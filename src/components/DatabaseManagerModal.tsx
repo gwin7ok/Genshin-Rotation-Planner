@@ -1,0 +1,1662 @@
+import React, { useState, useRef } from 'react';
+import { 
+  X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
+  Sparkles, Check, AlertTriangle, Shield, Zap, Sword, Flame, Layers, Clock, 
+  RotateCcw, Save, Filter
+} from 'lucide-react';
+import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
+import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
+import { ELEMENT_COLORS, ELEMENT_NAMES_JA } from '../data/characters';
+import { 
+  syncWithLatestMasterDB, 
+  syncCharactersMaster,
+  syncWeaponsMaster,
+  syncArtifactsMaster,
+  resetDatabaseToMaster, 
+  upsertCharacterInDb, 
+  deleteCharacterFromDb,
+  deleteAllCharactersFromDb,
+  clearAllDatabaseData,
+  upsertWeaponInDb,
+  deleteWeaponFromDb,
+  upsertArtifactInDb,
+  deleteArtifactFromDb,
+  saveDatabase
+} from '../utils/databaseService';
+
+interface DatabaseManagerModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  database: AppDatabase;
+  onUpdateDatabase: (newDb: AppDatabase) => void;
+}
+
+type TabType = 'characters' | 'weapons' | 'artifacts' | 'sync';
+
+export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
+  isOpen,
+  onClose,
+  database,
+  onUpdateDatabase,
+}) => {
+  const [activeTab, setActiveTab] = useState<TabType>('characters');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [elementFilter, setElementFilter] = useState<ElementType | 'all'>('all');
+  const [weaponTypeFilter, setWeaponTypeFilter] = useState<WeaponType | 'all'>('all');
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
+
+  // Edit sub-modals state
+  const [editingCharacter, setEditingCharacter] = useState<CharacterConfig | null>(null);
+  const [editingWeapon, setEditingWeapon] = useState<WeaponDatabaseItem | null>(null);
+  const [editingArtifact, setEditingArtifact] = useState<ArtifactSetDatabaseItem | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [confirmDialog, setConfirmDialog] = useState<{
+    title: string;
+    message: string;
+    confirmText: string;
+    confirmColor?: 'red' | 'amber' | 'rose';
+    onConfirm: () => void;
+  } | null>(null);
+
+  if (!isOpen) return null;
+
+  // Dynamic Generation & Sync: Characters
+  const handleSyncCharacters = () => {
+    setIsSyncing(true);
+    setSyncSuccessMsg(null);
+    setTimeout(() => {
+      const synced = syncCharactersMaster(database);
+      onUpdateDatabase(synced);
+      setIsSyncing(false);
+      setSyncSuccessMsg(`⚡ genshin-db(公式数値) ＋ gcsim(60 FPSモーション) より全 ${synced.characters.length} キャラクターの最新マスターデータを動的生成・更新しました！`);
+      setTimeout(() => setSyncSuccessMsg(null), 5000);
+    }, 400);
+  };
+
+  // Dynamic Generation & Sync: Weapons
+  const handleSyncWeapons = () => {
+    setIsSyncing(true);
+    setSyncSuccessMsg(null);
+    setTimeout(() => {
+      const synced = syncWeaponsMaster(database);
+      onUpdateDatabase(synced);
+      setIsSyncing(false);
+      setSyncSuccessMsg(`⚔️ genshin-db より全 ${synced.weapons.length} 種類の武器マスターデータを動的生成・更新しました！`);
+      setTimeout(() => setSyncSuccessMsg(null), 5000);
+    }, 400);
+  };
+
+  // Dynamic Generation & Sync: Artifacts
+  const handleSyncArtifacts = () => {
+    setIsSyncing(true);
+    setSyncSuccessMsg(null);
+    setTimeout(() => {
+      const synced = syncArtifactsMaster(database);
+      onUpdateDatabase(synced);
+      setIsSyncing(false);
+      setSyncSuccessMsg(`🏺 genshin-db より全 ${synced.artifacts.length} セットの聖遺物マスターデータを動的生成・更新しました！`);
+      setTimeout(() => setSyncSuccessMsg(null), 5000);
+    }, 400);
+  };
+
+  // Full reset
+  const handleFullReset = () => {
+    setConfirmDialog({
+      title: '初期状態へリセット',
+      message: 'すべてのカスタム変更をクリアし、データベースを初期の公式マスター状態に戻しますか？',
+      confirmText: '初期状態へリセット',
+      confirmColor: 'amber',
+      onConfirm: () => {
+        const reset = resetDatabaseToMaster();
+        onUpdateDatabase(reset);
+        setConfirmDialog(null);
+        setSyncSuccessMsg('データベースを初期マスターデータにリセットしました。');
+        setTimeout(() => setSyncSuccessMsg(null), 4000);
+      }
+    });
+  };
+
+  // Export JSON
+  const handleExportJson = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(database, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `genshin_db_export_${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  // Import JSON
+  const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target?.result as string) as AppDatabase;
+        if (imported && Array.isArray(imported.characters) && Array.isArray(imported.weapons) && Array.isArray(imported.artifacts)) {
+          saveDatabase(imported);
+          onUpdateDatabase(imported);
+          setSyncSuccessMsg('データベースファイルの復元に成功しました！');
+          setTimeout(() => setSyncSuccessMsg(null), 4000);
+        } else {
+          setSyncSuccessMsg('エラー: 無効なデータベースファイル形式です。');
+          setTimeout(() => setSyncSuccessMsg(null), 4000);
+        }
+      } catch (err) {
+        setSyncSuccessMsg('エラー: ファイルの読み込みに失敗しました。');
+        setTimeout(() => setSyncSuccessMsg(null), 4000);
+      }
+    };
+    reader.readAsText(file);
+    if (e.target) e.target.value = '';
+  };
+
+  // Delete Handlers using Custom In-App Modal
+  const handleDeleteChar = (id: string, name: string) => {
+    setConfirmDialog({
+      title: `キャラクター「${name}」の削除`,
+      message: `キャラクター「${name}」をデータベースから削除しますか？\n（メイン画面および選択画面からも即座に除外されます）`,
+      confirmText: '削除する',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteCharacterFromDb(database, id);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg(`キャラクター「${name}」を削除しました。`);
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  const handleDeleteAllCharacters = () => {
+    setConfirmDialog({
+      title: '全キャラクター一括削除',
+      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（削除後は空の状態になります。アプリ全画面から全キャラが除去されます）`,
+      confirmText: '全キャラ一括削除を実行',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteAllCharactersFromDb(database);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg('全キャラクターを一括削除しました。');
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  const handleClearAllData = () => {
+    setConfirmDialog({
+      title: 'データベース全データ完全消去',
+      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？`,
+      confirmText: '全データ完全消去',
+      confirmColor: 'rose',
+      onConfirm: () => {
+        const empty = clearAllDatabaseData();
+        onUpdateDatabase(empty);
+        setConfirmDialog(null);
+        setSyncSuccessMsg('データベースの全データを完全クリアしました。');
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  const handleDeleteWeapon = (id: string, name: string) => {
+    setConfirmDialog({
+      title: `武器「${name}」の削除`,
+      message: `武器「${name}」をデータベースから削除しますか？`,
+      confirmText: '削除する',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteWeaponFromDb(database, id);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg(`武器「${name}」を削除しました。`);
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  const handleDeleteArtifact = (id: string, name: string) => {
+    setConfirmDialog({
+      title: `聖遺物「${name}」の削除`,
+      message: `聖遺物「${name}」をデータベースから削除しますか？`,
+      confirmText: '削除する',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteArtifactFromDb(database, id);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg(`聖遺物「${name}」を削除しました。`);
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  // Filtered lists
+  const filteredCharacters = database.characters.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesElement = elementFilter === 'all' || c.element === elementFilter;
+    const matchesWeapon = weaponTypeFilter === 'all' || c.weaponType === weaponTypeFilter;
+    return matchesSearch && matchesElement && matchesWeapon;
+  });
+
+  const filteredWeapons = database.weapons.filter(w => {
+    const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
+    return matchesSearch && matchesWeapon;
+  });
+
+  const filteredArtifacts = database.artifacts.filter(a => {
+    return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-3 sm:p-5">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+        
+        {/* Modal Top Banner */}
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/70">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+              <Database className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-base text-white">
+                  データベース管理・カスタマイズ (Genshin Database Manager)
+                </h2>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60 flex items-center gap-1">
+                  <Check className="w-3 h-3 text-emerald-400" />
+                  ローカル保存有効
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                キャラクター性能・武器パッシブ・聖遺物効果の最新同期と、ユーザー自身による自由な数値編集・保存
+              </p>
+            </div>
+          </div>
+          
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Sync Success / Alert Toast */}
+        {syncSuccessMsg && (
+          <div className="bg-emerald-950/90 border-b border-emerald-600/60 px-4 py-2 flex items-center justify-between text-xs text-emerald-200 animate-fadeIn">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span>{syncSuccessMsg}</span>
+            </div>
+            <span className="text-[10px] text-emerald-400 font-mono">
+              最終更新: {database.lastSyncedAt}
+            </span>
+          </div>
+        )}
+
+        {/* Tab Navigation */}
+        <div className="flex items-center justify-between px-4 bg-slate-950/40 border-b border-slate-800 flex-wrap gap-2 pt-2">
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setActiveTab('characters')}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-t-xl border-t border-x transition-all ${
+                activeTab === 'characters'
+                  ? 'bg-slate-900 border-slate-700 text-amber-300 shadow-md'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>キャラクター ({database.characters.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('weapons')}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-t-xl border-t border-x transition-all ${
+                activeTab === 'weapons'
+                  ? 'bg-slate-900 border-slate-700 text-amber-300 shadow-md'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Sword className="w-3.5 h-3.5 text-sky-400" />
+              <span>武器 ({database.weapons.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('artifacts')}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-t-xl border-t border-x transition-all ${
+                activeTab === 'artifacts'
+                  ? 'bg-slate-900 border-slate-700 text-amber-300 shadow-md'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-purple-400" />
+              <span>聖遺物 ({database.artifacts.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('sync')}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-t-xl border-t border-x transition-all ${
+                activeTab === 'sync'
+                  ? 'bg-slate-900 border-slate-700 text-emerald-300 shadow-md'
+                  : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>最新データ同期・バックアップ</span>
+            </button>
+          </div>
+
+          <div className="text-[11px] font-mono text-slate-500 pb-2">
+            同期状態: <span className="text-slate-300">{database.lastSyncedAt || '未同期'}</span>
+          </div>
+        </div>
+
+        {/* Tab Content Container */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+
+          {/* TAB 1: CHARACTERS */}
+          {activeTab === 'characters' && (
+            <div className="space-y-4">
+              {/* Search & Action Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                  <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="キャラ名・IDで検索..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
+                  />
+                </div>
+
+                {/* Element Filters */}
+                <div className="flex items-center gap-1 overflow-x-auto py-1">
+                  <button
+                    onClick={() => setElementFilter('all')}
+                    className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
+                      elementFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                    }`}
+                  >
+                    全元素
+                  </button>
+                  {(['pyro', 'hydro', 'electro', 'dendro', 'cryo', 'anemo', 'geo'] as ElementType[]).map(elem => (
+                    <button
+                      key={elem}
+                      onClick={() => setElementFilter(elem)}
+                      className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
+                        elementFilter === elem 
+                          ? `${ELEMENT_COLORS[elem].light} ${ELEMENT_COLORS[elem].text} ${ELEMENT_COLORS[elem].border}` 
+                          : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                      }`}
+                    >
+                      {ELEMENT_NAMES_JA[elem]}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={handleDeleteAllCharacters}
+                    disabled={database.characters.length === 0}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                    <span>全キャラ一括削除 ({database.characters.length})</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingCharacter({
+                        id: `custom_${Date.now()}`,
+                        name: '新規キャラクター',
+                        element: 'pyro',
+                        weaponType: 'sword',
+                        avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150&auto=format&fit=crop&q=80',
+                        color: '#ef4444',
+                        accentColor: '#f87171',
+                        skillCooldown: 6.0,
+                        burstCooldown: 15.0,
+                        burstEnergyCost: 60,
+                        skillParticles: 3.0,
+                        energyRecharge: 100,
+                        availableActions: [
+                          { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true },
+                          { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, energyCost: 60 },
+                          { id: 'act_n1', name: '通常攻撃', shortName: 'N1', type: 'normal', defaultDuration: 0.3 }
+                        ]
+                      });
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>カスタムキャラ追加</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Characters Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {filteredCharacters.map(char => {
+                  const elemStyle = ELEMENT_COLORS[char.element];
+                  const isCustom = (char as any).isCustom || char.id.startsWith('custom_');
+
+                  return (
+                    <div
+                      key={char.id}
+                      className={`p-3.5 rounded-xl border bg-slate-900/90 transition-all hover:border-slate-600 flex flex-col justify-between space-y-3 ${
+                        isCustom ? 'border-amber-500/50 shadow-md shadow-amber-500/5' : 'border-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <img
+                            src={char.avatarUrl}
+                            alt={char.name}
+                            className="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0"
+                          />
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <h3 className="font-bold text-sm text-white">{char.name}</h3>
+                              {isCustom && (
+                                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                  カスタム
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
+                              <span className={`px-1.5 py-0.2 rounded font-semibold text-[10px] ${elemStyle.light} ${elemStyle.text} border ${elemStyle.border}`}>
+                                {ELEMENT_NAMES_JA[char.element]}
+                              </span>
+                              <span className="text-slate-400 capitalize">{char.weaponType}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setEditingCharacter(char)}
+                            className="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-slate-800 rounded-lg transition-colors"
+                            title="パラメータ編集"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteChar(char.id, char.name)}
+                            className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+                            title="削除"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Params Summary */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px] font-mono bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
+                        <div>
+                          <span className="text-slate-400">スキルCT:</span>{' '}
+                          <strong className="text-amber-300">{char.skillCooldown}s</strong>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">継続時間:</span>{' '}
+                          <strong className="text-amber-200">{char.skillDuration ? `${char.skillDuration}s` : '-'}</strong>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">爆発CT:</span>{' '}
+                          <strong className="text-purple-300">{char.burstCooldown}s</strong>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">爆発継続:</span>{' '}
+                          <strong className="text-purple-200">{char.burstDuration ? `${char.burstDuration}s` : '-'}</strong>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">爆発コスト:</span>{' '}
+                          <strong className="text-sky-300">{char.burstEnergyCost}pt</strong>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">生成粒子:</span>{' '}
+                          <strong className="text-emerald-300">{char.skillParticles}個</strong>
+                        </div>
+                      </div>
+
+                      {/* Action Templates Count */}
+                      <div className="text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/60 pt-2">
+                        <span>登録アクション型:</span>
+                        <span className="font-bold text-slate-200">{char.availableActions.length} 種</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: WEAPONS */}
+          {activeTab === 'weapons' && (
+            <div className="space-y-4">
+              {/* Search & Action Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                  <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="武器名・効果で検索..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
+                  />
+                </div>
+
+                {/* Weapon Type Filter */}
+                <div className="flex items-center gap-1 overflow-x-auto py-1">
+                  <button
+                    onClick={() => setWeaponTypeFilter('all')}
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
+                      weaponTypeFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800'
+                    }`}
+                  >
+                    全武器種
+                  </button>
+                  {(['sword', 'claymore', 'polearm', 'bow', 'catalyst'] as WeaponType[]).map(wt => (
+                    <button
+                      key={wt}
+                      onClick={() => setWeaponTypeFilter(wt)}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border capitalize transition-colors ${
+                        weaponTypeFilter === wt ? 'bg-sky-500/20 text-sky-300 border-sky-500/50' : 'bg-slate-900 text-slate-400 border-slate-800'
+                      }`}
+                    >
+                      {wt}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingWeapon({
+                      id: `weapon_custom_${Date.now()}`,
+                      name: 'カスタム新規武器',
+                      weaponType: 'sword',
+                      rarity: 5,
+                      baseAttack: 608,
+                      subStat: '会心率 33.1%',
+                      passiveName: '独自パッシブスキル',
+                      description: '元素スキル発動後、12秒間攻撃力+20%',
+                      buffEffect: {
+                        id: `buff_w_${Date.now()}`,
+                        name: 'カスタム武器バフ (攻撃力+20%)',
+                        duration: 12.0,
+                        statEffect: '攻撃力 +20%',
+                        description: '12秒間攻撃力+20%',
+                        color: '#f59e0b'
+                      }
+                    });
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>カスタム武器追加</span>
+                </button>
+              </div>
+
+              {/* Weapon List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {filteredWeapons.map(weapon => (
+                  <div
+                    key={weapon.id}
+                    className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/90 space-y-2.5 hover:border-slate-700 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-amber-400 font-bold text-xs">
+                            {'★'.repeat(weapon.rarity)}
+                          </span>
+                          <h3 className="font-bold text-sm text-white">{weapon.name}</h3>
+                          {weapon.isCustom && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                              カスタム
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5 font-mono">
+                          <span className="capitalize">{weapon.weaponType}</span>
+                          {weapon.baseAttack && <span>/ 基礎攻撃 {weapon.baseAttack}</span>}
+                          {weapon.subStat && <span className="text-amber-300">/ {weapon.subStat}</span>}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setEditingWeapon(weapon)}
+                          className="p-1.5 text-slate-400 hover:text-sky-300 hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteWeapon(weapon.id, weapon.name)}
+                          className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+                      <div className="font-bold text-amber-200">{weapon.passiveName}</div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">{weapon.description}</p>
+                    </div>
+
+                    {weapon.buffEffect && (
+                      <div className="flex items-center justify-between text-[11px] font-mono bg-sky-950/40 border border-sky-800/50 px-2.5 py-1 rounded text-sky-200">
+                        <span>連動バフ: {weapon.buffEffect.name}</span>
+                        <strong className="text-amber-300">{weapon.buffEffect.duration}s 持続</strong>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: ARTIFACTS */}
+          {activeTab === 'artifacts' && (
+            <div className="space-y-4">
+              {/* Search & Action Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                  <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="聖遺物名・2セット/4セット効果で検索..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
+                  />
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingArtifact({
+                      id: `art_custom_${Date.now()}`,
+                      name: 'カスタム聖遺物 4セット',
+                      rarity: 5,
+                      effect2p: '攻撃力 +18%',
+                      effect4p: '元素爆発命中後、10秒間全ダメバフ+24%',
+                      buffEffect: {
+                        id: `buff_art_${Date.now()}`,
+                        name: 'カスタム聖遺物: 全ダメバフ+24%',
+                        duration: 10.0,
+                        statEffect: '全ダメージ +24%',
+                        description: '元素爆発命中後10秒間、全ダメバフ+24%',
+                        color: '#c084fc'
+                      }
+                    });
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>カスタム聖遺物追加</span>
+                </button>
+              </div>
+
+              {/* Artifact List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {filteredArtifacts.map(art => (
+                  <div
+                    key={art.id}
+                    className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/90 space-y-2.5 hover:border-slate-700 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-amber-400 font-bold text-xs">
+                          {'★'.repeat(art.rarity)}
+                        </span>
+                        <h3 className="font-bold text-sm text-white">{art.name}</h3>
+                        {art.isCustom && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                            カスタム
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setEditingArtifact(art)}
+                          className="p-1.5 text-slate-400 hover:text-purple-300 hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteArtifact(art.id, art.name)}
+                          className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1 text-xs bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+                      <div>
+                        <span className="text-purple-300 font-bold">2セット:</span>{' '}
+                        <span className="text-slate-300">{art.effect2p}</span>
+                      </div>
+                      <div>
+                        <span className="text-amber-300 font-bold">4セット:</span>{' '}
+                        <span className="text-slate-300">{art.effect4p}</span>
+                      </div>
+                    </div>
+
+                    {art.buffEffect && (
+                      <div className="flex items-center justify-between text-[11px] font-mono bg-purple-950/40 border border-purple-800/50 px-2.5 py-1 rounded text-purple-200">
+                        <span>連動バフ: {art.buffEffect.name}</span>
+                        <strong className="text-amber-300">{art.buffEffect.duration}s 持続</strong>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: SYNC & BACKUP */}
+          {activeTab === 'sync' && (
+            <div className="max-w-2xl mx-auto space-y-6 py-4">
+              
+              {/* Dynamic Generators for Characters, Weapons, and Artifacts */}
+              <div className="space-y-4">
+                
+                {/* 1. Characters Generator */}
+                <div className="bg-slate-950 p-5 rounded-2xl border border-amber-500/40 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                      <Sparkles className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                        <span>⚡ 最新マスターデータの動的生成 (キャラ)</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">124キャラ完全網羅</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                        genshin-db (公式数値・スキル/爆発CT・効果継続時間) と gcsim (60 FPSモーションフレームデータ) より最新全124キャラのデータベースを動的に生成し、アプリ内DBを更新します。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400">
+                      登録数: <span className="font-mono text-amber-300 font-bold">{database.characters.length} キャラ</span>
+                    </div>
+                    <button
+                      onClick={handleSyncCharacters}
+                      disabled={isSyncing}
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <span>最新マスターデータの動的生成 (キャラ)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Weapons Generator */}
+                <div className="bg-slate-950 p-5 rounded-2xl border border-sky-500/40 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shrink-0">
+                      <Sword className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                        <span>⚔️ 最新マスターデータの動的生成 (武器)</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">245種類以上対応</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                        genshin-db より全武器の基礎攻撃力 (Lv.90)、サブステータス、パッシブ効果テキストおよびバフ継続時間 (`buffEffect`) を自動解析・抽出して最新化します。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400">
+                      登録数: <span className="font-mono text-sky-300 font-bold">{database.weapons.length} 武器</span>
+                    </div>
+                    <button
+                      onClick={handleSyncWeapons}
+                      disabled={isSyncing}
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <span>最新マスターデータの動的生成 (武器)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Artifacts Generator */}
+                <div className="bg-slate-950 p-5 rounded-2xl border border-pink-500/40 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 shrink-0">
+                      <Shield className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                        <span>🏺 最新マスターデータの動的生成 (聖遺物)</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono">59セット以上対応</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                        genshin-db より全聖遺物の 2セット・4セット効果テキストおよび4セット効果バフ継続時間 (`buffEffect`) を自動解析・抽出して最新化します。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400">
+                      登録数: <span className="font-mono text-pink-300 font-bold">{database.artifacts.length} セット</span>
+                    </div>
+                    <button
+                      onClick={handleSyncArtifacts}
+                      disabled={isSyncing}
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <span>最新マスターデータの動的生成 (聖遺物)</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Explanation Note */}
+              <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed space-y-1.5">
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-amber-400" />
+                  <span>同期仕様とデータソースについての解説</span>
+                </div>
+                <p>
+                  genshin-db (公式数値・テキスト) ＋ gcsim (60 FPSモーションフレーム) を組み合わせた全124キャラ完全マスターDBに対応しています。
+                </p>
+                <p className="text-slate-500">
+                  ※ スキル・爆発の各種CT、効果継続時間、および60 FPS基準のアニメーションフレーム秒数は「キャラクター」タブの各キャラ編集画面からコンマ0.01秒単位で自由にカスタマイズ・保存できます。
+                </p>
+              </div>
+
+              {/* JSON Export / Import */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                  <div className="flex items-center gap-2 text-amber-300 font-bold text-sm">
+                    <Download className="w-4 h-4 text-amber-400" />
+                    <span>JSON形式で出力 (バックアップ)</span>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    現在保存されているデータベース (ユーザーによるカスタマイズデータを含む) をJSONファイル形式で出力・ダウンロードします。
+                  </p>
+                  <button
+                    onClick={handleExportJson}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 font-bold text-xs rounded-lg border border-slate-700 transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>DBファイル(.json)をダウンロード</span>
+                  </button>
+                </div>
+
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                  <div className="flex items-center gap-2 text-sky-300 font-bold text-sm">
+                    <Upload className="w-4 h-4 text-sky-400" />
+                    <span>JSON形式から復元 (インポート)</span>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    保存したJSONファイルを読み込み、キャラクター・武器・聖遺物の最新カスタマイズ環境を復元・更新します。
+                  </p>
+                  <input
+                    type="file"
+                    accept=".json"
+                    ref={fileInputRef}
+                    onChange={handleImportJson}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-sky-200 font-bold text-xs rounded-lg border border-slate-700 transition-colors"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>DBファイルを選択して読み込み</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Danger Zone: Delete & Clear Options */}
+              <div className="bg-red-950/30 p-5 rounded-xl border border-red-900/60 space-y-4">
+                <div className="flex items-center gap-2 text-red-400 font-bold text-sm">
+                  <AlertTriangle className="w-4.5 h-4.5 text-red-400" />
+                  <span>データ消去・リセット操作 (Danger Zone)</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
+                    <div>
+                      <div className="font-bold text-xs text-red-300">全キャラ一括削除</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">登録中の全 {database.characters.length} キャラクターのみ消去します。</p>
+                    </div>
+                    <button
+                      onClick={handleDeleteAllCharacters}
+                      disabled={database.characters.length === 0}
+                      className="w-full py-1.5 bg-red-950 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded border border-red-800 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                      <span>全キャラ一括削除</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
+                    <div>
+                      <div className="font-bold text-xs text-amber-300">初期マスターへ戻す</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">公式の初期実装キャラ構成にデータベースを復元します。</p>
+                    </div>
+                    <button
+                      onClick={handleFullReset}
+                      className="w-full py-1.5 bg-amber-950/80 hover:bg-amber-900 text-amber-200 text-xs font-bold rounded border border-amber-800 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                      <span>初期状態に復元</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
+                    <div>
+                      <div className="font-bold text-xs text-rose-400">DB完全消去 (クリア)</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">全キャラ・全武器・全聖遺物データを完全クリアします。</p>
+                    </div>
+                    <button
+                      onClick={handleClearAllData}
+                      className="w-full py-1.5 bg-rose-950 hover:bg-rose-900 text-rose-200 text-xs font-bold rounded border border-rose-800 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                      <span>全データクリア</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+        </div>
+
+        {/* Modal Footer */}
+        <div className="px-5 py-3 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between text-xs text-slate-400">
+          <span>※ 変更されたデータベースはブラウザのLocalStorageに全自動保存されます。</span>
+          <button
+            onClick={onClose}
+            className="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg transition-colors shadow-md"
+          >
+            完了して閉じる
+          </button>
+        </div>
+
+      </div>
+
+      {/* Custom React In-App Confirm Modal */}
+      {confirmDialog && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700/80 w-full max-w-md rounded-2xl shadow-2xl p-5 space-y-4 text-white">
+            <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+              <div className="p-2.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-base text-white">{confirmDialog.title}</h3>
+                <p className="text-xs text-slate-400">実行確認</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line bg-slate-950 p-3 rounded-xl border border-slate-800 font-medium">
+              {confirmDialog.message}
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setConfirmDialog(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                onClick={confirmDialog.onConfirm}
+                className={`px-5 py-2 font-bold text-xs rounded-xl shadow-lg text-white transition-all ${
+                  confirmDialog.confirmColor === 'rose'
+                    ? 'bg-rose-600 hover:bg-rose-500'
+                    : confirmDialog.confirmColor === 'amber'
+                    ? 'bg-amber-600 hover:bg-amber-500'
+                    : 'bg-red-600 hover:bg-red-500'
+                }`}
+              >
+                {confirmDialog.confirmText}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= EDIT CHARACTER MODAL ================= */}
+      {editingCharacter && (
+        <EditCharacterSubModal
+          character={editingCharacter}
+          onClose={() => setEditingCharacter(null)}
+          onSave={(updated) => {
+            const newDb = upsertCharacterInDb(database, updated);
+            onUpdateDatabase(newDb);
+            setEditingCharacter(null);
+          }}
+        />
+      )}
+
+      {/* ================= EDIT WEAPON MODAL ================= */}
+      {editingWeapon && (
+        <EditWeaponSubModal
+          weapon={editingWeapon}
+          onClose={() => setEditingWeapon(null)}
+          onSave={(updated) => {
+            const newDb = upsertWeaponInDb(database, updated);
+            onUpdateDatabase(newDb);
+            setEditingWeapon(null);
+          }}
+        />
+      )}
+
+      {/* ================= EDIT ARTIFACT MODAL ================= */}
+      {editingArtifact && (
+        <EditArtifactSubModal
+          artifact={editingArtifact}
+          onClose={() => setEditingArtifact(null)}
+          onSave={(updated) => {
+            const newDb = upsertArtifactInDb(database, updated);
+            onUpdateDatabase(newDb);
+            setEditingArtifact(null);
+          }}
+        />
+      )}
+
+    </div>
+  );
+};
+
+/* =========================================================================
+   SUB-MODALS: CHARACTER EDIT FORM
+   ========================================================================= */
+interface EditCharacterSubModalProps {
+  character: CharacterConfig;
+  onClose: () => void;
+  onSave: (updated: CharacterConfig) => void;
+}
+
+const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character, onClose, onSave }) => {
+  const [form, setForm] = useState<CharacterConfig>({ ...character });
+  const [actions, setActions] = useState<ActionDefinition[]>([...character.availableActions]);
+
+  const handleSaveForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      ...form,
+      availableActions: actions,
+    });
+  };
+
+  const handleActionChange = (index: number, field: keyof ActionDefinition, val: any) => {
+    const updated = [...actions];
+    updated[index] = { ...updated[index], [field]: val };
+    setActions(updated);
+  };
+
+  const handleAddAction = () => {
+    setActions([
+      ...actions,
+      {
+        id: `act_${Date.now()}`,
+        name: '新規アクション',
+        shortName: 'Act',
+        type: 'normal',
+        defaultDuration: 0.5,
+        description: '追加アクション定義',
+      }
+    ]);
+  };
+
+  const handleRemoveAction = (index: number) => {
+    setActions(actions.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4">
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <Zap className="w-4 h-4 text-amber-400" />
+            <span>キャラクター定義編集: {form.name}</span>
+          </h3>
+          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+        </div>
+
+        <form onSubmit={handleSaveForm} className="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
+          
+          {/* Basic Information */}
+          <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <h4 className="font-bold text-amber-300 text-xs">基本属性パラメータ</h4>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-slate-400 mb-1">キャラクター名</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={e => setForm({ ...form, name: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-white"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">元素属性</label>
+                <select
+                  value={form.element}
+                  onChange={e => setForm({ ...form, element: e.target.value as ElementType })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-amber-200"
+                >
+                  {(['pyro', 'hydro', 'electro', 'dendro', 'cryo', 'anemo', 'geo', 'physical'] as ElementType[]).map(elem => (
+                    <option key={elem} value={elem}>{ELEMENT_NAMES_JA[elem]}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">武器種</label>
+                <select
+                  value={form.weaponType}
+                  onChange={e => setForm({ ...form, weaponType: e.target.value as WeaponType })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-sky-200"
+                >
+                  {(['sword', 'claymore', 'polearm', 'bow', 'catalyst'] as WeaponType[]).map(wt => (
+                    <option key={wt} value={wt}>{wt}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">アイコン画像URL</label>
+                <input
+                  type="text"
+                  value={form.avatarUrl}
+                  onChange={e => setForm({ ...form, avatarUrl: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 font-mono text-[11px]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Kit Parameters */}
+          <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <h4 className="font-bold text-purple-300 text-xs">スキル・爆発・効果継続時間・エネルギーCT仕様</h4>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 font-mono">
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">スキルCT (秒)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={form.skillCooldown}
+                  onChange={e => setForm({ ...form, skillCooldown: parseFloat(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-amber-300 font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">スキル継続時間 (秒)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={form.skillDuration || 0}
+                  onChange={e => setForm({ ...form, skillDuration: parseFloat(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-amber-200 font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">爆発CT (秒)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={form.burstCooldown}
+                  onChange={e => setForm({ ...form, burstCooldown: parseFloat(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-purple-300 font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">爆発継続時間 (秒)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={form.burstDuration || 0}
+                  onChange={e => setForm({ ...form, burstDuration: parseFloat(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-purple-200 font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">爆発必要エネルギー</label>
+                <input
+                  type="number"
+                  value={form.burstEnergyCost}
+                  onChange={e => setForm({ ...form, burstEnergyCost: parseInt(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-sky-300 font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1 text-[11px]">スキル粒子生成数</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={form.skillParticles}
+                  onChange={e => setForm({ ...form, skillParticles: parseFloat(e.target.value) || 0 })}
+                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-emerald-300 font-bold"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Action Templates Manager */}
+          <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-sky-300 text-xs">選択可能アクション定義リスト ({actions.length})</h4>
+              <button
+                type="button"
+                onClick={handleAddAction}
+                className="flex items-center gap-1 px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded text-[11px] font-bold"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>アクション追加</span>
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {actions.map((act, idx) => (
+                <div key={act.id || idx} className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 flex flex-wrap items-center gap-2">
+                  <input
+                    type="text"
+                    value={act.name}
+                    placeholder="アクション名"
+                    onChange={e => handleActionChange(idx, 'name', e.target.value)}
+                    className="flex-1 min-w-[130px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold"
+                  />
+
+                  <input
+                    type="text"
+                    value={act.shortName}
+                    placeholder="略称"
+                    onChange={e => handleActionChange(idx, 'shortName', e.target.value)}
+                    className="w-16 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold font-mono text-center"
+                  />
+
+                  <div className="flex items-center gap-1">
+                    <span className="text-slate-400 text-[10px]">所要時間:</span>
+                    <input
+                      type="number"
+                      step="0.05"
+                      value={act.defaultDuration}
+                      onChange={e => handleActionChange(idx, 'defaultDuration', parseFloat(e.target.value) || 0.1)}
+                      className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-amber-300 font-mono font-bold text-center"
+                    />
+                    <span className="text-slate-500">s</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveAction(idx)}
+                    className="p-1 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
+              キャンセル
+            </button>
+            <button type="submit" className="px-5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow-md">
+              データベースに保存
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
+};
+
+/* =========================================================================
+   SUB-MODALS: WEAPON EDIT FORM
+   ========================================================================= */
+interface EditWeaponSubModalProps {
+  weapon: WeaponDatabaseItem;
+  onClose: () => void;
+  onSave: (updated: WeaponDatabaseItem) => void;
+}
+
+const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onClose, onSave }) => {
+  const [form, setForm] = useState<WeaponDatabaseItem>({ ...weapon });
+  const [hasBuff, setHasBuff] = useState<boolean>(!!weapon.buffEffect);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const weaponToSave = { ...form };
+    if (!hasBuff) {
+      delete weaponToSave.buffEffect;
+    }
+    onSave(weaponToSave);
+  };
+
+  return (
+    <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4">
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <Sword className="w-4 h-4 text-sky-400" />
+            <span>武器定義編集: {form.name}</span>
+          </h3>
+          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-slate-400 mb-1">武器名</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={e => setForm({ ...form, name: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-bold"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-400 mb-1">武器種類</label>
+              <select
+                value={form.weaponType}
+                onChange={e => setForm({ ...form, weaponType: e.target.value as WeaponType })}
+                className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-sky-200 capitalize font-bold"
+              >
+                {(['sword', 'claymore', 'polearm', 'bow', 'catalyst'] as WeaponType[]).map(wt => (
+                  <option key={wt} value={wt}>{wt}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-slate-400 mb-1">レアリティ (★)</label>
+              <select
+                value={form.rarity}
+                onChange={e => setForm({ ...form, rarity: parseInt(e.target.value) as any })}
+                className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-amber-300 font-bold"
+              >
+                <option value={5}>★★★★★ (5星)</option>
+                <option value={4}>★★★★ (4星)</option>
+                <option value={3}>★★★ (3星)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-slate-400 mb-1">サブステータス表記</label>
+              <input
+                type="text"
+                value={form.subStat || ''}
+                onChange={e => setForm({ ...form, subStat: e.target.value })}
+                placeholder="例: 会心率 33.1%"
+                className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-amber-200"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">パッシブスキル名</label>
+            <input
+              type="text"
+              value={form.passiveName}
+              onChange={e => setForm({ ...form, passiveName: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-amber-200 font-bold"
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">パッシブ効果説明</label>
+            <textarea
+              rows={3}
+              value={form.description}
+              onChange={e => setForm({ ...form, description: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-slate-200"
+            />
+          </div>
+
+          {/* Buff Effect連動 */}
+          <div className="space-y-3 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer font-bold text-sky-300">
+                <input
+                  type="checkbox"
+                  checked={hasBuff}
+                  onChange={e => {
+                    setHasBuff(e.target.checked);
+                    if (e.target.checked && !form.buffEffect) {
+                      setForm({
+                        ...form,
+                        buffEffect: {
+                          id: `buff_w_${Date.now()}`,
+                          name: `${form.name}: パッシブバフ`,
+                          duration: 12.0,
+                          statEffect: '特有バフ発動',
+                          description: form.description || '',
+                          color: '#38bdf8'
+                        }
+                      });
+                    }
+                  }}
+                  className="rounded border-slate-700 text-sky-500 focus:ring-sky-500"
+                />
+                <span>タイムライン連動バフを有効化</span>
+              </label>
+            </div>
+
+            {hasBuff && form.buffEffect && (
+              <div className="space-y-2 pt-2 border-t border-slate-800 font-mono">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-slate-400 text-[10px]">バフ表示名</label>
+                    <input
+                      type="text"
+                      value={form.buffEffect.name}
+                      onChange={e => setForm({
+                        ...form,
+                        buffEffect: { ...form.buffEffect!, name: e.target.value }
+                      })}
+                      className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-white font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 text-[10px]">持続時間 (秒)</label>
+                    <input
+                      type="number"
+                      step="0.5"
+                      value={form.buffEffect.duration}
+                      onChange={e => setForm({
+                        ...form,
+                        buffEffect: { ...form.buffEffect!, duration: parseFloat(e.target.value) || 1 }
+                      })}
+                      className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
+              キャンセル
+            </button>
+            <button type="submit" className="px-5 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg shadow-md">
+              保存
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+/* =========================================================================
+   SUB-MODALS: ARTIFACT EDIT FORM
+   ========================================================================= */
+interface EditArtifactSubModalProps {
+  artifact: ArtifactSetDatabaseItem;
+  onClose: () => void;
+  onSave: (updated: ArtifactSetDatabaseItem) => void;
+}
+
+const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, onClose, onSave }) => {
+  const [form, setForm] = useState<ArtifactSetDatabaseItem>({ ...artifact });
+  const [hasBuff, setHasBuff] = useState<boolean>(!!artifact.buffEffect);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const artifactToSave = { ...form };
+    if (!hasBuff) {
+      delete artifactToSave.buffEffect;
+    }
+    onSave(artifactToSave);
+  };
+
+  return (
+    <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4">
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <Shield className="w-4 h-4 text-purple-400" />
+            <span>聖遺物定義編集: {form.name}</span>
+          </h3>
+          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
+          <div>
+            <label className="block text-slate-400 mb-1">聖遺物セット名</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-bold"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">2セット効果説明</label>
+            <input
+              type="text"
+              value={form.effect2p}
+              onChange={e => setForm({ ...form, effect2p: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-purple-200"
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">4セット効果説明</label>
+            <textarea
+              rows={3}
+              value={form.effect4p}
+              onChange={e => setForm({ ...form, effect4p: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-slate-200"
+            />
+          </div>
+
+          {/* Buff Effect */}
+          <div className="space-y-3 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+            <label className="flex items-center gap-2 cursor-pointer font-bold text-purple-300">
+              <input
+                type="checkbox"
+                checked={hasBuff}
+                onChange={e => {
+                  setHasBuff(e.target.checked);
+                  if (e.target.checked && !form.buffEffect) {
+                    setForm({
+                      ...form,
+                      buffEffect: {
+                        id: `buff_art_${Date.now()}`,
+                        name: `${form.name}: 4Pバフ`,
+                        duration: 12.0,
+                        statEffect: '4Pセットバフ',
+                        description: form.effect4p || '',
+                        color: '#c084fc'
+                      }
+                    });
+                  }
+                }}
+                className="rounded border-slate-700 text-purple-500 focus:ring-purple-500"
+              />
+              <span>タイムライン連動バフを有効化</span>
+            </label>
+
+            {hasBuff && form.buffEffect && (
+              <div className="grid grid-cols-2 gap-2 font-mono pt-2 border-t border-slate-800">
+                <div>
+                  <label className="block text-slate-400 text-[10px]">バフ表示名</label>
+                  <input
+                    type="text"
+                    value={form.buffEffect.name}
+                    onChange={e => setForm({
+                      ...form,
+                      buffEffect: { ...form.buffEffect!, name: e.target.value }
+                    })}
+                    className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-white font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-[10px]">持続時間 (秒)</label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    value={form.buffEffect.duration}
+                    onChange={e => setForm({
+                      ...form,
+                      buffEffect: { ...form.buffEffect!, duration: parseFloat(e.target.value) || 1 }
+                    })}
+                    className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
+              キャンセル
+            </button>
+            <button type="submit" className="px-5 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg shadow-md">
+              保存
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};

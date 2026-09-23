@@ -1,0 +1,2410 @@
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { 
+  Clock, 
+  ZoomIn, 
+  ZoomOut, 
+  Shield, 
+  Flame, 
+  Zap, 
+  Info, 
+  Layers, 
+  Activity, 
+  Sparkles,
+  AlertTriangle,
+  RotateCcw,
+  Repeat,
+  Lock,
+  CheckCircle2,
+  AlertOctagon,
+  ArrowRight,
+  ShieldAlert,
+  Check
+} from 'lucide-react';
+import { 
+  CharacterConfig, 
+  Stint, 
+  ActiveBuffSpan, 
+  CooldownSpan, 
+  CharacterRuntimeState 
+} from '../types/genshin';
+import { ELEMENT_COLORS, BUFF_DEFINITIONS } from '../data/characters';
+import { swapStintsForCharacters } from '../utils/stintReorder';
+
+// Organization structure for active buffs into independent non-overlapping rows.
+// Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
+export interface BuffRowInfo {
+  tag: string;
+  cleanName: string;
+  sample: ActiveBuffSpan;
+  spans: ActiveBuffSpan[];
+}
+
+export function getBuffClassification(buff: ActiveBuffSpan) {
+  const bId = (buff.buffId || '').toLowerCase();
+  const name = (buff.name || '').toLowerCase();
+
+  const isSkill = 
+    bId.includes('skill') || 
+    bId.includes('guoba') || 
+    bId.includes('pepper') || 
+    bId.includes('ring') || 
+    bId.includes('tri_karma') || 
+    bId.includes('salon') || 
+    bId.includes('paramita') ||
+    bId.includes('mirror') ||
+    name.includes('スキル') || 
+    name.includes('グゥオパァー') || 
+    name.includes('唐辛子') || 
+    name.includes('e');
+
+  const isBurst = 
+    bId.includes('burst') || 
+    bId.includes('pyronado') || 
+    bId.includes('raincutter') || 
+    bId.includes('fanfare') || 
+    bId.includes('shrine') || 
+    bId.includes('eye_buff') || 
+    name.includes('爆発') || 
+    name.includes('旋火輪') || 
+    name.includes('q');
+
+  if (isSkill) {
+    return { rank: 1, tag: '[E]' };
+  }
+  if (isBurst) {
+    return { rank: 2, tag: '[Q]' };
+  }
+  if (buff.sourceType === 'weapon') {
+    return { rank: 4, tag: '[武器]' };
+  }
+  if (buff.sourceType === 'artifact') {
+    return { rank: 5, tag: '[聖遺物]' };
+  }
+  return { rank: 3, tag: '[天賦]' };
+}
+
+export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
+  if (!buffs || buffs.length === 0) return [];
+
+  // Group by buffId / buff type so different buffs (e.g. E vs Q) are on distinct rows
+  const byId = new Map<string, ActiveBuffSpan[]>();
+  for (const b of buffs) {
+    const key = b.buffId || b.name;
+    if (!byId.has(key)) {
+      byId.set(key, []);
+    }
+    byId.get(key)!.push(b);
+  }
+
+  const result: BuffRowInfo[] = [];
+
+  // Sort: E (skill) first, Q (burst) second, other talents third, weapon fourth, artifact fifth
+  const sortedKeys = Array.from(byId.keys()).sort((keyA, keyB) => {
+    const listA = byId.get(keyA)!;
+    const listB = byId.get(keyB)!;
+    const classA = getBuffClassification(listA[0]);
+    const classB = getBuffClassification(listB[0]);
+    if (classA.rank !== classB.rank) {
+      return classA.rank - classB.rank;
+    }
+    const minStartA = Math.min(...listA.map(s => s.startTime));
+    const minStartB = Math.min(...listB.map(s => s.startTime));
+    return minStartA - minStartB;
+  });
+
+  for (const key of sortedKeys) {
+    const spans = byId.get(key)!.sort((a, b) => a.startTime - b.startTime);
+    const classification = getBuffClassification(spans[0]);
+    const cleanName = spans[0].name.replace(/^[^:]+:\s*/, '');
+
+    // Track packing in case of recasts
+    const tracks: ActiveBuffSpan[][] = [];
+    for (const span of spans) {
+      let placed = false;
+      for (const track of tracks) {
+        const last = track[track.length - 1];
+        if (last.endTime <= span.startTime + 0.05) {
+          track.push(span);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        tracks.push([span]);
+      }
+    }
+
+    tracks.forEach((trackSpans, tIdx) => {
+      result.push({
+        tag: classification.tag,
+        cleanName: tracks.length > 1 ? `${cleanName} #${tIdx + 1}` : cleanName,
+        sample: trackSpans[0],
+        spans: trackSpans,
+      });
+    });
+  }
+
+  return result;
+}
+
+interface GanttChartProps {
+  characters: CharacterConfig[];
+  stints: Stint[];
+  activeBuffs: ActiveBuffSpan[];
+  skillCooldowns: CooldownSpan[];
+  burstCooldowns: CooldownSpan[];
+  characterStates: Record<string, CharacterRuntimeState>;
+  totalDuration: number;
+  activeTime: number;
+  onSeek: (time: number) => void;
+  activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
+  onReorderCharacters?: (newChars: CharacterConfig[]) => void;
+  onReorderCharactersAndStints?: (newChars: CharacterConfig[], newStints: Stint[]) => void;
+  onUpdateStints?: (newStints: Stint[]) => void;
+  selectedAction?: { stintId: string; actionId: string } | null;
+  onSelectAction?: (stintId: string, actionId: string) => void;
+  loopStartTime?: number;
+  onUpdateLoopStartTime?: (newTime: number) => void;
+}
+
+export const GanttChart: React.FC<GanttChartProps> = ({
+  characters,
+  stints,
+  activeBuffs,
+  skillCooldowns,
+  burstCooldowns,
+  characterStates,
+  totalDuration,
+  activeTime,
+  onSeek,
+  activeBuffCountBySecond,
+  onReorderCharacters,
+  onReorderCharactersAndStints,
+  onUpdateStints,
+  selectedAction,
+  onSelectAction,
+  loopStartTime = 0,
+  onUpdateLoopStartTime,
+}) => {
+  const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
+  const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+  const [showConnectors, setShowConnectors] = useState<boolean>(true);
+  const [highlightBuffId, setHighlightBuffId] = useState<string | null>(null);
+  const [rowDisplayMode, setRowDisplayMode] = useState<'stints' | 'characters'>('stints');
+
+  // Loop marker dragging state
+  const [isDraggingLoopMarker, setIsDraggingLoopMarker] = useState<boolean>(false);
+
+  // Drag and Drop state for timeline action reordering directly on the Gantt Chart
+  const [draggedAction, setDraggedAction] = useState<{
+    stintId: string;
+    actionIndex: number;
+    actionId: string;
+  } | null>(null);
+  const [dragOverAction, setDragOverAction] = useState<{
+    stintId: string;
+    actionIndex: number;
+  } | null>(null);
+
+  const handleReorderActionsInStint = (stintId: string, fromIndex: number, toIndex: number) => {
+    if (!onUpdateStints || fromIndex === toIndex) return;
+    const newStints = stints.map(s => {
+      if (s.id !== stintId) return s;
+      const actions = [...s.actions];
+      const [moved] = actions.splice(fromIndex, 1);
+      actions.splice(toIndex, 0, moved);
+      return { ...s, actions };
+    });
+    onUpdateStints(newStints);
+  };
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerScrollRef = useRef<HTMLDivElement>(null);
+  const isSyncingScroll = useRef(false);
+
+  const handleContainerScroll = () => {
+    if (isSyncingScroll.current) return;
+    if (containerRef.current && headerScrollRef.current) {
+      isSyncingScroll.current = true;
+      headerScrollRef.current.scrollLeft = containerRef.current.scrollLeft;
+      requestAnimationFrame(() => {
+        isSyncingScroll.current = false;
+      });
+    }
+  };
+
+  const handleHeaderScroll = () => {
+    if (isSyncingScroll.current) return;
+    if (containerRef.current && headerScrollRef.current) {
+      isSyncingScroll.current = true;
+      containerRef.current.scrollLeft = headerScrollRef.current.scrollLeft;
+      requestAnimationFrame(() => {
+        isSyncingScroll.current = false;
+      });
+    }
+  };
+
+  const characterMap = new Map<string, CharacterConfig>();
+  characters.forEach(c => characterMap.set(c.id, c));
+
+  // Calculate discrete action boundary snap points (between actions)
+  // Each action boundary has time, label, action name
+  const actionBoundaries = useMemo(() => {
+    const list: { time: number; label: string; stintIdx: number; actIdx: number }[] = [];
+    list.push({ time: 0, label: '0.00s (ローテーション開始地点)', stintIdx: 0, actIdx: 0 });
+
+    stints.forEach((stint, sIdx) => {
+      const char = characterMap.get(stint.characterId);
+      const charName = char?.name || '';
+      stint.actions.forEach((act, aIdx) => {
+        const boundaryTime = act.endTime ?? 0;
+        // Avoid duplicate timestamps (with 0.01s tolerance)
+        const isLastAct = sIdx === stints.length - 1 && aIdx === stint.actions.length - 1;
+        if (!isLastAct && boundaryTime > 0.01 && !list.some(b => Math.abs(b.time - boundaryTime) < 0.02)) {
+          const nextAct = stint.actions[aIdx + 1];
+          const nextCharName = nextAct ? charName : (characterMap.get(stints[sIdx + 1]?.characterId)?.name || '');
+          const nextActName = nextAct ? nextAct.shortName : (stints[sIdx + 1]?.actions[0]?.shortName || '');
+          list.push({
+            time: Number(boundaryTime.toFixed(2)),
+            label: `${boundaryTime.toFixed(2)}s (${charName}:${act.shortName} と ${nextCharName}:${nextActName} の間)`,
+            stintIdx: sIdx,
+            actIdx: aIdx,
+          });
+        }
+      });
+    });
+
+    list.sort((a, b) => a.time - b.time);
+    return list;
+  }, [stints, characterMap]);
+
+  // Projected 2nd Cycle Calculations & Automatic CT/Buff Collision Checks
+  const cycle2Data = useMemo(() => {
+    const loopPeriod = Math.max(0, totalDuration - loopStartTime);
+    if (loopPeriod < 0.05 || stints.length === 0) {
+      return {
+        enabled: false,
+        loopPeriod: 0,
+        cycle2StartTime: totalDuration,
+        cycle2EndTime: totalDuration,
+        stints: [],
+        cooldownCollisions: [],
+        carryOverCooldowns: [],
+        carryOverSkillCDs: [],
+        carryOverBurstCDs: [],
+        cycle1SkillCDs: [],
+        cycle1BurstCDs: [],
+        cycle2NewCooldowns: [],
+        carryOverBuffs: [],
+        cycle2NewBuffs: [],
+        allCycle2Buffs: [],
+        buffSynergyPoints: [],
+      };
+    }
+
+    const offset = totalDuration - loopStartTime;
+    const cycle2StartTime = totalDuration;
+    const cycle2EndTime = totalDuration + loopPeriod;
+
+    // 1. Project Stints & Actions into 2nd Cycle (offset by totalDuration - loopStartTime)
+    const c2Stints: Array<{
+      id: string;
+      originalStintId: string;
+      characterId: string;
+      startTime: number;
+      endTime: number;
+      duration: number;
+      note?: string;
+      actions: Array<{
+        id: string;
+        originalActionId: string;
+        actionTypeId: string;
+        name: string;
+        shortName: string;
+        type: string;
+        duration: number;
+        startTime: number;
+        endTime: number;
+        isSkill: boolean;
+        isBurst: boolean;
+        hasCTCollision: boolean;
+        ctRemaining: number;
+        conflictingCDName?: string;
+        conflictingCDEndTime?: number;
+      }>;
+    }> = [];
+
+    const cooldownCollisions: Array<{
+      actionName: string;
+      characterName: string;
+      characterId: string;
+      actionTime: number;
+      remainingCT: number;
+      type: 'skill' | 'burst';
+    }> = [];
+
+    const cycle2NewCooldowns: CooldownSpan[] = [];
+    const cycle2NewBuffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = [];
+
+    stints.forEach((stint) => {
+      const char = characterMap.get(stint.characterId);
+      if (!char) return;
+
+      // Filter actions that belong to the loop segment [loopStartTime, totalDuration]
+      const loopActions = stint.actions.filter(a => (a.endTime ?? 0) > loopStartTime + 0.001);
+      if (loopActions.length === 0) return;
+
+      const c2Actions = loopActions.map(act => {
+        // Shift time into Cycle 2
+        const rawActStart = act.startTime ?? 0;
+        const c2ActStart = Math.max(cycle2StartTime, rawActStart + offset);
+        const c2ActEnd = c2ActStart + act.duration;
+        const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+        const isBurst = act.type === 'burst';
+
+        let hasCTCollision = false;
+        let ctRemaining = 0;
+        let conflictingCDName = '';
+        let conflictingCDEndTime = 0;
+
+        // Check 1st cycle skill cooldown collision
+        if (isSkill && act.type !== 'skill_reset') {
+          const charSkillCDs = skillCooldowns.filter(cd => cd.characterId === char.id);
+          for (const cd of charSkillCDs) {
+            if (cd.endTime > c2ActStart + 0.02) {
+              const rem = cd.endTime - c2ActStart;
+              if (rem > ctRemaining) {
+                hasCTCollision = true;
+                ctRemaining = rem;
+                conflictingCDName = '元素スキルCT';
+                conflictingCDEndTime = cd.endTime;
+              }
+            }
+          }
+        }
+
+        // Check 1st cycle burst cooldown collision
+        if (isBurst) {
+          const charBurstCDs = burstCooldowns.filter(cd => cd.characterId === char.id);
+          for (const cd of charBurstCDs) {
+            if (cd.endTime > c2ActStart + 0.02) {
+              const rem = cd.endTime - c2ActStart;
+              if (rem > ctRemaining) {
+                hasCTCollision = true;
+                ctRemaining = rem;
+                conflictingCDName = '元素爆発CT';
+                conflictingCDEndTime = cd.endTime;
+              }
+            }
+          }
+        }
+
+        if (hasCTCollision) {
+          cooldownCollisions.push({
+            actionName: act.name,
+            characterName: char.name,
+            characterId: char.id,
+            actionTime: c2ActStart,
+            remainingCT: Number(ctRemaining.toFixed(1)),
+            type: isBurst ? 'burst' : 'skill',
+          });
+        }
+
+        // New Cooldowns triggered in Cycle 2
+        if (isSkill && char.skillCooldown > 0) {
+          cycle2NewCooldowns.push({
+            id: `c2_cd_skill_${char.id}_${c2ActStart}`,
+            characterId: char.id,
+            type: 'skill',
+            startTime: c2ActStart,
+            endTime: c2ActStart + char.skillCooldown,
+            duration: char.skillCooldown,
+            actionInstanceId: `c2_${act.id}`,
+          });
+        }
+        if (isBurst && char.burstCooldown > 0) {
+          cycle2NewCooldowns.push({
+            id: `c2_cd_burst_${char.id}_${c2ActStart}`,
+            characterId: char.id,
+            type: 'burst',
+            startTime: c2ActStart,
+            endTime: c2ActStart + char.burstCooldown,
+            duration: char.burstCooldown,
+            actionInstanceId: `c2_${act.id}`,
+          });
+        }
+
+        // New Buffs triggered in Cycle 2
+        const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
+        const buffIdsToTrigger = matchedCharActionDef?.triggersBuffIds || [];
+        buffIdsToTrigger.forEach(buffId => {
+          const buffDef = BUFF_DEFINITIONS[buffId];
+          if (buffDef) {
+            cycle2NewBuffs.push({
+              id: `c2_buff_${buffId}_${c2ActStart}`,
+              buffId: buffDef.id,
+              name: buffDef.name,
+              sourceCharacterId: buffDef.sourceCharacterId || char.id,
+              sourceType: buffDef.sourceType,
+              startTime: c2ActStart,
+              endTime: c2ActStart + buffDef.duration,
+              duration: buffDef.duration,
+              color: buffDef.color,
+              description: buffDef.description,
+              isSnapshot: buffDef.snapshotable,
+              isCarryOver: false,
+            });
+          }
+        });
+
+        return {
+          id: `c2_${act.id}`,
+          originalActionId: act.id,
+          actionTypeId: act.actionTypeId,
+          name: act.name,
+          shortName: act.shortName,
+          type: act.type,
+          duration: act.duration,
+          startTime: c2ActStart,
+          endTime: c2ActEnd,
+          isSkill,
+          isBurst,
+          hasCTCollision,
+          ctRemaining: Number(ctRemaining.toFixed(1)),
+          conflictingCDName,
+          conflictingCDEndTime,
+        };
+      });
+
+      if (c2Actions.length > 0) {
+        const stintStart = c2Actions[0].startTime;
+        const stintEnd = c2Actions[c2Actions.length - 1].endTime;
+        c2Stints.push({
+          id: `c2_${stint.id}`,
+          originalStintId: stint.id,
+          characterId: stint.characterId,
+          startTime: stintStart,
+          endTime: stintEnd,
+          duration: stintEnd - stintStart,
+          note: stint.note,
+          actions: c2Actions,
+        });
+      }
+    });
+
+    // 2. 1st Cycle Cooldowns (ALL 1st-cycle skill & burst CDs: both finished in 1st cycle and carryovers)
+    const cycle1SkillCDs: Array<CooldownSpan & { isCarryOver: boolean; isFinishedInCycle1: boolean }> = skillCooldowns
+      .map(cd => ({
+        ...cd,
+        isCarryOver: cd.endTime > cycle2StartTime + 0.05,
+        isFinishedInCycle1: cd.endTime <= cycle2StartTime + 0.05,
+      }));
+
+    const cycle1BurstCDs: Array<CooldownSpan & { isCarryOver: boolean; isFinishedInCycle1: boolean }> = burstCooldowns
+      .map(cd => ({
+        ...cd,
+        isCarryOver: cd.endTime > cycle2StartTime + 0.05,
+        isFinishedInCycle1: cd.endTime <= cycle2StartTime + 0.05,
+      }));
+
+    const carryOverSkillCDs = cycle1SkillCDs.filter(cd => cd.isCarryOver);
+    const carryOverBurstCDs = cycle1BurstCDs.filter(cd => cd.isCarryOver);
+    const carryOverCooldowns = [...carryOverSkillCDs, ...carryOverBurstCDs];
+
+    // 3. 2nd Cycle Buffs (Only 2nd Cycle newly triggered buffs are shown in 2nd cycle lanes)
+    const allCycle2Buffs = [...cycle2NewBuffs];
+
+    // 4. Buff synergy point counts across [cycle2StartTime, cycle2EndTime]
+    const buffSynergyPoints: Array<{ time: number; count: number; activeBuffs: string[] }> = [];
+    const minSec = Math.floor(cycle2StartTime);
+    const maxSec = Math.ceil(cycle2EndTime);
+    for (let t = minSec; t <= maxSec; t += 0.5) {
+      const active = allCycle2Buffs.filter(b => b.startTime <= t && b.endTime >= t);
+      buffSynergyPoints.push({
+        time: t,
+        count: active.length,
+        activeBuffs: active.map(b => b.name),
+      });
+    }
+
+    return {
+      enabled: true,
+      loopPeriod,
+      cycle2StartTime,
+      cycle2EndTime,
+      stints: c2Stints,
+      cooldownCollisions,
+      carryOverCooldowns,
+      carryOverSkillCDs,
+      carryOverBurstCDs,
+      cycle1SkillCDs,
+      cycle1BurstCDs,
+      cycle2NewCooldowns,
+      cycle2NewBuffs,
+      allCycle2Buffs,
+      buffSynergyPoints,
+    };
+  }, [stints, totalDuration, loopStartTime, characterMap, skillCooldowns, burstCooldowns, activeBuffs]);
+
+  // Combined Buff Synergy Points spanning full timeline (1st cycle + 2nd cycle)
+  const allBuffSynergyPoints = useMemo(() => {
+    return [
+      ...activeBuffCountBySecond,
+      ...(cycle2Data.buffSynergyPoints || []),
+    ];
+  }, [activeBuffCountBySecond, cycle2Data.buffSynergyPoints]);
+
+  // Total timeline duration spanning 1st Cycle + 2nd Cycle Preview
+  const extendedTotalDuration = totalDuration + Math.max(0, totalDuration - loopStartTime);
+  const chartWidth = Math.max(800, Math.ceil(extendedTotalDuration + 2) * pixelsPerSecond);
+
+  // Handle timeline scrubber click or drag
+  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180; // 180px is character header width
+    if (clickX >= 0) {
+      const time = Math.min(extendedTotalDuration, Math.max(0, clickX / pixelsPerSecond));
+      onSeek(Number(time.toFixed(2)));
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+    if (clickX >= 0) {
+      setHoveredTime(Number((clickX / pixelsPerSecond).toFixed(2)));
+    } else {
+      setHoveredTime(null);
+    }
+  };
+
+  // Format relative time helper considering loopStartTime as 0s (negative for 1st-cycle setup)
+  const fmtTime = (absTime: number, precision: number = 1, showPlus: boolean = true): string => {
+    if (!loopStartTime || loopStartTime <= 0) {
+      return `${absTime.toFixed(precision)}s`;
+    }
+    const rel = absTime - loopStartTime;
+    if (Math.abs(rel) < 0.001) return `0${precision > 0 ? '.' + '0'.repeat(precision) : ''}s`;
+    if (rel < 0) return `-${Math.abs(rel).toFixed(precision)}s`;
+    return `${showPlus ? '+' : ''}${rel.toFixed(precision)}s`;
+  };
+
+  const fmtRange = (start: number, end: number, precision: number = 1): string => {
+    return `${fmtTime(start, precision)} ~ ${fmtTime(end, precision)}`;
+  };
+
+  // Generate ticks spanning full timeline (1st cycle + 2nd cycle)
+  // When loopStartTime > 0, ticks are generated relative to loopStartTime as 0s
+  const timelineTicks = useMemo(() => {
+    if (!loopStartTime || loopStartTime <= 0) {
+      const maxSeconds = Math.ceil(extendedTotalDuration + 2);
+      const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean }[] = [];
+      for (let s = 0; s <= maxSeconds; s++) {
+        list.push({
+          absTime: s,
+          relTime: s,
+          label: `${s}s`,
+          isZero: s === 0,
+          isNegative: false,
+        });
+      }
+      return list;
+    }
+
+    const minRel = -Math.ceil(loopStartTime);
+    const maxRel = Math.ceil(extendedTotalDuration - loopStartTime + 1);
+    const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean }[] = [];
+
+    // If loopStartTime is non-integer, add the absolute 0 point (rotation start)
+    if (Math.abs(loopStartTime - Math.round(loopStartTime)) > 0.05) {
+      list.push({
+        absTime: 0,
+        relTime: -loopStartTime,
+        label: `-${loopStartTime.toFixed(1)}s`,
+        isZero: false,
+        isNegative: true,
+      });
+    }
+
+    for (let r = minRel; r <= maxRel; r++) {
+      const absTime = Number((loopStartTime + r).toFixed(3));
+      if (absTime >= -0.001 && absTime <= extendedTotalDuration + 2) {
+        list.push({
+          absTime: Math.max(0, absTime),
+          relTime: r,
+          label: r === 0 ? '0s 🔁' : r < 0 ? `${r}s` : `+${r}s`,
+          isZero: r === 0,
+          isNegative: r < 0,
+        });
+      }
+    }
+
+    list.sort((a, b) => a.absTime - b.absTime);
+    return list.filter((item, idx, arr) => idx === 0 || Math.abs(item.absTime - arr[idx - 1].absTime) > 0.1);
+  }, [loopStartTime, extendedTotalDuration]);
+
+  // Find the closest action boundary for any given timeline second
+  const findClosestActionBoundary = (rawTime: number) => {
+    if (actionBoundaries.length === 0) return 0;
+    let closest = actionBoundaries[0];
+    let minDiff = Math.abs(rawTime - closest.time);
+    for (const b of actionBoundaries) {
+      const diff = Math.abs(rawTime - b.time);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = b;
+      }
+    }
+    return closest.time;
+  };
+
+  // Window-level mouseup/mousemove listeners for dragging the loop marker smoothly
+  useEffect(() => {
+    if (!isDraggingLoopMarker) return;
+
+    const onWindowMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+      if (clickX >= 0) {
+        const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
+        const snapped = findClosestActionBoundary(rawTime);
+        if (onUpdateLoopStartTime) {
+          onUpdateLoopStartTime(snapped);
+        }
+      } else {
+        if (onUpdateLoopStartTime) {
+          onUpdateLoopStartTime(0);
+        }
+      }
+    };
+
+    const onWindowMouseUp = () => {
+      setIsDraggingLoopMarker(false);
+    };
+
+    window.addEventListener('mousemove', onWindowMouseMove);
+    window.addEventListener('mouseup', onWindowMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onWindowMouseMove);
+      window.removeEventListener('mouseup', onWindowMouseUp);
+    };
+  }, [isDraggingLoopMarker, totalDuration, pixelsPerSecond, onUpdateLoopStartTime, actionBoundaries]);
+
+  // Pre-calculate connector points between consecutive stints for vertical snap visualization
+  // Stint i ends at t_end, Stint i+1 starts at t_end!
+  const handoffConnectors = stints.slice(0, stints.length - 1).map((stint, idx) => {
+    const nextStint = stints[idx + 1];
+    const fromCharIdx = characters.findIndex(c => c.id === stint.characterId);
+    const toCharIdx = characters.findIndex(c => c.id === nextStint.characterId);
+    const snapTime = stint.endTime ?? 0;
+    return {
+      snapTime,
+      fromCharIdx,
+      toCharIdx,
+      fromCharId: stint.characterId,
+      toCharId: nextStint.characterId,
+      xPos: snapTime * pixelsPerSecond,
+    };
+  });
+
+  return (
+    <section className="bg-slate-950 p-3 sm:p-4 border-b border-slate-800 w-full max-w-full overflow-x-clip">
+      <div className="w-full">
+        {/* =========================================================================
+            STICKY TOP HEADER PANEL (Gantt Title & Toolbar + Time Ruler + Loop + Unified + Synergy)
+            Sticks directly below <Header> at var(--header-height) during page scroll
+        ========================================================================= */}
+        <div 
+          className="sticky z-30 rounded-t-xl border border-slate-800 bg-slate-900/95 backdrop-blur-md shadow-2xl w-full mb-0 overflow-x-clip"
+          style={{ top: 'var(--header-height, 56px)' }}
+        >
+          {/* A. Gantt Title Bar & Toolbar Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 sm:px-3 sm:py-2 border-b border-slate-800 bg-slate-900/95">
+            {/* Title & Duration */}
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+              <h2 className="text-xs sm:text-sm font-bold text-white tracking-wide truncate">
+                ローテーション ガントチャート
+              </h2>
+              <span className="text-[11px] text-slate-400 font-mono shrink-0">
+                総時間: <strong className="text-amber-300 font-bold">{totalDuration.toFixed(1)}s</strong>
+              </span>
+              <span className="text-[11px] text-slate-600 font-mono hidden sm:inline shrink-0">|</span>
+              <span className="text-[11px] text-slate-400 font-mono hidden sm:inline shrink-0">
+                再生位置: <strong className="text-cyan-300 font-bold">{activeTime.toFixed(1)}s</strong>
+              </span>
+            </div>
+
+            {/* Header Controls (Split mode, snap lines, loop reset, zoom) */}
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              {/* Row Display Mode Toggle */}
+              <div className="flex items-center bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setRowDisplayMode('stints')}
+                  className={`px-2 py-0.5 rounded font-bold text-[11px] transition-all flex items-center gap-1 ${
+                    rowDisplayMode === 'stints'
+                      ? 'bg-amber-500 text-slate-950 shadow'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="登場ターンごとに1行ずつ階段状（ウォーターフォール）に分解表示"
+                >
+                  <span>登場回ごとに行を分割 (推奨)</span>
+                  <span className={`text-[9px] px-1 py-0.1 rounded font-mono font-bold ${
+                    rowDisplayMode === 'stints' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-amber-400'
+                  }`}>
+                    {stints.length}行
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRowDisplayMode('characters')}
+                  className={`px-2 py-0.5 rounded font-semibold text-[11px] transition-all flex items-center gap-1 ${
+                    rowDisplayMode === 'characters'
+                      ? 'bg-amber-500 text-slate-950 shadow'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="パーティの4キャラで各1行（合計4行）に集約表示"
+                >
+                  <span>4キャラ集約</span>
+                  <span className={`text-[9px] px-1 py-0.1 rounded font-mono ${
+                    rowDisplayMode === 'characters' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-400'
+                  }`}>
+                    4行
+                  </span>
+                </button>
+              </div>
+
+              {/* Toggle vertical handoff snap guides */}
+              <label className="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer select-none bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                <input
+                  type="checkbox"
+                  checked={showConnectors}
+                  onChange={(e) => setShowConnectors(e.target.checked)}
+                  className="rounded text-amber-500 focus:ring-0 focus:ring-offset-0 bg-slate-800 border-slate-700 w-3 h-3"
+                />
+                <span>交代垂直スナップ線 (端点一致)</span>
+              </label>
+
+              {/* Loop Boundary Marker Info / Reset */}
+              <div className="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-purple-500/40 text-[11px]">
+                <Repeat className="w-3 h-3 text-purple-400" />
+                <span className="text-purple-300 font-semibold">ループ基準点:</span>
+                <span className="font-mono text-purple-200 font-bold">
+                  {loopStartTime === 0 ? '0.00s (全周同一)' : `${loopStartTime.toFixed(2)}s`}
+                </span>
+                {loopStartTime > 0 && onUpdateLoopStartTime && (
+                  <button
+                    type="button"
+                    onClick={() => onUpdateLoopStartTime(0)}
+                    className="ml-1 text-[9px] text-slate-400 hover:text-white underline decoration-slate-600"
+                    title="0s (先頭) にリセット"
+                  >
+                    リセット
+                  </button>
+                )}
+              </div>
+
+              {/* Zoom Slider */}
+              <div className="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[11px]">
+                <ZoomOut 
+                  className="w-3 h-3 text-slate-400 cursor-pointer hover:text-white" 
+                  onClick={() => setPixelsPerSecond(prev => Math.max(30, prev - 10))}
+                />
+                <input
+                  type="range"
+                  min="30"
+                  max="100"
+                  value={pixelsPerSecond}
+                  onChange={(e) => setPixelsPerSecond(Number(e.target.value))}
+                  className="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+                <ZoomIn 
+                  className="w-3 h-3 text-slate-400 cursor-pointer hover:text-white" 
+                  onClick={() => setPixelsPerSecond(prev => Math.min(100, prev + 10))}
+                />
+                <span className="text-slate-400 font-mono text-[10px] min-w-[28px]">{pixelsPerSecond}px/s</span>
+              </div>
+            </div>
+          </div>
+
+          {/* B. Scrollable 4 Header Tracks (Time Ruler, Loop, Unified, Buff Synergy) + Horizontal Scrollbar */}
+          <div 
+            ref={headerScrollRef}
+            onScroll={handleHeaderScroll}
+            className="overflow-x-auto w-full relative border-b border-slate-800 custom-scrollbar bg-slate-900/90"
+          >
+            <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
+              
+              {/* 1. Top Time Ruler */}
+              <div className="flex border-b border-slate-800 bg-slate-900 h-9">
+                {/* Left Column Label (Corner: Sticky Left) */}
+                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[11px] font-bold text-slate-400 uppercase tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span>キャラクター / 項目</span>
+                  <Clock className="w-3.5 h-3.5 text-slate-500" />
+                </div>
+
+                {/* Time Ruler Ticks */}
+                <div 
+                  className="relative flex-1 cursor-pointer h-full bg-slate-900"
+                  onClick={handleTimelineClick}
+                >
+                  {timelineTicks.map(t => (
+                    <div
+                      key={`tick_${t.absTime}`}
+                      className={`absolute top-0 bottom-0 border-l flex flex-col justify-between pl-1 ${
+                        t.isZero
+                          ? 'border-purple-400 bg-purple-950/20 z-10'
+                          : t.isNegative
+                          ? 'border-amber-500/40'
+                          : 'border-slate-800/80'
+                      }`}
+                      style={{ left: `${t.absTime * pixelsPerSecond}px` }}
+                    >
+                      <span className={`text-[10px] font-mono font-bold ${
+                        t.isZero 
+                          ? 'text-purple-300 bg-purple-950 px-1 rounded border border-purple-500/50 shadow' 
+                          : t.isNegative 
+                          ? 'text-amber-300/90' 
+                          : 'text-slate-400'
+                      }`}>
+                        {t.label}
+                      </span>
+                      <span className={`w-0.5 h-1.5 ${t.isZero ? 'bg-purple-400' : 'bg-slate-700'}`}></span>
+                    </div>
+                  ))}
+
+                  {/* Sub-second ticks (0.5s) */}
+                  {timelineTicks.map(t => (
+                    <div
+                      key={`sub_${t.absTime}`}
+                      className="absolute bottom-0 h-1 border-l border-slate-800/40"
+                      style={{ left: `${(t.absTime + 0.5) * pixelsPerSecond}px` }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* 1.5 Loop Boundary Separator Track */}
+              <div className="flex border-b border-purple-900/60 bg-slate-950 items-center h-7 group select-none">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span className="flex items-center gap-1.5 truncate">
+                    <Repeat className="w-3 h-3 text-purple-400 shrink-0" />
+                    <span className="truncate">ループ基準点 (0s)</span>
+                  </span>
+                  <span className="text-[9px] text-purple-400/80 font-mono shrink-0">
+                    {loopStartTime === 0 ? '0s (全周同一)' : `${loopStartTime.toFixed(1)}s`}
+                  </span>
+                </div>
+
+                <div 
+                  className="relative flex-1 h-full flex items-center bg-slate-950/80"
+                  onClick={(e) => {
+                    if (!containerRef.current) return;
+                    const rect = containerRef.current.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+                    if (clickX >= 0) {
+                      const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
+                      const snapped = findClosestActionBoundary(rawTime);
+                      onUpdateLoopStartTime?.(snapped);
+                    }
+                  }}
+                >
+                  {/* 1st Cycle only (1周目のみ) shaded range */}
+                  {loopStartTime > 0 && (
+                    <div
+                      style={{ left: 0, width: `${loopStartTime * pixelsPerSecond}px` }}
+                      className="absolute inset-y-0.5 bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-purple-500/20 border-r border-dashed border-purple-400/60 flex items-center px-2 pointer-events-none"
+                    >
+                      <span className="text-[10px] font-bold text-amber-300/90 truncate">
+                        ◀ 1周目初動 (-{loopStartTime.toFixed(1)}s ~ 0.0s)
+                      </span>
+                    </div>
+                  )}
+
+                  {/* 2nd+ Cycle Loop (2周目以降も繰り返す) shaded range */}
+                  <div
+                    style={{ 
+                      left: `${loopStartTime * pixelsPerSecond}px`, 
+                      width: `${Math.max(0, (totalDuration - loopStartTime) * pixelsPerSecond)}px` 
+                    }}
+                    className="absolute inset-y-0.5 bg-gradient-to-r from-purple-500/15 to-indigo-500/10 flex items-center px-2 pointer-events-none"
+                  >
+                    <span className="text-[10px] font-bold text-purple-200 truncate">
+                      🔁 定常ループ (0.0s ~ +{(totalDuration - loopStartTime).toFixed(1)}s) ▶
+                    </span>
+                  </div>
+
+                  {/* Snapping tick dots for each action boundary */}
+                  {actionBoundaries.map((b, idx) => {
+                    const bX = b.time * pixelsPerSecond;
+                    const isCurrent = Math.abs(b.time - loopStartTime) < 0.02;
+                    return (
+                      <button
+                        key={`b_snap_${idx}`}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onUpdateLoopStartTime?.(b.time);
+                        }}
+                        style={{ left: `${bX}px` }}
+                        className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform z-10 ${
+                          isCurrent 
+                            ? 'w-3 h-3 bg-purple-400 ring-2 ring-purple-300 shadow scale-110' 
+                            : 'w-1.5 h-1.5 bg-purple-600/60 hover:scale-150 hover:bg-purple-300'
+                        }`}
+                        title={`【アクション区切りに設定】\n${b.label} (${fmtTime(b.time, 2)})`}
+                      />
+                    );
+                  })}
+
+                  {/* Draggable Loop Boundary Marker Pin */}
+                  <div
+                    style={{ left: `${loopStartTime * pixelsPerSecond}px` }}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsDraggingLoopMarker(true);
+                    }}
+                    className={`absolute top-0 bottom-0 -translate-x-1/2 z-20 flex flex-col items-center cursor-ew-resize group/marker ${
+                      isDraggingLoopMarker ? 'scale-105' : ''
+                    }`}
+                    title="【ドラッグで移動】1周目初動と定常ループの区切りマーク（0.0s基準点）"
+                  >
+                    {/* Pin Handle Badge */}
+                    <div className="flex items-center gap-1 bg-purple-600 hover:bg-purple-500 text-white font-black text-[9px] px-1.5 py-0.5 rounded-full shadow-lg border border-purple-300 ring-1 ring-purple-400/50 cursor-grab active:cursor-grabbing transition-transform">
+                      <Repeat className="w-2.5 h-2.5" />
+                      <span>0.00s 基準 ({loopStartTime.toFixed(2)}s)</span>
+                    </div>
+                    {/* Pin stem */}
+                    <div className="w-0.5 flex-1 bg-purple-400 shadow" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Unified Master On-Field Ribbon */}
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span className="flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-amber-400" />
+                    <span>統合出場トラック</span>
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono font-normal">全周連結</span>
+                </div>
+
+                <div 
+                  className="relative flex-1 h-full flex items-center cursor-pointer bg-slate-950"
+                  onClick={handleTimelineClick}
+                >
+                  {/* 1st Cycle Stints */}
+                  {stints.map((stint) => {
+                    const char = characterMap.get(stint.characterId);
+                    if (!char) return null;
+                    const startX = (stint.startTime ?? 0) * pixelsPerSecond;
+                    const width = (stint.duration ?? 0) * pixelsPerSecond;
+                    const isCurrent = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
+
+                    return (
+                      <div
+                        key={stint.id}
+                        style={{ left: `${startX}px`, width: `${width}px` }}
+                        className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
+                          isCurrent 
+                            ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold' 
+                            : 'border-slate-700/80 hover:border-slate-500'
+                        }`}
+                        title={`${char.name} 出場: ${(stint.startTime ?? 0).toFixed(2)}s ~ ${(stint.endTime ?? 0).toFixed(2)}s (${(stint.duration ?? 0).toFixed(2)}s)`}
+                      >
+                        <div 
+                          className="absolute inset-0 opacity-40"
+                          style={{ backgroundColor: char.color }}
+                        />
+                        <div className="relative z-10 flex items-center gap-1 truncate text-white">
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: char.accentColor }} />
+                          <span className="font-semibold text-[11px] truncate">{char.name}</span>
+                          <span className="text-[10px] opacity-75 font-mono">({(stint.duration ?? 0).toFixed(1)}s)</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* 2nd Cycle Stints (Together in Unified Track) */}
+                  {cycle2Data.enabled && cycle2Data.stints.map((stint) => {
+                    const char = characterMap.get(stint.characterId);
+                    if (!char) return null;
+                    const startX = stint.startTime * pixelsPerSecond;
+                    const width = stint.duration * pixelsPerSecond;
+                    const isCurrent = stint.startTime <= activeTime && activeTime < stint.endTime;
+
+                    return (
+                      <div
+                        key={stint.id}
+                        style={{ left: `${startX}px`, width: `${width}px` }}
+                        className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
+                          isCurrent 
+                            ? 'border-purple-400 ring-2 ring-purple-400/50 shadow-md font-bold' 
+                            : 'border-purple-800/80 hover:border-purple-500'
+                        }`}
+                        title={`【2周目】${char.name} 出場: ${stint.startTime.toFixed(2)}s ~ ${stint.endTime.toFixed(2)}s (${stint.duration.toFixed(2)}s)`}
+                      >
+                        <div 
+                          className="absolute inset-0 opacity-40"
+                          style={{ backgroundColor: char.color }}
+                        />
+                        <div className="relative z-10 flex items-center gap-1 truncate text-white">
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: char.accentColor }} />
+                          <span className="font-semibold text-[11px] truncate">{char.name}</span>
+                          <span className="text-[9px] px-1 py-0.2 rounded bg-purple-900/80 text-purple-200 border border-purple-700 font-mono ml-0.5">2周目</span>
+                          <span className="text-[10px] opacity-75 font-mono ml-0.5">({stint.duration.toFixed(1)}s)</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span className="flex items-center gap-1.5 truncate">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span className="truncate">バフ重複 (Synergy)</span>
+                  </span>
+                  <span className="text-[9px] text-slate-500 font-mono shrink-0">火力集中</span>
+                </div>
+
+                <div 
+                  className="relative flex-1 h-full flex items-center cursor-pointer bg-slate-950/90"
+                  onClick={handleTimelineClick}
+                >
+                  {allBuffSynergyPoints.map((pt, idx) => {
+                    const x = pt.time * pixelsPerSecond;
+                    const w = 0.5 * pixelsPerSecond;
+
+                    return (
+                      <div
+                        key={idx}
+                        style={{ 
+                          left: `${x}px`, 
+                          width: `${w}px`,
+                          backgroundColor: pt.count === 0 
+                            ? 'rgba(30, 41, 59, 0.3)' 
+                            : pt.count >= 3 
+                            ? 'rgba(234, 88, 12, 0.65)' 
+                            : pt.count >= 2 
+                            ? 'rgba(16, 185, 129, 0.55)' 
+                            : 'rgba(14, 165, 233, 0.35)',
+                        }}
+                        className="absolute top-1 bottom-1 rounded-sm border-r border-slate-950/40 flex items-center justify-center text-[10px] font-mono text-white select-none"
+                        title={`${pt.time.toFixed(1)}s: 有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
+                      >
+                        {pt.count > 0 && <span className="font-bold text-[9px]">{pt.count}</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            MAIN CHARACTER SWIMLANES CANVAS
+        ========================================================================= */}
+        <div 
+          ref={containerRef}
+          onScroll={handleContainerScroll}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setHoveredTime(null)}
+          className="relative overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"
+        >
+          <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none pt-3 pb-4">
+
+            {/* =========================================================================
+                3. Swimlanes: Stint-by-Stint (登場回ごと) or Character-Consolidated (4キャラ集約)
+            ========================================================================= */}
+            <div className="divide-y divide-slate-800/80">
+              {rowDisplayMode === 'stints' ? (
+                /* --- Mode A: Each Appearance Turn (Stint) gets its own row (Waterfall) --- */
+                stints.map((stint, stintIdx) => {
+                  const char = characterMap.get(stint.characterId) || characters[0];
+                  const isStintCurrentlyOnField = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
+
+                  // Calculate occurrence index for this character (e.g., 1st or 2nd appearance)
+                  const sameCharStints = stints.filter(s => s.characterId === char.id);
+                  const occurrenceNum = sameCharStints.findIndex(s => s.id === stint.id) + 1;
+                  const totalOccurrences = sameCharStints.length;
+
+                  // Find actions and cooldowns/buffs initiated by this stint
+                  const stintActionIds = new Set(stint.actions.map(a => a.id));
+                  const stintSkillCDs = skillCooldowns.filter(c => 
+                    c.characterId === char.id && (
+                      stintActionIds.has(c.actionInstanceId) || 
+                      (c.startTime >= (stint.startTime ?? 0) - 0.05 && c.startTime <= (stint.endTime ?? 0) + 0.05)
+                    )
+                  );
+                  const stintBurstCDs = burstCooldowns.filter(c => 
+                    c.characterId === char.id && (
+                      stintActionIds.has(c.actionInstanceId) || 
+                      (c.startTime >= (stint.startTime ?? 0) - 0.05 && c.startTime <= (stint.endTime ?? 0) + 0.05)
+                    )
+                  );
+                  const stintBuffs = activeBuffs.filter(b => 
+                    b.sourceCharacterId === char.id && 
+                    b.startTime >= (stint.startTime ?? 0) - 0.2 && 
+                    b.startTime <= (stint.endTime ?? 0) + 0.2
+                  );
+                  const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
+                  const isStintSelected = selectedAction?.stintId === stint.id;
+
+                  return (
+                    <div key={stint.id} className={`relative group/stint transition-colors ${
+                      isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
+                    }`}>
+                      <div className="flex">
+                        {/* Stint Row Header (Left Column: Sticky Left) */}
+                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                          isStintSelected
+                            ? 'bg-amber-950/80 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
+                            : isStintCurrentlyOnField 
+                            ? 'bg-slate-900 border-l-2 border-l-amber-400' 
+                            : 'bg-slate-950'
+                        }`}>
+                          <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div 
+                                className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner shrink-0"
+                                style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
+                              >
+                                {char.name.slice(0, 1)}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1">
+                                  <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                  {isStintCurrentlyOnField && (
+                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="現在出場中" />
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-1 mt-0.5">
+                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-900 border border-slate-700 text-amber-300 font-bold">
+                                    #{stintIdx + 1}
+                                  </span>
+                                  {totalOccurrences > 1 ? (
+                                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                                      登場 {occurrenceNum}/{totalOccurrences}回目
+                                    </span>
+                                  ) : (
+                                    <span className="text-[9px] text-slate-400 font-medium">単回出場</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Move Stint Row Up / Down */}
+                            {onUpdateStints && (
+                              <div className="flex flex-col items-center shrink-0 bg-slate-900 rounded border border-slate-800 p-0.5">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (stintIdx > 0) {
+                                      const next = [...stints];
+                                      const temp = next[stintIdx];
+                                      next[stintIdx] = next[stintIdx - 1];
+                                      next[stintIdx - 1] = temp;
+                                      onUpdateStints(next);
+                                    }
+                                  }}
+                                  disabled={stintIdx === 0}
+                                  title={`#${stintIdx + 1} (${char.name}) の登場順を上（前）へ`}
+                                  className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (stintIdx < stints.length - 1) {
+                                      const next = [...stints];
+                                      const temp = next[stintIdx];
+                                      next[stintIdx] = next[stintIdx + 1];
+                                      next[stintIdx + 1] = temp;
+                                      onUpdateStints(next);
+                                    }
+                                  }}
+                                  disabled={stintIdx === stints.length - 1}
+                                  title={`#${stintIdx + 1} (${char.name}) の登場順を下（次）へ`}
+                                  className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
+                                >
+                                  ▼
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Sub-labels for the stint row */}
+                          <div className="space-y-1 mt-2 text-[10px] font-mono text-slate-400 pl-0.5">
+                            <div className="flex items-center justify-between text-amber-300/90 font-semibold truncate">
+                              <span className="truncate">{stint.note || `${char.name}の行動`}</span>
+                              <span className="shrink-0 text-slate-400 font-mono text-[9px]">
+                                {(stint.duration ?? 0).toFixed(1)}s
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between text-slate-400 text-[9px]">
+                              <span>時間帯</span>
+                              <span className="font-mono">{(stint.startTime ?? 0).toFixed(1)}s ~ {(stint.endTime ?? 0).toFixed(1)}s</span>
+                            </div>
+                            {stintSkillCDs.length > 0 && (
+                              <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
+                                <span>⏱️ スキルCT</span>
+                                <span>{stintSkillCDs[0].duration.toFixed(1)}s</span>
+                              </div>
+                            )}
+                            {stintBurstCDs.length > 0 && (
+                              <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
+                                <span>⏱️ 爆発CT</span>
+                                <span>{stintBurstCDs[0].duration.toFixed(1)}s</span>
+                              </div>
+                            )}
+                            {stintBuffRows.length > 0 && (
+                              <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
+                                {stintBuffRows.map((bRow, rIdx) => (
+                                  <div key={`stint_buff_lbl_${stint.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
+                                    <span className="truncate flex items-center gap-1">
+                                      <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
+                                      <span className="truncate">{bRow.cleanName}</span>
+                                    </span>
+                                    <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Right Timeline Canvas for this Stint */}
+                        <div 
+                          className="relative flex-1 min-h-[95px] flex flex-col justify-around py-1 cursor-pointer"
+                          onClick={handleTimelineClick}
+                        >
+                          {/* Background Vertical Grid Lines */}
+                          {timelineTicks.map(t => (
+                            <div
+                              key={`grid_stint_${stint.id}_${t.absTime}`}
+                              className={`absolute top-0 bottom-0 border-l pointer-events-none ${
+                                t.isZero ? 'border-purple-400/70' : t.isNegative ? 'border-amber-500/30' : 'border-slate-800/40'
+                              }`}
+                              style={{ left: `${t.absTime * pixelsPerSecond}px` }}
+                            />
+                          ))}
+
+                          {/* --- Sublane 1: On-field Active Stint & Actions --- */}
+                          <div className="relative h-7 my-0.5">
+                            {(() => {
+                              const startX = (stint.startTime ?? 0) * pixelsPerSecond;
+                              const width = (stint.duration ?? 0) * pixelsPerSecond;
+
+                              return (
+                                <div
+                                  className={`absolute h-7 rounded-lg flex items-center overflow-hidden border shadow-sm transition-all ${
+                                    isStintCurrentlyOnField
+                                      ? 'border-amber-400 ring-2 ring-amber-400/50 shadow-amber-500/20'
+                                      : 'border-slate-700 hover:border-slate-500'
+                                  }`}
+                                  style={{
+                                    left: `${startX}px`,
+                                    width: `${width}px`,
+                                    background: `linear-gradient(90deg, ${char.color}55, ${char.color}33)`,
+                                  }}
+                                >
+                                  {stint.actions.map((act, actIdx) => {
+                                    const actStartX = ((act.startTime ?? 0) - (stint.startTime ?? 0)) * pixelsPerSecond;
+                                    const actWidth = act.duration * pixelsPerSecond;
+                                    const isActActive = (act.startTime ?? 0) <= activeTime && activeTime < (act.endTime ?? 0);
+                                    const isBurst = act.type === 'burst';
+                                    const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+                                    const isSelected = selectedAction?.stintId === stint.id && selectedAction?.actionId === act.id;
+                                    const isBeingDragged = draggedAction?.stintId === stint.id && draggedAction?.actionIndex === actIdx;
+                                    const isDragOverTarget = dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx && draggedAction?.actionIndex !== actIdx;
+
+                                    return (
+                                      <div
+                                        key={act.id}
+                                        draggable={true}
+                                        onDragStart={(e) => {
+                                          e.stopPropagation();
+                                          setDraggedAction({ stintId: stint.id, actionIndex: actIdx, actionId: act.id });
+                                          onSelectAction?.(stint.id, act.id);
+                                          e.dataTransfer.effectAllowed = 'move';
+                                          e.dataTransfer.setData('text/plain', act.id);
+                                        }}
+                                        onDragOver={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          if (draggedAction && draggedAction.stintId === stint.id) {
+                                            e.dataTransfer.dropEffect = 'move';
+                                            if (!dragOverAction || dragOverAction.actionIndex !== actIdx) {
+                                              setDragOverAction({ stintId: stint.id, actionIndex: actIdx });
+                                            }
+                                          }
+                                        }}
+                                        onDragLeave={(e) => {
+                                          e.stopPropagation();
+                                          if (dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx) {
+                                            setDragOverAction(null);
+                                          }
+                                        }}
+                                        onDrop={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          if (draggedAction && draggedAction.stintId === stint.id && draggedAction.actionIndex !== actIdx) {
+                                            handleReorderActionsInStint(stint.id, draggedAction.actionIndex, actIdx);
+                                          }
+                                          setDraggedAction(null);
+                                          setDragOverAction(null);
+                                        }}
+                                        onDragEnd={(e) => {
+                                          e.stopPropagation();
+                                          setDraggedAction(null);
+                                          setDragOverAction(null);
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          onSelectAction?.(stint.id, act.id);
+                                          onSeek(act.startTime ?? 0);
+                                          const el = document.getElementById(`stint-card-${stint.id}`);
+                                          if (el) {
+                                            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                          }
+                                        }}
+                                        style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
+                                        className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${
+                                          isSelected 
+                                            ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
+                                            : isActActive 
+                                            ? 'bg-amber-400 text-slate-950 ring-1 ring-white' 
+                                            : isBurst
+                                            ? 'bg-purple-600/90 text-white hover:brightness-110'
+                                            : isSkill
+                                            ? 'bg-sky-600/90 text-white hover:brightness-110'
+                                            : 'bg-slate-800/80 text-slate-200 hover:brightness-110'
+                                        } ${
+                                          isBeingDragged ? 'opacity-30 scale-95 ring-1 ring-dashed ring-amber-400' : ''
+                                        } ${
+                                          isDragOverTarget 
+                                            ? (draggedAction && draggedAction.actionIndex < actIdx 
+                                                ? 'border-r-4 border-r-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30' 
+                                                : 'border-l-4 border-l-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30') 
+                                            : ''
+                                        }`}
+                                        title={`【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`}
+                                      >
+                                        <span className="truncate px-0.5 flex items-center gap-0.5">
+                                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
+                                          {act.shortName}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })()}
+                          </div>
+
+                          {/* --- Sublane 2: Skill (E) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          <div className="relative h-4 my-0.5">
+                            {stintSkillCDs.map(cd => {
+                              const startX = cd.startTime * pixelsPerSecond;
+                              const width = cd.duration * pixelsPerSecond;
+                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                              const remaining = Math.max(0, cd.endTime - activeTime);
+
+                              return (
+                                <div
+                                  key={cd.id}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSeek(cd.startTime);
+                                  }}
+                                  style={{ left: `${startX}px`, width: `${width}px` }}
+                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
+                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
+                                  }`}
+                                  title={`【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
+                                >
+                                  <span className="truncate">
+                                    ⏱️ E-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* --- Sublane 3: Burst (Q) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          <div className="relative h-4 my-0.5">
+                            {stintBurstCDs.map(cd => {
+                              const startX = cd.startTime * pixelsPerSecond;
+                              const width = cd.duration * pixelsPerSecond;
+                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                              const remaining = Math.max(0, cd.endTime - activeTime);
+
+                              return (
+                                <div
+                                  key={cd.id}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSeek(cd.startTime);
+                                  }}
+                                  style={{ left: `${startX}px`, width: `${width}px` }}
+                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
+                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
+                                  }`}
+                                  title={`【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
+                                >
+                                  <span className="truncate">
+                                    ⏱️ Q-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* --- Sublane 4+: Active Buffs & Summons (Each effect duration in its own independent row) --- */}
+                          {stintBuffRows.map((bRow, rIdx) => (
+                            <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="relative h-4 my-0.5">
+                              {bRow.spans.map(buff => {
+                                const startX = buff.startTime * pixelsPerSecond;
+                                const width = Math.max(16, buff.duration * pixelsPerSecond);
+                                const isBuffActive = buff.startTime <= activeTime && activeTime < buff.endTime;
+                                const remaining = Math.max(0, buff.endTime - activeTime);
+
+                                return (
+                                  <div
+                                    key={buff.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(buff.startTime);
+                                    }}
+                                    style={{ 
+                                      left: `${startX}px`, 
+                                      width: `${width}px`,
+                                    }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
+                                      isBuffActive 
+                                        ? 'ring-1 ring-emerald-400 font-bold brightness-125' 
+                                        : 'opacity-90'
+                                    }`}
+                                    title={`【${bRow.tag} 効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                  >
+                                    <span className="truncate">
+                                      ✨ {bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} ({buff.duration.toFixed(0)}s) {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                /* --- Mode B: Consolidated 4 Character Swimlanes (1 Row per Character) --- */
+                characters.map((char, charIdx) => {
+                  const elemTheme = ELEMENT_COLORS[char.element];
+                  const charStints = stints.filter(s => s.characterId === char.id);
+                  const charSkillCDs = skillCooldowns.filter(c => c.characterId === char.id);
+                  const charBurstCDs = burstCooldowns.filter(c => c.characterId === char.id);
+                  const charBuffs = activeBuffs.filter(b => b.sourceCharacterId === char.id);
+                  const charBuffRows = organizeBuffsIntoRows(charBuffs);
+                  const isCharCurrentlyOnField = charStints.some(s => (s.startTime ?? 0) <= activeTime && activeTime < (s.endTime ?? 0));
+
+                  return (
+                    <div key={char.id} className="relative group/char bg-slate-950/30 hover:bg-slate-900/30 transition-colors">
+                      {/* Character Row Header (Left Column: Sticky Left) */}
+                      <div className="flex">
+                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                          isCharCurrentlyOnField ? 'bg-slate-900 border-l-2 border-l-amber-400' : 'bg-slate-950'
+                        }`}>
+                          <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div 
+                                className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner shrink-0"
+                                style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
+                              >
+                                {char.name.slice(0, 1)}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1">
+                                  <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                  {isCharCurrentlyOnField && (
+                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="現在出場中" />
+                                  )}
+                                </div>
+                                <span className="text-[10px] text-slate-400 truncate block">{char.artifactSetName || '聖遺物'}</span>
+                              </div>
+                            </div>
+
+                            {/* Move Row Up / Down (Syncs both Vertical Swimlane and Horizontal Timeline) */}
+                            {(onReorderCharactersAndStints || onReorderCharacters) && (
+                              <div className="flex flex-col items-center shrink-0 bg-slate-900 rounded border border-slate-800 p-0.5">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (charIdx > 0) {
+                                      const charA = characters[charIdx];
+                                      const charB = characters[charIdx - 1];
+                                      const next = [...characters];
+                                      const [moved] = next.splice(charIdx, 1);
+                                      next.splice(charIdx - 1, 0, moved);
+
+                                      if (onReorderCharactersAndStints) {
+                                        const nextStints = swapStintsForCharacters(stints, charA.id, charB.id);
+                                        onReorderCharactersAndStints(next, nextStints);
+                                      } else if (onReorderCharacters) {
+                                        onReorderCharacters(next);
+                                      }
+                                    }
+                                  }}
+                                  disabled={charIdx === 0}
+                                  title={`${char.name}のレーンおよび登場順を上（前）へ`}
+                                  className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (charIdx < characters.length - 1) {
+                                      const charA = characters[charIdx];
+                                      const charB = characters[charIdx + 1];
+                                      const next = [...characters];
+                                      const [moved] = next.splice(charIdx, 1);
+                                      next.splice(charIdx + 1, 0, moved);
+
+                                      if (onReorderCharactersAndStints) {
+                                        const nextStints = swapStintsForCharacters(stints, charA.id, charB.id);
+                                        onReorderCharactersAndStints(next, nextStints);
+                                      } else if (onReorderCharacters) {
+                                        onReorderCharacters(next);
+                                      }
+                                    }
+                                  }}
+                                  disabled={charIdx === characters.length - 1}
+                                  title={`${char.name}のレーンおよび登場順を下（次）へ`}
+                                  className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
+                                >
+                                  ▼
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Sub-labels for the row */}
+                          <div className="space-y-1.5 mt-2 text-[10px] font-mono text-slate-400 pl-1">
+                            <div className="flex items-center justify-between text-amber-300/90 font-semibold">
+                              <span>▶ 出場・行動</span>
+                              <span className="text-[9px] text-slate-500">{charStints.length}回出場</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sky-300 font-semibold">
+                              <span>⏱️ スキルCT</span>
+                              <span>{char.skillCooldown}s</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sky-300 font-semibold">
+                              <span>⏱️ 爆発CT</span>
+                              <span>{char.burstCooldown}s</span>
+                            </div>
+                            {charBuffRows.length > 0 && (
+                              <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
+                                {charBuffRows.map((bRow, rIdx) => (
+                                  <div key={`char_buff_lbl_${char.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
+                                    <span className="truncate flex items-center gap-1">
+                                      <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
+                                      <span className="truncate">{bRow.cleanName}</span>
+                                    </span>
+                                    <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Right Timeline Canvas for this Character */}
+                        <div 
+                          className="relative flex-1 min-h-[110px] flex flex-col justify-around py-1 cursor-pointer"
+                          onClick={handleTimelineClick}
+                        >
+                          {/* Background Vertical Grid Lines */}
+                          {timelineTicks.map(t => (
+                            <div
+                              key={`grid_${char.id}_${t.absTime}`}
+                              className={`absolute top-0 bottom-0 border-l pointer-events-none ${
+                                t.isZero ? 'border-purple-400/70' : t.isNegative ? 'border-amber-500/30' : 'border-slate-800/40'
+                              }`}
+                              style={{ left: `${t.absTime * pixelsPerSecond}px` }}
+                            />
+                          ))}
+
+                          {/* --- Sublane 1: On-field Active Stints & Actions --- */}
+                          <div className="relative h-7 my-0.5">
+                            {charStints.map(stint => {
+                              const startX = (stint.startTime ?? 0) * pixelsPerSecond;
+                              const width = (stint.duration ?? 0) * pixelsPerSecond;
+                              const isActiveStint = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
+
+                              return (
+                                <div
+                                  key={stint.id}
+                                  className={`absolute h-7 rounded-lg flex items-center overflow-hidden border shadow-sm transition-all ${
+                                    isActiveStint
+                                      ? 'border-amber-400 ring-2 ring-amber-400/50 shadow-amber-500/20'
+                                      : 'border-slate-700 hover:border-slate-500'
+                                  }`}
+                                  style={{
+                                    left: `${startX}px`,
+                                    width: `${width}px`,
+                                    background: `linear-gradient(90deg, ${char.color}55, ${char.color}33)`,
+                                  }}
+                                >
+                                  {/* Nested Actions inside this Stint */}
+                                  {stint.actions.map((act, actIdx) => {
+                                    const actStartX = ((act.startTime ?? 0) - (stint.startTime ?? 0)) * pixelsPerSecond;
+                                    const actWidth = act.duration * pixelsPerSecond;
+                                    const isActActive = (act.startTime ?? 0) <= activeTime && activeTime < (act.endTime ?? 0);
+                                    const isBurst = act.type === 'burst';
+                                    const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+                                    const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
+                                    const isSelected = selectedAction?.stintId === stint.id && selectedAction?.actionId === act.id;
+                                    const isBeingDragged = draggedAction?.stintId === stint.id && draggedAction?.actionIndex === actIdx;
+                                    const isDragOverTarget = dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx && draggedAction?.actionIndex !== actIdx;
+
+                                    return (
+                                      <div
+                                        key={act.id}
+                                        draggable={!isSwap}
+                                        onDragStart={(e) => {
+                                          if (isSwap) return;
+                                          e.stopPropagation();
+                                          setDraggedAction({ stintId: stint.id, actionIndex: actIdx, actionId: act.id });
+                                          onSelectAction?.(stint.id, act.id);
+                                          e.dataTransfer.effectAllowed = 'move';
+                                          e.dataTransfer.setData('text/plain', act.id);
+                                        }}
+                                        onDragOver={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          if (draggedAction && draggedAction.stintId === stint.id) {
+                                            e.dataTransfer.dropEffect = 'move';
+                                            if (!dragOverAction || dragOverAction.actionIndex !== actIdx) {
+                                              setDragOverAction({ stintId: stint.id, actionIndex: actIdx });
+                                            }
+                                          }
+                                        }}
+                                        onDragLeave={(e) => {
+                                          e.stopPropagation();
+                                          if (dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx) {
+                                            setDragOverAction(null);
+                                          }
+                                        }}
+                                        onDrop={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          if (draggedAction && draggedAction.stintId === stint.id && draggedAction.actionIndex !== actIdx) {
+                                            if (stint.actions[0]?.type === 'swap' && actIdx === 0) return;
+                                            handleReorderActionsInStint(stint.id, draggedAction.actionIndex, actIdx);
+                                          }
+                                          setDraggedAction(null);
+                                          setDragOverAction(null);
+                                        }}
+                                        onDragEnd={(e) => {
+                                          e.stopPropagation();
+                                          setDraggedAction(null);
+                                          setDragOverAction(null);
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          onSelectAction?.(stint.id, act.id);
+                                          onSeek(act.startTime ?? 0);
+                                          const el = document.getElementById(`stint-card-${stint.id}`);
+                                          if (el) {
+                                            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                          }
+                                        }}
+                                        style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
+                                        className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none ${
+                                          isSwap ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
+                                        } transition-all ${
+                                          isSelected 
+                                            ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
+                                            : isActActive 
+                                            ? 'bg-amber-400 text-slate-950 ring-1 ring-white' 
+                                            : isSwap
+                                            ? 'bg-sky-600/95 text-sky-100 border-sky-400 shadow-sm hover:brightness-110'
+                                            : isBurst
+                                            ? 'bg-purple-600/90 text-white hover:brightness-110'
+                                            : isSkill
+                                            ? 'bg-sky-600/90 text-white hover:brightness-110'
+                                            : 'bg-slate-800/80 text-slate-200 hover:brightness-110'
+                                        } ${
+                                          isBeingDragged ? 'opacity-30 scale-95 ring-1 ring-dashed ring-amber-400' : ''
+                                        } ${
+                                          isDragOverTarget 
+                                            ? (draggedAction && draggedAction.actionIndex < actIdx 
+                                                ? 'border-r-4 border-r-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30' 
+                                                : 'border-l-4 border-l-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30') 
+                                            : ''
+                                        }`}
+                                        title={
+                                          isSwap
+                                            ? `【🔄 キャラ交代 (交代所要時間)】\n所要時間: ${act.duration.toFixed(2)}s\n期間: [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
+                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
+                                        }
+                                      >
+                                        <span className="truncate px-0.5 flex items-center gap-0.5">
+                                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
+                                          {isSwap ? '🔄交代' : act.shortName}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* --- Sublane 2: Skill (E) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          <div className="relative h-4 my-0.5">
+                            {charSkillCDs.map(cd => {
+                              const startX = cd.startTime * pixelsPerSecond;
+                              const width = cd.duration * pixelsPerSecond;
+                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                              const remaining = Math.max(0, cd.endTime - activeTime);
+
+                              return (
+                                <div
+                                  key={cd.id}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSeek(cd.startTime);
+                                  }}
+                                  style={{ left: `${startX}px`, width: `${width}px` }}
+                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
+                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
+                                  }`}
+                                  title={`【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
+                                >
+                                  <span className="truncate">
+                                    ⏱️ E-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* --- Sublane 3: Burst (Q) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          <div className="relative h-4 my-0.5">
+                            {charBurstCDs.map(cd => {
+                              const startX = cd.startTime * pixelsPerSecond;
+                              const width = cd.duration * pixelsPerSecond;
+                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                              const remaining = Math.max(0, cd.endTime - activeTime);
+
+                              return (
+                                <div
+                                  key={cd.id}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSeek(cd.startTime);
+                                  }}
+                                  style={{ left: `${startX}px`, width: `${width}px` }}
+                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
+                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
+                                  }`}
+                                  title={`【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
+                                >
+                                  <span className="truncate">
+                                    ⏱️ Q-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* --- Sublane 4+: Active Buffs & Summons (Each effect duration in its own independent row) --- */}
+                          {charBuffRows.map((bRow, rIdx) => (
+                            <div key={`char_buff_row_${char.id}_${rIdx}`} className="relative h-4 my-0.5">
+                              {bRow.spans.map(buff => {
+                                const startX = buff.startTime * pixelsPerSecond;
+                                const width = Math.max(16, buff.duration * pixelsPerSecond);
+                                const isBuffActive = buff.startTime <= activeTime && activeTime < buff.endTime;
+                                const remaining = Math.max(0, buff.endTime - activeTime);
+
+                                return (
+                                  <div
+                                    key={buff.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(buff.startTime);
+                                    }}
+                                    style={{ 
+                                      left: `${startX}px`, 
+                                      width: `${width}px`,
+                                    }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
+                                      isBuffActive 
+                                        ? 'ring-1 ring-emerald-400 font-bold brightness-125' 
+                                        : 'opacity-90'
+                                    }`}
+                                    title={`【${bRow.tag} 効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                  >
+                                    <span className="truncate">
+                                      ✨ {bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} ({buff.duration.toFixed(0)}s) {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* =========================================================================
+                4.5 Automatic 2nd-Cycle Loop Projection & CT/Buff Collision Analyzer (2周目自動投影・読取専用)
+            ========================================================================= */}
+            {cycle2Data.enabled && cycle2Data.stints.length > 0 && (
+              <div className="border-t-2 border-purple-800/80 bg-slate-950/95">
+                {/* 2nd Cycle Section Header */}
+                <div className="flex items-center border-b border-purple-900/60 bg-gradient-to-r from-purple-950/90 via-slate-950 to-indigo-950/80 px-3 py-2">
+                  <div className="w-[180px] shrink-0 sticky left-0 z-45 flex items-center gap-1.5 font-bold text-xs text-purple-300 bg-slate-950 px-2 py-1 rounded border border-purple-800/60 shadow">
+                    <Repeat className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                    <span className="truncate">2周目ループ投影</span>
+                    <span className="text-[9px] bg-purple-900/80 border border-purple-700 text-purple-200 px-1 py-0.2 rounded flex items-center gap-0.5 shrink-0">
+                      <Lock className="w-2.5 h-2.5" /> 読取専用
+                    </span>
+                  </div>
+
+                  <div className="flex-1 flex flex-wrap items-center justify-between gap-2 px-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[11px] text-purple-300/90 font-medium">
+                        🔁 1周目 <strong className="text-white font-mono">{loopStartTime.toFixed(1)}s ~ {totalDuration.toFixed(1)}s</strong> の定常区間を <strong className="text-purple-300 font-mono">{cycle2Data.cycle2StartTime.toFixed(1)}s ~ {cycle2Data.cycle2EndTime.toFixed(1)}s</strong> に自動投影
+                      </span>
+                      <span className="text-[10px] text-slate-500">（1周目の設定がリアルタイム反映・編集不可）</span>
+                    </div>
+
+                    {/* Global CT Collision Status Banner */}
+                    <div className="flex items-center gap-2">
+                      {cycle2Data.cooldownCollisions.length > 0 ? (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-red-950/80 border border-red-500 text-red-300 text-xs font-bold animate-pulse shadow-red-500/20 shadow">
+                          <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                          <span>⚠️ CT衝突検出: {cycle2Data.cooldownCollisions.length}件のアクションでCT未回復</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/80 border border-emerald-500/70 text-emerald-300 text-xs font-bold">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span>✅ 全アクションCT解消済み（2周目即座移行可能）</span>
+                        </div>
+                      )}
+
+                      {cycle2Data.carryOverCooldowns.length > 0 && (
+                        <div className="flex items-center gap-1 px-2 py-1 rounded bg-sky-950/80 border border-sky-500/60 text-sky-300 text-[11px] font-mono">
+                          <span>⏱️ 1周目持ち越しCT: <strong>{cycle2Data.carryOverCooldowns.length}件</strong> (E:{cycle2Data.carryOverSkillCDs.length} / Q:{cycle2Data.carryOverBurstCDs.length})</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2nd Cycle Swimlanes (1 Row per Stint, with separate Skill CT row, Burst CT row, and individual Buff rows) */}
+                <div className="divide-y divide-purple-900/30">
+                  {cycle2Data.stints.map((stint, stintIdx) => {
+                    const char = characterMap.get(stint.characterId) || characters[0];
+                    const isStintCurrentlyOnField = stint.startTime <= activeTime && activeTime < stint.endTime;
+                    
+                    // 1. Skill Cooldowns (ALL 1st-cycle CDs + 2nd cycle new)
+                    const stintCycle1SkillCDs = cycle2Data.cycle1SkillCDs.filter(c => c.characterId === char.id);
+                    const stintNewSkillCDs = cycle2Data.cycle2NewCooldowns.filter(c => c.characterId === char.id && c.type === 'skill');
+                    const allStintSkillCDs = [...stintCycle1SkillCDs, ...stintNewSkillCDs];
+
+                    // 2. Burst Cooldowns (ALL 1st-cycle CDs + 2nd cycle new)
+                    const stintCycle1BurstCDs = cycle2Data.cycle1BurstCDs.filter(c => c.characterId === char.id);
+                    const stintNewBurstCDs = cycle2Data.cycle2NewCooldowns.filter(c => c.characterId === char.id && c.type === 'burst');
+                    const allStintBurstCDs = [...stintCycle1BurstCDs, ...stintNewBurstCDs];
+
+                    // 3. 2nd Cycle Buffs (Only 2nd-cycle new buffs, organized into 1 row per unique buff effect)
+                    const stintBuffs = cycle2Data.allCycle2Buffs.filter(b => 
+                      b.sourceCharacterId === char.id &&
+                      b.startTime >= stint.startTime - 0.2 &&
+                      b.startTime <= stint.endTime + 0.2
+                    );
+                    const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
+
+                    return (
+                      <div key={stint.id} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
+                        <div className="flex">
+                          {/* Left Column (Sticky Left) */}
+                          <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-45 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                            isStintCurrentlyOnField ? 'bg-slate-900 border-l-2 border-l-purple-400' : 'bg-slate-950'
+                          }`}>
+                            <div>
+                              <div className="flex items-center justify-between gap-1">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <div 
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner shrink-0"
+                                    style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
+                                  >
+                                    {char.name.slice(0, 1)}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-1">
+                                      <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-900/80 text-purple-300 border border-purple-700">
+                                        2周目 #{stintIdx + 1}
+                                      </span>
+                                    </div>
+                                    <div className="text-[9px] text-slate-400 font-mono mt-0.5">
+                                      {stint.startTime.toFixed(1)}s ~ {stint.endTime.toFixed(1)}s
+                                    </div>
+                                  </div>
+                                </div>
+                                <span title="読取専用（自動反映）">
+                                  <Lock className="w-3 h-3 text-slate-500 shrink-0" />
+                                </span>
+                              </div>
+
+                              {/* CT status badge */}
+                              <div className="mt-1.5 text-[9px] font-mono">
+                                {stint.actions.some(a => a.hasCTCollision) ? (
+                                  <div className="text-red-400 font-bold flex items-center gap-1 bg-red-950/60 border border-red-800/80 rounded px-1.5 py-0.5">
+                                    <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />
+                                    <span>CT未回復あり</span>
+                                  </div>
+                                ) : (
+                                  <div className="text-emerald-400 flex items-center gap-1 bg-emerald-950/40 border border-emerald-800/60 rounded px-1.5 py-0.5">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                                    <span>CT全解消</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Sub-labels matching 1st-cycle structure */}
+                            <div className="space-y-1 mt-2 text-[10px] font-mono text-slate-400 pl-0.5">
+                              <div className="flex items-center justify-between text-purple-300 font-semibold truncate">
+                                <span className="truncate">{stint.note || `${char.name}の行動 (2周目)`}</span>
+                                <span className="shrink-0 text-slate-400 font-mono text-[9px]">
+                                  {stint.duration.toFixed(1)}s
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-slate-400 text-[9px]">
+                                <span>時間帯</span>
+                                <span className="font-mono">{stint.startTime.toFixed(1)}s ~ {stint.endTime.toFixed(1)}s</span>
+                              </div>
+                              {allStintSkillCDs.length > 0 && (
+                                <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
+                                  <span>⏱️ スキルCT</span>
+                                  <span>
+                                    {stintCycle1SkillCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
+                                    {char.skillCooldown > 0 ? `${char.skillCooldown.toFixed(1)}s` : ''}
+                                  </span>
+                                </div>
+                              )}
+                              {allStintBurstCDs.length > 0 && (
+                                <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
+                                  <span>⏱️ 爆発CT</span>
+                                  <span>
+                                    {stintCycle1BurstCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
+                                    {char.burstCooldown > 0 ? `${char.burstCooldown.toFixed(1)}s` : ''}
+                                  </span>
+                                </div>
+                              )}
+                              {stintBuffRows.length > 0 && (
+                                <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
+                                  {stintBuffRows.map((bRow, rIdx) => (
+                                    <div key={`c2_stint_buff_lbl_${stint.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 2周目効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
+                                      <span className="truncate flex items-center gap-1">
+                                        <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
+                                        <span className="truncate">{bRow.cleanName}</span>
+                                      </span>
+                                      <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Right Timeline Canvas for 2nd Cycle */}
+                          <div 
+                            className="relative flex-1 min-h-[95px] flex flex-col justify-around py-1 cursor-pointer"
+                            onClick={handleTimelineClick}
+                          >
+                            {/* Background Vertical Grid Lines */}
+                            {timelineTicks.map(t => (
+                              <div
+                                key={`grid_c2_${stint.id}_${t.absTime}`}
+                                className={`absolute top-0 bottom-0 border-l pointer-events-none ${
+                                  t.isZero ? 'border-purple-400/70' : t.isNegative ? 'border-amber-500/30' : 'border-slate-800/40'
+                                }`}
+                                style={{ left: `${t.absTime * pixelsPerSecond}px` }}
+                              />
+                            ))}
+
+                            {/* --- Sublane 1: 2nd Cycle Stint & Actions --- */}
+                            <div className="relative h-7 my-0.5">
+                              {(() => {
+                                const startX = stint.startTime * pixelsPerSecond;
+                                const width = stint.duration * pixelsPerSecond;
+
+                                return (
+                                  <div
+                                    className={`absolute h-7 rounded-lg flex items-center overflow-hidden border shadow-sm transition-all ${
+                                      isStintCurrentlyOnField
+                                        ? 'border-purple-400 ring-2 ring-purple-400/50 shadow-purple-500/20'
+                                        : 'border-purple-800/70 hover:border-purple-500'
+                                    }`}
+                                    style={{
+                                      left: `${startX}px`,
+                                      width: `${width}px`,
+                                      background: `linear-gradient(90deg, ${char.color}44, ${char.color}22)`,
+                                    }}
+                                  >
+                                    {stint.actions.map((act) => {
+                                      const actStartX = (act.startTime - stint.startTime) * pixelsPerSecond;
+                                      const actWidth = act.duration * pixelsPerSecond;
+                                      const isSwap = act.type === 'swap' || (act as any).actionTypeId === 'action_switch_char';
+
+                                      return (
+                                        <div
+                                          key={act.id}
+                                          style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
+                                          className={`absolute h-6 top-0.5 rounded flex items-center justify-between px-1 border select-none transition-all ${
+                                            act.hasCTCollision
+                                              ? 'bg-red-950/90 border-red-500 ring-2 ring-red-500/80 shadow-lg text-white font-bold animate-pulse'
+                                              : isSwap
+                                              ? 'bg-sky-900/90 border-sky-500 text-sky-100 hover:border-sky-400'
+                                              : 'bg-slate-900/90 border-slate-700 text-slate-200 hover:border-purple-400'
+                                          }`}
+                                          title={
+                                            act.hasCTCollision
+                                              ? `【⚠️ CT衝突エラー】1周目の発動CTが2周目の発動時点（${act.startTime.toFixed(2)}s）までに解消されていません！\n残り待機時間: ${act.ctRemaining}s\nアクション: ${act.name}`
+                                              : isSwap
+                                              ? `【2周目キャラ交代】\n所要時間: ${act.duration.toFixed(2)}s\n開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s`
+                                              : `【2周目アクション (読取専用)】\n${act.name} (${act.duration.toFixed(2)}s)\n開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s\nCT状態: ✅ 解消済み`
+                                          }
+                                        >
+                                          <div className="flex items-center gap-1 min-w-0">
+                                            {act.hasCTCollision ? (
+                                              <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-bounce" />
+                                            ) : isSwap ? (
+                                              <span className="text-[10px]">🔄</span>
+                                            ) : (
+                                              <Lock className="w-2.5 h-2.5 text-purple-400/70 shrink-0" />
+                                            )}
+                                            <span className="font-bold text-[10px] truncate">{isSwap ? '交代' : act.shortName}</span>
+                                          </div>
+                                          {act.hasCTCollision && (
+                                            <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                              残{act.ctRemaining}s
+                                            </span>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                );
+                              })()}
+                            </div>
+
+                            {/* --- Sublane 2: Skill (E) Cooldown Row (1st-cycle carryover/finished + 2nd-cycle new) --- */}
+                            <div className="relative h-4 my-0.5">
+                              {allStintSkillCDs.map((cd) => {
+                                const isCarryOver = (cd as any).isCarryOver;
+                                const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
+                                const startX = cd.startTime * pixelsPerSecond;
+                                const width = cd.duration * pixelsPerSecond;
+                                const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                                const remaining = Math.max(0, cd.endTime - activeTime);
+
+                                return (
+                                  <div
+                                    key={`c2_skill_cd_${cd.id}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(cd.startTime);
+                                    }}
+                                    style={{ left: `${startX}px`, width: `${width}px` }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none ${
+                                      isFinishedInCycle1
+                                        ? 'bg-sky-950/70 border-sky-600/70 text-sky-300 hover:border-sky-400'
+                                        : isCarryOver
+                                        ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
+                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
+                                    } ${isCoolingDown ? 'brightness-125 font-bold' : ''}`}
+                                    title={
+                                      isFinishedInCycle1
+                                        ? `【1周目スキルCT (1周目中に解消済)】\nスキルCT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
+                                        : isCarryOver
+                                        ? `【1周目からの持ち越しスキルCT】\nスキルCT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n2周目開始時残り: ${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        : `【2周目スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                    }
+                                  >
+                                    <span className="truncate">
+                                      ⏱️ {isFinishedInCycle1
+                                        ? `[1周目] E-CT ${cd.duration.toFixed(1)}s (解消済)`
+                                        : isCarryOver
+                                        ? `[1周目持越] E-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
+                                        : `E-CT ${cd.duration.toFixed(1)}s`} {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+
+                            {/* --- Sublane 3: Burst (Q) Cooldown Row (1st-cycle carryover/finished + 2nd-cycle new) --- */}
+                            <div className="relative h-4 my-0.5">
+                              {allStintBurstCDs.map((cd) => {
+                                const isCarryOver = (cd as any).isCarryOver;
+                                const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
+                                const startX = cd.startTime * pixelsPerSecond;
+                                const width = cd.duration * pixelsPerSecond;
+                                const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
+                                const remaining = Math.max(0, cd.endTime - activeTime);
+
+                                return (
+                                  <div
+                                    key={`c2_burst_cd_${cd.id}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(cd.startTime);
+                                    }}
+                                    style={{ left: `${startX}px`, width: `${width}px` }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none ${
+                                      isFinishedInCycle1
+                                        ? 'bg-sky-950/70 border-sky-600/70 text-sky-300 hover:border-sky-400'
+                                        : isCarryOver
+                                        ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
+                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
+                                    } ${isCoolingDown ? 'brightness-125 font-bold' : ''}`}
+                                    title={
+                                      isFinishedInCycle1
+                                        ? `【1周目元素爆発CT (1周目中に解消済)】\n爆発CT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
+                                        : isCarryOver
+                                        ? `【1周目からの持ち越し元素爆発CT】\n爆発CT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n2周目開始時残り: ${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        : `【2周目爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                    }
+                                  >
+                                    <span className="truncate">
+                                      ⏱️ {isFinishedInCycle1
+                                        ? `[1周目] Q-CT ${cd.duration.toFixed(1)}s (解消済)`
+                                        : isCarryOver
+                                        ? `[1周目持越] Q-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
+                                        : `Q-CT ${cd.duration.toFixed(1)}s`} {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+
+                            {/* --- Sublane 4+: 2nd Cycle Buff Rows (Each effect duration in its own independent row) --- */}
+                            {stintBuffRows.map((bRow, rIdx) => (
+                              <div key={`c2_buff_row_${stint.id}_${rIdx}`} className="relative h-4 my-0.5">
+                                {bRow.spans.map((buff) => {
+                                  const startX = buff.startTime * pixelsPerSecond;
+                                  const width = Math.max(16, buff.duration * pixelsPerSecond);
+                                  const isBuffActive = buff.startTime <= activeTime && activeTime < buff.endTime;
+                                  const remaining = Math.max(0, buff.endTime - activeTime);
+
+                                  return (
+                                    <div
+                                      key={`c2_buff_span_${buff.id}`}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSeek(buff.startTime);
+                                      }}
+                                      style={{ 
+                                        left: `${startX}px`, 
+                                        width: `${width}px`,
+                                      }}
+                                      className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
+                                        isBuffActive ? 'ring-1 ring-emerald-400 font-bold brightness-125' : 'opacity-90'
+                                      }`}
+                                      title={`【${bRow.tag} 2周目効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                    >
+                                      <span className="truncate">
+                                        ✨ {bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} ({buff.duration.toFixed(0)}s) {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* 2nd Cycle Party Synergy Lane */}
+                {cycle2Data.buffSynergyPoints.length > 0 && (
+                  <div className="flex border-t border-purple-900/60 bg-slate-950/90 py-2">
+                    <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex flex-col justify-center sticky left-0 z-45 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
+                      <span className="text-xs font-bold text-purple-300 flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                        <span>2周目 バフ重複度</span>
+                      </span>
+                      <span className="text-[10px] text-slate-400">1周目持ち越し+2周目バフ</span>
+                    </div>
+
+                    <div 
+                      className="relative flex-1 h-8 flex items-center cursor-pointer"
+                      onClick={handleTimelineClick}
+                    >
+                      {cycle2Data.buffSynergyPoints.map((pt, idx) => {
+                        const x = pt.time * pixelsPerSecond;
+                        const w = 0.5 * pixelsPerSecond;
+
+                        return (
+                          <div
+                            key={idx}
+                            style={{ 
+                              left: `${x}px`, 
+                              width: `${w}px`,
+                              backgroundColor: pt.count === 0 
+                                ? 'rgba(30, 41, 59, 0.3)' 
+                                : pt.count >= 3 
+                                ? 'rgba(234, 88, 12, 0.65)' 
+                                : pt.count >= 2 
+                                ? 'rgba(168, 85, 247, 0.55)' 
+                                : 'rgba(14, 165, 233, 0.35)',
+                            }}
+                            className="absolute top-1 bottom-1 rounded-sm border-r border-slate-950/40 flex items-center justify-center text-[10px] font-mono text-white"
+                            title={`${pt.time.toFixed(1)}s: 2周目有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
+                          >
+                            {pt.count > 0 && <span className="font-bold text-[9px]">{pt.count}</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* =========================================================================
+                5. Vertical Handoff Connector Lines (交代スナップ垂直ガイド線)
+                The user specifically highlighted:
+                "前のキャラの登場期間終点と、次のキャラの登場期間始点の縦位置が重ならないよう一致していなければならない"
+            ========================================================================= */}
+            {showConnectors && handoffConnectors.map((conn, idx) => (
+              <div
+                key={`handoff_${idx}`}
+                style={{ left: `${conn.xPos + 180}px` }}
+                className="absolute top-9 bottom-0 w-0 border-l border-amber-400/70 border-dashed pointer-events-none z-10"
+              >
+                <span className="absolute -top-3 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-bold px-1 rounded shadow">
+                  {conn.snapTime.toFixed(1)}s
+                </span>
+              </div>
+            ))}
+
+            {/* =========================================================================
+                5.5 Vertical Loop Boundary Guide Line (2周目以降ループ開始垂直線)
+            ========================================================================= */}
+            {loopStartTime > 0 && (
+              <div
+                style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
+                className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-25 shadow-lg"
+              >
+                <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
+                  🔁 2周目ループ対象区切 (0.00s基準 / {loopStartTime.toFixed(2)}s)
+                </div>
+              </div>
+            )}
+
+            {/* =========================================================================
+                5.6 Vertical Cycle 1 Completion / Cycle 2 Loop Start Divider
+            ========================================================================= */}
+            {cycle2Data.enabled && (
+              <div
+                style={{ left: `${totalDuration * pixelsPerSecond + 180}px` }}
+                className="absolute top-0 bottom-0 w-0 border-l-2 border-dashed border-amber-400 pointer-events-none z-30 shadow-xl"
+              >
+                <div className="absolute top-1 -translate-x-1/2 bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded shadow-lg whitespace-nowrap flex items-center gap-1 border border-amber-300">
+                  <span>🏁 1周目完了 ({fmtTime(totalDuration, 2)}) / 🔁 2周目開始</span>
+                </div>
+              </div>
+            )}
+
+            {/* =========================================================================
+                6. Playhead Scrubber Laser (再生カーソル)
+            ========================================================================= */}
+            <div
+              style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
+              className="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 pointer-events-none z-40 shadow-lg shadow-amber-400/50"
+            >
+              <div className="absolute -top-1 -translate-x-1/2 w-3.5 h-3.5 bg-amber-400 rotate-45 border-2 border-slate-950 shadow" />
+              <div className="absolute top-3 left-1 bg-amber-500 text-slate-950 text-[10px] font-black px-1.5 py-0.5 rounded shadow whitespace-nowrap">
+                {fmtTime(activeTime, 1)}
+              </div>
+            </div>
+
+            {/* Hover Indicator */}
+            {hoveredTime !== null && (
+              <div
+                style={{ left: `${hoveredTime * pixelsPerSecond + 180}px` }}
+                className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-39"
+              >
+                <div className="absolute top-4 left-1 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded">
+                  {fmtTime(hoveredTime, 1)}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        {/* Legend / Guide */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-3 px-1 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="font-semibold text-slate-300">凡例:</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-2.5 rounded bg-amber-500/50 border border-amber-400"></span>
+              <span className="text-slate-200">出場・行動時間</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-2.5 rounded bg-sky-950 border border-sky-400"></span>
+              <span className="text-sky-300 font-semibold">CT（クールタイム / スキル・爆発統一）</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-2.5 rounded bg-emerald-950 border border-emerald-400"></span>
+              <span className="text-emerald-300 font-semibold">効果持続時間（バフ・設置物・継続効果統一）</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-0 border-t border-dashed border-amber-400"></span>
+              <span className="text-amber-300 font-medium">交代垂直スナップ (前の退場＝次の登場)</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-0 border-t-2 border-dotted border-purple-400"></span>
+              <span className="text-purple-300 font-medium">🔁 2周目以降ループ区切り</span>
+            </div>
+          </div>
+
+          <div className="text-[11px] text-slate-400">
+            ※ タイムライン上の任意の場所をクリックして再生位置をシークできます
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

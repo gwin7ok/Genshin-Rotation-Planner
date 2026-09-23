@@ -1,0 +1,6 @@
+{
+  "name": "原神ローテーション ガントチャート (Genshin Rotation Planner)",
+  "description": "原神の4人パーティ戦闘ローテーションを設計・最適化するガントチャートツール。出場キャラの数珠つなぎ配置、スキル/爆発CT管理、バフ持続時間の重なり、エネルギー循環を可視化・シミュレート。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

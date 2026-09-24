@@ -28,6 +28,7 @@ import {
   CharacterRuntimeState 
 } from '../types/genshin';
 import { ELEMENT_COLORS, BUFF_DEFINITIONS } from '../data/characters';
+import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { swapStintsForCharacters } from '../utils/stintReorder';
 
 // Organization structure for active buffs into independent non-overlapping rows.
@@ -411,8 +412,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         }
 
         const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
-        const actionSkillCT = matchedCharActionDef?.cooldown ?? matchedCharActionDef?.skillCooldown ?? char.skillCooldown;
-        const actionBurstCT = matchedCharActionDef?.cooldown ?? matchedCharActionDef?.burstCooldown ?? char.burstCooldown;
+        const actionSkillCT = matchedCharActionDef?.startsSkillCooldown ? (matchedCharActionDef.cooldown ?? 0) : 0;
+        const actionBurstCT = matchedCharActionDef?.startsBurstCooldown !== false ? (matchedCharActionDef?.cooldown ?? 0) : 0;
 
         // New Cooldowns triggered in Cycle 2
         if (isSkill && actionSkillCT > 0) {
@@ -1615,11 +1616,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             </div>
                             <div className="flex items-center justify-between text-sky-300 font-semibold">
                               <span>⏱️ スキルCT</span>
-                              <span>{char.skillCooldown}s</span>
+                              <span>{formatCharacterCooldowns(char, 'skill')}</span>
                             </div>
                             <div className="flex items-center justify-between text-sky-300 font-semibold">
                               <span>⏱️ 爆発CT</span>
-                              <span>{char.burstCooldown}s</span>
+                              <span>{formatCharacterCooldowns(char, 'burst')}</span>
                             </div>
                             {charBuffRows.length > 0 && (
                               <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
@@ -2017,7 +2018,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   <span>⏱️ スキルCT</span>
                                   <span>
                                     {stintCycle1SkillCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
-                                    {char.skillCooldown > 0 ? `${char.skillCooldown.toFixed(1)}s` : ''}
+                                    {formatSpanDurations(allStintSkillCDs)}
                                   </span>
                                 </div>
                               )}
@@ -2026,7 +2027,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   <span>⏱️ 爆発CT</span>
                                   <span>
                                     {stintCycle1BurstCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
-                                    {char.burstCooldown > 0 ? `${char.burstCooldown.toFixed(1)}s` : ''}
+                                    {formatSpanDurations(allStintBurstCDs)}
                                   </span>
                                 </div>
                               )}

@@ -1,15 +1,16 @@
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig } from '../types/genshin';
-import { INITIAL_MASTER_DATABASE } from '../data/databaseMaster';
-import { 
-  generateLatestMasterDatabase, 
-  generateLatestCharacterMaster, 
-  generateLatestWeaponsMaster, 
-  generateLatestArtifactsMaster 
-} from './genshinDbMasterGenerator';
-import { fetchOnlineGenshinData, OnlineSyncOptions } from '../services/genshinApiService';
+import { INITIAL_MASTER_DATABASE, DATABASE_VERSION, MASTER_WEAPONS, MASTER_ARTIFACTS } from '../data/databaseMaster';
+import { migrateLegacyCharacter } from './legacyMigration';
+import {
+  generateCharacterMaster,
+  CharacterGenerationReport,
+  GenerationProgress,
+} from '../masterdata/characterMasterGenerator';
 
 const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
+
+const isCustomCharacter = (c: CharacterConfig) => c.id.startsWith('custom_') || !!c.isCustom;
 
 /**
  * Loads database from LocalStorage or generates default master DB
@@ -25,81 +26,24 @@ export function loadDatabase(): AppDatabase {
       return INITIAL_MASTER_DATABASE;
     }
 
-    // Auto-migrate: Ensure all character actions have their individual CT (cooldown), effectDuration, and buttonLabel populated
-    parsed.characters = parsed.characters.map(char => {
-      // Special optimization for Keqing and Nilou
-      if (char.id === 'keqing') {
-        return {
-          ...char,
-          burstEnergyCost: 40,
-          skillParticles: 2.5,
-          availableActions: [
-            { id: 'keqing_n1', name: '通常攻撃 1段', shortName: 'N1', buttonLabel: 'N1', type: 'normal', defaultDuration: 0.23, cooldown: 0, effectDuration: 0 },
-            { id: 'keqing_ca', name: '重撃 (通常1段+重撃)', shortName: 'N1C', buttonLabel: 'N1C', type: 'charged', defaultDuration: 0.68, cooldown: 0, effectDuration: 0 },
-            { id: 'keqing_e', name: '元素スキル: 雷楔投擲', shortName: 'E', buttonLabel: 'E(投擲)', type: 'skill', defaultDuration: 0.40, cooldown: 7.5, effectDuration: 5.0, startsSkillCooldown: true },
-            { id: 'keqing_ee', name: 'スキル2段目: 瞬間移動斬撃', shortName: 'E', buttonLabel: 'E(斬撃)', type: 'skill', defaultDuration: 0.65, cooldown: 0, effectDuration: 5.0, startsSkillCooldown: false },
-            { id: 'keqing_e_ca', name: '遠隔重撃起爆 (暴雷連斬)', shortName: 'CA', buttonLabel: 'E-CA(起爆)', type: 'charged', defaultDuration: 0.68, cooldown: 0, effectDuration: 0 },
-            { id: 'keqing_q', name: '元素爆発: 天街巡遊', shortName: 'Q', buttonLabel: 'Q', type: 'burst', defaultDuration: 2.15, cooldown: 12.0, effectDuration: 8.0, startsBurstCooldown: true, energyCost: 40 },
-            { id: 'keqing_dash', name: 'ダッシュ', shortName: 'Dash', buttonLabel: 'Dash', type: 'dash', defaultDuration: 0.20, cooldown: 0, effectDuration: 0 },
-          ]
-        };
-      }
-      if (char.id === 'nilou') {
-        return {
-          ...char,
-          burstEnergyCost: 70,
-          skillParticles: 4.5,
-          availableActions: [
-            { id: 'nilou_n1', name: '通常攻撃 1段', shortName: 'N1', buttonLabel: 'N1', type: 'normal', defaultDuration: 0.38, cooldown: 0, effectDuration: 0 },
-            { id: 'nilou_ca', name: '重撃', shortName: 'CA', buttonLabel: 'CA', type: 'charged', defaultDuration: 0.65, cooldown: 0, effectDuration: 0 },
-            { id: 'nilou_e', name: '元素スキル: 七域のダンス', shortName: 'E', buttonLabel: 'E(始動)', type: 'skill', defaultDuration: 0.85, cooldown: 18.0, effectDuration: 10.0, startsSkillCooldown: true },
-            { id: 'nilou_e_water', name: '旋舞ステップ (天を滌う水環)', shortName: 'E', buttonLabel: 'E(水環)', type: 'skill', defaultDuration: 0.90, cooldown: 0, effectDuration: 12.0 },
-            { id: 'nilou_q', name: '元素爆発: 浮蓮のダンス·遠夢聆泉', shortName: 'Q', buttonLabel: 'Q', type: 'burst', defaultDuration: 1.80, cooldown: 18.0, effectDuration: 0, startsBurstCooldown: true, energyCost: 70 },
-            { id: 'nilou_dash', name: 'ダッシュ', shortName: 'Dash', buttonLabel: 'Dash', type: 'dash', defaultDuration: 0.20, cooldown: 0, effectDuration: 0 },
-          ]
-        };
-      }
+    const characters = parsed.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
 
-      return {
-        ...char,
-        availableActions: (char.availableActions || []).map(act => {
-          const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
-          const isSkill = act.type === 'skill' || act.type === 'skill_hold';
-          const isBurst = act.type === 'burst';
-
-          if (isUtility) {
-            return {
-              ...act,
-              buttonLabel: act.buttonLabel || act.shortName,
-              cooldown: 0,
-              effectDuration: 0,
-              skillCooldown: 0,
-              burstCooldown: 0,
-              startsSkillCooldown: false,
-              startsBurstCooldown: false,
-            };
-          }
-
-          const ct = act.cooldown ?? (isBurst ? (act.burstCooldown ?? char.burstCooldown) : (act.skillCooldown ?? act.customSkillCT ?? char.skillCooldown));
-          const dur = act.effectDuration ?? (isBurst ? (act.burstDuration ?? char.burstDuration) : (act.skillDuration ?? char.skillDuration));
-
-          return {
-            ...act,
-            buttonLabel: act.buttonLabel || act.shortName,
-            cooldown: ct,
-            effectDuration: dur,
-            skillCooldown: isSkill ? ct : act.skillCooldown,
-            skillDuration: isSkill ? dur : act.skillDuration,
-            burstCooldown: isBurst ? ct : act.burstCooldown,
-            burstDuration: isBurst ? dur : act.burstDuration,
-            startsSkillCooldown: isSkill ? true : act.startsSkillCooldown,
-            startsBurstCooldown: isBurst ? true : act.startsBurstCooldown,
-          };
-        })
+    // 旧バージョンの DB: マスター由来のキャラは同梱の最新マスターに置き換え、ユーザー作成キャラだけ残す
+    if ((parsed.version ?? 0) < DATABASE_VERSION) {
+      const customChars = characters.filter(isCustomCharacter);
+      const upgraded: AppDatabase = {
+        ...parsed,
+        version: DATABASE_VERSION,
+        characters: [
+          ...INITIAL_MASTER_DATABASE.characters.filter(mc => !customChars.some(cc => cc.id === mc.id)),
+          ...customChars,
+        ],
       };
-    });
+      saveDatabase(upgraded);
+      return upgraded;
+    }
 
-    return parsed;
+    return { ...parsed, characters };
   } catch (err) {
     console.warn('Failed to parse database from localStorage, falling back to master:', err);
     return INITIAL_MASTER_DATABASE;
@@ -118,11 +62,15 @@ export function saveDatabase(db: AppDatabase): void {
 }
 
 /**
- * Syncs only Character master roster
+ * genshin-db / gcsim から最新のキャラクターマスターをオンラインで生成し、DB に反映する。
+ * ユーザーが作成したキャラ (custom_*) はマスターと ID が重ならない限り残す。
  */
-export function syncCharactersMaster(currentDb: AppDatabase): AppDatabase {
-  const latestChars = generateLatestCharacterMaster();
-  const customChars = currentDb.characters.filter(c => c.id.startsWith('custom_') || (c as any).isCustom);
+export async function syncCharactersMasterOnline(
+  currentDb: AppDatabase,
+  onProgress?: (p: GenerationProgress) => void,
+): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
+  const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
+  const customChars = currentDb.characters.filter(isCustomCharacter);
   const mergedCharacters = [
     ...latestChars,
     ...customChars.filter(cc => !latestChars.some(mc => mc.id === cc.id))
@@ -131,19 +79,20 @@ export function syncCharactersMaster(currentDb: AppDatabase): AppDatabase {
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: `${nowStr} (キャラマスター動的生成完了)`,
+    version: DATABASE_VERSION,
+    lastSyncedAt: `${nowStr} (genshin-db + gcsim ${report.gcsimCommit.slice(0, 7)} から生成)`,
     characters: mergedCharacters
   };
 
   saveDatabase(updatedDb);
-  return updatedDb;
+  return { db: updatedDb, report };
 }
 
 /**
  * Syncs only Weapons master roster
  */
 export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
-  const latestWeapons = generateLatestWeaponsMaster();
+  const latestWeapons = MASTER_WEAPONS;
   const customWeapons = currentDb.weapons.filter(w => w.isCustom);
   const mergedWeapons = [
     ...latestWeapons,
@@ -153,7 +102,7 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: `${nowStr} (武器マスター動的生成完了)`,
+    lastSyncedAt: `${nowStr} (同梱の武器マスターを反映)`,
     weapons: mergedWeapons
   };
 
@@ -165,7 +114,7 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
  * Syncs only Artifacts master roster
  */
 export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
-  const latestArtifacts = generateLatestArtifactsMaster();
+  const latestArtifacts = MASTER_ARTIFACTS;
   const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
   const mergedArtifacts = [
     ...latestArtifacts,
@@ -175,54 +124,12 @@ export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: `${nowStr} (聖遺物マスター動的生成完了)`,
+    lastSyncedAt: `${nowStr} (同梱の聖遺物マスターを反映)`,
     artifacts: mergedArtifacts
   };
 
   saveDatabase(updatedDb);
   return updatedDb;
-}
-
-/**
- * Dynamically generates and syncs active local DB with latest genshin-db + gcsim Master Database
- */
-export function syncWithLatestMasterDB(currentDb?: AppDatabase): AppDatabase {
-  const master = generateLatestMasterDatabase();
-
-  if (!currentDb) {
-    saveDatabase(master);
-    return master;
-  }
-
-  // Preserve user created custom items
-  const customChars = currentDb.characters.filter(c => c.id.startsWith('custom_') || (c as any).isCustom);
-  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
-  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
-
-  const mergedCharacters = [
-    ...master.characters,
-    ...customChars.filter(cc => !master.characters.some(mc => mc.id === cc.id))
-  ];
-
-  const mergedWeapons = [
-    ...master.weapons,
-    ...customWeapons.filter(cw => !master.weapons.some(mw => mw.id === cw.id))
-  ];
-
-  const mergedArtifacts = [
-    ...master.artifacts,
-    ...customArtifacts.filter(ca => !master.artifacts.some(ma => ma.id === ca.id))
-  ];
-
-  const syncedDb: AppDatabase = {
-    ...master,
-    characters: mergedCharacters,
-    weapons: mergedWeapons,
-    artifacts: mergedArtifacts,
-  };
-
-  saveDatabase(syncedDb);
-  return syncedDb;
 }
 
 /**
@@ -243,7 +150,7 @@ export function resetDatabaseToMaster(): AppDatabase {
 export function upsertCharacterInDb(db: AppDatabase, character: CharacterConfig): AppDatabase {
   const index = db.characters.findIndex(c => c.id === character.id);
   const updatedList = [...db.characters];
-  const charToSave = {
+  const charToSave: CharacterConfig = {
     ...character,
     isCustom: true,
     updatedAt: new Date().toISOString(),
@@ -374,65 +281,6 @@ export function deleteArtifactFromDb(db: AppDatabase, artifactId: string): AppDa
     ...db,
     artifacts: db.artifacts.filter(a => a.id !== artifactId),
   };
-  saveDatabase(updatedDb);
-  return updatedDb;
-}
-
-/**
- * Syncs database with live online API (Genshin Dev API / Fandom Wiki mapping)
- */
-export async function syncWithOnlineGenshinApi(
-  currentDb: AppDatabase,
-  options: OnlineSyncOptions = { useOnlineApi: true, useWiki: true }
-): Promise<AppDatabase> {
-  const onlineChars = await fetchOnlineGenshinData(options);
-
-  // Merge existing custom characters and detailed local characters
-  const existingMap = new Map(currentDb.characters.map(c => [c.id, c]));
-  
-  const mergedChars = onlineChars.map(online => {
-    const existing = existingMap.get(online.id);
-    if (existing) {
-      // Preserve local actions if existing has richer configuration
-      return {
-        ...online,
-        ...existing,
-        // Update stats if needed while preserving custom actions
-        availableActions: (existing.availableActions && existing.availableActions.length > online.availableActions.length)
-          ? existing.availableActions
-          : online.availableActions,
-      };
-    }
-    return online;
-  });
-
-  // Keep any local-only or custom characters
-  for (const localChar of currentDb.characters) {
-    if (!mergedChars.some(m => m.id === localChar.id)) {
-      mergedChars.push(localChar);
-    }
-  }
-
-  const sourcesList = [];
-  if (options.useOnlineApi) sourcesList.push('オンラインAPI');
-  if (options.useWiki) sourcesList.push('Fandom Wiki');
-  const sourceLabel = sourcesList.length > 0 ? sourcesList.join(' + ') : '選択ソース';
-
-  const nowStr = new Date().toLocaleString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  }) + ` (${sourceLabel}と同期完了)`;
-
-  const updatedDb: AppDatabase = {
-    ...currentDb,
-    version: (currentDb.version || 1.0) + 0.1,
-    lastSyncedAt: nowStr,
-    characters: mergedChars,
-  };
-
   saveDatabase(updatedDb);
   return updatedDb;
 }

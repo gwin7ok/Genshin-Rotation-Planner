@@ -17734,6 +17734,2662 @@
     }
   },
   {
+    "id": "traveleranemo",
+    "name": "旅人(風)",
+    "englishName": "Traveler (Anemo)",
+    "element": "anemo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#14b8a6",
+    "accentColor": "#14b8a6",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "traveleranemo_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "traveleranemo_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "traveleranemo_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "traveleranemo_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "traveleranemo_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "traveleranemo_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "traveleranemo_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "traveleranemo_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "traveleranemo_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "traveleranemo_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "traveleranemo_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "traveleranemo_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "traveleranemo_e_aether",
+        "name": "元素スキル: 旋風の剣(空)",
+        "shortName": "E",
+        "buttonLabel": "E(一回押し)(空)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 5,
+        "effectDuration": 0,
+        "frames": {
+          "total": 76,
+          "cancels": {
+            "attack": 74,
+            "dash": 30,
+            "jump": 31,
+            "swap": 66
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "基本クールタイム"
+        },
+        "defaultDuration": 1.267
+      },
+      {
+        "id": "traveleranemo_e_lumine",
+        "name": "元素スキル: 旋風の剣(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(一回押し)(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 5,
+        "effectDuration": 0,
+        "frames": {
+          "total": 62,
+          "cancels": {
+            "attack": 61,
+            "dash": 31,
+            "jump": 31,
+            "swap": 60
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "基本クールタイム"
+        },
+        "defaultDuration": 1.033
+      },
+      {
+        "id": "traveleranemo_e_hold",
+        "name": "元素スキル(長押し): 旋風の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(長押し)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "dataSource": {
+          "cooldown": "最大チャージクールタイム"
+        },
+        "defaultDuration": 1.2
+      },
+      {
+        "id": "traveleranemo_q_aether",
+        "name": "元素爆発: 激風の息(空)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 6,
+        "frames": {
+          "total": 110,
+          "cancels": {
+            "skill": 109,
+            "dash": 96,
+            "jump": 96,
+            "swap": 100
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.833,
+        "buttonLabel": "Q(空)"
+      },
+      {
+        "id": "traveleranemo_q_lumine",
+        "name": "元素爆発: 激風の息(蛍)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 6,
+        "frames": {
+          "total": 105,
+          "cancels": {
+            "skill": 104,
+            "dash": 90,
+            "jump": 90,
+            "swap": 95
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.75,
+        "buttonLabel": "Q(蛍)"
+      },
+      {
+        "id": "traveleranemo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aetheranemo"
+    }
+  },
+  {
+    "id": "travelercryo",
+    "name": "旅人(氷)",
+    "englishName": "Traveler (Cryo)",
+    "element": "cryo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#06b6d4",
+    "accentColor": "#06b6d4",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelercryo_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelercryo_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelercryo_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelercryo_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelercryo_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelercryo_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelercryo_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelercryo_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelercryo_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelercryo_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelercryo_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelercryo_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelercryo_e",
+        "name": "元素スキル: 霧氷の剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 12,
+        "frames": {
+          "total": 66,
+          "hitmark": 19,
+          "cancels": {
+            "attack": 32,
+            "skill": 33,
+            "burst": 33,
+            "dash": 33,
+            "jump": 33,
+            "swap": 32
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "凛冽の寒星継続時間"
+        },
+        "defaultDuration": 1.1
+      },
+      {
+        "id": "travelercryo_q",
+        "name": "元素爆発: 飛氷の鉾",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 0,
+        "frames": {
+          "total": 75,
+          "cancels": {
+            "skill": 74,
+            "jump": 74,
+            "swap": 73
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 1.25
+      },
+      {
+        "id": "travelercryo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aethercryo"
+    }
+  },
+  {
+    "id": "travelerdendro",
+    "name": "旅人(草)",
+    "englishName": "Traveler (Dendro)",
+    "element": "dendro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#10b981",
+    "accentColor": "#10b981",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelerdendro_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelerdendro_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelerdendro_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelerdendro_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelerdendro_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelerdendro_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelerdendro_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelerdendro_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelerdendro_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelerdendro_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelerdendro_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelerdendro_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelerdendro_e_aether",
+        "name": "元素スキル: 草縁剣(空)",
+        "shortName": "E",
+        "buttonLabel": "E(空)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "frames": {
+          "total": 37,
+          "hitmark": 28,
+          "cancels": {
+            "dash": 29,
+            "jump": 29,
+            "swap": 36
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.617
+      },
+      {
+        "id": "travelerdendro_e_lumine",
+        "name": "元素スキル: 草縁剣(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "frames": {
+          "total": 37,
+          "hitmark": 28,
+          "cancels": {
+            "dash": 28,
+            "jump": 28,
+            "swap": 35
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.617
+      },
+      {
+        "id": "travelerdendro_q",
+        "name": "元素爆発: 臥草若化",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 0,
+        "frames": {
+          "total": 58,
+          "hitmark": 91,
+          "cancels": {
+            "swap": 57
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "travelerdendro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aetherdendro"
+    }
+  },
+  {
+    "id": "travelerelectro",
+    "name": "旅人(雷)",
+    "englishName": "Traveler (Electro)",
+    "element": "electro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#a855f7",
+    "accentColor": "#a855f7",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelerelectro_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelerelectro_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelerelectro_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelerelectro_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelerelectro_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelerelectro_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelerelectro_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelerelectro_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelerelectro_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelerelectro_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelerelectro_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelerelectro_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelerelectro_e_aether",
+        "name": "元素スキル: 雷影剣(空)",
+        "shortName": "E",
+        "buttonLabel": "E(空)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 13.5,
+        "effectDuration": 6,
+        "frames": {
+          "total": 57,
+          "hitmark": 21,
+          "cancels": {
+            "burst": 56,
+            "dash": 42,
+            "jump": 42,
+            "swap": 56
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.95
+      },
+      {
+        "id": "travelerelectro_e_lumine",
+        "name": "元素スキル: 雷影剣(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 13.5,
+        "effectDuration": 6,
+        "frames": {
+          "total": 57,
+          "hitmark": 21,
+          "cancels": {
+            "dash": 42,
+            "jump": 42,
+            "swap": 55
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.95
+      },
+      {
+        "id": "travelerelectro_q_aether",
+        "name": "元素爆発: 電光雷轟(空)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 12,
+        "frames": {
+          "total": 63,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 62,
+            "dash": 62,
+            "jump": 61,
+            "swap": 60
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.05,
+        "buttonLabel": "Q(空)"
+      },
+      {
+        "id": "travelerelectro_q_lumine",
+        "name": "元素爆発: 電光雷轟(蛍)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 12,
+        "frames": {
+          "total": 62,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 61,
+            "jump": 61,
+            "swap": 61
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.033,
+        "buttonLabel": "Q(蛍)"
+      },
+      {
+        "id": "travelerelectro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aetherelectro"
+    }
+  },
+  {
+    "id": "travelergeo",
+    "name": "旅人(岩)",
+    "englishName": "Traveler (Geo)",
+    "element": "geo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#f59e0b",
+    "accentColor": "#f59e0b",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelergeo_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelergeo_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelergeo_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelergeo_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelergeo_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelergeo_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelergeo_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelergeo_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelergeo_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelergeo_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelergeo_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelergeo_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelergeo_e_aether",
+        "name": "元素スキル: 星落としの剣(空)",
+        "shortName": "E",
+        "buttonLabel": "E(空)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 30,
+        "frames": {
+          "total": 81,
+          "cancels": {
+            "dash": 25,
+            "jump": 24,
+            "swap": 67
+          },
+          "source": "skill.go:skillFrames[0]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "荒星の継続時間"
+        },
+        "defaultDuration": 1.35
+      },
+      {
+        "id": "travelergeo_e_lumine",
+        "name": "元素スキル: 星落としの剣(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 30,
+        "frames": {
+          "total": 80,
+          "cancels": {
+            "attack": 79,
+            "dash": 23,
+            "jump": 24,
+            "swap": 65
+          },
+          "source": "skill.go:skillFrames[0]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "荒星の継続時間"
+        },
+        "defaultDuration": 1.333
+      },
+      {
+        "id": "travelergeo_q_aether",
+        "name": "元素爆発: 岩潮幾重(空)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 67,
+          "hitmark": 51,
+          "cancels": {
+            "dash": 42,
+            "jump": 42,
+            "swap": 51
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "岩の山の継続時間"
+        },
+        "defaultDuration": 1.117,
+        "buttonLabel": "Q(空)"
+      },
+      {
+        "id": "travelergeo_q_lumine",
+        "name": "元素爆発: 岩潮幾重(蛍)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 64,
+          "hitmark": 51,
+          "cancels": {
+            "attack": 62,
+            "dash": 42,
+            "jump": 42,
+            "swap": 49
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "岩の山の継続時間"
+        },
+        "defaultDuration": 1.067,
+        "buttonLabel": "Q(蛍)"
+      },
+      {
+        "id": "travelergeo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aethergeo"
+    }
+  },
+  {
+    "id": "travelerhydro",
+    "name": "旅人(水)",
+    "englishName": "Traveler (Hydro)",
+    "element": "hydro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#0ea5e9",
+    "accentColor": "#0ea5e9",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelerhydro_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelerhydro_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelerhydro_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelerhydro_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelerhydro_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelerhydro_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelerhydro_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelerhydro_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelerhydro_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelerhydro_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelerhydro_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelerhydro_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelerhydro_e_aether",
+        "name": "元素スキル: 水紋の剣(空)",
+        "shortName": "E",
+        "buttonLabel": "E(空)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "frames": {
+          "total": 45,
+          "cancels": {
+            "attack": 44,
+            "burst": 44,
+            "dash": 40,
+            "jump": 41,
+            "walk": 44,
+            "swap": 43
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.75
+      },
+      {
+        "id": "travelerhydro_e_lumine",
+        "name": "元素スキル: 水紋の剣(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "frames": {
+          "total": 44,
+          "cancels": {
+            "attack": 43,
+            "dash": 41,
+            "jump": 40,
+            "swap": 43
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.733
+      },
+      {
+        "id": "travelerhydro_e_shorthold0ticks_aether",
+        "name": "元素スキル派生: shortHold0Ticks(空)",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold0Ticks)(空)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 0.733,
+        "frames": {
+          "total": 44,
+          "cancels": {
+            "attack": 36,
+            "skill": 36,
+            "burst": 36,
+            "dash": 29,
+            "jump": 29,
+            "walk": 35
+          },
+          "source": "skill.go:skillShortHold0TicksFrames"
+        }
+      },
+      {
+        "id": "travelerhydro_e_shorthold0ticks_lumine",
+        "name": "元素スキル派生: shortHold0Ticks(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold0Ticks)(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 0.717,
+        "frames": {
+          "total": 43,
+          "cancels": {
+            "attack": 36,
+            "skill": 37,
+            "burst": 35,
+            "dash": 29,
+            "jump": 30,
+            "walk": 36
+          },
+          "source": "skill.go:skillShortHold0TicksFrames"
+        }
+      },
+      {
+        "id": "travelerhydro_e_shorthold_aether",
+        "name": "元素スキル派生: shortHold(空)",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold)(空)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 1.5,
+        "frames": {
+          "total": 90,
+          "cancels": {
+            "attack": 81,
+            "skill": 81,
+            "burst": 81,
+            "dash": 74,
+            "jump": 74,
+            "walk": 81
+          },
+          "source": "skill.go:skillShortHoldFrames"
+        }
+      },
+      {
+        "id": "travelerhydro_e_shorthold_lumine",
+        "name": "元素スキル派生: shortHold(蛍)",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold)(蛍)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 1.483,
+        "frames": {
+          "total": 89,
+          "cancels": {
+            "attack": 81,
+            "skill": 81,
+            "burst": 81,
+            "dash": 74,
+            "jump": 73,
+            "walk": 80
+          },
+          "source": "skill.go:skillShortHoldFrames"
+        }
+      },
+      {
+        "id": "travelerhydro_q_aether",
+        "name": "元素爆発: 昇流統水(空)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 4,
+        "frames": {
+          "total": 78,
+          "cancels": {
+            "attack": 76,
+            "jump": 77,
+            "swap": 76
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.3,
+        "buttonLabel": "Q(空)"
+      },
+      {
+        "id": "travelerhydro_q_lumine",
+        "name": "元素爆発: 昇流統水(蛍)",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 4,
+        "frames": {
+          "total": 78,
+          "cancels": {
+            "attack": 77,
+            "skill": 77,
+            "dash": 77,
+            "jump": 77,
+            "swap": 76
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.3,
+        "buttonLabel": "Q(蛍)"
+      },
+      {
+        "id": "travelerhydro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aetherhydro"
+    }
+  },
+  {
+    "id": "travelerpyro",
+    "name": "旅人(炎)",
+    "englishName": "Traveler (Pyro)",
+    "element": "pyro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "color": "#ef4444",
+    "accentColor": "#ef4444",
+    "energyRecharge": 100,
+    "availableActions": [
+      {
+        "id": "travelerpyro_n1_aether",
+        "name": "通常攻撃 1段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 17
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.283
+      },
+      {
+        "id": "travelerpyro_n1_lumine",
+        "name": "通常攻撃 1段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "defaultDuration": 0.4
+      },
+      {
+        "id": "travelerpyro_n2_aether",
+        "name": "通常攻撃 2段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 28,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 26
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.433
+      },
+      {
+        "id": "travelerpyro_n2_lumine",
+        "name": "通常攻撃 2段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 23,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 21
+          },
+          "source": "attack.go:attackFrames[1]"
+        },
+        "defaultDuration": 0.35
+      },
+      {
+        "id": "travelerpyro_n3_aether",
+        "name": "通常攻撃 3段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 36,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 32
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.533
+      },
+      {
+        "id": "travelerpyro_n3_lumine",
+        "name": "通常攻撃 3段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 39,
+          "hitmark": 19,
+          "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
+            "attack": 27
+          },
+          "source": "attack.go:attackFrames[2]"
+        },
+        "defaultDuration": 0.45
+      },
+      {
+        "id": "travelerpyro_n4_aether",
+        "name": "通常攻撃 4段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 30,
+          "cancels": {
+            "aim": 30,
+            "skill": 30,
+            "burst": 30,
+            "dash": 30,
+            "jump": 30,
+            "swap": 30,
+            "attack": 39
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.65
+      },
+      {
+        "id": "travelerpyro_n4_lumine",
+        "name": "通常攻撃 4段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 45,
+          "hitmark": 23,
+          "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
+            "attack": 38
+          },
+          "source": "attack.go:attackFrames[3]"
+        },
+        "defaultDuration": 0.633
+      },
+      {
+        "id": "travelerpyro_n5_aether",
+        "name": "通常攻撃 5段目(空)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(空)",
+        "type": "normal",
+        "frames": {
+          "total": 69,
+          "hitmark": 25,
+          "cancels": {
+            "aim": 25,
+            "skill": 25,
+            "burst": 25,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.15
+      },
+      {
+        "id": "travelerpyro_n5_lumine",
+        "name": "通常攻撃 5段目(蛍)",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)(蛍)",
+        "type": "normal",
+        "frames": {
+          "total": 64,
+          "hitmark": 14,
+          "cancels": {
+            "aim": 14,
+            "skill": 14,
+            "burst": 14,
+            "dash": 14,
+            "jump": 14,
+            "swap": 14
+          },
+          "source": "attack.go:attackFrames[4]"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "travelerpyro_ca_aether",
+        "name": "重撃(空)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "skill": 37,
+            "burst": 36,
+            "dash": 20,
+            "jump": 20,
+            "swap": 44
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "CA(空)"
+      },
+      {
+        "id": "travelerpyro_ca_lumine",
+        "name": "重撃(蛍)",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967,
+        "buttonLabel": "CA(蛍)"
+      },
+      {
+        "id": "travelerpyro_e",
+        "name": "元素スキル: 流火の剣",
+        "shortName": "E",
+        "buttonLabel": "E(一回押し)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 49,
+          "cancels": {
+            "dash": 31,
+            "jump": 31,
+            "swap": 48
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.817
+      },
+      {
+        "id": "travelerpyro_e_hold",
+        "name": "元素スキル(長押し): 流火の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(長押し)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 81,
+          "hitmark": 50,
+          "cancels": {
+            "attack": 61,
+            "burst": 59,
+            "skill": 77,
+            "dash": 60,
+            "jump": 61,
+            "swap": 59
+          },
+          "source": "skill.go:skillHoldFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 1.35
+      },
+      {
+        "id": "travelerpyro_q",
+        "name": "元素爆発: 燎原の灼炎",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 49,
+          "hitmark": 40,
+          "cancels": {
+            "skill": 48,
+            "swap": 47
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.817
+      },
+      {
+        "id": "travelerpyro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "source": {
+      "genshinId": 10000005,
+      "gcsimKey": "aetherpyro"
+    }
+  },
+  {
     "id": "varesa",
     "name": "ヴァレサ",
     "englishName": "Varesa",

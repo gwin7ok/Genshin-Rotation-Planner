@@ -23,8 +23,20 @@ const GCSIM_REPO = 'genshinsim/gcsim';
 const GCSIM_BRANCH = 'main';
 const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/Data/character.dm.json';
 
-/** 旅人は元素ごとに別キットのため対象外 (空 / 蛍) */
-const TRAVELER_IDS = new Set([10000005, 10000007]);
+/** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ */
+const AETHER_ID = 10000005;
+const TRAVELER_IDS = new Set([AETHER_ID, 10000007]);
+
+/** genshin-db の旅人天賦名 "旅人 (風元素)" の元素文字 → 元素 */
+const TRAVELER_ELEMENT_JA: Record<string, ElementType> = {
+  炎: 'pyro', 水: 'hydro', 風: 'anemo', 雷: 'electro', 草: 'dendro', 氷: 'cryo', 岩: 'geo',
+};
+
+/** gcsim の旅人フレームは先頭添字が性別 (0 = 空, 1 = 蛍) */
+const TRAVELER_GENDERS = [
+  { index: 0, label: '空', suffix: 'aether' },
+  { index: 1, label: '蛍', suffix: 'lumine' },
+] as const;
 
 /** フレームが取得できなかった場合にタイムライン表示用として使う秒数 (レポートで「仮値」として明示) */
 const PLACEHOLDER_DURATION: Partial<Record<ActionType, number>> = {
@@ -213,7 +225,7 @@ function extractTalentTimings(talent: GenshinDbTalent | undefined): TalentTiming
 
   const tapCdTitles = ['一回押しクールタイム', 'クールタイム', 'スキルクールタイム', 'スキルのクールタイム', '基本クールタイム'];
   let skillTapCooldown = findLabel(skill, tapCdTitles);
-  let skillHoldCooldown = findLabel(skill, ['長押しクールタイム']);
+  let skillHoldCooldown = findLabel(skill, ['長押しクールタイム', '最大チャージクールタイム']);
   // "クールタイム|{一回押し}/{長押し}秒" のように1ラベルに2値ある場合
   if (!skillHoldCooldown) {
     const both = findLabel(skill, ['クールタイム'], 'last');
@@ -376,7 +388,7 @@ function buildActions(ctx: BuildContext): BuildResult {
   // --- 元素スキル (一回押し / 長押し / その他派生) ------------------------------
   const skillName = talent?.combat2?.name;
   const skill = file('skill');
-  const skillTables = skill ? skill.tables.filter(t => !/Walk|Dash|Cancel|End|Lag/i.test(splitTableName(t.name).base)) : [];
+  const skillTables = skill ? skill.tables.filter(t => !/Walk|Dash|Cancel|End|Lag|Delay/i.test(splitTableName(t.name).base)) : [];
   const families = firstOfEachFamily(skillTables);
   const holdTable = families.find(t => /hold/i.test(t.name) && !/short/i.test(t.name));
   const tapTable = families.find(t => !/hold/i.test(t.name));
@@ -467,6 +479,77 @@ function buildActions(ctx: BuildContext): BuildResult {
 }
 
 // ---------------------------------------------------------------------------
+// 旅人: 性別ごとのフレーム
+// ---------------------------------------------------------------------------
+
+/** "a[1][0]" → ["1", "0"] */
+const tableIndices = (name: string) => [...name.matchAll(/\[(\w+)\]/g)].map(m => m[1]);
+
+/**
+ * 性別の添字の位置を決める。X[..][c.gender] の参照があればその位置、
+ * 無ければ (ローカル変数経由で参照される場合など) 先頭の添字がちょうど 0 と 1 の配列を性別とみなす。
+ */
+function genderPosition(file: ParsedGoFile, base: string): number | undefined {
+  const explicit = file.genderIndexPositions[base];
+  if (explicit !== undefined) return explicit;
+  const firsts = new Set(file.tables.filter(t => splitTableName(t.name).base === base).map(t => tableIndices(t.name)[0]));
+  return firsts.size === 2 && firsts.has('0') && firsts.has('1') ? 0 : undefined;
+}
+
+/** 性別で分かれたテーブルから指定性別の分だけを取り出し、性別の添字を外した見え方にする */
+function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharacterFiles {
+  const files: Record<string, ParsedGoFile> = {};
+  for (const [name, file] of Object.entries(parsed.files)) {
+    const tables = file.tables.flatMap(t => {
+      const { base } = splitTableName(t.name);
+      const position = genderPosition(file, base);
+      if (position === undefined) return [t];
+      const indices = tableIndices(t.name);
+      if (indices[position] !== String(gender)) return [];
+      indices.splice(position, 1);
+      return [{ ...t, name: `${base}${indices.map(i => `[${i}]`).join('')}` }];
+    });
+    files[name] = { ...file, tables };
+  }
+  return { files };
+}
+
+const sameFrames = (a?: ActionFrames, b?: ActionFrames) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+
+/**
+ * 空・蛍それぞれで組み立てたアクションを統合する。
+ * フレームが同じものは1つにまとめ、異なるものは「(空)」「(蛍)」を付けて両方登録する (記法略称は共通)。
+ */
+function mergeGenderActions(results: BuildResult[]): BuildResult {
+  const actions: ActionDefinition[] = [];
+  const placeholderActions = new Set<string>();
+  const ids = [...new Set(results.flatMap(r => r.actions.map(a => a.id)))];
+  for (const id of ids) {
+    const variants = results.map(r => r.actions.find(a => a.id === id));
+    const first = variants.find((v): v is ActionDefinition => !!v)!;
+    const allSame = variants.every(v => v && sameFrames(v.frames, first.frames) && v.defaultDuration === first.defaultDuration);
+    if (allSame) {
+      actions.push(first);
+      if (results.some(r => r.placeholderActions.includes(id))) placeholderActions.add(id);
+      continue;
+    }
+    variants.forEach((v, i) => {
+      if (!v) return;
+      const gender = TRAVELER_GENDERS[i];
+      const variantId = `${id}_${gender.suffix}`;
+      actions.push({
+        ...v,
+        id: variantId,
+        name: `${v.name}(${gender.label})`,
+        buttonLabel: `${v.buttonLabel ?? v.shortName}(${gender.label})`,
+      });
+      if (results[i].placeholderActions.includes(id)) placeholderActions.add(variantId);
+    });
+  }
+  return { actions, placeholderActions: [...placeholderActions] };
+}
+
+// ---------------------------------------------------------------------------
 // メイン
 // ---------------------------------------------------------------------------
 
@@ -528,30 +611,88 @@ export async function generateCharacterMaster(
   const englishById = new Map(charsEn.map(c => [c.id, c.name]));
   const talentByName = new Map(talentsJa.map(t => [t.name, t]));
   const talentById = new Map(talentsJa.map(t => [t.id, t]));
+  const iconUrl = (c?: GenshinDbCharacter) =>
+    c?.images?.filename_icon ? `${ICON_BASE_URL}/${c.images.filename_icon}.png` : (c?.images?.mihoyo_icon ?? '');
 
-  const targets = charsJa.filter(c => {
-    if (TRAVELER_IDS.has(c.id)) {
-      report.skipped.push({ name: c.name, reason: '旅人は元素ごとに別キットのため対象外' });
-      return false;
-    }
+  // 生成単位 (通常キャラ + 元素ごとの旅人)
+  interface BuildUnit {
+    id: string;
+    name: string;
+    englishName: string;
+    element: ElementType;
+    weaponType: WeaponType;
+    rarity: number;
+    avatarUrl: string;
+    genshinId: number;
+    talent?: GenshinDbTalent;
+    gcsimKey?: string;
+    gcsimDir?: string;
+    /** 旅人: 空・蛍でフレームを分けて組み立てる */
+    genderSplit?: boolean;
+  }
+  const units: BuildUnit[] = [];
+  const usedIds = new Set<string>();
+
+  for (const c of charsJa) {
+    if (TRAVELER_IDS.has(c.id)) continue;
     if (!ELEMENT_MAP[c.elementType]) {
       report.skipped.push({ name: c.name, reason: `元素 ${c.elementType} が未対応` });
-      return false;
+      continue;
     }
-    return true;
-  });
+    const englishName = englishById.get(c.id) ?? c.name;
+    let id = normalizeCharacterId(englishName);
+    if (usedIds.has(id)) id = `${id}${c.id}`;
+    usedIds.add(id);
+    const talent = talentByName.get(c.name) ?? talentById.get((c.id - 10000000) * 100 + 1);
+    if (!talent) errors.push(`genshin-db: ${c.name} の天賦データが見つかりません`);
+    const gcsimKey = gcsimKeyByGenshinId.get(c.id);
+    units.push({
+      id,
+      name: c.name,
+      englishName,
+      element: ELEMENT_MAP[c.elementType],
+      weaponType: WEAPON_MAP[c.weaponType] ?? 'sword',
+      rarity: c.rarity,
+      avatarUrl: iconUrl(c),
+      genshinId: c.id,
+      talent,
+      gcsimKey,
+      gcsimDir: gcsimKey ? dirByKey.get(gcsimKey) : undefined,
+    });
+  }
+
+  // 旅人: genshin-db の元素別天賦 "旅人 (風元素)" ごとに1キャラ。gcsim のフレームは traveler/common/<元素>
+  const aether = charsJa.find(c => c.id === AETHER_ID);
+  for (const t of talentsJa) {
+    const m = /^旅人\s*\((.)元素\)$/.exec(t.name);
+    const element = m ? TRAVELER_ELEMENT_JA[m[1]] : undefined;
+    if (!m || !element) continue;
+    const gcsimDir = `traveler/common/${element}`;
+    units.push({
+      id: `traveler${element}`,
+      name: `旅人(${m[1]})`,
+      englishName: `Traveler (${element.charAt(0).toUpperCase()}${element.slice(1)})`,
+      element,
+      weaponType: 'sword',
+      rarity: 5,
+      avatarUrl: iconUrl(aether),
+      genshinId: AETHER_ID,
+      talent: t,
+      gcsimKey: charDm.data[`aether${element}`] ? `aether${element}` : undefined,
+      gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
+      genderSplit: true,
+    });
+  }
 
   // 3. gcsim の Go ソースを取得・解析
-  const parsedByGenshinId = new Map<number, ParsedCharacterFiles>();
+  const parsedById = new Map<string, ParsedCharacterFiles>();
   let done = 0;
-  await runPool(targets, 12, async c => {
-    const key = gcsimKeyByGenshinId.get(c.id);
-    const dir = key ? dirByKey.get(key) : undefined;
-    if (dir) {
-      const available = filesByDir.get(dir) ?? new Set();
+  await runPool(units, 12, async u => {
+    if (u.gcsimDir) {
+      const available = filesByDir.get(u.gcsimDir) ?? new Set();
       const names = GCSIM_FILES.filter(f => available.has(f));
       try {
-        const texts = await Promise.all(names.map(f => fetchText(`${rawBase}internal/characters/${dir}/${f}.go`)));
+        const texts = await Promise.all(names.map(f => fetchText(`${rawBase}internal/characters/${u.gcsimDir}/${f}.go`)));
         // ファイル間で定数を共有するため、先に全ファイルの定数を集めてから解析する
         const shared = new Map<string, number>();
         texts.forEach(t => parseGoFile(t).consts.forEach((v, k) => shared.set(k, v)));
@@ -559,67 +700,59 @@ export async function generateCharacterMaster(
         names.forEach((f, i) => {
           files[f] = parseGoFile(texts[i], shared);
         });
-        parsedByGenshinId.set(c.id, { files });
+        parsedById.set(u.id, { files });
       } catch (e) {
-        errors.push(`gcsim ${dir}: ${e instanceof Error ? e.message : String(e)}`);
+        errors.push(`gcsim ${u.gcsimDir}: ${e instanceof Error ? e.message : String(e)}`);
       }
     }
     done++;
-    onProgress?.({ phase: 'gcsim のモーションフレームを解析中', done, total: targets.length });
+    onProgress?.({ phase: 'gcsim のモーションフレームを解析中', done, total: units.length });
   });
 
   // 4. キャラクター組み立て
   const characters: CharacterConfig[] = [];
-  const usedIds = new Set<string>();
-  for (const c of targets) {
-    const englishName = englishById.get(c.id) ?? c.name;
-    let id = normalizeCharacterId(englishName);
-    if (usedIds.has(id)) id = `${id}${c.id}`;
-    usedIds.add(id);
+  for (const u of units) {
+    const timings = extractTalentTimings(u.talent);
+    const parsed = parsedById.get(u.id);
+    const ctx = { id: u.id, weaponType: u.weaponType, timings, talent: u.talent };
 
-    const element = ELEMENT_MAP[c.elementType];
-    const weaponType = WEAPON_MAP[c.weaponType] ?? 'sword';
-    const talent = talentByName.get(c.name) ?? talentById.get((c.id - 10000000) * 100 + 1);
-    if (!talent) errors.push(`genshin-db: ${c.name} の天賦データが見つかりません`);
-    const timings = extractTalentTimings(talent);
-    const parsed = parsedByGenshinId.get(c.id);
-    const gcsimKey = gcsimKeyByGenshinId.get(c.id);
-
-    const { actions, placeholderActions } = buildActions({ id, weaponType, timings, talent, parsed });
+    const { actions, placeholderActions } = u.genderSplit && parsed
+      ? mergeGenderActions(TRAVELER_GENDERS.map(g => buildActions({ ...ctx, parsed: genderView(parsed, g.index) })))
+      : buildActions({ ...ctx, parsed });
 
     if (parsed) {
       report.charactersWithFrames++;
       for (const [f, p] of Object.entries(parsed.files)) {
-        if (p.unresolved.length > 0) report.unresolvedGoLines.push({ characterId: id, file: `${f}.go`, count: p.unresolved.length });
+        if (p.unresolved.length > 0) report.unresolvedGoLines.push({ characterId: u.id, file: `${f}.go`, count: p.unresolved.length });
       }
     }
     if (placeholderActions.length > 0) {
       report.placeholderDurations.push({
-        characterId: id,
-        name: c.name,
+        characterId: u.id,
+        name: u.name,
         actions: placeholderActions,
-        reason: !gcsimKey ? 'gcsim 未実装キャラ' : !parsed ? 'gcsim ソース取得失敗' : 'gcsim にフレーム定義が見つからない',
+        reason: !u.gcsimKey ? 'gcsim 未実装キャラ' : !parsed ? 'gcsim ソース取得失敗' : 'gcsim にフレーム定義が見つからない',
       });
     }
     for (const a of actions) {
       if ((a.startsSkillCooldown || a.startsBurstCooldown) && a.cooldown === undefined) {
-        report.missingCooldowns.push({ characterId: id, name: c.name, actionId: a.id });
+        report.missingCooldowns.push({ characterId: u.id, name: u.name, actionId: a.id });
       }
     }
 
     characters.push({
-      id,
-      name: c.name,
-      englishName,
-      element,
-      weaponType,
-      rarity: c.rarity,
-      avatarUrl: c.images?.filename_icon ? `${ICON_BASE_URL}/${c.images.filename_icon}.png` : (c.images?.mihoyo_icon ?? ''),
-      color: ELEMENT_HEX[element],
-      accentColor: ELEMENT_HEX[element],
+      id: u.id,
+      name: u.name,
+      englishName: u.englishName,
+      element: u.element,
+      weaponType: u.weaponType,
+      rarity: u.rarity,
+      avatarUrl: u.avatarUrl,
+      color: ELEMENT_HEX[u.element],
+      accentColor: ELEMENT_HEX[u.element],
       energyRecharge: 100,
       availableActions: actions,
-      source: { genshinId: c.id, ...(gcsimKey ? { gcsimKey } : {}) },
+      source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },
     });
   }
 

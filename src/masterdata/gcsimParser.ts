@@ -38,6 +38,8 @@ export interface ParsedGoFile {
   tables: FrameTable[];
   /** NewAttackFunc(c.Character, X) で参照されているテーブル名 */
   attackFuncTables: string[];
+  /** X[..][c.gender] の形で参照されるテーブル名 → 性別 (0=空 / 1=蛍) が入る添字の位置 */
+  genderIndexPositions: Record<string, number>;
   /** 評価できなかった式 (レポート用) */
   unresolved: string[];
 }
@@ -93,13 +95,16 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
     const ident = /^[A-Za-z_][\w.]*/.exec(src.slice(pos));
     if (ident) {
       pos += ident[0].length;
-      // len(arr)
+      // len(arr) / len(arr[i])
       if (ident[0] === 'len' && src[pos] === '(') {
-        const inner = /^\(\s*(\w+)\s*\)/.exec(src.slice(pos));
+        const inner = /^\(\s*(\w+)((?:\[\d+\])*)\s*\)/.exec(src.slice(pos));
         if (!inner) return undefined;
         pos += inner[0].length;
-        const arr = lookupArray(inner[1]);
-        return arr ? arr.length : undefined;
+        let arr: unknown = lookupArray(inner[1]);
+        for (const idx of inner[2].match(/\d+/g) ?? []) {
+          arr = Array.isArray(arr) ? arr[Number(idx)] : undefined;
+        }
+        return Array.isArray(arr) ? arr.length : undefined;
       }
       const indices: number[] = [];
       while (src[pos] === '[') {
@@ -268,7 +273,12 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
 
   const attackFuncTables = [...joined.matchAll(/frames\.NewAttackFunc(?:WithOffset)?\(\s*c\.Character\s*,\s*(\w+)/g)].map(x => x[1]);
 
-  return { consts, intArrays, tables: [...tables.values()], attackFuncTables, unresolved };
+  const genderIndexPositions: Record<string, number> = {};
+  for (const m of joined.matchAll(/(\w+)((?:\[[^\[\]]+\])*?)\[c\.gender\]/g)) {
+    genderIndexPositions[m[1]] ??= (m[2].match(/\[/g) ?? []).length;
+  }
+
+  return { consts, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved };
 }
 
 /** テーブル名から対応するヒットマーク定数を推定する (例: skillPressFrames → skillPressHitmark) */

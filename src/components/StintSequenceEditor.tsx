@@ -1212,9 +1212,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             key={actionDef.id}
                             onClick={() => addActionToStint(stintIndex, actionDef)}
                             className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-semibold border border-slate-700/70 hover:border-slate-500 transition-colors"
-                            title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加`}
+                            title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]`}
                           >
-                            +{actionDef.shortName}
+                            +{actionDef.buttonLabel || actionDef.shortName}
                           </button>
                         ))}
                       </div>

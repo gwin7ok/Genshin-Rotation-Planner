@@ -1,6 +1,5 @@
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ALL_CHARACTERS_ROSTER } from '../data/characters';
-import genshinDb from 'genshin-db';
 
 export interface SyncProgress {
   status: 'idle' | 'fetching' | 'success' | 'error';
@@ -468,63 +467,40 @@ export async function fetchOnlineGenshinData(
 ): Promise<CharacterConfig[]> {
   const resultCharactersMap = new Map<string, CharacterConfig>();
 
-  // 1. Build character profiles from ALL_CHARACTERS_ROSTER & genshin-db
+  // 1. Build character profiles from ALL_CHARACTERS_ROSTER
   for (const masterChar of ALL_CHARACTERS_ROSTER) {
-    let dbTalent: any = null;
-    let dbChar: any = null;
-    try {
-      const gDb = genshinDb as any;
-      dbTalent = gDb.talents(masterChar.id, { resultLanguage: 'Japanese' }) || gDb.talents(masterChar.name, { resultLanguage: 'Japanese' });
-      dbChar = gDb.characters(masterChar.id, { resultLanguage: 'Japanese' }) || gDb.characters(masterChar.name, { resultLanguage: 'Japanese' });
-    } catch {
-      // Fallback to built-in if genshin-db query fails
-    }
-
-    const elem = dbChar?.elementText ? normalizeElement(dbChar.elementText) : masterChar.element;
-    const wType = dbChar?.weaponText ? normalizeWeapon(dbChar.weaponText) : masterChar.weaponType;
+    const elem = masterChar.element;
+    const wType = masterChar.weaponType;
     const colorObj = ELEMENT_COLORS[elem] || { hex: masterChar.color };
 
-    let skillCD = masterChar.skillCooldown;
-    let burstCD = masterChar.burstCooldown;
-    let burstEnergy = masterChar.burstEnergyCost;
-    let skillDur = masterChar.skillDuration || 0;
-    let burstDur = masterChar.burstDuration || 0;
-
-    if (dbTalent?.combat2?.attributes?.parameters) {
-      const params = dbTalent.combat2.attributes.parameters;
-      if (params.param7 && Array.isArray(params.param7) && params.param7[0]) skillCD = Number(params.param7[0]);
-    }
-
-    if (dbTalent?.combat3?.attributes?.parameters) {
-      const params = dbTalent.combat3.attributes.parameters;
-      if (params.param6 && Array.isArray(params.param6) && params.param6[0]) burstCD = Number(params.param6[0]);
-      if (params.param7 && Array.isArray(params.param7) && params.param7[0]) burstEnergy = Number(params.param7[0]);
-      if (params.param5 && Array.isArray(params.param5) && params.param5[0]) burstDur = Number(params.param5[0]);
-    }
+    const skillCD = masterChar.skillCooldown;
+    const burstCD = masterChar.burstCooldown;
+    const burstEnergy = masterChar.burstEnergyCost;
+    const skillDur = masterChar.skillDuration || 0;
+    const burstDur = masterChar.burstDuration || 0;
 
     // Preserve Web-crawled / gcsim motion frame durations for actions and inject action-specific CT/durations
     const actionsWithMotionData: ActionDefinition[] = masterChar.availableActions.map(act => {
-      if (act.type === 'skill' || act.type === 'skill_hold') {
-        return {
-          ...act,
-          skillCooldown: act.skillCooldown ?? (act.customSkillCT || skillCD),
-          skillDuration: act.skillDuration ?? skillDur
-        };
-      }
-      if (act.type === 'burst') {
-        return {
-          ...act,
-          burstCooldown: act.burstCooldown ?? burstCD,
-          burstDuration: act.burstDuration ?? burstDur,
-          energyCost: act.energyCost ?? burstEnergy
-        };
-      }
-      return act;
+      const isSkill = act.type === 'skill' || act.type === 'skill_hold';
+      const isBurst = act.type === 'burst';
+      const ct = act.cooldown ?? (isBurst ? (act.burstCooldown ?? burstCD) : (act.skillCooldown ?? act.customSkillCT ?? skillCD));
+      const dur = act.effectDuration ?? (isBurst ? (act.burstDuration ?? burstDur) : (act.skillDuration ?? skillDur));
+
+      return {
+        ...act,
+        cooldown: ct,
+        effectDuration: dur,
+        skillCooldown: isSkill ? ct : act.skillCooldown,
+        skillDuration: isSkill ? dur : act.skillDuration,
+        burstCooldown: isBurst ? ct : act.burstCooldown,
+        burstDuration: isBurst ? dur : act.burstDuration,
+        energyCost: isBurst ? (act.energyCost ?? burstEnergy) : act.energyCost
+      };
     });
 
     const charConfig: CharacterConfig = {
       ...masterChar,
-      name: dbChar?.name || masterChar.name,
+      name: masterChar.name,
       element: elem,
       weaponType: wType,
       color: colorObj.hex,

@@ -75,26 +75,35 @@ const WEAPON_MAP: Record<string, string> = {
 // Helper to extract numeric stats from genshin-db talent labels
 function extractTalentStats(combat: any) {
   let cd = 0;
+  let holdCd = 0;
   let duration = 0;
   let energy = 0;
 
-  if (!combat?.attributes?.labels) return { cd, duration, energy };
+  if (!combat?.attributes?.labels) return { cd, holdCd, duration, energy };
 
   combat.attributes.labels.forEach((lbl: string) => {
-    const match = lbl.match(/\{param(\d+):[^\}]+\}/);
-    if (match) {
-      const paramNum = match[1];
-      const paramKey = `param${paramNum}`;
-      const val = combat.attributes.parameters?.[paramKey]?.[0];
-      if (typeof val === 'number') {
-        if (lbl.includes('クールタイム')) cd = val;
-        if (lbl.includes('継続時間')) duration = val;
-        if (lbl.includes('元素エネルギー')) energy = val;
+    const [title, formula] = lbl.split('|');
+    if (!title || !formula) return;
+    const matches = [...formula.matchAll(/param(\d+)/g)].map(m => 'param' + m[1]);
+    const getVal = (k: string) => combat.attributes.parameters?.[k]?.[0];
+
+    if (title.includes('長押しクールタイム')) {
+      if (matches[0] && typeof getVal(matches[0]) === 'number') holdCd = getVal(matches[0]);
+    } else if (title.includes('クールタイム')) {
+      if (matches.length > 1) {
+        if (typeof getVal(matches[0]) === 'number') cd = getVal(matches[0]);
+        if (typeof getVal(matches[matches.length - 1]) === 'number') holdCd = getVal(matches[matches.length - 1]);
+      } else if (matches[0] && typeof getVal(matches[0]) === 'number') {
+        cd = getVal(matches[0]);
       }
+    } else if (title.includes('継続時間') || title.includes('持続時間')) {
+      if (matches[0] && typeof getVal(matches[0]) === 'number') duration = getVal(matches[0]);
+    } else if (title.includes('元素エネルギー') || title.includes('エネルギー')) {
+      if (matches[0] && typeof getVal(matches[0]) === 'number') energy = getVal(matches[0]);
     }
   });
 
-  return { cd, duration, energy };
+  return { cd, holdCd: holdCd || cd, duration, energy };
 }
 
 // Simple Go source parser for gcsim frame definitions
@@ -217,9 +226,26 @@ async function processCharacter(nameKey: string, gcsimCharsSet: Set<string>): Pr
       defaultDuration: skillDurationSec,
       description: talent?.combat2?.description?.slice(0, 100) || '元素スキル発動',
       startsSkillCooldown: true,
+      cooldown: skillStats.cd || 10,
+      effectDuration: skillStats.duration || 0,
+      skillCooldown: skillStats.cd || 10,
+      skillDuration: skillStats.duration || 0,
       startupFrames: frameData['skill']?.startupFrames,
       totalFrames: frameData['skill']?.totalFrames,
       cancelableFrames: frameData['skill']?.cancelableFrames,
+    },
+    {
+      id: `${id}_e_hold`,
+      name: talent?.combat2?.name ? `元素スキル(長押し): ${talent.combat2.name}` : '元素スキル(長押し)',
+      shortName: 'Hold E',
+      type: 'skill_hold',
+      defaultDuration: Math.min(skillDurationSec * 1.5, 1.8),
+      description: '元素スキル長押し発動',
+      startsSkillCooldown: true,
+      cooldown: skillStats.holdCd || skillStats.cd || 10,
+      effectDuration: skillStats.duration || 0,
+      skillCooldown: skillStats.holdCd || skillStats.cd || 10,
+      skillDuration: skillStats.duration || 0,
     },
     {
       id: `${id}_q`,
@@ -229,6 +255,10 @@ async function processCharacter(nameKey: string, gcsimCharsSet: Set<string>): Pr
       defaultDuration: burstDurationSec,
       description: talent?.combat3?.description?.slice(0, 100) || '元素爆発発動',
       startsBurstCooldown: true,
+      cooldown: burstStats.cd || 15,
+      effectDuration: burstStats.duration || 0,
+      burstCooldown: burstStats.cd || 15,
+      burstDuration: burstStats.duration || 0,
       energyCost: burstStats.energy || 60,
       startupFrames: frameData['burst']?.startupFrames,
       totalFrames: frameData['burst']?.totalFrames,

@@ -13,8 +13,9 @@
     "availableActions": [
       {
         "id": "aino_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -27,8 +28,9 @@
       },
       {
         "id": "aino_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 75,
@@ -41,8 +43,9 @@
       },
       {
         "id": "aino_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 93,
@@ -140,8 +143,9 @@
     "availableActions": [
       {
         "id": "albedo_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -161,8 +165,9 @@
       },
       {
         "id": "albedo_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -182,8 +187,9 @@
       },
       {
         "id": "albedo_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 41,
@@ -203,8 +209,9 @@
       },
       {
         "id": "albedo_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -224,8 +231,9 @@
       },
       {
         "id": "albedo_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 62,
@@ -336,8 +344,9 @@
     "availableActions": [
       {
         "id": "alhaitham_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -358,8 +367,9 @@
       },
       {
         "id": "alhaitham_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -380,8 +390,9 @@
       },
       {
         "id": "alhaitham_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -402,8 +413,9 @@
       },
       {
         "id": "alhaitham_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 51,
@@ -424,8 +436,9 @@
       },
       {
         "id": "alhaitham_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 90,
@@ -567,8 +580,9 @@
     "availableActions": [
       {
         "id": "aloy_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -587,8 +601,9 @@
       },
       {
         "id": "aloy_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -607,8 +622,9 @@
       },
       {
         "id": "aloy_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -627,8 +643,9 @@
       },
       {
         "id": "aloy_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 61,
@@ -738,8 +755,9 @@
     "availableActions": [
       {
         "id": "alyosha_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -805,8 +823,9 @@
     "availableActions": [
       {
         "id": "amber_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -825,8 +844,9 @@
       },
       {
         "id": "amber_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -845,8 +865,9 @@
       },
       {
         "id": "amber_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -865,8 +886,9 @@
       },
       {
         "id": "amber_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -885,8 +907,9 @@
       },
       {
         "id": "amber_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 60,
@@ -996,8 +1019,9 @@
     "availableActions": [
       {
         "id": "aratakiitto_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 41,
@@ -1017,8 +1041,9 @@
       },
       {
         "id": "aratakiitto_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 51,
@@ -1038,8 +1063,9 @@
       },
       {
         "id": "aratakiitto_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -1059,8 +1085,9 @@
       },
       {
         "id": "aratakiitto_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 83,
@@ -1168,8 +1195,9 @@
     "availableActions": [
       {
         "id": "arlecchino_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -1190,8 +1218,9 @@
       },
       {
         "id": "arlecchino_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -1212,8 +1241,9 @@
       },
       {
         "id": "arlecchino_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -1234,8 +1264,9 @@
       },
       {
         "id": "arlecchino_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -1256,8 +1287,9 @@
       },
       {
         "id": "arlecchino_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 43,
@@ -1278,8 +1310,9 @@
       },
       {
         "id": "arlecchino_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -1396,8 +1429,9 @@
     "availableActions": [
       {
         "id": "baizhu_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -1418,8 +1452,9 @@
       },
       {
         "id": "baizhu_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -1440,8 +1475,9 @@
       },
       {
         "id": "baizhu_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -1462,8 +1498,9 @@
       },
       {
         "id": "baizhu_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -1582,8 +1619,9 @@
     "availableActions": [
       {
         "id": "barbara_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -1604,8 +1642,9 @@
       },
       {
         "id": "barbara_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -1626,8 +1665,9 @@
       },
       {
         "id": "barbara_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -1648,8 +1688,9 @@
       },
       {
         "id": "barbara_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 60,
@@ -1766,8 +1807,9 @@
     "availableActions": [
       {
         "id": "beidou_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -1786,8 +1828,9 @@
       },
       {
         "id": "beidou_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -1806,8 +1849,9 @@
       },
       {
         "id": "beidou_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 54,
@@ -1826,8 +1870,9 @@
       },
       {
         "id": "beidou_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -1846,8 +1891,9 @@
       },
       {
         "id": "beidou_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 96,
@@ -1948,8 +1994,9 @@
     "availableActions": [
       {
         "id": "bennett_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -1969,8 +2016,9 @@
       },
       {
         "id": "bennett_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -1990,8 +2038,9 @@
       },
       {
         "id": "bennett_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -2011,8 +2060,9 @@
       },
       {
         "id": "bennett_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -2032,8 +2082,9 @@
       },
       {
         "id": "bennett_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 60,
@@ -2166,8 +2217,9 @@
     "availableActions": [
       {
         "id": "candace_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -2187,8 +2239,9 @@
       },
       {
         "id": "candace_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -2207,8 +2260,9 @@
       },
       {
         "id": "candace_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -2228,8 +2282,9 @@
       },
       {
         "id": "candace_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 69,
@@ -2363,8 +2418,9 @@
     "availableActions": [
       {
         "id": "charlotte_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -2385,8 +2441,9 @@
       },
       {
         "id": "charlotte_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -2407,8 +2464,9 @@
       },
       {
         "id": "charlotte_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 74,
@@ -2559,8 +2617,9 @@
     "availableActions": [
       {
         "id": "chasca_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -2580,8 +2639,9 @@
       },
       {
         "id": "chasca_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -2601,8 +2661,9 @@
       },
       {
         "id": "chasca_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 53,
@@ -2622,8 +2683,9 @@
       },
       {
         "id": "chasca_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 73,
@@ -2733,8 +2795,9 @@
     "availableActions": [
       {
         "id": "chevreuse_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -2755,8 +2818,9 @@
       },
       {
         "id": "chevreuse_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -2777,8 +2841,9 @@
       },
       {
         "id": "chevreuse_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -2799,8 +2864,9 @@
       },
       {
         "id": "chevreuse_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -2943,8 +3009,9 @@
     "availableActions": [
       {
         "id": "chiori_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -2964,8 +3031,9 @@
       },
       {
         "id": "chiori_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -2985,8 +3053,9 @@
       },
       {
         "id": "chiori_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 42,
@@ -3006,8 +3075,9 @@
       },
       {
         "id": "chiori_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -3119,8 +3189,9 @@
     "availableActions": [
       {
         "id": "chongyun_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -3139,8 +3210,9 @@
       },
       {
         "id": "chongyun_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -3159,8 +3231,9 @@
       },
       {
         "id": "chongyun_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -3179,8 +3252,9 @@
       },
       {
         "id": "chongyun_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 101,
@@ -3280,8 +3354,9 @@
     "availableActions": [
       {
         "id": "citlali_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -3302,8 +3377,9 @@
       },
       {
         "id": "citlali_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -3324,8 +3400,9 @@
       },
       {
         "id": "citlali_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 52,
@@ -3444,8 +3521,9 @@
     "availableActions": [
       {
         "id": "clorinde_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -3465,8 +3543,9 @@
       },
       {
         "id": "clorinde_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -3486,8 +3565,9 @@
       },
       {
         "id": "clorinde_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 42,
@@ -3507,8 +3587,9 @@
       },
       {
         "id": "clorinde_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -3528,8 +3609,9 @@
       },
       {
         "id": "clorinde_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 60,
@@ -3640,8 +3722,9 @@
     "availableActions": [
       {
         "id": "collei_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -3660,8 +3743,9 @@
       },
       {
         "id": "collei_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -3680,8 +3764,9 @@
       },
       {
         "id": "collei_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 43,
@@ -3700,8 +3785,9 @@
       },
       {
         "id": "collei_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 65,
@@ -3810,8 +3896,9 @@
     "availableActions": [
       {
         "id": "columbina_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -3832,8 +3919,9 @@
       },
       {
         "id": "columbina_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -3854,8 +3942,9 @@
       },
       {
         "id": "columbina_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 76,
@@ -3976,8 +4065,9 @@
     "availableActions": [
       {
         "id": "cyno_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -3997,8 +4087,9 @@
       },
       {
         "id": "cyno_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -4018,8 +4109,9 @@
       },
       {
         "id": "cyno_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -4039,8 +4131,9 @@
       },
       {
         "id": "cyno_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 58,
@@ -4169,8 +4262,9 @@
     "availableActions": [
       {
         "id": "dahlia_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -4191,8 +4285,9 @@
       },
       {
         "id": "dahlia_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -4213,8 +4308,9 @@
       },
       {
         "id": "dahlia_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -4235,8 +4331,9 @@
       },
       {
         "id": "dahlia_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 71,
@@ -4351,8 +4448,9 @@
     "availableActions": [
       {
         "id": "dehya_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -4371,8 +4469,9 @@
       },
       {
         "id": "dehya_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -4391,8 +4490,9 @@
       },
       {
         "id": "dehya_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 43,
@@ -4411,8 +4511,9 @@
       },
       {
         "id": "dehya_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 85,
@@ -4535,8 +4636,9 @@
     "availableActions": [
       {
         "id": "diluc_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -4555,8 +4657,9 @@
       },
       {
         "id": "diluc_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -4575,8 +4678,9 @@
       },
       {
         "id": "diluc_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -4595,8 +4699,9 @@
       },
       {
         "id": "diluc_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 99,
@@ -4696,8 +4801,9 @@
     "availableActions": [
       {
         "id": "diona_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -4716,8 +4822,9 @@
       },
       {
         "id": "diona_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -4736,8 +4843,9 @@
       },
       {
         "id": "diona_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 44,
@@ -4756,8 +4864,9 @@
       },
       {
         "id": "diona_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -4776,8 +4885,9 @@
       },
       {
         "id": "diona_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 73,
@@ -4914,8 +5024,9 @@
     "availableActions": [
       {
         "id": "dori_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 44,
@@ -4934,8 +5045,9 @@
       },
       {
         "id": "dori_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -4954,8 +5066,9 @@
       },
       {
         "id": "dori_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 108,
@@ -5054,8 +5167,9 @@
     "availableActions": [
       {
         "id": "durin_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -5069,8 +5183,9 @@
       },
       {
         "id": "durin_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -5084,8 +5199,9 @@
       },
       {
         "id": "durin_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -5099,8 +5215,9 @@
       },
       {
         "id": "durin_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -5251,8 +5368,9 @@
     "availableActions": [
       {
         "id": "emilie_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -5273,8 +5391,9 @@
       },
       {
         "id": "emilie_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -5295,8 +5414,9 @@
       },
       {
         "id": "emilie_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 49,
@@ -5317,8 +5437,9 @@
       },
       {
         "id": "emilie_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 71,
@@ -5433,8 +5554,9 @@
     "availableActions": [
       {
         "id": "escoffier_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -5455,8 +5577,9 @@
       },
       {
         "id": "escoffier_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -5477,8 +5600,9 @@
       },
       {
         "id": "escoffier_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 62,
@@ -5604,8 +5728,9 @@
     "availableActions": [
       {
         "id": "eula_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -5624,8 +5749,9 @@
       },
       {
         "id": "eula_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -5644,8 +5770,9 @@
       },
       {
         "id": "eula_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 56,
@@ -5664,8 +5791,9 @@
       },
       {
         "id": "eula_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 44,
@@ -5684,8 +5812,9 @@
       },
       {
         "id": "eula_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 105,
@@ -5815,8 +5944,9 @@
     "availableActions": [
       {
         "id": "faruzan_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -5835,8 +5965,9 @@
       },
       {
         "id": "faruzan_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -5855,8 +5986,9 @@
       },
       {
         "id": "faruzan_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -5875,8 +6007,9 @@
       },
       {
         "id": "faruzan_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 86,
@@ -5990,8 +6123,9 @@
     "availableActions": [
       {
         "id": "fischl_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -6010,8 +6144,9 @@
       },
       {
         "id": "fischl_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -6030,8 +6165,9 @@
       },
       {
         "id": "fischl_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -6050,8 +6186,9 @@
       },
       {
         "id": "fischl_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -6070,8 +6207,9 @@
       },
       {
         "id": "fischl_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -6195,8 +6333,9 @@
     "availableActions": [
       {
         "id": "flins_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -6210,8 +6349,9 @@
       },
       {
         "id": "flins_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -6225,8 +6365,9 @@
       },
       {
         "id": "flins_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -6240,8 +6381,9 @@
       },
       {
         "id": "flins_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -6254,8 +6396,9 @@
       },
       {
         "id": "flins_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 68,
@@ -6386,8 +6529,9 @@
     "availableActions": [
       {
         "id": "freminet_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -6407,8 +6551,9 @@
       },
       {
         "id": "freminet_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 49,
@@ -6428,8 +6573,9 @@
       },
       {
         "id": "freminet_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 65,
@@ -6449,8 +6595,9 @@
       },
       {
         "id": "freminet_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 86,
@@ -6575,8 +6722,9 @@
     "availableActions": [
       {
         "id": "furina_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -6596,8 +6744,9 @@
       },
       {
         "id": "furina_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -6617,8 +6766,9 @@
       },
       {
         "id": "furina_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -6639,8 +6789,9 @@
       },
       {
         "id": "furina_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 58,
@@ -6759,8 +6910,9 @@
     "availableActions": [
       {
         "id": "gaming_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -6780,8 +6932,9 @@
       },
       {
         "id": "gaming_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -6801,8 +6954,9 @@
       },
       {
         "id": "gaming_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 86,
@@ -6822,8 +6976,9 @@
       },
       {
         "id": "gaming_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 89,
@@ -6926,8 +7081,9 @@
     "availableActions": [
       {
         "id": "ganyu_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 19,
@@ -6946,8 +7102,9 @@
       },
       {
         "id": "ganyu_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -6966,8 +7123,9 @@
       },
       {
         "id": "ganyu_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -6986,8 +7144,9 @@
       },
       {
         "id": "ganyu_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -7006,8 +7165,9 @@
       },
       {
         "id": "ganyu_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -7026,8 +7186,9 @@
       },
       {
         "id": "ganyu_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -7133,8 +7294,9 @@
     "availableActions": [
       {
         "id": "gorou_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -7153,8 +7315,9 @@
       },
       {
         "id": "gorou_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -7173,8 +7336,9 @@
       },
       {
         "id": "gorou_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 43,
@@ -7193,8 +7357,9 @@
       },
       {
         "id": "gorou_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -7303,8 +7468,9 @@
     "availableActions": [
       {
         "id": "hutao_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 20,
@@ -7324,8 +7490,9 @@
       },
       {
         "id": "hutao_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 16,
@@ -7345,8 +7512,9 @@
       },
       {
         "id": "hutao_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -7366,8 +7534,9 @@
       },
       {
         "id": "hutao_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -7387,8 +7556,9 @@
       },
       {
         "id": "hutao_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -7408,8 +7578,9 @@
       },
       {
         "id": "hutao_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 72,
@@ -7520,8 +7691,9 @@
     "availableActions": [
       {
         "id": "iansan_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -7542,8 +7714,9 @@
       },
       {
         "id": "iansan_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -7564,8 +7737,9 @@
       },
       {
         "id": "iansan_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -7683,8 +7857,9 @@
     "availableActions": [
       {
         "id": "ifa_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -7705,8 +7880,9 @@
       },
       {
         "id": "ifa_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -7727,8 +7903,9 @@
       },
       {
         "id": "ifa_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 90,
@@ -7845,8 +8022,9 @@
     "availableActions": [
       {
         "id": "illuga_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -7911,8 +8089,9 @@
     "availableActions": [
       {
         "id": "ineffa_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -7926,8 +8105,9 @@
       },
       {
         "id": "ineffa_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -7941,8 +8121,9 @@
       },
       {
         "id": "ineffa_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -7956,8 +8137,9 @@
       },
       {
         "id": "ineffa_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 55,
@@ -8062,8 +8244,9 @@
     "availableActions": [
       {
         "id": "jahoda_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -8083,8 +8266,9 @@
       },
       {
         "id": "jahoda_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 52,
@@ -8104,8 +8288,9 @@
       },
       {
         "id": "jahoda_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 99,
@@ -8208,8 +8393,9 @@
     "availableActions": [
       {
         "id": "jean_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -8229,8 +8415,9 @@
       },
       {
         "id": "jean_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 20,
@@ -8250,8 +8437,9 @@
       },
       {
         "id": "jean_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -8271,8 +8459,9 @@
       },
       {
         "id": "jean_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 49,
@@ -8292,8 +8481,9 @@
       },
       {
         "id": "jean_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 68,
@@ -8403,8 +8593,9 @@
     "availableActions": [
       {
         "id": "kachina_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -8469,8 +8660,9 @@
     "availableActions": [
       {
         "id": "kaedeharakazuha_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -8489,8 +8681,9 @@
       },
       {
         "id": "kaedeharakazuha_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 20,
@@ -8509,8 +8702,9 @@
       },
       {
         "id": "kaedeharakazuha_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -8530,8 +8724,9 @@
       },
       {
         "id": "kaedeharakazuha_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -8551,8 +8746,9 @@
       },
       {
         "id": "kaedeharakazuha_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 72,
@@ -8683,8 +8879,9 @@
     "availableActions": [
       {
         "id": "kaeya_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -8704,8 +8901,9 @@
       },
       {
         "id": "kaeya_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -8725,8 +8923,9 @@
       },
       {
         "id": "kaeya_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -8746,8 +8945,9 @@
       },
       {
         "id": "kaeya_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -8767,8 +8967,9 @@
       },
       {
         "id": "kaeya_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 64,
@@ -8880,8 +9081,9 @@
     "availableActions": [
       {
         "id": "kamisatoayaka_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -8901,8 +9103,9 @@
       },
       {
         "id": "kamisatoayaka_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 20,
@@ -8922,8 +9125,9 @@
       },
       {
         "id": "kamisatoayaka_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -8943,8 +9147,9 @@
       },
       {
         "id": "kamisatoayaka_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -8964,8 +9169,9 @@
       },
       {
         "id": "kamisatoayaka_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -9077,8 +9283,9 @@
     "availableActions": [
       {
         "id": "kamisatoayato_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -9098,8 +9305,9 @@
       },
       {
         "id": "kamisatoayato_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -9118,8 +9326,9 @@
       },
       {
         "id": "kamisatoayato_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -9139,8 +9348,9 @@
       },
       {
         "id": "kamisatoayato_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -9160,8 +9370,9 @@
       },
       {
         "id": "kamisatoayato_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 63,
@@ -9267,8 +9478,9 @@
     "availableActions": [
       {
         "id": "kaveh_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 44,
@@ -9288,8 +9500,9 @@
       },
       {
         "id": "kaveh_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -9309,8 +9522,9 @@
       },
       {
         "id": "kaveh_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 56,
@@ -9330,8 +9544,9 @@
       },
       {
         "id": "kaveh_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 81,
@@ -9436,8 +9651,9 @@
     "availableActions": [
       {
         "id": "keqing_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 19,
@@ -9457,8 +9673,9 @@
       },
       {
         "id": "keqing_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -9478,8 +9695,9 @@
       },
       {
         "id": "keqing_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -9499,8 +9717,9 @@
       },
       {
         "id": "keqing_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 58,
@@ -9520,8 +9739,9 @@
       },
       {
         "id": "keqing_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -9652,8 +9872,9 @@
     "availableActions": [
       {
         "id": "kinich_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -9673,8 +9894,9 @@
       },
       {
         "id": "kinich_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -9694,8 +9916,9 @@
       },
       {
         "id": "kinich_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 79,
@@ -9824,8 +10047,9 @@
     "availableActions": [
       {
         "id": "kirara_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -9846,8 +10070,9 @@
       },
       {
         "id": "kirara_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -9868,8 +10093,9 @@
       },
       {
         "id": "kirara_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 61,
@@ -9890,8 +10116,9 @@
       },
       {
         "id": "kirara_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 63,
@@ -10055,8 +10282,9 @@
     "availableActions": [
       {
         "id": "klee_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -10077,8 +10305,9 @@
       },
       {
         "id": "klee_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 41,
@@ -10099,8 +10328,9 @@
       },
       {
         "id": "klee_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 77,
@@ -10220,8 +10450,9 @@
     "availableActions": [
       {
         "id": "kujousara_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -10240,8 +10471,9 @@
       },
       {
         "id": "kujousara_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -10260,8 +10492,9 @@
       },
       {
         "id": "kujousara_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -10280,8 +10513,9 @@
       },
       {
         "id": "kujousara_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -10300,8 +10534,9 @@
       },
       {
         "id": "kujousara_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -10411,8 +10646,9 @@
     "availableActions": [
       {
         "id": "kukishinobu_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -10432,8 +10668,9 @@
       },
       {
         "id": "kukishinobu_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -10453,8 +10690,9 @@
       },
       {
         "id": "kukishinobu_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 50,
@@ -10474,8 +10712,9 @@
       },
       {
         "id": "kukishinobu_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -10585,8 +10824,9 @@
     "availableActions": [
       {
         "id": "lanyan_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -10607,8 +10847,9 @@
       },
       {
         "id": "lanyan_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -10629,8 +10870,9 @@
       },
       {
         "id": "lanyan_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 53,
@@ -10651,8 +10893,9 @@
       },
       {
         "id": "lanyan_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 63,
@@ -10784,8 +11027,9 @@
     "availableActions": [
       {
         "id": "lauma_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -10806,8 +11050,9 @@
       },
       {
         "id": "lauma_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -10828,8 +11073,9 @@
       },
       {
         "id": "lauma_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -10948,8 +11194,9 @@
     "availableActions": [
       {
         "id": "layla_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -10970,8 +11217,9 @@
       },
       {
         "id": "layla_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 50,
@@ -10992,8 +11240,9 @@
       },
       {
         "id": "layla_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 74,
@@ -11108,8 +11357,9 @@
     "availableActions": [
       {
         "id": "linnea_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -11175,8 +11425,9 @@
     "availableActions": [
       {
         "id": "lisa_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -11195,8 +11446,9 @@
       },
       {
         "id": "lisa_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -11216,8 +11468,9 @@
       },
       {
         "id": "lisa_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 40,
@@ -11237,8 +11490,9 @@
       },
       {
         "id": "lisa_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -11379,8 +11633,9 @@
     "availableActions": [
       {
         "id": "lohen_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -11445,8 +11700,9 @@
     "availableActions": [
       {
         "id": "lynette_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -11467,8 +11723,9 @@
       },
       {
         "id": "lynette_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -11489,8 +11746,9 @@
       },
       {
         "id": "lynette_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -11510,8 +11768,9 @@
       },
       {
         "id": "lynette_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 68,
@@ -11628,8 +11887,9 @@
     "availableActions": [
       {
         "id": "lyney_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -11649,8 +11909,9 @@
       },
       {
         "id": "lyney_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -11671,8 +11932,9 @@
       },
       {
         "id": "lyney_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 86,
@@ -11692,8 +11954,9 @@
       },
       {
         "id": "lyney_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -11829,8 +12092,9 @@
     "availableActions": [
       {
         "id": "mavuika_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 40,
@@ -11851,8 +12115,9 @@
       },
       {
         "id": "mavuika_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 50,
@@ -11873,8 +12138,9 @@
       },
       {
         "id": "mavuika_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -11895,8 +12161,9 @@
       },
       {
         "id": "mavuika_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 61,
@@ -12100,8 +12367,9 @@
     "availableActions": [
       {
         "id": "mika_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -12122,8 +12390,9 @@
       },
       {
         "id": "mika_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -12144,8 +12413,9 @@
       },
       {
         "id": "mika_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 41,
@@ -12166,8 +12436,9 @@
       },
       {
         "id": "mika_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -12188,8 +12459,9 @@
       },
       {
         "id": "mika_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 71,
@@ -12330,8 +12602,9 @@
     "availableActions": [
       {
         "id": "mona_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -12351,8 +12624,9 @@
       },
       {
         "id": "mona_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -12372,8 +12646,9 @@
       },
       {
         "id": "mona_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 54,
@@ -12393,8 +12668,9 @@
       },
       {
         "id": "mona_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -12509,8 +12785,9 @@
     "availableActions": [
       {
         "id": "mualani_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -12531,8 +12808,9 @@
       },
       {
         "id": "mualani_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -12553,8 +12831,9 @@
       },
       {
         "id": "mualani_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -12671,8 +12950,9 @@
     "availableActions": [
       {
         "id": "nahida_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -12693,8 +12973,9 @@
       },
       {
         "id": "nahida_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -12715,8 +12996,9 @@
       },
       {
         "id": "nahida_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -12737,8 +13019,9 @@
       },
       {
         "id": "nahida_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 71,
@@ -12881,8 +13164,9 @@
     "availableActions": [
       {
         "id": "navia_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -12901,8 +13185,9 @@
       },
       {
         "id": "navia_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 42,
@@ -12921,8 +13206,9 @@
       },
       {
         "id": "navia_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -12941,8 +13227,9 @@
       },
       {
         "id": "navia_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 93,
@@ -13045,8 +13332,9 @@
     "availableActions": [
       {
         "id": "nefer_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -13111,8 +13399,9 @@
     "availableActions": [
       {
         "id": "neuvillette_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -13133,8 +13422,9 @@
       },
       {
         "id": "neuvillette_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -13155,8 +13445,9 @@
       },
       {
         "id": "neuvillette_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 62,
@@ -13274,8 +13565,9 @@
     "availableActions": [
       {
         "id": "nicole_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -13296,8 +13588,9 @@
       },
       {
         "id": "nicole_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -13318,8 +13611,9 @@
       },
       {
         "id": "nicole_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -13440,8 +13734,9 @@
     "availableActions": [
       {
         "id": "nilou_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -13461,8 +13756,9 @@
       },
       {
         "id": "nilou_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -13482,8 +13778,9 @@
       },
       {
         "id": "nilou_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 58,
@@ -13638,8 +13935,9 @@
     "availableActions": [
       {
         "id": "ningguang_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 61,
@@ -13653,8 +13951,9 @@
       },
       {
         "id": "ningguang_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 56,
@@ -13668,8 +13967,9 @@
       },
       {
         "id": "ningguang_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -13776,8 +14076,9 @@
     "availableActions": [
       {
         "id": "noelle_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 54,
@@ -13798,8 +14099,9 @@
       },
       {
         "id": "noelle_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -13820,8 +14122,9 @@
       },
       {
         "id": "noelle_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 72,
@@ -13842,8 +14145,9 @@
       },
       {
         "id": "noelle_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 112,
@@ -13965,8 +14269,9 @@
     "availableActions": [
       {
         "id": "odette_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -13980,8 +14285,9 @@
       },
       {
         "id": "odette_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -13995,8 +14301,9 @@
       },
       {
         "id": "odette_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 69,
@@ -14010,8 +14317,9 @@
       },
       {
         "id": "odette_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 85,
@@ -14025,8 +14333,9 @@
       },
       {
         "id": "odette_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 70,
@@ -14157,8 +14466,9 @@
     "availableActions": [
       {
         "id": "ororon_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -14178,8 +14488,9 @@
       },
       {
         "id": "ororon_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 53,
@@ -14199,8 +14510,9 @@
       },
       {
         "id": "ororon_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 70,
@@ -14311,8 +14623,9 @@
     "availableActions": [
       {
         "id": "prune_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -14333,8 +14646,9 @@
       },
       {
         "id": "prune_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 54,
@@ -14355,8 +14669,9 @@
       },
       {
         "id": "prune_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 84,
@@ -14497,8 +14812,9 @@
     "availableActions": [
       {
         "id": "qiqi_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -14518,8 +14834,9 @@
       },
       {
         "id": "qiqi_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -14539,8 +14856,9 @@
       },
       {
         "id": "qiqi_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -14559,8 +14877,9 @@
       },
       {
         "id": "qiqi_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -14580,8 +14899,9 @@
       },
       {
         "id": "qiqi_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 53,
@@ -14694,8 +15014,9 @@
     "availableActions": [
       {
         "id": "raidenshogun_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -14715,8 +15036,9 @@
       },
       {
         "id": "raidenshogun_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -14736,8 +15058,9 @@
       },
       {
         "id": "raidenshogun_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -14757,8 +15080,9 @@
       },
       {
         "id": "raidenshogun_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -14778,8 +15102,9 @@
       },
       {
         "id": "raidenshogun_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 50,
@@ -14890,8 +15215,9 @@
     "availableActions": [
       {
         "id": "razor_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 45,
@@ -14910,8 +15236,9 @@
       },
       {
         "id": "razor_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -14930,8 +15257,9 @@
       },
       {
         "id": "razor_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -14950,8 +15278,9 @@
       },
       {
         "id": "razor_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 116,
@@ -15077,8 +15406,9 @@
     "availableActions": [
       {
         "id": "rosaria_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 24,
@@ -15098,8 +15428,9 @@
       },
       {
         "id": "rosaria_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -15119,8 +15450,9 @@
       },
       {
         "id": "rosaria_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -15140,8 +15472,9 @@
       },
       {
         "id": "rosaria_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 52,
@@ -15161,8 +15494,9 @@
       },
       {
         "id": "rosaria_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -15270,8 +15604,9 @@
     "availableActions": [
       {
         "id": "sandrone_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -15335,8 +15670,9 @@
     "availableActions": [
       {
         "id": "sangonomiyakokomi_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -15357,8 +15693,9 @@
       },
       {
         "id": "sangonomiyakokomi_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -15378,8 +15715,9 @@
       },
       {
         "id": "sangonomiyakokomi_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 65,
@@ -15495,8 +15833,9 @@
     "availableActions": [
       {
         "id": "sayu_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 36,
@@ -15515,8 +15854,9 @@
       },
       {
         "id": "sayu_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 48,
@@ -15535,8 +15875,9 @@
       },
       {
         "id": "sayu_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 52,
@@ -15555,8 +15896,9 @@
       },
       {
         "id": "sayu_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 71,
@@ -15694,8 +16036,9 @@
     "availableActions": [
       {
         "id": "sethos_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 19,
@@ -15709,8 +16052,9 @@
       },
       {
         "id": "sethos_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -15724,8 +16068,9 @@
       },
       {
         "id": "sethos_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 69,
@@ -15824,8 +16169,9 @@
     "availableActions": [
       {
         "id": "shenhe_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -15845,8 +16191,9 @@
       },
       {
         "id": "shenhe_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -15866,8 +16213,9 @@
       },
       {
         "id": "shenhe_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -15887,8 +16235,9 @@
       },
       {
         "id": "shenhe_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -15908,8 +16257,9 @@
       },
       {
         "id": "shenhe_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 49,
@@ -16055,8 +16405,9 @@
     "availableActions": [
       {
         "id": "shikanoinheizou_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -16076,8 +16427,9 @@
       },
       {
         "id": "shikanoinheizou_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -16097,8 +16449,9 @@
       },
       {
         "id": "shikanoinheizou_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -16118,8 +16471,9 @@
       },
       {
         "id": "shikanoinheizou_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -16139,8 +16493,9 @@
       },
       {
         "id": "shikanoinheizou_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -16242,8 +16597,9 @@
     "availableActions": [
       {
         "id": "sigewinne_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -16263,8 +16619,9 @@
       },
       {
         "id": "sigewinne_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 40,
@@ -16284,8 +16641,9 @@
       },
       {
         "id": "sigewinne_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 82,
@@ -16394,8 +16752,9 @@
     "availableActions": [
       {
         "id": "skirk_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -16409,8 +16768,9 @@
       },
       {
         "id": "skirk_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -16424,8 +16784,9 @@
       },
       {
         "id": "skirk_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 43,
@@ -16439,8 +16800,9 @@
       },
       {
         "id": "skirk_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -16454,8 +16816,9 @@
       },
       {
         "id": "skirk_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 72,
@@ -16588,8 +16951,9 @@
     "availableActions": [
       {
         "id": "sucrose_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -16610,8 +16974,9 @@
       },
       {
         "id": "sucrose_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -16632,8 +16997,9 @@
       },
       {
         "id": "sucrose_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -16654,8 +17020,9 @@
       },
       {
         "id": "sucrose_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 65,
@@ -16775,8 +17142,9 @@
     "availableActions": [
       {
         "id": "tartaglia_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -16795,8 +17163,9 @@
       },
       {
         "id": "tartaglia_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -16815,8 +17184,9 @@
       },
       {
         "id": "tartaglia_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -16835,8 +17205,9 @@
       },
       {
         "id": "tartaglia_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -16855,8 +17226,9 @@
       },
       {
         "id": "tartaglia_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -16875,8 +17247,9 @@
       },
       {
         "id": "tartaglia_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -17018,8 +17391,9 @@
     "availableActions": [
       {
         "id": "thoma_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -17039,8 +17413,9 @@
       },
       {
         "id": "thoma_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -17060,8 +17435,9 @@
       },
       {
         "id": "thoma_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -17081,8 +17457,9 @@
       },
       {
         "id": "thoma_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 58,
@@ -17193,8 +17570,9 @@
     "availableActions": [
       {
         "id": "tighnari_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -17213,8 +17591,9 @@
       },
       {
         "id": "tighnari_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 23,
@@ -17233,8 +17612,9 @@
       },
       {
         "id": "tighnari_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -17253,8 +17633,9 @@
       },
       {
         "id": "tighnari_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 68,
@@ -17366,8 +17747,9 @@
     "availableActions": [
       {
         "id": "varesa_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 49,
@@ -17388,8 +17770,9 @@
       },
       {
         "id": "varesa_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -17410,8 +17793,9 @@
       },
       {
         "id": "varesa_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -17553,8 +17937,9 @@
     "availableActions": [
       {
         "id": "varka_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -17568,8 +17953,9 @@
       },
       {
         "id": "varka_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -17583,8 +17969,9 @@
       },
       {
         "id": "varka_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 60,
@@ -17598,8 +17985,9 @@
       },
       {
         "id": "varka_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 47,
@@ -17613,8 +18001,9 @@
       },
       {
         "id": "varka_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 82,
@@ -17764,8 +18153,9 @@
     "availableActions": [
       {
         "id": "venti_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -17784,8 +18174,9 @@
       },
       {
         "id": "venti_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -17804,8 +18195,9 @@
       },
       {
         "id": "venti_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -17824,8 +18216,9 @@
       },
       {
         "id": "venti_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -17844,8 +18237,9 @@
       },
       {
         "id": "venti_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 22,
@@ -17864,8 +18258,9 @@
       },
       {
         "id": "venti_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 98,
@@ -17994,8 +18389,9 @@
     "availableActions": [
       {
         "id": "vesna_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -18060,8 +18456,9 @@
     "availableActions": [
       {
         "id": "vodyanitsa_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },
@@ -18126,8 +18523,9 @@
     "availableActions": [
       {
         "id": "wanderer_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -18148,8 +18546,9 @@
       },
       {
         "id": "wanderer_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -18170,8 +18569,9 @@
       },
       {
         "id": "wanderer_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 76,
@@ -18281,8 +18681,9 @@
     "availableActions": [
       {
         "id": "wriothesley_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -18303,8 +18704,9 @@
       },
       {
         "id": "wriothesley_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -18325,8 +18727,9 @@
       },
       {
         "id": "wriothesley_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 41,
@@ -18347,8 +18750,9 @@
       },
       {
         "id": "wriothesley_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 56,
@@ -18369,8 +18773,9 @@
       },
       {
         "id": "wriothesley_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -18480,8 +18885,9 @@
     "availableActions": [
       {
         "id": "xiangling_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 20,
@@ -18500,8 +18906,9 @@
       },
       {
         "id": "xiangling_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 17,
@@ -18520,8 +18927,9 @@
       },
       {
         "id": "xiangling_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -18541,8 +18949,9 @@
       },
       {
         "id": "xiangling_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 37,
@@ -18562,8 +18971,9 @@
       },
       {
         "id": "xiangling_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 70,
@@ -18670,8 +19080,9 @@
     "availableActions": [
       {
         "id": "xianyun_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -18692,8 +19103,9 @@
       },
       {
         "id": "xianyun_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -18714,8 +19126,9 @@
       },
       {
         "id": "xianyun_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 65,
@@ -18736,8 +19149,9 @@
       },
       {
         "id": "xianyun_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 93,
@@ -18859,8 +19273,9 @@
     "availableActions": [
       {
         "id": "xiao_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -18880,8 +19295,9 @@
       },
       {
         "id": "xiao_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 27,
@@ -18901,8 +19317,9 @@
       },
       {
         "id": "xiao_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -18922,8 +19339,9 @@
       },
       {
         "id": "xiao_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 42,
@@ -18943,8 +19361,9 @@
       },
       {
         "id": "xiao_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -18964,8 +19383,9 @@
       },
       {
         "id": "xiao_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 79,
@@ -19078,8 +19498,9 @@
     "availableActions": [
       {
         "id": "xilonen_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -19100,8 +19521,9 @@
       },
       {
         "id": "xilonen_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 57,
@@ -19122,8 +19544,9 @@
       },
       {
         "id": "xilonen_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 70,
@@ -19235,8 +19658,9 @@
     "availableActions": [
       {
         "id": "xingqiu_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -19256,8 +19680,9 @@
       },
       {
         "id": "xingqiu_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -19277,8 +19702,9 @@
       },
       {
         "id": "xingqiu_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -19298,8 +19724,9 @@
       },
       {
         "id": "xingqiu_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -19319,8 +19746,9 @@
       },
       {
         "id": "xingqiu_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 66,
@@ -19431,8 +19859,9 @@
     "availableActions": [
       {
         "id": "xinyan_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 33,
@@ -19451,8 +19880,9 @@
       },
       {
         "id": "xinyan_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -19471,8 +19901,9 @@
       },
       {
         "id": "xinyan_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 64,
@@ -19491,8 +19922,9 @@
       },
       {
         "id": "xinyan_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 94,
@@ -19591,8 +20023,9 @@
     "availableActions": [
       {
         "id": "yaemiko_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -19612,8 +20045,9 @@
       },
       {
         "id": "yaemiko_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 40,
@@ -19633,8 +20067,9 @@
       },
       {
         "id": "yaemiko_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 79,
@@ -19749,8 +20184,9 @@
     "availableActions": [
       {
         "id": "yanfei_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -19770,8 +20206,9 @@
       },
       {
         "id": "yanfei_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -19791,8 +20228,9 @@
       },
       {
         "id": "yanfei_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 73,
@@ -19909,8 +20347,9 @@
     "availableActions": [
       {
         "id": "yaoyao_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -19924,8 +20363,9 @@
       },
       {
         "id": "yaoyao_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -19939,8 +20379,9 @@
       },
       {
         "id": "yaoyao_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 51,
@@ -19954,8 +20395,9 @@
       },
       {
         "id": "yaoyao_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 59,
@@ -20062,8 +20504,9 @@
     "availableActions": [
       {
         "id": "yelan_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 15,
@@ -20082,8 +20525,9 @@
       },
       {
         "id": "yelan_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 21,
@@ -20102,8 +20546,9 @@
       },
       {
         "id": "yelan_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -20122,8 +20567,9 @@
       },
       {
         "id": "yelan_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -20231,8 +20677,9 @@
     "availableActions": [
       {
         "id": "yoimiya_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 35,
@@ -20251,8 +20698,9 @@
       },
       {
         "id": "yoimiya_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 26,
@@ -20271,8 +20719,9 @@
       },
       {
         "id": "yoimiya_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 39,
@@ -20291,8 +20740,9 @@
       },
       {
         "id": "yoimiya_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 44,
@@ -20311,8 +20761,9 @@
       },
       {
         "id": "yoimiya_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 52,
@@ -20423,8 +20874,9 @@
     "availableActions": [
       {
         "id": "yumemizukimizuki_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -20445,8 +20897,9 @@
       },
       {
         "id": "yumemizukimizuki_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 38,
@@ -20467,8 +20920,9 @@
       },
       {
         "id": "yumemizukimizuki_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 98,
@@ -20586,8 +21040,9 @@
     "availableActions": [
       {
         "id": "yunjin_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 25,
@@ -20607,8 +21062,9 @@
       },
       {
         "id": "yunjin_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 29,
@@ -20628,8 +21084,9 @@
       },
       {
         "id": "yunjin_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 32,
@@ -20649,8 +21106,9 @@
       },
       {
         "id": "yunjin_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 46,
@@ -20670,8 +21128,9 @@
       },
       {
         "id": "yunjin_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 67,
@@ -20781,8 +21240,9 @@
     "availableActions": [
       {
         "id": "zhongli_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -20802,8 +21262,9 @@
       },
       {
         "id": "zhongli_n2",
-        "name": "通常攻撃 2段",
-        "shortName": "N2",
+        "name": "通常攻撃 2段目",
+        "shortName": "N",
+        "buttonLabel": "N(2段目)",
         "type": "normal",
         "frames": {
           "total": 30,
@@ -20823,8 +21284,9 @@
       },
       {
         "id": "zhongli_n3",
-        "name": "通常攻撃 3段",
-        "shortName": "N3",
+        "name": "通常攻撃 3段目",
+        "shortName": "N",
+        "buttonLabel": "N(3段目)",
         "type": "normal",
         "frames": {
           "total": 28,
@@ -20844,8 +21306,9 @@
       },
       {
         "id": "zhongli_n4",
-        "name": "通常攻撃 4段",
-        "shortName": "N4",
+        "name": "通常攻撃 4段目",
+        "shortName": "N",
+        "buttonLabel": "N(4段目)",
         "type": "normal",
         "frames": {
           "total": 34,
@@ -20865,8 +21328,9 @@
       },
       {
         "id": "zhongli_n5",
-        "name": "通常攻撃 5段",
-        "shortName": "N5",
+        "name": "通常攻撃 5段目",
+        "shortName": "N",
+        "buttonLabel": "N(5段目)",
         "type": "normal",
         "frames": {
           "total": 31,
@@ -20886,8 +21350,9 @@
       },
       {
         "id": "zhongli_n6",
-        "name": "通常攻撃 6段",
-        "shortName": "N6",
+        "name": "通常攻撃 6段目",
+        "shortName": "N",
+        "buttonLabel": "N(6段目)",
         "type": "normal",
         "frames": {
           "total": 54,
@@ -21022,8 +21487,9 @@
     "availableActions": [
       {
         "id": "zibai_n1",
-        "name": "通常攻撃 1段",
-        "shortName": "N1",
+        "name": "通常攻撃 1段目",
+        "shortName": "N",
+        "buttonLabel": "N(1段目)",
         "type": "normal",
         "defaultDuration": 0.4
       },

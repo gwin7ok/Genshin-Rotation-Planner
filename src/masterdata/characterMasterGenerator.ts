@@ -327,18 +327,20 @@ function buildActions(ctx: BuildContext): BuildResult {
     normalTables.forEach((table, i) => {
       const isLast = i === normalTables.length - 1;
       const frames = toActionFrames(table, 'attack', attack.consts);
+      // gcsim の attackFrames[i] は「i+1段目を単体で振った」ときのフレーム (合計ではない)。
       // 次段へ繋ぐ前提: 最終段以外は「次の通常攻撃へのキャンセル」フレーム、最終段は全体フレーム
       const toNext = isLast ? table.total : (table.cancels.attack ?? table.total);
       actions.push(withDuration({
         id: `${id}_n${i + 1}`,
-        name: `通常攻撃 ${i + 1}段`,
-        shortName: `N${i + 1}`,
+        name: `通常攻撃 ${i + 1}段目`,
+        shortName: 'N',
+        buttonLabel: `N(${i + 1}段目)`,
         type: 'normal',
         frames,
       }, framesToSec(toNext)));
     });
   } else {
-    actions.push(withDuration({ id: `${id}_n1`, name: '通常攻撃 1段', shortName: 'N1', type: 'normal' }));
+    actions.push(withDuration({ id: `${id}_n1`, name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal' }));
   }
 
   // --- 重撃 / 狙い撃ち -----------------------------------------------------

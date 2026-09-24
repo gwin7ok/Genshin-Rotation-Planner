@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
-import { ELEMENT_COLORS, ELEMENT_NAMES_JA } from '../data/characters';
+import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/characters';
 import { formatCharacterCooldowns } from '../utils/characterActions';
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
 import { 
@@ -415,6 +415,29 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   ))}
                 </div>
 
+                {/* Weapon Type Filters */}
+                <div className="flex items-center gap-1 overflow-x-auto py-1">
+                  <button
+                    onClick={() => setWeaponTypeFilter('all')}
+                    className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
+                      weaponTypeFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                    }`}
+                  >
+                    全武器種
+                  </button>
+                  {(Object.keys(WEAPON_TYPE_NAMES_JA) as WeaponType[]).map(wt => (
+                    <button
+                      key={wt}
+                      onClick={() => setWeaponTypeFilter(wt)}
+                      className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
+                        weaponTypeFilter === wt ? 'bg-sky-500/20 text-sky-300 border-sky-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                      }`}
+                    >
+                      {WEAPON_TYPE_NAMES_JA[wt]}
+                    </button>
+                  ))}
+                </div>
+
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={handleDeleteAllCharacters}
@@ -599,7 +622,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         weaponTypeFilter === wt ? 'bg-sky-500/20 text-sky-300 border-sky-500/50' : 'bg-slate-900 text-slate-400 border-slate-800'
                       }`}
                     >
-                      {wt}
+                      {WEAPON_TYPE_NAMES_JA[wt]}
                     </button>
                   ))}
                 </div>

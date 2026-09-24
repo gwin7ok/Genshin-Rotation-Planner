@@ -1,4 +1,4 @@
-import { ActionDefinition, CharacterConfig, ElementType, BuffDefinition } from '../types/genshin';
+import { ActionDefinition, CharacterConfig, ElementType, WeaponType, BuffDefinition } from '../types/genshin';
 import masterDataJson from './characters_master_data.json';
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; text: string; light: string; hex: string }> = {
@@ -21,6 +21,14 @@ export const ELEMENT_NAMES_JA: Record<ElementType, string> = {
   anemo: '風元素',
   geo: '岩元素',
   physical: '物理',
+};
+
+export const WEAPON_TYPE_NAMES_JA: Record<WeaponType, string> = {
+  sword: '片手剣',
+  claymore: '両手剣',
+  polearm: '長柄武器',
+  bow: '弓',
+  catalyst: '法器',
 };
 
 const RAW_CURATED_ROSTER: CharacterConfig[] = [

@@ -23,7 +23,8 @@ export type ActionType =
 export interface ActionDefinition {
   id: string;
   name: string;
-  shortName: string;
+  shortName: string;       // 記法・ガントチャートブロックに表示する略称 (例: E, Q, N1, CA)
+  buttonLabel?: string;    // アクション構築エリアの追加ボタン等に表示するボタンラベル名 (未指定時は shortName)
   type: ActionType;
   defaultDuration: number; // in seconds
   description?: string;
@@ -32,6 +33,8 @@ export interface ActionDefinition {
   triggersBuffIds?: string[];
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
+  cooldown?: number;        // 各アクション固有のCT (秒)
+  effectDuration?: number;  // 各アクション固有の効果持続時間 (秒)
   skillCooldown?: number;   // アクション固有のスキルCT (秒)
   skillDuration?: number;   // アクション固有のスキル効果/バフ継続時間 (秒)
   burstCooldown?: number;   // アクション固有の爆発CT (秒)

@@ -143,7 +143,7 @@ export function calculateRotation(
         }
 
         // Apply skill cooldown
-        const skillCT = actionDef?.skillCooldown ?? (
+        const skillCT = actionDef?.cooldown ?? actionDef?.skillCooldown ?? (
           act.actionTypeId === 'bennett_e_burst' 
             ? 2.0 
             : act.actionTypeId === 'kazuha_tap_e_plunge'
@@ -230,7 +230,7 @@ export function calculateRotation(
           eventDescription: `${char.name} 元素爆発発動 (-${char.burstEnergyCost})`
         });
 
-        const burstCT = actionDef?.burstCooldown ?? char.burstCooldown;
+        const burstCT = actionDef?.cooldown ?? actionDef?.burstCooldown ?? char.burstCooldown;
 
         const burstCDSpan: CooldownSpan = {
           id: `cd_burst_${char.id}_${actionStartTime}`,

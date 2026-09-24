@@ -594,6 +594,44 @@ export const ALL_CHARACTERS_ROSTER: CharacterConfig[] = (() => {
     const elem = (record.element || 'pyro') as ElementType;
     const colorObj = ELEMENT_COLORS[elem] || ELEMENT_COLORS.pyro;
 
+    const skillCD = record.skill?.cooldown || 10;
+    const skillDur = record.skill?.duration || 0;
+    const burstCD = record.burst?.cooldown || 15;
+    const burstDur = record.burst?.duration || 0;
+    const burstCost = record.burst?.energyCost || 60;
+
+    const enrichedActions = (record.availableActions || []).map((act: any) => {
+      const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
+      const isSkill = act.type === 'skill' || act.type === 'skill_hold';
+      const isBurst = act.type === 'burst';
+
+      if (isUtility) {
+        return {
+          ...act,
+          buttonLabel: act.buttonLabel || act.shortName,
+          cooldown: 0,
+          effectDuration: 0,
+          skillCooldown: 0,
+          burstCooldown: 0,
+          startsSkillCooldown: false,
+          startsBurstCooldown: false,
+        };
+      }
+
+      const ct = act.cooldown ?? (isBurst ? (act.burstCooldown ?? burstCD) : (act.skillCooldown ?? skillCD));
+      const dur = act.effectDuration ?? (isBurst ? (act.burstDuration ?? burstDur) : (act.skillDuration ?? skillDur));
+      return {
+        ...act,
+        buttonLabel: act.buttonLabel || act.shortName,
+        cooldown: ct,
+        effectDuration: dur,
+        skillCooldown: isSkill ? ct : act.skillCooldown,
+        skillDuration: isSkill ? dur : act.skillDuration,
+        burstCooldown: isBurst ? ct : act.burstCooldown,
+        burstDuration: isBurst ? dur : act.burstDuration,
+      };
+    });
+
     const config: CharacterConfig = {
       id: record.id,
       name: record.name,
@@ -602,15 +640,15 @@ export const ALL_CHARACTERS_ROSTER: CharacterConfig[] = (() => {
       avatarUrl: record.avatarUrl,
       color: colorObj.hex,
       accentColor: colorObj.hex,
-      skillCooldown: record.skill?.cooldown || 10,
-      skillDuration: record.skill?.duration || 0,
-      burstCooldown: record.burst?.cooldown || 15,
-      burstDuration: record.burst?.duration || 0,
-      burstEnergyCost: record.burst?.energyCost || 60,
+      skillCooldown: skillCD,
+      skillDuration: skillDur,
+      burstCooldown: burstCD,
+      burstDuration: burstDur,
+      burstEnergyCost: burstCost,
       skillParticles: 3.5,
       energyRecharge: 100,
       frameData: record.frameData,
-      availableActions: record.availableActions || []
+      availableActions: enrichedActions
     };
     map.set(id, config);
   }
@@ -619,16 +657,54 @@ export const ALL_CHARACTERS_ROSTER: CharacterConfig[] = (() => {
   for (const curated of RAW_CURATED_ROSTER) {
     const existing = map.get(curated.id);
     if (existing) {
+      const skillCD = existing.skillCooldown || curated.skillCooldown;
+      const skillDur = existing.skillDuration || curated.skillDuration || 0;
+      const burstCD = existing.burstCooldown || curated.burstCooldown;
+      const burstDur = existing.burstDuration || curated.burstDuration || 0;
+
+      const mergedActions = curated.availableActions.map(act => {
+        const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
+        const isSkill = act.type === 'skill' || act.type === 'skill_hold';
+        const isBurst = act.type === 'burst';
+
+        if (isUtility) {
+          return {
+            ...act,
+            buttonLabel: act.buttonLabel || act.shortName,
+            cooldown: 0,
+            effectDuration: 0,
+            skillCooldown: 0,
+            burstCooldown: 0,
+            startsSkillCooldown: false,
+            startsBurstCooldown: false,
+          };
+        }
+
+        const ct = act.cooldown ?? (isBurst ? (act.burstCooldown ?? burstCD) : (act.skillCooldown ?? skillCD));
+        const dur = act.effectDuration ?? (isBurst ? (act.burstDuration ?? burstDur) : (act.skillDuration ?? skillDur));
+        return {
+          ...act,
+          buttonLabel: act.buttonLabel || act.shortName,
+          cooldown: ct,
+          effectDuration: dur,
+          skillCooldown: isSkill ? ct : act.skillCooldown,
+          skillDuration: isSkill ? dur : act.skillDuration,
+          burstCooldown: isBurst ? ct : act.burstCooldown,
+          burstDuration: isBurst ? dur : act.burstDuration,
+        };
+      });
+
       map.set(curated.id, {
         ...existing,
         ...curated,
-        skillCooldown: existing.skillCooldown || curated.skillCooldown,
-        skillDuration: existing.skillDuration || curated.skillDuration,
-        burstCooldown: existing.burstCooldown || curated.burstCooldown,
-        burstDuration: existing.burstDuration || curated.burstDuration,
+        skillCooldown: skillCD,
+        skillDuration: skillDur,
+        burstCooldown: burstCD,
+        burstDuration: burstDur,
         burstEnergyCost: existing.burstEnergyCost || curated.burstEnergyCost,
         frameData: existing.frameData || curated.frameData,
-        avatarUrl: curated.avatarUrl || existing.avatarUrl
+        avatarUrl: curated.avatarUrl || existing.avatarUrl,
+        availableActions: mergedActions
       });
     } else {
       map.set(curated.id, curated);

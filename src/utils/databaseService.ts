@@ -24,6 +24,81 @@ export function loadDatabase(): AppDatabase {
     if (!parsed || !Array.isArray(parsed.characters) || !Array.isArray(parsed.weapons) || !Array.isArray(parsed.artifacts)) {
       return INITIAL_MASTER_DATABASE;
     }
+
+    // Auto-migrate: Ensure all character actions have their individual CT (cooldown), effectDuration, and buttonLabel populated
+    parsed.characters = parsed.characters.map(char => {
+      // Special optimization for Keqing and Nilou
+      if (char.id === 'keqing') {
+        return {
+          ...char,
+          burstEnergyCost: 40,
+          skillParticles: 2.5,
+          availableActions: [
+            { id: 'keqing_n1', name: '通常攻撃 1段', shortName: 'N1', buttonLabel: 'N1', type: 'normal', defaultDuration: 0.23, cooldown: 0, effectDuration: 0 },
+            { id: 'keqing_ca', name: '重撃 (通常1段+重撃)', shortName: 'N1C', buttonLabel: 'N1C', type: 'charged', defaultDuration: 0.68, cooldown: 0, effectDuration: 0 },
+            { id: 'keqing_e', name: '元素スキル: 雷楔投擲', shortName: 'E', buttonLabel: 'E(投擲)', type: 'skill', defaultDuration: 0.40, cooldown: 7.5, effectDuration: 5.0, startsSkillCooldown: true },
+            { id: 'keqing_ee', name: 'スキル2段目: 瞬間移動斬撃', shortName: 'E', buttonLabel: 'E(斬撃)', type: 'skill', defaultDuration: 0.65, cooldown: 0, effectDuration: 5.0, startsSkillCooldown: false },
+            { id: 'keqing_e_ca', name: '遠隔重撃起爆 (暴雷連斬)', shortName: 'CA', buttonLabel: 'E-CA(起爆)', type: 'charged', defaultDuration: 0.68, cooldown: 0, effectDuration: 0 },
+            { id: 'keqing_q', name: '元素爆発: 天街巡遊', shortName: 'Q', buttonLabel: 'Q', type: 'burst', defaultDuration: 2.15, cooldown: 12.0, effectDuration: 8.0, startsBurstCooldown: true, energyCost: 40 },
+            { id: 'keqing_dash', name: 'ダッシュ', shortName: 'Dash', buttonLabel: 'Dash', type: 'dash', defaultDuration: 0.20, cooldown: 0, effectDuration: 0 },
+          ]
+        };
+      }
+      if (char.id === 'nilou') {
+        return {
+          ...char,
+          burstEnergyCost: 70,
+          skillParticles: 4.5,
+          availableActions: [
+            { id: 'nilou_n1', name: '通常攻撃 1段', shortName: 'N1', buttonLabel: 'N1', type: 'normal', defaultDuration: 0.38, cooldown: 0, effectDuration: 0 },
+            { id: 'nilou_ca', name: '重撃', shortName: 'CA', buttonLabel: 'CA', type: 'charged', defaultDuration: 0.65, cooldown: 0, effectDuration: 0 },
+            { id: 'nilou_e', name: '元素スキル: 七域のダンス', shortName: 'E', buttonLabel: 'E(始動)', type: 'skill', defaultDuration: 0.85, cooldown: 18.0, effectDuration: 10.0, startsSkillCooldown: true },
+            { id: 'nilou_e_water', name: '旋舞ステップ (天を滌う水環)', shortName: 'E', buttonLabel: 'E(水環)', type: 'skill', defaultDuration: 0.90, cooldown: 0, effectDuration: 12.0 },
+            { id: 'nilou_q', name: '元素爆発: 浮蓮のダンス·遠夢聆泉', shortName: 'Q', buttonLabel: 'Q', type: 'burst', defaultDuration: 1.80, cooldown: 18.0, effectDuration: 0, startsBurstCooldown: true, energyCost: 70 },
+            { id: 'nilou_dash', name: 'ダッシュ', shortName: 'Dash', buttonLabel: 'Dash', type: 'dash', defaultDuration: 0.20, cooldown: 0, effectDuration: 0 },
+          ]
+        };
+      }
+
+      return {
+        ...char,
+        availableActions: (char.availableActions || []).map(act => {
+          const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
+          const isSkill = act.type === 'skill' || act.type === 'skill_hold';
+          const isBurst = act.type === 'burst';
+
+          if (isUtility) {
+            return {
+              ...act,
+              buttonLabel: act.buttonLabel || act.shortName,
+              cooldown: 0,
+              effectDuration: 0,
+              skillCooldown: 0,
+              burstCooldown: 0,
+              startsSkillCooldown: false,
+              startsBurstCooldown: false,
+            };
+          }
+
+          const ct = act.cooldown ?? (isBurst ? (act.burstCooldown ?? char.burstCooldown) : (act.skillCooldown ?? act.customSkillCT ?? char.skillCooldown));
+          const dur = act.effectDuration ?? (isBurst ? (act.burstDuration ?? char.burstDuration) : (act.skillDuration ?? char.skillDuration));
+
+          return {
+            ...act,
+            buttonLabel: act.buttonLabel || act.shortName,
+            cooldown: ct,
+            effectDuration: dur,
+            skillCooldown: isSkill ? ct : act.skillCooldown,
+            skillDuration: isSkill ? dur : act.skillDuration,
+            burstCooldown: isBurst ? ct : act.burstCooldown,
+            burstDuration: isBurst ? dur : act.burstDuration,
+            startsSkillCooldown: isSkill ? true : act.startsSkillCooldown,
+            startsBurstCooldown: isBurst ? true : act.startsBurstCooldown,
+          };
+        })
+      };
+    });
+
     return parsed;
   } catch (err) {
     console.warn('Failed to parse database from localStorage, falling back to master:', err);

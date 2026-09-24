@@ -528,10 +528,37 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
                       </div>
 
-                      {/* Action Templates Count */}
-                      <div className="text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/60 pt-2">
-                        <span>登録アクション型:</span>
-                        <span className="font-bold text-slate-200">{char.availableActions.length} 種</span>
+                      {/* Action Templates with per-action CT & Duration */}
+                      <div className="border-t border-slate-800/60 pt-2 space-y-1.5">
+                        <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                          <span className="font-semibold text-slate-300">登録アクション ({char.availableActions.length}種):</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1">
+                          {char.availableActions.map((act) => {
+                            const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
+                            const ct = act.cooldown !== undefined ? act.cooldown : (isUtility ? 0 : (act.type === 'burst' ? (act.burstCooldown ?? 0) : (act.skillCooldown ?? 0)));
+                            const dur = act.effectDuration !== undefined ? act.effectDuration : (isUtility ? 0 : (act.type === 'burst' ? (act.burstDuration ?? 0) : (act.skillDuration ?? 0)));
+                            const hasDistinctLabel = act.buttonLabel && act.buttonLabel !== act.shortName;
+                            return (
+                              <span
+                                key={act.id}
+                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300"
+                                title={`${act.name}: モーション ${act.defaultDuration}s | 記法略称: ${act.shortName}${hasDistinctLabel ? ` | ボタン名: ${act.buttonLabel}` : ''}${ct > 0 ? ` | CT: ${ct}s` : ''}${dur > 0 ? ` | 効果: ${dur}s` : ''}`}
+                              >
+                                <span className="font-bold text-amber-300">{act.shortName}</span>
+                                {hasDistinctLabel && (
+                                  <span className="text-sky-300 text-[9px]">[{act.buttonLabel}]</span>
+                                )}
+                                {ct > 0 && (
+                                  <span className="text-amber-400/90 font-mono text-[9px] bg-amber-950/60 px-1 rounded border border-amber-800/40">CT:{ct}s</span>
+                                )}
+                                {dur > 0 && (
+                                  <span className="text-purple-300/90 font-mono text-[9px] bg-purple-950/60 px-1 rounded border border-purple-800/40">効果:{dur}s</span>
+                                )}
+                              </span>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   );
@@ -1287,45 +1314,133 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
             </div>
 
             <div className="space-y-2">
-              {actions.map((act, idx) => (
-                <div key={act.id || idx} className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 flex flex-wrap items-center gap-2">
-                  <input
-                    type="text"
-                    value={act.name}
-                    placeholder="アクション名"
-                    onChange={e => handleActionChange(idx, 'name', e.target.value)}
-                    className="flex-1 min-w-[130px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold"
-                  />
+              {actions.map((act, idx) => {
+                const actCooldown = act.cooldown ?? (act.type === 'burst' ? act.burstCooldown : act.skillCooldown) ?? 0;
+                const actDuration = act.effectDuration ?? (act.type === 'burst' ? act.burstDuration : act.skillDuration) ?? 0;
+                return (
+                  <div key={act.id || idx} className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <select
+                        value={act.type}
+                        onChange={e => handleActionChange(idx, 'type', e.target.value)}
+                        className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-sky-300 font-bold text-[11px]"
+                      >
+                        <option value="normal">通常 (Normal)</option>
+                        <option value="charged">重撃 (CA)</option>
+                        <option value="plunge">落下 (PA)</option>
+                        <option value="skill">スキル (E)</option>
+                        <option value="skill_hold">スキル長押し (Hold E)</option>
+                        <option value="burst">元素爆発 (Q)</option>
+                        <option value="dash">ダッシュ (Dash)</option>
+                        <option value="jump">ジャンプ (Jump)</option>
+                        <option value="swap">交代 (Swap)</option>
+                      </select>
 
-                  <input
-                    type="text"
-                    value={act.shortName}
-                    placeholder="略称"
-                    onChange={e => handleActionChange(idx, 'shortName', e.target.value)}
-                    className="w-16 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold font-mono text-center"
-                  />
+                      <input
+                        type="text"
+                        value={act.name}
+                        placeholder="アクション名"
+                        onChange={e => handleActionChange(idx, 'name', e.target.value)}
+                        className="flex-1 min-w-[130px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold text-xs"
+                      />
 
-                  <div className="flex items-center gap-1">
-                    <span className="text-slate-400 text-[10px]">所要時間:</span>
-                    <input
-                      type="number"
-                      step="0.05"
-                      value={act.defaultDuration}
-                      onChange={e => handleActionChange(idx, 'defaultDuration', parseFloat(e.target.value) || 0.1)}
-                      className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-amber-300 font-mono font-bold text-center"
-                    />
-                    <span className="text-slate-500">s</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-slate-400 text-[10px]">記法略称:</span>
+                        <input
+                          type="text"
+                          value={act.shortName}
+                          placeholder="記法略称 (E等)"
+                          title="タイムラインや記法テキストに表示される略称"
+                          onChange={e => handleActionChange(idx, 'shortName', e.target.value)}
+                          className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-amber-300 font-bold font-mono text-center text-xs"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <span className="text-slate-400 text-[10px]">ボタン表示名:</span>
+                        <input
+                          type="text"
+                          value={act.buttonLabel ?? ''}
+                          placeholder={act.shortName || "ボタン名"}
+                          title="アクション構築エリアの追加ボタンに表示する名称（空欄時は記法略称を使用）"
+                          onChange={e => handleActionChange(idx, 'buttonLabel', e.target.value)}
+                          className="w-24 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-sky-300 font-bold text-center text-xs"
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAction(idx)}
+                        className="p-1 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded ml-auto"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Per-action timing specs: Motion Duration, Cooldown (CT), and Effect Duration */}
+                    <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] font-mono border-t border-slate-800/60">
+                      <div className="flex items-center gap-1">
+                        <span className="text-slate-400">モーション所要:</span>
+                        <input
+                          type="number"
+                          step="0.05"
+                          value={act.defaultDuration}
+                          onChange={e => handleActionChange(idx, 'defaultDuration', parseFloat(e.target.value) || 0.1)}
+                          className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
+                        />
+                        <span className="text-slate-500">s</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <span className="text-amber-400 font-bold">固有CT:</span>
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={actCooldown}
+                          onChange={e => {
+                            const val = parseFloat(e.target.value) || 0;
+                            const updated = [...actions];
+                            updated[idx] = {
+                              ...updated[idx],
+                              cooldown: val,
+                              skillCooldown: val,
+                              burstCooldown: val,
+                              customSkillCT: val,
+                              startsSkillCooldown: act.type.startsWith('skill') ? true : act.startsSkillCooldown,
+                              startsBurstCooldown: act.type === 'burst' ? true : act.startsBurstCooldown
+                            };
+                            setActions(updated);
+                          }}
+                          className="w-16 bg-slate-950 border border-amber-900/60 focus:border-amber-500 rounded px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
+                        />
+                        <span className="text-slate-500">s</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <span className="text-purple-400 font-bold">効果持続時間:</span>
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={actDuration}
+                          onChange={e => {
+                            const val = parseFloat(e.target.value) || 0;
+                            const updated = [...actions];
+                            updated[idx] = {
+                              ...updated[idx],
+                              effectDuration: val,
+                              skillDuration: val,
+                              burstDuration: val
+                            };
+                            setActions(updated);
+                          }}
+                          className="w-16 bg-slate-950 border border-purple-900/60 focus:border-purple-500 rounded px-1.5 py-0.5 text-purple-300 font-mono font-bold text-center"
+                        />
+                        <span className="text-slate-500">s</span>
+                      </div>
+                    </div>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveAction(idx)}
-                    className="p-1 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

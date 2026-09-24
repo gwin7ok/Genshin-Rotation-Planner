@@ -410,32 +410,35 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           });
         }
 
+        const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
+        const actionSkillCT = matchedCharActionDef?.cooldown ?? matchedCharActionDef?.skillCooldown ?? char.skillCooldown;
+        const actionBurstCT = matchedCharActionDef?.cooldown ?? matchedCharActionDef?.burstCooldown ?? char.burstCooldown;
+
         // New Cooldowns triggered in Cycle 2
-        if (isSkill && char.skillCooldown > 0) {
+        if (isSkill && actionSkillCT > 0) {
           cycle2NewCooldowns.push({
             id: `c2_cd_skill_${char.id}_${c2ActStart}`,
             characterId: char.id,
             type: 'skill',
             startTime: c2ActStart,
-            endTime: c2ActStart + char.skillCooldown,
-            duration: char.skillCooldown,
+            endTime: c2ActStart + actionSkillCT,
+            duration: actionSkillCT,
             actionInstanceId: `c2_${act.id}`,
           });
         }
-        if (isBurst && char.burstCooldown > 0) {
+        if (isBurst && actionBurstCT > 0) {
           cycle2NewCooldowns.push({
             id: `c2_cd_burst_${char.id}_${c2ActStart}`,
             characterId: char.id,
             type: 'burst',
             startTime: c2ActStart,
-            endTime: c2ActStart + char.burstCooldown,
-            duration: char.burstCooldown,
+            endTime: c2ActStart + actionBurstCT,
+            duration: actionBurstCT,
             actionInstanceId: `c2_${act.id}`,
           });
         }
 
         // New Buffs triggered in Cycle 2
-        const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
         const buffIdsToTrigger = matchedCharActionDef?.triggersBuffIds || [];
         buffIdsToTrigger.forEach(buffId => {
           const buffDef = BUFF_DEFINITIONS[buffId];

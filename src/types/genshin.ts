@@ -20,6 +20,23 @@ export type ActionType =
   | 'swap'       // Explicit swap buffer
   | 'wait';      // Idle/wait
 
+/** 次アクション種別 (gcsim の action.ActionXxx に対応) */
+export type CancelTarget =
+  | 'attack' | 'charge' | 'aim' | 'skill' | 'burst'
+  | 'dash' | 'jump' | 'walk' | 'swap' | 'lowPlunge' | 'highPlunge';
+
+/** gcsim 由来のモーションフレーム (60 FPS) */
+export interface ActionFrames {
+  /** 全体フレーム (AnimationLength) */
+  total: number;
+  /** ヒットマーク (攻撃判定の発生フレーム) */
+  hitmark?: number;
+  /** 次アクション種別ごとのキャンセル可能フレーム (total と異なるもののみ) */
+  cancels: Partial<Record<CancelTarget, number>>;
+  /** 抽出元 (例: "skill.go:skillPressFrames") */
+  source: string;
+}
+
 export interface ActionDefinition {
   id: string;
   name: string;
@@ -28,24 +45,16 @@ export interface ActionDefinition {
   type: ActionType;
   defaultDuration: number; // in seconds
   description?: string;
-  particlesGenerated?: number;
-  energyCost?: number;
   triggersBuffIds?: string[];
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
-  cooldown?: number;        // 各アクション固有のCT (秒)
-  effectDuration?: number;  // 各アクション固有の効果持続時間 (秒)
-  skillCooldown?: number;   // アクション固有のスキルCT (秒)
-  skillDuration?: number;   // アクション固有のスキル効果/バフ継続時間 (秒)
-  burstCooldown?: number;   // アクション固有の爆発CT (秒)
-  burstDuration?: number;   // アクション固有の爆発効果/エリア継続時間 (秒)
-  customSkillCT?: number;   // (互換用エイリアス)
-  startupFrames?: number; // 60fps startup/hitmark frames
-  totalFrames?: number;   // 60fps total frames
-  cancelableFrames?: {
-    dash?: number;
-    jump?: number;
-    swap?: number;
+  cooldown?: number;        // このアクションが開始するCT (秒)
+  effectDuration?: number;  // このアクションの効果持続時間 (秒)
+  frames?: ActionFrames;    // gcsim モーションフレーム
+  /** 各値の出典 (genshin-db のラベル名など) */
+  dataSource?: {
+    cooldown?: string;
+    effectDuration?: string;
   };
 }
 
@@ -73,44 +82,35 @@ export interface Stint {
   duration?: number;
 }
 
-export interface CharacterFrameInfo {
-  startupFrames?: number;
-  totalFrames?: number;
-  cancelableFrames?: {
-    dash?: number;
-    jump?: number;
-    swap?: number;
-  };
-}
-
 export interface CharacterConfig {
   id: string;
   name: string;
+  englishName?: string;
   element: ElementType;
   weaponType: WeaponType;
+  rarity?: number;
   avatarUrl: string;
   color: string;
   accentColor: string;
-  
-  // Kit parameters:
-  skillCooldown: number;  // seconds (スキルCT)
-  skillDuration?: number; // seconds (スキル効果継続時間)
-  burstCooldown: number;  // seconds (爆発CT)
-  burstDuration?: number; // seconds (爆発効果継続時間)
-  burstEnergyCost: number; // 元素エネルギー
-  skillParticles: number;
 
-  // Motion Frame Data (from gcsim)
-  frameData?: Record<string, CharacterFrameInfo>;
-  
   // Custom user settings in party:
   energyRecharge: number; // % e.g. 180 = 180%
   weaponName?: string;
   artifactSetName?: string;
   constellation?: number;
-  
-  // Common action presets for this character:
+
+  // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
   availableActions: ActionDefinition[];
+
+  /** ユーザーが DB 管理画面で作成・編集したキャラ */
+  isCustom?: boolean;
+  updatedAt?: string;
+
+  /** マスターデータの出典 */
+  source?: {
+    genshinId?: number;
+    gcsimKey?: string;
+  };
 }
 
 export interface BuffDefinition {
@@ -150,21 +150,12 @@ export interface CooldownSpan {
   actionInstanceId: string;
 }
 
-export interface EnergyHistoryPoint {
-  time: number;
-  energy: number;
-  eventDescription?: string;
-}
-
 export interface CharacterRuntimeState {
   characterId: string;
   totalActiveTime: number;
   stints: Stint[];
   skillCooldowns: CooldownSpan[];
   burstCooldowns: CooldownSpan[];
-  energyPoints: EnergyHistoryPoint[];
-  finalEnergy: number;
-  energySufficiency: boolean;
 }
 
 export interface ValidationIssue {

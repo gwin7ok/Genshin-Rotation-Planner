@@ -19,6 +19,7 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
+import { migrateLegacyCharacter } from './utils/legacyMigration';
 
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
@@ -230,7 +231,7 @@ export default function App() {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
         if (parsed.characters && parsed.stints) {
-          setCharacters(parsed.characters);
+          setCharacters(parsed.characters.map(migrateLegacyCharacter));
           setStints(parsed.stints);
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
           if (typeof parsed.loopStartTime === 'number') setLoopStartTime(parsed.loopStartTime);

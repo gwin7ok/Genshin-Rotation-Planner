@@ -7,9 +7,10 @@ import {
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA } from '../data/characters';
+import { formatCharacterCooldowns } from '../utils/characterActions';
+import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
 import { 
-  syncWithLatestMasterDB, 
-  syncCharactersMaster,
+  syncCharactersMasterOnline,
   syncWeaponsMaster,
   syncArtifactsMaster,
   resetDatabaseToMaster, 
@@ -45,6 +46,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const [weaponTypeFilter, setWeaponTypeFilter] = useState<WeaponType | 'all'>('all');
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
+  const [charSyncProgress, setCharSyncProgress] = useState<GenerationProgress | null>(null);
+  const [charSyncReport, setCharSyncReport] = useState<CharacterGenerationReport | null>(null);
+  const [charSyncError, setCharSyncError] = useState<string | null>(null);
 
   // Edit sub-modals state
   const [editingCharacter, setEditingCharacter] = useState<CharacterConfig | null>(null);
@@ -63,17 +67,24 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Dynamic Generation & Sync: Characters
-  const handleSyncCharacters = () => {
+  // Dynamic Generation & Sync: Characters (genshin-db API + gcsim をネットから取得して生成)
+  const handleSyncCharacters = async () => {
     setIsSyncing(true);
     setSyncSuccessMsg(null);
-    setTimeout(() => {
-      const synced = syncCharactersMaster(database);
-      onUpdateDatabase(synced);
-      setIsSyncing(false);
-      setSyncSuccessMsg(`⚡ genshin-db(公式数値) ＋ gcsim(60 FPSモーション) より全 ${synced.characters.length} キャラクターの最新マスターデータを動的生成・更新しました！`);
+    setCharSyncError(null);
+    setCharSyncReport(null);
+    try {
+      const { db, report } = await syncCharactersMasterOnline(database, setCharSyncProgress);
+      onUpdateDatabase(db);
+      setCharSyncReport(report);
+      setSyncSuccessMsg(`⚡ genshin-db ＋ gcsim から ${report.totalCharacters} キャラクターのマスターデータを生成しました (モーションフレームあり: ${report.charactersWithFrames})`);
       setTimeout(() => setSyncSuccessMsg(null), 5000);
-    }, 400);
+    } catch (e) {
+      setCharSyncError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setIsSyncing(false);
+      setCharSyncProgress(null);
+    }
   };
 
   // Dynamic Generation & Sync: Weapons
@@ -84,7 +95,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const synced = syncWeaponsMaster(database);
       onUpdateDatabase(synced);
       setIsSyncing(false);
-      setSyncSuccessMsg(`⚔️ genshin-db より全 ${synced.weapons.length} 種類の武器マスターデータを動的生成・更新しました！`);
+      setSyncSuccessMsg(`⚔️ 同梱の武器マスターデータ (${synced.weapons.length} 種類) を反映しました`);
       setTimeout(() => setSyncSuccessMsg(null), 5000);
     }, 400);
   };
@@ -97,7 +108,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const synced = syncArtifactsMaster(database);
       onUpdateDatabase(synced);
       setIsSyncing(false);
-      setSyncSuccessMsg(`🏺 genshin-db より全 ${synced.artifacts.length} セットの聖遺物マスターデータを動的生成・更新しました！`);
+      setSyncSuccessMsg(`🏺 同梱の聖遺物マスターデータ (${synced.artifacts.length} セット) を反映しました`);
       setTimeout(() => setSyncSuccessMsg(null), 5000);
     }, 400);
   };
@@ -424,14 +435,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150&auto=format&fit=crop&q=80',
                         color: '#ef4444',
                         accentColor: '#f87171',
-                        skillCooldown: 6.0,
-                        burstCooldown: 15.0,
-                        burstEnergyCost: 60,
-                        skillParticles: 3.0,
                         energyRecharge: 100,
                         availableActions: [
-                          { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true },
-                          { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, energyCost: 60 },
+                          { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 6.0, effectDuration: 0 },
+                          { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, cooldown: 15.0, effectDuration: 0 },
                           { id: 'act_n1', name: '通常攻撃', shortName: 'N1', type: 'normal', defaultDuration: 0.3 }
                         ]
                       });
@@ -448,7 +455,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredCharacters.map(char => {
                   const elemStyle = ELEMENT_COLORS[char.element];
-                  const isCustom = (char as any).isCustom || char.id.startsWith('custom_');
+                  const isCustom = !!char.isCustom || char.id.startsWith('custom_');
 
                   return (
                     <div
@@ -500,31 +507,23 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
                       </div>
 
-                      {/* Params Summary */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px] font-mono bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
+                      {/* Params Summary (CT はアクションごとの値をまとめて表示) */}
+                      <div className="grid grid-cols-2 gap-1.5 text-[11px] font-mono bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
                         <div>
                           <span className="text-slate-400">スキルCT:</span>{' '}
-                          <strong className="text-amber-300">{char.skillCooldown}s</strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">継続時間:</span>{' '}
-                          <strong className="text-amber-200">{char.skillDuration ? `${char.skillDuration}s` : '-'}</strong>
+                          <strong className="text-amber-300">{formatCharacterCooldowns(char, 'skill')}</strong>
                         </div>
                         <div>
                           <span className="text-slate-400">爆発CT:</span>{' '}
-                          <strong className="text-purple-300">{char.burstCooldown}s</strong>
+                          <strong className="text-purple-300">{formatCharacterCooldowns(char, 'burst')}</strong>
                         </div>
-                        <div>
-                          <span className="text-slate-400">爆発継続:</span>{' '}
-                          <strong className="text-purple-200">{char.burstDuration ? `${char.burstDuration}s` : '-'}</strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">爆発コスト:</span>{' '}
-                          <strong className="text-sky-300">{char.burstEnergyCost}pt</strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">生成粒子:</span>{' '}
-                          <strong className="text-emerald-300">{char.skillParticles}個</strong>
+                        <div className="col-span-2">
+                          <span className="text-slate-400">モーション:</span>{' '}
+                          {char.availableActions.some(a => a.frames) ? (
+                            <strong className="text-emerald-300">gcsim フレーム ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})</strong>
+                          ) : (
+                            <strong className="text-slate-500">フレーム未取得 (仮の秒数)</strong>
+                          )}
                         </div>
                       </div>
 
@@ -535,15 +534,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
                         <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1">
                           {char.availableActions.map((act) => {
-                            const isUtility = ['normal', 'charged', 'plunge', 'dash', 'jump', 'swap'].includes(act.type);
-                            const ct = act.cooldown !== undefined ? act.cooldown : (isUtility ? 0 : (act.type === 'burst' ? (act.burstCooldown ?? 0) : (act.skillCooldown ?? 0)));
-                            const dur = act.effectDuration !== undefined ? act.effectDuration : (isUtility ? 0 : (act.type === 'burst' ? (act.burstDuration ?? 0) : (act.skillDuration ?? 0)));
+                            const ct = act.cooldown ?? 0;
+                            const dur = act.effectDuration ?? 0;
                             const hasDistinctLabel = act.buttonLabel && act.buttonLabel !== act.shortName;
                             return (
                               <span
                                 key={act.id}
                                 className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300"
-                                title={`${act.name}: モーション ${act.defaultDuration}s | 記法略称: ${act.shortName}${hasDistinctLabel ? ` | ボタン名: ${act.buttonLabel}` : ''}${ct > 0 ? ` | CT: ${ct}s` : ''}${dur > 0 ? ` | 効果: ${dur}s` : ''}`}
+                                title={`${act.name}: モーション ${act.defaultDuration}s${act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : ' (仮の秒数)'} | 記法略称: ${act.shortName}${hasDistinctLabel ? ` | ボタン名: ${act.buttonLabel}` : ''}${ct > 0 ? ` | CT: ${ct}s` : ''}${dur > 0 ? ` | 効果: ${dur}s` : ''}`}
                               >
                                 <span className="font-bold text-amber-300">{act.shortName}</span>
                                 {hasDistinctLabel && (
@@ -810,10 +808,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
                         <span>⚡ 最新マスターデータの動的生成 (キャラ)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">124キャラ完全網羅</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">オンライン取得</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db (公式数値・スキル/爆発CT・効果継続時間) と gcsim (60 FPSモーションフレームデータ) より最新全124キャラのデータベースを動的に生成し、アプリ内DBを更新します。
+                        genshin-db API (基本データ・アクションごとのCT/効果継続時間・公式アイコン) と gcsim の GitHub ソース (60 FPS モーションフレーム) を毎回ネットから取得し、全キャラのマスターデータを生成してアプリ内DBを更新します。
                       </p>
                     </div>
                   </div>
@@ -831,6 +829,47 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       <span>最新マスターデータの動的生成 (キャラ)</span>
                     </button>
                   </div>
+
+                  {charSyncProgress && (
+                    <div className="text-xs text-amber-200 font-mono">
+                      {charSyncProgress.phase}… {charSyncProgress.total > 1 ? `${charSyncProgress.done}/${charSyncProgress.total}` : ''}
+                    </div>
+                  )}
+
+                  {charSyncError && (
+                    <div className="p-2 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
+                      生成に失敗しました: {charSyncError}
+                      <div className="text-red-300/70 mt-0.5">ネット接続、または GitHub API の回数制限 (1時間60回) を確認してください。DBは変更されていません。</div>
+                    </div>
+                  )}
+
+                  {charSyncReport && (
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-1.5 max-h-64 overflow-y-auto">
+                      <div className="font-bold text-slate-200">
+                        生成レポート: {charSyncReport.totalCharacters} キャラ / gcsim フレームあり {charSyncReport.charactersWithFrames}
+                        <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)})</span>
+                      </div>
+                      {charSyncReport.skipped.length > 0 && (
+                        <div><span className="text-slate-400">対象外:</span> {charSyncReport.skipped.map(s => `${s.name} (${s.reason})`).join(' / ')}</div>
+                      )}
+                      {charSyncReport.placeholderDurations.length > 0 && (
+                        <div>
+                          <div className="text-amber-300">仮の秒数を使用 (フレーム未取得):</div>
+                          <ul className="pl-3 list-disc text-slate-400">
+                            {charSyncReport.placeholderDurations.map(p => (
+                              <li key={p.characterId}>{p.name}: {p.actions.map(a => a.replace(`${p.characterId}_`, '')).join(', ')} ({p.reason})</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {charSyncReport.missingCooldowns.length > 0 && (
+                        <div><span className="text-red-300">CT 未取得:</span> {charSyncReport.missingCooldowns.map(m => `${m.name} ${m.actionId}`).join(' / ')}</div>
+                      )}
+                      {charSyncReport.errors.length > 0 && (
+                        <div><span className="text-red-300">エラー:</span> {charSyncReport.errors.join(' / ')}</div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* 2. Weapons Generator */}
@@ -1227,78 +1266,6 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
             </div>
           </div>
 
-          {/* Kit Parameters */}
-          <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
-            <h4 className="font-bold text-purple-300 text-xs">スキル・爆発・効果継続時間・エネルギーCT仕様</h4>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 font-mono">
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">スキルCT (秒)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.skillCooldown}
-                  onChange={e => setForm({ ...form, skillCooldown: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-amber-300 font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">スキル継続時間 (秒)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.skillDuration || 0}
-                  onChange={e => setForm({ ...form, skillDuration: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-amber-200 font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">爆発CT (秒)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.burstCooldown}
-                  onChange={e => setForm({ ...form, burstCooldown: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-purple-300 font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">爆発継続時間 (秒)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.burstDuration || 0}
-                  onChange={e => setForm({ ...form, burstDuration: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-purple-200 font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">爆発必要エネルギー</label>
-                <input
-                  type="number"
-                  value={form.burstEnergyCost}
-                  onChange={e => setForm({ ...form, burstEnergyCost: parseInt(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-sky-300 font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1 text-[11px]">スキル粒子生成数</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={form.skillParticles}
-                  onChange={e => setForm({ ...form, skillParticles: parseFloat(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-emerald-300 font-bold"
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Action Templates Manager */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
             <div className="flex items-center justify-between">
@@ -1315,8 +1282,8 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
 
             <div className="space-y-2">
               {actions.map((act, idx) => {
-                const actCooldown = act.cooldown ?? (act.type === 'burst' ? act.burstCooldown : act.skillCooldown) ?? 0;
-                const actDuration = act.effectDuration ?? (act.type === 'burst' ? act.burstDuration : act.skillDuration) ?? 0;
+                const actCooldown = act.cooldown ?? 0;
+                const actDuration = act.effectDuration ?? 0;
                 return (
                   <div key={act.id || idx} className="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
@@ -1403,9 +1370,6 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
                             updated[idx] = {
                               ...updated[idx],
                               cooldown: val,
-                              skillCooldown: val,
-                              burstCooldown: val,
-                              customSkillCT: val,
                               startsSkillCooldown: act.type.startsWith('skill') ? true : act.startsSkillCooldown,
                               startsBurstCooldown: act.type === 'burst' ? true : act.startsBurstCooldown
                             };
@@ -1428,8 +1392,6 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
                             updated[idx] = {
                               ...updated[idx],
                               effectDuration: val,
-                              skillDuration: val,
-                              burstDuration: val
                             };
                             setActions(updated);
                           }}

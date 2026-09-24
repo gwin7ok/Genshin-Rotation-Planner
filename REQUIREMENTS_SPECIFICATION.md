@@ -99,12 +99,18 @@
 
 ---
 
-## 4. 自動生成スクリプト・実行・連携フロー
+## 4. 生成ロジック・実行・連携フロー
 
-1. **データ抽出生成スクリプト**: `scripts/buildMasterData.ts`
-   - `genshin-db` から基礎パラメータ（CT, 継続時間, 必要エネルギー, 属性, 武器種, 日本語名）を取得。
-   - `gcsim` GitHubリポジトリからGoソースコードを取得・解析し、フレームデータを抽出。
-   - 統合結果を `src/data/characters_master_data.json` に出力。
-2. **アプリケーション連携**:
-   - `src/data/characters.ts` および `src/services/genshinApiService.ts` でマスターデータを読み込み。
-   - 画面の「ローテーション Gantt チャート」および「データベース管理」にてスキルCT・効果継続時間・モーション時間をミリ秒・秒数で正確に反映。
+生成ロジックは `src/masterdata/characterMasterGenerator.ts` の1本に集約し、ブラウザと Node の両方から同じコードを使う。
+
+1. **データ取得 (毎回ネットから最新を取得)**
+   - genshin-db API (`https://genshin-db-api.vercel.app/api/v5`): キャラ基本データ、天賦ラベルから CT・効果継続時間、アイコンのファイル名
+   - gcsim GitHub: `git/trees/main` (ファイル一覧, API 1回) と `internal/characters/<dir>/{attack,charge,aimed,skill,burst}.go`
+   - アイコン: `https://enka.network/ui/<filename_icon>.png`
+2. **キャラの突き合わせ**: gcsim の `ui/packages/ui/src/Data/character.dm.json` にある公式キャラID (例: 胡桃 = 10000046) で genshin-db と結合する。フォルダは `zz_<key>.dm.go` の位置から求める。
+3. **フレーム抽出** (`src/masterdata/gcsimParser.ts`): `frames.InitAbilSlice(N)` / `InitNormalCancelSlice(hit, N)` と `[action.ActionXxx] = n` を読み、定数・配列添字・`len()` を含む算術式を評価する。
+4. **アクション定義**: CT・効果継続時間・フレームはアクションごとに持つ (N1..Nn / CA / E / 長押しE / 派生E / Q / ダッシュ)。キャラ単位の CT、爆発必要エネルギー、スキル粒子数は持たない。
+5. **欠損の扱い**: 取得できなかった値は捏造せず、タイムライン用の仮の秒数を使ったアクションとしてレポートに記録する。
+6. **実行方法**
+   - アプリ: DB管理 → 最新データ同期 → 「最新マスターデータの動的生成 (キャラ)」
+   - 同梱 JSON の再生成: `npm run build:master` (`src/data/characters_master_data.json` を上書き)

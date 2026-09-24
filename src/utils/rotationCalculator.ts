@@ -6,7 +6,6 @@ import {
   CooldownSpan, 
   ValidationIssue, 
   CharacterRuntimeState,
-  EnergyHistoryPoint
 } from '../types/genshin';
 import { BUFF_DEFINITIONS } from '../data/characters';
 
@@ -56,22 +55,12 @@ export function calculateRotation(
       stints: [],
       skillCooldowns: [],
       burstCooldowns: [],
-      energyPoints: [{ time: 0, energy: c.burstEnergyCost, eventDescription: 'ローテーション開始時(満タン)' }],
-      finalEnergy: c.burstEnergyCost,
-      energySufficiency: true,
     };
   });
 
   // Track latest cooldown end times:
   const latestSkillCTEnd: Record<string, { time: number; actionName: string }> = {};
   const latestBurstCTEnd: Record<string, { time: number; actionName: string }> = {};
-
-  // Track energy for each character:
-  const currentEnergy: Record<string, number> = {};
-  characters.forEach(c => {
-    // Standard rotation theory assumes characters enter rotation with burst ready (100% cost)
-    currentEnergy[c.id] = c.burstEnergyCost;
-  });
 
   // 1. Process Stints and Actions in strict chronological order
   for (let sIdx = 0; sIdx < rawStints.length; sIdx++) {
@@ -122,11 +111,13 @@ export function calculateRotation(
       };
       computedActions.push(computedAction);
 
-      // Check for skill cooldown conflicts
-      const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+      // CT・効果継続時間はアクション定義ごとに持つ
       const actionDef = char.availableActions.find(a => a.id === act.actionTypeId);
+      const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+      const cooldown = actionDef?.cooldown ?? 0;
 
       if (isSkill) {
+        // 祭礼リセット等はCT中でも発動可能
         const lastCT = latestSkillCTEnd[char.id];
         if (lastCT && lastCT.time > actionStartTime + 0.05 && act.type !== 'skill_reset') {
           const remaining = (lastCT.time - actionStartTime).toFixed(1);
@@ -142,54 +133,22 @@ export function calculateRotation(
           });
         }
 
-        // Apply skill cooldown
-        const skillCT = actionDef?.cooldown ?? actionDef?.skillCooldown ?? (
-          act.actionTypeId === 'bennett_e_burst' 
-            ? 2.0 
-            : act.actionTypeId === 'kazuha_tap_e_plunge'
-            ? 6.0
-            : act.actionTypeId === 'kazuha_hold_e_plunge'
-            ? 9.0
-            : char.skillCooldown
-        );
-
-        const cdSpan: CooldownSpan = {
-          id: `cd_skill_${char.id}_${actionStartTime}`,
-          characterId: char.id,
-          type: 'skill',
-          startTime: actionStartTime,
-          endTime: actionStartTime + skillCT,
-          duration: skillCT,
-          actionInstanceId: act.id,
-        };
-        skillCooldowns.push(cdSpan);
-        charStates[char.id].skillCooldowns.push(cdSpan);
-        latestSkillCTEnd[char.id] = { time: actionStartTime + skillCT, actionName: act.name };
-
-        // Generate particle energy after 0.8s travel time
-        const particleCount = char.skillParticles;
-        if (particleCount > 0) {
-          const particleArrival = actionStartTime + 0.8;
-          characters.forEach(targetChar => {
-            const isSameElement = targetChar.element === char.element;
-            // On-field gets 3 per same elem, 1 per diff elem; off-field gets 1.8 / 0.6
-            const baseGainPerParticle = isSameElement ? 3.0 : 1.0;
-            // We approximate active on-field recipient
-            const erMultiplier = (targetChar.energyRecharge || 100) / 100;
-            const energyGained = particleCount * baseGainPerParticle * erMultiplier;
-            
-            const newEnergy = Math.min(targetChar.burstEnergyCost, (currentEnergy[targetChar.id] || 0) + energyGained);
-            currentEnergy[targetChar.id] = newEnergy;
-            charStates[targetChar.id].energyPoints.push({
-              time: particleArrival,
-              energy: Number(newEnergy.toFixed(1)),
-              eventDescription: `${char.name}のE粒子回収 (+${energyGained.toFixed(1)})`
-            });
-          });
+        if (actionDef?.startsSkillCooldown && cooldown > 0) {
+          const cdSpan: CooldownSpan = {
+            id: `cd_skill_${char.id}_${actionStartTime}`,
+            characterId: char.id,
+            type: 'skill',
+            startTime: actionStartTime,
+            endTime: actionStartTime + cooldown,
+            duration: cooldown,
+            actionInstanceId: act.id,
+          };
+          skillCooldowns.push(cdSpan);
+          charStates[char.id].skillCooldowns.push(cdSpan);
+          latestSkillCTEnd[char.id] = { time: actionStartTime + cooldown, actionName: act.name };
         }
       }
 
-      // Check for burst cooldown and energy cost
       if (act.type === 'burst') {
         const lastBurstCT = latestBurstCTEnd[char.id];
         if (lastBurstCT && lastBurstCT.time > actionStartTime + 0.05) {
@@ -206,68 +165,24 @@ export function calculateRotation(
           });
         }
 
-        // Check energy
-        const energyAvailable = currentEnergy[char.id] || 0;
-        if (energyAvailable < char.burstEnergyCost - 1.0) {
-          validationIssues.push({
-            id: `burst_energy_${act.id}_${actionStartTime}`,
-            severity: 'warning',
+        if (actionDef?.startsBurstCooldown !== false && cooldown > 0) {
+          const burstCDSpan: CooldownSpan = {
+            id: `cd_burst_${char.id}_${actionStartTime}`,
             characterId: char.id,
-            stintId: rawStint.id,
-            actionId: act.id,
-            time: actionStartTime,
-            title: `${char.name}: 元素エネルギー不足の可能性`,
-            message: `必要エネルギー ${char.burstEnergyCost} に対し、推計値は約 ${energyAvailable.toFixed(0)} です。チャージ効率を上げるか同属性の粒子を拾わせてください。`
-          });
-          charStates[char.id].energySufficiency = false;
+            type: 'burst',
+            startTime: actionStartTime,
+            endTime: actionStartTime + cooldown,
+            duration: cooldown,
+            actionInstanceId: act.id,
+          };
+          burstCooldowns.push(burstCDSpan);
+          charStates[char.id].burstCooldowns.push(burstCDSpan);
+          latestBurstCTEnd[char.id] = { time: actionStartTime + cooldown, actionName: act.name };
         }
-
-        // Deduct energy & start burst cooldown
-        currentEnergy[char.id] = 0;
-        charStates[char.id].energyPoints.push({
-          time: actionStartTime,
-          energy: 0,
-          eventDescription: `${char.name} 元素爆発発動 (-${char.burstEnergyCost})`
-        });
-
-        const burstCT = actionDef?.cooldown ?? actionDef?.burstCooldown ?? char.burstCooldown;
-
-        const burstCDSpan: CooldownSpan = {
-          id: `cd_burst_${char.id}_${actionStartTime}`,
-          characterId: char.id,
-          type: 'burst',
-          startTime: actionStartTime,
-          endTime: actionStartTime + burstCT,
-          duration: burstCT,
-          actionInstanceId: act.id,
-        };
-        burstCooldowns.push(burstCDSpan);
-        charStates[char.id].burstCooldowns.push(burstCDSpan);
-        latestBurstCTEnd[char.id] = { time: actionStartTime + burstCT, actionName: act.name };
-
-        // Special: Raiden Shogun burst generates ~25 flat energy for party over her combo
-        if (char.id === 'raiden') {
-          setTimeout(() => {}, 0); // placeholder
-        }
-      }
-
-      // Special energy generator: Raiden burst combo gives flat ~24 energy to all
-      if (act.actionTypeId === 'raiden_combo') {
-        characters.forEach(targetChar => {
-          const flatGain = 24.0;
-          const newEnergy = Math.min(targetChar.burstEnergyCost, (currentEnergy[targetChar.id] || 0) + flatGain);
-          currentEnergy[targetChar.id] = newEnergy;
-          charStates[targetChar.id].energyPoints.push({
-            time: actionStartTime + 5.0,
-            energy: Number(newEnergy.toFixed(1)),
-            eventDescription: `雷電 夢想の一心による味方全体チャージ (+24)`
-          });
-        });
       }
 
       // Trigger attached buffs
-      const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
-      const buffIdsToTrigger = matchedCharActionDef?.triggersBuffIds || [];
+      const buffIdsToTrigger = actionDef?.triggersBuffIds || [];
 
       buffIdsToTrigger.forEach(buffId => {
         const buffDef = BUFF_DEFINITIONS[buffId];
@@ -324,16 +239,6 @@ export function calculateRotation(
   }
 
   const totalDuration = Number(currentTime.toFixed(2));
-
-  // Final energy state recording
-  characters.forEach(c => {
-    charStates[c.id].finalEnergy = Number((currentEnergy[c.id] || 0).toFixed(1));
-    charStates[c.id].energyPoints.push({
-      time: totalDuration,
-      energy: charStates[c.id].finalEnergy,
-      eventDescription: 'ローテーション終了時点'
-    });
-  });
 
   // Calculate buff overlap counts by second (0 to ceil(totalDuration))
   const maxSec = Math.ceil(totalDuration);

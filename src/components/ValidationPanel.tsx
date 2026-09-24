@@ -6,7 +6,6 @@ import {
   Info, 
   Repeat, 
   Zap, 
-  BatteryCharging,
   TrendingUp,
   Sparkles
 } from 'lucide-react';
@@ -64,7 +63,7 @@ export const ValidationPanel: React.FC<ValidationPanelProps> = ({
         </div>
 
         {/* 3 Column Grid: Loop & CT Status, Energy Sufficiency, Theorycraft Advice */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           
           {/* Column 1: Rotation Loop & Cooldown Conflicts */}
           <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
@@ -109,56 +108,6 @@ export const ValidationPanel: React.FC<ValidationPanelProps> = ({
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Column 2: Energy & Particle Forecast */}
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-200 mb-2">
-              <span className="flex items-center gap-1.5">
-                <BatteryCharging className="w-4 h-4 text-sky-400" />
-                <span>爆発エネルギー蓄積診断</span>
-              </span>
-              <span className="text-[10px] text-slate-500">チャージ効率 (ER%) 参照</span>
-            </div>
-
-            <div className="space-y-2">
-              {characters.map(c => {
-                const state = characterStates[c.id];
-                const current = state ? state.finalEnergy : c.burstEnergyCost;
-                const max = c.burstEnergyCost;
-                const ratio = Math.min(1, current / max);
-                const isSufficient = current >= max - 2;
-
-                return (
-                  <div key={c.id} className="text-xs space-y-0.5">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-semibold text-white flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: c.color }} />
-                        {c.name}
-                        <span className="text-slate-500 font-mono font-normal">({c.energyRecharge}%)</span>
-                      </span>
-                      <span className="font-mono">
-                        <strong className={isSufficient ? 'text-emerald-400' : 'text-amber-400'}>
-                          {current.toFixed(0)}
-                        </strong>
-                        <span className="text-slate-500"> / {max}</span>
-                      </span>
-                    </div>
-                    
-                    <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full transition-all ${isSufficient ? 'bg-emerald-400' : 'bg-amber-400'}`}
-                        style={{ width: `${ratio * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            
-            <p className="text-[10px] text-slate-400 mt-2">
-              ※ スキル粒子生成量、同元素/異元素比率、チャージ効率を基にシミュレートしています。
-            </p>
           </div>
 
           {/* Column 3: Theorycrafting / Synergy Tips */}

@@ -4,7 +4,7 @@ import weaponsMasterJson from './weapons_master_data.json';
 import artifactsMasterJson from './artifacts_master_data.json';
 
 /** DB 形式のバージョン。キャラのデータ構造を変えたら上げる (loadDatabase で旧データを移行する) */
-export const DATABASE_VERSION = 5;
+export const DATABASE_VERSION = 6;
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

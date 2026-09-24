@@ -40,7 +40,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
       { id: 'raiden_e', name: '元素スキル: 神悪憑き・雷罰悪曜の眼', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['raiden_eye_buff'], description: '雷罰悪曜の眼を展開。味方の爆発ダメUP & 追撃' },
       { id: 'raiden_q', name: '元素爆発: 奥義・夢想の一心', shortName: 'Q', type: 'burst', defaultDuration: 1.8, startsBurstCooldown: true, triggersBuffIds: ['raiden_burst_state'], description: '無想の一太刀を発動し夢想の一心状態に入る(7秒)' },
       { id: 'raiden_combo', name: '爆発中コンボ: 3N3C + N1C', shortName: '3N3C+N1C', type: 'combo', defaultDuration: 6.8, description: '夢想の一心中の最高DPSコンボ。味方全員に粒子/エネルギーを大量供給' },
-      { id: 'raiden_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.3 },
+      { id: 'raiden_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
       { id: 'raiden_ca', name: '重撃', shortName: 'C', type: 'charged', defaultDuration: 0.9 },
       { id: 'raiden_dash', name: 'ダッシュキャンセル', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
     ]
@@ -61,7 +61,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
       { id: 'bennett_e', name: '元素スキル: 情熱過剰久遠 (一押し)', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, description: '炎粒子を2〜3個生成 (CT:4.0s)' },
       { id: 'bennett_q', name: '元素爆発: 美冒険の輝き', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['bennett_q_field', 'noblesse_4p'], description: '鼓舞エリア生成(12s): 自身の基礎攻撃力参照の特大攻撃力加算+高頻度回復' },
       { id: 'bennett_e_burst', name: '元素スキル (爆発エリア内CT短縮)', shortName: 'E (短縮)', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 2, description: '鼓舞エリア内ではCTが2秒に半減' },
-      { id: 'bennett_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.3 },
+      { id: 'bennett_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
       { id: 'bennett_dash', name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
     ]
   },
@@ -80,7 +80,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     availableActions: [
       { id: 'xiangling_q', name: '元素爆発: 旋火輪 (4凸14秒)', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['xiangling_pyronado'], description: '超強力な持続炎追撃。発動時の攻撃力・ダメバフをスナップショット(14s)' },
       { id: 'xiangling_e', name: '元素スキル: グゥオパァー出撃', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['guoba_pepper'], description: 'グゥオパァー召喚(7.5s)。炎ブレス4回、唐辛子で攻撃+10%(10s)' },
-      { id: 'xiangling_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.25 },
+      { id: 'xiangling_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25 },
       { id: 'xiangling_dash', name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
     ]
   },
@@ -100,7 +100,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
       { id: 'xingqiu_q', name: '元素爆発: 古華剣・裁雨留虹', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, triggersBuffIds: ['xingqiu_raincutter'], description: '剣雨による追撃(15〜18s)。高頻度水付着と中断耐性・被ダメ軽減' },
       { id: 'xingqiu_e', name: '元素スキル: 古華剣・画雨籠山', shortName: 'E', type: 'skill', defaultDuration: 1.1, startsSkillCooldown: true, description: '2連撃水ダメージ＋水粒子5個生成 (CT: 21.0s)' },
       { id: 'xingqiu_e2', name: '元素スキル (祭礼リセット2回目)', shortName: 'E (祭礼)', type: 'skill_reset', defaultDuration: 1, startsSkillCooldown: true, description: '祭礼の剣効果で即座にもう一度Eを撃ち合計水粒子10個を回収' },
-      { id: 'xingqiu_n1', name: '通常攻撃 1段 (雨すだれ誘発)', shortName: 'N1', type: 'normal', defaultDuration: 0.25, description: '剣雨追撃を1回誘発' },
+      { id: 'xingqiu_n1', name: '通常攻撃 1段目 (雨すだれ誘発)', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25, description: '剣雨追撃を1回誘発' },
       { id: 'xingqiu_dash', name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
     ]
   },
@@ -119,7 +119,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     availableActions: [
       { id: 'yelan_q', name: '元素爆発: 淵曜の玲瓏', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, triggersBuffIds: ['yelan_q_buff'], description: '玄擲玲瓏展開(15s): 通常攻撃に連動して水追撃。時間経過で出場キャラの与ダメ最大+50%UP' },
       { id: 'yelan_e', name: '元素スキル: 幽奇の絡繰り針', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, description: '疾走して敵を縛り水ダメージ＋水粒子4個生成 (CT: 10.0s)' },
-      { id: 'yelan_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.25 },
+      { id: 'yelan_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25 },
       { id: 'yelan_breakthrough', name: '打破の矢 (重撃)', shortName: '打破', type: 'charged', defaultDuration: 0.6 },
     ]
   },
@@ -212,7 +212,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     availableActions: [
       { id: 'furina_e', name: '元素スキル: サロン・ソリティア', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['furina_salon_members'], description: 'サロンメンバー召喚(30s)。自動攻撃と味方HP消費 (CT: 20.0s)' },
       { id: 'furina_q', name: '元素爆発: 万民の歓呼', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['furina_fanfare'], description: 'もろびとこぞりて(18s)。テンション蓄積に応じて味方全員に最大+75%の全ダメバフ' },
-      { id: 'furina_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.3 },
+      { id: 'furina_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
     ]
   },
   {
@@ -248,7 +248,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     availableActions: [
       { id: 'nahida_hold_e', name: '元素スキル: 所聞遍計 (長押しスキャン)', shortName: '長押しE', type: 'skill_hold', defaultDuration: 1.2, startsSkillCooldown: true, triggersBuffIds: ['nahida_tri_karma', 'deepwood_4p'], cooldown: 6, description: '敵8体に滅浄三業マーク付与(25s)。草元素反応に連動して追撃＋草耐性-30%' },
       { id: 'nahida_q', name: '元素爆発: 心景幻成 (摩耶の宮殿)', shortName: 'Q', type: 'burst', defaultDuration: 1.5, startsBurstCooldown: true, triggersBuffIds: ['nahida_shrine_buff'], description: '摩耶の宮殿展開(15s): 出場キャラの元素熟知最大+250UP' },
-      { id: 'nahida_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', defaultDuration: 0.3 },
+      { id: 'nahida_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
     ]
   },
   {

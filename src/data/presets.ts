@@ -36,7 +36,7 @@ export const ROTATION_PRESETS: PartyPreset[] = [
           { id: 'act_2_1', actionTypeId: 'xingqiu_q', name: '元素爆発: 裁雨留虹', shortName: 'Q', type: 'burst', duration: 1.4 },
           { id: 'act_2_2', actionTypeId: 'xingqiu_e', name: '元素スキル: 画雨籠山', shortName: 'E', type: 'skill', duration: 1.1 },
           { id: 'act_2_3', actionTypeId: 'xingqiu_e2', name: '元素スキル (祭礼リセット)', shortName: 'E (祭礼)', type: 'skill_reset', duration: 1.0 },
-          { id: 'act_2_4', actionTypeId: 'xingqiu_n1', name: '通常攻撃 1段 (剣雨トリガー)', shortName: 'N1', type: 'normal', duration: 0.25 },
+          { id: 'act_2_4', actionTypeId: 'xingqiu_n1', name: '通常攻撃 1段目 (剣雨トリガー)', shortName: 'N', type: 'normal', duration: 0.25 },
         ]
       },
       {
@@ -102,7 +102,7 @@ export const ROTATION_PRESETS: PartyPreset[] = [
         actions: [
           { id: 'act_ht_2_1', actionTypeId: 'xingqiu_q', name: '元素爆発: 裁雨留虹', shortName: 'Q', type: 'burst', duration: 1.4 },
           { id: 'act_ht_2_2', actionTypeId: 'xingqiu_e', name: '元素スキル: 画雨籠山', shortName: 'E', type: 'skill', duration: 1.1 },
-          { id: 'act_ht_2_3', actionTypeId: 'xingqiu_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', duration: 0.25 },
+          { id: 'act_ht_2_3', actionTypeId: 'xingqiu_n1', name: '通常攻撃 1段目', shortName: 'N', type: 'normal', duration: 0.25 },
         ]
       },
       {
@@ -112,7 +112,7 @@ export const ROTATION_PRESETS: PartyPreset[] = [
         actions: [
           { id: 'act_ht_3_1', actionTypeId: 'yelan_e', name: '元素スキル: 幽奇の絡繰り針', shortName: 'E', type: 'skill', duration: 0.9 },
           { id: 'act_ht_3_2', actionTypeId: 'yelan_q', name: '元素爆発: 淵曜の玲瓏', shortName: 'Q', type: 'burst', duration: 1.4 },
-          { id: 'act_ht_3_3', actionTypeId: 'yelan_n1', name: '通常攻撃 1段', shortName: 'N1', type: 'normal', duration: 0.25 },
+          { id: 'act_ht_3_3', actionTypeId: 'yelan_n1', name: '通常攻撃 1段目', shortName: 'N', type: 'normal', duration: 0.25 },
         ]
       },
       {

@@ -564,6 +564,56 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     }
   };
 
+  // アクション要素以外をドラッグすると上下左右にスクロール（横: チャート / 縦: ページ）。
+  // 5px 未満の移動はクリック扱いのまま（再生位置の移動）、それ以上動いたら直後のクリックを打ち消す
+  const PAN_THRESHOLD_PX = 5;
+  const handlePanMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.button !== 0 || !containerRef.current) return;
+    const target = e.target as HTMLElement;
+    if (target.closest('button, input, select, textarea, a, label, [draggable="true"]')) return;
+
+    const container = containerRef.current;
+    const start = {
+      x: e.clientX,
+      y: e.clientY,
+      scrollLeft: container.scrollLeft,
+      scrollY: window.scrollY,
+    };
+    let panning = false;
+
+    const onMove = (ev: MouseEvent) => {
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      if (!panning) {
+        if (Math.hypot(dx, dy) < PAN_THRESHOLD_PX) return;
+        panning = true;
+        document.body.style.cursor = 'grabbing';
+        document.body.style.userSelect = 'none';
+      }
+      ev.preventDefault();
+      container.scrollLeft = start.scrollLeft - dx;
+      window.scrollTo(window.scrollX, start.scrollY - dy);
+    };
+
+    const onUp = () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      if (!panning) return;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      // ドラッグ終了時に発生するクリック（再生位置の移動）を1回だけ打ち消す
+      const suppressClick = (ce: MouseEvent) => {
+        ce.stopPropagation();
+        ce.preventDefault();
+      };
+      window.addEventListener('click', suppressClick, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', suppressClick, { capture: true }), 0);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -1068,6 +1118,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         <div 
           ref={containerRef}
           onScroll={handleContainerScroll}
+          onMouseDown={handlePanMouseDown}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setHoveredTime(null)}
           className="relative overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"

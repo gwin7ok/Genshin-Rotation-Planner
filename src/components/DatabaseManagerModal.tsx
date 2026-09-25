@@ -5,7 +5,7 @@ import {
   RotateCcw, Save, Filter, Lock, LockOpen
 } from 'lucide-react';
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
-import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
+import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/characters';
 import { formatCharacterCooldowns } from '../utils/characterActions';
 import { CharacterFilterBar, matchesCharacterFilter } from './CharacterFilterBar';
@@ -1169,12 +1169,17 @@ interface EditCharacterSubModalProps {
 const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character, onToggleLock, onClose, onSave }) => {
   const [form, setForm] = useState<CharacterConfig>({ ...character });
   const [actions, setActions] = useState<ActionDefinition[]>([...character.availableActions]);
+  const [passives, setPassives] = useState<PassiveEffectDefinition[]>([...(character.passiveEffects ?? [])]);
+  const updatePassive = (index: number, patch: Partial<PassiveEffectDefinition>) => {
+    setPassives(prev => prev.map((p, i) => (i === index ? { ...p, ...patch } : p)));
+  };
 
   const handleSaveForm = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
       ...form,
       availableActions: actions,
+      passiveEffects: passives,
     });
   };
 
@@ -1282,6 +1287,79 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
             </div>
           </div>
 
+          {/* 固有天賦の効果（発動バフ）: アクション構築で出場ごとに登録し、ガントチャートで発動位置を動かす */}
+          <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-lime-300 text-xs">固有天賦の効果（発動バフ） ({passives.length})</h4>
+              <button
+                type="button"
+                onClick={() => setPassives(prev => [...prev, {
+                  id: `${form.id}_pcustom_${Date.now()}`,
+                  name: '新しい効果',
+                  talentName: '新しい効果',
+                  talentSlot: 1,
+                  duration: 10,
+                }])}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-lime-900/60 hover:bg-lime-800 text-lime-100 text-xs font-bold border border-lime-700/70"
+              >
+                <Plus className="w-3.5 h-3.5" /> 効果追加
+              </button>
+            </div>
+            {passives.length === 0 ? (
+              <p className="text-[11px] text-slate-500">固有天賦の効果が登録されていません。</p>
+            ) : (
+              <div className="space-y-2">
+                {passives.map((p, idx) => (
+                  <div key={p.id} className="p-2.5 rounded-lg border border-slate-800 bg-slate-900/60 space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input
+                        type="text"
+                        value={p.name}
+                        onChange={e => updatePassive(idx, { name: e.target.value })}
+                        className="flex-1 min-w-[160px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold"
+                      />
+                      <span className="text-lime-400 font-bold">効果持続時間:</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step="any" /* ▲▼は1秒単位。小数も保存できるよう step 制限はかけない */
+                        value={p.duration ?? ''}
+                        placeholder="未設定"
+                        onChange={e => updatePassive(idx, { duration: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
+                        className="w-16 bg-slate-950 border border-lime-900/60 focus:border-lime-500 rounded px-1.5 py-0.5 text-lime-300 font-mono font-bold text-center"
+                      />
+                      <span className="text-slate-500">s</span>
+                      <span className="text-sky-400 font-bold">CT:</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step="any"
+                        value={p.cooldown ?? ''}
+                        placeholder="なし"
+                        onChange={e => updatePassive(idx, { cooldown: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
+                        className="w-16 bg-slate-950 border border-sky-900/60 focus:border-sky-500 rounded px-1.5 py-0.5 text-sky-300 font-mono font-bold text-center"
+                      />
+                      <span className="text-slate-500">s</span>
+                      <button
+                        type="button"
+                        onClick={() => setPassives(prev => prev.filter((_, i) => i !== idx))}
+                        className="p-1 text-slate-500 hover:text-red-400"
+                        title="この効果を削除"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    {p.description && (
+                      <p className="text-[10px] text-slate-400 leading-relaxed">
+                        <span className="text-slate-500">固有天賦「{p.talentName}」: </span>{p.description}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Action Templates Manager */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
             <div className="flex items-center justify-between">
@@ -1378,7 +1456,7 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
                         <span className="text-amber-400 font-bold">固有CT:</span>
                         <input
                           type="number"
-                          step="0.1"
+                          step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
                           value={actCooldown}
                           onChange={e => {
                             const val = parseFloat(e.target.value) || 0;
@@ -1400,7 +1478,7 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
                         <span className="text-purple-400 font-bold">効果持続時間:</span>
                         <input
                           type="number"
-                          step="0.1"
+                          step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
                           value={actDuration}
                           onChange={e => {
                             const val = parseFloat(e.target.value) || 0;

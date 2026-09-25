@@ -15,6 +15,7 @@
  */
 import type { ActionDefinition, ActionFrames, ActionType, CharacterConfig, ElementType, WeaponType } from '../types/genshin.ts';
 import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './gcsimParser.ts';
+import { applyConstellationVariants, type ConstellationVariantReport, type GenshinDbConstellation } from './constellationEffects.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
@@ -100,6 +101,8 @@ export interface CharacterGenerationReport {
   missingCooldowns: Array<{ characterId: string; name: string; actionId: string }>;
   /** gcsim の式を評価できなかった行数 */
   unresolvedGoLines: Array<{ characterId: string; file: string; count: number }>;
+  /** 命ノ星座で効果継続時間が延びる「(n凸)」アクションの生成結果 */
+  constellationVariants: ConstellationVariantReport;
   errors: string[];
 }
 
@@ -570,16 +573,18 @@ export async function generateCharacterMaster(
     placeholderDurations: [],
     missingCooldowns: [],
     unresolvedGoLines: [],
+    constellationVariants: { added: [], unreviewed: [], errors: [] },
     errors,
   };
 
   // 1. genshin-db + gcsim のインデックスを並列取得
   onProgress?.({ phase: 'genshin-db / gcsim の一覧を取得中', done: 0, total: 1 });
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
-  const [charsJa, charsEn, talentsJa, tree, charDm] = await Promise.all([
+  const [charsJa, charsEn, talentsJa, constellationsJa, tree, charDm] = await Promise.all([
     fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=Japanese`),
     fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=English`),
     fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=Japanese`),
+    fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=Japanese`),
     fetchJson<{ sha: string; truncated: boolean; tree: Array<{ path: string; type: string }> }>(
       `https://api.github.com/repos/${GCSIM_REPO}/git/trees/${GCSIM_BRANCH}?recursive=1`,
       { headers: { Accept: 'application/vnd.github+json' } },
@@ -755,6 +760,9 @@ export async function generateCharacterMaster(
       source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },
     });
   }
+
+  // 5. 命ノ星座で効果継続時間が延びるアクションを「(n凸)」付きの別アクションとして追加
+  report.constellationVariants = applyConstellationVariants(characters, constellationsJa);
 
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;

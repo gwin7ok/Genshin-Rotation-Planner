@@ -7,7 +7,7 @@ import {
   ValidationIssue, 
   CharacterRuntimeState,
 } from '../types/genshin';
-import { BUFF_DEFINITIONS } from '../data/characters';
+import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 
 export interface CalculatedRotation {
   totalDuration: number;
@@ -182,27 +182,9 @@ export function calculateRotation(
         }
       }
 
-      // Trigger attached buffs
-      const buffIdsToTrigger = actionDef?.triggersBuffIds || [];
-
-      buffIdsToTrigger.forEach(buffId => {
-        const buffDef = BUFF_DEFINITIONS[buffId];
-        if (buffDef) {
-          activeBuffs.push({
-            id: `buff_${buffId}_${actionStartTime}`,
-            buffId: buffDef.id,
-            name: buffDef.name,
-            sourceCharacterId: buffDef.sourceCharacterId || char.id,
-            sourceType: buffDef.sourceType,
-            startTime: actionStartTime,
-            endTime: actionStartTime + buffDef.duration,
-            duration: buffDef.duration,
-            color: buffDef.color,
-            description: buffDef.description,
-            isSnapshot: buffDef.snapshotable,
-          });
-        }
-      });
+      // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
+      const effectSpan = buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      if (effectSpan) activeBuffs.push(effectSpan);
 
       currentTime = actionEndTime;
     }
@@ -245,11 +227,12 @@ export function calculateRotation(
   const maxSec = Math.ceil(totalDuration);
   const activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[] = [];
   for (let s = 0; s <= maxSec; s += 0.5) {
-    const curBuffs = activeBuffs.filter(b => b.startTime <= s && b.endTime >= s);
+    // 同じアクション由来のバーが重なっても1つとして数える
+    const { count, names } = countDistinctActiveBuffs(activeBuffs, s);
     activeBuffCountBySecond.push({
       time: s,
-      count: curBuffs.length,
-      activeBuffs: curBuffs.map(b => b.name)
+      count,
+      activeBuffs: names,
     });
   }
 

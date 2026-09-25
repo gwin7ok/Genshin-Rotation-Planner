@@ -45,7 +45,6 @@ export interface ActionDefinition {
   type: ActionType;
   defaultDuration: number; // in seconds
   description?: string;
-  triggersBuffIds?: string[];
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
   cooldown?: number;        // このアクションが開始するCT (秒)
@@ -67,6 +66,8 @@ export interface CharacterActionInstance {
   duration: number; // in seconds (e.g. 0.8s)
   /** このアクションが開始するCT (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の cooldown を使う */
   cooldown?: number;
+  /** このアクションの効果継続時間 (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の effectDuration を使う */
+  effectDuration?: number;
   note?: string;
   // Computed at runtime:
   startTime?: number;

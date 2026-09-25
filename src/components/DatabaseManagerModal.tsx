@@ -8,7 +8,7 @@ import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../typ
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/characters';
 import { formatCharacterCooldowns } from '../utils/characterActions';
-import { CharacterFilterBar, matchesCharacterFilter } from './CharacterFilterBar';
+import { CharacterFilterBar, matchesCharacterFilter, ElementChip, WeaponChip } from './CharacterFilterBar';
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
 import { 
   syncCharactersMasterOnline,
@@ -446,7 +446,6 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               {/* Characters Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredCharacters.map(char => {
-                  const elemStyle = ELEMENT_COLORS[char.element];
                   const isCustom = !!char.isCustom || char.id.startsWith('custom_');
 
                   return (
@@ -474,11 +473,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-1.5 text-[11px] mt-0.5">
-                              <span className={`px-1.5 py-0.2 rounded font-semibold text-[10px] ${elemStyle.light} ${elemStyle.text} border ${elemStyle.border}`}>
-                                {ELEMENT_NAMES_JA[char.element]}
-                              </span>
-                              <span className="text-slate-400 capitalize">{char.weaponType}</span>
+                            {/* 元素・武器種（フィルターと同じ見た目） */}
+                            <div className="flex items-center gap-1 mt-1">
+                              <ElementChip element={char.element} />
+                              <WeaponChip weaponType={char.weaponType} />
                             </div>
                           </div>
                         </div>

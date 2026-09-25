@@ -51,6 +51,9 @@ interface StintSequenceEditorProps {
   loopStartIndex?: number;
 }
 
+/** 固定表示部分の「ガントチャート連動選択中」バーを表示するか（現在は非表示。要素は残してある） */
+const SHOW_SELECTED_ACTION_BAR = false;
+
 export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   characters,
   stints,
@@ -523,7 +526,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {/* =========================================================================
               3. Selected Action Focused Control Bar or Action Description Line
           ========================================================================= */}
-          {selectedActionInfo ? (
+          {SHOW_SELECTED_ACTION_BAR && selectedActionInfo ? (
             <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/70 border-2 border-amber-400 rounded-xl shadow-2xl text-xs animate-in fade-in">
               <div className="flex items-center gap-2.5 flex-wrap">
                 <span className="px-2 py-0.5 rounded font-black text-xs bg-amber-400 text-slate-950 flex items-center gap-1 shadow-sm">
@@ -661,11 +664,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             </div>
           </div>
 
-          {!selectedActionInfo && (
+          {!(SHOW_SELECTED_ACTION_BAR && selectedActionInfo) && (
             <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-400 font-bold">💡</span>
-                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、上のパイプラインの下に対象アクションが連動選択され、詳細編集が行えます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。</span>
+                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。</span>
               </span>
             </div>
           )}

@@ -90,7 +90,8 @@ function buildVariant(base: ActionDefinition, level: ConstellationLevel, effectD
     ...base,
     id: `${base.id}_c${level}`,
     name: `${base.name} ${tag}`,
-    shortName: `${base.shortName} ${tag}`,
+    // 記法略称は元アクションと同じ（Q / E）。区別はアクション名・ボタン表示名の「(n凸)」で行う
+    shortName: base.shortName,
     buttonLabel: `${base.buttonLabel ?? base.shortName} ${tag}`,
     effectDuration,
     description: `${level}凸: ${description}`,

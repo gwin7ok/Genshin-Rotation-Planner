@@ -8,6 +8,7 @@ import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../typ
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/characters';
 import { formatCharacterCooldowns } from '../utils/characterActions';
+import { CharacterFilterBar, matchesCharacterFilter } from './CharacterFilterBar';
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
 import { 
   syncCharactersMasterOnline,
@@ -252,9 +253,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Filtered lists
   const filteredCharacters = database.characters.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.id.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesElement = elementFilter === 'all' || c.element === elementFilter;
-    const matchesWeapon = weaponTypeFilter === 'all' || c.weaponType === weaponTypeFilter;
-    return matchesSearch && matchesElement && matchesWeapon;
+    const matchesFilter = matchesCharacterFilter(c, elementFilter, weaponTypeFilter);
+    return matchesSearch && matchesFilter;
   });
 
   const filteredWeapons = database.weapons.filter(w => {
@@ -379,7 +379,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
             <div className="space-y-4">
               {/* Search & Action Bar */}
               <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                <div className="flex items-center gap-2 basis-full">
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
@@ -390,53 +390,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   />
                 </div>
 
-                {/* Element Filters */}
-                <div className="flex items-center gap-1 overflow-x-auto py-1">
-                  <button
-                    onClick={() => setElementFilter('all')}
-                    className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
-                      elementFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                    }`}
-                  >
-                    全元素
-                  </button>
-                  {(['pyro', 'hydro', 'electro', 'dendro', 'cryo', 'anemo', 'geo'] as ElementType[]).map(elem => (
-                    <button
-                      key={elem}
-                      onClick={() => setElementFilter(elem)}
-                      className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
-                        elementFilter === elem 
-                          ? `${ELEMENT_COLORS[elem].light} ${ELEMENT_COLORS[elem].text} ${ELEMENT_COLORS[elem].border}` 
-                          : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      }`}
-                    >
-                      {ELEMENT_NAMES_JA[elem]}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Weapon Type Filters */}
-                <div className="flex items-center gap-1 overflow-x-auto py-1">
-                  <button
-                    onClick={() => setWeaponTypeFilter('all')}
-                    className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
-                      weaponTypeFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                    }`}
-                  >
-                    全武器種
-                  </button>
-                  {(Object.keys(WEAPON_TYPE_NAMES_JA) as WeaponType[]).map(wt => (
-                    <button
-                      key={wt}
-                      onClick={() => setWeaponTypeFilter(wt)}
-                      className={`px-2 py-1 text-[11px] font-semibold rounded-md border transition-colors ${
-                        weaponTypeFilter === wt ? 'bg-sky-500/20 text-sky-300 border-sky-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
-                      }`}
-                    >
-                      {WEAPON_TYPE_NAMES_JA[wt]}
-                    </button>
-                  ))}
-                </div>
+                {/* 元素・武器種フィルター（パーティ編成画面と共通） */}
+                <CharacterFilterBar
+                  className="basis-full"
+                  elementFilter={elementFilter}
+                  onElementFilterChange={setElementFilter}
+                  weaponFilter={weaponTypeFilter}
+                  onWeaponFilterChange={setWeaponTypeFilter}
+                />
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button

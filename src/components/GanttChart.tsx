@@ -25,13 +25,13 @@ import {
   Stint, 
   ActiveBuffSpan, 
   CooldownSpan, 
-  CharacterRuntimeState 
+  CharacterRuntimeState ,
+  PassiveSpan,
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
-import { swapStintsForCharacters } from '../utils/stintReorder';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -161,6 +161,8 @@ interface GanttChartProps {
   activeTime: number;
   onSeek: (time: number) => void;
   activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
+  /** 発動バフ（固有天賦）の効果・CT */
+  passiveSpans?: PassiveSpan[];
   onReorderCharacters?: (newChars: CharacterConfig[]) => void;
   onReorderCharactersAndStints?: (newChars: CharacterConfig[], newStints: Stint[]) => void;
   onUpdateStints?: (newStints: Stint[]) => void;
@@ -170,6 +172,10 @@ interface GanttChartProps {
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
   loopStartIndex?: number;
   onUpdateLoopStartIndex?: (index: number) => void;
+  /** キャラ交代の所要時間（2周目の先頭に入れる交代アクションに使う） */
+  switchDelay?: number;
+  /** アクション間所要時間（2周目の先頭の交代アクションの後に入る空白） */
+  actionDelay?: number;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
@@ -183,6 +189,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   activeTime,
   onSeek,
   activeBuffCountBySecond,
+  passiveSpans = [],
   onReorderCharacters,
   onReorderCharactersAndStints,
   onUpdateStints,
@@ -191,6 +198,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   loopStartTime = 0,
   loopStartIndex = 0,
   onUpdateLoopStartIndex,
+  switchDelay = 0.5,
+  actionDelay = 0.1,
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
@@ -199,6 +208,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   // Loop marker dragging state
   const [isDraggingLoopMarker, setIsDraggingLoopMarker] = useState<boolean>(false);
+
+  // 発動バフ（固有天賦）の発動位置ドラッグ: 出場の先頭からの秒数を、その出場の時間内で左右に動かす
+  const [draggingPassive, setDraggingPassive] = useState<{
+    stintId: string;
+    triggerId: string;
+    startClientX: number;
+    originOffset: number;
+    offset: number;
+    maxOffset: number;
+  } | null>(null);
 
   // Drag and Drop state for timeline action reordering directly on the Gantt Chart
   const [draggedAction, setDraggedAction] = useState<{
@@ -294,9 +313,19 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       };
     }
 
-    const offset = totalDuration - loopStartTime;
+    // ループの先頭が1周目の一番最初の出場（交代なし）の場合、2周目では1周目の最後のキャラからの交代が入るので、
+    // 先頭に交代アクションを入れ、2周目全体をその所要時間だけ後ろへずらす
+    const loopHeadStint = stints[loopStartIndex];
+    const needsHeadSwap = switchDelay > 0 && !!loopHeadStint &&
+      !loopHeadStint.actions.some(a => a.type === 'swap' || a.actionTypeId === 'action_switch_char');
+    // 交代の後は、ほかの出場と同じくアクション間所要時間の空白が入る
+    const headSwapShift = needsHeadSwap
+      ? switchDelay + (loopHeadStint.actions.length > 0 ? actionDelay : 0)
+      : 0;
+
+    const offset = totalDuration - loopStartTime + headSwapShift;
     const cycle2StartTime = totalDuration;
-    const cycle2EndTime = totalDuration + loopPeriod;
+    const cycle2EndTime = totalDuration + loopPeriod + headSwapShift;
 
     // 1. Project Stints & Actions into 2nd Cycle (offset by totalDuration - loopStartTime)
     const c2Stints: Array<{
@@ -345,7 +374,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       // ループ基準番号以降の出場キャラが 2周目ループの対象
       if (sIdx < loopStartIndex) return;
       const loopActions = stint.actions;
-      if (loopActions.length === 0) return;
+      if (loopActions.length === 0 && !(needsHeadSwap && sIdx === loopStartIndex)) return;
 
       const c2Actions = loopActions.map(act => {
         // Shift time into Cycle 2
@@ -455,6 +484,46 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         };
       });
 
+      // 発動バフ（固有天賦）も2周目に投影（読取専用の効果バーとして表示）
+      for (const p of passiveSpans) {
+        if (p.stintId !== stint.id || p.duration <= 0) continue;
+        const c2Start = p.startTime + offset;
+        cycle2NewBuffs.push({
+          id: `c2_${p.id}`,
+          buffId: `passive_${p.characterId}_${p.passiveEffectId}`,
+          name: `${char.name}: ${p.name}`,
+          sourceCharacterId: char.id,
+          sourceType: 'talent',
+          startTime: c2Start,
+          endTime: c2Start + p.duration,
+          duration: p.duration,
+          color: char.color,
+          description: `発動バフ（固有天賦）: ${p.name}`,
+          isCarryOver: false,
+        });
+      }
+
+      // 2周目の先頭の出場: 1周目の最後のキャラからの交代アクションを先頭に入れる
+      if (needsHeadSwap && sIdx === loopStartIndex) {
+        c2Actions.unshift({
+          id: `c2_switch_head_${stint.id}`,
+          originalActionId: '',
+          actionTypeId: 'action_switch_char',
+          name: 'キャラ交代',
+          shortName: '交代',
+          type: 'swap',
+          duration: switchDelay,
+          startTime: cycle2StartTime,
+          endTime: cycle2StartTime + switchDelay,
+          isSkill: false,
+          isBurst: false,
+          hasCTCollision: false,
+          ctRemaining: 0,
+          conflictingCDName: '',
+          conflictingCDEndTime: 0,
+        });
+      }
+
       if (c2Actions.length > 0) {
         const stintStart = c2Actions[0].startTime;
         const stintEnd = c2Actions[c2Actions.length - 1].endTime;
@@ -509,7 +578,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
     return {
       enabled: true,
-      loopPeriod,
+      loopPeriod: loopPeriod + headSwapShift,
       cycle2StartTime,
       cycle2EndTime,
       stints: c2Stints,
@@ -524,7 +593,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       allCycle2Buffs,
       buffSynergyPoints,
     };
-  }, [stints, totalDuration, loopStartTime, characterMap, skillCooldowns, burstCooldowns, activeBuffs]);
+  }, [stints, totalDuration, loopStartTime, loopStartIndex, switchDelay, actionDelay, passiveSpans, characterMap, skillCooldowns, burstCooldowns, activeBuffs]);
 
   // Combined Buff Synergy Points spanning full timeline (1st cycle + 2nd cycle)
   const allBuffSynergyPoints = useMemo(() => {
@@ -535,7 +604,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   }, [activeBuffCountBySecond, cycle2Data.buffSynergyPoints]);
 
   // Total timeline duration spanning 1st Cycle + 2nd Cycle Preview
-  const extendedTotalDuration = totalDuration + Math.max(0, totalDuration - loopStartTime);
+  const extendedTotalDuration = cycle2Data.enabled ? cycle2Data.cycle2EndTime : totalDuration;
   const chartWidth = Math.max(800, Math.ceil(extendedTotalDuration + 2) * pixelsPerSecond);
 
   // Handle timeline scrubber click or drag
@@ -555,7 +624,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const handlePanMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.button !== 0 || !containerRef.current) return;
     const target = e.target as HTMLElement;
-    if (target.closest('button, input, select, textarea, a, label, [draggable="true"]')) return;
+    if (target.closest('button, input, select, textarea, a, label, [draggable="true"], [data-no-pan]')) return;
 
     const container = containerRef.current;
     const start = {
@@ -716,6 +785,32 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mouseup', onWindowMouseUp);
     };
   }, [isDraggingLoopMarker, totalDuration, pixelsPerSecond, onUpdateLoopStartIndex, loopBoundaries]);
+
+  useEffect(() => {
+    if (!draggingPassive) return;
+    const onMove = (e: MouseEvent) => {
+      const delta = (e.clientX - draggingPassive.startClientX) / pixelsPerSecond;
+      const raw = Math.min(draggingPassive.maxOffset, Math.max(0, draggingPassive.originOffset + delta));
+      const offset = Math.round(raw * 20) / 20; // 0.05秒単位
+      setDraggingPassive(prev => (prev && prev.offset !== offset ? { ...prev, offset } : prev));
+    };
+    const onUp = () => {
+      const d = draggingPassive;
+      setDraggingPassive(null);
+      document.body.style.cursor = '';
+      if (!onUpdateStints || Math.abs(d.offset - d.originOffset) < 0.001) return;
+      onUpdateStints(stints.map(st => st.id !== d.stintId ? st : {
+        ...st,
+        passiveTriggers: (st.passiveTriggers ?? []).map(t => (t.id === d.triggerId ? { ...t, offset: d.offset } : t)),
+      }));
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [draggingPassive, pixelsPerSecond, stints, onUpdateStints]);
 
   // Pre-calculate connector points between consecutive stints for vertical snap visualization
   // Stint i ends at t_end, Stint i+1 starts at t_end!
@@ -1143,11 +1238,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     )
                   );
                   const stintBuffs = activeBuffs.filter(b => 
+                    b.origin !== 'passive' && // 発動バフは専用の行に表示
                     b.sourceCharacterId === char.id && 
                     b.startTime >= (stint.startTime ?? 0) - 0.2 && 
                     b.startTime <= (stint.endTime ?? 0) + 0.2
                   );
                   const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
+                  const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
@@ -1267,6 +1364,24 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       <span className="truncate">{bRow.cleanName}</span>
                                     </span>
                                     <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {stintPassives.length > 0 && (
+                              <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
+                                {stintPassives.map(p => (
+                                  <div key={`passive_lbl_${p.id}`} className="text-[9px] font-mono" title={`【発動バフ（固有天賦）】\n${p.name}\n効果 ${p.duration}s / CT ${p.cooldown}s`}>
+                                    <div className="flex items-center justify-between text-lime-300 truncate">
+                                      <span className="truncate"><span className="font-bold text-lime-400">[天賦]</span> {p.name}</span>
+                                      <span className="shrink-0 ml-1">{p.duration.toFixed(0)}s</span>
+                                    </div>
+                                    {p.cooldown > 0 && (
+                                      <div className="flex items-center justify-between text-sky-300">
+                                        <span>⏱️ 天賦CT</span>
+                                        <span>{p.cooldown.toFixed(1)}s</span>
+                                      </div>
+                                    )}
                                   </div>
                                 ))}
                               </div>
@@ -1493,6 +1608,65 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               })}
                             </div>
                           ))}
+
+                          {/* --- 発動バフ（固有天賦）: 登録1つにつき「効果」の行と「CT」の行。ドラッグで効果と CT を一緒に左右へ動かす --- */}
+                          {stintPassives.map(p => {
+                            const isDragging = draggingPassive?.triggerId === p.triggerId;
+                            const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
+                            const start = (stint.startTime ?? 0) + offset;
+                            const startDrag = (e: React.MouseEvent) => {
+                              if (e.button !== 0) return;
+                              e.preventDefault();
+                              e.stopPropagation();
+                              document.body.style.cursor = 'grabbing';
+                              setDraggingPassive({
+                                stintId: stint.id,
+                                triggerId: p.triggerId,
+                                startClientX: e.clientX,
+                                originOffset: offset,
+                                offset,
+                                maxOffset: stint.duration ?? 0,
+                              });
+                            };
+                            const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm';
+                            const cursor = isDragging ? 'cursor-grabbing ring-1 ring-lime-300' : 'cursor-grab';
+                            return (
+                              <React.Fragment key={`passive_rows_${p.id}`}>
+                                <div className="relative h-4 my-0.5">
+                                  <div
+                                    data-no-pan
+                                    onMouseDown={startDrag}
+                                    onClick={(e) => e.stopPropagation()}
+                                    style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.duration * pixelsPerSecond)}px` }}
+                                    className={`${barCommon} ${cursor} font-medium border-dashed ${
+                                      p.hasCTViolation
+                                        ? 'bg-red-950 border-red-400 text-red-100'
+                                        : 'bg-lime-950 border-lime-400 text-lime-100 hover:border-lime-300'
+                                    }`}
+                                    title={`【発動バフ（固有天賦）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? '\n⚠️ CT中の発動です' : ''}`}
+                                  >
+                                    <span className="truncate">
+                                      {p.hasCTViolation ? '⚠️' : '🎯'} [天賦] {p.name} ({p.duration.toFixed(0)}s){isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                    </span>
+                                  </div>
+                                </div>
+                                {p.cooldown > 0 && (
+                                  <div className="relative h-4 my-0.5">
+                                    <div
+                                      data-no-pan
+                                      onMouseDown={startDrag}
+                                      onClick={(e) => e.stopPropagation()}
+                                      style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.cooldown * pixelsPerSecond)}px` }}
+                                      className={`${barCommon} ${cursor} font-mono bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300`}
+                                      title={`【発動バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                    >
+                                      <span className="truncate">⏱️ 天賦CT {p.cooldown.toFixed(1)}s</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </React.Fragment>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
@@ -1701,44 +1875,51 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }}
                                   >
                                     {stint.actions.map((act) => {
+                                      // 見た目は1周目のアクション要素と同じ（CT衝突時のみ警告表示を重ねる）
                                       const actStartX = (act.startTime - stint.startTime) * pixelsPerSecond;
                                       const actWidth = act.duration * pixelsPerSecond;
                                       const isSwap = act.type === 'swap' || (act as any).actionTypeId === 'action_switch_char';
+                                      const isActActive = act.startTime <= activeTime && activeTime < act.endTime;
 
                                       return (
                                         <div
                                           key={act.id}
                                           style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
-                                          className={`absolute h-6 top-0.5 rounded flex items-center justify-between px-1 border select-none transition-all ${
+                                          className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none transition-all ${
                                             act.hasCTCollision
-                                              ? 'bg-red-950/90 border-red-500 ring-2 ring-red-500/80 shadow-lg text-white font-bold animate-pulse'
-                                              : isSwap
-                                              ? 'bg-sky-900/90 border-sky-500 text-sky-100 hover:border-sky-400'
-                                              : 'bg-slate-900/90 border-slate-700 text-slate-200 hover:border-purple-400'
+                                              ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse'
+                                              : isActActive
+                                              ? 'bg-amber-400 text-slate-950 ring-1 ring-white'
+                                              : act.isBurst
+                                              ? 'bg-purple-600/90 text-white hover:brightness-110'
+                                              : act.isSkill
+                                              ? 'bg-sky-600/90 text-white hover:brightness-110'
+                                              : 'bg-slate-800/80 text-slate-200 hover:brightness-110'
                                           }`}
                                           title={
                                             act.hasCTCollision
-                                              ? `【⚠️ CT衝突エラー】1周目の発動CTが2周目の発動時点（${act.startTime.toFixed(2)}s）までに解消されていません！\n残り待機時間: ${act.ctRemaining}s\nアクション: ${act.name}`
+                                              ? `【⚠️ CT衝突エラー】1周目の発動CTが2周目の発動時点（${act.startTime.toFixed(2)}s）までに解消されていません！
+残り待機時間: ${act.ctRemaining}s
+アクション: ${act.name}`
                                               : isSwap
-                                              ? `【2周目キャラ交代】\n所要時間: ${act.duration.toFixed(2)}s\n開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s`
-                                              : `【2周目アクション (読取専用)】\n${act.name} (${act.duration.toFixed(2)}s)\n開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s\nCT状態: ✅ 解消済み`
+                                              ? `【2周目キャラ交代】
+所要時間: ${act.duration.toFixed(2)}s
+開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s`
+                                              : `【2周目アクション (読取専用)】
+${act.name} (${act.duration.toFixed(2)}s)
+開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s
+CT状態: ✅ 解消済み`
                                           }
                                         >
-                                          <div className="flex items-center gap-1 min-w-0">
-                                            {act.hasCTCollision ? (
-                                              <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-bounce" />
-                                            ) : isSwap ? (
-                                              <span className="text-[10px]">🔄</span>
-                                            ) : (
-                                              <Lock className="w-2.5 h-2.5 text-purple-400/70 shrink-0" />
+                                          <span className="truncate px-0.5 flex items-center gap-0.5">
+                                            {act.hasCTCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
+                                            {act.shortName}
+                                            {act.hasCTCollision && (
+                                              <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                                残{act.ctRemaining}s
+                                              </span>
                                             )}
-                                            <span className="font-bold text-[10px] truncate">{isSwap ? '交代' : act.shortName}</span>
-                                          </div>
-                                          {act.hasCTCollision && (
-                                            <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                              残{act.ctRemaining}s
-                                            </span>
-                                          )}
+                                          </span>
                                         </div>
                                       );
                                     })}

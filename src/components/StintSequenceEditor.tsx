@@ -27,10 +27,11 @@ import {
   Stint, 
   CharacterActionInstance, 
   ActionDefinition,
-  ActionType
+  ActionType,
+  PassiveEffectDefinition,
+  PassiveTriggerInstance,
 } from '../types/genshin';
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
-import { alignStintsToCharacterOrder } from '../utils/stintReorder';
 import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
 
@@ -147,7 +148,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         .map(a => ({
           ...a,
           id: `act_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
-        }))
+        })),
+      passiveTriggers: (original.passiveTriggers ?? []).map(t => ({
+        ...t,
+        id: `ptrg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      })),
     };
     const next = [...stints];
     next.splice(index + 1, 0, cloned);
@@ -232,6 +237,47 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     const nextStints = [...stints];
     nextStints[stintIndex] = { ...targetStint, actions: nextActions };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // --- 発動バフ（固有天賦） ---
+  const updateStintPassiveTriggers = (stintIndex: number, update: (list: PassiveTriggerInstance[]) => PassiveTriggerInstance[]) => {
+    const targetStint = stints[stintIndex];
+    if (!targetStint) return;
+    const nextStints = [...stints];
+    nextStints[stintIndex] = { ...targetStint, passiveTriggers: update(targetStint.passiveTriggers ?? []) };
+    onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // 登録時の発動位置: 出場の先頭（キャラ交代があればその直後）
+  const addPassiveTrigger = (stintIndex: number, def: PassiveEffectDefinition) => {
+    const stint = stints[stintIndex];
+    if (!stint) return;
+    const swap = stint.actions.find(a => a.type === 'swap' || a.actionTypeId === 'action_switch_char');
+    const offset = swap ? Number(((swap.endTime ?? 0) - (stint.startTime ?? 0)).toFixed(3)) : 0;
+    updateStintPassiveTriggers(stintIndex, list => [
+      ...list,
+      { id: `ptrg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, passiveEffectId: def.id, name: def.name, offset },
+    ]);
+  };
+
+  const updatePassiveTriggerTiming = (
+    stintIndex: number,
+    triggerId: string,
+    field: 'duration' | 'cooldown',
+    value: number,
+    defaultValue: number,
+  ) => {
+    if (!Number.isFinite(value)) return;
+    const nextValue = Math.min(999, Math.max(0, Number(value.toFixed(2))));
+    updateStintPassiveTriggers(stintIndex, list => list.map(t => {
+      if (t.id !== triggerId) return t;
+      const { [field]: _omit, ...rest } = t;
+      return nextValue === defaultValue ? rest : { ...rest, [field]: nextValue };
+    }));
+  };
+
+  const removePassiveTrigger = (stintIndex: number, triggerId: string) => {
+    updateStintPassiveTriggers(stintIndex, list => list.filter(t => t.id !== triggerId));
   };
 
   const removeActionFromStint = (stintIndex: number, actionIndex: number) => {
@@ -383,15 +429,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => onUpdateStints(alignStintsToCharacterOrder(stints, characters))}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-amber-300 hover:text-amber-200 border border-slate-700/80 hover:border-amber-400 text-[11px] font-semibold transition-colors"
-                  title="パーティ編成の1→2→3→4枠目の順序に合わせて横軸の登場順を一括整列します"
-                >
-                  <RefreshCw className="w-3 h-3" />
-                  <span>編成スロット順（1→2→3→4）に横軸を整列</span>
-                </button>
                 <button
                   onClick={() => setShowGuideBanner(!showGuideBanner)}
                   className="text-[11px] text-slate-400 hover:text-slate-200 underline"
@@ -1343,6 +1380,79 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         ))}
                       </div>
                     </div>
+
+                    {/* 発動バフ（固有天賦）: アクションの数珠つなぎとは別。発動位置はガントチャートでドラッグして調整 */}
+                    <div className="mt-2.5 pt-2 border-t border-dashed border-emerald-800/50 flex flex-wrap items-center gap-2">
+                      <span className="text-[11px] font-bold text-emerald-300 shrink-0">✨ 発動バフ:</span>
+                      {(stint.passiveTriggers ?? []).map(trigger => {
+                        const def = char.passiveEffects?.find(p => p.id === trigger.passiveEffectId);
+                        const defaultDuration = def?.duration ?? 0;
+                        const defaultCooldown = def?.cooldown ?? 0;
+                        const hoverProps = {
+                          onHoverChange: (hovering: boolean) =>
+                            setCtHoverActionId(prev => (hovering ? trigger.id : prev === trigger.id ? null : prev)),
+                        };
+                        return (
+                          <div
+                            key={trigger.id}
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg border border-emerald-700/60 bg-emerald-950/40 text-xs"
+                            title={def?.description ?? trigger.name}
+                          >
+                            <span className="font-semibold text-emerald-200 max-w-[180px] truncate">{trigger.name}</span>
+                            <span className="text-[10px] font-mono text-slate-400" title="発動位置（出場の先頭から）。ガントチャートでドラッグして調整">
+                              @+{trigger.offset.toFixed(2)}s
+                            </span>
+                            <ActionTimingInput
+                              label="効果"
+                              value={trigger.duration ?? defaultDuration}
+                              defaultValue={defaultDuration}
+                              valueClassName="text-pink-300"
+                              title={`効果継続時間（初期値 ${defaultDuration}s）`}
+                              onChange={(v) => updatePassiveTriggerTiming(stintIndex, trigger.id, 'duration', v, defaultDuration)}
+                              {...hoverProps}
+                            />
+                            <ActionTimingInput
+                              label="CT"
+                              value={trigger.cooldown ?? defaultCooldown}
+                              defaultValue={defaultCooldown}
+                              valueClassName="text-emerald-300"
+                              title={`クールタイム（初期値 ${defaultCooldown}s。0sでCTなし）`}
+                              onChange={(v) => updatePassiveTriggerTiming(stintIndex, trigger.id, 'cooldown', v, defaultCooldown)}
+                              {...hoverProps}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removePassiveTrigger(stintIndex, trigger.id)}
+                              className="text-slate-500 hover:text-red-400 ml-0.5"
+                              title="発動バフを削除"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
+
+                      <div className="basis-full flex flex-wrap items-center gap-1">
+                        <span className="text-[11px] text-slate-500 font-medium">+ 登録:</span>
+                        {(char.passiveEffects ?? []).length === 0 ? (
+                          <span className="text-[11px] text-slate-500">
+                            {char.passiveEffects ? '固有天賦の効果がありません' : '固有天賦のデータがありません（編成設定でキャラを選び直すと使えます）'}
+                          </span>
+                        ) : (
+                          (char.passiveEffects ?? []).map(def => (
+                            <button
+                              key={def.id}
+                              onClick={() => addPassiveTrigger(stintIndex, def)}
+                              className="px-2 py-1 rounded bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 hover:text-white text-[11px] font-semibold border border-emerald-800/70 hover:border-emerald-500 transition-colors"
+                              title={`${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+                            >
+                              {/* 効果が複数ある固有天賦は名前に「(30秒)」が付いているので秒数を重ねて出さない */}
+                              +{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1381,7 +1491,7 @@ const ActionTimingInput: React.FC<{
       <input
         type="number"
         min={0}
-        step={0.5}
+        step={1}
         value={value}
         onChange={(e) => {
           if (e.target.value === '') return;
@@ -1395,17 +1505,17 @@ const ActionTimingInput: React.FC<{
       <div className="flex flex-col ml-0.5">
         <button
           type="button"
-          onClick={() => onChange(value + 0.5)}
+          onClick={() => onChange(value + 1)}
           className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-          title={`${label} +0.5秒`}
+          title={`${label} +1秒`}
         >
           ▲
         </button>
         <button
           type="button"
-          onClick={() => onChange(value - 0.5)}
+          onClick={() => onChange(value - 1)}
           className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-          title={`${label} -0.5秒`}
+          title={`${label} -1秒`}
         >
           ▼
         </button>

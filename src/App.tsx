@@ -22,6 +22,7 @@ import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, save
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter, migrateCharacterIds } from './utils/legacyMigration';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
+import { buildRotationNotation } from './utils/rotationNotation';
 import { isEmptySlotCharacter } from './data/characters';
 
 export default function App() {
@@ -212,20 +213,10 @@ export default function App() {
   };
 
   // 11. Notation Copy & Display
-  const rotationNotation = useMemo(() => {
-    const charMap = new Map(characters.map(c => [c.id, c.name]));
-    return calculatedResult.calculatedStints.map(s => {
-      const charName = charMap.get(s.characterId) || '不明';
-      const nonSwapActions = s.actions.filter(a => 
-        a.type !== 'swap' && 
-        a.shortName !== '交代' && 
-        a.name !== 'キャラ交代' && 
-        a.actionTypeId !== 'action_switch_char'
-      );
-      const acts = nonSwapActions.map(a => a.shortName).join(' ');
-      return `${charName} [${acts}]`;
-    }).join(' ➔ ');
-  }, [characters, calculatedResult.calculatedStints]);
+  const rotationNotation = useMemo(
+    () => buildRotationNotation(characters, calculatedResult.calculatedStints, loopStartIndex),
+    [characters, calculatedResult.calculatedStints, loopStartIndex],
+  );
 
   // 現在のメイン画面の状態を、読み込み中の保存編成（スロット）へ上書き保存
   const [overwriteSaved, setOverwriteSaved] = useState<boolean>(false);
@@ -379,6 +370,7 @@ export default function App() {
           activeTime={currentTime}
           onSeek={handleSeek}
           activeBuffCountBySecond={calculatedResult.activeBuffCountBySecond}
+          passiveSpans={calculatedResult.passiveSpans}
           onReorderCharacters={setCharacters}
           onReorderCharactersAndStints={(newChars, newStints) => {
             setCharacters(newChars);
@@ -390,6 +382,8 @@ export default function App() {
           loopStartTime={loopStartTime}
           loopStartIndex={loopStartIndex}
           onUpdateLoopStartIndex={setLoopStartIndex}
+          switchDelay={switchDelay}
+          actionDelay={actionDelay}
         />
 
         {/* 2-Tier Sequence Editor (Macro Stint DnD + Micro Action Reordering) */}
@@ -496,6 +490,7 @@ export default function App() {
         characters={characters}
         stints={calculatedResult.calculatedStints}
         totalDuration={totalDuration}
+        loopStartIndex={loopStartIndex}
       />
 
       {/* Help & Reordering Guide Modal */}

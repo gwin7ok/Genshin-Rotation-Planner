@@ -18,8 +18,10 @@ import {
   AlertOctagon,
   ArrowRight,
   ShieldAlert,
-  Check
+  Check,
+  RefreshCw
 } from 'lucide-react';
+import { CharacterAvatar } from './CharacterAvatar';
 import { 
   CharacterConfig, 
   Stint, 
@@ -1345,12 +1347,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                         }`}>
                           <div className="flex items-center justify-between gap-1">
                             <div className="flex items-center gap-2 min-w-0">
-                              <div 
-                                className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner shrink-0"
-                                style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
-                              >
-                                {char.name.slice(0, 1)}
-                              </div>
+                              <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1">
                                   <span className="font-bold text-xs text-white truncate">{char.name}</span>
@@ -1588,7 +1585,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
-                                          {act.shortName}
+                                          {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
+                                            ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
+                                            : act.shortName}
                                         </span>
                                       </div>
                                     );
@@ -1837,12 +1836,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             <div>
                               <div className="flex items-center justify-between gap-1">
                                 <div className="flex items-center gap-2 min-w-0">
-                                  <div 
-                                    className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner shrink-0"
-                                    style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
-                                  >
-                                    {char.name.slice(0, 1)}
-                                  </div>
+                                  <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                                   <div className="min-w-0">
                                     <div className="flex items-center gap-1">
                                       <span className="font-bold text-xs text-white truncate">{char.name}</span>
@@ -1996,7 +1990,7 @@ CT状態: ✅ 解消済み`
                                         >
                                           <span className="truncate px-0.5 flex items-center gap-0.5">
                                             {act.hasCTCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
-                                            {act.shortName}
+                                            {isSwap ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" /> : act.shortName}
                                             {act.hasCTCollision && (
                                               <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
                                                 残{act.ctRemaining}s

@@ -114,7 +114,8 @@ export function calculateRotation(
       // CT・効果継続時間はアクション定義ごとに持つ
       const actionDef = char.availableActions.find(a => a.id === act.actionTypeId);
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
-      const cooldown = actionDef?.cooldown ?? 0;
+      // 個別に変更された CT があれば優先
+      const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
 
       if (isSkill) {
         // 祭礼リセット等はCT中でも発動可能

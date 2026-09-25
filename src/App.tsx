@@ -14,10 +14,10 @@ import { HelpGuideModal } from './components/HelpGuideModal';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { ROTATION_PRESETS } from './data/presets';
-import { CharacterConfig, Stint, PartyPreset } from './types/genshin';
+import { CharacterConfig, Stint, PartyPreset, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
-import { loadActiveState, saveActiveState, clearActiveState } from './utils/storage';
+import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter } from './utils/legacyMigration';
 import { isEmptySlotCharacter } from './data/characters';
@@ -57,6 +57,10 @@ export default function App() {
     return savedInitialState?.actionDelay ?? 0.10;
   });
 
+  // User saved rotation slots (shown in the header's 編成選択) & currently loaded slot
+  const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>(() => getSavedSlots());
+  const [activeSlotId, setActiveSlotId] = useState<string | null>(() => savedInitialState?.activeSlotId ?? null);
+
   // 2. Playback / Scrubber State
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -80,8 +84,9 @@ export default function App() {
       loopStartTime,
       switchDelay,
       actionDelay,
+      activeSlotId,
     });
-  }, [characters, stints, selectedPresetId, loopStartTime, switchDelay, actionDelay]);
+  }, [characters, stints, selectedPresetId, loopStartTime, switchDelay, actionDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
@@ -138,6 +143,7 @@ export default function App() {
     setLoopStartTime(0);
     setSwitchDelay(preset.switchDelay ?? 0.50);
     setActionDelay(preset.actionDelay ?? 0.10);
+    setActiveSlotId(null);
     setIsPlaying(false);
   };
 
@@ -149,6 +155,7 @@ export default function App() {
     switchDelay?: number;
     actionDelay?: number;
     presetId?: string;
+    slotId?: string;
   }) => {
     setCharacters(slot.characters);
     setStints(slot.stints);
@@ -156,6 +163,7 @@ export default function App() {
     setSwitchDelay(slot.switchDelay ?? 0.50);
     setActionDelay(slot.actionDelay ?? 0.10);
     setSelectedPresetId(slot.presetId || 'custom');
+    setActiveSlotId(slot.slotId ?? null);
     setCurrentTime(0);
     setIsPlaying(false);
   };
@@ -168,6 +176,7 @@ export default function App() {
     setStints(defaultPreset.stints);
     setLoopStartTime(0);
     setSwitchDelay(defaultPreset.switchDelay ?? 0.50);
+    setActiveSlotId(null);
     setCurrentTime(0);
     setIsPlaying(false);
   };
@@ -197,6 +206,25 @@ export default function App() {
       return `${charName} [${acts}]`;
     }).join(' ➔ ');
   }, [characters, calculatedResult.calculatedStints]);
+
+  // 現在のメイン画面の状態を、読み込み中の保存編成（スロット）へ上書き保存
+  const [overwriteSaved, setOverwriteSaved] = useState<boolean>(false);
+  const handleOverwriteActiveSlot = () => {
+    const slot = savedSlots.find(s => s.id === activeSlotId);
+    if (!slot) return;
+    const updated = saveSlot({
+      ...slot,
+      characters,
+      stints,
+      loopStartTime,
+      totalDuration,
+      switchDelay,
+      actionDelay,
+    });
+    setSavedSlots(updated);
+    setOverwriteSaved(true);
+    setTimeout(() => setOverwriteSaved(false), 2000);
+  };
 
   const handleCopyNotation = () => {
     navigator.clipboard.writeText(rotationNotation);
@@ -236,6 +264,7 @@ export default function App() {
           setStints(parsed.stints);
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
           if (typeof parsed.loopStartTime === 'number') setLoopStartTime(parsed.loopStartTime);
+          setActiveSlotId(null);
           setCurrentTime(0);
           setIsPlaying(false);
         } else {
@@ -253,8 +282,18 @@ export default function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
       {/* Top Navigation & Controls */}
       <Header
-        currentPresetId={selectedPresetId}
-        onSelectPreset={handleSelectPreset}
+        savedSlots={savedSlots}
+        activeSlotId={activeSlotId}
+        onOverwriteActiveSlot={handleOverwriteActiveSlot}
+        overwriteSaved={overwriteSaved}
+        onSelectSavedSlot={(slot) => handleLoadCustomSlot({
+          characters: slot.characters,
+          stints: slot.stints,
+          loopStartTime: slot.loopStartTime ?? 0,
+          switchDelay: slot.switchDelay,
+          actionDelay: slot.actionDelay,
+          slotId: slot.id,
+        })}
         isPlaying={isPlaying}
         onTogglePlay={togglePlay}
         onResetPlayback={resetPlayback}
@@ -271,7 +310,6 @@ export default function App() {
         onImportJson={handleImportJson}
         onCopyNotation={handleCopyNotation}
         copiedNotation={copiedNotation}
-        isCustomState={selectedPresetId === 'custom'}
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
       />
@@ -340,6 +378,13 @@ export default function App() {
         switchDelay={switchDelay}
         actionDelay={actionDelay}
         currentPresetId={selectedPresetId}
+        onSelectPreset={handleSelectPreset}
+        activeSlotId={activeSlotId}
+        onSlotsChanged={(slots, currentSlotId) => {
+          setSavedSlots(slots);
+          if (currentSlotId !== undefined) setActiveSlotId(currentSlotId);
+          else if (activeSlotId && !slots.some(s => s.id === activeSlotId)) setActiveSlotId(null);
+        }}
         onLoadSlot={handleLoadCustomSlot}
         onResetToDefault={handleResetToDefault}
       />

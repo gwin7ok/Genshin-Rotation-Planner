@@ -1243,8 +1243,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         );
                       })}
 
-                      {/* Quick Add Action Palette for this Character */}
-                      <div className="flex items-center gap-1 pl-1">
+                      {/* Quick Add Action Palette for this Character（登録済みアクションの後で必ず改行し、行頭から表示） */}
+                      <div className="basis-full flex flex-wrap items-center gap-1">
                         <span className="text-[11px] text-slate-500 font-medium">+ 追加:</span>
                         {char.availableActions.map(actionDef => (
                           <button

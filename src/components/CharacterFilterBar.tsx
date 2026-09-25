@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Filter, Sword } from 'lucide-react';
 import { ElementType, WeaponType } from '../types/genshin';
 import { ELEMENT_ICON_DATA_URLS } from '../data/elementIcons';
+import { ELEMENT_COLORS } from '../data/characters';
 
 export type ElementFilterValue = ElementType | 'all';
 export type WeaponFilterValue = WeaponType | 'all';
@@ -92,7 +93,8 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
             }
           >
             <FilterIcon icon={elem.icon} iconUrl={elem.iconUrl} />
-            <span>{elem.label}</span>
+            {/* 元素名は元素の色で表示（「全元素」はボタンの文字色のまま） */}
+            <span className={elem.id === 'all' ? '' : ELEMENT_COLORS[elem.id].text}>{elem.label}</span>
           </button>
         );
       })}
@@ -124,3 +126,27 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
     </div>
   </div>
 );
+
+const CHIP_CLASS = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold border bg-slate-900/80 text-slate-400 border-slate-800';
+
+/** キャラの元素表示（フィルターの元素ボタンと同じ見た目: アイコン + 元素色の名前） */
+export const ElementChip: React.FC<{ element: ElementType }> = ({ element }) => {
+  const opt = ELEMENT_FILTER_OPTIONS.find(o => o.id === element);
+  return (
+    <span className={CHIP_CLASS}>
+      {opt && <FilterIcon icon={opt.icon} iconUrl={opt.iconUrl} />}
+      <span className={ELEMENT_COLORS[element].text}>{opt?.label ?? element}</span>
+    </span>
+  );
+};
+
+/** キャラの武器種表示（フィルターの武器ボタンと同じ見た目: アイコン + 武器種名） */
+export const WeaponChip: React.FC<{ weaponType: WeaponType }> = ({ weaponType }) => {
+  const opt = WEAPON_FILTER_OPTIONS.find(o => o.id === weaponType);
+  return (
+    <span className={CHIP_CLASS}>
+      {opt && <FilterIcon icon={opt.icon} iconUrl={opt.iconUrl} />}
+      <span>{opt?.label ?? weaponType}</span>
+    </span>
+  );
+};

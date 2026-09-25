@@ -12,12 +12,13 @@ import { PartyConfigModal } from './components/PartyConfigModal';
 import { RotationSummaryModal } from './components/RotationSummaryModal';
 import { HelpGuideModal } from './components/HelpGuideModal';
 import { SaveLoadModal } from './components/SaveLoadModal';
+import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { ROTATION_PRESETS } from './data/presets';
 import { CharacterConfig, Stint, PartyPreset, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot } from './utils/storage';
+import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter } from './utils/legacyMigration';
 import { isEmptySlotCharacter } from './data/characters';
@@ -226,6 +227,27 @@ export default function App() {
     setTimeout(() => setOverwriteSaved(false), 2000);
   };
 
+  // 「名前をつけて保存」: 現在の状態を新しい保存スロットとして保存し、読み込み中の編成にする
+  const [isSaveAsOpen, setIsSaveAsOpen] = useState<boolean>(false);
+  const activeSlot = savedSlots.find(s => s.id === activeSlotId) ?? null;
+  const handleSaveAs = (name: string, description?: string) => {
+    const newSlot: SavedRotationSlot = {
+      id: `slot_${Date.now()}`,
+      name,
+      description,
+      updatedAt: new Date().toISOString(),
+      characters,
+      stints,
+      loopStartTime,
+      totalDuration,
+      switchDelay,
+      actionDelay,
+    };
+    setSavedSlots(saveSlot(newSlot));
+    setActiveSlotId(newSlot.id);
+    setIsSaveAsOpen(false);
+  };
+
   const handleCopyNotation = () => {
     navigator.clipboard.writeText(rotationNotation);
     setCopiedNotation(true);
@@ -286,6 +308,7 @@ export default function App() {
         activeSlotId={activeSlotId}
         onOverwriteActiveSlot={handleOverwriteActiveSlot}
         overwriteSaved={overwriteSaved}
+        onOpenSaveAs={() => setIsSaveAsOpen(true)}
         onSelectSavedSlot={(slot) => handleLoadCustomSlot({
           characters: slot.characters,
           stints: slot.stints,
@@ -389,6 +412,14 @@ export default function App() {
         onResetToDefault={handleResetToDefault}
       />
 
+      {/* 名前をつけて保存 Popup */}
+      <SaveAsDialog
+        isOpen={isSaveAsOpen}
+        initialName={buildDefaultSlotName(characters, totalDuration, activeSlot)}
+        onClose={() => setIsSaveAsOpen(false)}
+        onSave={handleSaveAs}
+      />
+
       {/* Party Configuration Modal */}
       <PartyConfigModal
         isOpen={isPartyModalOpen}
@@ -397,6 +428,10 @@ export default function App() {
         stints={stints}
         database={database}
         onUpdatePartyAndStints={(newChars, newStints) => {
+          // パーティ構成が変わったら保存スロットとのつながりを切る（「保存スロットに未保存」表示）
+          if (JSON.stringify(newChars) !== JSON.stringify(characters)) {
+            setActiveSlotId(null);
+          }
           setCharacters(newChars);
           setStints(newStints);
         }}

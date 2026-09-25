@@ -1,5 +1,6 @@
 import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
 import { migrateLegacyCharacter } from './legacyMigration';
+import { isEmptySlotCharacter } from '../data/characters';
 
 const ACTIVE_ROTATION_KEY = 'genshin_rotation_current_state_v2';
 const SAVED_SLOTS_KEY = 'genshin_rotation_saved_slots_v2';
@@ -118,4 +119,19 @@ export function deleteSlot(slotId: string): SavedRotationSlot[] {
     console.warn('Failed to delete slot from localStorage:', e);
     return getSavedSlots();
   }
+}
+
+/**
+ * 「名前をつけて保存」の初期編成名
+ * - 保存スロットを読み込み中ならその保存編成名
+ * - 未保存なら「編成キャラ名（ローテーション時間）」（未設定スロットは除く）
+ */
+export function buildDefaultSlotName(
+  characters: CharacterConfig[],
+  totalDuration: number,
+  activeSlot?: SavedRotationSlot | null,
+): string {
+  if (activeSlot) return activeSlot.name;
+  const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
+  return `${charNames} (${totalDuration.toFixed(1)}s)`;
 }

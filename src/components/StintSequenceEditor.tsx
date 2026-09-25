@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useLayoutEffect } from 'react';
 import { 
   Plus, 
   Trash2, 
@@ -71,6 +71,26 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const [showGuideBanner, setShowGuideBanner] = useState(true);
   const [confirmClearStints, setConfirmClearStints] = useState(false);
 
+  // 出場ブロックの追加・削除でガントチャート（このエリアより上）の高さが変わっても、
+  // 見た目上スクロールしないよう、変更前後のこのエリアの位置差分だけスクロール位置を補正する
+  const sectionRef = useRef<HTMLElement>(null);
+  const pendingScrollAnchorTop = useRef<number | null>(null);
+
+  const updateStintsKeepingScroll = (next: Stint[]) => {
+    if (sectionRef.current) {
+      pendingScrollAnchorTop.current = sectionRef.current.getBoundingClientRect().top;
+    }
+    onUpdateStints(next);
+  };
+
+  useLayoutEffect(() => {
+    const prevTop = pendingScrollAnchorTop.current;
+    if (prevTop === null || !sectionRef.current) return;
+    pendingScrollAnchorTop.current = null;
+    const delta = sectionRef.current.getBoundingClientRect().top - prevTop;
+    if (Math.abs(delta) >= 1) window.scrollBy(0, delta);
+  });
+
   const characterMap = useMemo(() => {
     const map = new Map<string, CharacterConfig>();
     characters.forEach(c => map.set(c.id, c));
@@ -121,44 +141,26 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     };
     const next = [...stints];
     next.splice(index + 1, 0, cloned);
-    onUpdateStints(sanitizeStintsForUpdate(next));
+    updateStintsKeepingScroll(sanitizeStintsForUpdate(next));
   };
 
   const removeStint = (index: number) => {
-    if (stints.length <= 1) return;
     const next = stints.filter((_, i) => i !== index);
-    onUpdateStints(sanitizeStintsForUpdate(next));
+    updateStintsKeepingScroll(sanitizeStintsForUpdate(next));
   };
 
   const addStint = (characterId: string) => {
     const char = characterMap.get(characterId);
     if (!char) return;
     
-    // Default with the character's primary skill or attack
-    const defaultActionDef = char.availableActions[0] || {
-      id: 'default_action',
-      name: '通常攻撃',
-      shortName: 'N1',
-      type: 'normal' as ActionType,
-      defaultDuration: 0.5
-    };
-
+    // アクションは空で登録（2番目以降のキャラ交代は計算時に自動挿入される）
     const newStint: Stint = {
       id: `stint_${Date.now()}`,
       characterId,
       note: `${char.name}の出場`,
-      actions: [
-        {
-          id: `act_${Date.now()}`,
-          actionTypeId: defaultActionDef.id,
-          name: defaultActionDef.name,
-          shortName: defaultActionDef.shortName,
-          type: defaultActionDef.type,
-          duration: defaultActionDef.defaultDuration,
-        }
-      ]
+      actions: [],
     };
-    onUpdateStints(sanitizeStintsForUpdate([...stints, newStint]));
+    updateStintsKeepingScroll(sanitizeStintsForUpdate([...stints, newStint]));
   };
 
   // --- Action Micro Operations ---
@@ -205,7 +207,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     if (!targetStint) return;
 
     const userActions = targetStint.actions.filter(a => a.type !== 'swap');
-    if (userActions.length <= 1) return;
+    if (userActions.length === 0) return;
 
     const nextStints = [...stints];
     nextStints[stintIndex] = {
@@ -243,7 +245,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   };
 
   return (
-    <section className="bg-slate-900 border-b border-slate-800 p-4">
+    <section ref={sectionRef} className="bg-slate-900 border-b border-slate-800 p-4">
       <div className="max-w-7xl mx-auto space-y-4">
         
         {/* Sticky Header Container: Section Title through Action Legend & Description */}
@@ -267,7 +269,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     <button
                       type="button"
                       onClick={() => {
-                        onUpdateStints([]);
+                        updateStintsKeepingScroll([]);
                         setConfirmClearStints(false);
                       }}
                       className="px-2.5 py-1 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors shadow-sm"
@@ -607,7 +609,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     removeActionFromStint(selectedActionInfo.stintIndex, selectedActionInfo.actIndex);
                     onSelectAction?.('', '');
                   }}
-                  disabled={selectedActionInfo.stint.actions.length <= 1}
+                  disabled={selectedActionInfo.action.type === 'swap'}
                   className="px-2 py-1 rounded bg-red-950 hover:bg-red-800 text-red-200 text-xs border border-red-800 disabled:opacity-20 flex items-center gap-1"
                   title="このアクションを削除"
                 >
@@ -1027,7 +1029,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* Delete */}
                       <button
                         onClick={() => removeStint(stintIndex)}
-                        disabled={stints.length <= 1}
                         className="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none"
                         title="登場ブロックを削除"
                       >
@@ -1231,7 +1232,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               {/* Remove Action */}
                               <button
                                 onClick={() => removeActionFromStint(stintIndex, actIdx)}
-                                disabled={stint.actions.filter(a => a.type !== 'swap').length <= 1}
+                                disabled={stint.actions.filter(a => a.type !== 'swap').length === 0}
                                 className="text-slate-500 hover:text-red-400 disabled:opacity-20 ml-0.5"
                                 title="アクション削除"
                               >

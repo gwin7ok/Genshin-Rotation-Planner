@@ -27,7 +27,8 @@ import {
   CooldownSpan, 
   CharacterRuntimeState 
 } from '../types/genshin';
-import { ELEMENT_COLORS, BUFF_DEFINITIONS } from '../data/characters';
+import { ELEMENT_COLORS } from '../data/characters';
+import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { swapStintsForCharacters } from '../utils/stintReorder';
 
@@ -430,27 +431,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           });
         }
 
-        // New Buffs triggered in Cycle 2
-        const buffIdsToTrigger = matchedCharActionDef?.triggersBuffIds || [];
-        buffIdsToTrigger.forEach(buffId => {
-          const buffDef = BUFF_DEFINITIONS[buffId];
-          if (buffDef) {
-            cycle2NewBuffs.push({
-              id: `c2_buff_${buffId}_${c2ActStart}`,
-              buffId: buffDef.id,
-              name: buffDef.name,
-              sourceCharacterId: buffDef.sourceCharacterId || char.id,
-              sourceType: buffDef.sourceType,
-              startTime: c2ActStart,
-              endTime: c2ActStart + buffDef.duration,
-              duration: buffDef.duration,
-              color: buffDef.color,
-              description: buffDef.description,
-              isSnapshot: buffDef.snapshotable,
-              isCarryOver: false,
-            });
-          }
-        });
+        // 2周目で発動する効果バー（効果継続時間から作る）
+        const c2EffectSpan = buildActionEffectSpan(char, act, matchedCharActionDef, c2ActStart, 'c2_effect');
+        if (c2EffectSpan) cycle2NewBuffs.push({ ...c2EffectSpan, isCarryOver: false });
 
         return {
           id: `c2_${act.id}`,
@@ -514,11 +497,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const minSec = Math.floor(cycle2StartTime);
     const maxSec = Math.ceil(cycle2EndTime);
     for (let t = minSec; t <= maxSec; t += 0.5) {
-      const active = allCycle2Buffs.filter(b => b.startTime <= t && b.endTime >= t);
+      // 同じアクション由来のバーが重なっても1つとして数える
+      const { count, names } = countDistinctActiveBuffs(allCycle2Buffs, t);
       buffSynergyPoints.push({
         time: t,
-        count: active.length,
-        activeBuffs: active.map(b => b.name),
+        count,
+        activeBuffs: names,
       });
     }
 

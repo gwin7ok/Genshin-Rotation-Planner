@@ -2392,6 +2392,33 @@
         "defaultDuration": 0.85
       },
       {
+        "id": "candace_q_c1",
+        "name": "元素爆発: 聖儀·灰鴒の呼び潮 (1凸)",
+        "shortName": "Q (1凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 12,
+        "frames": {
+          "total": 51,
+          "hitmark": 33,
+          "cancels": {
+            "attack": 50,
+            "dash": 50,
+            "jump": 50,
+            "swap": 49
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.85,
+        "buttonLabel": "Q (1凸)",
+        "description": "1凸: 聖儀·灰鴒の呼び潮の赤冠より授かりし祝福状態の継続時間+3秒。"
+      },
+      {
         "id": "candace_dash",
         "name": "ダッシュ",
         "shortName": "D",
@@ -4422,6 +4449,34 @@
         "defaultDuration": 0.917
       },
       {
+        "id": "dahlia_q_c4",
+        "name": "元素爆発: 純光の祈り (4凸)",
+        "shortName": "Q (4凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 55,
+          "hitmark": 30,
+          "cancels": {
+            "attack": 53,
+            "skill": 52,
+            "dash": 51,
+            "jump": 51,
+            "swap": 52
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "西風の恵みの継続時間"
+        },
+        "defaultDuration": 0.917,
+        "buttonLabel": "Q (4凸)",
+        "description": "4凸: 元素爆発**純光の祈り**の「西風の恵み」効果の継続時間+3秒。"
+      },
+      {
         "id": "dahlia_dash",
         "name": "ダッシュ",
         "shortName": "D",
@@ -5526,6 +5581,34 @@
           "effectDuration": "ルミドゥースの瓶·ランク3の継続時間"
         },
         "defaultDuration": 1.85
+      },
+      {
+        "id": "emilie_q_c4",
+        "name": "元素爆発: アロマティック·アナライズ (4凸)",
+        "shortName": "Q (4凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 13.5,
+        "effectDuration": 4.8,
+        "frames": {
+          "total": 111,
+          "hitmark": 12,
+          "cancels": {
+            "attack": 108,
+            "dash": 97,
+            "jump": 98,
+            "walk": 96,
+            "swap": 105
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "ルミドゥースの瓶·ランク3の継続時間"
+        },
+        "defaultDuration": 1.85,
+        "buttonLabel": "Q (4凸)",
+        "description": "4凸: アロマティック·アナライズの継続時間+2秒。かつ、敵が薫る雫のターゲットとして選ばれる間隔-0.3秒。"
       },
       {
         "id": "emilie_dash",
@@ -10774,6 +10857,33 @@
         "defaultDuration": 0.867
       },
       {
+        "id": "kukishinobu_e_c2",
+        "name": "元素スキル: 越祓雷草の輪 (2凸)",
+        "shortName": "E (2凸)",
+        "buttonLabel": "E (2凸)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 52,
+          "hitmark": 11,
+          "cancels": {
+            "attack": 50,
+            "dash": 12,
+            "jump": 11,
+            "swap": 50
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.867,
+        "description": "2凸: 越祓草輪の継続時間+3秒。"
+      },
+      {
         "id": "kukishinobu_q",
         "name": "元素爆発: 御詠鳴神刈山祭",
         "shortName": "Q",
@@ -15578,6 +15688,31 @@
         "defaultDuration": 1.167
       },
       {
+        "id": "rosaria_q_c2",
+        "name": "元素爆発: 臨終の聖礼 (2凸)",
+        "shortName": "Q (2凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 12,
+        "frames": {
+          "total": 70,
+          "cancels": {
+            "dash": 57,
+            "jump": 59,
+            "swap": 69
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.167,
+        "buttonLabel": "Q (2凸)",
+        "description": "2凸: 臨終の聖礼で創られる氷槍の継続時間+4秒。"
+      },
+      {
         "id": "rosaria_dash",
         "name": "ダッシュ",
         "shortName": "D",
@@ -16379,6 +16514,34 @@
         "defaultDuration": 1.667
       },
       {
+        "id": "shenhe_q_c2",
+        "name": "元素爆発: 神女遣霊真訣 (2凸)",
+        "shortName": "Q (2凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 18,
+        "frames": {
+          "total": 100,
+          "hitmark": 78,
+          "cancels": {
+            "attack": 99,
+            "dash": 78,
+            "jump": 79,
+            "walk": 98,
+            "swap": 98
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.667,
+        "buttonLabel": "Q (2凸)",
+        "description": "2凸: 神女遣霊真訣の継続時間+6秒。領域内フィールド上キャラクターが与える氷元素ダメージの会心ダメージ+15%。"
+      },
+      {
         "id": "shenhe_dash",
         "name": "ダッシュ",
         "shortName": "D",
@@ -16724,6 +16887,33 @@
           "effectDuration": "継続時間"
         },
         "defaultDuration": 0.5
+      },
+      {
+        "id": "sigewinne_q_c4",
+        "name": "元素爆発: 過飽和まごころお注射 (4凸)",
+        "shortName": "Q (4凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 5.5,
+        "frames": {
+          "total": 30,
+          "cancels": {
+            "attack": 28,
+            "swap": 4,
+            "walk": 17,
+            "dash": 0,
+            "jump": 0
+          },
+          "source": "burst.go:endLag"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.5,
+        "buttonLabel": "Q (4凸)",
+        "description": "4凸: 過飽和まごころお注射の継続時間+3秒。"
       },
       {
         "id": "sigewinne_dash",
@@ -17114,6 +17304,34 @@
           "effectDuration": "継続時間"
         },
         "defaultDuration": 1.083
+      },
+      {
+        "id": "sucrose_q_c2",
+        "name": "元素爆発: 禁·風霊作成·七五同構弐型 (2凸)",
+        "shortName": "Q (2凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 8,
+        "frames": {
+          "total": 65,
+          "cancels": {
+            "attack": 49,
+            "charge": 48,
+            "skill": 48,
+            "dash": 47,
+            "jump": 47,
+            "swap": 47
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.083,
+        "buttonLabel": "Q (2凸)",
+        "description": "2凸: 禁·風霊作成·七五同構弐型のスキル継続時間+2秒。"
       },
       {
         "id": "sucrose_dash",
@@ -21710,6 +21928,29 @@
         "defaultDuration": 1.333
       },
       {
+        "id": "xiangling_q_c4",
+        "name": "元素爆発: 旋火輪 (4凸)",
+        "shortName": "Q (4凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 14,
+        "frames": {
+          "total": 80,
+          "cancels": {
+            "swap": 79
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.333,
+        "buttonLabel": "Q (4凸)",
+        "description": "4凸: 旋火輪の継続時間+40%。"
+      },
+      {
         "id": "xiangling_dash",
         "name": "ダッシュ",
         "shortName": "D",
@@ -22487,6 +22728,33 @@
           "effectDuration": "継続時間"
         },
         "defaultDuration": 0.667
+      },
+      {
+        "id": "xingqiu_q_c2",
+        "name": "元素爆発: 古華剣·裁雨留虹 (2凸)",
+        "shortName": "Q (2凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 18,
+        "frames": {
+          "total": 40,
+          "hitmark": 18,
+          "cancels": {
+            "attack": 33,
+            "skill": 33,
+            "dash": 33,
+            "jump": 33
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.667,
+        "buttonLabel": "Q (2凸)",
+        "description": "2凸: 古華剣·裁雨留虹の継続時間+3秒。 その他、剣雨攻撃を受けた敵の水元素耐性-15%、継続時間4秒。"
       },
       {
         "id": "xingqiu_dash",
@@ -23502,6 +23770,33 @@
           "effectDuration": "継続時間"
         },
         "defaultDuration": 1.883
+      },
+      {
+        "id": "yoimiya_q_c1",
+        "name": "元素爆発: 琉金の雲間草 (1凸)",
+        "shortName": "Q (1凸)",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 14,
+        "frames": {
+          "total": 113,
+          "hitmark": 75,
+          "cancels": {
+            "skill": 112,
+            "dash": 111,
+            "jump": 112,
+            "swap": 109
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.883,
+        "buttonLabel": "Q (1凸)",
+        "description": "1凸: 琉金の雲間草の琉金の炎の継続時間+4秒。 また、宵宮自身が発動した琉金の炎の影響を受けた敵が継続時間内に倒されると、宵宮の攻撃力+20%、継続時間20秒。"
       },
       {
         "id": "yoimiya_dash",

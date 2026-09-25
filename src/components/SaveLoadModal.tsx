@@ -79,8 +79,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const [activeTab, setActiveTab] = useState<'slots' | 'json'>('slots');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
 
-  // プリセット読込直後は、保存名の初期値をプリセット名にする（キャラ変更による自動命名で上書きしない）
-  const presetNameForSlotRef = useRef<string | null>(null);
+  // プリセット読込直後は、編成名・メモの初期値をプリセットの名前・説明にする（キャラ変更による自動命名で上書きしない）
+  const presetForSlotRef = useRef<{ name: string; description: string } | null>(null);
 
   // 開いたときだけリセットするもの
   useEffect(() => {
@@ -88,7 +88,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       setSaveSuccessMsg(null);
       setDuplicateSlot(null);
     } else {
-      presetNameForSlotRef.current = null;
+      presetForSlotRef.current = null;
     }
   }, [isOpen]);
 
@@ -98,9 +98,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       const slots = getSavedSlots();
       setSavedSlots(slots);
       const activeSlot = slots.find(s => s.id === activeSlotId) ?? null;
-      setNewSlotName(presetNameForSlotRef.current ?? buildDefaultSlotName(characters, totalDuration, activeSlot));
+      setNewSlotName(presetForSlotRef.current?.name ?? buildDefaultSlotName(characters, totalDuration, activeSlot));
       // 保存編成を読み込み中なら、そのメモも初期値にする
-      setNewSlotDesc(presetNameForSlotRef.current ? '' : (activeSlot?.description ?? ''));
+      setNewSlotDesc(presetForSlotRef.current ? presetForSlotRef.current.description : (activeSlot?.description ?? ''));
     }
   }, [isOpen, characters, totalDuration, activeSlotId]);
 
@@ -379,8 +379,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                   onChange={(e) => {
                     const p = ROTATION_PRESETS.find(x => x.id === e.target.value);
                     if (p) {
-                      presetNameForSlotRef.current = p.name;
+                      presetForSlotRef.current = { name: p.name, description: p.description };
                       setNewSlotName(p.name);
+                      setNewSlotDesc(p.description);
                       onSelectPreset(p);
                       setSaveSuccessMsg(`プリセット「${p.name}」を読み込みました。`);
                       setTimeout(() => setSaveSuccessMsg(null), 3000);

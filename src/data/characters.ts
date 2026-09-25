@@ -1,4 +1,4 @@
-import { ActionDefinition, CharacterConfig, ElementType, WeaponType, BuffDefinition } from '../types/genshin';
+import { ActionDefinition, CharacterConfig, ElementType, WeaponType } from '../types/genshin';
 import masterDataJson from './characters_master_data.json';
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; text: string; light: string; hex: string }> = {
@@ -63,8 +63,8 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '絶縁の旗印 4セット',
     constellation: 0,
     availableActions: [
-      { id: 'raiden_e', name: '元素スキル: 神悪憑き・雷罰悪曜の眼', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['raiden_eye_buff'], description: '雷罰悪曜の眼を展開。味方の爆発ダメUP & 追撃' },
-      { id: 'raiden_q', name: '元素爆発: 奥義・夢想の一心', shortName: 'Q', type: 'burst', defaultDuration: 1.8, startsBurstCooldown: true, triggersBuffIds: ['raiden_burst_state'], description: '無想の一太刀を発動し夢想の一心状態に入る(7秒)' },
+      { id: 'raiden_e', name: '元素スキル: 神悪憑き・雷罰悪曜の眼', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, description: '雷罰悪曜の眼を展開。味方の爆発ダメUP & 追撃' },
+      { id: 'raiden_q', name: '元素爆発: 奥義・夢想の一心', shortName: 'Q', type: 'burst', defaultDuration: 1.8, startsBurstCooldown: true, description: '無想の一太刀を発動し夢想の一心状態に入る(7秒)' },
       { id: 'raiden_combo', name: '爆発中コンボ: 3N3C + N1C', shortName: '3N3C+N1C', type: 'combo', defaultDuration: 6.8, description: '夢想の一心中の最高DPSコンボ。味方全員に粒子/エネルギーを大量供給' },
       { id: 'raiden_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
       { id: 'raiden_ca', name: '重撃', shortName: 'C', type: 'charged', defaultDuration: 0.9 },
@@ -85,7 +85,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     constellation: 5,
     availableActions: [
       { id: 'bennett_e', name: '元素スキル: 情熱過剰久遠 (一押し)', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, description: '炎粒子を2〜3個生成 (CT:4.0s)' },
-      { id: 'bennett_q', name: '元素爆発: 美冒険の輝き', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['bennett_q_field', 'noblesse_4p'], description: '鼓舞エリア生成(12s): 自身の基礎攻撃力参照の特大攻撃力加算+高頻度回復' },
+      { id: 'bennett_q', name: '元素爆発: 美冒険の輝き', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, description: '鼓舞エリア生成(12s): 自身の基礎攻撃力参照の特大攻撃力加算+高頻度回復' },
       { id: 'bennett_e_burst', name: '元素スキル (爆発エリア内CT短縮)', shortName: 'E (短縮)', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 2, description: '鼓舞エリア内ではCTが2秒に半減' },
       { id: 'bennett_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
       { id: 'bennett_dash', name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
@@ -104,8 +104,8 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '絶縁の旗印 4セット',
     constellation: 4,
     availableActions: [
-      { id: 'xiangling_q', name: '元素爆発: 旋火輪 (4凸14秒)', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['xiangling_pyronado'], description: '超強力な持続炎追撃。発動時の攻撃力・ダメバフをスナップショット(14s)' },
-      { id: 'xiangling_e', name: '元素スキル: グゥオパァー出撃', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['guoba_pepper'], description: 'グゥオパァー召喚(7.5s)。炎ブレス4回、唐辛子で攻撃+10%(10s)' },
+      { id: 'xiangling_q', name: '元素爆発: 旋火輪 (4凸14秒)', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, description: '超強力な持続炎追撃。発動時の攻撃力・ダメバフをスナップショット(14s)' },
+      { id: 'xiangling_e', name: '元素スキル: グゥオパァー出撃', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, description: 'グゥオパァー召喚(7.5s)。炎ブレス4回、唐辛子で攻撃+10%(10s)' },
       { id: 'xiangling_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25 },
       { id: 'xiangling_dash', name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: 0.2 },
     ]
@@ -123,7 +123,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '旧貴族 / 絶縁の旗印',
     constellation: 6,
     availableActions: [
-      { id: 'xingqiu_q', name: '元素爆発: 古華剣・裁雨留虹', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, triggersBuffIds: ['xingqiu_raincutter'], description: '剣雨による追撃(15〜18s)。高頻度水付着と中断耐性・被ダメ軽減' },
+      { id: 'xingqiu_q', name: '元素爆発: 古華剣・裁雨留虹', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, description: '剣雨による追撃(15〜18s)。高頻度水付着と中断耐性・被ダメ軽減' },
       { id: 'xingqiu_e', name: '元素スキル: 古華剣・画雨籠山', shortName: 'E', type: 'skill', defaultDuration: 1.1, startsSkillCooldown: true, description: '2連撃水ダメージ＋水粒子5個生成 (CT: 21.0s)' },
       { id: 'xingqiu_e2', name: '元素スキル (祭礼リセット2回目)', shortName: 'E (祭礼)', type: 'skill_reset', defaultDuration: 1, startsSkillCooldown: true, description: '祭礼の剣効果で即座にもう一度Eを撃ち合計水粒子10個を回収' },
       { id: 'xingqiu_n1', name: '通常攻撃 1段目 (雨すだれ誘発)', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25, description: '剣雨追撃を1回誘発' },
@@ -143,7 +143,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '絶縁の旗印 4セット',
     constellation: 0,
     availableActions: [
-      { id: 'yelan_q', name: '元素爆発: 淵曜の玲瓏', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, triggersBuffIds: ['yelan_q_buff'], description: '玄擲玲瓏展開(15s): 通常攻撃に連動して水追撃。時間経過で出場キャラの与ダメ最大+50%UP' },
+      { id: 'yelan_q', name: '元素爆発: 淵曜の玲瓏', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, description: '玄擲玲瓏展開(15s): 通常攻撃に連動して水追撃。時間経過で出場キャラの与ダメ最大+50%UP' },
       { id: 'yelan_e', name: '元素スキル: 幽奇の絡繰り針', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, description: '疾走して敵を縛り水ダメージ＋水粒子4個生成 (CT: 10.0s)' },
       { id: 'yelan_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.25 },
       { id: 'yelan_breakthrough', name: '打破の矢 (重撃)', shortName: '打破', type: 'charged', defaultDuration: 0.6 },
@@ -162,7 +162,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '燃え盛る炎の魔女 4セット',
     constellation: 1,
     availableActions: [
-      { id: 'hutao_e', name: '元素スキル: 蝶導来世', shortName: 'E', type: 'skill', defaultDuration: 0.6, startsSkillCooldown: true, triggersBuffIds: ['hutao_paramita'], description: '冥蝶の舞状態(9s)突入。HPを消費し攻撃力大幅上昇＋炎元素付与' },
+      { id: 'hutao_e', name: '元素スキル: 蝶導来世', shortName: 'E', type: 'skill', defaultDuration: 0.6, startsSkillCooldown: true, description: '冥蝶の舞状態(9s)突入。HPを消費し攻撃力大幅上昇＋炎元素付与' },
       { id: 'hutao_n1c_jump', name: '重撃ループ: N1C + ジャンプキャンセル', shortName: 'N1CJ', type: 'combo', defaultDuration: 0.85, description: '無凸基本コンボ' },
       { id: 'hutao_n1c_dash', name: '重撃ループ: N1C + ダッシュキャンセル (1凸)', shortName: 'N1CD', type: 'combo', defaultDuration: 0.72, description: '1凸でスタミナ無消費の最高速蒸発コンボ' },
       { id: 'hutao_burst', name: '元素爆発: 安神秘法', shortName: 'Q', type: 'burst', defaultDuration: 1.7, startsBurstCooldown: true, description: '広範囲に強力な炎超大ダメージ＋自己回復' },
@@ -181,7 +181,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '千岩牢固 4セット',
     constellation: 0,
     availableActions: [
-      { id: 'zhongli_hold_e', name: '元素スキル: 長押し (玉璋シールド)', shortName: '長押しE', type: 'skill_hold', defaultDuration: 1.5, startsSkillCooldown: true, triggersBuffIds: ['zhongli_shield', 'tenacity_4p'], description: '全元素・物理20%耐性ダウン付き最強シールド(20s) (CT: 12.0s)' },
+      { id: 'zhongli_hold_e', name: '元素スキル: 長押し (玉璋シールド)', shortName: '長押しE', type: 'skill_hold', defaultDuration: 1.5, startsSkillCooldown: true, description: '全元素・物理20%耐性ダウン付き最強シールド(20s) (CT: 12.0s)' },
       { id: 'zhongli_q', name: '元素爆発: 天星', shortName: 'Q', type: 'burst', defaultDuration: 2.1, startsBurstCooldown: true, description: '巨大隕石落下で石化(3.5s〜4s)付与 (CT: 12.0s)' },
     ]
   },
@@ -198,9 +198,9 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '翠緑の影 4セット',
     constellation: 0,
     availableActions: [
-      { id: 'kazuha_hold_e_plunge', name: '長押しスキル＋乱れ嵐斬 (落下)', shortName: '長E+PA', type: 'skill_hold', defaultDuration: 1.9, startsSkillCooldown: true, triggersBuffIds: ['kazuha_buff', 'vv_shred'], cooldown: 9, description: '広範囲集敵＋拡散による元素ダメバフ(8s)＋翠緑耐性-40%(10s)' },
-      { id: 'kazuha_tap_e_plunge', name: '一押しスキル＋乱れ嵐斬 (落下)', shortName: '短E+PA', type: 'skill', defaultDuration: 1.4, startsSkillCooldown: true, triggersBuffIds: ['kazuha_buff', 'vv_shred'], cooldown: 6, description: '素早い集敵＋拡散バフ・デバフ付与' },
-      { id: 'kazuha_q', name: '元素爆発: 万葉の一刀', shortName: 'Q', type: 'burst', defaultDuration: 1.6, startsBurstCooldown: true, triggersBuffIds: ['kazuha_burst_slash'], description: '流風秋野を展開(8s)。定期的に拡散を起こし継続バフ更新' },
+      { id: 'kazuha_hold_e_plunge', name: '長押しスキル＋乱れ嵐斬 (落下)', shortName: '長E+PA', type: 'skill_hold', defaultDuration: 1.9, startsSkillCooldown: true, cooldown: 9, description: '広範囲集敵＋拡散による元素ダメバフ(8s)＋翠緑耐性-40%(10s)' },
+      { id: 'kazuha_tap_e_plunge', name: '一押しスキル＋乱れ嵐斬 (落下)', shortName: '短E+PA', type: 'skill', defaultDuration: 1.4, startsSkillCooldown: true, cooldown: 6, description: '素早い集敵＋拡散バフ・デバフ付与' },
+      { id: 'kazuha_q', name: '元素爆発: 万葉の一刀', shortName: 'Q', type: 'burst', defaultDuration: 1.6, startsBurstCooldown: true, description: '流風秋野を展開(8s)。定期的に拡散を起こし継続バフ更新' },
     ]
   },
   {
@@ -236,8 +236,8 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '黄金の劇団 4セット',
     constellation: 0,
     availableActions: [
-      { id: 'furina_e', name: '元素スキル: サロン・ソリティア', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, triggersBuffIds: ['furina_salon_members'], description: 'サロンメンバー召喚(30s)。自動攻撃と味方HP消費 (CT: 20.0s)' },
-      { id: 'furina_q', name: '元素爆発: 万民の歓呼', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, triggersBuffIds: ['furina_fanfare'], description: 'もろびとこぞりて(18s)。テンション蓄積に応じて味方全員に最大+75%の全ダメバフ' },
+      { id: 'furina_e', name: '元素スキル: サロン・ソリティア', shortName: 'E', type: 'skill', defaultDuration: 0.9, startsSkillCooldown: true, description: 'サロンメンバー召喚(30s)。自動攻撃と味方HP消費 (CT: 20.0s)' },
+      { id: 'furina_q', name: '元素爆発: 万民の歓呼', shortName: 'Q', type: 'burst', defaultDuration: 1.3, startsBurstCooldown: true, description: 'もろびとこぞりて(18s)。テンション蓄積に応じて味方全員に最大+75%の全ダメバフ' },
       { id: 'furina_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
     ]
   },
@@ -272,8 +272,8 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '深林の記憶 4セット',
     constellation: 2,
     availableActions: [
-      { id: 'nahida_hold_e', name: '元素スキル: 所聞遍計 (長押しスキャン)', shortName: '長押しE', type: 'skill_hold', defaultDuration: 1.2, startsSkillCooldown: true, triggersBuffIds: ['nahida_tri_karma', 'deepwood_4p'], cooldown: 6, description: '敵8体に滅浄三業マーク付与(25s)。草元素反応に連動して追撃＋草耐性-30%' },
-      { id: 'nahida_q', name: '元素爆発: 心景幻成 (摩耶の宮殿)', shortName: 'Q', type: 'burst', defaultDuration: 1.5, startsBurstCooldown: true, triggersBuffIds: ['nahida_shrine_buff'], description: '摩耶の宮殿展開(15s): 出場キャラの元素熟知最大+250UP' },
+      { id: 'nahida_hold_e', name: '元素スキル: 所聞遍計 (長押しスキャン)', shortName: '長押しE', type: 'skill_hold', defaultDuration: 1.2, startsSkillCooldown: true, cooldown: 6, description: '敵8体に滅浄三業マーク付与(25s)。草元素反応に連動して追撃＋草耐性-30%' },
+      { id: 'nahida_q', name: '元素爆発: 心景幻成 (摩耶の宮殿)', shortName: 'Q', type: 'burst', defaultDuration: 1.5, startsBurstCooldown: true, description: '摩耶の宮殿展開(15s): 出場キャラの元素熟知最大+250UP' },
       { id: 'nahida_n1', name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal', defaultDuration: 0.3 },
     ]
   },
@@ -291,7 +291,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     constellation: 0,
     availableActions: [
       { id: 'alhaitham_q', name: '元素爆発: 殊境・顕象結縛', shortName: 'Q', type: 'burst', defaultDuration: 1.8, startsBurstCooldown: true, description: '琢光鏡0枚時発動で2秒後に鏡3枚獲得' },
-      { id: 'alhaitham_hold_e_plunge', name: '空打ち長押しE＋落下攻撃', shortName: '空E+PA', type: 'skill_hold', defaultDuration: 1.2, startsSkillCooldown: true, triggersBuffIds: ['alhaitham_mirror_3'], description: '即座に琢光鏡2枚獲得' },
+      { id: 'alhaitham_hold_e_plunge', name: '空打ち長押しE＋落下攻撃', shortName: '空E+PA', type: 'skill_hold', defaultDuration: 1.2, startsSkillCooldown: true, description: '即座に琢光鏡2枚獲得' },
       { id: 'alhaitham_infusion_combo', name: '3鏡コンボ (通常攻撃+追撃)', shortName: '3鏡コンボ', type: 'combo', defaultDuration: 4, description: '琢光鏡3枚状態での高頻度草追撃' },
       { id: 'alhaitham_ca', name: '重撃 (琢光鏡+1枚更新)', shortName: 'C', type: 'charged', defaultDuration: 0.7, description: '固有天賦で琢光鏡を1枚追加' },
     ]
@@ -309,7 +309,7 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
     artifactSetName: '楽園の絶花 / 金メッキ',
     constellation: 2,
     availableActions: [
-      { id: 'shinobu_e', name: '元素スキル: 越祓雷草の輪 (2凸15s)', shortName: 'E', type: 'skill', defaultDuration: 0.7, startsSkillCooldown: true, triggersBuffIds: ['shinobu_ring'], description: '草輪展開(15s): 1.5秒ごとに自傷と周囲回復＆雷範囲攻撃。超開花の最強起爆役' },
+      { id: 'shinobu_e', name: '元素スキル: 越祓雷草の輪 (2凸15s)', shortName: 'E', type: 'skill', defaultDuration: 0.7, startsSkillCooldown: true, description: '草輪展開(15s): 1.5秒ごとに自傷と周囲回復＆雷範囲攻撃。超開花の最強起爆役' },
       { id: 'shinobu_q', name: '元素爆発: 御詠鳴神刈山祭', shortName: 'Q', type: 'burst', defaultDuration: 1.4, startsBurstCooldown: true, description: '雷範囲結界生成' },
     ]
   },
@@ -558,213 +558,3 @@ export const ALL_CHARACTERS_ROSTER: CharacterConfig[] = (() => {
 
   return Array.from(map.values());
 })();
-
-export const BUFF_DEFINITIONS: Record<string, BuffDefinition> = {
-  bennett_q_field: {
-    id: 'bennett_q_field',
-    name: 'ベネット: 鼓舞エリア',
-    sourceCharacterId: 'bennett',
-    sourceType: 'talent',
-    duration: 12.0,
-    description: '基礎攻撃力参照の特大攻撃力加算 + 高速回復',
-    color: '#ef4444',
-    statsEffect: '攻撃力 +1000~1200'
-  },
-  noblesse_4p: {
-    id: 'noblesse_4p',
-    name: '旧貴族4: 攻撃力+20%',
-    sourceType: 'artifact',
-    duration: 12.0,
-    description: '元素爆発発動後、パーティ全員の攻撃力+20%',
-    color: '#f59e0b',
-    statsEffect: '全キャラ攻撃力 +20%'
-  },
-  xiangling_pyronado: {
-    id: 'xiangling_pyronado',
-    name: '香菱: 旋火輪 (4凸)',
-    sourceCharacterId: 'xiangling',
-    sourceType: 'talent',
-    duration: 14.0,
-    description: 'キャラ周囲を旋回する持続炎追撃。スナップショット有効',
-    color: '#ea580c',
-    snapshotable: true,
-    statsEffect: '継続炎元素ダメージ'
-  },
-  guoba_pepper: {
-    id: 'guoba_pepper',
-    name: '香菱: グゥオパァー/唐辛子',
-    sourceCharacterId: 'xiangling',
-    sourceType: 'talent',
-    duration: 10.0,
-    description: 'グゥオパァー召喚(7.5s)＋唐辛子で攻撃力+10%(10s)',
-    color: '#fb923c',
-    statsEffect: '攻撃力 +10%'
-  },
-  xingqiu_raincutter: {
-    id: 'xingqiu_raincutter',
-    name: '行秋: 裁雨留虹 (剣雨追撃)',
-    sourceCharacterId: 'xingqiu',
-    sourceType: 'talent',
-    duration: 15.0,
-    description: '通常攻撃連動水剣雨 + 中断耐性 + ダメージ軽減',
-    color: '#0284c7',
-    statsEffect: '継続水付着 / 軽減+29%'
-  },
-  yelan_q_buff: {
-    id: 'yelan_q_buff',
-    name: '夜蘭: 気心の向くまま (最大+50%ダメバフ)',
-    sourceCharacterId: 'yelan',
-    sourceType: 'talent',
-    duration: 15.0,
-    description: '出場キャラの与ダメージが毎秒+3.5%上昇(最大50%)',
-    color: '#0ea5e9',
-    statsEffect: '与ダメバフ +1%〜+50%'
-  },
-  raiden_eye_buff: {
-    id: 'raiden_eye_buff',
-    name: '雷電将軍: 雷罰悪曜の眼',
-    sourceCharacterId: 'raiden',
-    sourceType: 'talent',
-    duration: 25.0,
-    description: '味方の元素爆発エネルギーに応じた爆発ダメUP + 控え雷追撃',
-    color: '#9333ea',
-    statsEffect: '爆発ダメ +20%〜+27%'
-  },
-  raiden_burst_state: {
-    id: 'raiden_burst_state',
-    name: '雷電将軍: 夢想の一心',
-    sourceCharacterId: 'raiden',
-    sourceType: 'talent',
-    duration: 7.0,
-    description: '雷元素付与・中断耐性・味方全員のエネルギーを最大約25回復',
-    color: '#a855f7',
-    statsEffect: '味方全員エネルギー回復'
-  },
-  zhongli_shield: {
-    id: 'zhongli_shield',
-    name: '鍾離: 玉璋シールド (全耐性-20%)',
-    sourceCharacterId: 'zhongli',
-    sourceType: 'talent',
-    duration: 20.0,
-    description: '完全中断耐性 + 付近の敵の全元素＆物理耐性-20%',
-    color: '#d97706',
-    statsEffect: '全元素・物理耐性 -20%'
-  },
-  tenacity_4p: {
-    id: 'tenacity_4p',
-    name: '千岩4: 攻撃+20% & シールド強化',
-    sourceType: 'artifact',
-    duration: 3.0,
-    description: 'スキル命中時、パーティ全員攻撃+20%＆シールド強化+30%',
-    color: '#b45309',
-    statsEffect: '全キャラ攻撃 +20%'
-  },
-  vv_shred: {
-    id: 'vv_shred',
-    name: '翠緑の影4: 拡散耐性-40%',
-    sourceType: 'artifact',
-    duration: 10.0,
-    description: '拡散した元素の敵耐性-40% (装備者が表にいる時のみ発動)',
-    color: '#14b8a6',
-    statsEffect: '拡散元素耐性 -40%'
-  },
-  kazuha_buff: {
-    id: 'kazuha_buff',
-    name: '万葉: 風物の詩詠 (元素ダメバフ)',
-    sourceCharacterId: 'kazuha',
-    sourceType: 'talent',
-    duration: 8.0,
-    description: '万葉の熟知に応じて拡散した元素のダメバフを味方に付与(例: 熟知1000で+40%)',
-    color: '#2dd4bf',
-    statsEffect: '該当元素ダメバフ +40%'
-  },
-  kazuha_burst_slash: {
-    id: 'kazuha_burst_slash',
-    name: '万葉: 流風秋野 (領域追撃)',
-    sourceCharacterId: 'kazuha',
-    sourceType: 'talent',
-    duration: 8.0,
-    description: '拡散属性を付与した風領域による2秒ごとの追撃',
-    color: '#0d9488',
-    statsEffect: '継続拡散追撃'
-  },
-  furina_salon_members: {
-    id: 'furina_salon_members',
-    name: 'フリーナ: サロンメンバー',
-    sourceCharacterId: 'furina',
-    sourceType: 'talent',
-    duration: 30.0,
-    description: '召喚物3体による自律高火力水追撃 (味方HP消費)',
-    color: '#0284c7',
-    statsEffect: '高火力水追撃'
-  },
-  furina_fanfare: {
-    id: 'furina_fanfare',
-    name: 'フリーナ: 万民の歓呼 (テンションダメバフ)',
-    sourceCharacterId: 'furina',
-    sourceType: 'talent',
-    duration: 18.0,
-    description: 'HP増減に応じて全員の与ダメ最大+75%UP & 受療補正',
-    color: '#38bdf8',
-    statsEffect: '全キャラ与ダメ最大 +75%'
-  },
-  nahida_tri_karma: {
-    id: 'nahida_tri_karma',
-    name: 'ナヒーダ: 滅浄三業マーク',
-    sourceCharacterId: 'nahida',
-    sourceType: 'talent',
-    duration: 25.0,
-    description: '元素反応に連動して2.5秒ごとに激化・開花を誘発する草追撃',
-    color: '#10b981',
-    statsEffect: '高頻度草付着'
-  },
-  deepwood_4p: {
-    id: 'deepwood_4p',
-    name: '深林4: 草元素耐性-30%',
-    sourceType: 'artifact',
-    duration: 8.0,
-    description: 'スキルまたは爆発命中時、敵の草耐性-30%',
-    color: '#059669',
-    statsEffect: '草耐性 -30%'
-  },
-  nahida_shrine_buff: {
-    id: 'nahida_shrine_buff',
-    name: 'ナヒーダ: 摩耶の宮殿 (熟知バフ)',
-    sourceCharacterId: 'nahida',
-    sourceType: 'talent',
-    duration: 15.0,
-    description: '領域内の出場キャラの元素熟知を最大250加算',
-    color: '#34d399',
-    statsEffect: '出場キャラ熟知 +250'
-  },
-  hutao_paramita: {
-    id: 'hutao_paramita',
-    name: '胡桃: 冥蝶の舞 (炎付与+攻撃UP)',
-    sourceCharacterId: 'hutao',
-    sourceType: 'talent',
-    duration: 9.0,
-    description: '通常/重撃が炎元素になり攻撃力大幅UP (HP上限参照)',
-    color: '#ef4444',
-    statsEffect: '攻撃力超特大加算'
-  },
-  shinobu_ring: {
-    id: 'shinobu_ring',
-    name: '久岐忍: 越祓草輪',
-    sourceCharacterId: 'shinobu',
-    sourceType: 'talent',
-    duration: 15.0,
-    description: '1.5秒ごとの雷範囲攻撃と出場キャラの回復',
-    color: '#a855f7',
-    statsEffect: '超開花起爆 / 回復'
-  },
-  alhaitham_mirror_3: {
-    id: 'alhaitham_mirror_3',
-    name: 'アルハイゼン: 琢光鏡 3枚',
-    sourceCharacterId: 'alhaitham',
-    sourceType: 'talent',
-    duration: 4.0,
-    description: '3段光幕射出の最高火力草追撃',
-    color: '#10b981',
-    statsEffect: '草3段光幕射出'
-  }
-};

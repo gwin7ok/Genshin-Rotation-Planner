@@ -18,9 +18,8 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { CharacterConfig, Stint, SavedRotationSlot, PartyPreset } from '../types/genshin';
-import { getSavedSlots, saveSlot, deleteSlot, clearActiveState } from '../utils/storage';
+import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName } from '../utils/storage';
 import { ROTATION_PRESETS } from '../data/presets';
-import { isEmptySlotCharacter } from '../data/characters';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -77,17 +76,25 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // プリセット読込直後は、保存名の初期値をプリセット名にする（キャラ変更による自動命名で上書きしない）
   const presetNameForSlotRef = useRef<string | null>(null);
 
+  // 開いたときだけリセットするもの
   useEffect(() => {
     if (isOpen) {
-      setSavedSlots(getSavedSlots());
-      const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
-      setNewSlotName(presetNameForSlotRef.current ?? `${charNames} (${totalDuration.toFixed(1)}s)`);
       setNewSlotDesc('');
-      if (!presetNameForSlotRef.current) setSaveSuccessMsg(null);
+      setSaveSuccessMsg(null);
     } else {
       presetNameForSlotRef.current = null;
     }
-  }, [isOpen, characters, totalDuration]);
+  }, [isOpen]);
+
+  // 保存名の初期値（保存編成を読み込み中ならその名前、未保存なら「編成キャラ名 (時間)」）
+  useEffect(() => {
+    if (isOpen) {
+      const slots = getSavedSlots();
+      setSavedSlots(slots);
+      const activeSlot = slots.find(s => s.id === activeSlotId) ?? null;
+      setNewSlotName(presetNameForSlotRef.current ?? buildDefaultSlotName(characters, totalDuration, activeSlot));
+    }
+  }, [isOpen, characters, totalDuration, activeSlotId]);
 
   if (!isOpen) return null;
 
@@ -396,7 +403,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                     className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 shadow transition-all"
                   >
                     <Save className="w-4 h-4" />
-                    <span>スロットに保存</span>
+                    <span>名前をつけて保存</span>
                   </button>
                 </div>
 

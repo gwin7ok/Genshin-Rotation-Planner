@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database } from 'lucide-react';
+import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database, FilePlus2, FolderCog } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 
 interface HeaderProps {
@@ -8,6 +8,7 @@ interface HeaderProps {
   onSelectSavedSlot: (slot: SavedRotationSlot) => void;
   onOverwriteActiveSlot: () => void;
   overwriteSaved: boolean;
+  onOpenSaveAs: () => void;
   isPlaying: boolean;
   onTogglePlay: () => void;
   onResetPlayback: () => void;
@@ -34,6 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectSavedSlot,
   onOverwriteActiveSlot,
   overwriteSaved,
+  onOpenSaveAs,
   isPlaying,
   onTogglePlay,
   onResetPlayback,
@@ -108,11 +110,13 @@ export const Header: React.FC<HeaderProps> = ({
                   if (slot) onSelectSavedSlot(slot);
                 }}
                 disabled={savedSlots.length === 0}
-                className="bg-slate-900 text-xs font-semibold text-amber-200 rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer disabled:cursor-not-allowed disabled:text-slate-500 max-w-[130px] sm:max-w-xs truncate"
-                title="「編成管理」で保存した編成を呼び出します"
+                className={`bg-slate-900 text-xs font-semibold rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer disabled:cursor-not-allowed max-w-[130px] sm:max-w-xs truncate ${
+                  activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? 'text-amber-200' : 'text-slate-400'
+                }`}
+                title={savedSlots.length === 0 ? '保存された編成はありません（「名前をつけて保存」で保存できます）' : '保存した編成を呼び出します'}
               >
-                <option value="" disabled hidden={savedSlots.length > 0}>
-                  {savedSlots.length === 0 ? '保存された編成はありません' : '-- 保存した編成を選択 --'}
+                <option value="" disabled>
+                  保存スロットに未保存
                 </option>
                 {savedSlots.map(slot => (
                   <option key={slot.id} value={slot.id}>
@@ -144,12 +148,12 @@ export const Header: React.FC<HeaderProps> = ({
             })()}
 
             <button
-              onClick={onOpenSaveModal}
+              onClick={onOpenSaveAs}
               className="flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20 transition-all"
-              title="編成管理（保存・読込・スロット管理・バックアップ）"
+              title="現在の画面の状態を新しい保存スロットとして保存します"
             >
-              <Save className="w-3.5 h-3.5 shrink-0" />
-              <span>編成管理</span>
+              <FilePlus2 className="w-3.5 h-3.5 shrink-0" />
+              <span>名前をつけて保存</span>
             </button>
           </div>
 
@@ -240,6 +244,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Database className="w-3.5 h-3.5 text-emerald-400" />
               <span>DB管理</span>
+            </button>
+
+            <button
+              onClick={onOpenSaveModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
+              title="編成管理（保存・読込・スロット管理・バックアップ）"
+            >
+              <FolderCog className="w-3.5 h-3.5 text-amber-400" />
+              <span>編成管理</span>
             </button>
 
             <button

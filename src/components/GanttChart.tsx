@@ -412,8 +412,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         }
 
         const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
-        const actionSkillCT = matchedCharActionDef?.startsSkillCooldown ? (matchedCharActionDef.cooldown ?? 0) : 0;
-        const actionBurstCT = matchedCharActionDef?.startsBurstCooldown !== false ? (matchedCharActionDef?.cooldown ?? 0) : 0;
+        const actionCT = act.cooldown ?? matchedCharActionDef?.cooldown ?? 0;
+        const actionSkillCT = matchedCharActionDef?.startsSkillCooldown ? actionCT : 0;
+        const actionBurstCT = matchedCharActionDef?.startsBurstCooldown !== false ? actionCT : 0;
 
         // New Cooldowns triggered in Cycle 2
         if (isSkill && actionSkillCT > 0) {

@@ -65,6 +65,8 @@ export interface CharacterActionInstance {
   shortName: string;
   type: ActionType;
   duration: number; // in seconds (e.g. 0.8s)
+  /** このアクションが開始するCT (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の cooldown を使う */
+  cooldown?: number;
   note?: string;
   // Computed at runtime:
   startTime?: number;

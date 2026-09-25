@@ -31,6 +31,7 @@ import {
 } from '../types/genshin';
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { alignStintsToCharacterOrder } from '../utils/stintReorder';
+import { getActionCooldownInfo } from '../utils/characterActions';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -70,6 +71,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const [noteText, setNoteText] = useState('');
   const [showGuideBanner, setShowGuideBanner] = useState(true);
   const [confirmClearStints, setConfirmClearStints] = useState(false);
+  // CT入力欄の操作中は、アクションチップのドラッグ移動を無効にする（入力欄の文字選択と干渉するため）
+  const [ctHoverActionId, setCtHoverActionId] = useState<string | null>(null);
 
   // 出場ブロックの追加・削除でガントチャート（このエリアより上）の高さが変わっても、
   // 見た目上スクロールしないよう、変更前後のこのエリアの位置差分だけスクロール位置を補正する
@@ -199,6 +202,22 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       ...targetStint,
       actions: [...targetStint.actions, newAction]
     };
+    onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // 登録済みアクションのCTを個別に変更（アクション定義と同じ値になったら個別設定を解除）
+  const updateActionCooldown = (stintIndex: number, actionIndex: number, value: number, defaultCooldown: number) => {
+    const targetStint = stints[stintIndex];
+    if (!targetStint || !Number.isFinite(value)) return;
+    const act = targetStint.actions[actionIndex];
+    if (!act || act.type === 'swap') return;
+
+    const nextCooldown = Math.min(999, Math.max(0, Number(value.toFixed(2))));
+    const nextActions = [...targetStint.actions];
+    const { cooldown: _omit, ...rest } = act;
+    nextActions[actionIndex] = nextCooldown === defaultCooldown ? rest : { ...rest, cooldown: nextCooldown };
+    const nextStints = [...stints];
+    nextStints[stintIndex] = { ...targetStint, actions: nextActions };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 
@@ -1137,7 +1156,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 onSelectAction?.(stint.id, act.id);
                                 if (onSeek) onSeek(act.startTime ?? 0);
                               }}
-                              draggable
+                              draggable={ctHoverActionId !== act.id}
                               onDragStart={() => setDraggedAction({ stintIndex, actionIndex: actIdx })}
                               onDragOver={(e) => {
                                 e.preventDefault();
@@ -1210,6 +1229,69 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   </button>
                                 </div>
                               </div>
+
+                              {/* CT (クールタイム) — CTを開始するアクションのみ。追加後に個別変更できる */}
+                              {(() => {
+                                const ctInfo = getActionCooldownInfo(act, char.availableActions.find(a => a.id === act.actionTypeId));
+                                if (!ctInfo) return null;
+                                const isCustomCT = ctInfo.cooldown !== ctInfo.defaultCooldown;
+                                const setCT = (v: number) => updateActionCooldown(stintIndex, actIdx, v, ctInfo.defaultCooldown);
+                                return (
+                                  <div
+                                    className={`flex items-center gap-0.5 ml-1 rounded px-1.5 py-0.5 border text-[11px] font-mono ${
+                                      isCustomCT ? 'bg-amber-950/60 border-amber-500/60' : 'bg-slate-950/60 border-slate-800'
+                                    }`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onMouseEnter={() => setCtHoverActionId(act.id)}
+                                    onMouseLeave={() => setCtHoverActionId(prev => (prev === act.id ? null : prev))}
+                                    title={`${ctInfo.kind === 'burst' ? '元素爆発' : '元素スキル'}のCT（初期値 ${ctInfo.defaultCooldown}s）${isCustomCT ? '\n※個別に変更されています' : ''}`}
+                                  >
+                                    <span className="font-sans font-bold text-[10px] text-slate-400 mr-0.5">CT</span>
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      step={0.5}
+                                      value={ctInfo.cooldown}
+                                      onChange={(e) => {
+                                        if (e.target.value === '') return;
+                                        setCT(Number(e.target.value));
+                                      }}
+                                      className={`w-11 bg-slate-900 border border-slate-700 rounded px-1 py-0 text-right font-semibold focus:outline-none focus:border-amber-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                                        isCustomCT ? 'text-amber-300' : 'text-emerald-300'
+                                      }`}
+                                    />
+                                    <span className="text-slate-400">s</span>
+                                    <div className="flex flex-col ml-0.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => setCT(ctInfo.cooldown + 0.5)}
+                                        className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
+                                        title="CT +0.5秒"
+                                      >
+                                        ▲
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => setCT(ctInfo.cooldown - 0.5)}
+                                        className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
+                                        title="CT -0.5秒"
+                                      >
+                                        ▼
+                                      </button>
+                                    </div>
+                                    {isCustomCT && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setCT(ctInfo.defaultCooldown)}
+                                        className="ml-0.5 text-amber-400 hover:text-white text-[11px]"
+                                        title={`初期値 ${ctInfo.defaultCooldown}s に戻す`}
+                                      >
+                                        ↺
+                                      </button>
+                                    )}
+                                  </div>
+                                );
+                              })()}
 
                               {/* Quick Move Left / Right inside stint */}
                               <button

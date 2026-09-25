@@ -266,7 +266,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>ローテーションの保存・読込・バックアップ</span>
+                <span>編成管理</span>
               </h2>
               <p className="text-xs text-slate-400">
                 編集した内容は自動保存されています。名前を付けてスロット保存やJSONバックアップも可能です。

@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 disabled={savedSlots.length === 0}
                 className="bg-slate-900 text-xs font-semibold text-amber-200 rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer disabled:cursor-not-allowed disabled:text-slate-500 max-w-[130px] sm:max-w-xs truncate"
-                title="「保存・読込」で保存した編成を呼び出します"
+                title="「編成管理」で保存した編成を呼び出します"
               >
                 <option value="" disabled hidden={savedSlots.length > 0}>
                   {savedSlots.length === 0 ? '保存された編成はありません' : '-- 保存した編成を選択 --'}
@@ -146,10 +146,10 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenSaveModal}
               className="flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20 transition-all"
-              title="ローテーションの保存・読込・スロット管理・バックアップ"
+              title="編成管理（保存・読込・スロット管理・バックアップ）"
             >
               <Save className="w-3.5 h-3.5 shrink-0" />
-              <span>保存・読込</span>
+              <span>編成管理</span>
             </button>
           </div>
 

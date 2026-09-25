@@ -37,23 +37,61 @@ export const ganttStintRowId = (stintId: string) => `gantt-stint-row-${stintId}`
 const GANTT_LABEL_COLUMN_PX = 180;
 
 /**
- * ガントチャートの出場キャラ行を、ガントチャートの固定表示ヘッダーのすぐ下へ縦スクロールし、
- * その出場の最初のアクションがキャラ名列のすぐ右に来るよう横スクロールする
+ * ガントチャートの出場キャラ行を、ガントチャートの固定表示部分（ページヘッダー + ガントチャートのヘッダー）を除いた
+ * 表示範囲のちょうど縦の真ん中へスクロールし、その出場の開始位置がキャラ名列のすぐ右に来るよう横スクロールする。
+ * 行には data-start-px（出場開始位置の横座標 px）を付けておく
  */
 export function scrollToGanttStintRow(stintId: string): void {
   requestAnimationFrame(() => {
     const row = document.getElementById(ganttStintRowId(stintId));
     if (!row) return;
     const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
-    const ganttHeaderHeight = document.getElementById(GANTT_STICKY_HEADER_ID)?.offsetHeight ?? 0;
-    const top = window.scrollY + row.getBoundingClientRect().top - headerHeight - ganttHeaderHeight - GAP_PX;
+    const ganttHeader = document.getElementById(GANTT_STICKY_HEADER_ID);
+    const ganttHeaderHeight = ganttHeader?.offsetHeight ?? 0;
+    // ガントチャートのヘッダーが固定されていないとき（ページ上部付近）の、本来の位置（ページ座標）
+    const ganttHeaderNaturalTop = ganttHeader?.parentElement
+      ? ganttHeader.parentElement.getBoundingClientRect().top + window.scrollY
+      : 0;
+    const rowRect = row.getBoundingClientRect();
+    const rowDocTop = window.scrollY + rowRect.top;
+    const rowHeight = rowRect.height;
+    const viewportHeight = window.innerHeight;
+
+    // (1) ガントチャートのヘッダーが固定された状態: 表示範囲の上端は一定
+    const pinnedVisibleTop = headerHeight + ganttHeaderHeight;
+    const pinnedVisibleHeight = viewportHeight - pinnedVisibleTop;
+    let top = rowHeight >= pinnedVisibleHeight
+      ? rowDocTop - pinnedVisibleTop - GAP_PX // 行が表示範囲より高いときは上端をそろえる
+      : rowDocTop - pinnedVisibleTop - (pinnedVisibleHeight - rowHeight) / 2;
+
+    // (2) その位置ではまだヘッダーが固定されない（ページ上部付近）場合: ヘッダーも一緒に動くので、
+    //     表示範囲の上端 = ヘッダーの本来の位置 - s + ヘッダー高さ として、行の中心 = 表示範囲の中心 を s について解く
+    //     （行が表示範囲より高い場合、ヘッダーと行の位置関係はスクロールで変わらないので固定され始める位置にする）
+    const pinStartScroll = ganttHeaderNaturalTop - headerHeight;
+    if (top < pinStartScroll) {
+      const unpinned = 2 * rowDocTop + rowHeight - ganttHeaderNaturalTop - ganttHeaderHeight - viewportHeight;
+      top = rowHeight >= pinnedVisibleHeight ? pinStartScroll : Math.min(unpinned, pinStartScroll);
+    }
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 
     const container = document.getElementById(GANTT_SCROLL_CONTAINER_ID);
-    const firstBlock = row.querySelector<HTMLElement>('[draggable="true"]');
-    if (container && firstBlock) {
-      const delta = firstBlock.getBoundingClientRect().left - (container.getBoundingClientRect().left + GANTT_LABEL_COLUMN_PX + 24);
-      container.scrollTo({ left: Math.max(0, container.scrollLeft + delta), behavior: 'smooth' });
+    const startPx = Number(row.dataset.startPx);
+    if (container && Number.isFinite(startPx)) {
+      container.scrollTo({ left: Math.max(0, startPx - 24), behavior: 'smooth' });
     }
   });
+}
+
+/**
+ * 出場キャラをガントチャートでフォーカスする（統合出場トラックのクリック・アクション構築の「ガントチャートへ」で共通）
+ * - その出場の最初のアクション（キャラ交代以外）を選択して行を強調表示
+ * - ガントチャートの行を表示範囲の真ん中へスクロール
+ */
+export function focusStintInGantt(
+  stint: { id: string; actions: Array<{ id: string; type: string }> },
+  onSelectAction?: (stintId: string, actionId: string) => void,
+): void {
+  const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+  if (targetAct) onSelectAction?.(stint.id, targetAct.id);
+  scrollToGanttStintRow(stint.id);
 }

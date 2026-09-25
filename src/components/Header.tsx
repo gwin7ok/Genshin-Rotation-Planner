@@ -234,16 +234,16 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Collapsible Action Tools Row (DB管理, 並び替え・使い方, 編成設定, 手順書, 記法コピー, 記法表示) */}
+        {/* Collapsible Action Tools Row (編成設定, 編成管理, DB管理, 並び替え・使い方, 手順書, 記法コピー, 記法表示) */}
         {!isCollapsed && (
           <div className="flex flex-wrap items-center justify-start gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
             <button
-              onClick={onOpenDatabaseModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 transition-colors shadow-sm shrink-0"
-              title="キャラ・武器・聖遺物の最新公式データ同期とカスタム編集"
+              onClick={onOpenPartyModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
+              title="パーティ4人の編成・武器・聖遺物変更"
             >
-              <Database className="w-3.5 h-3.5 text-emerald-400" />
-              <span>DB管理</span>
+              <Settings2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>編成設定</span>
             </button>
 
             <button
@@ -256,21 +256,21 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
+              onClick={onOpenDatabaseModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 transition-colors shadow-sm shrink-0"
+              title="キャラ・武器・聖遺物の最新公式データ同期とカスタム編集"
+            >
+              <Database className="w-3.5 h-3.5 text-emerald-400" />
+              <span>DB管理</span>
+            </button>
+
+            <button
               onClick={onOpenHelpModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
               title="登場キャラの順番入れ替え・操作ガイドを開く"
             >
               <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
               <span>並び替え・使い方</span>
-            </button>
-
-            <button
-              onClick={onOpenPartyModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="パーティ4人の編成・武器・聖遺物変更"
-            >
-              <Settings2 className="w-3.5 h-3.5 text-amber-400" />
-              <span>編成設定</span>
             </button>
 
             <button

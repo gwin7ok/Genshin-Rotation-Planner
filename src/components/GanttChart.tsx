@@ -29,7 +29,7 @@ import {
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
-import { scrollStintCardBelowSticky, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
+import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { swapStintsForCharacters } from '../utils/stintReorder';
 
@@ -996,6 +996,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     return (
                       <div
                         key={stint.id}
+                        onClick={() => focusStintInGantt(stint, onSelectAction)}
                         style={{ left: `${startX}px`, width: `${width}px` }}
                         className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
                           isCurrent 
@@ -1028,6 +1029,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     return (
                       <div
                         key={stint.id}
+                        onClick={() => focusStintInGantt(stint)}
                         style={{ left: `${startX}px`, width: `${width}px` }}
                         className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
                           isCurrent 
@@ -1149,7 +1151,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
-                    <div key={stint.id} id={ganttStintRowId(stint.id)} className={`relative group/stint transition-colors ${
+                    <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative group/stint transition-colors ${
                       isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
                     }`}>
                       <div className="flex">
@@ -1569,7 +1571,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
 
                     return (
-                      <div key={stint.id} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
+                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
                         <div className="flex">
                           {/* Left Column (Sticky Left) */}
                           <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-45 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${

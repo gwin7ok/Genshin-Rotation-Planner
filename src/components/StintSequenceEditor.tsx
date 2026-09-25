@@ -32,7 +32,7 @@ import {
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { alignStintsToCharacterOrder } from '../utils/stintReorder';
 import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterActions';
-import { scrollStintCardBelowSticky, scrollToGanttStintRow, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
+import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -1018,11 +1018,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* ガントチャートの該当出場行へ移動 */}
                       <button
                         type="button"
-                        onClick={() => {
-                          const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
-                          if (targetAct) onSelectAction?.(stint.id, targetAct.id);
-                          scrollToGanttStintRow(stint.id);
-                        }}
+                        onClick={() => focusStintInGantt(stint, onSelectAction)}
                         className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-sky-300 border border-sky-700/60 hover:bg-sky-500 hover:text-slate-950 transition-all shadow-sm"
                         title="ガントチャートのこの出場の行へ移動"
                       >

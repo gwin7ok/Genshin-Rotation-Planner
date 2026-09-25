@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
   Save, 
@@ -74,13 +74,18 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const [activeTab, setActiveTab] = useState<'slots' | 'json'>('slots');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
 
+  // プリセット読込直後は、保存名の初期値をプリセット名にする（キャラ変更による自動命名で上書きしない）
+  const presetNameForSlotRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (isOpen) {
       setSavedSlots(getSavedSlots());
       const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
-      setNewSlotName(`${charNames} (${totalDuration.toFixed(1)}s)`);
+      setNewSlotName(presetNameForSlotRef.current ?? `${charNames} (${totalDuration.toFixed(1)}s)`);
       setNewSlotDesc('');
-      setSaveSuccessMsg(null);
+      if (!presetNameForSlotRef.current) setSaveSuccessMsg(null);
+    } else {
+      presetNameForSlotRef.current = null;
     }
   }, [isOpen, characters, totalDuration]);
 
@@ -342,8 +347,11 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                   onChange={(e) => {
                     const p = ROTATION_PRESETS.find(x => x.id === e.target.value);
                     if (p) {
+                      presetNameForSlotRef.current = p.name;
+                      setNewSlotName(p.name);
                       onSelectPreset(p);
-                      onClose();
+                      setSaveSuccessMsg(`プリセット「${p.name}」を読み込みました。`);
+                      setTimeout(() => setSaveSuccessMsg(null), 3000);
                     }
                   }}
                   className="w-full bg-slate-900 text-xs font-semibold text-amber-200 rounded-lg px-3 py-2 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"

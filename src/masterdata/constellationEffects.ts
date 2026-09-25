@@ -29,40 +29,40 @@ interface VerifiedRule {
   keyword: string;
 }
 
-/** 確認済み: 凸の延長対象が、マスターの効果継続時間（効果バー）と同じ効果のもの。キーは `${キャラID}_c${凸}` */
+/** 確認済み: 凸の延長対象が、マスターの効果継続時間（効果バー）と同じ効果のもの。キーは `${キャラ名}_c${凸}` */
 const VERIFIED_RULES: Record<string, VerifiedRule> = {
-  xiangling_c4: { target: 'q', keyword: '旋火輪' },
-  kukishinobu_c2: { target: 'e', keyword: '越祓草輪' },
-  xingqiu_c2: { target: 'q', keyword: '裁雨留虹' },
-  candace_c1: { target: 'q', keyword: '赤冠' },
-  dahlia_c4: { target: 'q', keyword: '' }, // 「西風の恵み」効果（説明文の抽出部分は「効果」）
-  emilie_c4: { target: 'q', keyword: 'アロマティック' },
-  rosaria_c2: { target: 'q', keyword: '氷槍' },
-  shenhe_c2: { target: 'q', keyword: '神女遣霊真訣' },
-  sigewinne_c4: { target: 'q', keyword: '過飽和まごころお注射' },
-  sucrose_c2: { target: 'q', keyword: '七五同構弐型' },
-  yoimiya_c1: { target: 'q', keyword: '琉金の炎' },
+  '香菱_c4': { target: 'q', keyword: '旋火輪' },
+  '久岐忍_c2': { target: 'e', keyword: '越祓草輪' },
+  '行秋_c2': { target: 'q', keyword: '裁雨留虹' },
+  'キャンディス_c1': { target: 'q', keyword: '赤冠' },
+  'ダリア_c4': { target: 'q', keyword: '' }, // 「西風の恵み」効果（説明文の抽出部分は「効果」）
+  'エミリエ_c4': { target: 'q', keyword: 'アロマティック' },
+  'ロサリア_c2': { target: 'q', keyword: '氷槍' },
+  '申鶴_c2': { target: 'q', keyword: '神女遣霊真訣' },
+  'シグウィン_c4': { target: 'q', keyword: '過飽和まごころお注射' },
+  'スクロース_c2': { target: 'q', keyword: '七五同構弐型' },
+  '宵宮_c1': { target: 'q', keyword: '琉金の炎' },
 };
 
 /** 確認済み: 説明文は「継続時間+X」の形だが、別アクションにしないもの（理由つき） */
 const NOT_APPLICABLE: Record<string, string> = {
-  alhaitham_c6: '琢光鏡の残り時間の延長（条件付き）',
-  collei_c2: '固有天賦「芽生え」状態の延長',
-  dehya_c2: 'E 再発動時に再生成された領域のみ延長（条件付き）',
-  dehya_c6: '会心発生ごとに +0.5秒（条件付き）',
-  escoffier_c4: 'ヒーリング・ディッシュの延長（マスターの効果はチルドモード）',
-  eula_c1: '冷酷な心の消費数に応じた物理ダメバフの延長（条件付き）',
-  gorou_c2: '結晶の欠片獲得ごとに +1秒（条件付き）',
-  iansan_c6: '運動量メーターの延長（マスターの Q 効果時間との対応が未確認）',
-  lauma_c1: '「生を紡ぐ糸」効果の延長',
-  mona_c1: '反応ダメージの強化（継続時間ではない）',
-  nefer_c2: '固有天賦「偽りの帳」の延長',
-  neuvillette_c6: '源水の雫の吸収ごとに +1秒（条件付き）',
-  nilou_c1: '水環の延長（マスターの効果はピルエット）',
-  noelle_c6: '敵を倒すごとに +1秒（条件付き）',
-  thoma_c2: '元素爆発自体の継続時間の延長（マスターの効果はシールド継続時間）',
-  vodyanitsa_c2: '「悠久の歌」効果の延長（マスターの効果との対応が未確認）',
-  zhongli_c4: '石化効果の延長（マスターの効果はシールド）',
+  'アルハイゼン_c6': '琢光鏡の残り時間の延長（条件付き）',
+  'コレイ_c2': '固有天賦「芽生え」状態の延長',
+  'ディシア_c2': 'E 再発動時に再生成された領域のみ延長（条件付き）',
+  'ディシア_c6': '会心発生ごとに +0.5秒（条件付き）',
+  'エスコフィエ_c4': 'ヒーリング・ディッシュの延長（マスターの効果はチルドモード）',
+  'エウルア_c1': '冷酷な心の消費数に応じた物理ダメバフの延長（条件付き）',
+  'ゴロー_c2': '結晶の欠片獲得ごとに +1秒（条件付き）',
+  'イアンサ_c6': '運動量メーターの延長（マスターの Q 効果時間との対応が未確認）',
+  'ラウマ_c1': '「生を紡ぐ糸」効果の延長',
+  'モナ_c1': '反応ダメージの強化（継続時間ではない）',
+  'ネフェル_c2': '固有天賦「偽りの帳」の延長',
+  'ヌヴィレット_c6': '源水の雫の吸収ごとに +1秒（条件付き）',
+  'ニィロウ_c1': '水環の延長（マスターの効果はピルエット）',
+  'ノエル_c6': '敵を倒すごとに +1秒（条件付き）',
+  'トーマ_c2': '元素爆発自体の継続時間の延長（マスターの効果はシールド継続時間）',
+  'ヴォジャニーツァ_c2': '「悠久の歌」効果の延長（マスターの効果との対応が未確認）',
+  '鍾離_c4': '石化効果の延長（マスターの効果はシールド）',
 };
 
 const DURATION_BONUS_PATTERN = /([^、。「」\s]+?)の?継続時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/;
@@ -116,7 +116,7 @@ export function applyConstellationVariants(
       const text = (con[`c${level}`]?.description ?? '').replace(/\s+/g, ' ');
       const m = DURATION_BONUS_PATTERN.exec(text);
       if (!m) continue;
-      const key = `${char.id}_c${level}`;
+      const key = `${char.name}_c${level}`;
       const rule = VERIFIED_RULES[key];
       if (!rule) {
         if (!NOT_APPLICABLE[key]) {

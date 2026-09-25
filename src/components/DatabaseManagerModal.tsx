@@ -252,7 +252,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
   // Filtered lists
   const filteredCharacters = database.characters.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.englishName ?? '').toLowerCase().includes(q);
     const matchesFilter = matchesCharacterFilter(c, elementFilter, weaponTypeFilter);
     return matchesSearch && matchesFilter;
   });
@@ -383,7 +384,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
-                    placeholder="キャラ名・IDで検索..."
+                    placeholder="キャラ名・英語名・IDで検索..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
@@ -1190,6 +1191,9 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
             <span>キャラクター定義編集: {form.name}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="キャラクターのキー（公式キャラID-元素 / カスタムキャラは custom_…）">
+              （ID:{form.id}）
+            </span>
           </h3>
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
         </div>

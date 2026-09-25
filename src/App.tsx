@@ -20,7 +20,7 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
-import { migrateLegacyCharacter } from './utils/legacyMigration';
+import { migrateLegacyCharacter, migrateCharacterIds } from './utils/legacyMigration';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { isEmptySlotCharacter } from './data/characters';
 
@@ -172,9 +172,14 @@ export default function App() {
     presetId?: string;
     slotId?: string;
   }) => {
-    setCharacters(slot.characters);
-    setStints(slot.stints);
-    setLoopStartIndex(resolveLoopStartIndex(slot, slot.characters, slot.stints, slot));
+    // 旧形式のキャラキーで書き出された JSON などにも対応
+    const { characters: loadedChars, stints: loadedStints } = migrateCharacterIds({
+      characters: slot.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>)),
+      stints: slot.stints,
+    });
+    setCharacters(loadedChars);
+    setStints(loadedStints);
+    setLoopStartIndex(resolveLoopStartIndex(slot, loadedChars, loadedStints, slot));
     setSwitchDelay(slot.switchDelay ?? 0.50);
     setActionDelay(slot.actionDelay ?? 0.10);
     setSelectedPresetId(slot.presetId || 'custom');
@@ -300,11 +305,14 @@ export default function App() {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
         if (parsed.characters && parsed.stints) {
-          const importedChars = parsed.characters.map(migrateLegacyCharacter);
+          const { characters: importedChars, stints: importedStints } = migrateCharacterIds({
+            characters: parsed.characters.map(migrateLegacyCharacter),
+            stints: parsed.stints,
+          });
           setCharacters(importedChars);
-          setStints(parsed.stints);
+          setStints(importedStints);
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
-          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, parsed.stints, { switchDelay, actionDelay }));
+          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
           setCurrentTime(0);
           setIsPlaying(false);

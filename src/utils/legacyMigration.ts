@@ -1,4 +1,5 @@
-import { ActionDefinition, CharacterConfig } from '../types/genshin';
+import { ActionDefinition, CharacterConfig, Stint } from '../types/genshin';
+import { resolveLegacyCharacterId } from '../data/characters';
 
 /**
  * 旧形式 (キャラ単位に skillCooldown / burstCooldown 等を持ち、エネルギー・粒子数を持つ) のキャラデータを
@@ -63,5 +64,17 @@ export function migrateLegacyCharacter(raw: Record<string, any>): CharacterConfi
   return {
     ...(rest as CharacterConfig),
     availableActions: (raw.availableActions ?? []).map((a: Record<string, any>) => migrateLegacyAction(a, charLevel)),
+  };
+}
+
+/**
+ * 旧形式のキャラキー（英語名由来など）で保存された編成・出場ブロックを、新形式（公式ID-元素）に置き換える。
+ * 編成キャラは保存時点のアクション定義をそのまま持っているので、キャラの id と出場ブロックの参照だけを変える
+ */
+export function migrateCharacterIds<T extends { characters: CharacterConfig[]; stints: Stint[] }>(data: T): T {
+  return {
+    ...data,
+    characters: data.characters.map(c => ({ ...c, id: resolveLegacyCharacterId(c.id) })),
+    stints: data.stints.map(s => ({ ...s, characterId: resolveLegacyCharacterId(s.characterId) })),
   };
 }

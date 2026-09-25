@@ -47,6 +47,8 @@ interface StintSequenceEditorProps {
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
   loopStartTime?: number;
+  /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
+  loopStartIndex?: number;
 }
 
 export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
@@ -63,6 +65,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   selectedAction,
   onSelectAction,
   loopStartTime = 0,
+  loopStartIndex = 0,
 }) => {
   const [draggedStintIndex, setDraggedStintIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -863,8 +866,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               return `+${rel.toFixed(2)}s`;
             };
 
-            const isSetupStint = loopStartTime > 0 && (stint.endTime ?? 0) <= loopStartTime;
-            const isLoopStint = loopStartTime > 0 && (stint.startTime ?? 0) >= loopStartTime;
+            // ループ基準は出場キャラの番号で持つ（基準番号より前が1周目初動、以降が定常ループ）
+            const isSetupStint = loopStartIndex > 0 && stintIndex < loopStartIndex;
+            const isLoopStint = loopStartIndex > 0 && stintIndex >= loopStartIndex;
 
             return (
               <div
@@ -975,8 +979,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         )}
                       </div>
 
-                      {/* Phase badge if loopStartTime > 0 */}
-                      {loopStartTime > 0 && (
+                      {/* Phase badge if loop base is set */}
+                      {loopStartIndex > 0 && (
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
                           isSetupStint
                             ? 'bg-amber-950/80 text-amber-300 border-amber-600/70'

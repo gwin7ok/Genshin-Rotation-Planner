@@ -28,6 +28,7 @@ interface SaveLoadModalProps {
   characters: CharacterConfig[];
   stints: Stint[];
   loopStartTime: number;
+  loopStartIndex: number;
   totalDuration: number;
   switchDelay?: number;
   actionDelay?: number;
@@ -39,7 +40,8 @@ interface SaveLoadModalProps {
   onLoadSlot: (slot: {
     characters: CharacterConfig[];
     stints: Stint[];
-    loopStartTime: number;
+    loopStartIndex?: number;
+    loopStartTime?: number;
     switchDelay?: number;
     actionDelay?: number;
     presetId?: string;
@@ -55,6 +57,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   characters,
   stints,
   loopStartTime,
+  loopStartIndex,
   totalDuration,
   switchDelay,
   actionDelay,
@@ -122,6 +125,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       updatedAt: new Date().toISOString(),
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       switchDelay,
@@ -141,6 +145,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       ...slot,
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       switchDelay,
@@ -168,6 +173,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     onLoadSlot({
       characters: slot.characters,
       stints: slot.stints,
+      loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       switchDelay: slot.switchDelay,
       actionDelay: slot.actionDelay,
@@ -184,6 +190,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       description: slot.description,
       characters: slot.characters,
       stints: slot.stints,
+      loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       totalDuration: slot.totalDuration,
       switchDelay: slot.switchDelay,
@@ -192,6 +199,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       name: newSlotName || '原神ローテーション',
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       switchDelay,
@@ -214,6 +222,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       description: slot.description,
       characters: slot.characters,
       stints: slot.stints,
+      loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       totalDuration: slot.totalDuration,
       exportedAt: new Date().toISOString(),
@@ -221,6 +230,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       name: newSlotName || '原神ローテーション',
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       exportedAt: new Date().toISOString(),
@@ -245,6 +255,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           onLoadSlot({
             characters: parsed.characters,
             stints: parsed.stints,
+            loopStartIndex: parsed.loopStartIndex,
             loopStartTime: parsed.loopStartTime ?? 0,
             name: parsed.name,
           });
@@ -268,6 +279,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         onLoadSlot({
           characters: parsed.characters,
           stints: parsed.stints,
+          loopStartIndex: parsed.loopStartIndex,
           loopStartTime: parsed.loopStartTime ?? 0,
           name: parsed.name,
         });

@@ -165,7 +165,9 @@ interface GanttChartProps {
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
   loopStartTime?: number;
-  onUpdateLoopStartTime?: (newTime: number) => void;
+  /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
+  loopStartIndex?: number;
+  onUpdateLoopStartIndex?: (index: number) => void;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
@@ -185,7 +187,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   selectedAction,
   onSelectAction,
   loopStartTime = 0,
-  onUpdateLoopStartTime,
+  loopStartIndex = 0,
+  onUpdateLoopStartIndex,
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
@@ -248,34 +251,21 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
-  // Calculate discrete action boundary snap points (between actions)
-  // Each action boundary has time, label, action name
-  const actionBoundaries = useMemo(() => {
-    const list: { time: number; label: string; stintIdx: number; actIdx: number }[] = [];
-    list.push({ time: 0, label: '0.00s (ローテーション開始地点)', stintIdx: 0, actIdx: 0 });
-
+  // ループ基準を置ける位置（出場キャラの境目）。index は「何番目の出場キャラの前か」（0=先頭・基準なし）
+  const loopBoundaries = useMemo(() => {
+    const list: { index: number; time: number; label: string }[] = [
+      { index: 0, time: 0, label: '先頭（基準なし・全周同一）' },
+    ];
     stints.forEach((stint, sIdx) => {
-      const char = characterMap.get(stint.characterId);
-      const charName = char?.name || '';
-      stint.actions.forEach((act, aIdx) => {
-        const boundaryTime = act.endTime ?? 0;
-        // Avoid duplicate timestamps (with 0.01s tolerance)
-        const isLastAct = sIdx === stints.length - 1 && aIdx === stint.actions.length - 1;
-        if (!isLastAct && boundaryTime > 0.01 && !list.some(b => Math.abs(b.time - boundaryTime) < 0.02)) {
-          const nextAct = stint.actions[aIdx + 1];
-          const nextCharName = nextAct ? charName : (characterMap.get(stints[sIdx + 1]?.characterId)?.name || '');
-          const nextActName = nextAct ? nextAct.shortName : (stints[sIdx + 1]?.actions[0]?.shortName || '');
-          list.push({
-            time: Number(boundaryTime.toFixed(2)),
-            label: `${boundaryTime.toFixed(2)}s (${charName}:${act.shortName} と ${nextCharName}:${nextActName} の間)`,
-            stintIdx: sIdx,
-            actIdx: aIdx,
-          });
-        }
+      if (sIdx === 0) return;
+      const prevName = characterMap.get(stints[sIdx - 1].characterId)?.name || '';
+      const name = characterMap.get(stint.characterId)?.name || '';
+      list.push({
+        index: sIdx,
+        time: stint.startTime ?? 0,
+        label: `${sIdx + 1}番目の出場（${prevName} と ${name} の間）`,
       });
     });
-
-    list.sort((a, b) => a.time - b.time);
     return list;
   }, [stints, characterMap]);
 
@@ -347,12 +337,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const cycle2NewCooldowns: CooldownSpan[] = [];
     const cycle2NewBuffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = [];
 
-    stints.forEach((stint) => {
+    stints.forEach((stint, sIdx) => {
       const char = characterMap.get(stint.characterId);
       if (!char) return;
 
-      // Filter actions that belong to the loop segment [loopStartTime, totalDuration]
-      const loopActions = stint.actions.filter(a => (a.endTime ?? 0) > loopStartTime + 0.001);
+      // ループ基準番号以降の出場キャラが 2周目ループの対象
+      if (sIdx < loopStartIndex) return;
+      const loopActions = stint.actions;
       if (loopActions.length === 0) return;
 
       const c2Actions = loopActions.map(act => {
@@ -650,19 +641,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     return list.filter((item, idx, arr) => idx === 0 || Math.abs(item.absTime - arr[idx - 1].absTime) > 0.1);
   }, [loopStartTime, extendedTotalDuration]);
 
-  // Find the closest action boundary for any given timeline second
-  const findClosestActionBoundary = (rawTime: number) => {
-    if (actionBoundaries.length === 0) return 0;
-    let closest = actionBoundaries[0];
+  // 指定秒数に一番近い出場キャラの境目（ループ基準番号）
+  const findClosestLoopBoundaryIndex = (rawTime: number) => {
+    let closest = loopBoundaries[0];
     let minDiff = Math.abs(rawTime - closest.time);
-    for (const b of actionBoundaries) {
+    for (const b of loopBoundaries) {
       const diff = Math.abs(rawTime - b.time);
       if (diff < minDiff) {
         minDiff = diff;
         closest = b;
       }
     }
-    return closest.time;
+    return closest.index;
   };
 
   // Window-level mouseup/mousemove listeners for dragging the loop marker smoothly
@@ -675,14 +665,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
       if (clickX >= 0) {
         const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
-        const snapped = findClosestActionBoundary(rawTime);
-        if (onUpdateLoopStartTime) {
-          onUpdateLoopStartTime(snapped);
-        }
+        onUpdateLoopStartIndex?.(findClosestLoopBoundaryIndex(rawTime));
       } else {
-        if (onUpdateLoopStartTime) {
-          onUpdateLoopStartTime(0);
-        }
+        onUpdateLoopStartIndex?.(0);
       }
     };
 
@@ -696,7 +681,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mousemove', onWindowMouseMove);
       window.removeEventListener('mouseup', onWindowMouseUp);
     };
-  }, [isDraggingLoopMarker, totalDuration, pixelsPerSecond, onUpdateLoopStartTime, actionBoundaries]);
+  }, [isDraggingLoopMarker, totalDuration, pixelsPerSecond, onUpdateLoopStartIndex, loopBoundaries]);
 
   // Pre-calculate connector points between consecutive stints for vertical snap visualization
   // Stint i ends at t_end, Stint i+1 starts at t_end!
@@ -799,12 +784,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 <Repeat className="w-3 h-3 text-purple-400" />
                 <span className="text-purple-300 font-semibold">ループ基準点:</span>
                 <span className="font-mono text-purple-200 font-bold">
-                  {loopStartTime === 0 ? '0.00s (全周同一)' : `${loopStartTime.toFixed(2)}s`}
+                  {loopStartIndex === 0 ? '先頭 (全周同一)' : `${loopStartIndex + 1}番目の前 (${loopStartTime.toFixed(2)}s)`}
                 </span>
-                {loopStartTime > 0 && onUpdateLoopStartTime && (
+                {loopStartIndex > 0 && onUpdateLoopStartIndex && (
                   <button
                     type="button"
-                    onClick={() => onUpdateLoopStartTime(0)}
+                    onClick={() => onUpdateLoopStartIndex(0)}
                     className="ml-1 text-[9px] text-slate-400 hover:text-white underline decoration-slate-600"
                     title="0s (先頭) にリセット"
                   >
@@ -901,7 +886,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     <span className="truncate">ループ基準点 (0s)</span>
                   </span>
                   <span className="text-[9px] text-purple-400/80 font-mono shrink-0">
-                    {loopStartTime === 0 ? '0s (全周同一)' : `${loopStartTime.toFixed(1)}s`}
+                    {loopStartIndex === 0 ? '全周同一' : `${loopStartIndex + 1}番目の前`}
                   </span>
                 </div>
 
@@ -913,8 +898,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
                     if (clickX >= 0) {
                       const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
-                      const snapped = findClosestActionBoundary(rawTime);
-                      onUpdateLoopStartTime?.(snapped);
+                      onUpdateLoopStartIndex?.(findClosestLoopBoundaryIndex(rawTime));
                     }
                   }}
                 >
@@ -944,16 +928,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   </div>
 
                   {/* Snapping tick dots for each action boundary */}
-                  {actionBoundaries.map((b, idx) => {
+                  {loopBoundaries.map((b, idx) => {
                     const bX = b.time * pixelsPerSecond;
-                    const isCurrent = Math.abs(b.time - loopStartTime) < 0.02;
+                    const isCurrent = b.index === loopStartIndex;
                     return (
                       <button
                         key={`b_snap_${idx}`}
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onUpdateLoopStartTime?.(b.time);
+                          onUpdateLoopStartIndex?.(b.index);
                         }}
                         style={{ left: `${bX}px` }}
                         className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform z-10 ${
@@ -961,7 +945,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             ? 'w-3 h-3 bg-purple-400 ring-2 ring-purple-300 shadow scale-110' 
                             : 'w-1.5 h-1.5 bg-purple-600/60 hover:scale-150 hover:bg-purple-300'
                         }`}
-                        title={`【アクション区切りに設定】\n${b.label} (${fmtTime(b.time, 2)})`}
+                        title={`【ループ基準に設定】\n${b.label} (${fmtTime(b.time, 2)})`}
                       />
                     );
                   })}

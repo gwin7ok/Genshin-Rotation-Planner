@@ -188,6 +188,9 @@ export interface SavedRotationSlot {
   updatedAt: string; // ISO string
   characters: CharacterConfig[];
   stints: Stint[];
+  /** 2周目ループの開始位置（何番目の出場キャラの前か。0始まり、0=基準なし） */
+  loopStartIndex?: number;
+  /** 旧形式のループ基準（秒）。読込時に loopStartIndex へ変換する。保存時は参考値として併記 */
   loopStartTime?: number;
   totalDuration?: number;
   switchDelay?: number;

@@ -21,6 +21,7 @@ import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter } from './utils/legacyMigration';
+import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { isEmptySlotCharacter } from './data/characters';
 
 export default function App() {
@@ -45,10 +46,6 @@ export default function App() {
     }
     return ROTATION_PRESETS[0].stints;
   });
-  // Loop boundary marker (default 0s or restored from storage)
-  const [loopStartTime, setLoopStartTime] = useState<number>(() => {
-    return savedInitialState?.loopStartTime ?? 0;
-  });
   // Character switch delay (default 0.50s or restored from storage)
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
@@ -56,6 +53,11 @@ export default function App() {
   // Action gap / execution delay (default 0.10s or restored from storage)
   const [actionDelay, setActionDelay] = useState<number>(() => {
     return savedInitialState?.actionDelay ?? 0.10;
+  });
+  // 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし）。旧データの秒数は番号へ変換
+  const [loopStartIndex, setLoopStartIndex] = useState<number>(() => {
+    if (!savedInitialState) return 0;
+    return resolveLoopStartIndex(savedInitialState, characters, stints, { switchDelay, actionDelay });
   });
 
   // User saved rotation slots (shown in the header's 編成選択) & currently loaded slot
@@ -82,12 +84,12 @@ export default function App() {
       characters,
       stints,
       selectedPresetId,
-      loopStartTime,
+      loopStartIndex,
       switchDelay,
       actionDelay,
       activeSlotId,
     });
-  }, [characters, stints, selectedPresetId, loopStartTime, switchDelay, actionDelay, activeSlotId]);
+  }, [characters, stints, selectedPresetId, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
@@ -96,6 +98,17 @@ export default function App() {
 
   // Keep playback currentTime bounded within totalDuration
   const totalDuration = calculatedResult.totalDuration;
+
+  // ループ基準の秒数は、基準番号の出場キャラの開始時刻から毎回求める（秒数は保存しない）
+  const loopStartTime = loopStartIndex > 0
+    ? (calculatedResult.calculatedStints[loopStartIndex]?.startTime ?? 0)
+    : 0;
+
+  // 出場キャラの削除などで基準番号が出場キャラの数を超えたら、基準を解除して先頭に戻す
+  useEffect(() => {
+    const normalized = normalizeLoopStartIndex(loopStartIndex, stints.length);
+    if (normalized !== loopStartIndex) setLoopStartIndex(normalized);
+  }, [loopStartIndex, stints.length]);
 
   // 6. Playback Animation Loop
   const lastFrameTimeRef = useRef<number | null>(null);
@@ -141,7 +154,7 @@ export default function App() {
     setCharacters(preset.characters);
     setStints(preset.stints);
     setCurrentTime(0);
-    setLoopStartTime(0);
+    setLoopStartIndex(0);
     setSwitchDelay(preset.switchDelay ?? 0.50);
     setActionDelay(preset.actionDelay ?? 0.10);
     setActiveSlotId(null);
@@ -152,7 +165,8 @@ export default function App() {
   const handleLoadCustomSlot = (slot: {
     characters: CharacterConfig[];
     stints: Stint[];
-    loopStartTime: number;
+    loopStartIndex?: number;
+    loopStartTime?: number;
     switchDelay?: number;
     actionDelay?: number;
     presetId?: string;
@@ -160,7 +174,7 @@ export default function App() {
   }) => {
     setCharacters(slot.characters);
     setStints(slot.stints);
-    setLoopStartTime(slot.loopStartTime ?? 0);
+    setLoopStartIndex(resolveLoopStartIndex(slot, slot.characters, slot.stints, slot));
     setSwitchDelay(slot.switchDelay ?? 0.50);
     setActionDelay(slot.actionDelay ?? 0.10);
     setSelectedPresetId(slot.presetId || 'custom');
@@ -175,7 +189,7 @@ export default function App() {
     setSelectedPresetId(defaultPreset.id);
     setCharacters(defaultPreset.characters);
     setStints(defaultPreset.stints);
-    setLoopStartTime(0);
+    setLoopStartIndex(0);
     setSwitchDelay(defaultPreset.switchDelay ?? 0.50);
     setActiveSlotId(null);
     setCurrentTime(0);
@@ -217,6 +231,7 @@ export default function App() {
       ...slot,
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       switchDelay,
@@ -239,6 +254,7 @@ export default function App() {
       updatedAt: new Date().toISOString(),
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       switchDelay,
@@ -261,6 +277,7 @@ export default function App() {
       presetId: selectedPresetId,
       characters,
       stints,
+      loopStartIndex,
       loopStartTime,
       totalDuration,
       exportDate: new Date().toISOString(),
@@ -283,10 +300,11 @@ export default function App() {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
         if (parsed.characters && parsed.stints) {
-          setCharacters(parsed.characters.map(migrateLegacyCharacter));
+          const importedChars = parsed.characters.map(migrateLegacyCharacter);
+          setCharacters(importedChars);
           setStints(parsed.stints);
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
-          if (typeof parsed.loopStartTime === 'number') setLoopStartTime(parsed.loopStartTime);
+          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, parsed.stints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
           setCurrentTime(0);
           setIsPlaying(false);
@@ -313,6 +331,7 @@ export default function App() {
         onSelectSavedSlot={(slot) => handleLoadCustomSlot({
           characters: slot.characters,
           stints: slot.stints,
+          loopStartIndex: slot.loopStartIndex,
           loopStartTime: slot.loopStartTime ?? 0,
           switchDelay: slot.switchDelay,
           actionDelay: slot.actionDelay,
@@ -361,7 +380,8 @@ export default function App() {
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
-          onUpdateLoopStartTime={setLoopStartTime}
+          loopStartIndex={loopStartIndex}
+          onUpdateLoopStartIndex={setLoopStartIndex}
         />
 
         {/* 2-Tier Sequence Editor (Macro Stint DnD + Micro Action Reordering) */}
@@ -379,6 +399,7 @@ export default function App() {
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
+          loopStartIndex={loopStartIndex}
         />
 
         {/* Cooldown Conflict Validation, Energy Sufficiency & Rotation Loop Diagnosis */}
@@ -398,6 +419,7 @@ export default function App() {
         characters={characters}
         stints={stints}
         loopStartTime={loopStartTime}
+        loopStartIndex={loopStartIndex}
         totalDuration={totalDuration}
         switchDelay={switchDelay}
         actionDelay={actionDelay}

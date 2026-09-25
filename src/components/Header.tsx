@@ -186,17 +186,24 @@ export const Header: React.FC<HeaderProps> = ({
                   {(() => {
                     const rel = currentTime - loopStartTime;
                     const relStr = Math.abs(rel) < 0.05 ? '0.0s' : rel < 0 ? `-${Math.abs(rel).toFixed(1)}s` : `+${rel.toFixed(1)}s`;
+                    // ループ1周の長さ（2周目開始地点 = ループ基準点 から最後まで）
+                    const loopPeriod = Math.max(0, totalDuration - loopStartTime);
                     return (
-                      <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
-                        {relStr}
-                      </span>
+                      <>
+                        <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
+                          {relStr}
+                        </span>
+                        <span className="text-sky-300 font-semibold" title="ループ1周の秒数（2周目開始地点から最後まで）">
+                          /{loopPeriod.toFixed(1)}s
+                        </span>
+                      </>
                     );
                   })()}
                 </div>
               ) : (
                 <div>
                   <span className="text-amber-400 font-bold">{currentTime.toFixed(1)}s</span>
-                  <span className="text-slate-500 text-[10px]">/{totalDuration.toFixed(1)}s</span>
+                  <span className="text-sky-300 font-semibold" title="総時間">/{totalDuration.toFixed(1)}s</span>
                 </div>
               )}
             </div>

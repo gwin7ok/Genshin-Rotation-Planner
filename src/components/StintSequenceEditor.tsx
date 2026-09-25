@@ -23,6 +23,7 @@ import {
   X
 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
+import { ElementIcon } from './ElementIcon';
 import { 
   CharacterConfig, 
   Stint, 
@@ -895,7 +896,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {stints.map((stint, stintIndex) => {
             const char = characterMap.get(stint.characterId);
             if (!char) return null;
-            const elemTheme = ELEMENT_COLORS[char.element];
             const isCurrentlyActive = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
             const isStintSelected = selectedAction?.stintId === stint.id;
             const stintDuration = (stint.duration ?? 0).toFixed(2);
@@ -979,9 +979,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       >
                         <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                         <span className="font-bold text-sm text-white">{char.name}</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium border ${elemTheme.bg} ${elemTheme.border} ${elemTheme.text}`}>
-                          {char.element.toUpperCase()}
-                        </span>
+                        <ElementIcon element={char.element} className="w-5 h-5" />
                         {isStintSelected && (
                           <span className="px-1.5 py-0.5 rounded font-black text-[10px] bg-yellow-400 text-slate-950 animate-pulse">
                             フォーカス中

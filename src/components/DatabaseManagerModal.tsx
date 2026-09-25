@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { 
   X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
   Sparkles, Check, AlertTriangle, Shield, Zap, Sword, Flame, Layers, Clock, 
-  RotateCcw, Save, Filter
+  RotateCcw, Save, Filter, Lock, LockOpen
 } from 'lucide-react';
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition } from '../types/genshin';
@@ -12,6 +12,7 @@ import { CharacterFilterBar, matchesCharacterFilter } from './CharacterFilterBar
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
 import { 
   syncCharactersMasterOnline,
+  setCharacterLockInDb,
   syncWeaponsMaster,
   syncArtifactsMaster,
   resetDatabaseToMaster, 
@@ -169,6 +170,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     if (e.target) e.target.value = '';
   };
 
+  // ロック（最新マスター同期で上書きしない・一括削除/全クリアで消さない）
+  const lockedCount = database.characters.filter(c => c.isLocked).length;
+  const handleToggleLock = (id: string, locked: boolean) => {
+    onUpdateDatabase(setCharacterLockInDb(database, id, locked));
+  };
+
   // Delete Handlers using Custom In-App Modal
   const handleDeleteChar = (id: string, name: string) => {
     setConfirmDialog({
@@ -189,7 +196,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleDeleteAllCharacters = () => {
     setConfirmDialog({
       title: '全キャラクター一括削除',
-      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（削除後は空の状態になります。アプリ全画面から全キャラが除去されます）`,
+      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（アプリ全画面から削除したキャラが除去されます）${lockedCount > 0 ? `\n※ロック中の ${lockedCount} キャラは削除されません` : ''}`,
       confirmText: '全キャラ一括削除を実行',
       confirmColor: 'red',
       onConfirm: () => {
@@ -205,11 +212,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleClearAllData = () => {
     setConfirmDialog({
       title: 'データベース全データ完全消去',
-      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？`,
+      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？${lockedCount > 0 ? `\n※ロック中の ${lockedCount} キャラは消去されません` : ''}`,
       confirmText: '全データ完全消去',
       confirmColor: 'rose',
       onConfirm: () => {
-        const empty = clearAllDatabaseData();
+        const empty = clearAllDatabaseData(database);
         onUpdateDatabase(empty);
         setConfirmDialog(null);
         setSyncSuccessMsg('データベースの全データを完全クリアしました。');
@@ -446,7 +453,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div
                       key={char.id}
                       className={`p-3.5 rounded-xl border bg-slate-900/90 transition-all hover:border-slate-600 flex flex-col justify-between space-y-3 ${
-                        isCustom ? 'border-amber-500/50 shadow-md shadow-amber-500/5' : 'border-slate-800'
+                        char.isLocked
+                          ? 'border-sky-500/60 shadow-md shadow-sky-500/5'
+                          : isCustom ? 'border-amber-500/50 shadow-md shadow-amber-500/5' : 'border-slate-800'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -475,6 +484,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-1">
+                          <CharacterLockButton
+                            locked={!!char.isLocked}
+                            onToggle={() => handleToggleLock(char.id, !char.isLocked)}
+                          />
                           <button
                             onClick={() => setEditingCharacter(char)}
                             className="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-slate-800 rounded-lg transition-colors"
@@ -1100,6 +1113,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       {editingCharacter && (
         <EditCharacterSubModal
           character={editingCharacter}
+          onToggleLock={(locked) => {
+            // DB にあるキャラはその場でロック状態を保存（新規カスタムキャラは保存時に反映）
+            if (database.characters.some(c => c.id === editingCharacter.id)) handleToggleLock(editingCharacter.id, locked);
+          }}
           onClose={() => setEditingCharacter(null)}
           onSave={(updated) => {
             const newDb = upsertCharacterInDb(database, updated);
@@ -1144,11 +1161,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
    ========================================================================= */
 interface EditCharacterSubModalProps {
   character: CharacterConfig;
+  onToggleLock: (locked: boolean) => void;
   onClose: () => void;
   onSave: (updated: CharacterConfig) => void;
 }
 
-const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character, onClose, onSave }) => {
+const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character, onToggleLock, onClose, onSave }) => {
   const [form, setForm] = useState<CharacterConfig>({ ...character });
   const [actions, setActions] = useState<ActionDefinition[]>([...character.availableActions]);
 
@@ -1195,7 +1213,17 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
               （ID:{form.id}）
             </span>
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          <div className="flex items-center gap-1">
+            <CharacterLockButton
+              locked={!!form.isLocked}
+              onToggle={() => {
+                const locked = !form.isLocked;
+                setForm(prev => ({ ...prev, isLocked: locked }));
+                onToggleLock(locked);
+              }}
+            />
+            <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          </div>
         </div>
 
         <form onSubmit={handleSaveForm} className="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
@@ -1725,3 +1753,20 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
     </div>
   );
 };
+
+/** キャラのロック切り替えボタン（南京錠）。ロック中は閉じた錠、解除中は開いた錠を表示 */
+const CharacterLockButton: React.FC<{ locked: boolean; onToggle: () => void }> = ({ locked, onToggle }) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    className={`p-1.5 rounded-lg transition-colors ${
+      locked ? 'text-sky-300 bg-sky-500/15 hover:bg-sky-500/25' : 'text-slate-500 hover:text-slate-200 hover:bg-slate-800'
+    }`}
+    title={locked
+      ? 'ロック中: 最新マスターデータの同期で上書きされず、全キャラ一括削除・全データクリアでも削除されません（クリックで解除）'
+      : 'ロックする: 最新マスターデータの同期での上書きや、全キャラ一括削除・全データクリアでの削除から保護します'}
+    aria-pressed={locked}
+  >
+    {locked ? <Lock className="w-3.5 h-3.5" /> : <LockOpen className="w-3.5 h-3.5" />}
+  </button>
+);

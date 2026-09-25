@@ -107,6 +107,8 @@ export interface CharacterConfig {
 
   /** ユーザーが DB 管理画面で作成・編集したキャラ */
   isCustom?: boolean;
+  /** DB管理でロックしたキャラ。最新マスターデータの同期で上書きされず、全キャラ一括削除・全データクリアでも削除されない */
+  isLocked?: boolean;
   updatedAt?: string;
 
   /** マスターデータの出典 */

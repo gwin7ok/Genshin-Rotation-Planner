@@ -11,6 +11,25 @@ import {
 const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
 
 const isCustomCharacter = (c: CharacterConfig) => c.id.startsWith('custom_') || !!c.isCustom;
+const isLockedCharacter = (c: CharacterConfig) => !!c.isLocked;
+
+/**
+ * マスターのキャラ一覧に、現在の DB のキャラを重ねる（キーで突き合わせ）
+ * - keepOverMaster が true のキャラは、同じキーのマスターより優先して残す（マスターで上書きしない）
+ * - カスタム・ロック中のキャラで、マスターに同じキーが無いものは末尾に残す
+ */
+function mergeMasterWithProtected(
+  masterChars: CharacterConfig[],
+  currentChars: CharacterConfig[],
+  keepOverMaster: (c: CharacterConfig) => boolean,
+): CharacterConfig[] {
+  const keptById = new Map(currentChars.filter(keepOverMaster).map(c => [c.id, c]));
+  const masterIds = new Set(masterChars.map(c => c.id));
+  return [
+    ...masterChars.map(mc => keptById.get(mc.id) ?? mc),
+    ...currentChars.filter(c => (isCustomCharacter(c) || isLockedCharacter(c)) && !masterIds.has(c.id)),
+  ];
+}
 
 /**
  * Loads database from LocalStorage or generates default master DB
@@ -28,16 +47,16 @@ export function loadDatabase(): AppDatabase {
 
     const characters = parsed.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
 
-    // 旧バージョンの DB: マスター由来のキャラは同梱の最新マスターに置き換え、ユーザー作成キャラだけ残す
+    // 旧バージョンの DB: マスター由来のキャラは同梱の最新マスターに置き換え、ユーザー作成キャラとロック中のキャラは残す
     if ((parsed.version ?? 0) < DATABASE_VERSION) {
-      const customChars = characters.filter(isCustomCharacter);
       const upgraded: AppDatabase = {
         ...parsed,
         version: DATABASE_VERSION,
-        characters: [
-          ...INITIAL_MASTER_DATABASE.characters.filter(mc => !customChars.some(cc => cc.id === mc.id)),
-          ...customChars,
-        ],
+        characters: mergeMasterWithProtected(
+          INITIAL_MASTER_DATABASE.characters,
+          characters,
+          c => isCustomCharacter(c) || isLockedCharacter(c),
+        ),
       };
       saveDatabase(upgraded);
       return upgraded;
@@ -62,19 +81,15 @@ export function saveDatabase(db: AppDatabase): void {
 }
 
 /**
- * genshin-db / gcsim から最新のキャラクターマスターをオンラインで生成し、DB に反映する。
- * ユーザーが作成したキャラ (custom_*) はマスターと ID が重ならない限り残す。
+ * genshin-db / gcsim から最新のキャラクターマスターをオンラインで生成し、DB に反映する（キーで突き合わせて上書き）。
+ * ロック中のキャラは上書きしない。ユーザーが作成したキャラ (custom_*) はマスターとキーが重ならない限り残す。
  */
 export async function syncCharactersMasterOnline(
   currentDb: AppDatabase,
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
   const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
-  const customChars = currentDb.characters.filter(isCustomCharacter);
-  const mergedCharacters = [
-    ...latestChars,
-    ...customChars.filter(cc => !latestChars.some(mc => mc.id === cc.id))
-  ];
+  const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -171,6 +186,18 @@ export function upsertCharacterInDb(db: AppDatabase, character: CharacterConfig)
 }
 
 /**
+ * キャラのロック状態だけを切り替える（カスタム扱いや更新日時は変えない）
+ */
+export function setCharacterLockInDb(db: AppDatabase, characterId: string, locked: boolean): AppDatabase {
+  const updatedDb: AppDatabase = {
+    ...db,
+    characters: db.characters.map(c => (c.id === characterId ? { ...c, isLocked: locked } : c)),
+  };
+  saveDatabase(updatedDb);
+  return updatedDb;
+}
+
+/**
  * Delete Single Character from Database
  */
 export function deleteCharacterFromDb(db: AppDatabase, characterId: string): AppDatabase {
@@ -188,7 +215,7 @@ export function deleteCharacterFromDb(db: AppDatabase, characterId: string): App
 export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
   const updatedDb: AppDatabase = {
     ...db,
-    characters: [],
+    characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
   };
   saveDatabase(updatedDb);
   return updatedDb;
@@ -197,11 +224,11 @@ export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
 /**
  * Clear All Data (Characters, Weapons, Artifacts) completely
  */
-export function clearAllDatabaseData(): AppDatabase {
+export function clearAllDatabaseData(db: AppDatabase): AppDatabase {
   const emptyDb: AppDatabase = {
     version: 1.0,
     lastSyncedAt: new Date().toLocaleString('ja-JP') + ' (全データクリア済)',
-    characters: [],
+    characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
     weapons: [],
     artifacts: [],
   };

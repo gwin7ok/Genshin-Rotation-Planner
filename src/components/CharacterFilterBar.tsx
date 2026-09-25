@@ -1,30 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Filter, Sword } from 'lucide-react';
 import { ElementType, WeaponType } from '../types/genshin';
+import { ELEMENT_ICON_DATA_URLS } from '../data/elementIcons';
 
 export type ElementFilterValue = ElementType | 'all';
 export type WeaponFilterValue = WeaponType | 'all';
 
-export const ELEMENT_FILTER_OPTIONS: Array<{ id: ElementFilterValue; label: string; color: string; icon: string }> = [
+/** icon: 画像が無い・読み込めないときの代わりの絵文字。iconUrl: 元素は genshin-db の埋め込み画像 */
+export const ELEMENT_FILTER_OPTIONS: Array<{ id: ElementFilterValue; label: string; color: string; icon: string; iconUrl?: string }> = [
   { id: 'all', label: '全元素', color: '#94a3b8', icon: '✦' },
-  { id: 'pyro', label: '炎', color: '#ef4444', icon: '🔥' },
-  { id: 'hydro', label: '水', color: '#0284c7', icon: '💧' },
-  { id: 'electro', label: '雷', color: '#a855f7', icon: '⚡' },
-  { id: 'dendro', label: '草', color: '#10b981', icon: '🌿' },
-  { id: 'cryo', label: '氷', color: '#06b6d4', icon: '❄️' },
-  { id: 'anemo', label: '風', color: '#14b8a6', icon: '🌀' },
-  { id: 'geo', label: '岩', color: '#f59e0b', icon: '🪨' },
-  { id: 'physical', label: '物理', color: '#64748b', icon: '⚔️' },
+  { id: 'pyro', label: '炎', color: '#ef4444', icon: '🔥', iconUrl: ELEMENT_ICON_DATA_URLS.pyro },
+  { id: 'hydro', label: '水', color: '#0284c7', icon: '💧', iconUrl: ELEMENT_ICON_DATA_URLS.hydro },
+  { id: 'electro', label: '雷', color: '#a855f7', icon: '⚡', iconUrl: ELEMENT_ICON_DATA_URLS.electro },
+  { id: 'dendro', label: '草', color: '#10b981', icon: '🌿', iconUrl: ELEMENT_ICON_DATA_URLS.dendro },
+  { id: 'cryo', label: '氷', color: '#06b6d4', icon: '❄️', iconUrl: ELEMENT_ICON_DATA_URLS.cryo },
+  { id: 'anemo', label: '風', color: '#14b8a6', icon: '🌀', iconUrl: ELEMENT_ICON_DATA_URLS.anemo },
+  { id: 'geo', label: '岩', color: '#f59e0b', icon: '🪨', iconUrl: ELEMENT_ICON_DATA_URLS.geo },
 ];
 
-export const WEAPON_FILTER_OPTIONS: Array<{ id: WeaponFilterValue; label: string; icon: string }> = [
+/** 武器種アイコン: enka.network のゲーム内アイコン（キャラアイコンと同じ取得元） */
+const WEAPON_ICON_BASE_URL = 'https://enka.network/ui';
+
+export const WEAPON_FILTER_OPTIONS: Array<{ id: WeaponFilterValue; label: string; icon: string; iconUrl?: string }> = [
   { id: 'all', label: '全武器', icon: '✦' },
-  { id: 'sword', label: '片手剣', icon: '🗡️' },
-  { id: 'claymore', label: '両手剣', icon: '⚔️' },
-  { id: 'polearm', label: '長柄武器', icon: '🔱' },
-  { id: 'bow', label: '弓', icon: '🏹' },
-  { id: 'catalyst', label: '法器', icon: '📖' },
+  { id: 'sword', label: '片手剣', icon: '🗡️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Sword.png` },
+  { id: 'claymore', label: '両手剣', icon: '⚔️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Claymore.png` },
+  { id: 'polearm', label: '長柄武器', icon: '🔱', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Pole.png` },
+  { id: 'bow', label: '弓', icon: '🏹', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Bow.png` },
+  { id: 'catalyst', label: '法器', icon: '📖', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Catalyst.png` },
 ];
+
+/** フィルターボタンのアイコン。画像が無い・読み込めないときは絵文字を表示 */
+const FilterIcon: React.FC<{ icon: string; iconUrl?: string }> = ({ icon, iconUrl }) => {
+  const [failed, setFailed] = useState(false);
+  if (!iconUrl || failed) return <span>{icon}</span>;
+  return <img src={iconUrl} alt="" className="w-4 h-4 object-contain shrink-0" draggable={false} onError={() => setFailed(true)} />;
+};
 
 /** 元素・武器種フィルターに一致するか */
 export const matchesCharacterFilter = (
@@ -80,7 +91,7 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
                 : {}
             }
           >
-            <span>{elem.icon}</span>
+            <FilterIcon icon={elem.icon} iconUrl={elem.iconUrl} />
             <span>{elem.label}</span>
           </button>
         );
@@ -105,7 +116,7 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
                 : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <span>{w.icon}</span>
+            <FilterIcon icon={w.icon} iconUrl={w.iconUrl} />
             <span>{w.label}</span>
           </button>
         );

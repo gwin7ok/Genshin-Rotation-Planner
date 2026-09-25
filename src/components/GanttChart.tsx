@@ -29,6 +29,7 @@ import {
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
+import { scrollStintCardBelowSticky, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { swapStintsForCharacters } from '../utils/stintReorder';
 
@@ -741,6 +742,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             Sticks directly below <Header> at var(--header-height) during page scroll
         ========================================================================= */}
         <div 
+          id={GANTT_STICKY_HEADER_ID}
           className="sticky z-30 rounded-t-xl border border-slate-800 bg-slate-900/95 backdrop-blur-md shadow-2xl w-full mb-0 overflow-x-clip"
           style={{ top: 'var(--header-height, 56px)' }}
         >
@@ -1101,6 +1103,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         ========================================================================= */}
         <div 
           ref={containerRef}
+          id={GANTT_SCROLL_CONTAINER_ID}
           onScroll={handleContainerScroll}
           onMouseDown={handlePanMouseDown}
           onMouseMove={handleMouseMove}
@@ -1146,7 +1149,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
-                    <div key={stint.id} className={`relative group/stint transition-colors ${
+                    <div key={stint.id} id={ganttStintRowId(stint.id)} className={`relative group/stint transition-colors ${
                       isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
                     }`}>
                       <div className="flex">
@@ -1359,10 +1362,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           e.stopPropagation();
                                           onSelectAction?.(stint.id, act.id);
                                           onSeek(act.startTime ?? 0);
-                                          const el = document.getElementById(`stint-card-${stint.id}`);
-                                          if (el) {
-                                            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                                          }
+                                          scrollStintCardBelowSticky(stint.id);
                                         }}
                                         style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${

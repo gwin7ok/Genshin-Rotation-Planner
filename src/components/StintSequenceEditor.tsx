@@ -32,6 +32,7 @@ import {
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { alignStintsToCharacterOrder } from '../utils/stintReorder';
 import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterActions';
+import { scrollStintCardBelowSticky, scrollToGanttStintRow, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -280,7 +281,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       <div className="max-w-7xl mx-auto space-y-4">
         
         {/* Sticky Header Container: セクション見出し・並び替えパイプライン・選択中アクション */}
-        <div className="sticky top-[var(--header-height,0px)] z-30 bg-slate-900/95 backdrop-blur-md pt-2 pb-3 -mx-4 px-4 border-b border-slate-800/80 shadow-xl space-y-3 transition-all">
+        <div id={ACTION_BUILDER_STICKY_ID} className="sticky top-[var(--header-height,0px)] z-30 bg-slate-900/95 backdrop-blur-md pt-2 pb-3 -mx-4 px-4 border-b border-slate-800/80 shadow-xl space-y-3 transition-all">
           {/* Section Header */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -418,10 +419,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   if (targetAct && onSeek) {
                     onSeek(targetAct.startTime ?? 0);
                   }
-                  const el = document.getElementById(`stint-card-${stint.id}`);
-                  if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                  }
+                  scrollStintCardBelowSticky(stint.id);
                 };
 
                 return (
@@ -927,6 +925,21 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     {/* Left: Reorder Controls & Character Info */}
                     <div className="flex items-center gap-2.5">
                       
+                      {/* ガントチャートの該当出場行へ移動 */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+                          if (targetAct) onSelectAction?.(stint.id, targetAct.id);
+                          scrollToGanttStintRow(stint.id);
+                        }}
+                        className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-sky-300 border border-sky-700/60 hover:bg-sky-500 hover:text-slate-950 transition-all shadow-sm"
+                        title="ガントチャートのこの出場の行へ移動"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                        <span>ガントチャートへ</span>
+                      </button>
+
                       {/* Explicit Up / Down Reorder Buttons */}
                       <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700/80">
                         <button
@@ -1341,6 +1354,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           })}
         </div>
       </div>
+      {/* パイプライン / ガントチャートからの移動で、末尾付近のカードも固定表示エリア直下まで上げるための下余白 */}
+      <div id={ACTION_BUILDER_BOTTOM_SPACER_ID} aria-hidden="true" />
     </section>
   );
 };

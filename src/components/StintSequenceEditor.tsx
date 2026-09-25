@@ -277,8 +277,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   };
 
   return (
-    <section ref={sectionRef} className="bg-slate-900 border-b border-slate-800 p-4">
-      <div className="max-w-7xl mx-auto space-y-4">
+    <section ref={sectionRef} className="bg-slate-900 border-b border-slate-800 p-4 w-full max-w-full">
+      <div className="w-full space-y-4">
         
         {/* Sticky Header Container: セクション見出し・並び替えパイプライン・選択中アクション */}
         <div id={ACTION_BUILDER_STICKY_ID} className="sticky top-[var(--header-height,0px)] z-30 bg-slate-900/95 backdrop-blur-md pt-2 pb-3 -mx-4 px-4 border-b border-slate-800/80 shadow-xl space-y-3 transition-all">
@@ -922,56 +922,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   {/* Top Bar of Stint Card */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800/80">
                     
-                    {/* Left: Reorder Controls & Character Info */}
+                    {/* Left: Character Info（#番号〜出場時間）& Reorder Controls */}
                     <div className="flex items-center gap-2.5">
                       
-                      {/* ガントチャートの該当出場行へ移動 */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
-                          if (targetAct) onSelectAction?.(stint.id, targetAct.id);
-                          scrollToGanttStintRow(stint.id);
-                        }}
-                        className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-sky-300 border border-sky-700/60 hover:bg-sky-500 hover:text-slate-950 transition-all shadow-sm"
-                        title="ガントチャートのこの出場の行へ移動"
-                      >
-                        <ArrowUp className="w-3.5 h-3.5" />
-                        <span>ガントチャートへ</span>
-                      </button>
-
-                      {/* Explicit Up / Down Reorder Buttons */}
-                      <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700/80">
-                        <button
-                          onClick={() => moveStint(stintIndex, stintIndex - 1)}
-                          disabled={isFirst}
-                          className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
-                          title="このキャラの登場順を1つ前（上）へ"
-                        >
-                          <ChevronUp className="w-3.5 h-3.5" />
-                          <span>上へ</span>
-                        </button>
-
-                        <button
-                          onClick={() => moveStint(stintIndex, stintIndex + 1)}
-                          disabled={isLast}
-                          className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
-                          title="このキャラの登場順を1つ次（下）へ"
-                        >
-                          <ChevronDown className="w-3.5 h-3.5" />
-                          <span>下へ</span>
-                        </button>
-                      </div>
-
-                      {/* Drag Handle with explicit label */}
-                      <div 
-                        className="hidden sm:flex items-center gap-1 text-[11px] text-slate-400 hover:text-amber-300 bg-slate-900 px-2 py-1 rounded border border-slate-700/60 cursor-grab active:cursor-grabbing select-none"
-                        title="ドラッグ＆ドロップで上下に並び替え"
-                      >
-                        <GripVertical className="w-3.5 h-3.5 text-amber-400" />
-                        <span>ドラッグ移動</span>
-                      </div>
-
                       {/* Stint Order Badge */}
                       <span className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold flex items-center justify-center border border-amber-500/40 shadow-inner">
                         #{stintIndex + 1}
@@ -1029,6 +982,53 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         <span className="text-amber-300 font-bold">{fmtRel(stint.endTime ?? 0)}</span>
                         <span className="text-slate-400 ml-1">({stintDuration}s)</span>
                       </div>
+
+                      {/* Explicit Up / Down Reorder Buttons */}
+                      <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-700/80">
+                        <button
+                          onClick={() => moveStint(stintIndex, stintIndex - 1)}
+                          disabled={isFirst}
+                          className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
+                          title="このキャラの登場順を1つ前（上）へ"
+                        >
+                          <ChevronUp className="w-3.5 h-3.5" />
+                          <span>上へ</span>
+                        </button>
+
+                        <button
+                          onClick={() => moveStint(stintIndex, stintIndex + 1)}
+                          disabled={isLast}
+                          className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
+                          title="このキャラの登場順を1つ次（下）へ"
+                        >
+                          <ChevronDown className="w-3.5 h-3.5" />
+                          <span>下へ</span>
+                        </button>
+                      </div>
+
+                      {/* Drag Handle with explicit label */}
+                      <div 
+                        className="hidden sm:flex items-center gap-1 text-[11px] text-slate-400 hover:text-amber-300 bg-slate-900 px-2 py-1 rounded border border-slate-700/60 cursor-grab active:cursor-grabbing select-none"
+                        title="ドラッグ＆ドロップで上下に並び替え"
+                      >
+                        <GripVertical className="w-3.5 h-3.5 text-amber-400" />
+                        <span>ドラッグ移動</span>
+                      </div>
+
+                      {/* ガントチャートの該当出場行へ移動 */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+                          if (targetAct) onSelectAction?.(stint.id, targetAct.id);
+                          scrollToGanttStintRow(stint.id);
+                        }}
+                        className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-sky-300 border border-sky-700/60 hover:bg-sky-500 hover:text-slate-950 transition-all shadow-sm"
+                        title="ガントチャートのこの出場の行へ移動"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                        <span>ガントチャートへ</span>
+                      </button>
                     </div>
 
                     {/* Right: Notes, Duplicate, Delete */}

@@ -101,6 +101,12 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     };
     setEditingChars(updated);
 
+    // 右隣のスロットが空（未設定）なら、続けて選べるようフォーカスを移す
+    const nextSlot = selectedSlot + 1;
+    if (nextSlot < updated.length && isEmptySlotCharacter(updated[nextSlot])) {
+      setSelectedSlot(nextSlot);
+    }
+
     // Automatically migrate old character's timeline stints to the new character!
     if (oldChar && !isEmptySlotCharacter(oldChar)) {
       const migrated = migrateStintsToNewCharacter(editingStints, oldChar.id, newRosterChar);

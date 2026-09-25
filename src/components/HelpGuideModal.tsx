@@ -122,20 +122,6 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
             </p>
           </div>
 
-          {/* Party Lane Order (Swimlane) & Horizontal Sync */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-            <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
-              <Repeat className="w-4 h-4 text-purple-400" />
-              <span>「編成設定」やレーン並び替え時の横軸（タイムライン）連動機能</span>
-            </h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              「編成設定」でスロットを <span className="text-amber-300 font-semibold">◀ 左へ / 右へ ▶</span> 入れ替えたり、ガントチャート左側の <span className="text-sky-300 font-semibold">▲ / ▼</span> ボタンでキャラの行を入れ替えると、<strong>縦軸の並び順だけでなく横軸の登場順序（タイムライン）も自動で連動してスワップ</strong>されます。
-            </p>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              また、登場順序エディター上部または編成設定モーダル内の <span className="text-amber-300 font-semibold">「🔄 編成スロット順（1→2→3→4）に横軸を整列」</span> ボタンを押すと、現在のパーティ枠番順（1枠目→2枠目→3枠目→4枠目）に横軸の出場順を一括で揃えることができます。
-            </p>
-          </div>
-
           {/* CT and Effect Duration Color Scheme */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
             <h4 className="font-bold text-white text-xs flex items-center gap-1.5">

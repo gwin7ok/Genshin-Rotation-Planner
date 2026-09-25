@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Copy, Check, FileText, Clock, Sparkles } from 'lucide-react';
 import { CharacterConfig, Stint } from '../types/genshin';
+import { buildRotationNotation } from '../utils/rotationNotation';
 
 interface RotationSummaryModalProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface RotationSummaryModalProps {
   characters: CharacterConfig[];
   stints: Stint[];
   totalDuration: number;
+  /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
+  loopStartIndex?: number;
 }
 
 export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
@@ -16,6 +19,7 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
   characters,
   stints,
   totalDuration,
+  loopStartIndex = 0,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -24,20 +28,8 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
-  // Generate standard Genshin theorycraft rotation shorthand:
-  // e.g. "行秋 [Q E E N1] ➔ ベネット [Q E] ➔ 香菱 [Q E] ➔ 雷電将軍 [Q 3N3C+N1C]"
-  const rotationNotation = stints.map(stint => {
-    const char = characterMap.get(stint.characterId);
-    const charName = char ? char.name : 'Unknown';
-    const nonSwapActions = stint.actions.filter(a => 
-      a.type !== 'swap' && 
-      a.shortName !== '交代' && 
-      a.name !== 'キャラ交代' && 
-      a.actionTypeId !== 'action_switch_char'
-    );
-    const actionStr = nonSwapActions.map(a => a.shortName).join(' ');
-    return `${charName} [${actionStr}]`;
-  }).join(' ➔ ');
+  // 記法: 刻晴(E E) ➔ [ナヒーダ(E CA) ➔ フィッシュル(Q)]（[ ] は2周目以降も繰り返す部分）
+  const rotationNotation = buildRotationNotation(characters, stints, loopStartIndex);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(rotationNotation);

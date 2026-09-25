@@ -4,10 +4,9 @@ import { CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshi
 import { AppDatabase } from '../types/database';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, createEmptySlotCharacter, isEmptySlotCharacter } from '../data/characters';
-import { 
-  swapStintsForCharacters, 
-  alignStintsToCharacterOrder, 
-  migrateStintsToNewCharacter 
+import {
+  migrateStintsToNewCharacter,
+  refreshCharactersFromDatabase,
 } from '../utils/stintReorder';
 
 interface PartyConfigModalProps {
@@ -30,7 +29,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const [selectedSlot, setSelectedSlot] = useState<number>(0);
   const [editingChars, setEditingChars] = useState<CharacterConfig[]>(characters);
   const [editingStints, setEditingStints] = useState<Stint[]>(stints);
-  const [syncHorizontalOrder, setSyncHorizontalOrder] = useState<boolean>(true);
 
   // Filter States
   const [elementFilter, setElementFilter] = useState<ElementFilterValue>('all');
@@ -104,16 +102,18 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     setEditingChars(updated);
     setSelectedSlot(toSlot);
 
-    // If syncHorizontalOrder is enabled, swap the horizontal appearance order (stints) on the timeline too!
-    if (syncHorizontalOrder && charA && charB) {
-      const swappedStints = swapStintsForCharacters(editingStints, charA.id, charB.id);
-      setEditingStints(swappedStints);
-    }
   };
 
-  const handleAlignAllStintsToSlots = () => {
-    const aligned = alignStintsToCharacterOrder(editingStints, editingChars);
-    setEditingStints(aligned);
+  // 編成中のキャラを、DB（マスターデータ）の最新データで登録し直す（同じキャラのまま）
+  const handleRefreshFromDatabase = () => {
+    const result = refreshCharactersFromDatabase(editingChars, editingStints, database.characters);
+    setEditingChars(result.characters);
+    setEditingStints(result.stints);
+    const msg = result.refreshed.length > 0
+      ? `${result.refreshed.join('・')} をマスターデータで登録し直しました（「編成を保存・適用」で確定）`
+      : '登録し直せるキャラがありません';
+    setWarningMsg(result.missing.length > 0 ? `${msg}。DBに見つからないキャラ: ${result.missing.join('・')}` : msg);
+    setTimeout(() => setWarningMsg(null), 5000);
   };
 
   const handleClearAll = () => {
@@ -149,7 +149,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 パーティ編成・ステータス設定 (Party Configuration)
               </h3>
               <p className="text-[11px] text-slate-400">
-                スロットの入れ替えは、ガントチャートの縦軸（レーン）および横軸（登場順）に連動します
+                スロットの入れ替えは、ガントチャートの縦軸（レーン）の並び順に反映されます
               </p>
             </div>
           </div>
@@ -211,29 +211,17 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
         {/* Horizontal Sync Options Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 bg-slate-950/90 border-b border-slate-800 text-xs">
-          <label className="flex items-center gap-2 cursor-pointer select-none text-slate-300 hover:text-white">
-            <input
-              type="checkbox"
-              checked={syncHorizontalOrder}
-              onChange={(e) => setSyncHorizontalOrder(e.target.checked)}
-              className="w-4 h-4 rounded text-amber-500 bg-slate-900 border-slate-700 focus:ring-amber-400"
-            />
-            <span className="font-semibold text-amber-300">
-              ⚡ 横軸の登場順序（タイムライン）も連動して並び替える
-            </span>
-            <span className="text-slate-400 text-[11px] hidden sm:inline">
-              （スロット変更時にタイムラインの順番も即座に同期）
-            </span>
-          </label>
 
+
+          <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            onClick={handleAlignAllStintsToSlots}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm"
-            title="現在のスロット順（1→2→3→4）に合わせて、タイムライン上の全登場ブロックを整列します"
+            onClick={handleRefreshFromDatabase}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors shadow-sm"
+            title="パーティメンバー全員（同じキャラのまま）を、DB管理の最新マスターデータで登録し直します。元素チャージ効率・武器・聖遺物は残し、登録済みアクションは新しいデータの同じアクションへ付け替えます（「編成を保存・適用」で確定）"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>横軸の登場順を1→2→3→4に完全整列</span>
+            <Database className="w-3.5 h-3.5" />
+            <span>全パーティメンバーをマスターデータで再登録</span>
           </button>
 
           {confirmClearAll ? (
@@ -265,6 +253,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               <span>編成・アクションを全クリア</span>
             </button>
           )}
+          </div>
         </div>
 
         {/* Slot Detail & Swap Roster */}
@@ -282,7 +271,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     onClick={() => handleMoveSlot(selectedSlot, selectedSlot - 1)}
                     disabled={selectedSlot === 0}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 disabled:opacity-25 disabled:pointer-events-none transition-colors"
-                    title="このキャラを左のスロットへ移動（横軸の登場順も連動）"
+                    title="このキャラを左のスロットへ移動"
                   >
                     ◀ 左のスロットへ
                   </button>
@@ -290,7 +279,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     onClick={() => handleMoveSlot(selectedSlot, selectedSlot + 1)}
                     disabled={selectedSlot === editingChars.length - 1}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 disabled:opacity-25 disabled:pointer-events-none transition-colors"
-                    title="このキャラを右のスロットへ移動（横軸の登場順も連動）"
+                    title="このキャラを右のスロットへ移動"
                   >
                     右のスロットへ ▶
                   </button>
@@ -472,7 +461,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
         {/* Modal Footer */}
         <div className="flex items-center justify-between px-5 py-3 border-t border-slate-800 bg-slate-950/80">
           <div className="text-[11px] text-slate-400">
-            {syncHorizontalOrder ? '✓ 横軸（タイムライン登場順）も自動連動保存されます' : '※ 縦軸の並び順のみ保存されます'}
+            「編成を保存・適用」を押すと変更が反映されます
           </div>
           <div className="flex items-center gap-2">
             <button

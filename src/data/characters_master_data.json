@@ -196,6 +196,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "天つ罪·国つ罪の鎮詞",
+        "talentSlot": 1,
+        "description": "神里流·氷華を発動した後の6秒間、神里綾華の通常攻撃と重撃のダメージ+30%。",
+        "id": "10000002-cryo_p1",
+        "name": "天つ罪·国つ罪の鎮詞",
+        "duration": 6,
+        "dataSource": {
+          "duration": "6秒間"
+        }
+      },
+      {
+        "talentName": "寒空の宣命祝詞",
+        "talentSlot": 2,
+        "description": "神里流·霰歩終了後に発生する氷が敵に命中すると、神里綾華は下記効果を獲得する。 ·スタミナを10ポイント回復する。 ·氷元素ダメージ+18%、継続時間10秒。",
+        "id": "10000002-cryo_p2",
+        "name": "寒空の宣命祝詞",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000002,
       "gcsimKey": "kamisatoayaka"
@@ -394,6 +418,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "風の赴くままに",
+        "talentSlot": 1,
+        "description": "ジンの通常攻撃が命中する時、50%の確率でチーム全員のHPを回復する。回復量はジンの攻撃力の15%に相当する。",
+        "id": "10000003-anemo_p1",
+        "name": "風の赴くままに",
+        "dataSource": {}
+      },
+      {
+        "talentName": "風の導くままに",
+        "talentSlot": 2,
+        "description": "蒲公英の風発動後、元素エネルギーが20%回復する。",
+        "id": "10000003-anemo_p2",
+        "name": "風の導くままに",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -789,6 +831,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "空を裂く風",
+        "talentSlot": 1,
+        "description": "通常攻撃の最後の1撃が風の刃を放つようになり、経路上の敵に攻撃力60%分の風元素ダメージを与える。",
+        "id": "10000005-anemo_p1",
+        "name": "空を裂く風",
+        "dataSource": {}
+      },
+      {
+        "talentName": "蘇生の風",
+        "talentSlot": 2,
+        "description": "旋風の剣で敵を倒した後、1秒毎にHPを2%回復する、継続時間5秒。 5秒に1回のみ発動可能。",
+        "id": "10000005-anemo_p2",
+        "name": "蘇生の風",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000005,
       "gcsimKey": "aetheranemo"
@@ -1118,6 +1181,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "鋭き凛氷",
+        "talentSlot": 1,
+        "description": "輝映・星電導：凛冽の寒星が存在している間、旅人の通常攻撃、重撃、落下攻撃は元素付与によって他の元素に変化しない氷元素ダメージへと変わり、与えるダメージが旅人の攻撃力の80%分アップする。",
+        "id": "10000005-cryo_p1",
+        "name": "鋭き凛氷",
+        "dataSource": {}
+      },
+      {
+        "talentName": "透明なる冷氷",
+        "talentSlot": 2,
+        "description": "旅人の元素熟知が、旅人の攻撃力の8%分アップする。この方法でアップできる旅人の元素熟知は、最大160まで。",
+        "id": "10000005-cryo_p2",
+        "name": "透明なる冷氷",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -1468,6 +1549,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "蔓生の埜草",
+        "talentSlot": 1,
+        "description": "草蓮灯が存在する間、1秒毎に領域内フィールド上キャラクターの元素熟知を6アップさせる「蓮光遍照」効果を1層獲得する。草蓮灯の「蓮光遍照」効果は最大10層まで重ね掛けできる。",
+        "id": "10000005-dendro_p1",
+        "name": "蔓生の埜草",
+        "dataSource": {}
+      },
+      {
+        "talentName": "生い茂る草叢",
+        "talentSlot": 2,
+        "description": "旅人自身の元素熟知の数値が1につき、草縁剣によるダメージ+0.15%、臥草若化によるダメージ+0.1%。",
+        "id": "10000005-dendro_p2",
+        "name": "生い茂る草叢",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -1853,6 +1952,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "転瞬の迅雷",
+        "talentSlot": 1,
+        "description": "周囲のチームメンバー（旅人自身を除く）が雷影剣で生成された豊穰の勾玉を拾うと、雷影剣のクールタイム-1.5秒。",
+        "id": "10000005-electro_p1",
+        "name": "転瞬の迅雷",
+        "dataSource": {}
+      },
+      {
+        "talentName": "轟く雷鳴",
+        "talentSlot": 2,
+        "description": "旅人自身の元素チャージ効率の10%を基準に、雷影剣が生成した豊穰の勾玉による元素チャージ効率をアップする。",
+        "id": "10000005-electro_p2",
+        "name": "轟く雷鳴",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000005,
       "gcsimKey": "aetherelectro"
@@ -2232,6 +2349,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "破れた断崖",
+        "talentSlot": 1,
+        "description": "星落としの剣のクールタイム-2秒。",
+        "id": "10000005-geo_p1",
+        "name": "破れた断崖",
+        "dataSource": {}
+      },
+      {
+        "talentName": "狂乱の岩崩れ",
+        "talentSlot": 2,
+        "description": "通常攻撃の最後の1撃が岩崩れを起こすようになり、範囲内の敵に攻撃力60%分の岩元素ダメージを与える。",
+        "id": "10000005-geo_p2",
+        "name": "狂乱の岩崩れ",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -2699,6 +2834,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "無染の清水",
+        "talentSlot": 1,
+        "description": "長押しで発動した水紋の剣による露雫が敵に命中した後、旅人の近くに源水の雫を生成する。旅人が源水の雫を拾うと、HPが7%回復する。 この方法で生成できる源水の雫は1秒毎に1個のみ。水紋の剣1回につき、生成できる源水の雫は4個まで。",
+        "id": "10000005-hydro_p1",
+        "name": "無染の清水",
+        "dataSource": {}
+      },
+      {
+        "talentName": "澄明の浄水",
+        "talentSlot": 2,
+        "description": "長押しで水紋の剣を発動する時、充満によってHPを消費した場合、発動終了時に飛散する激流のダメージがアップする。ダメージアップ量は旅人がこの発動期間中に充満で消費したHPの合計の45%に相当する。 この方法でアップできる上記攻撃によるダメージは5000までとなる。",
+        "id": "10000005-hydro_p2",
+        "name": "澄明の浄水",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000005,
       "gcsimKey": "aetherhydro"
@@ -3052,6 +3205,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "燃え立つ真火",
+        "talentSlot": 1,
+        "description": "旅人の夜魂値が20を超えている時、元素スキル流火の剣の「ブレイジング・ロック」と「バーニング・ロック」の攻撃が敵に命中した後の影響範囲がアップする。",
+        "id": "10000005-pyro_p1",
+        "name": "燃え立つ真火",
+        "dataSource": {}
+      },
+      {
+        "talentName": "燻る残火",
+        "talentSlot": 2,
+        "description": "ブレイジング・ロック、またはバーニング・ロックを持つフィールド上キャラクターが敵に炎元素関連反応を起こした後、旅人の元素エネルギーを5ポイント回復する。この効果は12秒毎に1回のみ発動可能。また、付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、旅人の元素エネルギーを4ポイント回復する。",
+        "cooldown": 12,
+        "id": "10000005-pyro_p2",
+        "name": "燻る残火",
+        "dataSource": {
+          "cooldown": "12秒毎に1回"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000005,
       "gcsimKey": "aetherpyro"
@@ -3260,6 +3434,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "感電余震",
+        "talentSlot": 1,
+        "description": "重撃が命中した時、敵に蒼雷の誘雷効果を付与する。",
+        "id": "10000006-electro_p1",
+        "name": "感電余震",
+        "dataSource": {}
+      },
+      {
+        "talentName": "静電気フィールド",
+        "talentSlot": 2,
+        "description": "薔薇の雷光攻撃を受けた敵の防御力-15%。継続時間10秒。",
+        "id": "10000006-electro_p2",
+        "name": "静電気フィールド",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000006,
       "gcsimKey": "lisa"
@@ -3446,6 +3641,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "輝く季節",
+        "talentSlot": 1,
+        "description": "公演、開始♪歌声の輪が継続している間、スタミナ消費-12%。",
+        "id": "10000014-hydro_p1",
+        "name": "輝く季節",
+        "dataSource": {}
+      },
+      {
+        "talentName": "アンコール",
+        "talentSlot": 2,
+        "description": "出場している自身のキャラクターが元素オーブまたは元素粒子を獲得した時、公演、開始♪の歌声の輪の継続時間+1秒。 この方法で最大5秒まで延長可能。",
+        "id": "10000014-hydro_p2",
+        "name": "アンコール",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -3650,6 +3863,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "冷血の剣",
+        "talentSlot": 1,
+        "description": "霜の襲撃が敵1体に命中する度、攻撃力15%分のHPを回復する。",
+        "id": "10000015-cryo_p1",
+        "name": "冷血の剣",
+        "dataSource": {}
+      },
+      {
+        "talentName": "氷淵の心",
+        "talentSlot": 2,
+        "description": "霜の襲撃が敵を凍結状態にした場合、凍結された敵から追加の元素粒子が落ちる。 1回の霜の襲撃は2つの元素粒子が追加で発生する。",
+        "id": "10000015-cryo_p2",
+        "name": "氷淵の心",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000015,
       "gcsimKey": "kaeya"
@@ -3813,6 +4044,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "ノンストップ",
+        "talentSlot": 1,
+        "description": "重撃のスタミナ消費-50%、最大継続時間+3秒。",
+        "id": "10000016-pyro_p1",
+        "name": "ノンストップ",
+        "dataSource": {}
+      },
+      {
+        "talentName": "溶融の翼",
+        "talentSlot": 2,
+        "description": "黎明による炎元素付与状態の継続時間+4秒、さらに効果継続中にディルックの与える炎元素ダメージ+20%。",
+        "id": "10000016-pyro_p2",
+        "name": "溶融の翼",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -4004,6 +4253,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "覚醒",
+        "talentSlot": 1,
+        "description": "鋭い爪と蒼雷のクールタイム-18%。 雷牙を放つ時、鋭い爪と蒼雷のクールタイムをリセットする。",
+        "id": "10000020-electro_p1",
+        "name": "覚醒",
+        "dataSource": {}
+      },
+      {
+        "talentName": "飢餓",
+        "talentSlot": 2,
+        "description": "レザーの元素エネルギーが50%以下になると、元素チャージ効率+30%。",
+        "id": "10000020-electro_p2",
+        "name": "飢餓",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -4200,6 +4467,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "百発百中！",
+        "talentSlot": 1,
+        "description": "矢の雨の会心率+10%、影響範囲+30%。",
+        "id": "10000021-pyro_p1",
+        "name": "百発百中！",
+        "dataSource": {}
+      },
+      {
+        "talentName": "制圧射撃",
+        "talentSlot": 2,
+        "description": "狙い撃ちが弱点に命中すると、攻撃力+15%、継続時間10秒。",
+        "id": "10000021-pyro_p2",
+        "name": "制圧射撃",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
       }
     ],
     "source": {
@@ -4438,6 +4726,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "余風の抱擁",
+        "talentSlot": 1,
+        "description": "高天の歌を長押しした後、上昇気流が発生する、継続時間20秒。",
+        "id": "10000022-anemo_p1",
+        "name": "余風の抱擁",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
+      },
+      {
+        "talentName": "暴風の目",
+        "talentSlot": 2,
+        "description": "風神の詩効果終了後、ウェンティの元素エネルギーを15回復する。 元素変化があった場合、該当元素のチームメンバーの元素エネルギーを15回復する。",
+        "id": "10000022-anemo_p2",
+        "name": "暴風の目",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000022,
       "gcsimKey": "venti"
@@ -4656,6 +4965,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "交差する炎",
+        "talentSlot": 1,
+        "description": "グゥオパァーの噴火距離+20%。",
+        "id": "10000023-pyro_p1",
+        "name": "交差する炎",
+        "dataSource": {}
+      },
+      {
+        "talentName": "激辛唐辛子",
+        "talentSlot": 2,
+        "description": "グゥオパァー出撃効果終了時、グゥオパァーは消えた位置に唐辛子を残す。唐辛子を拾うと、攻撃力+10%。継続時間10秒。",
+        "id": "10000023-pyro_p2",
+        "name": "激辛唐辛子",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000023,
       "gcsimKey": "xiangling"
@@ -4841,6 +5171,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "完全なる霊光",
+        "talentSlot": 1,
+        "description": "攻撃された瞬間に発動した浪追いの反撃は最大ダメージアップ効果を得る。",
+        "id": "10000024-electro_p1",
+        "name": "完全なる霊光",
+        "dataSource": {}
+      },
+      {
+        "talentName": "満天の霹靂",
+        "talentSlot": 2,
+        "description": "最大ダメージアップ効果のある浪追いを発動した後の10秒間、下記の効果が発動される。 ·通常攻撃と重撃の攻撃速度+15%、攻撃ダメージ+15%。 ·重撃に必要な時間が大幅に減少する。",
+        "id": "10000024-electro_p2",
+        "name": "満天の霹靂",
+        "duration": 10,
+        "dataSource": {
+          "duration": "10秒間"
+        }
       }
     ],
     "source": {
@@ -5071,6 +5422,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "水生みの要訣",
+        "talentSlot": 1,
+        "description": "雨すだれの剣が破壊、または継続時間終了時に、キャラクターのHPを行秋のHP上限の6%分回復する。",
+        "id": "10000025-hydro_p1",
+        "name": "水生みの要訣",
+        "dataSource": {}
+      },
+      {
+        "talentName": "虚実の筆",
+        "talentSlot": 2,
+        "description": "行秋の水元素ダメージ+20%。",
+        "id": "10000025-hydro_p2",
+        "name": "虚実の筆",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000025,
       "gcsimKey": "xingqiu"
@@ -5296,6 +5665,38 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "降魔·平妖大聖",
+        "talentSlot": 1,
+        "description": "靖妖儺舞状態の時、魈の与える全ダメージ+5%。また、スキル継続中、3秒毎に与える全ダメージが更に+5%。 最大25%まで。",
+        "id": "10000026-anemo_p1",
+        "name": "降魔·平妖大聖",
+        "dataSource": {}
+      },
+      {
+        "talentName": "壊劫·国土砕き",
+        "talentSlot": 2,
+        "description": "風輪両立発動後の7秒間、風輪両立によるダメージ+15%。 継続時間7秒、最大3重まで、重複で発動すると継続時間がリセットされる。",
+        "id": "10000026-anemo_p2_1",
+        "name": "壊劫·国土砕き (7秒)",
+        "duration": 7,
+        "dataSource": {
+          "duration": "7秒間"
+        }
+      },
+      {
+        "talentName": "壊劫·国土砕き",
+        "talentSlot": 2,
+        "description": "風輪両立発動後の7秒間、風輪両立によるダメージ+15%。 継続時間7秒、最大3重まで、重複で発動すると継続時間がリセットされる。",
+        "id": "10000026-anemo_p2_2",
+        "name": "壊劫·国土砕き (7秒)",
+        "duration": 7,
+        "dataSource": {
+          "duration": "継続時間7秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000026,
       "gcsimKey": "xiao"
@@ -5435,6 +5836,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "物換星移",
+        "talentSlot": 1,
+        "description": "星璇がついている間、凝光の重撃はスタミナを消費しない。",
+        "id": "10000027-geo_p1",
+        "name": "物換星移",
+        "dataSource": {}
+      },
+      {
+        "talentName": "備えあれば憂いなし",
+        "talentSlot": 2,
+        "description": "璇璣屏を突き抜けたキャラクターの岩元素ダメージ+12%、継続時間10秒。",
+        "id": "10000027-geo_p2",
+        "name": "備えあれば憂いなし",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
       }
     ],
     "source": {
@@ -5603,6 +6025,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "こんこんプレゼント",
+        "talentSlot": 1,
+        "description": "ボンボン爆弾と通常攻撃が敵にダメージを与えた時、50%の確率でクレーは爆裂花火を獲得する。 重撃を発動する時、スタミナの代わりに爆裂花火を優先的に消費し、与えるダメージ+50%。",
+        "id": "10000029-pyro_p1",
+        "name": "こんこんプレゼント",
+        "dataSource": {}
+      },
+      {
+        "talentName": "無限花火",
+        "talentSlot": 2,
+        "description": "クレーの重撃が会心を発生すると、チーム全員の元素エネルギーが2回復する。",
+        "id": "10000029-pyro_p2",
+        "name": "無限花火",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -5852,6 +6292,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "岩の宸断",
+        "talentSlot": 1,
+        "description": "玉璋シールドはダメージを受けた際に防御効果を発動する。 玉璋シールドに守られたキャラクターのシールド強化+5%。 シールドが消えるまで、最大5回強度を上げることができる。",
+        "id": "10000030-geo_p1",
+        "name": "岩の宸断",
+        "dataSource": {}
+      },
+      {
+        "talentName": "贅沢な食饌",
+        "talentSlot": 2,
+        "description": "HP上限を基準に、鍾離の下記攻撃のダメージが増加する。 ·通常攻撃、重撃と落下攻撃のダメージ増加量：HP上限の1.39% ·地心の岩柱、共鳴と長押しダメージ増加量：HP上限の1.9% ·天星ダメージ増加量：HP上限の33%",
+        "id": "10000030-geo_p2",
+        "name": "贅沢な食饌",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000030,
       "gcsimKey": "zhongli"
@@ -6060,6 +6518,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "星喰いの鴉",
+        "talentSlot": 1,
+        "description": "フィッシュルのチャージした狙い撃ち射撃がオズに命中すると、オズは周囲の敵に聖裁の雷を放ち、射撃ダメージ152.7%分の雷元素範囲ダメージを与える。",
+        "id": "10000031-electro_p1",
+        "name": "星喰いの鴉",
+        "dataSource": {}
+      },
+      {
+        "talentName": "断罪の雷影",
+        "talentSlot": 2,
+        "description": "オズがフィールドにいる時、出場している自身のキャラクターの敵への攻撃が雷元素の関連反応を起こすと、敵に聖裁の雷を下し、フィッシュルの攻撃力80%分の雷元素ダメージを与える。",
+        "id": "10000031-electro_p2",
+        "name": "断罪の雷影",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -6283,6 +6759,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "情熱復活",
+        "talentSlot": 1,
+        "description": "溢れる情熱のクールタイム-20%。",
+        "id": "10000032-pyro_p1",
+        "name": "情熱復活",
+        "dataSource": {}
+      },
+      {
+        "talentName": "恐れなき熱血",
+        "talentSlot": 2,
+        "description": "素晴らしい旅エリア内にいると、溢れる情熱が以下の効果を持つ。 ·クールタイム-50%。 ·2段チャージによるベネット自身のノックバックが発生しない。",
+        "id": "10000032-pyro_p2",
+        "name": "恐れなき熱血",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -6534,6 +7028,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "無尽蔵",
+        "talentSlot": 1,
+        "description": "断流効果の継続時間+8秒。",
+        "id": "10000033-hydro_p1",
+        "name": "無尽蔵",
+        "dataSource": {}
+      },
+      {
+        "talentName": "水形剣",
+        "talentSlot": 2,
+        "description": "魔王の武装·荒波の近接モード時、通常攻撃または重撃が会心を発生すると、命中した敵に断流効果を付与する。",
+        "id": "10000033-hydro_p2",
+        "name": "水形剣",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000033,
       "gcsimKey": "tartaglia"
@@ -6725,6 +7237,32 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "誠心誠意",
+        "talentSlot": 1,
+        "description": "ノエルが待機時、出場している自身のキャラクターのHPが30%以下になると自動で発動される。 出場している自身のキャラクターにノエルの防御力400%分のダメージを吸収するシールドを付与する、継続時間20秒。 ·全元素ダメージおよび物理ダメージに対して150%の吸収効果を持つ。 60秒毎に1回のみ発動可能。",
+        "cooldown": 60,
+        "id": "10000034-geo_p1",
+        "name": "誠心誠意",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒",
+          "cooldown": "60秒毎に1回"
+        }
+      },
+      {
+        "talentName": "きれいさっぱり",
+        "talentSlot": 2,
+        "description": "ノエルの通常攻撃または重撃が敵に累計4回命中すると、護心鎧のクールタイム-1秒。 0.1秒毎に1回のみカウント可能。",
+        "cooldown": 0.1,
+        "id": "10000034-geo_p2",
+        "name": "きれいさっぱり",
+        "dataSource": {
+          "cooldown": "0.1秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -6929,6 +7467,32 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "延命妙法",
+        "talentSlot": 1,
+        "description": "仙法·寒病鬼差状態時のキャラクターが元素反応を起こした時、受ける治療効果+20%、継続時間8秒。",
+        "id": "10000035-cryo_p1",
+        "name": "延命妙法",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      },
+      {
+        "talentName": "玉籤偶開",
+        "talentSlot": 2,
+        "description": "七七の通常攻撃または重撃が敵に命中した時、50%の確率で敵に度厄のお札を1枚付与する、継続時間6秒、30秒毎に1回のみ発動可能。",
+        "cooldown": 30,
+        "id": "10000035-cryo_p2",
+        "name": "玉籤偶開",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒",
+          "cooldown": "30秒毎に1回"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000035,
       "gcsimKey": "qiqi"
@@ -7092,6 +7656,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "吐納真定",
+        "talentSlot": 1,
+        "description": "霊刃·重華積霜エリア内にいる時、片手剣、両手剣、長柄武器キャラクターの通常攻撃の攻撃速度+8%。",
+        "id": "10000036-cryo_p1",
+        "name": "吐納真定",
+        "dataSource": {}
+      },
+      {
+        "talentName": "追氷剣訣",
+        "talentSlot": 2,
+        "description": "霊刃·重華積霜エリアが消えた時、自動的に付近の敵を攻撃する霊刃を召喚し、霊刃·重華積霜のスキルダメージ100%分の氷元素範囲ダメージを与える。命中した敵の氷元素耐性-10%、継続時間8秒。",
+        "id": "10000036-cryo_p2",
+        "name": "追氷剣訣",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
       }
     ],
     "source": {
@@ -7307,6 +7892,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "唯一の心",
+        "talentSlot": 1,
+        "description": "霜華の矢を放った後の5秒以内に放たれた霜華の矢と霜華満開の会心率+20%。",
+        "id": "10000037-cryo_p1",
+        "name": "唯一の心",
+        "dataSource": {}
+      },
+      {
+        "talentName": "天地安泰",
+        "talentSlot": 2,
+        "description": "降衆天華エリア内のキャラクターの氷元素ダメージ+20%。",
+        "id": "10000037-cryo_p2",
+        "name": "天地安泰",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000037,
       "gcsimKey": "ganyu"
@@ -7506,6 +8109,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "白亜色の気迫",
+        "talentSlot": 1,
+        "description": "創生術·擬似陽華の刹那の花がHP50%未満の敵にダメージを与えた場合、ダメージ量+25%。",
+        "id": "10000038-geo_p1",
+        "name": "白亜色の気迫",
+        "dataSource": {}
+      },
+      {
+        "talentName": "ホムンクルスの天智",
+        "talentSlot": 2,
+        "description": "誕生式·大地の潮を発動した時、周囲のチーム全員の元素熟知を+125、継続時間10秒。",
+        "id": "10000038-geo_p2",
+        "name": "ホムンクルスの天智",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
       }
     ],
     "source": {
@@ -7731,6 +8355,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "キャッツテールの裏メニュー",
+        "talentSlot": 1,
+        "description": "フリーズキャッツクローのシールドが存在する時、キャラクターの移動速度+10%、スタミナ消費-10%。",
+        "id": "10000039-cryo_p1",
+        "name": "キャッツテールの裏メニュー",
+        "dataSource": {}
+      },
+      {
+        "talentName": "滑稽な酔態",
+        "talentSlot": 2,
+        "description": "特製スピリッツのエリアに入った敵の攻撃力が15秒間-10%。",
+        "id": "10000039-cryo_p2",
+        "name": "滑稽な酔態",
+        "duration": 15,
+        "dataSource": {
+          "duration": "15秒間"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000039,
       "gcsimKey": "diona"
@@ -7912,6 +8557,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "「おばば、私を捕まえられますか～」",
+        "talentSlot": 1,
+        "description": "虚実流動状態に入った2秒後、周囲に敵がいる場合、自動的に虚影を1つ生成する。 虚影は2秒間存在した後に破裂する。破裂ダメージは水中幻願のダメージの50%に相当する。",
+        "id": "10000041-hydro_p1",
+        "name": "「おばば、私を捕まえられますか～」",
+        "duration": 2,
+        "dataSource": {
+          "duration": "2秒間"
+        }
+      },
+      {
+        "talentName": "「運命の流れに任せましょう！」",
+        "talentSlot": 2,
+        "description": "モナの与える水元素ダメージが増加する。増加量はモナの元素チャージ効率の20%に相当する。",
+        "id": "10000041-hydro_p2",
+        "name": "「運命の流れに任せましょう！」",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -8135,6 +8801,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "抵天の雷罰",
+        "talentSlot": 1,
+        "description": "雷楔継続中に再び星辰帰位を発動すると、刻晴は雷元素付与状態を獲得する。継続時間5秒。",
+        "id": "10000042-electro_p1",
+        "name": "抵天の雷罰",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
+      },
+      {
+        "talentName": "玉衡の貴",
+        "talentSlot": 2,
+        "description": "天街巡遊発動時、刻晴の会心率+15%、元素チャージ効率+15%、継続時間8秒。",
+        "id": "10000042-electro_p2",
+        "name": "玉衡の貴",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000042,
       "gcsimKey": "keqing"
@@ -8354,6 +9044,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "触媒置換術",
+        "talentSlot": 1,
+        "description": "スクロースが拡散、または星拡散反応を起こした時、該当元素のチームメンバー全員（スクロース自身を除く）の元素熟知+50、継続時間8秒。",
+        "id": "10000043-anemo_p1",
+        "name": "触媒置換術",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      },
+      {
+        "talentName": "小さな恵風",
+        "talentSlot": 2,
+        "description": "風霊作成·六三〇八又は禁·風霊作成·七五同構弐型が敵に命中した時、スクロースの元素熟知の20%を基準に、チーム全員（スクロース自身を除く）の元素熟知を強化する、継続時間8秒。",
+        "id": "10000043-anemo_p2",
+        "name": "小さな恵風",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000043,
       "gcsimKey": "sucrose"
@@ -8516,6 +9230,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "「観客いなくても演奏するのだ…」",
+        "talentSlot": 1,
+        "description": "情熱の薙ぎ払いのシールド発動に必要な命中数を減少する。 ·Lv.2シールド·指揮のリズム：1体の敵に命中する。 ·Lv.3シールド·舞のリズム：2体の敵に命中する。",
+        "id": "10000044-pyro_p1",
+        "name": "「観客いなくても演奏するのだ…」",
+        "dataSource": {}
+      },
+      {
+        "talentName": "「…これこそがロックだ！」",
+        "talentSlot": 2,
+        "description": "情熱の薙ぎ払いのシールドが存在する時、キャラクターが与える物理ダメージ+15%。",
+        "id": "10000044-pyro_p2",
+        "name": "「…これこそがロックだ！」",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -8741,6 +9473,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "懺悔に耳を傾ける幻影",
+        "talentSlot": 1,
+        "description": "罪喰いの懺悔で敵の背後から攻撃すると、ロサリアの会心率+12%、継続時間5秒。",
+        "id": "10000045-cryo_p1",
+        "name": "懺悔に耳を傾ける幻影",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
+      },
+      {
+        "talentName": "陰から支える暗色",
+        "talentSlot": 2,
+        "description": "臨終の聖礼発動時、自身の会心率の15%分、周囲のチーム全員（ロサリア自身を除く）の会心率をアップさせる、継続時間10秒。 この方法で獲得できる会心率アップ効果は、最大15%まで。",
+        "id": "10000045-cryo_p2",
+        "name": "陰から支える暗色",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000045,
       "gcsimKey": "rosaria"
@@ -8964,6 +9720,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "蝶隠の時",
+        "talentSlot": 1,
+        "description": "蝶導来世による冥蝶の舞状態終了後、チーム全員（胡桃自身を除く）の会心率+12%、継続時間8秒。",
+        "id": "10000046-pyro_p1",
+        "name": "蝶隠の時",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      },
+      {
+        "talentName": "血のかまど",
+        "talentSlot": 2,
+        "description": "胡桃のHPが50%以下の時、炎元素ダメージ+33%。",
+        "id": "10000046-pyro_p2",
+        "name": "血のかまど",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000046,
       "gcsimKey": "hutao"
@@ -9183,6 +9960,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "相聞剣法",
+        "talentSlot": 1,
+        "description": "千早振るを発動時、水元素/炎元素/氷元素/雷元素と接触した場合、その千早振る後の落下攻撃·乱れ嵐斬に元素変化が起き、攻撃力200%分の該当元素ダメージを追加で与える。このダメージは落下攻撃とみなされる。千早振るのスキル効果中、元素変化は1回のみ発生する。",
+        "id": "10000047-anemo_p1",
+        "name": "相聞剣法",
+        "dataSource": {}
+      },
+      {
+        "talentName": "風物の詩吟",
+        "talentSlot": 2,
+        "description": "楓原万葉が拡散または星拡散反応を起こした後、楓原万葉の元素熟知の数値が1につき、チーム全員に対し、拡散された元素のダメージ+0.04%、継続時間8秒。この方法で獲得した異なる元素ダメージアップ効果は共存する。",
+        "id": "10000047-anemo_p2",
+        "name": "風物の詩吟",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000047,
       "gcsimKey": "kaedeharakazuha"
@@ -9344,6 +10142,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "関連条約",
+        "talentSlot": 1,
+        "description": "煙緋が重撃で丹火の印を消費した時、丹火の印1枚につき炎元素ダメージ+5%、継続時間6秒。効果持続中に再び重撃を放つと、既存の効果が先にクリアされる。",
+        "id": "10000048-pyro_p1",
+        "name": "関連条約",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
+      },
+      {
+        "talentName": "法獣の灼眼",
+        "talentSlot": 2,
+        "description": "煙緋が自ら発動した重撃が敵に対して会心した時、追加で自身の攻撃力80%分の炎元素範囲ダメージを与える。このダメージは重撃ダメージとみなされる。",
+        "id": "10000048-pyro_p2",
+        "name": "法獣の灼眼",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -9570,6 +10389,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "袖火百景図",
+        "talentSlot": 1,
+        "description": "焔硝の庭火舞いの効果継続時間中、宵宮の通常攻撃が命中すると、炎元素ダメージ+2%、継続時間3秒、最大10重まで。",
+        "id": "10000049-pyro_p1",
+        "name": "袖火百景図",
+        "duration": 3,
+        "dataSource": {
+          "duration": "継続時間3秒"
+        }
+      },
+      {
+        "talentName": "炎昼の風物詩",
+        "talentSlot": 2,
+        "description": "琉金の雲間草を発動した後の15秒内、周囲のチーム全員（宵宮自身を除く）の攻撃力+10%。また、宵宮が琉金の雲間草を発動時に固有天賦「袖火百景図」の重ねた数をもとに、1重ごとにさらに攻撃力を1%アップする。",
+        "id": "10000049-pyro_p2",
+        "name": "炎昼の風物詩",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000049,
       "gcsimKey": "yoimiya"
@@ -9747,6 +10587,29 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "重装甲胄",
+        "talentSlot": 1,
+        "description": "フィールド上キャラクターが烈炎侍立シールドを獲得または更新した時、シールド強化+5%、継続時間6秒。 この効果は0.3秒毎に1回のみ発動可能、最大5重まで。",
+        "cooldown": 0.3,
+        "id": "10000050-pyro_p1",
+        "name": "重装甲胄",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒",
+          "cooldown": "0.3秒毎に1回"
+        }
+      },
+      {
+        "talentName": "進撃の烈炎",
+        "talentSlot": 2,
+        "description": "真紅熾炎の大鎧の熾炎崩滅によるダメージがトーマのHP上限2.2%分アップする。",
+        "id": "10000050-pyro_p2",
+        "name": "進撃の烈炎",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -9965,6 +10828,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "氷の残剣",
+        "talentSlot": 1,
+        "description": "長押しで氷潮の渦を発動した時、一度に冷酷な心を2つ消費すると、直ちに爆発する光臨の剣の欠片を創造する。光臨の剣の欠片は、氷浪の光剣で創造される光臨の剣の基礎ダメージ50%分の物理ダメージを与える。",
+        "id": "10000051-cryo_p1",
+        "name": "氷の残剣",
+        "dataSource": {}
+      },
+      {
+        "talentName": "戦意の表れ",
+        "talentSlot": 2,
+        "description": "氷浪の光剣を発動した時、氷潮の渦のクールタイムがリセットされ、冷酷な心を1つ獲得する。",
+        "id": "10000051-cryo_p2",
+        "name": "戦意の表れ",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000051,
       "gcsimKey": "eula"
@@ -10164,6 +11045,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "千万の願望",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが元素オーブまたは元素粒子を獲得した時、諸願百目の輪に願力を2層蓄積する。 この効果は3秒毎に1回のみ発動可能。",
+        "cooldown": 3,
+        "id": "10000052-electro_p1",
+        "name": "千万の願望",
+        "dataSource": {
+          "cooldown": "3秒毎に1回"
+        }
+      },
+      {
+        "talentName": "殊勝な御体",
+        "talentSlot": 2,
+        "description": "元素チャージ効率が100%を超えている場合、超えた分1%につき、雷電将軍は下記の効果を獲得する。 ·夢想の一心状態で提供する元素エネルギー回復+0.6%。 ·雷元素ダメージ+0.4%。",
+        "id": "10000052-electro_p2",
+        "name": "殊勝な御体",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -10369,6 +11271,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "適任の人を探そう",
+        "talentSlot": 1,
+        "description": "早柚がフィールド上で拡散または星拡散反応を起こした時、チーム内の自身のキャラクターまたは周囲の味方のHPを300回復する。また、早柚の元素熟知の数値が1につき、さらにHPを1.2回復する。 この効果は2秒毎に1回のみ発動可能。",
+        "cooldown": 2,
+        "id": "10000053-anemo_p1",
+        "name": "適任の人を探そう",
+        "dataSource": {
+          "cooldown": "2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "仕事をサボるのだ",
+        "talentSlot": 2,
+        "description": "嗚呼流·影貉繚乱のむじむじだるまは下記効果を獲得する。 ·キャラクターのHPを回復する時、該当キャラクターの近くに出場している他キャラクターも回復量20%に相当するHPを回復する。 ·敵を攻撃する時、与えるダメージの範囲を拡大する。",
+        "id": "10000053-anemo_p2",
+        "name": "仕事をサボるのだ",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000053,
       "gcsimKey": "sayu"
@@ -10530,6 +11453,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "葛籠の中の玉櫛",
+        "talentSlot": 1,
+        "description": "海人の羽衣発動時、フィールド上に珊瑚宮心海自身の化海月が存在する場合、化海月の継続時間をリセットする。",
+        "id": "10000054-hydro_p1",
+        "name": "葛籠の中の玉櫛",
+        "dataSource": {}
+      },
+      {
+        "talentName": "真珠の御唄",
+        "talentSlot": 2,
+        "description": "海人の羽衣の儀来羽衣状態にある時、珊瑚宮心海のHP上限を基準にアップする通常攻撃と重撃のダメージがさらに増えるようになる。アップする量は珊瑚宮心海の与える治療効果の15%となる。",
+        "id": "10000054-hydro_p2",
+        "name": "真珠の御唄",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -10704,6 +11645,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "風雨を恐れず",
+        "talentSlot": 1,
+        "description": "獣牙突撃陣形戦法を発動した後の12秒間、周囲のチーム全員の防御力+25%。",
+        "id": "10000055-geo_p1",
+        "name": "風雨を恐れず",
+        "duration": 12,
+        "dataSource": {
+          "duration": "12秒間"
+        }
+      },
+      {
+        "talentName": "報恩の守護",
+        "talentSlot": 2,
+        "description": "防御力を基準に、ゴローの下記攻撃のダメージが増加する。 ·犬坂の遠吠え方円陣のスキルダメージが防御力156%分アップする。 ·獣牙突撃陣形戦法のスキルダメージと岩晶崩滅のダメージが防御力15.6%分アップする。",
+        "id": "10000055-geo_p2",
+        "name": "報恩の守護",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -10902,6 +11864,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "不動心",
+        "talentSlot": 1,
+        "description": "烏天狗雷霆召呪による「烏羽護持」の時、狙い撃ちのチャージ時間-60%。",
+        "id": "10000056-electro_p1",
+        "name": "不動心",
+        "dataSource": {}
+      },
+      {
+        "talentName": "御公儀",
+        "talentSlot": 2,
+        "description": "天狗呪雷·伏は敵に命中すると、九条裟羅の元素チャージ効率を基準にし、その100%の元素チャージ効率毎に、チーム全員の元素エネルギーを1.2回復する。この効果は3秒毎に1回のみ発動可能。",
+        "cooldown": 3,
+        "id": "10000056-electro_p2",
+        "name": "御公儀",
+        "dataSource": {
+          "cooldown": "3秒毎に1回"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000056,
       "gcsimKey": "kujousara"
@@ -11078,6 +12061,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "荒瀧第一",
+        "talentSlot": 1,
+        "description": "荒瀧一斗が連続で「荒瀧逆袈裟」を発動した時、下記効果を獲得する。 ·斬撃を繰り出すたびに、その後の斬撃の攻撃速度+10%。この方法でアップできる攻撃速度は30%まで。 ·中断耐性がアップ。 これらの効果は連続斬撃が終了した時にクリアされる。",
+        "id": "10000057-geo_p1",
+        "name": "荒瀧第一",
+        "dataSource": {}
+      },
+      {
+        "talentName": "赤鬼の血",
+        "talentSlot": 2,
+        "description": "「荒瀧逆袈裟」のダメージが荒瀧一斗の防御力35%分アップする。",
+        "id": "10000057-geo_p2",
+        "name": "赤鬼の血",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000057,
       "gcsimKey": "aratakiitto"
@@ -11237,6 +12238,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "神籬之御蔭",
+        "talentSlot": 1,
+        "description": "大密法·天狐顕現発動時、殺生櫻を1株破壊する毎に、野干役呪·殺生櫻のクールタイムを1回分リセットする。",
+        "id": "10000058-electro_p1",
+        "name": "神籬之御蔭",
+        "dataSource": {}
+      },
+      {
+        "talentName": "啓蟄之祝詞",
+        "talentSlot": 2,
+        "description": "八重神子の元素熟知の数値が1につき、殺生櫻によるダメージ+0.15%。",
+        "id": "10000058-electro_p2",
+        "name": "啓蟄之祝詞",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -11431,6 +12450,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "反論稽古",
+        "talentSlot": 1,
+        "description": "鹿野院平蔵がフィールド上で拡散、または星拡散反応を起こした時、戮心拳の「変格」効果を1層獲得する。この効果は0.1秒毎に1回のみ発動可能。",
+        "cooldown": 0.1,
+        "id": "10000059-anemo_p1",
+        "name": "反論稽古",
+        "dataSource": {
+          "cooldown": "0.1秒毎に1回"
+        }
+      },
+      {
+        "talentName": "因由勘破",
+        "talentSlot": 2,
+        "description": "戮心拳が敵に命中すると、チーム全員（鹿野院平蔵自身を除く）の元素熟知+80、継続時間10秒。",
+        "id": "10000059-anemo_p2",
+        "name": "因由勘破",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000059,
       "gcsimKey": "shikanoinheizou"
@@ -11602,6 +12645,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "先後の決め手",
+        "talentSlot": 1,
+        "description": "チーム内キャラクターの元素タイプが1/2/3/4種類の時、夜蘭自身のHP上限+6%/12%/18%/30%。",
+        "id": "10000060-hydro_p1",
+        "name": "先後の決め手",
+        "dataSource": {}
+      },
+      {
+        "talentName": "気随気儘",
+        "talentSlot": 2,
+        "description": "「玲瓏一擲」継続時間中、フィールド上にいるチーム内の自身キャラクターの与えるダメージ+1%、1秒毎に3.5%アップする。最大で50%までアップする。 継続時間中、深謀玲瓏賽を再発動すると、既存の上記効果が先にクリアされる。",
+        "id": "10000060-hydro_p2",
+        "name": "気随気儘",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -11839,6 +12900,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "妖説岐尾の変",
+        "talentSlot": 1,
+        "description": "にゃんにゃん町飛脚のネコ箱急便状態にある綺良々は、敵に衝突するたびにがっちり梱包を1層獲得する、最大3層まで。この効果は敵1体につき、0.5秒毎に最大1回のみ発動可能。ネコ箱急便状態の終了時、がっちり梱包1層につき、綺良々は安全運送シールドを1つ獲得する。このシールドのダメージ吸収量はにゃんにゃん町飛脚で生成できる安全運送シールドの20%に相当する。綺良々がすでににゃんにゃん町飛脚で安全運送シールドを獲得しているとき、ダメージ吸収量は加算され、継続時間も更新される。",
+        "id": "10000061-dendro_p1",
+        "name": "妖説岐尾の変",
+        "dataSource": {}
+      },
+      {
+        "talentName": "ネコのぐるぐる目時計",
+        "talentSlot": 2,
+        "description": "綺良々のHP上限を基準に、HP上限1000毎ににゃんにゃん町飛脚の与えるダメージ+0.4%、秘法·サプライズ特別配送の与えるダメージ+0.3%。",
+        "id": "10000061-dendro_p2",
+        "name": "ネコのぐるぐる目時計",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000061,
       "gcsimKey": "kirara"
@@ -12012,6 +13091,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "戦闘オーバーライド",
+        "talentSlot": 1,
+        "description": "アーロイが凍てついた大地のコイル効果を獲得した時、アーロイの攻撃力+16%、周囲にいるチーム内他のキャラクターの攻撃力+8%、持続時間10秒。",
+        "id": "10000062-cryo_p1",
+        "name": "戦闘オーバーライド",
+        "dataSource": {}
+      },
+      {
+        "talentName": "強打",
+        "talentSlot": 2,
+        "description": "アーロイは凍てついた大地のアイスラッシュ状態にある時、1秒毎に氷元素ダメージ+3.5%、この方法での氷元素ダメージアップ効果は35%まで。",
+        "id": "10000062-cryo_p2",
+        "name": "強打",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -12278,6 +13375,38 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "大洞弥羅尊法",
+        "talentSlot": 1,
+        "description": "神女遣霊真訣の領域にいるフィールド上キャラクターの氷元素ダメージ+15%。",
+        "id": "10000063-cryo_p1",
+        "name": "大洞弥羅尊法",
+        "dataSource": {}
+      },
+      {
+        "talentName": "縛霊通真法印",
+        "talentSlot": 2,
+        "description": "申鶴が仰霊威召将役呪を発動すると、周囲チーム全員に下記効果を与える。 ·一回押しの場合、元素スキルおよび元素爆発ダメージ+15%、継続時間10秒。 ·長押しの場合、通常攻撃、重撃、落下攻撃ダメージ+15%、継続時間15秒。",
+        "id": "10000063-cryo_p2_1",
+        "name": "縛霊通真法印 (10秒)",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      },
+      {
+        "talentName": "縛霊通真法印",
+        "talentSlot": 2,
+        "description": "申鶴が仰霊威召将役呪を発動すると、周囲チーム全員に下記効果を与える。 ·一回押しの場合、元素スキルおよび元素爆発ダメージ+15%、継続時間10秒。 ·長押しの場合、通常攻撃、重撃、落下攻撃ダメージ+15%、継続時間15秒。",
+        "id": "10000063-cryo_p2_2",
+        "name": "縛霊通真法印 (15秒)",
+        "duration": 15,
+        "dataSource": {
+          "duration": "継続時間15秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000063,
       "gcsimKey": "shenhe"
@@ -12476,6 +13605,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "自我堅守",
+        "talentSlot": 1,
+        "description": "攻撃された瞬間に発動する旋雲開相は、長押しの2段チャージ状態になる。",
+        "id": "10000064-geo_p1",
+        "name": "自我堅守",
+        "dataSource": {}
+      },
+      {
+        "talentName": "独立嶄然",
+        "talentSlot": 2,
+        "description": "チーム内キャラクターの元素タイプが1/2/3/4種類の時、「飛雲旗陣」による通常攻撃ダメージアップ効果は、さらに雲菫の防御力2.5%/5%/7.5%/11.5%分上乗せされる。",
+        "id": "10000064-geo_p2",
+        "name": "独立嶄然",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -12683,6 +13830,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "檻を破る志",
+        "talentSlot": 1,
+        "description": "久岐忍のHPが50%以下の時、与える治療効果+15%。",
+        "id": "10000065-electro_p1",
+        "name": "檻を破る志",
+        "dataSource": {}
+      },
+      {
+        "talentName": "安心の処",
+        "talentSlot": 2,
+        "description": "久岐忍の元素熟知を基準に、越祓雷草の輪は以下の強化を得る。 ·アップする治療量：元素熟知の75%。 ·アップするダメージ量：元素熟知の25%。",
+        "id": "10000065-electro_p2",
+        "name": "安心の処",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000065,
       "gcsimKey": "kukishinobu"
@@ -12878,6 +14043,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "神里流·峰を纏いし清滝",
+        "talentSlot": 1,
+        "description": "神里流·鏡花は下記の効果を持つ。 ·発動後、神里綾人は2層の浪閃効果を獲得する。 ·水の幻影が破裂すると、神里綾人は重ね掛け上限に相当する浪閃効果を獲得する。",
+        "id": "10000066-hydro_p1",
+        "name": "神里流·峰を纏いし清滝",
+        "dataSource": {}
+      },
+      {
+        "talentName": "神里流·満ちゆく破月",
+        "talentSlot": 2,
+        "description": "神里綾人が待機中の時、元素エネルギーが40未満の場合、1秒毎に元素エネルギーを2回復する。",
+        "id": "10000066-hydro_p2",
+        "name": "神里流·満ちゆく破月",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000066,
       "gcsimKey": "kamisatoayato"
@@ -13052,6 +14235,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "フライリーフワインダー",
+        "talentSlot": 1,
+        "description": "リーフブーメランが戻ってくる前に、チーム内の自身キャラクターが燃焼、原激化、超激化、草激化、開花、超開花、烈開花、または月開花反応を起こすと、戻ってきた時に「芽生え」状態をキャラクターに付与し、持続的に周囲の敵にコレイの攻撃力40%分の草元素ダメージを与える、継続時間3秒。 芽生え状態中に再度獲得すると、既存の芽生え状態が先にクリアされる。このダメージは元素スキルダメージと見なされる。",
+        "id": "10000067-dendro_p1",
+        "name": "フライリーフワインダー",
+        "duration": 3,
+        "dataSource": {
+          "duration": "継続時間3秒"
+        }
+      },
+      {
+        "talentName": "徐かなること森の如く",
+        "talentSlot": 2,
+        "description": "コレアンバー領域内のキャラクターが燃焼、原激化、超激化、草激化、開花、超開花、烈開花、または月開花反応を起こすと、領域の継続時間+1秒。 この方法ではニャンコトレジャー1回につき、継続時間を最大3回まで延長できる。",
+        "id": "10000067-dendro_p2",
+        "name": "徐かなること森の如く",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000067,
       "gcsimKey": "collei"
@@ -13193,6 +14397,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "ゴールドマイニング",
+        "talentSlot": 1,
+        "description": "ランプの精とリンクしているキャラクターが感電、月感電、超電導、星電導、過負荷、原激化、超激化、超開花、雷元素拡散または雷元素結晶反応を起こすと、ジンニーランプ・トラブルシューターのクールタイム-1秒。 この効果は3秒毎に1回のみ発動可能。",
+        "cooldown": 3,
+        "id": "10000068-electro_p1",
+        "name": "ゴールドマイニング",
+        "dataSource": {
+          "cooldown": "3秒毎に1回"
+        }
+      },
+      {
+        "talentName": "砂だるま式利子",
+        "talentSlot": 2,
+        "description": "ジンニーランプ·トラブルシューターのトラブルシューター砲またはアフターサービス弾が敵に命中すると、ドリーの元素チャージ効率を基準にし、その100%の元素チャージ効率毎にドリーの元素エネルギーを5回復する。 ジンニーランプ·トラブルシューター1回につき、元素エネルギーは1度だけ回復できる。回復量は最大15まで。",
+        "id": "10000068-electro_p2",
+        "name": "砂だるま式利子",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -13370,6 +14595,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "深き眼識",
+        "talentSlot": 1,
+        "description": "ティナリが花筐の矢を発射する後、元素熟知+50、継続時間4秒。",
+        "id": "10000069-dendro_p1",
+        "name": "深き眼識",
+        "duration": 4,
+        "dataSource": {
+          "duration": "継続時間4秒"
+        }
+      },
+      {
+        "talentName": "草樹精通",
+        "talentSlot": 2,
+        "description": "ティナリの元素熟知の数値が1につき、自身の重撃と造生·蔓纏いの矢によるダメージ+0.06%。 この方法でアップできる上記攻撃によるダメージは60%までとなる。",
+        "id": "10000069-dendro_p2",
+        "name": "草樹精通",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -13573,6 +14819,38 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "落花廻旋の庭",
+        "talentSlot": 1,
+        "description": "チーム全員の元素タイプが草元素と水元素であり、かつ草元素と水元素のキャラクターが少なくとも一人ずついる時、ニィロウの七域のダンスの3段目のステップが完了すると、周囲のチーム全員に「金盃の豊穣」状態を付与する、継続時間30秒。 金盃の豊穣状態のキャラクターが草元素の攻撃を受けた後、周囲のチーム全員の元素熟知+100、継続時間10秒。また、開花や月開花反応を起こした時、草原核の代わりに「豊穣の核」が生成される。 草原核に比べ、豊穣の核は生成された直後に迸り、より大きな影響範囲を持つ。 豊穣の核は超開花反応と烈開花反応を起こすことができず、草原核と上限数を共有する。豊穣の核の攻撃は、開花反応による草原核の攻撃と見なされる。 チーム内キャラクターの元素タイプが固有天賦の条件を満たさない場合、既存の金盃の豊穣効果はクリアされる。",
+        "id": "10000070-hydro_p1_1",
+        "name": "落花廻旋の庭 (30秒)",
+        "duration": 30,
+        "dataSource": {
+          "duration": "継続時間30秒"
+        }
+      },
+      {
+        "talentName": "落花廻旋の庭",
+        "talentSlot": 1,
+        "description": "チーム全員の元素タイプが草元素と水元素であり、かつ草元素と水元素のキャラクターが少なくとも一人ずついる時、ニィロウの七域のダンスの3段目のステップが完了すると、周囲のチーム全員に「金盃の豊穣」状態を付与する、継続時間30秒。 金盃の豊穣状態のキャラクターが草元素の攻撃を受けた後、周囲のチーム全員の元素熟知+100、継続時間10秒。また、開花や月開花反応を起こした時、草原核の代わりに「豊穣の核」が生成される。 草原核に比べ、豊穣の核は生成された直後に迸り、より大きな影響範囲を持つ。 豊穣の核は超開花反応と烈開花反応を起こすことができず、草原核と上限数を共有する。豊穣の核の攻撃は、開花反応による草原核の攻撃と見なされる。 チーム内キャラクターの元素タイプが固有天賦の条件を満たさない場合、既存の金盃の豊穣効果はクリアされる。",
+        "id": "10000070-hydro_p1_2",
+        "name": "落花廻旋の庭 (10秒)",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      },
+      {
+        "talentName": "軽やかに舞う永世の夢",
+        "talentSlot": 2,
+        "description": "ニィロウのHP上限が30000を超えている時、その上限が1000超えるごとに「金盃の豊穣」状態のキャラクターが起こした豊穣の核によるダメージ+9%。 この方法でアップできる豊穣の核のダメージは最大400%までとなる。",
+        "id": "10000070-hydro_p2",
+        "name": "軽やかに舞う永世の夢",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000070,
       "gcsimKey": "nilou"
@@ -13768,6 +15046,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "落羽の裁決",
+        "talentSlot": 1,
+        "description": "聖儀·狼駆憑走の啓途誓使状態にある時、セノは一定間隔で「末路真眼」状態に入る。この状態で秘儀·律淵渡魂を発動すると「裁定」効果が起こり、その時の秘儀·律淵渡魂の与えるダメージ+35%。同時に前方に向けて渡荒の雷を3本放ち、セノの攻撃力100%分の雷元素ダメージを与える。 渡荒の雷によるダメージは元素スキルダメージと見なされる。",
+        "id": "10000071-electro_p1",
+        "name": "落羽の裁決",
+        "dataSource": {}
+      },
+      {
+        "talentName": "九弓の権能",
+        "talentSlot": 2,
+        "description": "セノの元素熟知を基準に、自身の下記攻撃のダメージが増加する。 ・啓途誓使状態での通常攻撃のダメージが元素熟知の150%分アップする。 ・固有天賦「落羽の裁決」の「渡荒の雷」のダメージが元素熟知の250%分アップする。",
+        "id": "10000071-electro_p2",
+        "name": "九弓の権能",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -13998,6 +15294,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "流羽の守り",
+        "talentSlot": 1,
+        "description": "聖儀·蒼鷺による庇護を長押ししている間に攻撃を受けると、チャージが瞬時に完了する。",
+        "id": "10000072-hydro_p1",
+        "name": "流羽の守り",
+        "dataSource": {}
+      },
+      {
+        "talentName": "砂の円蓋",
+        "talentSlot": 2,
+        "description": "聖儀·灰鴒の呼び潮の赤冠より授かりし祝福状態にあるキャラクターが通常攻撃で敵に元素ダメージを与えると、キャンディスのHP上限1000ごとにその時のダメージ+0.5%。",
+        "id": "10000072-hydro_p2",
+        "name": "砂の円蓋",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000072,
       "gcsimKey": "candace"
@@ -14212,6 +15526,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "浄善摂受明論",
+        "talentSlot": 1,
+        "description": "心景幻成発動時、摩耶の宮殿は下記効果を獲得する。 チーム内にいる元素熟知の最も高いキャラクターを参照し、その元素熟知の25%を基にフィールド上の領域内キャラクターの元素熟知をアップする。 この方法でアップできる元素熟知は最大250までとなる。",
+        "id": "10000073-dendro_p1",
+        "name": "浄善摂受明論",
+        "dataSource": {}
+      },
+      {
+        "talentName": "慧明縁覚智論",
+        "talentSlot": 2,
+        "description": "ナヒーダの元素熟知が200を超えている時、その200を超えた分の元素熟知の数値1につき、所聞遍計の滅浄三業によるダメージ+0.1%、会心率+0.03%。 この方法でアップできる滅浄三業のダメージは最大80%、会心率は最大24%までとなる。",
+        "id": "10000073-dendro_p2",
+        "name": "慧明縁覚智論",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000073,
       "gcsimKey": "nahida"
@@ -14375,6 +15707,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "降って湧いた光のように",
+        "talentSlot": 1,
+        "description": "安眠天幕シールドが存在している間、夜星を1つ獲得するたびに深眠効果を発動する。 ·安眠天幕シールド状態のキャラクターは、そのシールド強化+6%。 ·この効果は最大4層まで重ね掛けでき、安眠天幕シールドが消えるまで有効。",
+        "id": "10000074-cryo_p1",
+        "name": "降って湧いた光のように",
+        "dataSource": {}
+      },
+      {
+        "talentName": "熟睡妨害禁止！",
+        "talentSlot": 2,
+        "description": "垂裳凛然の夜が発射した飛星によるダメージ量が、レイラのHP上限の1.5%分アップする。",
+        "id": "10000074-cryo_p2",
+        "name": "熟睡妨害禁止！",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000074,
       "gcsimKey": "layla"
@@ -14531,6 +15881,30 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "拾玉得花",
+        "talentSlot": 1,
+        "description": "羽画·風姿華歌を発動時、水元素/炎元素/氷元素/雷元素に触れると、触れた元素を基に現在の児姿優風状態に各種強化効果を与える。 ·水元素：空居力上限+20ポイント。 ·炎元素：攻撃力+30%。 ·氷元素：会心率+20%。 ·雷元素：通常攻撃および重撃が敵に命中した後、元素エネルギーが0.8ポイント回復する。この方法による元素エネルギー回復は、0.2秒毎に1回のみ可能。 同時に獲得できる元素タイプと対応する強化効果は最大2種類まで。",
+        "cooldown": 0.2,
+        "id": "10000075-anemo_p1",
+        "name": "拾玉得花",
+        "dataSource": {
+          "cooldown": "0.2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "夢跡一風",
+        "talentSlot": 2,
+        "description": "児姿優風状態時、放浪者の空居·不生断または空居·風刀界が敵に命中すると、16%の確率で「傾落」効果を獲得できる。「傾落」効果：放浪者は現在の児姿優風状態で空中ダッシュをすると空居力を消費せず、代わりに傾落効果を解除する。また同時に風の矢を4本放ち、それぞれ攻撃力の35%に相当する風元素ダメージを与える。 空居·不生断および空居·風刀界で傾落効果が発動しなかった場合、次回の発動確率+12%。発動判定は0.1秒毎に1回のみ行われる。",
+        "cooldown": 0.1,
+        "id": "10000075-anemo_p2",
+        "name": "夢跡一風",
+        "dataSource": {
+          "cooldown": "0.1秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -14712,6 +16086,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "迅速流風",
+        "talentSlot": 1,
+        "description": "ファルザンが非想風天の「疾風示現」状態時、狙い撃ちのチャージ時間-60%。同時に、「風圧崩潰」効果によるサイクロンが命中した敵に搏風秘道の「詭風の禍つ」効果を付与する。",
+        "id": "10000076-anemo_p1",
+        "name": "迅速流風",
+        "dataSource": {}
+      },
+      {
+        "talentName": "七窟遺智",
+        "talentSlot": 2,
+        "description": "搏風秘道の「祈風の恵み」効果を持つキャラクターの通常攻撃、重撃、落下攻撃、元素スキル、または元素爆発が敵に風元素ダメージを与える時、烈風護持効果を発動し、ファルザンの基礎攻撃力の32%分を基準に与えるダメージを上げる。烈風護持効果の発生は0.8秒毎に1回のみ可能。この効果は「祈風の恵み」効果の継続時間終了、または1回発動した後に消失する。",
+        "cooldown": 0.8,
+        "id": "10000076-anemo_p2",
+        "name": "七窟遺智",
+        "dataSource": {
+          "cooldown": "0.8秒毎に1回"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000076,
       "gcsimKey": "faruzan"
@@ -14867,6 +16262,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "天星零落",
+        "talentSlot": 1,
+        "description": "玉顆珊々月中落の桂子仙機状態中、ヨォーヨがダッシュ、ジャンプ、またはダッシュしたままの状態にある時、近くの敵に白玉大根を投げ続ける。この方法で投げられる白玉大根は0.6秒毎に1本のみ。",
+        "id": "10000077-dendro_p1",
+        "name": "天星零落",
+        "dataSource": {}
+      },
+      {
+        "talentName": "先意承問",
+        "talentSlot": 2,
+        "description": "白玉大根爆発時、影響範囲内にいるフィールド上キャラクターのHPを1秒毎に1度だけ回復する。回復量はヨォーヨのHP上限の0.8%に相当する。継続時間5秒。",
+        "id": "10000077-dendro_p2",
+        "name": "先意承問",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
       }
     ],
     "source": {
@@ -15105,6 +16521,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "四因是正",
+        "talentSlot": 1,
+        "description": "アルハイゼンの重撃または落下攻撃が敵に命中すると、琢光鏡が1枚生成される。この効果は12秒毎に1回のみ発動可能。",
+        "cooldown": 12,
+        "id": "10000078-dendro_p1",
+        "name": "四因是正",
+        "dataSource": {
+          "cooldown": "12秒毎に1回"
+        }
+      },
+      {
+        "talentName": "謎林説破",
+        "talentSlot": 2,
+        "description": "アルハイゼンの元素熟知の数値が1につき、光幕のダメージおよび殊境·顕象結縛によるダメージ+0.1%。 この方法でアップできる光幕のダメージおよび殊境·顕象結縛によるダメージは100%までとなる。",
+        "id": "10000078-dendro_p2",
+        "name": "謎林説破",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000078,
       "gcsimKey": "alhaitham"
@@ -15291,6 +16728,47 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "惜しみなき扶翼",
+        "talentSlot": 1,
+        "description": "熔鉄流獄·剣域熾焔、または炎哮獅子咬を通して浄焔剣獄を回収してから6秒間、ディシアが赤鬣の血によるダメージを受ける際、そのダメージ-60%。この効果は2秒毎に1回のみ発動可能。 また、ディシアが熔鉄流獄·浄焔怒涛を発動してから9秒間、チーム全員に「熔金の躰」状態を付与する。熔金の躰状態にあるキャラクターが浄焔剣獄領域内にいる時、追加の中断耐性を獲得する。なお、熔金の躰状態の発生は18秒毎に1回のみ可能。",
+        "cooldown": 2,
+        "id": "10000079-pyro_p1_1",
+        "name": "惜しみなき扶翼 (6秒)",
+        "duration": 6,
+        "dataSource": {
+          "duration": "6秒間",
+          "cooldown": "2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "惜しみなき扶翼",
+        "talentSlot": 1,
+        "description": "熔鉄流獄·剣域熾焔、または炎哮獅子咬を通して浄焔剣獄を回収してから6秒間、ディシアが赤鬣の血によるダメージを受ける際、そのダメージ-60%。この効果は2秒毎に1回のみ発動可能。 また、ディシアが熔鉄流獄·浄焔怒涛を発動してから9秒間、チーム全員に「熔金の躰」状態を付与する。熔金の躰状態にあるキャラクターが浄焔剣獄領域内にいる時、追加の中断耐性を獲得する。なお、熔金の躰状態の発生は18秒毎に1回のみ可能。",
+        "cooldown": 2,
+        "id": "10000079-pyro_p1_2",
+        "name": "惜しみなき扶翼 (9秒)",
+        "duration": 9,
+        "dataSource": {
+          "duration": "9秒間",
+          "cooldown": "2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "至誠の尊崇",
+        "talentSlot": 2,
+        "description": "HPが40%未満の時、ディシアはHP上限の20%を基にHPを回復する。さらにそれから10秒間、HP上限の6%を基に2秒ごとにディシアのHPを回復する。この効果は20秒毎に1回のみ発動可能。",
+        "cooldown": 20,
+        "id": "10000079-pyro_p2",
+        "name": "至誠の尊崇",
+        "duration": 10,
+        "dataSource": {
+          "duration": "10秒間",
+          "cooldown": "20秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -15528,6 +17006,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "速射牽制",
+        "talentSlot": 1,
+        "description": "次の状況において、スターフロストスワールの霊風状態に偵察効果を追加し、フィールド上キャラクターの物理ダメージ+10%。 ·流霜の矢が複数の敵に命中すると、2体目以降、敵1体につき1層ずつ偵察効果が追加される。 ·氷星のシャードが敵に命中した時、1層の偵察効果が生成される。各氷星のシャードにつき1回のみ発動可能。 霊風状態の偵察効果は最大3層まで重ね掛け可能。継続時間中、スターフロストスワールを再発動すると、既存の霊風状態とその偵察効果が先にクリアされる。",
+        "id": "10000080-cryo_p1",
+        "name": "速射牽制",
+        "dataSource": {}
+      },
+      {
+        "talentName": "地形測量",
+        "talentSlot": 2,
+        "description": "スカイフェザーソングの鷹の羽状態と、スターフロストスワールの霊風状態が同時に付与されているフィールド上キャラクターが攻撃をして会心を発生させた時、霊風状態は固有天賦「速射牽制」の偵察効果を1層生成する。1回の霊風状態の継続時間中、この方法で生成できる偵察効果は1層まで。 また、霊風状態における偵察効果の重ね掛け層数の上限+1。 固有天賦「速射牽制」を解放する必要がある。",
+        "id": "10000080-cryo_p2",
+        "name": "地形測量",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000080,
       "gcsimKey": "mika"
@@ -15699,6 +17195,30 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "創造者の役目",
+        "talentSlot": 1,
+        "description": "草原核によるダメージ（烈開花、超開花を含む）がカーヴェに命中した時、カーヴェのHPが回復する。回復量はカーヴェの元素熟知の300%に相当。この効果は0.5秒毎に1回のみ発動可能。",
+        "cooldown": 0.5,
+        "id": "10000081-dendro_p1",
+        "name": "創造者の役目",
+        "dataSource": {
+          "cooldown": "0.5秒毎に1回"
+        }
+      },
+      {
+        "talentName": "芸術家の奇想",
+        "talentSlot": 2,
+        "description": "ムカルナスの描像の継続時間中に、カーヴェの通常攻撃、重撃、落下攻撃が敵に命中すると、元素熟知+25。この効果は0.1秒毎に1回のみ発動でき、最大4層まで重ね掛け可能。 ムカルナスの描像の効果終了時、この効果はクリアされる。",
+        "cooldown": 0.1,
+        "id": "10000081-dendro_p2",
+        "name": "芸術家の奇想",
+        "dataSource": {
+          "cooldown": "0.1秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -15891,6 +17411,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "五運終天",
+        "talentSlot": 1,
+        "description": "フィールド上にいるチーム内の自身のキャラクターのHPに応じて、白朮は異なる効果を得る。 ·HPが50%未満の時、白朮の与える治療効果+20%。 ·HPが50%以上の時、白朮の草元素ダメージ+25%。",
+        "id": "10000082-dendro_p1",
+        "name": "五運終天",
+        "dataSource": {}
+      },
+      {
+        "talentName": "地に在りて形を成す",
+        "talentSlot": 2,
+        "description": "無隙シールドの治療効果を受けたキャラクターは、「木運の歳」の効果を得られる。白朮のHP上限のうち50000以下の部分をもとに、1000毎に該当キャラクターが起こした燃焼、開花、超開花、烈開花反応によるダメージ+2%、超激化、草激化反応によるダメージアップ効果+0.8%、月開花反応によるダメージ+0.7%。継続時間6秒。",
+        "id": "10000082-dendro_p2",
+        "name": "地に在りて形を成す",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000082,
       "gcsimKey": "baizhu"
@@ -16076,6 +17617,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "巧妙なコンビネーション",
+        "talentSlot": 1,
+        "description": "魔術·アストニシングシフトを発動した後の10秒間、チーム内キャラクターの元素タイプが1/2/3/4種類の時、チーム全員の攻撃力がそれぞれ+8%/12%/16%/20%。",
+        "id": "10000083-anemo_p1",
+        "name": "巧妙なコンビネーション",
+        "duration": 10,
+        "dataSource": {
+          "duration": "10秒間"
+        }
+      },
+      {
+        "talentName": "プロップは完備",
+        "talentSlot": 2,
+        "description": "魔術·アストニシングシフトが召喚したビックラキャット·ボックスが元素変化を起こした後、リネットの元素爆発ダメージ+15%。効果は該当ビックラキャット·ボックスの継続時間終了まで継続する。",
+        "id": "10000083-anemo_p2",
+        "name": "プロップは完備",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -16283,6 +17845,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "息を呑むパフォーマンス",
+        "talentSlot": 1,
+        "description": "リネがプロップアローを発射することでHPを消費した時、そのプロップアローによって召喚されたファニーキャット·ハットが敵に命中すると、リネの元素エネルギーが3ポイント回復、また攻撃力の80%を基に与えるダメージを上げる。",
+        "id": "10000084-pyro_p1",
+        "name": "息を呑むパフォーマンス",
+        "dataSource": {}
+      },
+      {
+        "talentName": "フィナーレの喝采",
+        "talentSlot": 2,
+        "description": "炎元素の影響を受けている敵にリネが与えるダメージは、以下のようにアップする。 ·ダメージ+60%。 ·チーム内にリネ以外の炎元素タイプのキャラクターが一人存在するごとに、さらに+20%。 上記の方法により、炎元素の影響を受けている敵に与えるリネのダメージアップは最大100%までとなる。",
+        "id": "10000084-pyro_p2",
+        "name": "フィナーレの喝采",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000084,
       "gcsimKey": "lyney"
@@ -16474,6 +18054,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "飽和潜水",
+        "talentSlot": 1,
+        "description": "プレッシャー·フロウ·高圧粉砕を発動する時、ペールスタイマーの圧力ランクが4未満の場合、プレッシャー·フロウのクールタイム-1秒。",
+        "id": "10000085-cryo_p1",
+        "name": "飽和潜水",
+        "dataSource": {}
+      },
+      {
+        "talentName": "並流式冷却装置",
+        "talentSlot": 2,
+        "description": "フレミネが敵に氷砕き反応を起こした後、プレッシャー·フロウ·高圧粉砕の与えるダメージ+40%、継続時間5秒。",
+        "id": "10000085-cryo_p2",
+        "name": "並流式冷却装置",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
       }
     ],
     "source": {
@@ -16680,6 +18281,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "やがて公義は弁ぜらる",
+        "talentSlot": 1,
+        "description": "リオセスリのHPが60%未満の場合、「恩典の戒め」を獲得し、次の通常攻撃·フロストコンビネーションの重撃が誅罰·ヴォールティングアッパーに強化される。誅罰·ヴォールティングアッパー：スタミナを消費せず、与えるダメージ+50%。また、命中後にリオセスリのHPをHP上限の30%分回復する。 この方法で獲得できる「恩典の戒め」は、5秒毎に1回のみ。",
+        "cooldown": 5,
+        "id": "10000086-cryo_p1",
+        "name": "やがて公義は弁ぜらる",
+        "dataSource": {
+          "cooldown": "5秒毎に1回"
+        }
+      },
+      {
+        "talentName": "いずれ罪業は贖わる",
+        "talentSlot": 2,
+        "description": "リオセスリの現在HPが増減する時、リオセスリがアイスファング·ラッシュによる烈霜の懲戒状態にある場合、「抵罪の赦免」効果を1層獲得する。この効果は最大5層まで重ね掛けでき、1層につきリオセスリの攻撃力+6%。",
+        "id": "10000086-cryo_p2",
+        "name": "いずれ罪業は贖わる",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000086,
       "gcsimKey": "wriothesley"
@@ -16844,6 +18466,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "古海継嗣の権威",
+        "talentSlot": 1,
+        "description": "チームにいるキャラクターが敵に蒸発、凍結、感電、月感電、開花、月開花、水元素拡散、水元素結晶または月結晶反応を起こすと、ヌヴィレットに「遺龍の栄光」効果を付与する。継続時間30秒、最大3層まで重ね掛け可能。層数に応じて、重撃・衡平な裁量は通常の110%/125%/160%分のダメージを与えられるようになる。 生成された「遺龍の栄光」効果は元素反応ごとにカウントされる。",
+        "id": "10000087-hydro_p1",
+        "name": "古海継嗣の権威",
+        "duration": 30,
+        "dataSource": {
+          "duration": "継続時間30秒"
+        }
+      },
+      {
+        "talentName": "至高なる審理の紀律",
+        "talentSlot": 2,
+        "description": "現在HPが上限の30%を超えている場合、超えた分1%につき、ヌヴィレットの水元素ダメージ+0.6%。この効果によってアップできる水元素ダメージは最大30%までとなる。",
+        "id": "10000087-hydro_p2",
+        "name": "至高なる審理の紀律",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -17045,6 +18688,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "衝撃的モーメント",
+        "talentSlot": 1,
+        "description": "「フォーカスインプレッション」のマークが付いている敵が倒されたとき、フレーミング·氷点法のクールタイム-2秒。この方法での短縮は12秒毎に4回のみ発動可能。",
+        "id": "10000088-cryo_p1",
+        "name": "衝撃的モーメント",
+        "dataSource": {}
+      },
+      {
+        "talentName": "多様性リサーチ",
+        "talentSlot": 2,
+        "description": "チームにシャルロット自身を除いたフォンテーヌ出身のキャラクターが1/2/3名いるとき、シャルロットの与える治療効果がそれぞれ+5%/10%/15%。チームにフォンテーヌ以外の出身のキャラクターが1/2/3名いるとき、シャルロットの氷元素ダメージがそれぞれ+5%/10%/15%。",
+        "id": "10000088-cryo_p2",
+        "name": "多様性リサーチ",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000088,
       "gcsimKey": "charlotte"
@@ -17231,6 +18892,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "終わりなき円舞",
+        "talentSlot": 1,
+        "description": "フィールド上にいるチーム内のキャラクターがフリーナ自身以外からHP上限を超えて回復する治療を受けたとき、その後の4秒間、フリーナは2秒毎に周囲のチーム全員のHPを回復する。回復量は回復を受けるキャラクターのHP上限の2%に相当する。",
+        "id": "10000089-hydro_p1",
+        "name": "終わりなき円舞",
+        "duration": 4,
+        "dataSource": {
+          "duration": "4秒間"
+        }
+      },
+      {
+        "talentName": "聴き手なき独白",
+        "talentSlot": 2,
+        "description": "HP上限1000ポイント毎に、フリーナのサロン·ソリティアに、異なるアルケー属性に応じた強化効果を付与する。 「サロンメンバー」の与えるダメージ+0.7%。この方法でアップできる「サロンメンバー」のダメージは最大28%まで。 「衆の水の歌い手」が周囲のフィールド上にいるキャラクターのHPを回復する時間間隔-0.4%。この方法で短縮できる、前述の「衆の水の歌い手」の回復間隔は最大16%まで。",
+        "id": "10000089-hydro_p2",
+        "name": "聴き手なき独白",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -17447,6 +19129,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "尖兵協同戦術",
+        "talentSlot": 1,
+        "description": "チーム全員の元素タイプが炎元素または雷元素であり、かつ炎元素と雷元素のキャラクターが少なくとも一人ずついる時、シュヴルーズは周囲のチーム全員に「協同戦術」を付与する。付与されたキャラクターが過負荷反応を起こした後、その過負荷反応による影響を受けた敵の炎元素耐性および雷元素耐性-40%、継続時間6秒。 チーム内キャラクターの元素タイプが固有天賦の条件を満たさない場合、既存の協同戦術効果はクリアされる。",
+        "id": "10000090-pyro_p1",
+        "name": "尖兵協同戦術",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
+      },
+      {
+        "talentName": "縦陣戦力統括",
+        "talentSlot": 2,
+        "description": "シュヴルーズが近迫阻止射撃·速の「マグナムブレット」を発射した後、次の効果を発動する。シュヴルーズのHP上限を基準とし、HP上限1000毎に周囲のチームにいる炎元素と雷元素キャラクターの攻撃力+1%、継続時間30秒。この方法でアップできる攻撃力は最大40%まで。",
+        "id": "10000090-pyro_p2",
+        "name": "縦陣戦力統括",
+        "duration": 30,
+        "dataSource": {
+          "duration": "継続時間30秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000090,
       "gcsimKey": "chevreuse"
@@ -17613,6 +19319,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "未知の流通ルート",
+        "talentSlot": 1,
+        "description": "セレモニアル·クリスタルショットを発動した後の4秒間、ナヴィアの通常攻撃、重撃、落下攻撃ダメージは、元素付与によって他の元素に変化しない岩元素ダメージへと変わる。この時、ナヴィアの通常攻撃、重撃、落下攻撃ダメージ+40%。",
+        "id": "10000091-geo_p1",
+        "name": "未知の流通ルート",
+        "duration": 4,
+        "dataSource": {
+          "duration": "4秒間"
+        }
+      },
+      {
+        "talentName": "相互連携ネットワーク",
+        "talentSlot": 2,
+        "description": "チーム内に炎元素/雷元素/氷元素/水元素のキャラクターが1名いる毎に、ナヴィアの攻撃力+20%。この効果は最大2層まで重ね掛け可能。",
+        "id": "10000091-geo_p2",
+        "name": "相互連携ネットワーク",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -17784,6 +19511,29 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "泰平の舞",
+        "talentSlot": 1,
+        "description": "瑞獣登楼の落下攻撃·踏雲献瑞が敵に命中した後、嘉明は0.2秒毎に1回HPを回復する。回復量は嘉明のHP上限の1.5%に相当する。継続時間0.8秒。",
+        "cooldown": 0.2,
+        "id": "10000092-pyro_p1",
+        "name": "泰平の舞",
+        "duration": 0.8,
+        "dataSource": {
+          "duration": "継続時間0.8秒",
+          "cooldown": "0.2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "祥煙の瑞気",
+        "talentSlot": 2,
+        "description": "嘉明のHPが50%未満の時、受ける治療効果+20%。嘉明のHPが50%以上の時、落下攻撃·踏雲献瑞の与えるダメージ+20%。",
+        "id": "10000092-pyro_p2",
+        "name": "祥煙の瑞気",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -17979,6 +19729,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "白羽高くして祥風を追う",
+        "talentSlot": 1,
+        "description": "朝翔の鶴雲の閑雲衝撃波が敵に命中するたび、周囲チーム全員に継続時間20秒、最大4層まで重ね掛け可能の「風翎」効果を1層与える。「風翎」効果を与えられたキャラクターは、落下攻撃の会心率が4%/6%/8%/10%アップする。 それぞれの敵に命中したことで発生する「風翎」の継続時間は独立して計算される。",
+        "id": "10000093-anemo_p1",
+        "name": "白羽高くして祥風を追う",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
+      },
+      {
+        "talentName": "かの姿、洞府の仙人を彷彿す",
+        "talentSlot": 2,
+        "description": "夕集の竹星の「竹星」の補助仙力が残っている時、周囲のフィールド上キャラクターの着地時の落下攻撃によるダメージが、閑雲の攻撃力の200%分アップする。この方法によって、近くのフィールド上キャラクターの着地時の落下攻撃は最大9000までダメージアップ可能。 1回の着地における落下攻撃ダメージでは、上記ダメージアップ効果は1体の敵にのみ適用される。各キャラクターごとに、0.4秒毎に1回のみ発動可能。",
+        "cooldown": 0.4,
+        "id": "10000093-anemo_p2",
+        "name": "かの姿、洞府の仙人を彷彿す",
+        "dataSource": {
+          "cooldown": "0.4秒毎に1回"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000093,
       "gcsimKey": "xianyun"
@@ -18157,6 +19931,32 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "量体裁衣",
+        "talentSlot": 1,
+        "description": "羽袖一触の斬り上げ攻撃を発動した後の短い間、その後の操作によって異なる効果を得られる。元素スキルボタンを押すと、「織錦」が発動する。通常攻撃ボタンを押すと、「裁錦」が発動する。 織錦 ·キャラクターを切り替え、チーム内にいる次の自身のキャラクターを登場させる。 ·チーム内の自身キャラクター全員に「当意即妙」を付与する。「当意即妙」：フィールド上にいるチーム内の自身のキャラクターによる通常攻撃、重撃、落下攻撃が近くの敵に命中した時、「たもと」は連携攻撃を行い、敵の位置に羽袖一触の斬り上げ攻撃ダメージ100%分に相当する岩元素範囲ダメージを与える。これによるダメージは元素スキルダメージと見なされる。 ·「当意即妙」の継続時間は8秒。「たもと」による連携攻撃は2秒毎に1回のみ発動可能。「当意即妙」継続期間中、連携攻撃は最大2回まで。 裁錦 ·千織は岩元素付与を獲得、継続時間5秒。 千織がフィールドにいる時、羽袖一触の斬り上げ攻撃を発動した直後に元素スキルや通常攻撃ボタンを押さなかった場合、後続効果「裁錦」が発動する。",
+        "cooldown": 2,
+        "id": "10000094-geo_p1",
+        "name": "量体裁衣",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒",
+          "cooldown": "2秒毎に1回"
+        }
+      },
+      {
+        "talentName": "錦上添花",
+        "talentSlot": 2,
+        "description": "近くにいるチームキャラクターが岩元素創造物を創造した時、千織の岩元素ダメージ+20%、継続時間20秒。",
+        "id": "10000094-geo_p2",
+        "name": "錦上添花",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
       }
     ],
     "source": {
@@ -18339,6 +20139,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "休息は適度に取るのよ",
+        "talentSlot": 1,
+        "description": "ぴょんぴょんハイドロセラピー発動時、シグウィンは自身に継続時間18秒の「半強制的静養」効果を付与する。継続期間中、シグウィンの水元素ダメージ+8%。また、静養カウントを10層獲得する。付近にいるチーム内の待機中のキャラクター（シグウィンを除く）の元素スキルがダメージを与える時、静養カウントを1層消費し、その時の元素スキルによるダメージを次のようにアップする——シグウィンのHP上限が30000を超えている時、超えた部分の数値1000ごとにダメージ+80。この方法でアップできるダメージは最大2800まで。",
+        "id": "10000095-hydro_p1",
+        "name": "休息は適度に取るのよ",
+        "duration": 18,
+        "dataSource": {
+          "duration": "継続時間18秒"
+        }
+      },
+      {
+        "talentName": "丁寧な診療",
+        "talentSlot": 2,
+        "description": "シグウィンが治療を行う時、チーム全員の現在の命の契約の合計を基に、回復量をアップする。命の契約1000につき、回復量+3%。この方法でアップできる回復量は最大30%まで。",
+        "id": "10000095-hydro_p2",
+        "name": "丁寧な診療",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -18575,6 +20396,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "償えるものは苦痛のみ",
+        "talentSlot": 1,
+        "description": "血償の勅令は以下の特性を持つ。 ·アルレッキーノ自身が付与した血償の勅令を持つ敵が倒された時、アルレッキーノにHP上限の130%の「命の契約」を付与する。 ·付与から5秒後、血償の勅令·結に強化され、回収時、アルレッキーノに130%の「命の契約」を付与する。 この方法で「命の契約」を付与する時も、付与された「命の契約」の数値の上限が万象、灰に帰すの本来の制限を超えることはない。",
+        "id": "10000096-pyro_p1",
+        "name": "償えるものは苦痛のみ",
+        "dataSource": {}
+      },
+      {
+        "talentName": "護れるものは力のみ",
+        "talentSlot": 2,
+        "description": "アルレッキーノの攻撃力が1000を超えている時、1000を超えた分の数値100につき、アルレッキーノの全元素耐性と物理耐性が+1%。この方法でアップできるアルレッキーノの全元素耐性と物理耐性は最大20%まで。",
+        "id": "10000096-pyro_p2",
+        "name": "護れるものは力のみ",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000096,
       "gcsimKey": "arlecchino"
@@ -18706,6 +20545,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "黒鳶の謎掛",
+        "talentSlot": 1,
+        "description": "狙い撃ち射撃をする時のセトスの元素エネルギー1ポイントにつき、チャージ時間-0.285秒。この方法で、チャージ時間は0.3秒になるまで短縮でき、最大20ポイントの元素エネルギーをカウントする。発射時、発射した矢が貫影の矢であった場合、カウントした分の元素エネルギーを消費する。一方、1段チャージの矢であった場合、カウントした元素エネルギーの50%を消費する。",
+        "id": "10000097-electro_p1",
+        "name": "黒鳶の謎掛",
+        "dataSource": {}
+      },
+      {
+        "talentName": "砂王からの賜物",
+        "talentSlot": 2,
+        "description": "セトスは「熱砂の眩影」効果を獲得し、貫影の矢の与えるダメージがセトスの元素熟知の700%分アップする。 「熱砂の眩影」効果時間中、後述のどちらかの条件を満たした場合、効果は解除される。 ·貫影の矢が最初に敵に命中した5秒後。 ·4本の貫影の矢が敵に命中した後。 この効果を受けた貫影の矢が最初に敵に命中してから15秒後、再び「熱砂の眩影」効果を獲得できる。",
+        "id": "10000097-electro_p2",
+        "name": "砂王からの賜物",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -18907,6 +20764,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "夜を裂く紫焔",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが敵に雷元素関連反応を起こした後、クロリンデの攻撃力の20%を基に、クロリンデの消えゆく残光および通常攻撃による雷元素ダメージをアップする。この効果の継続時間は15秒、最大3層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。 この方法でアップできるクロリンデの上記の攻撃によるダメージは最大1800まで。",
+        "id": "10000098-electro_p1",
+        "name": "夜を裂く紫焔",
+        "dataSource": {}
+      },
+      {
+        "talentName": "契約の報償",
+        "talentSlot": 2,
+        "description": "クロリンデの命の契約がHP上限の100%以上の場合、命の契約の数値が増減する時、クロリンデの会心率+10%。この効果の継続時間は15秒、最大2層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。 また、夜狩の巡回の夜巡り状態も強化され、継続期間中、回復量の命の契約への変換率が100%になる。",
+        "id": "10000098-electro_p2",
+        "name": "契約の報償",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -19123,6 +20998,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "余香",
+        "talentSlot": 1,
+        "description": "芳香を2つ集めるたびに、ルミドゥースの瓶·ランク2は芳香を消費して「清露コロン」を出し、敵にエミリエの攻撃力600%分の草元素範囲ダメージを与える。このダメージは元素スキルダメージと見なされない。",
+        "id": "10000099-dendro_p1",
+        "name": "余香",
+        "dataSource": {}
+      },
+      {
+        "talentName": "精留",
+        "talentSlot": 2,
+        "description": "エミリエが燃焼状態の敵に与えるダメージをエミリエの攻撃力を基にアップする。攻撃力1000につき、ダメージ+15%。この方法でアップできるダメージは最大36%まで。",
+        "id": "10000099-dendro_p2",
+        "name": "精留",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000099,
       "gcsimKey": "emilie"
@@ -19189,6 +21082,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "山のこだま",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした後、カチーナの岩元素ダメージ+20%、継続時間12秒。",
+        "id": "10000100-geo_p1",
+        "name": "山のこだま",
+        "duration": 12,
+        "dataSource": {
+          "duration": "継続時間12秒"
+        }
+      },
+      {
+        "talentName": "磐岩の重み",
+        "talentSlot": 2,
+        "description": "ぐるぐるコマちゃんの与えるダメージがカチーナの防御力の20%分アップする。",
+        "id": "10000100-geo_p2",
+        "name": "磐岩の重み",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -19365,6 +21279,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "厄地の代償",
+        "talentSlot": 1,
+        "description": "夜魂の加護状態にある時、キィニチの元素スキルが命中した敵は「厄地」状態に陥る。それらの敵が燃焼反応または烈開花反応ダメージを受けると、キィニチの夜魂値が7回復する。この方法で夜魂値を回復できるのは0.8秒毎に1回のみ。厄地状態はキィニチの夜魂の加護状態が終了するまで継続する。",
+        "cooldown": 0.8,
+        "id": "10000101-dendro_p1",
+        "name": "厄地の代償",
+        "dataSource": {
+          "cooldown": "0.8秒毎に1回"
+        }
+      },
+      {
+        "talentName": "焔霊の契約",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした後、キィニチに「狩人の心得」を1層付与し、継続時間15秒、最大2層まで。キィニチが懸狩り·宙の遊猟の廻狩貫鱗砲を発動する時、「狩人の心得」をすべて消費する。消費した「狩人の心得」1層につき、その回の廻狩貫鱗砲の与えるダメージがキィニチの攻撃力320%分アップする。",
+        "id": "10000101-dendro_p2",
+        "name": "焔霊の契約",
+        "duration": 15,
+        "dataSource": {
+          "duration": "継続時間15秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000101,
       "gcsimKey": "kinich"
@@ -19530,6 +21468,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "耐熱型淡水プクフグ",
+        "talentSlot": 1,
+        "description": "サメサメバイト·ビッグウェーブが敵に命中した時、近くにプクフグフロートを1個生成する。プクフグフロートを獲得したムアラニは夜魂値を20回復する。1回の夜魂の加護期間中、この方法で生成できるプクフグフロートは2個まで。",
+        "id": "10000102-hydro_p1",
+        "name": "耐熱型淡水プクフグ",
+        "dataSource": {}
+      },
+      {
+        "talentName": "ナタのナンバーワンガイド",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした後、ムアラニは継続時間20秒、最大3重まで重ね掛け可能な「ウェーブチェイサーの心得」を1重獲得する。爆瀑ロケット発動時、ムアラニはウェーブチェイサーの心得をすべてクリアする。クリアした層数1つごとに、それぞれHP上限の15%/30%/45%を基に、今回の爆瀑ロケットの与えるダメージをアップする。",
+        "id": "10000102-hydro_p2",
+        "name": "ナタのナンバーワンガイド",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000102,
       "gcsimKey": "mualani"
@@ -19688,6 +21647,32 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "ネトティリズトリの残響",
+        "talentSlot": 1,
+        "description": "夜魂の加護状態時： ・元素変化した「サンプル音源」が2つ以上存在する場合、通常攻撃または落下攻撃が敵に命中した時、夜魂値を35獲得する。この効果は0.1秒毎に1回のみ発動可能。 ・元素変化した「サンプル音源」が2つ未満の場合、通常攻撃と落下攻撃のダメージ+30%。",
+        "cooldown": 0.1,
+        "id": "10000103-geo_p1",
+        "name": "ネトティリズトリの残響",
+        "dataSource": {
+          "cooldown": "0.1秒毎に1回"
+        }
+      },
+      {
+        "talentName": "ポータブル・アーマー",
+        "talentSlot": 2,
+        "description": "夜魂の加護状態中、シロネンの夜魂値が上限に達した時、「夜魂バースト」と同様の効果を1回発動する。この効果は14秒毎に1回のみ発動可能。 また、付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、シロネンの防御力+20%、継続時間15秒。",
+        "cooldown": 14,
+        "id": "10000103-geo_p2",
+        "name": "ポータブル・アーマー",
+        "duration": 15,
+        "dataSource": {
+          "duration": "継続時間15秒",
+          "cooldown": "14秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -19868,6 +21853,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "弾丸トリック",
+        "talentSlot": 1,
+        "description": "元素スキルスピリット・レインズのマルチ照準のチャージを行う時、チーム内に元素変化の条件を満たす元素タイプのキャラクターが存在する場合、条件を満たす異なる元素タイプの数によって以下の効果を獲得する。 ・元素タイプが1種類あるごとに、「スピリット転化」を起こす確率がそれぞれ33%/66.7%/100%になる。「スピリット転化」を起こすと、弾倉に装填された3発目のシャドウチェイサー弾がランダムで対応元素のシャドウチェイサー弾・光輝に変化する。 ・元素タイプが1種類あるごとに、チャスカは「閃影のスピリット」効果を1層獲得し、その層数に応じて、シャドウチェイサー弾・光輝の与えるダメージがそれぞれ+15%/35%/65%。「閃影のスピリット」効果はマルチ照準終了まで継続し、最大3層まで重ねられる。",
+        "id": "10000104-anemo_p1",
+        "name": "弾丸トリック",
+        "dataSource": {}
+      },
+      {
+        "talentName": "援護の気持ち",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、チャスカは近くの敵に「シャドウチェイサー弾・流紅」を放ち、夜魂性質の風元素ダメージを与える。そのダメージは元素スキルスピリット・レインズのシャドウチェイサー弾の150%に相当する。チーム内に炎元素、水元素、氷元素または雷元素タイプのキャラクターが存在する場合、シャドウチェイサー弾・流紅は元素変化を起こし、夜魂性質の対応元素ダメージを与える。そのダメージは元素スキルスピリット・レインズのシャドウチェイサー弾・光輝の150%に相当する。 上記方法によるダメージは重撃ダメージと見なされる。",
+        "id": "10000104-anemo_p2",
+        "name": "援護の気持ち",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000104,
       "gcsimKey": "chasca"
@@ -20023,6 +22026,34 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "夜陰のシナスタジア",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした後、オロルンは夜魂値を40獲得する。元素スキルを発動後の15秒間、チームにいる他のキャラクターの水元素、または雷元素の攻撃が敵に命中すると、オロルンは夜魂値を5獲得する。この効果は0.3秒毎に1回のみ発動でき、継続期間中に最大10回まで発動可能。 オロルンの夜魂値の上限は80。 さらに、近くの敵が感電や月感電ダメージを受けたとき、あるいは付近にいるチーム内の他のキャラクターが敵に夜魂性質のダメージを与えたとき、オロルンの夜魂値が10以上だった場合、オロルンは夜魂値を10消費して夜魂の加護状態に入り、「顕象超感覚」効果を発動する。オロルンの攻撃力の160%を基に、周囲の最大4体の敵に夜魂性質の雷元素ダメージを与える。上記効果は1.8秒毎に1回のみ発動可能。 夜魂の加護・オロルン オロルンの夜魂の加護状態の継続時間は最大6秒。",
+        "cooldown": 0.3,
+        "id": "10000105-electro_p1",
+        "name": "夜陰のシナスタジア",
+        "duration": 15,
+        "dataSource": {
+          "duration": "15秒間",
+          "cooldown": "0.3秒毎に1回"
+        }
+      },
+      {
+        "talentName": "霊相のカタリスト",
+        "talentSlot": 2,
+        "description": "元素スキル冥色のタイトロープの宿霊玉が敵に命中した後、オロルンは継続時間15秒の「霊相の印」効果を獲得する。 霊相の印 付近にいるチーム内フィールド上キャラクターの通常攻撃、重撃、または落下攻撃が敵に命中した後、そのキャラクターは元素エネルギーを3ポイント回復する。さらに、オロルンが待機中の場合、オロルンは元素エネルギーを3ポイント回復する。この効果は1秒毎に1回のみ発動でき、継続期間中最大3回まで発動できる。",
+        "cooldown": 1,
+        "id": "10000105-electro_p2",
+        "name": "霊相のカタリスト",
+        "duration": 15,
+        "dataSource": {
+          "duration": "継続時間15秒",
+          "cooldown": "1秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -20300,6 +22331,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "炎花の貢物",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、マーヴィカの攻撃力+30%、継続時間10秒。",
+        "id": "10000106-pyro_p1",
+        "name": "炎花の貢物",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      },
+      {
+        "talentName": "「キオンゴズィ」",
+        "talentSlot": 2,
+        "description": "元素爆発天を焦がす刻を発動した後、発動時の戦意1につき、フィールド上キャラクターの与えるダメージ+0.2%。この方法でアップできるチーム内フィールド上キャラクターの与えるダメージは最大40%まで。この効果は20秒間継続し、0%になるまで少しずつ減っていく。",
+        "id": "10000106-pyro_p2",
+        "name": "「キオンゴズィ」",
+        "duration": 20,
+        "dataSource": {
+          "duration": "20秒間"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000106,
       "gcsimKey": "mavuika"
@@ -20465,6 +22520,29 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "五重天の寒雨",
+        "talentSlot": 1,
+        "description": "イツパパが存在している間、付近にいるチーム内キャラクターが凍結反応、または溶解反応を起こした後、該当反応の影響を受けている敵の炎元素と水元素の耐性-20%、継続時間12秒。また、シトラリは夜魂値を16回復する。この方法による夜魂値の回復は、8秒毎に1回のみ可能。",
+        "cooldown": 8,
+        "id": "10000107-cryo_p1",
+        "name": "五重天の寒雨",
+        "duration": 12,
+        "dataSource": {
+          "duration": "継続時間12秒",
+          "cooldown": "8秒毎に1回"
+        }
+      },
+      {
+        "talentName": "白燧蝶の星衣",
+        "talentSlot": 2,
+        "description": "元素スキル霜暁の黒星において、イツパパの霜落の嵐の与えるダメージがシトラリの元素熟知の90%分アップする。元素爆発諸曜の令において、氷晶の嵐の与えるダメージがシトラリの元素熟知の1200%分アップする。 また、付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、シトラリは夜魂値を4回復する。",
+        "id": "10000107-cryo_p2",
+        "name": "白燧蝶の星衣",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -20670,6 +22748,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "四方封刀の霊占",
+        "talentSlot": 1,
+        "description": "元素スキル鳳跡随翦舞の突進が目標に命中した時、水元素/炎元素/氷元素/雷元素と接触した場合、鳳跡シールドに元素変化が起きる。変化後のシールドは対応元素に対して250%の吸収効果を持つ。 また、今回の元素スキル鳳跡随翦舞で鳳跡シールドに元素変化が起きた場合、藍硯が敵に向かって投げる翦月輪が生み出すダメージに、元の50%分の対応元素ダメージが追加される。このダメージは元素スキルダメージと見なされる。",
+        "id": "10000108-anemo_p1",
+        "name": "四方封刀の霊占",
+        "dataSource": {}
+      },
+      {
+        "talentName": "蒼羽鎮邪の勅符",
+        "talentSlot": 2,
+        "description": "元素スキル鳳跡随翦舞と元素爆発月踏む鶴弦の与えるダメージがそれぞれ、藍硯の元素熟知の309%分と774%分アップする。",
+        "id": "10000108-anemo_p2",
+        "name": "蒼羽鎮邪の勅符",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000108,
       "gcsimKey": "lanyan"
@@ -20836,6 +22932,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "名月浮声",
+        "talentSlot": 1,
+        "description": "夢見月瑞希が夢浮かみ状態で拡散または星拡散反応を起こした時、夢浮かみ状態の継続時間+2.5秒。この効果は0.3秒毎に1回のみ発動でき、1回の夢浮かみ状態の継続時間中に最大2回まで発動可能。",
+        "cooldown": 0.3,
+        "id": "10000109-anemo_p1",
+        "name": "名月浮声",
+        "dataSource": {
+          "cooldown": "0.3秒毎に1回"
+        }
+      },
+      {
+        "talentName": "昼想夜夢",
+        "talentSlot": 2,
+        "description": "夢見月瑞希が夢浮かみ状態にあるとき、付近にいるチーム内他のキャラクターの炎元素、水元素、氷元素または雷元素の攻撃が敵に命中すると、夢見月瑞希の元素熟知+100。継続時間4秒。",
+        "id": "10000109-anemo_p2",
+        "name": "昼想夜夢",
+        "duration": 4,
+        "dataSource": {
+          "duration": "継続時間4秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000109,
       "gcsimKey": "yumemizukimizuki"
@@ -21000,6 +23120,34 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "高負荷トレーニング・強化版",
+        "talentSlot": 1,
+        "description": "「ライトニング・ステップ」が敵に命中すると、イアンサは継続時間15秒の「プロパーフォーム」効果を獲得する。 継続期間中、イアンサの攻撃力+20%、元素爆発力の三原則の運動量メーターを通して夜魂値を回復する時、追加で夜魂値を1回復する。また、チーム内にいる自身のフィールド上キャラクターが夜魂値を消費または回復した後、イアンサが次に運動量メーターから夜魂値を回復する時、追加で回復する夜魂値が4までアップする。この効果は2.8秒毎に1回のみ発動可能。 「プロパーフォーム」効果は、イアンサの夜魂の加護状態終了時に解除される。",
+        "cooldown": 2.8,
+        "id": "10000110-electro_p1",
+        "name": "高負荷トレーニング・強化版",
+        "duration": 15,
+        "dataSource": {
+          "duration": "継続時間15秒",
+          "cooldown": "2.8秒毎に1回"
+        }
+      },
+      {
+        "talentName": "運動量グラジエント分析",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を発動すると、イアンサは継続時間10秒の「ウォーミングアップ」効果を獲得する。 継続期間中、イアンサが夜魂値を1以上回復する時、フィールド上の自身のキャラクターのHPも回復する。回復量はイアンサの攻撃力60%分に相当する。この効果は2.8秒毎に1回のみ発動可能。",
+        "cooldown": 2.8,
+        "id": "10000110-electro_p2",
+        "name": "運動量グラジエント分析",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒",
+          "cooldown": "2.8秒毎に1回"
+        }
       }
     ],
     "source": {
@@ -21192,6 +23340,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "連翔、三段跳び！",
+        "talentSlot": 1,
+        "description": "元素スキルホッピング・ナイトレインボー発動後、ヴァレサは継続時間5秒の「レインボークラッシュ」効果を獲得する。 継続期間中、ヴァレサが落下攻撃を行うと、着地時の落下攻撃ダメージが攻撃力50%分アップする。ヴァレサが猛烈パッション状態だった場合、着地時の落下攻撃ダメージが攻撃力180%分アップするようになる。 「レインボークラッシュ」効果は、着地時の衝撃が敵に命中した時、または継続時間終了時に解除される。",
+        "id": "10000111-electro_p1",
+        "name": "連翔、三段跳び！",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
+      },
+      {
+        "talentName": "ヒーロー、二度目の見参！",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、ヴァレサの攻撃力+35%、継続時間12秒。この効果は最大2層まで重ね掛けでき、継続時間は層ごとに独立してカウントされる。",
+        "id": "10000111-electro_p2",
+        "name": "ヒーロー、二度目の見参！",
+        "duration": 12,
+        "dataSource": {
+          "duration": "継続時間12秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000111,
       "gcsimKey": "varesa"
@@ -21366,6 +23538,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "美食は良薬に勝る",
+        "talentSlot": 1,
+        "description": "元素爆発**デコ・デコパージュ**を発動した後、エスコフィエは継続時間9秒の「ヒーリング・ディッシュ」効果を獲得する。1秒ごとに、周囲のフィールド上キャラクターのHPを回復する。回復量はエスコフィエの攻撃力138.24%分に相当する。",
+        "id": "10000112-cryo_p1",
+        "name": "美食は良薬に勝る",
+        "duration": 9,
+        "dataSource": {
+          "duration": "継続時間9秒"
+        }
+      },
+      {
+        "talentName": "シーズニングの中の閃き",
+        "talentSlot": 2,
+        "description": "チーム内に水元素または氷元素のキャラクターが1/2/3/4名いる時、エスコフィエの元素スキル**ミ・キュイ**もしくは元素爆発**デコ・デコパージュ**が敵に命中時、その敵の水元素耐性と氷元素耐性が、それぞれ-5%/10%/15%/55%、継続時間12秒。",
+        "id": "10000112-cryo_p2",
+        "name": "シーズニングの中の閃き",
+        "duration": 12,
+        "dataSource": {
+          "duration": "継続時間12秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000112,
       "gcsimKey": "escoffier"
@@ -21529,6 +23725,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "臨床医の大局観",
+        "talentSlot": 1,
+        "description": "イファが夜魂の加護状態にあるとき、チーム全員の合計夜魂値を基に、夜魂値が1存在するごとに、イファは**「救命の理念」**を1獲得する。救命の理念は付近にいるチーム内キャラクターの起こす拡散、星拡散、感電、月感電反応のダメージをアップさせる。",
+        "id": "10000113-anemo_p1",
+        "name": "臨床医の大局観",
+        "dataSource": {}
+      },
+      {
+        "talentName": "相互救援協定",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、イファの元素熟知+80、継続時間10秒。",
+        "id": "10000113-anemo_p2",
+        "name": "相互救援協定",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
       }
     ],
     "source": {
@@ -21728,6 +23945,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "理の超越",
+        "talentSlot": 1,
+        "description": "付近にいるチーム内キャラクターが敵に凍結、超電導、星電導、氷元素拡散、星拡散または氷元素結晶反応を起こすと、敵の近くに虚境の裂け目を1つ生成する。この効果は2.5秒毎に1回のみ発動可能。スカーク自身が作った虚境の裂け目は、フィールド上に3つまで存在できる。 スカークは以下の方法で、近くの一定範囲内の虚境の裂け目を吸収できる。 ・**七相一閃**モードの時、重撃が敵に命中する。 ・七相一閃モード時の特殊な元素爆発極悪技・尽を発動する。 ・元素スキル極悪技・閃を長押しして高速移動する。 虚境の裂け目を1つ吸収するごとに、スカークは**蛇の狡智**を8獲得する。",
+        "cooldown": 2.5,
+        "id": "10000114-cryo_p1",
+        "name": "理の超越",
+        "dataSource": {
+          "cooldown": "2.5秒毎に1回"
+        }
+      },
+      {
+        "talentName": "万流帰寂",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内の水元素キャラクターの水元素攻撃、または付近にいるチーム内の氷元素キャラクター（スカークを除く）の氷元素攻撃が敵に命中すると、スカークは20秒継続する「死川渡り」効果を1層獲得する。この効果は最大3層まで重ね掛けでき、継続時間は層ごとに独立してカウントされる。 この方法でスカークは、死川渡り効果をキャラクター1名につき1層獲得できる。 「死川渡り」効果が1層/2層/3層の時、スカークの**七相一閃**モード時の通常攻撃のダメージは110%/120%/170%となり、元素爆発極悪技・滅のダメージは105%/115%/160%となる。",
+        "id": "10000114-cryo_p2",
+        "name": "万流帰寂",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -21944,6 +24182,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "優しき風の寵愛",
+        "talentSlot": 1,
+        "description": "元素爆発**純光の祈り**の「西風の恵み」効果を受けているキャラクターが敵に凍結反応を起こした時、ダリアに「祝福」効果を2層付与する。この効果は8秒毎に1回のみ発動可能。",
+        "cooldown": 8,
+        "id": "10000115-hydro_p1",
+        "name": "優しき風の寵愛",
+        "dataSource": {
+          "cooldown": "8秒毎に1回"
+        }
+      },
+      {
+        "talentName": "遊び心に満ちた祈り",
+        "talentSlot": 2,
+        "description": "チーム内にいる自身のフィールド上キャラクターが、元素爆発**純光の祈り**の「西風の恵み」効果を受けている時、その攻撃速度はダリアのHP上限を基準に増加する。HP上限1000毎に攻撃速度+0.5%。この方法でアップできる攻撃速度は最大20%まで。",
+        "id": "10000115-hydro_p2",
+        "name": "遊び心に満ちた祈り",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000115,
       "gcsimKey": "dahlia"
@@ -22097,6 +24356,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "オーバークロック",
+        "talentSlot": 1,
+        "description": "**「ビルギッタ」**の付近に月感電反応によって発生した雷雲がある場合、ビルギッタが放電攻撃を行う時に追加で攻撃を1回行い、イネファの攻撃力の65%分の雷元素範囲ダメージを与える。このダメージは、月感電反応によるダメージと見なされる。",
+        "id": "10000116-electro_p1",
+        "name": "オーバークロック",
+        "dataSource": {}
+      },
+      {
+        "talentName": "再構築プロトコル",
+        "talentSlot": 2,
+        "description": "元素爆発**至高なる指令・全域浄化**を発動すると、チーム内の自身のキャラクター全員に「パラメータ再構築」効果を付与し、イネファの攻撃力の6%を基に、イネファとチーム内の自身のフィールド上キャラクターの元素熟知を強化する。継続時間20秒。",
+        "id": "10000116-electro_p2",
+        "name": "再構築プロトコル",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
       }
     ],
     "source": {
@@ -22264,6 +24544,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "霜夜に捧ぐ光",
+        "talentSlot": 1,
+        "description": "ラウマが元素スキル**聖言のルノ・永夜の眠り**を発動した後の20秒間、チーム内の月兆に応じて、それぞれ異なる強化効果を獲得する。異なる月兆レベルによって提供される強化効果は重ね掛けできない。 月兆・初照 付近にいるチーム内キャラクターが起こす開花、超開花、烈開花反応によるダメージに会心が発生する。なお、会心率は15%、会心ダメージは100%に固定される。この効果による会心率は、元素反応で会心を発生させる他の同種の効果と重ね掛け可能。 月兆・満照 付近にいるチーム内キャラクターが与える月開花反応ダメージの会心率+10%、会心ダメージ+20%。",
+        "id": "10000119-dendro_p1",
+        "name": "霜夜に捧ぐ光",
+        "duration": 20,
+        "dataSource": {
+          "duration": "20秒間"
+        }
+      },
+      {
+        "talentName": "甘泉に捧ぐ禊",
+        "talentSlot": 2,
+        "description": "ラウマの元素熟知1につき、ラウマは以下の強化効果を獲得する。 ・元素スキルの与えるダメージ+0.04%。この方法でアップできるダメージは最大32%まで。 ・重撃「獣霊の御使い・顕現」のクールタイム-0.02%。この方法で短縮できる「獣霊の御使い・顕現」のクールタイムは最大20%まで。",
+        "id": "10000119-dendro_p2",
+        "name": "甘泉に捧ぐ禊",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -22462,6 +24763,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "厳冬の響き",
+        "talentSlot": 1,
+        "description": "フリンズはチームの月兆に応じて、強化効果を獲得する。 月兆・満照：フリンズが起こした月感電反応によるダメージ+20%。",
+        "id": "10000120-electro_p1",
+        "name": "厳冬の響き",
+        "dataSource": {}
+      },
+      {
+        "talentName": "幽炎の囁き",
+        "talentSlot": 2,
+        "description": "フリンズの元素熟知が、フリンズの攻撃力の8%分アップする。この方法でアップできるフリンズの元素熟知は、最大160まで。",
+        "id": "10000120-electro_p2",
+        "name": "幽炎の囁き",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000120,
       "gcsimKey": "flins"
@@ -22592,6 +24911,24 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "効率運用プロトコル",
+        "talentSlot": 1,
+        "description": "アイノはチームの月兆に応じて、強化効果を獲得する。 月兆・満照：元素爆発**お水ひえひえ装置**が強化され、「落ち着いた方がいいカモ？」の水弾発射間隔がより短くなり、より広範囲な水元素範囲ダメージを与えるようになる。",
+        "id": "10000121-hydro_p1",
+        "name": "効率運用プロトコル",
+        "dataSource": {}
+      },
+      {
+        "talentName": "構造的パワーアップ",
+        "talentSlot": 2,
+        "description": "アイノの元素爆発の与ダメージが、アイノの元素熟知の50%分アップする。",
+        "id": "10000121-hydro_p2",
+        "name": "構造的パワーアップ",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000121,
       "gcsimKey": "aino"
@@ -22658,6 +24995,41 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "月下の賭け",
+        "talentSlot": 1,
+        "description": "ネフェルはチームの月兆に応じて、強化効果を獲得する。 月兆・満照：元素スキル**盤術・千夜一舞**を発動する時、フィールド上の草原核を「虚言の核」に変える。さらに、付近にいるチーム内キャラクターが次の15秒間、月開花反応を起こすと、本来生成する草原核と豊穣の核が虚言の核に取って代わる。虚言の核は超開花反応や烈開花反応を起こすことができず、迸ることもできない。 ネフェルは重撃または**幻の戯**を発動することで、周囲の一定範囲内にある虚言の核を吸収できる。虚言の核を1つ吸収するたびに、ネフェルは**「偽りの帳」**効果を1層獲得する。3層まで重ねられた時、または3層の継続時間がリセットされた時、ネフェルの元素熟知+100、継続時間8秒。",
+        "id": "10000122-dendro_p1_1",
+        "name": "月下の賭け (15秒)",
+        "duration": 15,
+        "dataSource": {
+          "duration": "15秒間"
+        }
+      },
+      {
+        "talentName": "月下の賭け",
+        "talentSlot": 1,
+        "description": "ネフェルはチームの月兆に応じて、強化効果を獲得する。 月兆・満照：元素スキル**盤術・千夜一舞**を発動する時、フィールド上の草原核を「虚言の核」に変える。さらに、付近にいるチーム内キャラクターが次の15秒間、月開花反応を起こすと、本来生成する草原核と豊穣の核が虚言の核に取って代わる。虚言の核は超開花反応や烈開花反応を起こすことができず、迸ることもできない。 ネフェルは重撃または**幻の戯**を発動することで、周囲の一定範囲内にある虚言の核を吸収できる。虚言の核を1つ吸収するたびに、ネフェルは**「偽りの帳」**効果を1層獲得する。3層まで重ねられた時、または3層の継続時間がリセットされた時、ネフェルの元素熟知+100、継続時間8秒。",
+        "id": "10000122-dendro_p1_2",
+        "name": "月下の賭け (8秒)",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      },
+      {
+        "talentName": "砂塵の娘",
+        "talentSlot": 2,
+        "description": "ネフェルが**「影の舞」**状態にある時、チーム内キャラクターが月開花反応を起こした後の5秒間、ネフェルの**蛇突状態**はチームに追加で**草露**を提供する。ネフェルの元素熟知が500を超えている時、500を超えた分の数値100につき草露の効果+10%。この方法でアップできる草露の効果は最大50%まで。",
+        "id": "10000122-dendro_p2",
+        "name": "砂塵の娘",
+        "duration": 5,
+        "dataSource": {
+          "duration": "5秒間"
+        }
       }
     ],
     "source": {
@@ -22860,6 +25232,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "顕現せし光霊",
+        "talentSlot": 1,
+        "description": "ドゥリンが元素爆発で具現化した力の形に応じて、異なる強化効果が発動する。 白焔の龍 付近にいるチーム内キャラクターが敵に燃焼、過負荷、炎元素拡散、炎元素結晶反応を起こした後、または燃焼状態の敵に炎元素ダメージや草元素ダメージを与えた時、その敵の炎元素耐性と反応に関与した対応する元素耐性-20%、継続時間6秒。 黒蝕の龍 ドゥリンが起こす蒸発反応によるダメージ+40%、溶解反応によるダメージ+40%。",
+        "id": "10000123-pyro_p1",
+        "name": "顕現せし光霊",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
+      },
+      {
+        "talentName": "混沌を創りし闇夜",
+        "talentSlot": 2,
+        "description": "元素爆発を発動した後の20秒間、ドゥリンは「原象精錬」効果を獲得する。継続時間中、ドゥリンは「原象」を10層獲得し、白焔の龍と黒蝕の龍による定期的な攻撃がダメージを与える時、「原象」を1層消費してそのダメージをアップする。攻撃力100ごとにダメージが元の3%分アップし、この方法により最大で元の75%分アップできる。1回の白焔の龍や黒蝕の龍が同時に複数の敵に命中した時、「原象」は1層しか消費されない。 また、再び元素爆発を発動すると、「原象」の層数はリセットされる。",
+        "id": "10000123-pyro_p2",
+        "name": "混沌を創りし闇夜",
+        "duration": 20,
+        "dataSource": {
+          "duration": "20秒間"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000123,
       "gcsimKey": "durin"
@@ -23007,6 +25403,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "報酬ゲットの妙案",
+        "talentSlot": 1,
+        "description": "チーム内に炎元素、水元素、雷元素または氷元素のキャラクターが1名以上いる時、それぞれの元素タイプのキャラクター数に応じて、元素爆発秘器・狩人の七つ道具の**家庭用肉球アシスタントマシン**が強化される。 ヤフォダはチーム内の上記元素タイプのキャラクターをこっそり記録する。これらのキャラクターのうち、最も多い元素タイプはそれぞれ次のような効果を発動する。 ・炎元素：家庭用肉球アシスタントマシンのダメージが元の130%になる。 ・水元素：家庭用肉球アシスタントマシンが与える治療量が元の120%になる。 ・雷元素：家庭用肉球アシスタントマシンの数が1個増える。 ・氷元素：家庭用肉球アシスタントマシンの攻撃間隔が10%短くなる。 上記元素タイプのキャラクター数が等しい場合、炎元素、水元素、雷元素、氷元素の順番で記録する。初期状態では、1種類の元素タイプの効果のみ発動できる。",
+        "id": "10000124-anemo_p1",
+        "name": "報酬ゲットの妙案",
+        "dataSource": {}
+      },
+      {
+        "talentName": "ベリーの褒賞",
+        "talentSlot": 2,
+        "description": "元素爆発秘器・狩人の七つ道具の**家庭用肉球アシスタントマシン**がチーム内の自身のフィールド上キャラクターに治療を行う時、治療対象のHPが70%を超えている場合、そのキャラクターの元素熟知+100、継続時間6秒。",
+        "id": "10000124-anemo_p2",
+        "name": "ベリーの褒賞",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
       }
     ],
     "source": {
@@ -23178,6 +25595,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "月が呼んだ狂気",
+        "talentSlot": 1,
+        "description": "**引力の干渉**を発動すると、コロンビーナは誘月効果を獲得し、自身の会心率+5%。継続時間10秒。この効果は最大3重まで重ねられる。",
+        "id": "10000125-hydro_p1",
+        "name": "月が呼んだ狂気",
+        "duration": 10,
+        "dataSource": {
+          "duration": "継続時間10秒"
+        }
+      },
+      {
+        "talentName": "新月の法則",
+        "talentSlot": 2,
+        "description": "**月の領域**の中にいるキャラクターが月反応を起こした時、それぞれ以下の効果を獲得する。 ・月感電反応：雷雲が条件を満たすターゲットに雷撃を与える時、33%の確率で追加で雷撃を1回与える。 ・月開花反応：月開花反応を起こした時、チームに特殊な**山月の草露**を1滴与える。この方法でチームに与えられる山月の草露は18秒ごとに最大3滴まで。 ・月結晶反応：月籠の共鳴を発動した時、それぞれの月籠は33%の確率で追加攻撃を1回行う。",
+        "id": "10000125-hydro_p2",
+        "name": "新月の法則",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000125,
       "gcsimKey": "columbina"
@@ -23246,6 +25684,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "月下に舞い降りる天女",
+        "talentSlot": 1,
+        "description": "元素スキル**衆生は忽然たるのみ**を発動、または付近にいるチーム内キャラクターが月籠の共鳴を発動した時、兹白は4秒間継続する「太陰降」効果を獲得し、**翔ける霊駒**の与える2段目のダメージが兹白の防御力の60%分アップする。",
+        "id": "10000126-geo_p1",
+        "name": "月下に舞い降りる天女",
+        "duration": 4,
+        "dataSource": {
+          "duration": "4秒間"
+        }
+      },
+      {
+        "talentName": "雲間に連なる山々",
+        "talentSlot": 2,
+        "description": "チーム内に岩元素のキャラクターが1名いる毎に（兹白自身を除く）、兹白の防御力+15%。チーム内に水元素のキャラクターが1名いる毎に、兹白の元素熟知+60。",
+        "id": "10000126-geo_p2",
+        "name": "雲間に連なる山々",
+        "dataSource": {}
+      }
+    ],
     "source": {
       "genshinId": 10000126
     }
@@ -23311,6 +25770,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "ライトブリンガーの盟約",
+        "talentSlot": 1,
+        "description": "元素スキル**暁を破る夜鳴鶯**または元素爆発**影無き灯り**を発動すると、周囲にいるチーム内の他キャラクターが20秒継続する「ライトキーパーの誓い」効果を獲得する。「ライトキーパーの誓い」：敵に与える岩元素ダメージの会心率+5%、会心ダメージ+10%。 月兆・満照 「ライトキーパーの誓い」効果を受けているキャラクターは、元素熟知+50。",
+        "id": "10000127-geo_p1",
+        "name": "ライトブリンガーの盟約",
+        "dataSource": {}
+      },
+      {
+        "talentName": "魔を狩る者の黄昏",
+        "talentSlot": 2,
+        "description": "**「夜鳴鶯の歌」**の効果が次のように強化される。チーム内に水元素または岩元素のキャラクターが1/2/3名いる時、「夜鳴鶯の歌」のダメージアップ効果が、イルーガの元素熟知の7%/14%/24%分アップする。なお、月結晶反応によるダメージをアップする場合は、イルーガの元素熟知の48%/96%/160%分アップとなる。",
+        "id": "10000127-geo_p2",
+        "name": "魔を狩る者の黄昏",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -23528,6 +26005,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "暁の風の行軍",
+        "talentSlot": 1,
+        "description": "チーム内に炎元素、水元素、雷元素または氷元素キャラクターが存在する時、この優先順位に従って、ファルカの攻撃力を基準として、攻撃力1000ごとにファルカは10%の風元素ダメージアップ効果と対応する元素のダメージアップ効果を獲得する。この方法でダメージアップ効果を獲得できるのは、1種類の元素タイプのみ。また、最大25%まで。 さらに、チーム内に2名以上の風元素キャラクターが存在する場合、または2名以上の同じ元素タイプ（炎元素、水元素、雷元素または氷元素）のキャラクターが存在する場合、ファルカが**疾風怒濤**状態で行う通常攻撃、重撃、特殊重撃蒼牙、および発動する特殊元素スキル**出づる四風**は、本来の140%のダメージを与える。チーム内に2名以上の風元素キャラクターと、前述した2名以上の同じ元素タイプのキャラクターが同時に存在する場合、上記の効果は220%にアップする。",
+        "id": "10000128-anemo_p1",
+        "name": "暁の風の行軍",
+        "dataSource": {}
+      },
+      {
+        "talentName": "風の御旗の導き",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内キャラクターが拡散または星拡散反応を起こした時、ファルカは「蒼牙の誓い」を1層獲得し、ファルカの通常攻撃、重撃、特殊重撃蒼牙および発動した特殊元素スキル**出づる四風**の与えるダメージ+7.5%。この効果は継続時間8秒、最大4層まで重ねられる。この方法によって、各キャラクターがファルカに付与できる「蒼牙の誓い」は1秒毎に1層のみ。",
+        "id": "10000128-anemo_p2",
+        "name": "風の御旗の導き",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000128,
       "gcsimKey": "varka"
@@ -23596,6 +26094,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "絶対服従の訓戒",
+        "talentSlot": 1,
+        "description": "**奇策**状態の時、チーム内にいる近くの他のキャラクターがダメージを与えてローエンが**闘争心**を蓄積する時、そのダメージがローエンの基礎攻撃力の3000%以上の場合、ローエンは追加で闘争心を60獲得する。",
+        "id": "10000129-cryo_p1",
+        "name": "絶対服従の訓戒",
+        "dataSource": {}
+      },
+      {
+        "talentName": "秀逸なる戯言",
+        "talentSlot": 2,
+        "description": "**奇策**状態の時、チーム内の近くにいる他のキャラクターが敵に氷元素関連反応を起こした後の8秒間、そのキャラクターとローエンの攻撃力+15%。",
+        "id": "10000129-cryo_p2",
+        "name": "秀逸なる戯言",
+        "duration": 8,
+        "dataSource": {
+          "duration": "8秒間"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000129
     }
@@ -23662,6 +26181,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "野外観察日誌",
+        "talentSlot": 1,
+        "description": "ルミがフィールド上にいる時、ルミの近くにいる敵の岩元素耐性-15%。 月兆・満照：リンネアの元素スキル**ルミのやっふー作戦**と元素爆発**絶体絶命サバイバル備忘録**が強化され、ルミをフィールド上に呼び出した後、ルミの近くにいる敵の岩元素耐性がさらに15%ダウンする。",
+        "id": "10000130-geo_p1",
+        "name": "野外観察日誌",
+        "dataSource": {}
+      },
+      {
+        "talentName": "博物分類図鑑",
+        "talentSlot": 2,
+        "description": "フィールド上にいるチーム内の自身のキャラクターに基づき、リンネアはチーム内の特定キャラクターの元素熟知をリンネアの防御力の5%分アップさせる。キャラクターの性質に応じた効果は以下の通り。 月兆キャラクター：そのキャラクターの元素熟知をアップさせる。 月兆キャラクター以外：リンネア自身の元素熟知をアップさせる。",
+        "id": "10000130-geo_p2",
+        "name": "博物分類図鑑",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -23830,6 +26367,41 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "分かち合い",
+        "talentSlot": 1,
+        "description": "元素スキル**聖言黙示・顕れぬ光**を発動した後の20秒間、ニコはチーム内の自分以外のフィールド上のキャラクターを「観測」し続ける。観測対象のキャラクターがフィールド上に3秒間留まると、そのキャラクターが持つ**虚己の恵み**効果が**聖祝の導き**に昇格し、攻撃力がさらに300アップする。なお、観測対象が魔導キャラクターの場合、虚己の恵み効果は直接聖祝の導きに昇格する。 ニコ以外のキャラクターが持つ聖祝の導きは、退場時に虚己の恵みに戻る。",
+        "id": "10000131-pyro_p1_1",
+        "name": "分かち合い (20秒)",
+        "duration": 20,
+        "dataSource": {
+          "duration": "20秒間"
+        }
+      },
+      {
+        "talentName": "分かち合い",
+        "talentSlot": 1,
+        "description": "元素スキル**聖言黙示・顕れぬ光**を発動した後の20秒間、ニコはチーム内の自分以外のフィールド上のキャラクターを「観測」し続ける。観測対象のキャラクターがフィールド上に3秒間留まると、そのキャラクターが持つ**虚己の恵み**効果が**聖祝の導き**に昇格し、攻撃力がさらに300アップする。なお、観測対象が魔導キャラクターの場合、虚己の恵み効果は直接聖祝の導きに昇格する。 ニコ以外のキャラクターが持つ聖祝の導きは、退場時に虚己の恵みに戻る。",
+        "id": "10000131-pyro_p1_2",
+        "name": "分かち合い (3秒)",
+        "duration": 3,
+        "dataSource": {
+          "duration": "3秒間"
+        }
+      },
+      {
+        "talentName": "美への愛",
+        "talentSlot": 2,
+        "description": "付近にいるチーム内のフィールド上キャラクターの元素ダメージが敵に命中すると、ニコ自身が持っている**虚己の恵み**は**聖祝の導き**に昇格する。継続時間8秒。",
+        "id": "10000131-pyro_p2",
+        "name": "美への愛",
+        "duration": 8,
+        "dataSource": {
+          "duration": "継続時間8秒"
+        }
       }
     ],
     "source": {
@@ -24021,6 +26593,27 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "さらなる懲罰",
+        "talentSlot": 1,
+        "description": "元素爆発**魔女狩りの時間なのだ！**を発動したうえで、「ハンティング」状態にある「魔女を誘う鈴」が敵にダメージを与え、かつそのダメージが敵に拡散または星拡散反応を起こした場合、敵の前にその拡散または星拡散反応に基づいて元素変化した**「災いを狩るハンマー」**を生成して叩きつけ、プルーネの攻撃力150%分の対応する元素ダメージを与える。このダメージは元素爆発ダメージと見なされる。",
+        "id": "10000132-anemo_p1",
+        "name": "さらなる懲罰",
+        "dataSource": {}
+      },
+      {
+        "talentName": "鈴の音とともに",
+        "talentSlot": 2,
+        "description": "プルーネが元素変化を起こした**「災いを狩るハンマー」**を敵に命中させると、付近にいるチーム内の他のキャラクターは5秒間継続する「鈴の鼓舞」効果を獲得する。通常攻撃、重撃、落下攻撃、元素スキル、または元素爆発が敵にダメージを与える時、「鈴の鼓舞」を獲得した際のプルーネの攻撃力のうち2000を超えた部分を基準に、そのダメージをアップさせる。攻撃力1につき、ダメージ+0.025%。最大+50%まで。",
+        "id": "10000132-anemo_p2",
+        "name": "鈴の音とともに",
+        "duration": 5,
+        "dataSource": {
+          "duration": "5秒間"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000132,
       "gcsimKey": "prune"
@@ -24086,6 +26679,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "悠久の演算機関",
+        "talentSlot": 1,
+        "description": "**輝映・星閃**：元素スキル**事象式：自在な解析**を発動する際、ファジオの**演算負荷**が50を超えている場合、演算負荷を低下させると同時に、付近の敵に向けて発射された2発目のプリズム弾が元の400%のダメージを与える。 また、ファジオの演算負荷が10低下するごとに、60秒間持続する改良戦術効果を1層獲得し、この効果は最大10層まで重ね掛けできる。サンドローネが輝映・星閃状態で元素爆発**事象式：Q.E.D**を発動すると、改良戦術の全ての層をクリアし、負温度エネルギー光線によって元の100%+クリアした層数×10%のダメージを与える。",
+        "id": "10000133-cryo_p1",
+        "name": "悠久の演算機関",
+        "duration": 60,
+        "dataSource": {
+          "duration": "60秒間"
+        }
+      },
+      {
+        "talentName": "淑女の礼儀作法",
+        "talentSlot": 2,
+        "description": "サンドローネの攻撃力に基づき、元素熟知をアップさせる。攻撃力100ごとにサンドローネの元素熟知+8、この方法でアップできる元素熟知量は最大160まで。",
+        "id": "10000133-cryo_p2",
+        "name": "淑女の礼儀作法",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -24155,6 +26769,30 @@
         "defaultDuration": 0.2
       }
     ],
+    "passiveEffects": [
+      {
+        "talentName": "最後の詩詠者",
+        "talentSlot": 1,
+        "description": "元素スキル流れる朝のレチタティーヴォ発動時、フィールド上の星の嵐を「流星の嵐」へ変化させる。また、付近にいるチーム内キャラクターが**悠久の歌**効果の継続期間中に星拡散反応を起こすと、星の嵐の代わりに流星の嵐を生成する。 流星の嵐を生成または起爆させた時、付近の敵の風元素耐性-35%、継続時間6秒。 さらに、悠久の歌の継続期間中、付近にいるチーム内キャラクターが輝映・星拡散状態に入った時、輝映・星拡散の継続時間が4秒延長される。",
+        "id": "10000140-hydro_p1",
+        "name": "最後の詩詠者",
+        "duration": 6,
+        "dataSource": {
+          "duration": "継続時間6秒"
+        }
+      },
+      {
+        "talentName": "十二弦の涙唄",
+        "talentSlot": 2,
+        "description": "元素スキル流れる朝のレチタティーヴォ発動時、ヴォジャニーツァは25層の**「メロディ」**と10層の**「コーラス」**を獲得する。 上記の2種類の効果はそれぞれ継続時間30秒、元素スキル発動時に層数が更新される。",
+        "id": "10000140-hydro_p2",
+        "name": "十二弦の涙唄",
+        "duration": 30,
+        "dataSource": {
+          "duration": "継続時間30秒"
+        }
+      }
+    ],
     "source": {
       "genshinId": 10000140
     }
@@ -24220,6 +26858,27 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "儀典「春の行列」",
+        "talentSlot": 1,
+        "description": "ヴェスナが特殊元素スキル**飛翔の剣**を発動または元素爆発**女皇陛下に敬礼を**発動後、「粛正」を1層獲得する、継続時間20秒、最大6層まで重ね掛けでき、継続時間は層ごとに独立してカウントされる。 「粛正」を持っている時、ヴェスナが呼び出した**霊剣**は本来の100%+「粛正」の層数×10%分のダメージを与える。元素スキル操典「勝利への道筋」を発動または退場時、「粛正」はクリアされる。",
+        "id": "10000143-anemo_p1",
+        "name": "儀典「春の行列」",
+        "duration": 20,
+        "dataSource": {
+          "duration": "継続時間20秒"
+        }
+      },
+      {
+        "talentName": "法典「冬の凱旋」",
+        "talentSlot": 2,
+        "description": "輝映・星拡散：チーム内キャラクターの元素タイプに応じて、ヴェスナは対応する効果を獲得する。 ・氷元素または風元素のキャラクター1人につき、ヴェスナの攻撃力+6%。 ・上記以外の元素タイプのキャラクター1人につき、ヴェスナの元素熟知+25。",
+        "id": "10000143-anemo_p2",
+        "name": "法典「冬の凱旋」",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -24288,6 +26947,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "微睡む林の目覚め",
+        "talentSlot": 1,
+        "description": "**トゥガリン**が攻撃を行う時、付近にいるチーム内フィールド上キャラクターのHPが回復する。回復量はアリョーシャの攻撃力の120%に相当する。",
+        "id": "10000148-electro_p1",
+        "name": "微睡む林の目覚め",
+        "dataSource": {}
+      },
+      {
+        "talentName": "冬の麦と落ち葉に告げる別れ",
+        "talentSlot": 2,
+        "description": "アリョーシャの元素チャージ効率を基に、アリョーシャの元素スキルと元素爆発によるダメージがアップする。元素チャージ効率1%につき、上記ダメージが0.35%アップし、最大70%までアップできる。",
+        "id": "10000148-electro_p2",
+        "name": "冬の麦と落ち葉に告げる別れ",
+        "dataSource": {}
       }
     ],
     "source": {
@@ -24484,6 +27161,24 @@
         "shortName": "D",
         "type": "dash",
         "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "選ばれし者の祝祭",
+        "talentSlot": 1,
+        "description": "オデットが**独舞者のシルエット**を召喚すると、さらに4層の**春の華**を獲得する。",
+        "id": "10000150-cryo_p1",
+        "name": "選ばれし者の祝祭",
+        "dataSource": {}
+      },
+      {
+        "talentName": "誠実なる者の悲しき歌",
+        "talentSlot": 2,
+        "description": "オデットの攻撃力のうち1000を超えた部分を基準に、攻撃力100につき、オデットの与える星反応ダメージに本来のダメージの1.5%分の追加ダメージが発生する。この方法による追加ダメージは最大で本来のダメージの30%まで。",
+        "id": "10000150-cryo_p2",
+        "name": "誠実なる者の悲しき歌",
+        "dataSource": {}
       }
     ],
     "source": {

@@ -292,7 +292,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onCopyNotation}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="テキスト記法コピー (行秋 [Q E E N1] ➔ ベネット [Q E]...)"
+              title="テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)"
             >
               {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
               <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>

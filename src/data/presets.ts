@@ -1,14 +1,15 @@
 import { PartyPreset } from '../types/genshin';
-import { ALL_CHARACTERS_ROSTER } from './characters';
+import { ALL_CHARACTERS_ROSTER, resolveLegacyCharacterId } from './characters';
 
-// Helper to get character by ID
+// Helper to get character by ID（プリセットは旧キーで書いてあるので新キーに変換して探す）
 const getChar = (id: string) => {
-  const found = ALL_CHARACTERS_ROSTER.find(c => c.id === id);
+  const key = resolveLegacyCharacterId(id);
+  const found = ALL_CHARACTERS_ROSTER.find(c => c.id === key);
   if (!found) throw new Error(`Character ${id} not found`);
   return { ...found };
 };
 
-export const ROTATION_PRESETS: PartyPreset[] = [
+const RAW_ROTATION_PRESETS: PartyPreset[] = [
   {
     id: 'raiden_national',
     name: '雷電ナショナル (Rational)',
@@ -286,3 +287,9 @@ export const ROTATION_PRESETS: PartyPreset[] = [
     ]
   }
 ];
+
+/** 出場ブロックのキャラ参照も新キー（公式ID-元素）に置き換えたプリセット */
+export const ROTATION_PRESETS: PartyPreset[] = RAW_ROTATION_PRESETS.map(preset => ({
+  ...preset,
+  stints: preset.stints.map(s => ({ ...s, characterId: resolveLegacyCharacterId(s.characterId) })),
+}));

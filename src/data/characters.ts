@@ -1,5 +1,6 @@
 import { ActionDefinition, CharacterConfig, ElementType, WeaponType } from '../types/genshin';
 import masterDataJson from './characters_master_data.json';
+import { isOfficialCharacterKey, legacyCharacterSlug } from './characterKeys';
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; text: string; light: string; hex: string }> = {
   pyro: { bg: 'bg-red-950/70', border: 'border-red-500', text: 'text-red-400', light: 'bg-red-500/20', hex: '#ef4444' },
@@ -512,7 +513,8 @@ const RAW_CURATED_ROSTER: CharacterConfig[] = [
 ];
 
 /** 手作業定義のIDとマスター (genshin-db 英語名由来) のIDが異なるもの */
-const CURATED_MASTER_ID_ALIASES: Record<string, string> = {
+/** 手作業定義（プリセット用）の旧キーのうち、英語名から作った旧キーと異なるもの → 英語名由来の旧キー */
+const CURATED_LEGACY_ALIASES: Record<string, string> = {
   raiden: 'raidenshogun',
   kazuha: 'kaedeharakazuha',
   childe: 'tartaglia',
@@ -522,6 +524,32 @@ const CURATED_MASTER_ID_ALIASES: Record<string, string> = {
 
 /** genshin-db + gcsim から生成したキャラクターマスター (npm run build:master で再生成) */
 export const MASTER_CHARACTERS = masterDataJson as CharacterConfig[];
+
+/** 旧形式のキャラキー（英語名由来 "hutao" / "traveleranemo"、手作業定義の "raiden" など）→ 新形式（公式ID-元素） */
+const LEGACY_CHARACTER_ID_MAP: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  for (const c of MASTER_CHARACTERS) {
+    if (!c.englishName) continue;
+    const slug = legacyCharacterSlug(c.englishName);
+    map.set(slug, c.id);
+    // 旧生成器は英語名が重複したとき公式IDを末尾に付けていた
+    if (c.source?.genshinId) map.set(`${slug}${c.source.genshinId}`, c.id);
+  }
+  for (const [curatedId, slug] of Object.entries(CURATED_LEGACY_ALIASES)) {
+    const key = map.get(slug);
+    if (key) map.set(curatedId, key);
+  }
+  return map;
+})();
+
+/**
+ * 保存データなどに残っている旧形式のキャラキーを、新形式（公式ID-元素）に置き換える。
+ * 新形式・カスタムキャラ・未設定スロット・対応が見つからないキーはそのまま返す
+ */
+export function resolveLegacyCharacterId(id: string): string {
+  if (isOfficialCharacterKey(id) || id.startsWith('custom_') || id.startsWith(EMPTY_SLOT_ID_PREFIX)) return id;
+  return LEGACY_CHARACTER_ID_MAP.get(id) ?? id;
+}
 
 /**
  * 手作業定義のアクションで CT・効果継続時間が未指定のものは、
@@ -546,10 +574,12 @@ export const ALL_CHARACTERS_ROSTER: CharacterConfig[] = (() => {
 
   // 手作業定義 (コンボ・バフ連動・装備メモ) をマスターに重ねる
   for (const curated of RAW_CURATED_ROSTER) {
-    const master = map.get(CURATED_MASTER_ID_ALIASES[curated.id] ?? curated.id);
-    map.set(curated.id, {
+    const id = resolveLegacyCharacterId(curated.id);
+    const master = map.get(id);
+    map.set(id, {
       ...master,
       ...curated,
+      id,
       avatarUrl: master?.avatarUrl || curated.avatarUrl,
       source: master?.source,
       availableActions: curated.availableActions.map(a => inheritTimings(a, master)),

@@ -16,6 +16,7 @@
 import type { ActionDefinition, ActionFrames, ActionType, CharacterConfig, ElementType, WeaponType } from '../types/genshin.ts';
 import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './gcsimParser.ts';
 import { applyConstellationVariants, type ConstellationVariantReport, type GenshinDbConstellation } from './constellationEffects.ts';
+import { characterKey } from '../data/characterKeys.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
@@ -556,7 +557,6 @@ function mergeGenderActions(results: BuildResult[]): BuildResult {
 // メイン
 // ---------------------------------------------------------------------------
 
-export const normalizeCharacterId = (englishName: string) => englishName.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst'];
 
@@ -636,7 +636,6 @@ export async function generateCharacterMaster(
     genderSplit?: boolean;
   }
   const units: BuildUnit[] = [];
-  const usedIds = new Set<string>();
 
   for (const c of charsJa) {
     if (TRAVELER_IDS.has(c.id)) continue;
@@ -645,9 +644,8 @@ export async function generateCharacterMaster(
       continue;
     }
     const englishName = englishById.get(c.id) ?? c.name;
-    let id = normalizeCharacterId(englishName);
-    if (usedIds.has(id)) id = `${id}${c.id}`;
-    usedIds.add(id);
+    // キャラのキーは「公式キャラID-元素」（英語名の変更に左右されない）
+    const id = characterKey(c.id, ELEMENT_MAP[c.elementType]);
     const talent = talentByName.get(c.name) ?? talentById.get((c.id - 10000000) * 100 + 1);
     if (!talent) errors.push(`genshin-db: ${c.name} の天賦データが見つかりません`);
     const gcsimKey = gcsimKeyByGenshinId.get(c.id);
@@ -674,7 +672,7 @@ export async function generateCharacterMaster(
     if (!m || !element) continue;
     const gcsimDir = `traveler/common/${element}`;
     units.push({
-      id: `traveler${element}`,
+      id: characterKey(AETHER_ID, element), // 旅人は公式IDが共通なので元素で区別
       name: `旅人(${m[1]})`,
       englishName: `Traveler (${element.charAt(0).toUpperCase()}${element.slice(1)})`,
       element,

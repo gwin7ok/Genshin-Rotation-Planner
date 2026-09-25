@@ -54,6 +54,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     const matchesSearch = !q || 
       rosterChar.name.toLowerCase().includes(q) || 
       rosterChar.id.toLowerCase().includes(q) ||
+      (rosterChar.englishName ?? '').toLowerCase().includes(q) ||
       (rosterChar.weaponName && rosterChar.weaponName.toLowerCase().includes(q));
     return matchesCharacterFilter(rosterChar, elementFilter, weaponFilter) && matchesSearch;
   });
@@ -390,7 +391,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="キャラ名・ID検索..."
+                  placeholder="キャラ名・英語名・ID検索..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full sm:w-48 bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-6 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-semibold"

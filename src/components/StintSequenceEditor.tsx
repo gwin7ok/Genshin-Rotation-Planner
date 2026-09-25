@@ -22,6 +22,7 @@ import {
   Target,
   X
 } from 'lucide-react';
+import { CharacterAvatar } from './CharacterAvatar';
 import { 
   CharacterConfig, 
   Stint, 
@@ -515,12 +516,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         }`}>
                           {idx + 1}
                         </span>
-                        <div
-                          className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold"
-                          style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1px solid ${char.color}` }}
-                        >
-                          {char.name.slice(0, 1)}
-                        </div>
+                        <CharacterAvatar char={char} className="w-5 h-5 rounded-md text-[10px]" borderWidth={1} />
                         <span className="text-xs font-bold text-white truncate max-w-[80px]">
                           {char.name}
                         </span>
@@ -981,12 +977,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
                         title="この出場ブロックを選択フォーカス（クリックでガントチャート＆設定画面に連動強調表示）"
                       >
-                        <div 
-                          className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-inner"
-                          style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `1.5px solid ${char.color}` }}
-                        >
-                          {char.name.slice(0, 1)}
-                        </div>
+                        <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                         <span className="font-bold text-sm text-white">{char.name}</span>
                         <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium border ${elemTheme.bg} ${elemTheme.border} ${elemTheme.text}`}>
                           {char.element.toUpperCase()}

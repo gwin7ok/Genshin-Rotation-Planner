@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter, Trash2 } from 'lucide-react';
+import { CharacterAvatar } from './CharacterAvatar';
 import { CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
@@ -182,12 +183,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     SLOT {idx + 1}
                   </span>
                   <div className={`flex items-center gap-2 ${isEmptySlotCharacter(c) ? 'opacity-50' : ''}`}>
-                    <div 
-                      className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs"
-                      style={{ backgroundColor: `${c.color}33`, color: c.accentColor, border: `1.5px solid ${c.color}` }}
-                    >
-                      {c.name.slice(0, 1)}
-                    </div>
+                    <CharacterAvatar char={c} className="w-7 h-7 rounded-lg text-xs" borderWidth={1.5} />
                     <div className="truncate">
                       <div className="font-bold text-xs text-white truncate">{c.name}</div>
                       <div className={`text-[10px] font-medium ${elemTheme.text}`}>
@@ -431,16 +427,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           : 'bg-slate-900/80 border-slate-800 hover:border-slate-600 hover:bg-slate-800'
                       }`}
                     >
-                      <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden"
-                        style={{ backgroundColor: `${rosterChar.color}33`, color: rosterChar.accentColor, border: `1.5px solid ${rosterChar.color}` }}
-                      >
-                        {rosterChar.avatarUrl ? (
-                          <img src={rosterChar.avatarUrl} alt={rosterChar.name} className="w-full h-full object-cover" />
-                        ) : (
-                          rosterChar.name.slice(0, 1)
-                        )}
-                      </div>
+                      <CharacterAvatar char={rosterChar} className="w-8 h-8 rounded-lg text-sm" />
                       <div className="min-w-0">
                         <div className="font-bold text-xs text-white truncate flex items-center gap-1">
                           <span>{rosterChar.name}</span>

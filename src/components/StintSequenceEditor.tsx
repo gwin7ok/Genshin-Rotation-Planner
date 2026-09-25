@@ -69,6 +69,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const [editingNoteStintId, setEditingNoteStintId] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
   const [showGuideBanner, setShowGuideBanner] = useState(true);
+  const [confirmClearStints, setConfirmClearStints] = useState(false);
 
   const characterMap = useMemo(() => {
     const map = new Map<string, CharacterConfig>();
@@ -250,13 +251,50 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {/* Section Header */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                登場順序（ターン）＆アクション構築
-                <span className="text-xs font-semibold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
-                  順番入れ替え対応
-                </span>
-              </h2>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                  アクション構築
+                  <span className="text-xs font-semibold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
+                    順番入れ替え対応
+                  </span>
+                </h2>
+
+                {/* 出場ブロック・アクションのみ全クリア（編成のキャラ登録は維持） */}
+                {confirmClearStints ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold text-red-300">出場キャラ・アクションを全て消去しますか？（編成は残ります）</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUpdateStints([]);
+                        setConfirmClearStints(false);
+                      }}
+                      className="px-2.5 py-1 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors shadow-sm"
+                    >
+                      消去する
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmClearStints(false)}
+                      className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                    >
+                      やめる
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmClearStints(true)}
+                    disabled={stints.length === 0}
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/40 transition-colors shadow-sm disabled:opacity-40 disabled:pointer-events-none"
+                    title="編成のキャラ登録は残したまま、タイムライン上の出場ブロックとアクションをすべて消去します"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>出場キャラ・アクションを全クリア</span>
+                  </button>
+                )}
+              </div>
               <p className="text-xs text-slate-400 mt-0.5">
                 各キャラの登場順を入れ替えると、前の退場と次の登場が自動で数珠つなぎ（垂直スナップ）されます。
               </p>

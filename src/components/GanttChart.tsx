@@ -209,6 +209,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   // Loop marker dragging state
   const [isDraggingLoopMarker, setIsDraggingLoopMarker] = useState<boolean>(false);
 
+  // 統合出場トラックの出場ボックスのドラッグ（出場順の入れ替え）
+  const [draggingTrackStint, setDraggingTrackStint] = useState<{
+    fromIndex: number;
+    startClientX: number;
+    dx: number;
+    moved: boolean;
+    /** 挿入先（ドラッグ中のボックスを除いた並びでの位置） */
+    targetIndex: number;
+    /** 統合出場トラック（時間 0 の位置）の画面上の左端 */
+    trackLeft: number;
+  } | null>(null);
+
   // 発動バフ（固有天賦）の発動位置ドラッグ: 出場の先頭からの秒数を、その出場の時間内で左右に動かす
   const [draggingPassive, setDraggingPassive] = useState<{
     stintId: string;
@@ -812,6 +824,44 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     };
   }, [draggingPassive, pixelsPerSecond, stints, onUpdateStints]);
 
+  useEffect(() => {
+    if (!draggingTrackStint) return;
+    const DRAG_THRESHOLD_PX = 5;
+    const onMove = (e: MouseEvent) => {
+      setDraggingTrackStint(prev => {
+        if (!prev) return prev;
+        const dx = e.clientX - prev.startClientX;
+        const moved = prev.moved || Math.abs(dx) >= DRAG_THRESHOLD_PX;
+        // ポインター位置の時刻より中点が左にある出場の数 = 挿入先
+        const pointerTime = (e.clientX - prev.trackLeft) / pixelsPerSecond;
+        const others = stints.filter((_, i) => i !== prev.fromIndex);
+        const targetIndex = others.filter(st => ((st.startTime ?? 0) + (st.endTime ?? 0)) / 2 < pointerTime).length;
+        return { ...prev, dx, moved, targetIndex };
+      });
+    };
+    const onUp = () => {
+      const d = draggingTrackStint;
+      setDraggingTrackStint(null);
+      document.body.style.cursor = '';
+      if (!d.moved) return; // クリック扱い（行へスクロール）
+      // ドラッグ後のクリック（行へスクロール・再生位置の移動）を1回だけ打ち消す
+      const suppressClick = (ce: MouseEvent) => { ce.stopPropagation(); ce.preventDefault(); };
+      window.addEventListener('click', suppressClick, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', suppressClick, { capture: true }), 0);
+      if (!onUpdateStints || d.targetIndex === d.fromIndex) return;
+      const next = [...stints];
+      const [moved] = next.splice(d.fromIndex, 1);
+      next.splice(d.targetIndex, 0, moved);
+      onUpdateStints(next);
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [draggingTrackStint, pixelsPerSecond, stints, onUpdateStints]);
+
   // Pre-calculate connector points between consecutive stints for vertical snap visualization
   // Stint i ends at t_end, Stint i+1 starts at t_end!
   const handoffConnectors = stints.slice(0, stints.length - 1).map((stint, idx) => {
@@ -1080,25 +1130,45 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   className="relative flex-1 h-full flex items-center cursor-pointer bg-slate-950"
                   onClick={handleTimelineClick}
                 >
-                  {/* 1st Cycle Stints */}
-                  {stints.map((stint) => {
+                  {/* 1st Cycle Stints（ドラッグで出場順を入れ替え / クリックでその行へスクロール） */}
+                  {stints.map((stint, stintIdx) => {
                     const char = characterMap.get(stint.characterId);
                     if (!char) return null;
                     const startX = (stint.startTime ?? 0) * pixelsPerSecond;
                     const width = (stint.duration ?? 0) * pixelsPerSecond;
                     const isCurrent = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
+                    const isDraggingThis = draggingTrackStint?.moved && draggingTrackStint.fromIndex === stintIdx;
 
                     return (
                       <div
                         key={stint.id}
+                        onMouseDown={(e) => {
+                          if (e.button !== 0 || !onUpdateStints) return;
+                          e.preventDefault();
+                          const trackLeft = (e.currentTarget.parentElement?.getBoundingClientRect().left ?? 0);
+                          setDraggingTrackStint({
+                            fromIndex: stintIdx,
+                            startClientX: e.clientX,
+                            dx: 0,
+                            moved: false,
+                            targetIndex: stintIdx,
+                            trackLeft,
+                          });
+                        }}
                         onClick={() => focusStintInGantt(stint, onSelectAction)}
-                        style={{ left: `${startX}px`, width: `${width}px` }}
-                        className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
-                          isCurrent 
-                            ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold' 
+                        style={{
+                          left: `${startX}px`,
+                          width: `${width}px`,
+                          ...(isDraggingThis ? { transform: `translateX(${draggingTrackStint!.dx}px)`, zIndex: 30 } : {}),
+                        }}
+                        className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden text-xs border cursor-grab ${
+                          isDraggingThis ? 'opacity-70 ring-2 ring-amber-300 shadow-xl cursor-grabbing' : 'transition-all'
+                        } ${
+                          isCurrent
+                            ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold'
                             : 'border-slate-700/80 hover:border-slate-500'
                         }`}
-                        title={`${char.name} 出場: ${(stint.startTime ?? 0).toFixed(2)}s ~ ${(stint.endTime ?? 0).toFixed(2)}s (${(stint.duration ?? 0).toFixed(2)}s)`}
+                        title={`${char.name} 出場: ${(stint.startTime ?? 0).toFixed(2)}s ~ ${(stint.endTime ?? 0).toFixed(2)}s (${(stint.duration ?? 0).toFixed(2)}s)\nドラッグで出場順を入れ替え / クリックでこの行へ移動`}
                       >
                         <div 
                           className="absolute inset-0 opacity-40"
@@ -1112,6 +1182,20 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       </div>
                     );
                   })}
+
+                  {/* 出場順ドラッグ中の挿入位置 */}
+                  {draggingTrackStint?.moved && (() => {
+                    const others = stints.filter((_, i) => i !== draggingTrackStint.fromIndex);
+                    const t = draggingTrackStint.targetIndex === 0
+                      ? 0
+                      : (others[draggingTrackStint.targetIndex - 1]?.endTime ?? 0);
+                    return (
+                      <div
+                        className="absolute top-0 bottom-0 w-1 -translate-x-1/2 bg-amber-300 rounded shadow-[0_0_8px_rgba(252,211,77,0.9)] z-40 pointer-events-none"
+                        style={{ left: `${t * pixelsPerSecond}px` }}
+                      />
+                    );
+                  })()}
 
                   {/* 2nd Cycle Stints (Together in Unified Track) */}
                   {cycle2Data.enabled && cycle2Data.stints.map((stint) => {

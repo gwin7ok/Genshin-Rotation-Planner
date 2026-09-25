@@ -6,6 +6,7 @@ import {
   CooldownSpan, 
   ValidationIssue, 
   CharacterRuntimeState,
+  PassiveSpan,
 } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 
@@ -18,6 +19,8 @@ export interface CalculatedRotation {
   characterStates: Record<string, CharacterRuntimeState>;
   validationIssues: ValidationIssue[];
   activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
+  /** 発動バフ（固有天賦）の効果・CT */
+  passiveSpans: PassiveSpan[];
   loopStatus: {
     canLoopImmediately: boolean;
     longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number } | null;
@@ -45,6 +48,9 @@ export function calculateRotation(
   const skillCooldowns: CooldownSpan[] = [];
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
+  const passiveSpans: PassiveSpan[] = [];
+  // 固有天賦ごとの直近の CT 終了時刻（キャラID + 効果ID）
+  const latestPassiveCTEnd: Record<string, number> = {};
 
   // Track runtime status for each character:
   const charStates: Record<string, CharacterRuntimeState> = {};
@@ -208,6 +214,58 @@ export function calculateRotation(
       }
     }
 
+    // 発動バフ（固有天賦）: 発動位置は出場の先頭からの秒数（出場時間の範囲内に収める）
+    for (const trigger of rawStint.passiveTriggers ?? []) {
+      const def = char.passiveEffects?.find(p => p.id === trigger.passiveEffectId);
+      const duration = trigger.duration ?? def?.duration ?? 0;
+      const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
+      const startTime = Number((stintStartTime + Math.min(Math.max(0, trigger.offset), stintDuration)).toFixed(3));
+      const ctKey = `${char.id}:${trigger.passiveEffectId}`;
+      const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
+      if (hasCTViolation) {
+        validationIssues.push({
+          id: `passive_ct_${trigger.id}`,
+          severity: 'warning',
+          characterId: char.id,
+          stintId: rawStint.id,
+          time: startTime,
+          title: `${char.name}: 発動バフCT中`,
+          message: `「${trigger.name}」の発動時点でCTがまだ ${(latestPassiveCTEnd[ctKey] - startTime).toFixed(1)} 秒残っています`,
+        });
+      }
+      if (cooldown > 0) latestPassiveCTEnd[ctKey] = startTime + cooldown;
+
+      passiveSpans.push({
+        id: `passive_${trigger.id}`,
+        triggerId: trigger.id,
+        stintId: rawStint.id,
+        characterId: char.id,
+        passiveEffectId: trigger.passiveEffectId,
+        name: trigger.name,
+        startTime,
+        duration,
+        endTime: startTime + duration,
+        cooldown,
+        cooldownEnd: startTime + cooldown,
+        hasCTViolation,
+      });
+      if (duration > 0) {
+        activeBuffs.push({
+          id: `passive_buff_${trigger.id}`,
+          buffId: `passive_${char.id}_${trigger.passiveEffectId}`, // 同じ固有天賦はバフ重複の集計で1つとして数える
+          name: `${char.name}: ${trigger.name}`,
+          sourceCharacterId: char.id,
+          sourceType: 'talent',
+          startTime,
+          endTime: startTime + duration,
+          duration,
+          color: char.color,
+          description: def?.description ?? trigger.name,
+          origin: 'passive',
+        });
+      }
+    }
+
     const calculatedStint: Stint = {
       ...rawStint,
       startTime: stintStartTime,
@@ -279,6 +337,7 @@ export function calculateRotation(
     characterStates: charStates,
     validationIssues,
     activeBuffCountBySecond,
+    passiveSpans,
     loopStatus: {
       canLoopImmediately,
       longestRemainingCT,

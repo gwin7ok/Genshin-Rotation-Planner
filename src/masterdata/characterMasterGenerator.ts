@@ -17,6 +17,7 @@ import type { ActionDefinition, ActionFrames, ActionType, CharacterConfig, Eleme
 import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './gcsimParser.ts';
 import { applyConstellationVariants, type ConstellationVariantReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
+import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
@@ -131,6 +132,8 @@ interface GenshinDbTalent {
   name: string;
   combat2?: GenshinDbTalentCombat;
   combat3?: GenshinDbTalentCombat;
+  passive1?: GenshinDbPassive;
+  passive2?: GenshinDbPassive;
 }
 
 // ---------------------------------------------------------------------------
@@ -755,6 +758,7 @@ export async function generateCharacterMaster(
       accentColor: ELEMENT_HEX[u.element],
       energyRecharge: 100,
       availableActions: actions,
+      passiveEffects: buildPassiveEffects(u.id, [u.talent?.passive1, u.talent?.passive2]),
       source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },
     });
   }

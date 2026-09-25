@@ -20,6 +20,7 @@ import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter } from './utils/legacyMigration';
+import { isEmptySlotCharacter } from './data/characters';
 
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
@@ -365,7 +366,7 @@ export default function App() {
           setDatabase(newDb);
           // Sync active party characters & stints with the updated database
           const validIds = new Set(newDb.characters.map(c => c.id));
-          const nextActiveChars = characters.filter(c => validIds.has(c.id));
+          const nextActiveChars = characters.filter(c => validIds.has(c.id) || isEmptySlotCharacter(c));
           if (nextActiveChars.length !== characters.length) {
             setCharacters(nextActiveChars);
             const nextStints = stints.filter(s => nextActiveChars.some(c => c.id === s.characterId));

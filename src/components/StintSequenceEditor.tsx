@@ -29,7 +29,7 @@ import {
   ActionDefinition,
   ActionType
 } from '../types/genshin';
-import { ELEMENT_COLORS } from '../data/characters';
+import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { alignStintsToCharacterOrder } from '../utils/stintReorder';
 
 interface StintSequenceEditorProps {
@@ -277,7 +277,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               {/* Add Stint Button Group */}
               <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
                 <span className="text-xs text-slate-400 px-2 font-medium">出場追加:</span>
-                {characters.map(c => {
+                {characters.filter(c => !isEmptySlotCharacter(c)).map(c => {
                   const elemTheme = ELEMENT_COLORS[c.element];
                   return (
                     <button

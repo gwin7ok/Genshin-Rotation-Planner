@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter } from 'lucide-react';
+import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
-import { ELEMENT_COLORS, ELEMENT_NAMES_JA } from '../data/characters';
+import { ELEMENT_COLORS, ELEMENT_NAMES_JA, createEmptySlotCharacter, isEmptySlotCharacter } from '../data/characters';
 import { 
   swapStintsForCharacters, 
   alignStintsToCharacterOrder, 
@@ -57,12 +57,14 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const [weaponFilter, setWeaponFilter] = useState<WeaponType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [warningMsg, setWarningMsg] = useState<string | null>(null);
+  const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
       setEditingChars(characters);
       setEditingStints(stints);
       setWarningMsg(null);
+      setConfirmClearAll(false);
     }
   }, [isOpen, characters, stints]);
 
@@ -100,7 +102,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     setEditingChars(updated);
 
     // Automatically migrate old character's timeline stints to the new character!
-    if (oldChar) {
+    if (oldChar && !isEmptySlotCharacter(oldChar)) {
       const migrated = migrateStintsToNewCharacter(editingStints, oldChar.id, newRosterChar);
       setEditingStints(migrated);
     }
@@ -127,6 +129,13 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const handleAlignAllStintsToSlots = () => {
     const aligned = alignStintsToCharacterOrder(editingStints, editingChars);
     setEditingStints(aligned);
+  };
+
+  const handleClearAll = () => {
+    setEditingChars(Array.from({ length: 4 }, (_, i) => createEmptySlotCharacter(i)));
+    setEditingStints([]);
+    setSelectedSlot(0);
+    setConfirmClearAll(false);
   };
 
   const handleUpdateCurrentField = (field: keyof CharacterConfig, val: any) => {
@@ -187,7 +196,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   <span className="text-[10px] font-bold text-slate-400 block mb-1">
                     SLOT {idx + 1}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className={`flex items-center gap-2 ${isEmptySlotCharacter(c) ? 'opacity-50' : ''}`}>
                     <div 
                       className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs"
                       style={{ backgroundColor: `${c.color}33`, color: c.accentColor, border: `1.5px solid ${c.color}` }}
@@ -197,7 +206,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <div className="truncate">
                       <div className="font-bold text-xs text-white truncate">{c.name}</div>
                       <div className={`text-[10px] font-medium ${elemTheme.text}`}>
-                        {ELEMENT_NAMES_JA[c.element]}
+                        {isEmptySlotCharacter(c) ? '下の一覧から選択' : ELEMENT_NAMES_JA[c.element]}
                       </div>
                     </div>
                   </div>
@@ -241,11 +250,41 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <RefreshCw className="w-3.5 h-3.5" />
             <span>横軸の登場順を1→2→3→4に完全整列</span>
           </button>
+
+          {confirmClearAll ? (
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-red-300">全キャラ・全アクションを消去しますか？</span>
+              <button
+                type="button"
+                onClick={handleClearAll}
+                className="px-2.5 py-1 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors shadow-sm"
+              >
+                消去する
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmClearAll(false)}
+                className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              >
+                やめる
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmClearAll(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/40 transition-colors shadow-sm"
+              title="4スロットのキャラ登録と、タイムライン上の全アクション（出場ブロック）を空にします（「編成を保存・適用」で確定）"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>編成・アクションを全クリア</span>
+            </button>
+          )}
         </div>
 
         {/* Slot Detail & Swap Roster */}
         <div className="p-5 overflow-y-auto space-y-5 flex-1">
-          {currentSlotChar && (
+          {currentSlotChar && !isEmptySlotCharacter(currentSlotChar) && (
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">

@@ -12,6 +12,24 @@ export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; t
   physical: { bg: 'bg-slate-900', border: 'border-slate-400', text: 'text-slate-300', light: 'bg-slate-500/20', hex: '#94a3b8' },
 };
 
+/** 編成クリア後の「未設定」スロット用プレースホルダーID接頭辞 */
+export const EMPTY_SLOT_ID_PREFIX = 'empty_slot_';
+
+export const isEmptySlotCharacter = (c: Pick<CharacterConfig, 'id'>): boolean =>
+  c.id.startsWith(EMPTY_SLOT_ID_PREFIX);
+
+export const createEmptySlotCharacter = (slotIndex: number): CharacterConfig => ({
+  id: `${EMPTY_SLOT_ID_PREFIX}${slotIndex + 1}`,
+  name: '未設定',
+  element: 'physical',
+  weaponType: 'sword',
+  avatarUrl: '',
+  color: '#475569',
+  accentColor: '#94a3b8',
+  energyRecharge: 100,
+  availableActions: [],
+});
+
 export const ELEMENT_NAMES_JA: Record<ElementType, string> = {
   pyro: '炎元素',
   hydro: '水元素',

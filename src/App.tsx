@@ -227,12 +227,13 @@ export default function App() {
     setTimeout(() => setOverwriteSaved(false), 2000);
   };
 
-  // 「名前をつけて保存」: 現在の状態を新しい保存スロットとして保存し、読み込み中の編成にする
+  // 「名前をつけて保存」: 現在の状態を保存スロットとして保存し、読み込み中の編成にする
+  // （同名の編成がある場合は確認のうえ overwriteSlotId のスロットへ上書き）
   const [isSaveAsOpen, setIsSaveAsOpen] = useState<boolean>(false);
   const activeSlot = savedSlots.find(s => s.id === activeSlotId) ?? null;
-  const handleSaveAs = (name: string, description?: string) => {
+  const handleSaveAs = (name: string, description: string | undefined, overwriteSlotId?: string) => {
     const newSlot: SavedRotationSlot = {
-      id: `slot_${Date.now()}`,
+      id: overwriteSlotId ?? `slot_${Date.now()}`,
       name,
       description,
       updatedAt: new Date().toISOString(),
@@ -416,6 +417,8 @@ export default function App() {
       <SaveAsDialog
         isOpen={isSaveAsOpen}
         initialName={buildDefaultSlotName(characters, totalDuration, activeSlot)}
+        initialDescription={activeSlot?.description ?? ''}
+        savedSlots={savedSlots}
         onClose={() => setIsSaveAsOpen(false)}
         onSave={handleSaveAs}
       />

@@ -135,3 +135,14 @@ export function buildDefaultSlotName(
   const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
   return `${charNames} (${totalDuration.toFixed(1)}s)`;
 }
+
+/** 編成名の同一判定用に正規化（前後空白・全角半角・大文字小文字の違いを無視） */
+export function normalizeSlotName(name: string): string {
+  return name.normalize('NFKC').trim().toLowerCase();
+}
+
+/** 同じ編成名（正規化して一致）の保存スロットを探す */
+export function findSlotByName(slots: SavedRotationSlot[], name: string): SavedRotationSlot | undefined {
+  const key = normalizeSlotName(name);
+  return slots.find(s => normalizeSlotName(s.name) === key);
+}

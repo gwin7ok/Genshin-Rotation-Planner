@@ -971,12 +971,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           >
             <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
               
-              {/* 1. Top Time Ruler */}
-              <div className="flex border-b border-slate-800 bg-slate-900 h-9">
+              {/* 1. Top Time Ruler（経過時間の目盛り。1行分の高さに詰める） */}
+              <div className="flex border-b border-slate-800 bg-slate-900 h-4">
                 {/* Left Column Label (Corner: Sticky Left) */}
-                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[11px] font-bold text-slate-400 uppercase tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
-                  <span>キャラクター / 項目</span>
-                  <Clock className="w-3.5 h-3.5 text-slate-500" />
+                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span>経過時間</span>
+                  <Clock className="w-3 h-3 text-slate-500" />
                 </div>
 
                 {/* Time Ruler Ticks */}
@@ -987,7 +987,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   {timelineTicks.map(t => (
                     <div
                       key={`tick_${t.absTime}`}
-                      className={`absolute top-0 bottom-0 border-l flex flex-col justify-between pl-1 ${
+                      className={`absolute top-0 bottom-0 border-l flex items-center pl-1 ${
                         t.isZero
                           ? 'border-purple-400 bg-purple-950/20 z-10'
                           : t.isNegative
@@ -996,16 +996,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       }`}
                       style={{ left: `${t.absTime * pixelsPerSecond}px` }}
                     >
-                      <span className={`text-[10px] font-mono font-bold ${
-                        t.isZero 
-                          ? 'text-purple-300 bg-purple-950 px-1 rounded border border-purple-500/50 shadow' 
+                      <span className={`text-[10px] leading-none font-mono font-bold ${
+                        t.isZero
+                          ? 'text-purple-300 bg-purple-950 px-1 rounded-sm border border-purple-500/50'
                           : t.isNegative 
                           ? 'text-amber-300/90' 
                           : 'text-slate-400'
                       }`}>
                         {t.label}
                       </span>
-                      <span className={`w-0.5 h-1.5 ${t.isZero ? 'bg-purple-400' : 'bg-slate-700'}`}></span>
                     </div>
                   ))}
 

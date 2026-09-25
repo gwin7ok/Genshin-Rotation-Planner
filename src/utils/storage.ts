@@ -132,8 +132,12 @@ export function buildDefaultSlotName(
   activeSlot?: SavedRotationSlot | null,
 ): string {
   if (activeSlot) return activeSlot.name;
-  const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
-  return `${charNames} (${totalDuration.toFixed(1)}s)`;
+  return `${buildPartyMemberNames(characters)} (${totalDuration.toFixed(1)}s)`;
+}
+
+/** 編成メンバー名を「・」でつないだ文字列（未設定スロットは除く） */
+export function buildPartyMemberNames(characters: CharacterConfig[]): string {
+  return characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
 }
 
 /** 編成名の同一判定用に正規化（前後空白・全角半角・大文字小文字の違いを無視） */

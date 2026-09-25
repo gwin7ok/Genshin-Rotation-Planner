@@ -15,10 +15,11 @@ import {
   AlertCircle,
   FileCode,
   Layers,
+  Users,
   ChevronRight
 } from 'lucide-react';
 import { CharacterConfig, Stint, SavedRotationSlot, PartyPreset } from '../types/genshin';
-import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName } from '../utils/storage';
+import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 import { ROTATION_PRESETS } from '../data/presets';
 
 interface SaveLoadModalProps {
@@ -103,6 +104,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   if (!isOpen) return null;
 
   const totalActionsCount = stints.reduce((sum, s) => sum + s.actions.length, 0);
+  const memberNames = buildPartyMemberNames(characters);
 
   // Save current as named slot (同名の編成がある場合は上書き確認)
   const handleSaveNew = (confirmedOverwrite?: SavedRotationSlot) => {
@@ -427,13 +429,25 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                   </button>
                 </div>
 
-                <input
-                  type="text"
-                  value={newSlotDesc}
-                  onChange={(e) => setNewSlotDesc(e.target.value)}
-                  placeholder="メモ・備考（任意: 聖遺物、チャージ効率、立ち回り注意点など）"
-                  className="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
-                />
+                <div className="space-y-1.5">
+                  <input
+                    type="text"
+                    value={newSlotDesc}
+                    onChange={(e) => setNewSlotDesc(e.target.value)}
+                    placeholder="メモ・備考（任意: 聖遺物、チャージ効率、立ち回り注意点など）"
+                    className="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewSlotDesc(memberNames)}
+                    disabled={!memberNames}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                    title={memberNames ? `メモ欄を「${memberNames}」に置き換えます` : '編成メンバーがいません'}
+                  >
+                    <Users className="w-3 h-3 text-amber-400" />
+                    <span>編成メンバーをメモ欄にセット</span>
+                  </button>
+                </div>
 
                 {duplicateSlot && (
                   <div className="p-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">

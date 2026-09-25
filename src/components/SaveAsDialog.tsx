@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, FilePlus2, AlertTriangle } from 'lucide-react';
+import { X, FilePlus2, AlertTriangle, Users } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { findSlotByName } from '../utils/storage';
 
@@ -8,6 +8,8 @@ interface SaveAsDialogProps {
   initialName: string;
   initialDescription?: string;
   savedSlots: SavedRotationSlot[];
+  /** 「編成メンバーをメモ欄にセット」で入れる文字列 */
+  memberNames: string;
   onClose: () => void;
   /** overwriteSlotId がある場合は、同名の既存スロットへの上書き保存 */
   onSave: (name: string, description: string | undefined, overwriteSlotId?: string) => void;
@@ -19,6 +21,7 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
   initialName,
   initialDescription = '',
   savedSlots,
+  memberNames,
   onClose,
   onSave,
 }) => {
@@ -114,6 +117,16 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
               placeholder="メモ・備考（任意）"
               className="w-full bg-slate-950/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
             />
+            <button
+              type="button"
+              onClick={() => setDescription(memberNames)}
+              disabled={!memberNames}
+              className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+              title={memberNames ? `メモ欄を「${memberNames}」に置き換えます` : '編成メンバーがいません'}
+            >
+              <Users className="w-3 h-3 text-amber-400" />
+              <span>編成メンバーをメモ欄にセット</span>
+            </button>
           </div>
 
           {duplicateSlot ? (

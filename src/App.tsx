@@ -18,7 +18,7 @@ import { ROTATION_PRESETS } from './data/presets';
 import { CharacterConfig, Stint, PartyPreset, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName } from './utils/storage';
+import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { migrateLegacyCharacter } from './utils/legacyMigration';
 import { isEmptySlotCharacter } from './data/characters';
@@ -419,6 +419,7 @@ export default function App() {
         initialName={buildDefaultSlotName(characters, totalDuration, activeSlot)}
         initialDescription={activeSlot?.description ?? ''}
         savedSlots={savedSlots}
+        memberNames={buildPartyMemberNames(characters)}
         onClose={() => setIsSaveAsOpen(false)}
         onSave={handleSaveAs}
       />

@@ -18,7 +18,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { CharacterConfig, Stint, SavedRotationSlot, PartyPreset } from '../types/genshin';
-import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName } from '../utils/storage';
+import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName } from '../utils/storage';
 import { ROTATION_PRESETS } from '../data/presets';
 
 interface SaveLoadModalProps {
@@ -67,6 +67,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>([]);
   const [newSlotName, setNewSlotName] = useState('');
   const [newSlotDesc, setNewSlotDesc] = useState('');
+  // 同じ編成名の既存スロット（上書き確認中）
+  const [duplicateSlot, setDuplicateSlot] = useState<SavedRotationSlot | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [importJsonText, setImportJsonText] = useState('');
   const [showJsonArea, setShowJsonArea] = useState(false);
@@ -79,8 +81,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // 開いたときだけリセットするもの
   useEffect(() => {
     if (isOpen) {
-      setNewSlotDesc('');
       setSaveSuccessMsg(null);
+      setDuplicateSlot(null);
     } else {
       presetNameForSlotRef.current = null;
     }
@@ -93,6 +95,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       setSavedSlots(slots);
       const activeSlot = slots.find(s => s.id === activeSlotId) ?? null;
       setNewSlotName(presetNameForSlotRef.current ?? buildDefaultSlotName(characters, totalDuration, activeSlot));
+      // 保存編成を読み込み中なら、そのメモも初期値にする
+      setNewSlotDesc(presetNameForSlotRef.current ? '' : (activeSlot?.description ?? ''));
     }
   }, [isOpen, characters, totalDuration, activeSlotId]);
 
@@ -100,12 +104,18 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
 
   const totalActionsCount = stints.reduce((sum, s) => sum + s.actions.length, 0);
 
-  // Save new custom slot
-  const handleSaveNew = () => {
-    if (!newSlotName.trim()) return;
+  // Save current as named slot (同名の編成がある場合は上書き確認)
+  const handleSaveNew = (confirmedOverwrite?: SavedRotationSlot) => {
+    const name = newSlotName.trim();
+    if (!name) return;
+    const dup = confirmedOverwrite ?? findSlotByName(savedSlots, name);
+    if (dup && !confirmedOverwrite) {
+      setDuplicateSlot(dup);
+      return;
+    }
     const newSlot: SavedRotationSlot = {
-      id: `slot_${Date.now()}`,
-      name: newSlotName.trim(),
+      id: dup ? dup.id : `slot_${Date.now()}`,
+      name,
       description: newSlotDesc.trim() || undefined,
       updatedAt: new Date().toISOString(),
       characters,
@@ -118,7 +128,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = saveSlot(newSlot);
     setSavedSlots(updated);
     onSlotsChanged(updated, newSlot.id);
-    setSaveSuccessMsg(`「${newSlot.name}」を保存しました！`);
+    setDuplicateSlot(null);
+    setSaveSuccessMsg(dup ? `「${newSlot.name}」を上書き保存しました！` : `「${newSlot.name}」を保存しました！`);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
@@ -392,14 +403,23 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                     <input
                       type="text"
                       value={newSlotName}
-                      onChange={(e) => setNewSlotName(e.target.value)}
+                      onChange={(e) => {
+                        setNewSlotName(e.target.value);
+                        setDuplicateSlot(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                          if (duplicateSlot) handleSaveNew(duplicateSlot);
+                          else handleSaveNew();
+                        }
+                      }}
                       placeholder="例: 雷電ナショナル (高速ループ最適化版)"
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
                     />
                   </div>
                   <button
-                    onClick={handleSaveNew}
-                    disabled={!newSlotName.trim()}
+                    onClick={() => handleSaveNew()}
+                    disabled={!newSlotName.trim() || !!duplicateSlot}
                     className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 shadow transition-all"
                   >
                     <Save className="w-4 h-4" />
@@ -414,6 +434,29 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                   placeholder="メモ・備考（任意: 聖遺物、チャージ効率、立ち回り注意点など）"
                   className="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
                 />
+
+                {duplicateSlot && (
+                  <div className="p-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">
+                    <span className="flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span>「<strong>{duplicateSlot.name}</strong>」という編成は既に保存されています。現在の内容で上書きしますか？</span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => setDuplicateSlot(null)}
+                        className="px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                      >
+                        やめる
+                      </button>
+                      <button
+                        onClick={() => handleSaveNew(duplicateSlot)}
+                        className="px-3 py-1 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-500 text-white transition-colors shadow"
+                      >
+                        上書きする
+                      </button>
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Section 2: Saved Custom Slots List */}

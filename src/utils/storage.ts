@@ -11,6 +11,8 @@ export interface ActiveRotationState {
   loopStartTime: number;
   switchDelay?: number;
   actionDelay?: number;
+  /** 現在読み込んでいるユーザー保存編成（スロット）のID */
+  activeSlotId?: string | null;
   lastSavedAt: string;
   customName?: string;
 }

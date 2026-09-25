@@ -17,9 +17,10 @@ import {
   Layers,
   ChevronRight
 } from 'lucide-react';
-import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
+import { CharacterConfig, Stint, SavedRotationSlot, PartyPreset } from '../types/genshin';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState } from '../utils/storage';
 import { ROTATION_PRESETS } from '../data/presets';
+import { isEmptySlotCharacter } from '../data/characters';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -31,6 +32,10 @@ interface SaveLoadModalProps {
   switchDelay?: number;
   actionDelay?: number;
   currentPresetId: string;
+  onSelectPreset: (preset: PartyPreset) => void;
+  activeSlotId: string | null;
+  /** 保存スロット一覧が変わったとき。currentSlotId を渡すと「現在読み込み中の編成」もそのIDに更新する */
+  onSlotsChanged: (slots: SavedRotationSlot[], currentSlotId?: string | null) => void;
   onLoadSlot: (slot: {
     characters: CharacterConfig[];
     stints: Stint[];
@@ -39,6 +44,7 @@ interface SaveLoadModalProps {
     actionDelay?: number;
     presetId?: string;
     name?: string;
+    slotId?: string;
   }) => void;
   onResetToDefault: () => void;
 }
@@ -53,6 +59,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   switchDelay,
   actionDelay,
   currentPresetId,
+  onSelectPreset,
+  activeSlotId,
+  onSlotsChanged,
   onLoadSlot,
   onResetToDefault,
 }) => {
@@ -68,7 +77,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setSavedSlots(getSavedSlots());
-      const charNames = characters.map(c => c.name).join('・');
+      const charNames = characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
       setNewSlotName(`${charNames} (${totalDuration.toFixed(1)}s)`);
       setNewSlotDesc('');
       setSaveSuccessMsg(null);
@@ -96,6 +105,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     };
     const updated = saveSlot(newSlot);
     setSavedSlots(updated);
+    onSlotsChanged(updated, newSlot.id);
     setSaveSuccessMsg(`「${newSlot.name}」を保存しました！`);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
@@ -114,6 +124,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     };
     const updated = saveSlot(updatedSlot);
     setSavedSlots(updated);
+    onSlotsChanged(updated, slot.id);
     setSaveSuccessMsg(`「${slot.name}」を上書き保存しました！`);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
@@ -122,6 +133,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const handleDelete = (slotId: string, name: string) => {
     const updated = deleteSlot(slotId);
     setSavedSlots(updated);
+    onSlotsChanged(updated);
     setSaveSuccessMsg(`「${name}」を削除しました。`);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
@@ -135,6 +147,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       switchDelay: slot.switchDelay,
       actionDelay: slot.actionDelay,
       name: slot.name,
+      slotId: slot.id,
     });
     onClose();
   };
@@ -318,6 +331,35 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {activeTab === 'slots' ? (
             <>
+              {/* Section 0: Load from built-in presets */}
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/80 space-y-2">
+                <h3 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4" />
+                  <span>プリセットから読込</span>
+                </h3>
+                <select
+                  value={!activeSlotId && ROTATION_PRESETS.some(p => p.id === currentPresetId) ? currentPresetId : ''}
+                  onChange={(e) => {
+                    const p = ROTATION_PRESETS.find(x => x.id === e.target.value);
+                    if (p) {
+                      onSelectPreset(p);
+                      onClose();
+                    }
+                  }}
+                  className="w-full bg-slate-900 text-xs font-semibold text-amber-200 rounded-lg px-3 py-2 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
+                >
+                  <option value="" disabled hidden>-- プリセットを選択 --</option>
+                  {ROTATION_PRESETS.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[11px] text-slate-500">
+                  選択すると現在の編集内容がプリセットで置き換わります（必要なら先に下でスロット保存してください）。
+                </p>
+              </div>
+
               {/* Section 1: Save Current as New Slot */}
               <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/80 space-y-3">
                 <div className="flex items-center justify-between">

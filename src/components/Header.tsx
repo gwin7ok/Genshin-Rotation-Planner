@@ -1,11 +1,13 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, Pause, RotateCcw, Sparkles, Settings2, Copy, Check, FileText, HelpCircle, Save, Database } from 'lucide-react';
-import { PartyPreset } from '../types/genshin';
-import { ROTATION_PRESETS } from '../data/presets';
+import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database } from 'lucide-react';
+import { SavedRotationSlot } from '../types/genshin';
 
 interface HeaderProps {
-  currentPresetId: string;
-  onSelectPreset: (preset: PartyPreset) => void;
+  savedSlots: SavedRotationSlot[];
+  activeSlotId: string | null;
+  onSelectSavedSlot: (slot: SavedRotationSlot) => void;
+  onOverwriteActiveSlot: () => void;
+  overwriteSaved: boolean;
   isPlaying: boolean;
   onTogglePlay: () => void;
   onResetPlayback: () => void;
@@ -22,14 +24,16 @@ interface HeaderProps {
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCopyNotation: () => void;
   copiedNotation: boolean;
-  isCustomState?: boolean;
   loopStartTime?: number;
   rotationNotation?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  currentPresetId,
-  onSelectPreset,
+  savedSlots,
+  activeSlotId,
+  onSelectSavedSlot,
+  onOverwriteActiveSlot,
+  overwriteSaved,
   isPlaying,
   onTogglePlay,
   onResetPlayback,
@@ -46,7 +50,6 @@ export const Header: React.FC<HeaderProps> = ({
   onImportJson,
   onCopyNotation,
   copiedNotation,
-  isCustomState = false,
   loopStartTime = 0,
   rotationNotation = '',
 }) => {
@@ -93,31 +96,52 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Preset Selector & Save/Load */}
+          {/* Saved Party (Slot) Selector & Save/Load */}
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-700/70">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="text-xs font-medium text-slate-300 hidden xl:inline">プリセット:</span>
+              <Users className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="text-xs font-medium text-slate-300 hidden xl:inline">編成選択:</span>
               <select
-                value={currentPresetId}
+                value={activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? activeSlotId : ''}
                 onChange={(e) => {
-                  const p = ROTATION_PRESETS.find(x => x.id === e.target.value);
-                  if (p) onSelectPreset(p);
+                  const slot = savedSlots.find(s => s.id === e.target.value);
+                  if (slot) onSelectSavedSlot(slot);
                 }}
-                className="bg-slate-900 text-xs font-semibold text-amber-200 rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer max-w-[130px] sm:max-w-xs truncate"
+                disabled={savedSlots.length === 0}
+                className="bg-slate-900 text-xs font-semibold text-amber-200 rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer disabled:cursor-not-allowed disabled:text-slate-500 max-w-[130px] sm:max-w-xs truncate"
+                title="「保存・読込」で保存した編成を呼び出します"
               >
-                {ROTATION_PRESETS.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
+                <option value="" disabled hidden={savedSlots.length > 0}>
+                  {savedSlots.length === 0 ? '保存された編成はありません' : '-- 保存した編成を選択 --'}
+                </option>
+                {savedSlots.map(slot => (
+                  <option key={slot.id} value={slot.id}>
+                    {slot.name}
                   </option>
                 ))}
-                {isCustomState && (
-                  <option value="custom">
-                    ✦ カスタム編集構成 (自動保存中)
-                  </option>
-                )}
               </select>
             </div>
+
+            {(() => {
+              const activeSlot = savedSlots.find(s => s.id === activeSlotId);
+              return (
+                <button
+                  onClick={onOverwriteActiveSlot}
+                  disabled={!activeSlot}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg border transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                    overwriteSaved
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
+                      : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-amber-500/40 hover:border-amber-400'
+                  }`}
+                  title={activeSlot
+                    ? `現在の画面の状態で「${activeSlot.name}」を上書き保存します`
+                    : '編成選択で保存編成を呼び出すと上書き保存できます'}
+                >
+                  {overwriteSaved ? <Check className="w-3.5 h-3.5 shrink-0" /> : <Save className="w-3.5 h-3.5 shrink-0" />}
+                  <span>{overwriteSaved ? '保存しました' : '上書き保存'}</span>
+                </button>
+              );
+            })()}
 
             <button
               onClick={onOpenSaveModal}

@@ -2394,7 +2394,7 @@
       {
         "id": "candace_q_c1",
         "name": "元素爆発: 聖儀·灰鴒の呼び潮 (1凸)",
-        "shortName": "Q (1凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,
@@ -4451,7 +4451,7 @@
       {
         "id": "dahlia_q_c4",
         "name": "元素爆発: 純光の祈り (4凸)",
-        "shortName": "Q (4凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,
@@ -5585,7 +5585,7 @@
       {
         "id": "emilie_q_c4",
         "name": "元素爆発: アロマティック·アナライズ (4凸)",
-        "shortName": "Q (4凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 13.5,
@@ -10859,7 +10859,7 @@
       {
         "id": "kukishinobu_e_c2",
         "name": "元素スキル: 越祓雷草の輪 (2凸)",
-        "shortName": "E (2凸)",
+        "shortName": "E",
         "buttonLabel": "E (2凸)",
         "type": "skill",
         "startsSkillCooldown": true,
@@ -15690,7 +15690,7 @@
       {
         "id": "rosaria_q_c2",
         "name": "元素爆発: 臨終の聖礼 (2凸)",
-        "shortName": "Q (2凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,
@@ -16516,7 +16516,7 @@
       {
         "id": "shenhe_q_c2",
         "name": "元素爆発: 神女遣霊真訣 (2凸)",
-        "shortName": "Q (2凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
@@ -16891,7 +16891,7 @@
       {
         "id": "sigewinne_q_c4",
         "name": "元素爆発: 過飽和まごころお注射 (4凸)",
-        "shortName": "Q (4凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 18,
@@ -17308,7 +17308,7 @@
       {
         "id": "sucrose_q_c2",
         "name": "元素爆発: 禁·風霊作成·七五同構弐型 (2凸)",
-        "shortName": "Q (2凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
@@ -21930,7 +21930,7 @@
       {
         "id": "xiangling_q_c4",
         "name": "元素爆発: 旋火輪 (4凸)",
-        "shortName": "Q (4凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
@@ -22732,7 +22732,7 @@
       {
         "id": "xingqiu_q_c2",
         "name": "元素爆発: 古華剣·裁雨留虹 (2凸)",
-        "shortName": "Q (2凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
@@ -23774,7 +23774,7 @@
       {
         "id": "yoimiya_q_c1",
         "name": "元素爆発: 琉金の雲間草 (1凸)",
-        "shortName": "Q (1凸)",
+        "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,

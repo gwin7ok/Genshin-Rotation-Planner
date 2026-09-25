@@ -276,7 +276,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     <section ref={sectionRef} className="bg-slate-900 border-b border-slate-800 p-4">
       <div className="max-w-7xl mx-auto space-y-4">
         
-        {/* Sticky Header Container: Section Title through Action Legend & Description */}
+        {/* Sticky Header Container: セクション見出し・並び替えパイプライン・選択中アクション */}
         <div className="sticky top-[var(--header-height,0px)] z-30 bg-slate-900/95 backdrop-blur-md pt-2 pb-3 -mx-4 px-4 border-b border-slate-800/80 shadow-xl space-y-3 transition-all">
           {/* Section Header */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -396,24 +396,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 </button>
               </div>
             </div>
-
-            {/* Guide Banner */}
-            {showGuideBanner && (
-              <div className="mb-3 p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200/90 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-amber-400 font-bold">💡 順番の入れ替え方:</span>
-                  <span>
-                    下のパイプラインの <strong>「◀ 前へ / 次へ ▶」</strong> ボタンを押すか、各カードの <strong>「▲ 上へ / ▼ 下へ」</strong> を押すと登場順が即座に入れ替わります。
-                  </span>
-                </div>
-                <button 
-                  onClick={onOpenHelpModal} 
-                  className="text-amber-300 underline font-semibold hover:text-white"
-                >
-                  詳しい解説 →
-                </button>
-              </div>
-            )}
 
             {/* Interactive Chips Pipeline */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 custom-scrollbar">
@@ -539,36 +521,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           </div>
 
           {/* =========================================================================
-              2. Action Type Notation Legend (凡例) - Right below Quick Reorder Pipeline
-          ========================================================================= */}
-          <div className="flex flex-wrap items-center gap-2 px-3 py-2 bg-slate-950/90 rounded-xl border border-slate-800 text-xs">
-            <span className="font-bold text-amber-300 text-[11px] shrink-0 flex items-center gap-1">
-              <Info className="w-3.5 h-3.5 text-amber-400" />
-              <span>【アクション凡例】</span>
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                <strong className="font-bold text-amber-200">E</strong>: 元素スキル
-              </span>
-              <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
-                <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
-              </span>
-              <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
-                <strong className="font-bold text-sky-200">N (N1~N5)</strong>: 通常攻撃
-              </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
-              </span>
-              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
-              </span>
-              <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                <strong className="font-bold text-cyan-200">長押しE</strong>: スキル長押し
-              </span>
-            </div>
-          </div>
-
-          {/* =========================================================================
               3. Selected Action Focused Control Bar or Action Description Line
           ========================================================================= */}
           {selectedActionInfo ? (
@@ -654,11 +606,66 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 </button>
               </div>
             </div>
-          ) : (
+          ) : null}
+        </div>
+
+        {/* =========================================================================
+            固定表示の対象外: 並び替えガイド・アクション凡例・操作ヒント
+        ========================================================================= */}
+        <div className="space-y-3">
+          {/* Guide Banner */}
+          {showGuideBanner && (
+            <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200/90 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-amber-400 font-bold">💡 順番の入れ替え方:</span>
+                <span>
+                  上のパイプラインの <strong>「◀ 前へ / 次へ ▶」</strong> ボタンを押すか、各カードの <strong>「▲ 上へ / ▼ 下へ」</strong> を押すと登場順が即座に入れ替わります。
+                </span>
+              </div>
+              <button 
+                onClick={onOpenHelpModal} 
+                className="text-amber-300 underline font-semibold hover:text-white"
+              >
+                詳しい解説 →
+              </button>
+            </div>
+          )}
+
+          {/* =========================================================================
+              2. Action Type Notation Legend (凡例)
+          ========================================================================= */}
+          <div className="flex flex-wrap items-center gap-2 px-3 py-2 bg-slate-950/90 rounded-xl border border-slate-800 text-xs">
+            <span className="font-bold text-amber-300 text-[11px] shrink-0 flex items-center gap-1">
+              <Info className="w-3.5 h-3.5 text-amber-400" />
+              <span>【アクション凡例】</span>
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                <strong className="font-bold text-amber-200">E</strong>: 元素スキル
+              </span>
+              <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
+              </span>
+              <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
+                <strong className="font-bold text-sky-200">N (N1~N5)</strong>: 通常攻撃
+              </span>
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
+              </span>
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
+              </span>
+              <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                <strong className="font-bold text-cyan-200">長押しE</strong>: スキル長押し
+              </span>
+            </div>
+          </div>
+
+          {!selectedActionInfo && (
             <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-400 font-bold">💡</span>
-                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、ここに対象アクションが連動選択され、詳細編集が行えます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。</span>
+                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、上のパイプラインの下に対象アクションが連動選択され、詳細編集が行えます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。</span>
               </span>
             </div>
           )}

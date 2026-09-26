@@ -22,22 +22,37 @@ const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
 const isCustomCharacter = (c: CharacterConfig) => c.id.startsWith('custom_') || !!c.isCustom;
 const isLockedCharacter = (c: CharacterConfig) => !!c.isLocked;
 
+const isCustomWeapon = (w: WeaponDatabaseItem) => w.id.startsWith('weapon_custom_') || !!w.isCustom;
+const isLockedWeapon = (w: WeaponDatabaseItem) => !!w.isLocked;
+
+const isCustomArtifact = (a: ArtifactSetDatabaseItem) => a.id.startsWith('art_custom_') || !!a.isCustom;
+const isLockedArtifact = (a: ArtifactSetDatabaseItem) => !!a.isLocked;
+
 /**
- * マスターのキャラ一覧に、現在の DB のキャラを重ねる（キーで突き合わせ）
- * - keepOverMaster が true のキャラは、同じキーのマスターより優先して残す（マスターで上書きしない）
- * - カスタム・ロック中のキャラで、マスターに同じキーが無いものは末尾に残す
+ * マスターの一覧に、現在の DB のアイテムを重ねる（IDで突き合わせ）
+ * - ロック中のアイテムは、マスターより優先して残す（マスターで上書きしない）
+ * - カスタム・ロック中のアイテムで、マスターに無いものは末尾に残す
  */
+function mergeItemsWithProtected<T extends { id: string }>(
+  masterItems: T[],
+  currentItems: T[],
+  isProtected: (item: T) => boolean,
+  isExtraCustom: (item: T) => boolean,
+): T[] {
+  const protectedById = new Map(currentItems.filter(isProtected).map(item => [item.id, item]));
+  const masterIds = new Set(masterItems.map(item => item.id));
+  return [
+    ...masterItems.map(mi => protectedById.get(mi.id) ?? mi),
+    ...currentItems.filter(item => (isExtraCustom(item) || isProtected(item)) && !masterIds.has(item.id)),
+  ];
+}
+
 function mergeMasterWithProtected(
   masterChars: CharacterConfig[],
   currentChars: CharacterConfig[],
   keepOverMaster: (c: CharacterConfig) => boolean,
 ): CharacterConfig[] {
-  const keptById = new Map(currentChars.filter(keepOverMaster).map(c => [c.id, c]));
-  const masterIds = new Set(masterChars.map(c => c.id));
-  return [
-    ...masterChars.map(mc => keptById.get(mc.id) ?? mc),
-    ...currentChars.filter(c => (isCustomCharacter(c) || isLockedCharacter(c)) && !masterIds.has(c.id)),
-  ];
+  return mergeItemsWithProtected(masterChars, currentChars, keepOverMaster, isCustomCharacter);
 }
 
 /**
@@ -121,11 +136,12 @@ export async function syncWeaponsMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: WeaponGenerationReport }> {
   const { weapons: latestWeapons, report } = await generateWeaponsMasterOnline(onProgress);
-  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
-  const mergedWeapons = [
-    ...latestWeapons,
-    ...customWeapons.filter(cw => !latestWeapons.some(mw => mw.id === cw.id))
-  ];
+  const mergedWeapons = mergeItemsWithProtected(
+    latestWeapons,
+    currentDb.weapons,
+    isLockedWeapon,
+    isCustomWeapon,
+  );
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -141,18 +157,19 @@ export async function syncWeaponsMasterOnline(
 
 /**
  * genshin-db API から最新の聖遺物マスターをオンラインで取得・解析し、DB に反映する。
- * ユーザーが追加したカスタム聖遺物 (isCustom: true) は保護される。
+ * ロック中およびカスタム聖遺物は保護される。
  */
 export async function syncArtifactsMasterOnline(
   currentDb: AppDatabase,
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: ArtifactGenerationReport }> {
   const { artifacts: latestArtifacts, report } = await generateArtifactsMasterOnline(onProgress);
-  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
-  const mergedArtifacts = [
-    ...latestArtifacts,
-    ...customArtifacts.filter(ca => !latestArtifacts.some(ma => ma.id === ca.id))
-  ];
+  const mergedArtifacts = mergeItemsWithProtected(
+    latestArtifacts,
+    currentDb.artifacts,
+    isLockedArtifact,
+    isCustomArtifact,
+  );
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -174,17 +191,18 @@ export async function syncEquipmentMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: EquipmentGenerationReport }> {
   const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
-  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
-  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
-
-  const mergedWeapons = [
-    ...latestWeapons,
-    ...customWeapons.filter(cw => !latestWeapons.some(mw => mw.id === cw.id))
-  ];
-  const mergedArtifacts = [
-    ...latestArtifacts,
-    ...customArtifacts.filter(ca => !latestArtifacts.some(ma => ma.id === ca.id))
-  ];
+  const mergedWeapons = mergeItemsWithProtected(
+    latestWeapons,
+    currentDb.weapons,
+    isLockedWeapon,
+    isCustomWeapon,
+  );
+  const mergedArtifacts = mergeItemsWithProtected(
+    latestArtifacts,
+    currentDb.artifacts,
+    isLockedArtifact,
+    isCustomArtifact,
+  );
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -204,11 +222,12 @@ export async function syncEquipmentMasterOnline(
  */
 export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
   const latestWeapons = MASTER_WEAPONS;
-  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
-  const mergedWeapons = [
-    ...latestWeapons,
-    ...customWeapons.filter(cw => !latestWeapons.some(mw => mw.id === cw.id))
-  ];
+  const mergedWeapons = mergeItemsWithProtected(
+    latestWeapons,
+    currentDb.weapons,
+    isLockedWeapon,
+    isCustomWeapon,
+  );
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -222,15 +241,16 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
 }
 
 /**
- * Syncs only Artifacts master roster
+ * Syncs only Artifacts master roster (オフライン・同梱JSON使用)
  */
 export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
   const latestArtifacts = MASTER_ARTIFACTS;
-  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
-  const mergedArtifacts = [
-    ...latestArtifacts,
-    ...customArtifacts.filter(ca => !latestArtifacts.some(ma => ma.id === ca.id))
-  ];
+  const mergedArtifacts = mergeItemsWithProtected(
+    latestArtifacts,
+    currentDb.artifacts,
+    isLockedArtifact,
+    isCustomArtifact,
+  );
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
@@ -319,17 +339,66 @@ export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
 
 /**
  * Clear All Data (Characters, Weapons, Artifacts) completely
+ * ロック中のアイテムはすべて保護されます
  */
 export function clearAllDatabaseData(db: AppDatabase): AppDatabase {
   const emptyDb: AppDatabase = {
     version: 1.0,
     lastSyncedAt: new Date().toLocaleString('ja-JP') + ' (全データクリア済)',
     characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
-    weapons: [],
-    artifacts: [],
+    weapons: db.weapons.filter(isLockedWeapon),          // ロック中の武器は残す
+    artifacts: db.artifacts.filter(isLockedArtifact),     // ロック中の聖遺物は残す
   };
   saveDatabase(emptyDb);
   return emptyDb;
+}
+
+/**
+ * 武器のロック状態だけを切り替える
+ */
+export function setWeaponLockInDb(db: AppDatabase, weaponId: string, locked: boolean): AppDatabase {
+  const updatedDb: AppDatabase = {
+    ...db,
+    weapons: db.weapons.map(w => (w.id === weaponId ? { ...w, isLocked: locked } : w)),
+  };
+  saveDatabase(updatedDb);
+  return updatedDb;
+}
+
+/**
+ * 聖遺物のロック状態だけを切り替える
+ */
+export function setArtifactLockInDb(db: AppDatabase, artifactId: string, locked: boolean): AppDatabase {
+  const updatedDb: AppDatabase = {
+    ...db,
+    artifacts: db.artifacts.map(a => (a.id === artifactId ? { ...a, isLocked: locked } : a)),
+  };
+  saveDatabase(updatedDb);
+  return updatedDb;
+}
+
+/**
+ * Delete All Weapons from Database at once
+ */
+export function deleteAllWeaponsFromDb(db: AppDatabase): AppDatabase {
+  const updatedDb: AppDatabase = {
+    ...db,
+    weapons: db.weapons.filter(isLockedWeapon), // ロック中の武器は残す
+  };
+  saveDatabase(updatedDb);
+  return updatedDb;
+}
+
+/**
+ * Delete All Artifacts from Database at once
+ */
+export function deleteAllArtifactsFromDb(db: AppDatabase): AppDatabase {
+  const updatedDb: AppDatabase = {
+    ...db,
+    artifacts: db.artifacts.filter(isLockedArtifact), // ロック中の聖遺物は残す
+  };
+  saveDatabase(updatedDb);
+  return updatedDb;
 }
 
 /**

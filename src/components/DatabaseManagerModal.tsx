@@ -20,12 +20,16 @@ import {
   syncWeaponsMasterOnline,
   syncArtifactsMasterOnline,
   setCharacterLockInDb,
+  setWeaponLockInDb,
+  setArtifactLockInDb,
   syncWeaponsMaster,
   syncArtifactsMaster,
   resetDatabaseToMaster, 
   upsertCharacterInDb, 
   deleteCharacterFromDb,
   deleteAllCharactersFromDb,
+  deleteAllWeaponsFromDb,
+  deleteAllArtifactsFromDb,
   clearAllDatabaseData,
   upsertWeaponInDb,
   deleteWeaponFromDb,
@@ -203,10 +207,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     if (e.target) e.target.value = '';
   };
 
-  // ロック（最新マスター同期で上書きしない・一括削除/全クリアで消さない）
-  const lockedCount = database.characters.filter(c => c.isLocked).length;
-  const handleToggleLock = (id: string, locked: boolean) => {
+  // ロック状態（最新マスター同期で上書きしない・一括削除/全クリアで消さない）
+  const lockedCharCount = database.characters.filter(c => c.isLocked).length;
+  const lockedWeaponCount = database.weapons.filter(w => w.isLocked).length;
+  const lockedArtifactCount = database.artifacts.filter(a => a.isLocked).length;
+
+  const handleToggleCharLock = (id: string, locked: boolean) => {
     onUpdateDatabase(setCharacterLockInDb(database, id, locked));
+  };
+  const handleToggleWeaponLock = (id: string, locked: boolean) => {
+    onUpdateDatabase(setWeaponLockInDb(database, id, locked));
+  };
+  const handleToggleArtifactLock = (id: string, locked: boolean) => {
+    onUpdateDatabase(setArtifactLockInDb(database, id, locked));
   };
 
   // Delete Handlers using Custom In-App Modal
@@ -229,7 +242,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleDeleteAllCharacters = () => {
     setConfirmDialog({
       title: '全キャラクター一括削除',
-      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（アプリ全画面から削除したキャラが除去されます）${lockedCount > 0 ? `\n※ロック中の ${lockedCount} キャラは削除されません` : ''}`,
+      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（アプリ全画面から削除したキャラが除去されます）${lockedCharCount > 0 ? `\n※ロック中の ${lockedCharCount} キャラは削除されません` : ''}`,
       confirmText: '全キャラ一括削除を実行',
       confirmColor: 'red',
       onConfirm: () => {
@@ -242,10 +255,43 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     });
   };
 
+  const handleDeleteAllWeapons = () => {
+    setConfirmDialog({
+      title: '全武器一括削除',
+      message: `警告: データベース内の全 ${database.weapons.length} 武器を一括削除しますか？${lockedWeaponCount > 0 ? `\n※ロック中の ${lockedWeaponCount} 武器は削除されません` : ''}`,
+      confirmText: '全武器一括削除を実行',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteAllWeaponsFromDb(database);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg('全武器を一括削除しました。');
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
+  const handleDeleteAllArtifacts = () => {
+    setConfirmDialog({
+      title: '全聖遺物一括削除',
+      message: `警告: データベース内の全 ${database.artifacts.length} 聖遺物セットを一括削除しますか？${lockedArtifactCount > 0 ? `\n※ロック中の ${lockedArtifactCount} 聖遺物は削除されません` : ''}`,
+      confirmText: '全聖遺物一括削除を実行',
+      confirmColor: 'red',
+      onConfirm: () => {
+        const updated = deleteAllArtifactsFromDb(database);
+        onUpdateDatabase(updated);
+        setConfirmDialog(null);
+        setSyncSuccessMsg('全聖遺物を一括削除しました。');
+        setTimeout(() => setSyncSuccessMsg(null), 3000);
+      }
+    });
+  };
+
   const handleClearAllData = () => {
+    const totalLocked = lockedCharCount + lockedWeaponCount + lockedArtifactCount;
     setConfirmDialog({
       title: 'データベース全データ完全消去',
-      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？${lockedCount > 0 ? `\n※ロック中の ${lockedCount} キャラは消去されません` : ''}`,
+      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？${totalLocked > 0 ? `\n※ロック中のアイテム（キャラ:${lockedCharCount} 武器:${lockedWeaponCount} 聖遺物:${lockedArtifactCount}）は保護されます` : ''}`,
       confirmText: '全データ完全消去',
       confirmColor: 'rose',
       onConfirm: () => {
@@ -515,9 +561,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <CharacterLockButton
+                          <ItemLockButton
                             locked={!!char.isLocked}
-                            onToggle={() => handleToggleLock(char.id, !char.isLocked)}
+                            onToggle={() => handleToggleCharLock(char.id, !char.isLocked)}
+                            itemTypeLabel="キャラ"
                           />
                           <button
                             onClick={() => setEditingCharacter(char)}
@@ -635,6 +682,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    onClick={handleDeleteAllWeapons}
+                    disabled={database.weapons.length === 0}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0 cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                    <span>全武器一括削除 ({database.weapons.length})</span>
+                  </button>
+
+                  <button
                     onClick={handleSyncWeapons}
                     disabled={isSyncing}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-700/90 hover:bg-sky-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
@@ -678,7 +734,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 {filteredWeapons.map(weapon => (
                   <div
                     key={weapon.id}
-                    className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/90 space-y-2.5 hover:border-slate-700 transition-all"
+                    className={`p-3.5 rounded-xl border space-y-2.5 transition-all ${
+                      weapon.isLocked
+                        ? 'border-sky-500/50 bg-sky-950/20 shadow-md shadow-sky-500/5'
+                        : weapon.isCustom
+                        ? 'border-amber-500/50 bg-slate-900/90 shadow-md shadow-amber-500/5'
+                        : 'border-slate-800 bg-slate-900/90 hover:border-slate-700'
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
@@ -701,6 +763,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-1">
+                        <ItemLockButton
+                          locked={!!weapon.isLocked}
+                          onToggle={() => handleToggleWeaponLock(weapon.id, !weapon.isLocked)}
+                          itemTypeLabel="武器"
+                        />
                         <button
                           onClick={() => setEditingWeapon(weapon)}
                           className="p-1.5 text-slate-400 hover:text-sky-300 hover:bg-slate-800 rounded-lg transition-colors"
@@ -751,6 +818,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    onClick={handleDeleteAllArtifacts}
+                    disabled={database.artifacts.length === 0}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0 cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                    <span>全聖遺物一括削除 ({database.artifacts.length})</span>
+                  </button>
+
+                  <button
                     onClick={handleSyncArtifacts}
                     disabled={isSyncing}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-700/90 hover:bg-purple-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
@@ -791,7 +867,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 {filteredArtifacts.map(art => (
                   <div
                     key={art.id}
-                    className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/90 space-y-2.5 hover:border-slate-700 transition-all"
+                    className={`p-3.5 rounded-xl border space-y-2.5 transition-all ${
+                      art.isLocked
+                        ? 'border-purple-500/50 bg-purple-950/20 shadow-md shadow-purple-500/5'
+                        : art.isCustom
+                        ? 'border-amber-500/50 bg-slate-900/90 shadow-md shadow-amber-500/5'
+                        : 'border-slate-800 bg-slate-900/90 hover:border-slate-700'
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -807,6 +889,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-1">
+                        <ItemLockButton
+                          locked={!!art.isLocked}
+                          onToggle={() => handleToggleArtifactLock(art.id, !art.isLocked)}
+                          itemTypeLabel="聖遺物"
+                        />
                         <button
                           onClick={() => setEditingArtifact(art)}
                           className="p-1.5 text-slate-400 hover:text-purple-300 hover:bg-slate-800 rounded-lg transition-colors"
@@ -869,18 +956,32 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                    <div className="text-xs text-slate-400">
-                      登録数: <span className="font-mono text-amber-300 font-bold">{database.characters.length} キャラ</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <span>登録数: <strong className="font-mono text-amber-300 font-bold">{database.characters.length} キャラ</strong></span>
+                      {lockedCharCount > 0 && (
+                        <span className="text-[10px] text-sky-400 font-mono font-bold">({lockedCharCount} ロック保護中)</span>
+                      )}
                     </div>
-                    <button
-                      onClick={handleSyncCharacters}
-                      disabled={isSyncing}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                      <span>最新マスターデータの動的生成 (キャラ)</span>
-                    </button>
+                    <div className="flex flex-col sm:items-end gap-2">
+                      <button
+                        onClick={handleSyncCharacters}
+                        disabled={isSyncing}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <span>最新マスターデータの動的生成 (キャラ)</span>
+                      </button>
+                      <button
+                        onClick={handleDeleteAllCharacters}
+                        disabled={database.characters.length === 0}
+                        className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
+                        title="ロック中以外の全キャラクターを一括削除"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                        <span>全キャラ一括削除</span>
+                      </button>
+                    </div>
                   </div>
 
                   {charSyncProgress && (
@@ -942,18 +1043,32 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                    <div className="text-xs text-slate-400">
-                      登録数: <span className="font-mono text-sky-300 font-bold">{database.weapons.length} 武器</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <span>登録数: <strong className="font-mono text-sky-300 font-bold">{database.weapons.length} 武器</strong></span>
+                      {lockedWeaponCount > 0 && (
+                        <span className="text-[10px] text-sky-400 font-mono font-bold">({lockedWeaponCount} ロック保護中)</span>
+                      )}
                     </div>
-                    <button
-                      onClick={handleSyncWeapons}
-                      disabled={isSyncing}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                      <span>最新マスターデータの動的生成 (武器)</span>
-                    </button>
+                    <div className="flex flex-col sm:items-end gap-2">
+                      <button
+                        onClick={handleSyncWeapons}
+                        disabled={isSyncing}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <span>最新マスターデータの動的生成 (武器)</span>
+                      </button>
+                      <button
+                        onClick={handleDeleteAllWeapons}
+                        disabled={database.weapons.length === 0}
+                        className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
+                        title="ロック中以外の全武器を一括削除"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                        <span>全武器一括削除</span>
+                      </button>
+                    </div>
                   </div>
 
                   {weaponSyncProgress && (
@@ -1007,18 +1122,32 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                    <div className="text-xs text-slate-400">
-                      登録数: <span className="font-mono text-pink-300 font-bold">{database.artifacts.length} セット</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <span>登録数: <strong className="font-mono text-pink-300 font-bold">{database.artifacts.length} セット</strong></span>
+                      {lockedArtifactCount > 0 && (
+                        <span className="text-[10px] text-purple-400 font-mono font-bold">({lockedArtifactCount} ロック保護中)</span>
+                      )}
                     </div>
-                    <button
-                      onClick={handleSyncArtifacts}
-                      disabled={isSyncing}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                      <span>最新マスターデータの動的生成 (聖遺物)</span>
-                    </button>
+                    <div className="flex flex-col sm:items-end gap-2">
+                      <button
+                        onClick={handleSyncArtifacts}
+                        disabled={isSyncing}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <span>最新マスターデータの動的生成 (聖遺物)</span>
+                      </button>
+                      <button
+                        onClick={handleDeleteAllArtifacts}
+                        disabled={database.artifacts.length === 0}
+                        className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
+                        title="ロック中以外の全聖遺物を一括削除"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                        <span>全聖遺物一括削除</span>
+                      </button>
+                    </div>
                   </div>
 
                   {artifactSyncProgress && (
@@ -1236,7 +1365,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
           character={editingCharacter}
           onToggleLock={(locked) => {
             // DB にあるキャラはその場でロック状態を保存（新規カスタムキャラは保存時に反映）
-            if (database.characters.some(c => c.id === editingCharacter.id)) handleToggleLock(editingCharacter.id, locked);
+            if (database.characters.some(c => c.id === editingCharacter.id)) handleToggleCharLock(editingCharacter.id, locked);
           }}
           onClose={() => setEditingCharacter(null)}
           onSave={(updated) => {
@@ -1251,6 +1380,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       {editingWeapon && (
         <EditWeaponSubModal
           weapon={editingWeapon}
+          onToggleLock={(locked) => {
+            if (database.weapons.some(w => w.id === editingWeapon.id)) handleToggleWeaponLock(editingWeapon.id, locked);
+          }}
           onClose={() => setEditingWeapon(null)}
           onSave={(updated) => {
             const newDb = upsertWeaponInDb(database, updated);
@@ -1264,6 +1396,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       {editingArtifact && (
         <EditArtifactSubModal
           artifact={editingArtifact}
+          onToggleLock={(locked) => {
+            if (database.artifacts.some(a => a.id === editingArtifact.id)) handleToggleArtifactLock(editingArtifact.id, locked);
+          }}
           onClose={() => setEditingArtifact(null)}
           onSave={(updated) => {
             const newDb = upsertArtifactInDb(database, updated);
@@ -1641,11 +1776,12 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
    ========================================================================= */
 interface EditWeaponSubModalProps {
   weapon: WeaponDatabaseItem;
+  onToggleLock?: (locked: boolean) => void;
   onClose: () => void;
   onSave: (updated: WeaponDatabaseItem) => void;
 }
 
-const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onClose, onSave }) => {
+const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onToggleLock, onClose, onSave }) => {
   const [form, setForm] = useState<WeaponDatabaseItem>({ ...weapon });
   const [hasBuff, setHasBuff] = useState<boolean>(!!weapon.buffEffect);
 
@@ -1665,8 +1801,22 @@ const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onClose
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Sword className="w-4 h-4 text-sky-400" />
             <span>武器定義編集: {form.name}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="武器ID">
+              （ID:{form.id}）
+            </span>
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          <div className="flex items-center gap-1">
+            <ItemLockButton
+              locked={!!form.isLocked}
+              onToggle={() => {
+                const locked = !form.isLocked;
+                setForm(prev => ({ ...prev, isLocked: locked }));
+                onToggleLock?.(locked);
+              }}
+              itemTypeLabel="武器"
+            />
+            <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
@@ -1821,11 +1971,12 @@ const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onClose
    ========================================================================= */
 interface EditArtifactSubModalProps {
   artifact: ArtifactSetDatabaseItem;
+  onToggleLock?: (locked: boolean) => void;
   onClose: () => void;
   onSave: (updated: ArtifactSetDatabaseItem) => void;
 }
 
-const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, onClose, onSave }) => {
+const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, onToggleLock, onClose, onSave }) => {
   const [form, setForm] = useState<ArtifactSetDatabaseItem>({ ...artifact });
   const [hasBuff, setHasBuff] = useState<boolean>(!!artifact.buffEffect);
 
@@ -1845,8 +1996,22 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Shield className="w-4 h-4 text-purple-400" />
             <span>聖遺物定義編集: {form.name}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="聖遺物ID">
+              （ID:{form.id}）
+            </span>
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          <div className="flex items-center gap-1">
+            <ItemLockButton
+              locked={!!form.isLocked}
+              onToggle={() => {
+                const locked = !form.isLocked;
+                setForm(prev => ({ ...prev, isLocked: locked }));
+                onToggleLock?.(locked);
+              }}
+              itemTypeLabel="聖遺物"
+            />
+            <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
@@ -1953,19 +2118,27 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
   );
 };
 
-/** キャラのロック切り替えボタン（南京錠）。ロック中は閉じた錠、解除中は開いた錠を表示 */
-const CharacterLockButton: React.FC<{ locked: boolean; onToggle: () => void }> = ({ locked, onToggle }) => (
+/** アイテム（キャラ・武器・聖遺物）のロック切り替えボタン（南京錠） */
+interface ItemLockButtonProps {
+  locked: boolean;
+  onToggle: () => void;
+  itemTypeLabel?: string;
+}
+
+const ItemLockButton: React.FC<ItemLockButtonProps> = ({ locked, onToggle, itemTypeLabel = 'アイテム' }) => (
   <button
     type="button"
     onClick={onToggle}
-    className={`p-1.5 rounded-lg transition-colors ${
+    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
       locked ? 'text-sky-300 bg-sky-500/15 hover:bg-sky-500/25' : 'text-slate-500 hover:text-slate-200 hover:bg-slate-800'
     }`}
     title={locked
-      ? 'ロック中: 最新マスターデータの同期で上書きされず、全キャラ一括削除・全データクリアでも削除されません（クリックで解除）'
-      : 'ロックする: 最新マスターデータの同期での上書きや、全キャラ一括削除・全データクリアでの削除から保護します'}
+      ? `ロック中: 最新マスターデータの同期で上書きされず、全${itemTypeLabel}一括削除・全データクリアでも削除されません（クリックで解除）`
+      : `ロックする: 最新マスターデータの同期での上書きや、全${itemTypeLabel}一括削除・全データクリアでの削除から保護します`}
     aria-pressed={locked}
   >
     {locked ? <Lock className="w-3.5 h-3.5" /> : <LockOpen className="w-3.5 h-3.5" />}
   </button>
 );
+
+const CharacterLockButton = ItemLockButton;

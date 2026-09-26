@@ -7,6 +7,15 @@ import {
   CharacterGenerationReport,
   GenerationProgress,
 } from '../masterdata/characterMasterGenerator';
+import {
+  generateWeaponsMasterOnline,
+  generateArtifactsMasterOnline,
+  generateEquipmentMaster,
+  type EquipmentGenerationProgress,
+  type WeaponGenerationReport,
+  type ArtifactGenerationReport,
+  type EquipmentGenerationReport,
+} from '../masterdata/equipmentMasterGenerator';
 
 const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
 
@@ -104,7 +113,94 @@ export async function syncCharactersMasterOnline(
 }
 
 /**
- * Syncs only Weapons master roster
+ * genshin-db API から最新の武器マスターをオンラインで取得・解析し、DB に反映する。
+ * ユーザーが追加したカスタム武器 (isCustom: true) は保護される。
+ */
+export async function syncWeaponsMasterOnline(
+  currentDb: AppDatabase,
+  onProgress?: (p: EquipmentGenerationProgress) => void,
+): Promise<{ db: AppDatabase; report: WeaponGenerationReport }> {
+  const { weapons: latestWeapons, report } = await generateWeaponsMasterOnline(onProgress);
+  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
+  const mergedWeapons = [
+    ...latestWeapons,
+    ...customWeapons.filter(cw => !latestWeapons.some(mw => mw.id === cw.id))
+  ];
+
+  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const updatedDb: AppDatabase = {
+    ...currentDb,
+    version: DATABASE_VERSION,
+    lastSyncedAt: `${nowStr} (genshin-db API より武器 ${report.totalWeapons} 件をオンライン生成)`,
+    weapons: mergedWeapons
+  };
+
+  saveDatabase(updatedDb);
+  return { db: updatedDb, report };
+}
+
+/**
+ * genshin-db API から最新の聖遺物マスターをオンラインで取得・解析し、DB に反映する。
+ * ユーザーが追加したカスタム聖遺物 (isCustom: true) は保護される。
+ */
+export async function syncArtifactsMasterOnline(
+  currentDb: AppDatabase,
+  onProgress?: (p: EquipmentGenerationProgress) => void,
+): Promise<{ db: AppDatabase; report: ArtifactGenerationReport }> {
+  const { artifacts: latestArtifacts, report } = await generateArtifactsMasterOnline(onProgress);
+  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
+  const mergedArtifacts = [
+    ...latestArtifacts,
+    ...customArtifacts.filter(ca => !latestArtifacts.some(ma => ma.id === ca.id))
+  ];
+
+  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const updatedDb: AppDatabase = {
+    ...currentDb,
+    version: DATABASE_VERSION,
+    lastSyncedAt: `${nowStr} (genshin-db API より聖遺物 ${report.totalArtifacts} セットをオンライン生成)`,
+    artifacts: mergedArtifacts
+  };
+
+  saveDatabase(updatedDb);
+  return { db: updatedDb, report };
+}
+
+/**
+ * genshin-db API から武器・聖遺物の両方をオンラインで取得・解析し、一括でDB に反映する。
+ */
+export async function syncEquipmentMasterOnline(
+  currentDb: AppDatabase,
+  onProgress?: (p: EquipmentGenerationProgress) => void,
+): Promise<{ db: AppDatabase; report: EquipmentGenerationReport }> {
+  const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
+  const customWeapons = currentDb.weapons.filter(w => w.isCustom);
+  const customArtifacts = currentDb.artifacts.filter(a => a.isCustom);
+
+  const mergedWeapons = [
+    ...latestWeapons,
+    ...customWeapons.filter(cw => !latestWeapons.some(mw => mw.id === cw.id))
+  ];
+  const mergedArtifacts = [
+    ...latestArtifacts,
+    ...customArtifacts.filter(ca => !latestArtifacts.some(ma => ma.id === ca.id))
+  ];
+
+  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const updatedDb: AppDatabase = {
+    ...currentDb,
+    version: DATABASE_VERSION,
+    lastSyncedAt: `${nowStr} (genshin-db API より武器・聖遺物をオンライン生成)`,
+    weapons: mergedWeapons,
+    artifacts: mergedArtifacts,
+  };
+
+  saveDatabase(updatedDb);
+  return { db: updatedDb, report };
+}
+
+/**
+ * Syncs only Weapons master roster (オフライン・同梱JSON使用)
  */
 export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
   const latestWeapons = MASTER_WEAPONS;

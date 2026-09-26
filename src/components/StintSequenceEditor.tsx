@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useRef, useLayoutEffect, useEffect } from 'react';
 import { 
   Plus, 
   Trash2, 
@@ -518,6 +518,19 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           {idx + 1}
                         </span>
                         <CharacterAvatar char={char} className="w-5 h-5 rounded-md text-[10px]" borderWidth={1} />
+                        {/* この出場ブロックを削除（チップの選択クリックとは別） */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeStint(idx);
+                          }}
+                          className="w-4 h-4 -ml-0.5 rounded flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-600 transition-colors shrink-0"
+                          title={`${char.name}の出場ブロック（${idx + 1}番目）を削除`}
+                          aria-label="出場ブロックを削除"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
                         <span className="text-xs font-bold text-white truncate max-w-[80px]">
                           {char.name}
                         </span>
@@ -1264,24 +1277,24 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 </span>
                               )}
 
-                              {/* Duration & Tweaks */}
-                              <div className="flex items-center gap-0.5 ml-1 bg-slate-950/60 rounded px-1.5 py-0.5 border border-slate-800 text-[11px] font-mono">
-                                <span className="text-amber-300 font-semibold">{act.duration.toFixed(2)}s</span>
+                              {/* モーション時間（数値入力 + ▲▼ 長押しで連続増減） */}
+                              <div
+                                className="flex items-center gap-0.5 ml-1 bg-slate-950/60 rounded px-1 py-0.5 border border-slate-800 text-[11px] font-mono"
+                                onClick={(e) => e.stopPropagation()}
+                                onMouseEnter={() => setCtHoverActionId(act.id)}
+                                onMouseLeave={() => setCtHoverActionId(prev => (prev === act.id ? null : prev))}
+                                title="モーション時間（直接入力、または ▲▼ で0.1秒ずつ。押し続けると連続で増減）"
+                              >
+                                <StepperNumberInput
+                                  value={act.duration}
+                                  decimals={2}
+                                  onCommit={(v) => updateActionDuration(stintIndex, actIdx, v - act.duration)}
+                                  className="w-10 text-amber-300"
+                                />
+                                <span className="text-slate-400">s</span>
                                 <div className="flex flex-col ml-0.5">
-                                  <button
-                                    onClick={() => updateActionDuration(stintIndex, actIdx, 0.1)}
-                                    className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-                                    title="+0.1秒"
-                                  >
-                                    ▲
-                                  </button>
-                                  <button
-                                    onClick={() => updateActionDuration(stintIndex, actIdx, -0.1)}
-                                    className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-                                    title="-0.1秒"
-                                  >
-                                    ▼
-                                  </button>
+                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, 0.1)} title="+0.1秒（長押しで連続）">▲</RepeatButton>
+                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, -0.1)} title="-0.1秒（長押しで連続）">▼</RepeatButton>
                                 </div>
                               </div>
 
@@ -1468,7 +1481,7 @@ const ActionTimingInput: React.FC<{
   const isCustom = value !== defaultValue;
   return (
     <div
-      className={`flex items-center gap-0.5 ml-1 rounded px-1.5 py-0.5 border text-[11px] font-mono ${
+      className={`flex items-center gap-0.5 ml-1 rounded px-1 py-0.5 border text-[11px] font-mono ${
         isCustom ? 'bg-amber-950/60 border-amber-500/60' : 'bg-slate-950/60 border-slate-800'
       }`}
       onClick={(e) => e.stopPropagation()}
@@ -1476,38 +1489,18 @@ const ActionTimingInput: React.FC<{
       onMouseLeave={() => onHoverChange(false)}
       title={`${title}${isCustom ? '\n※個別に変更されています' : ''}`}
     >
-      <span className="font-sans font-bold text-[10px] text-slate-400 mr-0.5">{label}</span>
-      <input
-        type="number"
-        min={0}
-        step={1}
+      <span className="font-sans font-bold text-[10px] text-slate-400">{label}</span>
+      {/* 小数第1位まで表示。2桁（99.9）まで収まる幅 */}
+      <StepperNumberInput
         value={value}
-        onChange={(e) => {
-          if (e.target.value === '') return;
-          onChange(Number(e.target.value));
-        }}
-        className={`w-11 bg-slate-900 border border-slate-700 rounded px-1 py-0 text-right font-semibold focus:outline-none focus:border-amber-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
-          isCustom ? 'text-amber-300' : valueClassName
-        }`}
+        decimals={1}
+        onCommit={onChange}
+        className={`w-9 ${isCustom ? 'text-amber-300' : valueClassName}`}
       />
       <span className="text-slate-400">s</span>
-      <div className="flex flex-col ml-0.5">
-        <button
-          type="button"
-          onClick={() => onChange(value + 1)}
-          className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-          title={`${label} +1秒`}
-        >
-          ▲
-        </button>
-        <button
-          type="button"
-          onClick={() => onChange(value - 1)}
-          className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold"
-          title={`${label} -1秒`}
-        >
-          ▼
-        </button>
+      <div className="flex flex-col">
+        <RepeatButton onStep={() => onChange(value + 1)} title={`${label} +1秒（長押しで連続）`}>▲</RepeatButton>
+        <RepeatButton onStep={() => onChange(value - 1)} title={`${label} -1秒（長押しで連続）`}>▼</RepeatButton>
       </div>
       {isCustom && (
         <button
@@ -1520,5 +1513,93 @@ const ActionTimingInput: React.FC<{
         </button>
       )}
     </div>
+  );
+};
+
+
+/**
+ * 押している間、繰り返し実行するボタン（押した瞬間に1回、0.4秒後から0.08秒ごと）。
+ * 実行する処理は毎回最新のもの（最新の値・状態）を使う
+ */
+const RepeatButton: React.FC<{ onStep: () => void; title: string; children: React.ReactNode }> = ({ onStep, title, children }) => {
+  const stepRef = useRef(onStep);
+  stepRef.current = onStep;
+  const timers = useRef<{ delay?: number; repeat?: number }>({});
+  const stop = () => {
+    window.clearTimeout(timers.current.delay);
+    window.clearInterval(timers.current.repeat);
+    timers.current = {};
+  };
+  useEffect(() => stop, []);
+
+  return (
+    <button
+      type="button"
+      title={title}
+      className="leading-none text-slate-400 hover:text-white text-[9px] hover:font-bold select-none"
+      onPointerDown={(e) => {
+        if (e.button !== 0) return;
+        e.preventDefault(); // 入力欄のフォーカスを奪わない
+        e.stopPropagation();
+        stop();
+        stepRef.current();
+        timers.current.delay = window.setTimeout(() => {
+          timers.current.repeat = window.setInterval(() => stepRef.current(), 80);
+        }, 400);
+      }}
+      onPointerUp={stop}
+      onPointerLeave={stop}
+      onPointerCancel={stop}
+      onClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          stepRef.current();
+        }
+      }}
+    >
+      {children}
+    </button>
+  );
+};
+
+/**
+ * 秒数の入力欄。入力中は打った文字をそのまま表示し（途中の「1.」なども可）、数値として読めるたびに反映する。
+ * 入力していないときは小数点以下 decimals 桁で表示する
+ */
+const StepperNumberInput: React.FC<{
+  value: number;
+  decimals: number;
+  onCommit: (value: number) => void;
+  className: string;
+}> = ({ value, decimals, onCommit, className }) => {
+  const [draft, setDraft] = useState<string | null>(null);
+  // ▲▼ などで外から値が変わったら、入力中の表示も追従させる
+  useEffect(() => {
+    if (draft === null) return;
+    const parsed = parseFloat(draft);
+    if (Number.isFinite(parsed) && Math.abs(parsed - value) > 1e-9) setDraft(value.toFixed(decimals));
+  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      value={draft ?? value.toFixed(decimals)}
+      onFocus={(e) => {
+        setDraft(value.toFixed(decimals));
+        e.target.select();
+      }}
+      onChange={(e) => {
+        setDraft(e.target.value);
+        const parsed = parseFloat(e.target.value);
+        if (Number.isFinite(parsed)) onCommit(parsed);
+      }}
+      onBlur={() => setDraft(null)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+      }}
+      className={`bg-slate-900 border border-slate-700 rounded px-0.5 py-0 text-right font-semibold focus:outline-none focus:border-amber-400 ${className}`}
+    />
   );
 };

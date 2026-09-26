@@ -72,6 +72,10 @@ export interface CharacterActionInstance {
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
+  /** CT未回復（CT衝突）フラグ */
+  hasCTCollision?: boolean;
+  /** CT衝突時の残り秒数 */
+  collisionRemainingCT?: number;
 }
 
 /** 固有天賦の効果（マスターデータ）。発動位置はユーザーがアクション構築・ガントチャートで決める */
@@ -117,6 +121,8 @@ export interface PassiveSpan {
   cooldownEnd: number;
   /** 同じ固有天賦・武器・聖遺物バフの CT 中に発動している */
   hasCTViolation?: boolean;
+  /** CT衝突時の残り秒数 */
+  collisionRemainingCT?: number;
   color?: string;
   description?: string;
 }

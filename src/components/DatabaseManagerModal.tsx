@@ -344,15 +344,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     return matchesSearch && matchesFilter;
   });
 
-  const filteredWeapons = database.weapons.filter(w => {
-    const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
-    return matchesSearch && matchesWeapon;
-  });
+  const filteredWeapons = database.weapons
+    .filter(w => {
+      const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase()) || (w.id ?? '').includes(searchQuery);
+      const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
+      return matchesSearch && matchesWeapon;
+    })
+    .sort((a, b) => Number(b.id) - Number(a.id));
 
-  const filteredArtifacts = database.artifacts.filter(a => {
-    return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const filteredArtifacts = database.artifacts
+    .filter(a => {
+      return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
+    })
+    .sort((a, b) => Number(b.id) - Number(a.id));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-3 sm:p-5">

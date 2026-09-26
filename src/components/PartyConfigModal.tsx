@@ -75,7 +75,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     const updated = [...editingChars];
     updated[selectedSlot] = {
       ...newRosterChar,
-      energyRecharge: newRosterChar.energyRecharge || 160,
     };
     setEditingChars(updated);
 
@@ -214,7 +213,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             type="button"
             onClick={handleRefreshFromDatabase}
             className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors shadow-sm"
-            title="パーティメンバー全員（同じキャラのまま）を、DB管理の最新マスターデータで登録し直します。元素チャージ効率・武器・聖遺物は残し、登録済みアクションは新しいデータの同じアクションへ付け替えます（「編成を保存・適用」で確定）"
+            title="パーティメンバー全員（同じキャラのまま）を、DB管理の最新マスターデータで登録し直します。武器・聖遺物は残し、登録済みアクションは新しいデータの同じアクションへ付け替えます（「編成を保存・適用」で確定）"
           >
             <Database className="w-3.5 h-3.5" />
             <span>全パーティメンバーをマスターデータで再登録</span>
@@ -282,24 +281,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                {/* Energy Recharge (ER%) */}
-                <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">元素チャージ効率 (ER%)</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min="100"
-                      max="350"
-                      step="5"
-                      value={currentSlotChar.energyRecharge || 150}
-                      onChange={(e) => handleUpdateCurrentField('energyRecharge', Number(e.target.value))}
-                      className="w-24 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-white font-mono focus:border-amber-400 focus:outline-none"
-                    />
-                    <span className="text-slate-400">%</span>
-                  </div>
-                </div>
-
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {/* Weapon Selection from Database */}
                 <div className="space-y-1">
                   <label className="text-slate-400 font-medium flex items-center justify-between">
@@ -319,10 +301,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <option value="">-- DBから武器を選択 --</option>
                     {database.weapons
                       .filter(w => w.weaponType === currentSlotChar.weaponType)
-                      .sort((a, b) => {
-                        if (b.rarity !== a.rarity) return b.rarity - a.rarity;
-                        return a.name.localeCompare(b.name, 'ja');
-                      })
+                      .sort((a, b) => Number(b.id) - Number(a.id))
                       .map(w => (
                         <option key={w.id} value={w.name}>
                           {'★'.repeat(w.rarity)} {w.name}
@@ -345,10 +324,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   >
                     <option value="">-- DBから聖遺物を選択 --</option>
                     {[...database.artifacts]
-                      .sort((a, b) => {
-                        if (b.rarity !== a.rarity) return b.rarity - a.rarity;
-                        return a.name.localeCompare(b.name, 'ja');
-                      })
+                      .sort((a, b) => Number(b.id) - Number(a.id))
                       .map(a => (
                         <option key={a.id} value={a.name}>
                           {'★'.repeat(a.rarity)} {a.name}

@@ -274,12 +274,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const headerScrollRef = useRef<HTMLDivElement>(null);
   const isSyncingScroll = useRef(false);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   const handleContainerScroll = () => {
     if (isSyncingScroll.current) return;
     if (containerRef.current && headerScrollRef.current) {
       isSyncingScroll.current = true;
       headerScrollRef.current.scrollLeft = containerRef.current.scrollLeft;
+      setScrollLeft(containerRef.current.scrollLeft);
       requestAnimationFrame(() => {
         isSyncingScroll.current = false;
       });
@@ -291,6 +293,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     if (containerRef.current && headerScrollRef.current) {
       isSyncingScroll.current = true;
       containerRef.current.scrollLeft = headerScrollRef.current.scrollLeft;
+      setScrollLeft(headerScrollRef.current.scrollLeft);
       requestAnimationFrame(() => {
         isSyncingScroll.current = false;
       });
@@ -741,6 +744,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   // Format relative time helper considering loopStartTime as 0s (negative for 1st-cycle setup)
   const fmtTime = (absTime: number, precision: number = 1, showPlus: boolean = true): string => {
+    if (cycle2Data.enabled && absTime >= totalDuration - 0.02) {
+      const c2Rel = Math.max(0, absTime - totalDuration);
+      return `2周目 +${c2Rel.toFixed(precision)}s`;
+    }
     if (!loopStartTime || loopStartTime <= 0) {
       return `${absTime.toFixed(precision)}s`;
     }
@@ -755,54 +762,94 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   };
 
   // Generate ticks spanning full timeline (1st cycle + 2nd cycle)
-  // When loopStartTime > 0, ticks are generated relative to loopStartTime as 0s
+  // 1st cycle: relative to loopStartTime as 0s (or absolute if loopStartTime=0)
+  // 2nd cycle: 2周目開始地点を0sとして以降の秒数を表示 (+1s, +2s, ...)
   const timelineTicks = useMemo(() => {
+    const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean; isCycle2?: boolean }[] = [];
+    const c2Start = cycle2Data.enabled ? cycle2Data.cycle2StartTime : null;
+    const c1End = c2Start !== null ? c2Start : extendedTotalDuration;
+
+    // 1. 1st Cycle Ticks
     if (!loopStartTime || loopStartTime <= 0) {
-      const maxSeconds = Math.ceil(extendedTotalDuration + 2);
-      const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean }[] = [];
+      const maxSeconds = Math.floor(c1End);
       for (let s = 0; s <= maxSeconds; s++) {
+        // If close to 2nd-cycle start, avoid colliding with 2nd-cycle 0s tick
+        if (c2Start !== null && Math.abs(s - c2Start) < 0.35) continue;
         list.push({
           absTime: s,
           relTime: s,
           label: `${s}s`,
           isZero: s === 0,
           isNegative: false,
+          isCycle2: false,
         });
       }
-      return list;
-    }
+    } else {
+      const minRel = -Math.ceil(loopStartTime);
+      const maxRel = Math.ceil(c1End - loopStartTime + 1);
 
-    const minRel = -Math.ceil(loopStartTime);
-    const maxRel = Math.ceil(extendedTotalDuration - loopStartTime + 1);
-    const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean }[] = [];
-
-    // If loopStartTime is non-integer, add the absolute 0 point (rotation start)
-    if (Math.abs(loopStartTime - Math.round(loopStartTime)) > 0.05) {
-      list.push({
-        absTime: 0,
-        relTime: -loopStartTime,
-        label: `-${loopStartTime.toFixed(1)}s`,
-        isZero: false,
-        isNegative: true,
-      });
-    }
-
-    for (let r = minRel; r <= maxRel; r++) {
-      const absTime = Number((loopStartTime + r).toFixed(3));
-      if (absTime >= -0.001 && absTime <= extendedTotalDuration + 2) {
+      // If loopStartTime is non-integer, add the absolute 0 point (rotation start)
+      if (Math.abs(loopStartTime - Math.round(loopStartTime)) > 0.05) {
         list.push({
-          absTime: Math.max(0, absTime),
-          relTime: r,
-          label: r === 0 ? '0s' : r < 0 ? `${r}s` : `+${r}s`,
-          isZero: r === 0,
-          isNegative: r < 0,
+          absTime: 0,
+          relTime: -loopStartTime,
+          label: `-${loopStartTime.toFixed(1)}s`,
+          isZero: false,
+          isNegative: true,
+          isCycle2: false,
         });
+      }
+
+      for (let r = minRel; r <= maxRel; r++) {
+        const absTime = Number((loopStartTime + r).toFixed(3));
+        if (absTime >= -0.001 && absTime <= c1End) {
+          // If close to 2nd-cycle start, skip so it doesn't collide with the 2nd-cycle 0s tick
+          if (c2Start !== null && Math.abs(absTime - c2Start) < 0.35) continue;
+          list.push({
+            absTime: Math.max(0, absTime),
+            relTime: r,
+            label: r === 0 ? '0s' : r < 0 ? `${r}s` : `+${r}s`,
+            isZero: r === 0,
+            isNegative: r < 0,
+            isCycle2: false,
+          });
+        }
+      }
+    }
+
+    // 2. 2nd Cycle Ticks (2周目開始地点を0sとして以降の時間を表示)
+    if (cycle2Data.enabled && c2Start !== null) {
+      // 2周目開始地点 = 0s
+      list.push({
+        absTime: c2Start,
+        relTime: 0,
+        label: '0s',
+        isZero: true,
+        isNegative: false,
+        isCycle2: true,
+      });
+
+      // 2周目開始以降の秒数 (+1s, +2s, +3s, ...)
+      const c2Duration = cycle2Data.cycle2EndTime - c2Start;
+      const maxC2Sec = Math.ceil(c2Duration + 1);
+      for (let s = 1; s <= maxC2Sec; s++) {
+        const absTime = Number((c2Start + s).toFixed(3));
+        if (absTime <= extendedTotalDuration + 2) {
+          list.push({
+            absTime,
+            relTime: s,
+            label: `+${s}s`,
+            isZero: false,
+            isNegative: false,
+            isCycle2: true,
+          });
+        }
       }
     }
 
     list.sort((a, b) => a.absTime - b.absTime);
     return list.filter((item, idx, arr) => idx === 0 || Math.abs(item.absTime - arr[idx - 1].absTime) > 0.1);
-  }, [loopStartTime, extendedTotalDuration]);
+  }, [loopStartTime, extendedTotalDuration, cycle2Data.enabled, cycle2Data.cycle2StartTime, cycle2Data.cycle2EndTime]);
 
   // 指定秒数に一番近い出場キャラの境目（ループ基準番号）
   const findClosestLoopBoundaryIndex = (rawTime: number) => {
@@ -927,6 +974,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     };
   });
 
+  // Playhead color state aligned with playback tool in Header
+  const isPlayheadNegative = loopStartTime > 0 && (activeTime - loopStartTime) < -0.05;
+  const isPlayheadLoop = (loopStartTime > 0 && !isPlayheadNegative) || activeTime >= totalDuration;
+
   return (
     <section className="bg-slate-950 p-3 sm:p-4 border-b border-slate-800 w-full max-w-full overflow-x-clip">
       <div className="w-full">
@@ -936,7 +987,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         ========================================================================= */}
         <div 
           id={GANTT_STICKY_HEADER_ID}
-          className="sticky z-30 rounded-t-xl border border-slate-800 bg-slate-900/95 backdrop-blur-md shadow-2xl w-full mb-0 overflow-x-clip"
+          className="sticky z-30 rounded-t-xl border border-slate-800 bg-slate-950 shadow-2xl w-full mb-0 overflow-x-clip"
           style={{ top: 'var(--header-height, 56px)' }}
         >
           {/* A. Gantt Title Bar & Toolbar Controls */}
@@ -1011,14 +1062,47 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             </div>
           </div>
 
-          {/* B. Scrollable 4 Header Tracks (Time Ruler, Loop, Unified, Buff Synergy) + Horizontal Scrollbar */}
+          {/* B. Scrollable 4 Header Tracks (Time Ruler, Loop, Unified, Buff Synergy) */}
           <div 
             ref={headerScrollRef}
             onScroll={handleHeaderScroll}
-            className="overflow-x-auto w-full relative border-b border-slate-800 custom-scrollbar bg-slate-900/90"
+            className="overflow-x-auto w-full relative border-b border-slate-800 no-scrollbar bg-slate-950"
           >
             <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
               
+              {/* Vertical Handoff Connector Lines through Header Tracks (Behind tracks) */}
+              {showConnectors && handoffConnectors.map((conn, idx) => (
+                <div
+                  key={`handoff_header_line_${idx}`}
+                  style={{ left: `${conn.xPos + 180}px` }}
+                  className="absolute top-4 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
+                />
+              ))}
+
+              {/* Vertical Loop Boundary Guide Lines through Header Tracks */}
+              {loopStartTime > 0 && (
+                <div
+                  style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
+                  className="absolute top-7 bottom-0 w-0 border-l-2 border-purple-400/80 border-dotted pointer-events-none z-0"
+                />
+              )}
+              {cycle2Data.enabled && (
+                <div
+                  style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond + 180}px` }}
+                  className="absolute top-7 bottom-0 w-0 border-l-2 border-purple-400/80 border-dotted pointer-events-none z-0"
+                />
+              )}
+
+              {/* Playhead Vertical Line in Fixed Header: begins directly from bottom tip of ▼ (top-[43px]) down through header tracks to bottom edge */}
+              <div
+                style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
+                className={`absolute top-[43px] bottom-0 w-0.5 pointer-events-none z-30 shadow-md ${
+                  isPlayheadLoop
+                    ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
+                    : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
+                }`}
+              />
+
               {/* 1. Loop Boundary Separator Track (ループ基準点) */}
               <div className="flex border-b border-purple-900/60 bg-slate-950 items-center h-7 group select-none">
                 <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
@@ -1055,7 +1139,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </div>
                   )}
 
-                  {/* 2nd+ Cycle Loop (2周目以降も繰り返す) shaded range */}
+                  {/* 1st Cycle Loop (1周目定常ループ) shaded range */}
                   <div
                     style={{ 
                       left: `${loopStartTime * pixelsPerSecond}px`, 
@@ -1066,9 +1150,24 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     }`}
                   >
                     <span className="text-[10px] font-bold text-purple-200 truncate">
-                      🔁 定常ループ (0.0s ~ +{(totalDuration - loopStartTime).toFixed(1)}s) ▶
+                      🔁 1周目ループ (0.0s ~ +{(totalDuration - loopStartTime).toFixed(1)}s) ▶
                     </span>
                   </div>
+
+                  {/* 2nd Cycle Loop (2周目定常ループ) shaded range */}
+                  {cycle2Data.enabled && (
+                    <div
+                      style={{ 
+                        left: `${cycle2Data.cycle2StartTime * pixelsPerSecond}px`, 
+                        width: `${Math.max(0, (cycle2Data.cycle2EndTime - cycle2Data.cycle2StartTime) * pixelsPerSecond)}px` 
+                      }}
+                      className="absolute inset-y-0.5 bg-gradient-to-r from-purple-600/25 via-indigo-600/20 to-purple-600/15 border-l-2 border-purple-400 border-dotted flex items-center px-2 pl-24 pointer-events-none"
+                    >
+                      <span className="text-[10px] font-bold text-purple-200 truncate">
+                        🔁 2周目ループ (0.0s ~ +{cycle2Data.loopPeriod.toFixed(1)}s) ▶
+                      </span>
+                    </div>
+                  )}
 
                   {/* Snapping tick dots for each action boundary */}
                   {loopBoundaries.map((b, idx) => {
@@ -1093,7 +1192,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     );
                   })}
 
-                  {/* Draggable Loop Boundary Marker Pin */}
+                  {/* Draggable Loop Boundary Marker Pin (1周目ループ区切) */}
                   <div
                     style={{ left: `${loopStartTime * pixelsPerSecond}px` }}
                     onMouseDown={(e) => {
@@ -1114,11 +1213,28 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
                   </div>
+
+                  {/* 2nd Cycle Start Snap Line Marker Pin (2周目開始地点) - 1周目ループ区切と同じ仕様 */}
+                  {cycle2Data.enabled && (
+                    <div
+                      style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond}px` }}
+                      className="absolute top-0 bottom-0 -translate-x-1/2 z-20 flex flex-col items-center pointer-events-none group/marker2"
+                      title={`【2周目開始地点】\n1周目終了＆2周目ループ開始 (${cycle2Data.cycle2StartTime.toFixed(2)}s)`}
+                    >
+                      {/* Pin Handle Badge */}
+                      <div className="flex items-center gap-1 bg-purple-700 text-white font-black text-[9px] px-1.5 py-0.5 rounded-full shadow-lg border border-purple-300 ring-1 ring-purple-400/50">
+                        <Repeat className="w-2.5 h-2.5 text-purple-200" />
+                        <span>2周目開始 ({cycle2Data.cycle2StartTime.toFixed(2)}s)</span>
+                      </div>
+                      {/* Pin stem */}
+                      <div className="w-0.5 flex-1 bg-purple-400 shadow" />
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* 2. Top Time Ruler（経過時間の目盛り） */}
-              <div className="flex border-b border-slate-800 bg-slate-900 h-4">
+              <div className="flex border-b border-slate-800 bg-slate-900 h-6">
                 {/* Left Column Label (Corner: Sticky Left) */}
                 <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span>経過時間</span>
@@ -1138,6 +1254,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           ? 'border-purple-400 z-10'
                           : t.isNegative
                           ? 'border-amber-500/40'
+                          : t.isCycle2
+                          ? 'border-purple-500/40'
                           : 'border-slate-800/80'
                       }`}
                       style={{ left: `${t.absTime * pixelsPerSecond}px` }}
@@ -1147,6 +1265,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           ? 'text-purple-300'
                           : t.isNegative 
                           ? 'text-amber-300/90' 
+                          : t.isCycle2
+                          ? 'text-purple-300/90'
                           : 'text-slate-400'
                       }`}>
                         {t.label}
@@ -1162,11 +1282,51 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       style={{ left: `${(t.absTime + 0.5) * pixelsPerSecond}px` }}
                     />
                   ))}
+
+                  {/* Orange Handoff Connector Badges (交代秒数) in 経過時間 Ruler */}
+                  {showConnectors && handoffConnectors.map((conn, idx) => (
+                    <div
+                      key={`handoff_ruler_badge_${idx}`}
+                      style={{ left: `${conn.snapTime * pixelsPerSecond}px` }}
+                      className="absolute top-0 bottom-0 flex items-center z-20 pointer-events-none -translate-x-1/2"
+                    >
+                      <span className="bg-amber-500 text-slate-950 text-[9px] leading-none font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
+                        {conn.snapTime.toFixed(1)}s
+                      </span>
+                    </div>
+                  ))}
+
+                  {/* Playhead Indicator in 経過時間 Row (▼ Marker at top, time badge side-by-side) */}
+                  <div
+                    style={{ left: `${activeTime * pixelsPerSecond}px` }}
+                    className="absolute top-0 bottom-0 flex items-center pointer-events-none z-40"
+                  >
+                    <div className="relative flex items-center">
+                      {/* ▼ Marker at top */}
+                      <div className="-translate-x-1/2 flex items-center relative">
+                        <svg 
+                          className={`w-2.5 h-2.5 shrink-0 drop-shadow relative z-10 ${
+                            isPlayheadLoop ? 'text-purple-400 fill-purple-400' : 'text-amber-400 fill-amber-400'
+                          }`} 
+                          viewBox="0 0 10 10"
+                        >
+                          <polygon points="1,2 9,2 5,8" />
+                        </svg>
+                      </div>
+                      <span className={`ml-0.5 text-[9px] font-mono font-black leading-none px-1.5 py-0.5 rounded shadow-md whitespace-nowrap border ${
+                        isPlayheadLoop
+                          ? 'bg-purple-600 text-white border-purple-400/80 shadow-purple-900/50'
+                          : 'bg-amber-500 text-slate-950 border-amber-300 shadow-amber-900/50'
+                      }`}>
+                        {fmtTime(activeTime, 1)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* 2. Unified Master On-Field Ribbon */}
-              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group">
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group relative z-10">
                 <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-amber-400" />
@@ -1283,7 +1443,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               </div>
 
               {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
-              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group">
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative z-10">
                 <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -1329,7 +1489,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         </div>
 
         {/* =========================================================================
-            MAIN CHARACTER SWIMLANES CANVAS
+            MAIN CHARACTER SWIMLANES CANVAS (ガントチャート部分)
+            Rendered behind sticky header (z-10 vs sticky header z-30) so when scrolling down,
+            the Gantt chart long bar goes behind the header instead of piercing through.
         ========================================================================= */}
         <div 
           ref={containerRef}
@@ -1338,7 +1500,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           onMouseDown={handlePanMouseDown}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setHoveredTime(null)}
-          className="relative overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"
+          className="relative z-10 overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"
         >
           <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none pt-3 pb-4">
 
@@ -1381,12 +1543,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
-                    <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative group/stint transition-colors ${
+                    <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative z-10 group/stint transition-colors ${
                       isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
                     }`}>
                       <div className="flex">
                         {/* Stint Row Header (Left Column: Sticky Left) */}
-                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                           isStintSelected
                             ? 'bg-amber-950/80 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
                             : isStintCurrentlyOnField 
@@ -1873,7 +2035,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
 
                     return (
-                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
+                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative z-10 group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
                         <div className="flex">
                           {/* Left Column (Sticky Left) */}
                           <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-45 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
@@ -2233,16 +2395,12 @@ CT状態: ✅ 解消済み`
               <div
                 key={`handoff_${idx}`}
                 style={{ left: `${conn.xPos + 180}px` }}
-                className="absolute top-9 bottom-0 w-0 border-l border-amber-400/70 border-dashed pointer-events-none z-10"
-              >
-                <span className="absolute -top-3 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-bold px-1 rounded shadow">
-                  {conn.snapTime.toFixed(1)}s
-                </span>
-              </div>
+                className="absolute top-0 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
+              />
             ))}
 
             {/* =========================================================================
-                5.5 Vertical Loop Boundary Guide Line (2周目以降ループ開始垂直線)
+                5.5 Vertical Loop Boundary Guide Line (1周目ループ区切 & 2周目開始地点)
             ========================================================================= */}
             {loopStartTime > 0 && (
               <div
@@ -2250,7 +2408,18 @@ CT状態: ✅ 解消済み`
                 className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-25 shadow-lg"
               >
                 <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
-                  🔁 2周目ループ対象区切 (0.00s基準 / {loopStartTime.toFixed(2)}s)
+                  🔁 1周目ループ区切 (0.00s基準 / {loopStartTime.toFixed(2)}s)
+                </div>
+              </div>
+            )}
+
+            {cycle2Data.enabled && (
+              <div
+                style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond + 180}px` }}
+                className="absolute top-0 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-25 shadow-lg"
+              >
+                <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
+                  🔁 2周目開始地点 ({cycle2Data.cycle2StartTime.toFixed(2)}s)
                 </div>
               </div>
             )}
@@ -2258,23 +2427,22 @@ CT状態: ✅ 解消済み`
 
 
             {/* =========================================================================
-                6. Playhead Scrubber Laser (再生カーソル)
+                6. Playhead Scrubber Laser (再生カーソル縦棒)
             ========================================================================= */}
             <div
               style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
-              className="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 pointer-events-none z-40 shadow-lg shadow-amber-400/50"
-            >
-              <div className="absolute -top-1 -translate-x-1/2 w-3.5 h-3.5 bg-amber-400 rotate-45 border-2 border-slate-950 shadow" />
-              <div className="absolute top-3 left-1 bg-amber-500 text-slate-950 text-[10px] font-black px-1.5 py-0.5 rounded shadow whitespace-nowrap">
-                {fmtTime(activeTime, 1)}
-              </div>
-            </div>
+              className={`absolute top-0 bottom-0 w-0.5 pointer-events-none z-40 shadow-lg ${
+                isPlayheadLoop
+                  ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
+                  : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
+              }`}
+            />
 
             {/* Hover Indicator */}
             {hoveredTime !== null && (
               <div
                 style={{ left: `${hoveredTime * pixelsPerSecond + 180}px` }}
-                className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-39"
+                className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-25"
               >
                 <div className="absolute top-4 left-1 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded">
                   {fmtTime(hoveredTime, 1)}

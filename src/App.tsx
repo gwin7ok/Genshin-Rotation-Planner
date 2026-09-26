@@ -122,7 +122,30 @@ export default function App() {
     if (normalized !== loopStartIndex) setLoopStartIndex(normalized);
   }, [loopStartIndex, stints.length]);
 
+  // 2周目ループ期間 & 終了時刻の計算
+  const cycle2Info = useMemo(() => {
+    const loopHeadStint = stints[loopStartIndex];
+    const needsHeadSwap = switchDelay > 0 && !!loopHeadStint &&
+      !loopHeadStint.actions.some(a => a.type === 'swap' || a.actionTypeId === 'action_switch_char');
+    const headSwapShift = needsHeadSwap
+      ? switchDelay + (loopHeadStint.actions.length > 0 ? actionDelay : 0)
+      : 0;
+    const baseLoopPeriod = Math.max(0, totalDuration - loopStartTime);
+    const loopPeriod = baseLoopPeriod + headSwapShift;
+    const cycle2StartTime = totalDuration;
+    const cycle2EndTime = totalDuration > 0 && loopPeriod > 0.05
+      ? totalDuration + loopPeriod
+      : totalDuration;
+    return {
+      enabled: totalDuration > 0 && loopPeriod > 0.05,
+      cycle2StartTime,
+      cycle2EndTime,
+      loopPeriod,
+    };
+  }, [stints, loopStartIndex, switchDelay, actionDelay, totalDuration, loopStartTime]);
+
   // 6. Playback Animation Loop
+  // 再生順: 一周目先頭(0s) → 二周目終わり(cycle2EndTime) → [二周目先頭(cycle2StartTime) → 二周目終わり(cycle2EndTime)]
   const lastFrameTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -138,8 +161,19 @@ export default function App() {
         const deltaSec = (timestamp - lastFrameTimeRef.current) / 1000;
         setCurrentTime(prevTime => {
           const next = prevTime + deltaSec * playbackSpeed;
+          const { enabled, cycle2StartTime, cycle2EndTime } = cycle2Info;
+
+          if (enabled && cycle2EndTime > cycle2StartTime) {
+            // 一周目先頭(0s) → 二周目終わり(cycle2EndTime) → [二周目先頭(cycle2StartTime) → 二周目終わり(cycle2EndTime)]
+            if (next >= cycle2EndTime) {
+              const loopDuration = cycle2EndTime - cycle2StartTime;
+              const overshoot = (next - cycle2EndTime) % loopDuration;
+              return cycle2StartTime + overshoot;
+            }
+            return next;
+          }
+
           if (next >= totalDuration) {
-            // Loop back to loop boundary point (loopStartTime) rather than the 0.0s setup start
             const targetLoopStart = (typeof loopStartTime === 'number' && loopStartTime >= 0 && loopStartTime < totalDuration)
               ? loopStartTime
               : 0;
@@ -158,7 +192,7 @@ export default function App() {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isPlaying, playbackSpeed, totalDuration, loopStartTime]);
+  }, [isPlaying, playbackSpeed, totalDuration, loopStartTime, cycle2Info]);
 
   // 7. Handle Preset Selection
   const handleSelectPreset = (preset: PartyPreset) => {
@@ -366,6 +400,7 @@ export default function App() {
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
         totalCTCollisions={totalCTCollisions}
+        cycle2Info={cycle2Info}
       />
 
       {/* Main Content Area */}

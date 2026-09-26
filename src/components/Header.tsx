@@ -28,6 +28,12 @@ interface HeaderProps {
   loopStartTime?: number;
   rotationNotation?: string;
   totalCTCollisions?: number;
+  cycle2Info?: {
+    enabled: boolean;
+    cycle2StartTime: number;
+    cycle2EndTime: number;
+    loopPeriod: number;
+  };
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -56,6 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
   loopStartTime = 0,
   rotationNotation = '',
   totalCTCollisions = 0,
+  cycle2Info,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -182,32 +189,46 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Time indicator */}
-            <div className="flex items-center gap-1 font-mono text-xs text-right min-w-[65px]">
-              {loopStartTime > 0 ? (
-                <div>
-                  {(() => {
-                    const rel = currentTime - loopStartTime;
-                    const relStr = Math.abs(rel) < 0.05 ? '0.0s' : rel < 0 ? `-${Math.abs(rel).toFixed(1)}s` : `+${rel.toFixed(1)}s`;
-                    // ループ1周の長さ（2周目開始地点 = ループ基準点 から最後まで）
-                    const loopPeriod = Math.max(0, totalDuration - loopStartTime);
-                    return (
-                      <>
-                        <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
-                          {relStr}
-                        </span>
-                        <span className="text-sky-300 font-semibold" title="ループ1周の秒数（2周目開始地点から最後まで）">
-                          /{loopPeriod.toFixed(1)}s
-                        </span>
-                      </>
-                    );
-                  })()}
-                </div>
-              ) : (
-                <div>
-                  <span className="text-amber-400 font-bold">{currentTime.toFixed(1)}s</span>
-                  <span className="text-sky-300 font-semibold" title="総時間">/{totalDuration.toFixed(1)}s</span>
-                </div>
-              )}
+            <div className="flex items-center gap-1 font-mono text-xs text-right min-w-[70px]">
+              {(() => {
+                if (cycle2Info?.enabled && currentTime >= totalDuration - 0.02) {
+                  const c2Rel = Math.max(0, currentTime - totalDuration);
+                  return (
+                    <div title={`再生位置: ${currentTime.toFixed(2)}s（2周目）`}>
+                      <span className="text-[10px] text-purple-400 font-bold mr-0.5">2周目</span>
+                      <span className="text-purple-300 font-bold">
+                        +{c2Rel.toFixed(1)}s
+                      </span>
+                      <span className="text-sky-300 font-semibold" title="2周目ループ1周の秒数">
+                        /{cycle2Info.loopPeriod.toFixed(1)}s
+                      </span>
+                    </div>
+                  );
+                }
+
+                if (loopStartTime > 0) {
+                  const rel = currentTime - loopStartTime;
+                  const relStr = Math.abs(rel) < 0.05 ? '0.0s' : rel < 0 ? `-${Math.abs(rel).toFixed(1)}s` : `+${rel.toFixed(1)}s`;
+                  const loopPeriod = Math.max(0, totalDuration - loopStartTime);
+                  return (
+                    <div title={`再生位置: ${currentTime.toFixed(2)}s（1周目）`}>
+                      <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
+                        {relStr}
+                      </span>
+                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数（2周目開始地点から最後まで）">
+                        /{loopPeriod.toFixed(1)}s
+                      </span>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div>
+                    <span className="text-amber-400 font-bold">{currentTime.toFixed(1)}s</span>
+                    <span className="text-sky-300 font-semibold" title="総時間">/{totalDuration.toFixed(1)}s</span>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Speed Selector */}

@@ -99,6 +99,18 @@ export default function App() {
   // Keep playback currentTime bounded within totalDuration
   const totalDuration = calculatedResult.totalDuration;
 
+  // 全体のCT違反件数計算（アクションCT違反 + バフCT違反）
+  const totalCTCollisions = useMemo(() => {
+    let count = 0;
+    calculatedResult.calculatedStints.forEach(s => {
+      count += s.actions.filter(a => a.hasCTCollision).length;
+    });
+    calculatedResult.passiveSpans.forEach(p => {
+      if (p.hasCTViolation) count++;
+    });
+    return count;
+  }, [calculatedResult]);
+
   // ループ基準の秒数は、基準番号の出場キャラの開始時刻から毎回求める（秒数は保存しない）
   const loopStartTime = loopStartIndex > 0
     ? (calculatedResult.calculatedStints[loopStartIndex]?.startTime ?? 0)
@@ -353,6 +365,7 @@ export default function App() {
         copiedNotation={copiedNotation}
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
+        totalCTCollisions={totalCTCollisions}
       />
 
       {/* Main Content Area */}

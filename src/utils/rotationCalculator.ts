@@ -223,7 +223,7 @@ export function calculateRotation(
       }
     }
 
-    // 連動・発動バフ（固有天賦・武器・聖遺物）: 発動位置は出場の先頭からの秒数（出場時間の範囲内に収める）
+    // 連動・発動バフ（固有天賦・武器・聖遺物）: 発動位置は出場の先頭からの秒数（退場後も自由移動可能）
     const availableBuffs = getAvailableBuffsForCharacter(char, options?.database);
 
     for (const trigger of rawStint.passiveTriggers ?? []) {
@@ -231,7 +231,7 @@ export function calculateRotation(
       const category: BuffCategory = def?.category || (trigger.passiveEffectId.startsWith('wbuff_') ? 'weapon' : trigger.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
       const duration = trigger.duration ?? def?.duration ?? 0;
       const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
-      const startTime = Number((stintStartTime + Math.min(Math.max(0, trigger.offset), stintDuration)).toFixed(3));
+      const startTime = Number((stintStartTime + Math.max(0, trigger.offset)).toFixed(3));
       const ctKey = `${char.id}:${trigger.passiveEffectId}`;
       const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
       const collisionRemainingCT = hasCTViolation

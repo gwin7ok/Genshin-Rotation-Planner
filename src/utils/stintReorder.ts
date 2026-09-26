@@ -40,7 +40,7 @@ export function migrateStintsToNewCharacter(
     return {
       ...stint,
       characterId: newChar.id,
-      note: `${newChar.name}の出場`,
+      note: stint.note ?? '',
       passiveTriggers: [], // 固有天賦はキャラ固有なので入れ替え時は外す
       actions: migratedActions.length > 0 ? migratedActions : [
         {

@@ -177,9 +177,14 @@ export interface ArtifactSetDatabaseItem {
 3. `src/data/weapons_master_data.json` および `src/data/artifacts_master_data.json` の全件再生成（公式ID化）
 
 ### ✅ Phase 2: DB管理モーダル（UI）の更新（完了）
-1. `DatabaseManagerModal.tsx` の「最新データ同期」タブに武器・聖遺物の動的生成ボタン & 進捗プログレスバーを実装
-2. 武器・聖遺物カード一覧に「連動バフ（持続時間 / CT）」のバッジ表示を追加
-3. `EditWeaponSubModal` および `EditArtifactSubModal` に「**CT / クールタイム (秒)**」入力欄を追加し、保存時の同期ロジックを実装
+1. `DatabaseManagerModal.tsx` の「最新データ同期」タブに武器・聖遺物の動的生成ボタン & 進捗プログレスバー、抽出レポート表示を実装
+2. 武器・聖遺物カード一覧に「連動バフ（持続時間 / CT）」のバッジ表示を追加（1/10秒精度フォーマット `XX.Xs` 表示）
+3. `EditWeaponSubModal` および `EditArtifactSubModal` の定義編集フォームを刷新
+   - 不要な「サブステータス（`subStat`）」項目を削除し、データ構造およびUIをクリーン化
+   - HTML5ステップ検証制約を `step="any"` で解消し、任意の数値を保存可能に改善
+   - 持続時間・CTともに1/10の桁（小数第1位）の精度で四捨五入・正規化して保存
+   - CTなしの扱いを固有天賦バフの仕様と完全統一（`cooldown: undefined`、UIプレースホルダー「なし」）
+4. 同梱マスターデータ（`weapons_master_data.json` / `artifacts_master_data.json`）の全件同期と最新化完了
 
 ### 🔄 Phase 3: アクション構築 & ガントチャートへの統合（次期実装）
 1. キャラクターの装備（`weapon` / `artifactSet`）に紐づく `buffEffects` を `StintSequenceEditor` に「+登録: 発動バフ」ボタンとして表示

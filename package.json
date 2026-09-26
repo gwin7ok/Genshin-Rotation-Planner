@@ -10,7 +10,8 @@
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "build:master": "node scripts/build-character-master.ts"
+    "build:master": "node scripts/build-character-master.ts",
+    "build:equipment": "node scripts/build-equipment-master.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

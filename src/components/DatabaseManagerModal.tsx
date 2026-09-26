@@ -10,8 +10,15 @@ import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/
 import { formatCharacterCooldowns } from '../utils/characterActions';
 import { CharacterFilterBar, matchesCharacterFilter, ElementChip, WeaponChip } from './CharacterFilterBar';
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
+import type { 
+  EquipmentGenerationProgress, 
+  WeaponGenerationReport, 
+  ArtifactGenerationReport 
+} from '../masterdata/equipmentMasterGenerator';
 import { 
   syncCharactersMasterOnline,
+  syncWeaponsMasterOnline,
+  syncArtifactsMasterOnline,
   setCharacterLockInDb,
   syncWeaponsMaster,
   syncArtifactsMaster,
@@ -48,9 +55,21 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const [weaponTypeFilter, setWeaponTypeFilter] = useState<WeaponType | 'all'>('all');
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
+
+  // Character Sync State
   const [charSyncProgress, setCharSyncProgress] = useState<GenerationProgress | null>(null);
   const [charSyncReport, setCharSyncReport] = useState<CharacterGenerationReport | null>(null);
   const [charSyncError, setCharSyncError] = useState<string | null>(null);
+
+  // Weapon Sync State
+  const [weaponSyncProgress, setWeaponSyncProgress] = useState<EquipmentGenerationProgress | null>(null);
+  const [weaponSyncReport, setWeaponSyncReport] = useState<WeaponGenerationReport | null>(null);
+  const [weaponSyncError, setWeaponSyncError] = useState<string | null>(null);
+
+  // Artifact Sync State
+  const [artifactSyncProgress, setArtifactSyncProgress] = useState<EquipmentGenerationProgress | null>(null);
+  const [artifactSyncReport, setArtifactSyncReport] = useState<ArtifactGenerationReport | null>(null);
+  const [artifactSyncError, setArtifactSyncError] = useState<string | null>(null);
 
   // Edit sub-modals state
   const [editingCharacter, setEditingCharacter] = useState<CharacterConfig | null>(null);
@@ -89,30 +108,44 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     }
   };
 
-  // Dynamic Generation & Sync: Weapons
-  const handleSyncWeapons = () => {
+  // Dynamic Generation & Sync: Weapons (genshin-db API からオンライン取得・解析して生成)
+  const handleSyncWeapons = async () => {
     setIsSyncing(true);
     setSyncSuccessMsg(null);
-    setTimeout(() => {
-      const synced = syncWeaponsMaster(database);
-      onUpdateDatabase(synced);
-      setIsSyncing(false);
-      setSyncSuccessMsg(`⚔️ 同梱の武器マスターデータ (${synced.weapons.length} 種類) を反映しました`);
+    setWeaponSyncError(null);
+    setWeaponSyncReport(null);
+    try {
+      const { db, report } = await syncWeaponsMasterOnline(database, setWeaponSyncProgress);
+      onUpdateDatabase(db);
+      setWeaponSyncReport(report);
+      setSyncSuccessMsg(`⚔️ genshin-db から最新の武器 ${report.totalWeapons} 種類をオンライン生成しました (発動バフ解析: ${report.weaponsWithBuffs} 件)`);
       setTimeout(() => setSyncSuccessMsg(null), 5000);
-    }, 400);
+    } catch (e) {
+      setWeaponSyncError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setIsSyncing(false);
+      setWeaponSyncProgress(null);
+    }
   };
 
-  // Dynamic Generation & Sync: Artifacts
-  const handleSyncArtifacts = () => {
+  // Dynamic Generation & Sync: Artifacts (genshin-db API からオンライン取得・解析して生成)
+  const handleSyncArtifacts = async () => {
     setIsSyncing(true);
     setSyncSuccessMsg(null);
-    setTimeout(() => {
-      const synced = syncArtifactsMaster(database);
-      onUpdateDatabase(synced);
-      setIsSyncing(false);
-      setSyncSuccessMsg(`🏺 同梱の聖遺物マスターデータ (${synced.artifacts.length} セット) を反映しました`);
+    setArtifactSyncError(null);
+    setArtifactSyncReport(null);
+    try {
+      const { db, report } = await syncArtifactsMasterOnline(database, setArtifactSyncProgress);
+      onUpdateDatabase(db);
+      setArtifactSyncReport(report);
+      setSyncSuccessMsg(`🏺 genshin-db から最新の聖遺物 ${report.totalArtifacts} セットをオンライン生成しました (発動バフ解析: ${report.artifactsWithBuffs} 件)`);
       setTimeout(() => setSyncSuccessMsg(null), 5000);
-    }, 400);
+    } catch (e) {
+      setArtifactSyncError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setIsSyncing(false);
+      setArtifactSyncProgress(null);
+    }
   };
 
   // Full reset
@@ -600,32 +633,44 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   ))}
                 </div>
 
-                <button
-                  onClick={() => {
-                    setEditingWeapon({
-                      id: `weapon_custom_${Date.now()}`,
-                      name: 'カスタム新規武器',
-                      weaponType: 'sword',
-                      rarity: 5,
-                      baseAttack: 608,
-                      subStat: '会心率 33.1%',
-                      passiveName: '独自パッシブスキル',
-                      description: '元素スキル発動後、12秒間攻撃力+20%',
-                      buffEffect: {
-                        id: `buff_w_${Date.now()}`,
-                        name: 'カスタム武器バフ (攻撃力+20%)',
-                        duration: 12.0,
-                        statEffect: '攻撃力 +20%',
-                        description: '12秒間攻撃力+20%',
-                        color: '#f59e0b'
-                      }
-                    });
-                  }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>カスタム武器追加</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={handleSyncWeapons}
+                    disabled={isSyncing}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-700/90 hover:bg-sky-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
+                    title="genshin-db API から最新の全武器データをオンライン取得して生成"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <span>最新武器をオンライン生成</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingWeapon({
+                        id: `weapon_custom_${Date.now()}`,
+                        name: 'カスタム新規武器',
+                        weaponType: 'sword',
+                        rarity: 5,
+                        baseAttack: 608,
+                        subStat: '会心率 33.1%',
+                        passiveName: '独自パッシブスキル',
+                        description: '元素スキル発動後、12秒間攻撃力+20%',
+                        buffEffect: {
+                          id: `buff_w_${Date.now()}`,
+                          name: 'カスタム武器バフ (攻撃力+20%)',
+                          duration: 12.0,
+                          statEffect: '攻撃力 +20%',
+                          description: '12秒間攻撃力+20%',
+                          color: '#f59e0b'
+                        }
+                      });
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>カスタム武器追加</span>
+                  </button>
+                </div>
               </div>
 
               {/* Weapon List */}
@@ -704,29 +749,41 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   />
                 </div>
 
-                <button
-                  onClick={() => {
-                    setEditingArtifact({
-                      id: `art_custom_${Date.now()}`,
-                      name: 'カスタム聖遺物 4セット',
-                      rarity: 5,
-                      effect2p: '攻撃力 +18%',
-                      effect4p: '元素爆発命中後、10秒間全ダメバフ+24%',
-                      buffEffect: {
-                        id: `buff_art_${Date.now()}`,
-                        name: 'カスタム聖遺物: 全ダメバフ+24%',
-                        duration: 10.0,
-                        statEffect: '全ダメージ +24%',
-                        description: '元素爆発命中後10秒間、全ダメバフ+24%',
-                        color: '#c084fc'
-                      }
-                    });
-                  }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>カスタム聖遺物追加</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={handleSyncArtifacts}
+                    disabled={isSyncing}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-700/90 hover:bg-purple-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
+                    title="genshin-db API から最新の全聖遺物データをオンライン取得して生成"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <span>最新聖遺物をオンライン生成</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingArtifact({
+                        id: `art_custom_${Date.now()}`,
+                        name: 'カスタム聖遺物 4セット',
+                        rarity: 5,
+                        effect2p: '攻撃力 +18%',
+                        effect4p: '元素爆発命中後、10秒間全ダメバフ+24%',
+                        buffEffect: {
+                          id: `buff_art_${Date.now()}`,
+                          name: 'カスタム聖遺物: 全ダメバフ+24%',
+                          duration: 10.0,
+                          statEffect: '全ダメージ +24%',
+                          description: '元素爆発命中後10秒間、全ダメバフ+24%',
+                          color: '#c084fc'
+                        }
+                      });
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>カスタム聖遺物追加</span>
+                  </button>
+                </div>
               </div>
 
               {/* Artifact List */}
@@ -877,10 +934,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
                         <span>⚔️ 最新マスターデータの動的生成 (武器)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">245種類以上対応</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">オンライン取得</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db より全武器の基礎攻撃力 (Lv.90)、サブステータス、パッシブ効果テキストおよびバフ継続時間 (`buffEffect`) を自動解析・抽出して最新化します。
+                        genshin-db API から毎回ネット経由で全武器データをオンライン取得し、基礎攻撃力 (Lv.90)、サブステータス、パッシブ効果および発動バフ（継続時間・CT・ステータス要約）を自動解析・構造化してアプリ内DBを最新化します。
                       </p>
                     </div>
                   </div>
@@ -898,6 +955,39 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       <span>最新マスターデータの動的生成 (武器)</span>
                     </button>
                   </div>
+
+                  {weaponSyncProgress && (
+                    <div className="text-xs text-sky-200 font-mono animate-pulse">
+                      {weaponSyncProgress.phase} {weaponSyncProgress.total > 1 ? `(${weaponSyncProgress.done}/${weaponSyncProgress.total})` : ''}
+                    </div>
+                  )}
+
+                  {weaponSyncError && (
+                    <div className="p-2.5 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
+                      生成に失敗しました: {weaponSyncError}
+                      <div className="text-red-300/70 mt-0.5">ネットワーク環境または API サーバーの状態を確認してください。DBは変更されていません。</div>
+                    </div>
+                  )}
+
+                  {weaponSyncReport && (
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
+                      <div className="font-bold text-sky-200 flex items-center justify-between">
+                        <span>武器マスター生成レポート: 全 {weaponSyncReport.totalWeapons} 件 / 発動バフ抽出 {weaponSyncReport.weaponsWithBuffs} 件</span>
+                        <span className="text-[10px] text-slate-500 font-mono">常時効果 {weaponSyncReport.constantPassiveItems.length} 件</span>
+                      </div>
+                      <div className="text-slate-400">発動バフ抽出サンプル (全 {weaponSyncReport.extractedBuffsList.length} 件中):</div>
+                      <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
+                        {weaponSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-sky-950/80 border border-sky-800/50 text-[10px] text-sky-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
+                            <strong className="text-amber-300">{b.sourceName}</strong>: {b.buffName} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
+                          </span>
+                        ))}
+                        {weaponSyncReport.extractedBuffsList.length > 30 && (
+                          <span className="text-[10px] text-slate-500 self-center">...他 {weaponSyncReport.extractedBuffsList.length - 30} 件</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* 3. Artifacts Generator */}
@@ -909,10 +999,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
                         <span>🏺 最新マスターデータの動的生成 (聖遺物)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono">59セット以上対応</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono">オンライン取得</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db より全聖遺物の 2セット・4セット効果テキストおよび4セット効果バフ継続時間 (`buffEffect`) を自動解析・抽出して最新化します。
+                        genshin-db API から毎回ネット経由で全聖遺物セットをオンライン取得し、2セット・4セット効果および4セット効果発動バフ（継続時間・CT・ステータス要約）を自動解析・構造化してアプリ内DBを最新化します。
                       </p>
                     </div>
                   </div>
@@ -930,6 +1020,39 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       <span>最新マスターデータの動的生成 (聖遺物)</span>
                     </button>
                   </div>
+
+                  {artifactSyncProgress && (
+                    <div className="text-xs text-pink-200 font-mono animate-pulse">
+                      {artifactSyncProgress.phase} {artifactSyncProgress.total > 1 ? `(${artifactSyncProgress.done}/${artifactSyncProgress.total})` : ''}
+                    </div>
+                  )}
+
+                  {artifactSyncError && (
+                    <div className="p-2.5 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
+                      生成に失敗しました: {artifactSyncError}
+                      <div className="text-red-300/70 mt-0.5">ネットワーク環境または API サーバーの状態を確認してください。DBは変更されていません。</div>
+                    </div>
+                  )}
+
+                  {artifactSyncReport && (
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
+                      <div className="font-bold text-pink-200 flex items-center justify-between">
+                        <span>聖遺物マスター生成レポート: 全 {artifactSyncReport.totalArtifacts} セット / 発動バフ抽出 {artifactSyncReport.artifactsWithBuffs} 件</span>
+                        <span className="text-[10px] text-slate-500 font-mono">常時効果 {artifactSyncReport.constantPassiveItems.length} 件</span>
+                      </div>
+                      <div className="text-slate-400">発動バフ抽出サンプル (全 {artifactSyncReport.extractedBuffsList.length} 件中):</div>
+                      <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
+                        {artifactSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-pink-950/80 border border-pink-800/50 text-[10px] text-pink-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
+                            <strong className="text-amber-300">{b.sourceName}</strong>: {b.buffName} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
+                          </span>
+                        ))}
+                        {artifactSyncReport.extractedBuffsList.length > 30 && (
+                          <span className="text-[10px] text-slate-500 self-center">...他 {artifactSyncReport.extractedBuffsList.length - 30} 件</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
               </div>

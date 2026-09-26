@@ -1458,9 +1458,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   const badgeCfg = getBuffBadgeConfig(category);
                                   return (
                                     <div key={`passive_lbl_${p.id}`} className="text-[9px] font-mono" title={`【発動バフ（${badgeCfg.label}）】\n${p.name}\n効果 ${p.duration}s / CT ${p.cooldown > 0 ? `${p.cooldown}s` : 'なし'}`}>
-                                      <div className={`flex items-center justify-between truncate ${category === 'weapon' ? 'text-sky-300' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'}`}>
+                                      <div className={`flex items-center justify-between truncate ${category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'}`}>
                                         <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {p.name}</span>
-                                        <span className="shrink-0 ml-1">{p.duration.toFixed(1)}s</span>
+                                        <span className={`shrink-0 ml-1 ${category === 'weapon' ? 'text-blue-400' : ''}`}>{p.duration.toFixed(1)}s</span>
                                       </div>
                                       {p.cooldown > 0 && (
                                         <div className={`flex items-center justify-between ${badgeCfg.timingValueClass}`}>
@@ -1604,13 +1604,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             })()}
                           </div>
 
-                          {/* --- Sublane 2: Skill (E) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          {/* --- Sublane 2: Skill (E) Cooldown Bar (Unified CT Color: Sky Blue, No Active Highlight) --- */}
                           <div className="relative h-4 my-0.5">
                             {stintSkillCDs.map(cd => {
                               const startX = cd.startTime * pixelsPerSecond;
                               const width = cd.duration * pixelsPerSecond;
-                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
-                              const remaining = Math.max(0, cd.endTime - activeTime);
 
                               return (
                                 <div
@@ -1620,26 +1618,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     onSeek(cd.startTime);
                                   }}
                                   style={{ left: `${startX}px`, width: `${width}px` }}
-                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
-                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
-                                  }`}
+                                  className="absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300"
                                   title={`【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
                                 >
                                   <span className="truncate">
-                                    ⏱️ E-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                    ⏱️ E-CT {cd.duration.toFixed(1)}s
                                   </span>
                                 </div>
                               );
                             })}
                           </div>
 
-                          {/* --- Sublane 3: Burst (Q) Cooldown Bar (Unified CT Color: Sky Blue) --- */}
+                          {/* --- Sublane 3: Burst (Q) Cooldown Bar (Unified CT Color: Sky Blue, No Active Highlight) --- */}
                           <div className="relative h-4 my-0.5">
                             {stintBurstCDs.map(cd => {
                               const startX = cd.startTime * pixelsPerSecond;
                               const width = cd.duration * pixelsPerSecond;
-                              const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
-                              const remaining = Math.max(0, cd.endTime - activeTime);
 
                               return (
                                 <div
@@ -1649,13 +1643,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     onSeek(cd.startTime);
                                   }}
                                   style={{ left: `${startX}px`, width: `${width}px` }}
-                                  className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300 ${
-                                    isCoolingDown ? 'ring-1 ring-sky-400 font-bold brightness-125' : ''
-                                  }`}
+                                  className="absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300"
                                   title={`【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
                                 >
                                   <span className="truncate">
-                                    ⏱️ Q-CT {cd.duration.toFixed(1)}s {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                    ⏱️ Q-CT {cd.duration.toFixed(1)}s
                                   </span>
                                 </div>
                               );
@@ -1684,7 +1676,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }}
                                     className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
                                       isBuffActive 
-                                        ? 'ring-1 ring-emerald-400 font-bold brightness-125' 
+                                        ? 'ring-2 ring-emerald-400 font-bold brightness-125 shadow-emerald-500/30' 
                                         : 'opacity-90'
                                     }`}
                                     title={`【${bRow.tag} 効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
@@ -1698,11 +1690,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             </div>
                           ))}
 
-                          {/* --- 発動バフ（固有天賦）: 登録1つにつき「効果」の行と「CT」の行。ドラッグで効果と CT を一緒に左右へ動かす --- */}
+                          {/* --- 発動バフ（固有天賦・武器・聖遺物）: 登録1つにつき「効果」の行（点線・ドラッグ可能・再生中強調）と「CT」の行 --- */}
                           {stintPassives.map(p => {
                             const isDragging = draggingPassive?.triggerId === p.triggerId;
                             const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
                             const start = (stint.startTime ?? 0) + offset;
+                            const end = start + p.duration;
+                            const isBuffActive = start <= activeTime && activeTime < end;
+                            const remaining = Math.max(0, end - activeTime);
                             const startDrag = (e: React.MouseEvent) => {
                               if (e.button !== 0) return;
                               e.preventDefault();
@@ -1719,8 +1714,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             };
                             const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
                             const badgeCfg = getBuffBadgeConfig(category);
-                            const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm';
-                            const cursor = isDragging ? 'cursor-grabbing ring-1 ring-amber-300' : 'cursor-grab';
+                            const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm transition-all';
+                            const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+
+                            // カテゴリごとの再生位置強調リング
+                            const activeRingClass = isBuffActive
+                              ? category === 'weapon'
+                                ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
+                                : category === 'artifact'
+                                ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
+                                : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
+                              : 'opacity-90';
+
                             return (
                               <React.Fragment key={`passive_rows_${p.id}`}>
                                 <div className="relative h-4 my-0.5">
@@ -1733,11 +1738,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       p.hasCTViolation
                                         ? 'bg-red-950 border-red-400 text-red-100'
                                         : badgeCfg.ganttBarClass
-                                    }`}
+                                    } ${activeRingClass}`}
                                     title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? '\n⚠️ CT中の発動です' : ''}`}
                                   >
                                     <span className="truncate">
-                                      {p.hasCTViolation ? '⚠️' : badgeCfg.icon} [{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s){isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                      {p.hasCTViolation ? '⚠️' : badgeCfg.icon} [{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s){isBuffActive ? ` [残${remaining.toFixed(1)}s]` : ''}{isDragging ? ` @+${offset.toFixed(2)}s` : ''}
                                     </span>
                                   </div>
                                 </div>
@@ -2021,8 +2026,6 @@ CT状態: ✅ 解消済み`
                                 const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = cd.duration * pixelsPerSecond;
-                                const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
-                                const remaining = Math.max(0, cd.endTime - activeTime);
 
                                 return (
                                   <div
@@ -2038,7 +2041,7 @@ CT状態: ✅ 解消済み`
                                         : isCarryOver
                                         ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
                                         : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
-                                    } ${isCoolingDown ? 'brightness-125 font-bold' : ''}`}
+                                    }`}
                                     title={
                                       isFinishedInCycle1
                                         ? `【1周目スキルCT (1周目中に解消済)】\nスキルCT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
@@ -2052,7 +2055,7 @@ CT状態: ✅ 解消済み`
                                         ? `[1周目] E-CT ${cd.duration.toFixed(1)}s (解消済)`
                                         : isCarryOver
                                         ? `[1周目持越] E-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
-                                        : `E-CT ${cd.duration.toFixed(1)}s`} {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                        : `E-CT ${cd.duration.toFixed(1)}s`}
                                     </span>
                                   </div>
                                 );
@@ -2066,8 +2069,6 @@ CT状態: ✅ 解消済み`
                                 const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = cd.duration * pixelsPerSecond;
-                                const isCoolingDown = cd.startTime <= activeTime && activeTime < cd.endTime;
-                                const remaining = Math.max(0, cd.endTime - activeTime);
 
                                 return (
                                   <div
@@ -2083,7 +2084,7 @@ CT状態: ✅ 解消済み`
                                         : isCarryOver
                                         ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
                                         : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
-                                    } ${isCoolingDown ? 'brightness-125 font-bold' : ''}`}
+                                    }`}
                                     title={
                                       isFinishedInCycle1
                                         ? `【1周目元素爆発CT (1周目中に解消済)】\n爆発CT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
@@ -2097,7 +2098,7 @@ CT状態: ✅ 解消済み`
                                         ? `[1周目] Q-CT ${cd.duration.toFixed(1)}s (解消済)`
                                         : isCarryOver
                                         ? `[1周目持越] Q-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
-                                        : `Q-CT ${cd.duration.toFixed(1)}s`} {isCoolingDown ? `(残${remaining.toFixed(1)}s)` : ''}
+                                        : `Q-CT ${cd.duration.toFixed(1)}s`}
                                     </span>
                                   </div>
                                 );

@@ -137,9 +137,9 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
       return {
         label: '武器',
         icon: '⚔️',
-        badgeClass: 'bg-sky-950/60 border-sky-700/70 text-sky-200',
-        hoverButtonClass: 'bg-sky-950/50 hover:bg-sky-900/60 text-sky-200 hover:text-white border-sky-800/70 hover:border-sky-500',
-        ganttBarClass: 'bg-sky-950 border-sky-400 text-sky-100 hover:border-sky-300',
+        badgeClass: 'bg-blue-950/70 border-blue-600/80 text-blue-200',
+        hoverButtonClass: 'bg-blue-950/60 hover:bg-blue-900/80 text-blue-200 hover:text-white border-blue-700/80 hover:border-blue-400',
+        ganttBarClass: 'bg-blue-700 border-blue-300 text-white shadow-sm hover:border-blue-200 hover:brightness-110',
         cooldownBarClass: unifiedCooldownBarClass,
         timingValueClass: unifiedTimingValueClass,
       };

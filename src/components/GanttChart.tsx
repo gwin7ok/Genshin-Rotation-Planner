@@ -750,7 +750,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         list.push({
           absTime: Math.max(0, absTime),
           relTime: r,
-          label: r === 0 ? '0s 🔁' : r < 0 ? `${r}s` : `+${r}s`,
+          label: r === 0 ? '0s' : r < 0 ? `${r}s` : `+${r}s`,
           isZero: r === 0,
           isNegative: r < 0,
         });
@@ -976,55 +976,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           >
             <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
               
-              {/* 1. Top Time Ruler（経過時間の目盛り。1行分の高さに詰める） */}
-              <div className="flex border-b border-slate-800 bg-slate-900 h-4">
-                {/* Left Column Label (Corner: Sticky Left) */}
-                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
-                  <span>経過時間</span>
-                  <Clock className="w-3 h-3 text-slate-500" />
-                </div>
-
-                {/* Time Ruler Ticks */}
-                <div 
-                  className="relative flex-1 cursor-pointer h-full bg-slate-900"
-                  onClick={handleTimelineClick}
-                >
-                  {timelineTicks.map(t => (
-                    <div
-                      key={`tick_${t.absTime}`}
-                      className={`absolute top-0 bottom-0 border-l flex items-center pl-1 ${
-                        t.isZero
-                          ? 'border-purple-400 bg-purple-950/20 z-10'
-                          : t.isNegative
-                          ? 'border-amber-500/40'
-                          : 'border-slate-800/80'
-                      }`}
-                      style={{ left: `${t.absTime * pixelsPerSecond}px` }}
-                    >
-                      <span className={`text-[10px] leading-none font-mono font-bold ${
-                        t.isZero
-                          ? 'text-purple-300 bg-purple-950 px-1 rounded-sm border border-purple-500/50'
-                          : t.isNegative 
-                          ? 'text-amber-300/90' 
-                          : 'text-slate-400'
-                      }`}>
-                        {t.label}
-                      </span>
-                    </div>
-                  ))}
-
-                  {/* Sub-second ticks (0.5s) */}
-                  {timelineTicks.map(t => (
-                    <div
-                      key={`sub_${t.absTime}`}
-                      className="absolute bottom-0 h-1 border-l border-slate-800/40"
-                      style={{ left: `${(t.absTime + 0.5) * pixelsPerSecond}px` }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* 1.5 Loop Boundary Separator Track */}
+              {/* 1. Loop Boundary Separator Track (ループ基準点) */}
               <div className="flex border-b border-purple-900/60 bg-slate-950 items-center h-7 group select-none">
                 <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
@@ -1052,7 +1004,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   {loopStartTime > 0 && (
                     <div
                       style={{ left: 0, width: `${loopStartTime * pixelsPerSecond}px` }}
-                      className="absolute inset-y-0.5 bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-purple-500/20 border-r border-dashed border-purple-400/60 flex items-center px-2 pointer-events-none"
+                      className="absolute inset-y-0.5 bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-purple-500/20 border-r border-dashed border-purple-400/60 flex items-center px-2 pr-16 pointer-events-none"
                     >
                       <span className="text-[10px] font-bold text-amber-300/90 truncate">
                         ◀ 1周目初動 (-{loopStartTime.toFixed(1)}s ~ 0.0s)
@@ -1066,7 +1018,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       left: `${loopStartTime * pixelsPerSecond}px`, 
                       width: `${Math.max(0, (totalDuration - loopStartTime) * pixelsPerSecond)}px` 
                     }}
-                    className="absolute inset-y-0.5 bg-gradient-to-r from-purple-500/15 to-indigo-500/10 flex items-center px-2 pointer-events-none"
+                    className={`absolute inset-y-0.5 bg-gradient-to-r from-purple-500/15 to-indigo-500/10 flex items-center px-2 pointer-events-none ${
+                      loopStartTime > 0 ? 'pl-20' : 'pl-2'
+                    }`}
                   >
                     <span className="text-[10px] font-bold text-purple-200 truncate">
                       🔁 定常ループ (0.0s ~ +{(totalDuration - loopStartTime).toFixed(1)}s) ▶
@@ -1117,6 +1071,54 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
                   </div>
+                </div>
+              </div>
+
+              {/* 2. Top Time Ruler（経過時間の目盛り） */}
+              <div className="flex border-b border-slate-800 bg-slate-900 h-4">
+                {/* Left Column Label (Corner: Sticky Left) */}
+                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                  <span>経過時間</span>
+                  <Clock className="w-3 h-3 text-slate-500" />
+                </div>
+
+                {/* Time Ruler Ticks */}
+                <div 
+                  className="relative flex-1 cursor-pointer h-full bg-slate-900"
+                  onClick={handleTimelineClick}
+                >
+                  {timelineTicks.map(t => (
+                    <div
+                      key={`tick_${t.absTime}`}
+                      className={`absolute top-0 bottom-0 border-l flex items-center pl-1 ${
+                        t.isZero
+                          ? 'border-purple-400 z-10'
+                          : t.isNegative
+                          ? 'border-amber-500/40'
+                          : 'border-slate-800/80'
+                      }`}
+                      style={{ left: `${t.absTime * pixelsPerSecond}px` }}
+                    >
+                      <span className={`text-[10px] leading-none font-mono font-bold ${
+                        t.isZero
+                          ? 'text-purple-300'
+                          : t.isNegative 
+                          ? 'text-amber-300/90' 
+                          : 'text-slate-400'
+                      }`}>
+                        {t.label}
+                      </span>
+                    </div>
+                  ))}
+
+                  {/* Sub-second ticks (0.5s) */}
+                  {timelineTicks.map(t => (
+                    <div
+                      key={`sub_${t.absTime}`}
+                      className="absolute bottom-0 h-1 border-l border-slate-800/40"
+                      style={{ left: `${(t.absTime + 0.5) * pixelsPerSecond}px` }}
+                    />
+                  ))}
                 </div>
               </div>
 

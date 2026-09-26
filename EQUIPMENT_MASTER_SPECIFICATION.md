@@ -78,8 +78,7 @@ export interface WeaponDatabaseItem {
   englishName: string;             // 英語名: "Elegy for the End"
   weaponType: WeaponType;          // "sword" | "claymore" | "polearm" | "bow" | "catalyst"
   rarity: number;                  // 3 〜 5
-  baseAttack: number;              // 基礎攻撃力
-  subStat?: string;                // サブステータス 例: "元素チャージ効率 12%"
+  baseAttack?: number;             // 基礎攻撃力
   avatarUrl: string;               // enka.network アイコン画像URL
   passiveName?: string;            // スキル名 例: "追憶と別れの歌"
   description?: string;            // スキル説明文

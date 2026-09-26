@@ -325,7 +325,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       })
                       .map(w => (
                         <option key={w.id} value={w.name}>
-                          {'★'.repeat(w.rarity)} {w.name} {w.subStat ? `(${w.subStat})` : ''}
+                          {'★'.repeat(w.rarity)} {w.name}
                         </option>
                       ))
                     }

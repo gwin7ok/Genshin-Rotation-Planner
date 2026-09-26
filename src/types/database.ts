@@ -26,7 +26,6 @@ export interface WeaponDatabaseItem {
   passiveName: string;
   description: string;
   baseAttack?: number;
-  subStat?: string;
   avatarUrl?: string;
   buffEffects?: EquipmentBuffDefinition[];
   // 旧形式互換用

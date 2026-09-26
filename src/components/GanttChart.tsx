@@ -1131,7 +1131,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               {/* Playhead Vertical Line in Fixed Header: begins directly from bottom tip of ▼ (top-[43px]) down through header tracks to bottom edge */}
               <div
                 style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
-                className={`absolute top-[43px] bottom-0 w-0.5 pointer-events-none z-30 shadow-md ${
+                className={`absolute top-[43px] bottom-0 w-0.5 pointer-events-none z-10 shadow-md ${
                   isPlayheadLoop
                     ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
                     : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
@@ -1140,7 +1140,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
               {/* 1. Loop Boundary Separator Track (ループ基準点) */}
               <div className="flex border-b border-purple-900/60 bg-slate-950 items-center h-7 group select-none">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Repeat className="w-3 h-3 text-purple-400 shrink-0" />
                     <span className="truncate">ループ基準点 (0s)</span>
@@ -1235,7 +1235,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       e.preventDefault();
                       setIsDraggingLoopMarker(true);
                     }}
-                    className={`absolute top-0 bottom-0 -translate-x-1/2 z-20 flex flex-col items-center cursor-ew-resize group/marker ${
+                    className={`absolute top-0 bottom-0 -translate-x-1/2 z-10 flex flex-col items-center cursor-ew-resize group/marker ${
                       isDraggingLoopMarker ? 'scale-105' : ''
                     }`}
                     title="【ドラッグで移動】1周目初動と定常ループの区切りマーク（0.0s基準点）"
@@ -1253,7 +1253,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   {cycle2Data.enabled && (
                     <div
                       style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond}px` }}
-                      className="absolute top-0 bottom-0 -translate-x-1/2 z-20 flex flex-col items-center pointer-events-none group/marker2"
+                      className="absolute top-0 bottom-0 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none group/marker2"
                       title={`【2周目開始地点】\n1周目終了＆2周目ループ開始 (${cycle2Data.cycle2StartTime.toFixed(2)}s)`}
                     >
                       {/* Pin Handle Badge */}
@@ -1271,7 +1271,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               {/* 2. Top Time Ruler（経過時間の目盛り） */}
               <div className="flex border-b border-slate-800 bg-slate-900 h-6">
                 {/* Left Column Label (Corner: Sticky Left) */}
-                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-900 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-950 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span>経過時間</span>
                   <Clock className="w-3 h-3 text-slate-500" />
                 </div>
@@ -1287,19 +1287,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       className={`absolute top-0 bottom-0 border-l flex items-center pl-1 ${
                         t.isZero
                           ? 'border-purple-400 z-10'
-                          : t.isNegative
-                          ? 'border-amber-500/40'
-                          : t.isCycle2
-                          ? 'border-purple-500/40'
-                          : 'border-slate-800/80'
+                          : 'border-slate-800/40'
                       }`}
                       style={{ left: `${t.absTime * pixelsPerSecond}px` }}
                     >
                       <span className={`text-[10px] leading-none font-mono font-bold ${
                         t.isZero
                           ? 'text-purple-300'
-                          : t.isNegative 
-                          ? 'text-amber-300/90' 
                           : t.isCycle2
                           ? 'text-purple-300/90'
                           : 'text-slate-400'
@@ -1336,10 +1330,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </div>
                   ))}
 
-                  {/* Playhead Indicator in 経過時間 Row (▼ Marker at top, time badge side-by-side) */}
+                  {/* Playhead Indicator in 経過時間 Row (▼ Marker at top, time badge side-by-side) - z-10 behind sticky left col */}
                   <div
                     style={{ left: `${activeTime * pixelsPerSecond}px` }}
-                    className="absolute top-0 bottom-0 flex items-center pointer-events-none z-40"
+                    className="absolute top-0 bottom-0 flex items-center pointer-events-none z-10"
                   >
                     <div className="relative flex items-center">
                       {/* ▼ Marker at top */}
@@ -1366,8 +1360,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               </div>
 
               {/* 2. Unified Master On-Field Ribbon */}
-              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group relative z-10">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group relative">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-amber-400" />
                     <span>統合出場トラック</span>
@@ -1483,8 +1477,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               </div>
 
               {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
-              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative z-10">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-40 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+              <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative">
+                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span className="truncate">バフ重複 (Synergy)</span>
@@ -1583,14 +1577,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
-                    <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative z-10 group/stint transition-colors ${
+                    <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative group/stint transition-colors ${
                       isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
                     }`}>
                       <div className="flex">
                         {/* Stint Row Header (Left Column: Sticky Left) */}
-                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-40 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                           isStintSelected
-                            ? 'bg-amber-950/80 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
+                            ? 'bg-amber-950 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
                             : isStintCurrentlyOnField 
                             ? 'bg-slate-900 border-l-2 border-l-amber-400' 
                             : 'bg-slate-950'
@@ -1742,7 +1736,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             <div
                               key={`grid_stint_${stint.id}_${t.absTime}`}
                               className={`absolute top-0 bottom-0 border-l pointer-events-none ${
-                                t.isZero ? 'border-purple-400/70' : t.isNegative ? 'border-amber-500/30' : 'border-slate-800/40'
+                                t.isZero ? 'border-purple-400/70' : 'border-slate-800/40'
                               }`}
                               style={{ left: `${t.absTime * pixelsPerSecond}px` }}
                             />
@@ -2049,7 +2043,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 4.5 Automatic 2nd-Cycle Loop Projection Swimlanes (2周目自動投影・読取専用)
             ========================================================================= */}
             {cycle2Data.enabled && cycle2Data.stints.length > 0 && (
-              <div className="border-t-2 border-purple-800/80 bg-slate-950/95">
+              <div className="border-t-2 border-purple-800/80 bg-slate-950">
                 {/* 2nd Cycle Swimlanes (1 Row per Stint, with separate Skill CT row, Burst CT row, and individual Buff rows) */}
                 <div className="divide-y divide-purple-900/30">
                   {cycle2Data.stints.map((stint, stintIdx) => {
@@ -2075,10 +2069,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
 
                     return (
-                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative z-10 group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
+                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
                         <div className="flex">
                           {/* Left Column (Sticky Left) */}
-                          <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-45 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                          <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                             isStintCurrentlyOnField ? 'bg-slate-900 border-l-2 border-l-purple-400' : 'bg-slate-950'
                           }`}>
                             <div>
@@ -2174,7 +2168,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               <div
                                 key={`grid_c2_${stint.id}_${t.absTime}`}
                                 className={`absolute top-0 bottom-0 border-l pointer-events-none ${
-                                  t.isZero ? 'border-purple-400/70' : t.isNegative ? 'border-amber-500/30' : 'border-slate-800/40'
+                                  t.isZero ? 'border-purple-400/70' : 'border-slate-800/40'
                                 }`}
                                 style={{ left: `${t.absTime * pixelsPerSecond}px` }}
                               />
@@ -2380,8 +2374,8 @@ CT状態: ✅ 解消済み`
 
                 {/* 2nd Cycle Party Synergy Lane */}
                 {cycle2Data.buffSynergyPoints.length > 0 && (
-                  <div className="flex border-t border-purple-900/60 bg-slate-950/90 py-2">
-                    <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex flex-col justify-center sticky left-0 z-45 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
+                  <div className="flex border-t border-purple-900/60 bg-slate-950 py-2">
+                    <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex flex-col justify-center sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
                       <span className="text-xs font-bold text-purple-300 flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5 text-purple-400" />
                         <span>2周目 バフ重複度</span>
@@ -2444,7 +2438,7 @@ CT状態: ✅ 解消済み`
             {loopStartTime > 0 && (
               <div
                 style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
-                className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-25 shadow-lg"
+                className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-10 shadow-lg"
               >
                 <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
                   🔁 1周目ループ区切 (0.00s基準 / {loopStartTime.toFixed(2)}s)
@@ -2455,7 +2449,7 @@ CT状態: ✅ 解消済み`
             {cycle2Data.enabled && (
               <div
                 style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond + 180}px` }}
-                className="absolute top-0 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-25 shadow-lg"
+                className="absolute top-0 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-10 shadow-lg"
               >
                 <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
                   🔁 2周目開始地点 ({cycle2Data.cycle2StartTime.toFixed(2)}s)
@@ -2470,7 +2464,7 @@ CT状態: ✅ 解消済み`
             ========================================================================= */}
             <div
               style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
-              className={`absolute top-0 bottom-0 w-0.5 pointer-events-none z-40 shadow-lg ${
+              className={`absolute top-0 bottom-0 w-0.5 pointer-events-none z-20 shadow-lg ${
                 isPlayheadLoop
                   ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
                   : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
@@ -2481,7 +2475,7 @@ CT状態: ✅ 解消済み`
             {hoveredTime !== null && (
               <div
                 style={{ left: `${hoveredTime * pixelsPerSecond + 180}px` }}
-                className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-25"
+                className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-10"
               >
                 <div className="absolute top-4 left-1 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded">
                   {fmtTime(hoveredTime, 1)}

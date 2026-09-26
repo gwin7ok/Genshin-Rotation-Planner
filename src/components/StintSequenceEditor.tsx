@@ -127,11 +127,16 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     return { stint, stintIndex, action, actIndex, char };
   }, [selectedAction, stints, characterMap, characters]);
 
-  // Sanitize helper to ensure raw stints stored in parent state do not hold duplicate automatic swap actions
+  // Sanitize helper to ensure raw stints stored in parent state do not hold duplicate automatic swap actions or stale runtime CT properties
   const sanitizeStintsForUpdate = (rawList: Stint[]): Stint[] => {
     return rawList.map(s => ({
       ...s,
-      actions: s.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
+      actions: s.actions
+        .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
+        .map(a => {
+          const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+          return rest;
+        })
     }));
   };
 

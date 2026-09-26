@@ -228,9 +228,8 @@ export async function generateWeaponsMasterOnline(
     const passiveName = wJa.effectName || 'パッシブ効果';
     const effectDescription = wJa.r1?.description || wJa.description || '';
 
-    // 基礎攻撃力 & サブステータス
+    // 基礎攻撃力
     let baseAttack: number | undefined;
-    let subStat: string | undefined;
 
     // Node環境等で stats(90) が利用可能な場合
     if (typeof wJa.stats === 'function') {
@@ -238,11 +237,6 @@ export async function generateWeaponsMasterOnline(
         const s90 = wJa.stats(90);
         if (s90) {
           baseAttack = Math.round(s90.attack || 0);
-          if (wJa.substat && s90.specialized) {
-            let spec = s90.specialized;
-            spec = typeof spec === 'number' ? (spec > 1 ? String(Math.round(spec)) : `${(spec * 100).toFixed(1)}%`) : String(spec);
-            subStat = `${wJa.substat} ${spec}`;
-          }
         }
       } catch {
         // ignore
@@ -253,9 +247,6 @@ export async function generateWeaponsMasterOnline(
     if (baseAttack === undefined) {
       if (wJa.baseAtkValue) {
         baseAttack = Math.round(wJa.baseAtkValue * (rarity === 5 ? 13.2 : rarity === 4 ? 11.5 : 9.5));
-      }
-      if (wJa.mainStatText && wJa.baseStatText) {
-        subStat = `${wJa.mainStatText} ${wJa.baseStatText}`;
       }
     }
 
@@ -311,7 +302,6 @@ export async function generateWeaponsMasterOnline(
       passiveName,
       description: effectDescription || '常時発動または特殊効果なし',
       baseAttack,
-      subStat,
       avatarUrl,
       buffEffects,
       buffEffect: legacyBuffEffect,

@@ -54,7 +54,7 @@ export function extractEquipmentTimings(text: string): ExtractedTimings {
     if (match && match[group]) {
       const val = parseFloat(match[group]);
       if (!isNaN(val) && val > 0) {
-        cooldown = val;
+        cooldown = Math.round(val * 10) / 10;
         cooldownMatch = match[0];
         break;
       }
@@ -81,7 +81,7 @@ export function extractEquipmentTimings(text: string): ExtractedTimings {
         if (cooldownMatch && cooldownMatch.includes(`${val}秒`) && cooldownMatch.includes('発動後')) {
           continue;
         }
-        duration = val;
+        duration = Math.round(val * 10) / 10;
         durationMatch = match[0];
         break;
       }
@@ -184,7 +184,7 @@ export function parseWeaponBuffs(weapon: {
     sourceType: 'weapon',
     sourceId: weapon.id,
     duration: effectiveDuration > 0 ? effectiveDuration : undefined,
-    cooldown: finalCooldown,
+    cooldown: finalCooldown && finalCooldown > 0 ? finalCooldown : undefined,
     description: descText,
     color,
     statEffectSummary: summary,
@@ -240,7 +240,7 @@ export function parseArtifactBuffs(artifact: {
     sourceType: 'artifact',
     sourceId: artifact.id,
     duration: effectiveDuration > 0 ? effectiveDuration : undefined,
-    cooldown: finalCooldown,
+    cooldown: finalCooldown && finalCooldown > 0 ? finalCooldown : undefined,
     description: effect4pText,
     color,
     statEffectSummary: summary,

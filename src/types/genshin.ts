@@ -146,7 +146,7 @@ export interface CharacterConfig {
   accentColor: string;
 
   // Custom user settings in party:
-  energyRecharge: number; // % e.g. 180 = 180%
+  energyRecharge?: number; // % e.g. 180 = 180%
   weaponName?: string;
   artifactSetName?: string;
   constellation?: number;

@@ -447,8 +447,12 @@ export default function App() {
         stints={stints}
         database={database}
         onUpdatePartyAndStints={(newChars, newStints) => {
-          // パーティ構成が変わったら保存スロットとのつながりを切る（「保存スロットに未保存」表示）
-          if (JSON.stringify(newChars) !== JSON.stringify(characters)) {
+          // メンバー自体（キャラIDの並び）が変わった場合のみ保存スロットとの紐付けを解除
+          // メンバーを変えずに武器・聖遺物のみ変更した場合は、編成名（アクティブな保存スロット）を維持
+          const memberIdsChanged =
+            newChars.length !== characters.length ||
+            newChars.some((c, i) => c.id !== characters[i]?.id);
+          if (memberIdsChanged) {
             setActiveSlotId(null);
           }
           setCharacters(newChars);

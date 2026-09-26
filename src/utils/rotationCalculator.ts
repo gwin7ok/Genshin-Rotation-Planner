@@ -32,8 +32,6 @@ export interface CalculatedRotation {
 export interface RotationOptions {
   switchDelay?: number;
   actionDelay?: number;
-  loopStartIndex?: number;
-  loopStartTime?: number;
   database?: GenshinDatabase;
 }
 
@@ -132,7 +130,9 @@ export function calculateRotation(
         // 祭礼リセット等はCT中でも発動可能
         const lastCT = latestSkillCTEnd[char.id];
         if (lastCT && lastCT.time > actionStartTime + 0.05 && act.type !== 'skill_reset') {
-          const remaining = (lastCT.time - actionStartTime).toFixed(1);
+          const remaining = Number((lastCT.time - actionStartTime).toFixed(1));
+          computedAction.hasCTCollision = true;
+          computedAction.collisionRemainingCT = remaining;
           validationIssues.push({
             id: `skill_ct_${act.id}_${actionStartTime}`,
             severity: 'error',
@@ -164,7 +164,9 @@ export function calculateRotation(
       if (act.type === 'burst') {
         const lastBurstCT = latestBurstCTEnd[char.id];
         if (lastBurstCT && lastBurstCT.time > actionStartTime + 0.05) {
-          const remaining = (lastBurstCT.time - actionStartTime).toFixed(1);
+          const remaining = Number((lastBurstCT.time - actionStartTime).toFixed(1));
+          computedAction.hasCTCollision = true;
+          computedAction.collisionRemainingCT = remaining;
           validationIssues.push({
             id: `burst_ct_${act.id}_${actionStartTime}`,
             severity: 'error',
@@ -230,6 +232,10 @@ export function calculateRotation(
       const startTime = Number((stintStartTime + Math.min(Math.max(0, trigger.offset), stintDuration)).toFixed(3));
       const ctKey = `${char.id}:${trigger.passiveEffectId}`;
       const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
+      const collisionRemainingCT = hasCTViolation
+        ? Number(((latestPassiveCTEnd[ctKey] ?? 0) - startTime).toFixed(1))
+        : undefined;
+
       if (hasCTViolation) {
         const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
         validationIssues.push({
@@ -239,7 +245,7 @@ export function calculateRotation(
           stintId: rawStint.id,
           time: startTime,
           title: `${char.name}: ${catLabel}CT中`,
-          message: `「${trigger.name}」の発動時点でCTがまだ ${(latestPassiveCTEnd[ctKey] - startTime).toFixed(1)} 秒残っています`,
+          message: `「${trigger.name}」の発動時点でCTがまだ ${collisionRemainingCT} 秒残っています`,
         });
       }
       if (cooldown > 0) latestPassiveCTEnd[ctKey] = startTime + cooldown;
@@ -260,6 +266,7 @@ export function calculateRotation(
         cooldown,
         cooldownEnd: startTime + cooldown,
         hasCTViolation,
+        collisionRemainingCT,
         color: buffColor,
         description: def?.description ?? trigger.name,
       });
@@ -308,60 +315,29 @@ export function calculateRotation(
     });
   }
 
-  // Loopability check: Check if 2nd cycle actions have any real CT collision with 1st cycle CDs
-  const loopStartIndex = options?.loopStartIndex ?? 0;
-  const loopStartStint = calculatedStints[loopStartIndex];
-  const loopStartTime = options?.loopStartTime ?? (loopStartStint?.startTime ?? 0);
-  const cycle2StartTime = totalDuration;
-  const cycle2Offset = cycle2StartTime - loopStartTime;
-
+  // Loopability check: Are all skill and burst cooldowns ended by totalDuration?
   let canLoopImmediately = true;
-  let longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number; actionName?: string } | null = null;
+  let longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number } | null = null;
 
-  // Track if 1st char in Cycle 2 is different from last char in Cycle 1 -> needs switch delay
-  const lastStint = calculatedStints[calculatedStints.length - 1];
-  const firstLoopStint = calculatedStints[loopStartIndex];
-  const needsHeadSwap = lastStint && firstLoopStint && lastStint.characterId !== firstLoopStint.characterId;
-  const headSwapDelay = needsHeadSwap ? switchDelay : 0;
-
-  calculatedStints.forEach((stint, sIdx) => {
-    if (sIdx < loopStartIndex) return;
-    const char = charMap.get(stint.characterId);
-    if (!char) return;
-
-    for (const act of stint.actions) {
-      const rawActStart = act.startTime ?? 0;
-      const c2ActStart = Math.max(cycle2StartTime, rawActStart + cycle2Offset + (sIdx === loopStartIndex ? headSwapDelay : 0));
-      const isSkill = act.type === 'skill' || act.type === 'skill_hold';
-      const isBurst = act.type === 'burst';
-
-      if (isSkill && act.type !== 'skill_reset') {
-        const charSkillCDs = skillCooldowns.filter(cd => cd.characterId === char.id);
-        for (const cd of charSkillCDs) {
-          if (cd.endTime > c2ActStart + 0.02) {
-            const rem = Number((cd.endTime - c2ActStart).toFixed(1));
-            canLoopImmediately = false;
-            if (!longestRemainingCT || rem > longestRemainingCT.remaining) {
-              longestRemainingCT = { characterName: char.name, type: 'skill', remaining: rem, actionName: act.name };
-            }
-          }
-        }
+  for (const c of characters) {
+    const sCT = latestSkillCTEnd[c.id];
+    if (sCT && sCT.time > totalDuration) {
+      const remaining = Number((sCT.time - totalDuration).toFixed(1));
+      if (!longestRemainingCT || remaining > longestRemainingCT.remaining) {
+        longestRemainingCT = { characterName: c.name, type: 'skill', remaining };
       }
-
-      if (isBurst) {
-        const charBurstCDs = burstCooldowns.filter(cd => cd.characterId === char.id);
-        for (const cd of charBurstCDs) {
-          if (cd.endTime > c2ActStart + 0.02) {
-            const rem = Number((cd.endTime - c2ActStart).toFixed(1));
-            canLoopImmediately = false;
-            if (!longestRemainingCT || rem > longestRemainingCT.remaining) {
-              longestRemainingCT = { characterName: char.name, type: 'burst', remaining: rem, actionName: act.name };
-            }
-          }
-        }
-      }
+      canLoopImmediately = false;
     }
-  });
+
+    const bCT = latestBurstCTEnd[c.id];
+    if (bCT && bCT.time > totalDuration) {
+      const remaining = Number((bCT.time - totalDuration).toFixed(1));
+      if (!longestRemainingCT || remaining > longestRemainingCT.remaining) {
+        longestRemainingCT = { characterName: c.name, type: 'burst', remaining };
+      }
+      canLoopImmediately = false;
+    }
+  }
 
   if (!canLoopImmediately && longestRemainingCT) {
     validationIssues.push({
@@ -369,7 +345,7 @@ export function calculateRotation(
       severity: 'info',
       time: totalDuration,
       title: 'ローテーション2周目ループCT注意',
-      message: `2周目を開始した際、${longestRemainingCT.characterName}の「${longestRemainingCT.actionName || (longestRemainingCT.type === 'burst' ? '元素爆発' : 'スキル')}」発動時点でCTが残り約 ${longestRemainingCT.remaining} 秒あります。ローテーションの延長または通常攻撃での時間調整が推奨されます。`
+      message: `2周目を直ちに開始した場合、${longestRemainingCT.characterName}の${longestRemainingCT.type === 'burst' ? '元素爆発' : 'スキル'}CTが残り約 ${longestRemainingCT.remaining} 秒あります。ローテーションの延長または通常攻撃での時間調整が推奨されます。`
     });
   }
 

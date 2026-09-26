@@ -376,7 +376,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       characterId: string;
       actionTime: number;
       remainingCT: number;
-      type: 'skill' | 'burst';
+      type: 'skill' | 'burst' | 'passive';
     }> = [];
 
     const cycle2NewCooldowns: CooldownSpan[] = [];
@@ -499,12 +499,29 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         };
       });
 
-      // 発動バフ（固有天賦・武器・聖遺物）も2周目に投影（読取専用の効果バーとして表示）
+      // 発動バフ（固有天賦・武器・聖遺物）も2周目に投影（1周目CTとの衝突検証つき）
       for (const p of passiveSpans) {
         if (p.stintId !== stint.id || p.duration <= 0) continue;
         const c2Start = p.startTime + offset;
         const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
         const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦';
+
+        // 1周目のCT終了時刻 (p.cooldownEnd) と 2周目発動時刻 (c2Start) の衝突判定
+        let hasCTCollision = false;
+        let ctRemaining = 0;
+        if (p.cooldown > 0 && p.cooldownEnd > c2Start + 0.02) {
+          hasCTCollision = true;
+          ctRemaining = Number((p.cooldownEnd - c2Start).toFixed(1));
+          cooldownCollisions.push({
+            actionName: `${p.name} (${catLabel})`,
+            characterName: char.name,
+            characterId: char.id,
+            actionTime: c2Start,
+            remainingCT: ctRemaining,
+            type: 'passive',
+          });
+        }
+
         cycle2NewBuffs.push({
           id: `c2_${p.id}`,
           buffId: `buff_${p.characterId}_${p.passiveEffectId}`,
@@ -514,8 +531,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           startTime: c2Start,
           endTime: c2Start + p.duration,
           duration: p.duration,
-          color: p.color || char.color,
-          description: `発動バフ（${catLabel}）: ${p.name}`,
+          color: hasCTCollision ? '#ef4444' : (p.color || char.color),
+          description: `発動バフ（${catLabel}）: ${p.name}${hasCTCollision ? ` ⚠️ CT未回復（残${ctRemaining}s）` : ''}`,
           isCarryOver: false,
         });
       }
@@ -1424,6 +1441,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 {(stint.duration ?? 0).toFixed(1)}s
                               </span>
                             </div>
+
+                            {/* CT Collision Warning Badge for 1st Cycle Stint Header */}
+                            {(stint.actions.some(a => a.hasCTCollision) || stintPassives.some(p => p.hasCTViolation)) && (
+                              <div className="text-[9px] bg-red-500/20 text-red-300 border border-red-500/40 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold animate-pulse">
+                                <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />
+                                <span>CT未回復あり</span>
+                              </div>
+                            )}
+
                             <div className="flex items-center justify-between text-slate-400 text-[9px]">
                               <span>時間帯</span>
                               <span className="font-mono">{(stint.startTime ?? 0).toFixed(1)}s ~ {(stint.endTime ?? 0).toFixed(1)}s</span>
@@ -1572,7 +1598,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }}
                                         style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${
-                                          isSelected 
+                                          act.hasCTCollision
+                                            ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
+                                            : isSelected 
                                             ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
                                             : isActActive 
                                             ? 'bg-amber-400 text-slate-950 ring-1 ring-white' 
@@ -1590,13 +1618,23 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                                 : 'border-l-4 border-l-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30') 
                                             : ''
                                         }`}
-                                        title={`【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`}
+                                        title={
+                                          act.hasCTCollision
+                                            ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${act.collisionRemainingCT ?? '?'}s\nアクション: ${act.name}`
+                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
+                                        }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
+                                          {act.hasCTCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
                                             : act.shortName}
+                                          {act.hasCTCollision && act.collisionRemainingCT !== undefined && (
+                                            <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                              残{act.collisionRemainingCT}s
+                                            </span>
+                                          )}
                                         </span>
                                       </div>
                                     );
@@ -1738,13 +1776,21 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.duration * pixelsPerSecond)}px` }}
                                     className={`${barCommon} ${cursor} font-medium border-dashed ${
                                       p.hasCTViolation
-                                        ? 'bg-red-950 border-red-400 text-red-100'
+                                        ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
                                         : badgeCfg.ganttBarClass
                                     } ${activeRingClass}`}
-                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? '\n⚠️ CT中の発動です' : ''}`}
+                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
                                   >
-                                    <span className="truncate">
-                                      {p.hasCTViolation ? '⚠️' : badgeCfg.icon} [{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s){isBuffActive ? ` [残${remaining.toFixed(1)}s]` : ''}{isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                    <span className="truncate flex items-center gap-1">
+                                      {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}
+                                      <span>[{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s)</span>
+                                      {p.hasCTViolation && p.collisionRemainingCT !== undefined && (
+                                        <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                          残{p.collisionRemainingCT}s
+                                        </span>
+                                      )}
+                                      {isBuffActive && !p.hasCTViolation ? ` [残${remaining.toFixed(1)}s]` : ''}
+                                      {isDragging ? ` @+${offset.toFixed(2)}s` : ''}
                                     </span>
                                   </div>
                                 </div>

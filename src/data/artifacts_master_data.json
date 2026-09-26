@@ -1,6 +1,6 @@
 [
   {
-    "id": "marechaussee_hunter",
+    "id": "15031",
     "name": "ファントムハンター",
     "englishName": "Marechaussee Hunter",
     "rarity": 5,
@@ -13,10 +13,10 @@
     "effect4p": "現在HPが増減する時、会心率+12%、継続時間5秒、最大3層まで重ね掛け可能。",
     "buffEffects": [
       {
-        "id": "abuff_marechaussee_hunter",
+        "id": "abuff_15031",
         "name": "ファントム4: 会心率UP",
         "sourceType": "artifact",
-        "sourceId": "marechaussee_hunter",
+        "sourceId": "15031",
         "duration": 5,
         "description": "現在HPが増減する時、会心率+12%、継続時間5秒、最大3層まで重ね掛け可能。",
         "color": "#60a5fa",
@@ -27,7 +27,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_marechaussee_hunter",
+      "id": "abuff_15031",
       "name": "ファントム4: 会心率UP",
       "duration": 5,
       "statEffect": "HP増減時、会心率+12% (最大3層=+36%)",
@@ -35,10 +35,10 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "maiden_beloved",
+    "id": "14004",
     "name": "愛される少女",
     "englishName": "Maiden Beloved",
     "rarity": 5,
@@ -51,10 +51,10 @@
     "effect4p": "元素スキルまたは元素爆発を発動した後10秒間、チーム全員の受ける治療効果+20%。",
     "buffEffects": [
       {
-        "id": "abuff_maiden_beloved",
+        "id": "abuff_14004",
         "name": "愛される少女4: 効果",
         "sourceType": "artifact",
-        "sourceId": "maiden_beloved",
+        "sourceId": "14004",
         "duration": 10,
         "description": "元素スキルまたは元素爆発を発動した後10秒間、チーム全員の受ける治療効果+20%。",
         "color": "#6366f1",
@@ -65,7 +65,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_maiden_beloved",
+      "id": "abuff_14004",
       "name": "愛される少女4: 効果",
       "duration": 10,
       "statEffect": "元素スキルまたは元素爆発を発動した後10秒間...",
@@ -73,10 +73,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "disenchantment_in_deep_shadow",
+    "id": "15046",
     "name": "影に沈む幻",
     "englishName": "Disenchantment in Deep Shadow",
     "rarity": 5,
@@ -89,10 +89,10 @@
     "effect4p": "超電導反応によるダメージ+80%、星電導反応によるダメージ+40%。装備者が超電導または星電導反応の影響を受けた敵を攻撃する時、その攻撃の会心率+16%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "golden_troupe",
+    "id": "15032",
     "name": "黄金の劇団",
     "englishName": "Golden Troupe",
     "rarity": 5,
@@ -105,10 +105,10 @@
     "effect4p": "元素スキルのダメージ+25%。また、装備者が待機中の時、元素スキルのダメージがさらに+25%。この効果は装備キャラクターが登場してから2秒後に解除される。",
     "buffEffects": [
       {
-        "id": "abuff_golden_troupe",
+        "id": "abuff_15032",
         "name": "劇団4: 待機時スキルダメ+25%",
         "sourceType": "artifact",
-        "sourceId": "golden_troupe",
+        "sourceId": "15032",
         "duration": 2,
         "description": "元素スキルのダメージ+25%。また、装備者が待機中の時、元素スキルのダメージがさらに+25%。この効果は装備キャラクターが登場してから2秒後に解除される。",
         "color": "#fbbf24",
@@ -117,7 +117,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_golden_troupe",
+      "id": "abuff_15032",
       "name": "劇団4: 待機時スキルダメ+25%",
       "duration": 2,
       "statEffect": "待機時、元素スキルダメージさらに+25%",
@@ -125,10 +125,10 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "vourukashas_glow",
+    "id": "15030",
     "name": "花海甘露の光",
     "englishName": "Vourukasha's Glow",
     "rarity": 5,
@@ -141,10 +141,10 @@
     "effect4p": "元素スキルと元素爆発のダメージ+10%。装備者がダメージを受けた後の5秒間、上記強化効果が80%アップする。最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_vourukashas_glow",
+        "id": "abuff_15030",
         "name": "花海甘露の光4: 効果",
         "sourceType": "artifact",
-        "sourceId": "vourukashas_glow",
+        "sourceId": "15030",
         "duration": 5,
         "description": "元素スキルと元素爆発のダメージ+10%。装備者がダメージを受けた後の5秒間、上記強化効果が80%アップする。最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。装備したキャラクターが待機している場合にも効果を発動できる。",
         "color": "#6366f1",
@@ -155,7 +155,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_vourukashas_glow",
+      "id": "abuff_15030",
       "name": "花海甘露の光4: 効果",
       "duration": 5,
       "statEffect": "ダメ+10%",
@@ -163,10 +163,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "husk_of_opulent_dreams",
+    "id": "15021",
     "name": "華館夢醒形骸記",
     "englishName": "Husk of Opulent Dreams",
     "rarity": 5,
@@ -179,10 +179,10 @@
     "effect4p": "この聖遺物セットを装備したキャラクターは、以下の状況において「問答」効果を獲得する。「問答」効果：フィールド上で岩元素攻撃を敵に命中した後に1層獲得、0.3秒毎に1層のみ獲得できる。待機中の時は、3秒毎に自動で1層獲得する。重ね掛けできる「問答」は最大4層までとなり、1層につき防御力+6%、岩元素ダメージ+6%。6秒毎に「問答」効果を獲得していない場合は、1層失う。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "oceanhued_clam",
+    "id": "15022",
     "name": "海染硨磲",
     "englishName": "Ocean-Hued Clam",
     "rarity": 5,
@@ -195,10 +195,10 @@
     "effect4p": "この聖遺物セットを装備したキャラクターがチーム内のキャラクターに治療を行うと、治療によるHP回復量（HP上限を超えた回復量も含む）を記録する海染の泡を生成する。海染の泡は3秒継続する。継続時間終了時、海染の泡は破裂し、周囲の敵に記録した回復量の90%分のダメージを与える（このダメージは感電や超電導などの元素反応と同じように計算されるが、元素熟知、キャラクターLv、または元素反応のダメージアップ効果の影響は受けない）。海染の泡は3.5秒毎に1回のみ生成可能。海染の泡が記録できる回復量は最大30000までとなり、HP上限超過分の回復量を含む。自身のチーム内に、海染の泡は1つのみ存在可能。この聖遺物セットを装備したキャラクターは待機中でも、この効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_oceanhued_clam",
+        "id": "abuff_15022",
         "name": "海染4: 泡ダメージ",
         "sourceType": "artifact",
-        "sourceId": "oceanhued_clam",
+        "sourceId": "15022",
         "duration": 3,
         "cooldown": 3.5,
         "description": "この聖遺物セットを装備したキャラクターがチーム内のキャラクターに治療を行うと、治療によるHP回復量（HP上限を超えた回復量も含む）を記録する海染の泡を生成する。海染の泡は3秒継続する。継続時間終了時、海染の泡は破裂し、周囲の敵に記録した回復量の90%分のダメージを与える（このダメージは感電や超電導などの元素反応と同じように計算されるが、元素熟知、キャラクターLv、または元素反応のダメージアップ効果の影響は受けない）。海染の泡は3.5秒毎に1回のみ生成可能。海染の泡が記録できる回復量は最大30000までとなり、HP上限超過分の回復量を含む。自身のチーム内に、海染の泡は1つのみ存在可能。この聖遺物セットを装備したキャラクターは待機中でも、この効果を発動できる。",
@@ -211,18 +211,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_oceanhued_clam",
+      "id": "abuff_15022",
       "name": "海染4: 泡ダメージ",
       "duration": 3,
+      "cooldown": 3.5,
       "statEffect": "回復量を記録し3秒後に物理ダメージ発生",
       "description": "この聖遺物セットを装備したキャラクターがチーム内のキャラクターに治療を行うと、治療によるHP回復量（HP上限を超えた回復量も含む）を記録する海染の泡を生成する。海染の泡は3秒継続する。継続時間終了時、海染の泡は破裂し、周囲の敵に記録した回復量の90%分のダメージを与える（このダメージは感電や超電導などの元素反応と同じように計算されるが、元素熟知、キャラクターLv、または元素反応のダメージアップ効果の影響は受けない）。海染の泡は3.5秒毎に1回のみ生成可能。海染の泡が記録できる回復量は最大30000までとなり、HP上限超過分の回復量を含む。自身のチーム内に、海染の泡は1つのみ存在可能。この聖遺物セットを装備したキャラクターは待機中でも、この効果を発動できる。",
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "scroll_of_the_hero_of_cinder_city",
+    "id": "15037",
     "name": "灰燼の都に立つ英雄の絵巻",
     "englishName": "Scroll of the Hero of Cinder City",
     "rarity": 5,
@@ -235,10 +236,10 @@
     "effect4p": "装備者が自身の元素タイプの関連元素反応を起こした後、周囲のチーム全員の、該当元素反応の関連元素タイプのダメージ+12%、継続時間15秒。この効果を発動した時に、装備者が「夜魂の加護」状態にあった場合、周囲チーム全員の前述の元素タイプのダメージがさらに+28%、継続時間20秒。装備者が待機中でも、上記効果を発動できる。同名の聖遺物セットによるダメージアップ効果は重ね掛け不可。",
     "buffEffects": [
       {
-        "id": "abuff_scroll_of_the_hero_of_cinder_city",
+        "id": "abuff_15037",
         "name": "絵巻4: 該当元素ダメバフ+40%",
         "sourceType": "artifact",
-        "sourceId": "scroll_of_the_hero_of_cinder_city",
+        "sourceId": "15037",
         "duration": 15,
         "description": "装備者が自身の元素タイプの関連元素反応を起こした後、周囲のチーム全員の、該当元素反応の関連元素タイプのダメージ+12%、継続時間15秒。この効果を発動した時に、装備者が「夜魂の加護」状態にあった場合、周囲チーム全員の前述の元素タイプのダメージがさらに+28%、継続時間20秒。装備者が待機中でも、上記効果を発動できる。同名の聖遺物セットによるダメージアップ効果は重ね掛け不可。",
         "color": "#fbbf24",
@@ -249,7 +250,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_scroll_of_the_hero_of_cinder_city",
+      "id": "abuff_15037",
       "name": "絵巻4: 該当元素ダメバフ+40%",
       "duration": 15,
       "statEffect": "夜魂性質反応後、関連元素ダメバフ+12%〜40%",
@@ -257,10 +258,10 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "flower_of_paradise_lost",
+    "id": "15028",
     "name": "楽園の絶花",
     "englishName": "Flower of Paradise Lost",
     "rarity": 5,
@@ -273,10 +274,10 @@
     "effect4p": "開花、超開花、烈開花反応によるダメージ+40%、月開花反応によるダメージ+10%。また、装備者自身が開花、超開花、烈開花、または月開花を起こした後、上記強化効果が25%アップする。継続時間10秒、最大4層まで重ねられ、1秒毎に最大1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_flower_of_paradise_lost",
+        "id": "abuff_15028",
         "name": "楽園の絶花4: 効果",
         "sourceType": "artifact",
-        "sourceId": "flower_of_paradise_lost",
+        "sourceId": "15028",
         "duration": 10,
         "description": "開花、超開花、烈開花反応によるダメージ+40%、月開花反応によるダメージ+10%。また、装備者自身が開花、超開花、烈開花、または月開花を起こした後、上記強化効果が25%アップする。継続時間10秒、最大4層まで重ねられ、1秒毎に最大1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
         "color": "#10b981",
@@ -287,7 +288,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_flower_of_paradise_lost",
+      "id": "abuff_15028",
       "name": "楽園の絶花4: 効果",
       "duration": 10,
       "statEffect": "ダメ+40%",
@@ -295,10 +296,10 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "retracing_bolide",
+    "id": "15015",
     "name": "逆飛びの流星",
     "englishName": "Retracing Bolide",
     "rarity": 5,
@@ -311,10 +312,10 @@
     "effect4p": "シールド状態の時、通常攻撃と重撃ダメージ+40%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "noblesse_oblige",
+    "id": "15007",
     "name": "旧貴族のしつけ",
     "englishName": "Noblesse Oblige",
     "rarity": 5,
@@ -327,10 +328,10 @@
     "effect4p": "元素爆発を発動すると、チーム全員の攻撃力+20%、継続時間12秒、重ねがけ不可。",
     "buffEffects": [
       {
-        "id": "abuff_noblesse_oblige",
+        "id": "abuff_15007",
         "name": "旧貴族4: 全員攻撃力+20%",
         "sourceType": "artifact",
-        "sourceId": "noblesse_oblige",
+        "sourceId": "15007",
         "duration": 12,
         "description": "元素爆発を発動すると、チーム全員の攻撃力+20%、継続時間12秒、重ねがけ不可。",
         "color": "#f87171",
@@ -341,7 +342,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_noblesse_oblige",
+      "id": "abuff_15007",
       "name": "旧貴族4: 全員攻撃力+20%",
       "duration": 12,
       "statEffect": "元素爆発発動後、チーム全員の攻撃力+20%",
@@ -349,10 +350,10 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "aubade_of_morningstar_and_moon",
+    "id": "15043",
     "name": "暁の星と月の歌",
     "englishName": "Aubade of Morningstar and Moon",
     "rarity": 5,
@@ -365,10 +366,10 @@
     "effect4p": "装備者が待機中の時、与える月反応のダメージ+20%。チーム全体の月兆レベルが満照以上の時、与える月反応のダメージがさらに+40%。上記効果は装備者がフィールド上に3秒間滞在すると解除される。",
     "buffEffects": [
       {
-        "id": "abuff_aubade_of_morningstar_and_moon",
+        "id": "abuff_15043",
         "name": "暁の星と月の歌4: 効果",
         "sourceType": "artifact",
-        "sourceId": "aubade_of_morningstar_and_moon",
+        "sourceId": "15043",
         "duration": 3,
         "description": "装備者が待機中の時、与える月反応のダメージ+20%。チーム全体の月兆レベルが満照以上の時、与える月反応のダメージがさらに+40%。上記効果は装備者がフィールド上に3秒間滞在すると解除される。",
         "color": "#6366f1",
@@ -379,7 +380,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_aubade_of_morningstar_and_moon",
+      "id": "abuff_15043",
       "name": "暁の星と月の歌4: 効果",
       "duration": 3,
       "statEffect": "ダメ+20%",
@@ -387,10 +388,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "gilded_dreams",
+    "id": "15026",
     "name": "金メッキの夢",
     "englishName": "Gilded Dreams",
     "rarity": 5,
@@ -403,10 +404,10 @@
     "effect4p": "元素反応を起こした後の8秒間、装備キャラクターは、チーム内自身以外のキャラクターの元素タイプに応じて強化効果を獲得する。チームに装備キャラクターと同じ元素タイプのキャラクターが1名存在する毎に攻撃力+14%、異なる元素タイプのキャラクターが1名存在する毎に元素熟知+50。上記効果は、それぞれ最大でキャラクター3名までカウントされる。この効果は8秒毎に1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_gilded_dreams",
+        "id": "abuff_15026",
         "name": "金メッキの夢4: 効果",
         "sourceType": "artifact",
-        "sourceId": "gilded_dreams",
+        "sourceId": "15026",
         "duration": 8,
         "cooldown": 8,
         "description": "元素反応を起こした後の8秒間、装備キャラクターは、チーム内自身以外のキャラクターの元素タイプに応じて強化効果を獲得する。チームに装備キャラクターと同じ元素タイプのキャラクターが1名存在する毎に攻撃力+14%、異なる元素タイプのキャラクターが1名存在する毎に元素熟知+50。上記効果は、それぞれ最大でキャラクター3名までカウントされる。この効果は8秒毎に1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
@@ -419,18 +420,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_gilded_dreams",
+      "id": "abuff_15026",
       "name": "金メッキの夢4: 効果",
       "duration": 8,
+      "cooldown": 8,
       "statEffect": "攻撃力+14% / 熟知+50",
       "description": "元素反応を起こした後の8秒間、装備キャラクターは、チーム内自身以外のキャラクターの元素タイプに応じて強化効果を獲得する。チームに装備キャラクターと同じ元素タイプのキャラクターが1名存在する毎に攻撃力+14%、異なる元素タイプのキャラクターが1名存在する毎に元素熟知+50。上記効果は、それぞれ最大でキャラクター3名までカウントされる。この効果は8秒毎に1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "bloodstained_chivalry",
+    "id": "15008",
     "name": "血染めの騎士道",
     "englishName": "Bloodstained Chivalry",
     "rarity": 5,
@@ -443,10 +445,10 @@
     "effect4p": "敵を倒した後の10秒間、重撃の際にスタミナを消費しない。また、重撃のダメージ+50%。",
     "buffEffects": [
       {
-        "id": "abuff_bloodstained_chivalry",
+        "id": "abuff_15008",
         "name": "血染めの騎士道4: 効果",
         "sourceType": "artifact",
-        "sourceId": "bloodstained_chivalry",
+        "sourceId": "15008",
         "duration": 10,
         "description": "敵を倒した後の10秒間、重撃の際にスタミナを消費しない。また、重撃のダメージ+50%。",
         "color": "#6366f1",
@@ -457,7 +459,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_bloodstained_chivalry",
+      "id": "abuff_15008",
       "name": "血染めの騎士道4: 効果",
       "duration": 10,
       "statEffect": "ダメ+50%",
@@ -465,10 +467,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "silken_moons_serenade",
+    "id": "15042",
     "name": "月を紡ぐ夜の歌",
     "englishName": "Silken Moon's Serenade",
     "rarity": 5,
@@ -481,10 +483,10 @@
     "effect4p": "元素ダメージを与えた時、8秒間継続する「月輝明光・崇拝」効果を獲得する。「月輝明光・崇拝」：チームの月兆が初照/満照の時、チーム全員の元素熟知+60/120。装備者が待機中でも、上記効果を発動できる。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
     "buffEffects": [
       {
-        "id": "abuff_silken_moons_serenade",
+        "id": "abuff_15042",
         "name": "月を紡ぐ夜の歌4: 効果",
         "sourceType": "artifact",
-        "sourceId": "silken_moons_serenade",
+        "sourceId": "15042",
         "duration": 8,
         "description": "元素ダメージを与えた時、8秒間継続する「月輝明光・崇拝」効果を獲得する。「月輝明光・崇拝」：チームの月兆が初照/満照の時、チーム全員の元素熟知+60/120。装備者が待機中でも、上記効果を発動できる。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
         "color": "#10b981",
@@ -495,7 +497,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_silken_moons_serenade",
+      "id": "abuff_15042",
       "name": "月を紡ぐ夜の歌4: 効果",
       "duration": 8,
       "statEffect": "熟知+60 / ダメ+10%",
@@ -503,10 +505,10 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "gladiators_finale",
+    "id": "15001",
     "name": "剣闘士のフィナーレ",
     "englishName": "Gladiator's Finale",
     "rarity": 5,
@@ -519,10 +521,10 @@
     "effect4p": "該当聖遺物セットを装備したキャラが片手剣、両手剣、長柄武器キャラの場合、通常攻撃ダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "scarlet_proof",
+    "id": "15047",
     "name": "紅血の証",
     "englishName": "Scarlet Proof",
     "rarity": 5,
@@ -535,10 +537,10 @@
     "effect4p": "装備者が星拡散反応を起こした後の10秒間、会心率+16%、星拡散反応ダメージ+40%。",
     "buffEffects": [
       {
-        "id": "abuff_scarlet_proof",
+        "id": "abuff_15047",
         "name": "紅血の証4: 効果",
         "sourceType": "artifact",
-        "sourceId": "scarlet_proof",
+        "sourceId": "15047",
         "duration": 10,
         "description": "装備者が星拡散反応を起こした後の10秒間、会心率+16%、星拡散反応ダメージ+40%。",
         "color": "#14b8a6",
@@ -549,7 +551,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_scarlet_proof",
+      "id": "abuff_15047",
       "name": "紅血の証4: 効果",
       "duration": 10,
       "statEffect": "会心率+16% / ダメ+40%",
@@ -557,10 +559,10 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "obsidian_codex",
+    "id": "15038",
     "name": "黒曜の秘典",
     "englishName": "Obsidian Codex",
     "rarity": 5,
@@ -573,10 +575,10 @@
     "effect4p": "装備者がフィールド上で夜魂値を1消費すると、会心率+40%、継続時間6秒。この効果は1秒毎に1回のみ発動可能。",
     "buffEffects": [
       {
-        "id": "abuff_obsidian_codex",
+        "id": "abuff_15038",
         "name": "黒曜4: 会心率+40%",
         "sourceType": "artifact",
-        "sourceId": "obsidian_codex",
+        "sourceId": "15038",
         "duration": 6,
         "cooldown": 1,
         "description": "装備者がフィールド上で夜魂値を1消費すると、会心率+40%、継続時間6秒。この効果は1秒毎に1回のみ発動可能。",
@@ -589,18 +591,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_obsidian_codex",
+      "id": "abuff_15038",
       "name": "黒曜4: 会心率+40%",
       "duration": 6,
+      "cooldown": 1,
       "statEffect": "夜魂値消費時、会心率+40%",
       "description": "装備者がフィールド上で夜魂値を1消費すると、会心率+40%、継続時間6秒。この効果は1秒毎に1回のみ発動可能。",
       "color": "#a855f7"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "desert_pavilion_chronicle",
+    "id": "15027",
     "name": "砂上の楼閣の史話",
     "englishName": "Desert Pavilion Chronicle",
     "rarity": 5,
@@ -613,10 +616,10 @@
     "effect4p": "重撃が敵に命中すると、該当キャラクターの通常攻撃の攻撃速度+10%、通常攻撃、重撃および落下攻撃ダメージ+40%、継続時間15秒。",
     "buffEffects": [
       {
-        "id": "abuff_desert_pavilion_chronicle",
+        "id": "abuff_15027",
         "name": "砂上の楼閣の史話4: 効果",
         "sourceType": "artifact",
-        "sourceId": "desert_pavilion_chronicle",
+        "sourceId": "15027",
         "duration": 15,
         "description": "重撃が敵に命中すると、該当キャラクターの通常攻撃の攻撃速度+10%、通常攻撃、重撃および落下攻撃ダメージ+40%、継続時間15秒。",
         "color": "#6366f1",
@@ -627,7 +630,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_desert_pavilion_chronicle",
+      "id": "abuff_15027",
       "name": "砂上の楼閣の史話4: 効果",
       "duration": 15,
       "statEffect": "ダメ+40%",
@@ -635,10 +638,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "song_of_days_past",
+    "id": "15033",
     "name": "在りし日の歌",
     "englishName": "Song of Days Past",
     "rarity": 5,
@@ -651,10 +654,10 @@
     "effect4p": "装備者がチームにいるキャラクターのHPを回復した時、継続時間6秒の「渇望」効果が発動し、HP回復量（HP上限を超えた回復量も含む）を記録する。継続時間終了時、「渇望」効果は「かの時の潮」効果に変化する。「かの時の潮」効果発動中、フィールド上にいるチーム内の自身キャラクターの通常攻撃、重撃、落下攻撃、元素スキル、元素爆発が敵に命中すると、「渇望」効果で記録した回復量の8%分を基に与えるダメージをアップする。「かの時の潮」効果は、5回発動、または10秒後にクリアされる。1回の「渇望」効果が記録する回復量は最大15000ポイントまで。なお、「渇望」は1つのみ存在でき、複数の装備者の与える回復量を記録可能。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_song_of_days_past",
+        "id": "abuff_15033",
         "name": "昔日4: 彼方の効果",
         "sourceType": "artifact",
-        "sourceId": "song_of_days_past",
+        "sourceId": "15033",
         "duration": 6,
         "cooldown": 6,
         "description": "装備者がチームにいるキャラクターのHPを回復した時、継続時間6秒の「渇望」効果が発動し、HP回復量（HP上限を超えた回復量も含む）を記録する。継続時間終了時、「渇望」効果は「かの時の潮」効果に変化する。「かの時の潮」効果発動中、フィールド上にいるチーム内の自身キャラクターの通常攻撃、重撃、落下攻撃、元素スキル、元素爆発が敵に命中すると、「渇望」効果で記録した回復量の8%分を基に与えるダメージをアップする。「かの時の潮」効果は、5回発動、または10秒後にクリアされる。1回の「渇望」効果が記録する回復量は最大15000ポイントまで。なお、「渇望」は1つのみ存在でき、複数の装備者の与える回復量を記録可能。装備したキャラクターが待機している場合にも効果を発動できる。",
@@ -666,18 +669,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_song_of_days_past",
+      "id": "abuff_15033",
       "name": "昔日4: 彼方の効果",
       "duration": 6,
+      "cooldown": 6,
       "statEffect": "回復記録後、通常重撃スキル爆発の基礎ダメ加算",
       "description": "装備者がチームにいるキャラクターのHPを回復した時、継続時間6秒の「渇望」効果が発動し、HP回復量（HP上限を超えた回復量も含む）を記録する。継続時間終了時、「渇望」効果は「かの時の潮」効果に変化する。「かの時の潮」効果発動中、フィールド上にいるチーム内の自身キャラクターの通常攻撃、重撃、落下攻撃、元素スキル、元素爆発が敵に命中すると、「渇望」効果で記録した回復量の8%分を基に与えるダメージをアップする。「かの時の潮」効果は、5回発動、または10秒後にクリアされる。1回の「渇望」効果が記録する回復量は最大15000ポイントまで。なお、「渇望」は1つのみ存在でき、複数の装備者の与える回復量を記録可能。装備したキャラクターが待機している場合にも効果を発動できる。",
       "color": "#fb7185"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "nighttime_whispers_in_the_echoing_woods",
+    "id": "15034",
     "name": "残響の森で囁かれる夜話",
     "englishName": "Nighttime Whispers in the Echoing Woods",
     "rarity": 5,
@@ -690,10 +694,10 @@
     "effect4p": "元素スキルを発動した後の10秒間、岩元素ダメージ+20%。結晶反応によるシールド状態にある時、または周囲に月結晶反応で生成された月籠が存在する時、上記強化効果が150%アップする。追加された効果量は、条件を満たさなくなった1秒後に解除される。",
     "buffEffects": [
       {
-        "id": "abuff_nighttime_whispers_in_the_echoing_woods",
+        "id": "abuff_15034",
         "name": "残響の森で囁かれる夜話4: 効果",
         "sourceType": "artifact",
-        "sourceId": "nighttime_whispers_in_the_echoing_woods",
+        "sourceId": "15034",
         "duration": 10,
         "description": "元素スキルを発動した後の10秒間、岩元素ダメージ+20%。結晶反応によるシールド状態にある時、または周囲に月結晶反応で生成された月籠が存在する時、上記強化効果が150%アップする。追加された効果量は、条件を満たさなくなった1秒後に解除される。",
         "color": "#f59e0b",
@@ -704,7 +708,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_nighttime_whispers_in_the_echoing_woods",
+      "id": "abuff_15034",
       "name": "残響の森で囁かれる夜話4: 効果",
       "duration": 10,
       "statEffect": "ダメ+20%",
@@ -712,10 +716,10 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "deepwood_memories",
+    "id": "15025",
     "name": "深林の記憶",
     "englishName": "Deepwood Memories",
     "rarity": 5,
@@ -728,10 +732,10 @@
     "effect4p": "元素スキルまたは元素爆発が敵に命中すると、その敵の草元素耐性-30%、継続時間8秒。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_deepwood_memories",
+        "id": "abuff_15025",
         "name": "深林4: 草元素耐性-30%",
         "sourceType": "artifact",
-        "sourceId": "deepwood_memories",
+        "sourceId": "15025",
         "duration": 8,
         "description": "元素スキルまたは元素爆発が敵に命中すると、その敵の草元素耐性-30%、継続時間8秒。装備したキャラクターが待機している場合にも効果を発動できる。",
         "color": "#10b981",
@@ -742,7 +746,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_deepwood_memories",
+      "id": "abuff_15025",
       "name": "深林4: 草元素耐性-30%",
       "duration": 8,
       "statEffect": "スキルまたは爆発命中で敵の草元素耐性-30%",
@@ -750,10 +754,10 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "finale_of_the_deep_galleries",
+    "id": "15040",
     "name": "深廊の終曲",
     "englishName": "Finale of the Deep Galleries",
     "rarity": 5,
@@ -766,10 +770,10 @@
     "effect4p": "装備者の元素エネルギーが0の時、通常攻撃ダメージ+60%、元素爆発ダメージ+60%。装備者の通常攻撃がダメージを与えた後、上記元素爆発ダメージアップ効果は6秒間無効になる。装備者の元素爆発がダメージを与えた後、上記通常攻撃ダメージアップ効果は6秒間無効になる。キャラクターが待機中でも発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_finale_of_the_deep_galleries",
+        "id": "abuff_15040",
         "name": "深廊の終曲4: 効果",
         "sourceType": "artifact",
-        "sourceId": "finale_of_the_deep_galleries",
+        "sourceId": "15040",
         "duration": 6,
         "description": "装備者の元素エネルギーが0の時、通常攻撃ダメージ+60%、元素爆発ダメージ+60%。装備者の通常攻撃がダメージを与えた後、上記元素爆発ダメージアップ効果は6秒間無効になる。装備者の元素爆発がダメージを与えた後、上記通常攻撃ダメージアップ効果は6秒間無効になる。キャラクターが待機中でも発動できる。",
         "color": "#c084fc",
@@ -780,7 +784,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_finale_of_the_deep_galleries",
+      "id": "abuff_15040",
       "name": "深廊の終曲4: 効果",
       "duration": 6,
       "statEffect": "ダメ+60%",
@@ -788,10 +792,10 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "nymphs_dream",
+    "id": "15029",
     "name": "水仙の夢",
     "englishName": "Nymph's Dream",
     "rarity": 5,
@@ -804,10 +808,10 @@
     "effect4p": "通常攻撃、重撃、落下攻撃、元素スキル、または元素爆発が敵に命中すると、8秒間継続する「鏡中の水仙」効果を1層獲得する。1/2/3層以上の「鏡中の水仙」効果を持つ時、それぞれ攻撃力+7%/16%/25%、水元素ダメージ+4%/9%/15%。通常攻撃、重撃、落下攻撃、元素スキル、元素爆発による「鏡中の水仙」効果はそれぞれ独立してカウントされる。",
     "buffEffects": [
       {
-        "id": "abuff_nymphs_dream",
+        "id": "abuff_15029",
         "name": "水仙の夢4: 効果",
         "sourceType": "artifact",
-        "sourceId": "nymphs_dream",
+        "sourceId": "15029",
         "duration": 8,
         "description": "通常攻撃、重撃、落下攻撃、元素スキル、または元素爆発が敵に命中すると、8秒間継続する「鏡中の水仙」効果を1層獲得する。1/2/3層以上の「鏡中の水仙」効果を持つ時、それぞれ攻撃力+7%/16%/25%、水元素ダメージ+4%/9%/15%。通常攻撃、重撃、落下攻撃、元素スキル、元素爆発による「鏡中の水仙」効果はそれぞれ独立してカウントされる。",
         "color": "#f87171",
@@ -818,7 +822,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_nymphs_dream",
+      "id": "abuff_15029",
       "name": "水仙の夢4: 効果",
       "duration": 8,
       "statEffect": "攻撃力+7% / ダメ+4%",
@@ -826,10 +830,10 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "viridescent_venerer",
+    "id": "15002",
     "name": "翠緑の影",
     "englishName": "Viridescent Venerer",
     "rarity": 5,
@@ -842,10 +846,10 @@
     "effect4p": "拡散反応によるダメージ+60%、星拡散反応によるダメージ+20%。拡散された元素タイプに応じて、影響を受けた敵の当該元素耐性-40%。継続時間10秒。敵に対して星拡散反応を起こした時も、その氷元素耐性-40%。同じ元素タイプの耐性ダウン効果は重ね掛けできない。",
     "buffEffects": [
       {
-        "id": "abuff_viridescent_venerer",
+        "id": "abuff_15002",
         "name": "翠緑4: 拡散耐性-40%",
         "sourceType": "artifact",
-        "sourceId": "viridescent_venerer",
+        "sourceId": "15002",
         "duration": 10,
         "description": "拡散反応によるダメージ+60%、星拡散反応によるダメージ+20%。拡散された元素タイプに応じて、影響を受けた敵の当該元素耐性-40%。継続時間10秒。敵に対して星拡散反応を起こした時も、その氷元素耐性-40%。同じ元素タイプの耐性ダウン効果は重ね掛けできない。",
         "color": "#34d399",
@@ -856,7 +860,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_viridescent_venerer",
+      "id": "abuff_15002",
       "name": "翠緑4: 拡散耐性-40%",
       "duration": 10,
       "statEffect": "拡散された元素の敵耐性-40%",
@@ -864,10 +868,10 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "unfinished_reverie",
+    "id": "15036",
     "name": "遂げられなかった想い",
     "englishName": "Unfinished Reverie",
     "rarity": 5,
@@ -880,10 +884,10 @@
     "effect4p": "戦闘状態が解除されてから3秒経過すると、与えるダメージ+50%。戦闘状態にある時、近くに燃焼状態の敵が存在しないまま6秒以上経過すると、上記強化効果の効果量は0%になるまで1秒毎に10%減少する。一方、燃焼状態の敵が存在する場合、50%になるまで1秒毎に10%増加する。この聖遺物セットを装備したキャラクターが待機している場合にも、効果を発動できる。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "emblem_of_severed_fate",
+    "id": "15020",
     "name": "絶縁の旗印",
     "englishName": "Emblem of Severed Fate",
     "rarity": 5,
@@ -896,10 +900,10 @@
     "effect4p": "元素チャージ効率の25%を基準に、元素爆発ダメージがアップする。この方法でアップできるダメージは最大75%まで。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "tenacity_of_the_millelith",
+    "id": "15017",
     "name": "千岩牢固",
     "englishName": "Tenacity of the Millelith",
     "rarity": 5,
@@ -912,10 +916,10 @@
     "effect4p": "元素スキルが敵に命中すると、周囲のチーム全員の攻撃力+20%、シールド強化+30%、持続時間3秒。この効果は0.5秒毎に1回のみ発動可能。この聖遺物セットを装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_tenacity_of_the_millelith",
+        "id": "abuff_15017",
         "name": "千岩4: 全員攻撃力+20%",
         "sourceType": "artifact",
-        "sourceId": "tenacity_of_the_millelith",
+        "sourceId": "15017",
         "duration": 3,
         "cooldown": 0.5,
         "description": "元素スキルが敵に命中すると、周囲のチーム全員の攻撃力+20%、シールド強化+30%、持続時間3秒。この効果は0.5秒毎に1回のみ発動可能。この聖遺物セットを装備したキャラクターが待機している場合にも効果を発動できる。",
@@ -928,18 +932,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_tenacity_of_the_millelith",
+      "id": "abuff_15017",
       "name": "千岩4: 全員攻撃力+20%",
       "duration": 3,
+      "cooldown": 0.5,
       "statEffect": "スキル命中でチーム全員攻撃力+20% / シールド強化+30%",
       "description": "元素スキルが敵に命中すると、周囲のチーム全員の攻撃力+20%、シールド強化+30%、持続時間3秒。この効果は0.5秒毎に1回のみ発動可能。この聖遺物セットを装備したキャラクターが待機している場合にも効果を発動できる。",
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "pale_flame",
+    "id": "15018",
     "name": "蒼白の炎",
     "englishName": "Pale Flame",
     "rarity": 5,
@@ -952,10 +957,10 @@
     "effect4p": "元素スキルが敵に命中すると、攻撃力+9%。持続時間7秒、最大2重まで、0.3秒毎に1回のみ発動可能。2重まで重ねると、2セットの効果が2倍になる。",
     "buffEffects": [
       {
-        "id": "abuff_pale_flame",
+        "id": "abuff_15018",
         "name": "蒼白の炎4: 効果",
         "sourceType": "artifact",
-        "sourceId": "pale_flame",
+        "sourceId": "15018",
         "duration": 7,
         "cooldown": 0.3,
         "description": "元素スキルが敵に命中すると、攻撃力+9%。持続時間7秒、最大2重まで、0.3秒毎に1回のみ発動可能。2重まで重ねると、2セットの効果が2倍になる。",
@@ -968,18 +973,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_pale_flame",
+      "id": "abuff_15018",
       "name": "蒼白の炎4: 効果",
       "duration": 7,
+      "cooldown": 0.3,
       "statEffect": "攻撃力+9%",
       "description": "元素スキルが敵に命中すると、攻撃力+9%。持続時間7秒、最大2重まで、0.3秒毎に1回のみ発動可能。2重まで重ねると、2セットの効果が2倍になる。",
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "wanderers_troupe",
+    "id": "15003",
     "name": "大地を流浪する楽団",
     "englishName": "Wanderer's Troupe",
     "rarity": 5,
@@ -992,10 +998,10 @@
     "effect4p": "該当聖遺物セットを装備したキャラが法器、弓キャラの場合、キャラの重撃ダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "vermillion_hereafter",
+    "id": "15023",
     "name": "辰砂往生録",
     "englishName": "Vermillion Hereafter",
     "rarity": 5,
@@ -1008,10 +1014,10 @@
     "effect4p": "元素爆発を発動すると、継続時間16秒の「潜光」効果が発動する。「潜光」：攻撃力+8%、キャラクターがHPを失うたびに攻撃力がさらに10%アップする。HPの損失による攻撃力アップ効果は0.8秒毎に1回のみ発動でき、最大4回重ね掛けできる。「潜光」効果はキャラクターが戦闘不能、または退場する時に解除される。「潜光」効果の継続時間中に再び元素爆発を発動すると、既存の「潜光」効果が先にクリアされる。",
     "buffEffects": [
       {
-        "id": "abuff_vermillion_hereafter",
+        "id": "abuff_15023",
         "name": "辰砂4: 潜光(攻撃力UP)",
         "sourceType": "artifact",
-        "sourceId": "vermillion_hereafter",
+        "sourceId": "15023",
         "duration": 16,
         "cooldown": 0.8,
         "description": "元素爆発を発動すると、継続時間16秒の「潜光」効果が発動する。「潜光」：攻撃力+8%、キャラクターがHPを失うたびに攻撃力がさらに10%アップする。HPの損失による攻撃力アップ効果は0.8秒毎に1回のみ発動でき、最大4回重ね掛けできる。「潜光」効果はキャラクターが戦闘不能、または退場する時に解除される。「潜光」効果の継続時間中に再び元素爆発を発動すると、既存の「潜光」効果が先にクリアされる。",
@@ -1024,18 +1030,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_vermillion_hereafter",
+      "id": "abuff_15023",
       "name": "辰砂4: 潜光(攻撃力UP)",
       "duration": 16,
+      "cooldown": 0.8,
       "statEffect": "爆発後HP減少で攻撃力最大+66%",
       "description": "元素爆発を発動すると、継続時間16秒の「潜光」効果が発動する。「潜光」：攻撃力+8%、キャラクターがHPを失うたびに攻撃力がさらに10%アップする。HPの損失による攻撃力アップ効果は0.8秒毎に1回のみ発動でき、最大4回重ね掛けできる。「潜光」効果はキャラクターが戦闘不能、または退場する時に解除される。「潜光」効果の継続時間中に再び元素爆発を発動すると、既存の「潜光」効果が先にクリアされる。",
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "long_nights_oath",
+    "id": "15039",
     "name": "長き夜の誓い",
     "englishName": "Long Night's Oath",
     "rarity": 5,
@@ -1048,10 +1055,10 @@
     "effect4p": "装備者の落下攻撃/重撃/元素スキルが敵に命中した後、「永遠に輝く流光」効果を1/2/2層獲得する。落下攻撃、重撃、または元素スキルによるこの効果はそれぞれ1秒毎に1回のみ発動可能。「永遠に輝く流光」：落下攻撃ダメージ+15%、継続時間6秒、最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。",
     "buffEffects": [
       {
-        "id": "abuff_long_nights_oath",
+        "id": "abuff_15039",
         "name": "長き夜の誓い4: 効果",
         "sourceType": "artifact",
-        "sourceId": "long_nights_oath",
+        "sourceId": "15039",
         "duration": 6,
         "cooldown": 1,
         "description": "装備者の落下攻撃/重撃/元素スキルが敵に命中した後、「永遠に輝く流光」効果を1/2/2層獲得する。落下攻撃、重撃、または元素スキルによるこの効果はそれぞれ1秒毎に1回のみ発動可能。「永遠に輝く流光」：落下攻撃ダメージ+15%、継続時間6秒、最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。",
@@ -1064,18 +1071,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_long_nights_oath",
+      "id": "abuff_15039",
       "name": "長き夜の誓い4: 効果",
       "duration": 6,
+      "cooldown": 1,
       "statEffect": "ダメ+15%",
       "description": "装備者の落下攻撃/重撃/元素スキルが敵に命中した後、「永遠に輝く流光」効果を1/2/2層獲得する。落下攻撃、重撃、または元素スキルによるこの効果はそれぞれ1秒毎に1回のみ発動可能。「永遠に輝く流光」：落下攻撃ダメージ+15%、継続時間6秒、最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。",
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "heart_of_depth",
+    "id": "15016",
     "name": "沈淪の心",
     "englishName": "Heart of Depth",
     "rarity": 5,
@@ -1088,10 +1096,10 @@
     "effect4p": "元素スキルを発動した後の15秒間、通常攻撃と重撃のダメージ+30%。",
     "buffEffects": [
       {
-        "id": "abuff_heart_of_depth",
+        "id": "abuff_15016",
         "name": "沈淪の心4: 効果",
         "sourceType": "artifact",
-        "sourceId": "heart_of_depth",
+        "sourceId": "15016",
         "duration": 15,
         "description": "元素スキルを発動した後の15秒間、通常攻撃と重撃のダメージ+30%。",
         "color": "#6366f1",
@@ -1102,7 +1110,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_heart_of_depth",
+      "id": "abuff_15016",
       "name": "沈淪の心4: 効果",
       "duration": 15,
       "statEffect": "ダメ+30%",
@@ -1110,10 +1118,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "shimenawas_reminiscence",
+    "id": "15019",
     "name": "追憶のしめ縄",
     "englishName": "Shimenawa's Reminiscence",
     "rarity": 5,
@@ -1126,10 +1134,10 @@
     "effect4p": "元素スキルを発動した時、キャラクターの元素エネルギーが15以上の場合、元素エネルギーを15消費し、次の10秒間通常攻撃、重撃、落下攻撃ダメージ+50%。継続時間中この効果は再発動できない。",
     "buffEffects": [
       {
-        "id": "abuff_shimenawas_reminiscence",
+        "id": "abuff_15019",
         "name": "追憶4: 通常・重撃・落下ダメ+50%",
         "sourceType": "artifact",
-        "sourceId": "shimenawas_reminiscence",
+        "sourceId": "15019",
         "duration": 10,
         "description": "元素スキルを発動した時、キャラクターの元素エネルギーが15以上の場合、元素エネルギーを15消費し、次の10秒間通常攻撃、重撃、落下攻撃ダメージ+50%。継続時間中この効果は再発動できない。",
         "color": "#f87171",
@@ -1140,7 +1148,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_shimenawas_reminiscence",
+      "id": "abuff_15019",
       "name": "追憶4: 通常・重撃・落下ダメ+50%",
       "duration": 10,
       "statEffect": "スキル時エネルギー15消費し通常重撃落下ダメ+50%",
@@ -1148,10 +1156,10 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "celestial_gift",
+    "id": "15045",
     "name": "天からの贈り物",
     "englishName": "Celestial Gift",
     "rarity": 5,
@@ -1164,10 +1172,10 @@
     "effect4p": "装備者が「魔女の課題」をクリアしている場合、元素スキルを発動すると、「天光の導き」効果を獲得する。この効果は装備者の元素タイプに基づき、付近にいるチーム全員に当該元素ダメージ+20%のバフを付与する。継続時間20秒。装備者が待機中でも発動可能。同じ聖遺物セットによるダメージアップ効果は重ね掛けできない。\n・チームが「魔導秘儀」効果を持っている時、「天光の導き」効果は「浮世の頌歌」に強化される。装備者の元素タイプに加え、フィールド上にいる自身のキャラクターの元素タイプに基づき、周囲のチーム全員に当該元素のダメージアップ効果を付与する。さらに、上記2種類の元素ダメージアップ効果は40%までアップする。同じ元素タイプの元素ダメージアップ効果は重ね掛けできない。",
     "buffEffects": [
       {
-        "id": "abuff_celestial_gift",
+        "id": "abuff_15045",
         "name": "天からの贈り物4: 効果",
         "sourceType": "artifact",
-        "sourceId": "celestial_gift",
+        "sourceId": "15045",
         "duration": 20,
         "description": "装備者が「魔女の課題」をクリアしている場合、元素スキルを発動すると、「天光の導き」効果を獲得する。この効果は装備者の元素タイプに基づき、付近にいるチーム全員に当該元素ダメージ+20%のバフを付与する。継続時間20秒。装備者が待機中でも発動可能。同じ聖遺物セットによるダメージアップ効果は重ね掛けできない。\n・チームが「魔導秘儀」効果を持っている時、「天光の導き」効果は「浮世の頌歌」に強化される。装備者の元素タイプに加え、フィールド上にいる自身のキャラクターの元素タイプに基づき、周囲のチーム全員に当該元素のダメージアップ効果を付与する。さらに、上記2種類の元素ダメージアップ効果は40%までアップする。同じ元素タイプの元素ダメージアップ効果は重ね掛けできない。",
         "color": "#6366f1",
@@ -1178,7 +1186,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_celestial_gift",
+      "id": "abuff_15045",
       "name": "天からの贈り物4: 効果",
       "duration": 20,
       "statEffect": "ダメ+20%",
@@ -1186,10 +1194,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "night_of_the_skys_unveiling",
+    "id": "15041",
     "name": "天穹の顕現せし夜",
     "englishName": "Night of the Sky's Unveiling",
     "rarity": 5,
@@ -1202,10 +1210,10 @@
     "effect4p": "付近にいるチーム内キャラクターが月反応を起こした時に装備者がフィールドにいる場合、4秒間継続する「月輝明光・蓄念」効果を獲得する。「月輝明光・蓄念」：チームの月兆が初照/満照の時、会心率+15%/30%。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
     "buffEffects": [
       {
-        "id": "abuff_night_of_the_skys_unveiling",
+        "id": "abuff_15041",
         "name": "天穹の顕現せし夜4: 効果",
         "sourceType": "artifact",
-        "sourceId": "night_of_the_skys_unveiling",
+        "sourceId": "15041",
         "duration": 4,
         "description": "付近にいるチーム内キャラクターが月反応を起こした時に装備者がフィールドにいる場合、4秒間継続する「月輝明光・蓄念」効果を獲得する。「月輝明光・蓄念」：チームの月兆が初照/満照の時、会心率+15%/30%。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
         "color": "#fbbf24",
@@ -1216,7 +1224,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_night_of_the_skys_unveiling",
+      "id": "abuff_15041",
       "name": "天穹の顕現せし夜4: 効果",
       "duration": 4,
       "statEffect": "会心率+15% / ダメ+10%",
@@ -1224,10 +1232,10 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "crimson_witch_of_flames",
+    "id": "15006",
     "name": "燃え盛る炎の魔女",
     "englishName": "Crimson Witch of Flames",
     "rarity": 5,
@@ -1240,10 +1248,10 @@
     "effect4p": "過負荷、燃焼、烈開花反応によるダメージ+40%。蒸発、溶解反応による加算効果+15%。元素スキルを発動した10秒間、2セットの効果が50%アップし、最大3重まで。",
     "buffEffects": [
       {
-        "id": "abuff_crimson_witch_of_flames",
+        "id": "abuff_15006",
         "name": "燃え盛る炎の魔女4: 効果",
         "sourceType": "artifact",
-        "sourceId": "crimson_witch_of_flames",
+        "sourceId": "15006",
         "duration": 10,
         "description": "過負荷、燃焼、烈開花反応によるダメージ+40%。蒸発、溶解反応による加算効果+15%。元素スキルを発動した10秒間、2セットの効果が50%アップし、最大3重まで。",
         "color": "#10b981",
@@ -1254,7 +1262,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_crimson_witch_of_flames",
+      "id": "abuff_15006",
       "name": "燃え盛る炎の魔女4: 効果",
       "duration": 10,
       "statEffect": "ダメ+40%",
@@ -1262,10 +1270,10 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "blizzard_strayer",
+    "id": "14001",
     "name": "氷風を彷徨う勇士",
     "englishName": "Blizzard Strayer",
     "rarity": 5,
@@ -1278,10 +1286,10 @@
     "effect4p": "氷元素の影響を受けている敵を攻撃した場合、会心率+20%。敵が凍結状態の場合、会心率は更に+20%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "a_day_carved_from_rising_winds",
+    "id": "15044",
     "name": "風立ちの日",
     "englishName": "A Day Carved From Rising Winds",
     "rarity": 5,
@@ -1294,10 +1302,10 @@
     "effect4p": "通常攻撃、重撃、元素スキル、または元素爆発が敵に命中すると、継続時間6秒の「風と牧歌の寵愛」を獲得する。「風と牧歌の寵愛」：攻撃力+25%。装備者が「魔女の課題」をクリアしている場合、「風と牧歌の寵愛」は「風と牧歌の決意」に強化され、「魔女の課題」をクリアした装備者の会心率+20%。装備したキャラクターが待機している場合にも効果を発動できる。",
     "buffEffects": [
       {
-        "id": "abuff_a_day_carved_from_rising_winds",
+        "id": "abuff_15044",
         "name": "風立ちの日4: 効果",
         "sourceType": "artifact",
-        "sourceId": "a_day_carved_from_rising_winds",
+        "sourceId": "15044",
         "duration": 6,
         "description": "通常攻撃、重撃、元素スキル、または元素爆発が敵に命中すると、継続時間6秒の「風と牧歌の寵愛」を獲得する。「風と牧歌の寵愛」：攻撃力+25%。装備者が「魔女の課題」をクリアしている場合、「風と牧歌の寵愛」は「風と牧歌の決意」に強化され、「魔女の課題」をクリアした装備者の会心率+20%。装備したキャラクターが待機している場合にも効果を発動できる。",
         "color": "#f87171",
@@ -1308,7 +1316,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_a_day_carved_from_rising_winds",
+      "id": "abuff_15044",
       "name": "風立ちの日4: 効果",
       "duration": 6,
       "statEffect": "攻撃力+25% / 会心率+20%",
@@ -1316,10 +1324,10 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "archaic_petra",
+    "id": "15014",
     "name": "悠久の磐岩",
     "englishName": "Archaic Petra",
     "rarity": 5,
@@ -1332,10 +1340,10 @@
     "effect4p": "結晶反応で形成された欠片を獲得、または月結晶反応を起こすと、チーム全員の該当元素ダメージ+35%、継続時間10秒。元素ダメージアップは1種類のみ獲得可能。",
     "buffEffects": [
       {
-        "id": "abuff_archaic_petra",
+        "id": "abuff_15014",
         "name": "悠久4: 該当元素ダメ+35%",
         "sourceType": "artifact",
-        "sourceId": "archaic_petra",
+        "sourceId": "15014",
         "duration": 10,
         "description": "結晶反応で形成された欠片を獲得、または月結晶反応を起こすと、チーム全員の該当元素ダメージ+35%、継続時間10秒。元素ダメージアップは1種類のみ獲得可能。",
         "color": "#f59e0b",
@@ -1346,7 +1354,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_archaic_petra",
+      "id": "abuff_15014",
       "name": "悠久4: 該当元素ダメ+35%",
       "duration": 10,
       "statEffect": "結晶反応の欠片を拾うと、該当元素ダメ+35%",
@@ -1354,10 +1362,10 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "echoes_of_an_offering",
+    "id": "15024",
     "name": "来歆の余響",
     "englishName": "Echoes of an Offering",
     "rarity": 5,
@@ -1370,10 +1378,10 @@
     "effect4p": "通常攻撃が敵に命中すると、36%の確率で「幽谷祭祀」が発動する。「幽谷祭祀」：通常攻撃ダメージが攻撃力70%分アップする。この効果は通常攻撃でダメージを与えた0.05秒後にクリアされる。通常攻撃後に「幽谷祭祀」が発動しなかった場合、次回の発動確率+20%。発動判定は0.2秒毎に1回のみ行われる。",
     "buffEffects": [
       {
-        "id": "abuff_echoes_of_an_offering",
+        "id": "abuff_15024",
         "name": "来歆の余響4: 効果",
         "sourceType": "artifact",
-        "sourceId": "echoes_of_an_offering",
+        "sourceId": "15024",
         "cooldown": 0.2,
         "description": "通常攻撃が敵に命中すると、36%の確率で「幽谷祭祀」が発動する。「幽谷祭祀」：通常攻撃ダメージが攻撃力70%分アップする。この効果は通常攻撃でダメージを与えた0.05秒後にクリアされる。通常攻撃後に「幽谷祭祀」が発動しなかった場合、次回の発動確率+20%。発動判定は0.2秒毎に1回のみ行われる。",
         "color": "#f87171",
@@ -1384,18 +1392,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_echoes_of_an_offering",
+      "id": "abuff_15024",
       "name": "来歆の余響4: 効果",
       "duration": 10,
+      "cooldown": 0.2,
       "statEffect": "通常攻撃が敵に命中すると、36%の確率でが発...",
       "description": "通常攻撃が敵に命中すると、36%の確率で「幽谷祭祀」が発動する。「幽谷祭祀」：通常攻撃ダメージが攻撃力70%分アップする。この効果は通常攻撃でダメージを与えた0.05秒後にクリアされる。通常攻撃後に「幽谷祭祀」が発動しなかった場合、次回の発動確率+20%。発動判定は0.2秒毎に1回のみ行われる。",
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "thundering_fury",
+    "id": "15005",
     "name": "雷のような怒り",
     "englishName": "Thundering Fury",
     "rarity": 5,
@@ -1408,10 +1417,10 @@
     "effect4p": "過負荷、感電、超電導、超開花反応によるダメージ+40%、超激化反応によるダメージアップ効果+20%、月感電、星電導反応によるダメージ+20%。上記元素反応または原激化反応を起こすと、元素スキルのクールタイム-1秒。0.8秒毎に最大1回のみ発動可能。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "thundersoother",
+    "id": "14002",
     "name": "雷を鎮める尊者",
     "englishName": "Thundersoother",
     "rarity": 5,
@@ -1424,10 +1433,10 @@
     "effect4p": "雷元素の影響を受けた敵に対するダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "lavawalker",
+    "id": "14003",
     "name": "烈火を渡る賢者",
     "englishName": "Lavawalker",
     "rarity": 5,
@@ -1440,10 +1449,10 @@
     "effect4p": "炎元素の影響を受けた敵に対するダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "heart_of_the_furnace",
+    "id": "15048",
     "name": "炉炎溶錬の心",
     "englishName": "Heart of the Furnace",
     "rarity": 5,
@@ -1456,10 +1465,10 @@
     "effect4p": "装備者が星反応を起こす、または星反応ダメージを与えた後の12秒間、攻撃力+12%、近くにいるチーム内のすべてのキャラクターが与える星反応ダメージ+50%。装備したキャラクターが待機している場合にも効果を発動できる。同じ名前の聖遺物セットによるダメージアップ効果は重ね掛けできない。",
     "buffEffects": [
       {
-        "id": "abuff_heart_of_the_furnace",
+        "id": "abuff_15048",
         "name": "炉炎溶錬の心4: 効果",
         "sourceType": "artifact",
-        "sourceId": "heart_of_the_furnace",
+        "sourceId": "15048",
         "duration": 12,
         "description": "装備者が星反応を起こす、または星反応ダメージを与えた後の12秒間、攻撃力+12%、近くにいるチーム内のすべてのキャラクターが与える星反応ダメージ+50%。装備したキャラクターが待機している場合にも効果を発動できる。同じ名前の聖遺物セットによるダメージアップ効果は重ね掛けできない。",
         "color": "#f87171",
@@ -1470,7 +1479,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_heart_of_the_furnace",
+      "id": "abuff_15048",
       "name": "炉炎溶錬の心4: 効果",
       "duration": 12,
       "statEffect": "攻撃力+12% / ダメ+50%",
@@ -1478,10 +1487,10 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "fragment_of_harmonic_whimsy",
+    "id": "15035",
     "name": "諧律奇想の断章",
     "englishName": "Fragment of Harmonic Whimsy",
     "rarity": 5,
@@ -1494,10 +1503,10 @@
     "effect4p": "命の契約の数値が増減する時、キャラクターの与えるダメージ+18%、継続時間6秒、最大3層まで重ね掛け可能。",
     "buffEffects": [
       {
-        "id": "abuff_fragment_of_harmonic_whimsy",
+        "id": "abuff_15035",
         "name": "諧律奇想の断章4: 効果",
         "sourceType": "artifact",
-        "sourceId": "fragment_of_harmonic_whimsy",
+        "sourceId": "15035",
         "duration": 6,
         "description": "命の契約の数値が増減する時、キャラクターの与えるダメージ+18%、継続時間6秒、最大3層まで重ね掛け可能。",
         "color": "#6366f1",
@@ -1508,7 +1517,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_fragment_of_harmonic_whimsy",
+      "id": "abuff_15035",
       "name": "諧律奇想の断章4: 効果",
       "duration": 6,
       "statEffect": "ダメ+18%",
@@ -1516,10 +1525,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "prayers_for_illumination",
+    "id": "15009",
     "name": "火祭りの人",
     "englishName": "Prayers for Illumination",
     "rarity": 4,
@@ -1532,10 +1541,10 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "scholar",
+    "id": "10012",
     "name": "学者",
     "englishName": "Scholar",
     "rarity": 4,
@@ -1548,10 +1557,10 @@
     "effect4p": "元素オーブまたは元素粒子を獲得した時、チーム内全ての弓と法器キャラの元素エネルギーが3回復する。3秒毎に1回のみ発動可能。",
     "buffEffects": [
       {
-        "id": "abuff_scholar",
+        "id": "abuff_10012",
         "name": "学者4: 効果",
         "sourceType": "artifact",
-        "sourceId": "scholar",
+        "sourceId": "10012",
         "cooldown": 3,
         "description": "元素オーブまたは元素粒子を獲得した時、チーム内全ての弓と法器キャラの元素エネルギーが3回復する。3秒毎に1回のみ発動可能。",
         "color": "#c084fc",
@@ -1562,18 +1571,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_scholar",
+      "id": "abuff_10012",
       "name": "学者4: 効果",
       "duration": 10,
+      "cooldown": 3,
       "statEffect": "元素オーブまたは元素粒子を獲得した時、チーム...",
       "description": "元素オーブまたは元素粒子を獲得した時、チーム内全ての弓と法器キャラの元素エネルギーが3回復する。3秒毎に1回のみ発動可能。",
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "tiny_miracle",
+    "id": "10004",
     "name": "奇跡",
     "englishName": "Tiny Miracle",
     "rarity": 4,
@@ -1586,10 +1596,10 @@
     "effect4p": "元素ダメージを受けると、その元素の耐性+30%、継続時間10秒。10秒毎に1回のみ発動可能。",
     "buffEffects": [
       {
-        "id": "abuff_tiny_miracle",
+        "id": "abuff_10004",
         "name": "奇跡4: 効果",
         "sourceType": "artifact",
-        "sourceId": "tiny_miracle",
+        "sourceId": "10004",
         "duration": 10,
         "cooldown": 10,
         "description": "元素ダメージを受けると、その元素の耐性+30%、継続時間10秒。10秒毎に1回のみ発動可能。",
@@ -1602,18 +1612,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_tiny_miracle",
+      "id": "abuff_10004",
       "name": "奇跡4: 効果",
       "duration": 10,
+      "cooldown": 10,
       "statEffect": "元素ダメージを受けると、その元素の耐性+30...",
       "description": "元素ダメージを受けると、その元素の耐性+30%、継続時間10秒。10秒毎に1回のみ発動可能。",
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "instructor",
+    "id": "10007",
     "name": "教官",
     "englishName": "Instructor",
     "rarity": 4,
@@ -1626,10 +1637,10 @@
     "effect4p": "元素反応を引き起こした後、チーム全員の元素熟知+120、継続時間8秒。",
     "buffEffects": [
       {
-        "id": "abuff_instructor",
+        "id": "abuff_10007",
         "name": "教官4: 全員元素熟知+120",
         "sourceType": "artifact",
-        "sourceId": "instructor",
+        "sourceId": "10007",
         "duration": 8,
         "description": "元素反応を引き起こした後、チーム全員の元素熟知+120、継続時間8秒。",
         "color": "#38bdf8",
@@ -1640,7 +1651,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_instructor",
+      "id": "abuff_10007",
       "name": "教官4: 全員元素熟知+120",
       "duration": 8,
       "statEffect": "元素反応を起こすとチーム全員の元素熟知+120",
@@ -1648,10 +1659,10 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "berserker",
+    "id": "10005",
     "name": "狂戦士",
     "englishName": "Berserker",
     "rarity": 4,
@@ -1664,10 +1675,10 @@
     "effect4p": "HPが70%以下になると、会心率+24%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "defenders_will",
+    "id": "10003",
     "name": "守護の心",
     "englishName": "Defender's Will",
     "rarity": 4,
@@ -1680,10 +1691,10 @@
     "effect4p": "チーム内の自身のキャラクターの元素タイプ1種類につき、自身にその元素の耐性+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "prayers_for_destiny",
+    "id": "15010",
     "name": "水祭りの人",
     "englishName": "Prayers for Destiny",
     "rarity": 4,
@@ -1696,10 +1707,10 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "gambler",
+    "id": "10008",
     "name": "博徒",
     "englishName": "Gambler",
     "rarity": 4,
@@ -1712,10 +1723,10 @@
     "effect4p": "敵を倒した時、100%の確率で元素スキルのクールタイムをリセットする。15秒に1回のみ発動可能。",
     "buffEffects": [
       {
-        "id": "abuff_gambler",
+        "id": "abuff_10008",
         "name": "博徒4: 効果",
         "sourceType": "artifact",
-        "sourceId": "gambler",
+        "sourceId": "10008",
         "cooldown": 15,
         "description": "敵を倒した時、100%の確率で元素スキルのクールタイムをリセットする。15秒に1回のみ発動可能。",
         "color": "#6366f1",
@@ -1726,18 +1737,19 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_gambler",
+      "id": "abuff_10008",
       "name": "博徒4: 効果",
       "duration": 10,
+      "cooldown": 15,
       "statEffect": "敵を倒した時、100%の確率で元素スキルのク...",
       "description": "敵を倒した時、100%の確率で元素スキルのクールタイムをリセットする。15秒に1回のみ発動可能。",
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "prayers_to_springtime",
+    "id": "15013",
     "name": "氷祭りの人",
     "englishName": "Prayers to Springtime",
     "rarity": 4,
@@ -1750,10 +1762,10 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "martial_artist",
+    "id": "10006",
     "name": "武人",
     "englishName": "Martial Artist",
     "rarity": 4,
@@ -1766,10 +1778,10 @@
     "effect4p": "元素スキル発動後、通常攻撃と重撃ダメージ+25%、継続時間8秒。",
     "buffEffects": [
       {
-        "id": "abuff_martial_artist",
+        "id": "abuff_10006",
         "name": "武人4: 効果",
         "sourceType": "artifact",
-        "sourceId": "martial_artist",
+        "sourceId": "10006",
         "duration": 8,
         "description": "元素スキル発動後、通常攻撃と重撃ダメージ+25%、継続時間8秒。",
         "color": "#6366f1",
@@ -1780,7 +1792,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_martial_artist",
+      "id": "abuff_10006",
       "name": "武人4: 効果",
       "duration": 8,
       "statEffect": "ダメ+25%",
@@ -1788,10 +1800,10 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "the_exile",
+    "id": "10009",
     "name": "亡命者",
     "englishName": "The Exile",
     "rarity": 4,
@@ -1804,10 +1816,10 @@
     "effect4p": "元素爆発を発動すると、2秒毎にチーム全員（自分を除く）の元素エネルギーを2回復する、継続時間6秒。重ね掛け不可。",
     "buffEffects": [
       {
-        "id": "abuff_the_exile",
+        "id": "abuff_10009",
         "name": "亡命者4: チームエネルギー回復",
         "sourceType": "artifact",
-        "sourceId": "the_exile",
+        "sourceId": "10009",
         "duration": 6,
         "description": "元素爆発を発動すると、2秒毎にチーム全員（自分を除く）の元素エネルギーを2回復する、継続時間6秒。重ね掛け不可。",
         "color": "#818cf8",
@@ -1818,7 +1830,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_the_exile",
+      "id": "abuff_10009",
       "name": "亡命者4: チームエネルギー回復",
       "duration": 6,
       "statEffect": "爆発発動後6秒間、他キャラのエネルギーを計6回復",
@@ -1826,10 +1838,10 @@
       "color": "#818cf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "brave_heart",
+    "id": "10002",
     "name": "勇士の心",
     "englishName": "Brave Heart",
     "rarity": 4,
@@ -1842,10 +1854,10 @@
     "effect4p": "HPが50%以上の敵に対するダメージ+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "prayers_for_wisdom",
+    "id": "15011",
     "name": "雷祭りの人",
     "englishName": "Prayers for Wisdom",
     "rarity": 4,
@@ -1858,10 +1870,10 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "resolution_of_sojourner",
+    "id": "10001",
     "name": "旅人の心",
     "englishName": "Resolution of Sojourner",
     "rarity": 4,
@@ -1874,10 +1886,10 @@
     "effect4p": "重撃の会心率+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "traveling_doctor",
+    "id": "10013",
     "name": "医者",
     "englishName": "Traveling Doctor",
     "rarity": 3,
@@ -1891,10 +1903,10 @@
     "effect4p": "元素爆発を発動すると、HPを20%回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "lucky_dog",
+    "id": "10011",
     "name": "幸運",
     "englishName": "Lucky Dog",
     "rarity": 3,
@@ -1908,10 +1920,10 @@
     "effect4p": "モラを拾得すると、HPを300回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   },
   {
-    "id": "adventurer",
+    "id": "10010",
     "name": "冒険者",
     "englishName": "Adventurer",
     "rarity": 3,
@@ -1925,10 +1937,10 @@
     "effect4p": "宝箱を開けた後5秒間、HPの30%を徐々に回復する。",
     "buffEffects": [
       {
-        "id": "abuff_adventurer",
+        "id": "abuff_10010",
         "name": "冒険者4: 効果",
         "sourceType": "artifact",
-        "sourceId": "adventurer",
+        "sourceId": "10010",
         "duration": 5,
         "description": "宝箱を開けた後5秒間、HPの30%を徐々に回復する。",
         "color": "#38bdf8",
@@ -1939,7 +1951,7 @@
       }
     ],
     "buffEffect": {
-      "id": "abuff_adventurer",
+      "id": "abuff_10010",
       "name": "冒険者4: 効果",
       "duration": 5,
       "statEffect": "宝箱を開けた後5秒間、HPの30%を徐々に回...",
@@ -1947,6 +1959,6 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/26 14:11:33"
+    "updatedAt": "2026/9/26 15:04:16"
   }
 ]

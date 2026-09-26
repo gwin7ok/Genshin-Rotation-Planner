@@ -32,34 +32,21 @@ export function extractEquipmentTimings(text: string): ExtractedTimings {
   let cooldown: number | undefined;
   let cooldownMatch: string | undefined;
 
-  // --- 1. 継続時間 (Duration) の正規表現抽出 ---
-  // 例: "継続時間12秒", "12秒間", "12秒継続", "10秒の間"
-  const durPatterns: Array<{ re: RegExp; group: number }> = [
-    { re: /(?:継続時間|持続時間)\s*([\d.]+)\s*秒/i, group: 1 },
-    { re: /([\d.]+)\s*秒継続/i, group: 1 },
-    { re: /([\d.]+)\s*秒間/i, group: 1 },
-    { re: /([\d.]+)\s*秒(?:の間|持続)/i, group: 1 },
-  ];
-
-  for (const { re, group } of durPatterns) {
-    const match = text.match(re);
-    if (match && match[group]) {
-      const val = parseFloat(match[group]);
-      if (!isNaN(val) && val > 0) {
-        duration = val;
-        durationMatch = match[0];
-        break;
-      }
-    }
-  }
-
-  // --- 2. クールタイム (Cooldown) の正規表現抽出 ---
-  // 例: "20秒毎に1回", "クールタイム20秒", "20秒に1回のみ発動", "発動後20秒の間、...獲得することはできない"
+  // --- 1. クールタイム (Cooldown) の正規表現抽出 ---
+  // 先にクールタイム文脈（発動後のXX秒間...など）を検出し、持続時間との誤認を防ぐ
   const cdPatterns: Array<{ re: RegExp; group: number }> = [
+    // 確実なCT表記: "クールタイムは20秒", "CT: 15秒", "CD 20秒"
+    { re: /(?:CD|クールタイム|CT)[：:\s]*(?:は)?\s*([\d.]+)\s*秒/i, group: 1 },
+    // "発動後(の)20秒間、...再度獲得することはできない/発動できない"
+    { re: /(?:発動後|発動すると)(?:の)?\s*([\d.]+)\s*秒(?:間|の間)?、?[^。]*?(?:再度|再発動|CT|再び|獲得することはできな|発動できな)/i, group: 1 },
+    // "再発動可能になるまで20秒"
+    { re: /(?:再発動可能になるまで|再発動のクールタイムは|次の発動まで)\s*([\d.]+)\s*秒/i, group: 1 },
+    // "最短で6秒毎に1回発動"
+    { re: /最短で\s*([\d.]+)\s*秒(?:毎|ごと)に\s*(?:1|一)\s*回/i, group: 1 },
+    // "20秒毎に1回のみ発動可能", "20秒ごとに1回"
     { re: /([\d.]+)\s*秒(?:毎|ごと)に\s*(?:1|一)\s*回/i, group: 1 },
-    { re: /(?:CD|クールタイム|CT)[：:\s]*([\d.]+)\s*秒/i, group: 1 },
-    { re: /([\d.]+)\s*秒に(?:1|一)回のみ発動/i, group: 1 },
-    { re: /(?:発動後|発動すると)\s*([\d.]+)\s*秒(?:の間)?、?[^。]*?(?:再度|再発動|CT|獲得することはできない)/i, group: 1 },
+    // "20秒に1回のみ発動"
+    { re: /([\d.]+)\s*秒に(?:1|一)回(?:のみ)?(?:発動|獲得)?/i, group: 1 },
   ];
 
   for (const { re, group } of cdPatterns) {
@@ -69,6 +56,33 @@ export function extractEquipmentTimings(text: string): ExtractedTimings {
       if (!isNaN(val) && val > 0) {
         cooldown = val;
         cooldownMatch = match[0];
+        break;
+      }
+    }
+  }
+
+  // --- 2. 継続時間 (Duration) の正規表現抽出 ---
+  // 例: "継続時間12秒", "12秒間", "12秒継続", "10秒の間"
+  // 注意: クールタイム文脈（「発動後の20秒間、...再度」など）でマッチした秒数と同一の場合は除外
+  const durPatterns: Array<{ re: RegExp; group: number }> = [
+    { re: /(?:継続時間|持続時間)\s*([\d.]+)\s*秒/i, group: 1 },
+    { re: /([\d.]+)\s*秒継続/i, group: 1 },
+    { re: /(?<!発動後(?:の)?)\b([\d.]+)\s*秒間(?![^。]*?(?:再度|再発動|獲得することはできな))/i, group: 1 },
+    { re: /([\d.]+)\s*秒(?:の間|持続)/i, group: 1 },
+    { re: /([\d.]+)\s*秒間/i, group: 1 },
+  ];
+
+  for (const { re, group } of durPatterns) {
+    const match = text.match(re);
+    if (match && match[group]) {
+      const val = parseFloat(match[group]);
+      if (!isNaN(val) && val > 0) {
+        // cooldownMatch に含まれる秒数と被っている場合は、CTを優先して次の候補を探す
+        if (cooldownMatch && cooldownMatch.includes(`${val}秒`) && cooldownMatch.includes('発動後')) {
+          continue;
+        }
+        duration = val;
+        durationMatch = match[0];
         break;
       }
     }

@@ -8,7 +8,9 @@ import {
   CharacterRuntimeState,
   PassiveSpan,
 } from '../types/genshin';
+import { GenshinDatabase } from '../types/database';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
+import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
 
 export interface CalculatedRotation {
   totalDuration: number;
@@ -19,7 +21,7 @@ export interface CalculatedRotation {
   characterStates: Record<string, CharacterRuntimeState>;
   validationIssues: ValidationIssue[];
   activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
-  /** 発動バフ（固有天賦）の効果・CT */
+  /** 発動バフ（固有天賦・武器・聖遺物）の効果・CT */
   passiveSpans: PassiveSpan[];
   loopStatus: {
     canLoopImmediately: boolean;
@@ -30,6 +32,7 @@ export interface CalculatedRotation {
 export interface RotationOptions {
   switchDelay?: number;
   actionDelay?: number;
+  database?: GenshinDatabase;
 }
 
 export function calculateRotation(
@@ -214,26 +217,32 @@ export function calculateRotation(
       }
     }
 
-    // 発動バフ（固有天賦）: 発動位置は出場の先頭からの秒数（出場時間の範囲内に収める）
+    // 連動・発動バフ（固有天賦・武器・聖遺物）: 発動位置は出場の先頭からの秒数（出場時間の範囲内に収める）
+    const availableBuffs = getAvailableBuffsForCharacter(char, options?.database);
+
     for (const trigger of rawStint.passiveTriggers ?? []) {
-      const def = char.passiveEffects?.find(p => p.id === trigger.passiveEffectId);
+      const def = availableBuffs.find(b => b.id === trigger.passiveEffectId);
+      const category: BuffCategory = def?.category || (trigger.passiveEffectId.startsWith('wbuff_') ? 'weapon' : trigger.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
       const duration = trigger.duration ?? def?.duration ?? 0;
       const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
       const startTime = Number((stintStartTime + Math.min(Math.max(0, trigger.offset), stintDuration)).toFixed(3));
       const ctKey = `${char.id}:${trigger.passiveEffectId}`;
       const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
       if (hasCTViolation) {
+        const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
         validationIssues.push({
           id: `passive_ct_${trigger.id}`,
           severity: 'warning',
           characterId: char.id,
           stintId: rawStint.id,
           time: startTime,
-          title: `${char.name}: 発動バフCT中`,
+          title: `${char.name}: ${catLabel}CT中`,
           message: `「${trigger.name}」の発動時点でCTがまだ ${(latestPassiveCTEnd[ctKey] - startTime).toFixed(1)} 秒残っています`,
         });
       }
       if (cooldown > 0) latestPassiveCTEnd[ctKey] = startTime + cooldown;
+
+      const buffColor = def?.color || (category === 'weapon' ? '#0284c7' : category === 'artifact' ? '#c084fc' : char.color);
 
       passiveSpans.push({
         id: `passive_${trigger.id}`,
@@ -242,24 +251,27 @@ export function calculateRotation(
         characterId: char.id,
         passiveEffectId: trigger.passiveEffectId,
         name: trigger.name,
+        category,
         startTime,
         duration,
         endTime: startTime + duration,
         cooldown,
         cooldownEnd: startTime + cooldown,
         hasCTViolation,
+        color: buffColor,
+        description: def?.description ?? trigger.name,
       });
       if (duration > 0) {
         activeBuffs.push({
           id: `passive_buff_${trigger.id}`,
-          buffId: `passive_${char.id}_${trigger.passiveEffectId}`, // 同じ固有天賦はバフ重複の集計で1つとして数える
+          buffId: `buff_${char.id}_${trigger.passiveEffectId}`, // 同じバフは重複集計で1つとして数える
           name: `${char.name}: ${trigger.name}`,
           sourceCharacterId: char.id,
-          sourceType: 'talent',
+          sourceType: category,
           startTime,
           endTime: startTime + duration,
           duration,
-          color: char.color,
+          color: buffColor,
           description: def?.description ?? trigger.name,
           origin: 'passive',
         });

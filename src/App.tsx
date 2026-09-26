@@ -94,8 +94,8 @@ export default function App() {
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, stints, { switchDelay, actionDelay });
-  }, [characters, stints, switchDelay, actionDelay]);
+    return calculateRotation(characters, stints, { switchDelay, actionDelay, database });
+  }, [characters, stints, switchDelay, actionDelay, database]);
 
   // Keep playback currentTime bounded within totalDuration
   const totalDuration = calculatedResult.totalDuration;
@@ -402,6 +402,7 @@ export default function App() {
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
           loopStartIndex={loopStartIndex}
+          database={database}
         />
 
         {/* Cooldown Conflict Validation, Energy Sufficiency & Rotation Loop Diagnosis */}

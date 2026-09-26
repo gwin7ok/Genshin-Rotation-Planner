@@ -17,6 +17,15 @@ export interface EquipmentBuffDefinition {
   };
 }
 
+export interface WeaponRefinementData {
+  rank: number; // 1 | 2 | 3 | 4 | 5
+  description: string;
+  duration?: number; // 効果持続時間 (秒)
+  cooldown?: number; // クールタイム (秒)
+  statEffectSummary?: string; // 効果要約
+  buffEffects?: EquipmentBuffDefinition[];
+}
+
 export interface WeaponDatabaseItem {
   id: string;
   name: string;
@@ -27,6 +36,10 @@ export interface WeaponDatabaseItem {
   description: string;
   baseAttack?: number;
   avatarUrl?: string;
+  /** デフォルト精錬ランク (★5=1, ★4以下=5) */
+  refinementRank?: number;
+  /** 全精錬ランク (R1〜R5) の効果データ配列 */
+  refinements?: WeaponRefinementData[];
   buffEffects?: EquipmentBuffDefinition[];
   // 旧形式互換用
   buffEffect?: {

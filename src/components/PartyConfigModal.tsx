@@ -3,6 +3,7 @@ import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, 
 import { CharacterAvatar } from './CharacterAvatar';
 import { CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
+import { WeaponModel } from '../models/WeaponModel';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, createEmptySlotCharacter, isEmptySlotCharacter } from '../data/characters';
 import {
@@ -282,8 +283,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                {/* Weapon Selection from Database */}
-                <div className="space-y-1">
+                {/* Weapon Selection from Database & Refinement Rank */}
+                <div className="space-y-1.5">
                   <label className="text-slate-400 font-medium flex items-center justify-between">
                     <span>装備武器 (DB連動)</span>
                     <span className="text-[10px] text-sky-400 font-bold">
@@ -293,30 +294,101 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                        currentSlotChar.weaponType === 'bow' ? '弓' : '法器'}
                     </span>
                   </label>
-                  <select
-                    value={currentSlotChar.weaponName || ''}
-                    onChange={(e) => handleUpdateCurrentField('weaponName', e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer"
-                  >
-                    <option value="">-- DBから武器を選択 --</option>
-                    {database.weapons
-                      .filter(w => w.weaponType === currentSlotChar.weaponType)
-                      .sort((a, b) => Number(b.id) - Number(a.id))
-                      .map(w => (
-                        <option key={w.id} value={w.name}>
-                          {'★'.repeat(w.rarity)} {w.name}
-                        </option>
-                      ))
-                    }
-                    {currentSlotChar.weaponName && !database.weapons.some(w => w.name === currentSlotChar.weaponName) && (
-                      <option value={currentSlotChar.weaponName}>{currentSlotChar.weaponName} (カスタム入力)</option>
-                    )}
-                  </select>
+
+                  <div className="flex gap-1.5">
+                    <select
+                      value={currentSlotChar.weaponName || ''}
+                      onChange={(e) => {
+                        const newWeaponName = e.target.value;
+                        const wObj = database.weapons.find(w => w.name === newWeaponName);
+                        const defaultRank = wObj ? (wObj.refinementRank ?? (wObj.rarity >= 5 ? 1 : 5)) : 1;
+                        const updated = [...editingChars];
+                        updated[selectedSlot] = {
+                          ...updated[selectedSlot],
+                          weaponName: newWeaponName,
+                          weaponRefinementRank: defaultRank,
+                        };
+                        setEditingChars(updated);
+                      }}
+                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer min-w-0"
+                    >
+                      <option value="">-- DBから武器を選択 --</option>
+                      {database.weapons
+                        .filter(w => w.weaponType === currentSlotChar.weaponType)
+                        .sort((a, b) => Number(b.id) - Number(a.id))
+                        .map(w => (
+                          <option key={w.id} value={w.name}>
+                            {'★'.repeat(w.rarity)} {w.name}
+                          </option>
+                        ))
+                      }
+                      {currentSlotChar.weaponName && !database.weapons.some(w => w.name === currentSlotChar.weaponName) && (
+                        <option value={currentSlotChar.weaponName}>{currentSlotChar.weaponName} (カスタム入力)</option>
+                      )}
+                    </select>
+
+                    {/* Refinement Rank Selector */}
+                    {(() => {
+                      const weaponModel = WeaponModel.findInDatabase(
+                        database.weapons,
+                        currentSlotChar.weaponName,
+                        currentSlotChar.weaponRefinementRank
+                      );
+                      if (!weaponModel) return null;
+                      return (
+                        <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="精錬ランク（R1〜R5）">
+                          <span className="text-[10px] text-amber-400 font-black">精錬</span>
+                          <select
+                            value={weaponModel.rank}
+                            onChange={(e) => {
+                              const r = parseInt(e.target.value, 10);
+                              handleUpdateCurrentField('weaponRefinementRank', r);
+                            }}
+                            className="bg-slate-950 text-amber-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
+                          >
+                            {[1, 2, 3, 4, 5].map(r => (
+                              <option key={`refine_opt_${r}`} value={r}>
+                                R{r}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Weapon Dynamic Passive Details (Resolved via WeaponModel) */}
+                  {(() => {
+                    const weaponModel = WeaponModel.findInDatabase(
+                      database.weapons,
+                      currentSlotChar.weaponName,
+                      currentSlotChar.weaponRefinementRank
+                    );
+                    if (!weaponModel) return null;
+                    return (
+                      <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
+                        <div className="flex items-center justify-between text-[10px] font-mono">
+                          <span className="font-bold text-amber-300">
+                            {weaponModel.passiveName} (R{weaponModel.rank})
+                          </span>
+                          <span className="text-slate-400">
+                            {weaponModel.cooldown ? `⏱️ CT ${weaponModel.cooldown}s` : ''}
+                            {weaponModel.duration ? ` / 効果 ${weaponModel.duration}s` : ''}
+                          </span>
+                        </div>
+                        <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
+                          {weaponModel.description}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Artifact Set Selection from Database */}
-                <div className="space-y-1">
-                  <label className="text-slate-400 font-medium">聖遺物セット (DB連動)</label>
+                <div className="space-y-1.5">
+                  <label className="text-slate-400 font-medium flex items-center justify-between">
+                    <span>聖遺物セット (DB連動)</span>
+                  </label>
                   <select
                     value={currentSlotChar.artifactSetName || ''}
                     onChange={(e) => handleUpdateCurrentField('artifactSetName', e.target.value)}
@@ -334,6 +406,22 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       <option value={currentSlotChar.artifactSetName}>{currentSlotChar.artifactSetName} (カスタム入力)</option>
                     )}
                   </select>
+
+                  {/* Artifact Passive Details */}
+                  {(() => {
+                    const art = database.artifacts.find(a => a.name === currentSlotChar.artifactSetName);
+                    if (!art) return null;
+                    return (
+                      <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
+                        <div className="text-[10px] font-mono font-bold text-purple-300">
+                          {art.name} (4セット効果)
+                        </div>
+                        <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
+                          {art.effect4p || art.effect2p || 'セット効果なし'}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

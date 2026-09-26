@@ -3,8 +3,8 @@ import { MASTER_CHARACTERS } from './characters';
 import weaponsMasterJson from './weapons_master_data.json';
 import artifactsMasterJson from './artifacts_master_data.json';
 
-/** DB 形式のバージョン。キャラのデータ構造を変えたら上げる (loadDatabase で旧データを移行する) */
-export const DATABASE_VERSION = 10;
+/** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
+export const DATABASE_VERSION = 11;
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

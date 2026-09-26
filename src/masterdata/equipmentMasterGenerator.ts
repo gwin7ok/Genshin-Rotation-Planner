@@ -39,6 +39,10 @@ export interface WeaponGenerationReport {
   extractedBuffsList: BuffExtractionEntry[];
   constantPassiveItems: Array<{ sourceType: 'weapon'; name: string }>;
   errors: string[];
+  sourceApiUrl?: string;
+  networkDurationMs?: number;
+  fetchedRawCountJa?: number;
+  fetchedRawCountEn?: number;
 }
 
 export interface ArtifactGenerationReport {
@@ -48,6 +52,10 @@ export interface ArtifactGenerationReport {
   extractedBuffsList: BuffExtractionEntry[];
   constantPassiveItems: Array<{ sourceType: 'artifact'; name: string }>;
   errors: string[];
+  sourceApiUrl?: string;
+  networkDurationMs?: number;
+  fetchedRawCountJa?: number;
+  fetchedRawCountEn?: number;
 }
 
 export interface EquipmentGenerationReport {
@@ -62,6 +70,8 @@ export interface EquipmentGenerationReport {
     name: string;
   }>;
   errors: string[];
+  sourceApiUrl?: string;
+  networkDurationMs?: number;
 }
 
 export interface EquipmentMasterResult {
@@ -134,6 +144,7 @@ export async function generateWeaponsMasterOnline(
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let weaponsJa: any[] = [];
   let weaponsEn: any[] = [];
+  const networkStart = Date.now();
 
   try {
     const results = await Promise.all([
@@ -142,6 +153,10 @@ export async function generateWeaponsMasterOnline(
     ]);
     weaponsJa = results[0];
     weaponsEn = results[1];
+    report.sourceApiUrl = `${GENSHIN_DB_API}/weapons`;
+    report.networkDurationMs = Date.now() - networkStart;
+    report.fetchedRawCountJa = weaponsJa.length;
+    report.fetchedRawCountEn = weaponsEn.length;
   } catch (apiErr) {
     // Node.js 環境のみローカル genshin-db パッケージをフォールバックとして試行
     if (typeof window === 'undefined') {
@@ -166,6 +181,7 @@ export async function generateWeaponsMasterOnline(
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const weaponsEnMap = new Map<string, any>(weaponsEn.map(w => [w.name, w]));
   const weaponsList: WeaponDatabaseItem[] = [];
+  const seenWeaponIds = new Set<string>();
 
   for (let i = 0; i < weaponsJa.length; i++) {
     const wJa = weaponsJa[i];
@@ -178,13 +194,23 @@ export async function generateWeaponsMasterOnline(
     const wEn = weaponsEnMap.get(wJa.name) || weaponsEn[i] || {};
     const englishName = wEn.name || wJa.name;
 
-    // IDの正規化 (英名ベース)
-    const id = englishName
+    // ID: genshin-db公式ID (例: "15503") を主キーとして使用
+    let id = String(wJa.id ?? wEn.id ?? englishName
       .toLowerCase()
       .replace(/['"-]/g, '')
       .replace(/[^a-z0-9]/g, '_')
       .replace(/_+/g, '_')
-      .replace(/^_+|_+$/g, '');
+      .replace(/^_+|_+$/g, ''));
+
+    // 重複IDの回避（「一心伝」名刀などゲーム内別バリアント対策）
+    if (seenWeaponIds.has(id)) {
+      let counter = 2;
+      while (seenWeaponIds.has(`${id}_${counter}`)) {
+        counter++;
+      }
+      id = `${id}_${counter}`;
+    }
+    seenWeaponIds.add(id);
 
     const rawType = wJa.weaponType || wEn.weaponType || 'Sword';
     const weaponType: WeaponType = WEAPON_TYPE_MAP[rawType] || 'sword';
@@ -327,6 +353,7 @@ export async function generateArtifactsMasterOnline(
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let artifactsJa: any[] = [];
   let artifactsEn: any[] = [];
+  const networkStart = Date.now();
 
   try {
     const results = await Promise.all([
@@ -335,6 +362,10 @@ export async function generateArtifactsMasterOnline(
     ]);
     artifactsJa = results[0];
     artifactsEn = results[1];
+    report.sourceApiUrl = `${GENSHIN_DB_API}/artifacts`;
+    report.networkDurationMs = Date.now() - networkStart;
+    report.fetchedRawCountJa = artifactsJa.length;
+    report.fetchedRawCountEn = artifactsEn.length;
   } catch (apiErr) {
     if (typeof window === 'undefined') {
       try {
@@ -358,6 +389,7 @@ export async function generateArtifactsMasterOnline(
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const artifactsEnMap = new Map<string, any>(artifactsEn.map(a => [a.name, a]));
   const artifactsList: ArtifactSetDatabaseItem[] = [];
+  const seenArtifactIds = new Set<string>();
 
   for (let i = 0; i < artifactsJa.length; i++) {
     const aJa = artifactsJa[i];
@@ -366,13 +398,22 @@ export async function generateArtifactsMasterOnline(
     const aEn = artifactsEnMap.get(aJa.name) || artifactsEn[i] || {};
     const englishName = aEn.name || aJa.name;
 
-    // IDの正規化
-    const id = englishName
+    // ID: genshin-db公式ID (例: "15002") を主キーとして使用
+    let id = String(aJa.id ?? aEn.id ?? englishName
       .toLowerCase()
       .replace(/['"-]/g, '')
       .replace(/[^a-z0-9]/g, '_')
       .replace(/_+/g, '_')
-      .replace(/^_+|_+$/g, '');
+      .replace(/^_+|_+$/g, ''));
+
+    if (seenArtifactIds.has(id)) {
+      let counter = 2;
+      while (seenArtifactIds.has(`${id}_${counter}`)) {
+        counter++;
+      }
+      id = `${id}_${counter}`;
+    }
+    seenArtifactIds.add(id);
 
     const rarityList: number[] = Array.isArray(aJa.rarityList)
       ? aJa.rarityList.map((r: any) => parseInt(String(r), 10)).filter((r: number) => !isNaN(r))
@@ -426,6 +467,7 @@ export async function generateArtifactsMasterOnline(
           id: primaryBuff.id,
           name: primaryBuff.name,
           duration: primaryBuff.duration || 10,
+          cooldown: primaryBuff.cooldown,
           statEffect: primaryBuff.statEffectSummary || '4セット効果バフ',
           description: primaryBuff.description,
           color: primaryBuff.color || '#ec4899',

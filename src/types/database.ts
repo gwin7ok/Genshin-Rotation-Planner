@@ -62,6 +62,7 @@ export interface ArtifactSetDatabaseItem {
     id: string;
     name: string;
     duration: number; // in seconds
+    cooldown?: number; // in seconds
     statEffect: string;
     description: string;
     color: string;

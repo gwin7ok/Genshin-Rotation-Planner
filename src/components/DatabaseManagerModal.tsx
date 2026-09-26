@@ -791,7 +791,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     {weapon.buffEffect && (
                       <div className="flex items-center justify-between text-[11px] font-mono bg-sky-950/40 border border-sky-800/50 px-2.5 py-1 rounded text-sky-200">
                         <span>連動バフ: {weapon.buffEffect.name}</span>
-                        <strong className="text-amber-300">{weapon.buffEffect.duration}s 持続</strong>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="text-amber-300">{weapon.buffEffect.duration}s 持続</strong>
+                          {weapon.buffEffect.cooldown !== undefined && weapon.buffEffect.cooldown > 0 && (
+                            <span className="text-cyan-300 text-[10px]">/ CT {weapon.buffEffect.cooldown}s</span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -923,7 +928,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     {art.buffEffect && (
                       <div className="flex items-center justify-between text-[11px] font-mono bg-purple-950/40 border border-purple-800/50 px-2.5 py-1 rounded text-purple-200">
                         <span>連動バフ: {art.buffEffect.name}</span>
-                        <strong className="text-amber-300">{art.buffEffect.duration}s 持続</strong>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="text-amber-300">{art.buffEffect.duration}s 持続</strong>
+                          {art.buffEffect.cooldown !== undefined && art.buffEffect.cooldown > 0 && (
+                            <span className="text-cyan-300 text-[10px]">/ CT {art.buffEffect.cooldown}s</span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1090,6 +1100,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <span>武器マスター生成レポート: 全 {weaponSyncReport.totalWeapons} 件 / 発動バフ抽出 {weaponSyncReport.weaponsWithBuffs} 件</span>
                         <span className="text-[10px] text-slate-500 font-mono">常時効果 {weaponSyncReport.constantPassiveItems.length} 件</span>
                       </div>
+                      {weaponSyncReport.sourceApiUrl && (
+                        <div className="flex flex-wrap items-center gap-2 p-1.5 rounded bg-sky-950/60 border border-sky-800/40 text-[10px] font-mono text-sky-300">
+                          <span>🌐 オンラインAPI取得: {weaponSyncReport.sourceApiUrl}</span>
+                          <span>• 通信時間: {((weaponSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2)}s</span>
+                          <span>• 取得生データ: 日本語 {weaponSyncReport.fetchedRawCountJa}件 / 英語 {weaponSyncReport.fetchedRawCountEn}件</span>
+                        </div>
+                      )}
                       <div className="text-slate-400">発動バフ抽出サンプル (全 {weaponSyncReport.extractedBuffsList.length} 件中):</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
                         {weaponSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
@@ -1169,6 +1186,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <span>聖遺物マスター生成レポート: 全 {artifactSyncReport.totalArtifacts} セット / 発動バフ抽出 {artifactSyncReport.artifactsWithBuffs} 件</span>
                         <span className="text-[10px] text-slate-500 font-mono">常時効果 {artifactSyncReport.constantPassiveItems.length} 件</span>
                       </div>
+                      {artifactSyncReport.sourceApiUrl && (
+                        <div className="flex flex-wrap items-center gap-2 p-1.5 rounded bg-pink-950/60 border border-pink-800/40 text-[10px] font-mono text-pink-300">
+                          <span>🌐 オンラインAPI取得: {artifactSyncReport.sourceApiUrl}</span>
+                          <span>• 通信時間: {((artifactSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2)}s</span>
+                          <span>• 取得生データ: 日本語 {artifactSyncReport.fetchedRawCountJa}件 / 英語 {artifactSyncReport.fetchedRawCountEn}件</span>
+                        </div>
+                      )}
                       <div className="text-slate-400">発動バフ抽出サンプル (全 {artifactSyncReport.extractedBuffsList.length} 件中):</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
                         {artifactSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
@@ -1790,6 +1814,29 @@ const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onToggl
     const weaponToSave = { ...form };
     if (!hasBuff) {
       delete weaponToSave.buffEffect;
+      weaponToSave.buffEffects = [];
+    } else if (weaponToSave.buffEffect) {
+      const cd = typeof weaponToSave.buffEffect.cooldown === 'number' && weaponToSave.buffEffect.cooldown > 0
+        ? weaponToSave.buffEffect.cooldown
+        : undefined;
+      weaponToSave.buffEffect = {
+        ...weaponToSave.buffEffect,
+        cooldown: cd,
+      };
+      // buffEffects 配列とも同期
+      weaponToSave.buffEffects = [
+        {
+          id: weaponToSave.buffEffect.id || `wbuff_${weaponToSave.id}`,
+          name: weaponToSave.buffEffect.name,
+          sourceType: 'weapon',
+          sourceId: weaponToSave.id,
+          duration: weaponToSave.buffEffect.duration,
+          cooldown: cd,
+          description: weaponToSave.buffEffect.description || weaponToSave.description,
+          color: weaponToSave.buffEffect.color,
+          statEffectSummary: weaponToSave.buffEffect.statEffect,
+        }
+      ];
     }
     onSave(weaponToSave);
   };
@@ -1921,7 +1968,7 @@ const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onToggl
 
             {hasBuff && form.buffEffect && (
               <div className="space-y-2 pt-2 border-t border-slate-800 font-mono">
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div>
                     <label className="block text-slate-400 text-[10px]">バフ表示名</label>
                     <input
@@ -1939,12 +1986,31 @@ const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, onToggl
                     <input
                       type="number"
                       step="0.5"
+                      min="0.1"
                       value={form.buffEffect.duration}
                       onChange={e => setForm({
                         ...form,
                         buffEffect: { ...form.buffEffect!, duration: parseFloat(e.target.value) || 1 }
                       })}
                       className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 text-[10px]">CT / クールタイム (秒)</label>
+                    <input
+                      type="number"
+                      step="0.5"
+                      min="0"
+                      placeholder="CTなし"
+                      value={form.buffEffect.cooldown ?? ''}
+                      onChange={e => {
+                        const val = e.target.value === '' ? undefined : (parseFloat(e.target.value) || 0);
+                        setForm({
+                          ...form,
+                          buffEffect: { ...form.buffEffect!, cooldown: val }
+                        });
+                      }}
+                      className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-bold placeholder-slate-600"
                     />
                   </div>
                 </div>
@@ -1985,6 +2051,29 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
     const artifactToSave = { ...form };
     if (!hasBuff) {
       delete artifactToSave.buffEffect;
+      artifactToSave.buffEffects = [];
+    } else if (artifactToSave.buffEffect) {
+      const cd = typeof artifactToSave.buffEffect.cooldown === 'number' && artifactToSave.buffEffect.cooldown > 0
+        ? artifactToSave.buffEffect.cooldown
+        : undefined;
+      artifactToSave.buffEffect = {
+        ...artifactToSave.buffEffect,
+        cooldown: cd,
+      };
+      // buffEffects 配列とも同期
+      artifactToSave.buffEffects = [
+        {
+          id: artifactToSave.buffEffect.id || `abuff_${artifactToSave.id}`,
+          name: artifactToSave.buffEffect.name,
+          sourceType: 'artifact',
+          sourceId: artifactToSave.id,
+          duration: artifactToSave.buffEffect.duration,
+          cooldown: cd,
+          description: artifactToSave.buffEffect.description || artifactToSave.effect4p,
+          color: artifactToSave.buffEffect.color,
+          statEffectSummary: artifactToSave.buffEffect.statEffect,
+        }
+      ];
     }
     onSave(artifactToSave);
   };
@@ -2074,7 +2163,7 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
             </label>
 
             {hasBuff && form.buffEffect && (
-              <div className="grid grid-cols-2 gap-2 font-mono pt-2 border-t border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono pt-2 border-t border-slate-800">
                 <div>
                   <label className="block text-slate-400 text-[10px]">バフ表示名</label>
                   <input
@@ -2092,12 +2181,31 @@ const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ artifact, o
                   <input
                     type="number"
                     step="0.5"
+                    min="0.1"
                     value={form.buffEffect.duration}
                     onChange={e => setForm({
                       ...form,
                       buffEffect: { ...form.buffEffect!, duration: parseFloat(e.target.value) || 1 }
                     })}
                     className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-[10px]">CT / クールタイム (秒)</label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    min="0"
+                    placeholder="CTなし"
+                    value={form.buffEffect.cooldown ?? ''}
+                    onChange={e => {
+                      const val = e.target.value === '' ? undefined : (parseFloat(e.target.value) || 0);
+                      setForm({
+                        ...form,
+                        buffEffect: { ...form.buffEffect!, cooldown: val }
+                      });
+                    }}
+                    className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-bold placeholder-slate-600"
                   />
                 </div>
               </div>

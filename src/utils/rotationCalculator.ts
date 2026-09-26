@@ -114,6 +114,8 @@ export function calculateRotation(
 
       const computedAction: CharacterActionInstance = {
         ...act,
+        hasCTCollision: false,
+        collisionRemainingCT: undefined,
         duration,
         startTime: actionStartTime,
         endTime: actionEndTime,

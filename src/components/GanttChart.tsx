@@ -245,16 +245,31 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     actionIndex: number;
   } | null>(null);
 
+  const cleanStintsForState = (rawStints: Stint[]): Stint[] => {
+    return rawStints.map(s => ({
+      ...s,
+      actions: s.actions
+        .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
+        .map(a => {
+          const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+          return rest;
+        })
+    }));
+  };
+
   const handleReorderActionsInStint = (stintId: string, fromIndex: number, toIndex: number) => {
     if (!onUpdateStints || fromIndex === toIndex) return;
     const newStints = stints.map(s => {
       if (s.id !== stintId) return s;
-      const actions = [...s.actions];
-      const [moved] = actions.splice(fromIndex, 1);
-      actions.splice(toIndex, 0, moved);
-      return { ...s, actions };
+      const cleanActions = s.actions.map(a => {
+        const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+        return rest;
+      });
+      const [moved] = cleanActions.splice(fromIndex, 1);
+      cleanActions.splice(toIndex, 0, moved);
+      return { ...s, actions: cleanActions };
     });
-    onUpdateStints(newStints);
+    onUpdateStints(cleanStintsForState(newStints));
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -303,6 +318,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     });
     return list;
   }, [stints, characterMap]);
+
+  // 全体のCT違反（スキル・爆発・固有天賦・武器・聖遺物）の合計数
+  const totalCTCollisions = useMemo(() => {
+    let count = 0;
+    stints.forEach(s => {
+      count += s.actions.filter(a => a.hasCTCollision).length;
+    });
+    passiveSpans.forEach(p => {
+      if (p.hasCTViolation) count++;
+    });
+    return count;
+  }, [stints, passiveSpans]);
 
   // Projected 2nd Cycle Calculations & Automatic CT/Buff Collision Checks
   const cycle2Data = useMemo(() => {
@@ -874,7 +901,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       const next = [...stints];
       const [moved] = next.splice(d.fromIndex, 1);
       next.splice(d.targetIndex, 0, moved);
-      onUpdateStints(next);
+      onUpdateStints(cleanStintsForState(next));
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
@@ -1088,6 +1115,19 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
                   </div>
+
+                  {/* Overall CT Collision Status Badge at Far Right End of Loop Benchmark Track */}
+                  {totalCTCollisions > 0 ? (
+                    <div className="sticky right-2 z-30 ml-auto flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-950/90 border border-red-500 text-red-300 text-[11px] font-bold shadow-red-500/30 shadow animate-pulse shrink-0 pointer-events-auto my-auto">
+                      <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                      <span>⚠️ 全体CT違反あり ({totalCTCollisions}件)</span>
+                    </div>
+                  ) : (
+                    <div className="sticky right-2 z-30 ml-auto flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 text-[11px] font-bold shadow shrink-0 pointer-events-auto my-auto">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>✅ 全体CT違反なし</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1403,7 +1443,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const temp = next[stintIdx];
                                       next[stintIdx] = next[stintIdx - 1];
                                       next[stintIdx - 1] = temp;
-                                      onUpdateStints(next);
+                                      onUpdateStints(cleanStintsForState(next));
                                     }
                                   }}
                                   disabled={stintIdx === 0}
@@ -1420,7 +1460,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const temp = next[stintIdx];
                                       next[stintIdx] = next[stintIdx + 1];
                                       next[stintIdx + 1] = temp;
-                                      onUpdateStints(next);
+                                      onUpdateStints(cleanStintsForState(next));
                                     }
                                   }}
                                   disabled={stintIdx === stints.length - 1}
@@ -1819,51 +1859,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             </div>
 
             {/* =========================================================================
-                4.5 Automatic 2nd-Cycle Loop Projection & CT/Buff Collision Analyzer (2周目自動投影・読取専用)
+                4.5 Automatic 2nd-Cycle Loop Projection Swimlanes (2周目自動投影・読取専用)
             ========================================================================= */}
             {cycle2Data.enabled && cycle2Data.stints.length > 0 && (
               <div className="border-t-2 border-purple-800/80 bg-slate-950/95">
-                {/* 2nd Cycle Section Header */}
-                <div className="flex items-center border-b border-purple-900/60 bg-gradient-to-r from-purple-950/90 via-slate-950 to-indigo-950/80 px-3 py-2">
-                  <div className="w-[180px] shrink-0 sticky left-0 z-45 flex items-center gap-1.5 font-bold text-xs text-purple-300 bg-slate-950 px-2 py-1 rounded border border-purple-800/60 shadow">
-                    <Repeat className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-                    <span className="truncate">2周目ループ投影</span>
-                    <span className="text-[9px] bg-purple-900/80 border border-purple-700 text-purple-200 px-1 py-0.2 rounded flex items-center gap-0.5 shrink-0">
-                      <Lock className="w-2.5 h-2.5" /> 読取専用
-                    </span>
-                  </div>
-
-                  <div className="flex-1 flex flex-wrap items-center justify-between gap-2 px-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[11px] text-purple-300/90 font-medium">
-                        🔁 1周目 <strong className="text-white font-mono">{loopStartTime.toFixed(1)}s ~ {totalDuration.toFixed(1)}s</strong> の定常区間を <strong className="text-purple-300 font-mono">{cycle2Data.cycle2StartTime.toFixed(1)}s ~ {cycle2Data.cycle2EndTime.toFixed(1)}s</strong> に自動投影
-                      </span>
-                      <span className="text-[10px] text-slate-500">（1周目の設定がリアルタイム反映・編集不可）</span>
-                    </div>
-
-                    {/* Global CT Collision Status Banner */}
-                    <div className="flex items-center gap-2">
-                      {cycle2Data.cooldownCollisions.length > 0 ? (
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-red-950/80 border border-red-500 text-red-300 text-xs font-bold animate-pulse shadow-red-500/20 shadow">
-                          <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                          <span>⚠️ CT衝突検出: {cycle2Data.cooldownCollisions.length}件のアクションでCT未回復</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/80 border border-emerald-500/70 text-emerald-300 text-xs font-bold">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                          <span>✅ 全アクションCT解消済み（2周目即座移行可能）</span>
-                        </div>
-                      )}
-
-                      {cycle2Data.carryOverCooldowns.length > 0 && (
-                        <div className="flex items-center gap-1 px-2 py-1 rounded bg-sky-950/80 border border-sky-500/60 text-sky-300 text-[11px] font-mono">
-                          <span>⏱️ 1周目持ち越しCT: <strong>{cycle2Data.carryOverCooldowns.length}件</strong> (E:{cycle2Data.carryOverSkillCDs.length} / Q:{cycle2Data.carryOverBurstCDs.length})</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
                 {/* 2nd Cycle Swimlanes (1 Row per Stint, with separate Skill CT row, Burst CT row, and individual Buff rows) */}
                 <div className="divide-y divide-purple-900/30">
                   {cycle2Data.stints.map((stint, stintIdx) => {
@@ -2014,7 +2013,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }}
                                   >
                                     {stint.actions.map((act) => {
-                                      // 見た目は1周目のアクション要素と同じ（CT衝突時のみ警告表示を重ねる）
                                       const actStartX = (act.startTime - stint.startTime) * pixelsPerSecond;
                                       const actWidth = act.duration * pixelsPerSecond;
                                       const isSwap = act.type === 'swap' || (act as any).actionTypeId === 'action_switch_char';
@@ -2067,7 +2065,7 @@ CT状態: ✅ 解消済み`
                               })()}
                             </div>
 
-                            {/* --- Sublane 2: Skill (E) Cooldown Row (1st-cycle carryover/finished + 2nd-cycle new) --- */}
+                            {/* --- Sublane 2: Skill (E) Cooldown Row --- */}
                             <div className="relative h-4 my-0.5">
                               {allStintSkillCDs.map((cd) => {
                                 const isCarryOver = (cd as any).isCarryOver;
@@ -2110,7 +2108,7 @@ CT状態: ✅ 解消済み`
                               })}
                             </div>
 
-                            {/* --- Sublane 3: Burst (Q) Cooldown Row (1st-cycle carryover/finished + 2nd-cycle new) --- */}
+                            {/* --- Sublane 3: Burst (Q) Cooldown Row --- */}
                             <div className="relative h-4 my-0.5">
                               {allStintBurstCDs.map((cd) => {
                                 const isCarryOver = (cd as any).isCarryOver;
@@ -2153,7 +2151,7 @@ CT状態: ✅ 解消済み`
                               })}
                             </div>
 
-                            {/* --- Sublane 4+: 2nd Cycle Buff Rows (Each effect duration in its own independent row) --- */}
+                            {/* --- Sublane 4+: 2nd Cycle Buff Rows --- */}
                             {stintBuffRows.map((bRow, rIdx) => (
                               <div key={`c2_buff_row_${stint.id}_${rIdx}`} className="relative h-4 my-0.5">
                                 {bRow.spans.map((buff) => {
@@ -2239,6 +2237,8 @@ CT状態: ✅ 解消済み`
               </div>
             )}
 
+
+
             {/* =========================================================================
                 5. Vertical Handoff Connector Lines (交代スナップ垂直ガイド線)
                 The user specifically highlighted:
@@ -2270,19 +2270,7 @@ CT状態: ✅ 解消済み`
               </div>
             )}
 
-            {/* =========================================================================
-                5.6 Vertical Cycle 1 Completion / Cycle 2 Loop Start Divider
-            ========================================================================= */}
-            {cycle2Data.enabled && (
-              <div
-                style={{ left: `${totalDuration * pixelsPerSecond + 180}px` }}
-                className="absolute top-0 bottom-0 w-0 border-l-2 border-dashed border-amber-400 pointer-events-none z-30 shadow-xl"
-              >
-                <div className="absolute top-1 -translate-x-1/2 bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded shadow-lg whitespace-nowrap flex items-center gap-1 border border-amber-300">
-                  <span>🏁 1周目完了 ({fmtTime(totalDuration, 2)}) / 🔁 2周目開始</span>
-                </div>
-              </div>
-            )}
+
 
             {/* =========================================================================
                 6. Playhead Scrubber Laser (再生カーソル)

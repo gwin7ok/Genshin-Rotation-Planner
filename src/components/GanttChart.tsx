@@ -957,22 +957,57 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     };
   }, [draggingTrackStint, pixelsPerSecond, stints, onUpdateStints]);
 
-  // Pre-calculate connector points between consecutive stints for vertical snap visualization
+  // Pre-calculate connector points between consecutive stints for vertical snap visualization (1st cycle + 2nd cycle)
   // Stint i ends at t_end, Stint i+1 starts at t_end!
-  const handoffConnectors = stints.slice(0, stints.length - 1).map((stint, idx) => {
-    const nextStint = stints[idx + 1];
-    const fromCharIdx = characters.findIndex(c => c.id === stint.characterId);
-    const toCharIdx = characters.findIndex(c => c.id === nextStint.characterId);
-    const snapTime = stint.endTime ?? 0;
-    return {
-      snapTime,
-      fromCharIdx,
-      toCharIdx,
-      fromCharId: stint.characterId,
-      toCharId: nextStint.characterId,
-      xPos: snapTime * pixelsPerSecond,
-    };
-  });
+  const handoffConnectors = useMemo(() => {
+    // 1. 1st Cycle Connectors
+    const c1List = stints.slice(0, stints.length - 1).map((stint, idx) => {
+      const nextStint = stints[idx + 1];
+      const fromCharIdx = characters.findIndex(c => c.id === stint.characterId);
+      const toCharIdx = characters.findIndex(c => c.id === nextStint.characterId);
+      const snapTime = stint.endTime ?? 0;
+      return {
+        id: `c1_conn_${idx}`,
+        snapTime,
+        relTime: snapTime,
+        displayLabel: `${snapTime.toFixed(1)}s`,
+        fromCharIdx,
+        toCharIdx,
+        fromCharId: stint.characterId,
+        toCharId: nextStint.characterId,
+        xPos: snapTime * pixelsPerSecond,
+        isCycle2: false,
+      };
+    });
+
+    // 2. 2nd Cycle Connectors (2周目開始地点を0s基準として計算)
+    const c2List: typeof c1List = [];
+    if (cycle2Data.enabled && cycle2Data.stints.length > 1) {
+      const c2Stints = cycle2Data.stints;
+      const c2Start = cycle2Data.cycle2StartTime;
+      c2Stints.slice(0, c2Stints.length - 1).forEach((stint, idx) => {
+        const nextStint = c2Stints[idx + 1];
+        const fromCharIdx = characters.findIndex(c => c.id === stint.characterId);
+        const toCharIdx = characters.findIndex(c => c.id === nextStint.characterId);
+        const snapTime = stint.endTime ?? 0;
+        const relTime = Math.max(0, snapTime - c2Start);
+        c2List.push({
+          id: `c2_conn_${idx}`,
+          snapTime,
+          relTime,
+          displayLabel: `+${relTime.toFixed(1)}s`,
+          fromCharIdx,
+          toCharIdx,
+          fromCharId: stint.characterId,
+          toCharId: nextStint.characterId,
+          xPos: snapTime * pixelsPerSecond,
+          isCycle2: true,
+        });
+      });
+    }
+
+    return [...c1List, ...c2List];
+  }, [stints, cycle2Data.enabled, cycle2Data.stints, cycle2Data.cycle2StartTime, characters, pixelsPerSecond]);
 
   // Playhead color state aligned with playback tool in Header
   const isPlayheadNegative = loopStartTime > 0 && (activeTime - loopStartTime) < -0.05;
@@ -1071,9 +1106,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
               
               {/* Vertical Handoff Connector Lines through Header Tracks (Behind tracks) */}
-              {showConnectors && handoffConnectors.map((conn, idx) => (
+              {showConnectors && handoffConnectors.map((conn) => (
                 <div
-                  key={`handoff_header_line_${idx}`}
+                  key={`handoff_header_line_${conn.id}`}
                   style={{ left: `${conn.xPos + 180}px` }}
                   className="absolute top-4 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
                 />
@@ -1283,15 +1318,20 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     />
                   ))}
 
-                  {/* Orange Handoff Connector Badges (交代秒数) in 経過時間 Ruler */}
-                  {showConnectors && handoffConnectors.map((conn, idx) => (
+                  {/* Orange Handoff Connector Badges (交代秒数: 1周目は絶対秒数 / 2周目は2周目開始0s基準) */}
+                  {showConnectors && handoffConnectors.map((conn) => (
                     <div
-                      key={`handoff_ruler_badge_${idx}`}
+                      key={`handoff_ruler_badge_${conn.id}`}
                       style={{ left: `${conn.snapTime * pixelsPerSecond}px` }}
                       className="absolute top-0 bottom-0 flex items-center z-20 pointer-events-none -translate-x-1/2"
+                      title={
+                        conn.isCycle2
+                          ? `【2周目 交代垂直スナップ】\n2周目開始より: +${conn.relTime.toFixed(2)}s (通算 ${conn.snapTime.toFixed(2)}s)`
+                          : `【1周目 交代垂直スナップ】\n交代時刻: ${conn.snapTime.toFixed(2)}s`
+                      }
                     >
                       <span className="bg-amber-500 text-slate-950 text-[9px] leading-none font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
-                        {conn.snapTime.toFixed(1)}s
+                        {conn.displayLabel}
                       </span>
                     </div>
                   ))}
@@ -2387,13 +2427,12 @@ CT状態: ✅ 解消済み`
 
 
             {/* =========================================================================
-                5. Vertical Handoff Connector Lines (交代スナップ垂直ガイド線)
-                The user specifically highlighted:
+                5. Vertical Handoff Connector Lines (交代スナップ垂直ガイド線: 1周目＋2周目)
                 "前のキャラの登場期間終点と、次のキャラの登場期間始点の縦位置が重ならないよう一致していなければならない"
             ========================================================================= */}
-            {showConnectors && handoffConnectors.map((conn, idx) => (
+            {showConnectors && handoffConnectors.map((conn) => (
               <div
-                key={`handoff_${idx}`}
+                key={`handoff_${conn.id}`}
                 style={{ left: `${conn.xPos + 180}px` }}
                 className="absolute top-0 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
               />

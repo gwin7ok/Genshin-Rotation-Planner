@@ -82,3 +82,5 @@ export interface AppDatabase {
   artifacts: ArtifactSetDatabaseItem[];
 }
 
+export type GenshinDatabase = AppDatabase;
+

@@ -109,13 +109,16 @@ export interface PassiveSpan {
   characterId: string;
   passiveEffectId: string;
   name: string;
+  category?: 'talent' | 'weapon' | 'artifact';
   startTime: number;
   duration: number;
   endTime: number;
   cooldown: number;
   cooldownEnd: number;
-  /** 同じ固有天賦の CT 中に発動している */
+  /** 同じ固有天賦・武器・聖遺物バフの CT 中に発動している */
   hasCTViolation?: boolean;
+  color?: string;
+  description?: string;
 }
 
 export interface Stint {

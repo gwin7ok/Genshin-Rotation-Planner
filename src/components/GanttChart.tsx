@@ -34,6 +34,7 @@ import { ELEMENT_COLORS } from '../data/characters';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
+import { getBuffBadgeConfig } from '../utils/buffUtils';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -498,21 +499,23 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         };
       });
 
-      // 発動バフ（固有天賦）も2周目に投影（読取専用の効果バーとして表示）
+      // 発動バフ（固有天賦・武器・聖遺物）も2周目に投影（読取専用の効果バーとして表示）
       for (const p of passiveSpans) {
         if (p.stintId !== stint.id || p.duration <= 0) continue;
         const c2Start = p.startTime + offset;
+        const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
+        const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦';
         cycle2NewBuffs.push({
           id: `c2_${p.id}`,
-          buffId: `passive_${p.characterId}_${p.passiveEffectId}`,
+          buffId: `buff_${p.characterId}_${p.passiveEffectId}`,
           name: `${char.name}: ${p.name}`,
           sourceCharacterId: char.id,
-          sourceType: 'talent',
+          sourceType: category,
           startTime: c2Start,
           endTime: c2Start + p.duration,
           duration: p.duration,
-          color: char.color,
-          description: `発動バフ（固有天賦）: ${p.name}`,
+          color: p.color || char.color,
+          description: `発動バフ（${catLabel}）: ${p.name}`,
           isCarryOver: false,
         });
       }
@@ -1450,20 +1453,24 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             )}
                             {stintPassives.length > 0 && (
                               <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
-                                {stintPassives.map(p => (
-                                  <div key={`passive_lbl_${p.id}`} className="text-[9px] font-mono" title={`【発動バフ（固有天賦）】\n${p.name}\n効果 ${p.duration}s / CT ${p.cooldown}s`}>
-                                    <div className="flex items-center justify-between text-lime-300 truncate">
-                                      <span className="truncate"><span className="font-bold text-lime-400">[天賦]</span> {p.name}</span>
-                                      <span className="shrink-0 ml-1">{p.duration.toFixed(0)}s</span>
-                                    </div>
-                                    {p.cooldown > 0 && (
-                                      <div className="flex items-center justify-between text-sky-300">
-                                        <span>⏱️ 天賦CT</span>
-                                        <span>{p.cooldown.toFixed(1)}s</span>
+                                {stintPassives.map(p => {
+                                  const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
+                                  const badgeCfg = getBuffBadgeConfig(category);
+                                  return (
+                                    <div key={`passive_lbl_${p.id}`} className="text-[9px] font-mono" title={`【発動バフ（${badgeCfg.label}）】\n${p.name}\n効果 ${p.duration}s / CT ${p.cooldown > 0 ? `${p.cooldown}s` : 'なし'}`}>
+                                      <div className={`flex items-center justify-between truncate ${category === 'weapon' ? 'text-sky-300' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'}`}>
+                                        <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {p.name}</span>
+                                        <span className="shrink-0 ml-1">{p.duration.toFixed(1)}s</span>
                                       </div>
-                                    )}
-                                  </div>
-                                ))}
+                                      {p.cooldown > 0 && (
+                                        <div className={`flex items-center justify-between ${badgeCfg.timingValueClass}`}>
+                                          <span>⏱️ {badgeCfg.label}CT</span>
+                                          <span>{p.cooldown.toFixed(1)}s</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -1710,8 +1717,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 maxOffset: stint.duration ?? 0,
                               });
                             };
+                            const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
+                            const badgeCfg = getBuffBadgeConfig(category);
                             const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm';
-                            const cursor = isDragging ? 'cursor-grabbing ring-1 ring-lime-300' : 'cursor-grab';
+                            const cursor = isDragging ? 'cursor-grabbing ring-1 ring-amber-300' : 'cursor-grab';
                             return (
                               <React.Fragment key={`passive_rows_${p.id}`}>
                                 <div className="relative h-4 my-0.5">
@@ -1723,12 +1732,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     className={`${barCommon} ${cursor} font-medium border-dashed ${
                                       p.hasCTViolation
                                         ? 'bg-red-950 border-red-400 text-red-100'
-                                        : 'bg-lime-950 border-lime-400 text-lime-100 hover:border-lime-300'
+                                        : badgeCfg.ganttBarClass
                                     }`}
-                                    title={`【発動バフ（固有天賦）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? '\n⚠️ CT中の発動です' : ''}`}
+                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? '\n⚠️ CT中の発動です' : ''}`}
                                   >
                                     <span className="truncate">
-                                      {p.hasCTViolation ? '⚠️' : '🎯'} [天賦] {p.name} ({p.duration.toFixed(0)}s){isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                      {p.hasCTViolation ? '⚠️' : badgeCfg.icon} [{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s){isDragging ? ` @+${offset.toFixed(2)}s` : ''}
                                     </span>
                                   </div>
                                 </div>
@@ -1739,10 +1748,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       onMouseDown={startDrag}
                                       onClick={(e) => e.stopPropagation()}
                                       style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.cooldown * pixelsPerSecond)}px` }}
-                                      className={`${barCommon} ${cursor} font-mono bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300`}
-                                      title={`【発動バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                      className={`${barCommon} ${cursor} font-mono ${badgeCfg.cooldownBarClass}`}
+                                      title={`【${badgeCfg.label}バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
                                     >
-                                      <span className="truncate">⏱️ 天賦CT {p.cooldown.toFixed(1)}s</span>
+                                      <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
                                     </div>
                                   </div>
                                 )}

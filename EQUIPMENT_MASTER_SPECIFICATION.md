@@ -186,8 +186,17 @@ export interface ArtifactSetDatabaseItem {
    - CTなしの扱いを固有天賦バフの仕様と完全統一（`cooldown: undefined`、UIプレースホルダー「なし」）
 4. 同梱マスターデータ（`weapons_master_data.json` / `artifacts_master_data.json`）の全件同期と最新化完了
 
-### 🔄 Phase 3: アクション構築 & ガントチャートへの統合（次期実装）
-1. キャラクターの装備（`weapon` / `artifactSet`）に紐づく `buffEffects` を `StintSequenceEditor` に「+登録: 発動バフ」ボタンとして表示
-2. 発動バフ（`PassiveTriggerInstance`）のデータ構造を拡張し、武器バフ・聖遺物バフも同一の仕組みで出場ブロックに登録可能にする
-3. `GanttChart.tsx` 上で効果バー・CTバーを描画し、ドラッグで発動タイミング（秒数オフセット）を調整可能にする
-4. `rotationCalculator.ts` のバフシナジー（重複カウント）に武器・聖遺物バフを合算
+### ✅ Phase 3: アクション構築 & ガントチャートへの統合（完了）
+1. **共通バフモデル & ユーティリティ（`src/utils/buffUtils.ts`）の実装**:
+   - `TriggerableBuffDefinition` 型、`getAvailableBuffsForCharacter`、`getBuffBadgeConfig` を共通部品化
+   - 固有天賦（`talent`）・装備武器（`weapon`）・装備聖遺物（`artifact`）の3系統バフを統一管理
+2. **アクション構築画面（`StintSequenceEditor` & `StintBuffTriggersSection.tsx`）の統合**:
+   - 出場ブロックごとに、キャラに装備されている武器・聖遺物の連動バフを「+登録:」パレットにカテゴリ別タグ付きで即座にボタン提示
+   - 登録済みバフ一覧でカテゴリバッジ（`🎯 [天賦]` / `⚔️ [武器]` / `🛡️ [聖遺物]`）、発動オフセット（`@+X.XXs`）、効果持続時間、CTのインライン微調整を可能に
+3. **ローテーション計算エンジン（`rotationCalculator.ts`）の統合**:
+   - 武器・聖遺物バフの `startTime`、`duration`、`cooldown`、CT衝突警告（`hasCTViolation`）を天賦バフと同一パイプラインで精密計算
+   - 重複バフ（`activeBuffs`）およびシナジータイムラインへの武器・聖遺物バフ合算を完了
+4. **ガントチャート（`GanttChart.tsx`）の統合**:
+   - タイムライン上に武器・聖遺物バフの効果バー（破線角丸）およびCTバー（`⏱️ 武器CT` / `⏱️ 聖遺物CT`）を描画
+   - マウスドラッグで出場時間内での発動タイミング（オフセット）を0.05秒単位で直感的に調整可能
+   - 2周目ループ投影（Cycle 2 Projection）でも武器・聖遺物バフの自動複製およびCT衝突検知に対応

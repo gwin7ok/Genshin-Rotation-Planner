@@ -33,9 +33,11 @@ import {
   PassiveEffectDefinition,
   PassiveTriggerInstance,
 } from '../types/genshin';
+import { GenshinDatabase } from '../types/database';
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
+import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -53,6 +55,7 @@ interface StintSequenceEditorProps {
   loopStartTime?: number;
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
   loopStartIndex?: number;
+  database?: GenshinDatabase;
 }
 
 /** 固定表示部分の「ガントチャート連動選択中」バーを表示するか（現在は非表示。要素は残してある） */
@@ -73,6 +76,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   onSelectAction,
   loopStartTime = 0,
   loopStartIndex = 0,
+  database,
 }) => {
   const [draggedStintIndex, setDraggedStintIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -1383,78 +1387,26 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       </div>
                     </div>
 
-                    {/* 発動バフ（固有天賦）: アクションの数珠つなぎとは別。発動位置はガントチャートでドラッグして調整 */}
-                    <div className="mt-2.5 pt-2 border-t border-dashed border-emerald-800/50 flex flex-wrap items-center gap-2">
-                      <span className="text-[11px] font-bold text-emerald-300 shrink-0">✨ 発動バフ:</span>
-                      {(stint.passiveTriggers ?? []).map(trigger => {
-                        const def = char.passiveEffects?.find(p => p.id === trigger.passiveEffectId);
-                        const defaultDuration = def?.duration ?? 0;
-                        const defaultCooldown = def?.cooldown ?? 0;
-                        const hoverProps = {
-                          onHoverChange: (hovering: boolean) =>
-                            setCtHoverActionId(prev => (hovering ? trigger.id : prev === trigger.id ? null : prev)),
-                        };
-                        return (
-                          <div
-                            key={trigger.id}
-                            className="flex items-center gap-1 px-2 py-1 rounded-lg border border-emerald-700/60 bg-emerald-950/40 text-xs"
-                            title={def?.description ?? trigger.name}
-                          >
-                            <span className="font-semibold text-emerald-200 max-w-[180px] truncate">{trigger.name}</span>
-                            <span className="text-[10px] font-mono text-slate-400" title="発動位置（出場の先頭から）。ガントチャートでドラッグして調整">
-                              @+{trigger.offset.toFixed(2)}s
-                            </span>
-                            <ActionTimingInput
-                              label="効果"
-                              value={trigger.duration ?? defaultDuration}
-                              defaultValue={defaultDuration}
-                              valueClassName="text-pink-300"
-                              title={`効果継続時間（初期値 ${defaultDuration}s）`}
-                              onChange={(v) => updatePassiveTriggerTiming(stintIndex, trigger.id, 'duration', v, defaultDuration)}
-                              {...hoverProps}
-                            />
-                            <ActionTimingInput
-                              label="CT"
-                              value={trigger.cooldown ?? defaultCooldown}
-                              defaultValue={defaultCooldown}
-                              valueClassName="text-emerald-300"
-                              title={`クールタイム（初期値 ${defaultCooldown}s。0sでCTなし）`}
-                              onChange={(v) => updatePassiveTriggerTiming(stintIndex, trigger.id, 'cooldown', v, defaultCooldown)}
-                              {...hoverProps}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removePassiveTrigger(stintIndex, trigger.id)}
-                              className="text-slate-500 hover:text-red-400 ml-0.5"
-                              title="発動バフを削除"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        );
-                      })}
-
-                      <div className="basis-full flex flex-wrap items-center gap-1">
-                        <span className="text-[11px] text-slate-500 font-medium">+ 登録:</span>
-                        {(char.passiveEffects ?? []).length === 0 ? (
-                          <span className="text-[11px] text-slate-500">
-                            {char.passiveEffects ? '固有天賦の効果がありません' : '固有天賦のデータがありません（編成設定でキャラを選び直すと使えます）'}
-                          </span>
-                        ) : (
-                          (char.passiveEffects ?? []).map(def => (
-                            <button
-                              key={def.id}
-                              onClick={() => addPassiveTrigger(stintIndex, def)}
-                              className="px-2 py-1 rounded bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 hover:text-white text-[11px] font-semibold border border-emerald-800/70 hover:border-emerald-500 transition-colors"
-                              title={`${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
-                            >
-                              {/* 効果が複数ある固有天賦は名前に「(30秒)」が付いているので秒数を重ねて出さない */}
-                              +{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}
-                            </button>
-                          ))
-                        )}
-                      </div>
-                    </div>
+                    {/* 連動・発動バフ（固有天賦・武器・聖遺物） */}
+                    <StintBuffTriggersSection
+                      stintIndex={stintIndex}
+                      stint={stint}
+                      char={char}
+                      database={database}
+                      onUpdatePassiveTriggers={updateStintPassiveTriggers}
+                      setCtHoverActionId={setCtHoverActionId}
+                      renderTimingInput={(label, value, defaultValue, valueClassName, title, onChange, onHoverChange) => (
+                        <ActionTimingInput
+                          label={label}
+                          value={value}
+                          defaultValue={defaultValue}
+                          valueClassName={valueClassName}
+                          title={title}
+                          onChange={onChange}
+                          onHoverChange={onHoverChange}
+                        />
+                      )}
+                    />
                   </div>
                 </div>
               </div>

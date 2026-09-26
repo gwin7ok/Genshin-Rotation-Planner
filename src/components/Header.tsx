@@ -77,9 +77,9 @@ export const Header: React.FC<HeaderProps> = ({
       ref={headerRef}
       className="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-3 sm:px-4 py-2 shadow-xl transition-all"
     >
-      <div className="max-w-7xl mx-auto flex flex-col gap-2">
+      <div className="w-full flex flex-col items-center gap-2">
         {/* Main Header Row */}
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 w-full">
           {/* Logo & Title */}
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 flex items-center justify-center shadow-md text-slate-950 font-black text-base shrink-0">
@@ -268,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Collapsible Action Tools Row (編成設定, 編成管理, DB管理, 並び替え・使い方, 手順書, 記法コピー, 記法表示) */}
         {!isCollapsed && (
-          <div className="flex flex-wrap items-center justify-start gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
             <button
               onClick={onOpenPartyModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"

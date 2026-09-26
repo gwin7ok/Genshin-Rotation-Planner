@@ -10,7 +10,7 @@
  *     「効果継続時間」「CT」「要約」「カラー」を自動抽出・構造化
  */
 
-import type { WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
+import type { WeaponDatabaseItem, ArtifactSetDatabaseItem, WeaponRefinementData } from '../types/database';
 import type { WeaponType } from '../types/genshin';
 import { parseWeaponBuffs, parseArtifactBuffs } from './equipmentBuffParser.ts';
 
@@ -224,9 +224,42 @@ export async function generateWeaponsMasterOnline(
       avatarUrl = wJa.images.icon || wJa.images.mihoyo_icon;
     }
 
-    // スキル効果テキスト (r1の文章を基本とする)
+    // デフォルト精錬ランク (★5は1, ★4以下は5)
+    const defaultRank = rarity >= 5 ? 1 : 5;
     const passiveName = wJa.effectName || 'パッシブ効果';
-    const effectDescription = wJa.r1?.description || wJa.description || '';
+
+    // R1〜R5 の精錬データ配列を構築
+    const refinements: WeaponRefinementData[] = [];
+    for (let r = 1; r <= 5; r++) {
+      const rObj = wJa[`r${r}`] || wJa.r1 || wJa.description;
+      const rankDesc = (typeof rObj === 'object' && rObj?.description)
+        ? rObj.description
+        : (typeof rObj === 'string' ? rObj : (wJa.description || ''));
+
+      const rankBuffs = parseWeaponBuffs({
+        id,
+        name: wJa.name,
+        englishName,
+        passiveName,
+        description: rankDesc,
+        rarity,
+      });
+
+      const rankPrimary = rankBuffs[0];
+      refinements.push({
+        rank: r,
+        description: rankDesc || '常時発動または特殊効果なし',
+        duration: rankPrimary?.duration,
+        cooldown: rankPrimary?.cooldown,
+        statEffectSummary: rankPrimary?.statEffectSummary,
+        buffEffects: rankBuffs.length > 0 ? rankBuffs : undefined,
+      });
+    }
+
+    // デフォルト精錬ランクのデータ
+    const activeRefinement = refinements.find(r => r.rank === defaultRank) || refinements[0];
+    const effectDescription = activeRefinement?.description || wJa.description || '';
+    const buffEffects = activeRefinement?.buffEffects || [];
 
     // 基礎攻撃力
     let baseAttack: number | undefined;
@@ -249,16 +282,6 @@ export async function generateWeaponsMasterOnline(
         baseAttack = Math.round(wJa.baseAtkValue * (rarity === 5 ? 13.2 : rarity === 4 ? 11.5 : 9.5));
       }
     }
-
-    // 発動バフの解析・生成
-    const buffEffects = parseWeaponBuffs({
-      id,
-      name: wJa.name,
-      englishName,
-      passiveName,
-      description: effectDescription,
-      rarity,
-    });
 
     if (buffEffects.length > 0) {
       report.weaponsWithBuffs++;
@@ -303,6 +326,8 @@ export async function generateWeaponsMasterOnline(
       description: effectDescription || '常時発動または特殊効果なし',
       baseAttack,
       avatarUrl,
+      refinementRank: defaultRank,
+      refinements,
       buffEffects,
       buffEffect: legacyBuffEffect,
       isCustom: false,

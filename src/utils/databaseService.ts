@@ -71,7 +71,7 @@ export function loadDatabase(): AppDatabase {
 
     const characters = parsed.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
 
-    // 旧バージョンの DB: マスター由来のキャラは同梱の最新マスターに置き換え、ユーザー作成キャラとロック中のキャラは残す
+    // 旧バージョンの DB: マスター由来のデータは同梱の最新マスター（★4:R5, ★5:R1など）に置き換え、ユーザー作成・ロック中のアイテムは保護
     if ((parsed.version ?? 0) < DATABASE_VERSION) {
       const upgraded: AppDatabase = {
         ...parsed,
@@ -80,6 +80,18 @@ export function loadDatabase(): AppDatabase {
           INITIAL_MASTER_DATABASE.characters,
           characters,
           c => isCustomCharacter(c) || isLockedCharacter(c),
+        ),
+        weapons: mergeItemsWithProtected(
+          INITIAL_MASTER_DATABASE.weapons,
+          parsed.weapons,
+          isLockedWeapon,
+          isCustomWeapon,
+        ),
+        artifacts: mergeItemsWithProtected(
+          INITIAL_MASTER_DATABASE.artifacts,
+          parsed.artifacts,
+          isLockedArtifact,
+          isCustomArtifact,
         ),
       };
       saveDatabase(upgraded);

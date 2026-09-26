@@ -148,6 +148,7 @@ export interface CharacterConfig {
   // Custom user settings in party:
   energyRecharge?: number; // % e.g. 180 = 180%
   weaponName?: string;
+  weaponRefinementRank?: number; // 精錬ランク (1〜5, 未指定時は星5=1/星4以下=5)
   artifactSetName?: string;
   constellation?: number;
 

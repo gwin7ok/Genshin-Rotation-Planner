@@ -112,6 +112,14 @@ export function inferBuffColor(text: string): string {
  */
 export function generateStatSummary(text: string): string {
   if (!text) return 'バフ効果';
+
+  // 西風・祭礼シリーズの精錬ランク別自動要約
+  const favMatch = text.match(/会心攻撃をした時、(\d+%)の確率で.*?(?:(\d+(?:\.\d+)?)秒毎に1回)/);
+  if (favMatch) return `会心時${favMatch[1]}で粒子生成(CT${favMatch[2]}s)`;
+
+  const sacMatch = text.match(/元素スキルがダメージを与えた時、(\d+%)の確率で.*?(?:(\d+(?:\.\d+)?)秒毎に1回)/);
+  if (sacMatch) return `スキル命中時${sacMatch[1]}でCTリセット(CT${sacMatch[2]}s)`;
+
   // 文中のキーフレーズを抽出して要約を作成
   const parts: string[] = [];
   const atkMatch = text.match(/攻撃力\+(\d+%?)/);
@@ -163,9 +171,9 @@ export function parseWeaponBuffs(weapon: {
   // 2. テキスト自動抽出
   const timings = extractEquipmentTimings(descText);
 
-  // 3. 継続時間が補正辞書にも説明文にも存在しない場合は、常時パッシブとみなして発動バフは生成しない
-  const finalDuration = override?.duration ?? timings.duration;
-  const finalCooldown = override?.cooldown ?? timings.cooldown;
+  // 3. テキストから抽出されたランク固有のタイミングを最優先し、なければ補正辞書を使用
+  const finalDuration = timings.duration ?? override?.duration;
+  const finalCooldown = timings.cooldown ?? override?.cooldown;
 
   if (finalDuration === undefined && finalCooldown === undefined && !override) {
     return [];
@@ -175,7 +183,7 @@ export function parseWeaponBuffs(weapon: {
   const effectiveDuration = finalDuration ?? 0;
 
   const buffName = override?.name ?? `${weapon.name}: ${weapon.passiveName || '効果'}`;
-  const summary = override?.statEffectSummary ?? generateStatSummary(descText);
+  const summary = generateStatSummary(descText) || override?.statEffectSummary || 'バフ効果';
   const color = override?.color ?? inferBuffColor(descText);
 
   const buffDef: EquipmentBuffDefinition = {

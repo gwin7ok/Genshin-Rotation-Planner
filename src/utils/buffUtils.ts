@@ -1,5 +1,6 @@
 import { CharacterConfig } from '../types/genshin';
 import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
+import { WeaponModel } from '../models/WeaponModel';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact';
 
@@ -42,35 +43,21 @@ export function getAvailableBuffsForCharacter(
     }
   }
 
-  // 2. 装備武器の連動バフ
+  // 2. 装備武器の連動バフ (精錬ランク WeaponModel で動的解決)
   if (character.weaponName && database?.weapons) {
-    const matchedWeapon = database.weapons.find(w => w.name === character.weaponName);
-    if (matchedWeapon) {
-      const buffs: EquipmentBuffDefinition[] = matchedWeapon.buffEffects && matchedWeapon.buffEffects.length > 0
-        ? matchedWeapon.buffEffects
-        : matchedWeapon.buffEffect
-        ? [
-            {
-              id: matchedWeapon.buffEffect.id || `wbuff_${matchedWeapon.id}`,
-              name: matchedWeapon.buffEffect.name,
-              sourceType: 'weapon',
-              sourceId: matchedWeapon.id,
-              duration: matchedWeapon.buffEffect.duration,
-              cooldown: matchedWeapon.buffEffect.cooldown,
-              description: matchedWeapon.buffEffect.description,
-              color: matchedWeapon.buffEffect.color || '#0284c7',
-              statEffectSummary: matchedWeapon.buffEffect.statEffect,
-            }
-          ]
-        : [];
-
-      for (const b of buffs) {
+    const weaponModel = WeaponModel.findInDatabase(
+      database.weapons,
+      character.weaponName,
+      character.weaponRefinementRank
+    );
+    if (weaponModel) {
+      for (const b of weaponModel.activeBuffEffects) {
         result.push({
           id: b.id,
           name: b.name,
           category: 'weapon',
-          sourceId: matchedWeapon.id,
-          sourceName: matchedWeapon.name,
+          sourceId: weaponModel.id,
+          sourceName: weaponModel.name,
           duration: b.duration,
           cooldown: b.cooldown,
           description: b.description,

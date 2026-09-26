@@ -7,7 +7,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { StintSequenceEditor } from './components/StintSequenceEditor';
 import { GanttChart } from './components/GanttChart';
-import { ValidationPanel } from './components/ValidationPanel';
 import { PartyConfigModal } from './components/PartyConfigModal';
 import { RotationSummaryModal } from './components/RotationSummaryModal';
 import { HelpGuideModal } from './components/HelpGuideModal';
@@ -403,15 +402,6 @@ export default function App() {
           loopStartTime={loopStartTime}
           loopStartIndex={loopStartIndex}
           database={database}
-        />
-
-        {/* Cooldown Conflict Validation, Energy Sufficiency & Rotation Loop Diagnosis */}
-        <ValidationPanel
-          characters={characters}
-          validationIssues={calculatedResult.validationIssues}
-          characterStates={calculatedResult.characterStates}
-          loopStatus={calculatedResult.loopStatus}
-          totalDuration={totalDuration}
         />
       </main>
 

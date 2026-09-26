@@ -125,8 +125,13 @@ export function getAvailableBuffsForCharacter(
 
 /**
  * バフのカテゴリ（天賦・武器・聖遺物）に応じたUIバッジ配色とアイコン定義を返す
+ * CTバーの色はキャラのアクションのCT（Sky Blue）に統一し、効果持続時間バーのみ由来元で色分けする
  */
 export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
+  // キャラクターのアクションCTバー（スキルCT・爆発CT）と同一の共通CTスタイル
+  const unifiedCooldownBarClass = 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300';
+  const unifiedTimingValueClass = 'text-sky-300';
+
   switch (category) {
     case 'weapon':
       return {
@@ -135,8 +140,8 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
         badgeClass: 'bg-sky-950/60 border-sky-700/70 text-sky-200',
         hoverButtonClass: 'bg-sky-950/50 hover:bg-sky-900/60 text-sky-200 hover:text-white border-sky-800/70 hover:border-sky-500',
         ganttBarClass: 'bg-sky-950 border-sky-400 text-sky-100 hover:border-sky-300',
-        cooldownBarClass: 'bg-cyan-950 border-cyan-400/90 text-cyan-200 hover:border-cyan-300',
-        timingValueClass: 'text-sky-300',
+        cooldownBarClass: unifiedCooldownBarClass,
+        timingValueClass: unifiedTimingValueClass,
       };
     case 'artifact':
       return {
@@ -145,8 +150,8 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
         badgeClass: 'bg-purple-950/60 border-purple-700/70 text-purple-200',
         hoverButtonClass: 'bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 hover:text-white border-purple-800/70 hover:border-purple-500',
         ganttBarClass: 'bg-purple-950 border-purple-400 text-purple-100 hover:border-purple-300',
-        cooldownBarClass: 'bg-fuchsia-950 border-fuchsia-400/90 text-fuchsia-200 hover:border-fuchsia-300',
-        timingValueClass: 'text-purple-300',
+        cooldownBarClass: unifiedCooldownBarClass,
+        timingValueClass: unifiedTimingValueClass,
       };
     case 'talent':
     default:
@@ -156,8 +161,8 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
         badgeClass: 'bg-emerald-950/60 border-emerald-700/70 text-emerald-200',
         hoverButtonClass: 'bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 hover:text-white border-emerald-800/70 hover:border-emerald-500',
         ganttBarClass: 'bg-lime-950 border-lime-400 text-lime-100 hover:border-lime-300',
-        cooldownBarClass: 'bg-emerald-950 border-emerald-400/90 text-emerald-200 hover:border-emerald-300',
-        timingValueClass: 'text-emerald-300',
+        cooldownBarClass: unifiedCooldownBarClass,
+        timingValueClass: unifiedTimingValueClass,
       };
   }
 }

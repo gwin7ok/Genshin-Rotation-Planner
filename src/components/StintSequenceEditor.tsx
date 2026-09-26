@@ -183,7 +183,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     const newStint: Stint = {
       id: `stint_${Date.now()}`,
       characterId,
-      note: `${char.name}の出場`,
+      note: '',
       actions: [],
     };
     updateStintsKeepingScroll(sanitizeStintsForUpdate([...stints, newStint]));

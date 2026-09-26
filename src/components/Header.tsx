@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database, FilePlus2, FolderCog } from 'lucide-react';
+import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 
 interface HeaderProps {
@@ -27,6 +27,7 @@ interface HeaderProps {
   copiedNotation: boolean;
   loopStartTime?: number;
   rotationNotation?: string;
+  totalCTCollisions?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -54,6 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
   copiedNotation,
   loopStartTime = 0,
   rotationNotation = '',
+  totalCTCollisions = 0,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -225,6 +227,29 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </div>
           </div>
+
+          {/* Overall CT Collision Status Badge (Always Visible between Play Controls & Collapse Toggle) */}
+          {totalCTCollisions > 0 ? (
+            <button
+              type="button"
+              onClick={onOpenSummaryModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 hover:bg-red-900 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0 cursor-pointer transition-colors"
+              title={`【⚠️ CT違反あり】ローテーション全体で ${totalCTCollisions} 件のクールタイム未回復違反が検出されています（クリックでサマリー表示）`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+              <span>⚠️ CT違反あり ({totalCTCollisions}件)</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onOpenSummaryModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500/70 text-emerald-300 text-xs font-bold shadow-sm shrink-0 cursor-pointer transition-colors"
+              title="【✅ CT全解消】ローテーション全体のすべてのアクションでクールタイムが回復済みです（クリックでサマリー表示）"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>✅ 全体CT違反なし</span>
+            </button>
+          )}
 
           {/* Toggle Button for Collapsing/Expanding DB管理, 並び替え・使い方, etc. */}
           <button

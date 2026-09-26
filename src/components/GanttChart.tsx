@@ -224,14 +224,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     trackLeft: number;
   } | null>(null);
 
-  // 発動バフ（固有天賦）の発動位置ドラッグ: 出場の先頭からの秒数を、その出場の時間内で左右に動かす
+  // 発動バフ（固有天賦）の発動位置ドラッグ: 出場の先頭からの秒数を、退場後も含めて左右に自由移動
   const [draggingPassive, setDraggingPassive] = useState<{
     stintId: string;
     triggerId: string;
     startClientX: number;
     originOffset: number;
     offset: number;
-    maxOffset: number;
   } | null>(null);
 
   // Drag and Drop state for timeline action reordering directly on the Gantt Chart
@@ -851,7 +850,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     if (!draggingPassive) return;
     const onMove = (e: MouseEvent) => {
       const delta = (e.clientX - draggingPassive.startClientX) / pixelsPerSecond;
-      const raw = Math.min(draggingPassive.maxOffset, Math.max(0, draggingPassive.originOffset + delta));
+      const raw = Math.max(0, draggingPassive.originOffset + delta);
       const offset = Math.round(raw * 20) / 20; // 0.05秒単位
       setDraggingPassive(prev => (prev && prev.offset !== offset ? { ...prev, offset } : prev));
     };
@@ -1115,19 +1114,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
                   </div>
-
-                  {/* Overall CT Collision Status Badge at Far Right End of Loop Benchmark Track */}
-                  {totalCTCollisions > 0 ? (
-                    <div className="sticky right-2 z-30 ml-auto flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-950/90 border border-red-500 text-red-300 text-[11px] font-bold shadow-red-500/30 shadow animate-pulse shrink-0 pointer-events-auto my-auto">
-                      <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                      <span>⚠️ 全体CT違反あり ({totalCTCollisions}件)</span>
-                    </div>
-                  ) : (
-                    <div className="sticky right-2 z-30 ml-auto flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 text-[11px] font-bold shadow shrink-0 pointer-events-auto my-auto">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>✅ 全体CT違反なし</span>
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -1789,7 +1775,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 startClientX: e.clientX,
                                 originOffset: offset,
                                 offset,
-                                maxOffset: stint.duration ?? 0,
                               });
                             };
                             const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
@@ -1819,7 +1804,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
                                         : badgeCfg.ganttBarClass
                                     } ${activeRingClass}`}
-                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（この出場の時間内）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
+                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（出場の先頭から +${offset.toFixed(2)}s）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
                                   >
                                     <span className="truncate flex items-center gap-1">
                                       {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}

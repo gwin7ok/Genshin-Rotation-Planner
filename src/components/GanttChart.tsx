@@ -1445,7 +1445,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
                                 const remTime = Math.max(0, cd.endTime - activeTime);
 
+                                const violatingAction = !isCarryOver
+                                  ? stint.actions.find(a => a.id === cd.actionInstanceId && a.hasCTCollision)
+                                  : undefined;
+
                                 return (
+                                  <React.Fragment key={cd.id}>
+                                  {violatingAction && (
+                                    <CTViolationMarker x={startX} remaining={violatingAction.collisionRemainingCT} />
+                                  )}
                                   <div
                                     key={cd.id}
                                     onClick={(e) => {
@@ -1472,6 +1480,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
                                     </span>
                                   </div>
+                                  </React.Fragment>
                                 );
                               })}
                             </div>
@@ -1490,7 +1499,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
                                 const remTime = Math.max(0, cd.endTime - activeTime);
 
+                                const violatingAction = !isCarryOver
+                                  ? stint.actions.find(a => a.id === cd.actionInstanceId && a.hasCTCollision)
+                                  : undefined;
+
                                 return (
+                                  <React.Fragment key={cd.id}>
+                                  {violatingAction && (
+                                    <CTViolationMarker x={startX} remaining={violatingAction.collisionRemainingCT} />
+                                  )}
                                   <div
                                     key={cd.id}
                                     onClick={(e) => {
@@ -1517,6 +1534,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       ⏱️ {isCarryOver ? '[持越] ' : ''}Q-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
                                     </span>
                                   </div>
+                                  </React.Fragment>
                                 );
                               })}
                             </div>
@@ -1678,6 +1696,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         : 'opacity-90';
 
                                       return (
+                                        <React.Fragment key={`reg_p_eff_${p.id}`}>
+                                        {p.hasCTViolation && !(grp.cooldown > 0) && (
+                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} />
+                                        )}
                                         <div
                                           key={`reg_p_eff_${p.id}`}
                                           data-no-pan
@@ -1703,6 +1725,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             {isDragging ? ` @+${offset.toFixed(2)}s` : ''}
                                           </span>
                                         </div>
+                                        </React.Fragment>
                                       );
                                     })}
                                   </div>
@@ -1763,6 +1786,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       };
 
                                       return (
+                                        <React.Fragment key={`reg_p_cd_${p.id}`}>
+                                        {p.hasCTViolation && (
+                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} />
+                                        )}
                                         <div
                                           key={`reg_p_cd_${p.id}`}
                                           data-no-pan
@@ -1774,6 +1801,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         >
                                           <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
                                         </div>
+                                        </React.Fragment>
                                       );
                                     })}
                                   </div>
@@ -1884,3 +1912,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     </section>
   );
 };
+
+/** CT違反マーク（キャラカードの違反マークと同じ）。x = バーの先頭（発動位置）の横座標。その左側に表示する */
+const CTViolationMarker: React.FC<{ x: number; remaining?: number }> = ({ x, remaining }) => (
+  <span
+    className="absolute top-1/2 -translate-y-1/2 inline-flex items-center pointer-events-auto"
+    style={{ left: `${x - 15}px`, zIndex: 30 }}
+    title={`CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
+  >
+    <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
+  </span>
+);

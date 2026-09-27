@@ -93,13 +93,15 @@ export default function App() {
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, stints, { switchDelay, actionDelay, database });
-  }, [characters, stints, switchDelay, actionDelay, database]);
+    return calculateRotation(characters, stints, { switchDelay, actionDelay, database, loopStartIndex });
+  }, [characters, stints, switchDelay, actionDelay, database, loopStartIndex]);
 
   // Keep playback currentTime bounded within totalDuration
   const totalDuration = calculatedResult.totalDuration;
+  const loopStartTime = calculatedResult.loopStartTime;
+  const loopPeriod = calculatedResult.loopPeriod;
 
-  // 全体のCT違反件数計算（アクションCT違反 + バフCT違反）
+  // 全体のCT違反件数計算（発動時点でのクールタイム未終了）
   const totalCTCollisions = useMemo(() => {
     let count = 0;
     calculatedResult.calculatedStints.forEach(s => {
@@ -111,41 +113,15 @@ export default function App() {
     return count;
   }, [calculatedResult]);
 
-  // ループ基準の秒数は、基準番号の出場キャラの開始時刻から毎回求める（秒数は保存しない）
-  const loopStartTime = loopStartIndex > 0
-    ? (calculatedResult.calculatedStints[loopStartIndex]?.startTime ?? 0)
-    : 0;
-
   // 出場キャラの削除などで基準番号が出場キャラの数を超えたら、基準を解除して先頭に戻す
   useEffect(() => {
     const normalized = normalizeLoopStartIndex(loopStartIndex, stints.length);
     if (normalized !== loopStartIndex) setLoopStartIndex(normalized);
   }, [loopStartIndex, stints.length]);
 
-  // 2周目ループ期間 & 終了時刻の計算
-  const cycle2Info = useMemo(() => {
-    const loopHeadStint = stints[loopStartIndex];
-    const needsHeadSwap = switchDelay > 0 && !!loopHeadStint &&
-      !loopHeadStint.actions.some(a => a.type === 'swap' || a.actionTypeId === 'action_switch_char');
-    const headSwapShift = needsHeadSwap
-      ? switchDelay + (loopHeadStint.actions.length > 0 ? actionDelay : 0)
-      : 0;
-    const baseLoopPeriod = Math.max(0, totalDuration - loopStartTime);
-    const loopPeriod = baseLoopPeriod + headSwapShift;
-    const cycle2StartTime = totalDuration;
-    const cycle2EndTime = totalDuration > 0 && loopPeriod > 0.05
-      ? totalDuration + loopPeriod
-      : totalDuration;
-    return {
-      enabled: totalDuration > 0 && loopPeriod > 0.05,
-      cycle2StartTime,
-      cycle2EndTime,
-      loopPeriod,
-    };
-  }, [stints, loopStartIndex, switchDelay, actionDelay, totalDuration, loopStartTime]);
-
-  // 6. Playback Animation Loop
-  // 再生順: 一周目先頭(0s) → 二周目終わり(cycle2EndTime) → [二周目先頭(cycle2StartTime) → 二周目終わり(cycle2EndTime)]
+  // 6. Playback Animation Loop & Loop Counter (4)
+  // 再生順: 1周目(0s 〜 totalDuration) → ループ開始点(loopStartTime)へ戻り周回数を+1
+  const [playbackCycleCount, setPlaybackCycleCount] = useState<number>(1);
   const lastFrameTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -161,24 +137,16 @@ export default function App() {
         const deltaSec = (timestamp - lastFrameTimeRef.current) / 1000;
         setCurrentTime(prevTime => {
           const next = prevTime + deltaSec * playbackSpeed;
-          const { enabled, cycle2StartTime, cycle2EndTime } = cycle2Info;
 
-          if (enabled && cycle2EndTime > cycle2StartTime) {
-            // 一周目先頭(0s) → 二周目終わり(cycle2EndTime) → [二周目先頭(cycle2StartTime) → 二周目終わり(cycle2EndTime)]
-            if (next >= cycle2EndTime) {
-              const loopDuration = cycle2EndTime - cycle2StartTime;
-              const overshoot = (next - cycle2EndTime) % loopDuration;
-              return cycle2StartTime + overshoot;
+          if (totalDuration > 0 && next >= totalDuration) {
+            if (loopPeriod > 0.05) {
+              const overshoot = (next - totalDuration) % loopPeriod;
+              setPlaybackCycleCount(c => c + 1);
+              return loopStartTime + overshoot;
+            } else {
+              setPlaybackCycleCount(1);
+              return 0;
             }
-            return next;
-          }
-
-          if (next >= totalDuration) {
-            const targetLoopStart = (typeof loopStartTime === 'number' && loopStartTime >= 0 && loopStartTime < totalDuration)
-              ? loopStartTime
-              : 0;
-            const overshoot = next - totalDuration;
-            return Math.min(totalDuration, targetLoopStart + overshoot);
           }
           return next;
         });
@@ -192,7 +160,7 @@ export default function App() {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isPlaying, playbackSpeed, totalDuration, loopStartTime, cycle2Info]);
+  }, [isPlaying, playbackSpeed, totalDuration, loopStartTime, loopPeriod]);
 
   // 7. Handle Preset Selection
   const handleSelectPreset = (preset: PartyPreset) => {
@@ -205,6 +173,7 @@ export default function App() {
     setActionDelay(preset.actionDelay ?? 0.10);
     setActiveSlotId(null);
     setIsPlaying(false);
+    setPlaybackCycleCount(1);
   };
 
   // 8. Handle Custom Slot Loading
@@ -232,6 +201,7 @@ export default function App() {
     setActiveSlotId(slot.slotId ?? null);
     setCurrentTime(0);
     setIsPlaying(false);
+    setPlaybackCycleCount(1);
   };
 
   // 9. Reset to default preset
@@ -245,6 +215,7 @@ export default function App() {
     setActiveSlotId(null);
     setCurrentTime(0);
     setIsPlaying(false);
+    setPlaybackCycleCount(1);
   };
 
   // 10. Handle Playback Controls
@@ -252,9 +223,11 @@ export default function App() {
   const resetPlayback = () => {
     setIsPlaying(false);
     setCurrentTime(0);
+    setPlaybackCycleCount(1);
   };
   const handleSeek = (time: number) => {
-    setCurrentTime(time);
+    const clamped = Math.max(0, Math.min(time, totalDuration));
+    setCurrentTime(clamped);
   };
 
   // 11. Notation Copy & Display
@@ -400,7 +373,8 @@ export default function App() {
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
         totalCTCollisions={totalCTCollisions}
-        cycle2Info={cycle2Info}
+        playbackCycleCount={playbackCycleCount}
+        loopPeriod={loopPeriod}
       />
 
       {/* Main Content Area */}
@@ -418,6 +392,10 @@ export default function App() {
           onSeek={handleSeek}
           activeBuffCountBySecond={calculatedResult.activeBuffCountBySecond}
           passiveSpans={calculatedResult.passiveSpans}
+          carryOverCooldowns={calculatedResult.carryOverCooldowns}
+          carryOverBuffs={calculatedResult.carryOverBuffs}
+          carryOverPassives={calculatedResult.carryOverPassives}
+          playbackCycleCount={playbackCycleCount}
           onReorderCharacters={setCharacters}
           onReorderCharactersAndStints={(newChars, newStints) => {
             setCharacters(newChars);

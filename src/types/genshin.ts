@@ -76,6 +76,10 @@ export interface CharacterActionInstance {
   hasCTCollision?: boolean;
   /** CT衝突時の残り秒数 */
   collisionRemainingCT?: number;
+  /** 2周目CT未回復（2周目CT衝突）フラグ */
+  hasCycle2CTCollision?: boolean;
+  /** 2周目CT衝突時の残り秒数 */
+  cycle2CollisionRemainingCT?: number;
 }
 
 /** 固有天賦の効果（マスターデータ）。発動位置はユーザーがアクション構築・ガントチャートで決める */
@@ -123,6 +127,12 @@ export interface PassiveSpan {
   hasCTViolation?: boolean;
   /** CT衝突時の残り秒数 */
   collisionRemainingCT?: number;
+  /** 2周目CT未回復フラグ */
+  hasCycle2CTViolation?: boolean;
+  /** 2周目CT衝突時の残り秒数 */
+  cycle2CollisionRemainingCT?: number;
+  /** 2周目折り返し持ち越しフラグ */
+  isCarryOver?: boolean;
   color?: string;
   description?: string;
 }
@@ -203,6 +213,8 @@ export interface ActiveBuffSpan {
   isSnapshot?: boolean;
   /** 'passive' = 発動バフ（固有天賦）。ガントチャートでは専用の行に表示する */
   origin?: 'action' | 'passive';
+  /** 2周目折り返し持ち越しフラグ */
+  isCarryOver?: boolean;
 }
 
 export interface CooldownSpan {
@@ -213,6 +225,10 @@ export interface CooldownSpan {
   endTime: number;
   duration: number;
   actionInstanceId: string;
+  /** 2周目折り返し持ち越しフラグ */
+  isCarryOver?: boolean;
+  originalStartTime?: number;
+  originalEndTime?: number;
 }
 
 export interface CharacterRuntimeState {

@@ -13,11 +13,6 @@ import {
   AlertTriangle,
   RotateCcw,
   Repeat,
-  Lock,
-  CheckCircle2,
-  AlertOctagon,
-  ArrowRight,
-  ShieldAlert,
   Check,
   RefreshCw
 } from 'lucide-react';
@@ -27,11 +22,10 @@ import {
   Stint, 
   ActiveBuffSpan, 
   CooldownSpan, 
-  CharacterRuntimeState ,
+  CharacterRuntimeState,
   PassiveSpan,
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
-import { buildActionEffectSpan, countDistinctActiveBuffs } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig } from '../utils/buffUtils';
@@ -120,33 +114,15 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
 
   for (const key of sortedKeys) {
     const spans = byId.get(key)!.sort((a, b) => a.startTime - b.startTime);
-    const classification = getBuffClassification(spans[0]);
-    const cleanName = spans[0].name.replace(/^[^:]+:\s*/, '');
+    const sample = spans.find(s => !(s as any).isCarryOver) || spans[0];
+    const classification = getBuffClassification(sample);
+    const cleanName = sample.name.replace(/^[^:]+:\s*/, '');
 
-    // Track packing in case of recasts
-    const tracks: ActiveBuffSpan[][] = [];
-    for (const span of spans) {
-      let placed = false;
-      for (const track of tracks) {
-        const last = track[track.length - 1];
-        if (last.endTime <= span.startTime + 0.05) {
-          track.push(span);
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) {
-        tracks.push([span]);
-      }
-    }
-
-    tracks.forEach((trackSpans, tIdx) => {
-      result.push({
-        tag: classification.tag,
-        cleanName: tracks.length > 1 ? `${cleanName} #${tIdx + 1}` : cleanName,
-        sample: trackSpans[0],
-        spans: trackSpans,
-      });
+    result.push({
+      tag: classification.tag,
+      cleanName,
+      sample,
+      spans,
     });
   }
 
@@ -179,6 +155,11 @@ interface GanttChartProps {
   switchDelay?: number;
   /** アクション間所要時間（2周目の先頭の交代アクションの後に入る空白） */
   actionDelay?: number;
+  /** 2周目折り返し（Carry-Over）情報 */
+  carryOverCooldowns?: CooldownSpan[];
+  carryOverBuffs?: ActiveBuffSpan[];
+  carryOverPassives?: PassiveSpan[];
+  playbackCycleCount?: number;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
@@ -193,6 +174,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   onSeek,
   activeBuffCountBySecond,
   passiveSpans = [],
+  carryOverCooldowns = [],
+  carryOverBuffs = [],
+  carryOverPassives = [],
+  playbackCycleCount = 1,
   onReorderCharacters,
   onReorderCharactersAndStints,
   onUpdateStints,
@@ -211,6 +196,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   // Loop marker dragging state
   const [isDraggingLoopMarker, setIsDraggingLoopMarker] = useState<boolean>(false);
+
+  // 2周目以降突入中フラグ（一時停止中も維持、リセットで1に戻る）
+  const isCycle2Active = (playbackCycleCount ?? 1) >= 2;
 
   // 統合出場トラックの出場ボックスのドラッグ（出場順の入れ替え）
   const [draggingTrackStint, setDraggingTrackStint] = useState<{
@@ -333,373 +321,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     return count;
   }, [stints, passiveSpans]);
 
-  // Projected 2nd Cycle Calculations & Automatic CT/Buff Collision Checks
-  const cycle2Data = useMemo(() => {
-    const loopPeriod = Math.max(0, totalDuration - loopStartTime);
-    if (loopPeriod < 0.05 || stints.length === 0) {
-      return {
-        enabled: false,
-        loopPeriod: 0,
-        cycle2StartTime: totalDuration,
-        cycle2EndTime: totalDuration,
-        stints: [],
-        cooldownCollisions: [],
-        carryOverCooldowns: [],
-        carryOverSkillCDs: [],
-        carryOverBurstCDs: [],
-        cycle1SkillCDs: [],
-        cycle1BurstCDs: [],
-        cycle2NewCooldowns: [],
-        carryOverBuffs: [],
-        cycle2NewBuffs: [],
-        allCycle2Buffs: [],
-        buffSynergyPoints: [],
-      };
-    }
+  // Total timeline duration (single cycle width [0, totalDuration])
+  const chartWidth = Math.max(800, Math.ceil(totalDuration + 2) * pixelsPerSecond);
 
-    // ループの先頭が1周目の一番最初の出場（交代なし）の場合、2周目では1周目の最後のキャラからの交代が入るので、
-    // 先頭に交代アクションを入れ、2周目全体をその所要時間だけ後ろへずらす
-    const loopHeadStint = stints[loopStartIndex];
-    const needsHeadSwap = switchDelay > 0 && !!loopHeadStint &&
-      !loopHeadStint.actions.some(a => a.type === 'swap' || a.actionTypeId === 'action_switch_char');
-    // 交代の後は、ほかの出場と同じくアクション間所要時間の空白が入る
-    const headSwapShift = needsHeadSwap
-      ? switchDelay + (loopHeadStint.actions.length > 0 ? actionDelay : 0)
-      : 0;
-
-    const offset = totalDuration - loopStartTime + headSwapShift;
-    const cycle2StartTime = totalDuration;
-    const cycle2EndTime = totalDuration + loopPeriod + headSwapShift;
-
-    // 1. Project Stints & Actions into 2nd Cycle (offset by totalDuration - loopStartTime)
-    const c2Stints: Array<{
-      id: string;
-      originalStintId: string;
-      characterId: string;
-      startTime: number;
-      endTime: number;
-      duration: number;
-      note?: string;
-      actions: Array<{
-        id: string;
-        originalActionId: string;
-        actionTypeId: string;
-        name: string;
-        shortName: string;
-        type: string;
-        duration: number;
-        startTime: number;
-        endTime: number;
-        isSkill: boolean;
-        isBurst: boolean;
-        hasCTCollision: boolean;
-        ctRemaining: number;
-        conflictingCDName?: string;
-        conflictingCDEndTime?: number;
-      }>;
-    }> = [];
-
-    const cooldownCollisions: Array<{
-      actionName: string;
-      characterName: string;
-      characterId: string;
-      actionTime: number;
-      remainingCT: number;
-      type: 'skill' | 'burst' | 'passive';
-    }> = [];
-
-    const cycle2NewCooldowns: CooldownSpan[] = [];
-    const cycle2NewBuffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = [];
-
-    stints.forEach((stint, sIdx) => {
-      const char = characterMap.get(stint.characterId);
-      if (!char) return;
-
-      // ループ基準番号以降の出場キャラが 2周目ループの対象
-      if (sIdx < loopStartIndex) return;
-      const loopActions = stint.actions;
-      if (loopActions.length === 0 && !(needsHeadSwap && sIdx === loopStartIndex)) return;
-
-      const c2Actions = loopActions.map(act => {
-        // Shift time into Cycle 2
-        const rawActStart = act.startTime ?? 0;
-        const c2ActStart = Math.max(cycle2StartTime, rawActStart + offset);
-        const c2ActEnd = c2ActStart + act.duration;
-        const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
-        const isBurst = act.type === 'burst';
-
-        let hasCTCollision = false;
-        let ctRemaining = 0;
-        let conflictingCDName = '';
-        let conflictingCDEndTime = 0;
-
-        // Check skill cooldown collision (both 1st cycle and previous 2nd cycle CDs)
-        if (isSkill && act.type !== 'skill_reset') {
-          const charSkillCDs = [
-            ...skillCooldowns.filter(cd => cd.characterId === char.id),
-            ...cycle2NewCooldowns.filter(cd => cd.characterId === char.id && cd.type === 'skill'),
-          ];
-          for (const cd of charSkillCDs) {
-            if (cd.endTime > c2ActStart + 0.02) {
-              const rem = cd.endTime - c2ActStart;
-              if (rem > ctRemaining) {
-                hasCTCollision = true;
-                ctRemaining = rem;
-                conflictingCDName = '元素スキルCT';
-                conflictingCDEndTime = cd.endTime;
-              }
-            }
-          }
-        }
-
-        // Check burst cooldown collision (both 1st cycle and previous 2nd cycle CDs)
-        if (isBurst) {
-          const charBurstCDs = [
-            ...burstCooldowns.filter(cd => cd.characterId === char.id),
-            ...cycle2NewCooldowns.filter(cd => cd.characterId === char.id && cd.type === 'burst'),
-          ];
-          for (const cd of charBurstCDs) {
-            if (cd.endTime > c2ActStart + 0.02) {
-              const rem = cd.endTime - c2ActStart;
-              if (rem > ctRemaining) {
-                hasCTCollision = true;
-                ctRemaining = rem;
-                conflictingCDName = '元素爆発CT';
-                conflictingCDEndTime = cd.endTime;
-              }
-            }
-          }
-        }
-
-        if (hasCTCollision) {
-          cooldownCollisions.push({
-            actionName: act.name,
-            characterName: char.name,
-            characterId: char.id,
-            actionTime: c2ActStart,
-            remainingCT: Number(ctRemaining.toFixed(1)),
-            type: isBurst ? 'burst' : 'skill',
-          });
-        }
-
-        const matchedCharActionDef = char.availableActions.find(a => a.id === act.actionTypeId);
-        const actionCT = act.cooldown ?? matchedCharActionDef?.cooldown ?? 0;
-        const actionSkillCT = matchedCharActionDef?.startsSkillCooldown ? actionCT : 0;
-        const actionBurstCT = matchedCharActionDef?.startsBurstCooldown !== false ? actionCT : 0;
-
-        // New Cooldowns triggered in Cycle 2
-        if (isSkill && actionSkillCT > 0) {
-          cycle2NewCooldowns.push({
-            id: `c2_cd_skill_${char.id}_${c2ActStart}`,
-            characterId: char.id,
-            type: 'skill',
-            startTime: c2ActStart,
-            endTime: c2ActStart + actionSkillCT,
-            duration: actionSkillCT,
-            actionInstanceId: `c2_${act.id}`,
-          });
-        }
-        if (isBurst && actionBurstCT > 0) {
-          cycle2NewCooldowns.push({
-            id: `c2_cd_burst_${char.id}_${c2ActStart}`,
-            characterId: char.id,
-            type: 'burst',
-            startTime: c2ActStart,
-            endTime: c2ActStart + actionBurstCT,
-            duration: actionBurstCT,
-            actionInstanceId: `c2_${act.id}`,
-          });
-        }
-
-        // 2周目で発動する効果バー（効果継続時間から作る）
-        const c2EffectSpan = buildActionEffectSpan(char, act, matchedCharActionDef, c2ActStart, 'c2_effect');
-        if (c2EffectSpan) cycle2NewBuffs.push({ ...c2EffectSpan, isCarryOver: false });
-
-        return {
-          id: `c2_${act.id}`,
-          originalActionId: act.id,
-          actionTypeId: act.actionTypeId,
-          name: act.name,
-          shortName: act.shortName,
-          type: act.type,
-          duration: act.duration,
-          startTime: c2ActStart,
-          endTime: c2ActEnd,
-          isSkill,
-          isBurst,
-          hasCTCollision,
-          ctRemaining: Number(ctRemaining.toFixed(1)),
-          conflictingCDName,
-          conflictingCDEndTime,
-        };
-      });
-
-      // 発動バフ（固有天賦・武器・聖遺物）も2周目に投影（1周目CTとの衝突検証つき）
-      for (const p of passiveSpans) {
-        if (p.stintId !== stint.id || p.duration <= 0) continue;
-        const c2Start = p.startTime + offset;
-        const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
-        const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦';
-
-        // 1周目のCT終了時刻 (p.cooldownEnd) と 2周目発動時刻 (c2Start) の衝突判定
-        let hasCTCollision = false;
-        let ctRemaining = 0;
-        if (p.cooldown > 0 && p.cooldownEnd > c2Start + 0.02) {
-          hasCTCollision = true;
-          ctRemaining = Number((p.cooldownEnd - c2Start).toFixed(1));
-          cooldownCollisions.push({
-            actionName: `${p.name} (${catLabel})`,
-            characterName: char.name,
-            characterId: char.id,
-            actionTime: c2Start,
-            remainingCT: ctRemaining,
-            type: 'passive',
-          });
-        }
-
-        cycle2NewBuffs.push({
-          id: `c2_${p.id}`,
-          buffId: `buff_${p.characterId}_${p.passiveEffectId}`,
-          name: `${char.name}: ${p.name}`,
-          sourceCharacterId: char.id,
-          sourceType: category,
-          startTime: c2Start,
-          endTime: c2Start + p.duration,
-          duration: p.duration,
-          color: hasCTCollision ? '#ef4444' : (p.color || char.color),
-          description: `発動バフ（${catLabel}）: ${p.name}${hasCTCollision ? ` ⚠️ CT未回復（残${ctRemaining}s）` : ''}`,
-          isCarryOver: false,
-        });
-      }
-
-      // 2周目の先頭の出場: 1周目の最後のキャラからの交代アクションを先頭に入れる
-      if (needsHeadSwap && sIdx === loopStartIndex) {
-        c2Actions.unshift({
-          id: `c2_switch_head_${stint.id}`,
-          originalActionId: '',
-          actionTypeId: 'action_switch_char',
-          name: 'キャラ交代',
-          shortName: '交代',
-          type: 'swap',
-          duration: switchDelay,
-          startTime: cycle2StartTime,
-          endTime: cycle2StartTime + switchDelay,
-          isSkill: false,
-          isBurst: false,
-          hasCTCollision: false,
-          ctRemaining: 0,
-          conflictingCDName: '',
-          conflictingCDEndTime: 0,
-        });
-      }
-
-      if (c2Actions.length > 0) {
-        const stintStart = c2Actions[0].startTime;
-        const stintEnd = c2Actions[c2Actions.length - 1].endTime;
-        c2Stints.push({
-          id: `c2_${stint.id}`,
-          originalStintId: stint.id,
-          characterId: stint.characterId,
-          startTime: stintStart,
-          endTime: stintEnd,
-          duration: stintEnd - stintStart,
-          note: stint.note,
-          actions: c2Actions,
-        });
-      }
-    });
-
-    // 2. 1st Cycle Cooldowns (ALL 1st-cycle skill & burst CDs: both finished in 1st cycle and carryovers)
-    const cycle1SkillCDs: Array<CooldownSpan & { isCarryOver: boolean; isFinishedInCycle1: boolean }> = skillCooldowns
-      .map(cd => ({
-        ...cd,
-        isCarryOver: cd.endTime > cycle2StartTime + 0.05,
-        isFinishedInCycle1: cd.endTime <= cycle2StartTime + 0.05,
-      }));
-
-    const cycle1BurstCDs: Array<CooldownSpan & { isCarryOver: boolean; isFinishedInCycle1: boolean }> = burstCooldowns
-      .map(cd => ({
-        ...cd,
-        isCarryOver: cd.endTime > cycle2StartTime + 0.05,
-        isFinishedInCycle1: cd.endTime <= cycle2StartTime + 0.05,
-      }));
-
-    const carryOverSkillCDs = cycle1SkillCDs.filter(cd => cd.isCarryOver);
-    const carryOverBurstCDs = cycle1BurstCDs.filter(cd => cd.isCarryOver);
-    const carryOverCooldowns = [...carryOverSkillCDs, ...carryOverBurstCDs];
-
-    // 3. 2nd Cycle Buffs & 1st Cycle Carry-Over Buffs
-    // 1周目の持ち越しバフ（1周目に発動し、効果終了時刻が2周目開始時刻を超えて残るバフ）
-    const carryOverBuffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = activeBuffs
-      .filter(b => b.endTime > cycle2StartTime + 0.05)
-      .map(b => ({
-        ...b,
-        isCarryOver: true,
-      }));
-
-    // 全タイムラインのバフ一覧（1周目バフ + 2周目新規バフ）: 1周目・2周目の区別なく計算
-    const allTimelineBuffs: ActiveBuffSpan[] = [...activeBuffs, ...cycle2NewBuffs];
-    const allCycle2Buffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = [
-      ...carryOverBuffs,
-      ...cycle2NewBuffs,
-    ];
-
-    // 4. Buff synergy point counts across [cycle2StartTime, cycle2EndTime]
-    // 1周目の持ち越しバフも含め、1・2周目の区別なく全バフから計算
-    const buffSynergyPoints: Array<{ time: number; count: number; activeBuffs: string[] }> = [];
-    const minSec = Math.floor(cycle2StartTime);
-    const maxSec = Math.ceil(cycle2EndTime);
-    for (let t = minSec; t <= maxSec; t += 0.5) {
-      // 1周目持ち越しバフ＋2周目新規バフを区別なく合算（同じアクション由来は1つとして集計）
-      const { count, names } = countDistinctActiveBuffs(allTimelineBuffs, t);
-      buffSynergyPoints.push({
-        time: t,
-        count,
-        activeBuffs: names,
-      });
-    }
-
-    return {
-      enabled: true,
-      loopPeriod: loopPeriod + headSwapShift,
-      cycle2StartTime,
-      cycle2EndTime,
-      stints: c2Stints,
-      cooldownCollisions,
-      carryOverCooldowns,
-      carryOverSkillCDs,
-      carryOverBurstCDs,
-      cycle1SkillCDs,
-      cycle1BurstCDs,
-      cycle2NewCooldowns,
-      carryOverBuffs,
-      cycle2NewBuffs,
-      allCycle2Buffs,
-      buffSynergyPoints,
-    };
-  }, [stints, totalDuration, loopStartTime, loopStartIndex, switchDelay, actionDelay, passiveSpans, characterMap, skillCooldowns, burstCooldowns, activeBuffs]);
-
-  // Total timeline duration spanning 1st Cycle + 2nd Cycle Preview
-  const extendedTotalDuration = cycle2Data.enabled ? cycle2Data.cycle2EndTime : totalDuration;
-  const chartWidth = Math.max(800, Math.ceil(extendedTotalDuration + 2) * pixelsPerSecond);
-
-  // Combined Buff Synergy Points spanning full timeline (1st cycle + 2nd cycle)
-  // 全タイムライン (0s 〜 extendedTotalDuration) について、1・2周目の区別なく全バフを合算してバフ重複度を統一計算
-  const allBuffSynergyPoints = useMemo(() => {
-    if (!cycle2Data.enabled) return activeBuffCountBySecond;
-    const allTimelineBuffs: ActiveBuffSpan[] = [...activeBuffs, ...cycle2Data.cycle2NewBuffs];
-    const maxSec = Math.ceil(extendedTotalDuration);
-    const points: Array<{ time: number; count: number; activeBuffs: string[] }> = [];
-    for (let s = 0; s <= maxSec; s += 0.5) {
-      const { count, names } = countDistinctActiveBuffs(allTimelineBuffs, s);
-      points.push({
-        time: s,
-        count,
-        activeBuffs: names,
-      });
-    }
-    return points;
-  }, [activeBuffCountBySecond, cycle2Data.enabled, cycle2Data.cycle2NewBuffs, activeBuffs, extendedTotalDuration]);
+  // Combined Buff Synergy Points (calculated with 3-D carryover deduplication in rotationCalculator)
+  const allBuffSynergyPoints = activeBuffCountBySecond;
 
   // Handle timeline scrubber click or drag
   const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -707,7 +333,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const rect = containerRef.current.getBoundingClientRect();
     const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180; // 180px is character header width
     if (clickX >= 0) {
-      const time = Math.min(extendedTotalDuration, Math.max(0, clickX / pixelsPerSecond));
+      const time = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
       onSeek(Number(time.toFixed(2)));
     }
   };
@@ -775,10 +401,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   // Format relative time helper considering loopStartTime as 0s (negative for 1st-cycle setup)
   const fmtTime = (absTime: number, precision: number = 1, showPlus: boolean = true): string => {
-    if (cycle2Data.enabled && absTime >= totalDuration - 0.02) {
-      const c2Rel = Math.max(0, absTime - totalDuration);
-      return `2周目 +${c2Rel.toFixed(precision)}s`;
-    }
     if (!loopStartTime || loopStartTime <= 0) {
       return `${absTime.toFixed(precision)}s`;
     }
@@ -792,20 +414,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     return `${fmtTime(start, precision)} ~ ${fmtTime(end, precision)}`;
   };
 
-  // Generate ticks spanning full timeline (1st cycle + 2nd cycle)
-  // 1st cycle: relative to loopStartTime as 0s (or absolute if loopStartTime=0)
-  // 2nd cycle: 2周目開始地点を0sとして以降の秒数を表示 (+1s, +2s, ...)
+  // Generate ticks spanning timeline
   const timelineTicks = useMemo(() => {
     const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean; isCycle2?: boolean }[] = [];
-    const c2Start = cycle2Data.enabled ? cycle2Data.cycle2StartTime : null;
-    const c1End = c2Start !== null ? c2Start : extendedTotalDuration;
+    const c1End = totalDuration;
 
-    // 1. 1st Cycle Ticks
     if (!loopStartTime || loopStartTime <= 0) {
       const maxSeconds = Math.floor(c1End);
       for (let s = 0; s <= maxSeconds; s++) {
-        // If close to 2nd-cycle start, avoid colliding with 2nd-cycle 0s tick
-        if (c2Start !== null && Math.abs(s - c2Start) < 0.35) continue;
         list.push({
           absTime: s,
           relTime: s,
@@ -834,8 +450,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       for (let r = minRel; r <= maxRel; r++) {
         const absTime = Number((loopStartTime + r).toFixed(3));
         if (absTime >= -0.001 && absTime <= c1End) {
-          // If close to 2nd-cycle start, skip so it doesn't collide with the 2nd-cycle 0s tick
-          if (c2Start !== null && Math.abs(absTime - c2Start) < 0.35) continue;
           list.push({
             absTime: Math.max(0, absTime),
             relTime: r,
@@ -848,39 +462,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       }
     }
 
-    // 2. 2nd Cycle Ticks (2周目開始地点を0sとして以降の時間を表示)
-    if (cycle2Data.enabled && c2Start !== null) {
-      // 2周目開始地点 = 0s
-      list.push({
-        absTime: c2Start,
-        relTime: 0,
-        label: '0s',
-        isZero: true,
-        isNegative: false,
-        isCycle2: true,
-      });
-
-      // 2周目開始以降の秒数 (+1s, +2s, +3s, ...)
-      const c2Duration = cycle2Data.cycle2EndTime - c2Start;
-      const maxC2Sec = Math.ceil(c2Duration + 1);
-      for (let s = 1; s <= maxC2Sec; s++) {
-        const absTime = Number((c2Start + s).toFixed(3));
-        if (absTime <= extendedTotalDuration + 2) {
-          list.push({
-            absTime,
-            relTime: s,
-            label: `+${s}s`,
-            isZero: false,
-            isNegative: false,
-            isCycle2: true,
-          });
-        }
-      }
-    }
-
     list.sort((a, b) => a.absTime - b.absTime);
     return list.filter((item, idx, arr) => idx === 0 || Math.abs(item.absTime - arr[idx - 1].absTime) > 0.1);
-  }, [loopStartTime, extendedTotalDuration, cycle2Data.enabled, cycle2Data.cycle2StartTime, cycle2Data.cycle2EndTime]);
+  }, [loopStartTime, totalDuration]);
 
   // 指定秒数に一番近い出場キャラの境目（ループ基準番号）
   const findClosestLoopBoundaryIndex = (rawTime: number) => {
@@ -1011,34 +595,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       };
     });
 
-    // 2. 2nd Cycle Connectors (2周目開始地点を0s基準として計算)
-    const c2List: typeof c1List = [];
-    if (cycle2Data.enabled && cycle2Data.stints.length > 1) {
-      const c2Stints = cycle2Data.stints;
-      const c2Start = cycle2Data.cycle2StartTime;
-      c2Stints.slice(0, c2Stints.length - 1).forEach((stint, idx) => {
-        const nextStint = c2Stints[idx + 1];
-        const fromCharIdx = characters.findIndex(c => c.id === stint.characterId);
-        const toCharIdx = characters.findIndex(c => c.id === nextStint.characterId);
-        const snapTime = stint.endTime ?? 0;
-        const relTime = Math.max(0, snapTime - c2Start);
-        c2List.push({
-          id: `c2_conn_${idx}`,
-          snapTime,
-          relTime,
-          displayLabel: `+${relTime.toFixed(1)}s`,
-          fromCharIdx,
-          toCharIdx,
-          fromCharId: stint.characterId,
-          toCharId: nextStint.characterId,
-          xPos: snapTime * pixelsPerSecond,
-          isCycle2: true,
-        });
-      });
-    }
-
-    return [...c1List, ...c2List];
-  }, [stints, cycle2Data.enabled, cycle2Data.stints, cycle2Data.cycle2StartTime, characters, pixelsPerSecond]);
+    return c1List;
+  }, [stints, characters, pixelsPerSecond]);
 
   // Playhead color state aligned with playback tool in Header
   const isPlayheadNegative = loopStartTime > 0 && (activeTime - loopStartTime) < -0.05;
@@ -1152,12 +710,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   className="absolute top-7 bottom-0 w-0 border-l-2 border-purple-400/80 border-dotted pointer-events-none z-0"
                 />
               )}
-              {cycle2Data.enabled && (
-                <div
-                  style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond + 180}px` }}
-                  className="absolute top-7 bottom-0 w-0 border-l-2 border-purple-400/80 border-dotted pointer-events-none z-0"
-                />
-              )}
 
               {/* Playhead Vertical Line in Fixed Header: begins directly from bottom tip of ▼ (top-[43px]) down through header tracks to bottom edge */}
               <div
@@ -1220,21 +772,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </span>
                   </div>
 
-                  {/* 2nd Cycle Loop (2周目定常ループ) shaded range */}
-                  {cycle2Data.enabled && (
-                    <div
-                      style={{ 
-                        left: `${cycle2Data.cycle2StartTime * pixelsPerSecond}px`, 
-                        width: `${Math.max(0, (cycle2Data.cycle2EndTime - cycle2Data.cycle2StartTime) * pixelsPerSecond)}px` 
-                      }}
-                      className="absolute inset-y-0.5 bg-gradient-to-r from-purple-600/25 via-indigo-600/20 to-purple-600/15 border-l-2 border-purple-400 border-dotted flex items-center px-2 pl-24 pointer-events-none"
-                    >
-                      <span className="text-[10px] font-bold text-purple-200 truncate">
-                        🔁 2周目ループ (0.0s ~ +{cycle2Data.loopPeriod.toFixed(1)}s) ▶
-                      </span>
-                    </div>
-                  )}
-
                   {/* Snapping tick dots for each action boundary */}
                   {loopBoundaries.map((b, idx) => {
                     const bX = b.time * pixelsPerSecond;
@@ -1279,23 +816,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
                   </div>
-
-                  {/* 2nd Cycle Start Snap Line Marker Pin (2周目開始地点) - 1周目ループ区切と同じ仕様 */}
-                  {cycle2Data.enabled && (
-                    <div
-                      style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond}px` }}
-                      className="absolute top-0 bottom-0 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none group/marker2"
-                      title={`【2周目開始地点】\n1周目終了＆2周目ループ開始 (${cycle2Data.cycle2StartTime.toFixed(2)}s)`}
-                    >
-                      {/* Pin Handle Badge */}
-                      <div className="flex items-center gap-1 bg-purple-700 text-white font-black text-[9px] px-1.5 py-0.5 rounded-full shadow-lg border border-purple-300 ring-1 ring-purple-400/50">
-                        <Repeat className="w-2.5 h-2.5 text-purple-200" />
-                        <span>2周目開始 ({cycle2Data.cycle2StartTime.toFixed(2)}s)</span>
-                      </div>
-                      {/* Pin stem */}
-                      <div className="w-0.5 flex-1 bg-purple-400 shadow" />
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -1470,40 +990,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       />
                     );
                   })()}
-
-                  {/* 2nd Cycle Stints (Together in Unified Track) */}
-                  {cycle2Data.enabled && cycle2Data.stints.map((stint) => {
-                    const char = characterMap.get(stint.characterId);
-                    if (!char) return null;
-                    const startX = stint.startTime * pixelsPerSecond;
-                    const width = stint.duration * pixelsPerSecond;
-                    const isCurrent = stint.startTime <= activeTime && activeTime < stint.endTime;
-
-                    return (
-                      <div
-                        key={stint.id}
-                        onClick={() => focusStintInGantt(stint)}
-                        style={{ left: `${startX}px`, width: `${width}px` }}
-                        className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden transition-all text-xs border ${
-                          isCurrent 
-                            ? 'border-purple-400 ring-2 ring-purple-400/50 shadow-md font-bold' 
-                            : 'border-purple-800/80 hover:border-purple-500'
-                        }`}
-                        title={`【2周目】${char.name} 出場: ${stint.startTime.toFixed(2)}s ~ ${stint.endTime.toFixed(2)}s (${stint.duration.toFixed(2)}s)`}
-                      >
-                        <div 
-                          className="absolute inset-0 opacity-40"
-                          style={{ backgroundColor: char.color }}
-                        />
-                        <div className="relative z-10 flex items-center gap-1 truncate text-white">
-                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: char.accentColor }} />
-                          <span className="font-semibold text-[11px] truncate">{char.name}</span>
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-purple-900/80 text-purple-200 border border-purple-700 font-mono ml-0.5">2周目</span>
-                          <span className="text-[10px] opacity-75 font-mono ml-0.5">({stint.duration.toFixed(1)}s)</span>
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
 
@@ -1582,6 +1068,21 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const sameCharStints = stints.filter(s => s.characterId === char.id);
                   const occurrenceNum = sameCharStints.findIndex(s => s.id === stint.id) + 1;
                   const totalOccurrences = sameCharStints.length;
+                  const isFirstOccurrence = occurrenceNum === 1;
+
+                  // Character-level carry-over cooldowns and buffs (shown on character's first appearance)
+                  const charCarryOverSkillCDs = isFirstOccurrence
+                    ? carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'skill')
+                    : [];
+                  const charCarryOverBurstCDs = isFirstOccurrence
+                    ? carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'burst')
+                    : [];
+                  const charCarryOverBuffs = isFirstOccurrence
+                    ? carryOverBuffs.filter(b => b.origin !== 'passive' && b.sourceCharacterId === char.id)
+                    : [];
+                  const charCarryOverPassives = isFirstOccurrence
+                    ? carryOverPassives.filter(p => p.characterId === char.id)
+                    : [];
 
                   // Find actions and cooldowns/buffs initiated by this stint
                   const stintActionIds = new Set(stint.actions.map(a => a.id));
@@ -1603,8 +1104,37 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     b.startTime >= (stint.startTime ?? 0) - 0.2 && 
                     b.startTime <= (stint.endTime ?? 0) + 0.2
                   );
-                  const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
+
+                  const allStintSkillCDs = [...charCarryOverSkillCDs, ...stintSkillCDs];
+                  const allStintBurstCDs = [...charCarryOverBurstCDs, ...stintBurstCDs];
+                  const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
+                  const stintBuffRows = organizeBuffsIntoRows(allStintBuffs);
                   const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
+
+                  // パッシブバフ（通常発動 + 1周目からの持ち越し）を同一の passiveEffectId ごとに統合
+                  const allPassiveEffectIds = Array.from(new Set([
+                    ...stintPassives.map(p => p.passiveEffectId),
+                    ...charCarryOverPassives.map(p => p.passiveEffectId),
+                  ]));
+
+                  const stintPassiveGroups = allPassiveEffectIds.map(effectId => {
+                    const regular = stintPassives.filter(p => p.passiveEffectId === effectId);
+                    const carry = charCarryOverPassives.filter(p => p.passiveEffectId === effectId);
+                    const sample = regular[0] || carry[0];
+                    const category = sample.category || (effectId.startsWith('wbuff_') ? 'weapon' : effectId.startsWith('abuff_') ? 'artifact' : 'talent');
+                    return {
+                      passiveEffectId: effectId,
+                      name: sample.name,
+                      category,
+                      duration: sample.duration,
+                      cooldown: sample.cooldown,
+                      color: sample.color,
+                      description: sample.description,
+                      regularPassives: regular,
+                      carryOverPassives: carry,
+                      hasCarryOver: carry.length > 0,
+                    };
+                  });
                   const isStintSelected = selectedAction?.stintId === stint.id;
 
                   return (
@@ -1613,41 +1143,31 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     }`}>
                       <div className="flex">
                         {/* Stint Row Header (Left Column: Sticky Left) */}
-                        <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                        <div className={`w-[180px] shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                           isStintSelected
                             ? 'bg-amber-950 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
                             : isStintCurrentlyOnField 
                             ? 'bg-slate-900 border-l-2 border-l-amber-400' 
                             : 'bg-slate-950'
                         }`}>
-                          <div className="flex items-center justify-between gap-1">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
-                              <div className="min-w-0">
-                                <div className="flex items-center gap-1">
-                                  <span className="font-bold text-xs text-white truncate">{char.name}</span>
-                                  {isStintCurrentlyOnField && (
-                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="現在出場中" />
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-1 mt-0.5">
-                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-900 border border-slate-700 text-amber-300 font-bold">
-                                    #{stintIdx + 1}
-                                  </span>
-                                  {totalOccurrences > 1 ? (
-                                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                                      登場 {occurrenceNum}/{totalOccurrences}回目
-                                    </span>
-                                  ) : (
-                                    <span className="text-[9px] text-slate-400 font-medium">単回出場</span>
-                                  )}
-                                </div>
+                          {/* Row 0: Character Info & Controls (Height: h-9 = 36px) */}
+                          <div className="h-9 px-2 flex items-center justify-between border-b border-slate-800/80 bg-slate-900/40">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
+                              <div className="flex items-center gap-1 min-w-0">
+                                <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-700 text-amber-300 font-bold shrink-0">
+                                  #{stintIdx + 1}
+                                </span>
+                                {isStintCurrentlyOnField && (
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" title="現在出場中" />
+                                )}
                               </div>
                             </div>
 
                             {/* Move Stint Row Up / Down */}
                             {onUpdateStints && (
-                              <div className="flex flex-col items-center shrink-0 bg-slate-900 rounded border border-slate-800 p-0.5">
+                              <div className="flex items-center shrink-0 bg-slate-900 rounded border border-slate-800 p-0.5 gap-0.5">
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -1686,95 +1206,107 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             )}
                           </div>
 
-                          {/* Sub-labels for the stint row */}
-                          <div className="space-y-1 mt-2 text-[10px] font-mono text-slate-400 pl-0.5">
+                          {/* Row 1: Actions & Time Band (Height: h-10 = 40px) */}
+                          <div className="h-10 px-2 flex flex-col justify-center border-b border-slate-800/60 text-[9px] font-mono leading-tight">
                             <div className="flex items-center justify-between text-amber-300/90 font-semibold truncate">
-                              <span className="truncate">{stint.note || `${char.name}の行動`}</span>
-                              <span className="shrink-0 text-slate-400 font-mono text-[9px]">
+                              <span className="truncate flex items-center gap-1">
+                                {(stint.actions.some(a => a.hasCTCollision) || stintPassives.some(p => p.hasCTViolation)) && (
+                                  <span title="CT未回復あり" className="inline-flex items-center">
+                                    <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
+                                  </span>
+                                )}
+                                <span className="truncate">{stint.note || `${char.name}の行動`}</span>
+                              </span>
+                              <span className="shrink-0 text-slate-400 font-mono text-[9px] ml-1">
                                 {(stint.duration ?? 0).toFixed(1)}s
                               </span>
                             </div>
-
-                            {/* CT Collision Warning Badge for 1st Cycle Stint Header */}
-                            {(stint.actions.some(a => a.hasCTCollision) || stintPassives.some(p => p.hasCTViolation)) && (
-                              <div className="text-[9px] bg-red-500/20 text-red-300 border border-red-500/40 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold animate-pulse">
-                                <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />
-                                <span>CT未回復あり</span>
-                              </div>
-                            )}
-
-                            <div className="flex items-center justify-between text-slate-400 text-[9px]">
+                            <div className="flex items-center justify-between text-slate-400 mt-0.5">
                               <span>時間帯</span>
                               <span className="font-mono">{(stint.startTime ?? 0).toFixed(1)}s ~ {(stint.endTime ?? 0).toFixed(1)}s</span>
                             </div>
-                            {stintSkillCDs.length > 0 && (
-                              <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
-                                <span>⏱️ スキルCT</span>
-                                <span>{stintSkillCDs[0].duration.toFixed(1)}s</span>
-                              </div>
-                            )}
-                            {stintBurstCDs.length > 0 && (
-                              <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
-                                <span>⏱️ 爆発CT</span>
-                                <span>{stintBurstCDs[0].duration.toFixed(1)}s</span>
-                              </div>
-                            )}
-                            {stintBuffRows.length > 0 && (
-                              <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
-                                {stintBuffRows.map((bRow, rIdx) => (
-                                  <div key={`stint_buff_lbl_${stint.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
-                                    <span className="truncate flex items-center gap-1">
-                                      <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
-                                      <span className="truncate">{bRow.cleanName}</span>
-                                    </span>
-                                    <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            {stintPassives.length > 0 && (
-                              <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
-                                {stintPassives.map(p => {
-                                  const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
-                                  const badgeCfg = getBuffBadgeConfig(category);
-                                  return (
-                                    <div key={`passive_lbl_${p.id}`} className="text-[9px] font-mono" title={`【発動バフ（${badgeCfg.label}）】\n${p.name}\n効果 ${p.duration}s / CT ${p.cooldown > 0 ? `${p.cooldown}s` : 'なし'}`}>
-                                      <div className={`flex items-center justify-between truncate ${category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'}`}>
-                                        <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {p.name}</span>
-                                        <span className={`shrink-0 ml-1 ${category === 'weapon' ? 'text-blue-400' : ''}`}>{p.duration.toFixed(1)}s</span>
-                                      </div>
-                                      {p.cooldown > 0 && (
-                                        <div className={`flex items-center justify-between ${badgeCfg.timingValueClass}`}>
-                                          <span>⏱️ {badgeCfg.label}CT</span>
-                                          <span>{p.cooldown.toFixed(1)}s</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
                           </div>
+
+                          {/* Row 2: Skill (E) Cooldown Row (Height: h-6 = 24px) */}
+                          {allStintSkillCDs.length > 0 && (
+                            <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
+                              <span className="truncate">⏱️ スキルCT{charCarryOverSkillCDs.length > 0 ? ' [持越]' : ''}</span>
+                              <span className="shrink-0 ml-1">{allStintSkillCDs[0].duration.toFixed(1)}s</span>
+                            </div>
+                          )}
+
+                          {/* Row 3: Burst (Q) Cooldown Row (Height: h-6 = 24px) */}
+                          {allStintBurstCDs.length > 0 && (
+                            <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
+                              <span className="truncate">⏱️ 爆発CT{charCarryOverBurstCDs.length > 0 ? ' [持越]' : ''}</span>
+                              <span className="shrink-0 ml-1">{allStintBurstCDs[0].duration.toFixed(1)}s</span>
+                            </div>
+                          )}
+
+                          {/* Row 4+: Action Effect Buff Rows (Height: h-6 = 24px each) */}
+                          {stintBuffRows.map((bRow, rIdx) => (
+                            <div 
+                              key={`stint_buff_lbl_${stint.id}_${rIdx}`} 
+                              className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono border-b border-slate-800/40" 
+                              title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}
+                            >
+                              <span className="truncate flex items-center gap-1">
+                                <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
+                                <span className="truncate">{bRow.cleanName}</span>
+                              </span>
+                              <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                            </div>
+                          ))}
+
+                          {/* Row 5+: Passive Group Rows (Height: h-6 = 24px each) */}
+                          {stintPassiveGroups.map(grp => {
+                            const category = grp.category;
+                            const badgeCfg = getBuffBadgeConfig(category);
+                            return (
+                              <React.Fragment key={`passive_lbl_grp_${stint.id}_${grp.passiveEffectId}`}>
+                                {grp.duration > 0 && (
+                                  <div 
+                                    className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 truncate ${
+                                      category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'
+                                    }`} 
+                                    title={`【発動バフ（${badgeCfg.label}）】\n${grp.name}\n効果 ${grp.duration}s / CT ${grp.cooldown > 0 ? `${grp.cooldown}s` : 'なし'}`}
+                                  >
+                                    <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {grp.name}{grp.hasCarryOver ? ' [持越]' : ''}</span>
+                                    <span className={`shrink-0 ml-1 ${category === 'weapon' ? 'text-blue-400' : ''}`}>{grp.duration.toFixed(1)}s</span>
+                                  </div>
+                                )}
+                                {grp.cooldown > 0 && (
+                                  <div className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 ${badgeCfg.timingValueClass}`}>
+                                    <span>⏱️ {badgeCfg.label}CT{grp.hasCarryOver ? ' [持越]' : ''}</span>
+                                    <span>{grp.cooldown.toFixed(1)}s</span>
+                                  </div>
+                                )}
+                              </React.Fragment>
+                            );
+                          })}
                         </div>
 
                         {/* Right Timeline Canvas for this Stint */}
                         <div 
-                          className="relative flex-1 min-h-[95px] flex flex-col justify-around py-1 cursor-pointer"
+                          className="relative flex-1 flex flex-col cursor-pointer"
                           onClick={handleTimelineClick}
                         >
                           {/* Background Vertical Grid Lines */}
                           {timelineTicks.map(t => (
                             <div
                               key={`grid_stint_${stint.id}_${t.absTime}`}
-                              className={`absolute top-0 bottom-0 border-l pointer-events-none ${
+                              className={`absolute top-0 bottom-0 border-l pointer-events-none z-0 ${
                                 t.isZero ? 'border-purple-400/70' : 'border-slate-800/40'
                               }`}
                               style={{ left: `${t.absTime * pixelsPerSecond}px` }}
                             />
                           ))}
 
-                          {/* --- Sublane 1: On-field Active Stint & Actions --- */}
-                          <div className="relative h-7 my-0.5">
+                          {/* --- Row 0: Top Header Space Match (Height: h-9 = 36px) --- */}
+                          <div className="h-9 relative border-b border-slate-800/40 pointer-events-none z-10" />
+
+                          {/* --- Row 1: On-field Active Stint & Actions (Height: h-10 = 40px) --- */}
+                          <div className="h-10 relative flex items-center border-b border-slate-800/40 z-10">
                             {(() => {
                               const startX = (stint.startTime ?? 0) * pixelsPerSecond;
                               const width = (stint.duration ?? 0) * pixelsPerSecond;
@@ -1801,6 +1333,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     const isSelected = selectedAction?.stintId === stint.id && selectedAction?.actionId === act.id;
                                     const isBeingDragged = draggedAction?.stintId === stint.id && draggedAction?.actionIndex === actIdx;
                                     const isDragOverTarget = dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx && draggedAction?.actionIndex !== actIdx;
+
+                                    const hasCollision = act.hasCTCollision;
+                                    const colRem = act.collisionRemainingCT;
 
                                     return (
                                       <div
@@ -1851,7 +1386,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }}
                                         style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${
-                                          act.hasCTCollision
+                                          hasCollision
                                             ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
                                             : isSelected 
                                             ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
@@ -1872,20 +1407,20 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             : ''
                                         }`}
                                         title={
-                                          act.hasCTCollision
-                                            ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${act.collisionRemainingCT ?? '?'}s\nアクション: ${act.name}`
+                                          hasCollision
+                                            ? `【⚠️ ${act.hasCTCollision ? 'CT衝突エラー' : '2周目CT衝突エラー'}】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
                                             : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
-                                          {act.hasCTCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
+                                          {hasCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
                                             : act.shortName}
-                                          {act.hasCTCollision && act.collisionRemainingCT !== undefined && (
+                                          {hasCollision && colRem !== undefined && (
                                             <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                              残{act.collisionRemainingCT}s
+                                              残{colRem}s
                                             </span>
                                           )}
                                         </span>
@@ -1897,167 +1432,350 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             })()}
                           </div>
 
-                          {/* --- Sublane 2: Skill (E) Cooldown Bar (Unified CT Color: Sky Blue, No Active Highlight) --- */}
-                          <div className="relative h-4 my-0.5">
-                            {stintSkillCDs.map(cd => {
-                              const startX = cd.startTime * pixelsPerSecond;
-                              const width = cd.duration * pixelsPerSecond;
-
-                              return (
-                                <div
-                                  key={cd.id}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onSeek(cd.startTime);
-                                  }}
-                                  style={{ left: `${startX}px`, width: `${width}px` }}
-                                  className="absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300"
-                                  title={`【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
-                                >
-                                  <span className="truncate">
-                                    ⏱️ E-CT {cd.duration.toFixed(1)}s
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* --- Sublane 3: Burst (Q) Cooldown Bar (Unified CT Color: Sky Blue, No Active Highlight) --- */}
-                          <div className="relative h-4 my-0.5">
-                            {stintBurstCDs.map(cd => {
-                              const startX = cd.startTime * pixelsPerSecond;
-                              const width = cd.duration * pixelsPerSecond;
-
-                              return (
-                                <div
-                                  key={cd.id}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onSeek(cd.startTime);
-                                  }}
-                                  style={{ left: `${startX}px`, width: `${width}px` }}
-                                  className="absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300"
-                                  title={`【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`}
-                                >
-                                  <span className="truncate">
-                                    ⏱️ Q-CT {cd.duration.toFixed(1)}s
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* --- Sublane 4+: Active Buffs & Summons (Each effect duration in its own independent row) --- */}
-                          {stintBuffRows.map((bRow, rIdx) => (
-                            <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="relative h-4 my-0.5">
-                              {bRow.spans.map(buff => {
-                                const startX = buff.startTime * pixelsPerSecond;
-                                const width = Math.max(16, buff.duration * pixelsPerSecond);
-                                const isBuffActive = buff.startTime <= activeTime && activeTime < buff.endTime;
-                                const remaining = Math.max(0, buff.endTime - activeTime);
+                          {/* --- Row 2: Skill (E) Cooldown Bar (Height: h-6 = 24px) --- */}
+                          {allStintSkillCDs.length > 0 && (
+                            <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                              {allStintSkillCDs.map(cd => {
+                                const isCarryOver = Boolean((cd as any).isCarryOver);
+                                if (cd.startTime >= totalDuration) return null;
+                                const visualEnd = Math.min(totalDuration, cd.endTime);
+                                const startX = cd.startTime * pixelsPerSecond;
+                                const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
+                                const isBarActive = isCycle2Active || !isCarryOver;
+                                const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
+                                const remTime = Math.max(0, cd.endTime - activeTime);
 
                                 return (
                                   <div
-                                    key={buff.id}
+                                    key={cd.id}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      onSeek(buff.startTime);
+                                      onSeek(cd.startTime);
                                     }}
-                                    style={{ 
-                                      left: `${startX}px`, 
-                                      width: `${width}px`,
-                                    }}
-                                    className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
-                                      isBuffActive 
-                                        ? 'ring-2 ring-emerald-400 font-bold brightness-125 shadow-emerald-500/30' 
-                                        : 'opacity-90'
+                                    style={{ left: `${startX}px`, width: `${width}px`, zIndex: isCarryOver ? 10 : 20 }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
+                                      isCarryOver && !isBarActive
+                                        ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                        : isCarryOver
+                                        ? isCurrentlyRunning
+                                          ? 'bg-sky-900 border-sky-300 text-white ring-1 ring-sky-300 shadow-md font-bold'
+                                          : 'bg-sky-950/90 border-sky-400 text-sky-200'
+                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300'
                                     }`}
-                                    title={`【${bRow.tag} 効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                    title={
+                                      isCarryOver
+                                        ? `【1周目からの持ち越しスキルCT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        : `【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                    }
                                   >
                                     <span className="truncate">
-                                      ✨ {bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} ({buff.duration.toFixed(0)}s) {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                      ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
                                     </span>
                                   </div>
                                 );
                               })}
                             </div>
-                          ))}
+                          )}
 
-                          {/* --- 発動バフ（固有天賦・武器・聖遺物）: 登録1つにつき「効果」の行（点線・ドラッグ可能・再生中強調）と「CT」の行 --- */}
-                          {stintPassives.map(p => {
-                            const isDragging = draggingPassive?.triggerId === p.triggerId;
-                            const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
-                            const start = (stint.startTime ?? 0) + offset;
-                            const end = start + p.duration;
-                            const isBuffActive = start <= activeTime && activeTime < end;
-                            const remaining = Math.max(0, end - activeTime);
-                            const startDrag = (e: React.MouseEvent) => {
-                              if (e.button !== 0) return;
-                              e.preventDefault();
-                              e.stopPropagation();
-                              document.body.style.cursor = 'grabbing';
-                              setDraggingPassive({
-                                stintId: stint.id,
-                                triggerId: p.triggerId,
-                                startClientX: e.clientX,
-                                originOffset: offset,
-                                offset,
-                              });
-                            };
-                            const category = p.category || (p.passiveEffectId.startsWith('wbuff_') ? 'weapon' : p.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
-                            const badgeCfg = getBuffBadgeConfig(category);
-                            const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm transition-all';
-                            const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+                          {/* --- Row 3: Burst (Q) Cooldown Bar (Height: h-6 = 24px) --- */}
+                          {allStintBurstCDs.length > 0 && (
+                            <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                              {allStintBurstCDs.map(cd => {
+                                const isCarryOver = Boolean((cd as any).isCarryOver);
+                                if (cd.startTime >= totalDuration) return null;
+                                const visualEnd = Math.min(totalDuration, cd.endTime);
+                                const startX = cd.startTime * pixelsPerSecond;
+                                const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
+                                const isBarActive = isCycle2Active || !isCarryOver;
+                                const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
+                                const remTime = Math.max(0, cd.endTime - activeTime);
 
-                            // カテゴリごとの再生位置強調リング
-                            const activeRingClass = isBuffActive
-                              ? category === 'weapon'
-                                ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
-                                : category === 'artifact'
-                                ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
-                                : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
-                              : 'opacity-90';
-
-                            return (
-                              <React.Fragment key={`passive_rows_${p.id}`}>
-                                <div className="relative h-4 my-0.5">
+                                return (
                                   <div
-                                    data-no-pan
-                                    onMouseDown={startDrag}
-                                    onClick={(e) => e.stopPropagation()}
-                                    style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.duration * pixelsPerSecond)}px` }}
-                                    className={`${barCommon} ${cursor} font-medium border-dashed ${
-                                      p.hasCTViolation
-                                        ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
-                                        : badgeCfg.ganttBarClass
-                                    } ${activeRingClass}`}
-                                    title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（出場の先頭から +${offset.toFixed(2)}s）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
+                                    key={cd.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(cd.startTime);
+                                    }}
+                                    style={{ left: `${startX}px`, width: `${width}px`, zIndex: isCarryOver ? 10 : 20 }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
+                                      isCarryOver && !isBarActive
+                                        ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                        : isCarryOver
+                                        ? isCurrentlyRunning
+                                          ? 'bg-sky-900 border-sky-300 text-white ring-1 ring-sky-300 shadow-md font-bold'
+                                          : 'bg-sky-950/90 border-sky-400 text-sky-200'
+                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300'
+                                    }`}
+                                    title={
+                                      isCarryOver
+                                        ? `【1周目からの持ち越し元素爆発CT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        : `【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                    }
                                   >
-                                    <span className="truncate flex items-center gap-1">
-                                      {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}
-                                      <span>[{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s)</span>
-                                      {p.hasCTViolation && p.collisionRemainingCT !== undefined && (
-                                        <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                          残{p.collisionRemainingCT}s
-                                        </span>
-                                      )}
-                                      {isBuffActive && !p.hasCTViolation ? ` [残${remaining.toFixed(1)}s]` : ''}
-                                      {isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                    <span className="truncate">
+                                      ⏱️ {isCarryOver ? '[持越] ' : ''}Q-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
                                     </span>
                                   </div>
-                                </div>
-                                {p.cooldown > 0 && (
-                                  <div className="relative h-4 my-0.5">
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {/* --- Row 4+: Active Buffs & Summons (Height: h-6 = 24px each) --- */}
+                          {stintBuffRows.map((bRow, rIdx) => {
+                            const regularStarts = bRow.spans.filter(s => !(s as any).isCarryOver).map(s => s.startTime);
+                            const minRegularStart = regularStarts.length > 0 ? Math.min(...regularStarts) : Infinity;
+
+                            return (
+                              <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                                {bRow.spans.map(buff => {
+                                  const isCarryOver = Boolean((buff as any).isCarryOver);
+                                  if (buff.startTime >= totalDuration) return null;
+                                  
+                                  // 重複発動しないため、持ち越しバーは通常発動開始位置（+接続用のわずかな余白0.05s）で終了させ、裏側にはみ出させない
+                                  const maxEnd = isCarryOver && minRegularStart < Infinity && buff.endTime > minRegularStart
+                                    ? Math.min(buff.endTime, minRegularStart + 0.05)
+                                    : buff.endTime;
+                                  const visualEnd = Math.min(totalDuration, maxEnd);
+                                  if (visualEnd <= buff.startTime) return null;
+
+                                  const isBarActive = isCycle2Active || !isCarryOver;
+                                  const startX = buff.startTime * pixelsPerSecond;
+                                  const width = Math.max(16, (visualEnd - buff.startTime) * pixelsPerSecond);
+                                  const isBuffActive = isBarActive && buff.startTime <= activeTime && activeTime < buff.endTime;
+                                  const remaining = Math.max(0, buff.endTime - activeTime);
+
+                                  return (
                                     <div
-                                      data-no-pan
-                                      onMouseDown={startDrag}
-                                      onClick={(e) => e.stopPropagation()}
-                                      style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, p.cooldown * pixelsPerSecond)}px` }}
-                                      className={`${barCommon} ${cursor} font-mono ${badgeCfg.cooldownBarClass}`}
-                                      title={`【${badgeCfg.label}バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                      key={buff.id}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSeek(buff.startTime);
+                                      }}
+                                      style={{ 
+                                        left: `${startX}px`, 
+                                        width: `${width}px`,
+                                        zIndex: isCarryOver ? 10 : 20,
+                                      }}
+                                      className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
+                                        isCarryOver && !isBarActive
+                                          ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                          : isBuffActive 
+                                          ? 'bg-emerald-950 border-emerald-400 text-emerald-100 ring-2 ring-emerald-400 font-bold brightness-125 shadow-emerald-500/30' 
+                                          : isCarryOver
+                                          ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 opacity-90'
+                                          : 'bg-emerald-950 border-emerald-400 text-emerald-100 opacity-90 hover:border-emerald-300'
+                                      }`}
+                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${isCarryOver && !isCycle2Active ? ' (※2周目以降で有効化)' : ''}\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
                                     >
-                                      <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
+                                      <span className="truncate">
+                                        ✨ {isCarryOver ? '[持越] ' : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(0)}s)`} {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                      </span>
                                     </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })}
+
+                          {/* --- Row 5+: 発動バフ（固有天賦・武器・聖遺物） (Height: h-6 = 24px each) --- */}
+                          {stintPassiveGroups.map(grp => {
+                            const category = grp.category;
+                            const badgeCfg = getBuffBadgeConfig(category);
+                            const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm transition-all';
+
+                            const regularStarts = grp.regularPassives.map(p => {
+                              const isDragging = draggingPassive?.triggerId === p.triggerId;
+                              const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
+                              return (stint.startTime ?? 0) + offset;
+                            });
+                            const minRegularStart = regularStarts.length > 0 ? Math.min(...regularStarts) : Infinity;
+
+                            return (
+                              <React.Fragment key={`passive_group_row_${stint.id}_${grp.passiveEffectId}`}>
+                                {/* 1. 効果持続時間行（同じ行の中に持ち越しバーと通常バーを配置） */}
+                                {grp.duration > 0 && (
+                                  <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                                    {/* 持ち越し効果バー (zIndex: 10) */}
+                                    {grp.carryOverPassives.map(cp => {
+                                      const isBarActive = isCycle2Active;
+                                      const start = cp.startTime;
+                                      if (start >= totalDuration) return null;
+
+                                      // 重複発動しないため、持ち越しバーは通常発動開始位置（+接続用0.05s）でクリップして裏側へのはみ出しを防止
+                                      const maxEnd = minRegularStart < Infinity && cp.endTime > minRegularStart
+                                        ? Math.min(cp.endTime, minRegularStart + 0.05)
+                                        : cp.endTime;
+                                      const visualEnd = Math.min(totalDuration, maxEnd);
+                                      if (visualEnd <= start) return null;
+
+                                      const dur = cp.duration;
+                                      const isBuffActive = isBarActive && start <= activeTime && activeTime < cp.endTime;
+                                      const remaining = Math.max(0, cp.endTime - activeTime);
+                                      const activeRingClass = isBuffActive
+                                        ? category === 'weapon'
+                                          ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
+                                          : category === 'artifact'
+                                          ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
+                                          : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
+                                        : 'opacity-90';
+
+                                      return (
+                                        <div
+                                          key={`wrap_p_eff_${cp.id}`}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            onSeek(start);
+                                          }}
+                                          style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 10 }}
+                                          className={`${barCommon} font-medium border-dashed cursor-pointer ${
+                                            !isBarActive
+                                              ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 hover:opacity-100 hover:border-slate-400'
+                                              : badgeCfg.ganttBarClass
+                                          } ${isBarActive ? activeRingClass : ''}`}
+                                          title={`【1周目からの持ち越し発動バフ（${badgeCfg.label}）】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n${cp.name} (${cp.duration.toFixed(1)}s)\n期間: [${start.toFixed(2)}s ~ ${cp.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                        >
+                                          <span className="truncate flex items-center gap-1">
+                                            {badgeCfg.icon}
+                                            <span>[持越] [{badgeCfg.label}] {cp.name} ({dur.toFixed(1)}s)</span>
+                                            {isBuffActive ? ` [残${remaining.toFixed(1)}s]` : ''}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+
+                                    {/* 通常発動効果バー（ドラッグ調整可能, zIndex: 20 で前面） */}
+                                    {grp.regularPassives.map(p => {
+                                      const isDragging = draggingPassive?.triggerId === p.triggerId;
+                                      const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
+                                      const start = (stint.startTime ?? 0) + offset;
+                                      if (start >= totalDuration) return null;
+                                      const visualEnd = Math.min(totalDuration, start + p.duration);
+                                      const end = start + p.duration;
+                                      const isBuffActive = start <= activeTime && activeTime < end;
+                                      const remaining = Math.max(0, end - activeTime);
+                                      const startDrag = (e: React.MouseEvent) => {
+                                        if (e.button !== 0) return;
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        document.body.style.cursor = 'grabbing';
+                                        setDraggingPassive({
+                                          stintId: stint.id,
+                                          triggerId: p.triggerId,
+                                          startClientX: e.clientX,
+                                          originOffset: offset,
+                                          offset,
+                                        });
+                                      };
+                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+                                      const activeRingClass = isBuffActive
+                                        ? category === 'weapon'
+                                          ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
+                                          : category === 'artifact'
+                                          ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
+                                          : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
+                                        : 'opacity-90';
+
+                                      return (
+                                        <div
+                                          key={`reg_p_eff_${p.id}`}
+                                          data-no-pan
+                                          onMouseDown={startDrag}
+                                          onClick={(e) => e.stopPropagation()}
+                                          style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
+                                          className={`${barCommon} ${cursor} font-medium border-dashed ${
+                                            p.hasCTViolation
+                                              ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
+                                              : badgeCfg.ganttBarClass
+                                          } ${activeRingClass}`}
+                                          title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（出場の先頭から +${offset.toFixed(2)}s）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
+                                        >
+                                          <span className="truncate flex items-center gap-1">
+                                            {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}
+                                            <span>[{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s)</span>
+                                            {p.hasCTViolation && p.collisionRemainingCT !== undefined && (
+                                              <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                                残{p.collisionRemainingCT}s
+                                              </span>
+                                            )}
+                                            {isBuffActive && !p.hasCTViolation ? ` [残${remaining.toFixed(1)}s]` : ''}
+                                            {isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+
+                                {/* 2. CT行（同じ行の中に持ち越しCTバーと通常CTバーを配置） */}
+                                {grp.cooldown > 0 && (
+                                  <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                                    {/* 持ち越しCTバー (zIndex: 10) */}
+                                    {grp.carryOverPassives.filter(cp => cp.cooldownEnd && cp.cooldownEnd > cp.startTime).map(cp => {
+                                      const isBarActive = isCycle2Active;
+                                      const start = cp.startTime;
+                                      if (start >= totalDuration) return null;
+                                      const cdEnd = cp.cooldownEnd!;
+                                      const visualEnd = Math.min(totalDuration, cdEnd);
+                                      const cdDur = cdEnd - start;
+
+                                      return (
+                                        <div
+                                          key={`wrap_p_cd_${cp.id}`}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            onSeek(start);
+                                          }}
+                                          style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 10 }}
+                                          className={`${barCommon} font-mono cursor-pointer ${
+                                            !isBarActive
+                                              ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                              : badgeCfg.cooldownBarClass
+                                          }`}
+                                          title={`【1周目からの持ち越し${badgeCfg.label}CT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n${cp.name}\nCT残り: ${cdDur.toFixed(1)}s [${start.toFixed(2)}s ~ ${cdEnd.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                        >
+                                          <span className="truncate">⏱️ [持越] {badgeCfg.label}CT {cdDur.toFixed(1)}s</span>
+                                        </div>
+                                      );
+                                    })}
+
+                                    {/* 通常CTバー (zIndex: 20 で前面) */}
+                                    {grp.regularPassives.map(p => {
+                                      const isDragging = draggingPassive?.triggerId === p.triggerId;
+                                      const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
+                                      const start = (stint.startTime ?? 0) + offset;
+                                      if (start >= totalDuration) return null;
+                                      const visualEnd = Math.min(totalDuration, start + p.cooldown);
+                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+                                      const startDrag = (e: React.MouseEvent) => {
+                                        if (e.button !== 0) return;
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        document.body.style.cursor = 'grabbing';
+                                        setDraggingPassive({
+                                          stintId: stint.id,
+                                          triggerId: p.triggerId,
+                                          startClientX: e.clientX,
+                                          originOffset: offset,
+                                          offset,
+                                        });
+                                      };
+
+                                      return (
+                                        <div
+                                          key={`reg_p_cd_${p.id}`}
+                                          data-no-pan
+                                          onMouseDown={startDrag}
+                                          onClick={(e) => e.stopPropagation()}
+                                          style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
+                                          className={`${barCommon} ${cursor} font-mono ${badgeCfg.cooldownBarClass}`}
+                                          title={`【${badgeCfg.label}バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                        >
+                                          <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </React.Fragment>
@@ -2069,397 +1787,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   );
                 })}
             </div>
-
-            {/* =========================================================================
-                4.5 Automatic 2nd-Cycle Loop Projection Swimlanes (2周目自動投影・読取専用)
-            ========================================================================= */}
-            {cycle2Data.enabled && cycle2Data.stints.length > 0 && (
-              <div className="border-t-2 border-purple-800/80 bg-slate-950">
-                {/* 2nd Cycle Swimlanes (1 Row per Stint, with separate Skill CT row, Burst CT row, and individual Buff rows) */}
-                <div className="divide-y divide-purple-900/30">
-                  {cycle2Data.stints.map((stint, stintIdx) => {
-                    const char = characterMap.get(stint.characterId) || characters[0];
-                    const isStintCurrentlyOnField = stint.startTime <= activeTime && activeTime < stint.endTime;
-                    
-                    // 1. Skill Cooldowns (ALL 1st-cycle CDs + 2nd cycle new)
-                    const stintCycle1SkillCDs = cycle2Data.cycle1SkillCDs.filter(c => c.characterId === char.id);
-                    const stintNewSkillCDs = cycle2Data.cycle2NewCooldowns.filter(c => c.characterId === char.id && c.type === 'skill');
-                    const allStintSkillCDs = [...stintCycle1SkillCDs, ...stintNewSkillCDs];
-
-                    // 2. Burst Cooldowns (ALL 1st-cycle CDs + 2nd cycle new)
-                    const stintCycle1BurstCDs = cycle2Data.cycle1BurstCDs.filter(c => c.characterId === char.id);
-                    const stintNewBurstCDs = cycle2Data.cycle2NewCooldowns.filter(c => c.characterId === char.id && c.type === 'burst');
-                    const allStintBurstCDs = [...stintCycle1BurstCDs, ...stintNewBurstCDs];
-
-                    // 3. 2nd Cycle Buffs (2nd-cycle new buffs + 1st-cycle carry-over buffs)
-                    const stintBuffs = cycle2Data.cycle2NewBuffs.filter(b => 
-                      b.sourceCharacterId === char.id &&
-                      b.startTime >= stint.startTime - 0.2 &&
-                      b.startTime <= stint.endTime + 0.2
-                    );
-                    const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
-                    const stintCarryOverBuffs = cycle2Data.carryOverBuffs.filter(b =>
-                      b.sourceCharacterId === char.id && b.endTime > stint.startTime
-                    );
-
-                    return (
-                      <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
-                        <div className="flex">
-                          {/* Left Column (Sticky Left) */}
-                          <div className={`w-[180px] shrink-0 p-2.5 border-r border-slate-800 flex flex-col justify-between sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
-                            isStintCurrentlyOnField ? 'bg-slate-900 border-l-2 border-l-purple-400' : 'bg-slate-950'
-                          }`}>
-                            <div>
-                              <div className="flex items-center justify-between gap-1">
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
-                                  <div className="min-w-0">
-                                    <div className="flex items-center gap-1">
-                                      <span className="font-bold text-xs text-white truncate">{char.name}</span>
-                                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-900/80 text-purple-300 border border-purple-700">
-                                        2周目 #{stintIdx + 1}
-                                      </span>
-                                    </div>
-                                    <div className="text-[9px] text-slate-400 font-mono mt-0.5">
-                                      {stint.startTime.toFixed(1)}s ~ {stint.endTime.toFixed(1)}s
-                                    </div>
-                                  </div>
-                                </div>
-                                <span title="読取専用（自動反映）">
-                                  <Lock className="w-3 h-3 text-slate-500 shrink-0" />
-                                </span>
-                              </div>
-
-                              {/* CT status badge */}
-                              <div className="mt-1.5 text-[9px] font-mono">
-                                {stint.actions.some(a => a.hasCTCollision) ? (
-                                  <div className="text-red-400 font-bold flex items-center gap-1 bg-red-950/60 border border-red-800/80 rounded px-1.5 py-0.5">
-                                    <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />
-                                    <span>CT未回復あり</span>
-                                  </div>
-                                ) : (
-                                  <div className="text-emerald-400 flex items-center gap-1 bg-emerald-950/40 border border-emerald-800/60 rounded px-1.5 py-0.5">
-                                    <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                                    <span>CT全解消</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Sub-labels matching 1st-cycle structure */}
-                            <div className="space-y-1 mt-2 text-[10px] font-mono text-slate-400 pl-0.5">
-                              <div className="flex items-center justify-between text-purple-300 font-semibold truncate">
-                                <span className="truncate">{stint.note || `${char.name}の行動 (2周目)`}</span>
-                                <span className="shrink-0 text-slate-400 font-mono text-[9px]">
-                                  {stint.duration.toFixed(1)}s
-                                </span>
-                              </div>
-                              <div className="flex items-center justify-between text-slate-400 text-[9px]">
-                                <span>時間帯</span>
-                                <span className="font-mono">{stint.startTime.toFixed(1)}s ~ {stint.endTime.toFixed(1)}s</span>
-                              </div>
-                              {allStintSkillCDs.length > 0 && (
-                                <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
-                                  <span>⏱️ スキルCT</span>
-                                  <span>
-                                    {stintCycle1SkillCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
-                                    {formatSpanDurations(allStintSkillCDs)}
-                                  </span>
-                                </div>
-                              )}
-                              {allStintBurstCDs.length > 0 && (
-                                <div className="flex items-center justify-between text-sky-300 text-[9px] font-mono">
-                                  <span>⏱️ 爆発CT</span>
-                                  <span>
-                                    {stintCycle1BurstCDs.some(c => c.isCarryOver) && <span className="text-sky-400 text-[8px] mr-1">[持越あり]</span>}
-                                    {formatSpanDurations(allStintBurstCDs)}
-                                  </span>
-                                </div>
-                              )}
-                              {(stintBuffRows.length > 0 || stintCarryOverBuffs.length > 0) && (
-                                <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
-                                  {stintCarryOverBuffs.map((cb, cbIdx) => (
-                                    <div key={`c2_carry_buff_lbl_${stint.id}_${cbIdx}`} className="flex items-center justify-between text-emerald-300/80 text-[9px] truncate font-mono" title={`【1周目からの持越バフ】\n${cb.name} (${cb.duration}s)\n期間: [${cb.startTime.toFixed(2)}s ~ ${cb.endTime.toFixed(2)}s]\n2周目出場時残り: ${(cb.endTime - stint.startTime).toFixed(1)}s`}>
-                                      <span className="truncate flex items-center gap-1">
-                                        <span className="text-emerald-400 font-bold shrink-0">[持越]</span>
-                                        <span className="truncate">{cb.name.replace(/^[^:]+:\s*/, '')}</span>
-                                      </span>
-                                      <span className="shrink-0 text-emerald-400/80 ml-1">残{Math.max(0, cb.endTime - stint.startTime).toFixed(0)}s</span>
-                                    </div>
-                                  ))}
-                                  {stintBuffRows.map((bRow, rIdx) => (
-                                    <div key={`c2_stint_buff_lbl_${stint.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 2周目効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
-                                      <span className="truncate flex items-center gap-1">
-                                        <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
-                                        <span className="truncate">{bRow.cleanName}</span>
-                                      </span>
-                                      <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Right Timeline Canvas for 2nd Cycle */}
-                          <div 
-                            className="relative flex-1 min-h-[95px] flex flex-col justify-around py-1 cursor-pointer"
-                            onClick={handleTimelineClick}
-                          >
-                            {/* Background Vertical Grid Lines */}
-                            {timelineTicks.map(t => (
-                              <div
-                                key={`grid_c2_${stint.id}_${t.absTime}`}
-                                className={`absolute top-0 bottom-0 border-l pointer-events-none ${
-                                  t.isZero ? 'border-purple-400/70' : 'border-slate-800/40'
-                                }`}
-                                style={{ left: `${t.absTime * pixelsPerSecond}px` }}
-                              />
-                            ))}
-
-                            {/* --- Sublane 1: 2nd Cycle Stint & Actions --- */}
-                            <div className="relative h-7 my-0.5">
-                              {(() => {
-                                const startX = stint.startTime * pixelsPerSecond;
-                                const width = stint.duration * pixelsPerSecond;
-
-                                return (
-                                  <div
-                                    className={`absolute h-7 rounded-lg flex items-center overflow-hidden border shadow-sm transition-all ${
-                                      isStintCurrentlyOnField
-                                        ? 'border-purple-400 ring-2 ring-purple-400/50 shadow-purple-500/20'
-                                        : 'border-purple-800/70 hover:border-purple-500'
-                                    }`}
-                                    style={{
-                                      left: `${startX}px`,
-                                      width: `${width}px`,
-                                      background: `linear-gradient(90deg, ${char.color}44, ${char.color}22)`,
-                                    }}
-                                  >
-                                    {stint.actions.map((act) => {
-                                      const actStartX = (act.startTime - stint.startTime) * pixelsPerSecond;
-                                      const actWidth = act.duration * pixelsPerSecond;
-                                      const isSwap = act.type === 'swap' || (act as any).actionTypeId === 'action_switch_char';
-                                      const isActActive = act.startTime <= activeTime && activeTime < act.endTime;
-
-                                      return (
-                                        <div
-                                          key={act.id}
-                                          style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
-                                          className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none transition-all ${
-                                            act.hasCTCollision
-                                              ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse'
-                                              : isActActive
-                                              ? 'bg-amber-400 text-slate-950 ring-1 ring-white'
-                                              : act.isBurst
-                                              ? 'bg-purple-600/90 text-white hover:brightness-110'
-                                              : act.isSkill
-                                              ? 'bg-sky-600/90 text-white hover:brightness-110'
-                                              : 'bg-slate-800/80 text-slate-200 hover:brightness-110'
-                                          }`}
-                                          title={
-                                            act.hasCTCollision
-                                              ? `【⚠️ CT衝突エラー】1周目の発動CTが2周目の発動時点（${act.startTime.toFixed(2)}s）までに解消されていません！
-残り待機時間: ${act.ctRemaining}s
-アクション: ${act.name}`
-                                              : isSwap
-                                              ? `【2周目キャラ交代】
-所要時間: ${act.duration.toFixed(2)}s
-開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s`
-                                              : `【2周目アクション (読取専用)】
-${act.name} (${act.duration.toFixed(2)}s)
-開始: ${act.startTime.toFixed(2)}s ~ 終了: ${act.endTime.toFixed(2)}s
-CT状態: ✅ 解消済み`
-                                          }
-                                        >
-                                          <span className="truncate px-0.5 flex items-center gap-0.5">
-                                            {act.hasCTCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
-                                            {isSwap ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" /> : act.shortName}
-                                            {act.hasCTCollision && (
-                                              <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                                残{act.ctRemaining}s
-                                              </span>
-                                            )}
-                                          </span>
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                );
-                              })()}
-                            </div>
-
-                            {/* --- Sublane 2: Skill (E) Cooldown Row --- */}
-                            <div className="relative h-4 my-0.5">
-                              {allStintSkillCDs.map((cd) => {
-                                const isCarryOver = (cd as any).isCarryOver;
-                                const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
-                                const startX = cd.startTime * pixelsPerSecond;
-                                const width = cd.duration * pixelsPerSecond;
-
-                                return (
-                                  <div
-                                    key={`c2_skill_cd_${cd.id}`}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      onSeek(cd.startTime);
-                                    }}
-                                    style={{ left: `${startX}px`, width: `${width}px` }}
-                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none ${
-                                      isFinishedInCycle1
-                                        ? 'bg-sky-950/70 border-sky-600/70 text-sky-300 hover:border-sky-400'
-                                        : isCarryOver
-                                        ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
-                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
-                                    }`}
-                                    title={
-                                      isFinishedInCycle1
-                                        ? `【1周目スキルCT (1周目中に解消済)】\nスキルCT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
-                                        : isCarryOver
-                                        ? `【1周目からの持ち越しスキルCT】\nスキルCT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n2周目開始時残り: ${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【2周目スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
-                                    }
-                                  >
-                                    <span className="truncate">
-                                      ⏱️ {isFinishedInCycle1
-                                        ? `[1周目] E-CT ${cd.duration.toFixed(1)}s (解消済)`
-                                        : isCarryOver
-                                        ? `[1周目持越] E-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
-                                        : `E-CT ${cd.duration.toFixed(1)}s`}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-
-                            {/* --- Sublane 3: Burst (Q) Cooldown Row --- */}
-                            <div className="relative h-4 my-0.5">
-                              {allStintBurstCDs.map((cd) => {
-                                const isCarryOver = (cd as any).isCarryOver;
-                                const isFinishedInCycle1 = (cd as any).isFinishedInCycle1;
-                                const startX = cd.startTime * pixelsPerSecond;
-                                const width = cd.duration * pixelsPerSecond;
-
-                                return (
-                                  <div
-                                    key={`c2_burst_cd_${cd.id}`}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      onSeek(cd.startTime);
-                                    }}
-                                    style={{ left: `${startX}px`, width: `${width}px` }}
-                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none ${
-                                      isFinishedInCycle1
-                                        ? 'bg-sky-950/70 border-sky-600/70 text-sky-300 hover:border-sky-400'
-                                        : isCarryOver
-                                        ? 'bg-sky-950/95 border-sky-400 ring-1 ring-sky-400/50 text-sky-200 shadow-sm'
-                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 shadow-sm hover:border-sky-300'
-                                    }`}
-                                    title={
-                                      isFinishedInCycle1
-                                        ? `【1周目元素爆発CT (1周目中に解消済)】\n爆発CT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`
-                                        : isCarryOver
-                                        ? `【1周目からの持ち越し元素爆発CT】\n爆発CT (${cd.duration.toFixed(1)}s)\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n2周目開始時残り: ${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【2周目爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
-                                    }
-                                  >
-                                    <span className="truncate">
-                                      ⏱️ {isFinishedInCycle1
-                                        ? `[1周目] Q-CT ${cd.duration.toFixed(1)}s (解消済)`
-                                        : isCarryOver
-                                        ? `[1周目持越] Q-CT (${(cd.endTime - cycle2Data.cycle2StartTime).toFixed(1)}s残)`
-                                        : `Q-CT ${cd.duration.toFixed(1)}s`}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-
-                            {/* --- Sublane 4+: 2nd Cycle Buff Rows --- */}
-                            {stintBuffRows.map((bRow, rIdx) => (
-                              <div key={`c2_buff_row_${stint.id}_${rIdx}`} className="relative h-4 my-0.5">
-                                {bRow.spans.map((buff) => {
-                                  const startX = buff.startTime * pixelsPerSecond;
-                                  const width = Math.max(16, buff.duration * pixelsPerSecond);
-                                  const isBuffActive = buff.startTime <= activeTime && activeTime < buff.endTime;
-                                  const remaining = Math.max(0, buff.endTime - activeTime);
-
-                                  return (
-                                    <div
-                                      key={`c2_buff_span_${buff.id}`}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onSeek(buff.startTime);
-                                      }}
-                                      style={{ 
-                                        left: `${startX}px`, 
-                                        width: `${width}px`,
-                                      }}
-                                      className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none bg-emerald-950 border-emerald-400 text-emerald-100 shadow-sm hover:border-emerald-300 ${
-                                        isBuffActive ? 'ring-1 ring-emerald-400 font-bold brightness-125' : 'opacity-90'
-                                      }`}
-                                      title={`【${bRow.tag} 2周目効果持続時間】\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
-                                    >
-                                      <span className="truncate">
-                                        ✨ {bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} ({buff.duration.toFixed(0)}s) {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* 2nd Cycle Party Synergy Lane */}
-                {cycle2Data.buffSynergyPoints.length > 0 && (
-                  <div className="flex border-t border-purple-900/60 bg-slate-950 py-2">
-                    <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex flex-col justify-center sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
-                      <span className="text-xs font-bold text-purple-300 flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                        <span>2周目 バフ重複度</span>
-                      </span>
-                      <span className="text-[10px] text-slate-400">1周目持ち越し+2周目バフ</span>
-                    </div>
-
-                    <div 
-                      className="relative flex-1 h-8 flex items-center cursor-pointer"
-                      onClick={handleTimelineClick}
-                    >
-                      {cycle2Data.buffSynergyPoints.map((pt, idx) => {
-                        const x = pt.time * pixelsPerSecond;
-                        const w = 0.5 * pixelsPerSecond;
-
-                        return (
-                          <div
-                            key={idx}
-                            style={{ 
-                              left: `${x}px`, 
-                              width: `${w}px`,
-                              backgroundColor: pt.count === 0 
-                                ? 'rgba(30, 41, 59, 0.3)' 
-                                : pt.count >= 3 
-                                ? 'rgba(234, 88, 12, 0.65)' 
-                                : pt.count >= 2 
-                                ? 'rgba(168, 85, 247, 0.55)' 
-                                : 'rgba(14, 165, 233, 0.35)',
-                            }}
-                            className="absolute top-1 bottom-1 rounded-sm border-r border-slate-950/40 flex items-center justify-center text-[10px] font-mono text-white"
-                            title={`${pt.time.toFixed(1)}s: 2周目有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
-                          >
-                            {pt.count > 0 && <span className="font-bold text-[9px]">{pt.count}</span>}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
 
 
 
@@ -2489,16 +1816,6 @@ CT状態: ✅ 解消済み`
               </div>
             )}
 
-            {cycle2Data.enabled && (
-              <div
-                style={{ left: `${cycle2Data.cycle2StartTime * pixelsPerSecond + 180}px` }}
-                className="absolute top-0 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-10 shadow-lg"
-              >
-                <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
-                  🔁 2周目開始地点 ({cycle2Data.cycle2StartTime.toFixed(2)}s)
-                </div>
-              </div>
-            )}
 
 
 
@@ -2552,6 +1869,10 @@ CT状態: ✅ 解消済み`
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-0 border-t-2 border-dotted border-purple-400"></span>
               <span className="text-purple-300 font-medium">🔁 2周目以降ループ区切り</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3.5 h-2.5 rounded bg-slate-800/80 border border-dashed border-slate-500"></span>
+              <span className="text-slate-300 font-medium">[持越] 1周目からの持ち越し（2周目以降で有効化）</span>
             </div>
           </div>
 

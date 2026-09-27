@@ -23,6 +23,12 @@ export interface CalculatedRotation {
   activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
   /** 発動バフ（固有天賦・武器・聖遺物）の効果・CT */
   passiveSpans: PassiveSpan[];
+  /** 2周目折り返し（Carry-Over）情報 */
+  carryOverCooldowns: CooldownSpan[];
+  carryOverBuffs: ActiveBuffSpan[];
+  carryOverPassives: PassiveSpan[];
+  loopStartTime: number;
+  loopPeriod: number;
   loopStatus: {
     canLoopImmediately: boolean;
     longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number } | null;
@@ -33,6 +39,7 @@ export interface RotationOptions {
   switchDelay?: number;
   actionDelay?: number;
   database?: GenshinDatabase;
+  loopStartIndex?: number;
 }
 
 export function calculateRotation(
@@ -42,6 +49,7 @@ export function calculateRotation(
 ): CalculatedRotation {
   const switchDelay = typeof options?.switchDelay === 'number' ? Math.max(0, options.switchDelay) : 0.50;
   const actionDelay = typeof options?.actionDelay === 'number' ? Math.max(0, options.actionDelay) : 0.10;
+  const loopStartIndex = typeof options?.loopStartIndex === 'number' ? Math.max(0, options.loopStartIndex) : 0;
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
@@ -80,8 +88,9 @@ export function calculateRotation(
     const stintStartTime = currentTime;
     const computedActions: CharacterActionInstance[] = [];
 
-    // If 2nd or subsequent character and switchDelay > 0, include switch action as first action inside this stint
-    if (sIdx > 0 && switchDelay > 0) {
+    // 2-C: 先頭キャラも含め、全出場に交代時間を設ける（switchDelay > 0の場合）
+    // これにより先頭キャラの例外処理が不要になり、ループ開始位置へ戻った時も自然に交代時間が入る
+    if (switchDelay > 0) {
       const switchActionStartTime = currentTime;
       const switchActionEndTime = Number((currentTime + switchDelay).toFixed(3));
       const switchAction: CharacterActionInstance = {
@@ -129,9 +138,10 @@ export function calculateRotation(
       const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
 
       if (isSkill) {
-        // 祭礼リセット等はCT中でも発動可能
+        // 祭礼リセットやCTを開始しない派生技（ニィロウのステップ等）はCT中でも発動可能
+        const isTriggeringAction = actionDef?.startsSkillCooldown !== false;
         const lastCT = latestSkillCTEnd[char.id];
-        if (lastCT && lastCT.time > actionStartTime + 0.05 && act.type !== 'skill_reset') {
+        if (lastCT && lastCT.time > actionStartTime + 0.05 && act.type !== 'skill_reset' && isTriggeringAction) {
           const remaining = Number((lastCT.time - actionStartTime).toFixed(1));
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = remaining;
@@ -147,7 +157,7 @@ export function calculateRotation(
           });
         }
 
-        if (actionDef?.startsSkillCooldown && cooldown > 0) {
+        if (isTriggeringAction && cooldown > 0) {
           const cdSpan: CooldownSpan = {
             id: `cd_skill_${char.id}_${actionStartTime}`,
             characterId: char.id,
@@ -164,8 +174,9 @@ export function calculateRotation(
       }
 
       if (act.type === 'burst') {
+        const isTriggeringBurst = actionDef?.startsBurstCooldown !== false;
         const lastBurstCT = latestBurstCTEnd[char.id];
-        if (lastBurstCT && lastBurstCT.time > actionStartTime + 0.05) {
+        if (lastBurstCT && lastBurstCT.time > actionStartTime + 0.05 && isTriggeringBurst) {
           const remaining = Number((lastBurstCT.time - actionStartTime).toFixed(1));
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = remaining;
@@ -181,7 +192,7 @@ export function calculateRotation(
           });
         }
 
-        if (actionDef?.startsBurstCooldown !== false && cooldown > 0) {
+        if (isTriggeringBurst && cooldown > 0) {
           const burstCDSpan: CooldownSpan = {
             id: `cd_burst_${char.id}_${actionStartTime}`,
             characterId: char.id,
@@ -230,7 +241,7 @@ export function calculateRotation(
       const def = availableBuffs.find(b => b.id === trigger.passiveEffectId);
       const category: BuffCategory = def?.category || (trigger.passiveEffectId.startsWith('wbuff_') ? 'weapon' : trigger.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
       const duration = trigger.duration ?? def?.duration ?? 0;
-      const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
+      const cooldown = def?.cooldown !== undefined ? def.cooldown : (trigger.cooldown ?? 0);
       const startTime = Number((stintStartTime + Math.max(0, trigger.offset)).toFixed(3));
       const ctKey = `${char.id}:${trigger.passiveEffectId}`;
       const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
@@ -303,13 +314,93 @@ export function calculateRotation(
   }
 
   const totalDuration = Number(currentTime.toFixed(2));
+  const safeLoopStartIndex = Math.min(loopStartIndex, Math.max(0, calculatedStints.length - 1));
+  const loopStartTime = calculatedStints[safeLoopStartIndex]?.startTime ?? 0;
+  const loopPeriod = Math.max(0, totalDuration - loopStartTime);
 
-  // Calculate buff overlap counts by second (0 to ceil(totalDuration))
+  const carryOverCooldowns: CooldownSpan[] = [];
+  const carryOverBuffs: ActiveBuffSpan[] = [];
+  const carryOverPassives: PassiveSpan[] = [];
+
+  if (loopPeriod > 0.05) {
+    // 1. スキルCTの2周目折り返し
+    for (const cd of skillCooldowns) {
+      if (cd.endTime > totalDuration + 0.02) {
+        const overflow = Number((cd.endTime - totalDuration).toFixed(3));
+        const wrapEnd = Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3)));
+        carryOverCooldowns.push({
+          id: `wrap_cd_skill_${cd.id}`,
+          characterId: cd.characterId,
+          type: 'skill',
+          startTime: loopStartTime,
+          endTime: wrapEnd,
+          duration: overflow,
+          actionInstanceId: cd.actionInstanceId,
+          isCarryOver: true,
+          originalStartTime: cd.startTime,
+          originalEndTime: cd.endTime,
+        });
+      }
+    }
+
+    // 2. 元素爆発CTの2周目折り返し
+    for (const cd of burstCooldowns) {
+      if (cd.endTime > totalDuration + 0.02) {
+        const overflow = Number((cd.endTime - totalDuration).toFixed(3));
+        const wrapEnd = Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3)));
+        carryOverCooldowns.push({
+          id: `wrap_cd_burst_${cd.id}`,
+          characterId: cd.characterId,
+          type: 'burst',
+          startTime: loopStartTime,
+          endTime: wrapEnd,
+          duration: overflow,
+          actionInstanceId: cd.actionInstanceId,
+          isCarryOver: true,
+          originalStartTime: cd.startTime,
+          originalEndTime: cd.endTime,
+        });
+      }
+    }
+
+    // 3. アクション効果バフの2周目折り返し（発動パッシブバフは除外）
+    for (const b of activeBuffs) {
+      if (b.origin !== 'passive' && b.endTime > totalDuration + 0.02) {
+        const overflow = Number((b.endTime - totalDuration).toFixed(3));
+        carryOverBuffs.push({
+          ...b,
+          id: `wrap_buff_${b.id}`,
+          buffId: b.buffId,
+          startTime: loopStartTime,
+          endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
+          duration: overflow,
+          isCarryOver: true,
+        });
+      }
+    }
+
+    // 4. 発動バフ（固有天賦・武器・聖遺物）の2周目折り返し
+    for (const p of passiveSpans) {
+      if (p.duration > 0 && p.endTime > totalDuration + 0.02) {
+        const overflow = Number((p.endTime - totalDuration).toFixed(3));
+        carryOverPassives.push({
+          ...p,
+          id: `wrap_passive_buff_${p.id}`,
+          startTime: loopStartTime,
+          endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
+          duration: overflow,
+          isCarryOver: true,
+        });
+      }
+    }
+  }
+
+  // 3-D: 持ち越しバフも含め、同じ buffId は1つとして数える（全タイムラインで重複度を一貫計算）
+  const allDistinctBuffs = [...activeBuffs, ...carryOverBuffs];
   const maxSec = Math.ceil(totalDuration);
   const activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[] = [];
   for (let s = 0; s <= maxSec; s += 0.5) {
-    // 同じアクション由来のバーが重なっても1つとして数える
-    const { count, names } = countDistinctActiveBuffs(activeBuffs, s);
+    const { count, names } = countDistinctActiveBuffs(allDistinctBuffs, s);
     activeBuffCountBySecond.push({
       time: s,
       count,
@@ -361,6 +452,11 @@ export function calculateRotation(
     validationIssues,
     activeBuffCountBySecond,
     passiveSpans,
+    carryOverCooldowns,
+    carryOverBuffs,
+    carryOverPassives,
+    loopStartTime,
+    loopPeriod,
     loopStatus: {
       canLoopImmediately,
       longestRemainingCT,

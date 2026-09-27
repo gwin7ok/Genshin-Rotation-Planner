@@ -1,6 +1,7 @@
 import { CharacterConfig } from '../types/genshin';
 import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
+import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact';
 
@@ -51,18 +52,27 @@ export function getAvailableBuffsForCharacter(
       character.weaponRefinementRank
     );
     if (weaponModel) {
+      const override = WEAPON_BUFF_OVERRIDES[weaponModel.name] || 
+        (weaponModel.englishName ? WEAPON_BUFF_OVERRIDES[weaponModel.englishName] : undefined);
+
       for (const b of weaponModel.activeBuffEffects) {
+        const duration = override?.duration !== undefined ? override.duration : b.duration;
+        const cooldown = override?.cooldown !== undefined ? override.cooldown : b.cooldown;
+        const name = override?.name || b.name;
+        const color = override?.color || b.color || '#0284c7';
+        const statEffectSummary = override?.statEffectSummary || b.statEffectSummary;
+
         result.push({
           id: b.id,
-          name: b.name,
+          name,
           category: 'weapon',
           sourceId: weaponModel.id,
           sourceName: weaponModel.name,
-          duration: b.duration,
-          cooldown: b.cooldown,
+          duration,
+          cooldown,
           description: b.description,
-          color: b.color || '#0284c7',
-          statEffectSummary: b.statEffectSummary,
+          color,
+          statEffectSummary,
         });
       }
     }
@@ -72,6 +82,11 @@ export function getAvailableBuffsForCharacter(
   if (character.artifactSetName && database?.artifacts) {
     const matchedArtifact = database.artifacts.find(a => a.name === character.artifactSetName);
     if (matchedArtifact) {
+      const cleanArtName = matchedArtifact.name.replace(/\s*(4セット|4-Piece.*)$/i, '');
+      const artOverride = ARTIFACT_BUFF_OVERRIDES[matchedArtifact.name] || 
+        ARTIFACT_BUFF_OVERRIDES[cleanArtName] ||
+        (matchedArtifact.englishName ? ARTIFACT_BUFF_OVERRIDES[matchedArtifact.englishName] : undefined);
+
       const buffs: EquipmentBuffDefinition[] = matchedArtifact.buffEffects && matchedArtifact.buffEffects.length > 0
         ? matchedArtifact.buffEffects
         : matchedArtifact.buffEffect
@@ -91,17 +106,23 @@ export function getAvailableBuffsForCharacter(
         : [];
 
       for (const b of buffs) {
+        const duration = artOverride?.duration !== undefined ? artOverride.duration : b.duration;
+        const cooldown = artOverride?.cooldown !== undefined ? artOverride.cooldown : b.cooldown;
+        const name = artOverride?.name || b.name;
+        const color = artOverride?.color || b.color || '#c084fc';
+        const statEffectSummary = artOverride?.statEffectSummary || b.statEffectSummary;
+
         result.push({
           id: b.id,
-          name: b.name,
+          name,
           category: 'artifact',
           sourceId: matchedArtifact.id,
           sourceName: matchedArtifact.name,
-          duration: b.duration,
-          cooldown: b.cooldown,
+          duration,
+          cooldown,
           description: b.description,
-          color: b.color || '#c084fc',
-          statEffectSummary: b.statEffectSummary,
+          color,
+          statEffectSummary,
         });
       }
     }

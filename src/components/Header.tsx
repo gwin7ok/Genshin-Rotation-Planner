@@ -28,12 +28,8 @@ interface HeaderProps {
   loopStartTime?: number;
   rotationNotation?: string;
   totalCTCollisions?: number;
-  cycle2Info?: {
-    enabled: boolean;
-    cycle2StartTime: number;
-    cycle2EndTime: number;
-    loopPeriod: number;
-  };
+  playbackCycleCount?: number;
+  loopPeriod?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -62,7 +58,8 @@ export const Header: React.FC<HeaderProps> = ({
   loopStartTime = 0,
   rotationNotation = '',
   totalCTCollisions = 0,
-  cycle2Info,
+  playbackCycleCount = 1,
+  loopPeriod = 0,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -188,19 +185,30 @@ export const Header: React.FC<HeaderProps> = ({
               <RotateCcw className="w-3 h-3" />
             </button>
 
+            {/* Playback Cycle Counter (1周目, 2周目, 3周目...) */}
+            <span
+              className={`px-1.5 py-0.5 rounded text-[10px] font-bold font-mono select-none transition-all ${
+                playbackCycleCount >= 2
+                  ? 'bg-purple-900/90 text-purple-200 border border-purple-500 shadow-sm shadow-purple-500/20'
+                  : 'bg-slate-800 text-slate-300 border border-slate-700'
+              }`}
+              title={`再生周回数: 現在${playbackCycleCount}周目（一時停止中は周回数を維持、リセットで1周目に戻ります）`}
+            >
+              {playbackCycleCount}周目
+            </span>
+
             {/* Time indicator */}
             <div className="flex items-center gap-1 font-mono text-xs text-right min-w-[70px]">
               {(() => {
-                if (cycle2Info?.enabled && currentTime >= totalDuration - 0.02) {
-                  const c2Rel = Math.max(0, currentTime - totalDuration);
+                if (playbackCycleCount >= 2 && loopPeriod > 0) {
+                  const rel = Math.max(0, currentTime - loopStartTime);
                   return (
-                    <div title={`再生位置: ${currentTime.toFixed(2)}s（2周目）`}>
-                      <span className="text-[10px] text-purple-400 font-bold mr-0.5">2周目</span>
+                    <div title={`再生位置: ${currentTime.toFixed(2)}s (${playbackCycleCount}周目)`}>
                       <span className="text-purple-300 font-bold">
-                        +{c2Rel.toFixed(1)}s
+                        +{rel.toFixed(1)}s
                       </span>
-                      <span className="text-sky-300 font-semibold" title="2周目ループ1周の秒数">
-                        /{cycle2Info.loopPeriod.toFixed(1)}s
+                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数">
+                        /{loopPeriod.toFixed(1)}s
                       </span>
                     </div>
                   );
@@ -209,14 +217,14 @@ export const Header: React.FC<HeaderProps> = ({
                 if (loopStartTime > 0) {
                   const rel = currentTime - loopStartTime;
                   const relStr = Math.abs(rel) < 0.05 ? '0.0s' : rel < 0 ? `-${Math.abs(rel).toFixed(1)}s` : `+${rel.toFixed(1)}s`;
-                  const loopPeriod = Math.max(0, totalDuration - loopStartTime);
+                  const curLoopPeriod = loopPeriod > 0 ? loopPeriod : Math.max(0, totalDuration - loopStartTime);
                   return (
                     <div title={`再生位置: ${currentTime.toFixed(2)}s（1周目）`}>
                       <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
                         {relStr}
                       </span>
-                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数（2周目開始地点から最後まで）">
-                        /{loopPeriod.toFixed(1)}s
+                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数（ループ開始地点から最後まで）">
+                        /{curLoopPeriod.toFixed(1)}s
                       </span>
                     </div>
                   );

@@ -29,10 +29,6 @@ export interface CalculatedRotation {
   carryOverPassives: PassiveSpan[];
   loopStartTime: number;
   loopPeriod: number;
-  loopStatus: {
-    canLoopImmediately: boolean;
-    longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number } | null;
-  };
 }
 
 export interface RotationOptions {
@@ -60,8 +56,9 @@ export function calculateRotation(
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
-  // 固有天賦ごとの直近の CT 終了時刻（キャラID + 効果ID）
-  const latestPassiveCTEnd: Record<string, number> = {};
+
+  // CT を持つ発動（スキル・爆発・発動バフ）。CT違反の判定はすべて計算後にまとめて行う（checkCooldownViolations）
+  const ctEvents: CooldownEvent[] = [];
 
   // Track runtime status for each character:
   const charStates: Record<string, CharacterRuntimeState> = {};
@@ -75,9 +72,35 @@ export function calculateRotation(
     };
   });
 
-  // Track latest cooldown end times:
-  const latestSkillCTEnd: Record<string, { time: number; actionName: string }> = {};
-  const latestBurstCTEnd: Record<string, { time: number; actionName: string }> = {};
+  // CT違反の検証メッセージ（同じアクションは1件にまとめ、残り秒数は最大値）
+  const violationRemaining = new Map<string, number>();
+  const addViolationIssue = (
+    id: string,
+    char: CharacterConfig,
+    stintId: string,
+    actionId: string | undefined,
+    time: number,
+    severity: 'error' | 'warning',
+    title: string,
+    what: string,
+    remaining: number,
+    cycle: number,
+  ) => {
+    const where = cycle === 0 ? '' : `（ループ${cycle + 1}周目の発動時）`;
+    const message = `${what}の発動時点で CT がまだ ${remaining} 秒残っています${where}`;
+    const prev = violationRemaining.get(id);
+    if (prev !== undefined) {
+      if (remaining > prev) {
+        violationRemaining.set(id, remaining);
+        const existing = validationIssues.find(v => v.id === id);
+        if (existing) existing.message = message;
+      }
+      return;
+    }
+    violationRemaining.set(id, remaining);
+    validationIssues.push({ id, severity, characterId: char.id, stintId, actionId, time, title, message });
+  };
+
 
   // 1. Process Stints and Actions in strict chronological order
   for (let sIdx = 0; sIdx < rawStints.length; sIdx++) {
@@ -137,23 +160,36 @@ export function calculateRotation(
       // 個別に変更された CT があれば優先
       const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
 
+      // CT に関わるスキル・爆発なのにアクション定義が見つからない（旧データの編成など）: CT を判定できないことを知らせる
+      if (!actionDef && (isSkill || act.type === 'burst') && act.cooldown === undefined) {
+        validationIssues.push({
+          id: `missing_def_${act.id}`,
+          severity: 'warning',
+          characterId: char.id,
+          stintId: rawStint.id,
+          actionId: act.id,
+          time: actionStartTime,
+          title: `${char.name}: アクション定義が見つかりません`,
+          message: `「${act.name}」の定義がキャラデータにないため、CT を判定できません（編成設定の「全パーティメンバーをマスターデータで再登録」で直ります）`,
+        });
+      }
+
       if (isSkill) {
-        // 祭礼リセットやCTを開始しない派生技（ニィロウのステップ等）はCT中でも発動可能
+        // CTを開始しない派生技（ニィロウのステップ等）はCTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
         const isTriggeringAction = actionDef?.startsSkillCooldown !== false;
-        const lastCT = latestSkillCTEnd[char.id];
-        if (lastCT && lastCT.time > actionStartTime + 0.05 && act.type !== 'skill_reset' && isTriggeringAction) {
-          const remaining = Number((lastCT.time - actionStartTime).toFixed(1));
-          computedAction.hasCTCollision = true;
-          computedAction.collisionRemainingCT = remaining;
-          validationIssues.push({
-            id: `skill_ct_${act.id}_${actionStartTime}`,
-            severity: 'error',
-            characterId: char.id,
-            stintId: rawStint.id,
-            actionId: act.id,
+        if (isTriggeringAction) {
+          ctEvents.push({
+            key: `${char.id}:skill`,
             time: actionStartTime,
-            title: `${char.name}: スキルCT違反`,
-            message: `スキル発動時点でクールタイムがまだ ${remaining} 秒残っています（直前の${lastCT.actionName}によるCT中）`
+            cooldown,
+            checked: act.type !== 'skill_reset',
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: (remaining, cycle) => {
+              computedAction.hasCTCollision = true;
+              computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
+              addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: スキルCT違反`, `スキル「${act.name}」`, remaining, cycle);
+            },
           });
         }
 
@@ -169,26 +205,24 @@ export function calculateRotation(
           };
           skillCooldowns.push(cdSpan);
           charStates[char.id].skillCooldowns.push(cdSpan);
-          latestSkillCTEnd[char.id] = { time: actionStartTime + cooldown, actionName: act.name };
         }
       }
 
       if (act.type === 'burst') {
         const isTriggeringBurst = actionDef?.startsBurstCooldown !== false;
-        const lastBurstCT = latestBurstCTEnd[char.id];
-        if (lastBurstCT && lastBurstCT.time > actionStartTime + 0.05 && isTriggeringBurst) {
-          const remaining = Number((lastBurstCT.time - actionStartTime).toFixed(1));
-          computedAction.hasCTCollision = true;
-          computedAction.collisionRemainingCT = remaining;
-          validationIssues.push({
-            id: `burst_ct_${act.id}_${actionStartTime}`,
-            severity: 'error',
-            characterId: char.id,
-            stintId: rawStint.id,
-            actionId: act.id,
+        if (isTriggeringBurst) {
+          ctEvents.push({
+            key: `${char.id}:burst`,
             time: actionStartTime,
-            title: `${char.name}: 元素爆発CT違反`,
-            message: `爆発発動時点で爆発CTがまだ ${remaining} 秒残っています`
+            cooldown,
+            checked: true,
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: (remaining, cycle) => {
+              computedAction.hasCTCollision = true;
+              computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
+              addViolationIssue(`burst_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: 元素爆発CT違反`, `元素爆発「${act.name}」`, remaining, cycle);
+            },
           });
         }
 
@@ -204,7 +238,6 @@ export function calculateRotation(
           };
           burstCooldowns.push(burstCDSpan);
           charStates[char.id].burstCooldowns.push(burstCDSpan);
-          latestBurstCTEnd[char.id] = { time: actionStartTime + cooldown, actionName: act.name };
         }
       }
 
@@ -241,27 +274,9 @@ export function calculateRotation(
       const def = availableBuffs.find(b => b.id === trigger.passiveEffectId);
       const category: BuffCategory = def?.category || (trigger.passiveEffectId.startsWith('wbuff_') ? 'weapon' : trigger.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
       const duration = trigger.duration ?? def?.duration ?? 0;
-      const cooldown = def?.cooldown !== undefined ? def.cooldown : (trigger.cooldown ?? 0);
+      // 個別に変更した CT を優先（継続時間と同じ優先順）
+      const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
       const startTime = Number((stintStartTime + Math.max(0, trigger.offset)).toFixed(3));
-      const ctKey = `${char.id}:${trigger.passiveEffectId}`;
-      const hasCTViolation = (latestPassiveCTEnd[ctKey] ?? -Infinity) > startTime + 0.05;
-      const collisionRemainingCT = hasCTViolation
-        ? Number(((latestPassiveCTEnd[ctKey] ?? 0) - startTime).toFixed(1))
-        : undefined;
-
-      if (hasCTViolation) {
-        const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
-        validationIssues.push({
-          id: `passive_ct_${trigger.id}`,
-          severity: 'warning',
-          characterId: char.id,
-          stintId: rawStint.id,
-          time: startTime,
-          title: `${char.name}: ${catLabel}CT中`,
-          message: `「${trigger.name}」の発動時点でCTがまだ ${collisionRemainingCT} 秒残っています`,
-        });
-      }
-      if (cooldown > 0) latestPassiveCTEnd[ctKey] = startTime + cooldown;
 
       const buffColor = def?.color || (category === 'weapon' ? '#0284c7' : category === 'artifact' ? '#c084fc' : char.color);
 
@@ -278,11 +293,27 @@ export function calculateRotation(
         endTime: startTime + duration,
         cooldown,
         cooldownEnd: startTime + cooldown,
-        hasCTViolation,
-        collisionRemainingCT,
+        hasCTViolation: false,
+        collisionRemainingCT: undefined,
         color: buffColor,
         description: def?.description ?? trigger.name,
       });
+      const passiveSpan = passiveSpans[passiveSpans.length - 1];
+      const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
+      ctEvents.push({
+        key: `${char.id}:passive:${trigger.passiveEffectId}`,
+        time: startTime,
+        cooldown,
+        checked: true,
+        stintIndex: sIdx,
+        name: trigger.name,
+        onViolation: (remaining, cycle) => {
+          passiveSpan.hasCTViolation = true;
+          passiveSpan.collisionRemainingCT = Math.max(passiveSpan.collisionRemainingCT ?? 0, remaining);
+          addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', `${char.name}: ${catLabel}CT中`, `「${trigger.name}」`, remaining, cycle);
+        },
+      });
+
       if (duration > 0) {
         activeBuffs.push({
           id: `passive_buff_${trigger.id}`,
@@ -317,6 +348,9 @@ export function calculateRotation(
   const safeLoopStartIndex = Math.min(loopStartIndex, Math.max(0, calculatedStints.length - 1));
   const loopStartTime = calculatedStints[safeLoopStartIndex]?.startTime ?? 0;
   const loopPeriod = Math.max(0, totalDuration - loopStartTime);
+
+  // CT違反の判定（1周目・2周目を区別せず、ループを必要な周数だけ並べた時間軸で時刻順に判定）
+  checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod);
 
   const carryOverCooldowns: CooldownSpan[] = [];
   const carryOverBuffs: ActiveBuffSpan[] = [];
@@ -408,40 +442,6 @@ export function calculateRotation(
     });
   }
 
-  // Loopability check: Are all skill and burst cooldowns ended by totalDuration?
-  let canLoopImmediately = true;
-  let longestRemainingCT: { characterName: string; type: 'skill' | 'burst'; remaining: number } | null = null;
-
-  for (const c of characters) {
-    const sCT = latestSkillCTEnd[c.id];
-    if (sCT && sCT.time > totalDuration) {
-      const remaining = Number((sCT.time - totalDuration).toFixed(1));
-      if (!longestRemainingCT || remaining > longestRemainingCT.remaining) {
-        longestRemainingCT = { characterName: c.name, type: 'skill', remaining };
-      }
-      canLoopImmediately = false;
-    }
-
-    const bCT = latestBurstCTEnd[c.id];
-    if (bCT && bCT.time > totalDuration) {
-      const remaining = Number((bCT.time - totalDuration).toFixed(1));
-      if (!longestRemainingCT || remaining > longestRemainingCT.remaining) {
-        longestRemainingCT = { characterName: c.name, type: 'burst', remaining };
-      }
-      canLoopImmediately = false;
-    }
-  }
-
-  if (!canLoopImmediately && longestRemainingCT) {
-    validationIssues.push({
-      id: 'loop_cd_remaining',
-      severity: 'info',
-      time: totalDuration,
-      title: 'ローテーション2周目ループCT注意',
-      message: `2周目を直ちに開始した場合、${longestRemainingCT.characterName}の${longestRemainingCT.type === 'burst' ? '元素爆発' : 'スキル'}CTが残り約 ${longestRemainingCT.remaining} 秒あります。ローテーションの延長または通常攻撃での時間調整が推奨されます。`
-    });
-  }
-
   return {
     totalDuration,
     calculatedStints,
@@ -457,9 +457,52 @@ export function calculateRotation(
     carryOverPassives,
     loopStartTime,
     loopPeriod,
-    loopStatus: {
-      canLoopImmediately,
-      longestRemainingCT,
-    }
   };
+}
+
+/** CT を持つ1回の発動 */
+interface CooldownEvent {
+  /** CT の共有単位（キャラ + スキル / 爆発 / 発動バフ） */
+  key: string;
+  /** 1周目の時間軸での発動時刻 */
+  time: number;
+  /** この発動が開始する CT（0 なら CT を開始しない） */
+  cooldown: number;
+  /** CT 中の発動を違反として扱うか（祭礼リセットなど CT 中でも撃てるものは false） */
+  checked: boolean;
+  stintIndex: number;
+  name: string;
+  /** 違反時: remaining = 残り CT 秒、cycle = 何周目の発動で違反したか（0 = 1周目） */
+  onViolation: (remaining: number, cycle: number) => void;
+}
+
+const CT_TOLERANCE_SEC = 0.05;
+
+/**
+ * CT違反をまとめて判定する（1周目と2周目を1本の時間軸に並べ、同じ CT を共有する発動を時刻順に見ていく）。
+ * - ループ区間（loopStartIndex 番目以降の出場）の発動は、1周目と、loopPeriod ずらした2周目に並べる
+ * - 初動部分（ループ区間より前）の発動は1回だけ
+ * 3周目以降は、各発動の直前にある同じ CT の発動が2周目と同じ（1周前の同じ位置）になるため、2周分の判定で足りる。
+ * どちらの周で違反しても、元の発動に違反の印を付ける。
+ */
+function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number): void {
+  const extraCycles = loopPeriod > 0.05 ? 1 : 0;
+
+  const timeline: Array<{ event: CooldownEvent; time: number; cycle: number; order: number }> = [];
+  events.forEach((event, order) => {
+    const repeats = event.stintIndex >= loopStartIndex ? extraCycles : 0;
+    for (let cycle = 0; cycle <= repeats; cycle++) {
+      timeline.push({ event, time: event.time + cycle * loopPeriod, cycle, order });
+    }
+  });
+  timeline.sort((a, b) => a.time - b.time || a.order - b.order);
+
+  const cooldownEnd = new Map<string, number>();
+  for (const item of timeline) {
+    const end = cooldownEnd.get(item.event.key) ?? -Infinity;
+    if (item.event.checked && end > item.time + CT_TOLERANCE_SEC) {
+      item.event.onViolation(Number((end - item.time).toFixed(1)), item.cycle);
+    }
+    if (item.event.cooldown > 0) cooldownEnd.set(item.event.key, item.time + item.event.cooldown);
+  }
 }

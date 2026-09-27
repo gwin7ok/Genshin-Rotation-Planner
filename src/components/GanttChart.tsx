@@ -433,9 +433,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         let conflictingCDName = '';
         let conflictingCDEndTime = 0;
 
-        // Check 1st cycle skill cooldown collision
+        // Check skill cooldown collision (both 1st cycle and previous 2nd cycle CDs)
         if (isSkill && act.type !== 'skill_reset') {
-          const charSkillCDs = skillCooldowns.filter(cd => cd.characterId === char.id);
+          const charSkillCDs = [
+            ...skillCooldowns.filter(cd => cd.characterId === char.id),
+            ...cycle2NewCooldowns.filter(cd => cd.characterId === char.id && cd.type === 'skill'),
+          ];
           for (const cd of charSkillCDs) {
             if (cd.endTime > c2ActStart + 0.02) {
               const rem = cd.endTime - c2ActStart;
@@ -449,9 +452,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           }
         }
 
-        // Check 1st cycle burst cooldown collision
+        // Check burst cooldown collision (both 1st cycle and previous 2nd cycle CDs)
         if (isBurst) {
-          const charBurstCDs = burstCooldowns.filter(cd => cd.characterId === char.id);
+          const charBurstCDs = [
+            ...burstCooldowns.filter(cd => cd.characterId === char.id),
+            ...cycle2NewCooldowns.filter(cd => cd.characterId === char.id && cd.type === 'burst'),
+          ];
           for (const cd of charBurstCDs) {
             if (cd.endTime > c2ActStart + 0.02) {
               const rem = cd.endTime - c2ActStart;
@@ -622,16 +628,30 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const carryOverBurstCDs = cycle1BurstCDs.filter(cd => cd.isCarryOver);
     const carryOverCooldowns = [...carryOverSkillCDs, ...carryOverBurstCDs];
 
-    // 3. 2nd Cycle Buffs (Only 2nd Cycle newly triggered buffs are shown in 2nd cycle lanes)
-    const allCycle2Buffs = [...cycle2NewBuffs];
+    // 3. 2nd Cycle Buffs & 1st Cycle Carry-Over Buffs
+    // 1周目の持ち越しバフ（1周目に発動し、効果終了時刻が2周目開始時刻を超えて残るバフ）
+    const carryOverBuffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = activeBuffs
+      .filter(b => b.endTime > cycle2StartTime + 0.05)
+      .map(b => ({
+        ...b,
+        isCarryOver: true,
+      }));
+
+    // 全タイムラインのバフ一覧（1周目バフ + 2周目新規バフ）: 1周目・2周目の区別なく計算
+    const allTimelineBuffs: ActiveBuffSpan[] = [...activeBuffs, ...cycle2NewBuffs];
+    const allCycle2Buffs: Array<ActiveBuffSpan & { isCarryOver: boolean }> = [
+      ...carryOverBuffs,
+      ...cycle2NewBuffs,
+    ];
 
     // 4. Buff synergy point counts across [cycle2StartTime, cycle2EndTime]
+    // 1周目の持ち越しバフも含め、1・2周目の区別なく全バフから計算
     const buffSynergyPoints: Array<{ time: number; count: number; activeBuffs: string[] }> = [];
     const minSec = Math.floor(cycle2StartTime);
     const maxSec = Math.ceil(cycle2EndTime);
     for (let t = minSec; t <= maxSec; t += 0.5) {
-      // 同じアクション由来のバーが重なっても1つとして数える
-      const { count, names } = countDistinctActiveBuffs(allCycle2Buffs, t);
+      // 1周目持ち越しバフ＋2周目新規バフを区別なく合算（同じアクション由来は1つとして集計）
+      const { count, names } = countDistinctActiveBuffs(allTimelineBuffs, t);
       buffSynergyPoints.push({
         time: t,
         count,
@@ -652,23 +672,34 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       cycle1SkillCDs,
       cycle1BurstCDs,
       cycle2NewCooldowns,
+      carryOverBuffs,
       cycle2NewBuffs,
       allCycle2Buffs,
       buffSynergyPoints,
     };
   }, [stints, totalDuration, loopStartTime, loopStartIndex, switchDelay, actionDelay, passiveSpans, characterMap, skillCooldowns, burstCooldowns, activeBuffs]);
 
-  // Combined Buff Synergy Points spanning full timeline (1st cycle + 2nd cycle)
-  const allBuffSynergyPoints = useMemo(() => {
-    return [
-      ...activeBuffCountBySecond,
-      ...(cycle2Data.buffSynergyPoints || []),
-    ];
-  }, [activeBuffCountBySecond, cycle2Data.buffSynergyPoints]);
-
   // Total timeline duration spanning 1st Cycle + 2nd Cycle Preview
   const extendedTotalDuration = cycle2Data.enabled ? cycle2Data.cycle2EndTime : totalDuration;
   const chartWidth = Math.max(800, Math.ceil(extendedTotalDuration + 2) * pixelsPerSecond);
+
+  // Combined Buff Synergy Points spanning full timeline (1st cycle + 2nd cycle)
+  // 全タイムライン (0s 〜 extendedTotalDuration) について、1・2周目の区別なく全バフを合算してバフ重複度を統一計算
+  const allBuffSynergyPoints = useMemo(() => {
+    if (!cycle2Data.enabled) return activeBuffCountBySecond;
+    const allTimelineBuffs: ActiveBuffSpan[] = [...activeBuffs, ...cycle2Data.cycle2NewBuffs];
+    const maxSec = Math.ceil(extendedTotalDuration);
+    const points: Array<{ time: number; count: number; activeBuffs: string[] }> = [];
+    for (let s = 0; s <= maxSec; s += 0.5) {
+      const { count, names } = countDistinctActiveBuffs(allTimelineBuffs, s);
+      points.push({
+        time: s,
+        count,
+        activeBuffs: names,
+      });
+    }
+    return points;
+  }, [activeBuffCountBySecond, cycle2Data.enabled, cycle2Data.cycle2NewBuffs, activeBuffs, extendedTotalDuration]);
 
   // Handle timeline scrubber click or drag
   const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -2060,13 +2091,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const stintNewBurstCDs = cycle2Data.cycle2NewCooldowns.filter(c => c.characterId === char.id && c.type === 'burst');
                     const allStintBurstCDs = [...stintCycle1BurstCDs, ...stintNewBurstCDs];
 
-                    // 3. 2nd Cycle Buffs (Only 2nd-cycle new buffs, organized into 1 row per unique buff effect)
-                    const stintBuffs = cycle2Data.allCycle2Buffs.filter(b => 
+                    // 3. 2nd Cycle Buffs (2nd-cycle new buffs + 1st-cycle carry-over buffs)
+                    const stintBuffs = cycle2Data.cycle2NewBuffs.filter(b => 
                       b.sourceCharacterId === char.id &&
                       b.startTime >= stint.startTime - 0.2 &&
                       b.startTime <= stint.endTime + 0.2
                     );
                     const stintBuffRows = organizeBuffsIntoRows(stintBuffs);
+                    const stintCarryOverBuffs = cycle2Data.carryOverBuffs.filter(b =>
+                      b.sourceCharacterId === char.id && b.endTime > stint.startTime
+                    );
 
                     return (
                       <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={stint.startTime * pixelsPerSecond} className="relative group/stint bg-purple-950/10 hover:bg-purple-900/15 transition-colors">
@@ -2142,8 +2176,17 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   </span>
                                 </div>
                               )}
-                              {stintBuffRows.length > 0 && (
+                              {(stintBuffRows.length > 0 || stintCarryOverBuffs.length > 0) && (
                                 <div className="space-y-0.5 pt-0.5 border-t border-slate-800/60">
+                                  {stintCarryOverBuffs.map((cb, cbIdx) => (
+                                    <div key={`c2_carry_buff_lbl_${stint.id}_${cbIdx}`} className="flex items-center justify-between text-emerald-300/80 text-[9px] truncate font-mono" title={`【1周目からの持越バフ】\n${cb.name} (${cb.duration}s)\n期間: [${cb.startTime.toFixed(2)}s ~ ${cb.endTime.toFixed(2)}s]\n2周目出場時残り: ${(cb.endTime - stint.startTime).toFixed(1)}s`}>
+                                      <span className="truncate flex items-center gap-1">
+                                        <span className="text-emerald-400 font-bold shrink-0">[持越]</span>
+                                        <span className="truncate">{cb.name.replace(/^[^:]+:\s*/, '')}</span>
+                                      </span>
+                                      <span className="shrink-0 text-emerald-400/80 ml-1">残{Math.max(0, cb.endTime - stint.startTime).toFixed(0)}s</span>
+                                    </div>
+                                  ))}
                                   {stintBuffRows.map((bRow, rIdx) => (
                                     <div key={`c2_stint_buff_lbl_${stint.id}_${rIdx}`} className="flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono" title={`【${bRow.tag} 2周目効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}>
                                       <span className="truncate flex items-center gap-1">

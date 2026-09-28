@@ -21,6 +21,8 @@ export interface ExtractedTimings {
   cooldownMatch?: string;
 }
 
+const MIN_EFFECT_COOLDOWN_SEC = 1;
+
 /**
  * 日本語の説明文から「継続時間」および「クールタイム」を抽出する
  */
@@ -54,8 +56,12 @@ export function extractEquipmentTimings(text: string): ExtractedTimings {
     if (match && match[group]) {
       const val = parseFloat(match[group]);
       if (!isNaN(val) && val > 0) {
-        cooldown = Math.round(val * 10) / 10;
-        cooldownMatch = match[0];
+        // 1秒未満の「○秒毎に1回」は効果を重ねる間隔（例: 聖顕の鍵の0.3秒）で、効果にCTは無い。
+        // 同じ文の後ろにある「○秒毎」は別の副次効果の間隔（エネルギー回復など）なので探さない
+        if (val >= MIN_EFFECT_COOLDOWN_SEC) {
+          cooldown = Math.round(val * 10) / 10;
+          cooldownMatch = match[0];
+        }
         break;
       }
     }

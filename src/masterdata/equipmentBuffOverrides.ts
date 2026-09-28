@@ -55,14 +55,12 @@ export const WEAPON_BUFF_OVERRIDES: Record<string, EquipmentBuffOverride> = {
   '聖顕の鍵': {
     name: '聖顕の鍵: 全員熟知バフ',
     duration: 20.0,
-    cooldown: 0,
     statEffectSummary: 'HP上限に応じてチーム全員の元素熟知加算',
     color: '#fbbf24', // アンバー
   },
   'Key of Khaj-Nisut': {
     name: '聖顕の鍵: 全員熟知バフ',
     duration: 20.0,
-    cooldown: 0,
     statEffectSummary: 'HP上限に応じてチーム全員の元素熟知加算',
     color: '#fbbf24',
   },

@@ -33,7 +33,7 @@ const isLockedArtifact = (a: ArtifactSetDatabaseItem) => !!a.isLocked;
  * - ロック中のアイテムは、マスターより優先して残す（マスターで上書きしない）
  * - カスタム・ロック中のアイテムで、マスターに無いものは末尾に残す
  */
-function mergeItemsWithProtected<T extends { id: string }>(
+function mergeItemsWithProtected<T extends { id: string; gcsimKey?: string }>(
   masterItems: T[],
   currentItems: T[],
   isProtected: (item: T) => boolean,
@@ -41,10 +41,19 @@ function mergeItemsWithProtected<T extends { id: string }>(
 ): T[] {
   const protectedById = new Map(currentItems.filter(isProtected).map(item => [item.id, item]));
   const masterIds = new Set(masterItems.map(item => item.id));
-  return [
+  return fillGcsimKeys([
     ...masterItems.map(mi => protectedById.get(mi.id) ?? mi),
     ...currentItems.filter(item => (isExtraCustom(item) || isProtected(item)) && !masterIds.has(item.id)),
-  ];
+  ], masterItems);
+}
+
+/**
+ * gcsimKey が無い品目に、マスターの値を公式IDで補う。
+ * gcsimKey は品目の識別情報なので、ロック中（マスターで上書きしない）品目にも補う。
+ */
+function fillGcsimKeys<T extends { id: string; gcsimKey?: string }>(items: T[], masterItems: T[]): T[] {
+  const keyById = new Map(masterItems.filter(m => m.gcsimKey).map(m => [m.id, m.gcsimKey]));
+  return items.map(item => (!item.gcsimKey && keyById.has(item.id) ? { ...item, gcsimKey: keyById.get(item.id) } : item));
 }
 
 function mergeMasterWithProtected(
@@ -98,7 +107,12 @@ export function loadDatabase(): AppDatabase {
       return upgraded;
     }
 
-    return { ...parsed, characters };
+    return {
+      ...parsed,
+      characters,
+      weapons: fillGcsimKeys(parsed.weapons, MASTER_WEAPONS),
+      artifacts: fillGcsimKeys(parsed.artifacts, MASTER_ARTIFACTS),
+    };
   } catch (err) {
     console.warn('Failed to parse database from localStorage, falling back to master:', err);
     return INITIAL_MASTER_DATABASE;

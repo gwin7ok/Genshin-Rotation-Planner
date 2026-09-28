@@ -16,6 +16,10 @@ import { parseWeaponBuffs, parseArtifactBuffs } from './equipmentBuffParser.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
+const GCSIM_REPO = 'genshinsim/gcsim';
+const GCSIM_BRANCH = 'main';
+const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/Data/weapon.dm.json';
+const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/Data/artifact.dm.json';
 
 export interface EquipmentGenerationProgress {
   phase: string;
@@ -72,6 +76,11 @@ export interface EquipmentGenerationReport {
   errors: string[];
   sourceApiUrl?: string;
   networkDurationMs?: number;
+  /** gcsimKey の対応表を取得した gcsim のコミット */
+  gcsimCommit: string;
+  /** gcsim 未対応（gcsimKey なし）の武器・聖遺物 "名前 (公式ID)" */
+  weaponsWithoutGcsimKey: string[];
+  artifactsWithoutGcsimKey: string[];
 }
 
 export interface EquipmentMasterResult {
@@ -517,6 +526,38 @@ export async function generateArtifactsMasterOnline(
   return { artifacts: artifactsList, report };
 }
 
+type GcsimDm = { data: Record<string, { id: number; key: string }> };
+
+/** gcsim の公式ID → キー対応表（武器・聖遺物）。同じコミットの内容を読む */
+async function fetchGcsimEquipmentKeys(): Promise<{
+  commit: string;
+  weaponKeyById: Map<number, string>;
+  artifactKeyById: Map<number, string>;
+}> {
+  const { sha } = await fetchJson<{ sha: string }>(
+    `https://api.github.com/repos/${GCSIM_REPO}/commits/${GCSIM_BRANCH}`,
+    { headers: { Accept: 'application/vnd.github+json' } },
+  );
+  const rawBase = `https://raw.githubusercontent.com/${GCSIM_REPO}/${sha}/`;
+  const [weaponDm, artifactDm] = await Promise.all([
+    fetchJson<GcsimDm>(rawBase + GCSIM_WEAPON_DM_PATH),
+    fetchJson<GcsimDm>(rawBase + GCSIM_ARTIFACT_DM_PATH),
+  ]);
+  const toMap = (dm: GcsimDm) => new Map(Object.values(dm.data).map(e => [e.id, e.key]));
+  return { commit: sha, weaponKeyById: toMap(weaponDm), artifactKeyById: toMap(artifactDm) };
+}
+
+/** 公式IDで突き合わせて gcsimKey を設定し、対応の無かったものを "名前 (ID)" で返す */
+function attachGcsimKeys(items: Array<{ id: string; name: string; gcsimKey?: string }>, keyById: Map<number, string>): string[] {
+  const missing: string[] = [];
+  for (const item of items) {
+    const key = keyById.get(Number(item.id));
+    if (key) item.gcsimKey = key;
+    else missing.push(`${item.name} (${item.id})`);
+  }
+  return missing;
+}
+
 /**
  * 武器と聖遺物の両方を一括で最新データソースから動的に生成する
  */
@@ -535,6 +576,11 @@ export async function generateEquipmentMaster(
     onProgress?.({ phase: p.phase, done: 2 + Math.min(2, p.done), total: 4 });
   });
 
+  onProgress?.({ phase: 'gcsim のキー対応表を取得中...', done: 4, total: 4 });
+  const gcsim = await fetchGcsimEquipmentKeys();
+  const weaponsWithoutGcsimKey = attachGcsimKeys(weapons, gcsim.weaponKeyById);
+  const artifactsWithoutGcsimKey = attachGcsimKeys(artifacts, gcsim.artifactKeyById);
+
   const combinedReport: EquipmentGenerationReport = {
     generatedAt: new Date().toISOString(),
     totalWeapons: wReport.totalWeapons,
@@ -544,6 +590,9 @@ export async function generateEquipmentMaster(
     extractedBuffsList: [...wReport.extractedBuffsList, ...aReport.extractedBuffsList],
     constantPassiveItems: [...wReport.constantPassiveItems, ...aReport.constantPassiveItems],
     errors: [...wReport.errors, ...aReport.errors],
+    gcsimCommit: gcsim.commit,
+    weaponsWithoutGcsimKey,
+    artifactsWithoutGcsimKey,
   };
 
   onProgress?.({ phase: '全マスターデータ生成完了', done: 4, total: 4 });

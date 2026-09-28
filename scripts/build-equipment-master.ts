@@ -34,6 +34,12 @@ if (report.extractedBuffsList.length > 25) {
   console.log(`  ... 他 ${report.extractedBuffsList.length - 25} 件`);
 }
 
+console.log(`\n--- gcsim キー (gcsim commit ${report.gcsimCommit.slice(0, 7)}) ---`);
+console.log(`  武器: ${report.totalWeapons - report.weaponsWithoutGcsimKey.length}/${report.totalWeapons} 件に設定`);
+console.log(`  聖遺物: ${report.totalArtifacts - report.artifactsWithoutGcsimKey.length}/${report.totalArtifacts} 件に設定`);
+if (report.weaponsWithoutGcsimKey.length > 0) console.log(`  gcsim 未対応の武器: ${report.weaponsWithoutGcsimKey.join(' / ')}`);
+if (report.artifactsWithoutGcsimKey.length > 0) console.log(`  gcsim 未対応の聖遺物: ${report.artifactsWithoutGcsimKey.join(' / ')}`);
+
 if (report.errors.length > 0) {
   console.log('\n⚠️ エラー / 警告:');
   for (const e of report.errors) console.log(`  ${e}`);

@@ -127,6 +127,8 @@ export interface PassiveSpan {
   isCarryOver?: boolean;
   /** 持ち越しバーの元の発動時刻 */
   originalStartTime?: number;
+  /** 持ち越しバーの元の本体のID */
+  sourceId?: string;
   color?: string;
   description?: string;
 }
@@ -211,6 +213,8 @@ export interface ActiveBuffSpan {
   isCarryOver?: boolean;
   /** 持ち越しバーの元の発動時刻 */
   originalStartTime?: number;
+  /** 持ち越しバーの元の本体のID */
+  sourceId?: string;
 }
 
 export interface CooldownSpan {

@@ -383,7 +383,6 @@ export default function App() {
           carryOverCooldowns={calculatedResult.carryOverCooldowns}
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}
-          playbackCycleCount={playbackCycleCount}
           elapsedTime={elapsedTime}
           onReorderCharacters={setCharacters}
           onReorderCharactersAndStints={(newChars, newStints) => {

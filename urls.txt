@@ -5,6 +5,25 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.npmrc
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/EQUIPMENT_MASTER_SPECIFICATION.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/REQUIREMENTS_SPECIFICATION.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/bun.lock
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/README.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-1-gcsim-keys/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-1-gcsim-keys/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-2-party-config/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-2-party-config/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3-action-delay/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3-action-delay/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3b-constellation/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3b-constellation/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3c-party-member-ref/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-3c-party-member-ref/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-4-config-converter/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-4-config-converter/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-5-key-catalog/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-5-key-catalog/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-6-run-and-apply/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-6-run-and-apply/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/plan.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/progress.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/index.html
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/metadata.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/package-lock.json
@@ -20,6 +39,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/comp
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/GanttChart.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/Header.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/HelpGuideModal.tsx
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/ListSelect.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/PartyConfigModal.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/RotationSummaryModal.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/SaveAsDialog.tsx
@@ -32,7 +52,6 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data/characters_master_data.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data/databaseMaster.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data/elementIcons.ts
-https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data/presets.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/data/weapons_master_data.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/index.css
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/main.tsx
@@ -43,6 +62,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/mast
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/equipmentMasterGenerator.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/gcsimParser.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/passiveEffects.ts
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/models/CharacterModel.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/models/WeaponModel.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/types/database.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/types/genshin.ts
@@ -57,4 +77,5 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/util
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/stintReorder.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/storage.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/tsconfig.json
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/urls.txt
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/vite.config.ts

@@ -409,6 +409,7 @@ export function calculateRotation(
           endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
           duration: overflow,
           isCarryOver: true,
+          originalStartTime: b.startTime,
         });
       }
     }
@@ -424,6 +425,7 @@ export function calculateRotation(
           endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
           duration: overflow,
           isCarryOver: true,
+          originalStartTime: p.startTime,
         });
       }
     }

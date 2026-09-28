@@ -24,7 +24,13 @@ import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoun
 import { buildRotationNotation } from './utils/rotationNotation';
 import { isEmptySlotCharacter } from './data/characters';
 
-const PLAYBACK_START = { time: 0, cycle: 1 };
+// 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
+function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: number, loopPeriod: number) {
+  if (elapsed < totalDuration || loopPeriod <= 0.05) return { time: Math.min(elapsed, totalDuration), cycle: 1 };
+  const sinceLoop = elapsed - totalDuration;
+  const lap = Math.floor(sinceLoop / loopPeriod);
+  return { time: loopStartTime + (sinceLoop - lap * loopPeriod), cycle: lap + 2 };
+}
 
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
@@ -68,10 +74,8 @@ export default function App() {
 
   // 2. Playback / Scrubber State
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  // 再生位置と周回数は必ず一緒に更新する（別 state にすると食い違う）
-  const [playback, setPlayback] = useState(PLAYBACK_START);
-  const currentTime = playback.time;
-  const playbackCycleCount = playback.cycle;
+  // 再生開始からの累積時間。周回数と周内の位置はここから求める
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
 
   // 3. Modals & Action Selection State
@@ -101,10 +105,16 @@ export default function App() {
     return calculateRotation(characters, stints, { switchDelay, actionDelay, database, loopStartIndex });
   }, [characters, stints, switchDelay, actionDelay, database, loopStartIndex]);
 
-  // Keep playback currentTime bounded within totalDuration
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
   const loopPeriod = calculatedResult.loopPeriod;
+  const { time: currentTime, cycle: playbackCycleCount } = toLapPosition(elapsedTime, totalDuration, loopStartTime, loopPeriod);
+
+  // 編集で計算結果が変わったら、再生を止めて1周目の先頭へ戻す（累積時間から求める周内の位置がずれるため）
+  useEffect(() => {
+    setIsPlaying(false);
+    setElapsedTime(0);
+  }, [calculatedResult]);
 
   // 全体のCT違反件数計算（発動時点でのクールタイム未終了）
   const totalCTCollisions = useMemo(() => {
@@ -139,11 +149,10 @@ export default function App() {
     const animate = (timestamp: number) => {
       if (lastFrameTimeRef.current !== null) {
         const deltaSec = (timestamp - lastFrameTimeRef.current) / 1000;
-        setPlayback(prev => {
-          const next = prev.time + deltaSec * playbackSpeed;
-          if (totalDuration <= 0 || next < totalDuration) return { ...prev, time: next };
-          if (loopPeriod <= 0.05) return PLAYBACK_START;
-          return { time: loopStartTime + (next - totalDuration) % loopPeriod, cycle: prev.cycle + 1 };
+        setElapsedTime(prev => {
+          const next = prev + deltaSec * playbackSpeed;
+          // ループ区間がなければ先頭へ戻る
+          return loopPeriod <= 0.05 && next >= totalDuration ? 0 : next;
         });
       }
       lastFrameTimeRef.current = timestamp;
@@ -155,19 +164,18 @@ export default function App() {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isPlaying, playbackSpeed, totalDuration, loopStartTime, loopPeriod]);
+  }, [isPlaying, playbackSpeed, totalDuration, loopPeriod]);
 
   // 7. Handle Preset Selection
   const handleSelectPreset = (preset: PartyPreset) => {
     setSelectedPresetId(preset.id);
-    setCharacters(preset.characters);
-    setStints(preset.stints);
-    setPlayback(PLAYBACK_START);
+    // 複製して渡す: 同じプリセットの選び直しでも計算結果が新しくなり、再生リセットの useEffect が動く
+    setCharacters(structuredClone(preset.characters));
+    setStints(structuredClone(preset.stints));
     setLoopStartIndex(0);
     setSwitchDelay(preset.switchDelay ?? 0.50);
     setActionDelay(preset.actionDelay ?? 0.10);
     setActiveSlotId(null);
-    setIsPlaying(false);
   };
 
   // 8. Handle Custom Slot Loading
@@ -193,33 +201,23 @@ export default function App() {
     setActionDelay(slot.actionDelay ?? 0.10);
     setSelectedPresetId(slot.presetId || 'custom');
     setActiveSlotId(slot.slotId ?? null);
-    setPlayback(PLAYBACK_START);
-    setIsPlaying(false);
   };
 
   // 9. Reset to default preset
-  const handleResetToDefault = () => {
-    const defaultPreset = ROTATION_PRESETS[0];
-    setSelectedPresetId(defaultPreset.id);
-    setCharacters(defaultPreset.characters);
-    setStints(defaultPreset.stints);
-    setLoopStartIndex(0);
-    setSwitchDelay(defaultPreset.switchDelay ?? 0.50);
-    setActiveSlotId(null);
-    setPlayback(PLAYBACK_START);
-    setIsPlaying(false);
-  };
+  const handleResetToDefault = () => handleSelectPreset(ROTATION_PRESETS[0]);
 
   // 10. Handle Playback Controls
   const togglePlay = () => setIsPlaying(prev => !prev);
   const resetPlayback = () => {
     setIsPlaying(false);
-    setPlayback(PLAYBACK_START);
+    setElapsedTime(0);
   };
   const handleSeek = (time: number) => {
-    const clamped = Math.max(0, Math.min(time, totalDuration));
-    // 初動（ループ開始点より前）は1周目にしか存在しない
-    setPlayback(prev => ({ time: clamped, cycle: clamped < loopStartTime ? 1 : prev.cycle }));
+    const t = Math.max(0, Math.min(time, totalDuration));
+    // 初動（ループ開始点より前）は1周目にしか存在しない。ループ区間内なら今の周のまま移動する
+    setElapsedTime(playbackCycleCount === 1 || t < loopStartTime
+      ? t
+      : totalDuration + (playbackCycleCount - 2) * loopPeriod + (t - loopStartTime));
   };
 
   // 11. Notation Copy & Display
@@ -315,8 +313,6 @@ export default function App() {
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
           setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
-          setPlayback(PLAYBACK_START);
-          setIsPlaying(false);
         } else {
           alert('無効なローテーションJSONファイルです。');
         }
@@ -388,6 +384,7 @@ export default function App() {
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}
           playbackCycleCount={playbackCycleCount}
+          elapsedTime={elapsedTime}
           onReorderCharacters={setCharacters}
           onReorderCharactersAndStints={(newChars, newStints) => {
             setCharacters(newChars);

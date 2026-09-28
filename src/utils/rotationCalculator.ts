@@ -12,6 +12,14 @@ import { GenshinDatabase } from '../types/database';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
 
+/** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
+export interface BuffOverlapSegment {
+  start: number;
+  end: number;
+  count: number;
+  activeBuffs: string[];
+}
+
 export interface CalculatedRotation {
   totalDuration: number;
   calculatedStints: Stint[];
@@ -20,7 +28,9 @@ export interface CalculatedRotation {
   burstCooldowns: CooldownSpan[];
   characterStates: Record<string, CharacterRuntimeState>;
   validationIssues: ValidationIssue[];
-  activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
+  /** バフ重複行（1周目: 折り返し部分を含まない / 2周目以降: 含む） */
+  buffOverlapSegments: BuffOverlapSegment[];
+  loopedBuffOverlapSegments: BuffOverlapSegment[];
   /** 発動バフ（固有天賦・武器・聖遺物）の効果・CT */
   passiveSpans: PassiveSpan[];
   /** 2周目折り返し（Carry-Over）情報 */
@@ -418,9 +428,9 @@ export function calculateRotation(
       }
     }
 
-    // 3. アクション効果バフの2周目折り返し（発動パッシブバフは除外）
+    // 3. 効果バフの2周目折り返し（発動バフ分はバフ数の集計用。バーは carryOverPassives で表示する）
     for (const b of activeBuffs) {
-      if (b.origin === 'passive' || b.endTime <= totalDuration + 0.02) continue;
+      if (b.endTime <= totalDuration + 0.02) continue;
       const carry = wrapEffect(b, activeBuffs.filter(x => x.buffId === b.buffId));
       if (carry) carryOverBuffs.push({ ...b, ...carry, id: `wrap_buff_${b.id}` });
     }
@@ -433,18 +443,9 @@ export function calculateRotation(
     }
   }
 
-  // 3-D: 持ち越しバフも含め、同じ buffId は1つとして数える（全タイムラインで重複度を一貫計算）
-  const allDistinctBuffs = [...activeBuffs, ...carryOverBuffs];
-  const maxSec = Math.ceil(totalDuration);
-  const activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[] = [];
-  for (let s = 0; s <= maxSec; s += 0.5) {
-    const { count, names } = countDistinctActiveBuffs(allDistinctBuffs, s);
-    activeBuffCountBySecond.push({
-      time: s,
-      count,
-      activeBuffs: names,
-    });
-  }
+  // バフ重複行: 1周目は折り返し部分をまだ数えず、2周目以降は数える
+  const buffOverlapSegments = buildBuffOverlapSegments(activeBuffs, totalDuration);
+  const loopedBuffOverlapSegments = buildBuffOverlapSegments([...activeBuffs, ...carryOverBuffs], totalDuration);
 
   return {
     totalDuration,
@@ -454,7 +455,8 @@ export function calculateRotation(
     burstCooldowns,
     characterStates: charStates,
     validationIssues,
-    activeBuffCountBySecond,
+    buffOverlapSegments,
+    loopedBuffOverlapSegments,
     passiveSpans,
     carryOverCooldowns,
     carryOverBuffs,
@@ -481,6 +483,24 @@ interface CooldownEvent {
 }
 
 const CT_TOLERANCE_SEC = 0.05;
+
+/** バフ数が変わる時刻（各バフの開始・終了）で区切り、区間ごとに数える（同じ buffId は1つ） */
+function buildBuffOverlapSegments(buffs: ActiveBuffSpan[], totalDuration: number): BuffOverlapSegment[] {
+  const cuts = [...new Set([0, totalDuration, ...buffs.flatMap(b => [b.startTime, b.endTime])])]
+    .filter(t => t >= 0 && t <= totalDuration)
+    .sort((a, b) => a - b);
+  const segments: BuffOverlapSegment[] = [];
+  for (let i = 0; i < cuts.length - 1; i++) {
+    const start = cuts[i];
+    const end = cuts[i + 1];
+    if (end - start < 0.001) continue;
+    const { count, names } = countDistinctActiveBuffs(buffs, (start + end) / 2);
+    const prev = segments[segments.length - 1];
+    if (prev && prev.count === count && prev.activeBuffs.join() === names.join()) prev.end = end;
+    else segments.push({ start, end, count, activeBuffs: names });
+  }
+  return segments;
+}
 
 function endAtNextStart<T extends { startTime: number; endTime: number }>(spans: T[], effectKey: (s: T) => string): void {
   const byKey = new Map<string, T[]>();

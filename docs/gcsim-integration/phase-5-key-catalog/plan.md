@@ -1,0 +1,62 @@
+# フェーズ5 計画: gcsim キーの辞書の生成
+
+関連決定: D10（分類の判定方法 A: gcsim ソースから自動生成＋手で補う一覧）、D11（表示の分類とバーのデータの持ち方）
+前提フェーズ: なし（フェーズ1〜4と並行可能。フェーズ6の前に必要）
+
+## 目的
+
+gcsim の詳細ログに出てくるバフ・状態・内部CTのキー名（例: `khaj-nisut-team-buff`, `tom-4pc-icd`, `lauma-c1`）から、ガントチャートに必要な情報を引ける**キーの辞書**を作る。
+
+| 辞書で引く情報 | 内容 |
+|---|---|
+| 分類 | スキル / 爆発 / 固有天賦 / 命ノ星座 / 武器 / 聖遺物 / その他（元素共鳴・システム・敵デバフ） |
+| 種類 | 効果 / CT（ユーザーに見せる発動制限） / 内部（見せない: ダメージ・粒子の内部クールダウンなど） |
+| 発動元 | キャラ（gcsim キャラキー）/ 武器 / 聖遺物セット |
+| 紐付け | CT がどの効果のものか（例: `khaj-nisut-icd` → `khaj-nisut-buff`） |
+| 表示名 | 日本語の表示名（手で補う） |
+
+## 背景（分析結果 2026-09-28）
+
+- gcsim のログで分類が明確なのは、スキル・爆発のCT（`cooldown` イベント）だけ。
+- バフ・状態は `status` イベントの mod / status として、分類を示す項目なしに同じ形で出る。キー名の付け方は統一されていない（`nahida-q-within` はキャラ名付き、`pirouette`・`lunarprayer` は付かない）ため、名前の規則では判定できない。
+- 固有天賦・武器・聖遺物のCTは専用イベントがなく、`〜-icd`・`〜-cd` のステータスとして出る。見せたいCTと内部クールダウンが混ざる。
+- 4分類に収まらないもの: 命ノ星座（`lauma-c1`）、元素共鳴（`dendro-res-30`, `hydro-res-hpp`）、システム効果（`ascendant-gleam`）、敵デバフ（深林4の耐性ダウンなど）、常時効果（`expiry=-1`）。
+- キー名が**定義されている gcsim のソースの場所**で、分類はほぼ機械的に決まる:
+
+| キー名 | 定義場所 | 分類 |
+|---|---|---|
+| `khaj-nisut-team-buff` | `internal/weapons/sword/keyofkhajnisut/` | 武器 |
+| `tom-4pc-icd` | `internal/artifacts/tenacity/` | 聖遺物（CT） |
+| `lauma-c1` | `internal/characters/lauma/cons.go` | 命ノ星座 |
+| `nahida-q-within` | `internal/characters/nahida/burst.go` | 爆発 |
+| `dendro-res-30`, `ascendant-gleam` | `pkg/simulation/setup.go` | 元素共鳴・システム |
+| `pirouette` | `internal/characters/nilou/` の複数ファイル | 定義元の判定が必要 |
+
+## 作り方（D10）
+
+1. **自動生成（ビルド時スクリプト）**: gcsim のソースを取得し、キーを登録している呼び出し（`AddStatus` / `AddStatMod` / `AddAttackMod` / `AddReactBonusMod` / `AddResistMod` などの mod・status 登録、および定数定義）からキー名を抽出する。
+   - 定義場所から分類・発動元を決める:
+     - `internal/characters/<key>/skill.go` → スキル、`burst.go` → 爆発、`asc.go` → 固有天賦、`cons.go` → 命ノ星座
+     - `internal/weapons/**/<weapon>/` → 武器、`internal/artifacts/<set>/` → 聖遺物
+     - `pkg/simulation/setup.go` など → その他（元素共鳴・システム）
+   - キー名や変数名の `icd` / `cd` からCT・内部の候補を判定する。
+   - 既存の gcsim ソース解析（`src/masterdata/gcsimParser.ts`、キャラ生成の gcsim 取得処理）の仕組みを流用する。
+2. **手で補う一覧（上書き）**: 自動で決まらないもの（複数ファイルにまたがるキー、CTと効果の紐付け、見せたいCTか内部か）と日本語の表示名を、手で管理する一覧で上書きする。
+3. **レポート**: 自動判定できなかったキー・上書きの無い未分類キーを一覧で出す（新キャラ追加時に確認できるように）。
+4. 生成物をアプリに同梱する（例: `src/data/gcsim_key_catalog.json`）。対応する gcsim のバージョン（コミット）を記録する。
+
+## 作業内容
+
+1. gcsim ソースからキーを抽出する方法を実装で確認する（mod・status の登録関数の種類、キーが定数や変数で渡される場合の解決）。
+2. 自動生成スクリプトとレポートを作る。
+3. 手で補う一覧の形式を決め、対象4キャラ（ナヒーダ・ニィロウ・コロンビーナ・ラウマ）と、その編成で使う武器・聖遺物の分を先に埋める。
+4. 前回の検証ログ（テスト編成の Sample）に出た全キーが辞書で引けることを確認する。
+
+## 完了条件
+
+- テスト編成の Sample に出た全キーが、分類・種類・発動元つきで辞書から引ける（または「内部」として除外される）。
+- 自動判定できなかったキーがレポートで分かる。
+
+## 影響範囲
+
+- 新規のビルドスクリプトとデータファイルの追加のみ（既存機能への影響なし）。

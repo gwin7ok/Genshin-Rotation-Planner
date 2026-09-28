@@ -4,6 +4,7 @@ import { CharacterAvatar } from './CharacterAvatar';
 import { ArtifactSetMode, CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
+import { CharacterModel, MAX_CONSTELLATION, defaultConstellation } from '../models/CharacterModel';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, createEmptySlotCharacter, isEmptySlotCharacter } from '../data/characters';
 import {
@@ -75,6 +76,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     const updated = [...editingChars];
     updated[selectedSlot] = {
       ...newRosterChar,
+      constellation: defaultConstellation(newRosterChar.rarity),
     };
     setEditingChars(updated);
 
@@ -169,10 +171,13 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               const elemTheme = ELEMENT_COLORS[c.element];
 
               return (
-                <button
+                <div
                   key={idx}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedSlot(idx)}
-                  className={`relative p-2.5 rounded-xl border text-left transition-all ${
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSlot(idx); } }}
+                  className={`relative p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     isSelected 
                       ? 'bg-slate-800 border-amber-400 shadow-md ring-1 ring-amber-400/40' 
                       : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
@@ -190,7 +195,27 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       </div>
                     </div>
                   </div>
-                </button>
+
+                  {/* 凸数（キャラカードの右下） */}
+                  {!isEmptySlotCharacter(c) && (
+                    <select
+                      value={CharacterModel.fromConfig(c).constellation}
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => e.stopPropagation()}
+                      onChange={(e) => {
+                        const updated = [...editingChars];
+                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10) };
+                        setEditingChars(updated);
+                      }}
+                      className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
+                      title="命ノ星座（凸数）"
+                    >
+                      {Array.from({ length: MAX_CONSTELLATION + 1 }, (_, n) => (
+                        <option key={n} value={n}>{n}凸</option>
+                      ))}
+                    </select>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -434,6 +459,46 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   })()}
                 </div>
               </div>
+
+              {/* 命ノ星座（凸数までの段階を有効として強調） */}
+              {(() => {
+                const model = CharacterModel.fromConfig(currentSlotChar);
+                const levels = currentSlotChar.constellations ?? [];
+                const actionName = (id: string) => currentSlotChar.availableActions.find(a => a.id === id)?.name ?? id;
+                return (
+                  <div className="mt-3 space-y-1.5 text-xs">
+                    <div className="text-slate-400 font-medium flex items-center justify-between">
+                      <span>命ノ星座</span>
+                      <span className="text-[10px] font-mono font-bold text-amber-300">{model.constellation}凸</span>
+                    </div>
+                    {levels.length === 0 ? (
+                      <p className="text-[10px] text-slate-500">凸データなし</p>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                        {levels.map(lv => {
+                          const active = lv.level <= model.constellation;
+                          return (
+                            <div
+                              key={lv.level}
+                              className={`rounded p-2 border text-[10px] space-y-0.5 ${active ? 'bg-slate-950/70 border-amber-500/40' : 'bg-slate-950/30 border-slate-800 opacity-50'}`}
+                            >
+                              <div className={`font-mono font-bold ${active ? 'text-amber-300' : 'text-slate-400'}`}>
+                                {lv.level}凸: {lv.name}
+                              </div>
+                              <p className="text-slate-300 line-clamp-2 leading-relaxed">{lv.description}</p>
+                              {lv.actionChanges?.map(ch => (
+                                <p key={ch.actionId} className="text-sky-300 font-semibold">
+                                  ⏱️ {actionName(ch.actionId)}: 効果 {ch.effectDuration}s
+                                </p>
+                              ))}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
 

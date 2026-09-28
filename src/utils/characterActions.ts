@@ -38,11 +38,7 @@ const GENERIC_EFFECT_LABELS = new Set(['', '基礎', '最大', '長押し最大'
  */
 function buildEffectLabel(sourceLabel: string | undefined, actionName: string): string {
   const label = (sourceLabel ?? '').replace(/継続時間$/, '').replace(/[の・]+$/, '').trim();
-  if (!GENERIC_EFFECT_LABELS.has(label)) {
-    // 凸アクション（アクション名末尾が「(n凸)」）は、元アクションの効果バーと区別できるよう効果名にも付ける
-    const constellationTag = /\(\d凸\)$/.exec(actionName.trim())?.[0];
-    return constellationTag ? `${label} ${constellationTag}` : label;
-  }
+  if (!GENERIC_EFFECT_LABELS.has(label)) return label;
   const skillName = (actionName.includes(':') ? actionName.split(':').slice(1).join(':') : actionName).trim();
   return skillName || '効果';
 }

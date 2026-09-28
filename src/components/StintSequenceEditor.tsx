@@ -38,6 +38,7 @@ import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterActions';
 import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
+import { CharacterModel } from '../models/CharacterModel';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -1309,7 +1310,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                               {/* CT・効果継続時間 — 追加後に個別変更できる */}
                               {(() => {
-                                const def = char.availableActions.find(a => a.id === act.actionTypeId);
+                                const def = CharacterModel.fromConfig(char).actions.find(a => a.id === act.actionTypeId);
                                 const ctInfo = getActionCooldownInfo(act, def);
                                 const effectInfo = getActionEffectInfo(act, def);
                                 const hoverProps = {
@@ -1379,7 +1380,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* Quick Add Action Palette for this Character（登録済みアクションの後で必ず改行し、行頭から表示） */}
                       <div className="basis-full flex flex-wrap items-center gap-1">
                         <span className="text-[11px] text-slate-500 font-medium">+ 追加:</span>
-                        {char.availableActions.map(actionDef => (
+                        {CharacterModel.fromConfig(char).actions.map(actionDef => (
                           <button
                             key={actionDef.id}
                             onClick={() => addActionToStint(stintIndex, actionDef)}

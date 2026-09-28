@@ -13,16 +13,15 @@ import { HelpGuideModal } from './components/HelpGuideModal';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
-import { ROTATION_PRESETS } from './data/presets';
-import { CharacterConfig, Stint, PartyPreset, SavedRotationSlot } from './types/genshin';
+import { CharacterConfig, Stint, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
-import { migrateLegacyCharacter, migrateCharacterIds } from './utils/legacyMigration';
+import { migrateLegacyCharacter } from './utils/legacyMigration';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { buildRotationNotation } from './utils/rotationNotation';
-import { isEmptySlotCharacter } from './data/characters';
+import { isEmptySlotCharacter, createEmptySlotCharacter } from './data/characters';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
 function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: number, loopPeriod: number) {
@@ -32,27 +31,26 @@ function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: nu
   return { time: loopStartTime + (sinceLoop - lap * loopPeriod), cycle: lap + 2 };
 }
 
+const createEmptyParty = (): CharacterConfig[] => Array.from({ length: 4 }, (_, i) => createEmptySlotCharacter(i));
+
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
   const [database, setDatabase] = useState<AppDatabase>(() => loadDatabase());
 
-  // 1. Initial State from LocalStorage (Auto-restore) or Default Preset
+  // 1. Initial State from LocalStorage (Auto-restore) or empty party
   const savedInitialState = useMemo(() => loadActiveState(), []);
 
-  const [selectedPresetId, setSelectedPresetId] = useState<string>(() => {
-    return savedInitialState?.selectedPresetId || 'raiden_national';
-  });
   const [characters, setCharacters] = useState<CharacterConfig[]>(() => {
     if (savedInitialState && savedInitialState.characters?.length > 0) {
       return savedInitialState.characters;
     }
-    return ROTATION_PRESETS[0].characters;
+    return createEmptyParty();
   });
   const [stints, setStints] = useState<Stint[]>(() => {
     if (savedInitialState && savedInitialState.stints?.length > 0) {
       return savedInitialState.stints;
     }
-    return ROTATION_PRESETS[0].stints;
+    return [];
   });
   // Character switch delay (default 0.50s or restored from storage)
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
@@ -87,18 +85,17 @@ export default function App() {
   const [copiedNotation, setCopiedNotation] = useState<boolean>(false);
   const [selectedAction, setSelectedAction] = useState<{ stintId: string; actionId: string } | null>(null);
 
-  // 4. Automatic Persistence (Every change to characters, stints, loopStartTime, or preset is saved)
+  // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
   useEffect(() => {
     saveActiveState({
       characters,
       stints,
-      selectedPresetId,
       loopStartIndex,
       switchDelay,
       actionDelay,
       activeSlotId,
     });
-  }, [characters, stints, selectedPresetId, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
+  }, [characters, stints, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
@@ -166,18 +163,6 @@ export default function App() {
     };
   }, [isPlaying, playbackSpeed, totalDuration, loopPeriod]);
 
-  // 7. Handle Preset Selection
-  const handleSelectPreset = (preset: PartyPreset) => {
-    setSelectedPresetId(preset.id);
-    // 複製して渡す: 同じプリセットの選び直しでも計算結果が新しくなり、再生リセットの useEffect が動く
-    setCharacters(structuredClone(preset.characters));
-    setStints(structuredClone(preset.stints));
-    setLoopStartIndex(0);
-    setSwitchDelay(preset.switchDelay ?? 0.50);
-    setActionDelay(preset.actionDelay ?? 0.10);
-    setActiveSlotId(null);
-  };
-
   // 8. Handle Custom Slot Loading
   const handleLoadCustomSlot = (slot: {
     characters: CharacterConfig[];
@@ -186,25 +171,27 @@ export default function App() {
     loopStartTime?: number;
     switchDelay?: number;
     actionDelay?: number;
-    presetId?: string;
     slotId?: string;
   }) => {
-    // 旧形式のキャラキーで書き出された JSON などにも対応
-    const { characters: loadedChars, stints: loadedStints } = migrateCharacterIds({
-      characters: slot.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>)),
-      stints: slot.stints,
-    });
+    const loadedChars = slot.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
+    const loadedStints = slot.stints;
     setCharacters(loadedChars);
     setStints(loadedStints);
     setLoopStartIndex(resolveLoopStartIndex(slot, loadedChars, loadedStints, slot));
     setSwitchDelay(slot.switchDelay ?? 0.50);
     setActionDelay(slot.actionDelay ?? 0.10);
-    setSelectedPresetId(slot.presetId || 'custom');
     setActiveSlotId(slot.slotId ?? null);
   };
 
-  // 9. Reset to default preset
-  const handleResetToDefault = () => handleSelectPreset(ROTATION_PRESETS[0]);
+  // 9. Reset to the initial state (empty party)
+  const handleResetToDefault = () => {
+    setCharacters(createEmptyParty());
+    setStints([]);
+    setLoopStartIndex(0);
+    setSwitchDelay(0.50);
+    setActionDelay(0.10);
+    setActiveSlotId(null);
+  };
 
   // 10. Handle Playback Controls
   const togglePlay = () => setIsPlaying(prev => !prev);
@@ -278,7 +265,6 @@ export default function App() {
   // 12. Export / Import JSON
   const handleExportJson = () => {
     const data = {
-      presetId: selectedPresetId,
       characters,
       stints,
       loopStartIndex,
@@ -290,7 +276,7 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `genshin_rotation_${selectedPresetId}_${Date.now()}.json`;
+    a.download = `genshin_rotation_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -304,13 +290,10 @@ export default function App() {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
         if (parsed.characters && parsed.stints) {
-          const { characters: importedChars, stints: importedStints } = migrateCharacterIds({
-            characters: parsed.characters.map(migrateLegacyCharacter),
-            stints: parsed.stints,
-          });
+          const importedChars: CharacterConfig[] = parsed.characters.map(migrateLegacyCharacter);
+          const importedStints: Stint[] = parsed.stints;
           setCharacters(importedChars);
           setStints(importedStints);
-          if (parsed.presetId) setSelectedPresetId(parsed.presetId);
           setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
         } else {
@@ -431,8 +414,6 @@ export default function App() {
         totalDuration={totalDuration}
         switchDelay={switchDelay}
         actionDelay={actionDelay}
-        currentPresetId={selectedPresetId}
-        onSelectPreset={handleSelectPreset}
         activeSlotId={activeSlotId}
         onSlotsChanged={(slots, currentSlotId) => {
           setSavedSlots(slots);

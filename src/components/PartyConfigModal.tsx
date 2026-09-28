@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
-import { CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
+import { ArtifactSetMode, CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
@@ -54,8 +54,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     const matchesSearch = !q || 
       rosterChar.name.toLowerCase().includes(q) || 
       rosterChar.id.toLowerCase().includes(q) ||
-      (rosterChar.englishName ?? '').toLowerCase().includes(q) ||
-      (rosterChar.weaponName && rosterChar.weaponName.toLowerCase().includes(q));
+      (rosterChar.englishName ?? '').toLowerCase().includes(q);
     return matchesCharacterFilter(rosterChar, elementFilter, weaponFilter) && matchesSearch;
   });
 
@@ -297,15 +296,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
                   <div className="flex gap-1.5">
                     <select
-                      value={currentSlotChar.weaponName || ''}
+                      value={currentSlotChar.weaponId || ''}
                       onChange={(e) => {
-                        const newWeaponName = e.target.value;
-                        const wObj = database.weapons.find(w => w.name === newWeaponName);
+                        const newWeaponId = e.target.value || undefined;
+                        const wObj = database.weapons.find(w => w.id === newWeaponId);
                         const defaultRank = wObj ? (wObj.refinementRank ?? (wObj.rarity >= 5 ? 1 : 5)) : 1;
                         const updated = [...editingChars];
                         updated[selectedSlot] = {
                           ...updated[selectedSlot],
-                          weaponName: newWeaponName,
+                          weaponId: newWeaponId,
                           weaponRefinementRank: defaultRank,
                         };
                         setEditingChars(updated);
@@ -317,21 +316,18 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         .filter(w => w.weaponType === currentSlotChar.weaponType)
                         .sort((a, b) => Number(b.id) - Number(a.id))
                         .map(w => (
-                          <option key={w.id} value={w.name}>
+                          <option key={w.id} value={w.id}>
                             {'★'.repeat(w.rarity)} {w.name}
                           </option>
                         ))
                       }
-                      {currentSlotChar.weaponName && !database.weapons.some(w => w.name === currentSlotChar.weaponName) && (
-                        <option value={currentSlotChar.weaponName}>{currentSlotChar.weaponName} (カスタム入力)</option>
-                      )}
                     </select>
 
                     {/* Refinement Rank Selector */}
                     {(() => {
                       const weaponModel = WeaponModel.findInDatabase(
                         database.weapons,
-                        currentSlotChar.weaponName,
+                        currentSlotChar.weaponId,
                         currentSlotChar.weaponRefinementRank
                       );
                       if (!weaponModel) return null;
@@ -361,7 +357,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   {(() => {
                     const weaponModel = WeaponModel.findInDatabase(
                       database.weapons,
-                      currentSlotChar.weaponName,
+                      currentSlotChar.weaponId,
                       currentSlotChar.weaponRefinementRank
                     );
                     if (!weaponModel) return null;
@@ -389,35 +385,49 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   <label className="text-slate-400 font-medium flex items-center justify-between">
                     <span>聖遺物セット (DB連動)</span>
                   </label>
-                  <select
-                    value={currentSlotChar.artifactSetName || ''}
-                    onChange={(e) => handleUpdateCurrentField('artifactSetName', e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer"
-                  >
-                    <option value="">-- DBから聖遺物を選択 --</option>
-                    {[...database.artifacts]
-                      .sort((a, b) => Number(b.id) - Number(a.id))
-                      .map(a => (
-                        <option key={a.id} value={a.name}>
-                          {'★'.repeat(a.rarity)} {a.name}
-                        </option>
-                      ))}
-                    {currentSlotChar.artifactSetName && !database.artifacts.some(a => a.name === currentSlotChar.artifactSetName) && (
-                      <option value={currentSlotChar.artifactSetName}>{currentSlotChar.artifactSetName} (カスタム入力)</option>
+                  <div className="flex gap-1.5">
+                    <select
+                      value={currentSlotChar.artifactSetId || ''}
+                      onChange={(e) => handleUpdateCurrentField('artifactSetId', e.target.value || undefined)}
+                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer min-w-0"
+                    >
+                      <option value="">-- DBから聖遺物を選択 --</option>
+                      {[...database.artifacts]
+                        .sort((a, b) => Number(b.id) - Number(a.id))
+                        .map(a => (
+                          <option key={a.id} value={a.id}>
+                            {'★'.repeat(a.rarity)} {a.name}
+                          </option>
+                        ))}
+                    </select>
+
+                    {/* 4セット / 2+2（2+2 は4セット効果の発動バフなし） */}
+                    {currentSlotChar.artifactSetId && (
+                      <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="聖遺物の組み合わせ（2+2 は4セット効果の発動バフなし）">
+                        <select
+                          value={currentSlotChar.artifactSetMode ?? '4pc'}
+                          onChange={(e) => handleUpdateCurrentField('artifactSetMode', e.target.value as ArtifactSetMode)}
+                          className="bg-slate-950 text-purple-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
+                        >
+                          <option value="4pc">4セット</option>
+                          <option value="2+2">2+2</option>
+                        </select>
+                      </div>
                     )}
-                  </select>
+                  </div>
 
                   {/* Artifact Passive Details */}
                   {(() => {
-                    const art = database.artifacts.find(a => a.name === currentSlotChar.artifactSetName);
+                    const art = database.artifacts.find(a => a.id === currentSlotChar.artifactSetId);
                     if (!art) return null;
+                    const isTwoPlusTwo = currentSlotChar.artifactSetMode === '2+2';
                     return (
                       <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
                         <div className="text-[10px] font-mono font-bold text-purple-300">
-                          {art.name} (4セット効果)
+                          {art.name} ({isTwoPlusTwo ? '2セット効果のみ・発動バフなし' : '4セット効果'})
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
-                          {art.effect4p || art.effect2p || 'セット効果なし'}
+                          {(isTwoPlusTwo ? art.effect2p : art.effect4p || art.effect2p) || 'セット効果なし'}
                         </p>
                       </div>
                     );

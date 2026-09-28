@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Save, 
@@ -18,9 +18,8 @@ import {
   Users,
   ChevronRight
 } from 'lucide-react';
-import { CharacterConfig, Stint, SavedRotationSlot, PartyPreset } from '../types/genshin';
+import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
-import { ROTATION_PRESETS } from '../data/presets';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -32,8 +31,6 @@ interface SaveLoadModalProps {
   totalDuration: number;
   switchDelay?: number;
   actionDelay?: number;
-  currentPresetId: string;
-  onSelectPreset: (preset: PartyPreset) => void;
   activeSlotId: string | null;
   /** 保存スロット一覧が変わったとき。currentSlotId を渡すと「現在読み込み中の編成」もそのIDに更新する */
   onSlotsChanged: (slots: SavedRotationSlot[], currentSlotId?: string | null) => void;
@@ -44,7 +41,6 @@ interface SaveLoadModalProps {
     loopStartTime?: number;
     switchDelay?: number;
     actionDelay?: number;
-    presetId?: string;
     name?: string;
     slotId?: string;
   }) => void;
@@ -61,8 +57,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   totalDuration,
   switchDelay,
   actionDelay,
-  currentPresetId,
-  onSelectPreset,
   activeSlotId,
   onSlotsChanged,
   onLoadSlot,
@@ -79,16 +73,11 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const [activeTab, setActiveTab] = useState<'slots' | 'json'>('slots');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
 
-  // プリセット読込直後は、編成名・メモの初期値をプリセットの名前・説明にする（キャラ変更による自動命名で上書きしない）
-  const presetForSlotRef = useRef<{ name: string; description: string } | null>(null);
-
   // 開いたときだけリセットするもの
   useEffect(() => {
     if (isOpen) {
       setSaveSuccessMsg(null);
       setDuplicateSlot(null);
-    } else {
-      presetForSlotRef.current = null;
     }
   }, [isOpen]);
 
@@ -98,9 +87,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       const slots = getSavedSlots();
       setSavedSlots(slots);
       const activeSlot = slots.find(s => s.id === activeSlotId) ?? null;
-      setNewSlotName(presetForSlotRef.current?.name ?? buildDefaultSlotName(characters, totalDuration, activeSlot));
+      setNewSlotName(buildDefaultSlotName(characters, totalDuration, activeSlot));
       // 保存編成を読み込み中なら、そのメモも初期値にする
-      setNewSlotDesc(presetForSlotRef.current ? presetForSlotRef.current.description : (activeSlot?.description ?? ''));
+      setNewSlotDesc(activeSlot?.description ?? '');
     }
   }, [isOpen, characters, totalDuration, activeSlotId]);
 
@@ -368,39 +357,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {activeTab === 'slots' ? (
             <>
-              {/* Section 0: Load from built-in presets */}
-              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/80 space-y-2">
-                <h3 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4" />
-                  <span>プリセットから読込</span>
-                </h3>
-                <select
-                  value={!activeSlotId && ROTATION_PRESETS.some(p => p.id === currentPresetId) ? currentPresetId : ''}
-                  onChange={(e) => {
-                    const p = ROTATION_PRESETS.find(x => x.id === e.target.value);
-                    if (p) {
-                      presetForSlotRef.current = { name: p.name, description: p.description };
-                      setNewSlotName(p.name);
-                      setNewSlotDesc(p.description);
-                      onSelectPreset(p);
-                      setSaveSuccessMsg(`プリセット「${p.name}」を読み込みました。`);
-                      setTimeout(() => setSaveSuccessMsg(null), 3000);
-                    }
-                  }}
-                  className="w-full bg-slate-900 text-xs font-semibold text-amber-200 rounded-lg px-3 py-2 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
-                >
-                  <option value="" disabled hidden>-- プリセットを選択 --</option>
-                  {ROTATION_PRESETS.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-slate-500">
-                  選択すると現在の編集内容がプリセットで置き換わります（必要なら先に下でスロット保存してください）。
-                </p>
-              </div>
-
               {/* Section 1: Save Current as New Slot */}
               <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/80 space-y-3">
                 <div className="flex items-center justify-between">
@@ -695,7 +651,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-t border-slate-800 bg-slate-950/70">
           <button
             onClick={() => {
-              if (window.confirm('現在の編集内容を初期プリセットに戻しますか？')) {
+              if (window.confirm('現在の編集内容を初期状態（キャラ未設定の編成）に戻しますか？')) {
                 clearActiveState();
                 onResetToDefault();
                 onClose();
@@ -704,7 +660,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
             className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1.5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>初期プリセット状態にリセット</span>
+            <span>初期状態（キャラ未設定）にリセット</span>
           </button>
 
           <button

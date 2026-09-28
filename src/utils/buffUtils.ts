@@ -45,15 +45,14 @@ export function getAvailableBuffsForCharacter(
   }
 
   // 2. 装備武器の連動バフ (精錬ランク WeaponModel で動的解決)
-  if (character.weaponName && database?.weapons) {
+  if (character.weaponId && database?.weapons) {
     const weaponModel = WeaponModel.findInDatabase(
       database.weapons,
-      character.weaponName,
+      character.weaponId,
       character.weaponRefinementRank
     );
     if (weaponModel) {
-      const override = WEAPON_BUFF_OVERRIDES[weaponModel.name] || 
-        (weaponModel.englishName ? WEAPON_BUFF_OVERRIDES[weaponModel.englishName] : undefined);
+      const override = WEAPON_BUFF_OVERRIDES[weaponModel.id];
 
       for (const b of weaponModel.activeBuffEffects) {
         const duration = override?.duration !== undefined ? override.duration : b.duration;
@@ -78,14 +77,11 @@ export function getAvailableBuffsForCharacter(
     }
   }
 
-  // 3. 装備聖遺物の連動バフ (4セット効果)
-  if (character.artifactSetName && database?.artifacts) {
-    const matchedArtifact = database.artifacts.find(a => a.name === character.artifactSetName);
+  // 3. 装備聖遺物の連動バフ (4セット効果。2+2 のときはセット効果の発動バフなし)
+  if (character.artifactSetId && character.artifactSetMode !== '2+2' && database?.artifacts) {
+    const matchedArtifact = database.artifacts.find(a => a.id === character.artifactSetId);
     if (matchedArtifact) {
-      const cleanArtName = matchedArtifact.name.replace(/\s*(4セット|4-Piece.*)$/i, '');
-      const artOverride = ARTIFACT_BUFF_OVERRIDES[matchedArtifact.name] || 
-        ARTIFACT_BUFF_OVERRIDES[cleanArtName] ||
-        (matchedArtifact.englishName ? ARTIFACT_BUFF_OVERRIDES[matchedArtifact.englishName] : undefined);
+      const artOverride = ARTIFACT_BUFF_OVERRIDES[matchedArtifact.id];
 
       const buffs: EquipmentBuffDefinition[] = matchedArtifact.buffEffects && matchedArtifact.buffEffects.length > 0
         ? matchedArtifact.buffEffects

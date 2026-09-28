@@ -142,16 +142,14 @@ export class WeaponModel {
     return new WeaponModel(item, rank);
   }
 
-  /** データベース配列から名前・IDで武器を検索して WeaponModel を生成 */
+  /** データベース配列から武器 id で検索して WeaponModel を生成 */
   static findInDatabase(
     weapons: WeaponDatabaseItem[],
-    nameOrId: string | undefined | null,
+    weaponId: string | undefined | null,
     rank?: number
   ): WeaponModel | null {
-    if (!nameOrId) return null;
-    const target = weapons.find(
-      w => w.name === nameOrId || w.id === nameOrId || w.englishName === nameOrId
-    );
+    if (!weaponId) return null;
+    const target = weapons.find(w => w.id === weaponId);
     if (!target) return null;
     return new WeaponModel(target, rank);
   }

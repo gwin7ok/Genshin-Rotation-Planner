@@ -87,8 +87,10 @@ export function refreshCharactersFromDatabase(
     const next: CharacterConfig = {
       ...latest,
       energyRecharge: c.energyRecharge,
-      weaponName: c.weaponName,
-      artifactSetName: c.artifactSetName,
+      weaponId: c.weaponId,
+      weaponRefinementRank: c.weaponRefinementRank,
+      artifactSetId: c.artifactSetId,
+      artifactSetMode: c.artifactSetMode,
       constellation: c.constellation,
     };
     newById.set(c.id, next);

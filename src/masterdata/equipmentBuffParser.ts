@@ -166,11 +166,8 @@ export function parseWeaponBuffs(weapon: {
   description?: string;
   rarity?: number;
 }): EquipmentBuffDefinition[] {
-  // 1. 補正辞書の検索 (日本語名、英語名、IDで照合)
-  const override: EquipmentBuffOverride | undefined =
-    WEAPON_BUFF_OVERRIDES[weapon.name] ??
-    (weapon.englishName ? WEAPON_BUFF_OVERRIDES[weapon.englishName] : undefined) ??
-    WEAPON_BUFF_OVERRIDES[weapon.id];
+  // 1. 補正辞書の検索 (武器 id で照合)
+  const override: EquipmentBuffOverride | undefined = WEAPON_BUFF_OVERRIDES[weapon.id];
 
   const descText = weapon.description || '';
 
@@ -224,13 +221,8 @@ export function parseArtifactBuffs(artifact: {
   // 聖遺物の主要な発動バフは 4セット効果 (effect4p)
   const effect4pText = artifact.effect4p || '';
 
-  // 1. 補正辞書の検索 (セット名、英語名、IDで照合)
-  const cleanName = artifact.name.replace(/\s*4セット$/, '').trim();
-  const override: EquipmentBuffOverride | undefined =
-    ARTIFACT_BUFF_OVERRIDES[cleanName] ??
-    ARTIFACT_BUFF_OVERRIDES[artifact.name] ??
-    (artifact.englishName ? ARTIFACT_BUFF_OVERRIDES[artifact.englishName] : undefined) ??
-    ARTIFACT_BUFF_OVERRIDES[artifact.id];
+  // 1. 補正辞書の検索 (聖遺物セット id で照合)
+  const override: EquipmentBuffOverride | undefined = ARTIFACT_BUFF_OVERRIDES[artifact.id];
 
   // 2. 4P効果テキストの自動抽出
   const timings = extractEquipmentTimings(effect4pText);
@@ -244,7 +236,7 @@ export function parseArtifactBuffs(artifact: {
   }
 
   const effectiveDuration = finalDuration ?? 0;
-  const buffName = override?.name ?? `${cleanName}4: 効果`;
+  const buffName = override?.name ?? `${artifact.name.replace(/\s*4セット$/, '').trim()}4: 効果`;
   const summary = override?.statEffectSummary ?? generateStatSummary(effect4pText);
   const color = override?.color ?? inferBuffColor(effect4pText);
 

@@ -110,6 +110,7 @@ gcsim v2.47.6（2026-09-24 リリース）で検証した。
 | D12 | CT待ちが発生するローテーション（O6） | **方針A**: CT待ちは「ローテーションの誤り」として示す。CT待ちがある場合は、**1周目（初動＋ループ1周目）だけ**を gcsim の実際の時間（1周目内のCT待ちを含む）で今の形のガントチャートに表示し、待ちが発生したアクションに**今と同じ形の違反マーク**（残りCT＝gcsim の実際の待ち時間）を付ける。2周目以降で初めて待ちが発生するアクションも、1周目の同じアクションに印を付ける。2周目以降の表示（再生の2周目モード・折り返し）は行わない。CT待ちが無い場合は通常どおり反映する（詳細はフェーズ6） |
 | D13 | IDキーの原則 | **マスターデータと編成に使うデータは、名前ではなく必ず各IDをキーとして登録・参照する**。保存済みデータはマスターデータの生成からやり直すため、旧データの移行処理は作らない（名前ベースの既存の移行処理も削除する）（フェーズ2） |
 | D14 | プリセット | 混乱を招くため、プリセットは現時点で全部削除する。プリセット専用の手作業のキャラ定義（旧キー形式）も削除し、初期状態は4枠とも未設定の編成にする（フェーズ2） |
+| D15 | 凸数（命ノ星座） | 精錬ランクと同じ構造（マスターデータに1〜6凸の段階データ／編成は凸数だけ／解決役 `CharacterModel`、ただし凸は累積適用）。範囲は**案a**: 全キャラの凸の名前・説明文を保存・表示し、数値の構造化は既存の「効果時間の延長」（11キャラ）だけ。凸数の初期値は星4=6凸・星5=0凸。gcsim には `cons=<凸数>` で渡す（フェーズ3b） |
 
 ## 5. CT・効果時間の管理構造の分析（2026-09-28）
 
@@ -158,11 +159,12 @@ gcsim v2.47.6（2026-09-24 リリース）で検証した。
 | 1 | 武器・聖遺物に gcsim キーを持たせる | [plan](phase-1-gcsim-keys/plan.md) | [progress](phase-1-gcsim-keys/progress.md) |
 | 2 | IDキーの原則の徹底・プリセット削除・4セット/2+2の選択 | [plan](phase-2-party-config/plan.md) | [progress](phase-2-party-config/progress.md) |
 | 3 | アクション遅延のアクションごとの個別化 | [plan](phase-3-action-delay/plan.md) | [progress](phase-3-action-delay/progress.md) |
+| 3b | キャラの凸数（命ノ星座） | [plan](phase-3b-constellation/plan.md) | [progress](phase-3b-constellation/progress.md) |
 | 4 | 編成 → gcsim 設定文の変換 | [plan](phase-4-config-converter/plan.md) | [progress](phase-4-config-converter/progress.md) |
 | 5 | gcsim キーの辞書の生成 | [plan](phase-5-key-catalog/plan.md) | [progress](phase-5-key-catalog/progress.md) |
 | 6 | gcsim 実行と結果のガントチャート反映 | [plan](phase-6-run-and-apply/plan.md) | [progress](phase-6-run-and-apply/progress.md) |
 
-依存関係: 1 → 2 → 4 → 6、3 → 4、5 → 6（フェーズ5は1〜4と並行可能）。
+依存関係: 1 → 2 → 4 → 6、3 → 4、2 → 3b → 4、5 → 6（フェーズ5は1〜4と並行可能）。
 
 ## 8. リスクと対策
 

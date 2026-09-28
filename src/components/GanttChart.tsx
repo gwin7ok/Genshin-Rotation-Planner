@@ -160,6 +160,8 @@ interface GanttChartProps {
   carryOverBuffs?: ActiveBuffSpan[];
   carryOverPassives?: PassiveSpan[];
   playbackCycleCount?: number;
+  /** 再生開始からの累積時間（周をまたいでも増え続ける） */
+  elapsedTime: number;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
@@ -178,6 +180,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   carryOverBuffs = [],
   carryOverPassives = [],
   playbackCycleCount = 1,
+  elapsedTime,
   onReorderCharacters,
   onReorderCharactersAndStints,
   onUpdateStints,
@@ -199,6 +202,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   // 2周目以降突入中フラグ（一時停止中も維持、リセットで1に戻る）
   const isCycle2Active = (playbackCycleCount ?? 1) >= 2;
+  // 持ち越しバーは、累積時間が元の発動位置を通過するまでグレー（まだ発動していない）
+  const isCarryOverActive = (originalStartTime?: number) =>
+    originalStartTime !== undefined && elapsedTime >= originalStartTime;
 
   // 統合出場トラックの出場ボックスのドラッグ（出場順の入れ替え）
   const [draggingTrackStint, setDraggingTrackStint] = useState<{
@@ -1441,7 +1447,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const visualEnd = Math.min(totalDuration, cd.endTime);
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
-                                const isBarActive = isCycle2Active || !isCarryOver;
+                                const isBarActive = !isCarryOver || isCarryOverActive(cd.originalStartTime);
                                 const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
                                 const remTime = Math.max(0, cd.endTime - activeTime);
 
@@ -1472,7 +1478,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }`}
                                     title={
                                       isCarryOver
-                                        ? `【1周目からの持ち越しスキルCT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        ? `【1周目からの持ち越しスキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
                                         : `【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
                                     }
                                   >
@@ -1495,7 +1501,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const visualEnd = Math.min(totalDuration, cd.endTime);
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
-                                const isBarActive = isCycle2Active || !isCarryOver;
+                                const isBarActive = !isCarryOver || isCarryOverActive(cd.originalStartTime);
                                 const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
                                 const remTime = Math.max(0, cd.endTime - activeTime);
 
@@ -1526,7 +1532,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }`}
                                     title={
                                       isCarryOver
-                                        ? `【1周目からの持ち越し元素爆発CT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        ? `【1周目からの持ち越し元素爆発CT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
                                         : `【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
                                     }
                                   >
@@ -1558,7 +1564,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   const visualEnd = Math.min(totalDuration, maxEnd);
                                   if (visualEnd <= buff.startTime) return null;
 
-                                  const isBarActive = isCycle2Active || !isCarryOver;
+                                  const isBarActive = !isCarryOver || isCarryOverActive(buff.originalStartTime);
                                   const startX = buff.startTime * pixelsPerSecond;
                                   const width = Math.max(16, (visualEnd - buff.startTime) * pixelsPerSecond);
                                   const isBuffActive = isBarActive && buff.startTime <= activeTime && activeTime < buff.endTime;
@@ -1585,7 +1591,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 opacity-90'
                                           : 'bg-emerald-950 border-emerald-400 text-emerald-100 opacity-90 hover:border-emerald-300'
                                       }`}
-                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${isCarryOver && !isCycle2Active ? ' (※2周目以降で有効化)' : ''}\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${!isBarActive ? ' (※元の発動位置を通過すると有効化)' : ''}\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
                                     >
                                       <span className="truncate">
                                         ✨ {isCarryOver ? '[持越] ' : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(0)}s)`} {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
@@ -1617,7 +1623,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                                     {/* 持ち越し効果バー (zIndex: 10) */}
                                     {grp.carryOverPassives.map(cp => {
-                                      const isBarActive = isCycle2Active;
+                                      const isBarActive = isCarryOverActive(cp.originalStartTime);
                                       const start = cp.startTime;
                                       if (start >= totalDuration) return null;
 
@@ -1652,7 +1658,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 hover:opacity-100 hover:border-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${isBarActive ? activeRingClass : ''}`}
-                                          title={`【1周目からの持ち越し発動バフ（${badgeCfg.label}）】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n${cp.name} (${cp.duration.toFixed(1)}s)\n期間: [${start.toFixed(2)}s ~ ${cp.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                          title={`【1周目からの持ち越し発動バフ（${badgeCfg.label}）】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n${cp.name} (${cp.duration.toFixed(1)}s)\n期間: [${start.toFixed(2)}s ~ ${cp.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`}
                                         >
                                           <span className="truncate flex items-center gap-1">
                                             {badgeCfg.icon}
@@ -1736,7 +1742,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                                     {/* 持ち越しCTバー (zIndex: 10) */}
                                     {grp.carryOverPassives.filter(cp => cp.cooldownEnd && cp.cooldownEnd > cp.startTime).map(cp => {
-                                      const isBarActive = isCycle2Active;
+                                      const isBarActive = isCarryOverActive(cp.originalStartTime);
                                       const start = cp.startTime;
                                       if (start >= totalDuration) return null;
                                       const cdEnd = cp.cooldownEnd!;
@@ -1756,7 +1762,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
                                               : badgeCfg.cooldownBarClass
                                           }`}
-                                          title={`【1周目からの持ち越し${badgeCfg.label}CT】${!isCycle2Active ? '(※2周目以降で有効化)' : ''}\n${cp.name}\nCT残り: ${cdDur.toFixed(1)}s [${start.toFixed(2)}s ~ ${cdEnd.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                          title={`【1周目からの持ち越し${badgeCfg.label}CT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n${cp.name}\nCT残り: ${cdDur.toFixed(1)}s [${start.toFixed(2)}s ~ ${cdEnd.toFixed(2)}s] (クリックで開始位置へシーク)`}
                                         >
                                           <span className="truncate">⏱️ [持越] {badgeCfg.label}CT {cdDur.toFixed(1)}s</span>
                                         </div>
@@ -1900,7 +1906,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-2.5 rounded bg-slate-800/80 border border-dashed border-slate-500"></span>
-              <span className="text-slate-300 font-medium">[持越] 1周目からの持ち越し（2周目以降で有効化）</span>
+              <span className="text-slate-300 font-medium">[持越] 1周目からの持ち越し（元の発動位置を通過すると有効化）</span>
             </div>
           </div>
 

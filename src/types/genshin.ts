@@ -125,6 +125,8 @@ export interface PassiveSpan {
   collisionRemainingCT?: number;
   /** 2周目折り返し持ち越しフラグ */
   isCarryOver?: boolean;
+  /** 持ち越しバーの元の発動時刻 */
+  originalStartTime?: number;
   color?: string;
   description?: string;
 }
@@ -207,6 +209,8 @@ export interface ActiveBuffSpan {
   origin?: 'action' | 'passive';
   /** 2周目折り返し持ち越しフラグ */
   isCarryOver?: boolean;
+  /** 持ち越しバーの元の発動時刻 */
+  originalStartTime?: number;
 }
 
 export interface CooldownSpan {

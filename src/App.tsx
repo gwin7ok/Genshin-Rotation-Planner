@@ -378,7 +378,8 @@ export default function App() {
           totalDuration={totalDuration}
           activeTime={currentTime}
           onSeek={handleSeek}
-          activeBuffCountBySecond={calculatedResult.activeBuffCountBySecond}
+          buffOverlapSegments={calculatedResult.buffOverlapSegments}
+          loopedBuffOverlapSegments={calculatedResult.loopedBuffOverlapSegments}
           passiveSpans={calculatedResult.passiveSpans}
           carryOverCooldowns={calculatedResult.carryOverCooldowns}
           carryOverBuffs={calculatedResult.carryOverBuffs}

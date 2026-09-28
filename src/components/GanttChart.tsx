@@ -29,6 +29,7 @@ import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig } from '../utils/buffUtils';
+import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -129,6 +130,15 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   return result;
 }
 
+// バフ重複行の色（寒色→暖色）: 0 / 1〜3 / 4〜6 / 7〜9 / 10以上。文字色は背景の明るさに合わせて白か黒
+function buffCountStyle(count: number): { backgroundColor: string; color: string } {
+  if (count === 0) return { backgroundColor: 'rgba(30, 41, 59, 0.3)', color: '#fff' };
+  if (count <= 3) return { backgroundColor: 'rgba(59, 130, 246, 0.45)', color: '#fff' };
+  if (count <= 6) return { backgroundColor: 'rgba(16, 185, 129, 0.55)', color: '#fff' };
+  if (count <= 9) return { backgroundColor: 'rgb(189, 187, 63)', color: '#000' };
+  return { backgroundColor: 'rgb(255, 30, 30)', color: '#fff' };
+}
+
 interface GanttChartProps {
   characters: CharacterConfig[];
   stints: Stint[];
@@ -139,7 +149,8 @@ interface GanttChartProps {
   totalDuration: number;
   activeTime: number;
   onSeek: (time: number) => void;
-  activeBuffCountBySecond: { time: number; count: number; activeBuffs: string[] }[];
+  buffOverlapSegments: BuffOverlapSegment[];
+  loopedBuffOverlapSegments: BuffOverlapSegment[];
   /** 発動バフ（固有天賦）の効果・CT */
   passiveSpans?: PassiveSpan[];
   onReorderCharacters?: (newChars: CharacterConfig[]) => void;
@@ -173,7 +184,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   totalDuration,
   activeTime,
   onSeek,
-  activeBuffCountBySecond,
+  buffOverlapSegments,
+  loopedBuffOverlapSegments,
   passiveSpans = [],
   carryOverCooldowns = [],
   carryOverBuffs = [],
@@ -207,7 +219,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   for (const s of [...activeBuffs.filter(b => b.origin !== 'passive'), ...passiveSpans.filter(p => p.duration > 0)]) {
     if (s.startTime <= activeTime && activeTime < s.endTime) runningEffects.set(s.id, s.endTime - activeTime);
   }
-  for (const s of [...carryOverBuffs, ...carryOverPassives]) {
+  for (const s of [...carryOverBuffs.filter(b => b.origin !== 'passive'), ...carryOverPassives]) {
     if (s.sourceId && isCarryOverActive(s.originalStartTime) && s.startTime <= activeTime && activeTime < s.endTime) {
       runningEffects.set(s.sourceId, s.endTime - activeTime);
     }
@@ -339,7 +351,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const chartWidth = Math.max(800, Math.ceil(totalDuration + 2) * pixelsPerSecond);
 
   // Combined Buff Synergy Points (calculated with 3-D carryover deduplication in rotationCalculator)
-  const allBuffSynergyPoints = activeBuffCountBySecond;
 
   // Handle timeline scrubber click or drag
   const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -1021,31 +1032,48 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   className="relative flex-1 h-full flex items-center cursor-pointer bg-slate-950/90"
                   onClick={handleTimelineClick}
                 >
-                  {allBuffSynergyPoints.map((pt, idx) => {
-                    const x = pt.time * pixelsPerSecond;
-                    const w = 0.5 * pixelsPerSecond;
-
+                  {(() => {
+                    const segments = elapsedTime >= totalDuration ? loopedBuffOverlapSegments : buffOverlapSegments;
+                    if (segments.length === 0) return null;
+                    // 帯は1つの要素のグラデーションで塗り、区切りごとに1px透明にして背景を区切り線として見せる
+                    // （区間ごとに箱を並べると、画面の拡大率によって区切りの見え方が不揃いになるため）
+                    const GAP_PX = 1;
+                    const band = segments
+                      .map((pt, i) => {
+                        const color = buffCountStyle(pt.count).backgroundColor;
+                        const start = pt.start * pixelsPerSecond;
+                        const end = pt.end * pixelsPerSecond;
+                        const fillEnd = i < segments.length - 1 ? end - GAP_PX : end;
+                        return `${color} ${start}px ${fillEnd}px, transparent ${fillEnd}px ${end}px`;
+                      })
+                      .join(', ');
                     return (
-                      <div
-                        key={idx}
-                        style={{ 
-                          left: `${x}px`, 
-                          width: `${w}px`,
-                          backgroundColor: pt.count === 0 
-                            ? 'rgba(30, 41, 59, 0.3)' 
-                            : pt.count >= 3 
-                            ? 'rgba(234, 88, 12, 0.65)' 
-                            : pt.count >= 2 
-                            ? 'rgba(16, 185, 129, 0.55)' 
-                            : 'rgba(14, 165, 233, 0.35)',
-                        }}
-                        className="absolute top-1 bottom-1 rounded-sm border-r border-slate-950/40 flex items-center justify-center text-[10px] font-mono text-white select-none"
-                        title={`${pt.time.toFixed(1)}s: 有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
-                      >
-                        {pt.count > 0 && <span className="font-bold text-[9px]">{pt.count}</span>}
-                      </div>
+                      <>
+                        {/* 上下の縁取りは全区間共通（色の明るさの違いで輪郭の位置がずれて見えないように） */}
+                        <div
+                          className="absolute top-1 bottom-1 left-0 border-y border-slate-400/50"
+                          style={{
+                            width: `${segments[segments.length - 1].end * pixelsPerSecond}px`,
+                            background: `linear-gradient(to right, ${band})`,
+                            backgroundClip: 'padding-box',
+                          }}
+                        />
+                        {segments.map(pt => {
+                          const w = (pt.end - pt.start) * pixelsPerSecond;
+                          return (
+                            <div
+                              key={pt.start}
+                              style={{ left: `${pt.start * pixelsPerSecond}px`, width: `${w}px`, color: buffCountStyle(pt.count).color }}
+                              className="absolute top-1 bottom-1 flex items-center justify-center text-[10px] font-mono select-none"
+                              title={`${pt.start.toFixed(1)}s ~ ${pt.end.toFixed(1)}s: 有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
+                            >
+                              {pt.count > 0 && w >= 10 && <span className="font-bold text-[9px]">{pt.count}</span>}
+                            </div>
+                          );
+                        })}
+                      </>
                     );
-                  })}
+                  })()}
                 </div>
               </div>
 

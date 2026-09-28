@@ -36,6 +36,8 @@ export interface WeaponDatabaseItem {
   description: string;
   baseAttack?: number;
   avatarUrl?: string;
+  /** gcsim の武器キー（例: "athousandfloatingdreams"）。無ければ gcsim 未対応 */
+  gcsimKey?: string;
   /** デフォルト精錬ランク (★5=1, ★4以下=5) */
   refinementRank?: number;
   /** 全精錬ランク (R1〜R5) の効果データ配列 */
@@ -66,6 +68,8 @@ export interface ArtifactSetDatabaseItem {
   rarity: number; // 1 | 2 | 3 | 4 | 5 (代表レアリティ、基本は最大値)
   rarityList?: number[];
   avatarUrl?: string;
+  /** gcsim の聖遺物セットキー（例: "deepwoodmemories"）。無ければ gcsim 未対応 */
+  gcsimKey?: string;
   effect2p: string;
   effect4p: string;
   buffEffects?: EquipmentBuffDefinition[];

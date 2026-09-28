@@ -1,5 +1,5 @@
 import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
-import { migrateLegacyCharacter, migrateCharacterIds } from './legacyMigration';
+import { migrateLegacyCharacter } from './legacyMigration';
 import { isEmptySlotCharacter } from '../data/characters';
 
 const ACTIVE_ROTATION_KEY = 'genshin_rotation_current_state_v2';
@@ -8,7 +8,6 @@ const SAVED_SLOTS_KEY = 'genshin_rotation_saved_slots_v2';
 export interface ActiveRotationState {
   characters: CharacterConfig[];
   stints: Stint[];
-  selectedPresetId: string;
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0始まり、0=基準なし） */
   loopStartIndex?: number;
   /** 旧形式のループ基準（秒）。読込時に loopStartIndex へ変換する */
@@ -45,7 +44,7 @@ export function loadActiveState(): ActiveRotationState | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (parsed && Array.isArray(parsed.characters) && Array.isArray(parsed.stints)) {
-      return migrateCharacterIds({ ...parsed, characters: parsed.characters.map(migrateLegacyCharacter) }) as ActiveRotationState;
+      return { ...parsed, characters: parsed.characters.map(migrateLegacyCharacter) } as ActiveRotationState;
     }
   } catch (e) {
     console.warn('Failed to load active rotation from localStorage:', e);
@@ -73,7 +72,7 @@ export function getSavedSlots(): SavedRotationSlot[] {
     if (!raw) return [];
     const list = JSON.parse(raw);
     if (Array.isArray(list)) {
-      return (list as SavedRotationSlot[]).map(slot => migrateCharacterIds({
+      return (list as SavedRotationSlot[]).map(slot => ({
         ...slot,
         characters: (slot.characters ?? []).map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>)),
         stints: slot.stints ?? [],

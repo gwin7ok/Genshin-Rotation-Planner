@@ -1,7 +1,7 @@
 import { CharacterConfig, Stint } from '../types/genshin';
 
 const isSwapAction = (a: Stint['actions'][number]) =>
-  a.type === 'swap' || a.shortName === '交代' || a.name === 'キャラ交代' || a.actionTypeId === 'action_switch_char';
+  a.type === 'swap' || a.actionTypeId === 'action_switch_char';
 
 /**
  * ローテーションの記法文字列

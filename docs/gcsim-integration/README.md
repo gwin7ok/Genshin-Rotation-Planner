@@ -9,7 +9,7 @@
 | [plan.md](plan.md) | 全体計画書（背景・調査結果・決定事項・全体構成・フェーズ一覧・リスク） |
 | [progress.md](progress.md) | 全体進捗（フェーズごとの状態・決定ログ・更新履歴） |
 | [phase-1-gcsim-keys/](phase-1-gcsim-keys/) | フェーズ1: 武器・聖遺物に gcsim キーを持たせる |
-| [phase-2-party-config/](phase-2-party-config/) | フェーズ2: 編成設定の参照をID化・4セット/2+2の選択 |
+| [phase-2-party-config/](phase-2-party-config/) | フェーズ2: IDキーの原則の徹底・プリセット削除・4セット/2+2の選択 |
 | [phase-3-action-delay/](phase-3-action-delay/) | フェーズ3: アクション遅延のアクションごとの個別化 |
 | [phase-4-config-converter/](phase-4-config-converter/) | フェーズ4: 編成 → gcsim 設定文の変換 |
 | [phase-5-key-catalog/](phase-5-key-catalog/) | フェーズ5: gcsim キーの辞書の生成 |

@@ -6,6 +6,8 @@ export type ElementType = 'pyro' | 'hydro' | 'electro' | 'dendro' | 'cryo' | 'an
 
 export type WeaponType = 'sword' | 'claymore' | 'polearm' | 'bow' | 'catalyst';
 
+export type ArtifactSetMode = '4pc' | '2+2';
+
 export type ActionType = 
   | 'normal'     // N1, N2, etc.
   | 'combo'      // e.g. N3C, 3N3C
@@ -159,9 +161,13 @@ export interface CharacterConfig {
 
   // Custom user settings in party:
   energyRecharge?: number; // % e.g. 180 = 180%
-  weaponName?: string;
+  /** 装備武器（DB の武器 id） */
+  weaponId?: string;
   weaponRefinementRank?: number; // 精錬ランク (1〜5, 未指定時は星5=1/星4以下=5)
-  artifactSetName?: string;
+  /** 装備聖遺物セット（DB の聖遺物セット id） */
+  artifactSetId?: string;
+  /** 聖遺物の組み合わせ。'2+2' は聖遺物の発動バフなし（未指定は '4pc'） */
+  artifactSetMode?: ArtifactSetMode;
   constellation?: number;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
@@ -248,16 +254,6 @@ export interface ValidationIssue {
   time: number;
   title: string;
   message: string;
-}
-
-export interface PartyPreset {
-  id: string;
-  name: string;
-  description: string;
-  characters: CharacterConfig[];
-  stints: Stint[];
-  switchDelay?: number;
-  actionDelay?: number;
 }
 
 export interface SavedRotationSlot {

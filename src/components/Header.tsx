@@ -1,6 +1,7 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
+import { ListSelect } from './ListSelect';
 
 interface HeaderProps {
   savedSlots: SavedRotationSlot[];
@@ -109,27 +110,23 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-700/70">
               <Users className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span className="text-xs font-medium text-slate-300 hidden xl:inline">編成選択:</span>
-              <select
+              <ListSelect
                 value={activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? activeSlotId : ''}
-                onChange={(e) => {
-                  const slot = savedSlots.find(s => s.id === e.target.value);
+                placeholder="保存スロットに未保存"
+                options={[
+                  { value: '', label: '保存スロットに未保存', disabled: true },
+                  ...savedSlots.map(slot => ({ value: slot.id, label: slot.name })),
+                ]}
+                onChange={(v) => {
+                  const slot = savedSlots.find(s => s.id === v);
                   if (slot) onSelectSavedSlot(slot);
                 }}
                 disabled={savedSlots.length === 0}
-                className={`bg-slate-900 text-xs font-semibold rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer disabled:cursor-not-allowed max-w-[130px] sm:max-w-xs truncate ${
+                className={`bg-slate-900 text-xs font-semibold rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 max-w-[130px] sm:max-w-xs ${
                   activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? 'text-amber-200' : 'text-slate-400'
                 }`}
                 title={savedSlots.length === 0 ? '保存された編成はありません（「名前をつけて保存」で保存できます）' : '保存した編成を呼び出します'}
-              >
-                <option value="" disabled>
-                  保存スロットに未保存
-                </option>
-                {savedSlots.map(slot => (
-                  <option key={slot.id} value={slot.id}>
-                    {slot.name}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             {(() => {

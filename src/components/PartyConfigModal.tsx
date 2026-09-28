@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
+import { ListSelect } from './ListSelect';
 import { ArtifactSetMode, CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
@@ -320,10 +321,18 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   </label>
 
                   <div className="flex gap-1.5">
-                    <select
+                    <ListSelect
                       value={currentSlotChar.weaponId || ''}
-                      onChange={(e) => {
-                        const newWeaponId = e.target.value || undefined;
+                      placeholder="-- DBから武器を選択 --"
+                      options={[
+                        { value: '', label: '-- DBから武器を選択 --' },
+                        ...database.weapons
+                          .filter(w => w.weaponType === currentSlotChar.weaponType)
+                          .sort((a, b) => Number(b.id) - Number(a.id))
+                          .map(w => ({ value: w.id, label: `${'★'.repeat(w.rarity)} ${w.name}` })),
+                      ]}
+                      onChange={(v) => {
+                        const newWeaponId = v || undefined;
                         const wObj = database.weapons.find(w => w.id === newWeaponId);
                         const defaultRank = wObj ? (wObj.refinementRank ?? (wObj.rarity >= 5 ? 1 : 5)) : 1;
                         const updated = [...editingChars];
@@ -334,19 +343,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         };
                         setEditingChars(updated);
                       }}
-                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer min-w-0"
-                    >
-                      <option value="">-- DBから武器を選択 --</option>
-                      {database.weapons
-                        .filter(w => w.weaponType === currentSlotChar.weaponType)
-                        .sort((a, b) => Number(b.id) - Number(a.id))
-                        .map(w => (
-                          <option key={w.id} value={w.id}>
-                            {'★'.repeat(w.rarity)} {w.name}
-                          </option>
-                        ))
-                      }
-                    </select>
+                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold min-w-0"
+                    />
 
                     {/* Refinement Rank Selector */}
                     {(() => {
@@ -411,48 +409,61 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <span>聖遺物セット (DB連動)</span>
                   </label>
                   <div className="flex gap-1.5">
-                    <select
+                    <ListSelect
                       value={currentSlotChar.artifactSetId || ''}
-                      onChange={(e) => handleUpdateCurrentField('artifactSetId', e.target.value || undefined)}
-                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold cursor-pointer min-w-0"
-                    >
-                      <option value="">-- DBから聖遺物を選択 --</option>
-                      {[...database.artifacts]
-                        .sort((a, b) => Number(b.id) - Number(a.id))
-                        .map(a => (
-                          <option key={a.id} value={a.id}>
-                            {'★'.repeat(a.rarity)} {a.name}
-                          </option>
-                        ))}
-                    </select>
+                      disabled={currentSlotChar.artifactSetMode === '2+2'}
+                      title={currentSlotChar.artifactSetMode === '2+2' ? '2+2 はセット効果の発動バフなしのため、聖遺物セットは選べません（4セットに戻すと選べます）' : undefined}
+                      options={[
+                        { value: '', label: currentSlotChar.artifactSetMode === '2+2' ? '効果なし（2+2）' : '-- DBから聖遺物を選択 --' },
+                        ...[...database.artifacts]
+                          .sort((a, b) => Number(b.id) - Number(a.id))
+                          .map(a => ({ value: a.id, label: `${'★'.repeat(a.rarity)} ${a.name}` })),
+                      ]}
+                      onChange={(v) => handleUpdateCurrentField('artifactSetId', v || undefined)}
+                      className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold min-w-0 disabled:opacity-60"
+                    />
 
-                    {/* 4セット / 2+2（2+2 は4セット効果の発動バフなし） */}
-                    {currentSlotChar.artifactSetId && (
-                      <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="聖遺物の組み合わせ（2+2 は4セット効果の発動バフなし）">
-                        <select
-                          value={currentSlotChar.artifactSetMode ?? '4pc'}
-                          onChange={(e) => handleUpdateCurrentField('artifactSetMode', e.target.value as ArtifactSetMode)}
-                          className="bg-slate-950 text-purple-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
-                        >
-                          <option value="4pc">4セット</option>
-                          <option value="2+2">2+2</option>
-                        </select>
-                      </div>
-                    )}
+                    {/* 4セット / 2+2（2+2 は4セット効果の発動バフなし。セット未選択でも選べる） */}
+                    <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="聖遺物の組み合わせ（2+2 は4セット効果の発動バフなし）">
+                      <select
+                        value={currentSlotChar.artifactSetMode ?? '4pc'}
+                        onChange={(e) => {
+                          // 2+2 は聖遺物セットを「効果なし」に固定する（セット選択を外す）
+                          const mode = e.target.value as ArtifactSetMode;
+                          const updated = [...editingChars];
+                          updated[selectedSlot] = {
+                            ...updated[selectedSlot],
+                            artifactSetMode: mode,
+                            ...(mode === '2+2' ? { artifactSetId: undefined } : {}),
+                          };
+                          setEditingChars(updated);
+                        }}
+                        className="bg-slate-950 text-purple-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
+                      >
+                        <option value="4pc">4セット</option>
+                        <option value="2+2">2+2</option>
+                      </select>
+                    </div>
                   </div>
 
                   {/* Artifact Passive Details */}
                   {(() => {
+                    if (currentSlotChar.artifactSetMode === '2+2') {
+                      return (
+                        <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[10px] text-slate-400">
+                          2+2: セット効果の発動バフなし（聖遺物セットは効果なしで固定）
+                        </div>
+                      );
+                    }
                     const art = database.artifacts.find(a => a.id === currentSlotChar.artifactSetId);
                     if (!art) return null;
-                    const isTwoPlusTwo = currentSlotChar.artifactSetMode === '2+2';
                     return (
                       <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
                         <div className="text-[10px] font-mono font-bold text-purple-300">
-                          {art.name} ({isTwoPlusTwo ? '2セット効果のみ・発動バフなし' : '4セット効果'})
+                          {art.name} (4セット効果)
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
-                          {(isTwoPlusTwo ? art.effect2p : art.effect4p || art.effect2p) || 'セット効果なし'}
+                          {art.effect4p || art.effect2p || 'セット効果なし'}
                         </p>
                       </div>
                     );

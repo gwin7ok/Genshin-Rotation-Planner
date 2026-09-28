@@ -24,6 +24,8 @@ import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoun
 import { buildRotationNotation } from './utils/rotationNotation';
 import { isEmptySlotCharacter } from './data/characters';
 
+const PLAYBACK_START = { time: 0, cycle: 1 };
+
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
   const [database, setDatabase] = useState<AppDatabase>(() => loadDatabase());
@@ -66,7 +68,10 @@ export default function App() {
 
   // 2. Playback / Scrubber State
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  // 再生位置と周回数は必ず一緒に更新する（別 state にすると食い違う）
+  const [playback, setPlayback] = useState(PLAYBACK_START);
+  const currentTime = playback.time;
+  const playbackCycleCount = playback.cycle;
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
 
   // 3. Modals & Action Selection State
@@ -119,9 +124,8 @@ export default function App() {
     if (normalized !== loopStartIndex) setLoopStartIndex(normalized);
   }, [loopStartIndex, stints.length]);
 
-  // 6. Playback Animation Loop & Loop Counter (4)
+  // 6. Playback Animation Loop
   // 再生順: 1周目(0s 〜 totalDuration) → ループ開始点(loopStartTime)へ戻り周回数を+1
-  const [playbackCycleCount, setPlaybackCycleCount] = useState<number>(1);
   const lastFrameTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -135,20 +139,11 @@ export default function App() {
     const animate = (timestamp: number) => {
       if (lastFrameTimeRef.current !== null) {
         const deltaSec = (timestamp - lastFrameTimeRef.current) / 1000;
-        setCurrentTime(prevTime => {
-          const next = prevTime + deltaSec * playbackSpeed;
-
-          if (totalDuration > 0 && next >= totalDuration) {
-            if (loopPeriod > 0.05) {
-              const overshoot = (next - totalDuration) % loopPeriod;
-              setPlaybackCycleCount(c => c + 1);
-              return loopStartTime + overshoot;
-            } else {
-              setPlaybackCycleCount(1);
-              return 0;
-            }
-          }
-          return next;
+        setPlayback(prev => {
+          const next = prev.time + deltaSec * playbackSpeed;
+          if (totalDuration <= 0 || next < totalDuration) return { ...prev, time: next };
+          if (loopPeriod <= 0.05) return PLAYBACK_START;
+          return { time: loopStartTime + (next - totalDuration) % loopPeriod, cycle: prev.cycle + 1 };
         });
       }
       lastFrameTimeRef.current = timestamp;
@@ -167,13 +162,12 @@ export default function App() {
     setSelectedPresetId(preset.id);
     setCharacters(preset.characters);
     setStints(preset.stints);
-    setCurrentTime(0);
+    setPlayback(PLAYBACK_START);
     setLoopStartIndex(0);
     setSwitchDelay(preset.switchDelay ?? 0.50);
     setActionDelay(preset.actionDelay ?? 0.10);
     setActiveSlotId(null);
     setIsPlaying(false);
-    setPlaybackCycleCount(1);
   };
 
   // 8. Handle Custom Slot Loading
@@ -199,9 +193,8 @@ export default function App() {
     setActionDelay(slot.actionDelay ?? 0.10);
     setSelectedPresetId(slot.presetId || 'custom');
     setActiveSlotId(slot.slotId ?? null);
-    setCurrentTime(0);
+    setPlayback(PLAYBACK_START);
     setIsPlaying(false);
-    setPlaybackCycleCount(1);
   };
 
   // 9. Reset to default preset
@@ -213,21 +206,20 @@ export default function App() {
     setLoopStartIndex(0);
     setSwitchDelay(defaultPreset.switchDelay ?? 0.50);
     setActiveSlotId(null);
-    setCurrentTime(0);
+    setPlayback(PLAYBACK_START);
     setIsPlaying(false);
-    setPlaybackCycleCount(1);
   };
 
   // 10. Handle Playback Controls
   const togglePlay = () => setIsPlaying(prev => !prev);
   const resetPlayback = () => {
     setIsPlaying(false);
-    setCurrentTime(0);
-    setPlaybackCycleCount(1);
+    setPlayback(PLAYBACK_START);
   };
   const handleSeek = (time: number) => {
     const clamped = Math.max(0, Math.min(time, totalDuration));
-    setCurrentTime(clamped);
+    // 初動（ループ開始点より前）は1周目にしか存在しない
+    setPlayback(prev => ({ time: clamped, cycle: clamped < loopStartTime ? 1 : prev.cycle }));
   };
 
   // 11. Notation Copy & Display
@@ -323,7 +315,7 @@ export default function App() {
           if (parsed.presetId) setSelectedPresetId(parsed.presetId);
           setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
-          setCurrentTime(0);
+          setPlayback(PLAYBACK_START);
           setIsPlaying(false);
         } else {
           alert('無効なローテーションJSONファイルです。');

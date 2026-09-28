@@ -15,7 +15,7 @@
  */
 import type { ActionDefinition, ActionFrames, ActionType, CharacterConfig, ElementType, WeaponType } from '../types/genshin.ts';
 import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './gcsimParser.ts';
-import { applyConstellationVariants, type ConstellationVariantReport, type GenshinDbConstellation } from './constellationEffects.ts';
+import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
 
@@ -104,7 +104,7 @@ export interface CharacterGenerationReport {
   /** gcsim の式を評価できなかった行数 */
   unresolvedGoLines: Array<{ characterId: string; file: string; count: number }>;
   /** 命ノ星座で効果継続時間が延びる「(n凸)」アクションの生成結果 */
-  constellationVariants: ConstellationVariantReport;
+  constellations: ConstellationReport;
   errors: string[];
 }
 
@@ -576,7 +576,7 @@ export async function generateCharacterMaster(
     placeholderDurations: [],
     missingCooldowns: [],
     unresolvedGoLines: [],
-    constellationVariants: { added: [], unreviewed: [], errors: [] },
+    constellations: emptyConstellationReport(),
     errors,
   };
 
@@ -619,6 +619,14 @@ export async function generateCharacterMaster(
   const englishById = new Map(charsEn.map(c => [c.id, c.name]));
   const talentByName = new Map(talentsJa.map(t => [t.name, t]));
   const talentById = new Map(talentsJa.map(t => [t.id, t]));
+  // 凸データの id は天賦と同じ規則（公式キャラID - 10000000）× 100 + 1。旅人は元素ごとに別エントリ（名前 "旅人 (風元素)" で判別）
+  const constellationById = new Map(constellationsJa.map(c => [c.id, c]));
+  const travelerConstellationByElement = new Map<ElementType, GenshinDbConstellation>();
+  for (const c of constellationsJa) {
+    const m = /^旅人\s*\((.)元素\)$/.exec(c.name);
+    const element = m ? TRAVELER_ELEMENT_JA[m[1]] : undefined;
+    if (element) travelerConstellationByElement.set(element, c);
+  }
   const iconUrl = (c?: GenshinDbCharacter) =>
     c?.images?.filename_icon ? `${ICON_BASE_URL}/${c.images.filename_icon}.png` : (c?.images?.mihoyo_icon ?? '');
 
@@ -633,6 +641,7 @@ export async function generateCharacterMaster(
     avatarUrl: string;
     genshinId: number;
     talent?: GenshinDbTalent;
+    constellation?: GenshinDbConstellation;
     gcsimKey?: string;
     gcsimDir?: string;
     /** 旅人: 空・蛍でフレームを分けて組み立てる */
@@ -662,6 +671,7 @@ export async function generateCharacterMaster(
       avatarUrl: iconUrl(c),
       genshinId: c.id,
       talent,
+      constellation: constellationById.get((c.id - 10000000) * 100 + 1),
       gcsimKey,
       gcsimDir: gcsimKey ? dirByKey.get(gcsimKey) : undefined,
     });
@@ -684,6 +694,7 @@ export async function generateCharacterMaster(
       avatarUrl: iconUrl(aether),
       genshinId: AETHER_ID,
       talent: t,
+      constellation: travelerConstellationByElement.get(element),
       gcsimKey: charDm.data[`aether${element}`] ? `aether${element}` : undefined,
       gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
       genderSplit: true,
@@ -746,7 +757,7 @@ export async function generateCharacterMaster(
       }
     }
 
-    characters.push({
+    const character: CharacterConfig = {
       id: u.id,
       name: u.name,
       englishName: u.englishName,
@@ -760,11 +771,11 @@ export async function generateCharacterMaster(
       availableActions: actions,
       passiveEffects: buildPassiveEffects(u.id, [u.talent?.passive1, u.talent?.passive2]),
       source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },
-    });
+    };
+    // 命ノ星座（1〜6凸）の段階データ。確認済みの効果継続時間の延長を含む
+    if (u.constellation) character.constellations = buildConstellations(character, u.constellation, report.constellations);
+    characters.push(character);
   }
-
-  // 5. 命ノ星座で効果継続時間が延びるアクションを「(n凸)」付きの別アクションとして追加
-  report.constellationVariants = applyConstellationVariants(characters, constellationsJa);
 
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;

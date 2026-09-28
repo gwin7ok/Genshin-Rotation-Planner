@@ -95,6 +95,26 @@ export interface PassiveEffectDefinition {
   dataSource?: { duration?: string; cooldown?: string };
 }
 
+export type ConstellationLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+/** 命ノ星座の1段階（マスターデータ） */
+export interface CharacterConstellationData {
+  level: ConstellationLevel;
+  name: string;
+  description: string;
+  /** この段階で変わるアクションの値（今は効果継続時間の延長のみ） */
+  actionChanges?: ConstellationActionChange[];
+}
+
+export interface ConstellationActionChange {
+  /** 変わるアクションの定義 ID（例: "10000023-pyro_q"） */
+  actionId: string;
+  /** 変更後の効果継続時間（秒） */
+  effectDuration?: number;
+  /** 根拠の説明文の抜粋 */
+  source?: string;
+}
+
 /** 出場ブロックに登録した発動バフ（固有天賦） */
 export interface PassiveTriggerInstance {
   id: string;
@@ -168,12 +188,15 @@ export interface CharacterConfig {
   artifactSetId?: string;
   /** 聖遺物の組み合わせ。'2+2' は聖遺物の発動バフなし（未指定は '4pc'） */
   artifactSetMode?: ArtifactSetMode;
+  /** 凸数（0〜6。未指定時は星4=6/星5=0） */
   constellation?: number;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
   availableActions: ActionDefinition[];
   /** 固有天賦の効果（発動バフとして出場ブロックに登録できる） */
   passiveEffects?: PassiveEffectDefinition[];
+  /** 命ノ星座（1〜6凸）の段階データ。凸数以下の段階を累積で適用する */
+  constellations?: CharacterConstellationData[];
 
   /** ユーザーが DB 管理画面で作成・編集したキャラ */
   isCustom?: boolean;

@@ -11,6 +11,7 @@ import {
 import { GenshinDatabase } from '../types/database';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
+import { CharacterModel } from '../models/CharacterModel';
 
 /** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
 export interface BuffOverlapSegment {
@@ -117,6 +118,7 @@ export function calculateRotation(
     const rawStint = rawStints[sIdx];
     const char = characterMap.get(rawStint.characterId);
     if (!char) continue;
+    const charActions = CharacterModel.fromConfig(char).actions;
 
     const stintStartTime = currentTime;
     const computedActions: CharacterActionInstance[] = [];
@@ -164,8 +166,8 @@ export function calculateRotation(
       };
       computedActions.push(computedAction);
 
-      // CT・効果継続時間はアクション定義ごとに持つ
-      const actionDef = char.availableActions.find(a => a.id === act.actionTypeId);
+      // CT・効果継続時間はアクション定義ごとに持つ（凸の変更を適用済み）
+      const actionDef = charActions.find(a => a.id === act.actionTypeId);
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
       // 個別に変更された CT があれば優先
       const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;

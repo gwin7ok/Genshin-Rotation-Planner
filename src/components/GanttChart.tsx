@@ -114,7 +114,7 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
 
   for (const key of sortedKeys) {
     const spans = byId.get(key)!.sort((a, b) => a.startTime - b.startTime);
-    const sample = spans.find(s => !(s as any).isCarryOver) || spans[0];
+    const sample = spans.find(s => !s.isCarryOver) || spans[0];
     const classification = getBuffClassification(sample);
     const cleanName = sample.name.replace(/^[^:]+:\s*/, '');
 
@@ -1408,7 +1408,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }`}
                                         title={
                                           hasCollision
-                                            ? `【⚠️ ${act.hasCTCollision ? 'CT衝突エラー' : '2周目CT衝突エラー'}】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
+                                            ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
                                             : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
                                         }
                                       >
@@ -1436,7 +1436,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {allStintSkillCDs.length > 0 && (
                             <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                               {allStintSkillCDs.map(cd => {
-                                const isCarryOver = Boolean((cd as any).isCarryOver);
+                                const isCarryOver = Boolean(cd.isCarryOver);
                                 if (cd.startTime >= totalDuration) return null;
                                 const visualEnd = Math.min(totalDuration, cd.endTime);
                                 const startX = cd.startTime * pixelsPerSecond;
@@ -1490,7 +1490,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {allStintBurstCDs.length > 0 && (
                             <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                               {allStintBurstCDs.map(cd => {
-                                const isCarryOver = Boolean((cd as any).isCarryOver);
+                                const isCarryOver = Boolean(cd.isCarryOver);
                                 if (cd.startTime >= totalDuration) return null;
                                 const visualEnd = Math.min(totalDuration, cd.endTime);
                                 const startX = cd.startTime * pixelsPerSecond;
@@ -1542,13 +1542,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
                           {/* --- Row 4+: Active Buffs & Summons (Height: h-6 = 24px each) --- */}
                           {stintBuffRows.map((bRow, rIdx) => {
-                            const regularStarts = bRow.spans.filter(s => !(s as any).isCarryOver).map(s => s.startTime);
+                            const regularStarts = bRow.spans.filter(s => !s.isCarryOver).map(s => s.startTime);
                             const minRegularStart = regularStarts.length > 0 ? Math.min(...regularStarts) : Infinity;
 
                             return (
                               <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                                 {bRow.spans.map(buff => {
-                                  const isCarryOver = Boolean((buff as any).isCarryOver);
+                                  const isCarryOver = Boolean(buff.isCarryOver);
                                   if (buff.startTime >= totalDuration) return null;
                                   
                                   // 重複発動しないため、持ち越しバーは通常発動開始位置（+接続用のわずかな余白0.05s）で終了させ、裏側にはみ出させない

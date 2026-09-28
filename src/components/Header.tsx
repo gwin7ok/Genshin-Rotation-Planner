@@ -192,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-purple-900/90 text-purple-200 border border-purple-500 shadow-sm shadow-purple-500/20'
                   : 'bg-slate-800 text-slate-300 border border-slate-700'
               }`}
-              title={`再生周回数: 現在${playbackCycleCount}周目（一時停止中は周回数を維持、リセットで1周目に戻ります）`}
+              title={`再生周回数: 現在${playbackCycleCount}周目（一時停止中やループ区間内のシークでは周回数を維持。初動部分へのシークやリセットで1周目に戻ります）`}
             >
               {playbackCycleCount}周目
             </span>

@@ -352,9 +352,30 @@ export function calculateRotation(
   // CT違反の判定（1周目・2周目を区別せず、ループを必要な周数だけ並べた時間軸で時刻順に判定）
   checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod);
 
+  // 同じ効果を再発動したら、前の発動の効果はそこで終わる（残りは上書きされる）
+  endAtNextStart(activeBuffs, b => b.buffId);
+  endAtNextStart(passiveSpans, p => `${p.characterId}:${p.passiveEffectId}`);
+
   const carryOverCooldowns: CooldownSpan[] = [];
   const carryOverBuffs: ActiveBuffSpan[] = [];
   const carryOverPassives: PassiveSpan[] = [];
+
+  // 効果の折り返し部分: ループ先頭から残り時間分。ループ区間で同じ効果を再発動したらそこで終わる。
+  // 本体の終了時刻も、折り返し後の実際の終了（totalDuration + 折り返し部分の長さ）に合わせる
+  const wrapEffect = (span: { id: string; startTime: number; endTime: number }, sameEffect: { startTime: number }[]) => {
+    const nextStart = Math.min(...sameEffect.filter(s => s.startTime >= loopStartTime).map(s => s.startTime));
+    const end = Number(Math.min(totalDuration, loopStartTime + (span.endTime - totalDuration), nextStart).toFixed(3));
+    span.endTime = totalDuration + Math.max(0, end - loopStartTime);
+    if (end <= loopStartTime + 0.02) return null;
+    return {
+      startTime: loopStartTime,
+      endTime: end,
+      duration: end - loopStartTime,
+      isCarryOver: true,
+      originalStartTime: span.startTime,
+      sourceId: span.id,
+    };
+  };
 
   if (loopPeriod > 0.05) {
     // 1. スキルCTの2周目折り返し
@@ -399,35 +420,16 @@ export function calculateRotation(
 
     // 3. アクション効果バフの2周目折り返し（発動パッシブバフは除外）
     for (const b of activeBuffs) {
-      if (b.origin !== 'passive' && b.endTime > totalDuration + 0.02) {
-        const overflow = Number((b.endTime - totalDuration).toFixed(3));
-        carryOverBuffs.push({
-          ...b,
-          id: `wrap_buff_${b.id}`,
-          buffId: b.buffId,
-          startTime: loopStartTime,
-          endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
-          duration: overflow,
-          isCarryOver: true,
-          originalStartTime: b.startTime,
-        });
-      }
+      if (b.origin === 'passive' || b.endTime <= totalDuration + 0.02) continue;
+      const carry = wrapEffect(b, activeBuffs.filter(x => x.buffId === b.buffId));
+      if (carry) carryOverBuffs.push({ ...b, ...carry, id: `wrap_buff_${b.id}` });
     }
 
     // 4. 発動バフ（固有天賦・武器・聖遺物）の2周目折り返し
     for (const p of passiveSpans) {
-      if (p.duration > 0 && p.endTime > totalDuration + 0.02) {
-        const overflow = Number((p.endTime - totalDuration).toFixed(3));
-        carryOverPassives.push({
-          ...p,
-          id: `wrap_passive_buff_${p.id}`,
-          startTime: loopStartTime,
-          endTime: Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3))),
-          duration: overflow,
-          isCarryOver: true,
-          originalStartTime: p.startTime,
-        });
-      }
+      if (p.duration <= 0 || p.endTime <= totalDuration + 0.02) continue;
+      const carry = wrapEffect(p, passiveSpans.filter(x => x.characterId === p.characterId && x.passiveEffectId === p.passiveEffectId));
+      if (carry) carryOverPassives.push({ ...p, ...carry, id: `wrap_passive_buff_${p.id}` });
     }
   }
 
@@ -479,6 +481,18 @@ interface CooldownEvent {
 }
 
 const CT_TOLERANCE_SEC = 0.05;
+
+function endAtNextStart<T extends { startTime: number; endTime: number }>(spans: T[], effectKey: (s: T) => string): void {
+  const byKey = new Map<string, T[]>();
+  for (const s of spans) byKey.set(effectKey(s), [...(byKey.get(effectKey(s)) ?? []), s]);
+  for (const list of byKey.values()) {
+    list.sort((a, b) => a.startTime - b.startTime);
+    list.forEach((s, i) => {
+      const next = list[i + 1];
+      if (next && next.startTime < s.endTime) s.endTime = next.startTime;
+    });
+  }
+}
 
 /**
  * CT違反をまとめて判定する（1周目と2周目を1本の時間軸に並べ、同じ CT を共有する発動を時刻順に見ていく）。

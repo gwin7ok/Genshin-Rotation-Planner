@@ -159,7 +159,6 @@ interface GanttChartProps {
   carryOverCooldowns?: CooldownSpan[];
   carryOverBuffs?: ActiveBuffSpan[];
   carryOverPassives?: PassiveSpan[];
-  playbackCycleCount?: number;
   /** 再生開始からの累積時間（周をまたいでも増え続ける） */
   elapsedTime: number;
 }
@@ -179,7 +178,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   carryOverCooldowns = [],
   carryOverBuffs = [],
   carryOverPassives = [],
-  playbackCycleCount = 1,
   elapsedTime,
   onReorderCharacters,
   onReorderCharactersAndStints,
@@ -200,11 +198,21 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   // Loop marker dragging state
   const [isDraggingLoopMarker, setIsDraggingLoopMarker] = useState<boolean>(false);
 
-  // 2周目以降突入中フラグ（一時停止中も維持、リセットで1に戻る）
-  const isCycle2Active = (playbackCycleCount ?? 1) >= 2;
   // 持ち越しバーは、累積時間が元の発動位置を通過するまでグレー（まだ発動していない）
   const isCarryOverActive = (originalStartTime?: number) =>
     originalStartTime !== undefined && elapsedTime >= originalStartTime;
+
+  // 再生バーが重なっている効果 → 残り秒数（本体と折り返し部分は同じ効果として本体のIDで扱う）
+  const runningEffects = new Map<string, number>();
+  for (const s of [...activeBuffs.filter(b => b.origin !== 'passive'), ...passiveSpans.filter(p => p.duration > 0)]) {
+    if (s.startTime <= activeTime && activeTime < s.endTime) runningEffects.set(s.id, s.endTime - activeTime);
+  }
+  for (const s of [...carryOverBuffs, ...carryOverPassives]) {
+    if (s.sourceId && isCarryOverActive(s.originalStartTime) && s.startTime <= activeTime && activeTime < s.endTime) {
+      runningEffects.set(s.sourceId, s.endTime - activeTime);
+    }
+  }
+  const effectRemaining = (span: { id: string; sourceId?: string }) => runningEffects.get(span.sourceId ?? span.id);
 
   // 統合出場トラックの出場ボックスのドラッグ（出場順の入れ替え）
   const [draggingTrackStint, setDraggingTrackStint] = useState<{
@@ -1448,8 +1456,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
                                 const isBarActive = !isCarryOver || isCarryOverActive(cd.originalStartTime);
-                                const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
-                                const remTime = Math.max(0, cd.endTime - activeTime);
 
                                 const violatingAction = !isCarryOver
                                   ? stint.actions.find(a => a.id === cd.actionInstanceId && a.hasCTCollision)
@@ -1471,9 +1477,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       isCarryOver && !isBarActive
                                         ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
                                         : isCarryOver
-                                        ? isCurrentlyRunning
-                                          ? 'bg-sky-900 border-sky-300 text-white ring-1 ring-sky-300 shadow-md font-bold'
-                                          : 'bg-sky-950/90 border-sky-400 text-sky-200'
+                                        ? 'bg-sky-950/90 border-sky-400 text-sky-200'
                                         : 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300'
                                     }`}
                                     title={
@@ -1483,7 +1487,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   >
                                     <span className="truncate">
-                                      ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
+                                      ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>
@@ -1502,8 +1506,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 const startX = cd.startTime * pixelsPerSecond;
                                 const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
                                 const isBarActive = !isCarryOver || isCarryOverActive(cd.originalStartTime);
-                                const isCurrentlyRunning = isCycle2Active && activeTime >= cd.startTime && activeTime < cd.endTime;
-                                const remTime = Math.max(0, cd.endTime - activeTime);
 
                                 const violatingAction = !isCarryOver
                                   ? stint.actions.find(a => a.id === cd.actionInstanceId && a.hasCTCollision)
@@ -1525,9 +1527,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       isCarryOver && !isBarActive
                                         ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
                                         : isCarryOver
-                                        ? isCurrentlyRunning
-                                          ? 'bg-sky-900 border-sky-300 text-white ring-1 ring-sky-300 shadow-md font-bold'
-                                          : 'bg-sky-950/90 border-sky-400 text-sky-200'
+                                        ? 'bg-sky-950/90 border-sky-400 text-sky-200'
                                         : 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300'
                                     }`}
                                     title={
@@ -1537,7 +1537,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   >
                                     <span className="truncate">
-                                      ⏱️ {isCarryOver ? '[持越] ' : ''}Q-CT {isCarryOver && isCurrentlyRunning ? `(残${remTime.toFixed(1)}s)` : `${(cd.endTime - cd.startTime).toFixed(1)}s`}
+                                      ⏱️ {isCarryOver ? '[持越] ' : ''}Q-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>
@@ -1548,27 +1548,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
                           {/* --- Row 4+: Active Buffs & Summons (Height: h-6 = 24px each) --- */}
                           {stintBuffRows.map((bRow, rIdx) => {
-                            const regularStarts = bRow.spans.filter(s => !s.isCarryOver).map(s => s.startTime);
-                            const minRegularStart = regularStarts.length > 0 ? Math.min(...regularStarts) : Infinity;
-
                             return (
                               <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                                 {bRow.spans.map(buff => {
                                   const isCarryOver = Boolean(buff.isCarryOver);
                                   if (buff.startTime >= totalDuration) return null;
-                                  
-                                  // 重複発動しないため、持ち越しバーは通常発動開始位置（+接続用のわずかな余白0.05s）で終了させ、裏側にはみ出させない
-                                  const maxEnd = isCarryOver && minRegularStart < Infinity && buff.endTime > minRegularStart
-                                    ? Math.min(buff.endTime, minRegularStart + 0.05)
-                                    : buff.endTime;
-                                  const visualEnd = Math.min(totalDuration, maxEnd);
-                                  if (visualEnd <= buff.startTime) return null;
+                                  const visualEnd = Math.min(totalDuration, buff.endTime);
 
                                   const isBarActive = !isCarryOver || isCarryOverActive(buff.originalStartTime);
                                   const startX = buff.startTime * pixelsPerSecond;
                                   const width = Math.max(16, (visualEnd - buff.startTime) * pixelsPerSecond);
-                                  const isBuffActive = isBarActive && buff.startTime <= activeTime && activeTime < buff.endTime;
-                                  const remaining = Math.max(0, buff.endTime - activeTime);
+                                  const remaining = effectRemaining(buff);
+                                  const isBuffActive = remaining !== undefined;
 
                                   return (
                                     <div
@@ -1609,12 +1600,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             const badgeCfg = getBuffBadgeConfig(category);
                             const barCommon = 'absolute h-3.5 rounded text-[9px] flex items-center px-1.5 border select-none shadow-sm transition-all';
 
-                            const regularStarts = grp.regularPassives.map(p => {
-                              const isDragging = draggingPassive?.triggerId === p.triggerId;
-                              const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
-                              return (stint.startTime ?? 0) + offset;
-                            });
-                            const minRegularStart = regularStarts.length > 0 ? Math.min(...regularStarts) : Infinity;
+                            const runningRingClass = category === 'weapon'
+                              ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
+                              : category === 'artifact'
+                              ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
+                              : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30';
 
                             return (
                               <React.Fragment key={`passive_group_row_${stint.id}_${grp.passiveEffectId}`}>
@@ -1626,24 +1616,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const isBarActive = isCarryOverActive(cp.originalStartTime);
                                       const start = cp.startTime;
                                       if (start >= totalDuration) return null;
-
-                                      // 重複発動しないため、持ち越しバーは通常発動開始位置（+接続用0.05s）でクリップして裏側へのはみ出しを防止
-                                      const maxEnd = minRegularStart < Infinity && cp.endTime > minRegularStart
-                                        ? Math.min(cp.endTime, minRegularStart + 0.05)
-                                        : cp.endTime;
-                                      const visualEnd = Math.min(totalDuration, maxEnd);
-                                      if (visualEnd <= start) return null;
+                                      const visualEnd = Math.min(totalDuration, cp.endTime);
 
                                       const dur = cp.duration;
-                                      const isBuffActive = isBarActive && start <= activeTime && activeTime < cp.endTime;
-                                      const remaining = Math.max(0, cp.endTime - activeTime);
-                                      const activeRingClass = isBuffActive
-                                        ? category === 'weapon'
-                                          ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
-                                          : category === 'artifact'
-                                          ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
-                                          : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
-                                        : 'opacity-90';
+                                      const remaining = effectRemaining(cp);
+                                      const isBuffActive = remaining !== undefined;
 
                                       return (
                                         <div
@@ -1657,7 +1634,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             !isBarActive
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 hover:opacity-100 hover:border-slate-400'
                                               : badgeCfg.ganttBarClass
-                                          } ${isBarActive ? activeRingClass : ''}`}
+                                          } ${isBuffActive ? runningRingClass : isBarActive ? 'opacity-90' : ''}`}
                                           title={`【1周目からの持ち越し発動バフ（${badgeCfg.label}）】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n${cp.name} (${cp.duration.toFixed(1)}s)\n期間: [${start.toFixed(2)}s ~ ${cp.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`}
                                         >
                                           <span className="truncate flex items-center gap-1">
@@ -1675,10 +1652,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
                                       const start = (stint.startTime ?? 0) + offset;
                                       if (start >= totalDuration) return null;
-                                      const visualEnd = Math.min(totalDuration, start + p.duration);
-                                      const end = start + p.duration;
-                                      const isBuffActive = start <= activeTime && activeTime < end;
-                                      const remaining = Math.max(0, end - activeTime);
+                                      const visualEnd = Math.min(totalDuration, start + (p.endTime - p.startTime));
+                                      const remaining = effectRemaining(p);
+                                      const isBuffActive = remaining !== undefined;
                                       const startDrag = (e: React.MouseEvent) => {
                                         if (e.button !== 0) return;
                                         e.preventDefault();
@@ -1693,13 +1669,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         });
                                       };
                                       const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
-                                      const activeRingClass = isBuffActive
-                                        ? category === 'weapon'
-                                          ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
-                                          : category === 'artifact'
-                                          ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
-                                          : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30'
-                                        : 'opacity-90';
+                                      const activeRingClass = isBuffActive ? runningRingClass : 'opacity-90';
 
                                       return (
                                         <React.Fragment key={`reg_p_eff_${p.id}`}>

@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { extractKeyCatalog } from '../src/masterdata/gcsimKeyCatalog.ts';
+import { KEY_OVERRIDES } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
 
 const REPO = 'genshinsim/gcsim';
 const BRANCH = 'main';
@@ -50,7 +51,7 @@ await Promise.all(Array.from({ length: 20 }, async () => {
   }
 }));
 
-const { catalog, report } = extractKeyCatalog(files, tree.sha);
+const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES);
 
 // 1 キー 1 行（差分が読みやすく、ファイルが大きくなりすぎないように）
 const lines = catalog.entries.map(e => '    ' + JSON.stringify(e));
@@ -65,6 +66,8 @@ console.log(`キー登録の呼び出し ${report.totalCalls} 件: 解決 ${repo
 console.log(`辞書のキー ${catalog.entries.length} 件（パターン ${catalog.entries.filter(e => e.isPattern).length}）`);
 console.log('分類:', JSON.stringify(report.byCategory));
 console.log('種類の候補:', JSON.stringify(report.byKind));
+console.log(`手で補う一覧を適用: ${report.manualCount} 件`);
+if (report.overridesMissing.length > 0) console.log(`  辞書に無い（gcsim の更新で消えた・書き間違い）: ${report.overridesMissing.join(', ')}`);
 console.log(`定義場所が複数にまたがるキー ${report.ambiguous.length} 件:`);
 for (const a of report.ambiguous) console.log(`  ${a.key} ← ${a.places.join(' / ')}`);
 console.log(`未解決のキー名 ${report.unresolved.length} 件:`);

@@ -13,7 +13,8 @@
     "build:master": "node scripts/build-character-master.ts",
     "build:equipment": "node scripts/build-equipment-master.ts",
     "build:catalog": "node scripts/build-key-catalog.ts",
-    "check:catalog": "node scripts/check-catalog-sample.mjs"
+    "check:catalog": "node scripts/check-catalog-sample.mjs",
+    "coverage:catalog": "node scripts/run-catalog-coverage.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

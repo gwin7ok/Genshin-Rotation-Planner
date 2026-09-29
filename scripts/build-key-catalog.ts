@@ -13,6 +13,7 @@ import { KEY_OVERRIDES } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
 
 const REPO = 'genshinsim/gcsim';
 const BRANCH = 'main';
+const observedPath = path.join(process.cwd(), 'src/data/gcsim_key_observed.json');
 const outputPath = path.join(process.cwd(), 'src/data/gcsim_key_catalog.json');
 
 /** キーの登録を含みうるソース（キャラ・武器・聖遺物・テンプレート・シミュレーションの設定） */
@@ -51,7 +52,7 @@ await Promise.all(Array.from({ length: 20 }, async () => {
   }
 }));
 
-const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES);
+const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined);
 
 // 1 キー 1 行（差分が読みやすく、ファイルが大きくなりすぎないように）
 const lines = catalog.entries.map(e => '    ' + JSON.stringify(e));
@@ -68,6 +69,7 @@ console.log('分類:', JSON.stringify(report.byCategory));
 console.log('種類の候補:', JSON.stringify(report.byKind));
 console.log(`手で補う一覧を適用: ${report.manualCount} 件`);
 if (report.overridesMissing.length > 0) console.log(`  辞書に無い（gcsim の更新で消えた・書き間違い）: ${report.overridesMissing.join(', ')}`);
+console.log(`実行のログで確認できたキー: 辞書にあった ${report.observedHits} 件、辞書に無く追加 ${report.observedAdded} 件（gcsim_key_observed.json）`);
 console.log(`定義場所が複数にまたがるキー ${report.ambiguous.length} 件:`);
 for (const a of report.ambiguous) console.log(`  ${a.key} ← ${a.places.join(' / ')}`);
 console.log(`未解決のキー名 ${report.unresolved.length} 件:`);

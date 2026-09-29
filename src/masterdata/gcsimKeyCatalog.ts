@@ -65,8 +65,12 @@ export interface KeyCatalogEntry {
   autoKind?: KeyKind;
   autoCategory?: KeyCategory;
   sources: KeySource[];
-  /** auto = 自動生成のみ、manual = 手で補う一覧で上書き・追記あり */
-  source: 'auto' | 'manual';
+  /** gcsim の実行（全キャラ・武器・聖遺物）のログで実際に出たキー */
+  observed?: boolean;
+  /** auto = 自動生成のみ、manual = 手で補う一覧で上書き・追記あり、observed = ソースから読めず、実行のログで確認できたキー */
+  source: 'auto' | 'manual' | 'observed';
+  /** observed のとき、ディレクトリが複数のキー（複数の武器・キャラ）を持つ場合の全て */
+  gcsimKeys?: string[];
 }
 
 /** 手で補う一覧（src/masterdata/gcsimKeyCatalogOverrides.ts）の1件 */
@@ -97,6 +101,9 @@ export interface KeyCatalogReport {
   byKind: Record<string, number>;
   /** 手で補う一覧を適用したキー数 */
   manualCount: number;
+  /** 実行のログで確認できたキーのうち、辞書にあったもの・辞書に無く追加したもの */
+  observedHits: number;
+  observedAdded: number;
   /** 手で補う一覧に書いてあるのに辞書に無いキー（gcsim の更新で消えた・書き間違い） */
   overridesMissing: string[];
 }
@@ -374,6 +381,59 @@ function callBody(text: string, start: number): string | undefined {
 }
 
 // ---------------------------------------------------------------------------
+// 実行で確認できたキー
+// ---------------------------------------------------------------------------
+
+/** scripts/run-catalog-coverage.mjs が書き出す、gcsim の実行のログで出たキー */
+export interface ObservedKeys {
+  entries: Array<{
+    key: string;
+    api: 'status' | 'mod';
+    permanent?: boolean;
+    durationFrames?: number;
+    /** 出したキャラ・武器・聖遺物（`character:<キー>` など。最大 6 件） */
+    subjects: string[];
+  }>;
+}
+
+/** パターンのキー（`durin-a1-{element}` / `scroll-4pc-*`）に一致する正規表現 */
+function patternToRegExp(e: KeyCatalogEntry): RegExp {
+  const escaped = e.key.replace(/[.+?^$()|[\]\\]/g, '\\$&');
+  return new RegExp('^' + escaped.replace('{element}', `(${(e.elements ?? []).join('|')})`).replace(/\*/g, '.*') + '$');
+}
+
+/** 実行のログにだけ出たキーから、辞書のエントリを作る。持ち主は、そのキーを出した対象 */
+function entryFromObserved(o: ObservedKeys['entries'][number]): KeyCatalogEntry {
+  const subjects = o.subjects.map(s => {
+    const [type, key] = s.split(':');
+    return { type: type as 'character' | 'weapon' | 'artifact', key };
+  });
+  const first = subjects[0];
+  // 多くの対象が同じキーを出す（ダッシュ・夜魂の共通処理など）ものは、システムの効果
+  const shared = subjects.length >= 5;
+  const category: KeyCategory = shared ? 'system'
+    : first.type === 'weapon' ? 'weapon'
+    : first.type === 'artifact' ? 'artifact'
+    : /-a[14]($|-)/.test(o.key) ? 'talent'
+    : /-c[1-6]($|-)/.test(o.key) ? 'constellation'
+    : 'character';
+  const owner: KeyOwner = shared
+    ? { type: 'system', dir: 'runtime', gcsimKey: 'shared' }
+    : { type: first.type, dir: `${first.type}s/${first.key}`, gcsimKey: first.key, ...(subjects.length > 1 ? { gcsimKeys: subjects.map(s => s.key) } : {}) };
+  return {
+    key: o.key,
+    category,
+    owner,
+    kind: guessKind(o.key, o.durationFrames),
+    ...(o.permanent ? { permanent: true } : {}),
+    ...(o.durationFrames !== undefined ? { durationFrames: o.durationFrames } : {}),
+    observed: true,
+    sources: [{ file: 'gcsim 実行のログ', api: o.api }],
+    source: 'observed',
+  };
+}
+
+// ---------------------------------------------------------------------------
 // 抽出
 // ---------------------------------------------------------------------------
 
@@ -399,6 +459,7 @@ export function extractKeyCatalog(
   gcsimCommit: string,
   allPaths: string[] = [],
   overrides: Record<string, KeyOverride> = {},
+  observed?: ObservedKeys,
 ): { catalog: KeyCatalog; report: KeyCatalogReport } {
   const ownerKeys = buildOwnerKeys(allPaths);
   const withKeys = (owner: KeyOwner): KeyOwner => {
@@ -418,7 +479,7 @@ export function extractKeyCatalog(
 
   const raws: RawKey[] = [];
   const report: KeyCatalogReport = {
-    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], byCategory: {}, byKind: {}, manualCount: 0, overridesMissing: [],
+    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], byCategory: {}, byKind: {}, manualCount: 0, observedHits: 0, observedAdded: 0, overridesMissing: [],
   };
 
   for (const [path, text] of Object.entries(files)) {
@@ -505,6 +566,36 @@ export function extractKeyCatalog(
     entries.push(entry);
     report.byCategory[entry.category] = (report.byCategory[entry.category] ?? 0) + 1;
     report.byKind[entry.kind] = (report.byKind[entry.kind] ?? 0) + 1;
+  }
+
+  // 実行で確認できたキー（scripts/run-catalog-coverage.mjs の結果）: 辞書にあれば observed の印、無ければ追加する
+  if (observed) {
+    const matchers = entries.map(e => ({ e, re: e.isPattern ? patternToRegExp(e) : undefined }));
+    const find = (key: string) => matchers.find(m => (m.re ? m.re.test(key) : m.e.key === key))?.e;
+    for (const o of observed.entries) {
+      const existing = find(o.key);
+      if (existing) {
+        existing.observed = true;
+        report.observedHits++;
+        continue;
+      }
+      const entry = entryFromObserved(o);
+      const override = overrides[o.key];
+      if (override) {
+        entry.name = override.name;
+        if (override.kind) entry.kind = override.kind;
+        if (override.category) entry.category = override.category;
+        if (override.cooldownOf) entry.cooldownOf = override.cooldownOf;
+        if (override.note) entry.note = override.note;
+        report.manualCount++;
+      }
+      entries.push(entry);
+      matchers.push({ e: entry, re: undefined });
+      report.observedAdded++;
+      report.byCategory[entry.category] = (report.byCategory[entry.category] ?? 0) + 1;
+      report.byKind[entry.kind] = (report.byKind[entry.kind] ?? 0) + 1;
+    }
+    entries.sort((a, b) => a.key.localeCompare(b.key));
   }
 
   const known = new Set(entries.map(e => e.key));

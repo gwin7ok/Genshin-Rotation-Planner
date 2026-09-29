@@ -98,9 +98,15 @@ export default function App() {
   }, [party, stints, loopStartIndex, switchDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
+  // gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。編集したら消す（結果が古くなるため）
+  const [gcsimCtWaits, setGcsimCtWaits] = useState<Record<string, number> | null>(null);
+  useEffect(() => {
+    setGcsimCtWaits(null);
+  }, [characters, visibleStints, switchDelay, loopStartIndex]);
+
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex });
-  }, [characters, visibleStints, switchDelay, database, loopStartIndex]);
+    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex, externalCtWaits: gcsimCtWaits ?? undefined });
+  }, [characters, visibleStints, switchDelay, database, loopStartIndex, gcsimCtWaits]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -504,6 +510,9 @@ export default function App() {
         copied={gcsimCopied}
         onCopyAgain={() => gcsimResult && void copyGcsimText(gcsimResult.config)}
         ctIssues={ctViolationIssues}
+        onCtWaits={setGcsimCtWaits}
+        stints={visibleStints}
+        onApplyStints={updateStints}
       />
 
       {/* Help & Reordering Guide Modal */}

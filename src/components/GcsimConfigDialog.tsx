@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2 } from 'lucide-react';
+import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2, Play } from 'lucide-react';
 import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
-import { validateGcsimConfig, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
+import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
+import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
+import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
+import { GcsimLogSummaryView } from './GcsimLogSummaryView';
+
+/** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
+const DEFAULT_SEED = 1;
 
 interface GcsimConfigDialogProps {
   isOpen: boolean;
@@ -19,11 +25,20 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
+  // gcsim の実行結果の読み取り（6-2 の確認用。書き戻しはしない）
+  const [running, setRunning] = useState(false);
+  const [runOutcome, setRunOutcome] = useState<
+    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string }
+    | { status: 'error' | 'unreachable'; message: string }
+    | null
+  >(null);
 
   // ポップアップを開き直す・設定文が変わったら、前回のチェック結果を消す
   useEffect(() => {
     setValidation(null);
     setValidating(false);
+    setRunOutcome(null);
+    setRunning(false);
   }, [isOpen, result?.config]);
 
   if (!isOpen || !result) return null;
@@ -35,6 +50,20 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const res = await validateGcsimConfig(target);
     setValidating(false);
     setValidation(res);
+  };
+  const handleRun = async () => {
+    setRunning(true);
+    setRunOutcome(null);
+    const res = await runGcsimSample(result.config, DEFAULT_SEED);
+    if (res.status !== 'ok') {
+      setRunning(false);
+      setRunOutcome({ status: res.status, message: res.message });
+      return;
+    }
+    const catalog = await loadKeyCatalog();
+    const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
+    setRunning(false);
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit });
   };
   const errors = result.warnings.filter(w => w.level === 'error');
   const warns = result.warnings.filter(w => w.level === 'warn');
@@ -133,6 +162,34 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                 {validation.status === 'invalid' && <div className="font-bold mb-0.5">文法エラー</div>}
                 {validation.message}
               </div>
+            )}
+          </div>
+
+          {/* gcsim の実行と読み取り結果（6-2 の確認用） */}
+          <div className="space-y-1.5">
+            <button
+              onClick={handleRun}
+              disabled={running || !result.runnable}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-700/80 hover:bg-sky-600 disabled:opacity-50 text-white border border-sky-500/60"
+              title={result.runnable ? 'gcsim ローカルサーバーでこの設定文を1回実行し、ログの読み取り結果を表示します（アプリの値は書き換えません）' : '実行できない要素があります（上の赤い警告を解消してください）'}
+            >
+              {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
+              <span>{running ? '実行中...' : 'gcsim で実行して読み取り結果を見る'}</span>
+            </button>
+            {runOutcome && runOutcome.status !== 'ok' && (
+              <div
+                className={`text-xs rounded-lg px-2.5 py-1.5 border whitespace-pre-wrap break-words ${
+                  runOutcome.status === 'error'
+                    ? 'bg-red-950/50 border-red-800/70 text-red-200'
+                    : 'bg-amber-950/40 border-amber-700/60 text-amber-200'
+                }`}
+              >
+                {runOutcome.status === 'error' && <div className="font-bold mb-0.5">gcsim の実行エラー</div>}
+                {runOutcome.message}
+              </div>
+            )}
+            {runOutcome && runOutcome.status === 'ok' && (
+              <GcsimLogSummaryView summary={runOutcome.summary} members={result.members} seed={runOutcome.seed} gcsimCommit={runOutcome.gcsimCommit} />
             )}
           </div>
 

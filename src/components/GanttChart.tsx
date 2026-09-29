@@ -247,7 +247,42 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     startClientX: number;
     originOffset: number;
     offset: number;
+    /** 出場の開始時刻（発動位置の秒数 = 開始時刻 − これ） */
+    stintStart: number;
+    /** 掴んだバーが表示されている位置（2周目の発動は折り返した位置） */
+    originPos: number;
+    /** ドラッグ開始時に再生位置が2周目以降だった（D40-2） */
+    lapTwo: boolean;
   } | null>(null);
+
+  // 2周目の発動（開始が周の終端以降）の表示位置: ループ先頭 + (開始 − 総時間)。ループの無い編成は表示しない
+  const loopPeriodSec = Math.max(0, totalDuration - loopStartTime);
+  const hasLoop = loopPeriodSec > 0.05;
+  /** 出場の先頭からの秒数の表示（負のときは出場の前） */
+  const fmtOffset = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}`;
+  const passiveDrawPos = (start: number) => (start >= totalDuration - 0.001 && hasLoop ? loopStartTime + Math.max(0, start - totalDuration) : start);
+  /** 再生位置が2周目以降か */
+  const isLapTwoView = hasLoop && elapsedTime >= totalDuration;
+  /**
+   * ドラッグ中の発動位置（出場の先頭からの秒数）を求める（D40-2）。
+   * 再生位置が1周目: 開始時刻 = 掴んだバーの表示位置 + 移動量（ローテの終了より右 = 2周目、範囲は 総時間 + 周期 まで。ループの無い編成は終端まで）
+   * 再生位置が2周目: 表示位置 + 移動量をループ先頭〜終端に収め、2周目の位置（総時間 + (位置 − ループ先頭)）にする
+   */
+  const dragPassiveOffset = (d: { originOffset: number; originPos: number; stintStart: number; lapTwo: boolean }, deltaSec: number) => {
+    let start: number;
+    if (d.lapTwo) {
+      const pos = Math.min(totalDuration, Math.max(loopStartTime, d.originPos + deltaSec));
+      start = totalDuration + (pos - loopStartTime);
+    } else {
+      const max = hasLoop ? totalDuration + loopPeriodSec : totalDuration;
+      // 掴んだバーの表示位置 + 移動量 = ドロップした位置（2周目の発動を掴んだときも、ドロップした位置の1周目に置く）
+      start = Math.min(max, d.originPos + deltaSec);
+    }
+    // 出場の前にも置ける（下限は時間 0）。出場の先頭からの秒数は負になりうる
+    const raw = Math.max(-d.stintStart, start - d.stintStart);
+    // 0.05秒単位。2周目に置いたものは、丸めで周の終端の手前に戻らないよう切り上げる
+    return d.lapTwo ? Math.ceil(raw * 20 - 1e-6) / 20 : Math.round(raw * 20) / 20;
+  };
 
   // Drag and Drop state for timeline action reordering directly on the Gantt Chart
   const [draggedAction, setDraggedAction] = useState<{
@@ -539,8 +574,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     if (!draggingPassive) return;
     const onMove = (e: MouseEvent) => {
       const delta = (e.clientX - draggingPassive.startClientX) / pixelsPerSecond;
-      const raw = Math.max(0, draggingPassive.originOffset + delta);
-      const offset = Math.round(raw * 20) / 20; // 0.05秒単位
+      const offset = dragPassiveOffset(draggingPassive, delta);
       setDraggingPassive(prev => (prev && prev.offset !== offset ? { ...prev, offset } : prev));
     };
     const onUp = () => {
@@ -559,7 +593,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
-  }, [draggingPassive, pixelsPerSecond, stints, onUpdateStints]);
+  }, [draggingPassive, pixelsPerSecond, stints, onUpdateStints, totalDuration, loopStartTime]);
 
   useEffect(() => {
     if (!draggingTrackStint) return;
@@ -1655,6 +1689,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const isBarActive = isCarryOverActive(cp.originalStartTime);
                                       const start = cp.startTime;
                                       if (start >= totalDuration) return null;
+                                      // 2周目の発動そのものは、通常バー側で折り返した位置に表示する
+                                      if ((cp.originalStartTime ?? 0) >= totalDuration) return null;
                                       const visualEnd = Math.min(totalDuration, cp.endTime);
 
                                       const dur = cp.duration;
@@ -1689,8 +1725,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     {grp.regularPassives.map(p => {
                                       const isDragging = draggingPassive?.triggerId === p.triggerId;
                                       const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
-                                      const start = (stint.startTime ?? 0) + offset;
-                                      if (start >= totalDuration) return null;
+                                      const realStart = (stint.startTime ?? 0) + offset;
+                                      // 2周目の発動（開始が周の終端以降）は、折り返した位置に表示し、再生位置が届くまでグレー（D39）
+                                      const isLapTwoBar = realStart >= totalDuration - 0.001;
+                                      const drawX = passiveDrawPos(realStart);
+                                      if (drawX >= totalDuration) return null;
+                                      const start = drawX;
+                                      const isPending = isLapTwoBar && !isCarryOverActive(realStart);
                                       const visualEnd = Math.min(totalDuration, start + (p.endTime - p.startTime));
                                       const remaining = effectRemaining(p);
                                       const isBuffActive = remaining !== undefined;
@@ -1705,10 +1746,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           startClientX: e.clientX,
                                           originOffset: offset,
                                           offset,
+                                          stintStart: stint.startTime ?? 0,
+                                          originPos: drawX,
+                                          lapTwo: isLapTwoView,
                                         });
                                       };
                                       const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
-                                      const activeRingClass = isBuffActive ? runningRingClass : 'opacity-90';
+                                      const activeRingClass = isPending ? 'opacity-60' : isBuffActive ? runningRingClass : 'opacity-90';
 
                                       return (
                                         <React.Fragment key={`reg_p_eff_${p.id}`}>
@@ -1724,9 +1768,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           className={`${barCommon} ${cursor} font-medium border-dashed ${
                                             p.hasCTViolation
                                               ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
+                                              : isPending
+                                              ? 'bg-slate-800/60 border-slate-600/70 text-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${activeRingClass}`}
-                                          title={`【発動バフ（${badgeCfg.label}）】ドラッグで発動位置を調整（出場の先頭から +${offset.toFixed(2)}s）\n${p.name} (${p.duration}s)\n発動: ${start.toFixed(2)}s（出場の先頭から +${offset.toFixed(2)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
+                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）\n${p.name} (${p.duration}s)\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
                                         >
                                           <span className="truncate flex items-center gap-1">
                                             {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}
@@ -1737,7 +1783,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               </span>
                                             )}
                                             {isBuffActive && !p.hasCTViolation ? ` [残${remaining.toFixed(1)}s]` : ''}
-                                            {isDragging ? ` @+${offset.toFixed(2)}s` : ''}
+                                            {isDragging ? ` @${fmtOffset(offset)}s` : ''}
                                           </span>
                                         </div>
                                         </React.Fragment>
@@ -1754,6 +1800,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const isBarActive = isCarryOverActive(cp.originalStartTime);
                                       const start = cp.startTime;
                                       if (start >= totalDuration) return null;
+                                      if ((cp.originalStartTime ?? 0) >= totalDuration) return null;
                                       const cdEnd = cp.cooldownEnd!;
                                       const visualEnd = Math.min(totalDuration, cdEnd);
                                       const cdDur = cdEnd - start;
@@ -1782,8 +1829,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     {grp.regularPassives.map(p => {
                                       const isDragging = draggingPassive?.triggerId === p.triggerId;
                                       const offset = isDragging ? draggingPassive!.offset : p.startTime - (stint.startTime ?? 0);
-                                      const start = (stint.startTime ?? 0) + offset;
-                                      if (start >= totalDuration) return null;
+                                      const realStart = (stint.startTime ?? 0) + offset;
+                                      const isLapTwoBar = realStart >= totalDuration - 0.001;
+                                      const drawX = passiveDrawPos(realStart);
+                                      if (drawX >= totalDuration) return null;
+                                      const start = drawX;
+                                      const isPending = isLapTwoBar && !isCarryOverActive(realStart);
                                       const visualEnd = Math.min(totalDuration, start + p.cooldown);
                                       const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
                                       const startDrag = (e: React.MouseEvent) => {
@@ -1797,6 +1848,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           startClientX: e.clientX,
                                           originOffset: offset,
                                           offset,
+                                          stintStart: stint.startTime ?? 0,
+                                          originPos: drawX,
+                                          lapTwo: isLapTwoView,
                                         });
                                       };
 
@@ -1811,8 +1865,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           onMouseDown={startDrag}
                                           onClick={(e) => e.stopPropagation()}
                                           style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
-                                          className={`${barCommon} ${cursor} font-mono ${badgeCfg.cooldownBarClass}`}
-                                          title={`【${badgeCfg.label}バフのCT】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                          className={`${barCommon} ${cursor} font-mono ${isPending ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60' : badgeCfg.cooldownBarClass}`}
+                                          title={`【${badgeCfg.label}バフのCT${isLapTwoBar ? '・2周目' : ''}】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
                                         >
                                           <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
                                         </div>

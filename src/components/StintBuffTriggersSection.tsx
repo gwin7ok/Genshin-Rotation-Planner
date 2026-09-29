@@ -168,7 +168,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
         {trackBuffs.length === 0 ? (
           <span className="text-[11px] text-slate-500 italic">
             {availableBuffs.length > 0
-              ? '時間のある発動バフはありません（常時・時間の無い効果は、ガントチャートの「全体の行」に表示されます）'
+              ? '時間のある発動バフはありません（常時・時間の無い効果は、ガントチャートの「時間指定のない効果」の行に表示されます）'
               : '発動バフデータがありません（編成設定で武器・聖遺物を選ぶと追加できます）'}
           </span>
         ) : (

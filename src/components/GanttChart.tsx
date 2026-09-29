@@ -1020,9 +1020,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 </div>
               </div>
 
-              {/* 2.2 全体の行（常時の効果・時間の無い固有天賦。D39-4） */}
-              <GlobalBuffRow characters={characters} database={database} />
-
               {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
               <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative">
                 <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
@@ -1832,6 +1829,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </div>
                   );
                 })}
+
+              {/* 時間指定のない効果の行（常時の効果・継続時間の無い固有天賦。D39-4）。最後のキャラ出場行の下 */}
+              <GlobalBuffRow characters={characters} database={database} />
             </div>
 
 

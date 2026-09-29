@@ -19,7 +19,7 @@ const DURATION_PATTERNS = [/継続時間\s*([\d.]+)\s*秒/g, /([\d.]+)\s*秒間/
 const COOLDOWN_PATTERN = /([\d.]+)\s*秒(?:毎|ごと)に\s*(?:1|一)\s*回/;
 
 /** 説明文中の継続時間を、出てくる順に取り出す（同じ位置の重複は除く） */
-function findDurations(text: string): Array<{ value: number; label: string }> {
+export function findDurations(text: string): Array<{ value: number; label: string }> {
   const hits: Array<{ index: number; value: number; label: string }> = [];
   for (const pattern of DURATION_PATTERNS) {
     for (const m of text.matchAll(pattern)) {

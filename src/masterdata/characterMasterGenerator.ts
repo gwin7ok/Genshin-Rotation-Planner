@@ -145,6 +145,8 @@ export interface CharacterGenerationReport {
   missingCooldowns: Array<{ characterId: string; name: string; actionId: string }>;
   /** gcsim の式を評価できなかった行数 */
   unresolvedGoLines: Array<{ characterId: string; file: string; count: number }>;
+  /** 落下攻撃 LP / HP（D48）: 生成した件数と、plunge.go はあるのにフレーム表を選べなかったキャラ */
+  plunge: { lowCount: number; highCount: number; unresolved: Array<{ characterId: string; name: string }> };
   /** CT開始位置（D37 / D44）: 自動で読めた件数・手で補った件数・未設定の一覧・手で補う値との食い違い */
   cooldownStart: {
     read: number;
@@ -343,6 +345,20 @@ function toActionFrames(table: FrameTable, file: string, consts: Map<string, num
 
 const framesToSec = (f: number) => Number((f / 60).toFixed(3));
 
+/**
+ * plunge.go から低・高の落下攻撃のフレーム表を選ぶ。名前が lowPlungeFrames / highPlungeFrames のものを優先し、
+ * 無ければ lowPlungeFramesC のような接尾辞つき、それも無ければ名前に low / high と plunge を含むもの（バイク・炎など特殊形態は除く）。
+ * 全体フレームが 1000 以上のものは、gcsim 側が未実装の仮置き（旅人(空)の 5000）なので使わない
+ */
+function findPlungeTable(tables: FrameTable[], kind: 'low' | 'high'): FrameTable | undefined {
+  const usable = firstOfEachFamily(tables).filter(t => t.total < 1000);
+  const base = (t: FrameTable) => splitTableName(t.name).base;
+  const exact = `${kind}PlungeFrames`;
+  return usable.find(t => base(t) === exact)
+    ?? usable.find(t => base(t).startsWith(exact))
+    ?? usable.find(t => new RegExp(`${kind}.*plunge|plunge.*${kind}`, 'i').test(base(t)) && !/bike|fiery|special/i.test(base(t)));
+}
+
 // ---------------------------------------------------------------------------
 // アクション定義の組み立て
 // ---------------------------------------------------------------------------
@@ -445,6 +461,26 @@ function buildActions(ctx: BuildContext): BuildResult {
     }, framesToSec(table.total)));
   } else {
     actions.push(withDuration({ id: `${id}_ca`, name: '重撃', shortName: 'CA', type: 'charged' }));
+  }
+
+  // --- 落下攻撃 LP / HP（フェーズ3f / D48）: gcsim の plunge.go にフレーム表があるものだけ ------------
+  const plungeFile = file('plunge');
+  if (plungeFile) {
+    for (const kind of [
+      { key: 'low' as const, suffix: 'lp', label: 'LP', name: '落下攻撃(低)', type: 'plunge_low' as const },
+      { key: 'high' as const, suffix: 'hp', label: 'HP', name: '落下攻撃(高)', type: 'plunge_high' as const },
+    ]) {
+      const table = findPlungeTable(plungeFile.tables, kind.key);
+      if (!table) continue;
+      actions.push({
+        id: `${id}_${kind.suffix}`,
+        name: kind.name,
+        shortName: kind.label,
+        type: kind.type,
+        defaultDuration: framesToSec(table.total),
+        frames: toActionFrames(table, 'plunge', plungeFile.consts),
+      });
+    }
   }
 
   // --- 元素スキル (一回押し / 長押し / その他派生) ------------------------------
@@ -617,7 +653,7 @@ function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharact
 // ---------------------------------------------------------------------------
 
 
-const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst'];
+const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst', 'plunge'];
 
 export async function generateCharacterMaster(
   onProgress?: (p: GenerationProgress) => void,
@@ -632,6 +668,7 @@ export async function generateCharacterMaster(
     placeholderDurations: [],
     missingCooldowns: [],
     unresolvedGoLines: [],
+    plunge: { lowCount: 0, highCount: 0, unresolved: [] },
     cooldownStart: { read: 0, manual: 0, unresolved: [], mismatches: [] },
     constellations: emptyConstellationReport(),
     errors,
@@ -812,6 +849,12 @@ export async function generateCharacterMaster(
       ...ctx,
       parsed: parsed && u.genderIndex !== undefined ? genderView(parsed, u.genderIndex) : parsed,
     });
+
+    if (actions.some(a => a.type === 'plunge_low')) report.plunge.lowCount++;
+    if (actions.some(a => a.type === 'plunge_high')) report.plunge.highCount++;
+    if (parsed?.files.plunge && !actions.some(a => a.type === 'plunge_low' || a.type === 'plunge_high')) {
+      report.plunge.unresolved.push({ characterId: u.id, name: u.name });
+    }
 
     // CT開始位置（D37 / D44）: スキル・爆発のアクションに、gcsim の遅れ（または手で補った値）を持たせる
     for (const a of actions) {

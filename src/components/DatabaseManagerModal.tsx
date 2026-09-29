@@ -1695,7 +1695,8 @@ const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character
                       >
                         <option value="normal">通常 (Normal)</option>
                         <option value="charged">重撃 (CA)</option>
-                        <option value="plunge">落下 (PA)</option>
+                        <option value="plunge_low">落下・低 (LP)</option>
+                        <option value="plunge_high">落下・高 (HP)</option>
                         <option value="skill">スキル (E)</option>
                         <option value="skill_hold">スキル長押し (Hold E)</option>
                         <option value="burst">元素爆発 (Q)</option>

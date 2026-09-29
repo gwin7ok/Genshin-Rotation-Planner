@@ -63,7 +63,8 @@ function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: str
     case 'burst': return 'burst';
     case 'dash': return 'dash';
     case 'jump': return 'jump';
-    case 'plunge': return 'lowPlunge';
+    case 'plunge_low': return 'lowPlunge';
+    case 'plunge_high': return 'highPlunge';
     default: return undefined; // 待機など: 全体のフレーム
   }
 }

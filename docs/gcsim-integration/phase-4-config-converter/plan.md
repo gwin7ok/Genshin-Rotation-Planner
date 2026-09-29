@@ -59,7 +59,7 @@ while 1 {
 | `normal` | `attack`（段数に応じて `attack:<n>`） |
 | `combo`（例: N3C） | `attack:3, charge` のように分解 |
 | `charged` | `charge`（弓の狙い撃ちは `aim`） |
-| `plunge` | `low_plunge` / `high_plunge`（どちらかに固定） |
+| `plunge_low` / `plunge_high`（フェーズ3f） | `low_plunge` / `high_plunge`（gcsim は空中状態などの前提条件があり、実行できない場合がある） |
 | `skill` | `skill` |
 | `skill_hold` | `skill[hold=1]`（多段階の長押しはキャラごとの指定が必要） |
 | `skill_reset` | `skill`（リセットの成否は gcsim の乱数。D7 の種の探索はフェーズ6） |

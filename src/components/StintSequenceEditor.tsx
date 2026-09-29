@@ -732,6 +732,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
                 <strong className="font-bold text-cyan-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
               </span>
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                <strong className="font-bold text-white">LP / HP</strong>: 落下攻撃（低 / 高）
+              </span>
             </div>
           </div>
 

@@ -240,9 +240,16 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   <div className="font-bold">アクションの所要時間: {preview.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>
                   {preview.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
-                      {preview.changes.map(c => (
-                        <div key={c.actionId}>{c.name}: {c.before.toFixed(3)}s → {c.after.toFixed(3)}s</div>
-                      ))}
+                      {preview.changes.map(c => {
+                        // 誰の（何番目の出場の）アクションか
+                        const stintIndex = stints.findIndex(st => st.id === c.stintId);
+                        const owner = stintIndex >= 0 ? result.members.find(m => m.characterId === stints[stintIndex].characterId)?.name : undefined;
+                        return (
+                          <div key={c.actionId}>
+                            {owner ?? '?'}{stintIndex >= 0 ? `（出場 #${stintIndex + 1}）` : ''} {c.name}: {c.before.toFixed(3)}s → {c.after.toFixed(3)}s
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                   <button

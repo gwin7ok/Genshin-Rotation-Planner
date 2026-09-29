@@ -12,7 +12,8 @@ export type ActionType =
   | 'normal'     // N（連続した N の段は計算時に自動で数える）
   | 'combo'      // e.g. N3C, 3N3C
   | 'charged'    // CA / Aimed shot
-  | 'plunge'     // PA
+  | 'plunge_low'  // LP（低空落下攻撃）
+  | 'plunge_high' // HP（高空落下攻撃）
   | 'skill'      // E (tap)
   | 'skill_hold' // E (hold)
   | 'skill_reset'// Sacrificial E reset

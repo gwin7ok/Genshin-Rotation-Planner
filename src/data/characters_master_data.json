@@ -136,6 +136,45 @@
         "defaultDuration": 1.183
       },
       {
+        "id": "10000002-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.217,
+        "frames": {
+          "total": 73,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 57,
+            "skill": 58,
+            "burst": 58,
+            "dash": 57,
+            "walk": 72,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000002-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.233,
+        "frames": {
+          "total": 74,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 59,
+            "skill": 58,
+            "burst": 58,
+            "dash": 59,
+            "swap": 61
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000002-cryo_e",
         "name": "元素スキル: 神里流·氷華",
         "shortName": "E",
@@ -2585,6 +2624,48 @@
         "defaultDuration": 1.55
       },
       {
+        "id": "10000006-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 58,
+            "charge": 48,
+            "skill": 58,
+            "burst": 57,
+            "dash": 45,
+            "walk": 66,
+            "swap": 50
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000006-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 60,
+            "charge": 51,
+            "skill": 58,
+            "burst": 59,
+            "dash": 47,
+            "walk": 67,
+            "swap": 52
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000006-electro_e",
         "name": "元素スキル: 蒼雷",
         "shortName": "tE",
@@ -3153,6 +3234,44 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.233,
+        "frames": {
+          "total": 74,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 58,
+            "dash": 47,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000007-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 58,
+            "skill": 60,
+            "burst": 59,
+            "dash": 48,
+            "swap": 62
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000007-cryo_e",
@@ -4538,6 +4657,44 @@
         "defaultDuration": 0.967
       },
       {
+        "id": "10000007-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.233,
+        "frames": {
+          "total": 74,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 58,
+            "dash": 47,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000007-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 58,
+            "skill": 60,
+            "burst": 59,
+            "dash": 48,
+            "swap": 62
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000007-pyro_e",
         "name": "元素スキル: 流火の剣",
         "shortName": "tE",
@@ -4815,6 +4972,47 @@
         "defaultDuration": 1.483
       },
       {
+        "id": "10000014-hydro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 57,
+            "charge": 46,
+            "skill": 44,
+            "burst": 44,
+            "dash": 44,
+            "swap": 48
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000014-hydro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 59,
+            "charge": 49,
+            "skill": 45,
+            "burst": 45,
+            "dash": 45,
+            "jump": 67,
+            "swap": 50
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000014-hydro_e",
         "name": "元素スキル: 公演、開始♪",
         "shortName": "E",
@@ -5075,6 +5273,46 @@
         "defaultDuration": 0.917
       },
       {
+        "id": "10000015-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.233,
+        "frames": {
+          "total": 74,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 55,
+            "skill": 55,
+            "burst": 55,
+            "dash": 45,
+            "walk": 73,
+            "swap": 64
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000015-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 56,
+            "skill": 57,
+            "burst": 56,
+            "dash": 47,
+            "walk": 75,
+            "swap": 67
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000015-cryo_e",
         "name": "元素スキル: 霜の襲撃",
         "shortName": "E",
@@ -5301,6 +5539,45 @@
         "defaultDuration": 0.8
       },
       {
+        "id": "10000016-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.3,
+        "frames": {
+          "total": 78,
+          "hitmark": 36,
+          "cancels": {
+            "attack": 49,
+            "skill": 50,
+            "burst": 49,
+            "dash": 36,
+            "jump": 77,
+            "swap": 59
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000016-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.35,
+        "frames": {
+          "total": 81,
+          "hitmark": 40,
+          "cancels": {
+            "attack": 51,
+            "skill": 53,
+            "burst": 51,
+            "dash": 40,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000016-pyro_e",
         "name": "元素スキル: 逆焔の刃",
         "shortName": "E",
@@ -5524,6 +5801,45 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000020-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.433,
+        "frames": {
+          "total": 86,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 56,
+            "skill": 57,
+            "burst": 57,
+            "dash": 44,
+            "swap": 69
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000020-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.45,
+        "frames": {
+          "total": 87,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 58,
+            "dash": 46,
+            "jump": 86,
+            "swap": 71
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000020-electro_e",
@@ -6075,6 +6391,19 @@
         "defaultDuration": 1.567
       },
       {
+        "id": "10000022-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 0.967,
+        "frames": {
+          "total": 58,
+          "hitmark": 58,
+          "cancels": {},
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000022-anemo_e",
         "name": "元素スキル: 高天の歌",
         "shortName": "tE",
@@ -6356,6 +6685,45 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.15
+      },
+      {
+        "id": "10000023-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 59,
+            "skill": 59,
+            "burst": 58,
+            "dash": 75,
+            "walk": 74,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000023-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "skill": 60,
+            "burst": 60,
+            "walk": 76,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000023-pyro_e",
@@ -7147,6 +7515,39 @@
         "defaultDuration": 0.75
       },
       {
+        "id": "10000026-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.033,
+        "frames": {
+          "total": 62,
+          "cancels": {
+            "attack": 60,
+            "skill": 59,
+            "dash": 60,
+            "jump": 61
+          },
+          "source": "plunge.go:lowPlungeFramesX"
+        }
+      },
+      {
+        "id": "10000026-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "cancels": {
+            "attack": 61,
+            "jump": 65,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFramesX"
+        }
+      },
+      {
         "id": "10000026-anemo_e",
         "name": "元素スキル: 風輪両立",
         "shortName": "E",
@@ -7595,6 +7996,48 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.883
+      },
+      {
+        "id": "10000029-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 57,
+            "charge": 53,
+            "skill": 58,
+            "burst": 47,
+            "dash": 47,
+            "jump": 66,
+            "swap": 50
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000029-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.183,
+        "frames": {
+          "total": 71,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 60,
+            "charge": 55,
+            "skill": 61,
+            "burst": 48,
+            "dash": 48,
+            "jump": 68,
+            "swap": 53
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000029-pyro_e",
@@ -8424,6 +8867,46 @@
         "defaultDuration": 0.917
       },
       {
+        "id": "10000032-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 36,
+          "cancels": {
+            "attack": 45,
+            "skill": 46,
+            "burst": 46,
+            "dash": 36,
+            "walk": 66,
+            "swap": 53
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000032-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "hitmark": 38,
+          "cancels": {
+            "attack": 47,
+            "skill": 46,
+            "burst": 47,
+            "dash": 38,
+            "walk": 67,
+            "swap": 54
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000032-pyro_e",
         "name": "元素スキル: 溢れる情熱",
         "shortName": "tE",
@@ -8963,6 +9446,47 @@
         "defaultDuration": 1.8
       },
       {
+        "id": "10000034-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 39,
+          "cancels": {
+            "attack": 51,
+            "charge": 51,
+            "skill": 51,
+            "burst": 50,
+            "dash": 39,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000034-geo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.367,
+        "frames": {
+          "total": 82,
+          "hitmark": 42,
+          "cancels": {
+            "attack": 53,
+            "charge": 52,
+            "skill": 52,
+            "burst": 52,
+            "dash": 42,
+            "walk": 81,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000034-geo_e",
         "name": "元素スキル: 護心鎧",
         "shortName": "E",
@@ -9234,6 +9758,46 @@
         "defaultDuration": 1.267
       },
       {
+        "id": "10000035-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "skill": 59,
+            "burst": 59,
+            "dash": 46,
+            "walk": 75,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000035-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 59,
+            "skill": 60,
+            "burst": 61,
+            "dash": 46,
+            "jump": 76,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000035-cryo_e",
         "name": "元素スキル: 仙法·寒病鬼差",
         "shortName": "E",
@@ -9467,6 +10031,45 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000036-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.417,
+        "frames": {
+          "total": 85,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 57,
+            "skill": 56,
+            "burst": 56,
+            "dash": 47,
+            "swap": 69
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000036-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.45,
+        "frames": {
+          "total": 87,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 58,
+            "skill": 59,
+            "burst": 58,
+            "dash": 47,
+            "walk": 86,
+            "swap": 71
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000036-cryo_e",
@@ -9990,6 +10593,46 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.933
+      },
+      {
+        "id": "10000038-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.05,
+        "frames": {
+          "total": 63,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 41,
+            "skill": 42,
+            "burst": 41,
+            "dash": 37,
+            "jump": 59,
+            "swap": 46
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000038-geo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "hitmark": 39,
+          "cancels": {
+            "attack": 44,
+            "skill": 43,
+            "burst": 42,
+            "dash": 39,
+            "jump": 61,
+            "swap": 47
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000038-geo_e",
@@ -10784,6 +11427,45 @@
         "defaultDuration": 0.6
       },
       {
+        "id": "10000042-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.217,
+        "frames": {
+          "total": 73,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 57,
+            "skill": 57,
+            "burst": 58,
+            "dash": 46,
+            "swap": 60
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000042-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 59,
+            "skill": 59,
+            "burst": 59,
+            "dash": 48,
+            "walk": 73,
+            "swap": 61
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000042-electro_e",
         "name": "元素スキル: 星辰帰位",
         "shortName": "E",
@@ -11039,6 +11721,47 @@
         "defaultDuration": 1.183
       },
       {
+        "id": "10000043-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 56,
+            "charge": 47,
+            "skill": 45,
+            "burst": 45,
+            "dash": 45,
+            "walk": 65,
+            "swap": 49
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000043-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 59,
+            "charge": 49,
+            "skill": 46,
+            "burst": 46,
+            "dash": 46,
+            "swap": 51
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000043-anemo_e",
         "name": "元素スキル: 風霊作成·六三〇八",
         "shortName": "E",
@@ -11279,6 +12002,48 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000044-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.35,
+        "frames": {
+          "total": 81,
+          "hitmark": 38,
+          "cancels": {
+            "attack": 51,
+            "charge": 51,
+            "skill": 51,
+            "burst": 51,
+            "dash": 38,
+            "walk": 79,
+            "swap": 64
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000044-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.367,
+        "frames": {
+          "total": 82,
+          "hitmark": 40,
+          "cancels": {
+            "attack": 53,
+            "charge": 53,
+            "skill": 52,
+            "burst": 53,
+            "dash": 40,
+            "walk": 81,
+            "swap": 66
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000044-pyro_e",
@@ -11534,6 +12299,46 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.15
+      },
+      {
+        "id": "10000045-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.3,
+        "frames": {
+          "total": 78,
+          "hitmark": 42,
+          "cancels": {
+            "attack": 59,
+            "skill": 60,
+            "burst": 59,
+            "dash": 77,
+            "walk": 74,
+            "swap": 66
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000045-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 43,
+          "cancels": {
+            "attack": 60,
+            "skill": 60,
+            "burst": 60,
+            "dash": 77,
+            "walk": 76,
+            "swap": 67
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000045-cryo_e",
@@ -11821,6 +12626,43 @@
         "defaultDuration": 1.033
       },
       {
+        "id": "10000046-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 58,
+            "skill": 59,
+            "burst": 59,
+            "jump": 74,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000046-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 59,
+            "skill": 60,
+            "burst": 60,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000046-pyro_e",
         "name": "元素スキル: 蝶導来世",
         "shortName": "E",
@@ -12078,6 +12920,46 @@
         "defaultDuration": 0.917
       },
       {
+        "id": "10000047-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.217,
+        "frames": {
+          "total": 73,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 52,
+            "skill": 52,
+            "burst": 51,
+            "dash": 46,
+            "jump": 69,
+            "swap": 53
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000047-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.217,
+        "frames": {
+          "total": 73,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 54,
+            "skill": 53,
+            "burst": 53,
+            "dash": 47,
+            "jump": 69,
+            "swap": 55
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000047-anemo_e",
         "name": "元素スキル: 千早振る",
         "shortName": "tE",
@@ -12329,6 +13211,47 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.317
+      },
+      {
+        "id": "10000048-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.083,
+        "frames": {
+          "total": 65,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 57,
+            "charge": 46,
+            "skill": 57,
+            "burst": 57,
+            "dash": 45,
+            "walk": 66,
+            "swap": 48
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000048-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 58,
+            "charge": 49,
+            "skill": 59,
+            "burst": 59,
+            "dash": 47,
+            "swap": 50
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000048-pyro_e",
@@ -13085,6 +14008,46 @@
         "defaultDuration": 0.8
       },
       {
+        "id": "10000051-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 50,
+            "skill": 51,
+            "burst": 50,
+            "dash": 37,
+            "walk": 79,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000051-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.4,
+        "frames": {
+          "total": 84,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 53,
+            "skill": 54,
+            "burst": 52,
+            "dash": 41,
+            "walk": 82,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000051-cryo_e",
         "name": "元素スキル: 氷潮の渦",
         "shortName": "tE",
@@ -13373,6 +14336,46 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.617
+      },
+      {
+        "id": "10000052-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.6,
+        "frames": {
+          "total": 96,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 60,
+            "skill": 59,
+            "burst": 60,
+            "dash": 80,
+            "jump": 80,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000052-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.65,
+        "frames": {
+          "total": 99,
+          "hitmark": 49,
+          "cancels": {
+            "attack": 61,
+            "skill": 60,
+            "burst": 62,
+            "dash": 84,
+            "jump": 84,
+            "swap": 65
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000052-electro_e",
@@ -14616,6 +15619,47 @@
         "defaultDuration": 2.183
       },
       {
+        "id": "10000057-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.383,
+        "frames": {
+          "total": 83,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 49,
+            "charge": 49,
+            "skill": 48,
+            "burst": 49,
+            "dash": 37,
+            "swap": 60
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000057-geo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.45,
+        "frames": {
+          "total": 87,
+          "hitmark": 40,
+          "cancels": {
+            "attack": 53,
+            "charge": 53,
+            "skill": 51,
+            "burst": 51,
+            "dash": 40,
+            "walk": 85,
+            "swap": 62
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000057-geo_e",
         "name": "元素スキル: 魔殺絶技·岩牛発破！",
         "shortName": "E",
@@ -14839,6 +15883,46 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.6
+      },
+      {
+        "id": "10000058-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "charge": 48,
+            "skill": 58,
+            "burst": 58,
+            "dash": 46,
+            "swap": 50
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000058-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "hitmark": 49,
+          "cancels": {
+            "attack": 60,
+            "charge": 51,
+            "skill": 60,
+            "burst": 60,
+            "dash": 49,
+            "swap": 52
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000058-electro_e",
@@ -15100,6 +16184,45 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.767
+      },
+      {
+        "id": "10000059-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 68,
+            "skill": 67,
+            "burst": 67,
+            "dash": 44,
+            "swap": 60
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000059-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.3,
+        "frames": {
+          "total": 78,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 69,
+            "skill": 70,
+            "burst": 69,
+            "dash": 47,
+            "walk": 76,
+            "swap": 62
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000059-anemo_e",
@@ -16951,6 +18074,45 @@
         "defaultDuration": 0.917
       },
       {
+        "id": "10000066-hydro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 55,
+            "skill": 55,
+            "burst": 55,
+            "dash": 45,
+            "jump": 73,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000066-hydro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 56,
+            "skill": 56,
+            "burst": 56,
+            "dash": 47,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000066-hydro_e",
         "name": "元素スキル: 神里流·鏡花",
         "shortName": "E",
@@ -17391,6 +18553,45 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000068-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 38,
+          "cancels": {
+            "attack": 50,
+            "skill": 51,
+            "burst": 51,
+            "dash": 38,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000068-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 40,
+          "cancels": {
+            "attack": 52,
+            "skill": 53,
+            "burst": 52,
+            "dash": 40,
+            "jump": 79,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000068-electro_e",
@@ -18113,6 +19314,46 @@
         "defaultDuration": 1.05
       },
       {
+        "id": "10000071-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.2,
+        "frames": {
+          "total": 72,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 58,
+            "dash": 59,
+            "jump": 59,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000071-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 59,
+            "skill": 59,
+            "burst": 59,
+            "dash": 59,
+            "jump": 59,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000071-electro_e",
         "name": "元素スキル: 秘儀·律淵渡魂",
         "shortName": "E",
@@ -18350,6 +19591,44 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.883
+      },
+      {
+        "id": "10000072-hydro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.35,
+        "frames": {
+          "total": 81,
+          "hitmark": 42,
+          "cancels": {
+            "attack": 59,
+            "skill": 59,
+            "burst": 60,
+            "dash": 79,
+            "swap": 65
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000072-hydro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.367,
+        "frames": {
+          "total": 82,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 62,
+            "skill": 62,
+            "burst": 62,
+            "walk": 81,
+            "swap": 66
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000072-hydro_e",
@@ -19125,6 +20404,25 @@
         "defaultDuration": 1.15
       },
       {
+        "id": "10000075-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.2,
+        "frames": {
+          "total": 72,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 65,
+            "charge": 64,
+            "burst": 65,
+            "dash": 41,
+            "swap": 57
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
         "id": "10000075-anemo_e",
         "name": "元素スキル: 羽画·風姿華歌",
         "shortName": "E",
@@ -19847,6 +21145,43 @@
         "defaultDuration": 1.067
       },
       {
+        "id": "10000078-dendro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.167,
+        "frames": {
+          "total": 70,
+          "cancels": {
+            "attack": 49,
+            "skill": 50,
+            "burst": 50,
+            "dash": 40,
+            "swap": 58
+          },
+          "source": "plunge.go:lowPlungeFramesAL"
+        }
+      },
+      {
+        "id": "10000078-dendro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "cancels": {
+            "attack": 56,
+            "skill": 56,
+            "burst": 56,
+            "dash": 48,
+            "jump": 76,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFramesXY"
+        }
+      },
+      {
         "id": "10000078-dendro_e",
         "name": "元素スキル: 共相·イデア模写",
         "shortName": "tE",
@@ -20106,6 +21441,46 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000079-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 38,
+          "cancels": {
+            "attack": 51,
+            "skill": 51,
+            "burst": 50,
+            "dash": 38,
+            "walk": 79,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000079-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.383,
+        "frames": {
+          "total": 83,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 54,
+            "skill": 55,
+            "burst": 53,
+            "dash": 41,
+            "walk": 82,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000079-pyro_e",
@@ -20659,6 +22034,46 @@
         "defaultDuration": 0.8
       },
       {
+        "id": "10000081-dendro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.417,
+        "frames": {
+          "total": 85,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 54,
+            "skill": 54,
+            "burst": 55,
+            "dash": 41,
+            "walk": 84,
+            "swap": 65
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000081-dendro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.4,
+        "frames": {
+          "total": 84,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 54,
+            "skill": 53,
+            "burst": 54,
+            "dash": 41,
+            "jump": 83,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000081-dendro_e",
         "name": "元素スキル: 精緻なる絵図",
         "shortName": "E",
@@ -21169,6 +22584,46 @@
         "defaultDuration": 0.85
       },
       {
+        "id": "10000083-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.217,
+        "frames": {
+          "total": 73,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 58,
+            "dash": 45,
+            "walk": 72,
+            "swap": 59
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000083-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 59,
+            "skill": 58,
+            "burst": 59,
+            "dash": 47,
+            "walk": 74,
+            "swap": 61
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000083-anemo_e",
         "name": "元素スキル: エニグマティック·フェイント",
         "shortName": "E",
@@ -21651,6 +23106,46 @@
         "defaultDuration": 0.8
       },
       {
+        "id": "10000085-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.417,
+        "frames": {
+          "total": 85,
+          "hitmark": 43,
+          "cancels": {
+            "attack": 56,
+            "skill": 55,
+            "burst": 57,
+            "dash": 43,
+            "jump": 84,
+            "swap": 67
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000085-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.45,
+        "frames": {
+          "total": 87,
+          "hitmark": 45,
+          "cancels": {
+            "attack": 58,
+            "skill": 58,
+            "burst": 59,
+            "dash": 45,
+            "jump": 86,
+            "swap": 68
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000085-cryo_e",
         "name": "元素スキル: プレッシャー·フロウ",
         "shortName": "E",
@@ -21919,6 +23414,44 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.867
+      },
+      {
+        "id": "10000086-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 62,
+            "skill": 63,
+            "burst": 64,
+            "dash": 44,
+            "swap": 49
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000086-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 65,
+            "skill": 64,
+            "burst": 63,
+            "dash": 47,
+            "swap": 51
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000086-cryo_e",
@@ -22388,6 +23921,48 @@
         "defaultDuration": 1.4
       },
       {
+        "id": "10000088-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.083,
+        "frames": {
+          "total": 65,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 57,
+            "charge": 47,
+            "skill": 57,
+            "burst": 56,
+            "dash": 44,
+            "walk": 64,
+            "swap": 48
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000088-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 59,
+            "charge": 50,
+            "skill": 58,
+            "burst": 59,
+            "dash": 46,
+            "walk": 66,
+            "swap": 50
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000088-cryo_e",
         "name": "元素スキル: フレーミング·氷点法",
         "shortName": "tE",
@@ -22669,6 +24244,48 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 4.217
+      },
+      {
+        "id": "10000089-hydro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "charge": 56,
+            "skill": 58,
+            "burst": 58,
+            "dash": 46,
+            "walk": 73,
+            "swap": 60
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000089-hydro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 59,
+            "charge": 55,
+            "skill": 59,
+            "burst": 59,
+            "dash": 47,
+            "walk": 74,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000089-hydro_e",
@@ -23190,6 +24807,46 @@
         "defaultDuration": 0.8
       },
       {
+        "id": "10000091-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.367,
+        "frames": {
+          "total": 82,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 50,
+            "skill": 50,
+            "burst": 50,
+            "dash": 37,
+            "walk": 80,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000091-geo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.383,
+        "frames": {
+          "total": 83,
+          "hitmark": 40,
+          "cancels": {
+            "attack": 52,
+            "skill": 53,
+            "burst": 53,
+            "dash": 40,
+            "walk": 82,
+            "swap": 64
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000091-geo_e",
         "name": "元素スキル: セレモニアル·クリスタルショット",
         "shortName": "E",
@@ -23424,6 +25081,45 @@
         "shortName": "CA",
         "type": "charged",
         "defaultDuration": 0.8
+      },
+      {
+        "id": "10000092-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.4,
+        "frames": {
+          "total": 84,
+          "hitmark": 43,
+          "cancels": {
+            "attack": 56,
+            "skill": 56,
+            "burst": 56,
+            "dash": 43,
+            "swap": 67
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000092-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.45,
+        "frames": {
+          "total": 87,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "skill": 57,
+            "burst": 57,
+            "dash": 46,
+            "walk": 86,
+            "swap": 69
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000092-pyro_e",
@@ -23681,6 +25377,45 @@
         "defaultDuration": 1.217
       },
       {
+        "id": "10000093-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.083,
+        "frames": {
+          "total": 65,
+          "cancels": {
+            "attack": 56,
+            "charge": 50,
+            "skill": 59,
+            "burst": 59,
+            "dash": 44,
+            "swap": 48
+          },
+          "source": "plunge.go:lowPlungeFramesXY"
+        }
+      },
+      {
+        "id": "10000093-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "cancels": {
+            "attack": 59,
+            "charge": 54,
+            "skill": 59,
+            "burst": 59,
+            "dash": 46,
+            "walk": 67,
+            "swap": 51
+          },
+          "source": "plunge.go:highPlungeFramesXY"
+        }
+      },
+      {
         "id": "10000093-anemo_e",
         "name": "元素スキル: 朝翔の鶴雲",
         "shortName": "E",
@@ -23933,6 +25668,24 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.733
+      },
+      {
+        "id": "10000094-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.15,
+        "frames": {
+          "total": 69,
+          "cancels": {
+            "attack": 54,
+            "skill": 53,
+            "burst": 54,
+            "dash": 44,
+            "swap": 56
+          },
+          "source": "plunge.go:lowPlungeFramesC"
+        }
       },
       {
         "id": "10000094-geo_e",
@@ -24457,6 +26210,48 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1
+      },
+      {
+        "id": "10000096-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.317,
+        "frames": {
+          "total": 79,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 62,
+            "charge": 69,
+            "skill": 60,
+            "burst": 61,
+            "jump": 78,
+            "walk": 75,
+            "swap": 63
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000096-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.35,
+        "frames": {
+          "total": 81,
+          "hitmark": 48,
+          "cancels": {
+            "attack": 62,
+            "charge": 73,
+            "skill": 64,
+            "burst": 63,
+            "jump": 80,
+            "walk": 78,
+            "swap": 66
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000096-pyro_e",
@@ -25153,6 +26948,45 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 0.833
+      },
+      {
+        "id": "10000099-dendro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.3,
+        "frames": {
+          "total": 78,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 61,
+            "skill": 60,
+            "burst": 60,
+            "dash": 76,
+            "walk": 75,
+            "swap": 73
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000099-dendro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.317,
+        "frames": {
+          "total": 79,
+          "hitmark": 49,
+          "cancels": {
+            "attack": 63,
+            "skill": 64,
+            "burst": 61,
+            "walk": 78,
+            "swap": 74
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000099-dendro_e",
@@ -25970,6 +27804,46 @@
         "defaultDuration": 0.7
       },
       {
+        "id": "10000103-geo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 47,
+          "cancels": {
+            "attack": 59,
+            "skill": 59,
+            "burst": 58,
+            "dash": 47,
+            "swap": 60,
+            "walk": 74
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000103-geo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 50,
+          "cancels": {
+            "attack": 62,
+            "skill": 60,
+            "burst": 61,
+            "dash": 50,
+            "jump": 74,
+            "swap": 61
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000103-geo_e",
         "name": "元素スキル: ヨワル・スクラッチ",
         "shortName": "E",
@@ -26214,6 +28088,26 @@
           "source": "aimed.go:aimedFrames[1]"
         },
         "defaultDuration": 1.6
+      },
+      {
+        "id": "10000104-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 50,
+          "cancels": {
+            "attack": 69,
+            "charge": 65,
+            "skill": 66,
+            "burst": 66,
+            "dash": 52,
+            "swap": 67
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
       },
       {
         "id": "10000104-anemo_e",
@@ -26695,6 +28589,48 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.65
+      },
+      {
+        "id": "10000106-pyro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 51,
+            "charge": 52,
+            "skill": 37,
+            "burst": 51,
+            "dash": 37,
+            "walk": 79,
+            "swap": 62
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000106-pyro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.383,
+        "frames": {
+          "total": 83,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 54,
+            "charge": 55,
+            "skill": 40,
+            "burst": 53,
+            "dash": 41,
+            "walk": 82,
+            "swap": 65
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000106-pyro_e",
@@ -27257,6 +29193,45 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.167
+      },
+      {
+        "id": "10000108-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 56,
+            "skill": 56,
+            "burst": 57,
+            "dash": 44,
+            "walk": 65,
+            "swap": 53
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000108-anemo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.117,
+        "frames": {
+          "total": 67,
+          "hitmark": 46,
+          "cancels": {
+            "attack": 58,
+            "skill": 59,
+            "burst": 60,
+            "dash": 46,
+            "swap": 53
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000108-anemo_e",
@@ -27970,6 +29945,48 @@
         "defaultDuration": 2.383
       },
       {
+        "id": "10000111-electro_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.25,
+        "frames": {
+          "total": 75,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 40,
+            "charge": 39,
+            "skill": 39,
+            "burst": 39,
+            "dash": 37,
+            "jump": 50,
+            "swap": 38
+          },
+          "source": "plunge.go:xianyunLowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000111-electro_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.2,
+        "frames": {
+          "total": 72,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 40,
+            "charge": 47,
+            "skill": 40,
+            "burst": 40,
+            "dash": 40,
+            "jump": 51,
+            "swap": 37
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
+      },
+      {
         "id": "10000111-electro_e",
         "name": "元素スキル: ホッピング・ナイトレインボー",
         "shortName": "E",
@@ -28207,6 +30224,46 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.083
+      },
+      {
+        "id": "10000112-cryo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "hitmark": 41,
+          "cancels": {
+            "attack": 59,
+            "skill": 58,
+            "burst": 58,
+            "dash": 75,
+            "walk": 74,
+            "swap": 61
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
+      },
+      {
+        "id": "10000112-cryo_hp",
+        "name": "落下攻撃(高)",
+        "shortName": "HP",
+        "type": "plunge_high",
+        "defaultDuration": 1.283,
+        "frames": {
+          "total": 77,
+          "hitmark": 43,
+          "cancels": {
+            "attack": 60,
+            "skill": 61,
+            "burst": 60,
+            "jump": 76,
+            "walk": 76,
+            "swap": 63
+          },
+          "source": "plunge.go:highPlungeFrames"
+        }
       },
       {
         "id": "10000112-cryo_e",
@@ -28460,6 +30517,27 @@
           "source": "charge.go:chargeFrames"
         },
         "defaultDuration": 1.433
+      },
+      {
+        "id": "10000113-anemo_lp",
+        "name": "落下攻撃(低)",
+        "shortName": "LP",
+        "type": "plunge_low",
+        "defaultDuration": 1.183,
+        "frames": {
+          "total": 71,
+          "hitmark": 38,
+          "cancels": {
+            "attack": 50,
+            "charge": 50,
+            "skill": 38,
+            "burst": 50,
+            "dash": 42,
+            "walk": 69,
+            "swap": 57
+          },
+          "source": "plunge.go:lowPlungeFrames"
+        }
       },
       {
         "id": "10000113-anemo_e",

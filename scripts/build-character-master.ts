@@ -25,6 +25,8 @@ for (const p of report.placeholderDurations) console.log(`  仮の秒数: ${p.na
 for (const m of report.missingCooldowns) console.log(`  CT未取得: ${m.name} ${m.actionId}`);
 for (const u of report.unresolvedGoLines) console.log(`  gcsim 未解決行: ${u.characterId}/${u.file} x${u.count}`);
 printKeyMapSummary('キャラ', keyMap);
+console.log(`落下攻撃: 低 ${report.plunge.lowCount} キャラ、高 ${report.plunge.highCount} キャラ`);
+for (const u of report.plunge.unresolved) console.log(`  落下攻撃 フレーム表なし（gcsim が未実装の仮置きなど）: ${u.name} (${u.characterId})`);
 const cs = report.cooldownStart;
 console.log(`CT開始位置: 自動 ${cs.read} 件、手で補った ${cs.manual} 件、未設定 ${cs.unresolved.length} 件`);
 for (const u of cs.unresolved) console.log(`  CT開始位置 未設定: ${u.name} ${u.actionId} … ${u.reason}`);

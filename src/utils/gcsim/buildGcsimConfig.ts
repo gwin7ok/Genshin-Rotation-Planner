@@ -108,6 +108,8 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const loopStints = input.stints.slice(loopStart);
 
   const charById = new Map(input.characters.map(c => [c.id, c]));
+  // 落下攻撃を含むキャラ（gcsim は空中状態などの前提条件があり、実行できない場合がある。D48）
+  const plungeChars = new Set<string>();
   const stintLines = (stintList: Stint[], indent: string): string[] => {
     const out: string[] = [];
     for (const stint of stintList) {
@@ -126,6 +128,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
           error(`${char.name}: アクション「${act.name}」（${act.actionTypeId}）に gcsim への変換規則がありません`);
           continue;
         }
+        if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
         out.push(`${indent}${key} ${mapped.command};`);
         const delayFrames = toFrames(actionDelayOf(act));
         if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
@@ -136,6 +139,10 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
 
   const initialLines = stintLines(initialStints, '');
   const loopLines = stintLines(loopStints, '  ');
+
+  if (plungeChars.size > 0) {
+    warn(`${[...plungeChars].join('・')}: 落下攻撃は、gcsim では空中状態（直前のアクション）などの前提条件があり、条件を満たさないと実行エラーになる場合があります`);
+  }
 
   // 3. シミュレーション時間の見積り（初動 + ループ×周数）を余裕付きで
   const stintSeconds = (s: Stint) =>

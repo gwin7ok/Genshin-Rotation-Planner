@@ -56,12 +56,35 @@ function fillGcsimKeys<T extends { id: string; gcsimKey?: string }>(items: T[], 
   return items.map(item => (!item.gcsimKey && keyById.has(item.id) ? { ...item, gcsimKey: keyById.get(item.id) } : item));
 }
 
+/**
+ * キャラに、マスター由来の参照情報（凸の段階データ・gcsim キー）が無ければ、マスターの値を公式ID（キー）で補う。
+ * ロック中（マスターで上書きしない）のキャラにも補う。アクションの値など、ユーザーが編集する内容には触れない。
+ */
+function fillCharacterReferences(chars: CharacterConfig[], masterChars: CharacterConfig[]): CharacterConfig[] {
+  const masterById = new Map(masterChars.map(m => [m.id, m]));
+  return chars.map(c => {
+    const master = masterById.get(c.id);
+    if (!master) return c;
+    const needsConstellations = !c.constellations && !!master.constellations;
+    const needsGcsimKey = !c.source?.gcsimKey && !!master.source?.gcsimKey;
+    if (!needsConstellations && !needsGcsimKey) return c;
+    return {
+      ...c,
+      ...(needsConstellations ? { constellations: master.constellations } : {}),
+      ...(needsGcsimKey ? { source: { ...c.source, gcsimKey: master.source!.gcsimKey } } : {}),
+    };
+  });
+}
+
 function mergeMasterWithProtected(
   masterChars: CharacterConfig[],
   currentChars: CharacterConfig[],
   keepOverMaster: (c: CharacterConfig) => boolean,
 ): CharacterConfig[] {
-  return mergeItemsWithProtected(masterChars, currentChars, keepOverMaster, isCustomCharacter);
+  return fillCharacterReferences(
+    mergeItemsWithProtected(masterChars, currentChars, keepOverMaster, isCustomCharacter),
+    masterChars,
+  );
 }
 
 /**
@@ -109,7 +132,7 @@ export function loadDatabase(): AppDatabase {
 
     return {
       ...parsed,
-      characters,
+      characters: fillCharacterReferences(characters, INITIAL_MASTER_DATABASE.characters),
       weapons: fillGcsimKeys(parsed.weapons, MASTER_WEAPONS),
       artifacts: fillGcsimKeys(parsed.artifacts, MASTER_ARTIFACTS),
     };

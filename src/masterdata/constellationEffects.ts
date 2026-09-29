@@ -30,7 +30,10 @@ interface VerifiedRule {
 }
 
 /** 確認済み: 凸の延長対象が、マスターの効果継続時間（効果バー）と同じ効果のもの。キーは `${キャラID}_c${凸}` */
-const VERIFIED_RULES: Record<string, VerifiedRule> = {
+const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
+  // 旅人(岩) 6凸: 1つの説明文に延長が2つ（岩潮幾重の岩の山 +5秒 = Q、星落としの剣の荒星 +10秒 = E）。gcsim traveler/common/geo の burst.go・skill.go の C6 と一致
+  '10000005-geo_c6': [{ target: 'q', keyword: '岩の山' }, { target: 'e', keyword: '荒星' }],
+  '10000007-geo_c6': [{ target: 'q', keyword: '岩の山' }, { target: 'e', keyword: '荒星' }],
   '10000023-pyro_c4': { target: 'q', keyword: '旋火輪' }, // 香菱
   '10000065-electro_c2': { target: 'e', keyword: '越祓草輪' }, // 久岐忍
   '10000025-hydro_c2': { target: 'q', keyword: '裁雨留虹' }, // 行秋
@@ -65,7 +68,7 @@ const NOT_APPLICABLE: Record<string, string> = {
   '10000030-geo_c4': '石化効果の延長（マスターの効果はシールド）', // 鍾離
 };
 
-const DURATION_BONUS_PATTERN = /([^、。「」\s]+?)の?継続時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/;
+const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?継続時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
   /** 凸の段階データを作ったキャラ数 */
@@ -108,32 +111,37 @@ export function buildConstellations(
     const data: CharacterConstellationData = { level, name: entry.name, description: text };
     result.push(data);
 
-    const m = DURATION_BONUS_PATTERN.exec(text);
-    if (!m) continue;
+    // 1つの説明文に延長が複数ある場合がある（旅人(岩) 6凸など）ので、すべて読み取る
+    const matches = [...text.matchAll(DURATION_BONUS_PATTERN_ALL)];
+    if (matches.length === 0) continue;
     const key = `${char.id}_c${level}`;
-    const rule = VERIFIED_RULES[key];
-    if (!rule) {
+    const verified = VERIFIED_RULES[key];
+    if (!verified) {
       if (!NOT_APPLICABLE[key]) {
         report.unreviewed.push({ characterId: char.id, name: char.name, constellation: level, description: text });
       }
       continue;
     }
 
-    const [, subject, amountText, unit] = m;
-    if (rule.keyword && !subject.includes(rule.keyword)) {
-      report.errors.push(`${char.name} ${level}凸: 説明文の延長対象「${subject}」が確認時の「${rule.keyword}」と一致しません`);
-      continue;
-    }
-    const actionId = `${char.id}_${rule.target}`;
-    const base = char.availableActions.find(a => a.id === actionId);
-    if (!base || !(base.effectDuration && base.effectDuration > 0)) {
-      report.errors.push(`${char.name} ${level}凸: 延長元アクション ${actionId} に効果継続時間がありません`);
-      continue;
-    }
+    for (const rule of Array.isArray(verified) ? verified : [verified]) {
+      // 確認済みの語を含む延長対象の記述を探す（語が空なら最初の記述）
+      const m = matches.find(x => x[1].includes(rule.keyword));
+      if (!m) {
+        report.errors.push(`${char.name} ${level}凸: 説明文に、確認時の延長対象「${rule.keyword}」を含む記述がありません`);
+        continue;
+      }
+      const [, , amountText, unit] = m;
+      const actionId = `${char.id}_${rule.target}`;
+      const base = char.availableActions.find(a => a.id === actionId);
+      if (!base || !(base.effectDuration && base.effectDuration > 0)) {
+        report.errors.push(`${char.name} ${level}凸: 延長元アクション ${actionId} に効果継続時間がありません`);
+        continue;
+      }
 
-    const to = extendDuration(base.effectDuration, Number(amountText), unit);
-    data.actionChanges = [{ actionId, effectDuration: to, source: m[0] }];
-    report.added.push({ characterId: char.id, name: char.name, constellation: level, actionId, from: base.effectDuration, to });
+      const to = extendDuration(base.effectDuration, Number(amountText), unit);
+      data.actionChanges = [...(data.actionChanges ?? []), { actionId, effectDuration: to, source: m[0] }];
+      report.added.push({ characterId: char.id, name: char.name, constellation: level, actionId, from: base.effectDuration, to });
+    }
   }
 
   if (result.length > 0) report.charactersWithConstellations++;

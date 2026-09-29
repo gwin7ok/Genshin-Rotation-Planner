@@ -1743,7 +1743,19 @@
       {
         "level": 6,
         "name": "永世の磐岩",
-        "description": "岩潮幾重の岩の山の継続時間+5秒。 星落としの剣荒星の継続時間+10秒。"
+        "description": "岩潮幾重の岩の山の継続時間+5秒。 星落としの剣荒星の継続時間+10秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000005-geo_q",
+            "effectDuration": 20,
+            "source": "岩潮幾重の岩の山の継続時間+5秒"
+          },
+          {
+            "actionId": "10000005-geo_e",
+            "effectDuration": 40,
+            "source": "星落としの剣荒星の継続時間+10秒"
+          }
+        ]
       }
     ]
   },
@@ -3843,7 +3855,19 @@
       {
         "level": 6,
         "name": "永世の磐岩",
-        "description": "岩潮幾重の岩の山の継続時間+5秒。 星落としの剣荒星の継続時間+10秒。"
+        "description": "岩潮幾重の岩の山の継続時間+5秒。 星落としの剣荒星の継続時間+10秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000007-geo_q",
+            "effectDuration": 20,
+            "source": "岩潮幾重の岩の山の継続時間+5秒"
+          },
+          {
+            "actionId": "10000007-geo_e",
+            "effectDuration": 40,
+            "source": "星落としの剣荒星の継続時間+10秒"
+          }
+        ]
       }
     ]
   },

@@ -38,6 +38,7 @@ while 1 {
 
 - **派生アクション（O4）**: 共通規則に当てはまらない派生アクションは、キャラごとの対応表（`src/utils/gcsim/actionMapping.ts` の `CHARACTER_ACTION_OVERRIDES`、アクション定義 ID → gcsim の命令）で対応させる。対応表にも無いものは「変換規則なし」の error とし、gcsim 実行をしない。今回は対象4キャラ（ナヒーダ・ニィロウ・コロンビーナ・ラウマ）分を作り、他は必要になったときに足す。
 - **確認手段**: ヘッダーに「gcsim設定文をコピー」ボタンを**恒常設置**する。押すと現在の編成を変換してクリップボードにコピーし、設定文と警告をポップアップ（`GcsimConfigDialog`）に表示する。フェーズ6で「gcsim で計算」ボタンを加えても残す。
+- **ポップアップでの文法チェック（D23）**: 「gcsim設定文をコピー」のポップアップに「gcsim で文法チェック」ボタンを置く。`src/utils/gcsim/gcsimClient.ts` の `validateGcsimConfig` が `POST http://localhost:54321/validate/{id}` を呼び、結果（OK / 文法エラー / サーバーに接続できない）をポップアップ内に表示する。フェーズ6の gcsim クライアント（6-1）の一部を前倒しした（`/sample` は6で追加）。
 - **文法確認**: gcsim 公式リリース（`server_windows_amd64.exe`）を取得して `/validate` で確認する。ダウンロードは、ファイル名・出典・サイズを示してユーザーの確認を取ってから行う。
 
 ## 実装で確定した内容

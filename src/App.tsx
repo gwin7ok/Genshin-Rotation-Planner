@@ -251,6 +251,12 @@ export default function App() {
     setIsSaveAsOpen(false);
   };
 
+  // アプリ自身のCT違反（スキル・爆発・発動バフ。ガントチャートの判定と同じ）
+  const ctViolationIssues = useMemo(
+    () => calculatedResult.validationIssues.filter(v => /^(skill|burst|passive)_ct_/.test(v.id)),
+    [calculatedResult],
+  );
+
   // gcsim 設定文（現在の編成・ローテーションを変換してコピー。警告はポップアップで表示）
   const [gcsimResult, setGcsimResult] = useState<GcsimConfigResult | null>(null);
   const [gcsimCopied, setGcsimCopied] = useState<boolean>(false);
@@ -496,6 +502,7 @@ export default function App() {
         result={gcsimResult}
         copied={gcsimCopied}
         onCopyAgain={() => gcsimResult && void copyGcsimText(gcsimResult.config)}
+        ctIssues={ctViolationIssues}
       />
 
       {/* Help & Reordering Guide Modal */}

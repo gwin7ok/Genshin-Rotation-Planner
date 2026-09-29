@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, Check, AlertTriangle, Copy } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2 } from 'lucide-react';
 import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
+import { validateGcsimConfig, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
 
 interface GcsimConfigDialogProps {
   isOpen: boolean;
@@ -9,11 +10,32 @@ interface GcsimConfigDialogProps {
   /** クリップボードへのコピーに成功したか */
   copied: boolean;
   onCopyAgain: () => void;
+  /** アプリ自身のCT違反（スキル・爆発・発動バフ）。無ければ空 */
+  ctIssues: { id: string; title: string; message: string }[];
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues }) => {
+  // gcsim サーバーでの文法チェック（/validate）の結果
+  const [validating, setValidating] = useState(false);
+  const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
+
+  // ポップアップを開き直す・設定文が変わったら、前回のチェック結果を消す
+  useEffect(() => {
+    setValidation(null);
+    setValidating(false);
+  }, [isOpen, result?.config]);
+
   if (!isOpen || !result) return null;
+
+  const handleValidate = async () => {
+    const target = result.config;
+    setValidating(true);
+    setValidation(null);
+    const res = await validateGcsimConfig(target);
+    setValidating(false);
+    setValidation(res);
+  };
   const errors = result.warnings.filter(w => w.level === 'error');
   const warns = result.warnings.filter(w => w.level === 'warn');
 
@@ -63,6 +85,56 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               ))}
             </div>
           )}
+
+          {/* アプリ自身のCT違反（ガントチャートの判定と同じ） */}
+          <div className="space-y-1.5">
+            {ctIssues.length === 0 ? (
+              <div className="flex items-center gap-1.5 text-xs text-emerald-300">
+                <Check className="w-4 h-4" />
+                <span>アプリのCT違反: なし</span>
+              </div>
+            ) : (
+              <>
+                <div className="text-[11px] font-bold text-red-300">アプリのCT違反: {ctIssues.length}件（先に解消してください）</div>
+                {ctIssues.map(issue => (
+                  <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
+                    <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                    <span><span className="font-bold">{issue.title}</span>: {issue.message}</span>
+                  </div>
+                ))}
+              </>
+            )}
+            <div className="text-[10px] text-slate-500">
+              ※ アプリ自身の判定です。gcsim で実際に実行したときのCT待ち（アプリの判定と一致しないことがあります）は、今後の gcsim 実行機能で確認できるようにします。
+            </div>
+          </div>
+
+          {/* 文法チェック（gcsim ローカルサーバーの /validate） */}
+          <div className="space-y-1.5">
+            <button
+              onClick={handleValidate}
+              disabled={validating}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700/80 hover:bg-emerald-600 disabled:opacity-50 text-white border border-emerald-500/60"
+              title="gcsim ローカルサーバー（localhost:54321）で、この設定文の文法をチェックします（実行はしません）"
+            >
+              {validating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
+              <span>{validating ? 'チェック中...' : 'gcsim で文法チェック'}</span>
+            </button>
+            {validation && (
+              <div
+                className={`text-xs rounded-lg px-2.5 py-1.5 border whitespace-pre-wrap break-words ${
+                  validation.status === 'ok'
+                    ? 'bg-emerald-950/40 border-emerald-700/60 text-emerald-200'
+                    : validation.status === 'invalid'
+                    ? 'bg-red-950/50 border-red-800/70 text-red-200'
+                    : 'bg-amber-950/40 border-amber-700/60 text-amber-200'
+                }`}
+              >
+                {validation.status === 'invalid' && <div className="font-bold mb-0.5">文法エラー</div>}
+                {validation.message}
+              </div>
+            )}
+          </div>
 
           <textarea
             readOnly

@@ -530,7 +530,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         availableActions: [
                           { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 6.0, effectDuration: 0 },
                           { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, cooldown: 15.0, effectDuration: 0 },
-                          { id: 'act_n1', name: '通常攻撃', shortName: 'N1', type: 'normal', defaultDuration: 0.3 }
+                          { id: 'act_n', name: '通常攻撃', shortName: 'N', type: 'normal', defaultDuration: 0.3 }
                         ]
                       });
                     }}

@@ -132,7 +132,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, inStateWindow, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -338,7 +338,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
     const nextStints = [...stints];
     const nextActions = [...targetStint.actions];
-    nextActions[actionIndex] = { ...act, duration: newDuration };
+    nextActions[actionIndex] = { ...act, duration: newDuration, durationManual: true };
     nextStints[stintIndex] = { ...targetStint, actions: nextActions };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
@@ -721,7 +721,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
               </span>
               <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
-                <strong className="font-bold text-sky-200">N (N1~N5)</strong>: 通常攻撃
+                <strong className="font-bold text-sky-200">N</strong>: 通常攻撃（連続した N は自動で1段目・2段目…と数えます）
               </span>
               <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
                 <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
@@ -1295,8 +1295,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               {/* CT・効果継続時間 — 追加後に個別変更できる */}
                               {(() => {
                                 const def = CharacterModel.fromConfig(char).actions.find(a => a.id === act.actionTypeId);
-                                const ctInfo = getActionCooldownInfo(act, def);
-                                const effectInfo = getActionEffectInfo(act, def);
+                                // 状態の窓の中の E（ステップ・再発動など）は、CT・効果バーを持たない
+                                const ctInfo = act.inStateWindow ? null : getActionCooldownInfo(act, def);
+                                const effectInfo = act.inStateWindow ? null : getActionEffectInfo(act, def);
                                 const hoverProps = {
                                   onHoverChange: (hovering: boolean) =>
                                     setCtHoverActionId(prev => (hovering ? act.id : prev === act.id ? null : prev)),

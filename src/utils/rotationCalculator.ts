@@ -1,4 +1,5 @@
 import { actionDelayOf } from './actionDelay';
+import { ACTION_STATE_RULES } from '../data/actionStateRules';
 import { 
   CharacterConfig, 
   Stint, 
@@ -66,6 +67,8 @@ export function calculateRotation(
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
+  // アクション状態の窓（キャラごと）
+  const stateWindows = new Map<string, { end: number; usesLeft?: number }>();
 
   // CT を持つ発動（スキル・爆発・発動バフ）。CT違反の判定はすべて計算後にまとめて行う（checkCooldownViolations）
   const ctEvents: CooldownEvent[] = [];
@@ -121,6 +124,8 @@ export function calculateRotation(
 
     const stintStartTime = currentTime;
     const computedActions: CharacterActionInstance[] = [];
+    // 連続した通常攻撃の段（gcsim と同じく、他のアクションを挟むと1段目に戻る）
+    let normalStreak = 0;
 
     // 2-C: 先頭キャラも含め、全出場に交代時間を設ける（switchDelay > 0の場合）
     // これにより先頭キャラの例外処理が不要になり、ループ開始位置へ戻った時も自然に交代時間が入る
@@ -147,7 +152,19 @@ export function calculateRotation(
     for (let aIdx = 0; aIdx < rawActions.length; aIdx++) {
       const act = rawActions[aIdx];
       const actionStartTime = currentTime;
-      const duration = Math.max(0.05, act.duration || 0.5);
+      // CT・効果継続時間はアクション定義ごとに持つ（凸の変更を適用済み）
+      const actionDef = charActions.find(a => a.id === act.actionTypeId);
+
+      // 通常攻撃: 所要時間が未編集なら、連続した N の段ごとの値を自動で使う（最大段数を超えたら1段目に戻る）
+      let autoDuration: number | undefined;
+      if (act.type === 'normal') {
+        const hits = actionDef?.normalHits;
+        if (hits && hits.length > 0 && !act.durationManual) autoDuration = hits[normalStreak % hits.length].duration;
+        normalStreak += 1;
+      } else {
+        normalStreak = 0;
+      }
+      const duration = Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
 
       const computedAction: CharacterActionInstance = {
@@ -160,9 +177,8 @@ export function calculateRotation(
       };
       computedActions.push(computedAction);
 
-      // CT・効果継続時間はアクション定義ごとに持つ（凸の変更を適用済み）
-      const actionDef = charActions.find(a => a.id === act.actionTypeId);
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
+      let inStateWindow = false;
       // 個別に変更された CT があれば優先
       const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
 
@@ -181,8 +197,23 @@ export function calculateRotation(
       }
 
       if (isSkill) {
-        // CTを開始しない派生技（ニィロウのステップ等）はCTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
-        const isTriggeringAction = actionDef?.startsSkillCooldown !== false;
+        // アクション状態の規則辞書: 窓（ニィロウの pirouette など）の中の E は、CTを開始しない・効果バーも出さない
+        const rule = ACTION_STATE_RULES[char.id];
+        if (rule && act.actionTypeId === `${char.id}_e` && act.type === 'skill') {
+          const win = stateWindows.get(char.id);
+          if (win && actionStartTime < win.end && (win.usesLeft === undefined || win.usesLeft > 0)) {
+            inStateWindow = true;
+            computedAction.inStateWindow = true;
+            if (win.usesLeft !== undefined) {
+              win.usesLeft -= 1;
+              if (win.usesLeft <= 0) stateWindows.delete(char.id);
+            }
+          } else {
+            stateWindows.set(char.id, { end: actionStartTime + rule.windowSeconds, usesLeft: rule.maxUses });
+          }
+        }
+        // CTを開始しない派生技は、CTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
+        const isTriggeringAction = actionDef?.startsSkillCooldown !== false && !inStateWindow;
         if (isTriggeringAction) {
           ctEvents.push({
             key: `${char.id}:skill`,
@@ -248,7 +279,7 @@ export function calculateRotation(
       }
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
-      const effectSpan = buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      const effectSpan = inStateWindow ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
       if (effectSpan) activeBuffs.push(effectSpan);
 
       // アクションごとの遅延は、そのアクションの終了後に入れる（出場の最後なら次の交代が遅れる）

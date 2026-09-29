@@ -1,7 +1,7 @@
-import { CharacterConfig, WeaponType } from './genshin';
+import { CharacterConfig, GcsimBuffLink, WeaponType } from './genshin';
 
 /** 武器・聖遺物の発動バフ定義 */
-export interface EquipmentBuffDefinition {
+export interface EquipmentBuffDefinition extends GcsimBuffLink {
   id: string;                      // 例: "wbuff_freedom_sworn", "abuff_noblesse_4p"
   name: string;                    // 表示名 例: "蒼古: 抗争の歌" / "旧貴族4: 全員攻撃力+20%"
   sourceType: 'weapon' | 'artifact';

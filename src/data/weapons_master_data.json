@@ -34,7 +34,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "amosbow"
   },
   {
@@ -66,7 +66,16 @@
             "statEffectSummary": "攻撃力+28% / 会心ダメ+28%",
             "dataSource": {
               "duration": "継続時間15秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "dawns-first-hue",
+              "twilights-splendor"
+            ],
+            "gcsimCooldownKeys": [
+              "vividnotions-cd"
+            ]
           }
         ]
       },
@@ -167,7 +176,16 @@
         "statEffectSummary": "攻撃力+28% / 会心ダメ+28%",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dawns-first-hue",
+          "twilights-splendor"
+        ],
+        "gcsimCooldownKeys": [
+          "vividnotions-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -179,7 +197,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "vividnotions"
   },
   {
@@ -214,7 +232,17 @@
             "dataSource": {
               "duration": "14秒間",
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "surfs-up-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "surfs-up-icd",
+              "surfs-up-stack-gain-icd",
+              "surfs-up-stack-loss-icd"
+            ]
           }
         ]
       },
@@ -329,7 +357,17 @@
         "dataSource": {
           "duration": "14秒間",
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "surfs-up-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "surfs-up-icd",
+          "surfs-up-stack-gain-icd",
+          "surfs-up-stack-loss-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -342,7 +380,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "surfsup"
   },
   {
@@ -374,7 +412,12 @@
             "statEffectSummary": "ダメ+4",
             "dataSource": {
               "duration": "14秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "tulaytullahsremembrance-na-dmg"
+            ]
           }
         ]
       },
@@ -475,7 +518,12 @@
         "statEffectSummary": "ダメ+4",
         "dataSource": {
           "duration": "14秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "tulaytullahsremembrance-na-dmg"
+        ]
       }
     ],
     "buffEffect": {
@@ -487,7 +535,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "tulaytullahsremembrance"
   },
   {
@@ -519,7 +567,12 @@
             "statEffectSummary": "攻撃力+15% / ダメ+18%",
             "dataSource": {
               "cooldown": "12秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "lumidouceelegy-bonus-buff"
+            ]
           }
         ]
       },
@@ -620,7 +673,12 @@
         "statEffectSummary": "攻撃力+15% / ダメ+18%",
         "dataSource": {
           "cooldown": "12秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lumidouceelegy-bonus-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -633,7 +691,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lumidouceelegy"
   },
   {
@@ -665,7 +723,13 @@
             "statEffectSummary": "攻撃力+20%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "beacon-of-the-reed-sea-damaged",
+              "beacon-of-the-reed-sea-skill"
+            ]
           }
         ]
       },
@@ -766,7 +830,13 @@
         "statEffectSummary": "攻撃力+20%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "beacon-of-the-reed-sea-damaged",
+          "beacon-of-the-reed-sea-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -778,7 +848,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "beaconofthereedsea"
   },
   {
@@ -810,7 +880,13 @@
             "statEffectSummary": "ダメ+10%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "peakpatrolsong-buff",
+              "peakpatrolsong-team-buff"
+            ]
           }
         ]
       },
@@ -911,7 +987,13 @@
         "statEffectSummary": "ダメ+10%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "peakpatrolsong-buff",
+          "peakpatrolsong-team-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -923,7 +1005,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "peakpatrolsong"
   },
   {
@@ -955,7 +1037,12 @@
             "statEffectSummary": "ダメ+14%",
             "dataSource": {
               "duration": "継続時間4秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "eternalflow-buff"
+            ]
           }
         ]
       },
@@ -1056,7 +1143,12 @@
         "statEffectSummary": "ダメ+14%",
         "dataSource": {
           "duration": "継続時間4秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "eternalflow-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -1068,7 +1160,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "tomeoftheeternalflow"
   },
   {
@@ -1100,7 +1192,12 @@
             "statEffectSummary": "ダメ+60%",
             "dataSource": {
               "duration": "3秒間"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "stirring-dawn-breeze"
+            ]
           }
         ]
       },
@@ -1201,7 +1298,12 @@
         "statEffectSummary": "ダメ+60%",
         "dataSource": {
           "duration": "3秒間"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "stirring-dawn-breeze"
+        ]
       }
     ],
     "buffEffect": {
@@ -1213,7 +1315,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thedaybreakchronicles"
   },
   {
@@ -1248,7 +1350,15 @@
             "dataSource": {
               "duration": "継続時間6秒",
               "cooldown": "14秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "bloodsoakedruins-lc"
+            ],
+            "gcsimCooldownKeys": [
+              "bloodsoakedruins-cd"
+            ]
           }
         ]
       },
@@ -1363,7 +1473,15 @@
         "dataSource": {
           "duration": "継続時間6秒",
           "cooldown": "14秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "bloodsoakedruins-lc"
+        ],
+        "gcsimCooldownKeys": [
+          "bloodsoakedruins-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -1376,7 +1494,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "bloodsoakedruins"
   },
   {
@@ -1414,7 +1532,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "staffofhoma"
   },
   {
@@ -1446,7 +1564,12 @@
             "statEffectSummary": "攻撃力+12%",
             "dataSource": {
               "duration": "継続時間3秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "symphonist-chanson-de-baies"
+            ]
           }
         ]
       },
@@ -1547,7 +1670,12 @@
         "statEffectSummary": "攻撃力+12%",
         "dataSource": {
           "duration": "継続時間3秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "symphonist-chanson-de-baies"
+        ]
       }
     ],
     "buffEffect": {
@@ -1559,7 +1687,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "symphonistofscents"
   },
   {
@@ -1591,7 +1719,16 @@
             "statEffectSummary": "攻撃力+20% / 会心ダメ+16%",
             "dataSource": {
               "duration": "継続時間3秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "athameartis-team-buff",
+              "blade-of-the-daylight-hours-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "athame-burst-cd"
+            ]
           }
         ]
       },
@@ -1692,7 +1829,16 @@
         "statEffectSummary": "攻撃力+20% / 会心ダメ+16%",
         "dataSource": {
           "duration": "継続時間3秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "athameartis-team-buff",
+          "blade-of-the-daylight-hours-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "athame-burst-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -1704,7 +1850,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "athameartis"
   },
   {
@@ -1736,7 +1882,15 @@
             "statEffectSummary": "ダメ+40%",
             "dataSource": {
               "duration": "継続時間17秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "disaster-remorse-proc",
+              "irreparable",
+              "path-of-conflict",
+              "unforgivable"
+            ]
           }
         ]
       },
@@ -1837,7 +1991,15 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "継続時間17秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "disaster-remorse-proc",
+          "irreparable",
+          "path-of-conflict",
+          "unforgivable"
+        ]
       }
     ],
     "buffEffect": {
@@ -1849,7 +2011,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "disasterandremorse"
   },
   {
@@ -1881,7 +2043,13 @@
             "statEffectSummary": "攻撃力+24% / ダメ+40%",
             "dataSource": {
               "duration": "20秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "fracturedhalo-atkp",
+              "fracturedhalo-lc-buff"
+            ]
           }
         ]
       },
@@ -1982,7 +2150,13 @@
         "statEffectSummary": "攻撃力+24% / ダメ+40%",
         "dataSource": {
           "duration": "20秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "fracturedhalo-atkp",
+          "fracturedhalo-lc-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -1994,7 +2168,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fracturedhalo"
   },
   {
@@ -2029,7 +2203,15 @@
             "dataSource": {
               "duration": "15秒間",
               "cooldown": "14秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "starcallerswatch"
+            ],
+            "gcsimCooldownKeys": [
+              "starcallerswatch-icd"
+            ]
           }
         ]
       },
@@ -2144,7 +2326,15 @@
         "dataSource": {
           "duration": "15秒間",
           "cooldown": "14秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "starcallerswatch"
+        ],
+        "gcsimCooldownKeys": [
+          "starcallerswatch-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -2157,7 +2347,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "starcallerswatch"
   },
   {
@@ -2193,9 +2383,31 @@
         "description": "攻撃力+40%。チームにいるキャラクターが、結晶反応による結晶の欠片を獲得または月結晶反応を起こした時、装備者は「契印」を1つ獲得し、元素スキルのダメージ+36%。「契印」の継続時間は15秒、最大2つまで。すべての「契印」は、装備者の元素スキルがダメージを与えた0.2秒後にクリアされる。月結晶反応により獲得可能な「契印」は、1秒毎に1つのみ。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12512",
+        "name": "千の黄昏と暁の誓約",
+        "sourceType": "weapon",
+        "sourceId": "12512",
+        "duration": 15,
+        "cooldown": 1,
+        "description": "攻撃力+20%。チームにいるキャラクターが、結晶反応による結晶の欠片を獲得または月結晶反応を起こした時、装備者は「契印」を1つ獲得し、元素スキルのダメージ+18%。「契印」の継続時間は15秒、最大2つまで。すべての「契印」は、装備者の元素スキルがダメージを与えた0.2秒後にクリアされる。月結晶反応により獲得可能な「契印」は、1秒毎に1つのみ。",
+        "dataSource": {
+          "duration": "gcsim: verdict-skill-dmg",
+          "cooldown": "gcsim: verdict-lcr-icd"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "verdict-skill-dmg"
+        ],
+        "gcsimCooldownKeys": [
+          "verdict-lcr-icd"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "verdict"
   },
   {
@@ -2227,7 +2439,12 @@
             "statEffectSummary": "ダメ+64%",
             "dataSource": {
               "duration": "5秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "lightbearing-moonshard"
+            ]
           }
         ]
       },
@@ -2328,7 +2545,12 @@
         "statEffectSummary": "ダメ+64%",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lightbearing-moonshard"
+        ]
       }
     ],
     "buffEffect": {
@@ -2340,7 +2562,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lightbearingmoonshard"
   },
   {
@@ -2372,7 +2594,16 @@
             "statEffectSummary": "ダメ+10%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "canopy-favor"
+            ],
+            "gcsimCooldownKeys": [
+              "fotmk-react-icd",
+              "fotmk-skill-icd"
+            ]
           }
         ]
       },
@@ -2473,7 +2704,16 @@
         "statEffectSummary": "ダメ+10%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "canopy-favor"
+        ],
+        "gcsimCooldownKeys": [
+          "fotmk-react-icd",
+          "fotmk-skill-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -2485,7 +2725,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fangofthemountainking"
   },
   {
@@ -2517,7 +2757,12 @@
             "statEffectSummary": "攻撃力+4%",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-majesty"
+            ]
           }
         ]
       },
@@ -2618,7 +2863,12 @@
         "statEffectSummary": "攻撃力+4%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-majesty"
+        ]
       }
     ],
     "buffEffect": {
@@ -2630,7 +2880,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "summitshaper"
   },
   {
@@ -2668,7 +2918,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lostprayertothesacredwinds"
   },
   {
@@ -2706,7 +2956,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thefirstgreatmagic"
   },
   {
@@ -2738,7 +2988,12 @@
             "statEffectSummary": "会心ダメ+20% / ダメ+20%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "absolution-dmg-bonus"
+            ]
           }
         ]
       },
@@ -2839,7 +3094,12 @@
         "statEffectSummary": "会心ダメ+20% / ダメ+20%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "absolution-dmg-bonus"
+        ]
       }
     ],
     "buffEffect": {
@@ -2851,7 +3111,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "absolution"
   },
   {
@@ -2887,9 +3147,26 @@
         "description": "HP+32%。周囲に敵がいる時、装備キャラクターの与えるダメージ+40%、この効果はキャラクターが待機状態でも発動する。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15508",
+        "name": "濯ぎし諸般の形",
+        "sourceType": "weapon",
+        "sourceId": "15508",
+        "duration": 1.2,
+        "description": "HP+16%。周囲に敵がいる時、装備キャラクターの与えるダメージ+20%、この効果はキャラクターが待機状態でも発動する。",
+        "dataSource": {
+          "duration": "gcsim: aquasimulacra-dmg"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "aquasimulacra-dmg"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "aquasimulacra"
   },
   {
@@ -2921,7 +3198,15 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "cooldown": "12秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "hunterspath-tireless-hunt"
+            ],
+            "gcsimCooldownKeys": [
+              "hunterspath-icd"
+            ]
           }
         ]
       },
@@ -3022,7 +3307,15 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "cooldown": "12秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "hunterspath-tireless-hunt"
+        ],
+        "gcsimCooldownKeys": [
+          "hunterspath-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -3035,7 +3328,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "hunterspath"
   },
   {
@@ -3070,7 +3363,16 @@
             "dataSource": {
               "duration": "12秒継続",
               "cooldown": "発動後の20秒間、追憶の欠片を再度"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "elegy-proc",
+              "millennial-atk%"
+            ],
+            "gcsimCooldownKeys": [
+              "elegy-cd"
+            ]
           }
         ]
       },
@@ -3185,7 +3487,16 @@
         "dataSource": {
           "duration": "12秒継続",
           "cooldown": "発動後の20秒間、追憶の欠片を再度"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "elegy-proc",
+          "millennial-atk%"
+        ],
+        "gcsimCooldownKeys": [
+          "elegy-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -3198,7 +3509,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "elegyfortheend"
   },
   {
@@ -3233,7 +3544,15 @@
             "dataSource": {
               "duration": "12秒継続",
               "cooldown": "発動後の20秒間、囁きの欠片を再度"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "pines-proc"
+            ],
+            "gcsimCooldownKeys": [
+              "songofbrokenpines-cooldown"
+            ]
           }
         ]
       },
@@ -3348,7 +3667,15 @@
         "dataSource": {
           "duration": "12秒継続",
           "cooldown": "発動後の20秒間、囁きの欠片を再度"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "pines-proc"
+        ],
+        "gcsimCooldownKeys": [
+          "songofbrokenpines-cooldown"
+        ]
       }
     ],
     "buffEffect": {
@@ -3361,7 +3688,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "songofbrokenpines"
   },
   {
@@ -3393,7 +3720,14 @@
             "statEffectSummary": "熟知+120",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "sunny-morning-burst",
+              "sunny-morning-skill",
+              "sunny-morning-swirl"
+            ]
           }
         ]
       },
@@ -3494,7 +3828,14 @@
         "statEffectSummary": "熟知+120",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sunny-morning-burst",
+          "sunny-morning-skill",
+          "sunny-morning-swirl"
+        ]
       }
     ],
     "buffEffect": {
@@ -3506,7 +3847,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sunnymorningsleepin"
   },
   {
@@ -3538,7 +3879,13 @@
             "statEffectSummary": "熟知+80 / 会心率+8%",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "reliquary-moonoftruth",
+              "reliquary-secretoflies"
+            ]
           }
         ]
       },
@@ -3639,7 +3986,13 @@
         "statEffectSummary": "熟知+80 / 会心率+8%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "reliquary-moonoftruth",
+          "reliquary-secretoflies"
+        ]
       }
     ],
     "buffEffect": {
@@ -3651,7 +4004,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "reliquaryoftruth"
   },
   {
@@ -3683,7 +4036,13 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "duration": "継続時間24秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "kaguras-verity",
+              "kaguras-verity-stacks"
+            ]
           }
         ]
       },
@@ -3784,7 +4143,13 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "duration": "継続時間24秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kaguras-verity",
+          "kaguras-verity-stacks"
+        ]
       }
     ],
     "buffEffect": {
@@ -3796,7 +4161,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "kagurasverity"
   },
   {
@@ -3831,7 +4196,12 @@
             "dataSource": {
               "duration": "20秒間",
               "cooldown": "14秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "angelos-heptades-buff"
+            ]
           }
         ]
       },
@@ -3946,7 +4316,12 @@
         "dataSource": {
           "duration": "20秒間",
           "cooldown": "14秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "angelos-heptades-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -3959,7 +4334,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "angelosheptades"
   },
   {
@@ -3994,7 +4369,16 @@
             "dataSource": {
               "duration": "継続時間8秒",
               "cooldown": "5秒ごとに1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "exaiphanes-blade-atk"
+            ],
+            "gcsimCooldownKeys": [
+              "exaiphanes-blade-cd",
+              "exaiphanes-blade-on-hit-icd"
+            ]
           }
         ]
       },
@@ -4109,7 +4493,16 @@
         "dataSource": {
           "duration": "継続時間8秒",
           "cooldown": "5秒ごとに1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "exaiphanes-blade-atk"
+        ],
+        "gcsimCooldownKeys": [
+          "exaiphanes-blade-cd",
+          "exaiphanes-blade-on-hit-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -4122,7 +4515,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "exaiphanesblade"
   },
   {
@@ -4154,7 +4547,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "astralvulturescrimsonplumage-atkp"
+            ]
           }
         ]
       },
@@ -4255,7 +4653,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "astralvulturescrimsonplumage-atkp"
+        ]
       }
     ],
     "buffEffect": {
@@ -4267,7 +4670,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "astralvulturescrimsonplumage"
   },
   {
@@ -4299,7 +4702,13 @@
             "statEffectSummary": "HP+20%。元素スキルが敵に命中すると、継...",
             "dataSource": {
               "duration": "継続時間20秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "khaj-nisut-buff",
+              "khaj-nisut-team-buff"
+            ]
           }
         ]
       },
@@ -4400,7 +4809,13 @@
         "statEffectSummary": "HP+20%。元素スキルが敵に命中すると、継...",
         "dataSource": {
           "duration": "継続時間20秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "khaj-nisut-buff",
+          "khaj-nisut-team-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -4412,7 +4827,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "keyofkhajnisut"
   },
   {
@@ -4444,7 +4859,13 @@
             "statEffectSummary": "ダメ+8%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "splendoroftranquilwaters-hp-buff",
+              "splendoroftranquilwaters-skill-buff"
+            ]
           }
         ]
       },
@@ -4545,7 +4966,13 @@
         "statEffectSummary": "ダメ+8%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "splendoroftranquilwaters-hp-buff",
+          "splendoroftranquilwaters-skill-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -4557,7 +4984,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "splendoroftranquilwaters"
   },
   {
@@ -4595,7 +5022,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "redhornstonethresher"
   },
   {
@@ -4627,7 +5054,15 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "cooldown": "14秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "crimsonmoonssemblance-bonus"
+            ],
+            "gcsimCooldownKeys": [
+              "crimsonmoonssemblance-icd"
+            ]
           }
         ]
       },
@@ -4728,7 +5163,15 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "cooldown": "14秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "crimsonmoonssemblance-bonus"
+        ],
+        "gcsimCooldownKeys": [
+          "crimsonmoonssemblance-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -4741,7 +5184,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "crimsonmoonssemblance"
   },
   {
@@ -4773,7 +5216,12 @@
             "statEffectSummary": "装備したキャラクターの元素熟知の52%を基準...",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "scarletsands-skill"
+            ]
           }
         ]
       },
@@ -4874,7 +5322,12 @@
         "statEffectSummary": "装備したキャラクターの元素熟知の52%を基準...",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "scarletsands-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -4886,7 +5339,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "staffofthescarletsands"
   },
   {
@@ -4924,7 +5377,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "athousandfloatingdreams"
   },
   {
@@ -4959,7 +5412,16 @@
             "dataSource": {
               "duration": "継続時間6秒",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "athousandblazingsuns-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "athousandblazingsuns-buff-icd",
+              "athousandblazingsuns-extend-icd"
+            ]
           }
         ]
       },
@@ -5074,7 +5536,16 @@
         "dataSource": {
           "duration": "継続時間6秒",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "athousandblazingsuns-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "athousandblazingsuns-buff-icd",
+          "athousandblazingsuns-extend-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -5087,7 +5558,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "athousandblazingsuns"
   },
   {
@@ -5119,7 +5590,9 @@
             "statEffectSummary": "攻撃力+0",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       },
@@ -5220,7 +5693,9 @@
         "statEffectSummary": "攻撃力+0",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -5232,7 +5707,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "13509",
@@ -5263,7 +5738,12 @@
             "statEffectSummary": "元素チャージ効率が100%を超えている場合、...",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "engulfing-er"
+            ]
           }
         ]
       },
@@ -5364,7 +5844,12 @@
         "statEffectSummary": "元素チャージ効率が100%を超えている場合、...",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "engulfing-er"
+        ]
       }
     ],
     "buffEffect": {
@@ -5376,7 +5861,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "engulfinglightning"
   },
   {
@@ -5411,7 +5896,15 @@
             "dataSource": {
               "duration": "12秒継続",
               "cooldown": "発動後20秒の間、奮起の欠片を再度"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "freedomsworn"
+            ],
+            "gcsimCooldownKeys": [
+              "freedom-sworn-cooldown"
+            ]
           }
         ]
       },
@@ -5526,7 +6019,15 @@
         "dataSource": {
           "duration": "12秒継続",
           "cooldown": "発動後20秒の間、奮起の欠片を再度"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "freedomsworn"
+        ],
+        "gcsimCooldownKeys": [
+          "freedom-sworn-cooldown"
+        ]
       }
     ],
     "buffEffect": {
@@ -5539,7 +6040,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "freedomsworn"
   },
   {
@@ -5571,7 +6072,12 @@
             "statEffectSummary": "攻撃力+24% / 会心ダメ+40%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "azurelight-buff"
+            ]
           }
         ]
       },
@@ -5672,7 +6178,12 @@
         "statEffectSummary": "攻撃力+24% / 会心ダメ+40%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "azurelight-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -5684,7 +6195,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "azurelight"
   },
   {
@@ -5716,7 +6227,15 @@
             "statEffectSummary": "ダメ+40%",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-frostbound-oath-geo",
+              "golden-frostbound-oath-lcr",
+              "golden-frostbound-oath-team-geo",
+              "golden-frostbound-oath-team-lcr"
+            ]
           }
         ]
       },
@@ -5817,7 +6336,15 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-frostbound-oath-geo",
+          "golden-frostbound-oath-lcr",
+          "golden-frostbound-oath-team-geo",
+          "golden-frostbound-oath-team-lcr"
+        ]
       }
     ],
     "buffEffect": {
@@ -5829,7 +6356,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "goldenfrostboundoath"
   },
   {
@@ -5861,7 +6388,12 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "duration": "継続時間20秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "calamity-consummation"
+            ]
           }
         ]
       },
@@ -5962,7 +6494,12 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "duration": "継続時間20秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "calamity-consummation"
+        ]
       }
     ],
     "buffEffect": {
@@ -5974,7 +6511,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "calamityqueller"
   },
   {
@@ -6009,7 +6546,16 @@
             "dataSource": {
               "duration": "継続時間12秒",
               "cooldown": "18秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "nocturnes-curtain-call-buff-cd",
+              "nocturnes-curtain-call-buff-hp"
+            ],
+            "gcsimCooldownKeys": [
+              "nocturnes-curtain-call-icd"
+            ]
           }
         ]
       },
@@ -6124,7 +6670,16 @@
         "dataSource": {
           "duration": "継続時間12秒",
           "cooldown": "18秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nocturnes-curtain-call-buff-cd",
+          "nocturnes-curtain-call-buff-hp"
+        ],
+        "gcsimCooldownKeys": [
+          "nocturnes-curtain-call-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -6137,7 +6692,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "nocturnescurtaincall"
   },
   {
@@ -6169,7 +6724,9 @@
             "statEffectSummary": "会心ダメ+56% / ダメ+56%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       },
@@ -6270,7 +6827,9 @@
         "statEffectSummary": "会心ダメ+56% / ダメ+56%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -6282,7 +6841,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "12516",
@@ -6313,7 +6872,12 @@
             "statEffectSummary": "攻撃力+28% / ダメ+16%",
             "dataSource": {
               "duration": "継続時間5秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "a-teaspoon-of-transcendence-stellar"
+            ]
           }
         ]
       },
@@ -6414,7 +6978,12 @@
         "statEffectSummary": "攻撃力+28% / ダメ+16%",
         "dataSource": {
           "duration": "継続時間5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "a-teaspoon-of-transcendence-stellar"
+        ]
       }
     ],
     "buffEffect": {
@@ -6426,7 +6995,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ateaspoonoftranscendence"
   },
   {
@@ -6458,7 +7027,12 @@
             "statEffectSummary": "ダメ+28%",
             "dataSource": {
               "duration": "継続時間20秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "crane-dmg%"
+            ]
           }
         ]
       },
@@ -6559,7 +7133,12 @@
         "statEffectSummary": "ダメ+28%",
         "dataSource": {
           "duration": "継続時間20秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "crane-dmg%"
+        ]
       }
     ],
     "buffEffect": {
@@ -6571,7 +7150,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "cranesechoingcall"
   },
   {
@@ -6603,7 +7182,15 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "cooldown": "30秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyward-atlas"
+            ],
+            "gcsimCooldownKeys": [
+              "skyward-atlas-icd"
+            ]
           }
         ]
       },
@@ -6704,7 +7291,15 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "cooldown": "30秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyward-atlas"
+        ],
+        "gcsimCooldownKeys": [
+          "skyward-atlas-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -6717,7 +7312,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skywardatlas"
   },
   {
@@ -6749,7 +7344,12 @@
             "statEffectSummary": "会心率+4%",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyward-blade"
+            ]
           }
         ]
       },
@@ -6850,7 +7450,12 @@
         "statEffectSummary": "会心率+4%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyward-blade"
+        ]
       }
     ],
     "buffEffect": {
@@ -6862,7 +7467,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skywardblade"
   },
   {
@@ -6894,7 +7499,15 @@
             "statEffectSummary": "会心率+8%",
             "dataSource": {
               "cooldown": "2秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyward spine"
+            ],
+            "gcsimCooldownKeys": [
+              "skyward-spine-icd"
+            ]
           }
         ]
       },
@@ -6995,7 +7608,15 @@
         "statEffectSummary": "会心率+8%",
         "dataSource": {
           "cooldown": "2秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyward spine"
+        ],
+        "gcsimCooldownKeys": [
+          "skyward-spine-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -7008,7 +7629,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skywardspine"
   },
   {
@@ -7040,7 +7661,15 @@
             "statEffectSummary": "会心ダメ+20% / ダメ+20%",
             "dataSource": {
               "cooldown": "4秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyward harp"
+            ],
+            "gcsimCooldownKeys": [
+              "skyward-harp-icd"
+            ]
           }
         ]
       },
@@ -7141,7 +7770,15 @@
         "statEffectSummary": "会心ダメ+20% / ダメ+20%",
         "dataSource": {
           "cooldown": "4秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyward harp"
+        ],
+        "gcsimCooldownKeys": [
+          "skyward-harp-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -7154,7 +7791,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skywardharp"
   },
   {
@@ -7186,7 +7823,12 @@
             "statEffectSummary": "ダメ+8%",
             "dataSource": {
               "duration": "継続時間20秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyward-pride-active"
+            ]
           }
         ]
       },
@@ -7287,7 +7929,12 @@
         "statEffectSummary": "ダメ+8%",
         "dataSource": {
           "duration": "継続時間20秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyward-pride-active"
+        ]
       }
     ],
     "buffEffect": {
@@ -7299,7 +7946,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skywardpride"
   },
   {
@@ -7331,7 +7978,15 @@
             "statEffectSummary": "攻撃力+10% / ダメ+12%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "polar-star-burst",
+              "polar-star-charged",
+              "polar-star-normal",
+              "polar-star-skill"
+            ]
           }
         ]
       },
@@ -7432,7 +8087,15 @@
         "statEffectSummary": "攻撃力+10% / ダメ+12%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "polar-star-burst",
+          "polar-star-charged",
+          "polar-star-normal",
+          "polar-star-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -7444,7 +8107,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "polarstar"
   },
   {
@@ -7476,7 +8139,12 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ripping-upheaval"
+            ]
           }
         ]
       },
@@ -7577,7 +8245,12 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ripping-upheaval"
+        ]
       }
     ],
     "buffEffect": {
@@ -7589,7 +8262,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "harangeppakufutsu"
   },
   {
@@ -7621,7 +8294,12 @@
             "statEffectSummary": "攻撃力+4%",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-majesty"
+            ]
           }
         ]
       },
@@ -7722,7 +8400,12 @@
         "statEffectSummary": "攻撃力+4%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-majesty"
+        ]
       }
     ],
     "buffEffect": {
@@ -7734,7 +8417,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "vortexvanquisher"
   },
   {
@@ -7766,7 +8449,13 @@
             "statEffectSummary": "会心率+28%",
             "dataSource": {
               "duration": "継続時間25秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "heartstrings-cr-cancel",
+              "heartstrings-skill"
+            ]
           }
         ]
       },
@@ -7867,7 +8556,13 @@
         "statEffectSummary": "会心率+28%",
         "dataSource": {
           "duration": "継続時間25秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "heartstrings-cr-cancel",
+          "heartstrings-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -7879,7 +8574,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "silvershowerheartstrings"
   },
   {
@@ -7911,7 +8606,9 @@
             "statEffectSummary": "攻撃力+8% / 会心ダメ+50%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       },
@@ -8012,7 +8709,9 @@
         "statEffectSummary": "攻撃力+8% / 会心ダメ+50%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -8024,7 +8723,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "11505",
@@ -8061,7 +8760,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "primordialjadecutter"
   },
   {
@@ -8093,7 +8792,13 @@
             "statEffectSummary": "攻撃力+20% / ダメ+12",
             "dataSource": {
               "duration": "継続時間5秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "thundering-pulse-normal",
+              "thundering-pulse-skill"
+            ]
           }
         ]
       },
@@ -8194,7 +8899,13 @@
         "statEffectSummary": "攻撃力+20% / ダメ+12",
         "dataSource": {
           "duration": "継続時間5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "thundering-pulse-normal",
+          "thundering-pulse-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -8206,7 +8917,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thunderingpulse"
   },
   {
@@ -8238,7 +8949,12 @@
             "statEffectSummary": "与える治療効果+10%。この武器を装備したキ...",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "moonglow-postburst"
+            ]
           }
         ]
       },
@@ -8339,7 +9055,12 @@
         "statEffectSummary": "与える治療効果+10%。この武器を装備したキ...",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "moonglow-postburst"
+        ]
       }
     ],
     "buffEffect": {
@@ -8351,7 +9072,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "everlastingmoonglow"
   },
   {
@@ -8383,7 +9104,12 @@
             "statEffectSummary": "攻撃力+4%",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-majesty"
+            ]
           }
         ]
       },
@@ -8484,7 +9210,12 @@
         "statEffectSummary": "攻撃力+4%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-majesty"
+        ]
       }
     ],
     "buffEffect": {
@@ -8496,7 +9227,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "memoryofdust"
   },
   {
@@ -8528,7 +9259,15 @@
             "statEffectSummary": "攻撃力+20%",
             "dataSource": {
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "aquila favonia"
+            ],
+            "gcsimCooldownKeys": [
+              "aquila-icd"
+            ]
           }
         ]
       },
@@ -8629,7 +9368,15 @@
         "statEffectSummary": "攻撃力+20%",
         "dataSource": {
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "aquila favonia"
+        ],
+        "gcsimCooldownKeys": [
+          "aquila-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -8642,7 +9389,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "aquilafavonia"
   },
   {
@@ -8674,7 +9421,12 @@
             "statEffectSummary": "ダメ+0",
             "dataSource": {
               "duration": "3秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "jadefall-buff"
+            ]
           }
         ]
       },
@@ -8775,7 +9527,12 @@
         "statEffectSummary": "ダメ+0",
         "dataSource": {
           "duration": "3秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "jadefall-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -8787,7 +9544,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "jadefallssplendor"
   },
   {
@@ -8819,7 +9576,12 @@
             "statEffectSummary": "攻撃力+4%",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-majesty"
+            ]
           }
         ]
       },
@@ -8920,7 +9682,12 @@
         "statEffectSummary": "攻撃力+4%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-majesty"
+        ]
       }
     ],
     "buffEffect": {
@@ -8932,7 +9699,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "theunforged"
   },
   {
@@ -8964,7 +9731,13 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "duration": "継続時間5秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "mistsplitter-burst",
+              "mistsplitter-normal"
+            ]
           }
         ]
       },
@@ -9065,7 +9838,13 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "duration": "継続時間5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mistsplitter-burst",
+          "mistsplitter-normal"
+        ]
       }
     ],
     "buffEffect": {
@@ -9077,7 +9856,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mistsplitterreforged"
   },
   {
@@ -9109,7 +9888,13 @@
             "statEffectSummary": "熟知+60 / ダメ+120%",
             "dataSource": {
               "duration": "継続時間4.5秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "new-moon-verse",
+              "prayer-of-the-far-north"
+            ]
           }
         ]
       },
@@ -9210,7 +9995,13 @@
         "statEffectSummary": "熟知+60 / ダメ+120%",
         "dataSource": {
           "duration": "継続時間4.5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "new-moon-verse",
+          "prayer-of-the-far-north"
+        ]
       }
     ],
     "buffEffect": {
@@ -9222,7 +10013,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "nightweaverslookingglass"
   },
   {
@@ -9254,7 +10045,12 @@
             "statEffectSummary": "ダメ+16%",
             "dataSource": {
               "duration": "継続時間15秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "urakumisugiri-increase-buff"
+            ]
           }
         ]
       },
@@ -9355,7 +10151,12 @@
         "statEffectSummary": "ダメ+16%",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "urakumisugiri-increase-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -9367,7 +10168,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "urakumisugiri"
   },
   {
@@ -9403,9 +10204,26 @@
         "description": "攻撃速度+10%。通常攻撃が敵に命中/元素スキルを発動/重撃を開始する時、装備者は「四風の詩」をそれぞれ1/2/2層獲得し、与えるダメージ+15.5%。継続時間は4秒、最大4層まで重ねられ、0.01秒毎に1回のみ発動可能。\nまた、チームが「魔導秘儀」効果を発動している場合は、「四風の詩」1層につき、装備者の会心ダメージ+15.5%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12515",
+        "name": "不滅の騎士道",
+        "sourceType": "weapon",
+        "sourceId": "12515",
+        "duration": 4,
+        "description": "攻撃速度+10%。通常攻撃が敵に命中/元素スキルを発動/重撃を開始する時、装備者は「四風の詩」をそれぞれ1/2/2層獲得し、与えるダメージ+7.5%。継続時間は4秒、最大4層まで重ねられ、0.01秒毎に1回のみ発動可能。\nまた、チームが「魔導秘儀」効果を発動している場合は、「四風の詩」1層につき、装備者の会心ダメージ+7.5%。",
+        "dataSource": {
+          "duration": "gcsim: gest-of-the-mighty-wolf-stacks"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "gest-of-the-mighty-wolf-stacks"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "gestofthemightywolf"
   },
   {
@@ -9440,7 +10258,15 @@
             "dataSource": {
               "duration": "継続時間12秒",
               "cooldown": "30秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "wolf-proc"
+            ],
+            "gcsimCooldownKeys": [
+              "wolf-gravestone-icd"
+            ]
           }
         ]
       },
@@ -9555,7 +10381,15 @@
         "dataSource": {
           "duration": "継続時間12秒",
           "cooldown": "30秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wolf-proc"
+        ],
+        "gcsimCooldownKeys": [
+          "wolf-gravestone-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -9568,7 +10402,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wolfsgravestone"
   },
   {
@@ -9600,7 +10434,12 @@
             "statEffectSummary": "攻撃力+3 / ダメ+12%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "primordial"
+            ]
           }
         ]
       },
@@ -9701,7 +10540,12 @@
         "statEffectSummary": "攻撃力+3 / ダメ+12%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "primordial"
+        ]
       }
     ],
     "buffEffect": {
@@ -9713,7 +10557,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "primordialjadewingedspear"
   },
   {
@@ -9745,7 +10589,13 @@
             "statEffectSummary": "攻撃力+16% / ダメ+16%",
             "dataSource": {
               "duration": "継続時間4秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "cashflow-atkspd",
+              "cashflow-buff"
+            ]
           }
         ]
       },
@@ -9846,7 +10696,13 @@
         "statEffectSummary": "攻撃力+16% / ダメ+16%",
         "dataSource": {
           "duration": "継続時間4秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "cashflow-atkspd",
+          "cashflow-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -9858,7 +10714,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "cashflowsupervision"
   },
   {
@@ -9890,7 +10746,15 @@
             "statEffectSummary": "会心率+4%",
             "dataSource": {
               "cooldown": "12秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "foliar-whitemoon-bristle"
+            ],
+            "gcsimCooldownKeys": [
+              "foliar-icd"
+            ]
           }
         ]
       },
@@ -9991,7 +10855,15 @@
         "statEffectSummary": "会心率+4%",
         "dataSource": {
           "cooldown": "12秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "foliar-whitemoon-bristle"
+        ],
+        "gcsimCooldownKeys": [
+          "foliar-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -10004,7 +10876,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lightoffoliarincision"
   },
   {
@@ -10042,7 +10914,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ultimateoverlordsmegamagicsword"
   },
   {
@@ -10158,7 +11030,9 @@
             "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
             "dataSource": {
               "cooldown": "8秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -10175,7 +11049,9 @@
         "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
         "dataSource": {
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -10188,7 +11064,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "11420",
@@ -10303,7 +11179,9 @@
             "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
             "dataSource": {
               "cooldown": "8秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -10320,7 +11198,9 @@
         "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
         "dataSource": {
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -10333,7 +11213,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "11421",
@@ -10448,7 +11328,9 @@
             "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
             "dataSource": {
               "cooldown": "8秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -10465,7 +11347,9 @@
         "statEffectSummary": "通常攻撃、重撃、落下攻撃が敵に命中すると怨霊...",
         "dataSource": {
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -10478,7 +11362,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "13415",
@@ -10515,7 +11399,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thecatch"
   },
   {
@@ -10551,9 +11435,26 @@
         "description": "チームにいるキャラクターが炎元素関連反応を起こした後、装備者の元素スキルダメージ+32%、継続期間8秒。この効果は、チーム内キャラクターが待機中でも発動できる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12431",
+        "name": "蒼翠の道の誓い",
+        "sourceType": "weapon",
+        "sourceId": "12431",
+        "duration": 8,
+        "description": "チームにいるキャラクターが炎元素関連反応を起こした後、装備者の元素スキルダメージ+32%、継続期間8秒。この効果は、チーム内キャラクターが待機中でも発動できる。",
+        "dataSource": {
+          "duration": "gcsim: earth-shaker"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "earth-shaker"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "earthshaker"
   },
   {
@@ -10669,7 +11570,12 @@
             "statEffectSummary": "元素スキル発動時、防御力+32%、継続時間1...",
             "dataSource": {
               "duration": "継続時間15秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "flute-of-ezpitzal-def-boost"
+            ]
           }
         ]
       }
@@ -10686,7 +11592,12 @@
         "statEffectSummary": "元素スキル発動時、防御力+32%、継続時間1...",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flute-of-ezpitzal-def-boost"
+        ]
       }
     ],
     "buffEffect": {
@@ -10698,7 +11609,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fluteofezpitzal"
   },
   {
@@ -10814,7 +11725,12 @@
             "statEffectSummary": "会心率+16%",
             "dataSource": {
               "duration": "5秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "fleuvecendreferryman-er"
+            ]
           }
         ]
       }
@@ -10831,7 +11747,12 @@
         "statEffectSummary": "会心率+16%",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "fleuvecendreferryman-er"
+        ]
       }
     ],
     "buffEffect": {
@@ -10843,7 +11764,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fleuvecendreferryman"
   },
   {
@@ -10959,7 +11880,12 @@
             "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "xiphos"
+            ]
           }
         ]
       }
@@ -10976,7 +11902,12 @@
         "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xiphos"
+        ]
       }
     ],
     "buffEffect": {
@@ -10988,7 +11919,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "xiphosmoonlight"
   },
   {
@@ -11104,7 +12035,15 @@
             "statEffectSummary": "元素スキルダメージが防御力80%分アップする...",
             "dataSource": {
               "cooldown": "1.5秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "cinnabar-buff-active"
+            ],
+            "gcsimCooldownKeys": [
+              "cinnabar-icd"
+            ]
           }
         ]
       }
@@ -11121,7 +12060,15 @@
         "statEffectSummary": "元素スキルダメージが防御力80%分アップする...",
         "dataSource": {
           "cooldown": "1.5秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "cinnabar-buff-active"
+        ],
+        "gcsimCooldownKeys": [
+          "cinnabar-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -11134,7 +12081,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "cinnabarspindle"
   },
   {
@@ -11250,7 +12197,17 @@
             "statEffectSummary": "攻撃力+36% / 熟知+240",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "golden-melody-atk",
+              "golden-melody-em",
+              "golden-melody-stellar"
+            ],
+            "gcsimCooldownKeys": [
+              "golden-melody-contrapuntal-icd"
+            ]
           }
         ]
       }
@@ -11267,7 +12224,17 @@
         "statEffectSummary": "攻撃力+36% / 熟知+240",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "golden-melody-atk",
+          "golden-melody-em",
+          "golden-melody-stellar"
+        ],
+        "gcsimCooldownKeys": [
+          "golden-melody-contrapuntal-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -11279,7 +12246,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "forgedbythegoldenmelody"
   },
   {
@@ -11315,9 +12282,26 @@
         "description": "ダッシュ、またはダッシュを代替する能力のスタミナ消費-15%。さらに、ダッシュ、またはダッシュを代替する能力を使用した後、通常攻撃の与えるダメージが攻撃力の32%分アップする。この効果は18回発動または7秒後にクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11430",
+        "name": "陣を落とした者の自矜",
+        "sourceType": "weapon",
+        "sourceId": "11430",
+        "duration": 7,
+        "description": "ダッシュ、またはダッシュを代替する能力のスタミナ消費-15%。さらに、ダッシュ、またはダッシュを代替する能力を使用した後、通常攻撃の与えるダメージが攻撃力の32%分アップする。この効果は18回発動または7秒後にクリアされる。",
+        "dataSource": {
+          "duration": "gcsim: sturdy-bone"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sturdy-bone"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sturdybone"
   },
   {
@@ -11355,7 +12339,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "alleyhunter"
   },
   {
@@ -11471,7 +12455,13 @@
             "statEffectSummary": "攻撃力+40%",
             "dataSource": {
               "duration": "持続時間5秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "wineandsong",
+              "wineandsong-klee"
+            ]
           }
         ]
       }
@@ -11488,7 +12478,13 @@
         "statEffectSummary": "攻撃力+40%",
         "dataSource": {
           "duration": "持続時間5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wineandsong",
+          "wineandsong-klee"
+        ]
       }
     ],
     "buffEffect": {
@@ -11500,7 +12496,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wineandsong"
   },
   {
@@ -11616,7 +12612,12 @@
             "statEffectSummary": "ダメ+24%",
             "dataSource": {
               "duration": "5秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "alley-flash-lockout"
+            ]
           }
         ]
       }
@@ -11633,7 +12634,12 @@
         "statEffectSummary": "ダメ+24%",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "alley-flash-lockout"
+        ]
       }
     ],
     "buffEffect": {
@@ -11645,7 +12651,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thealleyflash"
   },
   {
@@ -11761,7 +12767,12 @@
             "statEffectSummary": "攻撃力+48%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "tidal-shadow-atk-boost"
+            ]
           }
         ]
       }
@@ -11778,7 +12789,12 @@
         "statEffectSummary": "攻撃力+48%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "tidal-shadow-atk-boost"
+        ]
       }
     ],
     "buffEffect": {
@@ -11790,7 +12806,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "tidalshadow"
   },
   {
@@ -11828,7 +12844,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "chainbreaker"
   },
   {
@@ -11944,7 +12960,12 @@
             "statEffectSummary": "熟知+80",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ibispiercer-stacks"
+            ]
           }
         ]
       }
@@ -11961,7 +12982,12 @@
         "statEffectSummary": "熟知+80",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ibispiercer-stacks"
+        ]
       }
     ],
     "buffEffect": {
@@ -11973,7 +12999,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ibispiercer"
   },
   {
@@ -12089,7 +13115,13 @@
             "statEffectSummary": "攻撃力+16% / ダメ+32%",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "dodoco-atk",
+              "dodoco-ca"
+            ]
           }
         ]
       }
@@ -12106,7 +13138,13 @@
         "statEffectSummary": "攻撃力+16% / ダメ+32%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dodoco-atk",
+          "dodoco-ca"
+        ]
       }
     ],
     "buffEffect": {
@@ -12118,7 +13156,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "dodocotales"
   },
   {
@@ -12234,7 +13272,12 @@
             "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "dragonspine-spear-icd"
+            ]
           }
         ]
       }
@@ -12251,7 +13294,12 @@
         "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "dragonspine-spear-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -12264,7 +13312,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "dragonspinespear"
   },
   {
@@ -12302,7 +13350,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "balladofthefjords"
   },
   {
@@ -12418,7 +13466,13 @@
             "statEffectSummary": "攻撃力+66 / ダメ+10%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "predator-dmg",
+              "predator-stacks"
+            ]
           }
         ]
       }
@@ -12435,7 +13489,13 @@
         "statEffectSummary": "攻撃力+66 / ダメ+10%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "predator-dmg",
+          "predator-stacks"
+        ]
       }
     ],
     "buffEffect": {
@@ -12447,7 +13507,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "predator"
   },
   {
@@ -12578,7 +13638,16 @@
             "dataSource": {
               "duration": "継続時間30秒",
               "cooldown": "15秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "prospectors-drill",
+              "prospectors-drill-symbol"
+            ],
+            "gcsimCooldownKeys": [
+              "prospectors-drill-icd"
+            ]
           }
         ]
       }
@@ -12597,7 +13666,16 @@
         "dataSource": {
           "duration": "継続時間30秒",
           "cooldown": "15秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prospectors-drill",
+          "prospectors-drill-symbol"
+        ],
+        "gcsimCooldownKeys": [
+          "prospectors-drill-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -12610,7 +13688,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prospectorsdrill"
   },
   {
@@ -12726,7 +13804,12 @@
             "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "aquamarine"
+            ]
           }
         ]
       }
@@ -12743,7 +13826,12 @@
         "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "aquamarine"
+        ]
       }
     ],
     "buffEffect": {
@@ -12755,7 +13843,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "makhairaaquamarine"
   },
   {
@@ -12871,7 +13959,15 @@
             "statEffectSummary": "攻撃力+32%",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "stillwood-moonshadow"
+            ],
+            "gcsimCooldownKeys": [
+              "moonpiercer-icd"
+            ]
           }
         ]
       }
@@ -12888,7 +13984,15 @@
         "statEffectSummary": "攻撃力+32%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "stillwood-moonshadow"
+        ],
+        "gcsimCooldownKeys": [
+          "moonpiercer-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -12900,7 +14004,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "moonpiercer"
   },
   {
@@ -13016,7 +14120,12 @@
             "statEffectSummary": "ダメ+1%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ring-of-yaxche"
+            ]
           }
         ]
       }
@@ -13033,7 +14142,12 @@
         "statEffectSummary": "ダメ+1%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ring-of-yaxche"
+        ]
       }
     ],
     "buffEffect": {
@@ -13045,7 +14159,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ringofyaxche"
   },
   {
@@ -13161,7 +14275,13 @@
             "statEffectSummary": "攻撃力+8%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "compoundbow",
+              "compoundbow-stacks"
+            ]
           }
         ]
       }
@@ -13178,7 +14298,13 @@
         "statEffectSummary": "攻撃力+8%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "compoundbow",
+          "compoundbow-stacks"
+        ]
       }
     ],
     "buffEffect": {
@@ -13190,7 +14316,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "compoundbow"
   },
   {
@@ -13321,7 +14447,16 @@
             "dataSource": {
               "duration": "継続時間30秒",
               "cooldown": "15秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "range-gauge",
+              "range-gauge-symbol"
+            ],
+            "gcsimCooldownKeys": [
+              "range-gauge-icd"
+            ]
           }
         ]
       }
@@ -13340,7 +14475,16 @@
         "dataSource": {
           "duration": "継続時間30秒",
           "cooldown": "15秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "range-gauge",
+          "range-gauge-symbol"
+        ],
+        "gcsimCooldownKeys": [
+          "range-gauge-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -13353,7 +14497,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "rangegauge"
   },
   {
@@ -13469,7 +14613,9 @@
             "statEffectSummary": "装備者が元素スキルを発動した後、効果を獲得し...",
             "dataSource": {
               "duration": "1秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -13486,7 +14632,9 @@
         "statEffectSummary": "装備者が元素スキルを発動した後、効果を獲得し...",
         "dataSource": {
           "duration": "1秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -13498,7 +14646,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "14433",
@@ -13535,7 +14683,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackmarrowlantern"
   },
   {
@@ -13573,7 +14721,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "rainslasher"
   },
   {
@@ -13704,7 +14852,12 @@
             "dataSource": {
               "duration": "12秒間",
               "cooldown": "9秒ごとに1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "song-of-the-vigil-atk"
+            ]
           }
         ]
       }
@@ -13723,7 +14876,12 @@
         "dataSource": {
           "duration": "12秒間",
           "cooldown": "9秒ごとに1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "song-of-the-vigil-atk"
+        ]
       }
     ],
     "buffEffect": {
@@ -13736,7 +14894,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "songofthevigil"
   },
   {
@@ -13867,7 +15025,15 @@
             "dataSource": {
               "duration": "継続時間12秒",
               "cooldown": "20秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "kingssquire"
+            ],
+            "gcsimCooldownKeys": [
+              "kingssquire-icd"
+            ]
           }
         ]
       }
@@ -13886,7 +15052,15 @@
         "dataSource": {
           "duration": "継続時間12秒",
           "cooldown": "20秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kingssquire"
+        ],
+        "gcsimCooldownKeys": [
+          "kingssquire-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -13899,7 +15073,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "kingssquire"
   },
   {
@@ -14015,7 +15189,12 @@
             "statEffectSummary": "ダメ+16%",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ballad-of-the-boundless-blue-dmgp"
+            ]
           }
         ]
       }
@@ -14032,7 +15211,12 @@
         "statEffectSummary": "ダメ+16%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ballad-of-the-boundless-blue-dmgp"
+        ]
       }
     ],
     "buffEffect": {
@@ -14044,7 +15228,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "balladoftheboundlessblue"
   },
   {
@@ -14082,7 +15266,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "flowerwreathedfeathers"
   },
   {
@@ -14213,7 +15397,16 @@
             "dataSource": {
               "duration": "継続時間15秒",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "finaleofthedeep-atk-boost",
+              "finaleofthedeep-bond-flatatk-boost"
+            ],
+            "gcsimCooldownKeys": [
+              "finaleofthedeep-icd"
+            ]
           }
         ]
       }
@@ -14232,7 +15425,16 @@
         "dataSource": {
           "duration": "継続時間15秒",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "finaleofthedeep-atk-boost",
+          "finaleofthedeep-bond-flatatk-boost"
+        ],
+        "gcsimCooldownKeys": [
+          "finaleofthedeep-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -14245,7 +15447,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "finaleofthedeep"
   },
   {
@@ -14376,7 +15578,15 @@
             "dataSource": {
               "duration": "6秒間",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "kitain-skill-dmg-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "kitain-icd"
+            ]
           }
         ]
       }
@@ -14395,7 +15605,15 @@
         "dataSource": {
           "duration": "6秒間",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kitain-skill-dmg-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "kitain-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -14408,7 +15626,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "kitaincrossspear"
   },
   {
@@ -14446,7 +15664,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "rust"
   },
   {
@@ -14562,7 +15780,13 @@
             "statEffectSummary": "攻撃力+32% / 熟知+128",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blade-of-atonement-atk",
+              "blade-of-atonement-em"
+            ]
           }
         ]
       }
@@ -14579,7 +15803,13 @@
         "statEffectSummary": "攻撃力+32% / 熟知+128",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blade-of-atonement-atk",
+          "blade-of-atonement-em"
+        ]
       }
     ],
     "buffEffect": {
@@ -14591,7 +15821,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "bladeofatonement"
   },
   {
@@ -14629,7 +15859,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "royalgreatsword"
   },
   {
@@ -14667,7 +15897,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "royalbow"
   },
   {
@@ -14705,7 +15935,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "royallongsword"
   },
   {
@@ -14743,7 +15973,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "royalgrimoire"
   },
   {
@@ -14781,7 +16011,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "royalspear"
   },
   {
@@ -14897,7 +16127,13 @@
             "statEffectSummary": "熟知+120 / ダメ+32%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "echoes-of-the-heart-em",
+              "echoes-of-the-heart-stellar"
+            ]
           }
         ]
       }
@@ -14914,7 +16150,13 @@
         "statEffectSummary": "熟知+120 / ダメ+32%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "echoes-of-the-heart-em",
+          "echoes-of-the-heart-stellar"
+        ]
       }
     ],
     "buffEffect": {
@@ -14926,7 +16168,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "echoesoftheheart"
   },
   {
@@ -15042,7 +16284,12 @@
             "statEffectSummary": "攻撃力+40%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "tamayuratei"
+            ]
           }
         ]
       }
@@ -15059,7 +16306,12 @@
         "statEffectSummary": "攻撃力+40%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "tamayuratei"
+        ]
       }
     ],
     "buffEffect": {
@@ -15071,7 +16323,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "tamayurateinoohanashi"
   },
   {
@@ -15109,7 +16361,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prospectorsshovel"
   },
   {
@@ -15225,7 +16477,9 @@
             "statEffectSummary": "元素爆発を発動した後の6秒間、2秒毎に元素エ...",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -15242,7 +16496,9 @@
         "statEffectSummary": "元素爆発を発動した後の6秒間、2秒毎に元素エ...",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -15254,7 +16510,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prototypeamber"
   },
   {
@@ -15370,7 +16626,9 @@
             "statEffectSummary": "熟知+104",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -15387,7 +16645,9 @@
         "statEffectSummary": "熟知+104",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -15399,7 +16659,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "12427",
@@ -15529,7 +16789,16 @@
             "dataSource": {
               "duration": "継続時間30秒",
               "cooldown": "15秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "portable-power-saw-em",
+              "portable-power-saw-symbol"
+            ],
+            "gcsimCooldownKeys": [
+              "portable-power-saw-icd"
+            ]
           }
         ]
       }
@@ -15548,7 +16817,16 @@
         "dataSource": {
           "duration": "継続時間30秒",
           "cooldown": "15秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "portable-power-saw-em",
+          "portable-power-saw-symbol"
+        ],
+        "gcsimCooldownKeys": [
+          "portable-power-saw-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -15561,7 +16839,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "portablepowersaw"
   },
   {
@@ -15692,7 +16970,15 @@
             "dataSource": {
               "duration": "6秒間",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "nagamasa-skill-dmg-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "nagamasa-icd"
+            ]
           }
         ]
       }
@@ -15711,7 +16997,15 @@
         "dataSource": {
           "duration": "6秒間",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nagamasa-skill-dmg-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "nagamasa-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -15724,7 +17018,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "katsuragikirinagamasa"
   },
   {
@@ -15762,7 +17056,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "moonweaversdawn"
   },
   {
@@ -15888,7 +17182,12 @@
             "statEffectSummary": "熟知+120",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sapwoodblade-icd"
+            ]
           }
         ]
       }
@@ -15906,7 +17205,12 @@
         "statEffectSummary": "熟知+120",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sapwoodblade-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -15919,7 +17223,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sapwoodblade"
   },
   {
@@ -16035,7 +17339,12 @@
             "statEffectSummary": "通常攻撃または重撃が命中する時、50%の確率...",
             "dataSource": {
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "prototype-archaic-icd"
+            ]
           }
         ]
       }
@@ -16052,7 +17361,12 @@
         "statEffectSummary": "通常攻撃または重撃が命中する時、50%の確率...",
         "dataSource": {
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "prototype-archaic-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -16065,7 +17379,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prototypearchaic"
   },
   {
@@ -16181,7 +17495,12 @@
             "statEffectSummary": "熟知+80",
             "dataSource": {
               "duration": "10秒間"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "sacrificial-jade"
+            ]
           }
         ]
       }
@@ -16198,7 +17517,12 @@
         "statEffectSummary": "熟知+80",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sacrificial-jade"
+        ]
       }
     ],
     "buffEffect": {
@@ -16210,7 +17534,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificialjade"
   },
   {
@@ -16326,7 +17650,15 @@
             "statEffectSummary": "攻撃力+66",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "swordofdescension"
+            ],
+            "gcsimCooldownKeys": [
+              "swordofdescension-icd"
+            ]
           }
         ]
       }
@@ -16343,7 +17675,15 @@
         "statEffectSummary": "攻撃力+66",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "swordofdescension"
+        ],
+        "gcsimCooldownKeys": [
+          "swordofdescension-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -16356,7 +17696,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "swordofdescension"
   },
   {
@@ -16472,7 +17812,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "継続時間30秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blackcliff"
+            ]
           }
         ]
       }
@@ -16489,7 +17834,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "継続時間30秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackcliff"
+        ]
       }
     ],
     "buffEffect": {
@@ -16501,7 +17851,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackcliffslasher"
   },
   {
@@ -16617,7 +17967,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "継続時間30秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blackcliff"
+            ]
           }
         ]
       }
@@ -16634,7 +17989,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "継続時間30秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackcliff"
+        ]
       }
     ],
     "buffEffect": {
@@ -16646,7 +18006,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackcliffwarbow"
   },
   {
@@ -16762,7 +18122,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "継続時間30秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blackcliff"
+            ]
           }
         ]
       }
@@ -16779,7 +18144,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "継続時間30秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackcliff"
+        ]
       }
     ],
     "buffEffect": {
@@ -16791,7 +18161,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackclifflongsword"
   },
   {
@@ -16907,7 +18277,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "継続時間30秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blackcliff"
+            ]
           }
         ]
       }
@@ -16924,7 +18299,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "継続時間30秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackcliff"
+        ]
       }
     ],
     "buffEffect": {
@@ -16936,7 +18316,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackcliffpole"
   },
   {
@@ -17052,7 +18432,12 @@
             "statEffectSummary": "攻撃力+24%",
             "dataSource": {
               "duration": "継続時間30秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blackcliff"
+            ]
           }
         ]
       }
@@ -17069,7 +18454,12 @@
         "statEffectSummary": "攻撃力+24%",
         "dataSource": {
           "duration": "継続時間30秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackcliff"
+        ]
       }
     ],
     "buffEffect": {
@@ -17081,7 +18471,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blackcliffagate"
   },
   {
@@ -17197,7 +18587,15 @@
             "statEffectSummary": "ダメ+40%",
             "dataSource": {
               "cooldown": "5秒に1回のみ発動"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "blacksword"
+            ],
+            "gcsimCooldownKeys": [
+              "black-sword-icd"
+            ]
           }
         ]
       }
@@ -17214,7 +18612,15 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "cooldown": "5秒に1回のみ発動"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blacksword"
+        ],
+        "gcsimCooldownKeys": [
+          "black-sword-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -17227,7 +18633,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "theblacksword"
   },
   {
@@ -17343,7 +18749,12 @@
             "statEffectSummary": "治療を行う時、元素エネルギーを16ポイント回...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "dialoguesofthedesertsages-icd"
+            ]
           }
         ]
       }
@@ -17360,7 +18771,12 @@
         "statEffectSummary": "治療を行う時、元素エネルギーを16ポイント回...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "dialoguesofthedesertsages-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -17373,7 +18789,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "dialoguesofthedesertsages"
   },
   {
@@ -17499,7 +18915,12 @@
             "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
             "dataSource": {
               "cooldown": "16秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sacrificial-cd"
+            ]
           }
         ]
       }
@@ -17517,7 +18938,12 @@
         "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
         "dataSource": {
           "cooldown": "16秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sacrificial-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -17530,7 +18956,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificialbow"
   },
   {
@@ -17656,7 +19082,12 @@
             "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
             "dataSource": {
               "cooldown": "16秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sacrificial-cd"
+            ]
           }
         ]
       }
@@ -17674,7 +19105,12 @@
         "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
         "dataSource": {
           "cooldown": "16秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sacrificial-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -17687,7 +19123,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificialsword"
   },
   {
@@ -17813,7 +19249,12 @@
             "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
             "dataSource": {
               "cooldown": "16秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sacrificial-cd"
+            ]
           }
         ]
       }
@@ -17831,7 +19272,12 @@
         "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
         "dataSource": {
           "cooldown": "16秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sacrificial-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -17844,7 +19290,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificialgreatsword"
   },
   {
@@ -17970,7 +19416,12 @@
             "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
             "dataSource": {
               "cooldown": "16秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sacrificial-cd"
+            ]
           }
         ]
       }
@@ -17988,7 +19439,12 @@
         "statEffectSummary": "元素スキルが敵にダメージを与えた時、80%の...",
         "dataSource": {
           "cooldown": "16秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sacrificial-cd"
+        ]
       }
     ],
     "buffEffect": {
@@ -18001,7 +19457,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificialfragments"
   },
   {
@@ -18117,7 +19573,12 @@
             "statEffectSummary": "通常攻撃または重撃が命中すると、攻撃力と防御...",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "prototype-rancour"
+            ]
           }
         ]
       }
@@ -18134,7 +19595,12 @@
         "statEffectSummary": "通常攻撃または重撃が命中すると、攻撃力と防御...",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prototype-rancour"
+        ]
       }
     ],
     "buffEffect": {
@@ -18146,7 +19612,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prototyperancour"
   },
   {
@@ -18184,7 +19650,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wavebreakersfin"
   },
   {
@@ -18222,7 +19688,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "deathmatch"
   },
   {
@@ -18338,7 +19804,12 @@
             "statEffectSummary": "会心率+32% / ダメ+32%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "fruitful-hook-dmg%"
+            ]
           }
         ]
       }
@@ -18355,7 +19826,12 @@
         "statEffectSummary": "会心率+32% / ダメ+32%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "fruitful-hook-dmg%"
+        ]
       }
     ],
     "buffEffect": {
@@ -18367,7 +19843,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fruitfulhook"
   },
   {
@@ -18498,7 +19974,16 @@
             "dataSource": {
               "duration": "継続時間15秒",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "flowingpurity-bond-eledmg-boost",
+              "flowingpurity-eledmg-boost"
+            ],
+            "gcsimCooldownKeys": [
+              "flowingpurity-icd"
+            ]
           }
         ]
       }
@@ -18517,7 +20002,16 @@
         "dataSource": {
           "duration": "継続時間15秒",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flowingpurity-bond-eledmg-boost",
+          "flowingpurity-eledmg-boost"
+        ],
+        "gcsimCooldownKeys": [
+          "flowingpurity-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -18530,7 +20024,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "flowingpurity"
   },
   {
@@ -18661,7 +20155,16 @@
             "dataSource": {
               "duration": "6秒間",
               "cooldown": "12秒ごとに1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "clash-of-kings",
+              "clash-of-kings-ca-extension"
+            ],
+            "gcsimCooldownKeys": [
+              "clash-of-kings-icd"
+            ]
           }
         ]
       }
@@ -18680,7 +20183,16 @@
         "dataSource": {
           "duration": "6秒間",
           "cooldown": "12秒ごとに1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "clash-of-kings",
+          "clash-of-kings-ca-extension"
+        ],
+        "gcsimCooldownKeys": [
+          "clash-of-kings-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -18693,7 +20205,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "clashofkings"
   },
   {
@@ -18809,7 +20321,15 @@
             "statEffectSummary": "通常攻撃または重撃が命中する時、50%の確率...",
             "dataSource": {
               "cooldown": "8秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "eye-of-perception-bounce"
+            ],
+            "gcsimCooldownKeys": [
+              "perception-icd"
+            ]
           }
         ]
       }
@@ -18826,7 +20346,15 @@
         "statEffectSummary": "通常攻撃または重撃が命中する時、50%の確率...",
         "dataSource": {
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "eye-of-perception-bounce"
+        ],
+        "gcsimCooldownKeys": [
+          "perception-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -18839,7 +20367,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "eyeofperception"
   },
   {
@@ -18955,7 +20483,15 @@
             "statEffectSummary": "ダメ+24%",
             "dataSource": {
               "cooldown": "45秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "bell"
+            ],
+            "gcsimCooldownKeys": [
+              "bell-icd"
+            ]
           }
         ]
       }
@@ -18972,7 +20508,15 @@
         "statEffectSummary": "ダメ+24%",
         "dataSource": {
           "cooldown": "45秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "bell"
+        ],
+        "gcsimCooldownKeys": [
+          "bell-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -18985,7 +20529,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thebell"
   },
   {
@@ -19116,7 +20660,9 @@
             "dataSource": {
               "duration": "6秒間",
               "cooldown": "1秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -19135,7 +20681,9 @@
         "dataSource": {
           "duration": "6秒間",
           "cooldown": "1秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -19148,7 +20696,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "12417",
@@ -19263,7 +20811,15 @@
             "statEffectSummary": "熟知+120",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "forest-sanctuary"
+            ],
+            "gcsimCooldownKeys": [
+              "forestregalia-icd"
+            ]
           }
         ]
       }
@@ -19280,7 +20836,15 @@
         "statEffectSummary": "熟知+120",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "forest-sanctuary"
+        ],
+        "gcsimCooldownKeys": [
+          "forestregalia-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -19292,7 +20856,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "forestregalia"
   },
   {
@@ -19408,7 +20972,12 @@
             "statEffectSummary": "装備者が属性を持たない場合、通常攻撃、重撃、...",
             "dataSource": {
               "cooldown": "12秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "swordofnarzissenkreuz-icd"
+            ]
           }
         ]
       }
@@ -19425,7 +20994,12 @@
         "statEffectSummary": "装備者が属性を持たない場合、通常攻撃、重撃、...",
         "dataSource": {
           "cooldown": "12秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "swordofnarzissenkreuz-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -19438,7 +21012,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "swordofnarzissenkreuz"
   },
   {
@@ -19554,7 +21128,12 @@
             "statEffectSummary": "ダメ+16%",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "prototype"
+            ]
           }
         ]
       }
@@ -19571,7 +21150,12 @@
         "statEffectSummary": "ダメ+16%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prototype"
+        ]
       }
     ],
     "buffEffect": {
@@ -19583,7 +21167,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prototypestarglitter"
   },
   {
@@ -19699,7 +21283,12 @@
             "statEffectSummary": "治療を受けた時、元素エネルギーを16ポイント...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "rightfulreward-icd"
+            ]
           }
         ]
       }
@@ -19716,7 +21305,12 @@
         "statEffectSummary": "治療を受けた時、元素エネルギーを16ポイント...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "rightfulreward-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -19729,7 +21323,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "rightfulreward"
   },
   {
@@ -19845,7 +21439,12 @@
             "statEffectSummary": "攻撃力+16%",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "sacrificersstaff-buff"
+            ]
           }
         ]
       }
@@ -19862,7 +21461,12 @@
         "statEffectSummary": "攻撃力+16%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sacrificersstaff-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -19874,7 +21478,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sacrificersstaff"
   },
   {
@@ -20000,7 +21604,9 @@
             "statEffectSummary": "会心時100%で粒子生成(CT6s)",
             "dataSource": {
               "cooldown": "6秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -20018,7 +21624,9 @@
         "statEffectSummary": "会心時100%で粒子生成(CT6s)",
         "dataSource": {
           "cooldown": "6秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -20031,7 +21639,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "favoniussword"
   },
   {
@@ -20157,7 +21765,9 @@
             "statEffectSummary": "会心時100%で粒子生成(CT6s)",
             "dataSource": {
               "cooldown": "6秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -20175,7 +21785,9 @@
         "statEffectSummary": "会心時100%で粒子生成(CT6s)",
         "dataSource": {
           "cooldown": "6秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -20188,7 +21800,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "favoniusgreatsword"
   },
   {
@@ -20314,7 +21926,9 @@
             "statEffectSummary": "会心時100%で粒子生成(CT6s)",
             "dataSource": {
               "cooldown": "6秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -20332,7 +21946,9 @@
         "statEffectSummary": "会心時100%で粒子生成(CT6s)",
         "dataSource": {
           "cooldown": "6秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -20345,7 +21961,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "favoniuslance"
   },
   {
@@ -20471,7 +22087,9 @@
             "statEffectSummary": "会心時100%で粒子生成(CT6s)",
             "dataSource": {
               "cooldown": "6秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -20489,7 +22107,9 @@
         "statEffectSummary": "会心時100%で粒子生成(CT6s)",
         "dataSource": {
           "cooldown": "6秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -20502,7 +22122,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "favoniuscodex"
   },
   {
@@ -20628,7 +22248,9 @@
             "statEffectSummary": "会心時100%で粒子生成(CT6s)",
             "dataSource": {
               "cooldown": "6秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -20646,7 +22268,9 @@
         "statEffectSummary": "会心時100%で粒子生成(CT6s)",
         "dataSource": {
           "cooldown": "6秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -20659,7 +22283,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "favoniuswarbow"
   },
   {
@@ -20775,7 +22399,12 @@
             "statEffectSummary": "元素スキルを発動すると、元素チャージ効率+4...",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "oathsworn"
+            ]
           }
         ]
       }
@@ -20792,7 +22421,12 @@
         "statEffectSummary": "元素スキルを発動すると、元素チャージ効率+4...",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "oathsworn"
+        ]
       }
     ],
     "buffEffect": {
@@ -20804,7 +22438,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "oathsworneye"
   },
   {
@@ -20920,7 +22554,12 @@
             "statEffectSummary": "ダメ+32%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "songofstillness-dmg-boost"
+            ]
           }
         ]
       }
@@ -20937,7 +22576,12 @@
         "statEffectSummary": "ダメ+32%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "songofstillness-dmg-boost"
+        ]
       }
     ],
     "buffEffect": {
@@ -20949,7 +22593,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "songofstillness"
   },
   {
@@ -21065,7 +22709,9 @@
             "statEffectSummary": "元素反応を起こした後の12秒間、HP上限+3...",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -21082,7 +22728,9 @@
         "statEffectSummary": "元素反応を起こした後の12秒間、HP上限+3...",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -21094,7 +22742,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "serenityscall"
   },
   {
@@ -21132,7 +22780,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "12411",
@@ -21247,7 +22895,12 @@
             "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "starsilver-icd"
+            ]
           }
         ]
       }
@@ -21264,7 +22917,12 @@
         "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "starsilver-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -21277,7 +22935,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "snowtombedstarsilver"
   },
   {
@@ -21315,7 +22973,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thestringless"
   },
   {
@@ -21353,7 +23011,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lithicblade"
   },
   {
@@ -21391,7 +23049,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lithicspear"
   },
   {
@@ -21429,7 +23087,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "jadevista"
   },
   {
@@ -21560,7 +23218,16 @@
             "dataSource": {
               "duration": "継続時間30秒",
               "cooldown": "15秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "dockhands-assistant-em",
+              "dockhands-assistant-symbol"
+            ],
+            "gcsimCooldownKeys": [
+              "dockhands-assistant-icd"
+            ]
           }
         ]
       }
@@ -21579,7 +23246,16 @@
         "dataSource": {
           "duration": "継続時間30秒",
           "cooldown": "15秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dockhands-assistant-em",
+          "dockhands-assistant-symbol"
+        ],
+        "gcsimCooldownKeys": [
+          "dockhands-assistant-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -21592,7 +23268,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thedockhandsassistant"
   },
   {
@@ -21723,7 +23399,12 @@
             "dataSource": {
               "duration": "継続時間4秒",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "viridescent-hunt-icd"
+            ]
           }
         ]
       }
@@ -21742,7 +23423,12 @@
         "dataSource": {
           "duration": "継続時間4秒",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "viridescent-hunt-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -21755,7 +23441,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "theviridescenthunt"
   },
   {
@@ -21871,7 +23557,12 @@
             "statEffectSummary": "攻撃が敵に命中した時、目標の位置にHP上限の...",
             "dataSource": {
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "ash-graven-drinking-horn-icd"
+            ]
           }
         ]
       }
@@ -21888,7 +23579,12 @@
         "statEffectSummary": "攻撃が敵に命中した時、目標の位置にHP上限の...",
         "dataSource": {
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "ash-graven-drinking-horn-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -21901,7 +23597,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ashgravendrinkinghorn"
   },
   {
@@ -22017,7 +23713,12 @@
             "statEffectSummary": "熟知+240",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "covenant-of-frost-and-snow-em"
+            ]
           }
         ]
       }
@@ -22034,7 +23735,12 @@
         "statEffectSummary": "熟知+240",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "covenant-of-frost-and-snow-em"
+        ]
       }
     ],
     "buffEffect": {
@@ -22046,7 +23752,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "covenantoffrostandsnow"
   },
   {
@@ -22162,7 +23868,13 @@
             "statEffectSummary": "熟知+144",
             "dataSource": {
               "duration": "10秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "dawning-frost-ca",
+              "dawning-frost-skill"
+            ]
           }
         ]
       }
@@ -22179,7 +23891,13 @@
         "statEffectSummary": "熟知+144",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dawning-frost-ca",
+          "dawning-frost-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -22191,7 +23909,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "dawningfrost"
   },
   {
@@ -22322,7 +24040,15 @@
             "dataSource": {
               "duration": "15秒間",
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "flame-forged-insight-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "flame-forged-insight-icd"
+            ]
           }
         ]
       }
@@ -22341,7 +24067,15 @@
         "dataSource": {
           "duration": "15秒間",
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flame-forged-insight-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "flame-forged-insight-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -22354,7 +24088,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "flameforgedinsight"
   },
   {
@@ -22470,7 +24204,12 @@
             "statEffectSummary": "熟知+80",
             "dataSource": {
               "duration": "継続時間18秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "cloudforged-em"
+            ]
           }
         ]
       }
@@ -22487,7 +24226,12 @@
         "statEffectSummary": "熟知+80",
         "dataSource": {
           "duration": "継続時間18秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "cloudforged-em"
+        ]
       }
     ],
     "buffEffect": {
@@ -22499,7 +24243,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "cloudforged"
   },
   {
@@ -22615,7 +24359,12 @@
             "statEffectSummary": "ダメ+24%",
             "dataSource": {
               "duration": "継続時間8秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "mountain-bracing-bolt-other"
+            ]
           }
         ]
       }
@@ -22632,7 +24381,12 @@
         "statEffectSummary": "ダメ+24%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mountain-bracing-bolt-other"
+        ]
       }
     ],
     "buffEffect": {
@@ -22644,7 +24398,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mountainbracingbolt"
   },
   {
@@ -22680,9 +24434,26 @@
         "description": "通常攻撃または重撃が命中すると、100%の確率で和音を1個獲得する。和音を5個集めると、音律の力を放ち、周囲の敵に攻撃力の200%のダメージを与える。和音は最大30秒存在し、0.5秒毎に最大1個獲得可能。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11402",
+        "name": "和音",
+        "sourceType": "weapon",
+        "sourceId": "11402",
+        "duration": 30,
+        "description": "通常攻撃または重撃が命中すると、100%の確率で和音を1個獲得する。和音を5個集めると、音律の力を放ち、周囲の敵に攻撃力の200%のダメージを与える。和音は最大30秒存在し、0.5秒毎に最大1個獲得可能。",
+        "dataSource": {
+          "duration": "gcsim: flute-stack-duration"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flute-stack-duration"
+        ]
+      }
+    ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "theflute"
   },
   {
@@ -22798,7 +24569,12 @@
             "statEffectSummary": "攻撃力+24% / 熟知+96",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "mailedflower"
+            ]
           }
         ]
       }
@@ -22815,7 +24591,12 @@
         "statEffectSummary": "攻撃力+24% / 熟知+96",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mailedflower"
+        ]
       }
     ],
     "buffEffect": {
@@ -22827,7 +24608,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mailedflower"
   },
   {
@@ -22958,7 +24739,15 @@
             "dataSource": {
               "duration": "6秒間",
               "cooldown": "1秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ironsting"
+            ],
+            "gcsimCooldownKeys": [
+              "ironsting-icd"
+            ]
           }
         ]
       }
@@ -22977,7 +24766,15 @@
         "dataSource": {
           "duration": "6秒間",
           "cooldown": "1秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ironsting"
+        ],
+        "gcsimCooldownKeys": [
+          "ironsting-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -22990,7 +24787,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ironsting"
   },
   {
@@ -23106,7 +24903,12 @@
             "statEffectSummary": "熟知+200",
             "dataSource": {
               "duration": "20秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "etherlight"
+            ]
           }
         ]
       }
@@ -23123,7 +24925,12 @@
         "statEffectSummary": "熟知+200",
         "dataSource": {
           "duration": "20秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "etherlight"
+        ]
       }
     ],
     "buffEffect": {
@@ -23135,7 +24942,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "etherlightspindlelute"
   },
   {
@@ -23266,7 +25073,16 @@
             "dataSource": {
               "duration": "継続時間30秒",
               "cooldown": "5秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "amenoma-seed-0",
+              "amenoma-seed-1"
+            ],
+            "gcsimCooldownKeys": [
+              "amenoma-icd"
+            ]
           }
         ]
       }
@@ -23285,7 +25101,16 @@
         "dataSource": {
           "duration": "継続時間30秒",
           "cooldown": "5秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amenoma-seed-0",
+          "amenoma-seed-1"
+        ],
+        "gcsimCooldownKeys": [
+          "amenoma-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -23298,7 +25123,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "amenomakageuchi"
   },
   {
@@ -23414,7 +25239,12 @@
             "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "frostbearer-icd"
+            ]
           }
         ]
       }
@@ -23431,7 +25261,12 @@
         "statEffectSummary": "通常攻撃または重撃が敵に命中した時、100%...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "frostbearer-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -23444,7 +25279,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "frostbearer"
   },
   {
@@ -23575,7 +25410,15 @@
             "dataSource": {
               "duration": "継続時間10秒",
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "toukaboushigure-cursed-parasol"
+            ],
+            "gcsimCooldownKeys": [
+              "toukaboushigure-icd"
+            ]
           }
         ]
       }
@@ -23594,7 +25437,15 @@
         "dataSource": {
           "duration": "継続時間10秒",
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "toukaboushigure-cursed-parasol"
+        ],
+        "gcsimCooldownKeys": [
+          "toukaboushigure-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -23607,7 +25458,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "toukaboushigure"
   },
   {
@@ -23723,7 +25574,13 @@
             "statEffectSummary": "攻撃力+32% / ダメ+32%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "emberwell-atk",
+              "emberwell-stellar"
+            ]
           }
         ]
       }
@@ -23740,7 +25597,13 @@
         "statEffectSummary": "攻撃力+32% / ダメ+32%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "emberwell-atk",
+          "emberwell-stellar"
+        ]
       }
     ],
     "buffEffect": {
@@ -23752,7 +25615,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "emberwell"
   },
   {
@@ -23868,7 +25731,12 @@
             "statEffectSummary": "元素スキル発動時、防御力+32%、継続時間1...",
             "dataSource": {
               "duration": "継続時間15秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "footprint-def"
+            ]
           }
         ]
       }
@@ -23885,7 +25753,12 @@
         "statEffectSummary": "元素スキル発動時、防御力+32%、継続時間1...",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "footprint-def"
+        ]
       }
     ],
     "buffEffect": {
@@ -23897,7 +25770,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "footprintoftherainbow"
   },
   {
@@ -24013,7 +25886,12 @@
             "statEffectSummary": "攻撃力+56%",
             "dataSource": {
               "duration": "8秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "rainbow-serpent-bow"
+            ]
           }
         ]
       }
@@ -24030,7 +25908,12 @@
         "statEffectSummary": "攻撃力+56%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "rainbow-serpent-bow"
+        ]
       }
     ],
     "buffEffect": {
@@ -24042,7 +25925,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "rainbowserpentsrainbow"
   },
   {
@@ -24173,7 +26056,15 @@
             "dataSource": {
               "duration": "10秒間",
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "waveridingwhirl-buff"
+            ],
+            "gcsimCooldownKeys": [
+              "waveridingwhirl-icd"
+            ]
           }
         ]
       }
@@ -24192,7 +26083,15 @@
         "dataSource": {
           "duration": "10秒間",
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "waveridingwhirl-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "waveridingwhirl-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -24205,7 +26104,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "waveridingwhirl"
   },
   {
@@ -24243,7 +26142,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "hamayumi"
   },
   {
@@ -24359,7 +26258,12 @@
             "statEffectSummary": "通常攻撃または重撃が命中すると、攻撃力と防御...",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "whiteblind"
+            ]
           }
         ]
       }
@@ -24376,7 +26280,12 @@
         "statEffectSummary": "通常攻撃または重撃が命中すると、攻撃力と防御...",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "whiteblind"
+        ]
       }
     ],
     "buffEffect": {
@@ -24388,7 +26297,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "whiteblind"
   },
   {
@@ -24504,7 +26413,9 @@
             "statEffectSummary": "ダメ+20%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -24521,7 +26432,9 @@
         "statEffectSummary": "ダメ+20%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -24533,7 +26446,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "hakushinring"
   },
   {
@@ -24664,7 +26577,15 @@
             "dataSource": {
               "duration": "15秒間",
               "cooldown": "16秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "frostbreath-atk"
+            ],
+            "gcsimCooldownKeys": [
+              "frostbreath-buff-icd"
+            ]
           }
         ]
       }
@@ -24683,7 +26604,15 @@
         "dataSource": {
           "duration": "15秒間",
           "cooldown": "16秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "frostbreath-atk"
+        ],
+        "gcsimCooldownKeys": [
+          "frostbreath-buff-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -24696,7 +26625,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "frostbreath"
   },
   {
@@ -24734,7 +26663,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "festeringdesire"
   },
   {
@@ -24850,7 +26779,9 @@
             "statEffectSummary": "ダメ+48%",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -24867,7 +26798,9 @@
         "statEffectSummary": "ダメ+48%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -24879,7 +26812,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "15413",
@@ -24994,7 +26927,12 @@
             "statEffectSummary": "攻撃力+32%",
             "dataSource": {
               "duration": "持続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "windblume"
+            ]
           }
         ]
       }
@@ -25011,7 +26949,12 @@
         "statEffectSummary": "攻撃力+32%",
         "dataSource": {
           "duration": "持続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "windblume"
+        ]
       }
     ],
     "buffEffect": {
@@ -25023,7 +26966,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "windblumeode"
   },
   {
@@ -25139,7 +27082,12 @@
             "statEffectSummary": "攻撃力+24% / 熟知+96",
             "dataSource": {
               "duration": "10秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "missive"
+            ]
           }
         ]
       }
@@ -25156,7 +27104,12 @@
         "statEffectSummary": "攻撃力+24% / 熟知+96",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "missive"
+        ]
       }
     ],
     "buffEffect": {
@@ -25168,7 +27121,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "missivewindspear"
   },
   {
@@ -25284,7 +27237,12 @@
             "statEffectSummary": "ダメ+16%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "mappa-mare"
+            ]
           }
         ]
       }
@@ -25301,7 +27259,12 @@
         "statEffectSummary": "ダメ+16%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mappa-mare"
+        ]
       }
     ],
     "buffEffect": {
@@ -25313,7 +27276,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mappamare"
   },
   {
@@ -25429,7 +27392,9 @@
             "statEffectSummary": "熟知+120",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -25446,7 +27411,9 @@
         "statEffectSummary": "熟知+120",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -25458,7 +27425,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "masterkey"
   },
   {
@@ -25496,7 +27463,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fruitoffulfillment"
   },
   {
@@ -25534,7 +27501,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "calamityofeshu"
   },
   {
@@ -25650,7 +27617,13 @@
             "statEffectSummary": "ダメ+40%",
             "dataSource": {
               "duration": "5秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "mitternachtswaltz-ele",
+              "mitternachtswaltz-na"
+            ]
           }
         ]
       }
@@ -25667,7 +27640,13 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mitternachtswaltz-ele",
+          "mitternachtswaltz-na"
+        ]
       }
     ],
     "buffEffect": {
@@ -25679,7 +27658,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mitternachtswaltz"
   },
   {
@@ -25795,7 +27774,9 @@
             "statEffectSummary": "熟知+120",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -25812,7 +27793,9 @@
         "statEffectSummary": "熟知+120",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -25824,7 +27807,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "snarehook"
   },
   {
@@ -25940,7 +27923,15 @@
             "statEffectSummary": "ダメ+12%",
             "dataSource": {
               "cooldown": "7秒に1回のみ発動"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "twilight-bonus-dmg"
+            ],
+            "gcsimCooldownKeys": [
+              "twilight-icd"
+            ]
           }
         ]
       }
@@ -25957,7 +27948,15 @@
         "statEffectSummary": "ダメ+12%",
         "dataSource": {
           "cooldown": "7秒に1回のみ発動"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "twilight-bonus-dmg"
+        ],
+        "gcsimCooldownKeys": [
+          "twilight-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -25970,7 +27969,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fadingtwilight"
   },
   {
@@ -26086,7 +28085,12 @@
             "statEffectSummary": "元素粒子または元素オーブを獲得した5秒間、通...",
             "dataSource": {
               "duration": "5秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "crescent-pike-buff"
+            ]
           }
         ]
       }
@@ -26103,7 +28107,12 @@
         "statEffectSummary": "元素粒子または元素オーブを獲得した5秒間、通...",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "crescent-pike-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -26115,7 +28124,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "crescentpike"
   },
   {
@@ -26246,7 +28255,15 @@
             "dataSource": {
               "duration": "継続時間10秒",
               "cooldown": "30秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "widsith"
+            ],
+            "gcsimCooldownKeys": [
+              "widsith-icd"
+            ]
           }
         ]
       }
@@ -26265,7 +28282,15 @@
         "dataSource": {
           "duration": "継続時間10秒",
           "cooldown": "30秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "widsith"
+        ],
+        "gcsimCooldownKeys": [
+          "widsith-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -26278,7 +28303,7 @@
       "color": "#ec4899"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thewidsith"
   },
   {
@@ -26394,7 +28419,12 @@
             "statEffectSummary": "攻撃が敵に命中した時、目標の位置にHP上限の...",
             "dataSource": {
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "sequence-of-solitude-icd"
+            ]
           }
         ]
       }
@@ -26411,7 +28441,12 @@
         "statEffectSummary": "攻撃が敵に命中した時、目標の位置にHP上限の...",
         "dataSource": {
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sequence-of-solitude-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -26424,7 +28459,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sequenceofsolitude"
   },
   {
@@ -26555,7 +28590,15 @@
             "dataSource": {
               "duration": "10秒継続",
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "scion-heartsearer"
+            ],
+            "gcsimCooldownKeys": [
+              "scion-icd"
+            ]
           }
         ]
       }
@@ -26574,7 +28617,15 @@
         "dataSource": {
           "duration": "10秒継続",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "scion-heartsearer"
+        ],
+        "gcsimCooldownKeys": [
+          "scion-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -26587,7 +28638,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "scionoftheblazingsun"
   },
   {
@@ -26703,7 +28754,13 @@
             "statEffectSummary": "会心率+4% / ダメ+32%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "wolf-fang-burst",
+              "wolf-fang-skill"
+            ]
           }
         ]
       }
@@ -26720,7 +28777,13 @@
         "statEffectSummary": "会心率+4% / ダメ+32%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wolf-fang-burst",
+          "wolf-fang-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -26732,7 +28795,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wolffang"
   },
   {
@@ -26863,7 +28926,9 @@
             "dataSource": {
               "duration": "15秒間",
               "cooldown": "12秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -26882,7 +28947,9 @@
         "dataSource": {
           "duration": "15秒間",
           "cooldown": "12秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -26895,7 +28962,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "talkingstick"
   },
   {
@@ -27011,7 +29078,13 @@
             "statEffectSummary": "ダメ+40%",
             "dataSource": {
               "duration": "6秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "solar-na-buff",
+              "solar-skill-burst-buff"
+            ]
           }
         ]
       }
@@ -27028,7 +29101,13 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "solar-na-buff",
+          "solar-skill-burst-buff"
+        ]
       }
     ],
     "buffEffect": {
@@ -27040,7 +29119,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "solarpearl"
   },
   {
@@ -27078,7 +29157,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "dragonsbane"
   },
   {
@@ -27116,7 +29195,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lionsroar"
   },
   {
@@ -27232,7 +29311,12 @@
             "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
             "dataSource": {
               "duration": "継続時間12秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "wanderingevenstar"
+            ]
           }
         ]
       }
@@ -27249,7 +29333,12 @@
         "statEffectSummary": "10秒ごとに、下記の効果が発動する。装備した...",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wanderingevenstar"
+        ]
       }
     ],
     "buffEffect": {
@@ -27261,7 +29350,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wanderingevenstar"
   },
   {
@@ -27299,7 +29388,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "akuoumaru"
   },
   {
@@ -27337,7 +29426,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "mouunsmoon"
   },
   {
@@ -27453,7 +29542,12 @@
             "statEffectSummary": "攻撃力+72%",
             "dataSource": {
               "duration": "継続時間10秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "prototype-crescent"
+            ]
           }
         ]
       }
@@ -27470,7 +29564,12 @@
         "statEffectSummary": "攻撃力+72%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prototype-crescent"
+        ]
       }
     ],
     "buffEffect": {
@@ -27482,7 +29581,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "prototypecrescent"
   },
   {
@@ -27598,7 +29697,16 @@
             "statEffectSummary": "元素スキルを発動すると効果が付与され、攻撃が...",
             "dataSource": {
               "cooldown": "2秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "endoftheline-effect"
+            ],
+            "gcsimCooldownKeys": [
+              "endoftheline-dmg-icd",
+              "endoftheline-effect-icd"
+            ]
           }
         ]
       }
@@ -27615,7 +29723,16 @@
         "statEffectSummary": "元素スキルを発動すると効果が付与され、攻撃が...",
         "dataSource": {
           "cooldown": "2秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "endoftheline-effect"
+        ],
+        "gcsimCooldownKeys": [
+          "endoftheline-dmg-icd",
+          "endoftheline-effect-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -27628,7 +29745,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "endoftheline"
   },
   {
@@ -27759,7 +29876,15 @@
             "dataSource": {
               "duration": "継続時間8秒",
               "cooldown": "8秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "kagotsurube-isshin"
+            ],
+            "gcsimCooldownKeys": [
+              "kagotsurube-isshin-icd"
+            ]
           }
         ]
       }
@@ -27778,7 +29903,15 @@
         "dataSource": {
           "duration": "継続時間8秒",
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kagotsurube-isshin"
+        ],
+        "gcsimCooldownKeys": [
+          "kagotsurube-isshin-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -27791,7 +29924,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "kagotsurubeisshin"
   },
   {
@@ -27907,7 +30040,15 @@
             "statEffectSummary": "ダメ+24%",
             "dataSource": {
               "cooldown": "15秒毎に1回"
-            }
+            },
+            "timing": "always",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "luxurious-sea-lord"
+            ],
+            "gcsimCooldownKeys": [
+              "sealord-icd"
+            ]
           }
         ]
       }
@@ -27924,7 +30065,15 @@
         "statEffectSummary": "ダメ+24%",
         "dataSource": {
           "cooldown": "15秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "luxurious-sea-lord"
+        ],
+        "gcsimCooldownKeys": [
+          "sealord-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -27937,7 +30086,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "luxurioussealord"
   },
   {
@@ -27975,7 +30124,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "serpentspine"
   },
   {
@@ -28013,7 +30162,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "sharpshootersoath"
   },
   {
@@ -28129,7 +30278,12 @@
             "statEffectSummary": "攻撃が命中すると、50%の確率で1体の敵に攻...",
             "dataSource": {
               "cooldown": "11秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "fillet-blade-icd"
+            ]
           }
         ]
       }
@@ -28146,7 +30300,12 @@
         "statEffectSummary": "攻撃が命中すると、50%の確率で1体の敵に攻...",
         "dataSource": {
           "cooldown": "11秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "fillet-blade-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -28159,7 +30318,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "filletblade"
   },
   {
@@ -28197,7 +30356,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "recurvebow"
   },
   {
@@ -28313,7 +30472,12 @@
             "statEffectSummary": "攻撃力+40%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "darkironsword"
+            ]
           }
         ]
       }
@@ -28330,7 +30494,12 @@
         "statEffectSummary": "攻撃力+40%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "darkironsword"
+        ]
       }
     ],
     "buffEffect": {
@@ -28342,7 +30511,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "darkironsword"
   },
   {
@@ -28380,7 +30549,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "otherworldlystory"
   },
   {
@@ -28418,7 +30587,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blacktassel"
   },
   {
@@ -28456,7 +30625,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "slingshot"
   },
   {
@@ -28494,7 +30663,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ferrousshadow"
   },
   {
@@ -28610,7 +30779,12 @@
             "statEffectSummary": "攻撃力+20%",
             "dataSource": {
               "duration": "15秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "twinnephrite"
+            ]
           }
         ]
       }
@@ -28627,7 +30801,12 @@
         "statEffectSummary": "攻撃力+20%",
         "dataSource": {
           "duration": "15秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "twinnephrite"
+        ]
       }
     ],
     "buffEffect": {
@@ -28639,7 +30818,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "twinnephrite"
   },
   {
@@ -28677,7 +30856,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "whiteirongreatsword"
   },
   {
@@ -28715,7 +30894,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "whitetassel"
   },
   {
@@ -28831,7 +31010,9 @@
             "statEffectSummary": "元素爆発を発動した後、攻撃力と移動速度+24...",
             "dataSource": {
               "duration": "継続時間15秒"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false
           }
         ]
       }
@@ -28848,7 +31029,9 @@
         "statEffectSummary": "元素爆発を発動した後、攻撃力と移動速度+24...",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -28860,7 +31043,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skyridersword"
   },
   {
@@ -28976,7 +31159,12 @@
             "statEffectSummary": "攻撃力+10%",
             "dataSource": {
               "duration": "継続時間6秒"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "skyrider"
+            ]
           }
         ]
       }
@@ -28993,7 +31181,12 @@
         "statEffectSummary": "攻撃力+10%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skyrider"
+        ]
       }
     ],
     "buffEffect": {
@@ -29005,7 +31198,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "skyridergreatsword"
   },
   {
@@ -29121,7 +31314,12 @@
             "statEffectSummary": "重撃が弱点に命中した場合、追加で攻撃力200...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "messenger-icd"
+            ]
           }
         ]
       }
@@ -29138,7 +31336,12 @@
         "statEffectSummary": "重撃が弱点に命中した場合、追加で攻撃力200...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "messenger-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -29151,7 +31354,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "messenger"
   },
   {
@@ -29267,7 +31470,12 @@
             "statEffectSummary": "通常攻撃が命中した敵1体に攻撃力の320%の...",
             "dataSource": {
               "cooldown": "10秒毎に1回"
-            }
+            },
+            "timing": "conditional",
+            "gcsimTarget": false,
+            "gcsimCooldownKeys": [
+              "halberd-icd"
+            ]
           }
         ]
       }
@@ -29284,7 +31492,12 @@
         "statEffectSummary": "通常攻撃が命中した敵1体に攻撃力の320%の...",
         "dataSource": {
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "halberd-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -29297,7 +31510,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "halberd"
   },
   {
@@ -29335,7 +31548,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "magicguide"
   },
   {
@@ -29466,7 +31679,15 @@
             "dataSource": {
               "duration": "継続時間15秒",
               "cooldown": "3秒毎に1回"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "debate-club-effect"
+            ],
+            "gcsimCooldownKeys": [
+              "debate-club-icd"
+            ]
           }
         ]
       }
@@ -29485,7 +31706,15 @@
         "dataSource": {
           "duration": "継続時間15秒",
           "cooldown": "3秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "debate-club-effect"
+        ],
+        "gcsimCooldownKeys": [
+          "debate-club-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -29498,7 +31727,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "debateclub"
   },
   {
@@ -29536,7 +31765,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "bloodtaintedgreatsword"
   },
   {
@@ -29667,7 +31896,15 @@
             "dataSource": {
               "duration": "継続時間10秒",
               "cooldown": "20秒に1回のみ発動"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "ttds"
+            ],
+            "gcsimCooldownKeys": [
+              "ttds-icd"
+            ]
           }
         ]
       }
@@ -29686,7 +31923,15 @@
         "dataSource": {
           "duration": "継続時間10秒",
           "cooldown": "20秒に1回のみ発動"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ttds"
+        ],
+        "gcsimCooldownKeys": [
+          "ttds-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -29699,7 +31944,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thrillingtalesofdragonslayers"
   },
   {
@@ -29737,7 +31982,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "travelershandysword"
   },
   {
@@ -29775,7 +32020,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "coolsteel"
   },
   {
@@ -29891,7 +32136,12 @@
             "statEffectSummary": "攻撃力+40%",
             "dataSource": {
               "duration": "12秒間"
-            }
+            },
+            "timing": "computed",
+            "gcsimTarget": true,
+            "gcsimKeys": [
+              "emeraldorb"
+            ]
           }
         ]
       }
@@ -29908,7 +32158,12 @@
         "statEffectSummary": "攻撃力+40%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "emeraldorb"
+        ]
       }
     ],
     "buffEffect": {
@@ -29920,7 +32175,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "emeraldorb"
   },
   {
@@ -29958,7 +32213,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "ravenbow"
   },
   {
@@ -29996,7 +32251,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:34",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "harbingerofdawn"
   }
 ]

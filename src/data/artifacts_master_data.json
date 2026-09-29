@@ -23,7 +23,12 @@
         "statEffectSummary": "HP増減時、会心率+12% (最大3層=+36%)",
         "dataSource": {
           "duration": "継続時間5秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mh-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -35,7 +40,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "marechausseehunter"
   },
   {
@@ -62,7 +67,12 @@
         "statEffectSummary": "元素スキルまたは元素爆発を発動した後10秒間...",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "maiden-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -74,7 +84,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "maidenbeloved"
   },
   {
@@ -91,7 +101,7 @@
     "effect4p": "超電導反応によるダメージ+80%、星電導反応によるダメージ+40%。装備者が超電導または星電導反応の影響を受けた敵を攻撃する時、その攻撃の会心率+16%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "disenchantmentindeepshadow"
   },
   {
@@ -116,7 +126,12 @@
         "description": "元素スキルのダメージ+25%。また、装備者が待機中の時、元素スキルのダメージがさらに+25%。この効果は装備キャラクターが登場してから2秒後に解除される。",
         "color": "#fbbf24",
         "statEffectSummary": "待機時、元素スキルダメージさらに+25%",
-        "dataSource": {}
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "troupe-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -128,7 +143,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "goldentroupe"
   },
   {
@@ -155,7 +170,12 @@
         "statEffectSummary": "ダメ+10%",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "vg-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -167,7 +187,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "vourukashasglow"
   },
   {
@@ -184,7 +204,7 @@
     "effect4p": "この聖遺物セットを装備したキャラクターは、以下の状況において「問答」効果を獲得する。「問答」効果：フィールド上で岩元素攻撃を敵に命中した後に1層獲得、0.3秒毎に1層のみ獲得できる。待機中の時は、3秒毎に自動で1層獲得する。重ね掛けできる「問答」は最大4層までとなり、1層につき防御力+6%、岩元素ダメージ+6%。6秒毎に「問答」効果を獲得していない場合は、1層失う。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "huskofopulentdreams"
   },
   {
@@ -213,7 +233,9 @@
         "dataSource": {
           "duration": "3秒継続",
           "cooldown": "3.5秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -226,7 +248,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "oceanhuedclam"
   },
   {
@@ -253,7 +275,9 @@
         "statEffectSummary": "夜魂性質反応後、関連元素ダメバフ+12%〜40%",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -265,7 +289,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "scrolloftheheroofcindercity"
   },
   {
@@ -292,7 +316,15 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flower-4pc-buff"
+        ],
+        "gcsimCooldownKeys": [
+          "flower-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -304,7 +336,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "flowerofparadiselost"
   },
   {
@@ -321,7 +353,7 @@
     "effect4p": "シールド状態の時、通常攻撃と重撃ダメージ+40%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "retracingbolide"
   },
   {
@@ -348,7 +380,12 @@
         "statEffectSummary": "元素爆発発動後、チーム全員の攻撃力+20%",
         "dataSource": {
           "duration": "継続時間12秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nob-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -360,7 +397,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "noblesseoblige"
   },
   {
@@ -387,7 +424,12 @@
         "statEffectSummary": "ダメ+20%",
         "dataSource": {
           "duration": "3秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "aubade-4pc-onfield"
+        ]
       }
     ],
     "buffEffect": {
@@ -399,7 +441,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "aubadeofmorningstarandmoon"
   },
   {
@@ -428,7 +470,15 @@
         "dataSource": {
           "duration": "8秒間",
           "cooldown": "8秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "gd-4pc"
+        ],
+        "gcsimCooldownKeys": [
+          "gd-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -441,7 +491,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "gildeddreams"
   },
   {
@@ -468,7 +518,12 @@
         "statEffectSummary": "ダメ+50%",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "bloodstained-4pc-dmg%"
+        ]
       }
     ],
     "buffEffect": {
@@ -480,7 +535,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "bloodstainedchivalry"
   },
   {
@@ -507,7 +562,12 @@
         "statEffectSummary": "熟知+60 / ダメ+10%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "gleaming-moon-devotion-em"
+        ]
       }
     ],
     "buffEffect": {
@@ -519,7 +579,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "silkenmoonsserenade"
   },
   {
@@ -536,7 +596,7 @@
     "effect4p": "該当聖遺物セットを装備したキャラが片手剣、両手剣、長柄武器キャラの場合、通常攻撃ダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "gladiatorsfinale"
   },
   {
@@ -563,7 +623,13 @@
         "statEffectSummary": "会心率+16% / ダメ+40%",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "scarletproof-4pc-cr",
+          "scarletproof-4pc-dmg"
+        ]
       }
     ],
     "buffEffect": {
@@ -575,7 +641,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "scarletproof"
   },
   {
@@ -604,7 +670,15 @@
         "dataSource": {
           "duration": "継続時間6秒",
           "cooldown": "1秒毎に1回"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "obsidiancodex-4pc"
+        ],
+        "gcsimCooldownKeys": [
+          "obsidiancodex-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -617,7 +691,7 @@
       "color": "#a855f7"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "obsidiancodex"
   },
   {
@@ -644,7 +718,13 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "継続時間15秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "desert-4pc-dmg",
+          "desert-4pc-spd"
+        ]
       }
     ],
     "buffEffect": {
@@ -656,7 +736,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "desertpavilionchronicle"
   },
   {
@@ -684,7 +764,13 @@
         "statEffectSummary": "回復記録後、通常重撃スキル爆発の基礎ダメ加算",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "waves-of-days-past",
+          "yearning-effect"
+        ]
       }
     ],
     "buffEffect": {
@@ -697,7 +783,7 @@
       "color": "#fb7185"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "songofdayspast"
   },
   {
@@ -724,7 +810,12 @@
         "statEffectSummary": "ダメ+20%",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nighttimewhispers-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -736,7 +827,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "nighttimewhispersintheechoingwoods"
   },
   {
@@ -763,7 +854,12 @@
         "statEffectSummary": "スキルまたは爆発命中で敵の草元素耐性-30%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dm-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -775,7 +871,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "deepwoodmemories"
   },
   {
@@ -802,7 +898,13 @@
         "statEffectSummary": "ダメ+60%",
         "dataSource": {
           "duration": "6秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "deep-galleries-4pc-burst-debuff",
+          "deep-galleries-4pc-normal-debuff"
+        ]
       }
     ],
     "buffEffect": {
@@ -814,7 +916,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "finaleofthedeepgalleries"
   },
   {
@@ -841,7 +943,16 @@
         "statEffectSummary": "攻撃力+7% / ダメ+4%",
         "dataSource": {
           "duration": "8秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nd-burst",
+          "nd-charged",
+          "nd-normal",
+          "nd-plunge",
+          "nd-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -853,7 +964,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "nymphsdream"
   },
   {
@@ -880,7 +991,12 @@
         "statEffectSummary": "拡散された元素の敵耐性-40%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "vv-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -892,7 +1008,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "viridescentvenerer"
   },
   {
@@ -909,7 +1025,7 @@
     "effect4p": "戦闘状態が解除されてから3秒経過すると、与えるダメージ+50%。戦闘状態にある時、近くに燃焼状態の敵が存在しないまま6秒以上経過すると、上記強化効果の効果量は0%になるまで1秒毎に10%減少する。一方、燃焼状態の敵が存在する場合、50%になるまで1秒毎に10%増加する。この聖遺物セットを装備したキャラクターが待機している場合にも、効果を発動できる。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "unfinishedreverie"
   },
   {
@@ -926,7 +1042,7 @@
     "effect4p": "元素チャージ効率の25%を基準に、元素爆発ダメージがアップする。この方法でアップできるダメージは最大75%まで。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "emblemofseveredfate"
   },
   {
@@ -953,7 +1069,12 @@
         "statEffectSummary": "スキル命中でチーム全員攻撃力+20% / シールド強化+30%",
         "dataSource": {
           "duration": "持続時間3秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "tom-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -965,7 +1086,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "tenacityofthemillelith"
   },
   {
@@ -992,7 +1113,12 @@
         "statEffectSummary": "攻撃力+9%",
         "dataSource": {
           "duration": "持続時間7秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "pf-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1004,7 +1130,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "paleflame"
   },
   {
@@ -1021,7 +1147,7 @@
     "effect4p": "該当聖遺物セットを装備したキャラが法器、弓キャラの場合、キャラの重撃ダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "wandererstroupe"
   },
   {
@@ -1048,7 +1174,12 @@
         "statEffectSummary": "爆発後HP減少で攻撃力最大+66%",
         "dataSource": {
           "duration": "継続時間16秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "verm-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1060,7 +1191,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "vermillionhereafter"
   },
   {
@@ -1089,7 +1220,16 @@
         "dataSource": {
           "duration": "継続時間6秒",
           "cooldown": "1秒毎に1回"
-        }
+        },
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "longnightsoath-4pc"
+        ],
+        "gcsimCooldownKeys": [
+          "longnightsoath-icd-charge",
+          "longnightsoath-icd-skill"
+        ]
       }
     ],
     "buffEffect": {
@@ -1102,7 +1242,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "longnightsoath"
   },
   {
@@ -1129,7 +1269,12 @@
         "statEffectSummary": "ダメ+30%",
         "dataSource": {
           "duration": "15秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "hod-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1141,7 +1286,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "heartofdepth"
   },
   {
@@ -1168,7 +1313,15 @@
         "statEffectSummary": "スキル時エネルギー15消費し通常重撃落下ダメ+50%",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "shim-4pc"
+        ],
+        "gcsimCooldownKeys": [
+          "shim-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -1180,7 +1333,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "shimenawasreminiscence"
   },
   {
@@ -1207,7 +1360,13 @@
         "statEffectSummary": "ダメ+20%",
         "dataSource": {
           "duration": "継続時間20秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "celestialgift-4pc-active",
+          "celestialgift-4pc-holder"
+        ]
       }
     ],
     "buffEffect": {
@@ -1219,7 +1378,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "celestialgift"
   },
   {
@@ -1246,7 +1405,12 @@
         "statEffectSummary": "会心率+15% / ダメ+10%",
         "dataSource": {
           "duration": "4秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "gleaming-moon-intent-cr"
+        ]
       }
     ],
     "buffEffect": {
@@ -1258,7 +1422,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "nightoftheskysunveiling"
   },
   {
@@ -1285,7 +1449,12 @@
         "statEffectSummary": "ダメ+40%",
         "dataSource": {
           "duration": "10秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "crimson-4pc-stacks"
+        ]
       }
     ],
     "buffEffect": {
@@ -1297,7 +1466,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "crimsonwitchofflames"
   },
   {
@@ -1314,7 +1483,7 @@
     "effect4p": "氷元素の影響を受けている敵を攻撃した場合、会心率+20%。敵が凍結状態の場合、会心率は更に+20%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "blizzardstrayer"
   },
   {
@@ -1341,7 +1510,13 @@
         "statEffectSummary": "攻撃力+25% / 会心率+20%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blessing-of-pastoral-winds",
+          "resolve-of-pastoral-winds"
+        ]
       }
     ],
     "buffEffect": {
@@ -1353,7 +1528,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "adaycarvedfromrisingwinds"
   },
   {
@@ -1380,7 +1555,12 @@
         "statEffectSummary": "結晶反応の欠片を拾うと、該当元素ダメ+35%",
         "dataSource": {
           "duration": "継続時間10秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "archaic-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1392,7 +1572,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "archaicpetra"
   },
   {
@@ -1409,7 +1589,7 @@
     "effect4p": "通常攻撃が敵に命中すると、36%の確率で「幽谷祭祀」が発動する。「幽谷祭祀」：通常攻撃ダメージが攻撃力70%分アップする。この効果は通常攻撃でダメージを与えた0.05秒後にクリアされる。通常攻撃後に「幽谷祭祀」が発動しなかった場合、次回の発動確率+20%。発動判定は0.2秒毎に1回のみ行われる。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "echoesofanoffering"
   },
   {
@@ -1426,7 +1606,7 @@
     "effect4p": "過負荷、感電、超電導、超開花反応によるダメージ+40%、超激化反応によるダメージアップ効果+20%、月感電、星電導反応によるダメージ+20%。上記元素反応または原激化反応を起こすと、元素スキルのクールタイム-1秒。0.8秒毎に最大1回のみ発動可能。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thunderingfury"
   },
   {
@@ -1443,7 +1623,7 @@
     "effect4p": "雷元素の影響を受けた敵に対するダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "thundersoother"
   },
   {
@@ -1460,7 +1640,7 @@
     "effect4p": "炎元素の影響を受けた敵に対するダメージ+35%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "lavawalker"
   },
   {
@@ -1487,7 +1667,13 @@
         "statEffectSummary": "攻撃力+12% / ダメ+50%",
         "dataSource": {
           "duration": "12秒間"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "furnace-4pc-atk",
+          "furnace-4pc-react"
+        ]
       }
     ],
     "buffEffect": {
@@ -1499,7 +1685,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "heartofthefurnace"
   },
   {
@@ -1526,7 +1712,12 @@
         "statEffectSummary": "ダメ+18%",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "fragmentofharmonicwhimsy-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1538,7 +1729,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "fragmentofharmonicwhimsy"
   },
   {
@@ -1555,7 +1746,7 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10012",
@@ -1581,7 +1772,12 @@
         "statEffectSummary": "元素オーブまたは元素粒子を獲得した時、チーム...",
         "dataSource": {
           "cooldown": "3秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "scholar-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -1594,7 +1790,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "scholar"
   },
   {
@@ -1623,7 +1819,9 @@
         "dataSource": {
           "duration": "継続時間10秒",
           "cooldown": "10秒毎に1回"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -1636,7 +1834,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10007",
@@ -1662,7 +1860,12 @@
         "statEffectSummary": "元素反応を起こすとチーム全員の元素熟知+120",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "instructor-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1674,7 +1877,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "instructor"
   },
   {
@@ -1691,7 +1894,7 @@
     "effect4p": "HPが70%以下になると、会心率+24%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "berserker"
   },
   {
@@ -1708,7 +1911,7 @@
     "effect4p": "チーム内の自身のキャラクターの元素タイプ1種類につき、自身にその元素の耐性+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "defenderswill"
   },
   {
@@ -1725,7 +1928,7 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10008",
@@ -1751,7 +1954,12 @@
         "statEffectSummary": "敵を倒した時、100%の確率で元素スキルのク...",
         "dataSource": {
           "cooldown": "15秒に1回のみ発動"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "gambler-4pc-icd"
+        ]
       }
     ],
     "buffEffect": {
@@ -1764,7 +1972,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "gambler"
   },
   {
@@ -1781,7 +1989,7 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10006",
@@ -1807,7 +2015,12 @@
         "statEffectSummary": "ダメ+25%",
         "dataSource": {
           "duration": "継続時間8秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "martialartist-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1819,7 +2032,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "martialartist"
   },
   {
@@ -1846,7 +2059,12 @@
         "statEffectSummary": "爆発発動後6秒間、他キャラのエネルギーを計6回復",
         "dataSource": {
           "duration": "継続時間6秒"
-        }
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "exile-4pc"
+        ]
       }
     ],
     "buffEffect": {
@@ -1858,7 +2076,7 @@
       "color": "#818cf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "theexile"
   },
   {
@@ -1875,7 +2093,7 @@
     "effect4p": "HPが50%以上の敵に対するダメージ+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "braveheart"
   },
   {
@@ -1892,7 +2110,7 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10001",
@@ -1908,7 +2126,7 @@
     "effect4p": "重撃の会心率+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35",
+    "updatedAt": "2026/9/29 21:23:06",
     "gcsimKey": "resolutionofsojourner"
   },
   {
@@ -1926,7 +2144,7 @@
     "effect4p": "元素爆発を発動すると、HPを20%回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10011",
@@ -1943,7 +2161,7 @@
     "effect4p": "モラを拾得すると、HPを300回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   },
   {
     "id": "10010",
@@ -1970,7 +2188,9 @@
         "statEffectSummary": "宝箱を開けた後5秒間、HPの30%を徐々に回...",
         "dataSource": {
           "duration": "5秒間"
-        }
+        },
+        "timing": "conditional",
+        "gcsimTarget": false
       }
     ],
     "buffEffect": {
@@ -1982,6 +2202,6 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 17:32:35"
+    "updatedAt": "2026/9/29 21:23:06"
   }
 ]

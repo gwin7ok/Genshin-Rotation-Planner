@@ -1324,7 +1324,14 @@
       {
         "level": 2,
         "name": "壮健なる勁草",
-        "description": "草蓮灯の存在時間+3秒。"
+        "description": "草蓮灯の存在時間+3秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000005-dendro_q",
+            "effectDuration": 15,
+            "source": "草蓮灯の存在時間+3秒"
+          }
+        ]
       },
       {
         "level": 3,
@@ -3627,7 +3634,14 @@
       {
         "level": 2,
         "name": "壮健なる勁草",
-        "description": "草蓮灯の存在時間+3秒。"
+        "description": "草蓮灯の存在時間+3秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000007-dendro_q",
+            "effectDuration": 15,
+            "source": "草蓮灯の存在時間+3秒"
+          }
+        ]
       },
       {
         "level": 3,
@@ -8732,7 +8746,19 @@
       {
         "level": 6,
         "name": "永夜の禽",
-        "description": "オズの存在時間+2秒。オズは出場している自身のキャラクターと共に攻撃し、攻撃力30%分の雷元素ダメージを与える。"
+        "description": "オズの存在時間+2秒。オズは出場している自身のキャラクターと共に攻撃し、攻撃力30%分の雷元素ダメージを与える。",
+        "actionChanges": [
+          {
+            "actionId": "10000031-electro_e",
+            "effectDuration": 12,
+            "source": "オズの存在時間+2秒"
+          },
+          {
+            "actionId": "10000031-electro_q",
+            "effectDuration": 12,
+            "source": "オズの存在時間+2秒"
+          }
+        ]
       }
     ]
   },

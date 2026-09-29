@@ -69,7 +69,12 @@ export interface ApplyDurationsResult {
  * gcsim のログで分かるのは「次のアクションの開始までの間隔」= 所要時間 + アプリが渡した遅延（delay）。
  * 所要時間 = 間隔 − 遅延。遅延の値は変えない（渡した値のまま）。
  */
-export function applyActionDurations(stints: Stint[], pairs: AlignedAction[]): ApplyDurationsResult {
+export function applyActionDurations(
+  stints: Stint[],
+  pairs: AlignedAction[],
+  /** 画面に出ている所要時間（アクション ID → 秒。次に続くアクションに応じた自動値など、計算後の値）。変更前の表示と差の判定に使う。無ければ保存値 */
+  effectiveDurations?: Record<string, number>,
+): ApplyDurationsResult {
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
 
@@ -91,8 +96,9 @@ export function applyActionDurations(stints: Stint[], pairs: AlignedAction[]): A
       continue;
     }
     next.set(ref.actionId, seconds);
-    if (Math.abs(seconds - act.duration) >= 0.0005) {
-      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: act.name, before: act.duration, after: seconds });
+    const before = effectiveDurations?.[ref.actionId] ?? act.duration;
+    if (Math.abs(seconds - before) >= 0.0005) {
+      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: act.name, before, after: seconds });
     }
   }
 

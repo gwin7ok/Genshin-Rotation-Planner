@@ -378,6 +378,7 @@ export default function App() {
       <main className="flex-1 flex flex-col">
         {/* Visual Gantt Chart (Swimlanes with strict vertical alignment) */}
         <GanttChart
+          database={database}
           characters={characters}
           stints={calculatedResult.calculatedStints}
           activeBuffs={calculatedResult.activeBuffs}

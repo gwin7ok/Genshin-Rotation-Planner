@@ -29,6 +29,8 @@ import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig } from '../utils/buffUtils';
+import { GlobalBuffRow } from './GlobalBuffRow';
+import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 
 // Organization structure for active buffs into independent non-overlapping rows.
@@ -170,9 +172,12 @@ interface GanttChartProps {
   carryOverPassives?: PassiveSpan[];
   /** 再生開始からの累積時間（周をまたいでも増え続ける） */
   elapsedTime: number;
+  /** 全体の行で、武器・聖遺物の発動バフを引くマスターデータ */
+  database?: GenshinDatabase;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
+  database,
   characters,
   stints,
   activeBuffs,
@@ -1014,6 +1019,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   })()}
                 </div>
               </div>
+
+              {/* 2.2 全体の行（常時の効果・時間の無い固有天賦。D39-4） */}
+              <GlobalBuffRow characters={characters} database={database} />
 
               {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
               <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative">

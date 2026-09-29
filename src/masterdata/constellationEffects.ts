@@ -34,6 +34,11 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
   // 旅人(岩) 6凸: 1つの説明文に延長が2つ（岩潮幾重の岩の山 +5秒 = Q、星落としの剣の荒星 +10秒 = E）。gcsim traveler/common/geo の burst.go・skill.go の C6 と一致
   '10000005-geo_c6': [{ target: 'q', keyword: '岩の山' }, { target: 'e', keyword: '荒星' }],
   '10000007-geo_c6': [{ target: 'q', keyword: '岩の山' }, { target: 'e', keyword: '荒星' }],
+  // フィッシュル 6凸: オズの存在時間 +2秒（元素スキルと元素爆発のオズ。gcsim の fischl は C6 で両方の存在時間を延ばす）
+  '10000031-electro_c6': [{ target: 'e', keyword: 'オズ' }, { target: 'q', keyword: 'オズ' }],
+  // 旅人(草) 2凸: 草蓮灯の存在時間 +3秒（元素爆発）
+  '10000005-dendro_c2': { target: 'q', keyword: '草蓮灯' },
+  '10000007-dendro_c2': { target: 'q', keyword: '草蓮灯' },
   '10000023-pyro_c4': { target: 'q', keyword: '旋火輪' }, // 香菱
   '10000065-electro_c2': { target: 'e', keyword: '越祓草輪' }, // 久岐忍
   '10000025-hydro_c2': { target: 'q', keyword: '裁雨留虹' }, // 行秋
@@ -66,9 +71,10 @@ const NOT_APPLICABLE: Record<string, string> = {
   '10000050-pyro_c2': '元素爆発自体の継続時間の延長（マスターの効果はシールド継続時間）', // トーマ
   '10000140-hydro_c2': '「悠久の歌」効果の延長（マスターの効果との対応が未確認）', // ヴォジャニーツァ
   '10000030-geo_c4': '石化効果の延長（マスターの効果はシールド）', // 鍾離
+  '10000076-anemo_c2': '赫耀多面体の存在時間の延長（マスターの効果は疾風示現）', // ファルザン
 };
 
-const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?継続時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
+const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
   /** 凸の段階データを作ったキャラ数 */

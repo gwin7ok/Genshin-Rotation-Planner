@@ -52,21 +52,17 @@ export const filterStintsForCharacters = (stints: Stint[], characters: Character
 };
 
 /**
- * DB に無いキャラを参照している枠を未設定枠に置き換える（DB管理でのキャラ削除時）。
- * 置き換えた枠のキャラの出場ブロックは除く。
+ * 編集後の出場ブロック（表示中のキャラの分）に、DB に無いキャラの出場ブロックを足し戻す。
+ * 足し戻すのは、編成がまだそのキャラの ID を参照しているものだけ（DB に戻れば復活する）。
  */
-export function dropMissingMembers(
+export function mergeHiddenStints(
+  edited: Stint[],
+  allStints: Stint[],
+  characters: CharacterConfig[],
   party: PartyMember[],
-  stints: Stint[],
-  databaseCharacters: CharacterConfig[],
-): { party: PartyMember[]; stints: Stint[]; changed: boolean } {
-  const validIds = new Set(databaseCharacters.map(c => c.id));
-  const removed = new Set<string>();
-  const next = party.map((m, i) => {
-    if (isEmptyMember(m) || validIds.has(m.characterId)) return m;
-    removed.add(m.characterId);
-    return createEmptyMember(i);
-  });
-  if (removed.size === 0) return { party, stints, changed: false };
-  return { party: next, stints: stints.filter(s => !removed.has(s.characterId)), changed: true };
+): Stint[] {
+  const visibleIds = resolvedCharacterIds(characters);
+  const referenced = new Set(party.map(m => m.characterId));
+  const hidden = allStints.filter(s => !visibleIds.has(s.characterId) && referenced.has(s.characterId));
+  return hidden.length === 0 ? edited : [...edited, ...hidden];
 }

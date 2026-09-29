@@ -18,7 +18,7 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
-import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, dropMissingMembers } from './utils/party';
+import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { buildRotationNotation } from './utils/rotationNotation';
 
@@ -53,6 +53,8 @@ export default function App() {
   });
   // DB に無いキャラの出場ブロックは、計算・表示から除く（保存データには残す）
   const visibleStints = useMemo(() => filterStintsForCharacters(stints, characters), [stints, characters]);
+  // 出場ブロックの編集。DB に無いキャラ（表示から外れている）の出場ブロックは、編成が参照している間は残す
+  const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next, stints, characters, party));
   // Character switch delay (default 0.50s or restored from storage)
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
@@ -370,7 +372,7 @@ export default function App() {
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}
           elapsedTime={elapsedTime}
-          onUpdateStints={setStints}
+          onUpdateStints={updateStints}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
@@ -384,7 +386,7 @@ export default function App() {
         <StintSequenceEditor
           characters={characters}
           stints={calculatedResult.calculatedStints}
-          onUpdateStints={setStints}
+          onUpdateStints={updateStints}
           activeTime={currentTime}
           onSeek={handleSeek}
           switchDelay={switchDelay}
@@ -451,7 +453,7 @@ export default function App() {
             setActiveSlotId(null);
           }
           setParty(newParty);
-          setStints(newStints);
+          setStints(mergeHiddenStints(newStints, stints, characters, newParty));
         }}
       />
 
@@ -460,15 +462,9 @@ export default function App() {
         isOpen={isDatabaseModalOpen}
         onClose={() => setIsDatabaseModalOpen(false)}
         database={database}
-        onUpdateDatabase={(newDb) => {
-          setDatabase(newDb);
-          // DB から削除されたキャラの枠は未設定枠に置き換える（キャラの編集内容は ID 参照なので自動で反映される）
-          const dropped = dropMissingMembers(party, stints, newDb.characters);
-          if (dropped.changed) {
-            setParty(dropped.party);
-            setStints(dropped.stints);
-          }
-        }}
+        // 編成は ID だけを持つので、キャラの編集は自動で反映される。
+        // DB から削除されたキャラの枠は、DB に戻るまで未設定枠として表示する（編成の ID は書き換えない）
+        onUpdateDatabase={setDatabase}
       />
 
       {/* Rotation Cheat Sheet & Step-by-Step Modal */}

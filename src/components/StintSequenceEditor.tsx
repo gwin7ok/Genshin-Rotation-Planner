@@ -730,7 +730,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
               </span>
               <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                <strong className="font-bold text-cyan-200">長押しE</strong>: スキル長押し
+                <strong className="font-bold text-cyan-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
               </span>
             </div>
           </div>

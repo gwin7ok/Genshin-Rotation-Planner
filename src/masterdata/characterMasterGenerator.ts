@@ -36,23 +36,44 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
   '10000053-anemo': ['shorthold'],
   '10000061-dendro': ['shorthold'],
   '10000005-hydro': ['shorthold', 'shorthold0ticks'],
+  '10000007-hydro': ['shorthold', 'shorthold0ticks'],
   '10000106-pyro': ['recastframestobike', 'recastframestoring'],
 };
 
-/** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ */
+/** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ。空・蛍は別キャラとして元素ごとに登録する (D35) */
 const AETHER_ID = 10000005;
-const TRAVELER_IDS = new Set([AETHER_ID, 10000007]);
+const LUMINE_ID = 10000007;
+const TRAVELER_IDS = new Set([AETHER_ID, LUMINE_ID]);
 
 /** genshin-db の旅人天賦名 "旅人 (風元素)" の元素文字 → 元素 */
 const TRAVELER_ELEMENT_JA: Record<string, ElementType> = {
   炎: 'pyro', 水: 'hydro', 風: 'anemo', 雷: 'electro', 草: 'dendro', 氷: 'cryo', 岩: 'geo',
 };
 
-/** gcsim の旅人フレームは先頭添字が性別 (0 = 空, 1 = 蛍) */
-const TRAVELER_GENDERS = [
-  { index: 0, label: '空', suffix: 'aether' },
-  { index: 1, label: '蛍', suffix: 'lumine' },
+/** gcsim の旅人フレームは先頭添字が性別 (0 = 空, 1 = 蛍)。gcsim のキーは `aether<元素>` / `lumine<元素>` */
+const TRAVELERS = [
+  { genshinId: AETHER_ID, genderIndex: 0, label: '空', englishLabel: 'Aether', gcsimPrefix: 'aether' },
+  { genshinId: LUMINE_ID, genderIndex: 1, label: '蛍', englishLabel: 'Lumine', gcsimPrefix: 'lumine' },
 ] as const;
+
+/**
+ * 元素スキルの記法（D36）: 長押し派生が無いキャラのスキル = E、長押し系があるキャラの一回押し = tE、長押し系 = hE、再発動 = rE。
+ * 別ボタンの派生の表記（キー: 派生名（小文字））。長押しの秒数は、フェーズ5・6 でスキル全体の所要時間からの逆算として、表示側で「hE(?s)」と付ける。
+ */
+const DERIVED_SKILL_NOTATION: Record<string, { label: string; type: ActionType; startsCooldown: boolean }> = {
+  shorthold: { label: 'hE(short)', type: 'skill_hold', startsCooldown: true },
+  shorthold0ticks: { label: 'hE(0Ticks)', type: 'skill_hold', startsCooldown: true },
+  recast: { label: 'rE', type: 'skill', startsCooldown: false },
+  recastframestobike: { label: 'rE(bike)', type: 'skill', startsCooldown: false },
+  recastframestoring: { label: 'rE(ring)', type: 'skill', startsCooldown: false },
+};
+
+/**
+ * 旅人(水)の最大ホールド (`skill[hold=1]` = 22 ティック)。gcsim は shortHold(1 ティック) のフレームに 15 フレーム × 21 を足して計算する
+ * (traveler/common/hydro/skill.go: skillHold の extend)。ホールドのテーブル自体は無いので、shortHold から合成する。
+ */
+const TRAVELER_HYDRO_IDS = new Set([characterKey(AETHER_ID, 'hydro'), characterKey(LUMINE_ID, 'hydro')]);
+const TRAVELER_HYDRO_MAX_HOLD_EXTEND = 15 * (22 - 1);
 
 /** フレームが取得できなかった場合にタイムライン表示用として使う秒数 (レポートで「仮値」として明示) */
 const PLACEHOLDER_DURATION: Partial<Record<ActionType, number>> = {
@@ -425,7 +446,6 @@ function buildActions(ctx: BuildContext): BuildResult {
     id: `${id}_e`,
     name: skillName ? `元素スキル: ${skillName}` : '元素スキル',
     shortName: 'E',
-    buttonLabel: timings.skillHoldCooldown || resolvedHoldTable ? 'E(一回押し)' : 'E',
     type: 'skill',
     startsSkillCooldown: true,
     cooldown: timings.skillTapCooldown?.value,
@@ -442,8 +462,7 @@ function buildActions(ctx: BuildContext): BuildResult {
     actions.push(withDuration({
       id: `${id}_e_hold`,
       name: skillName ? `元素スキル(長押し): ${skillName}` : '元素スキル(長押し)',
-      shortName: '長押しE',
-      buttonLabel: 'E(長押し)',
+      shortName: 'hE',
       type: 'skill_hold',
       startsSkillCooldown: true,
       cooldown: holdCd?.value,
@@ -464,17 +483,53 @@ function buildActions(ctx: BuildContext): BuildResult {
       const suffix = splitTableName(table.name).base.replace(/^skill/i, '').replace(/Frames?$/i, '') || 'alt';
       const slug = suffix.charAt(0).toLowerCase() + suffix.slice(1);
       if (!PARAMETER_DERIVED_SKILLS[id]?.includes(slug.toLowerCase())) continue;
+      const notation = DERIVED_SKILL_NOTATION[slug.toLowerCase()];
+      // 長押し系の派生（旅人(水)・早柚・綺良々の shortHold など）は、gcsim では通常のEと同じCTが始まる (D36)
+      const startsCooldown = notation.startsCooldown;
       actions.push({
         id: `${id}_e_${slug.toLowerCase()}`,
         name: `元素スキル派生: ${slug}`,
-        shortName: 'E',
-        buttonLabel: `E(${slug})`,
-        type: 'skill',
-        startsSkillCooldown: false,
+        shortName: notation.label,
+        type: notation.type,
+        startsSkillCooldown: startsCooldown,
+        ...(startsCooldown ? { cooldown: timings.skillTapCooldown?.value, dataSource: { cooldown: timings.skillTapCooldown?.label } } : {}),
         defaultDuration: framesToSec(table.total),
         frames: toActionFrames(table, 'skill', skill.consts),
       });
     }
+  }
+
+  // 旅人(水): 最大ホールドは gcsim では shortHold のフレーム + 延長で表す。長押しの CT は一回押しと同じ
+  if (skill && TRAVELER_HYDRO_IDS.has(id)) {
+    const shortHold = families.find(t => splitTableName(t.name).base === 'skillShortHoldFrames');
+    if (shortHold) {
+      const base = toActionFrames(shortHold, 'skill', skill.consts);
+      const extend = (n: number) => n + TRAVELER_HYDRO_MAX_HOLD_EXTEND;
+      const frames: ActionFrames = {
+        total: extend(base.total),
+        ...(base.hitmark !== undefined ? { hitmark: extend(base.hitmark) } : {}),
+        cancels: Object.fromEntries(Object.entries(base.cancels).map(([k, v]) => [k, extend(v)])) as ActionFrames['cancels'],
+        source: 'skill.go:skillShortHoldFrames + 15 × (22 − 1) (skillHold, hold=1)',
+      };
+      actions.push({
+        id: `${id}_e_hold`,
+        name: skillName ? `元素スキル(最大ホールド): ${skillName}` : '元素スキル(最大ホールド)',
+        shortName: 'hE',
+        type: 'skill_hold',
+        startsSkillCooldown: true,
+        cooldown: timings.skillTapCooldown?.value,
+        effectDuration: 0,
+        defaultDuration: framesToSec(frames.total),
+        frames,
+        dataSource: { cooldown: timings.skillTapCooldown?.label },
+      });
+    }
+  }
+
+  // 長押し系（hE）が存在するキャラの一回押しは tE、存在しないキャラのスキルは E (D36)
+  if (actions.some(a => a.type === 'skill_hold')) {
+    const tap = actions.find(a => a.id === `${id}_e`);
+    if (tap) tap.shortName = 'tE';
   }
 
   // --- 元素爆発 -------------------------------------------------------------
@@ -503,7 +558,7 @@ function buildActions(ctx: BuildContext): BuildResult {
 }
 
 // ---------------------------------------------------------------------------
-// 旅人: 性別ごとのフレーム
+// 旅人: 性別ごとのフレーム（空・蛍それぞれの別ユニットとして切り出す）
 // ---------------------------------------------------------------------------
 
 /** "a[1][0]" → ["1", "0"] */
@@ -536,42 +591,6 @@ function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharact
     files[name] = { ...file, tables };
   }
   return { files };
-}
-
-const sameFrames = (a?: ActionFrames, b?: ActionFrames) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-const sameHits = (a?: ActionDefinition['normalHits'], b?: ActionDefinition['normalHits']) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-
-/**
- * 空・蛍それぞれで組み立てたアクションを統合する。
- * フレームが同じものは1つにまとめ、異なるものは「(空)」「(蛍)」を付けて両方登録する (記法略称は共通)。
- */
-function mergeGenderActions(results: BuildResult[]): BuildResult {
-  const actions: ActionDefinition[] = [];
-  const placeholderActions = new Set<string>();
-  const ids = [...new Set(results.flatMap(r => r.actions.map(a => a.id)))];
-  for (const id of ids) {
-    const variants = results.map(r => r.actions.find(a => a.id === id));
-    const first = variants.find((v): v is ActionDefinition => !!v)!;
-    const allSame = variants.every(v => v && sameFrames(v.frames, first.frames) && sameHits(v.normalHits, first.normalHits) && v.defaultDuration === first.defaultDuration);
-    if (allSame) {
-      actions.push(first);
-      if (results.some(r => r.placeholderActions.includes(id))) placeholderActions.add(id);
-      continue;
-    }
-    variants.forEach((v, i) => {
-      if (!v) return;
-      const gender = TRAVELER_GENDERS[i];
-      const variantId = `${id}_${gender.suffix}`;
-      actions.push({
-        ...v,
-        id: variantId,
-        name: `${v.name}(${gender.label})`,
-        buttonLabel: `${v.buttonLabel ?? v.shortName}(${gender.label})`,
-      });
-      if (results[i].placeholderActions.includes(id)) placeholderActions.add(variantId);
-    });
-  }
-  return { actions, placeholderActions: [...placeholderActions] };
 }
 
 // ---------------------------------------------------------------------------
@@ -662,8 +681,8 @@ export async function generateCharacterMaster(
     constellation?: GenshinDbConstellation;
     gcsimKey?: string;
     gcsimDir?: string;
-    /** 旅人: 空・蛍でフレームを分けて組み立てる */
-    genderSplit?: boolean;
+    /** 旅人: gcsim のフレームの性別の添字 (0 = 空, 1 = 蛍)。この性別の分だけ切り出して組み立てる */
+    genderIndex?: number;
   }
   const units: BuildUnit[] = [];
 
@@ -695,28 +714,32 @@ export async function generateCharacterMaster(
     });
   }
 
-  // 旅人: genshin-db の元素別天賦 "旅人 (風元素)" ごとに1キャラ。gcsim のフレームは traveler/common/<元素>
-  const aether = charsJa.find(c => c.id === AETHER_ID);
+  // 旅人: genshin-db の元素別天賦 "旅人 (風元素)" ごとに、空・蛍の2キャラ。gcsim のフレームは traveler/common/<元素>（空・蛍共通で性別の添字で分かれる）
+  // 天賦・命ノ星座は元素ごとに空・蛍で共通なので、同じ内容を両方に複写する
   for (const t of talentsJa) {
     const m = /^旅人\s*\((.)元素\)$/.exec(t.name);
     const element = m ? TRAVELER_ELEMENT_JA[m[1]] : undefined;
     if (!m || !element) continue;
     const gcsimDir = `traveler/common/${element}`;
-    units.push({
-      id: characterKey(AETHER_ID, element), // 旅人は公式IDが共通なので元素で区別
-      name: `旅人(${m[1]})`,
-      englishName: `Traveler (${element.charAt(0).toUpperCase()}${element.slice(1)})`,
-      element,
-      weaponType: 'sword',
-      rarity: 5,
-      avatarUrl: iconUrl(aether),
-      genshinId: AETHER_ID,
-      talent: t,
-      constellation: travelerConstellationByElement.get(element),
-      gcsimKey: charDm.data[`aether${element}`] ? `aether${element}` : undefined,
-      gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
-      genderSplit: true,
-    });
+    for (const traveler of TRAVELERS) {
+      const gcsimKey = `${traveler.gcsimPrefix}${element}`;
+      units.push({
+        id: characterKey(traveler.genshinId, element), // 旅人は公式IDが空・蛍の2つ、元素と組にして一意にする
+        name: `${traveler.label}(${m[1]})`,
+        // 「旅人」「Traveler」でも検索できるよう別名を持たせる
+        englishName: `${traveler.englishLabel} (${element.charAt(0).toUpperCase()}${element.slice(1)}) Traveler 旅人`,
+        element,
+        weaponType: 'sword',
+        rarity: 5,
+        avatarUrl: iconUrl(charsJa.find(c => c.id === traveler.genshinId)),
+        genshinId: traveler.genshinId,
+        talent: t,
+        constellation: travelerConstellationByElement.get(element),
+        gcsimKey: charDm.data[gcsimKey] ? gcsimKey : undefined,
+        gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
+        genderIndex: traveler.genderIndex,
+      });
+    }
   }
 
   // 3. gcsim の Go ソースを取得・解析
@@ -751,9 +774,10 @@ export async function generateCharacterMaster(
     const parsed = parsedById.get(u.id);
     const ctx = { id: u.id, weaponType: u.weaponType, timings, talent: u.talent };
 
-    const { actions, placeholderActions } = u.genderSplit && parsed
-      ? mergeGenderActions(TRAVELER_GENDERS.map(g => buildActions({ ...ctx, parsed: genderView(parsed, g.index) })))
-      : buildActions({ ...ctx, parsed });
+    const { actions, placeholderActions } = buildActions({
+      ...ctx,
+      parsed: parsed && u.genderIndex !== undefined ? genderView(parsed, u.genderIndex) : parsed,
+    });
 
     if (parsed) {
       report.charactersWithFrames++;

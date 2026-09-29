@@ -503,8 +503,8 @@
   },
   {
     "id": "10000005-anemo",
-    "name": "旅人(風)",
-    "englishName": "Traveler (Anemo)",
+    "name": "空(風)",
+    "englishName": "Aether (Anemo) Traveler 旅人",
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
@@ -513,8 +513,8 @@
     "accentColor": "#14b8a6",
     "availableActions": [
       {
-        "id": "10000005-anemo_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-anemo_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -617,120 +617,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-anemo_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-anemo_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-anemo_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -744,33 +635,13 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
+        "defaultDuration": 0.917
       },
       {
-        "id": "10000005-anemo_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
-      },
-      {
-        "id": "10000005-anemo_e_aether",
-        "name": "元素スキル: 旋風の剣(空)",
+        "id": "10000005-anemo_e",
+        "name": "元素スキル: 旋風の剣",
         "shortName": "E",
-        "buttonLabel": "E(一回押し)(空)",
+        "buttonLabel": "E(一回押し)",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 5,
@@ -791,30 +662,6 @@
         "defaultDuration": 1.267
       },
       {
-        "id": "10000005-anemo_e_lumine",
-        "name": "元素スキル: 旋風の剣(蛍)",
-        "shortName": "E",
-        "buttonLabel": "E(一回押し)(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": true,
-        "cooldown": 5,
-        "effectDuration": 0,
-        "frames": {
-          "total": 62,
-          "cancels": {
-            "attack": 61,
-            "dash": 31,
-            "jump": 31,
-            "swap": 60
-          },
-          "source": "skill.go:skillPressFrames"
-        },
-        "dataSource": {
-          "cooldown": "基本クールタイム"
-        },
-        "defaultDuration": 1.033
-      },
-      {
         "id": "10000005-anemo_e_hold",
         "name": "元素スキル(長押し): 旋風の剣",
         "shortName": "長押しE",
@@ -829,8 +676,8 @@
         "defaultDuration": 1.2
       },
       {
-        "id": "10000005-anemo_q_aether",
-        "name": "元素爆発: 激風の息(空)",
+        "id": "10000005-anemo_q",
+        "name": "元素爆発: 激風の息",
         "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
@@ -850,33 +697,7 @@
           "cooldown": "クールタイム",
           "effectDuration": "継続時間"
         },
-        "defaultDuration": 1.833,
-        "buttonLabel": "Q(空)"
-      },
-      {
-        "id": "10000005-anemo_q_lumine",
-        "name": "元素爆発: 激風の息(蛍)",
-        "shortName": "Q",
-        "type": "burst",
-        "startsBurstCooldown": true,
-        "cooldown": 15,
-        "effectDuration": 6,
-        "frames": {
-          "total": 105,
-          "cancels": {
-            "skill": 104,
-            "dash": 90,
-            "jump": 90,
-            "swap": 95
-          },
-          "source": "burst.go:burstFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
-        },
-        "defaultDuration": 1.75,
-        "buttonLabel": "Q(蛍)"
+        "defaultDuration": 1.833
       },
       {
         "id": "10000005-anemo_dash",
@@ -946,8 +767,8 @@
   },
   {
     "id": "10000005-cryo",
-    "name": "旅人(氷)",
-    "englishName": "Traveler (Cryo)",
+    "name": "空(氷)",
+    "englishName": "Aether (Cryo) Traveler 旅人",
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
@@ -956,8 +777,8 @@
     "accentColor": "#06b6d4",
     "availableActions": [
       {
-        "id": "10000005-cryo_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-cryo_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -1060,120 +881,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-cryo_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-cryo_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-cryo_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -1187,27 +899,7 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
-      },
-      {
-        "id": "10000005-cryo_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
+        "defaultDuration": 0.917
       },
       {
         "id": "10000005-cryo_e",
@@ -1324,8 +1016,8 @@
   },
   {
     "id": "10000005-dendro",
-    "name": "旅人(草)",
-    "englishName": "Traveler (Dendro)",
+    "name": "空(草)",
+    "englishName": "Aether (Dendro) Traveler 旅人",
     "element": "dendro",
     "weaponType": "sword",
     "rarity": 5,
@@ -1334,8 +1026,8 @@
     "accentColor": "#10b981",
     "availableActions": [
       {
-        "id": "10000005-dendro_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-dendro_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -1438,120 +1130,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-dendro_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-dendro_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-dendro_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -1565,33 +1148,13 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
+        "defaultDuration": 0.917
       },
       {
-        "id": "10000005-dendro_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
-      },
-      {
-        "id": "10000005-dendro_e_aether",
-        "name": "元素スキル: 草縁剣(空)",
+        "id": "10000005-dendro_e",
+        "name": "元素スキル: 草縁剣",
         "shortName": "E",
-        "buttonLabel": "E(空)",
+        "buttonLabel": "E",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 8,
@@ -1603,30 +1166,6 @@
             "dash": 29,
             "jump": 29,
             "swap": 36
-          },
-          "source": "skill.go:skillFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム"
-        },
-        "defaultDuration": 0.617
-      },
-      {
-        "id": "10000005-dendro_e_lumine",
-        "name": "元素スキル: 草縁剣(蛍)",
-        "shortName": "E",
-        "buttonLabel": "E(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": true,
-        "cooldown": 8,
-        "effectDuration": 0,
-        "frames": {
-          "total": 37,
-          "hitmark": 28,
-          "cancels": {
-            "dash": 28,
-            "jump": 28,
-            "swap": 35
           },
           "source": "skill.go:skillFrames"
         },
@@ -1721,8 +1260,8 @@
   },
   {
     "id": "10000005-electro",
-    "name": "旅人(雷)",
-    "englishName": "Traveler (Electro)",
+    "name": "空(雷)",
+    "englishName": "Aether (Electro) Traveler 旅人",
     "element": "electro",
     "weaponType": "sword",
     "rarity": 5,
@@ -1731,8 +1270,8 @@
     "accentColor": "#a855f7",
     "availableActions": [
       {
-        "id": "10000005-electro_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-electro_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -1835,120 +1374,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-electro_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-electro_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-electro_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -1962,33 +1392,13 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
+        "defaultDuration": 0.917
       },
       {
-        "id": "10000005-electro_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
-      },
-      {
-        "id": "10000005-electro_e_aether",
-        "name": "元素スキル: 雷影剣(空)",
+        "id": "10000005-electro_e",
+        "name": "元素スキル: 雷影剣",
         "shortName": "E",
-        "buttonLabel": "E(空)",
+        "buttonLabel": "E",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 13.5,
@@ -2011,33 +1421,8 @@
         "defaultDuration": 0.95
       },
       {
-        "id": "10000005-electro_e_lumine",
-        "name": "元素スキル: 雷影剣(蛍)",
-        "shortName": "E",
-        "buttonLabel": "E(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": true,
-        "cooldown": 13.5,
-        "effectDuration": 6,
-        "frames": {
-          "total": 57,
-          "hitmark": 21,
-          "cancels": {
-            "dash": 42,
-            "jump": 42,
-            "swap": 55
-          },
-          "source": "skill.go:skillFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
-        },
-        "defaultDuration": 0.95
-      },
-      {
-        "id": "10000005-electro_q_aether",
-        "name": "元素爆発: 電光雷轟(空)",
+        "id": "10000005-electro_q",
+        "name": "元素爆発: 電光雷轟",
         "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
@@ -2058,33 +1443,7 @@
           "cooldown": "クールタイム",
           "effectDuration": "継続時間"
         },
-        "defaultDuration": 1.05,
-        "buttonLabel": "Q(空)"
-      },
-      {
-        "id": "10000005-electro_q_lumine",
-        "name": "元素爆発: 電光雷轟(蛍)",
-        "shortName": "Q",
-        "type": "burst",
-        "startsBurstCooldown": true,
-        "cooldown": 20,
-        "effectDuration": 12,
-        "frames": {
-          "total": 62,
-          "hitmark": 37,
-          "cancels": {
-            "attack": 61,
-            "jump": 61,
-            "swap": 61
-          },
-          "source": "burst.go:burstFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
-        },
-        "defaultDuration": 1.033,
-        "buttonLabel": "Q(蛍)"
+        "defaultDuration": 1.05
       },
       {
         "id": "10000005-electro_dash",
@@ -2151,8 +1510,8 @@
   },
   {
     "id": "10000005-geo",
-    "name": "旅人(岩)",
-    "englishName": "Traveler (Geo)",
+    "name": "空(岩)",
+    "englishName": "Aether (Geo) Traveler 旅人",
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
@@ -2161,8 +1520,8 @@
     "accentColor": "#f59e0b",
     "availableActions": [
       {
-        "id": "10000005-geo_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-geo_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -2265,120 +1624,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-geo_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-geo_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-geo_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -2392,33 +1642,13 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
+        "defaultDuration": 0.917
       },
       {
-        "id": "10000005-geo_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
-      },
-      {
-        "id": "10000005-geo_e_aether",
-        "name": "元素スキル: 星落としの剣(空)",
+        "id": "10000005-geo_e",
+        "name": "元素スキル: 星落としの剣",
         "shortName": "E",
-        "buttonLabel": "E(空)",
+        "buttonLabel": "E",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 8,
@@ -2439,33 +1669,8 @@
         "defaultDuration": 1.35
       },
       {
-        "id": "10000005-geo_e_lumine",
-        "name": "元素スキル: 星落としの剣(蛍)",
-        "shortName": "E",
-        "buttonLabel": "E(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": true,
-        "cooldown": 8,
-        "effectDuration": 30,
-        "frames": {
-          "total": 80,
-          "cancels": {
-            "attack": 79,
-            "dash": 23,
-            "jump": 24,
-            "swap": 65
-          },
-          "source": "skill.go:skillFrames[0]"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "荒星の継続時間"
-        },
-        "defaultDuration": 1.333
-      },
-      {
-        "id": "10000005-geo_q_aether",
-        "name": "元素爆発: 岩潮幾重(空)",
+        "id": "10000005-geo_q",
+        "name": "元素爆発: 岩潮幾重",
         "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
@@ -2485,34 +1690,7 @@
           "cooldown": "クールタイム",
           "effectDuration": "岩の山の継続時間"
         },
-        "defaultDuration": 1.117,
-        "buttonLabel": "Q(空)"
-      },
-      {
-        "id": "10000005-geo_q_lumine",
-        "name": "元素爆発: 岩潮幾重(蛍)",
-        "shortName": "Q",
-        "type": "burst",
-        "startsBurstCooldown": true,
-        "cooldown": 15,
-        "effectDuration": 15,
-        "frames": {
-          "total": 64,
-          "hitmark": 51,
-          "cancels": {
-            "attack": 62,
-            "dash": 42,
-            "jump": 42,
-            "swap": 49
-          },
-          "source": "burst.go:burstFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "岩の山の継続時間"
-        },
-        "defaultDuration": 1.067,
-        "buttonLabel": "Q(蛍)"
+        "defaultDuration": 1.117
       },
       {
         "id": "10000005-geo_dash",
@@ -2579,8 +1757,8 @@
   },
   {
     "id": "10000005-hydro",
-    "name": "旅人(水)",
-    "englishName": "Traveler (Hydro)",
+    "name": "空(水)",
+    "englishName": "Aether (Hydro) Traveler 旅人",
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
@@ -2589,8 +1767,8 @@
     "accentColor": "#0ea5e9",
     "availableActions": [
       {
-        "id": "10000005-hydro_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-hydro_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -2693,120 +1871,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-hydro_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-hydro_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-hydro_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -2820,33 +1889,13 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
+        "defaultDuration": 0.917
       },
       {
-        "id": "10000005-hydro_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
-      },
-      {
-        "id": "10000005-hydro_e_aether",
-        "name": "元素スキル: 水紋の剣(空)",
+        "id": "10000005-hydro_e",
+        "name": "元素スキル: 水紋の剣",
         "shortName": "E",
-        "buttonLabel": "E(空)",
+        "buttonLabel": "E",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 10,
@@ -2869,34 +1918,10 @@
         "defaultDuration": 0.75
       },
       {
-        "id": "10000005-hydro_e_lumine",
-        "name": "元素スキル: 水紋の剣(蛍)",
+        "id": "10000005-hydro_e_shorthold0ticks",
+        "name": "元素スキル派生: shortHold0Ticks",
         "shortName": "E",
-        "buttonLabel": "E(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": true,
-        "cooldown": 10,
-        "effectDuration": 0,
-        "frames": {
-          "total": 44,
-          "cancels": {
-            "attack": 43,
-            "dash": 41,
-            "jump": 40,
-            "swap": 43
-          },
-          "source": "skill.go:skillPressFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム"
-        },
-        "defaultDuration": 0.733
-      },
-      {
-        "id": "10000005-hydro_e_shorthold0ticks_aether",
-        "name": "元素スキル派生: shortHold0Ticks(空)",
-        "shortName": "E",
-        "buttonLabel": "E(shortHold0Ticks)(空)",
+        "buttonLabel": "E(shortHold0Ticks)",
         "type": "skill",
         "startsSkillCooldown": false,
         "defaultDuration": 0.733,
@@ -2914,31 +1939,10 @@
         }
       },
       {
-        "id": "10000005-hydro_e_shorthold0ticks_lumine",
-        "name": "元素スキル派生: shortHold0Ticks(蛍)",
+        "id": "10000005-hydro_e_shorthold",
+        "name": "元素スキル派生: shortHold",
         "shortName": "E",
-        "buttonLabel": "E(shortHold0Ticks)(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": false,
-        "defaultDuration": 0.717,
-        "frames": {
-          "total": 43,
-          "cancels": {
-            "attack": 36,
-            "skill": 37,
-            "burst": 35,
-            "dash": 29,
-            "jump": 30,
-            "walk": 36
-          },
-          "source": "skill.go:skillShortHold0TicksFrames"
-        }
-      },
-      {
-        "id": "10000005-hydro_e_shorthold_aether",
-        "name": "元素スキル派生: shortHold(空)",
-        "shortName": "E",
-        "buttonLabel": "E(shortHold)(空)",
+        "buttonLabel": "E(shortHold)",
         "type": "skill",
         "startsSkillCooldown": false,
         "defaultDuration": 1.5,
@@ -2956,29 +1960,34 @@
         }
       },
       {
-        "id": "10000005-hydro_e_shorthold_lumine",
-        "name": "元素スキル派生: shortHold(蛍)",
-        "shortName": "E",
-        "buttonLabel": "E(shortHold)(蛍)",
-        "type": "skill",
-        "startsSkillCooldown": false,
-        "defaultDuration": 1.483,
+        "id": "10000005-hydro_e_hold",
+        "name": "元素スキル(最大ホールド): 水紋の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(最大ホールド)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "defaultDuration": 6.75,
         "frames": {
-          "total": 89,
+          "total": 405,
           "cancels": {
-            "attack": 81,
-            "skill": 81,
-            "burst": 81,
-            "dash": 74,
-            "jump": 73,
-            "walk": 80
+            "attack": 396,
+            "skill": 396,
+            "burst": 396,
+            "dash": 389,
+            "jump": 389,
+            "walk": 396
           },
-          "source": "skill.go:skillShortHoldFrames"
+          "source": "skill.go:skillShortHoldFrames + 15 × (22 − 1) (skillHold, hold=1)"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
         }
       },
       {
-        "id": "10000005-hydro_q_aether",
-        "name": "元素爆発: 昇流統水(空)",
+        "id": "10000005-hydro_q",
+        "name": "元素爆発: 昇流統水",
         "shortName": "Q",
         "type": "burst",
         "startsBurstCooldown": true,
@@ -2997,34 +2006,7 @@
           "cooldown": "クールタイム",
           "effectDuration": "継続時間"
         },
-        "defaultDuration": 1.3,
-        "buttonLabel": "Q(空)"
-      },
-      {
-        "id": "10000005-hydro_q_lumine",
-        "name": "元素爆発: 昇流統水(蛍)",
-        "shortName": "Q",
-        "type": "burst",
-        "startsBurstCooldown": true,
-        "cooldown": 20,
-        "effectDuration": 4,
-        "frames": {
-          "total": 78,
-          "cancels": {
-            "attack": 77,
-            "skill": 77,
-            "dash": 77,
-            "jump": 77,
-            "swap": 76
-          },
-          "source": "burst.go:burstFrames"
-        },
-        "dataSource": {
-          "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
-        },
-        "defaultDuration": 1.3,
-        "buttonLabel": "Q(蛍)"
+        "defaultDuration": 1.3
       },
       {
         "id": "10000005-hydro_dash",
@@ -3091,8 +2073,8 @@
   },
   {
     "id": "10000005-pyro",
-    "name": "旅人(炎)",
-    "englishName": "Traveler (Pyro)",
+    "name": "空(炎)",
+    "englishName": "Aether (Pyro) Traveler 旅人",
     "element": "pyro",
     "weaponType": "sword",
     "rarity": 5,
@@ -3101,8 +2083,8 @@
     "accentColor": "#ef4444",
     "availableActions": [
       {
-        "id": "10000005-pyro_n_aether",
-        "name": "通常攻撃(空)",
+        "id": "10000005-pyro_n",
+        "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
         "defaultDuration": 0.283,
@@ -3205,120 +2187,11 @@
               "source": "attack.go:attackFrames[4]"
             }
           }
-        ],
-        "buttonLabel": "N(空)"
+        ]
       },
       {
-        "id": "10000005-pyro_n_lumine",
-        "name": "通常攻撃(蛍)",
-        "shortName": "N",
-        "type": "normal",
-        "defaultDuration": 0.4,
-        "frames": {
-          "total": 32,
-          "hitmark": 16,
-          "cancels": {
-            "aim": 16,
-            "skill": 16,
-            "burst": 16,
-            "dash": 16,
-            "jump": 16,
-            "swap": 16,
-            "attack": 24
-          },
-          "source": "attack.go:attackFrames[0]"
-        },
-        "normalHits": [
-          {
-            "duration": 0.4,
-            "frames": {
-              "total": 32,
-              "hitmark": 16,
-              "cancels": {
-                "aim": 16,
-                "skill": 16,
-                "burst": 16,
-                "dash": 16,
-                "jump": 16,
-                "swap": 16,
-                "attack": 24
-              },
-              "source": "attack.go:attackFrames[0]"
-            }
-          },
-          {
-            "duration": 0.35,
-            "frames": {
-              "total": 23,
-              "hitmark": 10,
-              "cancels": {
-                "aim": 10,
-                "skill": 10,
-                "burst": 10,
-                "dash": 10,
-                "jump": 10,
-                "swap": 10,
-                "attack": 21
-              },
-              "source": "attack.go:attackFrames[1]"
-            }
-          },
-          {
-            "duration": 0.45,
-            "frames": {
-              "total": 39,
-              "hitmark": 19,
-              "cancels": {
-                "aim": 19,
-                "skill": 19,
-                "burst": 19,
-                "dash": 19,
-                "jump": 19,
-                "swap": 19,
-                "attack": 27
-              },
-              "source": "attack.go:attackFrames[2]"
-            }
-          },
-          {
-            "duration": 0.633,
-            "frames": {
-              "total": 45,
-              "hitmark": 23,
-              "cancels": {
-                "aim": 23,
-                "skill": 23,
-                "burst": 23,
-                "dash": 23,
-                "jump": 23,
-                "swap": 23,
-                "attack": 38
-              },
-              "source": "attack.go:attackFrames[3]"
-            }
-          },
-          {
-            "duration": 1.067,
-            "frames": {
-              "total": 64,
-              "hitmark": 14,
-              "cancels": {
-                "aim": 14,
-                "skill": 14,
-                "burst": 14,
-                "dash": 14,
-                "jump": 14,
-                "swap": 14
-              },
-              "source": "attack.go:attackFrames[4]"
-            }
-          }
-        ],
-        "buttonLabel": "N(蛍)"
-      },
-      {
-        "id": "10000005-pyro_ca_aether",
-        "name": "重撃(空)",
+        "id": "10000005-pyro_ca",
+        "name": "重撃",
         "shortName": "CA",
         "type": "charged",
         "frames": {
@@ -3332,27 +2205,7 @@
           },
           "source": "charge.go:chargeFrames"
         },
-        "defaultDuration": 0.917,
-        "buttonLabel": "CA(空)"
-      },
-      {
-        "id": "10000005-pyro_ca_lumine",
-        "name": "重撃(蛍)",
-        "shortName": "CA",
-        "type": "charged",
-        "frames": {
-          "total": 58,
-          "cancels": {
-            "skill": 34,
-            "burst": 35,
-            "dash": 25,
-            "jump": 25,
-            "swap": 25
-          },
-          "source": "charge.go:chargeFrames"
-        },
-        "defaultDuration": 0.967,
-        "buttonLabel": "CA(蛍)"
+        "defaultDuration": 0.917
       },
       {
         "id": "10000005-pyro_e",
@@ -3751,6 +2604,1850 @@
         "level": 6,
         "name": "パルスの魔女",
         "description": "登場時、周囲の敵に蒼雷の誘雷効果を3重付与する。 この効果は5秒毎に1回のみ発動可能。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-anemo",
+    "name": "蛍(風)",
+    "englishName": "Lumine (Anemo) Traveler 旅人",
+    "element": "anemo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#14b8a6",
+    "accentColor": "#14b8a6",
+    "availableActions": [
+      {
+        "id": "10000007-anemo_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-anemo_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-anemo_e",
+        "name": "元素スキル: 旋風の剣",
+        "shortName": "E",
+        "buttonLabel": "E(一回押し)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 5,
+        "effectDuration": 0,
+        "frames": {
+          "total": 62,
+          "cancels": {
+            "attack": 61,
+            "dash": 31,
+            "jump": 31,
+            "swap": 60
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "基本クールタイム"
+        },
+        "defaultDuration": 1.033
+      },
+      {
+        "id": "10000007-anemo_e_hold",
+        "name": "元素スキル(長押し): 旋風の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(長押し)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "dataSource": {
+          "cooldown": "最大チャージクールタイム"
+        },
+        "defaultDuration": 1.2
+      },
+      {
+        "id": "10000007-anemo_q",
+        "name": "元素爆発: 激風の息",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 6,
+        "frames": {
+          "total": 105,
+          "cancels": {
+            "skill": 104,
+            "dash": 90,
+            "jump": 90,
+            "swap": 95
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.75
+      },
+      {
+        "id": "10000007-anemo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "空を裂く風",
+        "talentSlot": 1,
+        "description": "通常攻撃の最後の1撃が風の刃を放つようになり、経路上の敵に攻撃力60%分の風元素ダメージを与える。",
+        "id": "10000007-anemo_p1",
+        "name": "空を裂く風",
+        "dataSource": {}
+      },
+      {
+        "talentName": "蘇生の風",
+        "talentSlot": 2,
+        "description": "旋風の剣で敵を倒した後、1秒毎にHPを2%回復する、継続時間5秒。 5秒に1回のみ発動可能。",
+        "id": "10000007-anemo_p2",
+        "name": "蘇生の風",
+        "duration": 5,
+        "dataSource": {
+          "duration": "継続時間5秒"
+        }
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "lumineanemo"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "回転する怒風",
+        "description": "旋風の剣は周囲5メートル以内の敵と物体をゆっくりと自分の前に吸い寄せることができる。"
+      },
+      {
+        "level": 2,
+        "name": "革新の旋風",
+        "description": "元素チャージ効率+16%。"
+      },
+      {
+        "level": 3,
+        "name": "天地の剛風",
+        "description": "激風の息のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "恩眷の和風",
+        "description": "旋風の剣継続中、自身の受けるダメージ-10%。"
+      },
+      {
+        "level": 5,
+        "name": "群星の渦風",
+        "description": "旋風の剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "もつれる信風",
+        "description": "激風の息によるダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、該当の元素耐性-20%。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-cryo",
+    "name": "蛍(氷)",
+    "englishName": "Lumine (Cryo) Traveler 旅人",
+    "element": "cryo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#06b6d4",
+    "accentColor": "#06b6d4",
+    "availableActions": [
+      {
+        "id": "10000007-cryo_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-cryo_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-cryo_e",
+        "name": "元素スキル: 霧氷の剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 12,
+        "frames": {
+          "total": 66,
+          "hitmark": 19,
+          "cancels": {
+            "attack": 32,
+            "skill": 33,
+            "burst": 33,
+            "dash": 33,
+            "jump": 33,
+            "swap": 32
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "凛冽の寒星継続時間"
+        },
+        "defaultDuration": 1.1
+      },
+      {
+        "id": "10000007-cryo_q",
+        "name": "元素爆発: 飛氷の鉾",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 0,
+        "frames": {
+          "total": 75,
+          "cancels": {
+            "skill": 74,
+            "jump": 74,
+            "swap": 73
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 1.25
+      },
+      {
+        "id": "10000007-cryo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "鋭き凛氷",
+        "talentSlot": 1,
+        "description": "輝映・星電導：凛冽の寒星が存在している間、旅人の通常攻撃、重撃、落下攻撃は元素付与によって他の元素に変化しない氷元素ダメージへと変わり、与えるダメージが旅人の攻撃力の80%分アップする。",
+        "id": "10000007-cryo_p1",
+        "name": "鋭き凛氷",
+        "dataSource": {}
+      },
+      {
+        "talentName": "透明なる冷氷",
+        "talentSlot": 2,
+        "description": "旅人の元素熟知が、旅人の攻撃力の8%分アップする。この方法でアップできる旅人の元素熟知は、最大160まで。",
+        "id": "10000007-cryo_p2",
+        "name": "透明なる冷氷",
+        "dataSource": {}
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "luminecryo"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "静まりゆく結氷",
+        "description": "旅人が星反応ダメージを与えた時、自身の元素エネルギーを5ポイント回復する。この効果は0.5秒毎に1回のみ発動可能。"
+      },
+      {
+        "level": 2,
+        "name": "唸る隕氷",
+        "description": "元素スキル**霧氷の剣**で放った氷晶が敵に命中した後、さらに現在フィールド上にいるキャラクターの元素熟知を60アップさせる。継続時間5秒。 また、上記効果の影響を受けたキャラクターが星反応を起こしたとき、または星反応ダメージを与えたとき、継続時間中、上記効果は元素熟知を120アップさせるものに変わる。"
+      },
+      {
+        "level": 3,
+        "name": "断ちきる鋭氷",
+        "description": "元素爆発**飛氷の鉾**のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "溶けざる堅氷",
+        "description": "元素スキル**霧氷の剣**が生成した凛冽の寒星の存在時間が25%延長される。"
+      },
+      {
+        "level": 5,
+        "name": "凍てつく霧氷",
+        "description": "元素スキル**霧氷の剣**のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "殺める輝氷",
+        "description": "元素爆発**飛氷の鉾**を発動時、**寒光**を1層消費するごとに、チーム内の他のキャラクターが与える星反応ダメージが5%アップする。この方法によるダメージアップは最大40%まで。継続時間15秒。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-dendro",
+    "name": "蛍(草)",
+    "englishName": "Lumine (Dendro) Traveler 旅人",
+    "element": "dendro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#10b981",
+    "accentColor": "#10b981",
+    "availableActions": [
+      {
+        "id": "10000007-dendro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-dendro_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-dendro_e",
+        "name": "元素スキル: 草縁剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "frames": {
+          "total": 37,
+          "hitmark": 28,
+          "cancels": {
+            "dash": 28,
+            "jump": 28,
+            "swap": 35
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.617
+      },
+      {
+        "id": "10000007-dendro_q",
+        "name": "元素爆発: 臥草若化",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 0,
+        "frames": {
+          "total": 58,
+          "hitmark": 91,
+          "cancels": {
+            "swap": 57
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-dendro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "蔓生の埜草",
+        "talentSlot": 1,
+        "description": "草蓮灯が存在する間、1秒毎に領域内フィールド上キャラクターの元素熟知を6アップさせる「蓮光遍照」効果を1層獲得する。草蓮灯の「蓮光遍照」効果は最大10層まで重ね掛けできる。",
+        "id": "10000007-dendro_p1",
+        "name": "蔓生の埜草",
+        "dataSource": {}
+      },
+      {
+        "talentName": "生い茂る草叢",
+        "talentSlot": 2,
+        "description": "旅人自身の元素熟知の数値が1につき、草縁剣によるダメージ+0.15%、臥草若化によるダメージ+0.1%。",
+        "id": "10000007-dendro_p2",
+        "name": "生い茂る草叢",
+        "dataSource": {}
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "luminedendro"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "寄身の倚草",
+        "description": "草縁剣が敵に命中すると、旅人の元素エネルギーが3.5回復する。"
+      },
+      {
+        "level": 2,
+        "name": "壮健なる勁草",
+        "description": "草蓮灯の存在時間+3秒。"
+      },
+      {
+        "level": 3,
+        "name": "婆娑の瑶草",
+        "description": "草縁剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "甘露の蜜草",
+        "description": "草蓮灯が蓮光幻変を発動すると、固有天賦「蔓生の埜草」の「蓮光遍照」効果を5層獲得する。 固有天賦「蔓生の埜草」を解放する必要がある。"
+      },
+      {
+        "level": 5,
+        "name": "迅生の豊草",
+        "description": "臥草若化のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "蘊思の霜草",
+        "description": "草蓮灯の「蓮光遍照」影響を受けているキャラクターによる草元素ダメージ+12%。草蓮灯が蓮光幻変を発動していた場合、さらに対応する元素ダメージ+12%。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-electro",
+    "name": "蛍(雷)",
+    "englishName": "Lumine (Electro) Traveler 旅人",
+    "element": "electro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#a855f7",
+    "accentColor": "#a855f7",
+    "availableActions": [
+      {
+        "id": "10000007-electro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-electro_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-electro_e",
+        "name": "元素スキル: 雷影剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 13.5,
+        "effectDuration": 6,
+        "frames": {
+          "total": 57,
+          "hitmark": 21,
+          "cancels": {
+            "dash": 42,
+            "jump": 42,
+            "swap": 55
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 0.95
+      },
+      {
+        "id": "10000007-electro_q",
+        "name": "元素爆発: 電光雷轟",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 12,
+        "frames": {
+          "total": 62,
+          "hitmark": 37,
+          "cancels": {
+            "attack": 61,
+            "jump": 61,
+            "swap": 61
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.033
+      },
+      {
+        "id": "10000007-electro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "転瞬の迅雷",
+        "talentSlot": 1,
+        "description": "周囲のチームメンバー（旅人自身を除く）が雷影剣で生成された豊穰の勾玉を拾うと、雷影剣のクールタイム-1.5秒。",
+        "id": "10000007-electro_p1",
+        "name": "転瞬の迅雷",
+        "dataSource": {}
+      },
+      {
+        "talentName": "轟く雷鳴",
+        "talentSlot": 2,
+        "description": "旅人自身の元素チャージ効率の10%を基準に、雷影剣が生成した豊穰の勾玉による元素チャージ効率をアップする。",
+        "id": "10000007-electro_p2",
+        "name": "轟く雷鳴",
+        "dataSource": {}
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "lumineelectro"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "豊穰の春雷",
+        "description": "雷影剣発動時に生成する豊穰の勾玉の数を3つにアップ。"
+      },
+      {
+        "level": 2,
+        "name": "激怒の蒼雷",
+        "description": "電光雷轟の威光の落雷が敵に命中すると、敵の雷元素耐性-15%、継続時間8秒。"
+      },
+      {
+        "level": 3,
+        "name": "連延の遠雷",
+        "description": "電光雷轟のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "予測不能な雷雲",
+        "description": "キャラクターが雷影剣で生成した豊穰の勾玉を獲得した時、該当キャラクターの元素エネルギーが35%未満の場合、豊穰の勾玉で回復できる元素エネルギー+100%。"
+      },
+      {
+        "level": 5,
+        "name": "荒野の雷鳴",
+        "description": "雷影剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "世を揺るがす神雷",
+        "description": "電光雷轟が威光の落雷を2回引き起こすたび、次の威光の落雷を大幅に強化し、本来の200%分のダメージを与え、さらに現在のキャラクターの元素エネルギーを1ポイント回復する。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-geo",
+    "name": "蛍(岩)",
+    "englishName": "Lumine (Geo) Traveler 旅人",
+    "element": "geo",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#f59e0b",
+    "accentColor": "#f59e0b",
+    "availableActions": [
+      {
+        "id": "10000007-geo_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-geo_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-geo_e",
+        "name": "元素スキル: 星落としの剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 30,
+        "frames": {
+          "total": 80,
+          "cancels": {
+            "attack": 79,
+            "dash": 23,
+            "jump": 24,
+            "swap": 65
+          },
+          "source": "skill.go:skillFrames[0]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "荒星の継続時間"
+        },
+        "defaultDuration": 1.333
+      },
+      {
+        "id": "10000007-geo_q",
+        "name": "元素爆発: 岩潮幾重",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 64,
+          "hitmark": 51,
+          "cancels": {
+            "attack": 62,
+            "dash": 42,
+            "jump": 42,
+            "swap": 49
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "岩の山の継続時間"
+        },
+        "defaultDuration": 1.067
+      },
+      {
+        "id": "10000007-geo_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "破れた断崖",
+        "talentSlot": 1,
+        "description": "星落としの剣のクールタイム-2秒。",
+        "id": "10000007-geo_p1",
+        "name": "破れた断崖",
+        "dataSource": {}
+      },
+      {
+        "talentName": "狂乱の岩崩れ",
+        "talentSlot": 2,
+        "description": "通常攻撃の最後の1撃が岩崩れを起こすようになり、範囲内の敵に攻撃力60%分の岩元素ダメージを与える。",
+        "id": "10000007-geo_p2",
+        "name": "狂乱の岩崩れ",
+        "dataSource": {}
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "luminegeo"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "巍然たる青岩",
+        "description": "チーム内キャラクターが岩潮幾重の岩の山に包囲されている時、会心率+10%、中断耐性がアップする。"
+      },
+      {
+        "level": 2,
+        "name": "不穏な溶岩",
+        "description": "星落としの剣の荒星が破壊される時に爆破が再び発生し、周囲の敵に星落としの剣のダメージに相当する岩元素範囲ダメージを与える。"
+      },
+      {
+        "level": 3,
+        "name": "八方の岩",
+        "description": "岩潮幾重のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "険しい重岩",
+        "description": "岩潮幾重が引き起こす振動波が敵に命中する度に、元素エネルギーが5回復する。 この方法で一回で最大25まで回復可能。"
+      },
+      {
+        "level": 5,
+        "name": "天墜の岩",
+        "description": "星落としの剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "永世の磐岩",
+        "description": "岩潮幾重の岩の山の継続時間+5秒。 星落としの剣荒星の継続時間+10秒。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-hydro",
+    "name": "蛍(水)",
+    "englishName": "Lumine (Hydro) Traveler 旅人",
+    "element": "hydro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#0ea5e9",
+    "accentColor": "#0ea5e9",
+    "availableActions": [
+      {
+        "id": "10000007-hydro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-hydro_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-hydro_e",
+        "name": "元素スキル: 水紋の剣",
+        "shortName": "E",
+        "buttonLabel": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "frames": {
+          "total": 44,
+          "cancels": {
+            "attack": 43,
+            "dash": 41,
+            "jump": 40,
+            "swap": 43
+          },
+          "source": "skill.go:skillPressFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.733
+      },
+      {
+        "id": "10000007-hydro_e_shorthold0ticks",
+        "name": "元素スキル派生: shortHold0Ticks",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold0Ticks)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 0.717,
+        "frames": {
+          "total": 43,
+          "cancels": {
+            "attack": 36,
+            "skill": 37,
+            "burst": 35,
+            "dash": 29,
+            "jump": 30,
+            "walk": 36
+          },
+          "source": "skill.go:skillShortHold0TicksFrames"
+        }
+      },
+      {
+        "id": "10000007-hydro_e_shorthold",
+        "name": "元素スキル派生: shortHold",
+        "shortName": "E",
+        "buttonLabel": "E(shortHold)",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "defaultDuration": 1.483,
+        "frames": {
+          "total": 89,
+          "cancels": {
+            "attack": 81,
+            "skill": 81,
+            "burst": 81,
+            "dash": 74,
+            "jump": 73,
+            "walk": 80
+          },
+          "source": "skill.go:skillShortHoldFrames"
+        }
+      },
+      {
+        "id": "10000007-hydro_e_hold",
+        "name": "元素スキル(最大ホールド): 水紋の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(最大ホールド)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "defaultDuration": 6.733,
+        "frames": {
+          "total": 404,
+          "cancels": {
+            "attack": 396,
+            "skill": 396,
+            "burst": 396,
+            "dash": 389,
+            "jump": 388,
+            "walk": 395
+          },
+          "source": "skill.go:skillShortHoldFrames + 15 × (22 − 1) (skillHold, hold=1)"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        }
+      },
+      {
+        "id": "10000007-hydro_q",
+        "name": "元素爆発: 昇流統水",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 20,
+        "effectDuration": 4,
+        "frames": {
+          "total": 78,
+          "cancels": {
+            "attack": 77,
+            "skill": 77,
+            "dash": 77,
+            "jump": 77,
+            "swap": 76
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.3
+      },
+      {
+        "id": "10000007-hydro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "無染の清水",
+        "talentSlot": 1,
+        "description": "長押しで発動した水紋の剣による露雫が敵に命中した後、旅人の近くに源水の雫を生成する。旅人が源水の雫を拾うと、HPが7%回復する。 この方法で生成できる源水の雫は1秒毎に1個のみ。水紋の剣1回につき、生成できる源水の雫は4個まで。",
+        "id": "10000007-hydro_p1",
+        "name": "無染の清水",
+        "dataSource": {}
+      },
+      {
+        "talentName": "澄明の浄水",
+        "talentSlot": 2,
+        "description": "長押しで水紋の剣を発動する時、充満によってHPを消費した場合、発動終了時に飛散する激流のダメージがアップする。ダメージアップ量は旅人がこの発動期間中に充満で消費したHPの合計の45%に相当する。 この方法でアップできる上記攻撃によるダメージは5000までとなる。",
+        "id": "10000007-hydro_p2",
+        "name": "澄明の浄水",
+        "dataSource": {}
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "luminehydro"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "細波の湖水",
+        "description": "源水の雫を拾うと、旅人は元素エネルギーを2ポイント回復する。 固有天賦「無染の清水」を解放する必要がある。"
+      },
+      {
+        "level": 2,
+        "name": "潺湲の碧水",
+        "description": "昇流統水の浮遊水沫の移動速度-30%、継続時間+3秒。"
+      },
+      {
+        "level": 3,
+        "name": "荒天の波水",
+        "description": "水紋の剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "傾落の流水",
+        "description": "水紋の剣を発動する時、ダメージ吸収量がHP上限の10%に値する水紋シールドを生成する。このシールドは水元素ダメージに対して250%の吸収効果があり、発動完了まで持続する。 2秒毎に1回、露雫が敵に命中した後、旅人が水紋シールド状態にある場合、水紋シールドのダメージ吸収量を旅人のHP上限の10%まで補充する。旅人が水紋シールド状態でない場合、水紋シールドを再生成する。"
+      },
+      {
+        "level": 5,
+        "name": "回旋の曲水",
+        "description": "昇流統水のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "正義の潮水",
+        "description": "旅人が源水の雫を拾う時、追加で周囲にいるHP割合の最も低いチーム内のキャラクターのHPを回復する。回復量はそのキャラクターのHP上限の6%に相当する。"
+      }
+    ]
+  },
+  {
+    "id": "10000007-pyro",
+    "name": "蛍(炎)",
+    "englishName": "Lumine (Pyro) Traveler 旅人",
+    "element": "pyro",
+    "weaponType": "sword",
+    "rarity": 5,
+    "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "color": "#ef4444",
+    "accentColor": "#ef4444",
+    "availableActions": [
+      {
+        "id": "10000007-pyro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.4,
+        "frames": {
+          "total": 32,
+          "hitmark": 16,
+          "cancels": {
+            "aim": 16,
+            "skill": 16,
+            "burst": 16,
+            "dash": 16,
+            "jump": 16,
+            "swap": 16,
+            "attack": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.4,
+            "frames": {
+              "total": 32,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "attack": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 23,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 21
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.45,
+            "frames": {
+              "total": 39,
+              "hitmark": 19,
+              "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
+                "attack": 27
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.633,
+            "frames": {
+              "total": 45,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 38
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          },
+          {
+            "duration": 1.067,
+            "frames": {
+              "total": 64,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackFrames[4]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "10000007-pyro_ca",
+        "name": "重撃",
+        "shortName": "CA",
+        "type": "charged",
+        "frames": {
+          "total": 58,
+          "cancels": {
+            "skill": 34,
+            "burst": 35,
+            "dash": 25,
+            "jump": 25,
+            "swap": 25
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.967
+      },
+      {
+        "id": "10000007-pyro_e",
+        "name": "元素スキル: 流火の剣",
+        "shortName": "E",
+        "buttonLabel": "E(一回押し)",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 49,
+          "cancels": {
+            "dash": 31,
+            "jump": 31,
+            "swap": 48
+          },
+          "source": "skill.go:skillFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.817
+      },
+      {
+        "id": "10000007-pyro_e_hold",
+        "name": "元素スキル(長押し): 流火の剣",
+        "shortName": "長押しE",
+        "buttonLabel": "E(長押し)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 81,
+          "hitmark": 50,
+          "cancels": {
+            "attack": 61,
+            "burst": 59,
+            "skill": 77,
+            "dash": 60,
+            "jump": 61,
+            "swap": 59
+          },
+          "source": "skill.go:skillHoldFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 1.35
+      },
+      {
+        "id": "10000007-pyro_q",
+        "name": "元素爆発: 燎原の灼炎",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 49,
+          "hitmark": 40,
+          "cancels": {
+            "skill": 48,
+            "swap": 47
+          },
+          "source": "burst.go:burstFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 0.817
+      },
+      {
+        "id": "10000007-pyro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "燃え立つ真火",
+        "talentSlot": 1,
+        "description": "旅人の夜魂値が20を超えている時、元素スキル流火の剣の「ブレイジング・ロック」と「バーニング・ロック」の攻撃が敵に命中した後の影響範囲がアップする。",
+        "id": "10000007-pyro_p1",
+        "name": "燃え立つ真火",
+        "dataSource": {}
+      },
+      {
+        "talentName": "燻る残火",
+        "talentSlot": 2,
+        "description": "ブレイジング・ロック、またはバーニング・ロックを持つフィールド上キャラクターが敵に炎元素関連反応を起こした後、旅人の元素エネルギーを5ポイント回復する。この効果は12秒毎に1回のみ発動可能。また、付近にいるチーム内キャラクターが「夜魂バースト」を起こした時、旅人の元素エネルギーを4ポイント回復する。",
+        "cooldown": 12,
+        "id": "10000007-pyro_p2",
+        "name": "燻る残火",
+        "dataSource": {
+          "cooldown": "12秒毎に1回"
+        }
+      }
+    ],
+    "source": {
+      "genshinId": 10000007,
+      "gcsimKey": "luminepyro"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "流光の星火",
+        "description": "ブレイジング・ロックまたはバーニング・ロックが存在する間、フィールド上キャラクターの与えるダメージ+6%。フィールド上キャラクターが夜魂の加護状態にある場合、与えるダメージがさらに+9%。"
+      },
+      {
+        "level": 2,
+        "name": "常明の燭火",
+        "description": "元素スキル流火の剣発動後の12秒間、付近にいるチーム内キャラクターが敵に炎元素関連反応を起こした後、旅人は夜魂値を14回復する。元素スキル流火の剣を発動するたびに、この方法で夜魂値を最大28回復可能。"
+      },
+      {
+        "level": 3,
+        "name": "燧伝の烽火",
+        "description": "元素スキル流火の剣のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 4,
+        "name": "灼熱の烈火",
+        "description": "元素爆発燎原の灼炎を発動した後、旅人の炎元素ダメージ+20%、継続時間9秒。"
+      },
+      {
+        "level": 5,
+        "name": "不滅の薪火",
+        "description": "元素爆発燎原の灼炎のスキルLv.+3。 最大Lv.15まで。"
+      },
+      {
+        "level": 6,
+        "name": "永燃の聖火",
+        "description": "夜魂の加護状態にある時、旅人の通常攻撃、重撃、落下攻撃ダメージは元素付与によって他の元素に変化しない夜魂性質の炎元素ダメージへと変わり、かつそれらの攻撃の会心ダメージ+40%。"
       }
     ]
   },

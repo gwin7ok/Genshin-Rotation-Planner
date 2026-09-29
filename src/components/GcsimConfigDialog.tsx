@@ -25,12 +25,14 @@ interface GcsimConfigDialogProps {
   onCtWaits: (waits: Record<string, number> | null) => void;
   /** 設定文の元になった出場ブロック（書き戻し先） */
   stints: Stint[];
+  /** 画面に出ている所要時間（計算後の出場ブロック。変更前の表示に使う） */
+  calculatedStints: Stint[];
   /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
   onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculatedStints, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -234,7 +236,9 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   </div>
                 );
               }
-              const preview = applyActionDurations(stints, runOutcome.align.pairs);
+              const effective: Record<string, number> = {};
+              for (const st of calculatedStints) for (const a of st.actions) effective[a.id] = a.duration;
+              const preview = applyActionDurations(stints, runOutcome.align.pairs, effective);
               return (
                 <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-sky-950/40 border-sky-700/60 text-sky-100 space-y-1">
                   <div className="font-bold">アクションの所要時間: {preview.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>

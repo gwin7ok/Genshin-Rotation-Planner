@@ -108,6 +108,30 @@ export const EXCLUDED_CONSTELLATIONS: Record<string, string> = {
   '10000110-electro_c6': 'イアンサ 6凸: 運動量メーターの継続時間+3秒（効果ではなく延長）',
 };
 
+/**
+ * 辞書のキーが、固有天賦の枠（a1 / a4）・命ノ星座の凸（c1〜c6）のどれのものか。
+ *   - 登録している関数の名前（asc.go の `a1` / `a1Init` / `makeA4`、cons.go の `c2` など）と、キー名の `a1` / `c2` の 2 つから決める
+ *   - 2 つが一致すればその枠。片方だけ分かるときはその枠。食い違う・関数名に複数の枠が含まれる（`c4c6`）ときは、キー名を採用
+ *   - 固有天賦は asc.go のキー、命ノ星座は cons.go のキーだけ（他方のファイルだけで登録されたキーは、名前が似ていても対象にしない）
+ */
+export function slotOfEntry(e: KeyCatalogEntry, kind: 'a' | 'c'): number | undefined {
+  const otherFile = kind === 'a' ? /[/]cons[.]go$/ : /[/]asc[.]go$/;
+  if (e.sources.length > 0 && e.sources.every(s => otherFile.test(s.file))) return undefined;
+  const ownFile = kind === 'a' ? /[/]asc[.]go$/ : /[/]cons[.]go$/;
+  const pattern = kind === 'a' ? /(?<![A-Za-z])[aA]([14])(?![0-9])|(?<=[a-z])A([14])(?![0-9])/g : /(?<![A-Za-z])[cC]([1-6])(?![0-9])|(?<=[a-z])C([1-6])(?![0-9])/g;
+  const fromFunc = new Set<number>();
+  for (const s of e.sources) {
+    if (!ownFile.test(s.file) || !s.func) continue;
+    const found = [...s.func.matchAll(pattern)].map(m => Number(m[1] ?? m[2]));
+    if (found.length === 1) fromFunc.add(found[0]);
+  }
+  const tokenRe = kind === 'a' ? /^a([14])$/ : /^c([1-6])$/;
+  const fromToken = e.key.split('-').map(x => tokenRe.exec(x)).find(Boolean);
+  const byToken = fromToken ? Number(fromToken[1]) : undefined;
+  if (byToken !== undefined) return byToken;
+  return fromFunc.size === 1 ? [...fromFunc][0] : undefined;
+}
+
 const tokensOf = (e: KeyCatalogEntry) => e.key.split('-');
 const hasToken = (e: KeyCatalogEntry, re: RegExp) => tokensOf(e).some(t => re.test(t));
 
@@ -216,9 +240,9 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
     for (const slot of [1, 2] as const) {
       const defs = (char.passiveEffects ?? []).filter(p => p.talentSlot === slot);
       if (defs.length === 0) continue;
-      let slotEntries = entries.filter(e => hasToken(e, slot === 1 ? /^a1$/ : /^a4$/));
+      let slotEntries = entries.filter(e => slotOfEntry(e, 'a') === (slot === 1 ? 1 : 4));
       // a1 / a4 の名前を持つキーが無いキャラは、固有天賦のファイル（asc.go）で登録された時間つきのキーを、継続時間が合う枠の定義に対応させる
-      const named = entries.some(e => hasToken(e, /^a[14]$/));
+      const named = entries.some(e => slotOfEntry(e, 'a') !== undefined);
       const ascKeys = named ? [] : entries.filter(e => e.category === 'talent' && !hasToken(e, /^c[1-6]$/));
       for (const def of defs) {
         let mine = slotEntries;
@@ -242,7 +266,8 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
     if (key) {
       const byLevel = new Map<number, KeyCatalogEntry[]>();
       for (const e of entries) {
-        const m = tokensOf(e).map(t => /^c([1-6])$/.exec(t)).find(Boolean);
+        const slotLevel = slotOfEntry(e, 'c');
+        const m = slotLevel !== undefined ? [String(slotLevel), String(slotLevel)] : undefined;
         if (!m) {
           if (e.category === 'constellation' && e.kind === 'effect') report.constellationSkipped.noLevel++;
           continue;

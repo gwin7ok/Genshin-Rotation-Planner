@@ -60,6 +60,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const [weaponTypeFilter, setWeaponTypeFilter] = useState<WeaponType | 'all'>('all');
   // ロック中のものだけを表示（キャラ・武器・聖遺物タブ共通）
   const [lockedOnly, setLockedOnly] = useState(false);
+  // gcsim に未実装（genshin-db にあって gcsim にキーが無い）ものだけを表示（キャラ・武器・聖遺物タブ共通）。カスタムは対象外
+  const [gcsimMissingOnly, setGcsimMissingOnly] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
 
@@ -344,20 +346,21 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     const q = searchQuery.toLowerCase();
     const matchesSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.englishName ?? '').toLowerCase().includes(q);
     const matchesFilter = matchesCharacterFilter(c, elementFilter, weaponTypeFilter);
-    return matchesSearch && matchesFilter && (!lockedOnly || !!c.isLocked);
+    return matchesSearch && matchesFilter && (!lockedOnly || !!c.isLocked) && (!gcsimMissingOnly || (!c.source?.gcsimKey && !c.isCustom && !c.id.startsWith('custom_')));
   });
 
   const filteredWeapons = database.weapons
     .filter(w => {
       const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase()) || (w.id ?? '').includes(searchQuery);
       const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
-      return matchesSearch && matchesWeapon && (!lockedOnly || !!w.isLocked);
+      return matchesSearch && matchesWeapon && (!lockedOnly || !!w.isLocked) && (!gcsimMissingOnly || (!w.gcsimKey && !w.isCustom));
     })
     .sort((a, b) => Number(b.id) - Number(a.id));
 
   const filteredArtifacts = database.artifacts
     .filter(a => {
       if (lockedOnly && !a.isLocked) return false;
+      if (gcsimMissingOnly && (a.gcsimKey || a.isCustom)) return false;
       return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
     })
     .sort((a, b) => Number(b.id) - Number(a.id));
@@ -505,6 +508,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 >
                   <Lock className="w-3 h-3" />
                   <span>ロック中のみ</span>
+                </button>
+
+                {/* gcsim 未実装のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setGcsimMissingOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                >
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>gcsim 未実装のみ</span>
                 </button>
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -713,6 +729,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   <span>ロック中のみ</span>
                 </button>
 
+                {/* gcsim 未実装のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setGcsimMissingOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                >
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>gcsim 未実装のみ</span>
+                </button>
+
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={handleDeleteAllWeapons}
@@ -804,6 +833,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 >
                   <Lock className="w-3 h-3" />
                   <span>ロック中のみ</span>
+                </button>
+
+                {/* gcsim 未実装のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setGcsimMissingOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                >
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>gcsim 未実装のみ</span>
                 </button>
 
                 <div className="flex items-center gap-2 shrink-0">

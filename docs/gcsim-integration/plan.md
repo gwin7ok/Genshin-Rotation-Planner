@@ -145,6 +145,10 @@ gcsim v2.47.6（2026-09-24 リリース）で検証した。
 | D29 | gcsim の結果の反映ルール（発動バフ） | 追加済みの要素は発動位置・効果持続時間・CT を上書き、未追加の要素はアプリが追加してから上書き。「入力に必要なアクションだけ入れて、他は自動追加」と「不要な要素もある程度追加して確認してから計算」の両方に対応（フェーズ6） |
 | D30 | 規則辞書の形式 | 窓の起点は窓を開く E の発動時刻、上書きする値は CT だけ、静的な秒数で表せない状態は規則なし（フェーズ3d） |
 | D31 | 所要時間の概算 | 次に続くアクションに応じたキャンセルフレームで自動計算。編集した値だけ固定（フェーズ3d） |
+| D32 | 編集値を自動に戻す操作 | 個別の「自動に戻す」ボタンは実装しない。gcsim の再実行（書き戻し）で全体を上書きする運用（フェーズ3d、6） |
+| D33 | マスターデータの生成方針 | genshin-db 主体を維持し、gcsim は補完に使う（genshin-db に無い設定値を可能な限り gcsim でカバー）（フェーズ5） |
+| D34 | genshin-db と gcsim の突き合わせ | 名前ではなく、あらかじめ作成した DB キーの照合表（公式 ID ↔ gcsim キー）で行う（フェーズ5） |
+| D35 | 旅人の扱い | 空・蛍を別キャラとして、元素ごとに2人（計14キャラ）で登録する。「旅人は1人まで」の制約は設けない（フェーズ3e） |
 
 ## 5. CT・効果時間の管理構造の分析（2026-09-28）
 
@@ -199,6 +203,7 @@ gcsim v2.47.6（2026-09-24 リリース）で検証した。
 | 3b | キャラの凸数（命ノ星座） | [plan](phase-3b-constellation/plan.md) | [progress](phase-3b-constellation/progress.md) |
 | 3c | 編成のキャラを ID 参照にする | [plan](phase-3c-party-member-ref/plan.md) | [progress](phase-3c-party-member-ref/progress.md) |
 | 3d | アクションの整理（自動切り替えの統合・N を1つに） | [plan](phase-3d-action-cleanup/plan.md) | [progress](phase-3d-action-cleanup/progress.md) |
+| 3e | 旅人を空・蛍の別キャラにする（14キャラ） | [plan](phase-3e-traveler-split/plan.md) | [progress](phase-3e-traveler-split/progress.md) |
 | 4 | 編成 → gcsim 設定文の変換 | [plan](phase-4-config-converter/plan.md) | [progress](phase-4-config-converter/progress.md) |
 | 5 | gcsim キーの辞書の生成 | [plan](phase-5-key-catalog/plan.md) | [progress](phase-5-key-catalog/progress.md) |
 | 6 | gcsim 実行と結果のガントチャート反映 | [plan](phase-6-run-and-apply/plan.md) | [progress](phase-6-run-and-apply/progress.md) |

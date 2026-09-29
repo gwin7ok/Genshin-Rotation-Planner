@@ -27,7 +27,7 @@ import {
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
-import { formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
+import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig } from '../utils/buffUtils';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 
@@ -261,7 +261,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, holdSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -272,7 +272,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const newStints = stints.map(s => {
       if (s.id !== stintId) return s;
       const cleanActions = s.actions.map(a => {
-        const { hasCTCollision, collisionRemainingCT, startTime, endTime, ...rest } = a;
+        const { hasCTCollision, collisionRemainingCT, holdSeconds, startTime, endTime, ...rest } = a;
         return rest;
       });
       const [moved] = cleanActions.splice(fromIndex, 1);
@@ -1465,7 +1465,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
-                                            : act.shortName}
+                                            : actionDisplayName(act)}
                                           {hasCollision && colRem !== undefined && (
                                             <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
                                               残{colRem}s
@@ -1498,7 +1498,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 return (
                                   <React.Fragment key={cd.id}>
                                   {violatingAction && (
-                                    <CTViolationMarker x={startX} remaining={violatingAction.collisionRemainingCT} />
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
                                   )}
                                   <div
                                     key={cd.id}
@@ -1548,7 +1548,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 return (
                                   <React.Fragment key={cd.id}>
                                   {violatingAction && (
-                                    <CTViolationMarker x={startX} remaining={violatingAction.collisionRemainingCT} />
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
                                   )}
                                   <div
                                     key={cd.id}

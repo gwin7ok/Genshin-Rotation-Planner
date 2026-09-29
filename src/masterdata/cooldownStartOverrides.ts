@@ -16,6 +16,8 @@ export interface CooldownStartOverride {
   cooldownPerHold?: number;
   /** cooldownPerHold があるとき、ホールド 0 のときの CT（秒）。マスターの cooldown をこの値にする（genshin-db の値は最大ホールドのときのもの） */
   baseCooldown?: number;
+  /** frames に含まれる長押しのフレーム数（早柚・綺良々は最大ホールド 600f 込み）。生成時に秒へ換算して holdInFrames にする */
+  holdInFrames?: number;
   note: string;
 }
 
@@ -66,8 +68,8 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000088-cryo_e_hold': { from: 'holdEnd', delayFrames: 109, note: 'charlotte/skill.go: hitmark-2（hitmark = hold + skillHoldHitmark(111)）' },
   '10000090-pyro_e_hold': { from: 'holdEnd', delayFrames: 13, note: 'chevreuse/skill.go: cdStart = hold + skillHoldCDStart(13)' },
   '10000114-cryo_e_hold': { from: 'holdEnd', delayFrames: 18, note: 'skirk/skill.go: extraDuration + skillHoldGainSS(18)' },
-  '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
-  '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
+  '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, holdInFrames: 600, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
+  '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, holdInFrames: 600, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
   // 旅人(風): 長押し（2 ティック以上）。gcsim の SkillHold は hitmark - 5 で CT を始める。hitmark = 31 + 15 × ティック数 + 5 - 15 + 5 なので、
   // 長押し（15f × ティック数）の終了から 21f。1 ティック以下は CT 5 秒・遅れ 16f（ホールド秒数を使う 5-5 で扱う）
   '10000005-anemo_e_hold': { from: 'holdEnd', delayFrames: 21, note: 'traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数' },

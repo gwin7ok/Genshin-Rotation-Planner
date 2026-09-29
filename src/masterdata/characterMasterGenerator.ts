@@ -822,6 +822,7 @@ export async function generateCharacterMaster(
         a.dataSource = { ...a.dataSource, cooldownStart: r.source };
         if (r.cooldownPerHold !== undefined) a.cooldownPerHold = r.cooldownPerHold;
         if (r.baseCooldown !== undefined) a.cooldown = r.baseCooldown;
+        if (r.holdInFrames !== undefined) a.holdInFrames = r.holdInFrames;
         report.cooldownStart[r.status === 'manual' ? 'manual' : 'read']++;
       } else {
         report.cooldownStart.unresolved.push({ characterId: u.id, name: u.name, actionId: a.id, reason: u.gcsimKey ? (r.reason ?? '') : 'gcsim 未実装' });

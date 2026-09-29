@@ -2,6 +2,14 @@ import { ActionDefinition, ActiveBuffSpan, CharacterActionInstance, CharacterCon
 
 const SKILL_TYPES = new Set(['skill', 'skill_hold', 'skill_reset']);
 
+/**
+ * ガントチャート・記法に出すアクション名。長押しの秒数が決まるもの（CT開始位置が「長押し終了」の hE）は「hE(2.5s)」の形にする（D36・D47）。
+ * 秒数は計算時に付く holdSeconds（所要時間から逆算した値）
+ */
+export function actionDisplayName(act: Pick<CharacterActionInstance, 'shortName' | 'holdSeconds'>): string {
+  return act.holdSeconds === undefined ? act.shortName : `${act.shortName}(${act.holdSeconds.toFixed(1)}s)`;
+}
+
 /** キャラのスキル/爆発アクションに設定された CT を "5s / 10s" の形でまとめる (未設定なら "-") */
 export function formatCharacterCooldowns(char: CharacterConfig, kind: 'skill' | 'burst'): string {
   const values = char.availableActions

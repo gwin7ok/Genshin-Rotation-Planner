@@ -1144,6 +1144,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     b.startTime <= (stint.endTime ?? 0) + 0.2
                   );
 
+                  // 左のキャラカードには、そのアクション本来のCT（持ち越しバーの残りCTではなく、元のCTの長さ）を表示する
+                  const originalCtSeconds = (list: CooldownSpan[]): number => {
+                    const own = list.find(c => !c.isCarryOver);
+                    if (own) return own.duration;
+                    const carried = list[0];
+                    return carried.originalStartTime !== undefined && carried.originalEndTime !== undefined
+                      ? carried.originalEndTime - carried.originalStartTime
+                      : carried.duration;
+                  };
                   const allStintSkillCDs = [...charCarryOverSkillCDs, ...stintSkillCDs];
                   const allStintBurstCDs = [...charCarryOverBurstCDs, ...stintBurstCDs];
                   const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
@@ -1269,16 +1278,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* Row 2: Skill (E) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintSkillCDs.length > 0 && (
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ スキルCT{charCarryOverSkillCDs.length > 0 ? ' [持越]' : ''}</span>
-                              <span className="shrink-0 ml-1">{allStintSkillCDs[0].duration.toFixed(1)}s</span>
+                              <span className="truncate">⏱️ スキルCT</span>
+                              <span className="shrink-0 ml-1">{originalCtSeconds(allStintSkillCDs).toFixed(1)}s</span>
                             </div>
                           )}
 
                           {/* Row 3: Burst (Q) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintBurstCDs.length > 0 && (
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ 爆発CT{charCarryOverBurstCDs.length > 0 ? ' [持越]' : ''}</span>
-                              <span className="shrink-0 ml-1">{allStintBurstCDs[0].duration.toFixed(1)}s</span>
+                              <span className="truncate">⏱️ 爆発CT</span>
+                              <span className="shrink-0 ml-1">{originalCtSeconds(allStintBurstCDs).toFixed(1)}s</span>
                             </div>
                           )}
 

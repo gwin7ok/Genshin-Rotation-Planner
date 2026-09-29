@@ -144,7 +144,7 @@
 
 | 保存先 | キー | 内容 |
 | :--- | :--- | :--- |
-| 現在の編成（localStorage） | `genshin_rotation_current_state_v2` | `party`, `stints`, `loopStartIndex`, `switchDelay`, `actionDelay`, `activeSlotId` |
+| 現在の編成（localStorage） | `genshin_rotation_current_state_v2` | `party`, `stints`, `loopStartIndex`, `switchDelay`, `activeSlotId` |
 | 保存スロット（localStorage） | `genshin_rotation_saved_slots_v2` | スロットごとに `party`, `stints`, `loopStartIndex`, 名前・メモ など |
 | JSON 書き出し・読み込み | — | `party`, `stints`, `loopStartIndex` など（編成管理・ヘッダーの書き出し） |
 

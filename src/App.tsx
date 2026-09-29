@@ -59,14 +59,10 @@ export default function App() {
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
   });
-  // Action gap / execution delay (default 0.10s or restored from storage)
-  const [actionDelay, setActionDelay] = useState<number>(() => {
-    return savedInitialState?.actionDelay ?? 0.10;
-  });
   // 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし）。旧データの秒数は番号へ変換
   const [loopStartIndex, setLoopStartIndex] = useState<number>(() => {
     if (!savedInitialState) return 0;
-    return resolveLoopStartIndex(savedInitialState, characters, visibleStints, { switchDelay, actionDelay });
+    return resolveLoopStartIndex(savedInitialState, characters, visibleStints, { switchDelay });
   });
 
   // User saved rotation slots (shown in the header's 編成選択) & currently loaded slot
@@ -95,15 +91,14 @@ export default function App() {
       stints,
       loopStartIndex,
       switchDelay,
-      actionDelay,
       activeSlotId,
     });
-  }, [party, stints, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
+  }, [party, stints, loopStartIndex, switchDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, visibleStints, { switchDelay, actionDelay, database, loopStartIndex });
-  }, [characters, visibleStints, switchDelay, actionDelay, database, loopStartIndex]);
+    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex });
+  }, [characters, visibleStints, switchDelay, database, loopStartIndex]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -173,7 +168,6 @@ export default function App() {
     loopStartIndex?: number;
     loopStartTime?: number;
     switchDelay?: number;
-    actionDelay?: number;
     slotId?: string;
   }) => {
     const loadedChars = resolvePartyCharacters(slot.party, database.characters);
@@ -182,7 +176,6 @@ export default function App() {
     setStints(slot.stints);
     setLoopStartIndex(resolveLoopStartIndex(slot, loadedChars, loadedStints, slot));
     setSwitchDelay(slot.switchDelay ?? 0.50);
-    setActionDelay(slot.actionDelay ?? 0.10);
     setActiveSlotId(slot.slotId ?? null);
   };
 
@@ -192,7 +185,6 @@ export default function App() {
     setStints([]);
     setLoopStartIndex(0);
     setSwitchDelay(0.50);
-    setActionDelay(0.10);
     setActiveSlotId(null);
   };
 
@@ -229,7 +221,6 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
-      actionDelay,
     });
     setSavedSlots(updated);
     setOverwriteSaved(true);
@@ -252,7 +243,6 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
-      actionDelay,
     };
     setSavedSlots(saveSlot(newSlot));
     setActiveSlotId(newSlot.id);
@@ -298,7 +288,7 @@ export default function App() {
           const importedStints: Stint[] = filterStintsForCharacters(parsed.stints, importedChars);
           setParty(importedParty);
           setStints(parsed.stints);
-          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
+          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay }));
           setActiveSlotId(null);
         } else {
           alert('無効なローテーションJSONファイルです。');
@@ -326,7 +316,6 @@ export default function App() {
           loopStartIndex: slot.loopStartIndex,
           loopStartTime: slot.loopStartTime ?? 0,
           switchDelay: slot.switchDelay,
-          actionDelay: slot.actionDelay,
           slotId: slot.id,
         })}
         isPlaying={isPlaying}
@@ -379,7 +368,6 @@ export default function App() {
           loopStartIndex={loopStartIndex}
           onUpdateLoopStartIndex={setLoopStartIndex}
           switchDelay={switchDelay}
-          actionDelay={actionDelay}
         />
 
         {/* 2-Tier Sequence Editor (Macro Stint DnD + Micro Action Reordering) */}
@@ -391,8 +379,6 @@ export default function App() {
           onSeek={handleSeek}
           switchDelay={switchDelay}
           onUpdateSwitchDelay={setSwitchDelay}
-          actionDelay={actionDelay}
-          onUpdateActionDelay={setActionDelay}
           onOpenHelpModal={() => setIsHelpModalOpen(true)}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
@@ -414,7 +400,6 @@ export default function App() {
         loopStartIndex={loopStartIndex}
         totalDuration={totalDuration}
         switchDelay={switchDelay}
-        actionDelay={actionDelay}
         activeSlotId={activeSlotId}
         onSlotsChanged={(slots, currentSlotId) => {
           setSavedSlots(slots);

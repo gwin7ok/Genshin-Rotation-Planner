@@ -1,3 +1,4 @@
+import { actionDelayOf } from './actionDelay';
 import { 
   CharacterConfig, 
   Stint, 
@@ -44,7 +45,6 @@ export interface CalculatedRotation {
 
 export interface RotationOptions {
   switchDelay?: number;
-  actionDelay?: number;
   database?: GenshinDatabase;
   loopStartIndex?: number;
 }
@@ -55,7 +55,6 @@ export function calculateRotation(
   options?: RotationOptions
 ): CalculatedRotation {
   const switchDelay = typeof options?.switchDelay === 'number' ? Math.max(0, options.switchDelay) : 0.50;
-  const actionDelay = typeof options?.actionDelay === 'number' ? Math.max(0, options.actionDelay) : 0.10;
   const loopStartIndex = typeof options?.loopStartIndex === 'number' ? Math.max(0, options.loopStartIndex) : 0;
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
@@ -146,11 +145,6 @@ export function calculateRotation(
     const rawActions = rawStint.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char');
 
     for (let aIdx = 0; aIdx < rawActions.length; aIdx++) {
-      // If there are already actions in this stint (switch action or previous action), insert actionDelay gap
-      if (computedActions.length > 0 && actionDelay > 0) {
-        currentTime = Number((currentTime + actionDelay).toFixed(3));
-      }
-
       const act = rawActions[aIdx];
       const actionStartTime = currentTime;
       const duration = Math.max(0.05, act.duration || 0.5);
@@ -182,7 +176,7 @@ export function calculateRotation(
           actionId: act.id,
           time: actionStartTime,
           title: `${char.name}: アクション定義が見つかりません`,
-          message: `「${act.name}」の定義がキャラデータにないため、CT を判定できません（編成設定の「全パーティメンバーをマスターデータで再登録」で直ります）`,
+          message: `「${act.name}」の定義がキャラデータにないため、CT を判定できません（DB 管理で、そのキャラのアクションを確認してください）`,
         });
       }
 
@@ -257,7 +251,8 @@ export function calculateRotation(
       const effectSpan = buildActionEffectSpan(char, act, actionDef, actionStartTime);
       if (effectSpan) activeBuffs.push(effectSpan);
 
-      currentTime = actionEndTime;
+      // アクションごとの遅延は、そのアクションの終了後に入れる（出場の最後なら次の交代が遅れる）
+      currentTime = Number((actionEndTime + actionDelayOf(act)).toFixed(3));
     }
 
     const stintEndTime = currentTime;

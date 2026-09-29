@@ -70,6 +70,8 @@ export interface CharacterActionInstance {
   cooldown?: number;
   /** このアクションの効果継続時間 (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の effectDuration を使う */
   effectDuration?: number;
+  /** このアクションの終了後、次のアクション（出場の最後なら次の交代）を遅らせる秒数。未設定は既定値 0.10 秒 */
+  delayAfter?: number;
   note?: string;
   // Computed at runtime:
   startTime?: number;
@@ -314,6 +316,5 @@ export interface SavedRotationSlot {
   loopStartTime?: number;
   totalDuration?: number;
   switchDelay?: number;
-  actionDelay?: number;
 }
 

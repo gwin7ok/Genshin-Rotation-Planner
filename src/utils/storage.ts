@@ -13,7 +13,6 @@ export interface ActiveRotationState {
   /** 旧形式のループ基準（秒）。読込時に loopStartIndex へ変換する */
   loopStartTime?: number;
   switchDelay?: number;
-  actionDelay?: number;
   /** 現在読み込んでいるユーザー保存編成（スロット）のID */
   activeSlotId?: string | null;
   lastSavedAt: string;

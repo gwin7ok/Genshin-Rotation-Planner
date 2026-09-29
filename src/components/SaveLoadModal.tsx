@@ -37,7 +37,6 @@ interface SaveLoadModalProps {
   loopStartIndex: number;
   totalDuration: number;
   switchDelay?: number;
-  actionDelay?: number;
   activeSlotId: string | null;
   /** 保存スロット一覧が変わったとき。currentSlotId を渡すと「現在読み込み中の編成」もそのIDに更新する */
   onSlotsChanged: (slots: SavedRotationSlot[], currentSlotId?: string | null) => void;
@@ -47,7 +46,6 @@ interface SaveLoadModalProps {
     loopStartIndex?: number;
     loopStartTime?: number;
     switchDelay?: number;
-    actionDelay?: number;
     name?: string;
     slotId?: string;
   }) => void;
@@ -65,7 +63,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   loopStartIndex,
   totalDuration,
   switchDelay,
-  actionDelay,
   activeSlotId,
   onSlotsChanged,
   onLoadSlot,
@@ -127,7 +124,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime,
       totalDuration,
       switchDelay,
-      actionDelay,
     };
     const updated = saveSlot(newSlot);
     setSavedSlots(updated);
@@ -147,7 +143,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime,
       totalDuration,
       switchDelay,
-      actionDelay,
       updatedAt: new Date().toISOString(),
     };
     const updated = saveSlot(updatedSlot);
@@ -174,7 +169,6 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       switchDelay: slot.switchDelay,
-      actionDelay: slot.actionDelay,
       name: slot.name,
       slotId: slot.id,
     });

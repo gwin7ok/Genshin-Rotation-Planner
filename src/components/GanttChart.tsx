@@ -1847,11 +1847,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               <div
                 style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
                 className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-10 shadow-lg"
-              >
-                <div className="absolute top-1/4 -translate-x-1/2 bg-purple-900/90 border border-purple-400 text-purple-200 text-[9px] font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
-                  🔁 1周目ループ区切 (0.00s基準 / {loopStartTime.toFixed(2)}s)
-                </div>
-              </div>
+              />
             )}
 
 

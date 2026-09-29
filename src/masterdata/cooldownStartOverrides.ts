@@ -5,13 +5,13 @@
  * 自動読み取りより優先される。自動読み取りの値と食い違うものは、マスター生成のレポートに出る（gcsim の更新で古くなったことに気づくため）。
  *
  * - キー: アクション定義 ID（`<キャラID>_e` / `_e_hold` / `_e_shorthold` / `_q` など。D13）
- * - from: `motionStart`（動作開始から）/ `holdEnd`（長押し終了から）
+ * - from: `motionStart`（動作開始から）/ `holdEnd`（長押し終了から）/ `stateEnd`（状態の終了から。夜魂・スキル状態が終わったときに gcsim が CT を始めるもの。D45）
  * - delayFrames: 遅れ（60fps のフレーム。gcsim のソースと照合しやすいようフレームで書く。生成時に秒へ換算）
  * - cooldownPerHold / baseCooldown: 長押し 1 秒あたりの CT の増分（秒）と、ホールド 0 のときの CT（秒）。CT の長さ = baseCooldown + cooldownPerHold × ホールド秒数
  * - note: 根拠（gcsim ソースの場所）
  */
 export interface CooldownStartOverride {
-  from: 'motionStart' | 'holdEnd';
+  from: 'motionStart' | 'holdEnd' | 'stateEnd';
   delayFrames: number;
   cooldownPerHold?: number;
   /** cooldownPerHold があるとき、ホールド 0 のときの CT（秒）。マスターの cooldown をこの値にする（genshin-db の値は最大ホールドのときのもの） */
@@ -68,4 +68,12 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000114-cryo_e_hold': { from: 'holdEnd', delayFrames: 18, note: 'skirk/skill.go: extraDuration + skillHoldGainSS(18)' },
   '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
   '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
+  // 状態の終了で CT が始まるもの（D45）。状態が何で終わるか（夜魂ポイントの枯渇・再発動・時間切れなど）は 5-5 以降で扱う
+  '10000104-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'chasca/skill.go: exitNightsoul() の SetCD(6.5秒)' },
+  '10000113-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'ifa/skill.go: exitNightsoul() の SetCD(7.5秒)' },
+  '10000124-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'jahoda/skill.go: cancelPursuit() の SetCD(skillCD + skillWindup)' },
+  '10000102-hydro_e': { from: 'stateEnd', delayFrames: 0, note: 'mualani/skill.go: cancelNightsoul() の SetCD(6秒)' },
+  '10000114-cryo_e': { from: 'stateEnd', delayFrames: 0, note: 'skirk/skill.go: exitSkillState() の SetCD(8秒)' },
+  '10000075-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'wanderer/skill.go: skillEndRoutine() の SetCD(6秒)' },
+  '10000103-geo_e': { from: 'stateEnd', delayFrames: 0, note: 'xilonen/skill.go: exitNightsoul() の SetCD(7秒)' },
 };

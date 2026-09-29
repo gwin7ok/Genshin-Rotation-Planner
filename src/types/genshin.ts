@@ -40,11 +40,11 @@ export interface ActionFrames {
 }
 
 /**
- * CTの開始位置（D37 / D44）。動作開始からの位置か、長押し終了からの位置か。
+ * CTの開始位置（D37 / D44 / D45）。動作開始からの位置か、長押し終了からの位置か、状態（夜魂・元素スキルの状態など）の終了からの位置か。
  * スキルと爆発で同じ形。delay は秒（gcsim の SetCD / SetCDWithDelay の遅れフレームを 60fps で換算）。
  */
 export interface CooldownStart {
-  from: 'motionStart' | 'holdEnd';
+  from: 'motionStart' | 'holdEnd' | 'stateEnd';
   delay: number;
 }
 

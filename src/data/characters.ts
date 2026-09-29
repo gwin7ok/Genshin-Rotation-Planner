@@ -26,7 +26,6 @@ export const createEmptySlotCharacter = (slotIndex: number): CharacterConfig => 
   avatarUrl: '',
   color: '#475569',
   accentColor: '#94a3b8',
-  energyRecharge: 100,
   availableActions: [],
 });
 

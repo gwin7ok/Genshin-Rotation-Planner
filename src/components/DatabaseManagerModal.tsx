@@ -511,7 +511,6 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150&auto=format&fit=crop&q=80',
                         color: '#ef4444',
                         accentColor: '#f87171',
-                        energyRecharge: 100,
                         availableActions: [
                           { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 6.0, effectDuration: 0 },
                           { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, cooldown: 15.0, effectDuration: 0 },

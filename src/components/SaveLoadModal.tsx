@@ -18,13 +18,20 @@ import {
   Users,
   ChevronRight
 } from 'lucide-react';
-import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
+import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types/genshin';
+import { AppDatabase } from '../types/database';
+import { resolvePartyCharacters } from '../utils/party';
+import { isEmptySlotCharacter } from '../data/characters';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** 編成（保存・書き出しの対象） */
+  party: PartyMember[];
+  /** 編成を DB と合わせて解決したキャラ（表示・編成名の生成用） */
   characters: CharacterConfig[];
+  database: AppDatabase;
   stints: Stint[];
   loopStartTime: number;
   loopStartIndex: number;
@@ -35,7 +42,7 @@ interface SaveLoadModalProps {
   /** 保存スロット一覧が変わったとき。currentSlotId を渡すと「現在読み込み中の編成」もそのIDに更新する */
   onSlotsChanged: (slots: SavedRotationSlot[], currentSlotId?: string | null) => void;
   onLoadSlot: (slot: {
-    characters: CharacterConfig[];
+    party: PartyMember[];
     stints: Stint[];
     loopStartIndex?: number;
     loopStartTime?: number;
@@ -50,7 +57,9 @@ interface SaveLoadModalProps {
 export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   isOpen,
   onClose,
+  party,
   characters,
+  database,
   stints,
   loopStartTime,
   loopStartIndex,
@@ -112,7 +121,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       name,
       description: newSlotDesc.trim() || undefined,
       updatedAt: new Date().toISOString(),
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -132,7 +141,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const handleOverwrite = (slot: SavedRotationSlot) => {
     const updatedSlot: SavedRotationSlot = {
       ...slot,
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -160,7 +169,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // Load slot
   const handleLoad = (slot: SavedRotationSlot) => {
     onLoadSlot({
-      characters: slot.characters,
+      party: slot.party,
       stints: slot.stints,
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
@@ -177,7 +186,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const payload = slot ? {
       name: slot.name,
       description: slot.description,
-      characters: slot.characters,
+      party: slot.party,
       stints: slot.stints,
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
@@ -186,7 +195,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       exportedAt: new Date().toISOString(),
     } : {
       name: newSlotName || '原神ローテーション',
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -209,7 +218,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const payload = slot ? {
       name: slot.name,
       description: slot.description,
-      characters: slot.characters,
+      party: slot.party,
       stints: slot.stints,
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
@@ -217,7 +226,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       exportedAt: new Date().toISOString(),
     } : {
       name: newSlotName || '原神ローテーション',
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -240,9 +249,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     reader.onload = (ev) => {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
-        if (parsed.characters && parsed.stints) {
+        if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
           onLoadSlot({
-            characters: parsed.characters,
+            party: parsed.party,
             stints: parsed.stints,
             loopStartIndex: parsed.loopStartIndex,
             loopStartTime: parsed.loopStartTime ?? 0,
@@ -264,9 +273,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const handleImportText = () => {
     try {
       const parsed = JSON.parse(importJsonText.trim());
-      if (parsed.characters && parsed.stints) {
+      if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
         onLoadSlot({
-          characters: parsed.characters,
+          party: parsed.party,
           stints: parsed.stints,
           loopStartIndex: parsed.loopStartIndex,
           loopStartTime: parsed.loopStartTime ?? 0,
@@ -495,7 +504,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
 
                             {/* Character Badges */}
                             <div className="flex items-center gap-1.5 pt-1">
-                              {slot.characters.map((c) => (
+                              {resolvePartyCharacters(slot.party, database.characters).filter(c => !isEmptySlotCharacter(c)).map((c) => (
                                 <div
                                   key={c.id}
                                   className="flex items-center gap-1 bg-slate-900/80 border border-slate-700 px-1.5 py-0.5 rounded text-[10px] text-slate-300"

@@ -168,6 +168,27 @@ export interface Stint {
   duration?: number;
 }
 
+/**
+ * 編成の1枠（保存データ）。キャラは DB の ID で参照し、編成ごとの設定だけを持つ。
+ * キャラのデータは表示・計算のたびに DB から引く（resolvePartyCharacters）。
+ */
+export interface PartyMember {
+  /** DB のキャラ ID（未設定枠は empty_slot_<n>） */
+  characterId: string;
+  /** 凸数（0〜6。未指定時は星4=6/星5=0） */
+  constellation?: number;
+  /** 装備武器（DB の武器 id） */
+  weaponId?: string;
+  /** 精錬ランク (1〜5, 未指定時は星5=1/星4以下=5) */
+  weaponRefinementRank?: number;
+  /** 装備聖遺物セット（DB の聖遺物セット id） */
+  artifactSetId?: string;
+  /** 聖遺物の組み合わせ。'2+2' は聖遺物の発動バフなし（未指定は '4pc'） */
+  artifactSetMode?: ArtifactSetMode;
+  /** 元素チャージ効率 (% e.g. 180 = 180%) */
+  energyRecharge?: number;
+}
+
 export interface CharacterConfig {
   id: string;
   name: string;
@@ -179,7 +200,7 @@ export interface CharacterConfig {
   color: string;
   accentColor: string;
 
-  // Custom user settings in party:
+  // 編成ごとの設定（PartyMember から解決して入る。DB のキャラ自身は持たない）:
   energyRecharge?: number; // % e.g. 180 = 180%
   /** 装備武器（DB の武器 id） */
   weaponId?: string;
@@ -284,7 +305,8 @@ export interface SavedRotationSlot {
   name: string;
   description?: string;
   updatedAt: string; // ISO string
-  characters: CharacterConfig[];
+  /** 編成（キャラの ID と編成ごとの設定） */
+  party: PartyMember[];
   stints: Stint[];
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0始まり、0=基準なし） */
   loopStartIndex?: number;

@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Database, Search, Filter, Trash2 } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { ListSelect } from './ListSelect';
-import { ArtifactSetMode, CharacterConfig, Stint, ElementType, WeaponType } from '../types/genshin';
+import { ArtifactSetMode, CharacterConfig, PartyMember, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { CharacterModel, MAX_CONSTELLATION, defaultConstellation } from '../models/CharacterModel';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
-import { ELEMENT_COLORS, ELEMENT_NAMES_JA, createEmptySlotCharacter, isEmptySlotCharacter } from '../data/characters';
-import {
-  migrateStintsToNewCharacter,
-  refreshCharactersFromDatabase,
-} from '../utils/stintReorder';
+import { ELEMENT_COLORS, ELEMENT_NAMES_JA, isEmptySlotCharacter } from '../data/characters';
+import { migrateStintsToNewCharacter } from '../utils/stintReorder';
+import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
 
 interface PartyConfigModalProps {
   isOpen: boolean;
   onClose: () => void;
-  characters: CharacterConfig[];
+  party: PartyMember[];
   stints: Stint[];
   database: AppDatabase;
-  onUpdatePartyAndStints: (newCharacters: CharacterConfig[], newStints: Stint[]) => void;
+  onUpdatePartyAndStints: (newParty: PartyMember[], newStints: Stint[]) => void;
 }
 
 export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   isOpen,
   onClose,
-  characters,
+  party,
   stints,
   database,
   onUpdatePartyAndStints,
 }) => {
   const [selectedSlot, setSelectedSlot] = useState<number>(0);
-  const [editingChars, setEditingChars] = useState<CharacterConfig[]>(characters);
+  // 編集中の編成はキャラの ID と編成ごとの設定だけを持ち、表示するキャラは DB から引く
+  const [editingParty, setEditingParty] = useState<PartyMember[]>(party);
+  const editingChars = useMemo(
+    () => resolvePartyCharacters(editingParty, database.characters),
+    [editingParty, database.characters],
+  );
   const [editingStints, setEditingStints] = useState<Stint[]>(stints);
 
   // Filter States
@@ -43,12 +46,12 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setEditingChars(characters);
+      setEditingParty(party);
       setEditingStints(stints);
       setWarningMsg(null);
       setConfirmClearAll(false);
     }
-  }, [isOpen, characters, stints]);
+  }, [isOpen, party, stints]);
 
   // Filtered Roster
   const filteredRoster = database.characters.filter(rosterChar => {
@@ -74,16 +77,17 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     }
 
     const oldChar = editingChars[selectedSlot];
-    const updated = [...editingChars];
+    const updated = [...editingParty];
     updated[selectedSlot] = {
-      ...newRosterChar,
+      characterId: newRosterChar.id,
       constellation: defaultConstellation(newRosterChar.rarity),
+      energyRecharge: 100,
     };
-    setEditingChars(updated);
+    setEditingParty(updated);
 
     // 右隣のスロットが空（未設定）なら、続けて選べるようフォーカスを移す
     const nextSlot = selectedSlot + 1;
-    if (nextSlot < updated.length && isEmptySlotCharacter(updated[nextSlot])) {
+    if (nextSlot < editingChars.length && isEmptySlotCharacter(editingChars[nextSlot])) {
       setSelectedSlot(nextSlot);
     }
 
@@ -96,47 +100,35 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
   const handleMoveSlot = (fromSlot: number, toSlot: number) => {
     if (toSlot < 0 || toSlot >= editingChars.length) return;
-    const charA = editingChars[fromSlot];
-    const charB = editingChars[toSlot];
+    const memberA = editingParty[fromSlot];
+    const memberB = editingParty[toSlot];
 
-    const updated = [...editingChars];
-    updated[fromSlot] = charB;
-    updated[toSlot] = charA;
-    setEditingChars(updated);
+    const updated = [...editingParty];
+    updated[fromSlot] = memberB;
+    updated[toSlot] = memberA;
+    setEditingParty(updated);
     setSelectedSlot(toSlot);
 
   };
 
-  // 編成中のキャラを、DB（マスターデータ）の最新データで登録し直す（同じキャラのまま）
-  const handleRefreshFromDatabase = () => {
-    const result = refreshCharactersFromDatabase(editingChars, editingStints, database.characters);
-    setEditingChars(result.characters);
-    setEditingStints(result.stints);
-    const msg = result.refreshed.length > 0
-      ? `${result.refreshed.join('・')} をマスターデータで登録し直しました（「編成を保存・適用」で確定）`
-      : '登録し直せるキャラがありません';
-    setWarningMsg(result.missing.length > 0 ? `${msg}。DBに見つからないキャラ: ${result.missing.join('・')}` : msg);
-    setTimeout(() => setWarningMsg(null), 5000);
-  };
-
   const handleClearAll = () => {
-    setEditingChars(Array.from({ length: 4 }, (_, i) => createEmptySlotCharacter(i)));
+    setEditingParty(createEmptyParty());
     setEditingStints([]);
     setSelectedSlot(0);
     setConfirmClearAll(false);
   };
 
-  const handleUpdateCurrentField = (field: keyof CharacterConfig, val: any) => {
-    const updated = [...editingChars];
+  const handleUpdateCurrentField = <K extends keyof PartyMember>(field: K, val: PartyMember[K]) => {
+    const updated = [...editingParty];
     updated[selectedSlot] = {
       ...updated[selectedSlot],
       [field]: val,
     };
-    setEditingChars(updated);
+    setEditingParty(updated);
   };
 
   const handleSave = () => {
-    onUpdatePartyAndStints(editingChars, editingStints);
+    onUpdatePartyAndStints(editingParty, editingStints);
     onClose();
   };
 
@@ -204,9 +196,9 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => e.stopPropagation()}
                       onChange={(e) => {
-                        const updated = [...editingChars];
+                        const updated = [...editingParty];
                         updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10) };
-                        setEditingChars(updated);
+                        setEditingParty(updated);
                       }}
                       className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
                       title="命ノ星座（凸数）"
@@ -235,16 +227,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
 
           <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={handleRefreshFromDatabase}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors shadow-sm"
-            title="パーティメンバー全員（同じキャラのまま）を、DB管理の最新マスターデータで登録し直します。武器・聖遺物は残し、登録済みアクションは新しいデータの同じアクションへ付け替えます（「編成を保存・適用」で確定）"
-          >
-            <Database className="w-3.5 h-3.5" />
-            <span>全パーティメンバーをマスターデータで再登録</span>
-          </button>
-
           {confirmClearAll ? (
             <div className="flex items-center gap-1.5">
               <span className="text-[11px] font-bold text-red-300">全キャラ・全アクションを消去しますか？</span>
@@ -335,13 +317,13 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         const newWeaponId = v || undefined;
                         const wObj = database.weapons.find(w => w.id === newWeaponId);
                         const defaultRank = wObj ? (wObj.refinementRank ?? (wObj.rarity >= 5 ? 1 : 5)) : 1;
-                        const updated = [...editingChars];
+                        const updated = [...editingParty];
                         updated[selectedSlot] = {
                           ...updated[selectedSlot],
                           weaponId: newWeaponId,
                           weaponRefinementRank: defaultRank,
                         };
-                        setEditingChars(updated);
+                        setEditingParty(updated);
                       }}
                       className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold min-w-0"
                     />
@@ -430,13 +412,13 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         onChange={(e) => {
                           // 2+2 は聖遺物セットを「効果なし」に固定する（セット選択を外す）
                           const mode = e.target.value as ArtifactSetMode;
-                          const updated = [...editingChars];
+                          const updated = [...editingParty];
                           updated[selectedSlot] = {
                             ...updated[selectedSlot],
                             artifactSetMode: mode,
                             ...(mode === '2+2' ? { artifactSetId: undefined } : {}),
                           };
-                          setEditingChars(updated);
+                          setEditingParty(updated);
                         }}
                         className="bg-slate-950 text-purple-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
                       >

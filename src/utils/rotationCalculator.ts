@@ -49,6 +49,8 @@ export interface RotationOptions {
   switchDelay?: number;
   database?: GenshinDatabase;
   loopStartIndex?: number;
+  /** gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。CT違反と同じ印を付ける（フェーズ6 / D21） */
+  externalCtWaits?: Record<string, number>;
 }
 
 /** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代 */
@@ -247,6 +249,14 @@ export function calculateRotation(
         endTime: actionEndTime,
       };
       computedActions.push(computedAction);
+
+      // gcsim の結果でCT待ちが生じたアクション: アプリのCT違反と同じ印を付ける
+      const externalWait = options?.externalCtWaits?.[act.id];
+      if (externalWait !== undefined) {
+        computedAction.hasCTCollision = true;
+        computedAction.collisionRemainingCT = externalWait;
+        addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: gcsim でCT待ち`, `「${act.name}」`, externalWait, 0);
+      }
 
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
       // 個別に変更された CT があれば優先

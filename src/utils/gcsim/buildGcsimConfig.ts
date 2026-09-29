@@ -51,6 +51,22 @@ export interface GcsimConfigResult {
   runnable: boolean;
   /** 設定文のキャラの並び（gcsim のログの char_index の順）。ログの読み取り（6-2）が使う */
   members: GcsimMemberInfo[];
+  /**
+   * 設定文のアクションと、アプリのアクションの対応（実行順に展開: 初動 → ループ × LOOP_ITERATIONS）。
+   * gcsim のログの `executed <action>`（交代を除く）を先頭から数えた番号が、この配列の番号に一致する（6-3b・6-3）
+   */
+  actionRefs: GcsimActionRef[];
+}
+
+export interface GcsimActionRef {
+  stintId: string;
+  actionId: string;
+  /** gcsim の命令の基本名（attack / skill / burst / charge / aim / dash / low_plunge ...。パラメータは含まない） */
+  command: string;
+  /** 設定文の中の位置: 初動 / ループ（何周目か） */
+  phase: 'initial' | 'loop';
+  /** phase = loop のとき、何周目か（1 始まり） */
+  loopIteration?: number;
 }
 
 const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
@@ -124,7 +140,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const charById = new Map(input.characters.map(c => [c.id, c]));
   // 落下攻撃を含むキャラ（gcsim は空中状態などの前提条件があり、実行できない場合がある。D48）
   const plungeChars = new Set<string>();
-  const stintLines = (stintList: Stint[], indent: string): string[] => {
+  const stintLines = (stintList: Stint[], indent: string, refs: { stintId: string; actionId: string; command: string }[]): string[] => {
     const out: string[] = [];
     for (const stint of stintList) {
       const char = charById.get(stint.characterId);
@@ -144,6 +160,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
         out.push(`${indent}${key} ${mapped.command};`);
+        refs.push({ stintId: stint.id, actionId: act.id, command: mapped.command.replace(/\[.*$/, '') });
         const delayFrames = toFrames(actionDelayOf(act));
         if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
       }
@@ -151,8 +168,14 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     return out;
   };
 
-  const initialLines = stintLines(initialStints, '');
-  const loopLines = stintLines(loopStints, '  ');
+  const initialRefs: { stintId: string; actionId: string; command: string }[] = [];
+  const loopRefs: { stintId: string; actionId: string; command: string }[] = [];
+  const initialLines = stintLines(initialStints, '', initialRefs);
+  const loopLines = stintLines(loopStints, '  ', loopRefs);
+  const actionRefs: GcsimActionRef[] = [
+    ...initialRefs.map(r => ({ ...r, phase: 'initial' as const })),
+    ...Array.from({ length: LOOP_ITERATIONS }, (_, i) => loopRefs.map(r => ({ ...r, phase: 'loop' as const, loopIteration: i + 1 }))).flat(),
+  ];
 
   if (plungeChars.size > 0) {
     warn(`${[...plungeChars].join('・')}: 落下攻撃は、gcsim では空中状態（直前のアクション）などの前提条件があり、条件を満たさないと実行エラーになる場合があります`);
@@ -218,5 +241,6 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     warnings,
     runnable: !warnings.some(w => w.level === 'error'),
     members: memberInfos,
+    actionRefs,
   };
 }

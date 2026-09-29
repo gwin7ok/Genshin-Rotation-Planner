@@ -4,7 +4,10 @@ import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
 import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
 import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
 import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
+import { mapCtWaitsToActions, type CtWaitMarks } from '../utils/gcsim/mapCtWaits';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
+import { alignActions, applyActionDurations, type AlignResult } from '../utils/gcsim/applyGcsimResult';
+import type { Stint } from '../types/genshin';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
 const DEFAULT_SEED = 1;
@@ -18,17 +21,26 @@ interface GcsimConfigDialogProps {
   onCopyAgain: () => void;
   /** アプリ自身のCT違反（スキル・爆発・発動バフ）。無ければ空 */
   ctIssues: { id: string; title: string; message: string }[];
+  /** gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）を、違反マークとして渡す。無ければ null（マークを消す） */
+  onCtWaits: (waits: Record<string, number> | null) => void;
+  /** 設定文の元になった出場ブロック（書き戻し先） */
+  stints: Stint[];
+  /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
+  onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
   // gcsim の実行結果の読み取り（6-2 の確認用。書き戻しはしない）
   const [running, setRunning] = useState(false);
+  const [applied, setApplied] = useState(false);
   const [runOutcome, setRunOutcome] = useState<
-    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string }
+    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult }
+    /** 実行前のアプリのCT違反があるため、gcsim を実行しなかった（D21-1） */
+    | { status: 'blocked' }
     | { status: 'error' | 'unreachable'; message: string }
     | null
   >(null);
@@ -39,6 +51,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     setValidating(false);
     setRunOutcome(null);
     setRunning(false);
+    setApplied(false);
   }, [isOpen, result?.config]);
 
   if (!isOpen || !result) return null;
@@ -52,8 +65,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     setValidation(res);
   };
   const handleRun = async () => {
-    setRunning(true);
     setRunOutcome(null);
+    // 実行前にアプリ自身のCT違反があれば、解消を促して実行しない
+    if (ctIssues.length > 0) {
+      setRunOutcome({ status: 'blocked' });
+      return;
+    }
+    setRunning(true);
     const res = await runGcsimSample(result.config, DEFAULT_SEED);
     if (res.status !== 'ok') {
       setRunning(false);
@@ -63,8 +81,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const catalog = await loadKeyCatalog();
     const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
     setRunning(false);
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit });
+    // gcsim でCT待ちが生じたら、結果は反映せず、該当アクションに違反マークを付ける（D21-2）
+    const waits = mapCtWaitsToActions(summary, result.actionRefs);
+    onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
+    setApplied(false);
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs) });
   };
+  const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');
   const warns = result.warnings.filter(w => w.level === 'warn');
 
@@ -134,7 +157,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               </>
             )}
             <div className="text-[10px] text-slate-500">
-              ※ アプリ自身の判定です。gcsim で実際に実行したときのCT待ち（アプリの判定と一致しないことがあります）は、今後の gcsim 実行機能で確認できるようにします。
+              ※ アプリ自身の判定です。gcsim で実際に実行したときのCT待ち（アプリの判定と一致しないことがあります）は、下の「gcsim で実行して読み取り結果を見る」で確認できます。
             </div>
           </div>
 
@@ -176,7 +199,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
               <span>{running ? '実行中...' : 'gcsim で実行して読み取り結果を見る'}</span>
             </button>
-            {runOutcome && runOutcome.status !== 'ok' && (
+            {runOutcome && runOutcome.status === 'blocked' && (
+              <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
+                <div className="font-bold mb-0.5">gcsim を実行しませんでした</div>
+                アプリのCT違反が {ctIssues.length} 件あります。先に解消してください（上の「アプリのCT違反」の一覧を参照）。
+              </div>
+            )}
+            {runOutcome && (runOutcome.status === 'error' || runOutcome.status === 'unreachable') && (
               <div
                 className={`text-xs rounded-lg px-2.5 py-1.5 border whitespace-pre-wrap break-words ${
                   runOutcome.status === 'error'
@@ -188,6 +217,45 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                 {runOutcome.message}
               </div>
             )}
+            {runOutcome && runOutcome.status === 'ok' && waitCount > 0 && (
+              <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
+                <div className="font-bold mb-0.5">gcsim でCT待ちが生じたため、結果を反映していません</div>
+                {waitCount} 件のアクションに、CT違反と同じ印を付けました（残りCT = gcsim で実際に待った秒数）。
+                ガントチャートの該当アクションを直して、もう一度実行してください。
+                {runOutcome.waits.swapWaits > 0 && `（交代の内部CT待ち ${runOutcome.waits.swapWaits} 件は対象外）`}
+                {runOutcome.waits.unmatched.length > 0 && `（アプリのアクションに対応付けできなかった待ち ${runOutcome.waits.unmatched.length} 件）`}
+              </div>
+            )}
+            {runOutcome && runOutcome.status === 'ok' && waitCount === 0 && (() => {
+              if (runOutcome.align.mismatch) {
+                return (
+                  <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-amber-950/40 border-amber-700/60 text-amber-200">
+                    設定文と gcsim のログのアクションの並びが合わないため、反映できません: {runOutcome.align.mismatch}
+                  </div>
+                );
+              }
+              const preview = applyActionDurations(stints, runOutcome.align.pairs);
+              return (
+                <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-sky-950/40 border-sky-700/60 text-sky-100 space-y-1">
+                  <div className="font-bold">アクションの所要時間: {preview.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>
+                  {preview.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {preview.changes.map(c => (
+                        <div key={c.actionId}>{c.name}: {c.before.toFixed(3)}s → {c.after.toFixed(3)}s</div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={() => { onApplyStints(preview.stints); setApplied(true); }}
+                    disabled={applied || preview.changes.length === 0}
+                    className="px-3 py-1 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white border border-sky-400/60"
+                    title="編集済みの所要時間も、gcsim の値で上書きします"
+                  >
+                    {applied ? '反映しました' : '所要時間をアプリに反映'}
+                  </button>
+                </div>
+              );
+            })()}
             {runOutcome && runOutcome.status === 'ok' && (
               <GcsimLogSummaryView summary={runOutcome.summary} members={result.members} seed={runOutcome.seed} gcsimCommit={runOutcome.gcsimCommit} />
             )}

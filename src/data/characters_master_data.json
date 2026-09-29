@@ -2351,9 +2351,15 @@
         "description": "長押しで発動した水紋の剣による露雫が敵に命中した後、旅人の近くに源水の雫を生成する。旅人が源水の雫を拾うと、HPが7%回復する。 この方法で生成できる源水の雫は1秒毎に1個のみ。水紋の剣1回につき、生成できる源水の雫は4個まで。",
         "id": "10000005-hydro_p1",
         "name": "無染の清水",
-        "dataSource": {},
+        "dataSource": {
+          "cooldown": "gcsim: sourcewater-droplet-icd"
+        },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sourcewater-droplet-icd"
+        ],
+        "cooldown": 1
       },
       {
         "talentName": "澄明の浄水",
@@ -4837,9 +4843,15 @@
         "description": "長押しで発動した水紋の剣による露雫が敵に命中した後、旅人の近くに源水の雫を生成する。旅人が源水の雫を拾うと、HPが7%回復する。 この方法で生成できる源水の雫は1秒毎に1個のみ。水紋の剣1回につき、生成できる源水の雫は4個まで。",
         "id": "10000007-hydro_p1",
         "name": "無染の清水",
-        "dataSource": {},
+        "dataSource": {
+          "cooldown": "gcsim: sourcewater-droplet-icd"
+        },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimCooldownKeys": [
+          "sourcewater-droplet-icd"
+        ],
+        "cooldown": 1
       },
       {
         "talentName": "澄明の浄水",
@@ -8916,6 +8928,21 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000029-pyro_c2",
+        "level": 2,
+        "name": "弾丸の破片",
+        "duration": 10,
+        "description": "ボンボン爆弾のブービートラップのダメージを受けた敵の防御力-23%、継続時間10秒。",
+        "dataSource": {
+          "duration": "genshin-db: 説明文の継続時間"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kleec2"
+        ]
+      },
+      {
         "id": "10000029-pyro_c6",
         "level": 6,
         "name": "火力全開",
@@ -10720,8 +10747,11 @@
           "duration": "継続時間6秒",
           "cooldown": "30秒毎に1回"
         },
-        "timing": "conditional",
-        "gcsimTarget": false,
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "qiqi-talisman"
+        ],
         "gcsimCooldownKeys": [
           "qiqi-a4-icd"
         ]
@@ -12569,8 +12599,11 @@
         "dataSource": {
           "duration": "継続時間5秒"
         },
-        "timing": "conditional",
-        "gcsimTarget": false
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "keqinginfuse"
+        ]
       },
       {
         "talentName": "玉衡の貴",
@@ -16340,9 +16373,15 @@
         "description": "海人の羽衣発動時、フィールド上に珊瑚宮心海自身の化海月が存在する場合、化海月の継続時間をリセットする。",
         "id": "10000054-hydro_p1",
         "name": "葛籠の中の玉櫛",
-        "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false
+        "dataSource": {
+          "duration": "gcsim: kokomiskill"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kokomiskill"
+        ],
+        "duration": 12.017
       },
       {
         "talentName": "真珠の御唄",
@@ -18699,9 +18738,15 @@
         "description": "アーロイは凍てついた大地のアイスラッシュ状態にある時、1秒毎に氷元素ダメージ+3.5%、この方法での氷元素ダメージアップ効果は35%まで。",
         "id": "10000062-cryo_p2",
         "name": "強打",
-        "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false
+        "dataSource": {
+          "duration": "gcsim: aloy-strong-strike"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "aloy-strong-strike"
+        ],
+        "duration": 10
       }
     ],
     "source": {
@@ -24093,9 +24138,15 @@
         "description": "次の状況において、スターフロストスワールの霊風状態に偵察効果を追加し、フィールド上キャラクターの物理ダメージ+10%。 ·流霜の矢が複数の敵に命中すると、2体目以降、敵1体につき1層ずつ偵察効果が追加される。 ·氷星のシャードが敵に命中した時、1層の偵察効果が生成される。各氷星のシャードにつき1回のみ発動可能。 霊風状態の偵察効果は最大3層まで重ね掛け可能。継続時間中、スターフロストスワールを再発動すると、既存の霊風状態とその偵察効果が先にクリアされる。",
         "id": "10000080-cryo_p1",
         "name": "速射牽制",
-        "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false
+        "dataSource": {
+          "duration": "gcsim: detector-buff"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "detector-buff"
+        ],
+        "duration": 12
       },
       {
         "talentName": "地形測量",
@@ -28393,10 +28444,13 @@
           "duration": "継続時間5秒",
           "cooldown": "2秒毎に1回"
         },
-        "timing": "conditional",
+        "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "chiori-a1-window"
+          "chiori-seize-the-moment"
+        ],
+        "gcsimCooldownKeys": [
+          "chiori-seize-the-moment-icd"
         ]
       },
       {
@@ -28656,7 +28710,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "sigewinne-a1"
+          "sigewinne-a1",
+          "sigewinne-convalescence"
         ]
       },
       {
@@ -30242,10 +30297,15 @@
         "id": "10000101-dendro_p1",
         "name": "厄地の代償",
         "dataSource": {
+          "duration": "gcsim: desolation",
           "cooldown": "0.8秒毎に1回"
         },
-        "timing": "conditional",
-        "gcsimTarget": false
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "desolation"
+        ],
+        "duration": 12
       },
       {
         "talentName": "焔霊の契約",
@@ -30257,8 +30317,11 @@
         "dataSource": {
           "duration": "継続時間15秒"
         },
-        "timing": "conditional",
-        "gcsimTarget": false
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "hunters-experience"
+        ]
       }
     ],
     "source": {
@@ -30777,13 +30840,16 @@
         "id": "10000103-geo_p1",
         "name": "ネトティリズトリの残響",
         "dataSource": {
+          "duration": "gcsim: xilonen-c2",
           "cooldown": "0.1秒毎に1回"
         },
-        "timing": "always",
+        "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "xilonen-a1"
-        ]
+          "xilonen-c2",
+          "xilonen-samplers-activated"
+        ],
+        "duration": 15
       },
       {
         "talentName": "ポータブル・アーマー",
@@ -30844,21 +30910,6 @@
       }
     ],
     "constellationEffects": [
-      {
-        "id": "10000103-geo_c2",
-        "level": 2,
-        "name": "燎原リミックス",
-        "duration": 15,
-        "description": "シロネンが持つ岩元素の「サンプル音源」は、常時アクティブ状態を維持する。また、シロネンの「サンプル音源」がアクティブ状態の時、「サンプル音源」の元素タイプに応じて、その元素タイプと同じであり、かつ付近にいるチーム内キャラクターに対応する効果を与える。 ・岩元素：与えるダメージ+50% ・炎元素：攻撃力+45% ・水元素：HP上限+45% ・氷元素：会心ダメージ+60% ・雷元素：元素エネルギーが25ポイント回復し、かつ元素爆発のクールタイム-6秒",
-        "dataSource": {
-          "duration": "gcsim: xilonen-c2"
-        },
-        "timing": "computed",
-        "gcsimTarget": true,
-        "gcsimKeys": [
-          "xilonen-c2"
-        ]
-      },
       {
         "id": "10000103-geo_c4",
         "level": 4,
@@ -32884,6 +32935,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "precise-movement"
+        ],
+        "gcsimCooldownKeys": [
+          "precise-movement-icd"
         ]
       },
       {
@@ -32902,6 +32956,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "warming-up"
+        ],
+        "gcsimCooldownKeys": [
+          "warming-up-icd"
         ]
       }
     ],
@@ -33174,8 +33231,11 @@
         "dataSource": {
           "duration": "継続時間5秒"
         },
-        "timing": "conditional",
-        "gcsimTarget": false
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "rainbow-crash"
+        ]
       },
       {
         "talentName": "ヒーロー、二度目の見参！",
@@ -33228,6 +33288,23 @@
         "level": 6,
         "name": "正義のヒーローの凱旋",
         "description": "マキシマムドライブ状態に入る時、ヴァレサの元素エネルギーを30ポイント回復する。 ヴァレサの落下攻撃と元素爆発シャイニングヴェント！の会心率+10%、会心ダメージ+100%。 また、元素スキルホッピング・ナイトレインボーを長押しで発動する時、または「パワフルタックル」モードで元素スキルボタンを一回押しする時、ヴァレサは夜魂値を上限まで回復する。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000111-electro_c4",
+        "level": 4,
+        "name": "突き進む勇気",
+        "duration": 15,
+        "description": "元素爆発シャイニングヴェント！を発動時、ヴァレサの状態によって、異なる強化効果を得る。 ・猛烈パッション状態またはマキシマムドライブ状態でない場合、ヴァレサは継続時間15秒の「勇往邁進」効果を獲得し、ヴァレサの攻撃力500%分を基に、ヴァレサの着地時の落下攻撃ダメージをアップする。この方法でアップできるダメージは最大20000まで。この効果は着地時の落下攻撃ダメージが敵に命中する、または継続時間終了時に解除される。 ・猛烈パッション状態またはマキシマムドライブ状態にある場合、今回の元素爆発シャイニングヴェント！の与えるダメージ+100%。",
+        "dataSource": {
+          "duration": "genshin-db: 説明文の継続時間"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "diligent-refinement"
+        ]
       }
     ]
   },
@@ -36224,9 +36301,15 @@
         "description": "**月の領域**の中にいるキャラクターが月反応を起こした時、それぞれ以下の効果を獲得する。 ・月感電反応：雷雲が条件を満たすターゲットに雷撃を与える時、33%の確率で追加で雷撃を1回与える。 ・月開花反応：月開花反応を起こした時、チームに特殊な**山月の草露**を1滴与える。この方法でチームに与えられる山月の草露は18秒ごとに最大3滴まで。 ・月結晶反応：月籠の共鳴を発動した時、それぞれの月籠は33%の確率で追加攻撃を1回行う。",
         "id": "10000125-hydro_p2",
         "name": "新月の法則",
-        "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false
+        "dataSource": {
+          "duration": "gcsim: moonridge-dew-timer"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "moonridge-dew-timer"
+        ],
+        "duration": 18
       }
     ],
     "source": {
@@ -37408,7 +37491,10 @@
           "duration": "20秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "guidance-of-theosis"
+        ]
       },
       {
         "talentName": "分かち合い",
@@ -37421,7 +37507,10 @@
           "duration": "3秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "guidance-of-theosis"
+        ]
       },
       {
         "talentName": "美への愛",
@@ -37717,8 +37806,11 @@
         "dataSource": {
           "duration": "5秒間"
         },
-        "timing": "conditional",
-        "gcsimTarget": false
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prune-tolling-rally"
+        ]
       }
     ],
     "source": {
@@ -38491,6 +38583,28 @@
         "level": 6,
         "name": "「さあ手を伸ばして 永遠の空に触れて」",
         "description": "固有天賦「選ばれし者の祝祭」が強化される。オデットが周囲のチーム全員に**春の華**を付与する時、自身の春の華は減少しなくなる。 また、春の華の影響下にあるキャラクターは、敵に与える星反応ダメージが25%**向上**し、オデットが敵に与える星反応ダメージが追加で20%向上する。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000150-cryo_c4",
+        "level": 4,
+        "name": "「燃ゆる青空の中へ 恍惚と堕ちていく」",
+        "duration": 20,
+        "cooldown": 3.5,
+        "description": "元素爆発疾きブルーバードの夢が強化される。オデットが雪鳥の夢を獲得した時、付近にいるチーム内の他のキャラクターが与える星反応ダメージがさらにアップする。ダメージアップ量は雪鳥の夢の効果の50%分に相当する。 また、チーム内のキャラクターが敵に星反応ダメージを与えた時、オデットは敵に対して追加攻撃を1回行い、氷元素範囲ダメージを1回与える。3.5秒毎に1回のみ発動可能。詳細はそれぞれ、以下の通り。 ・ダメージが輝映・星電導とみなされる場合、または輝映状態でない場合、オデットの攻撃力の66%分の星電導反応ダメージを与える。 ・ダメージが輝映・星拡散とみなされる場合、オデットの攻撃力の99%分の星拡散反応ダメージを与える。",
+        "dataSource": {
+          "duration": "gcsim: odette-snow-swans-dream",
+          "cooldown": "gcsim: odette-c4-icd"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "odette-snow-swans-dream"
+        ],
+        "gcsimCooldownKeys": [
+          "odette-c4-icd"
+        ]
       }
     ]
   }

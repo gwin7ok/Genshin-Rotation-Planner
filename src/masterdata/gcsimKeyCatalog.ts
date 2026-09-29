@@ -23,6 +23,8 @@ export interface KeySource {
   file: string;
   /** status = `AddStatus` / `Status.Add`、mod = `modifier.NewBase` を使う各種 mod */
   api: 'status' | 'mod';
+  /** 登録している関数の名前（例: `a1`、`c2`、`skillHold`）。固有天賦・命ノ星座の枠の確認に使う */
+  func?: string;
 }
 
 export interface KeyOwner {
@@ -450,6 +452,7 @@ interface RawKey {
   elements?: string[];
   path: string;
   api: 'status' | 'mod';
+  func?: string;
   durationFrames?: number;
 }
 
@@ -490,6 +493,8 @@ export function extractKeyCatalog(
     const pkg = packageOf(path);
     const consts = stringConsts.get(pkg) ?? new Map<string, string>();
     const numbers = numberConsts.get(pkg);
+    // 関数の位置（登録している関数の名前を調べる用）
+    const funcStarts = [...text.matchAll(/^func\s+(?:\([^)]*\)\s*)?(\w+)/gm)].map(f => ({ index: f.index ?? 0, name: f[1] }));
     for (const m of text.matchAll(CALL_RE)) {
       const body = callBody(text, (m.index ?? 0) + m[0].length);
       if (body === undefined) continue;
@@ -511,6 +516,7 @@ export function extractKeyCatalog(
         elements: resolved.kind === 'pattern' ? resolved.elements : undefined,
         path,
         api,
+        func: funcStarts.filter(f => f.index <= (m.index ?? 0)).pop()?.name,
         durationFrames: duration,
       });
       if (resolved.kind === 'pattern') report.patternCalls++;
@@ -541,7 +547,7 @@ export function extractKeyCatalog(
     const durations = list.map(r => r.durationFrames).filter((d): d is number => d !== undefined);
     const sources: KeySource[] = [];
     for (const r of list) {
-      if (!sources.some(s => s.file === r.path && s.api === r.api)) sources.push({ file: r.path, api: r.api });
+      if (!sources.some(s => s.file === r.path && s.api === r.api && s.func === r.func)) sources.push({ file: r.path, api: r.api, ...(r.func ? { func: r.func } : {}) });
     }
     const entry: KeyCatalogEntry = {
       key,

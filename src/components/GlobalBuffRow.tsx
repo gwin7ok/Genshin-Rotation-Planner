@@ -24,7 +24,7 @@ interface GlobalBuffItem {
 }
 
 /**
- * 全体の行（D39-4・D40）: 時間・CT が無い効果（常時の効果・継続時間の無い固有天賦）を、名前だけのボタンで並べる。
+ * 時間指定のない効果の行（D39-4・D40。旧称: 全体の行）: 時間・CT が無い効果（常時の効果・継続時間の無い固有天賦）を、名前だけのボタンで並べる。
  * 押せない。ホバーで説明を出す。編成とマスターから計算して常に表示する。
  */
 export const GlobalBuffRow: React.FC<GlobalBuffRowProps> = ({ characters, database }) => {
@@ -44,7 +44,7 @@ export const GlobalBuffRow: React.FC<GlobalBuffRowProps> = ({ characters, databa
       <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-teal-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] self-stretch">
         <span className="flex items-center gap-1.5">
           <Globe className="w-3.5 h-3.5 text-teal-400" />
-          <span>全体の行</span>
+          <span>時間指定のない効果</span>
         </span>
         <span className="text-[10px] text-slate-500 font-mono font-normal">{items.length}件</span>
       </div>

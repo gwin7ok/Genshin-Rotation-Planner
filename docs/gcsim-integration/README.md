@@ -14,6 +14,7 @@
 | [phase-3b-constellation/](phase-3b-constellation/) | フェーズ3b: キャラの凸数（命ノ星座） |
 | [phase-3c-party-member-ref/](phase-3c-party-member-ref/) | フェーズ3c: 編成のキャラを ID 参照にする |
 | [phase-3d-action-cleanup/](phase-3d-action-cleanup/) | フェーズ3d: アクションの整理（gcsim が自動で切り替えるものを統合・N を1つに） |
+| [phase-3e-traveler-split/](phase-3e-traveler-split/) | フェーズ3e: 旅人を空・蛍の別キャラにする（14キャラ） |
 | [phase-4-config-converter/](phase-4-config-converter/) | フェーズ4: 編成 → gcsim 設定文の変換 |
 | [phase-5-key-catalog/](phase-5-key-catalog/) | フェーズ5: gcsim キーの辞書の生成 |
 | [phase-6-run-and-apply/](phase-6-run-and-apply/) | フェーズ6: gcsim 実行と結果のガントチャート反映 |

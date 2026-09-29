@@ -54,7 +54,7 @@ gcsim v2.47.6（2026-09-24 リリース）で検証した。
 ### 3.3 対象キャラの対応状況
 
 - ナヒーダ・ニィロウ・コロンビーナ・ラウマは、スキル・爆発・固有天賦・命ノ星座まで gcsim に実装済み。実際にシミュレーションが完走した。
-- 公式ID→gcsim キーの対応表が gcsim リポジトリにある: `ui/packages/ui/src/Data/{character,weapon,artifact}.dm.json`
+- 公式ID→gcsim キーの対応表が gcsim リポジトリにある: `ui/packages/ui/src/data/{character,weapon,artifact}.dm.json`
 
 | 種類 | アプリの件数 | 対応付けできた件数 | 対応付けできないもの |
 |---|---|---|---|

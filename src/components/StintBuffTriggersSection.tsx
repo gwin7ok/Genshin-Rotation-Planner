@@ -129,7 +129,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
             </span>
             {matchedDef && <GcsimOutOfScopeBadge def={matchedDef} />}
             <span className="text-[10px] font-mono text-slate-400" title="発動位置（出場の先頭から）。ガントチャートでドラッグして調整">
-              @+{trigger.offset.toFixed(2)}s
+              @{trigger.offset >= 0 ? '+' : ''}{trigger.offset.toFixed(2)}s
             </span>
             {renderTimingInput(
               '効果',

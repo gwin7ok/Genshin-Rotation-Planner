@@ -380,7 +380,8 @@ export function calculateRotation(
       const duration = trigger.duration ?? def?.duration ?? 0;
       // 個別に変更した CT を優先（継続時間と同じ優先順）
       const cooldown = trigger.cooldown ?? def?.cooldown ?? 0;
-      const startTime = Number((stintStartTime + Math.max(0, trigger.offset)).toFixed(3));
+      // 発動位置は出場の前にも置ける（下限は時間 0）
+      const startTime = Number(Math.max(0, stintStartTime + trigger.offset).toFixed(3));
 
       const buffColor = def?.color || (category === 'weapon' ? '#0284c7' : category === 'artifact' ? '#c084fc' : char.color);
 
@@ -466,16 +467,24 @@ export function calculateRotation(
   const carryOverPassives: PassiveSpan[] = [];
 
   // 効果の折り返し部分: ループ先頭から残り時間分。ループ区間で同じ効果を再発動したらそこで終わる。
-  // 本体の終了時刻も、折り返し後の実際の終了（totalDuration + 折り返し部分の長さ）に合わせる
-  const wrapEffect = (span: { id: string; startTime: number; endTime: number }, sameEffect: { startTime: number }[]) => {
-    const nextStart = Math.min(...sameEffect.filter(s => s.startTime >= loopStartTime).map(s => s.startTime));
+  // 本体の終了時刻も、折り返し後の実際の終了（totalDuration + 折り返し部分の長さ）に合わせる。
+  // 開始が周の終端以降の発動（2周目の発動。D39）は、ループ先頭 + (開始 − 総時間) の位置から始まる
+  const wrapEffect = (span: { id: string; startTime: number; endTime: number }, sameEffect: { id?: string; startTime: number }[]) => {
+    const wrapDelay = Math.max(0, span.startTime - totalDuration);
+    const wrapStart = loopStartTime + wrapDelay;
+    const toLapTwo = (t: number) => (t >= totalDuration ? loopStartTime + (t - totalDuration) : t);
+    const nextStart = Math.min(
+      ...sameEffect
+        .filter(s => (wrapDelay > 0 ? (s as { id?: string }).id !== span.id && toLapTwo(s.startTime) > wrapStart : s.startTime >= loopStartTime))
+        .map(s => toLapTwo(s.startTime)),
+    );
     const end = Number(Math.min(totalDuration, loopStartTime + (span.endTime - totalDuration), nextStart).toFixed(3));
     span.endTime = totalDuration + Math.max(0, end - loopStartTime);
-    if (end <= loopStartTime + 0.02) return null;
+    if (end <= wrapStart + 0.02) return null;
     return {
-      startTime: loopStartTime,
+      startTime: Number(wrapStart.toFixed(3)),
       endTime: end,
-      duration: end - loopStartTime,
+      duration: end - wrapStart,
       isCarryOver: true,
       originalStartTime: span.startTime,
       sourceId: span.id,
@@ -540,7 +549,11 @@ export function calculateRotation(
     for (const p of passiveSpans) {
       if (p.duration <= 0 || p.endTime <= totalDuration + 0.02) continue;
       const carry = wrapEffect(p, passiveSpans.filter(x => x.characterId === p.characterId && x.passiveEffectId === p.passiveEffectId));
-      if (carry) carryOverPassives.push({ ...p, ...carry, id: `wrap_passive_buff_${p.id}` });
+      if (carry) {
+        // CTも折り返した位置に合わせる（本体のCT終了は元の時刻のまま）
+        const cooldownEnd = p.cooldownEnd > totalDuration ? Number((loopStartTime + (p.cooldownEnd - totalDuration)).toFixed(3)) : carry.startTime;
+        carryOverPassives.push({ ...p, ...carry, cooldownEnd, id: `wrap_passive_buff_${p.id}` });
+      }
     }
   }
 

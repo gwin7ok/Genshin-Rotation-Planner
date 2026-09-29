@@ -164,8 +164,6 @@ interface GanttChartProps {
   onUpdateLoopStartIndex?: (index: number) => void;
   /** キャラ交代の所要時間（2周目の先頭に入れる交代アクションに使う） */
   switchDelay?: number;
-  /** アクション間所要時間（2周目の先頭の交代アクションの後に入る空白） */
-  actionDelay?: number;
   /** 2周目折り返し（Carry-Over）情報 */
   carryOverCooldowns?: CooldownSpan[];
   carryOverBuffs?: ActiveBuffSpan[];
@@ -200,7 +198,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   loopStartIndex = 0,
   onUpdateLoopStartIndex,
   switchDelay = 0.5,
-  actionDelay = 0.1,
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);

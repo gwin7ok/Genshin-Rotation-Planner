@@ -12,7 +12,7 @@ export function resolveLoopStartIndex(
   source: { loopStartIndex?: number; loopStartTime?: number },
   characters: CharacterConfig[],
   stints: Stint[],
-  options: { switchDelay?: number; actionDelay?: number },
+  options: { switchDelay?: number },
 ): number {
   if (typeof source.loopStartIndex === 'number') {
     return normalizeLoopStartIndex(source.loopStartIndex, stints.length);
@@ -23,7 +23,6 @@ export function resolveLoopStartIndex(
 
   const calculated = calculateRotation(characters, stints, {
     switchDelay: options.switchDelay ?? 0.5,
-    actionDelay: options.actionDelay ?? 0.1,
   }).calculatedStints;
 
   let bestIndex = 0;

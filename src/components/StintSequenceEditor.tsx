@@ -39,6 +39,7 @@ import { getActionCooldownInfo, getActionEffectInfo } from '../utils/characterAc
 import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID, ACTION_BUILDER_BOTTOM_SPACER_ID } from '../utils/scrollToStintCard';
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
+import { actionDelayOf } from '../utils/actionDelay';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -48,8 +49,6 @@ interface StintSequenceEditorProps {
   onSeek?: (time: number) => void;
   switchDelay?: number;
   onUpdateSwitchDelay?: (delay: number) => void;
-  actionDelay?: number;
-  onUpdateActionDelay?: (delay: number) => void;
   onOpenHelpModal?: () => void;
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
@@ -70,8 +69,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   onSeek,
   switchDelay = 0.50,
   onUpdateSwitchDelay,
-  actionDelay = 0.10,
-  onUpdateActionDelay,
   onOpenHelpModal,
   selectedAction,
   onSelectAction,
@@ -205,6 +202,25 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
     const nextStints = [...stints];
     nextStints[stintIndex] = { ...targetStint, actions: newActions };
+    onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // アクションごとの遅延（そのアクションの終了後に入れる秒数）
+  const updateActionDelay = (stintIndex: number, actionId: string, delay: number) => {
+    const value = Math.max(0, Number(delay.toFixed(2)));
+    const nextStints = stints.map((s, i) => i !== stintIndex ? s : {
+      ...s,
+      actions: s.actions.map(a => a.id === actionId ? { ...a, delayAfter: value } : a),
+    });
+    onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // 全アクションの遅延を同じ値にそろえる
+  const setAllActionDelays = (delay: number) => {
+    const nextStints = stints.map(s => ({
+      ...s,
+      actions: s.actions.map(a => (a.type === 'swap' ? a : { ...a, delayAfter: delay })),
+    }));
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 
@@ -730,7 +746,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         </div>
 
         {/* =========================================================================
-            3. Timing Delays (交代所要時間 & アクション間所要時間)
+            3. Timing Delays (交代所要時間 & アクションごとの遅延)
         ========================================================================= */}
         <div className="bg-slate-950/90 border border-slate-700/80 rounded-xl p-3.5 shadow-md space-y-3">
           {/* 1. Character Change Delay */}
@@ -823,7 +839,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
           <div className="border-t border-slate-850 my-1" />
 
-          {/* 2. Action Execution Delay (アクション間所要時間) */}
+          {/* 2. Action Execution Delay (アクションごとの遅延: 一括設定) */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 font-bold shrink-0">
@@ -832,82 +848,32 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-amber-200">
-                    ⏱️ アクション間所要時間（アクション実行遅延）
+                    ⏱️ アクション遅延（アクションごと）
                   </span>
                   <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-900/60 text-amber-300 border border-amber-700">
-                    アクション間に自動挿入
+                    各アクションの終了後に挿入
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 mt-0.5">
-                  スキルや爆発、通常攻撃間の入力硬直・先行入力遅延を設定（初期値 0.10秒）。アクションの間に空白として反映されます。
+                  入力硬直・先行入力の遅れを、アクションごとに設定します（初期値 0.10秒。下の各アクションの右の「+0.10s」で個別に変更）。
                 </div>
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Stepper controls */}
-              <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
+            {/* 一括設定 */}
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="text-[11px] text-slate-400 mr-1">全アクションに一括設定:</span>
+              {[0.00, 0.05, 0.10, 0.15, 0.20].map(value => (
                 <button
+                  key={value}
                   type="button"
-                  onClick={() => onUpdateActionDelay?.(Math.max(0, Number((actionDelay - 0.05).toFixed(2))))}
-                  className="px-2 py-1 rounded bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.05秒"
+                  onClick={() => setAllActionDelays(value)}
+                  className="px-2 py-1 rounded text-[11px] font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-amber-400"
+                  title={`全アクションの遅延を ${value.toFixed(2)}秒 にする`}
                 >
-                  -0.05s
+                  {value.toFixed(2)}s
                 </button>
-                <button
-                  type="button"
-                  onClick={() => onUpdateActionDelay?.(Math.max(0, Number((actionDelay - 0.02).toFixed(2))))}
-                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.02秒"
-                >
-                  -0.02s
-                </button>
-                <div className="px-2 py-1 bg-slate-950 rounded border border-slate-700 font-mono font-bold text-sm text-amber-300 min-w-[62px] text-center">
-                  {actionDelay.toFixed(2)}s
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onUpdateActionDelay?.(Number((actionDelay + 0.02).toFixed(2)))}
-                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.02秒"
-                >
-                  +0.02s
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onUpdateActionDelay?.(Number((actionDelay + 0.05).toFixed(2)))}
-                  className="px-2 py-1 rounded bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.05秒"
-                >
-                  +0.05s
-                </button>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="flex items-center gap-1">
-                {[
-                  { label: '0.00s (即時/先行入力)', value: 0.00 },
-                  { label: '0.05s', value: 0.05 },
-                  { label: '0.10s (標準)', value: 0.10 },
-                  { label: '0.15s', value: 0.15 },
-                  { label: '0.20s', value: 0.20 },
-                ].map(preset => (
-                  <button
-                    key={preset.value}
-                    type="button"
-                    onClick={() => onUpdateActionDelay?.(preset.value)}
-                    className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
-                      Math.abs(actionDelay - preset.value) < 0.01
-                        ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
-                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-amber-400'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1145,21 +1111,40 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         const isSelected = selectedAction?.stintId === stint.id && selectedAction?.actionId === act.id;
                         const hasSwapAtHead = stint.actions[0]?.type === 'swap';
 
-                        const gapElement = actIdx > 0 && actionDelay > 0 ? (
+                        // 交代の直後はアクションの遅延を持たない。アクションごとの遅延は、そのアクションの後ろに表示・編集する
+                        const delayValue = actionDelayOf(act);
+                        const gapElement = !isSwap ? (
                           <div
                             key={`gap-${act.id}`}
-                            className="flex items-center gap-1 px-1.5 py-1 rounded bg-slate-950/80 border border-dashed border-amber-500/40 text-[10px] font-mono text-amber-300 select-none shadow-sm"
-                            title={`【アクション間所要時間（アクション実行遅延）】: +${actionDelay.toFixed(2)}s\nアクションの間に自動挿入される空白遅延です。`}
+                            className="flex items-center gap-0.5 px-1.5 py-1 rounded bg-slate-950/80 border border-dashed border-amber-500/40 text-[10px] font-mono text-amber-300 select-none shadow-sm"
+                            title={`【このアクションの後の遅延】: +${delayValue.toFixed(2)}s\nこのアクションの終了後に入る空白です（▲▼で0.05秒ずつ変更）。`}
                           >
                             <Clock className="w-2.5 h-2.5 text-amber-400" />
-                            <span className="font-bold">+{actionDelay.toFixed(2)}s</span>
+                            <span className="font-bold">+{delayValue.toFixed(2)}s</span>
+                            <div className="flex flex-col ml-0.5">
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue + 0.05); }}
+                                className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
+                                title="遅延を+0.05秒"
+                              >
+                                ▲
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue - 0.05); }}
+                                className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
+                                title="遅延を-0.05秒"
+                              >
+                                ▼
+                              </button>
+                            </div>
                           </div>
                         ) : null;
 
                         if (isSwap) {
                           return (
                             <React.Fragment key={act.id}>
-                              {gapElement}
                               <div
                                 id={`action-item-${act.id}`}
                                 onClick={() => {
@@ -1227,7 +1212,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                         return (
                           <React.Fragment key={act.id}>
-                            {gapElement}
                             <div
                               id={`action-item-${act.id}`}
                               onClick={() => {
@@ -1373,6 +1357,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 ✕
                               </button>
                             </div>
+                            {gapElement}
                           </React.Fragment>
                         );
                       })}

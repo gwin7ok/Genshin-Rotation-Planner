@@ -114,30 +114,17 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       const char = charById.get(stint.characterId);
       const key = keyOf.get(stint.characterId);
       if (!char || !key) continue; // キーが無いキャラは上で error 済み
-      // gcsim は通常攻撃の連続を数える。交代・他のアクションを挟むと 1 段目に戻る
-      let lastNormal = 0;
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char') continue;
         if (act.type === 'wait') {
           const frames = toFrames(act.duration);
           if (frames > 0) out.push(`${indent}delay(${frames});`);
-          lastNormal = 0;
           continue;
         }
         const mapped = mapAction(act.actionTypeId, char.weaponType);
         if (!mapped.command) {
           error(`${char.name}: アクション「${act.name}」（${act.actionTypeId}）に gcsim への変換規則がありません`);
-          lastNormal = 0;
           continue;
-        }
-        if (mapped.normalIndex !== undefined) {
-          const n = mapped.normalIndex;
-          if (n !== 1 && n !== lastNormal + 1) {
-            warn(`${char.name}: 通常攻撃 N${n} の直前が N${n - 1} ではありません（gcsim は連続した通常攻撃を順に数えるため、実際は別の段になります）`);
-          }
-          lastNormal = n;
-        } else {
-          lastNormal = 0;
         }
         out.push(`${indent}${key} ${mapped.command};`);
         const delayFrames = toFrames(actionDelayOf(act));

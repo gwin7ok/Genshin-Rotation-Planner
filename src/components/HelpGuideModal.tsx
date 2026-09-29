@@ -161,7 +161,7 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
               <span>ブロック内のアクション追加・微調整</span>
             </h4>
             <ul className="text-xs text-slate-400 space-y-1 list-disc list-inside leading-relaxed">
-              <li>カード右下の「+E」「+Q」「+N1」などのボタンを押すと、スキルや爆発を即座に追加できます。</li>
+              <li>カード右下の「+E」「+Q」「+N」などのボタンを押すと、スキルや爆発を即座に追加できます。</li>
               <li>アクションの所要時間（0.5sなど）の横の「▲/▼」を押すと、0.1秒単位で実行フレームを微調整できます。</li>
               <li>アクションチップ内の「◀」「▶」を押すと、同一キャラ内の行動順（例: E→Q から Q→E）を変更できます。</li>
             </ul>

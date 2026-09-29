@@ -26,6 +26,19 @@ const GCSIM_REPO = 'genshinsim/gcsim';
 const GCSIM_BRANCH = 'main';
 const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/data/character.dm.json';
 
+/**
+ * 別アクションとして残す派生スキル（gcsim へのパラメータ指定が必要なもの。B）。キー: キャラ ID、値: 派生の名前（小文字）。
+ *   フィッシュル `recast=1`、早柚・綺良々 `short_hold=1`、旅人(水) `hold=1`/`hold_ticks`、マーヴィカ `recast=1`
+ * これ以外の派生は、状態で gcsim が自動的に切り替える（A）ため、E のボタンにまとめる。
+ */
+const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
+  '10000031-electro': ['recast'],
+  '10000053-anemo': ['shorthold'],
+  '10000061-dendro': ['shorthold'],
+  '10000005-hydro': ['shorthold', 'shorthold0ticks'],
+  '10000106-pyro': ['recastframestobike', 'recastframestoring'],
+};
+
 /** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ */
 const AETHER_ID = 10000005;
 const TRAVELER_IDS = new Set([AETHER_ID, 10000007]);
@@ -343,23 +356,25 @@ function buildActions(ctx: BuildContext): BuildResult {
     if (key) normalTables = groups.get(key)!;
   }
   if (attack && normalTables.length > 0) {
-    normalTables.forEach((table, i) => {
+    // ボタンは「N」1つ（フェーズ3d / D26）。段ごとの値は normalHits に持ち、連続した N の何段目かは計算時に決める。
+    // gcsim の attackFrames[i] は「i+1段目を単体で振った」ときのフレーム (合計ではない)。
+    // 次段へ繋ぐ前提: 最終段以外は「次の通常攻撃へのキャンセル」フレーム、最終段は全体フレーム
+    const normalHits = normalTables.map((table, i) => {
       const isLast = i === normalTables.length - 1;
-      const frames = toActionFrames(table, 'attack', attack.consts);
-      // gcsim の attackFrames[i] は「i+1段目を単体で振った」ときのフレーム (合計ではない)。
-      // 次段へ繋ぐ前提: 最終段以外は「次の通常攻撃へのキャンセル」フレーム、最終段は全体フレーム
       const toNext = isLast ? table.total : (table.cancels.attack ?? table.total);
-      actions.push(withDuration({
-        id: `${id}_n${i + 1}`,
-        name: `通常攻撃 ${i + 1}段目`,
-        shortName: 'N',
-        buttonLabel: `N(${i + 1}段目)`,
-        type: 'normal',
-        frames,
-      }, framesToSec(toNext)));
+      return { duration: framesToSec(toNext), frames: toActionFrames(table, 'attack', attack.consts) };
+    });
+    actions.push({
+      id: `${id}_n`,
+      name: '通常攻撃',
+      shortName: 'N',
+      type: 'normal',
+      defaultDuration: normalHits[0].duration,
+      frames: normalHits[0].frames,
+      normalHits,
     });
   } else {
-    actions.push(withDuration({ id: `${id}_n1`, name: '通常攻撃 1段目', shortName: 'N', buttonLabel: 'N(1段目)', type: 'normal' }));
+    actions.push(withDuration({ id: `${id}_n`, name: '通常攻撃', shortName: 'N', type: 'normal' }));
   }
 
   // --- 重撃 / 狙い撃ち -----------------------------------------------------
@@ -441,12 +456,14 @@ function buildActions(ctx: BuildContext): BuildResult {
     }, resolvedHoldTable ? framesToSec(resolvedHoldTable.total) : undefined));
   }
 
-  // 再発動などの派生スキル (CT は開始しない)
+  // 派生スキル: gcsim へのパラメータ指定が必要なもの（B）だけを別アクションにする（フェーズ3d / D25・D26）。
+  // 状態で gcsim が自動的に切り替えるもの（A: 再発動・ステップなど）は、E のボタンにまとめるため生成しない
   if (skill) {
     for (const table of families) {
       if (table === tapTable || table === holdTable) continue;
       const suffix = splitTableName(table.name).base.replace(/^skill/i, '').replace(/Frames?$/i, '') || 'alt';
       const slug = suffix.charAt(0).toLowerCase() + suffix.slice(1);
+      if (!PARAMETER_DERIVED_SKILLS[id]?.includes(slug.toLowerCase())) continue;
       actions.push({
         id: `${id}_e_${slug.toLowerCase()}`,
         name: `元素スキル派生: ${slug}`,
@@ -522,6 +539,7 @@ function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharact
 }
 
 const sameFrames = (a?: ActionFrames, b?: ActionFrames) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+const sameHits = (a?: ActionDefinition['normalHits'], b?: ActionDefinition['normalHits']) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 
 /**
  * 空・蛍それぞれで組み立てたアクションを統合する。
@@ -534,7 +552,7 @@ function mergeGenderActions(results: BuildResult[]): BuildResult {
   for (const id of ids) {
     const variants = results.map(r => r.actions.find(a => a.id === id));
     const first = variants.find((v): v is ActionDefinition => !!v)!;
-    const allSame = variants.every(v => v && sameFrames(v.frames, first.frames) && v.defaultDuration === first.defaultDuration);
+    const allSame = variants.every(v => v && sameFrames(v.frames, first.frames) && sameHits(v.normalHits, first.normalHits) && v.defaultDuration === first.defaultDuration);
     if (allSame) {
       actions.push(first);
       if (results.some(r => r.placeholderActions.includes(id))) placeholderActions.add(id);

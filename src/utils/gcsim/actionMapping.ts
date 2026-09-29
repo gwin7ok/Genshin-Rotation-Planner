@@ -8,16 +8,19 @@
 
 /** キャラごとの対応表（キー: アクション定義 ID、値: gcsim の命令。パラメータ付きは `skill[hold=1]` の形） */
 export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
-  // ニィロウ: E 後の「七域のダンス」中は、通常攻撃が剣舞、スキルがステップになる（gcsim の pirouette 状態）
-  '10000070-hydro_e_sworddance': 'attack',
-  '10000070-hydro_e_whirlingsteps': 'skill',
+  // gcsim へのパラメータ指定が必要な派生スキル（B。フェーズ3d）
+  '10000031-electro_e_recast': 'skill[recast=1]',
+  '10000053-anemo_e_shorthold': 'skill[short_hold=1]',
+  '10000061-dendro_e_shorthold': 'skill[short_hold=1]',
+  '10000005-hydro_e_shorthold': 'skill[hold=1,hold_ticks=1]',
+  '10000005-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
+  '10000106-pyro_e_recastframestobike': 'skill[recast=1]',
+  '10000106-pyro_e_recastframestoring': 'skill[recast=1]',
 };
 
 export interface MappedAction {
   /** gcsim の命令（例: `attack`, `skill[hold=1]`）。対応なしは undefined */
   command?: string;
-  /** 通常攻撃の段数（`nN` のとき）。連続性の確認に使う */
-  normalIndex?: number;
 }
 
 /** アクション定義 ID の末尾（旅人の性別サフィックスは除く） */
@@ -29,9 +32,9 @@ export function mapAction(actionTypeId: string, weaponType?: string): MappedActi
   if (override) return { command: override };
 
   const suffix = actionSuffix(actionTypeId);
-  const normal = /^n(\d+)$/.exec(suffix);
-  if (normal) return { command: 'attack', normalIndex: Number(normal[1]) };
   switch (suffix) {
+    // 通常攻撃はボタン「N」1つ。段は gcsim が連続した attack から自動で数える
+    case 'n': return { command: 'attack' };
     case 'ca': return { command: weaponType === 'bow' ? 'aim' : 'charge' };
     case 'e': return { command: 'skill' };
     case 'e_hold': return { command: 'skill[hold=1]' };

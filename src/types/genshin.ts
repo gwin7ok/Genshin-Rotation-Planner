@@ -9,7 +9,7 @@ export type WeaponType = 'sword' | 'claymore' | 'polearm' | 'bow' | 'catalyst';
 export type ArtifactSetMode = '4pc' | '2+2';
 
 export type ActionType = 
-  | 'normal'     // N1, N2, etc.
+  | 'normal'     // N（連続した N の段は計算時に自動で数える）
   | 'combo'      // e.g. N3C, 3N3C
   | 'charged'    // CA / Aimed shot
   | 'plunge'     // PA
@@ -52,6 +52,11 @@ export interface ActionDefinition {
   cooldown?: number;        // このアクションが開始するCT (秒)
   effectDuration?: number;  // このアクションの効果持続時間 (秒)
   frames?: ActionFrames;    // gcsim モーションフレーム
+  /**
+   * 通常攻撃（type: 'normal'）の段ごとの値（1段目から順）。ボタンは「N」1つで、連続した N の何段目かは計算時に自動で決める（gcsim と同じ）。
+   * duration は「次の通常攻撃へのキャンセル」までの秒数（最終段は全体）。
+   */
+  normalHits?: { duration: number; frames?: ActionFrames }[];
   /** 各値の出典 (genshin-db のラベル名など) */
   dataSource?: {
     cooldown?: string;
@@ -66,6 +71,8 @@ export interface CharacterActionInstance {
   shortName: string;
   type: ActionType;
   duration: number; // in seconds (e.g. 0.8s)
+  /** true のとき duration はユーザーの編集値（または gcsim の結果）。未指定の通常攻撃は、連続した N の段ごとの値を自動で使う */
+  durationManual?: boolean;
   /** このアクションが開始するCT (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の cooldown を使う */
   cooldown?: number;
   /** このアクションの効果継続時間 (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の effectDuration を使う */
@@ -76,6 +83,8 @@ export interface CharacterActionInstance {
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
+  /** アクション状態の窓の中の E（CT・効果バーを持たない）。計算時にだけ付く */
+  inStateWindow?: boolean;
   /** CT未回復（CT衝突）フラグ */
   hasCTCollision?: boolean;
   /** CT衝突時の残り秒数 */

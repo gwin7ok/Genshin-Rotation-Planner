@@ -68,6 +68,10 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000114-cryo_e_hold': { from: 'holdEnd', delayFrames: 18, note: 'skirk/skill.go: extraDuration + skillHoldGainSS(18)' },
   '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
   '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
+  // 旅人(風): 長押し（2 ティック以上）。gcsim の SkillHold は hitmark - 5 で CT を始める。hitmark = 31 + 15 × ティック数 + 5 - 15 + 5 なので、
+  // 長押し（15f × ティック数）の終了から 21f。1 ティック以下は CT 5 秒・遅れ 16f（ホールド秒数を使う 5-5 で扱う）
+  '10000005-anemo_e_hold': { from: 'holdEnd', delayFrames: 21, note: 'traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数' },
+  '10000007-anemo_e_hold': { from: 'holdEnd', delayFrames: 21, note: 'traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数' },
   // 状態の終了で CT が始まるもの（D45）。状態が何で終わるか（夜魂ポイントの枯渇・再発動・時間切れなど）は 5-5 以降で扱う
   '10000104-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'chasca/skill.go: exitNightsoul() の SetCD(6.5秒)' },
   '10000113-anemo_e': { from: 'stateEnd', delayFrames: 0, note: 'ifa/skill.go: exitNightsoul() の SetCD(7.5秒)' },

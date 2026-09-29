@@ -42,6 +42,12 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
   '10000106-pyro': ['recastframestobike', 'recastframestoring'],
 };
 
+/**
+ * 長押しの元素スキルを持たないキャラ。genshin-db のクールタイムのラベルに 2 値ある（タルタリヤは「6.0~36.0秒」＝近接モードの継続時間で変わる）ため、
+ * 長押し（hE）と誤って生成されるのを防ぐ。
+ */
+const NO_HOLD_SKILL = new Set(['10000033-hydro']);
+
 /** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ。空・蛍は別キャラとして元素ごとに登録する (D35) */
 const AETHER_ID = 10000005;
 const LUMINE_ID = 10000007;
@@ -470,7 +476,7 @@ function buildActions(ctx: BuildContext): BuildResult {
     },
   }, tapTable ? framesToSec(tapTable.total) : undefined));
 
-  if (timings.skillHoldCooldown || resolvedHoldTable) {
+  if (!NO_HOLD_SKILL.has(id) && (timings.skillHoldCooldown || resolvedHoldTable)) {
     const holdCd = timings.skillHoldCooldown ?? timings.skillTapCooldown;
     actions.push(withDuration({
       id: `${id}_e_hold`,

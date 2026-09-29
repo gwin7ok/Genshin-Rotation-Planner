@@ -692,9 +692,14 @@
         "cooldown": 8,
         "effectDuration": 0,
         "dataSource": {
-          "cooldown": "最大チャージクールタイム"
+          "cooldown": "最大チャージクールタイム",
+          "cooldownStart": "manual: traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数"
         },
-        "defaultDuration": 1.2
+        "defaultDuration": 1.2,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.35
+        }
       },
       {
         "id": "10000005-anemo_q",
@@ -2909,9 +2914,14 @@
         "cooldown": 8,
         "effectDuration": 0,
         "dataSource": {
-          "cooldown": "最大チャージクールタイム"
+          "cooldown": "最大チャージクールタイム",
+          "cooldownStart": "manual: traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数"
         },
-        "defaultDuration": 1.2
+        "defaultDuration": 1.2,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.35
+        }
       },
       {
         "id": "10000007-anemo_q",
@@ -8707,7 +8717,7 @@
       {
         "id": "10000033-hydro_e",
         "name": "元素スキル: 魔王の武装·荒波",
-        "shortName": "tE",
+        "shortName": "E",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 6,
@@ -8732,20 +8742,6 @@
           "from": "motionStart",
           "delay": 0.233
         }
-      },
-      {
-        "id": "10000033-hydro_e_hold",
-        "name": "元素スキル(長押し): 魔王の武装·荒波",
-        "shortName": "hE",
-        "type": "skill_hold",
-        "startsSkillCooldown": true,
-        "cooldown": 36,
-        "effectDuration": 30,
-        "dataSource": {
-          "cooldown": "クールタイム (2値目)",
-          "effectDuration": "最大継続時間"
-        },
-        "defaultDuration": 1.2
       },
       {
         "id": "10000033-hydro_q",

@@ -124,6 +124,10 @@ export interface GcsimBuffLink {
   gcsimKeys?: string[];
   /** 対応する gcsim の発動間隔（CT）のキー */
   gcsimCooldownKeys?: string[];
+  /** 対応する gcsim の効果のキーのうち、gcsimKeys に入らないもの（永続の効果・時間が分からない効果・短い判定）。全体の行や確認用 */
+  gcsimExtraKeys?: string[];
+  /** gcsim 対象外（gcsimTarget = false）の理由 */
+  gcsimNote?: string;
   /** 分類 */
   timing?: BuffTiming;
   /** gcsim の対象か。false のとき、画面に「gcsim 対象外」の印を付ける（gcsim 未実装のキャラ、gcsim に効果のキーが無いもの。D28-3・D41） */

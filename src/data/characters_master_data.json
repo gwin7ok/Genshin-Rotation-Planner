@@ -540,7 +540,8 @@
         "name": "風の赴くままに",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "風の導くままに",
@@ -550,7 +551,8 @@
         "name": "風の導くままに",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -847,7 +849,8 @@
         "name": "空を裂く風",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "蘇生の風",
@@ -861,7 +864,7 @@
           "cooldown": "gcsim: traveleranemo-a4-icd"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "traveleranemo-a4-icd"
         ],
@@ -902,6 +905,23 @@
         "level": 6,
         "name": "もつれる信風",
         "description": "激風の息によるダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、該当の元素耐性-20%。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000005-anemo_c6",
+        "level": 6,
+        "name": "もつれる信風",
+        "duration": 10,
+        "description": "激風の息によるダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、該当の元素耐性-20%。",
+        "dataSource": {
+          "duration": "gcsim: amc-c6-*"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amc-c6-*"
+        ]
       }
     ]
   },
@@ -1117,7 +1137,8 @@
         "name": "鋭き凛氷",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "透明なる冷氷",
@@ -1701,7 +1722,8 @@
         "name": "転瞬の迅雷",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "轟く雷鳴",
@@ -1711,7 +1733,8 @@
         "name": "轟く雷鳴",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -1978,7 +2001,8 @@
         "name": "破れた断崖",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "狂乱の岩崩れ",
@@ -1988,7 +2012,8 @@
         "name": "狂乱の岩崩れ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -2355,7 +2380,7 @@
           "cooldown": "gcsim: sourcewater-droplet-icd"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sourcewater-droplet-icd"
         ],
@@ -2369,7 +2394,8 @@
         "name": "澄明の浄水",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -2647,7 +2673,8 @@
         "name": "燃え立つ真火",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "燻る残火",
@@ -2660,7 +2687,7 @@
           "cooldown": "12秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "travelerpyro-a4-icd"
         ]
@@ -3003,7 +3030,8 @@
         "name": "感電余震",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "静電気フィールド",
@@ -3301,7 +3329,8 @@
         "name": "空を裂く風",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "蘇生の風",
@@ -3315,7 +3344,7 @@
           "cooldown": "gcsim: traveleranemo-a4-icd"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "traveleranemo-a4-icd"
         ],
@@ -3356,6 +3385,23 @@
         "level": 6,
         "name": "もつれる信風",
         "description": "激風の息によるダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、該当の元素耐性-20%。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000007-anemo_c6",
+        "level": 6,
+        "name": "もつれる信風",
+        "duration": 10,
+        "description": "激風の息によるダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、該当の元素耐性-20%。",
+        "dataSource": {
+          "duration": "gcsim: amc-c6-*"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amc-c6-*"
+        ]
       }
     ]
   },
@@ -3609,7 +3655,8 @@
         "name": "鋭き凛氷",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "透明なる冷氷",
@@ -4191,7 +4238,8 @@
         "name": "転瞬の迅雷",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "轟く雷鳴",
@@ -4201,7 +4249,8 @@
         "name": "轟く雷鳴",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -4470,7 +4519,8 @@
         "name": "破れた断崖",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "狂乱の岩崩れ",
@@ -4480,7 +4530,8 @@
         "name": "狂乱の岩崩れ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -4847,7 +4898,7 @@
           "cooldown": "gcsim: sourcewater-droplet-icd"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sourcewater-droplet-icd"
         ],
@@ -4861,7 +4912,8 @@
         "name": "澄明の浄水",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -5177,7 +5229,8 @@
         "name": "燃え立つ真火",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "燻る残火",
@@ -5190,7 +5243,7 @@
           "cooldown": "12秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "travelerpyro-a4-icd"
         ]
@@ -5526,7 +5579,8 @@
         "name": "アンコール",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -5835,7 +5889,8 @@
         "name": "冷血の剣",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "氷淵の心",
@@ -5845,7 +5900,8 @@
         "name": "氷淵の心",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -6103,7 +6159,8 @@
         "name": "ノンストップ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "溶融の翼",
@@ -6113,7 +6170,8 @@
         "name": "溶融の翼",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -6449,7 +6507,8 @@
         "name": "覚醒",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "飢餓",
@@ -7095,7 +7154,8 @@
           "duration": "継続時間20秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "暴風の目",
@@ -7105,7 +7165,8 @@
         "name": "暴風の目",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -7174,6 +7235,21 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "venti-c4"
+        ]
+      },
+      {
+        "id": "10000022-anemo_c6",
+        "level": 6,
+        "name": "抗争の暴風",
+        "duration": 10,
+        "description": "風神の詩のダメージを受けた敵の風元素耐性-20%。 元素変化があった場合、変化した元素の耐性も-20%。",
+        "dataSource": {
+          "duration": "gcsim: venti-c6-{element}"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "venti-c6-{element}"
         ]
       }
     ]
@@ -7421,7 +7497,8 @@
         "name": "交差する炎",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "激辛唐辛子",
@@ -7712,7 +7789,8 @@
         "name": "完全なる霊光",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "満天の霹靂",
@@ -7997,7 +8075,8 @@
         "name": "水生みの要訣",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "虚実の筆",
@@ -8587,7 +8666,8 @@
         "name": "物換星移",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "備えあれば憂いなし",
@@ -8887,7 +8967,8 @@
         "name": "無限花火",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -9229,7 +9310,8 @@
         "name": "贅沢な食饌",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -9489,7 +9571,8 @@
         "name": "星喰いの鴉",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "断罪の雷影",
@@ -9499,7 +9582,8 @@
         "name": "断罪の雷影",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -9845,7 +9929,8 @@
         "name": "情熱復活",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "恐れなき熱血",
@@ -9855,7 +9940,8 @@
         "name": "恐れなき熱血",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -10114,7 +10200,8 @@
         "name": "無尽蔵",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "水形剣",
@@ -10124,7 +10211,8 @@
         "name": "水形剣",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -10419,7 +10507,7 @@
           "cooldown": "60秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "noelle-a1-icd"
         ]
@@ -10435,7 +10523,8 @@
           "cooldown": "0.1秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -11026,7 +11115,8 @@
         "name": "吐納真定",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "追氷剣訣",
@@ -11299,7 +11389,8 @@
         "name": "唯一の心",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "天地安泰",
@@ -11309,7 +11400,8 @@
         "name": "天地安泰",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -11984,7 +12076,8 @@
           "duration": "15秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -12240,7 +12333,8 @@
           "duration": "2秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "「運命の流れに任せましょう！」",
@@ -13248,7 +13342,8 @@
         "name": "「観客いなくても演奏するのだ…」",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "「…これこそがロックだ！」",
@@ -14321,7 +14416,8 @@
         "name": "相聞剣法",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "風物の詩吟",
@@ -14334,7 +14430,8 @@
           "duration": "継続時間8秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -14644,7 +14741,8 @@
         "name": "法獣の灼眼",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -15203,7 +15301,8 @@
         "name": "進撃の烈炎",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -15529,7 +15628,8 @@
         "name": "氷の残剣",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "戦意の表れ",
@@ -15539,7 +15639,8 @@
         "name": "戦意の表れ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -15833,7 +15934,8 @@
           "cooldown": "3秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "殊勝な御体",
@@ -16137,7 +16239,7 @@
           "cooldown": "2秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sayu-a1-icd"
         ]
@@ -16150,7 +16252,8 @@
         "name": "仕事をサボるのだ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -16391,7 +16494,8 @@
         "name": "真珠の御唄",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -16667,7 +16771,8 @@
         "name": "報恩の守護",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -16929,7 +17034,8 @@
         "name": "不動心",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "御公儀",
@@ -16942,7 +17048,7 @@
           "cooldown": "3秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sara-a4-icd"
         ]
@@ -17247,7 +17353,8 @@
         "name": "赤鬼の血",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -17525,7 +17632,8 @@
         "name": "神籬之御蔭",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "啓蟄之祝詞",
@@ -17609,6 +17717,9 @@
         ],
         "gcsimCooldownKeys": [
           "yae-c4-icd"
+        ],
+        "gcsimExtraKeys": [
+          "yae-c4"
         ]
       }
     ]
@@ -17857,7 +17968,8 @@
           "cooldown": "0.1秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "因由勘破",
@@ -18464,7 +18576,8 @@
         "name": "妖説岐尾の変",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "ネコのぐるぐる目時計",
@@ -19345,7 +19458,8 @@
         "name": "自我堅守",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "独立嶄然",
@@ -19355,7 +19469,8 @@
         "name": "独立嶄然",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -19648,7 +19763,8 @@
         "name": "安心の処",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -19961,7 +20077,8 @@
         "name": "神里流·峰を纏いし清滝",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "神里流·満ちゆく破月",
@@ -19971,7 +20088,8 @@
         "name": "神里流·満ちゆく破月",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -20509,7 +20627,8 @@
         "name": "砂だるま式利子",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -21379,7 +21498,8 @@
         "name": "九弓の権能",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -21724,7 +21844,8 @@
         "name": "流羽の守り",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "砂の円蓋",
@@ -22104,6 +22225,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "nahida-c2"
+        ],
+        "gcsimExtraKeys": [
+          "nahida-c2-lunarbloom"
         ]
       },
       {
@@ -22320,7 +22444,8 @@
         "name": "熟睡妨害禁止！",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -22600,6 +22725,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "wanderer-a4"
+        ],
+        "gcsimExtraKeys": [
+          "wanderer-a4-prevent"
         ]
       }
     ],
@@ -22850,7 +22978,8 @@
         "name": "迅速流風",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "七窟遺智",
@@ -22863,7 +22992,8 @@
           "cooldown": "0.8秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -23091,7 +23221,8 @@
         "name": "天星零落",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "先意承問",
@@ -23475,7 +23606,7 @@
           "cooldown": "12秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "alhaitham-a1-icd"
         ]
@@ -23847,7 +23978,7 @@
           "cooldown": "20秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "dehya-a4-icd"
         ]
@@ -24156,7 +24287,8 @@
         "name": "地形測量",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -24444,7 +24576,8 @@
           "cooldown": "0.5秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "芸術家の奇想",
@@ -25335,7 +25468,8 @@
         "name": "息を呑むパフォーマンス",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "フィナーレの喝采",
@@ -25633,7 +25767,8 @@
         "name": "飽和潜水",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "並流式冷却装置",
@@ -26243,7 +26378,8 @@
           "duration": "継続時間30秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "至高なる審理の紀律",
@@ -26562,7 +26698,8 @@
         "name": "衝撃的モーメント",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "多様性リサーチ",
@@ -27278,6 +27415,21 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "chev-c4"
+        ]
+      },
+      {
+        "id": "10000090-pyro_c6",
+        "level": 6,
+        "name": "罪過終止の追捕",
+        "duration": 8,
+        "description": "近迫阻止射撃·速の治療効果が12秒継続した後、周囲のチーム全員のHPを1回だけ回復する。回復量はシュヴルーズのHP上限の10%に相当する。 チームにいるキャラクターが「近迫阻止射撃·速」の治療効果を受けた後、炎元素ダメージ+20%、雷元素ダメージ+20%、継続時間8秒。この効果は最大3層まで重ねられる。層ごとに継続時間は独立して計算される。",
+        "dataSource": {
+          "duration": "genshin-db: 説明文の継続時間"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "chev-c6-*-stack"
         ]
       }
     ]
@@ -28138,6 +28290,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "xianyun-a1"
+        ],
+        "gcsimExtraKeys": [
+          "xianyun-a1-buff"
         ]
       },
       {
@@ -28451,6 +28606,9 @@
         ],
         "gcsimCooldownKeys": [
           "chiori-seize-the-moment-icd"
+        ],
+        "gcsimExtraKeys": [
+          "chiori-a1-window"
         ]
       },
       {
@@ -29087,7 +29245,8 @@
         "name": "償えるものは苦痛のみ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "護れるものは力のみ",
@@ -29097,7 +29256,8 @@
         "name": "護れるものは力のみ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -29306,7 +29466,8 @@
         "name": "黒鳶の謎掛",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "砂王からの賜物",
@@ -29378,6 +29539,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "sethos-c2-burst"
+        ],
+        "gcsimExtraKeys": [
+          "sethos-c2"
         ]
       },
       {
@@ -29905,7 +30069,8 @@
         "name": "余香",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "精留",
@@ -30074,7 +30239,8 @@
           "duration": "継続時間12秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "磐岩の重み",
@@ -30084,7 +30250,8 @@
         "name": "磐岩の重み",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -30565,7 +30732,8 @@
         "name": "耐熱型淡水プクフグ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "ナタのナンバーワンガイド",
@@ -30578,7 +30746,8 @@
           "duration": "継続時間20秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -30848,6 +31017,9 @@
         "gcsimKeys": [
           "xilonen-c2",
           "xilonen-samplers-activated"
+        ],
+        "gcsimExtraKeys": [
+          "xilonen-a1"
         ],
         "duration": 15
       },
@@ -31173,7 +31345,8 @@
         "name": "援護の気持ち",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -31852,6 +32025,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "mavuika-a4"
+        ],
+        "gcsimExtraKeys": [
+          "mavuika-a4-buff"
         ]
       }
     ],
@@ -31917,6 +32093,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "mavuika-c2"
+        ],
+        "gcsimExtraKeys": [
+          "mavuika-c2-base-atk"
         ]
       }
     ]
@@ -32131,7 +32310,8 @@
         "name": "白燧蝶の星衣",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -32409,7 +32589,8 @@
         "name": "四方封刀の霊占",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "蒼羽鎮邪の勅符",
@@ -32419,7 +32600,8 @@
         "name": "蒼羽鎮邪の勅符",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -32666,7 +32848,8 @@
           "cooldown": "0.3秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "昼想夜夢",
@@ -33304,6 +33487,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "diligent-refinement"
+        ],
+        "gcsimExtraKeys": [
+          "varesa-c4"
         ]
       }
     ]
@@ -34151,7 +34337,8 @@
         "name": "万流帰寂",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -34413,7 +34600,7 @@
           "cooldown": "8秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "dahlia-a1-benison-stack-icd"
         ]
@@ -34640,7 +34827,8 @@
         "name": "オーバークロック",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "再構築プロトコル",
@@ -34656,6 +34844,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "ineffa-a4"
+        ],
+        "gcsimExtraKeys": [
+          "ineffa-a4-buff"
         ]
       }
     ],
@@ -34709,6 +34900,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "ineffa-c1"
+        ],
+        "gcsimExtraKeys": [
+          "ineffa-c1-buff"
         ]
       }
     ]
@@ -35392,7 +35586,8 @@
         "name": "効率運用プロトコル",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "構造的パワーアップ",
@@ -35402,7 +35597,8 @@
         "name": "構造的パワーアップ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -35455,6 +35651,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "aino-c1"
+        ],
+        "gcsimExtraKeys": [
+          "aino-c1-buff"
         ]
       },
       {
@@ -35470,6 +35669,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "aino-c6"
+        ],
+        "gcsimExtraKeys": [
+          "aino-c6-buff"
         ]
       }
     ]
@@ -35546,7 +35748,8 @@
           "duration": "15秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "月下の賭け",
@@ -35559,7 +35762,8 @@
           "duration": "継続時間8秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "砂塵の娘",
@@ -35572,7 +35776,8 @@
           "duration": "5秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -35784,6 +35989,7 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "durin-a1-{element}",
           "durin-a1-black"
         ]
       },
@@ -35798,7 +36004,8 @@
           "duration": "20秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -35838,6 +36045,21 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000123-pyro_c2",
+        "level": 2,
+        "name": "底無き想い",
+        "duration": 6,
+        "description": "ドゥリンが元素爆発を発動した後の20秒間、付近にいるチーム内キャラクターが敵に蒸発、溶解、燃焼、過負荷、炎元素拡散、炎元素結晶反応を起こした後、または燃焼状態の敵に炎元素ダメージや草元素ダメージを与えた時、周囲のチーム全員の炎元素ダメージと反応に関与した対応する元素のダメージ+50%、継続時間6秒。",
+        "dataSource": {
+          "duration": "gcsim: durin-c2-{element}"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "durin-c2-{element}"
+        ]
+      },
       {
         "id": "10000123-pyro_c6",
         "level": 6,
@@ -36024,7 +36246,8 @@
         "name": "報酬ゲットの妙案",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "ベリーの褒賞",
@@ -36458,7 +36681,8 @@
           "duration": "4秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "雲間に連なる山々",
@@ -36468,7 +36692,8 @@
         "name": "雲間に連なる山々",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -36722,7 +36947,8 @@
         "name": "魔を狩る者の黄昏",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -36980,6 +37206,7 @@
         "timing": "always",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "varka-a1-{element}",
           "varka-a1-anemo",
           "varka-a1-physical"
         ]
@@ -37002,6 +37229,9 @@
         ],
         "gcsimCooldownKeys": [
           "varka-a4-icd"
+        ],
+        "gcsimExtraKeys": [
+          "varka-a4"
         ],
         "cooldown": 1
       }
@@ -37044,6 +37274,21 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000128-anemo_c4",
+        "level": 4,
+        "name": "「謳え、誰にも奪えない自由を」",
+        "duration": 10,
+        "description": "ファルカが拡散または星拡散反応を起こした時、反応に関わった元素タイプに応じて、周囲のチーム全員がそれぞれ20%の風元素と対応する元素のダメージアップ効果を獲得する。継続時間10秒。",
+        "dataSource": {
+          "duration": "genshin-db: 説明文の継続時間"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "varka-c4-{element}"
+        ]
+      },
+      {
         "id": "10000128-anemo_c6",
         "level": 6,
         "name": "「愛しきモンドよ、変わらぬ姿で」",
@@ -37054,6 +37299,9 @@
         "gcsimKeys": [
           "varka-c6-free-charge",
           "varka-c6-free-skill"
+        ],
+        "gcsimExtraKeys": [
+          "varka-c6-cdmg"
         ]
       }
     ]
@@ -37127,7 +37375,8 @@
         "name": "絶対服従の訓戒",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "秀逸なる戯言",
@@ -37140,7 +37389,8 @@
           "duration": "8秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -37249,7 +37499,8 @@
         "name": "野外観察日誌",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "博物分類図鑑",
@@ -37259,7 +37510,8 @@
         "name": "博物分類図鑑",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -37523,7 +37775,8 @@
           "duration": "継続時間8秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -37575,7 +37828,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "nicole-c2"
+          "nicole-c2",
+          "nicole-c2-*"
         ]
       },
       {
@@ -37790,7 +38044,7 @@
           "cooldown": "gcsim: prune-a1-swirl-check-icd"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "prune-a1-swirl-check-icd"
         ],
@@ -37864,6 +38118,9 @@
         "gcsimKeys": [
           "prune-c6-self-buff",
           "prune-c6-window"
+        ],
+        "gcsimExtraKeys": [
+          "prune-c6-active-buff"
         ]
       }
     ]
@@ -37939,7 +38196,8 @@
           "duration": "60秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "淑女の礼儀作法",
@@ -37949,7 +38207,8 @@
         "name": "淑女の礼儀作法",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -38060,7 +38319,8 @@
           "duration": "継続時間6秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "十二弦の涙唄",
@@ -38073,7 +38333,8 @@
           "duration": "継続時間30秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -38184,7 +38445,8 @@
           "duration": "継続時間20秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "法典「冬の凱旋」",
@@ -38194,7 +38456,8 @@
         "name": "法典「冬の凱旋」",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -38303,7 +38566,8 @@
         "name": "微睡む林の目覚め",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       },
       {
         "talentName": "冬の麦と落ち葉に告げる別れ",
@@ -38313,7 +38577,8 @@
         "name": "冬の麦と落ち葉に告げる別れ",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "source": {
@@ -38546,7 +38811,8 @@
         "name": "誠実なる者の悲しき歌",
         "dataSource": {},
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "source": {
@@ -38586,6 +38852,24 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000150-cryo_c2",
+        "level": 2,
+        "name": "「雪鳥の見ぬ夢を只 見届けたいだけで」",
+        "duration": 2,
+        "description": "固有天賦「選ばれし者の祝祭」が強化される。**春の華**1層につき、さらにキャラクターの攻撃力が7%アップする。 また、**独舞者のシルエット**が存在する時、オデットが**輝映・星閃**状態の場合、独舞者のシルエット付近の敵の対応する元素耐性がさらに20%ダウンする。 ・輝映・星電導：氷元素、雷元素。 ・輝映・星拡散：氷元素、風元素。",
+        "dataSource": {
+          "duration": "gcsim: odette-c2-{element}"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "odette-c2-{element}"
+        ],
+        "gcsimExtraKeys": [
+          "odette-c2"
+        ]
+      },
       {
         "id": "10000150-cryo_c4",
         "level": 4,

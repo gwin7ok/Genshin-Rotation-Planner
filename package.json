@@ -12,7 +12,8 @@
     "lint": "tsc --noEmit",
     "build:master": "node scripts/build-character-master.ts",
     "build:equipment": "node scripts/build-equipment-master.ts",
-    "build:catalog": "node scripts/build-key-catalog.ts"
+    "build:catalog": "node scripts/build-key-catalog.ts",
+    "check:catalog": "node scripts/check-catalog-sample.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

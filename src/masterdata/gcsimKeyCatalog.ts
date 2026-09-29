@@ -27,8 +27,15 @@ export interface KeySource {
 
 export interface KeyOwner {
   type: 'character' | 'weapon' | 'artifact' | 'template' | 'system';
-  /** gcsim のキー（キャラ = キャラのキー、武器・聖遺物 = ディレクトリ名）。共有パッケージ（weapons/common など）は 'common' */
+  /** gcsim ソースのディレクトリ（internal/ の下。例: `characters/kazuha`、`weapons/catalyst/nocturnes`） */
+  dir: string;
+  /**
+   * gcsim のキー（キャラ = キャラのキー、武器・聖遺物 = 武器・聖遺物のキー）。ディレクトリ内の zz_<キー>.dm.go から決める。
+   * キーを持たないディレクトリ（weapons/common など共有パッケージ、テンプレート、システム）はディレクトリ名
+   */
   gcsimKey: string;
+  /** ディレクトリが複数のキーを持つとき（旅人の空・蛍など）の全て */
+  gcsimKeys?: string[];
 }
 
 export interface KeyCatalogEntry {
@@ -48,8 +55,29 @@ export interface KeyCatalogEntry {
   durationFrames?: number;
   /** 定義場所が複数の分類・持ち主にまたがる（先頭の定義場所を採用。5-2b で確認） */
   ambiguous?: boolean;
+  /** 日本語の表示名（手で補う一覧。自動生成のみのキーには無い） */
+  name?: string;
+  /** CT のとき、どの効果（キー）のCTか（手で補う一覧） */
+  cooldownOf?: string;
+  /** 手で補う一覧の注記 */
+  note?: string;
+  /** 手で補う一覧で種類・分類を変えたとき、自動判定の値 */
+  autoKind?: KeyKind;
+  autoCategory?: KeyCategory;
   sources: KeySource[];
-  source: 'auto';
+  /** auto = 自動生成のみ、manual = 手で補う一覧で上書き・追記あり */
+  source: 'auto' | 'manual';
+}
+
+/** 手で補う一覧（src/masterdata/gcsimKeyCatalogOverrides.ts）の1件 */
+export interface KeyOverride {
+  name: string;
+  /** 自動判定の種類（名前からの候補）を変えるとき */
+  kind?: KeyKind;
+  /** 自動判定の分類（定義場所）を変えるとき（複数の定義場所にまたがるキーなど） */
+  category?: KeyCategory;
+  cooldownOf?: string;
+  note?: string;
 }
 
 export interface UnresolvedKeyCall {
@@ -67,6 +95,10 @@ export interface KeyCatalogReport {
   ambiguous: Array<{ key: string; places: string[] }>;
   byCategory: Record<string, number>;
   byKind: Record<string, number>;
+  /** 手で補う一覧を適用したキー数 */
+  manualCount: number;
+  /** 手で補う一覧に書いてあるのに辞書に無いキー（gcsim の更新で消えた・書き間違い） */
+  overridesMissing: string[];
 }
 
 export interface KeyCatalog {
@@ -79,8 +111,9 @@ export interface KeyCatalog {
 // 分類（定義場所）
 // ---------------------------------------------------------------------------
 
-/** ファイルのパスから、分類と持ち主を決める */
+/** ファイルのパスから、分類と持ち主（ディレクトリまで。gcsim のキーは buildOwnerKeys で決める）を決める */
 export function classifyPath(path: string): { category: KeyCategory; owner: KeyOwner } {
+  const dirOf = (prefix: string) => path.slice(prefix.length).replace(/\/?[^/]+$/, '');
   let m = /^internal\/characters\/(.+)\/(\w+)\.go$/.exec(path);
   if (m) {
     const file = m[2];
@@ -90,25 +123,52 @@ export function classifyPath(path: string): { category: KeyCategory; owner: KeyO
       : file === 'cons' ? 'constellation'
       : ['attack', 'charge', 'aimed', 'aim', 'plunge'].includes(file) ? 'attack'
       : 'character';
-    return { category, owner: { type: 'character', gcsimKey: m[1] } };
+    return { category, owner: { type: 'character', dir: `characters/${m[1]}`, gcsimKey: m[1] } };
   }
   if (path.startsWith('internal/weapons/')) {
-    const dir = /^internal\/weapons\/(?:[^/]+\/)?([^/]+)\//.exec(path)?.[1] ?? 'common';
-    return { category: 'weapon', owner: { type: 'weapon', gcsimKey: dir } };
+    // weapons/<武器種>/<ディレクトリ>/ か、共有パッケージ weapons/common/
+    const rel = dirOf('internal/weapons/');
+    const dir = rel === '' || rel === 'common' ? 'common' : rel;
+    return { category: 'weapon', owner: { type: 'weapon', dir: `weapons/${dir}`, gcsimKey: dir.split('/').pop()! } };
   }
   m = /^internal\/artifacts\/([^/]+)\//.exec(path);
-  if (m) return { category: 'artifact', owner: { type: 'artifact', gcsimKey: m[1] } };
+  if (m) return { category: 'artifact', owner: { type: 'artifact', dir: `artifacts/${m[1]}`, gcsimKey: m[1] } };
   m = /^internal\/template\/([^/]+)\//.exec(path);
-  if (m) return { category: 'template', owner: { type: 'template', gcsimKey: m[1] } };
-  return { category: 'system', owner: { type: 'system', gcsimKey: path.replace(/\.go$/, '') } };
+  if (m) return { category: 'template', owner: { type: 'template', dir: `template/${m[1]}`, gcsimKey: m[1] } };
+  return { category: 'system', owner: { type: 'system', dir: packageOfPath(path), gcsimKey: path.replace(/\.go$/, '') } };
+}
+
+const packageOfPath = (path: string) => path.replace(/\/[^/]+$/, '');
+
+/**
+ * ディレクトリ → gcsim のキー。各ディレクトリの zz_<キー>.dm.go（自動生成ファイル）の名前から決める。
+ * 旅人は共通ディレクトリ（characters/traveler/common/<元素>）を空・蛍の両方で使うので、両方のキーを持たせる
+ */
+export function buildOwnerKeys(allPaths: string[]): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+  const add = (dir: string, key: string) => {
+    if (!result.has(dir)) result.set(dir, []);
+    if (!result.get(dir)!.includes(key)) result.get(dir)!.push(key);
+  };
+  for (const p of allPaths) {
+    const m = /^internal\/(characters|weapons|artifacts)\/(.+)\/zz_(\w+)\.dm\.go$/.exec(p);
+    if (!m) continue;
+    add(`${m[1]}/${m[2]}`, m[3]);
+    const traveler = /^traveler\/(\w+)\/(aether|lumine)$/.exec(m[2]);
+    if (m[1] === 'characters' && traveler) add(`characters/traveler/common/${traveler[1]}`, m[3]);
+  }
+  return result;
 }
 
 const packageOf = (path: string) => path.replace(/\/[^/]+$/, '');
 
 /** 種類の候補（名前から）。粒子・エネルギー・ヒットラグは内部、icd / cd / cooldown は CT、それ以外は効果 */
-export function guessKind(key: string): KeyKind {
+export function guessKind(key: string, durationFrames?: number): KeyKind {
   if (/particle|energy|hitlag/i.test(key)) return 'internal';
-  if (/icd|cooldown|(^|[^a-z])cd([^a-z]|$)/i.test(key)) return 'cooldown';
+  if (/icd|cooldown|(^|[^a-z])cd([^a-z]|$)/i.test(key)) {
+    // 1 秒未満の間隔は、効果を重ねる間隔・内部の間隔で、ユーザーに見せるCTではない（I1 と同じ規則）
+    return durationFrames !== undefined && durationFrames > 0 && durationFrames < 60 ? 'internal' : 'cooldown';
+  }
   return 'effect';
 }
 
@@ -234,16 +294,83 @@ function resolveKeyExpr(
     : { kind: 'pattern', key: resolved.join('').replace(/\{element\}/g, '*') };
 }
 
-/** `fmt.Sprintf("scroll-%dpc-%v", ...)` の書式から、動詞を * に置き換えたパターンを作る */
-function resolveSprintf(expr: string): ResolvedKey | undefined {
-  const m = /^fmt\.Sprintf\(\s*("(?:[^"\\]|\\.)*")/.exec(expr.trim());
+/**
+ * `fmt.Sprintf("%v-hp", buffKey)` の書式の動詞を、順に、定数の値で置き換える。
+ * 値が分からない引数（変数・数値など）の動詞は * にして、パターンにする
+ */
+function resolveSprintf(
+  expr: string,
+  consts: Map<string, string>,
+  aliases: Map<string, Map<string, string>[]>,
+): ResolvedKey | undefined {
+  const call = /^fmt\.Sprintf\(([\s\S]*)\)$/.exec(expr.trim());
+  if (!call) return undefined;
+  const args = splitTopLevel(call[1]);
+  const format = parseStringLiteral(args[0]?.trim() ?? '');
+  if (format === undefined) return undefined;
+  let index = 1;
+  let wildcard = false;
+  const key = format.replace(/%[-+# 0-9.]*[a-zA-Z]/g, () => {
+    const arg = args[index++]?.trim();
+    const value = arg === undefined ? undefined : parseStringLiteral(arg) ?? consts.get(arg) ?? lookupAlias(arg, aliases);
+    if (value === undefined) wildcard = true;
+    return value ?? '*';
+  });
+  return wildcard ? { kind: 'pattern', key } : { kind: 'key', key };
+}
+
+/** `common.XxxKey` のような別パッケージの定数 */
+function lookupAlias(name: string, aliases: Map<string, Map<string, string>[]>): string | undefined {
+  const m = /^(\w+)\.(\w+)$/.exec(name);
   if (!m) return undefined;
-  try {
-    const format = JSON.parse(m[1]) as string;
-    return { kind: 'pattern', key: format.replace(/%[-+# 0-9.]*[a-zA-Z]/g, '*') };
-  } catch {
-    return undefined;
+  for (const c of aliases.get(m[1]) ?? []) {
+    const v = c.get(m[2]);
+    if (v !== undefined) return v;
   }
+  return undefined;
+}
+
+/** 括弧・文字列の外にあるカンマで、引数の列を分ける */
+function splitTopLevel(text: string): string[] {
+  const args: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"' || ch === '`' || ch === "'") {
+      const close = ch;
+      i++;
+      while (i < text.length && text[i] !== close) {
+        if (close !== '`' && text[i] === '\\') i++;
+        i++;
+      }
+    } else if (ch === '(' || ch === '[' || ch === '{') depth++;
+    else if (ch === ')' || ch === ']' || ch === '}') depth--;
+    else if (ch === ',' && depth === 0) {
+      args.push(text.slice(start, i));
+      start = i + 1;
+    }
+  }
+  args.push(text.slice(start));
+  return args;
+}
+
+/** 開き括弧の直後（start）から、対応する閉じ括弧までの中身 */
+function callBody(text: string, start: number): string | undefined {
+  let depth = 1;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"' || ch === '`' || ch === "'") {
+      const close = ch;
+      i++;
+      while (i < text.length && text[i] !== close) {
+        if (close !== '`' && text[i] === '\\') i++;
+        i++;
+      }
+    } else if (ch === '(') depth++;
+    else if (ch === ')' && --depth === 0) return text.slice(start, i);
+  }
+  return undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -251,7 +378,7 @@ function resolveSprintf(expr: string): ResolvedKey | undefined {
 // ---------------------------------------------------------------------------
 
 /** キー登録の呼び出し: 1 つ目の引数がキー、2 つ目が継続時間 */
-const CALL_RE = /(\.AddStatus\(|Core\.Status\.Add\(|modifier\.NewBase(?:WithHitlag)?\()\s*([^,]+?)\s*,\s*([^,)]+(?:\([^)]*\))?[^,)]*)/g;
+const CALL_RE = /(\.AddStatus\(|Core\.Status\.Add\(|modifier\.NewBase(?:WithHitlag)?\()/g;
 
 interface RawKey {
   key: string;
@@ -265,11 +392,20 @@ interface RawKey {
 /**
  * gcsim のソース（パス → 中身）から、キーの辞書を作る。
  * @param files internal/characters・weapons・artifacts・template と pkg/simulation/setup.go の Go ソース
+ * @param allPaths gcsim のリポジトリの全ファイルのパス（ディレクトリと gcsim のキーの対応に使う zz_*.dm.go を含む）
  */
 export function extractKeyCatalog(
   files: Record<string, string>,
   gcsimCommit: string,
+  allPaths: string[] = [],
+  overrides: Record<string, KeyOverride> = {},
 ): { catalog: KeyCatalog; report: KeyCatalogReport } {
+  const ownerKeys = buildOwnerKeys(allPaths);
+  const withKeys = (owner: KeyOwner): KeyOwner => {
+    const keys = ownerKeys.get(owner.dir);
+    if (!keys || keys.length === 0) return owner;
+    return { ...owner, gcsimKey: keys[0], ...(keys.length > 1 ? { gcsimKeys: keys } : {}) };
+  };
   const stringConsts = collectStringConsts(files);
   const numberConsts = collectNumberConsts(files);
   // 別パッケージの定数（common.XxxKey / player.XxxKey / reactable.XxxKey）
@@ -282,7 +418,7 @@ export function extractKeyCatalog(
 
   const raws: RawKey[] = [];
   const report: KeyCatalogReport = {
-    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], byCategory: {}, byKind: {},
+    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], byCategory: {}, byKind: {}, manualCount: 0, overridesMissing: [],
   };
 
   for (const [path, text] of Object.entries(files)) {
@@ -290,16 +426,20 @@ export function extractKeyCatalog(
     const consts = stringConsts.get(pkg) ?? new Map<string, string>();
     const numbers = numberConsts.get(pkg);
     for (const m of text.matchAll(CALL_RE)) {
+      const body = callBody(text, (m.index ?? 0) + m[0].length);
+      if (body === undefined) continue;
+      const callArgs = splitTopLevel(body);
+      if (callArgs.length < 2) continue;
       report.totalCalls++;
       const api: 'status' | 'mod' = m[1].includes('NewBase') ? 'mod' : 'status';
-      const expr = m[2];
-      const resolved = resolveKeyExpr(expr, consts, aliases, text) ?? resolveSprintf(expr);
+      const expr = callArgs[0].trim();
+      const resolved = resolveKeyExpr(expr, consts, aliases, text) ?? resolveSprintf(expr, consts, aliases);
       // パターンは、固定の接頭辞が 3 文字以上あるものだけ（`*-*` のような何にでも一致するものは使えない）
       if (!resolved || (resolved.kind === 'pattern' && !/^[^*{]{3,}/.test(resolved.key))) {
         report.unresolved.push({ file: path, expr: expr.trim().replace(/\s+/g, ' ') });
         continue;
       }
-      const duration = numbers ? evaluateGoExpr(m[3].trim(), numbers) : undefined;
+      const duration = numbers ? evaluateGoExpr(callArgs[1].trim(), numbers) : undefined;
       raws.push({
         key: resolved.key,
         isPattern: resolved.kind === 'pattern',
@@ -323,10 +463,12 @@ export function extractKeyCatalog(
   const entries: KeyCatalogEntry[] = [];
   for (const [key, list] of [...byKey.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
     const first = list[0];
-    const { category, owner } = classifyPath(first.path);
+    const classified = classifyPath(first.path);
+    const category = classified.category;
+    const owner = withKeys(classified.owner);
     const places = new Set(list.map(r => {
       const c = classifyPath(r.path);
-      return `${c.category}:${c.owner.gcsimKey}`;
+      return `${c.category}:${withKeys(c.owner).gcsimKey}`;
     }));
     const ambiguous = places.size > 1;
     if (ambiguous) report.ambiguous.push({ key, places: [...places] });
@@ -342,17 +484,31 @@ export function extractKeyCatalog(
       ...(first.elements ? { elements: first.elements } : {}),
       category,
       owner,
-      kind: guessKind(key),
+      kind: guessKind(key, durations.find(d => d > 0)),
       ...(durations.includes(-1) ? { permanent: true } : {}),
       ...(durations.length > 0 && !durations.includes(-1) ? { durationFrames: durations[0] } : {}),
       ...(ambiguous ? { ambiguous: true } : {}),
       sources,
       source: 'auto',
     };
+    // 手で補う一覧（D10・5-2b）: 表示名・種類・分類・CTの紐付けを上書きする。自動判定の値は autoKind / autoCategory に残す
+    const override = overrides[key];
+    if (override) {
+      entry.name = override.name;
+      if (override.kind && override.kind !== entry.kind) { entry.autoKind = entry.kind; entry.kind = override.kind; }
+      if (override.category && override.category !== entry.category) { entry.autoCategory = entry.category; entry.category = override.category; }
+      if (override.cooldownOf) entry.cooldownOf = override.cooldownOf;
+      if (override.note) entry.note = override.note;
+      entry.source = 'manual';
+      report.manualCount++;
+    }
     entries.push(entry);
-    report.byCategory[category] = (report.byCategory[category] ?? 0) + 1;
+    report.byCategory[entry.category] = (report.byCategory[entry.category] ?? 0) + 1;
     report.byKind[entry.kind] = (report.byKind[entry.kind] ?? 0) + 1;
   }
+
+  const known = new Set(entries.map(e => e.key));
+  report.overridesMissing = Object.keys(overrides).filter(k => !known.has(k));
 
   return {
     catalog: { gcsimCommit, generatedAt: new Date().toISOString(), entries },

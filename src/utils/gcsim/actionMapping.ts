@@ -14,6 +14,8 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000061-dendro_e_shorthold': 'skill[short_hold=1]',
   '10000005-hydro_e_shorthold': 'skill[hold=1,hold_ticks=1]',
   '10000005-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
+  '10000007-hydro_e_shorthold': 'skill[hold=1,hold_ticks=1]',
+  '10000007-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
   '10000106-pyro_e_recastframestobike': 'skill[recast=1]',
   '10000106-pyro_e_recastframestoring': 'skill[recast=1]',
 };
@@ -23,9 +25,9 @@ export interface MappedAction {
   command?: string;
 }
 
-/** アクション定義 ID の末尾（旅人の性別サフィックスは除く） */
+/** アクション定義 ID の末尾 */
 export const actionSuffix = (actionTypeId: string): string =>
-  actionTypeId.slice(actionTypeId.indexOf('_') + 1).replace(/_(aether|lumine)$/, '');
+  actionTypeId.slice(actionTypeId.indexOf('_') + 1);
 
 export function mapAction(actionTypeId: string, weaponType?: string): MappedAction {
   const override = CHARACTER_ACTION_OVERRIDES[actionTypeId];

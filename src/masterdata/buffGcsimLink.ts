@@ -12,6 +12,7 @@
  * gcsim 対象外（gcsimTarget = false）: gcsim 未実装のキャラ・武器・聖遺物、辞書に効果のキーが無いもの
  */
 import type { KeyCatalog, KeyCatalogEntry } from './gcsimKeyCatalog.ts';
+import { findDurations } from './passiveEffects.ts';
 import type {
   BuffTiming, CharacterConfig, ConstellationBuffDefinition, ConstellationLevel, GcsimBuffLink, PassiveEffectDefinition,
 } from '../types/genshin.ts';
@@ -65,6 +66,47 @@ const SHARED_WEAPON_RULES: Array<{ keyPrefix: string; weapon: (weaponKey: string
   { keyPrefix: 'favonius', weapon: k => k.startsWith('favonius') },
   { keyPrefix: 'sacrificial', weapon: k => k.startsWith('sacrificial') },
 ];
+
+/**
+ * 効果継続時間に意味が無い固有天賦（条件を満たすたびにほぼ常時発動する・発動間隔が効果の時間ではない・スキルの状態やゲージで終わりが決まる）。
+ * gcsim に時間つきのキーがあっても、継続時間を補わず、分類は「条件付き」にする（キーは対応付けたまま）。キー: 固有天賦の定義 ID
+ */
+export const NO_DURATION_TALENTS: Record<string, string> = {
+  '10000029-pyro_p1': 'クレー こんこんプレゼント: 条件付きでほぼ常時発動する',
+  '10000070-hydro_p2': 'ニィロウ 軽やかに舞う永世の夢: 条件付きでほぼ常時発動する',
+  '10000083-anemo_p2': 'リネット プロップは完備: 条件付きでほぼ常時発動する',
+  '10000075-anemo_p2': '放浪者 夢跡一風: 条件付きでほぼ常時発動する',
+  '10000068-electro_p1': 'ドリー ゴールドマイニング: 3 秒は発動間隔（CT）で、効果は瞬間',
+  '10000075-anemo_p1': '放浪者 拾玉得花: スキルの状態（20秒）より先に、別管理のゲージの消費で終わる',
+};
+
+/**
+ * 効果継続時間に意味が無い命ノ星座の効果（領域・状態が続く間だけ有効で、gcsim の値は更新の間隔・継続時間が無い・瞬間の効果）。
+ * 定義は作るが、継続時間は持たない（分類は「条件付き」。キーは対応付けたまま）。キー: 命ノ星座の効果の定義 ID（`<キャラID>_c<凸>`）
+ */
+export const NO_DURATION_CONSTELLATIONS: Record<string, string> = {
+  '10000003-anemo_c4': 'ジン 4凸: 領域内の敵に有効（更新の間隔）',
+  '10000005-dendro_c6': '空(草) 6凸: 草蓮灯の影響を受けている間',
+  '10000007-dendro_c6': '蛍(草) 6凸: 草蓮灯の影響を受けている間',
+  '10000005-geo_c1': '空(岩) 1凸: 岩の山に包囲されている間',
+  '10000007-geo_c1': '蛍(岩) 1凸: 岩の山に包囲されている間',
+  '10000006-electro_c2': 'リサ 2凸: 蒼雷長押し中',
+  '10000038-geo_c4': 'アルベド 4凸: 陽華のエリア内',
+  '10000038-geo_c6': 'アルベド 6凸: 陽華のエリア内',
+  '10000039-cryo_c6': 'ディオナ 6凸: 特製スピリッツのエリア内',
+  '10000068-electro_c4': 'ドリー 4凸: ランプの精とリンクしている間',
+  '10000047-anemo_c2': '万葉 2凸: 流風秋野の中',
+  '10000106-pyro_c2': 'マーヴィカ 2凸: 夜魂の加護状態の間',
+  '10000127-geo_c4': 'イルーガ 4凸: 「闇の小夜啼歌」の間',
+  '10000035-cryo_c6': '七七 6凸: 復活（CT 15 分）で、継続時間が無い',
+  '10000058-electro_c1': '八重神子 1凸: エネルギー回復で、継続時間が無い',
+  '10000128-anemo_c6': 'ファルカ 6凸: 使用回数を消費しない、ごく短い猶予',
+};
+
+/** 命ノ星座の効果の定義にしないもの（効果ではなく、他の効果の継続時間の延長など）。キー: 定義 ID */
+export const EXCLUDED_CONSTELLATIONS: Record<string, string> = {
+  '10000110-electro_c6': 'イアンサ 6凸: 運動量メーターの継続時間+3秒（効果ではなく延長）',
+};
 
 const tokensOf = (e: KeyCatalogEntry) => e.key.split('-');
 const hasToken = (e: KeyCatalogEntry, re: RegExp) => tokensOf(e).some(t => re.test(t));
@@ -140,10 +182,12 @@ export interface BuffLinkReport {
   added: Array<{ id: string; name: string; sourceName: string; duration?: number; keys: string[] }>;
   /** 命ノ星座のキーのうち、定義にしなかったもの: 永続のみの凸（常時。定義にせず辞書から直接扱う）、時間が分からない凸、凸の番号が分からないキー */
   constellationSkipped: { permanentOnly: number; unknownDuration: number; noLevel: number };
+  /** 命ノ星座の効果の継続時間を、説明文（genshin-db）の値にしたもの（gcsim の値と食い違うもの） */
+  constellationDurationFromText: Array<{ id: string; name: string; text: number; gcsim: number }>;
 }
 
 export const emptyBuffLinkReport = (): BuffLinkReport => ({
-  counts: {}, durationFilled: [], added: [], constellationSkipped: { permanentOnly: 0, unknownDuration: 0, noLevel: 0 },
+  counts: {}, durationFilled: [], added: [], constellationSkipped: { permanentOnly: 0, unknownDuration: 0, noLevel: 0 }, constellationDurationFromText: [],
 });
 
 function count(report: BuffLinkReport, kind: string, def: GcsimBuffLink): void {
@@ -185,8 +229,10 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           if (sameLength.length > 0) mine = sameLength;
         }
         const s = summarize(mine);
+        // 継続時間に意味が無い固有天賦は、条件付き扱い（継続時間は補わない）
+        if (NO_DURATION_TALENTS[def.id] && s.gcsimTarget) s.timing = 'conditional';
         applyLink(def, s);
-        fillFromGcsim(def, s, report);
+        if (!NO_DURATION_TALENTS[def.id]) fillFromGcsim(def, s, report);
         count(report, 'talent', def);
       }
     }
@@ -206,6 +252,8 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         byLevel.get(level)!.push(e);
       }
       for (const [level, list] of [...byLevel].sort((a, b) => a[0] - b[0])) {
+        const defId = `${char.id}_c${level}`;
+        if (EXCLUDED_CONSTELLATIONS[defId]) continue;
         const s = summarize(list);
         if (s.timing !== 'computed') {
           const effectsOnly = list.filter(e => e.kind === 'effect');
@@ -214,16 +262,27 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           continue;
         }
         const data = char.constellations?.find(c => c.level === level);
+        const noDuration = Boolean(NO_DURATION_CONSTELLATIONS[defId]);
+        // 継続時間: 説明文（genshin-db）に継続時間が 1 つだけ書いてあればそれを優先し（D33）、無ければ gcsim の値。意味が無いものは持たない
+        const fromText = noDuration ? [] : [...new Set(findDurations(data?.description ?? '').map(d => d.value))];
+        const textDuration = fromText.length === 1 ? fromText[0] : undefined;
         const def: ConstellationBuffDefinition = {
-          id: `${char.id}_c${level}`,
+          id: defId,
           level: level as ConstellationLevel,
           name: data?.name ?? `${level}凸`,
-          duration: s.duration,
+          ...(noDuration ? {} : { duration: textDuration ?? s.duration }),
           ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
           ...(data?.description ? { description: data.description } : {}),
-          dataSource: { duration: `gcsim: ${s.durationKey}`, ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
+          dataSource: {
+            ...(noDuration ? {} : { duration: textDuration !== undefined ? 'genshin-db: 説明文の継続時間' : `gcsim: ${s.durationKey}` }),
+            ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}),
+          },
         };
+        if (textDuration !== undefined && Math.abs(textDuration - (s.duration ?? 0)) > 0.05) {
+          report.constellationDurationFromText.push({ id: defId, name: `${char.name} ${level}凸`, text: textDuration, gcsim: s.duration ?? 0 });
+        }
         applyLink(def, s);
+        if (noDuration) def.timing = 'conditional';
         effects.push(def);
         count(report, 'constellation', def);
         report.added.push({ id: def.id, name: `${char.name} ${level}凸「${def.name}」`, sourceName: char.name, duration: def.duration, keys: def.gcsimKeys ?? [] });

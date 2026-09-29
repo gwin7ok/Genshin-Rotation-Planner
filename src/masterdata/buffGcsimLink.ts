@@ -153,6 +153,12 @@ export const IGNORED_KEYS: Record<string, string> = {
   'iansan-c6': 'イアンサ 6凸: 運動量メーターの延長（EXCLUDED_CONSTELLATIONS）',
 };
 
+/** gcsim 対象外の固有天賦のうち、効果が元素スキル・爆発の効果（アクションのバー）の中で処理されているもの。理由の文言を、個別に書く */
+const TALENT_NOTE_OVERRIDES: Record<string, string> = {
+  '10000016-pyro_p2': 'ディルック: 黎明の炎元素付与の延長と炎ダメージ+20% は、gcsim では元素爆発の効果（diluc-q）の中で処理される。元素爆発の効果バーに反映される',
+  '10000037-cryo_p2': '甘雨: 降衆天華のエリア内の氷ダメージ+20% は、gcsim では元素爆発の効果（ganyu-field）の中で処理される。元素爆発の効果バーに反映される',
+};
+
 const tokensOf = (e: KeyCatalogEntry) => e.key.split('-');
 const hasToken = (e: KeyCatalogEntry, re: RegExp) => tokensOf(e).some(t => re.test(t));
 
@@ -304,6 +310,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         if (NO_DURATION_TALENTS[def.id] && s.gcsimTarget) s.timing = 'conditional';
         applyLink(def, s);
         applyNote(def, Boolean(key));
+        if (!def.gcsimTarget && TALENT_NOTE_OVERRIDES[def.id]) def.gcsimNote = TALENT_NOTE_OVERRIDES[def.id];
         if (!NO_DURATION_TALENTS[def.id]) fillFromGcsim(def, s, report);
         count(report, 'talent', def);
       }

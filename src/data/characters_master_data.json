@@ -6171,7 +6171,7 @@
         "dataSource": {},
         "timing": "conditional",
         "gcsimTarget": false,
-        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+        "gcsimNote": "ディルック: 黎明の炎元素付与の延長と炎ダメージ+20% は、gcsim では元素爆発の効果（diluc-q）の中で処理される。元素爆発の効果バーに反映される"
       }
     ],
     "source": {
@@ -11401,7 +11401,7 @@
         "dataSource": {},
         "timing": "conditional",
         "gcsimTarget": false,
-        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+        "gcsimNote": "甘雨: 降衆天華のエリア内の氷ダメージ+20% は、gcsim では元素爆発の効果（ganyu-field）の中で処理される。元素爆発の効果バーに反映される"
       }
     ],
     "source": {

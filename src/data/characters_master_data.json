@@ -13658,7 +13658,8 @@
           "from": "holdEnd",
           "delay": 0.833
         },
-        "cooldownPerHold": 0.5
+        "cooldownPerHold": 0.5,
+        "holdInFrames": 10
       },
       {
         "id": "10000053-anemo_e_shorthold",
@@ -15637,7 +15638,8 @@
           "from": "holdEnd",
           "delay": 0.233
         },
-        "cooldownPerHold": 0.4
+        "cooldownPerHold": 0.4,
+        "holdInFrames": 10
       },
       {
         "id": "10000061-dendro_e_shorthold",

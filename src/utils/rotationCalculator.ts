@@ -224,10 +224,23 @@ export function calculateRotation(
       const duration = Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
 
+      // 長押しの秒数（CT開始位置が「長押し終了」のアクション）: 所要時間 −（ホールド 0 のときのモーション）。
+      // モーション = 次に続くアクションに応じたキャンセルフレーム。frames に長押しが含まれる分（holdInFrames）は差し引く
+      const cooldownStart = actionDef?.cooldownStart;
+      let holdSeconds: number | undefined;
+      if (cooldownStart?.from === 'holdEnd') {
+        const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
+        const motionFrames = frames ? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total : undefined;
+        holdSeconds = motionFrames === undefined
+          ? 0
+          : Number(Math.max(0, duration - (motionFrames / 60 - (actionDef?.holdInFrames ?? 0))).toFixed(3));
+      }
+
       const computedAction: CharacterActionInstance = {
         ...act,
         hasCTCollision: false,
         collisionRemainingCT: undefined,
+        ...(holdSeconds !== undefined ? { holdSeconds } : {}),
         duration,
         startTime: actionStartTime,
         endTime: actionEndTime,
@@ -236,7 +249,15 @@ export function calculateRotation(
 
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
       // 個別に変更された CT があれば優先
-      const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
+      // （長押しで長さが変わるものは、ホールド 0 のときの値 + 長押し 1 秒あたりの増分 × ホールド秒数）
+      const cooldown = act.cooldown ?? Number(((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)).toFixed(3));
+      // CTの開始位置（動作開始からの遅れ）。マスターの値。未設定は動作開始と同時
+      // 動作開始から / 長押し終了から / 状態の終了から（状態の長さは効果継続時間。無ければアクションの終了）
+      const effectSeconds = act.effectDuration ?? actionDef?.effectDuration ?? 0;
+      const ctOffset = Number((cooldownStart
+        ? cooldownStart.delay + (cooldownStart.from === 'holdEnd' ? holdSeconds ?? 0 : cooldownStart.from === 'stateEnd' ? (effectSeconds > 0 ? effectSeconds : duration) : 0)
+        : 0).toFixed(3));
+      const ctStartTime = Number((actionStartTime + ctOffset).toFixed(3));
 
       // CT に関わるスキル・爆発なのにアクション定義が見つからない（旧データの編成など）: CT を判定できないことを知らせる
       if (!actionDef && (isSkill || act.type === 'burst') && act.cooldown === undefined) {
@@ -260,6 +281,7 @@ export function calculateRotation(
           ctEvents.push({
             key: `${char.id}:skill`,
             time: actionStartTime,
+            ctOffset,
             cooldown,
             checked: act.type !== 'skill_reset',
             stintIndex: sIdx,
@@ -277,8 +299,8 @@ export function calculateRotation(
             id: `cd_skill_${char.id}_${actionStartTime}`,
             characterId: char.id,
             type: 'skill',
-            startTime: actionStartTime,
-            endTime: actionStartTime + cooldown,
+            startTime: ctStartTime,
+            endTime: Number((ctStartTime + cooldown).toFixed(3)),
             duration: cooldown,
             actionInstanceId: act.id,
           };
@@ -293,6 +315,7 @@ export function calculateRotation(
           ctEvents.push({
             key: `${char.id}:burst`,
             time: actionStartTime,
+            ctOffset,
             cooldown,
             checked: true,
             stintIndex: sIdx,
@@ -310,8 +333,8 @@ export function calculateRotation(
             id: `cd_burst_${char.id}_${actionStartTime}`,
             characterId: char.id,
             type: 'burst',
-            startTime: actionStartTime,
-            endTime: actionStartTime + cooldown,
+            startTime: ctStartTime,
+            endTime: Number((ctStartTime + cooldown).toFixed(3)),
             duration: cooldown,
             actionInstanceId: act.id,
           };
@@ -383,6 +406,7 @@ export function calculateRotation(
       ctEvents.push({
         key: `${char.id}:passive:${trigger.passiveEffectId}`,
         time: startTime,
+        ctOffset: 0,
         cooldown,
         checked: true,
         stintIndex: sIdx,
@@ -461,13 +485,16 @@ export function calculateRotation(
     // 1. スキルCTの2周目折り返し
     for (const cd of skillCooldowns) {
       if (cd.endTime > totalDuration + 0.02) {
-        const overflow = Number((cd.endTime - totalDuration).toFixed(3));
-        const wrapEnd = Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3)));
+        // CTの開始が周の終端より後（CT開始位置の遅れ）なら、折り返し後もその分だけ遅れて始まる
+        const wrapDelay = Math.max(0, cd.startTime - totalDuration);
+        const overflow = Number((cd.endTime - totalDuration - wrapDelay).toFixed(3));
+        const wrapStart = Number((loopStartTime + wrapDelay).toFixed(3));
+        const wrapEnd = Math.min(totalDuration, Number((wrapStart + overflow).toFixed(3)));
         carryOverCooldowns.push({
           id: `wrap_cd_skill_${cd.id}`,
           characterId: cd.characterId,
           type: 'skill',
-          startTime: loopStartTime,
+          startTime: wrapStart,
           endTime: wrapEnd,
           duration: overflow,
           actionInstanceId: cd.actionInstanceId,
@@ -481,13 +508,16 @@ export function calculateRotation(
     // 2. 元素爆発CTの2周目折り返し
     for (const cd of burstCooldowns) {
       if (cd.endTime > totalDuration + 0.02) {
-        const overflow = Number((cd.endTime - totalDuration).toFixed(3));
-        const wrapEnd = Math.min(totalDuration, Number((loopStartTime + overflow).toFixed(3)));
+        // CTの開始が周の終端より後（CT開始位置の遅れ）なら、折り返し後もその分だけ遅れて始まる
+        const wrapDelay = Math.max(0, cd.startTime - totalDuration);
+        const overflow = Number((cd.endTime - totalDuration - wrapDelay).toFixed(3));
+        const wrapStart = Number((loopStartTime + wrapDelay).toFixed(3));
+        const wrapEnd = Math.min(totalDuration, Number((wrapStart + overflow).toFixed(3)));
         carryOverCooldowns.push({
           id: `wrap_cd_burst_${cd.id}`,
           characterId: cd.characterId,
           type: 'burst',
-          startTime: loopStartTime,
+          startTime: wrapStart,
           endTime: wrapEnd,
           duration: overflow,
           actionInstanceId: cd.actionInstanceId,
@@ -542,6 +572,8 @@ interface CooldownEvent {
   key: string;
   /** 1周目の時間軸での発動時刻 */
   time: number;
+  /** 発動時刻から CT の開始までの秒数（CT開始位置。発動バフは 0） */
+  ctOffset: number;
   /** この発動が開始する CT（0 なら CT を開始しない） */
   cooldown: number;
   /** CT 中の発動を違反として扱うか（祭礼リセットなど CT 中でも撃てるものは false） */
@@ -609,6 +641,6 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     if (item.event.checked && end > item.time + CT_TOLERANCE_SEC) {
       item.event.onViolation(Number((end - item.time).toFixed(1)), item.cycle);
     }
-    if (item.event.cooldown > 0) cooldownEnd.set(item.event.key, item.time + item.event.cooldown);
+    if (item.event.cooldown > 0) cooldownEnd.set(item.event.key, item.time + item.event.ctOffset + item.event.cooldown);
   }
 }

@@ -63,6 +63,8 @@ export interface ActionDefinition {
   cooldownStart?: CooldownStart;
   /** 長押し 1 秒あたりの CT の増分（秒）。CT の長さ = cooldown + cooldownPerHold × ホールド秒数（早柚・綺良々） */
   cooldownPerHold?: number;
+  /** frames（gcsim のモーションフレーム）に含まれる長押しの秒数（早柚・綺良々は最大ホールド 10 秒込み）。ホールド秒数 = 所要時間 −（モーション − これ）（D36・D47） */
+  holdInFrames?: number;
   effectDuration?: number;  // このアクションの効果持続時間 (秒)
   frames?: ActionFrames;    // gcsim モーションフレーム
   /**
@@ -98,6 +100,8 @@ export interface CharacterActionInstance {
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
+  /** 長押し（CT開始位置が holdEnd）の秒数。所要時間から逆算した計算値。計算時にだけ付く */
+  holdSeconds?: number;
   /** アクション状態の窓の中の E（CT・効果バーを持たない）。計算時にだけ付く */
   inStateWindow?: boolean;
   /** CT未回復（CT衝突）フラグ */

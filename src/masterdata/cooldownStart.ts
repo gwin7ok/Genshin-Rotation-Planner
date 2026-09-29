@@ -114,6 +114,8 @@ export interface CooldownStartResolution {
   cooldownPerHold?: number;
   /** ホールド 0 のときの CT（秒）。あればマスターの cooldown をこの値にする */
   baseCooldown?: number;
+  /** frames に含まれる長押しの秒数 */
+  holdInFrames?: number;
   /** 出典（dataSource.cooldownStart） */
   source?: string;
   status: 'read' | 'manual' | 'unresolved';
@@ -173,6 +175,7 @@ export function resolveCooldownStart(actionId: string, calls: CooldownCall[] | u
       cooldownStart: { from: manual.from, delay: framesToSeconds(manual.delayFrames) },
       ...(manual.cooldownPerHold !== undefined ? { cooldownPerHold: manual.cooldownPerHold } : {}),
       ...(manual.baseCooldown !== undefined ? { baseCooldown: manual.baseCooldown } : {}),
+      ...(manual.holdInFrames !== undefined ? { holdInFrames: framesToSeconds(manual.holdInFrames) } : {}),
       source: `manual: ${manual.note}`,
       status: 'manual',
       ...(mismatch ? { mismatch } : {}),

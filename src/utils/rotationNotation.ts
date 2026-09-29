@@ -1,4 +1,5 @@
 import { CharacterConfig, Stint } from '../types/genshin';
+import { actionDisplayName } from './characterActions';
 
 const isSwapAction = (a: Stint['actions'][number]) =>
   a.type === 'swap' || a.actionTypeId === 'action_switch_char';
@@ -17,7 +18,7 @@ export function buildRotationNotation(
   const charMap = new Map(characters.map(c => [c.id, c.name]));
   const parts = stints.map(s => {
     const charName = charMap.get(s.characterId) || '不明';
-    const acts = s.actions.filter(a => !isSwapAction(a)).map(a => a.shortName).join(' ');
+    const acts = s.actions.filter(a => !isSwapAction(a)).map(actionDisplayName).join(' ');
     return `${charName}(${acts})`;
   });
   if (parts.length === 0) return '';

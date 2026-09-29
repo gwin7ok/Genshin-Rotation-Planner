@@ -33,6 +33,8 @@ export function linkCharacters(characters: CharacterConfig[]): void {
   for (const d of report.durationFilled) console.log(`    ${d.name} (${d.id}) = ${d.duration}s (${d.source})`);
   console.log(`  命ノ星座の継続時間を説明文の値にした（gcsim の値と食い違うもの）: ${report.constellationDurationFromText.length} 件`);
   for (const c of report.constellationDurationFromText) console.log(`    ${c.name} = ${c.text}s（gcsim ${c.gcsim}s）`);
+  console.log(`  未確認のキー（定義に対応付けておらず、確認済みの一覧にも無い）: ${report.unreviewedKeys.length} 件`);
+  for (const k of report.unreviewedKeys) console.log(`    ${k}`);
   const s = report.constellationSkipped;
   console.log(`  命ノ星座の効果の定義を追加: ${report.added.length} 件（永続のみで定義にしなかった凸 ${s.permanentOnly}、時間が分からず定義にしなかった凸 ${s.unknownDuration}、凸の番号が分からないキー ${s.noLevel}）`);
 }

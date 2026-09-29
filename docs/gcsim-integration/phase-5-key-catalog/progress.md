@@ -49,3 +49,4 @@
 | 2026-09-29 | 5-6 の確認後の修正: 継続時間を持たない固有天賦 6 件（`NO_DURATION_TALENTS`）。gcsim の補完 13 → 7 件。固有天賦の分類: 常時 47・gcsim 計算 71・条件付き 13・gcsim 対象外 143 |
 | 2026-09-29 | 命ノ星座の効果の調査結果を反映: `NO_DURATION_CONSTELLATIONS`（16 定義。継続時間なし・条件付き）、`EXCLUDED_CONSTELLATIONS`（イアンサ 6凸）、説明文の継続時間を優先（8 件を gcsim の値から変更）。`passiveEffects.ts` の `findDurations` を再利用。命ノ星座の効果 151 定義（gcsim 計算 135・条件付き 16）。DB バージョン 25 |
 | 2026-09-29 | 結び付けの全件確認（D52 の確認）: 辞書に登録関数名を追加（`KeySource.func`）、`slotOfEntry`（関数名とキー名から枠を決める）に変更。全件の一覧: `link-review.md` |
+| 2026-09-29 | 結び付けの未解決分の解決（D52 の確認）: `gcsimExtraKeys` / `gcsimNote` を追加、パターンのキーを対応付け、CT のみの定義を対象に、`IGNORED_KEYS`（12 件）と「未確認のキー」の報告（0 件）を追加。固有天賦 274（常時 46・gcsim 計算 83・条件付き 27・対象外 118）、命ノ星座 160 定義 |

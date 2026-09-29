@@ -42,7 +42,6 @@ export function indexCatalog(catalog: Pick<KeyCatalog, 'entries'>): CatalogIndex
   const byOwner = new Map<string, KeyCatalogEntry[]>();
   const shared: KeyCatalogEntry[] = [];
   for (const e of catalog.entries) {
-    if (e.isPattern) continue;
     if (e.owner.type === 'weapon' && e.owner.gcsimKey === 'common') {
       shared.push(e);
       continue;
@@ -132,6 +131,28 @@ export function slotOfEntry(e: KeyCatalogEntry, kind: 'a' | 'c'): number | undef
   return fromFunc.size === 1 ? [...fromFunc][0] : undefined;
 }
 
+/**
+ * 定義に対応付けないと確認したキー（固有天賦・命ノ星座のファイルで登録されているが、アプリの発動バフの定義にならないもの）。キー → 理由。
+ * 新しい gcsim で増えたキーは、マスター生成のレポートの「未確認のキー」に出るので、ここに理由を書くか、規則を直す
+ */
+export const IGNORED_KEYS: Record<string, string> = {
+  // ヘクセライ（魔女会）系の追加の固有天賦。固有天賦 1・2 の枠に属さず、アプリに定義が無い
+  'fischl-hexerei-atkp': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'fischl-hexerei-em': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'mona-hexerei-astral-glow-vaporize': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'mona-astral-glow': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'sucrose-hexerei-burst': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'sucrose-hexerei-skill': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'prune-hex-self-buff': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  'prune-hex-team-buff': 'ヘクセライの追加の固有天賦（アプリに定義が無い）',
+  // 枠（a1 / a4）が読めない固有天賦
+  'kokomi-passive': '枠が読めない固有天賦（関数名 passive）',
+  'arlecchino-passive': '枠が読めない固有天賦（関数名 passive）',
+  // スキル・爆発の効果に付随するもの
+  'omen-debuff': 'モナ: スキル・爆発の効果（星異のデバフ）',
+  'iansan-c6': 'イアンサ 6凸: 運動量メーターの延長（EXCLUDED_CONSTELLATIONS）',
+};
+
 const tokensOf = (e: KeyCatalogEntry) => e.key.split('-');
 const hasToken = (e: KeyCatalogEntry, re: RegExp) => tokensOf(e).some(t => re.test(t));
 
@@ -143,6 +164,7 @@ const isTimed = (e: KeyCatalogEntry) => !e.permanent && (e.durationFrames ?? 0) 
 
 interface Summary extends Required<Pick<GcsimBuffLink, 'timing' | 'gcsimTarget'>> {
   gcsimKeys?: string[];
+  gcsimExtraKeys?: string[];
   gcsimCooldownKeys?: string[];
   /** 時間つきの効果のうち最長（秒） */
   duration?: number;
@@ -157,6 +179,15 @@ interface Summary extends Required<Pick<GcsimBuffLink, 'timing' | 'gcsimTarget'>
 
 /** 辞書のキー（効果・発動間隔）から、分類と対応キーをまとめる */
 function summarize(entries: KeyCatalogEntry[]): Summary {
+  const s = summarizeMain(entries);
+  // 主のキー（gcsimKeys）に入らない効果のキーは、extra として残す（永続・時間が分からない・短い判定）
+  const main = new Set(s.gcsimKeys ?? []);
+  const extra = entries.filter(e => e.kind === 'effect' && !main.has(e.key)).map(e => e.key);
+  if (extra.length > 0) s.gcsimExtraKeys = extra;
+  return s;
+}
+
+function summarizeMain(entries: KeyCatalogEntry[]): Summary {
   const effects = entries.filter(e => e.kind === 'effect');
   const cooldowns = entries.filter(e => e.kind === 'cooldown');
   const timed = effects.filter(isTimed);
@@ -182,7 +213,20 @@ function summarize(entries: KeyCatalogEntry[]): Summary {
   }
   if (permanent.length > 0) return { timing: 'always', gcsimTarget: true, gcsimKeys: permanent.map(e => e.key), ...cooldownInfo };
   if (effects.length > 0) return { timing: 'conditional', gcsimTarget: true, gcsimKeys: effects.map(e => e.key), ...cooldownInfo };
+  // 効果のキーは無いが、発動間隔（CT）のキーがある: gcsim が CT を持つ（CT のバーに使える）ので、対象にする
+  if (cooldowns.length > 0) return { timing: 'conditional', gcsimTarget: true, ...cooldownInfo };
   return { timing: 'conditional', gcsimTarget: false, ...cooldownInfo };
+}
+
+/** gcsim 対象外の理由（画面のホバーの説明。D41） */
+function applyNote(def: GcsimBuffLink, hasGcsim: boolean): void {
+  if (def.gcsimTarget) {
+    delete def.gcsimNote;
+    return;
+  }
+  def.gcsimNote = hasGcsim
+    ? 'gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない'
+    : 'gcsim が未実装';
 }
 
 /** 定義に、対応キーと分類を書く（gcsim のキーが無ければ「対象外」） */
@@ -191,6 +235,7 @@ function applyLink(def: GcsimBuffLink, s: Summary): void {
   def.gcsimTarget = s.gcsimTarget;
   if (s.gcsimKeys?.length) def.gcsimKeys = s.gcsimKeys; else delete def.gcsimKeys;
   if (s.gcsimCooldownKeys?.length) def.gcsimCooldownKeys = s.gcsimCooldownKeys; else delete def.gcsimCooldownKeys;
+  if (s.gcsimExtraKeys?.length) def.gcsimExtraKeys = s.gcsimExtraKeys; else delete def.gcsimExtraKeys;
 }
 
 // ---------------------------------------------------------------------------
@@ -208,10 +253,12 @@ export interface BuffLinkReport {
   constellationSkipped: { permanentOnly: number; unknownDuration: number; noLevel: number };
   /** 命ノ星座の効果の継続時間を、説明文（genshin-db）の値にしたもの（gcsim の値と食い違うもの） */
   constellationDurationFromText: Array<{ id: string; name: string; text: number; gcsim: number }>;
+  /** 固有天賦・命ノ星座のファイルのキーで、定義に対応付けておらず、確認済みの一覧にも無いもの（要確認。0 件になるように IGNORED_KEYS に理由を書く） */
+  unreviewedKeys: string[];
 }
 
 export const emptyBuffLinkReport = (): BuffLinkReport => ({
-  counts: {}, durationFilled: [], added: [], constellationSkipped: { permanentOnly: 0, unknownDuration: 0, noLevel: 0 }, constellationDurationFromText: [],
+  counts: {}, durationFilled: [], added: [], constellationSkipped: { permanentOnly: 0, unknownDuration: 0, noLevel: 0 }, constellationDurationFromText: [], unreviewedKeys: [],
 });
 
 function count(report: BuffLinkReport, kind: string, def: GcsimBuffLink): void {
@@ -256,6 +303,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         // 継続時間に意味が無い固有天賦は、条件付き扱い（継続時間は補わない）
         if (NO_DURATION_TALENTS[def.id] && s.gcsimTarget) s.timing = 'conditional';
         applyLink(def, s);
+        applyNote(def, Boolean(key));
         if (!NO_DURATION_TALENTS[def.id]) fillFromGcsim(def, s, report);
         count(report, 'talent', def);
       }
@@ -308,6 +356,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         }
         applyLink(def, s);
         if (noDuration) def.timing = 'conditional';
+        applyNote(def, true);
         effects.push(def);
         count(report, 'constellation', def);
         report.added.push({ id: def.id, name: `${char.name} ${level}凸「${def.name}」`, sourceName: char.name, duration: def.duration, keys: def.gcsimKeys ?? [] });
@@ -315,6 +364,21 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
     }
     if (effects.length > 0) char.constellationEffects = effects;
     else delete char.constellationEffects;
+
+    // 固有天賦・命ノ星座のファイルで登録された効果のキーのうち、どの定義にも対応付けておらず、確認済みの一覧（IGNORED_KEYS）にも無いもの
+    const used = new Set<string>([
+      ...(char.passiveEffects ?? []).flatMap(p => [...(p.gcsimKeys ?? []), ...(p.gcsimExtraKeys ?? [])]),
+      ...(char.constellationEffects ?? []).flatMap(c => [...(c.gcsimKeys ?? []), ...(c.gcsimExtraKeys ?? [])]),
+    ]);
+    for (const e of entries) {
+      if (e.kind !== 'effect' || used.has(e.key) || IGNORED_KEYS[e.key]) continue;
+      const inAsc = e.sources.some(s => /[/]asc[.]go$/.test(s.file));
+      const inCons = e.sources.some(s => /[/]cons[.]go$/.test(s.file));
+      if (!inAsc && !inCons) continue;
+      // 命ノ星座は、時間つきの効果だけを定義にする方針（永続・時間が分からない・短い判定は定義にしない）
+      if (!inAsc && !isTimed(e)) continue;
+      report.unreviewedKeys.push(`${char.name}: ${e.key}`);
+    }
   }
   return report;
 }
@@ -363,6 +427,7 @@ export function linkEquipmentBuffs(
     if (defs.length > 0) {
       for (const def of defs) {
         applyLink(def, s);
+        applyNote(def, Boolean(w.gcsimKey));
         count(report, 'weapon', def);
       }
     } else if (s.timing === 'computed') {
@@ -388,6 +453,7 @@ export function linkEquipmentBuffs(
     const s = summarize(entries);
     for (const def of a.buffEffects ?? []) {
       applyLink(def, s);
+      applyNote(def, Boolean(a.gcsimKey));
       count(report, 'artifact', def);
     }
   }

@@ -1,7 +1,25 @@
 import React from 'react';
 import { CharacterConfig, PassiveTriggerInstance, Stint } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
-import { TriggerableBuffDefinition, getAvailableBuffsForCharacter, getBuffBadgeConfig } from '../utils/buffUtils';
+import {
+  GCSIM_OUT_OF_SCOPE_DEFAULT_REASON,
+  TriggerableBuffDefinition,
+  getAvailableBuffsForCharacter,
+  getBuffBadgeConfig,
+  isGcsimOutOfScope,
+  isGlobalRowBuff,
+} from '../utils/buffUtils';
+
+/** 「gcsim 対象外」のバッジ（gcsim の計算結果では置かれず、手動で置いたときだけ表示される。D41-3・D53） */
+const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ def }) =>
+  isGcsimOutOfScope(def) ? (
+    <span
+      className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 font-normal shrink-0"
+      title={def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON}
+    >
+      gcsim対象外
+    </span>
+  ) : null;
 
 interface StintBuffTriggersSectionProps {
   stintIndex: number;
@@ -73,10 +91,11 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
     onUpdatePassiveTriggers(stintIndex, list => list.filter(t => t.id !== triggerId));
   };
 
-  // カテゴリ別の利用可能バフ
-  const talentBuffs = availableBuffs.filter(b => b.category === 'talent');
-  const weaponBuffs = availableBuffs.filter(b => b.category === 'weapon');
-  const artifactBuffs = availableBuffs.filter(b => b.category === 'artifact');
+  // カテゴリ別の利用可能バフ。常時の効果・継続時間の無い固有天賦は、全体の行にだけ出す（D40-4）
+  const trackBuffs = availableBuffs.filter(b => !isGlobalRowBuff(b));
+  const talentBuffs = trackBuffs.filter(b => b.category === 'talent');
+  const weaponBuffs = trackBuffs.filter(b => b.category === 'weapon');
+  const artifactBuffs = trackBuffs.filter(b => b.category === 'artifact');
 
   return (
     <div className="mt-2.5 pt-2 border-t border-dashed border-slate-700/80 flex flex-wrap items-center gap-2">
@@ -108,6 +127,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
             <span className="font-semibold max-w-[180px] truncate" title={trigger.name}>
               {trigger.name}
             </span>
+            {matchedDef && <GcsimOutOfScopeBadge def={matchedDef} />}
             <span className="text-[10px] font-mono text-slate-400" title="発動位置（出場の先頭から）。ガントチャートでドラッグして調整">
               @+{trigger.offset.toFixed(2)}s
             </span>
@@ -145,9 +165,11 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
       <div className="basis-full flex flex-wrap items-center gap-1.5 mt-1">
         <span className="text-[11px] text-slate-400 font-medium">+ 登録:</span>
 
-        {availableBuffs.length === 0 ? (
+        {trackBuffs.length === 0 ? (
           <span className="text-[11px] text-slate-500 italic">
-            発動バフデータがありません（編成設定で武器・聖遺物を選ぶと追加できます）
+            {availableBuffs.length > 0
+              ? '時間のある発動バフはありません（常時・時間の無い効果は、ガントチャートの「全体の行」に表示されます）'
+              : '発動バフデータがありません（編成設定で武器・聖遺物を選ぶと追加できます）'}
           </span>
         ) : (
           <>
@@ -162,6 +184,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               >
                 <span>🎯</span>
                 <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
 
@@ -176,6 +199,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               >
                 <span>⚔️</span>
                 <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
 
@@ -190,6 +214,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               >
                 <span>🛡️</span>
                 <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
           </>

@@ -1,4 +1,4 @@
-import { CharacterConfig } from '../types/genshin';
+import { BuffTiming, CharacterConfig } from '../types/genshin';
 import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
@@ -16,7 +16,29 @@ export interface TriggerableBuffDefinition {
   description?: string;            // 詳細説明文
   color?: string;                  // ガントチャート表示色
   statEffectSummary?: string;      // バフ効果要約
+  timing?: BuffTiming;             // gcsim との分類（always = 常時 / computed / conditional）
+  gcsimTarget?: boolean;           // false = gcsim 対象外（手動でのみ置く）
+  gcsimNote?: string;              // gcsim 対象外の理由
 }
+
+/** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
+export const GCSIM_OUT_OF_SCOPE_DEFAULT_REASON = 'gcsim に状態のキーが無い(または未対応)ため、gcsim の計算結果では置かれません。手動で置いたときだけ表示されます';
+
+/** 「gcsim 対象外」のバッジの表示が必要か */
+export const isGcsimOutOfScope = (def: Pick<TriggerableBuffDefinition, 'gcsimTarget'>): boolean => def.gcsimTarget === false;
+
+/**
+ * 全体の行に出す発動バフか（D39-4・D40-3・D40-4）。
+ *   - 常時の効果（gcsim の効果が切れない）
+ *   - 継続時間の無い固有天賦（時間が無いので出場キャラのトラックには置かない）
+ * それ以外（時間のある効果）は、出場キャラのトラックのボタンにする
+ */
+export const isGlobalRowBuff = (def: Pick<TriggerableBuffDefinition, 'timing' | 'category' | 'duration'>): boolean =>
+  def.timing === 'always' || (def.category === 'talent' && !(def.duration && def.duration > 0));
+
+/** 全体の行の表示名の先頭に付ける分類（既定は「条件付き」。辞書で確認できたものだけ「常時」） */
+export const buffTimingLabel = (def: Pick<TriggerableBuffDefinition, 'timing'>): '常時' | '条件付き' =>
+  def.timing === 'always' ? '常時' : '条件付き';
 
 /**
  * 指定されたキャラクターが発動可能な全バフ（固有天賦・装備武器・装備聖遺物）を収集する
@@ -40,6 +62,9 @@ export function getAvailableBuffsForCharacter(
         cooldown: p.cooldown,
         description: p.description,
         color: character.color || '#84cc16',
+        timing: p.timing,
+        gcsimTarget: p.gcsimTarget,
+        gcsimNote: p.gcsimNote,
       });
     }
   }
@@ -72,6 +97,9 @@ export function getAvailableBuffsForCharacter(
           description: b.description,
           color,
           statEffectSummary,
+          timing: b.timing,
+          gcsimTarget: b.gcsimTarget,
+          gcsimNote: b.gcsimNote,
         });
       }
     }
@@ -119,6 +147,9 @@ export function getAvailableBuffsForCharacter(
           description: b.description,
           color,
           statEffectSummary,
+          timing: b.timing,
+          gcsimTarget: b.gcsimTarget,
+          gcsimNote: b.gcsimNote,
         });
       }
     }

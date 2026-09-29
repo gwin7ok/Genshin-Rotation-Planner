@@ -131,3 +131,11 @@ gcsim の詳細ログに出てくるバフ・状態・内部CTのキー名（例
 | 5-6 | 発動バフの候補と分類 | 辞書から、gcsim にだけある時間付きの効果を、ボタンの候補として作り、「常時」「条件付き」「gcsim 対象外」の分類の項目を付ける（D28・D40・D41） | 発動バフの定義、分類の項目 |
 
 **確認**: マスターを全件削除 → 再生成 → 登録した状態で行う。5-1: 再生成の前後で生成物の差が 0 件。5-2a・b: 未判定キーの一覧。5-3: フィッシュルなどの効果時間。5-4・5-5: 旅人(水)の hE だけの編成のCT違反の判定。5-6: 追加されたボタンの一覧。
+
+## 5-1 の実装（2026-09-29）
+
+- 照合表: `src/data/gcsim_key_map.json`（区画: characters / weapons / artifacts。各区画は gcsimCommit・records（マスターのキー・公式ID・名前・gcsim キー・source: dm.json | manual）・genshinOnly・gcsimOnly）。
+- 更新方法（選択肢1B）: マスター生成（`npm run build:master` はキャラ、`npm run build:equipment` は武器・聖遺物）のたびに作り直し、自分の区画だけを書き換える。アプリ内の動的生成も、同じ処理で表を作って引く（ファイルには保存しない）。
+- 突き合わせ失敗の記録（選択肢2A）: genshinOnly（gcsim 対象外）と gcsimOnly を表に残す。
+- 実装: `src/masterdata/gcsimKeyMap.ts`（`buildKeyMapSection`）、`characterMasterGenerator.ts`・`equipmentMasterGenerator.ts`（表から gcsimKey を引く）、`scripts/write-key-map.ts`。
+- 旅人（空・蛍）: 公式IDが元素に関わらず共通なので、手で補う（`10000005-<元素>` ↔ `aether<元素>`、`10000007-<元素>` ↔ `lumine<元素>`）。

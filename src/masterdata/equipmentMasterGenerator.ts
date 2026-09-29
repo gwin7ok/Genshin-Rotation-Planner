@@ -13,6 +13,7 @@
 import type { WeaponDatabaseItem, ArtifactSetDatabaseItem, WeaponRefinementData } from '../types/database';
 import type { WeaponType } from '../types/genshin';
 import { parseWeaponBuffs, parseArtifactBuffs } from './equipmentBuffParser.ts';
+import { buildKeyMapSection, keyMapLookup, type GcsimDmData, type KeyMapSection } from './gcsimKeyMap.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
@@ -87,6 +88,8 @@ export interface EquipmentMasterResult {
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
   report: EquipmentGenerationReport;
+  /** 照合表（武器・聖遺物の分）。生成のたびに作り直す */
+  keyMap: { weapons: KeyMapSection; artifacts: KeyMapSection };
 }
 
 // 武器種マッピング
@@ -526,13 +529,13 @@ export async function generateArtifactsMasterOnline(
   return { artifacts: artifactsList, report };
 }
 
-type GcsimDm = { data: Record<string, { id: number; key: string }> };
+type GcsimDm = { data: GcsimDmData };
 
-/** gcsim の公式ID → キー対応表（武器・聖遺物）。同じコミットの内容を読む */
+/** gcsim の dm.json（武器・聖遺物）。同じコミットの内容を読む */
 async function fetchGcsimEquipmentKeys(): Promise<{
   commit: string;
-  weaponKeyById: Map<number, string>;
-  artifactKeyById: Map<number, string>;
+  weaponDm: GcsimDmData;
+  artifactDm: GcsimDmData;
 }> {
   const { sha } = await fetchJson<{ sha: string }>(
     `https://api.github.com/repos/${GCSIM_REPO}/commits/${GCSIM_BRANCH}`,
@@ -543,19 +546,25 @@ async function fetchGcsimEquipmentKeys(): Promise<{
     fetchJson<GcsimDm>(rawBase + GCSIM_WEAPON_DM_PATH),
     fetchJson<GcsimDm>(rawBase + GCSIM_ARTIFACT_DM_PATH),
   ]);
-  const toMap = (dm: GcsimDm) => new Map(Object.values(dm.data).map(e => [e.id, e.key]));
-  return { commit: sha, weaponKeyById: toMap(weaponDm), artifactKeyById: toMap(artifactDm) };
+  return { commit: sha, weaponDm: weaponDm.data, artifactDm: artifactDm.data };
 }
 
-/** 公式IDで突き合わせて gcsimKey を設定し、対応の無かったものを "名前 (ID)" で返す */
-function attachGcsimKeys(items: Array<{ id: string; name: string; gcsimKey?: string }>, keyById: Map<number, string>): string[] {
-  const missing: string[] = [];
+/**
+ * 照合表（D34）を作り、公式IDで突き合わせた gcsimKey を設定する。
+ * 対応の無かったものは "名前 (ID)" で返す（照合表の genshinOnly と同じ）
+ */
+function attachGcsimKeys(
+  items: Array<{ id: string; name: string; gcsimKey?: string }>,
+  dm: GcsimDmData,
+  commit: string,
+): { keyMap: KeyMapSection; missing: string[] } {
+  const keyMap = buildKeyMapSection(items.map(i => ({ id: i.id, genshinId: Number(i.id), name: i.name })), dm, commit);
+  const keyById = keyMapLookup(keyMap);
   for (const item of items) {
-    const key = keyById.get(Number(item.id));
+    const key = keyById.get(item.id);
     if (key) item.gcsimKey = key;
-    else missing.push(`${item.name} (${item.id})`);
   }
-  return missing;
+  return { keyMap, missing: keyMap.genshinOnly.map(m => `${m.name} (${m.id})`) };
 }
 
 /**
@@ -578,8 +587,10 @@ export async function generateEquipmentMaster(
 
   onProgress?.({ phase: 'gcsim のキー対応表を取得中...', done: 4, total: 4 });
   const gcsim = await fetchGcsimEquipmentKeys();
-  const weaponsWithoutGcsimKey = attachGcsimKeys(weapons, gcsim.weaponKeyById);
-  const artifactsWithoutGcsimKey = attachGcsimKeys(artifacts, gcsim.artifactKeyById);
+  const weaponMap = attachGcsimKeys(weapons, gcsim.weaponDm, gcsim.commit);
+  const artifactMap = attachGcsimKeys(artifacts, gcsim.artifactDm, gcsim.commit);
+  const weaponsWithoutGcsimKey = weaponMap.missing;
+  const artifactsWithoutGcsimKey = artifactMap.missing;
 
   const combinedReport: EquipmentGenerationReport = {
     generatedAt: new Date().toISOString(),
@@ -601,5 +612,6 @@ export async function generateEquipmentMaster(
     weapons,
     artifacts,
     report: combinedReport,
+    keyMap: { weapons: weaponMap.keyMap, artifacts: artifactMap.keyMap },
   };
 }

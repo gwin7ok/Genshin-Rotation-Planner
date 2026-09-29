@@ -111,8 +111,27 @@ export interface CharacterActionInstance {
   collisionRemainingCT?: number;
 }
 
+/**
+ * 発動バフの、gcsim との対応と分類（フェーズ5 / 5-6、D28・D38〜D41・D52）
+ *   - always      … 常時（gcsim の効果が切れない。ガントチャートの全体の行に出す）
+ *   - computed    … gcsim が発動位置と時間を計算する（辞書に時間つきの効果のキーがある。書き戻しの対象）
+ *   - conditional … 条件付き（既定。gcsim が計算しない・辞書で確認できないもの）
+ */
+export type BuffTiming = 'always' | 'conditional' | 'computed';
+
+export interface GcsimBuffLink {
+  /** 対応する gcsim の効果のキー（辞書 gcsim_key_catalog.json）。複数あるときは、各キーを別のバーにする（D38-1） */
+  gcsimKeys?: string[];
+  /** 対応する gcsim の発動間隔（CT）のキー */
+  gcsimCooldownKeys?: string[];
+  /** 分類 */
+  timing?: BuffTiming;
+  /** gcsim の対象か。false のとき、画面に「gcsim 対象外」の印を付ける（gcsim 未実装のキャラ、gcsim に効果のキーが無いもの。D28-3・D41） */
+  gcsimTarget?: boolean;
+}
+
 /** 固有天賦の効果（マスターデータ）。発動位置はユーザーがアクション構築・ガントチャートで決める */
-export interface PassiveEffectDefinition {
+export interface PassiveEffectDefinition extends GcsimBuffLink {
   id: string;
   /** 表示名（固有天賦名。効果が複数ある場合は「名前 (30秒)」） */
   name: string;
@@ -127,6 +146,21 @@ export interface PassiveEffectDefinition {
 }
 
 export type ConstellationLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+/**
+ * 命ノ星座の効果（マスターデータ）。gcsim に時間つきの効果のキーがある凸だけが定義になる。
+ * 凸数が level 以上のときだけ、発動バフとして出せる。常時の効果（切れない効果）は定義にせず、辞書から直接扱う
+ */
+export interface ConstellationBuffDefinition extends GcsimBuffLink {
+  id: string;
+  level: ConstellationLevel;
+  /** 命ノ星座の名前 */
+  name: string;
+  duration?: number;
+  cooldown?: number;
+  description?: string;
+  dataSource?: { duration?: string; cooldown?: string };
+}
 
 /** 命ノ星座の1段階（マスターデータ） */
 export interface CharacterConstellationData {
@@ -249,6 +283,8 @@ export interface CharacterConfig {
   passiveEffects?: PassiveEffectDefinition[];
   /** 命ノ星座（1〜6凸）の段階データ。凸数以下の段階を累積で適用する */
   constellations?: CharacterConstellationData[];
+  /** 命ノ星座の効果（gcsim に時間つきの効果のキーがある凸。発動バフの候補。5-6） */
+  constellationEffects?: ConstellationBuffDefinition[];
 
   /** ユーザーが DB 管理画面で作成・編集したキャラ */
   isCustom?: boolean;

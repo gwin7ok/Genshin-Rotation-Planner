@@ -200,3 +200,11 @@ gcsim の詳細ログに出てくるバフ・状態・内部CTのキー名（例
 - gcsim による補完: `src/masterdata/effectDurationOverrides.ts`（アクション定義 ID → gcsim のフレーム・根拠）。生成時、genshin-db に効果時間が無いアクションにだけ入れ、`dataSource.effectDuration` に「gcsim: 根拠」を記録する。genshin-db に値があって食い違うものは、genshin-db を優先し、レポートに出す。一覧にあるがアクションが無いものも、レポートに出す。
 - 候補の表示: `npm run build:master` が、効果時間が空のスキル・爆発のうち、gcsim の辞書に「そのキャラのスキル / 爆発の、時間つきで永続でない効果」があるものを、候補として表示する（自動では採用しない）。
 - 新キャラ実装時の手順は `docs/新キャラ実装時の作業.md` に記載。
+
+## 5-6 の実装（2026-09-29 / D52）
+
+- 結び付け: `src/masterdata/buffGcsimLink.ts`。辞書のキーの分類（効果・CT）と、時間つき（30 フレーム以上で永続でない）・永続を見て、`timing` を決める（時間つきのキーがあれば computed、永続のみなら always、他は conditional。辞書に効果のキーが無ければ gcsimTarget = false）。
+- 対応付け: 固有天賦 = キーの名前の `a1` / `a4`（同じ枠に定義が複数なら継続時間が合うキー。a1 / a4 の名前が無いキャラは、固有天賦のファイルで登録された時間つきのキーを、継続時間が合う定義へ）。命ノ星座 = 名前の `c1`〜`c6`。武器 = 持ち主の全ての効果のキー + 共有パッケージのキー（`SHARED_WEAPON_RULES`）。聖遺物 = セットの効果のキーのうち 2 セット（`2pc`）を除く。
+- 補完（D33）: genshin-db に継続時間・CT が無い固有天賦の定義に、gcsim の値（2 秒以上の時間つきの効果の最長、確認用の `check` キーは除く）を入れる。出典は `dataSource`（「gcsim: キー」）。
+- 呼び出し: `npm run build:master` / `build:equipment`（`scripts/link-buffs.ts`）と、アプリの動的生成（`databaseService.ts`。辞書は動的インポート）。辞書が無いときは何もしない。
+- 新キャラ・新武器の手順は `docs/新キャラ実装時の作業.md` の項目 3。

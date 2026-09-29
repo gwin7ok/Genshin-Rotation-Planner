@@ -17,6 +17,15 @@ import {
   type EquipmentGenerationReport,
 } from '../masterdata/equipmentMasterGenerator';
 
+import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs } from '../masterdata/buffGcsimLink';
+import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
+
+/** 発動バフと gcsim の辞書の結び付け（5-6）用。辞書は大きいので、動的生成のときだけ読み込む */
+async function loadCatalogIndex() {
+  const catalog = (await import('../data/gcsim_key_catalog.json')).default as unknown as KeyCatalog;
+  return indexCatalog(catalog);
+}
+
 const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
 
 const isCustomCharacter = (c: CharacterConfig) => c.id.startsWith('custom_') || !!c.isCustom;
@@ -162,6 +171,7 @@ export async function syncCharactersMasterOnline(
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
   const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
+  linkCharacterBuffs(latestChars, await loadCatalogIndex());
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
@@ -240,6 +250,7 @@ export async function syncEquipmentMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: EquipmentGenerationReport }> {
   const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
+  linkEquipmentBuffs(latestWeapons, latestArtifacts, await loadCatalogIndex());
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
     currentDb.weapons,

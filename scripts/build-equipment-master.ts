@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { generateEquipmentMaster } from '../src/masterdata/equipmentMasterGenerator.ts';
 import { updateKeyMapFile, printKeyMapSummary, keyMapPath } from './write-key-map.ts';
+import { linkEquipment } from './link-buffs.ts';
 
 const weaponsOutputPath = path.join(process.cwd(), 'src/data/weapons_master_data.json');
 const artifactsOutputPath = path.join(process.cwd(), 'src/data/artifacts_master_data.json');
@@ -18,6 +19,7 @@ const { weapons, artifacts, report, keyMap } = await generateEquipmentMaster(p =
   console.log(`[${p.phase}] ${p.done}/${p.total}`);
 });
 
+linkEquipment(weapons, artifacts); // 発動バフと gcsim の辞書の結び付け（5-6）
 fs.writeFileSync(weaponsOutputPath, JSON.stringify(weapons, null, 2) + '\n', 'utf-8');
 fs.writeFileSync(artifactsOutputPath, JSON.stringify(artifacts, null, 2) + '\n', 'utf-8');
 updateKeyMapFile({ weapons: keyMap.weapons, artifacts: keyMap.artifacts });

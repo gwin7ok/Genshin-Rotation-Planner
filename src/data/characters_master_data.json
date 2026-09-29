@@ -474,7 +474,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
-        "effectDuration": 0,
+        "effectDuration": 10.667,
         "frames": {
           "total": 90,
           "hitmark": 40,
@@ -487,6 +487,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: jean/burst.go: jean-q",
           "cooldownStart": "burst.go:38"
         },
         "defaultDuration": 1.5,
@@ -1264,7 +1265,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
-        "effectDuration": 0,
+        "effectDuration": 12,
         "frames": {
           "total": 58,
           "hitmark": 91,
@@ -1275,6 +1276,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "草蓮灯存在時間",
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.967,
@@ -3566,7 +3568,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 20,
-        "effectDuration": 0,
+        "effectDuration": 12,
         "frames": {
           "total": 58,
           "hitmark": 91,
@@ -3577,6 +3579,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "草蓮灯存在時間",
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.967,
@@ -8382,7 +8385,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 12,
-        "effectDuration": 0,
+        "effectDuration": 3.1,
         "frames": {
           "total": 139,
           "hitmark": 101,
@@ -8395,6 +8398,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "石化時間",
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.317,
@@ -8601,7 +8605,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 25,
-        "effectDuration": 0,
+        "effectDuration": 10,
         "frames": {
           "total": 43,
           "cancels": {
@@ -8613,6 +8617,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "オズの存在時間",
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.717,
@@ -8646,7 +8651,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,
-        "effectDuration": 0,
+        "effectDuration": 10,
         "frames": {
           "total": 148,
           "hitmark": 18,
@@ -8659,6 +8664,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: fischl/burst.go: オズ（skill.go の oz-active と同じ）",
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.467,
@@ -11472,7 +11478,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 7.5,
-        "effectDuration": 0,
+        "effectDuration": 5.333,
         "frames": {
           "total": 37,
           "hitmark": 25,
@@ -11487,6 +11493,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: keqing/skill.go: keqingstiletto",
           "cooldownStart": "skill.go:20"
         },
         "defaultDuration": 0.617,
@@ -13260,7 +13267,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 9,
-        "effectDuration": 0,
+        "effectDuration": 10,
         "frames": {
           "total": 46,
           "hitmark": 32,
@@ -13275,6 +13282,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: yanfei/burst.go: yanfei-seal（印は元素スキルで付与）",
           "cooldownStart": "skill.go:28"
         },
         "defaultDuration": 0.767,
@@ -14898,7 +14906,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 20,
-        "effectDuration": 0,
+        "effectDuration": 12,
         "frames": {
           "total": 61,
           "hitmark": 24,
@@ -14910,6 +14918,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "存在時間",
           "cooldownStart": "skill.go:20"
         },
         "defaultDuration": 1.017,
@@ -16800,7 +16809,7 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 15,
-        "effectDuration": 0,
+        "effectDuration": 12,
         "frames": {
           "total": 58,
           "cancels": {
@@ -16814,6 +16823,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "ニャルダモン存在時間",
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.967,
@@ -20429,7 +20439,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 6,
-        "effectDuration": 0,
+        "effectDuration": 20,
         "frames": {
           "total": 28,
           "cancels": {},
@@ -20437,6 +20447,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: wanderer/skill.go: windfavored-state",
           "cooldownStart": "manual: wanderer/skill.go: skillEndRoutine() の SetCD(6秒)"
         },
         "defaultDuration": 0.467,
@@ -23152,7 +23163,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 10,
-        "effectDuration": 0,
+        "effectDuration": 10,
         "frames": {
           "total": 46,
           "hitmark": 29,
@@ -23167,6 +23178,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: freminet/skill.go: freminet-pers-time",
           "cooldownStart": "skill.go:35"
         },
         "defaultDuration": 0.767,
@@ -25694,7 +25706,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 16,
-        "effectDuration": 0,
+        "effectDuration": 17,
         "frames": {
           "total": 51,
           "cancels": {
@@ -25709,6 +25721,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "「たもと」の存在時間",
           "cooldownStart": "manual: chiori/skill.go: skillCDStarts[0]"
         },
         "defaultDuration": 0.85,
@@ -26260,7 +26273,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 30,
-        "effectDuration": 0,
+        "effectDuration": 30,
         "frames": {
           "total": 77,
           "cancels": {
@@ -26275,6 +26288,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: arlecchino/skill.go: directive",
           "cooldownStart": "skill.go:16"
         },
         "defaultDuration": 1.283,
@@ -27578,7 +27592,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 6,
-        "effectDuration": 0,
+        "effectDuration": 10,
         "frames": {
           "total": 69,
           "cancels": {
@@ -27593,6 +27607,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: mualani/skill.go: marked-as-prey",
           "cooldownStart": "manual: mualani/skill.go: cancelNightsoul() の SetCD(6秒)"
         },
         "defaultDuration": 1.15,
@@ -27850,7 +27865,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 7,
-        "effectDuration": 0,
+        "effectDuration": 15,
         "frames": {
           "total": 20,
           "cancels": {
@@ -27863,6 +27878,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "サンプル音源のアクティブ時間",
           "cooldownStart": "manual: xilonen/skill.go: exitNightsoul() の SetCD(7秒)"
         },
         "defaultDuration": 0.333,
@@ -29707,7 +29723,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 16,
-        "effectDuration": 0,
+        "effectDuration": 5,
         "frames": {
           "total": 137,
           "hitmark": 9,
@@ -29723,6 +29739,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: iansan/skill.go: fast-skill",
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.283,

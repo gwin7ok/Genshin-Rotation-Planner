@@ -18,6 +18,7 @@ import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
+import { EFFECT_DURATION_OVERRIDES } from './effectDurationOverrides.ts';
 import { parseCooldownCalls, resolveCooldownStart, type CooldownCall, type CooldownStartResolution } from './cooldownStart.ts';
 import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, type ManualKeyMapping } from './gcsimKeyMap.ts';
 
@@ -147,6 +148,13 @@ export interface CharacterGenerationReport {
   unresolvedGoLines: Array<{ characterId: string; file: string; count: number }>;
   /** 落下攻撃 LP / HP（D48）: 生成した件数と、plunge.go はあるのにフレーム表を選べなかったキャラ */
   plunge: { lowCount: number; highCount: number; unresolved: Array<{ characterId: string; name: string }> };
+  /** 効果継続時間の gcsim による補完（D33 / 5-3）: 補った件数・genshin-db の値との食い違い（genshin-db を優先） */
+  effectDuration: {
+    supplemented: Array<{ characterId: string; name: string; actionId: string; seconds: number; source: string }>;
+    mismatches: Array<{ characterId: string; name: string; actionId: string; genshinDb: number; gcsim: number }>;
+    /** 一覧にあるのに、対応するアクションが無い（キャラ・アクションの ID の変更・削除） */
+    orphans: string[];
+  };
   /** CT開始位置（D37 / D44）: 自動で読めた件数・手で補った件数・未設定の一覧・手で補う値との食い違い */
   cooldownStart: {
     read: number;
@@ -257,13 +265,13 @@ function findLabel(
   return undefined;
 }
 
-/** "〜継続時間" で終わるラベルのうち最初のもの (延長・CT 系は除外) */
+/** "〜継続時間" / "〜存在時間" / "〜石化時間" / "〜アクティブ時間" で終わるラベルのうち最初のもの (延長・長押し・CT 系は除外) */
 function findAnyDuration(combat: GenshinDbTalentCombat | undefined, exclude: RegExp): LabeledValue | undefined {
   const labels = combat?.attributes?.labels ?? [];
   const params = combat?.attributes?.parameters ?? {};
   for (const label of labels) {
     const title = label.split('|')[0].trim();
-    if (!/継続時間$/.test(title) || exclude.test(title)) continue;
+    if (!/(継続時間|存在時間|石化時間|アクティブ時間)$/.test(title) || exclude.test(title)) continue;
     const values = labelValues(label, params);
     if (values.length > 0) return { value: values[0], label: title };
   }
@@ -669,6 +677,7 @@ export async function generateCharacterMaster(
     missingCooldowns: [],
     unresolvedGoLines: [],
     plunge: { lowCount: 0, highCount: 0, unresolved: [] },
+    effectDuration: { supplemented: [], mismatches: [], orphans: [] },
     cooldownStart: { read: 0, manual: 0, unresolved: [], mismatches: [] },
     constellations: emptyConstellationReport(),
     errors,
@@ -856,6 +865,20 @@ export async function generateCharacterMaster(
       report.plunge.unresolved.push({ characterId: u.id, name: u.name });
     }
 
+    // 効果継続時間の補完（D33 / 5-3）: genshin-db に値が無いものだけ、gcsim の値（手で補う一覧）を入れる。genshin-db に値があれば、それを優先し、食い違いだけ記録する
+    for (const a of actions) {
+      const o = EFFECT_DURATION_OVERRIDES[a.id];
+      if (!o) continue;
+      const seconds = framesToSec(o.frames);
+      if (a.effectDuration && a.effectDuration > 0) {
+        if (Math.abs(a.effectDuration - seconds) > 0.05) report.effectDuration.mismatches.push({ characterId: u.id, name: u.name, actionId: a.id, genshinDb: a.effectDuration, gcsim: seconds });
+        continue;
+      }
+      a.effectDuration = seconds;
+      a.dataSource = { ...a.dataSource, effectDuration: `gcsim: ${o.source}` };
+      report.effectDuration.supplemented.push({ characterId: u.id, name: u.name, actionId: a.id, seconds, source: o.source });
+    }
+
     // CT開始位置（D37 / D44）: スキル・爆発のアクションに、gcsim の遅れ（または手で補った値）を持たせる
     for (const a of actions) {
       if (!a.startsSkillCooldown && !a.startsBurstCooldown) continue;
@@ -911,6 +934,9 @@ export async function generateCharacterMaster(
     if (u.constellation) character.constellations = buildConstellations(character, u.constellation, report.constellations);
     characters.push(character);
   }
+
+  const allActionIds = new Set(characters.flatMap(c => c.availableActions.map(a => a.id)));
+  report.effectDuration.orphans = Object.keys(EFFECT_DURATION_OVERRIDES).filter(id => !allActionIds.has(id));
 
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;

@@ -11,6 +11,7 @@ import {
   PassiveSpan,
 } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
+import type { CancelTarget } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
@@ -50,6 +51,23 @@ export interface RotationOptions {
   loopStartIndex?: number;
 }
 
+/** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代 */
+function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: string): CancelTarget | undefined {
+  if (!next) return 'swap';
+  switch (next.type) {
+    case 'normal': return 'attack';
+    case 'charged': return weaponType === 'bow' ? 'aim' : 'charge';
+    case 'skill':
+    case 'skill_hold':
+    case 'skill_reset': return 'skill';
+    case 'burst': return 'burst';
+    case 'dash': return 'dash';
+    case 'jump': return 'jump';
+    case 'plunge': return 'lowPlunge';
+    default: return undefined; // 待機など: 全体のフレーム
+  }
+}
+
 export function calculateRotation(
   characters: CharacterConfig[],
   rawStints: Stint[],
@@ -68,7 +86,7 @@ export function calculateRotation(
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
   // アクション状態の窓（キャラごと）
-  const stateWindows = new Map<string, { end: number; usesLeft?: number }>();
+  const stateWindows = new Map<string, { end: number; usesLeft?: number; used: number }>();
 
   // CT を持つ発動（スキル・爆発・発動バフ）。CT違反の判定はすべて計算後にまとめて行う（checkCooldownViolations）
   const ctEvents: CooldownEvent[] = [];
@@ -155,14 +173,53 @@ export function calculateRotation(
       // CT・効果継続時間はアクション定義ごとに持つ（凸の変更を適用済み）
       const actionDef = charActions.find(a => a.id === act.actionTypeId);
 
-      // 通常攻撃: 所要時間が未編集なら、連続した N の段ごとの値を自動で使う（最大段数を超えたら1段目に戻る）
-      let autoDuration: number | undefined;
+      // アクション状態の規則辞書: 窓（ニィロウの pirouette など）の中の E か、窓の中の何回目か
+      let inStateWindow = false;
+      let stageIndex = 0;
+      const rule = ACTION_STATE_RULES[char.id];
+      if (rule && act.type === 'skill' && act.actionTypeId === `${char.id}_e`) {
+        const win = stateWindows.get(char.id);
+        if (win && actionStartTime < win.end && (win.usesLeft === undefined || win.usesLeft > 0)) {
+          inStateWindow = true;
+          stageIndex = win.used;
+          win.used += 1;
+          if (win.usesLeft !== undefined) {
+            win.usesLeft -= 1;
+            if (win.usesLeft <= 0) stateWindows.delete(char.id);
+          }
+        } else {
+          stateWindows.set(char.id, { end: actionStartTime + rule.windowSeconds, usesLeft: rule.maxUses, used: 0 });
+        }
+      }
+
+      // 通常攻撃: 連続した N の段（gcsim と同じく、他のアクションを挟むと1段目に戻り、最大段数を超えたら1段目に戻る）
+      let frames = actionDef?.frames;
+      let hitFallbackDuration: number | undefined;
       if (act.type === 'normal') {
         const hits = actionDef?.normalHits;
-        if (hits && hits.length > 0 && !act.durationManual) autoDuration = hits[normalStreak % hits.length].duration;
+        if (hits && hits.length > 0) {
+          const hit = hits[normalStreak % hits.length];
+          frames = hit.frames ?? frames;
+          hitFallbackDuration = hit.duration;
+        }
         normalStreak += 1;
       } else {
         normalStreak = 0;
+      }
+      if (inStateWindow && rule?.stageFrames?.length) {
+        frames = rule.stageFrames[Math.min(stageIndex, rule.stageFrames.length - 1)];
+      }
+
+      // 所要時間: 編集済み（durationManual）ならその値。未編集なら、次に続くアクションに応じたキャンセルフレーム
+      // （出場の最後は次が交代）。フレームが無いアクションは、登録時の値を使う
+      let autoDuration: number | undefined;
+      if (!act.durationManual) {
+        if (frames) {
+          const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
+          autoDuration = Number((((nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) / 60).toFixed(3));
+        } else {
+          autoDuration = hitFallbackDuration;
+        }
       }
       const duration = Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
@@ -178,7 +235,6 @@ export function calculateRotation(
       computedActions.push(computedAction);
 
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
-      let inStateWindow = false;
       // 個別に変更された CT があれば優先
       const cooldown = act.cooldown ?? actionDef?.cooldown ?? 0;
 
@@ -197,21 +253,7 @@ export function calculateRotation(
       }
 
       if (isSkill) {
-        // アクション状態の規則辞書: 窓（ニィロウの pirouette など）の中の E は、CTを開始しない・効果バーも出さない
-        const rule = ACTION_STATE_RULES[char.id];
-        if (rule && act.actionTypeId === `${char.id}_e` && act.type === 'skill') {
-          const win = stateWindows.get(char.id);
-          if (win && actionStartTime < win.end && (win.usesLeft === undefined || win.usesLeft > 0)) {
-            inStateWindow = true;
-            computedAction.inStateWindow = true;
-            if (win.usesLeft !== undefined) {
-              win.usesLeft -= 1;
-              if (win.usesLeft <= 0) stateWindows.delete(char.id);
-            }
-          } else {
-            stateWindows.set(char.id, { end: actionStartTime + rule.windowSeconds, usesLeft: rule.maxUses });
-          }
-        }
+        computedAction.inStateWindow = inStateWindow || undefined;
         // CTを開始しない派生技は、CTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
         const isTriggeringAction = actionDef?.startsSkillCooldown !== false && !inStateWindow;
         if (isTriggeringAction) {

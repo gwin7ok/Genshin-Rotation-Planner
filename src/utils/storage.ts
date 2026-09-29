@@ -1,12 +1,12 @@
-import { CharacterConfig, Stint, SavedRotationSlot } from '../types/genshin';
-import { migrateLegacyCharacter } from './legacyMigration';
+import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types/genshin';
 import { isEmptySlotCharacter } from '../data/characters';
 
 const ACTIVE_ROTATION_KEY = 'genshin_rotation_current_state_v2';
 const SAVED_SLOTS_KEY = 'genshin_rotation_saved_slots_v2';
 
 export interface ActiveRotationState {
-  characters: CharacterConfig[];
+  /** 編成（キャラの ID と編成ごとの設定） */
+  party: PartyMember[];
   stints: Stint[];
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0始まり、0=基準なし） */
   loopStartIndex?: number;
@@ -43,8 +43,8 @@ export function loadActiveState(): ActiveRotationState | null {
     const raw = localStorage.getItem(ACTIVE_ROTATION_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (parsed && Array.isArray(parsed.characters) && Array.isArray(parsed.stints)) {
-      return { ...parsed, characters: parsed.characters.map(migrateLegacyCharacter) } as ActiveRotationState;
+    if (parsed && Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
+      return parsed as ActiveRotationState;
     }
   } catch (e) {
     console.warn('Failed to load active rotation from localStorage:', e);
@@ -72,11 +72,10 @@ export function getSavedSlots(): SavedRotationSlot[] {
     if (!raw) return [];
     const list = JSON.parse(raw);
     if (Array.isArray(list)) {
-      return (list as SavedRotationSlot[]).map(slot => ({
-        ...slot,
-        characters: (slot.characters ?? []).map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>)),
-        stints: slot.stints ?? [],
-      }));
+      // 旧形式（キャラを丸ごと持つ）の保存編成は読み込まない（D13）
+      return (list as SavedRotationSlot[])
+        .filter(slot => Array.isArray(slot.party))
+        .map(slot => ({ ...slot, stints: slot.stints ?? [] }));
     }
   } catch (e) {
     console.warn('Failed to load saved slots from localStorage:', e);

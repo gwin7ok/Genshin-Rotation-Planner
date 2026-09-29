@@ -13,15 +13,14 @@ import { HelpGuideModal } from './components/HelpGuideModal';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
-import { CharacterConfig, Stint, SavedRotationSlot } from './types/genshin';
+import { PartyMember, Stint, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
-import { migrateLegacyCharacter } from './utils/legacyMigration';
+import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, dropMissingMembers } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { buildRotationNotation } from './utils/rotationNotation';
-import { isEmptySlotCharacter, createEmptySlotCharacter } from './data/characters';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
 function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: number, loopPeriod: number) {
@@ -31,8 +30,6 @@ function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: nu
   return { time: loopStartTime + (sinceLoop - lap * loopPeriod), cycle: lap + 2 };
 }
 
-const createEmptyParty = (): CharacterConfig[] => Array.from({ length: 4 }, (_, i) => createEmptySlotCharacter(i));
-
 export default function App() {
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
   const [database, setDatabase] = useState<AppDatabase>(() => loadDatabase());
@@ -40,18 +37,22 @@ export default function App() {
   // 1. Initial State from LocalStorage (Auto-restore) or empty party
   const savedInitialState = useMemo(() => loadActiveState(), []);
 
-  const [characters, setCharacters] = useState<CharacterConfig[]>(() => {
-    if (savedInitialState && savedInitialState.characters?.length > 0) {
-      return savedInitialState.characters;
+  // 編成はキャラの ID と編成ごとの設定だけを持ち、キャラのデータは DB から引く
+  const [party, setParty] = useState<PartyMember[]>(() => {
+    if (savedInitialState && savedInitialState.party?.length > 0) {
+      return savedInitialState.party;
     }
     return createEmptyParty();
   });
+  const characters = useMemo(() => resolvePartyCharacters(party, database.characters), [party, database.characters]);
   const [stints, setStints] = useState<Stint[]>(() => {
     if (savedInitialState && savedInitialState.stints?.length > 0) {
       return savedInitialState.stints;
     }
     return [];
   });
+  // DB に無いキャラの出場ブロックは、計算・表示から除く（保存データには残す）
+  const visibleStints = useMemo(() => filterStintsForCharacters(stints, characters), [stints, characters]);
   // Character switch delay (default 0.50s or restored from storage)
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
@@ -63,7 +64,7 @@ export default function App() {
   // 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし）。旧データの秒数は番号へ変換
   const [loopStartIndex, setLoopStartIndex] = useState<number>(() => {
     if (!savedInitialState) return 0;
-    return resolveLoopStartIndex(savedInitialState, characters, stints, { switchDelay, actionDelay });
+    return resolveLoopStartIndex(savedInitialState, characters, visibleStints, { switchDelay, actionDelay });
   });
 
   // User saved rotation slots (shown in the header's 編成選択) & currently loaded slot
@@ -88,19 +89,19 @@ export default function App() {
   // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
   useEffect(() => {
     saveActiveState({
-      characters,
+      party,
       stints,
       loopStartIndex,
       switchDelay,
       actionDelay,
       activeSlotId,
     });
-  }, [characters, stints, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
+  }, [party, stints, loopStartIndex, switchDelay, actionDelay, activeSlotId]);
 
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, stints, { switchDelay, actionDelay, database, loopStartIndex });
-  }, [characters, stints, switchDelay, actionDelay, database, loopStartIndex]);
+    return calculateRotation(characters, visibleStints, { switchDelay, actionDelay, database, loopStartIndex });
+  }, [characters, visibleStints, switchDelay, actionDelay, database, loopStartIndex]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -127,9 +128,9 @@ export default function App() {
 
   // 出場キャラの削除などで基準番号が出場キャラの数を超えたら、基準を解除して先頭に戻す
   useEffect(() => {
-    const normalized = normalizeLoopStartIndex(loopStartIndex, stints.length);
+    const normalized = normalizeLoopStartIndex(loopStartIndex, visibleStints.length);
     if (normalized !== loopStartIndex) setLoopStartIndex(normalized);
-  }, [loopStartIndex, stints.length]);
+  }, [loopStartIndex, visibleStints.length]);
 
   // 6. Playback Animation Loop
   // 再生順: 1周目(0s 〜 totalDuration) → ループ開始点(loopStartTime)へ戻り周回数を+1
@@ -165,7 +166,7 @@ export default function App() {
 
   // 8. Handle Custom Slot Loading
   const handleLoadCustomSlot = (slot: {
-    characters: CharacterConfig[];
+    party: PartyMember[];
     stints: Stint[];
     loopStartIndex?: number;
     loopStartTime?: number;
@@ -173,10 +174,10 @@ export default function App() {
     actionDelay?: number;
     slotId?: string;
   }) => {
-    const loadedChars = slot.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
-    const loadedStints = slot.stints;
-    setCharacters(loadedChars);
-    setStints(loadedStints);
+    const loadedChars = resolvePartyCharacters(slot.party, database.characters);
+    const loadedStints = filterStintsForCharacters(slot.stints, loadedChars);
+    setParty(slot.party);
+    setStints(slot.stints);
     setLoopStartIndex(resolveLoopStartIndex(slot, loadedChars, loadedStints, slot));
     setSwitchDelay(slot.switchDelay ?? 0.50);
     setActionDelay(slot.actionDelay ?? 0.10);
@@ -185,7 +186,7 @@ export default function App() {
 
   // 9. Reset to the initial state (empty party)
   const handleResetToDefault = () => {
-    setCharacters(createEmptyParty());
+    setParty(createEmptyParty());
     setStints([]);
     setLoopStartIndex(0);
     setSwitchDelay(0.50);
@@ -220,7 +221,7 @@ export default function App() {
     if (!slot) return;
     const updated = saveSlot({
       ...slot,
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -243,7 +244,7 @@ export default function App() {
       name,
       description,
       updatedAt: new Date().toISOString(),
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -265,7 +266,7 @@ export default function App() {
   // 12. Export / Import JSON
   const handleExportJson = () => {
     const data = {
-      characters,
+      party,
       stints,
       loopStartIndex,
       loopStartTime,
@@ -289,11 +290,12 @@ export default function App() {
     reader.onload = (ev) => {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
-        if (parsed.characters && parsed.stints) {
-          const importedChars: CharacterConfig[] = parsed.characters.map(migrateLegacyCharacter);
-          const importedStints: Stint[] = parsed.stints;
-          setCharacters(importedChars);
-          setStints(importedStints);
+        if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
+          const importedParty: PartyMember[] = parsed.party;
+          const importedChars = resolvePartyCharacters(importedParty, database.characters);
+          const importedStints: Stint[] = filterStintsForCharacters(parsed.stints, importedChars);
+          setParty(importedParty);
+          setStints(parsed.stints);
           setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay, actionDelay }));
           setActiveSlotId(null);
         } else {
@@ -317,7 +319,7 @@ export default function App() {
         overwriteSaved={overwriteSaved}
         onOpenSaveAs={() => setIsSaveAsOpen(true)}
         onSelectSavedSlot={(slot) => handleLoadCustomSlot({
-          characters: slot.characters,
+          party: slot.party,
           stints: slot.stints,
           loopStartIndex: slot.loopStartIndex,
           loopStartTime: slot.loopStartTime ?? 0,
@@ -368,11 +370,6 @@ export default function App() {
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}
           elapsedTime={elapsedTime}
-          onReorderCharacters={setCharacters}
-          onReorderCharactersAndStints={(newChars, newStints) => {
-            setCharacters(newChars);
-            setStints(newStints);
-          }}
           onUpdateStints={setStints}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
@@ -407,7 +404,9 @@ export default function App() {
       <SaveLoadModal
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
+        party={party}
         characters={characters}
+        database={database}
         stints={stints}
         loopStartTime={loopStartTime}
         loopStartIndex={loopStartIndex}
@@ -439,19 +438,19 @@ export default function App() {
       <PartyConfigModal
         isOpen={isPartyModalOpen}
         onClose={() => setIsPartyModalOpen(false)}
-        characters={characters}
-        stints={stints}
+        party={party}
+        stints={visibleStints}
         database={database}
-        onUpdatePartyAndStints={(newChars, newStints) => {
+        onUpdatePartyAndStints={(newParty, newStints) => {
           // メンバー自体（キャラIDの並び）が変わった場合のみ保存スロットとの紐付けを解除
           // メンバーを変えずに武器・聖遺物のみ変更した場合は、編成名（アクティブな保存スロット）を維持
           const memberIdsChanged =
-            newChars.length !== characters.length ||
-            newChars.some((c, i) => c.id !== characters[i]?.id);
+            newParty.length !== party.length ||
+            newParty.some((m, i) => m.characterId !== party[i]?.characterId);
           if (memberIdsChanged) {
             setActiveSlotId(null);
           }
-          setCharacters(newChars);
+          setParty(newParty);
           setStints(newStints);
         }}
       />
@@ -463,13 +462,11 @@ export default function App() {
         database={database}
         onUpdateDatabase={(newDb) => {
           setDatabase(newDb);
-          // Sync active party characters & stints with the updated database
-          const validIds = new Set(newDb.characters.map(c => c.id));
-          const nextActiveChars = characters.filter(c => validIds.has(c.id) || isEmptySlotCharacter(c));
-          if (nextActiveChars.length !== characters.length) {
-            setCharacters(nextActiveChars);
-            const nextStints = stints.filter(s => nextActiveChars.some(c => c.id === s.characterId));
-            setStints(nextStints);
+          // DB から削除されたキャラの枠は未設定枠に置き換える（キャラの編集内容は ID 参照なので自動で反映される）
+          const dropped = dropMissingMembers(party, stints, newDb.characters);
+          if (dropped.changed) {
+            setParty(dropped.party);
+            setStints(dropped.stints);
           }
         }}
       />

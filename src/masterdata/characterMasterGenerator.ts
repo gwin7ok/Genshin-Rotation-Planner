@@ -767,7 +767,6 @@ export async function generateCharacterMaster(
       avatarUrl: u.avatarUrl,
       color: ELEMENT_HEX[u.element],
       accentColor: ELEMENT_HEX[u.element],
-      energyRecharge: 100,
       availableActions: actions,
       passiveEffects: buildPassiveEffects(u.id, [u.talent?.passive1, u.talent?.passive2]),
       source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },

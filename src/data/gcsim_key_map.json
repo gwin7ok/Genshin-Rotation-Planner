@@ -1,0 +1,3077 @@
+{
+  "characters": {
+    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "records": [
+      {
+        "id": "10000121-hydro",
+        "genshinId": 10000121,
+        "name": "アイノ",
+        "gcsimKey": "aino",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000038-geo",
+        "genshinId": 10000038,
+        "name": "アルベド",
+        "gcsimKey": "albedo",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000078-dendro",
+        "genshinId": 10000078,
+        "name": "アルハイゼン",
+        "gcsimKey": "alhaitham",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000062-cryo",
+        "genshinId": 10000062,
+        "name": "アーロイ",
+        "gcsimKey": "aloy",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000021-pyro",
+        "genshinId": 10000021,
+        "name": "アンバー",
+        "gcsimKey": "amber",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000057-geo",
+        "genshinId": 10000057,
+        "name": "荒瀧一斗",
+        "gcsimKey": "aratakiitto",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000096-pyro",
+        "genshinId": 10000096,
+        "name": "アルレッキーノ",
+        "gcsimKey": "arlecchino",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000082-dendro",
+        "genshinId": 10000082,
+        "name": "白朮",
+        "gcsimKey": "baizhu",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000014-hydro",
+        "genshinId": 10000014,
+        "name": "バーバラ",
+        "gcsimKey": "barbara",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000024-electro",
+        "genshinId": 10000024,
+        "name": "北斗",
+        "gcsimKey": "beidou",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000032-pyro",
+        "genshinId": 10000032,
+        "name": "ベネット",
+        "gcsimKey": "bennett",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000072-hydro",
+        "genshinId": 10000072,
+        "name": "キャンディス",
+        "gcsimKey": "candace",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000088-cryo",
+        "genshinId": 10000088,
+        "name": "シャルロット",
+        "gcsimKey": "charlotte",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000104-anemo",
+        "genshinId": 10000104,
+        "name": "チャスカ",
+        "gcsimKey": "chasca",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000090-pyro",
+        "genshinId": 10000090,
+        "name": "シュヴルーズ",
+        "gcsimKey": "chevreuse",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000094-geo",
+        "genshinId": 10000094,
+        "name": "千織",
+        "gcsimKey": "chiori",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000036-cryo",
+        "genshinId": 10000036,
+        "name": "重雲",
+        "gcsimKey": "chongyun",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000107-cryo",
+        "genshinId": 10000107,
+        "name": "シトラリ",
+        "gcsimKey": "citlali",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000098-electro",
+        "genshinId": 10000098,
+        "name": "クロリンデ",
+        "gcsimKey": "clorinde",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000067-dendro",
+        "genshinId": 10000067,
+        "name": "コレイ",
+        "gcsimKey": "collei",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000125-hydro",
+        "genshinId": 10000125,
+        "name": "コロンビーナ",
+        "gcsimKey": "columbina",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000071-electro",
+        "genshinId": 10000071,
+        "name": "セノ",
+        "gcsimKey": "cyno",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000115-hydro",
+        "genshinId": 10000115,
+        "name": "ダリア",
+        "gcsimKey": "dahlia",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000079-pyro",
+        "genshinId": 10000079,
+        "name": "ディシア",
+        "gcsimKey": "dehya",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000016-pyro",
+        "genshinId": 10000016,
+        "name": "ディルック",
+        "gcsimKey": "diluc",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000039-cryo",
+        "genshinId": 10000039,
+        "name": "ディオナ",
+        "gcsimKey": "diona",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000068-electro",
+        "genshinId": 10000068,
+        "name": "ドリー",
+        "gcsimKey": "dori",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000123-pyro",
+        "genshinId": 10000123,
+        "name": "ドゥリン",
+        "gcsimKey": "durin",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000099-dendro",
+        "genshinId": 10000099,
+        "name": "エミリエ",
+        "gcsimKey": "emilie",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000112-cryo",
+        "genshinId": 10000112,
+        "name": "エスコフィエ",
+        "gcsimKey": "escoffier",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000051-cryo",
+        "genshinId": 10000051,
+        "name": "エウルア",
+        "gcsimKey": "eula",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000076-anemo",
+        "genshinId": 10000076,
+        "name": "ファルザン",
+        "gcsimKey": "faruzan",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000031-electro",
+        "genshinId": 10000031,
+        "name": "フィッシュル",
+        "gcsimKey": "fischl",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000120-electro",
+        "genshinId": 10000120,
+        "name": "フリンズ",
+        "gcsimKey": "flins",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000085-cryo",
+        "genshinId": 10000085,
+        "name": "フレミネ",
+        "gcsimKey": "freminet",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000089-hydro",
+        "genshinId": 10000089,
+        "name": "フリーナ",
+        "gcsimKey": "furina",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000092-pyro",
+        "genshinId": 10000092,
+        "name": "嘉明",
+        "gcsimKey": "gaming",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000037-cryo",
+        "genshinId": 10000037,
+        "name": "甘雨",
+        "gcsimKey": "ganyu",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000055-geo",
+        "genshinId": 10000055,
+        "name": "ゴロー",
+        "gcsimKey": "gorou",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000046-pyro",
+        "genshinId": 10000046,
+        "name": "胡桃",
+        "gcsimKey": "hutao",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000110-electro",
+        "genshinId": 10000110,
+        "name": "イアンサ",
+        "gcsimKey": "iansan",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000113-anemo",
+        "genshinId": 10000113,
+        "name": "イファ",
+        "gcsimKey": "ifa",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000127-geo",
+        "genshinId": 10000127,
+        "name": "イルーガ",
+        "gcsimKey": "illuga",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000116-electro",
+        "genshinId": 10000116,
+        "name": "イネファ",
+        "gcsimKey": "ineffa",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000124-anemo",
+        "genshinId": 10000124,
+        "name": "ヤフォダ",
+        "gcsimKey": "jahoda",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000003-anemo",
+        "genshinId": 10000003,
+        "name": "ジン",
+        "gcsimKey": "jean",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000047-anemo",
+        "genshinId": 10000047,
+        "name": "楓原万葉",
+        "gcsimKey": "kaedeharakazuha",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000015-cryo",
+        "genshinId": 10000015,
+        "name": "ガイア",
+        "gcsimKey": "kaeya",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000002-cryo",
+        "genshinId": 10000002,
+        "name": "神里綾華",
+        "gcsimKey": "kamisatoayaka",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000066-hydro",
+        "genshinId": 10000066,
+        "name": "神里綾人",
+        "gcsimKey": "kamisatoayato",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000081-dendro",
+        "genshinId": 10000081,
+        "name": "カーヴェ",
+        "gcsimKey": "kaveh",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000042-electro",
+        "genshinId": 10000042,
+        "name": "刻晴",
+        "gcsimKey": "keqing",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000101-dendro",
+        "genshinId": 10000101,
+        "name": "キィニチ",
+        "gcsimKey": "kinich",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000061-dendro",
+        "genshinId": 10000061,
+        "name": "綺良々",
+        "gcsimKey": "kirara",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000029-pyro",
+        "genshinId": 10000029,
+        "name": "クレー",
+        "gcsimKey": "klee",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000056-electro",
+        "genshinId": 10000056,
+        "name": "九条裟羅",
+        "gcsimKey": "kujousara",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000065-electro",
+        "genshinId": 10000065,
+        "name": "久岐忍",
+        "gcsimKey": "kukishinobu",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000108-anemo",
+        "genshinId": 10000108,
+        "name": "藍硯",
+        "gcsimKey": "lanyan",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000119-dendro",
+        "genshinId": 10000119,
+        "name": "ラウマ",
+        "gcsimKey": "lauma",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000074-cryo",
+        "genshinId": 10000074,
+        "name": "レイラ",
+        "gcsimKey": "layla",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000006-electro",
+        "genshinId": 10000006,
+        "name": "リサ",
+        "gcsimKey": "lisa",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000083-anemo",
+        "genshinId": 10000083,
+        "name": "リネット",
+        "gcsimKey": "lynette",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000084-pyro",
+        "genshinId": 10000084,
+        "name": "リネ",
+        "gcsimKey": "lyney",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000106-pyro",
+        "genshinId": 10000106,
+        "name": "マーヴィカ",
+        "gcsimKey": "mavuika",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000080-cryo",
+        "genshinId": 10000080,
+        "name": "ミカ",
+        "gcsimKey": "mika",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000041-hydro",
+        "genshinId": 10000041,
+        "name": "モナ",
+        "gcsimKey": "mona",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000102-hydro",
+        "genshinId": 10000102,
+        "name": "ムアラニ",
+        "gcsimKey": "mualani",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000073-dendro",
+        "genshinId": 10000073,
+        "name": "ナヒーダ",
+        "gcsimKey": "nahida",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000091-geo",
+        "genshinId": 10000091,
+        "name": "ナヴィア",
+        "gcsimKey": "navia",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000087-hydro",
+        "genshinId": 10000087,
+        "name": "ヌヴィレット",
+        "gcsimKey": "neuvillette",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000131-pyro",
+        "genshinId": 10000131,
+        "name": "ニコ",
+        "gcsimKey": "nicole",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000070-hydro",
+        "genshinId": 10000070,
+        "name": "ニィロウ",
+        "gcsimKey": "nilou",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000027-geo",
+        "genshinId": 10000027,
+        "name": "凝光",
+        "gcsimKey": "ningguang",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000034-geo",
+        "genshinId": 10000034,
+        "name": "ノエル",
+        "gcsimKey": "noelle",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000150-cryo",
+        "genshinId": 10000150,
+        "name": "オデット",
+        "gcsimKey": "odette",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000105-electro",
+        "genshinId": 10000105,
+        "name": "オロルン",
+        "gcsimKey": "ororon",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000132-anemo",
+        "genshinId": 10000132,
+        "name": "プルーネ",
+        "gcsimKey": "prune",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000035-cryo",
+        "genshinId": 10000035,
+        "name": "七七",
+        "gcsimKey": "qiqi",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000052-electro",
+        "genshinId": 10000052,
+        "name": "雷電将軍",
+        "gcsimKey": "raidenshogun",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000020-electro",
+        "genshinId": 10000020,
+        "name": "レザー",
+        "gcsimKey": "razor",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000045-cryo",
+        "genshinId": 10000045,
+        "name": "ロサリア",
+        "gcsimKey": "rosaria",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000054-hydro",
+        "genshinId": 10000054,
+        "name": "珊瑚宮心海",
+        "gcsimKey": "sangonomiyakokomi",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000053-anemo",
+        "genshinId": 10000053,
+        "name": "早柚",
+        "gcsimKey": "sayu",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000097-electro",
+        "genshinId": 10000097,
+        "name": "セトス",
+        "gcsimKey": "sethos",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000063-cryo",
+        "genshinId": 10000063,
+        "name": "申鶴",
+        "gcsimKey": "shenhe",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000059-anemo",
+        "genshinId": 10000059,
+        "name": "鹿野院平蔵",
+        "gcsimKey": "shikanoinheizou",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000095-hydro",
+        "genshinId": 10000095,
+        "name": "シグウィン",
+        "gcsimKey": "sigewinne",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000114-cryo",
+        "genshinId": 10000114,
+        "name": "スカーク",
+        "gcsimKey": "skirk",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000043-anemo",
+        "genshinId": 10000043,
+        "name": "スクロース",
+        "gcsimKey": "sucrose",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000033-hydro",
+        "genshinId": 10000033,
+        "name": "タルタリヤ",
+        "gcsimKey": "tartaglia",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000050-pyro",
+        "genshinId": 10000050,
+        "name": "トーマ",
+        "gcsimKey": "thoma",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000069-dendro",
+        "genshinId": 10000069,
+        "name": "ティナリ",
+        "gcsimKey": "tighnari",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000111-electro",
+        "genshinId": 10000111,
+        "name": "ヴァレサ",
+        "gcsimKey": "varesa",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000128-anemo",
+        "genshinId": 10000128,
+        "name": "ファルカ",
+        "gcsimKey": "varka",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000022-anemo",
+        "genshinId": 10000022,
+        "name": "ウェンティ",
+        "gcsimKey": "venti",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000075-anemo",
+        "genshinId": 10000075,
+        "name": "放浪者",
+        "gcsimKey": "wanderer",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000086-cryo",
+        "genshinId": 10000086,
+        "name": "リオセスリ",
+        "gcsimKey": "wriothesley",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000023-pyro",
+        "genshinId": 10000023,
+        "name": "香菱",
+        "gcsimKey": "xiangling",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000093-anemo",
+        "genshinId": 10000093,
+        "name": "閑雲",
+        "gcsimKey": "xianyun",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000026-anemo",
+        "genshinId": 10000026,
+        "name": "魈",
+        "gcsimKey": "xiao",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000103-geo",
+        "genshinId": 10000103,
+        "name": "シロネン",
+        "gcsimKey": "xilonen",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000025-hydro",
+        "genshinId": 10000025,
+        "name": "行秋",
+        "gcsimKey": "xingqiu",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000044-pyro",
+        "genshinId": 10000044,
+        "name": "辛炎",
+        "gcsimKey": "xinyan",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000058-electro",
+        "genshinId": 10000058,
+        "name": "八重神子",
+        "gcsimKey": "yaemiko",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000048-pyro",
+        "genshinId": 10000048,
+        "name": "煙緋",
+        "gcsimKey": "yanfei",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000077-dendro",
+        "genshinId": 10000077,
+        "name": "ヨォーヨ",
+        "gcsimKey": "yaoyao",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000060-hydro",
+        "genshinId": 10000060,
+        "name": "夜蘭",
+        "gcsimKey": "yelan",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000049-pyro",
+        "genshinId": 10000049,
+        "name": "宵宮",
+        "gcsimKey": "yoimiya",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000109-anemo",
+        "genshinId": 10000109,
+        "name": "夢見月瑞希",
+        "gcsimKey": "yumemizukimizuki",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000064-geo",
+        "genshinId": 10000064,
+        "name": "雲菫",
+        "gcsimKey": "yunjin",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000030-geo",
+        "genshinId": 10000030,
+        "name": "鍾離",
+        "gcsimKey": "zhongli",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000005-pyro",
+        "genshinId": 10000005,
+        "name": "空(pyro)",
+        "gcsimKey": "aetherpyro",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-hydro",
+        "genshinId": 10000005,
+        "name": "空(hydro)",
+        "gcsimKey": "aetherhydro",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-anemo",
+        "genshinId": 10000005,
+        "name": "空(anemo)",
+        "gcsimKey": "aetheranemo",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-electro",
+        "genshinId": 10000005,
+        "name": "空(electro)",
+        "gcsimKey": "aetherelectro",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-dendro",
+        "genshinId": 10000005,
+        "name": "空(dendro)",
+        "gcsimKey": "aetherdendro",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-cryo",
+        "genshinId": 10000005,
+        "name": "空(cryo)",
+        "gcsimKey": "aethercryo",
+        "source": "manual"
+      },
+      {
+        "id": "10000005-geo",
+        "genshinId": 10000005,
+        "name": "空(geo)",
+        "gcsimKey": "aethergeo",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-pyro",
+        "genshinId": 10000007,
+        "name": "蛍(pyro)",
+        "gcsimKey": "luminepyro",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-hydro",
+        "genshinId": 10000007,
+        "name": "蛍(hydro)",
+        "gcsimKey": "luminehydro",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-anemo",
+        "genshinId": 10000007,
+        "name": "蛍(anemo)",
+        "gcsimKey": "lumineanemo",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-electro",
+        "genshinId": 10000007,
+        "name": "蛍(electro)",
+        "gcsimKey": "lumineelectro",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-dendro",
+        "genshinId": 10000007,
+        "name": "蛍(dendro)",
+        "gcsimKey": "luminedendro",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-cryo",
+        "genshinId": 10000007,
+        "name": "蛍(cryo)",
+        "gcsimKey": "luminecryo",
+        "source": "manual"
+      },
+      {
+        "id": "10000007-geo",
+        "genshinId": 10000007,
+        "name": "蛍(geo)",
+        "gcsimKey": "luminegeo",
+        "source": "manual"
+      }
+    ],
+    "genshinOnly": [
+      {
+        "id": "10000148-electro",
+        "name": "アリョーシャ"
+      },
+      {
+        "id": "10000100-geo",
+        "name": "カチーナ"
+      },
+      {
+        "id": "10000130-geo",
+        "name": "リンネア"
+      },
+      {
+        "id": "10000129-cryo",
+        "name": "ローエン"
+      },
+      {
+        "id": "10000122-dendro",
+        "name": "ネフェル"
+      },
+      {
+        "id": "10000133-cryo",
+        "name": "サンドローネ"
+      },
+      {
+        "id": "10000143-anemo",
+        "name": "ヴェスナ"
+      },
+      {
+        "id": "10000140-hydro",
+        "name": "ヴォジャニーツァ"
+      },
+      {
+        "id": "10000126-geo",
+        "name": "兹白"
+      }
+    ],
+    "gcsimOnly": []
+  },
+  "weapons": {
+    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "records": [
+      {
+        "id": "15502",
+        "genshinId": 15502,
+        "name": "アモスの弓",
+        "gcsimKey": "amosbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14519",
+        "genshinId": 14519,
+        "name": "ヴィヴィッド・ハート",
+        "gcsimKey": "vividnotions",
+        "source": "dm.json"
+      },
+      {
+        "id": "14516",
+        "genshinId": 14516,
+        "name": "サーフィンタイム",
+        "gcsimKey": "surfsup",
+        "source": "dm.json"
+      },
+      {
+        "id": "14512",
+        "genshinId": 14512,
+        "name": "トゥライトゥーラの記憶",
+        "gcsimKey": "tulaytullahsremembrance",
+        "source": "dm.json"
+      },
+      {
+        "id": "13513",
+        "genshinId": 13513,
+        "name": "ルミドゥースの挽歌",
+        "gcsimKey": "lumidouceelegy",
+        "source": "dm.json"
+      },
+      {
+        "id": "12511",
+        "genshinId": 12511,
+        "name": "葦海の標",
+        "gcsimKey": "beaconofthereedsea",
+        "source": "dm.json"
+      },
+      {
+        "id": "11516",
+        "genshinId": 11516,
+        "name": "岩峰を巡る歌",
+        "gcsimKey": "peakpatrolsong",
+        "source": "dm.json"
+      },
+      {
+        "id": "14514",
+        "genshinId": 14514,
+        "name": "久遠流転の大典",
+        "gcsimKey": "tomeoftheeternalflow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15515",
+        "genshinId": 15515,
+        "name": "暁を告げる歴史",
+        "gcsimKey": "thedaybreakchronicles",
+        "source": "dm.json"
+      },
+      {
+        "id": "13516",
+        "genshinId": 13516,
+        "name": "血染めの荒れ地",
+        "gcsimKey": "bloodsoakedruins",
+        "source": "dm.json"
+      },
+      {
+        "id": "13501",
+        "genshinId": 13501,
+        "name": "護摩の杖",
+        "gcsimKey": "staffofhoma",
+        "source": "dm.json"
+      },
+      {
+        "id": "13514",
+        "genshinId": 13514,
+        "name": "香りのシンフォニスト",
+        "gcsimKey": "symphonistofscents",
+        "source": "dm.json"
+      },
+      {
+        "id": "11518",
+        "genshinId": 11518,
+        "name": "黒蝕",
+        "gcsimKey": "athameartis",
+        "source": "dm.json"
+      },
+      {
+        "id": "13517",
+        "genshinId": 13517,
+        "name": "災憾",
+        "gcsimKey": "disasterandremorse",
+        "source": "dm.json"
+      },
+      {
+        "id": "13515",
+        "genshinId": 13515,
+        "name": "砕け散る光輪",
+        "gcsimKey": "fracturedhalo",
+        "source": "dm.json"
+      },
+      {
+        "id": "14517",
+        "genshinId": 14517,
+        "name": "祭星者の眺め",
+        "gcsimKey": "starcallerswatch",
+        "source": "dm.json"
+      },
+      {
+        "id": "12512",
+        "genshinId": 12512,
+        "name": "裁断",
+        "gcsimKey": "verdict",
+        "source": "dm.json"
+      },
+      {
+        "id": "11519",
+        "genshinId": 11519,
+        "name": "三日月の含光",
+        "gcsimKey": "lightbearingmoonshard",
+        "source": "dm.json"
+      },
+      {
+        "id": "12513",
+        "genshinId": 12513,
+        "name": "山の王の長牙",
+        "gcsimKey": "fangofthemountainking",
+        "source": "dm.json"
+      },
+      {
+        "id": "11504",
+        "genshinId": 11504,
+        "name": "斬山の刃",
+        "gcsimKey": "summitshaper",
+        "source": "dm.json"
+      },
+      {
+        "id": "14502",
+        "genshinId": 14502,
+        "name": "四風原典",
+        "gcsimKey": "lostprayertothesacredwinds",
+        "source": "dm.json"
+      },
+      {
+        "id": "15512",
+        "genshinId": 15512,
+        "name": "始まりの大魔術",
+        "gcsimKey": "thefirstgreatmagic",
+        "source": "dm.json"
+      },
+      {
+        "id": "11515",
+        "genshinId": 11515,
+        "name": "赦罪",
+        "gcsimKey": "absolution",
+        "source": "dm.json"
+      },
+      {
+        "id": "15508",
+        "genshinId": 15508,
+        "name": "若水",
+        "gcsimKey": "aquasimulacra",
+        "source": "dm.json"
+      },
+      {
+        "id": "15511",
+        "genshinId": 15511,
+        "name": "狩人の道",
+        "gcsimKey": "hunterspath",
+        "source": "dm.json"
+      },
+      {
+        "id": "15503",
+        "genshinId": 15503,
+        "name": "終焉を嘆く詩",
+        "gcsimKey": "elegyfortheend",
+        "source": "dm.json"
+      },
+      {
+        "id": "12503",
+        "genshinId": 12503,
+        "name": "松韻の響く頃",
+        "gcsimKey": "songofbrokenpines",
+        "source": "dm.json"
+      },
+      {
+        "id": "14518",
+        "genshinId": 14518,
+        "name": "寝正月の初晴",
+        "gcsimKey": "sunnymorningsleepin",
+        "source": "dm.json"
+      },
+      {
+        "id": "14521",
+        "genshinId": 14521,
+        "name": "真言の匣",
+        "gcsimKey": "reliquaryoftruth",
+        "source": "dm.json"
+      },
+      {
+        "id": "14509",
+        "genshinId": 14509,
+        "name": "神楽の真意",
+        "gcsimKey": "kagurasverity",
+        "source": "dm.json"
+      },
+      {
+        "id": "14523",
+        "genshinId": 14523,
+        "name": "塵と光の七つの誓約",
+        "gcsimKey": "angelosheptades",
+        "source": "dm.json"
+      },
+      {
+        "id": "11521",
+        "genshinId": 11521,
+        "name": "星鋒の剣",
+        "gcsimKey": "exaiphanesblade",
+        "source": "dm.json"
+      },
+      {
+        "id": "15514",
+        "genshinId": 15514,
+        "name": "星鷲の紅き羽",
+        "gcsimKey": "astralvulturescrimsonplumage",
+        "source": "dm.json"
+      },
+      {
+        "id": "11511",
+        "genshinId": 11511,
+        "name": "聖顕の鍵",
+        "gcsimKey": "keyofkhajnisut",
+        "source": "dm.json"
+      },
+      {
+        "id": "11513",
+        "genshinId": 11513,
+        "name": "静水流転の輝き",
+        "gcsimKey": "splendoroftranquilwaters",
+        "source": "dm.json"
+      },
+      {
+        "id": "12510",
+        "genshinId": 12510,
+        "name": "赤角石塵滅砕",
+        "gcsimKey": "redhornstonethresher",
+        "source": "dm.json"
+      },
+      {
+        "id": "13512",
+        "genshinId": 13512,
+        "name": "赤月のシルエット",
+        "gcsimKey": "crimsonmoonssemblance",
+        "source": "dm.json"
+      },
+      {
+        "id": "13511",
+        "genshinId": 13511,
+        "name": "赤砂の杖",
+        "gcsimKey": "staffofthescarletsands",
+        "source": "dm.json"
+      },
+      {
+        "id": "14511",
+        "genshinId": 14511,
+        "name": "千夜に浮かぶ夢",
+        "gcsimKey": "athousandfloatingdreams",
+        "source": "dm.json"
+      },
+      {
+        "id": "12514",
+        "genshinId": 12514,
+        "name": "千烈の日輪",
+        "gcsimKey": "athousandblazingsuns",
+        "source": "dm.json"
+      },
+      {
+        "id": "13509",
+        "genshinId": 13509,
+        "name": "草薙の稲光",
+        "gcsimKey": "engulfinglightning",
+        "source": "dm.json"
+      },
+      {
+        "id": "11503",
+        "genshinId": 11503,
+        "name": "蒼古なる自由への誓い",
+        "gcsimKey": "freedomsworn",
+        "source": "dm.json"
+      },
+      {
+        "id": "11517",
+        "genshinId": 11517,
+        "name": "蒼耀",
+        "gcsimKey": "azurelight",
+        "source": "dm.json"
+      },
+      {
+        "id": "15516",
+        "genshinId": 15516,
+        "name": "霜契の金枝",
+        "gcsimKey": "goldenfrostboundoath",
+        "source": "dm.json"
+      },
+      {
+        "id": "13507",
+        "genshinId": 13507,
+        "name": "息災",
+        "gcsimKey": "calamityqueller",
+        "source": "dm.json"
+      },
+      {
+        "id": "14522",
+        "genshinId": 14522,
+        "name": "帳の夜曲",
+        "gcsimKey": "nocturnescurtaincall",
+        "source": "dm.json"
+      },
+      {
+        "id": "12516",
+        "genshinId": 12516,
+        "name": "超越の鍵",
+        "gcsimKey": "ateaspoonoftranscendence",
+        "source": "dm.json"
+      },
+      {
+        "id": "14515",
+        "genshinId": 14515,
+        "name": "鶴鳴の余韻",
+        "gcsimKey": "cranesechoingcall",
+        "source": "dm.json"
+      },
+      {
+        "id": "14501",
+        "genshinId": 14501,
+        "name": "天空の巻",
+        "gcsimKey": "skywardatlas",
+        "source": "dm.json"
+      },
+      {
+        "id": "11502",
+        "genshinId": 11502,
+        "name": "天空の刃",
+        "gcsimKey": "skywardblade",
+        "source": "dm.json"
+      },
+      {
+        "id": "13502",
+        "genshinId": 13502,
+        "name": "天空の脊",
+        "gcsimKey": "skywardspine",
+        "source": "dm.json"
+      },
+      {
+        "id": "15501",
+        "genshinId": 15501,
+        "name": "天空の翼",
+        "gcsimKey": "skywardharp",
+        "source": "dm.json"
+      },
+      {
+        "id": "12501",
+        "genshinId": 12501,
+        "name": "天空の傲",
+        "gcsimKey": "skywardpride",
+        "source": "dm.json"
+      },
+      {
+        "id": "15507",
+        "genshinId": 15507,
+        "name": "冬極の白星",
+        "gcsimKey": "polarstar",
+        "source": "dm.json"
+      },
+      {
+        "id": "11510",
+        "genshinId": 11510,
+        "name": "波乱月白経津",
+        "gcsimKey": "harangeppakufutsu",
+        "source": "dm.json"
+      },
+      {
+        "id": "13504",
+        "genshinId": 13504,
+        "name": "破天の槍",
+        "gcsimKey": "vortexvanquisher",
+        "source": "dm.json"
+      },
+      {
+        "id": "15513",
+        "genshinId": 15513,
+        "name": "白雨心弦",
+        "gcsimKey": "silvershowerheartstrings",
+        "source": "dm.json"
+      },
+      {
+        "id": "11505",
+        "genshinId": 11505,
+        "name": "磐岩結緑",
+        "gcsimKey": "primordialjadecutter",
+        "source": "dm.json"
+      },
+      {
+        "id": "15509",
+        "genshinId": 15509,
+        "name": "飛雷の鳴弦",
+        "gcsimKey": "thunderingpulse",
+        "source": "dm.json"
+      },
+      {
+        "id": "14506",
+        "genshinId": 14506,
+        "name": "不滅の月華",
+        "gcsimKey": "everlastingmoonglow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14504",
+        "genshinId": 14504,
+        "name": "浮世の錠",
+        "gcsimKey": "memoryofdust",
+        "source": "dm.json"
+      },
+      {
+        "id": "11501",
+        "genshinId": 11501,
+        "name": "風鷹剣",
+        "gcsimKey": "aquilafavonia",
+        "source": "dm.json"
+      },
+      {
+        "id": "14505",
+        "genshinId": 14505,
+        "name": "碧落の瓏",
+        "gcsimKey": "jadefallssplendor",
+        "source": "dm.json"
+      },
+      {
+        "id": "12504",
+        "genshinId": 12504,
+        "name": "無工の剣",
+        "gcsimKey": "theunforged",
+        "source": "dm.json"
+      },
+      {
+        "id": "11509",
+        "genshinId": 11509,
+        "name": "霧切の廻光",
+        "gcsimKey": "mistsplitterreforged",
+        "source": "dm.json"
+      },
+      {
+        "id": "14520",
+        "genshinId": 14520,
+        "name": "夜を紡ぐ天鏡",
+        "gcsimKey": "nightweaverslookingglass",
+        "source": "dm.json"
+      },
+      {
+        "id": "11514",
+        "genshinId": 11514,
+        "name": "有楽御簾切",
+        "gcsimKey": "urakumisugiri",
+        "source": "dm.json"
+      },
+      {
+        "id": "12515",
+        "genshinId": 12515,
+        "name": "狼の武勲詩",
+        "gcsimKey": "gestofthemightywolf",
+        "source": "dm.json"
+      },
+      {
+        "id": "12502",
+        "genshinId": 12502,
+        "name": "狼の末路",
+        "gcsimKey": "wolfsgravestone",
+        "source": "dm.json"
+      },
+      {
+        "id": "13505",
+        "genshinId": 13505,
+        "name": "和璞鳶",
+        "gcsimKey": "primordialjadewingedspear",
+        "source": "dm.json"
+      },
+      {
+        "id": "14513",
+        "genshinId": 14513,
+        "name": "凛流の監視者",
+        "gcsimKey": "cashflowsupervision",
+        "source": "dm.json"
+      },
+      {
+        "id": "11512",
+        "genshinId": 11512,
+        "name": "萃光の裁葉",
+        "gcsimKey": "lightoffoliarincision",
+        "source": "dm.json"
+      },
+      {
+        "id": "12426",
+        "genshinId": 12426,
+        "name": "「スーパーアルティメット覇王魔剣」",
+        "gcsimKey": "ultimateoverlordsmegamagicsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "13415",
+        "genshinId": 13415,
+        "name": "「漁獲」",
+        "gcsimKey": "thecatch",
+        "source": "dm.json"
+      },
+      {
+        "id": "12431",
+        "genshinId": 12431,
+        "name": "アースシェイカー",
+        "gcsimKey": "earthshaker",
+        "source": "dm.json"
+      },
+      {
+        "id": "11431",
+        "genshinId": 11431,
+        "name": "エズピツァルの笛",
+        "gcsimKey": "fluteofezpitzal",
+        "source": "dm.json"
+      },
+      {
+        "id": "11426",
+        "genshinId": 11426,
+        "name": "サーンドルの渡し守",
+        "gcsimKey": "fleuvecendreferryman",
+        "source": "dm.json"
+      },
+      {
+        "id": "11418",
+        "genshinId": 11418,
+        "name": "サイフォスの月明かり",
+        "gcsimKey": "xiphosmoonlight",
+        "source": "dm.json"
+      },
+      {
+        "id": "11415",
+        "genshinId": 11415,
+        "name": "シナバースピンドル",
+        "gcsimKey": "cinnabarspindle",
+        "source": "dm.json"
+      },
+      {
+        "id": "12435",
+        "genshinId": 12435,
+        "name": "シンフォニーの鋳影",
+        "gcsimKey": "forgedbythegoldenmelody",
+        "source": "dm.json"
+      },
+      {
+        "id": "11430",
+        "genshinId": 11430,
+        "name": "ストロング・ボーン",
+        "gcsimKey": "sturdybone",
+        "source": "dm.json"
+      },
+      {
+        "id": "15410",
+        "genshinId": 15410,
+        "name": "ダークアレイの狩人",
+        "gcsimKey": "alleyhunter",
+        "source": "dm.json"
+      },
+      {
+        "id": "14410",
+        "genshinId": 14410,
+        "name": "ダークアレイの酒と詩",
+        "gcsimKey": "wineandsong",
+        "source": "dm.json"
+      },
+      {
+        "id": "11410",
+        "genshinId": 11410,
+        "name": "ダークアレイの閃光",
+        "gcsimKey": "thealleyflash",
+        "source": "dm.json"
+      },
+      {
+        "id": "12425",
+        "genshinId": 12425,
+        "name": "タイダル·シャドー",
+        "gcsimKey": "tidalshadow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15431",
+        "genshinId": 15431,
+        "name": "チェーンブレイカー",
+        "gcsimKey": "chainbreaker",
+        "source": "dm.json"
+      },
+      {
+        "id": "15419",
+        "genshinId": 15419,
+        "name": "トキの嘴",
+        "gcsimKey": "ibispiercer",
+        "source": "dm.json"
+      },
+      {
+        "id": "14413",
+        "genshinId": 14413,
+        "name": "ドドコの物語",
+        "gcsimKey": "dodocotales",
+        "source": "dm.json"
+      },
+      {
+        "id": "13409",
+        "genshinId": 13409,
+        "name": "ドラゴンスピア",
+        "gcsimKey": "dragonspinespear",
+        "source": "dm.json"
+      },
+      {
+        "id": "13424",
+        "genshinId": 13424,
+        "name": "フィヨルドの歌",
+        "gcsimKey": "balladofthefjords",
+        "source": "dm.json"
+      },
+      {
+        "id": "15415",
+        "genshinId": 15415,
+        "name": "プレデター",
+        "gcsimKey": "predator",
+        "source": "dm.json"
+      },
+      {
+        "id": "13427",
+        "genshinId": 13427,
+        "name": "プロスペクタードリル",
+        "gcsimKey": "prospectorsdrill",
+        "source": "dm.json"
+      },
+      {
+        "id": "12415",
+        "genshinId": 12415,
+        "name": "マカイラの水色",
+        "gcsimKey": "makhairaaquamarine",
+        "source": "dm.json"
+      },
+      {
+        "id": "13417",
+        "genshinId": 13417,
+        "name": "ムーンピアサー",
+        "gcsimKey": "moonpiercer",
+        "source": "dm.json"
+      },
+      {
+        "id": "14431",
+        "genshinId": 14431,
+        "name": "ヤシュチェの環",
+        "gcsimKey": "ringofyaxche",
+        "source": "dm.json"
+      },
+      {
+        "id": "15407",
+        "genshinId": 15407,
+        "name": "リングボウ",
+        "gcsimKey": "compoundbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15427",
+        "genshinId": 15427,
+        "name": "レンジゲージ",
+        "gcsimKey": "rangegauge",
+        "source": "dm.json"
+      },
+      {
+        "id": "14433",
+        "genshinId": 14433,
+        "name": "烏髄の孤灯",
+        "gcsimKey": "blackmarrowlantern",
+        "source": "dm.json"
+      },
+      {
+        "id": "12405",
+        "genshinId": 12405,
+        "name": "雨裁",
+        "gcsimKey": "rainslasher",
+        "source": "dm.json"
+      },
+      {
+        "id": "13436",
+        "genshinId": 13436,
+        "name": "遠望の歌",
+        "gcsimKey": "songofthevigil",
+        "source": "dm.json"
+      },
+      {
+        "id": "15417",
+        "genshinId": 15417,
+        "name": "王の近侍",
+        "gcsimKey": "kingssquire",
+        "source": "dm.json"
+      },
+      {
+        "id": "14426",
+        "genshinId": 14426,
+        "name": "果てなき紺碧の唄",
+        "gcsimKey": "balladoftheboundlessblue",
+        "source": "dm.json"
+      },
+      {
+        "id": "15430",
+        "genshinId": 15430,
+        "name": "花飾りの羽",
+        "gcsimKey": "flowerwreathedfeathers",
+        "source": "dm.json"
+      },
+      {
+        "id": "11425",
+        "genshinId": 11425,
+        "name": "海淵のフィナーレ",
+        "gcsimKey": "finaleofthedeep",
+        "source": "dm.json"
+      },
+      {
+        "id": "13414",
+        "genshinId": 13414,
+        "name": "喜多院十文字槍",
+        "gcsimKey": "kitaincrossspear",
+        "source": "dm.json"
+      },
+      {
+        "id": "15405",
+        "genshinId": 15405,
+        "name": "弓蔵",
+        "gcsimKey": "rust",
+        "source": "dm.json"
+      },
+      {
+        "id": "12436",
+        "genshinId": 12436,
+        "name": "救済の剣",
+        "gcsimKey": "bladeofatonement",
+        "source": "dm.json"
+      },
+      {
+        "id": "12404",
+        "genshinId": 12404,
+        "name": "旧貴族大剣",
+        "gcsimKey": "royalgreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "15404",
+        "genshinId": 15404,
+        "name": "旧貴族長弓",
+        "gcsimKey": "royalbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "11404",
+        "genshinId": 11404,
+        "name": "旧貴族長剣",
+        "gcsimKey": "royallongsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "14404",
+        "genshinId": 14404,
+        "name": "旧貴族秘法録",
+        "gcsimKey": "royalgrimoire",
+        "source": "dm.json"
+      },
+      {
+        "id": "13408",
+        "genshinId": 13408,
+        "name": "旧貴族猟槍",
+        "gcsimKey": "royalspear",
+        "source": "dm.json"
+      },
+      {
+        "id": "14436",
+        "genshinId": 14436,
+        "name": "胸中の谺",
+        "gcsimKey": "echoesoftheheart",
+        "source": "dm.json"
+      },
+      {
+        "id": "13432",
+        "genshinId": 13432,
+        "name": "玉響停の御噺",
+        "gcsimKey": "tamayurateinoohanashi",
+        "source": "dm.json"
+      },
+      {
+        "id": "13433",
+        "genshinId": 13433,
+        "name": "金掘りのシャベル",
+        "gcsimKey": "prospectorsshovel",
+        "source": "dm.json"
+      },
+      {
+        "id": "14406",
+        "genshinId": 14406,
+        "name": "金珀·試作",
+        "gcsimKey": "prototypeamber",
+        "source": "dm.json"
+      },
+      {
+        "id": "12427",
+        "genshinId": 12427,
+        "name": "携帯型チェーンソー",
+        "gcsimKey": "portablepowersaw",
+        "source": "dm.json"
+      },
+      {
+        "id": "12414",
+        "genshinId": 12414,
+        "name": "桂木斬長正",
+        "gcsimKey": "katsuragikirinagamasa",
+        "source": "dm.json"
+      },
+      {
+        "id": "11434",
+        "genshinId": 11434,
+        "name": "月紡ぎの曙光",
+        "gcsimKey": "moonweaversdawn",
+        "source": "dm.json"
+      },
+      {
+        "id": "11417",
+        "genshinId": 11417,
+        "name": "原木刀",
+        "gcsimKey": "sapwoodblade",
+        "source": "dm.json"
+      },
+      {
+        "id": "12406",
+        "genshinId": 12406,
+        "name": "古華·試作",
+        "gcsimKey": "prototypearchaic",
+        "source": "dm.json"
+      },
+      {
+        "id": "14424",
+        "genshinId": 14424,
+        "name": "古祠の瓏",
+        "gcsimKey": "sacrificialjade",
+        "source": "dm.json"
+      },
+      {
+        "id": "11412",
+        "genshinId": 11412,
+        "name": "降臨の剣",
+        "gcsimKey": "swordofdescension",
+        "source": "dm.json"
+      },
+      {
+        "id": "12408",
+        "genshinId": 12408,
+        "name": "黒岩の斬刀",
+        "gcsimKey": "blackcliffslasher",
+        "source": "dm.json"
+      },
+      {
+        "id": "15408",
+        "genshinId": 15408,
+        "name": "黒岩の戦弓",
+        "gcsimKey": "blackcliffwarbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "11408",
+        "genshinId": 11408,
+        "name": "黒岩の長剣",
+        "gcsimKey": "blackclifflongsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "13404",
+        "genshinId": 13404,
+        "name": "黒岩の突槍",
+        "gcsimKey": "blackcliffpole",
+        "source": "dm.json"
+      },
+      {
+        "id": "14408",
+        "genshinId": 14408,
+        "name": "黒岩の緋玉",
+        "gcsimKey": "blackcliffagate",
+        "source": "dm.json"
+      },
+      {
+        "id": "11409",
+        "genshinId": 11409,
+        "name": "黒剣",
+        "gcsimKey": "theblacksword",
+        "source": "dm.json"
+      },
+      {
+        "id": "13426",
+        "genshinId": 13426,
+        "name": "砂中の賢者達の問答",
+        "gcsimKey": "dialoguesofthedesertsages",
+        "source": "dm.json"
+      },
+      {
+        "id": "15403",
+        "genshinId": 15403,
+        "name": "祭礼の弓",
+        "gcsimKey": "sacrificialbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "11403",
+        "genshinId": 11403,
+        "name": "祭礼の剣",
+        "gcsimKey": "sacrificialsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "12403",
+        "genshinId": 12403,
+        "name": "祭礼の大剣",
+        "gcsimKey": "sacrificialgreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "14403",
+        "genshinId": 14403,
+        "name": "祭礼の断片",
+        "gcsimKey": "sacrificialfragments",
+        "source": "dm.json"
+      },
+      {
+        "id": "11406",
+        "genshinId": 11406,
+        "name": "斬岩·試作",
+        "gcsimKey": "prototyperancour",
+        "source": "dm.json"
+      },
+      {
+        "id": "13416",
+        "genshinId": 13416,
+        "name": "斬波のひれ長",
+        "gcsimKey": "wavebreakersfin",
+        "source": "dm.json"
+      },
+      {
+        "id": "13405",
+        "genshinId": 13405,
+        "name": "死闘の槍",
+        "gcsimKey": "deathmatch",
+        "source": "dm.json"
+      },
+      {
+        "id": "12430",
+        "genshinId": 12430,
+        "name": "実りの鉤鉈",
+        "gcsimKey": "fruitfulhook",
+        "source": "dm.json"
+      },
+      {
+        "id": "14425",
+        "genshinId": 14425,
+        "name": "純水流華",
+        "gcsimKey": "flowingpurity",
+        "source": "dm.json"
+      },
+      {
+        "id": "14435",
+        "genshinId": 14435,
+        "name": "諸王の対局",
+        "gcsimKey": "clashofkings",
+        "source": "dm.json"
+      },
+      {
+        "id": "14409",
+        "genshinId": 14409,
+        "name": "昭心",
+        "gcsimKey": "eyeofperception",
+        "source": "dm.json"
+      },
+      {
+        "id": "12402",
+        "genshinId": 12402,
+        "name": "鐘の剣",
+        "gcsimKey": "thebell",
+        "source": "dm.json"
+      },
+      {
+        "id": "12417",
+        "genshinId": 12417,
+        "name": "森林のレガリア",
+        "gcsimKey": "forestregalia",
+        "source": "dm.json"
+      },
+      {
+        "id": "11428",
+        "genshinId": 11428,
+        "name": "水仙十字の剣",
+        "gcsimKey": "swordofnarzissenkreuz",
+        "source": "dm.json"
+      },
+      {
+        "id": "13402",
+        "genshinId": 13402,
+        "name": "星鎌·試作",
+        "gcsimKey": "prototypestarglitter",
+        "source": "dm.json"
+      },
+      {
+        "id": "13425",
+        "genshinId": 13425,
+        "name": "正義の報酬",
+        "gcsimKey": "rightfulreward",
+        "source": "dm.json"
+      },
+      {
+        "id": "13434",
+        "genshinId": 13434,
+        "name": "聖祭者の輝杖",
+        "gcsimKey": "sacrificersstaff",
+        "source": "dm.json"
+      },
+      {
+        "id": "11401",
+        "genshinId": 11401,
+        "name": "西風剣",
+        "gcsimKey": "favoniussword",
+        "source": "dm.json"
+      },
+      {
+        "id": "12401",
+        "genshinId": 12401,
+        "name": "西風大剣",
+        "gcsimKey": "favoniusgreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "13407",
+        "genshinId": 13407,
+        "name": "西風長槍",
+        "gcsimKey": "favoniuslance",
+        "source": "dm.json"
+      },
+      {
+        "id": "14401",
+        "genshinId": 14401,
+        "name": "西風秘典",
+        "gcsimKey": "favoniuscodex",
+        "source": "dm.json"
+      },
+      {
+        "id": "15401",
+        "genshinId": 15401,
+        "name": "西風猟弓",
+        "gcsimKey": "favoniuswarbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14415",
+        "genshinId": 14415,
+        "name": "誓いの明瞳",
+        "gcsimKey": "oathsworneye",
+        "source": "dm.json"
+      },
+      {
+        "id": "15425",
+        "genshinId": 15425,
+        "name": "静寂の唄",
+        "gcsimKey": "songofstillness",
+        "source": "dm.json"
+      },
+      {
+        "id": "11433",
+        "genshinId": 11433,
+        "name": "静謐の笛",
+        "gcsimKey": "serenityscall",
+        "source": "dm.json"
+      },
+      {
+        "id": "12411",
+        "genshinId": 12411,
+        "name": "雪葬の星銀",
+        "gcsimKey": "snowtombedstarsilver",
+        "source": "dm.json"
+      },
+      {
+        "id": "15402",
+        "genshinId": 15402,
+        "name": "絶弦",
+        "gcsimKey": "thestringless",
+        "source": "dm.json"
+      },
+      {
+        "id": "12410",
+        "genshinId": 12410,
+        "name": "千岩古剣",
+        "gcsimKey": "lithicblade",
+        "source": "dm.json"
+      },
+      {
+        "id": "13406",
+        "genshinId": 13406,
+        "name": "千岩長槍",
+        "gcsimKey": "lithicspear",
+        "source": "dm.json"
+      },
+      {
+        "id": "15435",
+        "genshinId": 15435,
+        "name": "千鈞懸黎",
+        "gcsimKey": "jadevista",
+        "source": "dm.json"
+      },
+      {
+        "id": "11427",
+        "genshinId": 11427,
+        "name": "船渠剣",
+        "gcsimKey": "thedockhandsassistant",
+        "source": "dm.json"
+      },
+      {
+        "id": "15409",
+        "genshinId": 15409,
+        "name": "蒼翠の狩猟弓",
+        "gcsimKey": "theviridescenthunt",
+        "source": "dm.json"
+      },
+      {
+        "id": "14427",
+        "genshinId": 14427,
+        "name": "蒼紋の角杯",
+        "gcsimKey": "ashgravendrinkinghorn",
+        "source": "dm.json"
+      },
+      {
+        "id": "15436",
+        "genshinId": 15436,
+        "name": "霜雪の契",
+        "gcsimKey": "covenantoffrostandsnow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14434",
+        "genshinId": 14434,
+        "name": "霜辰",
+        "gcsimKey": "dawningfrost",
+        "source": "dm.json"
+      },
+      {
+        "id": "12432",
+        "genshinId": 12432,
+        "name": "知恵の溶炎",
+        "gcsimKey": "flameforgedinsight",
+        "source": "dm.json"
+      },
+      {
+        "id": "15426",
+        "genshinId": 15426,
+        "name": "築雲",
+        "gcsimKey": "cloudforged",
+        "source": "dm.json"
+      },
+      {
+        "id": "13430",
+        "genshinId": 13430,
+        "name": "鎮山の釘",
+        "gcsimKey": "mountainbracingbolt",
+        "source": "dm.json"
+      },
+      {
+        "id": "11402",
+        "genshinId": 11402,
+        "name": "笛の剣",
+        "gcsimKey": "theflute",
+        "source": "dm.json"
+      },
+      {
+        "id": "12418",
+        "genshinId": 12418,
+        "name": "鉄彩の花",
+        "gcsimKey": "mailedflower",
+        "source": "dm.json"
+      },
+      {
+        "id": "11407",
+        "genshinId": 11407,
+        "name": "鉄蜂の刺し",
+        "gcsimKey": "ironsting",
+        "source": "dm.json"
+      },
+      {
+        "id": "14432",
+        "genshinId": 14432,
+        "name": "天光のリュート",
+        "gcsimKey": "etherlightspindlelute",
+        "source": "dm.json"
+      },
+      {
+        "id": "11414",
+        "genshinId": 11414,
+        "name": "天目影打",
+        "gcsimKey": "amenomakageuchi",
+        "source": "dm.json"
+      },
+      {
+        "id": "14412",
+        "genshinId": 14412,
+        "name": "冬忍びの実",
+        "gcsimKey": "frostbearer",
+        "source": "dm.json"
+      },
+      {
+        "id": "11422",
+        "genshinId": 11422,
+        "name": "東花坊時雨",
+        "gcsimKey": "toukaboushigure",
+        "source": "dm.json"
+      },
+      {
+        "id": "11436",
+        "genshinId": 11436,
+        "name": "導炎の源",
+        "gcsimKey": "emberwell",
+        "source": "dm.json"
+      },
+      {
+        "id": "13431",
+        "genshinId": 13431,
+        "name": "虹の行方",
+        "gcsimKey": "footprintoftherainbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15434",
+        "genshinId": 15434,
+        "name": "虹蛇の雨弦",
+        "gcsimKey": "rainbowserpentsrainbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14430",
+        "genshinId": 14430,
+        "name": "波乗りの旋回",
+        "gcsimKey": "waveridingwhirl",
+        "source": "dm.json"
+      },
+      {
+        "id": "15414",
+        "genshinId": 15414,
+        "name": "破魔の弓",
+        "gcsimKey": "hamayumi",
+        "source": "dm.json"
+      },
+      {
+        "id": "12407",
+        "genshinId": 12407,
+        "name": "白影の剣",
+        "gcsimKey": "whiteblind",
+        "source": "dm.json"
+      },
+      {
+        "id": "14414",
+        "genshinId": 14414,
+        "name": "白辰の輪",
+        "gcsimKey": "hakushinring",
+        "source": "dm.json"
+      },
+      {
+        "id": "13435",
+        "genshinId": 13435,
+        "name": "氷の吐息",
+        "gcsimKey": "frostbreath",
+        "source": "dm.json"
+      },
+      {
+        "id": "11413",
+        "genshinId": 11413,
+        "name": "腐植の剣",
+        "gcsimKey": "festeringdesire",
+        "source": "dm.json"
+      },
+      {
+        "id": "15413",
+        "genshinId": 15413,
+        "name": "風花の頌歌",
+        "gcsimKey": "windblumeode",
+        "source": "dm.json"
+      },
+      {
+        "id": "13419",
+        "genshinId": 13419,
+        "name": "風信の矛",
+        "gcsimKey": "missivewindspear",
+        "source": "dm.json"
+      },
+      {
+        "id": "14407",
+        "genshinId": 14407,
+        "name": "万国諸海の図譜",
+        "gcsimKey": "mappamare",
+        "source": "dm.json"
+      },
+      {
+        "id": "12433",
+        "genshinId": 12433,
+        "name": "万能の鍵",
+        "gcsimKey": "masterkey",
+        "source": "dm.json"
+      },
+      {
+        "id": "14417",
+        "genshinId": 14417,
+        "name": "満悦の実",
+        "gcsimKey": "fruitoffulfillment",
+        "source": "dm.json"
+      },
+      {
+        "id": "11432",
+        "genshinId": 11432,
+        "name": "厄水の災い",
+        "gcsimKey": "calamityofeshu",
+        "source": "dm.json"
+      },
+      {
+        "id": "15412",
+        "genshinId": 15412,
+        "name": "幽夜のワルツ",
+        "gcsimKey": "mitternachtswaltz",
+        "source": "dm.json"
+      },
+      {
+        "id": "15433",
+        "genshinId": 15433,
+        "name": "羅網の針",
+        "gcsimKey": "snarehook",
+        "source": "dm.json"
+      },
+      {
+        "id": "15411",
+        "genshinId": 15411,
+        "name": "落霞",
+        "gcsimKey": "fadingtwilight",
+        "source": "dm.json"
+      },
+      {
+        "id": "13403",
+        "genshinId": 13403,
+        "name": "流月の針",
+        "gcsimKey": "crescentpike",
+        "source": "dm.json"
+      },
+      {
+        "id": "14402",
+        "genshinId": 14402,
+        "name": "流浪楽章",
+        "gcsimKey": "thewidsith",
+        "source": "dm.json"
+      },
+      {
+        "id": "15432",
+        "genshinId": 15432,
+        "name": "冷寂の音",
+        "gcsimKey": "sequenceofsolitude",
+        "source": "dm.json"
+      },
+      {
+        "id": "15424",
+        "genshinId": 15424,
+        "name": "烈日の後嗣",
+        "gcsimKey": "scionoftheblazingsun",
+        "source": "dm.json"
+      },
+      {
+        "id": "11424",
+        "genshinId": 11424,
+        "name": "狼牙",
+        "gcsimKey": "wolffang",
+        "source": "dm.json"
+      },
+      {
+        "id": "12424",
+        "genshinId": 12424,
+        "name": "話死合い棒",
+        "gcsimKey": "talkingstick",
+        "source": "dm.json"
+      },
+      {
+        "id": "14405",
+        "genshinId": 14405,
+        "name": "匣中日月",
+        "gcsimKey": "solarpearl",
+        "source": "dm.json"
+      },
+      {
+        "id": "13401",
+        "genshinId": 13401,
+        "name": "匣中滅龍",
+        "gcsimKey": "dragonsbane",
+        "source": "dm.json"
+      },
+      {
+        "id": "11405",
+        "genshinId": 11405,
+        "name": "匣中龍吟",
+        "gcsimKey": "lionsroar",
+        "source": "dm.json"
+      },
+      {
+        "id": "14416",
+        "genshinId": 14416,
+        "name": "彷徨える星",
+        "gcsimKey": "wanderingevenstar",
+        "source": "dm.json"
+      },
+      {
+        "id": "12416",
+        "genshinId": 12416,
+        "name": "惡王丸",
+        "gcsimKey": "akuoumaru",
+        "source": "dm.json"
+      },
+      {
+        "id": "15416",
+        "genshinId": 15416,
+        "name": "曚雲の月",
+        "gcsimKey": "mouunsmoon",
+        "source": "dm.json"
+      },
+      {
+        "id": "15406",
+        "genshinId": 15406,
+        "name": "澹月·試作",
+        "gcsimKey": "prototypecrescent",
+        "source": "dm.json"
+      },
+      {
+        "id": "15418",
+        "genshinId": 15418,
+        "name": "竭沢",
+        "gcsimKey": "endoftheline",
+        "source": "dm.json"
+      },
+      {
+        "id": "11416",
+        "genshinId": 11416,
+        "name": "籠釣瓶一心",
+        "gcsimKey": "kagotsurubeisshin",
+        "source": "dm.json"
+      },
+      {
+        "id": "12412",
+        "genshinId": 12412,
+        "name": "銜玉の海皇",
+        "gcsimKey": "luxurioussealord",
+        "source": "dm.json"
+      },
+      {
+        "id": "12409",
+        "genshinId": 12409,
+        "name": "螭龍の剣",
+        "gcsimKey": "serpentspine",
+        "source": "dm.json"
+      },
+      {
+        "id": "15302",
+        "genshinId": 15302,
+        "name": "シャープシューターの誓い",
+        "gcsimKey": "sharpshootersoath",
+        "source": "dm.json"
+      },
+      {
+        "id": "11305",
+        "genshinId": 11305,
+        "name": "チ虎魚の刀",
+        "gcsimKey": "filletblade",
+        "source": "dm.json"
+      },
+      {
+        "id": "15303",
+        "genshinId": 15303,
+        "name": "リカーブボウ",
+        "gcsimKey": "recurvebow",
+        "source": "dm.json"
+      },
+      {
+        "id": "11304",
+        "genshinId": 11304,
+        "name": "暗鉄剣",
+        "gcsimKey": "darkironsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "14303",
+        "genshinId": 14303,
+        "name": "異世界旅行記",
+        "gcsimKey": "otherworldlystory",
+        "source": "dm.json"
+      },
+      {
+        "id": "13303",
+        "genshinId": 13303,
+        "name": "黒纓槍",
+        "gcsimKey": "blacktassel",
+        "source": "dm.json"
+      },
+      {
+        "id": "15304",
+        "genshinId": 15304,
+        "name": "弾弓",
+        "gcsimKey": "slingshot",
+        "source": "dm.json"
+      },
+      {
+        "id": "12301",
+        "genshinId": 12301,
+        "name": "鉄影段平",
+        "gcsimKey": "ferrousshadow",
+        "source": "dm.json"
+      },
+      {
+        "id": "14305",
+        "genshinId": 14305,
+        "name": "特級の宝玉",
+        "gcsimKey": "twinnephrite",
+        "source": "dm.json"
+      },
+      {
+        "id": "12303",
+        "genshinId": 12303,
+        "name": "白鉄の大剣",
+        "gcsimKey": "whiteirongreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "13301",
+        "genshinId": 13301,
+        "name": "白纓槍",
+        "gcsimKey": "whitetassel",
+        "source": "dm.json"
+      },
+      {
+        "id": "11306",
+        "genshinId": 11306,
+        "name": "飛天御剣",
+        "gcsimKey": "skyridersword",
+        "source": "dm.json"
+      },
+      {
+        "id": "12306",
+        "genshinId": 12306,
+        "name": "飛天大御剣",
+        "gcsimKey": "skyridergreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "15305",
+        "genshinId": 15305,
+        "name": "文使い",
+        "gcsimKey": "messenger",
+        "source": "dm.json"
+      },
+      {
+        "id": "13302",
+        "genshinId": 13302,
+        "name": "鉾槍",
+        "gcsimKey": "halberd",
+        "source": "dm.json"
+      },
+      {
+        "id": "14301",
+        "genshinId": 14301,
+        "name": "魔導緒論",
+        "gcsimKey": "magicguide",
+        "source": "dm.json"
+      },
+      {
+        "id": "12305",
+        "genshinId": 12305,
+        "name": "理屈責め",
+        "gcsimKey": "debateclub",
+        "source": "dm.json"
+      },
+      {
+        "id": "12302",
+        "genshinId": 12302,
+        "name": "龍血を浴びた剣",
+        "gcsimKey": "bloodtaintedgreatsword",
+        "source": "dm.json"
+      },
+      {
+        "id": "14302",
+        "genshinId": 14302,
+        "name": "龍殺しの英傑譚",
+        "gcsimKey": "thrillingtalesofdragonslayers",
+        "source": "dm.json"
+      },
+      {
+        "id": "11303",
+        "genshinId": 11303,
+        "name": "旅道の剣",
+        "gcsimKey": "travelershandysword",
+        "source": "dm.json"
+      },
+      {
+        "id": "11301",
+        "genshinId": 11301,
+        "name": "冷刃",
+        "gcsimKey": "coolsteel",
+        "source": "dm.json"
+      },
+      {
+        "id": "14304",
+        "genshinId": 14304,
+        "name": "翡玉法珠",
+        "gcsimKey": "emeraldorb",
+        "source": "dm.json"
+      },
+      {
+        "id": "15301",
+        "genshinId": 15301,
+        "name": "鴉羽の弓",
+        "gcsimKey": "ravenbow",
+        "source": "dm.json"
+      },
+      {
+        "id": "11302",
+        "genshinId": 11302,
+        "name": "黎明の神剣",
+        "gcsimKey": "harbingerofdawn",
+        "source": "dm.json"
+      }
+    ],
+    "genshinOnly": [
+      {
+        "id": "14524",
+        "name": "旋流の讃美歌"
+      },
+      {
+        "id": "11522",
+        "name": "蝶の羽化"
+      },
+      {
+        "id": "11520",
+        "name": "白銀の湖を舞う翼"
+      },
+      {
+        "id": "11419",
+        "name": "「一心伝」名刀"
+      },
+      {
+        "id": "11420",
+        "name": "「一心伝」名刀"
+      },
+      {
+        "id": "11421",
+        "name": "「一心伝」名刀"
+      },
+      {
+        "id": "11435",
+        "name": "異端を狩る熔刃"
+      },
+      {
+        "id": "11438",
+        "name": "銀灯"
+      },
+      {
+        "id": "11437",
+        "name": "新たなる枝"
+      },
+      {
+        "id": "14437",
+        "name": "雪に沈む心"
+      },
+      {
+        "id": "15437",
+        "name": "風に遊ぶ弦"
+      }
+    ],
+    "gcsimOnly": [
+      {
+        "gcsimKey": "apprenticesnotes",
+        "genshinId": 14101
+      },
+      {
+        "gcsimKey": "beginnersprotector",
+        "genshinId": 13101
+      },
+      {
+        "gcsimKey": "dullblade",
+        "genshinId": 11101
+      },
+      {
+        "gcsimKey": "huntersbow",
+        "genshinId": 15101
+      },
+      {
+        "gcsimKey": "ironpoint",
+        "genshinId": 13201
+      },
+      {
+        "gcsimKey": "oldmercspal",
+        "genshinId": 12201
+      },
+      {
+        "gcsimKey": "pocketgrimoire",
+        "genshinId": 14201
+      },
+      {
+        "gcsimKey": "seasonedhuntersbow",
+        "genshinId": 15201
+      },
+      {
+        "gcsimKey": "silversword",
+        "genshinId": 11201
+      },
+      {
+        "gcsimKey": "wastergreatsword",
+        "genshinId": 12101
+      }
+    ]
+  },
+  "artifacts": {
+    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "records": [
+      {
+        "id": "15031",
+        "genshinId": 15031,
+        "name": "ファントムハンター",
+        "gcsimKey": "marechausseehunter",
+        "source": "dm.json"
+      },
+      {
+        "id": "14004",
+        "genshinId": 14004,
+        "name": "愛される少女",
+        "gcsimKey": "maidenbeloved",
+        "source": "dm.json"
+      },
+      {
+        "id": "15046",
+        "genshinId": 15046,
+        "name": "影に沈む幻",
+        "gcsimKey": "disenchantmentindeepshadow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15032",
+        "genshinId": 15032,
+        "name": "黄金の劇団",
+        "gcsimKey": "goldentroupe",
+        "source": "dm.json"
+      },
+      {
+        "id": "15030",
+        "genshinId": 15030,
+        "name": "花海甘露の光",
+        "gcsimKey": "vourukashasglow",
+        "source": "dm.json"
+      },
+      {
+        "id": "15021",
+        "genshinId": 15021,
+        "name": "華館夢醒形骸記",
+        "gcsimKey": "huskofopulentdreams",
+        "source": "dm.json"
+      },
+      {
+        "id": "15022",
+        "genshinId": 15022,
+        "name": "海染硨磲",
+        "gcsimKey": "oceanhuedclam",
+        "source": "dm.json"
+      },
+      {
+        "id": "15037",
+        "genshinId": 15037,
+        "name": "灰燼の都に立つ英雄の絵巻",
+        "gcsimKey": "scrolloftheheroofcindercity",
+        "source": "dm.json"
+      },
+      {
+        "id": "15028",
+        "genshinId": 15028,
+        "name": "楽園の絶花",
+        "gcsimKey": "flowerofparadiselost",
+        "source": "dm.json"
+      },
+      {
+        "id": "15015",
+        "genshinId": 15015,
+        "name": "逆飛びの流星",
+        "gcsimKey": "retracingbolide",
+        "source": "dm.json"
+      },
+      {
+        "id": "15007",
+        "genshinId": 15007,
+        "name": "旧貴族のしつけ",
+        "gcsimKey": "noblesseoblige",
+        "source": "dm.json"
+      },
+      {
+        "id": "15043",
+        "genshinId": 15043,
+        "name": "暁の星と月の歌",
+        "gcsimKey": "aubadeofmorningstarandmoon",
+        "source": "dm.json"
+      },
+      {
+        "id": "15026",
+        "genshinId": 15026,
+        "name": "金メッキの夢",
+        "gcsimKey": "gildeddreams",
+        "source": "dm.json"
+      },
+      {
+        "id": "15008",
+        "genshinId": 15008,
+        "name": "血染めの騎士道",
+        "gcsimKey": "bloodstainedchivalry",
+        "source": "dm.json"
+      },
+      {
+        "id": "15042",
+        "genshinId": 15042,
+        "name": "月を紡ぐ夜の歌",
+        "gcsimKey": "silkenmoonsserenade",
+        "source": "dm.json"
+      },
+      {
+        "id": "15001",
+        "genshinId": 15001,
+        "name": "剣闘士のフィナーレ",
+        "gcsimKey": "gladiatorsfinale",
+        "source": "dm.json"
+      },
+      {
+        "id": "15047",
+        "genshinId": 15047,
+        "name": "紅血の証",
+        "gcsimKey": "scarletproof",
+        "source": "dm.json"
+      },
+      {
+        "id": "15038",
+        "genshinId": 15038,
+        "name": "黒曜の秘典",
+        "gcsimKey": "obsidiancodex",
+        "source": "dm.json"
+      },
+      {
+        "id": "15027",
+        "genshinId": 15027,
+        "name": "砂上の楼閣の史話",
+        "gcsimKey": "desertpavilionchronicle",
+        "source": "dm.json"
+      },
+      {
+        "id": "15033",
+        "genshinId": 15033,
+        "name": "在りし日の歌",
+        "gcsimKey": "songofdayspast",
+        "source": "dm.json"
+      },
+      {
+        "id": "15034",
+        "genshinId": 15034,
+        "name": "残響の森で囁かれる夜話",
+        "gcsimKey": "nighttimewhispersintheechoingwoods",
+        "source": "dm.json"
+      },
+      {
+        "id": "15025",
+        "genshinId": 15025,
+        "name": "深林の記憶",
+        "gcsimKey": "deepwoodmemories",
+        "source": "dm.json"
+      },
+      {
+        "id": "15040",
+        "genshinId": 15040,
+        "name": "深廊の終曲",
+        "gcsimKey": "finaleofthedeepgalleries",
+        "source": "dm.json"
+      },
+      {
+        "id": "15029",
+        "genshinId": 15029,
+        "name": "水仙の夢",
+        "gcsimKey": "nymphsdream",
+        "source": "dm.json"
+      },
+      {
+        "id": "15002",
+        "genshinId": 15002,
+        "name": "翠緑の影",
+        "gcsimKey": "viridescentvenerer",
+        "source": "dm.json"
+      },
+      {
+        "id": "15036",
+        "genshinId": 15036,
+        "name": "遂げられなかった想い",
+        "gcsimKey": "unfinishedreverie",
+        "source": "dm.json"
+      },
+      {
+        "id": "15020",
+        "genshinId": 15020,
+        "name": "絶縁の旗印",
+        "gcsimKey": "emblemofseveredfate",
+        "source": "dm.json"
+      },
+      {
+        "id": "15017",
+        "genshinId": 15017,
+        "name": "千岩牢固",
+        "gcsimKey": "tenacityofthemillelith",
+        "source": "dm.json"
+      },
+      {
+        "id": "15018",
+        "genshinId": 15018,
+        "name": "蒼白の炎",
+        "gcsimKey": "paleflame",
+        "source": "dm.json"
+      },
+      {
+        "id": "15003",
+        "genshinId": 15003,
+        "name": "大地を流浪する楽団",
+        "gcsimKey": "wandererstroupe",
+        "source": "dm.json"
+      },
+      {
+        "id": "15023",
+        "genshinId": 15023,
+        "name": "辰砂往生録",
+        "gcsimKey": "vermillionhereafter",
+        "source": "dm.json"
+      },
+      {
+        "id": "15039",
+        "genshinId": 15039,
+        "name": "長き夜の誓い",
+        "gcsimKey": "longnightsoath",
+        "source": "dm.json"
+      },
+      {
+        "id": "15016",
+        "genshinId": 15016,
+        "name": "沈淪の心",
+        "gcsimKey": "heartofdepth",
+        "source": "dm.json"
+      },
+      {
+        "id": "15019",
+        "genshinId": 15019,
+        "name": "追憶のしめ縄",
+        "gcsimKey": "shimenawasreminiscence",
+        "source": "dm.json"
+      },
+      {
+        "id": "15045",
+        "genshinId": 15045,
+        "name": "天からの贈り物",
+        "gcsimKey": "celestialgift",
+        "source": "dm.json"
+      },
+      {
+        "id": "15041",
+        "genshinId": 15041,
+        "name": "天穹の顕現せし夜",
+        "gcsimKey": "nightoftheskysunveiling",
+        "source": "dm.json"
+      },
+      {
+        "id": "15006",
+        "genshinId": 15006,
+        "name": "燃え盛る炎の魔女",
+        "gcsimKey": "crimsonwitchofflames",
+        "source": "dm.json"
+      },
+      {
+        "id": "14001",
+        "genshinId": 14001,
+        "name": "氷風を彷徨う勇士",
+        "gcsimKey": "blizzardstrayer",
+        "source": "dm.json"
+      },
+      {
+        "id": "15044",
+        "genshinId": 15044,
+        "name": "風立ちの日",
+        "gcsimKey": "adaycarvedfromrisingwinds",
+        "source": "dm.json"
+      },
+      {
+        "id": "15014",
+        "genshinId": 15014,
+        "name": "悠久の磐岩",
+        "gcsimKey": "archaicpetra",
+        "source": "dm.json"
+      },
+      {
+        "id": "15024",
+        "genshinId": 15024,
+        "name": "来歆の余響",
+        "gcsimKey": "echoesofanoffering",
+        "source": "dm.json"
+      },
+      {
+        "id": "15005",
+        "genshinId": 15005,
+        "name": "雷のような怒り",
+        "gcsimKey": "thunderingfury",
+        "source": "dm.json"
+      },
+      {
+        "id": "14002",
+        "genshinId": 14002,
+        "name": "雷を鎮める尊者",
+        "gcsimKey": "thundersoother",
+        "source": "dm.json"
+      },
+      {
+        "id": "14003",
+        "genshinId": 14003,
+        "name": "烈火を渡る賢者",
+        "gcsimKey": "lavawalker",
+        "source": "dm.json"
+      },
+      {
+        "id": "15048",
+        "genshinId": 15048,
+        "name": "炉炎溶錬の心",
+        "gcsimKey": "heartofthefurnace",
+        "source": "dm.json"
+      },
+      {
+        "id": "15035",
+        "genshinId": 15035,
+        "name": "諧律奇想の断章",
+        "gcsimKey": "fragmentofharmonicwhimsy",
+        "source": "dm.json"
+      },
+      {
+        "id": "10012",
+        "genshinId": 10012,
+        "name": "学者",
+        "gcsimKey": "scholar",
+        "source": "dm.json"
+      },
+      {
+        "id": "10007",
+        "genshinId": 10007,
+        "name": "教官",
+        "gcsimKey": "instructor",
+        "source": "dm.json"
+      },
+      {
+        "id": "10005",
+        "genshinId": 10005,
+        "name": "狂戦士",
+        "gcsimKey": "berserker",
+        "source": "dm.json"
+      },
+      {
+        "id": "10003",
+        "genshinId": 10003,
+        "name": "守護の心",
+        "gcsimKey": "defenderswill",
+        "source": "dm.json"
+      },
+      {
+        "id": "10008",
+        "genshinId": 10008,
+        "name": "博徒",
+        "gcsimKey": "gambler",
+        "source": "dm.json"
+      },
+      {
+        "id": "10006",
+        "genshinId": 10006,
+        "name": "武人",
+        "gcsimKey": "martialartist",
+        "source": "dm.json"
+      },
+      {
+        "id": "10009",
+        "genshinId": 10009,
+        "name": "亡命者",
+        "gcsimKey": "theexile",
+        "source": "dm.json"
+      },
+      {
+        "id": "10002",
+        "genshinId": 10002,
+        "name": "勇士の心",
+        "gcsimKey": "braveheart",
+        "source": "dm.json"
+      },
+      {
+        "id": "10001",
+        "genshinId": 10001,
+        "name": "旅人の心",
+        "gcsimKey": "resolutionofsojourner",
+        "source": "dm.json"
+      }
+    ],
+    "genshinOnly": [
+      {
+        "id": "15009",
+        "name": "火祭りの人"
+      },
+      {
+        "id": "10004",
+        "name": "奇跡"
+      },
+      {
+        "id": "15010",
+        "name": "水祭りの人"
+      },
+      {
+        "id": "15013",
+        "name": "氷祭りの人"
+      },
+      {
+        "id": "15011",
+        "name": "雷祭りの人"
+      },
+      {
+        "id": "10013",
+        "name": "医者"
+      },
+      {
+        "id": "10011",
+        "name": "幸運"
+      },
+      {
+        "id": "10010",
+        "name": "冒険者"
+      }
+    ],
+    "gcsimOnly": []
+  }
+}

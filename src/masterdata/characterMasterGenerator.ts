@@ -18,6 +18,7 @@ import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
+import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, type ManualKeyMapping } from './gcsimKeyMap.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
@@ -145,6 +146,8 @@ export interface CharacterGenerationReport {
 export interface CharacterMasterResult {
   characters: CharacterConfig[];
   report: CharacterGenerationReport;
+  /** 照合表（キャラの分）。生成のたびに作り直す */
+  keyMap: KeyMapSection;
 }
 
 interface GenshinDbCharacter {
@@ -648,10 +651,23 @@ export async function generateCharacterMaster(
       filesByDir.get(go[1])!.add(go[2]);
     }
   }
-  const gcsimKeyByGenshinId = new Map<number, string>();
-  for (const [key, entry] of Object.entries(charDm.data)) {
-    if (!TRAVELER_IDS.has(entry.id)) gcsimKeyByGenshinId.set(entry.id, key);
+  // 照合表（D34）: 公式キャラID（旅人は 空・蛍 × 元素）↔ gcsim キー。名前では突き合わせない。gcsimKey はこの表から引く
+  const keyMapItems: KeyMapItem[] = [];
+  for (const c of charsJa) {
+    if (TRAVELER_IDS.has(c.id) || !ELEMENT_MAP[c.elementType]) continue;
+    keyMapItems.push({ id: characterKey(c.id, ELEMENT_MAP[c.elementType]), genshinId: c.id, name: c.name });
   }
+  // 旅人は公式IDが元素に関わらず共通（空 / 蛍）なので、dm.json では引けない。gcsim のキー（aether<元素> / lumine<元素>）を手で補う
+  const travelerManual: ManualKeyMapping[] = [];
+  for (const traveler of TRAVELERS) {
+    for (const element of Object.values(TRAVELER_ELEMENT_JA)) {
+      const id = characterKey(traveler.genshinId, element);
+      keyMapItems.push({ id, genshinId: traveler.genshinId, name: `${traveler.label}(${element})` });
+      travelerManual.push({ id, gcsimKey: `${traveler.gcsimPrefix}${element}` });
+    }
+  }
+  const keyMap = buildKeyMapSection(keyMapItems, charDm.data, tree.sha, travelerManual);
+  const gcsimKeyById = keyMapLookup(keyMap);
 
   const englishById = new Map(charsEn.map(c => [c.id, c.name]));
   const talentByName = new Map(talentsJa.map(t => [t.name, t]));
@@ -697,7 +713,7 @@ export async function generateCharacterMaster(
     const id = characterKey(c.id, ELEMENT_MAP[c.elementType]);
     const talent = talentByName.get(c.name) ?? talentById.get((c.id - 10000000) * 100 + 1);
     if (!talent) errors.push(`genshin-db: ${c.name} の天賦データが見つかりません`);
-    const gcsimKey = gcsimKeyByGenshinId.get(c.id);
+    const gcsimKey = gcsimKeyById.get(id);
     units.push({
       id,
       name: c.name,
@@ -735,7 +751,7 @@ export async function generateCharacterMaster(
         genshinId: traveler.genshinId,
         talent: t,
         constellation: travelerConstellationByElement.get(element),
-        gcsimKey: charDm.data[gcsimKey] ? gcsimKey : undefined,
+        gcsimKey: gcsimKeyById.get(characterKey(traveler.genshinId, element)),
         gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
         genderIndex: traveler.genderIndex,
       });
@@ -820,5 +836,5 @@ export async function generateCharacterMaster(
 
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;
-  return { characters, report };
+  return { characters, report, keyMap };
 }

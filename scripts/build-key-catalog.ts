@@ -10,6 +10,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { extractKeyCatalog } from '../src/masterdata/gcsimKeyCatalog.ts';
 import { KEY_OVERRIDES } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
+import { assignNames } from '../src/masterdata/gcsimKeyNames.ts';
+import { loadNameSources } from './genshin-db-names.ts';
 
 const REPO = 'genshinsim/gcsim';
 const BRANCH = 'main';
@@ -54,6 +56,10 @@ await Promise.all(Array.from({ length: 20 }, async () => {
 
 const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined);
 
+// 表示名: 手で補う一覧が優先。無いキーは、持ち主の名前（genshin-db）＋ キー名の規則で付ける
+console.log('genshin-db から名前を取得中...');
+const naming = assignNames(catalog.entries, await loadNameSources());
+
 // 1 キー 1 行（差分が読みやすく、ファイルが大きくなりすぎないように）
 const lines = catalog.entries.map(e => '    ' + JSON.stringify(e));
 fs.writeFileSync(
@@ -70,6 +76,7 @@ console.log('種類の候補:', JSON.stringify(report.byKind));
 console.log(`手で補う一覧を適用: ${report.manualCount} 件`);
 if (report.overridesMissing.length > 0) console.log(`  辞書に無い（gcsim の更新で消えた・書き間違い）: ${report.overridesMissing.join(', ')}`);
 console.log(`実行のログで確認できたキー: 辞書にあった ${report.observedHits} 件、辞書に無く追加 ${report.observedAdded} 件（gcsim_key_observed.json）`);
+console.log(`表示名: 手で補った ${naming.manual} 件、規則で付けた ${naming.rule} 件、一部が英語のまま ${naming.partial} 件、持ち主が分からず無し ${naming.unnamed} 件（表示は英語名 → キー名）`);
 console.log(`定義場所が複数にまたがるキー ${report.ambiguous.length} 件:`);
 for (const a of report.ambiguous) console.log(`  ${a.key} ← ${a.places.join(' / ')}`);
 console.log(`未解決のキー名 ${report.unresolved.length} 件:`);

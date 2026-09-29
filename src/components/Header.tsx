@@ -25,6 +25,7 @@ interface HeaderProps {
   onExportJson: () => void;
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCopyNotation: () => void;
+  onCopyGcsimConfig: () => void;
   copiedNotation: boolean;
   loopStartTime?: number;
   rotationNotation?: string;
@@ -55,6 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
   onExportJson,
   onImportJson,
   onCopyNotation,
+  onCopyGcsimConfig,
   copiedNotation,
   loopStartTime = 0,
   rotationNotation = '',
@@ -347,6 +349,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
               <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>
+            </button>
+
+            <button
+              onClick={onCopyGcsimConfig}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
+              title="現在の編成・ローテーションを gcsim の設定文に変換してクリップボードにコピー（警告も表示）"
+            >
+              <Copy className="w-3.5 h-3.5 text-emerald-400" />
+              <span>gcsim設定文をコピー</span>
             </button>
 
             {/* Notation Text Display right next to 記法コピー */}

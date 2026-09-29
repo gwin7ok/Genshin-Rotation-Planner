@@ -13,6 +13,8 @@ import { HelpGuideModal } from './components/HelpGuideModal';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
+import { GcsimConfigDialog } from './components/GcsimConfigDialog';
+import { buildGcsimConfig, type GcsimConfigResult } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
@@ -249,6 +251,30 @@ export default function App() {
     setIsSaveAsOpen(false);
   };
 
+  // gcsim 設定文（現在の編成・ローテーションを変換してコピー。警告はポップアップで表示）
+  const [gcsimResult, setGcsimResult] = useState<GcsimConfigResult | null>(null);
+  const [gcsimCopied, setGcsimCopied] = useState<boolean>(false);
+  const copyGcsimText = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setGcsimCopied(true);
+    } catch {
+      setGcsimCopied(false);
+    }
+  };
+  const handleCopyGcsimConfig = () => {
+    const result = buildGcsimConfig({
+      characters,
+      stints: visibleStints,
+      loopStartIndex,
+      switchDelay,
+      weapons: database.weapons,
+      artifacts: database.artifacts,
+    });
+    setGcsimResult(result);
+    void copyGcsimText(result.config);
+  };
+
   const handleCopyNotation = () => {
     navigator.clipboard.writeText(rotationNotation);
     setCopiedNotation(true);
@@ -333,6 +359,7 @@ export default function App() {
         onExportJson={handleExportJson}
         onImportJson={handleImportJson}
         onCopyNotation={handleCopyNotation}
+        onCopyGcsimConfig={handleCopyGcsimConfig}
         copiedNotation={copiedNotation}
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
@@ -460,6 +487,15 @@ export default function App() {
         stints={calculatedResult.calculatedStints}
         totalDuration={totalDuration}
         loopStartIndex={loopStartIndex}
+      />
+
+      {/* gcsim 設定文 */}
+      <GcsimConfigDialog
+        isOpen={gcsimResult !== null}
+        onClose={() => setGcsimResult(null)}
+        result={gcsimResult}
+        copied={gcsimCopied}
+        onCopyAgain={() => gcsimResult && void copyGcsimText(gcsimResult.config)}
       />
 
       {/* Help & Reordering Guide Modal */}

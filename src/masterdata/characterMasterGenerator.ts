@@ -8,7 +8,7 @@
  *   - gcsim (GitHub) … 各アクションのモーションフレーム (60 FPS)
  *       https://github.com/genshinsim/gcsim/tree/main/internal/characters
  *
- * キャラの突き合わせは gcsim の ui/packages/ui/src/Data/character.dm.json にある
+ * キャラの突き合わせは gcsim の ui/packages/ui/src/data/character.dm.json にある
  * 公式キャラID (例: 胡桃 = 10000046) で行う。名前の表記ゆれ (raidenshogun / raiden 等) に依存しない。
  *
  * 取得できなかった値は仮の数値で埋めずに未設定のままにし、レポートに記録する。
@@ -24,7 +24,7 @@ export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
 const GCSIM_REPO = 'genshinsim/gcsim';
 const GCSIM_BRANCH = 'main';
-const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/Data/character.dm.json';
+const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/data/character.dm.json';
 
 /** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ */
 const AETHER_ID = 10000005;

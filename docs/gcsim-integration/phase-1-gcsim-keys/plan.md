@@ -8,7 +8,7 @@ gcsim の設定文を作るとき、武器・聖遺物の gcsim キー（例: `a
 
 ## 現状
 
-- キャラ: `src/masterdata/characterMasterGenerator.ts` が gcsim の `ui/packages/ui/src/Data/character.dm.json` を取得し、公式IDで突き合わせて `source.gcsimKey` を設定している。旅人は公式IDが元素共通のため、突き合わせから除外し `aether<元素>` を設定している。
+- キャラ: `src/masterdata/characterMasterGenerator.ts` が gcsim の `ui/packages/ui/src/data/character.dm.json` を取得し、公式IDで突き合わせて `source.gcsimKey` を設定している。旅人は公式IDが元素共通のため、突き合わせから除外し `aether<元素>` を設定している。
 - 武器・聖遺物: `src/masterdata/equipmentMasterGenerator.ts`（`generateWeaponsMasterOnline` / `generateArtifactsMasterOnline` / `generateEquipmentMaster`）で genshin-db などから生成。gcsim キーは持っていない。
   - ID は公式ID（武器: 例 `15502`、聖遺物セット: 例 `15031`）。
   - 型: `src/types/database.ts` の `WeaponDatabaseItem` / `ArtifactSetDatabaseItem`。

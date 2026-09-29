@@ -18,8 +18,8 @@ export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
 const GCSIM_REPO = 'genshinsim/gcsim';
 const GCSIM_BRANCH = 'main';
-const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/Data/weapon.dm.json';
-const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/Data/artifact.dm.json';
+const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/data/weapon.dm.json';
+const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/data/artifact.dm.json';
 
 export interface EquipmentGenerationProgress {
   phase: string;

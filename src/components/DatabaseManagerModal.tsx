@@ -58,6 +58,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [elementFilter, setElementFilter] = useState<ElementType | 'all'>('all');
   const [weaponTypeFilter, setWeaponTypeFilter] = useState<WeaponType | 'all'>('all');
+  // ロック中のものだけを表示（キャラ・武器・聖遺物タブ共通）
+  const [lockedOnly, setLockedOnly] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
 
@@ -342,19 +344,20 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     const q = searchQuery.toLowerCase();
     const matchesSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.englishName ?? '').toLowerCase().includes(q);
     const matchesFilter = matchesCharacterFilter(c, elementFilter, weaponTypeFilter);
-    return matchesSearch && matchesFilter;
+    return matchesSearch && matchesFilter && (!lockedOnly || !!c.isLocked);
   });
 
   const filteredWeapons = database.weapons
     .filter(w => {
       const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase()) || (w.id ?? '').includes(searchQuery);
       const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
-      return matchesSearch && matchesWeapon;
+      return matchesSearch && matchesWeapon && (!lockedOnly || !!w.isLocked);
     })
     .sort((a, b) => Number(b.id) - Number(a.id));
 
   const filteredArtifacts = database.artifacts
     .filter(a => {
+      if (lockedOnly && !a.isLocked) return false;
       return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
     })
     .sort((a, b) => Number(b.id) - Number(a.id));
@@ -490,6 +493,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   weaponFilter={weaponTypeFilter}
                   onWeaponFilterChange={setWeaponTypeFilter}
                 />
+
+                {/* ロック中のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setLockedOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="ロック中のものだけを表示"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>ロック中のみ</span>
+                </button>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
@@ -684,6 +700,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   ))}
                 </div>
 
+                {/* ロック中のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setLockedOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="ロック中のものだけを表示"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>ロック中のみ</span>
+                </button>
+
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={handleDeleteAllWeapons}
@@ -763,6 +792,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
                   />
                 </div>
+
+                {/* ロック中のみ表示 */}
+                <button
+                  type="button"
+                  onClick={() => setLockedOnly(v => !v)}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
+                    lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                  title="ロック中のものだけを表示"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>ロック中のみ</span>
+                </button>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button

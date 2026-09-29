@@ -319,7 +319,7 @@
         "duration": 6,
         "description": "神里流·霜滅の霜見雪関扉のダメージを受けた敵の防御力-30%、継続時間6秒。",
         "dataSource": {
-          "duration": "gcsim: ayaka-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -597,7 +597,7 @@
         "duration": 15,
         "description": "ジンが元素オーブまたは元素粒子を獲得した時、チームにいる全てのキャラクターの移動速度+15%、攻撃速度+15%、継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: jean-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -609,12 +609,9 @@
         "id": "10000003-anemo_c4",
         "level": 4,
         "name": "蒲公英の国土",
-        "duration": 1.2,
         "description": "蒲公英の風のエリア内にいるすべての敵の風元素耐性-40%。",
-        "dataSource": {
-          "duration": "gcsim: jean-c4"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "jean-c4"
@@ -1180,7 +1177,7 @@
         "duration": 5,
         "description": "元素スキル**霧氷の剣**で放った氷晶が敵に命中した後、さらに現在フィールド上にいるキャラクターの元素熟知を60アップさせる。継続時間5秒。 また、上記効果の影響を受けたキャラクターが星反応を起こしたとき、または星反応ダメージを与えたとき、継続時間中、上記効果は元素熟知を120アップさせるものに変わる。",
         "dataSource": {
-          "duration": "gcsim: travelercryo-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1196,7 +1193,7 @@
         "duration": 15,
         "description": "元素爆発**飛氷の鉾**を発動時、**寒光**を1層消費するごとに、チーム内の他のキャラクターが与える星反応ダメージが5%アップする。この方法によるダメージアップは最大40%まで。継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: travelercryo-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1481,12 +1478,9 @@
         "id": "10000005-dendro_c6",
         "level": 6,
         "name": "蘊思の霜草",
-        "duration": 1,
         "description": "草蓮灯の「蓮光遍照」影響を受けているキャラクターによる草元素ダメージ+12%。草蓮灯が蓮光幻変を発動していた場合、さらに対応する元素ダメージ+12%。",
-        "dataSource": {
-          "duration": "gcsim: dmc-c6"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "dmc-c6"
@@ -1764,7 +1758,7 @@
         "duration": 8,
         "description": "電光雷轟の威光の落雷が敵に命中すると、敵の雷元素耐性-15%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: travelerelectro-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -2050,12 +2044,9 @@
         "id": "10000005-geo_c1",
         "level": 1,
         "name": "巍然たる青岩",
-        "duration": 2,
         "description": "チーム内キャラクターが岩潮幾重の岩の山に包囲されている時、会心率+10%、中断耐性がアップする。",
-        "dataSource": {
-          "duration": "gcsim: geo-traveler-c1"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "geo-traveler-c1"
@@ -2713,7 +2704,7 @@
         "duration": 12,
         "description": "元素スキル流火の剣発動後の12秒間、付近にいるチーム内キャラクターが敵に炎元素関連反応を起こした後、旅人は夜魂値を14回復する。元素スキル流火の剣を発動するたびに、この方法で夜魂値を最大28回復可能。",
         "dataSource": {
-          "duration": "gcsim: travelerpyro-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -2728,7 +2719,7 @@
         "duration": 9,
         "description": "元素爆発燎原の灼炎を発動した後、旅人の炎元素ダメージ+20%、継続時間9秒。",
         "dataSource": {
-          "duration": "gcsim: travelerpyro-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -3066,12 +3057,9 @@
         "id": "10000006-electro_c2",
         "level": 2,
         "name": "空間電位の結界",
-        "duration": 2.1,
         "description": "蒼雷長押し時に下記の効果が付与される。 ·防御力+25%。 ·リサの中断耐性をアップする。",
-        "dataSource": {
-          "duration": "gcsim: lisa-c2"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "lisa-c2"
@@ -3675,7 +3663,7 @@
         "duration": 5,
         "description": "元素スキル**霧氷の剣**で放った氷晶が敵に命中した後、さらに現在フィールド上にいるキャラクターの元素熟知を60アップさせる。継続時間5秒。 また、上記効果の影響を受けたキャラクターが星反応を起こしたとき、または星反応ダメージを与えたとき、継続時間中、上記効果は元素熟知を120アップさせるものに変わる。",
         "dataSource": {
-          "duration": "gcsim: travelercryo-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -3691,7 +3679,7 @@
         "duration": 15,
         "description": "元素爆発**飛氷の鉾**を発動時、**寒光**を1層消費するごとに、チーム内の他のキャラクターが与える星反応ダメージが5%アップする。この方法によるダメージアップは最大40%まで。継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: travelercryo-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -3976,12 +3964,9 @@
         "id": "10000007-dendro_c6",
         "level": 6,
         "name": "蘊思の霜草",
-        "duration": 1,
         "description": "草蓮灯の「蓮光遍照」影響を受けているキャラクターによる草元素ダメージ+12%。草蓮灯が蓮光幻変を発動していた場合、さらに対応する元素ダメージ+12%。",
-        "dataSource": {
-          "duration": "gcsim: dmc-c6"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "dmc-c6"
@@ -4257,7 +4242,7 @@
         "duration": 8,
         "description": "電光雷轟の威光の落雷が敵に命中すると、敵の雷元素耐性-15%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: travelerelectro-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -4545,12 +4530,9 @@
         "id": "10000007-geo_c1",
         "level": 1,
         "name": "巍然たる青岩",
-        "duration": 2,
         "description": "チーム内キャラクターが岩潮幾重の岩の山に包囲されている時、会心率+10%、中断耐性がアップする。",
-        "dataSource": {
-          "duration": "gcsim: geo-traveler-c1"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "geo-traveler-c1"
@@ -5246,7 +5228,7 @@
         "duration": 12,
         "description": "元素スキル流火の剣発動後の12秒間、付近にいるチーム内キャラクターが敵に炎元素関連反応を起こした後、旅人は夜魂値を14回復する。元素スキル流火の剣を発動するたびに、この方法で夜魂値を最大28回復可能。",
         "dataSource": {
-          "duration": "gcsim: travelerpyro-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -5261,7 +5243,7 @@
         "duration": 9,
         "description": "元素爆発燎原の灼炎を発動した後、旅人の炎元素ダメージ+20%、継続時間9秒。",
         "dataSource": {
-          "duration": "gcsim: travelerpyro-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -6166,7 +6148,7 @@
         "duration": 10,
         "description": "ディルックがダメージを受けると、攻撃力+10%、攻撃速度+5%、継続時間10秒。 最大3重まで。1.5秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: diluc-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -6181,7 +6163,7 @@
         "duration": 2,
         "description": "逆焔の刃を一定の時間間隔で発動すると、ダメージが大幅にアップする。 逆焔の刃発動2秒後、次の逆焔の刃のダメージ+40%、継続時間2秒。",
         "dataSource": {
-          "duration": "gcsim: diluc-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -6515,7 +6497,7 @@
         "duration": 8,
         "description": "レザーが元素オーブまたは元素粒子を獲得した8秒間、与えるダメージ+10%。",
         "dataSource": {
-          "duration": "gcsim: razor-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -6530,7 +6512,7 @@
         "duration": 7,
         "description": "鋭い爪と蒼雷の一回押しで攻撃した時、命中した敵の防御力-15%、継続時間7秒。",
         "dataSource": {
-          "duration": "gcsim: razor-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -6828,10 +6810,10 @@
         "id": "10000021-pyro_c6",
         "level": 6,
         "name": "野火の如く",
-        "duration": 15,
+        "duration": 10,
         "description": "矢の雨を発動した10秒間、チーム全員の移動速度+15%、攻撃力+15%。",
         "dataSource": {
-          "duration": "gcsim: amber-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -7158,7 +7140,7 @@
         "duration": 10,
         "description": "高天の歌発動後、敵の風元素耐性と物理耐性-12%、継続時間10秒。 高天の歌によってノックバックされた敵が着地するまで、風元素耐性と物理耐性が更に-12%。",
         "dataSource": {
-          "duration": "gcsim: venti-c2-anemo"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -7174,7 +7156,7 @@
         "duration": 10,
         "description": "ウェンティが元素オーブまたは元素粒子を獲得した時、風元素ダメージ+25%、継続時間10秒。",
         "dataSource": {
-          "duration": "gcsim: venti-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -7497,7 +7479,7 @@
         "duration": 6,
         "description": "グゥオパァーに攻撃された敵の炎元素耐性-15%、継続時間6秒。",
         "dataSource": {
-          "duration": "gcsim: xiangling-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -7782,7 +7764,7 @@
         "duration": 10,
         "description": "攻撃を受けた後の10秒間、北斗の通常攻撃に追加で20%の雷元素ダメージが付与される。",
         "dataSource": {
-          "duration": "gcsim: beidou-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -8070,7 +8052,7 @@
         "duration": 4,
         "description": "古華剣·裁雨留虹の継続時間+3秒。 その他、剣雨攻撃を受けた敵の水元素耐性-15%、継続時間4秒。",
         "dataSource": {
-          "duration": "gcsim: xingqiu-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -8425,10 +8407,10 @@
         "id": "10000026-anemo_c6",
         "level": 6,
         "name": "降魔·護法夜叉",
-        "duration": 1.2,
+        "duration": 1,
         "description": "靖妖儺舞状態の時、落下攻撃が2体以上の敵に命中すると、風輪両立の使用可能回数+1。その後の1秒間以内は、クールタイム関係なく風輪両立を発動できる。",
         "dataSource": {
-          "duration": "gcsim: xiao-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -8878,15 +8860,12 @@
         "description": "ボンボン爆弾と通常攻撃が敵にダメージを与えた時、50%の確率でクレーは爆裂花火を獲得する。 重撃を発動する時、スタミナの代わりに爆裂花火を優先的に消費し、与えるダメージ+50%。",
         "id": "10000029-pyro_p1",
         "name": "こんこんプレゼント",
-        "dataSource": {
-          "duration": "gcsim: a1-spark"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "a1-spark"
-        ],
-        "duration": 30
+        ]
       },
       {
         "talentName": "無限花火",
@@ -8943,7 +8922,7 @@
         "duration": 25,
         "description": "ドッカン花火状態中、クレーは3秒毎にチーム全員（クレー自身を除く）の元素エネルギーを3回復する。 ドッカン花火発動後25秒間、チーム全員の炎元素ダメージ+10%。",
         "dataSource": {
-          "duration": "gcsim: klee-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -10789,12 +10768,9 @@
         "id": "10000035-cryo_c6",
         "level": 6,
         "name": "起死回骸",
-        "duration": 12,
         "description": "仙法·救苦度厄を発動する時、近くにいるチーム内全ての戦闘不能状態のキャラクターを復活し、HPを50%まで回復させる。 この効果は15分毎に1回のみ発動可能。",
-        "dataSource": {
-          "duration": "gcsim: qiqi-c6"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "qiqi-c6"
@@ -11347,10 +11323,10 @@
         "id": "10000037-cryo_c1",
         "level": 1,
         "name": "飲露",
-        "duration": 5,
+        "duration": 6,
         "description": "二段チャージ重撃の霜華の矢または霜華満開が命中した時、敵の氷元素耐性-15%、継続時間6秒。 命中時に甘雨の元素エネルギーを2回復。二段チャージの重撃による元素エネルギーの回復効果は、1回の重撃で1度のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: ganyu-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -11692,7 +11668,7 @@
         "duration": 30,
         "description": "創生術·擬似陽華の刹那の花が放たれた時、アルベドに生滅カウントを付与する。継続時間30秒。 ·誕生式·大地の潮を発動する時、全ての生滅カウントを取り除く。取り除かれた数によって、誕生式·大地の潮の爆発ダメージと生滅の花のダメージがアップする。 ·生滅カウント1つにつき、アルベドの防御力30%分のダメージがアップする。 生滅カウントは最大4重まで。",
         "dataSource": {
-          "duration": "gcsim: albedo-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -11704,12 +11680,9 @@
         "id": "10000038-geo_c4",
         "level": 4,
         "name": "聖なる堕落",
-        "duration": 1,
         "description": "陽華のエリア内にいるキャラクターの落下攻撃ダメージ+30%。",
-        "dataSource": {
-          "duration": "gcsim: albedo-c4"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "albedo-c4"
@@ -11719,12 +11692,9 @@
         "id": "10000038-geo_c6",
         "level": 6,
         "name": "無垢なる土",
-        "duration": 1,
         "description": "陽華のエリア内にいるフィールド上のキャラクターが、結晶反応で生成されたシールド状態にある時、または陽華のエリア内に月籠が存在する時、与えるダメージ+17%。",
-        "dataSource": {
-          "duration": "gcsim: albedo-c6"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "albedo-c6"
@@ -12028,12 +11998,9 @@
         "id": "10000039-cryo_c6",
         "level": 6,
         "name": "キャッツテールが閉店の時",
-        "duration": 2,
         "description": "特製スピリッツのエリアにいるキャラクターは自身の現在HPによって下記の効果を獲得する。 ·HPが50%以下の時、受ける治療効果+30%。 ·HPが50%を超えている時、元素熟知+200。",
-        "dataSource": {
-          "duration": "gcsim: diona-c6"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "diona-c6",
@@ -12303,7 +12270,7 @@
         "duration": 8,
         "description": "チーム内の自身のキャラクターの攻撃が星異状態の敵に命中した後の8秒間、水元素関連反応の効果が強化される。 ・感電反応ダメージ+15%、月感電反応ダメージ+15%、蒸発反応ダメージ+15%、水元素の拡散反応によるダメージ+15%、月結晶反応によるダメージ+15%。 ・凍結反応の継続時間+15%。",
         "dataSource": {
-          "duration": "gcsim: mona-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -12339,7 +12306,7 @@
         "duration": 8,
         "description": "モナが虚実流動状態に入った後、1秒毎にモナの次の重撃ダメージ+60%。 この効果は最大で8秒間継続。また、この方法でアップできる重撃ダメージは最大180%まで。",
         "dataSource": {
-          "duration": "gcsim: mona-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -12666,7 +12633,7 @@
         "duration": 10,
         "description": "刻晴が雷元素の関連反応を起こした10秒間、攻撃力+25%。",
         "dataSource": {
-          "duration": "gcsim: keqing-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -12681,7 +12648,7 @@
         "duration": 8,
         "description": "通常攻撃、重撃、元素スキルまたは元素爆発を発動する時、刻晴の与える雷元素ダメージ+6%、継続時間8秒。 通常攻撃、重撃、元素スキルまたは元素爆発の発動による効果はそれぞれ別々でカウントされる。",
         "dataSource": {
-          "duration": "gcsim: keqing-c6-attack"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -13309,7 +13276,7 @@
         "cooldown": 5,
         "description": "会心攻撃が発生した5秒間、通常攻撃と重撃の攻撃速度+12%。 5秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: xinyan-c1",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: xinyan-c1-icd"
         },
         "timing": "computed",
@@ -13328,7 +13295,7 @@
         "duration": 12,
         "description": "情熱の薙ぎ払いの振り回しダメージを受けた敵の物理耐性-15%、継続時間12秒。",
         "dataSource": {
-          "duration": "gcsim: xinyan-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -13662,7 +13629,7 @@
         "duration": 4,
         "description": "ロサリアの攻撃で会心が発生すると、攻撃速度+10%、通常攻撃のダメージ+10%、継続時間4秒。",
         "dataSource": {
-          "duration": "gcsim: rosaria-c1-dmg"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -13678,7 +13645,7 @@
         "duration": 10,
         "description": "臨終の聖礼の攻撃が敵に命中すると、敵の物理耐性-20%、継続時間10秒。",
         "dataSource": {
-          "duration": "gcsim: rosaria-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -14019,7 +13986,7 @@
         "duration": 15,
         "description": "胡桃自ら与えた血梅香状態の敵が倒されると、周囲のチーム全員（胡桃自身を除く）の会心率+12%、継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: hutao-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -14035,7 +14002,7 @@
         "cooldown": 60,
         "description": "胡桃のHPが25%以下、または戦闘不能に至るダメージを受けた時に発動： このダメージで胡桃が戦闘不能になることはない。また、次の10秒間、胡桃の全元素耐性及び物理耐性+200%、会心率+100%、中断耐性大幅アップ。 この効果は胡桃のHPが1の時に自動で発動される。 60秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: hutao-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: hutao-c6-icd"
         },
         "timing": "computed",
@@ -14378,12 +14345,9 @@
         "id": "10000047-anemo_c2",
         "level": 2,
         "name": "山嵐残心",
-        "duration": 1,
         "description": "万葉の一刀の流風秋野で下記の効果を発動する。 ·継続時間内、楓原万葉自身の元素熟知+200。 ·流風秋野の中にいるフィールド上キャラクターの元素熟知+200。 この命ノ星座による元素熟知アップ効果は重ね掛けできない。",
-        "dataSource": {
-          "duration": "gcsim: kazuha-c2"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "kazuha-c2"
@@ -14396,7 +14360,7 @@
         "duration": 5,
         "description": "楓原万葉が千早振るまたは万葉の一刀を発動した後の5秒間、風元素付与を獲得する、また楓原万葉の元素熟知の数値が1につき、自身の通常攻撃、重撃、落下攻撃のダメージ+0.2%。",
         "dataSource": {
-          "duration": "gcsim: kazuha-c6-dmgup"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -14969,7 +14933,7 @@
         "duration": 20,
         "description": "琉金の雲間草の琉金の炎の継続時間+4秒。 また、宵宮自身が発動した琉金の炎の影響を受けた敵が継続時間内に倒されると、宵宮の攻撃力+20%、継続時間20秒。",
         "dataSource": {
-          "duration": "gcsim: yoimiya-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -14984,7 +14948,7 @@
         "duration": 6,
         "description": "宵宮の炎元素ダメージで会心が発生した後の6秒間、宵宮の炎元素ダメージ+25%。 宵宮が待機している場合にも効果を発動できる。",
         "dataSource": {
-          "duration": "gcsim: yoimiya-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -15253,7 +15217,7 @@
         "duration": 6,
         "description": "烈炎侍立シールドを獲得または更新した時、チーム全員の通常攻撃、重撃及び落下攻撃ダメージ+15%、継続時間6秒。",
         "dataSource": {
-          "duration": "gcsim: thoma-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -16447,10 +16411,10 @@
         "id": "10000054-hydro_c6",
         "level": 6,
         "name": "珊瑚一心",
-        "duration": 8,
+        "duration": 4,
         "description": "海人の羽衣による儀来羽衣状態の時、珊瑚宮心海の通常攻撃または重撃でHP80%以上のキャラクターに治療を行うと、水元素ダメージ+40%、継続時間4秒。",
         "dataSource": {
-          "duration": "gcsim: kokomi-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -16711,7 +16675,7 @@
         "duration": 12,
         "description": "犬坂の遠吠え方円陣または獣牙突撃陣形戦法発動後の12秒間、発動時の領域状態に基づき、周囲チーム全員の岩元素ダメージの会心ダメージをアップする。 ·「堅牢」：10%アップ。 ·「破耐」：20%アップ。 ·「粉砕」：40%アップ。 この効果は重ね掛けできず、最後に発動したものが反映される。",
         "dataSource": {
-          "duration": "gcsim: gorou-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -17291,7 +17255,7 @@
         "duration": 10,
         "description": "最凶鬼王·一斗轟臨！！による「憤怒の鬼王」状態が終了すると、周囲のチーム全員の防御力+20%、攻撃力+20%、継続時間10秒。",
         "dataSource": {
-          "duration": "gcsim: itto-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -17579,12 +17543,9 @@
         "id": "10000058-electro_c1",
         "level": 1,
         "name": "野狐供真編",
-        "duration": 10,
         "description": "大密法·天狐顕現で天狐雷霆を1回発生させるたびに、八重神子自身の元素エネルギーを8ポイント回復する。",
-        "dataSource": {
-          "duration": "gcsim: yae-c1-electro"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "yae-c1-electro",
@@ -17599,7 +17560,7 @@
         "cooldown": 5,
         "description": "殺生櫻の落雷が敵に命中すると、周囲のチーム全員の雷元素ダメージ+20%、継続時間5秒。",
         "dataSource": {
-          "duration": "gcsim: yaemiko-c4",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: yae-c4-icd"
         },
         "timing": "computed",
@@ -17921,7 +17882,7 @@
         "cooldown": 10,
         "description": "鹿野院平蔵が登場してから5秒間、通常攻撃の攻撃速度+15%、また戮心拳の「変格」効果を1層獲得する。この効果は10秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: heizou-c1",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: heizou-c1-icd"
         },
         "timing": "computed",
@@ -18188,7 +18149,7 @@
         "duration": 25,
         "description": "「命の糸」が爆発した時、マークした敵1体につき、チーム全員のHP上限+10%、継続時間25秒。この方法でアップできるHP上限は最大40%まで。",
         "dataSource": {
-          "duration": "gcsim: yelan-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -18525,7 +18486,7 @@
         "duration": 15,
         "description": "綺良々が元素スキルまたは元素爆発を発動した後15秒間、周囲のチーム全員の全元素ダメージ+12%。",
         "dataSource": {
-          "duration": "gcsim: kirara-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -19119,7 +19080,7 @@
         "duration": 60,
         "description": "申鶴自身によって「氷翎」効果を付与されたキャラクターが、「氷翎」のダメージアップ効果を発動すると、申鶴は「霜霄訣」を1層獲得する。 申鶴が仰霊威召将役呪を発動した時、「霜霄訣」をすべて消費する。消費した層数1につき、その時発動した仰霊威召将役呪のダメージ+5%。この効果は最大50回まで重ね掛け可能、継続時間60秒。",
         "dataSource": {
-          "duration": "gcsim: shenhe-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -19396,7 +19357,7 @@
         "duration": 12,
         "description": "破嶂の旌儀発動後、周囲チーム全員の通常攻撃ダメージ+15%、継続時間12秒。",
         "dataSource": {
-          "duration": "gcsim: yunjin-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -19411,7 +19372,7 @@
         "duration": 12,
         "description": "雲菫が結晶、月結晶反応を起こすと防御力+20%、継続時間12秒。",
         "dataSource": {
-          "duration": "gcsim: yunjin-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -19697,7 +19658,7 @@
         "cooldown": 60,
         "description": "久岐忍が戦闘不能に至るダメージを受けた時、このダメージで戦闘不能にならない。この効果は久岐忍のHPが1の時に自動で発動され、60秒毎に1回のみ発動できる。 また、久岐忍のHPが25%以下になると15秒間、自身の元素熟知+150、60秒毎に1回のみ発動できる。",
         "dataSource": {
-          "duration": "gcsim: kuki-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: kuki-c6-icd"
         },
         "timing": "computed",
@@ -20012,7 +19973,7 @@
         "duration": 15,
         "description": "神里流·水囿発動後、周囲チーム全員の通常攻撃速度+15%、継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: ayato-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -20276,7 +20237,7 @@
         "duration": 12,
         "description": "ニャンコトレジャーを発動すると、周囲のチーム全員（コレイ自身を除く）の元素熟知+60、継続時間12秒。",
         "dataSource": {
-          "duration": "gcsim: collei-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -20487,15 +20448,13 @@
         "id": "10000068-electro_p1",
         "name": "ゴールドマイニング",
         "dataSource": {
-          "duration": "gcsim: dori-a1",
           "cooldown": "3秒毎に1回"
         },
-        "timing": "computed",
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "dori-a1"
-        ],
-        "duration": 3
+        ]
       },
       {
         "talentName": "砂だるま式利子",
@@ -20549,12 +20508,9 @@
         "id": "10000068-electro_c4",
         "level": 4,
         "name": "益をとって損を補う",
-        "duration": 0.8,
         "description": "ランプの精とリンクしているキャラクターは、その時のHPと元素エネルギーに応じて、以下の強化効果を獲得する。 ·HPが50%未満の場合、受ける治療効果+50%。 ·元素エネルギーが50%未満の場合、元素チャージ効率+30%。",
-        "dataSource": {
-          "duration": "gcsim: dori-c4-er-bonus"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "dori-c4-er-bonus",
@@ -20820,7 +20776,7 @@
         "duration": 6,
         "description": "識果榴弾の識蘊の領域に敵がいる時、ティナリの草元素ダメージ+20%。 識蘊の領域の継続時間終了、または敵がいなくなった後、この効果は最大で6秒間持続できる。",
         "dataSource": {
-          "duration": "gcsim: tighnari-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -20835,7 +20791,7 @@
         "duration": 8,
         "description": "造生・蔓纏いの矢を放つと、周囲のチーム全員の元素熟知+60、継続時間8秒。造生・蔓纏いの矢が燃焼、開花、月開花、原激化、または草激化反応を起こすと、元素熟知がさらに60アップし、継続時間がリセットされる。",
         "dataSource": {
-          "duration": "gcsim: tighnari-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -21053,15 +21009,12 @@
         "description": "ニィロウのHP上限が30000を超えている時、その上限が1000超えるごとに「金盃の豊穣」状態のキャラクターが起こした豊穣の核によるダメージ+9%。 この方法でアップできる豊穣の核のダメージは最大400%までとなる。",
         "id": "10000070-hydro_p2",
         "name": "軽やかに舞う永世の夢",
-        "dataSource": {
-          "duration": "gcsim: nilou-a4"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "nilou-a4"
-        ],
-        "duration": 30
+        ]
       }
     ],
     "source": {
@@ -21108,7 +21061,7 @@
         "duration": 10,
         "description": "「金盃の豊穣」状態のキャラクターが敵に水元素ダメージを与えた後、その敵の水元素耐性-35%、継続時間10秒。敵に開花反応、または月開花反応によるダメージを与えた後、その敵の草元素耐性-35%、継続時間10秒。 固有天賦「落花廻旋の庭」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: nilou-c2-dendro"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -21124,7 +21077,7 @@
         "duration": 8,
         "description": "七域のダンスのピルエット状態の3段目のステップが敵に命中すると、ニィロウの元素エネルギーが15回復する。同時に浮蓮のダンス·遠夢聆泉によるダメージ+50%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: nilou-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -21428,7 +21381,7 @@
         "duration": 10,
         "description": "聖儀・狼駆憑走を発動した後、セノの通常攻撃の攻撃速度+20%、継続時間10秒。秘儀・律淵渡魂を発動時、固有天賦「落羽の裁決」の「裁定」効果を起こすと、該当効果の継続時間を更新する。 固有天賦「落羽の裁決」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: cyno-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -21443,7 +21396,7 @@
         "duration": 4,
         "description": "セノの通常攻撃が敵に命中すると、雷元素ダメージ+10%、継続時間4秒。この効果は0.1秒ごとに1回のみ発動でき、最大5層まで重ね掛け可能。",
         "dataSource": {
-          "duration": "gcsim: cyno-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -21793,7 +21746,7 @@
         "duration": 15,
         "description": "聖儀·蒼鷺による庇護が敵に命中すると、キャンディスのHP上限+20%、継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: candace-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -22100,7 +22053,7 @@
         "duration": 8,
         "description": "ナヒーダ自身が付与した蘊種印状態にある敵は、下記の効果を受ける。 ・燃焼、開花、超開花、烈開花反応によるダメージを受けると、一定の確率で会心が発生する。なお会心率は20%、会心ダメージは100%に固定される。この効果による会心率は、元素反応で会心を発生させる他の同種の効果と重ね掛け可能。 ・原激化、超激化、または草激化反応を受けた後の8秒間、防御力-30%。 ・受ける月開花反応によるダメージの会心率+10%、会心ダメージ+20%。",
         "dataSource": {
-          "duration": "gcsim: nahida-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -22115,7 +22068,7 @@
         "duration": 10,
         "description": "心景幻成発動後、ナヒーダの通常攻撃や重撃が所聞遍計の蘊種印状態の敵に命中すると、該当の敵およびその敵とリンクしているすべての相手に滅浄三業·破業障を発動し、ナヒーダの攻撃力200%と元素熟知400%分を基に、草元素ダメージを与える。 滅浄三業·破業障によるダメージは元素スキルダメージと見なされ、0.2秒ごとに1回のみ発動可能。 この効果は最大で10秒間継続でき、ナヒーダが滅浄三業·破業障を6回発動した後に解除される。",
         "dataSource": {
-          "duration": "gcsim: nahida-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -22369,7 +22322,7 @@
         "duration": 3,
         "description": "垂裳凛然の夜が1ラウンドの飛星を発射し始める時、周囲のチーム全員に「啓明」効果を付与し、通常攻撃と重撃によるダメージをレイラのHP上限の5%分アップする。 「啓明」効果は最大で3秒間継続でき、通常攻撃や重撃ダメージを与えた0.05秒後に解除される。",
         "dataSource": {
-          "duration": "gcsim: layla-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -22578,17 +22531,15 @@
         "id": "10000075-anemo_p1",
         "name": "拾玉得花",
         "dataSource": {
-          "duration": "gcsim: wanderer-a1-cryo",
           "cooldown": "0.2秒毎に1回"
         },
-        "timing": "computed",
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "wanderer-a1-cryo",
           "wanderer-a1-electro",
           "wanderer-a1-pyro"
-        ],
-        "duration": 20
+        ]
       },
       {
         "talentName": "夢跡一風",
@@ -22598,15 +22549,13 @@
         "id": "10000075-anemo_p2",
         "name": "夢跡一風",
         "dataSource": {
-          "duration": "gcsim: wanderer-a4",
           "cooldown": "0.1秒毎に1回"
         },
-        "timing": "computed",
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "wanderer-a4"
-        ],
-        "duration": 20
+        ]
       }
     ],
     "source": {
@@ -23161,7 +23110,7 @@
         "cooldown": 5,
         "description": "白玉大根爆発時、影響範囲内にいるフィールド上キャラクターの草元素ダメージ+15%、継続時間8秒。また、スタミナを15ポイント回復する。この方法によるスタミナの回復は、5秒毎に1回のみ可能。",
         "dataSource": {
-          "duration": "gcsim: yaoyao-c1",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: yaoyao-c1-stam-icd"
         },
         "timing": "computed",
@@ -23177,10 +23126,10 @@
         "id": "10000077-dendro_c4",
         "level": 4,
         "name": "愛嬌悠々",
-        "duration": 8.8,
+        "duration": 8,
         "description": "祥雲団々落清白、または玉顆珊々月中落を発動後、ヨォーヨのHP上限の0.3%を基にヨォーヨの元素熟知をアップする、継続時間8秒。この方法でアップできる元素熟知は最大120までとなる。",
         "dataSource": {
-          "duration": "gcsim: yaoyao-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -23544,7 +23493,7 @@
         "duration": 8,
         "description": "アルハイゼンが琢光鏡を生成する時、生成された琢光鏡の数が1につき、自身の元素熟知+50、継続時間8秒。層ごとに継続時間のカウントは独立しており、最大4層まで。琢光鏡の数が上限に達している場合にも効果を発動できる。",
         "dataSource": {
-          "duration": "gcsim: alhaitham-c2-1-stack"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -23562,7 +23511,7 @@
         "duration": 15,
         "description": "殊境·顕象結縛を発動時、このスキルによって消費·生成された琢光鏡の数に応じて、以下の効果を発動する。 ·琢光鏡を1枚消費する毎に、周囲にいるチーム内の他キャラクターの元素熟知+30、継続時間15秒。 ·琢光鏡を1枚生成する毎に、アルハイゼンの草元素ダメージ+10%、継続時間15秒。 継続時間中、殊境·顕象結縛を再発動すると、既存の上記効果が先にクリアされる。",
         "dataSource": {
-          "duration": "gcsim: alhaitham-c4-gain"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -23578,7 +23527,7 @@
         "duration": 6,
         "description": "アルハイゼンは下記効果を獲得する。 ·殊境·顕象結縛発動完了から2秒後、消費した琢光鏡の数に関係なく、3枚の琢光鏡を生成する。 ·アルハイゼンが琢光鏡を生成する時、琢光鏡の数がすでに上限に達している場合、アルハイゼンの会心率+10%、会心ダメージ+70%、継続時間6秒。 この効果が継続時間内に再び発動されると、残りの継続時間+6秒。",
         "dataSource": {
-          "duration": "gcsim: alhaitham-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -24509,7 +24458,7 @@
         "duration": 3,
         "description": "精緻なる絵図を発動した後の3秒間、カーヴェの草元素耐性+50%、受ける治療効果+25%。",
         "dataSource": {
-          "duration": "gcsim: kaveh-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -24807,7 +24756,7 @@
         "duration": 15,
         "description": "癒気全形論を発動した後の15秒間、周囲チーム全員の元素熟知+80。",
         "dataSource": {
-          "duration": "gcsim: baizhu-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -25074,15 +25023,12 @@
         "description": "魔術·アストニシングシフトが召喚したビックラキャット·ボックスが元素変化を起こした後、リネットの元素爆発ダメージ+15%。効果は該当ビックラキャット·ボックスの継続時間終了まで継続する。",
         "id": "10000083-anemo_p2",
         "name": "プロップは完備",
-        "dataSource": {
-          "duration": "gcsim: lynette-a4"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "lynette-a4"
-        ],
-        "duration": 6.4
+        ]
       }
     ],
     "source": {
@@ -25126,10 +25072,10 @@
         "id": "10000083-anemo_c6",
         "level": 6,
         "name": "真意看破の双眸",
-        "duration": 6.4,
+        "duration": 6,
         "description": "リネットがエニグマティック·フェイントのエニグマ·スラストを繰り出す時、風元素付与を獲得し、風元素ダメージ+20%、継続時間6秒。",
         "dataSource": {
-          "duration": "gcsim: lynette-c6-buff"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -25398,7 +25344,7 @@
         "duration": 6,
         "description": "リネが放った炎元素の重撃が敵に命中した後、その敵の炎元素耐性-20%、継続時間6秒。",
         "dataSource": {
-          "duration": "gcsim: lyney-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -25699,7 +25645,7 @@
         "duration": 6,
         "description": "フレミネが敵に凍結、氷砕き、超電導、星電導反応を起こした後、攻撃力+9%、継続時間6秒、最大2重まで。この効果は0.3秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: freminet-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -25714,7 +25660,7 @@
         "duration": 6,
         "description": "フレミネが敵に凍結、氷砕き、超電導、星電導反応を起こした後、会心ダメージ+12%、継続時間6秒、最大3重まで。この効果は0.3秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: freminet-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -26640,7 +26586,7 @@
         "duration": 12,
         "description": "フレーミング·氷点法発動時、「ヴェリテくん」の攻撃が1/2/3体以上の敵に命中すると、シャルロットの攻撃力はそれぞれ+10%/20%/30%となる。継続時間12秒。",
         "dataSource": {
-          "duration": "gcsim: charlotte-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -27275,7 +27221,7 @@
         "duration": 6,
         "description": "円形爆撃戦術·轟発動後、シュヴルーズが近迫阻止射撃·速を長押しで発動すると、近迫阻止射撃·速にクールタイムが発生しない。この効果は最大で6秒間持続でき、近迫阻止射撃·速を2回長押しで発動した後に解除される。",
         "dataSource": {
-          "duration": "gcsim: chev-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -27573,7 +27519,7 @@
         "duration": 8,
         "description": "晴天を衝く霰弾のサルートが敵に命中した時、その敵の岩元素耐性-20%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: navia-c4-shred"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -27877,7 +27823,7 @@
         "duration": 5,
         "description": "嘉明が治療効果を受けた時、それがHP上限を超える回復だった場合、嘉明の攻撃力+20%、継続時間5秒。",
         "dataSource": {
-          "duration": "gcsim: gaming-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -28204,7 +28150,7 @@
         "duration": 15,
         "description": "朝翔の鶴雲の天梯昇りを発動後、閑雲の攻撃力+20%、継続時間15秒。 また、固有天賦「かの姿、洞府の仙人を彷彿す」の効果は以下のように強化される。夕集の竹星の「竹星」の補助仙力が残っている時、周囲のフィールド上キャラクターの着地時の落下攻撃によるダメージが、閑雲の攻撃力の400%分アップする。この方法によって、近くのフィールド上キャラクターの着地時の落下攻撃は最大18000までダメージアップ可能。 1回の着地における落下攻撃ダメージでは、上記ダメージアップ効果は1体の敵にのみ適用される。各キャラクターごとに、0.4秒毎に1回のみ発動可能。 固有天賦「かの姿、洞府の仙人を彷彿す」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: xianyun-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -28219,7 +28165,7 @@
         "duration": 16,
         "description": "1回の朝翔の鶴雲での鶴雲幻化中、天梯昇りを1/2/3回発動すると、その幻化状態の間、閑雲衝撃波の会心ダメージが15%/35%/70%アップする。 閑雲が夕集の竹星を発動した後の16秒間、朝翔の鶴雲がクールタイムに入らなくなる。この効果は閑雲が朝翔の鶴雲を8回発動すると解除される。",
         "dataSource": {
-          "duration": "gcsim: xianyun-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -28511,11 +28457,11 @@
         "id": "10000094-geo_c4",
         "level": 4,
         "name": "衣裁三礼",
-        "duration": 15,
+        "duration": 8,
         "cooldown": 1,
         "description": "固有天賦「量体裁衣」の後続効果を発動した後の8秒間、フィールド上にいるチーム内自身のキャラクターの通常攻撃、重撃、落下攻撃が近くの敵に命中した時、敵の付近に簡易型自動制御人形の「きぬ」を1体召喚する。この方法で召喚できる「きぬ」は1秒毎に1体のみ。固有天賦「量体裁衣」の当意即妙または裁錦効果の継続期間中、上記方法で召喚できる「きぬ」は最大3体まで。上記効果は15秒毎に1回のみ発動可能。 固有天賦「量体裁衣」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: chiori-c4-lockout",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: chiori-c4-icd"
         },
         "timing": "computed",
@@ -28778,7 +28724,7 @@
         "duration": 8,
         "description": "ぴょんぴょんハイドロセラピーと過飽和まごころお注射を発動時、HP上限の30%に相当するバブルシールドを生成し、ダメージを吸収する。このシールドは水元素ダメージに対して250%の吸収効果を持ち、発動完了まで継続する。 また、ぴょんぴょんハイドロセラピーによるヒーリングバブルか過飽和まごころお注射が敵に命中した後、その敵の水元素耐性-35%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: sigewinne-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -28793,7 +28739,7 @@
         "duration": 15,
         "description": "シグウィンが治療を行う時、HP上限を基に自身の過飽和まごころお注射の会心率と会心ダメージを以下のようにアップする。HP上限1000ごとに会心率+0.4%、会心ダメージ+2.2%、継続時間15秒。この方法でアップできる会心率は最大20%まで、会心ダメージは最大110%まで。",
         "dataSource": {
-          "duration": "gcsim: sigewinne-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -29144,7 +29090,7 @@
         "cooldown": 15,
         "description": "昇りゆく凶月のダメージがアップする。アップ量は、アルレッキーノの攻撃力×その時点における「命の契約」パーセンテージ×700%。 万象、灰に帰すを発動した後の20秒間、アルレッキーノの通常攻撃と元素爆発の会心率+10%、会心ダメージ+70%。この効果は15秒毎に1回のみ発動可能。",
         "dataSource": {
-          "duration": "gcsim: arlecchino-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: arlecchino-c6-icd"
         },
         "timing": "computed",
@@ -29371,7 +29317,7 @@
         "duration": 10,
         "description": "後述のどちらかの条件を満たした場合、セトスの雷元素ダメージ+15%、継続時間10秒、最大2層まで。継続時間は層ごとに独立してカウントされる。 ・狙い撃ち射撃で元素エネルギーを消費する。固有天賦「黒鳶の謎掛」を解放しておく必要がある。 ・古儀・鳴砂牽雷で元素反応を起こし、元素エネルギーを回復する。 ・秘儀・瞑光貫影を発動する。",
         "dataSource": {
-          "duration": "gcsim: sethos-c2-burst"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -29386,7 +29332,7 @@
         "duration": 10,
         "description": "貫影の矢または瞑弦の矢が2体以上の敵に命中した時、周囲のチーム全員の元素熟知+80、継続時間10秒。",
         "dataSource": {
-          "duration": "gcsim: sethos-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -29971,7 +29917,7 @@
         "duration": 10,
         "description": "フレグランス・アコード、アロマティック・アナライズ、または固有天賦「余香」の清露コロン（該当の固有天賦を解放する必要がある）が敵に命中した時、その敵の草元素耐性-30%、継続時間10秒。",
         "dataSource": {
-          "duration": "gcsim: emilie-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -29987,7 +29933,7 @@
         "cooldown": 12,
         "description": "フレグランス·アコードまたはアロマティック·アナライズ発動時、エミリエは「留まる香り」を獲得する。継続時間5秒。 継続期間中、エミリエが通常攻撃または重撃を行うと、芳香が1生成される。さらに、エミリエの通常攻撃と重撃は元素付与によって他の元素に変化しない草元素ダメージへと変わり、与えるダメージがエミリエの攻撃力の300%分アップする。 「留まる香り」効果は、この方法で芳香を4生成した時、または継続時間終了時に解除され、12秒毎に1回のみ獲得できる。",
         "dataSource": {
-          "duration": "gcsim: emilie-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: emilie-c6-icd"
         },
         "timing": "computed",
@@ -30359,7 +30305,7 @@
         "duration": 6,
         "description": "キィニチの元素スキルが敵に命中した時、その敵の草元素耐性-30%、継続時間6秒。 また、キィニチが「夜魂の加護」状態で発動する初回の廻狩貫鱗砲の影響範囲アップ、かつ与えるダメージ+100%。",
         "dataSource": {
-          "duration": "gcsim: kinich-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -30920,7 +30866,7 @@
         "duration": 15,
         "description": "シロネンがヨワル・スクラッチを発動した後、周囲のチーム全員に継続時間15秒の「栄華の恵み」効果を付与する。 「栄華の恵み」を持つキャラクターの通常攻撃、重撃、落下攻撃の与えるダメージをシロネンの防御力の65%分アップする。この効果は6回発動、または継続時間終了時に解除される。 同時に複数の敵に命中した場合、命中した敵の数に応じて発動回数が消費される。「栄華の恵み」の発動回数は、付与されたキャラクターごとに計算される。",
         "dataSource": {
-          "duration": "gcsim: xilonen-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -30936,7 +30882,7 @@
         "cooldown": 15,
         "description": "夜魂の加護状態にある時、シロネンがダッシュ、跳躍、通常攻撃、落下攻撃を行うと、「永夜の祝福」効果を獲得する。夜魂の加護状態における制限を無視し、通常攻撃と落下攻撃の与えるダメージをアップ、継続時間5秒。 継続期間中： ・シロネンの夜魂値の時間制限カウントダウンを一時停止し、シロネンの夜魂値、燃素、スタミナは減少しなくなる。さらに、夜魂値が上限に達した時、シロネンの夜魂の加護状態は終了しない。 ・夜魂の加護状態にあるシロネンの通常攻撃と落下攻撃の与えるダメージがシロネンの防御力の300%分アップする。 ・1.5秒毎に、付近のチームメンバー全員のHPを回復する。回復量はシロネンの防御力の120%分に相当する。 「永夜の祝福」は15秒毎に1回のみ獲得可能。",
         "dataSource": {
-          "duration": "gcsim: xilonen-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: xilonen-c6-icd"
         },
         "timing": "computed",
@@ -31224,7 +31170,7 @@
         "cooldown": 3,
         "description": "チャスカのマルチ照準に必要なチャージ時間が短縮され、かつ固有天賦「弾丸トリック」の「スピリット転化」を起こした後、チャスカは「猛襲」状態に入る。その後の3秒間、チャスカが次に元素スキルスピリット・レインズのマルチ照準を発動する時、直ちにチャージが完了し、かつそのマルチ照準のシャドウチェイサー弾およびシャドウチェイサー弾・光輝の会心ダメージ+120%。「猛襲」効果は3秒毎に1回のみ獲得可能。 上記効果は固有天賦「弾丸トリック」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: chasca-c6",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: chasca-c6-icd"
         },
         "timing": "computed",
@@ -31494,7 +31440,7 @@
         "duration": 9,
         "description": "元素爆発闇声の残響を発動した後、オロルンは継続時間9秒の「霊式超感覚」効果を獲得する。 霊式超感覚 雷元素ダメージ+8%。 また、継続期間中、元素爆発闇声の残響またはウルトラソニック・アイが敵1体に命中するたびに、追加でオロルンの雷元素ダメージ+8%。この方法でアップできる雷元素ダメージは最大32%まで。",
         "dataSource": {
-          "duration": "gcsim: ororon-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -31509,7 +31455,7 @@
         "duration": 9,
         "description": "固有天賦「夜陰のシナスタジア」の「顕象超感覚」を発動した後、チーム内にいる自身のフィールド上キャラクターの攻撃力+10%、継続時間9秒。この効果は最大3層まで重ね掛け可能、継続時間は層ごとに独立してカウントされる。 また、元素爆発闇声の残響を発動時、「顕象超感覚」と同様の効果を1回発動し、本来の200%分のダメージを与える。 固有天賦「夜陰のシナスタジア」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: ororon-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -31899,10 +31845,10 @@
         "id": "10000106-pyro_c1",
         "level": 1,
         "name": "夜の主の授記",
-        "duration": 10,
+        "duration": 8,
         "description": "マーヴィカの夜魂値上限が120になり、かつ戦意の獲得効率+25%。 また、戦意を獲得した後、マーヴィカの攻撃力+40%、継続時間8秒。",
         "dataSource": {
-          "duration": "gcsim: mavuika-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -31914,12 +31860,9 @@
         "id": "10000106-pyro_c2",
         "level": 2,
         "name": "灰燼の代償",
-        "duration": 0.5,
         "description": "夜魂の加護状態にある時、マーヴィカの基礎攻撃力+200。さらに、諸火武装の形態に応じて、対応する効果を獲得する。 ・焚曜の輪：近くの敵の防御力-20%。 ・双駆輪：マーヴィカの通常攻撃、重撃、元素爆発天を焦がす刻の墜陽斬の与えるダメージを、それぞれマーヴィカの攻撃力の60%/90%/120%分アップする。",
-        "dataSource": {
-          "duration": "gcsim: mavuika-c2"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "mavuika-c2"
@@ -32472,7 +32415,7 @@
         "duration": 12,
         "description": "元素爆発月踏む鶴弦を発動後の12秒間、周囲チーム全員の元素熟知+60。",
         "dataSource": {
-          "duration": "gcsim: lanyan-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -32996,23 +32939,6 @@
         "level": 6,
         "name": "「豊穣の邦」の教え",
         "description": "運動量メーターの継続時間+3秒。 また、イアンサが夜魂値の回復効果を起こした時、回復量が上限を超えた場合、「火事場の馬鹿力」効果を獲得し、フィールド上にいるチーム内の自身のキャラクターの与えるダメージ+25%、継続時間3秒。"
-      }
-    ],
-    "constellationEffects": [
-      {
-        "id": "10000110-electro_c6",
-        "level": 6,
-        "name": "「豊穣の邦」の教え",
-        "duration": 3,
-        "description": "運動量メーターの継続時間+3秒。 また、イアンサが夜魂値の回復効果を起こした時、回復量が上限を超えた場合、「火事場の馬鹿力」効果を獲得し、フィールド上にいるチーム内の自身のキャラクターの与えるダメージ+25%、継続時間3秒。",
-        "dataSource": {
-          "duration": "gcsim: iansan-c6"
-        },
-        "timing": "computed",
-        "gcsimTarget": true,
-        "gcsimKeys": [
-          "iansan-c6"
-        ]
       }
     ]
   },
@@ -33614,7 +33540,7 @@
         "duration": 15,
         "description": "チームにいる4名のキャラクターの元素タイプが水元素または氷元素の時、エスコフィエの元素スキル**ミ・キュイ**または元素爆発**デコ・デコパージュ**発動後の15秒間、周囲のチーム全員が氷元素ダメージを与える時の会心ダメージ+60%。 固有天賦「シーズニングの中の閃き」を解放する必要がある。",
         "dataSource": {
-          "duration": "gcsim: escoffier-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -33629,7 +33555,7 @@
         "duration": 15,
         "description": "エスコフィエが**「チルド」モード**で調理マシナリーを起動する時、継続時間15秒の「即席スペシャリテ」効果を獲得する。継続期間中、エスコフィエは「冷製料理」効果を5層獲得する。周囲のフィールド上キャラクター（エスコフィエを除く）の通常攻撃、重撃、落下攻撃、元素スキルまたは元素爆発が敵に氷元素ダメージを与えると、「冷製料理」を1層消費して与えるダメージをエスコフィエの攻撃力240%分アップする。 一回の氷元素ダメージが同時に複数の敵に命中した場合、命中した敵の数に応じて「冷製料理」の層数が消費される。",
         "dataSource": {
-          "duration": "gcsim: escoffier-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -33912,7 +33838,7 @@
         "duration": 15,
         "description": "元素爆発**複合鎮静フィールド**による抑制風域の継続時間を3秒に延長する。 また、元素爆発複合鎮静フィールドを発動した後、イファの元素熟知+100、継続時間15秒。",
         "dataSource": {
-          "duration": "gcsim: ifa-c4"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -34195,7 +34121,7 @@
         "duration": 12.5,
         "description": "元素スキル極悪技・閃を発動すると、スカークは**蛇の狡智**を追加で10獲得する。 元素爆発極悪技・滅の元素爆発ダメージアップ効果において、カウントされる蛇の狡智の最大値が10アップする。 また、スカークが**七相一閃**モードの特殊元素爆発極悪技・尽を発動後の12.5秒間、攻撃力+70%。この効果はスカークが七相一閃モードを終了すると解除される。",
         "dataSource": {
-          "duration": "gcsim: skirk-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -34965,7 +34891,7 @@
         "cooldown": 1.9,
         "description": "ラウマが元素スキル**聖言のルノ・永夜の眠り**または元素爆発**聖言のルノ・月の心**を発動すると、「生を紡ぐ糸」を獲得する。継続時間20秒。 継続時間中、付近にいるチーム内キャラクターが月開花反応を起こした時、付近にいるフィールド上キャラクターのHPをラウマの元素熟知の500%分回復する。この効果は1.9秒毎に1回のみ発動可能。 また、ラウマの獣霊の御使い形態で消費するスタミナ-40%、最大継続時間+5秒。",
         "dataSource": {
-          "duration": "gcsim: lauma-c1",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: lauma-c1-icd"
         },
         "timing": "computed",
@@ -35446,7 +35372,7 @@
         "duration": 15,
         "description": "アイノが元素スキル**アイデアキャッチャー**または元素爆発**お水ひえひえ装置**を発動すると、アイノ自身と周囲のフィールド上の他のキャラクターの元素熟知+80、継続時間15秒。 この命ノ星座による元素熟知のアップ効果は重ね掛けできない。",
         "dataSource": {
-          "duration": "gcsim: aino-c1"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -35461,7 +35387,7 @@
         "duration": 15,
         "description": "元素爆発**お水ひえひえ装置**を発動した後の15秒間、周囲のフィールド上キャラクターの感電、開花、月感電、月開花、月結晶によるダメージ+15%。 月兆・満照：上記反応によるダメージがさらに+20%。",
         "dataSource": {
-          "duration": "gcsim: aino-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -35842,7 +35768,7 @@
         "duration": 6,
         "description": "ドゥリンの元素爆発ダメージは敵の防御力30%を無視する。 また、ドゥリンの元素爆発純白の法則・変転する光と漆黒の法則・燻る星が強化される。 ・元素爆発純白の法則・変転する光と「白焔の龍」が敵に命中すると、その敵の防御力-30%、継続時間6秒。 ・元素爆発漆黒の法則・燻る星と「黒蝕の龍」の与えるダメージが追加で敵の防御力40%を無視する。",
         "dataSource": {
-          "duration": "gcsim: durin-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -36084,7 +36010,7 @@
         "duration": 20,
         "description": "月兆・満照：元素スキル奇策・財宝分配法の**ゴロニャンお宝ボトル**が満タンになってから20秒間、付近にいるチーム内の月兆キャラクターの会心率+5%、会心ダメージ+40%。",
         "dataSource": {
-          "duration": "gcsim: jahoda-c6"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -36347,7 +36273,7 @@
         "duration": 8,
         "description": "**引力値**の蓄積速度+34%。 引力の干渉発動時、コロンビーナは明照効果を獲得し、HP上限+40%、継続時間8秒。 月兆・満照： 明照効果継続中、引力の干渉発動時、コロンビーナが最も多く引力値を溜めた月反応の種類に応じて、それぞれ以下の効果を獲得する。 ・月感電反応：フィールド上にいるチーム内の自身キャラクターの攻撃力が、コロンビーナのHP上限の1%分アップする。 ・月開花反応：フィールド上にいるチーム内の自身キャラクターの元素熟知が、コロンビーナのHP上限の0.35%分アップする。 ・月結晶反応：フィールド上にいるチーム内の自身キャラクターの防御力が、コロンビーナのHP上限の1%分アップする。 付近にいるチーム内キャラクターが与える月反応ダメージが7%**向上**する。",
         "dataSource": {
-          "duration": "gcsim: columbina-c2"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -36365,7 +36291,7 @@
         "duration": 8,
         "description": "**月の領域**にいるキャラクターが月反応を起こした後の8秒間、その反応に関与した元素タイプについて、チーム全員の与える会心ダメージを80%アップさせる。同じ元素タイプの会心ダメージアップ効果は重ね掛けできない。 付近にいるチーム内キャラクターが与える月反応ダメージが7%**向上**する。",
         "dataSource": {
-          "duration": "gcsim: columbina-c6-lb"
+          "duration": "genshin-db: 説明文の継続時間"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -36757,12 +36683,9 @@
         "id": "10000127-geo_c4",
         "level": 4,
         "name": "日逐いの狼",
-        "duration": 1.1,
         "description": "元素爆発**影無き灯り**の「闇の小夜啼歌」効果継続時間中、付近にいるチーム内フィールド上キャラクターの防御力+200。",
-        "dataSource": {
-          "duration": "gcsim: illuga-c4"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "illuga-c4"
@@ -37041,12 +36964,9 @@
         "id": "10000128-anemo_c6",
         "level": 6,
         "name": "「愛しきモンドよ、変わらぬ姿で」",
-        "duration": 3,
         "description": "**疾風怒濤**状態が次のように強化される。 ・特殊元素スキル**出づる四風**発動後の短時間、ファルカは元素スキルの一回押しまたは通常攻撃の長押しで、出づる四風の使用可能回数を消費せずに、特殊重撃蒼牙を追加で1回発動できるようになる。 ・特殊重撃蒼牙を行った後の短時間、ファルカは元素スキルの一回押しで、出づる四風の使用可能回数を消費せずに、出づる四風を追加で1回発動できるようになる。 上記の方法で追加の特殊重撃「蒼牙」または追加の特殊元素スキル「出づる四風」を発動した際は、上記の効果を発動できない。 さらに、固有天賦**「風の御旗の導き」**における「蒼牙の誓い」の効果が強化される。「蒼牙の誓い」1層につき、ファルカの会心ダメージ+20%。",
-        "dataSource": {
-          "duration": "gcsim: varka-c6-free-charge"
-        },
-        "timing": "computed",
+        "dataSource": {},
+        "timing": "conditional",
         "gcsimTarget": true,
         "gcsimKeys": [
           "varka-c6-free-charge",
@@ -37577,7 +37497,7 @@
         "cooldown": 16,
         "description": "付近にいるチーム内キャラクターの**虚己の恵み**が**聖祝の導き**に昇格した時、ニコはそのキャラクターに「導きの加護」効果を付与する。継続時間20秒。この効果は、各キャラクター16秒毎に1回のみ獲得可能。 「導きの加護」を持つキャラクターの通常攻撃、重撃、落下攻撃、元素スキル、元素爆発が与えるダメージは、ニコの攻撃力の70%分アップする。この効果は8回発動時、または継続時間終了時に解除される。 同時に複数の敵に命中した場合は、命中した敵の数に応じて発動回数を消費する。チーム内に「導きの加護」を持つキャラクターが複数人いる場合、それぞれの発動回数は独立してカウントされる。",
         "dataSource": {
-          "duration": "gcsim: nicole-c4",
+          "duration": "genshin-db: 説明文の継続時間",
           "cooldown": "gcsim: nicole-c4-icd"
         },
         "timing": "computed",

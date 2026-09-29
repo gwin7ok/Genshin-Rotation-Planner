@@ -55,8 +55,12 @@ export interface KeyCatalogEntry {
   durationFrames?: number;
   /** 定義場所が複数の分類・持ち主にまたがる（先頭の定義場所を採用。5-2b で確認） */
   ambiguous?: boolean;
-  /** 日本語の表示名（手で補う一覧。自動生成のみのキーには無い） */
+  /** 日本語の表示名（手で補う一覧、または持ち主の名前＋キー名の規則。持ち主が分からないキーには無い） */
   name?: string;
+  /** 英語の表示名（日本語名が無いときの表示に使う。持ち主が分からないキーには無い） */
+  nameEn?: string;
+  /** 表示名の由来（manual = 手で補う一覧、rule = 規則、partial = 規則だが一部が英語のまま） */
+  nameSource?: 'manual' | 'rule' | 'partial';
   /** CT のとき、どの効果（キー）のCTか（手で補う一覧） */
   cooldownOf?: string;
   /** 手で補う一覧の注記 */

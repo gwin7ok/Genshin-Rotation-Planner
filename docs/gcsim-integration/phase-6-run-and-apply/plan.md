@@ -144,3 +144,12 @@ CT待ちが生じるケースは、結果の反映を保留する。
 
 - 対象: 固有天賦の関数が無い 26 定義・キャラのキーが無い 10 定義（一覧: `phase-5-key-catalog/link-review.md`）。辞書に登録しない。
 - 表示: ユーザーが手動で置いたときだけガントチャートに出る。gcsim の結果からの自動追加・上書きの対象外。「gcsim 対象外」の印と、理由（`gcsimNote`）をホバーで出す（D41-3）。
+
+## フェーズ5 から引き継ぐこと（2026-09-29）
+
+- **辞書** `src/data/gcsim_key_catalog.json`: キー → 分類・持ち主・種類の候補・継続時間・表示名（日本語 `name` / 英語 `nameEn`。表示は 日本語名 → 英語名 → キー名。`displayNameOf`）。登録している関数名（`sources[].func`）、実行で確認済みか（`observed`）も持つ。
+- **発動バフの定義**（マスター）: `gcsimKeys`（各キーを別のバーにする）・`gcsimExtraKeys`・`gcsimCooldownKeys`・`timing`（always / computed / conditional）・`gcsimTarget`（false = 対象外）・`gcsimNote`（理由）。命ノ星座の効果は `CharacterConfig.constellationEffects`（凸数が足りるときだけ出す）。
+- **CT開始位置**: `ActionDefinition.cooldownStart`（motionStart / holdEnd / stateEnd）・`cooldownPerHold`・`holdInFrames`。アプリは計算値を使い、gcsim の書き戻し値は別の項目に保存する（D37）。
+- **gcsim の結果が補正する**のは値（CT・継続時間・発動位置・所要時間）。対応付け（辞書・結び付け）が誤ると、反映先を間違える。値の実態との差は、書き戻しで補正される前提で許容している。
+- **gcsim に状態のキーが無い固有天賦**（D53）は辞書に登録せず、ユーザーが手動で置いたときだけ表示する。
+- 保留事項: 出場追加ボタンがグレーになる現象（再現待ち。`progress.md` の「現在の状態」）。

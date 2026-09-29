@@ -8,6 +8,8 @@ import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
 import { mapAction } from './actionMapping.ts';
+import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
+import type { GcsimMemberInfo } from './readGcsimLog.ts';
 
 /** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル固定、会心率100% */
 const CHARACTER_LINE_PARAMS = 'lvl=90/90';
@@ -47,6 +49,8 @@ export interface GcsimConfigResult {
   warnings: GcsimWarning[];
   /** error の警告が無く、gcsim に送れる */
   runnable: boolean;
+  /** 設定文のキャラの並び（gcsim のログの char_index の順）。ログの読み取り（6-2）が使う */
+  members: GcsimMemberInfo[];
 }
 
 const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
@@ -59,6 +63,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const members = input.characters.filter(c => !isEmptySlot(c));
   const keyOf = new Map<string, string>();
   const lines: string[] = [];
+  const memberInfos: GcsimMemberInfo[] = [];
 
   if (members.length === 0) error('編成にキャラがいません');
   if (input.stints.length === 0) error('出場ブロックがありません（ローテーションが空です）');
@@ -71,6 +76,15 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       continue;
     }
     keyOf.set(c.id, key);
+    const weaponForInfo = input.weapons.find(w => w.id === c.weaponId);
+    const artifactForInfo = c.artifactSetMode !== '2+2' ? input.artifacts.find(a => a.id === c.artifactSetId) : undefined;
+    memberInfos.push({
+      characterId: c.id,
+      name: c.name,
+      gcsimKey: key,
+      weaponKey: weaponForInfo?.gcsimKey,
+      artifactKey: artifactForInfo?.gcsimKey,
+    });
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
     lines.push(`${key} char ${CHARACTER_LINE_PARAMS} cons=${cons} talent=${TALENT_LEVELS};`);
 
@@ -144,6 +158,34 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     warn(`${[...plungeChars].join('・')}: 落下攻撃は、gcsim では空中状態（直前のアクション）などの前提条件があり、条件を満たさないと実行エラーになる場合があります`);
   }
 
+  // 重撃の直前が通常攻撃でないキャラ（gcsim は実行エラーにする）。初動 → ループ → ループ（2周）の順に、直前のアクションを追う
+  {
+    const stintNumber = new Map(input.stints.map((s, i) => [s.id, i + 1]));
+    const reported = new Set<string>();
+    const sequence = [...initialStints, ...loopStints, ...loopStints];
+    let prev = 'none';
+    let prevCharId: string | undefined;
+    for (const stint of sequence) {
+      const char = charById.get(stint.characterId);
+      const key = keyOf.get(stint.characterId);
+      if (!char || !key) continue;
+      if (prevCharId !== undefined && prevCharId !== stint.characterId) prev = 'swap';
+      prevCharId = stint.characterId;
+      for (const act of stint.actions) {
+        if (act.type === 'swap' || act.actionTypeId === 'action_switch_char' || act.type === 'wait') continue;
+        const command = mapAction(act.actionTypeId, char.weaponType).command;
+        if (!command) continue;
+        const base = command.replace(/\[.*$/, '');
+        if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !reported.has(act.id)) {
+          reported.add(act.id);
+          const prevLabel = prev === 'none' ? 'ローテーションの最初' : PREVIOUS_ACTION_LABELS[prev] ?? prev;
+          error(`${char.name}: 出場 #${stintNumber.get(stint.id)} の「${act.name}」の直前が${prev === 'none' ? '' : '「'}${prevLabel}${prev === 'none' ? '' : '」'}です。gcsim では重撃の直前に通常攻撃（N）が必要です（ゲームでは長押しで通常攻撃1段目のあとに重撃が出ます）。この重撃の前に N を追加してください`);
+        }
+        prev = base;
+      }
+    }
+  }
+
   // 3. シミュレーション時間の見積り（初動 + ループ×周数）を余裕付きで
   const stintSeconds = (s: Stint) =>
     input.switchDelay + s.actions
@@ -175,5 +217,6 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     config: config.join('\n') + '\n',
     warnings,
     runnable: !warnings.some(w => w.level === 'error'),
+    members: memberInfos,
   };
 }

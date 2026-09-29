@@ -44,7 +44,7 @@ export interface GcsimLogEvent {
 }
 
 export type GcsimSampleResult =
-  | { status: 'ok'; logs: GcsimLogEvent[]; seed: number }
+  | { status: 'ok'; logs: GcsimLogEvent[]; seed: number; /** 最初に出場するキャラの gcsim キー（initial_character） */ initialCharacter?: string }
   /** 設定文の文法エラー・実行エラー（message にサーバーの返した内容） */
   | { status: 'error'; message: string }
   /** サーバーに接続できない（未起動・タイムアウトなど） */
@@ -78,14 +78,19 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
     if (parsed === null || typeof parsed !== 'object') {
       return { status: 'error', message: body.trim() };
     }
-    const obj = parsed as { error?: unknown; logs?: unknown };
+    const obj = parsed as { error?: unknown; logs?: unknown; initial_character?: unknown };
     if (obj.error !== undefined) {
       return { status: 'error', message: extractErrorText(body) };
     }
     if (!Array.isArray(obj.logs)) {
       return { status: 'error', message: '詳細ログ（logs）が含まれていません' };
     }
-    return { status: 'ok', logs: obj.logs as GcsimLogEvent[], seed };
+    return {
+      status: 'ok',
+      logs: obj.logs as GcsimLogEvent[],
+      seed,
+      initialCharacter: typeof obj.initial_character === 'string' ? obj.initial_character : undefined,
+    };
   } catch (e) {
     return { status: 'unreachable', message: unreachableMessage(e, SAMPLE_TIMEOUT_MS) };
   } finally {

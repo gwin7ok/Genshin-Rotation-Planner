@@ -281,6 +281,20 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
   return { consts, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved };
 }
 
+/** 解析済みファイルの定数・整数配列を使って、算術式（定数参照・配列添字・+ - * /）を評価する。評価できなければ undefined */
+export function evaluateGoExpr(expr: string, parsed: ParsedGoFile): number | undefined {
+  const lookup: Lookup = (ident, indices) => {
+    if (indices.length === 0) return parsed.consts.get(ident);
+    let cur: unknown = parsed.intArrays.get(ident);
+    for (const i of indices) {
+      if (!Array.isArray(cur)) return undefined;
+      cur = cur[i];
+    }
+    return typeof cur === 'number' ? cur : undefined;
+  };
+  return evalExpr(expr, lookup, ident => parsed.intArrays.get(ident));
+}
+
 /** テーブル名から対応するヒットマーク定数を推定する (例: skillPressFrames → skillPressHitmark) */
 export function findHitmark(table: FrameTable, consts: Map<string, number>): number | undefined {
   if (table.hitmark !== undefined) return table.hitmark;

@@ -139,3 +139,12 @@ gcsim の詳細ログに出てくるバフ・状態・内部CTのキー名（例
 - 突き合わせ失敗の記録（選択肢2A）: genshinOnly（gcsim 対象外）と gcsimOnly を表に残す。
 - 実装: `src/masterdata/gcsimKeyMap.ts`（`buildKeyMapSection`）、`characterMasterGenerator.ts`・`equipmentMasterGenerator.ts`（表から gcsimKey を引く）、`scripts/write-key-map.ts`。
 - 旅人（空・蛍）: 公式IDが元素に関わらず共通なので、手で補う（`10000005-<元素>` ↔ `aether<元素>`、`10000007-<元素>` ↔ `lumine<元素>`）。
+
+## 5-4 の実装（2026-09-29 / D44）
+
+- 項目: `cooldownStart?: { from: 'motionStart' | 'holdEnd'; delay: 秒 }`、`cooldownPerHold?: 秒/秒`、`dataSource.cooldownStart`（出典）。CT を始めるアクション（スキル・爆発）に付く。未設定は、5-5 で「動作開始と同時」として扱う。
+- 読み取り（`src/masterdata/cooldownStart.ts`）: `skill.go`/`burst.go` の `SetCD`（遅れ 0）と `SetCDWithDelay` を、囲む関数名で 一回押し（tap）・長押し（hold）・短押し（shortHold）・爆発に振り分け、アクション定義 ID の末尾（`_e` / `_e_hold` / `_e_shorthold` / `_q`）と対応付ける。長押しの関数が無いキャラは、共通の Skill 関数の呼び出しを使う。
+- 自動で読まないもの（手で補う一覧へ）: 遅れがホールド依存（`hold`・`duration` など）、添字が状態で決まる配列、関数内の変数（`x := ...`）、評価できない式、複数の呼び出しで値が異なるもの。一回押しは、ホールド引数 0 のときの値で読む。
+- 手で補う一覧: `src/masterdata/cooldownStartOverrides.ts`（キー: アクション定義 ID、値: フレーム。32 件）。優先は 手で補う一覧 ＞ 自動。食い違いはレポートに出す。`baseCooldown` を持つもの（早柚・綺良々）は、マスターの `cooldown` をホールド 0 の値にする。
+- 生成レポート（`npm run build:master`）: 自動・手で補った件数、未設定の一覧（理由つき）、食い違い。
+- **判断待ち**: 状態の終了で CT が始まるキャラ（チャスカ・イファ・ヤフォダ・ムアラニ・スカーク・放浪者・シロネンの E。夜魂の終了・状態の解除で `SetCD`）は、基準・遅れの形に合わず、未設定にしている。D37-3（「効果時間の終了で開始」の基準は、該当が確認できたら追加）に該当する可能性がある。

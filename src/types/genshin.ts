@@ -39,6 +39,15 @@ export interface ActionFrames {
   source: string;
 }
 
+/**
+ * CTの開始位置（D37 / D44）。動作開始からの位置か、長押し終了からの位置か。
+ * スキルと爆発で同じ形。delay は秒（gcsim の SetCD / SetCDWithDelay の遅れフレームを 60fps で換算）。
+ */
+export interface CooldownStart {
+  from: 'motionStart' | 'holdEnd';
+  delay: number;
+}
+
 export interface ActionDefinition {
   id: string;
   name: string;
@@ -49,7 +58,11 @@ export interface ActionDefinition {
   description?: string;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
-  cooldown?: number;        // このアクションが開始するCT (秒)
+  cooldown?: number;        // このアクションが開始するCT (秒)。ホールドで長さが変わるものは、ホールド 0 のときの値
+  /** CTの開始位置（マスターから自動設定。未設定は「動作開始と同時」として扱う） */
+  cooldownStart?: CooldownStart;
+  /** 長押し 1 秒あたりの CT の増分（秒）。CT の長さ = cooldown + cooldownPerHold × ホールド秒数（早柚・綺良々） */
+  cooldownPerHold?: number;
   effectDuration?: number;  // このアクションの効果持続時間 (秒)
   frames?: ActionFrames;    // gcsim モーションフレーム
   /**
@@ -61,6 +74,8 @@ export interface ActionDefinition {
   dataSource?: {
     cooldown?: string;
     effectDuration?: string;
+    /** CT開始位置の出典（例: "skill.go:skillPressCDStart" / "manual: ..."） */
+    cooldownStart?: string;
   };
 }
 

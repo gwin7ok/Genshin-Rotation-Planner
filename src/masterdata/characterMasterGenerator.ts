@@ -18,6 +18,7 @@ import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
+import { parseCooldownCalls, resolveCooldownStart, type CooldownCall, type CooldownStartResolution } from './cooldownStart.ts';
 import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, type ManualKeyMapping } from './gcsimKeyMap.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
@@ -138,6 +139,13 @@ export interface CharacterGenerationReport {
   missingCooldowns: Array<{ characterId: string; name: string; actionId: string }>;
   /** gcsim の式を評価できなかった行数 */
   unresolvedGoLines: Array<{ characterId: string; file: string; count: number }>;
+  /** CT開始位置（D37 / D44）: 自動で読めた件数・手で補った件数・未設定の一覧・手で補う値との食い違い */
+  cooldownStart: {
+    read: number;
+    manual: number;
+    unresolved: Array<{ characterId: string; name: string; actionId: string; reason: string }>;
+    mismatches: Array<{ characterId: string; name: string; actionId: string; readFrames: number; manualFrames: number }>;
+  };
   /** 命ノ星座で効果継続時間が延びる「(n凸)」アクションの生成結果 */
   constellations: ConstellationReport;
   errors: string[];
@@ -295,6 +303,8 @@ function extractTalentTimings(talent: GenshinDbTalent | undefined): TalentTiming
 interface ParsedCharacterFiles {
   /** ファイル名 (拡張子なし) → 解析結果 */
   files: Record<string, ParsedGoFile>;
+  /** skill.go / burst.go の CT を開始する呼び出し（CT開始位置の読み取り用） */
+  cooldownCalls: CooldownCall[];
 }
 
 /** "skillFrames[1]" → { base: "skillFrames", index: "1" } */
@@ -593,7 +603,7 @@ function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharact
     });
     files[name] = { ...file, tables };
   }
-  return { files };
+  return { ...parsed, files };
 }
 
 // ---------------------------------------------------------------------------
@@ -616,6 +626,7 @@ export async function generateCharacterMaster(
     placeholderDurations: [],
     missingCooldowns: [],
     unresolvedGoLines: [],
+    cooldownStart: { read: 0, manual: 0, unresolved: [], mismatches: [] },
     constellations: emptyConstellationReport(),
     errors,
   };
@@ -774,7 +785,8 @@ export async function generateCharacterMaster(
         names.forEach((f, i) => {
           files[f] = parseGoFile(texts[i], shared);
         });
-        parsedById.set(u.id, { files });
+        const cooldownCalls = names.flatMap((f, i) => (f === 'skill' || f === 'burst') ? parseCooldownCalls(texts[i], files[f]) : []);
+        parsedById.set(u.id, { files, cooldownCalls });
       } catch (e) {
         errors.push(`gcsim ${u.gcsimDir}: ${e instanceof Error ? e.message : String(e)}`);
       }
@@ -794,6 +806,22 @@ export async function generateCharacterMaster(
       ...ctx,
       parsed: parsed && u.genderIndex !== undefined ? genderView(parsed, u.genderIndex) : parsed,
     });
+
+    // CT開始位置（D37 / D44）: スキル・爆発のアクションに、gcsim の遅れ（または手で補った値）を持たせる
+    for (const a of actions) {
+      if (!a.startsSkillCooldown && !a.startsBurstCooldown) continue;
+      const r: CooldownStartResolution = resolveCooldownStart(a.id, parsed?.cooldownCalls);
+      if (r.cooldownStart) {
+        a.cooldownStart = r.cooldownStart;
+        a.dataSource = { ...a.dataSource, cooldownStart: r.source };
+        if (r.cooldownPerHold !== undefined) a.cooldownPerHold = r.cooldownPerHold;
+        if (r.baseCooldown !== undefined) a.cooldown = r.baseCooldown;
+        report.cooldownStart[r.status === 'manual' ? 'manual' : 'read']++;
+      } else {
+        report.cooldownStart.unresolved.push({ characterId: u.id, name: u.name, actionId: a.id, reason: u.gcsimKey ? (r.reason ?? '') : 'gcsim 未実装' });
+      }
+      if (r.mismatch) report.cooldownStart.mismatches.push({ characterId: u.id, name: u.name, actionId: a.id, ...r.mismatch });
+    }
 
     if (parsed) {
       report.charactersWithFrames++;

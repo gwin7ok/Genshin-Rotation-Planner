@@ -155,9 +155,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000002-cryo_q",
@@ -180,9 +185,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.083
+        "defaultDuration": 2.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000002-cryo_dash",
@@ -409,9 +419,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "最大継続時間"
+          "effectDuration": "最大継続時間",
+          "cooldownStart": "manual: jean/skill.go: skillHitmark(21) - 2（hold=0）"
         },
-        "defaultDuration": 0.767
+        "defaultDuration": 0.767,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000003-anemo_q",
@@ -432,9 +447,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:38"
         },
-        "defaultDuration": 1.5
+        "defaultDuration": 1.5,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.633
+        }
       },
       {
         "id": "10000003-anemo_dash",
@@ -654,9 +674,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "基本クールタイム"
+          "cooldown": "基本クールタイム",
+          "cooldownStart": "manual: traveler/common/anemo/skill.go: SkillPress の hitmark(34) - 5"
         },
-        "defaultDuration": 1.267
+        "defaultDuration": 1.267,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.483
+        }
       },
       {
         "id": "10000005-anemo_e_hold",
@@ -691,9 +716,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.833
+        "defaultDuration": 1.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000005-anemo_dash",
@@ -920,9 +950,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "凛冽の寒星継続時間"
+          "effectDuration": "凛冽の寒星継続時間",
+          "cooldownStart": "skill.go:17"
         },
-        "defaultDuration": 1.1
+        "defaultDuration": 1.1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.283
+        }
       },
       {
         "id": "10000005-cryo_q",
@@ -942,9 +977,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.25
+        "defaultDuration": 1.25,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000005-cryo_dash",
@@ -1164,9 +1204,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:cdStart"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.417
+        }
       },
       {
         "id": "10000005-dendro_q",
@@ -1185,9 +1230,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000005-dendro_dash",
@@ -1409,9 +1459,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 0.95
+        "defaultDuration": 0.95,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000005-electro_q",
@@ -1434,9 +1489,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:35"
         },
-        "defaultDuration": 1.05
+        "defaultDuration": 1.05,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.583
+        }
       },
       {
         "id": "10000005-electro_dash",
@@ -1656,9 +1716,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "荒星の継続時間"
+          "effectDuration": "荒星の継続時間",
+          "cooldownStart": "manual: traveler/common/geo/skill.go: skillCDStart[0]"
         },
-        "defaultDuration": 1.35
+        "defaultDuration": 1.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000005-geo_q",
@@ -1680,9 +1745,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "岩の山の継続時間"
+          "effectDuration": "岩の山の継続時間",
+          "cooldownStart": "burst.go:burstStart"
         },
-        "defaultDuration": 1.117
+        "defaultDuration": 1.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.583
+        }
       },
       {
         "id": "10000005-geo_dash",
@@ -1916,9 +1986,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillPressCdStart"
         },
-        "defaultDuration": 0.75
+        "defaultDuration": 0.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.4
+        }
       },
       {
         "id": "10000005-hydro_e_shorthold0ticks",
@@ -1928,7 +2003,8 @@
         "startsSkillCooldown": true,
         "cooldown": 10,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillShortHold0TicksCdStart"
         },
         "defaultDuration": 0.733,
         "frames": {
@@ -1942,6 +2018,10 @@
             "walk": 35
           },
           "source": "skill.go:skillShortHold0TicksFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
         }
       },
       {
@@ -1952,7 +2032,8 @@
         "startsSkillCooldown": true,
         "cooldown": 10,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillShortHoldCdStart"
         },
         "defaultDuration": 1.5,
         "frames": {
@@ -1966,6 +2047,10 @@
             "walk": 81
           },
           "source": "skill.go:skillShortHoldFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.933
         }
       },
       {
@@ -1990,7 +2075,12 @@
           "source": "skill.go:skillShortHoldFrames + 15 × (22 − 1) (skillHold, hold=1)"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillShortHoldCdStart(56) + extend(15 × 21)"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 6.183
         }
       },
       {
@@ -2012,9 +2102,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000005-hydro_dash",
@@ -2233,9 +2328,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:tapCdStart"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000005-pyro_e_hold",
@@ -2259,9 +2359,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:holdCdStart"
         },
-        "defaultDuration": 1.35
+        "defaultDuration": 1.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.8
+        }
       },
       {
         "id": "10000005-pyro_q",
@@ -2281,9 +2386,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000005-pyro_dash",
@@ -2490,9 +2600,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "一回押しクールタイム"
+          "cooldown": "一回押しクールタイム",
+          "cooldownStart": "skill.go:17"
         },
-        "defaultDuration": 0.667
+        "defaultDuration": 0.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.283
+        }
       },
       {
         "id": "10000006-electro_e_hold",
@@ -2515,9 +2630,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "長押しクールタイム"
+          "cooldown": "長押しクールタイム",
+          "cooldownStart": "skill.go:114"
         },
-        "defaultDuration": 2.383
+        "defaultDuration": 2.383,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.9
+        }
       },
       {
         "id": "10000006-electro_q",
@@ -2541,9 +2661,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:53"
         },
-        "defaultDuration": 1.467
+        "defaultDuration": 1.467,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.883
+        }
       },
       {
         "id": "10000006-electro_dash",
@@ -2766,9 +2891,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "基本クールタイム"
+          "cooldown": "基本クールタイム",
+          "cooldownStart": "manual: traveler/common/anemo/skill.go: SkillPress の hitmark(34) - 5"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.483
+        }
       },
       {
         "id": "10000007-anemo_e_hold",
@@ -2803,9 +2933,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.75
+        "defaultDuration": 1.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000007-anemo_dash",
@@ -3032,9 +3167,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "凛冽の寒星継続時間"
+          "effectDuration": "凛冽の寒星継続時間",
+          "cooldownStart": "skill.go:17"
         },
-        "defaultDuration": 1.1
+        "defaultDuration": 1.1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.283
+        }
       },
       {
         "id": "10000007-cryo_q",
@@ -3054,9 +3194,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.25
+        "defaultDuration": 1.25,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000007-cryo_dash",
@@ -3276,9 +3421,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:cdStart"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.417
+        }
       },
       {
         "id": "10000007-dendro_q",
@@ -3297,9 +3447,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000007-dendro_dash",
@@ -3520,9 +3675,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 0.95
+        "defaultDuration": 0.95,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000007-electro_q",
@@ -3544,9 +3704,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:35"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.583
+        }
       },
       {
         "id": "10000007-electro_dash",
@@ -3767,9 +3932,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "荒星の継続時間"
+          "effectDuration": "荒星の継続時間",
+          "cooldownStart": "manual: traveler/common/geo/skill.go: skillCDStart[0]"
         },
-        "defaultDuration": 1.333
+        "defaultDuration": 1.333,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000007-geo_q",
@@ -3792,9 +3962,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "岩の山の継続時間"
+          "effectDuration": "岩の山の継続時間",
+          "cooldownStart": "burst.go:burstStart"
         },
-        "defaultDuration": 1.067
+        "defaultDuration": 1.067,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.583
+        }
       },
       {
         "id": "10000007-geo_dash",
@@ -4026,9 +4201,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillPressCdStart"
         },
-        "defaultDuration": 0.733
+        "defaultDuration": 0.733,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.4
+        }
       },
       {
         "id": "10000007-hydro_e_shorthold0ticks",
@@ -4038,7 +4218,8 @@
         "startsSkillCooldown": true,
         "cooldown": 10,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillShortHold0TicksCdStart"
         },
         "defaultDuration": 0.717,
         "frames": {
@@ -4052,6 +4233,10 @@
             "walk": 36
           },
           "source": "skill.go:skillShortHold0TicksFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
         }
       },
       {
@@ -4062,7 +4247,8 @@
         "startsSkillCooldown": true,
         "cooldown": 10,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillShortHoldCdStart"
         },
         "defaultDuration": 1.483,
         "frames": {
@@ -4076,6 +4262,10 @@
             "walk": 80
           },
           "source": "skill.go:skillShortHoldFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.933
         }
       },
       {
@@ -4100,7 +4290,12 @@
           "source": "skill.go:skillShortHoldFrames + 15 × (22 − 1) (skillHold, hold=1)"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: traveler/common/hydro/skill.go: skillShortHoldCdStart(56) + extend(15 × 21)"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 6.183
         }
       },
       {
@@ -4124,9 +4319,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000007-hydro_dash",
@@ -4345,9 +4545,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:tapCdStart"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000007-pyro_e_hold",
@@ -4371,9 +4576,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:holdCdStart"
         },
-        "defaultDuration": 1.35
+        "defaultDuration": 1.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.8
+        }
       },
       {
         "id": "10000007-pyro_q",
@@ -4393,9 +4603,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000007-pyro_dash",
@@ -4612,9 +4827,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:skillCDStart"
         },
-        "defaultDuration": 0.917
+        "defaultDuration": 0.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.05
+        }
       },
       {
         "id": "10000014-hydro_q",
@@ -4636,9 +4856,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 3.25
+        "defaultDuration": 3.25,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000014-hydro_dash",
@@ -4859,9 +5084,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:25"
         },
-        "defaultDuration": 0.883
+        "defaultDuration": 0.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.417
+        }
       },
       {
         "id": "10000015-cryo_q",
@@ -4884,9 +5114,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:burstCDStart"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.8
+        }
       },
       {
         "id": "10000015-cryo_dash",
@@ -5074,9 +5309,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.533
+        "defaultDuration": 0.533,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000016-pyro_q",
@@ -5099,9 +5339,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "元素付与継続時間"
+          "effectDuration": "元素付与継続時間",
+          "cooldownStart": "burst.go:14"
         },
-        "defaultDuration": 2.333
+        "defaultDuration": 2.333,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000016-pyro_dash",
@@ -5290,9 +5535,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "雷の印の継続時間"
+          "effectDuration": "雷の印の継続時間",
+          "cooldownStart": "manual: razor/skill.go: skillPressCDStarts[0]（爆発中は 31f）"
         },
-        "defaultDuration": 1.233
+        "defaultDuration": 1.233,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.5
+        }
       },
       {
         "id": "10000020-electro_e_hold",
@@ -5314,9 +5564,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "雷の印の継続時間"
+          "effectDuration": "雷の印の継続時間",
+          "cooldownStart": "manual: razor/skill.go: skillHoldCDStarts[0]（爆発中も 52f）"
         },
-        "defaultDuration": 1.717
+        "defaultDuration": 1.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.867
+        }
       },
       {
         "id": "10000020-electro_q",
@@ -5339,9 +5594,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.233
+        "defaultDuration": 1.233,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000020-electro_dash",
@@ -5555,9 +5815,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillStart+hold"
         },
-        "defaultDuration": 0.55
+        "defaultDuration": 0.55,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.083
+        }
       },
       {
         "id": "10000021-pyro_q",
@@ -5580,9 +5845,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:56"
         },
-        "defaultDuration": 1.85
+        "defaultDuration": 1.85,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.933
+        }
       },
       {
         "id": "10000021-pyro_dash",
@@ -5815,9 +6085,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "一回押しクールタイム"
+          "cooldown": "一回押しクールタイム",
+          "cooldownStart": "manual: venti/skill.go: cdstart（一回押し）"
         },
-        "defaultDuration": 1.633
+        "defaultDuration": 1.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.35
+        }
       },
       {
         "id": "10000022-anemo_e_hold",
@@ -5835,9 +6110,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "長押しクールタイム"
+          "cooldown": "長押しクールタイム",
+          "cooldownStart": "manual: venti/skill.go: cdstart（hold != 0）"
         },
-        "defaultDuration": 4.817
+        "defaultDuration": 4.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.567
+        }
       },
       {
         "id": "10000022-anemo_q",
@@ -5858,9 +6138,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:81"
         },
-        "defaultDuration": 1.583
+        "defaultDuration": 1.583,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.35
+        }
       },
       {
         "id": "10000022-anemo_dash",
@@ -6080,9 +6365,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:13"
         },
-        "defaultDuration": 0.65
+        "defaultDuration": 0.65,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000023-pyro_q",
@@ -6101,9 +6391,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:18"
         },
-        "defaultDuration": 1.333
+        "defaultDuration": 1.333,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000023-pyro_dash",
@@ -6318,9 +6613,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:4"
         },
-        "defaultDuration": 0.75
+        "defaultDuration": 0.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.067
+        }
       },
       {
         "id": "10000024-electro_q",
@@ -6343,9 +6643,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000024-electro_dash",
@@ -6568,9 +6873,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:10"
         },
-        "defaultDuration": 1.117
+        "defaultDuration": 1.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.167
+        }
       },
       {
         "id": "10000025-hydro_q",
@@ -6593,9 +6903,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.667
+        "defaultDuration": 0.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000025-hydro_dash",
@@ -6842,9 +7157,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000026-anemo_q",
@@ -6866,9 +7186,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:29"
         },
-        "defaultDuration": 1.367
+        "defaultDuration": 1.367,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.483
+        }
       },
       {
         "id": "10000026-anemo_dash",
@@ -7048,9 +7373,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000027-geo_q",
@@ -7071,9 +7401,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.117
+        "defaultDuration": 2.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000027-geo_dash",
@@ -7274,9 +7609,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ブービートラップ継続時間"
+          "effectDuration": "ブービートラップ継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.25
+        "defaultDuration": 1.25,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000029-pyro_q",
@@ -7299,9 +7639,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:9"
         },
-        "defaultDuration": 2.317
+        "defaultDuration": 2.317,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.15
+        }
       },
       {
         "id": "10000029-pyro_dash",
@@ -7540,9 +7885,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:22"
         },
-        "defaultDuration": 0.633
+        "defaultDuration": 0.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.367
+        }
       },
       {
         "id": "10000030-geo_e_hold",
@@ -7563,9 +7913,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:47"
         },
-        "defaultDuration": 1.6
+        "defaultDuration": 1.6,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.783
+        }
       },
       {
         "id": "10000030-geo_q",
@@ -7586,9 +7941,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.317
+        "defaultDuration": 2.317,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000030-geo_dash",
@@ -7799,9 +8159,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000031-electro_e_recast",
@@ -7840,9 +8205,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.467
+        "defaultDuration": 2.467,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000031-electro_dash",
@@ -8061,9 +8431,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:14"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000032-pyro_e_hold",
@@ -8084,9 +8459,14 @@
           "source": "skill.go:skillFrames[1]"
         },
         "dataSource": {
-          "cooldown": "クールタイム (2値目)"
+          "cooldown": "クールタイム (2値目)",
+          "cooldownStart": "skill.go:cdDelay"
         },
-        "defaultDuration": 1.633
+        "defaultDuration": 1.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.717
+        }
       },
       {
         "id": "10000032-pyro_q",
@@ -8108,9 +8488,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:burstStartFrame"
         },
-        "defaultDuration": 0.883
+        "defaultDuration": 0.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.567
+        }
       },
       {
         "id": "10000032-pyro_dash",
@@ -8339,9 +8724,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "最大継続時間"
+          "effectDuration": "最大継続時間",
+          "cooldownStart": "manual: tartaglia/skill.go: cdDelay（既定。歩き・ダッシュ中は 0f）"
         },
-        "defaultDuration": 0.3
+        "defaultDuration": 0.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000033-hydro_e_hold",
@@ -8377,9 +8767,14 @@
           "source": "burst.go:burstMeleeFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: tartaglia/burst.go: 遠隔時の SetCDWithDelay(..., 0)（近接時は 66f）"
         },
-        "defaultDuration": 1.717
+        "defaultDuration": 1.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000033-hydro_dash",
@@ -8595,9 +8990,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:6"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.1
+        }
       },
       {
         "id": "10000034-geo_q",
@@ -8622,9 +9022,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.017
+        "defaultDuration": 2.017,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000034-geo_dash",
@@ -8853,9 +9258,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000035-cryo_q",
@@ -8878,9 +9288,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.917
+        "defaultDuration": 1.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000035-cryo_dash",
@@ -9078,9 +9493,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "元素付与継続時間"
+          "effectDuration": "元素付与継続時間",
+          "cooldownStart": "skill.go:34"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.567
+        }
       },
       {
         "id": "10000036-cryo_q",
@@ -9101,9 +9521,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.317
+        "defaultDuration": 1.317,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000036-cryo_dash",
@@ -9332,9 +9757,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:10"
         },
-        "defaultDuration": 0.467
+        "defaultDuration": 0.467,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.167
+        }
       },
       {
         "id": "10000037-cryo_q",
@@ -9357,9 +9787,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.083
+        "defaultDuration": 2.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000037-cryo_dash",
@@ -9581,9 +10016,14 @@
         },
         "dataSource": {
           "cooldown": "スキルクールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:23"
         },
-        "defaultDuration": 0.55
+        "defaultDuration": 0.55,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000038-geo_q",
@@ -9604,9 +10044,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:74"
         },
-        "defaultDuration": 1.6
+        "defaultDuration": 1.6,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.233
+        }
       },
       {
         "id": "10000038-geo_dash",
@@ -9824,9 +10269,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:skillPressHitmark"
         },
-        "defaultDuration": 0.567
+        "defaultDuration": 0.567,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.083
+        }
       },
       {
         "id": "10000039-cryo_e_hold",
@@ -9850,9 +10300,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:skillHoldHitmark"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.483
+        }
       },
       {
         "id": "10000039-cryo_q",
@@ -9874,9 +10329,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:41"
         },
-        "defaultDuration": 1.067
+        "defaultDuration": 1.067,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.683
+        }
       },
       {
         "id": "10000039-cryo_dash",
@@ -10085,9 +10545,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:24"
         },
-        "defaultDuration": 0.833
+        "defaultDuration": 0.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.4
+        }
       },
       {
         "id": "10000041-hydro_q",
@@ -10111,9 +10576,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "泡影の継続時間"
+          "effectDuration": "泡影の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.117
+        "defaultDuration": 2.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000041-hydro_dash",
@@ -10338,9 +10808,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000042-electro_q",
@@ -10361,9 +10836,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:52"
         },
-        "defaultDuration": 2.067
+        "defaultDuration": 2.067,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.867
+        }
       },
       {
         "id": "10000042-electro_dash",
@@ -10584,9 +11064,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:9"
         },
-        "defaultDuration": 1.133
+        "defaultDuration": 1.133,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.15
+        }
       },
       {
         "id": "10000043-anemo_q",
@@ -10610,9 +11095,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:18"
         },
-        "defaultDuration": 1.083
+        "defaultDuration": 1.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000043-anemo_dash",
@@ -10815,9 +11305,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:13"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000044-pyro_q",
@@ -10837,9 +11332,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 1.45
+        "defaultDuration": 1.45,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000044-pyro_dash",
@@ -11058,9 +11558,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:23"
         },
-        "defaultDuration": 0.85
+        "defaultDuration": 0.85,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000045-cryo_q",
@@ -11081,9 +11586,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.167
+        "defaultDuration": 1.167,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000045-cryo_dash",
@@ -11335,9 +11845,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:14"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000046-pyro_q",
@@ -11358,9 +11873,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:62"
         },
-        "defaultDuration": 1.633
+        "defaultDuration": 1.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.033
+        }
       },
       {
         "id": "10000046-pyro_dash",
@@ -11578,9 +12098,14 @@
           "source": "skill.go:skillPressFrames[0]"
         },
         "dataSource": {
-          "cooldown": "一回押しクールタイム"
+          "cooldown": "一回押しクールタイム",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 1.283
+        "defaultDuration": 1.283,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.133
+        }
       },
       {
         "id": "10000047-anemo_e_hold",
@@ -11599,9 +12124,14 @@
           "source": "skill.go:skillHoldFrames[0]"
         },
         "dataSource": {
-          "cooldown": "長押しクールタイム"
+          "cooldown": "長押しクールタイム",
+          "cooldownStart": "skill.go:skillHoldCDStart"
         },
-        "defaultDuration": 2.917
+        "defaultDuration": 2.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.517
+        }
       },
       {
         "id": "10000047-anemo_q",
@@ -11624,9 +12154,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.55
+        "defaultDuration": 1.55,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000047-anemo_dash",
@@ -11820,9 +12355,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:28"
         },
-        "defaultDuration": 0.767
+        "defaultDuration": 0.767,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.467
+        }
       },
       {
         "id": "10000048-pyro_q",
@@ -11846,9 +12386,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000048-pyro_dash",
@@ -12066,9 +12611,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:11"
         },
-        "defaultDuration": 0.567
+        "defaultDuration": 0.567,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
+        }
       },
       {
         "id": "10000049-pyro_q",
@@ -12091,9 +12641,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.883
+        "defaultDuration": 1.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000049-pyro_dash",
@@ -12306,9 +12861,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:9"
         },
-        "defaultDuration": 0.767
+        "defaultDuration": 0.767,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.15
+        }
       },
       {
         "id": "10000050-pyro_q",
@@ -12331,9 +12891,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000050-pyro_dash",
@@ -12545,9 +13110,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "冷酷な心継続時間"
+          "effectDuration": "冷酷な心継続時間",
+          "cooldownStart": "skill.go:16"
         },
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000051-cryo_e_hold",
@@ -12571,9 +13141,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "冷酷な心継続時間"
+          "effectDuration": "冷酷な心継続時間",
+          "cooldownStart": "skill.go:46"
         },
-        "defaultDuration": 1.667
+        "defaultDuration": 1.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.767
+        }
       },
       {
         "id": "10000051-cryo_q",
@@ -12596,9 +13171,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:97"
         },
-        "defaultDuration": 2.05
+        "defaultDuration": 2.05,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.617
+        }
       },
       {
         "id": "10000051-cryo_dash",
@@ -12818,9 +13398,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:6"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.1
+        }
       },
       {
         "id": "10000052-electro_q",
@@ -12843,9 +13428,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "夢想の一心継続時間"
+          "effectDuration": "夢想の一心継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.867
+        "defaultDuration": 1.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000052-electro_dash",
@@ -13036,9 +13626,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 0.75
+        "defaultDuration": 0.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000053-anemo_e_hold",
@@ -13046,7 +13641,7 @@
         "shortName": "hE",
         "type": "skill_hold",
         "startsSkillCooldown": true,
-        "cooldown": 11,
+        "cooldown": 6,
         "effectDuration": 10,
         "frames": {
           "total": 709,
@@ -13059,9 +13654,15 @@
         },
         "dataSource": {
           "cooldown": "クールタイム (2値目)",
-          "effectDuration": "長押し最大継続時間"
+          "effectDuration": "長押し最大継続時間",
+          "cooldownStart": "manual: sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5"
         },
-        "defaultDuration": 11.817
+        "defaultDuration": 11.817,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.833
+        },
+        "cooldownPerHold": 0.5
       },
       {
         "id": "10000053-anemo_e_shorthold",
@@ -13071,7 +13672,8 @@
         "startsSkillCooldown": true,
         "cooldown": 6,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillShortHoldCDStart"
         },
         "defaultDuration": 1.483,
         "frames": {
@@ -13080,6 +13682,10 @@
             "swap": 87
           },
           "source": "skill.go:skillShortHoldFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.5
         }
       },
       {
@@ -13101,9 +13707,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.083
+        "defaultDuration": 1.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000053-anemo_dash",
@@ -13298,9 +13909,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 1.017
+        "defaultDuration": 1.017,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000054-hydro_q",
@@ -13324,9 +13940,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:46"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.767
+        }
       },
       {
         "id": "10000054-hydro_dash",
@@ -13523,9 +14144,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:32"
         },
-        "defaultDuration": 0.783
+        "defaultDuration": 0.783,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.533
+        }
       },
       {
         "id": "10000055-geo_q",
@@ -13548,9 +14174,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.933
+        "defaultDuration": 0.933,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000055-geo_dash",
@@ -13767,9 +14398,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "攻撃力上昇継続時間"
+          "effectDuration": "攻撃力上昇継続時間",
+          "cooldownStart": "skill.go:7"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.117
+        }
       },
       {
         "id": "10000056-electro_q",
@@ -13792,9 +14428,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:burstStart"
         },
-        "defaultDuration": 1.333
+        "defaultDuration": 1.333,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.783
+        }
       },
       {
         "id": "10000056-electro_dash",
@@ -13999,9 +14640,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:skillRelease"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000057-geo_q",
@@ -14022,9 +14668,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.517
+        "defaultDuration": 1.517,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000057-geo_dash",
@@ -14214,9 +14865,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:16"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000058-electro_q",
@@ -14239,9 +14895,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.9
+        "defaultDuration": 1.9,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000058-electro_dash",
@@ -14453,9 +15114,14 @@
         "effectDuration": 60,
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "変格継続時間"
+          "effectDuration": "変格継続時間",
+          "cooldownStart": "manual: heizou/skill.go: skillCDStart（一回押しは delay=0）"
         },
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000059-anemo_q",
@@ -14477,9 +15143,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.2
+        "defaultDuration": 1.2,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000059-anemo_dash",
@@ -14682,9 +15353,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillHitmark-2"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.55
+        }
       },
       {
         "id": "10000060-hydro_q",
@@ -14706,9 +15382,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.55
+        "defaultDuration": 1.55,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000060-hydro_dash",
@@ -14921,9 +15602,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:12"
         },
-        "defaultDuration": 0.633
+        "defaultDuration": 0.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.2
+        }
       },
       {
         "id": "10000061-dendro_e_hold",
@@ -14931,7 +15617,7 @@
         "shortName": "hE",
         "type": "skill_hold",
         "startsSkillCooldown": true,
-        "cooldown": 12,
+        "cooldown": 8,
         "effectDuration": 12,
         "frames": {
           "total": 668,
@@ -14947,9 +15633,15 @@
         },
         "dataSource": {
           "cooldown": "クールタイム (2値目)",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "manual: kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）"
         },
-        "defaultDuration": 11.133
+        "defaultDuration": 11.133,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.233
+        },
+        "cooldownPerHold": 0.4
       },
       {
         "id": "10000061-dendro_e_shorthold",
@@ -14959,7 +15651,8 @@
         "startsSkillCooldown": true,
         "cooldown": 8,
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillShortHoldCDStart"
         },
         "defaultDuration": 1.317,
         "frames": {
@@ -14973,6 +15666,10 @@
             "swap": 72
           },
           "source": "skill.go:skillShortHoldFrames"
+        },
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.45
         }
       },
       {
@@ -14995,9 +15692,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000061-dendro_dash",
@@ -15195,9 +15897,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "攻撃力ダウン継続時間"
+          "effectDuration": "攻撃力ダウン継続時間",
+          "cooldownStart": "skill.go:19"
         },
-        "defaultDuration": 1.1
+        "defaultDuration": 1.1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000062-cryo_q",
@@ -15220,9 +15927,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.95
+        "defaultDuration": 1.95,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000062-cryo_dash",
@@ -15448,9 +16160,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "一回押し/長押し継続時間"
+          "effectDuration": "一回押し/長押し継続時間",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 0.633
+        "defaultDuration": 0.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.033
+        }
       },
       {
         "id": "10000063-cryo_e_hold",
@@ -15475,9 +16192,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "一回押し/長押し継続時間"
+          "effectDuration": "一回押し/長押し継続時間",
+          "cooldownStart": "skill.go:skillHoldCDStart+1"
         },
-        "defaultDuration": 1.3
+        "defaultDuration": 1.3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.533
+        }
       },
       {
         "id": "10000063-cryo_q",
@@ -15501,9 +16223,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.667
+        "defaultDuration": 1.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000063-cryo_dash",
@@ -15744,9 +16471,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: yunjin/skill.go: skillCDStarts[0]"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
+        }
       },
       {
         "id": "10000064-geo_q",
@@ -15768,9 +16500,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.95
+        "defaultDuration": 0.95,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000064-geo_dash",
@@ -15973,9 +16710,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:7"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.117
+        }
       },
       {
         "id": "10000065-electro_q",
@@ -15997,9 +16739,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.05
+        "defaultDuration": 1.05,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000065-electro_dash",
@@ -16220,9 +16967,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "滝廻鑑花継続時間"
+          "effectDuration": "滝廻鑑花継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.35
+        "defaultDuration": 0.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000066-hydro_q",
@@ -16245,9 +16997,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.05
+        "defaultDuration": 2.05,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000066-hydro_dash",
@@ -16446,9 +17203,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 1.133
+        "defaultDuration": 1.133,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000067-dendro_q",
@@ -16469,9 +17231,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.117
+        "defaultDuration": 1.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000067-dendro_dash",
@@ -16645,9 +17412,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:16"
         },
-        "defaultDuration": 0.733
+        "defaultDuration": 0.733,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000068-electro_q",
@@ -16670,9 +17442,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000068-electro_dash",
@@ -16875,9 +17652,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "識蘊の領域継続時間"
+          "effectDuration": "識蘊の領域継続時間",
+          "cooldownStart": "skill.go:13"
         },
-        "defaultDuration": 0.5
+        "defaultDuration": 0.5,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000069-dendro_q",
@@ -16900,9 +17682,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.967
+        "defaultDuration": 1.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000069-dendro_dash",
@@ -17093,9 +17880,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ピルエット継続時間"
+          "effectDuration": "ピルエット継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.367
+        "defaultDuration": 0.367,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000070-hydro_q",
@@ -17117,9 +17909,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.833
+        "defaultDuration": 1.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000070-hydro_dash",
@@ -17336,9 +18133,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: cyno/skill.go: skillCDDelay（爆発中の skillBCDDelay は 26f）"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.283
+        }
       },
       {
         "id": "10000071-electro_q",
@@ -17360,9 +18162,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "基礎継続時間"
+          "effectDuration": "基礎継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.433
+        "defaultDuration": 1.433,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000071-electro_dash",
@@ -17563,9 +18370,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "一回押しクールタイム"
+          "cooldown": "一回押しクールタイム",
+          "cooldownStart": "manual: candace/skill.go: skillCDStarts[0]"
         },
-        "defaultDuration": 0.433
+        "defaultDuration": 0.433,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000072-hydro_e_hold",
@@ -17586,9 +18398,14 @@
           "source": "skill.go:skillFrames[1]"
         },
         "dataSource": {
-          "cooldown": "長押しクールタイム"
+          "cooldown": "長押しクールタイム",
+          "cooldownStart": "manual: candace/skill.go: skillCDStarts[1]"
         },
-        "defaultDuration": 1.883
+        "defaultDuration": 1.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.483
+        }
       },
       {
         "id": "10000072-hydro_q",
@@ -17611,9 +18428,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.85
+        "defaultDuration": 0.85,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000072-hydro_dash",
@@ -17835,9 +18657,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "蘊種印の継続時間"
+          "effectDuration": "蘊種印の継続時間",
+          "cooldownStart": "skill.go:11"
         },
-        "defaultDuration": 0.533
+        "defaultDuration": 0.533,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
+        }
       },
       {
         "id": "10000073-dendro_e_hold",
@@ -17862,9 +18689,14 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "蘊種印の継続時間"
+          "effectDuration": "蘊種印の継続時間",
+          "cooldownStart": "manual: nahida/skill.go: SetCDWithDelay(..., hold+30)"
         },
-        "defaultDuration": 1.05
+        "defaultDuration": 1.05,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.5
+        }
       },
       {
         "id": "10000073-dendro_q",
@@ -17883,9 +18715,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "基礎継続時間"
+          "effectDuration": "基礎継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.867
+        "defaultDuration": 1.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000073-dendro_dash",
@@ -18077,9 +18914,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:19"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000074-cryo_q",
@@ -18103,9 +18945,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.317
+        "defaultDuration": 1.317,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000074-cryo_dash",
@@ -18318,9 +19165,14 @@
           "source": "burst.go:burstFramesNormal"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.683
+        "defaultDuration": 1.683,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000075-anemo_dash",
@@ -18526,9 +19378,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "疾風示現の継続時間"
+          "effectDuration": "疾風示現の継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.583
+        "defaultDuration": 0.583,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000076-anemo_q",
@@ -18553,9 +19410,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.183
+        "defaultDuration": 1.183,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000076-anemo_dash",
@@ -18733,9 +19595,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "月桂·投擲型の継続時間"
+          "effectDuration": "月桂·投擲型の継続時間",
+          "cooldownStart": "skill.go:skillCDStart"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.25
+        }
       },
       {
         "id": "10000077-dendro_q",
@@ -18758,9 +19625,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "桂子仙機の継続時間"
+          "effectDuration": "桂子仙機の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.05
+        "defaultDuration": 1.05,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000077-dendro_dash",
@@ -18993,9 +19865,14 @@
           "source": "skill.go:skillTapFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:15"
         },
-        "defaultDuration": 0.733
+        "defaultDuration": 0.733,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.25
+        }
       },
       {
         "id": "10000078-dendro_e_hold",
@@ -19018,9 +19895,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:23"
         },
-        "defaultDuration": 1.45
+        "defaultDuration": 1.45,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000078-dendro_q",
@@ -19043,9 +19925,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.517
+        "defaultDuration": 1.517,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000078-dendro_dash",
@@ -19239,9 +20126,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "領域の継続時間"
+          "effectDuration": "領域の継続時間",
+          "cooldownStart": "skill.go:18"
         },
-        "defaultDuration": 0.65
+        "defaultDuration": 0.65,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000079-pyro_q",
@@ -19263,9 +20155,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 1.267
+        "defaultDuration": 1.267,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000079-pyro_dash",
@@ -19518,9 +20415,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "霊風の継続時間"
+          "effectDuration": "霊風の継続時間",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 0.65
+        "defaultDuration": 0.65,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000080-cryo_e_hold",
@@ -19544,9 +20446,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "霊風の継続時間"
+          "effectDuration": "霊風の継続時間",
+          "cooldownStart": "skill.go:skillHoldCDStart+1"
         },
-        "defaultDuration": 0.767
+        "defaultDuration": 0.767,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.2
+        }
       },
       {
         "id": "10000080-cryo_q",
@@ -19567,9 +20474,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "鷹の羽の継続時間"
+          "effectDuration": "鷹の羽の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.017
+        "defaultDuration": 1.017,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000080-cryo_dash",
@@ -19765,9 +20677,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:33"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.55
+        }
       },
       {
         "id": "10000081-dendro_q",
@@ -19791,9 +20708,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000081-dendro_dash",
@@ -20014,9 +20936,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:23"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000082-dendro_q",
@@ -20039,9 +20966,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "無隙シールドの継続時間"
+          "effectDuration": "無隙シールドの継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.75
+        "defaultDuration": 1.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000082-dendro_dash",
@@ -20255,9 +21187,14 @@
           "source": "skill.go:skillPressFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.433
+        }
       },
       {
         "id": "10000083-anemo_q",
@@ -20281,9 +21218,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ビックラキャット·ボックスの継続時間"
+          "effectDuration": "ビックラキャット·ボックスの継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.933
+        "defaultDuration": 0.933,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000083-anemo_dash",
@@ -20492,9 +21434,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillCDStart"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.25
+        }
       },
       {
         "id": "10000084-pyro_q",
@@ -20519,9 +21466,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 5.35
+        "defaultDuration": 5.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000084-pyro_dash",
@@ -20716,9 +21668,14 @@
           "source": "skill.go:skillThrustFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:35"
         },
-        "defaultDuration": 0.767
+        "defaultDuration": 0.767,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.583
+        }
       },
       {
         "id": "10000085-cryo_q",
@@ -20742,9 +21699,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.083
+        "defaultDuration": 1.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000085-cryo_dash",
@@ -20976,9 +21938,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:skillCDDelay"
         },
-        "defaultDuration": 0.483
+        "defaultDuration": 0.483,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000086-cryo_q",
@@ -20996,9 +21963,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.217
+        "defaultDuration": 2.217,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000086-cryo_dash",
@@ -21197,9 +22169,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "源水の雫の継続時間"
+          "effectDuration": "源水の雫の継続時間",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000087-hydro_q",
@@ -21222,9 +22199,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.25
+        "defaultDuration": 2.25,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000087-hydro_dash",
@@ -21426,9 +22408,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "「スナップシルエット」マークの継続時間"
+          "effectDuration": "「スナップシルエット」マークの継続時間",
+          "cooldownStart": "skill.go:skillPressDelay"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.483
+        }
       },
       {
         "id": "10000088-cryo_e_hold",
@@ -21453,9 +22440,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "「スナップシルエット」マークの継続時間"
+          "effectDuration": "「スナップシルエット」マークの継続時間",
+          "cooldownStart": "manual: charlotte/skill.go: hitmark-2（hitmark = hold + skillHoldHitmark(111)）"
         },
-        "defaultDuration": 2.283
+        "defaultDuration": 2.283,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 1.817
+        }
       },
       {
         "id": "10000088-cryo_q",
@@ -21480,9 +22472,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "「スクープフィールド」の継続時間"
+          "effectDuration": "「スクープフィールド」の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.167
+        "defaultDuration": 1.167,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000088-cryo_dash",
@@ -21692,9 +22689,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "manual: furina/skill.go: pneumaCDDelay（ousiaCDDelay は 0f）"
         },
-        "defaultDuration": 0.9
+        "defaultDuration": 0.9,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.167
+        }
       },
       {
         "id": "10000089-hydro_q",
@@ -21719,9 +22721,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.017
+        "defaultDuration": 2.017,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000089-hydro_dash",
@@ -21936,9 +22943,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "治療継続時間"
+          "effectDuration": "治療継続時間",
+          "cooldownStart": "skill.go:skillPressCDStart"
         },
-        "defaultDuration": 0.517
+        "defaultDuration": 0.517,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000090-pyro_e_hold",
@@ -21962,9 +22974,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "治療継続時間"
+          "effectDuration": "治療継続時間",
+          "cooldownStart": "manual: chevreuse/skill.go: cdStart = hold + skillHoldCDStart(13)"
         },
-        "defaultDuration": 0.433
+        "defaultDuration": 0.433,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000090-pyro_q",
@@ -21987,9 +23004,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.017
+        "defaultDuration": 1.017,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000090-pyro_dash",
@@ -22185,9 +23207,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "裂晶の欠片の継続時間"
+          "effectDuration": "裂晶の欠片の継続時間",
+          "cooldownStart": "manual: navia/skill.go: skillPressCDStart（firingTime の既定値）"
         },
-        "defaultDuration": 0.667
+        "defaultDuration": 0.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.183
+        }
       },
       {
         "id": "10000091-geo_q",
@@ -22211,9 +23238,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "火力支援の継続時間"
+          "effectDuration": "火力支援の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.117
+        "defaultDuration": 2.117,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000091-geo_dash",
@@ -22410,9 +23442,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillCDStart"
         },
-        "defaultDuration": 1.067
+        "defaultDuration": 1.067,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.067
+        }
       },
       {
         "id": "10000092-pyro_q",
@@ -22436,9 +23473,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "獣舞態勢継続時間"
+          "effectDuration": "獣舞態勢継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.283
+        "defaultDuration": 1.283,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000092-pyro_dash",
@@ -22659,9 +23701,14 @@
           "source": "skill.go:skillLeapFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 4.067
+        "defaultDuration": 4.067,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000093-anemo_q",
@@ -22686,9 +23733,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.717
+        "defaultDuration": 1.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000093-anemo_dash",
@@ -22900,9 +23952,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: chiori/skill.go: skillCDStarts[0]"
         },
-        "defaultDuration": 0.85
+        "defaultDuration": 0.85,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000094-geo_q",
@@ -22923,9 +23980,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.683
+        "defaultDuration": 1.683,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000094-geo_dash",
@@ -23117,9 +24179,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: sigewinne/skill.go: skillPressCDStart"
         },
-        "defaultDuration": 0.683
+        "defaultDuration": 0.683,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000095-hydro_q",
@@ -23142,9 +24209,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 0.5
+        "defaultDuration": 0.5,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000095-hydro_dash",
@@ -23404,9 +24476,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:16"
         },
-        "defaultDuration": 1.283
+        "defaultDuration": 1.283,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
       },
       {
         "id": "10000096-pyro_q",
@@ -23428,9 +24505,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:0"
         },
-        "defaultDuration": 2.433
+        "defaultDuration": 2.433,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000096-pyro_dash",
@@ -23592,9 +24674,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:10"
         },
-        "defaultDuration": 0.633
+        "defaultDuration": 0.633,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.167
+        }
       },
       {
         "id": "10000097-electro_q",
@@ -23611,9 +24698,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "静思瞑影の継続時間"
+          "effectDuration": "静思瞑影の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.833
+        "defaultDuration": 0.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000097-electro_dash",
@@ -23837,9 +24929,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "夜巡り状態の継続時間"
+          "effectDuration": "夜巡り状態の継続時間",
+          "cooldownStart": "skill.go:skillStart"
         },
-        "defaultDuration": 0.55
+        "defaultDuration": 0.55,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.1
+        }
       },
       {
         "id": "10000098-electro_q",
@@ -23858,9 +24955,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.133
+        "defaultDuration": 2.133,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000098-electro_dash",
@@ -24070,9 +25172,14 @@
         },
         "dataSource": {
           "cooldown": "スキルのクールタイム",
-          "effectDuration": "ルミドゥースの瓶の継続時間"
+          "effectDuration": "ルミドゥースの瓶の継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.617
+        "defaultDuration": 0.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000099-dendro_q",
@@ -24096,9 +25203,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ルミドゥースの瓶·ランク3の継続時間"
+          "effectDuration": "ルミドゥースの瓶·ランク3の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.85
+        "defaultDuration": 1.85,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000099-dendro_dash",
@@ -24407,9 +25519,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000101-dendro_q",
@@ -24430,9 +25547,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:cdStart"
         },
-        "defaultDuration": 2.1
+        "defaultDuration": 2.1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000101-dendro_dash",
@@ -24658,9 +25780,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:0"
         },
-        "defaultDuration": 3
+        "defaultDuration": 3,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000102-hydro_dash",
@@ -24878,9 +26005,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "歓喜リズム継続時間"
+          "effectDuration": "歓喜リズム継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.683
+        "defaultDuration": 1.683,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000103-geo_dash",
@@ -25115,9 +26247,14 @@
           "source": "burst.go:burstFramesGrounded"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.9
+        "defaultDuration": 1.9,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000104-anemo_dash",
@@ -25304,9 +26441,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:14"
         },
-        "defaultDuration": 0.517
+        "defaultDuration": 0.517,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000105-electro_q",
@@ -25328,9 +26470,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.033
+        "defaultDuration": 1.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000105-electro_dash",
@@ -25552,9 +26699,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:18"
         },
-        "defaultDuration": 0.467
+        "defaultDuration": 0.467,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000106-pyro_e_hold",
@@ -25574,9 +26726,14 @@
           "source": "skill.go:skillFramesHold"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:18"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000106-pyro_e_recastframestobike",
@@ -25641,9 +26798,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "死生の炉の継続時間"
+          "effectDuration": "死生の炉の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.35
+        "defaultDuration": 2.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000106-pyro_dash",
@@ -25846,9 +27008,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.833
+        "defaultDuration": 0.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000107-cryo_q",
@@ -25871,9 +27038,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.883
+        "defaultDuration": 1.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000107-cryo_dash",
@@ -26088,9 +27260,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:4+hold"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.067
+        }
       },
       {
         "id": "10000108-anemo_q",
@@ -26111,9 +27288,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.667
+        "defaultDuration": 1.667,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000108-anemo_dash",
@@ -26307,9 +27489,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "夢浮かみ状態の継続時間"
+          "effectDuration": "夢浮かみ状態の継続時間",
+          "cooldownStart": "skill.go:skillCdDelay"
         },
-        "defaultDuration": 0.833
+        "defaultDuration": 0.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000109-anemo_q",
@@ -26334,9 +27521,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:burstCdDelay"
         },
-        "defaultDuration": 1.567
+        "defaultDuration": 1.567,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000109-anemo_dash",
@@ -26537,9 +27729,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.283
+        "defaultDuration": 2.283,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000110-electro_q",
@@ -26563,9 +27760,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.75
+        "defaultDuration": 0.75,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000110-electro_dash",
@@ -26772,9 +27974,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "追撃継続時間"
+          "effectDuration": "追撃継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.717
+        "defaultDuration": 0.717,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000111-electro_q",
@@ -26797,9 +28004,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.033
+        "defaultDuration": 2.033,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000111-electro_dash",
@@ -26998,9 +28210,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "チルドモードの継続時間"
+          "effectDuration": "チルドモードの継続時間",
+          "cooldownStart": "skill.go:22"
         },
-        "defaultDuration": 0.583
+        "defaultDuration": 0.583,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.367
+        }
       },
       {
         "id": "10000112-cryo_e_hold",
@@ -27012,9 +28229,14 @@
         "effectDuration": 20,
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "チルドモードの継続時間"
+          "effectDuration": "チルドモードの継続時間",
+          "cooldownStart": "skill.go:22"
         },
-        "defaultDuration": 1.2
+        "defaultDuration": 1.2,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.367
+        }
       },
       {
         "id": "10000112-cryo_q",
@@ -27033,9 +28255,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.833
+        "defaultDuration": 1.833,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000112-cryo_dash",
@@ -27261,9 +28488,14 @@
           "source": "burst.go:burstFramesGrounded"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.583
+        "defaultDuration": 1.583,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000113-anemo_dash",
@@ -27477,9 +28709,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "七相一閃モード継続時間"
+          "effectDuration": "七相一閃モード継続時間",
+          "cooldownStart": "manual: skirk/skill.go: extraDuration + skillHoldGainSS(18)"
         },
-        "defaultDuration": 0.3
+        "defaultDuration": 0.3,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000114-cryo_q",
@@ -27502,9 +28739,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:0"
         },
-        "defaultDuration": 2.517
+        "defaultDuration": 2.517,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000114-cryo_dash",
@@ -27717,9 +28959,14 @@
           "source": "skill.go:skillFrames[0]"
         },
         "dataSource": {
-          "cooldown": "スキルクールタイム"
+          "cooldown": "スキルクールタイム",
+          "cooldownStart": "skill.go:skillCDStarts[hold]"
         },
-        "defaultDuration": 0.883
+        "defaultDuration": 0.883,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.383
+        }
       },
       {
         "id": "10000115-hydro_q",
@@ -27743,9 +28990,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "西風の恵みの継続時間"
+          "effectDuration": "西風の恵みの継続時間",
+          "cooldownStart": "burst.go:burstCDStart"
         },
-        "defaultDuration": 0.917
+        "defaultDuration": 0.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000115-hydro_dash",
@@ -27929,9 +29181,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:1"
         },
-        "defaultDuration": 0.533
+        "defaultDuration": 0.533,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000116-electro_q",
@@ -27953,9 +29210,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.167
+        "defaultDuration": 2.167,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000116-electro_dash",
@@ -28154,9 +29416,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "「霜林の聖域」継続時間"
+          "effectDuration": "「霜林の聖域」継続時間",
+          "cooldownStart": "skill.go:13"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000119-dendro_q",
@@ -28180,9 +29447,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "蒼の讃歌の継続時間"
+          "effectDuration": "蒼の讃歌の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.917
+        "defaultDuration": 1.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000119-dendro_dash",
@@ -28374,9 +29646,14 @@
         },
         "dataSource": {
           "cooldown": "スキルクールタイム",
-          "effectDuration": "幽炎の露顕の継続時間"
+          "effectDuration": "幽炎の露顕の継続時間",
+          "cooldownStart": "skill.go:skillHitmark"
         },
-        "defaultDuration": 0.733
+        "defaultDuration": 0.733,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.317
+        }
       },
       {
         "id": "10000120-electro_q",
@@ -28398,9 +29675,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.167
+        "defaultDuration": 2.167,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000120-electro_dash",
@@ -28550,9 +29832,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:13"
         },
-        "defaultDuration": 0.867
+        "defaultDuration": 0.867,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.217
+        }
       },
       {
         "id": "10000121-hydro_q",
@@ -28577,9 +29864,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1
+        "defaultDuration": 1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000121-hydro_dash",
@@ -28887,9 +30179,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.817
+        "defaultDuration": 0.817,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000123-pyro_q",
@@ -28912,9 +30209,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "白焔の龍の継続時間"
+          "effectDuration": "白焔の龍の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.733
+        "defaultDuration": 1.733,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000123-pyro_dash",
@@ -29123,9 +30425,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "家庭用肉球アシスタントマシン継続時間"
+          "effectDuration": "家庭用肉球アシスタントマシン継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 0.917
+        "defaultDuration": 0.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000124-anemo_dash",
@@ -29326,9 +30633,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "引力のさざ波の継続時間"
+          "effectDuration": "引力のさざ波の継続時間",
+          "cooldownStart": "skill.go:20"
         },
-        "defaultDuration": 0.683
+        "defaultDuration": 0.683,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.333
+        }
       },
       {
         "id": "10000125-hydro_q",
@@ -29352,9 +30664,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "月の領域の継続時間"
+          "effectDuration": "月の領域の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.183
+        "defaultDuration": 2.183,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000125-hydro_dash",
@@ -29651,9 +30968,14 @@
           "source": "skill.go:skillTapFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:24"
         },
-        "defaultDuration": 0.783
+        "defaultDuration": 0.783,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.4
+        }
       },
       {
         "id": "10000127-geo_e_hold",
@@ -29676,9 +30998,14 @@
           "source": "skill.go:skillHoldFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:33"
         },
-        "defaultDuration": 0.967
+        "defaultDuration": 0.967,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.55
+        }
       },
       {
         "id": "10000127-geo_q",
@@ -29701,9 +31028,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.083
+        "defaultDuration": 1.083,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000127-geo_dash",
@@ -29895,9 +31227,14 @@
         },
         "dataSource": {
           "cooldown": "一回押しクールタイム",
-          "effectDuration": "疾風怒濤・継続時間"
+          "effectDuration": "疾風怒濤・継続時間",
+          "cooldownStart": "skill.go:39"
         },
-        "defaultDuration": 0.917
+        "defaultDuration": 0.917,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.65
+        }
       },
       {
         "id": "10000128-anemo_e_hold",
@@ -29909,9 +31246,14 @@
         "effectDuration": 12,
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "疾風怒濤・継続時間"
+          "effectDuration": "疾風怒濤・継続時間",
+          "cooldownStart": "skill.go:39"
         },
-        "defaultDuration": 1.2
+        "defaultDuration": 1.2,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.65
+        }
       },
       {
         "id": "10000128-anemo_q",
@@ -29934,9 +31276,14 @@
           "source": "burst.go:burstFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.533
+        "defaultDuration": 2.533,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000128-anemo_dash",
@@ -30368,9 +31715,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "シールド継続時間"
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000131-pyro_q",
@@ -30395,9 +31747,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "祈りの静観の継続時間"
+          "effectDuration": "祈りの静観の継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 2.133
+        "defaultDuration": 2.133,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000131-pyro_dash",
@@ -30610,9 +31967,14 @@
           "source": "skill.go:skillFrames"
         },
         "dataSource": {
-          "cooldown": "クールタイム"
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:25"
         },
-        "defaultDuration": 0.983
+        "defaultDuration": 0.983,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.417
+        }
       },
       {
         "id": "10000132-anemo_q",
@@ -30636,9 +31998,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ハンティングモード継続時間"
+          "effectDuration": "ハンティングモード継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.367
+        "defaultDuration": 1.367,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000132-anemo_dash",
@@ -31299,9 +32666,14 @@
         },
         "dataSource": {
           "cooldown": "スキルクールタイム",
-          "effectDuration": "独舞者のシルエットの継続時間"
+          "effectDuration": "独舞者のシルエットの継続時間",
+          "cooldownStart": "skill.go:14"
         },
-        "defaultDuration": 0.7
+        "defaultDuration": 0.7,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.233
+        }
       },
       {
         "id": "10000150-cryo_q",
@@ -31324,9 +32696,14 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "雪鳥の夢の継続時間"
+          "effectDuration": "雪鳥の夢の継続時間",
+          "cooldownStart": "burst.go:0"
         },
-        "defaultDuration": 2.1
+        "defaultDuration": 2.1,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000150-cryo_dash",

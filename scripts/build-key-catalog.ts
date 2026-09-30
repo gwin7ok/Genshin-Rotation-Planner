@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { extractKeyCatalog } from '../src/masterdata/gcsimKeyCatalog.ts';
-import { KEY_OVERRIDES } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
+import { KEY_OVERRIDES, MANUAL_PATTERN_KEYS } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
 import { assignNames } from '../src/masterdata/gcsimKeyNames.ts';
 import { loadNameSources } from './genshin-db-names.ts';
 
@@ -55,7 +55,7 @@ await Promise.all(Array.from({ length: 20 }, async () => {
   }
 }));
 
-const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined);
+const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined, MANUAL_PATTERN_KEYS);
 
 // 表示名: 手で補う一覧が優先。無いキーは、持ち主の名前（genshin-db）＋ キー名の規則で付ける
 console.log('genshin-db から名前を取得中...');
@@ -92,8 +92,7 @@ const naming = assignNames(catalog.entries, await loadNameSources());
     '## 消えたキー（その他）',
     ...(removed.filter(e => !inScope(e)).length ? removed.filter(e => !inScope(e)).map(fmt) : ['なし']),
     '',
-  ].join('
-'));
+  ].join('\n'));
   console.log(`辞書の差分: 増えたキー ${added.length} 件（対象 ${added.filter(inScope).length}）/ 消えたキー ${removed.length} 件（対象 ${removed.filter(inScope).length}）→ ${path.relative(process.cwd(), diffPath)}`);
 }
 

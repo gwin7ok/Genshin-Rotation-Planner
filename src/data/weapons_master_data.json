@@ -34,7 +34,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "amosbow"
   },
   {
@@ -75,6 +75,9 @@
             ],
             "gcsimCooldownKeys": [
               "vividnotions-cd"
+            ],
+            "gcsimExtraKeys": [
+              "vividnotions-atk"
             ]
           }
         ]
@@ -185,6 +188,9 @@
         ],
         "gcsimCooldownKeys": [
           "vividnotions-cd"
+        ],
+        "gcsimExtraKeys": [
+          "vividnotions-atk"
         ]
       }
     ],
@@ -197,7 +203,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "vividnotions"
   },
   {
@@ -242,6 +248,9 @@
               "surfs-up-icd",
               "surfs-up-stack-gain-icd",
               "surfs-up-stack-loss-icd"
+            ],
+            "gcsimExtraKeys": [
+              "surfs-up-hp%"
             ]
           }
         ]
@@ -367,6 +376,9 @@
           "surfs-up-icd",
           "surfs-up-stack-gain-icd",
           "surfs-up-stack-loss-icd"
+        ],
+        "gcsimExtraKeys": [
+          "surfs-up-hp%"
         ]
       }
     ],
@@ -380,7 +392,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "surfsup"
   },
   {
@@ -417,6 +429,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "tulaytullahsremembrance-na-dmg"
+            ],
+            "gcsimExtraKeys": [
+              "tulaytullahsremembrance-atkspd"
             ]
           }
         ]
@@ -523,6 +538,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "tulaytullahsremembrance-na-dmg"
+        ],
+        "gcsimExtraKeys": [
+          "tulaytullahsremembrance-atkspd"
         ]
       }
     ],
@@ -535,7 +553,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "tulaytullahsremembrance"
   },
   {
@@ -572,6 +590,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "lumidouceelegy-bonus-buff"
+            ],
+            "gcsimExtraKeys": [
+              "lumidouceelegy-atk-buff"
             ]
           }
         ]
@@ -678,6 +699,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "lumidouceelegy-bonus-buff"
+        ],
+        "gcsimExtraKeys": [
+          "lumidouceelegy-atk-buff"
         ]
       }
     ],
@@ -691,7 +715,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lumidouceelegy"
   },
   {
@@ -729,6 +753,9 @@
             "gcsimKeys": [
               "beacon-of-the-reed-sea-damaged",
               "beacon-of-the-reed-sea-skill"
+            ],
+            "gcsimExtraKeys": [
+              "beacon-of-the-reed-sea-hp"
             ]
           }
         ]
@@ -836,6 +863,9 @@
         "gcsimKeys": [
           "beacon-of-the-reed-sea-damaged",
           "beacon-of-the-reed-sea-skill"
+        ],
+        "gcsimExtraKeys": [
+          "beacon-of-the-reed-sea-hp"
         ]
       }
     ],
@@ -848,7 +878,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "beaconofthereedsea"
   },
   {
@@ -1005,7 +1035,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "peakpatrolsong"
   },
   {
@@ -1042,6 +1072,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "eternalflow-buff"
+            ],
+            "gcsimExtraKeys": [
+              "eternalflow-hpp"
             ]
           }
         ]
@@ -1148,6 +1181,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "eternalflow-buff"
+        ],
+        "gcsimExtraKeys": [
+          "eternalflow-hpp"
         ]
       }
     ],
@@ -1160,7 +1196,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "tomeoftheeternalflow"
   },
   {
@@ -1315,7 +1351,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thedaybreakchronicles"
   },
   {
@@ -1494,7 +1530,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "bloodsoakedruins"
   },
   {
@@ -1532,7 +1568,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "staffofhoma"
   },
   {
@@ -1569,6 +1605,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "symphonist-chanson-de-baies"
+            ],
+            "gcsimExtraKeys": [
+              "symphonist-atkp"
             ]
           }
         ]
@@ -1675,6 +1714,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "symphonist-chanson-de-baies"
+        ],
+        "gcsimExtraKeys": [
+          "symphonist-atkp"
         ]
       }
     ],
@@ -1687,7 +1729,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "symphonistofscents"
   },
   {
@@ -1850,7 +1892,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "athameartis"
   },
   {
@@ -2011,7 +2053,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "disasterandremorse"
   },
   {
@@ -2049,6 +2091,9 @@
             "gcsimKeys": [
               "fracturedhalo-atkp",
               "fracturedhalo-lc-buff"
+            ],
+            "gcsimExtraKeys": [
+              "fracturedhalo-lc-dmg"
             ]
           }
         ]
@@ -2156,6 +2201,9 @@
         "gcsimKeys": [
           "fracturedhalo-atkp",
           "fracturedhalo-lc-buff"
+        ],
+        "gcsimExtraKeys": [
+          "fracturedhalo-lc-dmg"
         ]
       }
     ],
@@ -2168,7 +2216,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fracturedhalo"
   },
   {
@@ -2211,6 +2259,10 @@
             ],
             "gcsimCooldownKeys": [
               "starcallerswatch-icd"
+            ],
+            "gcsimExtraKeys": [
+              "starcallerswatch-buff",
+              "starcallerswatch-em"
             ]
           }
         ]
@@ -2334,6 +2386,10 @@
         ],
         "gcsimCooldownKeys": [
           "starcallerswatch-icd"
+        ],
+        "gcsimExtraKeys": [
+          "starcallerswatch-buff",
+          "starcallerswatch-em"
         ]
       }
     ],
@@ -2347,7 +2403,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "starcallerswatch"
   },
   {
@@ -2403,11 +2459,15 @@
         ],
         "gcsimCooldownKeys": [
           "verdict-lcr-icd"
+        ],
+        "gcsimExtraKeys": [
+          "verdict-atk",
+          "verdict-dmg-window"
         ]
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "verdict"
   },
   {
@@ -2444,6 +2504,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "lightbearing-moonshard"
+            ],
+            "gcsimExtraKeys": [
+              "lightbearing-moonshard-def"
             ]
           }
         ]
@@ -2550,6 +2613,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "lightbearing-moonshard"
+        ],
+        "gcsimExtraKeys": [
+          "lightbearing-moonshard-def"
         ]
       }
     ],
@@ -2562,7 +2628,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lightbearingmoonshard"
   },
   {
@@ -2725,7 +2791,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fangofthemountainking"
   },
   {
@@ -2762,6 +2828,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "golden-majesty"
+            ],
+            "gcsimExtraKeys": [
+              "golden-majesty-kaeya"
             ]
           }
         ]
@@ -2868,6 +2937,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "golden-majesty"
+        ],
+        "gcsimExtraKeys": [
+          "golden-majesty-kaeya"
         ]
       }
     ],
@@ -2880,7 +2952,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "summitshaper"
   },
   {
@@ -2918,7 +2990,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lostprayertothesacredwinds"
   },
   {
@@ -2956,7 +3028,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thefirstgreatmagic"
   },
   {
@@ -2993,6 +3065,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "absolution-dmg-bonus"
+            ],
+            "gcsimExtraKeys": [
+              "absolution-crit-dmg"
             ]
           }
         ]
@@ -3099,6 +3174,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "absolution-dmg-bonus"
+        ],
+        "gcsimExtraKeys": [
+          "absolution-crit-dmg"
         ]
       }
     ],
@@ -3111,7 +3189,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "absolution"
   },
   {
@@ -3162,11 +3240,14 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "aquasimulacra-dmg"
+        ],
+        "gcsimExtraKeys": [
+          "aquasimulacra-hp"
         ]
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "aquasimulacra"
   },
   {
@@ -3206,6 +3287,9 @@
             ],
             "gcsimCooldownKeys": [
               "hunterspath-icd"
+            ],
+            "gcsimExtraKeys": [
+              "hunterspath-dmg-bonus"
             ]
           }
         ]
@@ -3315,6 +3399,9 @@
         ],
         "gcsimCooldownKeys": [
           "hunterspath-icd"
+        ],
+        "gcsimExtraKeys": [
+          "hunterspath-dmg-bonus"
         ]
       }
     ],
@@ -3328,7 +3415,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "hunterspath"
   },
   {
@@ -3372,6 +3459,9 @@
             ],
             "gcsimCooldownKeys": [
               "elegy-cd"
+            ],
+            "gcsimExtraKeys": [
+              "elegy-em"
             ]
           }
         ]
@@ -3496,6 +3586,9 @@
         ],
         "gcsimCooldownKeys": [
           "elegy-cd"
+        ],
+        "gcsimExtraKeys": [
+          "elegy-em"
         ]
       }
     ],
@@ -3509,7 +3602,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "elegyfortheend"
   },
   {
@@ -3552,6 +3645,9 @@
             ],
             "gcsimCooldownKeys": [
               "songofbrokenpines-cooldown"
+            ],
+            "gcsimExtraKeys": [
+              "pines-atk"
             ]
           }
         ]
@@ -3675,6 +3771,9 @@
         ],
         "gcsimCooldownKeys": [
           "songofbrokenpines-cooldown"
+        ],
+        "gcsimExtraKeys": [
+          "pines-atk"
         ]
       }
     ],
@@ -3688,7 +3787,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "songofbrokenpines"
   },
   {
@@ -3847,7 +3946,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sunnymorningsleepin"
   },
   {
@@ -3885,6 +3984,9 @@
             "gcsimKeys": [
               "reliquary-moonoftruth",
               "reliquary-secretoflies"
+            ],
+            "gcsimExtraKeys": [
+              "reliquary-cr"
             ]
           }
         ]
@@ -3992,6 +4094,9 @@
         "gcsimKeys": [
           "reliquary-moonoftruth",
           "reliquary-secretoflies"
+        ],
+        "gcsimExtraKeys": [
+          "reliquary-cr"
         ]
       }
     ],
@@ -4004,7 +4109,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "reliquaryoftruth"
   },
   {
@@ -4161,7 +4266,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "kagurasverity"
   },
   {
@@ -4201,6 +4306,10 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "angelos-heptades-buff"
+            ],
+            "gcsimExtraKeys": [
+              "angelos-heptades-atk",
+              "pathfinders-light"
             ]
           }
         ]
@@ -4321,6 +4430,10 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "angelos-heptades-buff"
+        ],
+        "gcsimExtraKeys": [
+          "angelos-heptades-atk",
+          "pathfinders-light"
         ]
       }
     ],
@@ -4334,7 +4447,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "angelosheptades"
   },
   {
@@ -4515,7 +4628,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "exaiphanesblade"
   },
   {
@@ -4552,6 +4665,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "astralvulturescrimsonplumage-atkp"
+            ],
+            "gcsimExtraKeys": [
+              "astralvulturescrimsonplumage-dmg"
             ]
           }
         ]
@@ -4658,6 +4774,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "astralvulturescrimsonplumage-atkp"
+        ],
+        "gcsimExtraKeys": [
+          "astralvulturescrimsonplumage-dmg"
         ]
       }
     ],
@@ -4670,7 +4789,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "astralvulturescrimsonplumage"
   },
   {
@@ -4708,6 +4827,9 @@
             "gcsimKeys": [
               "khaj-nisut-buff",
               "khaj-nisut-team-buff"
+            ],
+            "gcsimExtraKeys": [
+              "khaj-nisut"
             ]
           }
         ]
@@ -4815,6 +4937,9 @@
         "gcsimKeys": [
           "khaj-nisut-buff",
           "khaj-nisut-team-buff"
+        ],
+        "gcsimExtraKeys": [
+          "khaj-nisut"
         ]
       }
     ],
@@ -4827,7 +4952,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "keyofkhajnisut"
   },
   {
@@ -4984,7 +5109,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "splendoroftranquilwaters"
   },
   {
@@ -5022,7 +5147,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "redhornstonethresher"
   },
   {
@@ -5184,7 +5309,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "crimsonmoonssemblance"
   },
   {
@@ -5221,6 +5346,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "scarletsands-skill"
+            ],
+            "gcsimExtraKeys": [
+              "scarletsands"
             ]
           }
         ]
@@ -5327,6 +5455,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "scarletsands-skill"
+        ],
+        "gcsimExtraKeys": [
+          "scarletsands"
         ]
       }
     ],
@@ -5339,7 +5470,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "staffofthescarletsands"
   },
   {
@@ -5377,7 +5508,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "athousandfloatingdreams"
   },
   {
@@ -5558,7 +5689,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "athousandblazingsuns"
   },
   {
@@ -5592,7 +5723,8 @@
               "duration": "継続時間10秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       },
@@ -5695,7 +5827,8 @@
           "duration": "継続時間10秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -5707,7 +5840,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "13509",
@@ -5743,6 +5876,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "engulfing-er"
+            ],
+            "gcsimExtraKeys": [
+              "engulfing-lightning"
             ]
           }
         ]
@@ -5849,6 +5985,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "engulfing-er"
+        ],
+        "gcsimExtraKeys": [
+          "engulfing-lightning"
         ]
       }
     ],
@@ -5861,7 +6000,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "engulfinglightning"
   },
   {
@@ -5904,6 +6043,9 @@
             ],
             "gcsimCooldownKeys": [
               "freedom-sworn-cooldown"
+            ],
+            "gcsimExtraKeys": [
+              "freedom-dmg"
             ]
           }
         ]
@@ -6027,6 +6169,9 @@
         ],
         "gcsimCooldownKeys": [
           "freedom-sworn-cooldown"
+        ],
+        "gcsimExtraKeys": [
+          "freedom-dmg"
         ]
       }
     ],
@@ -6040,7 +6185,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "freedomsworn"
   },
   {
@@ -6195,7 +6340,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "azurelight"
   },
   {
@@ -6235,6 +6380,9 @@
               "golden-frostbound-oath-lcr",
               "golden-frostbound-oath-team-geo",
               "golden-frostbound-oath-team-lcr"
+            ],
+            "gcsimExtraKeys": [
+              "golden-frostbound-oath-def"
             ]
           }
         ]
@@ -6344,6 +6492,9 @@
           "golden-frostbound-oath-lcr",
           "golden-frostbound-oath-team-geo",
           "golden-frostbound-oath-team-lcr"
+        ],
+        "gcsimExtraKeys": [
+          "golden-frostbound-oath-def"
         ]
       }
     ],
@@ -6356,7 +6507,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "goldenfrostboundoath"
   },
   {
@@ -6393,6 +6544,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "calamity-consummation"
+            ],
+            "gcsimExtraKeys": [
+              "calamity-dmg"
             ]
           }
         ]
@@ -6499,6 +6653,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "calamity-consummation"
+        ],
+        "gcsimExtraKeys": [
+          "calamity-dmg"
         ]
       }
     ],
@@ -6511,7 +6668,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "calamityqueller"
   },
   {
@@ -6555,6 +6712,9 @@
             ],
             "gcsimCooldownKeys": [
               "nocturnes-curtain-call-icd"
+            ],
+            "gcsimExtraKeys": [
+              "nocturnes-curtain-call-hp"
             ]
           }
         ]
@@ -6679,6 +6839,9 @@
         ],
         "gcsimCooldownKeys": [
           "nocturnes-curtain-call-icd"
+        ],
+        "gcsimExtraKeys": [
+          "nocturnes-curtain-call-hp"
         ]
       }
     ],
@@ -6692,7 +6855,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "nocturnescurtaincall"
   },
   {
@@ -6726,7 +6889,8 @@
               "duration": "継続時間10秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       },
@@ -6829,7 +6993,8 @@
           "duration": "継続時間10秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -6841,7 +7006,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "12516",
@@ -6877,6 +7042,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "a-teaspoon-of-transcendence-stellar"
+            ],
+            "gcsimExtraKeys": [
+              "a-teaspoon-of-transcendence-atk"
             ]
           }
         ]
@@ -6983,6 +7151,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "a-teaspoon-of-transcendence-stellar"
+        ],
+        "gcsimExtraKeys": [
+          "a-teaspoon-of-transcendence-atk"
         ]
       }
     ],
@@ -6995,7 +7166,7 @@
       "color": "#14b8a6"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ateaspoonoftranscendence"
   },
   {
@@ -7150,7 +7321,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "cranesechoingcall"
   },
   {
@@ -7312,7 +7483,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skywardatlas"
   },
   {
@@ -7349,6 +7520,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "skyward-blade"
+            ],
+            "gcsimExtraKeys": [
+              "skyward-blade-crit"
             ]
           }
         ]
@@ -7455,6 +7629,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "skyward-blade"
+        ],
+        "gcsimExtraKeys": [
+          "skyward-blade-crit"
         ]
       }
     ],
@@ -7467,7 +7644,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skywardblade"
   },
   {
@@ -7629,7 +7806,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skywardspine"
   },
   {
@@ -7791,7 +7968,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skywardharp"
   },
   {
@@ -7828,6 +8005,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "skyward-pride-active"
+            ],
+            "gcsimExtraKeys": [
+              "skyward pride"
             ]
           }
         ]
@@ -7934,6 +8114,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "skyward-pride-active"
+        ],
+        "gcsimExtraKeys": [
+          "skyward pride"
         ]
       }
     ],
@@ -7946,7 +8129,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skywardpride"
   },
   {
@@ -7986,6 +8169,10 @@
               "polar-star-charged",
               "polar-star-normal",
               "polar-star-skill"
+            ],
+            "gcsimExtraKeys": [
+              "polar-star-atk",
+              "polar-star-dmg"
             ]
           }
         ]
@@ -8095,6 +8282,10 @@
           "polar-star-charged",
           "polar-star-normal",
           "polar-star-skill"
+        ],
+        "gcsimExtraKeys": [
+          "polar-star-atk",
+          "polar-star-dmg"
         ]
       }
     ],
@@ -8107,7 +8298,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "polarstar"
   },
   {
@@ -8144,6 +8335,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "ripping-upheaval"
+            ],
+            "gcsimExtraKeys": [
+              "haran-ele-bonus"
             ]
           }
         ]
@@ -8250,6 +8444,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "ripping-upheaval"
+        ],
+        "gcsimExtraKeys": [
+          "haran-ele-bonus"
         ]
       }
     ],
@@ -8262,7 +8459,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "harangeppakufutsu"
   },
   {
@@ -8299,6 +8496,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "golden-majesty"
+            ],
+            "gcsimExtraKeys": [
+              "golden-majesty-xiangling"
             ]
           }
         ]
@@ -8405,6 +8605,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "golden-majesty"
+        ],
+        "gcsimExtraKeys": [
+          "golden-majesty-xiangling"
         ]
       }
     ],
@@ -8417,7 +8620,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "vortexvanquisher"
   },
   {
@@ -8455,6 +8658,10 @@
             "gcsimKeys": [
               "heartstrings-cr-cancel",
               "heartstrings-skill"
+            ],
+            "gcsimExtraKeys": [
+              "heartstrings",
+              "heartstrings-cr"
             ]
           }
         ]
@@ -8562,6 +8769,10 @@
         "gcsimKeys": [
           "heartstrings-cr-cancel",
           "heartstrings-skill"
+        ],
+        "gcsimExtraKeys": [
+          "heartstrings",
+          "heartstrings-cr"
         ]
       }
     ],
@@ -8574,7 +8785,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "silvershowerheartstrings"
   },
   {
@@ -8608,7 +8819,8 @@
               "duration": "継続時間8秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       },
@@ -8711,7 +8923,8 @@
           "duration": "継続時間8秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -8723,7 +8936,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "11505",
@@ -8760,7 +8973,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "primordialjadecutter"
   },
   {
@@ -8798,6 +9011,9 @@
             "gcsimKeys": [
               "thundering-pulse-normal",
               "thundering-pulse-skill"
+            ],
+            "gcsimExtraKeys": [
+              "thundering-pulse"
             ]
           }
         ]
@@ -8905,6 +9121,9 @@
         "gcsimKeys": [
           "thundering-pulse-normal",
           "thundering-pulse-skill"
+        ],
+        "gcsimExtraKeys": [
+          "thundering-pulse"
         ]
       }
     ],
@@ -8917,7 +9136,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thunderingpulse"
   },
   {
@@ -8954,6 +9173,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "moonglow-postburst"
+            ],
+            "gcsimExtraKeys": [
+              "moonglow-heal-bonus"
             ]
           }
         ]
@@ -9060,6 +9282,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "moonglow-postburst"
+        ],
+        "gcsimExtraKeys": [
+          "moonglow-heal-bonus"
         ]
       }
     ],
@@ -9072,7 +9297,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "everlastingmoonglow"
   },
   {
@@ -9109,6 +9334,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "golden-majesty"
+            ],
+            "gcsimExtraKeys": [
+              "golden-majesty-klee"
             ]
           }
         ]
@@ -9215,6 +9443,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "golden-majesty"
+        ],
+        "gcsimExtraKeys": [
+          "golden-majesty-klee"
         ]
       }
     ],
@@ -9227,7 +9458,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "memoryofdust"
   },
   {
@@ -9389,7 +9620,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "aquilafavonia"
   },
   {
@@ -9544,7 +9775,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "jadefallssplendor"
   },
   {
@@ -9581,6 +9812,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "golden-majesty"
+            ],
+            "gcsimExtraKeys": [
+              "golden-majesty-diluc"
             ]
           }
         ]
@@ -9687,6 +9921,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "golden-majesty"
+        ],
+        "gcsimExtraKeys": [
+          "golden-majesty-diluc"
         ]
       }
     ],
@@ -9699,7 +9936,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "theunforged"
   },
   {
@@ -9737,6 +9974,9 @@
             "gcsimKeys": [
               "mistsplitter-burst",
               "mistsplitter-normal"
+            ],
+            "gcsimExtraKeys": [
+              "mistsplitter"
             ]
           }
         ]
@@ -9844,6 +10084,9 @@
         "gcsimKeys": [
           "mistsplitter-burst",
           "mistsplitter-normal"
+        ],
+        "gcsimExtraKeys": [
+          "mistsplitter"
         ]
       }
     ],
@@ -9856,7 +10099,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mistsplitterreforged"
   },
   {
@@ -9894,6 +10137,9 @@
             "gcsimKeys": [
               "new-moon-verse",
               "prayer-of-the-far-north"
+            ],
+            "gcsimExtraKeys": [
+              "nightweavers"
             ]
           }
         ]
@@ -10001,6 +10247,9 @@
         "gcsimKeys": [
           "new-moon-verse",
           "prayer-of-the-far-north"
+        ],
+        "gcsimExtraKeys": [
+          "nightweavers"
         ]
       }
     ],
@@ -10013,7 +10262,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "nightweaverslookingglass"
   },
   {
@@ -10050,6 +10299,11 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "urakumisugiri-increase-buff"
+            ],
+            "gcsimExtraKeys": [
+              "urakumisugiri-def",
+              "urakumisugiri-na",
+              "urakumisugiri-skill"
             ]
           }
         ]
@@ -10156,6 +10410,11 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "urakumisugiri-increase-buff"
+        ],
+        "gcsimExtraKeys": [
+          "urakumisugiri-def",
+          "urakumisugiri-na",
+          "urakumisugiri-skill"
         ]
       }
     ],
@@ -10168,7 +10427,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "urakumisugiri"
   },
   {
@@ -10219,11 +10478,14 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "gest-of-the-mighty-wolf-stacks"
+        ],
+        "gcsimExtraKeys": [
+          "gest-of-the-mighty-wolf-atkspd"
         ]
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "gestofthemightywolf"
   },
   {
@@ -10266,6 +10528,9 @@
             ],
             "gcsimCooldownKeys": [
               "wolf-gravestone-icd"
+            ],
+            "gcsimExtraKeys": [
+              "wolf-flat"
             ]
           }
         ]
@@ -10389,6 +10654,9 @@
         ],
         "gcsimCooldownKeys": [
           "wolf-gravestone-icd"
+        ],
+        "gcsimExtraKeys": [
+          "wolf-flat"
         ]
       }
     ],
@@ -10402,7 +10670,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "wolfsgravestone"
   },
   {
@@ -10557,7 +10825,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "primordialjadewingedspear"
   },
   {
@@ -10595,6 +10863,9 @@
             "gcsimKeys": [
               "cashflow-atkspd",
               "cashflow-buff"
+            ],
+            "gcsimExtraKeys": [
+              "cashflow-supervision-atkp"
             ]
           }
         ]
@@ -10702,6 +10973,9 @@
         "gcsimKeys": [
           "cashflow-atkspd",
           "cashflow-buff"
+        ],
+        "gcsimExtraKeys": [
+          "cashflow-supervision-atkp"
         ]
       }
     ],
@@ -10714,7 +10988,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "cashflowsupervision"
   },
   {
@@ -10754,6 +11028,9 @@
             ],
             "gcsimCooldownKeys": [
               "foliar-icd"
+            ],
+            "gcsimExtraKeys": [
+              "foliar-crit-rate"
             ]
           }
         ]
@@ -10863,6 +11140,9 @@
         ],
         "gcsimCooldownKeys": [
           "foliar-icd"
+        ],
+        "gcsimExtraKeys": [
+          "foliar-crit-rate"
         ]
       }
     ],
@@ -10876,7 +11156,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lightoffoliarincision"
   },
   {
@@ -10914,7 +11194,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ultimateoverlordsmegamagicsword"
   },
   {
@@ -11032,7 +11312,8 @@
               "cooldown": "8秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -11051,7 +11332,8 @@
           "cooldown": "8秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -11064,7 +11346,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "11420",
@@ -11181,7 +11463,8 @@
               "cooldown": "8秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -11200,7 +11483,8 @@
           "cooldown": "8秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -11213,7 +11497,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "11421",
@@ -11330,7 +11614,8 @@
               "cooldown": "8秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -11349,7 +11634,8 @@
           "cooldown": "8秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -11362,7 +11648,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "13415",
@@ -11399,7 +11685,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thecatch"
   },
   {
@@ -11454,7 +11740,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "earthshaker"
   },
   {
@@ -11609,7 +11895,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fluteofezpitzal"
   },
   {
@@ -11730,6 +12016,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "fleuvecendreferryman-er"
+            ],
+            "gcsimExtraKeys": [
+              "fleuvecendreferryman-cr"
             ]
           }
         ]
@@ -11752,6 +12041,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "fleuvecendreferryman-er"
+        ],
+        "gcsimExtraKeys": [
+          "fleuvecendreferryman-cr"
         ]
       }
     ],
@@ -11764,7 +12056,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fleuvecendreferryman"
   },
   {
@@ -11884,7 +12176,8 @@
             "timing": "computed",
             "gcsimTarget": true,
             "gcsimKeys": [
-              "xiphos"
+              "xiphos",
+              "xiphos-*"
             ]
           }
         ]
@@ -11906,7 +12199,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "xiphos"
+          "xiphos",
+          "xiphos-*"
         ]
       }
     ],
@@ -11919,7 +12213,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "xiphosmoonlight"
   },
   {
@@ -12081,7 +12375,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "cinnabarspindle"
   },
   {
@@ -12246,7 +12540,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "forgedbythegoldenmelody"
   },
   {
@@ -12301,7 +12595,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sturdybone"
   },
   {
@@ -12339,7 +12633,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "alleyhunter"
   },
   {
@@ -12496,7 +12790,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "wineandsong"
   },
   {
@@ -12617,6 +12911,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "alley-flash-lockout"
+            ],
+            "gcsimExtraKeys": [
+              "alleyflash"
             ]
           }
         ]
@@ -12639,6 +12936,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "alley-flash-lockout"
+        ],
+        "gcsimExtraKeys": [
+          "alleyflash"
         ]
       }
     ],
@@ -12651,7 +12951,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thealleyflash"
   },
   {
@@ -12806,7 +13106,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "tidalshadow"
   },
   {
@@ -12844,7 +13144,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "chainbreaker"
   },
   {
@@ -12999,7 +13299,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ibispiercer"
   },
   {
@@ -13156,7 +13456,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "dodocotales"
   },
   {
@@ -13274,7 +13574,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "dragonspine-spear-icd"
             ]
@@ -13296,7 +13596,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "dragonspine-spear-icd"
         ]
@@ -13312,7 +13612,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "dragonspinespear"
   },
   {
@@ -13350,7 +13650,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "balladofthefjords"
   },
   {
@@ -13472,6 +13772,9 @@
             "gcsimKeys": [
               "predator-dmg",
               "predator-stacks"
+            ],
+            "gcsimExtraKeys": [
+              "predator-atk"
             ]
           }
         ]
@@ -13495,6 +13798,9 @@
         "gcsimKeys": [
           "predator-dmg",
           "predator-stacks"
+        ],
+        "gcsimExtraKeys": [
+          "predator-atk"
         ]
       }
     ],
@@ -13507,7 +13813,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "predator"
   },
   {
@@ -13688,7 +13994,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prospectorsdrill"
   },
   {
@@ -13808,7 +14114,8 @@
             "timing": "computed",
             "gcsimTarget": true,
             "gcsimKeys": [
-              "aquamarine"
+              "aquamarine",
+              "aquamarine-*"
             ]
           }
         ]
@@ -13830,7 +14137,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "aquamarine"
+          "aquamarine",
+          "aquamarine-*"
         ]
       }
     ],
@@ -13843,7 +14151,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "makhairaaquamarine"
   },
   {
@@ -14004,7 +14312,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "moonpiercer"
   },
   {
@@ -14159,7 +14467,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ringofyaxche"
   },
   {
@@ -14316,7 +14624,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "compoundbow"
   },
   {
@@ -14497,7 +14805,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "rangegauge"
   },
   {
@@ -14615,7 +14923,8 @@
               "duration": "1秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -14634,7 +14943,8 @@
           "duration": "1秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -14646,7 +14956,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "14433",
@@ -14683,7 +14993,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackmarrowlantern"
   },
   {
@@ -14721,7 +15031,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "rainslasher"
   },
   {
@@ -14894,7 +15204,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "songofthevigil"
   },
   {
@@ -15073,7 +15383,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "kingssquire"
   },
   {
@@ -15228,7 +15538,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "balladoftheboundlessblue"
   },
   {
@@ -15266,7 +15576,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "flowerwreathedfeathers"
   },
   {
@@ -15447,7 +15757,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "finaleofthedeep"
   },
   {
@@ -15626,7 +15936,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "kitaincrossspear"
   },
   {
@@ -15664,7 +15974,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "rust"
   },
   {
@@ -15821,7 +16131,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "bladeofatonement"
   },
   {
@@ -15859,7 +16169,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "royalgreatsword"
   },
   {
@@ -15897,7 +16207,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "royalbow"
   },
   {
@@ -15935,7 +16245,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "royallongsword"
   },
   {
@@ -15973,7 +16283,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "royalgrimoire"
   },
   {
@@ -16011,7 +16321,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "royalspear"
   },
   {
@@ -16168,7 +16478,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "echoesoftheheart"
   },
   {
@@ -16323,7 +16633,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "tamayurateinoohanashi"
   },
   {
@@ -16361,7 +16671,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prospectorsshovel"
   },
   {
@@ -16479,7 +16789,8 @@
               "duration": "6秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -16498,7 +16809,8 @@
           "duration": "6秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -16510,7 +16822,7 @@
       "color": "#34d399"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prototypeamber"
   },
   {
@@ -16628,7 +16940,8 @@
               "duration": "12秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -16647,7 +16960,8 @@
           "duration": "12秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -16659,7 +16973,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "12427",
@@ -16839,7 +17153,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "portablepowersaw"
   },
   {
@@ -17018,7 +17332,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "katsuragikirinagamasa"
   },
   {
@@ -17056,7 +17370,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "moonweaversdawn"
   },
   {
@@ -17184,7 +17498,7 @@
               "duration": "継続時間12秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sapwoodblade-icd"
             ]
@@ -17207,7 +17521,7 @@
           "duration": "継続時間12秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sapwoodblade-icd"
         ]
@@ -17223,7 +17537,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sapwoodblade"
   },
   {
@@ -17341,7 +17655,7 @@
               "cooldown": "15秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "prototype-archaic-icd"
             ]
@@ -17363,7 +17677,7 @@
           "cooldown": "15秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "prototype-archaic-icd"
         ]
@@ -17379,7 +17693,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prototypearchaic"
   },
   {
@@ -17534,7 +17848,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificialjade"
   },
   {
@@ -17696,7 +18010,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "swordofdescension"
   },
   {
@@ -17851,7 +18165,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackcliffslasher"
   },
   {
@@ -18006,7 +18320,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackcliffwarbow"
   },
   {
@@ -18161,7 +18475,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackclifflongsword"
   },
   {
@@ -18316,7 +18630,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackcliffpole"
   },
   {
@@ -18471,7 +18785,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blackcliffagate"
   },
   {
@@ -18633,7 +18947,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "theblacksword"
   },
   {
@@ -18751,7 +19065,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "dialoguesofthedesertsages-icd"
             ]
@@ -18773,7 +19087,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "dialoguesofthedesertsages-icd"
         ]
@@ -18789,7 +19103,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "dialoguesofthedesertsages"
   },
   {
@@ -18917,7 +19231,7 @@
               "cooldown": "16秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sacrificial-cd"
             ]
@@ -18940,7 +19254,7 @@
           "cooldown": "16秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sacrificial-cd"
         ]
@@ -18956,7 +19270,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificialbow"
   },
   {
@@ -19084,7 +19398,7 @@
               "cooldown": "16秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sacrificial-cd"
             ]
@@ -19107,7 +19421,7 @@
           "cooldown": "16秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sacrificial-cd"
         ]
@@ -19123,7 +19437,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificialsword"
   },
   {
@@ -19251,7 +19565,7 @@
               "cooldown": "16秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sacrificial-cd"
             ]
@@ -19274,7 +19588,7 @@
           "cooldown": "16秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sacrificial-cd"
         ]
@@ -19290,7 +19604,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificialgreatsword"
   },
   {
@@ -19418,7 +19732,7 @@
               "cooldown": "16秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sacrificial-cd"
             ]
@@ -19441,7 +19755,7 @@
           "cooldown": "16秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sacrificial-cd"
         ]
@@ -19457,7 +19771,7 @@
       "color": "#60a5fa"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificialfragments"
   },
   {
@@ -19612,7 +19926,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prototyperancour"
   },
   {
@@ -19650,7 +19964,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "wavebreakersfin"
   },
   {
@@ -19688,7 +20002,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "deathmatch"
   },
   {
@@ -19809,6 +20123,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "fruitful-hook-dmg%"
+            ],
+            "gcsimExtraKeys": [
+              "fruitful-hook-cr"
             ]
           }
         ]
@@ -19831,6 +20148,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "fruitful-hook-dmg%"
+        ],
+        "gcsimExtraKeys": [
+          "fruitful-hook-cr"
         ]
       }
     ],
@@ -19843,7 +20163,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fruitfulhook"
   },
   {
@@ -19983,6 +20303,9 @@
             ],
             "gcsimCooldownKeys": [
               "flowingpurity-icd"
+            ],
+            "gcsimExtraKeys": [
+              "flowingpurity-bond"
             ]
           }
         ]
@@ -20011,6 +20334,9 @@
         ],
         "gcsimCooldownKeys": [
           "flowingpurity-icd"
+        ],
+        "gcsimExtraKeys": [
+          "flowingpurity-bond"
         ]
       }
     ],
@@ -20024,7 +20350,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "flowingpurity"
   },
   {
@@ -20205,7 +20531,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "clashofkings"
   },
   {
@@ -20367,7 +20693,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "eyeofperception"
   },
   {
@@ -20529,7 +20855,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thebell"
   },
   {
@@ -20662,7 +20988,8 @@
               "cooldown": "1秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -20683,7 +21010,8 @@
           "cooldown": "1秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -20696,7 +21024,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "12417",
@@ -20856,7 +21184,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "forestregalia"
   },
   {
@@ -20974,7 +21302,7 @@
               "cooldown": "12秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "swordofnarzissenkreuz-icd"
             ]
@@ -20996,7 +21324,7 @@
           "cooldown": "12秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "swordofnarzissenkreuz-icd"
         ]
@@ -21012,7 +21340,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "swordofnarzissenkreuz"
   },
   {
@@ -21167,7 +21495,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prototypestarglitter"
   },
   {
@@ -21285,7 +21613,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "rightfulreward-icd"
             ]
@@ -21307,7 +21635,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "rightfulreward-icd"
         ]
@@ -21323,7 +21651,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "rightfulreward"
   },
   {
@@ -21478,7 +21806,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sacrificersstaff"
   },
   {
@@ -21606,7 +21934,8 @@
               "cooldown": "6秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -21626,7 +21955,8 @@
           "cooldown": "6秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -21639,7 +21969,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "favoniussword"
   },
   {
@@ -21767,7 +22097,8 @@
               "cooldown": "6秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -21787,7 +22118,8 @@
           "cooldown": "6秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -21800,7 +22132,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "favoniusgreatsword"
   },
   {
@@ -21928,7 +22260,8 @@
               "cooldown": "6秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -21948,7 +22281,8 @@
           "cooldown": "6秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -21961,7 +22295,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "favoniuslance"
   },
   {
@@ -22089,7 +22423,8 @@
               "cooldown": "6秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -22109,7 +22444,8 @@
           "cooldown": "6秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -22122,7 +22458,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "favoniuscodex"
   },
   {
@@ -22250,7 +22586,8 @@
               "cooldown": "6秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -22270,7 +22607,8 @@
           "cooldown": "6秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -22283,7 +22621,7 @@
       "color": "#94a3b8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "favoniuswarbow"
   },
   {
@@ -22438,7 +22776,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "oathsworneye"
   },
   {
@@ -22593,7 +22931,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "songofstillness"
   },
   {
@@ -22711,7 +23049,8 @@
               "duration": "12秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -22730,7 +23069,8 @@
           "duration": "12秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -22742,7 +23082,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "serenityscall"
   },
   {
@@ -22780,7 +23120,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "12411",
@@ -22897,7 +23237,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "starsilver-icd"
             ]
@@ -22919,7 +23259,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "starsilver-icd"
         ]
@@ -22935,7 +23275,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "snowtombedstarsilver"
   },
   {
@@ -22973,7 +23313,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thestringless"
   },
   {
@@ -23011,7 +23351,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lithicblade"
   },
   {
@@ -23049,7 +23389,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lithicspear"
   },
   {
@@ -23087,7 +23427,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "jadevista"
   },
   {
@@ -23268,7 +23608,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thedockhandsassistant"
   },
   {
@@ -23401,7 +23741,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "viridescent-hunt-icd"
             ]
@@ -23425,7 +23765,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "viridescent-hunt-icd"
         ]
@@ -23441,7 +23781,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "theviridescenthunt"
   },
   {
@@ -23559,7 +23899,7 @@
               "cooldown": "15秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "ash-graven-drinking-horn-icd"
             ]
@@ -23581,7 +23921,7 @@
           "cooldown": "15秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "ash-graven-drinking-horn-icd"
         ]
@@ -23597,7 +23937,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ashgravendrinkinghorn"
   },
   {
@@ -23752,7 +24092,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "covenantoffrostandsnow"
   },
   {
@@ -23909,7 +24249,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "dawningfrost"
   },
   {
@@ -24088,7 +24428,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "flameforgedinsight"
   },
   {
@@ -24243,7 +24583,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "cloudforged"
   },
   {
@@ -24364,6 +24704,9 @@
             "gcsimTarget": true,
             "gcsimKeys": [
               "mountain-bracing-bolt-other"
+            ],
+            "gcsimExtraKeys": [
+              "mountain-bracing-bolt-base"
             ]
           }
         ]
@@ -24386,6 +24729,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "mountain-bracing-bolt-other"
+        ],
+        "gcsimExtraKeys": [
+          "mountain-bracing-bolt-base"
         ]
       }
     ],
@@ -24398,7 +24744,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mountainbracingbolt"
   },
   {
@@ -24453,7 +24799,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "theflute"
   },
   {
@@ -24608,7 +24954,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mailedflower"
   },
   {
@@ -24787,7 +25133,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ironsting"
   },
   {
@@ -24942,7 +25288,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "etherlightspindlelute"
   },
   {
@@ -25123,7 +25469,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "amenomakageuchi"
   },
   {
@@ -25241,7 +25587,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "frostbearer-icd"
             ]
@@ -25263,7 +25609,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "frostbearer-icd"
         ]
@@ -25279,7 +25625,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "frostbearer"
   },
   {
@@ -25418,6 +25764,9 @@
             ],
             "gcsimCooldownKeys": [
               "toukaboushigure-icd"
+            ],
+            "gcsimExtraKeys": [
+              "toukaboushigure"
             ]
           }
         ]
@@ -25445,6 +25794,9 @@
         ],
         "gcsimCooldownKeys": [
           "toukaboushigure-icd"
+        ],
+        "gcsimExtraKeys": [
+          "toukaboushigure"
         ]
       }
     ],
@@ -25458,7 +25810,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "toukaboushigure"
   },
   {
@@ -25615,7 +25967,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "emberwell"
   },
   {
@@ -25770,7 +26122,7 @@
       "color": "#f59e0b"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "footprintoftherainbow"
   },
   {
@@ -25925,7 +26277,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "rainbowserpentsrainbow"
   },
   {
@@ -26104,7 +26456,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "waveridingwhirl"
   },
   {
@@ -26142,7 +26494,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "hamayumi"
   },
   {
@@ -26297,7 +26649,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "whiteblind"
   },
   {
@@ -26415,7 +26767,8 @@
               "duration": "継続時間6秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -26434,7 +26787,8 @@
           "duration": "継続時間6秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -26446,7 +26800,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "hakushinring"
   },
   {
@@ -26625,7 +26979,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "frostbreath"
   },
   {
@@ -26663,7 +27017,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "festeringdesire"
   },
   {
@@ -26781,7 +27135,8 @@
               "duration": "継続時間12秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim が未実装"
           }
         ]
       }
@@ -26800,7 +27155,8 @@
           "duration": "継続時間12秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
       }
     ],
     "buffEffect": {
@@ -26812,7 +27168,7 @@
       "color": "#c084fc"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06"
+    "updatedAt": "2026/10/1 8:11:34"
   },
   {
     "id": "15413",
@@ -26966,7 +27322,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "windblumeode"
   },
   {
@@ -27121,7 +27477,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "missivewindspear"
   },
   {
@@ -27276,7 +27632,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mappamare"
   },
   {
@@ -27394,7 +27750,8 @@
               "duration": "12秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -27413,7 +27770,8 @@
           "duration": "12秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -27425,7 +27783,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "masterkey"
   },
   {
@@ -27463,7 +27821,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fruitoffulfillment"
   },
   {
@@ -27501,7 +27859,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "calamityofeshu"
   },
   {
@@ -27658,7 +28016,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mitternachtswaltz"
   },
   {
@@ -27776,7 +28134,8 @@
               "duration": "12秒間"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -27795,7 +28154,8 @@
           "duration": "12秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -27807,7 +28167,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "snarehook"
   },
   {
@@ -27969,7 +28329,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "fadingtwilight"
   },
   {
@@ -28124,7 +28484,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "crescentpike"
   },
   {
@@ -28303,7 +28663,7 @@
       "color": "#ec4899"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thewidsith"
   },
   {
@@ -28421,7 +28781,7 @@
               "cooldown": "15秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "sequence-of-solitude-icd"
             ]
@@ -28443,7 +28803,7 @@
           "cooldown": "15秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "sequence-of-solitude-icd"
         ]
@@ -28459,7 +28819,7 @@
       "color": "#38bdf8"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sequenceofsolitude"
   },
   {
@@ -28598,6 +28958,9 @@
             ],
             "gcsimCooldownKeys": [
               "scion-icd"
+            ],
+            "gcsimExtraKeys": [
+              "scion"
             ]
           }
         ]
@@ -28625,6 +28988,9 @@
         ],
         "gcsimCooldownKeys": [
           "scion-icd"
+        ],
+        "gcsimExtraKeys": [
+          "scion"
         ]
       }
     ],
@@ -28638,7 +29004,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "scionoftheblazingsun"
   },
   {
@@ -28760,6 +29126,9 @@
             "gcsimKeys": [
               "wolf-fang-burst",
               "wolf-fang-skill"
+            ],
+            "gcsimExtraKeys": [
+              "wolf-fang"
             ]
           }
         ]
@@ -28783,6 +29152,9 @@
         "gcsimKeys": [
           "wolf-fang-burst",
           "wolf-fang-skill"
+        ],
+        "gcsimExtraKeys": [
+          "wolf-fang"
         ]
       }
     ],
@@ -28795,7 +29167,7 @@
       "color": "#fbbf24"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "wolffang"
   },
   {
@@ -28928,7 +29300,8 @@
               "cooldown": "12秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -28949,7 +29322,8 @@
           "cooldown": "12秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -28962,7 +29336,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "talkingstick"
   },
   {
@@ -29119,7 +29493,7 @@
       "color": "#6366f1"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "solarpearl"
   },
   {
@@ -29157,7 +29531,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "dragonsbane"
   },
   {
@@ -29195,7 +29569,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "lionsroar"
   },
   {
@@ -29315,7 +29689,8 @@
             "timing": "computed",
             "gcsimTarget": true,
             "gcsimKeys": [
-              "wanderingevenstar"
+              "wanderingevenstar",
+              "wanderingevenstar-*"
             ]
           }
         ]
@@ -29337,7 +29712,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "wanderingevenstar"
+          "wanderingevenstar",
+          "wanderingevenstar-*"
         ]
       }
     ],
@@ -29350,7 +29726,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "wanderingevenstar"
   },
   {
@@ -29388,7 +29764,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "akuoumaru"
   },
   {
@@ -29426,7 +29802,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "mouunsmoon"
   },
   {
@@ -29581,7 +29957,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "prototypecrescent"
   },
   {
@@ -29745,7 +30121,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "endoftheline"
   },
   {
@@ -29924,7 +30300,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "kagotsurubeisshin"
   },
   {
@@ -30086,7 +30462,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "luxurioussealord"
   },
   {
@@ -30124,7 +30500,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "serpentspine"
   },
   {
@@ -30162,7 +30538,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "sharpshootersoath"
   },
   {
@@ -30280,7 +30656,7 @@
               "cooldown": "11秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "fillet-blade-icd"
             ]
@@ -30302,7 +30678,7 @@
           "cooldown": "11秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "fillet-blade-icd"
         ]
@@ -30318,7 +30694,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "filletblade"
   },
   {
@@ -30356,7 +30732,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "recurvebow"
   },
   {
@@ -30511,7 +30887,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "darkironsword"
   },
   {
@@ -30549,7 +30925,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "otherworldlystory"
   },
   {
@@ -30587,7 +30963,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "blacktassel"
   },
   {
@@ -30625,7 +31001,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "slingshot"
   },
   {
@@ -30663,7 +31039,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ferrousshadow"
   },
   {
@@ -30818,7 +31194,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "twinnephrite"
   },
   {
@@ -30856,7 +31232,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "whiteirongreatsword"
   },
   {
@@ -30894,7 +31270,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "whitetassel"
   },
   {
@@ -31012,7 +31388,8 @@
               "duration": "継続時間15秒"
             },
             "timing": "conditional",
-            "gcsimTarget": false
+            "gcsimTarget": false,
+            "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
           }
         ]
       }
@@ -31031,7 +31408,8 @@
           "duration": "継続時間15秒"
         },
         "timing": "conditional",
-        "gcsimTarget": false
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       }
     ],
     "buffEffect": {
@@ -31043,7 +31421,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skyridersword"
   },
   {
@@ -31198,7 +31576,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "skyridergreatsword"
   },
   {
@@ -31316,7 +31694,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "messenger-icd"
             ]
@@ -31338,7 +31716,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "messenger-icd"
         ]
@@ -31354,7 +31732,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "messenger"
   },
   {
@@ -31472,7 +31850,7 @@
               "cooldown": "10秒毎に1回"
             },
             "timing": "conditional",
-            "gcsimTarget": false,
+            "gcsimTarget": true,
             "gcsimCooldownKeys": [
               "halberd-icd"
             ]
@@ -31494,7 +31872,7 @@
           "cooldown": "10秒毎に1回"
         },
         "timing": "conditional",
-        "gcsimTarget": false,
+        "gcsimTarget": true,
         "gcsimCooldownKeys": [
           "halberd-icd"
         ]
@@ -31510,7 +31888,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "halberd"
   },
   {
@@ -31548,7 +31926,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "magicguide"
   },
   {
@@ -31727,7 +32105,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "debateclub"
   },
   {
@@ -31765,7 +32143,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "bloodtaintedgreatsword"
   },
   {
@@ -31944,7 +32322,7 @@
       "color": "#f87171"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "thrillingtalesofdragonslayers"
   },
   {
@@ -31982,7 +32360,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "travelershandysword"
   },
   {
@@ -32020,7 +32398,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "coolsteel"
   },
   {
@@ -32175,7 +32553,7 @@
       "color": "#10b981"
     },
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "emeraldorb"
   },
   {
@@ -32213,7 +32591,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "ravenbow"
   },
   {
@@ -32251,7 +32629,7 @@
     ],
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/9/29 21:23:06",
+    "updatedAt": "2026/10/1 8:11:34",
     "gcsimKey": "harbingerofdawn"
   }
 ]

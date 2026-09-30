@@ -13,9 +13,15 @@ export interface ActionEffectExtra {
   label: string;
   /** 実行したキャラ自身のイベントだけ使う */
   self?: boolean;
+  /** each = added / refreshed のイベントごとに1本（既定）/ chain = 更新・延長が続く間（前のイベントの終了予定より前に次のイベントが起きる間）を1本 */
+  mode?: 'each' | 'chain';
 }
 
 export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
+  // 胡桃のスキル（蝶導来世）: 紫煙状態中の重撃の命中で敵に付く血梅香（継続ダメージ。9.5 秒。命中のたびに延長）。ユーザー決定（2026-09-30）
+  '10000046-pyro_e': [
+    { key: 'blood-blossom', label: '血梅香（敵に付く継続ダメージ）', mode: 'chain' },
+  ],
   // ファルザンの爆発（搏風秘道）: 烈風波を放つたびに（約4秒おき）付与される2つの効果
   '10000076-anemo_q': [
     { key: 'faruzan-q-dmg-bonus', label: '祈風の恵み（風元素ダメージアップ）' },

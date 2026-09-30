@@ -355,7 +355,7 @@ export function applyActionExtraEffects(
   stints: Stint[],
   pairs: AlignedAction[],
   summary: GcsimLogSummary,
-  extrasTable: Record<string, { key: string; label: string; self?: boolean }[]>,
+  extrasTable: Record<string, { key: string; label: string; self?: boolean; mode?: 'each' | 'chain' }[]>,
 ): ApplyExtraEffectsResult {
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
@@ -376,16 +376,38 @@ export function applyActionExtraEffects(
 
     const extras: { key: string; name: string; offset: number; duration: number }[] = [];
     for (const def of defs) {
-      for (const ev of summary.effectEvents
-        .filter(e => e.key === def.key && e.frame >= executed.frame && e.frame < nextSameKind && (e.kind === 'added' || e.kind === 'refreshed') && e.expiry > e.frame
-          && (!def.self || e.charIndex === executed.charIndex))
-        .sort((a, b) => a.frame - b.frame)) {
-        extras.push({
-          key: def.key,
-          name: def.label,
-          offset: Number(framesToSeconds(ev.frame - executed.frame).toFixed(3)),
-          duration: Number(framesToSeconds(ev.expiry - ev.frame).toFixed(3)),
-        });
+      const inWindow = summary.effectEvents
+        .filter(e => e.key === def.key && e.frame >= executed.frame && e.frame < nextSameKind && e.expiry > e.frame && (!def.self || e.charIndex === executed.charIndex))
+        .sort((a, b) => a.frame - b.frame);
+      if (def.mode === 'chain') {
+        // 更新・延長が続く間を、1本のバーにする（前のイベントの終了予定より前に次のイベントが起きれば、同じバー）
+        let start = -1;
+        let end = -1;
+        const flush = () => {
+          if (start >= 0) {
+            extras.push({ key: def.key, name: def.label, offset: Number(framesToSeconds(start - executed.frame).toFixed(3)), duration: Number(framesToSeconds(end - start).toFixed(3)) });
+          }
+        };
+        for (const ev of inWindow) {
+          if (start >= 0 && ev.frame <= end) {
+            end = Math.max(end, ev.expiry);
+          } else {
+            flush();
+            start = ev.frame;
+            end = ev.expiry;
+          }
+        }
+        flush();
+      } else {
+        // 既定: added / refreshed のイベントごとに1本
+        for (const ev of inWindow.filter(e => e.kind === 'added' || e.kind === 'refreshed')) {
+          extras.push({
+            key: def.key,
+            name: def.label,
+            offset: Number(framesToSeconds(ev.frame - executed.frame).toFixed(3)),
+            duration: Number(framesToSeconds(ev.expiry - ev.frame).toFixed(3)),
+          });
+        }
       }
     }
     extras.sort((a, b) => a.offset - b.offset);

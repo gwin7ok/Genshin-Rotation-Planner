@@ -79,6 +79,16 @@ export interface KeyCatalogEntry {
   gcsimKeys?: string[];
 }
 
+/** 手で補うパターンのキー（gcsimKeyCatalogOverrides.ts の MANUAL_PATTERN_KEYS） */
+export interface ManualPatternInput {
+  key: string;
+  elements: string[];
+  file: string;
+  name: string;
+  durationFrames?: number;
+  note?: string;
+}
+
 /** 手で補う一覧（src/masterdata/gcsimKeyCatalogOverrides.ts）の1件 */
 export interface KeyOverride {
   name: string;
@@ -467,6 +477,7 @@ export function extractKeyCatalog(
   allPaths: string[] = [],
   overrides: Record<string, KeyOverride> = {},
   observed?: ObservedKeys,
+  manualPatterns: ManualPatternInput[] = [],
 ): { catalog: KeyCatalog; report: KeyCatalogReport } {
   const ownerKeys = buildOwnerKeys(allPaths);
   const withKeys = (owner: KeyOwner): KeyOwner => {
@@ -577,6 +588,30 @@ export function extractKeyCatalog(
     report.byCategory[entry.category] = (report.byCategory[entry.category] ?? 0) + 1;
     report.byKind[entry.kind] = (report.byKind[entry.kind] ?? 0) + 1;
   }
+
+  // 手で補うパターンのキー（自動で読めないもの。自動抽出で見つかっていれば追加しない）
+  for (const mp of manualPatterns) {
+    if (entries.some(e => e.key === mp.key)) continue;
+    const classified = classifyPath(mp.file);
+    const entry: KeyCatalogEntry = {
+      key: mp.key,
+      isPattern: true,
+      elements: mp.elements,
+      category: classified.category,
+      owner: withKeys(classified.owner),
+      kind: 'effect',
+      ...(mp.durationFrames !== undefined ? { durationFrames: mp.durationFrames } : {}),
+      name: mp.name,
+      ...(mp.note ? { note: mp.note } : {}),
+      sources: [{ file: mp.file, api: 'mod' }],
+      source: 'manual',
+    };
+    entries.push(entry);
+    report.manualCount++;
+    report.byCategory[entry.category] = (report.byCategory[entry.category] ?? 0) + 1;
+    report.byKind[entry.kind] = (report.byKind[entry.kind] ?? 0) + 1;
+  }
+  entries.sort((a, b) => a.key.localeCompare(b.key));
 
   // 実行で確認できたキー（scripts/run-catalog-coverage.mjs の結果）: 辞書にあれば observed の印、無ければ追加する
   if (observed) {

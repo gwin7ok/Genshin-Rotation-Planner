@@ -119,3 +119,29 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
   'dendro-res-30': o('元素共鳴（草）: 元素熟知（反応時）'),
   'ascendant-gleam': o('月兆: 反応ボーナス（月兆・満輝）'),
 };
+
+/**
+ * 手で補うパターンのキー（gcsim のソースから自動で読めないもの）。自動抽出で同じキーが見つかれば無視する。
+ * 翠緑の影4セットの拡散耐性ダウン: `viridescent.go` が `key := "vv" + ele.String()` で組み立て、変数 `key` 経由で登録するため、自動では読めない
+ * （接頭辞 `vv` は 2 文字で、パターンの 3 文字以上の条件にも満たない）。
+ */
+export interface ManualPatternKey {
+  key: string;
+  elements: string[];
+  /** 定義場所のファイル（分類・持ち主を決める） */
+  file: string;
+  name: string;
+  durationFrames?: number;
+  note?: string;
+}
+
+export const MANUAL_PATTERN_KEYS: ManualPatternKey[] = [
+  {
+    key: 'vv{element}',
+    elements: ['cryo', 'electro', 'hydro', 'pyro'],
+    file: 'internal/artifacts/viridescent/viridescent.go',
+    name: '翠緑の影 4セット: 拡散した元素の耐性ダウン',
+    durationFrames: 600,
+    note: 'viridescent.go: key := "vv" + ele.String()。拡散した元素（氷・雷・水・炎）の耐性を 40% 下げる（10 秒）',
+  },
+];

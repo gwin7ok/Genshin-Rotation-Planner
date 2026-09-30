@@ -7,7 +7,7 @@
 import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
-import { mapAction } from './actionMapping.ts';
+import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import type { GcsimMemberInfo } from './readGcsimLog.ts';
 
@@ -42,6 +42,8 @@ export interface GcsimConfigInput {
   switchDelay: number;
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
+  /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
+  holdSecondsByActionId?: Record<string, number>;
 }
 
 export interface GcsimConfigResult {
@@ -159,8 +161,9 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
           continue;
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
-        out.push(`${indent}${key} ${mapped.command};`);
-        refs.push({ stintId: stint.id, actionId: act.id, command: mapped.command.replace(/\[.*$/, '') });
+        const command = applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
+        out.push(`${indent}${key} ${command};`);
+        refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, '') });
         const delayFrames = toFrames(actionDelayOf(act));
         if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
       }

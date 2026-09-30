@@ -282,6 +282,9 @@ export default function App() {
       switchDelay,
       weapons: database.weapons,
       artifacts: database.artifacts,
+      holdSecondsByActionId: Object.fromEntries(
+        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
+      ),
     });
     setGcsimResult(result);
     void copyGcsimText(result.config);

@@ -52,6 +52,7 @@ for (const [defId, e] of Object.entries(table)) {
   if (ov === '') { overrideSkipped.add(defId); continue; }
   if (ov !== undefined) {
     const o = typeof ov === 'string' ? { key: ov } : ov;
+    for (const alt of ('alt' in o ? o.alt ?? [] : [])) links.push({ effectId: alt, targetId, role: 'main', ...(o.mode && o.mode !== 'expiry' ? { mode: o.mode } : {}), ...(o.self ? { self: true } : {}), approval: 'approved' });
     links.push({ effectId: o.key, targetId, role: 'main', ...(o.mode && o.mode !== 'expiry' ? { mode: o.mode } : {}), ...(o.self ? { self: true } : {}), approval: 'approved' });
   } else if (e.status === 'ok' && e.primary) {
     links.push({
@@ -116,8 +117,10 @@ for (const row of effects.values()) {
   else unlinked.push({ side: 'effect', id: row.id, reason: 'unreviewed' });
 }
 const targets: TargetRow[] = [];
+// スキル・爆発に加えて、紐づけが参照するアクション定義（デュリンの通常攻撃など）も対象にする
+const referencedDefs = new Set(links.map(l => l.targetId.replace(/^action:/, '')));
 for (const c of chars) {
-  for (const a of (c.availableActions ?? []).filter((x: any) => /skill|burst/.test(x.type))) {
+  for (const a of (c.availableActions ?? []).filter((x: any) => /skill|burst/.test(x.type) || referencedDefs.has(x.id))) {
     const id = `action:${a.id}`;
     targets.push({ id, type: 'action', char: c.name, actionType: a.type });
     if (linkedTargets.has(id)) continue;

@@ -1,0 +1,1631 @@
+{
+ "10000002-cryo_e": {
+  "char": "神里綾華",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "status:ayaka-a1": "2@0.02 dur=6.0/6.0"
+  },
+  "S2_x5": {
+   "status:ayaka-a1": "5@0.02 dur=6.0/6.0/6.0",
+   "dmg×n:Hyouka": "1@0.57"
+  },
+  "S3_combo": {
+   "status:ayaka-a1": "10@0.02 dur=6.0/5.2/5.0"
+  }
+ },
+ "10000003-anemo_e": {
+  "char": "ジン",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 5,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Gale Blade": "1@0.37"
+  },
+  "S3_combo": {}
+ },
+ "10000005-anemo_e": {
+  "char": "空(風)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Palm Vortex (Tap)": "1@0.58"
+  },
+  "S3_combo": {}
+ },
+ "10000005-anemo_e_hold": {
+  "char": "空(風)",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12"
+  },
+  "S2_x5": {
+   "dmg×n:Palm Vortex Initial Cutting (Hold)": "1@0.53",
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12",
+   "dmg×n:Palm Vortex Max Storm (Hold)": "1@1.95"
+  },
+  "S3_combo": {
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12"
+  }
+ },
+ "10000005-cryo_q": {
+  "char": "空(氷)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:travelercryo-e": "1@0.02 dur=12.3",
+   "dmg×n:Frostbound Javelin": "1@1.27",
+   "dmg×n:Frostpierce Star": "1@3.13"
+  },
+  "S2_x5": {
+   "dmg×n:Frostbound Javelin": "1@0.72"
+  },
+  "S3_combo": {
+   "status:travelercryo-e": "6@0.02 dur=12.3/10.4/10.1",
+   "dmg×n:Frostbound Javelin": "1@1.27",
+   "dmg×n:Frostpierce Star": "1@3.47"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Frostbound Javelin": "1@0.72"
+  },
+  "S4_burstFirst": {
+   "status:travelercryo-e": "3@2.58 dur=12.3/11.7/11.4",
+   "dmg×n:Frostpierce Star": "1@5.90"
+  }
+ },
+ "10000005-dendro_e": {
+  "char": "空(草)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Razorgrass Blade": "1@0.48"
+  },
+  "S3_combo": {}
+ },
+ "10000005-hydro_e": {
+  "char": "空(水)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Torrent Surge": "1@0.43",
+   "dmg×n:Spiritbreath Thorn": "1@1.18"
+  },
+  "S3_combo": {}
+ },
+ "10000005-hydro_e_shorthold0ticks": {
+  "char": "空(水)",
+  "cmd": "skill[hold=1,hold_ticks=0]",
+  "type": "skill_hold",
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000005-hydro_e_shorthold": {
+  "char": "空(水)",
+  "cmd": "skill[hold=1,hold_ticks=1]",
+  "type": "skill_hold",
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000005-hydro_e_hold": {
+  "char": "空(水)",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000005-hydro_q": {
+  "char": "空(水)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 4,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Rising Waters": "1@0.58"
+  },
+  "S3_combo": {},
+  "S5_burstOnly": {},
+  "S4_burstFirst": {}
+ },
+ "10000005-pyro_q": {
+  "char": "空(炎)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:nightsoul-blessing": "1@0.33 dur=12.0",
+   "dmg×n:Blazing Threshold DMG": "1@0.42"
+  },
+  "S2_x5": {
+   "dmg×n:Plains Scorcher": "1@0.68"
+  },
+  "S3_combo": {
+   "status:nightsoul-blessing": "6@0.33 dur=12.0/10.6/10.3",
+   "dmg×n:Blazing Threshold DMG": "1@0.42"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:nightsoul-blessing": "3@2.47 dur=12.0/11.4/11.1",
+   "dmg×n:Blazing Threshold DMG": "1@2.55"
+  }
+ },
+ "10000006-electro_e": {
+  "char": "リサ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Violet Arc (Press)": "1@0.38"
+  },
+  "S3_combo": {}
+ },
+ "10000006-electro_e_hold": {
+  "char": "リサ",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Violet Arc (Hold)": "1@1.97"
+  },
+  "S3_combo": {}
+ },
+ "10000007-anemo_e": {
+  "char": "蛍(風)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Palm Vortex (Tap)": "1@0.58"
+  },
+  "S3_combo": {}
+ },
+ "10000007-anemo_e_hold": {
+  "char": "蛍(風)",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12"
+  },
+  "S2_x5": {
+   "dmg×n:Palm Vortex Initial Cutting (Hold)": "1@0.53",
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12",
+   "dmg×n:Palm Vortex Max Storm (Hold)": "1@1.95"
+  },
+  "S3_combo": {
+   "dmg×n:Palm Vortex Max Cutting (Hold)": "1@1.12"
+  }
+ },
+ "10000007-cryo_q": {
+  "char": "蛍(氷)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:travelercryo-e": "1@0.02 dur=12.3",
+   "dmg×n:Frostbound Javelin": "1@1.27",
+   "dmg×n:Frostpierce Star": "1@3.13"
+  },
+  "S2_x5": {
+   "dmg×n:Frostbound Javelin": "1@0.72"
+  },
+  "S3_combo": {
+   "status:travelercryo-e": "6@0.02 dur=12.3/10.3/10.1",
+   "dmg×n:Frostbound Javelin": "1@1.27",
+   "dmg×n:Frostpierce Star": "1@3.47"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Frostbound Javelin": "1@0.72"
+  },
+  "S4_burstFirst": {
+   "status:travelercryo-e": "3@2.67 dur=12.3/11.6/11.3",
+   "dmg×n:Frostpierce Star": "1@5.98"
+  }
+ },
+ "10000007-dendro_e": {
+  "char": "蛍(草)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Razorgrass Blade": "1@0.48"
+  },
+  "S3_combo": {}
+ },
+ "10000007-hydro_e": {
+  "char": "蛍(水)",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Torrent Surge": "1@0.45",
+   "dmg×n:Spiritbreath Thorn": "1@1.18"
+  },
+  "S3_combo": {}
+ },
+ "10000007-hydro_e_shorthold0ticks": {
+  "char": "蛍(水)",
+  "cmd": "skill[hold=1,hold_ticks=0]",
+  "type": "skill_hold",
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000007-hydro_e_shorthold": {
+  "char": "蛍(水)",
+  "cmd": "skill[hold=1,hold_ticks=1]",
+  "type": "skill_hold",
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000007-hydro_e_hold": {
+  "char": "蛍(水)",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  },
+  "S2_x5": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03",
+   "dmg×n:Torrent Surge": "1@6.22",
+   "dmg×n:Spiritbreath Thorn": "1@6.98"
+  },
+  "S3_combo": {
+   "dmg×n:Dewdrop (Hold)": "1@1.03"
+  }
+ },
+ "10000007-hydro_q": {
+  "char": "蛍(水)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 4,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Rising Waters": "1@0.62"
+  },
+  "S3_combo": {},
+  "S5_burstOnly": {},
+  "S4_burstFirst": {}
+ },
+ "10000007-pyro_q": {
+  "char": "蛍(炎)",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:nightsoul-blessing": "1@0.33 dur=12.0",
+   "dmg×n:Blazing Threshold DMG": "1@0.42"
+  },
+  "S2_x5": {
+   "dmg×n:Plains Scorcher": "1@0.68"
+  },
+  "S3_combo": {
+   "status:nightsoul-blessing": "6@0.33 dur=12.0/10.5/10.2",
+   "dmg×n:Blazing Threshold DMG": "1@0.42"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:nightsoul-blessing": "3@2.55 dur=12.0/11.3/11.0",
+   "dmg×n:Blazing Threshold DMG": "1@2.63"
+  }
+ },
+ "10000014-hydro_q": {
+  "char": "バーバラ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:barbara-e": "1@0.07 dur=15.0",
+   "status:barb-a1-stam": "1@0.07 dur=15.0",
+   "heal:Melody Loop (Tick)": "4@0.07",
+   "heal:Shining Miracle♪": "2@2.22",
+   "dmg×n:Let the Show Begin♪ (Melody Loop)": "1@0.07"
+  },
+  "S2_x5": {
+   "heal:Shining Miracle♪": "5@1.30"
+  },
+  "S3_combo": {
+   "status:barbara-e": "1@0.07 dur=15.0",
+   "status:barb-a1-stam": "1@0.07 dur=15.0",
+   "heal:Melody Loop (Tick)": "4@0.07",
+   "heal:Shining Miracle♪": "2@2.22",
+   "heal:Melody Loop (Normal Attack)": "5@3.38",
+   "dmg×n:Let the Show Begin♪ (Melody Loop)": "1@0.07"
+  },
+  "S5_burstOnly": {
+   "heal:Shining Miracle♪": "2@1.30"
+  },
+  "S4_burstFirst": {
+   "heal:Shining Miracle♪": "1@1.30",
+   "status:barbara-e": "1@3.22 dur=15.0",
+   "status:barb-a1-stam": "1@3.22 dur=15.0",
+   "heal:Melody Loop (Tick)": "4@3.22",
+   "heal:Melody Loop (Normal Attack)": "2@4.17",
+   "dmg×n:Let the Show Begin♪ (Melody Loop)": "1@3.22"
+  }
+ },
+ "10000015-cryo_e": {
+  "char": "ガイア",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "heal:Cold-Blooded Strike": "2@0.48"
+  },
+  "S2_x5": {
+   "heal:Cold-Blooded Strike": "5@0.48",
+   "dmg×n:Frostgnaw": "1@0.48"
+  },
+  "S3_combo": {
+   "heal:Cold-Blooded Strike": "2@0.48"
+  }
+ },
+ "10000020-electro_e_hold": {
+  "char": "レザー",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 18,
+  "S0_base": "ERR error encountered on razor executing charge: razor: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:razor-a4": "1@0.00",
+   "status:utility-dash": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:razor-a4": "1@0.00",
+   "status:utility-dash": "1@0.00",
+   "dmg×n:Claw and Thunder (Hold)": "1@0.93"
+  },
+  "S3_combo": "ERR error encountered on razor executing charge: razor: action charge not implemented"
+ },
+ "10000021-pyro_e": {
+  "char": "アンバー",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on amber executing charge: amber: action charge not implemented",
+  "S1_x2": {
+   "status:amber-a1": "1@0.00"
+  },
+  "S2_x5": {
+   "status:amber-a1": "1@0.00",
+   "dmg×n:Baron Bunny": "1@8.85"
+  },
+  "S3_combo": "ERR error encountered on amber executing charge: amber: action charge not implemented"
+ },
+ "10000022-anemo_e": {
+  "char": "ウェンティ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on venti executing charge: venti: action charge not implemented",
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Skyward Sonnett (Press)": "1@0.87"
+  },
+  "S3_combo": "ERR error encountered on venti executing charge: venti: action charge not implemented"
+ },
+ "10000022-anemo_e_hold": {
+  "char": "ウェンティ",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S0_base": "ERR error encountered on venti executing charge: venti: action charge not implemented",
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Skyward Sonnett (Hold)": "1@1.25"
+  },
+  "S3_combo": "ERR error encountered on venti executing charge: venti: action charge not implemented"
+ },
+ "10000026-anemo_e": {
+  "char": "魈",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "status:xiao-a4": "2@0.27 dur=7.0/7.0"
+  },
+  "S2_x5": {
+   "status:xiao-a4": "5@0.27 dur=7.0/7.0/7.0",
+   "dmg×n:Lemniscatic Wind Cycling": "1@0.08"
+  },
+  "S3_combo": {
+   "status:xiao-a4": "11@0.27 dur=7.0/6.7/6.3",
+   "dmg×n:Normal 0": "1@0.48"
+  }
+ },
+ "10000027-geo_q": {
+  "char": "凝光",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "construct:1": "1@0.02",
+   "dmg×n:Starshatter": "1@2.08",
+   "dmg×n:Starshatter (Jade Screen Gems)": "1@3.62"
+  },
+  "S2_x5": {
+   "dmg×n:Starshatter": "1@1.05"
+  },
+  "S3_combo": {
+   "construct:1": "1@0.02",
+   "dmg×n:Starshatter": "1@2.08",
+   "dmg×n:Starshatter (Jade Screen Gems)": "1@3.62",
+   "dmg×n:Normal (Right)": "1@3.65",
+   "dmg×n:Normal (Left)": "1@4.75"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Starshatter": "1@1.05"
+  },
+  "S4_burstFirst": {
+   "construct:263": "1@4.38",
+   "dmg×n:Starshatter": "1@1.05"
+  }
+ },
+ "10000029-pyro_e": {
+  "char": "クレー",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 15,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Jumpy Dumpty (Bounce)": "1@1.20",
+   "dmg×n:Jumpy Dumpty (Mine)": "1@4.02"
+  },
+  "S3_combo": {}
+ },
+ "10000030-geo_q": {
+  "char": "鍾離",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 3.1,
+  "S1_x2": {
+   "construct:25": "1@0.42",
+   "dmg×n:Stone Stele (Tick)": "1@2.42"
+  },
+  "S2_x5": {
+   "dmg×n:Planet Befall": "1@1.70"
+  },
+  "S3_combo": {
+   "construct:25": "1@0.42",
+   "dmg×n:Stone Stele (Tick)": "1@2.42"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "construct:218": "1@3.63",
+   "dmg×n:Stone Stele (Tick)": "1@5.63"
+  }
+ },
+ "10000032-pyro_e": {
+  "char": "ベネット",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Passion Overload (Press)": "1@0.28"
+  },
+  "S3_combo": {}
+ },
+ "10000032-pyro_e_hold": {
+  "char": "ベネット",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Passion Overload (Level 1)": "1@0.77"
+  },
+  "S3_combo": {}
+ },
+ "10000036-cryo_q": {
+  "char": "重雲",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S0_base": "ERR error encountered on chongyun executing charge: chongyun: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:chongyunfield": "1@0.62 dur=10.0",
+   "status:chongyun-field": "11@0.62 dur=2.8/2.8/2.8",
+   "status:chongyun-a4": "1@10.93 dur=8.0",
+   "dmg×n:Spirit Blade: Cloud-Parting Star": "1@1.80"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Spirit Blade: Cloud-Parting Star": "1@0.85"
+  },
+  "S3_combo": "ERR error encountered on chongyun executing charge: chongyun: action charge not implemented",
+  "S5_burstOnly": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Spirit Blade: Cloud-Parting Star": "1@0.85"
+  },
+  "S4_burstFirst": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:chongyunfield": "1@3.97 dur=10.0",
+   "status:chongyun-field": "13@3.97 dur=2.8/2.2/2.8",
+   "status:chongyun-a4": "1@14.28 dur=8.0"
+  }
+ },
+ "10000037-cryo_e": {
+  "char": "甘雨",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 6,
+  "S0_base": "ERR error encountered on ganyu executing charge: ganyu: action charge not implemented",
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Ice Lotus": "1@0.23"
+  },
+  "S3_combo": "ERR error encountered on ganyu executing charge: ganyu: action charge not implemented"
+ },
+ "10000038-geo_q": {
+  "char": "アルベド",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "construct:26": "1@0.43",
+   "status:albedo-a4": "2@1.82 dur=10.0/10.0"
+  },
+  "S2_x5": {
+   "status:albedo-a4": "5@1.27 dur=10.0/10.0/10.0",
+   "dmg×n:Rite of Progeniture: Tectonic Tide": "1@1.27"
+  },
+  "S3_combo": {
+   "construct:26": "1@0.43",
+   "status:albedo-a4": "10@1.82 dur=10.0/9.6/9.3",
+   "dmg×n:Abiogenesis: Solar Isotoma (Tick)": "1@1.83"
+  },
+  "S5_burstOnly": {
+   "status:albedo-a4": "7@1.27 dur=10.0/9.6/9.3"
+  },
+  "S4_burstFirst": {
+   "status:albedo-a4": "6@1.27 dur=10.0/9.6/9.3",
+   "construct:195": "1@3.25"
+  }
+ },
+ "10000042-electro_q": {
+  "char": "刻晴",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:keqingstiletto": "1@0.02 dur=5.3",
+   "status:keqing-a4": "2@0.63 dur=8.0/8.0",
+   "dmg×n:Starward Sword (Consecutive Slash)": "1@2.00"
+  },
+  "S2_x5": {
+   "status:keqing-a4": "5@0.02 dur=8.0/8.0/8.0",
+   "dmg×n:Starward Sword (Initial)": "1@0.95",
+   "dmg×n:Starward Sword (Consecutive Slash)": "1@1.38",
+   "dmg×n:Starward Sword (Last Attack)": "1@3.30"
+  },
+  "S3_combo": {
+   "status:keqingstiletto": "1@0.02 dur=5.3",
+   "status:keqing-a4": "10@0.63 dur=8.0/5.9/5.6",
+   "dmg×n:Starward Sword (Consecutive Slash)": "1@2.00"
+  },
+  "S5_burstOnly": {
+   "status:keqing-a4": "7@0.02 dur=8.0/5.9/5.6",
+   "dmg×n:Starward Sword (Consecutive Slash)": "1@1.38"
+  },
+  "S4_burstFirst": {
+   "status:keqing-a4": "6@0.02 dur=8.0/5.9/5.6",
+   "status:keqingstiletto": "1@3.15 dur=5.3",
+   "dmg×n:Starward Sword (Consecutive Slash)": "1@1.38"
+  }
+ },
+ "10000043-anemo_e": {
+  "char": "スクロース",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Astable Anemohypostasis Creation-6308": "1@0.72"
+  },
+  "S3_combo": {}
+ },
+ "10000045-cryo_e": {
+  "char": "ロサリア",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "status:rosaria-a1": "4@0.42 dur=5.0/4.8/5.0"
+  },
+  "S2_x5": {
+   "status:rosaria-a1": "10@0.42 dur=5.0/4.8/5.0",
+   "dmg×n:Ravaging Confession (Hit 1)": "1@0.42",
+   "dmg×n:Ravaging Confession (Hit 2)": "1@0.72"
+  },
+  "S3_combo": {
+   "status:rosaria-a1": "12@0.42 dur=5.0/4.8/4.5"
+  }
+ },
+ "10000046-pyro_q": {
+  "char": "胡桃",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:paramita": "1@0.02 dur=9.2",
+   "heal:Spirit Soother": "2@1.58"
+  },
+  "S2_x5": {
+   "heal:Spirit Soother": "5@1.12",
+   "dmg×n:Spirit Soother": "1@1.12"
+  },
+  "S3_combo": {
+   "status:paramita": "8@0.02 dur=9.2/7.0/6.8",
+   "heal:Spirit Soother": "2@1.58",
+   "status:blood-blossom": "3@3.22 dur=9.5/8.7/8.6"
+  },
+  "S5_burstOnly": {
+   "heal:Spirit Soother": "2@1.12"
+  },
+  "S4_burstFirst": {
+   "heal:Spirit Soother": "1@1.12",
+   "status:paramita": "3@2.60 dur=9.2/8.6/8.4"
+  }
+ },
+ "10000047-anemo_e": {
+  "char": "楓原万葉",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Chihayaburu (Press)": "1@0.18"
+  },
+  "S3_combo": {}
+ },
+ "10000047-anemo_e_hold": {
+  "char": "楓原万葉",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Chihayaburu (Hold)": "1@0.57"
+  },
+  "S3_combo": {}
+ },
+ "10000053-anemo_e": {
+  "char": "早柚",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on sayu executing charge: sayu: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Fuufuu Windwheel (DoT Press)": "1@0.13",
+   "dmg×n:Fuufuu Whirlwind (Kick Press)": "1@0.43"
+  },
+  "S3_combo": "ERR error encountered on sayu executing charge: sayu: action charge not implemented"
+ },
+ "10000053-anemo_e_hold": {
+  "char": "早柚",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 10,
+  "S0_base": "ERR error encountered on sayu executing charge: sayu: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Fuufuu Windwheel (DoT Hold)": "1@0.32",
+   "dmg×n:Fuufuu Whirlwind (Kick Hold)": "1@1.15"
+  },
+  "S3_combo": "ERR error encountered on sayu executing charge: sayu: action charge not implemented"
+ },
+ "10000053-anemo_e_shorthold": {
+  "char": "早柚",
+  "cmd": "skill[short_hold=1]",
+  "type": "skill_hold",
+  "S0_base": "ERR error encountered on sayu executing charge: sayu: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Fuufuu Windwheel (DoT Hold)": "1@0.32",
+   "dmg×n:Fuufuu Whirlwind (Kick Hold)": "1@0.82"
+  },
+  "S3_combo": "ERR error encountered on sayu executing charge: sayu: action charge not implemented"
+ },
+ "10000058-electro_q": {
+  "char": "八重神子",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:yae_oldest_totem_expiry": "1@0.58 dur=24.4",
+   "dmg×n:Sesshou Sakura Tick": "1@2.03"
+  },
+  "S2_x5": {
+   "dmg×n:Great Secret Art: Tenko Kenshin": "1@1.68"
+  },
+  "S3_combo": {
+   "status:yae_oldest_totem_expiry": "1@0.58 dur=24.4",
+   "dmg×n:Sesshou Sakura Tick": "1@2.03"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:yae_oldest_totem_expiry": "1@3.87 dur=24.4",
+   "dmg×n:Sesshou Sakura Tick": "1@5.32"
+  }
+ },
+ "10000059-anemo_e": {
+  "char": "鹿野院平蔵",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 60,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Heartstopper Strike": "1@0.35"
+  },
+  "S3_combo": {}
+ },
+ "10000059-anemo_q": {
+  "char": "鹿野院平蔵",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Windmuster Iris (Aura check)": "1@0.58",
+   "dmg×n:Fudou Style Vacuum Slugger": "1@0.58"
+  },
+  "S3_combo": {},
+  "S5_burstOnly": {},
+  "S4_burstFirst": {}
+ },
+ "10000060-hydro_e": {
+  "char": "夜蘭",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on yelan executing charge: yelan: action charge not implemented",
+  "S1_x2": {
+   "status:yelan-a1": "1@0.00"
+  },
+  "S2_x5": {
+   "status:yelan-a1": "1@0.00",
+   "dmg×n:Lingering Lifeline": "1@0.62"
+  },
+  "S3_combo": "ERR error encountered on yelan executing charge: yelan: action charge not implemented"
+ },
+ "10000062-cryo_q": {
+  "char": "アーロイ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S0_base": "ERR error encountered on aloy executing charge: aloy: action charge not implemented",
+  "S1_x2": {
+   "status:aloy-coil-stacks": "1@0.00",
+   "status:aloy-a1": "2@0.53 dur=10.0/10.0"
+  },
+  "S2_x5": {
+   "status:aloy-coil-stacks": "1@0.00",
+   "dmg×n:Prophecies of Dawn": "1@1.68"
+  },
+  "S3_combo": "ERR error encountered on aloy executing charge: aloy: action charge not implemented",
+  "S5_burstOnly": {
+   "status:aloy-coil-stacks": "1@0.00"
+  },
+  "S4_burstFirst": {
+   "status:aloy-coil-stacks": "1@0.00",
+   "status:aloy-a1": "2@3.58 dur=10.0/10.0"
+  }
+ },
+ "10000068-electro_e": {
+  "char": "ドリー",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on dori executing charge: dori: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Troubleshooter Shot": "1@0.45",
+   "dmg×n:After-Sales Service Round": "1@1.22"
+  },
+  "S3_combo": "ERR error encountered on dori executing charge: dori: action charge not implemented"
+ },
+ "10000069-dendro_q": {
+  "char": "ティナリ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S0_base": "ERR error encountered on tighnari executing charge: tighnari: action charge not implemented",
+  "S1_x2": {
+   "status:tighnari-a4": "1@0.00",
+   "status:vijnanasuffusion": "1@0.23 dur=12.0",
+   "dmg×n:Tanglevine Shaft": "1@2.25",
+   "dmg×n:Secondary Tanglevine Shaft": "1@2.83"
+  },
+  "S2_x5": {
+   "status:tighnari-a4": "1@0.00",
+   "dmg×n:Tanglevine Shaft": "1@1.88",
+   "dmg×n:Secondary Tanglevine Shaft": "1@2.47"
+  },
+  "S3_combo": "ERR error encountered on tighnari executing charge: tighnari: action charge not implemented",
+  "S5_burstOnly": {
+   "status:tighnari-a4": "1@0.00",
+   "dmg×n:Tanglevine Shaft": "1@1.88",
+   "dmg×n:Secondary Tanglevine Shaft": "1@2.47"
+  },
+  "S4_burstFirst": {
+   "status:tighnari-a4": "1@0.00",
+   "status:vijnanasuffusion": "1@3.37 dur=12.0",
+   "dmg×n:Tanglevine Shaft": "1@1.88",
+   "dmg×n:Secondary Tanglevine Shaft": "1@2.47"
+  }
+ },
+ "10000071-electro_e": {
+  "char": "セノ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Secret Rite: Chasmic Soulfarer": "1@0.37"
+  },
+  "S3_combo": {}
+ },
+ "10000075-anemo_q": {
+  "char": "放浪者",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:windfavored-state": "1@0.02 dur=20.0",
+   "dmg×n:Kyougen: Five Ceremonial Plays (Windfavored)": "1@2.02",
+   "dmg×n:Kyougen: Five Ceremonial Plays": "1@27.02"
+  },
+  "S2_x5": {
+   "dmg×n:Kyougen: Five Ceremonial Plays": "1@1.55"
+  },
+  "S3_combo": {
+   "status:windfavored-state": "1@0.02 dur=20.0",
+   "status:wanderer-plunge-available": "1@2.43 dur=0.4",
+   "dmg×n:Kyougen: Five Ceremonial Plays (Windfavored)": "1@2.02",
+   "dmg×n:Kyougen: Five Ceremonial Plays": "1@17.02"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Kyougen: Five Ceremonial Plays": "1@1.55"
+  },
+  "S4_burstFirst": {
+   "status:windfavored-state": "1@2.83 dur=20.0",
+   "status:wanderer-a4": "1@3.93 dur=20.0",
+   "dmg×n:Kyougen: Five Ceremonial Plays": "1@1.55"
+  }
+ },
+ "10000078-dendro_e": {
+  "char": "アルハイゼン",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Universality: An Elaboration on Form": "1@0.33"
+  },
+  "S3_combo": {}
+ },
+ "10000078-dendro_e_hold": {
+  "char": "アルハイゼン",
+  "cmd": "skill[hold=1]",
+  "type": "skill_hold",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Universality: An Elaboration on Form (Hold)": "1@0.48"
+  },
+  "S3_combo": {}
+ },
+ "10000078-dendro_q": {
+  "char": "アルハイゼン",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "dmg×n:Particular Field: Fetters of Phenomena": "1@2.15"
+  },
+  "S2_x5": {
+   "dmg×n:Particular Field: Fetters of Phenomena": "1@1.58"
+  },
+  "S3_combo": {
+   "dmg×n:Particular Field: Fetters of Phenomena": "1@2.15"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Particular Field: Fetters of Phenomena": "1@1.58"
+  },
+  "S4_burstFirst": {
+   "dmg×n:Particular Field: Fetters of Phenomena": "1@1.58"
+  }
+ },
+ "10000081-dendro_e": {
+  "char": "カーヴェ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on kaveh executing charge: kaveh: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Artistic Ingenuity": "1@0.60"
+  },
+  "S3_combo": "ERR error encountered on kaveh executing charge: kaveh: action charge not implemented"
+ },
+ "10000082-dendro_e": {
+  "char": "白朮",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "heal:Universal Diagnosis Healing": "2@2.68",
+   "dmg×n:Universal Diagnosis": "1@0.23"
+  },
+  "S2_x5": {
+   "heal:Universal Diagnosis Healing": "5@2.68",
+   "dmg×n:Universal Diagnosis": "1@0.23"
+  },
+  "S3_combo": {
+   "heal:Universal Diagnosis Healing": "2@2.68",
+   "dmg×n:Universal Diagnosis": "1@0.23"
+  }
+ },
+ "10000083-anemo_e": {
+  "char": "リネット",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {
+   "heal:Enigmatic Feint": "2@0.48"
+  },
+  "S2_x5": {
+   "heal:Enigmatic Feint": "5@0.48",
+   "dmg×n:Enigmatic Feint": "1@0.48",
+   "dmg×n:Surging Blade (lynette)": "1@0.98"
+  },
+  "S3_combo": {
+   "heal:Enigmatic Feint": "2@0.48"
+  }
+ },
+ "10000084-pyro_e": {
+  "char": "リネ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on lyney executing charge: lyney: action charge not implemented",
+  "S1_x2": {
+   "status:lyney-a4": "1@0.00",
+   "heal:Bewildering Lights": "2@0.32"
+  },
+  "S2_x5": {
+   "status:lyney-a4": "1@0.00",
+   "heal:Bewildering Lights": "5@0.32",
+   "dmg×n:Bewildering Lights": "1@0.32"
+  },
+  "S3_combo": "ERR error encountered on lyney executing charge: lyney: action charge not implemented"
+ },
+ "10000086-cryo_q": {
+  "char": "リオセスリ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:wriothesley-e": "2@0.02 dur=10.0/7.3",
+   "status:wriothesley-a4": "2@0.02 dur=10.0/7.3",
+   "dmg×n:Darkgold Wolfbite": "1@1.75"
+  },
+  "S2_x5": {
+   "dmg×n:Darkgold Wolfbite": "1@1.67",
+   "dmg×n:Surging Blade": "1@2.68"
+  },
+  "S3_combo": {
+   "status:wriothesley-e": "8@0.02 dur=10.0/7.6/7.4",
+   "status:wriothesley-a4": "8@0.02 dur=10.0/7.6/7.4",
+   "dmg×n:Darkgold Wolfbite": "1@1.75"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Darkgold Wolfbite": "1@1.67"
+  },
+  "S4_burstFirst": {
+   "status:wriothesley-e": "4@3.25 dur=10.0/9.4/9.3",
+   "status:wriothesley-a4": "4@3.25 dur=10.0/9.4/9.3",
+   "dmg×n:Darkgold Wolfbite": "1@1.67"
+  }
+ },
+ "10000087-hydro_e": {
+  "char": "ヌヴィレット",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 15,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:O Tears, I Shall Repay": "1@0.40",
+   "dmg×n:Spiritbreath Thorn (neuvillette)": "1@1.02"
+  },
+  "S3_combo": {
+   "heal:Sourcewater Droplets Healing": "3@2.77"
+  }
+ },
+ "10000087-hydro_q": {
+  "char": "ヌヴィレット",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:O Tides, I Have Returned: Skill DMG": "1@1.60",
+   "dmg×n:O Tides, I Have Returned: Waterfall DMG": "1@2.27"
+  },
+  "S3_combo": {
+   "heal:Sourcewater Droplets Healing": "3@4.82"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {}
+ },
+ "10000090-pyro_q": {
+  "char": "シュヴルーズ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:chev-skill-heal": "1@0.32 dur=12.0",
+   "heal:Short-Range Rapid Interdiction Fire Healing": "6@2.32",
+   "dmg×n:Secondary Explosive Shell": "1@1.92"
+  },
+  "S2_x5": {
+   "dmg×n:Explosive Grenade": "1@1.00",
+   "dmg×n:Secondary Explosive Shell": "1@1.40"
+  },
+  "S3_combo": {
+   "status:chev-skill-heal": "1@0.32 dur=12.0",
+   "heal:Short-Range Rapid Interdiction Fire Healing": "6@2.32",
+   "dmg×n:Secondary Explosive Shell": "1@1.92"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Secondary Explosive Shell": "1@1.40"
+  },
+  "S4_burstFirst": {
+   "status:chev-skill-heal": "1@2.90 dur=12.0",
+   "heal:Short-Range Rapid Interdiction Fire Healing": "6@4.90",
+   "dmg×n:Secondary Explosive Shell": "1@1.40"
+  }
+ },
+ "10000091-geo_e": {
+  "char": "ナヴィア",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 300,
+  "S0_base": "ERR error encountered on navia executing charge: navia: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:navia-a4": "1@0.00",
+   "status:navia-a1-dmg": "2@0.20 dur=4.0/4.0"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:navia-a4": "1@0.00",
+   "status:navia-a1-dmg": "5@0.20 dur=4.0/4.0/4.0",
+   "dmg×n:Rosula Shardshot": "1@0.35"
+  },
+  "S3_combo": "ERR error encountered on navia executing charge: navia: action charge not implemented"
+ },
+ "10000092-pyro_e": {
+  "char": "嘉明",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on gaming executing charge: gaming: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:gaming-a4-heal-bonus": "1@0.00",
+   "status:gaming-a4-dmg-bonus": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "status:gaming-a4-heal-bonus": "1@0.00",
+   "status:gaming-a4-dmg-bonus": "1@0.00"
+  },
+  "S3_combo": "ERR error encountered on gaming executing charge: gaming: action charge not implemented"
+ },
+ "10000094-geo_e": {
+  "char": "千織",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 17,
+  "S1_x2": {
+   "status:chiori-a1-window": "2@0.45 dur=1.3/1.3",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@1.02"
+  },
+  "S2_x5": {
+   "status:chiori-a1-window": "3@0.45 dur=1.3/1.3/1.3",
+   "status:chiori-seize-the-moment": "2@0.52 dur=8.0/8.0",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@1.02"
+  },
+  "S3_combo": {
+   "status:chiori-a1-window": "2@0.45 dur=1.3/1.3",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@1.02"
+  }
+ },
+ "10000094-geo_q": {
+  "char": "千織",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:chiori-a1-window": "1@0.45 dur=1.3",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@1.02"
+  },
+  "S2_x5": {
+   "dmg×n:Hiyoku: Twin Blades": "1@1.55"
+  },
+  "S3_combo": {
+   "status:chiori-a1-window": "1@0.45 dur=1.3",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@1.02"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:chiori-a1-window": "1@3.68 dur=1.3",
+   "dmg×n:Fluttering Hasode (Tamato)": "1@4.25"
+  }
+ },
+ "10000096-pyro_q": {
+  "char": "アルレッキーノ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:directive": "1@0.65 dur=30.0",
+   "status:directive-limit": "1@0.73 dur=35.0",
+   "status:masque-of-the-red-death": "1@1.62",
+   "heal:Balemoon Rising (Heal)": "2@3.30"
+  },
+  "S2_x5": {
+   "heal:Balemoon Rising (Heal)": "5@2.07",
+   "dmg×n:Balemoon Rising": "1@1.85"
+  },
+  "S3_combo": {
+   "status:directive": "1@0.65 dur=30.0",
+   "status:directive-limit": "10@0.73 dur=35.0/32.5/32.2",
+   "status:masque-of-the-red-death": "1@1.62",
+   "heal:Balemoon Rising (Heal)": "2@3.30"
+  },
+  "S5_burstOnly": {
+   "heal:Balemoon Rising (Heal)": "2@2.07"
+  },
+  "S4_burstFirst": {
+   "heal:Balemoon Rising (Heal)": "1@2.07",
+   "status:directive": "3@3.60 dur=30.0/29.3/29.0",
+   "status:directive-limit": "3@3.68 dur=35.0/34.4/34.1"
+  }
+ },
+ "10000097-electro_e": {
+  "char": "セトス",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on sethos executing charge: sethos: action charge not implemented",
+  "S1_x2": {
+   "status:sethos-a4": "1@0.00"
+  },
+  "S2_x5": {
+   "status:sethos-a4": "1@0.00",
+   "dmg×n:Ancient Rite: Thunderous Roar of Sand": "1@0.23"
+  },
+  "S3_combo": "ERR error encountered on sethos executing charge: sethos: action charge not implemented"
+ },
+ "10000098-electro_q": {
+  "char": "クロリンデ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:clorinde-night-watch": "6@0.02 dur=7.6/5.5/5.4",
+   "status:clorinde-a4-buff": "6@25.78 dur=15.0/13.6/13.5",
+   "dmg×n:Last Lightfall": "1@2.18"
+  },
+  "S2_x5": {
+   "status:clorinde-a4-buff": "6@15.23 dur=15.0/13.6/13.5",
+   "dmg×n:Last Lightfall": "1@1.63"
+  },
+  "S3_combo": "ERR clorinde: need to use attack right before charge",
+  "S5_burstOnly": {
+   "status:clorinde-a4-buff": "8@25.23 dur=15.0/13.6/13.5",
+   "dmg×n:Last Lightfall": "1@1.63"
+  },
+  "S4_burstFirst": {
+   "status:clorinde-night-watch": "2@3.68 dur=7.6/6.3",
+   "dmg×n:Last Lightfall": "1@1.63"
+  }
+ },
+ "10000102-hydro_q": {
+  "char": "ムアラニ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:nightsoul-blessing": "1@0.05",
+   "status:mualani-surfing": "1@0.15"
+  },
+  "S2_x5": {
+   "dmg×n:Boomsharka-laka": "1@2.98"
+  },
+  "S3_combo": "ERR mualani: need to use attack right before charge",
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:nightsoul-blessing": "1@4.12",
+   "status:mualani-surfing": "1@4.22"
+  }
+ },
+ "10000103-geo_q": {
+  "char": "シロネン",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 12,
+  "S0_base": "ERR xilonen: need to use attack right before charge",
+  "S1_x2": {
+   "status:xilonen-a1": "1@0.00",
+   "status:nightsoul-blessing": "1@0.02 dur=9.0",
+   "status:xilonen-e-shred-geo": "31@0.02 dur=1.0/1.0/1.0",
+   "status:xilonen-a4": "2@0.12 dur=15.0/15.0"
+  },
+  "S2_x5": {
+   "status:xilonen-a1": "1@0.00",
+   "status:xilonen-a4": "3@1.62 dur=15.0/15.0/15.0",
+   "dmg×n:Ocelotlicue Point!": "1@1.62",
+   "dmg×n:Follow-Up Beat": "1@2.15"
+  },
+  "S3_combo": "ERR xilonen cannot charge in nightsoul blessing",
+  "S5_burstOnly": {
+   "status:xilonen-a1": "1@0.00",
+   "status:xilonen-a4": "9@1.62 dur=15.0/14.8/14.5"
+  },
+  "S4_burstFirst": {
+   "status:xilonen-a1": "1@0.00",
+   "status:xilonen-a4": "7@1.62 dur=15.0/14.8/14.5",
+   "status:nightsoul-blessing": "3@3.50 dur=9.0/8.5/8.1",
+   "status:xilonen-e-shred-geo": "33@3.50 dur=1.0/1.0/1.0"
+  }
+ },
+ "10000104-anemo_q": {
+  "char": "チャスカ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S0_base": "ERR error encountered on chasca executing charge: chasca: action charge not implemented",
+  "S1_x2": {
+   "status:chasca-a1": "1@0.00",
+   "status:nightsoul-blessing": "1@0.02",
+   "status:chasca-plunge-available": "2@10.02 dur=0.4/0.4",
+   "dmg×n:Soulseeker Shell": "1@1.83"
+  },
+  "S2_x5": {
+   "status:chasca-a1": "1@0.00",
+   "status:chasca-plunge-available": "5@1.72 dur=0.4/0.4/0.4",
+   "dmg×n:Galesplitting Soulseeker Shell": "1@1.62",
+   "dmg×n:Soulseeker Shell": "1@1.73"
+  },
+  "S3_combo": "ERR error encountered on chasca executing charge: chasca: action charge not implemented",
+  "S5_burstOnly": {
+   "status:chasca-a1": "1@0.00",
+   "status:chasca-plunge-available": "2@1.72 dur=0.4/0.4",
+   "dmg×n:Soulseeker Shell": "1@1.73"
+  },
+  "S4_burstFirst": {
+   "status:chasca-a1": "1@0.00",
+   "status:chasca-plunge-available": "2@1.72 dur=0.4/0.4",
+   "status:nightsoul-blessing": "1@2.68",
+   "dmg×n:Soulseeker Shell": "1@1.73"
+  }
+ },
+ "10000105-electro_e": {
+  "char": "オロルン",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on ororon executing charge: ororon: action charge not implemented",
+  "S1_x2": {
+   "status:ororon-a1": "2@0.02 dur=15.0/15.0",
+   "status:ororon-a4": "2@0.70 dur=15.0/15.0"
+  },
+  "S2_x5": {
+   "status:ororon-a1": "5@0.02 dur=15.0/15.0/15.0",
+   "status:ororon-a4": "5@0.70 dur=15.0/15.0/15.0",
+   "dmg×n:Spirit Orb DMG": "1@0.70"
+  },
+  "S3_combo": "ERR error encountered on ororon executing charge: ororon: action charge not implemented"
+ },
+ "10000106-pyro_e_recastframestobike": {
+  "char": "マーヴィカ",
+  "cmd": "skill[recast=1]",
+  "type": "skill",
+  "S1_x2": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing",
+  "S2_x5": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing",
+  "S3_combo": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+ },
+ "10000106-pyro_e_recastframestoring": {
+  "char": "マーヴィカ",
+  "cmd": "skill[recast=1]",
+  "type": "skill",
+  "S1_x2": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing",
+  "S2_x5": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing",
+  "S3_combo": "ERR error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+ },
+ "10000107-cryo_q": {
+  "char": "シトラリ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:nightsoul-blessing": "1@0.32 dur=20.0",
+   "shield:Dawnfrost Darkstar (Shield)": "1@0.63",
+   "status:opal-fire-state": "1@2.62",
+   "dmg×n:Frostfall Storm DMG": "1@3.60"
+  },
+  "S2_x5": {
+   "dmg×n:Ice Storm DMG": "1@1.98",
+   "dmg×n:Spiritvessel Skull DMG": "1@3.88"
+  },
+  "S3_combo": {
+   "status:nightsoul-blessing": "1@0.32 dur=20.0",
+   "shield:Dawnfrost Darkstar (Shield)": "1@0.63",
+   "status:opal-fire-state": "1@2.62",
+   "dmg×n:Frostfall Storm DMG": "1@3.60"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:nightsoul-blessing": "1@3.97 dur=20.0",
+   "status:opal-fire-state": "1@3.97",
+   "shield:Dawnfrost Darkstar (Shield)": "1@4.28",
+   "dmg×n:Frostfall Storm DMG": "1@4.95"
+  }
+ },
+ "10000108-anemo_q": {
+  "char": "藍硯",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:leap-back": "1@0.13 dur=1.1",
+   "shield:Swallow-Wisp Pinion Dance (Shield)": "1@0.32",
+   "dmg×n:Lustrous Moonrise": "1@1.75"
+  },
+  "S2_x5": {
+   "dmg×n:Lustrous Moonrise": "1@0.52"
+  },
+  "S3_combo": {
+   "status:leap-back": "1@0.13 dur=1.1",
+   "shield:Swallow-Wisp Pinion Dance (Shield)": "1@0.32",
+   "dmg×n:Lustrous Moonrise": "1@1.75",
+   "dmg×n:Normal 1": "1@3.22"
+  },
+  "S5_burstOnly": {
+   "dmg×n:Lustrous Moonrise": "1@0.52"
+  },
+  "S4_burstFirst": {
+   "status:leap-back": "1@3.13 dur=1.1",
+   "shield:Swallow-Wisp Pinion Dance (Shield)": "1@3.32"
+  }
+ },
+ "10000112-cryo_q": {
+  "char": "エスコフィエ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S0_base": "ERR escoffier: need to use attack right before charge",
+  "S1_x2": {
+   "status:escoffier-skill": "1@0.02 dur=22.0",
+   "status:escoffier-a4-shred-cryo": "25@0.40 dur=12.0/12.0/12.0",
+   "status:escoffier-a4-shred-hydro": "25@0.40 dur=12.0/12.0/12.0",
+   "status:escoffier-a1": "2@0.55 dur=10.4/10.4",
+   "heal:Scoring Cuts (Healing)": "2@2.17",
+   "heal:Rehab Diet": "18@3.17",
+   "dmg×n:Frosty Parfait": "1@2.57"
+  },
+  "S2_x5": {
+   "status:escoffier-a1": "5@0.02 dur=10.4/10.4/10.4",
+   "status:escoffier-a4-shred-cryo": "5@1.55 dur=12.0/12.0/12.0",
+   "status:escoffier-a4-shred-hydro": "5@1.55 dur=12.0/12.0/12.0",
+   "heal:Scoring Cuts (Healing)": "5@1.63",
+   "heal:Rehab Diet": "45@2.63",
+   "dmg×n:Scoring Cuts": "1@1.55"
+  },
+  "S3_combo": "ERR escoffier: need to use attack right before charge",
+  "S5_burstOnly": {
+   "status:escoffier-a1": "8@0.02 dur=10.4/8.6/8.2",
+   "status:escoffier-a4-shred-cryo": "8@1.55 dur=12.0/11.7/11.3",
+   "status:escoffier-a4-shred-hydro": "8@1.55 dur=12.0/11.7/11.3",
+   "heal:Scoring Cuts (Healing)": "2@1.63",
+   "heal:Rehab Diet": "18@2.90"
+  },
+  "S4_burstFirst": {
+   "status:escoffier-a1": "7@0.02 dur=10.4/8.6/8.2",
+   "status:escoffier-a4-shred-cryo": "30@1.55 dur=12.0/11.7/11.3",
+   "status:escoffier-a4-shred-hydro": "30@1.55 dur=12.0/11.7/11.3",
+   "heal:Scoring Cuts (Healing)": "1@1.63",
+   "heal:Rehab Diet": "9@2.90",
+   "status:escoffier-skill": "1@3.82 dur=22.0",
+   "dmg×n:Frosty Parfait": "1@6.37"
+  }
+ },
+ "10000113-anemo_q": {
+  "char": "イファ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:nightsoul-blessing": "1@0.02",
+   "status:ifa-plunge-available": "1@9.98 dur=0.4"
+  },
+  "S2_x5": {
+   "dmg×n:Compound Sedation Field": "1@0.70"
+  },
+  "S3_combo": {
+   "status:nightsoul-blessing": "1@0.02",
+   "heal:Tonicshot Healing": "6@1.27",
+   "status:ifa-plunge-available": "1@9.98 dur=0.4",
+   "dmg×n:Tonic Shot": "1@1.27"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:nightsoul-blessing": "1@2.62",
+   "heal:Tonicshot Healing": "2@3.18",
+   "status:ifa-plunge-available": "1@12.58 dur=0.4"
+  }
+ },
+ "10000115-hydro_e": {
+  "char": "ダリア",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Immersive Ordinance": "1@0.47"
+  },
+  "S3_combo": {}
+ },
+ "10000120-electro_q": {
+  "char": "フリンズ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:manifest-flame": "1@0.02 dur=10.3"
+  },
+  "S2_x5": {
+   "dmg×n:Cometh the Night (Initial)": "1@1.57",
+   "dmg×n:Cometh the Night (Mid)": "1@1.85",
+   "dmg×n:Cometh the Night (Final)": "1@2.75"
+  },
+  "S3_combo": {
+   "status:manifest-flame": "6@0.02 dur=10.3/8.2/8.0"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:manifest-flame": "3@2.75 dur=10.3/9.9/9.7"
+  }
+ },
+ "10000121-hydro_e": {
+  "char": "アイノ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR error encountered on aino executing charge: aino: action charge not implemented",
+  "S1_x2": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00"
+  },
+  "S2_x5": {
+   "status:ultimateoverlordsmegamagicsword": "1@0.00",
+   "dmg×n:Musecatcher 0": "1@0.27",
+   "dmg×n:Musecatcher 1": "1@0.57"
+  },
+  "S3_combo": "ERR error encountered on aino executing charge: aino: action charge not implemented"
+ },
+ "10000128-anemo_q": {
+  "char": "ファルカ",
+  "cmd": "burst",
+  "type": "burst",
+  "master": 0,
+  "S1_x2": {
+   "status:sturm-und-drang": "3@0.67 dur=12.0/12.1/14.2"
+  },
+  "S2_x5": {
+   "dmg×n:Northwind Avatar": "1@1.88"
+  },
+  "S3_combo": {
+   "status:sturm-und-drang": "9@0.67 dur=12.0/12.1/14.2"
+  },
+  "S5_burstOnly": {},
+  "S4_burstFirst": {
+   "status:sturm-und-drang": "4@4.90 dur=12.0/12.1/11.6"
+  }
+ },
+ "10000132-anemo_e": {
+  "char": "プルーネ",
+  "cmd": "skill",
+  "type": "skill",
+  "master": 0,
+  "S0_base": "ERR prune: need to use attack right before charge",
+  "S1_x2": {},
+  "S2_x5": {
+   "dmg×n:Ring-A-Ding-Ding! Hexhunter Chime DMG": "1@0.45"
+  },
+  "S3_combo": "ERR prune: need to use attack right before charge"
+ }
+}

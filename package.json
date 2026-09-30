@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "dev": "vite --port 3000 --host 0.0.0.0",
     "start": "vite --port 3000 --host 0.0.0.0",
@@ -20,7 +23,11 @@
     "link:effects": "node scripts/link-effect-by-duration.ts",
     "check:effectkeys": "node scripts/build-effect-coverage.ts",
     "verify:effectkeys": "node scripts/build-effect-coverage.ts --check",
-    "verify:effectkeys": "node scripts/build-effect-coverage.ts --check"
+    "gcsim:install": "node scripts/gcsim-server.ts install",
+    "gcsim:start": "node scripts/gcsim-server.ts start",
+    "gcsim:stop": "node scripts/gcsim-server.ts stop",
+    "gcsim:status": "node scripts/gcsim-server.ts status",
+    "gcsim:check": "node scripts/gcsim-server.ts check"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

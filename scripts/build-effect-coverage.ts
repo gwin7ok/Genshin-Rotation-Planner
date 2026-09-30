@@ -23,6 +23,7 @@
  * `--check` を付けると、ネットワークに繋がず、ファイルも書かずに、検査だけを行う（変更のたびに素早く確かめる用）。
  */
 import fs from 'node:fs';
+import { GCSIM_REPO, GCSIM_COMMIT } from '../src/utils/gcsim/gcsimConfig.ts';
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
@@ -75,7 +76,7 @@ const CHECK_ONLY = process.argv.includes('--check');
 let constructNames: string[] = [];
 try {
   if (CHECK_ONLY) throw new Error('--check のため取得しない');
-  const res = await fetch('https://raw.githubusercontent.com/genshinsim/gcsim/main/pkg/core/construct/construct.go');
+  const res = await fetch(`https://raw.githubusercontent.com/${GCSIM_REPO}/${GCSIM_COMMIT}/pkg/core/construct/construct.go`);
   if (res.ok) {
     const text = await res.text();
     const arr = /ConstructString\s*=\s*\[\.\.\.\]string\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';

@@ -1,6 +1,6 @@
 /**
  * スキル・爆発の「アクション定義 ID → 効果の gcsim キー」の対応表を、実測で作る（フェーズ6 / 6-3b'）。
- * 事前に gcsim のローカルサーバー（localhost:54321）を起動しておく。
+ * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start。バージョン・ポートは gcsim.config.json）。
  *
  *   node scripts/probe-effect-keys.ts
  *
@@ -17,8 +17,9 @@
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
+import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 
-const SERVER = 'http://localhost:54321';
+const SERVER = GCSIM_SERVER_URL;
 const MAX_LAG_FRAMES = 6 * 60;
 const MAX_EVENTS_PER_CAST = 4;
 

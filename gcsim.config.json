@@ -1,0 +1,50 @@
+{
+  "$comment": "このアプリのデータ（辞書・マスター・対応表）が依存する gcsim のバージョン。gcsim のバージョンを上げるときは docs/gcsim-サーバー更新手順.md に従い、この設定を先に更新する。",
+  "repo": "genshinsim/gcsim",
+  "version": "v2.48.0",
+  "commit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+  "releasedAt": "2026-09-29",
+  "license": "AGPL-3.0-or-later（v2.47.3 以降。v2.47.2 までは MIT）",
+  "server": {
+    "host": "localhost",
+    "port": 54321
+  },
+  "assets": {
+    "win32-x64": {
+      "name": "server_windows_amd64.exe",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_windows_amd64.exe",
+      "sha256": "59b3920cfb905cbb3e6604b5e38682259727006789d74a4e84d93bdafedf8fca",
+      "size": 49804800
+    },
+    "win32-arm64": {
+      "name": "server_windows_arm64.exe",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_windows_arm64.exe",
+      "sha256": "2634acccb8213ddafd061ad8f464e58e6b45592c5b1df2137551fba4ddb4ff5e",
+      "size": 46321152
+    },
+    "linux-x64": {
+      "name": "server_linux_amd64",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_linux_amd64",
+      "sha256": "032c491e84a662a667f344372b07691ad68100afcab9ea36da9a458b1c7b606b",
+      "size": 49481551
+    },
+    "linux-arm64": {
+      "name": "server_linux_arm64",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_linux_arm64",
+      "sha256": "373d1ea7884b5b8aaaf7e229b205866ea44f9e9bd67ff51b404a44020f5db5fd",
+      "size": 46550368
+    },
+    "darwin-x64": {
+      "name": "server_darwin_amd64",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_darwin_amd64",
+      "sha256": "53b9474f086b2ebe1cef60c3dcabfe2160bdbd1b6c709140afb1bcba79544a9a",
+      "size": 50614688
+    },
+    "darwin-arm64": {
+      "name": "server_darwin_arm64",
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.48.0/server_darwin_arm64",
+      "sha256": "bad079a6eda62334bbfab0bf841b288765023c4557025a8a815e57ce9d584418",
+      "size": 48078482
+    }
+  }
+}

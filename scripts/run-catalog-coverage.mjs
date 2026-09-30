@@ -1,7 +1,7 @@
 /**
  * gcsim の実行で出るキーの網羅確認（フェーズ5 / 5-2b の続き）
  *
- * 全キャラ・全武器・全聖遺物を、1 つずつ gcsim のローカルサーバー（localhost:54321）で実行し、
+ * 全キャラ・全武器・全聖遺物を、1 つずつ gcsim のローカルサーバー（npm run gcsim:start。ポートは gcsim.config.json）で実行し、
  * 詳細ログの status イベント（バフ・状態・内部CTのキー）を集める。辞書（src/data/gcsim_key_catalog.json）で引けるかを確かめ、
  * 実行で確認できたキーを src/data/gcsim_key_observed.json に書き出す（npm run build:catalog が辞書に合成する）。
  *
@@ -15,8 +15,9 @@
  * 1 人・1 対象での実行なので、チームバフ・反応・命ノ星座の条件付きの効果など、出ないキーがある。
  */
 import fs from 'node:fs';
+import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 
-const SERVER = 'http://localhost:54321/sample/coverage';
+const SERVER = GCSIM_SERVER_URL + '/sample/coverage';
 const root = process.cwd();
 const read = p => JSON.parse(fs.readFileSync(`${root}/${p}`, 'utf8'));
 const catalog = read('src/data/gcsim_key_catalog.json');

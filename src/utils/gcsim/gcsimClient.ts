@@ -2,7 +2,8 @@
  * gcsim ローカルサーバー（公式リリースの `server_<OS>_<arch>`）のクライアント。
  * 文法チェック（/validate）と、詳細ログの取得（/sample）。
  */
-export const GCSIM_SERVER_URL = 'http://localhost:54321';
+import { GCSIM_SERVER_URL as CONFIGURED_SERVER_URL } from './gcsimConfig.ts';
+export const GCSIM_SERVER_URL = CONFIGURED_SERVER_URL;
 const REQUEST_TIMEOUT_MS = 10000;
 
 export type GcsimValidateResult =

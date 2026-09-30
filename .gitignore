@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# gcsim サーバーの実行ファイル（公式リリースから取得。gcsim.config.json のバージョン・SHA-256 で固定。AGPL のため Git に入れない）
+.gcsim/

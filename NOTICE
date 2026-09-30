@@ -1,0 +1,52 @@
+Genshin Rotation Planner — 第三者のソフトウェア・データについての表示 (NOTICE)
+
+このリポジトリのアプリ本体のライセンスは、まだ決まっていない（LICENSE ファイルは無い）。
+以下は、このアプリが利用している第三者のソフトウェア・データと、その扱い。
+
+--------------------------------------------------------------------------------
+1. gcsim  (https://github.com/genshinsim/gcsim)
+--------------------------------------------------------------------------------
+Copyright (c) 2021 The gcsim contributors
+
+ライセンス:
+  - v2.47.3 以降: GNU Affero General Public License v3.0 以降（AGPL-3.0-or-later）
+  - v2.47.2 まで: MIT License
+  （gcsim のリポジトリの LICENSE による。2026-09-19 付で AGPLv3 に変更された）
+  ライセンス全文: https://github.com/genshinsim/gcsim/blob/main/LICENSE
+
+このアプリが依存するバージョン: gcsim.config.json の `version` / `commit`
+  対応するソースコード（Corresponding Source）: https://github.com/genshinsim/gcsim/tree/<commit>
+  （<commit> は gcsim.config.json の `commit`。現在の版は同ファイルを参照）
+
+このアプリでの使い方:
+  (a) gcsim サーバー（実行ファイル）
+      - 公式リリース（https://github.com/genshinsim/gcsim/releases）の `server_*` を、利用者のマシンに取得して使う。
+        `npm run gcsim:install` が、gcsim.config.json の URL から取得し、SHA-256 を検証する。
+      - この実行ファイルは、このリポジトリに含めない（.gcsim/ は Git 管理外）。このアプリは gcsim を配布しない。
+      - 改変しない。アプリとは HTTP（localhost）で通信する別のプログラムとして使う。
+  (b) gcsim のソースから作ったデータ（このリポジトリの src/data/ にある）
+      - gcsim_key_catalog.json（効果のキーの辞書）、gcsim_key_map.json、action_effect_keys.json、
+        action_effect_links_by_duration.json、effect_key_coverage.json
+      - characters_master_data.json / weapons_master_data.json / artifacts_master_data.json の
+        モーションフレーム・キャンセルフレーム・効果時間・gcsim のキー
+      これらは、gcsim のソースコード（internal/characters/ など）の値・名前を読み取って作った派生データ。
+      出典と取得コミットは、各ファイルの `gcsimCommit` と、アクションの `dataSource` に記録している。
+
+--------------------------------------------------------------------------------
+2. genshin-db  (https://github.com/theBowja/genshin-db)
+--------------------------------------------------------------------------------
+ライセンス: MIT License
+名前・天賦の説明・クールタイム・効果時間などのゲームデータを、genshin-db の API から取得してマスターデータを作る。
+ゲームの文章・画像・名称の著作権は、それぞれの権利者（HoYoverse / miHoYo）に帰属する。
+
+--------------------------------------------------------------------------------
+3. enka.network  (https://enka.network)
+--------------------------------------------------------------------------------
+キャラのアイコン画像を、enka.network の URL で参照する（画像をこのリポジトリに含めていない）。
+画像の著作権は、それぞれの権利者に帰属する。
+
+--------------------------------------------------------------------------------
+更新のルール
+--------------------------------------------------------------------------------
+gcsim のバージョンを上げたとき、または新しい第三者のデータ・ソフトウェアを使い始めたときは、この NOTICE を更新する。
+手順は docs/gcsim-サーバー更新手順.md を参照。

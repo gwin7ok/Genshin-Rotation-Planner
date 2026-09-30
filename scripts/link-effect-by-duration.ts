@@ -1,7 +1,7 @@
 /**
  * 効果キーが見つからなかった定義（キー無し・未収集）を、genshin-db の効果継続時間（マスターの effectDuration）を基準に、
  * gcsim のログの「継続時間を持つイベント」に紐づけられないか調べる（フェーズ6 / 6-3b'）。
- * 事前に gcsim のローカルサーバー（localhost:54321）を起動しておく。
+ * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start。バージョン・ポートは gcsim.config.json）。
  *
  *   node scripts/link-effect-by-duration.ts
  *
@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
+import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 
 const catalog = JSON.parse(fs.readFileSync('src/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map<string, any>(catalog.entries.filter((e: any) => !e.isPattern).map((e: any) => [e.key, e]));
@@ -50,7 +51,7 @@ for (const c of chars) {
     if (!cmd) { out[a.id] = { char: c.name, type: a.type, master, candidates: [], note: '変換規則なし' }; continue; }
     const cfg = [`${k} char lvl=90/90 cons=0 talent=9,9,9;`, `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`, `${k} add stats cr=1;`,
       'options iteration=1 duration=90 swap_delay=12 ignore_burst_energy=true;', 'target lvl=100 resist=0.1;', `active ${k};`, `${k} ${cmd}; delay(4200);`].join('\n');
-    const res = await fetch('http://localhost:54321/sample/lk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+    const res = await fetch(GCSIM_SERVER_URL + '/sample/lk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
     const text = await res.text();
     let j: any;
     try { j = JSON.parse(text); } catch { j = { error: text.trim().slice(0, 100) }; }

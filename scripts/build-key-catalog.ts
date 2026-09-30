@@ -13,8 +13,9 @@ import { KEY_OVERRIDES } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
 import { assignNames } from '../src/masterdata/gcsimKeyNames.ts';
 import { loadNameSources } from './genshin-db-names.ts';
 
-const REPO = 'genshinsim/gcsim';
-const BRANCH = 'main';
+import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../src/utils/gcsim/gcsimConfig.ts';
+const REPO = CONFIG_GCSIM_REPO;
+const BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
 const observedPath = path.join(process.cwd(), 'src/data/gcsim_key_observed.json');
 const outputPath = path.join(process.cwd(), 'src/data/gcsim_key_catalog.json');
 

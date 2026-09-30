@@ -25,6 +25,7 @@
 import fs from 'node:fs';
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
+import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
 import { KEY_DECISIONS, DEF_DECISIONS } from '../src/masterdata/effectKeyDecisions.ts';
 import {
@@ -62,6 +63,10 @@ for (const [defId, e] of Object.entries(table)) {
 }
 for (const [defId, extras] of Object.entries(ACTION_EFFECT_EXTRAS)) {
   for (const x of extras) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'extra', label: x.label, ...(x.self ? { self: true } : {}), approval: 'approved' });
+}
+
+for (const [defId, list] of Object.entries(ACTION_EFFECT_INCLUDED)) {
+  for (const x of list) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'included', label: x.note, approval: 'approved' });
 }
 
 // ---- gcsim のソースの設置物名 ----

@@ -46,7 +46,7 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'unreviewed': '未検討',
 };
 
-export type LinkRole = 'main' | 'extra';
+export type LinkRole = 'main' | 'extra' | 'included';
 /** 紐づけの確度: approved = ユーザーが確認して承認 / auto = 自動（マスターの効果時間との一致・実測）で作った */
 export type LinkApproval = 'approved' | 'auto';
 
@@ -91,7 +91,7 @@ export interface LinkRow {
   effectId: string;
   /** targets.id */
   targetId: string;
-  /** main = 本体の効果時間（effectDuration）/ extra = 副次効果のバー */
+  /** main = 本体の効果時間（effectDuration）/ extra = 副次効果のバー / included = そのアクションに含まれる効果（別のバーにも書き戻しにも使わない） */
   role: LinkRole;
   /** 継続時間の求め方（既定 expiry） */
   mode?: 'expiry' | 'ended' | 'span';

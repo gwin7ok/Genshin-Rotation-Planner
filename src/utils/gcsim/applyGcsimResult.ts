@@ -220,7 +220,7 @@ export type ActionEffectKeyTable = Record<string, {
 export type EffectDurationMode = 'expiry' | 'ended' | 'span';
 
 /** 手で補う一覧の値: キーだけ（expiry）か、求め方・自分限定つき */
-export type EffectKeyOverride = string | { key: string; mode?: EffectDurationMode; self?: boolean };
+export type EffectKeyOverride = string | { key: string; mode?: EffectDurationMode; self?: boolean; /** 状況によって別のキーで出る場合の代替（例: デュリンの爆発は白の姿と黒の姿でキーが違う）。イベントがあったキーのうち、効果が長いものを使う */ alt?: string[] };
 
 export interface EffectDurationChange {
   stintId: string;
@@ -281,7 +281,7 @@ export function applyActionEffectDurations(
       continue;
     }
     const ov = typeof override === 'string' ? (override ? { key: override } : undefined) : override;
-    const candidates = ov ? [ov.key] : entry?.primary ? [entry.primary] : (entry?.keys ?? []).map(c => c.key);
+    const candidates = ov ? [ov.key, ...(ov.alt ?? [])] : entry?.primary ? [entry.primary] : (entry?.keys ?? []).map(c => c.key);
     if (candidates.length === 0) continue;
     const mode: EffectDurationMode = ov ? ov.mode ?? 'expiry' : entry?.mode ?? 'expiry';
     const selfOnly = ov ? ov.self === true : entry?.self === true;
@@ -332,6 +332,9 @@ export function applyActionEffectDurations(
   return { stints: updated, changes, missingDefs: [...missing] };
 }
 
+/** chain 方式で、前のイベントの終了予定から次のイベントまでの隙間がこのフレーム数以内なら、同じバーにする（更新の間隔が効果時間よりわずかに長い印など） */
+const CHAIN_GAP_FRAMES = 12;
+
 export interface ExtraEffectChange {
   stintId: string;
   actionId: string;
@@ -376,8 +379,9 @@ export function applyActionExtraEffects(
 
     const extras: { key: string; name: string; offset: number; duration: number }[] = [];
     for (const def of defs) {
+      const keyRe = def.key.includes('*') ? new RegExp('^' + def.key.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$') : undefined;
       const inWindow = summary.effectEvents
-        .filter(e => e.key === def.key && e.frame >= executed.frame && e.frame < nextSameKind && e.expiry > e.frame && (!def.self || e.charIndex === executed.charIndex))
+        .filter(e => (keyRe ? keyRe.test(e.key) : e.key === def.key) && e.frame >= executed.frame && e.frame < nextSameKind && e.expiry > e.frame && (!def.self || e.charIndex === executed.charIndex))
         .sort((a, b) => a.frame - b.frame);
       if (def.mode === 'chain') {
         // 更新・延長が続く間を、1本のバーにする（前のイベントの終了予定より前に次のイベントが起きれば、同じバー）
@@ -389,7 +393,7 @@ export function applyActionExtraEffects(
           }
         };
         for (const ev of inWindow) {
-          if (start >= 0 && ev.frame <= end) {
+          if (start >= 0 && ev.frame <= end + CHAIN_GAP_FRAMES) {
             end = Math.max(end, ev.expiry);
           } else {
             flush();

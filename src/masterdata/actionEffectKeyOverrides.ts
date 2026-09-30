@@ -44,6 +44,8 @@ export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
   '10000104-anemo_q': '',
   // スカークの長押し: 登録しない（ユーザー決定）。自動収集が選んだ skirk-hold-e-anim は 0 秒
   '10000114-cryo_e_hold': '',
+  // デュリンの爆発: 白の姿のあとは durin-burst-white、黒の姿のあとは durin-burst-black（どちらも 20.5 秒）が出る
+  '10000123-pyro_q': { key: 'durin-burst-white', alt: ['durin-burst-black'] },
   // 八重神子のスキル: ストックできるスキル。ストックの扱いを決めるまで書き戻さない（継続ダメージの一致は保留）
   '10000058-electro_e': '',
 };

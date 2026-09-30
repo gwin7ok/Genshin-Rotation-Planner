@@ -17,8 +17,9 @@ import { buildKeyMapSection, keyMapLookup, type GcsimDmData, type KeyMapSection 
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
-const GCSIM_REPO = 'genshinsim/gcsim';
-const GCSIM_BRANCH = 'main';
+import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
+const GCSIM_REPO = CONFIG_GCSIM_REPO;
+const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
 const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/data/weapon.dm.json';
 const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/data/artifact.dm.json';
 

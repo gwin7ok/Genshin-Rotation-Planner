@@ -25,8 +25,9 @@ import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
 const ICON_BASE_URL = 'https://enka.network/ui';
-const GCSIM_REPO = 'genshinsim/gcsim';
-const GCSIM_BRANCH = 'main';
+import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
+const GCSIM_REPO = CONFIG_GCSIM_REPO;
+const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
 const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/data/character.dm.json';
 
 /**

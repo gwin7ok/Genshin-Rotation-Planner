@@ -9,6 +9,7 @@ const chars: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values
 const table = JSON.parse(fs.readFileSync('src/data/action_effect_keys.json', 'utf8')).entries;
 // 手で補う一覧（actionEffectKeyOverrides.ts）で指定済みの定義は「対応済み」として扱う（'' = 書き戻さない指定は対象外のまま）
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
+import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 for (const [id, v] of Object.entries(ACTION_EFFECT_KEY_OVERRIDES)) {
   if (!table[id]) continue;
   if (v === '') table[id].status = table[id].status === 'ok' ? 'nokey' : table[id].status;
@@ -31,7 +32,7 @@ for (const c of chars) {
       const cmd = mapAction(a.id, c.weaponType).command!;
       const cfg = [`${k} char lvl=90/90 cons=0 talent=9,9,9;`, `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`, `${k} add stats cr=1;`,
         'options iteration=1 duration=60 swap_delay=12 ignore_burst_energy=true;', 'target lvl=100 resist=0.1;', `active ${k};`, `${k} ${cmd}; delay(900);`].join('\n');
-      const r = await fetch('http://localhost:54321/sample/rv', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+      const r = await fetch(GCSIM_SERVER_URL + '/sample/rv', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
       const j = await r.json();
       if (j.error) { row.evidence.push(`実行エラー: ${j.error}`); row.verdict = '要確認'; }
       else {

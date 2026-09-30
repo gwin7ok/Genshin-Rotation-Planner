@@ -19,12 +19,18 @@ export type UnlinkedReason =
   | 'deferred'
   /** 上のどれにも当てはまらないが、紐づけないと決めた（メモに理由） */
   | 'decided-not-linked'
+  /** gcsim で実行できない（命令の変換規則の誤り・キーの不一致）ため、登録しない */
+  | 'not-runnable'
   /** gcsim にキャラ自体が未登録（アプリ側の定義が対象。gcsim の更新を待つ） */
   | 'not-in-gcsim'
   /** gcsim にはあるが、アプリのマスターにキャラが無い（マスターの再生成が先） */
   | 'not-in-app'
-  /** gcsim が状態・設置物・シールド・継続ダメージのイベントを出さない（実測済み） */
+  /** gcsim が状態・設置物・シールド・継続ダメージのイベントを出さない（実測済み。ユーザーの決定がまだ無い暫定の分類） */
   | 'no-event'
+  /** 決定済み: gcsim の効果が無く、ゲーム内にもバーにする持続する効果が無い（瞬間・回復のみなど）。バーを出さない */
+  | 'no-bar'
+  /** 決定済み: gcsim の効果は無いが、ゲーム内に持続する効果がある。gcsim とは紐づけず、アプリ側（マスターの効果時間）の値でバーを表示する */
+  | 'app-bar'
   /** gcsim で単独実行できず、収集できなかった（手で補う） */
   | 'unprobable'
   /** 切れない常時の効果（時間のバーにならない） */
@@ -37,10 +43,13 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'grace-window': '猶予時間・短い窓（効果ではない）',
   'hit-driven': '命中などで更新され続ける内部状態',
   'deferred': '保留',
-  'decided-not-linked': '紐づけないと決定済み',
+  'decided-not-linked': 'gcsim は効果を出すが、紐づけず・バーも出さない',
+  'not-runnable': 'gcsim で実行できない（登録しない）',
   'not-in-gcsim': 'gcsim にキャラが未登録',
   'not-in-app': 'アプリのマスターにキャラが無い',
-  'no-event': 'gcsim が効果のイベントを出さない',
+  'no-event': 'gcsim が効果のイベントを出さない（暫定）',
+  'no-bar': 'gcsim の効果なし・バーを出さない',
+  'app-bar': 'gcsim の効果なし・アプリ側の値でバーを表示',
   'unprobable': '単独実行できず未収集',
   'permanent': '常時の効果',
   'unreviewed': '未検討',

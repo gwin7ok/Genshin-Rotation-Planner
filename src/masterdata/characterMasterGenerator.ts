@@ -18,7 +18,7 @@ import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
-import { EFFECT_DURATION_OVERRIDES } from './effectDurationOverrides.ts';
+import { EFFECT_DURATION_OVERRIDES, EFFECT_DURATION_SUPPRESSED } from './effectDurationOverrides.ts';
 import { parseCooldownCalls, resolveCooldownStart, type CooldownCall, type CooldownStartResolution } from './cooldownStart.ts';
 import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, type ManualKeyMapping } from './gcsimKeyMap.ts';
 
@@ -154,6 +154,8 @@ export interface CharacterGenerationReport {
     mismatches: Array<{ characterId: string; name: string; actionId: string; genshinDb: number; gcsim: number }>;
     /** 一覧にあるのに、対応するアクションが無い（キャラ・アクションの ID の変更・削除） */
     orphans: string[];
+    /** 「効果時間なし」にした（バーに出さない。ユーザー決定）アクション */
+    suppressed: Array<{ characterId: string; name: string; actionId: string; genshinDb: number; reason: string }>;
   };
   /** CT開始位置（D37 / D44）: 自動で読めた件数・手で補った件数・未設定の一覧・手で補う値との食い違い */
   cooldownStart: {
@@ -677,7 +679,7 @@ export async function generateCharacterMaster(
     missingCooldowns: [],
     unresolvedGoLines: [],
     plunge: { lowCount: 0, highCount: 0, unresolved: [] },
-    effectDuration: { supplemented: [], mismatches: [], orphans: [] },
+    effectDuration: { supplemented: [], mismatches: [], orphans: [], suppressed: [] },
     cooldownStart: { read: 0, manual: 0, unresolved: [], mismatches: [] },
     constellations: emptyConstellationReport(),
     errors,
@@ -879,6 +881,15 @@ export async function generateCharacterMaster(
       report.effectDuration.supplemented.push({ characterId: u.id, name: u.name, actionId: a.id, seconds, source: o.source });
     }
 
+    // 効果継続時間なし（バーに出さない）: 手で決めた一覧のアクションは 0 にする
+    for (const a of actions) {
+      const reason = EFFECT_DURATION_SUPPRESSED[a.id];
+      if (!reason) continue;
+      if (a.effectDuration && a.effectDuration > 0) report.effectDuration.suppressed.push({ characterId: u.id, name: u.name, actionId: a.id, genshinDb: a.effectDuration, reason });
+      a.effectDuration = 0;
+      a.dataSource = { ...a.dataSource, effectDuration: `効果時間なし: ${reason}` };
+    }
+
     // CT開始位置（D37 / D44）: スキル・爆発のアクションに、gcsim の遅れ（または手で補った値）を持たせる
     for (const a of actions) {
       if (!a.startsSkillCooldown && !a.startsBurstCooldown) continue;
@@ -936,7 +947,7 @@ export async function generateCharacterMaster(
   }
 
   const allActionIds = new Set(characters.flatMap(c => c.availableActions.map(a => a.id)));
-  report.effectDuration.orphans = Object.keys(EFFECT_DURATION_OVERRIDES).filter(id => !allActionIds.has(id));
+  report.effectDuration.orphans = [...Object.keys(EFFECT_DURATION_OVERRIDES), ...Object.keys(EFFECT_DURATION_SUPPRESSED)].filter(id => !allActionIds.has(id));
 
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;

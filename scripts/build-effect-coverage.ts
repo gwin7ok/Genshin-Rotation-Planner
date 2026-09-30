@@ -126,7 +126,7 @@ for (const c of chars) {
     if (linkedTargets.has(id)) continue;
     const d = DEF_DECISIONS[a.id];
     const entry = table[a.id];
-    if (!c.source?.gcsimKey) unlinked.push({ side: 'target', id, reason: 'not-in-gcsim', note: 'gcsim にキャラが未登録' });
+    if (!c.source?.gcsimKey) unlinked.push({ side: 'target', id, reason: 'not-in-gcsim', note: d?.note ?? 'gcsim にキャラが未登録' });
     else if (d) unlinked.push({ side: 'target', id, reason: d.reason, note: d.note });
     else if (overrideSkipped.has(a.id)) unlinked.push({ side: 'target', id, reason: 'deferred', note: '手で補う一覧で「書き戻さない」と指定' });
     else if (entry?.status === 'unprobed') unlinked.push({ side: 'target', id, reason: 'unprobable', note: entry.reason });

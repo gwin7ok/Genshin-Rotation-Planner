@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
- "generatedAt": "2026-09-30T01:27:26.014Z",
+ "generatedAt": "2026-09-30T08:12:11.923Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -32,8 +32,7 @@
    "command": "skill",
    "status": "nokey",
    "via": "plain",
-   "keys": [],
-   "master": 5
+   "keys": []
   },
   "10000003-anemo_q": {
    "char": "ジン",
@@ -650,8 +649,7 @@
    "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
-   "keys": [],
-   "master": 18
+   "keys": []
   },
   "10000020-electro_q": {
    "char": "レザー",
@@ -1333,7 +1331,7 @@
      "events": 1,
      "casts": 1,
      "seconds": [
-      12
+      12.15
      ]
     }
    ],
@@ -1351,7 +1349,7 @@
      "events": 1,
      "casts": 1,
      "seconds": [
-      2.05
+      1.98
      ]
     }
    ],
@@ -1653,8 +1651,7 @@
    "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
-   "keys": [],
-   "master": 10
+   "keys": []
   },
   "10000053-anemo_e_shorthold": {
    "char": "早柚",
@@ -1859,8 +1856,7 @@
    "command": "skill",
    "status": "nokey",
    "via": "plain",
-   "keys": [],
-   "master": 60
+   "keys": []
   },
   "10000059-anemo_q": {
    "char": "鹿野院平蔵",
@@ -2997,8 +2993,7 @@
    "command": "skill",
    "status": "nokey",
    "via": "plain",
-   "keys": [],
-   "master": 300
+   "keys": []
   },
   "10000091-geo_q": {
    "char": "ナヴィア",
@@ -4003,23 +3998,35 @@
   "10000127-geo_e": {
    "char": "イルーガ",
    "command": "skill",
-   "status": "unprobed",
-   "keys": [],
-   "reason": "ln1:8: expecting ; at end of  statement, got char"
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
   },
   "10000127-geo_e_hold": {
    "char": "イルーガ",
    "command": "skill[hold=1]",
-   "status": "unprobed",
-   "keys": [],
-   "reason": "ln1:8: expecting ; at end of  statement, got char"
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
   },
   "10000127-geo_q": {
    "char": "イルーガ",
    "command": "burst",
-   "status": "unprobed",
-   "keys": [],
-   "reason": "ln1:8: expecting ; at end of  statement, got char"
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "haunted-night-oriole-song",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "haunted-night-oriole-song"
   },
   "10000128-anemo_e": {
    "char": "ファルカ",

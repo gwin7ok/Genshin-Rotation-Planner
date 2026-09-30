@@ -472,7 +472,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 6,
-        "effectDuration": 5,
+        "effectDuration": 0,
         "frames": {
           "total": 46,
           "hitmark": 21,
@@ -485,7 +485,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "最大継続時間",
+          "effectDuration": "効果時間なし: ジン: 5 秒は溜めの最大時間（動作の長さ）で、効果ではない",
           "cooldownStart": "manual: jean/skill.go: skillHitmark(21) - 2（hold=0）"
         },
         "defaultDuration": 0.767,
@@ -6438,7 +6438,7 @@
         "type": "skill_hold",
         "startsSkillCooldown": true,
         "cooldown": 10,
-        "effectDuration": 18,
+        "effectDuration": 0,
         "frames": {
           "total": 103,
           "cancels": {
@@ -6451,7 +6451,7 @@
         },
         "dataSource": {
           "cooldown": "長押しクールタイム",
-          "effectDuration": "雷の印の継続時間",
+          "effectDuration": "効果時間なし: レザー: 18 秒（雷の印）は短押しの効果。長押しは印を作らず消費する動作",
           "cooldownStart": "manual: razor/skill.go: skillHoldCDStarts[0]（爆発中も 52f）"
         },
         "defaultDuration": 1.717,
@@ -16144,7 +16144,7 @@
         "type": "skill_hold",
         "startsSkillCooldown": true,
         "cooldown": 6,
-        "effectDuration": 10,
+        "effectDuration": 0,
         "frames": {
           "total": 709,
           "cancels": {
@@ -16156,7 +16156,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム (2値目)",
-          "effectDuration": "長押し最大継続時間",
+          "effectDuration": "効果時間なし: 早柚: 10 秒は長押しの最大時間（動作の長さ）で、効果ではない",
           "cooldownStart": "manual: sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5"
         },
         "defaultDuration": 11.817,
@@ -17907,10 +17907,10 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 10,
-        "effectDuration": 60,
+        "effectDuration": 0,
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "変格継続時間",
+          "effectDuration": "効果時間なし: 鹿野院平蔵: 変格 60 秒はローテーション全体を覆う長さでバーにしない",
           "cooldownStart": "manual: heizou/skill.go: skillCDStart（一回押しは delay=0）"
         },
         "defaultDuration": 0.8,
@@ -27585,7 +27585,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 9,
-        "effectDuration": 300,
+        "effectDuration": 0,
         "frames": {
           "total": 40,
           "cancels": {
@@ -27599,7 +27599,7 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "裂晶の欠片の継続時間",
+          "effectDuration": "効果時間なし: ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない",
           "cooldownStart": "manual: navia/skill.go: skillPressCDStart（firingTime の既定値）"
         },
         "defaultDuration": 0.667,

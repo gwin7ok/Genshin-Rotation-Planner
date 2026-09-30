@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
- "generatedAt": "2026-09-30T01:27:27.089Z",
+ "generatedAt": "2026-09-30T08:12:14.389Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -38,7 +38,6 @@
   "10000003-anemo_e": {
    "char": "ジン",
    "type": "skill",
-   "master": 5,
    "candidates": []
   },
   "10000005-anemo_e": {
@@ -608,7 +607,6 @@
   "10000020-electro_e_hold": {
    "char": "レザー",
    "type": "skill_hold",
-   "master": 18,
    "candidates": []
   },
   "10000021-pyro_e": {
@@ -1132,13 +1130,13 @@
     {
      "source": "shield",
      "key": "shield:Xinyan Skill",
-     "seconds": 12
+     "seconds": 12.15
     }
    ],
    "match": {
     "source": "shield",
     "key": "shield:Xinyan Skill",
-    "seconds": 12
+    "seconds": 12.15
    }
   },
   "10000044-pyro_q": {
@@ -1150,14 +1148,14 @@
      "source": "damage",
      "key": "damage:Riff Revolution (DoT)",
      "mode": "expiry",
-     "seconds": 2.05
+     "seconds": 1.98
     }
    ],
    "match": {
     "source": "damage",
     "key": "damage:Riff Revolution (DoT)",
     "mode": "expiry",
-    "seconds": 2.05
+    "seconds": 1.98
    }
   },
   "10000045-cryo_e": {
@@ -1228,7 +1226,6 @@
   "10000053-anemo_e_hold": {
    "char": "早柚",
    "type": "skill_hold",
-   "master": 10,
    "candidates": []
   },
   "10000053-anemo_e_shorthold": {
@@ -1330,7 +1327,6 @@
   "10000059-anemo_e": {
    "char": "鹿野院平蔵",
    "type": "skill",
-   "master": 60,
    "candidates": []
   },
   "10000059-anemo_q": {
@@ -1816,7 +1812,6 @@
   "10000091-geo_e": {
    "char": "ナヴィア",
    "type": "skill",
-   "master": 300,
    "candidates": [
     {
      "source": "status",
@@ -2344,21 +2339,12 @@
   "10000127-geo_e": {
    "char": "イルーガ",
    "type": "skill",
-   "candidates": [],
-   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
+   "candidates": []
   },
   "10000127-geo_e_hold": {
    "char": "イルーガ",
    "type": "skill_hold",
-   "candidates": [],
-   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
-  },
-  "10000127-geo_q": {
-   "char": "イルーガ",
-   "type": "burst",
-   "master": 20,
-   "candidates": [],
-   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
+   "candidates": []
   },
   "10000128-anemo_q": {
    "char": "ファルカ",

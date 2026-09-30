@@ -32,11 +32,7 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
     { key: 'shenhe-burst-shred-cryo', label: '氷元素耐性ダウン（敵）', mode: 'chain' },
     { key: 'shenhe-burst-shred-phys', label: '物理耐性ダウン（敵）', mode: 'chain' },
   ],
-  // エウルアのスキル: 氷潮の渦の命中で敵に付く氷・物理の耐性ダウン
-  '10000051-cryo_e': [
-    { key: 'eula-icewhirl-shred-cryo', label: '氷元素耐性ダウン（敵）', mode: 'chain' },
-    { key: 'eula-icewhirl-shred-phys', label: '物理耐性ダウン（敵）', mode: 'chain' },
-  ],
+  // エウルアの長押し: 氷潮の渦の命中で敵に付く氷・物理の耐性ダウン（グリムハートのスタックがあるときだけ。gcsim の eula/skill.go では長押しのみ。短押しには付かない）
   '10000051-cryo_e_hold': [
     { key: 'eula-icewhirl-shred-cryo', label: '氷元素耐性ダウン（敵）', mode: 'chain' },
     { key: 'eula-icewhirl-shred-phys', label: '物理耐性ダウン（敵）', mode: 'chain' },

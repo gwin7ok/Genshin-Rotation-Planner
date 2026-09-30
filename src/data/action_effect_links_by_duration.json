@@ -1,0 +1,2374 @@
+{
+ "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+ "generatedAt": "2026-09-30T01:27:27.089Z",
+ "entries": {
+  "10000002-cryo_e": {
+   "char": "神里綾華",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "ayaka-a1",
+     "mode": "expiry",
+     "seconds": 6,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000002-cryo_q": {
+   "char": "神里綾華",
+   "type": "burst",
+   "master": 5,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Soumetsu (Cutting)",
+     "mode": "expiry",
+     "seconds": 4.75
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Soumetsu (Cutting)",
+    "mode": "expiry",
+    "seconds": 4.75
+   }
+  },
+  "10000003-anemo_e": {
+   "char": "ジン",
+   "type": "skill",
+   "master": 5,
+   "candidates": []
+  },
+  "10000005-anemo_e": {
+   "char": "空(風)",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000005-anemo_e_hold": {
+   "char": "空(風)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Palm Vortex Max Cutting (Hold)",
+     "mode": "expiry",
+     "seconds": 1
+    }
+   ]
+  },
+  "10000005-cryo_q": {
+   "char": "空(氷)",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Frostbound Javelin",
+     "mode": "expiry",
+     "seconds": 1.18
+    }
+   ]
+  },
+  "10000005-dendro_e": {
+   "char": "空(草)",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000005-dendro_q": {
+   "char": "空(草)",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerdendro-q",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "dmc-a1",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "dmc-a1",
+     "mode": "span",
+     "seconds": 11.7,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Lea Lotus Lamp",
+     "mode": "expiry",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "travelerdendro-q",
+    "mode": "expiry",
+    "seconds": 12,
+    "category": "character",
+    "kind": "effect"
+   }
+  },
+  "10000005-geo_e": {
+   "char": "空(岩)",
+   "type": "skill",
+   "master": 30,
+   "candidates": [
+    {
+     "source": "construct",
+     "key": "construct:TravellerSkill",
+     "seconds": 30
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:TravellerSkill",
+    "seconds": 30
+   }
+  },
+  "10000005-geo_q": {
+   "char": "空(岩)",
+   "type": "burst",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Wake of Earth",
+     "mode": "expiry",
+     "seconds": 1
+    },
+    {
+     "source": "construct",
+     "key": "construct:TravellerBurst",
+     "seconds": 15
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:TravellerBurst",
+    "seconds": 15
+   }
+  },
+  "10000005-hydro_e": {
+   "char": "空(水)",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000005-hydro_e_shorthold0ticks": {
+   "char": "空(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000005-hydro_e_shorthold": {
+   "char": "空(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000005-hydro_e_hold": {
+   "char": "空(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000005-hydro_q": {
+   "char": "空(水)",
+   "type": "burst",
+   "master": 4,
+   "candidates": []
+  },
+  "10000005-pyro_e": {
+   "char": "空(炎)",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Blazing Threshold DMG",
+     "mode": "expiry",
+     "seconds": 6.6
+    }
+   ]
+  },
+  "10000005-pyro_q": {
+   "char": "空(炎)",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000006-electro_e": {
+   "char": "リサ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000006-electro_e_hold": {
+   "char": "リサ",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000007-anemo_e": {
+   "char": "蛍(風)",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000007-anemo_e_hold": {
+   "char": "蛍(風)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Palm Vortex Max Cutting (Hold)",
+     "mode": "expiry",
+     "seconds": 1
+    }
+   ]
+  },
+  "10000007-cryo_q": {
+   "char": "蛍(氷)",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Frostbound Javelin",
+     "mode": "expiry",
+     "seconds": 1.18
+    }
+   ]
+  },
+  "10000007-dendro_e": {
+   "char": "蛍(草)",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000007-dendro_q": {
+   "char": "蛍(草)",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerdendro-q",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "dmc-a1",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "dmc-a1",
+     "mode": "span",
+     "seconds": 11.7,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Lea Lotus Lamp",
+     "mode": "expiry",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "travelerdendro-q",
+    "mode": "expiry",
+    "seconds": 12,
+    "category": "character",
+    "kind": "effect"
+   }
+  },
+  "10000007-geo_e": {
+   "char": "蛍(岩)",
+   "type": "skill",
+   "master": 30,
+   "candidates": [
+    {
+     "source": "construct",
+     "key": "construct:TravellerSkill",
+     "seconds": 30
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:TravellerSkill",
+    "seconds": 30
+   }
+  },
+  "10000007-geo_q": {
+   "char": "蛍(岩)",
+   "type": "burst",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Wake of Earth",
+     "mode": "expiry",
+     "seconds": 1
+    },
+    {
+     "source": "construct",
+     "key": "construct:TravellerBurst",
+     "seconds": 15
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:TravellerBurst",
+    "seconds": 15
+   }
+  },
+  "10000007-hydro_e": {
+   "char": "蛍(水)",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000007-hydro_e_shorthold0ticks": {
+   "char": "蛍(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000007-hydro_e_shorthold": {
+   "char": "蛍(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000007-hydro_e_hold": {
+   "char": "蛍(水)",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "travelerhydro-spiritbreath-icd",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "sourcewater-droplet-icd",
+     "mode": "span",
+     "seconds": 3.75,
+     "category": "talent",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Dewdrop (Hold)",
+     "mode": "expiry",
+     "seconds": 5.5
+    }
+   ]
+  },
+  "10000007-hydro_q": {
+   "char": "蛍(水)",
+   "type": "burst",
+   "master": 4,
+   "candidates": []
+  },
+  "10000007-pyro_e": {
+   "char": "蛍(炎)",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Blazing Threshold DMG",
+     "mode": "expiry",
+     "seconds": 6.6
+    }
+   ]
+  },
+  "10000007-pyro_q": {
+   "char": "蛍(炎)",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000014-hydro_q": {
+   "char": "バーバラ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000015-cryo_e": {
+   "char": "ガイア",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000020-electro_e_hold": {
+   "char": "レザー",
+   "type": "skill_hold",
+   "master": 18,
+   "candidates": []
+  },
+  "10000021-pyro_e": {
+   "char": "アンバー",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000021-pyro_q": {
+   "char": "アンバー",
+   "type": "burst",
+   "master": 2,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Fiery Rain",
+     "mode": "expiry",
+     "seconds": 2
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Fiery Rain",
+    "mode": "expiry",
+    "seconds": 2
+   }
+  },
+  "10000022-anemo_e": {
+   "char": "ウェンティ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000022-anemo_e_hold": {
+   "char": "ウェンティ",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000022-anemo_q": {
+   "char": "ウェンティ",
+   "type": "burst",
+   "master": 8,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Wind's Grand Ode",
+     "mode": "expiry",
+     "seconds": 8
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Wind's Grand Ode",
+    "mode": "expiry",
+    "seconds": 8
+   }
+  },
+  "10000024-electro_e": {
+   "char": "北斗",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Tidecaller (Shield)",
+     "seconds": 0.38
+    }
+   ]
+  },
+  "10000025-hydro_e": {
+   "char": "行秋",
+   "type": "skill",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "xingqiu-orbital",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "xingqiu-orbital",
+     "mode": "span",
+     "seconds": 0.6,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Xingqiu Orbital",
+     "mode": "expiry",
+     "seconds": 15.75
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "xingqiu-orbital",
+    "mode": "expiry",
+    "seconds": 15,
+    "category": "character",
+    "kind": "effect"
+   }
+  },
+  "10000026-anemo_e": {
+   "char": "魈",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "xiao-a4",
+     "mode": "expiry",
+     "seconds": 7,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000027-geo_e": {
+   "char": "凝光",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "construct",
+     "key": "construct:NingSkill",
+     "seconds": 30
+    }
+   ]
+  },
+  "10000027-geo_q": {
+   "char": "凝光",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Starshatter",
+     "mode": "expiry",
+     "seconds": 1.17
+    }
+   ]
+  },
+  "10000029-pyro_e": {
+   "char": "クレー",
+   "type": "skill",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "a1-spark",
+     "mode": "expiry",
+     "seconds": 30,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000030-geo_e": {
+   "char": "鍾離",
+   "type": "skill",
+   "master": 20,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Stone Stele (Tick)",
+     "mode": "expiry",
+     "seconds": 14
+    },
+    {
+     "source": "construct",
+     "key": "construct:ZhongliSkill",
+     "seconds": 31
+    }
+   ]
+  },
+  "10000030-geo_e_hold": {
+   "char": "鍾離",
+   "type": "skill_hold",
+   "master": 20,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "zhongli-pyro",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-pyro",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-hydro",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-hydro",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-cryo",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-cryo",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-electro",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-electro",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-geo",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-geo",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-anemo",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-anemo",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-physical",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-physical",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-dendro",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "zhongli-dendro",
+     "mode": "span",
+     "seconds": 19.8,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Stone Stele (Tick)",
+     "mode": "expiry",
+     "seconds": 14
+    },
+    {
+     "source": "construct",
+     "key": "construct:ZhongliSkill",
+     "seconds": 31
+    },
+    {
+     "source": "shield",
+     "key": "shield:Zhongli Skill",
+     "seconds": 20
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Zhongli Skill",
+    "seconds": 20
+   }
+  },
+  "10000030-geo_q": {
+   "char": "鍾離",
+   "type": "burst",
+   "master": 3.1,
+   "candidates": []
+  },
+  "10000032-pyro_e": {
+   "char": "ベネット",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000032-pyro_e_hold": {
+   "char": "ベネット",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000033-hydro_q": {
+   "char": "タルタリヤ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "riptide",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "character",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000034-geo_e": {
+   "char": "ノエル",
+   "type": "skill",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Noelle Skill",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Noelle Skill",
+    "seconds": 12
+   }
+  },
+  "10000035-cryo_q": {
+   "char": "七七",
+   "type": "burst",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "qiqi-talisman",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "qiqi-talisman",
+    "mode": "expiry",
+    "seconds": 15,
+    "category": "talent",
+    "kind": "effect"
+   }
+  },
+  "10000036-cryo_q": {
+   "char": "重雲",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Spirit Blade: Cloud-Parting Star",
+     "mode": "expiry",
+     "seconds": 0.43
+    }
+   ]
+  },
+  "10000037-cryo_e": {
+   "char": "甘雨",
+   "type": "skill",
+   "master": 6,
+   "candidates": []
+  },
+  "10000038-geo_e": {
+   "char": "アルベド",
+   "type": "skill",
+   "master": 30,
+   "candidates": [
+    {
+     "source": "construct",
+     "key": "construct:AlbedoSkill",
+     "seconds": 30
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:AlbedoSkill",
+    "seconds": 30
+   }
+  },
+  "10000038-geo_q": {
+   "char": "アルベド",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "albedo-a4",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000039-cryo_e": {
+   "char": "ディオナ",
+   "type": "skill",
+   "master": 1.8,
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Icy Paws (Shield)",
+     "seconds": 4.8
+    }
+   ]
+  },
+  "10000039-cryo_e_hold": {
+   "char": "ディオナ",
+   "type": "skill_hold",
+   "master": 1.8,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Icy Paw",
+     "mode": "expiry",
+     "seconds": 0.08
+    },
+    {
+     "source": "shield",
+     "key": "shield:Icy Paws (Shield)",
+     "seconds": 12
+    }
+   ]
+  },
+  "10000041-hydro_e": {
+   "char": "モナ",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Mirror Reflection of Doom (Tick)",
+     "mode": "expiry",
+     "seconds": 3.93
+    }
+   ]
+  },
+  "10000042-electro_q": {
+   "char": "刻晴",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "keqing-a4",
+     "mode": "expiry",
+     "seconds": 8,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Starward Sword (Consecutive Slash)",
+     "mode": "expiry",
+     "seconds": 1.47
+    }
+   ]
+  },
+  "10000043-anemo_e": {
+   "char": "スクロース",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000044-pyro_e": {
+   "char": "辛炎",
+   "type": "skill",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Xinyan Skill",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Xinyan Skill",
+    "seconds": 12
+   }
+  },
+  "10000044-pyro_q": {
+   "char": "辛炎",
+   "type": "burst",
+   "master": 2,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Riff Revolution (DoT)",
+     "mode": "expiry",
+     "seconds": 2.05
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Riff Revolution (DoT)",
+    "mode": "expiry",
+    "seconds": 2.05
+   }
+  },
+  "10000045-cryo_e": {
+   "char": "ロサリア",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "rosaria-a1",
+     "mode": "expiry",
+     "seconds": 5,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000046-pyro_q": {
+   "char": "胡桃",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000047-anemo_e": {
+   "char": "楓原万葉",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000047-anemo_e_hold": {
+   "char": "楓原万葉",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000050-pyro_e": {
+   "char": "トーマ",
+   "type": "skill",
+   "master": 8,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "thoma-a1",
+     "mode": "expiry",
+     "seconds": 6,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "shield",
+     "key": "shield:Thoma Skill",
+     "seconds": 8
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Thoma Skill",
+    "seconds": 8
+   }
+  },
+  "10000051-cryo_e_hold": {
+   "char": "エウルア",
+   "type": "skill_hold",
+   "master": 18,
+   "candidates": []
+  },
+  "10000053-anemo_e": {
+   "char": "早柚",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000053-anemo_e_hold": {
+   "char": "早柚",
+   "type": "skill_hold",
+   "master": 10,
+   "candidates": []
+  },
+  "10000053-anemo_e_shorthold": {
+   "char": "早柚",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000053-anemo_q": {
+   "char": "早柚",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Muji-Muji Daruma",
+     "mode": "expiry",
+     "seconds": 9
+    }
+   ]
+  },
+  "10000054-hydro_e": {
+   "char": "珊瑚宮心海",
+   "type": "skill",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "kokomiskill",
+     "mode": "expiry",
+     "seconds": 12.52,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Bake-Kurage",
+     "mode": "expiry",
+     "seconds": 14.1
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "kokomiskill",
+    "mode": "expiry",
+    "seconds": 12.52,
+    "category": "talent",
+    "kind": "effect"
+   }
+  },
+  "10000057-geo_e": {
+   "char": "荒瀧一斗",
+   "type": "skill",
+   "master": 6,
+   "candidates": [
+    {
+     "source": "construct",
+     "key": "construct:IttoSkill",
+     "seconds": 6
+    }
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:IttoSkill",
+    "seconds": 6
+   }
+  },
+  "10000058-electro_e": {
+   "char": "八重神子",
+   "type": "skill",
+   "master": 14,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "yae_oldest_totem_expiry",
+     "mode": "expiry",
+     "seconds": 24.43,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Sesshou Sakura Tick",
+     "mode": "expiry",
+     "seconds": 14.67
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Sesshou Sakura Tick",
+    "mode": "expiry",
+    "seconds": 14.67
+   }
+  },
+  "10000058-electro_q": {
+   "char": "八重神子",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000059-anemo_e": {
+   "char": "鹿野院平蔵",
+   "type": "skill",
+   "master": 60,
+   "candidates": []
+  },
+  "10000059-anemo_q": {
+   "char": "鹿野院平蔵",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000060-hydro_e": {
+   "char": "夜蘭",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000061-dendro_e": {
+   "char": "綺良々",
+   "type": "skill",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Shield of Safe Transport",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Shield of Safe Transport",
+    "seconds": 12
+   }
+  },
+  "10000061-dendro_e_hold": {
+   "char": "綺良々",
+   "type": "skill_hold",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Shield of Safe Transport",
+     "seconds": 12.02
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Shield of Safe Transport",
+    "seconds": 12.02
+   }
+  },
+  "10000061-dendro_e_shorthold": {
+   "char": "綺良々",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Shield of Safe Transport",
+     "seconds": 12.2
+    }
+   ]
+  },
+  "10000062-cryo_q": {
+   "char": "アーロイ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000064-geo_e": {
+   "char": "雲菫",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Opening Flourish (Shield)",
+     "seconds": 0.22
+    }
+   ]
+  },
+  "10000065-electro_q": {
+   "char": "久岐忍",
+   "type": "burst",
+   "master": 2,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Gyoei Narukami Kariyama Rite",
+     "mode": "expiry",
+     "seconds": 1.98
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Gyoei Narukami Kariyama Rite",
+    "mode": "expiry",
+    "seconds": 1.98
+   }
+  },
+  "10000066-hydro_q": {
+   "char": "神里綾人",
+   "type": "burst",
+   "master": 18,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "ayato-burst-mark",
+     "mode": "expiry",
+     "seconds": 1.45,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "ayato-burst-mark",
+     "mode": "span",
+     "seconds": 16.5,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "ayato-burst",
+     "mode": "expiry",
+     "seconds": 1.5,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "ayato-burst",
+     "mode": "span",
+     "seconds": 17.5,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Kamisato Art: Suiyuu",
+     "mode": "expiry",
+     "seconds": 13.5
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "ayato-burst",
+    "mode": "span",
+    "seconds": 17.5,
+    "category": "burst",
+    "kind": "effect"
+   }
+  },
+  "10000068-electro_e": {
+   "char": "ドリー",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000068-electro_q": {
+   "char": "ドリー",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Alcazarzaray's Exactitude: Connector DMG",
+     "mode": "expiry",
+     "seconds": 12.8
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Alcazarzaray's Exactitude: Connector DMG",
+    "mode": "expiry",
+    "seconds": 12.8
+   }
+  },
+  "10000069-dendro_q": {
+   "char": "ティナリ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Tanglevine Shaft",
+     "mode": "expiry",
+     "seconds": 0.32
+    },
+    {
+     "source": "damage",
+     "key": "damage:Secondary Tanglevine Shaft",
+     "mode": "expiry",
+     "seconds": 0.57
+    }
+   ]
+  },
+  "10000071-electro_e": {
+   "char": "セノ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000072-hydro_e": {
+   "char": "キャンディス",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Sacred Rite: Heron's Sanctum (Shield)",
+     "seconds": 0.27
+    }
+   ]
+  },
+  "10000072-hydro_e_hold": {
+   "char": "キャンディス",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Sacred Rite: Heron's Sanctum (Shield)",
+     "seconds": 1.52
+    }
+   ]
+  },
+  "10000074-cryo_e": {
+   "char": "レイラ",
+   "type": "skill",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Shooting Star",
+     "mode": "expiry",
+     "seconds": 1.65
+    },
+    {
+     "source": "shield",
+     "key": "shield:Curtain of Slumber (Shield)",
+     "seconds": 12
+    }
+   ],
+   "match": {
+    "source": "shield",
+    "key": "shield:Curtain of Slumber (Shield)",
+    "seconds": 12
+   }
+  },
+  "10000075-anemo_q": {
+   "char": "放浪者",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Kyougen: Five Ceremonial Plays",
+     "mode": "expiry",
+     "seconds": 0.5
+    }
+   ]
+  },
+  "10000076-anemo_q": {
+   "char": "ファルザン",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "faruzan-q-dmg-bonus",
+     "mode": "expiry",
+     "seconds": 4,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "faruzan-q-dmg-bonus",
+     "mode": "span",
+     "seconds": 12.42,
+     "category": "burst",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "faruzan-q-shred",
+     "mode": "expiry",
+     "seconds": 4,
+     "category": "burst",
+     "kind": "effect"
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "faruzan-q-dmg-bonus",
+    "mode": "span",
+    "seconds": 12.42,
+    "category": "burst",
+    "kind": "effect"
+   }
+  },
+  "10000078-dendro_e": {
+   "char": "アルハイゼン",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000078-dendro_e_hold": {
+   "char": "アルハイゼン",
+   "type": "skill_hold",
+   "candidates": []
+  },
+  "10000078-dendro_q": {
+   "char": "アルハイゼン",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Particular Field: Fetters of Phenomena",
+     "mode": "expiry",
+     "seconds": 1.4
+    }
+   ]
+  },
+  "10000081-dendro_e": {
+   "char": "カーヴェ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000082-dendro_e": {
+   "char": "白朮",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Universal Diagnosis",
+     "mode": "expiry",
+     "seconds": 2.4
+    }
+   ]
+  },
+  "10000082-dendro_q": {
+   "char": "白朮",
+   "type": "burst",
+   "master": 2.5,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "baizhu-a4",
+     "mode": "expiry",
+     "seconds": 6,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "baizhu-a4",
+     "mode": "span",
+     "seconds": 12.27,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Spiritvein Damage",
+     "mode": "expiry",
+     "seconds": 12.17
+    },
+    {
+     "source": "shield",
+     "key": "shield:Baizhu Seamless shield",
+     "seconds": 14.63
+    }
+   ]
+  },
+  "10000083-anemo_e": {
+   "char": "リネット",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "lynette-aligned-icd",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000083-anemo_q": {
+   "char": "リネット",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "lynette-a1",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "lynette-q",
+     "mode": "expiry",
+     "seconds": 12.57,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Bogglecat Box",
+     "mode": "expiry",
+     "seconds": 10.82
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "lynette-q",
+    "mode": "expiry",
+    "seconds": 12.57,
+    "category": "character",
+    "kind": "effect"
+   }
+  },
+  "10000084-pyro_e": {
+   "char": "リネ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000086-cryo_q": {
+   "char": "リオセスリ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "wriothesley-ousia-icd",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "burst",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Darkgold Wolfbite",
+     "mode": "expiry",
+     "seconds": 0.42
+    }
+   ]
+  },
+  "10000087-hydro_e": {
+   "char": "ヌヴィレット",
+   "type": "skill",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "neuvillette-aligned-icd",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000087-hydro_q": {
+   "char": "ヌヴィレット",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000088-cryo_q": {
+   "char": "シャルロット",
+   "type": "burst",
+   "master": 4,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Still Photo: Kamera",
+     "mode": "expiry",
+     "seconds": 2.95
+    }
+   ]
+  },
+  "10000090-pyro_q": {
+   "char": "シュヴルーズ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Secondary Explosive Shell",
+     "mode": "expiry",
+     "seconds": 0.75
+    }
+   ]
+  },
+  "10000091-geo_e": {
+   "char": "ナヴィア",
+   "type": "skill",
+   "master": 300,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "navia-a1-dmg",
+     "mode": "expiry",
+     "seconds": 4,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "navia-arkhe-icd",
+     "mode": "expiry",
+     "seconds": 7,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000092-pyro_e": {
+   "char": "嘉明",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000094-geo_e": {
+   "char": "千織",
+   "type": "skill",
+   "master": 17,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "chiori-a1-window",
+     "mode": "expiry",
+     "seconds": 1.3,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000094-geo_q": {
+   "char": "千織",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000095-hydro_q": {
+   "char": "シグウィン",
+   "type": "burst",
+   "master": 2.5,
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Super Saturated Syringing",
+     "mode": "expiry",
+     "seconds": 2.5
+    }
+   ],
+   "match": {
+    "source": "damage",
+    "key": "damage:Super Saturated Syringing",
+    "mode": "expiry",
+    "seconds": 2.5
+   }
+  },
+  "10000096-pyro_q": {
+   "char": "アルレッキーノ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000097-electro_e": {
+   "char": "セトス",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000098-electro_q": {
+   "char": "クロリンデ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Last Lightfall",
+     "mode": "expiry",
+     "seconds": 0.5
+    }
+   ]
+  },
+  "10000101-dendro_e": {
+   "char": "キィニチ",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 10.17,
+     "category": "template",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000102-hydro_q": {
+   "char": "ムアラニ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000103-geo_e": {
+   "char": "シロネン",
+   "type": "skill",
+   "master": 15,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "xilonen-e-recast-cd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "skill",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 9,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "xilonen-e-shred-geo",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "skill",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "xilonen-e-shred-geo",
+     "mode": "span",
+     "seconds": 8.7,
+     "category": "skill",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "xilonen-a4",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "xilonen-a4",
+    "mode": "expiry",
+    "seconds": 15,
+    "category": "talent",
+    "kind": "effect"
+   }
+  },
+  "10000103-geo_q": {
+   "char": "シロネン",
+   "type": "burst",
+   "master": 12,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "xilonen-a4",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000104-anemo_e": {
+   "char": "チャスカ",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "ended",
+     "seconds": 10,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "chasca-plunge-available",
+     "mode": "expiry",
+     "seconds": 0.43,
+     "category": "burst",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000105-electro_e": {
+   "char": "オロルン",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "ororon-a1",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "ororon-a4",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000106-pyro_e": {
+   "char": "マーヴィカ",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "ended",
+     "seconds": 12.4,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "mavuika-a1",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    },
+    {
+     "source": "damage",
+     "key": "damage:Rings of Searing Radiance",
+     "mode": "expiry",
+     "seconds": 12
+    }
+   ]
+  },
+  "10000106-pyro_e_hold": {
+   "char": "マーヴィカ",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "ended",
+     "seconds": 8.9,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "mavuika-a1",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    },
+    {
+     "source": "status",
+     "key": "mavuika-skill-recast-cd",
+     "mode": "expiry",
+     "seconds": 1,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000106-pyro_e_recastframestobike": {
+   "char": "マーヴィカ",
+   "type": "skill",
+   "candidates": [],
+   "note": "実行エラー: error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+  },
+  "10000106-pyro_e_recastframestoring": {
+   "char": "マーヴィカ",
+   "type": "skill",
+   "candidates": [],
+   "note": "実行エラー: error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+  },
+  "10000107-cryo_q": {
+   "char": "シトラリ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000108-anemo_q": {
+   "char": "藍硯",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Lustrous Moonrise",
+     "mode": "expiry",
+     "seconds": 0.62
+    }
+   ]
+  },
+  "10000111-electro_q": {
+   "char": "ヴァレサ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000112-cryo_e_hold": {
+   "char": "エスコフィエ",
+   "type": "skill_hold",
+   "master": 20,
+   "candidates": [],
+   "note": "実行エラー: ln7: character escoffier: key hold is invalid for action skill"
+  },
+  "10000112-cryo_q": {
+   "char": "エスコフィエ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "escoffier-a1",
+     "mode": "expiry",
+     "seconds": 10.42,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "escoffier-a4-shred-cryo",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "escoffier-a4-shred-hydro",
+     "mode": "expiry",
+     "seconds": 12,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000113-anemo_e": {
+   "char": "イファ",
+   "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "ended",
+     "seconds": 9.97,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "ifa-plunge-available",
+     "mode": "expiry",
+     "seconds": 0.43,
+     "category": "skill",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000113-anemo_q": {
+   "char": "イファ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "ifa-a4",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
+  "10000114-cryo_e": {
+   "char": "スカーク",
+   "type": "skill",
+   "master": 12.5,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "seven-phase-flash",
+     "mode": "expiry",
+     "seconds": 12.57,
+     "category": "skill",
+     "kind": "effect"
+    }
+   ],
+   "match": {
+    "source": "status",
+    "key": "seven-phase-flash",
+    "mode": "expiry",
+    "seconds": 12.57,
+    "category": "skill",
+    "kind": "effect"
+   }
+  },
+  "10000114-cryo_q": {
+   "char": "スカーク",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Havoc: Ruin (DoT)",
+     "mode": "expiry",
+     "seconds": 0.6
+    }
+   ]
+  },
+  "10000115-hydro_e": {
+   "char": "ダリア",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000120-electro_q": {
+   "char": "フリンズ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000121-hydro_e": {
+   "char": "アイノ",
+   "type": "skill",
+   "candidates": []
+  },
+  "10000127-geo_e": {
+   "char": "イルーガ",
+   "type": "skill",
+   "candidates": [],
+   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000127-geo_e_hold": {
+   "char": "イルーガ",
+   "type": "skill_hold",
+   "candidates": [],
+   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000127-geo_q": {
+   "char": "イルーガ",
+   "type": "burst",
+   "master": 20,
+   "candidates": [],
+   "note": "実行エラー: ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000128-anemo_q": {
+   "char": "ファルカ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000132-anemo_e": {
+   "char": "プルーネ",
+   "type": "skill",
+   "candidates": []
+  }
+ }
+}

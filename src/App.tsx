@@ -512,7 +512,7 @@ export default function App() {
         ctIssues={ctViolationIssues}
         onCtWaits={setGcsimCtWaits}
         stints={visibleStints}
-        calculatedStints={calculatedResult.calculatedStints}
+        calculated={calculatedResult}
         onApplyStints={updateStints}
       />
 

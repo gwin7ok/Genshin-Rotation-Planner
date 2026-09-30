@@ -1179,8 +1179,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const stintBuffs = activeBuffs.filter(b => 
                     b.origin !== 'passive' && // 発動バフは専用の行に表示
                     b.sourceCharacterId === char.id && 
-                    b.startTime >= (stint.startTime ?? 0) - 0.2 && 
-                    b.startTime <= (stint.endTime ?? 0) + 0.2
+                    (b.ownerStintId
+                      // 副次効果は、出場の終わりより後に始まっても、そのアクションの出場ブロックの行に出す
+                      ? b.ownerStintId === stint.id
+                      : b.startTime >= (stint.startTime ?? 0) - 0.2 && b.startTime <= (stint.endTime ?? 0) + 0.2)
                   );
 
                   // 左のキャラカードには、そのアクション本来のCT（持ち越しバーの残りCTではなく、元のCTの長さ）を表示する

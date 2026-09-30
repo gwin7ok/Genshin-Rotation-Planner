@@ -338,7 +338,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
     const nextStints = [...stints];
     const nextActions = [...targetStint.actions];
-    nextActions[actionIndex] = { ...act, duration: newDuration, durationManual: true };
+    // 所要時間の編集はホールド秒数の編集になりうるので、gcsim から書き戻したCT開始位置は消して計算値に戻す（D37-2）
+    const { gcsimCtOffset: _dropped, ...actWithoutCtOffset } = act;
+    nextActions[actionIndex] = { ...actWithoutCtOffset, duration: newDuration, durationManual: true };
     nextStints[stintIndex] = { ...targetStint, actions: nextActions };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };

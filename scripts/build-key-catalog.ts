@@ -60,6 +60,42 @@ const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t =
 console.log('genshin-db から名前を取得中...');
 const naming = assignNames(catalog.entries, await loadNameSources());
 
+// 前回の辞書との差分（増えたキー・消えたキー）を報告する。増えたキーは、スキル・爆発の効果の対応表（npm run check:effectkeys）で
+// 「未検討」として現れ、検討する範囲になる。消えたキー（gcsim の更新での改名・削除）は、紐づけが孤立するので手で直す
+{
+  const previous: Array<{ key: string; category?: string; kind?: string; owner?: { gcsimKey?: string } }> =
+    fs.existsSync(outputPath) ? JSON.parse(fs.readFileSync(outputPath, 'utf-8')).entries ?? [] : [];
+  const oldKeys = new Map(previous.map(e => [e.key, e]));
+  const newKeys = new Map(catalog.entries.map(e => [e.key, e]));
+  const added = catalog.entries.filter(e => !oldKeys.has(e.key));
+  const removed = previous.filter(e => !newKeys.has(e.key));
+  const inScope = (e: { category?: string; kind?: string }) => e.kind === 'effect' && ['skill', 'burst', 'character', 'attack'].includes(e.category ?? '');
+  const fmt = (e: { key: string; category?: string; kind?: string; owner?: { gcsimKey?: string } }) => `- \`${e.key}\` [${e.category}/${e.kind}] ${e.owner?.gcsimKey ?? ''}`;
+  const diffPath = path.join(process.cwd(), 'docs/gcsim-integration/phase-6-run-and-apply/catalog-diff.md');
+  fs.writeFileSync(diffPath, [
+    '# gcsim キーの辞書の差分（前回の作成との比較）',
+    '',
+    `作成: ${new Date().toISOString().slice(0, 10)} / gcsim commit ${tree.sha.slice(0, 7)}`,
+    '',
+    `増えたキー ${added.length} 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: ${added.filter(inScope).length} 件）/ 消えたキー ${removed.length} 件（うち対象 ${removed.filter(inScope).length} 件）`,
+    '',
+    '## 増えたキー（対象のもの）',
+    ...(added.filter(inScope).length ? added.filter(inScope).map(fmt) : ['なし']),
+    '',
+    '## 消えたキー（対象のもの。紐づけ・決定が残っていれば孤立する）',
+    ...(removed.filter(inScope).length ? removed.filter(inScope).map(fmt) : ['なし']),
+    '',
+    '## 増えたキー（その他）',
+    ...(added.filter(e => !inScope(e)).length ? added.filter(e => !inScope(e)).map(fmt) : ['なし']),
+    '',
+    '## 消えたキー（その他）',
+    ...(removed.filter(e => !inScope(e)).length ? removed.filter(e => !inScope(e)).map(fmt) : ['なし']),
+    '',
+  ].join('
+'));
+  console.log(`辞書の差分: 増えたキー ${added.length} 件（対象 ${added.filter(inScope).length}）/ 消えたキー ${removed.length} 件（対象 ${removed.filter(inScope).length}）→ ${path.relative(process.cwd(), diffPath)}`);
+}
+
 // 1 キー 1 行（差分が読みやすく、ファイルが大きくなりすぎないように）
 const lines = catalog.entries.map(e => '    ' + JSON.stringify(e));
 fs.writeFileSync(

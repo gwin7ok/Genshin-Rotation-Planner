@@ -95,6 +95,17 @@ export interface CharacterActionInstance {
   cooldown?: number;
   /** このアクションの効果継続時間 (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の effectDuration を使う */
   effectDuration?: number;
+  /**
+   * gcsim の結果から書き戻した、CTの開始位置（アクションの開始からの秒数。D37）。ユーザーは編集できない。
+   * あればマスターの CT開始位置（cooldownStart）とホールド秒数からの計算値より優先する。
+   * 所要時間を手で編集したとき（ホールド秒数の編集）は消して、計算値に戻す
+   */
+  gcsimCtOffset?: number;
+  /**
+   * gcsim の結果から書き戻した、このアクションに付随する副次効果のバー（例: ファルザンの爆発の「祈風の恵み」「詭風の禍つ」。各4秒で繰り返し発生）。
+   * offset = アクションの開始からの秒数。ユーザーは編集できない（gcsim の計算を再実行すると作り直す）
+   */
+  extraEffects?: { key: string; name: string; offset: number; duration: number }[];
   /** このアクションの終了後、次のアクション（出場の最後なら次の交代）を遅らせる秒数。未設定は既定値 0.10 秒 */
   delayAfter?: number;
   note?: string;
@@ -328,6 +339,8 @@ export interface ActiveBuffSpan {
   color: string;
   description: string;
   isSnapshot?: boolean;
+  /** 出場ブロックの ID。あれば、その出場ブロックの行に表示する（副次効果のように、出場の終わりより後に始まるバー用） */
+  ownerStintId?: string;
   /** 'passive' = 発動バフ（固有天賦）。ガントチャートでは専用の行に表示する */
   origin?: 'action' | 'passive';
   /** 2周目折り返し持ち越しフラグ */

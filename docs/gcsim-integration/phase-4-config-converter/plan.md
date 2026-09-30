@@ -61,7 +61,7 @@ while 1 {
 | `charged` | `charge`（弓の狙い撃ちは `aim`） |
 | `plunge_low` / `plunge_high`（フェーズ3f） | `low_plunge` / `high_plunge`（gcsim は空中状態などの前提条件があり、実行できない場合がある） |
 | `skill` | `skill` |
-| `skill_hold` | `skill[hold=1]`（多段階の長押しはキャラごとの指定が必要） |
+| `skill_hold` | `skill[hold=1]`（多段階の長押しはキャラごとの指定が必要）。**早柚・綺良々は長押しの長さを `hold=<フレーム数>`（上限 600）で渡す**（2026-09-30 D59。アプリ上の所要時間から逆算した holdSeconds。`applyHoldSeconds`） |
 | `skill_reset` | `skill`（リセットの成否は gcsim の乱数。D7 の種の探索はフェーズ6） |
 | `burst` | `burst` |
 | `dash` / `jump` | `dash` / `jump` |

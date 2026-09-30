@@ -6,7 +6,10 @@ import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog'
 import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
 import { mapCtWaitsToActions, type CtWaitMarks } from '../utils/gcsim/mapCtWaits';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
-import { alignActions, applyActionDurations, type AlignResult } from '../utils/gcsim/applyGcsimResult';
+import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult, type ActionEffectKeyTable } from '../utils/gcsim/applyGcsimResult';
+import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
+import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
+import type { CalculatedRotation } from '../utils/rotationCalculator';
 import type { Stint } from '../types/genshin';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
@@ -26,13 +29,13 @@ interface GcsimConfigDialogProps {
   /** 設定文の元になった出場ブロック（書き戻し先） */
   stints: Stint[];
   /** 画面に出ている所要時間（計算後の出場ブロック。変更前の表示に使う） */
-  calculatedStints: Stint[];
+  calculated: CalculatedRotation;
   /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
   onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculatedStints, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculated, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -40,7 +43,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
   const [running, setRunning] = useState(false);
   const [applied, setApplied] = useState(false);
   const [runOutcome, setRunOutcome] = useState<
-    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult }
+    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult; effectTable: ActionEffectKeyTable }
     /** 実行前のアプリのCT違反があるため、gcsim を実行しなかった（D21-1） */
     | { status: 'blocked' }
     | { status: 'error' | 'unreachable'; message: string }
@@ -81,13 +84,14 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     const catalog = await loadKeyCatalog();
+    const effectTable = ((await import('../data/action_effect_keys.json')).default as unknown as { entries: ActionEffectKeyTable }).entries;
     const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
     setRunning(false);
     // gcsim でCT待ちが生じたら、結果は反映せず、該当アクションに違反マークを付ける（D21-2）
     const waits = mapCtWaitsToActions(summary, result.actionRefs);
     onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
     setApplied(false);
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs) });
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs), effectTable });
   };
   const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');
@@ -236,33 +240,85 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   </div>
                 );
               }
-              const effective: Record<string, number> = {};
-              for (const st of calculatedStints) for (const a of st.actions) effective[a.id] = a.duration;
-              const preview = applyActionDurations(stints, runOutcome.align.pairs, effective);
+              // 変更前は、画面に出ている値（計算後）を使う
+              const effectiveDurations: Record<string, number> = {};
+              for (const st of calculated.calculatedStints) for (const a of st.actions) effectiveDurations[a.id] = a.duration;
+              const effectiveCooldowns: Record<string, number> = {};
+              for (const cd of [...calculated.skillCooldowns, ...calculated.burstCooldowns]) {
+                if (cd.actionInstanceId) effectiveCooldowns[cd.actionInstanceId] = cd.duration;
+              }
+              const durations = applyActionDurations(stints, runOutcome.align.pairs, effectiveDurations);
+              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns);
+              const effectiveEffects: Record<string, number> = {};
+              for (const b of calculated.activeBuffs) {
+                if (b.origin === 'passive') continue;
+                for (const a of stints.flatMap(st => st.actions)) {
+                  if (b.id.includes(`_${a.id}_`)) effectiveEffects[a.id] = b.duration;
+                }
+              }
+              const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, runOutcome.effectTable, ACTION_EFFECT_KEY_OVERRIDES, effectiveEffects);
+              const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, ACTION_EFFECT_EXTRAS);
+              const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length;
+              // 誰の（何番目の出場の）アクションか
+              const ownerLabel = (stintId: string) => {
+                const idx = stints.findIndex(st => st.id === stintId);
+                const owner = idx >= 0 ? result.members.find(m => m.characterId === stints[idx].characterId)?.name : undefined;
+                return `${owner ?? '?'}${idx >= 0 ? `（出場 #${idx + 1}）` : ''}`;
+              };
               return (
                 <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-sky-950/40 border-sky-700/60 text-sky-100 space-y-1">
-                  <div className="font-bold">アクションの所要時間: {preview.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>
-                  {preview.changes.length > 0 && (
+                  <div className="font-bold">アクションの所要時間: {durations.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>
+                  {durations.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
-                      {preview.changes.map(c => {
-                        // 誰の（何番目の出場の）アクションか
-                        const stintIndex = stints.findIndex(st => st.id === c.stintId);
-                        const owner = stintIndex >= 0 ? result.members.find(m => m.characterId === stints[stintIndex].characterId)?.name : undefined;
-                        return (
-                          <div key={c.actionId}>
-                            {owner ?? '?'}{stintIndex >= 0 ? `（出場 #${stintIndex + 1}）` : ''} {c.name}: {c.before.toFixed(3)}s → {c.after.toFixed(3)}s
-                          </div>
-                        );
-                      })}
+                      {durations.changes.map(c => (
+                        <div key={c.actionId}>{ownerLabel(c.stintId)} {c.name}: {c.before.toFixed(3)}s → {c.after.toFixed(3)}s</div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="font-bold">スキル・爆発のCT: {cooldowns.changes.length} 件が変わります（CTの長さ / 開始位置 = アクション開始から）</div>
+                  {cooldowns.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {cooldowns.changes.map(c => (
+                        <div key={c.actionId}>
+                          {ownerLabel(c.stintId)} {c.name}: CT {c.before.toFixed(2)}s → {c.after.toFixed(2)}s
+                          {c.startOffset !== undefined ? `（開始 +${c.startOffset.toFixed(2)}s）` : '（CTなし）'}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="font-bold">スキル・爆発の効果時間: {effects.changes.length} 件が変わります（gcsim のキーの状態。ある分だけ）</div>
+                  {effects.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {effects.changes.map(c => (
+                        <div key={c.actionId} title={c.key}>
+                          {ownerLabel(c.stintId)} {c.name}: 効果 {c.before.toFixed(2)}s → {c.after.toFixed(2)}s
+                          <span className="text-sky-400/70"> [{c.key}]</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="font-bold">副次効果のバー: {extras.changes.length} 件のアクションが変わります（1つのアクションから繰り返し発生する効果）</div>
+                  {extras.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {extras.changes.map(c => (
+                        <div key={c.actionId}>
+                          {ownerLabel(c.stintId)} {c.name}: {c.extras.length === 0 ? '（なし）' : c.extras.map(x => `${x.name.replace(/（.*$/, '')} +${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {effects.missingDefs.length > 0 && (
+                    <div className="text-[11px] text-amber-200">
+                      効果のキーの対応表に無いアクション定義があり、効果時間は書き戻していません: {effects.missingDefs.join(' / ')}（scripts/probe-effect-keys.ts で表を作り直してください）
                     </div>
                   )}
                   <button
-                    onClick={() => { onApplyStints(preview.stints); setApplied(true); }}
-                    disabled={applied || preview.changes.length === 0}
+                    onClick={() => { onApplyStints(extras.stints); setApplied(true); }}
+                    disabled={applied || total === 0}
                     className="px-3 py-1 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white border border-sky-400/60"
-                    title="編集済みの所要時間も、gcsim の値で上書きします"
+                    title="編集済みの所要時間・CTも、gcsim の値で上書きします"
                   >
-                    {applied ? '反映しました' : '所要時間をアプリに反映'}
+                    {applied ? '反映しました' : 'gcsim の結果をアプリに反映'}
                   </button>
                 </div>
               );

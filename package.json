@@ -14,7 +14,13 @@
     "build:equipment": "node scripts/build-equipment-master.ts",
     "build:catalog": "node scripts/build-key-catalog.ts",
     "check:catalog": "node scripts/check-catalog-sample.mjs",
-    "coverage:catalog": "node scripts/run-catalog-coverage.mjs"
+    "coverage:catalog": "node scripts/run-catalog-coverage.mjs",
+    "probe:effects": "node scripts/probe-effect-keys.ts",
+    "review:effects": "node scripts/review-effect-keys.ts",
+    "link:effects": "node scripts/link-effect-by-duration.ts",
+    "check:effectkeys": "node scripts/build-effect-coverage.ts",
+    "verify:effectkeys": "node scripts/build-effect-coverage.ts --check",
+    "verify:effectkeys": "node scripts/build-effect-coverage.ts --check"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

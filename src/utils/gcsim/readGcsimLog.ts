@@ -78,6 +78,19 @@ export interface GcsimEffectRecord {
   refreshFrames: number[];
 }
 
+/** 効果のイベント（状態の added / refreshed / extended、設置物、シールド、継続ダメージ） */
+export interface GcsimEffectEvent {
+  key: string;
+  frame: number;
+  /** イベントを受けた（記録された）キャラ。チームバフは受け手ごとに記録される。-1 = 敵 */
+  charIndex: number;
+  /** 終了予定のフレーム（-1 = 切れない・分からない） */
+  expiry: number;
+  /** 実際の終了のフレーム（`ended`。更新をまとめた最終の終了。-1 = 分からない） */
+  ended: number;
+  kind: 'added' | 'refreshed' | 'extended';
+}
+
 export interface GcsimCooldownWaitRecord {
   /** 実行できなかったアクション（skill / burst / swap ...） */
   action: string;
@@ -94,6 +107,11 @@ export interface GcsimLogSummary {
   stints: GcsimStintRecord[];
   cooldowns: GcsimCooldownRecord[];
   effects: GcsimEffectRecord[];
+  /**
+   * 効果のイベントそのもの（added / refreshed / extended。辞書で「効果」のキー）。同じキー・同じフレームは1つにまとめる。
+   * 効果を「発動ごと」に扱うとき（スキル・爆発の効果時間の書き戻し）に使う。expiry は終了予定のフレーム（-1 = 切れない）
+   */
+  effectEvents: GcsimEffectEvent[];
   cooldownWaits: GcsimCooldownWaitRecord[];
   /** 辞書に無いキー（除外した）とその出現数。開発時に分かるよう記録する */
   unknownKeys: { key: string; count: number; sample: string }[];
@@ -102,7 +120,7 @@ export interface GcsimLogSummary {
 }
 
 const STATUS_MSG = /^(?:.+ )?(?:mod|status) (added|refreshed|extended)$/;
-const CT_WAIT_MSG = /^could not execute (\S+); action not ready$/;
+const CT_WAIT_MSG = /^could not execute ([^\s[;]+)(?:\[[^\]]*\])?; action not ready$/;
 
 export interface ReadGcsimLogOptions {
   members: GcsimMemberInfo[];
@@ -133,7 +151,8 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
       if (current) (current as GcsimStintRecord).endFrame = l.frame;
       continue;
     }
-    const m = /^executed (\S+)$/.exec(l.msg);
+    // パラメータ付きの命令は `executed skill[hold=1]` の形で出る。名前は基本名（skill）だけにする
+    const m = /^executed ([^\s[]+)(?:\[.*\])?$/.exec(l.msg);
     if (!m) continue;
     if (m[1] === 'swap') {
       openStint(l.char_index ?? 0, l.frame);
@@ -190,6 +209,14 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
   // key + char_index ごとの、更新をまとめた発動
   interface Instance { key: string; entry: KeyCatalogEntry; charIndex: number; startFrame: number; endFrame: number; refreshFrames: number[] }
   const instances: Instance[] = [];
+  const effectEvents: GcsimEffectEvent[] = [];
+  const effectEventKeys = new Set<string>();
+  const pushEffectEvent = (ev: GcsimEffectEvent) => {
+    const id = `${ev.key} ${ev.frame}`;
+    if (effectEventKeys.has(id)) return;
+    effectEventKeys.add(id);
+    effectEvents.push(ev);
+  };
   const openInst = new Map<string, Instance>();
   for (const l of logs) {
     if (l.event !== 'status') continue;
@@ -207,6 +234,14 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
     if (entry.kind === 'internal') {
       internalSkipped++;
       continue;
+    }
+    if (entry.kind === 'effect') {
+      pushEffectEvent({
+        key, frame: l.frame, charIndex: l.char_index ?? 0,
+        expiry: typeof l.logs?.expiry === 'number' ? (l.logs.expiry as number) : -1,
+        ended: typeof l.ended === 'number' ? l.ended : -1,
+        kind: sm[1] as 'added' | 'refreshed' | 'extended',
+      });
     }
     const charIndex = l.char_index ?? 0;
     const idx = `${key}\u0000${charIndex}`;
@@ -265,6 +300,54 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
   const effects = [...merged.values()].sort((a, b) => a.startFrame - b.startFrame);
   for (const e of effects) e.refreshFrames.sort((a, b) => a - b);
 
+  // 設置物・シールドも、効果のイベントとして扱う（キーは `construct:<名前>` / `shield:<名前>`）。
+  //   設置物: `construct created: <名前>` 〜 同じ key の `construct destroyed`（終了予定 = 破棄のフレーム）
+  //   シールド: `shield added`（logs.name）〜 `shield expired` / `removed` / `broken`（無ければ logs.expiry）
+  for (const l of logs) {
+    if (l.event === 'construct' && l.msg.startsWith('construct created: ')) {
+      const name = l.msg.slice('construct created: '.length);
+      const dest = logs.find(d => d.event === 'construct' && d.frame > l.frame && d.msg.startsWith('construct destroyed') && d.logs?.key === l.logs?.key);
+      pushEffectEvent({ key: `construct:${name}`, frame: l.frame, charIndex: l.char_index ?? 0, expiry: dest ? dest.frame : -1, ended: dest ? dest.frame : -1, kind: 'added' });
+    } else if (l.event === 'shield' && l.msg === 'shield added') {
+      const name = String(l.logs?.name ?? '');
+      const end = logs.find(d => d.event === 'shield' && d.frame > l.frame && /^shield (expired|removed|broken)/.test(d.msg) && d.logs?.name === name);
+      const expiry = end ? end.frame : typeof l.logs?.expiry === 'number' ? (l.logs.expiry as number) : -1;
+      pushEffectEvent({ key: `shield:${name}`, frame: l.frame, charIndex: l.char_index ?? 0, expiry, ended: expiry, kind: 'added' });
+    }
+  }
+
+  // 継続してダメージを与える効果（状態のキーを持たないもの。例: 神里綾華の爆発）: 同じ名前のダメージが 3 回以上、3 秒以内の間隔で続くまとまりを、
+  // 1つの効果として扱う（キーは `damage:<ダメージの名前>`。開始 = 最初の命中、終了予定 = 最後の命中 + 命中間隔の中央値）
+  {
+    const groups = new Map<string, number[]>();
+    for (const l of logs) {
+      if (l.event !== 'damage') continue;
+      const gk = `${l.char_index ?? 0} ${l.msg}`;
+      const arr = groups.get(gk) ?? [];
+      arr.push(l.frame);
+      groups.set(gk, arr);
+    }
+    for (const [gk, frames] of groups) {
+      const [ci, abil] = gk.split(' ');
+      frames.sort((a, b) => a - b);
+      let cluster: number[] = [];
+      const flush = () => {
+        if (cluster.length >= 3) {
+          const gaps = cluster.slice(1).map((f, i) => f - cluster[i]).sort((a, b) => a - b);
+          const median = gaps[Math.floor(gaps.length / 2)];
+          const last = cluster[cluster.length - 1];
+          pushEffectEvent({ key: `damage:${abil}`, frame: cluster[0], charIndex: Number(ci), expiry: last + median, ended: last + median, kind: 'added' });
+        }
+        cluster = [];
+      };
+      for (const f of frames) {
+        if (cluster.length > 0 && f - cluster[cluster.length - 1] > 180) flush();
+        cluster.push(f);
+      }
+      flush();
+    }
+  }
+
   // ---- 4. CT待ち ----
   const cooldownWaits: GcsimCooldownWaitRecord[] = [];
   const openWait = new Map<string, GcsimCooldownWaitRecord>();
@@ -292,6 +375,7 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
     effects,
     cooldownWaits,
     unknownKeys: [...unknown.entries()].map(([key, v]) => ({ key, ...v })).sort((a, b) => b.count - a.count),
+    effectEvents,
     internalSkipped,
   };
 }

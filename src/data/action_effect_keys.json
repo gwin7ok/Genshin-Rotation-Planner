@@ -1,0 +1,4194 @@
+{
+ "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+ "generatedAt": "2026-09-30T01:27:26.014Z",
+ "entries": {
+  "10000002-cryo_e": {
+   "char": "神里綾華",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000002-cryo_q": {
+   "char": "神里綾華",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Soumetsu (Cutting)",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      4.75
+     ]
+    }
+   ],
+   "master": 5,
+   "primary": "damage:Soumetsu (Cutting)"
+  },
+  "10000003-anemo_e": {
+   "char": "ジン",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 5
+  },
+  "10000003-anemo_q": {
+   "char": "ジン",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "jean-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.67,
+      10.67
+     ]
+    }
+   ],
+   "master": 10.667,
+   "primary": "jean-q"
+  },
+  "10000005-anemo_e": {
+   "char": "空(風)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-anemo_e_hold": {
+   "char": "空(風)",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-anemo_q": {
+   "char": "空(風)",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "amcburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5.6,
+      5.6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "amcburst"
+  },
+  "10000005-cryo_e": {
+   "char": "空(氷)",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelercryo-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.32,
+      12.32
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelercryo-e"
+  },
+  "10000005-cryo_q": {
+   "char": "空(氷)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-dendro_e": {
+   "char": "空(草)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-dendro_q": {
+   "char": "空(草)",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "travelerdendro-q",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelerdendro-q"
+  },
+  "10000005-electro_e": {
+   "char": "空(雷)",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "abundance-amulet",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "abundance-amulet"
+  },
+  "10000005-electro_q": {
+   "char": "空(雷)",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelerelectroburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelerelectroburst"
+  },
+  "10000005-geo_e": {
+   "char": "空(岩)",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:TravellerSkill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      30
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "construct:TravellerSkill"
+  },
+  "10000005-geo_q": {
+   "char": "空(岩)",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:TravellerBurst",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "construct:TravellerBurst"
+  },
+  "10000005-hydro_e": {
+   "char": "空(水)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-hydro_e_shorthold0ticks": {
+   "char": "空(水)",
+   "command": "skill[hold=1,hold_ticks=0]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-hydro_e_shorthold": {
+   "char": "空(水)",
+   "command": "skill[hold=1,hold_ticks=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-hydro_e_hold": {
+   "char": "空(水)",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-hydro_q": {
+   "char": "空(水)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 4
+  },
+  "10000005-pyro_e": {
+   "char": "空(炎)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000005-pyro_e_hold": {
+   "char": "空(炎)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelerpyro-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "primary": "travelerpyro-e"
+  },
+  "10000005-pyro_q": {
+   "char": "空(炎)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000006-electro_e": {
+   "char": "リサ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000006-electro_e_hold": {
+   "char": "リサ",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000006-electro_q": {
+   "char": "リサ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lisaburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      16.98,
+      16.98
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "lisaburst"
+  },
+  "10000007-anemo_e": {
+   "char": "蛍(風)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-anemo_e_hold": {
+   "char": "蛍(風)",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-anemo_q": {
+   "char": "蛍(風)",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "amcburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5.57,
+      5.57
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "amcburst"
+  },
+  "10000007-cryo_e": {
+   "char": "蛍(氷)",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelercryo-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.32,
+      12.32
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelercryo-e"
+  },
+  "10000007-cryo_q": {
+   "char": "蛍(氷)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-dendro_e": {
+   "char": "蛍(草)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-dendro_q": {
+   "char": "蛍(草)",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "travelerdendro-q",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelerdendro-q"
+  },
+  "10000007-electro_e": {
+   "char": "蛍(雷)",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "abundance-amulet",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "abundance-amulet"
+  },
+  "10000007-electro_q": {
+   "char": "蛍(雷)",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelerelectroburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "travelerelectroburst"
+  },
+  "10000007-geo_e": {
+   "char": "蛍(岩)",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:TravellerSkill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      30
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "construct:TravellerSkill"
+  },
+  "10000007-geo_q": {
+   "char": "蛍(岩)",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:TravellerBurst",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "construct:TravellerBurst"
+  },
+  "10000007-hydro_e": {
+   "char": "蛍(水)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-hydro_e_shorthold0ticks": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1,hold_ticks=0]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-hydro_e_shorthold": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1,hold_ticks=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-hydro_e_hold": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-hydro_q": {
+   "char": "蛍(水)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 4
+  },
+  "10000007-pyro_e": {
+   "char": "蛍(炎)",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000007-pyro_e_hold": {
+   "char": "蛍(炎)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "travelerpyro-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "primary": "travelerpyro-e"
+  },
+  "10000007-pyro_q": {
+   "char": "蛍(炎)",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000014-hydro_e": {
+   "char": "バーバラ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "barbara-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.02,
+      15.02
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "barbara-e"
+  },
+  "10000014-hydro_q": {
+   "char": "バーバラ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000015-cryo_e": {
+   "char": "ガイア",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000015-cryo_q": {
+   "char": "ガイア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kaeya-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8.9,
+      8.9
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "kaeya-q"
+  },
+  "10000016-pyro_e": {
+   "char": "ディルック",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "diluc-e-window",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      4,
+      3.78,
+      4,
+      3.78
+     ]
+    }
+   ],
+   "primary": "diluc-e-window"
+  },
+  "10000016-pyro_q": {
+   "char": "ディルック",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "diluc-q",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      10.47,
+      12,
+      10.47
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "diluc-q"
+  },
+  "10000020-electro_e": {
+   "char": "レザー",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "razor-sigil",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      18,
+      18
+     ]
+    }
+   ],
+   "master": 18,
+   "primary": "razor-sigil"
+  },
+  "10000020-electro_e_hold": {
+   "char": "レザー",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 18
+  },
+  "10000020-electro_q": {
+   "char": "レザー",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "razor-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "razor-q"
+  },
+  "10000021-pyro_e": {
+   "char": "アンバー",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000021-pyro_q": {
+   "char": "アンバー",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Fiery Rain",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      2
+     ]
+    }
+   ],
+   "master": 2,
+   "primary": "damage:Fiery Rain"
+  },
+  "10000022-anemo_e": {
+   "char": "ウェンティ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000022-anemo_e_hold": {
+   "char": "ウェンティ",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000022-anemo_q": {
+   "char": "ウェンティ",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Wind's Grand Ode",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      8
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "damage:Wind's Grand Ode"
+  },
+  "10000023-pyro_e": {
+   "char": "香菱",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "xianglingguoba",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      7.3,
+      7.3
+     ]
+    }
+   ],
+   "primary": "xianglingguoba"
+  },
+  "10000023-pyro_q": {
+   "char": "香菱",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "xianglingburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "xianglingburst"
+  },
+  "10000024-electro_e": {
+   "char": "北斗",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000024-electro_q": {
+   "char": "北斗",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "beidouburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "beidouburst"
+  },
+  "10000025-hydro_e": {
+   "char": "行秋",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "xingqiu-orbital",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "xingqiu-orbital"
+  },
+  "10000025-hydro_q": {
+   "char": "行秋",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "xingqiuburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.55,
+      15.55
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "xingqiuburst"
+  },
+  "10000026-anemo_e": {
+   "char": "魈",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000026-anemo_q": {
+   "char": "魈",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "xiaoburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.95,
+      15.95
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "xiaoburst"
+  },
+  "10000027-geo_e": {
+   "char": "凝光",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000027-geo_q": {
+   "char": "凝光",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000029-pyro_e": {
+   "char": "クレー",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 15
+  },
+  "10000029-pyro_q": {
+   "char": "クレー",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kleeq",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.43,
+      12.43
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "kleeq"
+  },
+  "10000030-geo_e": {
+   "char": "鍾離",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 20
+  },
+  "10000030-geo_e_hold": {
+   "char": "鍾離",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Zhongli Skill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "shield:Zhongli Skill"
+  },
+  "10000030-geo_q": {
+   "char": "鍾離",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 3.1
+  },
+  "10000031-electro_e": {
+   "char": "フィッシュル",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "oz-active",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "oz-active"
+  },
+  "10000031-electro_e_recast": {
+   "char": "フィッシュル",
+   "command": "skill[recast=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "oz-active",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "primary": "oz-active"
+  },
+  "10000031-electro_q": {
+   "char": "フィッシュル",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "oz-active",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "oz-active"
+  },
+  "10000032-pyro_e": {
+   "char": "ベネット",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000032-pyro_e_hold": {
+   "char": "ベネット",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000032-pyro_q": {
+   "char": "ベネット",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "bennettburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.57,
+      12.57
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "bennettburst"
+  },
+  "10000033-hydro_e": {
+   "char": "タルタリヤ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "tartagliamelee",
+     "events": 1,
+     "casts": 2,
+     "seconds": [
+      30
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "tartagliamelee"
+  },
+  "10000033-hydro_q": {
+   "char": "タルタリヤ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000034-geo_e": {
+   "char": "ノエル",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Noelle Skill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shield:Noelle Skill"
+  },
+  "10000034-geo_q": {
+   "char": "ノエル",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "noelle-burst",
+     "events": 6,
+     "casts": 2,
+     "seconds": [
+      16.33,
+      16.15,
+      15.47,
+      16.33,
+      16.15,
+      15.47
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "noelle-burst"
+  },
+  "10000035-cryo_e": {
+   "char": "七七",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "qiqi-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.02,
+      15.02
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "qiqi-e"
+  },
+  "10000035-cryo_q": {
+   "char": "七七",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "qiqi-talisman",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "qiqi-talisman"
+  },
+  "10000036-cryo_e": {
+   "char": "重雲",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "chongyunfield",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 2,
+   "primary": "chongyunfield"
+  },
+  "10000036-cryo_q": {
+   "char": "重雲",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000037-cryo_e": {
+   "char": "甘雨",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 6
+  },
+  "10000037-cryo_q": {
+   "char": "甘雨",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "ganyuburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      17.03,
+      17.03
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "ganyuburst"
+  },
+  "10000038-geo_e": {
+   "char": "アルベド",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:AlbedoSkill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      30
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "construct:AlbedoSkill"
+  },
+  "10000038-geo_q": {
+   "char": "アルベド",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000039-cryo_e": {
+   "char": "ディオナ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 1.8
+  },
+  "10000039-cryo_e_hold": {
+   "char": "ディオナ",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 1.8
+  },
+  "10000039-cryo_q": {
+   "char": "ディオナ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "diona-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      13.47,
+      13.47
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "diona-q"
+  },
+  "10000041-hydro_e": {
+   "char": "モナ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000041-hydro_q": {
+   "char": "モナ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "mona-c2-hexerei-post-burst-ca",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5,
+      5
+     ]
+    },
+    {
+     "key": "mona-bubble",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8.02,
+      8.02
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "mona-bubble"
+  },
+  "10000042-electro_e": {
+   "char": "刻晴",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "keqingstiletto",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5.33,
+      5.33
+     ]
+    }
+   ],
+   "master": 5.333,
+   "primary": "keqingstiletto"
+  },
+  "10000042-electro_q": {
+   "char": "刻晴",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000043-anemo_e": {
+   "char": "スクロース",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000043-anemo_q": {
+   "char": "スクロース",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sucroseburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "sucroseburst"
+  },
+  "10000044-pyro_e": {
+   "char": "辛炎",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Xinyan Skill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shield:Xinyan Skill"
+  },
+  "10000044-pyro_q": {
+   "char": "辛炎",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Riff Revolution (DoT)",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      2.05
+     ]
+    }
+   ],
+   "master": 2,
+   "primary": "damage:Riff Revolution (DoT)"
+  },
+  "10000045-cryo_e": {
+   "char": "ロサリア",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000045-cryo_q": {
+   "char": "ロサリア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "rosariaburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8.5,
+      8.5
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "rosariaburst"
+  },
+  "10000046-pyro_e": {
+   "char": "胡桃",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "paramita",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      9.23,
+      9.23
+     ]
+    }
+   ],
+   "master": 9,
+   "primary": "paramita"
+  },
+  "10000046-pyro_q": {
+   "char": "胡桃",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000047-anemo_e": {
+   "char": "楓原万葉",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000047-anemo_e_hold": {
+   "char": "楓原万葉",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000047-anemo_q": {
+   "char": "楓原万葉",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kazuha-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8.78,
+      8.78
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "kazuha-q"
+  },
+  "10000048-pyro_e": {
+   "char": "煙緋",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yanfei-seal",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "yanfei-seal"
+  },
+  "10000048-pyro_q": {
+   "char": "煙緋",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yanfei-q",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      15.02,
+      14.67,
+      15.02,
+      14.67
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "yanfei-q"
+  },
+  "10000049-pyro_e": {
+   "char": "宵宮",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yoimiyaskill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.18,
+      10.18
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "yoimiyaskill"
+  },
+  "10000049-pyro_q": {
+   "char": "宵宮",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "aurous-blaze",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "aurous-blaze"
+  },
+  "10000050-pyro_e": {
+   "char": "トーマ",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Thoma Skill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      8
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "shield:Thoma Skill"
+  },
+  "10000050-pyro_q": {
+   "char": "トーマ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "thoma-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "thoma-q"
+  },
+  "10000051-cryo_e": {
+   "char": "エウルア",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "eula-grimheart-duration",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      18,
+      3.88
+     ]
+    }
+   ],
+   "master": 18,
+   "primary": "eula-grimheart-duration"
+  },
+  "10000051-cryo_e_hold": {
+   "char": "エウルア",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 18
+  },
+  "10000051-cryo_q": {
+   "char": "エウルア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "eula-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      7.48,
+      7.48
+     ]
+    }
+   ],
+   "primary": "eula-q"
+  },
+  "10000052-electro_e": {
+   "char": "雷電将軍",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "raiden-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      25,
+      25
+     ]
+    }
+   ],
+   "master": 25,
+   "primary": "raiden-e"
+  },
+  "10000052-electro_q": {
+   "char": "雷電将軍",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "raidenburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8.63,
+      8.63
+     ]
+    }
+   ],
+   "master": 7,
+   "primary": "raidenburst"
+  },
+  "10000053-anemo_e": {
+   "char": "早柚",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000053-anemo_e_hold": {
+   "char": "早柚",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 10
+  },
+  "10000053-anemo_e_shorthold": {
+   "char": "早柚",
+   "command": "skill[short_hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000053-anemo_q": {
+   "char": "早柚",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 12
+  },
+  "10000054-hydro_e": {
+   "char": "珊瑚宮心海",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "kokomiskill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.52
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "kokomiskill"
+  },
+  "10000054-hydro_q": {
+   "char": "珊瑚宮心海",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kokomiburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "kokomiburst"
+  },
+  "10000055-geo_e": {
+   "char": "ゴロー",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "gorou-e-warbanner",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "gorou-e-warbanner"
+  },
+  "10000055-geo_q": {
+   "char": "ゴロー",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "gorou-q-glory",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      9,
+      9
+     ]
+    }
+   ],
+   "master": 9,
+   "primary": "gorou-q-glory"
+  },
+  "10000056-electro_e": {
+   "char": "九条裟羅",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sara-e-cover",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      18,
+      18
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "sara-e-cover"
+  },
+  "10000056-electro_q": {
+   "char": "九条裟羅",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sara-attack-buff",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "primary": "sara-attack-buff"
+  },
+  "10000057-geo_e": {
+   "char": "荒瀧一斗",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:IttoSkill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "construct:IttoSkill"
+  },
+  "10000057-geo_q": {
+   "char": "荒瀧一斗",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "itto-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      13.25,
+      13.25
+     ]
+    },
+    {
+     "key": "itto-q-atkspd",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      13.25,
+      13.25
+     ]
+    }
+   ],
+   "master": 11,
+   "primary": "itto-q"
+  },
+  "10000058-electro_e": {
+   "char": "八重神子",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Sesshou Sakura Tick",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      14.67
+     ]
+    }
+   ],
+   "master": 14,
+   "primary": "damage:Sesshou Sakura Tick"
+  },
+  "10000058-electro_q": {
+   "char": "八重神子",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000059-anemo_e": {
+   "char": "鹿野院平蔵",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 60
+  },
+  "10000059-anemo_q": {
+   "char": "鹿野院平蔵",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000060-hydro_e": {
+   "char": "夜蘭",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000060-hydro_q": {
+   "char": "夜蘭",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yelanburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "yelanburst"
+  },
+  "10000061-dendro_e": {
+   "char": "綺良々",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Shield of Safe Transport",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shield:Shield of Safe Transport"
+  },
+  "10000061-dendro_e_hold": {
+   "char": "綺良々",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Shield of Safe Transport",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.02
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shield:Shield of Safe Transport"
+  },
+  "10000061-dendro_e_shorthold": {
+   "char": "綺良々",
+   "command": "skill[short_hold=1]",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Shield of Safe Transport",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.2
+     ]
+    }
+   ],
+   "primary": "shield:Shield of Safe Transport"
+  },
+  "10000061-dendro_q": {
+   "char": "綺良々",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kirara-cardamoms-expired",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "kirara-cardamoms-expired"
+  },
+  "10000062-cryo_e": {
+   "char": "アーロイ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "rushingice",
+     "events": 1,
+     "casts": 2,
+     "seconds": [
+      10
+     ]
+    },
+    {
+     "key": "aloy-rushing-ice",
+     "events": 1,
+     "casts": 2,
+     "seconds": [
+      10
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "rushingice"
+  },
+  "10000062-cryo_q": {
+   "char": "アーロイ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000063-cryo_e": {
+   "char": "申鶴",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "shenhe-quill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "shenhe-quill"
+  },
+  "10000063-cryo_e_hold": {
+   "char": "申鶴",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "shenhe-quill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "shenhe-quill"
+  },
+  "10000063-cryo_q": {
+   "char": "申鶴",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "shenheburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shenheburst"
+  },
+  "10000064-geo_e": {
+   "char": "雲菫",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000064-geo_q": {
+   "char": "雲菫",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yunjin-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "yunjin-q"
+  },
+  "10000065-electro_e": {
+   "char": "久岐忍",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kuki-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "kuki-e"
+  },
+  "10000065-electro_q": {
+   "char": "久岐忍",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Gyoei Narukami Kariyama Rite",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      1.98
+     ]
+    }
+   ],
+   "master": 2,
+   "primary": "damage:Gyoei Narukami Kariyama Rite"
+  },
+  "10000066-hydro_e": {
+   "char": "神里綾人",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "soukaikanka",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "soukaikanka"
+  },
+  "10000066-hydro_q": {
+   "char": "神里綾人",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "ayato-burst",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      17.5
+     ]
+    }
+   ],
+   "master": 18,
+   "primary": "ayato-burst",
+   "mode": "span"
+  },
+  "10000067-dendro_e": {
+   "char": "コレイ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "collei-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      2.28,
+      2.28
+     ]
+    }
+   ],
+   "primary": "collei-skill"
+  },
+  "10000067-dendro_q": {
+   "char": "コレイ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "collei-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6.3,
+      6.3
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "collei-burst"
+  },
+  "10000068-electro_e": {
+   "char": "ドリー",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000068-electro_q": {
+   "char": "ドリー",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Alcazarzaray's Exactitude: Connector DMG",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.8
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "damage:Alcazarzaray's Exactitude: Connector DMG"
+  },
+  "10000069-dendro_e": {
+   "char": "ティナリ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "vijnanasuffusion",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "vijnanasuffusion"
+  },
+  "10000069-dendro_q": {
+   "char": "ティナリ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000070-hydro_e": {
+   "char": "ニィロウ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "pirouette",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "pirouette"
+  },
+  "10000070-hydro_q": {
+   "char": "ニィロウ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lingeringaeon",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      2.02,
+      2.02
+     ]
+    }
+   ],
+   "primary": "lingeringaeon"
+  },
+  "10000071-electro_e": {
+   "char": "セノ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000071-electro_q": {
+   "char": "セノ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "cyno-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      11.87,
+      11.87
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "cyno-q"
+  },
+  "10000072-hydro_e": {
+   "char": "キャンディス",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000072-hydro_e_hold": {
+   "char": "キャンディス",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000072-hydro_q": {
+   "char": "キャンディス",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "candace-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      9,
+      9
+     ]
+    }
+   ],
+   "master": 9,
+   "primary": "candace-q"
+  },
+  "10000073-dendro_e": {
+   "char": "ナヒーダ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "nahida-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      25,
+      25
+     ]
+    }
+   ],
+   "master": 25,
+   "primary": "nahida-e"
+  },
+  "10000073-dendro_e_hold": {
+   "char": "ナヒーダ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "nahida-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      25,
+      25
+     ]
+    }
+   ],
+   "master": 25,
+   "primary": "nahida-e"
+  },
+  "10000073-dendro_q": {
+   "char": "ナヒーダ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "nahida-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "nahida-q"
+  },
+  "10000074-cryo_e": {
+   "char": "レイラ",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "shield:Curtain of Slumber (Shield)",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "shield:Curtain of Slumber (Shield)"
+  },
+  "10000074-cryo_q": {
+   "char": "レイラ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "laylaburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.6,
+      12.6
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "laylaburst"
+  },
+  "10000075-anemo_e": {
+   "char": "放浪者",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "windfavored-state",
+     "events": 1,
+     "casts": 2,
+     "seconds": [
+      20
+     ]
+    },
+    {
+     "key": "wanderer-plunge-available",
+     "events": 1,
+     "casts": 2,
+     "seconds": [
+      0.43
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "windfavored-state"
+  },
+  "10000075-anemo_q": {
+   "char": "放浪者",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000076-anemo_e": {
+   "char": "ファルザン",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "faruzan-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      18,
+      18
+     ]
+    }
+   ],
+   "master": 18,
+   "primary": "faruzan-e"
+  },
+  "10000076-anemo_q": {
+   "char": "ファルザン",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "faruzan-q-dmg-bonus",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.42
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "faruzan-q-dmg-bonus",
+   "mode": "span"
+  },
+  "10000077-dendro_e": {
+   "char": "ヨォーヨ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yuegui",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.8,
+      10.8
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "yuegui"
+  },
+  "10000077-dendro_q": {
+   "char": "ヨォーヨ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "yaoyaoburst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "master": 5,
+   "primary": "yaoyaoburst"
+  },
+  "10000078-dendro_e": {
+   "char": "アルハイゼン",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000078-dendro_e_hold": {
+   "char": "アルハイゼン",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000078-dendro_q": {
+   "char": "アルハイゼン",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000079-pyro_e": {
+   "char": "ディシア",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "dehya-field-status",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      2.25
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "dehya-field-status"
+  },
+  "10000079-pyro_q": {
+   "char": "ディシア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "dehya-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      4.1,
+      4.1
+     ]
+    },
+    {
+     "key": "dehya-burst-kick",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      0.77,
+      0.77
+     ]
+    }
+   ],
+   "master": 4,
+   "primary": "dehya-burst"
+  },
+  "10000080-cryo_e": {
+   "char": "ミカ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "soulwind",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      12.03,
+      12,
+      12.03
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "soulwind"
+  },
+  "10000080-cryo_e_hold": {
+   "char": "ミカ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "soulwind",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "soulwind"
+  },
+  "10000080-cryo_q": {
+   "char": "ミカ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "eagleplume",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "eagleplume"
+  },
+  "10000081-dendro_e": {
+   "char": "カーヴェ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000081-dendro_q": {
+   "char": "カーヴェ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "kaveh-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    },
+    {
+     "key": "kaveh-q-dmg-bonus",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "kaveh-q"
+  },
+  "10000082-dendro_e": {
+   "char": "白朮",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000082-dendro_q": {
+   "char": "白朮",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 2.5
+  },
+  "10000083-anemo_e": {
+   "char": "リネット",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000083-anemo_q": {
+   "char": "リネット",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "lynette-q",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.57
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "lynette-q"
+  },
+  "10000084-pyro_e": {
+   "char": "リネ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000084-pyro_q": {
+   "char": "リネ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lyney-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      3.03,
+      3.03
+     ]
+    },
+    {
+     "key": "lyney-q-mark",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      2.83,
+      2.83
+     ]
+    }
+   ],
+   "master": 3,
+   "primary": "lyney-q"
+  },
+  "10000085-cryo_e": {
+   "char": "フレミネ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "freminet-pers-time",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      10,
+      9.6,
+      10,
+      9.6
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "freminet-pers-time"
+  },
+  "10000085-cryo_q": {
+   "char": "フレミネ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "freminet-stalking",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10,
+      10
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "freminet-stalking"
+  },
+  "10000086-cryo_e": {
+   "char": "リオセスリ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "wriothesley-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.02,
+      10.02
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "wriothesley-e"
+  },
+  "10000086-cryo_q": {
+   "char": "リオセスリ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000087-hydro_e": {
+   "char": "ヌヴィレット",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 15
+  },
+  "10000087-hydro_q": {
+   "char": "ヌヴィレット",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000088-cryo_e": {
+   "char": "シャルロット",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "charlotte-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6.8,
+      6.8
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "charlotte-e"
+  },
+  "10000088-cryo_e_hold": {
+   "char": "シャルロット",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "charlotte-hold-e",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.9,
+      12.9
+     ]
+    }
+   ],
+   "master": 6,
+   "primary": "charlotte-hold-e"
+  },
+  "10000088-cryo_q": {
+   "char": "シャルロット",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 4
+  },
+  "10000089-hydro_e": {
+   "char": "フリーナ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "furina-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      29.23,
+      29.23
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "furina-skill"
+  },
+  "10000089-hydro_q": {
+   "char": "フリーナ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "furina-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      18.2,
+      18.2
+     ]
+    }
+   ],
+   "master": 18,
+   "primary": "furina-burst"
+  },
+  "10000090-pyro_e": {
+   "char": "シュヴルーズ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "chev-skill-heal",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.02,
+      12.02
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "chev-skill-heal"
+  },
+  "10000090-pyro_e_hold": {
+   "char": "シュヴルーズ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "chev-skill-heal",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.02,
+      12.02
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "chev-skill-heal"
+  },
+  "10000090-pyro_q": {
+   "char": "シュヴルーズ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000091-geo_e": {
+   "char": "ナヴィア",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 300
+  },
+  "10000091-geo_q": {
+   "char": "ナヴィア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "navia-artillery",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "navia-artillery"
+  },
+  "10000092-pyro_e": {
+   "char": "嘉明",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000092-pyro_q": {
+   "char": "嘉明",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "gaming-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    },
+    {
+     "key": "gaming-man-chai",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      1.67,
+      1.67
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "gaming-q"
+  },
+  "10000093-anemo_e": {
+   "char": "閑雲",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "cloud-transmogrification",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      3.67,
+      3.67
+     ]
+    }
+   ],
+   "primary": "cloud-transmogrification"
+  },
+  "10000093-anemo_q": {
+   "char": "閑雲",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "xianyun-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      16,
+      16
+     ]
+    },
+    {
+     "key": "xianyun-airborne-buff",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      16,
+      16
+     ]
+    }
+   ],
+   "master": 16,
+   "primary": "xianyun-burst"
+  },
+  "10000094-geo_e": {
+   "char": "千織",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 17
+  },
+  "10000094-geo_q": {
+   "char": "千織",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000095-hydro_e": {
+   "char": "シグウィン",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sigewinne-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "primary": "sigewinne-skill"
+  },
+  "10000095-hydro_q": {
+   "char": "シグウィン",
+   "command": "burst",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "damage:Super Saturated Syringing",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      2.5
+     ]
+    }
+   ],
+   "master": 2.5,
+   "primary": "damage:Super Saturated Syringing"
+  },
+  "10000096-pyro_e": {
+   "char": "アルレッキーノ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "directive",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      30,
+      30
+     ]
+    },
+    {
+     "key": "directive-limit",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      35,
+      35
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "directive"
+  },
+  "10000096-pyro_q": {
+   "char": "アルレッキーノ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000097-electro_e": {
+   "char": "セトス",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000097-electro_q": {
+   "char": "セトス",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sethos-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8,
+      8
+     ]
+    }
+   ],
+   "master": 8,
+   "primary": "sethos-burst"
+  },
+  "10000098-electro_e": {
+   "char": "クロリンデ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "clorinde-night-watch",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      7.6,
+      7.6
+     ]
+    }
+   ],
+   "master": 7.5,
+   "primary": "clorinde-night-watch"
+  },
+  "10000098-electro_q": {
+   "char": "クロリンデ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000099-dendro_e": {
+   "char": "エミリエ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lumidouce-case",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      22,
+      22
+     ]
+    },
+    {
+     "key": "lumidouce-scent-reset",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8,
+      8
+     ]
+    }
+   ],
+   "master": 22,
+   "primary": "lumidouce-case"
+  },
+  "10000099-dendro_q": {
+   "char": "エミリエ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lumidouce-case",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      2.8,
+      22,
+      2.8,
+      22
+     ]
+    },
+    {
+     "key": "lumidouce-scent-reset",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      8,
+      8
+     ]
+    },
+    {
+     "key": "emilie-burst-mark",
+     "events": 6,
+     "casts": 2,
+     "seconds": [
+      0.7,
+      0.7,
+      0.7,
+      0.7,
+      0.7,
+      0.7
+     ]
+    }
+   ],
+   "master": 2.8,
+   "primary": "lumidouce-case"
+  },
+  "10000101-dendro_e": {
+   "char": "キィニチ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000101-dendro_q": {
+   "char": "キィニチ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "ajaw",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      17.68,
+      17.68
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "ajaw"
+  },
+  "10000102-hydro_e": {
+   "char": "ムアラニ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "mualani-surfing",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "master": 10,
+   "primary": "mualani-surfing"
+  },
+  "10000102-hydro_q": {
+   "char": "ムアラニ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000103-geo_e": {
+   "char": "シロネン",
+   "command": "skill",
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "xilonen-a4",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "xilonen-a4"
+  },
+  "10000103-geo_q": {
+   "char": "シロネン",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 12
+  },
+  "10000104-anemo_e": {
+   "char": "チャスカ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000104-anemo_q": {
+   "char": "チャスカ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "chasca-plunge-available",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      0.43,
+      0.43
+     ]
+    }
+   ],
+   "primary": "chasca-plunge-available"
+  },
+  "10000105-electro_e": {
+   "char": "オロルン",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000105-electro_q": {
+   "char": "オロルン",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "supersonic-oculus",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      9,
+      9
+     ]
+    }
+   ],
+   "master": 9,
+   "primary": "supersonic-oculus"
+  },
+  "10000106-pyro_e": {
+   "char": "マーヴィカ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000106-pyro_e_hold": {
+   "char": "マーヴィカ",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000106-pyro_e_recastframestobike": {
+   "char": "マーヴィカ",
+   "command": "skill[recast=1]",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+  },
+  "10000106-pyro_e_recastframestoring": {
+   "char": "マーヴィカ",
+   "command": "skill[recast=1]",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "error encountered on mavuika executing skill: cannot recast E while not in nightsoul blessing"
+  },
+  "10000106-pyro_q": {
+   "char": "マーヴィカ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "mavuika-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      7,
+      7
+     ]
+    }
+   ],
+   "master": 7,
+   "primary": "mavuika-burst"
+  },
+  "10000107-cryo_e": {
+   "char": "シトラリ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "opal-fire-state",
+     "events": 1,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "master": 20,
+   "primary": "opal-fire-state"
+  },
+  "10000107-cryo_q": {
+   "char": "シトラリ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000108-anemo_e": {
+   "char": "藍硯",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "leap-back",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      1.1,
+      1.1
+     ]
+    }
+   ],
+   "master": 12.5,
+   "primary": "leap-back"
+  },
+  "10000108-anemo_q": {
+   "char": "藍硯",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000109-anemo_e": {
+   "char": "夢見月瑞希",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "dreamdrifter-state",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5,
+      5
+     ]
+    }
+   ],
+   "master": 5,
+   "primary": "dreamdrifter-state"
+  },
+  "10000109-anemo_q": {
+   "char": "夢見月瑞希",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "mizuki-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "mizuki-burst"
+  },
+  "10000110-electro_e": {
+   "char": "イアンサ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "fast-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5,
+      5
+     ]
+    }
+   ],
+   "master": 5,
+   "primary": "fast-skill"
+  },
+  "10000110-electro_q": {
+   "char": "イアンサ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "iansan-burst",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      11.4,
+      12,
+      11.4
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "iansan-burst"
+  },
+  "10000111-electro_e": {
+   "char": "ヴァレサ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "follow-up",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      5,
+      4.98,
+      5,
+      4.98
+     ]
+    }
+   ],
+   "master": 5,
+   "primary": "follow-up"
+  },
+  "10000111-electro_q": {
+   "char": "ヴァレサ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000112-cryo_e": {
+   "char": "エスコフィエ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "escoffier-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      21.97,
+      21.97
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "escoffier-skill"
+  },
+  "10000112-cryo_e_hold": {
+   "char": "エスコフィエ",
+   "command": "skill[hold=1]",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "ln7: character escoffier: key hold is invalid for action skill"
+  },
+  "10000112-cryo_q": {
+   "char": "エスコフィエ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000113-anemo_e": {
+   "char": "イファ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000113-anemo_q": {
+   "char": "イファ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000114-cryo_e": {
+   "char": "スカーク",
+   "command": "skill",
+   "status": "ok",
+   "keys": [
+    {
+     "key": "seven-phase-flash",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      12.57
+     ]
+    }
+   ],
+   "via": "duration-match",
+   "primary": "seven-phase-flash",
+   "master": 12.5
+  },
+  "10000114-cryo_e_hold": {
+   "char": "スカーク",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "skirk-hold-e-anim",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      0,
+      0
+     ]
+    }
+   ],
+   "master": 12.5,
+   "primary": "skirk-hold-e-anim"
+  },
+  "10000114-cryo_q": {
+   "char": "スカーク",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000115-hydro_e": {
+   "char": "ダリア",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000115-hydro_q": {
+   "char": "ダリア",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "dahlia-favonian-favor",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12,
+      12
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "dahlia-favonian-favor"
+  },
+  "10000116-electro_e": {
+   "char": "イネファ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "birgitta",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "birgitta"
+  },
+  "10000116-electro_q": {
+   "char": "イネファ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "birgitta",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "primary": "birgitta"
+  },
+  "10000119-dendro_e": {
+   "char": "ラウマ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lauma-frostgrove-sanctuary",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "lauma-frostgrove-sanctuary"
+  },
+  "10000119-dendro_q": {
+   "char": "ラウマ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "lauma-pale-hymn-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    },
+    {
+     "key": "lauma-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15,
+      15
+     ]
+    }
+   ],
+   "master": 15,
+   "primary": "lauma-pale-hymn-burst"
+  },
+  "10000120-electro_e": {
+   "char": "フリンズ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "manifest-flame",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.32,
+      10.32
+     ]
+    }
+   ],
+   "master": 10,
+   "primary": "manifest-flame"
+  },
+  "10000120-electro_q": {
+   "char": "フリンズ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000121-hydro_e": {
+   "char": "アイノ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000121-hydro_q": {
+   "char": "アイノ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "aino-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      14,
+      14
+     ]
+    }
+   ],
+   "master": 14,
+   "primary": "aino-q"
+  },
+  "10000123-pyro_e": {
+   "char": "ドゥリン",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "durin-essential-transformation",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6,
+      6
+     ]
+    }
+   ],
+   "primary": "durin-essential-transformation"
+  },
+  "10000123-pyro_q": {
+   "char": "ドゥリン",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "durin-burst-white",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20.5,
+      20.5
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "durin-burst-white"
+  },
+  "10000124-anemo_e": {
+   "char": "ヤフォダ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "jahoda-shadow-pursuit",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      5.57,
+      5.57
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "jahoda-shadow-pursuit"
+  },
+  "10000124-anemo_q": {
+   "char": "ヤフォダ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "jahoda-burst-dot",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      13.17,
+      13.17
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "jahoda-burst-dot"
+  },
+  "10000125-hydro_e": {
+   "char": "コロンビーナ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "columbina-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      25,
+      25
+     ]
+    }
+   ],
+   "master": 25,
+   "primary": "columbina-skill"
+  },
+  "10000125-hydro_q": {
+   "char": "コロンビーナ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "columbina-q",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "columbina-q"
+  },
+  "10000127-geo_e": {
+   "char": "イルーガ",
+   "command": "skill",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000127-geo_e_hold": {
+   "char": "イルーガ",
+   "command": "skill[hold=1]",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000127-geo_q": {
+   "char": "イルーガ",
+   "command": "burst",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "ln1:8: expecting ; at end of  statement, got char"
+  },
+  "10000128-anemo_e": {
+   "char": "ファルカ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sturm-und-drang",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      12.13,
+      12,
+      12.13
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "sturm-und-drang"
+  },
+  "10000128-anemo_e_hold": {
+   "char": "ファルカ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sturm-und-drang",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      12.13,
+      12,
+      12.13
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "sturm-und-drang"
+  },
+  "10000128-anemo_q": {
+   "char": "ファルカ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000131-pyro_e": {
+   "char": "ニコ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "grace-of-kenosis",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "grace-of-kenosis"
+  },
+  "10000131-pyro_q": {
+   "char": "ニコ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "silent-contemplation",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      20,
+      20
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "silent-contemplation"
+  },
+  "10000132-anemo_e": {
+   "char": "プルーネ",
+   "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000132-anemo_q": {
+   "char": "プルーネ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "prune-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      12.6,
+      12.6
+     ]
+    }
+   ],
+   "master": 12,
+   "primary": "prune-burst"
+  },
+  "10000150-cryo_e": {
+   "char": "オデット",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "odette-skill-recast",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6.57,
+      6.57
+     ]
+    },
+    {
+     "key": "odette-dance-double",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      21.03,
+      21.03
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "odette-dance-double"
+  },
+  "10000150-cryo_q": {
+   "char": "オデット",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "odette-skill-recast",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6.02,
+      6.02
+     ]
+    },
+    {
+     "key": "odette-dance-double",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      21.03,
+      21.03
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "odette-dance-double"
+  }
+ }
+}

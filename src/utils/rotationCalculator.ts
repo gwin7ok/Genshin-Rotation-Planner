@@ -265,9 +265,11 @@ export function calculateRotation(
       // CTの開始位置（動作開始からの遅れ）。マスターの値。未設定は動作開始と同時
       // 動作開始から / 長押し終了から / 状態の終了から（状態の長さは効果継続時間。無ければアクションの終了）
       const effectSeconds = act.effectDuration ?? actionDef?.effectDuration ?? 0;
-      const ctOffset = Number((cooldownStart
+      const computedCtOffset = Number((cooldownStart
         ? cooldownStart.delay + (cooldownStart.from === 'holdEnd' ? holdSeconds ?? 0 : cooldownStart.from === 'stateEnd' ? (effectSeconds > 0 ? effectSeconds : duration) : 0)
         : 0).toFixed(3));
+      // gcsim から書き戻した値があれば優先（D37）
+      const ctOffset = act.gcsimCtOffset ?? computedCtOffset;
       const ctStartTime = Number((actionStartTime + ctOffset).toFixed(3));
 
       // CT に関わるスキル・爆発なのにアクション定義が見つからない（旧データの編成など）: CT を判定できないことを知らせる
@@ -357,6 +359,25 @@ export function calculateRotation(
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       const effectSpan = inStateWindow ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
       if (effectSpan) activeBuffs.push(effectSpan);
+
+      // gcsim から書き戻した副次効果（アクションの開始からの位置・継続時間つき）
+      (act.extraEffects ?? []).forEach((ex, exIdx) => {
+        if (!(ex.duration > 0) || inStateWindow) return;
+        const exStart = Number((actionStartTime + Math.max(0, ex.offset)).toFixed(3));
+        activeBuffs.push({
+          id: `effect_extra_${char.id}_${act.id}_${exIdx}`,
+          buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
+          name: `${char.name} ${act.shortName}: ${ex.name}`,
+          sourceCharacterId: char.id,
+          sourceType: 'talent',
+          startTime: exStart,
+          endTime: Number((exStart + ex.duration).toFixed(3)),
+          duration: ex.duration,
+          color: char.color,
+          description: `${act.name}（副次効果: ${ex.name}）`,
+          ownerStintId: rawStint.id,
+        });
+      });
 
       // アクションごとの遅延は、そのアクションの終了後に入れる（出場の最後なら次の交代が遅れる）
       currentTime = Number((actionEndTime + actionDelayOf(act)).toFixed(3));

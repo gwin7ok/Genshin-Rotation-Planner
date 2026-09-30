@@ -354,6 +354,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
+  // アクション ID → そのアクションがある出場ブロックの ID（持ち越しバーを、発動した出場ブロックの行に出すため）
+  const homeStintIdOfAction = new Map<string, string>();
+  stints.forEach(s => s.actions.forEach(a => homeStintIdOfAction.set(a.id, s.id)));
+
   // ループ基準を置ける位置（出場キャラの境目）。index は「何番目の出場キャラの前か」（0=先頭・基準なし）
   const loopBoundaries = useMemo(() => {
     const list: { index: number; time: number; label: string }[] = [
@@ -1148,16 +1152,23 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const totalOccurrences = sameCharStints.length;
                   const isFirstOccurrence = occurrenceNum === 1;
 
-                  // Character-level carry-over cooldowns and buffs (shown on character's first appearance)
-                  const charCarryOverSkillCDs = isFirstOccurrence
-                    ? carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'skill')
-                    : [];
-                  const charCarryOverBurstCDs = isFirstOccurrence
-                    ? carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'burst')
-                    : [];
-                  const charCarryOverBuffs = isFirstOccurrence
-                    ? carryOverBuffs.filter(b => b.origin !== 'passive' && b.sourceCharacterId === char.id)
-                    : [];
+                  // 2周目への持ち越し（折り返し）バー: そのCT・効果を発動したアクションの出場ブロックの行に出す。
+                  // 発動元の出場ブロックが分からないもの（2周目で発動したものなど）は、そのキャラの最初の出場の行に出す。
+                  // CT違反の判定は、出場ブロックに関係なく、そのキャラの全出場のCTで行っている（rotationCalculator の ctEvents）
+                  const ctCarryHere = (c: CooldownSpan) => {
+                    const home = homeStintIdOfAction.get(c.actionInstanceId);
+                    return home ? home === stint.id : isFirstOccurrence;
+                  };
+                  const buffCarryHere = (b: ActiveBuffSpan) => {
+                    const home = b.ownerStintId
+                      ?? (b.originalStartTime !== undefined
+                        ? stints.find(s => s.characterId === char.id && b.originalStartTime! >= (s.startTime ?? 0) - 0.2 && b.originalStartTime! <= (s.endTime ?? 0) + 0.2)?.id
+                        : undefined);
+                    return home ? home === stint.id : isFirstOccurrence;
+                  };
+                  const charCarryOverSkillCDs = carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'skill' && ctCarryHere(c));
+                  const charCarryOverBurstCDs = carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'burst' && ctCarryHere(c));
+                  const charCarryOverBuffs = carryOverBuffs.filter(b => b.origin !== 'passive' && b.sourceCharacterId === char.id && buffCarryHere(b));
                   const charCarryOverPassives = isFirstOccurrence
                     ? carryOverPassives.filter(p => p.characterId === char.id)
                     : [];

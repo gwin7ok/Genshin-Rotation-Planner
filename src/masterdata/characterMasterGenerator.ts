@@ -51,7 +51,7 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
  * **スキルとは別のCT**（`ActionSpecialSkill`）を持つため、別のアクション（別ボタン）にする。通常のスキルのCTは開始しない。
  * キー: キャラ ID、値: 派生の名前（小文字。PARAMETER_DERIVED_SKILLS と同じ）と、gcsim の値（根拠つき）
  */
-const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean }> = {
+const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean }> = {
   '10000128-anemo': {
     slug: 'specialskill',
     label: 'spE',
@@ -64,7 +64,15 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     windowSeconds: 12,
     windowDelay: 39 / 60, // varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)
     windowExtendOnBurst: 2.3, // varka/burst.go: ExtendStatus(skillKey, 2.3*60)（「説明にはないが延びるらしい」）
-    windowHitlag: { normal: [0.03, 0.06, 0.06, 0.09, 0.1], charged: 0.09, special: 0.09 }, // AddStatus の第3引数 true = ヒットストップで延びる。値は attack.go の attackHitlagHaltFrame / charge.go / skill.go の HitlagHaltFrames（秒）。全ヒットが敵に当たった最大の場合
+    // AddStatus の第3引数 true = ヒットストップで延びる。ヒット 1 回あたりの止まるフレーム数 = ceil((HitlagHaltFrames + 3.6 × [防御ヒットストップ]) × (1 − 0.01))
+    // （pkg/core/combat/attack.go: DefHalt が有効（既定 true。pkg/gcs/parser/parser.go）で CanBeDefenseHalted の攻撃は、+3.6 フレーム。pkg/core/player/character/hitlag.go: ApplyHitlag の frozenFrames）。
+    // 全ヒットが敵に当たった最大の場合（2026-10-01 に gcsim の実行ログ 6/8/8/9f で確認）:
+    //   通常攻撃 N1〜N5 = 6/8/8/9/10f（attack.go: 1 段目 {1.8}、2〜5 段目の 2 ヒット目 {3.6, 3.6, 5.4, 6} フレームに +3.6。1 ヒット目は 0 で防御ヒットストップも無し）
+    //   重撃 = 9f（charge.go: 2 ヒット目 5.4+3.6）。特殊重撃（蒼牙）= 2 回 × 9f = 18f（azureDevour: {0, 5.4, 0, 5.4}、防御ヒットストップ有り）。重撃が特殊スキルの回数を使うかは後で決まるので、最大の 18f で見積もる
+    //   特殊スキル = 9f（skill.go: fourWindsHitHaltFrame {5.4, 0}、1 ヒット目だけ防御ヒットストップ有り）、スキルの初撃 = 9f（HitlagHaltFrames 5.4 + 3.6。状態は命中の 1f 前に付くので延長される）
+    windowHitlag: { normal: [6, 8, 8, 9, 10].map(f => f / 60), charged: 18 / 60, special: 9 / 60, skill: 9 / 60 },
+    // defhalt=false（体幹が崩れる敵）: 防御ヒットストップの +3.6f が無い。通常攻撃 2/4/4/6/6f、重撃 6f（特殊重撃は 2 回で 12f）、特殊スキル 6f、スキルの初撃 6f
+    windowHitlagNoDefHalt: { normal: [2, 4, 4, 6, 6].map(f => f / 60), charged: 12 / 60, special: 6 / 60, skill: 6 / 60 },
     reducePerHitHexerei: 1.0, // varka/asc.go hexSkillCDReduction: ヘクセレイ：秘儀（ヘクセレイのキャラが 2 人以上）のとき 1 秒（ゲーム内の説明: ヘクセレイ「魔術：秘密の儀式」で 1 秒短縮）
     reducePerHit: 0.5, // varka/skill.go: fourWindsCDRedCB → ReduceActionCooldown（hexSkillCDReduction = 30 フレーム）。ゲーム内の説明: 通常攻撃を与えると 0.5 秒短縮、最大 15 回
     hitsPerNormal: [1, 2, 2, 2, 2], // varka/attack.go の attackHitmarks（1〜5 段目のヒット数。ヒットごとに短縮の判定）
@@ -635,6 +643,7 @@ function buildActions(ctx: BuildContext): BuildResult {
         ...(sp.windowDelay ? { windowDelay: Number(sp.windowDelay.toFixed(3)) } : {}),
         ...(sp.windowExtendOnBurst ? { windowExtendOnBurst: sp.windowExtendOnBurst } : {}),
         ...(sp.windowHitlag ? { windowHitlag: sp.windowHitlag } : {}),
+        ...(sp.windowHitlagNoDefHalt ? { windowHitlagNoDefHalt: sp.windowHitlagNoDefHalt } : {}),
         ...(sp.reducePerHit ? { reducePerHit: sp.reducePerHit, ...(sp.reducePerHitHexerei ? { reducePerHitHexerei: sp.reducePerHitHexerei } : {}), hitsPerNormal: sp.hitsPerNormal ?? [1], maxReductions: sp.maxReductions ?? 15 } : {}),
       };
     }

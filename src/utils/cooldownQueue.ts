@@ -16,6 +16,8 @@ export class CooldownQueue<T = undefined> {
   head: QueueHead<T> | undefined;
   /** 待機中の CT（先頭の次から。長さだけを持つ） */
   private waiting: { duration: number; tag?: T }[] = [];
+  /** これより後に始まる待機中の CT は、積まない（ファルカ: 疾風怒濤が終わった後に始まる CT）。既定は制限なし */
+  private limit = Infinity;
 
   /** 同時に持てる回数（これだけ CT が積まれていたら、使えない） */
   readonly charges: number;
@@ -50,6 +52,8 @@ export class CooldownQueue<T = undefined> {
     while (this.head && this.head.end <= t + this.tolerance) {
       const endedAt = this.head.end;
       this.head = undefined;
+      // 始まる時刻が制限を過ぎていたら、待機中の CT は積まない
+      if (endedAt > this.limit + this.tolerance) this.waiting = [];
       const next = this.waiting.shift();
       if (next) this.start(endedAt, next.duration, next.tag);
     }
@@ -61,9 +65,12 @@ export class CooldownQueue<T = undefined> {
   }
 
   /** 積まれている CT を捨てて、全回数分を積み直す（スキルを使うと、全回数分の CT が始まる） */
-  reset(start: number, durations: { duration: number; tag?: T }[]): void {
+  reset(start: number, durations: { duration: number; tag?: T }[], limit = Infinity): void {
+    // 捨てる先頭の CT は、ここで終わる（バーを、積み直しの時刻で切る）
+    if (this.head) this.head.end = Math.min(this.head.end, start);
     this.head = undefined;
     this.waiting = [];
+    this.limit = limit;
     durations.forEach((d, i) => {
       if (i === 0) this.start(start, d.duration, d.tag);
       else this.waiting.push(d);

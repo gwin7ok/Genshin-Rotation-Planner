@@ -44,6 +44,8 @@ export interface GcsimConfigInput {
   loopStartIndex: number;
   /** キャラ交代の所要時間（秒） */
   switchDelay: number;
+  /** 敵の防御ヒットストップ（gcsim の defhalt）。既定 true。false のとき `defhalt=false` を渡す（体幹が崩れる敵に当てる場合） */
+  defHalt?: boolean;
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
   /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
@@ -288,7 +290,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const config: string[] = [
     ...lines,
     '',
-    `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES} ignore_burst_energy=true;`,
+    `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES} ignore_burst_energy=true${input.defHalt === false ? ' defhalt=false' : ''};`,
     'target lvl=100 resist=0.1;',
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',

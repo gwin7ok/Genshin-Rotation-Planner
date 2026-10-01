@@ -158,6 +158,8 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
       openStint(l.char_index ?? 0, l.frame);
       continue;
     }
+    // 出場の最後のアクションの遅延に使う `wait`（アプリのアクションではない）。前のアクションの長さに含める
+    if (m[1] === 'wait') continue;
     (current as GcsimStintRecord | null)?.actions.push({ name: m[1], charIndex: l.char_index ?? 0, frame: l.frame });
   }
   // アクションの長さ = 次のアクション（または交代の要求）の開始まで

@@ -264,8 +264,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               }
               const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, runOutcome.effectTable, ACTION_EFFECT_KEY_OVERRIDES, effectiveEffects);
               const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, ACTION_EFFECT_EXTRAS);
-              const passives = applyPassiveTriggers(extras.stints, runOutcome.align.pairs, runOutcome.summary, result.members, buffsByCharacter);
-              const charEffects = applyCharacterLinkedEffects(passives.stints, runOutcome.align.pairs, runOutcome.summary, result.members, CHARACTER_LINKED_EFFECTS);
+              const passives = applyPassiveTriggers(extras.stints, runOutcome.align.pairs, runOutcome.summary, result.members, buffsByCharacter, result.swapDelayFrames);
+              const charEffects = applyCharacterLinkedEffects(passives.stints, runOutcome.align.pairs, runOutcome.summary, result.members, CHARACTER_LINKED_EFFECTS, result.swapDelayFrames);
               const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length + passives.changes.length + charEffects.changes.length;
               // 誰の（何番目の出場の）アクションか
               const ownerLabel = (stintId: string) => {

@@ -23,6 +23,9 @@ export const LOOP_ITERATIONS = 2;
 const DURATION_MARGIN_FACTOR = 2;
 const DURATION_MARGIN_SECONDS = 30;
 
+/** gcsim の `swap_delay`（交代の要求から実行までのフレーム数）。交代遅延は `swap; delay(...)` で入れるため、最小にする */
+const SWAP_DELAY_FRAMES = 1;
+
 const toFrames = (seconds: number): number => Math.max(0, Math.round(seconds * 60));
 
 export interface GcsimWarning {
@@ -58,6 +61,8 @@ export interface GcsimConfigResult {
    * gcsim のログの `executed <action>`（交代を除く）を先頭から数えた番号が、この配列の番号に一致する（6-3b・6-3）
    */
   actionRefs: GcsimActionRef[];
+  /** 交代遅延（`swap_delay`）のフレーム数。出場の開始位置（アプリは交代遅延を出場に含める）を合わせるために使う */
+  swapDelayFrames: number;
 }
 
 export interface GcsimActionRef {
@@ -142,12 +147,40 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const charById = new Map(input.characters.map(c => [c.id, c]));
   // 落下攻撃を含むキャラ（gcsim は空中状態などの前提条件があり、実行できない場合がある。D48）
   const plungeChars = new Set<string>();
-  const stintLines = (stintList: Stint[], indent: string, refs: { stintId: string; actionId: string; command: string }[]): string[] => {
+  // 出場の先頭: 前の出場と違うキャラなら `<キャラ> swap;` で交代を実行し（swap_delay は 1 フレームだけ）、続けて交代遅延ぶんの `wait` を入れる。
+  //   アプリの交代遅延は「交代が終わってから最初の入力まで」で、gcsim の交代CT（交代の実行から 60 フレーム）にも含まれる。
+  //   gcsim の `swap_delay` は交代の実行までの待ちで、CTはその後から始まってしまうため使わない（フィッシュルの爆発だけの出場が、交代CT待ちになる）
+  const switchFrames = toFrames(input.switchDelay);
+  const stintLines = (
+    stintList: Stint[],
+    indent: string,
+    refs: { stintId: string; actionId: string; command: string }[],
+    /** 最初の出場の直前のキャラのキー（1周目と2周目以降で違うときは `loopPrevKeys`）。無ければ交代しない（最初の出場など） */
+    firstPrevKey: string | undefined,
+    /** ループの最初の出場の直前のキャラのキー（周ごとに違うとき: 1周目 / 2周目以降） */
+    loopPrevKeys?: { first: string | undefined; later: string | undefined },
+  ): string[] => {
     const out: string[] = [];
+    let prevKey = firstPrevKey;
+    let isFirst = true;
     for (const stint of stintList) {
       const char = charById.get(stint.characterId);
       const key = keyOf.get(stint.characterId);
       if (!char || !key) continue; // キーが無いキャラは上で error 済み
+      if (isFirst && loopPrevKeys) {
+        const needFirst = loopPrevKeys.first !== undefined && loopPrevKeys.first !== key;
+        const needLater = loopPrevKeys.later !== undefined && loopPrevKeys.later !== key;
+        if (needFirst && needLater) out.push(`${indent}${key} swap;`);
+        else if (needLater) out.push(`${indent}if i > 1 {`, `${indent}  ${key} swap;`, `${indent}}`);
+        else if (needFirst) out.push(`${indent}if i < 2 {`, `${indent}  ${key} swap;`, `${indent}}`);
+      } else if (prevKey !== undefined && prevKey !== key) {
+        out.push(`${indent}${key} swap;`);
+      }
+      // 交代遅延は `wait`（交代の直後にその時間を使う）。`delay` は次のアクションが実行できる状態になった「後」に入るため、
+      // 最初のアクションのCT待ちと重ならず、アプリの時間より長くなってしまう
+      if (switchFrames > 0) out.push(`${indent}wait(${switchFrames});`);
+      isFirst = false;
+      prevKey = key;
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char') continue;
         if (act.type === 'wait') {
@@ -173,8 +206,15 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
 
   const initialRefs: { stintId: string; actionId: string; command: string }[] = [];
   const loopRefs: { stintId: string; actionId: string; command: string }[] = [];
-  const initialLines = stintLines(initialStints, '', initialRefs);
-  const loopLines = stintLines(loopStints, '  ', loopRefs);
+  const stintKey = (s: Stint | undefined) => (s ? keyOf.get(s.characterId) : undefined);
+  const firstKey0 = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
+  const initialLines = stintLines(initialStints, '', initialRefs, undefined);
+  // ループの最初の出場の直前: 1周目は初動の最後（初動が無ければ最初のキャラ = active）、2周目以降はループの最後
+  const lastOf = (list: Stint[]) => [...list].reverse().map(stintKey).find(Boolean);
+  const loopLines = stintLines(loopStints, '  ', loopRefs, undefined, {
+    first: lastOf(initialStints) ?? firstKey0,
+    later: lastOf(loopStints),
+  });
   const actionRefs: GcsimActionRef[] = [
     ...initialRefs.map(r => ({ ...r, phase: 'initial' as const })),
     ...Array.from({ length: LOOP_ITERATIONS }, (_, i) => loopRefs.map(r => ({ ...r, phase: 'loop' as const, loopIteration: i + 1 }))).flat(),
@@ -226,7 +266,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const config: string[] = [
     ...lines,
     '',
-    `options iteration=1 duration=${duration} swap_delay=${toFrames(input.switchDelay)} ignore_burst_energy=true;`,
+    `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES} ignore_burst_energy=true;`,
     'target lvl=100 resist=0.1;',
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',
@@ -245,5 +285,6 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     runnable: !warnings.some(w => w.level === 'error'),
     members: memberInfos,
     actionRefs,
+    swapDelayFrames: SWAP_DELAY_FRAMES,
   };
 }

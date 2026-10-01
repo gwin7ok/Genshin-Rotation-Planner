@@ -30,14 +30,15 @@ export interface StintPlacement {
 }
 
 /** gcsim の出場（summary.stints）を、アプリの出場ブロックに対応付ける（出場の最初のアクションの actionRefs から引く） */
-export function placeStints(summary: GcsimLogSummary, pairs: AlignedAction[]): StintPlacement[] {
+export function placeStints(summary: GcsimLogSummary, pairs: AlignedAction[], swapDelayFrames = 0): StintPlacement[] {
   const refOf = new Map(pairs.map(p => [p.executed, p.ref]));
   const out: StintPlacement[] = [];
   for (const st of summary.stints) {
     const first = st.actions[0];
     const ref = first ? refOf.get(first) : undefined;
     if (!ref) continue;
-    out.push({ charIndex: st.charIndex, startFrame: st.startFrame, stintId: ref.stintId, firstLap: isFirstLap(ref) });
+      // アプリの出場は、交代遅延から始まる（出場の先頭 = 交代の要求。最初の出場も同じ）。gcsim の出場の開始（`executed swap`）は、要求の swap_delay 後
+    out.push({ charIndex: st.charIndex, startFrame: st.startFrame - swapDelayFrames, stintId: ref.stintId, firstLap: isFirstLap(ref) });
   }
   return out.sort((a, b) => a.startFrame - b.startFrame);
 }
@@ -155,8 +156,10 @@ export function applyPassiveTriggers(
   members: GcsimMemberInfo[],
   /** キャラ ID → そのキャラが発動できる発動バフの定義（getAvailableBuffsForCharacter） */
   buffsByCharacter: Record<string, TriggerableBuffDefinition[]>,
+  /** 交代遅延（swap_delay）のフレーム数 */
+  swapDelayFrames = 0,
 ): ApplyPassivesResult {
-  const placements = placeStints(summary, pairs);
+  const placements = placeStints(summary, pairs, swapDelayFrames);
   const lapEnd = lapEndFrame(placements);
   const changes: PassiveChange[] = [];
   const stintById = new Map(stints.map(s => [s.id, s]));
@@ -302,8 +305,10 @@ export function applyCharacterLinkedEffects(
   summary: GcsimLogSummary,
   members: GcsimMemberInfo[],
   table: Record<string, CharacterLinkedEffectDef[]>,
+  /** 交代遅延（swap_delay）のフレーム数 */
+  swapDelayFrames = 0,
 ): ApplyCharacterEffectsResult {
-  const placements = placeStints(summary, pairs);
+  const placements = placeStints(summary, pairs, swapDelayFrames);
   const lapEnd = lapEndFrame(placements);
   const next = new Map<string, { key: string; name: string; offset: number; duration: number }[]>();
   const touched = new Set<string>();

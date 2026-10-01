@@ -1,13 +1,13 @@
 /**
  * 辞書の確認（フェーズ5 / 5-2b）: 4 キャラ（ナヒーダ・ニィロウ・コロンビーナ・ラウマ）の編成を gcsim ローカルサーバーで実行し、
- * 詳細ログの status イベントの全キーが、辞書（src/data/gcsim_key_catalog.json）で引けるかを確かめる。
+ * 詳細ログの status イベントの全キーが、辞書（public/data/gcsim_key_catalog.json）で引けるかを確かめる。
  * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start。バージョン・ポートは gcsim.config.json）。
  *
  *   node scripts/check-catalog-sample.mjs
  */
 import fs from 'node:fs';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-const catalog = JSON.parse(fs.readFileSync('src/data/gcsim_key_catalog.json', 'utf8'));
+const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map(catalog.entries.filter(e => !e.isPattern).map(e => [e.key, e]));
 const patterns = catalog.entries.filter(e => e.isPattern).map(e => {
   const re = new RegExp('^' + e.key.replace(/[.+?^${}()|[\]\\]/g, m => (m === '{' || m === '}') ? m : '\\' + m)

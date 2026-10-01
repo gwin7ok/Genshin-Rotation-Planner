@@ -205,7 +205,18 @@ export interface PassiveTriggerInstance {
   /** 個別に変更した継続時間・CT（未指定なら定義の値） */
   duration?: number;
   cooldown?: number;
+  /**
+   * gcsim の結果から書き込んだときの、対応する効果のキー（D38-1: 1つの定義に複数のキーがあるときは、キーごとに別のバーにする）。
+   * 手動で置いたものは無い。再発動で前の効果が終わる判定・CT違反・表示の行は「定義 ID ＋ キー」の単位
+   */
+  gcsimKey?: string;
+  /** gcsim の計算を実行したが、この発動が gcsim の結果に出なかった（D38-2: 削除せず残して印を付ける） */
+  gcsimMissed?: boolean;
 }
+
+/** 発動バフの、再発動・CT・表示行の単位（定義 ID ＋ gcsim のキー） */
+export const passiveGroupOf = (passiveEffectId: string, gcsimKey?: string): string =>
+  gcsimKey ? `${passiveEffectId}#${gcsimKey}` : passiveEffectId;
 
 /** 計算済みの発動バフ（効果・CT のバー） */
 export interface PassiveSpan {
@@ -214,6 +225,12 @@ export interface PassiveSpan {
   stintId: string;
   characterId: string;
   passiveEffectId: string;
+  /** gcsim のキー（キーごとに別のバーにするとき）。手動で置いたものは無い */
+  gcsimKey?: string;
+  /** 再発動・CT・表示行の単位（定義 ID ＋ キー。passiveGroupOf） */
+  effectGroup: string;
+  /** gcsim の結果に出なかった手動の発動（印を付ける） */
+  gcsimMissed?: boolean;
   name: string;
   category?: 'talent' | 'weapon' | 'artifact';
   startTime: number;
@@ -241,6 +258,11 @@ export interface Stint {
   actions: CharacterActionInstance[];
   /** 発動バフ（固有天賦）の登録 */
   passiveTriggers?: PassiveTriggerInstance[];
+  /**
+   * gcsim の結果から書き込んだ、キャラクターに紐づく効果（D57。スキル・爆発・攻撃に連動しない、命中・反応由来の効果）。
+   * offset = 出場の先頭からの秒数（出場より前の効果は負）。ユーザーは編集できない（gcsim の計算を再実行すると作り直す）
+   */
+  extraEffects?: { key: string; name: string; offset: number; duration: number }[];
   note?: string;
   // Computed at runtime:
   startTime?: number;

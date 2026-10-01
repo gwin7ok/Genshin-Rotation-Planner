@@ -9,11 +9,11 @@
  *   1. 命令を 10 秒あけて 2 回実行する
  *   2. 実行できなかったとき（再発動・バイク更新など、先に別のアクションが要る派生）は、先に通常のスキルを実行してから、その命令を 2 回
  *   3. それでも実行できなければ「未収集」（理由つき）として残す。手で補う
- * 辞書（src/data/gcsim_key_catalog.json）で「そのキャラの skill / burst 分類の効果」のキーのうち、次を満たすものをその定義のキーにする。
+ * 辞書（public/data/gcsim_key_catalog.json）で「そのキャラの skill / burst 分類の効果」のキーのうち、次を満たすものをその定義のキーにする。
  *   - その命令の発動から 6 秒以内に、イベント（added / refreshed / extended）が起きる
  *   - そのキーのすべてのイベントが、そのキャラの何らかのスキル・爆発の発動から 6 秒以内に起きる（命中のたびに更新されるキーを除く）
  *   - 1回の発動あたり 4 イベント以下
- * 結果は src/data/action_effect_keys.json に書く。
+ * 結果は public/data/action_effect_keys.json に書く。
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
@@ -23,7 +23,7 @@ const SERVER = GCSIM_SERVER_URL;
 const MAX_LAG_FRAMES = 6 * 60;
 const MAX_EVENTS_PER_CAST = 4;
 
-const catalog = JSON.parse(fs.readFileSync('src/data/gcsim_key_catalog.json', 'utf8'));
+const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map<string, any>(catalog.entries.filter((e: any) => !e.isPattern).map((e: any) => [e.key, e]));
 const patterns = catalog.entries.filter((e: any) => e.isPattern).map((e: any) => ({
   e,
@@ -127,7 +127,7 @@ for (const c of characters) {
   }
 }
 
-fs.writeFileSync('src/data/action_effect_keys.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), entries: table }, null, 1));
+fs.writeFileSync('public/data/action_effect_keys.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), entries: table }, null, 1));
 const all = Object.entries(table);
 const count = (s: string) => all.filter(([, e]) => e.status === s).length;
 console.log(`定義 ${all.length} 件 / キーあり ${count('ok')} / キー無し ${count('nokey')} / 未収集 ${count('unprobed')}`);

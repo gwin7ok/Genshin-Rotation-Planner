@@ -10,6 +10,7 @@ import {
 import {
   generateWeaponsMasterOnline,
   generateArtifactsMasterOnline,
+  attachGcsimEquipmentKeys,
   generateEquipmentMaster,
   type EquipmentGenerationProgress,
   type WeaponGenerationReport,
@@ -19,11 +20,13 @@ import {
 
 import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs } from '../masterdata/buffGcsimLink';
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
+import { fetchRuntimeData } from './gcsim/runtimeData';
 
 /** 発動バフと gcsim の辞書の結び付け（5-6）用。辞書は大きいので、動的生成のときだけ読み込む */
 async function loadCatalogIndex() {
-  const catalog = (await import('../data/gcsim_key_catalog.json')).default as unknown as KeyCatalog;
-  return indexCatalog(catalog);
+  // 生成のたびに、必ずサーバーから取り直す（ブラウザのキャッシュ・モジュールのキャッシュを使わない）
+  const catalog = await fetchRuntimeData<KeyCatalog>('gcsim_key_catalog.json');
+  return { index: indexCatalog(catalog), commit: String(catalog.gcsimCommit ?? '').slice(0, 7) };
 }
 
 const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
@@ -171,14 +174,15 @@ export async function syncCharactersMasterOnline(
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
   const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
-  linkCharacterBuffs(latestChars, await loadCatalogIndex());
+  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  linkCharacterBuffs(latestChars, catalogIndex);
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db + gcsim ${report.gcsimCommit.slice(0, 7)} から生成)`,
+    lastSyncedAt: `${nowStr} (genshin-db + gcsim ${report.gcsimCommit.slice(0, 7)} から生成 / 辞書 ${catalogCommit})`,
     characters: mergedCharacters
   };
 
@@ -195,6 +199,10 @@ export async function syncWeaponsMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: WeaponGenerationReport }> {
   const { weapons: latestWeapons, report } = await generateWeaponsMasterOnline(onProgress);
+  // gcsim のキー（照合表）と、発動バフの gcsim の結び付け（辞書）。武器・聖遺物の生成も、キャラの生成と同じ取得元・辞書で行う
+  await attachGcsimEquipmentKeys(latestWeapons, []);
+  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  linkEquipmentBuffs(latestWeapons, [], catalogIndex);
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
     currentDb.weapons,
@@ -206,7 +214,7 @@ export async function syncWeaponsMasterOnline(
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より武器 ${report.totalWeapons} 件をオンライン生成)`,
+    lastSyncedAt: `${nowStr} (genshin-db API より武器 ${report.totalWeapons} 件をオンライン生成 / 辞書 ${catalogCommit})`,
     weapons: mergedWeapons
   };
 
@@ -223,6 +231,9 @@ export async function syncArtifactsMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: ArtifactGenerationReport }> {
   const { artifacts: latestArtifacts, report } = await generateArtifactsMasterOnline(onProgress);
+  await attachGcsimEquipmentKeys([], latestArtifacts);
+  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  linkEquipmentBuffs([], latestArtifacts, catalogIndex);
   const mergedArtifacts = mergeItemsWithProtected(
     latestArtifacts,
     currentDb.artifacts,
@@ -234,7 +245,7 @@ export async function syncArtifactsMasterOnline(
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より聖遺物 ${report.totalArtifacts} セットをオンライン生成)`,
+    lastSyncedAt: `${nowStr} (genshin-db API より聖遺物 ${report.totalArtifacts} セットをオンライン生成 / 辞書 ${catalogCommit})`,
     artifacts: mergedArtifacts
   };
 
@@ -250,7 +261,8 @@ export async function syncEquipmentMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: EquipmentGenerationReport }> {
   const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
-  linkEquipmentBuffs(latestWeapons, latestArtifacts, await loadCatalogIndex());
+  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  linkEquipmentBuffs(latestWeapons, latestArtifacts, catalogIndex);
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
     currentDb.weapons,
@@ -268,7 +280,7 @@ export async function syncEquipmentMasterOnline(
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より武器・聖遺物をオンライン生成)`,
+    lastSyncedAt: `${nowStr} (genshin-db API より武器・聖遺物をオンライン生成 / 辞書 ${catalogCommit})`,
     weapons: mergedWeapons,
     artifacts: mergedArtifacts,
   };

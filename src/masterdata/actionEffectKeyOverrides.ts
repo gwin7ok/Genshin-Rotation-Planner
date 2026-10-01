@@ -1,7 +1,7 @@
 import type { EffectKeyOverride } from '../utils/gcsim/applyGcsimResult';
 
 /**
- * スキル・爆発の効果に対応する gcsim のキー: 手で補う一覧（src/data/action_effect_keys.json の自動収集結果を上書きする）
+ * スキル・爆発の効果に対応する gcsim のキー: 手で補う一覧（public/data/action_effect_keys.json の自動収集結果を上書きする）
  *
  * 自動収集（scripts/probe-effect-keys.ts）は、アクション定義 ID ごとに、そのキャラの skill / burst 分類の効果のうち、
  * 「その命令の発動から 6 秒以内にイベントが起き、すべてのイベントが同キャラのスキル・爆発の発動から 6 秒以内に起き、

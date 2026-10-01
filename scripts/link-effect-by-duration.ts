@@ -17,14 +17,14 @@ import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 
-const catalog = JSON.parse(fs.readFileSync('src/data/gcsim_key_catalog.json', 'utf8'));
+const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map<string, any>(catalog.entries.filter((e: any) => !e.isPattern).map((e: any) => [e.key, e]));
 const patterns = catalog.entries.filter((e: any) => e.isPattern).map((e: any) => ({ e, re: new RegExp('^' + e.key.replace(/[.+?^$()|[\]\\]/g, '\\$&').replace('{element}', '(' + (e.elements ?? []).join('|') + ')').replace(/\*/g, '.*') + '$') }));
 const lookup = (k: string) => exact.get(k) ?? patterns.find((p: any) => p.re.test(k))?.e;
 
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const chars: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
-const table = JSON.parse(fs.readFileSync('src/data/action_effect_keys.json', 'utf8')).entries;
+const table = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 'utf8')).entries;
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
 const WINDOW_FRAMES = 15 * 60;
@@ -151,7 +151,7 @@ for (const [id, v] of all.filter(([, x]) => x.master === undefined && x.candidat
 // 一致した定義に加えて、マスターの効果時間が無い定義でも、同じキャラ・同じ種類の別の定義が同じ設置物・シールドに一致していれば、
 // 同じキーを使う（例: 綺良々の短押し長押しは、通常・長押しと同じシールド）。
 // 継続時間が 1 秒未満の短いシールド（反撃の受け流し用）と、一致しなかったもの（例: 鍾離の柱 31 秒 / マスター 20 秒）は追加しない。
-const patchFile = JSON.parse(fs.readFileSync('src/data/action_effect_keys.json', 'utf8'));
+const patchFile = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 'utf8'));
 let added = 0;
 for (const [id, v] of all) {
   let pick = v.match;
@@ -173,5 +173,5 @@ for (const [id, v] of all) {
   delete entry.reason;
   added++;
 }
-fs.writeFileSync('src/data/action_effect_keys.json', JSON.stringify(patchFile, null, 1));
+fs.writeFileSync('public/data/action_effect_keys.json', JSON.stringify(patchFile, null, 1));
 console.log(`キー表に ${added} 定義を追加`);

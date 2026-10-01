@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
-const catalog = JSON.parse(fs.readFileSync('src/data/gcsim_key_catalog.json', 'utf8'));
+const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map<string, any>(catalog.entries.filter((e: any) => !e.isPattern).map((e: any) => [e.key, e]));
 const patterns = catalog.entries.filter((e: any) => e.isPattern).map((e: any) => ({ e, re: new RegExp('^' + e.key.replace(/[.+?^$()|[\]\\]/g, '\\$&').replace('{element}', '(' + (e.elements ?? []).join('|') + ')').replace(/\*/g, '.*') + '$') }));
 const lookup = (k: string) => exact.get(k) ?? patterns.find((p: any) => p.re.test(k))?.e;
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const chars: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
-const table = JSON.parse(fs.readFileSync('src/data/action_effect_keys.json', 'utf8')).entries;
+const table = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 'utf8')).entries;
 // 手で補う一覧（actionEffectKeyOverrides.ts）で指定済みの定義は「対応済み」として扱う（'' = 書き戻さない指定は対象外のまま）
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';

@@ -4,8 +4,12 @@ import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
 import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
 import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
 import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
+import { fetchRuntimeData } from '../utils/gcsim/runtimeData';
 import { mapCtWaitsToActions, type CtWaitMarks } from '../utils/gcsim/mapCtWaits';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
+import { applyPassiveTriggers, applyCharacterLinkedEffects } from '../utils/gcsim/applyBuffEffects';
+import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
+import type { TriggerableBuffDefinition } from '../utils/buffUtils';
 import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult, type ActionEffectKeyTable } from '../utils/gcsim/applyGcsimResult';
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
 import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
@@ -30,12 +34,14 @@ interface GcsimConfigDialogProps {
   stints: Stint[];
   /** 画面に出ている所要時間（計算後の出場ブロック。変更前の表示に使う） */
   calculated: CalculatedRotation;
+  /** キャラ ID → 発動できる発動バフの定義（gcsim のキーとの対応付け用） */
+  buffsByCharacter: Record<string, TriggerableBuffDefinition[]>;
   /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
   onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculated, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculated, buffsByCharacter, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -84,7 +90,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     const catalog = await loadKeyCatalog();
-    const effectTable = ((await import('../data/action_effect_keys.json')).default as unknown as { entries: ActionEffectKeyTable }).entries;
+    const effectTable = (await fetchRuntimeData<{ entries: ActionEffectKeyTable }>('action_effect_keys.json')).entries;
     const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
     setRunning(false);
     // gcsim でCT待ちが生じたら、結果は反映せず、該当アクションに違反マークを付ける（D21-2）
@@ -258,7 +264,9 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               }
               const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, runOutcome.effectTable, ACTION_EFFECT_KEY_OVERRIDES, effectiveEffects);
               const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, ACTION_EFFECT_EXTRAS);
-              const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length;
+              const passives = applyPassiveTriggers(extras.stints, runOutcome.align.pairs, runOutcome.summary, result.members, buffsByCharacter);
+              const charEffects = applyCharacterLinkedEffects(passives.stints, runOutcome.align.pairs, runOutcome.summary, result.members, CHARACTER_LINKED_EFFECTS);
+              const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length + passives.changes.length + charEffects.changes.length;
               // 誰の（何番目の出場の）アクションか
               const ownerLabel = (stintId: string) => {
                 const idx = stints.findIndex(st => st.id === stintId);
@@ -307,13 +315,38 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                       ))}
                     </div>
                   )}
+                  <div className="font-bold">発動バフ（固有天賦・武器・聖遺物）: {passives.changes.length} 件が変わります（追加 {passives.changes.filter(c => c.kind === 'add').length} / 更新 {passives.changes.filter(c => c.kind === 'update').length} / gcsim に出なかった手動の発動 {passives.changes.filter(c => c.kind === 'missed').length}）</div>
+                  {passives.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {passives.changes.map((c, i) => (
+                        <div key={i} title={c.key}>
+                          {ownerLabel(c.stintId)} {c.name}:{' '}
+                          {c.kind === 'missed'
+                            ? `gcsim の結果に出ませんでした（残して印を付けます。+${(c.offset ?? 0).toFixed(2)}s）`
+                            : `${c.kind === 'add' ? '追加' : '更新'} +${(c.offset ?? 0).toFixed(2)}s / 効果 ${(c.duration ?? 0).toFixed(2)}s${c.cooldown !== undefined ? ` / CT ${c.cooldown.toFixed(2)}s` : ''}`}
+                          {c.before && <span className="text-sky-400/70">（変更前 +{c.before.offset.toFixed(2)}s{c.before.duration !== undefined ? ` / 効果 ${c.before.duration.toFixed(2)}s` : ''}）</span>}
+                          {c.warnBeforeStint && <span className="text-amber-300"> ※発動元の出場の前に起きた効果。出場の先頭に置きます</span>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="font-bold">キャラクターに紐づく効果: {charEffects.changes.length} 件の出場ブロックが変わります（命中・反応由来。直前の出場ブロックに表示）</div>
+                  {charEffects.changes.length > 0 && (
+                    <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
+                      {charEffects.changes.map(c => (
+                        <div key={c.stintId}>
+                          {ownerLabel(c.stintId)}: {c.effects.length === 0 ? '（なし）' : c.effects.map(x => `${x.name.replace(/（.*$/, '')} ${x.offset >= 0 ? '+' : ''}${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {effects.missingDefs.length > 0 && (
                     <div className="text-[11px] text-amber-200">
                       効果のキーの対応表に無いアクション定義があり、効果時間は書き戻していません: {effects.missingDefs.join(' / ')}（scripts/probe-effect-keys.ts で表を作り直してください）
                     </div>
                   )}
                   <button
-                    onClick={() => { onApplyStints(extras.stints); setApplied(true); }}
+                    onClick={() => { onApplyStints(charEffects.stints); setApplied(true); }}
                     disabled={applied || total === 0}
                     className="px-3 py-1 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white border border-sky-400/60"
                     title="編集済みの所要時間・CTも、gcsim の値で上書きします"

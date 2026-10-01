@@ -7,9 +7,9 @@
  *   effects（gcsim の効果）/ targets（アプリ側の対象）/ links（効果 ↔ 対象の組。中間表）/ unlinked（紐づけない理由）
  *
  * 入力:
- *   - gcsim のキーの辞書（src/data/gcsim_key_catalog.json）… 分類が skill / burst / character / attack の効果のキー
+ *   - gcsim のキーの辞書（public/data/gcsim_key_catalog.json）… 分類が skill / burst / character / attack の効果のキー
  *   - gcsim のソースの設置物名（pkg/core/construct/construct.go の ConstructString）… ネットワークに繋がらないときは省略
- *   - キー表（src/data/action_effect_keys.json）と、実行時に見つかった設置物・シールド・継続ダメージ（action_effect_links_by_duration.json）
+ *   - キー表（public/data/action_effect_keys.json）と、実行時に見つかった設置物・シールド・継続ダメージ（action_effect_links_by_duration.json）
  *   - 手で補う一覧（actionEffectKeyOverrides.ts / actionEffectExtras.ts）、承認済みの一覧（actionEffectApproved.ts）
  *   - 紐づけない決定（effectKeyDecisions.ts）
  *   - マスター（characters_master_data.json）のスキル・爆発のアクション定義
@@ -29,6 +29,7 @@ import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
 import { KEY_DECISIONS, DEF_DECISIONS } from '../src/masterdata/effectKeyDecisions.ts';
+import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
 import {
   UNLINKED_REASON_LABELS,
   type EffectKeyCoverage, type EffectRow, type LinkRow, type TargetRow, type UnlinkedReason, type UnlinkedRow,
@@ -37,8 +38,8 @@ import {
 const SCOPE_CATEGORIES = new Set(['skill', 'burst', 'character', 'attack']);
 const readJson = (p: string) => JSON.parse(fs.readFileSync(p, 'utf8'));
 
-const catalog = readJson('src/data/gcsim_key_catalog.json');
-const table: Record<string, any> = readJson('src/data/action_effect_keys.json').entries;
+const catalog = readJson('public/data/gcsim_key_catalog.json');
+const table: Record<string, any> = readJson('public/data/action_effect_keys.json').entries;
 const runtimeLinks: Record<string, any> = fs.existsSync('src/data/action_effect_links_by_duration.json') ? readJson('src/data/action_effect_links_by_duration.json').entries : {};
 const rawChars = readJson('src/data/characters_master_data.json');
 const chars: any[] = Array.isArray(rawChars) ? rawChars : rawChars.characters ?? Object.values(rawChars);
@@ -69,6 +70,13 @@ for (const [defId, extras] of Object.entries(ACTION_EFFECT_EXTRAS)) {
 
 for (const [defId, list] of Object.entries(ACTION_EFFECT_INCLUDED)) {
   for (const x of list) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'included', label: x.note, approval: 'approved' });
+}
+
+// キャラクターに紐づく効果（D57。命中・反応由来の効果）
+for (const [gcsimKey, defs] of Object.entries(CHARACTER_LINKED_EFFECTS)) {
+  const c = chars.find(x => x.source?.gcsimKey === gcsimKey);
+  if (!c) continue;
+  for (const d of defs) links.push({ effectId: d.key, targetId: `character:${c.id}`, role: 'character', label: d.label, approval: 'approved' });
 }
 
 // ---- gcsim のソースの設置物名 ----
@@ -118,6 +126,11 @@ for (const row of effects.values()) {
   else unlinked.push({ side: 'effect', id: row.id, reason: 'unreviewed' });
 }
 const targets: TargetRow[] = [];
+// キャラクターに紐づく効果の対象（紐づけが参照するキャラだけ）
+for (const id of new Set(links.filter(l => l.role === 'character').map(l => l.targetId))) {
+  const c = chars.find(x => `character:${x.id}` === id);
+  targets.push({ id, type: 'character', char: c?.name ?? id, actionType: 'character' });
+}
 // スキル・爆発に加えて、紐づけが参照するアクション定義（デュリンの通常攻撃など）も対象にする
 const referencedDefs = new Set(links.map(l => l.targetId.replace(/^action:/, '')));
 for (const c of chars) {

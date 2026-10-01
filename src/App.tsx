@@ -18,6 +18,7 @@ import { buildGcsimConfig, type GcsimConfigResult } from './utils/gcsim/buildGcs
 import { PartyMember, Stint, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
+import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
@@ -274,6 +275,11 @@ export default function App() {
       setGcsimCopied(false);
     }
   };
+  // キャラ ID → 発動できる発動バフの定義（gcsim の結果の書き戻しで、gcsim のキーとの対応付けに使う）
+  const buffsByCharacter = useMemo(
+    () => Object.fromEntries(characters.map(c => [c.id, getAvailableBuffsForCharacter(c, database)])),
+    [characters, database],
+  );
   const handleCopyGcsimConfig = () => {
     const result = buildGcsimConfig({
       characters,
@@ -516,6 +522,7 @@ export default function App() {
         onCtWaits={setGcsimCtWaits}
         stints={visibleStints}
         calculated={calculatedResult}
+        buffsByCharacter={buffsByCharacter}
         onApplyStints={updateStints}
       />
 

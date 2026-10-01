@@ -1,6 +1,6 @@
 /**
  * マスター生成（build-character-master.ts / build-equipment-master.ts）で、発動バフを gcsim の辞書と結び付ける（フェーズ5 / 5-6）。
- * 辞書（src/data/gcsim_key_catalog.json）は npm run build:catalog で作る。無ければ結び付けを行わない。
+ * 辞書（public/data/gcsim_key_catalog.json）は npm run build:catalog で作る。無ければ結び付けを行わない。
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,11 +8,11 @@ import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs, type BuffLinkRepo
 import type { CharacterConfig } from '../src/types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../src/types/database.ts';
 
-const catalogPath = path.join(process.cwd(), 'src/data/gcsim_key_catalog.json');
+const catalogPath = path.join(process.cwd(), 'public/data/gcsim_key_catalog.json');
 
 function loadIndex() {
   if (!fs.existsSync(catalogPath)) {
-    console.log('（辞書 src/data/gcsim_key_catalog.json が無いため、発動バフと gcsim の結び付けは行っていません。npm run build:catalog で作ってください）');
+    console.log('（辞書 public/data/gcsim_key_catalog.json が無いため、発動バフと gcsim の結び付けは行っていません。npm run build:catalog で作ってください）');
     return undefined;
   }
   return indexCatalog(JSON.parse(fs.readFileSync(catalogPath, 'utf-8')));

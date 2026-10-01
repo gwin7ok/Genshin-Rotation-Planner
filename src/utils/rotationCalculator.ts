@@ -12,6 +12,7 @@ import {
 } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
 import type { CancelTarget } from '../types/genshin';
+import { passiveGroupOf } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
@@ -422,7 +423,10 @@ export function calculateRotation(
         stintId: rawStint.id,
         characterId: char.id,
         passiveEffectId: trigger.passiveEffectId,
-        name: trigger.name,
+        gcsimKey: trigger.gcsimKey,
+        effectGroup: passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey),
+        gcsimMissed: trigger.gcsimMissed,
+        name: trigger.gcsimMissed ? `${trigger.name}（gcsim では発動せず）` : trigger.name,
         category,
         startTime,
         duration,
@@ -437,7 +441,7 @@ export function calculateRotation(
       const passiveSpan = passiveSpans[passiveSpans.length - 1];
       const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
       ctEvents.push({
-        key: `${char.id}:passive:${trigger.passiveEffectId}`,
+        key: `${char.id}:passive:${passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey)}`,
         time: startTime,
         ctOffset: 0,
         cooldown,
@@ -454,7 +458,7 @@ export function calculateRotation(
       if (duration > 0) {
         activeBuffs.push({
           id: `passive_buff_${trigger.id}`,
-          buffId: `buff_${char.id}_${trigger.passiveEffectId}`, // 同じバフは重複集計で1つとして数える
+          buffId: `buff_${char.id}_${passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey)}`, // 同じバフ（キー単位）は重複集計で1つとして数える
           name: `${char.name}: ${trigger.name}`,
           sourceCharacterId: char.id,
           sourceType: category,
@@ -467,6 +471,25 @@ export function calculateRotation(
         });
       }
     }
+
+    // gcsim から書き込んだ、キャラクターに紐づく効果（D57）。出場の先頭からの位置（出場より前は負。時間 0 より前には出さない）
+    (rawStint.extraEffects ?? []).forEach((ex, exIdx) => {
+      if (!(ex.duration > 0)) return;
+      const exStart = Number(Math.max(0, stintStartTime + ex.offset).toFixed(3));
+      activeBuffs.push({
+        id: `effect_char_${char.id}_${rawStint.id}_${exIdx}`,
+        buffId: `effect_char_${char.id}_${ex.key}`,
+        name: `${char.name}: ${ex.name}`,
+        sourceCharacterId: char.id,
+        sourceType: 'talent',
+        startTime: exStart,
+        endTime: Number((exStart + ex.duration).toFixed(3)),
+        duration: ex.duration,
+        color: char.color,
+        description: `キャラクターに紐づく効果: ${ex.name}`,
+        ownerStintId: rawStint.id,
+      });
+    });
 
     const calculatedStint: Stint = {
       ...rawStint,
@@ -491,7 +514,7 @@ export function calculateRotation(
 
   // 同じ効果を再発動したら、前の発動の効果はそこで終わる（残りは上書きされる）
   endAtNextStart(activeBuffs, b => b.buffId);
-  endAtNextStart(passiveSpans, p => `${p.characterId}:${p.passiveEffectId}`);
+  endAtNextStart(passiveSpans, p => `${p.characterId}:${p.effectGroup}`);
 
   const carryOverCooldowns: CooldownSpan[] = [];
   const carryOverBuffs: ActiveBuffSpan[] = [];
@@ -579,7 +602,7 @@ export function calculateRotation(
     // 4. 発動バフ（固有天賦・武器・聖遺物）の2周目折り返し
     for (const p of passiveSpans) {
       if (p.duration <= 0 || p.endTime <= totalDuration + 0.02) continue;
-      const carry = wrapEffect(p, passiveSpans.filter(x => x.characterId === p.characterId && x.passiveEffectId === p.passiveEffectId));
+      const carry = wrapEffect(p, passiveSpans.filter(x => x.characterId === p.characterId && x.effectGroup === p.effectGroup));
       if (carry) {
         // CTも折り返した位置に合わせる（本体のCT終了は元の時刻のまま）
         const cooldownEnd = p.cooldownEnd > totalDuration ? Number((loopStartTime + (p.cooldownEnd - totalDuration)).toFixed(3)) : carry.startTime;

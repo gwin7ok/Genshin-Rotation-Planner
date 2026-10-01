@@ -14429,9 +14429,11 @@
         "dataSource": {
           "duration": "継続時間8秒"
         },
-        "timing": "conditional",
-        "gcsimTarget": false,
-        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kazuha-a4-{element}"
+        ]
       }
     ],
     "source": {

@@ -11,13 +11,13 @@ import { updateKeyMapFile, printKeyMapSummary, keyMapPath } from './write-key-ma
 import { linkCharacters } from './link-buffs.ts';
 
 /**
- * 効果継続時間が空のスキル・爆発について、gcsim の辞書（src/data/gcsim_key_catalog.json）にある「そのキャラのスキル / 爆発の、時間つきの効果」の候補を表示する。
+ * 効果継続時間が空のスキル・爆発について、gcsim の辞書（public/data/gcsim_key_catalog.json）にある「そのキャラのスキル / 爆発の、時間つきの効果」の候補を表示する。
  * 新キャラの追加時など、src/masterdata/effectDurationOverrides.ts に足すかを判断する材料（自動では採用しない: 命ノ星座・内部の猶予・複数のキーが混ざるため）。
  */
 function printEffectCandidates(chars: Array<{ id: string; name: string; source?: { gcsimKey?: string }; availableActions: Array<{ id: string; type: string; shortName: string; effectDuration?: number }> }>): void {
   let catalog: { entries: Array<{ key: string; category: string; kind: string; permanent?: boolean; durationFrames?: number; isPattern?: boolean; owner: { gcsimKey: string; gcsimKeys?: string[] } }> };
   try {
-    catalog = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/gcsim_key_catalog.json'), 'utf-8'));
+    catalog = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public/data/gcsim_key_catalog.json'), 'utf-8'));
   } catch {
     return;
   }

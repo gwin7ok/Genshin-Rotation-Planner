@@ -1,5 +1,5 @@
 /**
- * gcsim キーの辞書（src/data/gcsim_key_catalog.json）を、gcsim のソースから作る（フェーズ5 / 5-2a）。
+ * gcsim キーの辞書（public/data/gcsim_key_catalog.json）を、gcsim のソースから作る（フェーズ5 / 5-2a）。
  *
  *   npm run build:catalog
  *
@@ -17,7 +17,7 @@ import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } 
 const REPO = CONFIG_GCSIM_REPO;
 const BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
 const observedPath = path.join(process.cwd(), 'src/data/gcsim_key_observed.json');
-const outputPath = path.join(process.cwd(), 'src/data/gcsim_key_catalog.json');
+const outputPath = path.join(process.cwd(), 'public/data/gcsim_key_catalog.json');
 
 /** キーの登録を含みうるソース（キャラ・武器・聖遺物・テンプレート・シミュレーションの設定） */
 const isSourceFile = (p: string) =>

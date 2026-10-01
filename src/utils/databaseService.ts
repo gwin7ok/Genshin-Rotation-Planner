@@ -175,6 +175,7 @@ export async function syncCharactersMasterOnline(
 ): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
   const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  report.catalogCommit = catalogCommit;
   linkCharacterBuffs(latestChars, catalogIndex);
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
@@ -200,8 +201,9 @@ export async function syncWeaponsMasterOnline(
 ): Promise<{ db: AppDatabase; report: WeaponGenerationReport }> {
   const { weapons: latestWeapons, report } = await generateWeaponsMasterOnline(onProgress);
   // gcsim のキー（照合表）と、発動バフの gcsim の結び付け（辞書）。武器・聖遺物の生成も、キャラの生成と同じ取得元・辞書で行う
-  await attachGcsimEquipmentKeys(latestWeapons, []);
+  report.gcsimCommit = await attachGcsimEquipmentKeys(latestWeapons, []);
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  report.catalogCommit = catalogCommit;
   linkEquipmentBuffs(latestWeapons, [], catalogIndex);
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
@@ -231,8 +233,9 @@ export async function syncArtifactsMasterOnline(
   onProgress?: (p: EquipmentGenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: ArtifactGenerationReport }> {
   const { artifacts: latestArtifacts, report } = await generateArtifactsMasterOnline(onProgress);
-  await attachGcsimEquipmentKeys([], latestArtifacts);
+  report.gcsimCommit = await attachGcsimEquipmentKeys([], latestArtifacts);
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  report.catalogCommit = catalogCommit;
   linkEquipmentBuffs([], latestArtifacts, catalogIndex);
   const mergedArtifacts = mergeItemsWithProtected(
     latestArtifacts,

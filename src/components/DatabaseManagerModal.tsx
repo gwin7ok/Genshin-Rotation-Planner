@@ -1038,7 +1038,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-1.5 max-h-64 overflow-y-auto">
                       <div className="font-bold text-slate-200">
                         生成レポート: {charSyncReport.totalCharacters} キャラ / gcsim フレームあり {charSyncReport.charactersWithFrames}
-                        <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)})</span>
+                        <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)}{charSyncReport.catalogCommit ? ` / 辞書 ${charSyncReport.catalogCommit}` : ''})</span>
                       </div>
                       {charSyncReport.skipped.length > 0 && (
                         <div><span className="text-slate-400">対象外:</span> {charSyncReport.skipped.map(s => `${s.name} (${s.reason})`).join(' / ')}</div>
@@ -1124,7 +1124,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   {weaponSyncReport && (
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
                       <div className="font-bold text-sky-200 flex items-center justify-between">
-                        <span>武器マスター生成レポート: 全 {weaponSyncReport.totalWeapons} 件 / 発動バフ抽出 {weaponSyncReport.weaponsWithBuffs} 件</span>
+                        <span>武器マスター生成レポート: 全 {weaponSyncReport.totalWeapons} 件 / 発動バフ抽出 {weaponSyncReport.weaponsWithBuffs} 件
+                          {weaponSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {weaponSyncReport.gcsimCommit.slice(0, 7)} / 辞書 {weaponSyncReport.catalogCommit ?? '-'})</span>}
+                        </span>
                         <span className="text-[10px] text-slate-500 font-mono">常時効果 {weaponSyncReport.constantPassiveItems.length} 件</span>
                       </div>
                       {weaponSyncReport.sourceApiUrl && (
@@ -1210,7 +1212,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   {artifactSyncReport && (
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
                       <div className="font-bold text-pink-200 flex items-center justify-between">
-                        <span>聖遺物マスター生成レポート: 全 {artifactSyncReport.totalArtifacts} セット / 発動バフ抽出 {artifactSyncReport.artifactsWithBuffs} 件</span>
+                        <span>聖遺物マスター生成レポート: 全 {artifactSyncReport.totalArtifacts} セット / 発動バフ抽出 {artifactSyncReport.artifactsWithBuffs} 件
+                          {artifactSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {artifactSyncReport.gcsimCommit.slice(0, 7)} / 辞書 {artifactSyncReport.catalogCommit ?? '-'})</span>}
+                        </span>
                         <span className="text-[10px] text-slate-500 font-mono">常時効果 {artifactSyncReport.constantPassiveItems.length} 件</span>
                       </div>
                       {artifactSyncReport.sourceApiUrl && (

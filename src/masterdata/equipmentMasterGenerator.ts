@@ -43,6 +43,10 @@ export interface WeaponGenerationReport {
   totalWeapons: number;
   weaponsWithBuffs: number;
   extractedBuffsList: BuffExtractionEntry[];
+  /** 生成に使った gcsim のコミット（照合表・辞書。画面から単独で生成したとき） */
+  gcsimCommit?: string;
+  /** 発動バフの結び付けに使った辞書の gcsim のコミット */
+  catalogCommit?: string;
   constantPassiveItems: Array<{ sourceType: 'weapon'; name: string }>;
   errors: string[];
   sourceApiUrl?: string;
@@ -56,6 +60,10 @@ export interface ArtifactGenerationReport {
   totalArtifacts: number;
   artifactsWithBuffs: number;
   extractedBuffsList: BuffExtractionEntry[];
+  /** 生成に使った gcsim のコミット（照合表・辞書。画面から単独で生成したとき） */
+  gcsimCommit?: string;
+  /** 発動バフの結び付けに使った辞書の gcsim のコミット */
+  catalogCommit?: string;
   constantPassiveItems: Array<{ sourceType: 'artifact'; name: string }>;
   errors: string[];
   sourceApiUrl?: string;
@@ -566,6 +574,20 @@ function attachGcsimKeys(
     if (key) item.gcsimKey = key;
   }
   return { keyMap, missing: keyMap.genshinOnly.map(m => `${m.name} (${m.id})`) };
+}
+
+/**
+ * 武器だけ・聖遺物だけを生成した結果にも、gcsim のキー（照合表。D34）を設定する。gcsim の対応表（GitHub）を取得する。
+ * 設定した gcsim のコミットを返す
+ */
+export async function attachGcsimEquipmentKeys(
+  weapons: Array<{ id: string; name: string; gcsimKey?: string }>,
+  artifacts: Array<{ id: string; name: string; gcsimKey?: string }>,
+): Promise<string> {
+  const gcsim = await fetchGcsimEquipmentKeys();
+  if (weapons.length > 0) attachGcsimKeys(weapons, gcsim.weaponDm, gcsim.commit);
+  if (artifacts.length > 0) attachGcsimKeys(artifacts, gcsim.artifactDm, gcsim.commit);
+  return gcsim.commit;
 }
 
 /**

@@ -137,6 +137,8 @@ export interface GenerationProgress {
 export interface CharacterGenerationReport {
   generatedAt: string;
   gcsimCommit: string;
+  /** 発動バフの結び付けに使った辞書の gcsim のコミット（画面から生成したとき） */
+  catalogCommit?: string;
   totalCharacters: number;
   charactersWithFrames: number;
   /** 生成対象外にしたキャラ */

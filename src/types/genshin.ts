@@ -74,8 +74,14 @@ export interface ActionDefinition {
   startsSpecialPool?: {
     cooldown: number;
     charges: number;
-    /** 特殊スキルを使える受付時間（秒。スキルを使ってから。同じ出場の中だけ）。受付の間の通常攻撃で、CT が短縮される */
+    /** 特殊スキルを使える受付時間（秒。同じ出場の中だけ）。受付の間の通常攻撃で、CT が短縮される */
     windowSeconds?: number;
+    /** 受付が始まるまでの、スキルを使ってからの秒数（ファルカ: 命中の 1 フレーム前 = 39f） */
+    windowDelay?: number;
+    /** 自分の元素爆発を使うと、受付が延びる秒数（ファルカ: 2.3） */
+    windowExtendOnBurst?: number;
+    /** ヒットストップによる受付の延長（秒。敵に全部当たった最大の場合）。通常攻撃は段ごと（1 段目から順。足りなければ繰り返す）、重撃・特殊スキルは 1 回あたり */
+    windowHitlag?: { normal?: number[]; charged?: number; special?: number };
     /** 受付の間、通常攻撃の 1 ヒットが敵に当たるたびに短縮される CT（秒） */
     reducePerHit?: number;
     /** ヘクセレイ：秘儀（パーティーのヘクセレイのキャラが 2 人以上で、本人もヘクセレイ）のときの、1 ヒットあたりの短縮（秒） */

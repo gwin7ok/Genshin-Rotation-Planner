@@ -1211,7 +1211,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   };
                   const allStintSkillCDs = [...charCarryOverSkillCDs, ...stintSkillCDs];
                   const allStintBurstCDs = [...charCarryOverBurstCDs, ...stintBurstCDs];
-                  const allStintSpecialCDs = [...charCarryOverSpecialCDs, ...stintSpecialCDs];
+                  const allStintSpecialCDs = [...charCarryOverSpecialCDs, ...stintSpecialCDs].sort((a, b) => a.startTime - b.startTime);
                   const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
                   const stintBuffRows = organizeBuffsIntoRows(allStintBuffs);
                   const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
@@ -1346,12 +1346,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           )}
 
                           {/* Row 2b: Special Skill Cooldown Row (特殊元素スキル。スキルとは別のCT) */}
-                          {allStintSpecialCDs.length > 0 && (
-                            <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ 特殊スキルCT</span>
-                              <span className="shrink-0 ml-1">{originalCtSeconds(allStintSpecialCDs).toFixed(1)}s</span>
+                          {/* 特殊スキルのCTは、1本ごとに別の行にする（重なって見えなくなるのを防ぐ） */}
+                          {allStintSpecialCDs.map((cd, i) => (
+                            <div key={cd.id} className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
+                              <span className="truncate">⏱️ 特殊スキルCT{allStintSpecialCDs.length > 1 ? ` ${i + 1}` : ''}</span>
+                              <span className="shrink-0 ml-1">{originalCtSeconds([cd]).toFixed(1)}s</span>
                             </div>
-                          )}
+                          ))}
 
                           {/* Row 3: Burst (Q) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintBurstCDs.length > 0 && (
@@ -1601,9 +1602,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           )}
 
                           {/* --- Row 2b: Special Skill Cooldown Bar (Height: h-6 = 24px) --- */}
-                          {allStintSpecialCDs.length > 0 && (
-                            <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
-                              {allStintSpecialCDs.map(cd => {
+                          {allStintSpecialCDs.map(rowCd => (
+                            <div key={rowCd.id} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                              {[rowCd].map(cd => {
                                 const isCarryOver = Boolean(cd.isCarryOver);
                                 if (cd.startTime >= totalDuration) return null;
                                 const visualEnd = Math.min(totalDuration, cd.endTime);
@@ -1648,7 +1649,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 );
                               })}
                             </div>
-                          )}
+                          ))}
 
                           {/* --- Row 3: Burst (Q) Cooldown Bar (Height: h-6 = 24px) --- */}
                           {allStintBurstCDs.length > 0 && (

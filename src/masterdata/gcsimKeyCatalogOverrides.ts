@@ -154,3 +154,12 @@ MANUAL_PATTERN_KEYS.push({
   durationFrames: 480,
   note: 'asc.go: swirlfunc が "kazuha-a4-"+key（元素名。変数経由）で登録する。拡散した元素（氷・雷・水・炎）の元素ダメージ+（8 秒）',
 });
+
+MANUAL_PATTERN_KEYS.push({
+  key: 'wineandsong-*',
+  elements: [],
+  file: 'internal/weapons/catalyst/wine/wine.go',
+  name: 'ダークアレイの酒と詩（千変万化）: スタミナ消費-・攻撃力+（キャラ別のキー）',
+  durationFrames: 300,
+  note: 'wine.go: fmt.Sprintf("wineandsong-%v", char.Base.Key.String())。通常攻撃が命中するとダッシュのスタミナ消費減（stam mod）、ダッシュ・ダッシュ代替の使用で攻撃力+（stat mod）。どちらも同じキー・5 秒',
+});

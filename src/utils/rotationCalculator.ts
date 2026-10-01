@@ -28,6 +28,8 @@ export interface BuffOverlapSegment {
 }
 
 export interface CalculatedRotation {
+  /** 風元素共鳴による CT の倍率（0.95 または 1）。gcsim の書き戻しに記録する */
+  cdResonanceScale: number;
   totalDuration: number;
   calculatedStints: Stint[];
   activeBuffs: ActiveBuffSpan[];
@@ -283,9 +285,13 @@ export function calculateRotation(
       // 個別に変更された CT があれば優先
       // （長押しで長さが変わるものは、ホールド 0 のときの値 + 長押し 1 秒あたりの増分 × ホールド秒数）
       const isCdAction = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset' || act.type === 'burst';
-      const baseCooldown = act.cooldown ?? Number((((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)) * (isCdAction ? cdResonanceScale : 1)).toFixed(3));
+      // gcsim から書き戻した CT は、書き戻したときの共鳴の倍率を含む。編成の共鳴が変わっていたら、その比で直す
+      const writtenCooldown = act.cooldown !== undefined && act.gcsimCdResonance !== undefined && act.gcsimCdResonance !== cdResonanceScale
+        ? Number((act.cooldown * cdResonanceScale / act.gcsimCdResonance).toFixed(3))
+        : act.cooldown;
+      const baseCooldown = writtenCooldown ?? Number((((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)) * (isCdAction ? cdResonanceScale : 1)).toFixed(3));
       // 風元素共鳴が無く、スキルの CT が書き戻しで変わっている（重雲の命ノ星座2など）ときは、特殊スキルの CT も同じ割合で短くする（gcsim のログで 660f → 627f を確認）
-      const cooldown = act.cooldown === undefined && actionDef?.cooldownPool === 'special' && specialCdScale !== 1 && cdResonanceScale === 1
+      const cooldown = writtenCooldown === undefined && actionDef?.cooldownPool === 'special' && specialCdScale !== 1 && cdResonanceScale === 1
         ? Number((baseCooldown * specialCdScale).toFixed(3))
         : baseCooldown;
       // CTの開始位置（動作開始からの遅れ）。マスターの値。未設定は動作開始と同時
@@ -340,7 +346,7 @@ export function calculateRotation(
         if (!isSpecial && !inStateWindow && actionDef?.startsSpecialPool) {
           const pool = actionDef.startsSpecialPool;
           const baseSkillCd = actionDef.cooldown ?? 0;
-          specialCdScale = baseSkillCd > 0 && act.cooldown !== undefined ? act.cooldown / baseSkillCd : cdResonanceScale;
+          specialCdScale = baseSkillCd > 0 && writtenCooldown !== undefined ? writtenCooldown / baseSkillCd : cdResonanceScale;
           const poolCooldown = Number((pool.cooldown * specialCdScale).toFixed(3));
           specialWindowStart = actionStartTime;
           specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds).toFixed(3)), count: 0, pool, actionId: act.id } : undefined;
@@ -824,6 +830,7 @@ export function calculateRotation(
   const loopedBuffOverlapSegments = buildBuffOverlapSegments([...activeBuffs, ...carryOverBuffs], totalDuration);
 
   return {
+    cdResonanceScale,
     totalDuration,
     calculatedStints,
     activeBuffs,

@@ -147,6 +147,8 @@ export function applyActionCooldowns(
   effectiveCooldowns?: Record<string, number>,
   /** CTが特殊元素スキルの枠（`special_skill`。スキルとは別のCT）のアクション ID */
   specialActionIds?: Set<string>,
+  /** 書き戻す CT が含む風元素共鳴の倍率（0.95 / 1）。編成の共鳴が変わったときの補正に使う */
+  cdResonance = 1,
 ): ApplyCooldownsResult {
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
@@ -194,7 +196,7 @@ export function applyActionCooldowns(
         const v = next.get(a.id);
         if (!v) return a;
         const { gcsimCtOffset: _old, ...rest } = a;
-        return { ...rest, cooldown: v.cooldown, ...(v.offset !== undefined ? { gcsimCtOffset: v.offset } : {}) };
+        return { ...rest, cooldown: v.cooldown, gcsimCdResonance: cdResonance, ...(v.offset !== undefined ? { gcsimCtOffset: v.offset } : {}) };
       }),
     };
   });

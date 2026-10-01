@@ -268,7 +268,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               }
               const durations = applyActionDurations(stints, runOutcome.align.pairs, effectiveDurations);
               const specialActionIds = new Set(calculated.calculatedStints.flatMap(st => st.actions).filter(a => a.cooldownPool === 'special').map(a => a.id));
-              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns, specialActionIds);
+              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns, specialActionIds, calculated.cdResonanceScale);
               const effectiveEffects: Record<string, number> = {};
               for (const b of calculated.activeBuffs) {
                 if (b.origin === 'passive') continue;

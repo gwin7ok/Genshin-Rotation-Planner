@@ -138,6 +138,8 @@ export interface CharacterActionInstance {
    * 所要時間を手で編集したとき（ホールド秒数の編集）は消して、計算値に戻す
    */
   gcsimCtOffset?: number;
+  /** gcsim から書き戻した CT（cooldown）が、どの風元素共鳴の倍率（0.95 / 1）を含む値か。編成の共鳴が変わったら、この比で補正する */
+  gcsimCdResonance?: number;
   /**
    * gcsim の結果から書き戻した、このアクションに付随する副次効果のバー（例: ファルザンの爆発の「祈風の恵み」「詭風の禍つ」。各4秒で繰り返し発生）。
    * offset = アクションの開始からの秒数。ユーザーは編集できない（gcsim の計算を再実行すると作り直す）

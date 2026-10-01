@@ -153,7 +153,9 @@ export function calculateRotation(
     // （特殊スキルのCT短縮は、ループの外の specialReductions に記録する）
     // 特殊スキルの受付（スキルを使ってからの時間と、通常攻撃による CT 短縮の回数。交代で消える）
     let specialWindowStart = 0;
-    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']> } | undefined;
+    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string } | undefined;
+    // 受付の効果バー（ファルカの「疾風怒濤」）。バーの終わりは、受付の終わり（爆発・ヒットストップの延長を含む）と、出場の終わりの早いほう
+    const windowBars: Array<{ span: ActiveBuffSpan; window: NonNullable<typeof specialWindow> }> = [];
     // 連続した通常攻撃の段（gcsim と同じく、他のアクションを挟むと1段目に戻る）
     let normalStreak = 0;
 
@@ -328,7 +330,7 @@ export function calculateRotation(
         if (!isSpecial && !inStateWindow && actionDef?.startsSpecialPool) {
           const pool = actionDef.startsSpecialPool;
           specialWindowStart = actionStartTime;
-          specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds).toFixed(3)), count: 0, pool } : undefined;
+          specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds).toFixed(3)), count: 0, pool, actionId: act.id } : undefined;
           ctEvents.push({
             key: `${char.id}:special`,
             time: actionStartTime,
@@ -461,7 +463,14 @@ export function calculateRotation(
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       const effectSpan = inStateWindow ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
-      if (effectSpan) activeBuffs.push(effectSpan);
+      if (effectSpan) {
+        // 受付と同じ状態のバーは、受付の始まり（スキルの後 windowDelay 秒）から、受付の終わりまで（出場の終わりで、下で切る）
+        if (specialWindow && specialWindow.actionId === act.id && specialWindow.pool.windowDelay) {
+          effectSpan.startTime = Number((effectSpan.startTime + specialWindow.pool.windowDelay).toFixed(3));
+          windowBars.push({ span: effectSpan, window: specialWindow });
+        }
+        activeBuffs.push(effectSpan);
+      }
 
       // gcsim から書き戻した副次効果（アクションの開始からの位置・継続時間つき）
       (act.extraEffects ?? []).forEach((ex, exIdx) => {
@@ -487,6 +496,11 @@ export function calculateRotation(
     }
 
     const stintEndTime = currentTime;
+    windowBars.forEach(({ span, window }, i) => {
+      const nextStart = windowBars[i + 1]?.span.startTime ?? Infinity;
+      span.endTime = Number(Math.max(span.startTime, Math.min(window.until, stintEndTime, nextStart)).toFixed(3));
+      span.duration = Number((span.endTime - span.startTime).toFixed(3));
+    });
     const stintDuration = stintEndTime - stintStartTime;
 
     // Check swap internal cooldown (1.0s)

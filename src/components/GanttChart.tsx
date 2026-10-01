@@ -301,7 +301,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, holdSeconds, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -312,7 +312,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const newStints = stints.map(s => {
       if (s.id !== stintId) return s;
       const cleanActions = s.actions.map(a => {
-        const { hasCTCollision, collisionRemainingCT, holdSeconds, startTime, endTime, ...rest } = a;
+        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, startTime, endTime, ...rest } = a;
         return rest;
       });
       const [moved] = cleanActions.splice(fromIndex, 1);
@@ -1455,6 +1455,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
                                     const hasCollision = act.hasCTCollision;
                                     const colRem = act.collisionRemainingCT;
+                                    const windowWarning = act.specialWindowWarning;
 
                                     return (
                                       <div
@@ -1507,6 +1508,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${
                                           hasCollision
                                             ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
+                                            : windowWarning && !isSelected
+                                            ? 'bg-sky-600/90 text-white ring-2 ring-inset ring-amber-400/80 z-20'
                                             : isSelected 
                                             ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
                                             : isActActive 
@@ -1528,11 +1531,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         title={
                                           hasCollision
                                             ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
+                                            : windowWarning
+                                            ? `【⚠️ 警告】${windowWarning}\nアクション: ${act.name}（gcsim の計算は制限されません）`
                                             : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
                                           {hasCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
+                                          {!hasCollision && windowWarning && <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />}
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />

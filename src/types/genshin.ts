@@ -157,6 +157,8 @@ export interface CharacterActionInstance {
   holdSeconds?: number;
   /** アクション状態の窓の中の E（CT・効果バーを持たない）。計算時にだけ付く */
   inStateWindow?: boolean;
+  /** 特殊スキルが受付時間の外で使われたときの警告文（黄色の警告。計算時にだけ付く） */
+  specialWindowWarning?: string;
   /** CT未回復（CT衝突）フラグ */
   hasCTCollision?: boolean;
   /** CT衝突時の残り秒数 */

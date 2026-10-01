@@ -186,10 +186,15 @@ export function applyPassiveTriggers(
       const keys = [...new Set(effectsOfDef.map(e => e.key))];
 
       for (const key of keys) {
-        // 終わりのある効果だけ（常時の効果は時刻の情報が無い）
+        // 終了時刻が無い永続キーも、マスターに有限の時間がある定義ならキー別バーにできる。
         // チームバフは受け取るキャラごとに開始・終了が少しずつ違って記録されるので、効果のイベントを更新が続く間ごとに1つの発動にまとめる
         // （アプリは、同じ効果を再発動すると前の発動はそこで終わる扱い）。2周目の更新では、1周目の発動を延ばさない
-        const recs = chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId);
+        const keyEntry = effectsOfDef.find(effect => effect.key === key)?.entry;
+        const recs = chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId)
+          .map(rec => rec.endFrame <= rec.startFrame && keyEntry?.permanent && def.duration && def.duration > 0
+            ? { ...rec, endFrame: rec.startFrame + Math.round(def.duration * 60) }
+            : rec)
+          .filter(rec => rec.endFrame > rec.startFrame);
         // 出場ブロックごとに、時刻順に並べる
         const byStint = new Map<string, { rec: { startFrame: number; endFrame: number }; place: EffectPlacement }[]>();
         for (const rec of recs) {

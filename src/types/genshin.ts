@@ -59,6 +59,32 @@ export interface ActionDefinition {
   description?: string;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
+  /**
+   * このアクションのCTが属する枠。無ければ、スキル（skill）・爆発（burst）の通常の枠。
+   * 'special' = 特殊元素スキル（オデットのスキル後の特殊スキルなど）。スキルとは別のCT（gcsim の `ActionSpecialSkill`）で、
+   * 通常のスキルのCTを開始しない（startsSkillCooldown = false）。ガントチャートでは別の行に出す
+   */
+  cooldownPool?: 'special';
+  /** 別枠のCT（cooldownPool）のチャージ数（同時に溜められる回数。無ければ 1）。ファルカの特殊スキルは 2 */
+  charges?: number;
+  /**
+   * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する
+   * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ
+   */
+  startsSpecialPool?: {
+    cooldown: number;
+    charges: number;
+    /** 特殊スキルを使える受付時間（秒。スキルを使ってから。同じ出場の中だけ）。受付の間の通常攻撃で、CT が短縮される */
+    windowSeconds?: number;
+    /** 受付の間、通常攻撃の 1 ヒットが敵に当たるたびに短縮される CT（秒） */
+    reducePerHit?: number;
+    /** ヘクセレイ：秘儀（パーティーのヘクセレイのキャラが 2 人以上で、本人もヘクセレイ）のときの、1 ヒットあたりの短縮（秒） */
+    reducePerHitHexerei?: number;
+    /** 通常攻撃の何段目（連続した N の 1 段目から順）が何ヒットか（ファルカ: 1・2・2・2・2）。段が足りなければ繰り返す */
+    hitsPerNormal?: number[];
+    /** 短縮できる最大ヒット数（スキルを使うたびにリセット） */
+    maxReductions?: number;
+  };
   cooldown?: number;        // このアクションが開始するCT (秒)。ホールドで長さが変わるものは、ホールド 0 のときの値
   /** CTの開始位置（マスターから自動設定。未設定は「動作開始と同時」として扱う） */
   cooldownStart?: CooldownStart;
@@ -117,6 +143,8 @@ export interface CharacterActionInstance {
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
+  /** このアクションのCTが属する枠（アクション定義の cooldownPool）。計算時にだけ付く。special = 特殊元素スキル（スキルとは別のCT） */
+  cooldownPool?: 'special';
   /** gcsim が自分で決める標準の所要時間（秒）。`gcsimBaseDuration`、無ければマスターのフレームから。計算時にだけ付く。ユーザーが標準より長くした分を gcsim に渡すために使う */
   naturalDuration?: number;
   /** 長押し（CT開始位置が holdEnd）の秒数。所要時間から逆算した計算値。計算時にだけ付く */
@@ -286,6 +314,8 @@ export interface PartyMember {
   characterId: string;
   /** 凸数（0〜6。未指定時は星4=6/星5=0） */
   constellation?: number;
+  /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。ヘクセレイに対応するキャラだけ意味がある。未指定は true（gcsim の既定と同じ） */
+  hexerei?: boolean;
   /** 装備武器（DB の武器 id） */
   weaponId?: string;
   /** 精錬ランク (1〜5, 未指定時は星5=1/星4以下=5) */
@@ -320,6 +350,8 @@ export interface CharacterConfig {
   artifactSetMode?: ArtifactSetMode;
   /** 凸数（0〜6。未指定時は星4=6/星5=0） */
   constellation?: number;
+  /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。編成の設定（PartyMember）から解決して入る。未指定は true */
+  hexerei?: boolean;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
   availableActions: ActionDefinition[];
@@ -383,7 +415,8 @@ export interface ActiveBuffSpan {
 export interface CooldownSpan {
   id: string;
   characterId: string;
-  type: 'skill' | 'burst';
+  /** special = 特殊元素スキルのCT（スキルとは別枠） */
+  type: 'skill' | 'burst' | 'special';
   startTime: number;
   endTime: number;
   duration: number;

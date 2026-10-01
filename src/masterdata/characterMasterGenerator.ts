@@ -37,11 +37,45 @@ const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/data/character.dm.json';
  */
 const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
   '10000031-electro': ['recast'],
+  '10000150-cryo': ['recast'], // オデットの特殊スキル（SPECIAL_SKILLS）
+  '10000128-anemo': ['specialskill'], // ファルカの特殊スキル（SPECIAL_SKILLS）
   '10000053-anemo': ['shorthold'],
   '10000061-dendro': ['shorthold'],
   '10000005-hydro': ['shorthold', 'shorthold0ticks'],
   '10000007-hydro': ['shorthold', 'shorthold0ticks'],
   '10000106-pyro': ['recastframestobike', 'recastframestoring'],
+};
+
+/**
+ * 特殊元素スキル（2026-10-01）。gcsim では、スキルの後の一定時間だけ使える特殊スキルを、同じ `skill` 命令で自動的に切り替えるが、
+ * **スキルとは別のCT**（`ActionSpecialSkill`）を持つため、別のアクション（別ボタン）にする。通常のスキルのCTは開始しない。
+ * キー: キャラ ID、値: 派生の名前（小文字。PARAMETER_DERIVED_SKILLS と同じ）と、gcsim の値（根拠つき）
+ */
+const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean }> = {
+  '10000128-anemo': {
+    slug: 'specialskill',
+    label: 'spE',
+    name: '特殊元素スキル',
+    cooldown: 11,
+    effectDuration: 0,
+    charges: 2,
+    startedBySkill: true,
+    cooldownDelay: 39 / 60,
+    windowSeconds: 12,
+    reducePerHitHexerei: 1.0, // varka/asc.go hexSkillCDReduction: ヘクセレイ：秘儀（ヘクセレイのキャラが 2 人以上）のとき 1 秒（ゲーム内の説明: ヘクセレイ「魔術：秘密の儀式」で 1 秒短縮）
+    reducePerHit: 0.5, // varka/skill.go: fourWindsCDRedCB → ReduceActionCooldown（hexSkillCDReduction = 30 フレーム）。ゲーム内の説明: 通常攻撃を与えると 0.5 秒短縮、最大 15 回
+    hitsPerNormal: [1, 2, 2, 2, 2], // varka/attack.go の attackHitmarks（1〜5 段目のヒット数。ヒットごとに短縮の判定）
+    maxReductions: 15,
+    source: 'varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)',
+  },
+  '10000150-cryo': {
+    slug: 'recast',
+    label: 'spE',
+    name: '特殊元素スキル',
+    cooldown: 15,
+    effectDuration: 20,
+    source: 'odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）',
+  },
 };
 
 /**
@@ -552,6 +586,26 @@ function buildActions(ctx: BuildContext): BuildResult {
       const slug = suffix.charAt(0).toLowerCase() + suffix.slice(1);
       if (!PARAMETER_DERIVED_SKILLS[id]?.includes(slug.toLowerCase())) continue;
       const notation = DERIVED_SKILL_NOTATION[slug.toLowerCase()];
+      const special = SPECIAL_SKILLS[id]?.slug === slug.toLowerCase() ? SPECIAL_SKILLS[id] : undefined;
+      if (special) {
+        // 特殊元素スキル: スキルとは別のCT・効果（スキルのCTは開始しない）
+        actions.push({
+          id: `${id}_e_${slug.toLowerCase()}`,
+          name: `${special.name}${skillName ? `（${skillName}の後）` : ''}`,
+          shortName: special.label,
+          type: 'skill',
+          startsSkillCooldown: false,
+          cooldownPool: 'special',
+          ...(special.charges ? { charges: special.charges } : {}),
+          ...(special.cooldownDelay ? { cooldownStart: { from: 'motionStart' as const, delay: Number(special.cooldownDelay.toFixed(3)) } } : {}),
+          cooldown: special.cooldown,
+          effectDuration: special.effectDuration,
+          defaultDuration: framesToSec(table.total),
+          frames: toActionFrames(table, 'skill', skill.consts),
+          dataSource: { cooldown: `gcsim: ${special.source}`, effectDuration: `gcsim: ${special.source}` },
+        });
+        continue;
+      }
       // 長押し系の派生（旅人(水)・早柚・綺良々の shortHold など）は、gcsim では通常のEと同じCTが始まる (D36)
       const startsCooldown = notation.startsCooldown;
       actions.push({
@@ -564,6 +618,19 @@ function buildActions(ctx: BuildContext): BuildResult {
         defaultDuration: framesToSec(table.total),
         frames: toActionFrames(table, 'skill', skill.consts),
       });
+    }
+  }
+
+  // 特殊スキルのCTをスキルが開始するキャラ（ファルカ）: スキル・長押しスキルに、特殊枠のCTの開始を持たせる
+  if (SPECIAL_SKILLS[id]?.startedBySkill) {
+    const sp = SPECIAL_SKILLS[id];
+    for (const a of actions) {
+      if (a.type === 'skill' && !a.cooldownPool || a.type === 'skill_hold') a.startsSpecialPool = {
+        cooldown: sp.cooldown,
+        charges: sp.charges ?? 1,
+        ...(sp.windowSeconds ? { windowSeconds: sp.windowSeconds } : {}),
+        ...(sp.reducePerHit ? { reducePerHit: sp.reducePerHit, ...(sp.reducePerHitHexerei ? { reducePerHitHexerei: sp.reducePerHitHexerei } : {}), hitsPerNormal: sp.hitsPerNormal ?? [1], maxReductions: sp.maxReductions ?? 15 } : {}),
+      };
     }
   }
 

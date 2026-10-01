@@ -132,6 +132,7 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   // ユーザー決定（2026-09-30）
   '10000112-cryo_e_hold': { reason: 'app-bar', note: 'エスコフィエの長押し: gcsim は長押しの指定（hold）を拒否して実行できず、効果も出ない。紐づけず、マスターの効果時間（20 秒）でバーを表示する（ユーザー決定 2026-09-30）' },
   '10000114-cryo_e_hold': { reason: 'app-bar', note: 'スカークの長押し: gcsim は skirk-hold-e-anim（0 秒。動作の目印）しか出さない。紐づけず、マスターの効果時間（12.5 秒）でバーを表示する（ユーザー決定 2026-09-30）' },
+  '10000128-anemo_e_specialskill': { reason: 'no-bar', note: 'ファルカの特殊スキル（spE。2026-10-01 に別アクションにした）: gcsim が出すのはダメージ（Four Winds Ascension）と CT（special_skill 11 秒・2 チャージ）だけで、バーにする状態は出ない（スキルの状態 sturm-und-drang は、スキル本体で表示）' },
   '10000127-geo_e': { reason: 'no-bar', note: 'イルーガのスキル: gcsim v2.48.0 で実行でき、ダメージ（Dawnbearing Songbird (Tap)）のみで、バーにする状態・設置物・シールドが出ない（ソース illuga/skill.go で確認。ユーザー確認済み 2026-09-30）' },
   '10000127-geo_e_hold': { reason: 'no-bar', note: 'イルーガの長押し: 同上（Dawnbearing Songbird (Hold) のダメージのみ。ユーザー確認済み 2026-09-30）' },
   '10000104-anemo_q': { reason: 'covered-by-passive', note: 'チャスカの爆発: 出るのは固有天賦の状態（chasca-a1）だけで、スキル・爆発の効果ではない。6-3c で扱う（ユーザー決定 2026-09-30）。自動収集の chasca-plunge-available は 0.43 秒の落下攻撃の窓で誤り' },

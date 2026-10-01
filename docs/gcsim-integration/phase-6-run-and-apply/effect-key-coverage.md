@@ -19,21 +19,21 @@
 
 設置物名（gcsim のソース）: 7 件
 
-## targets（アプリのスキル・爆発のアクション定義。309 件）
+## targets（アプリのスキル・爆発のアクション定義。314 件）
 
 | 状態 | 件数 |
 |---|---|
-| 紐づけ済み | 192 |
-| gcsim の効果なし・バーを出さない | 69 |
+| 紐づけ済み | 196 |
+| gcsim の効果なし・バーを出さない | 70 |
 | gcsim にキャラが未登録 | 18 |
 | 発動バフ（固有天賦）として扱う | 15 |
 | gcsim の効果なし・アプリ側の値でバーを表示 | 10 |
 | gcsim は効果を出すが、紐づけず・バーも出さない | 4 |
 | 保留 | 1 |
 
-## links（効果 ↔ 対象。227 件）
+## links（効果 ↔ 対象。230 件）
 
-内訳: main/auto=159 / main/approved=28 / extra/approved=29 / included/approved=9 / character/approved=2
+内訳: main/auto=159 / main/approved=29 / extra/approved=28 / included/approved=9 / character/approved=5
 整合性: 存在しない効果・対象を指す紐づけ 0 件 / 重複 0 件
 
 ## 未検討のアクション定義（0 件）

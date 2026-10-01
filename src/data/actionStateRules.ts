@@ -60,11 +60,7 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     stageFrames: [{ total: 82, cancels: { attack: 65, charge: 76, skill: 69, burst: 67, dash: 67, jump: 66, swap: 65 }, source: 'skill.go:skillConvertFrames' }],
     note: 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)',
   },
-  // オデット: 再発動の受付 394 フレームの間の E が recast（受付を消費）
-  '10000150-cryo': { windowSeconds: 394 / 60, maxUses: 1,
-    stageFrames: [{ total: 76, cancels: { attack: 75, dash: 74, jump: 75, walk: 75, swap: 74 }, source: 'skill.go:skillRecastFrames' }],
-    note: 'odette/skill.go: AddStatus(skillRecastKey, 394)',
-  },
+  // オデット: 特殊元素スキル（spE）は、スキルとは別のCTを持つため、別のアクション（`10000150-cryo_e_recast`）にした（2026-10-01）。窓の規則は不要
   // ドゥリン: スキル受付 6 秒の間の E が白/黒の再発動（受付を消費。白・黒でフレームが違い、どちらになるかは未確認のため stageFrames なし）
   '10000123-pyro': { windowSeconds: 6, maxUses: 1, note: 'durin/skill.go: skillWindowDur = 6*60' },
   // ヴァルカ: スキル状態 12 秒の間の E が specialSkill（回数の上限は未確認）

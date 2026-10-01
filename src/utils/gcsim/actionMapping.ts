@@ -18,6 +18,9 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000007-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
   '10000106-pyro_e_recastframestobike': 'skill[recast=1]',
   '10000106-pyro_e_recastframestoring': 'skill[recast=1]',
+  // 特殊元素スキル（別のCT。2026-10-01）: gcsim は、スキルの後の一定時間、同じ `skill` 命令を特殊スキルに自動で切り替える
+  '10000150-cryo_e_recast': 'skill',
+  '10000128-anemo_e_specialskill': 'skill',
 };
 
 /**

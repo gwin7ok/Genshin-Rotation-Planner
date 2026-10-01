@@ -12,7 +12,7 @@
  * 現在の対象: ナヒーダ・ニィロウ・コロンビーナ・ラウマと、その編成の武器・聖遺物・元素共鳴など（5-2b の最初の対象。順次広げる）。
  * 名前は、マスターデータのアクション名・固有天賦名・命ノ星座名・武器名・聖遺物名に合わせた。
  */
-import type { KeyOverride } from './gcsimKeyCatalog.ts';
+import type { AmbiguousKeyPin, KeyOverride } from './gcsimKeyCatalog.ts';
 
 const o = (name: string, extra: Partial<Omit<KeyOverride, 'name'>> = {}): KeyOverride => ({ name, ...extra });
 
@@ -163,3 +163,31 @@ MANUAL_PATTERN_KEYS.push({
   durationFrames: 300,
   note: 'wine.go: fmt.Sprintf("wineandsong-%v", char.Base.Key.String())。通常攻撃が命中するとダッシュのスタミナ消費減（stam mod）、ダッシュ・ダッシュ代替の使用で攻撃力+（stat mod）。どちらも同じキー・5 秒',
 });
+
+/**
+ * 定義場所が複数の分類にまたがる「曖昧な」キーの、分類の確定（2026-10-01）。
+ * 辞書の生成は、gcsim のファイルをパス順に処理する。曖昧なキーの分類はファイル名の順では決まらないので、ここで理由つきで確定する
+ * （値は、確定前の辞書の分類。対応表の範囲〔skill / burst / character / attack〕が動かないようにしている）。
+ * 新しい曖昧なキーが出たら、`npm run build:catalog` のレポートの「分類が未確定の曖昧なキー」に出るので、ここに追加する。
+ */
+export const AMBIGUOUS_KEY_CATEGORIES: Record<string, AmbiguousKeyPin> = {
+  'a1-icd': { category: 'talent', reason: 'キニチ・クレーの固有天賦1の発動間隔（どちらも asc.go）' },
+  'chasca-plunge-available': { category: 'burst', reason: 'チャスカ: 爆発（burst.go）で落下攻撃が可能な窓を開く。スキル終了（skill.go）でも登録' },
+  'dehya-skill-icd': { category: 'skill', reason: 'ディシア: スキルの発動間隔（内部）。爆発の連撃（burst.go）でも使う' },
+  'forest-sanctuary': { category: 'weapon', reason: '森林のレガリア・樹液の刃で共通（持ち主は両方）' },
+  'ganyu-c4': { category: 'burst', reason: '甘雨: 爆発（burst.go）の氷の領域内に付く4凸の効果' },
+  'kokomiskill': { category: 'talent', reason: '珊瑚宮心海: 固有天賦1（asc.go）。スキル（skill.go）でも登録' },
+  'lauma-c1': { category: 'constellation', reason: 'ラウマ: 1凸の効果（cons.go）。スキルでも登録' },
+  'lumidouce-case': { category: 'burst', reason: 'エミリエ: 爆発（burst.go）の ルミドゥース・ケース。キャラ共通の設置物の関数（lumidouce.go）でも登録' },
+  'lumidouce-scent-reset': { category: 'burst', reason: 'エミリエ: 爆発の ルミドゥース・ケース の芳香（猶予時間）' },
+  'millennial-atk%': { category: 'weapon', reason: '終焉を嘆く詩・松韻の響く頃・自由への誓いで共通（持ち主は全員）' },
+  'odette-skill-recast': { category: 'burst', reason: 'オデット: 再発動の猶予（burst.go）。スキル（skill.go）でも登録' },
+  'odette-snow-swans-dream': { category: 'constellation', reason: 'オデット: 4凸の効果（cons.go）。爆発の後処理（burst.go）でも登録' },
+  'omen-debuff': { category: 'burst', reason: 'モナ: 爆発（burst.go）の星異のデバフ。固有天賦（asc.go）が更新する' },
+  'paramita': { category: 'burst', reason: '胡桃: 爆発（burst.go）で紫煙状態を終わらせる。スキルが開く状態（skill.go）でも登録' },
+  'qiqi-talisman': { category: 'talent', reason: '七七: 固有天賦2（asc.go）の護符。爆発（burst.go）の命中でも登録' },
+  'radiance-stellar-swirl': { category: 'character', reason: 'オデット・七七・旅人(氷)の星拡散反応の状態（stellar.go。持ち主は全員）' },
+  'skill-particle-icd': { category: 'skill', reason: 'エミリエ・ヨォーヨの粒子の発生間隔（内部）' },
+  'skyrider': { category: 'weapon', reason: '天空の傲・天空の刃で共通（持ち主は両方）' },
+  'yanfei-seal': { category: 'burst', reason: '煙緋: 緋印（attack.go・skill.go・burst.go で登録。爆発で付与量が増える）' },
+};

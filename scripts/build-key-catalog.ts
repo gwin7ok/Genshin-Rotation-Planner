@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { extractKeyCatalog } from '../src/masterdata/gcsimKeyCatalog.ts';
-import { KEY_OVERRIDES, MANUAL_PATTERN_KEYS } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
+import { AMBIGUOUS_KEY_CATEGORIES, KEY_OVERRIDES, MANUAL_PATTERN_KEYS } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
 import { assignNames } from '../src/masterdata/gcsimKeyNames.ts';
 import { loadNameSources } from './genshin-db-names.ts';
 
@@ -55,7 +55,7 @@ await Promise.all(Array.from({ length: 20 }, async () => {
   }
 }));
 
-const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined, MANUAL_PATTERN_KEYS);
+const { catalog, report } = extractKeyCatalog(files, tree.sha, tree.tree.map(t => t.path), KEY_OVERRIDES, fs.existsSync(observedPath) ? JSON.parse(fs.readFileSync(observedPath, 'utf-8')) : undefined, MANUAL_PATTERN_KEYS, AMBIGUOUS_KEY_CATEGORIES);
 
 // 表示名: 手で補う一覧が優先。無いキーは、持ち主の名前（genshin-db）＋ キー名の規則で付ける
 console.log('genshin-db から名前を取得中...');
@@ -115,6 +115,8 @@ console.log(`実行のログで確認できたキー: 辞書にあった ${repor
 console.log(`表示名: 手で補った ${naming.manual} 件、規則で付けた ${naming.rule} 件、一部が英語のまま ${naming.partial} 件、持ち主が分からず無し ${naming.unnamed} 件（表示は英語名 → キー名）`);
 console.log(`定義場所が複数にまたがるキー ${report.ambiguous.length} 件:`);
 for (const a of report.ambiguous) console.log(`  ${a.key} ← ${a.places.join(' / ')}`);
+console.log(`  分類が未確定の曖昧なキー（要確認。AMBIGUOUS_KEY_CATEGORIES に追加）: ${report.ambiguousUnpinned.length} 件${report.ambiguousUnpinned.length ? ' → ' + report.ambiguousUnpinned.join(', ') : ''}`);
+console.log(`  確定した分類が実際の定義場所に無いキー: ${report.pinsInvalid.length} 件${report.pinsInvalid.length ? ' → ' + report.pinsInvalid.join(', ') : ''}`);
 console.log(`未解決のキー名 ${report.unresolved.length} 件:`);
 for (const u of report.unresolved) console.log(`  ${u.file}: ${u.expr}`);
 console.log(`\n出力: ${outputPath}`);

@@ -19,6 +19,8 @@ export interface TriggerableBuffDefinition {
   timing?: BuffTiming;             // gcsim との分類（always = 常時 / computed / conditional）
   gcsimTarget?: boolean;           // false = gcsim 対象外（手動でのみ置く）
   gcsimNote?: string;              // gcsim 対象外の理由
+  gcsimKeys?: string[];            // 対応する gcsim の効果のキー（パターンを含む）。各キーを別のバーにする
+  gcsimCooldownKeys?: string[];    // 対応する gcsim の発動間隔（CT）のキー
 }
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
@@ -65,6 +67,8 @@ export function getAvailableBuffsForCharacter(
         timing: p.timing,
         gcsimTarget: p.gcsimTarget,
         gcsimNote: p.gcsimNote,
+        gcsimKeys: p.gcsimKeys,
+        gcsimCooldownKeys: p.gcsimCooldownKeys,
       });
     }
   }
@@ -100,6 +104,8 @@ export function getAvailableBuffsForCharacter(
           timing: b.timing,
           gcsimTarget: b.gcsimTarget,
           gcsimNote: b.gcsimNote,
+          gcsimKeys: b.gcsimKeys,
+          gcsimCooldownKeys: b.gcsimCooldownKeys,
         });
       }
     }
@@ -150,6 +156,8 @@ export function getAvailableBuffsForCharacter(
           timing: b.timing,
           gcsimTarget: b.gcsimTarget,
           gcsimNote: b.gcsimNote,
+          gcsimKeys: b.gcsimKeys,
+          gcsimCooldownKeys: b.gcsimCooldownKeys,
         });
       }
     }

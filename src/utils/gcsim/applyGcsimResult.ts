@@ -197,7 +197,7 @@ export function applyActionCooldowns(
 }
 
 /**
- * スキル・爆発の効果に対応する gcsim のキー（src/data/action_effect_keys.json の entries）。
+ * スキル・爆発の効果に対応する gcsim のキー（public/data/action_effect_keys.json の entries）。
  * キー = アクション定義 ID。status: ok = キーあり / nokey = 効果の状態のキーが無い / unprobed = 収集できなかった（手で補う）
  */
 export type ActionEffectKeyTable = Record<string, {

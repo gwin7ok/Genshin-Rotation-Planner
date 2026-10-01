@@ -2,7 +2,7 @@
  * gcsim の実行で出るキーの網羅確認（フェーズ5 / 5-2b の続き）
  *
  * 全キャラ・全武器・全聖遺物を、1 つずつ gcsim のローカルサーバー（npm run gcsim:start。ポートは gcsim.config.json）で実行し、
- * 詳細ログの status イベント（バフ・状態・内部CTのキー）を集める。辞書（src/data/gcsim_key_catalog.json）で引けるかを確かめ、
+ * 詳細ログの status イベント（バフ・状態・内部CTのキー）を集める。辞書（public/data/gcsim_key_catalog.json）で引けるかを確かめ、
  * 実行で確認できたキーを src/data/gcsim_key_observed.json に書き出す（npm run build:catalog が辞書に合成する）。
  *
  *   node scripts/run-catalog-coverage.mjs            全件（数分）
@@ -20,7 +20,7 @@ import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 const SERVER = GCSIM_SERVER_URL + '/sample/coverage';
 const root = process.cwd();
 const read = p => JSON.parse(fs.readFileSync(`${root}/${p}`, 'utf8'));
-const catalog = read('src/data/gcsim_key_catalog.json');
+const catalog = read('public/data/gcsim_key_catalog.json');
 const characters = read('src/data/characters_master_data.json').filter(c => c.source?.gcsimKey);
 const weapons = read('src/data/weapons_master_data.json').filter(w => w.gcsimKey);
 const artifacts = read('src/data/artifacts_master_data.json').filter(a => a.gcsimKey);

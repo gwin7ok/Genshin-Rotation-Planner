@@ -1213,13 +1213,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
                   // パッシブバフ（通常発動 + 1周目からの持ち越し）を同一の passiveEffectId ごとに統合
                   const allPassiveEffectIds = Array.from(new Set([
-                    ...stintPassives.map(p => p.passiveEffectId),
-                    ...charCarryOverPassives.map(p => p.passiveEffectId),
+                    ...stintPassives.map(p => p.effectGroup),
+                    ...charCarryOverPassives.map(p => p.effectGroup),
                   ]));
 
                   const stintPassiveGroups = allPassiveEffectIds.map(effectId => {
-                    const regular = stintPassives.filter(p => p.passiveEffectId === effectId);
-                    const carry = charCarryOverPassives.filter(p => p.passiveEffectId === effectId);
+                    const regular = stintPassives.filter(p => p.effectGroup === effectId);
+                    const carry = charCarryOverPassives.filter(p => p.effectGroup === effectId);
                     const sample = regular[0] || carry[0];
                     const category = sample.category || (effectId.startsWith('wbuff_') ? 'weapon' : effectId.startsWith('abuff_') ? 'artifact' : 'talent');
                     return {

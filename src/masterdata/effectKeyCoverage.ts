@@ -17,6 +17,8 @@ export type UnlinkedReason =
   | 'hit-driven'
   /** 保留（ストックできるスキルなど、扱いが決まっていない） */
   | 'deferred'
+  /** 発動バフ（固有天賦）の書き戻しで扱う（対応表の範囲外。マスターの定義の gcsimKeys で結び付ける） */
+  | 'covered-by-passive'
   /** 上のどれにも当てはまらないが、紐づけないと決めた（メモに理由） */
   | 'decided-not-linked'
   /** gcsim で実行できない（命令の変換規則の誤り・キーの不一致）ため、登録しない */
@@ -43,6 +45,7 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'grace-window': '猶予時間・短い窓（効果ではない）',
   'hit-driven': '命中などで更新され続ける内部状態',
   'deferred': '保留',
+  'covered-by-passive': '発動バフ（固有天賦）として扱う',
   'decided-not-linked': 'gcsim は効果を出すが、紐づけず・バーも出さない',
   'not-runnable': 'gcsim で実行できない（登録しない）',
   'not-in-gcsim': 'gcsim にキャラが未登録',
@@ -55,7 +58,8 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'unreviewed': '未検討',
 };
 
-export type LinkRole = 'main' | 'extra' | 'included';
+/** main = 本体の効果時間 / extra = 副次効果のバー / included = そのアクションに含まれる効果 / character = キャラクターに紐づく効果（D57） */
+export type LinkRole = 'main' | 'extra' | 'included' | 'character';
 /** 紐づけの確度: approved = ユーザーが確認して承認 / auto = 自動（マスターの効果時間との一致・実測）で作った */
 export type LinkApproval = 'approved' | 'auto';
 
@@ -84,14 +88,14 @@ export interface EffectRow {
 }
 
 /** アプリ側の対象の種類（今はアクション定義。発動バフ・命ノ星座は、今後この表に加える） */
-export type TargetType = 'action';
+export type TargetType = 'action' | 'character';
 
 export interface TargetRow {
   /** 種類を前置きした ID: `action:<アクション定義 ID>` */
   id: string;
   type: TargetType;
   char: string;
-  /** アクションの種類（skill / skill_hold / burst） */
+  /** アクションの種類（skill / skill_hold / burst）。キャラクターに紐づけるときは 'character' */
   actionType: string;
 }
 

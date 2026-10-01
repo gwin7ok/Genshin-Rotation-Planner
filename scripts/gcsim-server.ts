@@ -129,7 +129,7 @@ async function check(): Promise<void> {
     console.log('- 実行ファイルは未取得（npm run gcsim:install）');
   }
   for (const f of ['gcsim_key_catalog.json', 'gcsim_key_map.json', 'action_effect_keys.json', 'action_effect_links_by_duration.json', 'effect_key_coverage.json']) {
-    const p = path.join(ROOT, 'src/data', f);
+    const p = path.join(ROOT, ['gcsim_key_catalog.json', 'action_effect_keys.json'].includes(f) ? 'public/data' : 'src/data', f);
     const commit = fs.existsSync(p) ? fs.readFileSync(p, 'utf8').match(/"gcsimCommit":\s*"([0-9a-f]+)"/)?.[1] : undefined;
     line(commit === cfg.commit, `${f} のコミット ${commit?.slice(0, 8) ?? '無し'} = 設定 ${cfg.commit.slice(0, 8)}`);
   }

@@ -145,3 +145,12 @@ export const MANUAL_PATTERN_KEYS: ManualPatternKey[] = [
     note: 'viridescent.go: key := "vv" + ele.String()。拡散した元素（氷・雷・水・炎）の耐性を 40% 下げる（10 秒）',
   },
 ];
+
+MANUAL_PATTERN_KEYS.push({
+  key: 'kazuha-a4-{element}',
+  elements: ['cryo', 'electro', 'hydro', 'pyro'],
+  file: 'internal/characters/kazuha/asc.go',
+  name: '楓原万葉 固有天賦2「風物の詩吟」: 拡散した元素の元素ダメージ+',
+  durationFrames: 480,
+  note: 'asc.go: swirlfunc が "kazuha-a4-"+key（元素名。変数経由）で登録する。拡散した元素（氷・雷・水・炎）の元素ダメージ+（8 秒）',
+});

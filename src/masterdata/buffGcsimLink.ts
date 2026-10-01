@@ -79,6 +79,12 @@ export const NO_DURATION_TALENTS: Record<string, string> = {
   '10000075-anemo_p1': '放浪者 拾玉得花: スキルの状態（20秒）より先に、別管理のゲージの消費で終わる',
 };
 
+/** 同じ固有天賦でも、gcsim が別キーで記録する効果は1定義に集約し、キーごとに別バーを作る。 */
+const TALENT_KEY_ADDITIONS: Record<string, string[]> = {
+  // A1 のスキル起動（20秒）と、月兆・満照時の常時攻撃補正は別効果・別バー。
+  '10000119-dendro_p1': ['light-for-the-frosty-night'],
+};
+
 /**
  * 効果継続時間に意味が無い命ノ星座の効果（領域・状態が続く間だけ有効で、gcsim の値は更新の間隔・継続時間が無い・瞬間の効果）。
  * 定義は作るが、継続時間は持たない（分類は「条件付き」。キーは対応付けたまま）。キー: 命ノ星座の効果の定義 ID（`<キャラID>_c<凸>`）
@@ -306,6 +312,13 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           if (sameLength.length > 0) mine = sameLength;
         }
         const s = summarize(mine);
+        const additionalKeys = TALENT_KEY_ADDITIONS[def.id] ?? [];
+        if (additionalKeys.length > 0) {
+          // timing / duration は主の時間つきキーから取り、追加キーも別バー対象として明示する。
+          s.gcsimKeys = [...new Set([...additionalKeys, ...(s.gcsimKeys ?? [])])];
+          s.gcsimExtraKeys = s.gcsimExtraKeys?.filter(key => !additionalKeys.includes(key));
+          if (s.gcsimExtraKeys?.length === 0) delete s.gcsimExtraKeys;
+        }
         // 継続時間に意味が無い固有天賦は、条件付き扱い（継続時間は補わない）
         if (NO_DURATION_TALENTS[def.id] && s.gcsimTarget) s.timing = 'conditional';
         applyLink(def, s);

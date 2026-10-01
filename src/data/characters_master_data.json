@@ -35099,9 +35099,10 @@
         "dataSource": {
           "duration": "20秒間"
         },
-        "timing": "always",
+        "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "light-for-the-frosty-night",
           "lauma-a1-ascendant"
         ]
       },

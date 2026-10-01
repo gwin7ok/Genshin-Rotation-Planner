@@ -49,6 +49,9 @@ interface StintSequenceEditorProps {
   onSeek?: (time: number) => void;
   switchDelay?: number;
   onUpdateSwitchDelay?: (delay: number) => void;
+  /** 敵の防御ヒットストップ（gcsim の defhalt）。既定 true */
+  defHalt?: boolean;
+  onUpdateDefHalt?: (value: boolean) => void;
   onOpenHelpModal?: () => void;
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
@@ -69,6 +72,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   onSeek,
   switchDelay = 0.50,
   onUpdateSwitchDelay,
+  defHalt = true,
+  onUpdateDefHalt,
   onOpenHelpModal,
   selectedAction,
   onSelectAction,
@@ -839,6 +844,34 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-850 my-1" />
+
+          {/* 敵の防御ヒットストップ（gcsim の defhalt） */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs">
+              <div className="font-bold text-slate-200">🛡️ 敵の防御ヒットストップ（gcsim の defhalt）</div>
+              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
+                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              {[{ label: '有効（既定）', value: true }, { label: '無効', value: false }].map(opt => (
+                <button
+                  key={String(opt.value)}
+                  type="button"
+                  onClick={() => onUpdateDefHalt?.(opt.value)}
+                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
+                    defHalt === opt.value
+                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
             </div>
           </div>
 

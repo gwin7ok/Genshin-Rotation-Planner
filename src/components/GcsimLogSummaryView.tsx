@@ -76,7 +76,7 @@ export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summar
             {summary.cooldowns.map((c, i) => (
               <tr key={i}>
                 <td className={td}>{nameOf(c.charIndex)}</td>
-                <td className={td}>{c.type === 'skill' ? 'スキル' : '爆発'}</td>
+                <td className={td}>{c.type === 'skill' ? 'スキル' : c.type === 'special' ? '特殊スキル' : '爆発'}</td>
                 <td className={td}>{sec(c.startFrame)}s</td>
                 <td className={td}>{c.readyFrame !== undefined ? `${sec(c.readyFrame)}s（${sec(c.readyFrame - c.startFrame)}s）` : '—'}</td>
                 <td className={td}>{sec(c.originalFrames)}s</td>

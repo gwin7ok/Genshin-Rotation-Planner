@@ -59,6 +59,14 @@ export default function App() {
   // 出場ブロックの編集。DB に無いキャラ（表示から外れている）の出場ブロックは、編成が参照している間は残す
   const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next, stints, characters, party));
   // Character switch delay (default 0.50s or restored from storage)
+  // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
+  const [defHalt, setDefHaltState] = useState<boolean>(() => {
+    try { return localStorage.getItem('gcsimDefHalt') !== 'false'; } catch { return true; }
+  });
+  const setDefHalt = (value: boolean) => {
+    setDefHaltState(value);
+    try { localStorage.setItem('gcsimDefHalt', String(value)); } catch { /* 保存できなくても動く */ }
+  };
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
   });
@@ -106,8 +114,8 @@ export default function App() {
   }, [characters, visibleStints, switchDelay, loopStartIndex]);
 
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex, externalCtWaits: gcsimCtWaits ?? undefined });
-  }, [characters, visibleStints, switchDelay, database, loopStartIndex, gcsimCtWaits]);
+    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined });
+  }, [characters, visibleStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -293,6 +301,7 @@ export default function App() {
       stints: visibleStints,
       loopStartIndex,
       switchDelay,
+      defHalt,
       weapons: database.weapons,
       artifacts: database.artifacts,
       extraWaitByActionId: Object.fromEntries(
@@ -441,6 +450,8 @@ export default function App() {
           onSeek={handleSeek}
           switchDelay={switchDelay}
           onUpdateSwitchDelay={setSwitchDelay}
+          defHalt={defHalt}
+          onUpdateDefHalt={setDefHalt}
           onOpenHelpModal={() => setIsHelpModalOpen(true)}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}

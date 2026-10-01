@@ -455,7 +455,7 @@ export function calculateRotation(
         onViolation: (remaining, cycle) => {
           passiveSpan.hasCTViolation = true;
           passiveSpan.collisionRemainingCT = Math.max(passiveSpan.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', `${char.name}: ${catLabel}CT中`, `「${trigger.name}」`, remaining, cycle);
+          addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', `${char.name}: ${catLabel}CT警告`, `「${trigger.name}」`, remaining, cycle);
         },
       });
 

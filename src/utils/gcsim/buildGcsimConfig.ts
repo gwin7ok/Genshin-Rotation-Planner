@@ -4,6 +4,7 @@
  * 純粋関数。編成（解決済みのキャラ）・出場ブロック・ループ開始点・交代遅延・DB から、gcsim の設定文と警告を作る。
  * 設定文の構成と決定事項は docs/gcsim-integration/phase-4-config-converter/plan.md を参照。
  */
+import { HEXEREI_GCSIM_KEYS, HEXEREI_GCSIM_PARAM } from '../../masterdata/hexereiCharacters.ts';
 import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
@@ -116,7 +117,9 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       artifactKey: artifactForInfo?.gcsimKey,
     });
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
-    lines.push(`${key} char ${CHARACTER_LINE_PARAMS} cons=${cons} talent=${TALENT_LEVELS};`);
+    // ヘクセレイ（魔女の宿題クリア）に対応するキャラは、明示的に渡す（gcsim の既定は有効）
+    const hexText = HEXEREI_GCSIM_KEYS.has(key) ? ` +params=[${HEXEREI_GCSIM_PARAM}=${c.hexerei === false ? 0 : 1}]` : '';
+    lines.push(`${key} char ${CHARACTER_LINE_PARAMS} cons=${cons} talent=${TALENT_LEVELS}${hexText};`);
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);
     if (!c.weaponId) {
@@ -208,7 +211,9 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
         refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, ''), ...(extra > 0 ? { extraSeconds: extra } : {}) });
-        if (extra > 0 && act === lastCommandAct) {
+        // 出場の最後のアクション、または追加分が長い（0.5 秒以上）ときは `wait`。長い待ちは、`wait` が交代・次の行動へのキャンセルより早く始まって吸収される分（最大 0.2 秒程度）が小さく、
+        // `delay`（次のアクションが実行できる状態になった後に入る）だと、CT待ちの後にさらに待つため、特殊スキルの受付（12 秒など）を過ぎてしまうことがある
+        if (extra > 0 && (act === lastCommandAct || extra >= 0.5)) {
           out.push(`${indent}wait(${toFrames(extra)});`);
           const delayOnly = toFrames(actionDelayOf(act));
           if (delayOnly > 0) out.push(`${indent}delay(${delayOnly});`);

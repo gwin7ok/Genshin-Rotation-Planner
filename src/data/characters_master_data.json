@@ -37135,6 +37135,21 @@
           "cooldownStart": "skill.go:39"
         },
         "defaultDuration": 0.917,
+        "startsSpecialPool": {
+          "cooldown": 11,
+          "charges": 2,
+          "windowSeconds": 12,
+          "reducePerHit": 0.5,
+          "reducePerHitHexerei": 1,
+          "hitsPerNormal": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "maxReductions": 15
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.65
@@ -37154,9 +37169,57 @@
           "cooldownStart": "skill.go:39"
         },
         "defaultDuration": 1.2,
+        "startsSpecialPool": {
+          "cooldown": 11,
+          "charges": 2,
+          "windowSeconds": 12,
+          "reducePerHit": 0.5,
+          "reducePerHitHexerei": 1,
+          "hitsPerNormal": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "maxReductions": 15
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.65
+        }
+      },
+      {
+        "id": "10000128-anemo_e_specialskill",
+        "name": "特殊元素スキル（堕ちる烈風の後）",
+        "shortName": "spE",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "cooldownPool": "special",
+        "charges": 2,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.65
+        },
+        "cooldown": 11,
+        "effectDuration": 0,
+        "defaultDuration": 1.133,
+        "frames": {
+          "total": 68,
+          "cancels": {
+            "attack": 55,
+            "charge": 64,
+            "skill": 56,
+            "burst": 55,
+            "dash": 56,
+            "jump": 55,
+            "walk": 65
+          },
+          "source": "skill.go:specialSkillFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)",
+          "effectDuration": "gcsim: varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)"
         }
       },
       {
@@ -38751,6 +38814,32 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        }
+      },
+      {
+        "id": "10000150-cryo_e_recast",
+        "name": "特殊元素スキル（柔きファントムの夜の舞の後）",
+        "shortName": "spE",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "cooldownPool": "special",
+        "cooldown": 15,
+        "effectDuration": 20,
+        "defaultDuration": 1.267,
+        "frames": {
+          "total": 76,
+          "cancels": {
+            "attack": 75,
+            "dash": 74,
+            "jump": 75,
+            "walk": 75,
+            "swap": 74
+          },
+          "source": "skill.go:skillRecastFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）",
+          "effectDuration": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）"
         }
       },
       {

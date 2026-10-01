@@ -82,6 +82,10 @@ export interface KeyCatalogEntry {
 /** 手で補うパターンのキー（gcsimKeyCatalogOverrides.ts の MANUAL_PATTERN_KEYS） */
 export interface ManualPatternInput {
   key: string;
+  /** true のとき、パターンではなく、そのままのキー（`Core.Status.Add` など、自動抽出の対象外の登録） */
+  exact?: boolean;
+  /** 種類（既定 effect） */
+  kind?: KeyKind;
   elements: string[];
   file: string;
   name: string;
@@ -626,11 +630,10 @@ export function extractKeyCatalog(
     const classified = classifyPath(mp.file);
     const entry: KeyCatalogEntry = {
       key: mp.key,
-      isPattern: true,
-      elements: mp.elements,
+      ...(mp.exact ? {} : { isPattern: true, elements: mp.elements }),
       category: classified.category,
       owner: withKeys(classified.owner),
-      kind: 'effect',
+      kind: mp.kind ?? 'effect',
       ...(mp.durationFrames !== undefined ? { durationFrames: mp.durationFrames } : {}),
       name: mp.name,
       ...(mp.note ? { note: mp.note } : {}),

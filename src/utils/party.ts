@@ -37,6 +37,7 @@ export function resolvePartyCharacters(
       artifactSetId: m.artifactSetId,
       artifactSetMode: m.artifactSetMode,
       constellation: m.constellation,
+      hexerei: m.hexerei,
     };
   });
 }

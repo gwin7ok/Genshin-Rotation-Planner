@@ -1164,6 +1164,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     return home ? home === stint.id : isFirstOccurrence;
                   };
                   const charCarryOverSkillCDs = carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'skill' && ctCarryHere(c));
+                  const charCarryOverSpecialCDs = carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'special' && ctCarryHere(c));
                   const charCarryOverBurstCDs = carryOverCooldowns.filter(c => c.characterId === char.id && c.type === 'burst' && ctCarryHere(c));
                   const charCarryOverBuffs = carryOverBuffs.filter(b => b.origin !== 'passive' && b.sourceCharacterId === char.id && buffCarryHere(b));
                   const charCarryOverPassives = isFirstOccurrence
@@ -1173,7 +1174,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   // Find actions and cooldowns/buffs initiated by this stint
                   const stintActionIds = new Set(stint.actions.map(a => a.id));
                   const stintSkillCDs = skillCooldowns.filter(c => 
-                    c.characterId === char.id && (
+                    c.type !== 'special' && c.characterId === char.id && (
+                      stintActionIds.has(c.actionInstanceId) || 
+                      (c.startTime >= (stint.startTime ?? 0) - 0.05 && c.startTime <= (stint.endTime ?? 0) + 0.05)
+                    )
+                  );
+                  const stintSpecialCDs = skillCooldowns.filter(c => 
+                    c.type === 'special' && c.characterId === char.id && (
                       stintActionIds.has(c.actionInstanceId) || 
                       (c.startTime >= (stint.startTime ?? 0) - 0.05 && c.startTime <= (stint.endTime ?? 0) + 0.05)
                     )
@@ -1204,6 +1211,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   };
                   const allStintSkillCDs = [...charCarryOverSkillCDs, ...stintSkillCDs];
                   const allStintBurstCDs = [...charCarryOverBurstCDs, ...stintBurstCDs];
+                  const allStintSpecialCDs = [...charCarryOverSpecialCDs, ...stintSpecialCDs];
                   const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
                   const stintBuffRows = organizeBuffsIntoRows(allStintBuffs);
                   const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
@@ -1334,6 +1342,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
                               <span className="truncate">⏱️ スキルCT</span>
                               <span className="shrink-0 ml-1">{originalCtSeconds(allStintSkillCDs).toFixed(1)}s</span>
+                            </div>
+                          )}
+
+                          {/* Row 2b: Special Skill Cooldown Row (特殊元素スキル。スキルとは別のCT) */}
+                          {allStintSpecialCDs.length > 0 && (
+                            <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
+                              <span className="truncate">⏱️ 特殊スキルCT</span>
+                              <span className="shrink-0 ml-1">{originalCtSeconds(allStintSpecialCDs).toFixed(1)}s</span>
                             </div>
                           )}
 
@@ -1576,6 +1592,56 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   >
                                     <span className="truncate">
                                       ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {(cd.endTime - cd.startTime).toFixed(1)}s
+                                    </span>
+                                  </div>
+                                  </React.Fragment>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {/* --- Row 2b: Special Skill Cooldown Bar (Height: h-6 = 24px) --- */}
+                          {allStintSpecialCDs.length > 0 && (
+                            <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                              {allStintSpecialCDs.map(cd => {
+                                const isCarryOver = Boolean(cd.isCarryOver);
+                                if (cd.startTime >= totalDuration) return null;
+                                const visualEnd = Math.min(totalDuration, cd.endTime);
+                                const startX = cd.startTime * pixelsPerSecond;
+                                const width = Math.max(16, (visualEnd - cd.startTime) * pixelsPerSecond);
+                                const isBarActive = !isCarryOver || isCarryOverActive(cd.originalStartTime);
+
+                                const violatingAction = !isCarryOver
+                                  ? stint.actions.find(a => a.id === cd.actionInstanceId && a.hasCTCollision)
+                                  : undefined;
+
+                                return (
+                                  <React.Fragment key={cd.id}>
+                                  {violatingAction && (
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
+                                  )}
+                                  <div
+                                    key={cd.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(cd.startTime);
+                                    }}
+                                    style={{ left: `${startX}px`, width: `${width}px`, zIndex: isCarryOver ? 10 : 20 }}
+                                    className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
+                                      isCarryOver && !isBarActive
+                                        ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                        : isCarryOver
+                                        ? 'bg-sky-950/90 border-sky-400 text-sky-200'
+                                        : 'bg-sky-950 border-sky-400/90 text-sky-200 hover:border-sky-300'
+                                    }`}
+                                    title={
+                                      isCarryOver
+                                        ? `【1周目からの持ち越し特殊スキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
+                                        : `【特殊スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                    }
+                                  >
+                                    <span className="truncate">
+                                      ⏱️ {isCarryOver ? '[持越] ' : ''}spE-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>

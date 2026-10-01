@@ -118,7 +118,7 @@ export interface CooldownChange {
   stintId: string;
   actionId: string;
   name: string;
-  type: 'skill' | 'burst';
+  type: 'skill' | 'burst' | 'special';
   /** 変更前のCTの長さ（画面に出ている値。CTが無ければ 0） */
   before: number;
   /** gcsim のCTの長さ。CTが発生しなかったアクションは 0 */
@@ -145,6 +145,8 @@ export function applyActionCooldowns(
   summary: GcsimLogSummary,
   /** 画面に出ているCTの長さ（アクション ID → 秒） */
   effectiveCooldowns?: Record<string, number>,
+  /** CTが特殊元素スキルの枠（`special_skill`。スキルとは別のCT）のアクション ID */
+  specialActionIds?: Set<string>,
 ): ApplyCooldownsResult {
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
@@ -158,7 +160,8 @@ export function applyActionCooldowns(
     if (ref.command !== 'skill' && ref.command !== 'burst') continue;
     const act = actionById.get(ref.actionId);
     if (!act) continue;
-    const type = ref.command;
+    // 特殊元素スキル（オデットの spE など）は、gcsim では同じ `skill` 命令だが、CTは `special_skill`（別枠）
+    const type: 'skill' | 'burst' | 'special' = ref.command === 'skill' && specialActionIds?.has(ref.actionId) ? 'special' : ref.command;
 
     const nextSameKind = executedAll
       .filter(e => e.charIndex === executed.charIndex && e.name === executed.name && e.frame > executed.frame)

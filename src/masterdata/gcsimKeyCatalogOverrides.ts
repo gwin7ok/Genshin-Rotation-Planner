@@ -126,6 +126,10 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
  * （接頭辞 `vv` は 2 文字で、パターンの 3 文字以上の条件にも満たない）。
  */
 export interface ManualPatternKey {
+  /** true のとき、パターンではなく、そのままのキー */
+  exact?: boolean;
+  /** 種類（既定 effect） */
+  kind?: import("./gcsimKeyCatalog.ts").KeyKind;
   key: string;
   elements: string[];
   /** 定義場所のファイル（分類・持ち主を決める） */
@@ -191,3 +195,14 @@ export const AMBIGUOUS_KEY_CATEGORIES: Record<string, AmbiguousKeyPin> = {
   'skyrider': { category: 'weapon', reason: '天空の傲・天空の刃で共通（持ち主は両方）' },
   'yanfei-seal': { category: 'burst', reason: '煙緋: 緋印（attack.go・skill.go・burst.go で登録。爆発で付与量が増える）' },
 };
+
+MANUAL_PATTERN_KEYS.push({
+  key: 'ssw-airborne-buff',
+  exact: true,
+  kind: 'internal',
+  elements: [],
+  file: 'pkg/reactable/stellarswirl_gadget.go',
+  name: '星拡散の渦: 滞空状態',
+  durationFrames: 300,
+  note: 'stellarswirl_gadget.go: Core.Status.Add(player.StellarSwirlAirborneBuff, 5*60)。星拡散の渦に巻き込まれたときの滞空（5 秒）。キャラの効果ではなく、反応の仕組み上の状態（`Core.Status.Add` は自動抽出の対象外）',
+});

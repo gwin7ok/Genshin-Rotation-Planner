@@ -32,7 +32,8 @@ export function getActionCooldownInfo(
   if (!def || !(typeof def.cooldown === 'number' && def.cooldown > 0)) return null;
   const kind = act.type === 'burst' ? 'burst' : SKILL_TYPES.has(act.type) ? 'skill' : null;
   if (!kind) return null;
-  const startsCooldown = kind === 'burst' ? def.startsBurstCooldown !== false : !!def.startsSkillCooldown;
+  // 特殊元素スキル（cooldownPool = 'special'）は、通常のスキルのCTは開始しないが、別枠のCTを開始する
+  const startsCooldown = kind === 'burst' ? def.startsBurstCooldown !== false : !!def.startsSkillCooldown || def.cooldownPool === 'special';
   if (!startsCooldown) return null;
   return { kind, cooldown: act.cooldown ?? def.cooldown, defaultCooldown: def.cooldown };
 }

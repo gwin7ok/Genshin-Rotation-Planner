@@ -52,7 +52,8 @@ export interface GcsimStintRecord {
 
 export interface GcsimCooldownRecord {
   charIndex: number;
-  type: 'skill' | 'burst';
+  /** special = 特殊元素スキル（`special_skill cooldown triggered`。スキルとは別のCT） */
+  type: 'skill' | 'burst' | 'special';
   /** CTの開始（`cooldown triggered`） */
   startFrame: number;
   /** CTの終了（`cooldown ready`）。ログの終わりまでに終了しなければ undefined */
@@ -175,8 +176,9 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
   const openCd = new Map<string, GcsimCooldownRecord>();
   for (const l of logs) {
     if (l.event !== 'cooldown') continue;
-    const type = (l.logs?.type as string | undefined) ?? l.msg.split(' ')[0];
-    if (type !== 'skill' && type !== 'burst') continue;
+    const rawType = (l.logs?.type as string | undefined) ?? l.msg.split(' ')[0];
+    const type = rawType === 'special_skill' ? 'special' : rawType;
+    if (type !== 'skill' && type !== 'burst' && type !== 'special') continue;
     const idx = `${l.char_index ?? 0}:${type}`;
     if (l.msg.endsWith('cooldown triggered')) {
       const rec: GcsimCooldownRecord = {

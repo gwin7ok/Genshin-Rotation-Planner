@@ -1,3 +1,4 @@
+import { isHexereiCapable } from '../masterdata/hexereiCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -19,6 +20,8 @@ interface PartyConfigModalProps {
   database: AppDatabase;
   onUpdatePartyAndStints: (newParty: PartyMember[], newStints: Stint[]) => void;
 }
+
+const updatedHexerei = (m: { hexerei?: boolean } | undefined): boolean => m?.hexerei !== false;
 
 export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   isOpen,
@@ -170,7 +173,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   tabIndex={0}
                   onClick={() => setSelectedSlot(idx)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSlot(idx); } }}
-                  className={`relative p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                  className={`relative p-2.5 rounded-xl border text-left transition-all cursor-pointer ${!isEmptySlotCharacter(c) ? 'pb-8' : ''} ${
                     isSelected 
                       ? 'bg-slate-800 border-amber-400 shadow-md ring-1 ring-amber-400/40' 
                       : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
@@ -188,6 +191,27 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       </div>
                     </div>
                   </div>
+
+                  {/* 魔女の宿題（ヘクセレイ）: 対応するキャラだけ。キャラカードの左下 */}
+                  {!isEmptySlotCharacter(c) && isHexereiCapable(c) && (
+                    <label
+                      className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-purple-300 cursor-pointer select-none"
+                      onClick={(e) => e.stopPropagation()}
+                      title="「魔女の宿題」をクリア済み（ヘクセレイのキャラ）。パーティーにヘクセレイのキャラが 2 人以上いると「ヘクセレイ：秘儀」の効果を獲得します（gcsim の `hex` パラメータ。既定はクリア済み）"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={updatedHexerei(editingParty[idx])}
+                        onChange={(e) => {
+                          const updated = [...editingParty];
+                          updated[idx] = { ...updated[idx], hexerei: e.target.checked };
+                          setEditingParty(updated);
+                        }}
+                        className="w-3 h-3 accent-purple-500"
+                      />
+                      <span>魔女の宿題</span>
+                    </label>
+                  )}
 
                   {/* 凸数（キャラカードの右下） */}
                   {!isEmptySlotCharacter(c) && (

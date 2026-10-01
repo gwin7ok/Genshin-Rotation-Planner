@@ -64,6 +64,14 @@ for (const [defId, e] of Object.entries(table)) {
     });
   }
 }
+// probe の表に無い定義（新しく別アクションにした特殊スキルなど）でも、手で補う一覧（本体の効果の指定）は紐づけに使う
+for (const [defId, ov] of Object.entries(ACTION_EFFECT_KEY_OVERRIDES)) {
+  if (table[defId] !== undefined || ov === '') continue;
+  const targetId = `action:${defId}`;
+  const o = typeof ov === 'string' ? { key: ov } : ov;
+  for (const alt of ('alt' in o ? o.alt ?? [] : [])) links.push({ effectId: alt, targetId, role: 'main', ...(o.mode && o.mode !== 'expiry' ? { mode: o.mode } : {}), ...(o.self ? { self: true } : {}), approval: 'approved' });
+  links.push({ effectId: o.key, targetId, role: 'main', ...(o.mode && o.mode !== 'expiry' ? { mode: o.mode } : {}), ...(o.self ? { self: true } : {}), approval: 'approved' });
+}
 for (const [defId, extras] of Object.entries(ACTION_EFFECT_EXTRAS)) {
   for (const x of extras) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'extra', label: x.label, ...(x.self ? { self: true } : {}), approval: 'approved' });
 }

@@ -1,3 +1,4 @@
+import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { actionDelayOf } from './actionDelay';
 import { ACTION_STATE_RULES } from '../data/actionStateRules';
 import { 
@@ -9,6 +10,7 @@ import {
   ValidationIssue, 
   CharacterRuntimeState,
   PassiveSpan,
+  ActionDefinition,
 } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
 import type { CancelTarget } from '../types/genshin';
@@ -94,6 +96,8 @@ export function calculateRotation(
 
   // CT を持つ発動（スキル・爆発・発動バフ）。CT違反の判定はすべて計算後にまとめて行う（checkCooldownViolations）
   const ctEvents: CooldownEvent[] = [];
+  // 特殊スキルの CT の短縮（通常攻撃のヒットごと。表示の CT バーを短くするために記録する）
+  const specialReductions: { characterId: string; time: number; amount: number }[] = [];
 
   // Track runtime status for each character:
   const charStates: Record<string, CharacterRuntimeState> = {};
@@ -146,6 +150,9 @@ export function calculateRotation(
 
     const stintStartTime = currentTime;
     const computedActions: CharacterActionInstance[] = [];
+    // （特殊スキルのCT短縮は、ループの外の specialReductions に記録する）
+    // 特殊スキルの受付（スキルを使ってからの時間と、通常攻撃による CT 短縮の回数。交代で消える）
+    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']> } | undefined;
     // 連続した通常攻撃の段（gcsim と同じく、他のアクションを挟むと1段目に戻る）
     let normalStreak = 0;
 
@@ -249,6 +256,7 @@ export function calculateRotation(
         collisionRemainingCT: undefined,
         ...(holdSeconds !== undefined ? { holdSeconds } : {}),
         ...(naturalDuration !== undefined ? { naturalDuration } : {}),
+        ...(actionDef?.cooldownPool ? { cooldownPool: actionDef.cooldownPool } : {}),
         duration,
         startTime: actionStartTime,
         endTime: actionEndTime,
@@ -294,29 +302,59 @@ export function calculateRotation(
       if (isSkill) {
         computedAction.inStateWindow = inStateWindow || undefined;
         // CTを開始しない派生技は、CTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
-        const isTriggeringAction = actionDef?.startsSkillCooldown !== false && !inStateWindow;
+        // 特殊元素スキル（cooldownPool = 'special'）は、スキルとは別のCT枠（スキルのCTは開始しない）
+        const isSpecial = actionDef?.cooldownPool === 'special';
+        const isTriggeringAction = isSpecial ? !inStateWindow : actionDef?.startsSkillCooldown !== false && !inStateWindow;
         if (isTriggeringAction) {
           ctEvents.push({
-            key: `${char.id}:skill`,
+            key: `${char.id}:${isSpecial ? 'special' : 'skill'}`,
             time: actionStartTime,
             ctOffset,
             cooldown,
+            ...(isSpecial && (actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
             checked: act.type !== 'skill_reset',
             stintIndex: sIdx,
             name: act.name,
             onViolation: (remaining, cycle) => {
               computedAction.hasCTCollision = true;
               computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-              addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: スキルCT違反`, `スキル「${act.name}」`, remaining, cycle);
+              addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: ${isSpecial ? '特殊スキルCT違反' : 'スキルCT違反'}`, `${isSpecial ? '特殊スキル' : 'スキル'}「${act.name}」`, remaining, cycle);
             },
+          });
+        }
+
+        // スキルが、特殊スキルの別枠のCTを、全チャージ分まとめて開始する（ファルカ）
+        if (!isSpecial && !inStateWindow && actionDef?.startsSpecialPool) {
+          const pool = actionDef.startsSpecialPool;
+          specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + pool.windowSeconds).toFixed(3)), count: 0, pool } : undefined;
+          ctEvents.push({
+            key: `${char.id}:special`,
+            time: actionStartTime,
+            ctOffset,
+            cooldown: pool.cooldown,
+            charges: pool.charges,
+            startsAll: true,
+            checked: false,
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: () => {},
+          });
+          skillCooldowns.push({
+            id: `cd_special_pool_${char.id}_${actionStartTime}`,
+            characterId: char.id,
+            type: 'special',
+            startTime: ctStartTime,
+            endTime: Number((ctStartTime + pool.cooldown).toFixed(3)),
+            duration: pool.cooldown,
+            actionInstanceId: act.id,
           });
         }
 
         if (isTriggeringAction && cooldown > 0) {
           const cdSpan: CooldownSpan = {
-            id: `cd_skill_${char.id}_${actionStartTime}`,
+            id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
             characterId: char.id,
-            type: 'skill',
+            type: isSpecial ? 'special' : 'skill',
             startTime: ctStartTime,
             endTime: Number((ctStartTime + cooldown).toFixed(3)),
             duration: cooldown,
@@ -359,6 +397,30 @@ export function calculateRotation(
           burstCooldowns.push(burstCDSpan);
           charStates[char.id].burstCooldowns.push(burstCDSpan);
         }
+      }
+
+      // 特殊スキルの受付の間の通常攻撃（N）: 特殊スキルの CT を短縮する（ファルカ。N が敵に当たるたびに 0.5 秒、最大 15 回）
+      if (act.type === 'normal' && specialWindow?.pool.reducePerHit && actionStartTime <= specialWindow.until && specialWindow.count < (specialWindow.pool.maxReductions ?? 15)) {
+        // 連続した N の何段目か（上で normalStreak を進めたあと）。ヒット数は段ごと
+        const stepHits = specialWindow.pool.hitsPerNormal ?? [1];
+        const hits = Math.min(stepHits[(normalStreak - 1 + stepHits.length * 8) % stepHits.length] ?? 1, (specialWindow.pool.maxReductions ?? 15) - specialWindow.count);
+        specialWindow.count += hits;
+        // ヘクセレイ：秘儀（ヘクセレイのキャラが 2 人以上で、本人もヘクセレイ）のとき、1 ヒットあたりの短縮が増える
+        const perHit = specialWindow.pool.reducePerHitHexerei !== undefined && isHexerei(char) && hexereiCount(characters) >= 2
+          ? specialWindow.pool.reducePerHitHexerei
+          : specialWindow.pool.reducePerHit;
+        ctEvents.push({
+          key: `${char.id}:special`,
+          time: actionStartTime,
+          ctOffset: 0,
+          cooldown: 0,
+          reduceBy: perHit * hits,
+          checked: false,
+          stintIndex: sIdx,
+          name: act.name,
+          onViolation: () => {},
+        });
+        specialReductions.push({ characterId: char.id, time: actionStartTime, amount: perHit * hits });
       }
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
@@ -508,6 +570,20 @@ export function calculateRotation(
     charStates[char.id].totalActiveTime += stintDuration;
   }
 
+  // 特殊スキルの CT のバーを、通常攻撃による短縮を反映した長さにする（CT 中の間に起きた短縮の合計。CT の終わりより前のものだけ）
+  for (const span of skillCooldowns) {
+    if (span.type !== 'special') continue;
+    const reductions = specialReductions.filter(r => r.characterId === span.characterId && r.time >= span.startTime - 0.001).sort((a, b) => a.time - b.time);
+    let end = span.endTime;
+    for (const r of reductions) {
+      if (r.time < end) end = Math.max(r.time, end - r.amount);
+    }
+    if (end < span.endTime - 0.001) {
+      span.endTime = Number(end.toFixed(3));
+      span.duration = Number((span.endTime - span.startTime).toFixed(3));
+    }
+  }
+
   const totalDuration = Number(currentTime.toFixed(2));
   const safeLoopStartIndex = Math.min(loopStartIndex, Math.max(0, calculatedStints.length - 1));
   const loopStartTime = calculatedStints[safeLoopStartIndex]?.startTime ?? 0;
@@ -559,9 +635,9 @@ export function calculateRotation(
         const wrapStart = Number((loopStartTime + wrapDelay).toFixed(3));
         const wrapEnd = Math.min(totalDuration, Number((wrapStart + overflow).toFixed(3)));
         carryOverCooldowns.push({
-          id: `wrap_cd_skill_${cd.id}`,
+          id: `wrap_cd_${cd.type === 'special' ? 'special' : 'skill'}_${cd.id}`,
           characterId: cd.characterId,
-          type: 'skill',
+          type: cd.type,
           startTime: wrapStart,
           endTime: wrapEnd,
           duration: overflow,
@@ -650,6 +726,12 @@ interface CooldownEvent {
   cooldown: number;
   /** CT 中の発動を違反として扱うか（祭礼リセットなど CT 中でも撃てるものは false） */
   checked: boolean;
+  /** この枠のチャージ数（同時に溜められる回数。無ければ 1）。どのチャージもCT中なら違反 */
+  charges?: number;
+  /** true のとき、この発動が全チャージのCTを順番に（キューで）始める（検査はしない。ファルカのスキルが特殊スキルのCTを開始する） */
+  startsAll?: boolean;
+  /** 0 より大きいとき、この発動は CT を始めず、CT 中のチャージの CT を、この秒数だけ短縮する（ファルカの通常攻撃） */
+  reduceBy?: number;
   stintIndex: number;
   name: string;
   /** 違反時: remaining = 残り CT 秒、cycle = 何周目の発動で違反したか（0 = 1周目） */
@@ -707,12 +789,35 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   });
   timeline.sort((a, b) => a.time - b.time || a.order - b.order);
 
-  const cooldownEnd = new Map<string, number>();
+  // CT枠ごとの、チャージごとの CT の終わり（チャージが 1 つの枠は、要素 1 つ）。チャージは順番に回復する（gcsim の cooldown_queue）
+  const cooldownEnd = new Map<string, number[]>();
   for (const item of timeline) {
-    const end = cooldownEnd.get(item.event.key) ?? -Infinity;
-    if (item.event.checked && end > item.time + CT_TOLERANCE_SEC) {
-      item.event.onViolation(Number((end - item.time).toFixed(1)), item.cycle);
+    const slots = cooldownEnd.get(item.event.key) ?? [];
+    const charges = Math.max(1, item.event.charges ?? 1);
+    while (slots.length < charges) slots.push(-Infinity);
+    cooldownEnd.set(item.event.key, slots);
+    const ev = item.event;
+    if (ev.reduceBy && ev.reduceBy > 0) {
+      // CT 中のチャージの終わりを、短縮する（キューなので後ろのチャージも同じだけ早まる）
+      for (let i = 0; i < slots.length; i++) if (slots[i] > item.time) slots[i] = Math.max(item.time, slots[i] - ev.reduceBy);
+      continue;
     }
-    if (item.event.cooldown > 0) cooldownEnd.set(item.event.key, item.time + item.event.ctOffset + item.event.cooldown);
+    const startAt = item.time + ev.ctOffset;
+    if (ev.startsAll) {
+      // 全チャージが CT 中から始まり、順番に回復する（1 つ目は CT 後、2 つ目はその CT の後…）
+      if (ev.cooldown > 0) for (let i = 0; i < slots.length; i++) slots[i] = startAt + ev.cooldown * (i + 1);
+      continue;
+    }
+    // 一番早く明けるチャージを使う。どのチャージも CT 中なら違反
+    let idx = 0;
+    for (let i = 1; i < slots.length; i++) if (slots[i] < slots[idx]) idx = i;
+    if (ev.checked && slots[idx] > item.time + CT_TOLERANCE_SEC) {
+      ev.onViolation(Number((slots[idx] - item.time).toFixed(1)), item.cycle);
+    }
+    if (ev.cooldown > 0) {
+      // 回復の開始 = 使った時刻と、他のチャージの回復の終わり（キューの末尾）の遅いほう
+      const tail = slots.reduce((m, e, i) => (i !== idx && e > item.time ? Math.max(m, e) : m), -Infinity);
+      slots[idx] = Math.max(startAt, tail) + ev.cooldown;
+    }
   }
 }

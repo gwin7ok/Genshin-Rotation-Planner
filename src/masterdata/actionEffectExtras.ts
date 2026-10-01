@@ -89,10 +89,7 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   '10000123-pyro_n': [
     { key: 'denial-of-darkness', label: '黒の姿（暗黒の否認）' },
   ],
-  // オデットのスキル: 1回目の後、窓の中の 2回目（再発動）で、独舞者の強化（20 秒）
-  '10000150-cryo_e': [
-    { key: 'odette-dance-double-upgrade', label: '独舞者の強化（ダブルダンス）' },
-  ],
+  // （オデットの独舞者の強化 `odette-dance-double-upgrade` は、特殊スキル `10000150-cryo_e_recast` の本体の効果にした。2026-10-01）
   // フリンズのスキル: 2回目のスキルで、雷鳴の交響（6 秒）
   '10000120-electro_e': [
     { key: 'thunderous-symphony', label: '雷鳴の交響' },

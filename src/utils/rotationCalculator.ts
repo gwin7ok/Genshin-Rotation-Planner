@@ -16,6 +16,7 @@ import { GenshinDatabase } from '../types/database';
 import type { CancelTarget } from '../types/genshin';
 import { passiveGroupOf } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
+import { CooldownQueue } from './cooldownQueue';
 import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
 
@@ -493,18 +494,21 @@ export function calculateRotation(
         const perHit = specialWindow.pool.reducePerHitHexerei !== undefined && isHexerei(char) && hexereiCount(characters) >= 2
           ? specialWindow.pool.reducePerHitHexerei
           : specialWindow.pool.reducePerHit;
-        ctEvents.push({
-          key: `${char.id}:special`,
-          time: actionStartTime,
-          ctOffset: 0,
-          cooldown: 0,
-          reduceBy: perHit * hits,
-          checked: false,
-          stintIndex: sIdx,
-          name: act.name,
-          onViolation: () => {},
-        });
-        specialReductions.push({ characterId: char.id, time: actionStartTime, amount: perHit * hits });
+        // 1 ヒットごとに別の短縮として記録する（先頭の CT がこのヒットの途中で明けると、残りのヒットは次の CT に効くため）
+        for (let h = 0; h < hits; h++) {
+          ctEvents.push({
+            key: `${char.id}:special`,
+            time: actionStartTime,
+            ctOffset: 0,
+            cooldown: 0,
+            reduceBy: perHit,
+            checked: false,
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: () => {},
+          });
+          specialReductions.push({ characterId: char.id, time: actionStartTime, amount: perHit });
+        }
       }
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
@@ -670,41 +674,46 @@ export function calculateRotation(
   for (const charId of new Set(skillCooldowns.filter(c => c.type === 'special').map(c => c.characterId))) {
     const spans = skillCooldowns.filter(c => c.type === 'special' && c.characterId === charId);
     const reductions = specialReductions.filter(r => r.characterId === charId);
-    if (spans.some(c => c.id.startsWith('cd_special_pool'))) {
-      // 2 本方式（ファルカ）: スキルで表・裏を同時に始め、特殊スキルで裏が表に移り、裏に新しい CT が始まる。短縮は表だけ
+    if (spans.some(c => /^cd_special_poold*_/.test(c.id))) {
+      // キュー方式（ファルカ）: gcsim と同じキュー（CooldownQueue）で、バーの位置を確定する。
+      // スキルで 2 本が積まれ（2 本目は 1 本目が 0 になった時点から満額）、特殊スキルを使うと末尾に 1 本積まれる。短縮は先頭の 1 本だけ
+      const poolCount = spans.filter(c => /^cd_special_poold*_/.test(c.id) && Math.abs(c.startTime - spans.find(p => /^cd_special_pool_/.test(p.id))!.startTime) < 0.001).length;
       const items: Array<{ time: number; order: number; span?: CooldownSpan; reduce?: number }> = [
-        ...spans.map(sp => ({ time: sp.startTime, order: sp.id.startsWith('cd_special_pool') ? 0 : 1, span: sp })),
+        ...spans.filter(sp => !/^cd_special_poold+_/.test(sp.id)).map(sp => ({ time: sp.startTime, order: /^cd_special_pool_/.test(sp.id) ? 0 : 1, span: sp })),
         ...reductions.map(r => ({ time: r.time, order: 2, reduce: r.amount })),
       ].sort((x, y) => x.time - y.time || x.order - y.order);
-      let front: CooldownSpan | undefined;
-      let back: CooldownSpan | undefined;
-      const poolStarts: CooldownSpan[] = [];
+      const duration = new Map<CooldownSpan, number>(spans.map(sp => [sp, sp.duration]));
+      const place = (head: { start: number; end: number; tag?: CooldownSpan }) => {
+        if (!head.tag) return;
+        head.tag.startTime = Number(head.start.toFixed(3));
+        head.tag.endTime = Number(head.end.toFixed(3));
+        head.tag.duration = Number((head.tag.endTime - head.tag.startTime).toFixed(3));
+      };
+      const queue = new CooldownQueue<CooldownSpan>(poolCount || 2, place);
+      const poolSpans = new Map<number, CooldownSpan[]>();
+      for (const sp of spans.filter(sp => /^cd_special_poold*_/.test(sp.id))) poolSpans.set(sp.startTime, [...(poolSpans.get(sp.startTime) ?? []), sp]);
       for (const it of items) {
+        queue.advance(it.time);
+        const sp = it.span;
         if (it.reduce !== undefined) {
-          if (front && it.time < front.endTime) {
-            front.endTime = Number(Math.max(it.time, front.endTime - it.reduce).toFixed(3));
-            front.duration = Number((front.endTime - front.startTime).toFixed(3));
-          }
-        } else if (it.span!.id.startsWith('cd_special_pool')) {
-          poolStarts.push(it.span!);
-          // 同じ時刻の 2 本（表・裏）がそろったら割り当てる
-          if (poolStarts.length === 2) { front = poolStarts[0]; back = poolStarts[1]; poolStarts.length = 0; }
-        } else if (it.span!.id.startsWith('cd_special_opt_')) {
-          // 受付の間の重撃: 表が明けていれば特殊重撃として CT を使う。明けていなければ普通の重撃なので、バーを消す
-          if (front && front.endTime <= it.time + CT_TOLERANCE_SEC) {
-            front = back;
-            back = it.span;
-          } else {
+          queue.reduce(it.time, it.reduce);
+          if (queue.head) place(queue.head);
+        } else if (sp && /^cd_special_pool_/.test(sp.id)) {
+          const group = (poolSpans.get(sp.startTime) ?? [sp]).sort((a, b) => Number(!a.id.startsWith('cd_special_pool_')) - Number(!b.id.startsWith('cd_special_pool_')) || a.id.localeCompare(b.id));
+          queue.reset(sp.startTime, group.map(g => ({ duration: duration.get(g) ?? g.duration, tag: g })));
+        } else if (sp) {
+          if (sp.id.startsWith('cd_special_opt_') && !queue.hasFree) {
+            // 回数に空きが無いときの重撃は、普通の重撃なので、バーを消す
             for (const list of [skillCooldowns, charStates[charId]?.skillCooldowns ?? []]) {
-              const idx = list.indexOf(it.span!);
+              const idx = list.indexOf(sp);
               if (idx >= 0) list.splice(idx, 1);
             }
+          } else {
+            queue.push(sp.startTime, duration.get(sp) ?? sp.duration, sp);
           }
-        } else {
-          front = back;
-          back = it.span;
         }
       }
+      queue.drain();
       continue;
     }
     for (const span of spans) {
@@ -863,7 +872,7 @@ interface CooldownEvent {
   checked: boolean;
   /** この枠のチャージ数（同時に溜められる回数。無ければ 1）。どのチャージもCT中なら違反 */
   charges?: number;
-  /** true のとき、この発動が全回分のCTを、同じ時刻から並行して始める（検査はしない。ファルカのスキルが特殊スキルのCTを開始する。この枠は並行方式になり、短縮は次に使える回の CT だけに効く） */
+  /** true のとき、この発動が全回数分のCTをキューに積む（1 つ目はこの時刻から、2 つ目は 1 つ目が明けてから。検査はしない。ファルカのスキルが特殊スキルのCTを開始する）。この枠は、短縮が先頭だけに効く */
   startsAll?: boolean;
   /** true のとき、特殊スキルの CT が空いていれば 1 回分使い、空いていなければ何もしない（ファルカの受付の間の重撃 = 特殊重撃「蒼牙」） */
   optional?: boolean;
@@ -927,8 +936,8 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   timeline.sort((a, b) => a.time - b.time || a.order - b.order);
 
   // CT枠ごとの、チャージごとの CT の終わり（チャージが 1 つの枠は、要素 1 つ）。チャージは順番に回復する（gcsim の cooldown_queue）
-  // ファルカの特殊スキルだけは 2 本方式（startsAll の発動を見た枠。slots[0] = 表、slots[1] = 裏）。下の startsAll の分岐を参照
-  const parallelKeys = new Set<string>();
+  // ファルカの特殊スキル（startsAll の発動を見た枠）は、gcsim と同じキュー（CooldownQueue）で持つ
+  const queues = new Map<string, CooldownQueue>();
   const cooldownEnd = new Map<string, number[]>();
   for (const item of timeline) {
     const slots = cooldownEnd.get(item.event.key) ?? [];
@@ -936,10 +945,11 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     while (slots.length < charges) slots.push(-Infinity);
     cooldownEnd.set(item.event.key, slots);
     const ev = item.event;
+    const queue = queues.get(item.event.key);
+    queue?.advance(item.time);
     if (ev.reduceBy && ev.reduceBy > 0) {
-      if (parallelKeys.has(item.event.key)) {
-        // 2本方式: 短縮は、表（slots[0]。次に使える回）の CT だけに効く
-        if (slots[0] > item.time) slots[0] = Math.max(item.time, slots[0] - ev.reduceBy);
+      if (queue) {
+        queue.reduce(item.time, ev.reduceBy);
       } else {
         // キュー方式: CT 中のものの終わりを、短縮する（後ろの回の CT も同じだけ早まる）
         for (let i = 0; i < slots.length; i++) if (slots[i] > item.time) slots[i] = Math.max(item.time, slots[i] - ev.reduceBy);
@@ -948,28 +958,25 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     }
     const startAt = item.time + ev.ctOffset;
     if (ev.startsAll) {
-      // 表と裏の CT を、スキルを使った時刻から同時に始める（ゲームの動画で確認。gcsim はキュー方式で、食い違う）
-      parallelKeys.add(item.event.key);
-      if (ev.cooldown > 0) for (let i = 0; i < slots.length; i++) slots[i] = startAt + ev.cooldown;
+      // スキルを使うと、全回数分の CT が積まれる（1 つ目はスキルの時刻から、2 つ目以降は前の CT が明けてから）。それまでの CT は捨てる
+      const q = queue ?? new CooldownQueue(charges);
+      q.reset(startAt, ev.cooldown > 0 ? Array.from({ length: charges }, () => ({ duration: ev.cooldown })) : []);
+      queues.set(item.event.key, q);
       continue;
     }
-    if (parallelKeys.has(item.event.key) && ev.optional) {
-      // 受付の間の重撃: 表が明けていれば特殊重撃になって 1 回分使う。明けていなければ普通の重撃（違反ではない）
-      if (slots[0] <= item.time + CT_TOLERANCE_SEC) {
-        slots.shift();
-        slots.push(startAt + ev.cooldown);
+    if (queue) {
+      if (ev.optional) {
+        // 受付の間の重撃: 回数に空きがあれば特殊重撃になって 1 回分使う。空いていなければ普通の重撃（違反ではない）
+        if (!queue.hasFree) continue;
+      } else if (ev.checked && !queue.hasFree && queue.head) {
+        ev.onViolation(Number((queue.head.end - item.time).toFixed(1)), item.cycle);
       }
+      // 使うと、新しい CT がキューの末尾に積まれる（キューが空なら、すぐ始まる）
+      queue.push(startAt, ev.cooldown);
       continue;
     }
-    if (parallelKeys.has(item.event.key)) {
-      // 2本方式の特殊スキル: 表が明けていなければ違反。使うと、裏だった CT が表に移り、裏に新しい CT が始まる
-      if (ev.checked && slots[0] > item.time + CT_TOLERANCE_SEC) {
-        ev.onViolation(Number((slots[0] - item.time).toFixed(1)), item.cycle);
-      }
-      slots.shift();
-      slots.push(startAt + ev.cooldown);
-      continue;
-    }
+    // キューの無い枠（スキルより前など）の、受付の間の重撃は、何もしない
+    if (ev.optional) continue;
     // 一番早く明けるチャージを使う。どのチャージも CT 中なら違反
     let idx = 0;
     for (let i = 1; i < slots.length; i++) if (slots[i] < slots[idx]) idx = i;
@@ -978,8 +985,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     }
     if (ev.cooldown > 0) {
       // 回復の開始 = 使った時刻と、他のチャージの回復の終わり（キューの末尾）の遅いほう
-      const tail = parallelKeys.has(item.event.key) ? -Infinity : slots.reduce((m, e, i) => (i !== idx && e > item.time ? Math.max(m, e) : m), -Infinity);
-      // 並行方式の枠は、使った回の CT が次に明けるのを、使った時刻から CT の長さ後と仮定する（バーは出さない。ゲームでの挙動は未確認）
+      const tail = slots.reduce((m, e, i) => (i !== idx && e > item.time ? Math.max(m, e) : m), -Infinity);
       slots[idx] = Math.max(startAt, tail) + ev.cooldown;
     }
   }

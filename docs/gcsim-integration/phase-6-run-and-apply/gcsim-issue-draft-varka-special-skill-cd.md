@@ -1,3 +1,5 @@
+> **【取り下げ（2026-10-01）】この草稿は誤り。ユーザーの観測表で、gcsim のキュー方式がゲームと一致すると分かったため、投稿しない。**
+
 # gcsim issue 草稿: ファルカ（Varka）の特殊スキルの 2 つ目の CT（2026-10-01）
 
 投稿先: https://github.com/genshinsim/gcsim/issues/new（issue テンプレートは無い）

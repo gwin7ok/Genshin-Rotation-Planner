@@ -91,6 +91,11 @@ export interface CharacterActionInstance {
   duration: number; // in seconds (e.g. 0.8s)
   /** true のとき duration はユーザーの編集値（または gcsim の結果）。未指定の通常攻撃は、連続した N の段ごとの値を自動で使う */
   durationManual?: boolean;
+  /**
+   * gcsim の結果から書き戻した、追加の待ち（ユーザーが標準より長くした分）を含まない、gcsim 自身の所要時間（秒）。
+   * 標準より長くした分（duration − これ）は、gcsim の設定文に遅延として足して渡す。ユーザーは編集できない。無ければ、マスターのフレームからの標準の所要時間を使う
+   */
+  gcsimBaseDuration?: number;
   /** このアクションが開始するCT (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の cooldown を使う */
   cooldown?: number;
   /** このアクションの効果継続時間 (秒)。ユーザーが個別に変更した場合のみ保持し、未指定ならアクション定義の effectDuration を使う */
@@ -112,6 +117,8 @@ export interface CharacterActionInstance {
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
+  /** gcsim が自分で決める標準の所要時間（秒）。`gcsimBaseDuration`、無ければマスターのフレームから。計算時にだけ付く。ユーザーが標準より長くした分を gcsim に渡すために使う */
+  naturalDuration?: number;
   /** 長押し（CT開始位置が holdEnd）の秒数。所要時間から逆算した計算値。計算時にだけ付く */
   holdSeconds?: number;
   /** アクション状態の窓の中の E（CT・効果バーを持たない）。計算時にだけ付く */

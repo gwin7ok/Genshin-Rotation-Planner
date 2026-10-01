@@ -265,9 +265,9 @@ export default function App() {
     () => calculatedResult.validationIssues.filter(v => /^(skill|burst)_ct_/.test(v.id)),
     [calculatedResult],
   );
-  // アプリ自身のCT警告（発動バフ。gcsim の計算は止めない）
+  // アプリ自身のCT警告（発動バフ・特殊スキルの受付時間外。gcsim の計算は止めない）
   const ctWarningIssues = useMemo(
-    () => calculatedResult.validationIssues.filter(v => /^passive_ct_/.test(v.id)),
+    () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_)/.test(v.id)),
     [calculatedResult],
   );
 

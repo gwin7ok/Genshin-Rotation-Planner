@@ -132,7 +132,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, holdSeconds, inStateWindow, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, inStateWindow, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));

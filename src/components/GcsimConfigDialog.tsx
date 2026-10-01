@@ -172,7 +172,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
             )}
             {ctWarnings.length > 0 && (
               <>
-                <div className="text-[11px] font-bold text-amber-300">アプリのCT警告: {ctWarnings.length}件（発動バフがCT中に発動する配置。効果が発動しないだけで、gcsim の計算は制限されません）</div>
+                <div className="text-[11px] font-bold text-amber-300">アプリのCT警告: {ctWarnings.length}件（発動バフがCT中に発動する配置は、効果が発動しないだけ。特殊スキルの受付時間外は、gcsim では通常のスキルになる。どちらも gcsim の計算は制限されません）</div>
                 {ctWarnings.map(issue => (
                   <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-amber-950/40 border-amber-700/60 text-amber-200">
                     <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />

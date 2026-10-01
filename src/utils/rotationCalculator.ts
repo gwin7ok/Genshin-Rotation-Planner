@@ -407,6 +407,10 @@ export function calculateRotation(
       // 特殊スキルの受付の確認（ファルカ）: 受付の外（ヒットストップ・爆発の延長を最大に見ても）で使うと、gcsim では通常のスキルになる（警告）
       if (actionDef?.cooldownPool === 'special' && (actionDef.charges ?? 1) > 1 && !inStateWindow) {
         if (!specialWindow || actionStartTime > specialWindow.until + 0.001) {
+          const windowMessage = specialWindow
+            ? `特殊スキルの受付時間外: 受付（スキルから約 ${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では通常のスキルとして扱われます`
+            : '特殊スキルの受付時間外: 同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます';
+          computedAction.specialWindowWarning = windowMessage;
           validationIssues.push({
             id: `special_window_${act.id}`,
             severity: 'warning',

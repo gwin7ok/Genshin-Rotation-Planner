@@ -113,6 +113,10 @@ export interface KeyCatalogReport {
   unresolved: UnresolvedKeyCall[];
   /** 定義場所が複数の分類・持ち主にまたがるキー */
   ambiguous: Array<{ key: string; places: string[] }>;
+  /** 上のうち、分類を手で確定していないキー（要確認。gcsimKeyCatalogOverrides.ts の AMBIGUOUS_KEY_CATEGORIES に追加する） */
+  ambiguousUnpinned: string[];
+  /** 分類の確定が、実際の定義場所の分類に無いキー（gcsim の更新で変わった・書き間違い） */
+  pinsInvalid: string[];
   byCategory: Record<string, number>;
   byKind: Record<string, number>;
   /** 手で補う一覧を適用したキー数 */
@@ -219,7 +223,7 @@ const STRING_CONST_RE = new RegExp(`^\\s*(?:const\\s+|var\\s+)?([A-Za-z_]\\w*)\\
 function collectStringConsts(files: Record<string, string>): Map<string, Map<string, string>> {
   const result = new Map<string, Map<string, string>>();
   const pending = new Map<string, Array<[string, string[]]>>();
-  for (const [path, text] of Object.entries(files)) {
+  for (const [path, text] of sortedEntries(files)) {
     const pkg = packageOf(path);
     if (!result.has(pkg)) result.set(pkg, new Map());
     if (!pending.has(pkg)) pending.set(pkg, []);
@@ -243,7 +247,7 @@ function collectStringConsts(files: Record<string, string>): Map<string, Map<str
 /** パッケージごとの数値定数（継続時間の式の評価用） */
 function collectNumberConsts(files: Record<string, string>): Map<string, ParsedGoFile> {
   const merged = new Map<string, Map<string, number>>();
-  for (const [path, text] of Object.entries(files)) {
+  for (const [path, text] of sortedEntries(files)) {
     const pkg = packageOf(path);
     if (!merged.has(pkg)) merged.set(pkg, new Map());
     const target = merged.get(pkg)!;
@@ -466,6 +470,17 @@ interface RawKey {
   durationFrames?: number;
 }
 
+/** ファイルをパス順に並べる（並列取得の完了順に依存しない。辞書の生成を決定的にする） */
+function sortedEntries(files: Record<string, string>): Array<[string, string]> {
+  return Object.entries(files).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+}
+
+/** 定義場所が複数の分類・持ち主にまたがる「曖昧な」キーの、分類の確定（理由つき。gcsimKeyCatalogOverrides.ts の AMBIGUOUS_KEY_CATEGORIES） */
+export interface AmbiguousKeyPin {
+  category: KeyCategory;
+  reason: string;
+}
+
 /**
  * gcsim のソース（パス → 中身）から、キーの辞書を作る。
  * @param files internal/characters・weapons・artifacts・template と pkg/simulation/setup.go の Go ソース
@@ -478,6 +493,7 @@ export function extractKeyCatalog(
   overrides: Record<string, KeyOverride> = {},
   observed?: ObservedKeys,
   manualPatterns: ManualPatternInput[] = [],
+  ambiguousPins: Record<string, AmbiguousKeyPin> = {},
 ): { catalog: KeyCatalog; report: KeyCatalogReport } {
   const ownerKeys = buildOwnerKeys(allPaths);
   const withKeys = (owner: KeyOwner): KeyOwner => {
@@ -497,10 +513,10 @@ export function extractKeyCatalog(
 
   const raws: RawKey[] = [];
   const report: KeyCatalogReport = {
-    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], byCategory: {}, byKind: {}, manualCount: 0, observedHits: 0, observedAdded: 0, overridesMissing: [],
+    totalCalls: 0, resolvedCalls: 0, patternCalls: 0, unresolved: [], ambiguous: [], ambiguousUnpinned: [], pinsInvalid: [], byCategory: {}, byKind: {}, manualCount: 0, observedHits: 0, observedAdded: 0, overridesMissing: [],
   };
 
-  for (const [path, text] of Object.entries(files)) {
+  for (const [path, text] of sortedEntries(files)) {
     const pkg = packageOf(path);
     const consts = stringConsts.get(pkg) ?? new Map<string, string>();
     const numbers = numberConsts.get(pkg);
@@ -544,16 +560,31 @@ export function extractKeyCatalog(
 
   const entries: KeyCatalogEntry[] = [];
   for (const [key, list] of [...byKey.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    const first = list[0];
-    const classified = classifyPath(first.path);
-    const category = classified.category;
-    const owner = withKeys(classified.owner);
     const places = new Set(list.map(r => {
       const c = classifyPath(r.path);
       return `${c.category}:${withKeys(c.owner).gcsimKey}`;
     }));
     const ambiguous = places.size > 1;
     if (ambiguous) report.ambiguous.push({ key, places: [...places] });
+    // 分類: 曖昧なキーは、手で確定した分類（ambiguousPins）。無ければパス順で最初の定義場所（レポートに「未確定」として出す）
+    let first = list[0];
+    const pin = ambiguous ? ambiguousPins[key] : undefined;
+    if (ambiguous && !pin) report.ambiguousUnpinned.push(key);
+    if (pin) {
+      const pinned = list.find(r => classifyPath(r.path).category === pin.category);
+      if (pinned) first = pinned;
+      else report.pinsInvalid.push(key);
+    }
+    const classified = classifyPath(first.path);
+    const category = classified.category;
+    let owner = withKeys(classified.owner);
+    // 持ち主: 同じ種類（キャラ同士・武器同士）の持ち主が複数あるキーは、全員の gcsim のキーを持たせる（例: millennial-atk% は終焉を嘆く詩・松韻の響く頃・自由への誓い）
+    const owners = list.map(r => withKeys(classifyPath(r.path).owner));
+    if (owners.every(o => o.type === owner.type)) {
+      const merged: string[] = [];
+      for (const o of [owner, ...owners]) for (const k of o.gcsimKeys ?? (o.gcsimKey ? [o.gcsimKey] : [])) if (!merged.includes(k)) merged.push(k);
+      if (merged.length > 1) owner = { ...owner, gcsimKey: merged[0], gcsimKeys: merged };
+    }
 
     const durations = list.map(r => r.durationFrames).filter((d): d is number => d !== undefined);
     const sources: KeySource[] = [];

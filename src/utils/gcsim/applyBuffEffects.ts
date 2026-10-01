@@ -51,26 +51,30 @@ export function lapEndFrame(placements: StintPlacement[], charIndex?: number): n
 /**
  * 効果のイベントを、更新が続く間（前のイベントの終了予定より前に次のイベントが起きる間。gapFrames までの隙間は許す）ごとの「まとまり」にする。
  * 2周目の先頭（lapEnd）をまたいでは、まとめない（2周目の更新で1周目の発動が延びて見えないように）。
- * 発動元キャラの2周目のコピーの出場（cutFrame）以降のイベントは、そのコピーの出場に属する（1周目と同一）ので無視する。終了予定が分からないイベントも無視する
+ * 発動元キャラの2周目のコピーの出場（cutFrame）以降のイベントは、そのコピーの出場に属する（1周目と同一）ので無視する。終了予定が分からないイベントも無視する。
+ * groupOf: イベントのフレーム → 置き場所（出場ブロック）。違う出場ブロックの更新は、まとめない（その出場ブロックの行に、その出場での発動として出す。
+ * アプリは「同じ効果を再発動したら前の発動はそこで終わる」扱いなので、別の出場での更新は、別の発動にしても見た目の連続性は保たれる）
  */
 export function chainEvents(
   events: { frame: number; expiry: number; ended: number }[],
   lapEnd: number,
   gapFrames = 0,
   cutFrame = Infinity,
+  groupOf?: (frame: number) => string | undefined,
 ): { startFrame: number; endFrame: number }[] {
-  const chains: { startFrame: number; endFrame: number }[] = [];
+  const chains: { startFrame: number; endFrame: number; group?: string }[] = [];
   for (const ev of [...events].sort((a, b) => a.frame - b.frame)) {
     if (ev.frame >= cutFrame) continue;
     const end = ev.expiry > ev.frame ? ev.expiry : ev.ended > ev.frame ? ev.ended : -1;
     if (end < 0) continue;
     const last = chains[chains.length - 1];
     // 1周目の発動と2周目の発動は、まとめない（2周目の更新で1周目の発動が延びて見えないように）
-    const joinable = last !== undefined && (ev.frame < lapEnd) === (last.startFrame < lapEnd);
+    const group = groupOf?.(ev.frame);
+    const joinable = last !== undefined && (ev.frame < lapEnd) === (last.startFrame < lapEnd) && last.group === group;
     if (last && joinable && ev.frame <= last.endFrame + gapFrames) last.endFrame = Math.max(last.endFrame, end);
-    else chains.push({ startFrame: ev.frame, endFrame: end });
+    else chains.push({ startFrame: ev.frame, endFrame: end, group });
   }
-  return chains;
+  return chains.map(c => ({ startFrame: c.startFrame, endFrame: c.endFrame }));
 }
 
 export interface EffectPlacement {
@@ -185,7 +189,7 @@ export function applyPassiveTriggers(
         // 終わりのある効果だけ（常時の効果は時刻の情報が無い）
         // チームバフは受け取るキャラごとに開始・終了が少しずつ違って記録されるので、効果のイベントを更新が続く間ごとに1つの発動にまとめる
         // （アプリは、同じ効果を再発動すると前の発動はそこで終わる扱い）。2周目の更新では、1周目の発動を延ばさない
-        const recs = chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex));
+        const recs = chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId);
         // 出場ブロックごとに、時刻順に並べる
         const byStint = new Map<string, { rec: { startFrame: number; endFrame: number }; place: EffectPlacement }[]>();
         for (const rec of recs) {
@@ -324,7 +328,7 @@ export function applyCharacterLinkedEffects(
         .sort((a, b) => a.frame - b.frame);
       const bars: { start: number; end: number }[] = [];
       if (def.mode === 'chain') {
-        for (const c of chainEvents(events, lapEnd, CHAIN_GAP_FRAMES, lapEndFrame(placements, charIndex))) bars.push({ start: c.startFrame, end: c.endFrame });
+        for (const c of chainEvents(events, lapEnd, CHAIN_GAP_FRAMES, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId)) bars.push({ start: c.startFrame, end: c.endFrame });
       } else {
         for (const ev of events.filter(e => e.kind === 'added' || e.kind === 'refreshed')) bars.push({ start: ev.frame, end: ev.expiry });
       }

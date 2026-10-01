@@ -88,6 +88,9 @@ export function calculateRotation(
   const calculatedStints: Stint[] = [];
   const activeBuffs: ActiveBuffSpan[] = [];
   const skillCooldowns: CooldownSpan[] = [];
+  // 風元素共鳴（風元素のキャラが 2 人以上）: 全キャラのスキル・爆発・特殊スキルの CT が 5% 短くなる（gcsim の anemo-res-cd。ゲームの動画でも、特殊スキルの CT 10.4 秒表示を確認）。
+  // 倍率を掛けるのは、マスターの値から計算する CT だけ（個別に変更した値・gcsim から書き戻した値は、すでにこの短縮を含む）
+  const cdResonanceScale = characters.filter(c => c.element === 'anemo').length >= 2 ? 0.95 : 1;
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
@@ -153,6 +156,8 @@ export function calculateRotation(
     // （特殊スキルのCT短縮は、ループの外の specialReductions に記録する）
     // 特殊スキルの受付（スキルを使ってからの時間と、通常攻撃による CT 短縮の回数。交代で消える）
     let specialWindowStart = 0;
+    // スキルの CT が、マスターの値から何倍に変わっているか（gcsim の書き戻し）。特殊スキルの CT にも同じ割合を掛ける
+    let specialCdScale = cdResonanceScale;
     let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string } | undefined;
     // 受付の効果バー（ファルカの「疾風怒濤」）。バーの終わりは、受付の終わり（爆発・ヒットストップの延長を含む）と、出場の終わりの早いほう
     const windowBars: Array<{ span: ActiveBuffSpan; window: NonNullable<typeof specialWindow> }> = [];
@@ -277,7 +282,12 @@ export function calculateRotation(
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
       // 個別に変更された CT があれば優先
       // （長押しで長さが変わるものは、ホールド 0 のときの値 + 長押し 1 秒あたりの増分 × ホールド秒数）
-      const cooldown = act.cooldown ?? Number(((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)).toFixed(3));
+      const isCdAction = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset' || act.type === 'burst';
+      const baseCooldown = act.cooldown ?? Number((((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)) * (isCdAction ? cdResonanceScale : 1)).toFixed(3));
+      // 風元素共鳴が無く、スキルの CT が書き戻しで変わっている（重雲の命ノ星座2など）ときは、特殊スキルの CT も同じ割合で短くする（gcsim のログで 660f → 627f を確認）
+      const cooldown = act.cooldown === undefined && actionDef?.cooldownPool === 'special' && specialCdScale !== 1 && cdResonanceScale === 1
+        ? Number((baseCooldown * specialCdScale).toFixed(3))
+        : baseCooldown;
       // CTの開始位置（動作開始からの遅れ）。マスターの値。未設定は動作開始と同時
       // 動作開始から / 長押し終了から / 状態の終了から（状態の長さは効果継続時間。無ければアクションの終了）
       const effectSeconds = act.effectDuration ?? actionDef?.effectDuration ?? 0;
@@ -329,13 +339,16 @@ export function calculateRotation(
         // スキルが、特殊スキルの別枠のCTを、全チャージ分まとめて開始する（ファルカ）
         if (!isSpecial && !inStateWindow && actionDef?.startsSpecialPool) {
           const pool = actionDef.startsSpecialPool;
+          const baseSkillCd = actionDef.cooldown ?? 0;
+          specialCdScale = baseSkillCd > 0 && act.cooldown !== undefined ? act.cooldown / baseSkillCd : cdResonanceScale;
+          const poolCooldown = Number((pool.cooldown * specialCdScale).toFixed(3));
           specialWindowStart = actionStartTime;
           specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds).toFixed(3)), count: 0, pool, actionId: act.id } : undefined;
           ctEvents.push({
             key: `${char.id}:special`,
             time: actionStartTime,
             ctOffset,
-            cooldown: pool.cooldown,
+            cooldown: poolCooldown,
             charges: pool.charges,
             startsAll: true,
             checked: false,
@@ -350,8 +363,8 @@ export function calculateRotation(
               characterId: char.id,
               type: 'special',
               startTime: ctStartTime,
-              endTime: Number((ctStartTime + pool.cooldown).toFixed(3)),
-              duration: pool.cooldown,
+              endTime: Number((ctStartTime + poolCooldown).toFixed(3)),
+              duration: poolCooldown,
               actionInstanceId: act.id,
             });
           }
@@ -432,7 +445,34 @@ export function calculateRotation(
         const pool = specialWindow.pool;
         if (act.type === 'burst') specialWindow.until += pool.windowExtendOnBurst ?? 0;
         else if (act.type === 'normal') specialWindow.until += pool.windowHitlag?.normal?.[(normalStreak - 1 + (pool.windowHitlag.normal.length || 1) * 8) % (pool.windowHitlag.normal.length || 1)] ?? 0;
-        else if (act.type === 'charged') specialWindow.until += pool.windowHitlag?.charged ?? 0;
+        else if (act.type === 'charged') {
+          specialWindow.until += pool.windowHitlag?.charged ?? 0;
+          // 受付の間の重撃は、特殊スキルの CT（回数）が空いていれば、特殊重撃「蒼牙」になり、特殊スキルと同じ CT を 1 回分使う（空いていなければ普通の重撃）。
+          // 空いているかは、CT の判定と、バーの表示の両方で決める（ここでは「使うかもしれない」発動として記録する）
+          ctEvents.push({
+            key: `${char.id}:special`,
+            time: actionStartTime,
+            ctOffset: 0,
+            cooldown: Number((pool.cooldown * specialCdScale).toFixed(3)),
+            charges: pool.charges,
+            optional: true,
+            checked: false,
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: () => {},
+          });
+          const optSpan: CooldownSpan = {
+            id: `cd_special_opt_${char.id}_${actionStartTime}`,
+            characterId: char.id,
+            type: 'special',
+            startTime: actionStartTime,
+            endTime: Number((actionStartTime + Number((pool.cooldown * specialCdScale).toFixed(3))).toFixed(3)),
+            duration: Number((pool.cooldown * specialCdScale).toFixed(3)),
+            actionInstanceId: act.id,
+          };
+          skillCooldowns.push(optSpan);
+          charStates[char.id].skillCooldowns.push(optSpan);
+        }
         else if (actionDef?.cooldownPool === 'special') specialWindow.until += pool.windowHitlag?.special ?? 0;
         specialWindow.until = Number(specialWindow.until.toFixed(3));
       }
@@ -643,6 +683,17 @@ export function calculateRotation(
           poolStarts.push(it.span!);
           // 同じ時刻の 2 本（表・裏）がそろったら割り当てる
           if (poolStarts.length === 2) { front = poolStarts[0]; back = poolStarts[1]; poolStarts.length = 0; }
+        } else if (it.span!.id.startsWith('cd_special_opt_')) {
+          // 受付の間の重撃: 表が明けていれば特殊重撃として CT を使う。明けていなければ普通の重撃なので、バーを消す
+          if (front && front.endTime <= it.time + CT_TOLERANCE_SEC) {
+            front = back;
+            back = it.span;
+          } else {
+            for (const list of [skillCooldowns, charStates[charId]?.skillCooldowns ?? []]) {
+              const idx = list.indexOf(it.span!);
+              if (idx >= 0) list.splice(idx, 1);
+            }
+          }
         } else {
           front = back;
           back = it.span;
@@ -807,6 +858,8 @@ interface CooldownEvent {
   charges?: number;
   /** true のとき、この発動が全回分のCTを、同じ時刻から並行して始める（検査はしない。ファルカのスキルが特殊スキルのCTを開始する。この枠は並行方式になり、短縮は次に使える回の CT だけに効く） */
   startsAll?: boolean;
+  /** true のとき、特殊スキルの CT が空いていれば 1 回分使い、空いていなければ何もしない（ファルカの受付の間の重撃 = 特殊重撃「蒼牙」） */
+  optional?: boolean;
   /** 0 より大きいとき、この発動は CT を始めず、CT 中のチャージの CT を、この秒数だけ短縮する（ファルカの通常攻撃） */
   reduceBy?: number;
   stintIndex: number;
@@ -891,6 +944,14 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       // 表と裏の CT を、スキルを使った時刻から同時に始める（ゲームの動画で確認。gcsim はキュー方式で、食い違う）
       parallelKeys.add(item.event.key);
       if (ev.cooldown > 0) for (let i = 0; i < slots.length; i++) slots[i] = startAt + ev.cooldown;
+      continue;
+    }
+    if (parallelKeys.has(item.event.key) && ev.optional) {
+      // 受付の間の重撃: 表が明けていれば特殊重撃になって 1 回分使う。明けていなければ普通の重撃（違反ではない）
+      if (slots[0] <= item.time + CT_TOLERANCE_SEC) {
+        slots.shift();
+        slots.push(startAt + ev.cooldown);
+      }
       continue;
     }
     if (parallelKeys.has(item.event.key)) {

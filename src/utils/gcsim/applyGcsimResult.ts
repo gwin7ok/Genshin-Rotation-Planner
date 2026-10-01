@@ -78,7 +78,7 @@ export function applyActionDurations(
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
 
-  const next = new Map<string, number>();
+  const next = new Map<string, { seconds: number; base: number }>();
   const changes: DurationChange[] = [];
   let skipped = 0;
   for (const { executed, ref } of pairs) {
@@ -89,13 +89,15 @@ export function applyActionDurations(
       skipped++;
       continue;
     }
-    const delayFrames = Math.max(0, Math.round(actionDelayOf(act) * 60));
-    const seconds = Number(framesToSeconds(executed.frames - delayFrames).toFixed(3));
+    // 標準より長くした分（遅延に足して渡した分）は、所要時間に含まれる。gcsim 自身の所要時間は、それを引いた値
+    const extra = ref.extraSeconds ?? 0;
+    const delayFrames = Math.max(0, Math.round((actionDelayOf(act) + extra) * 60));
+    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra).toFixed(3));
     if (seconds < 0) {
       skipped++;
       continue;
     }
-    next.set(ref.actionId, seconds);
+    next.set(ref.actionId, { seconds, base: Number(Math.max(0.05, seconds - extra).toFixed(3)) });
     const before = effectiveDurations?.[ref.actionId] ?? act.duration;
     if (Math.abs(seconds - before) >= 0.0005) {
       changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: act.name, before, after: seconds });
@@ -106,7 +108,7 @@ export function applyActionDurations(
     if (!st.actions.some(a => next.has(a.id))) return st;
     return {
       ...st,
-      actions: st.actions.map(a => (next.has(a.id) ? { ...a, duration: next.get(a.id)!, durationManual: true } : a)),
+      actions: st.actions.map(a => (next.has(a.id) ? { ...a, duration: next.get(a.id)!.seconds, durationManual: true, gcsimBaseDuration: next.get(a.id)!.base } : a)),
     };
   });
   return { stints: updated, changes, skipped };

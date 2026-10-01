@@ -217,7 +217,7 @@ export function calculateRotation(
       // 所要時間: 編集済み（durationManual）ならその値。未編集なら、次に続くアクションに応じたキャンセルフレーム
       // （出場の最後は次が交代）。フレームが無いアクションは、登録時の値を使う
       let autoDuration: number | undefined;
-      if (!act.durationManual) {
+      {
         if (frames) {
           const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
           autoDuration = Number((((nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) / 60).toFixed(3));
@@ -225,6 +225,9 @@ export function calculateRotation(
           autoDuration = hitFallbackDuration;
         }
       }
+      // gcsim 自身の標準の所要時間（編集済みでも）。ユーザーが標準より長くした分を gcsim に渡すために使う
+      const naturalDuration = act.gcsimBaseDuration ?? autoDuration;
+      if (act.durationManual) autoDuration = undefined;
       const duration = Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
 
@@ -245,6 +248,7 @@ export function calculateRotation(
         hasCTCollision: false,
         collisionRemainingCT: undefined,
         ...(holdSeconds !== undefined ? { holdSeconds } : {}),
+        ...(naturalDuration !== undefined ? { naturalDuration } : {}),
         duration,
         startTime: actionStartTime,
         endTime: actionEndTime,

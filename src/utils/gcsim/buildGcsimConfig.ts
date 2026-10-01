@@ -47,6 +47,11 @@ export interface GcsimConfigInput {
   artifacts: ArtifactSetDatabaseItem[];
   /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
   holdSecondsByActionId?: Record<string, number>;
+  /**
+   * ユーザーが標準の所要時間より長くした分（アクション ID → 秒）。gcsim にはアクションの長さを渡せないため、そのアクションの後の遅延に足して渡す。
+   * 長押し（holdSeconds で渡すアクション）は含めない
+   */
+  extraWaitByActionId?: Record<string, number>;
 }
 
 export interface GcsimConfigResult {
@@ -70,6 +75,8 @@ export interface GcsimActionRef {
   actionId: string;
   /** gcsim の命令の基本名（attack / skill / burst / charge / aim / dash / low_plunge ...。パラメータは含まない） */
   command: string;
+  /** 遅延に足して渡した、標準より長くした分（秒）。書き戻しで、gcsim 自身の所要時間を求めるために引く。無ければ 0 */
+  extraSeconds?: number;
   /** 設定文の中の位置: 初動 / ループ（何周目か） */
   phase: 'initial' | 'loop';
   /** phase = loop のとき、何周目か（1 始まり） */
@@ -154,7 +161,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const stintLines = (
     stintList: Stint[],
     indent: string,
-    refs: { stintId: string; actionId: string; command: string }[],
+    refs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[],
     /** 最初の出場の直前のキャラのキー（1周目と2周目以降で違うときは `loopPrevKeys`）。無ければ交代しない（最初の出場など） */
     firstPrevKey: string | undefined,
     /** ループの最初の出場の直前のキャラのキー（周ごとに違うとき: 1周目 / 2周目以降） */
@@ -181,6 +188,9 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       if (switchFrames > 0) out.push(`${indent}wait(${switchFrames});`);
       isFirst = false;
       prevKey = key;
+      // 出場の最後のアクション（次は交代）: 標準より長くした分は `wait` で渡す。`delay` は次の交代が実行できる状態になった「後」に入り、
+      // 交代CTの待ちと重ならないため（爆発・重撃の後なら `wait` がちょうど交代へのキャンセルの時点から始まる）
+      const lastCommandAct = [...stint.actions].reverse().find(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char' && a.type !== 'wait');
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char') continue;
         if (act.type === 'wait') {
@@ -196,16 +206,23 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
         const command = applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
         out.push(`${indent}${key} ${command};`);
-        refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, '') });
-        const delayFrames = toFrames(actionDelayOf(act));
-        if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
+        const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
+        refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, ''), ...(extra > 0 ? { extraSeconds: extra } : {}) });
+        if (extra > 0 && act === lastCommandAct) {
+          out.push(`${indent}wait(${toFrames(extra)});`);
+          const delayOnly = toFrames(actionDelayOf(act));
+          if (delayOnly > 0) out.push(`${indent}delay(${delayOnly});`);
+        } else {
+          const delayFrames = toFrames(actionDelayOf(act) + extra);
+          if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
+        }
       }
     }
     return out;
   };
 
-  const initialRefs: { stintId: string; actionId: string; command: string }[] = [];
-  const loopRefs: { stintId: string; actionId: string; command: string }[] = [];
+  const initialRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[] = [];
+  const loopRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[] = [];
   const stintKey = (s: Stint | undefined) => (s ? keyOf.get(s.characterId) : undefined);
   const firstKey0 = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
   const initialLines = stintLines(initialStints, '', initialRefs, undefined);

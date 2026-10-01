@@ -288,6 +288,11 @@ export default function App() {
       switchDelay,
       weapons: database.weapons,
       artifacts: database.artifacts,
+      extraWaitByActionId: Object.fromEntries(
+        calculatedResult.calculatedStints.flatMap(s => s.actions)
+          .filter(a => a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'swap' && a.type !== 'wait' && a.duration - a.naturalDuration >= 0.005)
+          .map(a => [a.id, Number((a.duration - (a.naturalDuration as number)).toFixed(3))]),
+      ),
       holdSecondsByActionId: Object.fromEntries(
         calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
       ),

@@ -30,6 +30,8 @@ interface HeaderProps {
   loopStartTime?: number;
   rotationNotation?: string;
   totalCTCollisions?: number;
+  /** 発動バフのCT警告の件数（CT中の発動。効果が発動しないだけで、gcsim の計算は止めない） */
+  totalCTWarnings?: number;
   playbackCycleCount?: number;
   loopPeriod?: number;
 }
@@ -61,6 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
   loopStartTime = 0,
   rotationNotation = '',
   totalCTCollisions = 0,
+  totalCTWarnings = 0,
   playbackCycleCount = 1,
   loopPeriod = 0,
 }) => {
@@ -265,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
               title={`【⚠️ CT違反あり】ローテーション全体で ${totalCTCollisions} 件のクールタイム未回復違反が検出されています（クリックでサマリー表示）`}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-              <span>⚠️ CT違反あり ({totalCTCollisions}件)</span>
+              <span>CT違反あり ({totalCTCollisions}件)</span>
             </button>
           ) : (
             <button
@@ -276,6 +279,18 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>✅ 全体CT違反なし</span>
+            </button>
+          )}
+
+          {totalCTWarnings > 0 && (
+            <button
+              type="button"
+              onClick={onOpenSummaryModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0 cursor-pointer transition-colors"
+              title={`【CT警告】発動バフ（固有天賦・武器・聖遺物）が、CT中に発動する配置が ${totalCTWarnings} 件あります。効果が発動しないだけで、gcsim の計算は制限されません`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>CT警告 ({totalCTWarnings}件)</span>
             </button>
           )}
 

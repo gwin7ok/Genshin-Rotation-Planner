@@ -376,17 +376,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     return list;
   }, [stints, characterMap]);
 
-  // 全体のCT違反（スキル・爆発・固有天賦・武器・聖遺物）の合計数
+  // 全体のCT違反（スキル・爆発）の合計数。発動バフのCT中の発動は「CT警告」（黄色）で、含めない
   const totalCTCollisions = useMemo(() => {
     let count = 0;
     stints.forEach(s => {
       count += s.actions.filter(a => a.hasCTCollision).length;
     });
-    passiveSpans.forEach(p => {
-      if (p.hasCTViolation) count++;
-    });
     return count;
-  }, [stints, passiveSpans]);
+  }, [stints]);
 
   // Total timeline duration (single cycle width [0, totalDuration])
   const chartWidth = Math.max(800, Math.ceil(totalDuration + 2) * pixelsPerSecond);
@@ -1310,9 +1307,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           <div className="h-10 px-2 flex flex-col justify-center border-b border-slate-800/60 text-[9px] font-mono leading-tight">
                             <div className="flex items-center justify-between text-amber-300/90 font-semibold truncate">
                               <span className="truncate flex items-center gap-1">
-                                {(stint.actions.some(a => a.hasCTCollision) || stintPassives.some(p => p.hasCTViolation)) && (
+                                {stint.actions.some(a => a.hasCTCollision) && (
                                   <span title="CT未回復あり" className="inline-flex items-center">
                                     <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
+                                  </span>
+                                )}
+                                {stintPassives.some(p => p.hasCTViolation) && (
+                                  <span title="CT警告あり（発動バフがCT中に発動する配置。効果が発動しないだけ）" className="inline-flex items-center">
+                                    <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                                   </span>
                                 )}
                                 <span className="truncate">{stint.note || `${char.name}の行動`}</span>
@@ -1770,7 +1772,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       return (
                                         <React.Fragment key={`reg_p_eff_${p.id}`}>
                                         {p.hasCTViolation && !(grp.cooldown > 0) && (
-                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} />
+                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} warning />
                                         )}
                                         <div
                                           key={`reg_p_eff_${p.id}`}
@@ -1780,18 +1782,18 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
                                           className={`${barCommon} ${cursor} font-medium border-dashed ${
                                             p.hasCTViolation
-                                              ? 'bg-red-950/90 border-red-500 text-red-100 ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
+                                              ? 'bg-amber-950/80 border-amber-500 text-amber-100 ring-2 ring-inset ring-amber-500/70 z-20'
                                               : isPending
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${activeRingClass}`}
-                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）\n${p.name} (${p.duration}s)\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT衝突エラー】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています！` : ''}`}
+                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）\n${p.name} (${p.duration}s)\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT警告】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています。この発動では効果は発動しません（gcsim の計算は制限されません）` : ''}`}
                                         >
                                           <span className="truncate flex items-center gap-1">
-                                            {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" /> : badgeCfg.icon}
+                                            {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" /> : badgeCfg.icon}
                                             <span>[{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s)</span>
                                             {p.hasCTViolation && p.collisionRemainingCT !== undefined && (
-                                              <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
+                                              <span className="text-[9px] bg-amber-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
                                                 残{p.collisionRemainingCT}s
                                               </span>
                                             )}
@@ -1870,7 +1872,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       return (
                                         <React.Fragment key={`reg_p_cd_${p.id}`}>
                                         {p.hasCTViolation && (
-                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} />
+                                          <CTViolationMarker x={start * pixelsPerSecond} remaining={p.collisionRemainingCT} warning />
                                         )}
                                         <div
                                           key={`reg_p_cd_${p.id}`}
@@ -1995,12 +1997,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 };
 
 /** CT違反マーク（キャラカードの違反マークと同じ）。x = バーの先頭（発動位置）の横座標。その左側に表示する */
-const CTViolationMarker: React.FC<{ x: number; remaining?: number }> = ({ x, remaining }) => (
+/** CT違反（スキル・爆発。赤）/ CT警告（発動バフ。黄色。`warning`）のマーク */
+const CTViolationMarker: React.FC<{ x: number; remaining?: number; warning?: boolean }> = ({ x, remaining, warning }) => (
   <span
     className="absolute top-1/2 -translate-y-1/2 inline-flex items-center pointer-events-auto"
     style={{ left: `${x - 15}px`, zIndex: 30 }}
-    title={`CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
+    title={warning ? `CT警告: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています（効果は発動しません）` : `CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
   >
-    <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
+    <AlertTriangle className={`w-3 h-3 shrink-0 ${warning ? 'text-amber-400' : 'text-red-400 animate-pulse'}`} />
   </span>
 );

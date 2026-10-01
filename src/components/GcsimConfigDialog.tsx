@@ -28,6 +28,8 @@ interface GcsimConfigDialogProps {
   onCopyAgain: () => void;
   /** アプリ自身のCT違反（スキル・爆発・発動バフ）。無ければ空 */
   ctIssues: { id: string; title: string; message: string }[];
+  /** アプリ自身のCT警告（発動バフのCT中の発動。gcsim の計算は止めない）。無ければ空 */
+  ctWarnings?: { id: string; title: string; message: string }[];
   /** gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）を、違反マークとして渡す。無ければ null（マークを消す） */
   onCtWaits: (waits: Record<string, number> | null) => void;
   /** 設定文の元になった出場ブロック（書き戻し先） */
@@ -41,7 +43,7 @@ interface GcsimConfigDialogProps {
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, onCtWaits, stints, calculated, buffsByCharacter, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, stints, calculated, buffsByCharacter, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -162,6 +164,17 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                 <div className="text-[11px] font-bold text-red-300">アプリのCT違反: {ctIssues.length}件（先に解消してください）</div>
                 {ctIssues.map(issue => (
                   <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
+                    <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                    <span><span className="font-bold">{issue.title}</span>: {issue.message}</span>
+                  </div>
+                ))}
+              </>
+            )}
+            {ctWarnings.length > 0 && (
+              <>
+                <div className="text-[11px] font-bold text-amber-300">アプリのCT警告: {ctWarnings.length}件（発動バフがCT中に発動する配置。効果が発動しないだけで、gcsim の計算は制限されません）</div>
+                {ctWarnings.map(issue => (
+                  <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-amber-950/40 border-amber-700/60 text-amber-200">
                     <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
                     <span><span className="font-bold">{issue.title}</span>: {issue.message}</span>
                   </div>

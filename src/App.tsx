@@ -120,17 +120,19 @@ export default function App() {
     setElapsedTime(0);
   }, [calculatedResult]);
 
-  // 全体のCT違反件数計算（発動時点でのクールタイム未終了）
+  // 全体のCT違反件数計算（スキル・爆発の発動時点でのクールタイム未終了。gcsim では実行できずCT待ちになる）
   const totalCTCollisions = useMemo(() => {
     let count = 0;
     calculatedResult.calculatedStints.forEach(s => {
       count += s.actions.filter(a => a.hasCTCollision).length;
     });
-    calculatedResult.passiveSpans.forEach(p => {
-      if (p.hasCTViolation) count++;
-    });
     return count;
   }, [calculatedResult]);
+  // 発動バフ（固有天賦・武器・聖遺物）のCT警告件数（CT中の発動は、効果が発動しないだけ。gcsim の計算は止めない）
+  const totalCTWarnings = useMemo(
+    () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length,
+    [calculatedResult],
+  );
 
   // 出場キャラの削除などで基準番号が出場キャラの数を超えたら、基準を解除して先頭に戻す
   useEffect(() => {
@@ -258,9 +260,14 @@ export default function App() {
     setIsSaveAsOpen(false);
   };
 
-  // アプリ自身のCT違反（スキル・爆発・発動バフ。ガントチャートの判定と同じ）
+  // アプリ自身のCT違反（スキル・爆発。ガントチャートの判定と同じ。gcsim の計算を止める）
   const ctViolationIssues = useMemo(
-    () => calculatedResult.validationIssues.filter(v => /^(skill|burst|passive)_ct_/.test(v.id)),
+    () => calculatedResult.validationIssues.filter(v => /^(skill|burst)_ct_/.test(v.id)),
+    [calculatedResult],
+  );
+  // アプリ自身のCT警告（発動バフ。gcsim の計算は止めない）
+  const ctWarningIssues = useMemo(
+    () => calculatedResult.validationIssues.filter(v => /^passive_ct_/.test(v.id)),
     [calculatedResult],
   );
 
@@ -390,6 +397,7 @@ export default function App() {
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
         totalCTCollisions={totalCTCollisions}
+        totalCTWarnings={totalCTWarnings}
         playbackCycleCount={playbackCycleCount}
         loopPeriod={loopPeriod}
       />
@@ -524,6 +532,7 @@ export default function App() {
         copied={gcsimCopied}
         onCopyAgain={() => gcsimResult && void copyGcsimText(gcsimResult.config)}
         ctIssues={ctViolationIssues}
+        ctWarnings={ctWarningIssues}
         onCtWaits={setGcsimCtWaits}
         stints={visibleStints}
         calculated={calculatedResult}

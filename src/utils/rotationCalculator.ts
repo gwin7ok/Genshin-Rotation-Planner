@@ -98,6 +98,9 @@ export function calculateRotation(
   // 受付の延長のヒットストップの値（敵の防御ヒットストップが無効なら短い値）
   const hitlagOf = (pool: NonNullable<ActionDefinition['startsSpecialPool']>) =>
     options?.defHalt === false ? pool.windowHitlagNoDefHalt ?? pool.windowHitlag : pool.windowHitlag;
+  // このアクションの所要時間に、ヒットストップで止まった分が含まれているか（gcsim から書き戻した所要時間だけ）。
+  // 受付（疾風怒濤）のヒットストップ延長は、所要時間に止まった分が含まれるときだけ足す（両方足すか、両方足さないか）
+  const durationHasHitlag = (a: { gcsimBaseDuration?: number }) => a.gcsimBaseDuration !== undefined;
   const cdResonanceScale = characters.filter(c => c.element === 'anemo').length >= 2 ? 0.95 : 1;
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
@@ -359,7 +362,7 @@ export function calculateRotation(
           const poolCooldown = Number((pool.cooldown * specialCdScale).toFixed(3));
           specialWindowStart = actionStartTime;
           // スキルの初撃のヒットストップも、受付を延ばす（状態は命中の 1 フレーム前に付く）
-          specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds + (hitlagOf(pool)?.skill ?? 0)).toFixed(3)), count: 0, pool, actionId: act.id, startTime: actionStartTime } : undefined;
+          specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds + (durationHasHitlag(act) ? hitlagOf(pool)?.skill ?? 0 : 0)).toFixed(3)), count: 0, pool, actionId: act.id, startTime: actionStartTime } : undefined;
           if (specialWindow) {
             stintWindows.push(specialWindow);
           }
@@ -456,11 +459,11 @@ export function calculateRotation(
         const pool = specialWindow.pool;
         if (act.type === 'burst') specialWindow.until += pool.windowExtendOnBurst ?? 0;
         else if (act.type === 'normal') {
-          const steps = hitlagOf(pool)?.normal ?? [];
+          const steps = durationHasHitlag(act) ? hitlagOf(pool)?.normal ?? [] : [];
           specialWindow.until += steps.length ? steps[(normalStreak - 1 + steps.length * 8) % steps.length] ?? 0 : 0;
         }
         else if (act.type === 'charged') {
-          specialWindow.until += hitlagOf(pool)?.charged ?? 0;
+          specialWindow.until += durationHasHitlag(act) ? hitlagOf(pool)?.charged ?? 0 : 0;
           // 受付の間の重撃は、特殊スキルの CT（回数）が空いていれば、特殊重撃「蒼牙」になり、特殊スキルと同じ CT を 1 回分使う（空いていなければ普通の重撃）。
           // 空いているかは、CT の判定と、バーの表示の両方で決める（ここでは「使うかもしれない」発動として記録する）
           ctEvents.push({
@@ -477,7 +480,7 @@ export function calculateRotation(
             onViolation: () => {},
           });
         }
-        else if (actionDef?.cooldownPool === 'special') specialWindow.until += hitlagOf(pool)?.special ?? 0;
+        else if (actionDef?.cooldownPool === 'special') specialWindow.until += durationHasHitlag(act) ? hitlagOf(pool)?.special ?? 0 : 0;
         specialWindow.until = Number(specialWindow.until.toFixed(3));
       }
 

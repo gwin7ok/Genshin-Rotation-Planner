@@ -854,7 +854,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             <div className="text-xs">
               <div className="font-bold text-slate-200">🛡️ 敵の防御ヒットストップ（gcsim の defhalt）</div>
               <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
-                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。
+                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。疾風怒濤の受付への反映は、gcsim から所要時間を書き戻したアクションだけ（所要時間にも止まった分が含まれるため）。
               </div>
             </div>
             <div className="flex items-center gap-1">

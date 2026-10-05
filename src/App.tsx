@@ -136,9 +136,10 @@ export default function App() {
     });
     return count;
   }, [calculatedResult]);
-  // 発動バフ（固有天賦・武器・聖遺物）のCT警告件数（CT中の発動は、効果が発動しないだけ。gcsim の計算は止めない）
+  // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）。どちらも gcsim の計算は止めない
   const totalCTWarnings = useMemo(
-    () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length,
+    () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length
+      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_')).length,
     [calculatedResult],
   );
 

@@ -51,7 +51,7 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
  * **スキルとは別のCT**（`ActionSpecialSkill`）を持つため、別のアクション（別ボタン）にする。通常のスキルのCTは開始しない。
  * キー: キャラ ID、値: 派生の名前（小文字。PARAMETER_DERIVED_SKILLS と同じ）と、gcsim の値（根拠つき）
  */
-const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean }> = {
+const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean; /** 受付だけを開き、CT は開始しない（オデット）。受付の間に 1 回使うと閉じる。爆発でも受付が開く（秒） */ windowOnly?: boolean; burstWindowSeconds?: number; /** 受付のバーの名前、特殊スキルの効果バーの名前（genshin-db のスキル名から） */ windowLabel?: string; effectLabel?: string }> = {
   '10000128-anemo': {
     slug: 'specialskill',
     label: 'spE',
@@ -85,6 +85,15 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     name: '特殊元素スキル',
     cooldown: 15,
     effectDuration: 20,
+    windowOnly: true,
+    windowLabel: '柔き払暁のコーダの受付', // 特殊スキル「柔き払暁のコーダ」（genshin-db の天賦の説明）を使える期間
+    effectLabel: '柔き払暁のコーダ後の強化', // danceDoubleUpgradeKey（20 秒）
+    startedBySkill: true,
+    windowSeconds: 394 / 60, // odette/skill.go: AddStatus(skillRecastKey, 394, true)（スキルの発動と同時。ヒットストップで延びる）
+    burstWindowSeconds: (6 * 60 + 1) / 60, // odette/burst.go: AddStatus(skillRecastKey, 6*60+burstSummonFrame, false)（爆発でも受付が開く。ヒットストップでは延びない）
+    // 通常攻撃のヒットストップ（odette/attack.go: attackHitlagHaltFrame {1.8}{1.8}{0,1.8}{3}{0}、attackDefHalt {true}{true}{false,false}{false}{true}。HitlagFactor 0.01）
+    windowHitlag: { normal: [6, 6, 2, 3, 0].map(f => f / 60) },
+    windowHitlagNoDefHalt: { normal: [2, 2, 2, 3, 0].map(f => f / 60) },
     source: 'odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）',
   },
 };
@@ -608,12 +617,13 @@ function buildActions(ctx: BuildContext): BuildResult {
           startsSkillCooldown: false,
           cooldownPool: 'special',
           ...(special.charges ? { charges: special.charges } : {}),
+          ...(special.windowOnly ? { requiresWindow: true } : {}),
           ...(special.cooldownDelay ? { cooldownStart: { from: 'motionStart' as const, delay: Number(special.cooldownDelay.toFixed(3)) } } : {}),
           cooldown: special.cooldown,
           effectDuration: special.effectDuration,
           defaultDuration: framesToSec(table.total),
           frames: toActionFrames(table, 'skill', skill.consts),
-          dataSource: { cooldown: `gcsim: ${special.source}`, effectDuration: `gcsim: ${special.source}` },
+          dataSource: { cooldown: `gcsim: ${special.source}`, effectDuration: special.effectLabel ?? `gcsim: ${special.source}` },
         });
         continue;
       }
@@ -639,7 +649,8 @@ function buildActions(ctx: BuildContext): BuildResult {
       if (a.type === 'skill' && !a.cooldownPool || a.type === 'skill_hold') a.startsSpecialPool = {
         cooldown: sp.cooldown,
         charges: sp.charges ?? 1,
-        ...(sp.windowSeconds ? { windowSeconds: sp.windowSeconds } : {}),
+        ...(sp.windowSeconds ? { windowSeconds: Number(sp.windowSeconds.toFixed(3)) } : {}),
+        ...(sp.windowOnly ? { windowOnly: true, singleUse: true, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}) } : {}),
         ...(sp.windowDelay ? { windowDelay: Number(sp.windowDelay.toFixed(3)) } : {}),
         ...(sp.windowExtendOnBurst ? { windowExtendOnBurst: sp.windowExtendOnBurst } : {}),
         ...(sp.windowHitlag ? { windowHitlag: sp.windowHitlag } : {}),
@@ -700,6 +711,14 @@ function buildActions(ctx: BuildContext): BuildResult {
       effectDuration: timings.burstDuration?.label,
     },
   }, burstTable ? framesToSec(burstTable.total) : undefined));
+
+  // 爆発でも特殊スキルの受付が開くキャラ（オデット）。ヒットストップでは延びない
+  if (SPECIAL_SKILLS[id]?.burstWindowSeconds) {
+    const sp = SPECIAL_SKILLS[id];
+    for (const a of actions) {
+      if (a.type === 'burst') a.startsSpecialPool = { cooldown: sp.cooldown, charges: sp.charges ?? 1, windowOnly: true, singleUse: true, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}), windowSeconds: Number(sp.burstWindowSeconds!.toFixed(3)) };
+    }
+  }
 
   // --- ダッシュ (キャラ固有フレームは gcsim 側で共通処理のため仮値) --------------
   actions.push({ id: `${id}_dash`, name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: PLACEHOLDER_DURATION.dash! });

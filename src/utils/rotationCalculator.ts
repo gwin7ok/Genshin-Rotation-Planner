@@ -167,11 +167,32 @@ export function calculateRotation(
     let specialWindowStart = 0;
     // スキルの CT が、マスターの値から何倍に変わっているか（gcsim の書き戻し）。特殊スキルの CT にも同じ割合を掛ける
     let specialCdScale = cdResonanceScale;
-    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string; startTime: number; effectiveEnd?: number } | undefined;
+    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string; startTime: number; effectiveEnd?: number; used?: boolean; usedAt?: number } | undefined;
     // この出場の受付（疾風怒濤）の一覧。出場の終わりで、有効な終わり（effectiveEnd）を決める
     const stintWindows: NonNullable<typeof specialWindow>[] = [];
+    // 時刻 t に、特殊スキルの受付が開いているか（1 回使うと閉じる受付は、使った後は閉じている）
+    const windowOpenAt = (t: number) => !!specialWindow && !specialWindow.used && t <= specialWindow.until + 0.001;
     // 受付の効果バー（ファルカの「疾風怒濤」）。バーの終わりは、受付の終わり（爆発・ヒットストップの延長を含む）と、出場の終わりの早いほう
     const windowBars: Array<{ span: ActiveBuffSpan; window: NonNullable<typeof specialWindow> }> = [];
+    // 受付だけを開く特殊スキル（オデット）の、受付の期間を示すバー（バフ重複の集計には数えない）
+    const addWindowOnlyBar = (w: NonNullable<typeof specialWindow>, openedBy: string) => {
+      if (!w.pool.windowOnly) return;
+      const span: ActiveBuffSpan = {
+        id: `window_${char.id}_${w.actionId}_${w.startTime}`,
+        buffId: `window_${char.id}`,
+        name: `${char.name} ${w.pool.windowLabel ?? '特殊スキルの受付'}（${openedBy}）`,
+        sourceCharacterId: char.id,
+        sourceType: 'talent',
+        startTime: w.startTime,
+        endTime: w.until,
+        duration: Number((w.until - w.startTime).toFixed(3)),
+        color: char.color,
+        description: '特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延び、特殊スキルを使うと閉じる。受付の外では、gcsim では通常のスキルになる',
+        noSynergy: true,
+      };
+      activeBuffs.push(span);
+      windowBars.push({ span, window: w });
+    };
     // 連続した通常攻撃の段（gcsim と同じく、他のアクションを挟むと1段目に戻る）
     let normalStreak = 0;
 
@@ -332,8 +353,10 @@ export function calculateRotation(
         // CTを開始しない派生技は、CTと無関係。祭礼リセットはCT中でも発動できる（CTは開始する）
         // 特殊元素スキル（cooldownPool = 'special'）は、スキルとは別のCT枠（スキルのCTは開始しない）
         const isSpecial = actionDef?.cooldownPool === 'special';
+        // 受付の間だけ使える特殊スキル（ファルカ・オデット）。受付が無い出場では、スキルを使った後でないと使えない
+        const needsWindow = isSpecial && ((actionDef?.charges ?? 1) > 1 || !!actionDef?.requiresWindow);
         // 受付の外で使った特殊スキル（ファルカ）は、gcsim では通常のスキルになり、特殊スキルの CT は積まれない（受付の警告は、下で出す）
-        const specialOutOfWindow = isSpecial && (actionDef?.charges ?? 1) > 1 && !inStateWindow && (!specialWindow || actionStartTime > specialWindow.until + 0.001);
+        const specialOutOfWindow = isSpecial && needsWindow && !inStateWindow && !windowOpenAt(actionStartTime);
         const isTriggeringAction = isSpecial ? !inStateWindow && !specialOutOfWindow : actionDef?.startsSkillCooldown !== false && !inStateWindow;
         if (isTriggeringAction) {
           ctEvents.push({
@@ -365,8 +388,9 @@ export function calculateRotation(
           specialWindow = pool.windowSeconds ? { until: Number((actionStartTime + (pool.windowDelay ?? 0) + pool.windowSeconds + (durationHasHitlag(act) ? hitlagOf(pool)?.skill ?? 0 : 0)).toFixed(3)), count: 0, pool, actionId: act.id, startTime: actionStartTime } : undefined;
           if (specialWindow) {
             stintWindows.push(specialWindow);
+            addWindowOnlyBar(specialWindow, 'スキル');
           }
-          ctEvents.push({
+          if (!pool.windowOnly) ctEvents.push({
             key: `${char.id}:special`,
             time: actionStartTime,
             ctOffset,
@@ -397,6 +421,15 @@ export function calculateRotation(
           skillCooldowns.push(cdSpan);
           charStates[char.id].skillCooldowns.push(cdSpan);
         }
+      }
+
+      // 爆発が特殊スキルの受付を開く（オデット。ヒットストップでは延びない）。同じ出場の受付は、新しい受付に置き換わる
+      if (act.type === 'burst' && actionDef?.startsSpecialPool?.windowSeconds && !inStateWindow) {
+        const pool = actionDef.startsSpecialPool;
+        specialWindowStart = actionStartTime;
+        specialWindow = { until: Number((actionStartTime + pool.windowSeconds!).toFixed(3)), count: 0, pool, actionId: act.id, startTime: actionStartTime };
+        stintWindows.push(specialWindow);
+        addWindowOnlyBar(specialWindow, '爆発');
       }
 
       if (act.type === 'burst') {
@@ -434,9 +467,10 @@ export function calculateRotation(
       }
 
       // 特殊スキルの受付の確認（ファルカ）: 受付の外（ヒットストップ・爆発の延長を最大に見ても）で使うと、gcsim では通常のスキルになる（警告）
-      if (actionDef?.cooldownPool === 'special' && (actionDef.charges ?? 1) > 1 && !inStateWindow) {
-        if (!specialWindow || actionStartTime > specialWindow.until + 0.001) {
-          const windowMessage = specialWindow
+      if (actionDef?.cooldownPool === 'special' && ((actionDef.charges ?? 1) > 1 || actionDef.requiresWindow) && !inStateWindow) {
+        if (!windowOpenAt(actionStartTime)) {
+          const windowClosed = !!specialWindow?.used;
+          const windowMessage = windowClosed ? '特殊スキルの受付は、すでに特殊スキルを使って閉じています（受付の間に 1 回だけ使えます）。gcsim では通常のスキルとして扱われます' : specialWindow
             ? `特殊スキルの受付時間外: 受付（スキルから約 ${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では通常のスキルとして扱われます`
             : '特殊スキルの受付時間外: 同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます';
           computedAction.specialWindowWarning = windowMessage;
@@ -448,14 +482,14 @@ export function calculateRotation(
             actionId: act.id,
             time: actionStartTime,
             title: `${char.name}: 特殊スキルの受付時間外`,
-            message: specialWindow
+            message: windowClosed ? `特殊スキル「${act.name}」: ${windowMessage}` : specialWindow
               ? `特殊スキル「${act.name}」は、受付（スキルから約 ${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では通常のスキルとして扱われます`
               : `特殊スキル「${act.name}」は、同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます`,
           });
         }
       }
       // 受付の延長: ヒットストップ（通常攻撃は段ごと、重撃・特殊スキルは 1 回あたり）、自分の元素爆発（ファルカ）
-      if (specialWindow && actionStartTime <= specialWindow.until + 0.001) {
+      if (specialWindow && windowOpenAt(actionStartTime)) {
         const pool = specialWindow.pool;
         if (act.type === 'burst') specialWindow.until += pool.windowExtendOnBurst ?? 0;
         else if (act.type === 'normal') {
@@ -482,6 +516,8 @@ export function calculateRotation(
         }
         else if (actionDef?.cooldownPool === 'special') specialWindow.until += durationHasHitlag(act) ? hitlagOf(pool)?.special ?? 0 : 0;
         specialWindow.until = Number(specialWindow.until.toFixed(3));
+        // 受付の間に特殊スキルを使うと、受付が閉じる（オデット）
+        if (actionDef?.cooldownPool === 'special' && pool.singleUse) { specialWindow.used = true; specialWindow.usedAt = actionStartTime; }
       }
 
       // 特殊スキルの受付の間の通常攻撃（N）: 特殊スキルの CT を短縮する（ファルカ。N が敵に当たるたびに 0.5 秒、最大 15 回）
@@ -552,7 +588,7 @@ export function calculateRotation(
     });
     windowBars.forEach(({ span, window }, i) => {
       const nextStart = windowBars[i + 1]?.span.startTime ?? Infinity;
-      span.endTime = Number(Math.max(span.startTime, Math.min(window.until, stintEndTime, nextStart)).toFixed(3));
+      span.endTime = Number(Math.max(span.startTime, Math.min(window.until, window.usedAt ?? Infinity, stintEndTime, nextStart)).toFixed(3));
       span.duration = Number((span.endTime - span.startTime).toFixed(3));
     });
     const stintDuration = stintEndTime - stintStartTime;

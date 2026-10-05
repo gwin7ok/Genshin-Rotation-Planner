@@ -67,6 +67,8 @@ export interface ActionDefinition {
   cooldownPool?: 'special';
   /** 別枠のCT（cooldownPool）のチャージ数（同時に溜められる回数。無ければ 1）。ファルカの特殊スキルは 2 */
   charges?: number;
+  /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
+  requiresWindow?: boolean;
   /**
    * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する
    * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ
@@ -76,6 +78,12 @@ export interface ActionDefinition {
     charges: number;
     /** 特殊スキルを使える受付時間（秒。同じ出場の中だけ）。受付の間の通常攻撃で、CT が短縮される */
     windowSeconds?: number;
+    /** 受付だけを開き、特殊スキルの CT は開始しない（オデット。CT は特殊スキルを使ったときに始まる） */
+    windowOnly?: boolean;
+    /** 受付のバーの名前（windowOnly のとき） */
+    windowLabel?: string;
+    /** 受付の間に特殊スキルを 1 回使うと、受付が閉じる（オデット） */
+    singleUse?: boolean;
     /** 受付が始まるまでの、スキルを使ってからの秒数（ファルカ: 命中の 1 フレーム前 = 39f） */
     windowDelay?: number;
     /** 自分の元素爆発を使うと、受付が延びる秒数（ファルカ: 2.3） */
@@ -412,6 +420,8 @@ export interface ActiveBuffSpan {
   color: string;
   description: string;
   isSnapshot?: boolean;
+  /** true = バフ重複（シナジー）の集計に数えない（特殊スキルの受付の期間バーなど） */
+  noSynergy?: boolean;
   /** 出場ブロックの ID。あれば、その出場ブロックの行に表示する（副次効果のように、出場の終わりより後に始まるバー用） */
   ownerStintId?: string;
   /** 'passive' = 発動バフ（固有天賦）。ガントチャートでは専用の行に表示する */

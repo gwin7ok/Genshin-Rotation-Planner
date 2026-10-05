@@ -287,7 +287,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenSummaryModal}
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0 cursor-pointer transition-colors"
-              title={`【CT警告】発動バフ（固有天賦・武器・聖遺物）が、CT中に発動する配置が ${totalCTWarnings} 件あります。効果が発動しないだけで、gcsim の計算は制限されません`}
+              title={`【CT警告】発動バフ（固有天賦・武器・聖遺物）がCT中に発動する配置、または特殊スキルが受付時間外にある配置が、合計 ${totalCTWarnings} 件あります。gcsim の計算は制限されません（発動バフは効果が発動しないだけ、特殊スキルは通常のスキルとして扱われます）`}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>CT警告 ({totalCTWarnings}件)</span>

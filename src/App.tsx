@@ -273,8 +273,9 @@ export default function App() {
   // 「アプリの計算に戻す」: 今のアクションの並びを基準に、gcsim の反映・個別の変更を外して、アプリの計算を全体に再適用する
   const handleResetToAppCalculation = () => {
     const summary = resetToAppCalculation(visibleStints);
+    // 外す内容がなくても、全体を計算し直す（保存されたアクションの値をすべて作り直した新しい並びで、計算・表示・再生位置を更新する）
     if (summary.actionsChanged === 0 && summary.stintsChanged === 0) {
-      window.alert('戻す内容がありません（gcsim の反映や、個別に変更した所要時間・CT・効果時間はありません）。');
+      updateStints(visibleStints.map(st => ({ ...st, actions: st.actions.map(a => ({ ...a })) })));
       return;
     }
     const ok = window.confirm(

@@ -185,6 +185,46 @@ const NIGHTSOUL_FREE_SKILLS: Record<string, { skillGain: number; plungeGain: num
 };
 
 /**
+ * 炎場の置き始めと置き直し（ディシア。2026-10-05）。gcsim dehya/skill.go。キー: キャラ ID。スキルの `_e` に付く
+ */
+const FIELD_RECASTS: Record<string, NonNullable<ActionDefinition['fieldRecast']>> = {
+  '10000079-pyro': {
+    startDelayFrames: 21, // skillHitmark(20) + 1: addField(dehyaFieldDuration)
+    recastPlaceFrames: 41, // skillRecastHitmark(40) + 1: addField(c.sanctumSavedDur)
+    pickupExtensionFrames: 24, // sanctumPickupExtension: 拾うと、残り時間に 0.4 秒を足す
+    c2Constellation: 2,
+    c2ExtensionFrames: 360, // cons.go c2IncreaseDur: sanctumSavedDur += 360（置き直しのとき）
+    source: 'dehya/skill.go: Skill()（炎場は skillHitmark + 1 で 12 秒）、skillRecast()（pickUpField で残り時間 + 24f を保存し、skillRecastHitmark + 1 で置き直す。炎場は拾っている間、時間が進まない）、cons.go: c2IncreaseDur',
+  },
+};
+
+/**
+ * 爆発の後のモード（ディシアのパンチ連打モード。2026-10-05）。gcsim dehya/burst.go・dash.go・jump.go。キー: キャラ ID
+ * 爆発のアクションの長さは、gcsim では 105f（burstPunch1Hitmark。frames は全部この値）。フレーム表の最初（kickFrames）を取るのは誤りなので、置き換える
+ */
+const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & { burstFrames: number }> = {
+  '10000079-pyro': {
+    label: 'パンチ連打モード',
+    burstFrames: 105,
+    startDelayFrames: 105,
+    durationFrames: Math.round(4.1 * 60),
+    // punchHitmarks: 入力の長さ（1・2 発目 30f、3 発目 28f、4 発目以降 27f）
+    inputFrames: [30, 30, 28, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27],
+    // 状態が切れた後、最後の自動のパンチ（最大 50f 後）と蹴り（46f 後）まで
+    finisherWindowFrames: 50 + 46,
+    finisher: { total: 76, cancels: { skill: 71, dash: 73, jump: 73, swap: 46 } },
+    dashToJumpFrames: 7,
+    dashJumpKickFrames: 17,
+    // 爆発が拾った炎場（pickUpField）の置き直し: 蹴りの命中の 1f 後（burstKickFunc）、交代の 46f 後（onExitField）、ジャンプの時点（jump.go）
+    autoPunchFrames: 50,
+    kickHitFrames: 46,
+    fieldPlaceAfterKickFrames: 1,
+    fieldPlaceAfterExitFrames: 46,
+    source: 'dehya/burst.go: burstDuration = 4.1*60、burstPunchSlowHitmark = 50（自動のパンチ）、punchHitmarks（入力のパンチ）、kickFrames（蹴り）。UseBurstAction: 状態の間の attack・skill はパンチ（ActionReady は CT を見ない）。dash.go: 状態の間の dash は、ジャンプへ 7f でキャンセルでき、17f 以内のジャンプは蹴り。jump.go: それ以外のジャンプは状態を終わらせる',
+  },
+};
+
+/**
  * 長押しの元素スキルを持たないキャラ。genshin-db のクールタイムのラベルに 2 値ある（タルタリヤは「6.0~36.0秒」＝近接モードの継続時間で変わる）ため、
  * 長押し（hE）と誤って生成されるのを防ぐ。
  */
@@ -847,6 +887,27 @@ function buildActions(ctx: BuildContext): BuildResult {
           }
         }
       }
+    }
+  }
+
+  // 炎場の置き始めと置き直し（ディシア）
+  const fieldRecast = FIELD_RECASTS[id];
+  if (fieldRecast) {
+    for (const a of actions) {
+      if (a.id === `${id}_e`) a.fieldRecast = fieldRecast;
+    }
+  }
+
+  // 爆発の後のモード（ディシア）
+  const mode = BURST_MODES[id];
+  if (mode) {
+    const { burstFrames, ...burstMode } = mode;
+    for (const a of actions) {
+      if (a.type !== 'burst') continue;
+      a.burstMode = burstMode;
+      a.frames = { total: burstFrames, cancels: {}, source: 'burst.go:burstPunch1Hitmark（爆発の長さ。全部の次のアクションで同じ）' };
+      a.defaultDuration = framesToSec(burstFrames);
+      a.effectDuration = 0; // モードのバー（パンチ連打モード）を、計算側で出す
     }
   }
 

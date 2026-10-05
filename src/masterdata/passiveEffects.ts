@@ -43,7 +43,8 @@ export function buildPassiveEffects(
     if (!passive?.name) return;
     const slot = (i + 1) as 1 | 2;
     const text = (passive.description ?? '').replace(/\s+/g, ' ');
-    const durations = findDurations(text);
+    // 同じ値の継続時間が複数回書かれているもの（魈の風輪両立「継続時間 7 秒」と「7 秒間」など）は、1 つの効果にする
+    const durations = findDurations(text).filter((d, n, all) => all.findIndex(x => x.value === d.value) === n);
     const cd = COOLDOWN_PATTERN.exec(text);
     const cooldown = cd ? Number(cd[1]) : undefined;
     const base = {

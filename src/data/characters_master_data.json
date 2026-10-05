@@ -8621,27 +8621,11 @@
         "talentName": "壊劫·国土砕き",
         "talentSlot": 2,
         "description": "風輪両立発動後の7秒間、風輪両立によるダメージ+15%。 継続時間7秒、最大3重まで、重複で発動すると継続時間がリセットされる。",
-        "id": "10000026-anemo_p2_1",
-        "name": "壊劫·国土砕き (7秒)",
+        "id": "10000026-anemo_p2",
+        "name": "壊劫·国土砕き",
         "duration": 7,
         "dataSource": {
           "duration": "7秒間"
-        },
-        "timing": "computed",
-        "gcsimTarget": true,
-        "gcsimKeys": [
-          "xiao-a4"
-        ]
-      },
-      {
-        "talentName": "壊劫·国土砕き",
-        "talentSlot": 2,
-        "description": "風輪両立発動後の7秒間、風輪両立によるダメージ+15%。 継続時間7秒、最大3重まで、重複で発動すると継続時間がリセットされる。",
-        "id": "10000026-anemo_p2_2",
-        "name": "壊劫·国土砕き (7秒)",
-        "duration": 7,
-        "dataSource": {
-          "duration": "継続時間7秒"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -24484,6 +24468,14 @@
           "cooldownStart": "skill.go:18"
         },
         "defaultDuration": 0.65,
+        "fieldRecast": {
+          "startDelayFrames": 21,
+          "recastPlaceFrames": 41,
+          "pickupExtensionFrames": 24,
+          "c2Constellation": 2,
+          "c2ExtensionFrames": 360,
+          "source": "dehya/skill.go: Skill()（炎場は skillHitmark + 1 で 12 秒）、skillRecast()（pickUpField で残り時間 + 24f を保存し、skillRecastHitmark + 1 で置き直す。炎場は拾っている間、時間が進まない）、cons.go: c2IncreaseDur"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
@@ -24496,23 +24488,57 @@
         "type": "burst",
         "startsBurstCooldown": true,
         "cooldown": 18,
-        "effectDuration": 4,
+        "effectDuration": 0,
         "frames": {
-          "total": 76,
-          "cancels": {
-            "skill": 71,
-            "dash": 73,
-            "jump": 73,
-            "swap": 46
-          },
-          "source": "burst.go:kickFrames"
+          "total": 105,
+          "cancels": {},
+          "source": "burst.go:burstPunch1Hitmark（爆発の長さ。全部の次のアクションで同じ）"
         },
         "dataSource": {
           "cooldown": "クールタイム",
           "effectDuration": "継続時間",
           "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 1.267,
+        "defaultDuration": 1.75,
+        "burstMode": {
+          "label": "パンチ連打モード",
+          "startDelayFrames": 105,
+          "durationFrames": 246,
+          "inputFrames": [
+            30,
+            30,
+            28,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27,
+            27
+          ],
+          "finisherWindowFrames": 96,
+          "finisher": {
+            "total": 76,
+            "cancels": {
+              "skill": 71,
+              "dash": 73,
+              "jump": 73,
+              "swap": 46
+            }
+          },
+          "dashToJumpFrames": 7,
+          "dashJumpKickFrames": 17,
+          "autoPunchFrames": 50,
+          "kickHitFrames": 46,
+          "fieldPlaceAfterKickFrames": 1,
+          "fieldPlaceAfterExitFrames": 46,
+          "source": "dehya/burst.go: burstDuration = 4.1*60、burstPunchSlowHitmark = 50（自動のパンチ）、punchHitmarks（入力のパンチ）、kickFrames（蹴り）。UseBurstAction: 状態の間の attack・skill はパンチ（ActionReady は CT を見ない）。dash.go: 状態の間の dash は、ジャンプへ 7f でキャンセルでき、17f 以内のジャンプは蹴り。jump.go: それ以外のジャンプは状態を終わらせる"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
@@ -24564,14 +24590,9 @@
           "duration": "9秒間",
           "cooldown": "2秒毎に1回"
         },
-        "timing": "computed",
-        "gcsimTarget": true,
-        "gcsimKeys": [
-          "dehya-a1-reduction"
-        ],
-        "gcsimCooldownKeys": [
-          "dehya-a1-icd"
-        ]
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "ディシア: 熔金の躰（浄焔怒涛の 9 秒後、チーム全員の炎場の中の中断耐性）は、gcsim が未実装（dehya/asc.go のコメント「interrupt res part of a1 is not implemented」。実行でも、状態が付かないことを確認）"
       },
       {
         "talentName": "至誠の尊崇",
@@ -39233,10 +39254,8 @@
           "duration": "3秒間"
         },
         "timing": "conditional",
-        "gcsimTarget": true,
-        "gcsimKeys": [
-          "guidance-of-theosis"
-        ]
+        "gcsimTarget": false,
+        "gcsimNote": "ニコ: 3 秒は、観測の対象が出場してから聖祝の導きに昇格するまでの滞在時間（条件）で、効果の継続時間ではない。昇格した聖祝の導き（gcsim: guidance-of-theosis）は、20 秒の観測の定義（p1_1）に結び付ける"
       },
       {
         "talentName": "美への愛",

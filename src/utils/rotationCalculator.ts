@@ -1,5 +1,6 @@
 import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { isRevelation } from '../masterdata/revelationCharacters';
+import { checkPlungePrerequisites } from './plungePrerequisites';
 import { actionDelayOf } from './actionDelay';
 import { ACTION_STATE_RULES } from '../data/actionStateRules';
 import { 
@@ -769,6 +770,23 @@ export function calculateRotation(
   }
 
   const totalDuration = Number(currentTime.toFixed(2));
+  // 落下攻撃が、gcsim で実行できる前提（直前のアクション・閑雲の爆発バフなど。data/plungeRules.ts）を満たしているか。満たさないと、gcsim は実行エラーになる（警告）
+  for (const w of checkPlungePrerequisites(characters, calculatedStints)) {
+    const action = calculatedStints.find(s => s.id === w.stintId)?.actions.find(a => a.id === w.actionId);
+    if (action) action.specialWindowWarning = w.message;
+    const charName = characters.find(c => c.id === w.characterId)?.name ?? '';
+    validationIssues.push({
+      id: `plunge_prereq_${w.actionId}`,
+      severity: 'warning',
+      characterId: w.characterId,
+      stintId: w.stintId,
+      actionId: w.actionId,
+      time: w.time,
+      title: `${charName}: 落下攻撃の前提`,
+      message: `「${w.actionName}」: ${w.message}`,
+    });
+  }
+
   const safeLoopStartIndex = Math.min(loopStartIndex, Math.max(0, calculatedStints.length - 1));
   const loopStartTime = calculatedStints[safeLoopStartIndex]?.startTime ?? 0;
   const loopPeriod = Math.max(0, totalDuration - loopStartTime);

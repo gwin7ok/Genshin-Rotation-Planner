@@ -74,6 +74,15 @@ const NOT_APPLICABLE: Record<string, string> = {
   '10000076-anemo_c2': '赫耀多面体の存在時間の延長（マスターの効果は疾風示現）', // ファルザン
 };
 
+/**
+ * 確認済み: 凸で変わる CT（アクションの CT の値の変更）。キーは `${キャラID}_c${凸}`。
+ * keyword: 説明文に含まれるべき語（説明文が変わったら反映せずエラーにする）
+ */
+const COOLDOWN_CHANGES: Record<string, { actionSuffix: string; cooldown: number; keyword: string; note: string }> = {
+  // フリンズ 1 凸: 特殊元素スキル「北国の嵐槍」の基本 CT を 4 秒に短縮（gcsim flins/cons.go c1SkillCD: 6*60 → 4*60）
+  '10000120-electro_c1': { actionSuffix: 'e_spearstorm', cooldown: 4, keyword: '北国の嵐槍の基本クールタイムを4秒に短縮', note: 'flins/cons.go: c1SkillCD() = 4*60' },
+};
+
 const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
@@ -116,6 +125,19 @@ export function buildConstellations(
     const text = (entry.description ?? '').replace(/\s+/g, ' ');
     const data: CharacterConstellationData = { level, name: entry.name, description: text };
     result.push(data);
+
+    // CT の変更（フリンズ 1 凸など）
+    const cdChange = COOLDOWN_CHANGES[`${char.id}_c${level}`];
+    if (cdChange) {
+      const actionId = `${char.id}_${cdChange.actionSuffix}`;
+      if (!text.replace(/\s+/g, '').includes(cdChange.keyword)) {
+        report.errors.push(`${char.name} ${level}凸: 説明文に、確認時の CT の記述「${cdChange.keyword}」がありません`);
+      } else if (!char.availableActions.some(a => a.id === actionId)) {
+        report.errors.push(`${char.name} ${level}凸: CT を変えるアクション ${actionId} がありません`);
+      } else {
+        data.actionChanges = [...(data.actionChanges ?? []), { actionId, cooldown: cdChange.cooldown, source: cdChange.note }];
+      }
+    }
 
     // 1つの説明文に延長が複数ある場合がある（旅人(岩) 6凸など）ので、すべて読み取る
     const matches = [...text.matchAll(DURATION_BONUS_PATTERN_ALL)];

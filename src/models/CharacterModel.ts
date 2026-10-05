@@ -36,14 +36,22 @@ export class CharacterModel {
   /** 凸の変更を適用したアクション定義（同じアクションに複数段階の変更があれば、段階の大きい方を使う） */
   get actions(): ActionDefinition[] {
     const effectDurationById = new Map<string, number>();
+    const cooldownById = new Map<string, number>();
     for (const c of [...this.activeConstellations].sort((a, b) => a.level - b.level)) {
       for (const change of c.actionChanges ?? []) {
         if (change.effectDuration !== undefined) effectDurationById.set(change.actionId, change.effectDuration);
+        if (change.cooldown !== undefined) cooldownById.set(change.actionId, change.cooldown);
       }
     }
-    if (effectDurationById.size === 0) return this.data.availableActions;
+    if (effectDurationById.size === 0 && cooldownById.size === 0) return this.data.availableActions;
     return this.data.availableActions.map(a =>
-      effectDurationById.has(a.id) ? { ...a, effectDuration: effectDurationById.get(a.id) } : a,
+      effectDurationById.has(a.id) || cooldownById.has(a.id)
+        ? {
+          ...a,
+          ...(effectDurationById.has(a.id) ? { effectDuration: effectDurationById.get(a.id) } : {}),
+          ...(cooldownById.has(a.id) ? { cooldown: cooldownById.get(a.id) } : {}),
+        }
+        : a,
     );
   }
 }

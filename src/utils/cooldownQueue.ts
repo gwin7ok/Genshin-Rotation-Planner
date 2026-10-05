@@ -83,6 +83,15 @@ export class CooldownQueue<T = undefined> {
     else this.waiting.push({ duration, tag });
   }
 
+  /** 先頭を捨てて、回数を 1 つ戻す（gcsim の ResetActionCooldown）。次の CT は、t から満額で始まる。何も積まれていなければ何もしない。解放の前に advance(t) しておくこと */
+  release(t: number): void {
+    if (!this.head) return;
+    this.head.end = Math.min(this.head.end, t);
+    this.head = undefined;
+    const next = this.waiting.shift();
+    if (next) this.start(t, next.duration, next.tag);
+  }
+
   /** 先頭を、amount 秒短縮する（先頭の残りまで。超過分は捨てる）。短縮の前に advance(t) しておくこと */
   reduce(t: number, amount: number): void {
     if (!this.head) return;

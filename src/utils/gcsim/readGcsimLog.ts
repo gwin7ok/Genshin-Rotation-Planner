@@ -58,6 +58,8 @@ export interface GcsimCooldownRecord {
   startFrame: number;
   /** CTの終了（`cooldown ready`）。ログの終わりまでに終了しなければ undefined */
   readyFrame?: number;
+  /** CT が実際に減り始めた位置。複数回分のスキルは、前の CT が明けてから始まるため、`startFrame` より後になる。1 回分なら `startFrame` と同じ */
+  queueStartFrame?: number;
   /** 短縮・リセットを反映する前のCTの長さ（フレーム） */
   originalFrames?: number;
   /** 短縮・リセットなどの操作（`forcefully ...`）があった場合のメッセージ */
@@ -173,7 +175,8 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
 
   // ---- 2. スキル・爆発のCT ----
   const cooldowns: GcsimCooldownRecord[] = [];
-  const openCd = new Map<string, GcsimCooldownRecord>();
+  // 複数回分のスキルは、CT が順番に回復する（先頭だけが減る）ので、`ready` は一番古い記録から順に対応する（先入れ先出し）
+  const openCd = new Map<string, GcsimCooldownRecord[]>();
   for (const l of logs) {
     if (l.event !== 'cooldown') continue;
     const rawType = (l.logs?.type as string | undefined) ?? l.msg.split(' ')[0];
@@ -189,22 +192,33 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
         forced: [],
       };
       cooldowns.push(rec);
-      openCd.set(idx, rec);
+      openCd.set(idx, [...(openCd.get(idx) ?? []), rec]);
     } else if (l.msg.endsWith('cooldown ready')) {
-      const rec = openCd.get(idx);
+      const open = openCd.get(idx) ?? [];
+      const rec = open.shift();
       if (rec && rec.readyFrame === undefined) rec.readyFrame = l.frame;
-      openCd.delete(idx);
+      if (open.length === 0) openCd.delete(idx);
     } else if (l.msg.includes('forcefully')) {
-      const rec = openCd.get(idx);
+      const rec = openCd.get(idx)?.[0];
       if (rec) {
         rec.forced.push({ frame: l.frame, msg: l.msg });
         // リセット・破棄はその時点でCTが終わる（`ready` は出ない）。短縮は残りが減るだけで、終わりは `ready` を待つ
         if (/reset|discard/.test(l.msg) && rec.readyFrame === undefined) {
           rec.readyFrame = l.frame;
-          openCd.delete(idx);
+          const open = openCd.get(idx) ?? [];
+          open.shift();
+          if (open.length === 0) openCd.delete(idx);
         }
       }
     }
+  }
+
+  // 複数回分のスキルは、前の CT が明けてから始まる（キューの開始）。同じキャラ・種別の記録を順に見て、実際に減り始めた位置を求める
+  const lastReady = new Map<string, number>();
+  for (const rec of cooldowns) {
+    const idx = `${rec.charIndex}:${rec.type}`;
+    rec.queueStartFrame = Math.max(rec.startFrame, lastReady.get(idx) ?? -Infinity);
+    if (rec.readyFrame !== undefined) lastReady.set(idx, rec.readyFrame);
   }
 
   // ---- 3. 効果（辞書で引く） ----

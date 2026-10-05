@@ -5,6 +5,7 @@
  * 設定文の構成と決定事項は docs/gcsim-integration/phase-4-config-converter/plan.md を参照。
  */
 import { HEXEREI_GCSIM_KEYS, HEXEREI_GCSIM_PARAM } from '../../masterdata/hexereiCharacters.ts';
+import { REVELATION_GCSIM_KEYS, REVELATION_GCSIM_PARAM } from '../../masterdata/revelationCharacters.ts';
 import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
@@ -120,7 +121,12 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     });
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
     // ヘクセレイ（魔女の宿題クリア）に対応するキャラは、明示的に渡す（gcsim の既定は有効）
-    const hexText = HEXEREI_GCSIM_KEYS.has(key) ? ` +params=[${HEXEREI_GCSIM_PARAM}=${c.hexerei === false ? 0 : 1}]` : '';
+    // 論示（八重神子）も同じく、明示的に渡す（gcsim の既定は達成済み）
+    const paramList = [
+      ...(HEXEREI_GCSIM_KEYS.has(key) ? [`${HEXEREI_GCSIM_PARAM}=${c.hexerei === false ? 0 : 1}`] : []),
+      ...(REVELATION_GCSIM_KEYS.has(key) ? [`${REVELATION_GCSIM_PARAM}=${c.revelation === false ? 0 : 1}`] : []),
+    ];
+    const hexText = paramList.length > 0 ? ` +params=[${paramList.join(',')}]` : '';
     lines.push(`${key} char ${CHARACTER_LINE_PARAMS} cons=${cons} talent=${TALENT_LEVELS}${hexText};`);
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);

@@ -83,6 +83,12 @@ const COOLDOWN_CHANGES: Record<string, { actionSuffix: string; cooldown: number;
   '10000120-electro_c1': { actionSuffix: 'e_spearstorm', cooldown: 4, keyword: '北国の嵐槍の基本クールタイムを4秒に短縮', note: 'flins/cons.go: c1SkillCD() = 4*60' },
 };
 
+/** 確認済み: 凸で変わる CT の回数。キーは `${キャラID}_c${凸}`（説明文の語を照合する） */
+const CHARGE_CHANGES: Record<string, { actionSuffix: string; charges: number; keyword: string; note: string }> = {
+  // 魈 1 凸: 風輪両立の使用可能回数 +1（gcsim xiao/xiao.go: SetNumCharges(ActionSkill, 2) → 凸 1 で 3）
+  '10000026-anemo_c1': { actionSuffix: 'e', charges: 3, keyword: '風輪両立の使用可能回数+1', note: 'xiao/xiao.go: Cons >= 1 で SetNumCharges(ActionSkill, 3)' },
+};
+
 const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
@@ -125,6 +131,19 @@ export function buildConstellations(
     const text = (entry.description ?? '').replace(/\s+/g, ' ');
     const data: CharacterConstellationData = { level, name: entry.name, description: text };
     result.push(data);
+
+    // CT の回数の変更（魈 1 凸など）
+    const chargeChange = CHARGE_CHANGES[`${char.id}_c${level}`];
+    if (chargeChange) {
+      const actionId = `${char.id}_${chargeChange.actionSuffix}`;
+      if (!text.replace(/\s+/g, '').includes(chargeChange.keyword)) {
+        report.errors.push(`${char.name} ${level}凸: 説明文に、確認時の回数の記述「${chargeChange.keyword}」がありません`);
+      } else if (!char.availableActions.some(a => a.id === actionId)) {
+        report.errors.push(`${char.name} ${level}凸: 回数を変えるアクション ${actionId} がありません`);
+      } else {
+        data.actionChanges = [...(data.actionChanges ?? []), { actionId, charges: chargeChange.charges, source: chargeChange.note }];
+      }
+    }
 
     // CT の変更（フリンズ 1 凸など）
     const cdChange = COOLDOWN_CHANGES[`${char.id}_c${level}`];

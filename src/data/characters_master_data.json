@@ -8365,6 +8365,7 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.617,
+        "charges": 2,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -8465,7 +8466,14 @@
       {
         "level": 1,
         "name": "壊劫·三界破壊",
-        "description": "風輪両立の使用可能回数+1。"
+        "description": "風輪両立の使用可能回数+1。",
+        "actionChanges": [
+          {
+            "actionId": "10000026-anemo_e",
+            "charges": 3,
+            "source": "xiao/xiao.go: Cons >= 1 で SetNumCharges(ActionSkill, 3)"
+          }
+        ]
       },
       {
         "level": 2,
@@ -8902,6 +8910,7 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 1.25,
+        "charges": 2,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -17582,6 +17591,12 @@
           "cooldownStart": "skill.go:16"
         },
         "defaultDuration": 0.617,
+        "charges": 3,
+        "spawnsTotem": {
+          "max": 3,
+          "lifetime": 15,
+          "lifetimeRevelation": 25
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
@@ -17612,6 +17627,7 @@
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 1.9,
+        "releasesSkillPerTotem": true,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -27640,6 +27656,7 @@
           "cooldownStart": "manual: navia/skill.go: skillPressCDStart（firingTime の既定値）"
         },
         "defaultDuration": 0.667,
+        "charges": 2,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
@@ -33372,6 +33389,12 @@
             "swap": 38
           },
           "source": "plunge.go:xianyunLowPlungeFrames"
+        },
+        "nightsoul": {
+          "role": "plunge",
+          "gain": 25,
+          "max": 40,
+          "blessingSeconds": 15
         }
       },
       {
@@ -33393,6 +33416,12 @@
             "swap": 37
           },
           "source": "plunge.go:highPlungeFrames"
+        },
+        "nightsoul": {
+          "role": "plunge",
+          "gain": 25,
+          "max": 40,
+          "blessingSeconds": 15
         }
       },
       {
@@ -33422,6 +33451,13 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.717,
+        "charges": 2,
+        "nightsoul": {
+          "role": "skill",
+          "gain": 20,
+          "max": 40,
+          "blessingSeconds": 15
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -33452,6 +33488,12 @@
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.033,
+        "nightsoul": {
+          "role": "burst",
+          "gain": 25,
+          "max": 40,
+          "blessingSeconds": 15
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0

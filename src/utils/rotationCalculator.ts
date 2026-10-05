@@ -1,4 +1,5 @@
 import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
+import { isRevelation } from '../masterdata/revelationCharacters';
 import { actionDelayOf } from './actionDelay';
 import { ACTION_STATE_RULES } from '../data/actionStateRules';
 import { 
@@ -374,7 +375,9 @@ export function calculateRotation(
             time: actionStartTime,
             ctOffset,
             cooldown,
-            ...(isSpecial && (actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
+            ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
+            ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, lifetime: isRevelation(char) ? actionDef.spawnsTotem.lifetimeRevelation : actionDef.spawnsTotem.lifetime } } : {}),
+            ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
             checked: act.type !== 'skill_reset',
             actionId: act.id,
             stintIndex: sIdx,
@@ -417,7 +420,8 @@ export function calculateRotation(
         }
 
         // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、使った時点では置かない。CT のキューで、前の CT が 0 になって始まった時点に、判定の関数が作る
-        const isQueuedSpecial = isSpecial && (actionDef?.charges ?? 1) > 1;
+        // 複数回分の通常のスキル（クレー・魈など）も同じ: バーは、CT のキューで始まった時点に作る
+        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1;
         if (isTriggeringAction && cooldown > 0 && !isQueuedSpecial) {
           const cdSpan: CooldownSpan = {
             id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
@@ -431,6 +435,35 @@ export function calculateRotation(
           skillCooldowns.push(cdSpan);
           charStates[char.id].skillCooldowns.push(cdSpan);
         }
+      }
+
+      // 八重神子: 爆発が、場の殺生桜 1 つにつき、スキルの CT を 1 回分戻す（固有天賦 1）
+      if (act.type === 'burst' && actionDef?.releasesSkillPerTotem) {
+        ctEvents.push({
+          key: `${char.id}:skill`,
+          time: actionStartTime,
+          ctOffset: 0,
+          cooldown: 0,
+          checked: false,
+          releasesPerTotem: { revelation: isRevelation(char) },
+          stintIndex: sIdx,
+          name: act.name,
+          onViolation: () => {},
+        });
+      }
+      // ヴァレサ: 落下攻撃・爆発が夜魂値を増やし、満タンで猛烈パッションに入る（次のスキルが無料）
+      if (actionDef?.nightsoul && actionDef.nightsoul.role !== 'skill') {
+        ctEvents.push({
+          key: `${char.id}:nightsoul`,
+          time: actionStartTime,
+          ctOffset: 0,
+          cooldown: 0,
+          checked: false,
+          nightsoul: actionDef.nightsoul,
+          stintIndex: sIdx,
+          name: act.name,
+          onViolation: () => {},
+        });
       }
 
       // 受付の間に使った特殊スキルが、特殊爆発の受付を開く（フリンズ: 嵐槍の後 6 秒。使うたびに受付が新しくなる）
@@ -894,6 +927,12 @@ interface CooldownEvent {
   optional?: boolean;
   /** 0 より大きいとき、この発動は CT を始めず、CT 中のチャージの CT を、この秒数だけ短縮する（ファルカの通常攻撃） */
   reduceBy?: number;
+  /** 設置物（八重神子の殺生桜）を 1 つ出す発動。寿命（秒）と上限。上限を超えると最古が消える */
+  spawnsTotem?: { max: number; lifetime: number };
+  /** 爆発: 場の設置物 1 つにつき、この枠（スキル）の先頭の CT を解放する（八重神子）。revelation が false なら、爆発のあと設置物が全部壊れる。検査はしない */
+  releasesPerTotem?: { revelation: boolean };
+  /** 夜魂値（ヴァレサ）。skill = スキル（無料のスキルなら、回数も CT も使わない）、plunge = 落下攻撃、burst = 爆発 */
+  nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   stintIndex: number;
   name: string;
   /** 違反時: remaining = 残り CT 秒、cycle = 何周目の発動で違反したか（0 = 1周目） */
@@ -955,17 +994,80 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   // ファルカの特殊スキル（startsAll の発動を見た枠）は、gcsim と同じキュー（CooldownQueue）で持つ
   interface QueueTag { actionId: string; cycle: number }
   const queues = new Map<string, CooldownQueue<QueueTag>>();
+  // 八重神子の殺生桜（枠のキー → 消える時刻の一覧）、ヴァレサの夜魂値（キャラ ID → 状態）
+  const totems = new Map<string, number[]>();
+  const nightsouls = new Map<string, { points: number; blessingEnd: number; freeAvail: boolean }>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
   const cooldownEnd = new Map<string, number[]>();
+  // CT のキューを作る。キューで CT が始まった時点に、バー（1 周目の分だけ）を作る。バーの種類は、枠のキー（`キャラ:special` / `キャラ:skill`）で決まる
+  const makeQueue = (ev: CooldownEvent, charges: number) => new CooldownQueue<QueueTag>(charges, head => {
+    if (!head.tag || head.tag.cycle !== 0) return;
+    const [barCharId, kind] = ev.key.split(':');
+    const type = kind === 'special' ? 'special' : 'skill';
+    const span: CooldownSpan = {
+      id: `cd_${type}_${barCharId}_${head.tag.actionId}_${queuedSpans.length}`,
+      characterId: barCharId,
+      type,
+      startTime: head.start,
+      endTime: head.end,
+      duration: head.end - head.start,
+      actionInstanceId: head.tag.actionId,
+    };
+    queuedSpans.push({ span, head });
+  });
   for (const item of timeline) {
     const slots = cooldownEnd.get(item.event.key) ?? [];
     const charges = Math.max(1, item.event.charges ?? 1);
     while (slots.length < charges) slots.push(-Infinity);
     cooldownEnd.set(item.event.key, slots);
     const ev = item.event;
-    const queue = queues.get(item.event.key);
+    let queue = queues.get(item.event.key);
     queue?.advance(item.time);
+    const charId = ev.key.split(':')[0];
+    // 夜魂値（ヴァレサ）: 落下攻撃・爆発。猛烈パッション中の落下攻撃は夜魂を使い切って終わる。満タンなら猛烈パッションに入り、次のスキルが無料になる
+    if (ev.nightsoul && ev.nightsoul.role !== 'skill') {
+      const st = nightsouls.get(charId) ?? { points: 0, blessingEnd: -Infinity, freeAvail: false };
+      nightsouls.set(charId, st);
+      const inBlessing = item.time < st.blessingEnd;
+      if (ev.nightsoul.role === 'burst') st.points = ev.nightsoul.max;
+      if (inBlessing && ev.nightsoul.role === 'plunge') {
+        st.points = 0;
+        st.blessingEnd = -Infinity;
+        st.freeAvail = false;
+      } else if (!inBlessing) {
+        st.points = Math.min(ev.nightsoul.max, st.points + ev.nightsoul.gain);
+        if (st.points >= ev.nightsoul.max) {
+          st.blessingEnd = item.time + ev.nightsoul.blessingSeconds;
+          st.freeAvail = true;
+        }
+      }
+      continue;
+    }
+    // 八重神子の爆発: 場の殺生桜 1 つにつき、スキルの先頭の CT を解放する
+    if (ev.releasesPerTotem) {
+      const list = (totems.get(ev.key) ?? []).filter(e => e > item.time);
+      for (let i = 0; i < list.length; i++) queue?.release(item.time);
+      if (!ev.releasesPerTotem.revelation) list.length = 0;
+      totems.set(ev.key, list);
+      continue;
+    }
+    // 八重神子のスキル: 殺生桜が 1 つ増える（上限を超えたら最古が消える）
+    if (ev.spawnsTotem) {
+      const list = (totems.get(ev.key) ?? []).filter(e => e > item.time);
+      if (list.length >= ev.spawnsTotem.max) list.shift();
+      list.push(item.time + ev.spawnsTotem.lifetime);
+      totems.set(ev.key, list);
+    }
+    // ヴァレサのスキル: 夜魂 +20。猛烈パッション中の最初のスキルは無料（回数も CT も使わない）
+    if (ev.nightsoul?.role === 'skill') {
+      const st = nightsouls.get(charId) ?? { points: 0, blessingEnd: -Infinity, freeAvail: false };
+      nightsouls.set(charId, st);
+      const free = st.freeAvail && item.time < st.blessingEnd;
+      if (free) st.freeAvail = false;
+      st.points = Math.min(ev.nightsoul.max, st.points + ev.nightsoul.gain);
+      if (free) continue;
+    }
     if (ev.reduceBy && ev.reduceBy > 0) {
       if (queue) {
         queue.reduce(item.time, ev.reduceBy);
@@ -978,24 +1080,16 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     const startAt = item.time + ev.ctOffset;
     if (ev.startsAll) {
       // スキルを使うと、全回数分の CT が積まれる（1 つ目はスキルの時刻から、2 つ目以降は前の CT が明けてから）。それまでの CT は捨てる
-      const q = queue ?? new CooldownQueue<QueueTag>(charges, head => {
-        if (!head.tag || head.tag.cycle !== 0) return;
-        const charId = item.event.key.split(':')[0];
-        const span: CooldownSpan = {
-          id: `cd_special_${charId}_${head.tag.actionId}_${queuedSpans.length}`,
-          characterId: charId,
-          type: 'special',
-          startTime: head.start,
-          endTime: head.end,
-          duration: head.end - head.start,
-          actionInstanceId: head.tag.actionId,
-        };
-        queuedSpans.push({ span, head });
-      });
+      const q = queue ?? makeQueue(ev, charges);
       const tag: QueueTag = { actionId: ev.actionId ?? '', cycle: item.cycle };
       q.reset(startAt, ev.cooldown > 0 ? Array.from({ length: charges }, () => ({ duration: ev.cooldown, tag })) : [], ev.window ? ev.window.effectiveEnd ?? ev.window.until : Infinity);
       queues.set(item.event.key, q);
       continue;
+    }
+    // 複数回分の通常のスキル（クレー・魈・八重神子など）も、gcsim と同じキューで持つ
+    if (!queue && charges > 1 && !ev.optional && ev.cooldown > 0) {
+      queue = makeQueue(ev, charges);
+      queues.set(item.event.key, queue);
     }
     if (queue) {
       if (ev.optional) {
@@ -1025,7 +1119,8 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
 
   // 待機中のまま残った CT を、始まる位置まで進めてから、バーの位置を確定する
   for (const q of queues.values()) q.drain();
-  return queuedSpans.map(({ span, head }) => ({
+  // 解放（八重神子の爆発）で、始まった直後に捨てられた CT（長さ 0）のバーは出さない
+  return queuedSpans.filter(({ head }) => head.end - head.start > 0.001).map(({ span, head }) => ({
     ...span,
     startTime: Number(head.start.toFixed(3)),
     endTime: Number(head.end.toFixed(3)),

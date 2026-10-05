@@ -1,4 +1,5 @@
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
+import { isRevelationCapable } from '../masterdata/revelationCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -22,6 +23,7 @@ interface PartyConfigModalProps {
 }
 
 const updatedHexerei = (m: { hexerei?: boolean } | undefined): boolean => m?.hexerei !== false;
+const updatedRevelation = (m: { revelation?: boolean } | undefined): boolean => m?.revelation !== false;
 
 export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   isOpen,
@@ -210,6 +212,27 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         className="w-3 h-3 accent-purple-500"
                       />
                       <span>魔女の宿題</span>
+                    </label>
+                  )}
+
+                  {/* 論示（八重神子）: 対応するキャラだけ。キャラカードの左下 */}
+                  {!isEmptySlotCharacter(c) && isRevelationCapable(c) && (
+                    <label
+                      className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-sky-300 cursor-pointer select-none"
+                      onClick={(e) => e.stopPropagation()}
+                      title="「論示」を達成済み。殺生桜が爆発で壊れなくなり、寿命が 10 秒長くなります（gcsim の `revelation` パラメータ。既定は達成済み）"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={updatedRevelation(editingParty[idx])}
+                        onChange={(e) => {
+                          const updated = [...editingParty];
+                          updated[idx] = { ...updated[idx], revelation: e.target.checked };
+                          setEditingParty(updated);
+                        }}
+                        className="w-3 h-3 accent-sky-500"
+                      />
+                      <span>論示達成</span>
                     </label>
                   )}
 
@@ -505,7 +528,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                               <p className="text-slate-300 line-clamp-2 leading-relaxed">{lv.description}</p>
                               {lv.actionChanges?.map(ch => (
                                 <p key={ch.actionId} className="text-sky-300 font-semibold">
-                                  ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? ` 効果 ${ch.effectDuration}s` : ''}{ch.cooldown !== undefined ? ` CT ${ch.cooldown}s` : ''}
+                                  ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? ` 効果 ${ch.effectDuration}s` : ''}{ch.cooldown !== undefined ? ` CT ${ch.cooldown}s` : ''}{ch.charges !== undefined ? ` 回数 ${ch.charges}` : ''}
                                 </p>
                               ))}
                             </div>

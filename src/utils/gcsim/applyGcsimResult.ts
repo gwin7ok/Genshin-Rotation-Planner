@@ -168,8 +168,12 @@ export function applyActionCooldowns(
     const nextSameKind = executedAll
       .filter(e => e.charIndex === executed.charIndex && e.name === executed.name && e.frame > executed.frame)
       .reduce((m, e) => Math.min(m, e.frame), Infinity);
-    const record = summary.cooldowns.find(c =>
-      c.charIndex === executed.charIndex && c.type === type && c.startFrame >= executed.frame && c.startFrame < nextSameKind);
+    const inWindow = (c: { charIndex: number; startFrame: number }) =>
+      c.charIndex === executed.charIndex && c.startFrame >= executed.frame && c.startFrame < nextSameKind;
+    // フリンズの嵐槍は、特殊スキルだが、gcsim は CT を `skill` 種別のログで出す（`special_skill` ではない。flins/skill.go の自前のログ）。
+    // 特殊スキルの記録が無ければ、同じ範囲の `skill` 種別の記録を使う（受付の外で使って通常のスキルになった場合も、実際の CT を反映できる）
+    const record = summary.cooldowns.find(c => c.type === type && inWindow(c))
+      ?? (type === 'special' ? summary.cooldowns.find(c => c.type === 'skill' && inWindow(c)) : undefined);
 
     let cooldown = 0;
     let offset: number | undefined;

@@ -35322,14 +35322,51 @@
           "cooldownStart": "skill.go:skillHitmark"
         },
         "defaultDuration": 0.733,
-        "recastOpensWindow": {
-          "windowSeconds": 6,
-          "windowLabel": "雷霆のシンフォニーの受付",
-          "openedBy": "嵐槍"
+        "startsSpecialPool": {
+          "cooldown": 6,
+          "charges": 1,
+          "windowSeconds": 10.317,
+          "windowOnly": true,
+          "singleUse": false,
+          "windowLabel": "北国の嵐槍の受付（幽炎の露顕）"
         },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        }
+      },
+      {
+        "id": "10000120-electro_e_spearstorm",
+        "name": "特殊元素スキル「北国の嵐槍」（古律・孤灯の秘密の後）",
+        "shortName": "spE",
+        "type": "skill",
+        "startsSkillCooldown": false,
+        "cooldownPool": "special",
+        "requiresWindow": true,
+        "ignoresCdScale": true,
+        "cooldown": 6,
+        "effectDuration": 0,
+        "defaultDuration": 0.7,
+        "frames": {
+          "total": 42,
+          "hitmark": 23,
+          "cancels": {
+            "attack": 28,
+            "burst": 28,
+            "dash": 26,
+            "jump": 26,
+            "walk": 32
+          },
+          "source": "skill.go:spearStormFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: flins/skill.go: spearStorm の AddStatus(spearStormCDKey, c1SkillCD(), false)（6 秒。命ノ星座 1 で 4 秒 → 未対応）。ActionReady: 幽炎の露顕の間、CT（spearStormCDKey）が明けていれば使える。状態が終わる（10*60+19f）か交代で CT は消える。説明文「基本クールタイムは 6 秒であり、他の効果の影響を受けない」",
+          "effectDuration": "北国の嵐槍"
+        },
+        "recastOpensWindow": {
+          "windowSeconds": 6,
+          "windowLabel": "雷霆のシンフォニーの受付",
+          "openedBy": "嵐槍"
         }
       },
       {

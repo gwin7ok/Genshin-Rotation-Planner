@@ -137,10 +137,10 @@ export default function App() {
     });
     return count;
   }, [calculatedResult]);
-  // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）。どちらも gcsim の計算は止めない
+  // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）、落下攻撃の前提を満たさない配置（gcsim では実行エラー）
   const totalCTWarnings = useMemo(
     () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length
-      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_')).length,
+      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_') || v.id.startsWith('plunge_prereq_')).length,
     [calculatedResult],
   );
 
@@ -294,7 +294,7 @@ export default function App() {
   );
   // アプリ自身のCT警告（発動バフ・特殊スキルの受付時間外。gcsim の計算は止めない）
   const ctWarningIssues = useMemo(
-    () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_)/.test(v.id)),
+    () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_|plunge_prereq_)/.test(v.id)),
     [calculatedResult],
   );
 

@@ -39,6 +39,7 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
   '10000031-electro': ['recast'],
   '10000150-cryo': ['recast'], // オデットの特殊スキル（SPECIAL_SKILLS）
   '10000128-anemo': ['specialskill'], // ファルカの特殊スキル（SPECIAL_SKILLS）
+  '10000120-electro': ['spearstorm'], // フリンズの特殊スキル（SPECIAL_SKILLS）
   '10000053-anemo': ['shorthold'],
   '10000061-dendro': ['shorthold'],
   '10000005-hydro': ['shorthold', 'shorthold0ticks'],
@@ -51,7 +52,7 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
  * **スキルとは別のCT**（`ActionSpecialSkill`）を持つため、別のアクション（別ボタン）にする。通常のスキルのCTは開始しない。
  * キー: キャラ ID、値: 派生の名前（小文字。PARAMETER_DERIVED_SKILLS と同じ）と、gcsim の値（根拠つき）
  */
-const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean; /** 受付だけを開き、CT は開始しない（オデット）。受付の間に 1 回使うと閉じる。爆発でも受付が開く（秒） */ windowOnly?: boolean; burstWindowSeconds?: number; /** 受付のバーの名前、特殊スキルの効果バーの名前（genshin-db のスキル名から） */ windowLabel?: string; effectLabel?: string }> = {
+const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean; /** 受付だけを開き、CT は開始しない（オデット）。受付の間に 1 回使うと閉じる。爆発でも受付が開く（秒） */ windowOnly?: boolean; burstWindowSeconds?: number; /** 受付のバーの名前、特殊スキルの効果バーの名前（genshin-db のスキル名から） */ windowLabel?: string; effectLabel?: string; /** 受付を 1 回使っても閉じない（フリンズ）。既定は閉じる */ windowSingleUse?: boolean; /** CT が元素共鳴などの影響を受けない（フリンズ） */ cdUnscaled?: boolean }> = {
   '10000128-anemo': {
     slug: 'specialskill',
     label: 'spE',
@@ -78,6 +79,21 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     hitsPerNormal: [1, 2, 2, 2, 2], // varka/attack.go の attackHitmarks（1〜5 段目のヒット数。ヒットごとに短縮の判定）
     maxReductions: 15,
     source: 'varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)',
+  },
+  '10000120-electro': {
+    slug: 'spearstorm',
+    label: 'spE',
+    name: '特殊元素スキル「北国の嵐槍」',
+    effectLabel: '北国の嵐槍',
+    cooldown: 6,
+    effectDuration: 0,
+    windowOnly: true,
+    windowSingleUse: false,
+    cdUnscaled: true,
+    startedBySkill: true,
+    windowSeconds: 10 + 19 / 60, // flins/skill.go: AddStatus(skillKey, 10*60+skillHitmark, true)（幽炎の露顕。嵐槍を使っても消えず、交代で消える）
+    windowLabel: '北国の嵐槍の受付（幽炎の露顕）',
+    source: 'flins/skill.go: spearStorm の AddStatus(spearStormCDKey, c1SkillCD(), false)（6 秒。命ノ星座 1 で 4 秒 → 未対応）。ActionReady: 幽炎の露顕の間、CT（spearStormCDKey）が明けていれば使える。状態が終わる（10*60+19f）か交代で CT は消える。説明文「基本クールタイムは 6 秒であり、他の効果の影響を受けない」',
   },
   '10000150-cryo': {
     slug: 'recast',
@@ -635,6 +651,7 @@ function buildActions(ctx: BuildContext): BuildResult {
           cooldownPool: 'special',
           ...(special.charges ? { charges: special.charges } : {}),
           ...(special.windowOnly ? { requiresWindow: true } : {}),
+          ...(special.cdUnscaled ? { ignoresCdScale: true } : {}),
           ...(special.cooldownDelay ? { cooldownStart: { from: 'motionStart' as const, delay: Number(special.cooldownDelay.toFixed(3)) } } : {}),
           cooldown: special.cooldown,
           effectDuration: special.effectDuration,
@@ -667,7 +684,7 @@ function buildActions(ctx: BuildContext): BuildResult {
         cooldown: sp.cooldown,
         charges: sp.charges ?? 1,
         ...(sp.windowSeconds ? { windowSeconds: Number(sp.windowSeconds.toFixed(3)) } : {}),
-        ...(sp.windowOnly ? { windowOnly: true, singleUse: true, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}) } : {}),
+        ...(sp.windowOnly ? { windowOnly: true, singleUse: sp.windowSingleUse !== false, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}) } : {}),
         ...(sp.windowDelay ? { windowDelay: Number(sp.windowDelay.toFixed(3)) } : {}),
         ...(sp.windowExtendOnBurst ? { windowExtendOnBurst: sp.windowExtendOnBurst } : {}),
         ...(sp.windowHitlag ? { windowHitlag: sp.windowHitlag } : {}),
@@ -737,7 +754,7 @@ function buildActions(ctx: BuildContext): BuildResult {
     }
   }
 
-  // 特殊爆発（フリンズ）: 受付の間だけ使える別アクション。状態中のスキル（2 回目の E）が受付を開く
+  // 特殊爆発（フリンズ）: 受付の間だけ使える別アクション。受付の間に使った特殊スキル（嵐槍）が受付を開く
   if (SPECIAL_BURSTS[id]) {
     const sb = SPECIAL_BURSTS[id];
     const table = burstFile?.tables.find(t => splitTableName(t.name).base === sb.tableName);
@@ -754,7 +771,7 @@ function buildActions(ctx: BuildContext): BuildResult {
         frames: toActionFrames(table, 'burst', burstFile.consts),
         dataSource: { cooldown: `gcsim: ${sb.source}` },
       }, framesToSec(table.total)));
-      const skillAct = actions.find(a => a.id === `${id}_e`);
+      const skillAct = actions.find(a => a.cooldownPool === 'special');
       if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
     }
   }

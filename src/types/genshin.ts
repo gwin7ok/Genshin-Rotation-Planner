@@ -71,7 +71,9 @@ export interface ActionDefinition {
   requiresWindow?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */
   specialBurst?: boolean;
-  /** 状態中のスキル（窓の中の 2 回目の E）が開く、特殊爆発などの受付（フリンズ: 嵐槍の後 6 秒） */
+  /** CT が、元素共鳴・CT 短縮などの影響を受けない（フリンズの嵐槍: 「基本クールタイム 6 秒。他の効果の影響を受けない」） */
+  ignoresCdScale?: boolean;
+  /** 受付の間に使った特殊スキルが開く、特殊爆発などの受付（フリンズ: 嵐槍の後 6 秒） */
   recastOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string };
   /**
    * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する

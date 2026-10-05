@@ -132,6 +132,29 @@ const SPECIAL_BURSTS: Record<string, { tableName: string; name: string; label: s
 };
 
 /**
+ * スキルの回数（2026-10-05）。gcsim の `SetNumCharges(action.ActionSkill, n)` が、キャラの生成時に凸に関係なく設定されるもの。
+ * 凸で増えるもの（魈 1 凸で 3 など）は、凸の変更（constellationEffects.ts の CHARGE_CHANGES）で扱う。
+ * CT は順番に回復する（gcsim の cdQueue）。キー: キャラ ID
+ */
+const SKILL_CHARGES: Record<string, number> = {
+  '10000026-anemo': 2, // 魈（xiao/xiao.go: SetNumCharges(ActionSkill, 2)）
+  '10000029-pyro': 2, // クレー（klee/klee.go）
+  '10000058-electro': 3, // 八重神子（yaemiko/yaemiko.go）
+  '10000091-geo': 2, // ナヴィア（navia/navia.go）
+  '10000111-electro': 2, // ヴァレサ（varesa/varesa.go）
+};
+
+/** 八重神子: スキルが殺生桜を出し（上限 3）、爆発が場の桜 1 つにつきスキルの CT を 1 回分戻す（固有天賦 1）。寿命は 15 秒、論示で 25 秒（kitsune.go・asc.go） */
+const TOTEM_SKILLS: Record<string, { max: number; lifetime: number; lifetimeRevelation: number }> = {
+  '10000058-electro': { max: 3, lifetime: 15, lifetimeRevelation: 25 },
+};
+
+/** ヴァレサ: 夜魂値で無料のスキル（varesa.go: MaxPoints = 40、skill.go: +20、plunge.go: +25、EnterTimedBlessing 15 秒） */
+const NIGHTSOUL_FREE_SKILLS: Record<string, { skillGain: number; plungeGain: number; max: number; blessingSeconds: number }> = {
+  '10000111-electro': { skillGain: 20, plungeGain: 25, max: 40, blessingSeconds: 15 },
+};
+
+/**
  * 長押しの元素スキルを持たないキャラ。genshin-db のクールタイムのラベルに 2 値ある（タルタリヤは「6.0~36.0秒」＝近接モードの継続時間で変わる）ため、
  * 長押し（hE）と誤って生成されるのを防ぐ。
  */
@@ -773,6 +796,29 @@ function buildActions(ctx: BuildContext): BuildResult {
       }, framesToSec(table.total)));
       const skillAct = actions.find(a => a.cooldownPool === 'special');
       if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
+    }
+  }
+
+  // スキルの回数（CT は順番に回復する）
+  const stock = SKILL_CHARGES[id];
+  if (stock) {
+    for (const a of actions) {
+      if ((a.type === 'skill' || a.type === 'skill_hold') && !a.cooldownPool && a.startsSkillCooldown === true) a.charges = stock;
+    }
+  }
+  const totem = TOTEM_SKILLS[id];
+  if (totem) {
+    for (const a of actions) {
+      if (a.type === 'skill' && !a.cooldownPool && a.startsSkillCooldown === true) a.spawnsTotem = totem;
+      if (a.type === 'burst') a.releasesSkillPerTotem = true;
+    }
+  }
+  const ns = NIGHTSOUL_FREE_SKILLS[id];
+  if (ns) {
+    for (const a of actions) {
+      if (a.type === 'skill' && !a.cooldownPool && a.startsSkillCooldown === true) a.nightsoul = { role: 'skill', gain: ns.skillGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
+      else if (a.type === 'plunge_low' || a.type === 'plunge_high') a.nightsoul = { role: 'plunge', gain: ns.plungeGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
+      else if (a.type === 'burst') a.nightsoul = { role: 'burst', gain: ns.plungeGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
     }
   }
 

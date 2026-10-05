@@ -178,7 +178,8 @@ export function applyActionCooldowns(
     let cooldown = 0;
     let offset: number | undefined;
     if (record) {
-      const lengthFrames = record.readyFrame !== undefined ? record.readyFrame - record.startFrame : record.originalFrames;
+      // 複数回分のスキルは、前の CT が明けてから減り始める。その待ちは、この回の CT の長さに含めない
+      const lengthFrames = record.readyFrame !== undefined ? record.readyFrame - (record.queueStartFrame ?? record.startFrame) : record.originalFrames;
       if (lengthFrames === undefined) continue; // 長さが分からない（ログの最後まで終わらない）
       cooldown = Number(framesToSeconds(lengthFrames).toFixed(3));
       offset = Number(framesToSeconds(record.startFrame - executed.frame).toFixed(3));

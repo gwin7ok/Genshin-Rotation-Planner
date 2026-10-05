@@ -65,8 +65,18 @@ export interface ActionDefinition {
    * 通常のスキルのCTを開始しない（startsSkillCooldown = false）。ガントチャートでは別の行に出す
    */
   cooldownPool?: 'special';
-  /** 別枠のCT（cooldownPool）のチャージ数（同時に溜められる回数。無ければ 1）。ファルカの特殊スキルは 2 */
+  /** CT の回数（同時に溜められる回数。無ければ 1）。別枠のCT（cooldownPool）の特殊スキル（ファルカは 2）と、通常のスキル（クレー 2・魈 2・八重神子 3 など）。CT は順番に回復する（gcsim の cdQueue） */
   charges?: number;
+  /** スキルが設置物（八重神子の殺生桜）を 1 つ出す。上限を超えると最古が消え、論示が有効なら寿命が延びる（秒） */
+  spawnsTotem?: { max: number; lifetime: number; lifetimeRevelation: number };
+  /** 爆発が、場にある設置物 1 つにつき、スキルの CT を 1 回分戻す（八重神子の固有天賦 1）。論示が無効なら、爆発で設置物が全部壊れる */
+  releasesSkillPerTotem?: boolean;
+  /**
+   * 夜魂値で無料のスキルが出るキャラ（ヴァレサ）。スキル = 夜魂 +gain、落下攻撃 = +gain、爆発 = 満タン + 落下攻撃相当。
+   * 落下攻撃（または爆発）の時点で max に達していて、猛烈パッション中でなければ、blessingSeconds の間、猛烈パッションに入り、次のスキル 1 回が無料（回数も CT も使わない）。
+   * 猛烈パッション中の落下攻撃は、夜魂を使い切って終わる。出典: gcsim varesa/varesa.go・skill.go・plunge.go・burst.go
+   */
+  nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */
@@ -254,6 +264,8 @@ export interface ConstellationActionChange {
   effectDuration?: number;
   /** 変更後の CT（秒。フリンズ 1 凸の嵐槍 6 秒 → 4 秒など） */
   cooldown?: number;
+  /** 変更後の CT の回数（魈 1 凸のスキル 2 回 → 3 回など） */
+  charges?: number;
   /** 根拠の説明文の抜粋 */
   source?: string;
 }
@@ -344,6 +356,8 @@ export interface PartyMember {
   constellation?: number;
   /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。ヘクセレイに対応するキャラだけ意味がある。未指定は true（gcsim の既定と同じ） */
   hexerei?: boolean;
+  /** 「論示」を達成済みか（八重神子）。未指定は true（gcsim の既定と同じ） */
+  revelation?: boolean;
   /** 装備武器（DB の武器 id） */
   weaponId?: string;
   /** 精錬ランク (1〜5, 未指定時は星5=1/星4以下=5) */
@@ -380,6 +394,8 @@ export interface CharacterConfig {
   constellation?: number;
   /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。編成の設定（PartyMember）から解決して入る。未指定は true */
   hexerei?: boolean;
+  /** 「論示」を達成済みか（八重神子）。編成の設定（PartyMember）から解決して入る。未指定は true */
+  revelation?: boolean;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
   availableActions: ActionDefinition[];

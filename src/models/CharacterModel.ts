@@ -37,19 +37,22 @@ export class CharacterModel {
   get actions(): ActionDefinition[] {
     const effectDurationById = new Map<string, number>();
     const cooldownById = new Map<string, number>();
+    const chargesById = new Map<string, number>();
     for (const c of [...this.activeConstellations].sort((a, b) => a.level - b.level)) {
       for (const change of c.actionChanges ?? []) {
         if (change.effectDuration !== undefined) effectDurationById.set(change.actionId, change.effectDuration);
         if (change.cooldown !== undefined) cooldownById.set(change.actionId, change.cooldown);
+        if (change.charges !== undefined) chargesById.set(change.actionId, change.charges);
       }
     }
-    if (effectDurationById.size === 0 && cooldownById.size === 0) return this.data.availableActions;
+    if (effectDurationById.size === 0 && cooldownById.size === 0 && chargesById.size === 0) return this.data.availableActions;
     return this.data.availableActions.map(a =>
-      effectDurationById.has(a.id) || cooldownById.has(a.id)
+      effectDurationById.has(a.id) || cooldownById.has(a.id) || chargesById.has(a.id)
         ? {
           ...a,
           ...(effectDurationById.has(a.id) ? { effectDuration: effectDurationById.get(a.id) } : {}),
           ...(cooldownById.has(a.id) ? { cooldown: cooldownById.get(a.id) } : {}),
+          ...(chargesById.has(a.id) ? { charges: chargesById.get(a.id) } : {}),
         }
         : a,
     );

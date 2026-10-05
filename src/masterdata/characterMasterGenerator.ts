@@ -203,6 +203,7 @@ const PLACEHOLDER_DURATION: Partial<Record<ActionType, number>> = {
   skill_hold: 1.2,
   burst: 1.5,
   dash: 0.2,
+  jump: 0.55, // gcsim の Jump は体型・直前のアクションで 31〜37f（stam.go の JumpLength）。gcsim の結果の反映で、実測の値になる
 };
 
 const ELEMENT_MAP: Record<string, ElementType> = {
@@ -824,6 +825,7 @@ function buildActions(ctx: BuildContext): BuildResult {
 
   // --- ダッシュ (キャラ固有フレームは gcsim 側で共通処理のため仮値) --------------
   actions.push({ id: `${id}_dash`, name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: PLACEHOLDER_DURATION.dash! });
+  actions.push({ id: `${id}_jump`, name: 'ジャンプ', shortName: 'J', type: 'jump', defaultDuration: PLACEHOLDER_DURATION.jump! });
 
   return { actions, placeholderActions };
 }

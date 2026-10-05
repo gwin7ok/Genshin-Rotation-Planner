@@ -62,6 +62,7 @@ export function mapAction(actionTypeId: string, weaponType?: string): MappedActi
     case 'e_hold': return { command: 'skill[hold=1]' };
     case 'q': return { command: 'burst' };
     case 'dash': return { command: 'dash' };
+    case 'jump': return { command: 'jump' };
     // 落下攻撃（フェーズ3f / D48）。gcsim は空中状態などの前提条件があり、実行できない場合がある
     case 'lp': return { command: 'low_plunge' };
     case 'hp': return { command: 'high_plunge' };

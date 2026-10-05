@@ -29,6 +29,7 @@ export const PREVIOUS_ACTION_LABELS: Record<string, string> = {
   charge: '重撃',
   attack: '通常攻撃',
   dash: 'ダッシュ',
+  jump: 'ジャンプ',
   low_plunge: '低空落下攻撃',
   high_plunge: '高空落下攻撃',
   aim: '狙い撃ち',

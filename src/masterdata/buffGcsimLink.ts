@@ -159,9 +159,20 @@ export const IGNORED_KEYS: Record<string, string> = {
   'iansan-c6': 'イアンサ 6凸: 運動量メーターの延長（EXCLUDED_CONSTELLATIONS）',
 };
 
+/**
+ * gcsim のキーに結び付けない固有天賦の定義（gcsim に、この効果が無い）。理由は TALENT_NOTE_OVERRIDES に書く。
+ * 同じ枠に継続時間の違う定義が複数あり、gcsim のキーの継続時間がどれかに合うときは、合わない定義は、自動で結び付けない（下の linkCharacterBuffs）。
+ * 自動で判定できないもの（gcsim のキーの継続時間が決まっていない）を、ここに書く
+ */
+const UNLINKED_TALENTS: Record<string, string> = {
+  '10000131-pyro_p1_2': 'ニコ: 3 秒は、観測の対象が出場してから聖祝の導きに昇格するまでの滞在時間（条件）で、効果の継続時間ではない。昇格した聖祝の導き（gcsim: guidance-of-theosis）は、20 秒の観測の定義（p1_1）に結び付ける',
+};
+
 /** gcsim 対象外の固有天賦のうち、効果が元素スキル・爆発の効果（アクションのバー）の中で処理されているもの。理由の文言を、個別に書く */
 const TALENT_NOTE_OVERRIDES: Record<string, string> = {
   '10000016-pyro_p2': 'ディルック: 黎明の炎元素付与の延長と炎ダメージ+20% は、gcsim では元素爆発の効果（diluc-q）の中で処理される。元素爆発の効果バーに反映される',
+  ...Object.fromEntries(Object.entries(UNLINKED_TALENTS)),
+  '10000079-pyro_p1_2': 'ディシア: 熔金の躰（浄焔怒涛の 9 秒後、チーム全員の炎場の中の中断耐性）は、gcsim が未実装（dehya/asc.go のコメント「interrupt res part of a1 is not implemented」。実行でも、状態が付かないことを確認）',
   '10000037-cryo_p2': '甘雨: 降衆天華のエリア内の氷ダメージ+20% は、gcsim では元素爆発の効果（ganyu-field）の中で処理される。元素爆発の効果バーに反映される',
 };
 
@@ -305,12 +316,17 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
       const ascKeys = named ? [] : entries.filter(e => e.category === 'talent' && !hasToken(e, /^c[1-6]$/));
       for (const def of defs) {
         let mine = slotEntries;
+        const matchesLength = (list: KeyCatalogEntry[], d: PassiveEffectDefinition) =>
+          d.duration !== undefined ? list.filter(e => e.durationFrames !== undefined && Math.abs(framesToSec(e.durationFrames) - d.duration!) < 0.05) : [];
         if (!named && def.duration !== undefined) {
           mine = ascKeys.filter(e => e.durationFrames !== undefined && Math.abs(framesToSec(e.durationFrames) - def.duration!) < 0.05);
         } else if (defs.length > 1 && def.duration !== undefined) {
           const sameLength = slotEntries.filter(e => e.durationFrames !== undefined && Math.abs(framesToSec(e.durationFrames) - def.duration!) < 0.05);
           if (sameLength.length > 0) mine = sameLength;
+          // この定義に合うキーが無く、同じ枠の別の定義が、そのキーに合っているときは、結び付けない（ディシア: 6 秒のキーに、9 秒の効果「熔金の躰」を結び付けない）
+          else if (defs.some(other => other !== def && matchesLength(slotEntries, other).length > 0)) mine = [];
         }
+        if (UNLINKED_TALENTS[def.id]) mine = [];
         const s = summarize(mine);
         const additionalKeys = TALENT_KEY_ADDITIONS[def.id] ?? [];
         if (additionalKeys.length > 0) {

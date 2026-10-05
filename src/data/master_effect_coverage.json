@@ -14801,9 +14801,10 @@
       "ownerId": "10000079-pyro",
       "ownerName": "ディシア",
       "name": "惜しみなき扶翼 (9秒)",
-      "timing": "computed",
-      "gcsimTarget": true,
-      "duration": 9
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 9,
+      "gcsimNote": "ディシア: 熔金の躰（浄焔怒涛の 9 秒後、チーム全員の炎場の中の中断耐性）は、gcsim が未実装（dehya/asc.go のコメント「interrupt res part of a1 is not implemented」。実行でも、状態が付かないことを確認）"
     },
     {
       "id": "talent:10000069-dendro_p1",
@@ -14998,8 +14999,9 @@
       "ownerName": "ニコ",
       "name": "分かち合い (3秒)",
       "timing": "conditional",
-      "gcsimTarget": true,
-      "duration": 3
+      "gcsimTarget": false,
+      "duration": 3,
+      "gcsimNote": "ニコ: 3 秒は、観測の対象が出場してから聖祝の導きに昇格するまでの滞在時間（条件）で、効果の継続時間ではない。昇格した聖祝の導き（gcsim: guidance-of-theosis）は、20 秒の観測の定義（p1_1）に結び付ける"
     },
     {
       "id": "talent:10000087-hydro_p1",
@@ -15385,7 +15387,7 @@
       "ownerId": "10000119-dendro",
       "ownerName": "ラウマ",
       "name": "霜夜に捧ぐ光",
-      "timing": "computed",
+      "timing": "always",
       "gcsimTarget": true,
       "duration": 20
     },
@@ -16548,21 +16550,11 @@
       "gcsimNote": "gcsim が未実装"
     },
     {
-      "id": "talent:10000026-anemo_p2_1",
+      "id": "talent:10000026-anemo_p2",
       "type": "talent",
       "ownerId": "10000026-anemo",
       "ownerName": "魈",
-      "name": "壊劫·国土砕き (7秒)",
-      "timing": "computed",
-      "gcsimTarget": true,
-      "duration": 7
-    },
-    {
-      "id": "talent:10000026-anemo_p2_2",
-      "type": "talent",
-      "ownerId": "10000026-anemo",
-      "ownerName": "魈",
-      "name": "壊劫·国土砕き (7秒)",
+      "name": "壊劫·国土砕き",
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 7
@@ -19511,20 +19503,8 @@
       "approval": "generated"
     },
     {
-      "effectId": "dehya-a1-icd",
-      "targetId": "talent:10000079-pyro_p1_2",
-      "role": "cooldown",
-      "approval": "generated"
-    },
-    {
       "effectId": "dehya-a1-reduction",
       "targetId": "talent:10000079-pyro_p1_1",
-      "role": "effect",
-      "approval": "generated"
-    },
-    {
-      "effectId": "dehya-a1-reduction",
-      "targetId": "talent:10000079-pyro_p1_2",
       "role": "effect",
       "approval": "generated"
     },
@@ -20479,12 +20459,6 @@
     {
       "effectId": "guidance-of-theosis",
       "targetId": "talent:10000131-pyro_p1_1",
-      "role": "effect",
-      "approval": "generated"
-    },
-    {
-      "effectId": "guidance-of-theosis",
-      "targetId": "talent:10000131-pyro_p1_2",
       "role": "effect",
       "approval": "generated"
     },
@@ -23208,13 +23182,7 @@
     },
     {
       "effectId": "xiao-a4",
-      "targetId": "talent:10000026-anemo_p2_1",
-      "role": "effect",
-      "approval": "generated"
-    },
-    {
-      "effectId": "xiao-a4",
-      "targetId": "talent:10000026-anemo_p2_2",
+      "targetId": "talent:10000026-anemo_p2",
       "role": "effect",
       "approval": "generated"
     },
@@ -25429,6 +25397,13 @@
     },
     {
       "side": "effect",
+      "id": "dehya-a1-icd",
+      "state": "unreviewed",
+      "reason": "key-has-no-master-link",
+      "note": "ディシア 固有天賦1「惜しみなき扶翼」: 発動間隔"
+    },
+    {
+      "side": "effect",
       "id": "emilie-c1-attack-icd",
       "state": "unreviewed",
       "reason": "key-has-no-master-link",
@@ -26199,6 +26174,13 @@
     },
     {
       "side": "target",
+      "id": "talent:10000079-pyro_p1_2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "ディシア: 熔金の躰（浄焔怒涛の 9 秒後、チーム全員の炎場の中の中断耐性）は、gcsim が未実装（dehya/asc.go のコメント「interrupt res part of a1 is not implemented」。実行でも、状態が付かないことを確認）"
+    },
+    {
+      "side": "target",
       "id": "talent:10000080-cryo_p2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
@@ -26441,6 +26423,13 @@
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "talent:10000131-pyro_p1_2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "ニコ: 3 秒は、観測の対象が出場してから聖祝の導きに昇格するまでの滞在時間（条件）で、効果の継続時間ではない。昇格した聖祝の導き（gcsim: guidance-of-theosis）は、20 秒の観測の定義（p1_1）に結び付ける"
     },
     {
       "side": "target",

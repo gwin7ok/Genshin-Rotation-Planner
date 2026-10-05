@@ -79,6 +79,43 @@ export interface ActionDefinition {
   nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
+  /**
+   * 爆発の後に、通常攻撃（N）・元素スキル（E）がパンチに置き換わるモード（ディシアの炎哮獅子咬）。単位はフレーム（60 FPS）。出典: gcsim dehya/burst.go・dash.go・jump.go
+   * - モードは、爆発の開始から startDelayFrames 後に始まり、durationFrames 続く（出場が終わる、窓の中のジャンプで終わる）
+   * - モードの間の N・E は、inputFrames の長さのパンチ（入力の何回目か。足りなければ最後を繰り返す）。スキルの CT・窓の規則は使わない
+   * - モードが終わった後、finisherWindowFrames 以内の最初の N・E は、フィニッシュの蹴り（finisher のフレーム）
+   * - モードの間のダッシュの直後 dashJumpKickFrames 以内のジャンプは、蹴り。そうでないジャンプは、モードを終わらせる
+   */
+  burstMode?: {
+    label: string;
+    startDelayFrames: number;
+    durationFrames: number;
+    inputFrames: number[];
+    finisherWindowFrames: number;
+    finisher: { total: number; cancels: Partial<Record<CancelTarget, number>> };
+    dashToJumpFrames: number;
+    dashJumpKickFrames: number;
+    /** 自動のパンチの間隔と、蹴りの命中までのフレーム（拾った炎場の置き直しの時刻に使う） */
+    autoPunchFrames: number;
+    kickHitFrames: number;
+    /** 蹴りの命中の何フレーム後に炎場を置き直すか／交代の何フレーム後に置き直すか */
+    fieldPlaceAfterKickFrames: number;
+    fieldPlaceAfterExitFrames: number;
+    source: string;
+  };
+  /**
+   * スキルが出す炎場（設置物）の、置き始めと置き直し（ディシアの熔鉄流獄・剣域熾焔）。単位はフレーム。出典: gcsim dehya/skill.go
+   * - 効果バー（炎場の継続時間）は、スキルの開始から startDelayFrames 後に始まる
+   * - 窓の中の E（置き直し）で、炎場を拾い（バーをその時点で切る）、命中の recastPlaceFrames 後に、「残り時間 + pickupExtensionFrames（命ノ星座 c2Constellation 以上は、さらに c2ExtensionFrames）」で置き直す
+   */
+  fieldRecast?: {
+    startDelayFrames: number;
+    recastPlaceFrames: number;
+    pickupExtensionFrames: number;
+    c2Constellation: number;
+    c2ExtensionFrames: number;
+    source: string;
+  };
   /** gcsim が、このアクションを実装していない（実行すると「action ... not implemented」のエラーになる。ディシアの重撃など）。ボタンは残すが、警告を出し、gcsim の設定文には入れない */
   gcsimUnsupported?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */

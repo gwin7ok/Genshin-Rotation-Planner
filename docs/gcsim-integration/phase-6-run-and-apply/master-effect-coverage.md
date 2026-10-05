@@ -21,14 +21,14 @@
 | skill / linked | 7 |
 | system / linked | 8 |
 | talent / excluded | 28 |
-| talent / linked | 179 |
-| talent / unreviewed | 1 |
+| talent / linked | 178 |
+| talent / unreviewed | 2 |
 | weapon / excluded | 36 |
 | weapon / linked | 331 |
 | weapon / pending | 45 |
 | weapon / unreviewed | 1 |
 
-## マスター対象（674件）
+## マスター対象（673件）
 
 | 種別 / 状態 | 件数 |
 |---|---:|
@@ -37,17 +37,17 @@
 | constellation / linked | 160 |
 | resonance / linked | 6 |
 | resonance / unreviewed | 1 |
-| talent / linked | 157 |
-| talent / unsupported | 117 |
+| talent / linked | 154 |
+| talent / unsupported | 119 |
 | weapon / linked | 171 |
 | weapon / unsupported | 21 |
 
-## links（828件）
+## links（824件）
 
 | 関係 | 件数 |
 |---|---:|
-| cooldown | 129 |
-| effect | 603 |
+| cooldown | 128 |
+| effect | 600 |
 | extra | 89 |
 | resonance | 7 |
 
@@ -176,7 +176,7 @@
 - effect yae-c6: 6-A2: 定義を持たない常時効果の扱い・表示が未実装
 - effect yanfei-c2: 6-A2: 定義を持たない常時効果の扱い・表示が未実装
 
-## 未確認（54件）
+## 未確認（55件）
 
 - effect aino-c2-icd: アイノ 命ノ星座2「歯車差分の進数原理」: 発動間隔
 - effect aino-c4-icd: アイノ 命ノ星座4「バターと猫と エネルギー供給の法則」: 発動間隔
@@ -197,6 +197,7 @@
 - effect columbina-c1-icd: コロンビーナ 命ノ星座1「花照らし峰に隠れ入る光」: 発動間隔
 - effect columbina-c4-icd: コロンビーナ 命ノ星座4「花の嵐や雲と木と岩の陰」: 発動間隔
 - effect dahlia-c6-icd: ダリア 命ノ星座6「あらゆる喜びが 君とあらんことを」: 発動間隔
+- effect dehya-a1-icd: ディシア 固有天賦1「惜しみなき扶翼」: 発動間隔
 - effect emilie-c1-attack-icd: エミリエ 命ノ星座1「淡く香るフレグランス」: attack 発動間隔
 - effect flins-c1-icd: フリンズ 命ノ星座1「雪影の幕をひらく時」: 発動間隔
 - effect furina-c4-icd: フリーナ 命ノ星座4「「地獄に堕ちずして いかに生の価値を知る！」」: 発動間隔

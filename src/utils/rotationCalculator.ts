@@ -110,6 +110,28 @@ export function calculateRotation(
   const passiveSpans: PassiveSpan[] = [];
   // アクション状態の窓（キャラごと）
   const stateWindows = new Map<string, { end: number; usesLeft?: number; used: number }>();
+  // 炎場（ディシアの熔鉄流獄）の効果バー（置き直しで、拾った時点で切って、新しいバーを出す）
+  const fieldSpans = new Map<string, ActiveBuffSpan>();
+  // 爆発の後のモード（ディシアのパンチ連打モード）の窓（1 周目の線形の計算）
+  const modeWindows = new Map<string, { sIdx: number; start: number; end: number; inputs: number; finished: boolean; span: ActiveBuffSpan; pending?: { savedFrames: number; template: ActiveBuffSpan } }>();
+  // 爆発が拾った炎場（ディシア）を、時刻 at に置き直す（残り時間 + 拾いの延長のバーを出す。まだ置き直していない回の再生成の窓は、新しい炎場の終わりまで延ばす）
+  const placePickedField = (charId: string, mw: { pending?: { savedFrames: number; template: ActiveBuffSpan } }, at: number) => {
+    if (!mw.pending) return;
+    const { savedFrames, template } = mw.pending;
+    mw.pending = undefined;
+    const startTime = Number(at.toFixed(3));
+    const placed: ActiveBuffSpan = {
+      ...template,
+      id: `${template.id}_burst_${startTime}`,
+      startTime,
+      endTime: Number((startTime + savedFrames / 60).toFixed(3)),
+      duration: Number((savedFrames / 60).toFixed(3)),
+    };
+    activeBuffs.push(placed);
+    fieldSpans.set(charId, placed);
+    const win = stateWindows.get(charId);
+    if (win) win.end = Math.max(win.end, placed.endTime);
+  };
   // 夜魂値で無料のスキルが出るキャラ（ヴァレサ）の状態（1 周目の線形の計算。マキシマムドライブの受付を開く条件に使う）
   const nightsoulTrackers = new Map<string, NightsoulTracker>();
 
@@ -236,7 +258,39 @@ export function calculateRotation(
       let inStateWindow = false;
       let stageIndex = 0;
       const rule = ACTION_STATE_RULES[char.id];
-      if (rule && act.type === 'skill' && act.actionTypeId === `${char.id}_e`) {
+
+      // 爆発の後のモード（ディシア）: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
+      const burstModeDef = charActions.find(a => a.burstMode)?.burstMode;
+      const mw = burstModeDef ? modeWindows.get(char.id) : undefined;
+      let modeKind: 'punch' | 'kick' | 'dash' | undefined;
+      if (burstModeDef && mw && mw.sIdx === sIdx) {
+        const isInput = act.type === 'normal' || (act.type === 'skill' && act.actionTypeId === `${char.id}_e`);
+        if (actionStartTime < mw.end - 0.001) {
+          if (isInput) modeKind = 'punch';
+          else if (act.type === 'dash') modeKind = 'dash';
+          else if (act.type === 'jump') {
+            const prevAct = computedActions[computedActions.length - 1];
+            const dashJump = prevAct?.type === 'dash' && actionStartTime - (prevAct.startTime ?? 0) <= burstModeDef.dashJumpKickFrames / 60 + 0.001;
+            mw.end = Math.min(mw.end, actionStartTime);
+            mw.span.endTime = Number(Math.max(mw.span.startTime, mw.end).toFixed(3));
+            mw.span.duration = Number((mw.span.endTime - mw.span.startTime).toFixed(3));
+            mw.finished = true;
+            if (dashJump) modeKind = 'kick';
+            else placePickedField(char.id, mw, actionStartTime); // ジャンプで状態が終わると、拾った炎場がその場に置かれる
+          }
+        } else if (!mw.finished && isInput && actionStartTime < mw.end + burstModeDef.finisherWindowFrames / 60) {
+          modeKind = 'kick';
+        }
+      }
+      if (modeKind === 'punch' || modeKind === 'kick') {
+        if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
+        if (modeKind === 'kick') {
+          mw!.finished = true;
+          placePickedField(char.id, mw!, actionStartTime + (burstModeDef!.kickHitFrames + burstModeDef!.fieldPlaceAfterKickFrames) / 60);
+        }
+      }
+
+      if (!modeKind && rule && act.type === 'skill' && act.actionTypeId === `${char.id}_e`) {
         const win = stateWindows.get(char.id);
         if (win && actionStartTime < win.end && (win.usesLeft === undefined || win.usesLeft > 0)) {
           inStateWindow = true;
@@ -272,7 +326,22 @@ export function calculateRotation(
         normalStreak = 0;
       }
       if (act.type === 'burst' && inActiveWindow && rule?.burstFrames) frames = rule.burstFrames;
-      if (inStateWindow && rule?.stageFrames?.length) {
+      if (modeKind && burstModeDef && mw) {
+        if (modeKind === 'punch') {
+          const h = burstModeDef.inputFrames[Math.min(mw.inputs, burstModeDef.inputFrames.length - 1)];
+          mw.inputs += 1;
+          frames = { total: h, cancels: {}, source: 'burst.go:punchHitmarks（入力のパンチ）' };
+          hitFallbackDuration = undefined;
+          normalStreak = 0;
+        } else if (modeKind === 'kick') {
+          frames = { total: burstModeDef.finisher.total, cancels: burstModeDef.finisher.cancels, source: 'burst.go:kickFrames（フィニッシュの蹴り）' };
+          hitFallbackDuration = undefined;
+          if (act.type === 'normal') normalStreak = 0;
+        } else {
+          frames = { total: Math.round((actionDef?.defaultDuration ?? 0.2) * 60), cancels: { jump: burstModeDef.dashToJumpFrames }, source: 'dash.go:burstDashDuration（ジャンプへ）' };
+        }
+      }
+      if (inStateWindow && !modeKind && rule?.stageFrames?.length) {
         frames = rule.stageFrames[Math.min(stageIndex, rule.stageFrames.length - 1)];
       }
 
@@ -470,6 +539,37 @@ export function calculateRotation(
         });
       }
 
+      // ディシアの爆発: 爆発の開始から startDelayFrames 後に、パンチ連打モードが始まる
+      if (act.type === 'burst' && actionDef?.burstMode) {
+        const bm = actionDef.burstMode;
+        const start = Number((actionStartTime + bm.startDelayFrames / 60).toFixed(3));
+        const end = Number((start + bm.durationFrames / 60).toFixed(3));
+        const span: ActiveBuffSpan = {
+          id: `burstmode_${char.id}_${act.id}`,
+          buffId: `burstmode_${char.id}`,
+          name: `${char.name} ${bm.label}`,
+          sourceCharacterId: char.id,
+          sourceType: 'talent',
+          startTime: start,
+          endTime: end,
+          duration: Number((end - start).toFixed(3)),
+          color: char.color,
+          description: '通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。窓の間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り',
+          noSynergy: true,
+        };
+        activeBuffs.push(span);
+        // 爆発の開始で、炎場を拾う（炎場が出ていれば。バーをここで切り、残り時間 + 拾いの延長を保存する）
+        let pending: { savedFrames: number; template: ActiveBuffSpan } | undefined;
+        const fieldDef = charActions.find(a => a.fieldRecast)?.fieldRecast;
+        const field = fieldSpans.get(char.id);
+        if (fieldDef && field && actionStartTime < field.endTime) {
+          pending = { savedFrames: Math.round((field.endTime - actionStartTime) * 60) + fieldDef.pickupExtensionFrames, template: { ...field } };
+          field.endTime = Number((actionStartTime + 1 / 60).toFixed(3));
+          field.duration = Number(Math.max(0, field.endTime - field.startTime).toFixed(3));
+        }
+        modeWindows.set(char.id, { sIdx, start, end, inputs: 0, finished: false, span, pending });
+      }
+
       // ヴァレサ: 夜魂値（猛烈パッション）と、マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中なら、短い間だけ特殊爆発の受付が開く）
       if (actionDef?.nightsoul) {
         const ns = actionDef.nightsoul;
@@ -640,6 +740,34 @@ export function calculateRotation(
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       const effectSpan = inStateWindow ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
+      if (effectSpan && actionDef?.fieldRecast) {
+        const delay = actionDef.fieldRecast.startDelayFrames / 60;
+        effectSpan.startTime = Number((effectSpan.startTime + delay).toFixed(3));
+        effectSpan.endTime = Number((effectSpan.endTime + delay).toFixed(3));
+        fieldSpans.set(char.id, effectSpan);
+      }
+      // 置き直し（窓の中の E）: 炎場を拾う（バーをここで切る）。命中の recastPlaceFrames 後に、残り時間 + 拾いの延長（命ノ星座 2 以上はさらに延長）で置き直す
+      if (inStateWindow && !modeKind && actionDef?.fieldRecast) {
+        const fr = actionDef.fieldRecast;
+        const field = fieldSpans.get(char.id);
+        if (field && actionStartTime < field.endTime) {
+          const remaining = field.endTime - actionStartTime;
+          const savedFrames = Math.round(remaining * 60) + fr.pickupExtensionFrames + (CharacterModel.fromConfig(char).constellation >= fr.c2Constellation ? fr.c2ExtensionFrames : 0);
+          field.endTime = Number((actionStartTime + 1 / 60).toFixed(3));
+          field.duration = Number(Math.max(0, field.endTime - field.startTime).toFixed(3));
+          const placedAt = Number((actionStartTime + fr.recastPlaceFrames / 60).toFixed(3));
+          const placed: ActiveBuffSpan = {
+            ...field,
+            id: `${field.id}_recast_${act.id}`,
+            startTime: placedAt,
+            endTime: Number((placedAt + savedFrames / 60).toFixed(3)),
+            duration: Number((savedFrames / 60).toFixed(3)),
+          };
+          activeBuffs.push(placed);
+          fieldSpans.set(char.id, placed);
+        }
+      }
       if (effectSpan) {
         // 受付と同じ状態のバーは、受付の始まり（スキルの後 windowDelay 秒）から、受付の終わりまで（出場の終わりで、下で切る）
         if (specialWindow && specialWindow.actionId === act.id && specialWindow.pool.windowDelay) {
@@ -673,6 +801,20 @@ export function calculateRotation(
     }
 
     const stintEndTime = currentTime;
+    // 出場が終わると、モードも終わる（キャラ交代で状態が終わる）。拾った炎場は、交代の fieldPlaceAfterExitFrames 後、または自動の蹴りの命中の後に置き直される（早いほう）
+    const modeAtEnd = modeWindows.get(char.id);
+    if (modeAtEnd && modeAtEnd.sIdx === sIdx && modeAtEnd.pending) {
+      const bm = charActions.find(a => a.burstMode)?.burstMode;
+      if (bm) {
+        const exitAt = stintEndTime + bm.fieldPlaceAfterExitFrames / 60;
+        const autoAt = modeAtEnd.end + (bm.autoPunchFrames + bm.kickHitFrames + bm.fieldPlaceAfterKickFrames) / 60;
+        placePickedField(char.id, modeAtEnd, Math.min(exitAt, autoAt));
+      }
+    }
+    if (modeAtEnd && modeAtEnd.sIdx === sIdx && modeAtEnd.span.endTime > stintEndTime) {
+      modeAtEnd.span.endTime = Number(Math.max(modeAtEnd.span.startTime, stintEndTime).toFixed(3));
+      modeAtEnd.span.duration = Number((modeAtEnd.span.endTime - modeAtEnd.span.startTime).toFixed(3));
+    }
     // 受付の有効な終わり: 受付の終わり（延長を含む）・出場の終わり（交代で状態が消える）・次のスキルの受付の始まりの早いもの。
     // 特殊スキルの CT は、この時刻より後に始まる待機中のものを積まない
     stintWindows.forEach((w, i) => {

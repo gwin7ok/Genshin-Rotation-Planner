@@ -505,7 +505,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                               <p className="text-slate-300 line-clamp-2 leading-relaxed">{lv.description}</p>
                               {lv.actionChanges?.map(ch => (
                                 <p key={ch.actionId} className="text-sky-300 font-semibold">
-                                  ⏱️ {actionName(ch.actionId)}: 効果 {ch.effectDuration}s
+                                  ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? ` 効果 ${ch.effectDuration}s` : ''}{ch.cooldown !== undefined ? ` CT ${ch.cooldown}s` : ''}
                                 </p>
                               ))}
                             </div>

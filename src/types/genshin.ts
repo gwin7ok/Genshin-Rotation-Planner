@@ -252,6 +252,8 @@ export interface ConstellationActionChange {
   actionId: string;
   /** 変更後の効果継続時間（秒） */
   effectDuration?: number;
+  /** 変更後の CT（秒。フリンズ 1 凸の嵐槍 6 秒 → 4 秒など） */
+  cooldown?: number;
   /** 根拠の説明文の抜粋 */
   source?: string;
 }

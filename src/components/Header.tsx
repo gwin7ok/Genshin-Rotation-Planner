@@ -26,6 +26,8 @@ interface HeaderProps {
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCopyNotation: () => void;
   onCopyGcsimConfig: () => void;
+  /** gcsim の結果の反映・個別の変更を外し、アクションの並びを基準にアプリの計算へ戻す */
+  onResetToAppCalculation?: () => void;
   copiedNotation: boolean;
   loopStartTime?: number;
   rotationNotation?: string;
@@ -59,6 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
   onImportJson,
   onCopyNotation,
   onCopyGcsimConfig,
+  onResetToAppCalculation,
   copiedNotation,
   loopStartTime = 0,
   rotationNotation = '',
@@ -374,6 +377,17 @@ export const Header: React.FC<HeaderProps> = ({
               <Copy className="w-3.5 h-3.5 text-emerald-400" />
               <span>gcsim設定文をコピー</span>
             </button>
+
+            {onResetToAppCalculation && (
+              <button
+                onClick={onResetToAppCalculation}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
+                title="アクションの並びはそのままに、gcsim の結果の反映や個別に変更した所要時間・CT・効果時間をすべて外して、アプリの計算（マスターのフレームと CT）に戻す"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                <span>アプリの計算に戻す</span>
+              </button>
+            )}
 
             {/* Notation Text Display right next to 記法コピー */}
             {rotationNotation && (

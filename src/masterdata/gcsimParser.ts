@@ -42,6 +42,8 @@ export interface ParsedGoFile {
   genderIndexPositions: Record<string, number>;
   /** 評価できなかった式 (レポート用) */
   unresolved: string[];
+  /** キャラの型のメソッド名（`func (c *char) ChargeAttack(` の ChargeAttack など。gcsim がそのアクションを実装しているかの確認に使う） */
+  methods: string[];
 }
 
 const ACTION_NAME_MAP: Record<string, CancelTarget> = {
@@ -281,7 +283,9 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
     genderIndexPositions[m[1]] ??= (m[2].match(/\[/g) ?? []).length;
   }
 
-  return { consts, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved };
+  const methods = [...joined.matchAll(/func \(\w+ \*\w+\) (\w+)\(/g)].map(m => m[1]);
+
+  return { consts, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved, methods };
 }
 
 /** 解析済みファイルの定数・整数配列を使って、算術式（定数参照・配列添字・+ - * /）を評価する。評価できなければ undefined */

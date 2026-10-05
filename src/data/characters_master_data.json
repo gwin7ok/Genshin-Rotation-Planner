@@ -6176,7 +6176,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000016-pyro_lp",
@@ -6501,7 +6502,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000020-electro_lp",
@@ -7879,7 +7881,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000024-electro_e",
@@ -11253,7 +11256,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000036-cryo_lp",
@@ -13527,7 +13531,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000044-pyro_lp",
@@ -15831,7 +15836,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000051-cryo_lp",
@@ -16475,7 +16481,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000053-anemo_e",
@@ -20976,7 +20983,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000068-electro_lp",
@@ -24407,7 +24415,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000079-pyro_lp",
@@ -25058,7 +25067,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000081-dendro_lp",
@@ -26280,7 +26290,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000085-cryo_lp",
@@ -28212,7 +28223,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000091-geo_lp",
@@ -28523,7 +28535,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000092-pyro_lp",
@@ -34153,6 +34166,13 @@
           },
           "source": "plunge.go:xianyunLowPlungeFrames"
         },
+        "plungeOpensWindow": {
+          "windowSeconds": 2.333,
+          "windowLabel": "マキシマムドライブ",
+          "openedBy": "落下攻撃",
+          "minConstellation": 2,
+          "closedBySkill": true
+        },
         "nightsoul": {
           "role": "plunge",
           "gain": 25,
@@ -34179,6 +34199,13 @@
             "swap": 37
           },
           "source": "plunge.go:highPlungeFrames"
+        },
+        "plungeOpensWindow": {
+          "windowSeconds": 2.333,
+          "windowLabel": "マキシマムドライブ",
+          "openedBy": "落下攻撃",
+          "minConstellation": 2,
+          "closedBySkill": true
         },
         "nightsoul": {
           "role": "plunge",
@@ -34260,6 +34287,37 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        }
+      },
+      {
+        "id": "10000111-electro_q_special",
+        "name": "特殊元素爆発（マキシマムドライブ）",
+        "shortName": "spQ",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "specialBurst": true,
+        "requiresWindow": true,
+        "specialBurstHint": "直前の落下攻撃（命ノ星座 2 以上、または猛烈パッション中）の後 2.3 秒以内で、その間にスキルを使っていないことが必要です",
+        "cooldown": 1,
+        "effectDuration": 0,
+        "frames": {
+          "total": 47,
+          "cancels": {
+            "attack": 46,
+            "skill": 45,
+            "dash": 43,
+            "swap": 42
+          },
+          "source": "burst.go:volcanicFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。varesa/burst.go: volcanicKablam（エネルギー 30、命中 42f、SetCD(ActionBurst, 1*60)、状態を消す）。varesa/varesa.go: ActionReady は、通常の爆発の CT が明けていること（AvailableCDCharge > 0）を求める。skill.go: スキルで状態が消える"
+        },
+        "defaultDuration": 0.783,
+        "specialBurstCooldown": {
+          "inWindow": 1,
+          "outOfWindow": 18,
+          "checkInWindow": true
         }
       },
       {
@@ -36394,9 +36452,11 @@
         "name": "特殊元素爆発（嵐槍の後）",
         "shortName": "spQ",
         "type": "burst",
-        "startsBurstCooldown": false,
+        "startsBurstCooldown": true,
         "specialBurst": true,
         "requiresWindow": true,
+        "specialBurstHint": "同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません",
+        "cooldown": 0,
         "effectDuration": 0,
         "frames": {
           "total": 81,
@@ -36413,7 +36473,12 @@
         "dataSource": {
           "cooldown": "gcsim: flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は SetCD せず（爆発の CT を始めない）、ConsumeEnergyPartial(3, 30)（エネルギー 30 で発動）、DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）"
         },
-        "defaultDuration": 1.35
+        "defaultDuration": 1.35,
+        "specialBurstCooldown": {
+          "inWindow": 0,
+          "outOfWindow": 20,
+          "checkInWindow": false
+        }
       },
       {
         "id": "10000120-electro_dash",
@@ -36609,7 +36674,8 @@
         "name": "重撃",
         "shortName": "CA",
         "type": "charged",
-        "defaultDuration": 0.8
+        "defaultDuration": 0.8,
+        "gcsimUnsupported": true
       },
       {
         "id": "10000121-hydro_e",

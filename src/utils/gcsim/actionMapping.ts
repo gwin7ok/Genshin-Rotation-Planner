@@ -24,6 +24,8 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000128-anemo_e_specialskill': 'skill',
   // 特殊爆発（フリンズ。嵐槍の後 6 秒の間、gcsim は同じ `burst` 命令を特殊爆発に自動で切り替える）
   '10000120-electro_q_special': 'burst',
+  // ヴァレサの特殊爆発（マキシマムドライブの間、gcsim は同じ `burst` 命令を大火山おろしに自動で切り替える）
+  '10000111-electro_q_special': 'burst',
 };
 
 /**

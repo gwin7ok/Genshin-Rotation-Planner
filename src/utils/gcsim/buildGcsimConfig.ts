@@ -209,6 +209,11 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
           if (frames > 0) out.push(`${indent}delay(${frames});`);
           continue;
         }
+        // gcsim が実装していないアクション（大剣の重撃など）は、実行すると「action ... not implemented」のエラーになるので、設定文に入れない
+        if (char.availableActions.find(a => a.id === act.actionTypeId)?.gcsimUnsupported) {
+          error(`${char.name}: アクション「${act.name}」は、gcsim が未実装のため、gcsim では実行できません（設定文には入れていません。アクションを外してください）`);
+          continue;
+        }
         const mapped = mapAction(act.actionTypeId, char.weaponType);
         if (!mapped.command) {
           error(`${char.name}: アクション「${act.name}」（${act.actionTypeId}）に gcsim への変換規則がありません`);

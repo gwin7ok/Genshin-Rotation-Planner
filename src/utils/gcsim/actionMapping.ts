@@ -21,6 +21,8 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   // 特殊元素スキル（別のCT。2026-10-01）: gcsim は、スキルの後の一定時間、同じ `skill` 命令を特殊スキルに自動で切り替える
   '10000150-cryo_e_recast': 'skill',
   '10000128-anemo_e_specialskill': 'skill',
+  // 特殊爆発（フリンズ。嵐槍の後 6 秒の間、gcsim は同じ `burst` 命令を特殊爆発に自動で切り替える）
+  '10000120-electro_q_special': 'burst',
 };
 
 /**

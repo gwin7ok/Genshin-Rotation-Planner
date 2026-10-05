@@ -423,6 +423,18 @@ export function calculateRotation(
         }
       }
 
+      // 状態中のスキル（2 回目の E）が、特殊爆発の受付を開く（フリンズ: 嵐槍の後 6 秒）
+      if (inStateWindow && actionDef?.recastOpensWindow) {
+        const w = actionDef.recastOpensWindow;
+        specialWindowStart = actionStartTime;
+        specialWindow = {
+          until: Number((actionStartTime + w.windowSeconds).toFixed(3)), count: 0, actionId: act.id, startTime: actionStartTime,
+          pool: { cooldown: 0, charges: 1, windowOnly: true, singleUse: true, windowSeconds: w.windowSeconds, windowLabel: w.windowLabel },
+        };
+        stintWindows.push(specialWindow);
+        addWindowOnlyBar(specialWindow, w.openedBy);
+      }
+
       // 爆発が特殊スキルの受付を開く（オデット。ヒットストップでは延びない）。同じ出場の受付は、新しい受付に置き換わる
       if (act.type === 'burst' && actionDef?.startsSpecialPool?.windowSeconds && !inStateWindow) {
         const pool = actionDef.startsSpecialPool;
@@ -466,13 +478,17 @@ export function calculateRotation(
         }
       }
 
-      // 特殊スキルの受付の確認（ファルカ）: 受付の外（ヒットストップ・爆発の延長を最大に見ても）で使うと、gcsim では通常のスキルになる（警告）
-      if (actionDef?.cooldownPool === 'special' && ((actionDef.charges ?? 1) > 1 || actionDef.requiresWindow) && !inStateWindow) {
+      // 特殊スキル・特殊爆発の受付の確認（ファルカ・オデット・フリンズ）: 受付の外（ヒットストップ・爆発の延長を最大に見ても）で使うと、gcsim では通常のスキル・爆発になる（警告）
+      const isSpecialBurst = act.type === 'burst' && !!actionDef?.specialBurst;
+      if ((actionDef?.cooldownPool === 'special' && ((actionDef.charges ?? 1) > 1 || actionDef.requiresWindow) || isSpecialBurst) && !inStateWindow) {
         if (!windowOpenAt(actionStartTime)) {
           const windowClosed = !!specialWindow?.used;
-          const windowMessage = windowClosed ? '特殊スキルの受付は、すでに特殊スキルを使って閉じています（受付の間に 1 回だけ使えます）。gcsim では通常のスキルとして扱われます' : specialWindow
-            ? `特殊スキルの受付時間外: 受付（スキルから約 ${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では通常のスキルとして扱われます`
-            : '特殊スキルの受付時間外: 同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます';
+          const kindName = isSpecialBurst ? '特殊爆発' : '特殊スキル';
+          const normalName = isSpecialBurst ? '通常の爆発（CT が始まる）' : '通常のスキル';
+          const noWindowHint = isSpecialBurst ? '同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません' : '同じ出場の中でスキルを使った後でないと使えません';
+          const windowMessage = windowClosed ? `${kindName}の受付は、すでに${kindName}を使って閉じています（受付の間に 1 回だけ使えます）。gcsim では${normalName}として扱われます` : specialWindow
+            ? `${kindName}の受付時間外: 受付（${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では${normalName}として扱われます`
+            : `${kindName}の受付時間外: ${noWindowHint}。gcsim では${normalName}として扱われます`;
           computedAction.specialWindowWarning = windowMessage;
           validationIssues.push({
             id: `special_window_${act.id}`,
@@ -481,10 +497,8 @@ export function calculateRotation(
             stintId: rawStint.id,
             actionId: act.id,
             time: actionStartTime,
-            title: `${char.name}: 特殊スキルの受付時間外`,
-            message: windowClosed ? `特殊スキル「${act.name}」: ${windowMessage}` : specialWindow
-              ? `特殊スキル「${act.name}」は、受付（スキルから約 ${(specialWindow.until - specialWindowStart).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - specialWindow.until).toFixed(1)} 秒過ぎています。gcsim では通常のスキルとして扱われます`
-              : `特殊スキル「${act.name}」は、同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます`,
+            title: `${char.name}: ${kindName}の受付時間外`,
+            message: `${kindName}「${act.name}」: ${windowMessage}`,
           });
         }
       }
@@ -517,7 +531,7 @@ export function calculateRotation(
         else if (actionDef?.cooldownPool === 'special') specialWindow.until += durationHasHitlag(act) ? hitlagOf(pool)?.special ?? 0 : 0;
         specialWindow.until = Number(specialWindow.until.toFixed(3));
         // 受付の間に特殊スキルを使うと、受付が閉じる（オデット）
-        if (actionDef?.cooldownPool === 'special' && pool.singleUse) { specialWindow.used = true; specialWindow.usedAt = actionStartTime; }
+        if ((actionDef?.cooldownPool === 'special' || isSpecialBurst) && pool.singleUse) { specialWindow.used = true; specialWindow.usedAt = actionStartTime; }
       }
 
       // 特殊スキルの受付の間の通常攻撃（N）: 特殊スキルの CT を短縮する（ファルカ。N が敵に当たるたびに 0.5 秒、最大 15 回）

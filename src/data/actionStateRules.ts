@@ -40,7 +40,7 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     ],
     note: 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)',
   },
-  // キーティング: 刃(stiletto)が出ている間の E が再発動（刃を消費）
+  // 刻晴: 刃(stiletto)が出ている間の E が再発動（刃を消費）
   '10000042-electro': { windowSeconds: 5 + 20 / 60, maxUses: 1,
     stageFrames: [{ total: 43, hitmark: 16, cancels: { attack: 42, dash: 16, jump: 16, swap: 42 }, source: 'skill.go:skillRecastFrames' }],
     note: 'keqing/skill.go: Status.Add(stilettoKey, 5*60+20)',
@@ -63,6 +63,30 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
   // オデット: 特殊元素スキル（spE）は、スキルとは別のCTを持つため、別のアクション（`10000150-cryo_e_recast`）にした（2026-10-01）。窓の規則は不要
   // ドゥリン: スキル受付 6 秒の間の E が白/黒の再発動（受付を消費。白・黒でフレームが違い、どちらになるかは未確認のため stageFrames なし）
   '10000123-pyro': { windowSeconds: 6, maxUses: 1, note: 'durin/skill.go: skillWindowDur = 6*60' },
+  // 千織（一回押しの E）: 傘の一振りの後（26f）から 78f の間の E が再発動（次のキャラへ強制交代。交代の遅れは 1f）。長押し E（42f 後に 77f）は別アクションなので対象外
+  '10000094-geo': {
+    windowSeconds: (26 + 78) / 60, maxUses: 1,
+    stageFrames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
+    note: 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）',
+  },
+  // 藍硯（一回押しの E）: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。命中しなければ窓は開かない（命中する前提）
+  '10000108-anemo': {
+    windowSeconds: (7 + 66) / 60, maxUses: 1,
+    stageFrames: [{ total: 41, cancels: { attack: 37, burst: 39, dash: 38, jump: 39 }, source: 'attack.go:ringsFrames' }],
+    note: 'lanyan/skill.go: detectHitmark=7、leapBack で AddStatus(leapBackStatus, 66, true)',
+  },
+  // ディシア: 炎場（命中の 1f 後に 12 秒）の間の E が再発動（CT なし）。その後の E は回収して置き直し（新しい CT）。炎場に重なる別の仕組み（元素爆発との連携）は未対応
+  '10000079-pyro': {
+    windowSeconds: (20 + 1 + 12 * 60) / 60, maxUses: 1,
+    stageFrames: [{ total: 74, cancels: { skill: 45, burst: 45, dash: 45, jump: 49, swap: 44 }, source: 'skill.go:skillRecastFrames' }],
+    note: 'dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)（AddStatus(dehyaFieldKey, dur, false)。ヒットストップで延びない）。hasRecastSkill で再発動は 1 回',
+  },
+  // 夢見月瑞希: 夢見状態（5 秒。ヒットストップで延びる。固有天賦 1 で最大 2 回延長）の間の E が状態の解除（CT なし）。延長は反応の条件のため含めない（最短の 5 秒）
+  '10000109-anemo': {
+    windowSeconds: 5, maxUses: 1,
+    stageFrames: [{ total: 50, cancels: { burst: 34, swap: 30 }, source: 'skill.go:skillFrames（状態の解除）' }],
+    note: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState',
+  },
   // ヴァルカ: スキル状態 12 秒の間の E が specialSkill（回数の上限は未確認）
   '10000128-anemo': {
     windowSeconds: 12,

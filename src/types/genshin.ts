@@ -69,6 +69,10 @@ export interface ActionDefinition {
   charges?: number;
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
+  /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */
+  specialBurst?: boolean;
+  /** 状態中のスキル（窓の中の 2 回目の E）が開く、特殊爆発などの受付（フリンズ: 嵐槍の後 6 秒） */
+  recastOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string };
   /**
    * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する
    * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ

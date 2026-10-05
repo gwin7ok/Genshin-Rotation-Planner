@@ -35322,6 +35322,11 @@
           "cooldownStart": "skill.go:skillHitmark"
         },
         "defaultDuration": 0.733,
+        "recastOpensWindow": {
+          "windowSeconds": 6,
+          "windowLabel": "雷霆のシンフォニーの受付",
+          "openedBy": "嵐槍"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
@@ -35355,6 +35360,32 @@
           "from": "motionStart",
           "delay": 0
         }
+      },
+      {
+        "id": "10000120-electro_q_special",
+        "name": "特殊元素爆発（嵐槍の後）",
+        "shortName": "spQ",
+        "type": "burst",
+        "startsBurstCooldown": false,
+        "specialBurst": true,
+        "requiresWindow": true,
+        "effectDuration": 0,
+        "frames": {
+          "total": 81,
+          "hitmark": 44,
+          "cancels": {
+            "attack": 53,
+            "skill": 53,
+            "dash": 51,
+            "jump": 50,
+            "walk": 58
+          },
+          "source": "burst.go:symphonyFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は SetCD せず（爆発の CT を始めない）、ConsumeEnergyPartial(3, 30)（エネルギー 30 で発動）、DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）"
+        },
+        "defaultDuration": 1.35
       },
       {
         "id": "10000120-electro_dash",

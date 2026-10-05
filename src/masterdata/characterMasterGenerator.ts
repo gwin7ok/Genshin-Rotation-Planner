@@ -99,6 +99,23 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
 };
 
 /**
+ * 特殊元素爆発（2026-10-05）。状態中のスキル（2 回目の E）の後の一定時間だけ、爆発が特殊爆発に切り替わる。
+ * 特殊爆発は、爆発の CT を始めない（CT 中でも使える）。使うと受付が閉じる。受付の外で使うと、通常の爆発（CT が始まる）。
+ * キー: キャラ ID
+ */
+const SPECIAL_BURSTS: Record<string, { tableName: string; name: string; label: string; windowSeconds: number; windowLabel: string; openedBy: string; source: string }> = {
+  '10000120-electro': {
+    tableName: 'symphonyFrames',
+    name: '特殊元素爆発（嵐槍の後）',
+    label: 'spQ',
+    windowSeconds: 6,
+    windowLabel: '雷霆のシンフォニーの受付',
+    openedBy: '嵐槍',
+    source: 'flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は SetCD せず（爆発の CT を始めない）、ConsumeEnergyPartial(3, 30)（エネルギー 30 で発動）、DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）',
+  },
+};
+
+/**
  * 長押しの元素スキルを持たないキャラ。genshin-db のクールタイムのラベルに 2 値ある（タルタリヤは「6.0~36.0秒」＝近接モードの継続時間で変わる）ため、
  * 長押し（hE）と誤って生成されるのを防ぐ。
  */
@@ -717,6 +734,28 @@ function buildActions(ctx: BuildContext): BuildResult {
     const sp = SPECIAL_SKILLS[id];
     for (const a of actions) {
       if (a.type === 'burst') a.startsSpecialPool = { cooldown: sp.cooldown, charges: sp.charges ?? 1, windowOnly: true, singleUse: true, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}), windowSeconds: Number(sp.burstWindowSeconds!.toFixed(3)) };
+    }
+  }
+
+  // 特殊爆発（フリンズ）: 受付の間だけ使える別アクション。状態中のスキル（2 回目の E）が受付を開く
+  if (SPECIAL_BURSTS[id]) {
+    const sb = SPECIAL_BURSTS[id];
+    const table = burstFile?.tables.find(t => splitTableName(t.name).base === sb.tableName);
+    if (table && burstFile) {
+      actions.push(withDuration({
+        id: `${id}_q_special`,
+        name: sb.name,
+        shortName: sb.label,
+        type: 'burst',
+        startsBurstCooldown: false,
+        specialBurst: true,
+        requiresWindow: true,
+        effectDuration: 0,
+        frames: toActionFrames(table, 'burst', burstFile.consts),
+        dataSource: { cooldown: `gcsim: ${sb.source}` },
+      }, framesToSec(table.total)));
+      const skillAct = actions.find(a => a.id === `${id}_e`);
+      if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
     }
   }
 

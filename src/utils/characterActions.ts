@@ -104,7 +104,7 @@ export function buildActionEffectSpan(
 export function countDistinctActiveBuffs(buffs: ActiveBuffSpan[], time: number): { count: number; names: string[] } {
   const byId = new Map<string, string>();
   for (const b of buffs) {
-    if (b.startTime <= time && b.endTime >= time && !byId.has(b.buffId)) byId.set(b.buffId, b.name);
+    if (!b.noSynergy && b.startTime <= time && b.endTime >= time && !byId.has(b.buffId)) byId.set(b.buffId, b.name);
   }
   return { count: byId.size, names: [...byId.values()] };
 }

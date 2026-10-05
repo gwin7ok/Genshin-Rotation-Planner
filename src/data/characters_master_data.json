@@ -35099,7 +35099,7 @@
         "dataSource": {
           "duration": "20秒間"
         },
-        "timing": "computed",
+        "timing": "always",
         "gcsimTarget": true,
         "gcsimKeys": [
           "light-for-the-frosty-night",
@@ -37140,6 +37140,32 @@
           "cooldown": 11,
           "charges": 2,
           "windowSeconds": 12,
+          "windowDelay": 0.65,
+          "windowExtendOnBurst": 2.3,
+          "windowHitlag": {
+            "normal": [
+              0.1,
+              0.13333333333333333,
+              0.13333333333333333,
+              0.15,
+              0.16666666666666666
+            ],
+            "charged": 0.3,
+            "special": 0.15,
+            "skill": 0.15
+          },
+          "windowHitlagNoDefHalt": {
+            "normal": [
+              0.03333333333333333,
+              0.06666666666666667,
+              0.06666666666666667,
+              0.1,
+              0.1
+            ],
+            "charged": 0.2,
+            "special": 0.1,
+            "skill": 0.1
+          },
           "reducePerHit": 0.5,
           "reducePerHitHexerei": 1,
           "hitsPerNormal": [
@@ -37174,6 +37200,32 @@
           "cooldown": 11,
           "charges": 2,
           "windowSeconds": 12,
+          "windowDelay": 0.65,
+          "windowExtendOnBurst": 2.3,
+          "windowHitlag": {
+            "normal": [
+              0.1,
+              0.13333333333333333,
+              0.13333333333333333,
+              0.15,
+              0.16666666666666666
+            ],
+            "charged": 0.3,
+            "special": 0.15,
+            "skill": 0.15
+          },
+          "windowHitlagNoDefHalt": {
+            "normal": [
+              0.03333333333333333,
+              0.06666666666666667,
+              0.06666666666666667,
+              0.1,
+              0.1
+            ],
+            "charged": 0.2,
+            "special": 0.1,
+            "skill": 0.1
+          },
           "reducePerHit": 0.5,
           "reducePerHitHexerei": 1,
           "hitsPerNormal": [
@@ -38812,6 +38864,32 @@
           "cooldownStart": "skill.go:14"
         },
         "defaultDuration": 0.7,
+        "startsSpecialPool": {
+          "cooldown": 15,
+          "charges": 1,
+          "windowSeconds": 6.567,
+          "windowOnly": true,
+          "singleUse": true,
+          "windowLabel": "柔き払暁のコーダの受付",
+          "windowHitlag": {
+            "normal": [
+              0.1,
+              0.1,
+              0.03333333333333333,
+              0.05,
+              0
+            ]
+          },
+          "windowHitlagNoDefHalt": {
+            "normal": [
+              0.03333333333333333,
+              0.03333333333333333,
+              0.03333333333333333,
+              0.05,
+              0
+            ]
+          }
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
@@ -38824,6 +38902,7 @@
         "type": "skill",
         "startsSkillCooldown": false,
         "cooldownPool": "special",
+        "requiresWindow": true,
         "cooldown": 15,
         "effectDuration": 20,
         "defaultDuration": 1.267,
@@ -38840,7 +38919,7 @@
         },
         "dataSource": {
           "cooldown": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）",
-          "effectDuration": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）"
+          "effectDuration": "柔き払暁のコーダ後の強化"
         }
       },
       {
@@ -38868,6 +38947,14 @@
           "cooldownStart": "burst.go:0"
         },
         "defaultDuration": 2.1,
+        "startsSpecialPool": {
+          "cooldown": 15,
+          "charges": 1,
+          "windowOnly": true,
+          "singleUse": true,
+          "windowLabel": "柔き払暁のコーダの受付",
+          "windowSeconds": 6.017
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0

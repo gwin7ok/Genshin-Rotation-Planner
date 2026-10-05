@@ -23076,7 +23076,14 @@
         "defaultDuration": 0.367,
         "frames": {
           "total": 28,
+          "hitmark": 13,
           "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
             "attack": 22,
             "charge": 22
           },
@@ -23087,7 +23094,14 @@
             "duration": 0.367,
             "frames": {
               "total": 28,
+              "hitmark": 13,
               "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
                 "attack": 22,
                 "charge": 22
               },
@@ -23098,7 +23112,14 @@
             "duration": 0.367,
             "frames": {
               "total": 31,
+              "hitmark": 16,
               "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
                 "attack": 22,
                 "charge": 25
               },
@@ -23109,7 +23130,14 @@
             "duration": 0.683,
             "frames": {
               "total": 51,
+              "hitmark": 31,
               "cancels": {
+                "aim": 31,
+                "skill": 31,
+                "burst": 31,
+                "dash": 31,
+                "jump": 31,
+                "swap": 31,
                 "attack": 41,
                 "charge": 37
               },
@@ -23120,7 +23148,14 @@
             "duration": 0.983,
             "frames": {
               "total": 59,
+              "hitmark": 21,
               "cancels": {
+                "aim": 21,
+                "skill": 21,
+                "burst": 21,
+                "dash": 21,
+                "jump": 21,
+                "swap": 21,
                 "walk": 54
               },
               "source": "attack.go:attackFrames[3]"
@@ -29340,9 +29375,15 @@
         "defaultDuration": 0.283,
         "frames": {
           "total": 19,
+          "hitmark": 10,
           "cancels": {
-            "attack": 17,
-            "aim": 15
+            "aim": 15,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 17
           },
           "source": "attack.go:attackFrames[0]"
         },
@@ -29351,9 +29392,15 @@
             "duration": 0.283,
             "frames": {
               "total": 19,
+              "hitmark": 10,
               "cancels": {
-                "attack": 17,
-                "aim": 15
+                "aim": 15,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 17
               },
               "source": "attack.go:attackFrames[0]"
             }
@@ -29362,9 +29409,15 @@
             "duration": 0.533,
             "frames": {
               "total": 35,
+              "hitmark": 15,
               "cancels": {
-                "attack": 32,
-                "aim": 28
+                "aim": 28,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15,
+                "attack": 32
               },
               "source": "attack.go:attackFrames[1]"
             }
@@ -29373,7 +29426,14 @@
             "duration": 1.15,
             "frames": {
               "total": 69,
+              "hitmark": 39,
               "cancels": {
+                "aim": 39,
+                "skill": 39,
+                "burst": 39,
+                "dash": 39,
+                "jump": 39,
+                "swap": 39,
                 "attack": 63
               },
               "source": "attack.go:attackFrames[2]"
@@ -34684,7 +34744,14 @@
         "defaultDuration": 0.2,
         "frames": {
           "total": 35,
+          "hitmark": 9,
           "cancels": {
+            "aim": 9,
+            "skill": 9,
+            "burst": 9,
+            "dash": 9,
+            "jump": 9,
+            "swap": 9,
             "attack": 12,
             "charge": 27
           },
@@ -34695,7 +34762,14 @@
             "duration": 0.2,
             "frames": {
               "total": 35,
+              "hitmark": 9,
               "cancels": {
+                "aim": 9,
+                "skill": 9,
+                "burst": 9,
+                "dash": 9,
+                "jump": 9,
+                "swap": 9,
                 "attack": 12,
                 "charge": 27
               },
@@ -34706,7 +34780,14 @@
             "duration": 0.317,
             "frames": {
               "total": 46,
+              "hitmark": 17,
               "cancels": {
+                "aim": 17,
+                "skill": 17,
+                "burst": 17,
+                "dash": 17,
+                "jump": 17,
+                "swap": 17,
                 "attack": 19,
                 "charge": 39
               },
@@ -34717,7 +34798,14 @@
             "duration": 0.55,
             "frames": {
               "total": 48,
+              "hitmark": 21,
               "cancels": {
+                "aim": 21,
+                "skill": 21,
+                "burst": 21,
+                "dash": 21,
+                "jump": 21,
+                "swap": 21,
                 "attack": 33,
                 "charge": 39
               },
@@ -34728,7 +34816,14 @@
             "duration": 0.917,
             "frames": {
               "total": 55,
+              "hitmark": 27,
               "cancels": {
+                "aim": 27,
+                "skill": 27,
+                "burst": 27,
+                "dash": 27,
+                "jump": 27,
+                "swap": 27,
                 "attack": 52
               },
               "source": "attack.go:attackFrames[3]"
@@ -35213,7 +35308,14 @@
         "defaultDuration": 0.233,
         "frames": {
           "total": 31,
+          "hitmark": 11,
           "cancels": {
+            "aim": 11,
+            "skill": 11,
+            "burst": 11,
+            "dash": 11,
+            "jump": 11,
+            "swap": 11,
             "attack": 14,
             "charge": 25
           },
@@ -35224,7 +35326,14 @@
             "duration": 0.233,
             "frames": {
               "total": 31,
+              "hitmark": 11,
               "cancels": {
+                "aim": 11,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11,
                 "attack": 14,
                 "charge": 25
               },
@@ -35235,7 +35344,14 @@
             "duration": 0.267,
             "frames": {
               "total": 31,
+              "hitmark": 11,
               "cancels": {
+                "aim": 11,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11,
                 "attack": 16,
                 "charge": 27
               },
@@ -35246,7 +35362,14 @@
             "duration": 0.383,
             "frames": {
               "total": 45,
+              "hitmark": 16,
               "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
                 "attack": 23,
                 "charge": 25
               },
@@ -35257,7 +35380,14 @@
             "duration": 0.667,
             "frames": {
               "total": 67,
+              "hitmark": 29,
               "cancels": {
+                "aim": 29,
+                "skill": 29,
+                "burst": 29,
+                "dash": 29,
+                "jump": 29,
+                "swap": 29,
                 "attack": 40
               },
               "source": "attack.go:attackFrames[3]"
@@ -35267,7 +35397,14 @@
             "duration": 1.133,
             "frames": {
               "total": 68,
+              "hitmark": 29,
               "cancels": {
+                "aim": 29,
+                "skill": 29,
+                "burst": 29,
+                "dash": 29,
+                "jump": 29,
+                "swap": 29,
                 "walk": 58
               },
               "source": "attack.go:attackFrames[4]"
@@ -35540,7 +35677,14 @@
         "defaultDuration": 0.533,
         "frames": {
           "total": 48,
+          "hitmark": 23,
           "cancels": {
+            "aim": 23,
+            "skill": 23,
+            "burst": 23,
+            "dash": 23,
+            "jump": 23,
+            "swap": 23,
             "attack": 32
           },
           "source": "attack.go:attackFrames[0]"
@@ -35550,7 +35694,14 @@
             "duration": 0.533,
             "frames": {
               "total": 48,
+              "hitmark": 23,
               "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
                 "attack": 32
               },
               "source": "attack.go:attackFrames[0]"
@@ -35560,7 +35711,14 @@
             "duration": 0.717,
             "frames": {
               "total": 75,
+              "hitmark": 20,
               "cancels": {
+                "aim": 20,
+                "skill": 20,
+                "burst": 20,
+                "dash": 20,
+                "jump": 20,
+                "swap": 20,
                 "attack": 43
               },
               "source": "attack.go:attackFrames[1]"
@@ -35570,7 +35728,14 @@
             "duration": 1.55,
             "frames": {
               "total": 93,
+              "hitmark": 43,
               "cancels": {
+                "aim": 43,
+                "skill": 43,
+                "burst": 43,
+                "dash": 43,
+                "jump": 43,
+                "swap": 43,
                 "attack": 62
               },
               "source": "attack.go:attackFrames[2]"
@@ -35913,7 +36078,14 @@
         "defaultDuration": 0.317,
         "frames": {
           "total": 29,
+          "hitmark": 11,
           "cancels": {
+            "aim": 11,
+            "skill": 11,
+            "burst": 11,
+            "dash": 11,
+            "jump": 11,
+            "swap": 11,
             "attack": 19,
             "charge": 21
           },
@@ -35924,7 +36096,14 @@
             "duration": 0.317,
             "frames": {
               "total": 29,
+              "hitmark": 11,
               "cancels": {
+                "aim": 11,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11,
                 "attack": 19,
                 "charge": 21
               },
@@ -35935,7 +36114,14 @@
             "duration": 0.233,
             "frames": {
               "total": 30,
+              "hitmark": 9,
               "cancels": {
+                "aim": 9,
+                "skill": 9,
+                "burst": 9,
+                "dash": 9,
+                "jump": 9,
+                "swap": 9,
                 "attack": 14,
                 "charge": 21
               },
@@ -35946,7 +36132,14 @@
             "duration": 0.8,
             "frames": {
               "total": 55,
+              "hitmark": 37,
               "cancels": {
+                "aim": 37,
+                "skill": 37,
+                "burst": 37,
+                "dash": 37,
+                "jump": 37,
+                "swap": 37,
                 "attack": 48,
                 "charge": 43
               },
@@ -35957,7 +36150,14 @@
             "duration": 1.1,
             "frames": {
               "total": 66,
+              "hitmark": 38,
               "cancels": {
+                "aim": 38,
+                "skill": 38,
+                "burst": 38,
+                "dash": 38,
+                "jump": 38,
+                "swap": 38,
                 "walk": 65
               },
               "source": "attack.go:attackFrames[3]"
@@ -36829,7 +37029,14 @@
         "defaultDuration": 0.233,
         "frames": {
           "total": 30,
+          "hitmark": 13,
           "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
             "attack": 14,
             "charge": 21
           },
@@ -36840,7 +37047,14 @@
             "duration": 0.233,
             "frames": {
               "total": 30,
+              "hitmark": 13,
               "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
                 "attack": 14,
                 "charge": 21
               },
@@ -36851,7 +37065,14 @@
             "duration": 0.35,
             "frames": {
               "total": 33,
+              "hitmark": 16,
               "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
                 "attack": 21,
                 "charge": 21
               },
@@ -36862,7 +37083,14 @@
             "duration": 0.75,
             "frames": {
               "total": 57,
+              "hitmark": 32,
               "cancels": {
+                "aim": 32,
+                "skill": 32,
+                "burst": 32,
+                "dash": 32,
+                "jump": 32,
+                "swap": 32,
                 "attack": 45,
                 "charge": 52
               },
@@ -36873,7 +37101,14 @@
             "duration": 1.333,
             "frames": {
               "total": 80,
+              "hitmark": 43,
               "cancels": {
+                "aim": 43,
+                "skill": 43,
+                "burst": 43,
+                "dash": 43,
+                "jump": 43,
+                "swap": 43,
                 "attack": 66
               },
               "source": "attack.go:attackFrames[3]"
@@ -37099,7 +37334,14 @@
         "defaultDuration": 0.383,
         "frames": {
           "total": 46,
+          "hitmark": 19,
           "cancels": {
+            "aim": 19,
+            "skill": 19,
+            "burst": 19,
+            "dash": 19,
+            "jump": 19,
+            "swap": 19,
             "attack": 23,
             "charge": 22
           },
@@ -37110,7 +37352,14 @@
             "duration": 0.383,
             "frames": {
               "total": 46,
+              "hitmark": 19,
               "cancels": {
+                "aim": 19,
+                "skill": 19,
+                "burst": 19,
+                "dash": 19,
+                "jump": 19,
+                "swap": 19,
                 "attack": 23,
                 "charge": 22
               },
@@ -37121,7 +37370,14 @@
             "duration": 0.483,
             "frames": {
               "total": 46,
+              "hitmark": 28,
               "cancels": {
+                "aim": 28,
+                "skill": 28,
+                "burst": 28,
+                "dash": 28,
+                "jump": 28,
+                "swap": 28,
                 "attack": 29,
                 "charge": 30
               },
@@ -37132,7 +37388,14 @@
             "duration": 0.917,
             "frames": {
               "total": 60,
+              "hitmark": 43,
               "cancels": {
+                "aim": 43,
+                "skill": 43,
+                "burst": 43,
+                "dash": 43,
+                "jump": 43,
+                "swap": 43,
                 "attack": 55,
                 "charge": 48
               },
@@ -37143,7 +37406,14 @@
             "duration": 0.667,
             "frames": {
               "total": 47,
+              "hitmark": 24,
               "cancels": {
+                "aim": 24,
+                "skill": 24,
+                "burst": 24,
+                "dash": 24,
+                "jump": 24,
+                "swap": 24,
                 "attack": 40,
                 "charge": 28
               },
@@ -37154,7 +37424,14 @@
             "duration": 1.367,
             "frames": {
               "total": 82,
+              "hitmark": 45,
               "cancels": {
+                "aim": 45,
+                "skill": 45,
+                "burst": 45,
+                "dash": 45,
+                "jump": 45,
+                "swap": 45,
                 "attack": 73,
                 "charge": 48
               },
@@ -38829,7 +39106,14 @@
         "defaultDuration": 0.283,
         "frames": {
           "total": 25,
+          "hitmark": 9,
           "cancels": {
+            "aim": 9,
+            "skill": 9,
+            "burst": 9,
+            "dash": 9,
+            "jump": 9,
+            "swap": 9,
             "attack": 17,
             "walk": 19
           },
@@ -38840,7 +39124,14 @@
             "duration": 0.283,
             "frames": {
               "total": 25,
+              "hitmark": 9,
               "cancels": {
+                "aim": 9,
+                "skill": 9,
+                "burst": 9,
+                "dash": 9,
+                "jump": 9,
+                "swap": 9,
                 "attack": 17,
                 "walk": 19
               },
@@ -38851,7 +39142,14 @@
             "duration": 0.317,
             "frames": {
               "total": 23,
+              "hitmark": 9,
               "cancels": {
+                "aim": 9,
+                "skill": 9,
+                "burst": 9,
+                "dash": 9,
+                "jump": 9,
+                "swap": 9,
                 "attack": 19,
                 "charge": 21
               },
@@ -38862,7 +39160,14 @@
             "duration": 0.9,
             "frames": {
               "total": 69,
+              "hitmark": 31,
               "cancels": {
+                "aim": 31,
+                "skill": 31,
+                "burst": 31,
+                "dash": 31,
+                "jump": 31,
+                "swap": 31,
                 "attack": 54,
                 "walk": 63
               },
@@ -38873,7 +39178,14 @@
             "duration": 0.883,
             "frames": {
               "total": 85,
+              "hitmark": 15,
               "cancels": {
+                "aim": 15,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15,
                 "attack": 53,
                 "charge": 73
               },
@@ -38884,7 +39196,14 @@
             "duration": 1.167,
             "frames": {
               "total": 70,
+              "hitmark": 15,
               "cancels": {
+                "aim": 15,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15,
                 "attack": 62
               },
               "source": "attack.go:attackFrames[4]"

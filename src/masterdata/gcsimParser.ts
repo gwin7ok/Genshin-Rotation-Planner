@@ -156,6 +156,9 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
   return value;
 }
 
+/** 要素は数値か、数値だけの式（`16 + 15`、`11 + 9 + 8 + 34`）。定数を含む式は評価できない（配列ごと落とす） */
+const toNumber = (s: string): number => evalExpr(s, () => undefined, () => undefined) ?? NaN;
+
 function parseIntList(body: string): number[] | number[][] | undefined {
   const trimmed = body.trim();
   if (trimmed.startsWith('{')) {
@@ -163,13 +166,13 @@ function parseIntList(body: string): number[] | number[][] | undefined {
     const re = /\{([^{}]*)\}/g;
     let m: RegExpExecArray | null;
     while ((m = re.exec(trimmed))) {
-      const row = m[1].split(',').map(s => s.trim()).filter(Boolean).map(Number);
+      const row = m[1].split(',').map(s => s.trim()).filter(Boolean).map(toNumber);
       if (row.some(n => Number.isNaN(n))) return undefined;
       rows.push(row);
     }
     return rows;
   }
-  const flat = trimmed.split(',').map(s => s.trim()).filter(Boolean).map(Number);
+  const flat = trimmed.split(',').map(s => s.trim()).filter(Boolean).map(toNumber);
   if (flat.some(n => Number.isNaN(n))) return undefined;
   return flat;
 }

@@ -119,7 +119,18 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
  * 特殊爆発は、爆発の CT を始めない（CT 中でも使える）。使うと受付が閉じる。受付の外で使うと、通常の爆発（CT が始まる）。
  * キー: キャラ ID
  */
-const SPECIAL_BURSTS: Record<string, { tableName: string; name: string; label: string; windowSeconds: number; windowLabel: string; openedBy: string; source: string }> = {
+const SPECIAL_BURSTS: Record<string, {
+  tableName: string; name: string; label: string; windowSeconds: number; windowLabel: string; openedBy: string; source: string;
+  /** 受付を開くもの: special-skill = 受付の間に使った特殊スキル（フリンズの嵐槍）、plunge = 落下攻撃（ヴァレサ。命ノ星座 minConstellation 以上、または猛烈パッション中） */
+  opener: 'special-skill' | 'plunge';
+  /** 受付の中の爆発の CT（秒）。外では、通常の爆発の CT */
+  cooldownInWindow: number;
+  /** 受付の中でも、爆発の CT が明けていることを求める（gcsim のヴァレサ） */
+  checkInWindow: boolean;
+  /** 受付の外で使ったときの警告に出す、必要な条件 */
+  hint: string;
+  minConstellation?: number;
+}> = {
   '10000120-electro': {
     tableName: 'symphonyFrames',
     name: '特殊元素爆発（嵐槍の後）',
@@ -127,7 +138,26 @@ const SPECIAL_BURSTS: Record<string, { tableName: string; name: string; label: s
     windowSeconds: 6,
     windowLabel: '雷霆のシンフォニーの受付',
     openedBy: '嵐槍',
+    opener: 'special-skill',
+    cooldownInWindow: 0,
+    checkInWindow: false,
+    hint: '同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません',
     source: 'flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は SetCD せず（爆発の CT を始めない）、ConsumeEnergyPartial(3, 30)（エネルギー 30 で発動）、DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）',
+  },
+  // ヴァレサ: マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中。140f）の間の爆発が、大火山おろしになる
+  '10000111-electro': {
+    tableName: 'volcanicFrames',
+    name: '特殊元素爆発（マキシマムドライブ）',
+    label: 'spQ',
+    windowSeconds: 140 / 60,
+    windowLabel: 'マキシマムドライブ',
+    openedBy: '落下攻撃',
+    opener: 'plunge',
+    minConstellation: 2,
+    cooldownInWindow: 1,
+    checkInWindow: true,
+    hint: '直前の落下攻撃（命ノ星座 2 以上、または猛烈パッション中）の後 2.3 秒以内で、その間にスキルを使っていないことが必要です',
+    source: 'varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。varesa/burst.go: volcanicKablam（エネルギー 30、命中 42f、SetCD(ActionBurst, 1*60)、状態を消す）。varesa/varesa.go: ActionReady は、通常の爆発の CT が明けていること（AvailableCDCharge > 0）を求める。skill.go: スキルで状態が消える',
   },
 };
 
@@ -587,6 +617,13 @@ function buildActions(ctx: BuildContext): BuildResult {
     actions.push(withDuration({ id: `${id}_ca`, name: '重撃', shortName: 'CA', type: 'charged' }));
   }
 
+  // gcsim が重撃・狙い撃ちを実装していない（メソッド ChargeAttack / Aimed が無い）キャラ: 実行すると「action charge not implemented」のエラーになる（ディシアなど）。
+  // gcsim のキャラが無い（解析できていない）場合は、全部が対象なので、印は付けない
+  if (parsed && !Object.values(parsed.files).some(f => f.methods.includes('ChargeAttack') || f.methods.includes('Aimed'))) {
+    const ca = actions.find(a => a.id === `${id}_ca`);
+    if (ca) ca.gcsimUnsupported = true;
+  }
+
   // --- 落下攻撃 LP / HP（フェーズ3f / D48）: gcsim の plunge.go にフレーム表があるものだけ ------------
   const plungeFile = file('plunge');
   if (plungeFile) {
@@ -788,15 +825,28 @@ function buildActions(ctx: BuildContext): BuildResult {
         name: sb.name,
         shortName: sb.label,
         type: 'burst',
-        startsBurstCooldown: false,
+        startsBurstCooldown: true,
         specialBurst: true,
         requiresWindow: true,
+        specialBurstHint: sb.hint,
+        cooldown: sb.cooldownInWindow,
         effectDuration: 0,
         frames: toActionFrames(table, 'burst', burstFile.consts),
         dataSource: { cooldown: `gcsim: ${sb.source}` },
       }, framesToSec(table.total)));
-      const skillAct = actions.find(a => a.cooldownPool === 'special');
-      if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
+      // 受付の外で使うと、通常の爆発になり、通常の CT が始まる
+      const sbAction = actions[actions.length - 1];
+      sbAction.specialBurstCooldown = { inWindow: sb.cooldownInWindow, outOfWindow: actions.find(a => a.id === `${id}_q`)?.cooldown ?? 0, checkInWindow: sb.checkInWindow };
+      if (sb.opener === 'special-skill') {
+        const skillAct = actions.find(a => a.cooldownPool === 'special');
+        if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
+      } else {
+        for (const a of actions) {
+          if (a.type === 'plunge_low' || a.type === 'plunge_high') {
+            a.plungeOpensWindow = { windowSeconds: Number(sb.windowSeconds.toFixed(3)), windowLabel: sb.windowLabel, openedBy: sb.openedBy, minConstellation: sb.minConstellation ?? 0, closedBySkill: true };
+          }
+        }
+      }
     }
   }
 
@@ -811,7 +861,7 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (totem) {
     for (const a of actions) {
       if (a.type === 'skill' && !a.cooldownPool && a.startsSkillCooldown === true) a.spawnsTotem = totem;
-      if (a.type === 'burst') a.releasesSkillPerTotem = true;
+      if (a.type === 'burst' && !a.specialBurst) a.releasesSkillPerTotem = true;
     }
   }
   const ns = NIGHTSOUL_FREE_SKILLS[id];
@@ -819,7 +869,7 @@ function buildActions(ctx: BuildContext): BuildResult {
     for (const a of actions) {
       if (a.type === 'skill' && !a.cooldownPool && a.startsSkillCooldown === true) a.nightsoul = { role: 'skill', gain: ns.skillGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
       else if (a.type === 'plunge_low' || a.type === 'plunge_high') a.nightsoul = { role: 'plunge', gain: ns.plungeGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
-      else if (a.type === 'burst') a.nightsoul = { role: 'burst', gain: ns.plungeGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
+      else if (a.type === 'burst' && !a.specialBurst) a.nightsoul = { role: 'burst', gain: ns.plungeGain, max: ns.max, blessingSeconds: ns.blessingSeconds };
     }
   }
 

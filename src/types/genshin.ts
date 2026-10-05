@@ -79,12 +79,26 @@ export interface ActionDefinition {
   nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
+  /** gcsim が、このアクションを実装していない（実行すると「action ... not implemented」のエラーになる。ディシアの重撃など）。ボタンは残すが、警告を出し、gcsim の設定文には入れない */
+  gcsimUnsupported?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */
   specialBurst?: boolean;
   /** CT が、元素共鳴・CT 短縮などの影響を受けない（フリンズの嵐槍: 「基本クールタイム 6 秒。他の効果の影響を受けない」） */
   ignoresCdScale?: boolean;
   /** 受付の間に使った特殊スキルが開く、特殊爆発などの受付（フリンズ: 嵐槍の後 6 秒） */
   recastOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string };
+  /**
+   * 落下攻撃が、特殊爆発の受付を開く（ヴァレサのマキシマムドライブ。落下攻撃の開始時に、命ノ星座が minConstellation 以上、または猛烈パッション中のとき）。
+   * closedBySkill: スキルを使うと、受付が閉じる
+   */
+  plungeOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string; minConstellation: number; closedBySkill: boolean };
+  /**
+   * 特殊爆発の CT（秒）。受付の中は inWindow（ヴァレサ 1 秒・フリンズ 0）、外では通常の爆発になるので outOfWindow（通常の爆発の CT）。
+   * checkInWindow: 受付の中でも、爆発の CT が明けていることを求める（gcsim のヴァレサは、通常の爆発の CT が明けていないと、大火山おろしを使えない）
+   */
+  specialBurstCooldown?: { inWindow: number; outOfWindow: number; checkInWindow: boolean };
+  /** 特殊爆発を、受付の外で使ったときの警告に出す、必要な条件の説明 */
+  specialBurstHint?: string;
   /**
    * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する
    * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ
@@ -98,6 +112,8 @@ export interface ActionDefinition {
     windowOnly?: boolean;
     /** 受付のバーの名前（windowOnly のとき） */
     windowLabel?: string;
+    /** スキルを使うと、受付が閉じる（ヴァレサのマキシマムドライブ） */
+    closedBySkill?: boolean;
     /** 受付の間に特殊スキルを 1 回使うと、受付が閉じる（オデット） */
     singleUse?: boolean;
     /** 受付が始まるまでの、スキルを使ってからの秒数（ファルカ: 命中の 1 フレーム前 = 39f） */

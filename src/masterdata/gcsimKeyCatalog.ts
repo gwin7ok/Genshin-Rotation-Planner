@@ -259,7 +259,7 @@ function collectNumberConsts(files: Record<string, string>): Map<string, ParsedG
   }
   const result = new Map<string, ParsedGoFile>();
   for (const [pkg, consts] of merged) {
-    result.set(pkg, { consts, intArrays: new Map(), tables: [], attackFuncTables: [], genderIndexPositions: {}, unresolved: [] });
+    result.set(pkg, { consts, intArrays: new Map(), tables: [], attackFuncTables: [], genderIndexPositions: {}, unresolved: [], methods: [] });
   }
   return result;
 }

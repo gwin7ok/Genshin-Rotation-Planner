@@ -1,6 +1,7 @@
 import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
+import { NightsoulTracker } from './nightsoulTracker';
 import { actionDelayOf } from './actionDelay';
 import { ACTION_STATE_RULES } from '../data/actionStateRules';
 import { 
@@ -109,6 +110,8 @@ export function calculateRotation(
   const passiveSpans: PassiveSpan[] = [];
   // アクション状態の窓（キャラごと）
   const stateWindows = new Map<string, { end: number; usesLeft?: number; used: number }>();
+  // 夜魂値で無料のスキルが出るキャラ（ヴァレサ）の状態（1 周目の線形の計算。マキシマムドライブの受付を開く条件に使う）
+  const nightsoulTrackers = new Map<string, NightsoulTracker>();
 
   // CT を持つ発動（スキル・爆発・発動バフ）。CT違反の判定はすべて計算後にまとめて行う（checkCooldownViolations）
   const ctEvents: CooldownEvent[] = [];
@@ -169,7 +172,7 @@ export function calculateRotation(
     let specialWindowStart = 0;
     // スキルの CT が、マスターの値から何倍に変わっているか（gcsim の書き戻し）。特殊スキルの CT にも同じ割合を掛ける
     let specialCdScale = cdResonanceScale;
-    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string; startTime: number; effectiveEnd?: number; used?: boolean; usedAt?: number } | undefined;
+    let specialWindow: { until: number; count: number; pool: NonNullable<ActionDefinition['startsSpecialPool']>; actionId: string; startTime: number; effectiveEnd?: number; used?: boolean; usedAt?: number; closedBy?: string } | undefined;
     // この出場の受付（疾風怒濤）の一覧。出場の終わりで、有効な終わり（effectiveEnd）を決める
     const stintWindows: NonNullable<typeof specialWindow>[] = [];
     // 特殊爆発の受付（フリンズ: 嵐槍の後 6 秒）。特殊スキルの受付（状態の 10 秒）と同時に存在するので、別に持つ。出場ごと（交代で消える）
@@ -467,6 +470,30 @@ export function calculateRotation(
         });
       }
 
+      // ヴァレサ: 夜魂値（猛烈パッション）と、マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中なら、短い間だけ特殊爆発の受付が開く）
+      if (actionDef?.nightsoul) {
+        const ns = actionDef.nightsoul;
+        const tracker = nightsoulTrackers.get(char.id) ?? new NightsoulTracker();
+        nightsoulTrackers.set(char.id, tracker);
+        if (ns.role === 'skill') {
+          tracker.useSkill(actionStartTime, ns.gain, ns.max);
+          // スキルを使うと、マキシマムドライブは終わる
+          if (burstWindow?.pool.closedBySkill) { burstWindow.used = true; burstWindow.usedAt = actionStartTime; burstWindow.closedBy = 'スキル'; }
+        } else if (ns.role === 'plunge') {
+          const po = actionDef.plungeOpensWindow;
+          if (po && (CharacterModel.fromConfig(char).constellation >= po.minConstellation || tracker.inBlessing(actionStartTime))) {
+            burstWindow = {
+              until: Number((actionStartTime + po.windowSeconds).toFixed(3)), count: 0, actionId: act.id, startTime: actionStartTime,
+              pool: { cooldown: 0, charges: 1, windowOnly: true, singleUse: true, windowSeconds: po.windowSeconds, windowLabel: po.windowLabel, closedBySkill: po.closedBySkill },
+            };
+            addWindowOnlyBar(burstWindow, po.openedBy, 'burst');
+          }
+          tracker.plunge(actionStartTime, ns.gain, ns.max, ns.blessingSeconds);
+        } else {
+          tracker.burst(actionStartTime, ns.gain, ns.max, ns.blessingSeconds);
+        }
+      }
+
       // 受付の間に使った特殊スキルが、特殊爆発の受付を開く（フリンズ: 嵐槍の後 6 秒。使うたびに受付が新しくなる）
       if (actionDef?.recastOpensWindow && actionDef.cooldownPool === 'special' && windowOpenAt(actionStartTime)) {
         const w = actionDef.recastOpensWindow;
@@ -487,14 +514,20 @@ export function calculateRotation(
       }
 
       if (act.type === 'burst') {
-        const isTriggeringBurst = actionDef?.startsBurstCooldown !== false;
+        // 特殊爆発（フリンズ・ヴァレサ）: 受付の中は、短い CT（ヴァレサ 1 秒・フリンズ なし）。外では通常の爆発になり、通常の CT が始まる
+        const sbc = actionDef?.specialBurst ? actionDef.specialBurstCooldown : undefined;
+        const sbInWindow = !!sbc && windowIsOpen(actionStartTime, burstWindow);
+        const burstCooldown = sbc ? (writtenCooldown ?? (sbInWindow ? sbc.inWindow : sbc.outOfWindow)) : cooldown;
+        const isTriggeringBurst = sbc
+          ? (sbInWindow ? sbc.inWindow > 0 || sbc.checkInWindow : sbc.outOfWindow > 0)
+          : actionDef?.startsBurstCooldown !== false;
         if (isTriggeringBurst) {
           ctEvents.push({
             key: `${char.id}:burst`,
             time: actionStartTime,
             ctOffset,
-            cooldown,
-            checked: true,
+            cooldown: burstCooldown,
+            checked: sbc && sbInWindow ? sbc.checkInWindow : true,
             stintIndex: sIdx,
             name: act.name,
             onViolation: (remaining, cycle) => {
@@ -505,14 +538,14 @@ export function calculateRotation(
           });
         }
 
-        if (isTriggeringBurst && cooldown > 0) {
+        if (isTriggeringBurst && burstCooldown > 0) {
           const burstCDSpan: CooldownSpan = {
             id: `cd_burst_${char.id}_${actionStartTime}`,
             characterId: char.id,
             type: 'burst',
             startTime: ctStartTime,
-            endTime: Number((ctStartTime + cooldown).toFixed(3)),
-            duration: cooldown,
+            endTime: Number((ctStartTime + burstCooldown).toFixed(3)),
+            duration: burstCooldown,
             actionInstanceId: act.id,
           };
           burstCooldowns.push(burstCDSpan);
@@ -528,8 +561,8 @@ export function calculateRotation(
           const windowClosed = !!winFor?.used;
           const kindName = isSpecialBurst ? '特殊爆発' : '特殊スキル';
           const normalName = isSpecialBurst ? '通常の爆発（CT が始まる）' : '通常のスキル';
-          const noWindowHint = isSpecialBurst ? '同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません' : '同じ出場の中でスキルを使った後でないと使えません';
-          const windowMessage = windowClosed ? `${kindName}の受付は、すでに${kindName}を使って閉じています（受付の間に 1 回だけ使えます）。gcsim では${normalName}として扱われます` : winFor
+          const noWindowHint = isSpecialBurst ? (actionDef?.specialBurstHint ?? '受付の中でないと使えません') : '同じ出場の中でスキルを使った後でないと使えません';
+          const windowMessage = windowClosed && winFor?.closedBy ? `${kindName}の受付は、${winFor.closedBy}を使ったため閉じています。gcsim では${normalName}として扱われます` : windowClosed ? `${kindName}の受付は、すでに${kindName}を使って閉じています（受付の間に 1 回だけ使えます）。gcsim では${normalName}として扱われます` : winFor
             ? `${kindName}の受付時間外: 受付（${(winFor.until - winFor.startTime).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - winFor.until).toFixed(1)} 秒過ぎています。gcsim では${normalName}として扱われます`
             : `${kindName}の受付時間外: ${noWindowHint}。gcsim では${normalName}として扱われます`;
           computedAction.specialWindowWarning = windowMessage;
@@ -770,6 +803,27 @@ export function calculateRotation(
   }
 
   const totalDuration = Number(currentTime.toFixed(2));
+  // gcsim が実装していないアクション（大剣の重撃など）: 実行すると「action ... not implemented」のエラーになる（警告）
+  for (const st of calculatedStints) {
+    const stChar = characters.find(c => c.id === st.characterId);
+    if (!stChar) continue;
+    for (const a of st.actions) {
+      if (!stChar.availableActions.find(d => d.id === a.actionTypeId)?.gcsimUnsupported) continue;
+      const message = 'gcsim が未実装のアクションです。gcsim で実行するとエラーになり、設定文には入れられません';
+      a.specialWindowWarning = message;
+      validationIssues.push({
+        id: `gcsim_unsupported_${a.id}`,
+        severity: 'warning',
+        characterId: st.characterId,
+        stintId: st.id,
+        actionId: a.id,
+        time: a.startTime ?? 0,
+        title: `${stChar.name}: gcsim 未実装のアクション`,
+        message: `「${a.name}」: ${message}`,
+      });
+    }
+  }
+
   // 落下攻撃が、gcsim で実行できる前提（直前のアクション・閑雲の爆発バフなど。data/plungeRules.ts）を満たしているか。満たさないと、gcsim は実行エラーになる（警告）
   for (const w of checkPlungePrerequisites(characters, calculatedStints)) {
     const action = calculatedStints.find(s => s.id === w.stintId)?.actions.find(a => a.id === w.actionId);
@@ -1014,7 +1068,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   const queues = new Map<string, CooldownQueue<QueueTag>>();
   // 八重神子の殺生桜（枠のキー → 消える時刻の一覧）、ヴァレサの夜魂値（キャラ ID → 状態）
   const totems = new Map<string, number[]>();
-  const nightsouls = new Map<string, { points: number; blessingEnd: number; freeAvail: boolean }>();
+  const nightsouls = new Map<string, NightsoulTracker>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
   const cooldownEnd = new Map<string, number[]>();
@@ -1043,23 +1097,12 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     let queue = queues.get(item.event.key);
     queue?.advance(item.time);
     const charId = ev.key.split(':')[0];
-    // 夜魂値（ヴァレサ）: 落下攻撃・爆発。猛烈パッション中の落下攻撃は夜魂を使い切って終わる。満タンなら猛烈パッションに入り、次のスキルが無料になる
+    // 夜魂値（ヴァレサ）: 落下攻撃・爆発（nightsoulTracker.ts）。猛烈パッション中の落下攻撃は夜魂を使い切って終わる。満タンなら猛烈パッションに入り、次のスキルが無料になる
     if (ev.nightsoul && ev.nightsoul.role !== 'skill') {
-      const st = nightsouls.get(charId) ?? { points: 0, blessingEnd: -Infinity, freeAvail: false };
-      nightsouls.set(charId, st);
-      const inBlessing = item.time < st.blessingEnd;
-      if (ev.nightsoul.role === 'burst') st.points = ev.nightsoul.max;
-      if (inBlessing && ev.nightsoul.role === 'plunge') {
-        st.points = 0;
-        st.blessingEnd = -Infinity;
-        st.freeAvail = false;
-      } else if (!inBlessing) {
-        st.points = Math.min(ev.nightsoul.max, st.points + ev.nightsoul.gain);
-        if (st.points >= ev.nightsoul.max) {
-          st.blessingEnd = item.time + ev.nightsoul.blessingSeconds;
-          st.freeAvail = true;
-        }
-      }
+      const tracker = nightsouls.get(charId) ?? new NightsoulTracker();
+      nightsouls.set(charId, tracker);
+      if (ev.nightsoul.role === 'plunge') tracker.plunge(item.time, ev.nightsoul.gain, ev.nightsoul.max, ev.nightsoul.blessingSeconds);
+      else tracker.burst(item.time, ev.nightsoul.gain, ev.nightsoul.max, ev.nightsoul.blessingSeconds);
       continue;
     }
     // 八重神子の爆発: 場の殺生桜 1 つにつき、スキルの先頭の CT を解放する
@@ -1079,12 +1122,9 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     }
     // ヴァレサのスキル: 夜魂 +20。猛烈パッション中の最初のスキルは無料（回数も CT も使わない）
     if (ev.nightsoul?.role === 'skill') {
-      const st = nightsouls.get(charId) ?? { points: 0, blessingEnd: -Infinity, freeAvail: false };
-      nightsouls.set(charId, st);
-      const free = st.freeAvail && item.time < st.blessingEnd;
-      if (free) st.freeAvail = false;
-      st.points = Math.min(ev.nightsoul.max, st.points + ev.nightsoul.gain);
-      if (free) continue;
+      const tracker = nightsouls.get(charId) ?? new NightsoulTracker();
+      nightsouls.set(charId, tracker);
+      if (tracker.useSkill(item.time, ev.nightsoul.gain, ev.nightsoul.max)) continue;
     }
     if (ev.reduceBy && ev.reduceBy > 0) {
       if (queue) {

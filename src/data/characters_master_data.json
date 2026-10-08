@@ -6241,6 +6241,53 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.533,
+        "mode": {
+          "label": "連撃の受付",
+          "description": "連撃の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 0,
+          "durationFrames": 240,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 38,
+                "hitmark": 28,
+                "cancels": {
+                  "skill": 37,
+                  "burst": 37,
+                  "dash": 28,
+                  "jump": 31,
+                  "swap": 36
+                },
+                "source": "skill.go:skillFrames[1]"
+              },
+              {
+                "total": 66,
+                "hitmark": 46,
+                "cancels": {
+                  "attack": 58,
+                  "skill": 57,
+                  "burst": 57,
+                  "dash": 47,
+                  "jump": 48
+                },
+                "source": "skill.go:skillFrames[2]"
+              }
+            ],
+            "maxUses": 2,
+            "refreshFrames": [
+              240,
+              240
+            ],
+            "endsOnLast": true
+          },
+          "source": "diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -13006,6 +13053,36 @@
           "cooldownStart": "skill.go:20"
         },
         "defaultDuration": 0.617,
+        "mode": {
+          "label": "雷楔",
+          "description": "雷楔（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 0,
+          "durationFrames": 320,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 43,
+                "hitmark": 16,
+                "cancels": {
+                  "attack": 42,
+                  "dash": 16,
+                  "jump": 16,
+                  "swap": 42
+                },
+                "source": "skill.go:skillRecastFrames"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true
+          },
+          "source": "keqing/skill.go: Status.Add(stilettoKey, 5*60+20)。雷楔がある間の E は再発動"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
@@ -37844,6 +37921,24 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.817,
+        "mode": {
+          "label": "再発動の受付",
+          "description": "再発動の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 0,
+          "durationFrames": 360,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [],
+            "maxUses": 1,
+            "endsOnLast": true
+          },
+          "source": "durin/skill.go: skillWindowDur = 6*60"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -40182,6 +40277,38 @@
           "cooldownStart": "skill.go:25"
         },
         "defaultDuration": 0.983,
+        "mode": {
+          "label": "変換の受付",
+          "description": "変換の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 0,
+          "durationFrames": 364,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 82,
+                "cancels": {
+                  "attack": 65,
+                  "charge": 76,
+                  "skill": 69,
+                  "burst": 67,
+                  "dash": 67,
+                  "jump": 66,
+                  "swap": 65
+                },
+                "source": "skill.go:skillConvertFrames"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true
+          },
+          "source": "prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.417

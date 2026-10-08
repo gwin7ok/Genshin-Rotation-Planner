@@ -392,6 +392,47 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     windowState: true,
     repress: { frames: [{ total: 68, cancels: { attack: 55, charge: 64, skill: 56, burst: 55, dash: 56, jump: 55, walk: 65 }, source: 'skill.go:specialSkillFrames' }] },
   })],
+  // 刻晴・プルーネ・ドゥリン・ディルック: 窓の規則から移した受付型（2026-10-08）。4 人とも、交代しても続く（ゲームでの確認: ユーザー。gcsim も、交代して戻った後の E が再発動）
+  // 刻晴: 雷楔（5 秒 + 20f）の間の E が再発動（雷楔を消費）
+  '10000042-electro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('雷楔', 0, 5 * 60 + 20, 'persists', {
+      frames: [{ total: 43, hitmark: 16, cancels: { attack: 42, dash: 16, jump: 16, swap: 42 }, source: 'skill.go:skillRecastFrames' }],
+      maxUses: 1,
+      endsOnLast: true,
+    }, 'keqing/skill.go: Status.Add(stilettoKey, 5*60+20)。雷楔がある間の E は再発動'),
+  }],
+  // プルーネ: 再発動の受付（364f）の間の E が変換（受付を消費）。実際の受付は拡散で開く（必ず開く前提）
+  '10000132-anemo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('変換の受付', 0, 364, 'persists', {
+      frames: [{ total: 82, cancels: { attack: 65, charge: 76, skill: 69, burst: 67, dash: 67, jump: 66, swap: 65 }, source: 'skill.go:skillConvertFrames' }],
+      maxUses: 1,
+      endsOnLast: true,
+    }, 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く'),
+  }],
+  // ドゥリン: スキルの受付（6 秒）の間の E が白／黒の再発動（受付を消費。どちらになるかでフレームが違い、未確認のため、E の通常のフレーム）
+  '10000123-pyro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', { frames: [], maxUses: 1, endsOnLast: true }, 'durin/skill.go: skillWindowDur = 6*60'),
+  }],
+  // ディルック: E の後 4 秒の間の E が 2・3 段目（E のたびに 4 秒に更新。3 段目で閉じる）。CT は 1 段目で始まる（10 秒）。ヒットストップによる延長は含めない
+  '10000016-pyro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('連撃の受付', 0, 4 * 60, 'persists', {
+      frames: [
+        { total: 38, hitmark: 28, cancels: { skill: 37, burst: 37, dash: 28, jump: 31, swap: 36 }, source: 'skill.go:skillFrames[1]' },
+        { total: 66, hitmark: 46, cancels: { attack: 58, skill: 57, burst: 57, dash: 47, jump: 48 }, source: 'skill.go:skillFrames[2]' },
+      ],
+      maxUses: 2,
+      refreshFrames: [4 * 60, 4 * 60],
+      endsOnLast: true,
+    }, 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）'),
+  }],
   // 千織（一回押しの E）: 傘の一振りの後（26f）から 78f の間の E が再発動（次のキャラへ強制交代。交代の遅れは 1f）。長押し E は対象外。窓の規則から移した
   '10000094-geo': [{
     action: 'e',

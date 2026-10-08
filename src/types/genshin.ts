@@ -69,6 +69,33 @@ export interface ActionMode {
   enders: ModeEnder[];
   /** 既定で、出場をモードの終わりまで延ばすか（出場ごとの切り替え Stint.holdMode が未指定のとき） */
   holdByDefault: boolean;
+  /**
+   * 維持の延長を出さない（出場の切り替えも出さない）。放浪者: gcsim は `wait` だけでは時間切れの処理をしない（次のアクションの実行時に終わる）ため、
+   * 延長を `wait` で出すと交代できなくなる
+   */
+  noHold?: boolean;
+  /**
+   * モードの間に、モードを開いたアクションをもう一度使うと、別の動作になる（終わらせない）。CT は始めない。
+   * frames = 何回目か（1 回目から順。足りなければ最後を繰り返す）のフレーム、maxUses = 使える回数（無ければ制限なし。使い切った後は、新しいモードを開く）、
+   * refreshFrames = 使うたびに、モードの終わりを「その時刻 + この値」に更新する（閑雲の跳躍）
+   */
+  repress?: { frames: ActionFrames[]; maxUses?: number; refreshFrames?: number[] };
+  /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
+  normalFrames?: ActionFrames[];
+  /** モードの間の元素爆発のフレーム */
+  burstFrames?: ActionFrames;
+  /**
+   * モードを開いたアクションの CT を、モードの終わりから始める（タルタリヤ・放浪者）。モードを開いたときには、entry の短い CT だけを始める。
+   * delayFrames = モードの終わりから CT が始まるまで（終わり方ごと。交代は、交代の動作〔交代遅延〕の後から）。
+   * byStay = CT の長さを、滞在時間（モードを開いたアクションの開始〜モードの終わり）で決める表（上から順に、below 秒未満なら seconds〔plusStay なら + 滞在時間〕。below が無い行は残り全部）。無ければ、アクションの CT。
+   * consScale = 命ノ星座が minConstellation 以上なら、長さに scale を掛ける
+   */
+  cooldownAtEnd?: {
+    delayFrames: { ender: number; swap: number; timeout: number };
+    entry?: { seconds: number; delayFrames: number };
+    byStay?: { below?: number; seconds: number; plusStay?: boolean }[];
+    consScale?: { minConstellation: number; scale: number };
+  };
   /** 根拠（gcsim ソース） */
   source: string;
 }
@@ -78,7 +105,10 @@ export interface ModeEnder {
   by: 'self' | ActionType;
   /** 終わらせる動作のフレーム（無ければ、そのアクションの通常のフレーム） */
   frames?: ActionFrames;
-  /** そのアクションでの CT の扱い: none = CT を始めない（効果バーも出さない）／start = ここで CT を始める */
+  /**
+   * そのアクションでの CT の扱い。どちらも、そのアクション自身の CT は始めない（効果バーも出さない）。
+   * none = CT と関係しない（夢見月瑞希の解除。CT 中でも使える）／start = ここで、モードを開いたアクションの CT が始まる（cooldownAtEnd。タルタリヤ・放浪者）。CT 中なら使えない（違反の判定をする）
+   */
   cooldown: 'none' | 'start';
 }
 

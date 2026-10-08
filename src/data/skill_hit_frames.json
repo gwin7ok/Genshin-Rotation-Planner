@@ -1,0 +1,1557 @@
+{
+ "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+ "generatedAt": "2026-10-08T16:46:49.030Z",
+ "maxFrames": 2400,
+ "entries": {
+  "10000002-cryo_e": {
+   "char": "神里綾華",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    33
+   ]
+  },
+  "10000003-anemo_e": {
+   "char": "ジン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21
+   ]
+  },
+  "10000005-anemo_e": {
+   "char": "空(風)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    34
+   ]
+  },
+  "10000005-anemo_e_hold": {
+   "char": "空(風)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    116
+   ]
+  },
+  "10000005-cryo_e": {
+   "char": "空(氷)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    19,
+    187,
+    200,
+    363,
+    376,
+    539,
+    552,
+    715,
+    728
+   ]
+  },
+  "10000005-dendro_e": {
+   "char": "空(草)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    28
+   ]
+  },
+  "10000005-electro_e": {
+   "char": "空(雷)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21
+   ]
+  },
+  "10000005-geo_e": {
+   "char": "空(岩)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    62
+   ]
+  },
+  "10000005-hydro_e": {
+   "char": "空(水)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25,
+    70
+   ]
+  },
+  "10000005-hydro_e_shorthold0ticks": {
+   "char": "空(水)",
+   "command": "skill[hold=1,hold_ticks=0]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000005-hydro_e_shorthold": {
+   "char": "空(水)",
+   "command": "skill[hold=1,hold_ticks=1]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000005-hydro_e_hold": {
+   "char": "空(水)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000005-pyro_e": {
+   "char": "空(炎)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24,
+    90,
+    156,
+    222,
+    288,
+    354
+   ]
+  },
+  "10000005-pyro_e_hold": {
+   "char": "空(炎)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    50,
+    62
+   ]
+  },
+  "10000006-electro_e": {
+   "char": "リサ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    22
+   ]
+  },
+  "10000006-electro_e_hold": {
+   "char": "リサ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    117
+   ]
+  },
+  "10000007-anemo_e": {
+   "char": "蛍(風)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    34
+   ]
+  },
+  "10000007-anemo_e_hold": {
+   "char": "蛍(風)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    116
+   ]
+  },
+  "10000007-cryo_e": {
+   "char": "蛍(氷)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    19,
+    187,
+    200,
+    363,
+    376,
+    539,
+    552,
+    715,
+    728
+   ]
+  },
+  "10000007-dendro_e": {
+   "char": "蛍(草)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    28
+   ]
+  },
+  "10000007-electro_e": {
+   "char": "蛍(雷)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21
+   ]
+  },
+  "10000007-geo_e": {
+   "char": "蛍(岩)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    62
+   ]
+  },
+  "10000007-hydro_e": {
+   "char": "蛍(水)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    26,
+    70
+   ]
+  },
+  "10000007-hydro_e_shorthold0ticks": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1,hold_ticks=0]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000007-hydro_e_shorthold": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1,hold_ticks=1]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000007-hydro_e_hold": {
+   "char": "蛍(水)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    372,
+    418
+   ]
+  },
+  "10000007-pyro_e": {
+   "char": "蛍(炎)",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24,
+    90,
+    156,
+    222,
+    288,
+    354
+   ]
+  },
+  "10000007-pyro_e_hold": {
+   "char": "蛍(炎)",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    50,
+    62
+   ]
+  },
+  "10000014-hydro_e": {
+   "char": "バーバラ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    42,
+    78
+   ]
+  },
+  "10000015-cryo_e": {
+   "char": "ガイア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    28
+   ]
+  },
+  "10000016-pyro_e": {
+   "char": "ディルック",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24
+   ]
+  },
+  "10000020-electro_e": {
+   "char": "レザー",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    32
+   ]
+  },
+  "10000020-electro_e_hold": {
+   "char": "レザー",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    55
+   ]
+  },
+  "10000021-pyro_e": {
+   "char": "アンバー",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    530
+   ]
+  },
+  "10000022-anemo_e": {
+   "char": "ウェンティ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    51
+   ]
+  },
+  "10000022-anemo_e_hold": {
+   "char": "ウェンティ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    74
+   ]
+  },
+  "10000023-pyro_e": {
+   "char": "香菱",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    126,
+    226,
+    326,
+    426
+   ]
+  },
+  "10000024-electro_e": {
+   "char": "北斗",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    23
+   ]
+  },
+  "10000025-hydro_e": {
+   "char": "行秋",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    12,
+    36
+   ]
+  },
+  "10000026-anemo_e": {
+   "char": "魈",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    4
+   ]
+  },
+  "10000027-geo_e": {
+   "char": "凝光",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    17
+   ]
+  },
+  "10000029-pyro_e": {
+   "char": "クレー",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    71,
+    240
+   ]
+  },
+  "10000030-geo_e": {
+   "char": "鍾離",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24,
+    144,
+    264,
+    384,
+    504,
+    624,
+    744,
+    864,
+    984,
+    1104,
+    1224,
+    1344,
+    1464,
+    1584,
+    1704,
+    1824
+   ]
+  },
+  "10000030-geo_e_hold": {
+   "char": "鍾離",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    48,
+    168,
+    288,
+    408,
+    528,
+    648,
+    768,
+    888,
+    1008,
+    1128,
+    1248,
+    1368,
+    1488,
+    1608,
+    1728,
+    1848
+   ]
+  },
+  "10000031-electro_e": {
+   "char": "フィッシュル",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    38,
+    92,
+    151,
+    210,
+    269,
+    328,
+    387,
+    446,
+    505,
+    564,
+    623
+   ]
+  },
+  "10000032-pyro_e": {
+   "char": "ベネット",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000032-pyro_e_hold": {
+   "char": "ベネット",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    45,
+    66
+   ]
+  },
+  "10000033-hydro_e": {
+   "char": "タルタリヤ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000034-geo_e": {
+   "char": "ノエル",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    14
+   ]
+  },
+  "10000035-cryo_e": {
+   "char": "七七",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    32,
+    33,
+    96,
+    231,
+    232,
+    291,
+    426,
+    427,
+    486,
+    621,
+    622,
+    681,
+    816,
+    817,
+    876
+   ]
+  },
+  "10000036-cryo_e": {
+   "char": "重雲",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    36,
+    655
+   ]
+  },
+  "10000037-cryo_e": {
+   "char": "甘雨",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    13,
+    373
+   ]
+  },
+  "10000038-geo_e": {
+   "char": "アルベド",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25
+   ]
+  },
+  "10000039-cryo_e": {
+   "char": "ディオナ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    10,
+    11
+   ]
+  },
+  "10000039-cryo_e_hold": {
+   "char": "ディオナ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    34,
+    35,
+    36,
+    37,
+    38
+   ]
+  },
+  "10000041-hydro_e": {
+   "char": "モナ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    86,
+    145,
+    204,
+    263,
+    329
+   ]
+  },
+  "10000042-electro_e": {
+   "char": "刻晴",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25
+   ]
+  },
+  "10000043-anemo_e": {
+   "char": "スクロース",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    42
+   ]
+  },
+  "10000044-pyro_e": {
+   "char": "辛炎",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    15
+   ]
+  },
+  "10000045-cryo_e": {
+   "char": "ロサリア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24,
+    42
+   ]
+  },
+  "10000046-pyro_e": {
+   "char": "胡桃",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000047-anemo_e": {
+   "char": "楓原万葉",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    10
+   ]
+  },
+  "10000047-anemo_e_hold": {
+   "char": "楓原万葉",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    33
+   ]
+  },
+  "10000048-pyro_e": {
+   "char": "煙緋",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    32
+   ]
+  },
+  "10000049-pyro_e": {
+   "char": "宵宮",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000050-pyro_e": {
+   "char": "トーマ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    11
+   ]
+  },
+  "10000051-cryo_e": {
+   "char": "エウルア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20
+   ]
+  },
+  "10000051-cryo_e_hold": {
+   "char": "エウルア",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    49
+   ]
+  },
+  "10000052-electro_e": {
+   "char": "雷電将軍",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    51
+   ]
+  },
+  "10000053-anemo_e": {
+   "char": "早柚",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25
+   ]
+  },
+  "10000053-anemo_e_hold": {
+   "char": "早柚",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    68
+   ]
+  },
+  "10000053-anemo_e_shorthold": {
+   "char": "早柚",
+   "command": "skill[short_hold=1]",
+   "status": "ok",
+   "hits": [
+    48
+   ]
+  },
+  "10000054-hydro_e": {
+   "char": "珊瑚宮心海",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    24,
+    150,
+    270,
+    390,
+    510,
+    630,
+    750
+   ]
+  },
+  "10000055-geo_e": {
+   "char": "ゴロー",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    34
+   ]
+  },
+  "10000056-electro_e": {
+   "char": "九条裟羅",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000057-geo_e": {
+   "char": "荒瀧一斗",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    18
+   ]
+  },
+  "10000058-electro_e": {
+   "char": "八重神子",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    121,
+    297,
+    473,
+    649,
+    825,
+    1001,
+    1177,
+    1353
+   ]
+  },
+  "10000059-anemo_e": {
+   "char": "鹿野院平蔵",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20
+   ]
+  },
+  "10000060-hydro_e": {
+   "char": "夜蘭",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    36
+   ]
+  },
+  "10000061-dendro_e": {
+   "char": "綺良々",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    14
+   ]
+  },
+  "10000061-dendro_e_hold": {
+   "char": "綺良々",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    37
+   ]
+  },
+  "10000061-dendro_e_shorthold": {
+   "char": "綺良々",
+   "command": "skill[short_hold=1]",
+   "status": "ok",
+   "hits": [
+    48
+   ]
+  },
+  "10000062-cryo_e": {
+   "char": "アーロイ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25,
+    31,
+    37
+   ]
+  },
+  "10000063-cryo_e": {
+   "char": "申鶴",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    4
+   ]
+  },
+  "10000063-cryo_e_hold": {
+   "char": "申鶴",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    33
+   ]
+  },
+  "10000064-geo_e": {
+   "char": "雲菫",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    13
+   ]
+  },
+  "10000065-electro_e": {
+   "char": "久岐忍",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    11,
+    115,
+    205,
+    295,
+    385,
+    475,
+    565,
+    655,
+    745
+   ]
+  },
+  "10000066-hydro_e": {
+   "char": "神里綾人",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    35
+   ]
+  },
+  "10000067-dendro_e": {
+   "char": "コレイ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    34,
+    138
+   ]
+  },
+  "10000068-electro_e": {
+   "char": "ドリー",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    26,
+    72,
+    85
+   ]
+  },
+  "10000069-dendro_e": {
+   "char": "ティナリ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20
+   ]
+  },
+  "10000070-hydro_e": {
+   "char": "ニィロウ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000071-electro_e": {
+   "char": "セノ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21
+   ]
+  },
+  "10000072-hydro_e": {
+   "char": "キャンディス",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000072-hydro_e_hold": {
+   "char": "キャンディス",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    91
+   ]
+  },
+  "10000073-dendro_e": {
+   "char": "ナヒーダ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    13
+   ]
+  },
+  "10000073-dendro_e_hold": {
+   "char": "ナヒーダ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    33
+   ]
+  },
+  "10000074-cryo_e": {
+   "char": "レイラ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    32,
+    450,
+    475,
+    499,
+    524
+   ]
+  },
+  "10000075-anemo_e": {
+   "char": "放浪者",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    2
+   ]
+  },
+  "10000076-anemo_e": {
+   "char": "ファルザン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    14
+   ]
+  },
+  "10000077-dendro_e": {
+   "char": "ヨォーヨ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    105,
+    165,
+    225,
+    285,
+    345,
+    405,
+    465,
+    525,
+    585,
+    645
+   ]
+  },
+  "10000078-dendro_e": {
+   "char": "アルハイゼン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    19
+   ]
+  },
+  "10000078-dendro_e_hold": {
+   "char": "アルハイゼン",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    28
+   ]
+  },
+  "10000079-pyro_e": {
+   "char": "ディシア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20
+   ]
+  },
+  "10000080-cryo_e": {
+   "char": "ミカ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    18
+   ]
+  },
+  "10000080-cryo_e_hold": {
+   "char": "ミカ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    15
+   ]
+  },
+  "10000081-dendro_e": {
+   "char": "カーヴェ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    35
+   ]
+  },
+  "10000082-dendro_e": {
+   "char": "白朮",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    13,
+    61,
+    109
+   ]
+  },
+  "10000083-anemo_e": {
+   "char": "リネット",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    28,
+    58
+   ]
+  },
+  "10000083-anemo_e_hold": {
+   "char": "リネット",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    51,
+    79
+   ]
+  },
+  "10000084-pyro_e": {
+   "char": "リネ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    18
+   ]
+  },
+  "10000085-cryo_e": {
+   "char": "フレミネ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    29,
+    62
+   ]
+  },
+  "10000086-cryo_e": {
+   "char": "リオセスリ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000087-hydro_e": {
+   "char": "ヌヴィレット",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    23,
+    60
+   ]
+  },
+  "10000088-cryo_e": {
+   "char": "シャルロット",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    31,
+    121,
+    211,
+    301,
+    391
+   ]
+  },
+  "10000088-cryo_e_hold": {
+   "char": "シャルロット",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    112,
+    202,
+    292,
+    382,
+    472,
+    562,
+    652,
+    742,
+    832
+   ]
+  },
+  "10000089-hydro_e": {
+   "char": "フリーナ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    18,
+    110,
+    131,
+    137,
+    209,
+    307,
+    336,
+    405,
+    445,
+    498,
+    540,
+    595,
+    693,
+    744,
+    760,
+    792,
+    891,
+    936,
+    985,
+    1072,
+    1087,
+    1139,
+    1184,
+    1278,
+    1347,
+    1378,
+    1384,
+    1477,
+    1546,
+    1576,
+    1669,
+    1700,
+    1749
+   ]
+  },
+  "10000090-pyro_e": {
+   "char": "シュヴルーズ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    25,
+    59
+   ]
+  },
+  "10000090-pyro_e_hold": {
+   "char": "シュヴルーズ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    19,
+    55
+   ]
+  },
+  "10000091-geo_e": {
+   "char": "ナヴィア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20,
+    75
+   ]
+  },
+  "10000092-pyro_e": {
+   "char": "嘉明",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000093-anemo_e": {
+   "char": "閑雲",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    3
+   ]
+  },
+  "10000094-geo_e": {
+   "char": "千織",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21,
+    60,
+    276,
+    492,
+    708,
+    924
+   ]
+  },
+  "10000095-hydro_e": {
+   "char": "シグウィン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    35,
+    75,
+    142,
+    249,
+    356,
+    463
+   ]
+  },
+  "10000096-pyro_e": {
+   "char": "アルレッキーノ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    17,
+    38,
+    338,
+    638
+   ]
+  },
+  "10000097-electro_e": {
+   "char": "セトス",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    13
+   ]
+  },
+  "10000098-electro_e": {
+   "char": "クロリンデ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000099-dendro_e": {
+   "char": "エミリエ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    37,
+    62,
+    111,
+    201,
+    291,
+    381,
+    471,
+    561,
+    651,
+    741,
+    831,
+    921,
+    1011,
+    1101,
+    1191,
+    1281
+   ]
+  },
+  "10000101-dendro_e": {
+   "char": "キィニチ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000102-hydro_e": {
+   "char": "ムアラニ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000103-geo_e": {
+   "char": "シロネン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    6
+   ]
+  },
+  "10000104-anemo_e": {
+   "char": "チャスカ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    3
+   ]
+  },
+  "10000105-electro_e": {
+   "char": "オロルン",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    41
+   ]
+  },
+  "10000106-pyro_e": {
+   "char": "マーヴィカ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16,
+    120,
+    240,
+    360,
+    480,
+    600,
+    720
+   ]
+  },
+  "10000106-pyro_e_hold": {
+   "char": "マーヴィカ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000107-cryo_e": {
+   "char": "シトラリ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    20
+   ]
+  },
+  "10000108-anemo_e": {
+   "char": "藍硯",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000108-anemo_e_hold": {
+   "char": "藍硯",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": []
+  },
+  "10000109-anemo_e": {
+   "char": "夢見月瑞希",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    2,
+    48,
+    93,
+    138,
+    183,
+    228,
+    273,
+    318
+   ]
+  },
+  "10000110-electro_e": {
+   "char": "イアンサ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    9
+   ]
+  },
+  "10000111-electro_e": {
+   "char": "ヴァレサ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    5
+   ]
+  },
+  "10000112-cryo_e": {
+   "char": "エスコフィエ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    23,
+    83,
+    153,
+    212,
+    270,
+    329,
+    387,
+    446,
+    504,
+    563,
+    621,
+    680,
+    738,
+    797,
+    855,
+    914,
+    972,
+    1031,
+    1089,
+    1148,
+    1206,
+    1265,
+    1323
+   ]
+  },
+  "10000112-cryo_e_hold": {
+   "char": "エスコフィエ",
+   "command": "skill[hold=1]",
+   "status": "unprobed",
+   "hits": [],
+   "reason": "ln7: character escoffier: key hold is invalid for action skill"
+  },
+  "10000113-anemo_e": {
+   "char": "イファ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000114-cryo_e": {
+   "char": "スカーク",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000114-cryo_e_hold": {
+   "char": "スカーク",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": []
+  },
+  "10000115-hydro_e": {
+   "char": "ダリア",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    27
+   ]
+  },
+  "10000116-electro_e": {
+   "char": "イネファ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    26,
+    110,
+    229,
+    348,
+    467,
+    586,
+    705,
+    824,
+    943,
+    1062,
+    1181
+   ]
+  },
+  "10000119-dendro_e": {
+   "char": "ラウマ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    16
+   ]
+  },
+  "10000120-electro_e": {
+   "char": "フリンズ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000121-hydro_e": {
+   "char": "アイノ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    15,
+    33
+   ]
+  },
+  "10000123-pyro_e": {
+   "char": "ドゥリン",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000124-anemo_e": {
+   "char": "ヤフォダ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    368
+   ]
+  },
+  "10000125-hydro_e": {
+   "char": "コロンビーナ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    21,
+    138,
+    255,
+    372,
+    489,
+    606,
+    723,
+    840,
+    957,
+    1074,
+    1191,
+    1308,
+    1425
+   ]
+  },
+  "10000127-geo_e": {
+   "char": "イルーガ",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000127-geo_e_hold": {
+   "char": "イルーガ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": []
+  },
+  "10000128-anemo_e": {
+   "char": "ファルカ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    40
+   ]
+  },
+  "10000128-anemo_e_hold": {
+   "char": "ファルカ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    40
+   ]
+  },
+  "10000131-pyro_e": {
+   "char": "ニコ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    9
+   ]
+  },
+  "10000132-anemo_e": {
+   "char": "プルーネ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    26
+   ]
+  },
+  "10000150-cryo_e": {
+   "char": "オデット",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    23,
+    157,
+    266,
+    391,
+    500,
+    625,
+    734,
+    859,
+    968,
+    1093,
+    1202
+   ]
+  }
+ }
+}

@@ -50,7 +50,8 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
 }) => {
   // 当該キャラクターの全発動可能バフ（固有天賦・武器・聖遺物）
   const availableBuffs = React.useMemo(() => {
-    return getAvailableBuffsForCharacter(char, database);
+    // 自動で出す効果（祭礼の武器）は、手で置く候補に出さない
+    return getAvailableBuffsForCharacter(char, database).filter(b => !b.autoApplied);
   }, [char, database]);
 
   // 発動位置: 出場の先頭（キャラ交代アクションがあればその直後）

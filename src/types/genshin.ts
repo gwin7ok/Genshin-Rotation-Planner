@@ -459,6 +459,8 @@ export interface PassiveSpan {
   gcsimKey?: string;
   /** 再発動・CT・表示行の単位（定義 ID ＋ キー。passiveGroupOf） */
   effectGroup: string;
+  /** アプリの計算が自動で出したバー（祭礼の武器効果。確率 100% の発動）。ユーザーは動かせない・消せない（triggerId の発動バフは無い） */
+  auto?: boolean;
   /** gcsim の結果に出なかった手動の発動（印を付ける） */
   gcsimMissed?: boolean;
   name: string;

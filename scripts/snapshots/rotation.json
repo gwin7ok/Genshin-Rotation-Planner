@@ -6159,6 +6159,14 @@
     8.333
    ]
   ],
+  "autoPassives": [
+   [
+    "祭礼の弓: スキルCTリセット",
+    0.717,
+    16,
+    16.717
+   ]
+  ],
   "issues": [],
   "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
@@ -6264,6 +6272,14 @@
     "skill",
     12.217,
     22.217
+   ]
+  ],
+  "autoPassives": [
+   [
+    "祭礼の弓: スキルCTリセット",
+    0.717,
+    16,
+    16.717
    ]
   ],
   "issues": [
@@ -6378,6 +6394,20 @@
     28.883
    ]
   ],
+  "autoPassives": [
+   [
+    "祭礼の弓: スキルCTリセット",
+    0.717,
+    16,
+    16.717
+   ],
+   [
+    "祭礼の弓: スキルCTリセット",
+    21.267,
+    16,
+    37.267
+   ]
+  ],
   "issues": [],
   "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(1200);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
@@ -6454,6 +6484,14 @@
     "skill",
     3.433,
     8.433
+   ]
+  ],
+  "autoPassives": [
+   [
+    "祭礼の断片: スキルCTリセット",
+    1.3,
+    16,
+    17.3
    ]
   ],
   "issues": [],
@@ -6550,6 +6588,14 @@
     "skill",
     21.733,
     41.733
+   ]
+  ],
+  "autoPassives": [
+   [
+    "祭礼の断片: スキルCTリセット",
+    1.683,
+    16,
+    17.683
    ]
   ],
   "issues": [],
@@ -6663,6 +6709,14 @@
     "skill",
     10.517,
     14.517
+   ]
+  ],
+  "autoPassives": [
+   [
+    "祭礼の断片: スキルCTリセット",
+    2.517,
+    16,
+    18.517
    ]
   ],
   "issues": [],
@@ -6869,6 +6923,14 @@
     22.732
    ]
   ],
+  "autoPassives": [
+   [
+    "祭礼の剣: スキルCTリセット",
+    0.683,
+    16,
+    16.683
+   ]
+  ],
   "issues": [
    [
     "error",
@@ -6979,6 +7041,26 @@
     "skill",
     42.699,
     47.699
+   ]
+  ],
+  "autoPassives": [
+   [
+    "祭礼の弓: スキルCTリセット",
+    1.133,
+    16,
+    17.133
+   ],
+   [
+    "祭礼の弓: スキルCTリセット",
+    17.333,
+    16,
+    33.333
+   ],
+   [
+    "祭礼の弓: スキルCTリセット",
+    41.799,
+    16,
+    57.799
    ]
   ],
   "issues": [],

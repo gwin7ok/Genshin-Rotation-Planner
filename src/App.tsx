@@ -311,7 +311,7 @@ export default function App() {
   };
   // キャラ ID → 発動できる発動バフの定義（gcsim の結果の書き戻しで、gcsim のキーとの対応付けに使う）
   const buffsByCharacter = useMemo(
-    () => Object.fromEntries(characters.map(c => [c.id, getAvailableBuffsForCharacter(c, database)])),
+    () => Object.fromEntries(characters.map(c => [c.id, getAvailableBuffsForCharacter(c, database).filter(b => !b.autoApplied)])),
     [characters, database],
   );
   const handleCopyGcsimConfig = () => {

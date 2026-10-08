@@ -150,6 +150,8 @@ export function applyActionCooldowns(
   specialActionIds?: Set<string>,
   /** 書き戻す CT が含む風元素共鳴の倍率（0.95 / 1）。編成の共鳴が変わったときの補正に使う */
   cdResonance = 1,
+  /** CT を書き戻さないアクション ID（祭礼の武器を持つキャラのスキル。発動による CT のリセットは、アプリの計算が持つ。D86） */
+  skipActionIds?: Set<string>,
 ): ApplyCooldownsResult {
   const actionById = new Map<string, CharacterActionInstance>();
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
@@ -161,6 +163,7 @@ export function applyActionCooldowns(
   for (const { executed, ref } of pairs) {
     if (!isFirstLap(ref)) continue;
     if (ref.command !== 'skill' && ref.command !== 'burst') continue;
+    if (skipActionIds?.has(ref.actionId)) continue;
     const act = actionById.get(ref.actionId);
     if (!act) continue;
     // 特殊元素スキル（オデットの spE など）は、gcsim では同じ `skill` 命令だが、CTは `special_skill`（別枠）

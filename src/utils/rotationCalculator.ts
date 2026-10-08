@@ -24,7 +24,7 @@ import type { ActionMode, ActionModeSpecial, CancelTarget, ModeEnder } from '../
 import { passiveGroupOf } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { CooldownQueue, type QueueHead } from './cooldownQueue';
-import { getAvailableBuffsForCharacter, BuffCategory } from './buffUtils';
+import { getAvailableBuffsForCharacter, BuffCategory, type TriggerableBuffDefinition } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
 
 /** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
@@ -53,6 +53,8 @@ export interface SacrificialProc {
 export interface CalculatedRotation {
   /** 祭礼の武器の発動の一覧（確率 100%・内部 CT だけ考慮した、アプリの計算） */
   sacrificialProcs: SacrificialProc[];
+  /** 祭礼の武器を持つキャラ ID。スキルの CT は、アプリの計算（発動による CT のリセット）が持つので、gcsim の結果の反映で書き戻さない */
+  sacrificialCharIds: string[];
   /** 風元素共鳴による CT の倍率（0.95 または 1）。gcsim の書き戻しに記録する */
   cdResonanceScale: number;
   totalDuration: number;
@@ -1310,6 +1312,39 @@ export function calculateRotation(
     charStates[span.characterId]?.skillCooldowns.push(span);
   }
 
+  // 祭礼の武器効果（確率 100%）の発動を、発動バフのバー（効果と、武器の内部 CT。長さは精錬で決まる）として自動で出す。
+  // 出すのは 1 周目の発動だけ（2 周目折り返しは、既存の持ち越しの仕組み）。手で置く発動バフ（triggerId）ではない（auto）
+  const sacrificialDefs = new Map<string, TriggerableBuffDefinition | undefined>();
+  for (const p of sacrificialProcs) {
+    if (p.cycle !== 0) continue;
+    const owner = characterMap.get(p.charId);
+    if (!owner) continue;
+    if (!sacrificialDefs.has(p.charId)) sacrificialDefs.set(p.charId, getAvailableBuffsForCharacter(owner, options?.database).find(b => b.autoApplied));
+    const def = sacrificialDefs.get(p.charId);
+    const stint = calculatedStints.find(st => st.characterId === p.charId && p.time >= st.startTime - 1e-6 && p.time < st.endTime + 1e-6);
+    if (!def || !stint) continue;
+    const duration = def.duration ?? 0.1;
+    passiveSpans.push({
+      id: `passive_auto_sac_${p.actionId}_${p.hitFrame}`,
+      triggerId: `auto_sac_${p.actionId}_${p.hitFrame}`,
+      auto: true,
+      stintId: stint.id,
+      characterId: p.charId,
+      passiveEffectId: def.id,
+      effectGroup: passiveGroupOf(def.id),
+      name: def.name,
+      category: 'weapon',
+      startTime: p.time,
+      duration,
+      endTime: Number((p.time + duration).toFixed(3)),
+      cooldown: p.icdSeconds,
+      cooldownEnd: Number((p.time + p.icdSeconds).toFixed(3)),
+      hasCTViolation: false,
+      color: def.color,
+      description: def.description,
+    });
+  }
+
   // 同じ効果を再発動したら、前の発動の効果はそこで終わる（残りは上書きされる）
   endAtNextStart(activeBuffs, b => (b.stackable ? `${b.buffId}#${b.id}` : b.buffId));
   endAtNextStart(passiveSpans, p => `${p.characterId}:${p.effectGroup}`);
@@ -1415,6 +1450,7 @@ export function calculateRotation(
 
   return {
     sacrificialProcs,
+    sacrificialCharIds: characters.filter(c => sacrificialOf(c)).map(c => c.id),
     cdResonanceScale,
     totalDuration,
     calculatedStints,

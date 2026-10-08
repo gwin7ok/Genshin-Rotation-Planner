@@ -561,7 +561,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   }],
   // 閑雲: 雲の変化（1 段目の跳躍から 220f）。状態の間の E は 2・3 段目の跳躍（状態が 238f・179f に更新）。落下攻撃で終わる。
   // 交代で終わる（ゲーム: 交代して戻ると 2 回目の E が CT。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）。
-  // プランジしないときの CT 3 秒短縮・凸 6 の CT なし跳躍は含めない
+  // 時間切れで終わったとき（落下攻撃を使わなかったとき）は、スキルの CT が 3 秒短くなる（cooldownReduceOnExpire。xianyun/skill.go cooldownReduce）。凸 6 の CT なし跳躍は含めない
   '10000093-anemo': [{
     action: 'e',
     mode: {
@@ -574,6 +574,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       swap: 'ends',
       enders: [{ by: 'plunge_low', cooldown: 'none' }, { by: 'plunge_high', cooldown: 'none' }],
       holdByDefault: true,
+      // xianyun/skill.go: QueueCharTask(cooldownReduce(src), skillStateDur[counter]) → 最後の跳躍から状態の長さの後に ReduceActionCooldown(skill, 3*60)。plunge.go driftcloudWave が skillSrc を無効にして取り消す。交代では取り消されない
+      cooldownReduceOnExpire: { seconds: 3, afterSwap: true },
       repress: {
         frames: [
           { total: 243, cancels: { skill: 15, burst: 60, dash: 60, jump: 60, walk: 66, swap: 59, lowPlunge: 15, highPlunge: 15 }, source: 'skill.go:skillLeapFrames[1]' },

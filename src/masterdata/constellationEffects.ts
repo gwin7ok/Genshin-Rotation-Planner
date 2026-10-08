@@ -78,15 +78,27 @@ const NOT_APPLICABLE: Record<string, string> = {
  * 確認済み: 凸で変わる CT（アクションの CT の値の変更）。キーは `${キャラID}_c${凸}`。
  * keyword: 説明文に含まれるべき語（説明文が変わったら反映せずエラーにする）
  */
-const COOLDOWN_CHANGES: Record<string, { actionSuffix: string; cooldown: number; keyword: string; note: string }> = {
+const COOLDOWN_CHANGES: Record<string, { actionSuffix: string | string[]; cooldown: number; keyword: string; note: string }> = {
   // フリンズ 1 凸: 特殊元素スキル「北国の嵐槍」の基本 CT を 4 秒に短縮（gcsim flins/cons.go c1SkillCD: 6*60 → 4*60）
   '10000120-electro_c1': { actionSuffix: 'e_spearstorm', cooldown: 4, keyword: '北国の嵐槍の基本クールタイムを4秒に短縮', note: 'flins/cons.go: c1SkillCD() = 4*60' },
+  // アンバー 4 凸: 爆弾人形のクールタイム -20%（15 秒 → 12 秒）
+  '10000021-pyro_c4': { actionSuffix: 'e', cooldown: 12, keyword: '爆弾人形のクールタイム-20%', note: 'amber/skill.go: Cons >= 4 で CT 720f（12 秒）、それ以外は 900f（15 秒）' },
 };
 
 /** 確認済み: 凸で変わる CT の回数。キーは `${キャラID}_c${凸}`（説明文の語を照合する） */
-const CHARGE_CHANGES: Record<string, { actionSuffix: string; charges: number; keyword: string; note: string }> = {
+const CHARGE_CHANGES: Record<string, { actionSuffix: string | string[]; charges: number; keyword: string; note: string }> = {
   // 魈 1 凸: 風輪両立の使用可能回数 +1（gcsim xiao/xiao.go: SetNumCharges(ActionSkill, 2) → 凸 1 で 3）
   '10000026-anemo_c1': { actionSuffix: 'e', charges: 3, keyword: '風輪両立の使用可能回数+1', note: 'xiao/xiao.go: Cons >= 1 で SetNumCharges(ActionSkill, 3)' },
+  // 凸で 1 回から 2 回になるもの（gcsim ソース 1f9c1f2e で確認 2026-10-09。回数だけが変わり、CT の長さは変わらない。アンバーは CT も変わる〔COOLDOWN_CHANGES〕）
+  '10000021-pyro_c4': { actionSuffix: 'e', charges: 2, keyword: '爆弾人形のクールタイム-20%、使用可能回数+1', note: 'amber/amber.go: Cons >= 4 で SetNumCharges(ActionSkill, 2)' },
+  '10000082-dendro_c1': { actionSuffix: 'e', charges: 2, keyword: '太素診要の使用可能回数+1', note: 'baizhu/cons.go c1: SetNumCharges(ActionSkill, 2)' },
+  '10000037-cryo_c2': { actionSuffix: 'e', charges: 2, keyword: '山沢麟跡の使用可能回数+1', note: 'ganyu/ganyu.go: Cons >= 2 で SetNumCharges(ActionSkill, 2)' },
+  '10000108-anemo_c6': { actionSuffix: ['e', 'e_hold'], charges: 2, keyword: '鳳跡随翦舞の使用可能回数+1', note: 'lanyan/lanyan.go: Cons >= 6 で SetNumCharges(ActionSkill, 2)（一回押し・長押しとも同じ回数を使う）' },
+  '10000083-anemo_c4': { actionSuffix: ['e', 'e_hold'], charges: 2, keyword: 'フェイントの使用可能回数+1', note: 'lynette/cons.go c4: SetNumCharges(ActionSkill, 2)' },
+  '10000063-cryo_c1': { actionSuffix: ['e', 'e_hold'], charges: 2, keyword: '仰霊威召将役呪の使用可能回数+1', note: 'shenhe/shenhe.go: Cons >= 1 で SetNumCharges(ActionSkill, 2)（一回押し 10 秒・長押し 15 秒）' },
+  '10000043-anemo_c1': { actionSuffix: 'e', charges: 2, keyword: '六三〇八の使用可能回数+1', note: 'sucrose/sucrose.go: Cons >= 1 で SetNumCharges(ActionSkill, 2)' },
+  '10000093-anemo_c1': { actionSuffix: 'e', charges: 2, keyword: '朝翔の鶴雲の使用可能回数+1', note: 'xianyun/cons.go c1: SetNumCharges(ActionSkill, 2)（1 回の発動で 3 連跳躍。CT は最初の跳躍だけが使う）' },
+  '10000060-hydro_c1': { actionSuffix: 'e', charges: 2, keyword: '絡み合う命の糸の使用可能回数+1', note: 'yelan/yelan.go: Cons >= 1 で SetNumCharges(ActionSkill, 2)' },
 };
 
 const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
@@ -107,6 +119,11 @@ export const emptyConstellationReport = (): ConstellationReport => ({
 });
 
 const LEVELS: ConstellationLevel[] = [1, 2, 3, 4, 5, 6];
+
+/** 凸の変更の対象アクション ID（接尾辞が複数なら全部。例: 藍硯の一回押し `e` と長押し `e_hold`） */
+function actionIdsOf(charId: string, suffix: string | string[]): string[] {
+  return (Array.isArray(suffix) ? suffix : [suffix]).map(x => `${charId}_${x}`);
+}
 
 /** 延長後の秒数（小数第2位まで） */
 function extendDuration(base: number, amount: number, unit: string): number {
@@ -135,26 +152,32 @@ export function buildConstellations(
     // CT の回数の変更（魈 1 凸など）
     const chargeChange = CHARGE_CHANGES[`${char.id}_c${level}`];
     if (chargeChange) {
-      const actionId = `${char.id}_${chargeChange.actionSuffix}`;
       if (!text.replace(/\s+/g, '').includes(chargeChange.keyword)) {
         report.errors.push(`${char.name} ${level}凸: 説明文に、確認時の回数の記述「${chargeChange.keyword}」がありません`);
-      } else if (!char.availableActions.some(a => a.id === actionId)) {
-        report.errors.push(`${char.name} ${level}凸: 回数を変えるアクション ${actionId} がありません`);
       } else {
-        data.actionChanges = [...(data.actionChanges ?? []), { actionId, charges: chargeChange.charges, source: chargeChange.note }];
+        for (const actionId of actionIdsOf(char.id, chargeChange.actionSuffix)) {
+          if (!char.availableActions.some(a => a.id === actionId)) {
+            report.errors.push(`${char.name} ${level}凸: 回数を変えるアクション ${actionId} がありません`);
+          } else {
+            data.actionChanges = [...(data.actionChanges ?? []), { actionId, charges: chargeChange.charges, source: chargeChange.note }];
+          }
+        }
       }
     }
 
     // CT の変更（フリンズ 1 凸など）
     const cdChange = COOLDOWN_CHANGES[`${char.id}_c${level}`];
     if (cdChange) {
-      const actionId = `${char.id}_${cdChange.actionSuffix}`;
       if (!text.replace(/\s+/g, '').includes(cdChange.keyword)) {
         report.errors.push(`${char.name} ${level}凸: 説明文に、確認時の CT の記述「${cdChange.keyword}」がありません`);
-      } else if (!char.availableActions.some(a => a.id === actionId)) {
-        report.errors.push(`${char.name} ${level}凸: CT を変えるアクション ${actionId} がありません`);
       } else {
-        data.actionChanges = [...(data.actionChanges ?? []), { actionId, cooldown: cdChange.cooldown, source: cdChange.note }];
+        for (const actionId of actionIdsOf(char.id, cdChange.actionSuffix)) {
+          if (!char.availableActions.some(a => a.id === actionId)) {
+            report.errors.push(`${char.name} ${level}凸: CT を変えるアクション ${actionId} がありません`);
+          } else {
+            data.actionChanges = [...(data.actionChanges ?? []), { actionId, cooldown: cdChange.cooldown, source: cdChange.note }];
+          }
+        }
       }
     }
 

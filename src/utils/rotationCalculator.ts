@@ -126,6 +126,8 @@ export function calculateRotation(
     start: number;
     end: number;
     endedBy?: 'ender' | 'swap' | 'timeout';
+    /** 終わらせるアクション・交代で切る前の、本来の終わりの時刻（時間切れで CT を短縮するモード〔cooldownReduceOnExpire〕に使う） */
+    naturalEnd?: number;
     span: ActiveBuffSpan;
     /** モードの間に、開いたアクションをもう一度使った回数（repress） */
     repressUsed: number;
@@ -149,8 +151,11 @@ export function calculateRotation(
   const isModeActive = (m: ModeWindow, charId: string, sIdx: number, t: number) =>
     m.charId === charId && !m.endedBy && t < m.end - 0.001 && (m.sIdx === sIdx || m.def.swap === 'persists');
   const modeWindows = new Map<string, ModeWindow>();
+  // 同じモードを開き直して置き換えられた、前の窓（終わった後の計算に使う）
+  const retiredModes: ModeWindow[] = [];
   const modeKeyOf = (charId: string, md: ActionMode) => `${charId}:${md.label}`;
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
+    m.naturalEnd ??= m.end;
     m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
     m.endedBy = by;
     m.span.endTime = m.end;
@@ -566,6 +571,7 @@ export function calculateRotation(
             ctOffset: evOffset,
             cooldown: evCooldown,
             ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
+            ...(!isSpecial && actionDef?.mode?.cooldownReduceOnExpire ? { forceQueue: true } : {}),
             ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, lifetime: isRevelation(char) ? actionDef.spawnsTotem.lifetimeRevelation : actionDef.spawnsTotem.lifetime } } : {}),
             ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
             checked: act.type !== 'skill_reset',
@@ -624,7 +630,7 @@ export function calculateRotation(
 
         // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、使った時点では置かない。CT のキューで、前の CT が 0 になって始まった時点に、判定の関数が作る
         // 複数回分の通常のスキル（クレー・魈など）も同じ: バーは、CT のキューで始まった時点に作る
-        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1;
+        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1 || !!actionDef?.mode?.cooldownReduceOnExpire;
         if (isTriggeringAction && evCooldown > 0 && !isQueuedSpecial) {
           const cdSpan: CooldownSpan = {
             id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
@@ -715,6 +721,7 @@ export function calculateRotation(
           field.endTime = Number((actionStartTime + 1 / 60).toFixed(3));
           field.duration = Number(Math.max(0, field.endTime - field.startTime).toFixed(3));
         }
+        if (prevMode) retiredModes.push(prevMode);
         modeWindows.set(key, opened);
         // 特殊スキル・特殊爆発の受付: この出場の、種類ごとの受付にする。特殊スキルの CT の仕組みは、スキルの startsSpecialPool（爆発で開いた受付〔オデット〕も同じ）
         if (md.special) {
@@ -1102,6 +1109,17 @@ export function calculateRotation(
     charStates[char.id].totalActiveTime += stintDuration;
   }
 
+  // 時間切れで終わったモードが、スキルの CT を短縮する（閑雲）。終わらせるアクション（落下攻撃）で終わったものと、同じアクションの使い直しで切れたものは、短縮しない。
+  // 交代で終わったものは、afterSwap なら、本来の終わりの時刻に短縮する
+  for (const m of [...retiredModes, ...modeWindows.values()]) {
+    const red = m.def.cooldownReduceOnExpire;
+    if (!red || m.def.special) continue;
+    const natural = m.naturalEnd ?? m.end;
+    // 'timeout' は、出場の終わりまでに自然に切れた（naturalEnd が無い）ものと、同じモードを開き直して切られた（naturalEnd がある）ものがある。後者は短縮しない
+    if (m.endedBy === 'ender' || (m.endedBy === 'timeout' && m.naturalEnd !== undefined) || (m.endedBy === 'swap' && !red.afterSwap)) continue;
+    ctEvents.push({ key: `${m.charId}:skill`, time: Number(natural.toFixed(3)), ctOffset: 0, cooldown: 0, reduceBy: red.seconds, checked: false, stintIndex: m.sIdx, name: m.opener.name, onViolation: () => {} });
+  }
+
   // モードの終わりから始まる CT（タルタリヤ・放浪者）: モードの計算の結果（終わりの時刻・終わり方）を受け取って、CT の発動を足す。
   // 長さは、滞在時間（モードを開いたアクションの開始〜モードの終わり）の表、無ければアクションの CT。交代で終わったときは、交代の動作の後から
   for (const m of modeWindows.values()) {
@@ -1319,6 +1337,8 @@ interface CooldownEvent {
   checked: boolean;
   /** この枠のチャージ数（同時に溜められる回数。無ければ 1）。どのチャージもCT中なら違反 */
   charges?: number;
+  /** true のとき、回数が 1 でも CT のキューで持つ（CT を後から短縮されるスキル。閑雲。バーの終わりが短縮で動く） */
+  forceQueue?: boolean;
   /** true のとき、この発動が全回数分のCTをキューに積む（1 つ目はこの時刻から、2 つ目は 1 つ目が明けてから。検査はしない。ファルカのスキルが特殊スキルのCTを開始する）。この枠は、短縮が先頭だけに効く */
   startsAll?: boolean;
   /** この発動のアクション ID（特殊スキルの CT のバーが、どの発動の分かを示す） */
@@ -1475,7 +1495,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       continue;
     }
     // 複数回分の通常のスキル（クレー・魈・八重神子など）も、gcsim と同じキューで持つ
-    if (!queue && charges > 1 && !ev.optional && ev.cooldown > 0) {
+    if (!queue && (charges > 1 || ev.forceQueue) && !ev.optional && ev.cooldown > 0) {
       queue = makeQueue(ev, charges);
       queues.set(item.event.key, queue);
     }

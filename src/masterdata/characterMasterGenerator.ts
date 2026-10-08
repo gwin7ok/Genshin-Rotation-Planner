@@ -282,6 +282,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     mode: {
       label: '夢浮かみ',
       description: '夢浮かみ状態。状態の間の元素スキル（E）で解除する（CT は始まらない）。キャラ交代でも終わる',
+      // mizuki.go: ActionReady が、夢浮かみの間はスキル（解除）・ダッシュ・爆発・交代以外を false にする（実行で確認: E → N の N は、状態の期限 301f まで待つ）
+      blocked: { types: ['normal', 'charged', 'jump', 'plunge_low', 'plunge_high'], result: 'wait', hint: '先に E（解除）を置いてください' },
       startDelayFrames: 0,
       durationFrames: 5 * 60,
       swap: 'ends',
@@ -383,6 +385,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // 状態中の E は使えない。CT（8 秒）は状態の終わりから（skill.go: exitSkillState）
   '10000114-cryo': [stateMode('e', '七相一閃', 19, 754, 'skirk/skill.go: skillDur = 754、enterSkillState（実行: E の 19f 後に seven-phase-flash、774f に exit skirk skill と CT 480f）。onExitField: 交代で終わる', {
     cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+    // skirk.go: NextQueueItemIsValid が、七相一閃の間のスキルをエラーにする（実行で確認: 「skirk: cannot use skill in seven-phase flash」）
+    blocked: { types: ['skill', 'skill_hold'], result: 'error', hint: '七相一閃が終わってから置いてください' },
   })],
   // 胡桃: 蝶導来世（554f。実行で、交代して戻ると状態が消えていることを確認）
   '10000046-pyro': [stateMode('e', '蝶導来世', 0, 554, 'hutao/skill.go: paramita（実行: E と同時に 554f）。交代で解除')],
@@ -563,6 +567,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     mode: {
       label: '雲の変化',
       description: '雲の変化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる',
+      // xianyun.go: ActionReady が、雲の変化の間の通常攻撃・重撃を false にする（実行で確認: E → N の N は、状態の期限 222f まで待つ）
+      blocked: { types: ['normal', 'charged'], result: 'wait', hint: '先に落下攻撃を置いて、雲の変化を終わらせてください' },
       startDelayFrames: 0,
       durationFrames: 220,
       swap: 'ends',

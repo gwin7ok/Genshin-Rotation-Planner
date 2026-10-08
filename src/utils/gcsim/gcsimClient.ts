@@ -59,7 +59,7 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), SAMPLE_TIMEOUT_MS);
   try {
-    const res = await fetch(`${GCSIM_SERVER_URL}/sample/sample_${Date.now()}`, {
+    const res = await fetch(`${GCSIM_SERVER_URL}/sample/sample_${Date.now()}_${seed}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ config, seed }),

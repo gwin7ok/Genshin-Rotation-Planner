@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
-  "generatedAt": "2026-10-01T01:37:52.271Z",
+  "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+  "generatedAt": "2026-10-08T12:34:14.781Z",
   "effects": [
     {
       "id": "a-day-carved-from-rising-winds-2pc",
@@ -10732,6 +10732,25 @@
       "observed": true
     },
     {
+      "id": "silver-light-em-*",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "silverlight",
+      "ownerName": "銀灯",
+      "durationFrames": 720,
+      "isPattern": true
+    },
+    {
+      "id": "silver-light-stack-icd",
+      "category": "weapon",
+      "kind": "internal",
+      "ownerType": "weapon",
+      "ownerKey": "silverlight",
+      "ownerName": "銀灯",
+      "durationFrames": 12
+    },
+    {
       "id": "skyrider",
       "category": "weapon",
       "kind": "effect",
@@ -17003,10 +17022,9 @@
       "ownerId": "11438",
       "ownerName": "銀灯",
       "name": "銀灯: 水上にたなびく霞",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 12,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 12
     },
     {
       "id": "weapon:12427:wbuff_12427",
@@ -22215,6 +22233,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "silver-light-em-*",
+      "targetId": "weapon:11438:wbuff_11438",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "skirk-a1-icd",
       "targetId": "talent:10000114-cryo_p1",
       "role": "cooldown",
@@ -24176,6 +24200,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "silver-light-stack-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている"
     },
     {
       "side": "effect",
@@ -26546,13 +26577,6 @@
     {
       "side": "target",
       "id": "weapon:11437:wbuff_11437",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "weapon:11438:wbuff_11438",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"

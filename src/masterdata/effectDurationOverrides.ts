@@ -11,29 +11,31 @@
  */
 export interface EffectDurationOverride {
   frames: number;
+  /** 効果バーの名前（日本語。ゲーム内の効果の名前）。出典（source）とは分けて持つ（2026-10-08。出典の文字列がバーの名前に出ていた） */
+  label: string;
   source: string;
 }
 
 export const EFFECT_DURATION_OVERRIDES: Record<string, EffectDurationOverride> = {
   // フィッシュル: オズ 10 秒（skill.go の `oz-active`。爆発のオズも同じ長さ）
-  '10000031-electro_e': { frames: 600, source: 'fischl/skill.go: oz-active' },
-  '10000031-electro_q': { frames: 600, source: 'fischl/burst.go: オズ（skill.go の oz-active と同じ）' },
+  '10000031-electro_e': { frames: 600, label: 'オズ', source: 'fischl/skill.go: oz-active' },
+  '10000031-electro_q': { frames: 600, label: 'オズ', source: 'fischl/burst.go: オズ（skill.go の oz-active と同じ）' },
   // フレミネ: 加圧 10 秒
-  '10000085-cryo_e': { frames: 600, source: 'freminet/skill.go: freminet-pers-time' },
+  '10000085-cryo_e': { frames: 600, label: '加圧', source: 'freminet/skill.go: freminet-pers-time' },
   // ムアラニ: 標的の印 10 秒
-  '10000102-hydro_e': { frames: 600, source: 'mualani/skill.go: marked-as-prey' },
+  '10000102-hydro_e': { frames: 600, label: '標的の印', source: 'mualani/skill.go: marked-as-prey' },
   // 煙緋: 丹火の印 10 秒（付与は元素スキル。キーは burst.go で登録）
-  '10000048-pyro_e': { frames: 600, source: 'yanfei/burst.go: yanfei-seal（印は元素スキルで付与）' },
+  '10000048-pyro_e': { frames: 600, label: '丹火の印', source: 'yanfei/burst.go: yanfei-seal（印は元素スキルで付与）' },
   // 放浪者: 風の加護 20 秒
-  '10000075-anemo_e': { frames: 1200, source: 'wanderer/skill.go: windfavored-state' },
+  '10000075-anemo_e': { frames: 1200, label: '風の加護', source: 'wanderer/skill.go: windfavored-state' },
   // 刻晴: 雷楔 5 秒 + 20 フレーム
-  '10000042-electro_e': { frames: 320, source: 'keqing/skill.go: keqingstiletto' },
+  '10000042-electro_e': { frames: 320, label: '雷楔', source: 'keqing/skill.go: keqingstiletto' },
   // イアンサ: 速攻状態 5 秒
-  '10000110-electro_e': { frames: 300, source: 'iansan/skill.go: fast-skill' },
+  '10000110-electro_e': { frames: 300, label: '速攻状態', source: 'iansan/skill.go: fast-skill' },
   // アルレッキーノ: 血の契約 30 秒
-  '10000096-pyro_e': { frames: 1800, source: 'arlecchino/skill.go: directive' },
+  '10000096-pyro_e': { frames: 1800, label: '血の契約', source: 'arlecchino/skill.go: directive' },
   // ジン: 蒲公英の風 10 秒 + 40 フレーム（発動の遅れを含む）
-  '10000003-anemo_q': { frames: 640, source: 'jean/burst.go: jean-q' },
+  '10000003-anemo_q': { frames: 640, label: '蒲公英の風', source: 'jean/burst.go: jean-q' },
 };
 
 /**

@@ -47,7 +47,9 @@ const GENERIC_EFFECT_LABELS = new Set(['', '基礎', '最大', '長押し最大'
  */
 function buildEffectLabel(sourceLabel: string | undefined, actionName: string): string {
   const label = (sourceLabel ?? '').replace(/継続時間$/, '').replace(/[の・]+$/, '').trim();
-  if (!GENERIC_EFFECT_LABELS.has(label)) return label;
+  // 出典のメモ（「gcsim: keqing/skill.go: ...」「manual: ...」）は名前にしない（アクション名のスキル名部分を使う）
+  const isSourceNote = /^(gcsim|manual)\s*:|\.go\b/.test(label);
+  if (!GENERIC_EFFECT_LABELS.has(label) && !isSourceNote) return label;
   const skillName = (actionName.includes(':') ? actionName.split(':').slice(1).join(':') : actionName).trim();
   return skillName || '効果';
 }
@@ -68,7 +70,7 @@ export function getActionEffectInfo(
   return {
     duration: act.effectDuration ?? defaultDuration,
     defaultDuration,
-    label: buildEffectLabel(def?.dataSource?.effectDuration, def?.name ?? ''),
+    label: def?.effectLabel ?? buildEffectLabel(def?.dataSource?.effectDuration, def?.name ?? ''),
   };
 }
 

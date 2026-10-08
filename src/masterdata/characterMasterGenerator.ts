@@ -52,7 +52,23 @@ const PARAMETER_DERIVED_SKILLS: Record<string, string[]> = {
  * **スキルとは別のCT**（`ActionSpecialSkill`）を持つため、別のアクション（別ボタン）にする。通常のスキルのCTは開始しない。
  * キー: キャラ ID、値: 派生の名前（小文字。PARAMETER_DERIVED_SKILLS と同じ）と、gcsim の値（根拠つき）
  */
-const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string; /** CTの開始位置（動作開始からの秒数。既定 0） */ cooldownDelay?: number; /** チャージ数（既定 1） */ charges?: number; /** 特殊スキルの受付時間（秒） */ windowSeconds?: number; /** 受付の延長（ファルカ）: 開始の遅れ・爆発による延長・ヒットストップ */ windowDelay?: number; windowExtendOnBurst?: number; windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number }; windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number }; /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */ reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number; /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる */ startedBySkill?: boolean; /** 受付だけを開き、CT は開始しない（オデット）。受付の間に 1 回使うと閉じる。爆発でも受付が開く（秒） */ windowOnly?: boolean; burstWindowSeconds?: number; /** 受付のバーの名前、特殊スキルの効果バーの名前（genshin-db のスキル名から） */ windowLabel?: string; effectLabel?: string; /** 受付を 1 回使っても閉じない（フリンズ）。既定は閉じる */ windowSingleUse?: boolean; /** CT が元素共鳴などの影響を受けない（フリンズ） */ cdUnscaled?: boolean }> = {
+const SPECIAL_SKILLS: Record<string, {
+  slug: string; label: string; name: string; cooldown: number; effectDuration: number; source: string;
+  /** CTの開始位置（動作開始からの秒数。既定 0） */
+  cooldownDelay?: number;
+  /** チャージ数（既定 1） */
+  charges?: number;
+  /** 受付の間の通常攻撃 1 ヒットあたりの CT 短縮（秒）、通常攻撃の段ごとのヒット数、最大ヒット数 */
+  reducePerHit?: number; reducePerHitHexerei?: number; hitsPerNormal?: number[]; maxReductions?: number;
+  /** スキル（E・長押し E）を使うと、全チャージ分のCTが同時に始まる（ファルカ。オデット・フリンズは windowOnly で CT は始まらない） */
+  startedBySkill?: boolean;
+  /** スキルは特殊スキルの CT を始めない（CT は特殊スキルを使ったときに始まる）。特殊スキルは受付の中でしか使えない（requiresWindow） */
+  windowOnly?: boolean;
+  /** 特殊スキルの効果バーの名前（genshin-db のスキル名から） */
+  effectLabel?: string;
+  /** CT が元素共鳴などの影響を受けない（フリンズ） */
+  cdUnscaled?: boolean;
+}> = {
   '10000128-anemo': {
     slug: 'specialskill',
     label: 'spE',
@@ -62,18 +78,7 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     charges: 2,
     startedBySkill: true,
     cooldownDelay: 39 / 60,
-    windowSeconds: 12,
-    windowDelay: 39 / 60, // varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)
-    windowExtendOnBurst: 2.3, // varka/burst.go: ExtendStatus(skillKey, 2.3*60)（「説明にはないが延びるらしい」）
-    // AddStatus の第3引数 true = ヒットストップで延びる。ヒット 1 回あたりの止まるフレーム数 = ceil((HitlagHaltFrames + 3.6 × [防御ヒットストップ]) × (1 − 0.01))
-    // （pkg/core/combat/attack.go: DefHalt が有効（既定 true。pkg/gcs/parser/parser.go）で CanBeDefenseHalted の攻撃は、+3.6 フレーム。pkg/core/player/character/hitlag.go: ApplyHitlag の frozenFrames）。
-    // 全ヒットが敵に当たった最大の場合（2026-10-01 に gcsim の実行ログ 6/8/8/9f で確認）:
-    //   通常攻撃 N1〜N5 = 6/8/8/9/10f（attack.go: 1 段目 {1.8}、2〜5 段目の 2 ヒット目 {3.6, 3.6, 5.4, 6} フレームに +3.6。1 ヒット目は 0 で防御ヒットストップも無し）
-    //   重撃 = 9f（charge.go: 2 ヒット目 5.4+3.6）。特殊重撃（蒼牙）= 2 回 × 9f = 18f（azureDevour: {0, 5.4, 0, 5.4}、防御ヒットストップ有り）。重撃が特殊スキルの回数を使うかは後で決まるので、最大の 18f で見積もる
-    //   特殊スキル = 9f（skill.go: fourWindsHitHaltFrame {5.4, 0}、1 ヒット目だけ防御ヒットストップ有り）、スキルの初撃 = 9f（HitlagHaltFrames 5.4 + 3.6。状態は命中の 1f 前に付くので延長される）
-    windowHitlag: { normal: [6, 8, 8, 9, 10].map(f => f / 60), charged: 18 / 60, special: 9 / 60, skill: 9 / 60 },
-    // defhalt=false（体幹が崩れる敵）: 防御ヒットストップの +3.6f が無い。通常攻撃 2/4/4/6/6f、重撃 6f（特殊重撃は 2 回で 12f）、特殊スキル 6f、スキルの初撃 6f
-    windowHitlagNoDefHalt: { normal: [2, 4, 4, 6, 6].map(f => f / 60), charged: 12 / 60, special: 6 / 60, skill: 6 / 60 },
+    // 受付（疾風怒濤）は、モードの定義（ACTION_MODES）
     reducePerHitHexerei: 1.0, // varka/asc.go hexSkillCDReduction: ヘクセレイ：秘儀（ヘクセレイのキャラが 2 人以上）のとき 1 秒（ゲーム内の説明: ヘクセレイ「魔術：秘密の儀式」で 1 秒短縮）
     reducePerHit: 0.5, // varka/skill.go: fourWindsCDRedCB → ReduceActionCooldown（hexSkillCDReduction = 30 フレーム）。ゲーム内の説明: 通常攻撃を与えると 0.5 秒短縮、最大 15 回
     hitsPerNormal: [1, 2, 2, 2, 2], // varka/attack.go の attackHitmarks（1〜5 段目のヒット数。ヒットごとに短縮の判定）
@@ -88,11 +93,9 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     cooldown: 6,
     effectDuration: 0,
     windowOnly: true,
-    windowSingleUse: false,
     cdUnscaled: true,
     startedBySkill: true,
-    windowSeconds: 10 + 19 / 60, // flins/skill.go: AddStatus(skillKey, 10*60+skillHitmark, true)（幽炎の露顕。嵐槍を使っても消えず、交代で消える）
-    windowLabel: '北国の嵐槍の受付（幽炎の露顕）',
+    // 受付（幽炎の露顕）は、モードの定義（ACTION_MODES）
     source: 'flins/skill.go: spearStorm の AddStatus(spearStormCDKey, c1SkillCD(), false)（6 秒。命ノ星座 1 で 4 秒 → 未対応）。ActionReady: 幽炎の露顕の間、CT（spearStormCDKey）が明けていれば使える。状態が終わる（10*60+19f）か交代で CT は消える。説明文「基本クールタイムは 6 秒であり、他の効果の影響を受けない」',
   },
   '10000150-cryo': {
@@ -102,14 +105,9 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
     cooldown: 15,
     effectDuration: 20,
     windowOnly: true,
-    windowLabel: '柔き払暁のコーダの受付', // 特殊スキル「柔き払暁のコーダ」（genshin-db の天賦の説明）を使える期間
     effectLabel: '柔き払暁のコーダ後の強化', // danceDoubleUpgradeKey（20 秒）
     startedBySkill: true,
-    windowSeconds: 394 / 60, // odette/skill.go: AddStatus(skillRecastKey, 394, true)（スキルの発動と同時。ヒットストップで延びる）
-    burstWindowSeconds: (6 * 60 + 1) / 60, // odette/burst.go: AddStatus(skillRecastKey, 6*60+burstSummonFrame, false)（爆発でも受付が開く。ヒットストップでは延びない）
-    // 通常攻撃のヒットストップ（odette/attack.go: attackHitlagHaltFrame {1.8}{1.8}{0,1.8}{3}{0}、attackDefHalt {true}{true}{false,false}{false}{true}。HitlagFactor 0.01）
-    windowHitlag: { normal: [6, 6, 2, 3, 0].map(f => f / 60) },
-    windowHitlagNoDefHalt: { normal: [2, 2, 2, 3, 0].map(f => f / 60) },
+    // 受付（柔き払暁のコーダの受付。スキル・爆発で開く）は、モードの定義（ACTION_MODES）
     source: 'odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）',
   },
 };
@@ -120,25 +118,18 @@ const SPECIAL_SKILLS: Record<string, { slug: string; label: string; name: string
  * キー: キャラ ID
  */
 const SPECIAL_BURSTS: Record<string, {
-  tableName: string; name: string; label: string; windowSeconds: number; windowLabel: string; openedBy: string; source: string;
-  /** 受付を開くもの: special-skill = 受付の間に使った特殊スキル（フリンズの嵐槍）、plunge = 落下攻撃（ヴァレサ。命ノ星座 minConstellation 以上、または猛烈パッション中） */
-  opener: 'special-skill' | 'plunge';
-  /** 受付の中の爆発の CT（秒）。外では、通常の爆発の CT */
+  tableName: string; name: string; label: string; source: string;
+  /** 受付の中の爆発の CT（秒）。外では、通常の爆発の CT。受付は、モードの定義（ACTION_MODES） */
   cooldownInWindow: number;
   /** 受付の中でも、爆発の CT が明けていることを求める（gcsim のヴァレサ） */
   checkInWindow: boolean;
   /** 受付の外で使ったときの警告に出す、必要な条件 */
   hint: string;
-  minConstellation?: number;
 }> = {
   '10000120-electro': {
     tableName: 'symphonyFrames',
     name: '特殊元素爆発（嵐槍の後）',
     label: 'spQ',
-    windowSeconds: 6,
-    windowLabel: '雷霆のシンフォニーの受付',
-    openedBy: '嵐槍',
-    opener: 'special-skill',
     cooldownInWindow: 0,
     checkInWindow: false,
     hint: '同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません',
@@ -149,11 +140,6 @@ const SPECIAL_BURSTS: Record<string, {
     tableName: 'volcanicFrames',
     name: '特殊元素爆発（マキシマムドライブ）',
     label: 'spQ',
-    windowSeconds: 140 / 60,
-    windowLabel: 'マキシマムドライブ',
-    openedBy: '落下攻撃',
-    opener: 'plunge',
-    minConstellation: 2,
     cooldownInWindow: 1,
     checkInWindow: true,
     hint: '直前の落下攻撃（命ノ星座 2 以上、または猛烈パッション中）の後 2.3 秒以内で、その間にスキルを使っていないことが必要です',
@@ -228,7 +214,7 @@ const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & {
  * keepEffectDuration: マスターの効果継続時間（genshin-db）を残す（アクションごとの個別の値で、モードを長くできる）。無ければ 0 にする（バーはモードのバーだけ）
  */
 /** action = モードを開くアクション（e = 一回押しの `_e`、e_hold = 長押しの `_e_hold`、q = 元素爆発）。複数のときは配列（同じモードを、どれで開いても同じに扱う） */
-type ActionModeEntry = { action: 'e' | 'e_hold' | 'q' | ('e' | 'e_hold')[]; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> };
+type ActionModeEntry = { action: string | string[]; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> };
 /**
  * 窓の規則から移した「受付」型のモード（2026-10-08。窓の規則とモードの定義の統一）。E の後の短い期間、E が別の動作になる（CT なし）。
  * バーは出さない（効果バーはそのまま）・延長しない・バフ重複に数えない。交代での扱いは、受付が交代 CT（1 秒）より短いキャラは影響しない
@@ -266,6 +252,26 @@ const stateMode = (action: 'e' | 'q', label: string, startDelayFrames: number, d
     source,
     ...extra,
   },
+});
+
+/**
+ * 特殊スキル・特殊爆発の受付（オデット・フリンズの特殊爆発・ヴァレサ）の行（2026-10-08。D78）。受付のバー（名前 =「受付の名前（開いたもの）」・バフ重複に数えない）、
+ * 延長なし、交代で終わる。モードを開くアクションの効果バーは別に出す
+ */
+const specialWindowMode = (label: string, barNote: string, durationFrames: number, description: string, special: NonNullable<NonNullable<ActionDefinition['mode']>['special']>, source: string): NonNullable<ActionDefinition['mode']> => ({
+  label,
+  description,
+  startDelayFrames: 0,
+  durationFrames,
+  swap: 'ends',
+  enders: [],
+  holdByDefault: false,
+  noHold: true,
+  noSynergy: true,
+  barNote,
+  keepEffectBar: true,
+  special,
+  source,
 });
 
 const ACTION_MODES: Record<string, ActionModeEntry[]> = {
@@ -384,14 +390,64 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   '10000049-pyro': [stateMode('e', '庭火焔硝', 0, 611, 'yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除')],
   // 神里綾人: 瞬水剣（360f）
   '10000066-hydro': [stateMode('e', '瞬水剣', 0, 360, 'kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除')],
-  // フリンズ: 幽炎の露顕（619f）。特殊スキル（嵐槍）の受付と同じ状態
-  '10000120-electro': [stateMode('e', '幽炎の露顕', 0, 619, 'flins/skill.go: manifest-flame（実行: E と同時に 619f）。交代で解除', { windowState: true })],
-  // ファルカ: 疾風怒濤（E の 39f 後から 720f。ヒットストップ・爆発で延びる）。特殊スキルの受付と同じ状態
-  // 状態の間の E は特殊スキル（specialSkillFrames 68f。CT は特殊スキルの枠で、別のボタン spE と同じ）。窓の規則から移した
-  '10000128-anemo': [stateMode('e', '疾風怒濤', 39, 720, 'varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除。状態の間の E は specialSkill', {
-    windowState: true,
-    repress: { frames: [{ total: 68, cancels: { attack: 55, charge: 64, skill: 56, burst: 55, dash: 56, jump: 55, walk: 65 }, source: 'skill.go:specialSkillFrames' }] },
-  })],
+  // --- 特殊スキル・特殊爆発の受付（2026-10-08。受付をモードの定義に統一。D78）。special.kind = skill は特殊スキル（spE）、burst は特殊爆発（spQ）を使える期間 ---
+  // フリンズ: 幽炎の露顕（E の 619f）。この間、特殊スキル「北国の嵐槍」を何度でも使える。交代で消える。既定は維持する
+  '10000120-electro': [{
+    ...stateMode('e', '幽炎の露顕', 0, 619, 'flins/skill.go: AddStatus(skillKey, 10*60+skillHitmark, true)（manifest-flame。実行: E と同時に 619f）。嵐槍を使っても消えず、交代で消える', {
+      description: '幽炎の露顕の状態。この間、特殊スキル「北国の嵐槍」（spE）を使える。キャラ交代で終わる',
+      special: { kind: 'skill' },
+    }),
+    action: ['e', 'e_hold'],
+  }, {
+    // 雷霆のシンフォニーの受付（幽炎の露顕の間に使った嵐槍の後 6 秒）。特殊爆発（spQ）を 1 回使うと閉じる。使うたびに新しくなる
+    action: 'e_spearstorm',
+    keepEffectDuration: true,
+    mode: specialWindowMode('雷霆のシンフォニーの受付', '嵐槍', 6 * 60, '特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる',
+      { kind: 'burst', singleUse: true, openCondition: { requiresOpen: 'skill' } },
+      'flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）'),
+  }],
+  // ファルカ: 疾風怒濤（E の 39f 後から 720f。ヒットストップ・自分の爆発〔+2.3 秒〕で延びる）。この間、特殊スキル（2 回分の CT）を使える。交代で消える。既定は維持する。
+  // 状態の間の E は特殊スキルの動作（specialSkillFrames 68f。CT は特殊スキルの枠で、別のボタン spE と同じ）。
+  // ヒットストップ: AddStatus の第3引数 true = ヒットストップで延びる。ヒット 1 回あたりの止まるフレーム数 = ceil((HitlagHaltFrames + 3.6 × [防御ヒットストップ]) × (1 − 0.01))
+  //   （pkg/core/combat/attack.go: DefHalt が有効〔既定〕で CanBeDefenseHalted の攻撃は +3.6 フレーム。pkg/core/player/character/hitlag.go: ApplyHitlag の frozenFrames）。全ヒットが敵に当たった最大の場合（2026-10-01 に gcsim の実行ログで確認）:
+  //   通常攻撃 N1〜N5 = 6/8/8/9/10f、重撃 = 9f（特殊重撃〔蒼牙〕は 2 回 × 9f = 18f。重撃が特殊スキルの回数を使うかは後で決まるので、最大の 18f で見積もる）、特殊スキル = 9f、スキルの初撃 = 9f。
+  //   防御ヒットストップ無効（defhalt=false）: 通常攻撃 2/4/4/6/6f、重撃 12f、特殊スキル 6f、スキルの初撃 6f
+  '10000128-anemo': [{
+    ...stateMode('e', '疾風怒濤', 39, 720, 'varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)（sturm-und-drang。実行: E の 39f 後に 720f）。varka/burst.go: ExtendStatus(skillKey, 2.3*60)。交代で解除。状態の間の E は specialSkill', {
+      description: '疾風怒濤の状態。この間、特殊スキル（spE）を使える。ヒットストップ・自分の元素爆発で延びる。キャラ交代で終わる',
+      repress: { frames: [{ total: 68, cancels: { attack: 55, charge: 64, skill: 56, burst: 55, dash: 56, jump: 55, walk: 65 }, source: 'skill.go:specialSkillFrames' }], actions: ['e'] },
+      special: {
+        kind: 'skill',
+        extendOnBurst: 2.3,
+        hitlag: { normal: [6, 8, 8, 9, 10].map(f => f / 60), charged: 18 / 60, special: 9 / 60, skill: 9 / 60 },
+        hitlagNoDefHalt: { normal: [2, 4, 4, 6, 6].map(f => f / 60), charged: 12 / 60, special: 6 / 60, skill: 6 / 60 },
+      },
+    }),
+    action: ['e', 'e_hold'],
+  }],
+  // オデット: 柔き払暁のコーダの受付（スキル 394f。ヒットストップで延びる／爆発 361f）。特殊スキル（spE）を 1 回使うと閉じる。スキル・爆発の効果バーは別に出す。
+  // 通常攻撃のヒットストップ（odette/attack.go: attackHitlagHaltFrame {1.8}{1.8}{0,1.8}{3}{0}、attackDefHalt {true}{true}{false,false}{false}{true}。HitlagFactor 0.01）
+  '10000150-cryo': [{
+    action: ['e', 'e_hold'],
+    keepEffectDuration: true,
+    mode: specialWindowMode('柔き払暁のコーダの受付', 'スキル', 394, '特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延びる。受付の外では、gcsim では通常のスキルになる',
+      { kind: 'skill', singleUse: true, hitlag: { normal: [6, 6, 2, 3, 0].map(f => f / 60) }, hitlagNoDefHalt: { normal: [2, 2, 2, 3, 0].map(f => f / 60) } },
+      'odette/skill.go: AddStatus(skillRecastKey, 394, true)（スキルの発動と同時。ヒットストップで延びる）。特殊スキルを使うと DeleteStatus'),
+  }, {
+    action: 'q',
+    keepEffectDuration: true,
+    mode: specialWindowMode('柔き払暁のコーダの受付', '爆発', 6 * 60 + 1, '特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延びる。受付の外では、gcsim では通常のスキルになる',
+      { kind: 'skill', singleUse: true, hitlag: { normal: [6, 6, 2, 3, 0].map(f => f / 60) }, hitlagNoDefHalt: { normal: [2, 2, 2, 3, 0].map(f => f / 60) } },
+      'odette/burst.go: AddStatus(skillRecastKey, 6*60+burstSummonFrame, false)（爆発でも受付が開く）'),
+  }],
+  // ヴァレサ: マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中なら 140f）。特殊爆発（spQ。大火山おろし）を 1 回使うか、スキルを使うと閉じる
+  '10000111-electro': [{
+    action: ['lp', 'hp'],
+    keepEffectDuration: true,
+    mode: specialWindowMode('マキシマムドライブ', '落下攻撃', 140, '特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる',
+      { kind: 'burst', singleUse: true, closedBySkill: true, openCondition: { minConstellation: 2, orBlessing: true } },
+      'varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。burst.go: volcanicKablam で状態を消す。skill.go: スキルで状態が消える'),
+  }],
   // 刻晴・プルーネ・ドゥリン・ディルック: 窓の規則から移した受付型（2026-10-08）。4 人とも、交代しても続く（ゲームでの確認: ユーザー。gcsim も、交代して戻った後の E が再発動）
   // 刻晴: 雷楔（5 秒 + 20f）の間の E が再発動（雷楔を消費）
   '10000042-electro': [{
@@ -1109,7 +1165,8 @@ function buildActions(ctx: BuildContext): BuildResult {
           effectDuration: special.effectDuration,
           defaultDuration: framesToSec(table.total),
           frames: toActionFrames(table, 'skill', skill.consts),
-          dataSource: { cooldown: `gcsim: ${special.source}`, effectDuration: special.effectLabel ?? `gcsim: ${special.source}` },
+          ...(special.effectLabel ? { effectLabel: special.effectLabel } : {}),
+          dataSource: { cooldown: `gcsim: ${special.source}`, effectDuration: `gcsim: ${special.source}` },
         });
         continue;
       }
@@ -1135,12 +1192,7 @@ function buildActions(ctx: BuildContext): BuildResult {
       if (a.type === 'skill' && !a.cooldownPool || a.type === 'skill_hold') a.startsSpecialPool = {
         cooldown: sp.cooldown,
         charges: sp.charges ?? 1,
-        ...(sp.windowSeconds ? { windowSeconds: Number(sp.windowSeconds.toFixed(3)) } : {}),
-        ...(sp.windowOnly ? { windowOnly: true, singleUse: sp.windowSingleUse !== false, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}) } : {}),
-        ...(sp.windowDelay ? { windowDelay: Number(sp.windowDelay.toFixed(3)) } : {}),
-        ...(sp.windowExtendOnBurst ? { windowExtendOnBurst: sp.windowExtendOnBurst } : {}),
-        ...(sp.windowHitlag ? { windowHitlag: sp.windowHitlag } : {}),
-        ...(sp.windowHitlagNoDefHalt ? { windowHitlagNoDefHalt: sp.windowHitlagNoDefHalt } : {}),
+        ...(sp.windowOnly ? { windowOnly: true } : {}),
         ...(sp.reducePerHit ? { reducePerHit: sp.reducePerHit, ...(sp.reducePerHitHexerei ? { reducePerHitHexerei: sp.reducePerHitHexerei } : {}), hitsPerNormal: sp.hitsPerNormal ?? [1], maxReductions: sp.maxReductions ?? 15 } : {}),
       };
     }
@@ -1198,13 +1250,6 @@ function buildActions(ctx: BuildContext): BuildResult {
     },
   }, burstTable ? framesToSec(burstTable.total) : undefined));
 
-  // 爆発でも特殊スキルの受付が開くキャラ（オデット）。ヒットストップでは延びない
-  if (SPECIAL_SKILLS[id]?.burstWindowSeconds) {
-    const sp = SPECIAL_SKILLS[id];
-    for (const a of actions) {
-      if (a.type === 'burst') a.startsSpecialPool = { cooldown: sp.cooldown, charges: sp.charges ?? 1, windowOnly: true, singleUse: true, ...(sp.windowLabel ? { windowLabel: sp.windowLabel } : {}), windowSeconds: Number(sp.burstWindowSeconds!.toFixed(3)) };
-    }
-  }
 
   // 特殊爆発（フリンズ）: 受付の間だけ使える別アクション。受付の間に使った特殊スキル（嵐槍）が受付を開く
   if (SPECIAL_BURSTS[id]) {
@@ -1228,16 +1273,6 @@ function buildActions(ctx: BuildContext): BuildResult {
       // 受付の外で使うと、通常の爆発になり、通常の CT が始まる
       const sbAction = actions[actions.length - 1];
       sbAction.specialBurstCooldown = { inWindow: sb.cooldownInWindow, outOfWindow: actions.find(a => a.id === `${id}_q`)?.cooldown ?? 0, checkInWindow: sb.checkInWindow };
-      if (sb.opener === 'special-skill') {
-        const skillAct = actions.find(a => a.cooldownPool === 'special');
-        if (skillAct) skillAct.recastOpensWindow = { windowSeconds: sb.windowSeconds, windowLabel: sb.windowLabel, openedBy: sb.openedBy };
-      } else {
-        for (const a of actions) {
-          if (a.type === 'plunge_low' || a.type === 'plunge_high') {
-            a.plungeOpensWindow = { windowSeconds: Number(sb.windowSeconds.toFixed(3)), windowLabel: sb.windowLabel, openedBy: sb.openedBy, minConstellation: sb.minConstellation ?? 0, closedBySkill: true };
-          }
-        }
-      }
     }
   }
 
@@ -1557,6 +1592,7 @@ export async function generateCharacterMaster(
         continue;
       }
       a.effectDuration = seconds;
+      a.effectLabel = o.label;
       a.dataSource = { ...a.dataSource, effectDuration: `gcsim: ${o.source}` };
       report.effectDuration.supplemented.push({ characterId: u.id, name: u.name, actionId: a.id, seconds, source: o.source });
     }

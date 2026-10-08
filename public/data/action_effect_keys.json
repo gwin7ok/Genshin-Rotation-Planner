@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
- "generatedAt": "2026-09-30T08:12:11.923Z",
+ "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+ "generatedAt": "2026-10-08T15:06:01.213Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -2606,7 +2606,6 @@
      ]
     }
    ],
-   "master": 4,
    "primary": "dehya-burst"
   },
   "10000080-cryo_e": {
@@ -2721,6 +2720,13 @@
   "10000083-anemo_e": {
    "char": "リネット",
    "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000083-anemo_e_hold": {
+   "char": "リネット",
+   "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
    "keys": []
@@ -3516,6 +3522,25 @@
    "master": 12.5,
    "primary": "leap-back"
   },
+  "10000108-anemo_e_hold": {
+   "char": "藍硯",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "leap-back",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      1.1,
+      1.1
+     ]
+    }
+   ],
+   "master": 12.5,
+   "primary": "leap-back"
+  },
   "10000108-anemo_q": {
    "char": "藍硯",
    "command": "burst",
@@ -3623,6 +3648,13 @@
    "primary": "follow-up"
   },
   "10000111-electro_q": {
+   "char": "ヴァレサ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000111-electro_q_special": {
    "char": "ヴァレサ",
    "command": "burst",
    "status": "nokey",
@@ -3849,7 +3881,32 @@
    "master": 10,
    "primary": "manifest-flame"
   },
+  "10000120-electro_e_spearstorm": {
+   "char": "フリンズ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "manifest-flame",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      10.32,
+      10.32
+     ]
+    }
+   ],
+   "primary": "manifest-flame"
+  },
   "10000120-electro_q": {
+   "char": "フリンズ",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000120-electro_q_special": {
    "char": "フリンズ",
    "command": "burst",
    "status": "nokey",
@@ -4070,6 +4127,26 @@
    "master": 12,
    "primary": "sturm-und-drang"
   },
+  "10000128-anemo_e_specialskill": {
+   "char": "ファルカ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sturm-und-drang",
+     "events": 4,
+     "casts": 2,
+     "seconds": [
+      12,
+      12.13,
+      12,
+      12.13
+     ]
+    }
+   ],
+   "primary": "sturm-und-drang"
+  },
   "10000128-anemo_q": {
    "char": "ファルカ",
    "command": "burst",
@@ -4142,6 +4219,34 @@
    "primary": "prune-burst"
   },
   "10000150-cryo_e": {
+   "char": "オデット",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "odette-skill-recast",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      6.57,
+      6.57
+     ]
+    },
+    {
+     "key": "odette-dance-double",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      21.03,
+      21.03
+     ]
+    }
+   ],
+   "master": 20,
+   "primary": "odette-dance-double"
+  },
+  "10000150-cryo_e_recast": {
    "char": "オデット",
    "command": "skill",
    "status": "ok",

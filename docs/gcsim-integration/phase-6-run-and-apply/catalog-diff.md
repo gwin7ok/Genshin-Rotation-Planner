@@ -1,8 +1,8 @@
 # gcsim キーの辞書の差分（前回の作成との比較）
 
-作成: 2026-10-01 / gcsim commit 1e6c1a8
+作成: 2026-10-08 / gcsim commit 1f9c1f2
 
-増えたキー 1 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: 0 件）/ 消えたキー 0 件（うち対象 0 件）
+増えたキー 2 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: 0 件）/ 消えたキー 0 件（うち対象 0 件）
 
 ## 増えたキー（対象のもの）
 なし
@@ -11,7 +11,8 @@
 なし
 
 ## 増えたキー（その他）
-- `ssw-airborne-buff` [system/internal] pkg/reactable/stellarswirl_gadget
+- `silver-light-em-*` [weapon/effect] silverlight
+- `silver-light-stack-icd` [weapon/internal] silverlight
 
 ## 消えたキー（その他）
 なし

@@ -1,6 +1,6 @@
 {
   "characters": {
-    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
     "records": [
       {
         "id": "10000121-hydro",
@@ -919,7 +919,7 @@
     "gcsimOnly": []
   },
   "weapons": {
-    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
     "records": [
       {
         "id": "15502",
@@ -1731,6 +1731,13 @@
         "genshinId": 14406,
         "name": "金珀·試作",
         "gcsimKey": "prototypeamber",
+        "source": "dm.json"
+      },
+      {
+        "id": "11438",
+        "genshinId": 11438,
+        "name": "銀灯",
+        "gcsimKey": "silverlight",
         "source": "dm.json"
       },
       {
@@ -2590,10 +2597,6 @@
         "name": "異端を狩る熔刃"
       },
       {
-        "id": "11438",
-        "name": "銀灯"
-      },
-      {
         "id": "11437",
         "name": "新たなる枝"
       },
@@ -2650,7 +2653,7 @@
     ]
   },
   "artifacts": {
-    "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
+    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
     "records": [
       {
         "id": "15031",

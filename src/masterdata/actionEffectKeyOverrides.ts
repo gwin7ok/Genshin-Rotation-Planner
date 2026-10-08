@@ -41,7 +41,11 @@ export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
   '10000111-electro_q': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // ヴァレサの爆発
   // 藍硯のスキル: 自動収集は、跳び退きの短い状態 leap-back（1.1 秒）を選んでいた。効果本体は燕の羽ばたき（シールド 12.5 秒。マスターの 12.5 秒と一致）
   '10000108-anemo_e': 'shield:Swallow-Wisp Pinion Dance (Shield)',
+  // 藍硯の長押し: 自動収集は leap-back（1.1 秒）を選ぶが、長押しでも同じ燕の羽ばたき（シールド 12.5 秒。gcsim で hold=1・60 とも 750f を確認 2026-10-09）
+  '10000108-anemo_e_hold': 'shield:Swallow-Wisp Pinion Dance (Shield)',
   // 書き戻さない（自動収集の誤りの打ち消し、またはユーザー決定）:
+  // ファルカの特殊スキル: 自動収集が選んだ sturm-und-drang は、スキル本体の状態。特殊スキルのバーは出さない（effectKeyDecisions の決定どおり）
+  '10000128-anemo_e_specialskill': '',
   // チャスカの爆発: 自動収集が選んだ chasca-plunge-available は 0.43 秒の落下攻撃の窓で、爆発の効果ではない
   '10000104-anemo_q': '',
   // スカークの長押し: 登録しない（ユーザー決定）。自動収集が選んだ skirk-hold-e-anim は 0 秒

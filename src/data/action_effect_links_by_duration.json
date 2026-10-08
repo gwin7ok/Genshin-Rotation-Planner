@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "1e6c1a8621728dfa8d420a861092259e752c4953",
- "generatedAt": "2026-09-30T08:12:14.389Z",
+ "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+ "generatedAt": "2026-10-08T15:06:04.053Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -1702,6 +1702,20 @@
     }
    ]
   },
+  "10000083-anemo_e_hold": {
+   "char": "リネット",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "lynette-aligned-icd",
+     "mode": "expiry",
+     "seconds": 10,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
   "10000083-anemo_q": {
    "char": "リネット",
    "type": "burst",
@@ -2205,6 +2219,28 @@
     }
    ]
   },
+  "10000111-electro_q_special": {
+   "char": "ヴァレサ",
+   "type": "burst",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 15,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "nightsoul-burst-icd",
+     "mode": "expiry",
+     "seconds": 18,
+     "category": "system",
+     "kind": "cooldown"
+    }
+   ]
+  },
   "10000112-cryo_e_hold": {
    "char": "エスコフィエ",
    "type": "skill_hold",
@@ -2327,6 +2363,11 @@
    "candidates": []
   },
   "10000120-electro_q": {
+   "char": "フリンズ",
+   "type": "burst",
+   "candidates": []
+  },
+  "10000120-electro_q_special": {
    "char": "フリンズ",
    "type": "burst",
    "candidates": []

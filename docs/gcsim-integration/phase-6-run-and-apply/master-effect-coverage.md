@@ -1,11 +1,11 @@
 # マスター効果とgcsimキーの対応表（カバレッジ）
 
-作成: 2026-10-01 / gcsim辞書コミット 1e6c1a86 / 生成: `npm run coverage:master-effects`
+作成: 2026-10-08 / gcsim辞書コミット 1f9c1f2e / 生成: `npm run coverage:master-effects`
 
 対象は固有天賦・命ノ星座・武器・聖遺物・元素共鳴。アクション効果用の `effect_key_coverage.json` とは別ファイルで管理し、将来統合できる `effects` / `targets` / `links` / `unlinked` 形式を使う。
 「未確認」はマスター側の対象またはgcsimキー側の効果について、対応付け・理由付き対象外・保留のいずれも無い状態。
 
-## gcsimキー（1111件）
+## gcsimキー（1113件）
 
 | 分類 / 状態 | 件数 |
 |---|---:|
@@ -23,8 +23,8 @@
 | talent / excluded | 28 |
 | talent / linked | 178 |
 | talent / unreviewed | 2 |
-| weapon / excluded | 36 |
-| weapon / linked | 331 |
+| weapon / excluded | 37 |
+| weapon / linked | 332 |
 | weapon / pending | 45 |
 | weapon / unreviewed | 1 |
 
@@ -39,15 +39,15 @@
 | resonance / unreviewed | 1 |
 | talent / linked | 154 |
 | talent / unsupported | 119 |
-| weapon / linked | 171 |
-| weapon / unsupported | 21 |
+| weapon / linked | 172 |
+| weapon / unsupported | 20 |
 
-## links（824件）
+## links（825件）
 
 | 関係 | 件数 |
 |---|---:|
 | cooldown | 128 |
-| effect | 600 |
+| effect | 601 |
 | extra | 89 |
 | resonance | 7 |
 

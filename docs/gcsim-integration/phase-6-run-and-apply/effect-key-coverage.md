@@ -1,6 +1,6 @@
 # スキル・爆発の効果の対応表（カバレッジ）
 
-作成: 2026-10-01 / gcsim の辞書のコミット 1e6c1a86 / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
+作成: 2026-10-08 / gcsim の辞書のコミット 1f9c1f2e / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
 
 4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。
 「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。
@@ -19,21 +19,22 @@
 
 設置物名（gcsim のソース）: 7 件
 
-## targets（アプリのスキル・爆発のアクション定義。314 件）
+## targets（アプリのスキル・爆発のアクション定義。319 件）
 
 | 状態 | 件数 |
 |---|---|
-| 紐づけ済み | 196 |
+| 紐づけ済み | 198 |
 | gcsim の効果なし・バーを出さない | 70 |
 | gcsim にキャラが未登録 | 18 |
 | 発動バフ（固有天賦）として扱う | 15 |
 | gcsim の効果なし・アプリ側の値でバーを表示 | 10 |
 | gcsim は効果を出すが、紐づけず・バーも出さない | 4 |
+| gcsim が効果のイベントを出さない（暫定） | 3 |
 | 保留 | 1 |
 
-## links（効果 ↔ 対象。230 件）
+## links（効果 ↔ 対象。232 件）
 
-内訳: main/auto=159 / main/approved=29 / extra/approved=28 / included/approved=9 / character/approved=5
+内訳: main/auto=160 / main/approved=30 / extra/approved=28 / included/approved=9 / character/approved=5
 整合性: 存在しない効果・対象を指す紐づけ 0 件 / 重複 0 件
 
 ## 未検討のアクション定義（0 件）

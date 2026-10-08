@@ -29,12 +29,6 @@ export interface ActionStateRule {
    * 未指定なら、窓の終わりは更新しない（最初の E から windowSeconds で固定）
    */
   refreshWindowSeconds?: number[];
-  /**
-   * 窓の間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕ごと。足りなければ繰り返す）。窓の間だけ通常攻撃が別の動作になるキャラ用（クロリンデの狩りの N）
-   */
-  normalFrames?: ActionFrames[];
-  /** 窓の間の元素爆発のフレーム */
-  burstFrames?: ActionFrames;
   /** 根拠（gcsim ソース） */
   note: string;
 }
@@ -56,11 +50,7 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     stageFrames: [{ total: 43, hitmark: 16, cancels: { attack: 42, dash: 16, jump: 16, swap: 42 }, source: 'skill.go:skillRecastFrames' }],
     note: 'keqing/skill.go: Status.Add(stilettoKey, 5*60+20)',
   },
-  // フレミネ: 加圧(persTime) 10 秒間の E が解放（加圧を消費）
-  '10000085-cryo': { windowSeconds: 10, maxUses: 1,
-    stageFrames: [{ total: 55, cancels: { attack: 53, skill: 47, burst: 47, dash: 47, jump: 47, swap: 51 }, source: 'skill.go:skillPressureFrames[0]' }],
-    note: 'freminet/skill.go: AddStatus(persTimeKey, 10*60)',
-  },
+  // フレミネ: 窓の規則ではなく、モードの定義（ACTION_MODES。潜水〔加圧〕。交代しても続く・E の再押しで起爆）にした（2026-10-08）
   // フリンズ: 窓の規則ではなく、特殊スキル（嵐槍。別アクション `10000120-electro_e_spearstorm`。2026-10-05）にした。
   // 嵐槍は状態を消費せず、専用の CT（6 秒）で何度も使えるため（ファルカ・オデットと同じ特殊スキルの仕組み）
   // プルーネ: 再発動の受付 364 フレームの間の E が convert（受付を消費）
@@ -100,28 +90,7 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     ],
     note: 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）',
   },
-  // 閑雲: 雲の変化の状態の間の E が 2 段目・3 段目の跳躍（E のたびに状態が更新: 1 段目から 220f、2 段目から 238f）。CT は 1 段目で始まる（12 秒）。
-  // プランジで状態が消える・プランジしないと次の CT が 3 秒短くなる・凸 6 の CT なし跳躍は含めない（gcsim の結果の書き戻しが補正する）
-  '10000093-anemo': {
-    windowSeconds: 220 / 60, maxUses: 2, refreshWindowSeconds: [238 / 60, 179 / 60],
-    stageFrames: [
-      { total: 243, cancels: { skill: 15, burst: 60, dash: 60, jump: 60, walk: 66, swap: 59, lowPlunge: 15, highPlunge: 15 }, source: 'skill.go:skillLeapFrames[1]' },
-      { total: 178, cancels: { skill: 128, burst: 126, dash: 130, jump: 129, walk: 125, swap: 126, lowPlunge: 18, highPlunge: 18 }, source: 'skill.go:skillLeapFrames[2]' },
-    ],
-    note: 'xianyun/skill.go: skillStateDur = {220, 238, 179}、AddStatus(skillStateKey, skillStateDur[counter], true)。3 回使うと次は新しい E',
-  },
-  // クロリンデ: E の 6f 後から 7.5 秒の間（狩りの状態）、E が突き（43f。CT なし・回数の制限なし・状態は延びない）。窓の間は、通常攻撃が「狩りの N」（3 段）、爆発が別のフレームになる
-  '10000098-electro': {
-    windowSeconds: (6 + 7.5 * 60) / 60,
-    stageFrames: [{ total: 43, cancels: { attack: 24, skill: 24, burst: 24, dash: 25, jump: 25, swap: 42 }, source: 'skill.go:skillDashFrames' }],
-    normalFrames: [
-      { total: 18, hitmark: 8, cancels: { skill: 11, burst: 10, dash: 8, jump: 8, swap: 8 }, source: 'attack.go:skillAttackFrames[0]（InitNormalCancelSlice は skill 以外へ hitmark でキャンセル）' },
-      { total: 17, hitmark: 8, cancels: { skill: 10, burst: 10, dash: 8, jump: 8, swap: 8 }, source: 'attack.go:skillAttackFrames[1]' },
-      { total: 20, hitmark: 9, cancels: { skill: 9, burst: 9, dash: 9, jump: 9, swap: 9 }, source: 'attack.go:skillAttackFrames[2]' },
-    ],
-    burstFrames: { total: 128, cancels: { attack: 127, skill: 127, dash: 127, swap: 127 }, source: 'burst.go:burstSkillStateFrames' },
-    note: 'clorinde/skill.go: AddStatus(skillStateKey, skillStart(6)+skillStateDuration(7.5)*60, true)。状態の間の E は skillDash（SetCD なし）。攻撃は attack.go の skillAttack、爆発は burstSkillStateFrames',
-  },
+  // 閑雲・クロリンデ: 窓の規則ではなく、モードの定義（ACTION_MODES。雲の変化・夜巡り。交代で終わる）にした（2026-10-08）
   // ヴァルカ: スキル状態 12 秒の間の E が specialSkill（回数の上限は未確認）
   '10000128-anemo': {
     windowSeconds: 12,

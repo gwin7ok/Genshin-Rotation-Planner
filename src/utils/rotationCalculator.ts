@@ -124,10 +124,17 @@ export function calculateRotation(
     end: number;
     endedBy?: 'ender' | 'swap' | 'timeout';
     span: ActiveBuffSpan;
+    /** モードの間に、開いたアクションをもう一度使った回数（repress） */
+    repressUsed: number;
+    /** モードを開いたアクション（モードの終わりから始まる CT〔cooldownAtEnd〕に使う） */
+    opener: { actionId: string; name: string; start: number; cooldown: number; cdScale: number; constellation: number };
     inputs: number;
     finished: boolean;
     pending?: { savedFrames: number; template: ActiveBuffSpan };
   }
+  // モードの間か（交代で終わるモードは、同じ出場の中だけ）
+  const isModeActive = (m: ModeWindow, charId: string, sIdx: number, t: number) =>
+    m.charId === charId && !m.endedBy && t < m.end - 0.001 && (m.sIdx === sIdx || m.def.swap === 'persists');
   const modeWindows = new Map<string, ModeWindow>();
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
     m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
@@ -294,14 +301,23 @@ export function calculateRotation(
       // モード（スキル・爆発で入る状態）: このアクションが、続いているモードを終わらせるアクションか（モードの定義の enders）。
       // 「交代しても続く」モードは、後の出場のアクションでも終わらせられる
       let modeEnder: { window: ModeWindow; ender: ModeEnder } | undefined;
+      // モードの間に、開いたアクションをもう一度使った（終わらせない別の動作。クロリンデの突き・閑雲の 2・3 段目の跳躍）
+      let modeRepress: { window: ModeWindow; index: number } | undefined;
       for (const m of modeWindows.values()) {
-        if (m.charId !== char.id || m.endedBy || actionStartTime >= m.end - 0.001 || (m.sIdx !== sIdx && m.def.swap !== 'persists')) continue;
+        if (!isModeActive(m, char.id, sIdx, actionStartTime)) continue;
         const ender = m.def.enders.find(e => (e.by === 'self' ? act.actionTypeId === m.actionDefId : act.type === e.by));
         if (ender) {
           modeEnder = { window: m, ender };
           break;
         }
+        const rp = m.def.repress;
+        if (rp && act.actionTypeId === m.actionDefId && (rp.maxUses === undefined || m.repressUsed < rp.maxUses)) {
+          modeRepress = { window: m, index: m.repressUsed };
+          break;
+        }
       }
+      // このアクションが、新しいモードを開くか（続いているモードの、終わらせるアクション・もう一度使った動作ではない）
+      const opensMode = !!actionDef?.mode && modeEnder?.window.actionDefId !== actionDef.id && !modeRepress;
 
       // 爆発の後のモード（ディシア）の固有の扱い: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
       const mw = burstModeAction ? modeWindows.get(burstModeAction.id) : undefined;
@@ -324,8 +340,20 @@ export function calculateRotation(
       }
       if (modeEnder) {
         endMode(modeEnder.window, actionStartTime, 'ender');
-        // 終わらせるアクションが CT を始めない（夢見月瑞希の E の再押し）: スキルの CT・効果バーを使わない
-        if (modeEnder.ender.cooldown === 'none' && act.type === 'skill') inStateWindow = true;
+        // 終わらせる E（夢見月瑞希の解除・タルタリヤの遠距離への戻り）は、自分の CT・効果バーを持たない（CT は、モードを開いたアクションの分。cooldownAtEnd）
+        if (act.type === 'skill') inStateWindow = true;
+      }
+      if (modeRepress) {
+        const { window: m, index } = modeRepress;
+        m.repressUsed += 1;
+        inStateWindow = true;
+        // 使うたびに、モードの終わりを更新する（閑雲の跳躍）
+        const rf = m.def.repress!.refreshFrames;
+        if (rf?.length) {
+          m.end = Number((actionStartTime + rf[Math.min(index, rf.length - 1)] / 60).toFixed(3));
+          m.span.endTime = m.end;
+          m.span.duration = Number((m.end - m.start).toFixed(3));
+        }
       }
       if (modeKind === 'punch' || modeKind === 'kick') {
         if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
@@ -355,9 +383,8 @@ export function calculateRotation(
       // 通常攻撃: 連続した N の段（gcsim と同じく、他のアクションを挟むと1段目に戻り、最大段数を超えたら1段目に戻る）
       let frames = actionDef?.frames;
       let hitFallbackDuration: number | undefined;
-      // 窓の間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの狩りの状態）
-      const activeStateWindow = rule ? stateWindows.get(char.id) : undefined;
-      const inActiveWindow = !!activeStateWindow && actionStartTime < activeStateWindow.end;
+      // モードの間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの夜巡り）
+      const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames));
       if (act.type === 'normal') {
         const hits = actionDef?.normalHits;
         if (hits && hits.length > 0) {
@@ -365,14 +392,19 @@ export function calculateRotation(
           frames = hit.frames ?? frames;
           hitFallbackDuration = hit.duration;
         }
-        if (inActiveWindow && rule?.normalFrames?.length) frames = rule.normalFrames[normalStreak % rule.normalFrames.length];
+        const modeNormal = frameMode?.def.normalFrames;
+        if (modeNormal?.length) frames = modeNormal[normalStreak % modeNormal.length];
         normalStreak += 1;
       } else {
         normalStreak = 0;
       }
-      if (act.type === 'burst' && inActiveWindow && rule?.burstFrames) frames = rule.burstFrames;
-      // モードを終わらせる動作のフレーム（夢見月瑞希の状態の解除）
+      if (act.type === 'burst' && frameMode?.def.burstFrames) frames = frameMode.def.burstFrames;
+      // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
       if (modeEnder?.ender.frames) frames = modeEnder.ender.frames;
+      if (modeRepress) {
+        const rpFrames = modeRepress.window.def.repress!.frames;
+        if (rpFrames.length) frames = rpFrames[Math.min(modeRepress.index, rpFrames.length - 1)];
+      }
       if (modeKind && burstModeDef && mw) {
         if (modeKind === 'punch') {
           const h = burstModeDef.inputFrames[Math.min(mw.inputs, burstModeDef.inputFrames.length - 1)];
@@ -490,12 +522,17 @@ export function calculateRotation(
         // 受付の外で使った特殊スキル（ファルカ）は、gcsim では通常のスキルになり、特殊スキルの CT は積まれない（受付の警告は、下で出す）
         const specialOutOfWindow = isSpecial && needsWindow && !inStateWindow && !windowOpenAt(actionStartTime);
         const isTriggeringAction = isSpecial ? !inStateWindow && !specialOutOfWindow : actionDef?.startsSkillCooldown !== false && !inStateWindow;
+        // モードの終わりから CT が始まるスキル（タルタリヤ・放浪者）: ここでは、入ったときの短い CT（タルタリヤ 1 秒）だけ。本来の CT は、計算の最後に足す
+        const atEnd = opensMode ? actionDef?.mode?.cooldownAtEnd : undefined;
+        const evCooldown = atEnd ? Number(((atEnd.entry?.seconds ?? 0) * (actionDef?.ignoresCdScale ? 1 : cdResonanceScale)).toFixed(3)) : cooldown;
+        const evOffset = atEnd ? (atEnd.entry ? Number((atEnd.entry.delayFrames / 60).toFixed(3)) : 0) : ctOffset;
+        const evCtStart = Number((actionStartTime + evOffset).toFixed(3));
         if (isTriggeringAction) {
           ctEvents.push({
             key: `${char.id}:${isSpecial ? 'special' : 'skill'}`,
             time: actionStartTime,
-            ctOffset,
-            cooldown,
+            ctOffset: evOffset,
+            cooldown: evCooldown,
             ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
             ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, lifetime: isRevelation(char) ? actionDef.spawnsTotem.lifetimeRevelation : actionDef.spawnsTotem.lifetime } } : {}),
             ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
@@ -507,6 +544,24 @@ export function calculateRotation(
               computedAction.hasCTCollision = true;
               computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
               addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: ${isSpecial ? '特殊スキルCT違反' : 'スキルCT違反'}`, `${isSpecial ? '特殊スキル' : 'スキル'}「${act.name}」`, remaining, cycle);
+            },
+          });
+        }
+        // モードを終わらせて CT を始める E（タルタリヤ）: 自分の CT は持たないが、CT 中（入ったときの 1 秒）なら使えない
+        if (modeEnder?.ender.cooldown === 'start') {
+          ctEvents.push({
+            key: `${char.id}:skill`,
+            time: actionStartTime,
+            ctOffset: 0,
+            cooldown: 0,
+            checked: true,
+            actionId: act.id,
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: (remaining, cycle) => {
+              computedAction.hasCTCollision = true;
+              computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
+              addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: スキルCT違反`, `スキル「${act.name}」`, remaining, cycle);
             },
           });
         }
@@ -543,14 +598,14 @@ export function calculateRotation(
         // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、使った時点では置かない。CT のキューで、前の CT が 0 になって始まった時点に、判定の関数が作る
         // 複数回分の通常のスキル（クレー・魈など）も同じ: バーは、CT のキューで始まった時点に作る
         const isQueuedSpecial = (actionDef?.charges ?? 1) > 1;
-        if (isTriggeringAction && cooldown > 0 && !isQueuedSpecial) {
+        if (isTriggeringAction && evCooldown > 0 && !isQueuedSpecial) {
           const cdSpan: CooldownSpan = {
             id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
             characterId: char.id,
             type: isSpecial ? 'special' : 'skill',
-            startTime: ctStartTime,
-            endTime: Number((ctStartTime + cooldown).toFixed(3)),
-            duration: cooldown,
+            startTime: evCtStart,
+            endTime: Number((evCtStart + evCooldown).toFixed(3)),
+            duration: evCooldown,
             actionInstanceId: act.id,
           };
           skillCooldowns.push(cdSpan);
@@ -588,8 +643,11 @@ export function calculateRotation(
       }
 
       // モードを開く（続いているモードを終わらせる E の再押しは、開かない）。モードは、アクションの開始から startDelayFrames 後に始まる
-      if (actionDef?.mode && modeEnder?.window.actionDefId !== actionDef.id) {
+      if (opensMode && actionDef?.mode) {
         const md = actionDef.mode;
+        // 使い切った後の、新しいモード（閑雲の 4 回目の E）: 続いている前のモードは、ここで終わる
+        const prevMode = modeWindows.get(actionDef.id);
+        if (prevMode && !prevMode.endedBy && prevMode.end > actionStartTime) endMode(prevMode, actionStartTime, 'timeout');
         const start = Number((actionStartTime + md.startDelayFrames / 60).toFixed(3));
         // 最大時間: モードの定義の値。アクションごとの効果継続時間（個別に変更した値・gcsim の結果）のほうが長ければ、その値
         const end = Number((start + Math.max(md.durationFrames / 60, act.effectDuration ?? 0)).toFixed(3));
@@ -607,7 +665,14 @@ export function calculateRotation(
           noSynergy: true,
         };
         activeBuffs.push(span);
-        const opened: ModeWindow = { charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, inputs: 0, finished: false, span };
+        const opened: ModeWindow = {
+          charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, span, repressUsed: 0, inputs: 0, finished: false,
+          opener: {
+            actionId: act.id, name: act.name, start: actionStartTime, cooldown,
+            cdScale: actionDef.ignoresCdScale ? 1 : cdResonanceScale,
+            constellation: CharacterModel.fromConfig(char).constellation,
+          },
+        };
         // ディシア: 爆発の開始で、炎場を拾う（炎場が出ていれば。バーをここで切り、残り時間 + 拾いの延長を保存する）
         const fieldDef = actionDef.burstMode ? charActions.find(a => a.fieldRecast)?.fieldRecast : undefined;
         const field = fieldSpans.get(char.id);
@@ -854,7 +919,9 @@ export function calculateRotation(
     // 延ばすのは、「交代で終わる」「終わらせないと交代できない」モードだけ。「交代しても続く」モードは延ばさず、バーだけ交代の後も続く。
     // 出場ごとの切り替え（holdMode）は、延長を足すかどうかだけに効く（モードの終わりの計算には関わらない）
     const stintModes = [...modeWindows.values()].filter(m => m.charId === char.id && m.sIdx === sIdx && m.def.swap !== 'persists');
-    const holdOn = (m: ModeWindow) => rawStint.holdMode ?? m.def.holdByDefault;
+    // 維持の延長を出さないモード（放浪者）は、切り替えも出さない
+    const holdableModes = stintModes.filter(m => !m.def.noHold);
+    const holdOn = (m: ModeWindow) => !m.def.noHold && (rawStint.holdMode ?? m.def.holdByDefault);
     // 維持の目標の時刻: モードの終わり。ディシアは、状態が切れた後の自動の蹴りが命中するまで
     const holdTargetOf = (m: ModeWindow) => (m.actionDefId === burstModeAction?.id && !m.finished ? autoKickAt(m) : m.end);
     const lastAction = [...computedActions].reverse().find(a => a.type !== 'swap');
@@ -889,7 +956,9 @@ export function calculateRotation(
           actionId: lastAction?.id,
           time: stintEndTime,
           title: `${char.name}: モードを終わらせずに交代`,
-          message: `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。終わらせるアクションを置くか、この出場の「モード維持」をオンにしてください`,
+          message: m.def.noHold
+            ? `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。交代の前に、終わらせるアクション（E の再押しなど）を置いてください（gcsim では交代できず、実行が止まります）`
+            : `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。終わらせるアクションを置くか、この出場の「モード維持」をオンにしてください`,
         });
       }
     }
@@ -1015,14 +1084,44 @@ export function calculateRotation(
       endTime: stintEndTime,
       duration: stintDuration,
       actions: computedActions,
-      modeHold: stintModes.length > 0
-        ? { on: stintModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(stintModes.map(m => m.def.label))].join('・') }
+      modeHold: holdableModes.length > 0
+        ? { on: holdableModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(holdableModes.map(m => m.def.label))].join('・') }
         : undefined,
     };
 
     calculatedStints.push(calculatedStint);
     charStates[char.id].stints.push(calculatedStint);
     charStates[char.id].totalActiveTime += stintDuration;
+  }
+
+  // モードの終わりから始まる CT（タルタリヤ・放浪者）: モードの計算の結果（終わりの時刻・終わり方）を受け取って、CT の発動を足す。
+  // 長さは、滞在時間（モードを開いたアクションの開始〜モードの終わり）の表、無ければアクションの CT。交代で終わったときは、交代の動作の後から
+  for (const m of modeWindows.values()) {
+    const cae = m.def.cooldownAtEnd;
+    if (!cae) continue;
+    const by = m.endedBy ?? 'timeout';
+    const at = Number((m.end + (by === 'swap' ? switchDelay : 0) + cae.delayFrames[by] / 60).toFixed(3));
+    let length = m.opener.cooldown;
+    if (cae.byStay?.length) {
+      const stay = m.end - m.opener.start;
+      const row = cae.byStay.find(r => r.below === undefined || stay < r.below - 0.0001) ?? cae.byStay[cae.byStay.length - 1];
+      length = (row.seconds + (row.plusStay ? stay : 0)) * m.opener.cdScale;
+      if (cae.consScale && m.opener.constellation >= cae.consScale.minConstellation) length *= cae.consScale.scale;
+    }
+    length = Number(length.toFixed(3));
+    if (!(length > 0)) continue;
+    ctEvents.push({ key: `${m.charId}:skill`, time: at, ctOffset: 0, cooldown: length, checked: false, actionId: m.opener.actionId, stintIndex: m.sIdx, name: m.opener.name, onViolation: () => {} });
+    const span: CooldownSpan = {
+      id: `cd_skill_${m.charId}_${m.opener.actionId}_end`,
+      characterId: m.charId,
+      type: 'skill',
+      startTime: at,
+      endTime: Number((at + length).toFixed(3)),
+      duration: length,
+      actionInstanceId: m.opener.actionId,
+    };
+    skillCooldowns.push(span);
+    charStates[m.charId]?.skillCooldowns.push(span);
   }
 
   const totalDuration = Number(currentTime.toFixed(2));

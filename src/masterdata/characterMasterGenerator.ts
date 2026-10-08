@@ -222,13 +222,14 @@ const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & {
 };
 
 /**
- * スキル・爆発で入るモード（状態）の、共通の定義（2026-10-08。mode-hold-plan.md）。キー: キャラ ID。action = モードを開くアクション（e = `_e`、q = 元素爆発）
+ * スキル・爆発で入るモード（状態）の、共通の定義（2026-10-08。mode-hold-plan.md）。キー: キャラ ID（1 人に複数のモード）。action = モードを開くアクション（e = `_e`、q = 元素爆発）
  * 交代での扱い・終わらせるアクション・既定で維持するかを、データで持つ（計算は、キャラごとの分岐を書かない）。
+ * 交代での扱いは、ゲームでの動き（ユーザーの確認。D73・D76）。gcsim と違うもの（閑雲・クロリンデは、gcsim では交代しても続く）は、各行に書く。
  * keepEffectDuration: マスターの効果継続時間（genshin-db）を残す（アクションごとの個別の値で、モードを長くできる）。無ければ 0 にする（バーはモードのバーだけ）
  */
-const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> }> = {
+const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> }[]> = {
   // 夢見月瑞希: 夢浮かみ（5 秒。固有天賦 1 の延長は反応が条件なので含めない）。状態の間の E で解除（CT なし）。交代で解除（実行で確認: 交代の時点で「DreamDrifter effect cancelled」）
-  '10000109-anemo': {
+  '10000109-anemo': [{
     action: 'e',
     keepEffectDuration: true,
     mode: {
@@ -241,9 +242,9 @@ const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boo
       holdByDefault: true,
       source: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）',
     },
-  },
+  }],
   // ディシア: 爆発の 105f 後から 4.1 秒のパンチ連打モード。ジャンプで終わる（ダッシュ → ジャンプは蹴り）。交代で終わる。固有の項目は BURST_MODES
-  '10000079-pyro': {
+  '10000079-pyro': [{
     action: 'q',
     mode: {
       label: 'パンチ連打モード',
@@ -255,7 +256,123 @@ const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boo
       holdByDefault: true,
       source: 'dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる',
     },
-  },
+  }],
+  // タルタリヤ: 近接の構え（30 秒）。構えの間の E で遠距離に戻る。交代で終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる。既定は維持しない（D75）
+  '10000033-hydro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '近接の構え',
+      description: '近接の構え（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）',
+      startDelayFrames: 0,
+      durationFrames: 30 * 60,
+      swap: 'ends',
+      enders: [{ by: 'self', cooldown: 'start', frames: { total: 18, cancels: { attack: 17, burst: 18, dash: 17, jump: 17, swap: 16 }, source: 'skill.go:skillMeleeFrames' } }],
+      holdByDefault: false,
+      cooldownAtEnd: {
+        delayFrames: { ender: 11, swap: 0, timeout: 0 },
+        entry: { seconds: 1, delayFrames: 14 },
+        byStay: [
+          { below: 2, seconds: 7 },
+          { below: 4, seconds: 8 },
+          { below: 5, seconds: 9 },
+          { below: 8, seconds: 5, plusStay: true },
+          { below: 30, seconds: 6, plusStay: true },
+          { seconds: 45 },
+        ],
+        consScale: { minConstellation: 1, scale: 0.8 },
+      },
+      source: 'tartaglia/skill.go: AddStatus(meleeKey, 30*60)、入る E は SetCDWithDelay(ActionSkill, 60, 14)。onExitMeleeStance: 構えに居た時間で CT（<2 秒 7 秒・<4 秒 8 秒・<5 秒 9 秒・<8 秒 5 秒 + 時間・<30 秒 6 秒 + 時間・以上 45 秒。C1 ×0.8）。E の再押しは 11f 後、交代（onExitField）・時間切れは遅れ 0。2026-10-08 に実行で確認',
+    },
+  }],
+  // 放浪者: 風の加護（飛行。10 秒）。E の再押しで終わる。終わらせないと交代できない（ゲーム・gcsim とも）。CT（6 秒）は状態の終わりから。
+  // 維持の延長は出さない（gcsim は `wait` だけでは時間切れの処理をせず、交代が約 546 秒待ちになる。D76）
+  '10000075-anemo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '風の加護',
+      description: '風の加護（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
+      startDelayFrames: 0,
+      durationFrames: 100 * 6,
+      swap: 'blocks',
+      enders: [{ by: 'self', cooldown: 'start' }],
+      holdByDefault: false,
+      noHold: true,
+      cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+      source: 'wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）',
+    },
+  }],
+  // フレミネ: 潜水（加圧。10 秒）。状態の間の E で起爆（CT は最初の E で始まっている）。交代しても続く（ゲーム・gcsim とも）
+  '10000085-cryo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '潜水（加圧）',
+      description: '加圧の状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く',
+      startDelayFrames: 0,
+      durationFrames: 10 * 60,
+      swap: 'persists',
+      enders: [{ by: 'self', cooldown: 'none', frames: { total: 55, cancels: { attack: 53, skill: 47, burst: 47, dash: 47, jump: 47, swap: 51 }, source: 'skill.go:skillPressureFrames[0]' } }],
+      holdByDefault: false,
+      source: 'freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）',
+    },
+  }],
+  // クロリンデ: 夜巡り（E の 6f 後から 7.5 秒）。状態の間の E は突き（CT なし・回数の制限なし・状態は延びない）、通常攻撃は狩りの N、爆発は別のフレーム。
+  // 交代で終わる（ゲーム。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）
+  '10000098-electro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '夜巡り',
+      description: '夜巡りの状態。状態の間の元素スキル（E）は突き（CT なし）、通常攻撃は狩りの N になる。キャラ交代で終わる',
+      startDelayFrames: 6,
+      durationFrames: 7.5 * 60,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      repress: { frames: [{ total: 43, cancels: { attack: 24, skill: 24, burst: 24, dash: 25, jump: 25, swap: 42 }, source: 'skill.go:skillDashFrames' }] },
+      normalFrames: [
+        { total: 18, hitmark: 8, cancels: { skill: 11, burst: 10, dash: 8, jump: 8, swap: 8 }, source: 'attack.go:skillAttackFrames[0]（InitNormalCancelSlice は skill 以外へ hitmark でキャンセル）' },
+        { total: 17, hitmark: 8, cancels: { skill: 10, burst: 10, dash: 8, jump: 8, swap: 8 }, source: 'attack.go:skillAttackFrames[1]' },
+        { total: 20, hitmark: 9, cancels: { skill: 9, burst: 9, dash: 9, jump: 9, swap: 9 }, source: 'attack.go:skillAttackFrames[2]' },
+      ],
+      burstFrames: { total: 128, cancels: { attack: 127, skill: 127, dash: 127, swap: 127 }, source: 'burst.go:burstSkillStateFrames' },
+      source: 'clorinde/skill.go: AddStatus(skillStateKey, skillStart(6)+skillStateDuration(7.5)*60, true)。状態の間の E は skillDash（SetCD なし）。攻撃は attack.go の skillAttack、爆発は burstSkillStateFrames',
+    },
+  }],
+  // 閑雲: 雲の変化（1 段目の跳躍から 220f）。状態の間の E は 2・3 段目の跳躍（状態が 238f・179f に更新）。落下攻撃で終わる。
+  // 交代で終わる（ゲーム: 交代して戻ると 2 回目の E が CT。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）。
+  // プランジしないときの CT 3 秒短縮・凸 6 の CT なし跳躍は含めない
+  '10000093-anemo': [{
+    action: 'e',
+    mode: {
+      label: '雲の変化',
+      description: '雲の変化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる',
+      startDelayFrames: 0,
+      durationFrames: 220,
+      swap: 'ends',
+      enders: [{ by: 'plunge_low', cooldown: 'none' }, { by: 'plunge_high', cooldown: 'none' }],
+      holdByDefault: true,
+      repress: {
+        frames: [
+          { total: 243, cancels: { skill: 15, burst: 60, dash: 60, jump: 60, walk: 66, swap: 59, lowPlunge: 15, highPlunge: 15 }, source: 'skill.go:skillLeapFrames[1]' },
+          { total: 178, cancels: { skill: 128, burst: 126, dash: 130, jump: 129, walk: 125, swap: 126, lowPlunge: 18, highPlunge: 18 }, source: 'skill.go:skillLeapFrames[2]' },
+        ],
+        maxUses: 2,
+        refreshFrames: [238, 179],
+      },
+      source: 'xianyun/skill.go: skillStateDur = {220, 238, 179}、AddStatus(skillStateKey, skillStateDur[counter], true)。3 回使うと次は新しい E。plunge.go: 落下攻撃で状態が消える',
+    },
+  }],
+};
+
+/**
+ * 一回押しの E のフレーム表を、表の並び順の最初ではなく、名前で選ぶキャラ（キー: キャラ ID、値: 表の名前）。
+ * タルタリヤ: skill.go の最初の表は近接の構えを終わらせる E（skillMeleeFrames。モードの終わらせるアクションのフレームに入れた）で、構えに入る E は skillRangedFrames
+ */
+const SKILL_TAP_TABLES: Record<string, string> = {
+  '10000033-hydro': 'skillRangedFrames',
 };
 
 /**
@@ -724,7 +841,8 @@ function buildActions(ctx: BuildContext): BuildResult {
   const skillTables = skill ? skill.tables.filter(t => !/Walk|Dash|Cancel|End|Lag|Delay/i.test(splitTableName(t.name).base)) : [];
   const families = firstOfEachFamily(skillTables);
   const holdTable = families.find(t => /hold/i.test(t.name) && !/short/i.test(t.name));
-  const tapTable = families.find(t => !/hold/i.test(t.name));
+  const tapOverride = SKILL_TAP_TABLES[id];
+  const tapTable = tapOverride ? families.find(t => splitTableName(t.name).base === tapOverride) : families.find(t => !/hold/i.test(t.name));
   let resolvedHoldTable = holdTable;
   // 明示的な Hold テーブルが無く、genshin-db に長押しCTがあり、一回押しが添字付き配列なら [1] を長押しとみなす
   if (!resolvedHoldTable && timings.skillHoldCooldown && tapTable) {
@@ -945,8 +1063,7 @@ function buildActions(ctx: BuildContext): BuildResult {
   }
 
   // スキル・爆発で入るモード（共通の定義）。効果バーは、計算側がモードのバーとして出す
-  const actionMode = ACTION_MODES[id];
-  if (actionMode) {
+  for (const actionMode of ACTION_MODES[id] ?? []) {
     for (const a of actions) {
       if (actionMode.action === 'e' ? a.id !== `${id}_e` : a.type !== 'burst' || a.specialBurst) continue;
       a.mode = actionMode.mode;

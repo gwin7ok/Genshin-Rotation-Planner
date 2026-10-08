@@ -43,8 +43,8 @@ export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summar
         <div className={`rounded-lg border p-2 ${sacrificial.ok ? 'border-emerald-800/70 bg-emerald-950/40 text-emerald-200' : 'border-amber-800/70 bg-amber-950/40 text-amber-200'}`}>
           祭礼の武器（{sacrificial.users.map(u => `${members[u.index]?.name ?? u.charKey} 精錬${u.refine}`).join('・')}）:{' '}
           {sacrificial.ok
-            ? `スキルの CT リセットが発動できる機会 ${sacrificial.opportunities} 回のすべてで発動する乱数の種 ${sacrificial.seed} を使っています（${sacrificial.searched} 個を探索）`
-            : `すべての機会で発動する種が見つからなかったため（${sacrificial.searched} 個を探索）、最も発動の多い種 ${sacrificial.seed}（機会 ${sacrificial.opportunities} 回のうち ${sacrificial.procs} 回で発動）を使っています。CT の長さが実際と異なる可能性があります`}
+            ? `アプリの発動 ${sacrificial.expected} 箇所のすべてで gcsim も発動し、余分な発動が無い乱数の種 ${sacrificial.seed} を使っています（${sacrificial.searched} 個を探索）`
+            : `アプリの発動と一致する種が見つからなかったため（${sacrificial.searched} 個を探索）、最も近い種 ${sacrificial.seed} を使っています（アプリの発動 ${sacrificial.expected} 箇所のうち gcsim でも発動 ${sacrificial.matched} 箇所・アプリでは発動するのに gcsim で発動しない ${sacrificial.missing} 箇所・アプリでは発動しないのに gcsim で発動した ${sacrificial.extras} 箇所）。スキルの CT の長さが、アプリの表示と異なる可能性があります`}
         </div>
       )}
 

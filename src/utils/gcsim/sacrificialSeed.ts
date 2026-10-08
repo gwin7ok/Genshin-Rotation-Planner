@@ -1,29 +1,31 @@
 /**
- * 祭礼系の武器（祭礼の断片・剣・大剣・弓）のスキル CT リセットの、乱数の種の探索（フェーズ 6 の 6-4。D7・D80）。
+ * 祭礼系の武器（祭礼の断片・剣・大剣・弓）のスキル CT リセットの、乱数の種の探索（フェーズ 6 の 6-4。D7・D80・D86）。
  *
- * gcsim の判定は確率（`0.3 + 0.1 × 精錬`。精錬 5 で 80%）で、発動を強制する手段が無い。種を固定して 1 回だけ実行すると、
- * たまたま発動して CT が極端に短く読まれる（夢見月瑞希 E: 15.00s → 0.42s）ことも、発動せず読まれないこともある。
- * そこで、**発動できる機会のすべてで発動する種**を探して、その種で実行した結果を使う（ユーザー決定 D80 2026-10-09。
- * 実行は 2 周で終わるので、機会は 1・2 周目に限られる）。
+ * gcsim の判定は確率（`0.3 + 0.1 × 精錬`。精錬 5 で 80%）で、発動を強制する手段が無い。確率と内部 CT は、gcsim が設定文の `refine=N` から決める
+ * （別に渡す手段は無い。アプリが渡す `refine` は、アプリの精錬と同じ）。
+ * 一方、アプリでは、発動確率はどの精錬でも 100%（スキルのダメージが当たった時点で、使用者が場にいて・スキルが CT 中で・武器の内部 CT が明けていれば発動。
+ * 内部 CT の長さだけが精錬で変わる）。そこで、**アプリで発動している箇所がすべて gcsim でも発動し、アプリで発動しない箇所で gcsim が発動しない種**を探して、
+ * その種で実行した結果を使う（ユーザー決定 D86 2026-10-09）。そうすると、gcsim のスキルの CT の結果が、アプリの CT バー・武器効果のバーと一致する。
  *
- * 発動できる機会（gcsim internal/weapons/common/sacrificial.go）: 使用者が場にいて、使用者のスキルのダメージ（AttackTagElementalArt = 4、ダメージ 0 でない）が敵に当たり、
- * そのとき使用者のスキルが CT 中で、武器の内部 CT（精錬 4 以上は `19 − 3×(精錬−4)` 秒、それ未満は `34 − 4×精錬` 秒）が明けているとき。
- * 機会は、ログから復元する（機会で発動しなかった分は、ログに残らないため）。
+ * アプリの発動（`SacrificialProc`: アクション ID・命中のフレーム・周）→ gcsim の予想時刻 =
+ *   「そのアクションの gcsim での実行のフレーム（設定文のアクション `GcsimActionRef` と、gcsim のログの `executed ...` を、先頭から順に対応づける）+ 命中のフレーム」。
+ * この時刻の前後 ±3 フレームに、同じキャラの `sacrificial proc'd` があれば、発動が一致。
  */
 import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient.ts';
+import type { GcsimActionRef } from './buildGcsimConfig.ts';
+import type { SacrificialProc } from '../rotationCalculator.ts';
 
 export const SACRIFICIAL_WEAPON_KEYS = ['sacrificialfragments', 'sacrificialsword', 'sacrificialgreatsword', 'sacrificialbow'] as const;
 
 /** 祭礼の武器の内部 CT（秒）。精錬 4 以上は `19 − 3×(精錬−4)`、それ未満は `34 − 4×精錬`（gcsim common/sacrificial.go） */
 export const sacrificialIcdSeconds = (refine: number): number => (refine >= 4 ? 19 - (refine - 4) * 3 : 34 - refine * 4);
 
-/** gcsim の AttackTagElementalArt（長押しのスキルは別のタグで、祭礼は発動しない） */
-const ATTACK_TAG_ELEMENTAL_ART = 4;
-
 /** 探索する種の最大数（見つからなければ、最良の種を使う） */
 export const MAX_SEED_SEARCH = 300;
-/** 同時に実行する数（gcsim のサーバーは並列で受けられる。1 回約 0.4 秒） */
+/** 同時に実行する数（gcsim のサーバーは並列で受けられる。1 回約 0.1〜0.4 秒） */
 const SEARCH_BATCH = 4;
+/** 発動の時刻の一致の許容（フレーム） */
+const MATCH_TOLERANCE_FRAMES = 3;
 
 export interface SacrificialUser {
   /** gcsim のキー（設定文の先頭の語） */
@@ -32,8 +34,6 @@ export interface SacrificialUser {
   index: number;
   weaponKey: string;
   refine: number;
-  /** 武器の内部 CT（フレーム） */
-  icdFrames: number;
 }
 
 /** 設定文から、祭礼系の武器を持つキャラを探す */
@@ -45,48 +45,58 @@ export function findSacrificialUsers(config: string): SacrificialUser[] {
     if (!(SACRIFICIAL_WEAPON_KEYS as readonly string[]).includes(m[2])) continue;
     const index = order.indexOf(m[1]);
     if (index < 0) continue;
-    const refine = Number(m[3]);
-    users.push({ charKey: m[1], index, weaponKey: m[2], refine, icdFrames: sacrificialIcdSeconds(refine) * 60 });
+    users.push({ charKey: m[1], index, weaponKey: m[2], refine: Number(m[3]) });
   }
   return users;
 }
 
-export interface SacrificialCheck {
-  /** 発動できる機会（フレームごとに 1 回と数える） */
-  opportunities: number;
-  /** そのうち、発動した数 */
-  procs: number;
-  /** 発動しなかった機会のフレーム */
-  missed: number[];
+export interface SacrificialMatch {
+  /** アプリの発動の数 */
+  expected: number;
+  /** そのうち、gcsim でも同じ箇所で発動した数 */
+  matched: number;
+  /** アプリでは発動するのに、gcsim で発動しなかった数 */
+  missing: number;
+  /** アプリでは発動しないのに、gcsim で発動した数 */
+  extras: number;
+  /** gcsim のログのアクションを、設定文のアクションに対応づけられなかった（途中で止まったなど）。その場合、対応づけられない発動は missing に数える */
+  unaligned: boolean;
 }
 
-/** ログから、祭礼が発動できた機会と、発動した数を数える */
-export function checkSacrificialProcs(logs: GcsimLogEvent[], users: SacrificialUser[], initialIndex: number): SacrificialCheck {
-  const result: SacrificialCheck = { opportunities: 0, procs: 0, missed: [] };
-  for (const user of users) {
-    const procFrames = new Set(logs.filter(l => l.event === 'weapon' && l.char_index === user.index && /sacrificial proc'd/.test(l.msg)).map(l => l.frame));
-    let active = initialIndex;
-    let skillOnCooldown = false;
-    let icdUntil = -Infinity;
-    let lastCountedFrame = -1;
-    for (const l of logs) {
-      if (l.event === 'action' && l.msg.startsWith('executed swap') && l.char_index !== undefined) active = l.char_index;
-      else if (l.event === 'cooldown' && l.char_index === user.index && l.logs?.type === 'skill') skillOnCooldown = String(l.logs.cooldown_queue ?? '') !== '';
-      else if (l.event === 'damage' && l.char_index === user.index && l.logs?.['attack-tag'] === ATTACK_TAG_ELEMENTAL_ART) {
-        const damage = Number(l.logs['damage'] ?? 0);
-        if (!(damage > 0) || active !== user.index || !skillOnCooldown || l.frame < icdUntil || l.frame === lastCountedFrame) continue;
-        lastCountedFrame = l.frame;
-        result.opportunities++;
-        if (procFrames.has(l.frame)) {
-          result.procs++;
-          icdUntil = l.frame + user.icdFrames;
-        } else {
-          result.missed.push(l.frame);
-        }
-      }
+const isLapMatch = (ref: GcsimActionRef, cycle: number): boolean =>
+  cycle === 0 ? ref.phase === 'initial' || ref.loopIteration === 1 : ref.phase === 'loop' && ref.loopIteration === cycle + 1;
+
+/** gcsim のログのうち、設定文のアクション（`GcsimActionRef`）に当たるもの（交代・待機を除く実行の順） */
+function executedActions(logs: GcsimLogEvent[]): GcsimLogEvent[] {
+  return logs.filter(l => {
+    if (l.event !== 'action') return false;
+    const m = l.msg.match(/^executed (\w+)/);
+    return !!m && !['swap', 'wait', 'noop', 'delay'].includes(m[1]);
+  });
+}
+
+/** アプリの発動と、gcsim のログの発動を照合する */
+export function matchAppProcs(logs: GcsimLogEvent[], refs: GcsimActionRef[], appProcs: SacrificialProc[]): SacrificialMatch {
+  const executed = executedActions(logs);
+  const procEvents = logs.filter(l => l.event === 'weapon' && /sacrificial proc/.test(l.msg));
+  const used = new Set<number>();
+  let matched = 0;
+  let unaligned = executed.length < refs.length;
+  for (const p of appProcs) {
+    const refIndex = refs.findIndex(r => r.actionId === p.actionId && isLapMatch(r, p.cycle));
+    const exec = refIndex >= 0 ? executed[refIndex] : undefined;
+    if (!exec || !exec.msg.includes(refs[refIndex].command)) {
+      if (refIndex >= 0) unaligned = true;
+      continue;
+    }
+    const expectFrame = exec.frame + p.hitFrame;
+    const i = procEvents.findIndex((e, k) => !used.has(k) && e.char_index === exec.char_index && Math.abs(e.frame - expectFrame) <= MATCH_TOLERANCE_FRAMES);
+    if (i >= 0) {
+      used.add(i);
+      matched++;
     }
   }
-  return result;
+  return { expected: appProcs.length, matched, missing: appProcs.length - matched, extras: procEvents.length - used.size, unaligned };
 }
 
 export interface SacrificialSearchInfo {
@@ -95,31 +105,42 @@ export interface SacrificialSearchInfo {
   seed: number;
   /** 試した種の数 */
   searched: number;
-  opportunities: number;
-  procs: number;
-  /** すべての機会で発動する種が見つかったか（false なら、最良の種を使っている） */
+  expected: number;
+  matched: number;
+  missing: number;
+  extras: number;
+  /** アプリの発動がすべて発動し、余分な発動も無い種が見つかったか（false なら、最も近い種を使っている） */
   ok: boolean;
 }
 
 export type SacrificialRunResult = GcsimSampleResult & { sacrificial?: SacrificialSearchInfo };
 
+export interface SacrificialSearchInput {
+  /** アプリの計算の、祭礼の武器の発動（`calculateRotation` の `sacrificialProcs`） */
+  appProcs: SacrificialProc[];
+  /** 設定文のアクション（`buildGcsimConfig` の `actionRefs`） */
+  refs: GcsimActionRef[];
+}
+
+/** 種の良さ（大きいほど良い）: 発動の不足・余分が少ない */
+const score = (m: SacrificialMatch) => -(m.missing * 2 + m.extras) - (m.unaligned ? 0.5 : 0);
+
 /**
- * 設定文を実行する。祭礼系の武器があれば、すべての機会で発動する種を探して、その種の結果を返す（無ければ、最初の種で 1 回だけ実行）。
+ * 設定文を実行する。祭礼系の武器があれば、アプリの発動に合う種（アプリの発動がすべて発動し、余分な発動が無い）を探して、その種の結果を返す
+ * （無ければ、最初の種で 1 回だけ実行）。見つからなければ、最も近い種（不足・余分が最も少ない。同じなら小さい種）を使う。
  * run は、種を指定して 1 回実行する関数（runGcsimSample）
  */
 export async function runWithSacrificialSeed(
   config: string,
   run: (config: string, seed: number) => Promise<GcsimSampleResult>,
+  input: SacrificialSearchInput,
   firstSeed = 1,
   maxSeeds = MAX_SEED_SEARCH,
 ): Promise<SacrificialRunResult> {
   const users = findSacrificialUsers(config);
   if (users.length === 0) return run(config, firstSeed);
 
-  const order: string[] = [];
-  for (const m of config.matchAll(/^(\w+) char /gm)) order.push(m[1]);
-
-  let best: { res: Extract<GcsimSampleResult, { status: 'ok' }>; check: SacrificialCheck } | undefined;
+  let best: { res: Extract<GcsimSampleResult, { status: 'ok' }>; match: SacrificialMatch } | undefined;
   let searched = 0;
   for (let from = firstSeed; from < firstSeed + maxSeeds; from += SEARCH_BATCH) {
     const seeds = Array.from({ length: Math.min(SEARCH_BATCH, firstSeed + maxSeeds - from) }, (_, i) => from + i);
@@ -128,15 +149,15 @@ export async function runWithSacrificialSeed(
       searched++;
       // 実行できなかったとき（設定文のエラー・サーバーに接続できない）は、その結果をそのまま返す
       if (res.status !== 'ok') return res;
-      const initialIndex = res.initialCharacter ? order.indexOf(res.initialCharacter) : 0;
-      const check = checkSacrificialProcs(res.logs, users, initialIndex);
-      const info = (ok: boolean): SacrificialSearchInfo => ({ users, seed: res.seed, searched, opportunities: check.opportunities, procs: check.procs, ok });
-      if (check.procs === check.opportunities) return { ...res, sacrificial: info(true) };
-      const ratio = (c: SacrificialCheck) => (c.opportunities === 0 ? 1 : c.procs / c.opportunities);
-      if (!best || ratio(check) > ratio(best.check)) best = { res, check };
+      const match = matchAppProcs(res.logs, input.refs, input.appProcs);
+      if (match.missing === 0 && match.extras === 0 && !match.unaligned) {
+        return { ...res, sacrificial: { users, seed: res.seed, searched, ...pick(match), ok: true } };
+      }
+      if (!best || score(match) > score(best.match)) best = { res, match };
     }
   }
-  // 見つからなかった: 発動の割合が最も高い種を使う
   const b = best!;
-  return { ...b.res, sacrificial: { users, seed: b.res.seed, searched, opportunities: b.check.opportunities, procs: b.check.procs, ok: false } };
+  return { ...b.res, sacrificial: { users, seed: b.res.seed, searched, ...pick(b.match), ok: false } };
 }
+
+const pick = (m: SacrificialMatch) => ({ expected: m.expected, matched: m.matched, missing: m.missing, extras: m.extras });

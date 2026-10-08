@@ -86,8 +86,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     setRunning(true);
-    // 祭礼系の武器があれば、発動できる機会のすべてで発動する乱数の種を探す（6-4。無ければ、最初の種で 1 回だけ実行）
-    const res = await runWithSacrificialSeed(result.config, runGcsimSample, DEFAULT_SEED);
+    // 祭礼系の武器があれば、アプリの発動がすべて発動し、余分な発動が無い乱数の種を探す（6-4・D86。無ければ、最初の種で 1 回だけ実行）
+    const res = await runWithSacrificialSeed(result.config, runGcsimSample, { appProcs: calculated.sacrificialProcs, refs: result.actionRefs }, DEFAULT_SEED);
     if (res.status !== 'ok') {
       setRunning(false);
       setRunOutcome({ status: res.status, message: res.message });
@@ -270,7 +270,11 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               }
               const durations = applyActionDurations(stints, runOutcome.align.pairs, effectiveDurations);
               const specialActionIds = new Set(calculated.calculatedStints.flatMap(st => st.actions).filter(a => a.cooldownPool === 'special').map(a => a.id));
-              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns, specialActionIds, calculated.cdResonanceScale);
+              // 祭礼の武器を持つキャラのスキルの CT は、書き戻さない（発動による CT のリセットは、アプリの計算が持つ。書き戻すと、CT がすでに短く、発動の判定と武器の内部 CT の管理が失われる）
+              const sacrificialSkillIds = new Set(
+                calculated.calculatedStints.filter(st => calculated.sacrificialCharIds.includes(st.characterId)).flatMap(st => st.actions).filter(a => a.type === 'skill' || a.type === 'skill_hold').map(a => a.id),
+              );
+              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns, specialActionIds, calculated.cdResonanceScale, sacrificialSkillIds);
               const effectiveEffects: Record<string, number> = {};
               for (const b of calculated.activeBuffs) {
                 if (b.origin === 'passive') continue;

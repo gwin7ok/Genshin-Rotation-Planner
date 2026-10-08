@@ -21,6 +21,8 @@ export interface TriggerableBuffDefinition {
   gcsimNote?: string;              // gcsim 対象外の理由
   gcsimKeys?: string[];            // 対応する gcsim の効果のキー（パターンを含む）。各キーを別のバーにする
   gcsimCooldownKeys?: string[];    // 対応する gcsim の発動間隔（CT）のキー
+  /** true = アプリの計算が自動で出す効果（祭礼の武器: スキルのダメージが当たったとき、確率 100% で発動）。手で置く候補には出さない */
+  autoApplied?: boolean;
 }
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
@@ -106,6 +108,7 @@ export function getAvailableBuffsForCharacter(
           gcsimNote: b.gcsimNote,
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
+          ...(b.gcsimCooldownKeys?.includes('sacrificial-cd') ? { autoApplied: true } : {}),
         });
       }
     }

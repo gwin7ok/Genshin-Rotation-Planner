@@ -1855,7 +1855,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           lapTwo: isLapTwoView,
                                         });
                                       };
-                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : p.auto ? 'cursor-default' : 'cursor-grab';
                                       const activeRingClass = isPending ? 'opacity-60' : isBuffActive ? runningRingClass : 'opacity-90';
 
                                       return (
@@ -1866,7 +1866,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         <div
                                           key={`reg_p_eff_${p.id}`}
                                           data-no-pan
-                                          onMouseDown={startDrag}
+                                          onMouseDown={p.auto ? undefined : startDrag}
                                           onClick={(e) => e.stopPropagation()}
                                           style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
                                           className={`${barCommon} ${cursor} font-medium border-dashed ${
@@ -1876,7 +1876,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${activeRingClass}`}
-                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）\n${p.name} (${p.duration}s)\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT警告】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています。この発動では効果は発動しません（gcsim の計算は制限されません）` : ''}`}
+                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}${p.auto ? '自動（アプリの計算。確率 100%・スキルのダメージが当たったとき）' : `ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）`}\n${p.name} (${p.duration}s)\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT警告】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています。この発動では効果は発動しません（gcsim の計算は制限されません）` : ''}`}
                                         >
                                           <span className="truncate flex items-center gap-1">
                                             {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" /> : badgeCfg.icon}
@@ -1940,7 +1940,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       const start = drawX;
                                       const isPending = isLapTwoBar && !isCarryOverActive(realStart);
                                       const visualEnd = Math.min(totalDuration, start + p.cooldown);
-                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : 'cursor-grab';
+                                      const cursor = isDragging ? 'cursor-grabbing ring-2 ring-amber-300' : p.auto ? 'cursor-default' : 'cursor-grab';
                                       const startDrag = (e: React.MouseEvent) => {
                                         if (e.button !== 0) return;
                                         e.preventDefault();
@@ -1966,11 +1966,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         <div
                                           key={`reg_p_cd_${p.id}`}
                                           data-no-pan
-                                          onMouseDown={startDrag}
+                                          onMouseDown={p.auto ? undefined : startDrag}
                                           onClick={(e) => e.stopPropagation()}
                                           style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
                                           className={`${barCommon} ${cursor} font-mono ${isPending ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60' : badgeCfg.cooldownBarClass}`}
-                                          title={`【${badgeCfg.label}バフのCT${isLapTwoBar ? '・2周目' : ''}】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]（ドラッグで効果と一緒に移動）`}
+                                          title={`【${badgeCfg.label}バフのCT${isLapTwoBar ? '・2周目' : ''}】${p.name}\nCT ${p.cooldown.toFixed(1)}s [${start.toFixed(1)}s ~ ${(start + p.cooldown).toFixed(1)}s]${p.auto ? '（自動。精錬で長さが決まる）' : '（ドラッグで効果と一緒に移動）'}`}
                                         >
                                           <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
                                         </div>

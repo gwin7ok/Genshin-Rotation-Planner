@@ -46,14 +46,11 @@ const makeAction = (char: any, step: Step) => {
   return base;
 };
 
-// 祭礼の武器（確率 100%・武器の内部 CT だけ考慮。2026-10-09）を持たせるための、武器の一覧。weaponId が無いキャラには影響しない
-const WEAPON_DB = [
-  { id: 'w_sword', name: '祭礼の剣', rarity: 4, gcsimKey: 'sacrificialsword', refinementRank: 5, weaponType: 'sword', baseAttack: 454 },
-  { id: 'w_claymore', name: '祭礼の大剣', rarity: 4, gcsimKey: 'sacrificialgreatsword', refinementRank: 5, weaponType: 'claymore', baseAttack: 454 },
-  { id: 'w_bow', name: '祭礼の弓', rarity: 4, gcsimKey: 'sacrificialbow', refinementRank: 5, weaponType: 'bow', baseAttack: 454 },
-  { id: 'w_catalyst', name: '祭礼の断片', rarity: 4, gcsimKey: 'sacrificialfragments', refinementRank: 5, weaponType: 'catalyst', baseAttack: 454 },
-];
-const SAC = (type: string) => ({ weaponId: 'w_' + type, weaponRefinementRank: 5 });
+// 祭礼の武器（確率 100%・武器の内部 CT だけ考慮。2026-10-09）を持たせるための、武器の一覧（実際のマスター。武器効果の定義を使って、自動のバーを出す）。weaponId が無いキャラには影響しない
+const MASTER_WEAPONS: any[] = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+const SAC_IDS: Record<string, string> = { sword: '11403', claymore: '12403', bow: '15403', catalyst: '14403' };
+const WEAPON_DB = Object.values(SAC_IDS).map(id => MASTER_WEAPONS.find(w => w.id === id)).filter(Boolean);
+const SAC = (type: string) => ({ weaponId: SAC_IDS[type], weaponRefinementRank: 5 });
 
 const S = (name: string, chars: Scenario['chars'], stints: Scenario['stints'], opts: Partial<Scenario> = {}): Scenario => ({ name, chars, stints, ...opts });
 const B: [string] = ['ベネット'];
@@ -167,6 +164,7 @@ function runScenario(sc: Scenario) {
     })),
     bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), b.noSynergy ? 'noSynergy' : '']).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
     cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || String(a[1]).localeCompare(String(b[1]))),
+    ...(res.passiveSpans.some((p: any) => p.auto) ? { autoPassives: res.passiveSpans.filter((p: any) => p.auto).map((p: any) => [p.name, r3(p.startTime), r3(p.cooldown), r3(p.cooldownEnd)]) } : {}),
     issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => (a[1] + a[2]).localeCompare(b[1] + b[2])),
     gcsim: built.config.split('\n').filter((l: string) => !/^\S+ (char|add) |^options|^target|^energy|^#/.test(l)).join('\n'),
     gcsimMessages: [...(built.errors ?? []), ...(built.warnings ?? [])].map((w: any) => (typeof w === 'string' ? w : w.message)),

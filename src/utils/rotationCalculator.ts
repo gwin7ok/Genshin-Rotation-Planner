@@ -35,7 +35,24 @@ export interface BuffOverlapSegment {
   activeBuffs: string[];
 }
 
+/** 祭礼の武器の発動（アプリの計算の結果。gcsim の種の探索で、gcsim も同じ箇所で発動する種を探すのに使う） */
+export interface SacrificialProc {
+  charId: string;
+  /** 発動のきっかけになったスキルのアクション（命中の表の元） */
+  actionId: string;
+  /** スキルを実行したフレームからの命中のフレーム（命中時刻の表） */
+  hitFrame: number;
+  /** 0 = 1 周目、1 = 2 周目（ループの区間のアクションだけ） */
+  cycle: number;
+  /** 発動の時刻（その周の時間軸）。cycle 1 は 1 周目の時間軸に ループ 1 周の長さを足した値 */
+  time: number;
+  /** 武器の内部 CT（秒） */
+  icdSeconds: number;
+}
+
 export interface CalculatedRotation {
+  /** 祭礼の武器の発動の一覧（確率 100%・内部 CT だけ考慮した、アプリの計算） */
+  sacrificialProcs: SacrificialProc[];
   /** 風元素共鳴による CT の倍率（0.95 または 1）。gcsim の書き戻しに記録する */
   cdResonanceScale: number;
   totalDuration: number;
@@ -639,7 +656,8 @@ export function calculateRotation(
             ctOffset: 0,
             cooldown: 0,
             checked: false,
-            sacrificial: { icdSeconds: sacrificial!.icdSeconds },
+            sacrificial: { icdSeconds: sacrificial!.icdSeconds, hitFrame: h },
+            actionId: act.id,
             stintIndex: sIdx,
             name: act.name,
             onViolation: () => {},
@@ -1286,7 +1304,8 @@ export function calculateRotation(
     if (loopPeriod > 0.05) while (tt >= totalDuration - 1e-6 && tt - loopPeriod >= loopStartTime - 1e-6) tt -= loopPeriod;
     return (stintIntervals.get(charId) ?? []).some(([s0, e0]) => tt >= s0 - 1e-6 && tt < e0 - 1e-6);
   };
-  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt)) {
+  const sacrificialProcs: SacrificialProc[] = [];
+  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs)) {
     skillCooldowns.push(span);
     charStates[span.characterId]?.skillCooldowns.push(span);
   }
@@ -1395,6 +1414,7 @@ export function calculateRotation(
   const loopedBuffOverlapSegments = buildBuffOverlapSegments([...activeBuffs, ...carryOverBuffs], totalDuration);
 
   return {
+    sacrificialProcs,
     cdResonanceScale,
     totalDuration,
     calculatedStints,
@@ -1429,7 +1449,7 @@ interface CooldownEvent {
   /** この枠のチャージ数（同時に溜められる回数。無ければ 1）。どのチャージもCT中なら違反 */
   charges?: number;
   /** 祭礼の武器: スキルのダメージが敵に当たる時刻の判定（確率 100%）。使用者が場にいて、スキルが CT 中で、武器の内部 CT が明けていれば、スキルの先頭の CT を捨てる */
-  sacrificial?: { icdSeconds: number };
+  sacrificial?: { icdSeconds: number; hitFrame: number };
   /** true のとき、回数が 1 でも CT のキューで持つ（CT を後から短縮されるスキル。閑雲。バーの終わりが短縮で動く） */
   forceQueue?: boolean;
   /** true のとき、この発動が全回数分のCTをキューに積む（1 つ目はこの時刻から、2 つ目は 1 つ目が明けてから。検査はしない。ファルカのスキルが特殊スキルのCTを開始する）。この枠は、短縮が先頭だけに効く */
@@ -1493,7 +1513,7 @@ function endAtNextStart<T extends { startTime: number; endTime: number }>(spans:
  * 3周目以降は、各発動の直前にある同じ CT の発動が2周目と同じ（1周前の同じ位置）になるため、2周分の判定で足りる。
  * どちらの周で違反しても、元の発動に違反の印を付ける。
  */
-function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean): CooldownSpan[] {
+function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean, procsOut?: SacrificialProc[]): CooldownSpan[] {
   const extraCycles = loopPeriod > 0.05 ? 1 : 0;
 
   const timeline: Array<{ event: CooldownEvent; time: number; cycle: number; order: number }> = [];
@@ -1548,6 +1568,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       if (queue?.head && item.time >= queue.head.start - 1e-6 && isActiveAt(charId, ev.time) && item.time >= (sacrificialIcdUntil.get(charId) ?? -Infinity) - 1e-9) {
         queue.release(item.time);
         sacrificialIcdUntil.set(charId, item.time + ev.sacrificial.icdSeconds);
+        procsOut?.push({ charId, actionId: ev.actionId ?? '', hitFrame: ev.sacrificial.hitFrame, cycle: item.cycle, time: Number(item.time.toFixed(3)), icdSeconds: ev.sacrificial.icdSeconds });
       }
       continue;
     }

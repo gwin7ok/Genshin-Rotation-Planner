@@ -209,9 +209,11 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char') continue;
         if (act.type === 'wait') {
-          // 出場の最後の待機には、モードの維持のための自動の待ちを足す
+          // 出場の最後の待機には、モードの維持のための自動の待ちを足す。
+          // 待機は `wait`（その場で、その時間を使う）。`delay` は次のアクションが実行できる状態になった「後」に入るため、待機の途中で CT が明ける
+          // 並び（E → 待機 → E）でも、gcsim が次のアクションを待機の前に試して CT 待ちになり、実行が待機の分だけ遅れてしまう（2026-10-09）
           const frames = toFrames(act.duration + Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0));
-          if (frames > 0) out.push(`${indent}delay(${frames});`);
+          if (frames > 0) out.push(`${indent}wait(${frames});`);
           continue;
         }
         // gcsim が実装していないアクション（大剣の重撃など）は、実行すると「action ... not implemented」のエラーになるので、設定文に入れない

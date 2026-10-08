@@ -357,8 +357,19 @@ export function calculateRotation(
       // パンチ・蹴りになった E（ディシアの爆発の後）は、炎場の置き直しにならず、新しいモードも開かない
       if (modeKind === 'punch' || modeKind === 'kick') modeRepress = undefined;
       // このアクションが、新しいモードを開くか（続いているモードの、終わらせるアクション・もう一度使った動作・パンチではない）
+      // モードの間に置けない操作（夢見月瑞希の夢浮かみの間の通常攻撃など）: 黄色の警告（アプリの時間は変えない）
+      const blockingMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && !!m.def.blocked?.types.includes(act.type));
+      const blockedMessage = blockingMode?.def.blocked
+        ? `「${blockingMode.def.label}」の間は「${act.name}」を置けません。${blockingMode.def.blocked.result === 'wait'
+          ? `gcsim では${blockingMode.def.label}が終わるまで（あと ${(blockingMode.end - actionStartTime).toFixed(1)} 秒）待ちます`
+          : 'gcsim では実行エラーになります'}。${blockingMode.def.blocked.hint}`
+        : undefined;
+      // gcsim で実行エラーになる操作（スカークの七相一閃の間の E）は、自分の CT・効果バーを持たない
+      if (blockingMode?.def.blocked?.result === 'error' && (act.type === 'skill' || act.type === 'skill_hold')) inStateWindow = true;
       const opensMode = !!actionDef?.mode && !(modeEnder && modeEnder.window.key === modeKeyOf(char.id, actionDef.mode)) && !modeRepress
-        && modeKind !== 'punch' && modeKind !== 'kick' && specialConditionOk(actionDef.mode, actionStartTime);
+        && modeKind !== 'punch' && modeKind !== 'kick' && specialConditionOk(actionDef.mode, actionStartTime)
+        // モードの間に置けない操作（スカークの七相一閃の間の E）は、新しいモードを開かない
+        && !blockedMessage;
       // スキルが全回数分の特殊スキルの CT を積むとき（ファルカ）の、受付の終わり（このアクションが開く受付に付ける）
       let pendingCtWindow: { until: number; effectiveEnd?: number } | undefined;
       if (modeEnder) {
@@ -474,6 +485,19 @@ export function calculateRotation(
         endTime: actionEndTime,
       };
       computedActions.push(computedAction);
+      if (blockedMessage) {
+        computedAction.specialWindowWarning = blockedMessage;
+        validationIssues.push({
+          id: `mode_blocked_${act.id}`,
+          severity: 'warning',
+          characterId: char.id,
+          stintId: rawStint.id,
+          actionId: act.id,
+          time: actionStartTime,
+          title: `${char.name}: モードの間に置けない操作`,
+          message: blockedMessage,
+        });
+      }
 
       // gcsim の結果でCT待ちが生じたアクション: アプリのCT違反と同じ印を付ける
       const externalWait = options?.externalCtWaits?.[act.id];

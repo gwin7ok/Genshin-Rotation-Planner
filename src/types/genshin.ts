@@ -102,6 +102,11 @@ export interface ActionMode {
    * 特殊爆発（kind = burst。specialBurst のアクション）を使える。外で使うと警告（gcsim では通常のスキル・爆発になる）
    */
   special?: ActionModeSpecial;
+  /**
+   * モードの間に置けない操作（段階 ④。2026-10-08）。置くと黄色の警告（アプリの時間は変えない。D12・D21 と同じ考え方）。
+   * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）。hint = 警告に添える、終わらせ方などの案内
+   */
+  blocked?: { types: ActionType[]; result: 'wait' | 'error'; hint: string };
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
   normalFrames?: ActionFrames[];
   /** モードの間の元素爆発のフレーム */

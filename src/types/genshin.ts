@@ -107,6 +107,11 @@ export interface ActionMode {
    * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）。hint = 警告に添える、終わらせ方などの案内
    */
   blocked?: { types: ActionType[]; result: 'wait' | 'error'; hint: string };
+  /**
+   * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 雲の変化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
+   * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでの動きは未確認）
+   */
+  cooldownReduceOnExpire?: { seconds: number; afterSwap: boolean };
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
   normalFrames?: ActionFrames[];
   /** モードの間の元素爆発のフレーム */

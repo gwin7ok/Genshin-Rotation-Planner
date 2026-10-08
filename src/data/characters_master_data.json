@@ -525,6 +525,7 @@
           "cooldownStart": "burst.go:38"
         },
         "defaultDuration": 1.5,
+        "effectLabel": "蒲公英の風",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.633
@@ -9822,6 +9823,7 @@
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.467,
+        "effectLabel": "オズ",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -13083,6 +13085,7 @@
           },
           "source": "keqing/skill.go: Status.Add(stilettoKey, 5*60+20)。雷楔がある間の E は再発動"
         },
+        "effectLabel": "雷楔",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
@@ -15169,6 +15172,7 @@
           "cooldownStart": "skill.go:28"
         },
         "defaultDuration": 0.767,
+        "effectLabel": "丹火の印",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.467
@@ -23475,6 +23479,7 @@
           },
           "source": "wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）"
         },
+        "effectLabel": "風の加護",
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
@@ -26786,6 +26791,7 @@
           "holdByDefault": false,
           "source": "freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）"
         },
+        "effectLabel": "加圧",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
@@ -30446,6 +30452,7 @@
           "cooldownStart": "skill.go:16"
         },
         "defaultDuration": 1.283,
+        "effectLabel": "血の契約",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
@@ -32083,6 +32090,7 @@
           "cooldownStart": "manual: mualani/skill.go: cancelNightsoul() の SetCD(6秒)"
         },
         "defaultDuration": 1.15,
+        "effectLabel": "標的の印",
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
@@ -34647,6 +34655,7 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.283,
+        "effectLabel": "速攻状態",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -34908,12 +34917,28 @@
           },
           "source": "plunge.go:xianyunLowPlungeFrames"
         },
-        "plungeOpensWindow": {
-          "windowSeconds": 2.333,
-          "windowLabel": "マキシマムドライブ",
-          "openedBy": "落下攻撃",
-          "minConstellation": 2,
-          "closedBySkill": true
+        "mode": {
+          "label": "マキシマムドライブ",
+          "description": "特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる",
+          "startDelayFrames": 0,
+          "durationFrames": 140,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noSynergy": true,
+          "barNote": "落下攻撃",
+          "keepEffectBar": true,
+          "special": {
+            "kind": "burst",
+            "singleUse": true,
+            "closedBySkill": true,
+            "openCondition": {
+              "minConstellation": 2,
+              "orBlessing": true
+            }
+          },
+          "source": "varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。burst.go: volcanicKablam で状態を消す。skill.go: スキルで状態が消える"
         },
         "nightsoul": {
           "role": "plunge",
@@ -34942,12 +34967,28 @@
           },
           "source": "plunge.go:highPlungeFrames"
         },
-        "plungeOpensWindow": {
-          "windowSeconds": 2.333,
-          "windowLabel": "マキシマムドライブ",
-          "openedBy": "落下攻撃",
-          "minConstellation": 2,
-          "closedBySkill": true
+        "mode": {
+          "label": "マキシマムドライブ",
+          "description": "特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる",
+          "startDelayFrames": 0,
+          "durationFrames": 140,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noSynergy": true,
+          "barNote": "落下攻撃",
+          "keepEffectBar": true,
+          "special": {
+            "kind": "burst",
+            "singleUse": true,
+            "closedBySkill": true,
+            "openCondition": {
+              "minConstellation": 2,
+              "orBlessing": true
+            }
+          },
+          "source": "varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。burst.go: volcanicKablam で状態を消す。skill.go: スキルで状態が消える"
         },
         "nightsoul": {
           "role": "plunge",
@@ -37133,21 +37174,20 @@
         "startsSpecialPool": {
           "cooldown": 6,
           "charges": 1,
-          "windowSeconds": 10.317,
-          "windowOnly": true,
-          "singleUse": false,
-          "windowLabel": "北国の嵐槍の受付（幽炎の露顕）"
+          "windowOnly": true
         },
         "mode": {
           "label": "幽炎の露顕",
-          "description": "幽炎の露顕の状態。入力がなければ 10.3 秒続く。キャラ交代で終わる",
+          "description": "幽炎の露顕の状態。この間、特殊スキル「北国の嵐槍」（spE）を使える。キャラ交代で終わる",
           "startDelayFrames": 0,
           "durationFrames": 619,
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "flins/skill.go: manifest-flame（実行: E と同時に 619f）。交代で解除",
-          "windowState": true
+          "source": "flins/skill.go: AddStatus(skillKey, 10*60+skillHitmark, true)（manifest-flame。実行: E と同時に 619f）。嵐槍を使っても消えず、交代で消える",
+          "special": {
+            "kind": "skill"
+          }
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -37178,14 +37218,31 @@
           },
           "source": "skill.go:spearStormFrames"
         },
+        "effectLabel": "北国の嵐槍",
         "dataSource": {
           "cooldown": "gcsim: flins/skill.go: spearStorm の AddStatus(spearStormCDKey, c1SkillCD(), false)（6 秒。命ノ星座 1 で 4 秒 → 未対応）。ActionReady: 幽炎の露顕の間、CT（spearStormCDKey）が明けていれば使える。状態が終わる（10*60+19f）か交代で CT は消える。説明文「基本クールタイムは 6 秒であり、他の効果の影響を受けない」",
-          "effectDuration": "北国の嵐槍"
+          "effectDuration": "gcsim: flins/skill.go: spearStorm の AddStatus(spearStormCDKey, c1SkillCD(), false)（6 秒。命ノ星座 1 で 4 秒 → 未対応）。ActionReady: 幽炎の露顕の間、CT（spearStormCDKey）が明けていれば使える。状態が終わる（10*60+19f）か交代で CT は消える。説明文「基本クールタイムは 6 秒であり、他の効果の影響を受けない」"
         },
-        "recastOpensWindow": {
-          "windowSeconds": 6,
-          "windowLabel": "雷霆のシンフォニーの受付",
-          "openedBy": "嵐槍"
+        "mode": {
+          "label": "雷霆のシンフォニーの受付",
+          "description": "特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる",
+          "startDelayFrames": 0,
+          "durationFrames": 360,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noSynergy": true,
+          "barNote": "嵐槍",
+          "keepEffectBar": true,
+          "special": {
+            "kind": "burst",
+            "singleUse": true,
+            "openCondition": {
+              "requiresOpen": "skill"
+            }
+          },
+          "source": "flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）"
         }
       },
       {
@@ -39255,33 +39312,6 @@
         "startsSpecialPool": {
           "cooldown": 11,
           "charges": 2,
-          "windowSeconds": 12,
-          "windowDelay": 0.65,
-          "windowExtendOnBurst": 2.3,
-          "windowHitlag": {
-            "normal": [
-              0.1,
-              0.13333333333333333,
-              0.13333333333333333,
-              0.15,
-              0.16666666666666666
-            ],
-            "charged": 0.3,
-            "special": 0.15,
-            "skill": 0.15
-          },
-          "windowHitlagNoDefHalt": {
-            "normal": [
-              0.03333333333333333,
-              0.06666666666666667,
-              0.06666666666666667,
-              0.1,
-              0.1
-            ],
-            "charged": 0.2,
-            "special": 0.1,
-            "skill": 0.1
-          },
           "reducePerHit": 0.5,
           "reducePerHitHexerei": 1,
           "hitsPerNormal": [
@@ -39295,14 +39325,13 @@
         },
         "mode": {
           "label": "疾風怒濤",
-          "description": "疾風怒濤の状態。入力がなければ 12.0 秒続く。キャラ交代で終わる",
+          "description": "疾風怒濤の状態。この間、特殊スキル（spE）を使える。ヒットストップ・自分の元素爆発で延びる。キャラ交代で終わる",
           "startDelayFrames": 39,
           "durationFrames": 720,
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除。状態の間の E は specialSkill",
-          "windowState": true,
+          "source": "varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)（sturm-und-drang。実行: E の 39f 後に 720f）。varka/burst.go: ExtendStatus(skillKey, 2.3*60)。交代で解除。状態の間の E は specialSkill",
           "repress": {
             "frames": [
               {
@@ -39318,7 +39347,38 @@
                 },
                 "source": "skill.go:specialSkillFrames"
               }
+            ],
+            "actions": [
+              "e"
             ]
+          },
+          "special": {
+            "kind": "skill",
+            "extendOnBurst": 2.3,
+            "hitlag": {
+              "normal": [
+                0.1,
+                0.13333333333333333,
+                0.13333333333333333,
+                0.15,
+                0.16666666666666666
+              ],
+              "charged": 0.3,
+              "special": 0.15,
+              "skill": 0.15
+            },
+            "hitlagNoDefHalt": {
+              "normal": [
+                0.03333333333333333,
+                0.06666666666666667,
+                0.06666666666666667,
+                0.1,
+                0.1
+              ],
+              "charged": 0.2,
+              "special": 0.1,
+              "skill": 0.1
+            }
           }
         },
         "cooldownStart": {
@@ -39343,33 +39403,6 @@
         "startsSpecialPool": {
           "cooldown": 11,
           "charges": 2,
-          "windowSeconds": 12,
-          "windowDelay": 0.65,
-          "windowExtendOnBurst": 2.3,
-          "windowHitlag": {
-            "normal": [
-              0.1,
-              0.13333333333333333,
-              0.13333333333333333,
-              0.15,
-              0.16666666666666666
-            ],
-            "charged": 0.3,
-            "special": 0.15,
-            "skill": 0.15
-          },
-          "windowHitlagNoDefHalt": {
-            "normal": [
-              0.03333333333333333,
-              0.06666666666666667,
-              0.06666666666666667,
-              0.1,
-              0.1
-            ],
-            "charged": 0.2,
-            "special": 0.1,
-            "skill": 0.1
-          },
           "reducePerHit": 0.5,
           "reducePerHitHexerei": 1,
           "hitsPerNormal": [
@@ -39380,6 +39413,64 @@
             2
           ],
           "maxReductions": 15
+        },
+        "mode": {
+          "label": "疾風怒濤",
+          "description": "疾風怒濤の状態。この間、特殊スキル（spE）を使える。ヒットストップ・自分の元素爆発で延びる。キャラ交代で終わる",
+          "startDelayFrames": 39,
+          "durationFrames": 720,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": true,
+          "source": "varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)（sturm-und-drang。実行: E の 39f 後に 720f）。varka/burst.go: ExtendStatus(skillKey, 2.3*60)。交代で解除。状態の間の E は specialSkill",
+          "repress": {
+            "frames": [
+              {
+                "total": 68,
+                "cancels": {
+                  "attack": 55,
+                  "charge": 64,
+                  "skill": 56,
+                  "burst": 55,
+                  "dash": 56,
+                  "jump": 55,
+                  "walk": 65
+                },
+                "source": "skill.go:specialSkillFrames"
+              }
+            ],
+            "actions": [
+              "e"
+            ]
+          },
+          "special": {
+            "kind": "skill",
+            "extendOnBurst": 2.3,
+            "hitlag": {
+              "normal": [
+                0.1,
+                0.13333333333333333,
+                0.13333333333333333,
+                0.15,
+                0.16666666666666666
+              ],
+              "charged": 0.3,
+              "special": 0.15,
+              "skill": 0.15
+            },
+            "hitlagNoDefHalt": {
+              "normal": [
+                0.03333333333333333,
+                0.06666666666666667,
+                0.06666666666666667,
+                0.1,
+                0.1
+              ],
+              "charged": 0.2,
+              "special": 0.1,
+              "skill": 0.1
+            }
+          }
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -41146,28 +41237,43 @@
         "startsSpecialPool": {
           "cooldown": 15,
           "charges": 1,
-          "windowSeconds": 6.567,
-          "windowOnly": true,
-          "singleUse": true,
-          "windowLabel": "柔き払暁のコーダの受付",
-          "windowHitlag": {
-            "normal": [
-              0.1,
-              0.1,
-              0.03333333333333333,
-              0.05,
-              0
-            ]
+          "windowOnly": true
+        },
+        "mode": {
+          "label": "柔き払暁のコーダの受付",
+          "description": "特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延びる。受付の外では、gcsim では通常のスキルになる",
+          "startDelayFrames": 0,
+          "durationFrames": 394,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noSynergy": true,
+          "barNote": "スキル",
+          "keepEffectBar": true,
+          "special": {
+            "kind": "skill",
+            "singleUse": true,
+            "hitlag": {
+              "normal": [
+                0.1,
+                0.1,
+                0.03333333333333333,
+                0.05,
+                0
+              ]
+            },
+            "hitlagNoDefHalt": {
+              "normal": [
+                0.03333333333333333,
+                0.03333333333333333,
+                0.03333333333333333,
+                0.05,
+                0
+              ]
+            }
           },
-          "windowHitlagNoDefHalt": {
-            "normal": [
-              0.03333333333333333,
-              0.03333333333333333,
-              0.03333333333333333,
-              0.05,
-              0
-            ]
-          }
+          "source": "odette/skill.go: AddStatus(skillRecastKey, 394, true)（スキルの発動と同時。ヒットストップで延びる）。特殊スキルを使うと DeleteStatus"
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -41196,9 +41302,10 @@
           },
           "source": "skill.go:skillRecastFrames"
         },
+        "effectLabel": "柔き払暁のコーダ後の強化",
         "dataSource": {
           "cooldown": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）",
-          "effectDuration": "柔き払暁のコーダ後の強化"
+          "effectDuration": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）"
         }
       },
       {
@@ -41226,13 +41333,41 @@
           "cooldownStart": "burst.go:0"
         },
         "defaultDuration": 2.1,
-        "startsSpecialPool": {
-          "cooldown": 15,
-          "charges": 1,
-          "windowOnly": true,
-          "singleUse": true,
-          "windowLabel": "柔き払暁のコーダの受付",
-          "windowSeconds": 6.017
+        "mode": {
+          "label": "柔き払暁のコーダの受付",
+          "description": "特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延びる。受付の外では、gcsim では通常のスキルになる",
+          "startDelayFrames": 0,
+          "durationFrames": 361,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noSynergy": true,
+          "barNote": "爆発",
+          "keepEffectBar": true,
+          "special": {
+            "kind": "skill",
+            "singleUse": true,
+            "hitlag": {
+              "normal": [
+                0.1,
+                0.1,
+                0.03333333333333333,
+                0.05,
+                0
+              ]
+            },
+            "hitlagNoDefHalt": {
+              "normal": [
+                0.03333333333333333,
+                0.03333333333333333,
+                0.03333333333333333,
+                0.05,
+                0
+              ]
+            }
+          },
+          "source": "odette/burst.go: AddStatus(skillRecastKey, 6*60+burstSummonFrame, false)（爆発でも受付が開く）"
         },
         "cooldownStart": {
           "from": "motionStart",

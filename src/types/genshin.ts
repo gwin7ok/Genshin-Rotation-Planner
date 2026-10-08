@@ -91,13 +91,17 @@ export interface ActionMode {
   noBar?: boolean;
   /** モードが、長押しの終わりから始まる（開始 = 長押しの終わり + startDelayFrames。藍硯の長押し） */
   startAfterHold?: boolean;
-  /**
-   * モードが、このアクションが開く特殊スキルの受付と同じ状態（ファルカの疾風怒濤・フリンズの幽炎の露顕）。
-   * モードのバーは出さず（受付・効果のバーが兼ねる）、維持の目標は、受付の終わり（ヒットストップ・爆発の延長を含む）
-   */
-  windowState?: boolean;
-  /** モードのバーを、バフ重複の集計に数えない（ディシアのパンチ連打モード。これまで効果バーが無かったもの） */
+  /** モードのバーを、バフ重複の集計に数えない（ディシアのパンチ連打モード・受付） */
   noSynergy?: boolean;
+  /** モードのバーの名前の後ろに付ける、開いたものの説明（オデットの受付:「スキル」「爆発」） */
+  barNote?: string;
+  /** モードを開くアクションの効果バーを、モードのバーと別に出す（オデット: 受付と、スキル・爆発の効果は別のもの） */
+  keepEffectBar?: boolean;
+  /**
+   * 特殊スキル・特殊爆発の受付（2026-10-08。受付をモードの定義に統一。D78）。この間だけ、特殊スキル（kind = skill。cooldownPool = 'special' で requiresWindow のアクション）・
+   * 特殊爆発（kind = burst。specialBurst のアクション）を使える。外で使うと警告（gcsim では通常のスキル・爆発になる）
+   */
+  special?: ActionModeSpecial;
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
   normalFrames?: ActionFrames[];
   /** モードの間の元素爆発のフレーム */
@@ -116,6 +120,28 @@ export interface ActionMode {
   };
   /** 根拠（gcsim ソース） */
   source: string;
+}
+
+export interface ActionModeSpecial {
+  kind: 'skill' | 'burst';
+  /** 受付の間に特殊スキル・特殊爆発を 1 回使うと、受付が閉じる（オデット・フリンズの特殊爆発・ヴァレサ） */
+  singleUse?: boolean;
+  /** スキルを使うと、受付が閉じる（ヴァレサのマキシマムドライブ） */
+  closedBySkill?: boolean;
+  /** 自分の元素爆発を使うと、受付が延びる秒数（ファルカ: 2.3） */
+  extendOnBurst?: number;
+  /**
+   * ヒットストップによる受付の延長（秒。敵に全部当たった最大の場合。gcsim から書き戻した所要時間のアクションだけに足す。D71）。
+   * 通常攻撃は段ごと（1 段目から順。足りなければ繰り返す）、重撃・特殊スキルは 1 回あたり、skill = 受付を開いたスキルの初撃
+   */
+  hitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number };
+  /** 敵の防御ヒットストップ（gcsim の defhalt）が無効のときの hitlag */
+  hitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number };
+  /**
+   * 受付が開く条件。無ければ、モードを開くアクションで必ず開く。
+   * minConstellation / orBlessing: 命ノ星座がこれ以上、または猛烈パッション中（ヴァレサの落下攻撃）。requiresOpen: 同じ出場の、この種類の受付が開いているとき（フリンズ: 受付の間の嵐槍）
+   */
+  openCondition?: { minConstellation?: number; orBlessing?: boolean; requiresOpen?: 'skill' | 'burst' };
 }
 
 export interface ModeEnder {
@@ -202,13 +228,6 @@ export interface ActionDefinition {
   specialBurst?: boolean;
   /** CT が、元素共鳴・CT 短縮などの影響を受けない（フリンズの嵐槍: 「基本クールタイム 6 秒。他の効果の影響を受けない」） */
   ignoresCdScale?: boolean;
-  /** 受付の間に使った特殊スキルが開く、特殊爆発などの受付（フリンズ: 嵐槍の後 6 秒） */
-  recastOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string };
-  /**
-   * 落下攻撃が、特殊爆発の受付を開く（ヴァレサのマキシマムドライブ。落下攻撃の開始時に、命ノ星座が minConstellation 以上、または猛烈パッション中のとき）。
-   * closedBySkill: スキルを使うと、受付が閉じる
-   */
-  plungeOpensWindow?: { windowSeconds: number; windowLabel: string; openedBy: string; minConstellation: number; closedBySkill: boolean };
   /**
    * 特殊爆発の CT（秒）。受付の中は inWindow（ヴァレサ 1 秒・フリンズ 0）、外では通常の爆発になるので outOfWindow（通常の爆発の CT）。
    * checkInWindow: 受付の中でも、爆発の CT が明けていることを求める（gcsim のヴァレサは、通常の爆発の CT が明けていないと、大火山おろしを使えない）
@@ -218,29 +237,14 @@ export interface ActionDefinition {
   specialBurstHint?: string;
   /**
    * このアクション（スキル）が、特殊元素スキルの別枠のCT（cooldownPool = 'special'）も、全チャージ分まとめて開始する
-   * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ
+   * （ファルカ: スキルを使うと、特殊スキルの CT 11 秒が 2 チャージ分、同時に始まる）。開始位置はこのアクションのCTの開始位置と同じ。
+   * CT の仕組みだけを持つ。受付（使える期間・延長・閉じる条件・バー）は、モードの定義（mode.special）。D78
    */
   startsSpecialPool?: {
     cooldown: number;
     charges: number;
-    /** 特殊スキルを使える受付時間（秒。同じ出場の中だけ）。受付の間の通常攻撃で、CT が短縮される */
-    windowSeconds?: number;
-    /** 受付だけを開き、特殊スキルの CT は開始しない（オデット。CT は特殊スキルを使ったときに始まる） */
+    /** 特殊スキルの CT は開始しない（オデット・フリンズ。CT は特殊スキルを使ったときに始まる） */
     windowOnly?: boolean;
-    /** 受付のバーの名前（windowOnly のとき） */
-    windowLabel?: string;
-    /** スキルを使うと、受付が閉じる（ヴァレサのマキシマムドライブ） */
-    closedBySkill?: boolean;
-    /** 受付の間に特殊スキルを 1 回使うと、受付が閉じる（オデット） */
-    singleUse?: boolean;
-    /** 受付が始まるまでの、スキルを使ってからの秒数（ファルカ: 命中の 1 フレーム前 = 39f） */
-    windowDelay?: number;
-    /** 自分の元素爆発を使うと、受付が延びる秒数（ファルカ: 2.3） */
-    windowExtendOnBurst?: number;
-    /** ヒットストップによる受付の延長（秒。敵に全部当たった最大の場合）。通常攻撃は段ごと（1 段目から順。足りなければ繰り返す）、重撃・特殊スキルは 1 回あたり */
-    windowHitlag?: { normal?: number[]; charged?: number; special?: number; skill?: number };
-    /** 敵の防御ヒットストップ（gcsim の defhalt）が無効のときの windowHitlag（体幹が崩れる敵に当てる場合） */
-    windowHitlagNoDefHalt?: { normal?: number[]; charged?: number; special?: number; skill?: number };
     /** 受付の間、通常攻撃の 1 ヒットが敵に当たるたびに短縮される CT（秒） */
     reducePerHit?: number;
     /** ヘクセレイ：秘儀（パーティーのヘクセレイのキャラが 2 人以上で、本人もヘクセレイ）のときの、1 ヒットあたりの短縮（秒） */
@@ -258,6 +262,8 @@ export interface ActionDefinition {
   /** frames（gcsim のモーションフレーム）に含まれる長押しの秒数（早柚・綺良々は最大ホールド 10 秒込み）。ホールド秒数 = 所要時間 −（モーション − これ）（D36・D47） */
   holdInFrames?: number;
   effectDuration?: number;  // このアクションの効果持続時間 (秒)
+  /** 効果バーの名前（例: 「雷楔」）。無ければ、効果時間の出典のラベル（genshin-db）から作る。出典（dataSource.effectDuration）とは分けて持つ */
+  effectLabel?: string;
   frames?: ActionFrames;    // gcsim モーションフレーム
   /**
    * 通常攻撃（type: 'normal'）の段ごとの値（1段目から順）。ボタンは「N」1つで、連続した N の何段目かは計算時に自動で決める（gcsim と同じ）。

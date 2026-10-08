@@ -29,7 +29,8 @@
     "gcsim:start": "node scripts/gcsim-server.ts start",
     "gcsim:stop": "node scripts/gcsim-server.ts stop",
     "gcsim:status": "node scripts/gcsim-server.ts status",
-    "gcsim:check": "node scripts/gcsim-server.ts check"
+    "gcsim:check": "node scripts/gcsim-server.ts check",
+    "check:snapshots": "node scripts/check-rotation-snapshots.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

@@ -109,7 +109,7 @@ export interface ActionMode {
   blocked?: { types: ActionType[]; result: 'wait' | 'error'; hint: string };
   /**
    * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 雲の変化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
-   * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでの動きは未確認）
+   * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでも同じことを確認済み: ユーザー 2026-10-09）
    */
   cooldownReduceOnExpire?: { seconds: number; afterSwap: boolean };
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
@@ -184,8 +184,12 @@ export interface ActionDefinition {
   cooldownPool?: 'special';
   /** CT の回数（同時に溜められる回数。無ければ 1）。別枠のCT（cooldownPool）の特殊スキル（ファルカは 2）と、通常のスキル（クレー 2・魈 2・八重神子 3 など）。CT は順番に回復する（gcsim の cdQueue） */
   charges?: number;
-  /** スキルが設置物（八重神子の殺生桜）を 1 つ出す。上限を超えると最古が消え、論示が有効なら寿命が延びる（秒） */
-  spawnsTotem?: { max: number; lifetime: number; lifetimeRevelation: number };
+  /**
+   * スキルが設置物（八重神子の殺生桜）を 1 つ出す。上限（max）を超えると最古が消える。
+   * 寿命は、スキルの効果継続時間（effectDuration。八重神子は 14 秒）が元で、論示が有効なら revelationBonusSeconds だけ長い（24 秒）。
+   * 桜はスキルの発動から startDelayFrames 後に現れる（効果バーもそこから始まる）。出典: gcsim yaemiko/kitsune.go・skill.go（D81）
+   */
+  spawnsTotem?: { max: number; revelationBonusSeconds: number; startDelayFrames: number };
   /** 爆発が、場にある設置物 1 つにつき、スキルの CT を 1 回分戻す（八重神子の固有天賦 1）。論示が無効なら、爆発で設置物が全部壊れる */
   releasesSkillPerTotem?: boolean;
   /**
@@ -601,6 +605,8 @@ export interface ActiveBuffSpan {
   isSnapshot?: boolean;
   /** true = バフ重複（シナジー）の集計に数えない（特殊スキルの受付の期間バーなど） */
   noSynergy?: boolean;
+  /** true = 同じ効果を再発動しても、前のバーを切らない（同時に複数ある設置物。八重神子の殺生桜。切るのは数え方〔totemTracker.ts〕だけ） */
+  stackable?: boolean;
   /** 出場ブロックの ID。あれば、その出場ブロックの行に表示する（副次効果のように、出場の終わりより後に始まるバー用） */
   ownerStintId?: string;
   /** 'passive' = 発動バフ（固有天賦）。ガントチャートでは専用の行に表示する */

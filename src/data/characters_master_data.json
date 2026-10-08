@@ -18222,8 +18222,8 @@
         "charges": 3,
         "spawnsTotem": {
           "max": 3,
-          "lifetime": 15,
-          "lifetimeRevelation": 25
+          "revelationBonusSeconds": 10,
+          "startDelayFrames": 34
         },
         "cooldownStart": {
           "from": "motionStart",

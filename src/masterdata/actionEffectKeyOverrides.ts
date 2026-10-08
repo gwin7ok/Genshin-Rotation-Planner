@@ -59,6 +59,6 @@ export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
   '10000053-anemo_q': 'damage:Muji-Muji Daruma',
   // シャルロットの爆発: 撮影（マスター 4 秒。gcsim は約 3 秒）
   '10000088-cryo_q': 'damage:Still Photo: Kamera',
-  // 八重神子のスキル: ストックできるスキル。ストックの扱いを決めるまで書き戻さない（継続ダメージの一致は保留）
+  // 八重神子のスキル: 殺生桜のバーはアプリ側の数え方で出す（D81）ので、gcsim の効果（継続ダメージ・最古の桜の期限）は書き戻さない
   '10000058-electro_e': '',
 };

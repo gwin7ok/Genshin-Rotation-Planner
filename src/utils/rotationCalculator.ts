@@ -348,12 +348,15 @@ export function calculateRotation(
         m.repressUsed += 1;
         inStateWindow = true;
         // 使うたびに、モードの終わりを更新する（閑雲の跳躍）
-        const rf = m.def.repress!.refreshFrames;
+        const rp = m.def.repress!;
+        const rf = rp.refreshFrames;
         if (rf?.length) {
           m.end = Number((actionStartTime + rf[Math.min(index, rf.length - 1)] / 60).toFixed(3));
           m.span.endTime = m.end;
           m.span.duration = Number((m.end - m.start).toFixed(3));
         }
+        // 使い切るとモードが終わる（ニィロウのステップ 3 段目）
+        if (rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses) endMode(m, actionStartTime, 'ender');
       }
       if (modeKind === 'punch' || modeKind === 'kick') {
         if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
@@ -662,9 +665,11 @@ export function calculateRotation(
           duration: Number((end - start).toFixed(3)),
           color: char.color,
           description: md.description,
-          noSynergy: true,
+          // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
+          ...(md.noSynergy ? { noSynergy: true } : {}),
         };
-        activeBuffs.push(span);
+        // 受付と同じ状態のモード（ファルカ・フリンズ）は、受付・効果のバーが兼ねる
+        if (!md.windowState) activeBuffs.push(span);
         const opened: ModeWindow = {
           charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, span, repressUsed: 0, inputs: 0, finished: false,
           opener: {
@@ -854,7 +859,7 @@ export function calculateRotation(
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
-      const effectSpan = inStateWindow || actionDef?.mode ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      const effectSpan = inStateWindow || (actionDef?.mode && !actionDef.mode.windowState) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
       // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
       if (effectSpan && actionDef?.fieldRecast) {
         const delay = actionDef.fieldRecast.startDelayFrames / 60;
@@ -922,6 +927,12 @@ export function calculateRotation(
     // 維持の延長を出さないモード（放浪者）は、切り替えも出さない
     const holdableModes = stintModes.filter(m => !m.def.noHold);
     const holdOn = (m: ModeWindow) => !m.def.noHold && (rawStint.holdMode ?? m.def.holdByDefault);
+    // 受付と同じ状態のモード（ファルカ・フリンズ）: モードの終わりは、受付の終わり（ヒットストップ・爆発の延長を含む）
+    for (const m of stintModes) {
+      if (!m.def.windowState || m.endedBy) continue;
+      const w = stintWindows.find(sw => sw.actionId === m.opener.actionId);
+      if (w) m.end = Number(w.until.toFixed(3));
+    }
     // 維持の目標の時刻: モードの終わり。ディシアは、状態が切れた後の自動の蹴りが命中するまで
     const holdTargetOf = (m: ModeWindow) => (m.actionDefId === burstModeAction?.id && !m.finished ? autoKickAt(m) : m.end);
     const lastAction = [...computedActions].reverse().find(a => a.type !== 'swap');

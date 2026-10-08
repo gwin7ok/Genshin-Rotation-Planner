@@ -35,16 +35,7 @@ export interface ActionStateRule {
 
 export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
   // ニィロウ: E 後の pirouette 10 秒間、E がステップ・N が剣舞になる（回数の上限は未確認）
-  '10000070-hydro': {
-    windowSeconds: 10,
-    // ステップ 1〜3 段（whirlingStepsFrames[0..2]）。各段の全体 33 / 62 / 63、Skill(次のE) 27 / 32 / 63、Swap 31 / 62 / 61
-    stageFrames: [
-      { total: 33, cancels: { attack: 27, skill: 27, dash: 26, jump: 27, swap: 31 }, source: 'skill.go:whirlingStepsFrames[0]' },
-      { total: 62, cancels: { attack: 40, skill: 32, burst: 40, dash: 36, jump: 37 }, source: 'skill.go:whirlingStepsFrames[1]' },
-      { total: 63, cancels: { dash: 57, jump: 57, swap: 61 }, source: 'skill.go:whirlingStepsFrames[2]' },
-    ],
-    note: 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)',
-  },
+  // ニィロウ: 窓の規則ではなく、モードの定義（ACTION_MODES。剣舞。ステップ 3 段で終わる）にした（2026-10-08）
   // 刻晴: 刃(stiletto)が出ている間の E が再発動（刃を消費）
   '10000042-electro': { windowSeconds: 5 + 20 / 60, maxUses: 1,
     stageFrames: [{ total: 43, hitmark: 16, cancels: { attack: 42, dash: 16, jump: 16, swap: 42 }, source: 'skill.go:skillRecastFrames' }],

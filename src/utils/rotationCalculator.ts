@@ -5,6 +5,7 @@ import { NightsoulTracker } from './nightsoulTracker';
 import { TotemTracker, totemTiming } from './totemTracker';
 import { SACRIFICIAL_WEAPON_KEYS, sacrificialIcdSeconds } from './gcsim/sacrificialSeed';
 import skillHitFrameData from '../data/skill_hit_frames.json';
+import canQueueAfterData from '../data/can_queue_after.json';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -67,10 +68,30 @@ export interface RotationOptions {
   externalCtWaits?: Record<string, number>;
 }
 
-/** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代 */
-function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: string): CancelTarget | undefined {
+/**
+ * スキル・爆発の「次の行動を受け付け始めるフレーム」（gcsim の CanQueueAfter。scripts/probe-can-queue-after.ts が実測で作る）。
+ * 待機（`wait`）は、アクションの実行の後、この時刻から始まる（gcsim run.go: queuePhase → handleWait）
+ */
+const CAN_QUEUE_AFTER = (canQueueAfterData as { entries: Record<string, number> }).entries;
+
+/** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代。'wait' = 次が待機（CanQueueAfter） */
+type NextKey = CancelTarget | 'wait';
+
+/**
+ * 次が待機のときの、アクションの所要時間（フレーム）。gcsim は、アクションの実行の後、CanQueueAfter（最も早いキャンセル）まで進めてから待機を始める。
+ * 実測の表（スキル・爆発）があればそれ、無ければキャンセルの表の最小値（実測と 374 件中 322 件が一致、349 件が 6 フレーム以内）、それも無ければ全体のフレーム
+ */
+function canQueueFrames(frames: { total: number; cancels: Partial<Record<CancelTarget, number>> }, def: { id: string; frames?: unknown } | undefined): number {
+  const measured = def && frames === def.frames ? CAN_QUEUE_AFTER[def.id] : undefined;
+  if (measured !== undefined) return measured;
+  const values = Object.values(frames.cancels).filter((v): v is number => typeof v === 'number' && v > 0);
+  return values.length > 0 ? Math.min(...values) : frames.total;
+}
+
+function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: string): NextKey | undefined {
   if (!next) return 'swap';
   switch (next.type) {
+    case 'wait': return 'wait';
     case 'normal': return 'attack';
     case 'charged': return weaponType === 'bow' ? 'aim' : 'charge';
     case 'skill':
@@ -476,7 +497,8 @@ export function calculateRotation(
       {
         if (frames) {
           const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
-          autoDuration = Number((((nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) / 60).toFixed(3));
+          const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
+          autoDuration = Number((motion / 60).toFixed(3));
         } else {
           autoDuration = hitFallbackDuration;
         }
@@ -493,7 +515,7 @@ export function calculateRotation(
       let holdSeconds: number | undefined;
       if (cooldownStart?.from === 'holdEnd') {
         const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
-        const motionFrames = frames ? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total : undefined;
+        const motionFrames = frames ? (nextKey === 'wait' ? canQueueFrames(frames, actionDef) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) : undefined;
         holdSeconds = motionFrames === undefined
           ? 0
           : Number(Math.max(0, duration - (motionFrames / 60 - (actionDef?.holdInFrames ?? 0))).toFixed(3));
@@ -987,7 +1009,8 @@ export function calculateRotation(
       });
 
       // アクションごとの遅延は、そのアクションの終了後に入れる（出場の最後なら次の交代が遅れる）
-      currentTime = Number((actionEndTime + actionDelayOf(act)).toFixed(3));
+      // 待機の後には、遅延を入れない（gcsim の設定文は、待機の後に delay を出さない。アクションの後の遅延は、待機の後の次のアクションの直前に入る）
+      currentTime = Number((actionEndTime + (act.type === 'wait' ? 0 : actionDelayOf(act))).toFixed(3));
     }
 
     // モードの維持: 維持が有効なら、出場を、モードの終わりまで延ばす（出場の最後のアクションの後の、自動の待ち。秒数は保存しない）。

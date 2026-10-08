@@ -51,6 +51,7 @@ npm run probe:effects      # 全スキル・爆発を単独実行し、効果キ
 npm run link:effects       # 継続時間による紐づけ（action_effect_links_by_duration.json）
 npm run check:effectkeys   # 対応表（effect_key_coverage.json）と整合性の検査
 npm run probe:skill-hits   # スキルの命中時刻の表（skill_hit_frames.json。祭礼の武器効果の計算に使う）
+npm run probe:queue-frames # スキル・爆発の「次の行動を受け付け始めるフレーム」（can_queue_after.json。待機の位置を gcsim に合わせる）
 ```
 - 以前の結果との差分（`git diff src/data/action_effect_*.json`）を見る。想定外の変化があれば、gcsim 側の挙動の変更を疑う。
 - `check:effectkeys` の「未検討」が出たら、新しいキー・新しいキャラ。`effectKeyDecisions.ts`・`actionEffectKeyOverrides.ts`・`actionEffectExtras.ts` に理由つきで登録する。

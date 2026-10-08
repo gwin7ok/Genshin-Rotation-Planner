@@ -2,6 +2,7 @@ import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import type { GcsimLogSummary, GcsimMemberInfo } from '../utils/gcsim/readGcsimLog';
 import { framesToSeconds } from '../utils/gcsim/readGcsimLog';
+import type { SacrificialSearchInfo } from '../utils/gcsim/sacrificialSeed';
 
 interface GcsimLogSummaryViewProps {
   summary: GcsimLogSummary;
@@ -9,6 +10,8 @@ interface GcsimLogSummaryViewProps {
   seed: number;
   /** 辞書を生成した gcsim のコミット */
   gcsimCommit?: string;
+  /** 祭礼系の武器があるときの、乱数の種の探索の結果（6-4。D80） */
+  sacrificial?: SacrificialSearchInfo;
 }
 
 const sec = (frames: number | undefined, digits = 2) => (frames === undefined ? '—' : framesToSeconds(frames).toFixed(digits));
@@ -17,7 +20,7 @@ const sec = (frames: number | undefined, digits = 2) => (frames === undefined ? 
 const entryName = (e: { name?: string; nameEn?: string; key: string }) => e.name ?? e.nameEn ?? e.key;
 
 /** gcsim の実行結果の読み取り結果（6-2 の確認用。書き戻しはしない） */
-export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summary, members, seed, gcsimCommit }) => {
+export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summary, members, seed, gcsimCommit, sacrificial }) => {
   const nameOf = (i: number | undefined) => (i === undefined ? '—' : i < 0 ? '敵' : members[i]?.name ?? `#${i}`);
   const [showInternalDetail, setShowInternalDetail] = React.useState(false);
 
@@ -35,6 +38,15 @@ export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summar
         （発動間隔 {cooldownKeys.length} 件・内部として除外 {summary.internalSkipped} 件）/ シード {seed}
         {gcsimCommit ? ` / 辞書の gcsim コミット ${gcsimCommit.slice(0, 8)}` : ''}
       </div>
+
+      {sacrificial && (
+        <div className={`rounded-lg border p-2 ${sacrificial.ok ? 'border-emerald-800/70 bg-emerald-950/40 text-emerald-200' : 'border-amber-800/70 bg-amber-950/40 text-amber-200'}`}>
+          祭礼の武器（{sacrificial.users.map(u => `${members[u.index]?.name ?? u.charKey} 精錬${u.refine}`).join('・')}）:{' '}
+          {sacrificial.ok
+            ? `スキルの CT リセットが発動できる機会 ${sacrificial.opportunities} 回のすべてで発動する乱数の種 ${sacrificial.seed} を使っています（${sacrificial.searched} 個を探索）`
+            : `すべての機会で発動する種が見つからなかったため（${sacrificial.searched} 個を探索）、最も発動の多い種 ${sacrificial.seed}（機会 ${sacrificial.opportunities} 回のうち ${sacrificial.procs} 回で発動）を使っています。CT の長さが実際と異なる可能性があります`}
+        </div>
+      )}
 
       {summary.cooldownWaits.length > 0 && (
         <div className="rounded-lg border border-red-800/70 bg-red-950/50 p-2 space-y-0.5">

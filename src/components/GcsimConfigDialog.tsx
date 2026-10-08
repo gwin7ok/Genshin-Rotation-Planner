@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2, Play } from 'lucide-react';
 import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
 import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
+import { runWithSacrificialSeed, type SacrificialSearchInfo } from '../utils/gcsim/sacrificialSeed';
 import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
 import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
 import { fetchRuntimeData } from '../utils/gcsim/runtimeData';
@@ -51,7 +52,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
   const [running, setRunning] = useState(false);
   const [applied, setApplied] = useState(false);
   const [runOutcome, setRunOutcome] = useState<
-    | { status: 'ok'; summary: GcsimLogSummary; seed: number; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult; effectTable: ActionEffectKeyTable }
+    | { status: 'ok'; summary: GcsimLogSummary; seed: number; sacrificial?: SacrificialSearchInfo; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult; effectTable: ActionEffectKeyTable }
     /** 実行前のアプリのCT違反があるため、gcsim を実行しなかった（D21-1） */
     | { status: 'blocked' }
     | { status: 'error' | 'unreachable'; message: string }
@@ -85,7 +86,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     setRunning(true);
-    const res = await runGcsimSample(result.config, DEFAULT_SEED);
+    // 祭礼系の武器があれば、発動できる機会のすべてで発動する乱数の種を探す（6-4。無ければ、最初の種で 1 回だけ実行）
+    const res = await runWithSacrificialSeed(result.config, runGcsimSample, DEFAULT_SEED);
     if (res.status !== 'ok') {
       setRunning(false);
       setRunOutcome({ status: res.status, message: res.message });
@@ -99,7 +101,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const waits = mapCtWaitsToActions(summary, result.actionRefs);
     onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
     setApplied(false);
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs), effectTable });
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs), effectTable });
   };
   const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');
@@ -371,7 +373,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               );
             })()}
             {runOutcome && runOutcome.status === 'ok' && (
-              <GcsimLogSummaryView summary={runOutcome.summary} members={result.members} seed={runOutcome.seed} gcsimCommit={runOutcome.gcsimCommit} />
+              <GcsimLogSummaryView summary={runOutcome.summary} members={result.members} seed={runOutcome.seed} gcsimCommit={runOutcome.gcsimCommit} sacrificial={runOutcome.sacrificial} />
             )}
           </div>
 

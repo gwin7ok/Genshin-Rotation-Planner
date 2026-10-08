@@ -16,7 +16,7 @@ import {
   ActionDefinition,
 } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
-import type { CancelTarget } from '../types/genshin';
+import type { ActionMode, CancelTarget, ModeEnder } from '../types/genshin';
 import { passiveGroupOf } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { CooldownQueue, type QueueHead } from './cooldownQueue';
@@ -112,8 +112,29 @@ export function calculateRotation(
   const stateWindows = new Map<string, { end: number; usesLeft?: number; used: number }>();
   // 炎場（ディシアの熔鉄流獄）の効果バー（置き直しで、拾った時点で切って、新しいバーを出す）
   const fieldSpans = new Map<string, ActiveBuffSpan>();
-  // 爆発の後のモード（ディシアのパンチ連打モード）の窓（1 周目の線形の計算）
-  const modeWindows = new Map<string, { sIdx: number; start: number; end: number; inputs: number; finished: boolean; span: ActiveBuffSpan; pending?: { savedFrames: number; template: ActiveBuffSpan } }>();
+  // スキル・爆発で入るモード（夢見月瑞希の夢浮かみ・ディシアのパンチ連打モードなど）の窓（1 周目の線形の計算）。キー: モードを開くアクションの定義 ID。
+  // モードの計算の結果は、end（終わりの時刻）と endedBy（どう終わったか: 終わらせるアクション・交代・時間切れ）。CT などは、これを受け取るだけにする。
+  // inputs・finished・pending は、ディシアの固有の項目（burstMode）用
+  interface ModeWindow {
+    charId: string;
+    actionDefId: string;
+    def: ActionMode;
+    sIdx: number;
+    start: number;
+    end: number;
+    endedBy?: 'ender' | 'swap' | 'timeout';
+    span: ActiveBuffSpan;
+    inputs: number;
+    finished: boolean;
+    pending?: { savedFrames: number; template: ActiveBuffSpan };
+  }
+  const modeWindows = new Map<string, ModeWindow>();
+  const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
+    m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
+    m.endedBy = by;
+    m.span.endTime = m.end;
+    m.span.duration = Number((m.end - m.start).toFixed(3));
+  };
   // 爆発が拾った炎場（ディシア）を、時刻 at に置き直す（残り時間 + 拾いの延長のバーを出す。まだ置き直していない回の再生成の窓は、新しい炎場の終わりまで延ばす）
   const placePickedField = (charId: string, mw: { pending?: { savedFrames: number; template: ActiveBuffSpan } }, at: number) => {
     if (!mw.pending) return;
@@ -187,6 +208,17 @@ export function calculateRotation(
     const char = characterMap.get(rawStint.characterId);
     if (!char) continue;
     const charActions = CharacterModel.fromConfig(char).actions;
+    // 爆発の後のモードに、固有の項目（パンチ・蹴り・炎場の拾い）を持つキャラ（ディシア）
+    const burstModeAction = charActions.find(a => a.burstMode && a.mode);
+    const burstModeDef = burstModeAction?.burstMode;
+    // 入力がなければ、状態が切れた後の最初の自動のパンチ（autoPunchFrames ごと）の後に、蹴りが命中する。その時刻（入力があるときは、最も遅い場合）
+    const autoKickAt = (m: ModeWindow) => {
+      if (!burstModeDef) return m.end;
+      const punchAt = m.inputs === 0
+        ? m.start + Math.ceil((m.end - m.start) * 60 / burstModeDef.autoPunchFrames - 0.001) * burstModeDef.autoPunchFrames / 60
+        : m.end + burstModeDef.autoPunchFrames / 60;
+      return punchAt + (burstModeDef.kickHitFrames + burstModeDef.fieldPlaceAfterKickFrames) / 60;
+    };
 
     const stintStartTime = currentTime;
     const computedActions: CharacterActionInstance[] = [];
@@ -259,21 +291,29 @@ export function calculateRotation(
       let stageIndex = 0;
       const rule = ACTION_STATE_RULES[char.id];
 
-      // 爆発の後のモード（ディシア）: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
-      const burstModeDef = charActions.find(a => a.burstMode)?.burstMode;
-      const mw = burstModeDef ? modeWindows.get(char.id) : undefined;
+      // モード（スキル・爆発で入る状態）: このアクションが、続いているモードを終わらせるアクションか（モードの定義の enders）。
+      // 「交代しても続く」モードは、後の出場のアクションでも終わらせられる
+      let modeEnder: { window: ModeWindow; ender: ModeEnder } | undefined;
+      for (const m of modeWindows.values()) {
+        if (m.charId !== char.id || m.endedBy || actionStartTime >= m.end - 0.001 || (m.sIdx !== sIdx && m.def.swap !== 'persists')) continue;
+        const ender = m.def.enders.find(e => (e.by === 'self' ? act.actionTypeId === m.actionDefId : act.type === e.by));
+        if (ender) {
+          modeEnder = { window: m, ender };
+          break;
+        }
+      }
+
+      // 爆発の後のモード（ディシア）の固有の扱い: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
+      const mw = burstModeAction ? modeWindows.get(burstModeAction.id) : undefined;
       let modeKind: 'punch' | 'kick' | 'dash' | undefined;
       if (burstModeDef && mw && mw.sIdx === sIdx) {
         const isInput = act.type === 'normal' || (act.type === 'skill' && act.actionTypeId === `${char.id}_e`);
-        if (actionStartTime < mw.end - 0.001) {
+        if (!mw.endedBy && actionStartTime < mw.end - 0.001) {
           if (isInput) modeKind = 'punch';
           else if (act.type === 'dash') modeKind = 'dash';
-          else if (act.type === 'jump') {
+          else if (modeEnder?.window === mw) {
             const prevAct = computedActions[computedActions.length - 1];
             const dashJump = prevAct?.type === 'dash' && actionStartTime - (prevAct.startTime ?? 0) <= burstModeDef.dashJumpKickFrames / 60 + 0.001;
-            mw.end = Math.min(mw.end, actionStartTime);
-            mw.span.endTime = Number(Math.max(mw.span.startTime, mw.end).toFixed(3));
-            mw.span.duration = Number((mw.span.endTime - mw.span.startTime).toFixed(3));
             mw.finished = true;
             if (dashJump) modeKind = 'kick';
             else placePickedField(char.id, mw, actionStartTime); // ジャンプで状態が終わると、拾った炎場がその場に置かれる
@@ -281,6 +321,11 @@ export function calculateRotation(
         } else if (!mw.finished && isInput && actionStartTime < mw.end + burstModeDef.finisherWindowFrames / 60) {
           modeKind = 'kick';
         }
+      }
+      if (modeEnder) {
+        endMode(modeEnder.window, actionStartTime, 'ender');
+        // 終わらせるアクションが CT を始めない（夢見月瑞希の E の再押し）: スキルの CT・効果バーを使わない
+        if (modeEnder.ender.cooldown === 'none' && act.type === 'skill') inStateWindow = true;
       }
       if (modeKind === 'punch' || modeKind === 'kick') {
         if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
@@ -326,6 +371,8 @@ export function calculateRotation(
         normalStreak = 0;
       }
       if (act.type === 'burst' && inActiveWindow && rule?.burstFrames) frames = rule.burstFrames;
+      // モードを終わらせる動作のフレーム（夢見月瑞希の状態の解除）
+      if (modeEnder?.ender.frames) frames = modeEnder.ender.frames;
       if (modeKind && burstModeDef && mw) {
         if (modeKind === 'punch') {
           const h = burstModeDef.inputFrames[Math.min(mw.inputs, burstModeDef.inputFrames.length - 1)];
@@ -381,6 +428,7 @@ export function calculateRotation(
         ...(holdSeconds !== undefined ? { holdSeconds } : {}),
         ...(naturalDuration !== undefined ? { naturalDuration } : {}),
         ...(actionDef?.cooldownPool ? { cooldownPool: actionDef.cooldownPool } : {}),
+        modeHoldSeconds: undefined,
         duration,
         startTime: actionStartTime,
         endTime: actionEndTime,
@@ -539,35 +587,36 @@ export function calculateRotation(
         });
       }
 
-      // ディシアの爆発: 爆発の開始から startDelayFrames 後に、パンチ連打モードが始まる
-      if (act.type === 'burst' && actionDef?.burstMode) {
-        const bm = actionDef.burstMode;
-        const start = Number((actionStartTime + bm.startDelayFrames / 60).toFixed(3));
-        const end = Number((start + bm.durationFrames / 60).toFixed(3));
+      // モードを開く（続いているモードを終わらせる E の再押しは、開かない）。モードは、アクションの開始から startDelayFrames 後に始まる
+      if (actionDef?.mode && modeEnder?.window.actionDefId !== actionDef.id) {
+        const md = actionDef.mode;
+        const start = Number((actionStartTime + md.startDelayFrames / 60).toFixed(3));
+        // 最大時間: モードの定義の値。アクションごとの効果継続時間（個別に変更した値・gcsim の結果）のほうが長ければ、その値
+        const end = Number((start + Math.max(md.durationFrames / 60, act.effectDuration ?? 0)).toFixed(3));
         const span: ActiveBuffSpan = {
-          id: `burstmode_${char.id}_${act.id}`,
-          buffId: `burstmode_${char.id}`,
-          name: `${char.name} ${bm.label}`,
+          id: `mode_${actionDef.id}_${act.id}`,
+          buffId: `mode_${actionDef.id}`,
+          name: `${char.name} ${md.label}`,
           sourceCharacterId: char.id,
           sourceType: 'talent',
           startTime: start,
           endTime: end,
           duration: Number((end - start).toFixed(3)),
           color: char.color,
-          description: '通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。窓の間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り',
+          description: md.description,
           noSynergy: true,
         };
         activeBuffs.push(span);
-        // 爆発の開始で、炎場を拾う（炎場が出ていれば。バーをここで切り、残り時間 + 拾いの延長を保存する）
-        let pending: { savedFrames: number; template: ActiveBuffSpan } | undefined;
-        const fieldDef = charActions.find(a => a.fieldRecast)?.fieldRecast;
+        const opened: ModeWindow = { charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, inputs: 0, finished: false, span };
+        // ディシア: 爆発の開始で、炎場を拾う（炎場が出ていれば。バーをここで切り、残り時間 + 拾いの延長を保存する）
+        const fieldDef = actionDef.burstMode ? charActions.find(a => a.fieldRecast)?.fieldRecast : undefined;
         const field = fieldSpans.get(char.id);
         if (fieldDef && field && actionStartTime < field.endTime) {
-          pending = { savedFrames: Math.round((field.endTime - actionStartTime) * 60) + fieldDef.pickupExtensionFrames, template: { ...field } };
+          opened.pending = { savedFrames: Math.round((field.endTime - actionStartTime) * 60) + fieldDef.pickupExtensionFrames, template: { ...field } };
           field.endTime = Number((actionStartTime + 1 / 60).toFixed(3));
           field.duration = Number(Math.max(0, field.endTime - field.startTime).toFixed(3));
         }
-        modeWindows.set(char.id, { sIdx, start, end, inputs: 0, finished: false, span, pending });
+        modeWindows.set(actionDef.id, opened);
       }
 
       // ヴァレサ: 夜魂値（猛烈パッション）と、マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中なら、短い間だけ特殊爆発の受付が開く）
@@ -739,7 +788,8 @@ export function calculateRotation(
       }
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
-      const effectSpan = inStateWindow ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
+      const effectSpan = inStateWindow || actionDef?.mode ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
       // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
       if (effectSpan && actionDef?.fieldRecast) {
         const delay = actionDef.fieldRecast.startDelayFrames / 60;
@@ -800,20 +850,48 @@ export function calculateRotation(
       currentTime = Number((actionEndTime + actionDelayOf(act)).toFixed(3));
     }
 
-    const stintEndTime = currentTime;
-    // 出場が終わると、モードも終わる（キャラ交代で状態が終わる）。拾った炎場は、交代の fieldPlaceAfterExitFrames 後、または自動の蹴りの命中の後に置き直される（早いほう）
-    const modeAtEnd = modeWindows.get(char.id);
-    if (modeAtEnd && modeAtEnd.sIdx === sIdx && modeAtEnd.pending) {
-      const bm = charActions.find(a => a.burstMode)?.burstMode;
-      if (bm) {
-        const exitAt = stintEndTime + bm.fieldPlaceAfterExitFrames / 60;
-        const autoAt = modeAtEnd.end + (bm.autoPunchFrames + bm.kickHitFrames + bm.fieldPlaceAfterKickFrames) / 60;
-        placePickedField(char.id, modeAtEnd, Math.min(exitAt, autoAt));
+    // モードの維持: 維持が有効なら、出場を、モードの終わりまで延ばす（出場の最後のアクションの後の、自動の待ち。秒数は保存しない）。
+    // 延ばすのは、「交代で終わる」「終わらせないと交代できない」モードだけ。「交代しても続く」モードは延ばさず、バーだけ交代の後も続く。
+    // 出場ごとの切り替え（holdMode）は、延長を足すかどうかだけに効く（モードの終わりの計算には関わらない）
+    const stintModes = [...modeWindows.values()].filter(m => m.charId === char.id && m.sIdx === sIdx && m.def.swap !== 'persists');
+    const holdOn = (m: ModeWindow) => rawStint.holdMode ?? m.def.holdByDefault;
+    // 維持の目標の時刻: モードの終わり。ディシアは、状態が切れた後の自動の蹴りが命中するまで
+    const holdTargetOf = (m: ModeWindow) => (m.actionDefId === burstModeAction?.id && !m.finished ? autoKickAt(m) : m.end);
+    const lastAction = [...computedActions].reverse().find(a => a.type !== 'swap');
+    let modeHoldSeconds = 0;
+    if (lastAction) {
+      const target = Math.max(0, ...stintModes.filter(m => !m.endedBy && holdOn(m)).map(holdTargetOf));
+      const extra = Number((target - currentTime).toFixed(3));
+      if (extra >= 0.005) {
+        modeHoldSeconds = extra;
+        lastAction.modeHoldSeconds = extra;
+        currentTime = Number((currentTime + extra).toFixed(3));
       }
     }
-    if (modeAtEnd && modeAtEnd.sIdx === sIdx && modeAtEnd.span.endTime > stintEndTime) {
-      modeAtEnd.span.endTime = Number(Math.max(modeAtEnd.span.startTime, stintEndTime).toFixed(3));
-      modeAtEnd.span.duration = Number((modeAtEnd.span.endTime - modeAtEnd.span.startTime).toFixed(3));
+
+    const stintEndTime = currentTime;
+    // ディシア: 拾った炎場は、交代の fieldPlaceAfterExitFrames 後、または自動の蹴りの命中の後に置き直される（早いほう）
+    const burstModeAtEnd = burstModeAction ? modeWindows.get(burstModeAction.id) : undefined;
+    if (burstModeDef && burstModeAtEnd && burstModeAtEnd.sIdx === sIdx && burstModeAtEnd.pending) {
+      placePickedField(char.id, burstModeAtEnd, Math.min(stintEndTime + burstModeDef.fieldPlaceAfterExitFrames / 60, autoKickAt(burstModeAtEnd)));
+    }
+    // 出場の終わりでの、モードの終わり方: 時間切れ／交代で終わる／終わらせないと交代できない（警告）。「交代しても続く」モードは、そのまま続く
+    for (const m of stintModes) {
+      if (m.endedBy) continue;
+      if (m.end <= stintEndTime + 0.001) m.endedBy = 'timeout';
+      else if (m.def.swap === 'ends') endMode(m, stintEndTime, 'swap');
+      else {
+        validationIssues.push({
+          id: `mode_blocks_${rawStint.id}_${m.actionDefId}`,
+          severity: 'warning',
+          characterId: char.id,
+          stintId: rawStint.id,
+          actionId: lastAction?.id,
+          time: stintEndTime,
+          title: `${char.name}: モードを終わらせずに交代`,
+          message: `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。終わらせるアクションを置くか、この出場の「モード維持」をオンにしてください`,
+        });
+      }
     }
     // 受付の有効な終わり: 受付の終わり（延長を含む）・出場の終わり（交代で状態が消える）・次のスキルの受付の始まりの早いもの。
     // 特殊スキルの CT は、この時刻より後に始まる待機中のものを積まない
@@ -937,6 +1015,9 @@ export function calculateRotation(
       endTime: stintEndTime,
       duration: stintDuration,
       actions: computedActions,
+      modeHold: stintModes.length > 0
+        ? { on: stintModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(stintModes.map(m => m.def.label))].join('・') }
+        : undefined,
     };
 
     calculatedStints.push(calculatedStint);

@@ -89,12 +89,8 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     stageFrames: [{ total: 74, cancels: { skill: 45, burst: 45, dash: 45, jump: 49, swap: 44 }, source: 'skill.go:skillRecastFrames' }],
     note: 'dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)（AddStatus(dehyaFieldKey, dur, false)。ヒットストップで延びない）。hasRecastSkill で再発動は 1 回',
   },
-  // 夢見月瑞希: 夢見状態（5 秒。ヒットストップで延びる。固有天賦 1 で最大 2 回延長）の間の E が状態の解除（CT なし）。延長は反応の条件のため含めない（最短の 5 秒）
-  '10000109-anemo': {
-    windowSeconds: 5, maxUses: 1,
-    stageFrames: [{ total: 50, cancels: { burst: 34, swap: 30 }, source: 'skill.go:skillFrames（状態の解除）' }],
-    note: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState',
-  },
+  // 夢見月瑞希: 窓の規則ではなく、モードの定義（マスターの ActionDefinition.mode。characterMasterGenerator.ts の ACTION_MODES）にした（2026-10-08）。
+  // 状態の間の E（解除。CT なし）は、モードを終わらせるアクションとして扱う。同じ値を 2 か所に持たない
   // ディルック: E の後 4 秒の間の E が 2 段目・3 段目（E を使うたびに 4 秒に更新。3 段目で窓が閉じる）。CT は 1 段目で始まる（10 秒）。ヒットストップによる窓の延長（約 0.12〜0.16 秒）は含めない（最短）
   '10000016-pyro': {
     windowSeconds: 4, maxUses: 2, refreshWindowSeconds: [4, 4],

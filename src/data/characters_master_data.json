@@ -24501,9 +24501,6 @@
         },
         "defaultDuration": 1.75,
         "burstMode": {
-          "label": "パンチ連打モード",
-          "startDelayFrames": 105,
-          "durationFrames": 246,
           "inputFrames": [
             30,
             30,
@@ -24538,6 +24535,21 @@
           "fieldPlaceAfterKickFrames": 1,
           "fieldPlaceAfterExitFrames": 46,
           "source": "dehya/burst.go: burstDuration = 4.1*60、burstPunchSlowHitmark = 50（自動のパンチ）、punchHitmarks（入力のパンチ）、kickFrames（蹴り）。UseBurstAction: 状態の間の attack・skill はパンチ（ActionReady は CT を見ない）。dash.go: 状態の間の dash は、ジャンプへ 7f でキャンセルでき、17f 以内のジャンプは蹴り。jump.go: それ以外のジャンプは状態を終わらせる"
+        },
+        "mode": {
+          "label": "パンチ連打モード",
+          "description": "通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。モードの間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り",
+          "startDelayFrames": 105,
+          "durationFrames": 246,
+          "swap": "ends",
+          "enders": [
+            {
+              "by": "jump",
+              "cooldown": "none"
+            }
+          ],
+          "holdByDefault": true,
+          "source": "dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる"
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -33653,6 +33665,29 @@
           "cooldownStart": "skill.go:skillCdDelay"
         },
         "defaultDuration": 0.833,
+        "mode": {
+          "label": "夢浮かみ",
+          "description": "夢浮かみ状態。状態の間の元素スキル（E）で解除する（CT は始まらない）。キャラ交代でも終わる",
+          "startDelayFrames": 0,
+          "durationFrames": 300,
+          "swap": "ends",
+          "enders": [
+            {
+              "by": "self",
+              "cooldown": "none",
+              "frames": {
+                "total": 50,
+                "cancels": {
+                  "burst": 34,
+                  "swap": 30
+                },
+                "source": "skill.go:skillFrames（状態の解除）"
+              }
+            }
+          ],
+          "holdByDefault": true,
+          "source": "mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383

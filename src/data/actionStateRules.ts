@@ -52,24 +52,7 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
   // オデット: 特殊元素スキル（spE）は、スキルとは別のCTを持つため、別のアクション（`10000150-cryo_e_recast`）にした（2026-10-01）。窓の規則は不要
   // ドゥリン: スキル受付 6 秒の間の E が白/黒の再発動（受付を消費。白・黒でフレームが違い、どちらになるかは未確認のため stageFrames なし）
   '10000123-pyro': { windowSeconds: 6, maxUses: 1, note: 'durin/skill.go: skillWindowDur = 6*60' },
-  // 千織（一回押しの E）: 傘の一振りの後（26f）から 78f の間の E が再発動（次のキャラへ強制交代。交代の遅れは 1f）。長押し E（42f 後に 77f）は別アクションなので対象外
-  '10000094-geo': {
-    windowSeconds: (26 + 78) / 60, maxUses: 1,
-    stageFrames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
-    note: 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）',
-  },
-  // 藍硯（一回押しの E）: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。命中しなければ窓は開かない（命中する前提）
-  '10000108-anemo': {
-    windowSeconds: (7 + 66) / 60, maxUses: 1,
-    stageFrames: [{ total: 41, cancels: { attack: 37, burst: 39, dash: 38, jump: 39 }, source: 'attack.go:ringsFrames' }],
-    note: 'lanyan/skill.go: detectHitmark=7、leapBack で AddStatus(leapBackStatus, 66, true)',
-  },
-  // ディシア: 炎場（命中の 1f 後に 12 秒）の間の E が再発動（CT なし）。その後の E は回収して置き直し（新しい CT）。炎場に重なる別の仕組み（元素爆発との連携）は未対応
-  '10000079-pyro': {
-    windowSeconds: (20 + 1 + 12 * 60) / 60, maxUses: 1,
-    stageFrames: [{ total: 74, cancels: { skill: 45, burst: 45, dash: 45, jump: 49, swap: 44 }, source: 'skill.go:skillRecastFrames' }],
-    note: 'dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)（AddStatus(dehyaFieldKey, dur, false)。ヒットストップで延びない）。hasRecastSkill で再発動は 1 回',
-  },
+  // 千織・藍硯・ディシア（炎場）: 窓の規則ではなく、モードの定義（ACTION_MODES の「受付」型）にした（2026-10-08。窓の規則とモードの定義の統一）
   // 夢見月瑞希: 窓の規則ではなく、モードの定義（マスターの ActionDefinition.mode。characterMasterGenerator.ts の ACTION_MODES）にした（2026-10-08）。
   // 状態の間の E（解除。CT なし）は、モードを終わらせるアクションとして扱う。同じ値を 2 か所に持たない
   // ディルック: E の後 4 秒の間の E が 2 段目・3 段目（E を使うたびに 4 秒に更新。3 段目で窓が閉じる）。CT は 1 段目で始まる（10 秒）。ヒットストップによる窓の延長（約 0.12〜0.16 秒）は含めない（最短）
@@ -82,10 +65,5 @@ export const ACTION_STATE_RULES: Record<string, ActionStateRule> = {
     note: 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）',
   },
   // 閑雲・クロリンデ: 窓の規則ではなく、モードの定義（ACTION_MODES。雲の変化・夜巡り。交代で終わる）にした（2026-10-08）
-  // ヴァルカ: スキル状態 12 秒の間の E が specialSkill（回数の上限は未確認）
-  '10000128-anemo': {
-    windowSeconds: 12,
-    stageFrames: [{ total: 68, cancels: { attack: 55, charge: 64, skill: 56, burst: 55, dash: 56, jump: 55, walk: 65 }, source: 'skill.go:specialSkillFrames' }],
-    note: 'varka/skill.go: AddStatus(skillKey, 12*60)',
-  },
+  // ファルカ: 窓の規則ではなく、モードの定義（疾風怒濤。状態の間の E は特殊スキルの動作）にした（2026-10-08）
 };

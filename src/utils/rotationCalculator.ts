@@ -116,8 +116,12 @@ export function calculateRotation(
   // モードの計算の結果は、end（終わりの時刻）と endedBy（どう終わったか: 終わらせるアクション・交代・時間切れ）。CT などは、これを受け取るだけにする。
   // inputs・finished・pending は、ディシアの固有の項目（burstMode）用
   interface ModeWindow {
+    /** モードのキー（キャラ ID + モードの名前。一回押し・長押しの両方で開くモード〔藍硯〕は同じキー） */
+    key: string;
     charId: string;
     actionDefId: string;
+    /** モードを開いたアクションが炎場を出す（ディシア。炎場の置き直しで、モードの終わりが延びる） */
+    hasField?: boolean;
     def: ActionMode;
     sIdx: number;
     start: number;
@@ -136,6 +140,7 @@ export function calculateRotation(
   const isModeActive = (m: ModeWindow, charId: string, sIdx: number, t: number) =>
     m.charId === charId && !m.endedBy && t < m.end - 0.001 && (m.sIdx === sIdx || m.def.swap === 'persists');
   const modeWindows = new Map<string, ModeWindow>();
+  const modeKeyOf = (charId: string, md: ActionMode) => `${charId}:${md.label}`;
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
     m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
     m.endedBy = by;
@@ -157,8 +162,10 @@ export function calculateRotation(
     };
     activeBuffs.push(placed);
     fieldSpans.set(charId, placed);
-    const win = stateWindows.get(charId);
-    if (win) win.end = Math.max(win.end, placed.endTime);
+    // 置き直しの受付（剣域熾焔）が未使用なら、新しい炎場の終わりまで延ばす
+    for (const m of modeWindows.values()) {
+      if (m.charId === charId && m.hasField && !m.endedBy) m.end = Math.max(m.end, placed.endTime);
+    }
   };
   // 夜魂値で無料のスキルが出るキャラ（ヴァレサ）の状態（1 周目の線形の計算。マキシマムドライブの受付を開く条件に使う）
   const nightsoulTrackers = new Map<string, NightsoulTracker>();
@@ -303,6 +310,12 @@ export function calculateRotation(
       let modeEnder: { window: ModeWindow; ender: ModeEnder } | undefined;
       // モードの間に、開いたアクションをもう一度使った（終わらせない別の動作。クロリンデの突き・閑雲の 2・3 段目の跳躍）
       let modeRepress: { window: ModeWindow; index: number } | undefined;
+      // 受付と同じ状態のモード（ファルカ）: モードの終わりは、受付の終わり（ヒットストップ・爆発の延長を含む）。アクションごとに合わせる
+      for (const m of modeWindows.values()) {
+        if (!m.def.windowState || m.endedBy || m.charId !== char.id || m.sIdx !== sIdx) continue;
+        const w = stintWindows.find(sw => sw.actionId === m.opener.actionId);
+        if (w) m.end = Number(w.until.toFixed(3));
+      }
       for (const m of modeWindows.values()) {
         if (!isModeActive(m, char.id, sIdx, actionStartTime)) continue;
         const ender = m.def.enders.find(e => (e.by === 'self' ? act.actionTypeId === m.actionDefId : act.type === e.by));
@@ -311,16 +324,15 @@ export function calculateRotation(
           break;
         }
         const rp = m.def.repress;
-        if (rp && act.actionTypeId === m.actionDefId && (rp.maxUses === undefined || m.repressUsed < rp.maxUses)) {
+        const repressMatches = rp && (rp.actions ? rp.actions.some(s => act.actionTypeId === `${char.id}_${s}`) : act.actionTypeId === m.actionDefId);
+        if (rp && repressMatches && (rp.maxUses === undefined || m.repressUsed < rp.maxUses)) {
           modeRepress = { window: m, index: m.repressUsed };
           break;
         }
       }
-      // このアクションが、新しいモードを開くか（続いているモードの、終わらせるアクション・もう一度使った動作ではない）
-      const opensMode = !!actionDef?.mode && modeEnder?.window.actionDefId !== actionDef.id && !modeRepress;
 
       // 爆発の後のモード（ディシア）の固有の扱い: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
-      const mw = burstModeAction ? modeWindows.get(burstModeAction.id) : undefined;
+      const mw = burstModeAction?.mode ? modeWindows.get(modeKeyOf(char.id, burstModeAction.mode)) : undefined;
       let modeKind: 'punch' | 'kick' | 'dash' | undefined;
       if (burstModeDef && mw && mw.sIdx === sIdx) {
         const isInput = act.type === 'normal' || (act.type === 'skill' && act.actionTypeId === `${char.id}_e`);
@@ -338,6 +350,11 @@ export function calculateRotation(
           modeKind = 'kick';
         }
       }
+      // パンチ・蹴りになった E（ディシアの爆発の後）は、炎場の置き直しにならず、新しいモードも開かない
+      if (modeKind === 'punch' || modeKind === 'kick') modeRepress = undefined;
+      // このアクションが、新しいモードを開くか（続いているモードの、終わらせるアクション・もう一度使った動作・パンチではない）
+      const opensMode = !!actionDef?.mode && !(modeEnder && modeEnder.window.key === modeKeyOf(char.id, actionDef.mode)) && !modeRepress
+        && modeKind !== 'punch' && modeKind !== 'kick';
       if (modeEnder) {
         endMode(modeEnder.window, actionStartTime, 'ender');
         // 終わらせる E（夢見月瑞希の解除・タルタリヤの遠距離への戻り）は、自分の CT・効果バーを持たない（CT は、モードを開いたアクションの分。cooldownAtEnd）
@@ -649,9 +666,11 @@ export function calculateRotation(
       if (opensMode && actionDef?.mode) {
         const md = actionDef.mode;
         // 使い切った後の、新しいモード（閑雲の 4 回目の E）: 続いている前のモードは、ここで終わる
-        const prevMode = modeWindows.get(actionDef.id);
+        const key = modeKeyOf(char.id, md);
+        const prevMode = modeWindows.get(key);
         if (prevMode && !prevMode.endedBy && prevMode.end > actionStartTime) endMode(prevMode, actionStartTime, 'timeout');
-        const start = Number((actionStartTime + md.startDelayFrames / 60).toFixed(3));
+        // 長押しの終わりから始まるモード（藍硯の長押し）は、長押しの秒数（所要時間からの逆算）を足す
+        const start = Number((actionStartTime + (md.startAfterHold ? holdSeconds ?? 0 : 0) + md.startDelayFrames / 60).toFixed(3));
         // 最大時間: モードの定義の値。アクションごとの効果継続時間（個別に変更した値・gcsim の結果）のほうが長ければ、その値
         const end = Number((start + Math.max(md.durationFrames / 60, act.effectDuration ?? 0)).toFixed(3));
         const span: ActiveBuffSpan = {
@@ -668,10 +687,11 @@ export function calculateRotation(
           // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
           ...(md.noSynergy ? { noSynergy: true } : {}),
         };
-        // 受付と同じ状態のモード（ファルカ・フリンズ）は、受付・効果のバーが兼ねる
-        if (!md.windowState) activeBuffs.push(span);
+        // 受付と同じ状態のモード（ファルカ・フリンズ）と、バーを出さないモード（受付）は、受付・効果のバーが兼ねる
+        if (!md.windowState && !md.noBar) activeBuffs.push(span);
         const opened: ModeWindow = {
-          charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, span, repressUsed: 0, inputs: 0, finished: false,
+          key, charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, span, repressUsed: 0, inputs: 0, finished: false,
+          ...(actionDef.fieldRecast ? { hasField: true } : {}),
           opener: {
             actionId: act.id, name: act.name, start: actionStartTime, cooldown,
             cdScale: actionDef.ignoresCdScale ? 1 : cdResonanceScale,
@@ -686,7 +706,7 @@ export function calculateRotation(
           field.endTime = Number((actionStartTime + 1 / 60).toFixed(3));
           field.duration = Number(Math.max(0, field.endTime - field.startTime).toFixed(3));
         }
-        modeWindows.set(actionDef.id, opened);
+        modeWindows.set(key, opened);
       }
 
       // ヴァレサ: 夜魂値（猛烈パッション）と、マキシマムドライブ（落下攻撃の開始時に、命ノ星座 2 以上、または猛烈パッション中なら、短い間だけ特殊爆発の受付が開く）
@@ -859,7 +879,7 @@ export function calculateRotation(
 
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
-      const effectSpan = inStateWindow || (actionDef?.mode && !actionDef.mode.windowState) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      const effectSpan = inStateWindow || (actionDef?.mode && !actionDef.mode.windowState && !actionDef.mode.noBar) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
       // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
       if (effectSpan && actionDef?.fieldRecast) {
         const delay = actionDef.fieldRecast.startDelayFrames / 60;
@@ -949,7 +969,7 @@ export function calculateRotation(
 
     const stintEndTime = currentTime;
     // ディシア: 拾った炎場は、交代の fieldPlaceAfterExitFrames 後、または自動の蹴りの命中の後に置き直される（早いほう）
-    const burstModeAtEnd = burstModeAction ? modeWindows.get(burstModeAction.id) : undefined;
+    const burstModeAtEnd = burstModeAction?.mode ? modeWindows.get(modeKeyOf(char.id, burstModeAction.mode)) : undefined;
     if (burstModeDef && burstModeAtEnd && burstModeAtEnd.sIdx === sIdx && burstModeAtEnd.pending) {
       placePickedField(char.id, burstModeAtEnd, Math.min(stintEndTime + burstModeDef.fieldPlaceAfterExitFrames / 60, autoKickAt(burstModeAtEnd)));
     }

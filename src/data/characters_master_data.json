@@ -24704,6 +24704,36 @@
           "c2ExtensionFrames": 360,
           "source": "dehya/skill.go: Skill()（炎場は skillHitmark + 1 で 12 秒）、skillRecast()（pickUpField で残り時間 + 24f を保存し、skillRecastHitmark + 1 で置き直す。炎場は拾っている間、時間が進まない）、cons.go: c2IncreaseDur"
         },
+        "mode": {
+          "label": "剣域熾焔",
+          "description": "剣域熾焔（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 0,
+          "durationFrames": 741,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 74,
+                "cancels": {
+                  "skill": 45,
+                  "burst": 45,
+                  "dash": 45,
+                  "jump": 49,
+                  "swap": 44
+                },
+                "source": "skill.go:skillRecastFrames"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true
+          },
+          "source": "dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)。hasRecastSkill で再発動は 1 回（窓の規則から移した）"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
@@ -29652,6 +29682,30 @@
           "cooldownStart": "manual: chiori/skill.go: skillCDStarts[0]"
         },
         "defaultDuration": 0.85,
+        "mode": {
+          "label": "再発動の受付",
+          "description": "再発動の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 26,
+          "durationFrames": 78,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 1,
+                "cancels": {},
+                "source": "skill.go:skillRecast（強制交代。アプリの交代遅延 1f）"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true
+          },
+          "source": "chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）"
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
@@ -33864,6 +33918,39 @@
           "cooldownStart": "skill.go:4+hold"
         },
         "defaultDuration": 1.333,
+        "mode": {
+          "label": "羽月の輪の受付",
+          "description": "羽月の輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 7,
+          "durationFrames": 66,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 41,
+                "cancels": {
+                  "attack": 37,
+                  "burst": 39,
+                  "dash": 38,
+                  "jump": 39
+                },
+                "source": "attack.go:ringsFrames"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true,
+            "actions": [
+              "e"
+            ]
+          },
+          "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
+          "startAfterHold": true
+        },
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.067
@@ -33894,6 +33981,39 @@
           "cooldownStart": "manual: lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)"
         },
         "defaultDuration": 11.5,
+        "mode": {
+          "label": "羽月の輪の受付",
+          "description": "羽月の輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 7,
+          "durationFrames": 66,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 41,
+                "cancels": {
+                  "attack": 37,
+                  "burst": 39,
+                  "dash": 38,
+                  "jump": 39
+                },
+                "source": "attack.go:ringsFrames"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true,
+            "actions": [
+              "e"
+            ]
+          },
+          "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
+          "startAfterHold": true
+        },
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.067
@@ -39086,8 +39206,25 @@
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除",
-          "windowState": true
+          "source": "varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除。状態の間の E は specialSkill",
+          "windowState": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 68,
+                "cancels": {
+                  "attack": 55,
+                  "charge": 64,
+                  "skill": 56,
+                  "burst": 55,
+                  "dash": 56,
+                  "jump": 55,
+                  "walk": 65
+                },
+                "source": "skill.go:specialSkillFrames"
+              }
+            ]
+          }
         },
         "cooldownStart": {
           "from": "motionStart",

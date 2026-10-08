@@ -1519,9 +1519,10 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     let queue = queues.get(item.event.key);
     queue?.advance(item.time);
     const charId = ev.key.split(':')[0];
-    // 祭礼の武器: スキルのダメージが当たった。使用者が場にいて、スキルが CT 中（キューに CT が積まれている）で、武器の内部 CT が明けていれば、先頭の CT を捨てる（gcsim の ResetActionCooldown）
+    // 祭礼の武器: スキルのダメージが当たった。使用者が場にいて、スキルが CT 中（先頭の CT がもう始まっている）で、武器の内部 CT が明けていれば、先頭の CT を捨てる（gcsim の ResetActionCooldown）。
+    // スキルを使った時点で CT は積んであるが、CT が始まるのは少し後（CT 開始位置）。始まる前の命中では、gcsim の Cooldown が 0 なので、発動しない
     if (ev.sacrificial) {
-      if (queue && queue.size > 0 && isActiveAt(charId, ev.time) && item.time >= (sacrificialIcdUntil.get(charId) ?? -Infinity) - 1e-9) {
+      if (queue?.head && item.time >= queue.head.start - 1e-6 && isActiveAt(charId, ev.time) && item.time >= (sacrificialIcdUntil.get(charId) ?? -Infinity) - 1e-9) {
         queue.release(item.time);
         sacrificialIcdUntil.set(charId, item.time + ev.sacrificial.icdSeconds);
       }

@@ -26009,7 +26009,7 @@
       {
         "id": "10000083-anemo_e",
         "name": "元素スキル: エニグマティック·フェイント",
-        "shortName": "E",
+        "shortName": "tE",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 12,
@@ -26036,6 +26036,37 @@
           "from": "motionStart",
           "delay": 0.433
         }
+      },
+      {
+        "id": "10000083-anemo_e_hold",
+        "name": "元素スキル(長押し): エニグマティック·フェイント",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 12,
+        "effectDuration": 0,
+        "frames": {
+          "total": 225,
+          "cancels": {
+            "attack": 213,
+            "skill": 213,
+            "burst": 213,
+            "dash": 212,
+            "jump": 215,
+            "swap": 211
+          },
+          "source": "skill.go:skillHoldEndFrames（+ 長押し 34 + 最大 150f）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: lynette/skill.go: SetCDWithDelay(..., duration + skillHoldEndCDStart(14))、duration = hold + 34"
+        },
+        "defaultDuration": 3.75,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.8
+        },
+        "holdInFrames": 2.5
       },
       {
         "id": "10000083-anemo_q",
@@ -33811,31 +33842,63 @@
       {
         "id": "10000108-anemo_e",
         "name": "元素スキル: 鳳跡随翦舞",
-        "shortName": "E",
+        "shortName": "tE",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 16,
         "effectDuration": 12.5,
         "frames": {
-          "total": 49,
+          "total": 80,
           "cancels": {
-            "attack": 45,
-            "burst": 46,
-            "dash": 47,
-            "jump": 47
+            "attack": 33,
+            "skill": 33,
+            "burst": 79,
+            "dash": 77,
+            "jump": 79
           },
-          "source": "skill.go:skillMissFrames"
+          "source": "skill.go:skillHitFrames"
         },
         "dataSource": {
           "cooldown": "クールタイム",
           "effectDuration": "シールド継続時間",
           "cooldownStart": "skill.go:4+hold"
         },
-        "defaultDuration": 0.817,
+        "defaultDuration": 1.333,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.067
         }
+      },
+      {
+        "id": "10000108-anemo_e_hold",
+        "name": "元素スキル(長押し): 鳳跡随翦舞",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 16,
+        "effectDuration": 12.5,
+        "frames": {
+          "total": 690,
+          "cancels": {
+            "attack": 643,
+            "skill": 643,
+            "burst": 689,
+            "dash": 687,
+            "jump": 689
+          },
+          "source": "skill.go:skillHitFrames（+ 長押し 0 + 最大 610f）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "シールド継続時間",
+          "cooldownStart": "manual: lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)"
+        },
+        "defaultDuration": 11.5,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.067
+        },
+        "holdInFrames": 10.167
       },
       {
         "id": "10000108-anemo_q",

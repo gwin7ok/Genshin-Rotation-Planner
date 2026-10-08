@@ -29,16 +29,21 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
 };
 
 /**
- * 長押しの長さ（フレーム）を `hold=<フレーム数>` で渡すアクション（gcsim の上限は 600 = 10 秒）。
- * 値はユーザーが編集した所要時間から逆算した長押し秒数（holdSeconds）。早柚・綺良々
+ * 長押しの長さ（フレーム）を `hold=<フレーム数>` で渡すアクションと、gcsim の上限（フレーム）。
+ * 値はユーザーが編集した所要時間から逆算した長押し秒数（holdSeconds。既定は最大）。早柚・綺良々（600）、リネット（150）、藍硯（610）
  */
-export const HOLD_FRAMES_ACTIONS = new Set<string>(['10000053-anemo_e_hold', '10000061-dendro_e_hold']);
-const MAX_HOLD_FRAMES = 600;
+export const HOLD_FRAMES_ACTIONS = new Map<string, number>([
+  ['10000053-anemo_e_hold', 600],
+  ['10000061-dendro_e_hold', 600],
+  ['10000083-anemo_e_hold', 150],
+  ['10000108-anemo_e_hold', 610],
+]);
 
 /** 長押しの秒数を gcsim の命令に反映する（対象外のアクション・秒数が不明なときは、そのまま返す） */
 export function applyHoldSeconds(actionTypeId: string, command: string, holdSeconds: number | undefined): string {
-  if (!HOLD_FRAMES_ACTIONS.has(actionTypeId) || holdSeconds === undefined) return command;
-  const frames = Math.min(MAX_HOLD_FRAMES, Math.max(1, Math.round(holdSeconds * 60)));
+  const maxFrames = HOLD_FRAMES_ACTIONS.get(actionTypeId);
+  if (maxFrames === undefined || holdSeconds === undefined) return command;
+  const frames = Math.min(maxFrames, Math.max(1, Math.round(holdSeconds * 60)));
   return command.replace(/\[.*$/, '') + `[hold=${frames}]`;
 }
 

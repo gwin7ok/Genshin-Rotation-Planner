@@ -430,11 +430,26 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
 };
 
 /**
+ * 長押しの長さを gcsim の `hold=<フレーム数>` で渡すスキル（モード維持の段階 ③。2026-10-08）。キー: キャラ ID。
+ * genshin-db に長押しの CT が無く、gcsim のフレーム表が長押しの後の部分だけ（名前に End を含むなど）で、長押しのアクションが生成されないキャラ。
+ * - table: 長押しの後の部分のフレーム表、offsetFrames: `hold` に足される固定の長さ、maxHoldFrames: `hold` の上限
+ * - CT開始位置・frames に含まれる長押し（holdInFrames）は、cooldownStartOverrides.ts
+ */
+const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; maxHoldFrames: number; note: string }> = {
+  // リネット: hold は 1〜150。長押しの状態は hold + 34f（skillHold(hold + 34)）、その後に skillHoldEndFrames
+  '10000083-anemo': { table: 'skillHoldEndFrames', offsetFrames: 34, maxHoldFrames: 150, note: 'lynette/skill.go: Skill（hold > 150 は 150）、skillHold: Frames = duration + skillHoldEndFrames[next]' },
+  // 藍硯: hold は 0〜610。フレームは skillHitFrames（探知が命中した場合。窓の規則と同じく命中する前提。gcsim の実行でも命中のフレーム）+ hold
+  '10000108-anemo': { table: 'skillHitFrames', offsetFrames: 0, maxHoldFrames: 610, note: 'lanyan/skill.go: Skill（hold > 610 は 610）、Frames = getCurrentSkillFrames()[next] + hold（命中すると leap-back の状態で skillHitFrames）' },
+};
+
+/**
  * 一回押しの E のフレーム表を、表の並び順の最初ではなく、名前で選ぶキャラ（キー: キャラ ID、値: 表の名前）。
  * タルタリヤ: skill.go の最初の表は近接の構えを終わらせる E（skillMeleeFrames。モードの終わらせるアクションのフレームに入れた）で、構えに入る E は skillRangedFrames
  */
 const SKILL_TAP_TABLES: Record<string, string> = {
   '10000033-hydro': 'skillRangedFrames',
+  // 藍硯: 探知が命中した場合のフレーム（窓の規則〔羽月の輪〕と同じく命中する前提。2026-10-08 の実行で、交代は命中のフレーム〔80f〕）
+  '10000108-anemo': 'skillHitFrames',
 };
 
 /**
@@ -943,6 +958,32 @@ function buildActions(ctx: BuildContext): BuildResult {
         effectDuration: timings.skillHoldDuration?.label,
       },
     }, resolvedHoldTable ? framesToSec(resolvedHoldTable.total) : undefined));
+  }
+
+  // 長押しの長さを gcsim の `hold=<フレーム数>` で渡すスキル（リネット・藍硯。モード維持の段階 ③）。
+  // gcsim のフレーム表は長押しの後の部分だけなので、最大の長押しを足した長さで作る（既定の所要時間 = 最大の長押し。短くするときは所要時間を編集する）
+  const paramHold = PARAM_HOLD_SKILLS[id];
+  if (paramHold && skill && !actions.some(a => a.id === `${id}_e_hold`)) {
+    const table = skill.tables.find(t => t.name === paramHold.table);
+    if (table) {
+      const add = paramHold.offsetFrames + paramHold.maxHoldFrames;
+      const base = toActionFrames(table, 'skill', skill.consts);
+      const cancels = Object.fromEntries(Object.entries(base.cancels).map(([k, v]) => [k, (v as number) + add]));
+      actions.push(withDuration({
+        id: `${id}_e_hold`,
+        name: skillName ? `元素スキル(長押し): ${skillName}` : '元素スキル(長押し)',
+        shortName: 'hE',
+        type: 'skill_hold',
+        startsSkillCooldown: true,
+        cooldown: timings.skillTapCooldown?.value,
+        effectDuration: timings.skillTapDuration?.value ?? 0,
+        frames: { total: base.total + add, cancels, source: `skill.go:${table.name}（+ 長押し ${paramHold.offsetFrames} + 最大 ${paramHold.maxHoldFrames}f）` },
+        dataSource: {
+          cooldown: timings.skillTapCooldown?.label,
+          effectDuration: timings.skillTapDuration?.label,
+        },
+      }, framesToSec(base.total + add)));
+    }
   }
 
   // 派生スキル: gcsim へのパラメータ指定が必要なもの（B）だけを別アクションにする（フェーズ3d / D25・D26）。

@@ -56,6 +56,8 @@ export interface GcsimConfigInput {
    * 長押し（holdSeconds で渡すアクション）は含めない
    */
   extraWaitByActionId?: Record<string, number>;
+  /** extraWaitByActionId のうち、モードの維持のための自動の待ち（アクション ID → 秒）。書き戻しで、保存する所要時間から引く（維持の秒数は保存しない） */
+  modeHoldByActionId?: Record<string, number>;
 }
 
 export interface GcsimConfigResult {
@@ -81,6 +83,8 @@ export interface GcsimActionRef {
   command: string;
   /** 遅延に足して渡した、標準より長くした分（秒）。書き戻しで、gcsim 自身の所要時間を求めるために引く。無ければ 0 */
   extraSeconds?: number;
+  /** extraSeconds のうち、モードの維持のための自動の待ち（秒）。書き戻す所要時間には含めない。無ければ 0 */
+  modeHoldSeconds?: number;
   /** 設定文の中の位置: 初動 / ループ（何周目か） */
   phase: 'initial' | 'loop';
   /** phase = loop のとき、何周目か（1 始まり） */
@@ -172,7 +176,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const stintLines = (
     stintList: Stint[],
     indent: string,
-    refs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[],
+    refs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[],
     /** 最初の出場の直前のキャラのキー（1周目と2周目以降で違うときは `loopPrevKeys`）。無ければ交代しない（最初の出場など） */
     firstPrevKey: string | undefined,
     /** ループの最初の出場の直前のキャラのキー（周ごとに違うとき: 1周目 / 2周目以降） */
@@ -205,7 +209,8 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char') continue;
         if (act.type === 'wait') {
-          const frames = toFrames(act.duration);
+          // 出場の最後の待機には、モードの維持のための自動の待ちを足す
+          const frames = toFrames(act.duration + Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0));
           if (frames > 0) out.push(`${indent}delay(${frames});`);
           continue;
         }
@@ -223,7 +228,8 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
         const command = applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
-        refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, ''), ...(extra > 0 ? { extraSeconds: extra } : {}) });
+        const modeHold = Math.max(0, input.modeHoldByActionId?.[act.id] ?? 0);
+        refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, ''), ...(extra > 0 ? { extraSeconds: extra } : {}), ...(modeHold > 0 ? { modeHoldSeconds: modeHold } : {}) });
         // 出場の最後のアクション、または追加分が長い（0.5 秒以上）ときは `wait`。長い待ちは、`wait` が交代・次の行動へのキャンセルより早く始まって吸収される分（最大 0.2 秒程度）が小さく、
         // `delay`（次のアクションが実行できる状態になった後に入る）だと、CT待ちの後にさらに待つため、特殊スキルの受付（12 秒など）を過ぎてしまうことがある
         if (extra > 0 && (act === lastCommandAct || extra >= 0.5)) {
@@ -239,8 +245,8 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     return out;
   };
 
-  const initialRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[] = [];
-  const loopRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number }[] = [];
+  const initialRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[] = [];
+  const loopRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[] = [];
   const stintKey = (s: Stint | undefined) => (s ? keyOf.get(s.characterId) : undefined);
   const firstKey0 = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
   const initialLines = stintLines(initialStints, '', initialRefs, undefined);

@@ -92,12 +92,13 @@ export function applyActionDurations(
     // 標準より長くした分（遅延に足して渡した分）は、所要時間に含まれる。gcsim 自身の所要時間は、それを引いた値
     const extra = ref.extraSeconds ?? 0;
     const delayFrames = Math.max(0, Math.round((actionDelayOf(act) + extra) * 60));
-    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra).toFixed(3));
+    // モードの維持のための自動の待ちは、保存する所要時間に含めない（計算のたびに、出場の終わりに足す）
+    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra - (ref.modeHoldSeconds ?? 0)).toFixed(3));
     if (seconds < 0) {
       skipped++;
       continue;
     }
-    next.set(ref.actionId, { seconds, base: Number(Math.max(0.05, seconds - extra).toFixed(3)) });
+    next.set(ref.actionId, { seconds, base: Number(Math.max(0.05, seconds - (extra - (ref.modeHoldSeconds ?? 0))).toFixed(3)) });
     const before = effectiveDurations?.[ref.actionId] ?? act.duration;
     if (Math.abs(seconds - before) >= 0.0005) {
       changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: act.name, before, after: seconds });

@@ -296,12 +296,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   } | null>(null);
 
   const cleanStintsForState = (rawStints: Stint[]): Stint[] => {
-    return rawStints.map(s => ({
+    return rawStints.map(({ modeHold, ...s }) => ({
       ...s,
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -312,7 +312,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const newStints = stints.map(s => {
       if (s.id !== stintId) return s;
       const cleanActions = s.actions.map(a => {
-        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, startTime, endTime, ...rest } = a;
+        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
         return rest;
       });
       const [moved] = cleanActions.splice(fromIndex, 1);
@@ -1549,6 +1549,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             </span>
                                           )}
                                         </span>
+                                      </div>
+                                    );
+                                  })}
+                                  {/* モードの維持のために、出場の最後のアクションの後に自動で足した待ち（薄い色。保存しない） */}
+                                  {stint.actions.filter(act => (act.modeHoldSeconds ?? 0) > 0).map(act => {
+                                    const hold = act.modeHoldSeconds ?? 0;
+                                    return (
+                                      <div
+                                        key={`${act.id}_modehold`}
+                                        style={{ left: `${((stint.endTime ?? 0) - hold - (stint.startTime ?? 0)) * pixelsPerSecond}px`, width: `${hold * pixelsPerSecond}px` }}
+                                        className={`absolute h-full flex items-center justify-center border-r border-dashed border-slate-400/50 text-[9px] text-slate-200/70 select-none ${
+                                          act.type === 'burst' ? 'bg-purple-600/30' : act.type === 'skill' || act.type === 'skill_hold' ? 'bg-sky-600/30' : 'bg-slate-500/30'
+                                        }`}
+                                        title={`【モード維持】${stint.modeHold?.label ?? 'モード'}が最大時間まで続くように、「${act.name}」の後を自動で延ばしています（+${hold.toFixed(2)}s。保存しません）。\n切り替えは、アクション構築エリアの出場ブロックの「モード維持」`}
+                                      >
+                                        <span className="truncate px-0.5">維持</span>
                                       </div>
                                     );
                                   })}

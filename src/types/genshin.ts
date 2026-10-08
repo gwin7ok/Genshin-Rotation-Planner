@@ -49,6 +49,39 @@ export interface CooldownStart {
   delay: number;
 }
 
+/**
+ * スキル・爆発で入るモード（状態）の終わり方。キャラごとの分岐は書かず、このデータだけで扱う（mode-hold-plan.md）。
+ * モードの終わり = 「開始 + 最大時間」「終わらせるアクションを置いた時刻」「出場の終わり（swap = 'ends' だけ）」の最も早い時刻。
+ * 出場の延長（維持）= max(0, モードの終わり − 出場の最後のアクションの終わり)。足すのは swap が 'ends'・'blocks' のモードだけ
+ */
+export interface ActionMode {
+  /** モードのバーの名前 */
+  label: string;
+  /** モードのバーの説明 */
+  description: string;
+  /** アクションの開始から、モードが始まるまでのフレーム */
+  startDelayFrames: number;
+  /** 入力がないときの最大時間（フレーム） */
+  durationFrames: number;
+  /** 交代での扱い: ends = 交代で終わる／persists = 交代しても続く／blocks = 終わらせないと交代できない */
+  swap: 'ends' | 'persists' | 'blocks';
+  /** モードを終わらせるアクション */
+  enders: ModeEnder[];
+  /** 既定で、出場をモードの終わりまで延ばすか（出場ごとの切り替え Stint.holdMode が未指定のとき） */
+  holdByDefault: boolean;
+  /** 根拠（gcsim ソース） */
+  source: string;
+}
+
+export interface ModeEnder {
+  /** self = モードを開いたアクションをもう一度（E の再押し）。それ以外は、アクションの種別（jump など） */
+  by: 'self' | ActionType;
+  /** 終わらせる動作のフレーム（無ければ、そのアクションの通常のフレーム） */
+  frames?: ActionFrames;
+  /** そのアクションでの CT の扱い: none = CT を始めない（効果バーも出さない）／start = ここで CT を始める */
+  cooldown: 'none' | 'start';
+}
+
 export interface ActionDefinition {
   id: string;
   name: string;
@@ -79,17 +112,16 @@ export interface ActionDefinition {
   nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
+  /** このアクションで入るモード（状態）。夢見月瑞希の夢浮かみ・ディシアのパンチ連打モードなど */
+  mode?: ActionMode;
   /**
-   * 爆発の後に、通常攻撃（N）・元素スキル（E）がパンチに置き換わるモード（ディシアの炎哮獅子咬）。単位はフレーム（60 FPS）。出典: gcsim dehya/burst.go・dash.go・jump.go
-   * - モードは、爆発の開始から startDelayFrames 後に始まり、durationFrames 続く（出場が終わる、窓の中のジャンプで終わる）
+   * 爆発の後のモード（mode）の間、通常攻撃（N）・元素スキル（E）がパンチに置き換わる（ディシアの炎哮獅子咬）。モードの共通の定義（mode）に入らない、固有の項目。
+   * 単位はフレーム（60 FPS）。出典: gcsim dehya/burst.go・dash.go・jump.go
    * - モードの間の N・E は、inputFrames の長さのパンチ（入力の何回目か。足りなければ最後を繰り返す）。スキルの CT・窓の規則は使わない
    * - モードが終わった後、finisherWindowFrames 以内の最初の N・E は、フィニッシュの蹴り（finisher のフレーム）
    * - モードの間のダッシュの直後 dashJumpKickFrames 以内のジャンプは、蹴り。そうでないジャンプは、モードを終わらせる
    */
   burstMode?: {
-    label: string;
-    startDelayFrames: number;
-    durationFrames: number;
     inputFrames: number[];
     finisherWindowFrames: number;
     finisher: { total: number; cancels: Partial<Record<CancelTarget, number>> };
@@ -238,6 +270,8 @@ export interface CharacterActionInstance {
   holdSeconds?: number;
   /** アクション状態の窓の中の E（CT・効果バーを持たない）。計算時にだけ付く */
   inStateWindow?: boolean;
+  /** モードの維持のために、このアクション（出場の最後）の後に自動で足した待ち（秒）。所要時間（duration）には含めない。計算時にだけ付き、保存しない */
+  modeHoldSeconds?: number;
   /** 特殊スキルが受付時間の外で使われたとき、落下攻撃が gcsim の前提を満たさないときの警告文（黄色の警告。計算時にだけ付く） */
   specialWindowWarning?: string;
   /** CT未回復（CT衝突）フラグ */
@@ -391,11 +425,15 @@ export interface Stint {
    * offset = 出場の先頭からの秒数（出場より前の効果は負）。ユーザーは編集できない（gcsim の計算を再実行すると作り直す）
    */
   extraEffects?: { key: string; name: string; offset: number; duration: number }[];
+  /** モードの維持（出場を、モードの終わりまで自動で延ばす）の切り替え。未指定は、モードの定義の既定（ActionMode.holdByDefault）。延ばした秒数は保存しない */
+  holdMode?: boolean;
   note?: string;
   // Computed at runtime:
   startTime?: number;
   endTime?: number;
   duration?: number;
+  /** この出場で、維持の対象のモード（交代で終わる・終わらせないと交代できない）に入ったときだけ付く。on = 維持が有効か、seconds = 足した待ち、label = モードの名前 */
+  modeHold?: { on: boolean; seconds: number; label: string };
 }
 
 /**

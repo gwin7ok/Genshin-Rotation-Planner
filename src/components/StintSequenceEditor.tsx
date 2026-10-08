@@ -132,12 +132,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
   // Sanitize helper to ensure raw stints stored in parent state do not hold duplicate automatic swap actions or stale runtime CT properties
   const sanitizeStintsForUpdate = (rawList: Stint[]): Stint[] => {
-    return rawList.map(s => ({
+    return rawList.map(({ modeHold, ...s }) => ({
       ...s,
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, inStateWindow, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, inStateWindow, modeHoldSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -347,6 +347,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     const { gcsimCtOffset: _dropped, ...actWithoutCtOffset } = act;
     nextActions[actionIndex] = { ...actWithoutCtOffset, duration: newDuration, durationManual: true };
     nextStints[stintIndex] = { ...targetStint, actions: nextActions };
+    onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // モードの維持（出場を、モードの終わりまで自動で延ばす）の切り替え。保存するのは、切り替えの状態だけ
+  const toggleHoldMode = (stintIndex: number) => {
+    const nextStints = [...stints];
+    nextStints[stintIndex] = { ...nextStints[stintIndex], holdMode: !nextStints[stintIndex].modeHold?.on };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 
@@ -1082,6 +1089,21 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                     {/* Right: Notes, Duplicate, Delete */}
                     <div className="flex items-center gap-1">
+                      {/* モードの維持の切り替え（この出場で、維持の対象のモードに入ったときだけ） */}
+                      {stint.modeHold && (
+                        <button
+                          type="button"
+                          onClick={() => toggleHoldMode(stintIndex)}
+                          className={`px-2 py-1 rounded-lg text-xs font-semibold border transition-all shadow-sm ${
+                            stint.modeHold.on
+                              ? 'bg-emerald-900/40 text-emerald-300 border-emerald-600/60 hover:bg-emerald-800/60'
+                              : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-slate-200'
+                          }`}
+                          title={`【モード維持】「${stint.modeHold.label}」が最大時間まで続くように、出場の最後のアクションの後を自動で延ばします（延ばした秒数は保存しません。gcsim の設定文には wait として出します）。\nオフにすると、最後のアクションの直後に交代します。途中で終わらせたいときは、終わらせるアクションを置いてください。`}
+                        >
+                          モード維持: {stint.modeHold.on ? `オン${stint.modeHold.seconds > 0 ? `（+${stint.modeHold.seconds.toFixed(2)}s）` : ''}` : 'オフ'}
+                        </button>
+                      )}
                       {/* Note button */}
                       {editingNoteStintId === stint.id ? (
                         <div className="flex items-center gap-1">

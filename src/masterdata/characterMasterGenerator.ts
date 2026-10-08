@@ -204,10 +204,7 @@ const FIELD_RECASTS: Record<string, NonNullable<ActionDefinition['fieldRecast']>
  */
 const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & { burstFrames: number }> = {
   '10000079-pyro': {
-    label: 'パンチ連打モード',
     burstFrames: 105,
-    startDelayFrames: 105,
-    durationFrames: Math.round(4.1 * 60),
     // punchHitmarks: 入力の長さ（1・2 発目 30f、3 発目 28f、4 発目以降 27f）
     inputFrames: [30, 30, 28, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27],
     // 状態が切れた後、最後の自動のパンチ（最大 50f 後）と蹴り（46f 後）まで
@@ -221,6 +218,43 @@ const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & {
     fieldPlaceAfterKickFrames: 1,
     fieldPlaceAfterExitFrames: 46,
     source: 'dehya/burst.go: burstDuration = 4.1*60、burstPunchSlowHitmark = 50（自動のパンチ）、punchHitmarks（入力のパンチ）、kickFrames（蹴り）。UseBurstAction: 状態の間の attack・skill はパンチ（ActionReady は CT を見ない）。dash.go: 状態の間の dash は、ジャンプへ 7f でキャンセルでき、17f 以内のジャンプは蹴り。jump.go: それ以外のジャンプは状態を終わらせる',
+  },
+};
+
+/**
+ * スキル・爆発で入るモード（状態）の、共通の定義（2026-10-08。mode-hold-plan.md）。キー: キャラ ID。action = モードを開くアクション（e = `_e`、q = 元素爆発）
+ * 交代での扱い・終わらせるアクション・既定で維持するかを、データで持つ（計算は、キャラごとの分岐を書かない）。
+ * keepEffectDuration: マスターの効果継続時間（genshin-db）を残す（アクションごとの個別の値で、モードを長くできる）。無ければ 0 にする（バーはモードのバーだけ）
+ */
+const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> }> = {
+  // 夢見月瑞希: 夢浮かみ（5 秒。固有天賦 1 の延長は反応が条件なので含めない）。状態の間の E で解除（CT なし）。交代で解除（実行で確認: 交代の時点で「DreamDrifter effect cancelled」）
+  '10000109-anemo': {
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '夢浮かみ',
+      description: '夢浮かみ状態。状態の間の元素スキル（E）で解除する（CT は始まらない）。キャラ交代でも終わる',
+      startDelayFrames: 0,
+      durationFrames: 5 * 60,
+      swap: 'ends',
+      enders: [{ by: 'self', cooldown: 'none', frames: { total: 50, cancels: { burst: 34, swap: 30 }, source: 'skill.go:skillFrames（状態の解除）' } }],
+      holdByDefault: true,
+      source: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）',
+    },
+  },
+  // ディシア: 爆発の 105f 後から 4.1 秒のパンチ連打モード。ジャンプで終わる（ダッシュ → ジャンプは蹴り）。交代で終わる。固有の項目は BURST_MODES
+  '10000079-pyro': {
+    action: 'q',
+    mode: {
+      label: 'パンチ連打モード',
+      description: '通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。モードの間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り',
+      startDelayFrames: 105,
+      durationFrames: Math.round(4.1 * 60),
+      swap: 'ends',
+      enders: [{ by: 'jump', cooldown: 'none' }],
+      holdByDefault: true,
+      source: 'dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる',
+    },
   },
 };
 
@@ -907,7 +941,16 @@ function buildActions(ctx: BuildContext): BuildResult {
       a.burstMode = burstMode;
       a.frames = { total: burstFrames, cancels: {}, source: 'burst.go:burstPunch1Hitmark（爆発の長さ。全部の次のアクションで同じ）' };
       a.defaultDuration = framesToSec(burstFrames);
-      a.effectDuration = 0; // モードのバー（パンチ連打モード）を、計算側で出す
+    }
+  }
+
+  // スキル・爆発で入るモード（共通の定義）。効果バーは、計算側がモードのバーとして出す
+  const actionMode = ACTION_MODES[id];
+  if (actionMode) {
+    for (const a of actions) {
+      if (actionMode.action === 'e' ? a.id !== `${id}_e` : a.type !== 'burst' || a.specialBurst) continue;
+      a.mode = actionMode.mode;
+      if (!actionMode.keepEffectDuration) a.effectDuration = 0;
     }
   }
 

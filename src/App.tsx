@@ -140,7 +140,7 @@ export default function App() {
   // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）、落下攻撃の前提を満たさない配置（gcsim では実行エラー）
   const totalCTWarnings = useMemo(
     () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length
-      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_') || v.id.startsWith('plunge_prereq_') || v.id.startsWith('gcsim_unsupported_')).length,
+      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_') || v.id.startsWith('plunge_prereq_') || v.id.startsWith('gcsim_unsupported_') || v.id.startsWith('mode_blocks_')).length,
     [calculatedResult],
   );
 
@@ -294,7 +294,7 @@ export default function App() {
   );
   // アプリ自身のCT警告（発動バフ・特殊スキルの受付時間外。gcsim の計算は止めない）
   const ctWarningIssues = useMemo(
-    () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_|plunge_prereq_|gcsim_unsupported_)/.test(v.id)),
+    () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_|plunge_prereq_|gcsim_unsupported_|mode_blocks_)/.test(v.id)),
     [calculatedResult],
   );
 
@@ -323,10 +323,18 @@ export default function App() {
       defHalt,
       weapons: database.weapons,
       artifacts: database.artifacts,
+      // 標準より長くした分（所要時間の編集）と、モードの維持のための自動の待ち（出場の最後のアクション。待機のアクションにも足す）
       extraWaitByActionId: Object.fromEntries(
         calculatedResult.calculatedStints.flatMap(s => s.actions)
-          .filter(a => a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'swap' && a.type !== 'wait' && a.duration - a.naturalDuration >= 0.005)
-          .map(a => [a.id, Number((a.duration - (a.naturalDuration as number)).toFixed(3))]),
+          .filter(a => a.type !== 'swap')
+          .map(a => {
+            const manual = a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'wait' ? Math.max(0, a.duration - a.naturalDuration) : 0;
+            return [a.id, Number(((manual >= 0.005 ? manual : 0) + (a.modeHoldSeconds ?? 0)).toFixed(3))] as const;
+          })
+          .filter(([, extra]) => extra > 0),
+      ),
+      modeHoldByActionId: Object.fromEntries(
+        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.modeHoldSeconds).map(a => [a.id, a.modeHoldSeconds as number]),
       ),
       holdSecondsByActionId: Object.fromEntries(
         calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),

@@ -79,7 +79,18 @@ export interface ActionMode {
    * frames = 何回目か（1 回目から順。足りなければ最後を繰り返す）のフレーム、maxUses = 使える回数（無ければ制限なし。使い切った後は、新しいモードを開く）、
    * refreshFrames = 使うたびに、モードの終わりを「その時刻 + この値」に更新する（閑雲の跳躍）
    */
-  repress?: { frames: ActionFrames[]; maxUses?: number; refreshFrames?: number[]; endsOnLast?: boolean };
+  repress?: {
+    frames: ActionFrames[];
+    maxUses?: number;
+    refreshFrames?: number[];
+    endsOnLast?: boolean;
+    /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も羽月の輪） */
+    actions?: string[];
+  };
+  /** モードのバーを出さない（受付のような短い期間。効果バーは、モードを開くアクションの効果バーのまま） */
+  noBar?: boolean;
+  /** モードが、長押しの終わりから始まる（開始 = 長押しの終わり + startDelayFrames。藍硯の長押し） */
+  startAfterHold?: boolean;
   /**
    * モードが、このアクションが開く特殊スキルの受付と同じ状態（ファルカの疾風怒濤・フリンズの幽炎の露顕）。
    * モードのバーは出さず（受付・効果のバーが兼ねる）、維持の目標は、受付の終わり（ヒットストップ・爆発の延長を含む）

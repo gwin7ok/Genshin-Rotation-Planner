@@ -227,7 +227,27 @@ const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & {
  * 交代での扱いは、ゲームでの動き（ユーザーの確認。D73・D76）。gcsim と違うもの（閑雲・クロリンデは、gcsim では交代しても続く）は、各行に書く。
  * keepEffectDuration: マスターの効果継続時間（genshin-db）を残す（アクションごとの個別の値で、モードを長くできる）。無ければ 0 にする（バーはモードのバーだけ）
  */
-type ActionModeEntry = { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> };
+/** action = モードを開くアクション（e = 一回押しの `_e`、e_hold = 長押しの `_e_hold`、q = 元素爆発）。複数のときは配列（同じモードを、どれで開いても同じに扱う） */
+type ActionModeEntry = { action: 'e' | 'e_hold' | 'q' | ('e' | 'e_hold')[]; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> };
+/**
+ * 窓の規則から移した「受付」型のモード（2026-10-08。窓の規則とモードの定義の統一）。E の後の短い期間、E が別の動作になる（CT なし）。
+ * バーは出さない（効果バーはそのまま）・延長しない・バフ重複に数えない。交代での扱いは、受付が交代 CT（1 秒）より短いキャラは影響しない
+ */
+const windowMode = (label: string, startDelayFrames: number, durationFrames: number, swap: 'ends' | 'persists', repress: NonNullable<NonNullable<ActionDefinition['mode']>['repress']>, source: string, extra: Partial<NonNullable<ActionDefinition['mode']>> = {}): NonNullable<ActionDefinition['mode']> => ({
+  label,
+  description: `${label}（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない`,
+  startDelayFrames,
+  durationFrames,
+  swap,
+  enders: [],
+  holdByDefault: false,
+  noHold: true,
+  noBar: true,
+  noSynergy: true,
+  repress,
+  source,
+  ...extra,
+});
 /**
  * 入力がなければ最大時間まで続き、ボタン操作では終わらず、交代で終わるモード（A-2・D-2）の行。開始の遅れ・最大時間は、gcsim の実行で確認したフレーム
  * （2026-10-08。入力なしで `skill` / `burst; wait(1300)` を実行し、状態が付いたフレームと期限）。既定は維持する。効果継続時間（genshin-db）は残す
@@ -266,6 +286,16 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   }],
   // ディシア: 爆発の 105f 後から 4.1 秒のパンチ連打モード。ジャンプで終わる（ダッシュ → ジャンプは蹴り）。交代で終わる。固有の項目は BURST_MODES
   '10000079-pyro': [{
+    // 炎場（12 秒。E の命中の 1f 後から）の間の E は置き直し（剣域熾焔。CT なし・1 回）。炎場は設置物なので交代しても続く（gcsim も、交代して戻った後の E が置き直し。2026-10-08 に実行で確認）。
+    // 爆発が炎場を拾って置き直すと、受付は新しい炎場の終わりまで延びる（計算側。モードを開いたアクションが fieldRecast を持つ）
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('剣域熾焔', 0, 20 + 1 + 12 * 60, 'persists', {
+      frames: [{ total: 74, cancels: { skill: 45, burst: 45, dash: 45, jump: 49, swap: 44 }, source: 'skill.go:skillRecastFrames' }],
+      maxUses: 1,
+      endsOnLast: true,
+    }, 'dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)。hasRecastSkill で再発動は 1 回（窓の規則から移した）'),
+  }, {
     action: 'q',
     mode: {
       label: 'パンチ連打モード',
@@ -357,7 +387,32 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // フリンズ: 幽炎の露顕（619f）。特殊スキル（嵐槍）の受付と同じ状態
   '10000120-electro': [stateMode('e', '幽炎の露顕', 0, 619, 'flins/skill.go: manifest-flame（実行: E と同時に 619f）。交代で解除', { windowState: true })],
   // ファルカ: 疾風怒濤（E の 39f 後から 720f。ヒットストップ・爆発で延びる）。特殊スキルの受付と同じ状態
-  '10000128-anemo': [stateMode('e', '疾風怒濤', 39, 720, 'varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除', { windowState: true })],
+  // 状態の間の E は特殊スキル（specialSkillFrames 68f。CT は特殊スキルの枠で、別のボタン spE と同じ）。窓の規則から移した
+  '10000128-anemo': [stateMode('e', '疾風怒濤', 39, 720, 'varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除。状態の間の E は specialSkill', {
+    windowState: true,
+    repress: { frames: [{ total: 68, cancels: { attack: 55, charge: 64, skill: 56, burst: 55, dash: 56, jump: 55, walk: 65 }, source: 'skill.go:specialSkillFrames' }] },
+  })],
+  // 千織（一回押しの E）: 傘の一振りの後（26f）から 78f の間の E が再発動（次のキャラへ強制交代。交代の遅れは 1f）。長押し E は対象外。窓の規則から移した
+  '10000094-geo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('再発動の受付', 26, 78, 'ends', {
+      frames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
+      maxUses: 1,
+      endsOnLast: true,
+    }, 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）'),
+  }],
+  // 藍硯: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。一回押しでも長押しでも開く（長押しは、長押しの終わりから）。命中する前提。窓の規則から移した
+  '10000108-anemo': [{
+    action: ['e', 'e_hold'],
+    keepEffectDuration: true,
+    mode: windowMode('羽月の輪の受付', 7, 66, 'ends', {
+      frames: [{ total: 41, cancels: { attack: 37, burst: 39, dash: 38, jump: 39 }, source: 'attack.go:ringsFrames' }],
+      maxUses: 1,
+      endsOnLast: true,
+      actions: ['e'],
+    }, 'lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings', { startAfterHold: true }),
+  }],
   // ニィロウ: 剣舞（600f）。状態の間の E はステップ（3 段。CT なし）で、3 段目で剣舞が終わる（実行: 3 段目の 40f 後に tranquilityaura）
   '10000070-hydro': [stateMode('e', '剣舞', 0, 600, 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)、whirlingStepsFrames。3 段目で pirouette が終わる。交代で解除', {
     repress: {
@@ -1168,7 +1223,9 @@ function buildActions(ctx: BuildContext): BuildResult {
   // スキル・爆発で入るモード（共通の定義）。効果バーは、計算側がモードのバーとして出す
   for (const actionMode of ACTION_MODES[id] ?? []) {
     for (const a of actions) {
-      if (actionMode.action === 'e' ? a.id !== `${id}_e` : a.type !== 'burst' || a.specialBurst) continue;
+      const suffixes = Array.isArray(actionMode.action) ? actionMode.action : [actionMode.action];
+      const matches = suffixes.some(s => (s === 'q' ? a.type === 'burst' && !a.specialBurst : a.id === `${id}_${s}`));
+      if (!matches) continue;
       a.mode = actionMode.mode;
       if (!actionMode.keepEffectDuration) a.effectDuration = 0;
     }

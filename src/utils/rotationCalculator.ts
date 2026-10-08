@@ -13,7 +13,7 @@ import {
   Stint, 
   CharacterActionInstance, 
   ActiveBuffSpan, 
-  CooldownSpan, 
+  CooldownSpan, StockSpan, 
   ValidationIssue, 
   CharacterRuntimeState,
   PassiveSpan,
@@ -51,6 +51,8 @@ export interface SacrificialProc {
 }
 
 export interface CalculatedRotation {
+  /** スキルのストック数の区間（回数が 2 以上のスキルを持つキャラ。1 周目・2 周目） */
+  stockSpans: StockSpan[];
   /** 祭礼の武器の発動の一覧（確率 100%・内部 CT だけ考慮した、アプリの計算） */
   sacrificialProcs: SacrificialProc[];
   /** 祭礼の武器を持つキャラ ID。スキルの CT は、アプリの計算（発動による CT のリセット）が持つので、gcsim の結果の反映で書き戻さない */
@@ -1323,10 +1325,13 @@ export function calculateRotation(
     return (stintIntervals.get(charId) ?? []).some(([s0, e0]) => tt >= s0 - 1e-6 && tt < e0 - 1e-6);
   };
   const sacrificialProcs: SacrificialProc[] = [];
-  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs)) {
+  const stockLogs: StockLog[] = [];
+  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs, stockLogs)) {
     skillCooldowns.push(span);
     charStates[span.characterId]?.skillCooldowns.push(span);
   }
+
+  const stockSpans = buildStockSpans(stockLogs, totalDuration, loopStartTime, loopPeriod);
 
   // 祭礼の武器効果（確率 100%）の発動を、発動バフのバー（効果と、武器の内部 CT。長さは精錬で決まる）として自動で出す。
   // 出すのは 1 周目の発動だけ（2 周目折り返しは、既存の持ち越しの仕組み）。手で置く発動バフ（triggerId）ではない（auto）
@@ -1465,6 +1470,7 @@ export function calculateRotation(
   const loopedBuffOverlapSegments = buildBuffOverlapSegments([...activeBuffs, ...carryOverBuffs], totalDuration);
 
   return {
+    stockSpans,
     sacrificialProcs,
     sacrificialCharIds: characters.filter(c => sacrificialOf(c)).map(c => c.id),
     cdResonanceScale,
@@ -1484,6 +1490,56 @@ export function calculateRotation(
     loopStartTime,
     loopPeriod,
   };
+}
+
+/** スキルのストック（積まれている CT の数 = size の変化）の記録。時刻順（2 周分の時間軸） */
+interface StockLog {
+  charId: string;
+  max: number;
+  points: Array<[number, number]>;
+}
+
+/**
+ * ストックの記録 → 区間（StockSpan）。ストック = 最大回数 − 積まれている CT の数（0 未満にはしない）。
+ * 1 周目: 時間 0〜1 周目の終わり（出場しているかに関わらず決まる数。最初は満タン）。
+ * 2 周目: 1 周目の終わりの状態から続けて、ループ 1 周分（表示位置は、ループ先頭 + (時刻 − 1 周目の終わり)）。ループの無い編成は 1 周目だけ。
+ * 数が同じ区間は 1 本にまとめ、0 の区間・長さ 0 の区間は出さない
+ */
+function buildStockSpans(logs: StockLog[], totalDuration: number, loopStartTime: number, loopPeriod: number): StockSpan[] {
+  const out: StockSpan[] = [];
+  const hasLoop = loopPeriod > 0.05;
+  for (const log of logs) {
+    const pts = [...log.points].sort((a, b) => a[0] - b[0]);
+    const countAt = (size: number) => Math.max(0, log.max - size);
+    // 区間の列（[開始, 終了, 数]）。最初は満タン
+    const steps: Array<[number, number, number]> = [];
+    let from = -Infinity;
+    let count = log.max;
+    for (const [t, size] of pts) {
+      steps.push([from, t, count]);
+      from = t;
+      count = countAt(size);
+    }
+    steps.push([from, Infinity, count]);
+    const lapSpans = (lap: 1 | 2, w0: number, w1: number, shift: number) => {
+      const spans: StockSpan[] = [];
+      for (const [s0, s1, c] of steps) {
+        const a = Math.max(s0, w0);
+        const b = Math.min(s1, w1);
+        if (c <= 0 || b - a < 0.001) continue;
+        const last = spans[spans.length - 1];
+        if (last && last.count === c && Math.abs(last.endTime - (a + shift)) < 0.001) last.endTime = Number((b + shift).toFixed(3));
+        else spans.push({ id: '', characterId: log.charId, lap, startTime: Number((a + shift).toFixed(3)), endTime: Number((b + shift).toFixed(3)), count: c, max: log.max });
+      }
+      return spans;
+    };
+    // ストックは、出場しているかに関わらず決まる数なので、1 周目の先頭（時間 0）から出す
+    const lap1 = lapSpans(1, 0, totalDuration, 0);
+    // 2 周目: ループの区間の発動があるキャラだけ（記録が 1 周目の終わりを過ぎている）
+    const lap2 = hasLoop && pts.some(([t]) => t >= totalDuration - 1e-6) ? lapSpans(2, totalDuration, totalDuration + loopPeriod, loopStartTime - totalDuration) : [];
+    [...lap1, ...lap2].forEach((s, i) => out.push({ ...s, id: `stock_${log.charId}_${s.lap}_${i}` }));
+  }
+  return out;
 }
 
 /** CT を持つ1回の発動 */
@@ -1565,7 +1621,7 @@ function endAtNextStart<T extends { startTime: number; endTime: number }>(spans:
  * 3周目以降は、各発動の直前にある同じ CT の発動が2周目と同じ（1周前の同じ位置）になるため、2周分の判定で足りる。
  * どちらの周で違反しても、元の発動に違反の印を付ける。
  */
-function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean, procsOut?: SacrificialProc[]): CooldownSpan[] {
+function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean, procsOut?: SacrificialProc[], stockOut?: StockLog[]): CooldownSpan[] {
   const extraCycles = loopPeriod > 0.05 ? 1 : 0;
 
   const timeline: Array<{ event: CooldownEvent; time: number; cycle: number; order: number }> = [];
@@ -1588,9 +1644,21 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   const nightsouls = new Map<string, NightsoulTracker>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
+  const stockLogs = new Map<string, StockLog>();
   const cooldownEnd = new Map<string, number[]>();
   // CT のキューを作る。キューで CT が始まった時点に、バー（1 周目の分だけ）を作る。バーの種類は、枠のキー（`キャラ:special` / `キャラ:skill`）で決まる
-  const makeQueue = (ev: CooldownEvent, charges: number) => new CooldownQueue<QueueTag>(charges, head => {
+  const makeQueue = (ev: CooldownEvent, charges: number) => {
+    // 回数が 2 以上の通常のスキルは、ストック数の変化（積まれている CT の数）を記録する
+    const [stockCharId, stockKind] = ev.key.split(':');
+    let log: StockLog | undefined;
+    if (stockOut && stockKind === 'skill' && charges > 1) {
+      log = { charId: stockCharId, max: charges, points: [] };
+      stockOut.push(log);
+      stockLogs.set(ev.key, log);
+    }
+    return new CooldownQueue<QueueTag>(charges, startedHead => onQueueStart(ev, startedHead), 0.001, log ? (t, size) => log!.points.push([t, size]) : undefined);
+  };
+  const onQueueStart = (ev: CooldownEvent, head: QueueHead<QueueTag>) => {
     if (!head.tag || head.tag.cycle !== 0) return;
     const [barCharId, kind] = ev.key.split(':');
     const type = kind === 'special' ? 'special' : 'skill';
@@ -1601,10 +1669,11 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       startTime: head.start,
       endTime: head.end,
       duration: head.end - head.start,
+      baseDuration: head.end - head.start,
       actionInstanceId: head.tag.actionId,
     };
     queuedSpans.push({ span, head });
-  });
+  };
   for (const item of timeline) {
     const slots = cooldownEnd.get(item.event.key) ?? [];
     const charges = Math.max(1, item.event.charges ?? 1);
@@ -1682,6 +1751,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       }
       // 使うと、新しい CT がキューの末尾に積まれる（キューが空なら、すぐ始まる）
       queue.push(startAt, ev.cooldown, { actionId: ev.actionId ?? '', cycle: item.cycle });
+      stockLogs.get(item.event.key)?.points.push([item.time, queue.size]);
       continue;
     }
     // キューの無い枠（スキルより前など）の、受付の間の重撃は、何もしない

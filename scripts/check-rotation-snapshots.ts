@@ -164,6 +164,7 @@ function runScenario(sc: Scenario) {
     })),
     bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), b.noSynergy ? 'noSynergy' : '']).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
     cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || String(a[1]).localeCompare(String(b[1]))),
+    ...(res.stockSpans.length > 0 ? { stock: res.stockSpans.map((x: any) => [x.characterId.slice(0, 14), x.lap, r3(x.startTime), r3(x.endTime), x.count]) } : {}),
     ...(res.passiveSpans.some((p: any) => p.auto) ? { autoPassives: res.passiveSpans.filter((p: any) => p.auto).map((p: any) => [p.name, r3(p.startTime), r3(p.cooldown), r3(p.cooldownEnd)]) } : {}),
     issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => (a[1] + a[2]).localeCompare(b[1] + b[2])),
     gcsim: built.config.split('\n').filter((l: string) => !/^\S+ (char|add) |^options|^target|^energy|^#/.test(l)).join('\n'),

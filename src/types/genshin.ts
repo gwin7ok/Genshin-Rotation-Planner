@@ -621,6 +621,20 @@ export interface ActiveBuffSpan {
   sourceId?: string;
 }
 
+/** スキルのストック数（使用可能回数）の区間。回数が 2 以上のスキルを持つキャラだけ。0 の区間は持たない */
+export interface StockSpan {
+  id: string;
+  characterId: string;
+  /** 1 = 1 周目（時間 0 から。満タンから始まる）、2 = 2 周目（1 周目の終わりの状態から続く。表示位置はループ先頭から） */
+  lap: 1 | 2;
+  startTime: number;
+  endTime: number;
+  /** ストック数（1 以上） */
+  count: number;
+  /** 最大回数 */
+  max: number;
+}
+
 export interface CooldownSpan {
   id: string;
   characterId: string;
@@ -629,6 +643,8 @@ export interface CooldownSpan {
   startTime: number;
   endTime: number;
   duration: number;
+  /** 本来の CT の長さ（バーは、解放・短縮で短くなることがある。キャラカードにはこちらを出す） */
+  baseDuration?: number;
   actionInstanceId: string;
   /** 2周目折り返し持ち越しフラグ */
   isCarryOver?: boolean;

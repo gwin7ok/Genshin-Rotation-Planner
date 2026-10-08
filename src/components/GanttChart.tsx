@@ -21,7 +21,7 @@ import {
   CharacterConfig, 
   Stint, 
   ActiveBuffSpan, 
-  CooldownSpan, 
+  CooldownSpan, StockSpan, 
   CharacterRuntimeState,
   PassiveSpan,
 } from '../types/genshin';
@@ -167,6 +167,8 @@ interface GanttChartProps {
   /** キャラ交代の所要時間（2周目の先頭に入れる交代アクションに使う） */
   switchDelay?: number;
   /** 2周目折り返し（Carry-Over）情報 */
+  /** スキルのストック数の区間（回数が 2 以上のスキルを持つキャラ。1 周目・2 周目） */
+  stockSpans?: StockSpan[];
   carryOverCooldowns?: CooldownSpan[];
   carryOverBuffs?: ActiveBuffSpan[];
   carryOverPassives?: PassiveSpan[];
@@ -190,6 +192,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   buffOverlapSegments,
   loopedBuffOverlapSegments,
   passiveSpans = [],
+  stockSpans = [],
   carryOverCooldowns = [],
   carryOverBuffs = [],
   carryOverPassives = [],
@@ -1203,7 +1206,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   // 左のキャラカードには、そのアクション本来のCT（持ち越しバーの残りCTではなく、元のCTの長さ）を表示する
                   const originalCtSeconds = (list: CooldownSpan[]): number => {
                     const own = list.find(c => !c.isCarryOver);
-                    if (own) return own.duration;
+                    if (own) return own.baseDuration ?? own.duration;
                     const carried = list[0];
                     return carried.originalStartTime !== undefined && carried.originalEndTime !== undefined
                       ? carried.originalEndTime - carried.originalStartTime
@@ -1215,6 +1218,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
                   const stintBuffRows = organizeBuffsIntoRows(allStintBuffs);
                   const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
+                  // スキルのストック数（回数が 2 以上のスキル）。1 周目の行と、2 周目（ループがあるとき）の行
+                  const stockLaps = ([1, 2] as const)
+                    .map(lap => ({ lap, spans: stockSpans.filter(s => s.characterId === char.id && s.lap === lap) }))
+                    .filter(l => l.spans.length > 0);
 
                   // パッシブバフ（通常発動 + 1周目からの持ち越し）を同一の passiveEffectId ごとに統合
                   const allPassiveEffectIds = Array.from(new Set([
@@ -1336,6 +1343,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               <span className="font-mono">{(stint.startTime ?? 0).toFixed(1)}s ~ {(stint.endTime ?? 0).toFixed(1)}s</span>
                             </div>
                           </div>
+
+                          {/* スキルストック数の行（1 周目・2 周目で 1 行ずつ） */}
+                          {stockLaps.map(l => (
+                            <div key={`stock_label_${l.lap}`} className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] font-mono border-b border-slate-800/40">
+                              <span className="truncate">🔢 スキルストック</span>
+                              <span className="shrink-0 ml-1">{stockLaps.length > 1 ? `${l.lap}周目` : ''}</span>
+                            </div>
+                          ))}
 
                           {/* Row 2: Skill (E) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintSkillCDs.length > 0 && (
@@ -1572,6 +1587,30 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               );
                             })()}
                           </div>
+
+                          {/* --- スキルストック数のバー（1 周目・2 周目で 1 行ずつ。数が変わるたびに別のバー。0 はバーなし） --- */}
+                          {stockLaps.map(l => (
+                            <div key={`stock_bar_${l.lap}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                              {l.spans.map(sp => {
+                                const startX = sp.startTime * pixelsPerSecond;
+                                const width = Math.max(14, (Math.min(totalDuration, sp.endTime) - sp.startTime) * pixelsPerSecond);
+                                return (
+                                  <div
+                                    key={sp.id}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSeek(l.lap === 2 ? totalDuration + (sp.startTime - loopStartTime) : sp.startTime);
+                                    }}
+                                    style={{ left: `${startX}px`, width: `${width}px` }}
+                                    className="absolute h-3.5 rounded text-[9px] font-mono flex items-center justify-center px-1 border bg-emerald-950 border-emerald-400/80 text-emerald-200 hover:border-emerald-300 cursor-pointer select-none shadow-sm"
+                                    title={`【スキルのストック ${sp.count} / ${sp.max}】${l.lap}周目 [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s]（クリックで開始位置へシーク）${l.lap === 1 ? '\n時間 0 は満タンの仮定' : ''}`}
+                                  >
+                                    <span className="truncate">{sp.count}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ))}
 
                           {/* --- Row 2: Skill (E) Cooldown Bar (Height: h-6 = 24px) --- */}
                           {allStintSkillCDs.length > 0 && (

@@ -26,10 +26,14 @@ export class CooldownQueue<T = undefined> {
   /** 明けた誤差（秒） */
   private readonly tolerance: number;
 
-  constructor(charges: number, onStart?: (head: QueueHead<T>) => void, tolerance = 0.001) {
+  /** 積まれている CT の数が変わったときに呼ぶ（先頭が明けた・解放した）。使った（push）ときは呼ばない（使った時刻は、呼び出し側が知っている） */
+  private readonly onSize: ((t: number, size: number) => void) | undefined;
+
+  constructor(charges: number, onStart?: (head: QueueHead<T>) => void, tolerance = 0.001, onSize?: (t: number, size: number) => void) {
     this.charges = charges;
     this.onStart = onStart;
     this.tolerance = tolerance;
+    this.onSize = onSize;
   }
 
   /** 積まれている CT の数（先頭を含む） */
@@ -56,6 +60,7 @@ export class CooldownQueue<T = undefined> {
       if (endedAt > this.limit + this.tolerance) this.waiting = [];
       const next = this.waiting.shift();
       if (next) this.start(endedAt, next.duration, next.tag);
+      this.onSize?.(endedAt, this.size);
     }
   }
 
@@ -90,6 +95,7 @@ export class CooldownQueue<T = undefined> {
     this.head = undefined;
     const next = this.waiting.shift();
     if (next) this.start(t, next.duration, next.tag);
+    this.onSize?.(t, this.size);
   }
 
   /** 先頭を、amount 秒短縮する（先頭の残りまで。超過分は捨てる）。短縮の前に advance(t) しておくこと */

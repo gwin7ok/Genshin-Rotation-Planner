@@ -456,6 +456,7 @@ export default function App() {
           buffOverlapSegments={calculatedResult.buffOverlapSegments}
           loopedBuffOverlapSegments={calculatedResult.loopedBuffOverlapSegments}
           passiveSpans={calculatedResult.passiveSpans}
+          stockSpans={calculatedResult.stockSpans}
           carryOverCooldowns={calculatedResult.carryOverCooldowns}
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}

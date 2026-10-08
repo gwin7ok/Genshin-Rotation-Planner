@@ -129,7 +129,23 @@ function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: str
  * スキルのダメージが敵に当たる時刻の表（スキルを実行したフレームからの相対。scripts/probe-skill-hits.ts が gcsim の実行で作る）。
  * 祭礼の武器効果は、このダメージが当たったときに発動する。表が無い（空の）アクションは、祭礼が発動しない
  */
-const SKILL_HITS = (skillHitFrameData as { entries: Record<string, { hits: number[] }> }).entries;
+const SKILL_HITS = (skillHitFrameData as { entries: Record<string, { hits: number[]; byConstellation?: Record<string, number[]>; holdFramesMax?: number }> }).entries;
+
+/**
+ * スキルの命中のフレーム。命ノ星座で変わるもの（byConstellation: その段階以降の値）と、長押しの長さを渡すもの（holdFramesMax: 長押しの長さ − 1 フレームだけ後ろにずれる）に対応。
+ * 長押しの長さ（holdSeconds）は、gcsim に渡すもの（applyHoldSeconds）と同じ丸め・上限
+ */
+function skillHitFrames(actionId: string, constellation: number, holdSeconds: number | undefined): number[] {
+  const e = SKILL_HITS[actionId];
+  if (!e) return [];
+  let hits = e.hits;
+  for (const [cons, h] of Object.entries(e.byConstellation ?? {}).sort((a, b) => Number(a[0]) - Number(b[0]))) if (constellation >= Number(cons)) hits = h;
+  if (e.holdFramesMax !== undefined && holdSeconds !== undefined) {
+    const shift = Math.min(e.holdFramesMax, Math.max(1, Math.round(holdSeconds * 60))) - 1;
+    hits = hits.map(h => h + shift);
+  }
+  return hits;
+}
 
 export function calculateRotation(
   characters: CharacterConfig[],
@@ -629,7 +645,7 @@ export function calculateRotation(
         const evCtStart = Number((actionStartTime + evOffset).toFixed(3));
         // 祭礼の武器: スキルのダメージが当たる時刻（命中時刻の表）。スキルを使ったときだけ（モードの間の 2 回目以降の E は、CT を始めないので対象外）
         const sacrificial = sacrificialOf(char);
-        const sacrificialHits: number[] = isTriggeringAction && !isSpecial && sacrificial && actionDef ? SKILL_HITS[actionDef.id]?.hits ?? [] : [];
+        const sacrificialHits: number[] = isTriggeringAction && !isSpecial && sacrificial && actionDef ? skillHitFrames(actionDef.id, CharacterModel.fromConfig(char).constellation, holdSeconds) : [];
         if (isTriggeringAction) {
           ctEvents.push({
             key: `${char.id}:${isSpecial ? 'special' : 'skill'}`,

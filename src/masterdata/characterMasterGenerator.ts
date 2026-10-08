@@ -160,9 +160,13 @@ const SKILL_CHARGES: Record<string, number> = {
   '10000111-electro': 2, // ヴァレサ（varesa/varesa.go）
 };
 
-/** 八重神子: スキルが殺生桜を出し（上限 3）、爆発が場の桜 1 つにつきスキルの CT を 1 回分戻す（固有天賦 1）。寿命は 15 秒、論示で 25 秒（kitsune.go・asc.go） */
-const TOTEM_SKILLS: Record<string, { max: number; lifetime: number; lifetimeRevelation: number }> = {
-  '10000058-electro': { max: 3, lifetime: 15, lifetimeRevelation: 25 },
+/**
+ * 八重神子: スキルが殺生桜を出し（上限 3）、爆発が場の桜 1 つにつきスキルの CT を 1 回分戻す（固有天賦 1）。
+ * 寿命は、スキルの効果継続時間（14 秒）、論示で +10 秒（24 秒。ユーザー決定 D81）。桜は、スキルの 34f 後に現れる（skill.go: skillStart）。
+ * gcsim は、スキルの発動から 900f（論示で 1500f）で消える（kitsune.go: kitsuneDur + revelationBonusSkillDur）。出現から数えると 14.4 秒／24.4 秒で、アプリの 14／24 秒とは 0.4 秒ずれる
+ */
+const TOTEM_SKILLS: Record<string, { max: number; revelationBonusSeconds: number; startDelayFrames: number }> = {
+  '10000058-electro': { max: 3, revelationBonusSeconds: 10, startDelayFrames: 34 },
 };
 
 /** ヴァレサ: 夜魂値で無料のスキル（varesa.go: MaxPoints = 40、skill.go: +20、plunge.go: +25、EnterTimedBlessing 15 秒） */

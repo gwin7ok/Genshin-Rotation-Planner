@@ -2,6 +2,7 @@ import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
 import { NightsoulTracker } from './nightsoulTracker';
+import { TotemTracker, totemTiming } from './totemTracker';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -153,6 +154,12 @@ export function calculateRotation(
   const modeWindows = new Map<string, ModeWindow>();
   // 同じモードを開き直して置き換えられた、前の窓（終わった後の計算に使う）
   const retiredModes: ModeWindow[] = [];
+  // 八重神子の殺生桜（キャラ ID → 桜の数え方。効果バーを、押し出し・爆発で壊れた時刻で切る）。CT の判定と同じ数え方（totemTracker.ts）
+  const barTotems = new Map<string, TotemTracker<ActiveBuffSpan>>();
+  const cutBar = (span: ActiveBuffSpan, at: number) => {
+    span.endTime = Number(Math.max(span.startTime, at).toFixed(3));
+    span.duration = Number((span.endTime - span.startTime).toFixed(3));
+  };
   const modeKeyOf = (charId: string, md: ActionMode) => `${charId}:${md.label}`;
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
     m.naturalEnd ??= m.end;
@@ -572,7 +579,7 @@ export function calculateRotation(
             cooldown: evCooldown,
             ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
             ...(!isSpecial && actionDef?.mode?.cooldownReduceOnExpire ? { forceQueue: true } : {}),
-            ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, lifetime: isRevelation(char) ? actionDef.spawnsTotem.lifetimeRevelation : actionDef.spawnsTotem.lifetime } } : {}),
+            ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, ...totemTiming(actionDef.spawnsTotem, act.effectDuration ?? actionDef.effectDuration ?? 0, isRevelation(char)) } } : {}),
             ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
             checked: act.type !== 'skill_reset',
             actionId: act.id,
@@ -648,6 +655,12 @@ export function calculateRotation(
 
       // 八重神子: 爆発が、場の殺生桜 1 つにつき、スキルの CT を 1 回分戻す（固有天賦 1）
       if (act.type === 'burst' && actionDef?.releasesSkillPerTotem) {
+        // 効果バー: 論示が未達成なら、爆発で桜が全部壊れる（バーをここで切る）
+        const barTracker = barTotems.get(char.id);
+        if (barTracker) {
+          const present = barTracker.burst(actionStartTime, !isRevelation(char));
+          if (!isRevelation(char)) for (const x of present) cutBar(x.tag, x.end);
+        }
         ctEvents.push({
           key: `${char.id}:skill`,
           time: actionStartTime,
@@ -881,6 +894,18 @@ export function calculateRotation(
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
       const effectSpan = inStateWindow || (actionDef?.mode && !actionDef.mode.noBar && !actionDef.mode.keepEffectBar) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      // 殺生桜（八重神子）: バーは、桜が現れる位置から始まり、寿命（効果継続時間 + 論示で +10 秒）で終わる。4 つ目が出ると最古が消え、バーをそこで切る
+      if (effectSpan && isSkill && actionDef?.spawnsTotem) {
+        const tt = totemTiming(actionDef.spawnsTotem, effectSpan.duration, isRevelation(char));
+        effectSpan.startTime = Number((actionStartTime + tt.delay).toFixed(3));
+        effectSpan.endTime = Number((effectSpan.startTime + tt.lifetime).toFixed(3));
+        effectSpan.duration = tt.lifetime;
+        effectSpan.stackable = true;
+        const tracker = barTotems.get(char.id) ?? new TotemTracker<ActiveBuffSpan>();
+        barTotems.set(char.id, tracker);
+        const popped = tracker.spawn(effectSpan.startTime, tt.lifetime, actionDef.spawnsTotem.max, effectSpan);
+        if (popped) cutBar(popped.tag, popped.end);
+      }
       // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
       if (effectSpan && actionDef?.fieldRecast) {
         const delay = actionDef.fieldRecast.startDelayFrames / 60;
@@ -1201,7 +1226,7 @@ export function calculateRotation(
   }
 
   // 同じ効果を再発動したら、前の発動の効果はそこで終わる（残りは上書きされる）
-  endAtNextStart(activeBuffs, b => b.buffId);
+  endAtNextStart(activeBuffs, b => (b.stackable ? `${b.buffId}#${b.id}` : b.buffId));
   endAtNextStart(passiveSpans, p => `${p.characterId}:${p.effectGroup}`);
 
   const carryOverCooldowns: CooldownSpan[] = [];
@@ -1350,7 +1375,7 @@ interface CooldownEvent {
   /** 0 より大きいとき、この発動は CT を始めず、CT 中のチャージの CT を、この秒数だけ短縮する（ファルカの通常攻撃） */
   reduceBy?: number;
   /** 設置物（八重神子の殺生桜）を 1 つ出す発動。寿命（秒）と上限。上限を超えると最古が消える */
-  spawnsTotem?: { max: number; lifetime: number };
+  spawnsTotem?: { max: number; delay: number; lifetime: number };
   /** 爆発: 場の設置物 1 つにつき、この枠（スキル）の先頭の CT を解放する（八重神子）。revelation が false なら、爆発のあと設置物が全部壊れる。検査はしない */
   releasesPerTotem?: { revelation: boolean };
   /** 夜魂値（ヴァレサ）。skill = スキル（無料のスキルなら、回数も CT も使わない）、plunge = 落下攻撃、burst = 爆発 */
@@ -1417,7 +1442,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   interface QueueTag { actionId: string; cycle: number }
   const queues = new Map<string, CooldownQueue<QueueTag>>();
   // 八重神子の殺生桜（枠のキー → 消える時刻の一覧）、ヴァレサの夜魂値（キャラ ID → 状態）
-  const totems = new Map<string, number[]>();
+  const totems = new Map<string, TotemTracker>();
   const nightsouls = new Map<string, NightsoulTracker>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
@@ -1457,18 +1482,15 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     }
     // 八重神子の爆発: 場の殺生桜 1 つにつき、スキルの先頭の CT を解放する
     if (ev.releasesPerTotem) {
-      const list = (totems.get(ev.key) ?? []).filter(e => e > item.time);
-      for (let i = 0; i < list.length; i++) queue?.release(item.time);
-      if (!ev.releasesPerTotem.revelation) list.length = 0;
-      totems.set(ev.key, list);
+      const present = totems.get(ev.key)?.burst(item.time, !ev.releasesPerTotem.revelation) ?? [];
+      for (let i = 0; i < present.length; i++) queue?.release(item.time);
       continue;
     }
     // 八重神子のスキル: 殺生桜が 1 つ増える（上限を超えたら最古が消える）
     if (ev.spawnsTotem) {
-      const list = (totems.get(ev.key) ?? []).filter(e => e > item.time);
-      if (list.length >= ev.spawnsTotem.max) list.shift();
-      list.push(item.time + ev.spawnsTotem.lifetime);
-      totems.set(ev.key, list);
+      const tracker = totems.get(ev.key) ?? new TotemTracker();
+      totems.set(ev.key, tracker);
+      tracker.spawn(item.time + ev.spawnsTotem.delay, ev.spawnsTotem.lifetime, ev.spawnsTotem.max, undefined);
     }
     // ヴァレサのスキル: 夜魂 +20。猛烈パッション中の最初のスキルは無料（回数も CT も使わない）
     if (ev.nightsoul?.role === 'skill') {

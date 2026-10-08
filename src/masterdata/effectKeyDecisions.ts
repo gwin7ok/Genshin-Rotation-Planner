@@ -20,7 +20,7 @@ export const KEY_DECISIONS: Record<string, Decision> = {
   'ayato-burst-mark': { reason: 'covered-by-main', note: '神里綾人の爆発: 18 秒の持続は本体（ayato-burst）のバーで表示' },
   'lumidouce-scent-reset': { reason: 'grace-window', note: 'エミリエ: 芳香を集められない状態が 8 秒続くとランク 1 に戻る猶予時間。効果本体は lumidouce-case' },
   'odette-skill-recast': { reason: 'grace-window', note: 'オデット: スキルを再発動できる猶予時間（約 6 秒）。効果本体は odette-dance-double' },
-  'yae_oldest_totem_expiry': { reason: 'deferred', note: "八重神子: 最初に置いた殺生櫻の残り存在時間。6-6「ストックできるスキルへの対応」で扱う（ユーザー決定 2026-09-30）" },
+  'yae_oldest_totem_expiry': { reason: 'decided-not-linked', note: "八重神子: 最も古い殺生桜の期限（最古が消えるたびに更新される）。桜の寿命・押し出し・爆発での消滅は、アプリ側の数え方（totemTracker.ts）で管理する。gcsim の状態は、最後の 1 つが消えるときにログが出ず、2 つ目以降の更新後の期限は gcsim の計算の誤りで実際より遅いため、使わない（ユーザー決定 D81 2026-10-09）" },
   'ifa-plunge-available': { reason: 'grace-window', note: 'イファ: 落下攻撃ができる短い窓（約 0.4 秒）。夜魂の状態（nightsoul-blessing）を効果時間にしている' },
   'chasca-plunge-available': { reason: 'grace-window', note: 'チャスカ: 同上' },
   'wanderer-plunge-available': { reason: 'grace-window', note: '放浪者: 落下攻撃ができる短い窓（約 0.4 秒）。効果本体は windfavored-state' },
@@ -91,7 +91,7 @@ export const KEY_DECISIONS: Record<string, Decision> = {
   "center-of-attention": { reason: "deferred", note: "フリーナ: 命ノ星座6の効果（10秒）。6-A2（命ノ星座の扱い）の実装時に扱いを決める（ユーザー決定 2026-09-30）" },
   // ---- G（耐性ダウン・被ダメ増）は推奨どおりに決定、J・D は一旦保留（2026-09-30 ユーザー決定）----
   "omen-debuff": { reason: "covered-by-main", note: "モナの爆発: 星命定軌は mona-omen（含まれる）と mona-bubble（本体）で紐づけ済み" },
-  "damage:Sesshou Sakura Tick": { reason: "deferred", note: "八重神子のスキルの継続ダメージ。6-6「ストックできるスキルへの対応」で扱う（ユーザー決定 2026-09-30）" },
+  "damage:Sesshou Sakura Tick": { reason: "decided-not-linked", note: "八重神子のスキルの継続ダメージ。すべての桜の合算で、E 1 回の分に分けられないため、バーにしない。桜のバーは、アプリ側の数え方で出す（ユーザー決定 D81 2026-10-09）" },
   // ---- H（印）は「命中で更新される内部状態」に決定（2026-09-30 ユーザー決定）----
   // ---- J の個別確認（2026-09-30 ユーザー決定: 反応・命中・被ダメージ由来と、別のキーで表示済みのものは紐づけない）----
   "apex-drive": { reason: "decided-not-linked", note: "ヴァレサ: 落下攻撃のあとに付く 2.3 秒の状態（攻撃の分類。スキル・爆発の効果ではない）" },
@@ -138,7 +138,7 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   '10000104-anemo_q': { reason: 'covered-by-passive', note: 'チャスカの爆発: 出るのは固有天賦の状態（chasca-a1）だけで、スキル・爆発の効果ではない。6-3c で扱う（ユーザー決定 2026-09-30）。自動収集の chasca-plunge-available は 0.43 秒の落下攻撃の窓で誤り' },
   '10000106-pyro_e_recastframestobike': { reason: 'no-bar', note: 'マーヴィカの再発動: gcsim に新しい継続時間のイベントが出ない。バーを表示できないため登録しない' },
   '10000106-pyro_e_recastframestoring': { reason: 'no-bar', note: 'マーヴィカの再発動: 同上' },
-  '10000058-electro_e': { reason: 'deferred', note: "八重神子のスキル: 6-6「ストックできるスキルへの対応」で扱う（継続ダメージの一致は取れている）" },
+  '10000058-electro_e': { reason: 'app-bar', note: "八重神子のスキル: 殺生桜のバーは、アプリ側で E ごとに出す（寿命 14 秒、論示で 24 秒。押し出し・爆発〔論示なし〕で切る）。gcsim の結果の反映で置き換えない。反映されるのは E の発動位置だけ（ユーザー決定 D81 2026-10-09）" },
   // ユーザー決定（2026-09-30）: マスターの「効果時間」が、効果ではなくアクション自身の動作・別のアクションの効果のもの。gcsim の効果に紐づけない
   '10000003-anemo_e': { reason: 'no-bar', note: 'ジンのスキル: マスターの 5 秒は溜めの最大時間（動作の長さ）で、効果ではない。gcsim も状態を出さない' },
   '10000053-anemo_e_hold': { reason: 'no-bar', note: '早柚の長押し: マスターの 10 秒は長押しの最大時間（動作の長さ）で、効果ではない。gcsim も状態を出さない' },

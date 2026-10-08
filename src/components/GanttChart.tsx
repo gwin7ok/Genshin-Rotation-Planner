@@ -40,6 +40,8 @@ export interface BuffRowInfo {
   cleanName: string;
   sample: ActiveBuffSpan;
   spans: ActiveBuffSpan[];
+  /** 設置物（殺生桜）の行（0 始まり）。あれば、ラベルに ①②③ を付ける */
+  lane?: number;
 }
 
 export function getBuffClassification(buff: ActiveBuffSpan) {
@@ -92,7 +94,8 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   // Group by buffId / buff type so different buffs (e.g. E vs Q) are on distinct rows
   const byId = new Map<string, ActiveBuffSpan[]>();
   for (const b of buffs) {
-    const key = b.buffId || b.name;
+    // 行を持つバー（殺生桜）は、行ごとに別の行にする
+    const key = (b.buffId || b.name) + (b.lane !== undefined ? `#${b.lane}` : '');
     if (!byId.has(key)) {
       byId.set(key, []);
     }
@@ -110,6 +113,8 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
     if (classA.rank !== classB.rank) {
       return classA.rank - classB.rank;
     }
+    // 同じバフの行は、行の番号順
+    if (listA[0].buffId === listB[0].buffId && listA[0].lane !== undefined && listB[0].lane !== undefined) return listA[0].lane - listB[0].lane;
     const minStartA = Math.min(...listA.map(s => s.startTime));
     const minStartB = Math.min(...listB.map(s => s.startTime));
     return minStartA - minStartB;
@@ -119,13 +124,15 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
     const spans = byId.get(key)!.sort((a, b) => a.startTime - b.startTime);
     const sample = spans.find(s => !s.isCarryOver) || spans[0];
     const classification = getBuffClassification(sample);
-    const cleanName = sample.name.replace(/^[^:]+:\s*/, '');
+    const lane = sample.lane;
+    const cleanName = sample.name.replace(/^[^:]+:\s*/, '') + (lane !== undefined ? ' ' + '①②③④⑤⑥'.charAt(lane) : '');
 
     result.push({
       tag: classification.tag,
       cleanName,
       sample,
       spans,
+      ...(lane !== undefined ? { lane } : {}),
     });
   }
 
@@ -1388,7 +1395,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
                                 <span className="truncate">{bRow.cleanName}</span>
                               </span>
-                              <span className="shrink-0 text-emerald-400/80 ml-1">{bRow.sample.duration.toFixed(0)}s</span>
+                              <span className="shrink-0 text-emerald-400/80 ml-1">{(bRow.lane !== undefined ? Math.max(...bRow.spans.map(x => x.duration)) : bRow.sample.duration).toFixed(0)}s</span>
                             </div>
                           ))}
 

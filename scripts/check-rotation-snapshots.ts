@@ -136,6 +136,9 @@ const SCENARIOS: Scenario[] = [
   S('八重神子 E E E → 5 秒 → E（押し出し。論示あり）', [['八重神子'], B], [[0, ['e', 'e', 'e', 'w5', 'e']], [1, ['e', 'w30']]]),
   S('八重神子 E E Q（論示あり。桜は残り、CT が戻る）', [['八重神子'], B], [[0, ['e', 'e', 'q']], [1, ['e', 'w30']]]),
   S('八重神子 E E Q（論示なし。桜が全部壊れる）', [['八重神子', { revelation: false }], B], [[0, ['e', 'e', 'q']], [1, ['e', 'w30']]]),
+  // 殺生桜の行（桜ごとに別の行。3 つ未満は一番上の空き行・3 つなら最古の行を置き換える）と、2 周目の折り返し（持ち越しの桜が、置き換えた桜の行を引き継ぐ）
+  S('八重神子 E E E → 短い待機（桜が 2 周目へ持ち越し。論示あり）', [['八重神子'], B], [[0, ['e', 'e', 'e', 'w3']], [1, ['e']]]),
+  S('八重神子 E E → E E E（ループで持ち越しの桜を置き換える）', [['八重神子'], B], [[0, ['e', 'e', 'w1', 'e', 'e', 'e']], [1, ['e']]], { loopStartIndex: 0 }),
   S('八重神子 E（論示なし。14 秒）', [['八重神子', { revelation: false }], B], [[0, ['e']], [1, ['e', 'w30']]]),
   S('八重神子 E（論示あり。24 秒）', [['八重神子'], B], [[0, ['e']], [1, ['e', 'w30']]]),
 ];
@@ -162,8 +165,10 @@ function runScenario(sc: Scenario) {
       char: chars.find(c => c.id === s.characterId)?.name, start: r3(s.startTime), end: r3(s.endTime), modeHold: s.modeHold,
       actions: s.actions.filter((a: any) => a.type !== 'swap').map((a: any) => [a.shortName, r3(a.startTime), r3(a.duration), a.inStateWindow ? 'window' : '', a.hasCTCollision ? `CT違反${a.collisionRemainingCT}` : '', a.specialWindowWarning ?? '', a.modeHoldSeconds ? `hold${a.modeHoldSeconds}` : ''].filter(v => v !== '')),
     })),
-    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), b.noSynergy ? 'noSynergy' : '']).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
+    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), (b.noSynergy ? 'noSynergy' : '') + (b.lane !== undefined ? `L${b.lane}` : '')]).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
     cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || String(a[1]).localeCompare(String(b[1]))),
+    ...(res.carryOverBuffs.some((x: any) => x.lane !== undefined) ? { carryTotems: res.carryOverBuffs.filter((x: any) => x.lane !== undefined).map((x: any) => [x.lane, r3(x.startTime), r3(x.endTime)]) } : {}),
+    ...(res.activeBuffs.some((x: any) => x.lane !== undefined) ? { totemOverlap: res.loopedBuffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]) } : {}),
     ...(res.stockSpans.length > 0 ? { stock: res.stockSpans.map((x: any) => [x.characterId.slice(0, 14), x.lap, r3(x.startTime), r3(x.endTime), x.count]) } : {}),
     ...(res.passiveSpans.some((p: any) => p.auto) ? { autoPassives: res.passiveSpans.filter((p: any) => p.auto).map((p: any) => [p.name, r3(p.startTime), r3(p.cooldown), r3(p.cooldownEnd)]) } : {}),
     issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => (a[1] + a[2]).localeCompare(b[1] + b[2])),

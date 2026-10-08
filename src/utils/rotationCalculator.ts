@@ -229,6 +229,10 @@ export function calculateRotation(
   const retiredModes: ModeWindow[] = [];
   // 八重神子の殺生桜（キャラ ID → 桜の数え方。効果バーを、押し出し・爆発で壊れた時刻で切る）。CT の判定と同じ数え方（totemTracker.ts）
   const barTotems = new Map<string, TotemTracker<ActiveBuffSpan>>();
+  // 殺生桜のバーの、本来の寿命（押し出し・爆発で切る前）、上限、爆発の時刻（2 周目の再現に使う）
+  const totemLifetime = new Map<ActiveBuffSpan, number>();
+  const totemMax = new Map<string, number>();
+  const totemBursts = new Map<string, Array<{ time: number; destroy: boolean }>>();
   const cutBar = (span: ActiveBuffSpan, at: number) => {
     span.endTime = Number(Math.max(span.startTime, at).toFixed(3));
     span.duration = Number((span.endTime - span.startTime).toFixed(3));
@@ -750,6 +754,9 @@ export function calculateRotation(
         const barTracker = barTotems.get(char.id);
         if (barTracker) {
           const present = barTracker.burst(actionStartTime, !isRevelation(char));
+          const burstLog = totemBursts.get(char.id) ?? [];
+          burstLog.push({ time: actionStartTime, destroy: !isRevelation(char) });
+          totemBursts.set(char.id, burstLog);
           if (!isRevelation(char)) for (const x of present) cutBar(x.tag, x.end);
         }
         ctEvents.push({
@@ -994,7 +1001,10 @@ export function calculateRotation(
         effectSpan.stackable = true;
         const tracker = barTotems.get(char.id) ?? new TotemTracker<ActiveBuffSpan>();
         barTotems.set(char.id, tracker);
-        const popped = tracker.spawn(effectSpan.startTime, tt.lifetime, actionDef.spawnsTotem.max, effectSpan);
+        const { popped, lane } = tracker.spawn(effectSpan.startTime, tt.lifetime, actionDef.spawnsTotem.max, effectSpan);
+        effectSpan.lane = lane;
+        totemLifetime.set(effectSpan, tt.lifetime);
+        totemMax.set(effectSpan.buffId, actionDef.spawnsTotem.max);
         if (popped) cutBar(popped.tag, popped.end);
       }
       // 炎場（ディシア）: バーは、スキルの startDelayFrames 後（炎場が置かれる位置）から始まる
@@ -1447,7 +1457,10 @@ export function calculateRotation(
     }
 
     // 3. 効果バフの2周目折り返し（発動バフ分はバフ数の集計用。バーは carryOverPassives で表示する）
+    // 殺生桜（行を持つバー）は、2 周目の動きを再現して持ち越す（別に処理する）
+    carryOverBuffs.push(...wrapTotems(activeBuffs.filter(b => b.stackable && b.lane !== undefined), totalDuration, loopStartTime, totemLifetime, totemMax, totemBursts));
     for (const b of activeBuffs) {
+      if (b.stackable && b.lane !== undefined) continue;
       if (b.endTime <= totalDuration + 0.02) continue;
       const carry = wrapEffect(b, activeBuffs.filter(x => x.buffId === b.buffId));
       if (carry) carryOverBuffs.push({ ...b, ...carry, id: `wrap_buff_${b.id}` });
@@ -1600,6 +1613,96 @@ function buildBuffOverlapSegments(buffs: ActiveBuffSpan[], totalDuration: number
     else segments.push({ start, end, count, activeBuffs: names });
   }
   return segments;
+}
+
+/**
+ * 殺生桜（行を持つバー）の 2 周目折り返し。1 周目の終わりに残る桜を初期状態にして、ループの区間の桜の設置・爆発を時刻順に流す（2 周目の動きの再現）。
+ *   - 置き換えられた（最古として押し出された）持ち越しの桜は、その時刻で切る。置き換えた新しい桜のバーの行を、持ち越しバーの行にする（同じ行で、持ち越しが終わる時刻 = 新しいバーが始まる時刻）
+ *   - 爆発で壊れた桜（論示未達成）は、その時刻で切る
+ *   - 置き換えられずに寿命で終わる桜は、1 周目のバーが使っていない行に置く（全部埋まるときは、元の行）
+ */
+function wrapTotems(
+  bars: ActiveBuffSpan[],
+  totalDuration: number,
+  loopStartTime: number,
+  lifetimes: Map<ActiveBuffSpan, number>,
+  maxByBuff: Map<string, number>,
+  burstsByChar: Map<string, Array<{ time: number; destroy: boolean }>>,
+): ActiveBuffSpan[] {
+  const out: ActiveBuffSpan[] = [];
+  if (totalDuration - loopStartTime <= 0.05) return out;
+  const byBuff = new Map<string, ActiveBuffSpan[]>();
+  for (const b of bars) byBuff.set(b.buffId, [...(byBuff.get(b.buffId) ?? []), b]);
+  for (const [buffId, group] of byBuff) {
+    const max = maxByBuff.get(buffId) ?? 3;
+    type Tag = { carry?: ActiveBuffSpan };
+    // 持ち越し: 1 周目の終わりより後まで残る桜（開始が 1 周目の終わり以降の設置を含む）
+    const carried = group.filter(b => b.endTime > totalDuration + 0.02).sort((a, b) => a.startTime - b.startTime).map(b => {
+      const start = b.startTime >= totalDuration ? loopStartTime + (b.startTime - totalDuration) : loopStartTime;
+      const fullEnd = loopStartTime + (b.endTime - totalDuration);
+      const carry: ActiveBuffSpan = {
+        ...b,
+        id: `wrap_buff_${b.id}`,
+        startTime: Number(start.toFixed(3)),
+        endTime: Number(Math.min(totalDuration, fullEnd).toFixed(3)),
+        isCarryOver: true,
+        originalStartTime: b.startTime,
+        sourceId: b.id,
+      };
+      carry.duration = Number((carry.endTime - carry.startTime).toFixed(3));
+      return { src: b, carry, fullEnd };
+    });
+    // ループの区間の設置（2 周目にも同じ時刻に起きる）と、爆発
+    const spawns = group.filter(b => b.startTime >= loopStartTime - 1e-6 && b.startTime < totalDuration).sort((a, b) => a.startTime - b.startTime);
+    const charId = group[0].sourceCharacterId;
+    const bursts = (burstsByChar.get(charId) ?? []).filter(x => x.time >= loopStartTime - 1e-6 && x.time < totalDuration);
+    type Ev = { t: number; order: number; kind: 'carry' | 'spawn' | 'burst'; i: number };
+    const events: Ev[] = [
+      ...carried.map((c, i): Ev => ({ t: c.carry.startTime, order: 0, kind: 'carry', i })),
+      ...spawns.map((s, i): Ev => ({ t: s.startTime, order: 1, kind: 'spawn', i })),
+      ...bursts.map((x, i): Ev => ({ t: x.time, order: 1, kind: 'burst', i })),
+    ].sort((a, b) => a.t - b.t || a.order - b.order);
+    const tracker = new TotemTracker<Tag>();
+    const assigned = new Set<ActiveBuffSpan>();
+    for (const ev of events) {
+      if (ev.kind === 'carry') {
+        const c = carried[ev.i];
+        tracker.spawn(ev.t, c.fullEnd - ev.t, max, { carry: c.carry }, c.src.lane);
+      } else if (ev.kind === 'spawn') {
+        const s = spawns[ev.i];
+        const { popped } = tracker.spawn(ev.t, lifetimes.get(s) ?? s.duration, max, {});
+        const cb = popped?.tag.carry;
+        if (cb) {
+          cb.endTime = Number(Math.max(cb.startTime, Math.min(cb.endTime, popped!.end)).toFixed(3));
+          cb.lane = s.lane;
+          assigned.add(cb);
+        }
+      } else {
+        for (const x of tracker.burst(ev.t, bursts[ev.i].destroy)) {
+          const cb = x.tag.carry;
+          if (cb) cb.endTime = Number(Math.max(cb.startTime, Math.min(cb.endTime, x.end)).toFixed(3));
+        }
+      }
+    }
+    // 置き換えられずに終わる桜: 1 周目のバーが使っていない行へ
+    const placed: ActiveBuffSpan[] = [];
+    for (const c of carried) {
+      c.carry.duration = Number((c.carry.endTime - c.carry.startTime).toFixed(3));
+      if (c.carry.duration <= 0.02) continue;
+      if (!assigned.has(c.carry)) {
+        const busy = new Set<number>();
+        for (const o of [...group, ...placed]) {
+          if (o !== c.src && o.lane !== undefined && o.startTime < c.carry.endTime - 1e-6 && Math.min(o.endTime, totalDuration) > c.carry.startTime + 1e-6) busy.add(o.lane);
+        }
+        let lane = 0;
+        while (lane < max && busy.has(lane)) lane++;
+        if (lane < max) c.carry.lane = lane;
+      }
+      placed.push(c.carry);
+    }
+    out.push(...placed);
+  }
+  return out;
 }
 
 function endAtNextStart<T extends { startTime: number; endTime: number }>(spans: T[], effectKey: (s: T) => string): void {

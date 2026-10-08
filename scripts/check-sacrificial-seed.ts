@@ -42,7 +42,8 @@ const makeAction = (char: any, step: string) => {
 };
 
 // 並び: [キャラ, [アクション...]]（その後に、ベネットが E → 80 秒待機）
-const CASES: Array<[string, string[]]> = [
+// [キャラ, アクション, 凸（省略は 0）]
+const CASES: Array<[string, string[], number?]> = [
   ['甘雨', ['e', 'w1', 'e']],
   ['甘雨', ['e', 'w20', 'e', 'w1', 'e']],
   ['久岐忍', ['e', 'w1', 'e', 'w15', 'e']],
@@ -53,14 +54,22 @@ const CASES: Array<[string, string[]]> = [
   ['ヌヴィレット', ['e', 'w1', 'e', 'w14', 'e']],
   ['神里綾人', ['e', 'w1', 'e', 'w14', 'e']],
   ['フィッシュル', ['e', 'w13', 'e', 'w27', 'e']],
+  // 命ノ星座・長押しで命中が変わるもの（2026-10-09）
+  ['久岐忍', ['e', 'w1', 'e', 'w15', 'e'], 2],
+  ['九条裟羅', ['e', 'w3', 'e', 'w11', 'e'], 2],
+  ['ノエル', ['e', 'w1', 'e', 'w25', 'e'], 4],
+  ['レイラ', ['e', 'w1', 'e', 'w14', 'e'], 6],
+  ['シトラリ', ['e', 'w17', 'e', 'w17', 'e'], 0],
+  ['シトラリ', ['e', 'w21', 'e', 'w21', 'e'], 6],
+  ['早柚', ['e_hold', 'w1', 'e', 'w16', 'e_hold']],
 ];
 
 let failed = 0;
 let checked = 0;
-for (const [name, steps] of CASES) {
+for (const [name, steps, cons = 0] of CASES) {
   seq = 0;
   const c0 = all.find((x: any) => x.name === name);
-  const chars = [byName(name, { weaponId: SAC_IDS[c0.weaponType], weaponRefinementRank: 5 }), byName('ベネット', { weaponId: dull.id, weaponRefinementRank: 1 })];
+  const chars = [byName(name, { weaponId: SAC_IDS[c0.weaponType], weaponRefinementRank: 5, constellation: cons }), byName('ベネット', { weaponId: dull.id, weaponRefinementRank: 1 })];
   const stints = [
     { id: 's0', characterId: chars[0].id, actions: steps.map(s => makeAction(chars[0], s)) },
     { id: 's1', characterId: chars[1].id, actions: ['e', 'w80'].map(s => makeAction(chars[1], s)) },
@@ -79,8 +88,16 @@ for (const [name, steps] of CASES) {
   if (out.status !== 'ok' || !out.sacrificial) { failed++; console.log(`✗ ${name} ${steps.join(' ')}: gcsim を実行できなかった / 祭礼の探索が働かなかった（${out.status}）`); continue; }
   const s = out.sacrificial;
   const autoBars = res.passiveSpans.filter((p: any) => p.auto && p.characterId === chars[0].id).length;
-  if (s.ok) console.log(`✓ ${name} ${steps.join(' ')}: アプリの発動 ${s.expected} 箇所（武器効果のバー ${autoBars} 本）がすべて gcsim でも発動、余分なし（種 ${s.seed}・探索 ${s.searched} 個）`);
-  else { failed++; console.log(`✗ ${name} ${steps.join(' ')}: 一致する種が見つからない（アプリ ${s.expected} / 一致 ${s.matched} / 不足 ${s.missing} / 余分 ${s.extras}。探索 ${s.searched} 個）`); }
+  if (s.ok) console.log(`✓ ${name}${cons ? ` 凸${cons}` : ''} ${steps.join(' ')}: アプリの発動 ${s.expected} 箇所（武器効果のバー ${autoBars} 本）がすべて gcsim でも発動、余分なし（種 ${s.seed}・探索 ${s.searched} 個）`);
+  else {
+    failed++;
+    if (process.env.DEBUG) {
+      const frames = (re: RegExp, ev: string) => JSON.stringify(out.logs.filter((l: any) => l.event === ev && re.test(l.msg)).map((l: any) => l.frame));
+      console.log('  アプリの発動', JSON.stringify(res.sacrificialProcs.map((x: any) => [x.cycle, x.time, x.hitFrame])));
+      console.log('  gcsim の発動', frames(/sacrificial proc/, 'weapon'), ' gcsim の E', frames(/executed skill/, 'action'));
+      console.log('  アプリの E', JSON.stringify(acts.filter((x: any) => x.type === 'skill').map((x: any) => x.startTime)));
+    }
+    console.log(`✗ ${name} ${steps.join(' ')}: 一致する種が見つからない（アプリ ${s.expected} / 一致 ${s.matched} / 不足 ${s.missing} / 余分 ${s.extras}。探索 ${s.searched} 個）`); }
 }
 await server.close();
 console.log(failed === 0 ? `\n全 ${checked} 並びで、アプリの発動と gcsim の発動が一致する種が見つかった` : `\n${failed} / ${checked} 並びで、一致する種が見つからなかった`);

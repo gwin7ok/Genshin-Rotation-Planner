@@ -12,7 +12,7 @@
  * 結果は src/data/skill_hit_frames.json に書く。
  */
 import fs from 'node:fs';
-import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
+import { HOLD_FRAMES_ACTIONS, mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 
 const SERVER = GCSIM_SERVER_URL;
@@ -25,6 +25,15 @@ const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', '
 const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
+const headerOf = (c: any, k: string, cons: number) => [
+  `${k} char lvl=90/90 cons=${cons} talent=9,9,9;`,
+  `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`,
+  `${k} add stats cr=1;`,
+  'options iteration=1 duration=90 swap_delay=12 ignore_burst_energy=true;',
+  'target lvl=100 resist=0.1;',
+  `active ${k};`,
+];
+
 async function run(config: string): Promise<{ logs?: any[]; error?: string }> {
   const res = await fetch(`${SERVER}/sample/hits_${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
   const text = await res.text();
@@ -36,7 +45,8 @@ async function run(config: string): Promise<{ logs?: any[]; error?: string }> {
   }
 }
 
-interface Entry { char: string; command: string; status: 'ok' | 'unprobed'; hits: number[]; reason?: string }
+/** byConstellation: 命ノ星座で命中が変わるアクションの、その段階以降の命中（hits は 0 凸）。holdFramesMax: 長押しの長さを渡すアクション（命中は長押し − 1 フレームだけ後ろにずれる） */
+interface Entry { char: string; command: string; status: 'ok' | 'unprobed'; hits: number[]; byConstellation?: Record<string, number[]>; holdFramesMax?: number; reason?: string }
 const entries: Record<string, Entry> = {};
 let n = 0;
 for (const c of characters) {
@@ -46,33 +56,51 @@ for (const c of characters) {
     n++;
     const command = mapAction(def.id, c.weaponType).command;
     if (!command) { entries[def.id] = { char: c.name, command: '', status: 'unprobed', hits: [], reason: '変換規則なし（mapAction）' }; continue; }
-    const header = [
-      `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
-      `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`,
-      `${k} add stats cr=1;`,
-      'options iteration=1 duration=90 swap_delay=12 ignore_burst_energy=true;',
-      'target lvl=100 resist=0.1;',
-      `active ${k};`,
-    ];
     // 先に別のスキルが要る派生（再発動など）は、通常のスキルを先に実行してから、その命令を 1 回
-    const attempts = [
-      { via: 'plain', body: `wait(30); ${k} ${command}; delay(${MAX_FRAMES + 60});` },
-      { via: 'prelude', body: `wait(30); ${k} skill; delay(600); ${k} ${command}; delay(${MAX_FRAMES + 60});` },
-    ];
-    let done = false; let last = '';
-    for (const at of attempts) {
-      const out = await run([...header, at.body].join('\n'));
-      if (out.error) { last = out.error; continue; }
-      const execs = out.logs!.filter(l => l.event === 'action' && l.msg.startsWith(`executed ${command.replace(/\[.*$/, '')}`));
-      const exec = (at.via === 'plain' ? execs[0] : execs[execs.length - 1])?.frame;
-      if (exec === undefined) { last = '実行されなかった'; continue; }
-      const hits = [...new Set<number>(
-        out.logs!.filter(l => l.event === 'damage' && l.char_index === 0 && l.logs?.['attack-tag'] === ATTACK_TAG_ELEMENTAL_ART && Number(l.logs?.damage ?? 0) > 0 && l.frame >= exec && l.frame - exec <= MAX_FRAMES)
-          .map(l => l.frame - exec),
-      )].sort((a, b) => a - b);
-      entries[def.id] = { char: c.name, command, status: 'ok', hits };
+    const probe = async (cons: number, cmd: string): Promise<{ hits?: number[]; error?: string }> => {
+      const header = headerOf(c, k, cons);
+      const bare = cmd.replace(/\[.*$/, '');
+      const attempts = [
+        { via: 'plain', body: `wait(30); ${k} ${cmd}; delay(${MAX_FRAMES + 60});` },
+        { via: 'prelude', body: `wait(30); ${k} skill; delay(600); ${k} ${cmd}; delay(${MAX_FRAMES + 60});` },
+      ];
+      let last = '';
+      for (const at of attempts) {
+        const out = await run([...header, at.body].join('\n'));
+        if (out.error) { last = out.error; continue; }
+        const execs = out.logs!.filter(l => l.event === 'action' && l.msg.startsWith(`executed ${bare}`));
+        const exec = (at.via === 'plain' ? execs[0] : execs[execs.length - 1])?.frame;
+        if (exec === undefined) { last = '実行されなかった'; continue; }
+        const hits = [...new Set<number>(
+          out.logs!.filter(l => l.event === 'damage' && l.char_index === 0 && l.logs?.['attack-tag'] === ATTACK_TAG_ELEMENTAL_ART && Number(l.logs?.damage ?? 0) > 0 && l.frame >= exec && l.frame - exec <= MAX_FRAMES)
+            .map(l => l.frame - exec),
+        )].sort((x, y) => x - y);
+        return { hits };
+      }
+      return { error: last };
+    };
+    const base = await probe(0, command);
+    const last = base.error ?? '';
+    let done = false;
+    if (base.hits) {
+      const entry: Entry = { char: c.name, command, status: 'ok', hits: base.hits };
+      // 命ノ星座で命中が変わるか（1〜6 凸。変わった段階だけ記録）
+      let prev = JSON.stringify(base.hits);
+      for (let cons = 1; cons <= 6; cons++) {
+        const r = await probe(cons, command);
+        if (!r.hits || JSON.stringify(r.hits) === prev) continue;
+        prev = JSON.stringify(r.hits);
+        (entry.byConstellation ??= {})[String(cons)] = r.hits;
+      }
+      // 長押しの長さ（フレーム）を渡すアクション: 命中は、長押しの長さ − 1 フレームだけ後ろにずれる（hold=1 が基準）。上限で確かめる
+      const holdMax = HOLD_FRAMES_ACTIONS.get(def.id);
+      if (holdMax !== undefined && base.hits.length > 0) {
+        const r = await probe(0, `${command.replace(/\[.*$/, '')}[hold=${holdMax}]`);
+        if (r.hits && JSON.stringify(r.hits) === JSON.stringify(base.hits.map(h => h + holdMax - 1))) entry.holdFramesMax = holdMax;
+        else console.log('  長押しで命中が単純にずれない', c.name, def.id, JSON.stringify(r.hits));
+      }
+      entries[def.id] = entry;
       done = true;
-      break;
     }
     if (!done) entries[def.id] = { char: c.name, command, status: 'unprobed', hits: [], reason: last };
     if (n % 40 === 0) console.log(`${n} 件`);

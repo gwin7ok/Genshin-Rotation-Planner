@@ -3,7 +3,7 @@ import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
 import { NightsoulTracker } from './nightsoulTracker';
 import { actionDelayOf } from './actionDelay';
-import { ACTION_STATE_RULES } from '../data/actionStateRules';
+
 import { 
   CharacterConfig, 
   Stint, 
@@ -108,8 +108,7 @@ export function calculateRotation(
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
-  // アクション状態の窓（キャラごと）
-  const stateWindows = new Map<string, { end: number; usesLeft?: number; used: number }>();
+
   // 炎場（ディシアの熔鉄流獄）の効果バー（置き直しで、拾った時点で切って、新しいバーを出す）
   const fieldSpans = new Map<string, ActiveBuffSpan>();
   // スキル・爆発で入るモード（夢見月瑞希の夢浮かみ・ディシアのパンチ連打モードなど）の窓（1 周目の線形の計算）。キー: モードを開くアクションの定義 ID。
@@ -300,10 +299,8 @@ export function calculateRotation(
       // CT・効果継続時間はアクション定義ごとに持つ（凸の変更を適用済み）
       const actionDef = charActions.find(a => a.id === act.actionTypeId);
 
-      // アクション状態の規則辞書: 窓（ニィロウの pirouette など）の中の E か、窓の中の何回目か
+      // モードの中の E（終わらせる E・別の動作になる E。CT・効果バーを持たない）
       let inStateWindow = false;
-      let stageIndex = 0;
-      const rule = ACTION_STATE_RULES[char.id];
 
       // モード（スキル・爆発で入る状態）: このアクションが、続いているモードを終わらせるアクションか（モードの定義の enders）。
       // 「交代しても続く」モードは、後の出場のアクションでも終わらせられる
@@ -383,22 +380,6 @@ export function calculateRotation(
         }
       }
 
-      if (!modeKind && rule && act.type === 'skill' && act.actionTypeId === `${char.id}_e`) {
-        const win = stateWindows.get(char.id);
-        if (win && actionStartTime < win.end && (win.usesLeft === undefined || win.usesLeft > 0)) {
-          inStateWindow = true;
-          stageIndex = win.used;
-          win.used += 1;
-          // 窓の中の E のたびに窓が更新されるキャラ（ディルック・閑雲）
-          if (rule.refreshWindowSeconds?.length) win.end = Number((actionStartTime + rule.refreshWindowSeconds[Math.min(win.used - 1, rule.refreshWindowSeconds.length - 1)]).toFixed(3));
-          if (win.usesLeft !== undefined) {
-            win.usesLeft -= 1;
-            if (win.usesLeft <= 0) stateWindows.delete(char.id);
-          }
-        } else {
-          stateWindows.set(char.id, { end: actionStartTime + rule.windowSeconds, usesLeft: rule.maxUses, used: 0 });
-        }
-      }
 
       // 通常攻撃: 連続した N の段（gcsim と同じく、他のアクションを挟むと1段目に戻り、最大段数を超えたら1段目に戻る）
       let frames = actionDef?.frames;
@@ -440,9 +421,7 @@ export function calculateRotation(
           frames = { total: Math.round((actionDef?.defaultDuration ?? 0.2) * 60), cancels: { jump: burstModeDef.dashToJumpFrames }, source: 'dash.go:burstDashDuration（ジャンプへ）' };
         }
       }
-      if (inStateWindow && !modeKind && rule?.stageFrames?.length) {
-        frames = rule.stageFrames[Math.min(stageIndex, rule.stageFrames.length - 1)];
-      }
+
 
       // 所要時間: 編集済み（durationManual）ならその値。未編集なら、次に続くアクションに応じたキャンセルフレーム
       // （出場の最後は次が交代）。フレームが無いアクションは、登録時の値を使う

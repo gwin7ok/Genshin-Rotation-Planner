@@ -227,7 +227,28 @@ const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & {
  * 交代での扱いは、ゲームでの動き（ユーザーの確認。D73・D76）。gcsim と違うもの（閑雲・クロリンデは、gcsim では交代しても続く）は、各行に書く。
  * keepEffectDuration: マスターの効果継続時間（genshin-db）を残す（アクションごとの個別の値で、モードを長くできる）。無ければ 0 にする（バーはモードのバーだけ）
  */
-const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> }[]> = {
+type ActionModeEntry = { action: 'e' | 'q'; keepEffectDuration?: boolean; mode: NonNullable<ActionDefinition['mode']> };
+/**
+ * 入力がなければ最大時間まで続き、ボタン操作では終わらず、交代で終わるモード（A-2・D-2）の行。開始の遅れ・最大時間は、gcsim の実行で確認したフレーム
+ * （2026-10-08。入力なしで `skill` / `burst; wait(1300)` を実行し、状態が付いたフレームと期限）。既定は維持する。効果継続時間（genshin-db）は残す
+ */
+const stateMode = (action: 'e' | 'q', label: string, startDelayFrames: number, durationFrames: number, source: string, extra: Partial<NonNullable<ActionDefinition['mode']>> = {}): ActionModeEntry => ({
+  action,
+  keepEffectDuration: true,
+  mode: {
+    label,
+    description: `${label}の状態。入力がなければ ${(durationFrames / 60).toFixed(1)} 秒続く。キャラ交代で終わる`,
+    startDelayFrames,
+    durationFrames,
+    swap: 'ends',
+    enders: [],
+    holdByDefault: true,
+    source,
+    ...extra,
+  },
+});
+
+const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // 夢見月瑞希: 夢浮かみ（5 秒。固有天賦 1 の延長は反応が条件なので含めない）。状態の間の E で解除（CT なし）。交代で解除（実行で確認: 交代の時点で「DreamDrifter effect cancelled」）
   '10000109-anemo': [{
     action: 'e',
@@ -254,6 +275,7 @@ const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boo
       swap: 'ends',
       enders: [{ by: 'jump', cooldown: 'none' }],
       holdByDefault: true,
+      noSynergy: true,
       source: 'dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる',
     },
   }],
@@ -317,7 +339,47 @@ const ACTION_MODES: Record<string, { action: 'e' | 'q'; keepEffectDuration?: boo
       holdByDefault: false,
       source: 'freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）',
     },
-  }],
+  },
+  // フレミネの爆発: 影狩り（10 秒）
+  stateMode('q', '影狩り', 0, 600, 'freminet/burst.go: freminet-stalking（実行: 爆発と同時に 600f）')],
+  // --- A-2: スキルで入る、ボタン操作で終わらないモード（2026-10-08） ---
+  // スカーク: 七相一閃（E の 19f 後から 754f）。蛇の秘計は gcsim の既定で 100 点から始まり（毎秒 7 点減る）、上限の 754f まで続く（実効。D74）。
+  // 状態中の E は使えない。CT（8 秒）は状態の終わりから（skill.go: exitSkillState）
+  '10000114-cryo': [stateMode('e', '七相一閃', 19, 754, 'skirk/skill.go: skillDur = 754、enterSkillState（実行: E の 19f 後に seven-phase-flash、774f に exit skirk skill と CT 480f）。onExitField: 交代で終わる', {
+    cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+  })],
+  // 胡桃: 蝶導来世（554f。実行で、交代して戻ると状態が消えていることを確認）
+  '10000046-pyro': [stateMode('e', '蝶導来世', 0, 554, 'hutao/skill.go: paramita（実行: E と同時に 554f）。交代で解除')],
+  // 宵宮: 庭火焔硝（611f）
+  '10000049-pyro': [stateMode('e', '庭火焔硝', 0, 611, 'yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除')],
+  // 神里綾人: 瞬水剣（360f）
+  '10000066-hydro': [stateMode('e', '瞬水剣', 0, 360, 'kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除')],
+  // フリンズ: 幽炎の露顕（619f）。特殊スキル（嵐槍）の受付と同じ状態
+  '10000120-electro': [stateMode('e', '幽炎の露顕', 0, 619, 'flins/skill.go: manifest-flame（実行: E と同時に 619f）。交代で解除', { windowState: true })],
+  // ファルカ: 疾風怒濤（E の 39f 後から 720f。ヒットストップ・爆発で延びる）。特殊スキルの受付と同じ状態
+  '10000128-anemo': [stateMode('e', '疾風怒濤', 39, 720, 'varka/skill.go: sturm-und-drang（実行: E の 39f 後に 720f）。交代で解除', { windowState: true })],
+  // ニィロウ: 剣舞（600f）。状態の間の E はステップ（3 段。CT なし）で、3 段目で剣舞が終わる（実行: 3 段目の 40f 後に tranquilityaura）
+  '10000070-hydro': [stateMode('e', '剣舞', 0, 600, 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)、whirlingStepsFrames。3 段目で pirouette が終わる。交代で解除', {
+    repress: {
+      frames: [
+        { total: 33, cancels: { attack: 27, skill: 27, dash: 26, jump: 27, swap: 31 }, source: 'skill.go:whirlingStepsFrames[0]' },
+        { total: 62, cancels: { attack: 40, skill: 32, burst: 40, dash: 36, jump: 37 }, source: 'skill.go:whirlingStepsFrames[1]' },
+        { total: 63, cancels: { dash: 57, jump: 57, swap: 61 }, source: 'skill.go:whirlingStepsFrames[2]' },
+      ],
+      maxUses: 3,
+      endsOnLast: true,
+    },
+  })],
+  // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
+  '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
+  '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],
+  '10000092-pyro': [stateMode('q', '瑞獣の舞', 36, 720, 'gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる')],
+  '10000057-geo': [stateMode('q', '怒目鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],
+  '10000054-hydro': [stateMode('q', '儀来羽衣', 0, 600, 'kokomi/burst.go: kokomiburst（実行: 爆発と同時に 600f）。交代で終わる')],
+  '10000106-pyro': [stateMode('q', '燔天の時', 105, 420, 'mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる')],
+  '10000052-electro': [stateMode('q', '夢想の一心', 0, 518, 'raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる')],
+  '10000020-electro': [stateMode('q', '雷牙', 32, 900, 'razor/burst.go: razor-q（実行: 爆発の 32f 後から 900f）。交代で終わる')],
+  '10000097-electro': [stateMode('q', '黄昏の祈り', 0, 480, 'sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる')],
   // クロリンデ: 夜巡り（E の 6f 後から 7.5 秒）。状態の間の E は突き（CT なし・回数の制限なし・状態は延びない）、通常攻撃は狩りの N、爆発は別のフレーム。
   // 交代で終わる（ゲーム。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）
   '10000098-electro': [{

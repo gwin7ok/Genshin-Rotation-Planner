@@ -232,12 +232,15 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
         refs.push({ stintId: stint.id, actionId: act.id, command: command.replace(/\[.*$/, ''), ...(extra > 0 ? { extraSeconds: extra } : {}), ...(modeHold > 0 ? { modeHoldSeconds: modeHold } : {}) });
         // 出場の最後のアクション、または追加分が長い（0.5 秒以上）ときは `wait`。長い待ちは、`wait` が交代・次の行動へのキャンセルより早く始まって吸収される分（最大 0.2 秒程度）が小さく、
         // `delay`（次のアクションが実行できる状態になった後に入る）だと、CT待ちの後にさらに待つため、特殊スキルの受付（12 秒など）を過ぎてしまうことがある
-        if (extra > 0 && (act === lastCommandAct || extra >= 0.5)) {
-          out.push(`${indent}wait(${toFrames(extra)});`);
-          const delayOnly = toFrames(actionDelayOf(act));
+        // モードの維持の分は、`delay` で渡す（交代できる状態になった後から数える）。`wait` は、最も早いキャンセル（交代へのキャンセルより前のことがある）から始まるため、
+        // 交代が状態の期限より早くなる（胡桃のスキルで 24f。2026-10-08 に実行で確認）。維持は数秒あるので、交代 CT（1 秒）の待ちとは重ならない
+        const manualExtra = Number(Math.max(0, extra - modeHold).toFixed(3));
+        if (manualExtra > 0 && (act === lastCommandAct || manualExtra >= 0.5)) {
+          out.push(`${indent}wait(${toFrames(manualExtra)});`);
+          const delayOnly = toFrames(actionDelayOf(act) + modeHold);
           if (delayOnly > 0) out.push(`${indent}delay(${delayOnly});`);
         } else {
-          const delayFrames = toFrames(actionDelayOf(act) + extra);
+          const delayFrames = toFrames(actionDelayOf(act) + manualExtra + modeHold);
           if (delayFrames > 0) out.push(`${indent}delay(${delayFrames});`);
         }
       }

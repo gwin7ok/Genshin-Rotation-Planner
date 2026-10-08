@@ -14,6 +14,9 @@ import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient.ts';
 
 export const SACRIFICIAL_WEAPON_KEYS = ['sacrificialfragments', 'sacrificialsword', 'sacrificialgreatsword', 'sacrificialbow'] as const;
 
+/** 祭礼の武器の内部 CT（秒）。精錬 4 以上は `19 − 3×(精錬−4)`、それ未満は `34 − 4×精錬`（gcsim common/sacrificial.go） */
+export const sacrificialIcdSeconds = (refine: number): number => (refine >= 4 ? 19 - (refine - 4) * 3 : 34 - refine * 4);
+
 /** gcsim の AttackTagElementalArt（長押しのスキルは別のタグで、祭礼は発動しない） */
 const ATTACK_TAG_ELEMENTAL_ART = 4;
 
@@ -43,8 +46,7 @@ export function findSacrificialUsers(config: string): SacrificialUser[] {
     const index = order.indexOf(m[1]);
     if (index < 0) continue;
     const refine = Number(m[3]);
-    const seconds = refine >= 4 ? 19 - (refine - 4) * 3 : 34 - refine * 4;
-    users.push({ charKey: m[1], index, weaponKey: m[2], refine, icdFrames: seconds * 60 });
+    users.push({ charKey: m[1], index, weaponKey: m[2], refine, icdFrames: sacrificialIcdSeconds(refine) * 60 });
   }
   return users;
 }

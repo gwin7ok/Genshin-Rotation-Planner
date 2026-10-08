@@ -46,6 +46,15 @@ const makeAction = (char: any, step: Step) => {
   return base;
 };
 
+// 祭礼の武器（確率 100%・武器の内部 CT だけ考慮。2026-10-09）を持たせるための、武器の一覧。weaponId が無いキャラには影響しない
+const WEAPON_DB = [
+  { id: 'w_sword', name: '祭礼の剣', rarity: 4, gcsimKey: 'sacrificialsword', refinementRank: 5, weaponType: 'sword', baseAttack: 454 },
+  { id: 'w_claymore', name: '祭礼の大剣', rarity: 4, gcsimKey: 'sacrificialgreatsword', refinementRank: 5, weaponType: 'claymore', baseAttack: 454 },
+  { id: 'w_bow', name: '祭礼の弓', rarity: 4, gcsimKey: 'sacrificialbow', refinementRank: 5, weaponType: 'bow', baseAttack: 454 },
+  { id: 'w_catalyst', name: '祭礼の断片', rarity: 4, gcsimKey: 'sacrificialfragments', refinementRank: 5, weaponType: 'catalyst', baseAttack: 454 },
+];
+const SAC = (type: string) => ({ weaponId: 'w_' + type, weaponRefinementRank: 5 });
+
 const S = (name: string, chars: Scenario['chars'], stints: Scenario['stints'], opts: Partial<Scenario> = {}): Scenario => ({ name, chars, stints, ...opts });
 const B: [string] = ['ベネット'];
 const SCENARIOS: Scenario[] = [
@@ -115,6 +124,16 @@ const SCENARIOS: Scenario[] = [
   S('閑雲 E E E → 5 秒 → E（3 回目の跳躍の後の時間切れ）', [['閑雲'], B], [[0, ['e', 'e', 'e', 'w5', 'e']], [1, ['e']]]),
   S('閑雲 E → 交代 → 閑雲 E（交代しても、本来の終わりで短縮）', [['閑雲'], B], [[0, ['e']], [1, ['e', 'w3']], [0, ['e']]]),
   S('閑雲 凸 1 E → 5 秒 → E → E', [['閑雲', { constellation: 1 }], B], [[0, ['e', 'w5', 'e', 'w5', 'e']], [1, ['e']]]),
+  // --- 祭礼の武器（2026-10-09。確率 100%・武器の内部 CT 16 秒。スキルのダメージが当たった時点で、使用者が場にいて、スキルが CT 中で、内部 CT が明けていれば、スキルの CT を捨てる。命中時刻の表: src/data/skill_hit_frames.json） ---
+  S('祭礼 甘雨（弓）E → 1 秒 → E（1 回目で CT がリセットされ、2 回目が使える）', [['甘雨', SAC('bow')], B], [[0, ['e', 'w1', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 甘雨 E → 1 秒 → E → 1 秒 → E（3 回目は内部 CT 中で、CT 違反）', [['甘雨', SAC('bow')], B], [[0, ['e', 'w1', 'e', 'w1', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 甘雨 E → 20 秒 → E → 1 秒 → E（内部 CT が明けた後は、また使える）', [['甘雨', SAC('bow')], B], [[0, ['e', 'w20', 'e', 'w1', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 夢見月瑞希 E → 1 秒 → E（雲の継続ダメージの命中でも発動する）', [['夢見月瑞希', SAC('catalyst')], B], [[0, ['e', 'w1', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 クレー（回数 2）E → E → E', [['クレー', SAC('catalyst')], B], [[0, ['e', 'e', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 八重神子（回数 3）E E E → E', [['八重神子', SAC('catalyst')], B], [[0, ['e', 'e', 'e', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 宵宮（スキルのダメージが無い）E → 1 秒 → E（発動しない）', [['宵宮', SAC('bow')], B], [[0, ['e', 'w1', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼 久岐忍 E → 1 秒 → E → 14 秒 → E（継続ダメージが内部 CT の明けた後にも当たる）', [['久岐忍', SAC('sword')], B], [[0, ['e', 'w1', 'e', 'w14', 'e']], [1, ['e', 'w80']]]),
+  S('祭礼なし 甘雨 E → 1 秒 → E（対照。2 回目は CT 違反）', [['甘雨'], B], [[0, ['e', 'w1', 'e']], [1, ['e', 'w80']]]),
   // --- 八重神子の殺生桜（D81。寿命は効果継続時間 14 秒、論示で +10 秒。桜は E の 34f 後に現れる。4 つ目で最古を押し出す。爆発で、場の桜 1 つにつき E の CT を 1 回分戻す。論示なしは、爆発で全部壊れる） ---
   S('八重神子 E E E → 5 秒 → E（押し出し。論示あり）', [['八重神子'], B], [[0, ['e', 'e', 'e', 'w5', 'e']], [1, ['e', 'w30']]]),
   S('八重神子 E E Q（論示あり。桜は残り、CT が戻る）', [['八重神子'], B], [[0, ['e', 'e', 'q']], [1, ['e', 'w30']]]),
@@ -129,10 +148,10 @@ function runScenario(sc: Scenario) {
   seq = 0;
   const chars = sc.chars.map(([name, extra]) => byName(name, extra));
   const stints = sc.stints.map(([ci, steps, extra], i) => ({ id: `s${i}`, characterId: chars[ci].id, actions: steps.map(s => makeAction(chars[ci], s)), ...(extra ?? {}) }));
-  const res = calculateRotation(chars, stints, { switchDelay: 0.5, loopStartIndex: sc.loopStartIndex ?? 0, defHalt: sc.defHalt ?? true });
+  const res = calculateRotation(chars, stints, { switchDelay: 0.5, loopStartIndex: sc.loopStartIndex ?? 0, defHalt: sc.defHalt ?? true, database: { weapons: WEAPON_DB } as any });
   const actions = res.calculatedStints.flatMap((s: any) => s.actions);
   const built = buildGcsimConfig({
-    characters: chars, stints, loopStartIndex: sc.loopStartIndex ?? 0, switchDelay: 0.5, defHalt: sc.defHalt ?? true, weapons: [], artifacts: [],
+    characters: chars, stints, loopStartIndex: sc.loopStartIndex ?? 0, switchDelay: 0.5, defHalt: sc.defHalt ?? true, weapons: WEAPON_DB as any, artifacts: [],
     extraWaitByActionId: Object.fromEntries(actions.filter((a: any) => a.type !== 'swap').map((a: any) => {
       const manual = a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'wait' ? Math.max(0, a.duration - a.naturalDuration) : 0;
       return [a.id, Number(((manual >= 0.005 ? manual : 0) + (a.modeHoldSeconds ?? 0)).toFixed(3))];

@@ -3,6 +3,8 @@ import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
 import { NightsoulTracker } from './nightsoulTracker';
 import { TotemTracker, totemTiming } from './totemTracker';
+import { SACRIFICIAL_WEAPON_KEYS, sacrificialIcdSeconds } from './gcsim/sacrificialSeed';
+import skillHitFrameData from '../data/skill_hit_frames.json';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -83,6 +85,12 @@ function cancelKeyOf(next: CharacterActionInstance | undefined, weaponType?: str
   }
 }
 
+/**
+ * スキルのダメージが敵に当たる時刻の表（スキルを実行したフレームからの相対。scripts/probe-skill-hits.ts が gcsim の実行で作る）。
+ * 祭礼の武器効果は、このダメージが当たったときに発動する。表が無い（空の）アクションは、祭礼が発動しない
+ */
+const SKILL_HITS = (skillHitFrameData as { entries: Record<string, { hits: number[] }> }).entries;
+
 export function calculateRotation(
   characters: CharacterConfig[],
   rawStints: Stint[],
@@ -106,6 +114,13 @@ export function calculateRotation(
   // 受付（疾風怒濤）のヒットストップ延長は、所要時間に止まった分が含まれるときだけ足す（両方足すか、両方足さないか）
   const durationHasHitlag = (a: { gcsimBaseDuration?: number }) => a.gcsimBaseDuration !== undefined;
   const cdResonanceScale = characters.filter(c => c.element === 'anemo').length >= 2 ? 0.95 : 1;
+  // 祭礼の武器（祭礼の断片・剣・大剣・弓）を持つキャラ: 武器の内部 CT（秒）。確率は 100% として扱う（発動の条件は、CT の判定の中で見る）
+  const sacrificialOf = (c: CharacterConfig): { icdSeconds: number } | undefined => {
+    const w = options?.database?.weapons.find(x => x.id === c.weaponId);
+    if (!w?.gcsimKey || !(SACRIFICIAL_WEAPON_KEYS as readonly string[]).includes(w.gcsimKey)) return undefined;
+    const refine = c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5);
+    return { icdSeconds: sacrificialIcdSeconds(refine) };
+  };
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
   const passiveSpans: PassiveSpan[] = [];
@@ -571,6 +586,9 @@ export function calculateRotation(
         const evCooldown = atEnd ? Number(((atEnd.entry?.seconds ?? 0) * (actionDef?.ignoresCdScale ? 1 : cdResonanceScale)).toFixed(3)) : cooldown;
         const evOffset = atEnd ? (atEnd.entry ? Number((atEnd.entry.delayFrames / 60).toFixed(3)) : 0) : ctOffset;
         const evCtStart = Number((actionStartTime + evOffset).toFixed(3));
+        // 祭礼の武器: スキルのダメージが当たる時刻（命中時刻の表）。スキルを使ったときだけ（モードの間の 2 回目以降の E は、CT を始めないので対象外）
+        const sacrificial = sacrificialOf(char);
+        const sacrificialHits: number[] = isTriggeringAction && !isSpecial && sacrificial && actionDef ? SKILL_HITS[actionDef.id]?.hits ?? [] : [];
         if (isTriggeringAction) {
           ctEvents.push({
             key: `${char.id}:${isSpecial ? 'special' : 'skill'}`,
@@ -578,7 +596,7 @@ export function calculateRotation(
             ctOffset: evOffset,
             cooldown: evCooldown,
             ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
-            ...(!isSpecial && actionDef?.mode?.cooldownReduceOnExpire ? { forceQueue: true } : {}),
+            ...(!isSpecial && (actionDef?.mode?.cooldownReduceOnExpire || sacrificialHits.length > 0) ? { forceQueue: true } : {}),
             ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, ...totemTiming(actionDef.spawnsTotem, act.effectDuration ?? actionDef.effectDuration ?? 0, isRevelation(char)) } } : {}),
             ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
             checked: act.type !== 'skill_reset',
@@ -590,6 +608,19 @@ export function calculateRotation(
               computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
               addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: ${isSpecial ? '特殊スキルCT違反' : 'スキルCT違反'}`, `${isSpecial ? '特殊スキル' : 'スキル'}「${act.name}」`, remaining, cycle);
             },
+          });
+        }
+        for (const h of sacrificialHits) {
+          ctEvents.push({
+            key: `${char.id}:skill`,
+            time: Number((actionStartTime + h / 60).toFixed(3)),
+            ctOffset: 0,
+            cooldown: 0,
+            checked: false,
+            sacrificial: { icdSeconds: sacrificial!.icdSeconds },
+            stintIndex: sIdx,
+            name: act.name,
+            onViolation: () => {},
           });
         }
         // モードを終わらせて CT を始める E（タルタリヤ）: 自分の CT は持たないが、CT 中（入ったときの 1 秒）なら使えない
@@ -637,7 +668,7 @@ export function calculateRotation(
 
         // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、使った時点では置かない。CT のキューで、前の CT が 0 になって始まった時点に、判定の関数が作る
         // 複数回分の通常のスキル（クレー・魈など）も同じ: バーは、CT のキューで始まった時点に作る
-        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1 || !!actionDef?.mode?.cooldownReduceOnExpire;
+        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1 || !!actionDef?.mode?.cooldownReduceOnExpire || (!isSpecial && sacrificialHits.length > 0);
         if (isTriggeringAction && evCooldown > 0 && !isQueuedSpecial) {
           const cdSpan: CooldownSpan = {
             id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
@@ -1220,7 +1251,19 @@ export function calculateRotation(
 
   // CT違反の判定（1周目・2周目を区別せず、ループを必要な周数だけ並べた時間軸で時刻順に判定）
   // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、判定のキューで CT が始まった時点に作られる
-  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod)) {
+  // 使用者が場にいるか（祭礼の発動の条件）。時刻 t が 1 周目の終わりを過ぎたら、ループの区間に折り返して見る
+  const stintIntervals = new Map<string, Array<[number, number]>>();
+  for (const st of calculatedStints) {
+    const list = stintIntervals.get(st.characterId) ?? [];
+    list.push([st.startTime, st.endTime]);
+    stintIntervals.set(st.characterId, list);
+  }
+  const isActiveAt = (charId: string, t: number): boolean => {
+    let tt = t;
+    if (loopPeriod > 0.05) while (tt >= totalDuration - 1e-6 && tt - loopPeriod >= loopStartTime - 1e-6) tt -= loopPeriod;
+    return (stintIntervals.get(charId) ?? []).some(([s0, e0]) => tt >= s0 - 1e-6 && tt < e0 - 1e-6);
+  };
+  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt)) {
     skillCooldowns.push(span);
     charStates[span.characterId]?.skillCooldowns.push(span);
   }
@@ -1362,6 +1405,8 @@ interface CooldownEvent {
   checked: boolean;
   /** この枠のチャージ数（同時に溜められる回数。無ければ 1）。どのチャージもCT中なら違反 */
   charges?: number;
+  /** 祭礼の武器: スキルのダメージが敵に当たる時刻の判定（確率 100%）。使用者が場にいて、スキルが CT 中で、武器の内部 CT が明けていれば、スキルの先頭の CT を捨てる */
+  sacrificial?: { icdSeconds: number };
   /** true のとき、回数が 1 でも CT のキューで持つ（CT を後から短縮されるスキル。閑雲。バーの終わりが短縮で動く） */
   forceQueue?: boolean;
   /** true のとき、この発動が全回数分のCTをキューに積む（1 つ目はこの時刻から、2 つ目は 1 つ目が明けてから。検査はしない。ファルカのスキルが特殊スキルのCTを開始する）。この枠は、短縮が先頭だけに効く */
@@ -1425,7 +1470,7 @@ function endAtNextStart<T extends { startTime: number; endTime: number }>(spans:
  * 3周目以降は、各発動の直前にある同じ CT の発動が2周目と同じ（1周前の同じ位置）になるため、2周分の判定で足りる。
  * どちらの周で違反しても、元の発動に違反の印を付ける。
  */
-function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number): CooldownSpan[] {
+function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean): CooldownSpan[] {
   const extraCycles = loopPeriod > 0.05 ? 1 : 0;
 
   const timeline: Array<{ event: CooldownEvent; time: number; cycle: number; order: number }> = [];
@@ -1443,6 +1488,8 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   const queues = new Map<string, CooldownQueue<QueueTag>>();
   // 八重神子の殺生桜（枠のキー → 消える時刻の一覧）、ヴァレサの夜魂値（キャラ ID → 状態）
   const totems = new Map<string, TotemTracker>();
+  // 祭礼の武器の内部 CT が明ける時刻（キャラ ID → 時刻）
+  const sacrificialIcdUntil = new Map<string, number>();
   const nightsouls = new Map<string, NightsoulTracker>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
@@ -1472,6 +1519,14 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
     let queue = queues.get(item.event.key);
     queue?.advance(item.time);
     const charId = ev.key.split(':')[0];
+    // 祭礼の武器: スキルのダメージが当たった。使用者が場にいて、スキルが CT 中（キューに CT が積まれている）で、武器の内部 CT が明けていれば、先頭の CT を捨てる（gcsim の ResetActionCooldown）
+    if (ev.sacrificial) {
+      if (queue && queue.size > 0 && isActiveAt(charId, ev.time) && item.time >= (sacrificialIcdUntil.get(charId) ?? -Infinity) - 1e-9) {
+        queue.release(item.time);
+        sacrificialIcdUntil.set(charId, item.time + ev.sacrificial.icdSeconds);
+      }
+      continue;
+    }
     // 夜魂値（ヴァレサ）: 落下攻撃・爆発（nightsoulTracker.ts）。猛烈パッション中の落下攻撃は夜魂を使い切って終わる。満タンなら猛烈パッションに入り、次のスキルが無料になる
     if (ev.nightsoul && ev.nightsoul.role !== 'skill') {
       const tracker = nightsouls.get(charId) ?? new NightsoulTracker();

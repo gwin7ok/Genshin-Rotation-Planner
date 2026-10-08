@@ -106,7 +106,9 @@ export function buildActionEffectSpan(
 export function countDistinctActiveBuffs(buffs: ActiveBuffSpan[], time: number): { count: number; names: string[] } {
   const byId = new Map<string, string>();
   for (const b of buffs) {
-    if (!b.noSynergy && b.startTime <= time && b.endTime >= time && !byId.has(b.buffId)) byId.set(b.buffId, b.name);
+    // 行を持つバー（殺生桜）は、行ごとに 1 つと数える
+    const key = b.lane === undefined ? b.buffId : `${b.buffId}#${b.lane}`;
+    if (!b.noSynergy && b.startTime <= time && b.endTime >= time && !byId.has(key)) byId.set(key, b.name);
   }
   return { count: byId.size, names: [...byId.values()] };
 }

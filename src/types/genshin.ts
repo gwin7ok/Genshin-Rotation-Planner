@@ -609,6 +609,8 @@ export interface ActiveBuffSpan {
   noSynergy?: boolean;
   /** true = 同じ効果を再発動しても、前のバーを切らない（同時に複数ある設置物。八重神子の殺生桜。切るのは数え方〔totemTracker.ts〕だけ） */
   stackable?: boolean;
+  /** 設置物（八重神子の殺生桜）の行（0 始まり）。桜ごとに別の行に出す。バフ重複の数も、行ごとに 1 つ */
+  lane?: number;
   /** 出場ブロックの ID。あれば、その出場ブロックの行に表示する（副次効果のように、出場の終わりより後に始まるバー用） */
   ownerStintId?: string;
   /** 'passive' = 発動バフ（固有天賦）。ガントチャートでは専用の行に表示する */

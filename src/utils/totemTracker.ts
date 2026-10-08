@@ -16,6 +16,8 @@ export interface Totem<T = undefined> {
   start: number;
   /** 消える時刻（寿命の終わり。押し出し・爆発で壊れたときは、その時刻に更新する） */
   end: number;
+  /** 行（バーを出す行。0 始まり）。新しい桜は、場にある桜が使っていない一番上の行。上限なら、押し出した最古の桜の行 */
+  lane: number;
   tag: T;
 }
 
@@ -41,17 +43,24 @@ export class TotemTracker<T = undefined> {
 
   /**
    * 時刻 appearAt に、桜を 1 つ出す（寿命 lifetime 秒）。上限を超えたら、最古が押し出されて、その時刻で消える。
-   * 押し出された桜を返す（バーをその時刻で切るために使う）
+   * 押し出された桜（バーをその時刻で切るために使う）と、新しい桜の行を返す。
+   * fixedLane を渡すと、その行に置く（2 周目の再現で、1 周目の終わりに残っている桜を、元の行で置くとき）
    */
-  spawn(appearAt: number, lifetime: number, max: number, tag: T): Totem<T> | undefined {
+  spawn(appearAt: number, lifetime: number, max: number, tag: T, fixedLane?: number): { popped: Totem<T> | undefined; lane: number } {
     this.list = this.list.filter(x => x.end > appearAt);
     let popped: Totem<T> | undefined;
     if (this.list.length >= max) {
       popped = this.list.shift();
       if (popped) popped.end = Math.min(popped.end, appearAt);
     }
-    this.list.push({ start: appearAt, end: Number((appearAt + lifetime).toFixed(3)), tag });
-    return popped;
+    const used = new Set(this.list.map(x => x.lane));
+    let lane = fixedLane ?? popped?.lane;
+    if (lane === undefined) {
+      lane = 0;
+      while (used.has(lane)) lane++;
+    }
+    this.list.push({ start: appearAt, end: Number((appearAt + lifetime).toFixed(3)), lane, tag });
+    return { popped, lane };
   }
 
   /**

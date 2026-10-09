@@ -160,6 +160,73 @@ export const IGNORED_KEYS: Record<string, string> = {
 };
 
 /**
+ * 内部の重複防止の間隔（ダメージ・粒子・エネルギー回復などの再発動の制限）のキー。ユーザーに見せる発動制限ではないので、定義に結び付けず「対象外」にする（D90。2026-10-09）。キー → 理由
+ */
+export const INTERNAL_INTERVAL_KEYS: Record<string, string> = {
+  'alhaitham-c1-icd': '内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない',
+  'candace-c6-icd': '内部の重複防止の間隔（2.3 秒）。ユーザーに見せる発動制限ではない',
+  'chongyun-c4-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
+  'dehya-a1-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
+  'emilie-c1-attack-icd': '内部の重複防止の間隔（2.9 秒）。ユーザーに見せる発動制限ではない',
+  'glimbrightIcdKey': '内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない',
+  'kinich-c4-icd-key': '内部の重複防止の間隔（2.8 秒）。ユーザーに見せる発動制限ではない',
+  'lanyan-c2-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
+  'neuvillette-c6-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
+  'prune-c1-icd': '内部の重複防止の間隔（1.8 秒）。ユーザーに見せる発動制限ではない',
+  'razor-hexerei-icd': '内部の重複防止の間隔（2.23 秒）。ユーザーに見せる発動制限ではない',
+  'spine-dmgtaken-icd': '内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない',
+  'travelerhydro-c4-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
+  'wriothesley-c1-icd': '内部の重複防止の間隔（2.5 秒）。ユーザーに見せる発動制限ではない',
+  'gaming-c4': '内部の重複防止の間隔（0.2 秒）。ユーザーに見せる発動制限ではない',
+};
+
+/**
+ * 結び付けたいが、付け先の定義が無いキー（その凸の効果が、時間つきの効果ではない: CT 付きの即時・条件つきの効果）。
+ * 6-A2（定義を持たない効果の扱い・表示）で、定義を作るときに一緒に結び付ける（D90）。キー → 優先度つきのメモ
+ */
+export const PENDING_DEFINITION_KEYS: Record<string, string> = {
+  'aino-c2-icd': '追加攻撃（間隔 5 秒）',
+  'aino-c4-icd': 'エネルギー回復（間隔 10 秒）',
+  'arlecchino-c2-icd': '追加攻撃（間隔 10 秒）',
+  'arlecchino-c4-icd': '優先: スキル（昇りゆく凶月）の CT を 2 秒短縮する効果の間隔',
+  'baizhu-c2-icd': 'HP回復（間隔 5 秒）',
+  'c4-skull-icd': 'エネルギー回復（間隔 8 秒）',
+  'charlotte-c6-icd': 'HP回復（間隔 6 秒）',
+  'chev-c1-icd': 'エネルギー回復（間隔 10 秒）',
+  'chev-c2-icd': '追加攻撃（間隔 10 秒）',
+  'clorinde-c1-IcdKey': '追加攻撃',
+  'clorinde-c6-cd-bonus': '追加攻撃',
+  'clorinde-c6-icd': '追加攻撃',
+  'columbina-c1-icd': 'エネルギー回復（間隔 15 秒）',
+  'columbina-c4-icd': 'エネルギー回復（間隔 15 秒）',
+  'dahlia-c6-icd': 'HP回復（間隔 900 秒）',
+  'flins-c1-icd': 'エネルギー回復（間隔 5.5 秒）',
+  'furina-c4-icd': 'エネルギー回復（間隔 5 秒）',
+  'iansan-c1-icd': 'エネルギー回復（間隔 18 秒）',
+  'illuga-c1-icd': 'エネルギー回復（間隔 15 秒）',
+  'ineffa-c4-icd': 'エネルギー回復（間隔 4 秒）',
+  'ineffa-c6-icd': '追加攻撃（間隔 3.5 秒）',
+  'kaveh-c6-icd': '追加攻撃（間隔 3 秒）',
+  'keqing-c2-icd': 'その他（間隔 5 秒）',
+  'kirara-c4-icd': '追加攻撃（間隔 3.8 秒）',
+  'kuki-c4-icd': '追加攻撃（間隔 5 秒）',
+  'lauma-c4-icd': 'エネルギー回復（間隔 5 秒）',
+  'lyney-c1-icd': 'その他（間隔 15 秒）',
+  'neuvillette-c4-icd': 'その他（間隔 4 秒）',
+  'nicole-c1-icd': '追加攻撃（間隔 6 秒）',
+  'qiqi-c1-icd': 'エネルギー回復（間隔 6 秒）',
+  'sara-c1-icd': '優先: 爆発（烏天狗雷霆召呪）の CT を 1 秒短縮する効果の間隔',
+  'sethos-c6-icd': 'その他（間隔 15 秒）',
+  'xianyun-c4-icd': 'HP回復（間隔 5 秒）',
+  'clorinde-c6-cr-bonus': '追加攻撃',
+  'prune-c2': 'その他',
+  'shenhe-c2': '優先: 領域内の氷ダメージの会心ダメージ+15%',
+  'wanderer-c2-burstbonus': 'その他',
+  'xiangling-c6': '優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xlc6 と同じ効果）',
+  'xlc6': '優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xiangling-c6 と同じ効果）',
+};
+
+/**
  * gcsim のキーに結び付けない固有天賦の定義（gcsim に、この効果が無い）。理由は TALENT_NOTE_OVERRIDES に書く。
  * 同じ枠に継続時間の違う定義が複数あり、gcsim のキーの継続時間がどれかに合うときは、合わない定義は、自動で結び付けない（下の linkCharacterBuffs）。
  * 自動で判定できないもの（gcsim のキーの継続時間が決まっていない）を、ここに書く

@@ -14,7 +14,7 @@ import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEf
 import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../utils/rotationCalculator';
 import type { Stint, ReactionRowRef } from '../types/genshin';
-import { extractReactionRows, anchorReactionRows, reactionAnchorInput } from '../utils/gcsim/readReactions';
+import { extractReactionRows, anchorReactionRows, reactionLapInputs } from '../utils/gcsim/readReactions';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
 const DEFAULT_SEED = 1;
@@ -106,8 +106,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const align = alignActions(summary, result.actionRefs);
     // 反応の状態（月反応・星反応）は、CT待ちが無く、アクションの並びが合っているときだけ出す（実行する前は何も出さない）
     if (Object.keys(waits.byActionId).length === 0 && !align.mismatch) {
-      const { anchors, lapEndFrame } = reactionAnchorInput(align.pairs);
-      onReactions(anchorReactionRows(extractReactionRows(res.logs), anchors, lapEndFrame));
+      onReactions(anchorReactionRows(extractReactionRows(res.logs), reactionLapInputs(align.pairs)));
     } else {
       onReactions(null);
     }

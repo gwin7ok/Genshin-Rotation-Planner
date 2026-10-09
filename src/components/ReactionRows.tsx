@@ -11,6 +11,8 @@ interface ReactionRowsProps {
   pixelsPerSecond: number;
   totalDuration: number;
   timelineTicks: { absTime: number; isZero?: boolean }[];
+  /** ループの先頭の時刻（2 周目の行の再生位置への変換に使う） */
+  loopStartTime: number;
   onSeek: (time: number) => void;
   onTimelineClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
@@ -55,22 +57,37 @@ const KIND_INFO: Record<ReactionKind, { label: string; unit: string; barClass: s
   },
 };
 
-export const ReactionRows: React.FC<ReactionRowsProps> = ({ rows, pixelsPerSecond, totalDuration, timelineTicks, onSeek, onTimelineClick }) => {
-  const ordered = KIND_ORDER.map(k => rows.find(r => r.kind === k)).filter((r): r is ReactionRow => !!r && r.segments.length > 0);
+export const ReactionRows: React.FC<ReactionRowsProps> = (props) => {
+  const { rows } = props;
+  const lap1 = rows.filter(r => r.lap === 1);
+  const lap2 = rows.filter(r => r.lap === 2);
+  if (lap1.length === 0 && lap2.length === 0) return null;
+  return (
+    <>
+      {lap1.length > 0 && <ReactionArea {...props} lap={1} areaRows={lap1} />}
+      {lap2.length > 0 && <ReactionArea {...props} lap={2} areaRows={lap2} />}
+    </>
+  );
+};
+
+/** 1 周目・2 周目それぞれの表示エリア（スキルのストックの行と同じ考え方。2 周目は 1 周目の終わりの状態から続く） */
+const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: ReactionRow[] }> = ({ areaRows, lap, pixelsPerSecond, totalDuration, timelineTicks, loopStartTime, onSeek, onTimelineClick }) => {
+  const ordered = KIND_ORDER.map(k => areaRows.find(r => r.kind === k)).filter((r): r is ReactionRow => !!r && r.segments.length > 0);
   if (ordered.length === 0) return null;
+  const seekTo = (t: number) => onSeek(lap === 2 ? totalDuration + (t - loopStartTime) : t);
 
   return (
-    <div className="relative border-b border-slate-800 bg-slate-950/30" data-testid="reaction-rows">
+    <div className="relative border-b border-slate-800 bg-slate-950/30" data-testid={`reaction-rows-lap${lap}`}>
       <div className="flex">
         {/* 左の列（横スクロールしても見えるよう固定） */}
         <div className="w-[180px] shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
           <div className="h-6 px-2 flex items-center justify-between text-violet-300 text-[10px] font-bold border-b border-slate-800/60">
-            <span>🌀 反応</span>
+            <span>🌀 反応（{lap}周目）</span>
             <span className="text-[9px] text-slate-500 font-mono font-normal">gcsim の結果</span>
           </div>
           {ordered.map(row => (
             <div
-              key={`reaction_label_${row.kind}`}
+              key={`reaction_label_${lap}_${row.kind}`}
               className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 ${KIND_INFO[row.kind].labelClass}`}
               title={KIND_INFO[row.kind].help}
             >
@@ -84,7 +101,7 @@ export const ReactionRows: React.FC<ReactionRowsProps> = ({ rows, pixelsPerSecon
         <div className="relative flex-1 flex flex-col cursor-pointer" onClick={onTimelineClick}>
           {timelineTicks.map(t => (
             <div
-              key={`grid_reaction_${t.absTime}`}
+              key={`grid_reaction_${lap}_${t.absTime}`}
               className={`absolute top-0 bottom-0 border-l pointer-events-none z-0 ${t.isZero ? 'border-purple-400/70' : 'border-slate-800/40'}`}
               style={{ left: `${t.absTime * pixelsPerSecond}px` }}
             />
@@ -93,7 +110,7 @@ export const ReactionRows: React.FC<ReactionRowsProps> = ({ rows, pixelsPerSecon
           {ordered.map(row => {
             const info = KIND_INFO[row.kind];
             return (
-              <div key={`reaction_bar_${row.kind}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+              <div key={`reaction_bar_${lap}_${row.kind}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
                 {row.segments.map((sp, i) => {
                   if (sp.startTime >= totalDuration) return null;
                   const end = Math.min(totalDuration, sp.endTime);
@@ -103,14 +120,14 @@ export const ReactionRows: React.FC<ReactionRowsProps> = ({ rows, pixelsPerSecon
                   const countText = sp.count !== undefined ? `${sp.count}${info.unit ? info.unit : ''}` : `${dur.toFixed(1)}s`;
                   return (
                     <div
-                      key={`${row.kind}_${i}`}
+                      key={`${lap}_${row.kind}_${i}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onSeek(sp.startTime);
+                        seekTo(sp.startTime);
                       }}
                       style={{ left: `${startX}px`, width: `${width}px` }}
                       className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center justify-center px-1 border hover:brightness-125 cursor-pointer ${info.barClass}`}
-                      title={`【${info.label.replace(/^\S+\s/, '')}】${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n※ gcsim を実行した結果（1 周目）。編集すると、実行し直すまで位置のずれが残ることがあります（クリックで開始位置へシーク）`}
+                      title={`【${info.label.replace(/^\S+\s/, '')}】${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n※ gcsim を実行した結果（${lap}周目）。編集すると、実行し直すまで位置のずれが残ることがあります（クリックで開始位置へシーク）`}
                     >
                       <span className="truncate">{sp.count !== undefined && width < 60 ? sp.count : countText}</span>
                     </div>

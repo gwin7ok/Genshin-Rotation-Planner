@@ -2063,6 +2063,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 pixelsPerSecond={pixelsPerSecond}
                 totalDuration={totalDuration}
                 timelineTicks={timelineTicks}
+                loopStartTime={loopStartTime}
                 onSeek={onSeek}
                 onTimelineClick={handleTimelineClick}
               />

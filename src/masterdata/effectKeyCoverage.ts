@@ -17,6 +17,8 @@ export type UnlinkedReason =
   | 'hit-driven'
   /** 保留（ストックできるスキルなど、扱いが決まっていない） */
   | 'deferred'
+  /** 命ノ星座の効果。マスター側の命ノ星座の定義（constellationEffects）に結び付け済み（6-A2。D91・D92） */
+  | 'covered-by-master'
   /** 発動バフ（固有天賦）の書き戻しで扱う（対応表の範囲外。マスターの定義の gcsimKeys で結び付ける） */
   | 'covered-by-passive'
   /** 上のどれにも当てはまらないが、紐づけないと決めた（メモに理由） */
@@ -45,6 +47,7 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'grace-window': '猶予時間・短い窓（効果ではない）',
   'hit-driven': '命中などで更新され続ける内部状態',
   'deferred': '保留',
+  'covered-by-master': 'マスター側の命ノ星座の定義で扱う',
   'covered-by-passive': '発動バフ（固有天賦）として扱う',
   'decided-not-linked': 'gcsim は効果を出すが、紐づけず・バーも出さない',
   'not-runnable': 'gcsim で実行できない（登録しない）',

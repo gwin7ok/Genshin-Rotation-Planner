@@ -139,6 +139,22 @@ export function slotOfEntry(e: KeyCatalogEntry, kind: 'a' | 'c'): number | undef
 }
 
 /**
+ * スキル・爆発のファイル（skill.go・burst.go）で登録されているが、実際は命ノ星座の効果のキー。キー → 凸と役割（D92。2026-10-09）。
+ *   - main: その凸の定義の効果のキー（時間つきなら、別のバーになる）
+ *   - extra: 同じ効果の別のキー・付随する状態（別のバーにしない。gcsimExtraKeys）
+ */
+export const CONSTELLATION_KEYS_IN_ACTION_FILES: Record<string, { level: ConstellationLevel; role: 'main' | 'extra' }> = {
+  // 夜蘭 4 凸: HP 上限+10%（25 秒）。yelan-c4 と同じ効果の、ステータス変更側のキー
+  'yelanc4': { level: 4, role: 'extra' },
+  // 夜蘭 6 凸: 「権謀術数」状態（最大 20 秒。打破の矢）
+  'yelan_c6': { level: 6, role: 'main' },
+  // フリーナ 6 凸: 「万民のまなざし」（10 秒）
+  'center-of-attention': { level: 6, role: 'main' },
+  // 北斗 6 凸: 雷斫り継続中の雷元素耐性-15%（爆発の効果の間。短い更新のキーなので、バーにしない）
+  'beidouc6': { level: 6, role: 'extra' },
+};
+
+/**
  * 定義に対応付けないと確認したキー（固有天賦・命ノ星座のファイルで登録されているが、アプリの発動バフの定義にならないもの）。キー → 理由。
  * 新しい gcsim で増えたキーは、マスター生成のレポートの「未確認のキー」に出るので、ここに理由を書くか、規則を直す
  */
@@ -372,7 +388,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
     if (key) {
       const byLevel = new Map<number, KeyCatalogEntry[]>();
       for (const e of entries) {
-        const slotLevel = slotOfEntry(e, 'c');
+        const slotLevel = CONSTELLATION_KEYS_IN_ACTION_FILES[e.key]?.level ?? slotOfEntry(e, 'c');
         const m = slotLevel !== undefined ? [String(slotLevel), String(slotLevel)] : undefined;
         if (!m) {
           if (e.category === 'constellation' && e.kind === 'effect') report.constellationSkipped.noLevel++;
@@ -388,14 +404,18 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         // 内部の重複防止の間隔のキーは、定義に結び付けない（対象外。D90）
         const list = rawList.filter(e => !INTERNAL_INTERVAL_KEYS[e.key]);
         if (list.length === 0) continue;
-        const s = summarize(list);
+        // 別のファイルで登録された「同じ効果の別のキー」は、別のバーにせず、extra にする
+        const forcedExtra = list.filter(e => CONSTELLATION_KEYS_IN_ACTION_FILES[e.key]?.role === 'extra');
+        const mainList = list.filter(e => !forcedExtra.includes(e));
+        const s: Summary = mainList.length > 0 ? summarize(mainList) : { timing: 'conditional', gcsimTarget: true };
+        if (forcedExtra.length > 0) s.gcsimExtraKeys = [...(s.gcsimExtraKeys ?? []), ...forcedExtra.map(e => e.key)];
         const timed = s.timing === 'computed';
         if (!timed) {
           // 時間の無い効果（常時・条件つき・CT だけ）は、画面に出す価値のあるもの（ステータス・ダメージの増減、CT 短縮）だけを定義にする（6-A2。D91）
           const effectsOnly = list.filter(e => e.kind === 'effect');
           const text = char.constellations?.find(c => c.level === level)?.description ?? '';
           const worthy = list.some(e => NATURE_EXCEPTIONS[e.key]) || isDisplayWorthyNature(natureOfText(text));
-          const hasKeys = (s.gcsimKeys?.length ?? 0) > 0 || (s.gcsimCooldownKeys?.length ?? 0) > 0;
+          const hasKeys = (s.gcsimKeys?.length ?? 0) > 0 || (s.gcsimCooldownKeys?.length ?? 0) > 0 || (s.gcsimExtraKeys?.length ?? 0) > 0;
           if (!worthy || !hasKeys) {
             if (effectsOnly.some(e => e.permanent)) report.constellationSkipped.permanentOnly++;
             else if (effectsOnly.length > 0) report.constellationSkipped.unknownDuration++;

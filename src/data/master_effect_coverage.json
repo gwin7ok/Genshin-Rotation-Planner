@@ -1513,6 +1513,17 @@
       "observed": true
     },
     {
+      "id": "beidouc6",
+      "category": "burst",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "beidou",
+      "ownerName": "北斗",
+      "name": "北斗 元素爆発「雷斫り」: beidouc6",
+      "durationFrames": 90,
+      "observed": true
+    },
+    {
       "id": "collei-a4-modcheck",
       "category": "burst",
       "kind": "effect",
@@ -1597,6 +1608,17 @@
       "ownerName": "行秋",
       "name": "行秋 命ノ星座2「青空の虹」",
       "durationFrames": 240,
+      "observed": true
+    },
+    {
+      "id": "yelan_c6",
+      "category": "burst",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "yelan",
+      "ownerName": "夜蘭",
+      "name": "夜蘭 元素爆発「深謀玲瓏賽」: yelan_c6",
+      "durationFrames": 1200,
       "observed": true
     },
     {
@@ -5131,6 +5153,17 @@
       "observed": true
     },
     {
+      "id": "center-of-attention",
+      "category": "skill",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "furina",
+      "ownerName": "フリーナ",
+      "name": "フリーナ 元素スキル「サロン·ソリティア」: center of attention",
+      "durationFrames": 600,
+      "observed": true
+    },
+    {
       "id": "chongyun-c2",
       "category": "skill",
       "kind": "effect",
@@ -5213,6 +5246,17 @@
       "ownerKey": "yelan",
       "ownerName": "夜蘭",
       "name": "夜蘭 命ノ星座4「騙し取る者、移花接木」",
+      "durationFrames": 1500,
+      "observed": true
+    },
+    {
+      "id": "yelanc4",
+      "category": "skill",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "yelan",
+      "ownerName": "夜蘭",
+      "name": "夜蘭 元素スキル「絡み合う命の糸」: yelanc4",
       "durationFrames": 1500,
       "observed": true
     },
@@ -13498,7 +13542,7 @@
       "name": "「僕の歌を聴きたまえ—— さあ 愛の杯を掲げよう！」",
       "timing": "computed",
       "gcsimTarget": true,
-      "duration": 2.9
+      "duration": 10
     },
     {
       "id": "constellation:10000120-electro_c2",
@@ -14605,6 +14649,15 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000024-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000024-electro",
+      "ownerName": "北斗",
+      "name": "北斗の祓い",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000109-anemo_c6",
       "type": "constellation",
       "ownerId": "10000109-anemo",
@@ -14631,6 +14684,16 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 3
+    },
+    {
+      "id": "constellation:10000060-hydro_c6",
+      "type": "constellation",
+      "ownerId": "10000060-hydro",
+      "ownerName": "夜蘭",
+      "name": "勝ち得る者、独り勝ち",
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 20
     },
     {
       "id": "constellation:10000060-hydro_c4",
@@ -20269,6 +20332,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "beidouc6",
+      "targetId": "constellation:10000024-electro_c6",
+      "role": "extra",
+      "approval": "generated"
+    },
+    {
       "effectId": "bell",
       "targetId": "weapon:12402:wbuff_12402",
       "role": "effect",
@@ -20481,6 +20550,12 @@
     {
       "effectId": "celestialgift-4pc-holder-*",
       "targetId": "artifact:15045:abuff_15045",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "center-of-attention",
+      "targetId": "constellation:10000089-hydro_c6",
       "role": "effect",
       "approval": "generated"
     },
@@ -25513,6 +25588,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "yelan_c6",
+      "targetId": "constellation:10000060-hydro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "yelan-a1",
       "targetId": "talent:10000060-hydro_p1",
       "role": "effect",
@@ -25528,6 +25609,12 @@
       "effectId": "yelan-c4",
       "targetId": "constellation:10000060-hydro_c4",
       "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "yelanc4",
+      "targetId": "constellation:10000060-hydro_c4",
+      "role": "extra",
       "approval": "generated"
     },
     {

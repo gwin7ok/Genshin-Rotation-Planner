@@ -195,7 +195,11 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
       openCd.set(idx, [...(openCd.get(idx) ?? []), rec]);
     } else if (l.msg.endsWith('cooldown ready')) {
       const open = openCd.get(idx) ?? [];
-      const rec = open.shift();
+      // 終わりが予想どおり（開始 + 元の長さ。フリンズの嵐槍のように、元の長さを絶対のフレームで出す記録は、元の長さそのもの）の記録があれば、それと対応づける。
+      // 同じ種別で、別々に終わる 2 つの CT（フリンズのスキルと嵐槍。どちらも `skill` 種別で出る）を、先入れ先出しで取り違えないため。無ければ、一番古い記録（複数回分のスキル）
+      let k = open.findIndex(r => r.readyFrame === undefined && r.originalFrames !== undefined && (r.startFrame + r.originalFrames === l.frame || r.originalFrames === l.frame));
+      if (k < 0) k = 0;
+      const rec = open.splice(k, 1)[0];
       if (rec && rec.readyFrame === undefined) rec.readyFrame = l.frame;
       if (open.length === 0) openCd.delete(idx);
     } else if (l.msg.includes('forcefully')) {
@@ -217,8 +221,10 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
   const lastReady = new Map<string, number>();
   for (const rec of cooldowns) {
     const idx = `${rec.charIndex}:${rec.type}`;
-    rec.queueStartFrame = Math.max(rec.startFrame, lastReady.get(idx) ?? -Infinity);
-    if (rec.readyFrame !== undefined) lastReady.set(idx, rec.readyFrame);
+    const prev = lastReady.get(idx) ?? -Infinity;
+    // 前の記録より先に終わる記録は、同じキューではない（別々に終わる CT。フリンズの嵐槍など）ので、待ちは無い
+    rec.queueStartFrame = rec.readyFrame !== undefined && rec.readyFrame < prev ? rec.startFrame : Math.max(rec.startFrame, prev);
+    if (rec.readyFrame !== undefined) lastReady.set(idx, Math.max(prev, rec.readyFrame));
   }
 
   // ---- 3. 効果（辞書で引く） ----

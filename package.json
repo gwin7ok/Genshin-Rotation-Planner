@@ -26,6 +26,7 @@
     "link:effects": "node scripts/link-effect-by-duration.ts",
     "link:actions": "node scripts/link-actions.ts",
     "check:action-links": "node scripts/check-action-links.ts",
+    "check:cooldown-log": "node scripts/check-cooldown-log.ts",
     "coverage:links": "node scripts/coverage-links.ts",
     "check:effectkeys": "node scripts/build-effect-coverage.ts",
     "verify:effectkeys": "node scripts/build-effect-coverage.ts --check",

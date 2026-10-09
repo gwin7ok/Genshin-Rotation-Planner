@@ -498,7 +498,13 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   '10000123-pyro': [{
     action: 'e',
     keepEffectDuration: true,
-    mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', { frames: [], maxUses: 1, endsOnLast: true }, 'durin/skill.go: skillWindowDur = 6*60', { noBar: false, keepEffectBar: true }),
+    mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', {
+      frames: [{ total: 83, cancels: {attack:62,skill:53,burst:50,dash:46,jump:47,swap:48}, source: 'durin/skill.go: skillRecastWhiteFrames（受付の間の E = 白の再発動）' }],
+      framesByAction: { n: { total: 67, cancels: {attack:64,skill:48,burst:45,dash:42,jump:41,swap:43}, source: 'durin/skill.go: skillRecastBlackFrames（attack.go: 受付の間の通常攻撃 = 黒の再発動）' } },
+      actions: ['e', 'n'],
+      maxUses: 1,
+      endsOnLast: true,
+    }, 'durin/skill.go: skillWindowDur = 6*60（受付の間の E = skillRecastWhite、attack.go: 受付の間の N = skillRecastBlack。どちらも受付を消す）', { noBar: false, keepEffectBar: true, description: '再発動の受付（受付）。この間の元素スキル（E）は白、通常攻撃（N）は黒の再発動になり、CT を使わない。どちらを使っても受付は閉じる' }),
   }],
   // ディルック: E の後 4 秒の間の E が 2・3 段目（E のたびに 4 秒に更新。3 段目で閉じる）。CT は 1 段目で始まる（10 秒）。ヒットストップによる延長は含めない
   '10000016-pyro': [{

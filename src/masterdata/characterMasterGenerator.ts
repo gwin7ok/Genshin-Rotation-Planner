@@ -475,13 +475,13 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       frames: [{ total: 82, cancels: { attack: 65, charge: 76, skill: 69, burst: 67, dash: 67, jump: 66, swap: 65 }, source: 'skill.go:skillConvertFrames' }],
       maxUses: 1,
       endsOnLast: true,
-    }, 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く'),
+    }, 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く', { noBar: false, keepEffectBar: true }),
   }],
   // ドゥリン: スキルの受付（6 秒）の間の E が白／黒の再発動（受付を消費。どちらになるかでフレームが違い、未確認のため、E の通常のフレーム）
   '10000123-pyro': [{
     action: 'e',
     keepEffectDuration: true,
-    mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', { frames: [], maxUses: 1, endsOnLast: true }, 'durin/skill.go: skillWindowDur = 6*60'),
+    mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', { frames: [], maxUses: 1, endsOnLast: true }, 'durin/skill.go: skillWindowDur = 6*60', { noBar: false, keepEffectBar: true }),
   }],
   // ディルック: E の後 4 秒の間の E が 2・3 段目（E のたびに 4 秒に更新。3 段目で閉じる）。CT は 1 段目で始まる（10 秒）。ヒットストップによる延長は含めない
   '10000016-pyro': [{
@@ -495,7 +495,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       maxUses: 2,
       refreshFrames: [4 * 60, 4 * 60],
       endsOnLast: true,
-    }, 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）'),
+    }, 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）', { noBar: false, keepEffectBar: true }),
   }],
   // 千織（一回押しの E）: 傘の一振りの後（26f）から 78f の間の E が再発動（次のキャラへ強制交代。交代の遅れは 1f）。長押し E は対象外。窓の規則から移した
   '10000094-geo': [{
@@ -505,7 +505,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       frames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
       maxUses: 1,
       endsOnLast: true,
-    }, 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）'),
+    }, 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）', { noBar: false, keepEffectBar: true }),
   }],
   // 藍硯: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。一回押しでも長押しでも開く（長押しは、長押しの終わりから）。命中する前提。窓の規則から移した
   '10000108-anemo': [{
@@ -516,7 +516,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       maxUses: 1,
       endsOnLast: true,
       actions: ['e'],
-    }, 'lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings', { startAfterHold: true }),
+    }, 'lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings', { startAfterHold: true, noBar: false, keepEffectBar: true }),
   }],
   // ニィロウ: 剣舞（600f）。状態の間の E はステップ（3 段。CT なし）で、3 段目で剣舞が終わる（実行: 3 段目の 40f 後に tranquilityaura）
   '10000070-hydro': [stateMode('e', '剣舞', 0, 600, 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)、whirlingStepsFrames。3 段目で pirouette が終わる。交代で解除', {

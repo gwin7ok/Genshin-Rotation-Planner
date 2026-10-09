@@ -6595,7 +6595,7 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [
@@ -6631,7 +6631,8 @@
             ],
             "endsOnLast": true
           },
-          "source": "diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）"
+          "source": "diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）",
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -31790,7 +31791,7 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [
@@ -31803,7 +31804,8 @@
             "maxUses": 1,
             "endsOnLast": true
           },
-          "source": "chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）"
+          "source": "chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）",
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -36385,7 +36387,7 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [
@@ -36407,7 +36409,8 @@
             ]
           },
           "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
-          "startAfterHold": true
+          "startAfterHold": true,
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -36454,7 +36457,7 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [
@@ -36476,7 +36479,8 @@
             ]
           },
           "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
-          "startAfterHold": true
+          "startAfterHold": true,
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "holdEnd",
@@ -40727,14 +40731,15 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [],
             "maxUses": 1,
             "endsOnLast": true
           },
-          "source": "durin/skill.go: skillWindowDur = 6*60"
+          "source": "durin/skill.go: skillWindowDur = 6*60",
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -43254,7 +43259,7 @@
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "noBar": true,
+          "noBar": false,
           "noSynergy": true,
           "repress": {
             "frames": [
@@ -43275,7 +43280,8 @@
             "maxUses": 1,
             "endsOnLast": true
           },
-          "source": "prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く"
+          "source": "prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く",
+          "keepEffectBar": true
         },
         "cooldownStart": {
           "from": "motionStart",

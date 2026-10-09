@@ -166,6 +166,49 @@ export interface ModeEnder {
   cooldown: 'none' | 'start';
 }
 
+/**
+ * 効果時間の求め方（スキル・爆発の効果時間の書き戻し）
+ *   expiry … 最初のイベントの「終了予定 − 発生」（窓の中の延長 `extended` を含む）。状態・設置物・シールド・継続ダメージ
+ *   ended  … 最初のイベントの「実際の終了 − 発生」（分からなければ終了予定）。終了予定を持たず、条件で終わる状態（夜魂の状態など）
+ *   span   … 窓の中の最後のイベント − 最初のイベント。効果の間ずっと更新され続ける状態（神里綾人の爆発など）
+ */
+export type EffectDurationMode = 'expiry' | 'ended' | 'span';
+
+/**
+ * スキル・爆発の効果に対応する gcsim のキー（アクション定義に持つ。D95。旧: public/data/action_effect_keys.json ＋ actionEffectKeyOverrides.ts）。
+ * 作り方: 実行して集めた結果（中間データ）と、手で補う一覧を、マスター生成が取り込む（src/masterdata/actionGcsimLink.ts）。
+ */
+export interface ActionGcsimEffect {
+  /** true = 書き戻さない（手で補う一覧の '' ＝ アプリの値のまま） */
+  skip?: boolean;
+  /** 候補のキー（状態のキー / `construct:<名前>` / `shield:<名前>` / `damage:<ダメージの名前>`）。先頭から順。複数のときは、イベントがあったキーのうち、効果が最も長いものを使う */
+  keys: string[];
+  /** 効果時間の求め方（既定 expiry） */
+  mode?: EffectDurationMode;
+  /** 実行したキャラ自身のイベントだけを使う（夜魂の状態など、全員で同じキーを使うもの） */
+  self?: boolean;
+  /** 収集の結果: ok = キーあり / nokey = 効果の状態のキーが無い / unprobed = 収集できなかった / manual = 手で補う一覧 */
+  status?: 'ok' | 'nokey' | 'unprobed' | 'manual';
+}
+
+/** スキル・爆発に付随して繰り返し発生する継続効果（副次効果）。それぞれ別のバーにする */
+export interface ActionGcsimExtra {
+  /** gcsim のキー（状態のキー / `construct:<名前>` / `shield:<名前>` など。`*` を含められる） */
+  key: string;
+  /** ガントチャートに出す名前 */
+  label: string;
+  /** 実行したキャラ自身のイベントだけ使う */
+  self?: boolean;
+  /** each = added / refreshed のイベントごとに1本（既定）/ chain = 更新・延長が続く間を1本 */
+  mode?: 'each' | 'chain';
+}
+
+/** スキル・爆発に「含まれる」効果（別のバーにしない・書き戻しにも使わない。対応表では included として持つ） */
+export interface ActionGcsimIncluded {
+  key: string;
+  note: string;
+}
+
 export interface ActionDefinition {
   id: string;
   name: string;
@@ -182,6 +225,12 @@ export interface ActionDefinition {
    * 通常のスキルのCTを開始しない（startsSkillCooldown = false）。ガントチャートでは別の行に出す
    */
   cooldownPool?: 'special';
+  /** 効果時間に対応する gcsim のキー（スキル・爆発。D95）。無ければ、対応表に載っていない */
+  gcsimEffect?: ActionGcsimEffect;
+  /** 副次効果（D95） */
+  gcsimExtras?: ActionGcsimExtra[];
+  /** 含まれる効果（D95） */
+  gcsimIncluded?: ActionGcsimIncluded[];
   /** CT の回数（同時に溜められる回数。無ければ 1）。別枠のCT（cooldownPool）の特殊スキル（ファルカは 2）と、通常のスキル（クレー 2・魈 2・八重神子 3 など）。CT は順番に回復する（gcsim の cdQueue） */
   charges?: number;
   /**

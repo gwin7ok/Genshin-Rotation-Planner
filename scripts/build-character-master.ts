@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { generateCharacterMaster } from '../src/masterdata/characterMasterGenerator.ts';
 import { updateKeyMapFile, printKeyMapSummary, keyMapPath } from './write-key-map.ts';
-import { linkCharacters } from './link-buffs.ts';
+import { linkActions, linkCharacters } from './link-buffs.ts';
 
 /**
  * 効果継続時間が空のスキル・爆発について、gcsim の辞書（public/data/gcsim_key_catalog.json）にある「そのキャラのスキル / 爆発の、時間つきの効果」の候補を表示する。
@@ -44,6 +44,7 @@ const { characters, report, keyMap } = await generateCharacterMaster(p => {
 });
 
 linkCharacters(characters); // 発動バフと gcsim の辞書の結び付け（5-6）
+linkActions(characters); // スキル・爆発の効果と gcsim のキーの紐付け（中間データの取り込み。D95）
 fs.writeFileSync(outputPath, JSON.stringify(characters, null, 2) + '\n', 'utf-8');
 updateKeyMapFile({ characters: keyMap });
 

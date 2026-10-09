@@ -6,16 +6,9 @@
  * 間に起きたイベント（added / refreshed）ごとに、1本のバー（開始 = 発生、継続時間 = 終了予定 − 発生）にする。
  * キーは、ユーザーがゲーム内の説明（wiki）と照合して承認したものだけを載せる（命中のたびに更新される内部のキーを誤って拾わないため）。
  */
-export interface ActionEffectExtra {
-  /** gcsim のキー（状態のキー / `construct:<名前>` / `shield:<名前>` など） */
-  key: string;
-  /** ガントチャートに出す名前 */
-  label: string;
-  /** 実行したキャラ自身のイベントだけ使う */
-  self?: boolean;
-  /** each = added / refreshed のイベントごとに1本（既定）/ chain = 更新・延長が続く間（前のイベントの終了予定より前に次のイベントが起きる間）を1本 */
-  mode?: 'each' | 'chain';
-}
+import type { ActionGcsimExtra } from '../types/genshin.ts';
+
+export type ActionEffectExtra = ActionGcsimExtra;
 
 export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   // ---- 命中・反応由来の効果（2026-09-30 ユーザー決定: gcsim が返したときにバーで表示できる形で登録）----

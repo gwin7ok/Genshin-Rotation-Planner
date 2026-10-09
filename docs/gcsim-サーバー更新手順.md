@@ -49,12 +49,14 @@ npm run build:equipment    # 武器・聖遺物
 ```bash
 npm run probe:effects      # 全スキル・爆発を単独実行し、効果キーの表（action_effect_keys.json）を作り直す
 npm run link:effects       # 継続時間による紐づけ（action_effect_links_by_duration.json）
-npm run check:effectkeys   # 対応表（effect_key_coverage.json）と整合性の検査
+npm run link:actions       # 収集の結果と手で補う一覧を、マスターのアクション定義（gcsimEffect など）に取り込む（ネットワーク不要。D95）
+npm run coverage:links     # 紐付けの検査とレポートを 1 本に（check:action-links・check:effectkeys・coverage:master-effects。全体の文書 key-link-coverage.md を作る）
 npm run probe:skill-hits   # スキルの命中時刻の表（skill_hit_frames.json。祭礼の武器効果の計算に使う）
 npm run probe:queue-frames # スキル・爆発の「次の行動を受け付け始めるフレーム」（can_queue_after.json。待機の位置を gcsim に合わせる）
 ```
 - 以前の結果との差分（`git diff src/data/action_effect_*.json`）を見る。想定外の変化があれば、gcsim 側の挙動の変更を疑う。
-- `check:effectkeys` の「未検討」が出たら、新しいキー・新しいキャラ。`effectKeyDecisions.ts`・`actionEffectKeyOverrides.ts`・`actionEffectExtras.ts` に理由つきで登録する。
+- `coverage:links` の「未検討」（全体の文書 `key-link-coverage.md`）が出たら、新しいキー・新しいキャラ。決定の置き場は `src/masterdata/keyLinkDecisions.ts` の案内を見る（A: `effectKeyDecisions.ts`・`actionEffectKeyOverrides.ts`・`actionEffectExtras.ts` / B: `buffGcsimLink.ts` の表・`effectNature.ts`）。決めたら `npm run link:actions`（マスターへ取り込み）→ `coverage:links` で確認する。
+- **順序**: `probe:effects` → `link:effects`（gcsim を実行。中間データ）→ `link:actions`（取り込み）。`build:master` も最後に同じ取り込みを行う。
 - 登録済みの紐づけが今も動くかの確認（2026-09-30 に実施した検証）: 対応表の全 links について、対象のアクションを単独実行し、効果のイベントが出ることを確認する。命中・反応・被ダメージが要るものは出ないことがあるので、条件つきの順序（例: ニィロウの E×4、ドゥリンの E→E）で追加確認する。
 
 ### 6. 整合性の検査

@@ -1,5 +1,5 @@
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
-import { CharacterConfig } from '../types/genshin';
+import { ActionDefinition, CharacterConfig } from '../types/genshin';
 import { INITIAL_MASTER_DATABASE, DATABASE_VERSION, MASTER_WEAPONS, MASTER_ARTIFACTS } from '../data/databaseMaster';
 import { migrateLegacyCharacter } from './legacyMigration';
 import {
@@ -19,6 +19,10 @@ import {
 } from '../masterdata/equipmentMasterGenerator';
 
 import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs } from '../masterdata/buffGcsimLink';
+import { linkActionEffects, type ActionEffectKeyTable } from '../masterdata/actionGcsimLink';
+import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
+import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
+import { ACTION_EFFECT_INCLUDED } from '../masterdata/actionEffectIncluded';
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
 import { fetchRuntimeData } from './gcsim/runtimeData';
 
@@ -79,13 +83,39 @@ function fillCharacterReferences(chars: CharacterConfig[], masterChars: Characte
     if (!master) return c;
     const needsConstellations = !c.constellations && !!master.constellations;
     const needsGcsimKey = !c.source?.gcsimKey && !!master.source?.gcsimKey;
-    if (!needsConstellations && !needsGcsimKey) return c;
+    // スキル・爆発の gcsim の紐付け（gcsimEffect・gcsimExtras・gcsimIncluded）は、マスター由来で、ユーザーが編集する内容ではないので、
+    // ロック中・編集済みのキャラにも、毎回マスターの値（アクション定義 ID で突き合わせ）で上書きする（D95。gcsim の更新後も、ロック中のキャラに最新の紐付けが効く）
+    const links = syncActionLinks(c, master);
+    if (!needsConstellations && !needsGcsimKey && !links) return c;
     return {
       ...c,
+      ...(links ? { availableActions: links } : {}),
       ...(needsConstellations ? { constellations: master.constellations } : {}),
       ...(needsGcsimKey ? { source: { ...c.source, gcsimKey: master.source!.gcsimKey } } : {}),
     };
   });
+}
+
+const ACTION_LINK_FIELDS = ['gcsimEffect', 'gcsimExtras', 'gcsimIncluded'] as const;
+
+/** キャラのアクション定義の紐付けを、マスターの同じ ID のアクション定義の値にそろえる。変更が無ければ undefined */
+function syncActionLinks(c: CharacterConfig, master: CharacterConfig): ActionDefinition[] | undefined {
+  const masterActions = new Map((master.availableActions ?? []).map(a => [a.id, a]));
+  let changed = false;
+  const next = (c.availableActions ?? []).map(a => {
+    const m = masterActions.get(a.id);
+    if (!m) return a;
+    const same = ACTION_LINK_FIELDS.every(f => JSON.stringify(a[f]) === JSON.stringify(m[f]));
+    if (same) return a;
+    changed = true;
+    const copy: ActionDefinition = { ...a };
+    for (const f of ACTION_LINK_FIELDS) {
+      if (m[f] === undefined) delete copy[f];
+      else (copy as unknown as Record<string, unknown>)[f] = m[f];
+    }
+    return copy;
+  });
+  return changed ? next : undefined;
 }
 
 function mergeMasterWithProtected(
@@ -177,6 +207,9 @@ export async function syncCharactersMasterOnline(
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
   report.catalogCommit = catalogCommit;
   linkCharacterBuffs(latestChars, catalogIndex);
+  // スキル・爆発の紐付け: 中間データ（gcsim を実行して集めた結果）を取得して、アクション定義に取り込む（D95）
+  const actionTable = (await fetchRuntimeData<{ entries: ActionEffectKeyTable }>('action_effect_keys.json')).entries;
+  linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED });
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });

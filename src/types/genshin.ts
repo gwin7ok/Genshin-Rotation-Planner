@@ -88,6 +88,8 @@ export interface ActionMode {
     endsOnLast?: boolean;
     /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も羽月の輪） */
     actions?: string[];
+    /** アクション（定義 ID の末尾）ごとのフレーム。あれば frames より優先（ドゥリン: 受付の間の E は白・N は黒の再発動で、フレームが違う） */
+    framesByAction?: Record<string, ActionFrames>;
   };
   /** モードのバーを出さない（受付のような短い期間。効果バーは、モードを開くアクションの効果バーのまま） */
   noBar?: boolean;

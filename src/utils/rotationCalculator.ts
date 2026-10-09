@@ -529,8 +529,14 @@ export function calculateRotation(
       // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
       if (modeEnder?.ender.frames) frames = modeEnder.ender.frames;
       if (modeRepress) {
-        const rpFrames = modeRepress.window.def.repress!.frames;
-        if (rpFrames.length) frames = rpFrames[Math.min(modeRepress.index, rpFrames.length - 1)];
+        const rp = modeRepress.window.def.repress!;
+        const rpFrames = rp.frames;
+        // アクションごとのフレーム（ドゥリン: 受付の間の N は黒の再発動）。通常攻撃の段は 1 段目に戻る
+        const byAction = rp.framesByAction?.[act.actionTypeId.slice(char.id.length + 1)];
+        if (byAction) {
+          frames = byAction;
+          if (act.type === 'normal') normalStreak = 0;
+        } else if (rpFrames.length) frames = rpFrames[Math.min(modeRepress.index, rpFrames.length - 1)];
       }
       if (modeKind && burstModeDef && mw) {
         if (modeKind === 'punch') {

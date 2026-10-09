@@ -5,15 +5,13 @@ import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '.
 import { runWithSacrificialSeed, type SacrificialSearchInfo } from '../utils/gcsim/sacrificialSeed';
 import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
 import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
-import { fetchRuntimeData } from '../utils/gcsim/runtimeData';
 import { mapCtWaitsToActions, type CtWaitMarks } from '../utils/gcsim/mapCtWaits';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
 import { applyPassiveTriggers, applyCharacterLinkedEffects } from '../utils/gcsim/applyBuffEffects';
 import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
 import type { TriggerableBuffDefinition } from '../utils/buffUtils';
-import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult, type ActionEffectKeyTable } from '../utils/gcsim/applyGcsimResult';
-import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
-import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
+import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult } from '../utils/gcsim/applyGcsimResult';
+import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../utils/rotationCalculator';
 import type { Stint } from '../types/genshin';
 
@@ -39,12 +37,14 @@ interface GcsimConfigDialogProps {
   calculated: CalculatedRotation;
   /** キャラ ID → 発動できる発動バフの定義（gcsim のキーとの対応付け用） */
   buffsByCharacter: Record<string, TriggerableBuffDefinition[]>;
+  /** スキル・爆発の効果と gcsim のキーの紐付け（アクション定義の gcsimEffect・gcsimExtras から作る。D95） */
+  actionLinks: ActionLinkTables;
   /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
   onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, stints, calculated, buffsByCharacter, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, stints, calculated, buffsByCharacter, actionLinks, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -52,7 +52,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
   const [running, setRunning] = useState(false);
   const [applied, setApplied] = useState(false);
   const [runOutcome, setRunOutcome] = useState<
-    | { status: 'ok'; summary: GcsimLogSummary; seed: number; sacrificial?: SacrificialSearchInfo; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult; effectTable: ActionEffectKeyTable }
+    | { status: 'ok'; summary: GcsimLogSummary; seed: number; sacrificial?: SacrificialSearchInfo; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult }
     /** 実行前のアプリのCT違反があるため、gcsim を実行しなかった（D21-1） */
     | { status: 'blocked' }
     | { status: 'error' | 'unreachable'; message: string }
@@ -94,14 +94,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     const catalog = await loadKeyCatalog();
-    const effectTable = (await fetchRuntimeData<{ entries: ActionEffectKeyTable }>('action_effect_keys.json')).entries;
     const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
     setRunning(false);
     // gcsim でCT待ちが生じたら、結果は反映せず、該当アクションに違反マークを付ける（D21-2）
     const waits = mapCtWaitsToActions(summary, result.actionRefs);
     onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
     setApplied(false);
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs), effectTable });
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs) });
   };
   const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');
@@ -282,8 +281,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   if (b.id.includes(`_${a.id}_`)) effectiveEffects[a.id] = b.duration;
                 }
               }
-              const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, runOutcome.effectTable, ACTION_EFFECT_KEY_OVERRIDES, effectiveEffects);
-              const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, ACTION_EFFECT_EXTRAS);
+              const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, actionLinks.effects, effectiveEffects);
+              const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, actionLinks.extras);
               const passives = applyPassiveTriggers(extras.stints, runOutcome.align.pairs, runOutcome.summary, result.members, buffsByCharacter, result.swapDelayFrames);
               const charEffects = applyCharacterLinkedEffects(passives.stints, runOutcome.align.pairs, runOutcome.summary, result.members, CHARACTER_LINKED_EFFECTS, result.swapDelayFrames);
               const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length + passives.changes.length + charEffects.changes.length;

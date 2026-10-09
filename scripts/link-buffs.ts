@@ -5,6 +5,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs, type BuffLinkReport } from '../src/masterdata/buffGcsimLink.ts';
+import { linkActionEffects, type ActionEffectKeyTable } from '../src/masterdata/actionGcsimLink.ts';
+import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
+import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
+import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import type { CharacterConfig } from '../src/types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../src/types/database.ts';
 
@@ -37,6 +41,22 @@ export function linkCharacters(characters: CharacterConfig[]): void {
   for (const k of report.unreviewedKeys) console.log(`    ${k}`);
   const s = report.constellationSkipped;
   console.log(`  命ノ星座の効果の定義を追加: ${report.added.length} 件（永続のみで定義にしなかった凸 ${s.permanentOnly}、時間が分からず定義にしなかった凸 ${s.unknownDuration}、凸の番号が分からないキー ${s.noLevel}）`);
+}
+
+/**
+ * スキル・爆発の効果と gcsim のキーの紐付けを、アクション定義に取り込む（D95）。
+ * 中間データ public/data/action_effect_keys.json（npm run probe:effects → npm run link:effects で作る）と、手で補う一覧を読む。無ければ取り込まない
+ */
+export function linkActions(characters: CharacterConfig[]): void {
+  const tablePath = path.join(process.cwd(), 'public/data/action_effect_keys.json');
+  if (!fs.existsSync(tablePath)) {
+    console.log('（中間データ public/data/action_effect_keys.json が無いため、スキル・爆発の紐付けの取り込みは行っていません。npm run probe:effects で作ってください）');
+    return;
+  }
+  const table = (JSON.parse(fs.readFileSync(tablePath, 'utf-8')) as { entries: ActionEffectKeyTable }).entries;
+  const report = linkActionEffects(characters, { table, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED });
+  console.log(`スキル・爆発の紐付けの取り込み: 本体 ${report.effects} 件・副次効果 ${report.extras} 件・含まれる効果 ${report.included} 件`);
+  if (report.unknownDefIds.length > 0) console.log(`  入力にあるが、マスターのアクション定義に無い ID: ${report.unknownDefIds.length} 件（${report.unknownDefIds.slice(0, 8).join(', ')}${report.unknownDefIds.length > 8 ? ' …' : ''}）`);
 }
 
 /** 武器・聖遺物の発動バフを結び付ける（weapons / artifacts を書き換える） */

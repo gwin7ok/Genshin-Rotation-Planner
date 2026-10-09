@@ -201,6 +201,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -231,6 +235,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Soumetsu (Cutting)"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -511,6 +521,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -541,6 +555,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.633
+        },
+        "gcsimEffect": {
+          "keys": [
+            "jean-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -810,6 +830,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.483
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -828,6 +852,10 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.35
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -857,6 +885,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "amcburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -1137,6 +1171,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.283
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelercryo-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -1164,6 +1204,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -1439,6 +1483,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.417
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -1466,6 +1514,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerdendro-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -1733,6 +1787,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [
+            "abundance-amulet"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -1763,6 +1823,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerelectroburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -2020,6 +2086,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:TravellerSkill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -2049,6 +2121,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:TravellerBurst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -2317,6 +2395,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.4
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -2346,6 +2428,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -2375,6 +2461,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.933
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -2405,6 +2495,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 6.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -2433,6 +2527,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -2677,6 +2775,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -2708,6 +2814,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.8
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerpyro-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -2735,6 +2847,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -3062,6 +3178,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.283
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -3092,6 +3212,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.9
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -3123,6 +3247,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.883
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lisaburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -3382,6 +3512,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.483
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -3400,6 +3534,10 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.35
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -3429,6 +3567,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "amcburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -3747,6 +3891,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.283
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelercryo-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -3774,6 +3924,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -4049,6 +4203,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.417
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -4076,6 +4234,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerdendro-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -4342,6 +4506,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [
+            "abundance-amulet"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -4371,6 +4541,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerelectroburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -4629,6 +4805,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:TravellerSkill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -4659,6 +4841,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:TravellerBurst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -4925,6 +5113,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.4
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -4954,6 +5146,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -4983,6 +5179,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.933
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -5013,6 +5213,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 6.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -5043,6 +5247,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -5325,6 +5533,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -5356,6 +5572,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.8
+        },
+        "gcsimEffect": {
+          "keys": [
+            "travelerpyro-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -5383,6 +5605,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -5719,6 +5945,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.05
+        },
+        "gcsimEffect": {
+          "keys": [
+            "barbara-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -5748,6 +5980,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -6051,6 +6287,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.417
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -6081,6 +6321,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.8
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kaeya-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -6390,6 +6636,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "diluc-e-window"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -6420,6 +6672,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [
+            "diluc-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -6729,6 +6987,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.5
+        },
+        "gcsimEffect": {
+          "keys": [
+            "razor-sigil"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -6758,6 +7022,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.867
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -6798,6 +7066,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "razor-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -7098,6 +7372,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.083
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -7128,6 +7406,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.933
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Fiery Rain"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -7427,6 +7711,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.35
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -7452,6 +7740,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.567
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -7480,6 +7772,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.35
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Wind's Grand Ode"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -7807,6 +8105,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.217
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xianglingguoba"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -7833,6 +8137,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xianglingburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -8116,6 +8426,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.067
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -8146,6 +8460,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "beidouburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -8421,6 +8741,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.167
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xingqiu-orbital"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -8451,6 +8777,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xingqiuburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -8771,6 +9103,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -8810,6 +9146,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.483
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xiaoburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -9054,6 +9396,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:NingSkill"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -9082,6 +9430,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -9348,6 +9700,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -9378,6 +9734,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.15
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kleeq"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -9671,6 +10033,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.367
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:ZhongliSkill"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -9699,6 +10067,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.783
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Zhongli Skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -9728,6 +10102,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -9962,6 +10340,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "oz-active"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -9980,6 +10364,12 @@
             "jump": 5
           },
           "source": "skill.go:skillRecastFrames"
+        },
+        "gcsimEffect": {
+          "keys": [
+            "oz-active"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -10010,6 +10400,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "oz-active"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -10318,6 +10714,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -10346,6 +10746,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.717
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -10375,6 +10779,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.567
+        },
+        "gcsimEffect": {
+          "keys": [
+            "bennettburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -10706,6 +11116,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [
+            "tartagliamelee"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -10735,6 +11151,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "riptide"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -11012,6 +11434,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.1
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Noelle Skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -11044,6 +11472,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "noelle-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -11350,6 +11784,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "qiqi-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -11380,6 +11820,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "qiqi-talisman"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -11672,6 +12118,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.567
+        },
+        "gcsimEffect": {
+          "keys": [
+            "chongyunfield"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -11700,6 +12152,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -11977,6 +12433,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.167
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -12007,7 +12467,26 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "ganyuburst"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "ganyu-burst-mark",
+            "label": "印（降衆天華）",
+            "mode": "chain"
+          }
+        ],
+        "gcsimIncluded": [
+          {
+            "key": "ganyu-c4",
+            "note": "命ノ星座4「西狩」。領域内の敵への氷ダメージ増"
+          }
+        ]
       },
       {
         "id": "10000037-cryo_dash",
@@ -12340,6 +12819,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:AlbedoSkill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -12368,6 +12853,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.233
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -12651,6 +13140,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.083
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Icy Paws (Shield)"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -12682,6 +13177,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.483
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Icy Paws (Shield)"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -12711,6 +13212,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.683
+        },
+        "gcsimEffect": {
+          "keys": [
+            "diona-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -12969,6 +13476,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.4
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Mirror Reflection of Doom (Tick)"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -13000,7 +13513,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "mona-bubble"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "mona-omen",
+            "note": "星命定軌（敵の被ダメージ増）。本体の持続は mona-bubble"
+          }
+        ]
       },
       {
         "id": "10000041-hydro_dash",
@@ -13383,6 +13908,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [
+            "keqingstiletto"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -13411,6 +13942,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.867
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -13747,6 +14282,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.15
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -13778,6 +14317,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sucroseburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -14072,6 +14617,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.217
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Xinyan Skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -14099,6 +14650,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Riff Revolution (DoT)"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -14429,6 +14986,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -14457,6 +15018,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "rosariaburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -14813,7 +15380,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "paramita"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "blood-blossom",
+            "label": "血梅香（敵に付く継続ダメージ）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000046-pyro_q",
@@ -14841,6 +15421,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.033
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -15160,6 +15744,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.133
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -15186,6 +15774,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.517
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -15216,6 +15808,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kazuha-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -15504,6 +16102,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.467
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yanfei-seal"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -15535,6 +16139,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yanfei-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -15799,6 +16409,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yoimiyaskill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -15829,6 +16445,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "aurous-blaze"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16101,6 +16723,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.15
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Thoma Skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16131,6 +16759,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "thoma-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16423,6 +17057,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
+        },
+        "gcsimEffect": {
+          "keys": [
+            "eula-grimheart-duration"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16454,7 +17094,23 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.767
-        }
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
+        },
+        "gcsimExtras": [
+          {
+            "key": "eula-icewhirl-shred-cryo",
+            "label": "氷元素耐性ダウン（敵）",
+            "mode": "chain"
+          },
+          {
+            "key": "eula-icewhirl-shred-phys",
+            "label": "物理耐性ダウン（敵）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000051-cryo_q",
@@ -16484,6 +17140,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.617
+        },
+        "gcsimEffect": {
+          "keys": [
+            "eula-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16790,6 +17452,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.1
+        },
+        "gcsimEffect": {
+          "keys": [
+            "raiden-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -16830,6 +17498,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "raidenburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17061,6 +17735,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -17091,7 +17769,11 @@
           "delay": 0.833
         },
         "cooldownPerHold": 0.5,
-        "holdInFrames": 10
+        "holdInFrames": 10,
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
+        }
       },
       {
         "id": "10000053-anemo_e_shorthold",
@@ -17115,6 +17797,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.5
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -17143,6 +17829,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Muji-Muji Daruma"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -17375,6 +18067,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kokomiskill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17416,6 +18114,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.767
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kokomiburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17670,6 +18374,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.533
+        },
+        "gcsimEffect": {
+          "keys": [
+            "gorou-e-warbanner"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17700,6 +18410,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "gorou-q-glory"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17956,6 +18672,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.117
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sara-e-cover"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -17986,6 +18708,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.783
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sara-attack-buff"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -18286,6 +19014,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [
+            "construct:IttoSkill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -18324,6 +19058,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "itto-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -18611,6 +19351,11 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
+        },
+        "gcsimEffect": {
+          "skip": true,
+          "keys": [],
+          "status": "manual"
         }
       },
       {
@@ -18642,6 +19387,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -18977,6 +19726,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -19006,6 +19759,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -19253,6 +20010,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.55
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -19282,6 +20043,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yelanburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -19564,6 +20331,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.2
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Shield of Safe Transport"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -19597,7 +20370,13 @@
           "delay": 0.233
         },
         "cooldownPerHold": 0.4,
-        "holdInFrames": 10
+        "holdInFrames": 10,
+        "gcsimEffect": {
+          "keys": [
+            "shield:Shield of Safe Transport"
+          ],
+          "status": "ok"
+        }
       },
       {
         "id": "10000061-dendro_e_shorthold",
@@ -19626,6 +20405,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.45
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Shield of Safe Transport"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -19656,6 +20441,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kirara-cardamoms-expired"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -19894,6 +20685,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [
+            "rushingice"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -19924,6 +20721,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -20180,6 +20981,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.033
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shenhe-quill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -20212,6 +21019,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.533
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shenhe-quill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -20243,7 +21056,25 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shenheburst"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "shenhe-burst-shred-cryo",
+            "label": "氷元素耐性ダウン（敵）",
+            "mode": "chain"
+          },
+          {
+            "key": "shenhe-burst-shred-phys",
+            "label": "物理耐性ダウン（敵）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000063-cryo_dash",
@@ -20554,6 +21385,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -20583,6 +21418,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yunjin-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -20853,6 +21694,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.117
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kuki-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -20882,6 +21729,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Gyoei Narukami Kariyama Rite"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -21196,6 +22049,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "soukaikanka"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -21226,6 +22085,13 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "ayato-burst"
+          ],
+          "mode": "span",
+          "status": "ok"
         }
       },
       {
@@ -21486,6 +22352,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [
+            "collei-skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -21514,6 +22386,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "collei-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -21781,6 +22659,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -21811,6 +22693,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Alcazarzaray's Exactitude: Connector DMG"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -22051,6 +22939,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.217
+        },
+        "gcsimEffect": {
+          "keys": [
+            "vijnanasuffusion"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -22081,6 +22975,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -22292,6 +23190,12 @@
               "source": "attack.go:attackFrames[2]"
             }
           }
+        ],
+        "gcsimExtras": [
+          {
+            "key": "lunarprayer",
+            "label": "月の祈り"
+          }
         ]
       },
       {
@@ -22387,7 +23291,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "pirouette"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "tranquilityaura",
+            "label": "静謐の光環"
+          }
+        ]
       },
       {
         "id": "10000070-hydro_q",
@@ -22416,6 +23332,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lingeringaeon"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -22760,6 +23682,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.283
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -22799,6 +23725,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "cyno-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -23108,6 +24040,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -23136,6 +24072,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 1.483
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -23166,7 +24106,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "candace-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "candace-q-dmg",
+            "note": "爆発中の通常攻撃ダメージ加算"
+          }
+        ]
       },
       {
         "id": "10000072-hydro_dash",
@@ -23427,6 +24379,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nahida-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -23459,6 +24417,12 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.5
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nahida-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -23485,7 +24449,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nahida-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "nahida-q-within",
+            "label": "領域内（心景幻成）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000073-dendro_dash",
@@ -23748,6 +24725,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Curtain of Slumber (Shield)"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -23779,6 +24762,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "laylaburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -24062,6 +25051,12 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "windfavored-state"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -24092,6 +25087,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -24356,6 +25355,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "faruzan-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -24388,7 +25393,24 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "faruzan-q-dmg-bonus"
+          ],
+          "mode": "span",
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "faruzan-q-dmg-bonus",
+            "label": "祈風の恵み（風元素ダメージアップ）"
+          },
+          {
+            "key": "faruzan-q-shred",
+            "label": "詭風の禍つ（風元素耐性ダウン）"
+          }
+        ]
       },
       {
         "id": "10000076-anemo_dash",
@@ -24643,6 +25665,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.25
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yuegui"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -24673,6 +25701,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "yaoyaoburst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -25002,6 +26036,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.25
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -25032,6 +26070,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -25062,6 +26104,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -25410,7 +26456,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "dehya-field-status"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "dehya-redmanes-blood",
+            "label": "紅鬃の血（自己ダメージ）"
+          }
+        ]
       },
       {
         "id": "10000079-pyro_q",
@@ -25486,6 +26544,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "dehya-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -25804,6 +26868,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
+        },
+        "gcsimEffect": {
+          "keys": [
+            "soulwind"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -25835,6 +26905,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.2
+        },
+        "gcsimEffect": {
+          "keys": [
+            "soulwind"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -25863,6 +26939,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "eagleplume"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -26142,6 +27224,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.55
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -26173,7 +27259,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "kaveh-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "kaveh-q-dmg-bonus",
+            "label": "ダメージアップ（退場で終了）"
+          }
+        ]
       },
       {
         "id": "10000081-dendro_dash",
@@ -26462,6 +27560,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -26492,6 +27594,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Baizhu Seamless shield"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -26795,6 +27903,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.433
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -26826,7 +27938,11 @@
           "from": "holdEnd",
           "delay": 0.8
         },
-        "holdInFrames": 2.5
+        "holdInFrames": 2.5,
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
+        }
       },
       {
         "id": "10000083-anemo_q",
@@ -26857,6 +27973,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lynette-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -27119,6 +28241,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.25
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -27151,7 +28277,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lyney-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "lyney-grinmalkinhat",
+            "label": "ファニーハット（帽子の召喚物）"
+          }
+        ]
       },
       {
         "id": "10000084-pyro_dash",
@@ -27467,6 +28605,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
+        },
+        "gcsimEffect": {
+          "keys": [
+            "freminet-pers-time"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -27508,6 +28652,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "freminet-stalking"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -27844,6 +28994,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "wriothesley-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -27869,6 +29025,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -28124,6 +29284,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -28154,6 +29318,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -28434,6 +29602,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.483
+        },
+        "gcsimEffect": {
+          "keys": [
+            "charlotte-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -28466,6 +29640,12 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 1.817
+        },
+        "gcsimEffect": {
+          "keys": [
+            "charlotte-hold-e"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -28498,6 +29678,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Still Photo: Kamera"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -28804,6 +29990,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.167
+        },
+        "gcsimEffect": {
+          "keys": [
+            "furina-skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -28836,7 +30028,23 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "furina-burst"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "furina-burst-damage-buff",
+            "note": "熱狂による与ダメージ増"
+          },
+          {
+            "key": "furina-burst-heal-buff",
+            "note": "熱狂による回復量増"
+          }
+        ]
       },
       {
         "id": "10000089-hydro_dash",
@@ -29105,6 +30313,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [
+            "chev-skill-heal"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -29136,6 +30350,12 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.217
+        },
+        "gcsimEffect": {
+          "keys": [
+            "chev-skill-heal"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -29166,6 +30386,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -29461,6 +30685,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.183
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -29492,6 +30720,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "navia-artillery"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -29770,6 +31004,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.067
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -29811,6 +31049,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "gaming-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -30193,6 +31437,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "cloud-transmogrification"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -30225,7 +31475,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xianyun-burst"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "xianyun-airborne-buff",
+            "label": "滞空の強化（ジャンプ力アップ）"
+          }
+        ]
       },
       {
         "id": "10000093-anemo_dash",
@@ -30546,6 +31808,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -30574,6 +31840,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -30819,6 +32089,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sigewinne-skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -30849,6 +32125,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "damage:Super Saturated Syringing"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -31210,7 +32492,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "directive"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "masque-of-the-red-death",
+            "note": "通常攻撃の強化（血の債務の状態に依存）"
+          }
+        ]
       },
       {
         "id": "10000096-pyro_q",
@@ -31239,6 +32533,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -31498,6 +32796,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.167
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -31532,6 +32834,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sethos-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -31905,6 +33213,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.1
+        },
+        "gcsimEffect": {
+          "keys": [
+            "clorinde-night-watch"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -31931,6 +33245,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -32234,6 +33552,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lumidouce-case"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -32265,7 +33589,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lumidouce-case"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "emilie-burst-mark",
+            "label": "印（アロマティック・アナライズ）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000099-dendro_dash",
@@ -32658,6 +33995,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -32686,6 +34031,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "ajaw"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -32956,7 +34307,19 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "mualani-surfing"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "marked-as-prey",
+            "label": "獲物の印（敵）"
+          }
+        ]
       },
       {
         "id": "10000102-hydro_q",
@@ -32986,6 +34349,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -33254,7 +34621,20 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "xilonen-a4"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "xilonen-e-shred-*",
+            "label": "耐性ダウン（敵）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000103-geo_q",
@@ -33284,6 +34664,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -33596,6 +34980,14 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -33626,6 +35018,11 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "skip": true,
+          "keys": [],
+          "status": "manual"
         }
       },
       {
@@ -33857,6 +35254,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -33886,6 +35287,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "supersonic-oculus"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -34224,6 +35631,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -34251,6 +35666,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -34271,6 +35694,10 @@
             "jump": 13
           },
           "source": "skill.go:skillRecastFramesToBike"
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "unprobed"
         }
       },
       {
@@ -34291,6 +35718,10 @@
             "swap": 24
           },
           "source": "skill.go:skillRecastFramesToRing"
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "unprobed"
         }
       },
       {
@@ -34333,6 +35764,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "mavuika-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -34595,6 +36032,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "opal-fire-state"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -34625,6 +36068,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -34965,6 +36412,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.067
+        },
+        "gcsimEffect": {
+          "keys": [
+            "shield:Swallow-Wisp Pinion Dance (Shield)"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -35029,7 +36482,13 @@
           "from": "holdEnd",
           "delay": 0.067
         },
-        "holdInFrames": 10.167
+        "holdInFrames": 10.167,
+        "gcsimEffect": {
+          "keys": [
+            "shield:Swallow-Wisp Pinion Dance (Shield)"
+          ],
+          "status": "manual"
+        }
       },
       {
         "id": "10000108-anemo_q",
@@ -35057,6 +36516,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -35334,7 +36797,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "dreamdrifter-state"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "mizuki-swirl-buff",
+            "note": "スキル中の拡散反応ダメージ増"
+          }
+        ]
       },
       {
         "id": "10000109-anemo_q",
@@ -35366,6 +36841,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "mizuki-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -35632,6 +37113,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "fast-skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -35663,7 +37150,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "iansan-burst"
+          ],
+          "status": "ok"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "iansan-burst-buff",
+            "note": "爆発中の攻撃力増"
+          }
+        ]
       },
       {
         "id": "10000110-electro_dash",
@@ -36021,6 +37520,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "follow-up"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -36057,6 +37562,14 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -36088,6 +37601,10 @@
           "inWindow": 1,
           "outOfWindow": 18,
           "checkInWindow": true
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -36383,6 +37900,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.367
+        },
+        "gcsimEffect": {
+          "keys": [
+            "escoffier-skill"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -36402,6 +37925,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.367
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "unprobed"
         }
       },
       {
@@ -36428,6 +37955,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -36707,6 +38238,14 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
         }
       },
       {
@@ -36737,6 +38276,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -36996,6 +38539,12 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "seven-phase-flash"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -37022,6 +38571,11 @@
         "cooldownStart": {
           "from": "holdEnd",
           "delay": 0.3
+        },
+        "gcsimEffect": {
+          "skip": true,
+          "keys": [],
+          "status": "manual"
         }
       },
       {
@@ -37052,7 +38606,17 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
+        },
+        "gcsimIncluded": [
+          {
+            "key": "skirk-burst-extinction-dmg",
+            "note": "爆発中のダメージ加算"
+          }
+        ]
       },
       {
         "id": "10000114-cryo_dash",
@@ -37319,6 +38883,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.383
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -37350,6 +38918,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "dahlia-favonian-favor"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -37610,6 +39184,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "birgitta"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -37639,6 +39219,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "birgitta"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -37883,7 +39469,25 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.217
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lauma-frostgrove-sanctuary"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "lauma-skill-shred-dendro",
+            "label": "草元素耐性ダウン（敵）",
+            "mode": "chain"
+          },
+          {
+            "key": "lauma-skill-shred-hydro",
+            "label": "水元素耐性ダウン（敵）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000119-dendro_q",
@@ -37914,7 +39518,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "lauma-pale-hymn-burst"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "lauma-pale-hymn-moonsong",
+            "label": "蒼白の賛歌・月の歌"
+          }
+        ]
       },
       {
         "id": "10000119-dendro_dash",
@@ -38240,7 +39856,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.317
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "manifest-flame"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "thunderous-symphony",
+            "label": "雷鳴の交響"
+          }
+        ]
       },
       {
         "id": "10000120-electro_e_spearstorm",
@@ -38291,6 +39919,12 @@
             }
           },
           "source": "flins/skill.go: spearStorm の AddStatus(thunderousSymphonyKey, 6*60, true)。flins/burst.go: thunderousSymphony は DeleteStatus(thunderousSymphonyKey)（1 回で閉じる）"
+        },
+        "gcsimEffect": {
+          "keys": [
+            "manifest-flame"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -38320,6 +39954,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -38353,6 +39991,10 @@
           "inWindow": 0,
           "outOfWindow": 20,
           "checkInWindow": false
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -38607,6 +40249,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.217
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -38639,7 +40285,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "aino-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "aino-burst-mark",
+            "label": "印（お水ひえひえ装置）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000121-hydro_dash",
@@ -39006,6 +40665,12 @@
               "source": "attack.go:attackFrames[3]"
             }
           }
+        ],
+        "gcsimExtras": [
+          {
+            "key": "denial-of-darkness",
+            "label": "黒の姿（暗黒の否認）"
+          }
         ]
       },
       {
@@ -39074,7 +40739,19 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "durin-essential-transformation"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "confirmation-of-purity",
+            "label": "白の姿（純粋の確認）"
+          }
+        ]
       },
       {
         "id": "10000123-pyro_q",
@@ -39104,6 +40781,13 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "durin-burst-white",
+            "durin-burst-black"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -39354,7 +41038,19 @@
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "jahoda-shadow-pursuit"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "jahoda-meowball",
+            "label": "猫玉（フラスコ排出）"
+          }
+        ]
       },
       {
         "id": "10000124-anemo_q",
@@ -39385,6 +41081,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.017
+        },
+        "gcsimEffect": {
+          "keys": [
+            "jahoda-burst-dot"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -39625,7 +41327,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.333
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "columbina-skill"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "columbina-gravity",
+            "label": "重力（月の反応）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000125-hydro_q",
@@ -39656,7 +41371,20 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
-        }
+        },
+        "gcsimEffect": {
+          "keys": [
+            "columbina-q"
+          ],
+          "status": "ok"
+        },
+        "gcsimExtras": [
+          {
+            "key": "columbina-q-buff",
+            "label": "反応ボーナス（爆発中）",
+            "mode": "chain"
+          }
+        ]
       },
       {
         "id": "10000125-hydro_dash",
@@ -40080,6 +41808,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.4
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -40110,6 +41842,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.55
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -40140,6 +41876,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "haunted-night-oriole-song"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -40486,6 +42228,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.65
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sturm-und-drang"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -40577,6 +42325,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.65
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sturm-und-drang"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -40610,6 +42364,11 @@
         "dataSource": {
           "cooldown": "gcsim: varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)",
           "effectDuration": "gcsim: varka/skill.go: SetCD(action.ActionSpecialSkill, fourWindsCD = 11*60)。スキルを使うと全チャージ分のCTが始まり（convertToFourWinds のとき）、スキルの後 12 秒（skillKey）の間だけ使える。SetNumCharges(ActionSpecialSkill, 2)"
+        },
+        "gcsimEffect": {
+          "skip": true,
+          "keys": [],
+          "status": "manual"
         }
       },
       {
@@ -40640,6 +42399,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -41165,6 +42928,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "grace-of-kenosis"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -41197,6 +42966,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "silent-contemplation"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -41505,6 +43280,10 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.417
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -41536,6 +43315,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "prune-burst"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -42392,6 +44177,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.233
+        },
+        "gcsimEffect": {
+          "keys": [
+            "odette-dance-double"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -42420,6 +44211,12 @@
         "dataSource": {
           "cooldown": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）",
           "effectDuration": "gcsim: odette/skill.go: SetCD(action.ActionSpecialSkill, 15*60)、AddStatus(danceDoubleUpgradeKey, 20*60)。スキルの後 394 フレーム（約 6.6 秒）の間だけ使える（AddStatus(skillRecastKey, 394)）"
+        },
+        "gcsimEffect": {
+          "keys": [
+            "odette-dance-double-upgrade"
+          ],
+          "status": "manual"
         }
       },
       {
@@ -42486,6 +44283,12 @@
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
+        },
+        "gcsimEffect": {
+          "keys": [
+            "odette-dance-double"
+          ],
+          "status": "ok"
         }
       },
       {

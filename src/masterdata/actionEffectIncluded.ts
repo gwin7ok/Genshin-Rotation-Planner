@@ -7,10 +7,9 @@
  *   - 効果の内容が、そのスキル・爆発の持続バー（本体・副次効果）と同じ期間の内部の加算で、別のバーにすると二重の表示になる
  * ユーザーが、ゲーム内の説明と照合して決定（2026-09-30）。
  */
-export interface IncludedEffect {
-  key: string;
-  note: string;
-}
+import type { ActionGcsimIncluded } from '../types/genshin.ts';
+
+export type IncludedEffect = ActionGcsimIncluded;
 
 export const ACTION_EFFECT_INCLUDED: Record<string, IncludedEffect[]> = {
   // キャンディスの爆発: 爆発中の通常攻撃ダメージ加算

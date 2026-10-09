@@ -5,7 +5,7 @@
  *   6-3a: アクションの所要時間（このファイル）
  * ユーザーが手で入れた値は、上書きで失われる（D20。編集済みの所要時間も上書き。D27-2）。
  */
-import type { CharacterActionInstance, Stint } from '../../types/genshin.ts';
+import type { ActionGcsimEffect, CharacterActionInstance, EffectDurationMode, Stint } from '../../types/genshin.ts';
 import { actionDelayOf } from '../actionDelay.ts';
 import type { GcsimActionRef } from './buildGcsimConfig.ts';
 import { framesToSeconds, type GcsimActionRecord, type GcsimLogSummary } from './readGcsimLog.ts';
@@ -212,31 +212,9 @@ export function applyActionCooldowns(
   return { stints: updated, changes };
 }
 
-/**
- * スキル・爆発の効果に対応する gcsim のキー（public/data/action_effect_keys.json の entries）。
- * キー = アクション定義 ID。status: ok = キーあり / nokey = 効果の状態のキーが無い / unprobed = 収集できなかった（手で補う）
- */
-export type ActionEffectKeyTable = Record<string, {
-  status: 'ok' | 'nokey' | 'unprobed';
-  keys: { key: string }[];
-  /** 効果時間の本体のキー（候補が複数のとき、マスターの効果時間に最も近いキー）。あればこれだけを使う */
-  primary?: string;
-  /** primary の効果時間の求め方（既定 expiry） */
-  mode?: EffectDurationMode;
-  /** primary のイベントを、実行したキャラ自身のものだけ使う（夜魂の状態など、全員で同じキーを使うもの） */
-  self?: boolean;
-}>;
-
-/**
- * 効果時間の求め方
- *   expiry … 最初のイベントの「終了予定 − 発生」（窓の中の延長 `extended` を含む）。状態・設置物・シールド・継続ダメージ
- *   ended  … 最初のイベントの「実際の終了 − 発生」（分からなければ終了予定）。終了予定を持たず、条件で終わる状態（夜魂の状態など）
- *   span   … 窓の中の最後のイベント − 最初のイベント。効果の間ずっと更新され続ける状態（神里綾人の爆発など）
- */
-export type EffectDurationMode = 'expiry' | 'ended' | 'span';
-
-/** 手で補う一覧の値: キーだけ（expiry）か、求め方・自分限定つき */
-export type EffectKeyOverride = string | { key: string; mode?: EffectDurationMode; self?: boolean; /** 状況によって別のキーで出る場合の代替（例: デュリンの爆発は白の姿と黒の姿でキーが違う）。イベントがあったキーのうち、効果が長いものを使う */ alt?: string[] };
+// スキル・爆発の紐付けの型は、取り込み（src/masterdata/actionGcsimLink.ts）にある（D95）
+export type { ActionEffectKeyTable, EffectKeyOverride } from '../../masterdata/actionGcsimLink.ts';
+export type { EffectDurationMode } from '../../types/genshin.ts';
 
 export interface EffectDurationChange {
   stintId: string;
@@ -262,15 +240,14 @@ export interface ApplyEffectDurationsResult {
  *   起きた、最初の効果イベント（added / refreshed / extended）の「終了予定 − 発生」を効果時間にする。
  *   窓は全周で取る（2周目の先頭で始まる効果を1周目のアクションのものと誤らないため）。書き込みは1周目のアクションだけ。
  *   イベントが無いアクション・切れない効果は書き換えない（CTと違い、効果が出ないことは誤りとは限らない）。
- *   使うキー: 手で補う一覧（overrides）→ 表の primary（候補が複数のとき、マスターの効果時間に最も近いキー）→ 表のキーの中で効果が長いもの。
+ *   使うキー: アクション定義の gcsimEffect.keys（手で補う一覧 → 中間データの primary → 中間データのキー全部。取り込みで決まる。D95）。複数のときは効果が長いもの。
  */
 export function applyActionEffectDurations(
   stints: Stint[],
   pairs: AlignedAction[],
   summary: GcsimLogSummary,
-  table: ActionEffectKeyTable,
-  /** 手で補う一覧（アクション定義 ID → キー。空文字 = 書き戻さない） */
-  overrides: Record<string, EffectKeyOverride> = {},
+  /** アクション定義 ID → 本体の紐付け（アクション定義の gcsimEffect。buildActionLinkTables） */
+  links: Record<string, ActionGcsimEffect>,
   /** 画面に出ている効果時間（アクション ID → 秒） */
   effectiveEffects?: Record<string, number>,
 ): ApplyEffectDurationsResult {
@@ -289,18 +266,16 @@ export function applyActionEffectDurations(
     if (!act) continue;
 
     const defId = act.actionTypeId;
-    const override = overrides[defId];
-    if (override === '') continue;
-    const entry = table[defId];
-    if (!entry && override === undefined) {
+    const link = links[defId];
+    if (!link) {
       missing.add(defId);
       continue;
     }
-    const ov = typeof override === 'string' ? (override ? { key: override } : undefined) : override;
-    const candidates = ov ? [ov.key, ...(ov.alt ?? [])] : entry?.primary ? [entry.primary] : (entry?.keys ?? []).map(c => c.key);
+    if (link.skip) continue;
+    const candidates = link.keys;
     if (candidates.length === 0) continue;
-    const mode: EffectDurationMode = ov ? ov.mode ?? 'expiry' : entry?.mode ?? 'expiry';
-    const selfOnly = ov ? ov.self === true : entry?.self === true;
+    const mode: EffectDurationMode = link.mode ?? 'expiry';
+    const selfOnly = link.self === true;
 
     const nextSameKind = executedAll
       .filter(e => e.charIndex === executed.charIndex && e.name === executed.name && e.frame > executed.frame)

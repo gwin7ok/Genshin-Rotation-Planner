@@ -1,4 +1,4 @@
-import type { EffectKeyOverride } from '../utils/gcsim/applyGcsimResult';
+import type { EffectKeyOverride } from './actionGcsimLink.ts';
 
 /**
  * スキル・爆発の効果に対応する gcsim のキー: 手で補う一覧（public/data/action_effect_keys.json の自動収集結果を上書きする）

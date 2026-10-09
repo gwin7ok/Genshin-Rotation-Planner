@@ -20,6 +20,7 @@ import { PartyMember, Stint, SavedRotationSlot } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
+import { buildActionLinkTables } from './masterdata/actionGcsimLink';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
@@ -314,6 +315,8 @@ export default function App() {
     () => Object.fromEntries(characters.map(c => [c.id, getAvailableBuffsForCharacter(c, database).filter(b => !b.autoApplied)])),
     [characters, database],
   );
+  // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
+  const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   const handleCopyGcsimConfig = () => {
     const result = buildGcsimConfig({
       characters,
@@ -577,6 +580,7 @@ export default function App() {
         stints={visibleStints}
         calculated={calculatedResult}
         buffsByCharacter={buffsByCharacter}
+        actionLinks={actionLinks}
         onApplyStints={updateStints}
       />
 

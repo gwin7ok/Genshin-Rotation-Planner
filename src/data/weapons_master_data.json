@@ -32,7 +32,21 @@
         "description": "通常攻撃と重撃のダメージ+24%。通常攻撃と重撃で放たれる矢は、0.1秒経過する毎にダメージが更に+16%、最大5回まで。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15502",
+        "name": "一心不乱",
+        "sourceType": "weapon",
+        "sourceId": "15502",
+        "description": "通常攻撃と重撃のダメージ+12%。通常攻撃と重撃で放たれる矢は、0.1秒経過する毎にダメージが更に+8%、最大5回まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amos"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "amosbow"
@@ -1566,7 +1580,22 @@
         "description": "HP+40%。また、キャラクターのHP上限の1.6%分、攻撃力がアップする。キャラクターのHPが50%未満の時、攻撃力が更にHP上限の1.8%分アップする。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13501",
+        "name": "縛り無き朱色の蝶",
+        "sourceType": "weapon",
+        "sourceId": "13501",
+        "description": "HP+20%。また、キャラクターのHP上限の0.8%分、攻撃力がアップする。キャラクターのHPが50%未満の時、攻撃力が更にHP上限の1%分アップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "homa-atk-buff",
+          "homa-hp"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "staffofhoma"
@@ -2988,7 +3017,21 @@
         "description": "移動速度+10%。フィールドにいる時、4秒毎に元素ダメージ+16%、最大4重まで。キャラが退場または戦闘不能まで有効。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14502",
+        "name": "果てしない恵み",
+        "sourceType": "weapon",
+        "sourceId": "14502",
+        "description": "移動速度+10%。フィールドにいる時、4秒毎に元素ダメージ+8%、最大4重まで。キャラが退場または戦闘不能まで有効。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lost-prayer"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "lostprayertothesacredwinds"
@@ -3026,7 +3069,22 @@
         "description": "重撃ダメージ+32%。チーム内に装備者と同じ元素タイプのキャラクター（装備者自身を含む）が1名いる毎に、「トリック」効果を1層獲得する。異なる元素タイプのキャラクターが1名いる毎に、「パフォーマンス」効果を1層獲得する。1/2/3層以上の「トリック」効果がある時、攻撃力がそれぞれ+32%/64%/96%。1/2/3層以上の「パフォーマンス」効果がある時、移動速度がそれぞれ+12%/15%/18%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15512",
+        "name": "偉大なる者·パルジファル",
+        "sourceType": "weapon",
+        "sourceId": "15512",
+        "description": "重撃ダメージ+16%。チーム内に装備者と同じ元素タイプのキャラクター（装備者自身を含む）が1名いる毎に、「トリック」効果を1層獲得する。異なる元素タイプのキャラクターが1名いる毎に、「パフォーマンス」効果を1層獲得する。1/2/3層以上の「トリック」効果がある時、攻撃力がそれぞれ+16%/32%/48%。1/2/3層以上の「パフォーマンス」効果がある時、移動速度がそれぞれ+4%/7%/10%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "thefirstgreatmagic-atk",
+          "thefirstgreatmagic-dmg%"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "thefirstgreatmagic"
@@ -5147,7 +5205,21 @@
         "description": "防御力+56%。通常攻撃と重撃ダメージが防御力80%分アップする。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12510",
+        "name": "御伽大王の御伽話",
+        "sourceType": "weapon",
+        "sourceId": "12510",
+        "description": "防御力+28%。通常攻撃と重撃ダメージが防御力40%分アップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "redhorn-stonethrasher-def-boost"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "redhornstonethresher"
@@ -5508,7 +5580,22 @@
         "description": "チーム内にいる他キャラクターの元素タイプと装備者自身の元素タイプに応じて、自身に異なる強化効果をもたらす。元素タイプが同じ場合：元素熟知+64。元素タイプが異なる場合：自身元素タイプの元素ダメージ+26%。上記の強化効果は1種類につき最大3層まで重ね掛け可能。また、装備者自身を除く、周囲のチーム全員の元素熟知+48、同じ武器によるこの効果は複数重ねることができる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14511",
+        "name": "千夜の暁歌",
+        "sourceType": "weapon",
+        "sourceId": "14511",
+        "description": "チーム内にいる他キャラクターの元素タイプと装備者自身の元素タイプに応じて、自身に異なる強化効果をもたらす。元素タイプが同じ場合：元素熟知+32。元素タイプが異なる場合：自身元素タイプの元素ダメージ+10%。上記の強化効果は1種類につき最大3層まで重ね掛け可能。また、装備者自身を除く、周囲のチーム全員の元素熟知+40、同じ武器によるこの効果は複数重ねることができる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "a-thousand-floating-dreams",
+          "a-thousand-floating-dreams-party-*"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "athousandfloatingdreams"
@@ -8975,7 +9062,22 @@
         "description": "HP+40%。また、キャラクターのHP上限の2.4%分、攻撃力がアップする。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11505",
+        "name": "護国の無垢なる心",
+        "sourceType": "weapon",
+        "sourceId": "11505",
+        "description": "HP+20%。また、キャラクターのHP上限の1.2%分、攻撃力がアップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "jadecutter-atk-buff",
+          "jadecutter-hp"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "primordialjadecutter"
@@ -11196,7 +11298,21 @@
         "description": "攻撃力+24%。それだけじゃない！メリュシー村であなたに助けられたメリュジーヌたちの声援が力を与え、満たしてくれる。助けた彼女たちの数を基に、攻撃力がさらに最大24%アップする。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12426",
+        "name": "がんばって！",
+        "sourceType": "weapon",
+        "sourceId": "12426",
+        "description": "攻撃力+24%。それだけじゃない！メリュシー村であなたに助けられたメリュジーヌたちの声援が力を与え、満たしてくれる。助けた彼女たちの数を基に、攻撃力がさらに最大24%アップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ultimateoverlordsmegamagicsword"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "ultimateoverlordsmegamagicsword"
@@ -11687,7 +11803,21 @@
         "description": "元素爆発ダメージ+32%、元素爆発の会心率+12%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13415",
+        "name": "舟歌",
+        "sourceType": "weapon",
+        "sourceId": "13415",
+        "description": "元素爆発ダメージ+32%、元素爆発の会心率+12%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "the-catch"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "thecatch"
@@ -12635,7 +12765,21 @@
         "description": "この武器を装備したキャラクターが待機している時、1秒ごとに自身の与えるダメージ+4%。この方法で獲得できるダメージアップ効果は40%まで。4秒以上フィールド上にいると、上記ダメージアップ効果は0%になるまで、1秒毎に8%ダウンする。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15410",
+        "name": "路地奇襲",
+        "sourceType": "weapon",
+        "sourceId": "15410",
+        "description": "この武器を装備したキャラクターが待機している時、1秒ごとに自身の与えるダメージ+4%。この方法で獲得できるダメージアップ効果は40%まで。4秒以上フィールド上にいると、上記ダメージアップ効果は0%になるまで、1秒毎に8%ダウンする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "alley-hunter"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "alleyhunter"
@@ -13146,7 +13290,22 @@
         "description": "チームにナタ出身のキャラクター、または装備者と元素タイプが異なるキャラクターが1名いるごとに、装備者の攻撃力+9.6%。そのようなキャラクターが3名以上いる場合、装備者の元素熟知+48。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15431",
+        "name": "花と落羽の長歌",
+        "sourceType": "weapon",
+        "sourceId": "15431",
+        "description": "チームにナタ出身のキャラクター、または装備者と元素タイプが異なるキャラクターが1名いるごとに、装備者の攻撃力+9.6%。そのようなキャラクターが3名以上いる場合、装備者の元素熟知+48。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "chain-breaker-atk",
+          "chain-breaker-em"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "chainbreaker"
@@ -13652,7 +13811,21 @@
         "description": "チーム内に異なる元素タイプのキャラクターが3名以上いる時、元素熟知+240。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13424",
+        "name": "氷原にある数々の物語",
+        "sourceType": "weapon",
+        "sourceId": "13424",
+        "description": "チーム内に異なる元素タイプのキャラクターが3名以上いる時、元素熟知+240。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "balladofthefjords"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "balladofthefjords"
@@ -14995,7 +15168,21 @@
         "description": "開花反応ダメージ+96%、月開花反応ダメージ+24%。月兆・満照：上記の月開花反応ダメージアップ効果がさらに+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14433",
+        "name": "契約の証",
+        "sourceType": "weapon",
+        "sourceId": "14433",
+        "description": "開花反応ダメージ+96%、月開花反応ダメージ+24%。月兆・満照：上記の月開花反応ダメージアップ効果がさらに+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "blackmarrow-lantern"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "blackmarrowlantern"
@@ -15033,7 +15220,21 @@
         "description": "水元素または雷元素の影響を受けた敵に対するダメージ+36%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12405",
+        "name": "水と雷の破滅",
+        "sourceType": "weapon",
+        "sourceId": "12405",
+        "description": "水元素または雷元素の影響を受けた敵に対するダメージ+36%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "rainslasher"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "rainslasher"
@@ -15578,7 +15779,21 @@
         "description": "滑翔に消費するスタミナ-15%。狙い撃ち時、0.5秒毎に重撃ダメージ+12%。この効果は最大6層まで重ね掛けでき、照準モードでない状態を10秒維持した後に解除される。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15430",
+        "name": "まだ見ぬ花序",
+        "sourceType": "weapon",
+        "sourceId": "15430",
+        "description": "滑翔に消費するスタミナ-15%。狙い撃ち時、0.5秒毎に重撃ダメージ+12%。この効果は最大6層まで重ね掛けでき、照準モードでない状態を10秒維持した後に解除される。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flowerwreathedfeathers"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "flowerwreathedfeathers"
@@ -15976,7 +16191,21 @@
         "description": "通常攻撃のダメージ+80%、重撃のダメージ-10%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15405",
+        "name": "速射の弓",
+        "sourceType": "weapon",
+        "sourceId": "15405",
+        "description": "通常攻撃のダメージ+80%、重撃のダメージ-10%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "rust"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "rust"
@@ -16171,7 +16400,21 @@
         "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12404",
+        "name": "集中",
+        "sourceType": "weapon",
+        "sourceId": "12404",
+        "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "royal"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "royalgreatsword"
@@ -16209,7 +16452,21 @@
         "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15404",
+        "name": "集中",
+        "sourceType": "weapon",
+        "sourceId": "15404",
+        "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "royal"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "royalbow"
@@ -16247,7 +16504,21 @@
         "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11404",
+        "name": "集中",
+        "sourceType": "weapon",
+        "sourceId": "11404",
+        "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "royal"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "royallongsword"
@@ -16285,7 +16556,21 @@
         "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14404",
+        "name": "集中",
+        "sourceType": "weapon",
+        "sourceId": "14404",
+        "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "royal"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "royalgrimoire"
@@ -16323,7 +16608,21 @@
         "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13408",
+        "name": "集中",
+        "sourceType": "weapon",
+        "sourceId": "13408",
+        "description": "攻撃が敵にダメージを与えた時、会心率+16%、最大5重まで。攻撃会心発生時、効果がクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "royal"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "royalspear"
@@ -16673,7 +16972,21 @@
         "description": "感電反応ダメージ+96%、月感電反応ダメージ+24%。月兆・満照：上記の月感電反応ダメージアップ効果がさらに+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13433",
+        "name": "迅速果断",
+        "sourceType": "weapon",
+        "sourceId": "13433",
+        "description": "感電反応ダメージ+96%、月感電反応ダメージ+24%。月兆・満照：上記の月感電反応ダメージアップ効果がさらに+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prospectors-shovel"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "prospectorsshovel"
@@ -17377,7 +17690,21 @@
         "description": "元素爆発ダメージ+40%。装備者の元素エネルギー上限が60/40以下の場合、元素爆発ダメージがさらに+32%/56%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11434",
+        "name": "秘銀の血告",
+        "sourceType": "weapon",
+        "sourceId": "11434",
+        "description": "元素爆発ダメージ+40%。装備者の元素エネルギー上限が60/40以下の場合、元素爆発ダメージがさらに+32%/56%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "moonweavers-dawn"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "moonweaversdawn"
@@ -19977,7 +20304,21 @@
         "description": "チーム全員の元素エネルギー上限の合計を基に、元素爆発ダメージをアップさせる。1ポイントにつき、装備したキャラクターの元素爆発ダメージ+0.24%。この方法でアップできる元素爆発ダメージは最大80%まで。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13416",
+        "name": "波を統べる海祇の民",
+        "sourceType": "weapon",
+        "sourceId": "13416",
+        "description": "チーム全員の元素エネルギー上限の合計を基に、元素爆発ダメージをアップさせる。1ポイントにつき、装備したキャラクターの元素爆発ダメージ+0.24%。この方法でアップできる元素爆発ダメージは最大80%まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wavebreaker"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "wavebreakersfin"
@@ -20015,7 +20356,21 @@
         "description": "近くに敵が2人以上いる時、攻撃力+32%、防御力+32%。近くに敵が2人未満の時、攻撃力+48%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13405",
+        "name": "剣闘士",
+        "sourceType": "weapon",
+        "sourceId": "13405",
+        "description": "近くに敵が2人以上いる時、攻撃力+32%、防御力+32%。近くに敵が2人未満の時、攻撃力+48%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "deathmatch"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "deathmatch"
@@ -23326,7 +23681,21 @@
         "description": "元素スキルと元素爆発のダメージ+48%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15402",
+        "name": "矢なしの詩",
+        "sourceType": "weapon",
+        "sourceId": "15402",
+        "description": "元素スキルと元素爆発のダメージ+48%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "stringless"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "thestringless"
@@ -23364,7 +23733,21 @@
         "description": "チームに璃月出身のキャラクターが1人いる毎に、この武器を装備したキャラクターの攻撃力+11%、会心率+7%。最大4重まで。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12410",
+        "name": "千岩訣·同心",
+        "sourceType": "weapon",
+        "sourceId": "12410",
+        "description": "チームに璃月出身のキャラクターが1人いる毎に、この武器を装備したキャラクターの攻撃力+11%、会心率+7%。最大4重まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lithic"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "lithicblade"
@@ -23402,7 +23785,21 @@
         "description": "チームに璃月出身のキャラクターが1人いる毎に、この武器を装備したキャラクターの攻撃力+11%、会心率+7%。最大4重まで。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13406",
+        "name": "千岩訣·同心",
+        "sourceType": "weapon",
+        "sourceId": "13406",
+        "description": "チームに璃月出身のキャラクターが1人いる毎に、この武器を装備したキャラクターの攻撃力+11%、会心率+7%。最大4重まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lithic"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "lithicspear"
@@ -23440,7 +23837,21 @@
         "description": "装備者を除き、以下の条件に合うチーム内キャラクターが1名いるごとに、以下の効果を獲得する。・元素タイプが装備者と同じ場合、装備者の元素熟知+128。・元素タイプが装備者と異なる場合、装備者の攻撃力+24%。上記2種類の効果は合計で最大3層まで重ね掛けでき、元素タイプが同じだった場合の効果が優先して発動する。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15435",
+        "name": "夜を飾る灯火",
+        "sourceType": "weapon",
+        "sourceId": "15435",
+        "description": "装備者を除き、以下の条件に合うチーム内キャラクターが1名いるごとに、以下の効果を獲得する。・元素タイプが装備者と同じ場合、装備者の元素熟知+128。・元素タイプが装備者と異なる場合、装備者の攻撃力+24%。上記2種類の効果は合計で最大3層まで重ね掛けでき、元素タイプが同じだった場合の効果が優先して発動する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "jade-vista"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "jadevista"
@@ -26507,7 +26918,21 @@
         "description": "通常攻撃のダメージ+32%、重撃のダメージ+24%。この武器を装備したキャラクターの元素エネルギーが満タンの場合、該当効果が2倍になる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15414",
+        "name": "浅瀨の弭",
+        "sourceType": "weapon",
+        "sourceId": "15414",
+        "description": "通常攻撃のダメージ+32%、重撃のダメージ+24%。この武器を装備したキャラクターの元素エネルギーが満タンの場合、該当効果が2倍になる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "hamayumi"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "hamayumi"
@@ -27030,7 +27455,21 @@
         "description": "元素スキルのダメージ+32%、元素スキルの会心率+12%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11413",
+        "name": "底なしの渇望",
+        "sourceType": "weapon",
+        "sourceId": "11413",
+        "description": "元素スキルのダメージ+32%、元素スキルの会心率+12%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "festering"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "festeringdesire"
@@ -27834,7 +28273,21 @@
         "description": "元素反応を起こすと、「盈虚」効果を獲得する。「盈虚」効果：元素熟知+36、攻撃力-5%。「盈虚」効果は最大5層まで重ね掛けでき、0.3秒毎に最大1層獲得可能。元素反応を起こさないでいると、6秒毎に1層失う。キャラクターが待機中でも発動できる。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14417",
+        "name": "正円の相",
+        "sourceType": "weapon",
+        "sourceId": "14417",
+        "description": "元素反応を起こすと、「盈虚」効果を獲得する。「盈虚」効果：元素熟知+36、攻撃力-5%。「盈虚」効果は最大5層まで重ね掛けでき、0.3秒毎に最大1層獲得可能。元素反応を起こさないでいると、6秒毎に1層失う。キャラクターが待機中でも発動できる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "fruitoffulfillment"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "fruitoffulfillment"
@@ -27872,7 +28325,21 @@
         "description": "キャラクターがシールド状態の時、通常攻撃と重撃ダメージ+40%、通常攻撃と重撃の会心率+16%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11432",
+        "name": "広がる境界線",
+        "sourceType": "weapon",
+        "sourceId": "11432",
+        "description": "キャラクターがシールド状態の時、通常攻撃と重撃ダメージ+40%、通常攻撃と重撃の会心率+16%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "calamityofeshu"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "calamityofeshu"
@@ -29544,7 +30011,21 @@
         "description": "水元素または炎元素の影響を受けた敵に対するダメージ+36%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13401",
+        "name": "炎と水の破滅",
+        "sourceType": "weapon",
+        "sourceId": "13401",
+        "description": "水元素または炎元素の影響を受けた敵に対するダメージ+36%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dragonbane"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "dragonsbane"
@@ -29582,7 +30063,21 @@
         "description": "炎元素または雷元素の影響を受けた敵に対するダメージ+36%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11405",
+        "name": "炎と雷の破滅",
+        "sourceType": "weapon",
+        "sourceId": "11405",
+        "description": "炎元素または雷元素の影響を受けた敵に対するダメージ+36%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lionsroar"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "lionsroar"
@@ -30513,7 +31008,21 @@
         "description": "フィールドにいる時、4秒毎に、与えるダメージ+10%、被ダメージ+2%。最大5重まで、退場後もリセットされず、攻撃を受けると効果数-1。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12409",
+        "name": "波乗り",
+        "sourceType": "weapon",
+        "sourceId": "12409",
+        "description": "フィールドにいる時、4秒毎に、与えるダメージ+10%、被ダメージ+2%。最大5重まで、退場後もリセットされず、攻撃を受けると効果数-1。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "spine"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "serpentspine"
@@ -30551,7 +31060,21 @@
         "description": "弱点に対するダメージ+48%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15302",
+        "name": "精密射撃",
+        "sourceType": "weapon",
+        "sourceId": "15302",
+        "description": "弱点に対するダメージ+48%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sharpshooter"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "sharpshootersoath"
@@ -31014,7 +31537,21 @@
         "description": "通常攻撃または重撃の矢が発射した後、0.3秒以内に敵に命中した場合、与えるダメージ+60%。0.3秒以上の場合、与えるダメージ-10%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15304",
+        "name": "弾弓",
+        "sourceType": "weapon",
+        "sourceId": "15304",
+        "description": "通常攻撃または重撃の矢が発射した後、0.3秒以内に敵に命中した場合、与えるダメージ+60%。0.3秒以上の場合、与えるダメージ-10%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "slingshot"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "slingshot"
@@ -31052,7 +31589,21 @@
         "description": "HPが90%以下になると、重撃は中断されにくくなり、更に重撃ダメージ+50%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12301",
+        "name": "不屈",
+        "sourceType": "weapon",
+        "sourceId": "12301",
+        "description": "HPが90%以下になると、重撃は中断されにくくなり、更に重撃ダメージ+50%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ferrousshadow"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "ferrousshadow"
@@ -31283,7 +31834,21 @@
         "description": "通常攻撃のダメージ+48%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_13301",
+        "name": "鋭利",
+        "sourceType": "weapon",
+        "sourceId": "13301",
+        "description": "通常攻撃のダメージ+48%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "whitetassel"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "whitetassel"
@@ -31943,7 +32508,21 @@
         "description": "水元素または雷元素の影響を受けた敵に対するダメージ+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_14301",
+        "name": "水と雷の破滅",
+        "sourceType": "weapon",
+        "sourceId": "14301",
+        "description": "水元素または雷元素の影響を受けた敵に対するダメージ+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "magic-guide"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "magicguide"
@@ -32160,7 +32739,21 @@
         "description": "炎元素または雷元素の影響を受けた敵に対するダメージ+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_12302",
+        "name": "炎と雷の破滅",
+        "sourceType": "weapon",
+        "sourceId": "12302",
+        "description": "炎元素または雷元素の影響を受けた敵に対するダメージ+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "bloodtaintedgreatsword"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "bloodtaintedgreatsword"
@@ -32415,7 +33008,21 @@
         "description": "水元素または氷元素の影響を受けた敵に対するダメージ+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11301",
+        "name": "水と氷の破滅",
+        "sourceType": "weapon",
+        "sourceId": "11301",
+        "description": "水元素または氷元素の影響を受けた敵に対するダメージ+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "coolsteel"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "coolsteel"
@@ -32608,7 +33215,21 @@
         "description": "水元素または炎元素の影響を受けた敵に対するダメージ+24%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_15301",
+        "name": "炎と水の破滅",
+        "sourceType": "weapon",
+        "sourceId": "15301",
+        "description": "水元素または炎元素の影響を受けた敵に対するダメージ+24%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ravenbow"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "ravenbow"
@@ -32646,7 +33267,21 @@
         "description": "HPが90%以上の時、会心率+28%。"
       }
     ],
-    "buffEffects": [],
+    "buffEffects": [
+      {
+        "id": "wbuff_11302",
+        "name": "奮い立てる",
+        "sourceType": "weapon",
+        "sourceId": "11302",
+        "description": "HPが90%以上の時、会心率+28%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "harbinger"
+        ]
+      }
+    ],
     "isCustom": false,
     "updatedAt": "2026/10/8 21:34:42",
     "gcsimKey": "harbingerofdawn"

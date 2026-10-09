@@ -1524,6 +1524,17 @@
       "observed": true
     },
     {
+      "id": "ganyu-c4",
+      "category": "burst",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "ganyu",
+      "ownerName": "甘雨",
+      "name": "甘雨 命ノ星座4「西狩」",
+      "permanent": true,
+      "observed": true
+    },
+    {
       "id": "klee-c6",
       "category": "burst",
       "kind": "effect",
@@ -5120,6 +5131,16 @@
       "observed": true
     },
     {
+      "id": "chongyun-c2",
+      "category": "skill",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "chongyun",
+      "ownerName": "重雲",
+      "name": "重雲 命ノ星座2「周天の回転」",
+      "observed": true
+    },
+    {
       "id": "collei-a1",
       "category": "skill",
       "kind": "effect",
@@ -5150,6 +5171,16 @@
       "ownerName": "ディルック",
       "name": "ディルック 命ノ星座6「闇を清算する炎の剣」: speed",
       "durationFrames": 360,
+      "observed": true
+    },
+    {
+      "id": "eula-c1",
+      "category": "skill",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "eula",
+      "ownerName": "エウルア",
+      "name": "エウルア 命ノ星座1「潮の幻像」",
       "observed": true
     },
     {
@@ -11885,6 +11916,15 @@
       "duration": 10
     },
     {
+      "id": "artifact:15046:abuff_15046",
+      "type": "artifact",
+      "ownerId": "15046",
+      "ownerName": "影に沈む幻",
+      "name": "影に沈む幻 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "artifact:15032:abuff_15032",
       "type": "artifact",
       "ownerId": "15032",
@@ -11903,6 +11943,15 @@
       "timing": "always",
       "gcsimTarget": true,
       "duration": 5
+    },
+    {
+      "id": "artifact:15021:abuff_15021",
+      "type": "artifact",
+      "ownerId": "15021",
+      "ownerName": "華館夢醒形骸記",
+      "name": "華館夢醒形骸記 4セット",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "artifact:15022:abuff_15022",
@@ -11956,6 +12005,15 @@
       "gcsimNote": "gcsim が未実装"
     },
     {
+      "id": "artifact:15015:abuff_15015",
+      "type": "artifact",
+      "ownerId": "15015",
+      "ownerName": "逆飛びの流星",
+      "name": "逆飛びの流星 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "artifact:15007:abuff_15007",
       "type": "artifact",
       "ownerId": "15007",
@@ -11974,6 +12032,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "artifact:10005:abuff_10005",
+      "type": "artifact",
+      "ownerId": "10005",
+      "ownerName": "狂戦士",
+      "name": "狂戦士 4セット",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "artifact:15043:abuff_15043",
@@ -12014,6 +12081,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "artifact:15001:abuff_15001",
+      "type": "artifact",
+      "ownerId": "15001",
+      "ownerName": "剣闘士のフィナーレ",
+      "name": "剣闘士のフィナーレ 4セット",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "artifact:15047:abuff_15047",
@@ -12106,6 +12182,24 @@
       "duration": 10
     },
     {
+      "id": "artifact:15036:abuff_15036",
+      "type": "artifact",
+      "ownerId": "15036",
+      "ownerName": "遂げられなかった想い",
+      "name": "遂げられなかった想い 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "artifact:15020:abuff_15020",
+      "type": "artifact",
+      "ownerId": "15020",
+      "ownerName": "絶縁の旗印",
+      "name": "絶縁の旗印 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "artifact:15017:abuff_15017",
       "type": "artifact",
       "ownerId": "15017",
@@ -12124,6 +12218,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 7
+    },
+    {
+      "id": "artifact:15003:abuff_15003",
+      "type": "artifact",
+      "ownerId": "15003",
+      "ownerName": "大地を流浪する楽団",
+      "name": "大地を流浪する楽団 4セット",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "artifact:15023:abuff_15023",
@@ -12205,6 +12308,15 @@
       "gcsimTarget": true
     },
     {
+      "id": "artifact:14001:abuff_14001",
+      "type": "artifact",
+      "ownerId": "14001",
+      "ownerName": "氷風を彷徨う勇士",
+      "name": "氷風を彷徨う勇士 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "artifact:10006:abuff_10006",
       "type": "artifact",
       "ownerId": "10006",
@@ -12246,6 +12358,15 @@
       "gcsimNote": "gcsim が未実装"
     },
     {
+      "id": "artifact:10002:abuff_10002",
+      "type": "artifact",
+      "ownerId": "10002",
+      "ownerName": "勇士の心",
+      "name": "勇士の心 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "artifact:15014:abuff_15014",
       "type": "artifact",
       "ownerId": "15014",
@@ -12254,6 +12375,42 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "artifact:15005:abuff_15005",
+      "type": "artifact",
+      "ownerId": "15005",
+      "ownerName": "雷のような怒り",
+      "name": "雷のような怒り 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "artifact:14002:abuff_14002",
+      "type": "artifact",
+      "ownerId": "14002",
+      "ownerName": "雷を鎮める尊者",
+      "name": "雷を鎮める尊者 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "artifact:10001:abuff_10001",
+      "type": "artifact",
+      "ownerId": "10001",
+      "ownerName": "旅人の心",
+      "name": "旅人の心 4セット",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "artifact:14003:abuff_14003",
+      "type": "artifact",
+      "ownerId": "14003",
+      "ownerName": "烈火を渡る賢者",
+      "name": "烈火を渡る賢者 4セット",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "artifact:15048:abuff_15048",
@@ -12354,6 +12511,15 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000096-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000096-pyro",
+      "ownerName": "アルレッキーノ",
+      "name": "「あらゆる褒賞と罰は この手によるもの…」",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000096-pyro_c6",
       "type": "constellation",
       "ownerId": "10000096-pyro",
@@ -12364,6 +12530,15 @@
       "duration": 20
     },
     {
+      "id": "constellation:10000096-pyro_c4",
+      "type": "constellation",
+      "ownerId": "10000096-pyro",
+      "ownerName": "アルレッキーノ",
+      "name": "「これからは互いを慈しみ 手を取り合うとしよう…」",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000021-pyro_c6",
       "type": "constellation",
       "ownerId": "10000021-pyro",
@@ -12372,6 +12547,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000110-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000110-electro",
+      "ownerName": "イアンサ",
+      "name": "おサボり厳禁！",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000116-electro_c1",
@@ -12400,6 +12584,15 @@
       "ownerName": "イルーガ",
       "name": "日逐いの狼",
       "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000111-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000111-electro",
+      "ownerName": "ヴァレサ",
+      "name": "正義のヒーローの凱旋",
+      "timing": "always",
       "gcsimTarget": true
     },
     {
@@ -12443,6 +12636,24 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000051-cryo_c1",
+      "type": "constellation",
+      "ownerId": "10000051-cryo",
+      "ownerName": "エウルア",
+      "name": "潮の幻像",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000051-cryo_c4",
+      "type": "constellation",
+      "ownerId": "10000051-cryo",
+      "ownerName": "エウルア",
+      "name": "劣等感との戦い",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000112-cryo_c2",
       "type": "constellation",
       "ownerId": "10000112-cryo",
@@ -12481,6 +12692,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000099-dendro_c1",
+      "type": "constellation",
+      "ownerId": "10000099-dendro",
+      "ownerName": "エミリエ",
+      "name": "淡く香るフレグランス",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000150-cryo_c2",
@@ -12523,6 +12743,24 @@
       "duration": 9
     },
     {
+      "id": "constellation:10000105-electro_c1",
+      "type": "constellation",
+      "ownerId": "10000105-electro",
+      "ownerName": "オロルン",
+      "name": "霧立つ林中の痕跡",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000081-dendro_c4",
+      "type": "constellation",
+      "ownerId": "10000081-dendro",
+      "ownerName": "カーヴェ",
+      "name": "アパダーナの饗宴",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000081-dendro_c1",
       "type": "constellation",
       "ownerId": "10000081-dendro",
@@ -12543,6 +12781,24 @@
       "duration": 12
     },
     {
+      "id": "constellation:10000015-cryo_c1",
+      "type": "constellation",
+      "ownerId": "10000015-cryo",
+      "ownerName": "ガイア",
+      "name": "優れた血筋",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000101-dendro_c1",
+      "type": "constellation",
+      "ownerId": "10000101-dendro",
+      "ownerName": "キィニチ",
+      "name": "七鸚の嘴",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000101-dendro_c2",
       "type": "constellation",
       "ownerId": "10000101-dendro",
@@ -12551,6 +12807,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000101-dendro_c4",
+      "type": "constellation",
+      "ownerId": "10000101-dendro",
+      "ownerName": "キィニチ",
+      "name": "蜂鳥の羽",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000072-hydro_c2",
@@ -12583,6 +12848,24 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000098-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000098-electro",
+      "ownerName": "クロリンデ",
+      "name": "「故に—— 希望を捨ててはならない」",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000098-electro_c4",
+      "type": "constellation",
+      "ownerId": "10000098-electro",
+      "ownerName": "クロリンデ",
+      "name": "「涙と命、仁愛を心に刻め」",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000067-dendro_c4",
       "type": "constellation",
       "ownerId": "10000067-dendro",
@@ -12591,6 +12874,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "constellation:10000067-dendro_c1",
+      "type": "constellation",
+      "ownerId": "10000067-dendro",
+      "ownerName": "コレイ",
+      "name": "ディープウッドパトロール",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000055-geo_c6",
@@ -12611,6 +12903,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "constellation:10000125-hydro_c4",
+      "type": "constellation",
+      "ownerId": "10000125-hydro",
+      "ownerName": "コロンビーナ",
+      "name": "花の嵐や雲と木と岩の陰",
+      "timing": "conditional",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000125-hydro_c2",
@@ -12641,6 +12942,24 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "constellation:10000107-cryo_c6",
+      "type": "constellation",
+      "ownerId": "10000107-cryo",
+      "ownerName": "シトラリ",
+      "name": "原動天の シークレットパクト",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000107-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000107-cryo",
+      "ownerName": "シトラリ",
+      "name": "心を呑む者の ピルグリメイジ",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000088-cryo_c2",
@@ -12703,6 +13022,15 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000103-geo_c2",
+      "type": "constellation",
+      "ownerId": "10000103-geo",
+      "ownerName": "シロネン",
+      "name": "燎原リミックス",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000003-anemo_c4",
       "type": "constellation",
       "ownerId": "10000003-anemo",
@@ -12732,6 +13060,15 @@
       "duration": 12.5
     },
     {
+      "id": "constellation:10000114-cryo_c4",
+      "type": "constellation",
+      "ownerId": "10000114-cryo",
+      "ownerName": "スカーク",
+      "name": "流断",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000043-anemo_c6",
       "type": "constellation",
       "ownerId": "10000043-anemo",
@@ -12740,6 +13077,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000097-electro_c1",
+      "type": "constellation",
+      "ownerId": "10000097-electro",
+      "ownerName": "セトス",
+      "name": "シュラインの謁霊歌",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000097-electro_c2",
@@ -12792,6 +13138,15 @@
       "duration": 4
     },
     {
+      "id": "constellation:10000115-hydro_c6",
+      "type": "constellation",
+      "ownerId": "10000115-hydro",
+      "ownerName": "ダリア",
+      "name": "あらゆる喜びが 君とあらんことを",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000104-anemo_c6",
       "type": "constellation",
       "ownerId": "10000104-anemo",
@@ -12811,6 +13166,42 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000039-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000039-cryo",
+      "ownerName": "ディオナ",
+      "name": "クールキャッツクロー",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000079-pyro_c6",
+      "type": "constellation",
+      "ownerId": "10000079-pyro",
+      "ownerName": "ディシア",
+      "name": "黄金を裂く焔爪",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000079-pyro_c1",
+      "type": "constellation",
+      "ownerId": "10000079-pyro",
+      "ownerName": "ディシア",
+      "name": "煌めく皎潔の炎",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000079-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000079-pyro",
+      "ownerName": "ディシア",
+      "name": "燿く清砂の利刃",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000069-dendro_c2",
       "type": "constellation",
       "ownerId": "10000069-dendro",
@@ -12819,6 +13210,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000069-dendro_c1",
+      "type": "constellation",
+      "ownerId": "10000069-dendro",
+      "ownerName": "ティナリ",
+      "name": "根から判断する原初",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000069-dendro_c4",
@@ -12841,6 +13241,15 @@
       "duration": 6
     },
     {
+      "id": "constellation:10000016-pyro_c1",
+      "type": "constellation",
+      "ownerId": "10000016-pyro",
+      "ownerName": "ディルック",
+      "name": "罪の裁断",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000016-pyro_c2",
       "type": "constellation",
       "ownerId": "10000016-pyro",
@@ -12859,6 +13268,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 2
+    },
+    {
+      "id": "constellation:10000123-pyro_c4",
+      "type": "constellation",
+      "ownerId": "10000123-pyro",
+      "ownerName": "ドゥリン",
+      "name": "充溢の根源",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000123-pyro_c2",
@@ -12930,6 +13348,24 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000073-dendro_c4",
+      "type": "constellation",
+      "ownerId": "10000073-dendro",
+      "ownerName": "ナヒーダ",
+      "name": "比量現行の茎",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000070-hydro_c1",
+      "type": "constellation",
+      "ownerId": "10000070-hydro",
+      "ownerName": "ニィロウ",
+      "name": "却月の舞踊",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000070-hydro_c2",
       "type": "constellation",
       "ownerId": "10000070-hydro",
@@ -12950,6 +13386,15 @@
       "duration": 8
     },
     {
+      "id": "constellation:10000070-hydro_c6",
+      "type": "constellation",
+      "ownerId": "10000070-hydro",
+      "ownerName": "ニィロウ",
+      "name": "霜絶の弦歌",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000131-pyro_c4",
       "type": "constellation",
       "ownerId": "10000131-pyro",
@@ -12968,6 +13413,24 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 20
+    },
+    {
+      "id": "constellation:10000087-hydro_c2",
+      "type": "constellation",
+      "ownerId": "10000087-hydro",
+      "ownerName": "ヌヴィレット",
+      "name": "律法の懲罰",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000034-geo_c2",
+      "type": "constellation",
+      "ownerId": "10000034-geo",
+      "ownerName": "ノエル",
+      "name": "旋風のメイド",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000014-hydro_c2",
@@ -13019,6 +13482,15 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000089-hydro_c2",
+      "type": "constellation",
+      "ownerId": "10000089-hydro",
+      "ownerName": "フリーナ",
+      "name": "「女は気まぐれ 水面に揺らぐ浮草のよう」",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000089-hydro_c6",
       "type": "constellation",
       "ownerId": "10000089-hydro",
@@ -13039,6 +13511,33 @@
       "duration": 6
     },
     {
+      "id": "constellation:10000120-electro_c1",
+      "type": "constellation",
+      "ownerId": "10000120-electro",
+      "ownerName": "フリンズ",
+      "name": "雪影の幕をひらく時",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000120-electro_c4",
+      "type": "constellation",
+      "ownerId": "10000120-electro",
+      "ownerName": "フリンズ",
+      "name": "咆哮する荒れ山の夜",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000132-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000132-anemo",
+      "ownerName": "プルーネ",
+      "name": "元素の力を抱きしめて さあ荷物をまとめよう",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000132-anemo_c6",
       "type": "constellation",
       "ownerId": "10000132-anemo",
@@ -13047,6 +13546,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 5.5
+    },
+    {
+      "id": "constellation:10000085-cryo_c1",
+      "type": "constellation",
+      "ownerId": "10000085-cryo",
+      "ownerName": "フレミネ",
+      "name": "深海と泡沫の夢",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000085-cryo_c4",
@@ -13067,6 +13575,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000032-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000032-pyro",
+      "ownerName": "ベネット",
+      "name": "絶境踏破",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000106-pyro_c2",
@@ -13098,6 +13615,15 @@
       "duration": 12
     },
     {
+      "id": "constellation:10000102-hydro_c4",
+      "type": "constellation",
+      "ownerId": "10000102-hydro",
+      "ownerName": "ムアラニ",
+      "name": "サメくんの主食は プクフグだよ",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000041-hydro_c6",
       "type": "constellation",
       "ownerId": "10000041-hydro",
@@ -13116,6 +13642,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "constellation:10000041-hydro_c4",
+      "type": "constellation",
+      "ownerId": "10000041-hydro",
+      "ownerName": "モナ",
+      "name": "絶滅の預言",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000041-hydro_c1",
@@ -13178,6 +13713,24 @@
       "duration": 20
     },
     {
+      "id": "constellation:10000119-dendro_c2",
+      "type": "constellation",
+      "ownerId": "10000119-dendro",
+      "ownerName": "ラウマ",
+      "name": "「北の戒めを綴りて 伝承を語れ」",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000086-cryo_c1",
+      "type": "constellation",
+      "ownerId": "10000086-cryo",
+      "ownerName": "リオセスリ",
+      "name": "悪を為す者に恐れを",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000086-cryo_c4",
       "type": "constellation",
       "ownerId": "10000086-cryo",
@@ -13194,6 +13747,15 @@
       "ownerName": "リサ",
       "name": "空間電位の結界",
       "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000084-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000084-pyro",
+      "ownerName": "リネ",
+      "name": "巧言令色の誘引",
+      "timing": "always",
       "gcsimTarget": true
     },
     {
@@ -13227,6 +13789,15 @@
       "duration": 3
     },
     {
+      "id": "constellation:10000074-cryo_c6",
+      "type": "constellation",
+      "ownerId": "10000074-cryo",
+      "ownerName": "レイラ",
+      "name": "夜彩は輝く灯火のように",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000020-electro_c4",
       "type": "constellation",
       "ownerId": "10000020-electro",
@@ -13235,6 +13806,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 7
+    },
+    {
+      "id": "constellation:10000020-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000020-electro",
+      "ownerName": "レザー",
+      "name": "制圧",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000020-electro_c6",
@@ -13307,6 +13887,15 @@
       "duration": 12
     },
     {
+      "id": "constellation:10000048-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000048-pyro",
+      "ownerName": "煙緋",
+      "name": "最終解釈権",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000092-pyro_c2",
       "type": "constellation",
       "ownerId": "10000092-pyro",
@@ -13317,6 +13906,15 @@
       "duration": 5
     },
     {
+      "id": "constellation:10000092-pyro_c6",
+      "type": "constellation",
+      "ownerId": "10000092-pyro",
+      "ownerName": "嘉明",
+      "name": "百獣支配",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000037-cryo_c1",
       "type": "constellation",
       "ownerId": "10000037-cryo",
@@ -13325,6 +13923,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000037-cryo_c4",
+      "type": "constellation",
+      "ownerId": "10000037-cryo",
+      "ownerName": "甘雨",
+      "name": "西狩",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000037-cryo_c6",
@@ -13367,6 +13974,15 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000056-electro_c1",
+      "type": "constellation",
+      "ownerId": "10000056-electro",
+      "ownerName": "九条裟羅",
+      "name": "烏目",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000056-electro_c6",
       "type": "constellation",
       "ownerId": "10000056-electro",
@@ -13375,6 +13991,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000005-pyro_c6",
+      "type": "constellation",
+      "ownerId": "10000005-pyro",
+      "ownerName": "空(炎)",
+      "name": "永燃の聖火",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000005-pyro_c4",
@@ -13395,6 +14020,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "constellation:10000005-pyro_c1",
+      "type": "constellation",
+      "ownerId": "10000005-pyro",
+      "ownerName": "空(炎)",
+      "name": "流光の星火",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000005-geo_c1",
@@ -13445,6 +14079,15 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000005-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000005-anemo",
+      "ownerName": "空(風)",
+      "name": "革新の旋風",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000005-electro_c2",
       "type": "constellation",
       "ownerId": "10000005-electro",
@@ -13453,6 +14096,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "constellation:10000007-pyro_c6",
+      "type": "constellation",
+      "ownerId": "10000007-pyro",
+      "ownerName": "蛍(炎)",
+      "name": "永燃の聖火",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000007-pyro_c4",
@@ -13473,6 +14125,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "constellation:10000007-pyro_c1",
+      "type": "constellation",
+      "ownerId": "10000007-pyro",
+      "ownerName": "蛍(炎)",
+      "name": "流光の星火",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000007-geo_c1",
@@ -13523,6 +14184,15 @@
       "duration": 10
     },
     {
+      "id": "constellation:10000007-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000007-anemo",
+      "ownerName": "蛍(風)",
+      "name": "革新の旋風",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000007-electro_c2",
       "type": "constellation",
       "ownerId": "10000007-electro",
@@ -13551,6 +14221,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000057-geo_c6",
+      "type": "constellation",
+      "ownerId": "10000057-geo",
+      "ownerName": "荒瀧一斗",
+      "name": "傾奇の張本、荒瀧一斗",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000057-geo_c4",
@@ -13591,6 +14270,24 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 2
+    },
+    {
+      "id": "constellation:10000023-pyro_c6",
+      "type": "constellation",
+      "ownerId": "10000023-pyro",
+      "ownerName": "香菱",
+      "name": "竜巻旋火輪",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000042-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000042-electro",
+      "ownerName": "刻晴",
+      "name": "苛捐",
+      "timing": "conditional",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000042-electro_c4",
@@ -13652,6 +14349,33 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000035-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000035-cryo",
+      "ownerName": "七七",
+      "name": "氷寒蝕骨",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000036-cryo_c6",
+      "type": "constellation",
+      "ownerId": "10000036-cryo",
+      "ownerName": "重雲",
+      "name": "四霊の捧げ",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000036-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000036-cryo",
+      "ownerName": "重雲",
+      "name": "周天の回転",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000049-pyro_c1",
       "type": "constellation",
       "ownerId": "10000049-pyro",
@@ -13670,6 +14394,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "constellation:10000063-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000063-cryo",
+      "ownerName": "申鶴",
+      "name": "定蒙",
+      "timing": "conditional",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000063-cryo_c4",
@@ -13692,6 +14425,24 @@
       "duration": 6
     },
     {
+      "id": "constellation:10000002-cryo_c6",
+      "type": "constellation",
+      "ownerId": "10000002-cryo",
+      "ownerName": "神里綾華",
+      "name": "間水月",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000066-hydro_c1",
+      "type": "constellation",
+      "ownerId": "10000066-hydro",
+      "ownerName": "神里綾人",
+      "name": "鏡華風姿",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000066-hydro_c4",
       "type": "constellation",
       "ownerId": "10000066-hydro",
@@ -13700,6 +14451,24 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 15
+    },
+    {
+      "id": "constellation:10000066-hydro_c2",
+      "type": "constellation",
+      "ownerId": "10000066-hydro",
+      "ownerName": "神里綾人",
+      "name": "世に源泉ありて",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000044-pyro_c2",
+      "type": "constellation",
+      "ownerId": "10000044-pyro",
+      "ownerName": "辛炎",
+      "name": "オープニング演出",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000044-pyro_c4",
@@ -13732,6 +14501,15 @@
       "duration": 8
     },
     {
+      "id": "constellation:10000053-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000053-anemo",
+      "ownerName": "早柚",
+      "name": "逃げ道確保",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000082-dendro_c4",
       "type": "constellation",
       "ownerId": "10000082-dendro",
@@ -13742,6 +14520,15 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000058-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000058-electro",
+      "ownerName": "八重神子",
+      "name": "大殺生呪禁",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000058-electro_c4",
       "type": "constellation",
       "ownerId": "10000058-electro",
@@ -13750,6 +14537,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 5
+    },
+    {
+      "id": "constellation:10000058-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000058-electro",
+      "ownerName": "八重神子",
+      "name": "望月之吼噦",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000058-electro_c1",
@@ -13790,6 +14586,15 @@
       "duration": 20
     },
     {
+      "id": "constellation:10000075-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000075-anemo",
+      "ownerName": "放浪者",
+      "name": "弐番·箙島廓白浪",
+      "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000024-electro_c4",
       "type": "constellation",
       "ownerId": "10000024-electro",
@@ -13798,6 +14603,24 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000109-anemo_c6",
+      "type": "constellation",
+      "ownerId": "10000109-anemo",
+      "ownerName": "夢見月瑞希",
+      "name": "煙る月",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "constellation:10000109-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000109-anemo",
+      "ownerName": "夢見月瑞希",
+      "name": "希なる朝の",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000109-anemo_c1",
@@ -13850,6 +14673,15 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000026-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000026-anemo",
+      "ownerName": "魈",
+      "name": "空劫·虚空開敷の変",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "constellation:10000026-anemo_c6",
       "type": "constellation",
       "ownerId": "10000026-anemo",
@@ -13858,6 +14690,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 1
+    },
+    {
+      "id": "constellation:10000026-anemo_c4",
+      "type": "constellation",
+      "ownerId": "10000026-anemo",
+      "ownerName": "魈",
+      "name": "神通·諸苦滅尽",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "resonance:anemo",
@@ -16589,6 +17430,15 @@
       "duration": 15.95
     },
     {
+      "id": "weapon:12426:wbuff_12426",
+      "type": "weapon",
+      "ownerId": "12426",
+      "ownerName": "「スーパーアルティメット覇王魔剣」",
+      "name": "がんばって！",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:11419:wbuff_11419",
       "type": "weapon",
       "ownerId": "11419",
@@ -16619,6 +17469,15 @@
       "gcsimNote": "gcsim が未実装"
     },
     {
+      "id": "weapon:13415:wbuff_13415",
+      "type": "weapon",
+      "ownerId": "13415",
+      "ownerName": "「漁獲」",
+      "name": "舟歌",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:12431:wbuff_12431",
       "type": "weapon",
       "ownerId": "12431",
@@ -16627,6 +17486,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "weapon:15502:wbuff_15502",
+      "type": "weapon",
+      "ownerId": "15502",
+      "ownerName": "アモスの弓",
+      "name": "一心不乱",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:14519:wbuff_14519",
@@ -16688,6 +17556,15 @@
       "gcsimTarget": true
     },
     {
+      "id": "weapon:15302:wbuff_15302",
+      "type": "weapon",
+      "ownerId": "15302",
+      "ownerName": "シャープシューターの誓い",
+      "name": "精密射撃",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:12435:wbuff_12435",
       "type": "weapon",
       "ownerId": "12435",
@@ -16706,6 +17583,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 7
+    },
+    {
+      "id": "weapon:15410:wbuff_15410",
+      "type": "weapon",
+      "ownerId": "15410",
+      "ownerName": "ダークアレイの狩人",
+      "name": "路地奇襲",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:14410:wbuff_14410",
@@ -16736,6 +17622,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "weapon:15431:wbuff_15431",
+      "type": "weapon",
+      "ownerId": "15431",
+      "ownerName": "チェーンブレイカー",
+      "name": "花と落羽の長歌",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:11305:wbuff_11305",
@@ -16783,6 +17678,15 @@
       "ownerName": "ドラゴンスピア",
       "name": "ドラゴンスピア: 霜の埋葬",
       "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:13424:wbuff_13424",
+      "type": "weapon",
+      "ownerId": "13424",
+      "ownerName": "フィヨルドの歌",
+      "name": "氷原にある数々の物語",
+      "timing": "always",
       "gcsimTarget": true
     },
     {
@@ -16896,6 +17800,24 @@
       "gcsimNote": "gcsim が未実装"
     },
     {
+      "id": "weapon:14433:wbuff_14433",
+      "type": "weapon",
+      "ownerId": "14433",
+      "ownerName": "烏髄の孤灯",
+      "name": "契約の証",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:12405:wbuff_12405",
+      "type": "weapon",
+      "ownerId": "12405",
+      "ownerName": "雨裁",
+      "name": "水と雷の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:13436:wbuff_13436",
       "type": "weapon",
       "ownerId": "13436",
@@ -16924,6 +17846,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "weapon:15430:wbuff_15430",
+      "type": "weapon",
+      "ownerId": "15430",
+      "ownerName": "花飾りの羽",
+      "name": "まだ見ぬ花序",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:11425:wbuff_11425",
@@ -16966,6 +17897,15 @@
       "duration": 4
     },
     {
+      "id": "weapon:15405:wbuff_15405",
+      "type": "weapon",
+      "ownerId": "15405",
+      "ownerName": "弓蔵",
+      "name": "速射の弓",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:12436:wbuff_12436",
       "type": "weapon",
       "ownerId": "12436",
@@ -16974,6 +17914,51 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "weapon:12404:wbuff_12404",
+      "type": "weapon",
+      "ownerId": "12404",
+      "ownerName": "旧貴族大剣",
+      "name": "集中",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:15404:wbuff_15404",
+      "type": "weapon",
+      "ownerId": "15404",
+      "ownerName": "旧貴族長弓",
+      "name": "集中",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:11404:wbuff_11404",
+      "type": "weapon",
+      "ownerId": "11404",
+      "ownerName": "旧貴族長剣",
+      "name": "集中",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:14404:wbuff_14404",
+      "type": "weapon",
+      "ownerId": "14404",
+      "ownerName": "旧貴族秘法録",
+      "name": "集中",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:13408:wbuff_13408",
+      "type": "weapon",
+      "ownerId": "13408",
+      "ownerName": "旧貴族猟槍",
+      "name": "集中",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:14436:wbuff_14436",
@@ -17004,6 +17989,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "weapon:13433:wbuff_13433",
+      "type": "weapon",
+      "ownerId": "13433",
+      "ownerName": "金掘りのシャベル",
+      "name": "迅速果断",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:14406:wbuff_14406",
@@ -17057,6 +18051,15 @@
       "duration": 6
     },
     {
+      "id": "weapon:11434:wbuff_11434",
+      "type": "weapon",
+      "ownerId": "11434",
+      "ownerName": "月紡ぎの曙光",
+      "name": "秘銀の血告",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:11417:wbuff_11417",
       "type": "weapon",
       "ownerId": "11417",
@@ -17084,6 +18087,15 @@
       "timing": "always",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "weapon:13501:wbuff_13501",
+      "type": "weapon",
+      "ownerId": "13501",
+      "ownerName": "護摩の杖",
+      "name": "縛り無き朱色の蝶",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:11412:wbuff_11412",
@@ -17301,6 +18313,42 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "weapon:13416:wbuff_13416",
+      "type": "weapon",
+      "ownerId": "13416",
+      "ownerName": "斬波のひれ長",
+      "name": "波を統べる海祇の民",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:14502:wbuff_14502",
+      "type": "weapon",
+      "ownerId": "14502",
+      "ownerName": "四風原典",
+      "name": "果てしない恵み",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:15512:wbuff_15512",
+      "type": "weapon",
+      "ownerId": "15512",
+      "ownerName": "始まりの大魔術",
+      "name": "偉大なる者·パルジファル",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:13405:wbuff_13405",
+      "type": "weapon",
+      "ownerId": "13405",
+      "ownerName": "死闘の槍",
+      "name": "剣闘士",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:12430:wbuff_12430",
@@ -17625,6 +18673,15 @@
       "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
     },
     {
+      "id": "weapon:12510:wbuff_12510",
+      "type": "weapon",
+      "ownerId": "12510",
+      "ownerName": "赤角石塵滅砕",
+      "name": "御伽大王の御伽話",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:13512:wbuff_13512",
       "type": "weapon",
       "ownerId": "13512",
@@ -17653,6 +18710,42 @@
       "gcsimTarget": true
     },
     {
+      "id": "weapon:15402:wbuff_15402",
+      "type": "weapon",
+      "ownerId": "15402",
+      "ownerName": "絶弦",
+      "name": "矢なしの詩",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:12410:wbuff_12410",
+      "type": "weapon",
+      "ownerId": "12410",
+      "ownerName": "千岩古剣",
+      "name": "千岩訣·同心",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:13406:wbuff_13406",
+      "type": "weapon",
+      "ownerId": "13406",
+      "ownerName": "千岩長槍",
+      "name": "千岩訣·同心",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:14511:wbuff_14511",
+      "type": "weapon",
+      "ownerId": "14511",
+      "ownerName": "千夜に浮かぶ夢",
+      "name": "千夜の暁歌",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:12514:wbuff_12514",
       "type": "weapon",
       "ownerId": "12514",
@@ -17661,6 +18754,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 6
+    },
+    {
+      "id": "weapon:15435:wbuff_15435",
+      "type": "weapon",
+      "ownerId": "15435",
+      "ownerName": "千鈞懸黎",
+      "name": "夜を飾る灯火",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:14524:wbuff_14524",
@@ -17773,6 +18875,15 @@
       "duration": 20
     },
     {
+      "id": "weapon:15304:wbuff_15304",
+      "type": "weapon",
+      "ownerId": "15304",
+      "ownerName": "弾弓",
+      "name": "弾弓",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:12432:wbuff_12432",
       "type": "weapon",
       "ownerId": "12432",
@@ -17852,6 +18963,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 30
+    },
+    {
+      "id": "weapon:12301:wbuff_12301",
+      "type": "weapon",
+      "ownerId": "12301",
+      "ownerName": "鉄影段平",
+      "name": "不屈",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:12418:wbuff_12418",
@@ -18040,6 +19160,15 @@
       "duration": 8
     },
     {
+      "id": "weapon:15414:wbuff_15414",
+      "type": "weapon",
+      "ownerId": "15414",
+      "ownerName": "破魔の弓",
+      "name": "浅瀨の弭",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:15513:wbuff_15513",
       "type": "weapon",
       "ownerId": "15513",
@@ -18080,6 +19209,24 @@
       "gcsimTarget": false,
       "duration": 6,
       "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+    },
+    {
+      "id": "weapon:13301:wbuff_13301",
+      "type": "weapon",
+      "ownerId": "13301",
+      "ownerName": "白纓槍",
+      "name": "鋭利",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:11505:wbuff_11505",
+      "type": "weapon",
+      "ownerId": "11505",
+      "ownerName": "磐岩結緑",
+      "name": "護国の無垢なる心",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:11306:wbuff_11306",
@@ -18140,6 +19287,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "weapon:11413:wbuff_11413",
+      "type": "weapon",
+      "ownerId": "11413",
+      "ownerName": "腐植の剣",
+      "name": "底なしの渇望",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:15437:wbuff_15437",
@@ -18210,6 +19366,15 @@
       "gcsimTarget": true
     },
     {
+      "id": "weapon:14301:wbuff_14301",
+      "type": "weapon",
+      "ownerId": "14301",
+      "ownerName": "魔導緒論",
+      "name": "水と雷の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:14407:wbuff_14407",
       "type": "weapon",
       "ownerId": "14407",
@@ -18229,6 +19394,15 @@
       "gcsimTarget": false,
       "duration": 12,
       "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+    },
+    {
+      "id": "weapon:14417:wbuff_14417",
+      "type": "weapon",
+      "ownerId": "14417",
+      "ownerName": "満悦の実",
+      "name": "正円の相",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:12504:wbuff_12504",
@@ -18259,6 +19433,15 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 4.5
+    },
+    {
+      "id": "weapon:11432:wbuff_11432",
+      "type": "weapon",
+      "ownerId": "11432",
+      "ownerName": "厄水の災い",
+      "name": "広がる境界線",
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "weapon:15412:wbuff_15412",
@@ -18331,6 +19514,15 @@
       "duration": 10
     },
     {
+      "id": "weapon:12302:wbuff_12302",
+      "type": "weapon",
+      "ownerId": "12302",
+      "ownerName": "龍血を浴びた剣",
+      "name": "炎と雷の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:14302:wbuff_14302",
       "type": "weapon",
       "ownerId": "14302",
@@ -18347,6 +19539,15 @@
       "ownerName": "冷寂の音",
       "name": "冷寂の音: サイレント・トリガー",
       "timing": "conditional",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:11301:wbuff_11301",
+      "type": "weapon",
+      "ownerId": "11301",
+      "ownerName": "冷刃",
+      "name": "水と氷の破滅",
+      "timing": "always",
       "gcsimTarget": true
     },
     {
@@ -18431,6 +19632,24 @@
       "duration": 6
     },
     {
+      "id": "weapon:13401:wbuff_13401",
+      "type": "weapon",
+      "ownerId": "13401",
+      "ownerName": "匣中滅龍",
+      "name": "炎と水の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:11405:wbuff_11405",
+      "type": "weapon",
+      "ownerId": "11405",
+      "ownerName": "匣中龍吟",
+      "name": "炎と雷の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
       "id": "weapon:14416:wbuff_14416",
       "type": "weapon",
       "ownerId": "14416",
@@ -18496,6 +19715,33 @@
       "name": "銜玉の海皇: 海の勝利",
       "timing": "always",
       "gcsimTarget": true
+    },
+    {
+      "id": "weapon:15301:wbuff_15301",
+      "type": "weapon",
+      "ownerId": "15301",
+      "ownerName": "鴉羽の弓",
+      "name": "炎と水の破滅",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:11302:wbuff_11302",
+      "type": "weapon",
+      "ownerId": "11302",
+      "ownerName": "黎明の神剣",
+      "name": "奮い立てる",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "weapon:12409:wbuff_12409",
+      "type": "weapon",
+      "ownerId": "12409",
+      "ownerName": "螭龍の剣",
+      "name": "波乗り",
+      "timing": "always",
+      "gcsimTarget": true
     }
   ],
   "links": [
@@ -18508,6 +19754,18 @@
     {
       "effectId": "a-teaspoon-of-transcendence-stellar",
       "targetId": "weapon:12516:wbuff_12516",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "a-thousand-floating-dreams",
+      "targetId": "weapon:14511:wbuff_14511",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "a-thousand-floating-dreams-party-*",
+      "targetId": "weapon:14511:wbuff_14511",
       "role": "effect",
       "approval": "generated"
     },
@@ -18644,6 +19902,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "alley-hunter",
+      "targetId": "weapon:15410:wbuff_15410",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "alleyflash",
       "targetId": "weapon:11410:wbuff_11410",
       "role": "extra",
@@ -18680,6 +19944,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "amc-c2",
+      "targetId": "constellation:10000005-anemo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "amc-c2",
+      "targetId": "constellation:10000007-anemo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "amc-c6-*",
       "targetId": "constellation:10000005-anemo_c6",
       "role": "effect",
@@ -18706,6 +19982,12 @@
     {
       "effectId": "amenoma-seed-1",
       "targetId": "weapon:11414:wbuff_11414",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "amos",
+      "targetId": "weapon:15502:wbuff_15502",
       "role": "effect",
       "approval": "generated"
     },
@@ -18768,6 +20050,18 @@
       "effectId": "archaic-4pc",
       "targetId": "artifact:15014:abuff_15014",
       "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "arlecchino-c2-icd",
+      "targetId": "constellation:10000096-pyro_c2",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "arlecchino-c4-icd",
+      "targetId": "constellation:10000096-pyro_c4",
+      "role": "cooldown",
       "approval": "generated"
     },
     {
@@ -18861,6 +20155,24 @@
       "approval": "generated"
     },
     {
+      "effectId": "ayaka-c6",
+      "targetId": "constellation:10000002-cryo_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ayato-c1",
+      "targetId": "constellation:10000066-hydro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ayato-c2",
+      "targetId": "constellation:10000066-hydro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "ayato-c4",
       "targetId": "constellation:10000066-hydro_c4",
       "role": "effect",
@@ -18899,6 +20211,12 @@
     {
       "effectId": "ballad-of-the-boundless-blue-dmgp",
       "targetId": "weapon:14426:wbuff_14426",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "balladofthefjords",
+      "targetId": "weapon:13424:wbuff_13424",
       "role": "effect",
       "approval": "generated"
     },
@@ -18963,6 +20281,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "bennett-c2",
+      "targetId": "constellation:10000032-pyro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "berserker-4pc",
+      "targetId": "artifact:10005:abuff_10005",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "black-sword-icd",
       "targetId": "weapon:11409:wbuff_11409",
       "role": "cooldown",
@@ -18995,6 +20325,12 @@
     {
       "effectId": "blackcliff",
       "targetId": "weapon:15408:wbuff_15408",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "blackmarrow-lantern",
+      "targetId": "weapon:14433:wbuff_14433",
       "role": "effect",
       "approval": "generated"
     },
@@ -19047,6 +20383,30 @@
       "approval": "generated"
     },
     {
+      "effectId": "bloodtaintedgreatsword",
+      "targetId": "weapon:12302:wbuff_12302",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "bolide-4pc",
+      "targetId": "artifact:15015:abuff_15015",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "braveheart-4pc",
+      "targetId": "artifact:10002:abuff_10002",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "bs-4pc",
+      "targetId": "artifact:14001:abuff_14001",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "calamity-consummation",
       "targetId": "weapon:13507:wbuff_13507",
       "role": "effect",
@@ -19056,6 +20416,12 @@
       "effectId": "calamity-dmg",
       "targetId": "weapon:13507:wbuff_13507",
       "role": "extra",
+      "approval": "generated"
+    },
+    {
+      "effectId": "calamityofeshu",
+      "targetId": "weapon:11432:wbuff_11432",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -19115,6 +20481,18 @@
     {
       "effectId": "celestialgift-4pc-holder-*",
       "targetId": "artifact:15045:abuff_15045",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "chain-breaker-atk",
+      "targetId": "weapon:15431:wbuff_15431",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "chain-breaker-em",
+      "targetId": "weapon:15431:wbuff_15431",
       "role": "effect",
       "approval": "generated"
     },
@@ -19233,6 +20611,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "chongyun-c2",
+      "targetId": "constellation:10000036-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "chongyun-c6",
+      "targetId": "constellation:10000036-cryo_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "cinnabar-buff-active",
       "targetId": "weapon:11415:wbuff_11415",
       "role": "effect",
@@ -19259,6 +20649,18 @@
     {
       "effectId": "citlali-a1-pyro",
       "targetId": "talent:10000107-cryo_p1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "citlali-c2-em",
+      "targetId": "constellation:10000107-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "citlali-c6",
+      "targetId": "constellation:10000107-cryo_c6",
       "role": "effect",
       "approval": "generated"
     },
@@ -19293,6 +20695,30 @@
       "approval": "generated"
     },
     {
+      "effectId": "clorinde-c4-burst-bonus",
+      "targetId": "constellation:10000098-electro_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "clorinde-c6-cd-bonus",
+      "targetId": "constellation:10000098-electro_c6",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "clorinde-c6-cr-bonus",
+      "targetId": "constellation:10000098-electro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "clorinde-c6-icd",
+      "targetId": "constellation:10000098-electro_c6",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
       "effectId": "cloudforged-em",
       "targetId": "weapon:15426:wbuff_15426",
       "role": "effect",
@@ -19307,6 +20733,12 @@
     {
       "effectId": "collei-a4-modcheck",
       "targetId": "talent:10000067-dendro_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "collei-c1",
+      "targetId": "constellation:10000067-dendro_c1",
       "role": "effect",
       "approval": "generated"
     },
@@ -19347,6 +20779,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "columbina-c4-icd",
+      "targetId": "constellation:10000125-hydro_c4",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
       "effectId": "columbina-c6-lb",
       "targetId": "constellation:10000125-hydro_c6",
       "role": "effect",
@@ -19373,6 +20811,12 @@
     {
       "effectId": "compoundbow-stacks",
       "targetId": "weapon:15407:wbuff_15407",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "coolsteel",
+      "targetId": "weapon:11301:wbuff_11301",
       "role": "effect",
       "approval": "generated"
     },
@@ -19467,6 +20911,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "dahlia-c6-icd",
+      "targetId": "constellation:10000115-hydro_c6",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
       "effectId": "darkironsword",
       "targetId": "weapon:11304:wbuff_11304",
       "role": "effect",
@@ -19487,6 +20937,12 @@
     {
       "effectId": "dawns-first-hue",
       "targetId": "weapon:14519:wbuff_14519",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "deathmatch",
+      "targetId": "weapon:13405:wbuff_13405",
       "role": "effect",
       "approval": "generated"
     },
@@ -19530,6 +20986,24 @@
       "effectId": "dehya-a4-icd",
       "targetId": "talent:10000079-pyro_p2",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "dehya-c1",
+      "targetId": "constellation:10000079-pyro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "dehya-c6",
+      "targetId": "constellation:10000079-pyro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "dehya-sanctum-dot-c2",
+      "targetId": "constellation:10000079-pyro_c2",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -19587,6 +21061,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "diluc-c1",
+      "targetId": "constellation:10000016-pyro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "diluc-c2",
       "targetId": "constellation:10000016-pyro_c2",
       "role": "effect",
@@ -19617,6 +21097,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "diona-c2",
+      "targetId": "constellation:10000039-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "diona-c6",
       "targetId": "constellation:10000039-cryo_c6",
       "role": "effect",
@@ -19631,6 +21117,18 @@
     {
       "effectId": "disaster-remorse-proc",
       "targetId": "weapon:13517:wbuff_13517",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "disenchantment-4pc-cr",
+      "targetId": "artifact:15046:abuff_15046",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "disenchantment-4pc-dmg",
+      "targetId": "artifact:15046:abuff_15046",
       "role": "effect",
       "approval": "generated"
     },
@@ -19725,6 +21223,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "dragonbane",
+      "targetId": "weapon:13401:wbuff_13401",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "dragonspine-spear-icd",
       "targetId": "weapon:13409:wbuff_13409",
       "role": "cooldown",
@@ -19745,6 +21249,12 @@
     {
       "effectId": "durin-c2-{element}",
       "targetId": "constellation:10000123-pyro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "durin-c4",
+      "targetId": "constellation:10000123-pyro_c4",
       "role": "effect",
       "approval": "generated"
     },
@@ -19803,6 +21313,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "emblem-4pc",
+      "targetId": "artifact:15020:abuff_15020",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "emeraldorb",
       "targetId": "weapon:14304:wbuff_14304",
       "role": "effect",
@@ -19811,6 +21327,12 @@
     {
       "effectId": "emilie-a4",
       "targetId": "talent:10000099-dendro_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "emilie-c1",
+      "targetId": "constellation:10000099-dendro_c1",
       "role": "effect",
       "approval": "generated"
     },
@@ -19911,6 +21433,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "eula-c1",
+      "targetId": "constellation:10000051-cryo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "eula-c4",
+      "targetId": "constellation:10000051-cryo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "exaiphanes-blade-atk",
       "targetId": "weapon:11521:wbuff_11521",
       "role": "effect",
@@ -19950,6 +21484,18 @@
       "effectId": "faruzan-c6-icd",
       "targetId": "constellation:10000076-anemo_c6",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ferrousshadow",
+      "targetId": "weapon:12301:wbuff_12301",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "festering",
+      "targetId": "weapon:11413:wbuff_11413",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -20019,8 +21565,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "flins-c1-icd",
+      "targetId": "constellation:10000120-electro_c1",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
       "effectId": "flins-c2",
       "targetId": "constellation:10000120-electro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "flins-c4",
+      "targetId": "constellation:10000120-electro_c4",
       "role": "effect",
       "approval": "generated"
     },
@@ -20040,6 +21598,12 @@
       "effectId": "flower-4pc-icd",
       "targetId": "artifact:15028:abuff_15028",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "flowerwreathedfeathers",
+      "targetId": "weapon:15430:wbuff_15430",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -20181,6 +21745,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "freminet-c1",
+      "targetId": "constellation:10000085-cryo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "freminet-c4",
       "targetId": "constellation:10000085-cryo_c4",
       "role": "effect",
@@ -20223,6 +21793,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "fruitoffulfillment",
+      "targetId": "weapon:14417:wbuff_14417",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "furina-a1",
       "targetId": "talent:10000089-hydro_p1",
       "role": "effect",
@@ -20231,6 +21807,12 @@
     {
       "effectId": "furina-a4",
       "targetId": "talent:10000089-hydro_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "furina-c2-hp",
+      "targetId": "constellation:10000089-hydro_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -20283,8 +21865,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "gaming-c6",
+      "targetId": "constellation:10000092-pyro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "ganyu-c1",
       "targetId": "constellation:10000037-cryo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ganyu-c4",
+      "targetId": "constellation:10000037-cryo_c4",
       "role": "effect",
       "approval": "generated"
     },
@@ -20333,6 +21927,12 @@
     {
       "effectId": "gest-of-the-mighty-wolf-stacks",
       "targetId": "weapon:12515:wbuff_12515",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "glad-4pc",
+      "targetId": "artifact:15001:abuff_15001",
       "role": "effect",
       "approval": "generated"
     },
@@ -20487,9 +22087,21 @@
       "approval": "generated"
     },
     {
+      "effectId": "hamayumi",
+      "targetId": "weapon:15414:wbuff_15414",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "haran-ele-bonus",
       "targetId": "weapon:11510:wbuff_11510",
       "role": "extra",
+      "approval": "generated"
+    },
+    {
+      "effectId": "harbinger",
+      "targetId": "weapon:11302:wbuff_11302",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -20541,6 +22153,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "homa-atk-buff",
+      "targetId": "weapon:13501:wbuff_13501",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "homa-hp",
+      "targetId": "weapon:13501:wbuff_13501",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "hunters-experience",
       "targetId": "talent:10000101-dendro_p2",
       "role": "effect",
@@ -20561,6 +22185,12 @@
     {
       "effectId": "hunterspath-tireless-hunt",
       "targetId": "weapon:15511:wbuff_15511",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "husk-4pc",
+      "targetId": "artifact:15021:abuff_15021",
       "role": "effect",
       "approval": "generated"
     },
@@ -20598,6 +22228,12 @@
       "effectId": "hydro-res-hpp",
       "targetId": "resonance:hydro",
       "role": "resonance",
+      "approval": "generated"
+    },
+    {
+      "effectId": "iansan-c2",
+      "targetId": "constellation:10000110-electro_c2",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -20703,6 +22339,30 @@
       "approval": "generated"
     },
     {
+      "effectId": "itto-c6",
+      "targetId": "constellation:10000057-geo_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "jade-vista",
+      "targetId": "weapon:15435:wbuff_15435",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "jadecutter-atk-buff",
+      "targetId": "weapon:11505:wbuff_11505",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "jadecutter-hp",
+      "targetId": "weapon:11505:wbuff_11505",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "jadefall-buff",
       "targetId": "weapon:14505:wbuff_14505",
       "role": "effect",
@@ -20729,6 +22389,12 @@
     {
       "effectId": "jean-c4",
       "targetId": "constellation:10000003-anemo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "kaeya-c1",
+      "targetId": "constellation:10000015-cryo_c1",
       "role": "effect",
       "approval": "generated"
     },
@@ -20775,6 +22441,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "kaveh-c4",
+      "targetId": "constellation:10000081-dendro_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "kazuha-a4-{element}",
       "targetId": "talent:10000047-anemo_p2",
       "role": "effect",
@@ -20796,6 +22468,12 @@
       "effectId": "keqing-a4",
       "targetId": "talent:10000042-electro_p2",
       "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "keqing-c2-icd",
+      "targetId": "constellation:10000042-electro_c2",
+      "role": "cooldown",
       "approval": "generated"
     },
     {
@@ -20865,8 +22543,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "kinich-c1",
+      "targetId": "constellation:10000101-dendro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "kinich-c2",
       "targetId": "constellation:10000101-dendro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "kinich-c4-dmgp",
+      "targetId": "constellation:10000101-dendro_c4",
       "role": "effect",
       "approval": "generated"
     },
@@ -20979,8 +22669,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "lauma-c2-lunarbloom-buff",
+      "targetId": "constellation:10000119-dendro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "lauma-pale-hymn-c6",
       "targetId": "constellation:10000119-dendro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "lavawalker-4pc",
+      "targetId": "artifact:14003:abuff_14003",
       "role": "effect",
       "approval": "generated"
     },
@@ -20993,6 +22695,12 @@
     {
       "effectId": "layla-c4",
       "targetId": "constellation:10000074-cryo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "layla-c6",
+      "targetId": "constellation:10000074-cryo_c6",
       "role": "effect",
       "approval": "generated"
     },
@@ -21015,6 +22723,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "lionsroar",
+      "targetId": "weapon:11405:wbuff_11405",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "lisa-a4",
       "targetId": "talent:10000006-electro_p2",
       "role": "effect",
@@ -21023,6 +22737,18 @@
     {
       "effectId": "lisa-c2",
       "targetId": "constellation:10000006-electro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "lithic",
+      "targetId": "weapon:12410:wbuff_12410",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "lithic",
+      "targetId": "weapon:13406:wbuff_13406",
       "role": "effect",
       "approval": "generated"
     },
@@ -21042,6 +22768,12 @@
       "effectId": "longnightsoath-icd-skill",
       "targetId": "artifact:15039:abuff_15039",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "lost-prayer",
+      "targetId": "weapon:14502:wbuff_14502",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21087,8 +22819,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "lyney-c2",
+      "targetId": "constellation:10000084-pyro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "lyney-c4",
       "targetId": "constellation:10000084-pyro_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "magic-guide",
+      "targetId": "weapon:14301:wbuff_14301",
       "role": "effect",
       "approval": "generated"
     },
@@ -21237,6 +22981,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "mizuki-c2",
+      "targetId": "constellation:10000109-anemo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "mizuki-c6",
+      "targetId": "constellation:10000109-anemo_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "mona-a4",
       "targetId": "talent:10000041-hydro_p2",
       "role": "effect",
@@ -21258,6 +23014,12 @@
       "effectId": "mona-c2-icd",
       "targetId": "constellation:10000041-hydro_c2",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "mona-c4",
+      "targetId": "constellation:10000041-hydro_c4",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21297,6 +23059,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "moonweavers-dawn",
+      "targetId": "weapon:11434:wbuff_11434",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "mountain-bracing-bolt-base",
       "targetId": "weapon:13430:wbuff_13430",
       "role": "extra",
@@ -21305,6 +23073,12 @@
     {
       "effectId": "mountain-bracing-bolt-other",
       "targetId": "weapon:13430:wbuff_13430",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "mualani-c4",
+      "targetId": "constellation:10000102-hydro_c4",
       "role": "effect",
       "approval": "generated"
     },
@@ -21342,6 +23116,12 @@
       "effectId": "nahida-c2-lunarbloom",
       "targetId": "constellation:10000073-dendro_c2",
       "role": "extra",
+      "approval": "generated"
+    },
+    {
+      "effectId": "nahida-c4",
+      "targetId": "constellation:10000073-dendro_c4",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21411,6 +23191,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "neuvillette-c2",
+      "targetId": "constellation:10000087-hydro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "new-moon-verse",
       "targetId": "weapon:14520:wbuff_14520",
       "role": "effect",
@@ -21471,6 +23257,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "nilou-c1",
+      "targetId": "constellation:10000070-hydro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "nilou-c2-dendro",
       "targetId": "constellation:10000070-hydro_c2",
       "role": "effect",
@@ -21485,6 +23277,18 @@
     {
       "effectId": "nilou-c4",
       "targetId": "constellation:10000070-hydro_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "nilou-c6-cd",
+      "targetId": "constellation:10000070-hydro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "nilou-c6-cr",
+      "targetId": "constellation:10000070-hydro_c6",
       "role": "effect",
       "approval": "generated"
     },
@@ -21528,6 +23332,18 @@
       "effectId": "noelle-a1-icd",
       "targetId": "talent:10000034-geo_p1",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "noelle-c2-dmg",
+      "targetId": "constellation:10000034-geo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "noelle-c2-stam",
+      "targetId": "constellation:10000034-geo_c2",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21600,6 +23416,12 @@
       "effectId": "ororon-a4-icd",
       "targetId": "talent:10000105-electro_p2",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ororon-c1",
+      "targetId": "constellation:10000105-electro_c1",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21777,6 +23599,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "prospectors-shovel",
+      "targetId": "weapon:13433:wbuff_13433",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "prototype",
       "targetId": "weapon:13402:wbuff_13402",
       "role": "effect",
@@ -21804,6 +23632,12 @@
       "effectId": "prune-a1-swirl-check-icd",
       "targetId": "talent:10000132-anemo_p1",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "prune-c2",
+      "targetId": "constellation:10000132-anemo_c2",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -21849,6 +23683,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "qiqi-c2",
+      "targetId": "constellation:10000035-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "qiqi-c2-radiance",
+      "targetId": "constellation:10000035-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "qiqi-c6",
       "targetId": "constellation:10000035-cryo_c6",
       "role": "effect",
@@ -21885,6 +23731,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "rainslasher",
+      "targetId": "weapon:12405:wbuff_12405",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "range-gauge",
       "targetId": "weapon:15427:wbuff_15427",
       "role": "effect",
@@ -21903,6 +23755,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "ravenbow",
+      "targetId": "weapon:15301:wbuff_15301",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "razor-a4",
       "targetId": "talent:10000020-electro_p2",
       "role": "effect",
@@ -21911,6 +23769,12 @@
     {
       "effectId": "razor-c1",
       "targetId": "constellation:10000020-electro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "razor-c2",
+      "targetId": "constellation:10000020-electro_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -21929,6 +23793,12 @@
     {
       "effectId": "razor-hexerei-c6-buff",
       "targetId": "constellation:10000020-electro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "redhorn-stonethrasher-def-boost",
+      "targetId": "weapon:12510:wbuff_12510",
       "role": "effect",
       "approval": "generated"
     },
@@ -22005,6 +23875,42 @@
       "approval": "generated"
     },
     {
+      "effectId": "royal",
+      "targetId": "weapon:11404:wbuff_11404",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "royal",
+      "targetId": "weapon:12404:wbuff_12404",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "royal",
+      "targetId": "weapon:13408:wbuff_13408",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "royal",
+      "targetId": "weapon:14404:wbuff_14404",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "royal",
+      "targetId": "weapon:15404:wbuff_15404",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "rust",
+      "targetId": "weapon:15405:wbuff_15405",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "sacrificersstaff-buff",
       "targetId": "weapon:13434:wbuff_13434",
       "role": "effect",
@@ -22053,6 +23959,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "sara-c1-icd",
+      "targetId": "constellation:10000056-electro_c1",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
       "effectId": "sara-c6",
       "targetId": "constellation:10000056-electro_c6",
       "role": "effect",
@@ -22062,6 +23974,12 @@
       "effectId": "sayu-a1-icd",
       "targetId": "talent:10000053-anemo_p1",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "sayu-c2",
+      "targetId": "constellation:10000053-anemo_c2",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -22149,6 +24067,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "sethos-c1",
+      "targetId": "constellation:10000097-electro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "sethos-c2",
       "targetId": "constellation:10000097-electro_c2",
       "role": "extra",
@@ -22167,6 +24091,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "sharpshooter",
+      "targetId": "weapon:15302:wbuff_15302",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "shenhe-a1",
       "targetId": "talent:10000063-cryo_p1",
       "role": "effect",
@@ -22181,6 +24111,12 @@
     {
       "effectId": "shenhe-a4-press",
       "targetId": "talent:10000063-cryo_p2_1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "shenhe-c2",
+      "targetId": "constellation:10000063-cryo_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -22257,6 +24193,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "skirk-c4",
+      "targetId": "constellation:10000114-cryo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "skyrider",
       "targetId": "weapon:11306:wbuff_11306",
       "role": "effect",
@@ -22329,6 +24271,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "slingshot",
+      "targetId": "weapon:15304:wbuff_15304",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "sojourner-4pc",
+      "targetId": "artifact:10001:abuff_10001",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "solar-na-buff",
       "targetId": "weapon:14405:wbuff_14405",
       "role": "effect",
@@ -22368,6 +24322,12 @@
       "effectId": "sourcewater-droplet-icd",
       "targetId": "talent:10000007-hydro_p1",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "spine",
+      "targetId": "weapon:12409:wbuff_12409",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -22421,6 +24381,12 @@
     {
       "effectId": "stirring-dawn-breeze",
       "targetId": "weapon:15515:wbuff_15515",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "stringless",
+      "targetId": "weapon:15402:wbuff_15402",
       "role": "effect",
       "approval": "generated"
     },
@@ -22533,6 +24499,30 @@
       "approval": "generated"
     },
     {
+      "effectId": "tf-4pc",
+      "targetId": "artifact:15005:abuff_15005",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "the-catch",
+      "targetId": "weapon:13415:wbuff_13415",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "thefirstgreatmagic-atk",
+      "targetId": "weapon:15512:wbuff_15512",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "thefirstgreatmagic-dmg%",
+      "targetId": "weapon:15512:wbuff_15512",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "thoma-a1",
       "targetId": "talent:10000050-pyro_p1",
       "role": "effect",
@@ -22577,6 +24567,12 @@
     {
       "effectId": "tighnari-a4",
       "targetId": "talent:10000069-dendro_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "tighnari-c1",
+      "targetId": "constellation:10000069-dendro_c1",
       "role": "effect",
       "approval": "generated"
     },
@@ -22701,6 +24697,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "travelerpyro-c1",
+      "targetId": "constellation:10000005-pyro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "travelerpyro-c1",
+      "targetId": "constellation:10000007-pyro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "travelerpyro-c2",
       "targetId": "constellation:10000005-pyro_c2",
       "role": "effect",
@@ -22725,8 +24733,26 @@
       "approval": "generated"
     },
     {
+      "effectId": "travelerpyro-c6",
+      "targetId": "constellation:10000005-pyro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "travelerpyro-c6",
+      "targetId": "constellation:10000007-pyro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "troupe-4pc",
       "targetId": "artifact:15032:abuff_15032",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "ts-4pc",
+      "targetId": "artifact:14002:abuff_14002",
       "role": "effect",
       "approval": "generated"
     },
@@ -22779,6 +24805,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "ultimateoverlordsmegamagicsword",
+      "targetId": "weapon:12426:wbuff_12426",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "unfinishedreverie-4pc",
+      "targetId": "artifact:15036:abuff_15036",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "unforgivable",
       "targetId": "weapon:13517:wbuff_13517",
       "role": "effect",
@@ -22818,6 +24856,12 @@
       "effectId": "varesa-c4",
       "targetId": "constellation:10000111-electro_c4",
       "role": "extra",
+      "approval": "generated"
+    },
+    {
+      "effectId": "varesa-c6",
+      "targetId": "constellation:10000111-electro_c6",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -23013,6 +25057,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "wanderer-c2-burstbonus",
+      "targetId": "constellation:10000075-anemo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "wanderingevenstar",
       "targetId": "weapon:14416:wbuff_14416",
       "role": "effect",
@@ -23037,6 +25087,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "wavebreaker",
+      "targetId": "weapon:13416:wbuff_13416",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "waveridingwhirl-buff",
       "targetId": "weapon:14430:wbuff_14430",
       "role": "effect",
@@ -23057,6 +25113,12 @@
     {
       "effectId": "whiteblind",
       "targetId": "weapon:12407:wbuff_12407",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "whitetassel",
+      "targetId": "weapon:13301:wbuff_13301",
       "role": "effect",
       "approval": "generated"
     },
@@ -23145,8 +25207,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "wriothesley-c1",
+      "targetId": "constellation:10000086-cryo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "wriothesley-c4-spd",
       "targetId": "constellation:10000086-cryo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "wt-4pc",
+      "targetId": "artifact:15003:abuff_15003",
       "role": "effect",
       "approval": "generated"
     },
@@ -23165,6 +25239,12 @@
     {
       "effectId": "xiangling-c2",
       "targetId": "constellation:10000023-pyro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "xiangling-c6",
+      "targetId": "constellation:10000023-pyro_c6",
       "role": "effect",
       "approval": "generated"
     },
@@ -23211,6 +25291,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "xiao-c2",
+      "targetId": "constellation:10000026-anemo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "xiao-c4",
+      "targetId": "constellation:10000026-anemo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "xiao-c6",
       "targetId": "constellation:10000026-anemo_c6",
       "role": "effect",
@@ -23237,6 +25329,12 @@
     {
       "effectId": "xilonen-c2",
       "targetId": "talent:10000103-geo_p1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "xilonen-c2-buff",
+      "targetId": "constellation:10000103-geo_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -23295,6 +25393,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "xinyan-c2",
+      "targetId": "constellation:10000044-pyro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "xinyan-c4",
       "targetId": "constellation:10000044-pyro_c4",
       "role": "effect",
@@ -23313,6 +25417,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "xlc6",
+      "targetId": "constellation:10000023-pyro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "yae-c1-electro",
       "targetId": "constellation:10000058-electro_c1",
       "role": "effect",
@@ -23321,6 +25431,12 @@
     {
       "effectId": "yae-c1-ssc",
       "targetId": "constellation:10000058-electro_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "yae-c2",
+      "targetId": "constellation:10000058-electro_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -23334,6 +25450,12 @@
       "effectId": "yae-c4-icd",
       "targetId": "constellation:10000058-electro_c4",
       "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "yae-c6",
+      "targetId": "constellation:10000058-electro_c6",
+      "role": "effect",
       "approval": "generated"
     },
     {
@@ -23351,6 +25473,12 @@
     {
       "effectId": "yanfei-a1",
       "targetId": "talent:10000048-pyro_p1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "yanfei-c2",
+      "targetId": "constellation:10000048-pyro_c2",
       "role": "effect",
       "approval": "generated"
     },
@@ -23475,10 +25603,31 @@
     },
     {
       "side": "effect",
+      "id": "aino-c2-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "aino-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "alhaitham-c1-icd",
       "state": "excluded",
       "reason": "internal-interval",
       "note": "内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
+      "id": "amber-c2",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -23514,6 +25663,13 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "baizhu-c2-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「HP 回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -23566,6 +25722,13 @@
     },
     {
       "side": "effect",
+      "id": "c4-skull-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "candace-c6-icd",
       "state": "excluded",
       "reason": "internal-interval",
@@ -23587,10 +25750,45 @@
     },
     {
       "side": "effect",
+      "id": "charlotte-c6-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「HP 回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "chev-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "chev-c2-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "chongyun-c4-icd",
       "state": "excluded",
       "reason": "internal-interval",
       "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
+      "id": "clorinde-c1-IcdKey",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "columbina-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -23757,8 +25955,8 @@
       "side": "effect",
       "id": "exile-2pc",
       "state": "excluded",
-      "reason": "two-piece-effect",
-      "note": "D5: 2セット効果は発動バフのバーにしない"
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -23853,6 +26051,13 @@
     },
     {
       "side": "effect",
+      "id": "furina-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "furina-c6-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -23937,6 +26142,13 @@
     },
     {
       "side": "effect",
+      "id": "iansan-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "iansan-c6",
       "state": "excluded",
       "reason": "excluded-constellation",
@@ -23955,6 +26167,27 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "illuga-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "ineffa-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "ineffa-c6-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -23979,6 +26212,13 @@
     },
     {
       "side": "effect",
+      "id": "kaveh-c6-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "khaj-nisut-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -23997,6 +26237,13 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "kirara-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24021,10 +26268,24 @@
     },
     {
       "side": "effect",
+      "id": "kuki-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "lanyan-c2-icd",
       "state": "excluded",
       "reason": "internal-interval",
       "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
+      "id": "lauma-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24039,6 +26300,13 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "lyney-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「その他」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24147,10 +26415,24 @@
     },
     {
       "side": "effect",
+      "id": "neuvillette-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「その他」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "neuvillette-c6-icd",
       "state": "excluded",
       "reason": "internal-interval",
       "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
+      "id": "nicole-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24177,8 +26459,8 @@
       "side": "effect",
       "id": "ohc-2pc",
       "state": "excluded",
-      "reason": "two-piece-effect",
-      "note": "D5: 2セット効果は発動バフのバーにしない"
+      "reason": "low-value-nature",
+      "note": "効果の性質が「HP 回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24252,6 +26534,13 @@
     },
     {
       "side": "effect",
+      "id": "qiqi-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "razor-hexerei-icd",
       "state": "excluded",
       "reason": "internal-interval",
@@ -24268,8 +26557,15 @@
       "side": "effect",
       "id": "scholar-2pc",
       "state": "excluded",
-      "reason": "two-piece-effect",
-      "note": "D5: 2セット効果は発動バフのバーにしない"
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
+      "id": "sethos-c6-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「その他」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -24532,6 +26828,13 @@
     },
     {
       "side": "effect",
+      "id": "xianyun-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「HP 回復」で、画面に出す価値が低い（D91）"
+    },
+    {
+      "side": "effect",
       "id": "xilonen-a1-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -24543,1133 +26846,6 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
-    },
-    {
-      "side": "effect",
-      "id": "a-thousand-floating-dreams",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "a-thousand-floating-dreams-party-*",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "aino-c2-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "aino-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 10 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "alley-hunter",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "amber-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "amc-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "amos",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "arlecchino-c2-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 10 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "arlecchino-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（優先: スキル（昇りゆく凶月）の CT を 2 秒短縮する効果の間隔）"
-    },
-    {
-      "side": "effect",
-      "id": "ayaka-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ayato-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ayato-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "baizhu-c2-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "balladofthefjords",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "bennett-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "berserker-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "blackmarrow-lantern",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "bloodtaintedgreatsword",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "bolide-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "braveheart-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "bs-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "c4-skull-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 8 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "calamityofeshu",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "chain-breaker-atk",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "chain-breaker-em",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "charlotte-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 6 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "chev-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 10 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "chev-c2-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 10 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "chongyun-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "citlali-c2-em",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "citlali-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c1-IcdKey",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c4-burst-bonus",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-cd-bonus",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-cr-bonus",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
-    },
-    {
-      "side": "effect",
-      "id": "collei-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "columbina-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "columbina-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "coolsteel",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "dahlia-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 900 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "deathmatch",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "dehya-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "dehya-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "dehya-sanctum-dot-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "diluc-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "diona-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "disenchantment-4pc-cr",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "disenchantment-4pc-dmg",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "dragonbane",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "durin-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "emblem-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "emilie-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "eula-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ferrousshadow",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "festering",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "flins-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5.5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "flins-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "flowerwreathedfeathers",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "freminet-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "fruitoffulfillment",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "furina-c2-hp",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "furina-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "gaming-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "glad-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "hamayumi",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "harbinger",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "homa-atk-buff",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "homa-hp",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "husk-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "iansan-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 18 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "iansan-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "illuga-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "ineffa-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 4 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "ineffa-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3.5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "itto-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "jade-vista",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "jadecutter-atk-buff",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "jadecutter-hp",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "kaeya-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "kaveh-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "kaveh-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "keqing-c2-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "kinich-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "kinich-c4-dmgp",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "kirara-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3.8 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "kuki-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "lauma-c2-lunarbloom-buff",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "lauma-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "lavawalker-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "layla-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "lionsroar",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "lithic",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "lost-prayer",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "lyney-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他（間隔 15 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "lyney-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "magic-guide",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "mizuki-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "mizuki-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "mona-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "moonweavers-dawn",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "mualani-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "nahida-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "neuvillette-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "neuvillette-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他（間隔 4 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "nicole-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 6 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "nilou-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "nilou-c6-cd",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "nilou-c6-cr",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "noelle-c2-dmg",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "noelle-c2-stam",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ororon-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "prospectors-shovel",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "prune-c2",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他）"
-    },
-    {
-      "side": "effect",
-      "id": "qiqi-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 6 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "qiqi-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "qiqi-c2-radiance",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "rainslasher",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ravenbow",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "razor-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "redhorn-stonethrasher-def-boost",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "royal",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "rust",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "sara-c1-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（優先: 爆発（烏天狗雷霆召呪）の CT を 1 秒短縮する効果の間隔）"
-    },
-    {
-      "side": "effect",
-      "id": "sayu-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "sethos-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "sethos-c6-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他（間隔 15 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "sharpshooter",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "shenhe-c2",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（優先: 領域内の氷ダメージの会心ダメージ+15%）"
-    },
-    {
-      "side": "effect",
-      "id": "skirk-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "slingshot",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "sojourner-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "spine",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "stringless",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "tf-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "the-catch",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "thefirstgreatmagic-atk",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "thefirstgreatmagic-dmg%",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "tighnari-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "travelerpyro-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "travelerpyro-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ts-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "ultimateoverlordsmegamagicsword",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "unfinishedreverie-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "varesa-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "wanderer-c2-burstbonus",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（その他）"
-    },
-    {
-      "side": "effect",
-      "id": "wavebreaker",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "whitetassel",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "wriothesley-c1",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "wt-4pc",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "xiangling-c6",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xlc6 と同じ効果））"
-    },
-    {
-      "side": "effect",
-      "id": "xianyun-c4-icd",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 5 秒））"
-    },
-    {
-      "side": "effect",
-      "id": "xiao-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "xiao-c4",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "xilonen-c2-buff",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "xinyan-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "xlc6",
-      "state": "pending",
-      "reason": "definition-needed",
-      "note": "6-A2: 付け先の定義が無い（優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xiangling-c6 と同じ効果））"
-    },
-    {
-      "side": "effect",
-      "id": "yae-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "yae-c6",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "yanfei-c2",
-      "state": "pending",
-      "reason": "permanent-effect-display",
-      "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
     },
     {
       "side": "target",

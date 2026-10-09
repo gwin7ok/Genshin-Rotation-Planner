@@ -97,6 +97,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
   const talentBuffs = trackBuffs.filter(b => b.category === 'talent');
   const weaponBuffs = trackBuffs.filter(b => b.category === 'weapon');
   const artifactBuffs = trackBuffs.filter(b => b.category === 'artifact');
+  const constellationBuffs = trackBuffs.filter(b => b.category === 'constellation');
 
   return (
     <div className="mt-2.5 pt-2 border-t border-dashed border-slate-700/80 flex flex-wrap items-center gap-2">
@@ -184,6 +185,21 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 title={`【固有天賦】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
               >
                 <span>🎯</span>
+                <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <GcsimOutOfScopeBadge def={def} />
+              </button>
+            ))}
+
+            {/* 1b. 命ノ星座の効果（凸数が足りているもの） */}
+            {constellationBuffs.map(def => (
+              <button
+                key={def.id}
+                type="button"
+                onClick={() => handleAddTrigger(def)}
+                className="px-2 py-1 rounded bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 hover:text-white text-[11px] font-semibold border border-rose-800/80 hover:border-rose-500 transition-all flex items-center gap-1"
+                title={`【命ノ星座】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+              >
+                <span>✦</span>
                 <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>

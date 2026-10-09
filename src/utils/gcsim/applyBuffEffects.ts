@@ -175,7 +175,8 @@ export function applyPassiveTriggers(
   const executedStints = new Set(placements.filter(p => p.firstLap).map(p => p.stintId));
 
   members.forEach((member, charIndex) => {
-    const defs = (buffsByCharacter[member.characterId] ?? []).filter(d => d.gcsimTarget !== false && (d.gcsimKeys?.length ?? 0) > 0);
+    // 効果のキーを持つ定義に加えて、CT のキーだけを持つ定義（CT 短縮など、時間の無い命ノ星座の効果。6-A2）も対象にする
+    const defs = (buffsByCharacter[member.characterId] ?? []).filter(d => d.gcsimTarget !== false && ((d.gcsimKeys?.length ?? 0) > 0 || (d.gcsimCooldownKeys?.length ?? 0) > 0));
     if (defs.length === 0) return;
     const mine = summary.effects.filter(e => e.sourceCharIndex === charIndex);
 
@@ -183,14 +184,18 @@ export function applyPassiveTriggers(
       const cts = mine.filter(e => e.entry.kind === 'cooldown' && (def.gcsimCooldownKeys ?? []).includes(e.key));
       const effectsOfDef = mine.filter(e => e.entry.kind === 'effect' && (def.gcsimKeys ?? []).some(k => matchesGcsimKey(k, e.key)));
       const multiKey = (def.gcsimKeys?.length ?? 0) > 1 || (def.gcsimKeys ?? []).some(k => k.includes('*') || k.includes('{element}'));
-      const keys = [...new Set(effectsOfDef.map(e => e.key))];
+      // CT のキーだけの定義: 効果のバーは持たず（効果時間 0）、gcsim で発動した時刻に、発動間隔（CT）のバーだけを置く
+      const ctOnly = (def.gcsimKeys?.length ?? 0) === 0;
+      const keys = ctOnly ? [...new Set(cts.map(e => e.key))] : [...new Set(effectsOfDef.map(e => e.key))];
 
       for (const key of keys) {
         // 終了時刻が無い永続キーも、マスターに有限の時間がある定義ならキー別バーにできる。
         // チームバフは受け取るキャラごとに開始・終了が少しずつ違って記録されるので、効果のイベントを更新が続く間ごとに1つの発動にまとめる
         // （アプリは、同じ効果を再発動すると前の発動はそこで終わる扱い）。2周目の更新では、1周目の発動を延ばさない
         const keyEntry = effectsOfDef.find(effect => effect.key === key)?.entry;
-        const recs = chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId)
+        const recs = ctOnly
+          ? cts.filter(e => e.key === key && e.endFrame > e.startFrame && e.startFrame < lapEndFrame(placements, charIndex)).map(e => ({ startFrame: e.startFrame, endFrame: e.endFrame }))
+          : chainEvents(summary.effectEvents.filter(ev => ev.key === key), lapEnd, 0, lapEndFrame(placements, charIndex), frame => placeEffect(placements, charIndex, frame)?.stintId)
           .map(rec => rec.endFrame <= rec.startFrame && keyEntry?.permanent && def.duration && def.duration > 0
             ? { ...rec, endFrame: rec.startFrame + Math.round(def.duration * 60) }
             : rec)
@@ -211,8 +216,8 @@ export function applyPassiveTriggers(
             .filter(t => t.passiveEffectId === def.id && (t.gcsimKey === key || t.gcsimKey === undefined) && !claimed.has(t.id))
             .sort((a, b) => a.offset - b.offset);
           list.forEach(({ rec, place }, i) => {
-            const duration = Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3));
-            const cooldown = cooldownFor(rec, cts);
+            const duration = ctOnly ? 0 : Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3));
+            const cooldown = ctOnly ? Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3)) : cooldownFor(rec, cts);
             const name = multiKey ? `${def.name}（${key}）` : def.name;
             const t = existing[i];
             if (t) {

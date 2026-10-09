@@ -1168,7 +1168,7 @@ export function calculateRotation(
         description: def?.description ?? trigger.name,
       });
       const passiveSpan = passiveSpans[passiveSpans.length - 1];
-      const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : '固有天賦バフ';
+      const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : category === 'constellation' ? '命ノ星座の効果' : '固有天賦バフ';
       ctEvents.push({
         key: `${char.id}:passive:${passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey)}`,
         time: startTime,

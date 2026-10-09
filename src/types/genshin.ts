@@ -464,7 +464,7 @@ export interface PassiveSpan {
   /** gcsim の結果に出なかった手動の発動（印を付ける） */
   gcsimMissed?: boolean;
   name: string;
-  category?: 'talent' | 'weapon' | 'artifact';
+  category?: 'talent' | 'weapon' | 'artifact' | 'constellation';
   startTime: number;
   duration: number;
   endTime: number;
@@ -584,7 +584,7 @@ export interface BuffDefinition {
   id: string;
   name: string;
   sourceCharacterId?: string;
-  sourceType: 'talent' | 'weapon' | 'artifact';
+  sourceType: 'talent' | 'weapon' | 'artifact' | 'constellation';
   duration: number; // in seconds
   description: string;
   color: string;
@@ -598,7 +598,7 @@ export interface ActiveBuffSpan {
   buffId: string;
   name: string;
   sourceCharacterId: string;
-  sourceType: 'talent' | 'weapon' | 'artifact';
+  sourceType: 'talent' | 'weapon' | 'artifact' | 'constellation';
   startTime: number;
   endTime: number;
   duration: number;

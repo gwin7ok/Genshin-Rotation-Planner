@@ -1,14 +1,15 @@
 import { BuffTiming, CharacterConfig } from '../types/genshin';
 import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
+import { CharacterModel } from '../models/CharacterModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
 
-export type BuffCategory = 'talent' | 'weapon' | 'artifact';
+export type BuffCategory = 'talent' | 'weapon' | 'artifact' | 'constellation';
 
 export interface TriggerableBuffDefinition {
   id: string;                      // 例: "amber_pyro_p1", "wbuff_15503", "abuff_15007"
   name: string;                    // 表示名
-  category: BuffCategory;          // 'talent' | 'weapon' | 'artifact'
+  category: BuffCategory;          // 'talent' | 'weapon' | 'artifact' | 'constellation'
   sourceId: string;                // キャラクターID / 武器ID / 聖遺物ID
   sourceName?: string;             // キャラクター名 / 武器名 / 聖遺物名
   duration?: number;               // 持続時間 (秒)
@@ -34,11 +35,11 @@ export const isGcsimOutOfScope = (def: Pick<TriggerableBuffDefinition, 'gcsimTar
 /**
  * 全体の行に出す発動バフか（D39-4・D40-3・D40-4）。
  *   - 常時の効果（gcsim の効果が切れない）
- *   - 継続時間の無い固有天賦（時間が無いので出場キャラのトラックには置かない）
+ *   - 継続時間の無い固有天賦・命ノ星座の効果（時間が無いので出場キャラのトラックには置かない。6-A2）
  * それ以外（時間のある効果）は、出場キャラのトラックのボタンにする
  */
 export const isGlobalRowBuff = (def: Pick<TriggerableBuffDefinition, 'timing' | 'category' | 'duration'>): boolean =>
-  def.timing === 'always' || (def.category === 'talent' && !(def.duration && def.duration > 0));
+  def.timing === 'always' || ((def.category === 'talent' || def.category === 'constellation') && !(def.duration && def.duration > 0));
 
 /** 全体の行の表示名の先頭に付ける分類（既定は「条件付き」。辞書で確認できたものだけ「常時」） */
 export const buffTimingLabel = (def: Pick<TriggerableBuffDefinition, 'timing'>): '常時' | '条件付き' =>
@@ -166,6 +167,30 @@ export function getAvailableBuffsForCharacter(
     }
   }
 
+  // 4. 命ノ星座の効果（凸数が足りているもの。時間つきの効果は出場キャラのトラックのボタン、時間の無い効果は「時間指定のない効果」の行。6-A2）
+  if (character.constellationEffects && character.constellationEffects.length > 0) {
+    const constellation = CharacterModel.fromConfig(character).constellation;
+    for (const c of character.constellationEffects) {
+      if (c.level > constellation) continue;
+      result.push({
+        id: c.id,
+        name: `${c.level}凸「${c.name}」`,
+        category: 'constellation',
+        sourceId: character.id,
+        sourceName: character.name,
+        duration: c.duration,
+        cooldown: c.cooldown,
+        description: c.description,
+        color: character.color || '#f472b6',
+        timing: c.timing,
+        gcsimTarget: c.gcsimTarget,
+        gcsimNote: c.gcsimNote,
+        gcsimKeys: c.gcsimKeys,
+        gcsimCooldownKeys: c.gcsimCooldownKeys,
+      });
+    }
+  }
+
   return result;
 }
 
@@ -196,6 +221,16 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
         badgeClass: 'bg-purple-950/60 border-purple-700/70 text-purple-200',
         hoverButtonClass: 'bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 hover:text-white border-purple-800/70 hover:border-purple-500',
         ganttBarClass: 'bg-purple-950 border-purple-400 text-purple-100 hover:border-purple-300',
+        cooldownBarClass: unifiedCooldownBarClass,
+        timingValueClass: unifiedTimingValueClass,
+      };
+    case 'constellation':
+      return {
+        label: '凸',
+        icon: '✦',
+        badgeClass: 'bg-rose-950/60 border-rose-700/70 text-rose-200',
+        hoverButtonClass: 'bg-rose-950/50 hover:bg-rose-900/60 text-rose-200 hover:text-white border-rose-800/70 hover:border-rose-500',
+        ganttBarClass: 'bg-rose-950 border-rose-400 text-rose-100 hover:border-rose-300',
         cooldownBarClass: unifiedCooldownBarClass,
         timingValueClass: unifiedTimingValueClass,
       };

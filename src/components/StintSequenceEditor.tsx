@@ -40,6 +40,7 @@ import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
+import { isModeHoldAction } from '../utils/modeHoldAction';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -321,9 +322,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     if (userActions.length === 0) return;
 
     const nextStints = [...stints];
+    // 維持のアクションを外したら、この出場の維持をオフにする（オンのままだと、自動でまた足される）
+    const removingHold = isModeHoldAction(targetStint.actions[actionIndex] ?? {});
     nextStints[stintIndex] = {
       ...targetStint,
-      actions: targetStint.actions.filter((_, i) => i !== actionIndex)
+      actions: targetStint.actions.filter((_, i) => i !== actionIndex),
+      ...(removingHold ? { holdMode: false } : {}),
     };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };

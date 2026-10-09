@@ -13,7 +13,8 @@ import type { TriggerableBuffDefinition } from '../utils/buffUtils';
 import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult } from '../utils/gcsim/applyGcsimResult';
 import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../utils/rotationCalculator';
-import type { Stint } from '../types/genshin';
+import type { Stint, ReactionRowRef } from '../types/genshin';
+import { extractReactionRows, anchorReactionRows, reactionAnchorInput } from '../utils/gcsim/readReactions';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
 const DEFAULT_SEED = 1;
@@ -31,6 +32,8 @@ interface GcsimConfigDialogProps {
   ctWarnings?: { id: string; title: string; message: string }[];
   /** gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）を、違反マークとして渡す。無ければ null（マークを消す） */
   onCtWaits: (waits: Record<string, number> | null) => void;
+  /** gcsim の結果から読み取った反応の状態（月感電の雲・星電導など。D112）を、ガントチャートの「反応」の行へ渡す。無ければ null */
+  onReactions: (rows: ReactionRowRef[] | null) => void;
   /** 設定文の元になった出場ブロック（書き戻し先） */
   stints: Stint[];
   /** 画面に出ている所要時間（計算後の出場ブロック。変更前の表示に使う） */
@@ -44,7 +47,7 @@ interface GcsimConfigDialogProps {
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, stints, calculated, buffsByCharacter, actionLinks, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, onReactions, stints, calculated, buffsByCharacter, actionLinks, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -100,7 +103,15 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const waits = mapCtWaitsToActions(summary, result.actionRefs);
     onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
     setApplied(false);
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align: alignActions(summary, result.actionRefs) });
+    const align = alignActions(summary, result.actionRefs);
+    // 反応の状態（月反応・星反応）は、CT待ちが無く、アクションの並びが合っているときだけ出す（実行する前は何も出さない）
+    if (Object.keys(waits.byActionId).length === 0 && !align.mismatch) {
+      const { anchors, lapEndFrame } = reactionAnchorInput(align.pairs);
+      onReactions(anchorReactionRows(extractReactionRows(res.logs), anchors, lapEndFrame));
+    } else {
+      onReactions(null);
+    }
+    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align });
   };
   const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');

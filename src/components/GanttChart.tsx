@@ -21,7 +21,7 @@ import {
   CharacterConfig, 
   Stint, 
   ActiveBuffSpan, 
-  CooldownSpan, StockSpan, 
+  CooldownSpan, StockSpan, ReactionRow,
   CharacterRuntimeState,
   PassiveSpan,
 } from '../types/genshin';
@@ -30,6 +30,7 @@ import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, 
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig } from '../utils/buffUtils';
 import { GlobalBuffRow } from './GlobalBuffRow';
+import { ReactionRows } from './ReactionRows';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 
@@ -179,6 +180,8 @@ interface GanttChartProps {
   /** 2周目折り返し（Carry-Over）情報 */
   /** スキルのストック数の区間（回数が 2 以上のスキルを持つキャラ。1 周目・2 周目） */
   stockSpans?: StockSpan[];
+  /** 反応（月反応・星反応）の状態。gcsim を実行した結果だけ（実行前は空）。最後の出場の行と、時間指定のない効果の行の間に出す（D112） */
+  reactionRows?: ReactionRow[];
   carryOverCooldowns?: CooldownSpan[];
   carryOverBuffs?: ActiveBuffSpan[];
   carryOverPassives?: PassiveSpan[];
@@ -203,6 +206,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   loopedBuffOverlapSegments,
   passiveSpans = [],
   stockSpans = [],
+  reactionRows = [],
   carryOverCooldowns = [],
   carryOverBuffs = [],
   carryOverPassives = [],
@@ -2052,6 +2056,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </div>
                   );
                 })}
+
+              {/* 反応（月反応・星反応）の状態の行（D112）。最後のキャラ出場行と、時間指定のない効果の行の間。gcsim を実行した結果だけ */}
+              <ReactionRows
+                rows={reactionRows}
+                pixelsPerSecond={pixelsPerSecond}
+                totalDuration={totalDuration}
+                timelineTicks={timelineTicks}
+                onSeek={onSeek}
+                onTimelineClick={handleTimelineClick}
+              />
 
               {/* 時間指定のない効果の行（常時の効果・継続時間の無い固有天賦。D39-4）。最後のキャラ出場行の下 */}
               <GlobalBuffRow characters={characters} database={database} />

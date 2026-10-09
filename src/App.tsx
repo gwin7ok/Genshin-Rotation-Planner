@@ -16,7 +16,7 @@ import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { buildGcsimConfig, type GcsimConfigResult } from './utils/gcsim/buildGcsimConfig';
-import { PartyMember, Stint, SavedRotationSlot } from './types/genshin';
+import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
@@ -115,9 +115,38 @@ export default function App() {
     setGcsimCtWaits(null);
   }, [characters, visibleStints, switchDelay, loopStartIndex]);
 
+  // gcsim の結果から読み取った反応の状態（月感電の雲・星電導など。アクション基準。D112）。実行する前は null（何も出さない）。
+  // 編成・交代・ループ基準・アクションの並びを編集したら消す（所要時間だけの変更・反映では残す）
+  const [gcsimReactions, setGcsimReactions] = useState<ReactionRowRef[] | null>(null);
+  const actionIdKey = useMemo(() => visibleStints.map(st => `${st.characterId}:${st.actions.map(a => a.id).join(',')}`).join('|'), [visibleStints]);
+  useEffect(() => {
+    setGcsimReactions(null);
+  }, [characters, switchDelay, loopStartIndex, actionIdKey]);
+
   const calculatedResult = useMemo(() => {
     return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined });
   }, [characters, visibleStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits]);
+
+  // 反応の区間を、現在のアクションの開始時刻に直す（アクションが見つからない区間は出さない）
+  const reactionRows = useMemo<ReactionRow[]>(() => {
+    if (!gcsimReactions) return [];
+    const startOf = new Map<string, number>();
+    for (const st of calculatedResult.calculatedStints) for (const a of st.actions) if (a.startTime !== undefined) startOf.set(a.id, a.startTime);
+    const rows: ReactionRow[] = [];
+    for (const row of gcsimReactions) {
+      const segments: ReactionRow['segments'] = [];
+      for (const sg of row.segments) {
+        const s0 = startOf.get(sg.start.actionId);
+        const e0 = startOf.get(sg.end.actionId);
+        if (s0 === undefined || e0 === undefined) continue;
+        const startTime = Number((s0 + sg.start.offset).toFixed(3));
+        const endTime = Number((e0 + sg.end.offset).toFixed(3));
+        if (endTime > startTime) segments.push({ startTime, endTime, ...(sg.count !== undefined ? { count: sg.count } : {}) });
+      }
+      if (segments.length) rows.push({ kind: row.kind, ...(row.max !== undefined ? { max: row.max } : {}), segments });
+    }
+    return rows;
+  }, [gcsimReactions, calculatedResult]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -460,6 +489,7 @@ export default function App() {
           loopedBuffOverlapSegments={calculatedResult.loopedBuffOverlapSegments}
           passiveSpans={calculatedResult.passiveSpans}
           stockSpans={calculatedResult.stockSpans}
+          reactionRows={reactionRows}
           carryOverCooldowns={calculatedResult.carryOverCooldowns}
           carryOverBuffs={calculatedResult.carryOverBuffs}
           carryOverPassives={calculatedResult.carryOverPassives}
@@ -577,6 +607,7 @@ export default function App() {
         ctIssues={ctViolationIssues}
         ctWarnings={ctWarningIssues}
         onCtWaits={setGcsimCtWaits}
+        onReactions={setGcsimReactions}
         stints={visibleStints}
         calculated={calculatedResult}
         buffsByCharacter={buffsByCharacter}

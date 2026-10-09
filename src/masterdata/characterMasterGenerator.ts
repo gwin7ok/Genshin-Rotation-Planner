@@ -189,6 +189,23 @@ const FIELD_RECASTS: Record<string, NonNullable<ActionDefinition['fieldRecast']>
 };
 
 /**
+ * 領域が続く間、操作中のキャラに効果を付け直すスキル（重雲。2026-10-10）。gcsim chongyun/skill.go。キー: キャラ ID。スキルの `_e` に付く
+ */
+const FIELD_EFFECTS: Record<string, NonNullable<ActionDefinition['fieldEffect']>> = {
+  '10000036-cryo': {
+    startDelayFrames: 36,
+    fieldFrames: 600,
+    ctReduction: {
+      minConstellation: 2,
+      rate: 0.15,
+      label: '周天の回転（CT −15%）',
+      description: '霊刃·重華積霜の領域の間、操作中のキャラのスキル・爆発・特殊スキルのクールタイム −15%（命ノ星座 2。gcsim は、1 秒ごと・交代のたびに付け直す）'
+    },
+    source: 'chongyun/skill.go: skillHitmark(36) で領域（600f）を作り、1 秒ごとに操作中のキャラへ氷付与（infuseDur 秒）と、命ノ星座 2 以上は CT −15%（chongyun-c2）を付ける。交代したときも付ける'
+  },
+};
+
+/**
  * 爆発の後のモード（ディシアのパンチ連打モード。2026-10-05）。gcsim dehya/burst.go・dash.go・jump.go。キー: キャラ ID
  * 爆発のアクションの長さは、gcsim では 105f（burstPunch1Hitmark。frames は全部この値）。フレーム表の最初（kickFrames）を取るのは誤りなので、置き換える
  */
@@ -1294,6 +1311,14 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (fieldRecast) {
     for (const a of actions) {
       if (a.id === `${id}_e`) a.fieldRecast = fieldRecast;
+    }
+  }
+
+  // 領域が続く間、操作中のキャラに効果を付け直すスキル（重雲）
+  const fieldEffect = FIELD_EFFECTS[id];
+  if (fieldEffect) {
+    for (const a of actions) {
+      if (a.id === `${id}_e`) a.fieldEffect = fieldEffect;
     }
   }
 

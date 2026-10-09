@@ -15,6 +15,8 @@ import type { EffectKeyOverride } from './actionGcsimLink.ts';
  *   - { key, mode, self } … 継続時間の求め方（expiry = 終了予定 / ended = 実際の終了 / span = 更新が続く間）と、実行したキャラ自身のイベントだけを使うか
  */
 export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
+  // 重雲のスキル: 領域の gcsim の状態（chongyunfield = 10 秒）は、氷付与の長さ + 領域の継続時間を表す効果バーとは別なので、書き戻さない（アプリの fieldEffect で計算。2026-10-10）
+  '10000036-cryo_e': '',
   // オデットの特殊元素スキル（スキルの後の約 6.6 秒だけ使える。別のアクション。2026-10-01）: 完了時に付く独舞者の強化 20 秒
   '10000150-cryo_e_recast': 'odette-dance-double-upgrade',
   // --- 継続時間の一致では紐づかなかったが、ユーザーがゲーム内の説明（wiki）で確認して指定したもの（2026-09-30）---

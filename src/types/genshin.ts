@@ -287,6 +287,17 @@ export interface ActionDefinition {
     c2ExtensionFrames: number;
     source: string;
   };
+  /**
+   * 領域が、続く間ずっと、操作中のキャラに効果を付け直す（重雲の霊刃·重華積霜。2026-10-10）。単位はフレーム。出典: gcsim chongyun/skill.go
+   * - 効果バー（氷付与）は、スキルの開始から、命中（startDelayFrames）+ 領域（fieldFrames）+ 付与の長さ（効果継続時間）まで続く
+   * - ctReduction: 凸 minConstellation 以上のとき、その期間（命中〜バーの終わり）に使ったスキル・爆発・特殊スキルの CT を rate だけ短くする。別のバーを出す
+   */
+  fieldEffect?: {
+    startDelayFrames: number;
+    fieldFrames: number;
+    ctReduction?: { minConstellation: number; rate: number; label: string; description: string };
+    source: string;
+  };
   /** gcsim が、このアクションを実装していない（実行すると「action ... not implemented」のエラーになる。ディシアの重撃など）。ボタンは残すが、警告を出し、gcsim の設定文には入れない */
   gcsimUnsupported?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */

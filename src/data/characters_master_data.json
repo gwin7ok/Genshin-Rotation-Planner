@@ -12121,11 +12121,21 @@
           "from": "motionStart",
           "delay": 0.567
         },
+        "fieldEffect": {
+          "startDelayFrames": 36,
+          "fieldFrames": 600,
+          "ctReduction": {
+            "minConstellation": 2,
+            "rate": 0.15,
+            "label": "周天の回転（CT −15%）",
+            "description": "霊刃·重華積霜の領域の間、操作中のキャラのスキル・爆発・特殊スキルのクールタイム −15%（命ノ星座 2。gcsim は、1 秒ごと・交代のたびに付け直す）"
+          },
+          "source": "chongyun/skill.go: skillHitmark(36) で領域（600f）を作り、1 秒ごとに操作中のキャラへ氷付与（infuseDur 秒）と、命ノ星座 2 以上は CT −15%（chongyun-c2）を付ける。交代したときも付ける"
+        },
         "gcsimEffect": {
-          "keys": [
-            "chongyunfield"
-          ],
-          "status": "ok"
+          "skip": true,
+          "keys": [],
+          "status": "manual"
         }
       },
       {

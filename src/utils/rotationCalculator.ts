@@ -172,6 +172,9 @@ export function calculateRotation(
   // 受付（疾風怒濤）のヒットストップ延長は、所要時間に止まった分が含まれるときだけ足す（両方足すか、両方足さないか）
   const durationHasHitlag = (a: { gcsimBaseDuration?: number }) => a.gcsimBaseDuration !== undefined;
   const cdResonanceScale = characters.filter(c => c.element === 'anemo').length >= 2 ? 0.95 : 1;
+  // 領域が操作中のキャラに付ける CT 短縮の期間（重雲の命ノ星座 2。gcsim は、領域の間 1 秒ごと・交代のたびに付け直す）。マスターの値から計算する CT にだけ掛ける
+  const ctReductionWindows: { start: number; end: number; rate: number }[] = [];
+  const ctReductionScaleAt = (t: number) => ctReductionWindows.reduce((acc, w) => (t >= w.start - 1e-9 && t < w.end - 1e-9 ? acc * (1 - w.rate) : acc), 1);
   // 祭礼の武器（祭礼の断片・剣・大剣・弓）を持つキャラ: 武器の内部 CT（秒）。確率は 100% として扱う（発動の条件は、CT の判定の中で見る）
   const sacrificialOf = (c: CharacterConfig): { icdSeconds: number } | undefined => {
     const w = options?.database?.weapons.find(x => x.id === c.weaponId);
@@ -619,10 +622,11 @@ export function calculateRotation(
       const writtenCooldown = act.cooldown !== undefined && act.gcsimCdResonance !== undefined && act.gcsimCdResonance !== cdResonanceScale
         ? Number((act.cooldown * cdResonanceScale / act.gcsimCdResonance).toFixed(3))
         : act.cooldown;
-      const baseCooldown = writtenCooldown ?? Number((((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)) * (isCdAction && !actionDef?.ignoresCdScale ? cdResonanceScale : 1)).toFixed(3));
+      const fieldCtScale = isCdAction && !actionDef?.ignoresCdScale ? ctReductionScaleAt(actionStartTime) : 1;
+      const baseCooldown = writtenCooldown ?? Number((((actionDef?.cooldown ?? 0) + (actionDef?.cooldownPerHold ?? 0) * (holdSeconds ?? 0)) * (isCdAction && !actionDef?.ignoresCdScale ? cdResonanceScale * fieldCtScale : 1)).toFixed(3));
       // 風元素共鳴が無く、スキルの CT が書き戻しで変わっている（重雲の命ノ星座2など）ときは、特殊スキルの CT も同じ割合で短くする（gcsim のログで 660f → 627f を確認）
       const cooldown = writtenCooldown === undefined && actionDef?.cooldownPool === 'special' && !actionDef.ignoresCdScale && specialCdScale !== 1 && cdResonanceScale === 1
-        ? Number((baseCooldown * specialCdScale).toFixed(3))
+        ? Number(((baseCooldown / fieldCtScale) * specialCdScale).toFixed(3))
         : baseCooldown;
       // CTの開始位置（動作開始からの遅れ）。マスターの値。未設定は動作開始と同時
       // 動作開始から / 長押し終了から / 状態の終了から（状態の長さは効果継続時間。無ければアクションの終了）
@@ -1049,6 +1053,32 @@ export function calculateRotation(
           };
           activeBuffs.push(placed);
           fieldSpans.set(char.id, placed);
+        }
+      }
+      // 領域が続く間、操作中のキャラに効果を付け直す（重雲）: 氷付与のバーは、命中 + 領域 + 付与の長さまで。凸 2 以上は、同じ期間の CT 短縮のバーを別に出す
+      if (effectSpan && actionDef?.fieldEffect && !inStateWindow) {
+        const fe = actionDef.fieldEffect;
+        const hit = Number((actionStartTime + fe.startDelayFrames / 60).toFixed(3));
+        const fieldEnd = Number((hit + fe.fieldFrames / 60 + effectSpan.duration).toFixed(3));
+        effectSpan.endTime = fieldEnd;
+        effectSpan.duration = Number((fieldEnd - effectSpan.startTime).toFixed(3));
+        const cr = fe.ctReduction;
+        if (cr && CharacterModel.fromConfig(char).constellation >= cr.minConstellation) {
+          ctReductionWindows.push({ start: hit, end: fieldEnd, rate: cr.rate });
+          activeBuffs.push({
+            id: `field_ct_${act.id}`,
+            buffId: `field_ct_${actionDef.id}`,
+            name: `${char.name} ${cr.label}`,
+            sourceCharacterId: char.id,
+            sourceType: 'constellation',
+            startTime: hit,
+            endTime: fieldEnd,
+            duration: Number((fieldEnd - hit).toFixed(3)),
+            color: char.color,
+            description: cr.description,
+            noSynergy: true,
+            ownerStintId: rawStint.id,
+          });
         }
       }
       if (effectSpan) activeBuffs.push(effectSpan);

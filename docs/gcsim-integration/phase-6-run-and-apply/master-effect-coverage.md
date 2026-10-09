@@ -30,7 +30,7 @@
 | artifact / unsupported | 3 |
 | constellation / linked | 238 |
 | resonance / linked | 6 |
-| resonance / unreviewed | 1 |
+| resonance / unsupported | 1 |
 | talent / linked | 154 |
 | talent / unsupported | 119 |
 | weapon / linked | 217 |
@@ -49,8 +49,8 @@
 
 なし
 
-## 未確認（1件）
+## 未確認（0件）
 
-- target resonance:electro: 現行辞書に対応キーが無い。gcsimが別経路で扱うか、対象外かを確認する
+なし
 
 整合性: 孤立リンク 0件

@@ -40,6 +40,10 @@ const RESONANCE_KEY_TO_ELEMENT: Record<string, string> = {
   'dendro-res-30': 'dendro',
   'dendro-res-50': 'dendro',
 };
+/** 辞書に状態のキーが無い元素共鳴と、その理由（gcsim のソースで確認済み） */
+const RESONANCE_WITHOUT_KEY: Record<string, string> = {
+  electro: 'gcsim は、雷共鳴を元素粒子の生成だけで実装している（setup.go: 感電・過負荷・超電導・開花系の反応で、5 秒に 1 回、雷元素粒子 1 個を配る。状態・CT のキーは無い）。アプリの定義に時間・CT が無いので、結び付けるキーは無く、gcsim の結果の書き戻しの対象外（2026-10-09 確認）',
+};
 const RESONANCE_ELEMENTS = ['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'];
 
 const effectsById = new Map<string, MasterEffectKeyRow>();
@@ -155,6 +159,8 @@ for (const target of targetsById.values()) {
   }
   if (target.type !== 'resonance' && target.gcsimTarget === false) {
     unlinked.push({ side: 'target', id: target.id, state: 'unsupported', reason: 'gcsim-target-false', note: target.gcsimNote ?? 'gcsim 対象外。理由は未記載' });
+  } else if (target.type === 'resonance' && RESONANCE_WITHOUT_KEY[target.ownerId]) {
+    unlinked.push({ side: 'target', id: target.id, state: 'unsupported', reason: 'resonance-has-no-key', note: RESONANCE_WITHOUT_KEY[target.ownerId] });
   } else if (target.type === 'resonance') {
     unreviewed('target', target.id, 'no-resonance-key', '現行辞書に対応キーが無い。gcsimが別経路で扱うか、対象外かを確認する');
   } else {

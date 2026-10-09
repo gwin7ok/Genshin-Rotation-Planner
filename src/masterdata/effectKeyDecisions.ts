@@ -135,6 +135,10 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   '10000128-anemo_e_specialskill': { reason: 'no-bar', note: 'ファルカの特殊スキル（spE。2026-10-01 に別アクションにした）: gcsim が出すのはダメージ（Four Winds Ascension）と CT（special_skill 11 秒・2 チャージ）だけで、バーにする状態は出ない（スキルの状態 sturm-und-drang は、スキル本体で表示）' },
   '10000127-geo_e': { reason: 'no-bar', note: 'イルーガのスキル: gcsim v2.48.0 で実行でき、ダメージ（Dawnbearing Songbird (Tap)）のみで、バーにする状態・設置物・シールドが出ない（ソース illuga/skill.go で確認。ユーザー確認済み 2026-09-30）' },
   '10000127-geo_e_hold': { reason: 'no-bar', note: 'イルーガの長押し: 同上（Dawnbearing Songbird (Hold) のダメージのみ。ユーザー確認済み 2026-09-30）' },
+  // ユーザー決定（2026-10-09）: gcsim の実行で、アクション自身が持続する効果を残さないことを確認し、ゲームでも無いことをユーザーが確認
+  '10000083-anemo_e_hold': { reason: 'no-bar', note: 'リネットの長押し: 敵に付く影の印は長押しの間だけ（gcsim は状態のキーを出さない）で、動作の長さのバーに含まれる。出るのはダメージと粒子・並び替えの内部の間隔だけ。ユーザー確認済み 2026-10-09' },
+  '10000111-electro_q_special': { reason: 'no-bar', note: 'ヴァレサの特殊爆発（大火山おろし）: ダメージのみで、持続する効果は無い。特殊爆発の受付（マキシマムドライブ）は、モードの定義（special）のバー。ユーザー確認済み 2026-10-09' },
+  '10000120-electro_q_special': { reason: 'no-bar', note: 'フリンズの特殊爆発（嵐槍の後）: ダメージのみで、持続する効果は無い。爆発が使える 6 秒の窓（thunderous-symphony）は、嵐槍の側のモードの定義（special）のバー。ユーザー確認済み 2026-10-09' },
   '10000104-anemo_q': { reason: 'covered-by-passive', note: 'チャスカの爆発: 出るのは固有天賦の状態（chasca-a1）だけで、スキル・爆発の効果ではない。6-3c で扱う（ユーザー決定 2026-09-30）。自動収集の chasca-plunge-available は 0.43 秒の落下攻撃の窓で誤り' },
   '10000106-pyro_e_recastframestobike': { reason: 'no-bar', note: 'マーヴィカの再発動: gcsim に新しい継続時間のイベントが出ない。バーを表示できないため登録しない' },
   '10000106-pyro_e_recastframestoring': { reason: 'no-bar', note: 'マーヴィカの再発動: 同上' },

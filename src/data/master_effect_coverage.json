@@ -26936,13 +26936,6 @@
     },
     {
       "side": "target",
-      "id": "resonance:electro",
-      "state": "unreviewed",
-      "reason": "no-resonance-key",
-      "note": "現行辞書に対応キーが無い。gcsimが別経路で扱うか、対象外かを確認する"
-    },
-    {
-      "side": "target",
       "id": "artifact:10004:abuff_10004",
       "state": "unsupported",
       "reason": "gcsim-target-false",
@@ -26961,6 +26954,13 @@
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
+    },
+    {
+      "side": "target",
+      "id": "resonance:electro",
+      "state": "unsupported",
+      "reason": "resonance-has-no-key",
+      "note": "gcsim は、雷共鳴を元素粒子の生成だけで実装している（setup.go: 感電・過負荷・超電導・開花系の反応で、5 秒に 1 回、雷元素粒子 1 個を配る。状態・CT のキーは無い）。アプリの定義に時間・CT が無いので、結び付けるキーは無く、gcsim の結果の書き戻しの対象外（2026-10-09 確認）"
     },
     {
       "side": "target",

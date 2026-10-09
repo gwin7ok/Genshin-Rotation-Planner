@@ -106,9 +106,9 @@ export interface ActionMode {
   special?: ActionModeSpecial;
   /**
    * モードの間に置けない操作（段階 ④。2026-10-08）。置くと黄色の警告（アプリの時間は変えない。D12・D21 と同じ考え方）。
-   * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）。hint = 警告に添える、終わらせ方などの案内
+   * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）／none = ゲームでは何も起きない（CT も効果も無し。藍硯の受付の間の長押し E。gcsim は別の動作として実行する）。hint = 警告に添える、終わらせ方などの案内
    */
-  blocked?: { types: ActionType[]; result: 'wait' | 'error'; hint: string };
+  blocked?: { types: ActionType[]; result: 'wait' | 'error' | 'none'; hint: string };
   /**
    * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 雲の変化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
    * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでも同じことを確認済み: ユーザー 2026-10-09）
@@ -660,6 +660,8 @@ export interface ActiveBuffSpan {
   noSynergy?: boolean;
   /** true = 同じ効果を再発動しても、前のバーを切らない（同時に複数ある設置物。八重神子の殺生桜。切るのは数え方〔totemTracker.ts〕だけ） */
   stackable?: boolean;
+  /** true = スキルの後の受付（再発動・別の動作・特殊スキル／爆発を使える期間）のバー。ガントチャートでは、スキルストックの行とスキル CT の行の間の行に出す */
+  windowBar?: boolean;
   /** 設置物（八重神子の殺生桜）の行（0 始まり）。桜ごとに別の行に出す。バフ重複の数も、行ごとに 1 つ */
   lane?: number;
   /** 出場ブロックの ID。あれば、その出場ブロックの行に表示する（副次効果のように、出場の終わりより後に始まるバー用） */

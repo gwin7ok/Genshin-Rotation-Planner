@@ -451,10 +451,10 @@ export function calculateRotation(
       const blockedMessage = blockingMode?.def.blocked
         ? `「${blockingMode.def.label}」の間は「${act.name}」を置けません。${blockingMode.def.blocked.result === 'wait'
           ? `gcsim では${blockingMode.def.label}が終わるまで（あと ${(blockingMode.end - actionStartTime).toFixed(1)} 秒）待ちます`
-          : 'gcsim では実行エラーになります'}。${blockingMode.def.blocked.hint}`
+          : blockingMode.def.blocked.result === 'none' ? 'ゲームでは何も起きません。gcsim では別の動作として実行されます' : 'gcsim では実行エラーになります'}。${blockingMode.def.blocked.hint}`
         : undefined;
       // gcsim で実行エラーになる操作（スカークの七相一閃の間の E）は、自分の CT・効果バーを持たない
-      if (blockingMode?.def.blocked?.result === 'error' && (act.type === 'skill' || act.type === 'skill_hold')) inStateWindow = true;
+      if ((blockingMode?.def.blocked?.result === 'error' || blockingMode?.def.blocked?.result === 'none') && (act.type === 'skill' || act.type === 'skill_hold')) inStateWindow = true;
       const opensMode = !!actionDef?.mode && !(modeEnder && modeEnder.window.key === modeKeyOf(char.id, actionDef.mode)) && !modeRepress
         && modeKind !== 'punch' && modeKind !== 'kick' && specialConditionOk(actionDef.mode, actionStartTime)
         // モードの間に置けない操作（スカークの七相一閃の間の E）は、新しいモードを開かない
@@ -826,6 +826,8 @@ export function calculateRotation(
           description: md.description,
           // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
           ...(md.noSynergy ? { noSynergy: true } : {}),
+          // スキルの後の受付のバー（ガントチャートで、スキルストックとスキル CT の間の行に出す）
+          ...(md.description.includes('受付') ? { windowBar: true } : {}),
         };
         // バーを出さないモード（受付型）は、効果バーが兼ねる
         if (!md.noBar) activeBuffs.push(span);

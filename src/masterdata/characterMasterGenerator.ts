@@ -517,7 +517,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       maxUses: 1,
       endsOnLast: true,
       actions: ['e'],
-    }, 'lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings', { startAfterHold: true, noBar: false, keepEffectBar: true }),
+    }, 'lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings', { startAfterHold: true, noBar: false, keepEffectBar: true, blocked: { types: ['skill_hold'], result: 'none', hint: 'ゲームでは、受付の間の長押し E は何も起きません（CT も使いません。回数 1 のとき。6 凸の回数 2 は未確認）。受付が終わってから置いてください' } }),
   }],
   // ニィロウ: 剣舞（600f）。状態の間の E はステップ（3 段。CT なし）で、3 段目で剣舞が終わる（実行: 3 段目の 40f 後に tranquilityaura）
   '10000070-hydro': [stateMode('e', '剣舞', 0, 600, 'nilou/skill.go: AddStatus(pirouetteStatus, 10*60)、whirlingStepsFrames。3 段目で pirouette が終わる。交代で解除', {

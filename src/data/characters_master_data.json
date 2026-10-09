@@ -36411,7 +36411,14 @@
           },
           "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
           "startAfterHold": true,
-          "keepEffectBar": true
+          "keepEffectBar": true,
+          "blocked": {
+            "types": [
+              "skill_hold"
+            ],
+            "result": "none",
+            "hint": "ゲームでは、受付の間の長押し E は何も起きません（CT も使いません。回数 1 のとき。6 凸の回数 2 は未確認）。受付が終わってから置いてください"
+          }
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -36481,7 +36488,14 @@
           },
           "source": "lanyan/skill.go: detectHitmark = 7（長押しは 7 + hold）、leapBack で AddStatus(leapBackStatus, 66, true)。状態の間の E は reathermoonRings",
           "startAfterHold": true,
-          "keepEffectBar": true
+          "keepEffectBar": true,
+          "blocked": {
+            "types": [
+              "skill_hold"
+            ],
+            "result": "none",
+            "hint": "ゲームでは、受付の間の長押し E は何も起きません（CT も使いません。回数 1 のとき。6 凸の回数 2 は未確認）。受付が終わってから置いてください"
+          }
         },
         "cooldownStart": {
           "from": "holdEnd",

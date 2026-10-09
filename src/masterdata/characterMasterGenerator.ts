@@ -492,7 +492,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       frames: [{ total: 82, cancels: { attack: 65, charge: 76, skill: 69, burst: 67, dash: 67, jump: 66, swap: 65 }, source: 'skill.go:skillConvertFrames' }],
       maxUses: 1,
       endsOnLast: true,
-    }, 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く', { noBar: false, keepEffectBar: true }),
+    }, 'prune/skill.go: AddStatus(skillRecastWindowKey, 364)。拡散で受付が開く', { noBar: false, keepEffectBar: true, description: '変換の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない。実際は、E のダメージが敵に拡散を起こしたときだけ開く（アプリは、拡散が起きる前提で、必ず開く）' }),
   }],
   // ドゥリン: スキルの受付（6 秒）の間の E が白／黒の再発動（受付を消費。どちらになるかでフレームが違い、未確認のため、E の通常のフレーム）
   '10000123-pyro': [{

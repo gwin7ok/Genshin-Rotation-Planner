@@ -43308,7 +43308,7 @@
         "defaultDuration": 0.983,
         "mode": {
           "label": "変換の受付",
-          "description": "変換の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "description": "変換の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない。実際は、E のダメージが敵に拡散を起こしたときだけ開く（アプリは、拡散が起きる前提で、必ず開く）",
           "startDelayFrames": 0,
           "durationFrames": 364,
           "swap": "persists",

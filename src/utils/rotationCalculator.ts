@@ -26,6 +26,7 @@ import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActi
 import { CooldownQueue, type QueueHead } from './cooldownQueue';
 import { getAvailableBuffsForCharacter, BuffCategory, type TriggerableBuffDefinition } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
+import { MODE_HOLD_ACTION_ID } from './modeHoldAction';
 
 /** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
 export interface BuffOverlapSegment {
@@ -397,6 +398,13 @@ export function calculateRotation(
 
     // Filter out any runtime-generated swap actions in raw actions to avoid duplicates
     const rawActions = rawStint.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char');
+    // 「維持」のアクション（並びの中の本物のアクション。D114）: 長さは、その開始時刻から、維持が有効なモードの終わりまでの残り
+    const hasHoldAction = rawActions.some(a => a.actionTypeId === MODE_HOLD_ACTION_ID);
+    const holdRemainingAt = (t: number): number => {
+      const modes = [...modeWindows.values()].filter(m => m.charId === char.id && m.sIdx === sIdx && m.def.swap !== 'persists' && !m.def.noHold && !m.endedBy && (rawStint.holdMode ?? m.def.holdByDefault));
+      const target = Math.max(0, ...modes.map(m => (m.actionDefId === burstModeAction?.id && !m.finished ? autoKickAt(m) : m.end)));
+      return Math.max(0, Number((target - t).toFixed(3)));
+    };
 
     for (let aIdx = 0; aIdx < rawActions.length; aIdx++) {
       const act = rawActions[aIdx];
@@ -570,7 +578,10 @@ export function calculateRotation(
       // gcsim 自身の標準の所要時間（編集済みでも）。ユーザーが標準より長くした分を gcsim に渡すために使う
       const naturalDuration = act.gcsimBaseDuration ?? autoDuration;
       if (act.durationManual) autoDuration = undefined;
-      const duration = Math.max(0.05, autoDuration ?? (act.duration || 0.5));
+      const isHoldAction = act.actionTypeId === MODE_HOLD_ACTION_ID;
+      const duration = isHoldAction
+        ? (act.durationManual ? Math.max(0, act.duration || 0) : holdRemainingAt(actionStartTime))
+        : Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
 
       // 長押しの秒数（CT開始位置が「長押し終了」のアクション）: 所要時間 −（ホールド 0 のときのモーション）。
@@ -1125,7 +1136,10 @@ export function calculateRotation(
     const holdTargetOf = (m: ModeWindow) => (m.actionDefId === burstModeAction?.id && !m.finished ? autoKickAt(m) : m.end);
     const lastAction = [...computedActions].reverse().find(a => a.type !== 'swap');
     let modeHoldSeconds = 0;
-    if (lastAction) {
+    if (hasHoldAction) {
+      // 維持のアクションが並びにあるときは、その長さが維持（最後に自動で足さない）
+      modeHoldSeconds = Number(computedActions.filter(a => a.actionTypeId === MODE_HOLD_ACTION_ID).reduce((sum, a) => sum + a.duration, 0).toFixed(3));
+    } else if (lastAction) {
       const target = Math.max(0, ...stintModes.filter(m => !m.endedBy && holdOn(m)).map(holdTargetOf));
       const extra = Number((target - currentTime).toFixed(3));
       if (extra >= 0.005) {

@@ -25,6 +25,7 @@ import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, save
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
+import { normalizeModeHoldActions, isModeHoldAction } from './utils/modeHoldAction';
 import { buildRotationNotation } from './utils/rotationNotation';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
@@ -147,6 +148,14 @@ export default function App() {
     }
     return rows;
   }, [gcsimReactions, calculatedResult]);
+
+  // 「維持」のアクション（モード維持を並びの中の本物のアクションにしたもの。D114）を、計算結果に合わせて出し入れする。
+  // モードを開いたら並びの最後に足し、維持をオフにしたら外す。変更が無ければ何もしない（再計算しても同じ結果になる）
+  useEffect(() => {
+    const next = normalizeModeHoldActions(visibleStints, calculatedResult.calculatedStints);
+    if (next) updateStints(next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calculatedResult]);
 
   const totalDuration = calculatedResult.totalDuration;
   const loopStartTime = calculatedResult.loopStartTime;
@@ -361,6 +370,8 @@ export default function App() {
           .filter(a => a.type !== 'swap')
           .map(a => {
             const manual = a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'wait' ? Math.max(0, a.duration - a.naturalDuration) : 0;
+            // 維持のアクション（待機）: 長さが自動のときは、計算した長さを gcsim の `wait` に渡す（元の所要時間は 0）
+            if (isModeHoldAction(a) && !a.durationManual) return [a.id, Number(a.duration.toFixed(3))] as const;
             return [a.id, Number(((manual >= 0.005 ? manual : 0) + (a.modeHoldSeconds ?? 0)).toFixed(3))] as const;
           })
           .filter(([, extra]) => extra > 0),

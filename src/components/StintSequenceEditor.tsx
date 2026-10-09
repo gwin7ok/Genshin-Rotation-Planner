@@ -932,7 +932,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             if (!char) return null;
             const isCurrentlyActive = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
             const isStintSelected = selectedAction?.stintId === stint.id;
-            const stintDuration = (stint.duration ?? 0).toFixed(2);
+            const stintDuration = (stint.duration ?? 0).toFixed(1);
             const startTimeStr = (stint.startTime ?? 0).toFixed(2);
             const endTimeStr = (stint.endTime ?? 0).toFixed(2);
             const isFirst = stintIndex === 0;
@@ -940,11 +940,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
             // Relative time formatter
             const fmtRel = (t: number) => {
-              if (!loopStartTime || loopStartTime <= 0) return `${t.toFixed(2)}s`;
+              if (!loopStartTime || loopStartTime <= 0) return `${t.toFixed(1)}s`;
               const rel = t - loopStartTime;
-              if (Math.abs(rel) < 0.005) return '0.00s';
-              if (rel < 0) return `-${Math.abs(rel).toFixed(2)}s`;
-              return `+${rel.toFixed(2)}s`;
+              if (Math.abs(rel) < 0.05) return '0.0s';
+              if (rel < 0) return `-${Math.abs(rel).toFixed(1)}s`;
+              return `+${rel.toFixed(1)}s`;
             };
 
             // ループ基準は出場キャラの番号で持つ（基準番号より前が1周目初動、以降が定常ループ）
@@ -1101,7 +1101,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           }`}
                           title={`【モード維持】「${stint.modeHold.label}」が最大時間まで続くように、出場の最後のアクションの後を自動で延ばします（延ばした秒数は保存しません。gcsim の設定文には wait として出します）。\nオフにすると、最後のアクションの直後に交代します。途中で終わらせたいときは、終わらせるアクションを置いてください。`}
                         >
-                          モード維持: {stint.modeHold.on ? `オン${stint.modeHold.seconds > 0 ? `（+${stint.modeHold.seconds.toFixed(2)}s）` : ''}` : 'オフ'}
+                          モード維持: {stint.modeHold.on ? `オン${stint.modeHold.seconds > 0 ? `（+${stint.modeHold.seconds.toFixed(1)}s）` : ''}` : 'オフ'}
                         </button>
                       )}
                       {/* Note button */}
@@ -1239,7 +1239,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                                 {/* Duration & Tweaks */}
                                 <div className="flex items-center gap-0.5 ml-1 bg-slate-950/90 rounded px-1.5 py-0.5 border border-sky-600/70 text-[11px] font-mono">
-                                  <span className="text-sky-300 font-bold">{act.duration.toFixed(2)}s</span>
+                                  <span className="text-sky-300 font-bold">{act.duration.toFixed(1)}s</span>
                                   <div className="flex flex-col ml-0.5">
                                     <button
                                       type="button"

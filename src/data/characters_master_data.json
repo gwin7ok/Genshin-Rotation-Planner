@@ -6629,7 +6629,8 @@
               240,
               240
             ],
-            "endsOnLast": true
+            "endsOnLast": true,
+            "barPerUse": true
           },
           "source": "diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）",
           "keepEffectBar": true

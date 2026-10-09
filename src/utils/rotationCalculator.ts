@@ -243,7 +243,7 @@ export function calculateRotation(
     m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
     m.endedBy = by;
     m.span.endTime = m.end;
-    m.span.duration = Number((m.end - m.start).toFixed(3));
+    m.span.duration = Number((m.end - m.span.startTime).toFixed(3));
   };
   // 爆発が拾った炎場（ディシア）を、時刻 at に置き直す（残り時間 + 拾いの延長のバーを出す。まだ置き直していない回の再生成の窓は、新しい炎場の終わりまで延ばす）
   const placePickedField = (charId: string, mw: { pending?: { savedFrames: number; template: ActiveBuffSpan } }, at: number) => {
@@ -474,9 +474,23 @@ export function calculateRotation(
         const rp = m.def.repress!;
         const rf = rp.refreshFrames;
         if (rf?.length) {
-          m.end = Number((actionStartTime + rf[Math.min(index, rf.length - 1)] / 60).toFixed(3));
-          m.span.endTime = m.end;
-          m.span.duration = Number((m.end - m.start).toFixed(3));
+          const newEnd = Number((actionStartTime + rf[Math.min(index, rf.length - 1)] / 60).toFixed(3));
+          if (rp.barPerUse) {
+            // 使うたびに、前のバーをここで終わらせ、新しいバーを同じ行に置く（ディルックの連撃の受付）。最後の 1 回の後は、新しいバーを置かない
+            m.span.endTime = Number(Math.min(m.span.endTime, actionStartTime).toFixed(3));
+            m.span.duration = Number((m.span.endTime - m.span.startTime).toFixed(3));
+            m.end = newEnd;
+            const last = rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses;
+            if (!last) {
+              const next: ActiveBuffSpan = { ...m.span, id: `${m.span.id}_u${m.repressUsed}`, startTime: actionStartTime, endTime: newEnd, duration: Number((newEnd - actionStartTime).toFixed(3)) };
+              if (!m.def.noBar) activeBuffs.push(next);
+              m.span = next;
+            }
+          } else {
+            m.end = newEnd;
+            m.span.endTime = m.end;
+            m.span.duration = Number((m.end - m.start).toFixed(3));
+          }
         }
         // 使い切るとモードが終わる（ニィロウのステップ 3 段目）
         if (rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses) endMode(m, actionStartTime, 'ender');

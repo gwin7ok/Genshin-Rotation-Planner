@@ -494,6 +494,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       ],
       maxUses: 2,
       refreshFrames: [4 * 60, 4 * 60],
+      barPerUse: true,
       endsOnLast: true,
     }, 'diluc/skill.go: AddStatus(eWindowKey, 4*60, true)（E のたびに更新）、eCounter == 3 で DeleteStatus、SetCD は 1 段目（10*60）', { noBar: false, keepEffectBar: true }),
   }],

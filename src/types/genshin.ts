@@ -83,6 +83,8 @@ export interface ActionMode {
     frames: ActionFrames[];
     maxUses?: number;
     refreshFrames?: number[];
+    /** 使うたびに、前のバーをその時刻で終わらせ、新しいバーを同じ行に置く（ディルックの連撃の受付。最後の 1 回の後は、新しいバーを置かない）。無ければ、1 本のバーを延ばす */
+    barPerUse?: boolean;
     endsOnLast?: boolean;
     /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も羽月の輪） */
     actions?: string[];

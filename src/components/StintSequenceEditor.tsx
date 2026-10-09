@@ -137,7 +137,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, inStateWindow, modeHoldSeconds, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, inStateWindow, modeHoldSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -1323,6 +1323,16 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               <span className="font-medium max-w-[150px] truncate" title={act.name}>
                                 {act.name}
                               </span>
+
+                              {/* 特殊重撃（蒼牙）: 特殊スキルの使用回数を 1 回分使った重撃 */}
+                              {act.usedSpecialCharge && (
+                                <span
+                                  className="px-1.5 py-0.2 rounded font-black text-[9px] bg-cyan-400 text-slate-950 shrink-0"
+                                  title="特殊重撃（蒼牙）: 特殊スキルの使用回数を 1 回分使います（スタミナは使いません）。回数が空いていなければ、普通の重撃になります"
+                                >
+                                  特殊重撃
+                                </span>
+                              )}
 
                               {/* Selected Badge */}
                               {isSelected && (

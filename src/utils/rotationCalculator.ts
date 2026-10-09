@@ -1382,9 +1382,14 @@ export function calculateRotation(
   };
   const sacrificialProcs: SacrificialProc[] = [];
   const stockLogs: StockLog[] = [];
-  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs, stockLogs)) {
+  const usedSpecialCharged = new Set<string>();
+  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs, stockLogs, usedSpecialCharged)) {
     skillCooldowns.push(span);
     charStates[span.characterId]?.skillCooldowns.push(span);
+  }
+  // 特殊スキルの回数を使って特殊重撃（蒼牙）になった重撃に印を付ける
+  if (usedSpecialCharged.size > 0) {
+    for (const st of calculatedStints) for (const a of st.actions) if (usedSpecialCharged.has(a.id)) a.usedSpecialCharge = true;
   }
 
   const stockSpans = buildStockSpans(stockLogs, totalDuration, loopStartTime, loopPeriod);
@@ -1770,7 +1775,7 @@ function endAtNextStart<T extends { startTime: number; endTime: number }>(spans:
  * 3周目以降は、各発動の直前にある同じ CT の発動が2周目と同じ（1周前の同じ位置）になるため、2周分の判定で足りる。
  * どちらの周で違反しても、元の発動に違反の印を付ける。
  */
-function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean, procsOut?: SacrificialProc[], stockOut?: StockLog[]): CooldownSpan[] {
+function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number, loopPeriod: number, isActiveAt: (charId: string, t: number) => boolean, procsOut?: SacrificialProc[], stockOut?: StockLog[], optionalUsedOut?: Set<string>): CooldownSpan[] {
   const extraCycles = loopPeriod > 0.05 ? 1 : 0;
 
   const timeline: Array<{ event: CooldownEvent; time: number; cycle: number; order: number }> = [];
@@ -1895,6 +1900,7 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       if (ev.optional) {
         // 受付の間の重撃: 回数に空きがあれば特殊重撃になって 1 回分使う。空いていなければ普通の重撃（違反ではない）
         if (!queue.hasFree) continue;
+        if (item.cycle === 0 && ev.actionId) optionalUsedOut?.add(ev.actionId);
       } else if (ev.checked && !queue.hasFree && queue.head) {
         ev.onViolation(Number((queue.head.end - item.time).toFixed(1)), item.cycle);
       }

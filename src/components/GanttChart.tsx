@@ -314,7 +314,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -325,7 +325,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const newStints = stints.map(s => {
       if (s.id !== stintId) return s;
       const cleanActions = s.actions.map(a => {
-        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
+        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
         return rest;
       });
       const [moved] = cleanActions.splice(fromIndex, 1);
@@ -1611,7 +1611,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
                                             : windowWarning
                                             ? `【⚠️ 警告】${windowWarning}\nアクション: ${act.name}（gcsim の計算は制限されません）`
-                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]`
+                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]${act.usedSpecialCharge ? '\n【特殊重撃（蒼牙）】特殊スキルの使用回数を 1 回分使います（スタミナは使いません）' : ''}`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
@@ -1621,6 +1621,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
                                             : actionDisplayName(act)}
+                                          {act.usedSpecialCharge && (
+                                            <span className="text-[9px] bg-cyan-400 text-slate-950 font-black px-1 rounded ml-0.5 shrink-0">特殊</span>
+                                          )}
                                           {hasCollision && colRem !== undefined && (
                                             <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
                                               残{colRem}s

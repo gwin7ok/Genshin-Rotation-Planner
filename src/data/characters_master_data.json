@@ -8244,6 +8244,18 @@
         "gcsimKeys": [
           "beidou-c4"
         ]
+      },
+      {
+        "id": "10000024-electro_c6",
+        "level": 6,
+        "name": "北斗の祓い",
+        "description": "雷斫り継続中、周囲の敵の雷元素耐性-15%。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimExtraKeys": [
+          "beidouc6"
+        ]
       }
     ]
   },
@@ -19375,6 +19387,24 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "yelan-c4"
+        ],
+        "gcsimExtraKeys": [
+          "yelanc4"
+        ]
+      },
+      {
+        "id": "10000060-hydro_c6",
+        "level": 6,
+        "name": "勝ち得る者、独り勝ち",
+        "duration": 20,
+        "description": "深謀玲瓏賽を発動後、夜蘭は「権謀術数」状態に入る。 通常攻撃は特殊な「打破の矢」に変化する。この矢は打破の矢に近い特性を持ち、与えるダメージは打破の矢の156%、かつ重撃ダメージとみなされる。 「権謀術数」状態の継続時間は最大20秒となり、5本の矢が発射されると終了する。",
+        "dataSource": {
+          "duration": "gcsim: yelan_c6"
+        },
+        "timing": "computed",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "yelan_c6"
         ]
       }
     ]
@@ -28907,14 +28937,15 @@
         "id": "10000089-hydro_c6",
         "level": 6,
         "name": "「僕の歌を聴きたまえ—— さあ 愛の杯を掲げよう！」",
-        "duration": 2.9,
+        "duration": 10,
         "description": "「サロン·ソリティア」発動時、フリーナは「万民のまなざし」効果を獲得する。継続時間10秒。 継続時間中、フリーナの通常攻撃、重撃および落下攻撃ダメージは、元素付与によって他の元素に変化しない水元素ダメージへと変わる。そして、フリーナ自身のHP上限の18%分、与えるダメージがアップする。 継続時間中、フリーナの通常攻撃（「アルケー：聖俗の座客」の攻撃を含まない）や重撃、着地時の落下攻撃が敵に命中すると、命中時のアルケー属性を基に、異なる効果を発動する。0.1秒毎に発動可能。 アルケー：ウーシア 1秒毎に、周囲のチーム全員のHPをフリーナのHP上限の4%分回復する。継続時間2.9秒。再び発動すると、継続時間が延長される。 アルケー：プネウマ 今回の通常攻撃（「アルケー：聖俗の座客」の攻撃を含まない）、重撃、着地時の落下攻撃によるダメージを、さらにフリーナのHP上限の25%分アップさせる。それの攻撃が敵に命中した時、周囲のチームは全員、現在HPの1%分のHPを消費する。 「万民のまなざし」継続期間中、上記効果は最大6回発動可能。この効果は発動回数が6回に達したとき、または継続時間終了時に解除される。",
         "dataSource": {
-          "duration": "gcsim: furina-c6-ousia-heal"
+          "duration": "gcsim: center-of-attention"
         },
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "center-of-attention",
           "furina-c6-ousia-heal"
         ]
       }

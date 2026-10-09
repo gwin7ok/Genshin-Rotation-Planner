@@ -1227,6 +1227,68 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   const allStintSpecialCDs = [...charCarryOverSpecialCDs, ...stintSpecialCDs].sort((a, b) => a.startTime - b.startTime);
                   const allStintBuffs = [...charCarryOverBuffs, ...stintBuffs];
                   const stintBuffRows = organizeBuffsIntoRows(allStintBuffs);
+                  // スキルの後の受付のバーの行は、スキルストックの行とスキル CT の行の間に出す。それ以外の効果バーは、これまでの位置
+                  const windowBuffRows = stintBuffRows.filter(r => r.spans.some(sp => sp.windowBar));
+                  const otherBuffRows = stintBuffRows.filter(r => !r.spans.some(sp => sp.windowBar));
+                  const renderBuffLabel = (bRow, rIdx) => (
+                            <div 
+                              key={`stint_buff_lbl_${stint.id}_${rIdx}`} 
+                              className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono border-b border-slate-800/40" 
+                              title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}
+                            >
+                              <span className="truncate flex items-center gap-1">
+                                <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
+                                <span className="truncate">{bRow.cleanName}</span>
+                              </span>
+                              <span className="shrink-0 text-emerald-400/80 ml-1">{(bRow.lane !== undefined ? Math.max(...bRow.spans.map(x => x.duration)) : bRow.sample.duration).toFixed(0)}s</span>
+                            </div>
+                          );
+                  const renderBuffBar = (bRow, rIdx) => {
+                            return (
+                              <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
+                                {bRow.spans.map(buff => {
+                                  const isCarryOver = Boolean(buff.isCarryOver);
+                                  if (buff.startTime >= totalDuration) return null;
+                                  const visualEnd = Math.min(totalDuration, buff.endTime);
+
+                                  const isBarActive = !isCarryOver || isCarryOverActive(buff.originalStartTime);
+                                  const startX = buff.startTime * pixelsPerSecond;
+                                  const width = Math.max(16, (visualEnd - buff.startTime) * pixelsPerSecond);
+                                  const remaining = effectRemaining(buff);
+                                  const isBuffActive = remaining !== undefined;
+
+                                  return (
+                                    <div
+                                      key={buff.id}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSeek(buff.startTime);
+                                      }}
+                                      style={{ 
+                                        left: `${startX}px`, 
+                                        width: `${width}px`,
+                                        zIndex: isCarryOver ? 10 : 20,
+                                      }}
+                                      className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
+                                        isCarryOver && !isBarActive
+                                          ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
+                                          : isBuffActive 
+                                          ? 'bg-emerald-950 border-emerald-400 text-emerald-100 ring-2 ring-emerald-400 font-bold brightness-125 shadow-emerald-500/30' 
+                                          : isCarryOver
+                                          ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 opacity-90'
+                                          : 'bg-emerald-950 border-emerald-400 text-emerald-100 opacity-90 hover:border-emerald-300'
+                                      }`}
+                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${!isBarActive ? ' (※元の発動位置を通過すると有効化)' : ''}\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                    >
+                                      <span className="truncate">
+                                        ✨ {isCarryOver ? '[持越] ' : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(0)}s)`} {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          };
                   const stintPassives = passiveSpans.filter(p => p.stintId === stint.id);
                   // スキルのストック数（回数が 2 以上のスキル）。1 周目の行と、2 周目（ループがあるとき）の行
                   const stockLaps = ([1, 2] as const)
@@ -1362,6 +1424,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             </div>
                           ))}
 
+                          {/* スキルの後の受付のバーの行（スキルストックの行の下・スキル CT の行の上） */}
+                          {windowBuffRows.map(renderBuffLabel)}
+
                           {/* Row 2: Skill (E) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintSkillCDs.length > 0 && (
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
@@ -1388,19 +1453,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           )}
 
                           {/* Row 4+: Action Effect Buff Rows (Height: h-6 = 24px each) */}
-                          {stintBuffRows.map((bRow, rIdx) => (
-                            <div 
-                              key={`stint_buff_lbl_${stint.id}_${rIdx}`} 
-                              className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono border-b border-slate-800/40" 
-                              title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration}s)\n${bRow.sample.description}`}
-                            >
-                              <span className="truncate flex items-center gap-1">
-                                <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
-                                <span className="truncate">{bRow.cleanName}</span>
-                              </span>
-                              <span className="shrink-0 text-emerald-400/80 ml-1">{(bRow.lane !== undefined ? Math.max(...bRow.spans.map(x => x.duration)) : bRow.sample.duration).toFixed(0)}s</span>
-                            </div>
-                          ))}
+                          {otherBuffRows.map(renderBuffLabel)}
 
                           {/* Row 5+: Passive Group Rows (Height: h-6 = 24px each) */}
                           {stintPassiveGroups.map(grp => {
@@ -1622,6 +1675,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             </div>
                           ))}
 
+                          {/* スキルの後の受付のバーの行 */}
+                          {windowBuffRows.map(renderBuffBar)}
+
                           {/* --- Row 2: Skill (E) Cooldown Bar (Height: h-6 = 24px) --- */}
                           {allStintSkillCDs.length > 0 && (
                             <div className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
@@ -1773,52 +1829,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           )}
 
                           {/* --- Row 4+: Active Buffs & Summons (Height: h-6 = 24px each) --- */}
-                          {stintBuffRows.map((bRow, rIdx) => {
-                            return (
-                              <div key={`stint_buff_row_${stint.id}_${rIdx}`} className="h-6 relative flex items-center border-b border-slate-800/20 z-10">
-                                {bRow.spans.map(buff => {
-                                  const isCarryOver = Boolean(buff.isCarryOver);
-                                  if (buff.startTime >= totalDuration) return null;
-                                  const visualEnd = Math.min(totalDuration, buff.endTime);
-
-                                  const isBarActive = !isCarryOver || isCarryOverActive(buff.originalStartTime);
-                                  const startX = buff.startTime * pixelsPerSecond;
-                                  const width = Math.max(16, (visualEnd - buff.startTime) * pixelsPerSecond);
-                                  const remaining = effectRemaining(buff);
-                                  const isBuffActive = remaining !== undefined;
-
-                                  return (
-                                    <div
-                                      key={buff.id}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onSeek(buff.startTime);
-                                      }}
-                                      style={{ 
-                                        left: `${startX}px`, 
-                                        width: `${width}px`,
-                                        zIndex: isCarryOver ? 10 : 20,
-                                      }}
-                                      className={`absolute h-3.5 rounded text-[9px] font-medium flex items-center px-1.5 border transition-all cursor-pointer select-none shadow-sm ${
-                                        isCarryOver && !isBarActive
-                                          ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
-                                          : isBuffActive 
-                                          ? 'bg-emerald-950 border-emerald-400 text-emerald-100 ring-2 ring-emerald-400 font-bold brightness-125 shadow-emerald-500/30' 
-                                          : isCarryOver
-                                          ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 opacity-90'
-                                          : 'bg-emerald-950 border-emerald-400 text-emerald-100 opacity-90 hover:border-emerald-300'
-                                      }`}
-                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${!isBarActive ? ' (※元の発動位置を通過すると有効化)' : ''}\n${buff.name} (${buff.duration}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
-                                    >
-                                      <span className="truncate">
-                                        ✨ {isCarryOver ? '[持越] ' : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(0)}s)`} {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          })}
+                          {otherBuffRows.map(renderBuffBar)}
 
                           {/* --- Row 5+: 発動バフ（固有天賦・武器・聖遺物） (Height: h-6 = 24px each) --- */}
                           {stintPassiveGroups.map(grp => {

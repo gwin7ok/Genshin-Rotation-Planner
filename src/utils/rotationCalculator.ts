@@ -827,7 +827,7 @@ export function calculateRotation(
           // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
           ...(md.noSynergy ? { noSynergy: true } : {}),
           // スキルの後の受付のバー（ガントチャートで、スキルストックとスキル CT の間の行に出す）
-          ...(md.description.includes('受付') ? { windowBar: true } : {}),
+          ...(md.description.includes('受付') ? { windowBar: true, standardDuration: Number((md.durationFrames / 60).toFixed(3)) } : {}),
         };
         // バーを出さないモード（受付型）は、効果バーが兼ねる
         if (!md.noBar) activeBuffs.push(span);

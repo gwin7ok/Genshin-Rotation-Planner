@@ -1240,7 +1240,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
                                 <span className="truncate">{bRow.cleanName}</span>
                               </span>
-                              <span className="shrink-0 text-emerald-400/80 ml-1">{(bRow.lane !== undefined ? Math.max(...bRow.spans.map(x => x.duration)) : bRow.sample.duration).toFixed(1)}s</span>
+                              <span className="shrink-0 text-emerald-400/80 ml-1">{(bRow.sample.windowBar && bRow.sample.standardDuration !== undefined ? bRow.sample.standardDuration : bRow.lane !== undefined ? Math.max(...bRow.spans.map(x => x.duration)) : bRow.sample.duration).toFixed(1)}s</span>
                             </div>
                           );
                   const renderBuffBar = (bRow, rIdx) => {

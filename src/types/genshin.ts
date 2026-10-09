@@ -404,6 +404,8 @@ export interface CharacterActionInstance {
   modeHoldSeconds?: number;
   /** 特殊スキルが受付時間の外で使われたとき、落下攻撃が gcsim の前提を満たさないときの警告文（黄色の警告。計算時にだけ付く） */
   specialWindowWarning?: string;
+  /** 受付の間の重撃が、特殊スキルの使用回数を 1 回分使って「特殊重撃（蒼牙）」になった（1 周目の発動。ファルカ）。計算時にだけ付き、保存しない */
+  usedSpecialCharge?: boolean;
   /** CT未回復（CT衝突）フラグ */
   hasCTCollision?: boolean;
   /** CT衝突時の残り秒数 */

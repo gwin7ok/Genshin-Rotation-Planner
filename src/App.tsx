@@ -143,7 +143,7 @@ export default function App() {
         const endTime = Number((e0 + sg.end.offset).toFixed(3));
         if (endTime > startTime) segments.push({ startTime, endTime, ...(sg.count !== undefined ? { count: sg.count } : {}) });
       }
-      if (segments.length) rows.push({ kind: row.kind, ...(row.max !== undefined ? { max: row.max } : {}), segments });
+      if (segments.length) rows.push({ kind: row.kind, lap: row.lap, ...(row.max !== undefined ? { max: row.max } : {}), segments });
     }
     return rows;
   }, [gcsimReactions, calculatedResult]);

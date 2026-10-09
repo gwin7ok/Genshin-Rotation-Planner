@@ -164,45 +164,64 @@ export function extractReactionRows(logs: GcsimLogEvent[]): FrameReactionRow[] {
   return rows;
 }
 
-/** 反応の区間を、アクションの開始を基準にした位置に直す。lapEndFrame 以降（2 周目以降）は含めない */
-export function anchorReactionRows(
-  rows: FrameReactionRow[],
-  pairs: { executedFrame: number; actionId: string }[],
-  lapEndFrame: number,
-): ReactionRowRef[] {
-  if (pairs.length === 0) return [];
-  const sorted = [...pairs].sort((a, b) => a.executedFrame - b.executedFrame);
-  const anchorOf = (frame: number) => {
-    let pick = sorted[0];
-    for (const p of sorted) {
-      if (p.executedFrame <= frame) pick = p;
-      else break;
-    }
-    return { actionId: pick.actionId, offset: Number(((frame - pick.executedFrame) / 60).toFixed(3)) };
-  };
+/** 周ごとの、アンカー（アクションの実行フレーム → アプリのアクション ID）と、その周のフレームの範囲 */
+export interface ReactionLapInput {
+  lap: 1 | 2;
+  anchors: { executedFrame: number; actionId: string }[];
+  startFrame: number;
+  endFrame: number;
+}
+
+/** 反応の区間を、周ごとに、アクションの開始を基準にした位置に直す。周の範囲に掛かる部分だけを、範囲で切って出す */
+export function anchorReactionRows(rows: FrameReactionRow[], laps: ReactionLapInput[]): ReactionRowRef[] {
   const out: ReactionRowRef[] = [];
-  for (const row of rows) {
-    const segments = row.segments
-      .filter(s => s.startFrame < lapEndFrame)
-      .map(s => ({
-        start: anchorOf(s.startFrame),
-        end: anchorOf(Math.min(s.endFrame, lapEndFrame)),
-        ...(s.count !== undefined ? { count: s.count } : {}),
-      }));
-    if (segments.length) out.push({ kind: row.kind, ...(row.max !== undefined ? { max: row.max } : {}), segments });
+  for (const lapInput of laps) {
+    if (lapInput.anchors.length === 0) continue;
+    const sorted = [...lapInput.anchors].sort((a, b) => a.executedFrame - b.executedFrame);
+    const anchorOf = (frame: number) => {
+      let pick = sorted[0];
+      for (const p of sorted) {
+        if (p.executedFrame <= frame) pick = p;
+        else break;
+      }
+      return { actionId: pick.actionId, offset: Number(((frame - pick.executedFrame) / 60).toFixed(3)) };
+    };
+    for (const row of rows) {
+      const segments = row.segments
+        .filter(sg => sg.endFrame > lapInput.startFrame && sg.startFrame < lapInput.endFrame)
+        .map(sg => ({
+          start: anchorOf(Math.max(sg.startFrame, lapInput.startFrame)),
+          end: anchorOf(Math.min(sg.endFrame, lapInput.endFrame)),
+          ...(sg.count !== undefined ? { count: sg.count } : {}),
+        }));
+      if (segments.length) out.push({ kind: row.kind, lap: lapInput.lap, ...(row.max !== undefined ? { max: row.max } : {}), segments });
+    }
   }
   return out;
 }
 
-/** 設定文のアクションとログの対応（alignActions の結果）から、アンカーの入力と、1 周目の終わりのフレームを作る */
-export function reactionAnchorInput(
-  pairs: { executed: { frame: number }; ref: GcsimActionRef }[],
-): { anchors: { executedFrame: number; actionId: string }[]; lapEndFrame: number } {
+/**
+ * 設定文のアクションとログの対応（alignActions の結果）から、周ごとの入力を作る。
+ * 1 周目 = 初動 + ループ 1 周目（アプリの 1 周目）、2 周目 = ループ 2 周目。1 周目の範囲は 0 〜 ループ 2 周目の最初のアクション。
+ */
+export function reactionLapInputs(pairs: { executed: { frame: number }; ref: GcsimActionRef }[]): ReactionLapInput[] {
   const isFirst = (r: GcsimActionRef) => r.phase === 'initial' || r.loopIteration === 1;
   const first = pairs.filter(p => isFirst(p.ref));
-  const later = pairs.filter(p => !isFirst(p.ref));
-  return {
-    anchors: first.map(p => ({ executedFrame: p.executed.frame, actionId: p.ref.actionId })),
-    lapEndFrame: later.length ? Math.min(...later.map(p => p.executed.frame)) : Infinity,
-  };
+  const second = pairs.filter(p => p.ref.phase === 'loop' && p.ref.loopIteration === 2);
+  const third = pairs.filter(p => p.ref.phase === 'loop' && (p.ref.loopIteration ?? 0) >= 3);
+  const minFrame = (list: { executed: { frame: number } }[]) => Math.min(...list.map(p => p.executed.frame));
+  const secondStart = second.length ? minFrame(second) : Infinity;
+  const laps: ReactionLapInput[] = [];
+  if (first.length) {
+    laps.push({ lap: 1, anchors: first.map(p => ({ executedFrame: p.executed.frame, actionId: p.ref.actionId })), startFrame: 0, endFrame: secondStart });
+  }
+  if (second.length) {
+    laps.push({
+      lap: 2,
+      anchors: second.map(p => ({ executedFrame: p.executed.frame, actionId: p.ref.actionId })),
+      startFrame: secondStart,
+      endFrame: third.length ? minFrame(third) : Infinity,
+    });
+  }
+  return laps;
 }

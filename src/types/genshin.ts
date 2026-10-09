@@ -722,6 +722,8 @@ export interface ReactionAnchor {
 /** 反応の区間（アクション基準）。count = スタック数・設置物の数 */
 export interface ReactionRowRef {
   kind: ReactionKind;
+  /** 1 = 1 周目（初動 + ループ 1 周目）、2 = 2 周目（ループ 2 周目。1 周目の終わりの状態から続く。表示位置はループの区間） */
+  lap: 1 | 2;
   max?: number;
   segments: { start: ReactionAnchor; end: ReactionAnchor; count?: number }[];
 }
@@ -729,6 +731,7 @@ export interface ReactionRowRef {
 /** 反応の区間（アプリの時刻。ガントチャートの「反応」の行に出す） */
 export interface ReactionRow {
   kind: ReactionKind;
+  lap: 1 | 2;
   max?: number;
   segments: { startTime: number; endTime: number; count?: number }[];
 }

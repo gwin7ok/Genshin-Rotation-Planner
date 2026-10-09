@@ -9,7 +9,7 @@
  * effects / targets / links / unlinked の構造で別レポートを出力する。
  */
 import fs from 'node:fs';
-import { IGNORED_KEYS } from '../src/masterdata/buffGcsimLink.ts';
+import { IGNORED_KEYS, INTERNAL_INTERVAL_KEYS, PENDING_DEFINITION_KEYS } from '../src/masterdata/buffGcsimLink.ts';
 import type {
   MasterEffectCoverage, MasterEffectDisposition, MasterEffectKeyRow,
   MasterEffectLinkRow, MasterEffectTargetRow, MasterEffectTargetType,
@@ -173,6 +173,14 @@ for (const effect of effectsById.values()) {
   }
   if (effect.category === 'talent' && IGNORED_KEYS[effect.id]) {
     unlinked.push({ side: 'effect', id: effect.id, state: 'excluded', reason: 'known-talent-exclusion', note: IGNORED_KEYS[effect.id] });
+    continue;
+  }
+  if (INTERNAL_INTERVAL_KEYS[effect.id]) {
+    unlinked.push({ side: 'effect', id: effect.id, state: 'excluded', reason: 'internal-interval', note: INTERNAL_INTERVAL_KEYS[effect.id] });
+    continue;
+  }
+  if (PENDING_DEFINITION_KEYS[effect.id]) {
+    unlinked.push({ side: 'effect', id: effect.id, state: 'pending', reason: 'definition-needed', note: `6-A2: 付け先の定義が無い（${PENDING_DEFINITION_KEYS[effect.id]}）` });
     continue;
   }
   if (effect.category === 'artifact' && /(?:^|-)2pc(?:-|$)/.test(effect.id)) {

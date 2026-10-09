@@ -23475,6 +23475,13 @@
     },
     {
       "side": "effect",
+      "id": "alhaitham-c1-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "angelos-heptades-energy-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -23559,6 +23566,13 @@
     },
     {
       "side": "effect",
+      "id": "candace-c6-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2.3 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "cashflow-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -23570,6 +23584,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "chongyun-c4-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -23619,6 +23640,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "dehya-a1-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -23696,6 +23724,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "emilie-c1-attack-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2.9 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -23839,6 +23874,13 @@
     },
     {
       "side": "effect",
+      "id": "gaming-c4",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（0.2 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "gd-2pc",
       "state": "excluded",
       "reason": "two-piece-effect",
@@ -23850,6 +23892,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "glimbrightIcdKey",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -23937,6 +23986,13 @@
     },
     {
       "side": "effect",
+      "id": "kinich-c4-icd-key",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2.8 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "kirara-a1-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -23962,6 +24018,13 @@
       "state": "excluded",
       "reason": "known-talent-exclusion",
       "note": "枠が読めない固有天賦（関数名 passive）"
+    },
+    {
+      "side": "effect",
+      "id": "lanyan-c2-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -24084,6 +24147,13 @@
     },
     {
       "side": "effect",
+      "id": "neuvillette-c6-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "nighttimewhispers-2pc",
       "state": "excluded",
       "reason": "two-piece-effect",
@@ -24154,6 +24224,13 @@
     },
     {
       "side": "effect",
+      "id": "prune-c1-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（1.8 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "prune-c4-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -24172,6 +24249,13 @@
       "state": "excluded",
       "reason": "known-talent-exclusion",
       "note": "ヘクセライの追加の固有天賦（アプリに定義が無い）"
+    },
+    {
+      "side": "effect",
+      "id": "razor-hexerei-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2.23 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -24259,6 +24343,13 @@
     },
     {
       "side": "effect",
+      "id": "spine-dmgtaken-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "splendoroftranquilwaters-hp-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -24319,6 +24410,13 @@
       "state": "excluded",
       "reason": "internal-key",
       "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "travelerhydro-c4-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない"
     },
     {
       "side": "effect",
@@ -24413,6 +24511,13 @@
     },
     {
       "side": "effect",
+      "id": "wriothesley-c1-icd",
+      "state": "excluded",
+      "reason": "internal-interval",
+      "note": "内部の重複防止の間隔（2.5 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
       "id": "wt-2pc",
       "state": "excluded",
       "reason": "two-piece-effect",
@@ -24455,6 +24560,20 @@
     },
     {
       "side": "effect",
+      "id": "aino-c2-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 5 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "aino-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 10 秒））"
+    },
+    {
+      "side": "effect",
       "id": "alley-hunter",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -24483,6 +24602,20 @@
     },
     {
       "side": "effect",
+      "id": "arlecchino-c2-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 10 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "arlecchino-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（優先: スキル（昇りゆく凶月）の CT を 2 秒短縮する効果の間隔）"
+    },
+    {
+      "side": "effect",
       "id": "ayaka-c6",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -24501,6 +24634,13 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "baizhu-c2-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 5 秒））"
     },
     {
       "side": "effect",
@@ -24560,6 +24700,13 @@
     },
     {
       "side": "effect",
+      "id": "c4-skull-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 8 秒））"
+    },
+    {
+      "side": "effect",
       "id": "calamityofeshu",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -24578,6 +24725,27 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "charlotte-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 6 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "chev-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 10 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "chev-c2-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 10 秒））"
     },
     {
       "side": "effect",
@@ -24602,10 +24770,38 @@
     },
     {
       "side": "effect",
+      "id": "clorinde-c1-IcdKey",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
+    },
+    {
+      "side": "effect",
       "id": "clorinde-c4-burst-bonus",
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "clorinde-c6-cd-bonus",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
+    },
+    {
+      "side": "effect",
+      "id": "clorinde-c6-cr-bonus",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
+    },
+    {
+      "side": "effect",
+      "id": "clorinde-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃）"
     },
     {
       "side": "effect",
@@ -24616,10 +24812,31 @@
     },
     {
       "side": "effect",
+      "id": "columbina-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "columbina-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
+    },
+    {
+      "side": "effect",
       "id": "coolsteel",
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "dahlia-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 900 秒））"
     },
     {
       "side": "effect",
@@ -24728,6 +24945,13 @@
     },
     {
       "side": "effect",
+      "id": "flins-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5.5 秒））"
+    },
+    {
+      "side": "effect",
       "id": "flins-c4",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -24760,6 +24984,13 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "furina-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5 秒））"
     },
     {
       "side": "effect",
@@ -24812,10 +25043,38 @@
     },
     {
       "side": "effect",
+      "id": "iansan-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 18 秒））"
+    },
+    {
+      "side": "effect",
       "id": "iansan-c2",
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "illuga-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 15 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "ineffa-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 4 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "ineffa-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3.5 秒））"
     },
     {
       "side": "effect",
@@ -24861,6 +25120,20 @@
     },
     {
       "side": "effect",
+      "id": "kaveh-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "keqing-c2-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他（間隔 5 秒））"
+    },
+    {
+      "side": "effect",
       "id": "kinich-c1",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -24875,10 +25148,31 @@
     },
     {
       "side": "effect",
+      "id": "kirara-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 3.8 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "kuki-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 5 秒））"
+    },
+    {
+      "side": "effect",
       "id": "lauma-c2-lunarbloom-buff",
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "lauma-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 5 秒））"
     },
     {
       "side": "effect",
@@ -24914,6 +25208,13 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "lyney-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他（間隔 15 秒））"
     },
     {
       "side": "effect",
@@ -24980,6 +25281,20 @@
     },
     {
       "side": "effect",
+      "id": "neuvillette-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他（間隔 4 秒））"
+    },
+    {
+      "side": "effect",
+      "id": "nicole-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（追加攻撃（間隔 6 秒））"
+    },
+    {
+      "side": "effect",
       "id": "nilou-c1",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -25026,6 +25341,20 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "prune-c2",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他）"
+    },
+    {
+      "side": "effect",
+      "id": "qiqi-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（エネルギー回復（間隔 6 秒））"
     },
     {
       "side": "effect",
@@ -25085,6 +25414,13 @@
     },
     {
       "side": "effect",
+      "id": "sara-c1-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（優先: 爆発（烏天狗雷霆召呪）の CT を 1 秒短縮する効果の間隔）"
+    },
+    {
+      "side": "effect",
       "id": "sayu-c2",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -25099,10 +25435,24 @@
     },
     {
       "side": "effect",
+      "id": "sethos-c6-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他（間隔 15 秒））"
+    },
+    {
+      "side": "effect",
       "id": "sharpshooter",
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "shenhe-c2",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（優先: 領域内の氷ダメージの会心ダメージ+15%）"
     },
     {
       "side": "effect",
@@ -25218,6 +25568,13 @@
     },
     {
       "side": "effect",
+      "id": "wanderer-c2-burstbonus",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（その他）"
+    },
+    {
+      "side": "effect",
       "id": "wavebreaker",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -25243,6 +25600,20 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
+    },
+    {
+      "side": "effect",
+      "id": "xiangling-c6",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xlc6 と同じ効果））"
+    },
+    {
+      "side": "effect",
+      "id": "xianyun-c4-icd",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（HP回復（間隔 5 秒））"
     },
     {
       "side": "effect",
@@ -25274,6 +25645,13 @@
     },
     {
       "side": "effect",
+      "id": "xlc6",
+      "state": "pending",
+      "reason": "definition-needed",
+      "note": "6-A2: 付け先の定義が無い（優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xiangling-c6 と同じ効果））"
+    },
+    {
+      "side": "effect",
       "id": "yae-c2",
       "state": "pending",
       "reason": "permanent-effect-display",
@@ -25292,384 +25670,6 @@
       "state": "pending",
       "reason": "permanent-effect-display",
       "note": "6-A2: 定義を持たない常時効果の扱い・表示が未実装"
-    },
-    {
-      "side": "effect",
-      "id": "aino-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "アイノ 命ノ星座2「歯車差分の進数原理」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "aino-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "アイノ 命ノ星座4「バターと猫と エネルギー供給の法則」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "alhaitham-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "アルハイゼン 命ノ星座1「イントゥイション」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "arlecchino-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "アルレッキーノ 命ノ星座2「「あらゆる褒賞と罰は この手によるもの…」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "arlecchino-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "アルレッキーノ 命ノ星座4「「これからは互いを慈しみ 手を取り合うとしよう…」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "baizhu-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "白朮 命ノ星座2「脈絡明哲」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "c4-skull-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "シトラリ 命ノ星座4「拒死者の スピリットスカル」: skull 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "candace-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "キャンディス 命ノ星座6「満溢の潮汐」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "charlotte-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "シャルロット 命ノ星座6「好奇を以て要義と為す」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "chev-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "シュヴルーズ 命ノ星座1「戦線維持の胆力」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "chev-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "シュヴルーズ 命ノ星座2「誘導殉爆の狙撃」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "chongyun-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "重雲 命ノ星座4「浮雲霜天」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c1-IcdKey",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "クロリンデ 命ノ星座1「「ここより、 燭影の帷を通る」」: IcdKey"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-cd-bonus",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "クロリンデ 命ノ星座6「「故に—— 希望を捨ててはならない」」: 発動間隔 ボーナス"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-cr-bonus",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "クロリンデ 命ノ星座6「「故に—— 希望を捨ててはならない」」: 会心率 ボーナス"
-    },
-    {
-      "side": "effect",
-      "id": "clorinde-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "クロリンデ 命ノ星座6「「故に—— 希望を捨ててはならない」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "columbina-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "コロンビーナ 命ノ星座1「花照らし峰に隠れ入る光」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "columbina-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "コロンビーナ 命ノ星座4「花の嵐や雲と木と岩の陰」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "dahlia-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ダリア 命ノ星座6「あらゆる喜びが 君とあらんことを」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "dehya-a1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ディシア 固有天賦1「惜しみなき扶翼」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "emilie-c1-attack-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "エミリエ 命ノ星座1「淡く香るフレグランス」: attack 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "flins-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "フリンズ 命ノ星座1「雪影の幕をひらく時」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "furina-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "フリーナ 命ノ星座4「「地獄に堕ちずして いかに生の価値を知る！」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "gaming-c4",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "嘉明 命ノ星座4「雲中越山」"
-    },
-    {
-      "side": "effect",
-      "id": "glimbrightIcdKey",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "クロリンデ: glimbrightIcdKey"
-    },
-    {
-      "side": "effect",
-      "id": "iansan-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "イアンサ 命ノ星座1「千里の道も一歩から」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "illuga-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "イルーガ 命ノ星座1「危機を告げる禽」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "ineffa-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "イネファ 命ノ星座4「訓示に至らぬ道」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "ineffa-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "イネファ 命ノ星座6「貴方に捧げる暁」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "kaveh-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "カーヴェ 命ノ星座6「パイリダエーザの理想」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "keqing-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "刻晴 命ノ星座2「苛捐」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "kinich-c4-icd-key",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "キィニチ 命ノ星座4「蜂鳥の羽」: 発動間隔 key"
-    },
-    {
-      "side": "effect",
-      "id": "kirara-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "綺良々 命ノ星座4「韋駄天駿足」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "kuki-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "久岐忍 命ノ星座4「捨て去りし閉鎖の心」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "lanyan-c2-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "藍硯 命ノ星座2「「舞う袂軽く美玉光る」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "lauma-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ラウマ 命ノ星座4「巨熊の力を 恋い慕うこと勿れ」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "lyney-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "リネ 命ノ星座1「奇想天外の芸当」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "neuvillette-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ヌヴィレット 命ノ星座4「憐憫の玉冠」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "neuvillette-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ヌヴィレット 命ノ星座6「憤怒の報償」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "nicole-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "ニコ 命ノ星座1「「大いに愛されし人の子よ、 恐るることなかれ」」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "prune-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "プルーネ 命ノ星座1「誓いを立てたあの日から キミを救う旅が始まった」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "prune-c2",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "プルーネ 命ノ星座2「元素の力を抱きしめて さあ荷物をまとめよう」"
-    },
-    {
-      "side": "effect",
-      "id": "qiqi-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "七七 命ノ星座1「寒苦回向」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "razor-hexerei-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "レザー: hexerei 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "sara-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "九条裟羅 命ノ星座1「烏目」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "sethos-c6-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "セトス 命ノ星座6「巡日のパイロン」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "shenhe-c2",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "申鶴 命ノ星座2「定蒙」"
-    },
-    {
-      "side": "effect",
-      "id": "spine-dmgtaken-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "螭龍の剣（波乗り）: dmgtaken 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "travelerhydro-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "旅人 命ノ星座4「傾落の流水」: travelerhydro 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "wanderer-c2-burstbonus",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "放浪者 命ノ星座2「弐番·箙島廓白浪」: burstbonus"
-    },
-    {
-      "side": "effect",
-      "id": "wriothesley-c1-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "リオセスリ 命ノ星座1「悪を為す者に恐れを」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "xiangling-c6",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "香菱 命ノ星座6「竜巻旋火輪」"
-    },
-    {
-      "side": "effect",
-      "id": "xianyun-c4-icd",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "閑雲 命ノ星座4「黍珠割烹の妙」: 発動間隔"
-    },
-    {
-      "side": "effect",
-      "id": "xlc6",
-      "state": "unreviewed",
-      "reason": "key-has-no-master-link",
-      "note": "香菱: xlc6"
     },
     {
       "side": "target",

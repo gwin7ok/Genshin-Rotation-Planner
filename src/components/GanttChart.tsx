@@ -85,6 +85,9 @@ export function getBuffClassification(buff: ActiveBuffSpan) {
   if (buff.sourceType === 'artifact') {
     return { rank: 5, tag: '[聖遺物]' };
   }
+  if (buff.sourceType === 'constellation') {
+    return { rank: 3.5, tag: '[凸]' };
+  }
   return { rank: 3, tag: '[天賦]' };
 }
 
@@ -1408,7 +1411,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 {grp.duration > 0 && (
                                   <div 
                                     className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 truncate ${
-                                      category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : 'text-lime-300'
+                                      category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : category === 'constellation' ? 'text-rose-300' : 'text-lime-300'
                                     }`} 
                                     title={`【発動バフ（${badgeCfg.label}）】\n${grp.name}\n効果 ${grp.duration}s / CT ${grp.cooldown > 0 ? `${grp.cooldown}s` : 'なし'}`}
                                   >
@@ -1827,6 +1830,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               ? 'ring-2 ring-blue-300 font-bold brightness-125 shadow-blue-500/30'
                               : category === 'artifact'
                               ? 'ring-2 ring-purple-300 font-bold brightness-125 shadow-purple-500/30'
+                              : category === 'constellation'
+                              ? 'ring-2 ring-rose-300 font-bold brightness-125 shadow-rose-500/30'
                               : 'ring-2 ring-lime-300 font-bold brightness-125 shadow-lime-500/30';
 
                             return (

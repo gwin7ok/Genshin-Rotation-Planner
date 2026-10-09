@@ -59,7 +59,7 @@ export const GlobalBuffRow: React.FC<GlobalBuffRowProps> = ({ characters, databa
               const badgeCfg = getBuffBadgeConfig(def.category);
               const label = buffTimingLabel(def);
               const outOfScope = isGcsimOutOfScope(def);
-              const sourceLabel = def.category === 'talent' ? '固有天賦' : def.category === 'weapon' ? `武器: ${def.sourceName ?? ''}` : `聖遺物: ${def.sourceName ?? ''}`;
+              const sourceLabel = def.category === 'talent' ? '固有天賦' : def.category === 'constellation' ? '命ノ星座' : def.category === 'weapon' ? `武器: ${def.sourceName ?? ''}` : `聖遺物: ${def.sourceName ?? ''}`;
               const tooltip = [
                 `【${label}】${owner.name} / ${sourceLabel}`,
                 def.description ?? def.name,

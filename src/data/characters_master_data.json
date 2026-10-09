@@ -333,6 +333,18 @@
         "gcsimKeys": [
           "ayaka-c4"
         ]
+      },
+      {
+        "id": "10000002-cryo_c6",
+        "level": 6,
+        "name": "間水月",
+        "description": "10秒毎に、神里綾華は「薄氷の舞」状態を獲得し、重撃ダメージが298%アップする。重撃が敵に命中してから0.5秒後、「薄氷の舞」の効果はクリアされ、クールタイムのカウントが開始される。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ayaka-c6"
+        ]
       }
     ]
   },
@@ -930,6 +942,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000005-anemo_c2",
+        "level": 2,
+        "name": "革新の旋風",
+        "description": "元素チャージ効率+16%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amc-c2"
+        ]
+      },
       {
         "id": "10000005-anemo_c6",
         "level": 6,
@@ -2795,6 +2819,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000005-pyro_c1",
+        "level": 1,
+        "name": "流光の星火",
+        "description": "ブレイジング・ロックまたはバーニング・ロックが存在する間、フィールド上キャラクターの与えるダメージ+6%。フィールド上キャラクターが夜魂の加護状態にある場合、与えるダメージがさらに+9%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "travelerpyro-c1"
+        ]
+      },
+      {
         "id": "10000005-pyro_c2",
         "level": 2,
         "name": "常明の燭火",
@@ -2822,6 +2858,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "travelerpyro-c4"
+        ]
+      },
+      {
+        "id": "10000005-pyro_c6",
+        "level": 6,
+        "name": "永燃の聖火",
+        "description": "夜魂の加護状態にある時、旅人の通常攻撃、重撃、落下攻撃ダメージは元素付与によって他の元素に変化しない夜魂性質の炎元素ダメージへと変わり、かつそれらの攻撃の会心ダメージ+40%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "travelerpyro-c6"
         ]
       }
     ]
@@ -3466,6 +3514,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000007-anemo_c2",
+        "level": 2,
+        "name": "革新の旋風",
+        "description": "元素チャージ効率+16%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "amc-c2"
+        ]
+      },
       {
         "id": "10000007-anemo_c6",
         "level": 6,
@@ -5407,6 +5467,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000007-pyro_c1",
+        "level": 1,
+        "name": "流光の星火",
+        "description": "ブレイジング・ロックまたはバーニング・ロックが存在する間、フィールド上キャラクターの与えるダメージ+6%。フィールド上キャラクターが夜魂の加護状態にある場合、与えるダメージがさらに+9%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "travelerpyro-c1"
+        ]
+      },
+      {
         "id": "10000007-pyro_c2",
         "level": 2,
         "name": "常明の燭火",
@@ -5434,6 +5506,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "travelerpyro-c4"
+        ]
+      },
+      {
+        "id": "10000007-pyro_c6",
+        "level": 6,
+        "name": "永燃の聖火",
+        "description": "夜魂の加護状態にある時、旅人の通常攻撃、重撃、落下攻撃ダメージは元素付与によって他の元素に変化しない夜魂性質の炎元素ダメージへと変わり、かつそれらの攻撃の会心ダメージ+40%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "travelerpyro-c6"
         ]
       }
     ]
@@ -6073,6 +6157,20 @@
         "name": "輪旋の氷",
         "description": "凛冽なる輪舞の氷柱が1本追加され、発動時に元素エネルギーが15回復する。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000015-cryo_c1",
+        "level": 1,
+        "name": "優れた血筋",
+        "description": "氷元素の影響を受けた敵に対して、ガイアの通常攻撃と重撃の会心率+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kaeya-c1"
+        ]
+      }
     ]
   },
   {
@@ -6400,6 +6498,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000016-pyro_c1",
+        "level": 1,
+        "name": "罪の裁断",
+        "description": "HPが50%を超えている敵に対して、ディルックの与えるダメージ+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "diluc-c1"
+        ]
+      },
       {
         "id": "10000016-pyro_c2",
         "level": 2,
@@ -6781,6 +6891,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "razor-c1"
+        ]
+      },
+      {
+        "id": "10000020-electro_c2",
+        "level": 2,
+        "name": "制圧",
+        "description": "HPが30%以下の敵を攻撃する時、会心率+10%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "razor-c2"
         ]
       },
       {
@@ -7830,6 +7952,19 @@
         "gcsimKeys": [
           "xiangling-c2"
         ]
+      },
+      {
+        "id": "10000023-pyro_c6",
+        "level": 6,
+        "name": "竜巻旋火輪",
+        "description": "旋火輪継続中、チーム全員の炎元素ダメージ+15%。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xiangling-c6",
+          "xlc6"
+        ]
       }
     ]
   },
@@ -8758,6 +8893,30 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000026-anemo_c2",
+        "level": 2,
+        "name": "空劫·虚空開敷の変",
+        "description": "フィールド上にいない時、魈自身の元素チャージ効率+25%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xiao-c2"
+        ]
+      },
+      {
+        "id": "10000026-anemo_c4",
+        "level": 4,
+        "name": "神通·諸苦滅尽",
+        "description": "魈のHPが50%未満の時、防御力+100%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xiao-c4"
+        ]
+      },
       {
         "id": "10000026-anemo_c6",
         "level": 6,
@@ -10280,6 +10439,20 @@
         "name": "烈火と勇気",
         "description": "素晴らしい旅エリア内にいる片手剣、両手剣、長柄武器キャラクターの炎元素ダメージ+15%、さらに炎元素付与状態を獲得する。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000032-pyro_c2",
+        "level": 2,
+        "name": "絶境踏破",
+        "description": "ベネットのHPが70%以下になると、元素チャージ効率+30%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "bennett-c2"
+        ]
+      }
     ]
   },
   {
@@ -10945,6 +11118,21 @@
         "name": "埃は許しません",
         "description": "大掃除発動で、ノエルの防御力50%分の攻撃力を追加でアップする。 スキル継続中、敵1体倒す度に継続時間+1秒。最大10秒まで。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000034-geo_c2",
+        "level": 2,
+        "name": "旋風のメイド",
+        "description": "ノエルの重撃スタミナ消費-20%、与えるダメージ+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "noelle-c2-dmg",
+          "noelle-c2-stam"
+        ]
+      }
     ]
   },
   {
@@ -11274,6 +11462,19 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000035-cryo_c2",
+        "level": 2,
+        "name": "氷寒蝕骨",
+        "description": "氷元素の影響を受けた敵に、七七の通常攻撃と重撃の与えるダメージ+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "qiqi-c2",
+          "qiqi-c2-radiance"
+        ]
+      },
+      {
         "id": "10000035-cryo_c6",
         "level": 6,
         "name": "起死回骸",
@@ -11567,6 +11768,32 @@
         "level": 6,
         "name": "四霊の捧げ",
         "description": "HPの割合が重雲より低い敵に霊刃·雲開星落が命中した時、ダメージ+15%。 また、スキル発動時さらに追加で霊刃を1本を召喚する。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000036-cryo_c2",
+        "level": 2,
+        "name": "周天の回転",
+        "description": "霊刃·重華積霜エリア内で発動した元素スキルと元素爆発のクールタイム-15%。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "chongyun-c2"
+        ]
+      },
+      {
+        "id": "10000036-cryo_c6",
+        "level": 6,
+        "name": "四霊の捧げ",
+        "description": "HPの割合が重雲より低い敵に霊刃·雲開星落が命中した時、ダメージ+15%。 また、スキル発動時さらに追加で霊刃を1本を召喚する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "chongyun-c6"
+        ]
       }
     ]
   },
@@ -11866,6 +12093,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "ganyu-c1"
+        ]
+      },
+      {
+        "id": "10000037-cryo_c4",
+        "level": 4,
+        "name": "西狩",
+        "description": "降衆天華エリア内、敵の受けるダメージがアップする。 受けるダメージのアップ量は初期が5%、3秒毎に5%アップし、最大25%までアップできる。 敵がエリアを出た後、エリアによる効果は3秒続く。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ganyu-c4"
         ]
       },
       {
@@ -12544,6 +12783,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000039-cryo_c2",
+        "level": 2,
+        "name": "クールキャッツクロー",
+        "description": "フリーズキャッツクローによるダメージ+15%、シールドのダメージ吸収量+15%。 命中時、近くに出場している他のキャラクターにフリーズキャッツクロー50%分のダメージを吸収するシールドを付与する、継続時間5秒。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "diona-c2"
+        ]
+      },
+      {
         "id": "10000039-cryo_c6",
         "level": 6,
         "name": "キャッツテールが閉店の時",
@@ -12854,6 +13105,18 @@
         ],
         "gcsimCooldownKeys": [
           "mona-c2-icd"
+        ]
+      },
+      {
+        "id": "10000041-hydro_c4",
+        "level": 4,
+        "name": "絶滅の預言",
+        "description": "チーム内の自身のキャラクターが星異状態の敵を攻撃する時、会心率+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mona-c4"
         ]
       },
       {
@@ -13224,6 +13487,21 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000042-electro_c2",
+        "level": 2,
+        "name": "苛捐",
+        "cooldown": 5,
+        "description": "刻晴の通常攻撃または重撃が雷元素の影響を受けた敵に命中した時、50%の確率で元素粒子を1個生成する。 5秒毎に1回のみ発動可能。",
+        "dataSource": {
+          "cooldown": "gcsim: keqing-c2-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "keqing-c2-icd"
+        ]
+      },
       {
         "id": "10000042-electro_c4",
         "level": 4,
@@ -13907,6 +14185,18 @@
         ],
         "gcsimCooldownKeys": [
           "xinyan-c1-icd"
+        ]
+      },
+      {
+        "id": "10000044-pyro_c2",
+        "level": 2,
+        "name": "オープニング演出",
+        "description": "反逆の弾きによる物理ダメージの会心率+100%。さらに発動する時にLv.3シールド·舞のリズムを生成する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xinyan-c2"
         ]
       },
       {
@@ -15314,6 +15604,20 @@
         "name": "追加条項だよ",
         "description": "煙緋が所持できる丹火の印の最大枚数+1。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000048-pyro_c2",
+        "level": 2,
+        "name": "最終解釈権",
+        "description": "煙緋の重撃がHP50%未満の敵に対して、会心率+20%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "yanfei-c2"
+        ]
+      }
     ]
   },
   {
@@ -16244,6 +16548,32 @@
         "name": "高貴なる者の義務",
         "description": "氷浪の光剣で創造した光臨の剣は、直ちにエネルギーを5つ獲得する。通常攻撃、元素スキルまたは元素爆発によりエネルギーを獲得する際、50%の確率でさらに1つ獲得する。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000051-cryo_c1",
+        "level": 1,
+        "name": "潮の幻像",
+        "description": "氷潮の渦の冷酷な心を消費するとエウルアの物理ダメージ+30%、継続時間6秒。 冷酷な心を1つ消費するたびに、この効果の継続時間+6秒、最大18秒まで。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "eula-c1"
+        ]
+      },
+      {
+        "id": "10000051-cryo_c4",
+        "level": 4,
+        "name": "劣等感との戦い",
+        "description": "HP50%未満の敵に対する光臨の剣のダメージ+25%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "eula-c4"
+        ]
+      }
     ]
   },
   {
@@ -16881,6 +17211,20 @@
         "level": 6,
         "name": "ぐーたら寝る時間",
         "description": "早柚自身の嗚呼流·影貉繚乱によって召喚されたむじむじだるまの攻撃力と回復量は、早柚の元素熟知によって決まる。早柚の元素熟知の数値が1につき、下記効果が発動する。 ·むじむじだるまのダメージは攻撃力0.2%分アップする。この方法でアップできるダメージは攻撃力400%分まで。 ·むじむじだるまによるHP回復量+3。この方法でアップできる回復量は6000まで。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000053-anemo_c2",
+        "level": 2,
+        "name": "逃げ道確保",
+        "description": "嗚呼流·風隠急進で下記効果を獲得する。 ·一回押し時の風々輪·旋舞蹴のダメージ+3.3%。 ·長押しの風々輪状態では、0.5秒毎に風々輪·旋舞蹴のダメージ+3.3%。この方法でアップできる風々輪·旋舞蹴のダメージは66%まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sayu-c2"
+        ]
       }
     ]
   },
@@ -17714,6 +18058,21 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000056-electro_c1",
+        "level": 1,
+        "name": "烏目",
+        "cooldown": 3,
+        "description": "天狗呪雷がキャラクターに攻撃力アップ効果を付与、または敵に命中すると、烏天狗雷霆召呪のクールタイム-1秒。 この効果は3秒毎に1回のみ発動可能。",
+        "dataSource": {
+          "cooldown": "gcsim: sara-c1-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "sara-c1-icd"
+        ]
+      },
+      {
         "id": "10000056-electro_c6",
         "level": 6,
         "name": "我界",
@@ -18047,6 +18406,18 @@
         "gcsimKeys": [
           "itto-c4"
         ]
+      },
+      {
+        "id": "10000057-geo_c6",
+        "level": 6,
+        "name": "傾奇の張本、荒瀧一斗",
+        "description": "荒瀧一斗の重撃の会心ダメージ+70%。また、「荒瀧逆袈裟」を発動する時、50%の確率で「乱神の怪力」が消費されなくなる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "itto-c6"
+        ]
       }
     ]
   },
@@ -18353,6 +18724,18 @@
         ]
       },
       {
+        "id": "10000058-electro_c2",
+        "level": 2,
+        "name": "望月之吼噦",
+        "description": "殺生櫻の創造時の初期階位を弐、最大階位を肆にアップ、攻撃範囲+60%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "yae-c2"
+        ]
+      },
+      {
         "id": "10000058-electro_c4",
         "level": 4,
         "name": "緋櫻誘雷章",
@@ -18373,6 +18756,18 @@
         ],
         "gcsimExtraKeys": [
           "yae-c4"
+        ]
+      },
+      {
+        "id": "10000058-electro_c6",
+        "level": 6,
+        "name": "大殺生呪禁",
+        "description": "殺生櫻が攻撃する際、敵の防御力の60%を無視する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "yae-c6"
         ]
       }
     ]
@@ -19939,6 +20334,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000063-cryo_c2",
+        "level": 2,
+        "name": "定蒙",
+        "description": "神女遣霊真訣の継続時間+6秒。領域内フィールド上キャラクターが与える氷元素ダメージの会心ダメージ+15%。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "shenhe-c2"
+        ]
+      },
+      {
         "id": "10000063-cryo_c4",
         "level": 4,
         "name": "洞観",
@@ -20868,6 +21275,30 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000066-hydro_c1",
+        "level": 1,
+        "name": "鏡華風姿",
+        "description": "HP50%以下の敵に対して、瞬水剣によるダメージ+40%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ayato-c1"
+        ]
+      },
+      {
+        "id": "10000066-hydro_c2",
+        "level": 2,
+        "name": "世に源泉ありて",
+        "description": "浪閃の重ね掛け上限が5層になる。神里綾人が3層以上の浪閃状態の時、HP上限が50%アップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ayato-c2"
+        ]
+      },
+      {
         "id": "10000066-hydro_c4",
         "level": 4,
         "name": "細流厭わず",
@@ -21138,6 +21569,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000067-dendro_c1",
+        "level": 1,
+        "name": "ディープウッドパトロール",
+        "description": "コレイが待機状態の時、元素チャージ効率+20%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "collei-c1"
+        ]
+      },
       {
         "id": "10000067-dendro_c4",
         "level": 4,
@@ -21694,6 +22137,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000069-dendro_c1",
+        "level": 1,
+        "name": "根から判断する原初",
+        "description": "ティナリの重撃の会心率+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "tighnari-c1"
+        ]
+      },
+      {
         "id": "10000069-dendro_c2",
         "level": 2,
         "name": "茎から分析する由来",
@@ -22033,6 +22488,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000070-hydro_c1",
+        "level": 1,
+        "name": "却月の舞踊",
+        "description": "七域のダンスは、以下の強化効果を獲得する。 ·水月によるダメージ+65%。 ·天を滌う水環の継続時間+6秒。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nilou-c1"
+        ]
+      },
+      {
         "id": "10000070-hydro_c2",
         "level": 2,
         "name": "星天の花雨",
@@ -22061,6 +22528,19 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "nilou-c4"
+        ]
+      },
+      {
+        "id": "10000070-hydro_c6",
+        "level": 6,
+        "name": "霜絶の弦歌",
+        "description": "HP上限1000ごとにニィロウの会心率+0.6%、会心ダメージ+1.2%。 この方法でアップできる会心率は最大30%、会心ダメージは最大60%となる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nilou-c6-cd",
+          "nilou-c6-cr"
         ]
       }
     ]
@@ -23076,6 +23556,18 @@
         ]
       },
       {
+        "id": "10000073-dendro_c4",
+        "level": 4,
+        "name": "比量現行の茎",
+        "description": "近くに所聞遍計の蘊種印状態にある敵が1/2/3/4体またはそれ以上いる時、ナヒーダの元素熟知が100/120/140/160アップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "nahida-c4"
+        ]
+      },
+      {
         "id": "10000073-dendro_c6",
         "level": 6,
         "name": "大辯円成の実",
@@ -23350,6 +23842,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "layla-c4"
+        ]
+      },
+      {
+        "id": "10000074-cryo_c6",
+        "level": 6,
+        "name": "夜彩は輝く灯火のように",
+        "description": "垂裳凛然の夜の飛星によるダメージ+40%、星流揺籠の夢の星光弾によるダメージ+40%。 また、垂裳凛然の夜による夜星の生成間隔が20%短縮する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "layla-c6"
         ]
       }
     ]
@@ -23664,6 +24168,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "wanderer-c1-atkspd"
+        ]
+      },
+      {
+        "id": "10000075-anemo_c2",
+        "level": 2,
+        "name": "弐番·箙島廓白浪",
+        "description": "児姿優風状態時、空居力の上限値と現在の空居力の差が1あるごとに狂言·式楽伍番の与えるダメージが4%アップする。 この方法でアップできる狂言·式楽伍番のダメージは最大200%までとなる。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wanderer-c2-burstbonus"
         ]
       }
     ]
@@ -25046,6 +25562,44 @@
         "name": "黄金を裂く焔爪",
         "description": "炎哮獅子咬の会心率+10%。 また、1回の熾炎獅子の継続時間中、熾鬣拳が敵に命中し会心を起こすと、継続時間内の炎哮獅子咬の会心ダメージ+15%、熾炎獅子の継続時間+0.5秒。この効果は0.2秒毎に1回のみ発動可能。この方法で延長できる継続時間は2秒まで、アップできる会心ダメージは60%までとなる。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000079-pyro_c1",
+        "level": 1,
+        "name": "煌めく皎潔の炎",
+        "description": "ディシアのHP上限+20%。またHP上限を基準に、ディシアの下記攻撃のダメージが増加する。 ·熔鉄流獄のダメージ増加量：HP上限の3.6%。 ·炎哮獅子咬のダメージ増加量：HP上限の6%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dehya-c1"
+        ]
+      },
+      {
+        "id": "10000079-pyro_c2",
+        "level": 2,
+        "name": "燿く清砂の利刃",
+        "description": "熔鉄流獄·剣域熾焔発動時、再生成された「浄焔剣獄」領域の継続時間+6秒。 また、フィールド上に「浄焔剣獄」領域が存在する場合、領域内フィールド上キャラクターが攻撃を受けると、「浄焔剣獄」による次の連携攻撃のダメージ+50%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dehya-sanctum-dot-c2"
+        ]
+      },
+      {
+        "id": "10000079-pyro_c6",
+        "level": 6,
+        "name": "黄金を裂く焔爪",
+        "description": "炎哮獅子咬の会心率+10%。 また、1回の熾炎獅子の継続時間中、熾鬣拳が敵に命中し会心を起こすと、継続時間内の炎哮獅子咬の会心ダメージ+15%、熾炎獅子の継続時間+0.5秒。この効果は0.2秒毎に1回のみ発動可能。この方法で延長できる継続時間は2秒まで、アップできる会心ダメージは60%までとなる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "dehya-c6"
+        ]
+      }
     ]
   },
   {
@@ -25705,6 +26259,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "kaveh-c2"
+        ]
+      },
+      {
+        "id": "10000081-dendro_c4",
+        "level": 4,
+        "name": "アパダーナの饗宴",
+        "description": "カーヴェの起こした開花、または月開花反応によって生成された草原核が迸る時、与えるダメージ+60%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kaveh-c4"
         ]
       }
     ]
@@ -26636,6 +27202,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000084-pyro_c2",
+        "level": 2,
+        "name": "巧言令色の誘引",
+        "description": "リネがフィールドに存在する時、2秒毎に「一意専心」効果を1層獲得し、リネの会心ダメージ+20%。この効果は最大3層まで重ね掛け可能、リネが退場する時に解除される。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lyney-c2"
+        ]
+      },
+      {
         "id": "10000084-pyro_c4",
         "level": 4,
         "name": "熟知熟練の方策",
@@ -26983,6 +27561,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000085-cryo_c1",
+        "level": 1,
+        "name": "深海と泡沫の夢",
+        "description": "プレッシャー·フロウ·高圧粉砕の会心率+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "freminet-c1"
+        ]
+      },
       {
         "id": "10000085-cryo_c4",
         "level": 4,
@@ -27338,6 +27928,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000086-cryo_c1",
+        "level": 1,
+        "name": "悪を為す者に恐れを",
+        "description": "固有天賦「やがて公義は弁ぜらる」の「恩典の戒め」は以下のように変化する。 リオセスリのHPが60%未満、またはアイスファング・ラッシュによる烈霜の懲戒状態を継続中に、リペルブローの5段目が命中すると「恩典の戒め」を獲得する。「恩典の戒め」は2.5秒毎に1回のみ獲得可能。 また、誅罰・ヴォールティングアッパーは以下のように強化される。 ・ダメージアップ効果が200%になる。 ・命中した時に烈霜の懲戒状態だった場合、烈霜の懲戒状態が4秒延長される。烈霜の懲戒状態中、この方法による継続時間の延長は1回のみ。 固有天賦「やがて公義は弁ぜらる」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "wriothesley-c1"
+        ]
+      },
+      {
         "id": "10000086-cryo_c4",
         "level": 4,
         "name": "苦に喘ぐ者に救いを",
@@ -27602,6 +28204,20 @@
         "level": 6,
         "name": "憤怒の報償",
         "description": "重撃·衡平な裁量を発動時、ヌヴィレットは一定範囲内の源水の雫を吸収できる。源水の雫を1個吸収するごとに、重撃·衡平な裁量の継続時間+1秒。 さらに、重撃·衡平な裁量が敵に命中すると、2秒毎に追加で洪水を2つ放つ。洪水は1つにつき、ヌヴィレットのHP上限10%分の水元素ダメージを与える。この方法によるダメージは、重撃·衡平な裁量のダメージと見なされる。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000087-hydro_c2",
+        "level": 2,
+        "name": "律法の懲罰",
+        "description": "固有天賦「古海継嗣の権威」は以下のように強化される。「遺龍の栄光」1層につき、重撃・衡平な裁量の会心ダメージ+14%。この方法でアップできる会心ダメージは最大42%まで。 固有天賦「古海継嗣の権威」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "neuvillette-c2"
+        ]
       }
     ]
   },
@@ -28275,6 +28891,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000089-hydro_c2",
+        "level": 2,
+        "name": "「女は気まぐれ 水面に揺らぐ浮草のよう」",
+        "description": "万民のカルナバル継続期間中、周囲のチーム全員の現在HPが増減する時、フリーナの獲得する「テンション」が250%増加する。さらに「テンション」が上限を超えた部分について、1ポイントごとに、フリーナのHP上限が0.35%増える。この方法で増やせるフリーナのHP上限は最大140%まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "furina-c2-hp"
+        ]
+      },
       {
         "id": "10000089-hydro_c6",
         "level": 6,
@@ -29253,6 +29881,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "gaming-c2"
+        ]
+      },
+      {
+        "id": "10000092-pyro_c6",
+        "level": 6,
+        "name": "百獣支配",
+        "description": "瑞獣登楼の落下攻撃·踏雲献瑞の会心率+20%、会心ダメージ+40%、攻撃範囲がアップする。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "gaming-c6"
         ]
       }
     ]
@@ -30647,6 +31287,36 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000096-pyro_c2",
+        "level": 2,
+        "name": "「あらゆる褒賞と罰は この手によるもの…」",
+        "cooldown": 10,
+        "description": "血償の勅令を付与する時、代わりに血償の勅令・結を付与するようになる。 アルレッキーノが血償の勅令・結を回収する時、前方に凶月血炎を召喚し、アルレッキーノの攻撃力900%分の炎元素範囲ダメージを与える。また、アルレッキーノの全元素耐性および物理耐性+20%、継続時間15秒。この効果は10秒毎に1回のみ発動可能。 固有天賦「償えるものは苦痛のみ」を解放する必要がある。",
+        "dataSource": {
+          "cooldown": "gcsim: arlecchino-c2-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "arlecchino-c2-icd"
+        ]
+      },
+      {
+        "id": "10000096-pyro_c4",
+        "level": 4,
+        "name": "「これからは互いを慈しみ 手を取り合うとしよう…」",
+        "cooldown": 10,
+        "description": "アルレッキーノが血償の勅令の回収に成功した時、昇りゆく凶月のクールタイムが2秒減少し、自身の元素エネルギーを15ポイント回復する。この効果は10秒毎に1回のみ発動可能。",
+        "dataSource": {
+          "cooldown": "gcsim: arlecchino-c4-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "arlecchino-c4-icd"
+        ]
+      },
+      {
         "id": "10000096-pyro_c6",
         "level": 6,
         "name": "「この先、我々は ——新しき生に興じる」",
@@ -30917,6 +31587,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000097-electro_c1",
+        "level": 1,
+        "name": "シュラインの謁霊歌",
+        "description": "貫影の矢の会心率+15%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sethos-c1"
+        ]
+      },
       {
         "id": "10000097-electro_c2",
         "level": 2,
@@ -31298,6 +31980,36 @@
         "name": "「故に—— 希望を捨ててはならない」",
         "description": "夜狩の巡回発動後の12秒間、クロリンデの会心率+10%、会心ダメージ+70%。 また、夜巡り状態継続期間中、特定の状況で「明燭の影」が現れて追撃を行い、クロリンデの攻撃力200%分の雷元素ダメージを与える。この方法によるダメージは通常攻撃ダメージと見なされる。 明燭の影は以下の状況で現れる。 ·クロリンデが攻撃に当たる直前。 ·クロリンデが穿夜·契約を繰り出した時。 この2つの方法による明燭の影の召喚は、1秒毎に1回のみ可能。夜巡り状態継続期間中は、明燭の影を最大6回召喚できる。 また、夜巡り状態継続期間中、クロリンデの受けるダメージ-80%、中断耐性がアップする。この効果は夜巡り状態終了時、あるいは明燭の影を6回召喚した1秒後に解除される。"
       }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000098-electro_c4",
+        "level": 4,
+        "name": "「涙と命、仁愛を心に刻め」",
+        "description": "消えゆく残光が敵にダメージを与える時、クロリンデの命の契約パーセンテージを基に以下の通りダメージがアップする。命の契約1%につき、消えゆく残光のダメージ+2%。この方法でアップできる消えゆく残光ダメージは最大200%まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "clorinde-c4-burst-bonus"
+        ]
+      },
+      {
+        "id": "10000098-electro_c6",
+        "level": 6,
+        "name": "「故に—— 希望を捨ててはならない」",
+        "description": "夜狩の巡回発動後の12秒間、クロリンデの会心率+10%、会心ダメージ+70%。 また、夜巡り状態継続期間中、特定の状況で「明燭の影」が現れて追撃を行い、クロリンデの攻撃力200%分の雷元素ダメージを与える。この方法によるダメージは通常攻撃ダメージと見なされる。 明燭の影は以下の状況で現れる。 ·クロリンデが攻撃に当たる直前。 ·クロリンデが穿夜·契約を繰り出した時。 この2つの方法による明燭の影の召喚は、1秒毎に1回のみ可能。夜巡り状態継続期間中は、明燭の影を最大6回召喚できる。 また、夜巡り状態継続期間中、クロリンデの受けるダメージ-80%、中断耐性がアップする。この効果は夜巡り状態終了時、あるいは明燭の影を6回召喚した1秒後に解除される。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "clorinde-c6-cr-bonus"
+        ],
+        "gcsimCooldownKeys": [
+          "clorinde-c6-cd-bonus",
+          "clorinde-c6-icd"
+        ]
+      }
     ]
   },
   {
@@ -31609,6 +32321,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000099-dendro_c1",
+        "level": 1,
+        "name": "淡く香るフレグランス",
+        "description": "フレグランス・アコードと固有天賦「余香」の清露コロンによるダメージ+20%。固有天賦「余香」を解放する必要がある。 また、付近にいるチーム内キャラクターが敵に燃焼反応を起こした時、または燃焼状態の敵に草元素ダメージを与えた時、追加で芳香を1生成する。この効果は2.9秒毎に1回のみ発動可能。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "emilie-c1"
+        ]
+      },
       {
         "id": "10000099-dendro_c2",
         "level": 2,
@@ -32022,6 +32746,18 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000101-dendro_c1",
+        "level": 1,
+        "name": "七鸚の嘴",
+        "description": "キィニチが懸狩り·宙の遊猟を使って跳躍し、着地した後、移動速度+30%、継続時間6秒。 また、廻狩貫鱗砲の会心ダメージ+100%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kinich-c1"
+        ]
+      },
+      {
         "id": "10000101-dendro_c2",
         "level": 2,
         "name": "星虎の掌",
@@ -32034,6 +32770,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "kinich-c2"
+        ]
+      },
+      {
+        "id": "10000101-dendro_c4",
+        "level": 4,
+        "name": "蜂鳥の羽",
+        "description": "夜魂の加護状態にあるとき、キィニチは円軌道射撃または廻狩貫鱗砲を発動した後、自身の元素エネルギーを5ポイント回復する。この方法による元素エネルギーの回復は、2.8秒毎に1回のみ可能。 また、偉大なる聖龍を崇拝せよの与えるダメージ+70%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "kinich-c4-dmgp"
         ]
       }
     ]
@@ -32285,6 +33033,20 @@
         "level": 6,
         "name": "「流泉の衆」の精神",
         "description": "命ノ星座「のどかなメツトリ」のダメージアップ効果について、「夜魂の加護状態での初めて」という制限を解除する。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000102-hydro_c4",
+        "level": 4,
+        "name": "サメくんの主食は プクフグだよ",
+        "description": "プクフグフロートを獲得するとき、ムアラニは元素エネルギーを8回復する。固有天賦「耐熱型淡水プクフグ」を解放する必要がある。 また、爆瀑ロケットの与えるダメージ+75%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mualani-c4"
+        ]
       }
     ]
   },
@@ -32590,6 +33352,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000103-geo_c2",
+        "level": 2,
+        "name": "燎原リミックス",
+        "description": "シロネンが持つ岩元素の「サンプル音源」は、常時アクティブ状態を維持する。また、シロネンの「サンプル音源」がアクティブ状態の時、「サンプル音源」の元素タイプに応じて、その元素タイプと同じであり、かつ付近にいるチーム内キャラクターに対応する効果を与える。 ・岩元素：与えるダメージ+50% ・炎元素：攻撃力+45% ・水元素：HP上限+45% ・氷元素：会心ダメージ+60% ・雷元素：元素エネルギーが25ポイント回復し、かつ元素爆発のクールタイム-6秒",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "xilonen-c2-buff"
+        ]
+      },
       {
         "id": "10000103-geo_c4",
         "level": 4,
@@ -33179,6 +33953,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000105-electro_c1",
+        "level": 1,
+        "name": "霧立つ林中の痕跡",
+        "description": "元素スキル冥色のタイトロープの宿霊玉の移動回数+2。 また、宿霊玉が敵に命中した後、その敵に「夜冥」効果を付与、継続時間12秒。「夜冥」効果を受けている敵に対して、固有天賦「夜陰のシナスタジア」による「顕象超感覚」のダメージ+50%。固有天賦「夜陰のシナスタジア」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "ororon-c1"
+        ]
+      },
       {
         "id": "10000105-electro_c2",
         "level": 2,
@@ -33894,6 +34680,32 @@
         "level": 6,
         "name": "原動天の シークレットパクト",
         "description": "元素スキル霜暁の黒星で召喚したイツパパは「白燧」状態を常に維持する。夜魂値が尽きても、イツパパの「白燧」状態は終了しない。 また、元素スキル霜暁の黒星を発動時、イツパパはすべての夜魂値を消費し、イツパパ存在期間中、夜魂値を消費し続ける。この方法で夜魂値を1消費するたびに、シトラリは「秘律カウント」を1獲得する。 秘律カウントの上限は40。この秘律カウント1につき、付近のチーム全員の炎元素と水元素ダメージ+1.5%、シトラリの与えるダメージ+2.5%。 イツパパが退場する時、または元素スキルを再発動時、シトラリの「秘律カウント」はクリアされる。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000107-cryo_c2",
+        "level": 2,
+        "name": "心を呑む者の ピルグリメイジ",
+        "description": "シトラリの元素熟知+125、白曜シールド状態にある、またはイツパパのついている他のキャラクターの元素熟知+250。 また、元素スキル霜暁の黒星を発動時、近くのフィールド上キャラクターにも白曜シールドを付与するようになる。 固有天賦「五重天の寒雨」の効果が以下のように強化される。 イツパパが存在している間、付近にいるチーム内キャラクターが凍結反応、または溶解反応を起こした後、該当反応の影響を受けている敵の炎元素と水元素の耐性がさらに-20%、継続時間12秒。固有天賦「五重天の寒雨」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "citlali-c2-em"
+        ]
+      },
+      {
+        "id": "10000107-cryo_c6",
+        "level": 6,
+        "name": "原動天の シークレットパクト",
+        "description": "元素スキル霜暁の黒星で召喚したイツパパは「白燧」状態を常に維持する。夜魂値が尽きても、イツパパの「白燧」状態は終了しない。 また、元素スキル霜暁の黒星を発動時、イツパパはすべての夜魂値を消費し、イツパパ存在期間中、夜魂値を消費し続ける。この方法で夜魂値を1消費するたびに、シトラリは「秘律カウント」を1獲得する。 秘律カウントの上限は40。この秘律カウント1につき、付近のチーム全員の炎元素と水元素ダメージ+1.5%、シトラリの与えるダメージ+2.5%。 イツパパが退場する時、または元素スキルを再発動時、シトラリの「秘律カウント」はクリアされる。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "citlali-c6"
+        ]
       }
     ]
   },
@@ -34623,6 +35435,30 @@
         "gcsimKeys": [
           "mizuki-c1"
         ]
+      },
+      {
+        "id": "10000109-anemo_c2",
+        "level": 2,
+        "name": "希なる朝の",
+        "description": "夢浮かみ状態に入る時、夢見月瑞希の元素熟知1ごとに、周囲のチーム全員（夢見月瑞希を除く）の炎元素、水元素、氷元素、雷元素ダメージ+0.04%。この効果は夢浮かみ状態終了まで継続する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mizuki-c2"
+        ]
+      },
+      {
+        "id": "10000109-anemo_c6",
+        "level": 6,
+        "name": "煙る月",
+        "description": "夢見月瑞希が夢浮かみ状態にある時、付近にいるチーム内キャラクターの与える拡散反応ダメージに会心が発生する。なお会心率は30%、会心ダメージは100%に固定される。さらに、これらのキャラクターの与える星拡散反応ダメージの会心率+10%、会心ダメージ+20%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "mizuki-c6"
+        ]
       }
     ]
   },
@@ -34891,6 +35727,20 @@
         "level": 6,
         "name": "「豊穣の邦」の教え",
         "description": "運動量メーターの継続時間+3秒。 また、イアンサが夜魂値の回復効果を起こした時、回復量が上限を超えた場合、「火事場の馬鹿力」効果を獲得し、フィールド上にいるチーム内の自身のキャラクターの与えるダメージ+25%、継続時間3秒。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000110-electro_c2",
+        "level": 2,
+        "name": "おサボり厳禁！",
+        "description": "元素爆発力の三原則を発動する時、イアンサは固有天賦「高負荷トレーニング・強化版」の「プロパーフォーム」効果を獲得する。継続時間15秒。また、「プロパーフォーム」効果継続期間中、イアンサが待機している場合、フィールド上にいるチーム内の自身キャラクターの攻撃力+30%。固有天賦「高負荷トレーニング・強化版」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "iansan-c2"
+        ]
       }
     ]
   },
@@ -35311,6 +36161,18 @@
         ],
         "gcsimExtraKeys": [
           "varesa-c4"
+        ]
+      },
+      {
+        "id": "10000111-electro_c6",
+        "level": 6,
+        "name": "正義のヒーローの凱旋",
+        "description": "マキシマムドライブ状態に入る時、ヴァレサの元素エネルギーを30ポイント回復する。 ヴァレサの落下攻撃と元素爆発シャイニングヴェント！の会心率+10%、会心ダメージ+100%。 また、元素スキルホッピング・ナイトレインボーを長押しで発動する時、または「パワフルタックル」モードで元素スキルボタンを一回押しする時、ヴァレサは夜魂値を上限まで回復する。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "varesa-c6"
         ]
       }
     ]
@@ -36259,6 +37121,18 @@
         "gcsimKeys": [
           "skirk-c2"
         ]
+      },
+      {
+        "id": "10000114-cryo_c4",
+        "level": 4,
+        "name": "流断",
+        "description": "固有天賦**万流帰寂**の効果が次のように強化される。「死川渡り」効果が1層/2層/3層の時、スカークの攻撃力が10%/20%/40%アップする。 固有天賦「万流帰寂」を解放する必要がある。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "skirk-c4"
+        ]
       }
     ]
   },
@@ -36534,6 +37408,23 @@
         "level": 6,
         "name": "あらゆる喜びが 君とあらんことを",
         "description": "元素爆発**純光の祈り**の「西風の恵み」効果を受けているフィールド上キャラクターの攻撃速度+10%。 また、「西風の恵み」効果を受けているフィールド上キャラクターが戦闘不能になると、以下の効果が発動する。 ・そのキャラクターが復活する。 ・そのキャラクターのHPを100%回復する。 この効果は15分毎に1回のみ発動可能。"
+      }
+    ],
+    "constellationEffects": [
+      {
+        "id": "10000115-hydro_c6",
+        "level": 6,
+        "name": "あらゆる喜びが 君とあらんことを",
+        "cooldown": 900,
+        "description": "元素爆発**純光の祈り**の「西風の恵み」効果を受けているフィールド上キャラクターの攻撃速度+10%。 また、「西風の恵み」効果を受けているフィールド上キャラクターが戦闘不能になると、以下の効果が発動する。 ・そのキャラクターが復活する。 ・そのキャラクターのHPを100%回復する。 この効果は15分毎に1回のみ発動可能。",
+        "dataSource": {
+          "cooldown": "gcsim: dahlia-c6-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "dahlia-c6-icd"
+        ]
       }
     ]
   },
@@ -37099,6 +37990,18 @@
         ]
       },
       {
+        "id": "10000119-dendro_c2",
+        "level": 2,
+        "name": "「北の戒めを綴りて 伝承を語れ」",
+        "description": "元素爆発**聖言のルノ・月の心**を以下のように強化する。 ・**「蒼の讃歌」**の効果が強化される。付近にいるチーム内キャラクターが開花、超開花、烈開花反応を起こした時に与えるダメージが、ラウマの元素熟知の500%分、追加でアップする。また、付近にいるチーム内キャラクターが与える月開花反応ダメージが、ラウマの元素熟知の400%分、追加でアップする。 月兆・満照：付近にいるチーム内キャラクターが与える月開花反応ダメージ+40%。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "lauma-c2-lunarbloom-buff"
+        ]
+      },
+      {
         "id": "10000119-dendro_c6",
         "level": 6,
         "name": "「我が血と涙を 月に捧げ奉らん」",
@@ -37509,6 +38412,21 @@
     ],
     "constellationEffects": [
       {
+        "id": "10000120-electro_c1",
+        "level": 1,
+        "name": "雪影の幕をひらく時",
+        "cooldown": 5.5,
+        "description": "特殊元素スキル北国の嵐槍の基本クールタイムを4秒に短縮する。 また、チーム内キャラクターが月感電反応を起こすと、フリンズの元素エネルギーを8回復する。この効果は5.5秒毎に1回のみ発動可能。",
+        "dataSource": {
+          "cooldown": "gcsim: flins-c1-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "flins-c1-icd"
+        ]
+      },
+      {
         "id": "10000120-electro_c2",
         "level": 2,
         "name": "邪悪の壁を超える者",
@@ -37521,6 +38439,18 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "flins-c2"
+        ]
+      },
+      {
+        "id": "10000120-electro_c4",
+        "level": 4,
+        "name": "咆哮する荒れ山の夜",
+        "description": "フリンズの攻撃力+20%。 また、固有天賦**「幽炎の囁き」**は以下のように強化される。フリンズの元素熟知が、フリンズの攻撃力の10%分アップする。この方法でアップできるフリンズの元素熟知は、最大220まで。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "flins-c4"
         ]
       }
     ]
@@ -38246,6 +39176,18 @@
         ]
       },
       {
+        "id": "10000123-pyro_c4",
+        "level": 4,
+        "name": "充溢の根源",
+        "description": "ドゥリンの元素爆発ダメージ+40%。また、命ノ星座**「赤土の逆理」**の「輪廻啓発」消費効果発動時、30%の確率で「輪廻啓発」を消費しない。",
+        "dataSource": {},
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "durin-c4"
+        ]
+      },
+      {
         "id": "10000123-pyro_c6",
         "level": 6,
         "name": "二重の誕生",
@@ -38787,6 +39729,21 @@
           "columbina-c2-lb",
           "columbina-c2-lc",
           "columbina-c2-lcr"
+        ]
+      },
+      {
+        "id": "10000125-hydro_c4",
+        "level": 4,
+        "name": "花の嵐や雲と木と岩の陰",
+        "cooldown": 15,
+        "description": "**引力の干渉**発動時、コロンビーナの元素エネルギーを4回復する。 また、コロンビーナの引力値を最も多く溜めた月反応の種類が、月感電/月開花/月結晶反応であった場合の、引力の干渉による月反応ダメージが、それぞれコロンビーナのHP上限の12.5%/2.5%/12.5%分アップする。上記効果は15秒毎に1回のみ発動可能。 付近にいるチーム内キャラクターが与える月反応ダメージが1.5%**向上**する。",
+        "dataSource": {
+          "cooldown": "gcsim: columbina-c4-icd"
+        },
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimCooldownKeys": [
+          "columbina-c4-icd"
         ]
       },
       {
@@ -40636,6 +41593,18 @@
       }
     ],
     "constellationEffects": [
+      {
+        "id": "10000132-anemo_c2",
+        "level": 2,
+        "name": "元素の力を抱きしめて さあ荷物をまとめよう",
+        "description": "元素爆発**魔女狩りの時間なのだ！**の発動中、「魔女を誘う鈴」が「ハンティング」モードの時、プルーネは「魔女狩り」効果を獲得する。この時、プルーネの攻撃力が10%アップし、「魔女を誘う鈴」および元素変化した**「災いを狩るハンマー」**が敵に命中した場合、攻撃力がさらに5%アップする。この方法で攻撃力は最大40%までアップできる。 継続時間中、「魔女狩りの時間なのだ！」を再発動すると、既存の上記効果が先にクリアされる。",
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "prune-c2"
+        ]
+      },
       {
         "id": "10000132-anemo_c6",
         "level": 6,

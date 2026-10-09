@@ -11,6 +11,7 @@
  *   conditional … 上のどちらでもない（既定。辞書に効果のキーはあるが時間が分からない・辞書に効果のキーが無い）
  * gcsim 対象外（gcsimTarget = false）: gcsim 未実装のキャラ・武器・聖遺物、辞書に効果のキーが無いもの
  */
+import { isDisplayWorthyNature, natureOfText, NATURE_EXCEPTIONS } from './effectNature.ts';
 import type { KeyCatalog, KeyCatalogEntry } from './gcsimKeyCatalog.ts';
 import { findDurations } from './passiveEffects.ts';
 import type {
@@ -178,52 +179,6 @@ export const INTERNAL_INTERVAL_KEYS: Record<string, string> = {
   'travelerhydro-c4-icd': '内部の重複防止の間隔（2 秒）。ユーザーに見せる発動制限ではない',
   'wriothesley-c1-icd': '内部の重複防止の間隔（2.5 秒）。ユーザーに見せる発動制限ではない',
   'gaming-c4': '内部の重複防止の間隔（0.2 秒）。ユーザーに見せる発動制限ではない',
-};
-
-/**
- * 結び付けたいが、付け先の定義が無いキー（その凸の効果が、時間つきの効果ではない: CT 付きの即時・条件つきの効果）。
- * 6-A2（定義を持たない効果の扱い・表示）で、定義を作るときに一緒に結び付ける（D90）。キー → 優先度つきのメモ
- */
-export const PENDING_DEFINITION_KEYS: Record<string, string> = {
-  'aino-c2-icd': '追加攻撃（間隔 5 秒）',
-  'aino-c4-icd': 'エネルギー回復（間隔 10 秒）',
-  'arlecchino-c2-icd': '追加攻撃（間隔 10 秒）',
-  'arlecchino-c4-icd': '優先: スキル（昇りゆく凶月）の CT を 2 秒短縮する効果の間隔',
-  'baizhu-c2-icd': 'HP回復（間隔 5 秒）',
-  'c4-skull-icd': 'エネルギー回復（間隔 8 秒）',
-  'charlotte-c6-icd': 'HP回復（間隔 6 秒）',
-  'chev-c1-icd': 'エネルギー回復（間隔 10 秒）',
-  'chev-c2-icd': '追加攻撃（間隔 10 秒）',
-  'clorinde-c1-IcdKey': '追加攻撃',
-  'clorinde-c6-cd-bonus': '追加攻撃',
-  'clorinde-c6-icd': '追加攻撃',
-  'columbina-c1-icd': 'エネルギー回復（間隔 15 秒）',
-  'columbina-c4-icd': 'エネルギー回復（間隔 15 秒）',
-  'dahlia-c6-icd': 'HP回復（間隔 900 秒）',
-  'flins-c1-icd': 'エネルギー回復（間隔 5.5 秒）',
-  'furina-c4-icd': 'エネルギー回復（間隔 5 秒）',
-  'iansan-c1-icd': 'エネルギー回復（間隔 18 秒）',
-  'illuga-c1-icd': 'エネルギー回復（間隔 15 秒）',
-  'ineffa-c4-icd': 'エネルギー回復（間隔 4 秒）',
-  'ineffa-c6-icd': '追加攻撃（間隔 3.5 秒）',
-  'kaveh-c6-icd': '追加攻撃（間隔 3 秒）',
-  'keqing-c2-icd': 'その他（間隔 5 秒）',
-  'kirara-c4-icd': '追加攻撃（間隔 3.8 秒）',
-  'kuki-c4-icd': '追加攻撃（間隔 5 秒）',
-  'lauma-c4-icd': 'エネルギー回復（間隔 5 秒）',
-  'lyney-c1-icd': 'その他（間隔 15 秒）',
-  'neuvillette-c4-icd': 'その他（間隔 4 秒）',
-  'nicole-c1-icd': '追加攻撃（間隔 6 秒）',
-  'qiqi-c1-icd': 'エネルギー回復（間隔 6 秒）',
-  'sara-c1-icd': '優先: 爆発（烏天狗雷霆召呪）の CT を 1 秒短縮する効果の間隔',
-  'sethos-c6-icd': 'その他（間隔 15 秒）',
-  'xianyun-c4-icd': 'HP回復（間隔 5 秒）',
-  'clorinde-c6-cr-bonus': '追加攻撃',
-  'prune-c2': 'その他',
-  'shenhe-c2': '優先: 領域内の氷ダメージの会心ダメージ+15%',
-  'wanderer-c2-burstbonus': 'その他',
-  'xiangling-c6': '優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xlc6 と同じ効果）',
-  'xlc6': '優先: 旋火輪の間、チーム全員の炎ダメージ+15%（xiangling-c6 と同じ効果）',
 };
 
 /**
@@ -427,18 +382,28 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         if (!byLevel.has(level)) byLevel.set(level, []);
         byLevel.get(level)!.push(e);
       }
-      for (const [level, list] of [...byLevel].sort((a, b) => a[0] - b[0])) {
+      for (const [level, rawList] of [...byLevel].sort((a, b) => a[0] - b[0])) {
         const defId = `${char.id}_c${level}`;
         if (EXCLUDED_CONSTELLATIONS[defId]) continue;
+        // 内部の重複防止の間隔のキーは、定義に結び付けない（対象外。D90）
+        const list = rawList.filter(e => !INTERNAL_INTERVAL_KEYS[e.key]);
+        if (list.length === 0) continue;
         const s = summarize(list);
-        if (s.timing !== 'computed') {
+        const timed = s.timing === 'computed';
+        if (!timed) {
+          // 時間の無い効果（常時・条件つき・CT だけ）は、画面に出す価値のあるもの（ステータス・ダメージの増減、CT 短縮）だけを定義にする（6-A2。D91）
           const effectsOnly = list.filter(e => e.kind === 'effect');
-          if (effectsOnly.some(e => e.permanent)) report.constellationSkipped.permanentOnly++;
-          else if (effectsOnly.length > 0) report.constellationSkipped.unknownDuration++;
-          continue;
+          const text = char.constellations?.find(c => c.level === level)?.description ?? '';
+          const worthy = list.some(e => NATURE_EXCEPTIONS[e.key]) || isDisplayWorthyNature(natureOfText(text));
+          const hasKeys = (s.gcsimKeys?.length ?? 0) > 0 || (s.gcsimCooldownKeys?.length ?? 0) > 0;
+          if (!worthy || !hasKeys) {
+            if (effectsOnly.some(e => e.permanent)) report.constellationSkipped.permanentOnly++;
+            else if (effectsOnly.length > 0) report.constellationSkipped.unknownDuration++;
+            continue;
+          }
         }
         const data = char.constellations?.find(c => c.level === level);
-        const noDuration = Boolean(NO_DURATION_CONSTELLATIONS[defId]);
+        const noDuration = !timed || Boolean(NO_DURATION_CONSTELLATIONS[defId]);
         // 継続時間: 説明文（genshin-db）に継続時間が 1 つだけ書いてあればそれを優先し（D33）、無ければ gcsim の値。意味が無いものは持たない
         const fromText = noDuration ? [] : [...new Set(findDurations(data?.description ?? '').map(d => d.value))];
         const textDuration = fromText.length === 1 ? fromText[0] : undefined;
@@ -458,7 +423,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           report.constellationDurationFromText.push({ id: defId, name: `${char.name} ${level}凸`, text: textDuration, gcsim: s.duration ?? 0 });
         }
         applyLink(def, s);
-        if (noDuration) def.timing = 'conditional';
+        if (noDuration && timed) def.timing = 'conditional';
         applyNote(def, true);
         effects.push(def);
         count(report, 'constellation', def);
@@ -524,7 +489,7 @@ export function linkEquipmentBuffs(
   const report = emptyBuffLinkReport();
 
   for (const w of weapons) {
-    const entries = w.gcsimKey ? weaponEntries(w.gcsimKey, index) : [];
+    const entries = (w.gcsimKey ? weaponEntries(w.gcsimKey, index) : []).filter(e => !INTERNAL_INTERVAL_KEYS[e.key]);
     const defs = w.buffEffects ?? [];
     const s = summarize(entries);
     if (defs.length > 0) {
@@ -548,12 +513,43 @@ export function linkEquipmentBuffs(
       w.buffEffects = [def];
       count(report, 'weapon', def);
       report.added.push({ id: def.id, name: `${w.name}「${def.name}」`, sourceName: w.name, duration: def.duration, keys: def.gcsimKeys ?? [] });
+    } else if (s.timing === 'always' && (s.gcsimKeys?.length ?? 0) > 0 && (entries.some(e => NATURE_EXCEPTIONS[e.key]) || isDisplayWorthyNature(natureOfText(w.description ?? '')))) {
+      // 常時の効果（時間が無い）。定義が無いものは、画面の「時間指定のない効果」の行に出すため、定義にする（6-A2。D91）
+      const def: EquipmentBuffDefinition = {
+        id: `wbuff_${w.id}`,
+        name: w.passiveName || w.name,
+        sourceType: 'weapon',
+        sourceId: w.id,
+        ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
+        description: w.description,
+        dataSource: { ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
+      };
+      applyLink(def, s);
+      w.buffEffects = [def];
+      count(report, 'weapon', def);
+      report.added.push({ id: def.id, name: `${w.name}「${def.name}」（常時）`, sourceName: w.name, duration: undefined, keys: def.gcsimKeys ?? [] });
     }
   }
 
   for (const a of artifacts) {
-    const entries = (a.gcsimKey ? index.byOwner.get(a.gcsimKey) ?? [] : []).filter(e => !hasToken(e, /^2pc$/));
+    const entries = (a.gcsimKey ? index.byOwner.get(a.gcsimKey) ?? [] : []).filter(e => !hasToken(e, /^2pc$/) && !INTERNAL_INTERVAL_KEYS[e.key]);
     const s = summarize(entries);
+    if ((a.buffEffects ?? []).length === 0 && !a.buffEffect && s.timing === 'always' && (s.gcsimKeys?.length ?? 0) > 0
+      && (entries.some(e => NATURE_EXCEPTIONS[e.key]) || isDisplayWorthyNature(natureOfText(a.effect4p ?? '')))) {
+      // 常時の 4 セット効果（時間が無い）。定義が無いものは、画面の「時間指定のない効果」の行に出すため、定義にする（6-A2。D91）
+      const def: EquipmentBuffDefinition = {
+        id: `abuff_${a.id}`,
+        name: `${a.name} 4セット`,
+        sourceType: 'artifact',
+        sourceId: a.id,
+        ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
+        description: a.effect4p ?? '',
+        dataSource: { ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
+      };
+      applyLink(def, s);
+      a.buffEffects = [def];
+      report.added.push({ id: def.id, name: `${a.name} 4セット（常時）`, sourceName: a.name, duration: undefined, keys: def.gcsimKeys ?? [] });
+    }
     for (const def of a.buffEffects ?? []) {
       applyLink(def, s);
       applyNote(def, Boolean(a.gcsimKey));

@@ -2,6 +2,8 @@
 
 作成: 2026-10-09 / gcsim 辞書のコミット 1f9c1f2e / 元: `src/data/master_effect_coverage.json` の「未確認」（理由 `key-has-no-master-link`）
 
+**2026-10-09 実装済み（D91）: C・D の保留 39 件は、価値のあるもの（ステータス・ダメージの増減、CT 短縮）を定義にして結び付け、価値の低いもの（エネルギー回復・追加攻撃・HP 回復）は対象外（`low-value-nature`）にした。保留は 0 件。**
+
 **2026-10-09 決定（D90。推奨どおり）: B と嘉明 4 凸の計 15 件は対象外（`INTERNAL_INTERVAL_KEYS`）。C と D の残り計 39 件は保留（`PENDING_DEFINITION_KEYS`。6-A2 で定義を作るときに結び付ける）。未確認は 54 → 0。**
 
 ## 結論（先に）

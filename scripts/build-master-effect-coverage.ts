@@ -9,7 +9,8 @@
  * effects / targets / links / unlinked の構造で別レポートを出力する。
  */
 import fs from 'node:fs';
-import { IGNORED_KEYS, INTERNAL_INTERVAL_KEYS, PENDING_DEFINITION_KEYS } from '../src/masterdata/buffGcsimLink.ts';
+import { IGNORED_KEYS, INTERNAL_INTERVAL_KEYS, slotOfEntry } from '../src/masterdata/buffGcsimLink.ts';
+import { NATURE_EXCEPTIONS, NATURE_LABEL, isDisplayWorthyNature, natureOfText } from '../src/masterdata/effectNature.ts';
 import type {
   MasterEffectCoverage, MasterEffectDisposition, MasterEffectKeyRow,
   MasterEffectLinkRow, MasterEffectTargetRow, MasterEffectTargetType,
@@ -161,6 +162,21 @@ for (const target of targetsById.values()) {
   }
 }
 
+const catalogByKey = new Map<string, any>((catalog.entries as any[]).map(e => [e.key, e]));
+/** 効果のキーに対応するゲーム内の説明文（命ノ星座はその凸の説明、武器は説明、聖遺物は 4 セット効果）。分からなければ undefined */
+function descriptionOf(key: string): string | undefined {
+  const e = catalogByKey.get(key);
+  if (!e) return undefined;
+  if (e.category === 'constellation' && e.owner?.type === 'character') {
+    const level = slotOfEntry(e, 'c');
+    const c = characterByGcsimKey.get(e.owner.gcsimKey);
+    return level !== undefined ? c?.constellations?.find((x: any) => x.level === level)?.description : undefined;
+  }
+  if (e.category === 'weapon' && e.owner?.type === 'weapon') return weaponByGcsimKey.get(e.owner.gcsimKey)?.description;
+  if (e.category === 'artifact' && e.owner?.type === 'artifact') return artifactByGcsimKey.get(e.owner.gcsimKey)?.effect4p;
+  return undefined;
+}
+
 for (const effect of effectsById.values()) {
   if (effect.category === 'missing-from-catalog') {
     unreviewed('effect', effect.id, 'key-not-in-catalog', 'マスターのキー配列が参照するgcsimキーが辞書に無い');
@@ -179,9 +195,16 @@ for (const effect of effectsById.values()) {
     unlinked.push({ side: 'effect', id: effect.id, state: 'excluded', reason: 'internal-interval', note: INTERNAL_INTERVAL_KEYS[effect.id] });
     continue;
   }
-  if (PENDING_DEFINITION_KEYS[effect.id]) {
-    unlinked.push({ side: 'effect', id: effect.id, state: 'pending', reason: 'definition-needed', note: `6-A2: 付け先の定義が無い（${PENDING_DEFINITION_KEYS[effect.id]}）` });
-    continue;
+  // 時間の無い効果で、画面に出す価値が低いもの（エネルギー回復・追加攻撃・HP 回復など）は、定義にしないで対象外（6-A2。D91）
+  if (['constellation', 'weapon', 'artifact'].includes(effect.category)) {
+    const text = descriptionOf(effect.id);
+    if (text !== undefined && !NATURE_EXCEPTIONS[effect.id]) {
+      const nature = natureOfText(text);
+      if (!isDisplayWorthyNature(nature)) {
+        unlinked.push({ side: 'effect', id: effect.id, state: 'excluded', reason: 'low-value-nature', note: `効果の性質が「${NATURE_LABEL[nature]}」で、画面に出す価値が低い（D91）` });
+        continue;
+      }
+    }
   }
   if (effect.category === 'artifact' && /(?:^|-)2pc(?:-|$)/.test(effect.id)) {
     unlinked.push({ side: 'effect', id: effect.id, state: 'excluded', reason: 'two-piece-effect', note: 'D5: 2セット効果は発動バフのバーにしない' });

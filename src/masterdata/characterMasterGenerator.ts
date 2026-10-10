@@ -414,7 +414,11 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // 宵宮: 庭火焔硝（611f）
   '10000049-pyro': [stateMode('e', '庭火焔硝', 0, 611, 'yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除')],
   // 神里綾人: 瞬水剣（360f）
-  '10000066-hydro': [stateMode('e', '瞬水剣', 0, 360, 'kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除')],
+  // 瞬水剣の間の通常攻撃は、全段 23f（取り消しは 5f）の瞬水剣。重撃は gcsim が実行エラーにする（2026-10-10）
+  '10000066-hydro': [stateMode('e', '瞬水剣', 0, 360, 'kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除', {
+    normalFrames: [{total:23,hitmark:5,cancels:{skill:5,burst:5,dash:5,jump:5,swap:5},source:'attack.go:shunsuikenFrames（InitNormalCancelSlice(5, 23)。全段同じ。攻撃速度の補正は未対応）'}],
+    blocked: {types:['charged'],result:'error',hint:'瞬水剣の間は重撃を使えません（gcsim は実行エラー）。瞬水剣が終わってから置いてください'},
+  })],
   // --- 特殊スキル・特殊爆発の受付（2026-10-08。受付をモードの定義に統一。D78）。special.kind = skill は特殊スキル（spE）、burst は特殊爆発（spQ）を使える期間 ---
   // フリンズ: 幽炎の露顕（E の 619f）。この間、特殊スキル「北国の嵐槍」を何度でも使える。交代で消える。既定は維持する
   '10000120-electro': [{
@@ -561,7 +565,11 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   '10000057-geo': [stateMode('q', '怒目鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],
   '10000054-hydro': [stateMode('q', '儀来羽衣', 0, 600, 'kokomi/burst.go: kokomiburst（実行: 爆発と同時に 600f）。交代で終わる')],
   '10000106-pyro': [stateMode('q', '燔天の時', 105, 420, 'mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる')],
-  '10000052-electro': [stateMode('q', '夢想の一心', 0, 518, 'raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる')],
+  // 夢想の一心の間の通常攻撃は刀の 5 段、重撃は刀の重撃（2 回ヒット 56f）（2026-10-10）
+  '10000052-electro': [stateMode('q', '夢想の一心', 0, 518, 'raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる', {
+    normalFrames: [{total:21,hitmark:12,cancels:{attack:19,skill:12,burst:12,dash:12,jump:12,swap:12},source:'attack.go:swordFrames[0]'},{total:26,hitmark:13,cancels:{attack:16,skill:13,burst:13,dash:13,jump:13,swap:13},source:'attack.go:swordFrames[1]'},{total:34,hitmark:11,cancels:{attack:16,skill:11,burst:11,dash:11,jump:11,swap:11},source:'attack.go:swordFrames[2]'},{total:67,hitmark:33,cancels:{attack:44,skill:33,burst:33,dash:33,jump:33,swap:33},source:'attack.go:swordFrames[3]'},{total:59,hitmark:33,cancels:{skill:33,burst:33,dash:33,jump:33,swap:33},source:'attack.go:swordFrames[4]'}],
+    chargedFrames: {total:56,hitmark:32,cancels:{dash:32,jump:32},source:'charge.go:swordCAFrames（2 回ヒット。24f・32f）'},
+  })],
   '10000020-electro': [stateMode('q', '雷牙', 32, 900, 'razor/burst.go: razor-q（実行: 爆発の 32f 後から 900f）。交代で終わる')],
   '10000097-electro': [stateMode('q', '黄昏の祈り', 0, 480, 'sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる')],
   // クロリンデ: 夜巡り（E の 6f 後から 7.5 秒）。状態の間の E は突き（CT なし・回数の制限なし・状態は延びない）、通常攻撃は狩りの N、爆発は別のフレーム。

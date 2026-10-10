@@ -120,6 +120,8 @@ export interface ActionMode {
   normalFrames?: ActionFrames[];
   /** モードの間の元素爆発のフレーム */
   burstFrames?: ActionFrames;
+  /** モードの間の重撃のフレーム（雷電将軍の夢想の一心: 刀の重撃） */
+  chargedFrames?: ActionFrames;
   /**
    * モードを開いたアクションの CT を、モードの終わりから始める（タルタリヤ・放浪者）。モードを開いたときには、entry の短い CT だけを始める。
    * delayFrames = モードの終わりから CT が始まるまで（終わり方ごと。交代は、交代の動作〔交代遅延〕の後から）。

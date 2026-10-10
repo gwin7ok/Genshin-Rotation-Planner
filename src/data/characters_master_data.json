@@ -17505,7 +17505,82 @@
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる"
+          "source": "raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる",
+          "normalFrames": [
+            {
+              "total": 21,
+              "hitmark": 12,
+              "cancels": {
+                "attack": 19,
+                "skill": 12,
+                "burst": 12,
+                "dash": 12,
+                "jump": 12,
+                "swap": 12
+              },
+              "source": "attack.go:swordFrames[0]"
+            },
+            {
+              "total": 26,
+              "hitmark": 13,
+              "cancels": {
+                "attack": 16,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13
+              },
+              "source": "attack.go:swordFrames[1]"
+            },
+            {
+              "total": 34,
+              "hitmark": 11,
+              "cancels": {
+                "attack": 16,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11
+              },
+              "source": "attack.go:swordFrames[2]"
+            },
+            {
+              "total": 67,
+              "hitmark": 33,
+              "cancels": {
+                "attack": 44,
+                "skill": 33,
+                "burst": 33,
+                "dash": 33,
+                "jump": 33,
+                "swap": 33
+              },
+              "source": "attack.go:swordFrames[3]"
+            },
+            {
+              "total": 59,
+              "hitmark": 33,
+              "cancels": {
+                "skill": 33,
+                "burst": 33,
+                "dash": 33,
+                "jump": 33,
+                "swap": 33
+              },
+              "source": "attack.go:swordFrames[4]"
+            }
+          ],
+          "chargedFrames": {
+            "total": 56,
+            "hitmark": 32,
+            "cancels": {
+              "dash": 32,
+              "jump": 32
+            },
+            "source": "charge.go:swordCAFrames（2 回ヒット。24f・32f）"
+          }
         },
         "cooldownStart": {
           "from": "motionStart",
@@ -22056,7 +22131,28 @@
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除"
+          "source": "kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除",
+          "normalFrames": [
+            {
+              "total": 23,
+              "hitmark": 5,
+              "cancels": {
+                "skill": 5,
+                "burst": 5,
+                "dash": 5,
+                "jump": 5,
+                "swap": 5
+              },
+              "source": "attack.go:shunsuikenFrames（InitNormalCancelSlice(5, 23)。全段同じ。攻撃速度の補正は未対応）"
+            }
+          ],
+          "blocked": {
+            "types": [
+              "charged"
+            ],
+            "result": "error",
+            "hint": "瞬水剣の間は重撃を使えません（gcsim は実行エラー）。瞬水剣が終わってから置いてください"
+          }
         },
         "cooldownStart": {
           "from": "motionStart",

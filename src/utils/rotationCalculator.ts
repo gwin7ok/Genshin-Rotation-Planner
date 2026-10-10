@@ -519,7 +519,7 @@ export function calculateRotation(
       let frames = actionDef?.frames;
       let hitFallbackDuration: number | undefined;
       // モードの間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの夜巡り）
-      const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames));
+      const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames || m.def.chargedFrames));
       if (act.type === 'normal') {
         const hits = actionDef?.normalHits;
         if (hits && hits.length > 0) {
@@ -534,6 +534,7 @@ export function calculateRotation(
         normalStreak = 0;
       }
       if (act.type === 'burst' && frameMode?.def.burstFrames) frames = frameMode.def.burstFrames;
+      if (act.type === 'charged' && frameMode?.def.chargedFrames) frames = frameMode.def.chargedFrames;
       // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
       if (modeEnder?.ender.frames) frames = modeEnder.ender.frames;
       if (modeRepress) {

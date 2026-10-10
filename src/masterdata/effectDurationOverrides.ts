@@ -49,6 +49,8 @@ export const EFFECT_DURATION_OVERRIDES: Record<string, EffectDurationOverride> =
  */
 export const EFFECT_DURATION_SUPPRESSED: Record<string, string> = {
   '10000003-anemo_e': 'ジン: 5 秒は溜めの最大時間（動作の長さ）で、効果ではない',
+  '10000003-anemo_e_hold': 'ジン: 5 秒は溜めの最大時間（動作の長さ）で、効果ではない',
+  '10000091-geo_e_hold': 'ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない',
   '10000053-anemo_e_hold': '早柚: 10 秒は長押しの最大時間（動作の長さ）で、効果ではない',
   '10000020-electro_e_hold': 'レザー: 18 秒（雷の印）は短押しの効果。長押しは印を作らず消費する動作',
   '10000091-geo_e': 'ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない',

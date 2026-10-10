@@ -1,3 +1,4 @@
+import { GcsimMissingBadge, isGcsimMissingCharacter } from './GcsimMissingBadge';
 import React, { useState, useRef, useMemo, useEffect, useLayoutEffect } from 'react';
 import { 
   Clock, 
@@ -1620,14 +1621,17 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             onHeight={(h) => setTopRowHeight(stint.id, h)}
                             className="min-h-9 relative border-b border-slate-800/40 pointer-events-none z-10 flex items-center"
                           >
-                            {stints.findIndex(st => st.characterId === char.id) === stintIdx && (selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
+                            {stints.findIndex(st => st.characterId === char.id) === stintIdx && ((selfTimelessByChar.get(char.id)?.length ?? 0) > 0 || isGcsimMissingCharacter(char)) && (
                               <div
                                 data-testid={`self-timeless-${char.id}`}
                                 className="sticky left-[190px] flex flex-wrap items-center gap-1 py-1 pointer-events-auto"
                                 style={{ maxWidth: 'calc(100vw - 240px)' }}
                               >
-                                <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
-                                {selfTimelessByChar.get(char.id)!.map(item => <TimelessBuffChip key={item.key} item={item} />)}
+                                <GcsimMissingBadge char={char} />
+                                {(selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
+                                  <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
+                                )}
+                                {(selfTimelessByChar.get(char.id) ?? []).map(item => <TimelessBuffChip key={item.key} item={item} />)}
                               </div>
                             )}
                           </MeasuredRow>

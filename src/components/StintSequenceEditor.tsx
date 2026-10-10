@@ -1,3 +1,4 @@
+import { GcsimMissingBadge } from './GcsimMissingBadge';
 import React, { useState, useMemo, useRef, useLayoutEffect, useEffect } from 'react';
 import { 
   Plus, 
@@ -559,8 +560,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 {characters.filter(c => !isEmptySlotCharacter(c)).map(c => {
                   const elemTheme = ELEMENT_COLORS[c.element];
                   return (
+                    <React.Fragment key={c.id}>
+                    <GcsimMissingBadge char={c} />
                     <button
-                      key={c.id}
                       onClick={() => addStint(c.id)}
                       className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
                       title={`${c.name}の出場ブロックを末尾に追加`}
@@ -569,6 +571,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <span>{c.name}</span>
                       <Plus className="w-3 h-3 text-slate-400" />
                     </button>
+                    </React.Fragment>
                   );
                 })}
               </div>

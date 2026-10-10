@@ -554,6 +554,10 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         { total: 62, cancels: { attack: 40, skill: 32, burst: 40, dash: 36, jump: 37 }, source: 'skill.go:whirlingStepsFrames[1]' },
         { total: 63, cancels: { dash: 57, jump: 57, swap: 61 }, source: 'skill.go:whirlingStepsFrames[2]' },
       ],
+      // 状態の間の N は剣舞の N（歩みと同じ 3 段の数え方。2026-10-10）。N で 3 段目を終えると、8 秒の月の祈りに入る（その間の N も剣舞の N）
+      actions: ['e', 'n'],
+      framesByAction: { n: [{total:20,hitmark:14,cancels:{attack:18,skill:14,burst:14,dash:14,jump:14,swap:14},source:'skill.go:swordDanceFrames[0]（剣舞の N 1 段。InitNormalCancelSlice(hitmark, 20)）'},{total:23,hitmark:12,cancels:{skill:12,burst:12,dash:12,jump:12,swap:12},source:'skill.go:swordDanceFrames[1]'},{total:60,hitmark:35,cancels:{attack:55,skill:35,burst:35,dash:35,jump:35,swap:35},source:'skill.go:swordDanceFrames[2]'}] },
+      followUps: { n: {label:'月の祈り',description:'月の祈りの状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる',startDelayFrames:30,durationFrames:480,swap:'ends',enders:[],holdByDefault:false,noHold:true,noBar:true,normalFrames:[{total:20,hitmark:14,cancels:{attack:18,skill:14,burst:14,dash:14,jump:14,swap:14},source:'skill.go:swordDanceFrames[0]（剣舞の N 1 段。InitNormalCancelSlice(hitmark, 20)）'},{total:23,hitmark:12,cancels:{skill:12,burst:12,dash:12,jump:12,swap:12},source:'skill.go:swordDanceFrames[1]'},{total:60,hitmark:35,cancels:{attack:55,skill:35,burst:35,dash:35,jump:35,swap:35},source:'skill.go:swordDanceFrames[2]'}],source:'nilou/skill.go: Pirouette（N で 3 段目を終えると AddStatus(lunarPrayerStatus, 8*60)。delayDance = 30）、attack.go: lunarPrayerStatus の間の N は SwordDance。バーは gcsim の副次効果（lunarprayer）'} },
       maxUses: 3,
       endsOnLast: true,
     },

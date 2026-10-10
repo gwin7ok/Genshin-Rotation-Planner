@@ -50,6 +50,7 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
   '10000095-hydro_c4': { target: 'q', keyword: '過飽和まごころお注射' }, // シグウィン
   '10000043-anemo_c2': { target: 'q', keyword: '七五同構弐型' }, // スクロース
   '10000049-pyro_c1': { target: 'q', keyword: '琉金の炎' }, // 宵宮
+  '10000148-electro_c2': { target: 'q', keyword: '攻守の猟犬' }, // アリョーシャ（gcsim PR #3207 burst.go: AddStatus(burstKey, 14*60 + c2BurstDur())。未検証）
 };
 
 /** 確認済み: 説明文は「継続時間+X」の形だが、アクションの値の変更にしないもの（理由つき）。キーは `${キャラID}_c${凸}` */
@@ -65,6 +66,7 @@ const NOT_APPLICABLE: Record<string, string> = {
   '10000119-dendro_c1': '「生を紡ぐ糸」効果の延長', // ラウマ
   '10000041-hydro_c1': '反応ダメージの強化（継続時間ではない）', // モナ
   '10000122-dendro_c2': '固有天賦「偽りの帳」の延長', // ネフェル
+  '10000129-cryo_c6': '奇策状態の延長（命中時の条件付き。7 秒に 1 回）', // ローエン
   '10000087-hydro_c6': '源水の雫の吸収ごとに +1秒（条件付き）', // ヌヴィレット
   '10000070-hydro_c1': '水環の延長（マスターの効果はピルエット）', // ニィロウ
   '10000034-geo_c6': '敵を倒すごとに +1秒（条件付き）', // ノエル
@@ -101,7 +103,8 @@ const CHARGE_CHANGES: Record<string, { actionSuffix: string | string[]; charges:
   '10000060-hydro_c1': { actionSuffix: 'e', charges: 2, keyword: '絡み合う命の糸の使用可能回数+1', note: 'yelan/yelan.go: Cons >= 1 で SetNumCharges(ActionSkill, 2)' },
 };
 
-const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?[+＋]\s*([\d.]+)\s*(%|秒)/g;
+// 「継続時間+6秒」と「継続時間が6秒延長される」（アリョーシャ 2 凸）の両方
+const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?(?:[+＋]\s*|(?=[\d.]+\s*秒延長))([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
   /** 凸の段階データを作ったキャラ数 */

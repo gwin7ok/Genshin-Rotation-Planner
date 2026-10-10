@@ -133,7 +133,15 @@ export interface ActionMode {
    * 通常攻撃などのアクションで gainByType だけ溜まる（最大 max）。モードの間に別の動作になった E（repress）は、ゲージが max のときだけ使え、使うと 0 になる。
    * 足りないときは黄色の警告（アプリの時間は変えない。gcsim は実行エラー）。ゲージに数えない増加（hint）は、gcsim を実行したときだけ分かる
    */
-  gauge?: { label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string };
+  gauge?: {
+    label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string;
+    /** 別の動作になった E の消費量（兹白の月相の輝き 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
+    cost?: number;
+  };
+  /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
+  extendByBurstFrames?: number;
+  /** 命ノ星座による変化（その星座以上のとき適用。上から順に重ねる）: repress の使える回数・ゲージの初期値（モードの開始時の増加） */
+  byConstellation?: { minConstellation: number; repressMaxUses?: number; gaugeInitial?: number }[];
   /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */
   replaces?: string[];
   /** このモードの間の元素爆発の名前と、効果バーの名前（ドゥリンの漆黒の否の間の爆発 = 漆黒の法則・黒蝕の龍） */

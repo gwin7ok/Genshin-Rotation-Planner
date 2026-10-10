@@ -249,6 +249,17 @@ export function calculateRotation(
     span.duration = Number((span.endTime - span.startTime).toFixed(3));
   };
   const modeKeyOf = (charId: string, md: ActionMode) => `${charId}:${md.label}`;
+  // 命ノ星座による、別の動作の使える回数（兹白の C1: 4 → 5）・ゲージの初期値（C1: 100）
+  const modeMaxUses = (m: ModeWindow): number | undefined => {
+    let v = m.def.repress?.maxUses;
+    for (const c of m.def.byConstellation ?? []) if (m.opener.constellation >= c.minConstellation && c.repressMaxUses !== undefined) v = c.repressMaxUses;
+    return v;
+  };
+  const modeGaugeInitial = (m: ModeWindow): number => {
+    let v = 0;
+    for (const c of m.def.byConstellation ?? []) if (m.opener.constellation >= c.minConstellation && c.gaugeInitial !== undefined) v = c.gaugeInitial;
+    return v;
+  };
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
     m.naturalEnd ??= m.end;
     m.end = Number(Math.max(m.start, Math.min(m.end, at)).toFixed(3));
@@ -436,7 +447,7 @@ export function calculateRotation(
         }
         const rp = m.def.repress;
         const repressMatches = rp && (rp.actions ? rp.actions.some(s => act.actionTypeId === `${char.id}_${s}`) : act.actionTypeId === m.actionDefId);
-        if (rp && repressMatches && (rp.maxUses === undefined || m.repressUsed < rp.maxUses)) {
+        if (rp && repressMatches && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) {
           modeRepress = { window: m, index: m.repressUsed };
           break;
         }
@@ -514,7 +525,7 @@ export function calculateRotation(
             m.span.endTime = Number(Math.min(m.span.endTime, actionStartTime).toFixed(3));
             m.span.duration = Number((m.span.endTime - m.span.startTime).toFixed(3));
             m.end = newEnd;
-            const last = rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses;
+            const last = rp.endsOnLast && modeMaxUses(m) !== undefined && m.repressUsed >= modeMaxUses(m)!;
             if (!last) {
               const next: ActiveBuffSpan = { ...m.span, id: `${m.span.id}_u${m.repressUsed}`, startTime: actionStartTime, endTime: newEnd, duration: Number((newEnd - actionStartTime).toFixed(3)) };
               if (!m.def.noBar) activeBuffs.push(next);
@@ -527,7 +538,7 @@ export function calculateRotation(
           }
         }
         // 使い切るとモードが終わる（ニィロウのステップ 3 段目）
-        if (rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses) {
+        if (rp.endsOnLast && modeMaxUses(m) !== undefined && m.repressUsed >= modeMaxUses(m)!) {
           endMode(m, actionStartTime, 'ender');
           // そのアクションで終えたときだけ続けて開くモード（ニィロウ: N で 3 段目を終えると月の祈り）
           const fu = rp.followUps?.[act.actionTypeId.slice(char.id.length + 1)];
@@ -560,18 +571,29 @@ export function calculateRotation(
           }
         }
       }
+      // モードの間の自分の元素爆発で、モードの終わりが延びる（兹白: 月相転移 +1.7 秒。gcsim: ExtendStatus(skillKey, 1.7*60)）
+      if (act.type === 'burst') {
+        for (const m of modeWindows.values()) {
+          const ext = m.def.extendByBurstFrames;
+          if (!ext || !isModeActive(m, char.id, sIdx, actionStartTime) || actionStartTime < m.start - 0.001) continue;
+          m.end = Number((m.end + ext / 60).toFixed(3));
+          m.span.endTime = m.end;
+          m.span.duration = Number((m.end - m.span.startTime).toFixed(3));
+        }
+      }
       // モードのゲージ（キィニチの夜魂値）: 時間の増加 → このアクションの増加（N）／使用（別の動作になった E は、満タンのときだけ使え、0 になる）
       let gaugeMessage: string | undefined;
       for (const m of modeWindows.values()) {
         const g = m.def.gauge;
         if (!g || !isModeActive(m, char.id, sIdx, actionStartTime) || actionStartTime < m.start - 0.001) continue;
-        const state = m.gauge ?? { value: 0, ticks: 0 };
+        const state = m.gauge ?? { value: Math.min(g.max, modeGaugeInitial(m)), ticks: 0 };
         const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
         state.value = Math.min(g.max, state.value + (ticksNow - state.ticks) * g.timeGain.amount);
         state.ticks = ticksNow;
         if (modeRepress?.window === m && (act.type === 'skill' || act.type === 'skill_hold')) {
-          if (state.value < g.max) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(state.value)} / ${g.max}）。${g.hint}`;
-          state.value = 0;
+          const need = g.cost ?? g.max;
+          if (state.value < need) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(state.value)} / ${need}）。${g.hint}`;
+          state.value = g.cost !== undefined ? Math.max(0, state.value - g.cost) : 0;
         } else {
           state.value = Math.min(g.max, state.value + (g.gainByType[act.type] ?? 0));
         }

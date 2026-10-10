@@ -159,6 +159,7 @@ const SKILL_CHARGES: Record<string, number> = {
   '10000058-electro': 3, // 八重神子（yaemiko/yaemiko.go）
   '10000091-geo': 2, // ナヴィア（navia/navia.go）
   '10000111-electro': 2, // ヴァレサ（varesa/varesa.go）
+  '10000122-dendro': 2, // ネフェル（nefer/nefer.go: SetNumCharges(ActionSkill, 2)。gcsim PR #3045。未検証）
 };
 
 /**
@@ -620,6 +621,113 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul',
     },
   }],
+  // 兹白（issue #36。gcsim main の PR #3093）: 月相転移（E の 18f 後から 900f。E の発動から 918f）。この間、E は霊駿の駆け（月相の輝き 70 を消費。CT なし）になり、4 回使うと終わる（C1: 5 回）。
+  // 月相の輝き: 時間で 1 秒に 10（6f ごとに +1）、通常攻撃が敵に当たると +5（0.5 秒に 1 回まで。重撃は数えない）。上限 100。C1: E の直後に +100。C6（獲得 1.5 倍・全消費）は未対応。
+  // 元素爆発を使うと、月相転移が 1.7 秒（102f）延びる。交代で終わる（OnCharacterSwap で skillKey を削除）。E の CT（18 秒）は最初の E で始まる
+  '10000126-geo': [{
+    action: 'e',
+    mode: {
+      label: '月相転移',
+      description: '月相転移の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は月相の輝きを 70 消費して霊駿の駆けになる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる',
+      startDelayFrames: 18,
+      durationFrames: 900,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      extendByBurstFrames: 102,
+      byConstellation: [{ minConstellation: 1, repressMaxUses: 5, gaugeInitial: 100 }],
+      repress: {
+        frames: [{ total: 61, cancels: { attack: 45, skill: 54, burst: 45, dash: 42, jump: 43, walk: 47 }, source: 'skill.go:skillSkillFrames' }],
+        maxUses: 4,
+        endsOnLast: true,
+      },
+      gauge: {
+        label: '月相の輝き',
+        max: 100,
+        cost: 70,
+        timeGain: { everyFrames: 6, amount: 1 },
+        gainByType: { normal: 5 },
+        hint: '月の結晶反応（+35）・命ノ星座 6（獲得 1.5 倍）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください',
+      },
+      source: 'zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回',
+    },
+  }],
+  // ネフェル（issue #36。gcsim PR #3045・未マージ・未検証）: 影の舞（E の発動から 9 秒。CT 9 秒・2 回分）。この間、草露を 1 滴以上持つとき、重撃が「幻の戯」（スタミナを消費しない特殊な重撃）になる（E 1 回につき 3 回まで）。
+  // E をもう一度使うと、影の舞が開き直される（3 回に戻る）。交代で終わる。草露（Verdant Dew）の数と、幻の戯の発動条件（宿った幻の数）は数えない（足りないときは、普通の重撃になる）。偽りの帳（Q の強化）・種は未対応
+  '10000122-dendro': [{
+    action: 'e',
+    mode: {
+      label: '影の舞',
+      description: '影の舞の状態（9 秒）。草露を 1 滴以上持つとき、重撃が幻の戯（スタミナを消費しない特殊な重撃）になる（E 1 回につき 3 回まで。草露の数は数えていません）。キャラ交代で終わる',
+      startDelayFrames: 0,
+      durationFrames: 540,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      repress: {
+        actions: ['ca'],
+        frames: [{ total: 126, cancels: { burst: 30, dash: 30 }, source: 'charge.go:tapPhantasmChargeAttack（basicChargeWindup 20 + phantasmAnimationLength 106。爆発・ダッシュへは 20 + phantasmHit1 10）' }],
+        maxUses: 3,
+      },
+      source: 'nefer/skill.go: AddStatus(shadowDanceKey, 9*60)、phantasmCharges = 3（phantasmChargesPerSkill）、SetCDWithDelay(skill, 9*60, 22)。nefer.go: canTriggerPhantasm = 影の舞 + 幻の戯の残り + 草露 > 0、OnCharacterSwap で状態を消す。charge.go: tapPhantasmChargeAttack（ActionStam = 0）',
+    },
+  }],
+  // カチーナ（issue #36。gcsim PR #2697・未マージ・未検証）: ぐるぐるコマちゃん（E）。夜魂値 60 を、独立して存在する間は 143f 後から 118f ごとの攻撃で 10 ずつ消費（6 回 = 733f で消える。wiki: 乗らずに使うと 12 秒攻撃し CT は 8 秒）。
+  // 一回押し = 独立して存在（交代しても残って攻撃を続ける）。長押し = 乗る（通常攻撃が地面を叩く攻撃になり、1 回ごとに夜魂値 10 を消費。wiki: 乗っている間は約 1 秒ごとに 10 消費 → 約 6 秒と見なす）。
+  // 続いている間の E は、乗り降り（CT なし。30f）。夜魂値の数・燃素・夜魂トランス（他のナタのキャラの交代）・C2 は未対応
+  '10000100-geo': [{
+    action: 'e',
+    mode: {
+      label: 'ぐるぐるコマちゃん',
+      description: 'ぐるぐるコマちゃんが独立して存在する状態（約 12 秒。夜魂値 60 を 2 秒ごとの攻撃で 10 ずつ消費）。続いている間の元素スキル（E）は、乗り降りになる（CT なし）。交代しても残る',
+      startDelayFrames: 0,
+      durationFrames: 733,
+      swap: 'persists',
+      enders: [],
+      holdByDefault: false,
+      noHold: true,
+      repress: {
+        frames: [{ total: 30, cancels: { attack: 30, burst: 30, dash: 30, jump: 30, walk: 30, swap: 30 }, source: 'skill.go:skillRecastFrames（InitAbilSlice(30)。未検証）' }],
+        actions: ['e', 'e_hold'],
+      },
+      source: 'kachina/skill.go: startTwirly（EnterBlessing(60)、AddStatus(twirlyKey, -1)、一回押しは queueIndependent(143)。independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。kachina.go: ActionReady（twirlyKey の間の E は使える）',
+    },
+  }, {
+    action: 'e_hold',
+    mode: {
+      label: 'ぐるぐるコマちゃん（搭乗）',
+      description: 'ぐるぐるコマちゃんに乗っている状態（夜魂値 60 を 1 秒ごとに 10 消費 → 約 6 秒と見なす）。通常攻撃は、地面を叩く攻撃になる。続いている間の元素スキル（E）は、乗り降りになる（CT なし）',
+      startDelayFrames: 0,
+      durationFrames: 360,
+      swap: 'persists',
+      enders: [],
+      holdByDefault: false,
+      noHold: true,
+      normalFrames: [
+        { total: 51, hitmark: 38, cancels: { skill: 38, burst: 38, dash: 38, jump: 38, swap: 38, attack: 51, charge: 51 }, source: 'attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）' },
+        { total: 47, hitmark: 36, cancels: { skill: 36, burst: 36, dash: 36, jump: 36, swap: 36, attack: 47, charge: 47 }, source: 'attack.go:mountedFrames[1]' },
+        { total: 46, hitmark: 35, cancels: { skill: 35, burst: 35, dash: 35, jump: 35, swap: 35, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[2]' },
+        { total: 46, hitmark: 34, cancels: { skill: 34, burst: 34, dash: 34, jump: 34, swap: 34, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[3]' },
+      ],
+      repress: {
+        frames: [{ total: 30, cancels: { attack: 30, burst: 30, dash: 30, jump: 30, walk: 30, swap: 30 }, source: 'skill.go:skillRecastFrames（InitAbilSlice(30)。未検証）' }],
+        actions: ['e', 'e_hold'],
+      },
+      source: 'kachina/skill.go: startTwirly(hold) → mounted = true。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。ActionStam: 乗っている間は 0。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費',
+    },
+  }],
+  // リンネア（issue #36。gcsim PR #2596・未マージ・未検証）: E の後 0.6 秒（36f）の間の E が再発動（CT なし。E のたびに 0.6 秒に更新）。3 回目の再発動で、ルミが大技（万鈞砕）を出して標準の力になる。
+  // E の CT（18 秒）は最初の E で始まる（1f 後）。ルミの存在時間 25 秒は、スキルの効果バー（genshin-db）のまま
+  '10000130-geo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: windowMode('ルミの再発動の受付', 0, 36, 'ends', {
+      frames: [{ total: 10, cancels: {}, source: 'skill.go:skillRecastFrames（InitAbilSlice(10)。未検証）' }],
+      maxUses: 3,
+      refreshFrames: [36, 36, 36],
+      endsOnLast: true,
+    }, 'linnea/skill.go: AddStatus(skillRecastKey, 0.6*60, true)（E のたびに更新）、recastCount == 3 で DeleteStatus して大技。SetCDWithDelay(skill, 18*60, 1)', { noBar: false, keepEffectBar: true }),
+  }],
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
   '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],
@@ -710,6 +818,8 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
   // キィニチ: 加護に入る E の hold は 0〜301（hold > 0 で、長押しの長さは hold − 1。照準モード）。フレームは skillFrames[next] + hold − 1、加護に入る・CT が始まるのは skillStart(9) + hold − 1。
   // 加護の中の E（廻狩貫鱗砲）の hold は 0〜181（モードの定義 repress）
   '10000101-dendro': { table: 'skillFrames', offsetFrames: -1, maxHoldFrames: 301, note: 'kinich/skill.go: Skill（hold > 301 は 301、hold > 0 なら hold -= 1）、Frames = skillFrames[next] + hold、Tasks.Add(…, skillStart + hold)' },
+  // カチーナ（issue #36。gcsim PR #2697・未マージ・未検証）: hold > 0 は「ぐるぐるコマちゃんに乗る」（長押し。hold の長さは数えない = 追加の長押しなし）。フレームは一回押しと同じ skillFrames
+  '10000100-geo': { table: 'skillFrames', offsetFrames: 0, maxHoldFrames: 0, note: 'kachina/skill.go: Skill（p["hold"] > 0 で startTwirly(hold) → mounted = true）。Frames は skillFrames[next]（長押しの追加なし）' },
   // 藍硯: hold は 0〜610。フレームは skillHitFrames（探知が命中した場合。窓の規則と同じく命中する前提。gcsim の実行でも命中のフレーム）+ hold
   '10000108-anemo': { table: 'skillHitFrames', offsetFrames: 0, maxHoldFrames: 610, note: 'lanyan/skill.go: Skill（hold > 610 は 610）、Frames = getCurrentSkillFrames()[next] + hold（命中すると leap-back の状態で skillHitFrames）' },
 };

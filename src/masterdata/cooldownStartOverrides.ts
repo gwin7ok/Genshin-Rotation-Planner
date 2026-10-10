@@ -47,6 +47,8 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000020-electro_e': { from: 'motionStart', delayFrames: 30, note: 'razor/skill.go: skillPressCDStarts[0]（爆発中は 31f）' },
   '10000020-electro_e_hold': { from: 'motionStart', delayFrames: 52, note: 'razor/skill.go: skillHoldCDStarts[0]（爆発中も 52f）' },
   // 鹿野院平蔵: skillRelease(delay) の skillCDStart + delay（一回押しは delay=0）
+  // 平蔵の長押し（0 層から 4 層まで溜める 180f）: skillCDStart(18) + delay(180)
+  '10000059-anemo_e_hold': { from: 'motionStart', delayFrames: 198, note: 'heizou/skill.go: skillRelease(delay) の skillCDStart + delay。delay = skillHoldDuration(4) = 180f（0 層から）' },
   '10000059-anemo_e': { from: 'motionStart', delayFrames: 18, note: 'heizou/skill.go: skillCDStart（一回押しは delay=0）' },
   // シグウィン: 一回押し（hold=0）。短押し・長押しは 40f / 66f
   '10000095-hydro_e': { from: 'motionStart', delayFrames: 16, note: 'sigewinne/skill.go: skillPressCDStart' },

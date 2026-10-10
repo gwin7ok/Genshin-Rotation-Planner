@@ -39,6 +39,7 @@ import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
 import { actionTone } from '../utils/actionTone';
+import { actionDescription } from '../utils/actionDescription';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 
@@ -1238,7 +1239,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
                           className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
-                          title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]`}
+                          title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
                         >
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
@@ -1404,7 +1405,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               </span>
 
                               {/* Action Name */}
-                              <span className="font-medium max-w-[150px] truncate" title={act.name}>
+                              <span
+                                className="font-medium max-w-[150px] truncate"
+                                title={(() => {
+                                  const desc = actionDescription(act, char.availableActions.find(d => d.id === act.actionTypeId));
+                                  return desc ? `${act.name}\n\n${desc}` : act.name;
+                                })()}
+                              >
                                 {act.name}
                               </span>
 

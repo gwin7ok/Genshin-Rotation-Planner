@@ -25,6 +25,7 @@ import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
 const ICON_BASE_URL = 'https://enka.network/ui';
+import { appSideSourceByGenshinId, type AppSideSource } from './appSideCharacterSources.ts';
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
 const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
@@ -1159,7 +1160,8 @@ function buildActions(ctx: BuildContext): BuildResult {
 
   // --- 重撃 / 狙い撃ち -----------------------------------------------------
   const aimed = file('aimed') ?? file('aim');
-  const charge = file('charge');
+  // 重撃のフレーム表が attack.go にあるキャラ（カチーナの PR など）もある
+  const charge = file('charge') ?? (attack?.tables.some(t => t.name === 'chargeFrames') ? attack : undefined);
   if (aimed && aimed.tables.length > 0) {
     // aimedFrames[0] = 非チャージ, 最終添字 = フルチャージ
     const family = splitTableName(aimed.tables[0].name).base;
@@ -1681,6 +1683,8 @@ export async function generateCharacterMaster(
     constellation?: GenshinDbConstellation;
     gcsimKey?: string;
     gcsimDir?: string;
+    /** gcsim 未実装のキャラの、アプリ側だけの対応: フレームを読む別のコミット（appSideCharacterSources.ts） */
+    appSide?: AppSideSource;
     /** 旅人: gcsim のフレームの性別の添字 (0 = 空, 1 = 蛍)。この性別の分だけ切り出して組み立てる */
     genderIndex?: number;
   }
@@ -1711,6 +1715,7 @@ export async function generateCharacterMaster(
       constellation: constellationById.get((c.id - 10000000) * 100 + 1),
       gcsimKey,
       gcsimDir: gcsimKey ? dirByKey.get(gcsimKey) : undefined,
+      appSide: gcsimKey ? undefined : appSideSourceByGenshinId(c.id),
     });
   }
 
@@ -1746,11 +1751,21 @@ export async function generateCharacterMaster(
   const parsedById = new Map<string, ParsedCharacterFiles>();
   let done = 0;
   await runPool(units, 12, async u => {
-    if (u.gcsimDir) {
-      const available = filesByDir.get(u.gcsimDir) ?? new Set();
-      const names = GCSIM_FILES.filter(f => available.has(f));
+    if (u.gcsimDir || u.appSide) {
       try {
-        const texts = await Promise.all(names.map(f => fetchText(`${rawBase}internal/characters/${u.gcsimDir}/${f}.go`)));
+        // リリースのキャラ: 取得済みの一覧と固定コミット。アプリ側だけの対応のキャラ: そのコミットのディレクトリの一覧を取る
+        const dir = u.gcsimDir ?? u.appSide!.dir;
+        const base = u.appSide && !u.gcsimDir ? `https://raw.githubusercontent.com/${GCSIM_REPO}/${u.appSide.ref}/` : rawBase;
+        let available = filesByDir.get(dir) ?? new Set<string>();
+        if (u.appSide && !u.gcsimDir) {
+          const list = await fetchJson<Array<{ name: string }>>(
+            `https://api.github.com/repos/${GCSIM_REPO}/contents/internal/characters/${dir}?ref=${u.appSide.ref}`,
+            { headers: { Accept: 'application/vnd.github+json' } },
+          );
+          available = new Set(list.map(f => f.name.replace(/\.go$/, '')));
+        }
+        const names = GCSIM_FILES.filter(f => available.has(f));
+        const texts = await Promise.all(names.map(f => fetchText(`${base}internal/characters/${dir}/${f}.go`)));
         // ファイル間で定数を共有するため、先に全ファイルの定数を集めてから解析する
         const shared = new Map<string, number>();
         texts.forEach(t => parseGoFile(t).consts.forEach((v, k) => shared.set(k, v)));
@@ -1761,7 +1776,7 @@ export async function generateCharacterMaster(
         const cooldownCalls = names.flatMap((f, i) => (f === 'skill' || f === 'burst') ? parseCooldownCalls(texts[i], files[f]) : []);
         parsedById.set(u.id, { files, cooldownCalls });
       } catch (e) {
-        errors.push(`gcsim ${u.gcsimDir}: ${e instanceof Error ? e.message : String(e)}`);
+        errors.push(`gcsim ${u.gcsimDir ?? u.appSide?.dir}: ${e instanceof Error ? e.message : String(e)}`);
       }
     }
     done++;
@@ -1822,7 +1837,7 @@ export async function generateCharacterMaster(
         if (r.holdInFrames !== undefined) a.holdInFrames = r.holdInFrames;
         report.cooldownStart[r.status === 'manual' ? 'manual' : 'read']++;
       } else {
-        report.cooldownStart.unresolved.push({ characterId: u.id, name: u.name, actionId: a.id, reason: u.gcsimKey ? (r.reason ?? '') : 'gcsim 未実装' });
+        report.cooldownStart.unresolved.push({ characterId: u.id, name: u.name, actionId: a.id, reason: u.gcsimKey || parsed ? (r.reason ?? '') : 'gcsim 未実装' });
       }
       if (r.mismatch) report.cooldownStart.mismatches.push({ characterId: u.id, name: u.name, actionId: a.id, ...r.mismatch });
     }
@@ -1838,7 +1853,7 @@ export async function generateCharacterMaster(
         characterId: u.id,
         name: u.name,
         actions: placeholderActions,
-        reason: !u.gcsimKey ? 'gcsim 未実装キャラ' : !parsed ? 'gcsim ソース取得失敗' : 'gcsim にフレーム定義が見つからない',
+        reason: !u.gcsimKey && !u.appSide ? 'gcsim 未実装キャラ' : !parsed ? 'gcsim ソース取得失敗' : 'gcsim にフレーム定義が見つからない',
       });
     }
     for (const a of actions) {
@@ -1859,7 +1874,11 @@ export async function generateCharacterMaster(
       accentColor: ELEMENT_HEX[u.element],
       availableActions: actions,
       passiveEffects: buildPassiveEffects(u.id, [u.talent?.passive1, u.talent?.passive2]),
-      source: { genshinId: u.genshinId, ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}) },
+      source: {
+        genshinId: u.genshinId,
+        ...(u.gcsimKey ? { gcsimKey: u.gcsimKey } : {}),
+        ...(u.appSide && parsed ? { frameSource: u.appSide.label } : {}),
+      },
     };
     // 命ノ星座（1〜6凸）の段階データ。確認済みの効果継続時間の延長を含む
     if (u.constellation) character.constellations = buildConstellations(character, u.constellation, report.constellations);

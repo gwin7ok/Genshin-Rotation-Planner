@@ -247,11 +247,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       duration: actionDef.defaultDuration,
     };
 
+    // 追加位置（追加作業 21 / issue #26）: 選択中のアクションが、この出場の中にあれば、その直前（交代アクションなら、その直後）。
+    // 別の出場のアクションを選択中・アクションの選択なしのときは、末尾。追加しても、選択は変えない（連続して追加すると、追加した順に並ぶ）
+    let insertAt = targetStint.actions.length;
+    if (selectedAction && selectedAction.stintId === targetStint.id && selectedAction.actionId) {
+      const idx = targetStint.actions.findIndex(a => a.id === selectedAction.actionId);
+      if (idx >= 0) insertAt = targetStint.actions[idx].type === 'swap' ? idx + 1 : idx;
+    }
+    const actions = [...targetStint.actions];
+    actions.splice(insertAt, 0, newAction);
+
     const nextStints = [...stints];
-    nextStints[stintIndex] = {
-      ...targetStint,
-      actions: [...targetStint.actions, newAction]
-    };
+    nextStints[stintIndex] = { ...targetStint, actions };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 
@@ -979,6 +986,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div
                 key={stint.id}
                 id={`stint-card-${stint.id}`}
+                onClick={(e) => {
+                  // 出場カードの背景のクリック: この出場をフォーカスしたまま、アクションの選択を外す（追加は末尾になる）。
+                  // ボタン・入力・説明つきの要素・アクション自身のクリックは、対象外
+                  const t = e.target as HTMLElement;
+                  if (t.closest('button, input, select, textarea, a, label, [title], [id^="action-item-"]')) return;
+                  onSelectAction?.(stint.id, '');
+                }}
                 draggable
                 onDragStart={() => setDraggedStintIndex(stintIndex)}
                 onDragOver={(e) => {

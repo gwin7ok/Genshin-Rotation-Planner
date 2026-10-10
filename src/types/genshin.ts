@@ -672,6 +672,8 @@ export interface CharacterConfig {
   source?: {
     genshinId?: number;
     gcsimKey?: string;
+    /** gcsim 未実装のキャラで、フレームを gcsim の main・未マージ PR から読んだ場合の出典（issue #36。例: 「gcsim PR #2697（未マージ・未検証）」） */
+    frameSource?: string;
   };
 }
 

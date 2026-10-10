@@ -656,7 +656,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <div className="col-span-2">
                           <span className="text-slate-400">モーション:</span>{' '}
                           {char.availableActions.some(a => a.frames) ? (
-                            <strong className="text-emerald-300">gcsim フレーム ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})</strong>
+                            <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? `gcsim のリリースには入っていない実装のフレームです（出典: ${char.source.frameSource}）` : undefined}>
+                              {char.source?.frameSource ? `出典: ${char.source.frameSource}` : 'gcsim フレーム'} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
+                            </strong>
                           ) : (
                             <strong className="text-slate-500">フレーム未取得 (仮の秒数)</strong>
                           )}

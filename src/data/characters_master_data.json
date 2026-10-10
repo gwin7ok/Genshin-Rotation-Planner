@@ -34854,7 +34854,95 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.4,
+        "defaultDuration": 0.3,
+        "frames": {
+          "total": 31,
+          "hitmark": 11,
+          "cancels": {
+            "aim": 11,
+            "skill": 11,
+            "burst": 11,
+            "dash": 11,
+            "jump": 11,
+            "swap": 11,
+            "attack": 18,
+            "charge": 20
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.3,
+            "frames": {
+              "total": 31,
+              "hitmark": 11,
+              "cancels": {
+                "aim": 11,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11,
+                "attack": 18,
+                "charge": 20
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.683,
+            "frames": {
+              "total": 52,
+              "hitmark": 18,
+              "cancels": {
+                "aim": 18,
+                "skill": 18,
+                "burst": 18,
+                "dash": 18,
+                "jump": 18,
+                "swap": 18,
+                "attack": 41,
+                "charge": 41
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.733,
+            "frames": {
+              "total": 52,
+              "hitmark": 21,
+              "cancels": {
+                "aim": 21,
+                "skill": 21,
+                "burst": 21,
+                "dash": 21,
+                "jump": 21,
+                "swap": 21,
+                "attack": 44,
+                "charge": 45
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.85,
+            "frames": {
+              "total": 51,
+              "hitmark": 16,
+              "cancels": {
+                "aim": 16,
+                "skill": 16,
+                "burst": 16,
+                "dash": 16,
+                "jump": 16,
+                "swap": 16,
+                "charge": 500
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          }
+        ],
         "description": "通常攻撃\n槍による最大4段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費して前方に突進し、経路上の敵にダメージを与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
@@ -34862,7 +34950,20 @@
         "name": "重撃",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 0.8,
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "attack": 50,
+            "charge": 500,
+            "skill": 50,
+            "burst": 50,
+            "dash": 50,
+            "jump": 50,
+            "swap": 49
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 0.917,
         "description": "通常攻撃\n槍による最大4段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費して前方に突進し、経路上の敵にダメージを与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
@@ -34873,11 +34974,29 @@
         "startsSkillCooldown": true,
         "cooldown": 20,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 733,
+          "cancels": {
+            "attack": 56,
+            "burst": 30,
+            "skill": 51,
+            "dash": 55,
+            "jump": 57,
+            "walk": 45,
+            "swap": 44
+          },
+          "source": "skill.go:skillFrames"
         },
-        "defaultDuration": 0.8,
-        "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。"
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:10"
+        },
+        "defaultDuration": 12.217,
+        "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.167
+        }
       },
       {
         "id": "10000100-geo_q",
@@ -34887,12 +35006,30 @@
         "startsBurstCooldown": true,
         "cooldown": 18,
         "effectDuration": 12,
+        "frames": {
+          "total": 75,
+          "hitmark": 35,
+          "cancels": {
+            "attack": 56,
+            "charge": 56,
+            "skill": 53,
+            "dash": 53,
+            "jump": 53,
+            "swap": 50
+          },
+          "source": "burst.go:burstFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "領域継続時間"
+          "effectDuration": "領域継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 1.5,
-        "description": "地面を叩き、カチーナの防御力を基に岩元素範囲ダメージを与え、スーパードリル領域を生成する。\nこの領域はぐるぐるコマちゃんの攻撃範囲とぐるぐるコマちゃんに乗っている間の移動速度をアップする。\n\n発動時、フィールド上にカチーナ自身のぐるぐるコマちゃんが存在する場合、それを近くに召喚する。"
+        "defaultDuration": 1.25,
+        "description": "地面を叩き、カチーナの防御力を基に岩元素範囲ダメージを与え、スーパードリル領域を生成する。\nこの領域はぐるぐるコマちゃんの攻撃範囲とぐるぐるコマちゃんに乗っている間の移動速度をアップする。\n\n発動時、フィールド上にカチーナ自身のぐるぐるコマちゃんが存在する場合、それを近くに召喚する。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000100-geo_dash",
@@ -34937,7 +35074,8 @@
       }
     ],
     "source": {
-      "genshinId": 10000100
+      "genshinId": 10000100,
+      "frameSource": "gcsim PR #2697（未マージ・未検証。2026-08-12 時点）"
     },
     "constellations": [
       {
@@ -41950,7 +42088,95 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.4,
+        "defaultDuration": 0.25,
+        "frames": {
+          "total": 40,
+          "hitmark": 10,
+          "cancels": {
+            "aim": 10,
+            "skill": 10,
+            "burst": 10,
+            "dash": 10,
+            "jump": 10,
+            "swap": 10,
+            "attack": 15,
+            "walk": 33
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.25,
+            "frames": {
+              "total": 40,
+              "hitmark": 10,
+              "cancels": {
+                "aim": 10,
+                "skill": 10,
+                "burst": 10,
+                "dash": 10,
+                "jump": 10,
+                "swap": 10,
+                "attack": 15,
+                "walk": 33
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.333,
+            "frames": {
+              "total": 38,
+              "hitmark": 8,
+              "cancels": {
+                "aim": 8,
+                "skill": 8,
+                "burst": 8,
+                "dash": 8,
+                "jump": 8,
+                "swap": 8,
+                "attack": 20,
+                "walk": 34
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.817,
+            "frames": {
+              "total": 62,
+              "hitmark": 26,
+              "cancels": {
+                "aim": 26,
+                "skill": 26,
+                "burst": 26,
+                "dash": 26,
+                "jump": 26,
+                "swap": 26,
+                "attack": 49,
+                "walk": 50
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 0.85,
+            "frames": {
+              "total": 51,
+              "hitmark": 22,
+              "cancels": {
+                "aim": 22,
+                "skill": 22,
+                "burst": 22,
+                "dash": 22,
+                "jump": 22,
+                "swap": 22,
+                "walk": 63
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          }
+        ],
         "description": "通常攻撃\n蛇のような鋭さと優雅な立ち振る舞いで最大4段の蹴りを繰り出し、草元素ダメージを与える。\n\n重撃\n蛇突状態に入り、スタミナを消費する代わりに最大2.5秒間高速移動する。重撃ボタンを離した時や継続時間終了時、あるいはスタミナが尽きた時、ネフェルは蛇突状態を解除する。その際、追加でスタミナを消費し、敵に草元素ダメージを与える。**「影の舞」**状態にある時、スタミナの追加消費量が減少する。\nまた、ネフェルが蛇突状態にある時、元素スキル**盤術・千夜一舞**を発動したり、ダッシュを行ったりしても、蛇突状態は解除されない。\n\n落下攻撃\n空中の草元素の力を凝集させながら落下し、地面に衝撃を与える。経路上の敵を攻撃し、落下時に草元素範囲ダメージを与える。"
       },
       {
@@ -41958,7 +42184,20 @@
         "name": "重撃",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 0.8,
+        "frames": {
+          "total": 72,
+          "cancels": {
+            "attack": 29,
+            "skill": 48,
+            "burst": 48,
+            "dash": 48,
+            "jump": 48,
+            "swap": 28,
+            "walk": 71
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 1.2,
         "description": "通常攻撃\n蛇のような鋭さと優雅な立ち振る舞いで最大4段の蹴りを繰り出し、草元素ダメージを与える。\n\n重撃\n蛇突状態に入り、スタミナを消費する代わりに最大2.5秒間高速移動する。重撃ボタンを離した時や継続時間終了時、あるいはスタミナが尽きた時、ネフェルは蛇突状態を解除する。その際、追加でスタミナを消費し、敵に草元素ダメージを与える。**「影の舞」**状態にある時、スタミナの追加消費量が減少する。\nまた、ネフェルが蛇突状態にある時、元素スキル**盤術・千夜一舞**を発動したり、ダッシュを行ったりしても、蛇突状態は解除されない。\n\n落下攻撃\n空中の草元素の力を凝集させながら落下し、地面に衝撃を与える。経路上の敵を攻撃し、落下時に草元素範囲ダメージを与える。"
       },
       {
@@ -41969,12 +42208,31 @@
         "startsSkillCooldown": true,
         "cooldown": 9,
         "effectDuration": 9,
+        "frames": {
+          "total": 52,
+          "hitmark": 24,
+          "cancels": {
+            "attack": 26,
+            "charge": 29,
+            "dash": 38,
+            "jump": 38,
+            "swap": 25,
+            "burst": 38,
+            "walk": 34
+          },
+          "source": "skill.go:skillFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "影の舞の継続時間"
+          "effectDuration": "影の舞の継続時間",
+          "cooldownStart": "skill.go:22"
         },
-        "defaultDuration": 0.8,
-        "description": "月の色を映す薄絹のように、または寒夜の砂海のように凛とした傾国の舞。ネフェルは一定距離前方に突進して草元素範囲ダメージを与え、**「影の舞」**状態に入る。\n「影の舞」状態の時、**草露**を1滴以上所持する場合、ネフェルの重撃はスタミナを消費しない特殊な重撃**「幻の戯」**に変わる。また、「影の舞」状態中、ネフェルの中断耐性がアップする。\n\n初期使用可能回数2回。"
+        "defaultDuration": 0.867,
+        "description": "月の色を映す薄絹のように、または寒夜の砂海のように凛とした傾国の舞。ネフェルは一定距離前方に突進して草元素範囲ダメージを与え、**「影の舞」**状態に入る。\n「影の舞」状態の時、**草露**を1滴以上所持する場合、ネフェルの重撃はスタミナを消費しない特殊な重撃**「幻の戯」**に変わる。また、「影の舞」状態中、ネフェルの中断耐性がアップする。\n\n初期使用可能回数2回。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.367
+        }
       },
       {
         "id": "10000122-dendro_q",
@@ -41984,11 +42242,28 @@
         "startsBurstCooldown": true,
         "cooldown": 15,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 131,
+          "cancels": {
+            "attack": 119,
+            "skill": 119,
+            "dash": 120,
+            "jump": 120,
+            "swap": 118,
+            "walk": 119
+          },
+          "source": "burst.go:burstFrames"
         },
-        "defaultDuration": 1.5,
-        "description": "トートの真眼を以て、偽物の謎に「解」を捧げ、前方の敵に草元素範囲ダメージを与える。発動時、ネフェルはすべての**「偽りの帳」**を消費し、この時発動する元素爆発のダメージをアップする。"
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
+        },
+        "defaultDuration": 2.183,
+        "description": "トートの真眼を以て、偽物の謎に「解」を捧げ、前方の敵に草元素範囲ダメージを与える。発動時、ネフェルはすべての**「偽りの帳」**を消費し、この時発動する元素爆発のダメージをアップする。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000122-dendro_dash",
@@ -42050,7 +42325,8 @@
       }
     ],
     "source": {
-      "genshinId": 10000122
+      "genshinId": 10000122,
+      "frameSource": "gcsim PR #3045（未マージ・未検証。2026-09-20 時点）"
     },
     "constellations": [
       {
@@ -43142,7 +43418,95 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.4,
+        "defaultDuration": 0.3,
+        "frames": {
+          "total": 40,
+          "hitmark": 11,
+          "cancels": {
+            "aim": 11,
+            "skill": 11,
+            "burst": 11,
+            "dash": 11,
+            "jump": 11,
+            "swap": 11,
+            "attack": 18,
+            "charge": 21
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.3,
+            "frames": {
+              "total": 40,
+              "hitmark": 11,
+              "cancels": {
+                "aim": 11,
+                "skill": 11,
+                "burst": 11,
+                "dash": 11,
+                "jump": 11,
+                "swap": 11,
+                "attack": 18,
+                "charge": 21
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.3,
+            "frames": {
+              "total": 36,
+              "hitmark": 12,
+              "cancels": {
+                "aim": 12,
+                "skill": 12,
+                "burst": 12,
+                "dash": 12,
+                "jump": 12,
+                "swap": 12,
+                "attack": 18,
+                "walk": 29
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.667,
+            "frames": {
+              "total": 45,
+              "hitmark": 27,
+              "cancels": {
+                "aim": 27,
+                "skill": 27,
+                "burst": 27,
+                "dash": 27,
+                "jump": 27,
+                "swap": 27,
+                "attack": 40,
+                "walk": 40
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 1.117,
+            "frames": {
+              "total": 67,
+              "hitmark": 27,
+              "cancels": {
+                "aim": 27,
+                "skill": 27,
+                "burst": 27,
+                "dash": 27,
+                "jump": 27,
+                "swap": 27,
+                "attack": 57
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          }
+        ],
         "description": "通常攻撃\n剣による最大4段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費し、前方に斬撃を2回放つ。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
@@ -43150,7 +43514,18 @@
         "name": "重撃",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 0.8,
+        "frames": {
+          "total": 72,
+          "cancels": {
+            "skill": 70,
+            "burst": 70,
+            "dash": 32,
+            "jump": 32,
+            "swap": 69
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 1.2,
         "description": "通常攻撃\n剣による最大4段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費し、前方に斬撃を2回放つ。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
@@ -43161,12 +43536,30 @@
         "startsSkillCooldown": true,
         "cooldown": 18,
         "effectDuration": 15,
+        "frames": {
+          "total": 52,
+          "hitmark": 18,
+          "cancels": {
+            "attack": 28,
+            "skill": 28,
+            "burst": 29,
+            "dash": 27,
+            "jump": 27,
+            "walk": 41
+          },
+          "source": "skill.go:skillFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "隙を過ぐる月の継続時間"
+          "effectDuration": "隙を過ぐる月の継続時間",
+          "cooldownStart": "skill.go:skillHitmark"
         },
-        "defaultDuration": 0.8,
-        "description": "古の権能を呼び起こし、**「隙を過ぐる月」**状態に入る。\nこの状態の時、兹白の通常攻撃と重撃は、元素付与によって他の元素に変化しない岩元素ダメージへと変わる。同時に、異なる方法で特殊な「隙に浮かぶ光」を蓄積できるようになる。この「隙に浮かぶ光」を消費することで、特殊な元素スキル翔ける霊駒を発動できる。\n\n月兆・満照\n「隙を過ぐる月」状態にある時、兹白の通常攻撃の4段目は岩元素ダメージを追加で与える。このダメージは、月結晶反応によるダメージと見なされる。"
+        "defaultDuration": 0.867,
+        "description": "古の権能を呼び起こし、**「隙を過ぐる月」**状態に入る。\nこの状態の時、兹白の通常攻撃と重撃は、元素付与によって他の元素に変化しない岩元素ダメージへと変わる。同時に、異なる方法で特殊な「隙に浮かぶ光」を蓄積できるようになる。この「隙に浮かぶ光」を消費することで、特殊な元素スキル翔ける霊駒を発動できる。\n\n月兆・満照\n「隙を過ぐる月」状態にある時、兹白の通常攻撃の4段目は岩元素ダメージを追加で与える。このダメージは、月結晶反応によるダメージと見なされる。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.3
+        }
       },
       {
         "id": "10000126-geo_q",
@@ -43176,11 +43569,27 @@
         "startsBurstCooldown": true,
         "cooldown": 15,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 103,
+          "cancels": {
+            "attack": 97,
+            "skill": 98,
+            "dash": 98,
+            "jump": 99,
+            "swap": 96
+          },
+          "source": "burst.go:burstFrames"
         },
-        "defaultDuration": 1.5,
-        "description": "青玄陽華の華笠を回して攻撃を行い、岩元素ダメージを2回与える。2回目のダメージは月結晶反応ダメージと見なされる。\n発動時、兹白が**「隙を過ぐる月」**状態である場合、現在の「隙を過ぐる月」状態の継続時間+1.7秒。"
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
+        },
+        "defaultDuration": 1.717,
+        "description": "青玄陽華の華笠を回して攻撃を行い、岩元素ダメージを2回与える。2回目のダメージは月結晶反応ダメージと見なされる。\n発動時、兹白が**「隙を過ぐる月」**状態である場合、現在の「隙を過ぐる月」状態の継続時間+1.7秒。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000126-geo_dash",
@@ -43225,7 +43634,8 @@
       }
     ],
     "source": {
-      "genshinId": 10000126
+      "genshinId": 10000126,
+      "frameSource": "gcsim main（PR #3093 マージ済み・リリース前）"
     },
     "constellations": [
       {
@@ -44298,15 +44708,86 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.4,
+        "defaultDuration": 0.35,
+        "frames": {
+          "total": 21,
+          "hitmark": 15,
+          "cancels": {
+            "aim": 15,
+            "skill": 15,
+            "burst": 15,
+            "dash": 15,
+            "jump": 15,
+            "swap": 15
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.35,
+            "frames": {
+              "total": 21,
+              "hitmark": 15,
+              "cancels": {
+                "aim": 15,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.433,
+            "frames": {
+              "total": 26,
+              "hitmark": 12,
+              "cancels": {
+                "aim": 12,
+                "skill": 12,
+                "burst": 12,
+                "dash": 12,
+                "jump": 12,
+                "swap": 12
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.717,
+            "frames": {
+              "total": 43,
+              "hitmark": 47,
+              "cancels": {
+                "aim": 47,
+                "skill": 47,
+                "burst": 47,
+                "dash": 47,
+                "jump": 47,
+                "swap": 47
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          }
+        ],
         "description": "通常攻撃\n最大3段の連続射撃を行う。\n\n重撃\nダメージがより高く、より精確な狙い撃ちを発動する。\n照準時、岩晶を矢先に凝集させ、岩晶に満ちた矢で敵に岩元素ダメージを与える。\n\n落下攻撃\n空中から矢の雨を放ち、凄まじいスピードで落下し地面に衝撃を与え、落下時に範囲ダメージを与える。"
       },
       {
         "id": "10000130-geo_ca",
-        "name": "重撃",
+        "name": "狙い撃ち (フルチャージ)",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 0.8,
+        "frames": {
+          "total": 94,
+          "cancels": {
+            "dash": 86,
+            "jump": 86
+          },
+          "source": "aimed.go:aimedFrames[1]"
+        },
+        "defaultDuration": 1.567,
         "description": "通常攻撃\n最大3段の連続射撃を行う。\n\n重撃\nダメージがより高く、より精確な狙い撃ちを発動する。\n照準時、岩晶を矢先に凝集させ、岩晶に満ちた矢で敵に岩元素ダメージを与える。\n\n落下攻撃\n空中から矢の雨を放ち、凄まじいスピードで落下し地面に衝撃を与え、落下時に範囲ダメージを与える。"
       },
       {
@@ -44317,12 +44798,29 @@
         "startsSkillCooldown": true,
         "cooldown": 18,
         "effectDuration": 25,
+        "frames": {
+          "total": 14,
+          "cancels": {
+            "attack": 33,
+            "aim": 44,
+            "skill": 20,
+            "burst": 15,
+            "walk": 32,
+            "swap": 13
+          },
+          "source": "skill.go:skillFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "ルミの継続時間"
+          "effectDuration": "ルミの継続時間",
+          "cooldownStart": "skill.go:skillCDStart"
         },
-        "defaultDuration": 0.8,
-        "description": "ルミと一緒に冒険しよう！ルミは一回押しか連打かで、それぞれ異なる形態で出撃する。\n\n一回押し\nルミは**とっておき形態**で出撃し、近くの敵を継続的に攻撃して岩元素範囲ダメージを与える。近くに月籠が存在する場合、ルミは近くの敵に月結晶反応ダメージと見なされる岩元素範囲ダメージを与える。\n\n連打\nいざ、本気を見せる時だ！元素スキル発動後、元素スキルまたは通常攻撃を連打すると、リンネアはルミにキラキラの宝石をたくさん食べさせ、お腹いっぱいになったルミは**さいごのきりふだ形態**で出撃し、近くの敵に月結晶反応ダメージと見なされる極めて強力な岩元素範囲ダメージを1回与え、**がんばり形態**に切り替わる。\nまた、元素スキルを連打している間は、リンネアの中断耐性がアップする。"
+        "defaultDuration": 0.233,
+        "description": "ルミと一緒に冒険しよう！ルミは一回押しか連打かで、それぞれ異なる形態で出撃する。\n\n一回押し\nルミは**とっておき形態**で出撃し、近くの敵を継続的に攻撃して岩元素範囲ダメージを与える。近くに月籠が存在する場合、ルミは近くの敵に月結晶反応ダメージと見なされる岩元素範囲ダメージを与える。\n\n連打\nいざ、本気を見せる時だ！元素スキル発動後、元素スキルまたは通常攻撃を連打すると、リンネアはルミにキラキラの宝石をたくさん食べさせ、お腹いっぱいになったルミは**さいごのきりふだ形態**で出撃し、近くの敵に月結晶反応ダメージと見なされる極めて強力な岩元素範囲ダメージを1回与え、**がんばり形態**に切り替わる。\nまた、元素スキルを連打している間は、リンネアの中断耐性がアップする。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000130-geo_q",
@@ -44332,12 +44830,25 @@
         "startsBurstCooldown": true,
         "cooldown": 15,
         "effectDuration": 12,
+        "frames": {
+          "total": 110,
+          "cancels": {
+            "skill": 96,
+            "swap": 97
+          },
+          "source": "burst.go:burstFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "治療継続時間"
+          "effectDuration": "治療継続時間",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 1.5,
-        "description": "超うでききの冒険者も、適度に休まないと！リンネアのもと、ルミは**とっておき形態**で出撃して、近くのチーム内キャラクター全員のHPを回復する。さらにその後の一定時間、近くのフィールド上にいるキャラクターのHPを継続的に回復する。回復量はリンネアの防御力に基づく。\n元素爆発の発動時、ルミがすでに出撃している場合、ルミの出撃形態は変わらずに継続時間がリセットされる。"
+        "defaultDuration": 1.833,
+        "description": "超うでききの冒険者も、適度に休まないと！リンネアのもと、ルミは**とっておき形態**で出撃して、近くのチーム内キャラクター全員のHPを回復する。さらにその後の一定時間、近くのフィールド上にいるキャラクターのHPを継続的に回復する。回復量はリンネアの防御力に基づく。\n元素爆発の発動時、ルミがすでに出撃している場合、ルミの出撃形態は変わらずに継続時間がリセットされる。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        }
       },
       {
         "id": "10000130-geo_dash",
@@ -44379,7 +44890,8 @@
       }
     ],
     "source": {
-      "genshinId": 10000130
+      "genshinId": 10000130,
+      "frameSource": "gcsim PR #2596（未マージ・未検証。2026-10-06 時点）"
     },
     "constellations": [
       {
@@ -45496,7 +46008,95 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.4,
+        "defaultDuration": 0.3,
+        "frames": {
+          "total": 34,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 18,
+            "charge": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.3,
+            "frames": {
+              "total": 34,
+              "hitmark": 13,
+              "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
+                "attack": 18,
+                "charge": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.383,
+            "frames": {
+              "total": 38,
+              "hitmark": 14,
+              "cancels": {
+                "aim": 14,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14,
+                "attack": 23,
+                "charge": 26
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.883,
+            "frames": {
+              "total": 65,
+              "hitmark": 32,
+              "cancels": {
+                "aim": 32,
+                "skill": 32,
+                "burst": 32,
+                "dash": 32,
+                "jump": 32,
+                "swap": 32,
+                "attack": 53,
+                "charge": 54
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 1.033,
+            "frames": {
+              "total": 62,
+              "hitmark": 17,
+              "cancels": {
+                "aim": 17,
+                "skill": 17,
+                "burst": 17,
+                "dash": 17,
+                "jump": 17,
+                "swap": 17,
+                "attack": 56
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          }
+        ],
         "description": "通常攻撃\n槍による最大4段の連続攻撃を行い、最後の一撃が命中した敵に**狩猟の印**効果を付与する。\n\n重撃\n一定のスタミナを消費して前方に突進し、経路上の敵にダメージを与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
@@ -45504,23 +46104,84 @@
         "name": "重撃",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 0.8,
+        "frames": {
+          "total": 63,
+          "hitmark": 24,
+          "cancels": {
+            "skill": 62,
+            "burst": 62,
+            "dash": 24,
+            "jump": 24,
+            "swap": 61
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 1.05,
         "description": "通常攻撃\n槍による最大4段の連続攻撃を行い、最後の一撃が命中した敵に**狩猟の印**効果を付与する。\n\n重撃\n一定のスタミナを消費して前方に突進し、経路上の敵にダメージを与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {
         "id": "10000148-electro_e",
         "name": "元素スキル: 伏撃の雷鳴",
-        "shortName": "E",
+        "shortName": "tE",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 15,
         "effectDuration": 15,
+        "frames": {
+          "total": 31,
+          "hitmark": 18,
+          "cancels": {
+            "attack": 30,
+            "burst": 30,
+            "dash": 30,
+            "walk": 30,
+            "swap": 29
+          },
+          "source": "skill.go:skillFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "狩猟の印継続時間"
+          "effectDuration": "狩猟の印継続時間",
+          "cooldownStart": "skill.go:16"
         },
-        "defaultDuration": 0.8,
-        "description": "ハンターの本能に従い、一回押しと長押しによって異なる効果を発動させ、命中した敵に**狩猟の印**効果を付与する。\n\n一回押し\n前方へ射撃し、雷元素範囲ダメージを与える。\n\n長押し\n照準状態に入り、前方の一定範囲内にいる敵を定める。この状態の時、アリョーシャの中断耐性がアップする。\n長押し終了時、定めた敵に雷元素ダメージを与える。"
+        "defaultDuration": 0.517,
+        "description": "ハンターの本能に従い、一回押しと長押しによって異なる効果を発動させ、命中した敵に**狩猟の印**効果を付与する。\n\n一回押し\n前方へ射撃し、雷元素範囲ダメージを与える。\n\n長押し\n照準状態に入り、前方の一定範囲内にいる敵を定める。この状態の時、アリョーシャの中断耐性がアップする。\n長押し終了時、定めた敵に雷元素ダメージを与える。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.267
+        }
+      },
+      {
+        "id": "10000148-electro_e_hold",
+        "name": "元素スキル(長押し): 伏撃の雷鳴",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 15,
+        "frames": {
+          "total": 142,
+          "hitmark": 113,
+          "cancels": {
+            "attack": 138,
+            "burst": 138,
+            "dash": 138,
+            "jump": 138,
+            "swap": 137
+          },
+          "source": "skill.go:skillHoldFrames"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "狩猟の印継続時間",
+          "cooldownStart": "skill.go:111"
+        },
+        "defaultDuration": 2.367,
+        "description": "ハンターの本能に従い、一回押しと長押しによって異なる効果を発動させ、命中した敵に**狩猟の印**効果を付与する。\n\n一回押し\n前方へ射撃し、雷元素範囲ダメージを与える。\n\n長押し\n照準状態に入り、前方の一定範囲内にいる敵を定める。この状態の時、アリョーシャの中断耐性がアップする。\n長押し終了時、定めた敵に雷元素ダメージを与える。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.85
+        }
       },
       {
         "id": "10000148-electro_q",
@@ -45530,12 +46191,27 @@
         "startsBurstCooldown": true,
         "cooldown": 18,
         "effectDuration": 14,
+        "frames": {
+          "total": 55,
+          "cancels": {
+            "attack": 54,
+            "skill": 53,
+            "walk": 54,
+            "swap": 52
+          },
+          "source": "burst.go:burstFrames"
+        },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "burst.go:1"
         },
-        "defaultDuration": 1.5,
-        "description": "信頼する仲間トゥガリンを戦場に呼び寄せ、前方エリアを一時的に雷の狩場へと変化させる。\n\n雷の狩場\n・周囲の敵を継続的に挑発し、敵の攻撃を引き付ける。\n・2秒ごとに、そこに足を踏み入れた敵に対して雷元素範囲ダメージを1回与える。\n\nトゥガリン\n・周囲に敵がいるとき、2秒ごとにいずれかの敵の近くへ素早く移動して噛みつき、雷元素ダメージを与える。\n・狩猟の印の効果を受けている敵に命中した時、狩猟の印を発動させる。\n・トゥガリンは狩猟の印効果を受けている敵を優先的に攻撃する。"
+        "defaultDuration": 0.917,
+        "description": "信頼する仲間トゥガリンを戦場に呼び寄せ、前方エリアを一時的に雷の狩場へと変化させる。\n\n雷の狩場\n・周囲の敵を継続的に挑発し、敵の攻撃を引き付ける。\n・2秒ごとに、そこに足を踏み入れた敵に対して雷元素範囲ダメージを1回与える。\n\nトゥガリン\n・周囲に敵がいるとき、2秒ごとにいずれかの敵の近くへ素早く移動して噛みつき、雷元素ダメージを与える。\n・狩猟の印の効果を受けている敵に命中した時、狩猟の印を発動させる。\n・トゥガリンは狩猟の印効果を受けている敵を優先的に攻撃する。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.017
+        }
       },
       {
         "id": "10000148-electro_dash",
@@ -45577,7 +46253,8 @@
       }
     ],
     "source": {
-      "genshinId": 10000148
+      "genshinId": 10000148,
+      "frameSource": "gcsim PR #3207（未マージ・未検証。2026-10-08 時点）"
     },
     "constellations": [
       {

@@ -382,6 +382,10 @@ export interface ActionDefinition {
 
 export interface CharacterActionInstance {
   id: string; // unique instance ID
+  /** グループ（Stint.groups の id）。同じ出場ブロックの隣接するアクションだけ。入れ子は無し（追加作業 20-A） */
+  groupId?: string;
+  /** グループの展開で増えた複製の何回目か（2 回目 = 1）。計算用で、保存しない（utils/actionGroups.ts） */
+  groupCopy?: number;
   actionTypeId: string; // reference to predefined or custom action
   name: string;
   shortName: string;
@@ -577,6 +581,8 @@ export interface Stint {
   id: string;
   characterId: string;
   actions: CharacterActionInstance[];
+  /** アクションのグループ（回数。グループに入るアクションは groupId で指す。追加作業 20-A） */
+  groups?: { id: string; repeat: number }[];
   /** 発動バフ（固有天賦）の登録 */
   passiveTriggers?: PassiveTriggerInstance[];
   /**

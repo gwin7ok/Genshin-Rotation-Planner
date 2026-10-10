@@ -33,6 +33,7 @@ import { GlobalBuffRow } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
 import { actionToneOnColor } from '../utils/actionTone';
 import { actionDescription } from '../utils/actionDescription';
+import { isGroupCopy, moveActionRespectingGroups, stripGroupCopies } from '../utils/actionGroups';
 import type { DragPreview } from '../utils/dragPreview';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
@@ -708,8 +709,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         const stint = prev.base.find(st => st.id === prev.stintId);
         if (!stint) return prev;
         const pointerTime = (stint.startTime ?? 0) + (e.clientX - prev.rowLeft) / pixelsPerSecond;
-        const others = stint.actions.filter((_, i) => i !== prev.fromIndex);
-        // ポインターの時刻より中点が左にあるアクションの数 = 挿入先（先頭の交代アクションの前には入らない）
+        const others = stint.actions.filter(a => a.id !== prev.actionId && !isGroupCopy(a));
+        // ポインターの時刻より中点が左にあるアクションの数 = 挿入先（先頭の交代アクションの前には入らない。グループの複製は数えない）
         const minIndex = stint.actions[0]?.type === 'swap' ? 1 : 0;
         const targetIndex = Math.max(minIndex, others.filter(a => ((a.startTime ?? 0) + (a.endTime ?? 0)) / 2 < pointerTime).length);
         return { ...prev, moved, targetIndex };
@@ -724,12 +725,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.addEventListener('click', suppressClick, { capture: true, once: true });
       setTimeout(() => window.removeEventListener('click', suppressClick, { capture: true }), 0);
       if (!onUpdateStints || d.targetIndex === d.fromIndex) return;
+      // グループの規則: グループの中は中だけで並び替え、外のアクションはグループの中に入らない
       const next = d.base.map(st => {
         if (st.id !== d.stintId) return st;
-        const actions = [...st.actions];
-        const [moved] = actions.splice(d.fromIndex, 1);
-        actions.splice(d.targetIndex, 0, moved);
-        return { ...st, actions };
+        const moved = moveActionRespectingGroups(st.actions, d.actionId, d.targetIndex);
+        return moved ? { ...st, actions: moved } : st;
       });
       onUpdateStints(cleanStintsForState(next));
     };
@@ -751,7 +751,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   useEffect(() => {
     if (!draggingAction?.moved) return;
     {
-      const swaps = draggingAction.base.find(st => st.id === draggingAction.stintId)?.actions.filter(a => a.type === 'swap').length ?? 0;
+      const swaps = stripGroupCopies(draggingAction.base.find(st => st.id === draggingAction.stintId)?.actions ?? []).filter(a => a.type === 'swap').length;
       onPreviewReorder?.(draggingAction.targetIndex === draggingAction.fromIndex ? null : { kind: 'action', stintId: draggingAction.stintId, actionId: draggingAction.actionId, to: Math.max(0, draggingAction.targetIndex - swaps) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1658,7 +1658,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         key={act.id}
                                         onMouseDown={(e) => {
                                           // 交代アクションは動かせない。ボタン類のクリックは、ドラッグにしない
-                                          if (e.button !== 0 || !onUpdateStints || isSwapAction) return;
+                                          if (e.button !== 0 || !onUpdateStints || isSwapAction || isGroupCopy(act)) return;
                                           e.preventDefault();
                                           setDraggingAction({
                                             stintId: stint.id,
@@ -1725,6 +1725,29 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       </div>
                                     );
                                   })}
+                                  {/* グループの枠（展開した複製を含む範囲。追加作業 20-A） */}
+                                  {(() => {
+                                    const frames: { id: string; start: number; end: number; repeat: number }[] = [];
+                                    stint.actions.forEach(a => {
+                                      if (!a.groupId) return;
+                                      const f = frames.find(x => x.id === a.groupId);
+                                      const st = a.startTime ?? 0;
+                                      const en = a.endTime ?? st;
+                                      if (f) { f.start = Math.min(f.start, st); f.end = Math.max(f.end, en); } else frames.push({ id: a.groupId, start: st, end: en, repeat: stint.groups?.find(g => g.id === a.groupId)?.repeat ?? 1 });
+                                    });
+                                    return frames.map(f => (
+                                      <div
+                                        key={`group_frame_${f.id}`}
+                                        className="absolute top-0 bottom-0 border-2 border-dashed border-fuchsia-400/70 rounded pointer-events-none z-20"
+                                        style={{ left: `${(f.start - (stint.startTime ?? 0)) * pixelsPerSecond}px`, width: `${Math.max(2, (f.end - f.start) * pixelsPerSecond)}px` }}
+                                        title={`グループ ×${f.repeat}`}
+                                      >
+                                        {f.repeat > 1 && (
+                                          <span className="absolute -top-2 left-0 text-[8px] font-mono px-0.5 rounded bg-fuchsia-950 text-fuchsia-200 leading-none">×{f.repeat}</span>
+                                        )}
+                                      </div>
+                                    ));
+                                  })()}
                                   {/* モードの維持のために、出場の最後のアクションの後に自動で足した待ち（薄い色。保存しない） */}
                                   {stint.actions.filter(act => (act.modeHoldSeconds ?? 0) > 0).map(act => {
                                     const hold = act.modeHoldSeconds ?? 0;

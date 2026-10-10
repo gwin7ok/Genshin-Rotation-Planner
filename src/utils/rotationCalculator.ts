@@ -1,3 +1,4 @@
+import { expandGroupedStints } from './actionGroups';
 import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
@@ -152,9 +153,11 @@ function skillHitFrames(actionId: string, constellation: number, holdSeconds: nu
 
 export function calculateRotation(
   characters: CharacterConfig[],
-  rawStints: Stint[],
+  inputStints: Stint[],
   options?: RotationOptions
 ): CalculatedRotation {
+  // グループの回数を、続けて置いたものとして展開する（追加作業 20-A）
+  const rawStints = expandGroupedStints(inputStints);
   const switchDelay = typeof options?.switchDelay === 'number' ? Math.max(0, options.switchDelay) : 0.50;
   const loopStartIndex = typeof options?.loopStartIndex === 'number' ? Math.max(0, options.loopStartIndex) : 0;
   const characterMap = new Map<string, CharacterConfig>();

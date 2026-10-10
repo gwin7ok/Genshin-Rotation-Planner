@@ -1,4 +1,5 @@
 import type { Stint } from '../types/genshin';
+import { moveActionRespectingGroups } from './actionGroups';
 
 /**
  * ガントチャートのドラッグ中の、仮の並び（2026-10-10。追加作業 21 / issue #16）。
@@ -33,8 +34,7 @@ export function applyDragPreview(stints: Stint[], preview: DragPreview | null): 
       if (rest[pos].type !== 'swap') seen++;
       pos++;
     }
-    const actions = [...rest];
-    actions.splice(pos, 0, item);
-    return { ...s, actions };
+    // グループの規則（グループの中のアクションは、グループの中だけ。外のアクションは、グループの中に入らない）
+    return { ...s, actions: moveActionRespectingGroups(s.actions, preview.actionId, pos) ?? s.actions };
   });
 }

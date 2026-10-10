@@ -16,6 +16,7 @@ import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
+import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { AppDatabase } from './types/database';
@@ -64,7 +65,7 @@ export default function App() {
   // DB に無いキャラの出場ブロックは、計算・表示から除く（保存データには残す）
   const visibleStints = useMemo(() => filterStintsForCharacters(stints, characters), [stints, characters]);
   // 出場ブロックの編集。DB に無いキャラ（表示から外れている）の出場ブロックは、編成が参照している間は残す
-  const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next, stints, characters, party));
+  const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next.map(normalizeGroups), stints, characters, party));
   // Character switch delay (default 0.50s or restored from storage)
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
   const [defHalt, setDefHaltState] = useState<boolean>(() => {

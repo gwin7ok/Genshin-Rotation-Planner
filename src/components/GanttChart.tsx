@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, useLayoutEffect } from 'react';
 import { 
   Clock, 
   ZoomIn, 
@@ -29,7 +29,7 @@ import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig, getAvailableBuffsForCharacter, isGlobalRowBuff, buffTimingLabel, type TriggerableBuffDefinition } from '../utils/buffUtils';
-import { GlobalBuffRow } from './GlobalBuffRow';
+import { GlobalBuffRow, TimelessBuffChip, selfTimelessBuffItems, type TimelessBuffItem } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
 import { actionToneOnColor } from '../utils/actionTone';
 import { actionDescription } from '../utils/actionDescription';
@@ -147,23 +147,25 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   return result;
 }
 
-/** 時間指定のない効果のうち、自分だけに効くもの（キャラごと）。出場トラックのキャラ名の横に出す */
-function selfTimelessBuffs(char: CharacterConfig, database?: GenshinDatabase): TriggerableBuffDefinition[] {
-  return getAvailableBuffsForCharacter(char, database).filter(d => !d.autoApplied && isGlobalRowBuff(d) && d.scope === 'self');
-}
-
-/** 見出しのバッジのホバー: 効果の一覧（名前・由来・説明） */
-function selfTimelessTitle(defs: TriggerableBuffDefinition[]): string {
-  const source = (d: TriggerableBuffDefinition) =>
-    d.category === 'talent' ? '固有天賦'
-      : d.category === 'constellation' ? '命ノ星座'
-      : d.category === 'weapon' ? `武器: ${d.sourceName ?? ''}`
-      : `聖遺物: ${d.sourceName ?? ''}`;
-  return [
-    '【時間指定のない効果（このキャラだけ）】',
-    ...defs.map(d => `・[${buffTimingLabel(d)}] ${d.name}（${source(d)}）\n  ${d.description ?? ''}`),
-  ].join('\n');
-}
+/**
+ * 高さが内容で変わる行。高さを測って、親に知らせる（左の見出しの行を、同じ高さにそろえるため）。
+ * 出場トラックのキャラ名の行は、時間指定のない効果のボタンが横幅に収まらないとき、折り返して行を増やす
+ */
+const MeasuredRow: React.FC<{ onHeight: (h: number) => void; className?: string; children?: React.ReactNode }> = ({ onHeight, className, children }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const cb = useRef(onHeight);
+  cb.current = onHeight;
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const report = () => cb.current(el.offsetHeight);
+    report();
+    const ro = new ResizeObserver(report);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return <div ref={ref} className={className}>{children}</div>;
+};
 
 /** アクションの説明文（定義の説明。通常攻撃などは、共通の説明） */
 function descOf(char: CharacterConfig, act: { type: ActionType; actionTypeId?: string }): string | undefined {
@@ -263,6 +265,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+  // 出場ブロックごとの、キャラ名の行の高さ（時間指定のない効果が折り返すと、高くなる。左の見出しをそろえる）
+  const [topRowHeights, setTopRowHeights] = useState<Record<string, number>>({});
+  const setTopRowHeight = (stintId: string, h: number) =>
+    setTopRowHeights(prev => (Math.abs((prev[stintId] ?? 36) - h) < 0.5 ? prev : { ...prev, [stintId]: h }));
   const [showConnectors, setShowConnectors] = useState<boolean>(true);
   const [highlightBuffId, setHighlightBuffId] = useState<string | null>(null);
 
@@ -405,8 +411,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
   // キャラごとの、時間指定のない効果のうち自分だけに効くもの（キャラ名の横のバッジ。追加作業 23）
-  const selfTimelessByChar = new Map<string, TriggerableBuffDefinition[]>(
-    characters.map(c => [c.id, selfTimelessBuffs(c, database)] as const),
+  const selfTimelessByChar = new Map<string, TimelessBuffItem[]>(
+    characters.map(c => [c.id, selfTimelessBuffItems(c, database)] as const),
   );
 
   // アクション ID → そのアクションがある出場ブロックの ID（持ち越しバーを、発動した出場ブロックの行に出すため）
@@ -1444,7 +1450,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             : 'bg-slate-950'
                         }`}>
                           {/* Row 0: Character Info & Controls (Height: h-9 = 36px) */}
-                          <div className="h-9 px-2 flex items-center justify-between border-b border-slate-800/80 bg-slate-900/40">
+                          <div className="min-h-9 px-2 flex items-center justify-between border-b border-slate-800/80 bg-slate-900/40" style={{ height: Math.max(36, topRowHeights[stint.id] ?? 36) }}>
                             <div className="flex items-center gap-1.5 min-w-0">
                               <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
                               <div className="flex items-center gap-1 min-w-0">
@@ -1454,15 +1460,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 </span>
                                 {isStintCurrentlyOnField && (
                                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" title="現在出場中" />
-                                )}
-                                {/* 時間指定のない効果のうち、自分だけに効くもの（そのキャラの一番早い出場の行だけ。追加作業 23 / issue #29） */}
-                                {stints.findIndex(st => st.characterId === char.id) === stintIdx && (selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
-                                  <span
-                                    className="text-[9px] font-mono px-1 py-0.2 rounded bg-teal-950/70 border border-teal-700/70 text-teal-300 font-bold shrink-0 cursor-default"
-                                    title={selfTimelessTitle(selfTimelessByChar.get(char.id)!)}
-                                  >
-                                    ✨{selfTimelessByChar.get(char.id)!.length}
-                                  </span>
                                 )}
                               </div>
                             </div>
@@ -1618,7 +1615,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           ))}
 
                           {/* --- Row 0: Top Header Space Match (Height: h-9 = 36px) --- */}
-                          <div className="h-9 relative border-b border-slate-800/40 pointer-events-none z-10" />
+                          {/* キャラ名の行（左の見出しの 1 行目と同じ高さ）。そのキャラの一番早い出場の行には、時間指定のない効果のうち、このキャラだけに効くものを横に並べる（追加作業 23 / issue #29）。横スクロールしても見えるよう左端に固定 */}
+                          <MeasuredRow
+                            onHeight={(h) => setTopRowHeight(stint.id, h)}
+                            className="min-h-9 relative border-b border-slate-800/40 pointer-events-none z-10 flex items-center"
+                          >
+                            {stints.findIndex(st => st.characterId === char.id) === stintIdx && (selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
+                              <div
+                                data-testid={`self-timeless-${char.id}`}
+                                className="sticky left-[190px] flex flex-wrap items-center gap-1 py-1 pointer-events-auto"
+                                style={{ maxWidth: 'calc(100vw - 240px)' }}
+                              >
+                                <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
+                                {selfTimelessByChar.get(char.id)!.map(item => <TimelessBuffChip key={item.key} item={item} />)}
+                              </div>
+                            )}
+                          </MeasuredRow>
 
                           {/* --- Row 1: On-field Active Stint & Actions (Height: h-10 = 40px) --- */}
                           <div className="h-10 relative flex items-center border-b border-slate-800/40 z-10">

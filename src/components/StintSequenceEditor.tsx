@@ -981,6 +981,29 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             // ループ基準は出場キャラの番号で持つ（基準番号より前が1周目初動、以降が定常ループ）
             const isSetupStint = loopStartIndex > 0 && stintIndex < loopStartIndex;
             const isLoopStint = loopStartIndex > 0 && stintIndex >= loopStartIndex;
+            // 連動・発動バフ: 「+ 登録」の行（palette）と、登録済みの一覧（list）を、別の場所に出す
+            const renderBuffSection = (part: 'palette' | 'list') => (
+      <StintBuffTriggersSection
+        part={part}
+        stintIndex={stintIndex}
+        stint={stint}
+        char={char}
+        database={database}
+        onUpdatePassiveTriggers={updateStintPassiveTriggers}
+        setCtHoverActionId={setCtHoverActionId}
+        renderTimingInput={(label, value, defaultValue, valueClassName, title, onChange, onHoverChange) => (
+          <ActionTimingInput
+            label={label}
+            value={value}
+            defaultValue={defaultValue}
+            valueClassName={valueClassName}
+            title={title}
+            onChange={onChange}
+            onHoverChange={onHoverChange}
+          />
+        )}
+      />
+            );
 
             return (
               <div
@@ -1200,7 +1223,23 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                   {/* Actions inside this Stint (Micro Sequence) */}
                   <div className="pt-2.5">
-                    <div className="flex flex-wrap items-center gap-2">
+                  {/* アクション追加ボタン（出場の見出しの直下。アクションが増えて折り返しても、位置が動かない。追加作業 27 / issue #35） */}
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-[11px] text-slate-500 font-medium">+ 追加:</span>
+                      {CharacterModel.fromConfig(char).actions.map(actionDef => (
+                        <button
+                          key={actionDef.id}
+                          onClick={() => addActionToStint(stintIndex, actionDef)}
+                          className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-semibold border border-slate-700/70 hover:border-slate-500 transition-colors"
+                          title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]`}
+                        >
+                          +{actionDef.buttonLabel || actionDef.shortName}
+                        </button>
+                      ))}
+                    </div>
+                    {/* 連動・発動バフの登録（「+ 登録」の行） */}
+                    {renderBuffSection('palette')}
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
                       {stint.actions.map((act, actIdx) => {
                         const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
                         const isActionActive = (act.startTime ?? 0) <= activeTime && activeTime < (act.endTime ?? 0);
@@ -1453,42 +1492,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         );
                       })}
 
-                      {/* Quick Add Action Palette for this Character（登録済みアクションの後で必ず改行し、行頭から表示） */}
-                      <div className="basis-full flex flex-wrap items-center gap-1">
-                        <span className="text-[11px] text-slate-500 font-medium">+ 追加:</span>
-                        {CharacterModel.fromConfig(char).actions.map(actionDef => (
-                          <button
-                            key={actionDef.id}
-                            onClick={() => addActionToStint(stintIndex, actionDef)}
-                            className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-semibold border border-slate-700/70 hover:border-slate-500 transition-colors"
-                            title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]`}
-                          >
-                            +{actionDef.buttonLabel || actionDef.shortName}
-                          </button>
-                        ))}
-                      </div>
                     </div>
 
-                    {/* 連動・発動バフ（固有天賦・武器・聖遺物） */}
-                    <StintBuffTriggersSection
-                      stintIndex={stintIndex}
-                      stint={stint}
-                      char={char}
-                      database={database}
-                      onUpdatePassiveTriggers={updateStintPassiveTriggers}
-                      setCtHoverActionId={setCtHoverActionId}
-                      renderTimingInput={(label, value, defaultValue, valueClassName, title, onChange, onHoverChange) => (
-                        <ActionTimingInput
-                          label={label}
-                          value={value}
-                          defaultValue={defaultValue}
-                          valueClassName={valueClassName}
-                          title={title}
-                          onChange={onChange}
-                          onHoverChange={onHoverChange}
-                        />
-                      )}
-                    />
+                    {/* 連動・発動バフの一覧（登録済みのもの） */}
+                    {renderBuffSection('list')}
                   </div>
                 </div>
               </div>

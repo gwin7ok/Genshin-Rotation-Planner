@@ -70,7 +70,7 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
                 <div className="text-xs">
                   <span className="font-bold text-white">クイック並び替えパイプラインを使う</span>
                   <p className="text-slate-400 mt-0.5">
-                    エディター上部にある「登場順序クイックパイプライン」のチップに表示された <span className="inline-flex items-center text-amber-300 font-semibold px-1 py-0.5 bg-slate-800 rounded border border-slate-700">◀ 前へ</span> <span className="inline-flex items-center text-amber-300 font-semibold px-1 py-0.5 bg-slate-800 rounded border border-slate-700">次へ ▶</span> 矢印をクリックするか、チップ自体を左右にドラッグします。
+                    エディター上部にある「登場順序クイックパイプライン」のチップを左右にドラッグします。チップ右端の × で、その出場ブロックを削除できます。
                   </p>
                 </div>
               </div>
@@ -163,7 +163,7 @@ export const HelpGuideModal: React.FC<HelpGuideModalProps> = ({ isOpen, onClose 
             <ul className="text-xs text-slate-400 space-y-1 list-disc list-inside leading-relaxed">
               <li>カード右下の「+E」「+Q」「+N」などのボタンを押すと、スキルや爆発を即座に追加できます。</li>
               <li>アクションの所要時間（0.5sなど）の横の「▲/▼」を押すと、0.1秒単位で実行フレームを微調整できます。</li>
-              <li>アクションチップ内の「◀」「▶」を押すと、同一キャラ内の行動順（例: E→Q から Q→E）を変更できます。</li>
+              <li>アクションをドラッグ＆ドロップすると、同一キャラ内の行動順（例: E→Q から Q→E）を変更できます。右端の ✕ で削除できます。</li>
             </ul>
           </div>
 

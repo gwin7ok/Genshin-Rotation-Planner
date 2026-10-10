@@ -14,8 +14,6 @@ import {
   Info,
   HelpCircle,
   Sparkles,
-  ArrowLeft,
-  ArrowRight,
   ChevronUp,
   ChevronDown,
   RefreshCw,
@@ -477,7 +475,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <span>登場順序クイック並び替えパイプライン</span>
                 </span>
                 <span className="text-[11px] text-slate-400 hidden sm:inline">
-                  （チップの「◀」「▶」クリック、またはドラッグで順番を変更できます）
+                  （チップをドラッグして順番を変更できます）
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -541,19 +539,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           : 'bg-slate-900 border-slate-700/80 hover:border-slate-500'
                       }`}
                     >
-                      {/* Move Earlier Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          moveStint(idx, idx - 1);
-                        }}
-                        disabled={isFirst}
-                        title="このキャラの登場順を1つ前（左）へ"
-                        className="p-1 rounded bg-slate-800 text-slate-300 hover:text-amber-300 hover:bg-slate-700 disabled:opacity-20 disabled:pointer-events-none transition-colors"
-                      >
-                        <ArrowLeft className="w-3 h-3" />
-                      </button>
-
                       {/* Character Avatar & Number (Click to Select Focus) */}
                       <div
                         onClick={handleChipClick}
@@ -568,19 +553,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           {idx + 1}
                         </span>
                         <CharacterAvatar char={char} className="w-5 h-5 rounded-md text-[10px]" borderWidth={1} />
-                        {/* この出場ブロックを削除（チップの選択クリックとは別） */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeStint(idx);
-                          }}
-                          className="w-4 h-4 -ml-0.5 rounded flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-600 transition-colors shrink-0"
-                          title={`${char.name}の出場ブロック（${idx + 1}番目）を削除`}
-                          aria-label="出場ブロックを削除"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
                         <span className="text-xs font-bold text-white truncate max-w-[80px]">
                           {char.name}
                         </span>
@@ -594,17 +566,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         </span>
                       </div>
 
-                      {/* Move Later Button */}
+                      {/* この出場ブロックを削除（右端。順序の入れ替えはドラッグ＆ドロップ） */}
                       <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          moveStint(idx, idx + 1);
+                          removeStint(idx);
                         }}
-                        disabled={isLast}
-                        title="このキャラの登場順を1つ次（右）へ"
-                        className="p-1 rounded bg-slate-800 text-slate-300 hover:text-amber-300 hover:bg-slate-700 disabled:opacity-20 disabled:pointer-events-none transition-colors"
+                        className="w-4 h-4 rounded flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-600 transition-colors shrink-0"
+                        title={`${char.name}の出場ブロック（${idx + 1}番目）を削除`}
+                        aria-label="出場ブロックを削除"
                       >
-                        <ArrowRight className="w-3 h-3" />
+                        <X className="w-3 h-3" />
                       </button>
                     </div>
 
@@ -717,7 +690,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-amber-400 font-bold">💡 順番の入れ替え方:</span>
                 <span>
-                  上のパイプラインの <strong>「◀ 前へ / 次へ ▶」</strong> ボタンを押すか、各カードの <strong>「▲ 上へ / ▼ 下へ」</strong> を押すと登場順が即座に入れ替わります。
+                  上のパイプラインのチップを <strong>ドラッグ＆ドロップ</strong> するか、各カードの <strong>「▲ 上へ / ▼ 下へ」</strong> を押すと登場順が即座に入れ替わります。
                 </span>
               </div>
               <button 
@@ -1451,25 +1424,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 );
                               })()}
 
-                              {/* Quick Move Left / Right inside stint */}
-                              <button
-                                onClick={() => moveAction(stintIndex, actIdx, actIdx - 1)}
-                                disabled={actIdx === 0 || (hasSwapAtHead && actIdx === 1)}
-                                className="text-slate-500 hover:text-slate-200 disabled:opacity-20"
-                                title="アクションを前に移動"
-                              >
-                                ◀
-                              </button>
-                              <button
-                                onClick={() => moveAction(stintIndex, actIdx, actIdx + 1)}
-                                disabled={actIdx === stint.actions.length - 1}
-                                className="text-slate-500 hover:text-slate-200 disabled:opacity-20"
-                                title="アクションを後ろに移動"
-                              >
-                                ▶
-                              </button>
-
-                              {/* Remove Action */}
+                              {/* Remove Action（右端。順序の入れ替えはドラッグ＆ドロップ） */}
                               <button
                                 onClick={() => removeActionFromStint(stintIndex, actIdx)}
                                 disabled={stint.actions.filter(a => a.type !== 'swap').length === 0}

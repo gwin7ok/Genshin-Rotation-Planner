@@ -541,6 +541,21 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <span>全キャラ一括削除 ({database.characters.length})</span>
                   </button>
 
+                  {/* 最新マスターデータの動的生成（キャラ）。武器・聖遺物のタブと同じ位置・形（issue #27） */}
+                  <button
+                    onClick={handleSyncCharacters}
+                    disabled={isSyncing}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700/90 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
+                    title="genshin-db API と gcsim から最新の全キャラクターデータをオンライン取得して生成"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
+                    <span>
+                      {syncingKind === 'character' && charSyncProgress
+                        ? `生成中… ${charSyncProgress.phase}${charSyncProgress.total > 1 ? ` ${charSyncProgress.done}/${charSyncProgress.total}` : ''}`
+                        : '最新キャラをオンライン生成'}
+                    </span>
+                  </button>
+
                   <button
                     onClick={() => {
                       setEditingCharacter({

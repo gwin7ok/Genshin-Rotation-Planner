@@ -659,8 +659,17 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
   '10000003-anemo': { table: 'skillFrames', offsetFrames: 0, maxHoldFrames: 300, note: 'jean/skill.go: Skill（hold = min(hold, 300)）、Frames = skillFrames[next] + hold、SetCDWithDelay(…, 360, hitmark-2)' },
   // ナヴィア: hold は 1〜241（hold > 0 で長押し。長押しの長さは hold − 1）。フレームは skillFrames[1][結晶の数が 3 以上なら 1][next] + hold − 1。CT は firingTime = 41 + hold − 1 から。結晶の数はアプリで持たないので、3 未満の表 [1][0] を使う
   '10000091-geo': { table: 'skillFrames[1][0]', offsetFrames: -1, maxHoldFrames: 241, note: 'navia/skill.go: Skill（hold > 241 は 241、hold -= 1）、firingTime = skillHoldCDStart(41) + hold、Frames = skillFrames[holdIndex][shrapnelIndex][next] + hold' },
+  // 鹿野院平蔵: 長押し（hold != 0）は、変格が 4 層になるまで溜める（1 層ごとに 45f。層が 4 なら 17f）。長さは hold ではなく、持っている層で決まる。
+  // アプリは層を持たないので、0 層から 4 層まで溜める長さ（180f）を、最大の長押しとする（層があるときは gcsim の結果の反映で短くなる）。
+  // フレームは delay + skillEndFrames[next] + skillHitmark(20)。CT は skillCDStart(18) + delay（motionStart から）
+  '10000059-anemo': { table: 'skillEndFrames', offsetFrames: 20, maxHoldFrames: 180, note: 'heizou/skill.go: skillHold（decStack 0 のとき skillHoldDuration(4) = 180f。4 層なら holdAtFullStacksPenalty 17f）、Frames = delay + skillEndFrames[next] + skillHitmark' },
   // 藍硯: hold は 0〜610。フレームは skillHitFrames（探知が命中した場合。窓の規則と同じく命中する前提。gcsim の実行でも命中のフレーム）+ hold
   '10000108-anemo': { table: 'skillHitFrames', offsetFrames: 0, maxHoldFrames: 610, note: 'lanyan/skill.go: Skill（hold > 610 は 610）、Frames = getCurrentSkillFrames()[next] + hold（命中すると leap-back の状態で skillHitFrames）' },
+};
+
+/** 一回押しの E のフレーム表が、名前に「End」を含むために除外されるキャラ（キー: キャラ ID）。table = 表の名前、offsetFrames = 表に足すフレーム（命中など） */
+const TAP_END_FRAMES: Record<string, { table: string; offsetFrames: number }> = {
+  '10000059-anemo': { table: 'skillEndFrames', offsetFrames: 20 },
 };
 
 /**
@@ -1160,6 +1169,9 @@ function buildActions(ctx: BuildContext): BuildResult {
   const skill = file('skill');
   const skillTables = skill ? skill.tables.filter(t => !/Walk|Dash|Cancel|End|Lag|Delay/i.test(splitTableName(t.name).base)) : [];
   const families = firstOfEachFamily(skillTables);
+  // 一回押しのフレーム表が「End」を含む名前で除外されるキャラ（平蔵: skillEndFrames + 命中 20f）。表の名前と、足すフレーム
+  const tapEndTable = TAP_END_FRAMES[id] && !firstOfEachFamily(skillTables).find(t => !/hold/i.test(t.name)) && skill
+    ? skill.tables.find(t => t.name === TAP_END_FRAMES[id].table) : undefined;
   const holdTable = families.find(t => /hold/i.test(t.name) && !/short/i.test(t.name));
   const tapOverride = SKILL_TAP_TABLES[id];
   const tapTable = tapOverride ? families.find(t => splitTableName(t.name).base === tapOverride) : families.find(t => !/hold/i.test(t.name));
@@ -1183,12 +1195,12 @@ function buildActions(ctx: BuildContext): BuildResult {
     startsSkillCooldown: true,
     cooldown: timings.skillTapCooldown?.value,
     effectDuration: timings.skillTapDuration?.value ?? 0,
-    frames: tapTable && skill ? toActionFrames(tapTable, 'skill', skill.consts) : undefined,
+    frames: tapTable && skill ? toActionFrames(tapTable, 'skill', skill.consts) : tapEndTable && skill ? { ...toActionFrames(tapEndTable, 'skill', skill.consts), total: tapEndTable.total + TAP_END_FRAMES[id].offsetFrames } : undefined,
     dataSource: {
       cooldown: timings.skillTapCooldown?.label,
       effectDuration: timings.skillTapDuration?.label,
     },
-  }, tapTable ? framesToSec(tapTable.total) : undefined));
+  }, tapTable ? framesToSec(tapTable.total) : tapEndTable ? framesToSec(tapEndTable.total + TAP_END_FRAMES[id].offsetFrames) : undefined));
 
   if (!NO_HOLD_SKILL.has(id) && (timings.skillHoldCooldown || resolvedHoldTable)) {
     const holdCd = timings.skillHoldCooldown ?? timings.skillTapCooldown;

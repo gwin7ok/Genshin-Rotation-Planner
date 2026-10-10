@@ -19873,14 +19873,52 @@
           "effectDuration": "効果時間なし: 鹿野院平蔵: 変格 60 秒はローテーション全体を覆う長さでバーにしない",
           "cooldownStart": "manual: heizou/skill.go: skillCDStart（一回押しは delay=0）"
         },
-        "defaultDuration": 0.8,
+        "defaultDuration": 0.65,
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.3
         },
+        "frames": {
+          "total": 39,
+          "hitmark": 20,
+          "cancels": {
+            "dash": 30,
+            "jump": 30,
+            "swap": 30
+          },
+          "source": "skill.go:skillEndFrames（+ 命中 20f）"
+        },
         "gcsimEffect": {
           "keys": [],
           "status": "nokey"
+        }
+      },
+      {
+        "id": "10000059-anemo_e_hold",
+        "name": "元素スキル(長押し): 戮心拳",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 0,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "効果時間なし: 鹿野院平蔵: 変格 60 秒はローテーション全体を覆う長さでバーにしない",
+          "cooldownStart": "manual: heizou/skill.go: skillCDStart(18) + delay(180)"
+        },
+        "defaultDuration": 3.65,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 3.3
+        },
+        "frames": {
+          "total": 219,
+          "cancels": {
+            "dash": 210,
+            "jump": 210,
+            "swap": 210
+          },
+          "source": "skill.go:skillEndFrames（+ 命中 20 + 最大の長押し 180f = 変格 0 層から 4 層まで）"
         }
       },
       {

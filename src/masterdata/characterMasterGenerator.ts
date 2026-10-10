@@ -537,7 +537,20 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       frames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
       maxUses: 1,
       endsOnLast: true,
+      // 窓の間は、E も長押し E も再発動になる（gcsim: a1WindowKey が有効なら hold に関係なく skillRecast）
+      actions: ['e', 'e_hold'],
     }, 'chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）', { noBar: false, keepEffectBar: true }),
+  }, {
+    // 長押し（hold=1）: 窓は skillA1WindowStarts[1]=42 から skillA1WindowDurations[1]=77f（2026-10-10）
+    action: 'e_hold',
+    keepEffectDuration: true,
+    mode: windowMode('再発動の受付', 42, 77, 'ends', {
+      frames: [{ total: 1, cancels: {}, source: 'skill.go:skillRecast（強制交代。アプリの交代遅延 1f）' }],
+      maxUses: 1,
+      endsOnLast: true,
+      // 窓の間は、E も長押し E も再発動になる（gcsim: a1WindowKey が有効なら hold に関係なく skillRecast）
+      actions: ['e', 'e_hold'],
+    }, 'chiori/skill.go: skillA1WindowStarts[1]=42, skillA1WindowDurations[1]=77 → activateA1Window', { noBar: false, keepEffectBar: true }),
   }],
   // 藍硯: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。一回押しでも長押しでも開く（長押しは、長押しの終わりから）。命中する前提。窓の規則から移した
   '10000108-anemo': [{
@@ -642,6 +655,10 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
 const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; maxHoldFrames: number; note: string }> = {
   // リネット: hold は 1〜150。長押しの状態は hold + 34f（skillHold(hold + 34)）、その後に skillHoldEndFrames
   '10000083-anemo': { table: 'skillHoldEndFrames', offsetFrames: 34, maxHoldFrames: 150, note: 'lynette/skill.go: Skill（hold > 150 は 150）、skillHold: Frames = duration + skillHoldEndFrames[next]' },
+  // ジン: hold は 0〜300（min(hold, 300)）。フレームは skillFrames[next] + hold（hitmark = 21 + hold）。CT は hitmark − 2 から（holdEnd + 19f）
+  '10000003-anemo': { table: 'skillFrames', offsetFrames: 0, maxHoldFrames: 300, note: 'jean/skill.go: Skill（hold = min(hold, 300)）、Frames = skillFrames[next] + hold、SetCDWithDelay(…, 360, hitmark-2)' },
+  // ナヴィア: hold は 1〜241（hold > 0 で長押し。長押しの長さは hold − 1）。フレームは skillFrames[1][結晶の数が 3 以上なら 1][next] + hold − 1。CT は firingTime = 41 + hold − 1 から。結晶の数はアプリで持たないので、3 未満の表 [1][0] を使う
+  '10000091-geo': { table: 'skillFrames[1][0]', offsetFrames: -1, maxHoldFrames: 241, note: 'navia/skill.go: Skill（hold > 241 は 241、hold -= 1）、firingTime = skillHoldCDStart(41) + hold、Frames = skillFrames[holdIndex][shrapnelIndex][next] + hold' },
   // 藍硯: hold は 0〜610。フレームは skillHitFrames（探知が命中した場合。窓の規則と同じく命中する前提。gcsim の実行でも命中のフレーム）+ hold
   '10000108-anemo': { table: 'skillHitFrames', offsetFrames: 0, maxHoldFrames: 610, note: 'lanyan/skill.go: Skill（hold > 610 は 610）、Frames = getCurrentSkillFrames()[next] + hold（命中すると leap-back の状態で skillHitFrames）' },
 };
@@ -654,6 +671,18 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
 const FORCED_INDEXED_HOLD: Record<string, number> = {
   '10000119-dendro': 1,
   '10000041-hydro': 1,
+  // 千織: 長押し = skillFrames[1]（88f。CT は 34f から。再発動の受付は 42f から 77f）
+  '10000094-geo': 1,
+};
+
+/**
+ * 長押しが、段（hold = 1・2 など）で別のフレーム表になっているキャラ（キー: キャラ ID）。
+ * shortHoldIndex = 低い段（hold=1）の表の添字 → `_e_shorthold`、holdIndex = 高い段（hold=2）の表の添字 → `_e_hold`。CT・効果時間は一回押しと同じ（追加作業 17。2026-10-10）
+ * 雲菫: skillFrames[1]（溜め Lv.1）・[2]（Lv.2）／シグウィン: skillFrames[1]（短押し長押し）・[2]（長押し）
+ */
+const FORCED_INDEXED_VARIANTS: Record<string, { shortHoldIndex: number; holdIndex: number }> = {
+  '10000064-geo': { shortHoldIndex: 1, holdIndex: 2 },
+  '10000095-hydro': { shortHoldIndex: 1, holdIndex: 2 },
 };
 
 /**
@@ -1202,6 +1231,33 @@ function buildActions(ctx: BuildContext): BuildResult {
           effectDuration: timings.skillTapDuration?.label,
         },
       }, framesToSec(base.total + add)));
+    }
+  }
+
+  // 長押しが段で別の表になっているキャラ（FORCED_INDEXED_VARIANTS）: 低い段 = `_e_shorthold`・高い段 = `_e_hold`
+  const variants = FORCED_INDEXED_VARIANTS[id];
+  if (variants && tapTable && skill) {
+    const { base } = splitTableName(tapTable.name);
+    for (const v of [
+      { suffix: 'e_shorthold', index: variants.shortHoldIndex, shortName: 'hE(short)', label: '長押し（低い段）' },
+      { suffix: 'e_hold', index: variants.holdIndex, shortName: 'hE', label: '長押し' },
+    ]) {
+      const table = skillTables.find(t => t.name === `${base}[${v.index}]`);
+      if (!table || actions.some(a => a.id === `${id}_${v.suffix}`)) continue;
+      actions.push(withDuration({
+        id: `${id}_${v.suffix}`,
+        name: skillName ? `元素スキル(${v.label}): ${skillName}` : `元素スキル(${v.label})`,
+        shortName: v.shortName,
+        type: 'skill_hold',
+        startsSkillCooldown: true,
+        cooldown: timings.skillTapCooldown?.value,
+        effectDuration: timings.skillTapDuration?.value ?? 0,
+        frames: toActionFrames(table, 'skill', skill.consts),
+        dataSource: {
+          cooldown: timings.skillTapCooldown?.label,
+          effectDuration: timings.skillTapDuration?.label,
+        },
+      }, framesToSec(table.total)));
     }
   }
 

@@ -27,6 +27,14 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000072-hydro_e_hold': { from: 'motionStart', delayFrames: 89, note: 'candace/skill.go: skillCDStarts[1]' },
   // 千織: skillCDStarts = [19, 34]（添字は hold。一回押し 0）
   '10000094-geo_e': { from: 'motionStart', delayFrames: 19, note: 'chiori/skill.go: skillCDStarts[0]' },
+  // 千織の長押し（hold=1）: skillCDStarts[1]
+  '10000094-geo_e_hold': { from: 'motionStart', delayFrames: 34, note: 'chiori/skill.go: skillCDStarts[1]' },
+  // 雲菫: skillCDStarts = [11, 48, 90]（添字は溜めの段。一回押し 0）
+  '10000064-geo_e_shorthold': { from: 'motionStart', delayFrames: 48, note: 'yunjin/skill.go: skillCDStarts[1]（溜め Lv.1）' },
+  '10000064-geo_e_hold': { from: 'motionStart', delayFrames: 90, note: 'yunjin/skill.go: skillCDStarts[2]（溜め Lv.2）' },
+  // シグウィン: 一回押し 16f・短押し長押し（hold=1）40f・長押し（hold=2）66f
+  '10000095-hydro_e_shorthold': { from: 'motionStart', delayFrames: 40, note: 'sigewinne/skill.go: skillShortHoldCDStart' },
+  '10000095-hydro_e_hold': { from: 'motionStart', delayFrames: 66, note: 'sigewinne/skill.go: skillHoldCDStart' },
   // セノ: 通常時は Tasks.Add(triggerSkillCD, skillCDDelay)。爆発中（skillB）は 26f
   '10000071-electro_e': { from: 'motionStart', delayFrames: 17, note: 'cyno/skill.go: skillCDDelay（爆発中の skillBCDDelay は 26f）' },
   // フリーナ: 自動で切り替わる 2 形態（pneuma 10f / ousia 0f）。先頭の pneuma を採用
@@ -71,6 +79,10 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, holdInFrames: 600, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
   // リネット・藍硯の長押し（`hold=<フレーム数>` で渡す。モード維持の段階 ③。2026-10-08）。frames は最大の長押し込み
   '10000083-anemo_e_hold': { from: 'holdEnd', delayFrames: 34 + 14, holdInFrames: 150, note: 'lynette/skill.go: SetCDWithDelay(..., duration + skillHoldEndCDStart(14))、duration = hold + 34' },
+  // ジンの長押し（0〜300f）: 遅れは hitmark − 2 = 21 + hold − 2（長押しの終わりから 19f）
+  '10000003-anemo_e_hold': { from: 'holdEnd', delayFrames: 19, holdInFrames: 300, note: 'jean/skill.go: SetCDWithDelay(…, 360, hitmark-2)、hitmark = skillHitmark(21) + hold' },
+  // ナヴィアの長押し（hold 1〜241 → 長押しの長さ 0〜240f）: firingTime = skillHoldCDStart(41) + hold − 1
+  '10000091-geo_e_hold': { from: 'holdEnd', delayFrames: 41, holdInFrames: 240, note: 'navia/skill.go: firingTime = skillHoldCDStart(41) + hold（hold は 1 引いた後）' },
   '10000108-anemo_e_hold': { from: 'holdEnd', delayFrames: 4, holdInFrames: 610, note: 'lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。羽月の輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）' },
   '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, holdInFrames: 600, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
   // 旅人(風): 長押し（2 ティック以上）。gcsim の SkillHold は hitmark - 5 で CT を始める。hitmark = 31 + 15 × ティック数 + 5 - 15 + 5 なので、

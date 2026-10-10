@@ -16,6 +16,11 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000005-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
   '10000007-hydro_e_shorthold': 'skill[hold=1,hold_ticks=1]',
   '10000007-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
+  // 段のある長押し（追加作業 17）: 雲菫（溜め Lv.1 / Lv.2）・シグウィン（hold=1 短押し長押し / hold=2 長押し）
+  '10000064-geo_e_shorthold': 'skill[hold=1]',
+  '10000064-geo_e_hold': 'skill[hold=2]',
+  '10000095-hydro_e_shorthold': 'skill[hold=1]',
+  '10000095-hydro_e_hold': 'skill[hold=2]',
   '10000106-pyro_e_recastframestobike': 'skill[recast=1]',
   '10000106-pyro_e_recastframestoring': 'skill[recast=1]',
   // 特殊元素スキル（別のCT。2026-10-01）: gcsim は、スキルの後の一定時間、同じ `skill` 命令を特殊スキルに自動で切り替える
@@ -37,13 +42,21 @@ export const HOLD_FRAMES_ACTIONS = new Map<string, number>([
   ['10000061-dendro_e_hold', 600],
   ['10000083-anemo_e_hold', 150],
   ['10000108-anemo_e_hold', 610],
+  // ジン（0〜300）・ナヴィア（1〜241。長押しの長さ = hold − 1）。追加作業 17
+  ['10000003-anemo_e_hold', 300],
+  ['10000091-geo_e_hold', 241],
+]);
+
+/** 長押しの長さ（フレーム）に足して `hold=` に渡す値（ナヴィア: gcsim が hold から 1 を引くため） */
+const HOLD_PARAM_OFFSET = new Map<string, number>([
+  ['10000091-geo_e_hold', 1],
 ]);
 
 /** 長押しの秒数を gcsim の命令に反映する（対象外のアクション・秒数が不明なときは、そのまま返す） */
 export function applyHoldSeconds(actionTypeId: string, command: string, holdSeconds: number | undefined): string {
   const maxFrames = HOLD_FRAMES_ACTIONS.get(actionTypeId);
   if (maxFrames === undefined || holdSeconds === undefined) return command;
-  const frames = Math.min(maxFrames, Math.max(1, Math.round(holdSeconds * 60)));
+  const frames = Math.min(maxFrames, Math.max(1, Math.round(holdSeconds * 60) + (HOLD_PARAM_OFFSET.get(actionTypeId) ?? 0)));
   return command.replace(/\[.*$/, '') + `[hold=${frames}]`;
 }
 

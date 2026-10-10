@@ -528,6 +528,35 @@
         }
       },
       {
+        "id": "10000003-anemo_e_hold",
+        "name": "元素スキル(長押し): 風圧剣",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 6,
+        "effectDuration": 0,
+        "frames": {
+          "total": 346,
+          "cancels": {
+            "dash": 328,
+            "jump": 328,
+            "swap": 345
+          },
+          "source": "skill.go:skillFrames（+ 長押し 0 + 最大 300f）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "効果時間なし: ジン: 5 秒は溜めの最大時間（動作の長さ）で、効果ではない",
+          "cooldownStart": "manual: jean/skill.go: SetCDWithDelay(…, 360, hitmark-2)、hitmark = 21 + hold"
+        },
+        "defaultDuration": 5.767,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.317
+        },
+        "holdInFrames": 5
+      },
+      {
         "id": "10000003-anemo_q",
         "name": "元素爆発: 蒲公英の風",
         "shortName": "Q",
@@ -21514,6 +21543,62 @@
         }
       },
       {
+        "id": "10000064-geo_e_shorthold",
+        "name": "元素スキル(長押し（低い段）): 旋雲開相",
+        "shortName": "hE(short)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 9,
+        "effectDuration": 0,
+        "frames": {
+          "total": 97,
+          "cancels": {
+            "attack": 96,
+            "dash": 85,
+            "jump": 85,
+            "swap": 95
+          },
+          "source": "skill.go:skillFrames[1]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillFrames[1]（手で指定）"
+        },
+        "defaultDuration": 1.617,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.8
+        }
+      },
+      {
+        "id": "10000064-geo_e_hold",
+        "name": "元素スキル(長押し): 旋雲開相",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 9,
+        "effectDuration": 0,
+        "frames": {
+          "total": 141,
+          "cancels": {
+            "attack": 140,
+            "dash": 129,
+            "jump": 129,
+            "swap": 138
+          },
+          "source": "skill.go:skillFrames[2]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillFrames[2]（手で指定）"
+        },
+        "defaultDuration": 2.35,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.5
+        }
+      },
+      {
         "id": "10000064-geo_q",
         "name": "元素爆発: 破嶂の旌儀",
         "shortName": "Q",
@@ -30954,6 +31039,38 @@
         }
       },
       {
+        "id": "10000091-geo_e_hold",
+        "name": "元素スキル(長押し): セレモニアル·クリスタルショット",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 9,
+        "effectDuration": 0,
+        "frames": {
+          "total": 311,
+          "cancels": {
+            "attack": 310,
+            "dash": 294,
+            "jump": 294,
+            "walk": 305,
+            "swap": 309
+          },
+          "source": "skill.go:skillFrames[1][0]（+ 長押し -1 + 最大 241f）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "効果時間なし: ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない",
+          "cooldownStart": "manual: navia/skill.go: firingTime = skillHoldCDStart(41) + hold"
+        },
+        "defaultDuration": 5.183,
+        "charges": 2,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.683
+        },
+        "holdInFrames": 4
+      },
+      {
         "id": "10000091-geo_q",
         "name": "元素爆発: 晴天を衝く霰弾のサルート",
         "shortName": "Q",
@@ -32063,7 +32180,11 @@
               }
             ],
             "maxUses": 1,
-            "endsOnLast": true
+            "endsOnLast": true,
+            "actions": [
+              "e",
+              "e_hold"
+            ]
           },
           "source": "chiori/skill.go: skillA1WindowStarts[0]=26, skillA1WindowDurations[0]=78 → activateA1Window（AddStatus(a1WindowKey, 78, true)）",
           "keepEffectBar": true
@@ -32075,6 +32196,64 @@
         "gcsimEffect": {
           "keys": [],
           "status": "nokey"
+        }
+      },
+      {
+        "id": "10000094-geo_e_hold",
+        "name": "元素スキル(長押し): 羽袖一触",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 16,
+        "effectDuration": 17,
+        "frames": {
+          "total": 88,
+          "cancels": {
+            "lowPlunge": 52,
+            "skill": 44,
+            "walk": 86,
+            "swap": 87
+          },
+          "source": "skill.go:skillFrames[1]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "「たもと」の存在時間",
+          "cooldownStart": "skill.go:skillFrames[1]（手で指定）"
+        },
+        "defaultDuration": 1.467,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.567
+        },
+        "mode": {
+          "label": "再発動の受付",
+          "description": "再発動の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "startDelayFrames": 42,
+          "durationFrames": 77,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": false,
+          "noSynergy": true,
+          "repress": {
+            "frames": [
+              {
+                "total": 1,
+                "cancels": {},
+                "source": "skill.go:skillRecast（強制交代。アプリの交代遅延 1f）"
+              }
+            ],
+            "maxUses": 1,
+            "endsOnLast": true,
+            "actions": [
+              "e",
+              "e_hold"
+            ]
+          },
+          "source": "chiori/skill.go: skillA1WindowStarts[1]=42, skillA1WindowDurations[1]=77 → activateA1Window",
+          "keepEffectBar": true
         }
       },
       {
@@ -32358,6 +32537,66 @@
             "sigewinne-skill"
           ],
           "status": "ok"
+        }
+      },
+      {
+        "id": "10000095-hydro_e_shorthold",
+        "name": "元素スキル(長押し（低い段）): ぴょんぴょんハイドロセラピー",
+        "shortName": "hE(short)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 56,
+          "cancels": {},
+          "source": "skill.go:skillFrames[1]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillFrames[1]（手で指定）"
+        },
+        "defaultDuration": 0.933,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.667
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sigewinne-skill"
+          ],
+          "status": "manual"
+        }
+      },
+      {
+        "id": "10000095-hydro_e_hold",
+        "name": "元素スキル(長押し): ぴょんぴょんハイドロセラピー",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 89,
+          "cancels": {
+            "walk": 86
+          },
+          "source": "skill.go:skillFrames[2]"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:skillFrames[2]（手で指定）"
+        },
+        "defaultDuration": 1.483,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.1
+        },
+        "gcsimEffect": {
+          "keys": [
+            "sigewinne-skill"
+          ],
+          "status": "manual"
         }
       },
       {

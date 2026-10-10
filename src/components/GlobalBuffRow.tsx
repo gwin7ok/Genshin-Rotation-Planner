@@ -33,7 +33,8 @@ export const GlobalBuffRow: React.FC<GlobalBuffRowProps> = ({ characters, databa
     for (const owner of characters) {
       if (owner.id.startsWith('empty_slot_')) continue;
       for (const def of getAvailableBuffsForCharacter(owner, database)) {
-        if (isGlobalRowBuff(def)) result.push({ key: `${owner.id}:${def.id}`, owner, def });
+        // 全体向けだけ（自分だけの効果は、出場トラックのキャラ名の横。追加作業 23）
+        if (isGlobalRowBuff(def) && def.scope !== 'self') result.push({ key: `${owner.id}:${def.id}`, owner, def });
       }
     }
     return result;

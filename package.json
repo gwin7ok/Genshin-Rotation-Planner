@@ -23,6 +23,7 @@
     "probe:queue-frames": "node scripts/probe-can-queue-after.ts",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",
     "review:effects": "node scripts/review-effect-keys.ts",
+    "review:buff-scopes": "node scripts/review-buff-scopes.ts",
     "link:effects": "node scripts/link-effect-by-duration.ts",
     "link:actions": "node scripts/link-actions.ts",
     "check:action-links": "node scripts/check-action-links.ts",

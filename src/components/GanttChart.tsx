@@ -31,7 +31,7 @@ import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from
 import { getBuffBadgeConfig } from '../utils/buffUtils';
 import { GlobalBuffRow } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
-import { actionTone } from '../utils/actionTone';
+import { actionToneOnColor } from '../utils/actionTone';
 import type { DragPreview } from '../utils/dragPreview';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
@@ -1628,14 +1628,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           onSeek(act.startTime ?? 0);
                                           scrollStintCardBelowSticky(stint.id);
                                         }}
-                                        style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
+                                        style={{ left: `${actStartX}px`, width: `${actWidth}px`, ...(hasCollision || windowWarning ? {} : actionToneOnColor(act).style) }}
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing ${isBeingDragged ? '' : 'transition-all'} ${
                                           // 色（地・文字）: CT 違反・警告・再生中・種別の色。選択中は、枠（黄色の太線）だけを足す
                                           hasCollision
                                             ? 'bg-red-950/90 text-white animate-pulse'
                                             : windowWarning
                                             ? 'bg-sky-600/90 text-white'
-                                            : `border ${actionTone(act).box} hover:brightness-125`
+                                            : `border ${actionToneOnColor(act).className} hover:brightness-125`
                                         } ${
                                           isSelected
                                             ? 'ring-2 ring-inset ring-yellow-400 border-yellow-400 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]'

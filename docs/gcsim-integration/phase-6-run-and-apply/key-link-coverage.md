@@ -9,12 +9,12 @@
 
 - 未検討: **0 件**（なし）
 - 保留: 1 件
-- アクション定義の紐付けと入力の食い違い（check:action-links）: なし
+- アクション定義の紐付けと入力の食い違い（check:action-links）: **エラーあり。上の出力を確認**
 
 ## A: スキル・爆発（アクション定義の gcsimEffect・gcsimExtras・gcsimIncluded。中間データ ＋ 手で補う一覧から取り込む）
 
 - gcsim の効果 299 件: linked 197 / decided-not-linked 49 / covered-by-master 20 / covered-by-main 19 / grace-window 10 / covered-by-passive 4
-- アプリの対象（アクション定義）329 件: linked 201 / no-bar 76 / not-in-gcsim 18 / covered-by-passive 15 / app-bar 12 / decided-not-linked 6 / deferred 1
+- アプリの対象（アクション定義）331 件: linked 202 / no-bar 76 / not-in-gcsim 18 / covered-by-passive 16 / app-bar 12 / decided-not-linked 6 / deferred 1
 
 ## B: 固有天賦・命ノ星座・武器・聖遺物・元素共鳴（定義の gcsimKeys など。辞書から自動で結び付ける）
 

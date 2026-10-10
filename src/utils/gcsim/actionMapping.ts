@@ -45,6 +45,8 @@ export const HOLD_FRAMES_ACTIONS = new Map<string, number>([
   // ジン（0〜300）・ナヴィア（1〜241。長押しの長さ = hold − 1）。追加作業 17
   ['10000003-anemo_e_hold', 300],
   ['10000091-geo_e_hold', 241],
+  // アンバー（hold に上限なし。gcsim は丸めない。1 分を上限の目安にする）
+  ['10000021-pyro_e_hold', 3600],
   // キィニチ（加護に入る長押しは 1〜301。長押しの長さ = hold − 1。加護の中の廻狩貫鱗砲の長押しも同じ命令で、gcsim が 181 に丸める）
   ['10000101-dendro_e_hold', 301],
 ]);

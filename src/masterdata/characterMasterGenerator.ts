@@ -647,6 +647,16 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
 };
 
 /**
+ * 長押しの E が、フレーム表の添字（一回押し [0]・長押し [1]）で分かれているが、genshin-db に長押しの CT が無く、自動では見つからないキャラ
+ * （キー: キャラ ID、値: 長押しの表の添字）。gcsim は `skill[hold=1]`。CT・効果時間は一回押しと同じ（追加作業 17。2026-10-10）
+ * ラウマ: skillFrames[1]（露を 1 つ以上持っているときだけ使える。無いと gcsim は実行エラー）／モナ: skillFrames[1]（水中の幻願）
+ */
+const FORCED_INDEXED_HOLD: Record<string, number> = {
+  '10000119-dendro': 1,
+  '10000041-hydro': 1,
+};
+
+/**
  * 一回押しの E のフレーム表を、表の並び順の最初ではなく、名前で選ぶキャラ（キー: キャラ ID、値: 表の名前）。
  * タルタリヤ: skill.go の最初の表は近接の構えを終わらせる E（skillMeleeFrames。モードの終わらせるアクションのフレームに入れた）で、構えに入る E は skillRangedFrames
  */
@@ -1129,6 +1139,11 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (!resolvedHoldTable && timings.skillHoldCooldown && tapTable) {
     const { base } = splitTableName(tapTable.name);
     resolvedHoldTable = skillTables.find(t => t.name === `${base}[1]`);
+  }
+  // 長押しの CT が genshin-db に無いが、gcsim の表に長押しがあるキャラ（FORCED_INDEXED_HOLD）
+  if (!resolvedHoldTable && FORCED_INDEXED_HOLD[id] !== undefined && tapTable) {
+    const { base } = splitTableName(tapTable.name);
+    resolvedHoldTable = skillTables.find(t => t.name === `${base}[${FORCED_INDEXED_HOLD[id]}]`);
   }
 
   actions.push(withDuration({

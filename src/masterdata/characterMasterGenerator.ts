@@ -672,14 +672,15 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'nefer/skill.go: AddStatus(shadowDanceKey, 9*60)、phantasmCharges = 3（phantasmChargesPerSkill）、SetCDWithDelay(skill, 9*60, 22)。nefer.go: canTriggerPhantasm = 影の舞 + 幻の戯の残り + 草露 > 0、OnCharacterSwap で状態を消す。charge.go: tapPhantasmChargeAttack（ActionStam = 0）',
     },
   }],
-  // カチーナ（issue #36。gcsim PR #2697・未マージ・未検証）: ぐるぐるコマちゃん（E）。夜魂値 60 を、独立して存在する間は 143f 後から 118f ごとの攻撃で 10 ずつ消費（6 回 = 733f で消える。wiki: 乗らずに使うと 12 秒攻撃し CT は 8 秒）。
-  // 一回押し = 独立して存在（交代しても残って攻撃を続ける）。長押し = 乗る（通常攻撃が地面を叩く攻撃になり、1 回ごとに夜魂値 10 を消費。wiki: 乗っている間は約 1 秒ごとに 10 消費 → 約 6 秒と見なす）。
-  // 続いている間の E は、乗り降り（CT なし。30f）。夜魂値の数・燃素・夜魂トランス（他のナタのキャラの交代）・C2 は未対応
+  // カチーナ（issue #36。gcsim PR #2697・未マージ・未検証）: ぐるぐるコマちゃん（E）。夜魂値 60 を、降りている（独立して存在する）間は 143f 後から 118f ごとの攻撃で 10 ずつ消費（6 回 = 733f で消える）、
+  // 乗っている間は約 1 秒ごとに 10 消費（wiki。PR は時間の消費を実装していない）、乗っている間の通常攻撃は 1 回ごとに 10 消費（PR・wiki）。0 になるとモードが終わる。
+  // 一回押しの E = 降りている・長押し = 乗る。続いている間の E は、乗り降り（CT なし。30f。降りた直後の最初の攻撃は 30f 後）。交代したら、乗っていても降りる（独立して残る）。
+  // C2 の爆発は夜魂値を 20 回復する。燃素（ナタの地域）・夜魂トランス（他のナタのキャラの交代）は未対応
   '10000100-geo': [{
-    action: 'e',
+    action: ['e', 'e_hold'],
     mode: {
       label: 'ぐるぐるコマちゃん',
-      description: 'ぐるぐるコマちゃんが独立して存在する状態（約 12 秒。夜魂値 60 を 2 秒ごとの攻撃で 10 ずつ消費）。続いている間の元素スキル（E）は、乗り降りになる（CT なし）。交代しても残る',
+      description: 'ぐるぐるコマちゃんが存在する状態。夜魂値（60）は、降りている間は 2 秒ごとの攻撃で 10 ずつ、乗っている間は 1 秒ごとと、通常攻撃 1 回ごとに 10 ずつ減り、0 になると終わる。続いている間の元素スキル（E）は乗り降りになる（CT なし）。交代しても残る',
       startDelayFrames: 0,
       durationFrames: 733,
       swap: 'persists',
@@ -690,30 +691,21 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         frames: [{ total: 30, cancels: { attack: 30, burst: 30, dash: 30, jump: 30, walk: 30, swap: 30 }, source: 'skill.go:skillRecastFrames（InitAbilSlice(30)。未検証）' }],
         actions: ['e', 'e_hold'],
       },
-      source: 'kachina/skill.go: startTwirly（EnterBlessing(60)、AddStatus(twirlyKey, -1)、一回押しは queueIndependent(143)。independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。kachina.go: ActionReady（twirlyKey の間の E は使える）',
-    },
-  }, {
-    action: 'e_hold',
-    mode: {
-      label: 'ぐるぐるコマちゃん（搭乗）',
-      description: 'ぐるぐるコマちゃんに乗っている状態（夜魂値 60 を 1 秒ごとに 10 消費 → 約 6 秒と見なす）。通常攻撃は、地面を叩く攻撃になる。続いている間の元素スキル（E）は、乗り降りになる（CT なし）',
-      startDelayFrames: 0,
-      durationFrames: 360,
-      swap: 'persists',
-      enders: [],
-      holdByDefault: false,
-      noHold: true,
-      normalFrames: [
-        { total: 51, hitmark: 38, cancels: { skill: 38, burst: 38, dash: 38, jump: 38, swap: 38, attack: 51, charge: 51 }, source: 'attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）' },
-        { total: 47, hitmark: 36, cancels: { skill: 36, burst: 36, dash: 36, jump: 36, swap: 36, attack: 47, charge: 47 }, source: 'attack.go:mountedFrames[1]' },
-        { total: 46, hitmark: 35, cancels: { skill: 35, burst: 35, dash: 35, jump: 35, swap: 35, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[2]' },
-        { total: 46, hitmark: 34, cancels: { skill: 34, burst: 34, dash: 34, jump: 34, swap: 34, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[3]' },
-      ],
-      repress: {
-        frames: [{ total: 30, cancels: { attack: 30, burst: 30, dash: 30, jump: 30, walk: 30, swap: 30 }, source: 'skill.go:skillRecastFrames（InitAbilSlice(30)。未検証）' }],
-        actions: ['e', 'e_hold'],
+      drain: {
+        label: '夜魂値',
+        max: 60,
+        idle: { firstFrames: 143, resumeFrames: 30, everyFrames: 118, amount: 10 },
+        ridden: { everyFrames: 60, amount: 10 },
+        costByType: { normal: 10 },
+        riddenNormalFrames: [
+          { total: 51, hitmark: 38, cancels: { skill: 38, burst: 38, dash: 38, jump: 38, swap: 38, attack: 51, charge: 51 }, source: 'attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）' },
+          { total: 47, hitmark: 36, cancels: { skill: 36, burst: 36, dash: 36, jump: 36, swap: 36, attack: 47, charge: 47 }, source: 'attack.go:mountedFrames[1]' },
+          { total: 46, hitmark: 35, cancels: { skill: 35, burst: 35, dash: 35, jump: 35, swap: 35, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[2]' },
+          { total: 46, hitmark: 34, cancels: { skill: 34, burst: 34, dash: 34, jump: 34, swap: 34, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[3]' },
+        ],
+        burstGain: { minConstellation: 2, amount: 20 },
       },
-      source: 'kachina/skill.go: startTwirly(hold) → mounted = true。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。ActionStam: 乗っている間は 0。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費',
+      source: 'kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費',
     },
   }],
   // リンネア（issue #36。gcsim PR #2596・未マージ・未検証）: E の後 0.6 秒（36f）の間の E が再発動（CT なし。E のたびに 0.6 秒に更新）。3 回目の再発動で、ルミが大技（万鈞砕）を出して標準の力になる。

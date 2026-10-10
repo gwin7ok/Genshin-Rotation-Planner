@@ -140,6 +140,26 @@ export interface ActionMode {
   };
   /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
   extendByBurstFrames?: number;
+  /**
+   * 夜魂値のように、時間と操作で減り、0 になるとモードが終わる値（カチーナのぐるぐるコマちゃん。issue #36）。
+   * モードの終わりは、値が 0 になる時刻に更新される（durationFrames は、操作がないときの最大の長さと同じにしておく）。
+   * 状態は「降りている（独立して存在）」と「乗っている」。モードを開く E は、一回押し = 降りている・長押し = 乗っている。
+   * 続いている間の E（repress）は、長押しなら乗る・一回押しなら乗り降りの切り替え。交代したら、乗っていても降りる（独立して存在）
+   */
+  drain?: {
+    label: string;
+    max: number;
+    /** 降りている間: 開始から最初の消費まで・降りた直後から最初の消費まで・以降の間隔・1 回の消費量（フレーム） */
+    idle: { firstFrames: number; resumeFrames: number; everyFrames: number; amount: number };
+    /** 乗っている間の、時間による消費 */
+    ridden: { everyFrames: number; amount: number };
+    /** 乗っている間の、アクションの種類ごとの消費（通常攻撃 10） */
+    costByType: Partial<Record<ActionType, number>>;
+    /** 乗っている間の通常攻撃のフレーム（連続した N の何段目か。足りなければ繰り返す） */
+    riddenNormalFrames: ActionFrames[];
+    /** 元素爆発で回復する量（命ノ星座 minConstellation 以上） */
+    burstGain?: { minConstellation: number; amount: number };
+  };
   /** 命ノ星座による変化（その星座以上のとき適用。上から順に重ねる）: repress の使える回数・ゲージの初期値（モードの開始時の増加） */
   byConstellation?: { minConstellation: number; repressMaxUses?: number; gaugeInitial?: number }[];
   /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */

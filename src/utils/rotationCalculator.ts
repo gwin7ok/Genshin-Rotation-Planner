@@ -527,6 +527,11 @@ export function calculateRotation(
           // そのアクションで終えたときだけ続けて開くモード（ニィロウ: N で 3 段目を終えると月の祈り）
           const fu = rp.followUps?.[act.actionTypeId.slice(char.id.length + 1)];
           if (fu) {
+            // 置き換えるモード（純白の正 ⇔ 漆黒の否）は、ここで終わる
+            for (const label of fu.replaces ?? []) {
+              const other = modeWindows.get(`${char.id}:${label}`);
+              if (other && !other.endedBy) endMode(other, actionStartTime, 'ender');
+            }
             const fStart = Number((actionStartTime + fu.startDelayFrames / 60).toFixed(3));
             const fEnd = Number((fStart + fu.durationFrames / 60).toFixed(3));
             const fSpan: ActiveBuffSpan = {
@@ -648,8 +653,13 @@ export function calculateRotation(
           : Number(Math.max(0, duration - (motionFrames / 60 - (actionDef?.holdInFrames ?? 0))).toFixed(3));
       }
 
+      // 状態によって爆発の種類が変わるキャラ（ドゥリン: 漆黒の否の間は漆黒の法則）: アクションと効果バーの名前を、その種類にする
+      const burstVariantMode = act.type === 'burst'
+        ? [...modeWindows.values()].find(m => m.charId === char.id && m.def.burstVariant && isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001)
+        : undefined;
       const computedAction: CharacterActionInstance = {
         ...act,
+        ...(burstVariantMode?.def.burstVariant ? { name: burstVariantMode.def.burstVariant.name } : {}),
         hasCTCollision: false,
         collisionRemainingCT: undefined,
         ...(holdSeconds !== undefined ? { holdSeconds } : {}),
@@ -1081,6 +1091,10 @@ export function calculateRotation(
       // 効果継続時間（アクション定義 or 個別変更値）から効果バーを作る
       // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
       const effectSpan = inStateWindow || (actionDef?.mode && !actionDef.mode.noBar && !actionDef.mode.keepEffectBar) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
+      if (effectSpan && burstVariantMode?.def.burstVariant) {
+        effectSpan.name = `${char.name} ${act.shortName}: ${burstVariantMode.def.burstVariant.effectLabel}`;
+        effectSpan.description = burstVariantMode.def.burstVariant.name;
+      }
       // 殺生桜（八重神子）: バーは、桜が現れる位置から始まり、寿命（効果継続時間 + 論示で +10 秒）で終わる。4 つ目が出ると最古が消え、バーをそこで切る
       if (effectSpan && isSkill && actionDef?.spawnsTotem) {
         const tt = totemTiming(actionDef.spawnsTotem, effectSpan.duration, isRevelation(char));

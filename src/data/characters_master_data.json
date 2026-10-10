@@ -140,7 +140,7 @@
       {
         "id": "10000002-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.217,
         "frames": {
@@ -161,7 +161,7 @@
       {
         "id": "10000002-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.233,
         "frames": {
@@ -3186,7 +3186,7 @@
       {
         "id": "10000006-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.117,
         "frames": {
@@ -3208,7 +3208,7 @@
       {
         "id": "10000006-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -3913,7 +3913,7 @@
       {
         "id": "10000007-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.233,
         "frames": {
@@ -3933,7 +3933,7 @@
       {
         "id": "10000007-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -5585,7 +5585,7 @@
       {
         "id": "10000007-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.233,
         "frames": {
@@ -5605,7 +5605,7 @@
       {
         "id": "10000007-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -5996,7 +5996,7 @@
       {
         "id": "10000014-hydro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.1,
         "frames": {
@@ -6017,7 +6017,7 @@
       {
         "id": "10000014-hydro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -6348,7 +6348,7 @@
       {
         "id": "10000015-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.233,
         "frames": {
@@ -6369,7 +6369,7 @@
       {
         "id": "10000015-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.283,
         "frames": {
@@ -6658,7 +6658,7 @@
       {
         "id": "10000016-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.3,
         "frames": {
@@ -6679,7 +6679,7 @@
       {
         "id": "10000016-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.35,
         "frames": {
@@ -7063,7 +7063,7 @@
       {
         "id": "10000020-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.433,
         "frames": {
@@ -7083,7 +7083,7 @@
       {
         "id": "10000020-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.45,
         "frames": {
@@ -7858,7 +7858,7 @@
       {
         "id": "10000022-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 0.967,
         "frames": {
@@ -8235,7 +8235,7 @@
       {
         "id": "10000023-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.283,
         "frames": {
@@ -8256,7 +8256,7 @@
       {
         "id": "10000023-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.283,
         "frames": {
@@ -9249,7 +9249,7 @@
       {
         "id": "10000026-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.033,
         "frames": {
@@ -9267,7 +9267,7 @@
       {
         "id": "10000026-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.1,
         "frames": {
@@ -9845,7 +9845,7 @@
       {
         "id": "10000029-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.117,
         "frames": {
@@ -9867,7 +9867,7 @@
       {
         "id": "10000029-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.183,
         "frames": {
@@ -10883,7 +10883,7 @@
       {
         "id": "10000032-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.117,
         "frames": {
@@ -10904,7 +10904,7 @@
       {
         "id": "10000032-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -11607,7 +11607,7 @@
       {
         "id": "10000034-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.333,
         "frames": {
@@ -11628,7 +11628,7 @@
       {
         "id": "10000034-geo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.367,
         "frames": {
@@ -11967,7 +11967,7 @@
       {
         "id": "10000035-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.267,
         "frames": {
@@ -11988,7 +11988,7 @@
       {
         "id": "10000035-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.283,
         "frames": {
@@ -12308,7 +12308,7 @@
       {
         "id": "10000036-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.417,
         "frames": {
@@ -12328,7 +12328,7 @@
       {
         "id": "10000036-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.45,
         "frames": {
@@ -13028,7 +13028,7 @@
       {
         "id": "10000038-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.05,
         "frames": {
@@ -13049,7 +13049,7 @@
       {
         "id": "10000038-geo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.1,
         "frames": {
@@ -14137,7 +14137,7 @@
       {
         "id": "10000042-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.217,
         "frames": {
@@ -14157,7 +14157,7 @@
       {
         "id": "10000042-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -14546,7 +14546,7 @@
       {
         "id": "10000043-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.1,
         "frames": {
@@ -14568,7 +14568,7 @@
       {
         "id": "10000043-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -14887,7 +14887,7 @@
       {
         "id": "10000044-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.35,
         "frames": {
@@ -14909,7 +14909,7 @@
       {
         "id": "10000044-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.367,
         "frames": {
@@ -15266,7 +15266,7 @@
       {
         "id": "10000045-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.3,
         "frames": {
@@ -15287,7 +15287,7 @@
       {
         "id": "10000045-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.333,
         "frames": {
@@ -15657,7 +15657,7 @@
       {
         "id": "10000046-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -15677,7 +15677,7 @@
       {
         "id": "10000046-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.267,
         "frames": {
@@ -16038,7 +16038,7 @@
       {
         "id": "10000047-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.217,
         "frames": {
@@ -16059,7 +16059,7 @@
       {
         "id": "10000047-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.217,
         "frames": {
@@ -16396,7 +16396,7 @@
       {
         "id": "10000048-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.083,
         "frames": {
@@ -16418,7 +16418,7 @@
       {
         "id": "10000048-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.117,
         "frames": {
@@ -17367,7 +17367,7 @@
       {
         "id": "10000051-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.333,
         "frames": {
@@ -17388,7 +17388,7 @@
       {
         "id": "10000051-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.4,
         "frames": {
@@ -17771,7 +17771,7 @@
       {
         "id": "10000052-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.6,
         "frames": {
@@ -17792,7 +17792,7 @@
       {
         "id": "10000052-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.65,
         "frames": {
@@ -19429,7 +19429,7 @@
       {
         "id": "10000057-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.383,
         "frames": {
@@ -19450,7 +19450,7 @@
       {
         "id": "10000057-geo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.45,
         "frames": {
@@ -19767,7 +19767,7 @@
       {
         "id": "10000058-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.1,
         "frames": {
@@ -19788,7 +19788,7 @@
       {
         "id": "10000058-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -20167,7 +20167,7 @@
       {
         "id": "10000059-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -20187,7 +20187,7 @@
       {
         "id": "10000059-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.3,
         "frames": {
@@ -22605,7 +22605,7 @@
       {
         "id": "10000066-hydro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -22626,7 +22626,7 @@
       {
         "id": "10000066-hydro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.267,
         "frames": {
@@ -23253,7 +23253,7 @@
       {
         "id": "10000068-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.283,
         "frames": {
@@ -23273,7 +23273,7 @@
       {
         "id": "10000068-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.333,
         "frames": {
@@ -24388,7 +24388,7 @@
       {
         "id": "10000071-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.2,
         "frames": {
@@ -24409,7 +24409,7 @@
       {
         "id": "10000071-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -24756,7 +24756,7 @@
       {
         "id": "10000072-hydro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.35,
         "frames": {
@@ -24776,7 +24776,7 @@
       {
         "id": "10000072-hydro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.367,
         "frames": {
@@ -25780,7 +25780,7 @@
       {
         "id": "10000075-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.2,
         "frames": {
@@ -26777,7 +26777,7 @@
       {
         "id": "10000078-dendro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.167,
         "frames": {
@@ -26796,7 +26796,7 @@
       {
         "id": "10000078-dendro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.283,
         "frames": {
@@ -27163,7 +27163,7 @@
       {
         "id": "10000079-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.333,
         "frames": {
@@ -27184,7 +27184,7 @@
       {
         "id": "10000079-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.383,
         "frames": {
@@ -27980,7 +27980,7 @@
       {
         "id": "10000081-dendro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.417,
         "frames": {
@@ -28001,7 +28001,7 @@
       {
         "id": "10000081-dendro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.4,
         "frames": {
@@ -28669,7 +28669,7 @@
       {
         "id": "10000083-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.217,
         "frames": {
@@ -28690,7 +28690,7 @@
       {
         "id": "10000083-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -29354,7 +29354,7 @@
       {
         "id": "10000085-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.417,
         "frames": {
@@ -29375,7 +29375,7 @@
       {
         "id": "10000085-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.45,
         "frames": {
@@ -29799,7 +29799,7 @@
       {
         "id": "10000086-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -29819,7 +29819,7 @@
       {
         "id": "10000086-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.267,
         "frames": {
@@ -30410,7 +30410,7 @@
       {
         "id": "10000088-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.083,
         "frames": {
@@ -30432,7 +30432,7 @@
       {
         "id": "10000088-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.117,
         "frames": {
@@ -30807,7 +30807,7 @@
       {
         "id": "10000089-hydro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -30829,7 +30829,7 @@
       {
         "id": "10000089-hydro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.267,
         "frames": {
@@ -31515,7 +31515,7 @@
       {
         "id": "10000091-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.367,
         "frames": {
@@ -31536,7 +31536,7 @@
       {
         "id": "10000091-geo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.383,
         "frames": {
@@ -31876,7 +31876,7 @@
       {
         "id": "10000092-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.4,
         "frames": {
@@ -31896,7 +31896,7 @@
       {
         "id": "10000092-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.45,
         "frames": {
@@ -32243,7 +32243,7 @@
       {
         "id": "10000093-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.083,
         "frames": {
@@ -32263,7 +32263,7 @@
       {
         "id": "10000093-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.133,
         "frames": {
@@ -32687,7 +32687,7 @@
       {
         "id": "10000094-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.15,
         "frames": {
@@ -33505,7 +33505,7 @@
       {
         "id": "10000096-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.317,
         "frames": {
@@ -33527,7 +33527,7 @@
       {
         "id": "10000096-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.35,
         "frames": {
@@ -34584,7 +34584,7 @@
       {
         "id": "10000099-dendro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.3,
         "frames": {
@@ -34605,7 +34605,7 @@
       {
         "id": "10000099-dendro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.317,
         "frames": {
@@ -35924,7 +35924,7 @@
       {
         "id": "10000103-geo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -35945,7 +35945,7 @@
       {
         "id": "10000103-geo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.25,
         "frames": {
@@ -36309,7 +36309,7 @@
       {
         "id": "10000104-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.333,
         "frames": {
@@ -36946,7 +36946,7 @@
       {
         "id": "10000106-pyro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.333,
         "frames": {
@@ -36968,7 +36968,7 @@
       {
         "id": "10000106-pyro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.383,
         "frames": {
@@ -37710,7 +37710,7 @@
       {
         "id": "10000108-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.117,
         "frames": {
@@ -37731,7 +37731,7 @@
       {
         "id": "10000108-anemo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.117,
         "frames": {
@@ -38812,7 +38812,7 @@
       {
         "id": "10000111-electro_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.25,
         "frames": {
@@ -38863,7 +38863,7 @@
       {
         "id": "10000111-electro_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.2,
         "frames": {
@@ -39269,7 +39269,7 @@
       {
         "id": "10000112-cryo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.267,
         "frames": {
@@ -39290,7 +39290,7 @@
       {
         "id": "10000112-cryo_hp",
         "name": "落下攻撃(高)",
-        "shortName": "HP",
+        "shortName": "hP",
         "type": "plunge_high",
         "defaultDuration": 1.283,
         "frames": {
@@ -39633,7 +39633,7 @@
       {
         "id": "10000113-anemo_lp",
         "name": "落下攻撃(低)",
-        "shortName": "LP",
+        "shortName": "lP",
         "type": "plunge_low",
         "defaultDuration": 1.183,
         "frames": {

@@ -245,7 +245,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
     const newId = `act_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const newAction: CharacterActionInstance = actionDef === 'wait'
-      ? { id: newId, actionTypeId: 'wait', name: '待機', shortName: 'W', type: 'wait', duration: WAIT_DEFAULT_SECONDS }
+      ? { id: newId, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: WAIT_DEFAULT_SECONDS }
       : {
         id: newId,
         actionTypeId: actionDef.id,
@@ -745,7 +745,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 <strong className="font-bold text-cyan-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
               </span>
               <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                <strong className="font-bold text-white">LP / HP</strong>: 落下攻撃（低 / 高）
+                <strong className="font-bold text-white">lP / hP</strong>: 落下攻撃（低 / 高）
               </span>
             </div>
           </div>
@@ -1247,10 +1247,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
                       <button
                         onClick={() => addActionToStint(stintIndex, 'wait')}
-                        className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'W' }).box}`}
+                        className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'w' }).box}`}
                         title={`待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
                       >
-                        <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'W' }).label}`}>+待機</strong>
+                        <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'w' }).label}`}>+待機</strong>
                       </button>
                     </div>
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}

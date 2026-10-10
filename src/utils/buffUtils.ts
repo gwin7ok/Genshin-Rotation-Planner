@@ -3,6 +3,7 @@ import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { CharacterModel } from '../models/CharacterModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
+import { classifyBuffScope, type BuffScope } from './buffScope';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact' | 'constellation';
 
@@ -22,6 +23,8 @@ export interface TriggerableBuffDefinition {
   gcsimNote?: string;              // gcsim 対象外の理由
   gcsimKeys?: string[];            // 対応する gcsim の効果のキー（パターンを含む）。各キーを別のバーにする
   gcsimCooldownKeys?: string[];    // 対応する gcsim の発動間隔（CT）のキー
+  /** 時間指定のない効果が効く範囲（team = 全体で最下行、self = 自分だけでキャラ名の横。追加作業 23） */
+  scope?: BuffScope;
   /** true = アプリの計算が自動で出す効果（祭礼の武器: スキルのダメージが当たったとき、確率 100% で発動）。手で置く候補には出さない */
   autoApplied?: boolean;
 }
@@ -191,7 +194,7 @@ export function getAvailableBuffsForCharacter(
     }
   }
 
-  return result;
+  return result.map(d => ({ ...d, scope: classifyBuffScope(d) }));
 }
 
 /**

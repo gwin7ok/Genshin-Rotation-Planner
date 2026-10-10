@@ -28,7 +28,7 @@ import {
 import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
-import { getBuffBadgeConfig } from '../utils/buffUtils';
+import { getBuffBadgeConfig, getAvailableBuffsForCharacter, isGlobalRowBuff, buffTimingLabel, type TriggerableBuffDefinition } from '../utils/buffUtils';
 import { GlobalBuffRow } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
 import { actionToneOnColor } from '../utils/actionTone';
@@ -144,6 +144,24 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   }
 
   return result;
+}
+
+/** 時間指定のない効果のうち、自分だけに効くもの（キャラごと）。出場トラックのキャラ名の横に出す */
+function selfTimelessBuffs(char: CharacterConfig, database?: GenshinDatabase): TriggerableBuffDefinition[] {
+  return getAvailableBuffsForCharacter(char, database).filter(d => !d.autoApplied && isGlobalRowBuff(d) && d.scope === 'self');
+}
+
+/** 見出しのバッジのホバー: 効果の一覧（名前・由来・説明） */
+function selfTimelessTitle(defs: TriggerableBuffDefinition[]): string {
+  const source = (d: TriggerableBuffDefinition) =>
+    d.category === 'talent' ? '固有天賦'
+      : d.category === 'constellation' ? '命ノ星座'
+      : d.category === 'weapon' ? `武器: ${d.sourceName ?? ''}`
+      : `聖遺物: ${d.sourceName ?? ''}`;
+  return [
+    '【時間指定のない効果（このキャラだけ）】',
+    ...defs.map(d => `・[${buffTimingLabel(d)}] ${d.name}（${source(d)}）\n  ${d.description ?? ''}`),
+  ].join('\n');
 }
 
 /** アクションの説明文（定義の説明。通常攻撃などは、共通の説明） */
@@ -385,6 +403,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
+  // キャラごとの、時間指定のない効果のうち自分だけに効くもの（キャラ名の横のバッジ。追加作業 23）
+  const selfTimelessByChar = new Map<string, TriggerableBuffDefinition[]>(
+    characters.map(c => [c.id, selfTimelessBuffs(c, database)] as const),
+  );
 
   // アクション ID → そのアクションがある出場ブロックの ID（持ち越しバーを、発動した出場ブロックの行に出すため）
   const homeStintIdOfAction = new Map<string, string>();
@@ -1432,6 +1454,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 </span>
                                 {isStintCurrentlyOnField && (
                                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" title="現在出場中" />
+                                )}
+                                {/* 時間指定のない効果のうち、自分だけに効くもの（そのキャラの一番早い出場の行だけ。追加作業 23 / issue #29） */}
+                                {stints.findIndex(st => st.characterId === char.id) === stintIdx && (selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
+                                  <span
+                                    className="text-[9px] font-mono px-1 py-0.2 rounded bg-teal-950/70 border border-teal-700/70 text-teal-300 font-bold shrink-0 cursor-default"
+                                    title={selfTimelessTitle(selfTimelessByChar.get(char.id)!)}
+                                  >
+                                    ✨{selfTimelessByChar.get(char.id)!.length}
+                                  </span>
                                 )}
                               </div>
                             </div>

@@ -31,6 +31,7 @@ import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from
 import { getBuffBadgeConfig } from '../utils/buffUtils';
 import { GlobalBuffRow } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
+import type { DragPreview } from '../utils/dragPreview';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 
@@ -169,6 +170,8 @@ interface GanttChartProps {
   onReorderCharacters?: (newChars: CharacterConfig[]) => void;
   onReorderCharactersAndStints?: (newChars: CharacterConfig[], newStints: Stint[]) => void;
   onUpdateStints?: (newStints: Stint[]) => void;
+  /** ドラッグ中の仮の並び（null で解除）。親が、この並びで再計算して stints に渡す */
+  onPreviewReorder?: (preview: DragPreview | null) => void;
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
   loopStartTime?: number;
@@ -214,6 +217,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   onReorderCharacters,
   onReorderCharactersAndStints,
   onUpdateStints,
+  onPreviewReorder,
   selectedAction,
   onSelectAction,
   loopStartTime = 0,
@@ -248,6 +252,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   // 統合出場トラックの出場ボックスのドラッグ（出場順の入れ替え）
   const [draggingTrackStint, setDraggingTrackStint] = useState<{
     fromIndex: number;
+    /** ドラッグしている出場ブロックの ID（仮の並びで位置が変わるため、番号ではなく ID で見分ける） */
+    stintId: string;
+    /** ドラッグを始めた時点の並び（挿入先の判定と確定は、この並びで行う） */
+    base: Stint[];
     startClientX: number;
     dx: number;
     moved: boolean;
@@ -302,14 +310,19 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   };
 
   // Drag and Drop state for timeline action reordering directly on the Gantt Chart
-  const [draggedAction, setDraggedAction] = useState<{
+  // マウス方式（出場ブロックのドラッグと同じ。5px のしきい値・ドラッグ中は仮の並びで再計算・Esc で取り消し。追加作業 21 / issue #32）
+  const [draggingAction, setDraggingAction] = useState<{
     stintId: string;
-    actionIndex: number;
     actionId: string;
-  } | null>(null);
-  const [dragOverAction, setDragOverAction] = useState<{
-    stintId: string;
-    actionIndex: number;
+    fromIndex: number;
+    startClientX: number;
+    moved: boolean;
+    /** 挿入先（ドラッグ中のアクションを除いた並びでの位置） */
+    targetIndex: number;
+    /** 出場ブロックの開始時刻の位置の、画面上の左端 */
+    rowLeft: number;
+    /** ドラッグを始めた時点の並び（挿入先の判定と確定は、この並びで行う） */
+    base: Stint[];
   } | null>(null);
 
   const cleanStintsForState = (rawStints: Stint[]): Stint[] => {
@@ -322,21 +335,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           return rest;
         })
     }));
-  };
-
-  const handleReorderActionsInStint = (stintId: string, fromIndex: number, toIndex: number) => {
-    if (!onUpdateStints || fromIndex === toIndex) return;
-    const newStints = stints.map(s => {
-      if (s.id !== stintId) return s;
-      const cleanActions = s.actions.map(a => {
-        const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
-        return rest;
-      });
-      const [moved] = cleanActions.splice(fromIndex, 1);
-      cleanActions.splice(toIndex, 0, moved);
-      return { ...s, actions: cleanActions };
-    });
-    onUpdateStints(cleanStintsForState(newStints));
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -623,7 +621,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         const moved = prev.moved || Math.abs(dx) >= DRAG_THRESHOLD_PX;
         // ポインター位置の時刻より中点が左にある出場の数 = 挿入先
         const pointerTime = (e.clientX - prev.trackLeft) / pixelsPerSecond;
-        const others = stints.filter((_, i) => i !== prev.fromIndex);
+        const others = prev.base.filter((_, i) => i !== prev.fromIndex);
         const targetIndex = others.filter(st => ((st.startTime ?? 0) + (st.endTime ?? 0)) / 2 < pointerTime).length;
         return { ...prev, dx, moved, targetIndex };
       });
@@ -631,6 +629,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const onUp = () => {
       const d = draggingTrackStint;
       setDraggingTrackStint(null);
+      onPreviewReorder?.(null);
       document.body.style.cursor = '';
       if (!d.moved) return; // クリック扱い（行へスクロール）
       // ドラッグ後のクリック（行へスクロール・再生位置の移動）を1回だけ打ち消す
@@ -638,18 +637,94 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.addEventListener('click', suppressClick, { capture: true, once: true });
       setTimeout(() => window.removeEventListener('click', suppressClick, { capture: true }), 0);
       if (!onUpdateStints || d.targetIndex === d.fromIndex) return;
-      const next = [...stints];
+      const next = [...d.base];
       const [moved] = next.splice(d.fromIndex, 1);
       next.splice(d.targetIndex, 0, moved);
       onUpdateStints(cleanStintsForState(next));
     };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setDraggingTrackStint(null);
+      onPreviewReorder?.(null);
+      document.body.style.cursor = '';
+    };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
+    window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('keydown', onKey);
     };
-  }, [draggingTrackStint, pixelsPerSecond, stints, onUpdateStints]);
+  }, [draggingTrackStint, pixelsPerSecond, onUpdateStints, onPreviewReorder]);
+
+  // アクションのドラッグ
+  useEffect(() => {
+    if (!draggingAction) return;
+    const DRAG_THRESHOLD_PX = 5;
+    const onMove = (e: MouseEvent) => {
+      setDraggingAction(prev => {
+        if (!prev) return prev;
+        const moved = prev.moved || Math.abs(e.clientX - prev.startClientX) >= DRAG_THRESHOLD_PX;
+        const stint = prev.base.find(st => st.id === prev.stintId);
+        if (!stint) return prev;
+        const pointerTime = (stint.startTime ?? 0) + (e.clientX - prev.rowLeft) / pixelsPerSecond;
+        const others = stint.actions.filter((_, i) => i !== prev.fromIndex);
+        // ポインターの時刻より中点が左にあるアクションの数 = 挿入先（先頭の交代アクションの前には入らない）
+        const minIndex = stint.actions[0]?.type === 'swap' ? 1 : 0;
+        const targetIndex = Math.max(minIndex, others.filter(a => ((a.startTime ?? 0) + (a.endTime ?? 0)) / 2 < pointerTime).length);
+        return { ...prev, moved, targetIndex };
+      });
+    };
+    const onUp = () => {
+      const d = draggingAction;
+      setDraggingAction(null);
+      onPreviewReorder?.(null);
+      if (!d.moved) return; // クリック扱い（選択・再生位置の移動）
+      const suppressClick = (ce: MouseEvent) => { ce.stopPropagation(); ce.preventDefault(); };
+      window.addEventListener('click', suppressClick, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', suppressClick, { capture: true }), 0);
+      if (!onUpdateStints || d.targetIndex === d.fromIndex) return;
+      const next = d.base.map(st => {
+        if (st.id !== d.stintId) return st;
+        const actions = [...st.actions];
+        const [moved] = actions.splice(d.fromIndex, 1);
+        actions.splice(d.targetIndex, 0, moved);
+        return { ...st, actions };
+      });
+      onUpdateStints(cleanStintsForState(next));
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setDraggingAction(null);
+      onPreviewReorder?.(null);
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [draggingAction, pixelsPerSecond, onUpdateStints, onPreviewReorder]);
+  const actionPreviewKey = draggingAction?.moved ? `${draggingAction.stintId}:${draggingAction.fromIndex}>${draggingAction.targetIndex}` : '';
+  useEffect(() => {
+    if (!draggingAction?.moved) return;
+    {
+      const swaps = draggingAction.base.find(st => st.id === draggingAction.stintId)?.actions.filter(a => a.type === 'swap').length ?? 0;
+      onPreviewReorder?.(draggingAction.targetIndex === draggingAction.fromIndex ? null : { kind: 'action', stintId: draggingAction.stintId, actionId: draggingAction.actionId, to: Math.max(0, draggingAction.targetIndex - swaps) });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionPreviewKey]);
+
+  // ドラッグ中の仮の並び: 挿入先が変わったときだけ、親へ渡す
+  const trackPreviewKey = draggingTrackStint?.moved ? `${draggingTrackStint.fromIndex}>${draggingTrackStint.targetIndex}` : '';
+  useEffect(() => {
+    if (!draggingTrackStint?.moved) return;
+    onPreviewReorder?.(draggingTrackStint.targetIndex === draggingTrackStint.fromIndex ? null : { kind: 'stint', from: draggingTrackStint.fromIndex, to: draggingTrackStint.targetIndex });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackPreviewKey]);
 
   // Pre-calculate connector points between consecutive stints for vertical snap visualization (1st cycle + 2nd cycle)
   // Stint i ends at t_end, Stint i+1 starts at t_end!
@@ -1010,7 +1085,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     const startX = (stint.startTime ?? 0) * pixelsPerSecond;
                     const width = (stint.duration ?? 0) * pixelsPerSecond;
                     const isCurrent = (stint.startTime ?? 0) <= activeTime && activeTime < (stint.endTime ?? 0);
-                    const isDraggingThis = draggingTrackStint?.moved && draggingTrackStint.fromIndex === stintIdx;
+                    const isDraggingThis = draggingTrackStint?.moved && draggingTrackStint.stintId === stint.id;
 
                     return (
                       <div
@@ -1021,6 +1096,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           const trackLeft = (e.currentTarget.parentElement?.getBoundingClientRect().left ?? 0);
                           setDraggingTrackStint({
                             fromIndex: stintIdx,
+                            stintId: stint.id,
+                            base: stints,
                             startClientX: e.clientX,
                             dx: 0,
                             moved: false,
@@ -1032,7 +1109,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                         style={{
                           left: `${startX}px`,
                           width: `${width}px`,
-                          ...(isDraggingThis ? { transform: `translateX(${draggingTrackStint!.dx}px)`, zIndex: 30 } : {}),
+                          ...(isDraggingThis ? { zIndex: 30 } : {}),
                         }}
                         className={`absolute h-7 rounded-md flex items-center px-1.5 overflow-hidden text-xs border cursor-grab ${
                           isDraggingThis ? 'opacity-70 ring-2 ring-amber-300 shadow-xl cursor-grabbing' : 'transition-all'
@@ -1056,19 +1133,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     );
                   })}
 
-                  {/* 出場順ドラッグ中の挿入位置 */}
-                  {draggingTrackStint?.moved && (() => {
-                    const others = stints.filter((_, i) => i !== draggingTrackStint.fromIndex);
-                    const t = draggingTrackStint.targetIndex === 0
-                      ? 0
-                      : (others[draggingTrackStint.targetIndex - 1]?.endTime ?? 0);
-                    return (
-                      <div
-                        className="absolute top-0 bottom-0 w-1 -translate-x-1/2 bg-amber-300 rounded shadow-[0_0_8px_rgba(252,211,77,0.9)] z-40 pointer-events-none"
-                        style={{ left: `${t * pixelsPerSecond}px` }}
-                      />
-                    );
-                  })()}
                 </div>
               </div>
 
@@ -1532,8 +1596,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     const isBurst = act.type === 'burst';
                                     const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';
                                     const isSelected = selectedAction?.stintId === stint.id && selectedAction?.actionId === act.id;
-                                    const isBeingDragged = draggedAction?.stintId === stint.id && draggedAction?.actionIndex === actIdx;
-                                    const isDragOverTarget = dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx && draggedAction?.actionIndex !== actIdx;
+                                    const isBeingDragged = !!draggingAction?.moved && draggingAction.actionId === act.id;
+                                    const isSwapAction = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
 
                                     const hasCollision = act.hasCTCollision;
                                     const colRem = act.collisionRemainingCT;
@@ -1542,43 +1606,20 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     return (
                                       <div
                                         key={act.id}
-                                        draggable={true}
-                                        onDragStart={(e) => {
-                                          e.stopPropagation();
-                                          setDraggedAction({ stintId: stint.id, actionIndex: actIdx, actionId: act.id });
-                                          onSelectAction?.(stint.id, act.id);
-                                          e.dataTransfer.effectAllowed = 'move';
-                                          e.dataTransfer.setData('text/plain', act.id);
-                                        }}
-                                        onDragOver={(e) => {
+                                        onMouseDown={(e) => {
+                                          // 交代アクションは動かせない。ボタン類のクリックは、ドラッグにしない
+                                          if (e.button !== 0 || !onUpdateStints || isSwapAction) return;
                                           e.preventDefault();
-                                          e.stopPropagation();
-                                          if (draggedAction && draggedAction.stintId === stint.id) {
-                                            e.dataTransfer.dropEffect = 'move';
-                                            if (!dragOverAction || dragOverAction.actionIndex !== actIdx) {
-                                              setDragOverAction({ stintId: stint.id, actionIndex: actIdx });
-                                            }
-                                          }
-                                        }}
-                                        onDragLeave={(e) => {
-                                          e.stopPropagation();
-                                          if (dragOverAction?.stintId === stint.id && dragOverAction?.actionIndex === actIdx) {
-                                            setDragOverAction(null);
-                                          }
-                                        }}
-                                        onDrop={(e) => {
-                                          e.preventDefault();
-                                          e.stopPropagation();
-                                          if (draggedAction && draggedAction.stintId === stint.id && draggedAction.actionIndex !== actIdx) {
-                                            handleReorderActionsInStint(stint.id, draggedAction.actionIndex, actIdx);
-                                          }
-                                          setDraggedAction(null);
-                                          setDragOverAction(null);
-                                        }}
-                                        onDragEnd={(e) => {
-                                          e.stopPropagation();
-                                          setDraggedAction(null);
-                                          setDragOverAction(null);
+                                          setDraggingAction({
+                                            stintId: stint.id,
+                                            actionId: act.id,
+                                            fromIndex: actIdx,
+                                            startClientX: e.clientX,
+                                            moved: false,
+                                            targetIndex: actIdx,
+                                            rowLeft: e.currentTarget.parentElement?.getBoundingClientRect().left ?? 0,
+                                            base: stints,
+                                          });
                                         }}
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -1587,7 +1628,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           scrollStintCardBelowSticky(stint.id);
                                         }}
                                         style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
-                                        className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing transition-all ${
+                                        className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing ${isBeingDragged ? '' : 'transition-all'} ${
                                           hasCollision
                                             ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
                                             : windowWarning && !isSelected
@@ -1602,13 +1643,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             ? 'bg-sky-600/90 text-white hover:brightness-110'
                                             : 'bg-slate-800/80 text-slate-200 hover:brightness-110'
                                         } ${
-                                          isBeingDragged ? 'opacity-30 scale-95 ring-1 ring-dashed ring-amber-400' : ''
-                                        } ${
-                                          isDragOverTarget 
-                                            ? (draggedAction && draggedAction.actionIndex < actIdx 
-                                                ? 'border-r-4 border-r-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30' 
-                                                : 'border-l-4 border-l-amber-400 ring-2 ring-amber-400/80 bg-amber-400/30') 
-                                            : ''
+                                          isBeingDragged ? 'opacity-70 ring-2 ring-amber-300 shadow-xl z-30' : ''
                                         }`}
                                         title={
                                           hasCollision

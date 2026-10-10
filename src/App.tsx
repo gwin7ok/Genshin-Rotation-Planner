@@ -15,6 +15,7 @@ import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
+import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { AppDatabase } from './types/database';
@@ -138,9 +139,12 @@ export default function App() {
     setGcsimReactions(null);
   }, [characters, switchDelay, loopStartIndex, actionIdKey]);
 
+  // ガントチャートのドラッグ中の仮の並び（ドロップするまで保存しない。計算だけをこの並びで行う。追加作業 21）
+  const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
+  const previewedStints = useMemo(() => applyDragPreview(visibleStints, dragPreview), [visibleStints, dragPreview]);
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, visibleStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined });
-  }, [characters, visibleStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits]);
+    return calculateRotation(characters, previewedStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined });
+  }, [characters, previewedStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits]);
 
   // 反応の区間を、現在のアクションの開始時刻に直す（アクションが見つからない区間は出さない）
   const reactionRows = useMemo<ReactionRow[]>(() => {
@@ -583,6 +587,7 @@ export default function App() {
           database={database}
           characters={characters}
           stints={calculatedResult.calculatedStints}
+          onPreviewReorder={setDragPreview}
           activeBuffs={calculatedResult.activeBuffs}
           skillCooldowns={calculatedResult.skillCooldowns}
           burstCooldowns={calculatedResult.burstCooldowns}
@@ -601,7 +606,7 @@ export default function App() {
           elapsedTime={elapsedTime}
           onUpdateStints={updateStints}
           selectedAction={selectedAction}
-          onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
+          onSelectAction={(stintId, actionId) => setSelectedAction(stintId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
           loopStartIndex={loopStartIndex}
           onUpdateLoopStartIndex={setLoopStartIndex}
@@ -623,7 +628,7 @@ export default function App() {
           onUpdateHurt={setHurt}
           onOpenHelpModal={() => setIsHelpModalOpen(true)}
           selectedAction={selectedAction}
-          onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}
+          onSelectAction={(stintId, actionId) => setSelectedAction(stintId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
           loopStartIndex={loopStartIndex}
           database={database}

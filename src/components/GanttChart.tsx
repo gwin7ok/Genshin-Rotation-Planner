@@ -1392,13 +1392,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
                   return (
                     <div key={stint.id} id={ganttStintRowId(stint.id)} data-start-px={(stint.startTime ?? 0) * pixelsPerSecond} className={`relative group/stint transition-colors ${
-                      isStintSelected ? 'bg-amber-500/10' : 'bg-slate-950/30 hover:bg-slate-900/30'
+                      'bg-slate-950/30 hover:bg-slate-900/30'
                     }`}>
                       <div className="flex">
                         {/* Stint Row Header (Left Column: Sticky Left) */}
                         <div className={`w-[180px] shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                           isStintSelected
-                            ? 'bg-amber-950 border-l-4 border-l-yellow-400 ring-1 ring-yellow-400/50 shadow-md'
+                            ? 'bg-slate-950 border-l-4 border-l-yellow-400 ring-2 ring-inset ring-yellow-400 shadow-md'
                             : isStintCurrentlyOnField 
                             ? 'bg-slate-900 border-l-2 border-l-amber-400' 
                             : 'bg-slate-950'
@@ -1630,15 +1630,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }}
                                         style={{ left: `${actStartX}px`, width: `${actWidth}px` }}
                                         className={`absolute h-full flex items-center justify-center border-r border-slate-950/60 text-[10px] font-bold select-none cursor-grab active:cursor-grabbing ${isBeingDragged ? '' : 'transition-all'} ${
+                                          // 色（地・文字）: CT 違反・警告・再生中・種別の色。選択中は、枠（黄色の太線）だけを足す
                                           hasCollision
-                                            ? 'bg-red-950/90 text-white ring-2 ring-inset ring-red-500/80 animate-pulse z-20'
-                                            : windowWarning && !isSelected
-                                            ? 'bg-sky-600/90 text-white ring-2 ring-inset ring-amber-400/80 z-20'
-                                            : isSelected 
-                                            ? 'ring-2 ring-yellow-400 border-yellow-300 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]' 
-                                            : isActActive 
-                                            ? 'bg-amber-400 text-slate-950 ring-1 ring-white' 
+                                            ? 'bg-red-950/90 text-white animate-pulse'
+                                            : windowWarning
+                                            ? 'bg-sky-600/90 text-white'
                                             : `border ${actionTone(act).box} hover:brightness-125`
+                                        } ${
+                                          isSelected
+                                            ? 'ring-2 ring-inset ring-yellow-400 border-yellow-400 z-30 shadow-[0_0_12px_rgba(250,204,21,0.8)]'
+                                            : hasCollision
+                                            ? 'ring-2 ring-inset ring-red-500/80 z-20'
+                                            : windowWarning
+                                            ? 'ring-2 ring-inset ring-amber-400/80 z-20'
+                                            : isActActive
+                                            ? 'ring-1 ring-white'
+                                            : ''
                                         } ${
                                           isBeingDragged ? 'opacity-70 ring-2 ring-amber-300 shadow-xl z-30' : ''
                                         }`}

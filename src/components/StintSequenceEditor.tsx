@@ -539,7 +539,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       }}
                       className={`shrink-0 flex items-center gap-1.5 p-1.5 pr-2 rounded-xl border transition-all ${
                         isSelected
-                          ? 'bg-amber-500/30 border-yellow-400 text-yellow-100 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold scale-[1.02]'
+                          ? 'bg-slate-900 ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold scale-[1.02]'
                           : isCurrent
                           ? 'bg-amber-500/20 border-amber-400 shadow-md ring-1 ring-amber-400/50'
                           : dragOverIndex === idx
@@ -1029,7 +1029,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 onDragEnd={() => setDraggedStintIndex(null)}
                 className={`relative rounded-xl border transition-all ${
                   isStintSelected
-                    ? 'bg-slate-900 border-amber-400 ring-2 ring-amber-400/50 shadow-xl shadow-amber-500/10'
+                    ? 'bg-slate-950/70 border-yellow-400 ring-2 ring-yellow-400 shadow-xl shadow-yellow-500/10'
                     : isCurrentlyActive 
                     ? 'bg-slate-850 border-amber-400/80 shadow-lg shadow-amber-500/10 ring-1 ring-amber-400/40' 
                     : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
@@ -1290,11 +1290,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   if (onSeek) onSeek(act.startTime ?? 0);
                                 }}
                                 className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer shadow-sm ${
+                                  'bg-sky-950/80 text-sky-200 hover:border-sky-400'
+                                } ${
                                   isSelected
-                                    ? 'bg-amber-500/30 border-yellow-400 text-yellow-100 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
-                                    : isActionActive
-                                    ? 'bg-sky-500/30 border-sky-400 text-sky-100 ring-2 ring-sky-400/60 shadow-sky-500/20 font-bold'
-                                    : 'bg-sky-950/80 border-sky-500/80 text-sky-200 hover:border-sky-400'
+                                    ? 'ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
+                                    : isActionActive ? 'border-sky-400 ring-2 ring-sky-400/60 shadow-sky-500/20' : 'border-sky-500/80'
                                 }`}
                                 title={`【キャラ交代所要時間（出場時間の先頭）】\n所要時間: ${act.duration.toFixed(2)}s\n期間: [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s] (クリックで選択フォーカス)`}
                               >
@@ -1373,11 +1373,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               }}
                               onDragEnd={() => setDraggedAction(null)}
                               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer ${
+                                `${actionTone(act).box} hover:brightness-125`
+                              } ${
+                                // 選択中は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
                                 isSelected
-                                  ? 'bg-amber-500/30 border-yellow-400 text-yellow-100 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
-                                  : isActionActive
-                                  ? 'bg-amber-500/20 border-amber-400 text-amber-200 ring-1 ring-amber-400/50 shadow'
-                                  : `${actionTone(act).box} hover:brightness-125`
+                                  ? 'ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
+                                  : isActionActive ? 'border-amber-400 ring-1 ring-amber-400/50 shadow' : ''
                               }`}
                             >
                               {/* Action Type Badge */}

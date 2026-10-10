@@ -92,6 +92,10 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
     { key: 'lauma-skill-shred-dendro', label: '草元素耐性ダウン（敵）', mode: 'chain' },
     { key: 'lauma-skill-shred-hydro', label: '水元素耐性ダウン（敵）', mode: 'chain' },
   ],
+  '10000119-dendro_e_hold': [
+    { key: 'lauma-skill-shred-dendro', label: '草元素耐性ダウン（敵）', mode: 'chain' },
+    { key: 'lauma-skill-shred-hydro', label: '水元素耐性ダウン（敵）', mode: 'chain' },
+  ],
   // 胡桃のスキル（蝶導来世）: 紫煙状態中の重撃の命中で敵に付く血梅香（継続ダメージ。9.5 秒。命中のたびに延長）。ユーザー決定（2026-09-30）
   '10000046-pyro_e': [
     { key: 'blood-blossom', label: '血梅香（敵に付く継続ダメージ）', mode: 'chain' },

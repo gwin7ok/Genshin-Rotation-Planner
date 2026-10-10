@@ -57,6 +57,9 @@ export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
   // 継続ダメージのまとまりを、効果時間（本体）として登録（ユーザー決定 2026-09-30。マスターの値は gcsim の値で上書き）
   // モナのスキル: 虚影（幻影）のダメージが続く間
   '10000041-hydro_e': 'damage:Mirror Reflection of Doom (Tick)',
+  // モナの長押し（水中の幻願。一回押しと同じ鏡のダメージ）・ラウマの長押し（霜林の聖域。一回押しと同じ）
+  '10000041-hydro_e_hold': 'damage:Mirror Reflection of Doom (Tick)',
+  '10000119-dendro_e_hold': 'lauma-frostgrove-sanctuary',
   // 早柚の爆発: むじむじダルマ（マスター 12 秒。gcsim は約 9 秒）
   '10000053-anemo_q': 'damage:Muji-Muji Daruma',
   // シャルロットの爆発: 撮影（マスター 4 秒。gcsim は約 3 秒）

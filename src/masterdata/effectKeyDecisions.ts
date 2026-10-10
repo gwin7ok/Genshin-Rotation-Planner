@@ -68,6 +68,7 @@ export const KEY_DECISIONS: Record<string, Decision> = {
   "shield:Opening Flourish (Shield)": { reason: "decided-not-linked", note: "反撃用の短いシールドでバーにしない（対象側の決定に合わせる）" },
   "shield:Sacred Rite: Heron's Sanctum (Shield)": { reason: "decided-not-linked", note: "反撃用の短いシールドでバーにしない（対象側の決定に合わせる）" },
   "construct:LunarCrystallize": { reason: "decided-not-linked", note: "反応で生じる設置物で、アクションの効果ではない" },
+  "chongyunfield": { reason: "decided-not-linked", note: "重雲の領域（10 秒）。氷付与の効果バーと、命ノ星座 2 の CT 短縮のバーは、アプリの fieldEffect（命中 + 領域 + 付与の長さ）で作る（D106）。書き戻さない" },
   "zhongli-anemo": { reason: "decided-not-linked", note: "鍾離のシールドに付随する元素別の内部状態（各1秒）でバーにしない" },
   "zhongli-cryo": { reason: "decided-not-linked", note: "鍾離のシールドに付随する元素別の内部状態（各1秒）でバーにしない" },
   "zhongli-dendro": { reason: "decided-not-linked", note: "鍾離のシールドに付随する元素別の内部状態（各1秒）でバーにしない" },

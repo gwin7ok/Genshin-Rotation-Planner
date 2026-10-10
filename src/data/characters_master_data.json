@@ -34994,7 +34994,7 @@
         "defaultDuration": 12.217,
         "mode": {
           "label": "ぐるぐるコマちゃん",
-          "description": "ぐるぐるコマちゃんが独立して存在する状態（約 12 秒。夜魂値 60 を 2 秒ごとの攻撃で 10 ずつ消費）。続いている間の元素スキル（E）は、乗り降りになる（CT なし）。交代しても残る",
+          "description": "ぐるぐるコマちゃんが存在する状態。夜魂値（60）は、降りている間は 2 秒ごとの攻撃で 10 ずつ、乗っている間は 1 秒ごとと、通常攻撃 1 回ごとに 10 ずつ減り、0 になると終わる。続いている間の元素スキル（E）は乗り降りになる（CT なし）。交代しても残る",
           "startDelayFrames": 0,
           "durationFrames": 733,
           "swap": "persists",
@@ -35021,7 +35021,86 @@
               "e_hold"
             ]
           },
-          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)、AddStatus(twirlyKey, -1)、一回押しは queueIndependent(143)。independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。kachina.go: ActionReady（twirlyKey の間の E は使える）"
+          "drain": {
+            "label": "夜魂値",
+            "max": 60,
+            "idle": {
+              "firstFrames": 143,
+              "resumeFrames": 30,
+              "everyFrames": 118,
+              "amount": 10
+            },
+            "ridden": {
+              "everyFrames": 60,
+              "amount": 10
+            },
+            "costByType": {
+              "normal": 10
+            },
+            "riddenNormalFrames": [
+              {
+                "total": 51,
+                "hitmark": 38,
+                "cancels": {
+                  "skill": 38,
+                  "burst": 38,
+                  "dash": 38,
+                  "jump": 38,
+                  "swap": 38,
+                  "attack": 51,
+                  "charge": 51
+                },
+                "source": "attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）"
+              },
+              {
+                "total": 47,
+                "hitmark": 36,
+                "cancels": {
+                  "skill": 36,
+                  "burst": 36,
+                  "dash": 36,
+                  "jump": 36,
+                  "swap": 36,
+                  "attack": 47,
+                  "charge": 47
+                },
+                "source": "attack.go:mountedFrames[1]"
+              },
+              {
+                "total": 46,
+                "hitmark": 35,
+                "cancels": {
+                  "skill": 35,
+                  "burst": 35,
+                  "dash": 35,
+                  "jump": 35,
+                  "swap": 35,
+                  "attack": 46,
+                  "charge": 46
+                },
+                "source": "attack.go:mountedFrames[2]"
+              },
+              {
+                "total": 46,
+                "hitmark": 34,
+                "cancels": {
+                  "skill": 34,
+                  "burst": 34,
+                  "dash": 34,
+                  "jump": 34,
+                  "swap": 34,
+                  "attack": 46,
+                  "charge": 46
+                },
+                "source": "attack.go:mountedFrames[3]"
+              }
+            ],
+            "burstGain": {
+              "minConstellation": 2,
+              "amount": 20
+            }
+          },
+          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
         },
         "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。",
         "cooldownStart": {
@@ -35056,72 +35135,14 @@
         },
         "defaultDuration": 12.217,
         "mode": {
-          "label": "ぐるぐるコマちゃん（搭乗）",
-          "description": "ぐるぐるコマちゃんに乗っている状態（夜魂値 60 を 1 秒ごとに 10 消費 → 約 6 秒と見なす）。通常攻撃は、地面を叩く攻撃になる。続いている間の元素スキル（E）は、乗り降りになる（CT なし）",
+          "label": "ぐるぐるコマちゃん",
+          "description": "ぐるぐるコマちゃんが存在する状態。夜魂値（60）は、降りている間は 2 秒ごとの攻撃で 10 ずつ、乗っている間は 1 秒ごとと、通常攻撃 1 回ごとに 10 ずつ減り、0 になると終わる。続いている間の元素スキル（E）は乗り降りになる（CT なし）。交代しても残る",
           "startDelayFrames": 0,
-          "durationFrames": 360,
+          "durationFrames": 733,
           "swap": "persists",
           "enders": [],
           "holdByDefault": false,
           "noHold": true,
-          "normalFrames": [
-            {
-              "total": 51,
-              "hitmark": 38,
-              "cancels": {
-                "skill": 38,
-                "burst": 38,
-                "dash": 38,
-                "jump": 38,
-                "swap": 38,
-                "attack": 51,
-                "charge": 51
-              },
-              "source": "attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）"
-            },
-            {
-              "total": 47,
-              "hitmark": 36,
-              "cancels": {
-                "skill": 36,
-                "burst": 36,
-                "dash": 36,
-                "jump": 36,
-                "swap": 36,
-                "attack": 47,
-                "charge": 47
-              },
-              "source": "attack.go:mountedFrames[1]"
-            },
-            {
-              "total": 46,
-              "hitmark": 35,
-              "cancels": {
-                "skill": 35,
-                "burst": 35,
-                "dash": 35,
-                "jump": 35,
-                "swap": 35,
-                "attack": 46,
-                "charge": 46
-              },
-              "source": "attack.go:mountedFrames[2]"
-            },
-            {
-              "total": 46,
-              "hitmark": 34,
-              "cancels": {
-                "skill": 34,
-                "burst": 34,
-                "dash": 34,
-                "jump": 34,
-                "swap": 34,
-                "attack": 46,
-                "charge": 46
-              },
-              "source": "attack.go:mountedFrames[3]"
-            }
-          ],
           "repress": {
             "frames": [
               {
@@ -35142,7 +35163,86 @@
               "e_hold"
             ]
           },
-          "source": "kachina/skill.go: startTwirly(hold) → mounted = true。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。ActionStam: 乗っている間は 0。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
+          "drain": {
+            "label": "夜魂値",
+            "max": 60,
+            "idle": {
+              "firstFrames": 143,
+              "resumeFrames": 30,
+              "everyFrames": 118,
+              "amount": 10
+            },
+            "ridden": {
+              "everyFrames": 60,
+              "amount": 10
+            },
+            "costByType": {
+              "normal": 10
+            },
+            "riddenNormalFrames": [
+              {
+                "total": 51,
+                "hitmark": 38,
+                "cancels": {
+                  "skill": 38,
+                  "burst": 38,
+                  "dash": 38,
+                  "jump": 38,
+                  "swap": 38,
+                  "attack": 51,
+                  "charge": 51
+                },
+                "source": "attack.go:mountedFrames[0]（InitNormalCancelSlice(38, 51)）"
+              },
+              {
+                "total": 47,
+                "hitmark": 36,
+                "cancels": {
+                  "skill": 36,
+                  "burst": 36,
+                  "dash": 36,
+                  "jump": 36,
+                  "swap": 36,
+                  "attack": 47,
+                  "charge": 47
+                },
+                "source": "attack.go:mountedFrames[1]"
+              },
+              {
+                "total": 46,
+                "hitmark": 35,
+                "cancels": {
+                  "skill": 35,
+                  "burst": 35,
+                  "dash": 35,
+                  "jump": 35,
+                  "swap": 35,
+                  "attack": 46,
+                  "charge": 46
+                },
+                "source": "attack.go:mountedFrames[2]"
+              },
+              {
+                "total": 46,
+                "hitmark": 34,
+                "cancels": {
+                  "skill": 34,
+                  "burst": 34,
+                  "dash": 34,
+                  "jump": 34,
+                  "swap": 34,
+                  "attack": 46,
+                  "charge": 46
+                },
+                "source": "attack.go:mountedFrames[3]"
+              }
+            ],
+            "burstGain": {
+              "minConstellation": 2,
+              "amount": 20
+            }
+          },
+          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
         },
         "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。",
         "cooldownStart": {

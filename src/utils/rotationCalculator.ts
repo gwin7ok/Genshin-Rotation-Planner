@@ -1,4 +1,5 @@
 import { expandGroupedStints } from './actionGroups';
+import { countNatlan, nightsoulBurstCooldown, isNightsoulBurstTriggered } from '../masterdata/nightsoulBurst';
 import { isHexerei, hexereiCount } from '../masterdata/hexereiCharacters';
 import { isRevelation } from '../masterdata/revelationCharacters';
 import { checkPlungePrerequisites } from './plungePrerequisites';
@@ -216,6 +217,8 @@ export function calculateRotation(
     stacks?: number;
     /** ゲージ（def.gauge のモードだけ）: 現在値と、時間で数え終えた回数 */
     gauge?: { value: number; ticks: number };
+    /** 減る値（def.drain のモードだけ）: 残り・乗っているか・最後に数えた時刻・次の消費の時刻（降りている間） */
+    drain?: { points: number; riding: boolean; at: number; nextTick: number };
     /** モードを開いたアクション（モードの終わりから始まる CT〔cooldownAtEnd〕に使う） */
     opener: { actionId: string; name: string; start: number; cooldown: number; cdScale: number; constellation: number };
     inputs: number;
@@ -259,6 +262,37 @@ export function calculateRotation(
     let v = 0;
     for (const c of m.def.byConstellation ?? []) if (m.opener.constellation >= c.minConstellation && c.gaugeInitial !== undefined) v = c.gaugeInitial;
     return v;
+  };
+  // 減る値（カチーナの夜魂値）: 時刻 to まで、時間による消費を数える（乗っている間は連続、降りている間は一定の間隔の離散）
+  const drainAdvance = (m: ModeWindow, to: number) => {
+    const d = m.def.drain;
+    const st = m.drain;
+    if (!d || !st || to <= st.at) return;
+    if (st.points > 0) {
+      if (st.riding) {
+        st.points = Math.max(0, st.points - (d.ridden.amount / (d.ridden.everyFrames / 60)) * (to - st.at));
+      } else {
+        const every = d.idle.everyFrames / 60;
+        while (st.nextTick <= to + 1e-6 && st.points > 0) {
+          st.points = Math.max(0, st.points - d.idle.amount);
+          st.nextTick = Number((st.nextTick + every).toFixed(4));
+        }
+      }
+    }
+    st.at = to;
+  };
+  // 減る値の残りから、モードの終わりの時刻を求め直す（バーの終わりも更新する）
+  const drainProject = (m: ModeWindow, fromTime: number) => {
+    const d = m.def.drain;
+    const st = m.drain;
+    if (!d || !st || m.endedBy) return;
+    let end: number;
+    if (st.points <= 0.0001) end = fromTime;
+    else if (st.riding) end = st.at + st.points / (d.ridden.amount / (d.ridden.everyFrames / 60));
+    else end = st.nextTick + (Math.ceil(st.points / d.idle.amount - 1e-6) - 1) * (d.idle.everyFrames / 60);
+    m.end = Number(Math.max(m.start, end).toFixed(3));
+    m.span.endTime = m.end;
+    m.span.duration = Number((m.end - m.span.startTime).toFixed(3));
   };
   const endMode = (m: ModeWindow, at: number, by: NonNullable<ModeWindow['endedBy']>) => {
     m.naturalEnd ??= m.end;
@@ -581,6 +615,32 @@ export function calculateRotation(
           m.span.duration = Number((m.end - m.span.startTime).toFixed(3));
         }
       }
+      // 減る値（カチーナの夜魂値）: ここまでの時間による消費を数え、E の乗り降り・乗っている間の通常攻撃・爆発での回復を反映して、モードの終わりを求め直す
+      for (const m of modeWindows.values()) {
+        const d = m.def.drain;
+        if (!d || !m.drain || m.charId !== char.id || m.endedBy || actionStartTime < m.start - 0.001) continue;
+        if (!isModeActive(m, char.id, sIdx, actionStartTime)) continue;
+        drainAdvance(m, actionStartTime);
+        if (modeRepress?.window === m && (act.type === 'skill' || act.type === 'skill_hold')) {
+          if (act.actionTypeId.endsWith('_e_hold')) m.drain.riding = true;
+          else if (m.drain.riding) {
+            m.drain.riding = false;
+            m.drain.nextTick = Number((actionStartTime + d.idle.resumeFrames / 60).toFixed(4));
+          } else m.drain.riding = true;
+        } else if (m.drain.riding && (d.costByType[act.type] ?? 0) > 0) {
+          m.drain.points = Math.max(0, m.drain.points - (d.costByType[act.type] ?? 0));
+          if (m.drain.points <= 0.0001) {
+            // 命中の時点で夜魂値が尽きる（通常攻撃の命中）
+            const hit = (d.riddenNormalFrames[0]?.hitmark ?? 0) / 60;
+            m.drain.at = Number((actionStartTime + hit).toFixed(3));
+            drainProject(m, m.drain.at);
+            continue;
+          }
+        } else if (act.type === 'burst' && d.burstGain && m.opener.constellation >= d.burstGain.minConstellation) {
+          m.drain.points = Math.min(d.max, m.drain.points + d.burstGain.amount);
+        }
+        drainProject(m, actionStartTime);
+      }
       // モードのゲージ（キィニチの夜魂値）: 時間の増加 → このアクションの増加（N）／使用（別の動作になった E は、満タンのときだけ使え、0 になる）
       let gaugeMessage: string | undefined;
       for (const m of modeWindows.values()) {
@@ -620,7 +680,8 @@ export function calculateRotation(
           frames = hit.frames ?? frames;
           hitFallbackDuration = hit.duration;
         }
-        const modeNormal = frameMode?.def.normalFrames;
+        const ridingDrain = [...modeWindows.values()].find(m => m.def.drain && m.drain?.riding && isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001);
+        const modeNormal = frameMode?.def.normalFrames ?? ridingDrain?.def.drain?.riddenNormalFrames;
         if (modeNormal?.length) frames = modeNormal[normalStreak % modeNormal.length];
         normalStreak += 1;
       } else {
@@ -984,6 +1045,12 @@ export function calculateRotation(
             constellation: CharacterModel.fromConfig(char).constellation,
           },
         };
+        // 減る値のあるモード（カチーナ）: 開いた E が長押しなら乗っている・一回押しなら降りている（独立して存在）
+        if (md.drain) {
+          const riding = actionDef.id.endsWith('_e_hold');
+          opened.drain = { points: md.drain.max, riding, at: start, nextTick: Number((start + md.drain.idle.firstFrames / 60).toFixed(4)) };
+          drainProject(opened, start);
+        }
         // ディシア: 爆発の開始で、炎場を拾う（炎場が出ていれば。バーをここで切り、残り時間 + 拾いの延長を保存する）
         const fieldDef = actionDef.burstMode ? charActions.find(a => a.fieldRecast)?.fieldRecast : undefined;
         const field = fieldSpans.get(char.id);
@@ -1413,6 +1480,16 @@ export function calculateRotation(
       });
     });
 
+    // 交代したら、乗っていても降りる（ぐるぐるコマちゃんは独立して残る）。降りた直後の最初の攻撃は、resumeFrames 後
+    for (const m of modeWindows.values()) {
+      if (!m.def.drain || !m.drain || m.charId !== char.id || m.endedBy || !m.drain.riding || m.sIdx !== sIdx) continue;
+      if (stintEndTime >= m.end - 0.001) continue;
+      drainAdvance(m, stintEndTime);
+      m.drain.riding = false;
+      m.drain.nextTick = Number((stintEndTime + m.def.drain.idle.resumeFrames / 60).toFixed(4));
+      drainProject(m, stintEndTime);
+    }
+
     const calculatedStint: Stint = {
       ...rawStint,
       startTime: stintStartTime,
@@ -1572,6 +1649,56 @@ export function calculateRotation(
       color: def.color,
       description: def.description,
     });
+  }
+
+  // 夜魂バーストで発動する効果（カチーナの山のこだまなど）は、チーム共通の間隔（ナタのキャラ 1 人 18 秒・2 人 12 秒・3 人以上 9 秒）を空ける。
+  // 同じ時刻（0.05 秒以内）の発動は、同じ夜魂バーストに反応したものとして数える。間隔が足りない発動は、CT 警告にする（アプリの時間は変えない）
+  {
+    const natlan = countNatlan(characters);
+    const burstCd = nightsoulBurstCooldown(natlan);
+    const triggered = passiveSpans.filter(p => {
+      if (p.auto || p.category !== 'talent') return false;
+      const def = characterMap.get(p.characterId)?.passiveEffects?.find(e => e.id === p.passiveEffectId);
+      return isNightsoulBurstTriggered(def?.description);
+    }).sort((a, b) => a.startTime - b.startTime);
+    if (triggered.length > 0 && burstCd === undefined) {
+      const first = triggered[0];
+      const ch = characterMap.get(first.characterId);
+      validationIssues.push({
+        id: `nightsoul_burst_none_${first.id}`,
+        severity: 'warning',
+        characterId: first.characterId,
+        stintId: first.stintId,
+        time: first.startTime,
+        title: `${ch?.name ?? ''}: 夜魂バーストが起きません`,
+        message: '夜魂バーストは、チーム内にナタのキャラがいるときだけ起きます。このチームにはナタのキャラがいません',
+      });
+    } else if (triggered.length > 0 && burstCd !== undefined) {
+      let anchor = -Infinity;
+      for (const sp of triggered) {
+        if (sp.startTime - anchor < 0.05) continue; // 同じ夜魂バースト
+        const gap = sp.startTime - anchor;
+        if (gap < burstCd - 0.001) {
+          const remaining = Number((burstCd - gap).toFixed(2));
+          for (const same of triggered.filter(t => Math.abs(t.startTime - sp.startTime) < 0.05)) {
+            same.hasCTViolation = true;
+            same.collisionRemainingCT = Math.max(same.collisionRemainingCT ?? 0, remaining);
+          }
+          const ch = characterMap.get(sp.characterId);
+          validationIssues.push({
+            id: `nightsoul_burst_ct_${sp.id}`,
+            severity: 'warning',
+            characterId: sp.characterId,
+            stintId: sp.stintId,
+            time: sp.startTime,
+            title: `${ch?.name ?? ''}: 夜魂バーストの間隔`,
+            message: `「${sp.name}」の発動は、前の夜魂バーストからあと ${remaining} 秒空ける必要があります（チーム内のナタのキャラ ${natlan} 人 → ${burstCd} 秒に 1 回）`,
+          });
+        } else {
+          anchor = sp.startTime;
+        }
+      }
+    }
   }
 
   // 同じ効果を再発動したら、前の発動の効果はそこで終わる（残りは上書きされる）

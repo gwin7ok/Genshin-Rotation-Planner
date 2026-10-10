@@ -177,7 +177,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSlot(idx); } }}
                   className={`relative p-2.5 rounded-xl border text-left transition-all cursor-pointer ${!isEmptySlotCharacter(c) ? 'pb-8' : ''} ${
                     isSelected 
-                      ? 'bg-slate-800 border-amber-400 shadow-md ring-1 ring-amber-400/40' 
+                      ? 'bg-slate-950/80 border-yellow-400 shadow-md ring-2 ring-yellow-400' 
                       : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
                   }`}
                 >
@@ -600,7 +600,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       disabled={isSelectedInSlot || isInOtherSlot}
                       className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
                         isSelectedInSlot
-                          ? 'bg-amber-500/20 border-amber-400/80 opacity-60 pointer-events-none'
+                          ? 'bg-slate-900/80 border-yellow-400 ring-2 ring-yellow-400 opacity-60 pointer-events-none'
                           : isInOtherSlot
                           ? 'bg-slate-950/40 border-slate-800/40 opacity-30 pointer-events-none'
                           : 'bg-slate-900/80 border-slate-800 hover:border-slate-600 hover:bg-slate-800'

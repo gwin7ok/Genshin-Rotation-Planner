@@ -137,6 +137,8 @@ export interface ActionMode {
     label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string;
     /** 別の動作になった E の消費量（兹白の月相の輝き 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
     cost?: number;
+    /** 通常攻撃（N）の、連続した N の段ごとの増加量（段の数で繰り返す。あれば gainByType.normal より優先。ローエンの愉悦・ヴェスナの剣気） */
+    gainByNormalIndex?: number[];
   };
   /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
   extendByBurstFrames?: number;

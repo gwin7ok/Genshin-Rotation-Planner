@@ -655,7 +655,11 @@ export function calculateRotation(
           if (state.value < need) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(state.value)} / ${need}）。${g.hint}`;
           state.value = g.cost !== undefined ? Math.max(0, state.value - g.cost) : 0;
         } else {
-          state.value = Math.min(g.max, state.value + (g.gainByType[act.type] ?? 0));
+          // 通常攻撃は、連続した N の何段目か（ここで数える normalStreak は、この N の前までの連続数）で増加量が変わる場合がある
+          const gain = act.type === 'normal' && g.gainByNormalIndex?.length
+            ? g.gainByNormalIndex[normalStreak % g.gainByNormalIndex.length]
+            : g.gainByType[act.type] ?? 0;
+          state.value = Math.min(g.max, state.value + gain);
         }
         m.gauge = state;
       }

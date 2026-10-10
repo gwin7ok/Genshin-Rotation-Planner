@@ -16,8 +16,13 @@ const { characters, report } = await generateCharacterMaster();
 linkCharacters(characters);
 linkActions(characters);
 
+// アプリ側だけの対応の表のキャラ（フレームを gcsim の未マージ実装から読む）と、gcsim にキーが無く推定の長さを入れるキャラ（フレーム・キー無し）
 const ids = new Set(APP_SIDE_SOURCES.map(s => s.genshinId));
-const fresh = new Map(characters.filter(c => c.source?.genshinId !== undefined && ids.has(c.source.genshinId)).map(c => [c.id, c]));
+const fresh = new Map(
+  characters
+    .filter(c => (c.source?.genshinId !== undefined && ids.has(c.source.genshinId)) || (!c.source?.gcsimKey && !c.isCustom))
+    .map(c => [c.id, c]),
+);
 const current = JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as typeof characters;
 let replaced = 0;
 const next = current.map(c => {

@@ -720,6 +720,66 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       endsOnLast: true,
     }, 'linnea/skill.go: AddStatus(skillRecastKey, 0.6*60, true)（E のたびに更新）、recastCount == 3 で DeleteStatus して大技。SetCDWithDelay(skill, 18*60, 1)', { noBar: false, keepEffectBar: true }),
   }],
+  // ローエン（issue #36。gcsim に実装なし。wiki: 掟破りの奇兵）: 奇策（E の発動から 13 秒。CT 18 秒）。この間の E は魂を穿つ痛み（特殊元素スキル。愉悦が 100 のとき使え、全部消費。CT なし。1 回の奇策で 3 回まで）。
+  // 愉悦: 奇策の間の通常攻撃・重撃が命中するたびに +17（命中数: N1 = 1・N2 = 1・N3 = 3・N4 = 1・N5 = 2。重撃 = 3 ヒットと見なす。wiki: 通常 6 ヒット、または重撃ループ 2 回で上限）。元素爆発で奇策が 1.65 秒延びる。交代で終わる。
+  // フレームは、実測がない（特殊元素スキルは、特殊スキルの中央値 68f の推定）。闘争心（他のキャラのダメージで溜まる）・魔導秘儀は未対応。C6: 回数 +2
+  '10000129-cryo': [{
+    action: 'e',
+    mode: {
+      label: '奇策',
+      description: '奇策の状態（13 秒）。通常攻撃・重撃が命中すると愉悦が溜まり、100 になると元素スキル（E）が魂を穿つ痛み（特殊元素スキル）になる（CT なし。1 回の奇策で 3 回まで）。元素爆発で 1.65 秒延びる。キャラ交代で終わる',
+      startDelayFrames: 0,
+      durationFrames: 780,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      extendByBurstFrames: 99,
+      byConstellation: [{ minConstellation: 6, repressMaxUses: 5 }],
+      repress: {
+        frames: [{ total: 68, cancels: { attack: 55, skill: 55, burst: 55, dash: 55, jump: 55, swap: 55 }, source: '推定（特殊スキルの中央値 68f。実測ではありません）' }],
+        maxUses: 3,
+      },
+      gauge: {
+        label: '愉悦',
+        max: 100,
+        timeGain: { everyFrames: 1000000, amount: 0 },
+        gainByType: { normal: 17, charged: 51 },
+        gainByNormalIndex: [17, 17, 51, 17, 34],
+        hint: '通常攻撃・重撃の命中数は wiki の記述からの推定です。闘争心・命ノ星座の効果は数えていません。足りないと特殊元素スキルは使えません',
+      },
+      source: 'wiki（掟破りの奇兵・魂を穿つ痛み・愉悦）: 奇策 13 秒、愉悦 100 で特殊元素スキル、1 回の奇策で 3 回まで、元素爆発で +1.65 秒、退場で解除。フレームは推定',
+    },
+  }],
+  // ヴェスナ（issue #36。gcsim に実装なし。wiki: 操典「勝利への道筋」）: 風巡りの臨戦（E の発動から 15 秒。CT 18 秒）。この間の E は飛翔の剣（特殊元素スキル。剣気 1 枚を消費。CT なし。ランク 1→2→3→3→3 で計 5 回使うと終わる。C1: 6 回）。
+  // 剣気: 最初の E で 2 枚（上限 3 枚）。攻撃で溜まる（通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35）。元素爆発で +1 枚。交代で終わる。フレームは推定（特殊スキルの中央値 68f）。粛清（スタック）・星拡散は未対応
+  '10000143-anemo': [{
+    action: 'e',
+    mode: {
+      label: '風巡りの臨戦',
+      description: '風巡りの臨戦の状態（15 秒）。通常攻撃・重撃・落下攻撃・元素爆発で剣気が溜まり、元素スキル（E）が飛翔の剣（特殊元素スキル。剣気 1 枚を消費。CT なし）になる。5 回使うと終わる。キャラ交代で終わる',
+      startDelayFrames: 0,
+      durationFrames: 900,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      byConstellation: [{ minConstellation: 0, gaugeInitial: 200 }, { minConstellation: 1, repressMaxUses: 6 }],
+      repress: {
+        frames: [{ total: 68, cancels: { attack: 55, skill: 55, burst: 55, dash: 55, jump: 55, swap: 55 }, source: '推定（特殊スキルの中央値 68f。実測ではありません）' }],
+        maxUses: 5,
+        endsOnLast: true,
+      },
+      gauge: {
+        label: '剣気',
+        max: 300,
+        cost: 100,
+        timeGain: { everyFrames: 1000000, amount: 0 },
+        gainByType: { normal: 20, charged: 30, plunge_low: 35, plunge_high: 35, burst: 100 },
+        gainByNormalIndex: [20, 20, 20, 20, 20, 50],
+        hint: '剣気は 100 = 1 枚として数えています（wiki の記述による。実測ではありません）。足りないと飛翔の剣は使えません',
+      },
+      source: 'wiki（操典「勝利への道筋」・風巡りの臨戦・飛翔の剣）: 15 秒、剣気ゲージ 3 枚（最初の E で 2 枚）、飛翔の剣は 1 枚消費・5 回で終了、通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35・元素爆発 1。フレームは推定',
+    },
+  }],
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
   '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],
@@ -1024,7 +1084,10 @@ async function fetchWithRetry(url: string, init?: RequestInit, retries = 2): Pro
   let lastError: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, init);
+      // Node（スクリプト）から実行するときは、環境変数 GITHUB_TOKEN があれば、GitHub API の認証に使う（未認証は 1 時間に 60 回まで）
+      const token = typeof process !== 'undefined' ? process.env?.GITHUB_TOKEN : undefined;
+      const auth = token && url.startsWith('https://api.github.com/') ? { headers: { ...(init?.headers as Record<string, string> | undefined), Authorization: `Bearer ${token}` } } : {};
+      const res = await fetch(url, { ...init, ...auth });
       if (res.ok) return res;
       lastError = new Error(`HTTP ${res.status} ${res.statusText}: ${url}`);
       if (res.status === 403 || res.status === 404) break; // レート制限・存在しないものは再試行しない
@@ -1688,6 +1751,55 @@ function genderView(parsed: ParsedCharacterFiles, gender: number): ParsedCharact
 
 const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst', 'plunge'];
 
+/**
+ * gcsim にも、gcsim の未マージ実装（appSideCharacterSources.ts）にもフレームが無いキャラの、アクションの長さの推定（issue #36）。
+ * 同じ武器種のキャラ（gcsim のフレームがあるもの）の中央値を使う。通常攻撃の段数は ESTIMATE_NORMAL_HITS（wiki）。実測ではないので、
+ * source.frameSource に「推定」と書く（画面に出る）。フレーム（frames）は作らない（実測と区別するため）
+ */
+const ESTIMATE_NORMAL_HITS: Record<number, number> = {
+  10000129: 5, // ローエン（wiki: ナイフ投げ→槍突き→ナイフ3連→蹴り上げ→槍2連の全5段）
+  10000133: 3, // サンドローネ（wiki: 最大3段）
+  10000140: 4, // ヴォジャニーツァ（wiki: 4段）
+  10000143: 6, // ヴェスナ（wiki: 6段）
+};
+const DEFAULT_ESTIMATE_NORMAL_HITS = 4;
+const median = (values: number[]): number | undefined => {
+  const v = values.filter(x => Number.isFinite(x)).sort((a, b) => a - b);
+  return v.length ? v[Math.floor(v.length / 2)] : undefined;
+};
+function applyEstimatedDurations(characters: CharacterConfig[]): void {
+  const measured = characters.filter(c => c.source?.gcsimKey && !c.source.frameSource && c.availableActions.some(a => a.frames));
+  for (const c of characters) {
+    if (c.source?.gcsimKey || c.source?.frameSource || c.isCustom) continue;
+    if (c.availableActions.some(a => a.frames)) continue;
+    const same = measured.filter(m => m.weaponType === c.weaponType);
+    if (same.length < 3) continue;
+    const typeOf = (m: CharacterConfig, type: string) => m.availableActions.find(a => a.type === type && a.frames);
+    const hitCount = ESTIMATE_NORMAL_HITS[c.source?.genshinId ?? 0] ?? DEFAULT_ESTIMATE_NORMAL_HITS;
+    // 通常攻撃: 連続した段ごと。段 i が途中の段（次の段がある）のキャラの中央値。最終段は、各キャラの最終段の中央値
+    const chains = same.map(m => m.availableActions.find(a => a.type === 'normal')?.normalHits).filter((h): h is NonNullable<typeof h> => !!h && h.length > 0);
+    const finalMedian = median(chains.map(h => h[h.length - 1].duration));
+    // 同じ武器種に、その段まで続くキャラがいないとき（片手剣の 6 段目など）は、前の段の値を使う
+    const hits: Array<number | undefined> = [];
+    for (let i = 0; i < hitCount; i++) {
+      hits.push(i === hitCount - 1 ? finalMedian : median(chains.filter(h => h.length > i + 1).map(h => h[i].duration)) ?? hits[i - 1]);
+    }
+    const skill = median(same.map(m => typeOf(m, 'skill')).filter(Boolean).map(a => (a!.frames!.cancels.attack ?? a!.frames!.total) / 60));
+    const burst = median(same.map(m => typeOf(m, 'burst')).filter(Boolean).map(a => (a!.frames!.cancels.attack ?? a!.frames!.total) / 60));
+    const charged = median(same.map(m => typeOf(m, 'charged')).filter(Boolean).map(a => a!.frames!.total / 60));
+    const r3 = (v: number) => Number(v.toFixed(3));
+    for (const a of c.availableActions) {
+      if (a.type === 'normal' && hits.every(h => h !== undefined)) {
+        a.normalHits = hits.map(h => ({ duration: r3(h!) }));
+        a.defaultDuration = r3(hits[0]!);
+      } else if (a.type === 'charged' && charged !== undefined) a.defaultDuration = r3(charged);
+      else if ((a.type === 'skill' || a.type === 'skill_hold') && skill !== undefined) a.defaultDuration = r3(skill);
+      else if (a.type === 'burst' && burst !== undefined) a.defaultDuration = r3(burst);
+    }
+    c.source = { ...c.source, frameSource: `推定（同じ武器種の ${same.length} キャラの中央値。実測ではありません）` };
+  }
+}
+
 export async function generateCharacterMaster(
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<CharacterMasterResult> {
@@ -1990,6 +2102,7 @@ export async function generateCharacterMaster(
   const allActionIds = new Set(characters.flatMap(c => c.availableActions.map(a => a.id)));
   report.effectDuration.orphans = [...Object.keys(EFFECT_DURATION_OVERRIDES), ...Object.keys(EFFECT_DURATION_SUPPRESSED)].filter(id => !allActionIds.has(id));
 
+  applyEstimatedDurations(characters);
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;
   return { characters, report, keyMap };

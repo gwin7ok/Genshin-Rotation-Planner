@@ -20,7 +20,7 @@ import {
   ActionDefinition,
 } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
-import type { ActionMode, ActionModeSpecial, CancelTarget, ModeEnder } from '../types/genshin';
+import type { ActionFrames, ActionMode, ActionModeSpecial, CancelTarget, ModeEnder } from '../types/genshin';
 import { passiveGroupOf } from '../types/genshin';
 import { buildActionEffectSpan, countDistinctActiveBuffs } from './characterActions';
 import { CooldownQueue, type QueueHead } from './cooldownQueue';
@@ -209,6 +209,8 @@ export function calculateRotation(
     span: ActiveBuffSpan;
     /** モードの間に、開いたアクションをもう一度使った回数（repress） */
     repressUsed: number;
+    /** 通常攻撃で溜まったスタック（def.nStacks のモードだけ） */
+    stacks?: number;
     /** モードを開いたアクション（モードの終わりから始まる CT〔cooldownAtEnd〕に使う） */
     opener: { actionId: string; name: string; start: number; cooldown: number; cdScale: number; constellation: number };
     inputs: number;
@@ -435,6 +437,22 @@ export function calculateRotation(
         }
       }
 
+      // 通常攻撃で溜まるスタック（フレミネの加圧）: N のたびに溜まり、max の後の N は起爆（モードを終わらせる）になる
+      let stackDetonation: { window: ModeWindow; frames: ActionFrames } | undefined;
+      if (!modeEnder && act.type === 'normal') {
+        for (const m of modeWindows.values()) {
+          const ns = m.def.nStacks;
+          if (!ns || !isModeActive(m, char.id, sIdx, actionStartTime)) continue;
+          if ((m.stacks ?? 0) >= ns.max) {
+            stackDetonation = { window: m, frames: ns.detonate };
+            endMode(m, actionStartTime, 'ender');
+          } else {
+            const boosted = !!ns.boostedBy && [...modeWindows.values()].some(x => x.charId === char.id && x.def.label === ns.boostedBy && isModeActive(x, char.id, sIdx, actionStartTime));
+            m.stacks = Math.min(ns.max, (m.stacks ?? 0) + (boosted ? ns.boostedPerUse ?? ns.perUse : ns.perUse));
+          }
+        }
+      }
+
       // 爆発の後のモード（ディシア）の固有の扱い: モードの間の N・E はパンチ、ダッシュは短く（ジャンプへ）、ジャンプは蹴りかモードの終わり、終わった後の最初の N・E は蹴り
       const mw = burstModeAction?.mode ? modeWindows.get(modeKeyOf(char.id, burstModeAction.mode)) : undefined;
       let modeKind: 'punch' | 'kick' | 'dash' | undefined;
@@ -562,7 +580,14 @@ export function calculateRotation(
       if (act.type === 'burst' && frameMode?.def.burstFrames) frames = frameMode.def.burstFrames;
       if (act.type === 'charged' && frameMode?.def.chargedFrames) frames = frameMode.def.chargedFrames;
       // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
-      if (modeEnder?.ender.frames) frames = modeEnder.ender.frames;
+      if (modeEnder?.ender.frames) {
+        const ns = modeEnder.window.def.nStacks;
+        frames = ns && (modeEnder.window.stacks ?? 0) >= ns.max ? ns.detonate : modeEnder.ender.frames;
+      }
+      if (stackDetonation) {
+        frames = stackDetonation.frames;
+        normalStreak = 0;
+      }
       if (modeRepress) {
         const rp = modeRepress.window.def.repress!;
         const rpFrames = rp.frames;

@@ -396,6 +396,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       swap: 'persists',
       enders: [{ by: 'self', cooldown: 'none', frames: { total: 55, cancels: { attack: 53, skill: 47, burst: 47, dash: 47, jump: 47, swap: 51 }, source: 'skill.go:skillPressureFrames[0]' } }],
       holdByDefault: false,
+      // N のたびにスタックが溜まり（影狩りの間は 2）、4 になった後の N（と E）は、起爆のフレームになる（2026-10-10）
+      nStacks: {perUse:1,boostedBy:'影狩り',boostedPerUse:2,max:4,detonate:{total:59,cancels:{attack:53,skill:42,burst:42,dash:43,jump:41,swap:51},source:'skill.go:skillPressureFrames[1]（スタック 4 の起爆。N・E どちらでも）'},source:'freminet/attack.go: skillStacks >= 4 の N は detonateSkill。persTimeKey の間の N で skillStacks +1（影狩りの間は +2。最大 4）'},
       source: 'freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）',
     },
   },

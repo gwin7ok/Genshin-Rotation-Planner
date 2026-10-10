@@ -123,6 +123,11 @@ export interface ActionMode {
   cooldownReduceOnExpire?: { seconds: number; afterSwap: boolean };
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
   normalFrames?: ActionFrames[];
+  /**
+   * 通常攻撃（N）のたびに溜まるスタック（フレミネの加圧。2026-10-10）。スタックが max に達した後の N は、起爆（detonate のフレーム。モードを終わらせる）になる。
+   * 終わらせる E（enders の self）も、スタックが max のときは detonate のフレームになる。boostedBy = このラベルのモードが続いている間は、1 回で boostedPerUse 溜まる
+   */
+  nStacks?: { perUse: number; boostedBy?: string; boostedPerUse?: number; max: number; detonate: ActionFrames; source: string };
   /** モードの間の元素爆発のフレーム */
   burstFrames?: ActionFrames;
   /** モードの間の重撃のフレーム（雷電将軍の夢想の一心: 刀の重撃） */

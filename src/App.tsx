@@ -26,6 +26,8 @@ import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
 import { normalizeModeHoldActions, isModeHoldAction } from './utils/modeHoldAction';
+import { runGcsimForConfig, computeGcsimApply, summarizeApplyPlan, describeApplyPlan } from './utils/gcsim/gcsimCompute';
+import { GcsimComputeBanner, type GcsimComputeBannerState } from './components/GcsimComputeBanner';
 import { buildRotationNotation } from './utils/rotationNotation';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
@@ -355,8 +357,8 @@ export default function App() {
   );
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
-  const handleCopyGcsimConfig = () => {
-    const result = buildGcsimConfig({
+  // 現在の編成・ローテーションから gcsim の設定文を作る（コピーと「gcsim で計算」の両方で使う）
+  const buildCurrentGcsimConfig = () => buildGcsimConfig({
       characters,
       stints: visibleStints,
       loopStartIndex,
@@ -383,8 +385,78 @@ export default function App() {
         calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
       ),
     });
+  const handleCopyGcsimConfig = () => {
+    const result = buildCurrentGcsimConfig();
     setGcsimResult(result);
     void copyGcsimText(result.config);
+  };
+
+  // 「gcsim で計算」（6-5。D120）: 設定文を作り、実行して、CT 待ちが無ければ結果を一括で反映する
+  const [gcsimComputing, setGcsimComputing] = useState(false);
+  const [gcsimBanner, setGcsimBanner] = useState<GcsimComputeBannerState | null>(null);
+  const handleGcsimCompute = async () => {
+    if (gcsimComputing) return;
+    const result = buildCurrentGcsimConfig();
+    const errors = result.warnings.filter(w => w.level === 'error');
+    if (errors.length > 0) {
+      setGcsimBanner({
+        level: 'error',
+        title: 'gcsim で実行できない要素があるため、計算しませんでした',
+        message: '「gcsim設定文をコピー」のポップアップで、詳しい警告を確認できます。',
+        details: errors.map(w => w.message),
+      });
+      return;
+    }
+    if (ctViolationIssues.length > 0) {
+      setGcsimBanner({
+        level: 'error',
+        title: `アプリのCT違反が ${ctViolationIssues.length} 件あるため、計算しませんでした`,
+        message: '先に、CT 違反を解消してください（ガントチャートの赤い印のアクション）。',
+        details: ctViolationIssues.map(v => `${v.title}: ${v.message}`),
+      });
+      return;
+    }
+    setGcsimComputing(true);
+    setGcsimBanner({ level: 'running', title: 'gcsim で計算しています…', message: '祭礼の武器があると、種を探すので、数十秒かかることがあります。' });
+    const outcome = await runGcsimForConfig(result, calculatedResult);
+    setGcsimComputing(false);
+    if (outcome.status !== 'ok') {
+      setGcsimBanner(outcome.status === 'unreachable'
+        ? { level: 'error', title: 'gcsim サーバーに接続できませんでした', message: outcome.message + '\nサーバーを起動してください（npm run gcsim:start）。' }
+        : { level: 'error', title: 'gcsim の実行エラー', message: outcome.message });
+      return;
+    }
+    const waitIds = Object.keys(outcome.waits.byActionId);
+    setGcsimCtWaits(waitIds.length > 0 ? outcome.waits.byActionId : null);
+    if (waitIds.length > 0 || outcome.align.mismatch) {
+      setGcsimReactions(null);
+      setGcsimBanner(waitIds.length > 0
+        ? {
+          level: 'warn',
+          title: `gcsim でCT待ちが生じたため、結果を反映していません（${waitIds.length} 件）`,
+          message: '該当アクションに、CT 違反と同じ印を付けました（残りCT = gcsim で実際に待った秒数）。ガントチャートの該当アクションを直して、もう一度計算してください。',
+        }
+        : {
+          level: 'warn',
+          title: '設定文と gcsim のログのアクションの並びが合わないため、反映できません',
+          message: outcome.align.mismatch,
+        });
+      return;
+    }
+    // 反応の状態（月反応・星反応）
+    const { extractReactionRows, anchorReactionRows, reactionLapInputs } = await import('./utils/gcsim/readReactions');
+    setGcsimReactions(anchorReactionRows(extractReactionRows(outcome.logs), reactionLapInputs(outcome.align.pairs)));
+    const plan = computeGcsimApply({ stints: visibleStints, calculated: calculatedResult, result, buffsByCharacter, actionLinks, outcome });
+    const warnCount = result.warnings.filter(w => w.level === 'warn').length;
+    if (plan.total > 0) updateStints(plan.stints);
+    setGcsimBanner({
+      level: warnCount > 0 ? 'warn' : 'success',
+      title: plan.total > 0 ? 'gcsim の計算結果を反映しました' : 'gcsim で計算しました（アプリの値と同じため、変更はありません）',
+      message: summarizeApplyPlan(plan)
+        + (warnCount > 0 ? '\n設定文の警告が ' + warnCount + ' 件あります（「gcsim設定文をコピー」のポップアップで確認できます）。' : '')
+        + (plan.total > 0 ? '\n取り消すには「アプリの計算に戻す」を押してください。' : ''),
+      details: describeApplyPlan(plan, visibleStints, result.members),
+    });
   };
 
   const handleCopyNotation = () => {
@@ -472,6 +544,8 @@ export default function App() {
         onImportJson={handleImportJson}
         onCopyNotation={handleCopyNotation}
         onCopyGcsimConfig={handleCopyGcsimConfig}
+        onGcsimCompute={() => void handleGcsimCompute()}
+        gcsimComputing={gcsimComputing}
         onResetToAppCalculation={handleResetToAppCalculation}
         copiedNotation={copiedNotation}
         loopStartTime={loopStartTime}
@@ -481,6 +555,9 @@ export default function App() {
         playbackCycleCount={playbackCycleCount}
         loopPeriod={loopPeriod}
       />
+
+      {/* 「gcsim で計算」の結果（実行中・反映・警告・エラー） */}
+      <GcsimComputeBanner state={gcsimBanner} onClose={() => setGcsimBanner(null)} />
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col">

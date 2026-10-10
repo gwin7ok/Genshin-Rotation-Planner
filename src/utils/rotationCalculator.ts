@@ -504,7 +504,33 @@ export function calculateRotation(
           }
         }
         // 使い切るとモードが終わる（ニィロウのステップ 3 段目）
-        if (rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses) endMode(m, actionStartTime, 'ender');
+        if (rp.endsOnLast && rp.maxUses !== undefined && m.repressUsed >= rp.maxUses) {
+          endMode(m, actionStartTime, 'ender');
+          // そのアクションで終えたときだけ続けて開くモード（ニィロウ: N で 3 段目を終えると月の祈り）
+          const fu = rp.followUps?.[act.actionTypeId.slice(char.id.length + 1)];
+          if (fu) {
+            const fStart = Number((actionStartTime + fu.startDelayFrames / 60).toFixed(3));
+            const fEnd = Number((fStart + fu.durationFrames / 60).toFixed(3));
+            const fSpan: ActiveBuffSpan = {
+              id: `mode_${m.actionDefId}_${act.id}_followup`,
+              buffId: `mode_${m.actionDefId}_followup`,
+              name: `${char.name} ${fu.label}`,
+              sourceCharacterId: char.id,
+              sourceType: 'talent',
+              startTime: fStart,
+              endTime: fEnd,
+              duration: Number((fEnd - fStart).toFixed(3)),
+              color: char.color,
+              description: fu.description,
+              noSynergy: true,
+            };
+            if (!fu.noBar) activeBuffs.push(fSpan);
+            modeWindows.set(modeKeyOf(char.id, fu), {
+              key: modeKeyOf(char.id, fu), charId: char.id, actionDefId: `${m.actionDefId}#${fu.label}`, def: fu, sIdx, start: fStart, end: fEnd, span: fSpan,
+              repressUsed: 0, inputs: 0, finished: false, reductions: 0, opener: m.opener,
+            });
+          }
+        }
       }
       if (modeKind === 'punch' || modeKind === 'kick') {
         if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
@@ -543,7 +569,7 @@ export function calculateRotation(
         // アクションごとのフレーム（ドゥリン: 受付の間の N は黒の再発動）。通常攻撃の段は 1 段目に戻る
         const byAction = rp.framesByAction?.[act.actionTypeId.slice(char.id.length + 1)];
         if (byAction) {
-          frames = byAction;
+          frames = Array.isArray(byAction) ? byAction[Math.min(modeRepress.index, byAction.length - 1)] : byAction;
           if (act.type === 'normal') normalStreak = 0;
         } else if (rpFrames.length) frames = rpFrames[Math.min(modeRepress.index, rpFrames.length - 1)];
       }

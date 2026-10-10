@@ -34,6 +34,9 @@ interface HeaderProps {
   copiedNotation: boolean;
   loopStartTime?: number;
   rotationNotation?: string;
+  /** 記法のモード（略号 / 名称）と、切り替え */
+  notationMode?: 'short' | 'name';
+  onChangeNotationMode?: (mode: 'short' | 'name') => void;
   totalCTCollisions?: number;
   /** 発動バフのCT警告の件数（CT中の発動。効果が発動しないだけで、gcsim の計算は止めない） */
   totalCTWarnings?: number;
@@ -70,6 +73,8 @@ export const Header: React.FC<HeaderProps> = ({
   copiedNotation,
   loopStartTime = 0,
   rotationNotation = '',
+  notationMode = 'short',
+  onChangeNotationMode,
   totalCTCollisions = 0,
   totalCTWarnings = 0,
   playbackCycleCount = 1,
@@ -413,6 +418,23 @@ export const Header: React.FC<HeaderProps> = ({
                 title="現在のローテーション記法"
               >
                 <span className="text-[10px] text-slate-500 font-sans shrink-0 select-none">記法:</span>
+                <div className="flex items-center gap-0.5 shrink-0 font-sans">
+                  {([['short', '略号'], ['name', '名称']] as const).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => onChangeNotationMode?.(value)}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border transition-colors ${
+                        notationMode === value
+                          ? 'bg-sky-500 text-slate-950 border-sky-400'
+                          : 'bg-slate-900 text-slate-300 border-slate-700 hover:border-sky-400'
+                      }`}
+                      title={value === 'short' ? '略号の記法（KQM の形。詰めて書く）' : '名称の記法（日本語。スペースで区切る）'}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
                 <span className="select-all font-semibold tracking-wide">{rotationNotation}</span>
               </div>
             )}

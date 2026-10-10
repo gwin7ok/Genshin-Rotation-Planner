@@ -11,6 +11,9 @@ interface RotationSummaryModalProps {
   totalDuration: number;
   /** 2周目ループの開始位置（何番目の出場キャラの前か。0=基準なし） */
   loopStartIndex?: number;
+  /** 記法のモード（略号 / 名称）と、切り替え */
+  notationMode?: 'short' | 'name';
+  onChangeNotationMode?: (mode: 'short' | 'name') => void;
 }
 
 export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
@@ -20,6 +23,8 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
   stints,
   totalDuration,
   loopStartIndex = 0,
+  notationMode = 'short',
+  onChangeNotationMode,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -28,8 +33,8 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
-  // 記法: 刻晴(E E) ➔ [ナヒーダ(E C) ➔ フィッシュル(Q)]（[ ] は2周目以降も繰り返す部分）
-  const rotationNotation = buildRotationNotation(characters, stints, loopStartIndex);
+  // 記法（KQM の記法。モードは、略号 / 名称）: 刻晴 EQ > {ナヒーダ E 2[N1C] > フィッシュル Q}（{ } は2周目以降も繰り返す部分）
+  const rotationNotation = buildRotationNotation(characters, stints, loopStartIndex, notationMode);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(rotationNotation);
@@ -65,6 +70,23 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>ワンライナー記法 (SNS・共有用)</span>
               </span>
+              <div className="flex items-center gap-0.5 shrink-0 font-sans">
+                  {([['short', '略号'], ['name', '名称']] as const).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => onChangeNotationMode?.(value)}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border transition-colors ${
+                        notationMode === value
+                          ? 'bg-sky-500 text-slate-950 border-sky-400'
+                          : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-sky-400'
+                      }`}
+                      title={value === 'short' ? '略号の記法（KQM の形。詰めて書く）' : '名称の記法（日本語。スペースで区切る）'}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               <button
                 onClick={handleCopy}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-medium transition-colors"

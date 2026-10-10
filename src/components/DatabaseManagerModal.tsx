@@ -659,6 +659,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                             <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? `gcsim のリリースには入っていない実装のフレームです（出典: ${char.source.frameSource}）` : undefined}>
                               {char.source?.frameSource ? `出典: ${char.source.frameSource}` : 'gcsim フレーム'} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
                             </strong>
+                          ) : char.source?.frameSource ? (
+                            <strong className="text-amber-300" title="実測のフレームがありません。同じ武器種のキャラの中央値からの推定です">出典: {char.source.frameSource}</strong>
                           ) : (
                             <strong className="text-slate-500">フレーム未取得 (仮の秒数)</strong>
                           )}

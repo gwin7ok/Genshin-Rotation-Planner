@@ -128,6 +128,12 @@ export interface ActionMode {
    * 終わらせる E（enders の self）も、スタックが max のときは detonate のフレームになる。boostedBy = このラベルのモードが続いている間は、1 回で boostedPerUse 溜まる
    */
   nStacks?: { perUse: number; boostedBy?: string; boostedPerUse?: number; max: number; detonate: ActionFrames; source: string };
+  /**
+   * モードの間に溜まるゲージ（キィニチの夜魂値。2026-10-10）。モードの開始で 0。時間で everyFrames ごとに amount 溜まり、
+   * 通常攻撃などのアクションで gainByType だけ溜まる（最大 max）。モードの間に別の動作になった E（repress）は、ゲージが max のときだけ使え、使うと 0 になる。
+   * 足りないときは黄色の警告（アプリの時間は変えない。gcsim は実行エラー）。ゲージに数えない増加（hint）は、gcsim を実行したときだけ分かる
+   */
+  gauge?: { label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string };
   /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */
   replaces?: string[];
   /** このモードの間の元素爆発の名前と、効果バーの名前（ドゥリンの漆黒の否の間の爆発 = 漆黒の法則・黒蝕の龍） */

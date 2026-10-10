@@ -211,6 +211,8 @@ export function calculateRotation(
     repressUsed: number;
     /** 通常攻撃で溜まったスタック（def.nStacks のモードだけ） */
     stacks?: number;
+    /** ゲージ（def.gauge のモードだけ）: 現在値と、時間で数え終えた回数 */
+    gauge?: { value: number; ticks: number };
     /** モードを開いたアクション（モードの終わりから始まる CT〔cooldownAtEnd〕に使う） */
     opener: { actionId: string; name: string; start: number; cooldown: number; cdScale: number; constellation: number };
     inputs: number;
@@ -555,6 +557,23 @@ export function calculateRotation(
           }
         }
       }
+      // モードのゲージ（キィニチの夜魂値）: 時間の増加 → このアクションの増加（N）／使用（別の動作になった E は、満タンのときだけ使え、0 になる）
+      let gaugeMessage: string | undefined;
+      for (const m of modeWindows.values()) {
+        const g = m.def.gauge;
+        if (!g || !isModeActive(m, char.id, sIdx, actionStartTime) || actionStartTime < m.start - 0.001) continue;
+        const state = m.gauge ?? { value: 0, ticks: 0 };
+        const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
+        state.value = Math.min(g.max, state.value + (ticksNow - state.ticks) * g.timeGain.amount);
+        state.ticks = ticksNow;
+        if (modeRepress?.window === m && (act.type === 'skill' || act.type === 'skill_hold')) {
+          if (state.value < g.max) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(state.value)} / ${g.max}）。${g.hint}`;
+          state.value = 0;
+        } else {
+          state.value = Math.min(g.max, state.value + (g.gainByType[act.type] ?? 0));
+        }
+        m.gauge = state;
+      }
       if (modeKind === 'punch' || modeKind === 'kick') {
         if (act.type === 'skill') inStateWindow = true; // スキルの CT・効果・窓の規則は使わない
         if (modeKind === 'kick') {
@@ -650,7 +669,8 @@ export function calculateRotation(
         const motionFrames = frames ? (nextKey === 'wait' ? canQueueFrames(frames, actionDef) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) : undefined;
         holdSeconds = motionFrames === undefined
           ? 0
-          : Number(Math.max(0, duration - (motionFrames / 60 - (actionDef?.holdInFrames ?? 0))).toFixed(3));
+          // モードの間に別の動作になった長押し（キィニチの廻狩貫鱗砲）は、フレームが長押しを含まない（既定は最短の照準）
+          : Number(Math.max(0, duration - (motionFrames / 60 - (modeRepress ? 0 : actionDef?.holdInFrames ?? 0))).toFixed(3));
       }
 
       // 状態によって爆発の種類が変わるキャラ（ドゥリン: 漆黒の否の間は漆黒の法則）: アクションと効果バーの名前を、その種類にする
@@ -682,6 +702,20 @@ export function calculateRotation(
           time: actionStartTime,
           title: `${char.name}: モードの間に置けない操作`,
           message: blockedMessage,
+        });
+      }
+
+      if (gaugeMessage) {
+        computedAction.specialWindowWarning = gaugeMessage;
+        validationIssues.push({
+          id: `mode_gauge_${act.id}`,
+          severity: 'warning',
+          characterId: char.id,
+          stintId: rawStint.id,
+          actionId: act.id,
+          time: actionStartTime,
+          title: `${char.name}: ゲージが足りません`,
+          message: gaugeMessage,
         });
       }
 

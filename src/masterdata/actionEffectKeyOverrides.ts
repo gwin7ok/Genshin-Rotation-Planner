@@ -40,6 +40,7 @@ export const ACTION_EFFECT_KEY_OVERRIDES: Record<string, EffectKeyOverride> = {
   '10000005-pyro_e': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // 空(炎)のスキル
   '10000007-pyro_e': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // 蛍(炎)のスキル
   '10000101-dendro_e': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // キィニチのスキル
+  '10000101-dendro_e_hold': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // キィニチの長押し（加護に入る。一回押しと同じ）
   '10000111-electro_q': { key: 'nightsoul-blessing', mode: 'ended', self: true }, // ヴァレサの爆発
   // 藍硯のスキル: 自動収集は、跳び退きの短い状態 leap-back（1.1 秒）を選んでいた。効果本体は燕の羽ばたき（シールド 12.5 秒。マスターの 12.5 秒と一致）
   '10000108-anemo_e': 'shield:Swallow-Wisp Pinion Dance (Shield)',

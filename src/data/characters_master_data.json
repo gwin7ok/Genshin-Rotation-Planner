@@ -34529,12 +34529,12 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "cooldownStart": "skill.go:SetCD（遅れなし）"
+          "cooldownStart": "manual: kinich/skill.go: Tasks.Add(…SetCD(ActionSkill, 18*60)…, skillStart(9) + hold)"
         },
         "defaultDuration": 0.7,
         "cooldownStart": {
           "from": "motionStart",
-          "delay": 0
+          "delay": 0.15
         },
         "gcsimEffect": {
           "keys": [
@@ -34543,7 +34543,259 @@
           "mode": "ended",
           "self": true,
           "status": "manual"
+        },
+        "mode": {
+          "label": "夜魂の加護",
+          "description": "夜魂の加護の状態（10 秒）。通常攻撃は円軌道射撃になり、元素スキル（E）は夜魂値が満タン（20）のとき廻狩貫鱗砲になる（CT なし）。キャラ交代で終わる",
+          "startDelayFrames": 9,
+          "durationFrames": 610,
+          "startAfterHold": true,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": true,
+          "normalFrames": [
+            {
+              "total": 53,
+              "hitmark": 38,
+              "cancels": {
+                "attack": 40,
+                "skill": 33,
+                "burst": 35,
+                "dash": 26,
+                "jump": 32,
+                "walk": 50,
+                "swap": 38
+              },
+              "source": "attack.go:skillAttackFrames[0]（N1(E)。InitNormalCancelSlice(38, 53)）"
+            },
+            {
+              "total": 53,
+              "hitmark": 38,
+              "cancels": {
+                "attack": 40,
+                "skill": 33,
+                "burst": 32,
+                "dash": 21,
+                "jump": 34,
+                "walk": 51,
+                "swap": 38
+              },
+              "source": "attack.go:skillAttackFrames[1]（N2(E)）"
+            }
+          ],
+          "repress": {
+            "frames": [
+              {
+                "total": 135,
+                "cancels": {
+                  "attack": 59,
+                  "burst": 59,
+                  "dash": 67,
+                  "jump": 67,
+                  "walk": 71,
+                  "swap": 100
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）"
+              }
+            ],
+            "actions": [
+              "e",
+              "e_hold"
+            ],
+            "framesByAction": {
+              "e": {
+                "total": 135,
+                "cancels": {
+                  "attack": 59,
+                  "burst": 59,
+                  "dash": 67,
+                  "jump": 67,
+                  "walk": 71,
+                  "swap": 100
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）"
+              },
+              "e_hold": {
+                "total": 117,
+                "cancels": {
+                  "attack": 41,
+                  "burst": 41,
+                  "dash": 49,
+                  "jump": 49,
+                  "walk": 53,
+                  "swap": 82
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 17 + scalespikerFrames。hold=1）"
+              }
+            }
+          },
+          "gauge": {
+            "label": "夜魂値",
+            "max": 20,
+            "timeGain": {
+              "everyFrames": 30,
+              "amount": 1
+            },
+            "gainByType": {
+              "normal": 3
+            },
+            "hint": "A1（燃焼・烈開花で +7）・盲点（+4）による増加は数えていません。gcsim では、満タンでないと実行エラーになります。通常攻撃を足すか、時間を空けてください"
+          },
+          "blocked": {
+            "types": [
+              "charged",
+              "plunge_low",
+              "plunge_high"
+            ],
+            "result": "error",
+            "hint": "夜魂の加護の間は、重撃・落下攻撃は使えません"
+          },
+          "source": "kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul"
         }
+      },
+      {
+        "id": "10000101-dendro_e_hold",
+        "name": "元素スキル(長押し): 懸狩り·宙の遊猟",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 0,
+        "frames": {
+          "total": 342,
+          "cancels": {
+            "attack": 329,
+            "burst": 327,
+            "walk": 341
+          },
+          "source": "skill.go:skillFrames（+ 長押し -1 + 最大 301f）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: kinich/skill.go: 同上。hold > 0 のとき、長押しの長さは hold − 1"
+        },
+        "defaultDuration": 5.7,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.15
+        },
+        "gcsimEffect": {
+          "keys": [
+            "nightsoul-blessing"
+          ],
+          "mode": "ended",
+          "self": true,
+          "status": "manual"
+        },
+        "mode": {
+          "label": "夜魂の加護",
+          "description": "夜魂の加護の状態（10 秒）。通常攻撃は円軌道射撃になり、元素スキル（E）は夜魂値が満タン（20）のとき廻狩貫鱗砲になる（CT なし）。キャラ交代で終わる",
+          "startDelayFrames": 9,
+          "durationFrames": 610,
+          "startAfterHold": true,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": true,
+          "normalFrames": [
+            {
+              "total": 53,
+              "hitmark": 38,
+              "cancels": {
+                "attack": 40,
+                "skill": 33,
+                "burst": 35,
+                "dash": 26,
+                "jump": 32,
+                "walk": 50,
+                "swap": 38
+              },
+              "source": "attack.go:skillAttackFrames[0]（N1(E)。InitNormalCancelSlice(38, 53)）"
+            },
+            {
+              "total": 53,
+              "hitmark": 38,
+              "cancels": {
+                "attack": 40,
+                "skill": 33,
+                "burst": 32,
+                "dash": 21,
+                "jump": 34,
+                "walk": 51,
+                "swap": 38
+              },
+              "source": "attack.go:skillAttackFrames[1]（N2(E)）"
+            }
+          ],
+          "repress": {
+            "frames": [
+              {
+                "total": 135,
+                "cancels": {
+                  "attack": 59,
+                  "burst": 59,
+                  "dash": 67,
+                  "jump": 67,
+                  "walk": 71,
+                  "swap": 100
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）"
+              }
+            ],
+            "actions": [
+              "e",
+              "e_hold"
+            ],
+            "framesByAction": {
+              "e": {
+                "total": 135,
+                "cancels": {
+                  "attack": 59,
+                  "burst": 59,
+                  "dash": 67,
+                  "jump": 67,
+                  "walk": 71,
+                  "swap": 100
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）"
+              },
+              "e_hold": {
+                "total": 117,
+                "cancels": {
+                  "attack": 41,
+                  "burst": 41,
+                  "dash": 49,
+                  "jump": 49,
+                  "walk": 53,
+                  "swap": 82
+                },
+                "source": "skill.go:ScalespikerCannon（releaseFrame 17 + scalespikerFrames。hold=1）"
+              }
+            }
+          },
+          "gauge": {
+            "label": "夜魂値",
+            "max": 20,
+            "timeGain": {
+              "everyFrames": 30,
+              "amount": 1
+            },
+            "gainByType": {
+              "normal": 3
+            },
+            "hint": "A1（燃焼・烈開花で +7）・盲点（+4）による増加は数えていません。gcsim では、満タンでないと実行エラーになります。通常攻撃を足すか、時間を空けてください"
+          },
+          "blocked": {
+            "types": [
+              "charged",
+              "plunge_low",
+              "plunge_high"
+            ],
+            "result": "error",
+            "hint": "夜魂の加護の間は、重撃・落下攻撃は使えません"
+          },
+          "source": "kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul"
+        },
+        "holdInFrames": 5
       },
       {
         "id": "10000101-dendro_q",

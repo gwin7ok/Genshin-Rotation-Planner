@@ -1,6 +1,6 @@
-# キィニチの仕様（案。追加作業 17 の続き。2026-10-10）
+# キィニチの仕様（2026-10-10。決定・実装済み: D127）
 
-出典: gcsim `internal/characters/kinich/`（skill.go・attack.go・asc.go）、wikiwiki「キィニチ」。実装は、ユーザーの確認後。
+出典: gcsim `internal/characters/kinich/`（skill.go・attack.go・asc.go）、wikiwiki「キィニチ」。4 点は推奨どおりに決定し、実装した（D127。DB v55）。以下の「案」は、そのままの内容で実装している。CT の開始は、加護に入る 9f 後（実装時に、gcsim のソースで確認）。
 
 ## 1. ゲーム・gcsim の動き
 

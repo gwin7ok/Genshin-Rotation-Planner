@@ -46,6 +46,9 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   // レザー: 爆発中でないとき（burstActive=0）。爆発中は 31f（一回押し）
   '10000020-electro_e': { from: 'motionStart', delayFrames: 30, note: 'razor/skill.go: skillPressCDStarts[0]（爆発中は 31f）' },
   '10000020-electro_e_hold': { from: 'motionStart', delayFrames: 52, note: 'razor/skill.go: skillHoldCDStarts[0]（爆発中も 52f）' },
+  // キィニチ: 夜魂の加護に入るタスク（skillStart(9) + hold − 1）の中で SetCD(skillCD)。長押しは、長押しの終わりから 9f
+  '10000101-dendro_e': { from: 'motionStart', delayFrames: 9, note: 'kinich/skill.go: Tasks.Add(…SetCD(ActionSkill, 18*60)…, skillStart(9) + hold)' },
+  '10000101-dendro_e_hold': { from: 'holdEnd', delayFrames: 9, holdInFrames: 300, note: 'kinich/skill.go: 同上。hold > 0 のとき、長押しの長さは hold − 1' },
   // 鹿野院平蔵: skillRelease(delay) の skillCDStart + delay（一回押しは delay=0）
   // 平蔵の長押し（0 層から 4 層まで溜める 180f）: skillCDStart(18) + delay(180)
   '10000059-anemo_e_hold': { from: 'motionStart', delayFrames: 198, note: 'heizou/skill.go: skillRelease(delay) の skillCDStart + delay。delay = skillHoldDuration(4) = 180f（0 層から）' },

@@ -579,6 +579,46 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       endsOnLast: true,
     },
   })],
+  // キィニチ: 夜魂の加護（E の 9f 後。長押しなら長押しの終わりから。610f）。加護の中は、N が円軌道射撃（2 種が交互）、E は夜魂値が満タン（20）のとき廻狩貫鱗砲（CT なし。加護は続く）。
+  // 夜魂値: 時間で 0.5 秒ごとに +1、N で +3（A1 の燃焼・烈開花で +7、盲点で +4 は、アプリは数えない）。交代で終わる（gcsim: OnCharacterSwap の cancelNightsoul。ゲームでの確認は未）。
+  // 廻狩貫鱗砲の長押しは、既定は最短の照準（hold=1。発射 17f）。長押しの長さは所要時間で変える（上限 181）。加護の中では、重撃・落下攻撃は使えない（gcsim は実行エラー）
+  '10000101-dendro': [{
+    action: ['e', 'e_hold'],
+    keepEffectDuration: true,
+    mode: {
+      label: '夜魂の加護',
+      description: '夜魂の加護の状態（10 秒）。通常攻撃は円軌道射撃になり、元素スキル（E）は夜魂値が満タン（20）のとき廻狩貫鱗砲になる（CT なし）。キャラ交代で終わる',
+      startDelayFrames: 9,
+      durationFrames: 610,
+      startAfterHold: true,
+      swap: 'ends',
+      enders: [],
+      holdByDefault: true,
+      normalFrames: [
+        { total: 53, hitmark: 38, cancels: { attack: 40, skill: 33, burst: 35, dash: 26, jump: 32, walk: 50, swap: 38 }, source: 'attack.go:skillAttackFrames[0]（N1(E)。InitNormalCancelSlice(38, 53)）' },
+        { total: 53, hitmark: 38, cancels: { attack: 40, skill: 33, burst: 32, dash: 21, jump: 34, walk: 51, swap: 38 }, source: 'attack.go:skillAttackFrames[1]（N2(E)）' },
+      ],
+      repress: {
+        // 一回押し: 発射 35f の後の scalespikerFrames（既定 100・N/Q 24・ダッシュ/ジャンプ 32・歩き 36・交代 65）
+        frames: [{ total: 135, cancels: { attack: 59, burst: 59, dash: 67, jump: 67, walk: 71, swap: 100 }, source: 'skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）' }],
+        actions: ['e', 'e_hold'],
+        framesByAction: {
+          e: { total: 135, cancels: { attack: 59, burst: 59, dash: 67, jump: 67, walk: 71, swap: 100 }, source: 'skill.go:ScalespikerCannon（releaseFrame 35 + scalespikerFrames）' },
+          // 長押し（hold=1: 発射 17f。hold が 1 増えるごとに +1f）
+          e_hold: { total: 117, cancels: { attack: 41, burst: 41, dash: 49, jump: 49, walk: 53, swap: 82 }, source: 'skill.go:ScalespikerCannon（releaseFrame 17 + scalespikerFrames。hold=1）' },
+        },
+      },
+      gauge: {
+        label: '夜魂値',
+        max: 20,
+        timeGain: { everyFrames: 30, amount: 1 },
+        gainByType: { normal: 3 },
+        hint: 'A1（燃焼・烈開花で +7）・盲点（+4）による増加は数えていません。gcsim では、満タンでないと実行エラーになります。通常攻撃を足すか、時間を空けてください',
+      },
+      blocked: { types: ['charged', 'plunge_low', 'plunge_high'], result: 'error', hint: '夜魂の加護の間は、重撃・落下攻撃は使えません' },
+      source: 'kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul',
+    },
+  }],
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
   '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],
@@ -663,6 +703,9 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
   // アプリは層を持たないので、0 層から 4 層まで溜める長さ（180f）を、最大の長押しとする（層があるときは gcsim の結果の反映で短くなる）。
   // フレームは delay + skillEndFrames[next] + skillHitmark(20)。CT は skillCDStart(18) + delay（motionStart から）
   '10000059-anemo': { table: 'skillEndFrames', offsetFrames: 20, maxHoldFrames: 180, note: 'heizou/skill.go: skillHold（decStack 0 のとき skillHoldDuration(4) = 180f。4 層なら holdAtFullStacksPenalty 17f）、Frames = delay + skillEndFrames[next] + skillHitmark' },
+  // キィニチ: 加護に入る E の hold は 0〜301（hold > 0 で、長押しの長さは hold − 1。照準モード）。フレームは skillFrames[next] + hold − 1、加護に入る・CT が始まるのは skillStart(9) + hold − 1。
+  // 加護の中の E（廻狩貫鱗砲）の hold は 0〜181（モードの定義 repress）
+  '10000101-dendro': { table: 'skillFrames', offsetFrames: -1, maxHoldFrames: 301, note: 'kinich/skill.go: Skill（hold > 301 は 301、hold > 0 なら hold -= 1）、Frames = skillFrames[next] + hold、Tasks.Add(…, skillStart + hold)' },
   // 藍硯: hold は 0〜610。フレームは skillHitFrames（探知が命中した場合。窓の規則と同じく命中する前提。gcsim の実行でも命中のフレーム）+ hold
   '10000108-anemo': { table: 'skillHitFrames', offsetFrames: 0, maxHoldFrames: 610, note: 'lanyan/skill.go: Skill（hold > 610 は 610）、Frames = getCurrentSkillFrames()[next] + hold（命中すると leap-back の状態で skillHitFrames）' },
 };

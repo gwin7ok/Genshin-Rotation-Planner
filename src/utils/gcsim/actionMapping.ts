@@ -45,11 +45,14 @@ export const HOLD_FRAMES_ACTIONS = new Map<string, number>([
   // ジン（0〜300）・ナヴィア（1〜241。長押しの長さ = hold − 1）。追加作業 17
   ['10000003-anemo_e_hold', 300],
   ['10000091-geo_e_hold', 241],
+  // キィニチ（加護に入る長押しは 1〜301。長押しの長さ = hold − 1。加護の中の廻狩貫鱗砲の長押しも同じ命令で、gcsim が 181 に丸める）
+  ['10000101-dendro_e_hold', 301],
 ]);
 
 /** 長押しの長さ（フレーム）に足して `hold=` に渡す値（ナヴィア: gcsim が hold から 1 を引くため） */
 const HOLD_PARAM_OFFSET = new Map<string, number>([
   ['10000091-geo_e_hold', 1],
+  ['10000101-dendro_e_hold', 1],
 ]);
 
 /** 長押しの秒数を gcsim の命令に反映する（対象外のアクション・秒数が不明なときは、そのまま返す） */

@@ -1290,22 +1290,23 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   if (onSeek) onSeek(act.startTime ?? 0);
                                 }}
                                 className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer shadow-sm ${
-                                  'bg-sky-950/80 text-sky-200 hover:border-sky-400'
+                                  `${actionTone(act).box} hover:brightness-125`
                                 } ${
+                                  // 選択中は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
                                   isSelected
                                     ? 'ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
-                                    : isActionActive ? 'border-sky-400 ring-2 ring-sky-400/60 shadow-sky-500/20' : 'border-sky-500/80'
+                                    : isActionActive ? 'border-amber-400 ring-1 ring-amber-400/50 shadow' : ''
                                 }`}
                                 title={`【キャラ交代所要時間（出場時間の先頭）】\n所要時間: ${act.duration.toFixed(2)}s\n期間: [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s] (クリックで選択フォーカス)`}
                               >
                                 {/* Action Type Badge */}
-                                <span className="px-1.5 py-0.5 rounded font-black text-[10px] bg-sky-400 text-slate-950 flex items-center gap-1 shadow-sm">
-                                  <RefreshCw className="w-3 h-3" />
+                                <span className={`px-0.5 font-mono font-extrabold text-[11px] flex items-center gap-1 ${actionTone(act).label}`}>
+                                  <RefreshCw className="w-3 h-3 text-sky-300" />
                                   交代
                                 </span>
 
                                 {/* Action Name */}
-                                <span className="font-semibold text-sky-200 truncate">
+                                <span className="font-medium truncate">
                                   キャラ交代
                                 </span>
 
@@ -1316,8 +1317,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 )}
 
                                 {/* Duration & Tweaks */}
-                                <div className="flex items-center gap-0.5 ml-1 bg-slate-950/90 rounded px-1.5 py-0.5 border border-sky-600/70 text-[11px] font-mono">
-                                  <span className="text-sky-300 font-bold">{act.duration.toFixed(1)}s</span>
+                                <div className="flex items-center gap-0.5 ml-1 bg-slate-950/90 rounded px-1.5 py-0.5 border border-slate-700 text-[11px] font-mono">
+                                  <span className="text-slate-200 font-bold">{act.duration.toFixed(1)}s</span>
                                   <div className="flex flex-col ml-0.5">
                                     <button
                                       type="button"

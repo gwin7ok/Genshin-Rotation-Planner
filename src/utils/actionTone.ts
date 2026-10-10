@@ -22,3 +22,28 @@ export function actionTone(def: { type: string; shortName: string }): ActionTone
   if (def.type === 'skill_hold' || def.type === 'skill_reset') return TONES.cyan;
   return TONES.slate;
 }
+
+const RGB: Record<string, string> = {
+  'bg-amber-500/10': '245,158,11',
+  'bg-purple-500/10': '168,85,247',
+  'bg-sky-500/10': '14,165,233',
+  'bg-emerald-500/10': '16,185,129',
+  'bg-cyan-500/10': '6,182,212',
+};
+
+/**
+ * 他の色の地（ガントチャートの出場ブロックの色）の上に置く要素用。凡例と同じ色（暗い地に 10% の色）になるよう、
+ * 暗い地を敷いた上に、色を 10% 重ねる。クラスの地の色（bg-…）を除いた box と、インラインの style を返す
+ */
+export function actionToneOnColor(def: { type: string; shortName: string }): { className: string; style: { backgroundColor: string; backgroundImage?: string } } {
+  const tone = actionTone(def);
+  const parts = tone.box.split(' ');
+  const bg = parts.find(c => c.startsWith('bg-')) ?? '';
+  const rgb = RGB[bg];
+  return {
+    className: parts.filter(c => !c.startsWith('bg-')).join(' '),
+    style: rgb
+      ? { backgroundColor: '#020617', backgroundImage: `linear-gradient(rgba(${rgb},0.1),rgba(${rgb},0.1))` }
+      : { backgroundColor: '#1e293b' },
+  };
+}

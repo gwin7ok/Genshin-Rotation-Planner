@@ -22,6 +22,8 @@ const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ de
   ) : null;
 
 interface StintBuffTriggersSectionProps {
+  /** palette = 「+ 登録」の行だけ、list = 登録済みの連動・発動バフの一覧だけ（無ければ何も出さない）、all = 両方（追加作業 27 / issue #35） */
+  part?: 'all' | 'palette' | 'list';
   stintIndex: number;
   stint: Stint;
   char: CharacterConfig;
@@ -40,6 +42,7 @@ interface StintBuffTriggersSectionProps {
 }
 
 export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> = ({
+  part = 'all',
   stintIndex,
   stint,
   char,
@@ -99,14 +102,21 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
   const artifactBuffs = trackBuffs.filter(b => b.category === 'artifact');
   const constellationBuffs = trackBuffs.filter(b => b.category === 'constellation');
 
+  const showList = part !== 'palette';
+  const showPalette = part !== 'list';
+  // 一覧だけのとき、登録が無ければ何も出さない
+  if (part === 'list' && (stint.passiveTriggers ?? []).length === 0) return null;
+
   return (
-    <div className="mt-2.5 pt-2 border-t border-dashed border-slate-700/80 flex flex-wrap items-center gap-2">
+    <div className={`${part === 'palette' ? 'mt-1.5' : 'mt-2.5 pt-2 border-t border-dashed border-slate-700/80'} flex flex-wrap items-center gap-2`}>
+      {showList && (
       <span className="text-[11px] font-bold text-amber-300 shrink-0 flex items-center gap-1">
         <span>✨ 連動・発動バフ:</span>
       </span>
+      )}
 
       {/* 登録済みトリガー一覧 */}
-      {(stint.passiveTriggers ?? []).map(trigger => {
+      {showList && (stint.passiveTriggers ?? []).map(trigger => {
         const matchedDef = availableBuffs.find(b => b.id === trigger.passiveEffectId);
         const category = matchedDef?.category || (trigger.passiveEffectId.startsWith('wbuff_') ? 'weapon' : trigger.passiveEffectId.startsWith('abuff_') ? 'artifact' : 'talent');
         const badgeCfg = getBuffBadgeConfig(category);
@@ -164,6 +174,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
       })}
 
       {/* バフ登録パレット（天賦 / 武器 / 聖遺物） */}
+      {showPalette && (
       <div className="basis-full flex flex-wrap items-center gap-1.5 mt-1">
         <span className="text-[11px] text-slate-400 font-medium">+ 登録:</span>
 
@@ -237,6 +248,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
           </>
         )}
       </div>
+      )}
     </div>
   );
 };

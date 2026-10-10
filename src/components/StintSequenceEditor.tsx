@@ -272,22 +272,30 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           title="グループ（枠の背景をドラッグすると、グループごと移動します。中のアクションをドラッグすると、グループの中で並び替わります）"
           className={`flex flex-wrap items-center gap-2 p-1.5 rounded-xl border border-dashed border-fuchsia-400/70 bg-fuchsia-500/5 cursor-grab ${draggedGroup?.groupId === run.id ? 'opacity-60' : ''}`}
         >
-          <div className="flex items-center gap-1 text-[10px] font-mono text-fuchsia-200 select-none" onClick={(e) => e.stopPropagation()}>
-            <span>グループ ×</span>
-            <input
-              type="number"
-              min={1}
-              max={99}
-              value={run.repeat}
-              onChange={(e) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, Number(e.target.value)))}
-              className="w-10 bg-slate-900 border border-fuchsia-500/50 rounded px-1 py-0.5 text-fuchsia-100"
-              aria-label="グループの回数"
+          {/* グループ × [回数] 回 [▲▼] [解除]（秒数の入力欄と同じ形） */}
+          <div className="flex items-center gap-1 text-[11px] font-mono text-fuchsia-200 select-none" onClick={(e) => e.stopPropagation()}>
+            <span className="font-sans font-bold text-[10px]">グループ</span>
+            <span>×</span>
+            <div
+              className="flex items-center gap-0.5 rounded px-1 py-0.5 border bg-slate-950/60 border-slate-800"
               title="グループの回数（この回数だけ、中のアクションを続けて行います）"
-            />
+            >
+              <StepperNumberInput
+                value={run.repeat}
+                decimals={0}
+                onCommit={(v) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, v))}
+                className="w-7 text-fuchsia-100"
+              />
+              <span className="text-slate-400 font-sans text-[10px]">回</span>
+              <div className="flex flex-col">
+                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat + 1))} title="回数 +1（長押しで連続）">▲</RepeatButton>
+                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat - 1))} title="回数 -1（長押しで連続）">▼</RepeatButton>
+              </div>
+            </div>
             <button
               type="button"
               onClick={() => updateStintAt(stintIndex, cur => ungroup(cur, run.id))}
-              className="px-1.5 py-0.5 rounded border border-fuchsia-500/50 text-fuchsia-200 hover:bg-fuchsia-500/20"
+              className="px-1.5 py-0.5 rounded border border-fuchsia-500/50 text-fuchsia-200 hover:bg-fuchsia-500/20 font-sans text-[10px]"
               title="グループを解除（中のアクションは、そのまま残ります）"
             >
               解除

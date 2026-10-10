@@ -128,6 +128,10 @@ export interface ActionMode {
    * 終わらせる E（enders の self）も、スタックが max のときは detonate のフレームになる。boostedBy = このラベルのモードが続いている間は、1 回で boostedPerUse 溜まる
    */
   nStacks?: { perUse: number; boostedBy?: string; boostedPerUse?: number; max: number; detonate: ActionFrames; source: string };
+  /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */
+  replaces?: string[];
+  /** このモードの間の元素爆発の名前と、効果バーの名前（ドゥリンの漆黒の否の間の爆発 = 漆黒の法則・黒蝕の龍） */
+  burstVariant?: { name: string; effectLabel: string };
   /** モードの間の元素爆発のフレーム */
   burstFrames?: ActionFrames;
   /** モードの間の重撃のフレーム（雷電将軍の夢想の一心: 刀の重撃） */

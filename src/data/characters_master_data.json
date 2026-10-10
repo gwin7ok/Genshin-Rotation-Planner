@@ -41007,7 +41007,41 @@
               "n"
             ],
             "maxUses": 1,
-            "endsOnLast": true
+            "endsOnLast": true,
+            "followUps": {
+              "e": {
+                "label": "純白の正",
+                "description": "純白の正の状態（30 秒）。元素爆発は「純白の法則・変転する光」（白焔の龍）になる。漆黒の否の状態に置き換わる",
+                "startDelayFrames": 0,
+                "durationFrames": 1800,
+                "swap": "persists",
+                "enders": [],
+                "holdByDefault": false,
+                "noHold": true,
+                "replaces": [
+                  "漆黒の否"
+                ],
+                "source": "durin/skill.go: skillRecastWhite（AddStatus(whiteKey, 30*60)・DeleteStatus(blackKey)）。burst.go: blackKey が無ければ burstWhite"
+              },
+              "n": {
+                "label": "漆黒の否",
+                "description": "漆黒の否の状態（30 秒）。元素爆発は「漆黒の法則・燻る星」（黒蝕の龍）になる。純白の正の状態に置き換わる",
+                "startDelayFrames": 0,
+                "durationFrames": 1800,
+                "swap": "persists",
+                "enders": [],
+                "holdByDefault": false,
+                "noHold": true,
+                "replaces": [
+                  "純白の正"
+                ],
+                "burstVariant": {
+                  "name": "元素爆発: 漆黒の法則・燻る星",
+                  "effectLabel": "黒蝕の龍"
+                },
+                "source": "durin/skill.go: skillRecastBlack（AddStatus(blackKey, 30*60)・DeleteStatus(whiteKey)）。burst.go: blackKey の間は burstBlack"
+              }
+            }
           },
           "source": "durin/skill.go: skillWindowDur = 6*60（受付の間の E = skillRecastWhite、attack.go: 受付の間の N = skillRecastBlack。どちらも受付を消す）",
           "keepEffectBar": true

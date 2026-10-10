@@ -504,7 +504,9 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   '10000123-pyro': [{
     action: 'e',
     keepEffectDuration: true,
+    // 受付の間の E は白（純白の正の状態）、N は黒（漆黒の否の状態）に入る。状態は 30 秒（2026-10-10）
     mode: windowMode('再発動の受付', 0, 6 * 60, 'persists', {
+      followUps: { e: {label:'純白の正',description:'純白の正の状態（30 秒）。元素爆発は「純白の法則・変転する光」（白焔の龍）になる。漆黒の否の状態に置き換わる',startDelayFrames:0,durationFrames:1800,swap:'persists',enders:[],holdByDefault:false,noHold:true,replaces:['漆黒の否'],source:'durin/skill.go: skillRecastWhite（AddStatus(whiteKey, 30*60)・DeleteStatus(blackKey)）。burst.go: blackKey が無ければ burstWhite'}, n: {label:'漆黒の否',description:'漆黒の否の状態（30 秒）。元素爆発は「漆黒の法則・燻る星」（黒蝕の龍）になる。純白の正の状態に置き換わる',startDelayFrames:0,durationFrames:1800,swap:'persists',enders:[],holdByDefault:false,noHold:true,replaces:['純白の正'],burstVariant:{name:'元素爆発: 漆黒の法則・燻る星',effectLabel:'黒蝕の龍'},source:'durin/skill.go: skillRecastBlack（AddStatus(blackKey, 30*60)・DeleteStatus(whiteKey)）。burst.go: blackKey の間は burstBlack'} },
       frames: [{ total: 83, cancels: {attack:62,skill:53,burst:50,dash:46,jump:47,swap:48}, source: 'durin/skill.go: skillRecastWhiteFrames（受付の間の E = 白の再発動）' }],
       framesByAction: { n: { total: 67, cancels: {attack:64,skill:48,burst:45,dash:42,jump:41,swap:43}, source: 'durin/skill.go: skillRecastBlackFrames（attack.go: 受付の間の通常攻撃 = 黒の再発動）' } },
       actions: ['e', 'n'],

@@ -22,7 +22,8 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames } from './utils/storage';
+import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
+import { rotationFileName, nameFromFileName } from './utils/rotationFile';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
@@ -247,13 +248,36 @@ export default function App() {
     loopStartTime?: number;
     switchDelay?: number;
     slotId?: string;
+    /** JSON から読み込んだときの編成名（slotId が無いとき、この名前の保存編成として登録して、読み込み中の編成にする。issue #23） */
+    name?: string;
+    totalDuration?: number;
   }) => {
     const loadedChars = resolvePartyCharacters(slot.party, database.characters);
     const loadedStints = filterStintsForCharacters(slot.stints, loadedChars);
+    const loopIndex = resolveLoopStartIndex(slot, loadedChars, loadedStints, slot);
     setParty(slot.party);
     setStints(slot.stints);
-    setLoopStartIndex(resolveLoopStartIndex(slot, loadedChars, loadedStints, slot));
+    setLoopStartIndex(loopIndex);
     setSwitchDelay(slot.switchDelay ?? 0.50);
+    if (!slot.slotId && slot.name?.trim()) {
+      // 同じ名前の保存編成があるときは、連番を付ける（上書きしない）
+      let name = slot.name.trim();
+      for (let n = 2; findSlotByName(getSavedSlots(), name); n++) name = `${slot.name.trim()} (${n})`;
+      const imported: SavedRotationSlot = {
+        id: `slot_${Date.now()}`,
+        name,
+        updatedAt: new Date().toISOString(),
+        party: slot.party,
+        stints: slot.stints,
+        loopStartIndex: loopIndex,
+        loopStartTime: slot.loopStartTime ?? 0,
+        totalDuration: slot.totalDuration ?? 0,
+        switchDelay: slot.switchDelay ?? 0.50,
+      };
+      setSavedSlots(saveSlot(imported));
+      setActiveSlotId(imported.id);
+      return;
+    }
     setActiveSlotId(slot.slotId ?? null);
   };
 
@@ -488,19 +512,23 @@ export default function App() {
 
   // 12. Export / Import JSON
   const handleExportJson = () => {
+    // 編成名: 読み込み中の保存編成の名前。未保存なら「メンバー名（時間）」。ファイル名にも使う（issue #23）
+    const name = buildDefaultSlotName(characters, totalDuration, activeSlot);
     const data = {
+      name,
       party,
       stints,
       loopStartIndex,
       loopStartTime,
       totalDuration,
+      switchDelay,
       exportDate: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `genshin_rotation_${Date.now()}.json`;
+    a.download = rotationFileName(name);
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -517,10 +545,15 @@ export default function App() {
           const importedParty: PartyMember[] = parsed.party;
           const importedChars = resolvePartyCharacters(importedParty, database.characters);
           const importedStints: Stint[] = filterStintsForCharacters(parsed.stints, importedChars);
-          setParty(importedParty);
-          setStints(parsed.stints);
-          setLoopStartIndex(resolveLoopStartIndex(parsed, importedChars, importedStints, { switchDelay }));
-          setActiveSlotId(null);
+          handleLoadCustomSlot({
+            party: importedParty,
+            stints: parsed.stints,
+            loopStartIndex: parsed.loopStartIndex,
+            loopStartTime: parsed.loopStartTime ?? 0,
+            switchDelay: parsed.switchDelay ?? switchDelay,
+            totalDuration: parsed.totalDuration,
+            name: parsed.name || nameFromFileName(file.name),
+          });
         } else {
           alert('無効なローテーションJSONファイルです。');
         }

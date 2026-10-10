@@ -22,6 +22,7 @@ import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
+import { rotationFileName, nameFromFileName } from '../utils/rotationFile';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 
 interface SaveLoadModalProps {
@@ -47,6 +48,7 @@ interface SaveLoadModalProps {
     loopStartTime?: number;
     switchDelay?: number;
     name?: string;
+    totalDuration?: number;
     slotId?: string;
   }) => void;
   onResetToDefault: () => void;
@@ -202,7 +204,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `rotation_${(slot?.name || 'custom').replace(/\s+/g, '_')}_${Date.now()}.json`;
+    a.download = rotationFileName(slot?.name || newSlotName || buildDefaultSlotName(characters, totalDuration, savedSlots.find(s => s.id === activeSlotId)));
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -249,7 +251,9 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
             stints: parsed.stints,
             loopStartIndex: parsed.loopStartIndex,
             loopStartTime: parsed.loopStartTime ?? 0,
-            name: parsed.name,
+            name: parsed.name || nameFromFileName(file.name),
+            totalDuration: parsed.totalDuration,
+            switchDelay: parsed.switchDelay,
           });
           onClose();
         } else {

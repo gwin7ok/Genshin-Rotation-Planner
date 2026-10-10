@@ -1198,8 +1198,8 @@ function buildActions(ctx: BuildContext): BuildResult {
   const plungeFile = file('plunge');
   if (plungeFile) {
     for (const kind of [
-      { key: 'low' as const, suffix: 'lp', label: 'LP', name: '落下攻撃(低)', type: 'plunge_low' as const },
-      { key: 'high' as const, suffix: 'hp', label: 'HP', name: '落下攻撃(高)', type: 'plunge_high' as const },
+      { key: 'low' as const, suffix: 'lp', label: 'lP', name: '落下攻撃(低)', type: 'plunge_low' as const },
+      { key: 'high' as const, suffix: 'hp', label: 'hP', name: '落下攻撃(高)', type: 'plunge_high' as const },
     ]) {
       const table = findPlungeTable(plungeFile.tables, kind.key);
       if (!table) continue;

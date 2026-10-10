@@ -35,7 +35,7 @@ interface Scenario { name: string; chars: [string, Record<string, unknown>?][]; 
 let seq = 0;
 const makeAction = (char: any, step: Step) => {
   const id = `a${++seq}`;
-  if (/^w[\d.]+$/.test(step)) return { id, actionTypeId: 'wait', name: '待機', shortName: 'W', type: 'wait', duration: Number(step.slice(1)) };
+  if (/^w[\d.]+$/.test(step)) return { id, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: Number(step.slice(1)) };
   const m = step.match(/^([\w]+)(?:([@#])([\d.]+))?$/);
   if (!m) throw new Error(`並びの書き方が違います: ${step}`);
   const def = char.availableActions.find((a: any) => a.id === `${char.id}_${m[1]}`);

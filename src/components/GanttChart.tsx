@@ -145,12 +145,14 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   return result;
 }
 
-// バフ重複行の色（寒色→暖色）: 0 / 1〜3 / 4〜6 / 7〜9 / 10以上。文字色は背景の明るさに合わせて白か黒
-function buffCountStyle(count: number): { backgroundColor: string; color: string } {
-  if (count === 0) return { backgroundColor: 'rgba(30, 41, 59, 0.3)', color: '#fff' };
-  if (count <= 3) return { backgroundColor: 'rgba(59, 130, 246, 0.45)', color: '#fff' };
-  if (count <= 6) return { backgroundColor: 'rgba(16, 185, 129, 0.55)', color: '#fff' };
-  if (count <= 9) return { backgroundColor: 'rgb(189, 187, 63)', color: '#000' };
+// バフ重複行の色（寒色→暖色）: 0 = 無色、1 以上は、ローテーション全体の最大数を基準に 4 等分（最大の 25% 以下 / 50% 以下 / 75% 以下 / それより多い）。
+// 文字色は背景の明るさに合わせて白か黒（追加作業 22 / issue #30）
+function buffCountStyle(count: number, maxCount: number): { backgroundColor: string; color: string } {
+  if (count <= 0) return { backgroundColor: 'rgba(30, 41, 59, 0.3)', color: '#fff' };
+  const ratio = maxCount > 0 ? count / maxCount : 1;
+  if (ratio <= 0.25) return { backgroundColor: 'rgba(59, 130, 246, 0.45)', color: '#fff' };
+  if (ratio <= 0.5) return { backgroundColor: 'rgba(16, 185, 129, 0.55)', color: '#fff' };
+  if (ratio <= 0.75) return { backgroundColor: 'rgb(189, 187, 63)', color: '#000' };
   return { backgroundColor: 'rgb(255, 30, 30)', color: '#fff' };
 }
 
@@ -1144,7 +1146,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span className="truncate">バフ重複 (Synergy)</span>
                   </span>
-                  <span className="text-[9px] text-slate-500 font-mono shrink-0">火力集中</span>
+                  <span className="text-[9px] text-slate-500 font-mono shrink-0" title="色は、ローテーション全体の最大数を基準に 4 等分しています">最大 {Math.max(0, ...buffOverlapSegments.map(p => p.count), ...loopedBuffOverlapSegments.map(p => p.count))}</span>
                 </div>
 
                 <div 
@@ -1154,12 +1156,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   {(() => {
                     const segments = elapsedTime >= totalDuration ? loopedBuffOverlapSegments : buffOverlapSegments;
                     if (segments.length === 0) return null;
+                    // 色の基準: 1 周目・2 周目を通した最大数（周が変わっても、同じ数が同じ色になる）
+                    const maxCount = Math.max(0, ...buffOverlapSegments.map(p => p.count), ...loopedBuffOverlapSegments.map(p => p.count));
                     // 帯は1つの要素のグラデーションで塗り、区切りごとに1px透明にして背景を区切り線として見せる
                     // （区間ごとに箱を並べると、画面の拡大率によって区切りの見え方が不揃いになるため）
                     const GAP_PX = 1;
                     const band = segments
                       .map((pt, i) => {
-                        const color = buffCountStyle(pt.count).backgroundColor;
+                        const color = buffCountStyle(pt.count, maxCount).backgroundColor;
                         const start = pt.start * pixelsPerSecond;
                         const end = pt.end * pixelsPerSecond;
                         const fillEnd = i < segments.length - 1 ? end - GAP_PX : end;
@@ -1182,9 +1186,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           return (
                             <div
                               key={pt.start}
-                              style={{ left: `${pt.start * pixelsPerSecond}px`, width: `${w}px`, color: buffCountStyle(pt.count).color }}
+                              style={{ left: `${pt.start * pixelsPerSecond}px`, width: `${w}px`, color: buffCountStyle(pt.count, maxCount).color }}
                               className="absolute top-1 bottom-1 flex items-center justify-center text-[10px] font-mono select-none"
-                              title={`${pt.start.toFixed(2)}s ~ ${pt.end.toFixed(2)}s: 有効バフ ${pt.count}個 [${pt.activeBuffs.join(', ')}]`}
+                              title={`${pt.start.toFixed(2)}s ~ ${pt.end.toFixed(2)}s: 有効バフ ${pt.count}個（最大 ${maxCount}個）[${pt.activeBuffs.join(', ')}]`}
                             >
                               {pt.count > 0 && w >= 10 && <span className="font-bold text-[9px]">{pt.count}</span>}
                             </div>

@@ -313,6 +313,10 @@ export default function App() {
 
   // 「アプリの計算に戻す」: 今のアクションの並びを基準に、gcsim の反映・個別の変更を外して、アプリの計算を全体に再適用する
   const handleResetToAppCalculation = () => {
+    // 戻した後に、前回の「gcsim で計算」の結果の表示・CT 待ちの印・反応の行が残らないようにする
+    setGcsimBanner(null);
+    setGcsimReactions(null);
+    setGcsimCtWaits(null);
     const summary = resetToAppCalculation(visibleStints);
     // 外す内容がなくても、全体を計算し直す（保存されたアクションの値をすべて作り直した新しい並びで、計算・表示・再生位置を更新する）
     if (summary.actionsChanged === 0 && summary.stintsChanged === 0) {

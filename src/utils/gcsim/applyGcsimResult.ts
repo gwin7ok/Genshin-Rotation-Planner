@@ -93,7 +93,8 @@ export function applyActionDurations(
     const extra = ref.extraSeconds ?? 0;
     const delayFrames = Math.max(0, Math.round((actionDelayOf(act) + extra) * 60));
     // モードの維持のための自動の待ちは、保存する所要時間に含めない（計算のたびに、出場の終わりに足す）
-    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra - (ref.modeHoldSeconds ?? 0)).toFixed(3));
+    // 直後の待機（待機のアクション・維持）は、gcsim のログではアクションの間隔に含まれる。所要時間には含めない
+    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra - (ref.modeHoldSeconds ?? 0) - (ref.waitAfterSeconds ?? 0)).toFixed(3));
     if (seconds < 0) {
       skipped++;
       continue;

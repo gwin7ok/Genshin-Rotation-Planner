@@ -85,6 +85,8 @@ export interface GcsimActionRef {
   extraSeconds?: number;
   /** extraSeconds のうち、モードの維持のための自動の待ち（秒）。書き戻す所要時間には含めない。無ければ 0 */
   modeHoldSeconds?: number;
+  /** このアクションの直後に置いた待機（待機のアクション・維持）の合計（秒）。gcsim のログのアクションの間隔に含まれるので、書き戻す所要時間から引く */
+  waitAfterSeconds?: number;
   /** 設定文の中の位置: 初動 / ループ（何周目か） */
   phase: 'initial' | 'loop';
   /** phase = loop のとき、何周目か（1 始まり） */
@@ -176,7 +178,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
   const stintLines = (
     stintList: Stint[],
     indent: string,
-    refs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[],
+    refs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number; waitAfterSeconds?: number }[],
     /** 最初の出場の直前のキャラのキー（1周目と2周目以降で違うときは `loopPrevKeys`）。無ければ交代しない（最初の出場など） */
     firstPrevKey: string | undefined,
     /** ループの最初の出場の直前のキャラのキー（周ごとに違うとき: 1周目 / 2周目以降） */
@@ -213,7 +215,12 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
           // 待機は `wait`（その場で、その時間を使う）。`delay` は次のアクションが実行できる状態になった「後」に入るため、待機の途中で CT が明ける
           // 並び（E → 待機 → E）でも、gcsim が次のアクションを待機の前に試して CT 待ちになり、実行が待機の分だけ遅れてしまう（2026-10-09）
           const frames = toFrames(act.duration + Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0));
-          if (frames > 0) out.push(`${indent}wait(${frames});`);
+          if (frames > 0) {
+            out.push(`${indent}wait(${frames});`);
+            // 直前のアクション（この出場の）の、書き戻す所要時間から引く待ち
+            const prev = refs[refs.length - 1];
+            if (prev && prev.stintId === stint.id) prev.waitAfterSeconds = Number(((prev.waitAfterSeconds ?? 0) + frames / 60).toFixed(3));
+          }
           continue;
         }
         // gcsim が実装していないアクション（大剣の重撃など）は、実行すると「action ... not implemented」のエラーになるので、設定文に入れない
@@ -250,8 +257,8 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     return out;
   };
 
-  const initialRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[] = [];
-  const loopRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number }[] = [];
+  const initialRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number; waitAfterSeconds?: number }[] = [];
+  const loopRefs: { stintId: string; actionId: string; command: string; extraSeconds?: number; modeHoldSeconds?: number; waitAfterSeconds?: number }[] = [];
   const stintKey = (s: Stint | undefined) => (s ? keyOf.get(s.characterId) : undefined);
   const firstKey0 = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
   const initialLines = stintLines(initialStints, '', initialRefs, undefined);

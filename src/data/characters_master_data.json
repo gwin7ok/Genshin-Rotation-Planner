@@ -120,7 +120,7 @@
       {
         "id": "10000002-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 71,
@@ -479,7 +479,7 @@
       {
         "id": "10000003-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 57,
@@ -818,7 +818,7 @@
       {
         "id": "10000005-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -1155,7 +1155,7 @@
       {
         "id": "10000005-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -1471,7 +1471,7 @@
       {
         "id": "10000005-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -1773,7 +1773,7 @@
       {
         "id": "10000005-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -2074,7 +2074,7 @@
       {
         "id": "10000005-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -2381,7 +2381,7 @@
       {
         "id": "10000005-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -2764,7 +2764,7 @@
       {
         "id": "10000005-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -3121,7 +3121,7 @@
       {
         "id": "10000006-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 93,
@@ -3500,7 +3500,7 @@
       {
         "id": "10000007-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -3837,7 +3837,7 @@
       {
         "id": "10000007-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -4191,7 +4191,7 @@
       {
         "id": "10000007-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -4493,7 +4493,7 @@
       {
         "id": "10000007-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -4792,7 +4792,7 @@
       {
         "id": "10000007-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -5101,7 +5101,7 @@
       {
         "id": "10000007-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -5484,7 +5484,7 @@
       {
         "id": "10000007-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -5886,7 +5886,7 @@
       {
         "id": "10000014-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 89,
@@ -6234,7 +6234,7 @@
       {
         "id": "10000015-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -6548,7 +6548,7 @@
       {
         "id": "10000016-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -6947,7 +6947,7 @@
       {
         "id": "10000020-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -7363,7 +7363,7 @@
       {
         "id": "10000021-pyro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -7723,7 +7723,7 @@
       {
         "id": "10000022-anemo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 94,
@@ -8090,7 +8090,7 @@
       {
         "id": "10000023-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 69,
@@ -8459,7 +8459,7 @@
       {
         "id": "10000024-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -8765,7 +8765,7 @@
       {
         "id": "10000025-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -9090,7 +9090,7 @@
       {
         "id": "10000026-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 45,
@@ -9417,7 +9417,7 @@
       {
         "id": "10000027-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 52,
@@ -9674,7 +9674,7 @@
       {
         "id": "10000029-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 113,
@@ -10055,7 +10055,7 @@
       {
         "id": "10000030-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 47,
@@ -10367,7 +10367,7 @@
       {
         "id": "10000031-electro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -10699,7 +10699,7 @@
       {
         "id": "10000032-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -11074,7 +11074,7 @@
       {
         "id": "10000033-hydro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 94,
@@ -11410,7 +11410,7 @@
       {
         "id": "10000034-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 108,
@@ -11766,7 +11766,7 @@
       {
         "id": "10000035-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 76,
@@ -12111,7 +12111,7 @@
       {
         "id": "10000036-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -12472,7 +12472,7 @@
       {
         "id": "10000037-cryo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 113,
@@ -12811,7 +12811,7 @@
       {
         "id": "10000038-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 56,
@@ -13174,7 +13174,7 @@
       {
         "id": "10000039-cryo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 94,
@@ -13507,7 +13507,7 @@
       {
         "id": "10000041-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 113,
@@ -13904,7 +13904,7 @@
       {
         "id": "10000042-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 36,
@@ -14304,7 +14304,7 @@
       {
         "id": "10000043-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 71,
@@ -14652,7 +14652,7 @@
       {
         "id": "10000044-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -15016,7 +15016,7 @@
       {
         "id": "10000045-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 69,
@@ -15400,7 +15400,7 @@
       {
         "id": "10000046-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 62,
@@ -15775,7 +15775,7 @@
       {
         "id": "10000047-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -16124,7 +16124,7 @@
       {
         "id": "10000048-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 79,
@@ -16468,7 +16468,7 @@
       {
         "id": "10000049-pyro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 150,
@@ -16792,7 +16792,7 @@
       {
         "id": "10000050-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 64,
@@ -17093,7 +17093,7 @@
       {
         "id": "10000051-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -17481,7 +17481,7 @@
       {
         "id": "10000052-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 37,
@@ -17889,7 +17889,7 @@
       {
         "id": "10000053-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -18208,7 +18208,7 @@
       {
         "id": "10000054-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 76,
@@ -18520,7 +18520,7 @@
       {
         "id": "10000055-geo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 94,
@@ -18817,7 +18817,7 @@
       {
         "id": "10000056-electro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -19118,7 +19118,7 @@
       {
         "id": "10000057-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 131,
@@ -19446,7 +19446,7 @@
       {
         "id": "10000058-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -19839,7 +19839,7 @@
       {
         "id": "10000059-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 46,
@@ -20194,7 +20194,7 @@
       {
         "id": "10000060-hydro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -20508,7 +20508,7 @@
       {
         "id": "10000061-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 52,
@@ -20868,7 +20868,7 @@
       {
         "id": "10000062-cryo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -21157,7 +21157,7 @@
       {
         "id": "10000063-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 81,
@@ -21567,7 +21567,7 @@
       {
         "id": "10000064-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 59,
@@ -21932,7 +21932,7 @@
       {
         "id": "10000065-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 35,
@@ -22243,7 +22243,7 @@
       {
         "id": "10000066-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -22611,7 +22611,7 @@
       {
         "id": "10000067-dendro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -22890,7 +22890,7 @@
       {
         "id": "10000068-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -23197,7 +23197,7 @@
       {
         "id": "10000069-dendro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 94,
@@ -23501,7 +23501,7 @@
       {
         "id": "10000070-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 43,
@@ -24001,7 +24001,7 @@
       {
         "id": "10000071-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 63,
@@ -24362,7 +24362,7 @@
       {
         "id": "10000072-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 53,
@@ -24732,7 +24732,7 @@
       {
         "id": "10000073-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 69,
@@ -25082,7 +25082,7 @@
       {
         "id": "10000074-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 49,
@@ -25369,7 +25369,7 @@
       {
         "id": "10000075-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 69,
@@ -25713,7 +25713,7 @@
       {
         "id": "10000076-anemo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -26022,7 +26022,7 @@
       {
         "id": "10000077-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -26354,7 +26354,7 @@
       {
         "id": "10000078-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 64,
@@ -26744,7 +26744,7 @@
       {
         "id": "10000079-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -27223,7 +27223,7 @@
       {
         "id": "10000080-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 66,
@@ -27550,7 +27550,7 @@
       {
         "id": "10000081-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -27913,7 +27913,7 @@
       {
         "id": "10000082-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 75,
@@ -28218,7 +28218,7 @@
       {
         "id": "10000083-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 51,
@@ -28599,7 +28599,7 @@
       {
         "id": "10000084-pyro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 80,
@@ -28903,7 +28903,7 @@
       {
         "id": "10000085-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -29332,7 +29332,7 @@
       {
         "id": "10000086-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 52,
@@ -29657,7 +29657,7 @@
       {
         "id": "10000087-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 87,
@@ -29930,7 +29930,7 @@
       {
         "id": "10000088-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 84,
@@ -30321,7 +30321,7 @@
       {
         "id": "10000089-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 253,
@@ -30687,7 +30687,7 @@
       {
         "id": "10000090-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 65,
@@ -31030,7 +31030,7 @@
       {
         "id": "10000091-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -31384,7 +31384,7 @@
       {
         "id": "10000092-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -31732,7 +31732,7 @@
       {
         "id": "10000093-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 73,
@@ -32172,7 +32172,7 @@
       {
         "id": "10000094-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 44,
@@ -32565,7 +32565,7 @@
       {
         "id": "10000095-hydro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 112,
@@ -32976,7 +32976,7 @@
       {
         "id": "10000096-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 60,
@@ -33329,7 +33329,7 @@
       {
         "id": "10000097-electro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 379,
@@ -33668,7 +33668,7 @@
       {
         "id": "10000098-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 68,
@@ -34044,7 +34044,7 @@
       {
         "id": "10000099-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 50,
@@ -34333,7 +34333,7 @@
       {
         "id": "10000100-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -34530,7 +34530,7 @@
       {
         "id": "10000101-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 87,
@@ -35086,7 +35086,7 @@
       {
         "id": "10000102-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 100,
@@ -35365,7 +35365,7 @@
       {
         "id": "10000103-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 42,
@@ -35747,7 +35747,7 @@
       {
         "id": "10000104-anemo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 96,
@@ -36039,7 +36039,7 @@
       {
         "id": "10000105-electro_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 85,
@@ -36370,7 +36370,7 @@
       {
         "id": "10000106-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 99,
@@ -36811,7 +36811,7 @@
       {
         "id": "10000107-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 56,
@@ -37122,7 +37122,7 @@
       {
         "id": "10000108-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 70,
@@ -37561,7 +37561,7 @@
       {
         "id": "10000109-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 81,
@@ -37907,7 +37907,7 @@
       {
         "id": "10000110-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 55,
@@ -38208,7 +38208,7 @@
       {
         "id": "10000111-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 143,
@@ -38658,7 +38658,7 @@
       {
         "id": "10000112-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 65,
@@ -39014,7 +39014,7 @@
       {
         "id": "10000113-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 86,
@@ -39310,7 +39310,7 @@
       {
         "id": "10000114-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 53,
@@ -39682,7 +39682,7 @@
       {
         "id": "10000115-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 67,
@@ -39984,7 +39984,7 @@
       {
         "id": "10000116-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 60,
@@ -40264,7 +40264,7 @@
       {
         "id": "10000119-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 68,
@@ -40682,7 +40682,7 @@
       {
         "id": "10000120-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 60,
@@ -41107,7 +41107,7 @@
       {
         "id": "10000121-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8,
         "gcsimUnsupported": true
@@ -41326,7 +41326,7 @@
       {
         "id": "10000122-dendro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -41567,7 +41567,7 @@
       {
         "id": "10000123-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 58,
@@ -41964,7 +41964,7 @@
       {
         "id": "10000124-anemo_ca",
         "name": "狙い撃ち (フルチャージ)",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 85,
@@ -42236,7 +42236,7 @@
       {
         "id": "10000125-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 101,
@@ -42502,7 +42502,7 @@
       {
         "id": "10000126-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -42720,7 +42720,7 @@
       {
         "id": "10000127-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 66,
@@ -43065,7 +43065,7 @@
       {
         "id": "10000128-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 67,
@@ -43509,7 +43509,7 @@
       {
         "id": "10000129-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -43639,7 +43639,7 @@
       {
         "id": "10000130-geo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -43838,7 +43838,7 @@
       {
         "id": "10000131-pyro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 99,
@@ -44158,7 +44158,7 @@
       {
         "id": "10000132-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 116,
@@ -44421,7 +44421,7 @@
       {
         "id": "10000133-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -44550,7 +44550,7 @@
       {
         "id": "10000140-hydro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -44683,7 +44683,7 @@
       {
         "id": "10000143-anemo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -44813,7 +44813,7 @@
       {
         "id": "10000148-electro_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "defaultDuration": 0.8
       },
@@ -45047,7 +45047,7 @@
       {
         "id": "10000150-cryo_ca",
         "name": "重撃",
-        "shortName": "CA",
+        "shortName": "C",
         "type": "charged",
         "frames": {
           "total": 83,

@@ -679,6 +679,8 @@ export function calculateRotation(
         : undefined;
       const computedAction: CharacterActionInstance = {
         ...act,
+        // 略号は、保存データのコピーではなく、アクション定義から引く（略号を変えても、保存済みの出場ブロックに反映される）
+        ...(actionDef?.shortName ? { shortName: actionDef.shortName } : {}),
         ...(burstVariantMode?.def.burstVariant ? { name: burstVariantMode.def.burstVariant.name } : {}),
         hasCTCollision: false,
         collisionRemainingCT: undefined,

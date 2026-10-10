@@ -703,6 +703,9 @@ const PARAM_HOLD_SKILLS: Record<string, { table: string; offsetFrames: number; m
   // アプリは層を持たないので、0 層から 4 層まで溜める長さ（180f）を、最大の長押しとする（層があるときは gcsim の結果の反映で短くなる）。
   // フレームは delay + skillEndFrames[next] + skillHitmark(20)。CT は skillCDStart(18) + delay（motionStart から）
   '10000059-anemo': { table: 'skillEndFrames', offsetFrames: 20, maxHoldFrames: 180, note: 'heizou/skill.go: skillHold（decStack 0 のとき skillHoldDuration(4) = 180f。4 層なら holdAtFullStacksPenalty 17f）、Frames = delay + skillEndFrames[next] + skillHitmark' },
+  // アンバー: hold に上限はない（gcsim は丸めない。ゲームも、人形を投げる距離が上限で固定されるだけで、長押しは続けられる。ユーザー確認 2026-10-10）。
+  // フレームは skillFrames[next] + hold、人形が着地・CT が始まるのは hold の後。既定は 1 秒（60f。仮の値）で、所要時間を編集して長さを変える
+  '10000021-pyro': { table: 'skillFrames', offsetFrames: 0, maxHoldFrames: 60, note: 'amber/skill.go: hold = p["hold"]（丸めなし）、Frames = skillFrames[next] + hold、SetCDWithDelay(…, skillStart + hold)' },
   // キィニチ: 加護に入る E の hold は 0〜301（hold > 0 で、長押しの長さは hold − 1。照準モード）。フレームは skillFrames[next] + hold − 1、加護に入る・CT が始まるのは skillStart(9) + hold − 1。
   // 加護の中の E（廻狩貫鱗砲）の hold は 0〜181（モードの定義 repress）
   '10000101-dendro': { table: 'skillFrames', offsetFrames: -1, maxHoldFrames: 301, note: 'kinich/skill.go: Skill（hold > 301 は 301、hold > 0 なら hold -= 1）、Frames = skillFrames[next] + hold、Tasks.Add(…, skillStart + hold)' },

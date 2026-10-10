@@ -155,6 +155,7 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   '10000020-electro_e_hold': { reason: 'no-bar', note: 'レザーの長押し: マスターの 18 秒（雷の印）は短押しの効果。長押しは印を作らず消費する動作で、gcsim も印の状態を出さない（短押しは razor-sigil で紐づけ済み）' },
   // ユーザー決定（2026-09-30）: 固有天賦の状態だけが出るスキル・爆発は保留（6-3c で扱う）
   '10000002-cryo_e': { reason: 'covered-by-passive', note: '神里綾華のスキル: gcsim が出すのは固有天賦の状態（ayaka-a1）だけで、スキル・爆発の効果ではない。6-3c（固有天賦の発動バフ）で扱う（ユーザー決定 2026-09-30）' },
+  '10000021-pyro_e_hold': { reason: 'covered-by-passive', note: 'アンバーの長押し: 一回押しと同じ（固有天賦 amber-a1 だけ）' },
   '10000021-pyro_e': { reason: 'covered-by-passive', note: 'アンバーのスキル: gcsim が出すのは固有天賦の状態（amber-a1）だけで、スキル・爆発の効果ではない。6-3c（固有天賦の発動バフ）で扱う（ユーザー決定 2026-09-30）' },
   '10000026-anemo_e': { reason: 'covered-by-passive', note: '魈のスキル: gcsim が出すのは固有天賦の状態（xiao-a4）だけで、スキル・爆発の効果ではない。6-3c（固有天賦の発動バフ）で扱う（ユーザー決定 2026-09-30）' },
   '10000038-geo_q': { reason: 'covered-by-passive', note: 'アルベドの爆発: gcsim が出すのは固有天賦の状態（albedo-a4）だけで、スキル・爆発の効果ではない。6-3c（固有天賦の発動バフ）で扱う（ユーザー決定 2026-09-30）' },

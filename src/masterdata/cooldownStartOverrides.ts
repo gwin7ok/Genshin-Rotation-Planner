@@ -46,6 +46,8 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   // レザー: 爆発中でないとき（burstActive=0）。爆発中は 31f（一回押し）
   '10000020-electro_e': { from: 'motionStart', delayFrames: 30, note: 'razor/skill.go: skillPressCDStarts[0]（爆発中は 31f）' },
   '10000020-electro_e_hold': { from: 'motionStart', delayFrames: 52, note: 'razor/skill.go: skillHoldCDStarts[0]（爆発中も 52f）' },
+  // アンバーの長押し: skillStart(5) + hold（一回押しは 5f。cooldownStart は自動読み取りの値と同じ）
+  '10000021-pyro_e_hold': { from: 'holdEnd', delayFrames: 5, holdInFrames: 60, note: 'amber/skill.go: SetCDWithDelay(ActionSkill, …, skillStart(5) + hold)' },
   // キィニチ: 夜魂の加護に入るタスク（skillStart(9) + hold − 1）の中で SetCD(skillCD)。長押しは、長押しの終わりから 9f
   '10000101-dendro_e': { from: 'motionStart', delayFrames: 9, note: 'kinich/skill.go: Tasks.Add(…SetCD(ActionSkill, 18*60)…, skillStart(9) + hold)' },
   '10000101-dendro_e_hold': { from: 'holdEnd', delayFrames: 9, holdInFrames: 300, note: 'kinich/skill.go: 同上。hold > 0 のとき、長押しの長さは hold − 1' },

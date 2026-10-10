@@ -7410,6 +7410,40 @@
         }
       },
       {
+        "id": "10000021-pyro_e_hold",
+        "name": "元素スキル(長押し): 爆弾人形",
+        "shortName": "hE",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 0,
+        "frames": {
+          "total": 93,
+          "cancels": {
+            "attack": 92,
+            "burst": 92,
+            "dash": 68,
+            "jump": 68,
+            "swap": 83
+          },
+          "source": "skill.go:skillFrames（+ 長押し 0 + 既定 60f。hold に上限なし）"
+        },
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "manual: amber/skill.go: skillStart(5) + hold"
+        },
+        "defaultDuration": 1.55,
+        "cooldownStart": {
+          "from": "holdEnd",
+          "delay": 0.083
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
+        },
+        "holdInFrames": 1
+      },
+      {
         "id": "10000021-pyro_q",
         "name": "元素爆発: 矢の雨",
         "shortName": "Q",

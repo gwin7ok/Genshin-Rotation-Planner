@@ -82,7 +82,7 @@ const COOLDOWN_CHANGES: Record<string, { actionSuffix: string | string[]; cooldo
   // フリンズ 1 凸: 特殊元素スキル「北国の嵐槍」の基本 CT を 4 秒に短縮（gcsim flins/cons.go c1SkillCD: 6*60 → 4*60）
   '10000120-electro_c1': { actionSuffix: 'e_spearstorm', cooldown: 4, keyword: '北国の嵐槍の基本クールタイムを4秒に短縮', note: 'flins/cons.go: c1SkillCD() = 4*60' },
   // アンバー 4 凸: 爆弾人形のクールタイム -20%（15 秒 → 12 秒）
-  '10000021-pyro_c4': { actionSuffix: 'e', cooldown: 12, keyword: '爆弾人形のクールタイム-20%', note: 'amber/skill.go: Cons >= 4 で CT 720f（12 秒）、それ以外は 900f（15 秒）' },
+  '10000021-pyro_c4': { actionSuffix: ['e', 'e_hold'], cooldown: 12, keyword: '爆弾人形のクールタイム-20%', note: 'amber/skill.go: Cons >= 4 で CT 720f（12 秒）、それ以外は 900f（15 秒）' },
 };
 
 /** 確認済み: 凸で変わる CT の回数。キーは `${キャラID}_c${凸}`（説明文の語を照合する） */
@@ -90,7 +90,7 @@ const CHARGE_CHANGES: Record<string, { actionSuffix: string | string[]; charges:
   // 魈 1 凸: 風輪両立の使用可能回数 +1（gcsim xiao/xiao.go: SetNumCharges(ActionSkill, 2) → 凸 1 で 3）
   '10000026-anemo_c1': { actionSuffix: 'e', charges: 3, keyword: '風輪両立の使用可能回数+1', note: 'xiao/xiao.go: Cons >= 1 で SetNumCharges(ActionSkill, 3)' },
   // 凸で 1 回から 2 回になるもの（gcsim ソース 1f9c1f2e で確認 2026-10-09。回数だけが変わり、CT の長さは変わらない。アンバーは CT も変わる〔COOLDOWN_CHANGES〕）
-  '10000021-pyro_c4': { actionSuffix: 'e', charges: 2, keyword: '爆弾人形のクールタイム-20%、使用可能回数+1', note: 'amber/amber.go: Cons >= 4 で SetNumCharges(ActionSkill, 2)' },
+  '10000021-pyro_c4': { actionSuffix: ['e', 'e_hold'], charges: 2, keyword: '爆弾人形のクールタイム-20%、使用可能回数+1', note: 'amber/amber.go: Cons >= 4 で SetNumCharges(ActionSkill, 2)' },
   '10000082-dendro_c1': { actionSuffix: 'e', charges: 2, keyword: '太素診要の使用可能回数+1', note: 'baizhu/cons.go c1: SetNumCharges(ActionSkill, 2)' },
   '10000037-cryo_c2': { actionSuffix: 'e', charges: 2, keyword: '山沢麟跡の使用可能回数+1', note: 'ganyu/ganyu.go: Cons >= 2 で SetNumCharges(ActionSkill, 2)' },
   '10000108-anemo_c6': { actionSuffix: ['e', 'e_hold'], charges: 2, keyword: '鳳跡随翦舞の使用可能回数+1', note: 'lanyan/lanyan.go: Cons >= 6 で SetNumCharges(ActionSkill, 2)（一回押し・長押しとも同じ回数を使う）' },

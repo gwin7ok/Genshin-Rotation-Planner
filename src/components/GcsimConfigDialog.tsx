@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2, Play } from 'lucide-react';
 import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
-import { validateGcsimConfig, runGcsimSample, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
-import { runWithSacrificialSeed, type SacrificialSearchInfo } from '../utils/gcsim/sacrificialSeed';
-import { readGcsimLog, type GcsimLogSummary } from '../utils/gcsim/readGcsimLog';
-import { loadKeyCatalog } from '../utils/gcsim/keyCatalogLookup';
-import { mapCtWaitsToActions, type CtWaitMarks } from '../utils/gcsim/mapCtWaits';
+import { validateGcsimConfig, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
-import { applyPassiveTriggers, applyCharacterLinkedEffects } from '../utils/gcsim/applyBuffEffects';
-import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
+import { runGcsimForConfig, computeGcsimApply, type GcsimRunOutcome } from '../utils/gcsim/gcsimCompute';
 import type { TriggerableBuffDefinition } from '../utils/buffUtils';
-import { alignActions, applyActionDurations, applyActionCooldowns, applyActionEffectDurations, applyActionExtraEffects, type AlignResult } from '../utils/gcsim/applyGcsimResult';
 import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../utils/rotationCalculator';
 import type { Stint, ReactionRowRef } from '../types/genshin';
@@ -55,10 +49,9 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
   const [running, setRunning] = useState(false);
   const [applied, setApplied] = useState(false);
   const [runOutcome, setRunOutcome] = useState<
-    | { status: 'ok'; summary: GcsimLogSummary; seed: number; sacrificial?: SacrificialSearchInfo; gcsimCommit?: string; waits: CtWaitMarks; align: AlignResult }
+    | GcsimRunOutcome
     /** 実行前のアプリのCT違反があるため、gcsim を実行しなかった（D21-1） */
     | { status: 'blocked' }
-    | { status: 'error' | 'unreachable'; message: string }
     | null
   >(null);
 
@@ -89,28 +82,23 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     setRunning(true);
-    // 祭礼系の武器があれば、アプリの発動がすべて発動し、余分な発動が無い乱数の種を探す（6-4・D86。無ければ、最初の種で 1 回だけ実行）
-    const res = await runWithSacrificialSeed(result.config, runGcsimSample, { appProcs: calculated.sacrificialProcs, refs: result.actionRefs }, DEFAULT_SEED);
+    const res = await runGcsimForConfig(result, calculated);
+    setRunning(false);
     if (res.status !== 'ok') {
-      setRunning(false);
       setRunOutcome({ status: res.status, message: res.message });
       return;
     }
-    const catalog = await loadKeyCatalog();
-    const summary = readGcsimLog(res.logs, { members: result.members, lookup: catalog.lookup, initialCharacterKey: res.initialCharacter });
-    setRunning(false);
     // gcsim でCT待ちが生じたら、結果は反映せず、該当アクションに違反マークを付ける（D21-2）
-    const waits = mapCtWaitsToActions(summary, result.actionRefs);
-    onCtWaits(Object.keys(waits.byActionId).length > 0 ? waits.byActionId : null);
+    const hasWaits = Object.keys(res.waits.byActionId).length > 0;
+    onCtWaits(hasWaits ? res.waits.byActionId : null);
     setApplied(false);
-    const align = alignActions(summary, result.actionRefs);
     // 反応の状態（月反応・星反応）は、CT待ちが無く、アクションの並びが合っているときだけ出す（実行する前は何も出さない）
-    if (Object.keys(waits.byActionId).length === 0 && !align.mismatch) {
-      onReactions(anchorReactionRows(extractReactionRows(res.logs), reactionLapInputs(align.pairs)));
+    if (!hasWaits && !res.align.mismatch) {
+      onReactions(anchorReactionRows(extractReactionRows(res.logs), reactionLapInputs(res.align.pairs)));
     } else {
       onReactions(null);
     }
-    setRunOutcome({ status: 'ok', summary, seed: res.seed, sacrificial: res.sacrificial, gcsimCommit: catalog.gcsimCommit, waits, align });
+    setRunOutcome(res);
   };
   const waitCount = runOutcome?.status === 'ok' ? Object.keys(runOutcome.waits.byActionId).length : 0;
   const errors = result.warnings.filter(w => w.level === 'error');
@@ -270,32 +258,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   </div>
                 );
               }
-              // 変更前は、画面に出ている値（計算後）を使う
-              const effectiveDurations: Record<string, number> = {};
-              for (const st of calculated.calculatedStints) for (const a of st.actions) effectiveDurations[a.id] = a.duration;
-              const effectiveCooldowns: Record<string, number> = {};
-              for (const cd of [...calculated.skillCooldowns, ...calculated.burstCooldowns]) {
-                if (cd.actionInstanceId) effectiveCooldowns[cd.actionInstanceId] = cd.duration;
-              }
-              const durations = applyActionDurations(stints, runOutcome.align.pairs, effectiveDurations);
-              const specialActionIds = new Set(calculated.calculatedStints.flatMap(st => st.actions).filter(a => a.cooldownPool === 'special').map(a => a.id));
-              // 祭礼の武器を持つキャラのスキルの CT は、書き戻さない（発動による CT のリセットは、アプリの計算が持つ。書き戻すと、CT がすでに短く、発動の判定と武器の内部 CT の管理が失われる）
-              const sacrificialSkillIds = new Set(
-                calculated.calculatedStints.filter(st => calculated.sacrificialCharIds.includes(st.characterId)).flatMap(st => st.actions).filter(a => a.type === 'skill' || a.type === 'skill_hold').map(a => a.id),
-              );
-              const cooldowns = applyActionCooldowns(durations.stints, runOutcome.align.pairs, runOutcome.summary, effectiveCooldowns, specialActionIds, calculated.cdResonanceScale, sacrificialSkillIds);
-              const effectiveEffects: Record<string, number> = {};
-              for (const b of calculated.activeBuffs) {
-                if (b.origin === 'passive') continue;
-                for (const a of stints.flatMap(st => st.actions)) {
-                  if (b.id.includes(`_${a.id}_`)) effectiveEffects[a.id] = b.duration;
-                }
-              }
-              const effects = applyActionEffectDurations(cooldowns.stints, runOutcome.align.pairs, runOutcome.summary, actionLinks.effects, effectiveEffects);
-              const extras = applyActionExtraEffects(effects.stints, runOutcome.align.pairs, runOutcome.summary, actionLinks.extras);
-              const passives = applyPassiveTriggers(extras.stints, runOutcome.align.pairs, runOutcome.summary, result.members, buffsByCharacter, result.swapDelayFrames);
-              const charEffects = applyCharacterLinkedEffects(passives.stints, runOutcome.align.pairs, runOutcome.summary, result.members, CHARACTER_LINKED_EFFECTS, result.swapDelayFrames);
-              const total = durations.changes.length + cooldowns.changes.length + effects.changes.length + extras.changes.length + passives.changes.length + charEffects.changes.length;
+              const plan = computeGcsimApply({ stints, calculated, result, buffsByCharacter, actionLinks, outcome: runOutcome });
+              const { durations, cooldowns, effects, extras, passives, charEffects, total } = plan;
               // 誰の（何番目の出場の）アクションか
               const ownerLabel = (stintId: string) => {
                 const idx = stints.findIndex(st => st.id === stintId);

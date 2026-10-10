@@ -26,6 +26,9 @@ interface HeaderProps {
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCopyNotation: () => void;
   onCopyGcsimConfig: () => void;
+  /** 「gcsim で計算」: 設定文を作って gcsim を実行し、結果を一括で反映する（D120） */
+  onGcsimCompute?: () => void;
+  gcsimComputing?: boolean;
   /** gcsim の結果の反映・個別の変更を外し、アクションの並びを基準にアプリの計算へ戻す */
   onResetToAppCalculation?: () => void;
   copiedNotation: boolean;
@@ -61,6 +64,8 @@ export const Header: React.FC<HeaderProps> = ({
   onImportJson,
   onCopyNotation,
   onCopyGcsimConfig,
+  onGcsimCompute,
+  gcsimComputing = false,
   onResetToAppCalculation,
   copiedNotation,
   loopStartTime = 0,
@@ -368,6 +373,18 @@ export const Header: React.FC<HeaderProps> = ({
               {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
               <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>
             </button>
+
+            {onGcsimCompute && (
+              <button
+                onClick={onGcsimCompute}
+                disabled={gcsimComputing}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 disabled:opacity-60 disabled:cursor-wait text-white border border-sky-500/70 transition-colors"
+                title="gcsim で計算: 現在の編成・ローテーションを gcsim で実行し、所要時間・CT・効果時間・発動バフなどを一括で反映します（CT 違反があると実行しません。取り消しは「アプリの計算に戻す」）"
+              >
+                <Play className="w-3.5 h-3.5" />
+                <span>{gcsimComputing ? '計算中…' : 'gcsim で計算'}</span>
+              </button>
+            )}
 
             <button
               onClick={onCopyGcsimConfig}

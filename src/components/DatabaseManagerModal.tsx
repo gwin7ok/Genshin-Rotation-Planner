@@ -63,6 +63,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // gcsim に未実装（genshin-db にあって gcsim にキーが無い）ものだけを表示（キャラ・武器・聖遺物タブ共通）。カスタムは対象外
   const [gcsimMissingOnly, setGcsimMissingOnly] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  // どの生成を実行中か（回転するアイコンを、押したボタンの種類だけにする。issue #2）
+  const [syncingKind, setSyncingKind] = useState<'character' | 'weapon' | 'artifact' | null>(null);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
 
   // Character Sync State
@@ -100,6 +102,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Dynamic Generation & Sync: Characters (genshin-db API + gcsim をネットから取得して生成)
   const handleSyncCharacters = async () => {
     setIsSyncing(true);
+    setSyncingKind('character');
     setSyncSuccessMsg(null);
     setCharSyncError(null);
     setCharSyncReport(null);
@@ -113,6 +116,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       setCharSyncError(e instanceof Error ? e.message : String(e));
     } finally {
       setIsSyncing(false);
+      setSyncingKind(null);
       setCharSyncProgress(null);
     }
   };
@@ -120,6 +124,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Dynamic Generation & Sync: Weapons (genshin-db API からオンライン取得・解析して生成)
   const handleSyncWeapons = async () => {
     setIsSyncing(true);
+    setSyncingKind('weapon');
     setSyncSuccessMsg(null);
     setWeaponSyncError(null);
     setWeaponSyncReport(null);
@@ -133,6 +138,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       setWeaponSyncError(e instanceof Error ? e.message : String(e));
     } finally {
       setIsSyncing(false);
+      setSyncingKind(null);
       setWeaponSyncProgress(null);
     }
   };
@@ -140,6 +146,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Dynamic Generation & Sync: Artifacts (genshin-db API からオンライン取得・解析して生成)
   const handleSyncArtifacts = async () => {
     setIsSyncing(true);
+    setSyncingKind('artifact');
     setSyncSuccessMsg(null);
     setArtifactSyncError(null);
     setArtifactSyncReport(null);
@@ -153,6 +160,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       setArtifactSyncError(e instanceof Error ? e.message : String(e));
     } finally {
       setIsSyncing(false);
+      setSyncingKind(null);
       setArtifactSyncProgress(null);
     }
   };
@@ -758,7 +766,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-700/90 hover:bg-sky-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
                     title="genshin-db API から最新の全武器データをオンライン取得して生成"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'weapon' ? 'animate-spin' : ''}`} />
                     <span>最新武器をオンライン生成</span>
                   </button>
 
@@ -864,7 +872,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-700/90 hover:bg-purple-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
                     title="genshin-db API から最新の全聖遺物データをオンライン取得して生成"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'artifact' ? 'animate-spin' : ''}`} />
                     <span>最新聖遺物をオンライン生成</span>
                   </button>
 
@@ -980,7 +988,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 <div className="bg-slate-950 p-5 rounded-2xl border border-amber-500/40 space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                      <Sparkles className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <Sparkles className={`w-5 h-5 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
@@ -1006,7 +1014,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         disabled={isSyncing}
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
-                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`w-4 h-4 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
                         <span>最新マスターデータの動的生成 (キャラ)</span>
                       </button>
                       <button
@@ -1067,7 +1075,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 <div className="bg-slate-950 p-5 rounded-2xl border border-sky-500/40 space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shrink-0">
-                      <Sword className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <Sword className={`w-5 h-5 ${syncingKind === 'weapon' ? 'animate-spin' : ''}`} />
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
@@ -1093,7 +1101,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         disabled={isSyncing}
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
-                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`w-4 h-4 ${syncingKind === 'weapon' ? 'animate-spin' : ''}`} />
                         <span>最新マスターデータの動的生成 (武器)</span>
                       </button>
                       <button
@@ -1155,7 +1163,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 <div className="bg-slate-950 p-5 rounded-2xl border border-pink-500/40 space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 shrink-0">
-                      <Shield className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
+                      <Shield className={`w-5 h-5 ${syncingKind === 'artifact' ? 'animate-spin' : ''}`} />
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
@@ -1181,7 +1189,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         disabled={isSyncing}
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
-                        <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`w-4 h-4 ${syncingKind === 'artifact' ? 'animate-spin' : ''}`} />
                         <span>最新マスターデータの動的生成 (聖遺物)</span>
                       </button>
                       <button

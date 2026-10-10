@@ -235,18 +235,24 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 
-  const addActionToStint = (stintIndex: number, actionDef: ActionDefinition) => {
+  /** 「待機」（何もしないで待つアクション。issue #28）。長さの既定は 1 秒。所要時間の欄で変える */
+  const WAIT_DEFAULT_SECONDS = 1;
+
+  const addActionToStint = (stintIndex: number, actionDef: ActionDefinition | 'wait') => {
     const targetStint = stints[stintIndex];
     if (!targetStint) return;
 
-    const newAction: CharacterActionInstance = {
-      id: `act_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      actionTypeId: actionDef.id,
-      name: actionDef.name,
-      shortName: actionDef.shortName,
-      type: actionDef.type,
-      duration: actionDef.defaultDuration,
-    };
+    const newId = `act_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const newAction: CharacterActionInstance = actionDef === 'wait'
+      ? { id: newId, actionTypeId: 'wait', name: '待機', shortName: 'W', type: 'wait', duration: WAIT_DEFAULT_SECONDS }
+      : {
+        id: newId,
+        actionTypeId: actionDef.id,
+        name: actionDef.name,
+        shortName: actionDef.shortName,
+        type: actionDef.type,
+        duration: actionDef.defaultDuration,
+      };
 
     // 追加位置（追加作業 21 / issue #26）: 選択中のアクションが、この出場の中にあれば、その直前（交代アクションなら、その直後）。
     // 別の出場のアクションを選択中・アクションの選択なしのときは、末尾。追加しても、選択は変えない（連続して追加すると、追加した順に並ぶ）
@@ -1237,6 +1243,14 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
                       ))}
+                      {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
+                      <button
+                        onClick={() => addActionToStint(stintIndex, 'wait')}
+                        className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'W' }).box}`}
+                        title={`待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
+                      >
+                        <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'W' }).label}`}>+待機</strong>
+                      </button>
                     </div>
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
                     {renderBuffSection('palette')}

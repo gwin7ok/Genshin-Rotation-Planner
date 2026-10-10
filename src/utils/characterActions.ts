@@ -1,4 +1,5 @@
 import { ActionDefinition, ActiveBuffSpan, CharacterActionInstance, CharacterConfig } from '../types/genshin';
+import { actionDescription } from './actionDescription';
 
 const SKILL_TYPES = new Set(['skill', 'skill_hold', 'skill_reset']);
 
@@ -98,7 +99,8 @@ export function buildActionEffectSpan(
     endTime: startTime + info.duration,
     duration: info.duration,
     color: char.color,
-    description: `${act.name}${def?.dataSource?.effectDuration ? `（${def.dataSource.effectDuration}）` : ''}`,
+    description: `${act.name}${def?.dataSource?.effectDuration ? `（${def.dataSource.effectDuration}）` : ''}${actionDescription(act, def) ? `
+${actionDescription(act, def)}` : ''}`,
   };
 }
 

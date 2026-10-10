@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { 
-  CharacterConfig, 
+  CharacterConfig, ActionType, 
   Stint, 
   ActiveBuffSpan, 
   CooldownSpan, StockSpan, ReactionRow,
@@ -32,6 +32,7 @@ import { getBuffBadgeConfig } from '../utils/buffUtils';
 import { GlobalBuffRow } from './GlobalBuffRow';
 import { ReactionRows } from './ReactionRows';
 import { actionToneOnColor } from '../utils/actionTone';
+import { actionDescription } from '../utils/actionDescription';
 import type { DragPreview } from '../utils/dragPreview';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
@@ -143,6 +144,19 @@ export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
   }
 
   return result;
+}
+
+/** アクションの説明文（定義の説明。通常攻撃などは、共通の説明） */
+function descOf(char: CharacterConfig, act: { type: ActionType; actionTypeId?: string }): string | undefined {
+  return actionDescription(act, char.availableActions.find(d => d.id === act.actionTypeId));
+}
+
+/** CT バーのホバーに足す、技の名前と説明（CT を始めたアクションを、出場の中から探す） */
+function ctActionInfo(char: CharacterConfig, stint: Stint, actionId: string | undefined): string {
+  const act = actionId ? stint.actions.find(a => a.id === actionId) : undefined;
+  if (!act) return '';
+  const desc = descOf(char, act);
+  return `\n${act.name}${desc ? `\n\n${desc}` : ''}`;
 }
 
 // バフ重複行の色（寒色→暖色）: 0 = 無色、1 以上は、ローテーション全体の最大数を基準に 4 等分（最大の 25% 以下 / 50% 以下 / 75% 以下 / それより多い）。
@@ -1658,7 +1672,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                             ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
                                             : windowWarning
                                             ? `【⚠️ 警告】${windowWarning}\nアクション: ${act.name}（gcsim の計算は制限されません）`
-                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]${act.usedSpecialCharge ? '\n【特殊重撃（蒼牙）】特殊スキルの使用回数を 1 回分使います（スタミナは使いません）' : ''}`
+                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]${act.usedSpecialCharge ? '\n【特殊重撃（蒼牙）】特殊スキルの使用回数を 1 回分使います（スタミナは使いません）' : ''}${descOf(char, act) ? `\n\n${descOf(char, act)}` : ''}`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
@@ -1765,7 +1779,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     title={
                                       isCarryOver
                                         ? `【1周目からの持ち越しスキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                        : `【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
                                     }
                                   >
                                     <span className="truncate">
@@ -1815,7 +1829,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     title={
                                       isCarryOver
                                         ? `【1周目からの持ち越し特殊スキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【特殊スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                        : `【特殊スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
                                     }
                                   >
                                     <span className="truncate">
@@ -1865,7 +1879,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     title={
                                       isCarryOver
                                         ? `【1周目からの持ち越し元素爆発CT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)`
+                                        : `【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
                                     }
                                   >
                                     <span className="truncate">

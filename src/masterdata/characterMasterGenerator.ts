@@ -897,12 +897,16 @@ interface GenshinDbCharacter {
 
 interface GenshinDbTalentCombat {
   name: string;
+  /** 天賦の説明文（装飾の無い文） */
+  description?: string;
   attributes?: { labels?: string[]; parameters?: Record<string, number[]> };
 }
 
 interface GenshinDbTalent {
   id: number;
   name: string;
+  /** 通常攻撃・重撃・落下攻撃（1 つの説明文に 3 つがまとまっている） */
+  combat1?: GenshinDbTalentCombat;
   combat2?: GenshinDbTalentCombat;
   combat3?: GenshinDbTalentCombat;
   passive1?: GenshinDbPassive;
@@ -1522,6 +1526,17 @@ function buildActions(ctx: BuildContext): BuildResult {
   // --- ダッシュ (キャラ固有フレームは gcsim 側で共通処理のため仮値) --------------
   actions.push({ id: `${id}_dash`, name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: PLACEHOLDER_DURATION.dash! });
   actions.push({ id: `${id}_jump`, name: 'ジャンプ', shortName: 'J', type: 'jump', defaultDuration: PLACEHOLDER_DURATION.jump! });
+
+  // 説明文（ホバー表示。スキル・爆発・通常攻撃・重撃・落下攻撃。ダッシュ・ジャンプなどは、表示側の共通の説明）
+  const skillDescription = talent?.combat2?.description;
+  const burstDescription = talent?.combat3?.description;
+  // 通常攻撃・重撃・落下攻撃は、genshin-db では 1 つの説明文（combat1）。3 つで共通で出す（ユーザー決定）
+  const normalDescription = talent?.combat1?.description;
+  for (const a of actions) {
+    if (skillDescription && (a.type === 'skill' || a.type === 'skill_hold' || a.type === 'skill_reset')) a.description = skillDescription;
+    else if (burstDescription && a.type === 'burst') a.description = burstDescription;
+    else if (normalDescription && (a.type === 'normal' || a.type === 'charged' || a.type === 'plunge_low' || a.type === 'plunge_high')) a.description = normalDescription;
+  }
 
   return { actions, placeholderActions };
 }

@@ -242,6 +242,7 @@ export interface ActionDefinition {
   buttonLabel?: string;    // アクション構築エリアの追加ボタン等に表示するボタンラベル名 (未指定時は shortName)
   type: ActionType;
   defaultDuration: number; // in seconds
+  /** 説明文（スキル・爆発・通常攻撃・重撃・落下攻撃: genshin-db の天賦の説明。ホバー表示に使う。無いものは、共通の説明を表示側で補う） */
   description?: string;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;

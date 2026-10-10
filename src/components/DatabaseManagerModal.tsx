@@ -1,3 +1,4 @@
+import { GcsimMissingBadge } from './GcsimMissingBadge';
 import React, { useState, useRef } from 'react';
 import { 
   X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
@@ -604,7 +605,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           />
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <h3 className="font-bold text-sm text-white">{char.name}</h3>
+                              <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{char.name}</span><GcsimMissingBadge char={char} /></h3>
                               {isCustom && (
                                 <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                                   カスタム

@@ -1,3 +1,4 @@
+import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
 import { isRevelationCapable } from '../masterdata/revelationCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
@@ -187,7 +188,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   <div className={`flex items-center gap-2 ${isEmptySlotCharacter(c) ? 'opacity-50' : ''}`}>
                     <CharacterAvatar char={c} className="w-7 h-7 rounded-lg text-xs" borderWidth={1.5} />
                     <div className="truncate">
-                      <div className="font-bold text-xs text-white truncate">{c.name}</div>
+                      <div className="font-bold text-xs text-white flex items-center gap-1 min-w-0">
+                        <span className="truncate">{c.name}</span>
+                        <GcsimMissingBadge char={c} />
+                      </div>
                       <div className={`text-[10px] font-medium ${elemTheme.text}`}>
                         {isEmptySlotCharacter(c) ? '下の一覧から選択' : ELEMENT_NAMES_JA[c.element]}
                       </div>
@@ -609,7 +613,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       <CharacterAvatar char={rosterChar} className="w-8 h-8 rounded-lg text-sm" />
                       <div className="min-w-0">
                         <div className="font-bold text-xs text-white truncate flex items-center gap-1">
-                          <span>{rosterChar.name}</span>
+                          <span className="truncate">{rosterChar.name}</span>
+                          <GcsimMissingBadge char={rosterChar} />
                           {isCustom && <span className="text-[8px] text-amber-300 font-mono">✦</span>}
                         </div>
                         <div className={`text-[10px] ${elemTheme.text}`}>

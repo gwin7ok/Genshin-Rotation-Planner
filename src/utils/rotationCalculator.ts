@@ -1782,7 +1782,11 @@ function buildBuffOverlapSegments(buffs: ActiveBuffSpan[], totalDuration: number
     if (end - start < 0.001) continue;
     const { count, names } = countDistinctActiveBuffs(buffs, (start + end) / 2);
     const prev = segments[segments.length - 1];
-    if (prev && prev.count === count && prev.activeBuffs.join() === names.join()) prev.end = end;
+    // 同じ数の時間帯は 1 つのバーにする（追加作業 22 / issue #8）。入れ替わりがあるときは、その間に有効だったバフ名をまとめる
+    if (prev && prev.count === count) {
+      prev.end = end;
+      for (const n of names) if (!prev.activeBuffs.includes(n)) prev.activeBuffs.push(n);
+    }
     else segments.push({ start, end, count, activeBuffs: names });
   }
   return segments;

@@ -40,6 +40,7 @@ import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
+import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 
 interface StintSequenceEditorProps {
@@ -53,6 +54,9 @@ interface StintSequenceEditorProps {
   /** 敵の防御ヒットストップ（gcsim の defhalt）。既定 true */
   defHalt?: boolean;
   onUpdateDefHalt?: (value: boolean) => void;
+  /** 敵から受けるダメージ（gcsim の hurt。既定: 無効） */
+  hurt?: HurtSetting;
+  onUpdateHurt?: (value: HurtSetting) => void;
   onOpenHelpModal?: () => void;
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
@@ -75,6 +79,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   onUpdateSwitchDelay,
   defHalt = true,
   onUpdateDefHalt,
+  hurt = DEFAULT_HURT,
+  onUpdateHurt,
   onOpenHelpModal,
   selectedAction,
   onSelectAction,
@@ -876,6 +882,47 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   onClick={() => onUpdateDefHalt?.(opt.value)}
                   className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
                     defHalt === opt.value
+                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-slate-850 my-1" />
+
+          {/* 敵から受けるダメージ（gcsim の hurt。追加作業 18） */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs">
+              <div className="font-bold text-slate-200">💥 敵から受けるダメージ（gcsim の hurt）</div>
+              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
+                有効にすると、gcsim の実行で、出場中のキャラが一定の間隔で物理ダメージを受ける（間隔・量とも範囲の中の乱数）。ディシアの「紅き血」など、自分が受けたダメージで HP が減ることが条件の効果を再現する。無効のときは、ダメージを受けない。アプリの計算は変わらない。
+              </div>
+              {hurt.enabled && (
+                <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
+                  <span>間隔（秒）</span>
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最小（秒）" />
+                  <span>〜</span>
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最大（秒）" />
+                  <span className="ml-2">ダメージ（HP）</span>
+                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最小" />
+                  <span>〜</span>
+                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最大" />
+                  {!hurtStatement(hurt) && <span className="text-amber-300">値が不正です（最小 ≤ 最大・1 以上）。gcsim には渡しません</span>}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-1">
+              {[{ label: '無効（既定）', value: false }, { label: '有効', value: true }].map(opt => (
+                <button
+                  key={String(opt.value)}
+                  type="button"
+                  onClick={() => onUpdateHurt?.({ ...hurt, enabled: opt.value })}
+                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
+                    hurt.enabled === opt.value
                       ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
                       : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
                   }`}

@@ -11,7 +11,7 @@ export type ArtifactSetMode = '4pc' | '2+2';
 export type ActionType = 
   | 'normal'     // N（連続した N の段は計算時に自動で数える）
   | 'combo'      // e.g. N3C, 3N3C
-  | 'charged'    // CA / Aimed shot
+  | 'charged'    // C（重撃）/ Aimed shot
   | 'plunge_low'  // LP（低空落下攻撃）
   | 'plunge_high' // HP（高空落下攻撃）
   | 'skill'      // E (tap)
@@ -238,7 +238,7 @@ export interface ActionGcsimIncluded {
 export interface ActionDefinition {
   id: string;
   name: string;
-  shortName: string;       // 記法・ガントチャートブロックに表示する略称 (例: E, Q, N1, CA)
+  shortName: string;       // 記法・ガントチャートブロックに表示する略称 (例: E, Q, N1, C)
   buttonLabel?: string;    // アクション構築エリアの追加ボタン等に表示するボタンラベル名 (未指定時は shortName)
   type: ActionType;
   defaultDuration: number; // in seconds

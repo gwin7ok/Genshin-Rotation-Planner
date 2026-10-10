@@ -38,6 +38,7 @@ import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
+import { actionTone } from '../utils/actionTone';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 
@@ -1230,10 +1231,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         <button
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
-                          className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-semibold border border-slate-700/70 hover:border-slate-500 transition-colors"
+                          className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
                           title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]`}
                         >
-                          +{actionDef.buttonLabel || actionDef.shortName}
+                          <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
                       ))}
                     </div>
@@ -1376,22 +1377,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   ? 'bg-amber-500/30 border-yellow-400 text-yellow-100 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
                                   : isActionActive
                                   ? 'bg-amber-500/20 border-amber-400 text-amber-200 ring-1 ring-amber-400/50 shadow'
-                                  : isBurst
-                                  ? 'bg-purple-950/70 border-purple-600/70 text-purple-200 hover:border-purple-400'
-                                  : isSkill
-                                  ? 'bg-sky-950/70 border-sky-600/70 text-sky-200 hover:border-sky-400'
-                                  : 'bg-slate-900 border-slate-700/80 text-slate-200 hover:border-slate-500'
+                                  : `${actionTone(act).box} hover:brightness-125`
                               }`}
                             >
                               {/* Action Type Badge */}
                               <span 
-                                className={`px-1.5 py-0.2 rounded font-extrabold text-[11px] ${
-                                  isBurst 
-                                    ? 'bg-purple-500 text-slate-950' 
-                                    : isSkill 
-                                    ? 'bg-sky-400 text-slate-950' 
-                                    : 'bg-slate-700 text-slate-200'
-                                }`}
+                                className={`px-0.5 font-mono font-extrabold text-[11px] ${actionTone(act).label}`}
                               >
                                 {act.shortName}
                               </span>

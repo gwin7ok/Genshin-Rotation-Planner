@@ -1164,7 +1164,7 @@ function buildActions(ctx: BuildContext): BuildResult {
     actions.push(withDuration({
       id: `${id}_ca`,
       name: '狙い撃ち (フルチャージ)',
-      shortName: 'CA',
+      shortName: 'C',
       type: 'charged',
       frames: toActionFrames(full, 'aimed', aimed.consts),
     }, framesToSec(full.total)));
@@ -1175,12 +1175,12 @@ function buildActions(ctx: BuildContext): BuildResult {
     actions.push(withDuration({
       id: `${id}_ca`,
       name: '重撃',
-      shortName: 'CA',
+      shortName: 'C',
       type: 'charged',
       frames: toActionFrames(table, 'charge', charge.consts),
     }, framesToSec(table.total)));
   } else {
-    actions.push(withDuration({ id: `${id}_ca`, name: '重撃', shortName: 'CA', type: 'charged' }));
+    actions.push(withDuration({ id: `${id}_ca`, name: '重撃', shortName: 'C', type: 'charged' }));
   }
 
   // gcsim が重撃・狙い撃ちを実装していない（メソッド ChargeAttack / Aimed が無い）キャラ: 実行すると「action charge not implemented」のエラーになる（ディシアなど）。

@@ -28,7 +28,7 @@ export const RotationSummaryModal: React.FC<RotationSummaryModalProps> = ({
   const characterMap = new Map<string, CharacterConfig>();
   characters.forEach(c => characterMap.set(c.id, c));
 
-  // 記法: 刻晴(E E) ➔ [ナヒーダ(E CA) ➔ フィッシュル(Q)]（[ ] は2周目以降も繰り返す部分）
+  // 記法: 刻晴(E E) ➔ [ナヒーダ(E C) ➔ フィッシュル(Q)]（[ ] は2周目以降も繰り返す部分）
   const rotationNotation = buildRotationNotation(characters, stints, loopStartIndex);
 
   const handleCopy = () => {

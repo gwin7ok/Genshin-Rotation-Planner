@@ -1,3 +1,4 @@
+import { expandGroupedStints } from '../actionGroups';
 /**
  * 編成 → gcsim 設定文の変換（フェーズ4）
  *
@@ -123,7 +124,9 @@ export interface GcsimActionRef {
 
 const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
 
-export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
+export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult {
+  // グループの回数を展開する（追加作業 20-A）
+  const input: GcsimConfigInput = { ...rawInput, stints: expandGroupedStints(rawInput.stints) };
   const warnings: GcsimWarning[] = [];
   const error = (message: string) => warnings.push({ level: 'error', message });
   const warn = (message: string) => warnings.push({ level: 'warn', message });

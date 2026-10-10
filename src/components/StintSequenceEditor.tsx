@@ -40,6 +40,7 @@ import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
 import { actionTone } from '../utils/actionTone';
 import { actionDescription } from '../utils/actionDescription';
+import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup } from '../utils/actionGroups';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 
@@ -71,7 +72,7 @@ const SHOW_SELECTED_ACTION_BAR = false;
 
 export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   characters,
-  stints,
+  stints: calculatedStints,
   onUpdateStints,
   activeTime,
   onSeek,
@@ -88,6 +89,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   loopStartIndex = 0,
   database,
 }) => {
+  // グループの展開で増えた複製は、構築エリアには出さない・編集の対象にしない（追加作業 20-A）
+  const stints = useMemo(() => calculatedStints.map(s => ({ ...s, actions: stripGroupCopies(s.actions) })), [calculatedStints]);
+  // Ctrl+クリックで複数選択したアクション（グループ化の対象）と、ドラッグ中のグループ
+  const [multiSel, setMultiSel] = useState<{ stintId: string; ids: string[] } | null>(null);
+  const [draggedGroup, setDraggedGroup] = useState<{ stintIndex: number; groupId: string } | null>(null);
   const [draggedStintIndex, setDraggedStintIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [draggedAction, setDraggedAction] = useState<{ stintIndex: number; actionIndex: number } | null>(null);
@@ -200,21 +206,99 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   };
 
   // --- Action Micro Operations ---
+  // アクションの移動。グループの規則: グループの中のアクションは、グループの中だけで並び替わる。外のアクションは、グループの中に入らない
   const moveAction = (stintIndex: number, fromActIdx: number, toActIdx: number) => {
     const targetStint = stints[stintIndex];
     if (!targetStint || toActIdx < 0 || toActIdx >= targetStint.actions.length) return;
-    
-    // Prevent moving into or past the swap action at index 0 if present
-    const hasSwap = targetStint.actions[0]?.type === 'swap';
-    if (hasSwap && (toActIdx === 0 || fromActIdx === 0)) return;
-
-    const newActions = [...targetStint.actions];
-    const [moved] = newActions.splice(fromActIdx, 1);
-    newActions.splice(toActIdx, 0, moved);
-
+    const moving = targetStint.actions[fromActIdx];
+    if (!moving) return;
+    const moved = moveActionRespectingGroups(targetStint.actions, moving.id, toActIdx);
+    if (!moved) return;
     const nextStints = [...stints];
-    nextStints[stintIndex] = { ...targetStint, actions: newActions };
+    nextStints[stintIndex] = { ...targetStint, actions: moved };
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
+  };
+
+  // グループ（追加作業 20-A）: 選択したアクションをグループにする・解除・回数・グループごとの移動
+  const updateStintAt = (stintIndex: number, fn: (s: Stint) => Stint) => {
+    const next = [...stints];
+    next[stintIndex] = fn(stints[stintIndex]);
+    onUpdateStints(sanitizeStintsForUpdate(next));
+  };
+  const groupSelected = (stintIndex: number) => {
+    const st = stints[stintIndex];
+    if (!st || !multiSel || multiSel.stintId !== st.id) return;
+    const grouped = createGroup(st, multiSel.ids);
+    if (!grouped) return;
+    updateStintAt(stintIndex, () => grouped);
+    setMultiSel(null);
+  };
+  const moveGroupTo = (stintIndex: number, groupId: string, overActionId: string) => {
+    const st = stints[stintIndex];
+    if (!st) return;
+    const rest = st.actions.filter(a => a.groupId !== groupId);
+    const to = rest.findIndex(a => a.id === overActionId);
+    if (to < 0) return;
+    const moved = moveGroupBlock(st.actions, groupId, to);
+    if (moved) updateStintAt(stintIndex, cur => ({ ...cur, actions: moved }));
+  };
+
+  /**
+   * 出場ブロックのアクションの並びを、グループの枠つきで出す。グループは、隣接するアクションを 1 つの枠で囲み、回数の入力欄と解除ボタンを付ける。
+   * 枠の背景をドラッグするとグループごとの移動、中のアクション要素をドラッグするとグループの中での並び替え（ユーザー決定 2026-10-11）
+   */
+  const renderActionSegments = (
+    stint: Stint,
+    stintIndex: number,
+    renderOne: (act: CharacterActionInstance, actIdx: number) => React.ReactNode,
+  ): React.ReactNode[] => {
+    const runs = groupRuns(stint);
+    const nodes: React.ReactNode[] = [];
+    let i = 0;
+    while (i < stint.actions.length) {
+      const run = runs.find(r => r.start === i);
+      if (!run) {
+        nodes.push(renderOne(stint.actions[i], i));
+        i += 1;
+        continue;
+      }
+      const members = stint.actions.slice(run.start, run.end + 1);
+      nodes.push(
+        <div
+          key={`group_${run.id}`}
+          draggable
+          onDragStart={() => setDraggedGroup({ stintIndex, groupId: run.id })}
+          onDragEnd={() => setDraggedGroup(null)}
+          title="グループ（枠の背景をドラッグすると、グループごと移動します。中のアクションをドラッグすると、グループの中で並び替わります）"
+          className={`flex flex-wrap items-center gap-2 p-1.5 rounded-xl border border-dashed border-fuchsia-400/70 bg-fuchsia-500/5 cursor-grab ${draggedGroup?.groupId === run.id ? 'opacity-60' : ''}`}
+        >
+          <div className="flex items-center gap-1 text-[10px] font-mono text-fuchsia-200 select-none" onClick={(e) => e.stopPropagation()}>
+            <span>グループ ×</span>
+            <input
+              type="number"
+              min={1}
+              max={99}
+              value={run.repeat}
+              onChange={(e) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, Number(e.target.value)))}
+              className="w-10 bg-slate-900 border border-fuchsia-500/50 rounded px-1 py-0.5 text-fuchsia-100"
+              aria-label="グループの回数"
+              title="グループの回数（この回数だけ、中のアクションを続けて行います）"
+            />
+            <button
+              type="button"
+              onClick={() => updateStintAt(stintIndex, cur => ungroup(cur, run.id))}
+              className="px-1.5 py-0.5 rounded border border-fuchsia-500/50 text-fuchsia-200 hover:bg-fuchsia-500/20"
+              title="グループを解除（中のアクションは、そのまま残ります）"
+            >
+              解除
+            </button>
+          </div>
+          {members.map((m, k) => renderOne(m, run.start + k))}
+        </div>,
+      );
+      i = run.end + 1;
+    }
+    return nodes;
   };
 
   // アクションごとの遅延（そのアクションの終了後に入れる秒数）
@@ -263,6 +347,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       if (idx >= 0) insertAt = targetStint.actions[idx].type === 'swap' ? idx + 1 : idx;
     }
     const actions = [...targetStint.actions];
+    // グループの途中（前後の両方が同じグループ）に入れるときは、そのグループに入れる
+    const before = actions[insertAt - 1];
+    const after = actions[insertAt];
+    if (before?.groupId && before.groupId === after?.groupId) newAction.groupId = before.groupId;
     actions.splice(insertAt, 0, newAction);
 
     const nextStints = [...stints];
@@ -754,7 +842,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-400 font-bold">💡</span>
-                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。</span>
+                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。Ctrl+クリックで隣接するアクションを複数選択すると、グループにして回数を設定できます。</span>
               </span>
             </div>
           )}
@@ -1244,6 +1332,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
                       ))}
+                      {/* グループ化（Ctrl+クリックで選んだ、隣接するアクション。追加作業 20-A） */}
+                      {multiSel && multiSel.stintId === stint.id && multiSel.ids.length >= 2 && (
+                        <button
+                          type="button"
+                          onClick={() => groupSelected(stintIndex)}
+                          disabled={createGroup(stint, multiSel.ids) === null}
+                          className="px-2 py-0.5 rounded border border-fuchsia-500/60 bg-fuchsia-500/10 text-fuchsia-200 font-mono text-[11px] hover:bg-fuchsia-500/20 disabled:opacity-40"
+                          title={createGroup(stint, multiSel.ids) === null ? '隣接していて、グループに入っていないアクションを選んでください' : '選んだアクションを、1 つのグループにします（回数を設定できます）'}
+                        >
+                          {multiSel.ids.length} 個をグループ化
+                        </button>
+                      )}
                       {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
                       <button
                         onClick={() => addActionToStint(stintIndex, 'wait')}
@@ -1256,7 +1356,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
                     {renderBuffSection('palette')}
                     <div className="flex flex-wrap items-center gap-2 mt-2">
-                      {stint.actions.map((act, actIdx) => {
+                      {renderActionSegments(stint, stintIndex, (act, actIdx) => {
                         const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
                         const isActionActive = (act.startTime ?? 0) <= activeTime && activeTime < (act.endTime ?? 0);
                         const isBurst = act.type === 'burst';
@@ -1368,14 +1468,35 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           <React.Fragment key={act.id}>
                             <div
                               id={`action-item-${act.id}`}
-                              onClick={() => {
+                              onClick={(e) => {
+                                // Ctrl（Mac は Cmd）+クリック: 複数選択（グループ化の対象。同じ出場ブロックの中だけ）
+                                if (e.ctrlKey || e.metaKey) {
+                                  e.preventDefault();
+                                  setMultiSel(prev => {
+                                    const current = prev && prev.stintId === stint.id
+                                      ? prev.ids
+                                      : (selectedAction?.stintId === stint.id && selectedAction.actionId ? [selectedAction.actionId] : []);
+                                    const ids = current.includes(act.id) ? current.filter(x => x !== act.id) : [...current, act.id];
+                                    return ids.length > 0 ? { stintId: stint.id, ids } : null;
+                                  });
+                                  return;
+                                }
+                                setMultiSel(null);
                                 onSelectAction?.(stint.id, act.id);
                                 if (onSeek) onSeek(act.startTime ?? 0);
                               }}
                               draggable={ctHoverActionId !== act.id}
-                              onDragStart={() => setDraggedAction({ stintIndex, actionIndex: actIdx })}
+                              onDragStart={(e) => {
+                                e.stopPropagation(); // 枠（グループ）のドラッグにしない
+                                setDraggedAction({ stintIndex, actionIndex: actIdx });
+                              }}
                               onDragOver={(e) => {
                                 e.preventDefault();
+                                // グループごとの移動: 重ねた要素の手前へ
+                                if (draggedGroup && draggedGroup.stintIndex === stintIndex) {
+                                  if (act.groupId !== draggedGroup.groupId) moveGroupTo(stintIndex, draggedGroup.groupId, act.id);
+                                  return;
+                                }
                                 if (
                                   draggedAction && 
                                   draggedAction.stintIndex === stintIndex && 
@@ -1387,12 +1508,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   setDraggedAction({ stintIndex, actionIndex: actIdx });
                                 }
                               }}
-                              onDragEnd={() => setDraggedAction(null)}
+                              onDragEnd={(e) => { e.stopPropagation(); setDraggedAction(null); }}
                               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer ${
                                 `${actionTone(act).box} hover:brightness-125`
                               } ${
-                                // 選択中は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
-                                isSelected
+                                // 選択中（複数選択を含む）は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
+                                isSelected || (multiSel?.stintId === stint.id && multiSel.ids.includes(act.id))
                                   ? 'ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
                                   : isActionActive ? 'border-amber-400 ring-1 ring-amber-400/50 shadow' : ''
                               }`}

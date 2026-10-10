@@ -31,7 +31,7 @@ import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoun
 import { normalizeModeHoldActions, isModeHoldAction } from './utils/modeHoldAction';
 import { runGcsimForConfig, computeGcsimApply, summarizeApplyPlan, describeApplyPlan } from './utils/gcsim/gcsimCompute';
 import { GcsimComputeBanner, type GcsimComputeBannerState } from './components/GcsimComputeBanner';
-import { buildRotationNotation } from './utils/rotationNotation';
+import { buildRotationNotation, type NotationMode } from './utils/rotationNotation';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
 function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: number, loopPeriod: number) {
@@ -306,9 +306,17 @@ export default function App() {
   };
 
   // 11. Notation Copy & Display
+  // 記法のモード（略号 / 名称）。回転ごとではなく、アプリ全体の設定（既定: 略号。追加作業 20-B）
+  const [notationMode, setNotationModeState] = useState<NotationMode>(() => {
+    try { return localStorage.getItem('rotationNotationMode') === 'name' ? 'name' : 'short'; } catch { return 'short'; }
+  });
+  const setNotationMode = (mode: NotationMode) => {
+    setNotationModeState(mode);
+    try { localStorage.setItem('rotationNotationMode', mode); } catch { /* 保存できなくても動く */ }
+  };
   const rotationNotation = useMemo(
-    () => buildRotationNotation(characters, calculatedResult.calculatedStints, loopStartIndex),
-    [characters, calculatedResult.calculatedStints, loopStartIndex],
+    () => buildRotationNotation(characters, calculatedResult.calculatedStints, loopStartIndex, notationMode),
+    [characters, calculatedResult.calculatedStints, loopStartIndex, notationMode],
   );
 
   // 現在のメイン画面の状態を、読み込み中の保存編成（スロット）へ上書き保存
@@ -605,6 +613,8 @@ export default function App() {
         copiedNotation={copiedNotation}
         loopStartTime={loopStartTime}
         rotationNotation={rotationNotation}
+        notationMode={notationMode}
+        onChangeNotationMode={setNotationMode}
         totalCTCollisions={totalCTCollisions}
         totalCTWarnings={totalCTWarnings}
         playbackCycleCount={playbackCycleCount}
@@ -741,6 +751,8 @@ export default function App() {
         stints={calculatedResult.calculatedStints}
         totalDuration={totalDuration}
         loopStartIndex={loopStartIndex}
+        notationMode={notationMode}
+        onChangeNotationMode={setNotationMode}
       />
 
       {/* gcsim 設定文 */}

@@ -7,15 +7,46 @@ const isSwapAction = (a: Stint['actions'][number]) =>
 /** 維持（モードの維持のために自動で足される待ち）。記法には出さない */
 const isModeHold = (a: Stint['actions'][number]) => a.actionTypeId === 'mode_hold';
 
+/**
+ * 記法のモード（追加作業 20-B / issue #15）
+ *   short = 略号（KQM の記法。詰めて書く）／name = 名称（日本語。スペースで区切る）
+ */
+export type NotationMode = 'short' | 'name';
+
+/** 名称モードの、アクションの名前（略号 → 名称。元素は省略。ユーザー決定 2026-10-11） */
+const NAME_OF_SHORT: Record<string, string> = {
+  E: 'スキル',
+  tE: '短押しスキル',
+  hE: '長押しスキル',
+  rE: '再発動スキル',
+  spE: '特殊スキル',
+  Q: '爆発',
+  spQ: '特殊爆発',
+  N: '通常',
+  C: '重撃',
+  D: 'ダッシュ',
+  J: 'ジャンプ',
+  lP: '落下攻撃(低)',
+  hP: '落下攻撃(高)',
+};
+
+/** 略号 → 名称。`hE(short)` のような後ろの印は、括弧つきで残す。対応が無い略号は、そのまま */
+function nameOfShort(short: string): string {
+  if (NAME_OF_SHORT[short]) return NAME_OF_SHORT[short];
+  const m = /^([A-Za-z]+)(\(.+\))$/.exec(short);
+  if (m && NAME_OF_SHORT[m[1]]) return `${NAME_OF_SHORT[m[1]]}${m[2]}`;
+  return short;
+}
+
 /** 秒数の表記（0.0s の形） */
 const sec = (v: number) => `${v.toFixed(1)}s`;
 
 /** アクション列の記法（グループの外・中で共通）。連続する通常攻撃は N + 回数にまとめる。詰めて書く */
-function notationOf(actions: Stint['actions']): string {
+function notationOf(actions: Stint['actions'], mode: NotationMode): string {
   const out: string[] = [];
   let normals = 0;
   const flush = () => {
-    if (normals > 0) out.push(`N${normals}`);
+    if (normals > 0) out.push(mode === 'name' ? (normals > 1 ? `通常×${normals}` : '通常') : `N${normals}`);
     normals = 0;
   };
   for (const a of actions) {
@@ -25,11 +56,15 @@ function notationOf(actions: Stint['actions']): string {
       continue;
     }
     flush();
-    if (a.type === 'wait') out.push(`w@${sec(a.duration ?? 0)}`);
-    else out.push(a.holdSeconds === undefined ? a.shortName : `${a.shortName}@${sec(a.holdSeconds)}`);
+    if (a.type === 'wait') out.push(`${mode === 'name' ? '待機' : 'w'}@${sec(a.duration ?? 0)}`);
+    else {
+      const label = mode === 'name' ? nameOfShort(a.shortName) : a.shortName;
+      out.push(a.holdSeconds === undefined ? label : `${label}@${sec(a.holdSeconds)}`);
+    }
   }
   flush();
-  return out.join('');
+  // 略号は詰めて、名称はスペースで区切る
+  return out.join(mode === 'name' ? ' ' : '');
 }
 
 /**
@@ -39,7 +74,7 @@ function notationOf(actions: Stint['actions']): string {
  *   - グループ（回数 2 以上）: `n[ … ]`。前後にスペース（N の数字との混同を避ける）。回数 1 のグループは、括弧なし
  *   - 交代・維持は出さない。それ以外は、アクションの略号（E・tE・hE・Q・C・D・J・lP・hP …）
  */
-export function buildStintNotation(stint: Stint): string {
+export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): string {
   const actions = stripGroupCopies(stint.actions);
   const runs = groupRuns({ actions, groups: stint.groups });
   const parts: { text: string; spaced: boolean }[] = [];
@@ -49,16 +84,19 @@ export function buildStintNotation(stint: Stint): string {
     if (!run) {
       // 次のグループの手前まで
       const nextStart = runs.find(r => r.start > i)?.start ?? actions.length;
-      const text = notationOf(actions.slice(i, nextStart));
+      const text = notationOf(actions.slice(i, nextStart), mode);
       if (text) parts.push({ text, spaced: false });
       i = nextStart;
       continue;
     }
-    const inner = notationOf(actions.slice(run.start, run.end + 1));
-    if (inner) parts.push(run.repeat > 1 ? { text: `${run.repeat}[${inner}]`, spaced: true } : { text: inner, spaced: false });
+    const inner = notationOf(actions.slice(run.start, run.end + 1), mode);
+    // 略号: 2[N1C]（KQM）／名称: 2×[通常 重撃]
+    const grouped = mode === 'name' ? `${run.repeat}×[${inner}]` : `${run.repeat}[${inner}]`;
+    if (inner) parts.push(run.repeat > 1 ? { text: grouped, spaced: true } : { text: inner, spaced: false });
     i = run.end + 1;
   }
-  return parts.reduce((acc, p, k) => (k === 0 ? p.text : acc + (p.spaced || parts[k - 1].spaced ? ' ' : '') + p.text), '');
+  // 略号: グループの前後だけスペース。名称: すべてスペースで区切る
+  return parts.reduce((acc, p, k) => (k === 0 ? p.text : acc + (mode === 'name' || p.spaced || parts[k - 1].spaced ? ' ' : '') + p.text), '');
 }
 
 /**
@@ -72,11 +110,12 @@ export function buildRotationNotation(
   characters: CharacterConfig[],
   stints: Stint[],
   loopStartIndex: number,
+  mode: NotationMode = 'short',
 ): string {
   const charMap = new Map(characters.map(c => [c.id, c.name]));
   const parts = stints.map(s => {
     const charName = charMap.get(s.characterId) || '不明';
-    const acts = buildStintNotation(s);
+    const acts = buildStintNotation(s, mode);
     return acts ? `${charName} ${acts}` : charName;
   });
   if (parts.length === 0) return '';

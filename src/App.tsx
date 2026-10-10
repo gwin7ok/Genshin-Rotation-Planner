@@ -15,7 +15,7 @@ import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
-import { buildGcsimConfig, type GcsimConfigResult } from './utils/gcsim/buildGcsimConfig';
+import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
@@ -71,6 +71,18 @@ export default function App() {
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
     try { localStorage.setItem('gcsimDefHalt', String(value)); } catch { /* 保存できなくても動く */ }
+  };
+  // 敵から受けるダメージ（gcsim の hurt。追加作業 18）。defHalt と同じく、回転ごとではなく、アプリ全体の設定（既定: 無効）
+  const [hurt, setHurtState] = useState<HurtSetting>(() => {
+    try {
+      const v = JSON.parse(localStorage.getItem('gcsimHurt') ?? 'null');
+      if (v && typeof v === 'object') return { ...DEFAULT_HURT, ...v };
+    } catch { /* 読めなければ既定 */ }
+    return DEFAULT_HURT;
+  });
+  const setHurt = (value: HurtSetting) => {
+    setHurtState(value);
+    try { localStorage.setItem('gcsimHurt', JSON.stringify(value)); } catch { /* 保存できなくても動く */ }
   };
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
@@ -368,6 +380,7 @@ export default function App() {
       loopStartIndex,
       switchDelay,
       defHalt,
+      hurt,
       weapons: database.weapons,
       artifacts: database.artifacts,
       // 標準より長くした分（所要時間の編集）と、モードの維持のための自動の待ち（出場の最後のアクション。待機のアクションにも足す）
@@ -606,6 +619,8 @@ export default function App() {
           onUpdateSwitchDelay={setSwitchDelay}
           defHalt={defHalt}
           onUpdateDefHalt={setDefHalt}
+          hurt={hurt}
+          onUpdateHurt={setHurt}
           onOpenHelpModal={() => setIsHelpModalOpen(true)}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId && actionId ? { stintId, actionId } : null)}

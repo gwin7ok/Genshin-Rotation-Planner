@@ -36,6 +36,32 @@ export interface GcsimWarning {
   message: string;
 }
 
+/**
+ * 敵から受けるダメージの設定（追加作業 18）。ディシアの「紅き血」（自分が受けたダメージで HP が減ったとき）など、外からの HP の減少が条件の効果を再現する。
+ * 間隔は秒、ダメージ量は HP。元素は物理（gcsim の `hurt every interval=… amount=… element=physical`）。ダメージは、間隔・量とも範囲の中の乱数
+ */
+export interface HurtSetting {
+  enabled: boolean;
+  intervalMin: number;
+  intervalMax: number;
+  amountMin: number;
+  amountMax: number;
+}
+
+/** 既定（無効）。値は、D122 で確認した例（240〜300f ごとに 1000〜1500）と同じ */
+export const DEFAULT_HURT: HurtSetting = { enabled: false, intervalMin: 4, intervalMax: 5, amountMin: 1000, amountMax: 1500 };
+
+/** 設定文の `hurt` 行（無効・不正な値のときは undefined） */
+export function hurtStatement(h: HurtSetting | undefined): string | undefined {
+  if (!h?.enabled) return undefined;
+  const lo = Math.round(h.intervalMin * 60);
+  const hi = Math.round(h.intervalMax * 60);
+  const a = Math.round(h.amountMin);
+  const b = Math.round(h.amountMax);
+  if (![lo, hi, a, b].every(Number.isFinite) || lo < 1 || hi < lo || a < 1 || b < a) return undefined;
+  return `hurt every interval=${lo},${hi} amount=${a},${b} element=physical;`;
+}
+
 export interface GcsimConfigInput {
   /** 編成を DB と合わせて解決したキャラ（未設定枠を含む 4 枠） */
   characters: CharacterConfig[];
@@ -47,6 +73,8 @@ export interface GcsimConfigInput {
   switchDelay: number;
   /** 敵の防御ヒットストップ（gcsim の defhalt）。既定 true。false のとき `defhalt=false` を渡す（体幹が崩れる敵に当てる場合） */
   defHalt?: boolean;
+  /** 敵から受けるダメージ（gcsim の `hurt every`。出場中のキャラが一定の間隔でダメージを受ける）。無い・無効なら、設定文に出さない */
+  hurt?: HurtSetting;
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
   /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
@@ -321,6 +349,7 @@ export function buildGcsimConfig(input: GcsimConfigInput): GcsimConfigResult {
     '',
     `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES} ignore_burst_energy=true${input.defHalt === false ? ' defhalt=false' : ''};`,
     'target lvl=100 resist=0.1;',
+    ...(hurtStatement(input.hurt) ? [hurtStatement(input.hurt)!] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',
     ...initialLines,

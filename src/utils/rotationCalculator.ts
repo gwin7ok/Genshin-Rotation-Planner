@@ -958,6 +958,9 @@ export function calculateRotation(
         // 祭礼の武器: スキルのダメージが当たる時刻（命中時刻の表）。スキルを使ったときだけ（モードの間の 2 回目以降の E は、CT を始めないので対象外）
         const sacrificial = sacrificialOf(char);
         const sacrificialHits: number[] = isTriggeringAction && !isSpecial && sacrificial && actionDef ? skillHitFrames(actionDef.id, CharacterModel.fromConfig(char).constellation, holdSeconds) : [];
+        // 効果が残っている間に使い直すと CT がリセットされる（凝光の命ノ星座 2）。効果の長さ = この発動の効果継続時間
+        const recastRule = !isSpecial && isTriggeringAction ? actionDef?.recastReset : undefined;
+        const recastActive = !!recastRule && CharacterModel.fromConfig(char).constellation >= recastRule.minConstellation;
         if (isTriggeringAction) {
           ctEvents.push({
             key: `${char.id}:${isSpecial ? 'special' : 'skill'}`,
@@ -966,6 +969,7 @@ export function calculateRotation(
             cooldown: evCooldown,
             ...((actionDef?.charges ?? 1) > 1 ? { charges: actionDef!.charges } : {}),
             ...(!isSpecial && (actionDef?.mode?.cooldownReduceOnExpire || sacrificialHits.length > 0) ? { forceQueue: true } : {}),
+            ...(recastActive ? { forceQueue: true, recastReset: { icdSeconds: recastRule!.icdSeconds, lifetime: effectSeconds } } : {}),
             ...(!isSpecial && actionDef?.spawnsTotem ? { spawnsTotem: { max: actionDef.spawnsTotem.max, ...totemTiming(actionDef.spawnsTotem, act.effectDuration ?? actionDef.effectDuration ?? 0, isRevelation(char)) } } : {}),
             ...(!isSpecial && actionDef?.nightsoul?.role === 'skill' ? { nightsoul: actionDef.nightsoul } : {}),
             checked: act.type !== 'skill_reset',
@@ -1038,7 +1042,7 @@ export function calculateRotation(
 
         // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、使った時点では置かない。CT のキューで、前の CT が 0 になって始まった時点に、判定の関数が作る
         // 複数回分の通常のスキル（クレー・魈など）も同じ: バーは、CT のキューで始まった時点に作る
-        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1 || !!actionDef?.mode?.cooldownReduceOnExpire || (!isSpecial && sacrificialHits.length > 0);
+        const isQueuedSpecial = (actionDef?.charges ?? 1) > 1 || !!actionDef?.mode?.cooldownReduceOnExpire || (!isSpecial && sacrificialHits.length > 0) || recastActive;
         if (isTriggeringAction && evCooldown > 0 && !isQueuedSpecial) {
           const cdSpan: CooldownSpan = {
             id: `cd_${isSpecial ? 'special' : 'skill'}_${char.id}_${actionStartTime}`,
@@ -1997,6 +2001,8 @@ interface CooldownEvent {
   sacrificial?: { icdSeconds: number; hitFrame: number };
   /** true のとき、回数が 1 でも CT のキューで持つ（CT を後から短縮されるスキル。閑雲。バーの終わりが短縮で動く） */
   forceQueue?: boolean;
+  /** 凝光の命ノ星座 2: 前の発動から lifetime 秒以内（光幕が残っている）に、CT が明けた状態で使い直すと、CT がすぐリセットされる（icdSeconds に 1 回まで） */
+  recastReset?: { icdSeconds: number; lifetime: number };
   /** true のとき、この発動が全回数分のCTをキューに積む（1 つ目はこの時刻から、2 つ目は 1 つ目が明けてから。検査はしない。ファルカのスキルが特殊スキルのCTを開始する）。この枠は、短縮が先頭だけに効く */
   startsAll?: boolean;
   /** この発動のアクション ID（特殊スキルの CT のバーが、どの発動の分かを示す） */
@@ -2172,6 +2178,8 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
   const totems = new Map<string, TotemTracker>();
   // 祭礼の武器の内部 CT が明ける時刻（キャラ ID → 時刻）
   const sacrificialIcdUntil = new Map<string, number>();
+  // 使い直しの CT リセット（凝光）: 枠のキー → 前の発動の時刻・前のリセットの時刻
+  const recastStates = new Map<string, { lastCast: number; lastReset: number }>();
   const nightsouls = new Map<string, NightsoulTracker>();
   // キューで CT が始まった（先頭になった）1 周目の発動の分は、その時点でバーを作る。終わりは、後の短縮で動くので、最後に確定する
   const queuedSpans: Array<{ span: CooldownSpan; head: QueueHead<QueueTag> }> = [];
@@ -2274,16 +2282,29 @@ function checkCooldownViolations(events: CooldownEvent[], loopStartIndex: number
       queues.set(item.event.key, queue);
     }
     if (queue) {
+      let violated = false;
       if (ev.optional) {
         // 受付の間の重撃: 回数に空きがあれば特殊重撃になって 1 回分使う。空いていなければ普通の重撃（違反ではない）
         if (!queue.hasFree) continue;
         if (item.cycle === 0 && ev.actionId) optionalUsedOut?.add(ev.actionId);
       } else if (ev.checked && !queue.hasFree && queue.head) {
+        violated = true;
         ev.onViolation(Number((queue.head.end - item.time).toFixed(1)), item.cycle);
       }
       // 使うと、新しい CT がキューの末尾に積まれる（キューが空なら、すぐ始まる）
       queue.push(startAt, ev.cooldown, { actionId: ev.actionId ?? '', cycle: item.cycle });
       stockLogs.get(item.event.key)?.points.push([item.time, queue.size]);
+      // 光幕が残っている間の使い直し（置き換えで破裂）: 積んだ CT をすぐリセットする（6 秒に 1 回まで）。CT 違反の発動は、gcsim では実行されないので数えない
+      if (ev.recastReset && !violated) {
+        const st = recastStates.get(item.event.key) ?? { lastCast: -Infinity, lastReset: -Infinity };
+        const alive = item.time < st.lastCast + ev.recastReset.lifetime - 1e-6;
+        if (alive && item.time >= st.lastReset + ev.recastReset.icdSeconds - 1e-6) {
+          queue.release(item.time);
+          st.lastReset = item.time;
+        }
+        st.lastCast = item.time;
+        recastStates.set(item.event.key, st);
+      }
       continue;
     }
     // キューの無い枠（スキルより前など）の、受付の間の重撃は、何もしない

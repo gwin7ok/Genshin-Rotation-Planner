@@ -34,6 +34,8 @@ export const EFFECT_DURATION_OVERRIDES: Record<string, EffectDurationOverride> =
   '10000110-electro_e': { frames: 300, label: '速攻状態', source: 'iansan/skill.go: fast-skill' },
   // アルレッキーノ: 血の契約 30 秒
   '10000096-pyro_e': { frames: 1800, label: '血の契約', source: 'arlecchino/skill.go: directive' },
+  // 凝光: 璇璣屏 30 秒（光幕。命ノ星座 2 の CT リセットは、この間の使い直しで起きる。recastReset）
+  '10000027-geo_e': { frames: 1800, label: '璇璣屏', source: 'ningguang/skill.go: newScreen(1800)（construct:NingSkill）' },
   // ジン: 蒲公英の風 10 秒 + 40 フレーム（発動の遅れを含む）
   '10000003-anemo_q': { frames: 640, label: '蒲公英の風', source: 'jean/burst.go: jean-q' },
 };

@@ -373,6 +373,11 @@ export interface ActionDefinition {
     ctReduction?: { minConstellation: number; rate: number; label: string; description: string };
     source: string;
   };
+  /**
+   * 効果（設置物）が残っている間に、このスキルを使い直すと、その効果が置き換わり（破裂し）、CT がすぐリセットされる（凝光の命ノ星座 2: 璇璣屏。2026-10-11）。
+   * 効果が残っているかは、前の発動からの経過 < 効果継続時間（effectDuration）で見る。icdSeconds に 1 回まで。出典: gcsim ningguang/screen.go（OnDestruct）
+   */
+  recastReset?: { minConstellation: number; icdSeconds: number; source: string };
   /** gcsim が、このアクションを実装していない（実行すると「action ... not implemented」のエラーになる。ディシアの重撃など）。ボタンは残すが、警告を出し、gcsim の設定文には入れない */
   gcsimUnsupported?: boolean;
   /** 特殊爆発（フリンズの雷霆のシンフォニー）。受付の間だけ使え、爆発の CT を始めず、使うと受付が閉じる。受付の外で使うと、gcsim では通常の爆発（CT が始まる） */

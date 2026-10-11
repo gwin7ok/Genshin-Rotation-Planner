@@ -12497,6 +12497,16 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000148-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000148-electro",
+      "ownerName": "アリョーシャ",
+      "name": "御旗の奪還",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000078-dendro_c4",
       "type": "constellation",
       "ownerId": "10000078-dendro",
@@ -12650,6 +12660,46 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000143-anemo_c2",
+      "type": "constellation",
+      "ownerId": "10000143-anemo",
+      "ownerName": "ヴェスナ",
+      "name": "春を迎える輪舞",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000143-anemo_c4",
+      "type": "constellation",
+      "ownerId": "10000143-anemo",
+      "ownerName": "ヴェスナ",
+      "name": "先人たちの栄光",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000143-anemo_c1",
+      "type": "constellation",
+      "ownerId": "10000143-anemo",
+      "ownerName": "ヴェスナ",
+      "name": "冬を見送る盛宴",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000143-anemo_c6",
+      "type": "constellation",
+      "ownerId": "10000143-anemo",
+      "ownerName": "ヴェスナ",
+      "name": "揺るぎなき忠誠",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000022-anemo_c6",
       "type": "constellation",
       "ownerId": "10000022-anemo",
@@ -12678,6 +12728,49 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 10
+    },
+    {
+      "id": "constellation:10000140-hydro_c6",
+      "type": "constellation",
+      "ownerId": "10000140-hydro",
+      "ownerName": "ヴォジャニーツァ",
+      "name": "永遠に続く祝い歌",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000140-hydro_c4",
+      "type": "constellation",
+      "ownerId": "10000140-hydro",
+      "ownerName": "ヴォジャニーツァ",
+      "name": "岸辺を漂う波の声",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 6,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000140-hydro_c1",
+      "type": "constellation",
+      "ownerId": "10000140-hydro",
+      "ownerName": "ヴォジャニーツァ",
+      "name": "脚光に咲く水の花",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 5,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000140-hydro_c2",
+      "type": "constellation",
+      "ownerId": "10000140-hydro",
+      "ownerName": "ヴォジャニーツァ",
+      "name": "風雪を穿つこだま",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 5,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "constellation:10000051-cryo_c1",
@@ -12834,6 +12927,16 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000100-geo_c4",
+      "type": "constellation",
+      "ownerId": "10000100-geo",
+      "ownerName": "カチーナ",
+      "name": "敵が多いほど、 気を付けなくちゃ…！",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000101-dendro_c1",
       "type": "constellation",
       "ownerId": "10000101-dendro",
@@ -12966,6 +13069,36 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "constellation:10000133-cryo_c6",
+      "type": "constellation",
+      "ownerId": "10000133-cryo",
+      "ownerName": "サンドローネ",
+      "name": "てづから水仙の夢から醒めて 薄明を掴まん",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000133-cryo_c1",
+      "type": "constellation",
+      "ownerId": "10000133-cryo",
+      "ownerName": "サンドローネ",
+      "name": "まばゆき黄金は 遠き日の夕暮れ",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000133-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000133-cryo",
+      "ownerName": "サンドローネ",
+      "name": "りりしき影を鏡に 遺して巡る歳月",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "constellation:10000095-hydro_c6",
@@ -13468,6 +13601,37 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000122-dendro_c2",
+      "type": "constellation",
+      "ownerId": "10000122-dendro",
+      "ownerName": "ネフェル",
+      "name": "洞察は計略の礎",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 8,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000122-dendro_c6",
+      "type": "constellation",
+      "ownerId": "10000122-dendro",
+      "ownerName": "ネフェル",
+      "name": "必勝は逆転にあり",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000122-dendro_c4",
+      "type": "constellation",
+      "ownerId": "10000122-dendro",
+      "ownerName": "ネフェル",
+      "name": "藪に堕ちる幻惑",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000034-geo_c2",
       "type": "constellation",
       "ownerId": "10000034-geo",
@@ -13823,6 +13987,49 @@
       "duration": 6
     },
     {
+      "id": "constellation:10000130-geo_c6",
+      "type": "constellation",
+      "ownerId": "10000130-geo",
+      "ownerName": "リンネア",
+      "name": "ゴールデンビーグルの夢",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000130-geo_c4",
+      "type": "constellation",
+      "ownerId": "10000130-geo",
+      "ownerName": "リンネア",
+      "name": "スペシャリストの第六感",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 5,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000130-geo_c2",
+      "type": "constellation",
+      "ownerId": "10000130-geo",
+      "ownerName": "リンネア",
+      "name": "喜びと悲しみの予兆",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 8,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000130-geo_c1",
+      "type": "constellation",
+      "ownerId": "10000130-geo",
+      "ownerName": "リンネア",
+      "name": "未分類のモノたち",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 10,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000074-cryo_c4",
       "type": "constellation",
       "ownerId": "10000074-cryo",
@@ -13879,6 +14086,17 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 8
+    },
+    {
+      "id": "constellation:10000129-cryo_c2",
+      "type": "constellation",
+      "ownerId": "10000129-cryo",
+      "ownerName": "ローエン",
+      "name": "的にするものは 翼を持つすべて",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 8,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "constellation:10000045-cryo_c1",
@@ -14736,6 +14954,27 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000126-geo_c2",
+      "type": "constellation",
+      "ownerId": "10000126-geo",
+      "ownerName": "兹白",
+      "name": "生は変じて屍と化する",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000126-geo_c6",
+      "type": "constellation",
+      "ownerId": "10000126-geo",
+      "ownerName": "兹白",
+      "name": "天地の人は過客の如し",
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 3,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000026-anemo_c2",
       "type": "constellation",
       "ownerId": "10000026-anemo",
@@ -14858,16 +15097,6 @@
       "ownerId": "10000148-electro",
       "ownerName": "アリョーシャ",
       "name": "冬の麦と落ち葉に告げる別れ",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
-    },
-    {
-      "id": "talent:10000148-electro_p1",
-      "type": "talent",
-      "ownerId": "10000148-electro",
-      "ownerName": "アリョーシャ",
-      "name": "微睡む林の目覚め",
       "timing": "conditional",
       "gcsimTarget": false,
       "gcsimNote": "gcsim が未実装"
@@ -15947,17 +16176,6 @@
       "gcsimTarget": true
     },
     {
-      "id": "talent:10000122-dendro_p1_1",
-      "type": "talent",
-      "ownerId": "10000122-dendro",
-      "ownerName": "ネフェル",
-      "name": "月下の賭け (15秒)",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 15,
-      "gcsimNote": "gcsim が未実装"
-    },
-    {
       "id": "talent:10000122-dendro_p1_2",
       "type": "talent",
       "ownerId": "10000122-dendro",
@@ -15966,17 +16184,6 @@
       "timing": "conditional",
       "gcsimTarget": false,
       "duration": 8,
-      "gcsimNote": "gcsim が未実装"
-    },
-    {
-      "id": "talent:10000122-dendro_p2",
-      "type": "talent",
-      "ownerId": "10000122-dendro",
-      "ownerName": "ネフェル",
-      "name": "砂塵の娘",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 5,
       "gcsimNote": "gcsim が未実装"
     },
     {
@@ -16457,16 +16664,6 @@
       "timing": "conditional",
       "gcsimTarget": false,
       "duration": 8,
-      "gcsimNote": "gcsim が未実装"
-    },
-    {
-      "id": "talent:10000129-cryo_p1",
-      "type": "talent",
-      "ownerId": "10000129-cryo",
-      "ownerName": "ローエン",
-      "name": "絶対服従の訓戒",
-      "timing": "conditional",
-      "gcsimTarget": false,
       "gcsimNote": "gcsim が未実装"
     },
     {
@@ -26957,6 +27154,167 @@
     },
     {
       "side": "target",
+      "id": "constellation:10000100-geo_c4",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000122-dendro_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000122-dendro_c4",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000122-dendro_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000126-geo_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000126-geo_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000129-cryo_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000130-geo_c1",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000130-geo_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000130-geo_c4",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000130-geo_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000133-cryo_c1",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000133-cryo_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000133-cryo_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000140-hydro_c1",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000140-hydro_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000140-hydro_c4",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000140-hydro_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000143-anemo_c1",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000143-anemo_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000143-anemo_c4",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000143-anemo_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000148-electro_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装"
+    },
+    {
+      "side": "target",
       "id": "resonance:electro",
       "state": "unsupported",
       "reason": "resonance-has-no-key",
@@ -27636,21 +27994,7 @@
     },
     {
       "side": "target",
-      "id": "talent:10000122-dendro_p1_1",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
       "id": "talent:10000122-dendro_p1_2",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "talent:10000122-dendro_p2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"
@@ -27689,13 +28033,6 @@
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
-    },
-    {
-      "side": "target",
-      "id": "talent:10000129-cryo_p1",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
     },
     {
       "side": "target",
@@ -27770,13 +28107,6 @@
     {
       "side": "target",
       "id": "talent:10000143-anemo_p2",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "talent:10000148-electro_p1",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"

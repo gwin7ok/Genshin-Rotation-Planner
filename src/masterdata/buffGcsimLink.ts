@@ -14,6 +14,7 @@
 import { isDisplayWorthyNature, natureOfText, NATURE_EXCEPTIONS } from './effectNature.ts';
 import type { KeyCatalog, KeyCatalogEntry } from './gcsimKeyCatalog.ts';
 import { findDurations } from './passiveEffects.ts';
+import { APP_SIDE_CONSTELLATION_EFFECTS, APP_SIDE_EXCLUDED_PASSIVES } from './appSideBuffDefinitions.ts';
 import type {
   BuffTiming, CharacterConfig, ConstellationBuffDefinition, ConstellationLevel, GcsimBuffLink, PassiveEffectDefinition,
 } from '../types/genshin.ts';
@@ -343,6 +344,11 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
   for (const char of characters) {
     const key = char.source?.gcsimKey;
     const entries = key ? index.byOwner.get(key) ?? [] : [];
+    // gcsim 未実装のキャラ: 効果の定義にしない固有天賦を外す（アプリ側の分類。appSideBuffDefinitions.ts。issue #38）
+    if (!key && char.passiveEffects) {
+      const kept = char.passiveEffects.filter(p => !APP_SIDE_EXCLUDED_PASSIVES[p.id]);
+      if (kept.length !== char.passiveEffects.length) char.passiveEffects = kept;
+    }
 
     // 固有天賦
     for (const slot of [1, 2] as const) {
@@ -449,6 +455,30 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
         count(report, 'constellation', def);
         report.added.push({ id: def.id, name: `${char.name} ${level}凸「${def.name}」`, sourceName: char.name, duration: def.duration, keys: def.gcsimKeys ?? [] });
       }
+    }
+    // gcsim 未実装のキャラ: 辞書のキーが無いので、アプリ側の分類（appSideBuffDefinitions.ts）から定義を作る
+    if (!key) {
+      for (const e of APP_SIDE_CONSTELLATION_EFFECTS[char.id] ?? []) {
+        const data = char.constellations?.find(c => c.level === e.level);
+        const def: ConstellationBuffDefinition = {
+          id: `${char.id}_c${e.level}`,
+          level: e.level as ConstellationLevel,
+          name: data?.name ?? `${e.level}凸`,
+          ...(e.duration !== undefined ? { duration: e.duration } : {}),
+          ...(e.cooldown !== undefined ? { cooldown: e.cooldown } : {}),
+          ...(data?.description ? { description: data.description } : {}),
+          dataSource: {
+            ...(e.duration !== undefined ? { duration: 'アプリ側の分類（genshin-db の説明文）' } : {}),
+            ...(e.cooldown !== undefined ? { cooldown: 'アプリ側の分類（genshin-db の説明文）' } : {}),
+          },
+          timing: 'conditional',
+          gcsimTarget: false,
+        };
+        applyNote(def, false);
+        effects.push(def);
+        count(report, 'constellation', def);
+      }
+      effects.sort((a, b) => a.level - b.level);
     }
     if (effects.length > 0) char.constellationEffects = effects;
     else delete char.constellationEffects;

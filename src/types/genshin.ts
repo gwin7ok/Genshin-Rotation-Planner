@@ -115,7 +115,12 @@ export interface ActionMode {
    * モードの間に置けない操作（段階 ④。2026-10-08）。置くと黄色の警告（アプリの時間は変えない。D12・D21 と同じ考え方）。
    * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）／none = ゲームでは何も起きない（CT も効果も無し。藍硯の受付の間の長押し E。gcsim は別の動作として実行する）。hint = 警告に添える、終わらせ方などの案内
    */
-  blocked?: { types: ActionType[]; result: 'wait' | 'error' | 'none'; hint: string };
+  blocked?: { types: ActionType[]; result: 'wait' | 'error' | 'none'; hint: string; /** 置ける別のアクション（定義 ID の末尾。フィッシュルのオズの間の再発動 e_recast） */ except?: string[] };
+  /**
+   * モードの終わりを、「durationFrames（開始から効果が出るまでの遅れ）+ 効果継続時間（アクション定義の値。命ノ星座の延長を含む）」にする
+   * （フィッシュルのオズ: 出現までの遅れ + 10 秒〔凸 6 で 12 秒〕）
+   */
+  plusEffectDuration?: boolean;
   /**
    * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 雲の変化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
    * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでも同じことを確認済み: ユーザー 2026-10-09）

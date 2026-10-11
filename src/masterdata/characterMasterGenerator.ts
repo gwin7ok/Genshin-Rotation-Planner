@@ -268,6 +268,22 @@ const windowMode = (label: string, startDelayFrames: number, durationFrames: num
   source,
   ...extra,
 });
+/** フィッシュルのオズがいる間（E の再発動以外の E を置けない）。バーは出さない（効果バーがオズのバー）。交代しても続く */
+const ozBlockMode = (spawnFrames: number, source: string): NonNullable<ActionDefinition['mode']> => ({
+  label: 'オズ',
+  description: 'オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない',
+  startDelayFrames: 0,
+  durationFrames: spawnFrames,
+  plusEffectDuration: true,
+  swap: 'persists',
+  enders: [],
+  holdByDefault: false,
+  noHold: true,
+  noBar: true,
+  noSynergy: true,
+  blocked: { types: ['skill', 'skill_hold'], except: ['e_recast'], result: 'wait', hint: 'オズが消えてから置くか、再発動（recast）を使ってください' },
+  source,
+});
 /**
  * 入力がなければ最大時間まで続き、ボタン操作では終わらず、交代で終わるモード（A-2・D-2）の行。開始の遅れ・最大時間は、gcsim の実行で確認したフレーム
  * （2026-10-08。入力なしで `skill` / `burst; wait(1300)` を実行し、状態が付いたフレームと期限）。既定は維持する。効果継続時間（genshin-db）は残す
@@ -802,6 +818,12 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'wiki（操典「勝利への道筋」・風巡りの臨戦・飛翔の剣）: 15 秒、剣気ゲージ 3 枚（最初の E で 2 枚）、飛翔の剣は 1 枚消費・5 回で終了、通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35・元素爆発 1。フレームは推定',
     },
   }],
+  // フィッシュル（A3。D163）: オズがいる間は、E を使えない（gcsim の ActionReady。再発動 recast だけ使える）。gcsim は、オズが消えるまで待つ（アプリの時間は変えず、黄色の警告）。
+  // オズは、E では 18f 後に出現・爆発では 113f 後（爆発の後すぐ交代すると、交代の後〔約 40f 後〕）に出現し、10 秒（凸 6 で 12 秒）続く。ozActive は、アクションの開始から立つ
+  '10000031-electro': [
+    { action: 'e', keepEffectDuration: true, mode: ozBlockMode(18, 'fischl/skill.go: ozActive = true（アクションの開始）、queueOz(skillOzSpawn 18f)、dur 600f（凸 6 は 720f）、removeOz で ozActive = false。fischl.go ActionReady: ozActive のとき recast 以外の E は false') },
+    { action: 'q', keepEffectDuration: true, mode: ozBlockMode(40, 'fischl/burst.go: ozActive = true（アクションの開始）。オズは 113f 後に出現（交代した場合は、交代の後〔約 40f 後〕）。交代する出し方を基準にした（交代しないときは、約 70f 長い）') },
+  ],
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
   '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],

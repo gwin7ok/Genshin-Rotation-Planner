@@ -622,7 +622,9 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     },
   }],
   // 兹白（issue #36。gcsim main の PR #3093）: 月相転移（E の 18f 後から 900f。E の発動から 918f）。この間、E は霊駿の駆け（月相の輝き 70 を消費。CT なし）になり、4 回使うと終わる（C1: 5 回）。
-  // 月相の輝き: 時間で 1 秒に 10（6f ごとに +1）、通常攻撃が敵に当たると +5（0.5 秒に 1 回まで。重撃は数えない）。上限 100。C1: E の直後に +100。C6（獲得 1.5 倍・全消費）は未対応。
+  // 月相の輝き: 時間で 1 秒に 10（6f ごとに +1）、通常攻撃が敵に当たると +5（0.5 秒に 1 回まで。重撃は数えない）。上限 100。C1: E の直後に +100。
+  // 輝きは、モードの外では増減せず、終わった後も残る（gcsim: radiance は skillKey が消えても保持。次の月相転移へ持ち越す。D160。ゲームでの確認は #37）。
+  // C4: モードの間は、通常攻撃の段が戻らない（N1 N2 E N3 と続く）。C6: 輝きの獲得 1.5 倍（時間・通常攻撃）、霊駿の駆けが輝きを全部消費する。月の結晶反応 +35 は未対応。
   // 元素爆発を使うと、月相転移が 1.7 秒（102f）延びる。交代で終わる（OnCharacterSwap で skillKey を削除）。E の CT（18 秒）は最初の E で始まる
   '10000126-geo': [{
     action: 'e',
@@ -635,7 +637,11 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       enders: [],
       holdByDefault: true,
       extendByBurstFrames: 102,
-      byConstellation: [{ minConstellation: 1, repressMaxUses: 5, gaugeInitial: 100 }],
+      byConstellation: [
+        { minConstellation: 1, repressMaxUses: 5, gaugeInitial: 100 },
+        { minConstellation: 4, keepNormalChain: true },
+        { minConstellation: 6, gaugeGainScale: 1.5, gaugeCostAll: true },
+      ],
       repress: {
         frames: [{ total: 61, cancels: { attack: 45, skill: 54, burst: 45, dash: 42, jump: 43, walk: 47 }, source: 'skill.go:skillSkillFrames' }],
         maxUses: 4,
@@ -645,11 +651,12 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         label: '月相の輝き',
         max: 100,
         cost: 70,
+        persists: true,
         timeGain: { everyFrames: 6, amount: 1 },
         gainByType: { normal: 5 },
-        hint: '月の結晶反応（+35）・命ノ星座 6（獲得 1.5 倍）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください',
+        hint: '月の結晶反応（+35）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください',
       },
-      source: 'zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回',
+      source: 'zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）',
     },
   }],
   // ネフェル（issue #36。gcsim PR #3045・未マージ・未検証）: 影の舞（E の発動から 9 秒。CT 9 秒・2 回分）。この間、草露を 1 滴以上持つとき、重撃が「幻の戯」（スタミナを消費しない特殊な重撃）になる（E 1 回につき 3 回まで）。
@@ -664,6 +671,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       swap: 'ends',
       enders: [],
       holdByDefault: true,
+      // 爆発の次の重撃: 幻の戯が使えるとき 124f、使えないとき 131f（burst.go: burstPhantasmChargeCancelFrame / burstNormalChargeCancelFrame）。草露の数は数えない
+      burstToChargedFrames: 124,
       repress: {
         actions: ['ca'],
         frames: [{ total: 126, cancels: { burst: 30, dash: 30 }, source: 'charge.go:tapPhantasmChargeAttack（basicChargeWindup 20 + phantasmAnimationLength 106。爆発・ダッシュへは 20 + phantasmHit1 10）' }],
@@ -675,7 +684,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // カチーナ（issue #36。gcsim PR #2697・未マージ・未検証）: ぐるぐるコマちゃん（E）。夜魂値 60 を、降りている（独立して存在する）間は 143f 後から 118f ごとの攻撃で 10 ずつ消費（6 回 = 733f で消える）、
   // 乗っている間は約 1 秒ごとに 10 消費（wiki。PR は時間の消費を実装していない）、乗っている間の通常攻撃は 1 回ごとに 10 消費（PR・wiki）。0 になるとモードが終わる。
   // 一回押しの E = 降りている・長押し = 乗る。続いている間の E は、乗り降り（CT なし。30f。降りた直後の最初の攻撃は 30f 後）。交代したら、乗っていても降りる（独立して残る）。
-  // C2 の爆発は夜魂値を 20 回復する。燃素（ナタの地域）・夜魂トランス（他のナタのキャラの交代）は未対応
+  // C2 の爆発は夜魂値を 20 回復する（モードが尽きた後は、爆発の時点から、降りている状態で夜魂値 20 で開き直す。D160）。燃素（ナタの地域）・夜魂トランス（他のナタのキャラの交代。PR に実装なし）は未対応
   '10000100-geo': [{
     action: ['e', 'e_hold'],
     mode: {
@@ -703,9 +712,9 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
           { total: 46, hitmark: 35, cancels: { skill: 35, burst: 35, dash: 35, jump: 35, swap: 35, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[2]' },
           { total: 46, hitmark: 34, cancels: { skill: 34, burst: 34, dash: 34, jump: 34, swap: 34, attack: 46, charge: 46 }, source: 'attack.go:mountedFrames[3]' },
         ],
-        burstGain: { minConstellation: 2, amount: 20 },
+        burstGain: { minConstellation: 2, amount: 20, reopens: true },
       },
-      source: 'kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費',
+      source: 'kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)、モードが無ければ startTwirlyWithPoints(20, false)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費',
     },
   }],
   // リンネア（issue #36。gcsim PR #2596・未マージ・未検証）: E の後 0.6 秒（36f）の間の E が再発動（CT なし。E のたびに 0.6 秒に更新）。3 回目の再発動で、ルミが大技（万鈞砕）を出して標準の力になる。
@@ -734,7 +743,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       enders: [],
       holdByDefault: true,
       extendByBurstFrames: 99,
-      byConstellation: [{ minConstellation: 6, repressMaxUses: 5 }],
+      // C6: 魂を穿つ痛み +2 回・命中で奇策が 1.25 秒延びる（7 秒に 1 回まで。使った時刻で数える）・愉悦が上限まで回復（使った後に上限へ。ユーザー決定 D160 の 4-②。説明文の読みで、ゲームでの確認は #37）
+      byConstellation: [{ minConstellation: 6, repressMaxUses: 5, repressExtend: { frames: 75, icdFrames: 420 }, gaugeRefillOnRepress: true }],
       repress: {
         frames: [{ total: 68, cancels: { attack: 55, skill: 55, burst: 55, dash: 55, jump: 55, swap: 55 }, source: '推定（特殊スキルの中央値 68f。実測ではありません）' }],
         maxUses: 3,
@@ -762,7 +772,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       swap: 'ends',
       enders: [],
       holdByDefault: true,
-      byConstellation: [{ minConstellation: 0, gaugeInitial: 200 }, { minConstellation: 1, repressMaxUses: 6 }],
+      // C1: 最高ランクの飛翔の剣が 4 回まで（計 6 回）・最高ランクの 1 回目（3 回目の使用 = 番号 2）は剣気を消費しない
+      byConstellation: [{ minConstellation: 0, gaugeInitial: 200 }, { minConstellation: 1, repressMaxUses: 6, repressFreeIndex: 2 }],
       repress: {
         frames: [{ total: 68, cancels: { attack: 55, skill: 55, burst: 55, dash: 55, jump: 55, swap: 55 }, source: '推定（特殊スキルの中央値 68f。実測ではありません）' }],
         maxUses: 5,
@@ -1800,6 +1811,24 @@ function applyEstimatedDurations(characters: CharacterConfig[]): void {
   }
 }
 
+/**
+ * gcsim の未マージ PR のフレームの欠けを、推定で補う（issue #36。D160）。
+ * カチーナ（PR #2697）: skill.go の skillFrames に ActionCharge が無く、E → 重撃のつなぎが全体の長さ（733f ≒ 12 秒）になる。
+ * ゲームでそうなるとは考えにくいので、通常攻撃へのつなぎ（attack）の値で補い、出典に「推定」と書く（ユーザー決定）
+ */
+function applyAppSideFrameFixes(characters: CharacterConfig[]): void {
+  for (const c of characters) {
+    if (c.source?.genshinId !== 10000100 || !c.source.frameSource) continue;
+    for (const a of c.availableActions) {
+      if ((a.type !== 'skill' && a.type !== 'skill_hold') || !a.frames) continue;
+      const { cancels } = a.frames;
+      if (cancels.charge !== undefined || cancels.attack === undefined) continue;
+      cancels.charge = cancels.attack;
+      a.frames.source = `${a.frames.source}。重撃へのつなぎ（charge）は PR に無いため、通常攻撃へのつなぎ（attack ${cancels.attack}f）で補った（推定。D160）`;
+    }
+  }
+}
+
 export async function generateCharacterMaster(
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<CharacterMasterResult> {
@@ -2103,6 +2132,7 @@ export async function generateCharacterMaster(
   report.effectDuration.orphans = [...Object.keys(EFFECT_DURATION_OVERRIDES), ...Object.keys(EFFECT_DURATION_SUPPRESSED)].filter(id => !allActionIds.has(id));
 
   applyEstimatedDurations(characters);
+  applyAppSideFrameFixes(characters);
   characters.sort((a, b) => a.id.localeCompare(b.id));
   report.totalCharacters = characters.length;
   return { characters, report, keyMap };

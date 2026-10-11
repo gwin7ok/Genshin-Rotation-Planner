@@ -34983,9 +34983,10 @@
             "dash": 55,
             "jump": 57,
             "walk": 45,
-            "swap": 44
+            "swap": 44,
+            "charge": 56
           },
-          "source": "skill.go:skillFrames"
+          "source": "skill.go:skillFrames。重撃へのつなぎ（charge）は PR に無いため、通常攻撃へのつなぎ（attack 56f）で補った（推定。D160）"
         },
         "dataSource": {
           "cooldown": "クールタイム",
@@ -35097,10 +35098,11 @@
             ],
             "burstGain": {
               "minConstellation": 2,
-              "amount": 20
+              "amount": 20,
+              "reopens": true
             }
           },
-          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
+          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)、モードが無ければ startTwirlyWithPoints(20, false)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
         },
         "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。",
         "cooldownStart": {
@@ -35125,9 +35127,10 @@
             "dash": 55,
             "jump": 57,
             "walk": 45,
-            "swap": 44
+            "swap": 44,
+            "charge": 56
           },
-          "source": "skill.go:skillFrames（+ 長押し 0 + 最大 0f）"
+          "source": "skill.go:skillFrames（+ 長押し 0 + 最大 0f）。重撃へのつなぎ（charge）は PR に無いため、通常攻撃へのつなぎ（attack 56f）で補った（推定。D160）"
         },
         "dataSource": {
           "cooldown": "クールタイム",
@@ -35239,10 +35242,11 @@
             ],
             "burstGain": {
               "minConstellation": 2,
-              "amount": 20
+              "amount": 20,
+              "reopens": true
             }
           },
-          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
+          "source": "kachina/skill.go: startTwirly（EnterBlessing(60)。一回押しは queueIndependent(143)、independent は 118f ごと・夜魂値 10 消費）、recastTwirlyWithHold（降りると 30f 後に独立）。attack.go: mountedAttack（consumeTwirlyPoints(10)、mountedFrames）。consumeTwirlyPoints: 0 以下で endTwirly。burst.go: C2 は GeneratePoints(20)、モードが無ければ startTwirlyWithPoints(20, false)。wiki: 乗っている間は約 1 秒ごとに夜魂値 10 を消費"
         },
         "description": "最高に頼もしいぐるぐるコマちゃんと共に戦う！\n「ぐるぐるコマちゃん」を召喚する。長押しで発動した場合、カチーナはぐるぐるコマちゃんを召喚し、その上に乗る。\n発動後、カチーナは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·カチーナ\nぐるぐるコマちゃんは行動するたびに夜魂値を消費する。\n夜魂値が尽きると、カチーナの夜魂の加護状態は終了する。\n\nぐるぐるコマちゃん\nぐるぐるコマちゃんは単独で存在でき、カチーナが乗った場合は操ることもできる。ぐるぐるコマちゃんが存在している間、カチーナの元素スキル「いけ、ぐるぐるコマちゃん！」はぐるぐるコマちゃんに乗り降りするためのものに変わる。\n·ぐるぐるコマちゃんが独立して存在している間、一定時間ごとに地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与える。\n·カチーナは、ぐるぐるコマちゃんに乗っている間、素早く移動したり、登ったりすることができ、さらに通常攻撃時には地面を叩き、カチーナの防御力を基に夜魂性質の岩元素範囲ダメージを与えるようになる。\n\nぐるぐるコマちゃんは岩元素創造物と見なされ、カチーナの夜魂の加護状態が終了すると消える。カチーナ自身が召喚したぐるぐるコマちゃんは1つのみ存在可能。",
         "cooldownStart": {
@@ -42488,6 +42492,7 @@
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
+          "burstToChargedFrames": 124,
           "repress": {
             "actions": [
               "ca"
@@ -43848,6 +43853,15 @@
               "minConstellation": 1,
               "repressMaxUses": 5,
               "gaugeInitial": 100
+            },
+            {
+              "minConstellation": 4,
+              "keepNormalChain": true
+            },
+            {
+              "minConstellation": 6,
+              "gaugeGainScale": 1.5,
+              "gaugeCostAll": true
             }
           ],
           "repress": {
@@ -43872,6 +43886,7 @@
             "label": "月相の輝き",
             "max": 100,
             "cost": 70,
+            "persists": true,
             "timeGain": {
               "everyFrames": 6,
               "amount": 1
@@ -43879,9 +43894,9 @@
             "gainByType": {
               "normal": 5
             },
-            "hint": "月の結晶反応（+35）・命ノ星座 6（獲得 1.5 倍）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください"
+            "hint": "月の結晶反応（+35）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください"
           },
-          "source": "zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回"
+          "source": "zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）"
         },
         "description": "古の権能を呼び起こし、**「隙を過ぐる月」**状態に入る。\nこの状態の時、兹白の通常攻撃と重撃は、元素付与によって他の元素に変化しない岩元素ダメージへと変わる。同時に、異なる方法で特殊な「隙に浮かぶ光」を蓄積できるようになる。この「隙に浮かぶ光」を消費することで、特殊な元素スキル翔ける霊駒を発動できる。\n\n月兆・満照\n「隙を過ぐる月」状態にある時、兹白の通常攻撃の4段目は岩元素ダメージを追加で与える。このダメージは、月結晶反応によるダメージと見なされる。",
         "cooldownStart": {
@@ -44955,7 +44970,12 @@
           "byConstellation": [
             {
               "minConstellation": 6,
-              "repressMaxUses": 5
+              "repressMaxUses": 5,
+              "repressExtend": {
+                "frames": 75,
+                "icdFrames": 420
+              },
+              "gaugeRefillOnRepress": true
             }
           ],
           "repress": {
@@ -46291,7 +46311,14 @@
       {
         "level": 2,
         "name": "風雪を穿つこだま",
-        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チーム内のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチーム内のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。"
+        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チーム内のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチーム内のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000140-hydro_e",
+            "effectDuration": 25,
+            "source": "**悠久の歌**効果の継続時間+9秒"
+          }
+        ]
       },
       {
         "level": 3,
@@ -46390,7 +46417,8 @@
             },
             {
               "minConstellation": 1,
-              "repressMaxUses": 6
+              "repressMaxUses": 6,
+              "repressFreeIndex": 2
             }
           ],
           "repress": {

@@ -208,6 +208,17 @@ const FIELD_EFFECTS: Record<string, NonNullable<ActionDefinition['fieldEffect']>
 };
 
 /**
+ * 効果が残っている間に使い直すと、CT がすぐリセットされるスキル（凝光の命ノ星座 2。2026-10-11）。キー: キャラ ID。スキルの `_e` に付く
+ */
+const RECAST_RESETS: Record<string, NonNullable<ActionDefinition['recastReset']>> = {
+  '10000027-geo': {
+    minConstellation: 2,
+    icdSeconds: 6,
+    source: 'ningguang/screen.go: OnDestruct（命ノ星座 2 以上・前のリセットから 360f 以上・スキルが CT 中なら ResetActionCooldown）。skill.go: SetCD の後に Constructs.New（置き換えで前の光幕の OnDestruct が呼ばれる）。光幕は 1800f',
+  },
+};
+
+/**
  * 爆発の後のモード（ディシアのパンチ連打モード。2026-10-05）。gcsim dehya/burst.go・dash.go・jump.go。キー: キャラ ID
  * 爆発のアクションの長さは、gcsim では 105f（burstPunch1Hitmark。frames は全部この値）。フレーム表の最初（kickFrames）を取るのは誤りなので、置き換える
  */
@@ -1652,6 +1663,14 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (fieldEffect) {
     for (const a of actions) {
       if (a.id === `${id}_e`) a.fieldEffect = fieldEffect;
+    }
+  }
+
+  // 効果が残っている間に使い直すと、CT がすぐリセットされるスキル（凝光）
+  const recastReset = RECAST_RESETS[id];
+  if (recastReset) {
+    for (const a of actions) {
+      if (a.id === `${id}_e`) a.recastReset = recastReset;
     }
   }
 

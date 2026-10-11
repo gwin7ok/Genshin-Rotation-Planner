@@ -4,6 +4,7 @@
  * 全キャラの再生成（npm run build:master）は、保存済みのデータとの細かい差（表記など）まで書き換えるため、その差を巻き込まずに、対象のキャラだけを更新したいときに使う。
  *
  *   npm run build:master:appside
+ *   npm run build:master:appside -- 10000027-geo       … 追加で、指定したキャラ ID（マスターのキャラ ID）も差し替える（gcsim 実装済みのキャラの、生成物の変更だけを入れたいとき）
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,9 +19,10 @@ linkActions(characters);
 
 // アプリ側だけの対応の表のキャラ（フレームを gcsim の未マージ実装から読む）と、gcsim にキーが無く推定の長さを入れるキャラ（フレーム・キー無し）
 const ids = new Set(APP_SIDE_SOURCES.map(s => s.genshinId));
+const extraIds = new Set(process.argv.slice(2).filter(a => !a.startsWith('-')));
 const fresh = new Map(
   characters
-    .filter(c => (c.source?.genshinId !== undefined && ids.has(c.source.genshinId)) || (!c.source?.gcsimKey && !c.isCustom))
+    .filter(c => extraIds.has(c.id) || (c.source?.genshinId !== undefined && ids.has(c.source.genshinId)) || (!c.source?.gcsimKey && !c.isCustom))
     .map(c => [c.id, c]),
 );
 const current = JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as typeof characters;

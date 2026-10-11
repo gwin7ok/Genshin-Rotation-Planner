@@ -9587,7 +9587,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 12,
-        "effectDuration": 0,
+        "effectDuration": 30,
         "frames": {
           "total": 62,
           "hitmark": 17,
@@ -9601,9 +9601,17 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
+          "effectDuration": "gcsim: ningguang/skill.go: newScreen(1800)（construct:NingSkill）",
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 1.033,
+        "recastReset": {
+          "minConstellation": 2,
+          "icdSeconds": 6,
+          "source": "ningguang/screen.go: OnDestruct（命ノ星座 2 以上・前のリセットから 360f 以上・スキルが CT 中なら ResetActionCooldown）。skill.go: SetCD の後に Constructs.New（置き換えで前の光幕の OnDestruct が呼ばれる）。光幕は 1800f"
+        },
+        "description": "黄金、黒曜岩、強者の余裕で璇璣屏を作り、岩元素範囲ダメージを与える。\n\n璇璣屏\n·敵の投擲攻撃を防御する。\n·耐久度は凝光のHP上限によって決まる。\n\n璇璣屏は岩元素創造物と見なされ、一部の攻撃を防ぐことができるが、璇璣屏に登ることはできない。璇璣屏は1つのみ存在可能。",
+        "effectLabel": "璇璣屏",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -9613,8 +9621,7 @@
             "construct:NingSkill"
           ],
           "status": "manual"
-        },
-        "description": "黄金、黒曜岩、強者の余裕で璇璣屏を作り、岩元素範囲ダメージを与える。\n\n璇璣屏\n·敵の投擲攻撃を防御する。\n·耐久度は凝光のHP上限によって決まる。\n\n璇璣屏は岩元素創造物と見なされ、一部の攻撃を防ぐことができるが、璇璣屏に登ることはできない。璇璣屏は1つのみ存在可能。"
+        }
       },
       {
         "id": "10000027-geo_q",
@@ -9639,6 +9646,7 @@
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.117,
+        "description": "自身の周りに宝石を凝聚させ、それらを一気に放つ。自動索敵する宝石は周りの敵を攻撃し、大量の岩元素ダメージを与える。\n周りに璇璣屏が存在する時に天権崩玉を発動すると、璇璣屏から追加で宝石が放たれ、敵を攻撃する。",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -9646,8 +9654,7 @@
         "gcsimEffect": {
           "keys": [],
           "status": "nokey"
-        },
-        "description": "自身の周りに宝石を凝聚させ、それらを一気に放つ。自動索敵する宝石は周りの敵を攻撃し、大量の岩元素ダメージを与える。\n周りに璇璣屏が存在する時に天権崩玉を発動すると、璇璣屏から追加で宝石が放たれ、敵を攻撃する。"
+        }
       },
       {
         "id": "10000027-geo_dash",

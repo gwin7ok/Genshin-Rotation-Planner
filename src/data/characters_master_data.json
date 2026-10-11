@@ -46657,6 +46657,21 @@
           "effectDuration": "風巡りの臨戦の継続時間"
         },
         "defaultDuration": 0.717,
+        "layerBuff": {
+          "label": "粛清",
+          "description": "粛清（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる",
+          "durationFrames": 1200,
+          "max": 6,
+          "fullOnEnter": {
+            "minConstellation": 2
+          },
+          "fullBuff": {
+            "minConstellation": 2,
+            "label": "粛清（最大層）攻撃力 +40%",
+            "description": "命ノ星座 2: 最大層の「粛清」を持っている間、ヴェスナの攻撃力 +40%"
+          },
+          "source": "genshin-db（儀典「春の行列」・命ノ星座 2）: 飛翔の剣・爆発で 1 層・20 秒（層ごとに独立）・最大 6 層。操典「勝利への道筋」の発動または退場でクリア。命ノ星座 2: 風巡りの臨戦に入ると最大層、最大層で ATK+40%"
+        },
         "mode": {
           "label": "風巡りの臨戦",
           "description": "風巡りの臨戦の状態（15 秒）。通常攻撃・重撃・落下攻撃・元素爆発で剣気が溜まり、元素スキル（E）が飛翔の剣（特殊元素スキル。剣気 1 枚を消費。CT なし）になる。5 回使うと終わる。キャラ交代で終わる",
@@ -46992,7 +47007,7 @@
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 15,
-        "effectDuration": 15,
+        "effectDuration": 0,
         "frames": {
           "total": 31,
           "hitmark": 18,
@@ -47007,10 +47022,37 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "狩猟の印継続時間",
+          "effectDuration": "効果時間なし: アリョーシャ: 狩猟の印（15 秒）は、印のバー（markCycle。印の発動・更新を含む）で表す",
           "cooldownStart": "skill.go:16"
         },
         "defaultDuration": 0.517,
+        "markCycle": {
+          "role": "skill",
+          "hitFrames": 18,
+          "rule": {
+            "markLabel": "狩猟の印",
+            "markDescription": "狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる",
+            "buffLabel": "狩人の照準",
+            "buffDescription": "狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される",
+            "durationFrames": 902,
+            "resolveDelayFrames": 6,
+            "extraStacks": {
+              "minConstellation": 6,
+              "extra": 1
+            },
+            "burst": {
+              "firstTickFrames": 79,
+              "intervalFrames": 118,
+              "durationFrames": 840,
+              "tugarinDelayFrames": 39,
+              "c2": {
+                "minConstellation": 2,
+                "extraFrames": 360
+              }
+            },
+            "source": "alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）"
+          }
+        },
         "description": "ハンターの本能に従い、一回押しと長押しによって異なる効果を発動させ、命中した敵に**狩猟の印**効果を付与する。\n\n一回押し\n前方へ射撃し、雷元素範囲ダメージを与える。\n\n長押し\n照準状態に入り、前方の一定範囲内にいる敵を定める。この状態の時、アリョーシャの中断耐性がアップする。\n長押し終了時、定めた敵に雷元素ダメージを与える。",
         "cooldownStart": {
           "from": "motionStart",
@@ -47024,7 +47066,7 @@
         "type": "skill_hold",
         "startsSkillCooldown": true,
         "cooldown": 15,
-        "effectDuration": 15,
+        "effectDuration": 0,
         "frames": {
           "total": 142,
           "hitmark": 113,
@@ -47039,10 +47081,37 @@
         },
         "dataSource": {
           "cooldown": "クールタイム",
-          "effectDuration": "狩猟の印継続時間",
+          "effectDuration": "効果時間なし: アリョーシャ: 狩猟の印（15 秒）は、印のバー（markCycle。印の発動・更新を含む）で表す",
           "cooldownStart": "skill.go:111"
         },
         "defaultDuration": 2.367,
+        "markCycle": {
+          "role": "skill",
+          "hitFrames": 113,
+          "rule": {
+            "markLabel": "狩猟の印",
+            "markDescription": "狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる",
+            "buffLabel": "狩人の照準",
+            "buffDescription": "狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される",
+            "durationFrames": 902,
+            "resolveDelayFrames": 6,
+            "extraStacks": {
+              "minConstellation": 6,
+              "extra": 1
+            },
+            "burst": {
+              "firstTickFrames": 79,
+              "intervalFrames": 118,
+              "durationFrames": 840,
+              "tugarinDelayFrames": 39,
+              "c2": {
+                "minConstellation": 2,
+                "extraFrames": 360
+              }
+            },
+            "source": "alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）"
+          }
+        },
         "description": "ハンターの本能に従い、一回押しと長押しによって異なる効果を発動させ、命中した敵に**狩猟の印**効果を付与する。\n\n一回押し\n前方へ射撃し、雷元素範囲ダメージを与える。\n\n長押し\n照準状態に入り、前方の一定範囲内にいる敵を定める。この状態の時、アリョーシャの中断耐性がアップする。\n長押し終了時、定めた敵に雷元素ダメージを与える。",
         "cooldownStart": {
           "from": "motionStart",
@@ -47073,6 +47142,32 @@
           "cooldownStart": "burst.go:1"
         },
         "defaultDuration": 0.917,
+        "markCycle": {
+          "role": "burst",
+          "rule": {
+            "markLabel": "狩猟の印",
+            "markDescription": "狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる",
+            "buffLabel": "狩人の照準",
+            "buffDescription": "狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される",
+            "durationFrames": 902,
+            "resolveDelayFrames": 6,
+            "extraStacks": {
+              "minConstellation": 6,
+              "extra": 1
+            },
+            "burst": {
+              "firstTickFrames": 79,
+              "intervalFrames": 118,
+              "durationFrames": 840,
+              "tugarinDelayFrames": 39,
+              "c2": {
+                "minConstellation": 2,
+                "extraFrames": 360
+              }
+            },
+            "source": "alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）"
+          }
+        },
         "description": "信頼する仲間トゥガリンを戦場に呼び寄せ、前方エリアを一時的に雷の狩場へと変化させる。\n\n雷の狩場\n・周囲の敵を継続的に挑発し、敵の攻撃を引き付ける。\n・2秒ごとに、そこに足を踏み入れた敵に対して雷元素範囲ダメージを1回与える。\n\nトゥガリン\n・周囲に敵がいるとき、2秒ごとにいずれかの敵の近くへ素早く移動して噛みつき、雷元素ダメージを与える。\n・狩猟の印の効果を受けている敵に命中した時、狩猟の印を発動させる。\n・トゥガリンは狩猟の印効果を受けている敵を優先的に攻撃する。",
         "cooldownStart": {
           "from": "motionStart",

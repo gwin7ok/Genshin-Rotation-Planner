@@ -87,6 +87,8 @@ export interface GcsimConfigInput {
   extraWaitByActionId?: Record<string, number>;
   /** extraWaitByActionId のうち、モードの維持のための自動の待ち（アクション ID → 秒）。書き戻しで、保存する所要時間から引く（維持の秒数は保存しない） */
   modeHoldByActionId?: Record<string, number>;
+  /** アクション ID → gcsim の命令（モードの別の動作になった E が、パラメータ付きの命令になるもの。計算結果の `gcsimCommand`。フィッシュルのオズの間の E = skill[recast=1]） */
+  commandByActionId?: Record<string, string>;
 }
 
 export interface GcsimConfigResult {
@@ -265,7 +267,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
           continue;
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
-        const command = applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
+        const command = input.commandByActionId?.[act.id] ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
         const modeHold = Math.max(0, input.modeHoldByActionId?.[act.id] ?? 0);

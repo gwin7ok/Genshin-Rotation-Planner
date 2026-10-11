@@ -268,10 +268,13 @@ const windowMode = (label: string, startDelayFrames: number, durationFrames: num
   source,
   ...extra,
 });
-/** フィッシュルのオズがいる間（E の再発動以外の E を置けない）。バーは出さない（効果バーがオズのバー）。交代しても続く */
+/**
+ * フィッシュルのオズがいる間（E は再発動になる。ゲームで確認済み。gcsim も `skill[recast=1]` なら使える）。バーは出さない（効果バーがオズのバー）。交代しても続く。
+ * 再発動は CT を使わず・新しい効果バーも出さない。フレームは gcsim の skillRecastFrames
+ */
 const ozBlockMode = (spawnFrames: number, source: string): NonNullable<ActionDefinition['mode']> => ({
   label: 'オズ',
-  description: 'オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない',
+  description: 'オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間の元素スキル（E）は再発動になり、CT を使わない（オズを呼び寄せる）',
   startDelayFrames: 0,
   durationFrames: spawnFrames,
   plusEffectDuration: true,
@@ -281,7 +284,11 @@ const ozBlockMode = (spawnFrames: number, source: string): NonNullable<ActionDef
   noHold: true,
   noBar: true,
   noSynergy: true,
-  blocked: { types: ['skill', 'skill_hold'], except: ['e_recast'], result: 'wait', hint: 'オズが消えてから置くか、再発動（recast）を使ってください' },
+  repress: {
+    actions: ['e'],
+    frames: [{ total: 37, cancels: { attack: 36, burst: 35, dash: 4, jump: 5 }, source: 'skill.go:skillRecastFrames（再発動。ゲームで、オズの間の E が再発動になることを確認済み）' }],
+    gcsimCommand: 'skill[recast=1]',
+  },
   source,
 });
 /**

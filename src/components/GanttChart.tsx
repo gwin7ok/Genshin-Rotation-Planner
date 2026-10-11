@@ -374,7 +374,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, gcsimCommand, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));

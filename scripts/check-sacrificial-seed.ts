@@ -81,6 +81,7 @@ for (const [name, steps, cons = 0] of CASES) {
     characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: weaponDb, artifacts: [],
     extraWaitByActionId: Object.fromEntries(acts.filter((x: any) => x.type !== 'swap').map((x: any) => { const manual = x.durationManual && x.holdSeconds === undefined && x.naturalDuration !== undefined && x.type !== 'wait' ? Math.max(0, x.duration - x.naturalDuration) : 0; return [x.id, Number(((manual >= 0.005 ? manual : 0) + (x.modeHoldSeconds ?? 0)).toFixed(3))]; }).filter(([, v]: [string, number]) => v > 0)),
     modeHoldByActionId: Object.fromEntries(acts.filter((x: any) => x.modeHoldSeconds).map((x: any) => [x.id, x.modeHoldSeconds])),
+    commandByActionId: Object.fromEntries(acts.filter((x: any) => x.gcsimCommand).map((x: any) => [x.id, x.gcsimCommand])),
     holdSecondsByActionId: Object.fromEntries(acts.filter((x: any) => x.holdSeconds !== undefined).map((x: any) => [x.id, x.holdSeconds])),
   });
   const out = await runWithSacrificialSeed(built.config, runGcsimSample, { appProcs: res.sacrificialProcs, refs: built.actionRefs }, 1);

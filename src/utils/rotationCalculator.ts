@@ -483,6 +483,8 @@ export function calculateRotation(
       let modeEnder: { window: ModeWindow; ender: ModeEnder } | undefined;
       // モードの間に、開いたアクションをもう一度使った（終わらせない別の動作。クロリンデの突き・閑雲の 2・3 段目の跳躍）
       let modeRepress: { window: ModeWindow; index: number } | undefined;
+      // 別の動作になった E の、gcsim の命令（パラメータ付き。フィッシュルのオズの間の E = skill[recast=1]）
+      let repressGcsimCommand: string | undefined;
       for (const m of modeWindows.values()) {
         if (!isModeActive(m, char.id, sIdx, actionStartTime)) continue;
         const ender = m.def.enders.find(e => (e.by === 'self' ? act.actionTypeId === m.actionDefId : act.type === e.by));
@@ -561,6 +563,7 @@ export function calculateRotation(
         const { window: m, index } = modeRepress;
         m.repressUsed += 1;
         inStateWindow = true;
+        repressGcsimCommand = m.def.repress?.gcsimCommand;
         // 命ノ星座で、使うたびにモードの終わりが延びる（ローエンの C6: 1.25 秒。icdFrames に 1 回まで）
         const extend = consValue(m.def, m.opener.constellation, 'repressExtend');
         if (extend && (m.lastExtendAt === undefined || actionStartTime >= m.lastExtendAt + extend.icdFrames / 60 - 0.001)) {
@@ -858,6 +861,7 @@ export function calculateRotation(
         ...(burstVariantMode?.def.burstVariant ? { name: burstVariantMode.def.burstVariant.name } : {}),
         hasCTCollision: false,
         collisionRemainingCT: undefined,
+        ...(repressGcsimCommand ? { gcsimCommand: repressGcsimCommand } : {}),
         ...(holdSeconds !== undefined ? { holdSeconds } : {}),
         ...(naturalDuration !== undefined ? { naturalDuration } : {}),
         ...(actionDef?.cooldownPool ? { cooldownPool: actionDef.cooldownPool } : {}),

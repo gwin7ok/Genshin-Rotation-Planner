@@ -29,6 +29,7 @@ import { CooldownQueue, type QueueHead } from './cooldownQueue';
 import { getAvailableBuffsForCharacter, BuffCategory, type TriggerableBuffDefinition } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
 import { MODE_HOLD_ACTION_ID } from './modeHoldAction';
+import { simulateLayers, simulateMarks, type LayerBuffRule, type LayerEvent, type MarkCycleRule, type MarkEvent } from './stateBars';
 
 /** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
 export interface BuffOverlapSegment {
@@ -241,6 +242,9 @@ export function calculateRotation(
   const isModeActive = (m: ModeWindow, charId: string, sIdx: number, t: number) =>
     m.charId === charId && !m.endedBy && t < m.end - 0.001 && (m.sIdx === sIdx || m.def.swap === 'persists');
   const modeWindows = new Map<string, ModeWindow>();
+  // 層が溜まる効果（ヴェスナの粛清）・印と印の発動で付くバフ（アリョーシャの狩人の照準）の引き金の記録（キャラ ID → ）。計算の最後に、期間（バー）にする
+  const layerEventsByChar = new Map<string, { rule: LayerBuffRule; events: LayerEvent[] }>();
+  const markEventsByChar = new Map<string, { rule: MarkCycleRule; events: MarkEvent[] }>();
   // 同じモードを開き直して置き換えられた、前の窓（終わった後の計算に使う）
   const retiredModes: ModeWindow[] = [];
   // 八重神子の殺生桜（キャラ ID → 桜の数え方。効果バーを、押し出し・爆発で壊れた時刻で切る）。CT の判定と同じ数え方（totemTracker.ts）
@@ -871,6 +875,33 @@ export function calculateRotation(
         endTime: actionEndTime,
       };
       computedActions.push(computedAction);
+      // 層が溜まる効果（ヴェスナ）: E で新しい状態に入る = クリア（命ノ星座 2 は最大層から）、別の動作になった E・爆発 = +1 層
+      const layerRule = charActions.find(a => a.layerBuff)?.layerBuff;
+      if (layerRule && !blockedMessage && (act.type === 'skill' || act.type === 'burst')) {
+        const kind: LayerEvent['kind'] | undefined = act.type === 'burst' ? 'gain' : modeRepress ? 'gain' : opensMode ? 'enter' : undefined;
+        if (kind) {
+          const entry = layerEventsByChar.get(char.id) ?? { rule: layerRule, events: [] };
+          entry.events.push({ time: actionStartTime, kind });
+          layerEventsByChar.set(char.id, entry);
+        }
+      }
+      // 印と、印の発動で付くバフ（アリョーシャ）: E の命中で印（2 回目の命中で発動）、爆発の領域・トゥガリンの攻撃
+      const markDef = actionDef?.markCycle;
+      if (markDef && !blockedMessage && !inStateWindow) {
+        const entry = markEventsByChar.get(char.id) ?? { rule: markDef.rule, events: [] };
+        const rule = markDef.rule;
+        if (markDef.role === 'skill') {
+          entry.events.push({ kind: 'skill', time: Number((actionStartTime + ((markDef.hitFrames ?? 0) + rule.resolveDelayFrames) / 60).toFixed(3)) });
+        } else {
+          const c2 = CharacterModel.fromConfig(char).constellation >= rule.burst.c2.minConstellation;
+          const burstFrames = rule.burst.durationFrames + (c2 ? rule.burst.c2.extraFrames : 0);
+          for (let f = rule.burst.firstTickFrames; f < burstFrames; f += rule.burst.intervalFrames) {
+            if (c2) entry.events.push({ kind: 'field', time: Number((actionStartTime + f / 60).toFixed(3)) });
+            entry.events.push({ kind: 'tugarin', time: Number((actionStartTime + (f + rule.burst.tugarinDelayFrames + rule.resolveDelayFrames) / 60).toFixed(3)) });
+          }
+        }
+        markEventsByChar.set(char.id, entry);
+      }
       if (blockedMessage) {
         computedAction.specialWindowWarning = blockedMessage;
         validationIssues.push({
@@ -1456,6 +1487,9 @@ export function calculateRotation(
     }
 
     const stintEndTime = currentTime;
+    // 層が溜まる効果: 退場でクリア
+    const layerEntry = layerEventsByChar.get(char.id);
+    if (layerEntry) layerEntry.events.push({ time: stintEndTime, kind: 'exit' });
     // ディシア: 拾った炎場は、交代の fieldPlaceAfterExitFrames 後、または自動の蹴りの命中の後に置き直される（早いほう）
     const burstModeAtEnd = burstModeAction?.mode ? modeWindows.get(modeKeyOf(char.id, burstModeAction.mode)) : undefined;
     if (burstModeDef && burstModeAtEnd && burstModeAtEnd.sIdx === sIdx && burstModeAtEnd.pending) {
@@ -1701,6 +1735,40 @@ export function calculateRotation(
   const safeLoopStartIndex = Math.min(loopStartIndex, Math.max(0, calculatedStints.length - 1));
   const loopStartTime = calculatedStints[safeLoopStartIndex]?.startTime ?? 0;
   const loopPeriod = Math.max(0, totalDuration - loopStartTime);
+
+  // 層が溜まる効果・印のバフを、期間（バー）にする（ヴェスナの粛清・アリョーシャの狩猟の印と狩人の照準）
+  const stateBar = (char: CharacterConfig, id: string, name: string, start: number, end: number, description: string, noSynergy: boolean) => {
+    const startTime = Number(start.toFixed(3));
+    const endTime = Number(end.toFixed(3));
+    if (endTime - startTime < 0.001) return;
+    activeBuffs.push({
+      id,
+      buffId: id,
+      name: `${char.name} ${name}`,
+      sourceCharacterId: char.id,
+      sourceType: 'talent',
+      startTime,
+      endTime,
+      duration: Number((endTime - startTime).toFixed(3)),
+      color: char.color,
+      description,
+      ...(noSynergy ? { noSynergy: true } : {}),
+    });
+  };
+  for (const [charId, entry] of layerEventsByChar) {
+    const char = characters.find(c => c.id === charId);
+    if (!char) continue;
+    const { layers, fullPeriods } = simulateLayers(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
+    layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, `${entry.rule.label}（${l.index}層目）`, l.start, l.end, entry.rule.description, true));
+    fullPeriods.forEach((p, i) => stateBar(char, `layerfull_${charId}_${i}`, entry.rule.fullBuff!.label, p.start, p.end, entry.rule.fullBuff!.description, true));
+  }
+  for (const [charId, entry] of markEventsByChar) {
+    const char = characters.find(c => c.id === charId);
+    if (!char) continue;
+    const { marks, buffs } = simulateMarks(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
+    marks.forEach((m, i) => stateBar(char, `mark_${charId}_${i}`, entry.rule.markLabel, m.start, m.end, entry.rule.markDescription, true));
+    buffs.forEach((b, i) => stateBar(char, `markbuff_${charId}_${i}`, b.stacks > 1 ? `${entry.rule.buffLabel}（${b.stacks}層）` : entry.rule.buffLabel, b.start, b.end, entry.rule.buffDescription, false));
+  }
 
   // CT違反の判定（1周目・2周目を区別せず、ループを必要な周数だけ並べた時間軸で時刻順に判定）
   // 2 回分の CT を持つ特殊スキル（ファルカ）のバーは、判定のキューで CT が始まった時点に作られる

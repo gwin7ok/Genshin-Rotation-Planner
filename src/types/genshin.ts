@@ -381,6 +381,50 @@ export interface ActionDefinition {
     source: string;
   };
   /**
+   * 層が溜まる効果（ヴェスナの粛清。2026-10-11）。E に付く（爆発の分も、E の定義から引く）。
+   * 別の動作になった E（飛翔の剣）・元素爆発で 1 層増える（層ごとに独立した継続時間。最大 max。最大のとき、最も古い層が置き換わる）。
+   * E で新しい状態に入る（モードを開く）・退場でクリア。命ノ星座 fullOnEnter 以上は、入るときに最大層から。fullBuff = 最大層の間だけ付く効果
+   */
+  layerBuff?: {
+    label: string;
+    description: string;
+    durationFrames: number;
+    max: number;
+    fullOnEnter?: { minConstellation: number };
+    fullBuff?: { minConstellation: number; label: string; description: string };
+    source: string;
+  };
+  /**
+   * 印と、印の発動で付くバフ（アリョーシャの狩猟の印・狩人の照準。2026-10-11）。skill = E の命中で印を付ける（印があれば発動）。
+   * burst = 爆発: 領域の tick・トゥガリンの攻撃（印があれば発動するだけ）。出典: gcsim の未マージ PR #3207（未検証）
+   */
+  markCycle?: {
+    role: 'skill' | 'burst';
+    /** skill: アクションの開始から命中までのフレーム */
+    hitFrames?: number;
+    rule: {
+      markLabel: string;
+      markDescription: string;
+      buffLabel: string;
+      buffDescription: string;
+      /** 印・バフの継続時間 */
+      durationFrames: number;
+      /** 命中から印の処理までのフレーム */
+      resolveDelayFrames: number;
+      /** 命ノ星座 minConstellation 以上で、バフの層が extra 増える */
+      extraStacks?: { minConstellation: number; extra: number };
+      burst: {
+        firstTickFrames: number;
+        intervalFrames: number;
+        durationFrames: number;
+        tugarinDelayFrames: number;
+        /** 命ノ星座 minConstellation 以上: 爆発が extraFrames 延び、領域の tick で印が付く */
+        c2: { minConstellation: number; extraFrames: number };
+      };
+      source: string;
+    };
+  };
+  /**
    * 効果（設置物）が残っている間に、このスキルを使い直すと、その効果が置き換わり（破裂し）、CT がすぐリセットされる（凝光の命ノ星座 2: 璇璣屏。2026-10-11）。
    * 効果が残っているかは、前の発動からの経過 < 効果継続時間（effectDuration）で見る。icdSeconds に 1 回まで。出典: gcsim ningguang/screen.go（OnDestruct）
    */

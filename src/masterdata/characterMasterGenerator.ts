@@ -208,6 +208,49 @@ const FIELD_EFFECTS: Record<string, NonNullable<ActionDefinition['fieldEffect']>
 };
 
 /**
+ * 層が溜まる効果（ヴェスナの粛清。2026-10-11。issue #36）。キー: キャラ ID。スキルの `_e` に付く（爆発での +1 層も、この定義を使う）。
+ * 仕様は説明文（genshin-db）と wiki。gcsim に実装が無く、未検証。効果量（霊剣のダメージ +10% / 層・最大層で攻撃力 +40%）は、アプリでは使わない（いつ有効かを示す）
+ */
+const LAYER_BUFFS: Record<string, NonNullable<ActionDefinition['layerBuff']>> = {
+  '10000143-anemo': {
+    label: '粛清',
+    description: '粛清（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる',
+    durationFrames: 1200,
+    max: 6,
+    fullOnEnter: { minConstellation: 2 },
+    fullBuff: { minConstellation: 2, label: '粛清（最大層）攻撃力 +40%', description: '命ノ星座 2: 最大層の「粛清」を持っている間、ヴェスナの攻撃力 +40%' },
+    source: 'genshin-db（儀典「春の行列」・命ノ星座 2）: 飛翔の剣・爆発で 1 層・20 秒（層ごとに独立）・最大 6 層。操典「勝利への道筋」の発動または退場でクリア。命ノ星座 2: 風巡りの臨戦に入ると最大層、最大層で ATK+40%',
+  },
+};
+
+/**
+ * 印と、印の発動で付くバフ（アリョーシャの狩猟の印・狩人の照準。2026-10-11。issue #36）。キー: キャラ ID。スキル（`_e`・`_e_hold`）と爆発に付く。
+ * 出典: gcsim の未マージ PR #3207（alyosha/skill.go・burst.go・cons.go。未検証）。効果量（ATK%・EM +100）は、アプリでは使わない（いつ有効かを示す）
+ */
+const MARK_CYCLES: Record<string, { skillHitFrames: Record<string, number>; rule: NonNullable<NonNullable<ActionDefinition['markCycle']>['rule']> }> = {
+  '10000148-electro': {
+    skillHitFrames: { e: 18, e_hold: 113 },
+    rule: {
+      markLabel: '狩猟の印',
+      markDescription: '狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる',
+      buffLabel: '狩人の照準',
+      buffDescription: '狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される',
+      durationFrames: 902,
+      resolveDelayFrames: 6,
+      extraStacks: { minConstellation: 6, extra: 1 },
+      burst: {
+        firstTickFrames: 79,
+        intervalFrames: 118,
+        durationFrames: 840,
+        tugarinDelayFrames: 39,
+        c2: { minConstellation: 2, extraFrames: 360 },
+      },
+      source: 'alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）',
+    },
+  },
+};
+
+/**
  * 効果が残っている間に使い直すと、CT がすぐリセットされるスキル（凝光の命ノ星座 2。2026-10-11）。キー: キャラ ID。スキルの `_e` に付く
  */
 const RECAST_RESETS: Record<string, NonNullable<ActionDefinition['recastReset']>> = {
@@ -1692,6 +1735,22 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (fieldEffect) {
     for (const a of actions) {
       if (a.id === `${id}_e`) a.fieldEffect = fieldEffect;
+    }
+  }
+
+  // 層が溜まる効果（ヴェスナ）・印と印の発動で付くバフ（アリョーシャ）
+  const layerBuff = LAYER_BUFFS[id];
+  if (layerBuff) {
+    for (const a of actions) {
+      if (a.id === `${id}_e`) a.layerBuff = layerBuff;
+    }
+  }
+  const markCycle = MARK_CYCLES[id];
+  if (markCycle) {
+    for (const a of actions) {
+      const suffix = a.id.slice(id.length + 1);
+      if (markCycle.skillHitFrames[suffix] !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames[suffix], rule: markCycle.rule };
+      else if (a.type === 'burst' && !a.specialBurst) a.markCycle = { role: 'burst', rule: markCycle.rule };
     }
   }
 

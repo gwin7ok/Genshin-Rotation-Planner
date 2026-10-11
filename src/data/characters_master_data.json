@@ -46978,6 +46978,34 @@
             }
           }
         ],
+        "markCycle": {
+          "role": "skill",
+          "hitFrames": 17,
+          "normalIndex": 3,
+          "rule": {
+            "markLabel": "狩猟の印",
+            "markDescription": "狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる",
+            "buffLabel": "狩人の照準",
+            "buffDescription": "狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される",
+            "durationFrames": 902,
+            "resolveDelayFrames": 6,
+            "extraStacks": {
+              "minConstellation": 6,
+              "extra": 1
+            },
+            "burst": {
+              "firstTickFrames": 79,
+              "intervalFrames": 118,
+              "durationFrames": 840,
+              "tugarinDelayFrames": 39,
+              "c2": {
+                "minConstellation": 2,
+                "extraFrames": 360
+              }
+            },
+            "source": "alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）"
+          }
+        },
         "description": "通常攻撃\n槍による最大4段の連続攻撃を行い、最後の一撃が命中した敵に**狩猟の印**効果を付与する。\n\n重撃\n一定のスタミナを消費して前方に突進し、経路上の敵にダメージを与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。"
       },
       {

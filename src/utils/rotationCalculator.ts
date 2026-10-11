@@ -570,7 +570,8 @@ export function calculateRotation(
         repressGcsimCommand = m.def.repress?.gcsimCommand;
         // 命ノ星座で、使うたびにモードの終わりが延びる（ローエンの C6: 1.25 秒。icdFrames に 1 回まで）
         const extend = consValue(m.def, m.opener.constellation, 'repressExtend');
-        if (extend && (m.lastExtendAt === undefined || actionStartTime >= m.lastExtendAt + extend.icdFrames / 60 - 0.001)) {
+        // wiki: 愉悦が回復した後の「次の」魂を穿つ痛みで延びる。1 回目で回復するので、延びるのは 2 回目から
+        if (extend && m.repressUsed >= 2 && (m.lastExtendAt === undefined || actionStartTime >= m.lastExtendAt + extend.icdFrames / 60 - 0.001)) {
           m.lastExtendAt = actionStartTime;
           m.end = Number((m.end + extend.frames / 60).toFixed(3));
           m.span.endTime = m.end;
@@ -887,7 +888,10 @@ export function calculateRotation(
       }
       // 印と、印の発動で付くバフ（アリョーシャ）: E の命中で印（2 回目の命中で発動）、爆発の領域・トゥガリンの攻撃
       const markDef = actionDef?.markCycle;
-      if (markDef && !blockedMessage && !inStateWindow) {
+      // 通常攻撃で印を付けるもの（アリョーシャの 4 段目）は、その段のときだけ
+      const markNormalOk = markDef?.normalIndex === undefined
+        || (act.type === 'normal' && normalStreak > 0 && (normalStreak - 1) % Math.max(1, actionDef?.normalHits?.length ?? 4) === markDef.normalIndex);
+      if (markDef && markNormalOk && !blockedMessage && !inStateWindow) {
         const entry = markEventsByChar.get(char.id) ?? { rule: markDef.rule, events: [] };
         const rule = markDef.rule;
         if (markDef.role === 'skill') {

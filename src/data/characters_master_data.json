@@ -10570,6 +10570,32 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.717,
+        "mode": {
+          "label": "オズ",
+          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない",
+          "startDelayFrames": 0,
+          "durationFrames": 18,
+          "plusEffectDuration": true,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "blocked": {
+            "types": [
+              "skill",
+              "skill_hold"
+            ],
+            "except": [
+              "e_recast"
+            ],
+            "result": "wait",
+            "hint": "オズが消えてから置くか、再発動（recast）を使ってください"
+          },
+          "source": "fischl/skill.go: ozActive = true（アクションの開始）、queueOz(skillOzSpawn 18f)、dur 600f（凸 6 は 720f）、removeOz で ozActive = false。fischl.go ActionReady: ozActive のとき recast 以外の E は false"
+        },
+        "description": "オズを召喚する。暗影と雷電によって構成された鴉が降臨する時、狭範囲に雷元素ダメージを与える。\nオズが存在する時、雷の魔弾を発射し、付近の敵を自動で攻撃する。\n\n長押しでスキルの発動位置を調整可能。\nオズが存在する間に再び一回押すとオズを自身の傍に呼び寄せる。",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0
@@ -10579,8 +10605,7 @@
             "oz-active"
           ],
           "status": "ok"
-        },
-        "description": "オズを召喚する。暗影と雷電によって構成された鴉が降臨する時、狭範囲に雷元素ダメージを与える。\nオズが存在する時、雷の魔弾を発射し、付近の敵を自動で攻撃する。\n\n長押しでスキルの発動位置を調整可能。\nオズが存在する間に再び一回押すとオズを自身の傍に呼び寄せる。"
+        }
       },
       {
         "id": "10000031-electro_e_recast",
@@ -10599,13 +10624,13 @@
           },
           "source": "skill.go:skillRecastFrames"
         },
+        "description": "オズを召喚する。暗影と雷電によって構成された鴉が降臨する時、狭範囲に雷元素ダメージを与える。\nオズが存在する時、雷の魔弾を発射し、付近の敵を自動で攻撃する。\n\n長押しでスキルの発動位置を調整可能。\nオズが存在する間に再び一回押すとオズを自身の傍に呼び寄せる。",
         "gcsimEffect": {
           "keys": [
             "oz-active"
           ],
           "status": "ok"
-        },
-        "description": "オズを召喚する。暗影と雷電によって構成された鴉が降臨する時、狭範囲に雷元素ダメージを与える。\nオズが存在する時、雷の魔弾を発射し、付近の敵を自動で攻撃する。\n\n長押しでスキルの発動位置を調整可能。\nオズが存在する間に再び一回押すとオズを自身の傍に呼び寄せる。"
+        }
       },
       {
         "id": "10000031-electro_q",
@@ -10631,6 +10656,32 @@
           "cooldownStart": "burst.go:SetCD（遅れなし）"
         },
         "defaultDuration": 2.467,
+        "mode": {
+          "label": "オズ",
+          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない",
+          "startDelayFrames": 0,
+          "durationFrames": 40,
+          "plusEffectDuration": true,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "blocked": {
+            "types": [
+              "skill",
+              "skill_hold"
+            ],
+            "except": [
+              "e_recast"
+            ],
+            "result": "wait",
+            "hint": "オズが消えてから置くか、再発動（recast）を使ってください"
+          },
+          "source": "fischl/burst.go: ozActive = true（アクションの開始）。オズは 113f 後に出現（交代した場合は、交代の後〔約 40f 後〕）。交代する出し方を基準にした（交代しないときは、約 70f 長い）"
+        },
+        "description": "オズを召喚し、純粋なる夜色の翼を広げてフィッシュルを守る。\n継続期間中、下記の効果が発動する。\n·フィッシュルはオズ形態で高速移動する。\n·付近の敵に落雷で攻撃し、雷元素ダメージを与える。落雷によるダメージは同じ敵に1回のみ有効。\n·効果終了時、オズは戦場に留まり、皇女の敵を攻撃する。発動前にオズがすでに戦場に存在してる場合は、オズの継続時間がリセットされる。",
         "effectLabel": "オズ",
         "cooldownStart": {
           "from": "motionStart",
@@ -10641,8 +10692,7 @@
             "oz-active"
           ],
           "status": "ok"
-        },
-        "description": "オズを召喚し、純粋なる夜色の翼を広げてフィッシュルを守る。\n継続期間中、下記の効果が発動する。\n·フィッシュルはオズ形態で高速移動する。\n·付近の敵に落雷で攻撃し、雷元素ダメージを与える。落雷によるダメージは同じ敵に1回のみ有効。\n·効果終了時、オズは戦場に留まり、皇女の敵を攻撃する。発動前にオズがすでに戦場に存在してる場合は、オズの継続時間がリセットされる。"
+        }
       },
       {
         "id": "10000031-electro_dash",

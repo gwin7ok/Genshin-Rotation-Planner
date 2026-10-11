@@ -537,7 +537,8 @@ export function calculateRotation(
       if (modeKind === 'punch' || modeKind === 'kick') modeRepress = undefined;
       // このアクションが、新しいモードを開くか（続いているモードの、終わらせるアクション・もう一度使った動作・パンチではない）
       // モードの間に置けない操作（夢見月瑞希の夢浮かみの間の通常攻撃など）: 黄色の警告（アプリの時間は変えない）
-      const blockingMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && !!m.def.blocked?.types.includes(act.type));
+      const blockingMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && !!m.def.blocked?.types.includes(act.type)
+        && !m.def.blocked.except?.some(s => act.actionTypeId === `${char.id}_${s}`));
       const blockedMessage = blockingMode?.def.blocked
         ? `「${blockingMode.def.label}」の間は「${act.name}」を置けません。${blockingMode.def.blocked.result === 'wait'
           ? `gcsim では${blockingMode.def.label}が終わるまで（あと ${(blockingMode.end - actionStartTime).toFixed(1)} 秒）待ちます`
@@ -1107,7 +1108,11 @@ export function calculateRotation(
         const start = Number((actionStartTime + (md.startAfterHold ? holdSeconds ?? 0 : 0) + md.startDelayFrames / 60).toFixed(3));
         // 最大時間: モードの定義の値。アクションごとの効果継続時間（個別に変更した値・gcsim の結果）のほうが長ければ、その値。
         // 受付（special）は、受付の長さそのもの（効果継続時間は別のもの）。受付を開いたスキルの初撃のヒットストップで延びる（ファルカ。状態は命中の 1 フレーム前に付く）
-        const baseSeconds = md.special ? md.durationFrames / 60 + (durationHasHitlag(act) ? hitlagOf(md.special)?.skill ?? 0 : 0) : Math.max(md.durationFrames / 60, act.effectDuration ?? 0);
+        const baseSeconds = md.special
+          ? md.durationFrames / 60 + (durationHasHitlag(act) ? hitlagOf(md.special)?.skill ?? 0 : 0)
+          : md.plusEffectDuration
+            ? md.durationFrames / 60 + (act.effectDuration ?? actionDef.effectDuration ?? 0)
+            : Math.max(md.durationFrames / 60, act.effectDuration ?? 0);
         const end = Number((start + baseSeconds).toFixed(3));
         const span: ActiveBuffSpan = {
           id: `mode_${actionDef.id}_${act.id}`,

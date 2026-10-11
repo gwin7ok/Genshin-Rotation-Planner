@@ -229,7 +229,8 @@ const LAYER_BUFFS: Record<string, NonNullable<ActionDefinition['layerBuff']>> = 
  */
 const MARK_CYCLES: Record<string, { skillHitFrames: Record<string, number>; rule: NonNullable<NonNullable<ActionDefinition['markCycle']>['rule']> }> = {
   '10000148-electro': {
-    skillHitFrames: { e: 18, e_hold: 113 },
+    // 通常攻撃 4 段目の命中（17f）でも印を付ける（gcsim PR #3207 attack.go: normalHitNum-1 で triggerSkillMarkCB(true)。wiki も同じ）
+    skillHitFrames: { e: 18, e_hold: 113, n: 17 },
     rule: {
       markLabel: '狩猟の印',
       markDescription: '狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる',
@@ -1749,7 +1750,8 @@ function buildActions(ctx: BuildContext): BuildResult {
   if (markCycle) {
     for (const a of actions) {
       const suffix = a.id.slice(id.length + 1);
-      if (markCycle.skillHitFrames[suffix] !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames[suffix], rule: markCycle.rule };
+      if (suffix === 'n' && markCycle.skillHitFrames.n !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames.n, normalIndex: 3, rule: markCycle.rule };
+      else if (markCycle.skillHitFrames[suffix] !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames[suffix], rule: markCycle.rule };
       else if (a.type === 'burst' && !a.specialBurst) a.markCycle = { role: 'burst', rule: markCycle.rule };
     }
   }

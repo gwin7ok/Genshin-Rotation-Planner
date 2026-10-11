@@ -402,6 +402,8 @@ export interface ActionDefinition {
     role: 'skill' | 'burst';
     /** skill: アクションの開始から命中までのフレーム */
     hitFrames?: number;
+    /** 通常攻撃で印を付けるとき、連続した N の何段目か（0 から。アリョーシャの 4 段目 = 3）。無ければ、アクション自身の命中 */
+    normalIndex?: number;
     rule: {
       markLabel: string;
       markDescription: string;

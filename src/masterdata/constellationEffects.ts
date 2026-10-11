@@ -50,6 +50,7 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
   '10000095-hydro_c4': { target: 'q', keyword: '過飽和まごころお注射' }, // シグウィン
   '10000043-anemo_c2': { target: 'q', keyword: '七五同構弐型' }, // スクロース
   '10000049-pyro_c1': { target: 'q', keyword: '琉金の炎' }, // 宵宮
+  '10000140-hydro_c2': { target: 'e', keyword: '悠久の歌' }, // ヴォジャニーツァ（E の効果 = 悠久の歌。genshin-db の E の説明で確認。+9 秒）
   '10000148-electro_c2': { target: 'q', keyword: '攻守の猟犬' }, // アリョーシャ（gcsim PR #3207 burst.go: AddStatus(burstKey, 14*60 + c2BurstDur())。未検証）
 };
 
@@ -71,7 +72,6 @@ const NOT_APPLICABLE: Record<string, string> = {
   '10000070-hydro_c1': '水環の延長（マスターの効果はピルエット）', // ニィロウ
   '10000034-geo_c6': '敵を倒すごとに +1秒（条件付き）', // ノエル
   '10000050-pyro_c2': '元素爆発自体の継続時間の延長（マスターの効果はシールド継続時間）', // トーマ
-  '10000140-hydro_c2': '「悠久の歌」効果の延長（マスターの効果との対応が未確認）', // ヴォジャニーツァ
   '10000030-geo_c4': '石化効果の延長（マスターの効果はシールド）', // 鍾離
   '10000076-anemo_c2': '赫耀多面体の存在時間の延長（マスターの効果は疾風示現）', // ファルザン
 };

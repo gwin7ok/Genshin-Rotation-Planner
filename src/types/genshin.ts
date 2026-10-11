@@ -139,6 +139,8 @@ export interface ActionMode {
     cost?: number;
     /** 通常攻撃（N）の、連続した N の段ごとの増加量（段の数で繰り返す。あれば gainByType.normal より優先。ローエンの愉悦・ヴェスナの剣気） */
     gainByNormalIndex?: number[];
+    /** モードが終わっても、ゲージの値を次のモードへ持ち越す（兹白の月相の輝き。gcsim は、モードの外では増減しない）。次のモードの初期値 = 持ち越し + 命ノ星座の gaugeInitial（上限まで） */
+    persists?: boolean;
   };
   /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
   extendByBurstFrames?: number;
@@ -160,10 +162,28 @@ export interface ActionMode {
     /** 乗っている間の通常攻撃のフレーム（連続した N の何段目か。足りなければ繰り返す） */
     riddenNormalFrames: ActionFrames[];
     /** 元素爆発で回復する量（命ノ星座 minConstellation 以上） */
-    burstGain?: { minConstellation: number; amount: number };
+    burstGain?: { minConstellation: number; amount: number; /** モードが無い（尽きた後の）ときも、爆発でモードを開き直す（降りている状態で amount から。カチーナの C2） */ reopens?: boolean };
   };
   /** 命ノ星座による変化（その星座以上のとき適用。上から順に重ねる）: repress の使える回数・ゲージの初期値（モードの開始時の増加） */
-  byConstellation?: { minConstellation: number; repressMaxUses?: number; gaugeInitial?: number }[];
+  byConstellation?: {
+    minConstellation: number;
+    repressMaxUses?: number;
+    gaugeInitial?: number;
+    /** ゲージの獲得量（時間・通常攻撃）に掛ける倍率（兹白の C6: 1.5） */
+    gaugeGainScale?: number;
+    /** 別の動作になった E が、ゲージを全部消費する（兹白の C6） */
+    gaugeCostAll?: boolean;
+    /** モードの間は、通常攻撃の段が、ほかのアクションを挟んでも戻らない（兹白の C4） */
+    keepNormalChain?: boolean;
+    /** 別の動作になった E を使うと、モードの終わりが frames 延びる（icdFrames に 1 回まで。ローエンの C6: 1.25 秒・7 秒に 1 回） */
+    repressExtend?: { frames: number; icdFrames: number };
+    /** 別の動作になった E を使った後、ゲージが上限まで回復する（ローエンの C6） */
+    gaugeRefillOnRepress?: boolean;
+    /** 別の動作になった E のうち、この番号（0 から。モードの中での何回目か）の回は、ゲージを消費しない（ヴェスナの C1: 最高ランクの 1 回目 = 2） */
+    repressFreeIndex?: number;
+  }[];
+  /** モードの間（別の動作になる E が残っているとき）、元素爆発の次の重撃へのつなぎ（フレーム。ネフェル: 幻の戯が使えるときは 124f。使えないときは通常のフレーム） */
+  burstToChargedFrames?: number;
   /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */
   replaces?: string[];
   /** このモードの間の元素爆発の名前と、効果バーの名前（ドゥリンの漆黒の否の間の爆発 = 漆黒の法則・黒蝕の龍） */

@@ -217,6 +217,8 @@ export function calculateRotation(
     stacks?: number;
     /** ゲージ（def.gauge のモードだけ）: 現在値と、時間で数え終えた回数 */
     gauge?: { value: number; ticks: number };
+    /** モードの終わりを延ばした最後の時刻（命ノ星座の repressExtend。間隔の制限に使う） */
+    lastExtendAt?: number;
     /** 減る値（def.drain のモードだけ）: 残り・乗っているか・最後に数えた時刻・次の消費の時刻（降りている間） */
     drain?: { points: number; riding: boolean; at: number; nextTick: number };
     /** モードを開いたアクション（モードの終わりから始まる CT〔cooldownAtEnd〕に使う） */
@@ -263,6 +265,15 @@ export function calculateRotation(
     for (const c of m.def.byConstellation ?? []) if (m.opener.constellation >= c.minConstellation && c.gaugeInitial !== undefined) v = c.gaugeInitial;
     return v;
   };
+  // 命ノ星座による変化（byConstellation）のうち、その項目を持つ最も高い星座の値（その星座以上のとき）
+  const consValue = <K extends keyof NonNullable<ActionMode['byConstellation']>[number]>(
+    def: ActionMode, constellation: number, key: K,
+  ): NonNullable<ActionMode['byConstellation']>[number][K] | undefined => {
+    let v: NonNullable<ActionMode['byConstellation']>[number][K] | undefined;
+    for (const c of def.byConstellation ?? []) if (constellation >= c.minConstellation && c[key] !== undefined) v = c[key];
+    return v;
+  };
+  const modeGainScale = (m: ModeWindow): number => consValue(m.def, m.opener.constellation, 'gaugeGainScale') ?? 1;
   // 減る値（カチーナの夜魂値）: 時刻 to まで、時間による消費を数える（乗っている間は連続、降りている間は一定の間隔の離散）
   const drainAdvance = (m: ModeWindow, to: number) => {
     const d = m.def.drain;
@@ -549,6 +560,14 @@ export function calculateRotation(
         const { window: m, index } = modeRepress;
         m.repressUsed += 1;
         inStateWindow = true;
+        // 命ノ星座で、使うたびにモードの終わりが延びる（ローエンの C6: 1.25 秒。icdFrames に 1 回まで）
+        const extend = consValue(m.def, m.opener.constellation, 'repressExtend');
+        if (extend && (m.lastExtendAt === undefined || actionStartTime >= m.lastExtendAt + extend.icdFrames / 60 - 0.001)) {
+          m.lastExtendAt = actionStartTime;
+          m.end = Number((m.end + extend.frames / 60).toFixed(3));
+          m.span.endTime = m.end;
+          m.span.duration = Number((m.end - m.span.startTime).toFixed(3));
+        }
         // 使うたびに、モードの終わりを更新する（閑雲の跳躍）
         const rp = m.def.repress!;
         const rf = rp.refreshFrames;
@@ -641,25 +660,72 @@ export function calculateRotation(
         }
         drainProject(m, actionStartTime);
       }
+      // 尽きた後の再開（カチーナの C2: 爆発で夜魂値 20 から、降りている状態で開き直す）。続いているモードがあるときは、上の drain の処理が回復する
+      if (act.type === 'burst') {
+        const constellation = CharacterModel.fromConfig(char).constellation;
+        for (const reopenDef of charActions) {
+          const md = reopenDef.mode;
+          const bg = md?.drain?.burstGain;
+          if (!md || !md.drain || !bg?.reopens || constellation < bg.minConstellation) continue;
+          const key = modeKeyOf(char.id, md);
+          const prev = modeWindows.get(key);
+          if (prev && isModeActive(prev, char.id, sIdx, actionStartTime) && actionStartTime >= prev.start - 0.001) continue;
+          const reStart = actionStartTime;
+          const reSpan: ActiveBuffSpan = {
+            id: `mode_${reopenDef.id}_${act.id}_reopen`,
+            buffId: `mode_${reopenDef.id}`,
+            name: `${char.name} ${md.label}`,
+            sourceCharacterId: char.id,
+            sourceType: 'talent',
+            startTime: reStart,
+            endTime: Number((reStart + md.durationFrames / 60).toFixed(3)),
+            duration: Number((md.durationFrames / 60).toFixed(3)),
+            color: char.color,
+            description: md.description,
+            ...(md.noSynergy ? { noSynergy: true } : {}),
+          };
+          const reopened: ModeWindow = {
+            key, charId: char.id, actionDefId: reopenDef.id, def: md, sIdx, start: reStart, end: reSpan.endTime, span: reSpan, repressUsed: 0, inputs: 0, finished: false, reductions: 0,
+            opener: { actionId: act.id, name: act.name, start: actionStartTime, cooldown: 0, cdScale: 1, constellation },
+          };
+          // 一回押しの E と同じ（降りている）。開始から最初の消費まで firstFrames
+          reopened.drain = { points: bg.amount, riding: false, at: reStart, nextTick: Number((reStart + md.drain.idle.firstFrames / 60).toFixed(4)) };
+          drainProject(reopened, reStart);
+          if (!md.noBar) activeBuffs.push(reSpan);
+          if (prev) retiredModes.push(prev);
+          modeWindows.set(key, reopened);
+        }
+      }
       // モードのゲージ（キィニチの夜魂値）: 時間の増加 → このアクションの増加（N）／使用（別の動作になった E は、満タンのときだけ使え、0 になる）
       let gaugeMessage: string | undefined;
       for (const m of modeWindows.values()) {
         const g = m.def.gauge;
-        if (!g || !isModeActive(m, char.id, sIdx, actionStartTime) || actionStartTime < m.start - 0.001) continue;
+        // 使い切って終わる回（endsOnLast の最後の E）も、ここで消費を数える（モードは、この処理の前に終わっている）
+        const usedUp = modeRepress?.window === m;
+        if (!g || m.charId !== char.id || !(isModeActive(m, char.id, sIdx, actionStartTime) || usedUp) || actionStartTime < m.start - 0.001) continue;
+        const scale = modeGainScale(m);
         const state = m.gauge ?? { value: Math.min(g.max, modeGaugeInitial(m)), ticks: 0 };
         const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
-        state.value = Math.min(g.max, state.value + (ticksNow - state.ticks) * g.timeGain.amount);
+        state.value = Math.min(g.max, state.value + (ticksNow - state.ticks) * g.timeGain.amount * scale);
         state.ticks = ticksNow;
         if (modeRepress?.window === m && (act.type === 'skill' || act.type === 'skill_hold')) {
-          const need = g.cost ?? g.max;
+          // 命ノ星座で、この回は消費しない（ヴェスナの C1: 最高ランクの 1 回目）
+          const freeIndex = consValue(m.def, m.opener.constellation, 'repressFreeIndex');
+          const free = freeIndex !== undefined && modeRepress.index === freeIndex;
+          const need = free ? 0 : g.cost ?? g.max;
           if (state.value < need) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(state.value)} / ${need}）。${g.hint}`;
-          state.value = g.cost !== undefined ? Math.max(0, state.value - g.cost) : 0;
+          if (!free) {
+            const costAll = !!consValue(m.def, m.opener.constellation, 'gaugeCostAll');
+            state.value = costAll || g.cost === undefined ? 0 : Math.max(0, state.value - g.cost);
+          }
+          // 命ノ星座で、使った後に上限まで回復する（ローエンの C6）
+          if (consValue(m.def, m.opener.constellation, 'gaugeRefillOnRepress')) state.value = g.max;
         } else {
           // 通常攻撃は、連続した N の何段目か（ここで数える normalStreak は、この N の前までの連続数）で増加量が変わる場合がある
           const gain = act.type === 'normal' && g.gainByNormalIndex?.length
             ? g.gainByNormalIndex[normalStreak % g.gainByNormalIndex.length]
             : g.gainByType[act.type] ?? 0;
-          state.value = Math.min(g.max, state.value + gain);
+          state.value = Math.min(g.max, state.value + gain * scale);
         }
         m.gauge = state;
       }
@@ -689,7 +755,12 @@ export function calculateRotation(
         if (modeNormal?.length) frames = modeNormal[normalStreak % modeNormal.length];
         normalStreak += 1;
       } else {
-        normalStreak = 0;
+        // 命ノ星座で、モードの間は通常攻撃の段が戻らない（兹白の C4。gcsim: ResetNormalCounter。モードを開く E もモードの中で数える）
+        const constellationNow = CharacterModel.fromConfig(char).constellation;
+        const keepChain = [...modeWindows.values()].some(m => m.charId === char.id && isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001
+          && !!consValue(m.def, m.opener.constellation, 'keepNormalChain'))
+          || (opensMode && !!actionDef?.mode && !!consValue(actionDef.mode, constellationNow, 'keepNormalChain'));
+        if (!keepChain) normalStreak = 0;
       }
       if (act.type === 'burst' && frameMode?.def.burstFrames) frames = frameMode.def.burstFrames;
       if (act.type === 'charged' && frameMode?.def.chargedFrames) frames = frameMode.def.chargedFrames;
@@ -735,7 +806,19 @@ export function calculateRotation(
       {
         if (frames) {
           const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
-          const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
+          // 爆発の次の重撃が、モードの別の動作（ネフェルの幻の戯）になるとき、つなぎのフレームが短い
+          let burstCharged: number | undefined;
+          const nextAct = rawActions[aIdx + 1];
+          if (act.type === 'burst' && nextAct?.type === 'charged') {
+            for (const m of modeWindows.values()) {
+              const bf = m.def.burstToChargedFrames;
+              const rp = m.def.repress;
+              if (!bf || !rp || !isModeActive(m, char.id, sIdx, actionStartTime) || actionStartTime < m.start - 0.001) continue;
+              const matches = rp.actions ? rp.actions.some(s => nextAct.actionTypeId === `${char.id}_${s}`) : nextAct.actionTypeId === m.actionDefId;
+              if (matches && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) { burstCharged = bf; break; }
+            }
+          }
+          const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
           autoDuration = Number((motion / 60).toFixed(3));
         } else {
           autoDuration = hitFallbackDuration;
@@ -1049,6 +1132,18 @@ export function calculateRotation(
             constellation: CharacterModel.fromConfig(char).constellation,
           },
         };
+        // 持ち越すゲージ（兹白の月相の輝き）: 前のモードが終わったときの値 + 命ノ星座の初期増加（上限まで）
+        if (md.gauge?.persists) {
+          const g = md.gauge;
+          let carry = 0;
+          if (prevMode) {
+            const ps = prevMode.gauge ?? { value: Math.min(g.max, modeGaugeInitial(prevMode)), ticks: 0 };
+            const until = Math.min(prevMode.end, actionStartTime);
+            const ticks = Math.max(0, Math.floor((until - prevMode.start + 0.0005) / (g.timeGain.everyFrames / 60)));
+            carry = Math.min(g.max, ps.value + Math.max(0, ticks - ps.ticks) * g.timeGain.amount * modeGainScale(prevMode));
+          }
+          opened.gauge = { value: Math.min(g.max, carry + modeGaugeInitial(opened)), ticks: 0 };
+        }
         // 減る値のあるモード（カチーナ）: 開いた E が長押しなら乗っている・一回押しなら降りている（独立して存在）
         if (md.drain) {
           const riding = actionDef.id.endsWith('_e_hold');

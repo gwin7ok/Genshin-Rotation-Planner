@@ -83,6 +83,8 @@ export interface ActionMode {
     frames: ActionFrames[];
     maxUses?: number;
     refreshFrames?: number[];
+    /** 別の動作になった E を gcsim の設定文に入れるときの命令（無ければ、通常の対応。フィッシュルのオズの間の E は `skill[recast=1]`） */
+    gcsimCommand?: string;
     /** 使うたびに、前のバーをその時刻で終わらせ、新しいバーを同じ行に置く（ディルックの連撃の受付。最後の 1 回の後は、新しいバーを置かない）。無ければ、1 本のバーを延ばす */
     barPerUse?: boolean;
     endsOnLast?: boolean;
@@ -491,6 +493,8 @@ export interface CharacterActionInstance {
   inStateWindow?: boolean;
   /** モードの維持のために、このアクション（出場の最後）の後に自動で足した待ち（秒）。所要時間（duration）には含めない。計算時にだけ付き、保存しない */
   modeHoldSeconds?: number;
+  /** このアクションを gcsim の設定文に入れるときの命令（モードの別の動作になった E が、パラメータ付きの命令になるとき。フィッシュルのオズの間の E = skill[recast=1]）。計算時にだけ付き、保存しない */
+  gcsimCommand?: string;
   /** 特殊スキルが受付時間の外で使われたとき、落下攻撃が gcsim の前提を満たさないときの警告文（黄色の警告。計算時にだけ付く） */
   specialWindowWarning?: string;
   /** 受付の間の重撃が、特殊スキルの使用回数を 1 回分使って「特殊重撃（蒼牙）」になった（1 周目の発動。ファルカ）。計算時にだけ付き、保存しない */

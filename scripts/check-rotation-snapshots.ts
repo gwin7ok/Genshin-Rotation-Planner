@@ -192,12 +192,12 @@ const SCENARIOS: Scenario[] = [
   S('凝光 凸 0 E → 12 秒 → E → E → 13 秒 → E（リセットなし）', [['凝光', { constellation: 0 }], B], [[0, ['e', 'w12', 'e', 'e', 'w13', 'e', 'w60']], [1, ['e']]]),
   S('凝光 凸 2 E → 12 秒 → E → E → 13 秒 → E（2 回目と 4 回目の E で CT リセット。3 回目は 6 秒以内で CT 12 秒）', [['凝光', { constellation: 2 }], B], [[0, ['e', 'w12', 'e', 'e', 'w13', 'e', 'w60']], [1, ['e']]]),
   S('凝光 凸 2 E → 35 秒 → E（光幕が消えた後はリセットなし）', [['凝光', { constellation: 2 }], B], [[0, ['e', 'w35', 'e', 'w60']], [1, ['e']]]),
-  // --- フィッシュル（A3。D163）: オズがいる間は E を使えない（再発動 recast だけ使える）。gcsim は、オズが消えるまで待つ（アプリは、黄色の警告だけ） ---
-  S('フィッシュル E → E（オズの間。警告）', [['フィッシュル'], B], [[0, ['e', 'e', 'w60']], [1, ['e']]]),
-  S('フィッシュル Q → E（爆発のオズの間。警告）', [['フィッシュル'], B], [[0, ['q', 'e', 'w60']], [1, ['e']]]),
-  S('フィッシュル E → 再発動（警告なし）', [['フィッシュル'], B], [[0, ['e', 'e_recast', 'w60']], [1, ['e']]]),
-  S('フィッシュル 凸 6 Q → 待機 11 秒 → E（オズ 12 秒。警告）', [['フィッシュル', { constellation: 6 }], B], [[0, ['q', 'w11', 'e', 'w60']], [1, ['e']]]),
-  S('フィッシュル Q → 待機 11 秒 → E（オズが消えた後。警告なし）', [['フィッシュル', { constellation: 0 }], B], [[0, ['q', 'w11', 'e', 'w60']], [1, ['e']]]),
+  // --- フィッシュル（A3。D163・D164）: オズがいる間の E は再発動になる（ゲームで確認済み）。CT を使わず、gcsim へは skill[recast=1] で渡す ---
+  S('フィッシュル E → E（オズの間。再発動になる。CT 違反なし）', [['フィッシュル'], B], [[0, ['e', 'e', 'w60']], [1, ['e']]]),
+  S('フィッシュル Q → E（爆発のオズの間。再発動になる）', [['フィッシュル'], B], [[0, ['q', 'e', 'w60']], [1, ['e']]]),
+  S('フィッシュル E → 再発動（明示した再発動）', [['フィッシュル'], B], [[0, ['e', 'e_recast', 'w60']], [1, ['e']]]),
+  S('フィッシュル 凸 6 Q → 待機 11 秒 → E（オズ 12 秒。再発動になる）', [['フィッシュル', { constellation: 6 }], B], [[0, ['q', 'w11', 'e', 'w60']], [1, ['e']]]),
+  S('フィッシュル Q → 待機 11 秒 → E（オズが消えた後。通常の E）', [['フィッシュル', { constellation: 0 }], B], [[0, ['q', 'w11', 'e', 'w60']], [1, ['e']]]),
 ];
 
 const r3 = (v: number | undefined) => (v === undefined ? undefined : Number(v.toFixed(3)));
@@ -215,6 +215,7 @@ function runScenario(sc: Scenario) {
       return [a.id, Number(((manual >= 0.005 ? manual : 0) + (a.modeHoldSeconds ?? 0)).toFixed(3))];
     }).filter(([, v]: [string, number]) => v > 0)),
     modeHoldByActionId: Object.fromEntries(actions.filter((a: any) => a.modeHoldSeconds).map((a: any) => [a.id, a.modeHoldSeconds])),
+    commandByActionId: Object.fromEntries(actions.filter((x: any) => x.gcsimCommand).map((x: any) => [x.id, x.gcsimCommand])),
     holdSecondsByActionId: Object.fromEntries(actions.filter((a: any) => a.holdSeconds !== undefined).map((a: any) => [a.id, a.holdSeconds])),
   });
   return {

@@ -10572,7 +10572,7 @@
         "defaultDuration": 0.717,
         "mode": {
           "label": "オズ",
-          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない",
+          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間の元素スキル（E）は再発動になり、CT を使わない（オズを呼び寄せる）",
           "startDelayFrames": 0,
           "durationFrames": 18,
           "plusEffectDuration": true,
@@ -10582,16 +10582,23 @@
           "noHold": true,
           "noBar": true,
           "noSynergy": true,
-          "blocked": {
-            "types": [
-              "skill",
-              "skill_hold"
+          "repress": {
+            "actions": [
+              "e"
             ],
-            "except": [
-              "e_recast"
+            "frames": [
+              {
+                "total": 37,
+                "cancels": {
+                  "attack": 36,
+                  "burst": 35,
+                  "dash": 4,
+                  "jump": 5
+                },
+                "source": "skill.go:skillRecastFrames（再発動。ゲームで、オズの間の E が再発動になることを確認済み）"
+              }
             ],
-            "result": "wait",
-            "hint": "オズが消えてから置くか、再発動（recast）を使ってください"
+            "gcsimCommand": "skill[recast=1]"
           },
           "source": "fischl/skill.go: ozActive = true（アクションの開始）、queueOz(skillOzSpawn 18f)、dur 600f（凸 6 は 720f）、removeOz で ozActive = false。fischl.go ActionReady: ozActive のとき recast 以外の E は false"
         },
@@ -10658,7 +10665,7 @@
         "defaultDuration": 2.467,
         "mode": {
           "label": "オズ",
-          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間は、再発動（recast）以外の元素スキル（E）を使えない",
+          "description": "オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間の元素スキル（E）は再発動になり、CT を使わない（オズを呼び寄せる）",
           "startDelayFrames": 0,
           "durationFrames": 40,
           "plusEffectDuration": true,
@@ -10668,16 +10675,23 @@
           "noHold": true,
           "noBar": true,
           "noSynergy": true,
-          "blocked": {
-            "types": [
-              "skill",
-              "skill_hold"
+          "repress": {
+            "actions": [
+              "e"
             ],
-            "except": [
-              "e_recast"
+            "frames": [
+              {
+                "total": 37,
+                "cancels": {
+                  "attack": 36,
+                  "burst": 35,
+                  "dash": 4,
+                  "jump": 5
+                },
+                "source": "skill.go:skillRecastFrames（再発動。ゲームで、オズの間の E が再発動になることを確認済み）"
+              }
             ],
-            "result": "wait",
-            "hint": "オズが消えてから置くか、再発動（recast）を使ってください"
+            "gcsimCommand": "skill[recast=1]"
           },
           "source": "fischl/burst.go: ozActive = true（アクションの開始）。オズは 113f 後に出現（交代した場合は、交代の後〔約 40f 後〕）。交代する出し方を基準にした（交代しないときは、約 70f 長い）"
         },

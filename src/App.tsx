@@ -438,6 +438,9 @@ export default function App() {
       holdSecondsByActionId: Object.fromEntries(
         calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
       ),
+      commandByActionId: Object.fromEntries(
+        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.gcsimCommand).map(a => [a.id, a.gcsimCommand as string]),
+      ),
     });
   const handleCopyGcsimConfig = () => {
     const result = buildCurrentGcsimConfig();

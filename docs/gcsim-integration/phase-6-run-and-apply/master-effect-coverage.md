@@ -22,17 +22,18 @@
 | weapon / excluded | 38 |
 | weapon / linked | 377 |
 
-## マスター対象（810件）
+## マスター対象（829件）
 
 | 種別 / 状態 | 件数 |
 |---|---:|
 | artifact / linked | 52 |
 | artifact / unsupported | 3 |
 | constellation / linked | 238 |
+| constellation / unsupported | 23 |
 | resonance / linked | 6 |
 | resonance / unsupported | 1 |
 | talent / linked | 154 |
-| talent / unsupported | 119 |
+| talent / unsupported | 115 |
 | weapon / linked | 217 |
 | weapon / unsupported | 20 |
 

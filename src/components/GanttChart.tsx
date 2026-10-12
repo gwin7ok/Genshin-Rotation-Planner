@@ -1245,6 +1245,17 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 </div>
               </div>
 
+              {/* 反応（月反応・星反応・草露・月露）の状態の行（D112）。バフ重複のすぐ下。固定表示のヘッダーの中に置く。gcsim を実行した結果だけ */}
+              <ReactionRows
+                rows={reactionRows}
+                pixelsPerSecond={pixelsPerSecond}
+                totalDuration={totalDuration}
+                timelineTicks={timelineTicks}
+                loopStartTime={loopStartTime}
+                onSeek={onSeek}
+                onTimelineClick={handleTimelineClick}
+              />
+
             </div>
           </div>
         </div>
@@ -2205,17 +2216,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     </div>
                   );
                 })}
-
-              {/* 反応（月反応・星反応）の状態の行（D112）。最後のキャラ出場行と、時間指定のない効果の行の間。gcsim を実行した結果だけ */}
-              <ReactionRows
-                rows={reactionRows}
-                pixelsPerSecond={pixelsPerSecond}
-                totalDuration={totalDuration}
-                timelineTicks={timelineTicks}
-                loopStartTime={loopStartTime}
-                onSeek={onSeek}
-                onTimelineClick={handleTimelineClick}
-              />
 
               {/* 時間指定のない効果の行（常時の効果・継続時間の無い固有天賦。D39-4）。最後のキャラ出場行の下 */}
               <GlobalBuffRow characters={characters} database={database} />

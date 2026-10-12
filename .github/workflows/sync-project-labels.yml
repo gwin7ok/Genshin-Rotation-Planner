@@ -1,0 +1,114 @@
+# プロジェクトの Status に合わせて、Issue のラベルを付け外しする（定期実行）。
+#
+#   プロジェクト: https://github.com/users/gwin7ok/projects/2
+#   Status「In Progress」にある Issue → ラベル「作業中」を付ける（無いものからは外す）
+#   Status「On Hold」にある Issue     → ラベル「保留」を付ける（無いものからは外す）
+#
+# GitHub の仕組み上、個人のプロジェクトの変更は、Actions の起動条件にできないため、15 分おきに、プロジェクトを読んで合わせる
+# （反映は、最大で 15 分ほど遅れる）。
+#
+# 事前の準備（リポジトリの Settings → Secrets and variables → Actions）:
+#   Secret「PROJECT_TOKEN」に、個人用アクセストークン（classic）を登録する。スコープ: `project`・`repo`
+#   （標準の GITHUB_TOKEN は、個人のプロジェクトを読めない）
+#   ※ トークンには期限がある。期限が切れると、この処理は失敗する（Actions のタブに赤く出る）。
+#
+# 手動で実行したいとき: Actions → 「プロジェクトの Status をラベルに反映」→ Run workflow
+
+name: プロジェクトの Status をラベルに反映
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-project-labels
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      REPO: ${{ github.repository }}
+      PROJECT_OWNER: gwin7ok
+      PROJECT_NUMBER: "2"
+      # Status の名前 → ラベル（ここを書き換えると、対応を変えられる）
+      STATUS_WORKING: "In Progress"
+      LABEL_WORKING: "作業中"
+      STATUS_HOLD: "On Hold"
+      LABEL_HOLD: "保留"
+    steps:
+      - name: トークンの確認
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Secret PROJECT_TOKEN が未設定です。リポジトリの Settings → Secrets and variables → Actions に登録してください（スコープ: project, repo）"
+            exit 1
+          fi
+
+      - name: ラベルが無ければ作る
+        run: |
+          gh label create "$LABEL_WORKING" --repo "$REPO" --color "fbca04" --description "作業中（プロジェクトの In Progress に自動で付く）" 2>/dev/null || true
+          gh label create "$LABEL_HOLD" --repo "$REPO" --color "cfd3d7" --description "保留（プロジェクトの On Hold に自動で付く）" 2>/dev/null || true
+
+      - name: プロジェクトの項目を読む
+        run: |
+          set -euo pipefail
+          # 行の形: Status名<TAB>Issue番号（このリポジトリの Issue だけ）
+          gh api graphql --paginate -f owner="$PROJECT_OWNER" -F number="$PROJECT_NUMBER" -f query='
+            query($owner: String!, $number: Int!, $endCursor: String) {
+              user(login: $owner) {
+                projectV2(number: $number) {
+                  items(first: 100, after: $endCursor) {
+                    nodes {
+                      fieldValueByName(name: "Status") {
+                        ... on ProjectV2ItemFieldSingleSelectValue { name }
+                      }
+                      content {
+                        ... on Issue { number repository { nameWithOwner } }
+                      }
+                    }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }' \
+            --jq '.data.user.projectV2.items.nodes[]
+                  | select(.content.number != null and .content.repository.nameWithOwner == env.REPO)
+                  | [(.fieldValueByName.name // ""), (.content.number | tostring)] | @tsv' > items.tsv
+          echo "プロジェクトの項目（このリポジトリの Issue）: $(wc -l < items.tsv) 件"
+          cat items.tsv
+
+      - name: ラベルを合わせる
+        run: |
+          set -euo pipefail
+          lines() { printf '%s\n' "$1" | sed '/^$/d' | sort -u; }
+
+          sync_label() {
+            local status="$1" label="$2"
+            local want have
+            want=$(awk -F'\t' -v s="$status" '$1==s {print $2}' items.tsv)
+            have=$(gh issue list --repo "$REPO" --label "$label" --state all --limit 1000 --json number --jq '.[].number')
+            want=$(lines "$want")
+            have=$(lines "$have")
+            # 付けるもの: want にあって have に無い／外すもの: have にあって want に無い
+            local add remove n
+            add=$(comm -23 <(printf '%s\n' "$want") <(printf '%s\n' "$have") | sed '/^$/d')
+            remove=$(comm -13 <(printf '%s\n' "$want") <(printf '%s\n' "$have") | sed '/^$/d')
+            for n in $add; do
+              echo "付ける: #$n に「$label」（Status: $status）"
+              gh issue edit "$n" --repo "$REPO" --add-label "$label"
+            done
+            for n in $remove; do
+              echo "外す: #$n から「$label」"
+              gh issue edit "$n" --repo "$REPO" --remove-label "$label"
+            done
+            echo "「$label」: 対象 $(printf '%s\n' "$want" | sed '/^$/d' | wc -l) 件（付けた $(printf '%s\n' "$add" | sed '/^$/d' | wc -l)・外した $(printf '%s\n' "$remove" | sed '/^$/d' | wc -l)）"
+          }
+
+          sync_label "$STATUS_WORKING" "$LABEL_WORKING"
+          sync_label "$STATUS_HOLD" "$LABEL_HOLD"

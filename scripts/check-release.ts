@@ -100,7 +100,10 @@ if (!mirror) {
     ng(`sourceMirror の URL を解釈できません: ${mirror.url}`);
   } else {
     try {
-      const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'check-release' };
+      // 認証なしの API は、Actions の共有 IP から呼ぶと、回数の上限（HTTP 403）に当たることがある。トークンがあれば付ける
+      const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+      const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'check-release' };
+      if (token) headers.Authorization = 'Bearer ' + token;
       const res = await fetch(`https://api.github.com/repos/${m[1]}/git/ref/tags/${tag}`, { headers });
       if (res.status === 404) {
         ng(`フォーク ${m[1]} に、タグ ${tag} がありません（docs/gcsim-サーバー更新手順.md の 6-B）`);

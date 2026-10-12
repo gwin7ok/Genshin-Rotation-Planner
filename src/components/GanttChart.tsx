@@ -38,6 +38,8 @@ import { isGroupCopy, moveActionRespectingGroups, stripGroupCopies } from '../ut
 import type { DragPreview } from '../utils/dragPreview';
 import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
+import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
+import { summarizeEquipment, constellationOf } from '../utils/equipmentSummary';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -456,7 +458,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180; // 180px is character header width
+    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH; // 左の見出しの列の幅
     if (clickX >= 0) {
       const time = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
       onSeek(Number(time.toFixed(2)));
@@ -516,7 +518,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH;
     if (clickX >= 0) {
       setHoveredTime(Number((clickX / pixelsPerSecond).toFixed(2)));
     } else {
@@ -612,7 +614,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const onWindowMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+      const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH;
       if (clickX >= 0) {
         const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
         onUpdateLoopStartIndex?.(findClosestLoopBoundaryIndex(rawTime));
@@ -892,13 +894,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             onScroll={handleHeaderScroll}
             className="overflow-x-auto w-full relative border-b border-slate-800 no-scrollbar bg-slate-950"
           >
-            <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none">
+            <div style={{ width: chartWidth + GANTT_LABEL_WIDTH, minWidth: '100%' }} className="relative select-none">
               
               {/* Vertical Handoff Connector Lines through Header Tracks (Behind tracks) */}
               {showConnectors && handoffConnectors.map((conn) => (
                 <div
                   key={`handoff_header_line_${conn.id}`}
-                  style={{ left: `${conn.xPos + 180}px` }}
+                  style={{ left: `${conn.xPos + GANTT_LABEL_WIDTH}px` }}
                   className="absolute top-4 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
                 />
               ))}
@@ -906,14 +908,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               {/* Vertical Loop Boundary Guide Lines through Header Tracks */}
               {loopStartTime > 0 && (
                 <div
-                  style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
+                  style={{ left: `${loopStartTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
                   className="absolute top-7 bottom-0 w-0 border-l-2 border-purple-400/80 border-dotted pointer-events-none z-0"
                 />
               )}
 
               {/* Playhead Vertical Line in Fixed Header: begins directly from bottom tip of ▼ (top-[43px]) down through header tracks to bottom edge */}
               <div
-                style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
+                style={{ left: `${activeTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
                 className={`absolute top-[43px] bottom-0 w-0.5 pointer-events-none z-10 shadow-md ${
                   isPlayheadLoop
                     ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
@@ -923,7 +925,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
               {/* 1. Loop Boundary Separator Track (ループ基準点) */}
               <div className="flex border-b border-purple-900/60 bg-slate-950 items-center h-7 group select-none">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Repeat className="w-3 h-3 text-purple-400 shrink-0" />
                     <span className="truncate">ループ基準点 (0s)</span>
@@ -938,7 +940,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   onClick={(e) => {
                     if (!containerRef.current) return;
                     const rect = containerRef.current.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - 180;
+                    const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH;
                     if (clickX >= 0) {
                       const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
                       onUpdateLoopStartIndex?.(findClosestLoopBoundaryIndex(rawTime));
@@ -1022,7 +1024,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               {/* 2. Top Time Ruler（経過時間の目盛り） */}
               <div className="flex border-b border-slate-800 bg-slate-900 h-6">
                 {/* Left Column Label (Corner: Sticky Left) */}
-                <div className="w-[180px] shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-950 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-950 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span>経過時間</span>
                   <Clock className="w-3 h-3 text-slate-500" />
                 </div>
@@ -1112,7 +1114,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
               {/* 2. Unified Master On-Field Ribbon */}
               <div className="flex border-b border-slate-800 bg-slate-950 items-center h-10 group relative">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-amber-400" />
                     <span>統合出場トラック</span>
@@ -1184,7 +1186,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
               {/* 2.5 Party Buff Synergy & DPS Heatmap Lane */}
               <div className="flex border-b border-slate-800 bg-slate-950 items-center h-8 group relative">
-                <div className="w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
+                <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span className="truncate">バフ重複 (Synergy)</span>
@@ -1261,7 +1263,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           onMouseLeave={() => setHoveredTime(null)}
           className="relative z-10 overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"
         >
-          <div style={{ width: chartWidth + 180, minWidth: '100%' }} className="relative select-none pt-3 pb-4">
+          <div style={{ width: chartWidth + GANTT_LABEL_WIDTH, minWidth: '100%' }} className="relative select-none pt-3 pb-4">
 
             {/* =========================================================================
                 3. Swimlanes: Stint-by-Stint (登場回ごと)
@@ -1443,7 +1445,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     }`}>
                       <div className="flex">
                         {/* Stint Row Header (Left Column: Sticky Left) */}
-                        <div className={`w-[180px] shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
+                        <div style={{ width: GANTT_LABEL_WIDTH }} className={`shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] ${
                           isStintSelected
                             ? 'bg-slate-950 border-l-4 border-l-yellow-400 ring-2 ring-inset ring-yellow-400 shadow-md'
                             : isStintCurrentlyOnField 
@@ -1456,6 +1458,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
                               <div className="flex items-center gap-1 min-w-0">
                                 <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                <span
+                                  className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-rose-500/50 text-rose-300 font-bold shrink-0"
+                                  title={`命ノ星座: ${constellationOf(char)}凸（編成設定で変更）`}
+                                >
+                                  {constellationOf(char)}凸
+                                </span>
                                 <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-700 text-amber-300 font-bold shrink-0">
                                   #{stintIdx + 1}
                                 </span>
@@ -1616,24 +1624,38 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           ))}
 
                           {/* --- Row 0: Top Header Space Match (Height: h-9 = 36px) --- */}
-                          {/* キャラ名の行（左の見出しの 1 行目と同じ高さ）。そのキャラの一番早い出場の行には、時間指定のない効果のうち、このキャラだけに効くものを横に並べる（追加作業 23 / issue #29）。横スクロールしても見えるよう左端に固定 */}
+                          {/* キャラ名の行（左の見出しの 1 行目と同じ高さ）。どの出場の行にも、gcsim 未実装の印・武器と聖遺物・時間指定のない効果のうちこのキャラだけに効くものを並べる（追加作業 23 / issue #29。2 回目以降の出場にも同じものを出す）。横スクロールしても見えるよう左端に固定 */}
                           <MeasuredRow
                             onHeight={(h) => setTopRowHeight(stint.id, h)}
                             className="min-h-9 relative border-b border-slate-800/40 pointer-events-none z-10 flex items-center"
                           >
-                            {stints.findIndex(st => st.characterId === char.id) === stintIdx && ((selfTimelessByChar.get(char.id)?.length ?? 0) > 0 || isGcsimMissingCharacter(char)) && (
-                              <div
-                                data-testid={`self-timeless-${char.id}`}
-                                className="sticky left-[190px] flex flex-wrap items-center gap-1 py-1 pointer-events-auto"
-                                style={{ maxWidth: 'calc(100vw - 240px)' }}
-                              >
-                                <GcsimMissingBadge char={char} />
-                                {(selfTimelessByChar.get(char.id)?.length ?? 0) > 0 && (
-                                  <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
-                                )}
-                                {(selfTimelessByChar.get(char.id) ?? []).map(item => <TimelessBuffChip key={item.key} item={item} />)}
-                              </div>
-                            )}
+                            {(() => {
+                              const eq = summarizeEquipment(char, database);
+                              const timeless = selfTimelessByChar.get(char.id) ?? [];
+                              return (
+                                <div
+                                  data-testid={`self-timeless-${char.id}-${stintIdx}`}
+                                  className="sticky flex flex-wrap items-center gap-x-1 gap-y-0.5 py-1 pointer-events-auto"
+                                  style={{ left: GANTT_LABEL_WIDTH + 10, maxWidth: `calc(100vw - ${GANTT_LABEL_WIDTH + 60}px)` }}
+                                >
+                                  {/* gcsim 未実装のバー → （改行）→ 武器・聖遺物 → （改行）→ このキャラだけの効果のバー */}
+                                  {isGcsimMissingCharacter(char) && <GcsimMissingBadge char={char} />}
+                                  {(eq.weapon || eq.artifact) && (
+                                    <div
+                                      className="basis-full flex flex-wrap items-center gap-x-3 text-[10px] font-semibold select-none"
+                                      data-testid={`equipment-${char.id}-${stintIdx}`}
+                                    >
+                                      {eq.weapon && <span className="text-blue-300"><span className="text-slate-500 font-normal">武器</span> {eq.weapon}</span>}
+                                      {eq.artifact && <span className="text-purple-300"><span className="text-slate-500 font-normal">聖遺物</span> {eq.artifact}</span>}
+                                    </div>
+                                  )}
+                                  {timeless.length > 0 && (
+                                    <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
+                                  )}
+                                  {timeless.map(item => <TimelessBuffChip key={item.key} item={item} />)}
+                                </div>
+                              );
+                            })()}
                           </MeasuredRow>
 
                           {/* --- Row 1: On-field Active Stint & Actions (Height: h-10 = 40px) --- */}
@@ -2208,7 +2230,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             {showConnectors && handoffConnectors.map((conn) => (
               <div
                 key={`handoff_${conn.id}`}
-                style={{ left: `${conn.xPos + 180}px` }}
+                style={{ left: `${conn.xPos + GANTT_LABEL_WIDTH}px` }}
                 className="absolute top-0 bottom-0 w-0 border-l border-amber-400/60 border-dashed pointer-events-none z-0"
               />
             ))}
@@ -2218,7 +2240,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             ========================================================================= */}
             {loopStartTime > 0 && (
               <div
-                style={{ left: `${loopStartTime * pixelsPerSecond + 180}px` }}
+                style={{ left: `${loopStartTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
                 className="absolute top-9 bottom-0 w-0 border-l-2 border-purple-400 border-dotted pointer-events-none z-10 shadow-lg"
               />
             )}
@@ -2230,7 +2252,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 6. Playhead Scrubber Laser (再生カーソル縦棒)
             ========================================================================= */}
             <div
-              style={{ left: `${activeTime * pixelsPerSecond + 180}px` }}
+              style={{ left: `${activeTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
               className={`absolute top-0 bottom-0 w-0.5 pointer-events-none z-20 shadow-lg ${
                 isPlayheadLoop
                   ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
@@ -2241,7 +2263,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             {/* Hover Indicator */}
             {hoveredTime !== null && (
               <div
-                style={{ left: `${hoveredTime * pixelsPerSecond + 180}px` }}
+                style={{ left: `${hoveredTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
                 className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-10"
               >
                 <div className="absolute top-4 left-1 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded">

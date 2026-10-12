@@ -1,4 +1,5 @@
 import React from 'react';
+import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
 import type { ReactionKind, ReactionRow } from '../types/genshin';
 
 /**
@@ -80,7 +81,7 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
     <div className="relative border-b border-slate-800 bg-slate-950/30" data-testid={`reaction-rows-lap${lap}`}>
       <div className="flex">
         {/* 左の列（横スクロールしても見えるよう固定） */}
-        <div className="w-[180px] shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
+        <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
           <div className="h-6 px-2 flex items-center justify-between text-violet-300 text-[10px] font-bold border-b border-slate-800/60">
             <span>🌀 反応（{lap}周目）</span>
             <span className="text-[9px] text-slate-500 font-mono font-normal">gcsim の結果</span>

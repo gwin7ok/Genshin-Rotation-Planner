@@ -2,6 +2,7 @@ import React from 'react';
 import { Globe, User } from 'lucide-react';
 import { CharacterConfig } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
+import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
 import {
   GCSIM_OUT_OF_SCOPE_DEFAULT_REASON,
   TriggerableBuffDefinition,
@@ -71,7 +72,7 @@ export const TimelessBuffRow: React.FC<{
   testId?: string;
 }> = ({ items, label, perCharacter = false, emptyText, testId }) => (
   <div data-testid={testId} className={`flex border-b border-slate-800 items-start group relative min-h-8 ${perCharacter ? 'bg-slate-950/70' : 'bg-slate-950'}`}>
-    <div className={`w-[180px] shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] self-stretch ${perCharacter ? 'text-teal-200' : 'text-teal-300'}`}>
+    <div style={{ width: GANTT_LABEL_WIDTH }} className={`shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] self-stretch ${perCharacter ? 'text-teal-200' : 'text-teal-300'}`}>
       <span className="flex items-center gap-1.5 min-w-0">
         {perCharacter ? <User className="w-3.5 h-3.5 text-teal-400 shrink-0" /> : <Globe className="w-3.5 h-3.5 text-teal-400 shrink-0" />}
         <span className="truncate" title={label}>{label}</span>
@@ -81,7 +82,7 @@ export const TimelessBuffRow: React.FC<{
 
     <div className="relative flex-1 py-1">
       {/* 横スクロールしても見えるよう、左端に固定して折り返す */}
-      <div className="sticky left-[188px] flex flex-wrap items-center gap-1 pr-2" style={{ maxWidth: 'calc(100vw - 220px)' }}>
+      <div className="sticky flex flex-wrap items-center gap-1 pr-2" style={{ left: GANTT_LABEL_WIDTH + 8, maxWidth: `calc(100vw - ${GANTT_LABEL_WIDTH + 40}px)` }}>
         {items.length === 0 ? (
           <span className="text-[11px] text-slate-500 italic">{emptyText ?? 'ありません'}</span>
         ) : (

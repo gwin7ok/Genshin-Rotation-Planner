@@ -294,6 +294,30 @@ export default function App() {
     name?: string;
     totalDuration?: number;
   }) => {
+    // ファイルから読み込んだ編成（slotId なし・名前あり）は、その名前の保存編成として登録する。
+    // 同じ名前の保存編成があるときは、「上書き」か「名前を変更して保存」かを尋ねる（やめたときは、何も読み込まない）
+    let importName: string | null = null;
+    let overwriteTarget: SavedRotationSlot | undefined;
+    if (!slot.slotId && slot.name?.trim()) {
+      importName = slot.name.trim();
+      for (;;) {
+        const dup = findSlotByName(getSavedSlots(), importName);
+        if (!dup) break;
+        const overwrite = window.confirm(
+          `「${importName}」と同じ名前の編成が、すでにあります。\n\n` +
+          `OK: その編成を上書きして保存する\n` +
+          `キャンセル: 名前を変更して保存する`,
+        );
+        if (overwrite) {
+          overwriteTarget = dup;
+          break;
+        }
+        const input = window.prompt('変更後の編成名を入力してください', importName);
+        if (input === null || !input.trim()) return; // やめる
+        importName = input.trim();
+      }
+    }
+
     const loadedChars = resolvePartyCharacters(slot.party, database.characters);
     const loadedStints = filterStintsForCharacters(slot.stints, loadedChars);
     const loopIndex = resolveLoopStartIndex(slot, loadedChars, loadedStints, slot);
@@ -306,13 +330,12 @@ export default function App() {
     setGcsimReactionState(restoredReactions
       ? { rows: restoredReactions, signature: makeReactionSignature(loadedChars, slot.switchDelay ?? 0.50, loopIndex, loadedStints) }
       : null);
-    if (!slot.slotId && slot.name?.trim()) {
-      // 同じ名前の保存編成があるときは、連番を付ける（上書きしない）
-      let name = slot.name.trim();
-      for (let n = 2; findSlotByName(getSavedSlots(), name); n++) name = `${slot.name.trim()} (${n})`;
+    if (importName) {
       const imported: SavedRotationSlot = {
-        id: `slot_${Date.now()}`,
-        name,
+        // 上書きのときは、既存の保存編成の ID・説明を引き継ぐ
+        ...(overwriteTarget ? { description: overwriteTarget.description } : {}),
+        id: overwriteTarget ? overwriteTarget.id : `slot_${Date.now()}`,
+        name: importName,
         updatedAt: new Date().toISOString(),
         party: slot.party,
         stints: slot.stints,

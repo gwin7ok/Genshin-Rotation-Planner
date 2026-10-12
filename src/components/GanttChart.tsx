@@ -1469,9 +1469,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* Row 0: Character Info & Controls (Height: h-9 = 36px) */}
                           <div className="min-h-9 px-2 flex items-center justify-between border-b border-slate-800/80 bg-slate-900/40" style={{ height: Math.max(36, topRowHeights[stint.id] ?? 36) }}>
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
-                              <div className="flex items-center gap-1 min-w-0">
+                              {/* アバター・キャラ名のクリック: 出場トラックだけをフォーカスし（アクションは選択しない）、その開始時刻へ移動して、アクション構築のカードへスクロールする */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const first = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+                                  onSelectAction?.(stint.id, '');
+                                  if (first) onSeek(first.startTime ?? 0);
+                                  scrollStintCardBelowSticky(stint.id);
+                                }}
+                                title={`${char.name}の出場ブロックを選択フォーカス（アクションは選択しない。アクション構築の出場カードへ移動）`}
+                                className="flex items-center gap-1.5 min-w-0 cursor-pointer hover:opacity-80 transition-opacity"
+                              >
+                                <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
                                 <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                              </button>
+                              <div className="flex items-center gap-1 min-w-0">
                                 <span
                                   className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-rose-500/50 text-rose-300 font-bold shrink-0"
                                   title={`命ノ星座: ${constellationOf(char)}凸（編成設定で変更）`}

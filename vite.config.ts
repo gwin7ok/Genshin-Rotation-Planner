@@ -23,7 +23,8 @@ export default defineConfig(() => {
       host: '0.0.0.0',
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       hmr: process.env.DISABLE_HMR !== 'true',
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      // gcsim の WebAssembly 版（44MB。npm run wasm:build が書き換える）は監視しない（書き込み中の EBUSY で開発サーバーが落ちるため）
+      watch: process.env.DISABLE_HMR === 'true' ? null : { ignored: ['**/public/gcsim/main.wasm', '**/public/gcsim/wasm_exec.js', '**/public/gcsim/wasm-info.json'] },
     },
   };
 });

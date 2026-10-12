@@ -66,6 +66,18 @@ npm run lint               # 型チェック
 ```
 `gcsim_key_map.json` などのコミットが設定と食い違うと ✗ が出る。
 
+### 6-B. WebAssembly 版を作り直す（公開サイトが配る gcsim。D169）
+
+1. `npm run wasm:build`（Go が要る。`GO` 環境変数で go の場所を渡せる。`-- --src <展開済みのソース>` でソースの取得を省略できる）。
+   `public/gcsim/main.wasm`・`wasm_exec.js`・`wasm-info.json` が生成される（Git 管理外）。
+2. **ソースの控えを更新する**（AGPL の配布の義務。配布版のコミットを、自分のフォークに置く）:
+   - フォークを同期する: `gh repo sync <自分のアカウント>/gcsim`（または GitHub の「Sync fork」）。フォークの main には、コミットしない。
+   - 配布版のコミットにタグを付けて push する: `git tag app-wasm-<version> <commit>` → `git push origin app-wasm-<version>`（フォークの clone で）。
+   - 古い版の WASM を配り続けている間は、そのタグを消さない。
+3. `gcsim.config.json` の `sourceMirror`（url・tagPrefix）が、フォークと一致していることを確かめる（画面の下部・NOTICE のリンク先になる）。
+4. 画面の確認: アプリの「gcsim で計算」と「gcsim で文法チェック」が、WASM（ブラウザ内）で動くこと。`gcsim_engine` を localStorage に `server` と書くと、localhost のサーバーに切り替えられる。
+5. WASM とサーバーの結果が一致していることを確かめる（`docs/提供方法の検討-WASM検証結果.md` の再現手順 4）。
+
 ### 7. 画面で通し確認する
 - マスターを全件削除 → 再生成 → 登録した状態で、代表的な編成（4キャラ）で「gcsim設定文をコピー」→「gcsim で実行して読み取り結果を見る」を行う。
 - 確認する点: 実行エラーが無い / 「辞書に無いキー」が増えていない / 所要時間・CT・効果時間の変更一覧が、前のバージョンと極端に違わない / CT待ちが出ない編成で出ていない。

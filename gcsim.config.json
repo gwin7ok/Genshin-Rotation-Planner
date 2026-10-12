@@ -5,6 +5,7 @@
   "commit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
   "releasedAt": "2026-10-03",
   "license": "AGPL-3.0-or-later（v2.47.3 以降。v2.47.2 までは MIT）",
+  "sourceMirror": { "url": "https://github.com/gwin7ok/gcsim", "tagPrefix": "app-wasm-" },
   "server": {
     "host": "localhost",
     "port": 54321

@@ -10,6 +10,8 @@ import { GanttChart } from './components/GanttChart';
 import { PartyConfigModal } from './components/PartyConfigModal';
 import { RotationSummaryModal } from './components/RotationSummaryModal';
 import { HelpGuideModal } from './components/HelpGuideModal';
+import { SourceNotice } from './components/SourceNotice';
+import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
@@ -479,7 +481,9 @@ export default function App() {
     setGcsimComputing(false);
     if (outcome.status !== 'ok') {
       setGcsimBanner(outcome.status === 'unreachable'
-        ? { level: 'error', title: 'gcsim サーバーに接続できませんでした', message: outcome.message + '\nサーバーを起動してください（npm run gcsim:start）。' }
+        ? (getLastGcsimEngine() === 'wasm'
+          ? { level: 'error', title: 'gcsim（ブラウザ内の WebAssembly 版）を実行できませんでした', message: outcome.message + '\nページを再読み込みしてください。直らないときは、別のブラウザをお試しください。' }
+          : { level: 'error', title: 'gcsim サーバーに接続できませんでした', message: outcome.message + '\nサーバーを起動してください（npm run gcsim:start）。' })
         : { level: 'error', title: 'gcsim の実行エラー', message: outcome.message });
       return;
     }
@@ -787,6 +791,7 @@ export default function App() {
         <p>
           原神戦闘ローテーション ガントチャート設計ツール ✦ 出場ターンの数珠つなぎ（直列スナップ）とクールタイム・バフ重複可視化
         </p>
+        <SourceNotice />
       </footer>
     </div>
   );

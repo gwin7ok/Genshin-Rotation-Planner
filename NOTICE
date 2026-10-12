@@ -1,6 +1,6 @@
 Genshin Rotation Planner — 第三者のソフトウェア・データについての表示 (NOTICE)
 
-このリポジトリのアプリ本体のライセンスは、まだ決まっていない（LICENSE ファイルは無い）。
+このアプリ本体のライセンスは、GNU Affero General Public License v3.0 以降（AGPL-3.0-or-later。LICENSE ファイル。2026-10-12 決定。D169）。
 以下は、このアプリが利用している第三者のソフトウェア・データと、その扱い。
 
 --------------------------------------------------------------------------------
@@ -17,9 +17,17 @@ Copyright (c) 2021 The gcsim contributors
 このアプリが依存するバージョン: gcsim.config.json の `version` / `commit`
   対応するソースコード（Corresponding Source）: https://github.com/genshinsim/gcsim/tree/<commit>
   （<commit> は gcsim.config.json の `commit`。現在の版は同ファイルを参照）
+  配布版（WebAssembly 版）のソースの控え: gcsim.config.json の `sourceMirror`（自分の GitHub のフォーク。配布版のコミットに、タグ `<tagPrefix><version>` を付ける）
 
 このアプリでの使い方:
+  (c) gcsim の WebAssembly 版（public/gcsim/main.wasm・wasm_exec.js。このアプリの公開サイトが、画面と一緒に配る）
+      - gcsim.config.json のコミットのソースを、**無改変**で、`npm run wasm:build`（GOOS=js GOARCH=wasm go build -trimpath ./cmd/wasm）でビルドしたもの。
+        ビルドの条件（コミット・Go のバージョン・コマンド・SHA-256）は、public/gcsim/wasm-info.json に残す。
+      - 利用者のブラウザの中（Web Worker）で動く。画面の JavaScript とは、メッセージ（JSON の文字列）だけでやり取りする。
+      - 配布に当たるので、AGPL-3.0 の義務として、(1) ソースの入手先を画面の下部に出す (2) LICENSE（全文）と本 NOTICE を同梱する (3) ビルドを再現できるようにする。
+      - この生成物は Git に入れない（.gitignore）。公開サイトのビルドの前に `npm run wasm:build` を実行する。
   (a) gcsim サーバー（実行ファイル）
+      - 開発・検証用と、将来のネイティブアプリ（ランチャー）での利用。公開サイトの既定は (c)。
       - 公式リリース（https://github.com/genshinsim/gcsim/releases）の `server_*` を、利用者のマシンに取得して使う。
         `npm run gcsim:install` が、gcsim.config.json の URL から取得し、SHA-256 を検証する。
       - この実行ファイルは、このリポジトリに含めない（.gcsim/ は Git 管理外）。このアプリは gcsim を配布しない。

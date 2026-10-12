@@ -297,7 +297,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               type="button"
               onClick={() => updateStintAt(stintIndex, cur => ungroup(cur, run.id))}
               className="px-1.5 py-0.5 rounded border border-fuchsia-500/50 text-fuchsia-200 hover:bg-fuchsia-500/20 font-sans text-[10px]"
-              title="グループを解除（中のアクションは、そのまま残ります）"
+              title="グループを解除します（今の回数のまま、中のアクションを回数ぶん並べた通常のアクションにします）"
             >
               解除
             </button>
@@ -1344,15 +1344,15 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         </button>
                       ))}
                       {/* グループ化（Ctrl+クリックで選んだ、隣接するアクション。追加作業 20-A） */}
-                      {multiSel && multiSel.stintId === stint.id && multiSel.ids.length >= 2 && (
+                      {multiSel && multiSel.stintId === stint.id && multiSel.ids.length >= 1 && (
                         <button
                           type="button"
                           onClick={() => groupSelected(stintIndex)}
                           disabled={createGroup(stint, multiSel.ids) === null}
                           className="px-2 py-0.5 rounded border border-fuchsia-500/60 bg-fuchsia-500/10 text-fuchsia-200 font-mono text-[11px] hover:bg-fuchsia-500/20 disabled:opacity-40"
-                          title={createGroup(stint, multiSel.ids) === null ? '隣接していて、グループに入っていないアクションを選んでください' : '選んだアクションを、1 つのグループにします（回数を設定できます）'}
+                          title={createGroup(stint, multiSel.ids) === null ? '隣接していて、グループに入っていないアクションを選んでください' : multiSel.ids.length === 1 ? '選んだアクションを、繰り返すグループにします（作成後に回数を設定します。記法は 3C のように書きます）' : '選んだアクションを、1 つのグループにします（回数を設定できます）'}
                         >
-                          {multiSel.ids.length} 個をグループ化
+                          {multiSel.ids.length === 1 ? '1 個を繰り返す（グループ化）' : `${multiSel.ids.length} 個をグループ化`}
                         </button>
                       )}
                       {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
@@ -1487,7 +1487,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                     const current = prev && prev.stintId === stint.id
                                       ? prev.ids
                                       : (selectedAction?.stintId === stint.id && selectedAction.actionId ? [selectedAction.actionId] : []);
-                                    const ids = current.includes(act.id) ? current.filter(x => x !== act.id) : [...current, act.id];
+                                    const fromSingleSelected = !(prev && prev.stintId === stint.id) && current.length === 1 && current[0] === act.id;
+                                    const ids = fromSingleSelected ? current : current.includes(act.id) ? current.filter(x => x !== act.id) : [...current, act.id];
                                     return ids.length > 0 ? { stintId: stint.id, ids } : null;
                                   });
                                   return;

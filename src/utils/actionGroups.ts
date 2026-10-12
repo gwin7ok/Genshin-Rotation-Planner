@@ -2,7 +2,8 @@ import type { CharacterActionInstance, Stint } from '../types/genshin';
 
 /**
  * アクションのグループ化（追加作業 20-A / issue #33）。
- *   - 同じ出場ブロックの、隣接するアクションをグループにできる。グループは Stint.groups（回数）と、各アクションの groupId で持つ（入れ子は無し）
+ *   - 同じ出場ブロックの、隣接するアクションをグループにできる。**1 つのアクションだけのグループも作れる**（そのアクションを繰り返す。記法は `3C`）。
+ *     グループは Stint.groups（回数）と、各アクションの groupId で持つ（入れ子は無し）
  *   - 回数 n のグループは、計算・gcsim の設定文では、中のアクションを n 回、続けて置いたものとして扱う（expandGroupedStints）
  *   - 展開で増えたアクションの複製（groupCopy = 2 回目以降の何回目か）は、保存しない（stripGroupCopies）
  */
@@ -49,7 +50,7 @@ export function expandGroupedStints(stints: Stint[]): Stint[] {
   });
 }
 
-/** グループの整合を取る: 2 つ未満・隣接でないグループは解除し、使われていないグループの項目を消す */
+/** グループの整合を取る: 空・隣接でないグループは解除し、使われていないグループの項目を消す（1 つだけのグループは有効） */
 export function normalizeGroups(stint: Stint): Stint {
   const actions = stripGroupCopies(stint.actions);
   const ids = new Set(actions.map(a => a.groupId).filter((g): g is string => !!g));
@@ -59,7 +60,7 @@ export function normalizeGroups(stint: Stint): Stint {
   for (const id of ids) {
     const mine = runs.filter(r => r.id === id);
     const members = actions.filter(a => a.groupId === id).length;
-    if (mine.length === 1 && members >= 2) valid.add(id);
+    if (mine.length === 1 && members >= 1) valid.add(id);
   }
   const nextActions = actions.map(a => {
     if (!a.groupId || valid.has(a.groupId)) return a;
@@ -71,11 +72,14 @@ export function normalizeGroups(stint: Stint): Stint {
   return groups.length > 0 ? { ...rest, actions: nextActions, groups } : { ...rest, actions: nextActions };
 }
 
-/** 隣接するアクションを、グループにする（回数 1）。隣接していない・グループ済みのものを含む・2 つ未満・交代アクションを含むときは、null */
+/**
+ * 隣接するアクションを、グループにする。隣接していない・グループ済みのものを含む・空・交代アクションを含むときは、null。
+ * 回数の初期値は 1（ユーザー決定 2026-10-12。作成した後に、回数を設定する。1 つのアクションのグループも同じ）
+ */
 export function createGroup(stint: Stint, actionIds: string[]): Stint | null {
   const actions = stripGroupCopies(stint.actions);
   const idx = actionIds.map(id => actions.findIndex(a => a.id === id)).sort((a, b) => a - b);
-  if (idx.length < 2 || idx.some(i => i < 0)) return null;
+  if (idx.length < 1 || idx.some(i => i < 0)) return null;
   for (let k = 1; k < idx.length; k++) if (idx[k] !== idx[k - 1] + 1) return null;
   const members = idx.map(i => actions[i]);
   if (members.some(m => m.groupId || m.type === 'swap')) return null;
@@ -88,16 +92,38 @@ export function createGroup(stint: Stint, actionIds: string[]): Stint | null {
   };
 }
 
+/**
+ * グループを解除する。**解除の時点の回数のまま**、中のアクションを回数ぶん並べた通常のアクションにする
+ * （回数 3 のグループ [N C] → N C N C N C。ユーザー決定 2026-10-12）。回数 1 なら、並びはそのまま。
+ * 2 回目以降のアクションは、新しい ID の独立したアクション（元と同じ内容）になる。
+ */
 export function ungroup(stint: Stint, groupId: string): Stint {
-  return normalizeGroups({
-    ...stint,
-    actions: stripGroupCopies(stint.actions).map(a => {
-      if (a.groupId !== groupId) return a;
-      const { groupId: _removed, ...rest } = a;
-      return rest as CharacterActionInstance;
-    }),
-    groups: (stint.groups ?? []).filter(g => g.id !== groupId),
+  const base = stripGroupCopies(stint.actions);
+  const repeat = Math.max(1, Math.floor(stint.groups?.find(g => g.id === groupId)?.repeat ?? 1));
+  const run = groupRuns({ actions: base, groups: stint.groups }).find(r => r.id === groupId);
+  const usedIds = new Set(base.map(a => a.id));
+  const withoutGroup = (a: CharacterActionInstance): CharacterActionInstance => {
+    const { groupId: _removed, ...rest } = a;
+    return rest as CharacterActionInstance;
+  };
+  const freshId = (baseId: string, k: number): string => {
+    let id = `${baseId}_r${k}`;
+    for (let n = 2; usedIds.has(id); n++) id = `${baseId}_r${k}_${n}`;
+    usedIds.add(id);
+    return id;
+  };
+  const actions: CharacterActionInstance[] = [];
+  base.forEach((a, i) => {
+    actions.push(a.groupId === groupId ? withoutGroup(a) : a);
+    if (!run || repeat <= 1 || run.end !== i) return;
+    const members = base.slice(run.start, run.end + 1);
+    for (let k = 1; k < repeat; k++) {
+      for (const m of members) actions.push({ ...withoutGroup(m), id: freshId(m.id, k) });
+    }
   });
+  const groups = (stint.groups ?? []).filter(g => g.id !== groupId);
+  const { groups: _g, ...rest } = stint;
+  return normalizeGroups(groups.length > 0 ? { ...rest, actions, groups } : { ...rest, actions });
 }
 
 export function setGroupRepeat(stint: Stint, groupId: string, repeat: number): Stint {

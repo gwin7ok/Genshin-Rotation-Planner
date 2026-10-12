@@ -869,6 +869,12 @@ export interface ReactionRowRef {
   segments: { start: ReactionAnchor; end: ReactionAnchor; count?: number }[];
 }
 
+/** 保存する反応の行（gcsim の実行結果。gcsim のバージョンが違うものは、復元しない） */
+export interface SavedReactions {
+  gcsimVersion: string;
+  rows: ReactionRowRef[];
+}
+
 /** 反応の区間（アプリの時刻。ガントチャートの「反応」の行に出す） */
 export interface ReactionRow {
   kind: ReactionKind;
@@ -927,5 +933,7 @@ export interface SavedRotationSlot {
   loopStartTime?: number;
   totalDuration?: number;
   switchDelay?: number;
+  /** gcsim の実行結果の反応の行（月・星の反応・草露・月露）。gcsim のバージョンつき */
+  reactions?: SavedReactions;
 }
 

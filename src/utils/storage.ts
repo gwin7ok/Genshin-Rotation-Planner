@@ -1,4 +1,4 @@
-import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types/genshin';
+import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
 
@@ -11,6 +11,8 @@ export interface ActiveRotationState {
   /** 旧形式のループ基準（秒）。読込時に loopStartIndex へ変換する */
   loopStartTime?: number;
   switchDelay?: number;
+  /** gcsim の実行結果の反応の行（gcsim のバージョンつき） */
+  reactions?: SavedReactions;
   /** 現在読み込んでいるユーザー保存編成（スロット）のID */
   activeSlotId?: string | null;
   lastSavedAt: string;

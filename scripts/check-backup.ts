@@ -205,6 +205,48 @@ check('設定: 既定値と、保存・読み込みの往復', () => {
   assert.equal(settings.loadHurt().enabled, true);
 });
 
+// --- 反応の行（gcsim の結果）の保存: gcsim のバージョンつき。古いバージョンのものは出さない（D205） ---
+const savedReactions = await server.ssrLoadModule('/src/utils/gcsim/savedReactions.ts');
+const gcsimConfig = await server.ssrLoadModule('/src/utils/gcsim/gcsimConfig.ts');
+const sampleRows = [
+  { kind: 'verdantdew', lap: 1, max: 3, segments: [{ start: { actionId: 'a1', offset: 0.5 }, end: { actionId: 'a2', offset: 0 }, count: 2 }] },
+  { kind: 'lunarcharged', lap: 2, segments: [{ start: { actionId: 'a3', offset: 0 }, end: { actionId: 'a3', offset: 5.5 } }] },
+];
+
+check('反応の行: 保存 → 読み込みで、同じ内容に戻る（gcsim のバージョンつき）', () => {
+  const packed = savedReactions.packReactions(sampleRows);
+  assert.equal(packed.gcsimVersion, gcsimConfig.GCSIM_VERSION);
+  assert.deepEqual(savedReactions.unpackReactions(JSON.parse(JSON.stringify(packed))), sampleRows);
+});
+check('反応の行: 無い・空は、保存しない', () => {
+  assert.equal(savedReactions.packReactions(null), undefined);
+  assert.equal(savedReactions.packReactions([]), undefined);
+  assert.equal(savedReactions.unpackReactions(undefined), null);
+});
+check('反応の行: gcsim のバージョンが違う（古い計算結果）は、出さない', () => {
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: 'v0.0.0', rows: sampleRows }), null);
+  assert.equal(savedReactions.unpackReactions({ rows: sampleRows }), null);
+  assert.deepEqual(savedReactions.unpackReactions({ gcsimVersion: 'v9.9.9', rows: sampleRows }, 'v9.9.9'), sampleRows);
+});
+check('反応の行: 形が壊れているものは、出さない（落ちない）', () => {
+  const v = gcsimConfig.GCSIM_VERSION;
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: v, rows: [{ kind: 'unknown', lap: 1, segments: [] }] }), null);
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: v, rows: [{ kind: 'verdantdew', lap: 3, segments: [] }] }), null);
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: v, rows: [{ kind: 'verdantdew', lap: 1, segments: [{ start: {}, end: {} }] }] }), null);
+  assert.equal(savedReactions.unpackReactions('x'), null);
+});
+check('反応の行: 保存編成・現在の編成・バックアップの往復で、残る', () => {
+  const packed = savedReactions.packReactions(sampleRows);
+  storage.saveSlot({ ...slot('slot_r', '反応つき', '2026-10-03T00:00:00.000Z'), reactions: packed });
+  storage.saveActiveState({ party: [member('10000025-hydro')], stints: [{ id: 'cur2', characterId: '10000025-hydro', note: '', actions: [] }], loopStartIndex: 0, switchDelay: 0.5, activeSlotId: null, reactions: packed });
+  const text2 = JSON.stringify(backup.buildBackup(new Date('2026-10-12T00:00:00Z')));
+  const parsed = backup.parseBackup(text2);
+  assert.equal(parsed.ok, true);
+  const s = parsed.backup.savedSlots.find((x: any) => x.id === 'slot_r');
+  assert.deepEqual(savedReactions.unpackReactions(s.reactions), sampleRows);
+  assert.deepEqual(savedReactions.unpackReactions(parsed.backup.currentState.reactions), sampleRows);
+});
+
 // --- 規則: localStorage を、persistence.ts 以外から直接呼ばない ---
 check('規則: src/ の localStorage の直接呼び出しは persistence.ts だけ', () => {
   const offenders: string[] = [];

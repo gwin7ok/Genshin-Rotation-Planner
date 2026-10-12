@@ -18,7 +18,7 @@ import {
   Users,
   ChevronRight
 } from 'lucide-react';
-import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types/genshin';
+import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
@@ -39,6 +39,8 @@ interface SaveLoadModalProps {
   loopStartIndex: number;
   totalDuration: number;
   switchDelay?: number;
+  /** 今の反応の行（gcsim の結果。保存する形。無ければ undefined） */
+  reactions?: SavedReactions;
   activeSlotId: string | null;
   /** 保存スロット一覧が変わったとき。currentSlotId を渡すと「現在読み込み中の編成」もそのIDに更新する */
   onSlotsChanged: (slots: SavedRotationSlot[], currentSlotId?: string | null) => void;
@@ -51,6 +53,7 @@ interface SaveLoadModalProps {
     name?: string;
     totalDuration?: number;
     slotId?: string;
+    reactions?: unknown;
   }) => void;
   onResetToDefault: () => void;
 }
@@ -66,6 +69,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   loopStartIndex,
   totalDuration,
   switchDelay,
+  reactions,
   activeSlotId,
   onSlotsChanged,
   onLoadSlot,
@@ -127,6 +131,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime,
       totalDuration,
       switchDelay,
+      reactions,
     };
     const updated = saveSlot(newSlot);
     setSavedSlots(updated);
@@ -146,6 +151,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime,
       totalDuration,
       switchDelay,
+      reactions,
       updatedAt: new Date().toISOString(),
     };
     const updated = saveSlot(updatedSlot);
@@ -172,6 +178,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       switchDelay: slot.switchDelay,
+      reactions: slot.reactions,
       name: slot.name,
       slotId: slot.id,
     });
@@ -189,6 +196,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime: slot.loopStartTime ?? 0,
       totalDuration: slot.totalDuration,
       switchDelay: slot.switchDelay,
+      reactions: slot.reactions,
       exportedAt: new Date().toISOString(),
     } : {
       name: newSlotName || '原神ローテーション',
@@ -198,6 +206,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartTime,
       totalDuration,
       switchDelay,
+      reactions,
       exportedAt: new Date().toISOString(),
     };
 
@@ -220,6 +229,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartIndex: slot.loopStartIndex,
       loopStartTime: slot.loopStartTime ?? 0,
       totalDuration: slot.totalDuration,
+      reactions: slot.reactions,
       exportedAt: new Date().toISOString(),
     } : {
       name: newSlotName || '原神ローテーション',
@@ -228,6 +238,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       loopStartIndex,
       loopStartTime,
       totalDuration,
+      reactions,
       exportedAt: new Date().toISOString(),
     };
 
@@ -255,6 +266,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
             name: parsed.name || nameFromFileName(file.name),
             totalDuration: parsed.totalDuration,
             switchDelay: parsed.switchDelay,
+            reactions: parsed.reactions,
           });
           onClose();
         } else {
@@ -324,6 +336,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           name: parsed.name,
           totalDuration: parsed.totalDuration,
           switchDelay: parsed.switchDelay,
+          reactions: parsed.reactions,
         });
         onClose();
       } else {

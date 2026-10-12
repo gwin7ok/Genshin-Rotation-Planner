@@ -74,6 +74,9 @@ jobs:
 
       - name: 公開前の検査（WASM の SHA-256・コミットの一致・フォークのタグ・LICENSE）
         run: npm run check:release
+        env:
+          # フォークのタグの確認（GitHub API）の回数制限（HTTP 403）を避けるため、トークンを渡す
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/configure-pages@v5
 

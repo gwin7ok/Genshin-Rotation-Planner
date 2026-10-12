@@ -1,6 +1,6 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
-import { isRevelationCapable } from '../masterdata/revelationCharacters';
+import { isRevelationCapable, revelationTooltip } from '../masterdata/revelationCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -219,12 +219,12 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     </label>
                   )}
 
-                  {/* 論示（八重神子）: 対応するキャラだけ。キャラカードの左下 */}
+                  {/* 論示（八重神子・七七）: 対応するキャラだけ。キャラカードの左下 */}
                   {!isEmptySlotCharacter(c) && isRevelationCapable(c) && (
                     <label
                       className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-sky-300 cursor-pointer select-none"
                       onClick={(e) => e.stopPropagation()}
-                      title="「論示」を達成済み。殺生桜が爆発で壊れなくなり、寿命が 10 秒長くなります（gcsim の `revelation` パラメータ。既定は達成済み）"
+                      title={revelationTooltip(c.source?.gcsimKey)}
                     >
                       <input
                         type="checkbox"

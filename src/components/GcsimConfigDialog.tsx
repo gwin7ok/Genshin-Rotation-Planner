@@ -191,7 +191,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               onClick={handleValidate}
               disabled={validating}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700/80 hover:bg-emerald-600 disabled:opacity-50 text-white border border-emerald-500/60"
-              title="gcsim ローカルサーバー（localhost:54321）で、この設定文の文法をチェックします（実行はしません）"
+              title="gcsim で、この設定文の文法をチェックします（実行はしません。ブラウザ内の WebAssembly 版。無ければ localhost:54321 のサーバー）"
             >
               {validating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
               <span>{validating ? 'チェック中...' : 'gcsim で文法チェック'}</span>

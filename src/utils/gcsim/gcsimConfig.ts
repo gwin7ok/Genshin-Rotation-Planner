@@ -20,6 +20,8 @@ export interface GcsimConfig {
   commit: string;
   releasedAt: string;
   license: string;
+  /** 配布している gcsim の WebAssembly 版のソースの入手先（自分の GitHub のフォーク。配布版のコミットに、`<tagPrefix><version>` のタグを付ける） */
+  sourceMirror?: { url: string; tagPrefix: string };
   server: { host: string; port: number };
   /** キー: `<process.platform>-<process.arch>`（例: win32-x64） */
   assets: Record<string, GcsimAsset>;

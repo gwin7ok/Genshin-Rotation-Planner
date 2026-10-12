@@ -9,3 +9,8 @@ coverage/
 
 # gcsim サーバーの実行ファイル（公式リリースから取得。gcsim.config.json のバージョン・SHA-256 で固定。AGPL のため Git に入れない）
 .gcsim/
+
+# gcsim の WebAssembly 版（npm run wasm:build で、gcsim.config.json のコミットのソースから生成。AGPL-3.0）
+public/gcsim/main.wasm
+public/gcsim/wasm_exec.js
+public/gcsim/wasm-info.json

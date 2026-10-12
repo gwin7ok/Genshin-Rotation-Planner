@@ -108,6 +108,17 @@ export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
 }
 
 /**
+ * 保存編成の一覧を、そのまま置き換える（バックアップの復元用。更新日時は書き換えない）
+ */
+export function replaceSavedSlots(slots: SavedRotationSlot[]): void {
+  try {
+    localStorage.setItem(SAVED_SLOTS_KEY, JSON.stringify(slots));
+  } catch (e) {
+    console.warn('Failed to replace saved slots in localStorage:', e);
+  }
+}
+
+/**
  * Delete a custom slot
  */
 export function deleteSlot(slotId: string): SavedRotationSlot[] {

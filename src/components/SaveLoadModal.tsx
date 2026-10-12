@@ -22,7 +22,8 @@ import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
-import { rotationFileName, nameFromFileName } from '../utils/rotationFile';
+import { rotationFileName, nameFromFileName, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
+import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 
 interface SaveLoadModalProps {
@@ -267,6 +268,49 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     e.target.value = '';
   };
 
+  // 全データのバックアップ（全スロット・設定・利用者のデータ）の書き出し
+  const handleExportBackup = () => {
+    const backup = buildBackup();
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${APP_FILE_PREFIX}_バックアップ_${fileTimestamp()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    const s = summarizeBackup(backup);
+    setSaveSuccessMsg(`全データのバックアップを書き出しました（保存編成 ${s.slots} 件・設定 ${s.settings} 件・作成したデータ ${s.characters + s.weapons + s.artifacts} 件）`);
+  };
+
+  // 全データのバックアップの復元（確認 → 復元 → 画面の再読み込み）
+  const handleImportBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const parsed = parseBackup(String(ev.target?.result ?? ''));
+      if (!parsed.ok) {
+        alert((parsed as { ok: false; error: string }).error);
+        return;
+      }
+      const s = summarizeBackup(parsed.backup);
+      const lines = [
+        'このバックアップから、次の内容を復元します。',
+        `・保存編成 ${s.slots} 件（同じ ID は、バックアップのほうが新しいときだけ置き換え）`,
+        `・設定 ${s.settings} 件`,
+        `・作成・ロックしたキャラ ${s.characters} 件・武器 ${s.weapons} 件・聖遺物 ${s.artifacts} 件`,
+        s.hasCurrentState ? '・現在の編成（今の編集内容は、バックアップのものに置き換わります）' : '・現在の編成は含まれていません',
+        '',
+        '復元後、画面を再読み込みします。よろしいですか？',
+      ];
+      if (!window.confirm(lines.join('\n'))) return;
+      restoreBackup(parsed.backup, { restoreCurrent: true });
+      window.location.reload();
+    };
+    reader.readAsText(file);
+  };
+
   // Import JSON from text area
   const handleImportText = () => {
     try {
@@ -278,6 +322,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           loopStartIndex: parsed.loopStartIndex,
           loopStartTime: parsed.loopStartTime ?? 0,
           name: parsed.name,
+          totalDuration: parsed.totalDuration,
+          switchDelay: parsed.switchDelay,
         });
         onClose();
       } else {
@@ -571,6 +617,31 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           ) : (
             /* JSON Tab */
             <div className="space-y-4">
+              {/* 全データのバックアップ（引っ越し・端末の変更・配信先の移行用） */}
+              <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-700/40 space-y-3">
+                <div>
+                  <h4 className="text-xs font-bold text-amber-200">全データのバックアップ（引っ越し・端末の変更用）</h4>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    保存編成（すべて）・現在の編成・設定・作成/ロックしたキャラ・武器・聖遺物を、1 つのファイルにまとめます。
+                    ブラウザのデータを消す前や、別のブラウザ・端末・サイトの URL が変わるときに使います。
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    onClick={handleExportBackup}
+                    className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-2 text-left"
+                  >
+                    <Download className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-bold text-white">全データを書き出す</span>
+                  </button>
+                  <label className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-sky-400 transition-all flex items-center gap-2 cursor-pointer">
+                    <Upload className="w-4 h-4 text-sky-400" />
+                    <span className="text-xs font-bold text-white">バックアップから復元する</span>
+                    <input type="file" accept=".json" onChange={handleImportBackup} className="hidden" />
+                  </label>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   onClick={() => handleExportJsonFile()}

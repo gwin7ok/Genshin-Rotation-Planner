@@ -160,7 +160,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     });
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
     // ヘクセレイ（魔女の宿題クリア）に対応するキャラは、明示的に渡す（gcsim の既定は有効）
-    // 論示（八重神子・七七）も同じく、明示的に渡す（gcsim の既定は達成済み）
+    // 諭示（八重神子・七七）も同じく、明示的に渡す（gcsim の既定は達成済み）
     const paramList = [
       ...(HEXEREI_GCSIM_KEYS.has(key) ? [`${HEXEREI_GCSIM_PARAM}=${c.hexerei === false ? 0 : 1}`] : []),
       ...(REVELATION_GCSIM_KEYS.has(key) ? [`${REVELATION_GCSIM_PARAM}=${c.revelation === false ? 0 : 1}`] : []),

@@ -1100,7 +1100,7 @@ export function calculateRotation(
 
       // 八重神子: 爆発が、場の殺生桜 1 つにつき、スキルの CT を 1 回分戻す（固有天賦 1）
       if (act.type === 'burst' && actionDef?.releasesSkillPerTotem) {
-        // 効果バー: 論示が未達成なら、爆発で桜が全部壊れる（バーをここで切る）
+        // 効果バー: 諭示が未達成なら、爆発で桜が全部壊れる（バーをここで切る）
         const barTracker = barTotems.get(char.id);
         if (barTracker) {
           const present = barTracker.burst(actionStartTime, !isRevelation(char));
@@ -1370,7 +1370,7 @@ export function calculateRotation(
         effectSpan.name = `${char.name} ${act.shortName}: ${burstVariantMode.def.burstVariant.effectLabel}`;
         effectSpan.description = burstVariantMode.def.burstVariant.name;
       }
-      // 殺生桜（八重神子）: バーは、桜が現れる位置から始まり、寿命（効果継続時間 + 論示で +10 秒）で終わる。4 つ目が出ると最古が消え、バーをそこで切る
+      // 殺生桜（八重神子）: バーは、桜が現れる位置から始まり、寿命（効果継続時間 + 諭示で +10 秒）で終わる。4 つ目が出ると最古が消え、バーをそこで切る
       if (effectSpan && isSkill && actionDef?.spawnsTotem) {
         const tt = totemTiming(actionDef.spawnsTotem, effectSpan.duration, isRevelation(char));
         effectSpan.startTime = Number((actionStartTime + tt.delay).toFixed(3));
@@ -2133,7 +2133,7 @@ function buildBuffOverlapSegments(buffs: ActiveBuffSpan[], totalDuration: number
 /**
  * 殺生桜（行を持つバー）の 2 周目折り返し。1 周目の終わりに残る桜を初期状態にして、ループの区間の桜の設置・爆発を時刻順に流す（2 周目の動きの再現）。
  *   - 置き換えられた（最古として押し出された）持ち越しの桜は、その時刻で切る。置き換えた新しい桜のバーの行を、持ち越しバーの行にする（同じ行で、持ち越しが終わる時刻 = 新しいバーが始まる時刻）
- *   - 爆発で壊れた桜（論示未達成）は、その時刻で切る
+ *   - 爆発で壊れた桜（諭示未達成）は、その時刻で切る
  *   - 置き換えられずに寿命で終わる桜は、1 周目のバーが使っていない行に置く（全部埋まるときは、元の行）
  */
 function wrapTotems(

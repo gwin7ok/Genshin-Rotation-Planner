@@ -2,9 +2,9 @@
  * 設置物（八重神子の殺生桜）の数え方（2026-10-09。D81）。
  *
  * gcsim（yaemiko/kitsune.go）の動き:
- *   - スキルを使うと、skillStart（34f）後に桜が 1 つ出る。寿命は決まった長さ（論示を達成していると +10 秒）
+ *   - スキルを使うと、skillStart（34f）後に桜が 1 つ出る。寿命は決まった長さ（諭示を達成していると +10 秒）
  *   - 場に 3 つあるときに出ると、最古の桜が消える（押し出し）
- *   - 爆発は、場にある桜 1 つにつき、スキルの CT を 1 回分戻す。論示が未達成なら、そのあと桜が全部壊れる
+ *   - 爆発は、場にある桜 1 つにつき、スキルの CT を 1 回分戻す。諭示が未達成なら、そのあと桜が全部壊れる
  *
  * CT の判定（rotationCalculator の checkCooldownViolations）と、効果バーの計算（1 周目の線形の計算）の両方で、同じ数え方を使う。
  * 桜の寿命は、スキルの効果継続時間（act.effectDuration ?? def.effectDuration）が 1 か所だけの元になる。
@@ -64,7 +64,7 @@ export class TotemTracker<T = undefined> {
   }
 
   /**
-   * 時刻 t の爆発。場にある桜を返す（1 つにつき CT を 1 回分戻す）。論示が未達成（destroy）なら、桜は全部、その時刻で壊れる
+   * 時刻 t の爆発。場にある桜を返す（1 つにつき CT を 1 回分戻す）。諭示が未達成（destroy）なら、桜は全部、その時刻で壊れる
    */
   burst(t: number, destroy: boolean): Totem<T>[] {
     const present = this.alive(t);

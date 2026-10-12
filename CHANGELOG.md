@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-13
+
 ### 変更
 - gcsim の計算エンジン（main.wasm）のビルドから、デバッグ情報を除き、サイズを小さくした（約 44.3 MB → 42.5 MB。配信時の転送量は約 0.2 MB 減る。計算結果は変わらない）。
 
@@ -66,6 +68,7 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/releases/tag/v1.0.0

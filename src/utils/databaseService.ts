@@ -1,6 +1,7 @@
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { ActionDefinition, CharacterConfig } from '../types/genshin';
 import { INITIAL_MASTER_DATABASE, DATABASE_VERSION, MASTER_WEAPONS, MASTER_ARTIFACTS } from '../data/databaseMaster';
+import { noteStoredDbVersion } from './versionNotice';
 import { migrateLegacyCharacter } from './legacyMigration';
 import {
   generateCharacterMaster,
@@ -144,6 +145,9 @@ export function loadDatabase(): AppDatabase {
     }
 
     const characters = parsed.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
+
+    // 更新の通知の判定用に、置き換え前の DB のバージョンを残す（記録が無いときだけ。versionNotice.ts）
+    noteStoredDbVersion(parsed.version ?? 0);
 
     // 旧バージョンの DB: マスター由来のデータは同梱の最新マスター（★4:R5, ★5:R1など）に置き換え、ユーザー作成・ロック中のアイテムは保護
     if ((parsed.version ?? 0) < DATABASE_VERSION) {

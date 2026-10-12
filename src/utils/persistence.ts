@@ -38,6 +38,8 @@ export const DEVICE_KEYS = {
   gcsimEngine: 'gcsim_engine',
   /** 構築エリアのガイド（アクション凡例・操作のヒント）の表示（'false' = 非表示。既定: 表示） */
   editorGuideVisible: 'editor_guide_visible',
+  /** 利用者が最後に確認した、DB（マスターデータ）のバージョン。更新の通知（versionNotice.ts）に使う */
+  lastSeenDbVersion: 'app_last_seen_db_version',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

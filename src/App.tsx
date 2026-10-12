@@ -10,6 +10,9 @@ import { GanttChart } from './components/GanttChart';
 import { PartyConfigModal } from './components/PartyConfigModal';
 import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
+import { UpdateNoticeModal } from './components/UpdateNoticeModal';
+import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
+import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
@@ -108,6 +111,17 @@ export default function App() {
   const [isUsageOpen, setIsUsageOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState<boolean>(false);
+  // マスターデータ（DB）の更新の通知: DB のバージョンが、最後に確認した版より新しければ、DB管理で「全削除 → 動的生成」を促す（D196・D198）
+  const [versionNotice, setVersionNotice] = useState(() => evaluateVersionNotice(DATABASE_VERSION));
+  useEffect(() => {
+    // 通知しないとき（初めての利用など）は、今の DB のバージョンを、確認済みとして記録する
+    if (!versionNotice.show) markVersionSeen(DATABASE_VERSION);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const dismissVersionNotice = () => {
+    markVersionSeen(DATABASE_VERSION);
+    setVersionNotice(n => ({ ...n, show: false }));
+  };
   const [copiedNotation, setCopiedNotation] = useState<boolean>(false);
   const [selectedAction, setSelectedAction] = useState<{ stintId: string; actionId: string } | null>(null);
 
@@ -737,6 +751,18 @@ export default function App() {
           }
           setParty(newParty);
           setStints(mergeHiddenStints(newStints, stints, characters, newParty));
+        }}
+      />
+
+      {/* アプリの更新の通知（マスターデータの全削除 → 動的生成の案内） */}
+      <UpdateNoticeModal
+        isOpen={versionNotice.show}
+        previous={versionNotice.previous}
+        current={versionNotice.current}
+        onClose={dismissVersionNotice}
+        onOpenDatabase={() => {
+          dismissVersionNotice();
+          setIsDatabaseModalOpen(true);
         }}
       />
 

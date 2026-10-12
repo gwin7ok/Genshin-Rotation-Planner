@@ -67,6 +67,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // どの生成を実行中か（回転するアイコンを、押したボタンの種類だけにする。issue #2）
   const [syncingKind, setSyncingKind] = useState<'character' | 'weapon' | 'artifact' | null>(null);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
+  // 「最新データ（キャラ・武器・聖遺物）をオンライン生成」（3 種を順に再生成）の、実行中の段階と、失敗の表示
+  const [bulkStep, setBulkStep] = useState<{ index: number; label: string } | null>(null);
+  const [bulkError, setBulkError] = useState<string | null>(null);
 
   // Character Sync State
   const [charSyncProgress, setCharSyncProgress] = useState<GenerationProgress | null>(null);
@@ -162,6 +165,62 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     } finally {
       setIsSyncing(false);
       setSyncingKind(null);
+      setArtifactSyncProgress(null);
+    }
+  };
+
+  // 3 種（キャラクター → 武器 → 聖遺物）を順に、オンライン生成して上書きする。
+  // 生成のたびに、結果を DB に反映・保存する（途中で失敗しても、成功した分は残る）。ロック中・カスタムは上書きしない。
+  const handleSyncAll = async () => {
+    setIsSyncing(true);
+    setSyncSuccessMsg(null);
+    setBulkError(null);
+    setCharSyncError(null);
+    setCharSyncReport(null);
+    setWeaponSyncError(null);
+    setWeaponSyncReport(null);
+    setArtifactSyncError(null);
+    setArtifactSyncReport(null);
+    let step = '';
+    try {
+      let db = database;
+
+      step = 'キャラクター';
+      setBulkStep({ index: 1, label: step });
+      setSyncingKind('character');
+      const c = await syncCharactersMasterOnline(db, setCharSyncProgress);
+      db = c.db;
+      onUpdateDatabase(db);
+      setCharSyncReport(c.report);
+      setCharSyncProgress(null);
+
+      step = '武器';
+      setBulkStep({ index: 2, label: step });
+      setSyncingKind('weapon');
+      const w = await syncWeaponsMasterOnline(db, setWeaponSyncProgress);
+      db = w.db;
+      onUpdateDatabase(db);
+      setWeaponSyncReport(w.report);
+      setWeaponSyncProgress(null);
+
+      step = '聖遺物';
+      setBulkStep({ index: 3, label: step });
+      setSyncingKind('artifact');
+      const a = await syncArtifactsMasterOnline(db, setArtifactSyncProgress);
+      db = a.db;
+      onUpdateDatabase(db);
+      setArtifactSyncReport(a.report);
+
+      setSyncSuccessMsg(`🔄 最新データをオンライン生成しました（キャラクター ${c.report.totalCharacters} 件・武器 ${w.report.totalWeapons} 種類・聖遺物 ${a.report.totalArtifacts} セット）`);
+      setTimeout(() => setSyncSuccessMsg(null), 6000);
+    } catch (e) {
+      setBulkError(`${step}の生成に失敗しました（${step}より前の生成結果は反映・保存済みです）: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setIsSyncing(false);
+      setSyncingKind(null);
+      setBulkStep(null);
+      setCharSyncProgress(null);
+      setWeaponSyncProgress(null);
       setArtifactSyncProgress(null);
     }
   };
@@ -380,11 +439,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         
         {/* Modal Top Banner */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/70">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
               <Database className="w-4 h-4" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-base text-white">
                   データベース管理・カスタマイズ (Genshin Database Manager)
@@ -400,13 +459,39 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
             </div>
           </div>
           
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSyncAll}
+              disabled={isSyncing}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-wait text-white border border-emerald-500/70 shadow-sm transition-colors"
+              title="キャラクター → 武器 → 聖遺物の順に、最新のマスターデータをオンライン生成して上書きします（ロック中・カスタムは上書きしません）"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${bulkStep ? 'animate-spin' : ''}`} />
+              <span>
+                {bulkStep
+                  ? `生成中… (${bulkStep.index}/3 ${bulkStep.label})`
+                  : '最新データ（キャラ・武器・聖遺物）をオンライン生成'}
+              </span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
+
+        {/* 一括生成の失敗 */}
+        {bulkError && (
+          <div className="bg-red-950/90 border-b border-red-700/60 px-4 py-2 flex items-start justify-between gap-3 text-xs text-red-200">
+            <span>{bulkError}</span>
+            <button type="button" onClick={() => setBulkError(null)} className="text-red-300 hover:text-white shrink-0" title="閉じる">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Sync Success / Alert Toast */}
         {syncSuccessMsg && (

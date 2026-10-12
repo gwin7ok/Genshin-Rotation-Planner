@@ -308,7 +308,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">発動バフ（固有天賦・武器・聖遺物）: {passives.changes.length} 件が変わります（追加 {passives.changes.filter(c => c.kind === 'add').length} / 更新 {passives.changes.filter(c => c.kind === 'update').length} / gcsim に出なかった手動の発動 {passives.changes.filter(c => c.kind === 'missed').length}）</div>
+                  <div className="font-bold">発動バフ（固有天賦・武器・聖遺物）: {passives.changes.length} 件が変わります（追加 {passives.changes.filter(c => c.kind === 'add').length} / 更新 {passives.changes.filter(c => c.kind === 'update').length} / gcsim に出なかった手動の発動 {passives.changes.filter(c => c.kind === 'missed').length} / 同じ効果の統合 {passives.changes.filter(c => c.kind === 'merged').length}）</div>
                   {passives.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {passives.changes.map((c, i) => (
@@ -316,6 +316,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                           {ownerLabel(c.stintId)} {c.name}:{' '}
                           {c.kind === 'missed'
                             ? `gcsim の結果に出ませんでした（残して印を付けます。+${(c.offset ?? 0).toFixed(2)}s）`
+                            : c.kind === 'merged'
+                            ? `同じ効果の別のキー（${c.key}）のため、統合して取り除きます（+${(c.offset ?? 0).toFixed(2)}s）`
                             : `${c.kind === 'add' ? '追加' : '更新'} +${(c.offset ?? 0).toFixed(2)}s / 効果 ${(c.duration ?? 0).toFixed(2)}s${c.cooldown !== undefined ? ` / CT ${c.cooldown.toFixed(2)}s` : ''}`}
                           {c.before && <span className="text-sky-400/70">（変更前 +{c.before.offset.toFixed(2)}s{c.before.duration !== undefined ? ` / 効果 ${c.before.duration.toFixed(2)}s` : ''}）</span>}
                           {c.warnBeforeStint && <span className="text-amber-300"> ※発動元の出場の前に起きた効果。出場の先頭に置きます</span>}

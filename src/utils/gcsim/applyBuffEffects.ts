@@ -10,6 +10,7 @@
  *   D57  … 命中・反応由来の「キャラクターに紐づく効果」は `Stint.extraEffects` に書く（直前の出場ブロック。無ければ将来方向で一番近い出場ブロックで、秒数は負）
  */
 import type { PassiveTriggerInstance, Stint } from '../../types/genshin.ts';
+import { aliasPrimaryOf, effectiveGcsimKeys, isAliasKeyInDef, labelForKey } from '../../masterdata/effectKeyDisplay';
 import type { TriggerableBuffDefinition } from '../buffUtils.ts';
 import type { AlignedAction } from './applyGcsimResult.ts';
 import { isFirstLap } from './applyGcsimResult.ts';
@@ -120,7 +121,7 @@ export interface PassiveChange {
   defId: string;
   name: string;
   key: string;
-  kind: 'add' | 'update' | 'missed';
+  kind: 'add' | 'update' | 'missed' | 'merged';
   offset?: number;
   duration?: number;
   cooldown?: number;
@@ -183,10 +184,16 @@ export function applyPassiveTriggers(
     for (const def of defs) {
       const cts = mine.filter(e => e.entry.kind === 'cooldown' && (def.gcsimCooldownKeys ?? []).includes(e.key));
       const effectsOfDef = mine.filter(e => e.entry.kind === 'effect' && (def.gcsimKeys ?? []).some(k => matchesGcsimKey(k, e.key)));
-      const multiKey = (def.gcsimKeys?.length ?? 0) > 1 || (def.gcsimKeys ?? []).some(k => k.includes('*') || k.includes('{element}'));
+      // 同じ効果の別名のキー（状態 + 修正）は、主のキーがあればバーにしない（effectKeyDisplay.ts）。名前のキー別の付け方も、判定に使う
+      const defKeys = def.gcsimKeys ?? [];
+      const distinctKeys = effectiveGcsimKeys(defKeys);
+      const multiKey = distinctKeys.length > 1 || distinctKeys.some(k => k.includes('*') || k.includes('{element}'));
       // CT のキーだけの定義: 効果のバーは持たず（効果時間 0）、gcsim で発動した時刻に、発動間隔（CT）のバーだけを置く
       const ctOnly = (def.gcsimKeys?.length ?? 0) === 0;
-      const keys = ctOnly ? [...new Set(cts.map(e => e.key))] : [...new Set(effectsOfDef.map(e => e.key))];
+      const presentKeys = new Set(effectsOfDef.map(e => e.key));
+      const keys = ctOnly
+        ? [...new Set(cts.map(e => e.key))]
+        : [...new Set(effectsOfDef.filter(e => !(isAliasKeyInDef(e.key, defKeys) && presentKeys.has(aliasPrimaryOf(e.key) ?? ''))).map(e => e.key))];
 
       for (const key of keys) {
         // 終了時刻が無い永続キーも、マスターに有限の時間がある定義ならキー別バーにできる。
@@ -218,13 +225,13 @@ export function applyPassiveTriggers(
           list.forEach(({ rec, place }, i) => {
             const duration = ctOnly ? 0 : Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3));
             const cooldown = ctOnly ? Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3)) : cooldownFor(rec, cts);
-            const name = multiKey ? `${def.name}（${key}）` : def.name;
+            const name = labelForKey(key) ?? (multiKey ? `${def.name}（${key}）` : def.name);
             const t = existing[i];
             if (t) {
               claimed.add(t.id);
               const beforeDuration = t.duration ?? def.duration;
               const beforeCooldown = t.cooldown ?? def.cooldown;
-              const same = t.gcsimKey === key && Math.abs(t.offset - place.offset) < 0.0005 && beforeDuration !== undefined && Math.abs(beforeDuration - duration) < 0.0005
+              const same = t.gcsimKey === key && t.name === name && Math.abs(t.offset - place.offset) < 0.0005 && beforeDuration !== undefined && Math.abs(beforeDuration - duration) < 0.0005
                 && (cooldown === undefined || (beforeCooldown !== undefined && Math.abs(beforeCooldown - cooldown) < 0.0005));
               if (!same) {
                 changes.push({
@@ -234,6 +241,7 @@ export function applyPassiveTriggers(
                 });
               }
               t.gcsimKey = key;
+              t.name = name;
               t.offset = place.offset;
               t.duration = duration;
               if (cooldown !== undefined) t.cooldown = cooldown;
@@ -256,6 +264,16 @@ export function applyPassiveTriggers(
   // 定義が gcsim のキーを持つのに、gcsim の結果に出なかった発動は、削除せず残して印を付ける（D38-2）
   const gcsimDefs = new Map<string, TriggerableBuffDefinition>();
   for (const defs of Object.values(buffsByCharacter)) for (const d of defs) if (d.gcsimTarget !== false && (d.gcsimKeys?.length ?? 0) > 0) gcsimDefs.set(d.id, d);
+  // 同じ効果の別名のキー（状態 + 修正）で作られていた、前回の発動を取り除く（主のキーのバーだけを残す）
+  for (const [stintId, arr] of triggers) {
+    const kept = arr.filter(t => {
+      const def = gcsimDefs.get(t.passiveEffectId);
+      if (!def || !t.gcsimKey || claimed.has(t.id) || !isAliasKeyInDef(t.gcsimKey, def.gcsimKeys ?? [])) return true;
+      changes.push({ stintId, defId: def.id, name: t.name, key: t.gcsimKey, kind: 'merged', offset: t.offset });
+      return false;
+    });
+    if (kept.length !== arr.length) triggers.set(stintId, kept);
+  }
   for (const [stintId, arr] of triggers) {
     for (const t of arr) {
       if (claimed.has(t.id)) continue;

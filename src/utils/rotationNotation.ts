@@ -72,6 +72,7 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
  *   - 連続する通常攻撃は、`N` + 連続した回数（N N N C → N3C）
  *   - 長押しの秒数が決まるアクション: `hE@2.0s`／待機: `w@1.0s`
  *   - グループ（回数 2 以上）: `n[ … ]`。前後にスペース（N の数字との混同を避ける）。回数 1 のグループは、括弧なし
+ *   - 1 つのアクションだけのグループ: 括弧なしで、回数 + 略号（C を 3 回 → `3C`。名称は `3×重撃`）
  *   - 交代・維持は出さない。それ以外は、アクションの略号（E・tE・hE・Q・C・D・J・lP・hP …）
  */
 export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): string {
@@ -91,7 +92,11 @@ export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): 
     }
     const inner = notationOf(actions.slice(run.start, run.end + 1), mode);
     // 略号: 2[N1C]（KQM）／名称: 2×[通常 重撃]
-    const grouped = mode === 'name' ? `${run.repeat}×[${inner}]` : `${run.repeat}[${inner}]`;
+    // 1 つのアクションだけのグループは、括弧なし: 3C／3×重撃
+    const single = run.start === run.end;
+    const grouped = single
+      ? (mode === 'name' ? `${run.repeat}×${inner}` : `${run.repeat}${inner}`)
+      : (mode === 'name' ? `${run.repeat}×[${inner}]` : `${run.repeat}[${inner}]`);
     if (inner) parts.push(run.repeat > 1 ? { text: grouped, spaced: true } : { text: inner, spaced: false });
     i = run.end + 1;
   }

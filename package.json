@@ -14,6 +14,8 @@
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
+    "check:groups": "node scripts/check-groups.ts",
+    "check:effects": "node scripts/check-effect-keys.ts",
     "check:backup": "node scripts/check-backup.ts",
     "release:bump": "node scripts/release-bump.ts",
     "release:tag": "node scripts/release-tag.ts",

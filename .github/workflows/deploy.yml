@@ -58,6 +58,12 @@ jobs:
       - name: バックアップの往復の確認
         run: npm run check:backup
 
+      - name: 効果のキーの扱いの確認
+        run: npm run check:effects
+
+      - name: グループ化の確認
+        run: npm run check:groups
+
       - name: 画面をビルド（base = /<リポジトリ名>/）
         run: npm run build
         env:

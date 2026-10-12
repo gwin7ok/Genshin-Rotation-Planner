@@ -26,6 +26,7 @@ import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
+import { packReactions, unpackReactions } from './utils/gcsim/savedReactions';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
@@ -46,6 +47,24 @@ function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: nu
   const sinceLoop = elapsed - totalDuration;
   const lap = Math.floor(sinceLoop / loopPeriod);
   return { time: loopStartTime + (sinceLoop - lap * loopPeriod), cycle: lap + 2 };
+}
+
+/**
+ * 反応の行が「どの状態の計算結果か」を表す署名。編成（キャラ・装備・凸など）・交代遅延・ループ基準・
+ * 出場の並びとアクションの ID が同じなら同じ。所要時間・CT・効果時間の変更では変わらない。
+ */
+function makeReactionSignature(
+  characters: ReturnType<typeof resolvePartyCharacters>,
+  switchDelay: number,
+  loopStartIndex: number,
+  stints: Stint[],
+): string {
+  return JSON.stringify([
+    characters.map(c => [c.id, c.weaponId, c.weaponRefinementRank, c.artifactSetId, c.artifactSetMode, c.constellation, c.hexerei, c.revelation, c.energyRecharge]),
+    switchDelay,
+    loopStartIndex,
+    stints.map(st => [st.characterId, st.actions.map(a => a.id)]),
+  ]);
 }
 
 export default function App() {
@@ -125,6 +144,30 @@ export default function App() {
   const [copiedNotation, setCopiedNotation] = useState<boolean>(false);
   const [selectedAction, setSelectedAction] = useState<{ stintId: string; actionId: string } | null>(null);
 
+  // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
+  // gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。編集したら消す（結果が古くなるため）
+  const [gcsimCtWaits, setGcsimCtWaits] = useState<Record<string, number> | null>(null);
+  useEffect(() => {
+    setGcsimCtWaits(null);
+  }, [characters, visibleStints, switchDelay, loopStartIndex]);
+
+  // gcsim の結果から読み取った反応の状態（月感電の雲・星電導・草露・月露など。アクション基準。D112）。
+  // 実行する前は null（何も出さない）。編成に保存され（gcsim のバージョンつき）、読み込みで戻る。
+  // 「どの状態の結果か」を署名で持つ: 編成・交代・ループ基準・アクションの並びを編集して署名が変わったら、出さない
+  // （所要時間だけの変更・反映では署名は変わらず、残る）
+  const reactionSignature = useMemo(() => makeReactionSignature(characters, switchDelay, loopStartIndex, visibleStints), [characters, switchDelay, loopStartIndex, visibleStints]);
+  const reactionSignatureRef = useRef(reactionSignature);
+  reactionSignatureRef.current = reactionSignature;
+  const [gcsimReactionState, setGcsimReactionState] = useState<{ rows: ReactionRowRef[]; signature: string } | null>(() => {
+    const rows = unpackReactions(savedInitialState?.reactions);
+    return rows ? { rows, signature: reactionSignature } : null;
+  });
+  const gcsimReactions: ReactionRowRef[] | null =
+    gcsimReactionState && gcsimReactionState.signature === reactionSignature ? gcsimReactionState.rows : null;
+  /** 反応の行を、今の状態の結果として置く（null で消す） */
+  const setGcsimReactions = (rows: ReactionRowRef[] | null) =>
+    setGcsimReactionState(rows ? { rows, signature: reactionSignatureRef.current } : null);
+
   // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
   useEffect(() => {
     saveActiveState({
@@ -133,23 +176,9 @@ export default function App() {
       loopStartIndex,
       switchDelay,
       activeSlotId,
+      reactions: packReactions(gcsimReactions),
     });
-  }, [party, stints, loopStartIndex, switchDelay, activeSlotId]);
-
-  // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
-  // gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。編集したら消す（結果が古くなるため）
-  const [gcsimCtWaits, setGcsimCtWaits] = useState<Record<string, number> | null>(null);
-  useEffect(() => {
-    setGcsimCtWaits(null);
-  }, [characters, visibleStints, switchDelay, loopStartIndex]);
-
-  // gcsim の結果から読み取った反応の状態（月感電の雲・星電導など。アクション基準。D112）。実行する前は null（何も出さない）。
-  // 編成・交代・ループ基準・アクションの並びを編集したら消す（所要時間だけの変更・反映では残す）
-  const [gcsimReactions, setGcsimReactions] = useState<ReactionRowRef[] | null>(null);
-  const actionIdKey = useMemo(() => visibleStints.map(st => `${st.characterId}:${st.actions.map(a => a.id).join(',')}`).join('|'), [visibleStints]);
-  useEffect(() => {
-    setGcsimReactions(null);
-  }, [characters, switchDelay, loopStartIndex, actionIdKey]);
+  }, [party, stints, loopStartIndex, switchDelay, activeSlotId, gcsimReactions]);
 
   // ガントチャートのドラッグ中の仮の並び（ドロップするまで保存しない。計算だけをこの並びで行う。追加作業 21）
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
@@ -259,6 +288,8 @@ export default function App() {
     loopStartTime?: number;
     switchDelay?: number;
     slotId?: string;
+    /** 保存した反応の行（gcsim のバージョンが違うときは、出さない） */
+    reactions?: unknown;
     /** JSON から読み込んだときの編成名（slotId が無いとき、この名前の保存編成として登録して、読み込み中の編成にする。issue #23） */
     name?: string;
     totalDuration?: number;
@@ -270,6 +301,11 @@ export default function App() {
     setStints(slot.stints);
     setLoopStartIndex(loopIndex);
     setSwitchDelay(slot.switchDelay ?? 0.50);
+    // 反応の行: 読み込む編成の署名で置く（gcsim のバージョンが違えば、出さない）
+    const restoredReactions = unpackReactions(slot.reactions);
+    setGcsimReactionState(restoredReactions
+      ? { rows: restoredReactions, signature: makeReactionSignature(loadedChars, slot.switchDelay ?? 0.50, loopIndex, loadedStints) }
+      : null);
     if (!slot.slotId && slot.name?.trim()) {
       // 同じ名前の保存編成があるときは、連番を付ける（上書きしない）
       let name = slot.name.trim();
@@ -284,6 +320,7 @@ export default function App() {
         loopStartTime: slot.loopStartTime ?? 0,
         totalDuration: slot.totalDuration ?? 0,
         switchDelay: slot.switchDelay ?? 0.50,
+        reactions: packReactions(restoredReactions),
       };
       setSavedSlots(saveSlot(imported));
       setActiveSlotId(imported.id);
@@ -299,6 +336,7 @@ export default function App() {
     setLoopStartIndex(0);
     setSwitchDelay(0.50);
     setActiveSlotId(null);
+    setGcsimReactionState(null);
   };
 
   // 10. Handle Playback Controls
@@ -340,6 +378,7 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
+      reactions: packReactions(gcsimReactions),
     });
     setSavedSlots(updated);
     setOverwriteSaved(true);
@@ -362,6 +401,7 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
+      reactions: packReactions(gcsimReactions),
     };
     setSavedSlots(saveSlot(newSlot));
     setActiveSlotId(newSlot.id);
@@ -584,6 +624,7 @@ export default function App() {
             loopStartTime: parsed.loopStartTime ?? 0,
             switchDelay: parsed.switchDelay ?? switchDelay,
             totalDuration: parsed.totalDuration,
+            reactions: parsed.reactions,
             name: parsed.name || nameFromFileName(file.name),
           });
         } else {
@@ -613,6 +654,7 @@ export default function App() {
           loopStartTime: slot.loopStartTime ?? 0,
           switchDelay: slot.switchDelay,
           slotId: slot.id,
+          reactions: slot.reactions,
         })}
         isPlaying={isPlaying}
         onTogglePlay={togglePlay}
@@ -712,6 +754,7 @@ export default function App() {
         loopStartIndex={loopStartIndex}
         totalDuration={totalDuration}
         switchDelay={switchDelay}
+        reactions={packReactions(gcsimReactions)}
         activeSlotId={activeSlotId}
         onSlotsChanged={(slots, currentSlotId) => {
           setSavedSlots(slots);

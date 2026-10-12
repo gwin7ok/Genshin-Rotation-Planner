@@ -12,6 +12,8 @@ import { RotationSummaryModal } from './components/RotationSummaryModal';
 import { HelpGuideModal } from './components/HelpGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
+import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
+import { GCSIM_COMMIT } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
@@ -453,6 +455,16 @@ export default function App() {
   // 「gcsim で計算」（6-5。D120）: 設定文を作り、実行して、CT 待ちが無ければ結果を一括で反映する
   const [gcsimComputing, setGcsimComputing] = useState(false);
   const [gcsimBanner, setGcsimBanner] = useState<GcsimComputeBannerState | null>(null);
+  // 画面と、配信している gcsim（WebAssembly 版）の版が合っていないときに警告する（公開サイトで、画面だけ新しい／古いキャッシュが残る場合）
+  useEffect(() => {
+    let cancelled = false;
+    checkWasmVersionMismatch(GCSIM_COMMIT).then(message => {
+      if (!cancelled && message) setGcsimBanner({ level: 'warn', title: 'gcsim の版が合っていません', message });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const handleGcsimCompute = async () => {
     if (gcsimComputing) return;
     const result = buildCurrentGcsimConfig();

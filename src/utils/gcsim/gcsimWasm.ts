@@ -123,3 +123,20 @@ export function wasmCall(
     ensureWorker().postMessage({ id, t: kind, config: payload.config, seed: payload.seed });
   });
 }
+
+/**
+ * 画面（gcsim.config.json のコミット）と、配信している WASM（wasm-info.json）の版が合っているかを調べる。
+ * 合っていなければ、利用者に出す警告文を返す。調べられないとき（WASM を使わない・取得できない）は null。
+ */
+export async function checkWasmVersionMismatch(expectedCommit: string): Promise<string | null> {
+  try {
+    if ((await resolveEngine()) !== 'wasm') return null;
+    const res = await fetch(`${baseUrl()}gcsim/wasm-info.json`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const info = (await res.json()) as { gcsimCommit?: unknown; gcsimVersion?: unknown };
+    if (typeof info.gcsimCommit !== 'string' || info.gcsimCommit === expectedCommit) return null;
+    return `この画面は gcsim ${expectedCommit.slice(0, 8)} 用ですが、配信されている gcsim は ${info.gcsimCommit.slice(0, 8)}（${String(info.gcsimVersion ?? '不明')}）です。ページを再読み込みしてください（直らないときは、管理者に連絡してください）。`;
+  } catch {
+    return null;
+  }
+}

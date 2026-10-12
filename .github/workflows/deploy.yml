@@ -64,6 +64,9 @@ jobs:
       - name: グループ化の確認
         run: npm run check:groups
 
+      - name: 更新の通知の判定の確認
+        run: npm run check:version-notice
+
       - name: 画面をビルド（base = /<リポジトリ名>/）
         run: npm run build
         env:

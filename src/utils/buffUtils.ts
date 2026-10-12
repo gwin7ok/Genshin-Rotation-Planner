@@ -4,6 +4,7 @@ import { WeaponModel } from '../models/WeaponModel';
 import { CharacterModel } from '../models/CharacterModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
 import { classifyBuffScope, type BuffScope } from './buffScope';
+import { APP_SIDE_REVELATION_BUFFS, isRevelationAppSide } from '../masterdata/revelationCharacters';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact' | 'constellation';
 
@@ -75,6 +76,25 @@ export function getAvailableBuffsForCharacter(
         gcsimNote: p.gcsimNote,
         gcsimKeys: p.gcsimKeys,
         gcsimCooldownKeys: p.gcsimCooldownKeys,
+      });
+    }
+  }
+
+  // 1b. 諭示のアプリ側の発動バフ（gcsim に実装が無いキャラ。「諭示達成」が有効のときだけ）
+  if (isRevelationAppSide(character)) {
+    for (const b of APP_SIDE_REVELATION_BUFFS[character.source?.gcsimKey ?? ''] ?? []) {
+      result.push({
+        id: `${character.id}_${b.idSuffix}`,
+        name: b.name,
+        category: 'talent',
+        sourceId: character.id,
+        sourceName: character.name,
+        duration: b.duration,
+        description: b.description,
+        color: character.color || '#84cc16',
+        timing: 'conditional',
+        gcsimTarget: false,
+        gcsimNote: 'gcsim に諭示の実装が無いため、gcsim の計算結果では置かれません。手動で置いたときだけ表示されます',
       });
     }
   }

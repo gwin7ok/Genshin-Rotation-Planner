@@ -39,7 +39,7 @@ export class CharacterModel {
     const effectDurationById = new Map<string, number>();
     const cooldownById = new Map<string, number>();
     const chargesById = new Map<string, number>();
-    // 論示を達成済みのときの CT（七七のスキル 30 秒 → 15 秒）。凸の変更があれば、そちらが優先
+    // 諭示を達成済みのときの CT（七七のスキル 30 秒 → 15 秒）。凸の変更があれば、そちらが優先
     const revelationCd = isRevelation(this.data) ? REVELATION_ACTION_COOLDOWNS[this.data.source?.gcsimKey ?? ''] : undefined;
     for (const [actionId, cd] of Object.entries(revelationCd ?? {})) cooldownById.set(actionId, cd);
     for (const c of [...this.activeConstellations].sort((a, b) => a.level - b.level)) {

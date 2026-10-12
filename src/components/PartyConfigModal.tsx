@@ -1,6 +1,6 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
-import { isRevelationCapable, revelationTooltip } from '../masterdata/revelationCharacters';
+import { hasRevelationSetting, hasRevelationInfo, REVELATION_INFO, revelationTooltip } from '../masterdata/revelationCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -219,8 +219,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     </label>
                   )}
 
-                  {/* 論示（八重神子・七七）: 対応するキャラだけ。キャラカードの左下 */}
-                  {!isEmptySlotCharacter(c) && isRevelationCapable(c) && (
+                  {/* 諭示（八重神子・七七）: 対応するキャラだけ。キャラカードの左下 */}
+                  {!isEmptySlotCharacter(c) && hasRevelationSetting(c) && (
                     <label
                       className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-sky-300 cursor-pointer select-none"
                       onClick={(e) => e.stopPropagation()}
@@ -236,7 +236,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         }}
                         className="w-3 h-3 accent-sky-500"
                       />
-                      <span>論示達成</span>
+                      <span>諭示達成</span>
                     </label>
                   )}
 
@@ -503,6 +503,31 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   })()}
                 </div>
               </div>
+
+              {/* 魔女の諭示（追加天賦）の強化内容と、gcsim・アプリでの扱い */}
+              {hasRevelationInfo(currentSlotChar) && (() => {
+                const info = REVELATION_INFO[currentSlotChar.source?.gcsimKey ?? ''];
+                const badge = info.gcsim.status === 'implemented'
+                  ? { text: 'gcsim 実装済み', cls: 'bg-emerald-950 text-emerald-300 border-emerald-700/60' }
+                  : info.gcsim.status === 'open-pr'
+                  ? { text: 'gcsim は PR 待ち', cls: 'bg-amber-950 text-amber-300 border-amber-700/60' }
+                  : { text: 'gcsim 未実装', cls: 'bg-slate-900 text-slate-400 border-slate-700' };
+                return (
+                  <div className="mt-3 space-y-1.5 text-xs" data-testid="revelation-info">
+                    <div className="text-slate-400 font-medium flex items-center justify-between gap-2">
+                      <span>魔女の諭示: <span className="text-sky-300 font-bold">{info.talentName}</span></span>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${badge.cls}`} title={info.gcsim.note}>{badge.text}</span>
+                    </div>
+                    <div className="rounded p-2 border bg-slate-950/60 border-sky-500/30 space-y-1">
+                      <ul className="list-disc list-outside pl-4 space-y-0.5 text-[10px] text-slate-300 leading-relaxed">
+                        {info.summary.map((t, i) => <li key={i}>{t}</li>)}
+                      </ul>
+                      <p className="text-[10px] text-sky-300 font-semibold">アプリでの扱い: <span className="text-slate-300 font-normal">{info.app}</span></p>
+                      <p className="text-[10px] text-slate-500">gcsim: {info.gcsim.note}</p>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* 命ノ星座（凸数までの段階を有効として強調） */}
               {(() => {

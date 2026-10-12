@@ -71,7 +71,7 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
  * 1 つの出場ブロックのアクションの記法（KQM の記法に従う。詰めて書く）
  *   - 連続する通常攻撃は、`N` + 連続した回数（N N N C → N3C）
  *   - 長押しの秒数が決まるアクション: `hE@2.0s`／待機: `w@1.0s`
- *   - グループ（回数 2 以上）: `n[ … ]`。前後にスペース（N の数字との混同を避ける）。回数 1 のグループは、括弧なし
+ *   - グループ（回数 2 以上）: `n[ … ]`。前後にスペース（N の数字との混同を避ける）。回数 1 のグループは、括弧なし（前後のスペースは同じ）
  *   - 1 つのアクションだけのグループ: 括弧なしで、回数 + 略号（C を 3 回 → `3C`。名称は `3×重撃`）
  *   - 交代・維持は出さない。それ以外は、アクションの略号（E・tE・hE・Q・C・D・J・lP・hP …）
  */
@@ -97,7 +97,8 @@ export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): 
     const grouped = single
       ? (mode === 'name' ? `${run.repeat}×${inner}` : `${run.repeat}${inner}`)
       : (mode === 'name' ? `${run.repeat}×[${inner}]` : `${run.repeat}[${inner}]`);
-    if (inner) parts.push(run.repeat > 1 ? { text: grouped, spaced: true } : { text: inner, spaced: false });
+    // 回数 1 のグループは、括弧なし。ただし、前後はスペースで区切る（グループの境目を見分けるため）
+    if (inner) parts.push({ text: run.repeat > 1 ? grouped : inner, spaced: true });
     i = run.end + 1;
   }
   // 略号: グループの前後だけスペース。名称: すべてスペースで区切る

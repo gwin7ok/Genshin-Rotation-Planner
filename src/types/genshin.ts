@@ -319,11 +319,11 @@ export interface ActionDefinition {
   charges?: number;
   /**
    * スキルが設置物（八重神子の殺生桜）を 1 つ出す。上限（max）を超えると最古が消える。
-   * 寿命は、スキルの効果継続時間（effectDuration。八重神子は 14 秒）が元で、論示が有効なら revelationBonusSeconds だけ長い（24 秒）。
+   * 寿命は、スキルの効果継続時間（effectDuration。八重神子は 14 秒）が元で、諭示が有効なら revelationBonusSeconds だけ長い（24 秒）。
    * 桜はスキルの発動から startDelayFrames 後に現れる（効果バーもそこから始まる）。出典: gcsim yaemiko/kitsune.go・skill.go（D81）
    */
   spawnsTotem?: { max: number; revelationBonusSeconds: number; startDelayFrames: number };
-  /** 爆発が、場にある設置物 1 つにつき、スキルの CT を 1 回分戻す（八重神子の固有天賦 1）。論示が無効なら、爆発で設置物が全部壊れる */
+  /** 爆発が、場にある設置物 1 つにつき、スキルの CT を 1 回分戻す（八重神子の固有天賦 1）。諭示が無効なら、爆発で設置物が全部壊れる */
   releasesSkillPerTotem?: boolean;
   /**
    * 夜魂値で無料のスキルが出るキャラ（ヴァレサ）。スキル = 夜魂 +gain、落下攻撃 = +gain、爆発 = 満タン + 落下攻撃相当。
@@ -722,7 +722,7 @@ export interface PartyMember {
   constellation?: number;
   /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。ヘクセレイに対応するキャラだけ意味がある。未指定は true（gcsim の既定と同じ） */
   hexerei?: boolean;
-  /** 「論示」を達成済みか（八重神子）。未指定は true（gcsim の既定と同じ） */
+  /** 「諭示」を達成済みか（八重神子）。未指定は true（gcsim の既定と同じ） */
   revelation?: boolean;
   /** 装備武器（DB の武器 id） */
   weaponId?: string;
@@ -760,7 +760,7 @@ export interface CharacterConfig {
   constellation?: number;
   /** 「魔女の宿題」をクリア済み（ヘクセレイのキャラ）か。編成の設定（PartyMember）から解決して入る。未指定は true */
   hexerei?: boolean;
-  /** 「論示」を達成済みか（八重神子）。編成の設定（PartyMember）から解決して入る。未指定は true */
+  /** 「諭示」を達成済みか（八重神子）。編成の設定（PartyMember）から解決して入る。未指定は true */
   revelation?: boolean;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):

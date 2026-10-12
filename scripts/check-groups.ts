@@ -61,10 +61,10 @@ check('記法（略号）: C を 3 回 → 「3C」（CCC ではない）', () =
   st = g.setGroupRepeat(st, st.groups[0].id, 3);
   assert.equal(notation(st), 'N1 3C E');
 });
-check('記法（略号）: 回数 1 は、括弧も数字も出さない', () => {
+check('記法（略号）: 回数 1 は、括弧も数字も出さない。前後はスペースで区切る', () => {
   let st = g.createGroup(baseStint(), ['c1']);
   st = g.setGroupRepeat(st, st.groups[0].id, 1);
-  assert.equal(notation(st), 'N1CE');
+  assert.equal(notation(st), 'N1 C E');
 });
 check('記法（略号）: 複数のアクションのグループは、従来どおり n[ … ]', () => {
   let st = g.createGroup(baseStint(), ['n1', 'c1']);

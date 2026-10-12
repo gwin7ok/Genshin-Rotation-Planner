@@ -19,6 +19,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
+import { PRESET_COUNT, PRESET_NAME_PREFIX, restorePresets } from '../utils/presets';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
@@ -159,6 +160,22 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     onSlotsChanged(updated, slot.id);
     setSaveSuccessMsg(`「${slot.name}」を上書き保存しました！`);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
+  };
+
+  // プリセット編成（同梱の 5 編成）を、保存編成に復元する（同じ名前の保存編成は、上書き）
+  const handleRestorePresets = () => {
+    const ok = window.confirm(
+      `プリセット ${PRESET_COUNT} 編成を復元します。\n\n` +
+      `・名前が「${PRESET_NAME_PREFIX}」で始まる、同じ名前の保存編成は、同梱の内容で上書きされます\n` +
+      `・ほかの保存編成は、そのままです\n\n` +
+      `よろしいですか？`,
+    );
+    if (!ok) return;
+    const result = restorePresets();
+    setSavedSlots(result.slots);
+    onSlotsChanged(result.slots);
+    setSaveSuccessMsg(`プリセット ${PRESET_COUNT} 編成を復元しました（新規 ${result.added} 件・上書き ${result.overwritten} 件）`);
+    setTimeout(() => setSaveSuccessMsg(null), 4000);
   };
 
   // Delete slot
@@ -515,9 +532,20 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                     <FolderOpen className="w-4 h-4 text-amber-400" />
                     <span>保存済みスロット</span>
                   </h3>
-                  <span className="text-[11px] text-slate-500">
-                    {savedSlots.length === 0 ? '保存されたスロットはありません' : `${savedSlots.length} 件`}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-500">
+                      {savedSlots.length === 0 ? '保存されたスロットはありません' : `${savedSlots.length} 件`}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRestorePresets}
+                      className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors"
+                      title={`同梱のプリセット ${PRESET_COUNT} 編成（名前の先頭が「${PRESET_NAME_PREFIX}」）を、保存編成に入れ直します。同じ名前の保存編成は、上書きされます`}
+                      data-testid="restore-presets"
+                    >
+                      プリセット({PRESET_COUNT}編成)を復元する
+                    </button>
+                  </div>
                 </div>
 
                 {savedSlots.length === 0 ? (

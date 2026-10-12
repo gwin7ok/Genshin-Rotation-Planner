@@ -1,0 +1,877 @@
+{
+  "name": "豊穣月開花",
+  "description": "ナヒーダ・ニィロウ・コロンビーナ・ラウマ",
+  "party": [
+    {
+      "characterId": "10000073-dendro",
+      "constellation": 2,
+      "energyRecharge": 100,
+      "weaponId": "14403",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15025"
+    },
+    {
+      "characterId": "10000070-hydro",
+      "constellation": 2,
+      "energyRecharge": 100,
+      "weaponId": "11511",
+      "weaponRefinementRank": 1,
+      "artifactSetMode": "2+2"
+    },
+    {
+      "characterId": "10000125-hydro",
+      "constellation": 2,
+      "energyRecharge": 100,
+      "weaponId": "14406",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15043"
+    },
+    {
+      "characterId": "10000119-dendro",
+      "constellation": 0,
+      "energyRecharge": 100,
+      "weaponId": "14432",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15042"
+    }
+  ],
+  "stints": [
+    {
+      "id": "stint_1790639768334",
+      "characterId": "10000073-dendro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790639793975_533l",
+          "actionTypeId": "10000073-dendro_e",
+          "name": "元素スキル: 所聞遍計",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.533,
+          "naturalDuration": 0.533,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.533,
+          "effectDuration": 25
+        },
+        {
+          "id": "act_1790639794922_a6b6",
+          "actionTypeId": "10000073-dendro_q",
+          "name": "元素爆発: 心景幻成",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.85,
+          "naturalDuration": 1.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.85,
+          "cooldown": 13.5,
+          "gcsimCdResonance": 1,
+          "effectDuration": 23.517,
+          "gcsimCtOffset": 0,
+          "extraEffects": [
+            {
+              "key": "nahida-q-within",
+              "name": "領域内（心景幻成）",
+              "offset": 1.6,
+              "duration": 18.5
+            }
+          ]
+        }
+      ],
+      "startTime": 0,
+      "endTime": 3.083,
+      "duration": 3.083,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv559xa7_0",
+          "passiveEffectId": "10000073-dendro_p1",
+          "name": "浄善摂受明論",
+          "offset": 2.767,
+          "duration": 17.5,
+          "gcsimKey": "nahida-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_1",
+          "passiveEffectId": "abuff_15025",
+          "name": "深林4: 草元素耐性-30%",
+          "offset": 0.75,
+          "duration": 24.267,
+          "gcsimKey": "dm-4pc"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790639769056",
+      "characterId": "10000070-hydro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790639800608_107n",
+          "actionTypeId": "10000070-hydro_e",
+          "name": "元素スキル: 七域のダンス",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.317,
+          "naturalDuration": 0.317,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.317,
+          "cooldown": 18,
+          "gcsimCdResonance": 1,
+          "effectDuration": 10,
+          "gcsimCtOffset": 0
+        },
+        {
+          "id": "act_1790657505462_18dq",
+          "actionTypeId": "10000070-hydro_e",
+          "name": "元素スキル: 七域のダンス",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.45,
+          "naturalDuration": 0.45,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.45,
+          "cooldown": 0,
+          "gcsimCdResonance": 1
+        },
+        {
+          "id": "act_1790657506812_wx8d",
+          "actionTypeId": "10000070-hydro_e",
+          "name": "元素スキル: 七域のダンス",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.533,
+          "naturalDuration": 0.533,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.533,
+          "cooldown": 0,
+          "gcsimCdResonance": 1
+        },
+        {
+          "id": "act_1790657507648_0k6e",
+          "actionTypeId": "10000070-hydro_e",
+          "name": "元素スキル: 七域のダンス",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 1.017,
+          "naturalDuration": 1.017,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.017,
+          "cooldown": 0,
+          "gcsimCdResonance": 1,
+          "extraEffects": [
+            {
+              "key": "tranquilityaura",
+              "name": "静謐の光環",
+              "offset": 0.667,
+              "duration": 18
+            }
+          ]
+        }
+      ],
+      "startTime": 3.083,
+      "endTime": 6.3,
+      "duration": 3.2169999999999996,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv559xa7_2",
+          "passiveEffectId": "10000070-hydro_p1_1",
+          "name": "落花廻旋の庭 (30秒)",
+          "offset": 2.783,
+          "duration": 30,
+          "gcsimKey": "nilou-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_3",
+          "passiveEffectId": "10000070-hydro_p1_2",
+          "name": "落花廻旋の庭 (10秒)",
+          "offset": 3.717,
+          "duration": 22,
+          "gcsimKey": "nilou-a1-em"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_4",
+          "passiveEffectId": "10000070-hydro_p1_2",
+          "name": "落花廻旋の庭 (10秒)",
+          "offset": 16.717,
+          "duration": 11.95,
+          "gcsimKey": "nilou-a1-em"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_5",
+          "passiveEffectId": "10000070-hydro_p2",
+          "name": "軽やかに舞う永世の夢",
+          "offset": 2.783,
+          "duration": 30,
+          "gcsimKey": "nilou-a4"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_6",
+          "passiveEffectId": "wbuff_11511",
+          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-buff）",
+          "offset": 0.783,
+          "duration": 22.05,
+          "gcsimKey": "khaj-nisut-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_7",
+          "passiveEffectId": "wbuff_11511",
+          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-team-buff）",
+          "offset": 1.967,
+          "duration": 20.867,
+          "gcsimKey": "khaj-nisut-team-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_8",
+          "passiveEffectId": "10000070-hydro_c2",
+          "name": "2凸「星天の花雨」（nilou-c2-hydro）",
+          "offset": 2.833,
+          "duration": 22.967,
+          "gcsimKey": "nilou-c2-hydro"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_9",
+          "passiveEffectId": "10000070-hydro_c2",
+          "name": "2凸「星天の花雨」（nilou-c2-hydro）",
+          "offset": 17.75,
+          "duration": 10,
+          "gcsimKey": "nilou-c2-hydro"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_a",
+          "passiveEffectId": "10000070-hydro_c2",
+          "name": "2凸「星天の花雨」（nilou-c2-dendro）",
+          "offset": 3.717,
+          "duration": 22,
+          "gcsimKey": "nilou-c2-dendro"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_b",
+          "passiveEffectId": "10000070-hydro_c2",
+          "name": "2凸「星天の花雨」（nilou-c2-dendro）",
+          "offset": 16.267,
+          "duration": 12.4,
+          "gcsimKey": "nilou-c2-dendro"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790639769740",
+      "characterId": "10000125-hydro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790639818677_ohix",
+          "actionTypeId": "10000125-hydro_e",
+          "name": "元素スキル: 万古の潮汐",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.467,
+          "naturalDuration": 0.467,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.467,
+          "cooldown": 17,
+          "gcsimCdResonance": 1,
+          "effectDuration": 25,
+          "gcsimCtOffset": 0.333,
+          "extraEffects": [
+            {
+              "key": "columbina-gravity",
+              "name": "重力（月の反応）",
+              "offset": 1.05,
+              "duration": 19.8
+            }
+          ]
+        },
+        {
+          "id": "act_1790639819417_w612",
+          "actionTypeId": "10000125-hydro_q",
+          "name": "元素爆発: 月明かりの郷愁",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 2.167,
+          "naturalDuration": 2.167,
+          "durationManual": true,
+          "gcsimBaseDuration": 2.167,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "effectDuration": 20,
+          "gcsimCtOffset": 0,
+          "extraEffects": [
+            {
+              "key": "columbina-q-buff",
+              "name": "反応ボーナス（爆発中）",
+              "offset": 1.433,
+              "duration": 18.8
+            }
+          ]
+        },
+        {
+          "id": "act_1790701217629_7jgv",
+          "actionTypeId": "10000125-hydro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 0.717,
+          "naturalDuration": 0.95,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.717
+        }
+      ],
+      "startTime": 6.3,
+      "endTime": 10.684,
+      "duration": 4.3839999999999995,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv559xa7_c",
+          "passiveEffectId": "10000125-hydro_p1",
+          "name": "月が呼んだ狂気",
+          "offset": 0.867,
+          "duration": 15.15,
+          "gcsimKey": "columbina-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_f",
+          "passiveEffectId": "10000125-hydro_p2",
+          "name": "新月の法則",
+          "offset": 3.117,
+          "duration": 18,
+          "gcsimKey": "moonridge-dew-timer"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_g",
+          "passiveEffectId": "abuff_15043",
+          "name": "暁の星と月の歌4: 効果",
+          "offset": 0.017,
+          "duration": 3,
+          "gcsimKey": "aubade-4pc-onfield"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_i",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 最大HP+40%（コロンビーナ）",
+          "offset": 0.867,
+          "duration": 13.15,
+          "gcsimKey": "columbina-c2"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_l",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
+          "offset": 0.867,
+          "duration": 13.15,
+          "gcsimKey": "columbina-c2-lb"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790639770567",
+      "characterId": "10000119-dendro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790639826184_rwwd",
+          "actionTypeId": "10000119-dendro_e",
+          "name": "元素スキル: 聖言のルノ・永夜の眠り",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.633,
+          "naturalDuration": 0.633,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.633,
+          "cooldown": 12,
+          "gcsimCdResonance": 1,
+          "effectDuration": 15,
+          "gcsimCtOffset": 0.217,
+          "extraEffects": [
+            {
+              "key": "lauma-skill-shred-dendro",
+              "name": "草元素耐性ダウン（敵）",
+              "offset": 0.267,
+              "duration": 24.417
+            },
+            {
+              "key": "lauma-skill-shred-hydro",
+              "name": "水元素耐性ダウン（敵）",
+              "offset": 0.267,
+              "duration": 24.417
+            }
+          ]
+        },
+        {
+          "id": "act_1790639828963_rcb8",
+          "actionTypeId": "10000119-dendro_q",
+          "name": "元素爆発: 聖言のルノ・月の心",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.817,
+          "naturalDuration": 1.817,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.817,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "effectDuration": 15,
+          "gcsimCtOffset": 0
+        }
+      ],
+      "startTime": 10.684,
+      "endTime": 13.834,
+      "duration": 3.1500000000000004,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv559xa7_o",
+          "passiveEffectId": "10000119-dendro_p1",
+          "name": "霜夜に捧ぐ光（light-for-the-frosty-night）",
+          "offset": 0.517,
+          "duration": 20,
+          "gcsimKey": "light-for-the-frosty-night"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa8_p",
+          "passiveEffectId": "wbuff_14432",
+          "name": "天光のリュート: 最後の歌い手",
+          "offset": 0.517,
+          "duration": 20,
+          "gcsimKey": "etherlight"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa8_q",
+          "passiveEffectId": "abuff_15042",
+          "name": "月を紡ぐ夜の歌4: 効果",
+          "offset": 0.783,
+          "duration": 14.617,
+          "gcsimKey": "gleaming-moon-devotion-em"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa8_r",
+          "passiveEffectId": "abuff_15042",
+          "name": "月を紡ぐ夜の歌4: 効果",
+          "offset": 9.35,
+          "duration": 14.767,
+          "gcsimKey": "gleaming-moon-devotion-em"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790639771237",
+      "characterId": "10000125-hydro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790658661178_tzwe",
+          "actionTypeId": "10000125-hydro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 1.333,
+          "naturalDuration": 1.683,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.333
+        },
+        {
+          "id": "act_1790658662776_f7zi",
+          "actionTypeId": "10000125-hydro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 1.333,
+          "naturalDuration": 1.683,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.333
+        },
+        {
+          "id": "act_1790658663752_karm",
+          "actionTypeId": "10000125-hydro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 1.333,
+          "naturalDuration": 0.95,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.333
+        },
+        {
+          "id": "act_1791803040675_9zk2",
+          "actionTypeId": "10000125-hydro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 0.717,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.717
+        }
+      ],
+      "startTime": 13.834,
+      "endTime": 18.95,
+      "duration": 5.116,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv559xa7_d",
+          "passiveEffectId": "10000125-hydro_p1",
+          "name": "月が呼んだ狂気",
+          "offset": 3.183,
+          "duration": 10,
+          "gcsimKey": "columbina-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_e",
+          "passiveEffectId": "10000125-hydro_p1",
+          "name": "月が呼んだ狂気",
+          "offset": 7.683,
+          "duration": 10,
+          "gcsimKey": "columbina-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_h",
+          "passiveEffectId": "abuff_15043",
+          "name": "暁の星と月の歌4: 効果",
+          "offset": 0.017,
+          "duration": 3,
+          "gcsimKey": "aubade-4pc-onfield"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_j",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 最大HP+40%（コロンビーナ）",
+          "offset": 3.183,
+          "duration": 8,
+          "gcsimKey": "columbina-c2"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_k",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 最大HP+40%（コロンビーナ）",
+          "offset": 7.683,
+          "duration": 8,
+          "gcsimKey": "columbina-c2"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_m",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
+          "offset": 3.183,
+          "duration": 8,
+          "gcsimKey": "columbina-c2-lb"
+        },
+        {
+          "id": "ptrg_gcsim_mv559xa7_n",
+          "passiveEffectId": "10000125-hydro_c2",
+          "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
+          "offset": 7.683,
+          "duration": 8,
+          "gcsimKey": "columbina-c2-lb"
+        }
+      ]
+    }
+  ],
+  "loopStartIndex": 0,
+  "loopStartTime": 0,
+  "totalDuration": 19.22,
+  "switchDelay": 0.5,
+  "reactions": {
+    "gcsimVersion": "v2.48.8",
+    "rows": [
+      {
+        "kind": "verdantdew",
+        "lap": 1,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 1.117
+            },
+            "end": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.35
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.35
+            },
+            "end": {
+              "actionId": "act_1790701217629_7jgv",
+              "offset": 0.917
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790701217629_7jgv",
+              "offset": 0.917
+            },
+            "end": {
+              "actionId": "act_1790639826184_rwwd",
+              "offset": 0.183
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790639826184_rwwd",
+              "offset": 0.183
+            },
+            "end": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 1.883
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 1.883
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "end": {
+              "actionId": "act_1790658662776_f7zi",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658662776_f7zi",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.483
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.483
+            },
+            "end": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 0.767
+            },
+            "count": 1
+          }
+        ]
+      },
+      {
+        "kind": "moonridgedew",
+        "lap": 1,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 2.033
+            },
+            "end": {
+              "actionId": "act_1790639826184_rwwd",
+              "offset": 0.267
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790639826184_rwwd",
+              "offset": 0.267
+            },
+            "end": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.3
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.3
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 1.333
+            },
+            "count": 3
+          }
+        ]
+      },
+      {
+        "kind": "verdantdew",
+        "lap": 2,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639793975_533l",
+              "offset": 0.15
+            },
+            "end": {
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.95
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.95
+            },
+            "end": {
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 0.317
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 0.317
+            },
+            "end": {
+              "actionId": "act_1790701217629_7jgv",
+              "offset": 0.917
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790701217629_7jgv",
+              "offset": 0.917
+            },
+            "end": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 1.983
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 1.983
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "end": {
+              "actionId": "act_1790658662776_f7zi",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658662776_f7zi",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.483
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.483
+            },
+            "end": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658663752_karm",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 1.483
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 3.917
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 3.917
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 6.35
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 6.35
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 12.85
+            },
+            "count": 3
+          }
+        ]
+      },
+      {
+        "kind": "moonridgedew",
+        "lap": 2,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639793975_533l",
+              "offset": 0
+            },
+            "end": {
+              "actionId": "act_1791803040675_9zk2",
+              "offset": 12.85
+            },
+            "count": 3
+          }
+        ]
+      }
+    ]
+  }
+}

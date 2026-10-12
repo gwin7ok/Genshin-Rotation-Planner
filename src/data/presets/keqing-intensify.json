@@ -1,0 +1,688 @@
+{
+  "name": "激化刻晴",
+  "description": "刻晴・ナヒーダ・楓原万葉・フィッシュル",
+  "party": [
+    {
+      "characterId": "10000042-electro",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "11509",
+      "weaponRefinementRank": 1,
+      "artifactSetId": "15005"
+    },
+    {
+      "characterId": "10000073-dendro",
+      "constellation": 2,
+      "energyRecharge": 100,
+      "weaponId": "14403",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15025"
+    },
+    {
+      "characterId": "10000047-anemo",
+      "constellation": 0,
+      "energyRecharge": 100,
+      "weaponId": "11407",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15002"
+    },
+    {
+      "characterId": "10000031-electro",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "15503",
+      "weaponRefinementRank": 1,
+      "artifactSetId": "15032"
+    }
+  ],
+  "stints": [
+    {
+      "id": "stint_1790659391911",
+      "characterId": "10000042-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659526014_xuss",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.583,
+          "delayAfter": 0.4,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.583,
+          "cooldown": 7.5,
+          "gcsimCdResonance": 1,
+          "effectDuration": 5.333,
+          "naturalDuration": 0.583,
+          "gcsimCtOffset": 0.333
+        },
+        {
+          "id": "act_1790659527158_maoe",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.8,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.8,
+          "cooldown": 0,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.8
+        }
+      ],
+      "startTime": 0,
+      "endTime": 2.383,
+      "duration": 2.383,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h8_0",
+          "passiveEffectId": "10000042-electro_p1",
+          "name": "抵天の雷罰",
+          "offset": 1.517,
+          "duration": 5.433,
+          "gcsimKey": "keqinginfuse"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_d",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-skill）",
+          "offset": 0.533,
+          "duration": 8.1,
+          "gcsimKey": "keqing-c6-skill"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659394278",
+      "characterId": "10000073-dendro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659557999_d8ck",
+          "actionTypeId": "10000073-dendro_e",
+          "name": "元素スキル: 所聞遍計",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.533,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.533,
+          "effectDuration": 25.8,
+          "naturalDuration": 0.533
+        },
+        {
+          "id": "act_1790659559619_44e9",
+          "actionTypeId": "10000073-dendro_q",
+          "name": "元素爆発: 心景幻成",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.85,
+          "cooldown": 13.5,
+          "gcsimCdResonance": 1,
+          "effectDuration": 20.683,
+          "naturalDuration": 1.85,
+          "gcsimCtOffset": 0,
+          "extraEffects": [
+            {
+              "key": "nahida-q-within",
+              "name": "領域内（心景幻成）",
+              "offset": 1.6,
+              "duration": 20.5
+            }
+          ]
+        }
+      ],
+      "startTime": 2.383,
+      "endTime": 5.466,
+      "duration": 3.083,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h9_m",
+          "passiveEffectId": "10000073-dendro_p1",
+          "name": "浄善摂受明論",
+          "offset": 2.75,
+          "duration": 19.5,
+          "gcsimKey": "nahida-a1"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_n",
+          "passiveEffectId": "abuff_15025",
+          "name": "深林4: 草元素耐性-30%",
+          "offset": 0.733,
+          "duration": 26.183,
+          "gcsimKey": "dm-4pc"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_o",
+          "passiveEffectId": "10000073-dendro_c2",
+          "name": "2凸「正覚善見の根」",
+          "offset": 3.75,
+          "duration": 24.783,
+          "gcsimKey": "nahida-c2"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659395581",
+      "characterId": "10000031-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659573119_xx01",
+          "actionTypeId": "10000031-electro_q",
+          "name": "元素爆発: 夜の幻現",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 0.6,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.4,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "effectDuration": 12,
+          "naturalDuration": 0.4,
+          "gcsimCtOffset": 0
+        }
+      ],
+      "startTime": 5.466,
+      "endTime": 6.666,
+      "duration": 1.2000000000000002,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h9_v",
+          "passiveEffectId": "wbuff_15503",
+          "name": "終焉: 別れの歌（elegy-proc）",
+          "offset": 3.3,
+          "duration": 12.6,
+          "gcsimKey": "elegy-proc",
+          "cooldown": 20
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_w",
+          "passiveEffectId": "wbuff_15503",
+          "name": "終焉: 別れの歌（millennial-atk%）",
+          "offset": 3.3,
+          "duration": 12.6,
+          "gcsimKey": "millennial-atk%",
+          "cooldown": 20
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659397308",
+      "characterId": "10000047-anemo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791806523525_f199",
+          "actionTypeId": "10000047-anemo_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.317,
+          "naturalDuration": 0.217,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.317
+        },
+        {
+          "id": "act_1790659583591_muyo",
+          "actionTypeId": "10000047-anemo_e",
+          "name": "元素スキル: 千早振る",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.4,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.4,
+          "cooldown": 6,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.4,
+          "gcsimCtOffset": 0.133
+        },
+        {
+          "id": "act_1790813001111_1p2h",
+          "actionTypeId": "10000047-anemo_hp",
+          "name": "落下攻撃(高)",
+          "shortName": "hP",
+          "type": "plunge_high",
+          "duration": 0.833,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.833,
+          "naturalDuration": 0.833
+        }
+      ],
+      "startTime": 6.666,
+      "endTime": 8.916,
+      "duration": 2.25,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h9_p",
+          "passiveEffectId": "10000047-anemo_p2",
+          "name": "風物の詩吟（kazuha-a4-electro）",
+          "offset": 1.1,
+          "duration": 9.133,
+          "gcsimKey": "kazuha-a4-electro"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_r",
+          "passiveEffectId": "wbuff_11407",
+          "name": "鉄蜂の刺し: 注入の棘",
+          "offset": 1.1,
+          "duration": 6,
+          "gcsimKey": "ironsting",
+          "cooldown": 1
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_t",
+          "passiveEffectId": "abuff_15002",
+          "name": "翠緑4: 拡散耐性-40%（vvelectro）",
+          "offset": 1.1,
+          "duration": 11.15,
+          "gcsimKey": "vvelectro"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659503055",
+      "characterId": "10000042-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659616255_nj14",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.583,
+          "cooldown": 4.5,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.583,
+          "gcsimCdResonance": 1,
+          "effectDuration": 5.333,
+          "naturalDuration": 0.583,
+          "delayAfter": 0.4,
+          "gcsimCtOffset": 0.333
+        },
+        {
+          "id": "act_1790659617082_ij5i",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.8,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.8,
+          "cooldown": 0,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.8
+        },
+        {
+          "id": "act_1790813117966_lxno",
+          "actionTypeId": "10000042-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.317,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.317,
+          "naturalDuration": 0.317
+        },
+        {
+          "id": "act_1790659618509_pk9m",
+          "actionTypeId": "10000042-electro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 0.583,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.583,
+          "naturalDuration": 0.583
+        },
+        {
+          "id": "act_1790659619535_tpoa",
+          "actionTypeId": "10000042-electro_q",
+          "name": "元素爆発: 天街巡遊",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 2.033,
+          "durationManual": true,
+          "gcsimBaseDuration": 2.033,
+          "cooldown": 12,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 2.033,
+          "gcsimCtOffset": 0.867
+        }
+      ],
+      "startTime": 8.916,
+      "endTime": 14.532,
+      "duration": 5.616,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h8_1",
+          "passiveEffectId": "10000042-electro_p1",
+          "name": "抵天の雷罰",
+          "offset": 1.5,
+          "duration": 5.533,
+          "gcsimKey": "keqinginfuse"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_3",
+          "passiveEffectId": "10000042-electro_p2",
+          "name": "玉衡の貴",
+          "offset": 3.5,
+          "duration": 8,
+          "gcsimKey": "keqing-a4"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_5",
+          "passiveEffectId": "wbuff_11509",
+          "name": "霧切の廻光: 霧切の御腰物（mistsplitter-normal）",
+          "offset": 2.567,
+          "duration": 5.65,
+          "gcsimKey": "mistsplitter-normal"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_7",
+          "passiveEffectId": "wbuff_11509",
+          "name": "霧切の廻光: 霧切の御腰物（mistsplitter-burst）",
+          "offset": 3.5,
+          "duration": 10,
+          "gcsimKey": "mistsplitter-burst"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_9",
+          "passiveEffectId": "10000042-electro_c2",
+          "name": "2凸「苛捐」",
+          "offset": 2.567,
+          "duration": 0,
+          "gcsimKey": "keqing-c2-icd",
+          "cooldown": 5
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_b",
+          "passiveEffectId": "10000042-electro_c4",
+          "name": "4凸「調律」",
+          "offset": 0.933,
+          "duration": 15.85,
+          "gcsimKey": "keqing-c4"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_e",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-skill）",
+          "offset": 0.517,
+          "duration": 8.2,
+          "gcsimKey": "keqing-c6-skill"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_g",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-attack）",
+          "offset": 2.4,
+          "duration": 8.1,
+          "gcsimKey": "keqing-c6-attack"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_i",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-charge）",
+          "offset": 2.817,
+          "duration": 8,
+          "gcsimKey": "keqing-c6-charge"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_k",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-burst）",
+          "offset": 3.5,
+          "duration": 8,
+          "gcsimKey": "keqing-c6-burst"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659511231",
+      "characterId": "10000047-anemo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659627065_epde",
+          "actionTypeId": "10000047-anemo_e",
+          "name": "元素スキル: 千早振る",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.4,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.4,
+          "cooldown": 6,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.4,
+          "gcsimCtOffset": 0.133
+        },
+        {
+          "id": "act_1790813012716_y8zm",
+          "actionTypeId": "10000047-anemo_hp",
+          "name": "落下攻撃(高)",
+          "shortName": "hP",
+          "type": "plunge_high",
+          "duration": 0.833,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.833,
+          "naturalDuration": 0.833
+        }
+      ],
+      "startTime": 14.532,
+      "endTime": 16.465,
+      "duration": 1.9329999999999998,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h9_q",
+          "passiveEffectId": "10000047-anemo_p2",
+          "name": "風物の詩吟（kazuha-a4-electro）",
+          "offset": 1.617,
+          "duration": 8.5,
+          "gcsimKey": "kazuha-a4-electro"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_s",
+          "passiveEffectId": "wbuff_11407",
+          "name": "鉄蜂の刺し: 注入の棘",
+          "offset": 0.683,
+          "duration": 6,
+          "gcsimKey": "ironsting",
+          "cooldown": 1
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_u",
+          "passiveEffectId": "abuff_15002",
+          "name": "翠緑4: 拡散耐性-40%（vvelectro）",
+          "offset": 1.617,
+          "duration": 10.517,
+          "gcsimKey": "vvelectro"
+        }
+      ]
+    },
+    {
+      "id": "stint_1790659514605",
+      "characterId": "10000042-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1790659665259_m5o9",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.583,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.583,
+          "cooldown": 3.65,
+          "gcsimCdResonance": 1,
+          "effectDuration": 5.333,
+          "naturalDuration": 0.583,
+          "gcsimCtOffset": 0.333
+        },
+        {
+          "id": "act_1790659666023_n3u8",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.8,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.8,
+          "cooldown": 0,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.8
+        },
+        {
+          "id": "act_1790813078761_gqgn",
+          "actionTypeId": "10000042-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.317,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.317,
+          "naturalDuration": 0.317,
+          "groupId": "grp_1791806664765_trfd"
+        },
+        {
+          "id": "act_1790659670941_r34l",
+          "actionTypeId": "10000042-electro_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 0.6,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.6,
+          "naturalDuration": 0.6,
+          "groupId": "grp_1791806664765_trfd"
+        },
+        {
+          "id": "act_1791806714245_pybk",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.583,
+          "naturalDuration": 0.467,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.583,
+          "cooldown": 6.5,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0.333,
+          "effectDuration": 5.333
+        },
+        {
+          "id": "act_1791806715914_87ev",
+          "actionTypeId": "10000042-electro_e",
+          "name": "元素スキル: 星辰帰位",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.8,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.8,
+          "cooldown": 0,
+          "gcsimCdResonance": 1
+        }
+      ],
+      "startTime": 16.465,
+      "endTime": 22.466,
+      "duration": 6.001000000000001,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv57a5h8_2",
+          "passiveEffectId": "10000042-electro_p1",
+          "name": "抵天の雷罰",
+          "offset": 1.2,
+          "duration": 10.35,
+          "gcsimKey": "keqinginfuse"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_4",
+          "passiveEffectId": "10000042-electro_p2",
+          "name": "玉衡の貴",
+          "offset": 1.467,
+          "duration": 2.75,
+          "gcsimKey": "keqing-a4"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_6",
+          "passiveEffectId": "wbuff_11509",
+          "name": "霧切の廻光: 霧切の御腰物（mistsplitter-normal）",
+          "offset": 2.267,
+          "duration": 7.983,
+          "gcsimKey": "mistsplitter-normal"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_8",
+          "passiveEffectId": "wbuff_11509",
+          "name": "霧切の廻光: 霧切の御腰物（mistsplitter-burst）",
+          "offset": 1.467,
+          "duration": 4.85,
+          "gcsimKey": "mistsplitter-burst"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_a",
+          "passiveEffectId": "10000042-electro_c2",
+          "name": "2凸「苛捐」",
+          "offset": 3.383,
+          "duration": 0,
+          "gcsimKey": "keqing-c2-icd",
+          "cooldown": 5.2
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_c",
+          "passiveEffectId": "10000042-electro_c4",
+          "name": "4凸「調律」",
+          "offset": 0.933,
+          "duration": 15.333,
+          "gcsimKey": "keqing-c4"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h8_f",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-skill）",
+          "offset": 0.517,
+          "duration": 13.017,
+          "gcsimKey": "keqing-c6-skill"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_h",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-attack）",
+          "offset": 1.467,
+          "duration": 11.067,
+          "gcsimKey": "keqing-c6-attack"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_j",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-charge）",
+          "offset": 1.467,
+          "duration": 11.383,
+          "gcsimKey": "keqing-c6-charge"
+        },
+        {
+          "id": "ptrg_gcsim_mv57a5h9_l",
+          "passiveEffectId": "10000042-electro_c6",
+          "name": "6凸「廉貞」（keqing-c6-burst）",
+          "offset": 1.467,
+          "duration": 2.75,
+          "gcsimKey": "keqing-c6-burst"
+        }
+      ],
+      "groups": [
+        {
+          "id": "grp_1791806664765_trfd",
+          "repeat": 3
+        }
+      ]
+    }
+  ],
+  "loopStartIndex": 1,
+  "loopStartTime": 2.383,
+  "totalDuration": 23.58,
+  "switchDelay": 0.5
+}

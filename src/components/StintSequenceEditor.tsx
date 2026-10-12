@@ -13,7 +13,6 @@ import {
   Edit3, 
   CornerDownRight,
   Info,
-  HelpCircle,
   Sparkles,
   ChevronUp,
   ChevronDown,
@@ -39,8 +38,9 @@ import { scrollStintCardBelowSticky, focusStintInGantt, ACTION_BUILDER_STICKY_ID
 import { StintBuffTriggersSection } from './StintBuffTriggersSection';
 import { CharacterModel } from '../models/CharacterModel';
 import { actionDelayOf } from '../utils/actionDelay';
-import { actionTone } from '../utils/actionTone';
+import { actionTone, actionOrderRank } from '../utils/actionTone';
 import { actionDescription } from '../utils/actionDescription';
+import { DEVICE_KEYS, readString, writeString } from '../utils/persistence';
 import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup } from '../utils/actionGroups';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
@@ -59,7 +59,6 @@ interface StintSequenceEditorProps {
   /** 敵から受けるダメージ（gcsim の hurt。既定: 無効） */
   hurt?: HurtSetting;
   onUpdateHurt?: (value: HurtSetting) => void;
-  onOpenHelpModal?: () => void;
   selectedAction?: { stintId: string; actionId: string } | null;
   onSelectAction?: (stintId: string, actionId: string) => void;
   loopStartTime?: number;
@@ -83,7 +82,6 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   onUpdateDefHalt,
   hurt = DEFAULT_HURT,
   onUpdateHurt,
-  onOpenHelpModal,
   selectedAction,
   onSelectAction,
   loopStartTime = 0,
@@ -100,7 +98,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const [draggedAction, setDraggedAction] = useState<{ stintIndex: number; actionIndex: number } | null>(null);
   const [editingNoteStintId, setEditingNoteStintId] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
-  const [showGuideBanner, setShowGuideBanner] = useState(true);
+  // ガイド（アクション凡例・操作のヒント）の表示。端末に覚えておく（既定: 表示）
+  const [showGuide, setShowGuide] = useState<boolean>(() => readString(DEVICE_KEYS.editorGuideVisible) !== 'false');
+  const toggleGuide = () => {
+    const next = !showGuide;
+    setShowGuide(next);
+    writeString(DEVICE_KEYS.editorGuideVisible, String(next));
+  };
   const [confirmClearStints, setConfirmClearStints] = useState(false);
   // CT入力欄の操作中は、アクションチップのドラッグ移動を無効にする（入力欄の文字選択と干渉するため）
   const [ctHoverActionId, setCtHoverActionId] = useState<string | null>(null);
@@ -490,16 +494,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         
         {/* Sticky Header Container: セクション見出し・並び替えパイプライン・選択中アクション */}
         <div id={ACTION_BUILDER_STICKY_ID} className="sticky top-[var(--header-height,0px)] z-30 bg-slate-900/95 backdrop-blur-md pt-2 pb-3 -mx-4 px-4 border-b border-slate-800/80 shadow-xl space-y-3 transition-all">
-          {/* Section Header */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* Section Header（見出し + 全クリア の行 / 出場追加の行） */}
+          <div className="flex flex-col items-stretch gap-2">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-sm font-bold text-white flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                <h2 className="text-base sm:text-lg font-extrabold text-white tracking-wide flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-amber-400"></span>
                   アクション構築
-                  <span className="text-xs font-semibold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
-                    順番入れ替え対応
-                  </span>
                 </h2>
 
                 {/* 出場ブロック・アクションのみ全クリア（編成のキャラ登録は維持） */}
@@ -537,23 +538,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   </button>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                各キャラの登場順を入れ替えると、前の退場と次の登場が自動で数珠つなぎ（垂直スナップ）されます。
-              </p>
             </div>
 
             <div className="flex items-center gap-2">
-              {onOpenHelpModal && (
-                <button
-                  onClick={onOpenHelpModal}
-                  className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors"
-                  title="順番の入れ替え方法を見る"
-                >
-                  <HelpCircle className="w-3.5 h-3.5" />
-                  <span>入れ替え方法ガイド</span>
-                </button>
-              )}
-
               {/* Add Stint Button Group */}
               <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
                 <span className="text-xs text-slate-400 px-2 font-medium">出場追加:</span>
@@ -581,7 +568,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {/* =========================================================================
               1. Prominent Quick Reorder Pipeline (登場順序クイック並び替えバー)
           ========================================================================= */}
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          {/* ガイド（凡例・ヒント）を直下に出すときは、下の余白を無くして、すき間なく並べる */}
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800" style={showGuide ? { marginBottom: 0 } : undefined}>
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-amber-300 flex items-center gap-1">
@@ -594,10 +582,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setShowGuideBanner(!showGuideBanner)}
+                  onClick={toggleGuide}
                   className="text-[11px] text-slate-400 hover:text-slate-200 underline"
+                  title="アクション凡例と、操作のヒントの表示・非表示を切り替えます"
                 >
-                  {showGuideBanner ? 'ガイドを非表示' : '操作方法を見る'}
+                  {showGuide ? 'ガイドを非表示' : 'ガイドを表示'}
                 </button>
               </div>
             </div>
@@ -687,11 +676,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           e.stopPropagation();
                           removeStint(idx);
                         }}
-                        className="w-4 h-4 rounded flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-600 transition-colors shrink-0"
+                        className="p-0.5 rounded flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors shrink-0"
                         title={`${char.name}の出場ブロック（${idx + 1}番目）を削除`}
                         aria-label="出場ブロックを削除"
                       >
-                        <X className="w-3 h-3" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
@@ -792,273 +781,59 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               </div>
             </div>
           ) : null}
-        </div>
 
-        {/* =========================================================================
-            固定表示の対象外: 並び替えガイド・アクション凡例・操作ヒント
-        ========================================================================= */}
-        <div className="space-y-3">
-          {/* Guide Banner */}
-          {showGuideBanner && (
-            <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200/90 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-amber-400 font-bold">💡 順番の入れ替え方:</span>
-                <span>
-                  上のパイプラインのチップを <strong>ドラッグ＆ドロップ</strong> するか、各カードの <strong>「▲ 上へ / ▼ 下へ」</strong> を押すと登場順が即座に入れ替わります。
+          {/* アクション凡例・操作ヒント（固定表示の中。パイプラインの直下。「ガイドを非表示 / 表示」で切り替え） */}
+          {showGuide && (
+            <div className="space-y-1.5">
+            {/* =========================================================================
+                2. Action Type Notation Legend (凡例)
+            ========================================================================= */}
+            <div className="flex flex-wrap items-center gap-2 px-3 py-2 bg-slate-950/90 rounded-xl border border-slate-800 text-xs">
+              <span className="font-bold text-amber-300 text-[11px] shrink-0 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-amber-400" />
+                <span>【アクション凡例】</span>
+              </span>
+              <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  <strong className="font-bold text-amber-200">E</strong>: 元素スキル
+                </span>
+                <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  <strong className="font-bold text-amber-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
+                </span>
+                <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                  <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
+                </span>
+                <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
+                  <strong className="font-bold text-sky-200">N</strong>: 通常攻撃（連続した N は自動で1段目・2段目…と数えます）
+                </span>
+                <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                  <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <strong className="font-bold text-white">J</strong>: ジャンプ
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <strong className="font-bold text-white">lP / hP</strong>: 落下攻撃（低 / 高）
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <strong className="font-bold text-white">待機</strong>: 何もしないで待つ（記法は w）
                 </span>
               </div>
-              <button 
-                onClick={onOpenHelpModal} 
-                className="text-amber-300 underline font-semibold hover:text-white"
-              >
-                詳しい解説 →
-              </button>
+            </div>
+
+            {!(SHOW_SELECTED_ACTION_BAR && selectedActionInfo) && (
+              <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
+                <span className="flex items-center gap-1.5">
+                  <span className="text-amber-400 font-bold">💡</span>
+                  <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。Ctrl+クリックで隣接するアクションを複数選択すると、グループにして回数を設定できます。</span>
+                </span>
+              </div>
+            )}
             </div>
           )}
-
-          {/* =========================================================================
-              2. Action Type Notation Legend (凡例)
-          ========================================================================= */}
-          <div className="flex flex-wrap items-center gap-2 px-3 py-2 bg-slate-950/90 rounded-xl border border-slate-800 text-xs">
-            <span className="font-bold text-amber-300 text-[11px] shrink-0 flex items-center gap-1">
-              <Info className="w-3.5 h-3.5 text-amber-400" />
-              <span>【アクション凡例】</span>
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                <strong className="font-bold text-amber-200">E</strong>: 元素スキル
-              </span>
-              <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
-                <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
-              </span>
-              <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
-                <strong className="font-bold text-sky-200">N</strong>: 通常攻撃（連続した N は自動で1段目・2段目…と数えます）
-              </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
-              </span>
-              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
-              </span>
-              <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                <strong className="font-bold text-cyan-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
-              </span>
-              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                <strong className="font-bold text-white">lP / hP</strong>: 落下攻撃（低 / 高）
-              </span>
-            </div>
-          </div>
-
-          {!(SHOW_SELECTED_ACTION_BAR && selectedActionInfo) && (
-            <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
-              <span className="flex items-center gap-1.5">
-                <span className="text-amber-400 font-bold">💡</span>
-                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。Ctrl+クリックで隣接するアクションを複数選択すると、グループにして回数を設定できます。</span>
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* =========================================================================
-            3. Timing Delays (交代所要時間 & アクションごとの遅延)
-        ========================================================================= */}
-        <div className="bg-slate-950/90 border border-slate-700/80 rounded-xl p-3.5 shadow-md space-y-3">
-          {/* 1. Character Change Delay */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400 flex items-center justify-center text-sky-300 font-bold shrink-0">
-                <RefreshCw className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-sky-200">
-                    🔄 キャラチェンジ所要時間（交代遅延）
-                  </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-900/60 text-sky-300 border border-sky-700">
-                    全交代箇所に自動挿入
-                  </span>
-                </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  キャラ切替時の操作硬直・交代内部CTを設定（初期値 0.50秒）。全登場ターン間に自動反映されます。
-                </div>
-              </div>
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Stepper controls */}
-              <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
-                <button
-                  type="button"
-                  onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.10).toFixed(2))))}
-                  className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.10秒"
-                >
-                  -0.1s
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05).toFixed(2))))}
-                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.05秒"
-                >
-                  -0.05s
-                </button>
-                <div className="px-2 py-1 bg-slate-950 rounded border border-slate-700 font-mono font-bold text-sm text-sky-300 min-w-[62px] text-center">
-                  {switchDelay.toFixed(2)}s
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.05).toFixed(2)))}
-                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.05秒"
-                >
-                  +0.05s
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.10).toFixed(2)))}
-                  className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.10秒"
-                >
-                  +0.1s
-                </button>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="flex items-center gap-1">
-                {[
-                  { label: '0.00s (即時)', value: 0.00 },
-                  { label: '0.30s', value: 0.30 },
-                  { label: '0.50s (標準)', value: 0.50 },
-                  { label: '0.80s', value: 0.80 },
-                  { label: '1.00s', value: 1.00 },
-                ].map(preset => (
-                  <button
-                    key={preset.value}
-                    type="button"
-                    onClick={() => onUpdateSwitchDelay?.(preset.value)}
-                    className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
-                      Math.abs(switchDelay - preset.value) < 0.01
-                        ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
-                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-850 my-1" />
-
-          {/* 敵の防御ヒットストップ（gcsim の defhalt） */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs">
-              <div className="font-bold text-slate-200">🛡️ 敵の防御ヒットストップ（gcsim の defhalt）</div>
-              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
-                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。疾風怒濤の受付への反映は、gcsim から所要時間を書き戻したアクションだけ（所要時間にも止まった分が含まれるため）。
-              </div>
-            </div>
-            <div className="flex items-center gap-1">
-              {[{ label: '有効（既定）', value: true }, { label: '無効', value: false }].map(opt => (
-                <button
-                  key={String(opt.value)}
-                  type="button"
-                  onClick={() => onUpdateDefHalt?.(opt.value)}
-                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
-                    defHalt === opt.value
-                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t border-slate-850 my-1" />
-
-          {/* 敵から受けるダメージ（gcsim の hurt。追加作業 18） */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs">
-              <div className="font-bold text-slate-200">💥 敵から受けるダメージ（gcsim の hurt）</div>
-              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
-                有効にすると、gcsim の実行で、出場中のキャラが一定の間隔で物理ダメージを受ける（間隔・量とも範囲の中の乱数）。ディシアの「紅き血」など、自分が受けたダメージで HP が減ることが条件の効果を再現する。無効のときは、ダメージを受けない。アプリの計算は変わらない。
-              </div>
-              {hurt.enabled && (
-                <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
-                  <span>間隔（秒）</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最小（秒）" />
-                  <span>〜</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最大（秒）" />
-                  <span className="ml-2">ダメージ（HP）</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最小" />
-                  <span>〜</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最大" />
-                  {!hurtStatement(hurt) && <span className="text-amber-300">値が不正です（最小 ≤ 最大・1 以上）。gcsim には渡しません</span>}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              {[{ label: '無効（既定）', value: false }, { label: '有効', value: true }].map(opt => (
-                <button
-                  key={String(opt.value)}
-                  type="button"
-                  onClick={() => onUpdateHurt?.({ ...hurt, enabled: opt.value })}
-                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
-                    hurt.enabled === opt.value
-                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
-                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t border-slate-850 my-1" />
-
-          {/* 2. Action Execution Delay (アクションごとの遅延: 一括設定) */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 font-bold shrink-0">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-amber-200">
-                    ⏱️ アクション遅延（アクションごと）
-                  </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-900/60 text-amber-300 border border-amber-700">
-                    各アクションの終了後に挿入
-                  </span>
-                </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
-                  入力硬直・先行入力の遅れを、アクションごとに設定します（初期値 0.10秒。下の各アクションの右の「+0.10s」で個別に変更）。
-                </div>
-              </div>
-            </div>
-
-            {/* 一括設定 */}
-            <div className="flex items-center gap-1 flex-wrap">
-              <span className="text-[11px] text-slate-400 mr-1">全アクションに一括設定:</span>
-              {[0.00, 0.05, 0.10, 0.15, 0.20].map(value => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setAllActionDelays(value)}
-                  className="px-2 py-1 rounded text-[11px] font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-amber-400"
-                  title={`全アクションの遅延を ${value.toFixed(2)}秒 にする`}
-                >
-                  {value.toFixed(2)}s
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* =========================================================================
@@ -1332,12 +1107,12 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <div className="pt-2.5">
                   {/* アクション追加ボタン（出場の見出しの直下。アクションが増えて折り返しても、位置が動かない。追加作業 27 / issue #35） */}
                     <div className="flex flex-wrap items-center gap-1">
-                      <span className="text-[11px] text-slate-500 font-medium">+ 追加:</span>
-                      {CharacterModel.fromConfig(char).actions.map(actionDef => (
+                      <span className="h-7 w-14 shrink-0 mr-2.5 inline-flex items-center justify-center text-xs font-extrabold text-red-100 bg-red-600/60 border border-red-400 rounded shadow-sm shadow-red-900/50" title="アクションを追加します（選択中のアクションの直前に入ります）">+ 追加</span>
+                      {[...CharacterModel.fromConfig(char).actions].sort((a, b) => actionOrderRank(a) - actionOrderRank(b)).map(actionDef => (
                         <button
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
-                          className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
+                          className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
                           title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
                         >
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
@@ -1358,7 +1133,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
                       <button
                         onClick={() => addActionToStint(stintIndex, 'wait')}
-                        className={`px-2 py-0.5 rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'w' }).box}`}
+                        className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'w' }).box}`}
                         title={`待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
                       >
                         <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'w' }).label}`}>+待機</strong>
@@ -1366,6 +1141,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     </div>
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
                     {renderBuffSection('palette')}
+                    {/* 「+ 登録」の行と、アクション要素の行を分ける実線 */}
+                    <div className="mt-2 border-t border-solid border-slate-600/80" />
                     <div className="flex flex-wrap items-center gap-2 mt-2">
                       {renderActionSegments(stint, stintIndex, (act, actIdx) => {
                         const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
@@ -1380,7 +1157,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         const gapElement = !isSwap ? (
                           <div
                             key={`gap-${act.id}`}
-                            className="flex items-center gap-0.5 px-1.5 py-1 rounded bg-slate-950/80 border border-dashed border-amber-500/40 text-[10px] font-mono text-amber-300 select-none shadow-sm"
+                            className="flex items-center gap-0.5 h-7 px-1.5 rounded bg-slate-950/80 border border-dashed border-amber-500/40 shrink-0 text-[10px] font-mono text-amber-300 select-none shadow-sm"
                             title={`【このアクションの後の遅延】: +${delayValue.toFixed(2)}s\nこのアクションの終了後に入る空白です（▲▼で0.05秒ずつ変更）。`}
                           >
                             <Clock className="w-2.5 h-2.5 text-amber-400" />
@@ -1415,7 +1192,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                   onSelectAction?.(stint.id, act.id);
                                   if (onSeek) onSeek(act.startTime ?? 0);
                                 }}
-                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer shadow-sm ${
+                                className={`flex items-center gap-1.5 h-7 px-2 rounded-lg border transition-all text-xs select-none cursor-pointer shrink-0 shadow-sm ${
                                   `${actionTone(act).box} hover:brightness-125`
                                 } ${
                                   // 選択中は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
@@ -1426,7 +1203,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 title={`【キャラ交代所要時間（出場時間の先頭）】\n所要時間: ${act.duration.toFixed(2)}s\n期間: [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s] (クリックで選択フォーカス)`}
                               >
                                 {/* Action Type Badge */}
-                                <span className={`px-0.5 font-mono font-extrabold text-[11px] flex items-center gap-1 ${actionTone(act).label}`}>
+                                <span className={`px-0.5 font-mono font-extrabold text-[11px] flex items-center gap-1 whitespace-nowrap shrink-0 ${actionTone(act).label}`}>
                                   <RefreshCw className="w-3 h-3 text-sky-300" />
                                   交代
                                 </span>
@@ -1443,7 +1220,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 )}
 
                                 {/* Duration & Tweaks */}
-                                <div className="flex items-center gap-0.5 ml-1 bg-slate-950/90 rounded px-1.5 py-0.5 border border-slate-700 text-[11px] font-mono">
+                                <div className="flex items-center gap-0.5 ml-1 h-5 bg-slate-950/90 rounded px-1.5 border border-slate-700 text-[11px] font-mono shrink-0">
                                   <span className="text-slate-200 font-bold">{act.duration.toFixed(1)}s</span>
                                   <div className="flex flex-col ml-0.5">
                                     <button
@@ -1521,7 +1298,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 }
                               }}
                               onDragEnd={(e) => { e.stopPropagation(); setDraggedAction(null); }}
-                              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-xs select-none cursor-pointer ${
+                              className={`flex items-center gap-1.5 h-7 px-2 rounded-lg border transition-all text-xs select-none cursor-pointer shrink-0 ${
                                 `${actionTone(act).box} hover:brightness-125`
                               } ${
                                 // 選択中（複数選択を含む）は、黄色の太い枠だけを足す（地の色は、種別の色のまま）
@@ -1567,7 +1344,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                               {/* モーション時間（数値入力 + ▲▼ 長押しで連続増減） */}
                               <div
-                                className="flex items-center gap-0.5 ml-1 bg-slate-950/60 rounded px-1 py-0.5 border border-slate-800 text-[11px] font-mono"
+                                className="flex items-center gap-0.5 ml-1 h-5 bg-slate-950/60 rounded px-1 border border-slate-800 text-[11px] font-mono shrink-0"
                                 onClick={(e) => e.stopPropagation()}
                                 onMouseEnter={() => setCtHoverActionId(act.id)}
                                 onMouseLeave={() => setCtHoverActionId(prev => (prev === act.id ? null : prev))}
@@ -1628,10 +1405,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               <button
                                 onClick={() => removeActionFromStint(stintIndex, actIdx)}
                                 disabled={stint.actions.filter(a => a.type !== 'swap').length === 0}
-                                className="text-slate-500 hover:text-red-400 disabled:opacity-20 ml-0.5"
+                                className="p-0.5 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none ml-0.5 flex items-center justify-center shrink-0"
                                 title="アクション削除"
+                                aria-label="アクションを削除"
                               >
-                                ✕
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
                             {gapElement}
@@ -1648,6 +1426,208 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               </div>
             );
           })}
+        </div>
+
+        {/* =========================================================================
+            5. 時間の設定（出場トラックの下）: キャラチェンジ所要時間 → アクション遅延 → 敵の防御ヒットストップ → 敵から受けるダメージ
+        ========================================================================= */}
+        <div className="bg-slate-950/90 border border-slate-700/80 rounded-xl p-3.5 shadow-md space-y-3">
+          {/* 1. Character Change Delay */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400 flex items-center justify-center text-sky-300 font-bold shrink-0">
+                <RefreshCw className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-sky-200">
+                    🔄 キャラチェンジ所要時間（交代遅延）
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-900/60 text-sky-300 border border-sky-700">
+                    全交代箇所に自動挿入
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  キャラ切替時の操作硬直・交代内部CTを設定（初期値 0.50秒）。全登場ターン間に自動反映されます。
+                </div>
+              </div>
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Stepper controls */}
+              <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
+                <button
+                  type="button"
+                  onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.10).toFixed(2))))}
+                  className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
+                  title="-0.10秒"
+                >
+                  -0.1s
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05).toFixed(2))))}
+                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
+                  title="-0.05秒"
+                >
+                  -0.05s
+                </button>
+                <div className="px-2 py-1 bg-slate-950 rounded border border-slate-700 font-mono font-bold text-sm text-sky-300 min-w-[62px] text-center">
+                  {switchDelay.toFixed(2)}s
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.05).toFixed(2)))}
+                  className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
+                  title="+0.05秒"
+                >
+                  +0.05s
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.10).toFixed(2)))}
+                  className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
+                  title="+0.10秒"
+                >
+                  +0.1s
+                </button>
+              </div>
+
+              {/* Quick Presets */}
+              <div className="flex items-center gap-1">
+                {[
+                  { label: '0.00s (即時)', value: 0.00 },
+                  { label: '0.30s', value: 0.30 },
+                  { label: '0.50s (標準)', value: 0.50 },
+                  { label: '0.80s', value: 0.80 },
+                  { label: '1.00s', value: 1.00 },
+                ].map(preset => (
+                  <button
+                    key={preset.value}
+                    type="button"
+                    onClick={() => onUpdateSwitchDelay?.(preset.value)}
+                    className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
+                      Math.abs(switchDelay - preset.value) < 0.01
+                        ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-850 my-1" />
+
+          {/* 2. Action Execution Delay (アクションごとの遅延: 一括設定) */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 font-bold shrink-0">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-amber-200">
+                    ⏱️ アクション遅延（アクションごと）
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-900/60 text-amber-300 border border-amber-700">
+                    各アクションの終了後に挿入
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  入力硬直・先行入力の遅れを、アクションごとに設定します（初期値 0.10秒。下の各アクションの右の「+0.10s」で個別に変更）。
+                </div>
+              </div>
+            </div>
+
+            {/* 一括設定 */}
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="text-[11px] text-slate-400 mr-1">全アクションに一括設定:</span>
+              {[0.00, 0.05, 0.10, 0.15, 0.20].map(value => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setAllActionDelays(value)}
+                  className="px-2 py-1 rounded text-[11px] font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-amber-400"
+                  title={`全アクションの遅延を ${value.toFixed(2)}秒 にする`}
+                >
+                  {value.toFixed(2)}s
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-slate-850 my-1" />
+
+          {/* 敵の防御ヒットストップ（gcsim の defhalt） */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs">
+              <div className="font-bold text-slate-200">🛡️ 敵の防御ヒットストップ（gcsim の defhalt）</div>
+              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
+                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。疾風怒濤の受付への反映は、gcsim から所要時間を書き戻したアクションだけ（所要時間にも止まった分が含まれるため）。
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              {[{ label: '有効（既定）', value: true }, { label: '無効', value: false }].map(opt => (
+                <button
+                  key={String(opt.value)}
+                  type="button"
+                  onClick={() => onUpdateDefHalt?.(opt.value)}
+                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
+                    defHalt === opt.value
+                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-slate-850 my-1" />
+
+          {/* 敵から受けるダメージ（gcsim の hurt。追加作業 18） */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs">
+              <div className="font-bold text-slate-200">💥 敵から受けるダメージ（gcsim の hurt）</div>
+              <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
+                有効にすると、gcsim の実行で、出場中のキャラが一定の間隔で物理ダメージを受ける（間隔・量とも範囲の中の乱数）。ディシアの「紅き血」など、自分が受けたダメージで HP が減ることが条件の効果を再現する。無効のときは、ダメージを受けない。アプリの計算は変わらない。
+              </div>
+              {hurt.enabled && (
+                <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
+                  <span>間隔（秒）</span>
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最小（秒）" />
+                  <span>〜</span>
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最大（秒）" />
+                  <span className="ml-2">ダメージ（HP）</span>
+                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最小" />
+                  <span>〜</span>
+                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最大" />
+                  {!hurtStatement(hurt) && <span className="text-amber-300">値が不正です（最小 ≤ 最大・1 以上）。gcsim には渡しません</span>}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-1">
+              {[{ label: '無効（既定）', value: false }, { label: '有効', value: true }].map(opt => (
+                <button
+                  key={String(opt.value)}
+                  type="button"
+                  onClick={() => onUpdateHurt?.({ ...hurt, enabled: opt.value })}
+                  className={`px-2 py-1 rounded text-[11px] font-semibold transition-all ${
+                    hurt.enabled === opt.value
+                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                      : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-sky-400'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       {/* パイプライン / ガントチャートからの移動で、末尾付近のカードも固定表示エリア直下まで上げるための下余白 */}
@@ -1669,7 +1649,7 @@ const ActionTimingInput: React.FC<{
   const isCustom = value !== defaultValue;
   return (
     <div
-      className={`flex items-center gap-0.5 ml-1 rounded px-1 py-0.5 border text-[11px] font-mono ${
+      className={`flex items-center gap-0.5 ml-1 h-5 rounded px-1 border text-[11px] font-mono shrink-0 ${
         isCustom ? 'bg-amber-950/60 border-amber-500/60' : 'bg-slate-950/60 border-slate-800'
       }`}
       onClick={(e) => e.stopPropagation()}
@@ -1694,7 +1674,7 @@ const ActionTimingInput: React.FC<{
         <button
           type="button"
           onClick={() => onChange(defaultValue)}
-          className="ml-0.5 text-amber-400 hover:text-white text-[11px]"
+          className="ml-0.5 text-amber-400 hover:text-white text-[11px] leading-none"
           title={`初期値 ${defaultValue}s に戻す`}
         >
           ↺

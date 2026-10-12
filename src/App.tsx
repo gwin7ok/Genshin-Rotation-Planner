@@ -22,6 +22,7 @@ import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
+import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
@@ -589,7 +590,6 @@ export default function App() {
       return;
     }
     // 反応の状態（月反応・星反応）
-    const { extractReactionRows, anchorReactionRows, reactionLapInputs } = await import('./utils/gcsim/readReactions');
     setGcsimReactions(anchorReactionRows(extractReactionRows(outcome.logs), reactionLapInputs(outcome.align.pairs)));
     const plan = computeGcsimApply({ stints: visibleStints, calculated: calculatedResult, result, buffsByCharacter, actionLinks, outcome });
     const warnCount = result.warnings.filter(w => w.level === 'warn').length;

@@ -8,9 +8,10 @@
     {
       // 更新履歴の更新（package.json の version 更新 + CHANGELOG.md の [Unreleased] を版に切り出し）。
       // [Unreleased] が空なら、前のリリース以降のコミットから生成する（確認あり）。次の版（パッチ/マイナー/メジャー）を選ぶ。
+      // 版の更新のあとに、npm run build で dist を作り直す（公開前の検査が、dist と public の main.wasm が同じかを見るため。版も dist に入る）。
       "label": "Update Changelog",
       "type": "shell",
-      "command": "npm run release:bump",
+      "command": "npm run release:bump && npm run build",
       "options": { "cwd": "${workspaceFolder}" },
       "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false, "focus": true }
     },

@@ -7,7 +7,7 @@
  * 使うには、Cloudflare の Web Analytics でサイトを登録し、表示される「トークン」を、下の CLOUDFLARE_ANALYTICS_TOKEN に入れる
  * （トークンは、公開される値。秘密ではない）。空のままなら、何もしない（画面の説明も出さない）。
  */
-export const CLOUDFLARE_ANALYTICS_TOKEN = '0e823541683e4704b582fac737968bd8';
+export const CLOUDFLARE_ANALYTICS_TOKEN: string = '0e823541683e4704b582fac737968bd8';
 
 const BEACON_URL = 'https://static.cloudflareinsights.com/beacon.min.js';
 

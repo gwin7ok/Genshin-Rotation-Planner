@@ -15,6 +15,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "check:backup": "node scripts/check-backup.ts",
+    "release:bump": "node scripts/release-bump.ts",
+    "release:tag": "node scripts/release-tag.ts",
     "check:release": "node scripts/check-release.ts",
     "wasm:build": "node scripts/build-gcsim-wasm.ts",
     "build:master:appside": "node scripts/regenerate-appside-characters.ts",

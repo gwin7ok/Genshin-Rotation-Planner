@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-10-13
+
 ### 追加
 - アクセス数の集計に、Cloudflare Web Analytics（Cookie なし）を使うようにした（公開サイトだけ。ページの URL・ブラウザの種類などのアクセス情報だけが送られ、編成・設定のデータは送られない。画面の下部に説明を表示する）。
 
@@ -71,7 +73,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/releases/tag/v1.0.0

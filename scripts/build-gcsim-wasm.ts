@@ -37,7 +37,7 @@ async function obtainSource(): Promise<string> {
   if (!res.ok) throw new Error(`ソースを取得できませんでした（HTTP ${res.status}）`);
   const tgz = path.join(work, 'src.tgz');
   fs.writeFileSync(tgz, Buffer.from(await res.arrayBuffer()));
-  run('tar', ['-xzf', tgz, '-C', work]);
+  run('tar', ['-xzf', 'src.tgz'], { cwd: work });
   const sub = fs.readdirSync(work).find(n => fs.statSync(path.join(work, n)).isDirectory());
   if (!sub) throw new Error('ソースの展開に失敗しました');
   return path.join(work, sub);
@@ -51,7 +51,7 @@ console.log(`Go: ${goVersion}`);
 const env = { ...process.env, GOOS: 'js', GOARCH: 'wasm' };
 const tmpWasm = path.join(wasmDir, 'main.wasm');
 console.log('ビルド中…（初回は依存モジュールの取得で、数十秒かかる）');
-run(goBin, ['build', '-trimpath', '-o', tmpWasm, '.'], { cwd: wasmDir, env });
+run(goBin, ['build', '-trimpath', '-ldflags=-s -w', '-o', tmpWasm, '.'], { cwd: wasmDir, env });
 
 const goroot = run(goBin, ['env', 'GOROOT']).trim();
 const execJs = [path.join(goroot, 'lib', 'wasm', 'wasm_exec.js'), path.join(goroot, 'misc', 'wasm', 'wasm_exec.js')].find(p => fs.existsSync(p));
@@ -65,7 +65,7 @@ const info = {
   gcsimVersion: config.version,
   gcsimCommit: config.commit,
   goVersion,
-  command: 'GOOS=js GOARCH=wasm go build -trimpath -o main.wasm ./cmd/wasm',
+  command: 'GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w" -o main.wasm ./cmd/wasm',
   sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
   size: bytes.length,
   builtAt: new Date().toISOString(),

@@ -42,7 +42,7 @@
 
 1. Go 1.27.2（`go1.27.2.windows-amd64.zip`。SHA-256 `1314008898bd40df77af4b014f777f08873dbdfbcd3d92308728ee03304fe04f`）を展開。
 2. gcsim のソースの tarball（`gh api repos/genshinsim/gcsim/tarball/<commit>`）を展開。
-3. `cmd/wasm` で `GOOS=js GOARCH=wasm go build -trimpath -o main.wasm .`、`$(go env GOROOT)/lib/wasm/wasm_exec.js` を同じ場所に置く。
+3. `cmd/wasm` で `GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w" -o main.wasm .`、`$(go env GOROOT)/lib/wasm/wasm_exec.js` を同じ場所に置く。
 4. `check-rotation-snapshots.ts` の `built.config` を全並びぶん書き出し（武器の行 `add weapon="dullblade" refine=1 lvl=90/90` を足す）、WASM とサーバーの `sample` を比較する。
 
 ## 実装（2026-10-12。D169）

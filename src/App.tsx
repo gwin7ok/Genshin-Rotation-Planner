@@ -11,6 +11,7 @@ import { PartyConfigModal } from './components/PartyConfigModal';
 import { RotationSummaryModal } from './components/RotationSummaryModal';
 import { HelpGuideModal } from './components/HelpGuideModal';
 import { SourceNotice } from './components/SourceNotice';
+import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT } from './utils/gcsim/gcsimConfig.ts';
@@ -72,24 +73,16 @@ export default function App() {
   const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next.map(normalizeGroups), stints, characters, party));
   // Character switch delay (default 0.50s or restored from storage)
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
-  const [defHalt, setDefHaltState] = useState<boolean>(() => {
-    try { return localStorage.getItem('gcsimDefHalt') !== 'false'; } catch { return true; }
-  });
+  const [defHalt, setDefHaltState] = useState<boolean>(() => loadDefHalt());
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
-    try { localStorage.setItem('gcsimDefHalt', String(value)); } catch { /* 保存できなくても動く */ }
+    saveDefHalt(value);
   };
   // 敵から受けるダメージ（gcsim の hurt。追加作業 18）。defHalt と同じく、回転ごとではなく、アプリ全体の設定（既定: 無効）
-  const [hurt, setHurtState] = useState<HurtSetting>(() => {
-    try {
-      const v = JSON.parse(localStorage.getItem('gcsimHurt') ?? 'null');
-      if (v && typeof v === 'object') return { ...DEFAULT_HURT, ...v };
-    } catch { /* 読めなければ既定 */ }
-    return DEFAULT_HURT;
-  });
+  const [hurt, setHurtState] = useState<HurtSetting>(() => loadHurt());
   const setHurt = (value: HurtSetting) => {
     setHurtState(value);
-    try { localStorage.setItem('gcsimHurt', JSON.stringify(value)); } catch { /* 保存できなくても動く */ }
+    saveHurt(value);
   };
   const [switchDelay, setSwitchDelay] = useState<number>(() => {
     return savedInitialState?.switchDelay ?? 0.50;
@@ -311,12 +304,10 @@ export default function App() {
 
   // 11. Notation Copy & Display
   // 記法のモード（略号 / 名称）。回転ごとではなく、アプリ全体の設定（既定: 略号。追加作業 20-B）
-  const [notationMode, setNotationModeState] = useState<NotationMode>(() => {
-    try { return localStorage.getItem('rotationNotationMode') === 'name' ? 'name' : 'short'; } catch { return 'short'; }
-  });
+  const [notationMode, setNotationModeState] = useState<NotationMode>(() => loadNotationMode());
   const setNotationMode = (mode: NotationMode) => {
     setNotationModeState(mode);
-    try { localStorage.setItem('rotationNotationMode', mode); } catch { /* 保存できなくても動く */ }
+    saveNotationMode(mode);
   };
   const rotationNotation = useMemo(
     () => buildRotationNotation(characters, calculatedResult.calculatedStints, loopStartIndex, notationMode),

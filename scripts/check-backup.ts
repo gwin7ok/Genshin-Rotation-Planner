@@ -7,6 +7,8 @@
  * あわせて、復元の規則（古い保存編成で上書きしない）と、読み込めないファイルの扱いを確かめる。
  */
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { createServer } from 'vite';
 
 // 偽の localStorage（アプリのモジュールを読む前に用意する）
@@ -145,6 +147,74 @@ check('設定: 未知のキーは取り込まない', () => {
   const r = backup.parseBackup(JSON.stringify({ ...file, settings: { ...file.settings, evilKey: 'x' } }));
   assert.equal(r.ok, true);
   assert.equal('evilKey' in r.backup.settings, false);
+});
+
+// --- 保存層（persistence.ts。D175） ---
+const persistence = await server.ssrLoadModule('/src/utils/persistence.ts');
+const settings = await server.ssrLoadModule('/src/utils/appSettings.ts');
+
+check('保存層: キーの文字列が、公開済みのデータと同じ（変えると、利用者のデータが読めなくなる）', () => {
+  assert.deepEqual({ ...persistence.STORAGE_KEYS }, {
+    activeRotation: 'genshin_rotation_current_state_v2',
+    savedSlots: 'genshin_rotation_saved_slots_v2',
+    database: 'genshin_app_db_v1',
+  });
+  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode' });
+  assert.equal(persistence.DEVICE_KEYS.gcsimEngine, 'gcsim_engine');
+  assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '端末だけの設定は、バックアップに含めない');
+});
+check('保存層: 書き込みが失敗しても例外を投げない（容量超過）', () => {
+  persistence.setPersistenceBackend({
+    getItem: () => null,
+    setItem: () => {
+      throw new Error('QuotaExceededError');
+    },
+    removeItem: () => {
+      throw new Error('x');
+    },
+  });
+  try {
+    assert.equal(persistence.writeString('k', 'v'), false);
+    assert.equal(persistence.writeJson('k', { a: 1 }), false);
+    persistence.removeKey('k');
+    assert.equal(storage.getSavedSlots().length, 0);
+  } finally {
+    persistence.setPersistenceBackend(null);
+  }
+});
+check('保存層: 壊れた JSON は null（例外にしない）', () => {
+  store.set('broken', '{not json');
+  assert.equal(persistence.readJson('broken'), null);
+  assert.equal(persistence.readJson('nothing'), null);
+});
+check('設定: 既定値と、保存・読み込みの往復', () => {
+  store.clear();
+  assert.equal(settings.loadDefHalt(), true);
+  assert.equal(settings.loadNotationMode(), 'short');
+  const defaults = settings.loadHurt();
+  settings.saveDefHalt(false);
+  settings.saveNotationMode('name');
+  settings.saveHurt({ ...defaults, enabled: true });
+  assert.equal(settings.loadDefHalt(), false);
+  assert.equal(settings.loadNotationMode(), 'name');
+  assert.equal(settings.loadHurt().enabled, true);
+});
+
+// --- 規則: localStorage を、persistence.ts 以外から直接呼ばない ---
+check('規則: src/ の localStorage の直接呼び出しは persistence.ts だけ', () => {
+  const offenders: string[] = [];
+  const walk = (dir: string) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) {
+        walk(p);
+      } else if (/\.(ts|tsx)$/.test(e.name) && !p.split(path.sep).join('/').endsWith('src/utils/persistence.ts')) {
+        if (/\b(localStorage|sessionStorage)\s*[.[]/.test(fs.readFileSync(p, 'utf8'))) offenders.push(p);
+      }
+    }
+  };
+  walk('src');
+  assert.deepEqual(offenders, [], `persistence.ts を通してください: ${offenders.join(', ')}`);
 });
 
 await server.close();

@@ -1,8 +1,6 @@
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot } from '../types/genshin';
 import { isEmptySlotCharacter } from '../data/characters';
-
-const ACTIVE_ROTATION_KEY = 'genshin_rotation_current_state_v2';
-const SAVED_SLOTS_KEY = 'genshin_rotation_saved_slots_v2';
+import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
 
 export interface ActiveRotationState {
   /** 編成（キャラの ID と編成ごとの設定） */
@@ -20,117 +18,76 @@ export interface ActiveRotationState {
 }
 
 /**
- * Save current active working state to localStorage
+ * 現在編集中の編成を保存する（自動保存。保存先は persistence.ts）
  */
 export function saveActiveState(state: Omit<ActiveRotationState, 'lastSavedAt'>): void {
-  try {
-    const payload: ActiveRotationState = {
-      ...state,
-      lastSavedAt: new Date().toISOString(),
-    };
-    localStorage.setItem(ACTIVE_ROTATION_KEY, JSON.stringify(payload));
-  } catch (e) {
-    console.warn('Failed to auto-save rotation to localStorage:', e);
-  }
+  const payload: ActiveRotationState = {
+    ...state,
+    lastSavedAt: new Date().toISOString(),
+  };
+  writeJson(STORAGE_KEYS.activeRotation, payload);
 }
 
 /**
- * Load saved active working state from localStorage
+ * 保存してある、編集中の編成を読む
  */
 export function loadActiveState(): ActiveRotationState | null {
-  try {
-    const raw = localStorage.getItem(ACTIVE_ROTATION_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed && Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-      return parsed as ActiveRotationState;
-    }
-  } catch (e) {
-    console.warn('Failed to load active rotation from localStorage:', e);
+  const parsed = readJson<Partial<ActiveRotationState>>(STORAGE_KEYS.activeRotation);
+  if (parsed && Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
+    return parsed as ActiveRotationState;
   }
   return null;
 }
 
 /**
- * Clear current active state from localStorage (reset to defaults)
+ * 編集中の編成の保存を消す（初期状態に戻す）
  */
 export function clearActiveState(): void {
-  try {
-    localStorage.removeItem(ACTIVE_ROTATION_KEY);
-  } catch (e) {
-    console.warn('Failed to clear active rotation:', e);
-  }
+  removeKey(STORAGE_KEYS.activeRotation);
 }
 
 /**
- * Get all user saved custom rotation slots
+ * 保存編成（スロット）の一覧を読む
  */
 export function getSavedSlots(): SavedRotationSlot[] {
-  try {
-    const raw = localStorage.getItem(SAVED_SLOTS_KEY);
-    if (!raw) return [];
-    const list = JSON.parse(raw);
-    if (Array.isArray(list)) {
-      // 旧形式（キャラを丸ごと持つ）の保存編成は読み込まない（D13）
-      return (list as SavedRotationSlot[])
-        .filter(slot => Array.isArray(slot.party))
-        .map(slot => ({ ...slot, stints: slot.stints ?? [] }));
-    }
-  } catch (e) {
-    console.warn('Failed to load saved slots from localStorage:', e);
-  }
-  return [];
+  const list = readJson<unknown>(STORAGE_KEYS.savedSlots);
+  if (!Array.isArray(list)) return [];
+  // 旧形式（キャラを丸ごと持つ）の保存編成は読み込まない（D13）
+  return (list as SavedRotationSlot[])
+    .filter(slot => Array.isArray(slot.party))
+    .map(slot => ({ ...slot, stints: slot.stints ?? [] }));
 }
 
 /**
- * Save or update a custom slot
+ * 保存編成を、追加または更新する
  */
 export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
-  try {
-    const current = getSavedSlots();
-    const existingIdx = current.findIndex(s => s.id === slot.id);
-    let updated: SavedRotationSlot[];
-    if (existingIdx >= 0) {
-      updated = [...current];
-      updated[existingIdx] = { ...slot, updatedAt: new Date().toISOString() };
-    } else {
-      updated = [
-        { ...slot, updatedAt: new Date().toISOString() },
-        ...current,
-      ];
-    }
-    localStorage.setItem(SAVED_SLOTS_KEY, JSON.stringify(updated));
-    return updated;
-  } catch (e) {
-    console.warn('Failed to save slot to localStorage:', e);
-    return getSavedSlots();
+  const current = getSavedSlots();
+  const existingIdx = current.findIndex(s => s.id === slot.id);
+  const stamped = { ...slot, updatedAt: new Date().toISOString() };
+  let updated: SavedRotationSlot[];
+  if (existingIdx >= 0) {
+    updated = [...current];
+    updated[existingIdx] = stamped;
+  } else {
+    updated = [stamped, ...current];
   }
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? updated : getSavedSlots();
 }
 
 /**
  * 保存編成の一覧を、そのまま置き換える（バックアップの復元用。更新日時は書き換えない）
  */
 export function replaceSavedSlots(slots: SavedRotationSlot[]): void {
-  try {
-    localStorage.setItem(SAVED_SLOTS_KEY, JSON.stringify(slots));
-  } catch (e) {
-    console.warn('Failed to replace saved slots in localStorage:', e);
-  }
+  writeJson(STORAGE_KEYS.savedSlots, slots);
 }
 
 /**
- * Delete a custom slot
+ * 保存編成を削除する
  */
 export function deleteSlot(slotId: string): SavedRotationSlot[] {
-  try {
-    const current = getSavedSlots();
-    const updated = current.filter(s => s.id !== slotId);
-    localStorage.setItem(SAVED_SLOTS_KEY, JSON.stringify(updated));
-    return updated;
-  } catch (e) {
-    console.warn('Failed to delete slot from localStorage:', e);
-    return getSavedSlots();
-  }
+  const updated = getSavedSlots().filter(s => s.id !== slotId);
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? updated : getSavedSlots();
 }
 
 /**

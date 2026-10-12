@@ -11,13 +11,12 @@ import type { SavedRotationSlot, CharacterConfig } from '../types/genshin';
 import type { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { loadActiveState, saveActiveState, getSavedSlots, replaceSavedSlots, type ActiveRotationState } from './storage';
 import { loadDatabase, saveDatabase } from './databaseService';
+import { BACKUP_SETTING_KEYS, readString, writeString } from './persistence';
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
 
 export const BACKUP_FORMAT = 'genshin-rotation-planner-backup';
 export const BACKUP_VERSION = 1;
 
-/** 設定の localStorage のキー（値は、文字列のまま退避・復元する）。設定を足したら、ここにも足す */
-export const BACKUP_SETTING_KEYS = ['gcsimDefHalt', 'gcsimHurt', 'rotationNotationMode'] as const;
 
 export interface BackupFile {
   format: typeof BACKUP_FORMAT;
@@ -45,13 +44,10 @@ const isUserArtifact = (a: ArtifactSetDatabaseItem) => a.id.startsWith('art_cust
 export function buildBackup(now: Date = new Date()): BackupFile {
   const active = loadActiveState();
   const settings: Record<string, string> = {};
+  // 設定のキーは persistence.ts の SETTING_KEYS（値は、文字列のまま退避・復元する）
   for (const key of BACKUP_SETTING_KEYS) {
-    try {
-      const v = localStorage.getItem(key);
-      if (v !== null) settings[key] = v;
-    } catch {
-      // 読めない設定は含めない
-    }
+    const v = readString(key);
+    if (v !== null) settings[key] = v;
   }
   const db: AppDatabase = loadDatabase();
   let currentState: BackupFile['currentState'] = null;
@@ -108,7 +104,7 @@ export function parseBackup(text: string): ParseBackupResult {
       app: { gcsimVersion: String(b.app?.gcsimVersion ?? '') },
       currentState: b.currentState ?? null,
       savedSlots: b.savedSlots.filter(s => s && typeof s.id === 'string' && Array.isArray(s.party)),
-      settings: Object.fromEntries(Object.entries(b.settings ?? {}).filter(([k, v]) => (BACKUP_SETTING_KEYS as readonly string[]).includes(k) && typeof v === 'string')) as Record<string, string>,
+      settings: Object.fromEntries(Object.entries(b.settings ?? {}).filter(([k, v]) => BACKUP_SETTING_KEYS.includes(k) && typeof v === 'string')) as Record<string, string>,
       database: b.database,
     },
   };
@@ -180,12 +176,7 @@ export function restoreBackup(b: BackupFile, options: { restoreCurrent: boolean 
   replaceSavedSlots(slots);
 
   for (const [key, value] of Object.entries(b.settings)) {
-    try {
-      localStorage.setItem(key, value);
-      result.settings++;
-    } catch {
-      // 保存できない設定は飛ばす
-    }
+    if (writeString(key, value)) result.settings++;
   }
 
   const { characters, weapons, artifacts } = b.database;

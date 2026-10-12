@@ -18,7 +18,7 @@ interface ReactionRowsProps {
   onTimelineClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const KIND_ORDER: ReactionKind[] = ['lunarcharged', 'lunarcrystallize', 'stellarconduct', 'stellarswirl', 'stellarswirl_airborne'];
+const KIND_ORDER: ReactionKind[] = ['lunarcharged', 'lunarcrystallize', 'verdantdew', 'moonridgedew', 'stellarconduct', 'stellarswirl', 'stellarswirl_airborne'];
 
 const KIND_INFO: Record<ReactionKind, { label: string; unit: string; barClass: string; labelClass: string; help: string }> = {
   lunarcharged: {
@@ -34,6 +34,20 @@ const KIND_INFO: Record<ReactionKind, { label: string; unit: string; barClass: s
     barClass: 'bg-amber-950 border-amber-400/80 text-amber-200',
     labelClass: 'text-amber-300',
     help: '月結晶を起こすと、月の結晶の設置物が最大 3 つできる（9 秒）。数字 = そのときの設置物の数',
+  },
+  verdantdew: {
+    label: '🌿 草露（所持数）',
+    unit: '個',
+    barClass: 'bg-lime-950 border-lime-400/80 text-lime-200',
+    labelClass: 'text-lime-300',
+    help: '月開花を起こすと、約 2.5 秒の間、約 2.4 秒ごとに草露が 1 つ増える（最大 3。途中の端数は次の月開花へ持ち越す）。ラウマのスキル（最大 3 個）・コロンビーナの重撃（1 個）が消費する。数字 = そのときの数',
+  },
+  moonridgedew: {
+    label: '🌙 月露（所持数）',
+    unit: '個',
+    barClass: 'bg-sky-950 border-sky-400/80 text-sky-200',
+    labelClass: 'text-sky-300',
+    help: 'コロンビーナの固有天賦2: 月反応（月感電・月開花・月結晶）のたびに 1 つ増える（最大 3）。重撃 1 回ごとに 1 個消費する（草露が先）。数字 = そのときの数',
   },
   stellarconduct: {
     label: '⭐ 星電導のフィールド',

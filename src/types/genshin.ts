@@ -852,7 +852,7 @@ export interface StockSpan {
  * 反応（月反応・星反応）の状態の種類（gcsim の実行結果から出す。D112）
  * lunarcharged = 月感電の雲 / lunarcrystallize = 月結晶の設置物 / stellarconduct = 星電導のフィールド / stellarswirl = 星拡散の渦 / stellarswirl_airborne = 星拡散の爆発後の強化
  */
-export type ReactionKind = 'lunarcharged' | 'lunarcrystallize' | 'stellarconduct' | 'stellarswirl' | 'stellarswirl_airborne';
+export type ReactionKind = 'lunarcharged' | 'lunarcrystallize' | 'verdantdew' | 'moonridgedew' | 'stellarconduct' | 'stellarswirl' | 'stellarswirl_airborne';
 
 /** アクションの開始を基準にした位置（秒）。編集でアクションの時刻が変わっても、位置がずれない */
 export interface ReactionAnchor {

@@ -11,7 +11,9 @@
  *   星電導   … `polestar-field`（フィールド 6 秒。4 秒ごとに適用中のスタックを更新。最大 12）
  *   星拡散   … ダメージ `Stellar Swirl`（渦に 1 スタック。最大 6）→ `Stellar Swirl Detonation`（渦の爆発。181f で爆発）、
  *              爆発後に `ssw-airborne-buff`（5 秒）
- *   月開花   … 状態が無い（バーにならない）
+ *   月開花   … 状態が無い（バーにならない）。ただし、月開花で増える草露の数は、行にする（下）
+ *   草露     … プレイヤーの 0〜3 の数（`verdant dew gained/consumed`）。月開花のあと 149f の間、146f ごとに +1
+ *   月露     … コロンビーナの固有天賦2 の 0〜3 の数（`moonridge dew gained/consumed`）。月反応のたびに +1
  */
 import type { GcsimLogEvent } from './gcsimClient.ts';
 import type { GcsimActionRef } from './buildGcsimConfig.ts';
@@ -60,6 +62,31 @@ function statusIntervals(logs: GcsimLogEvent[], key: string): { start: number; e
   return mergeIntervals(list);
 }
 
+/**
+ * 草露・月露の数の区間（gcsim pkg/core/player/verdantdew.go）。ログ（element）の文言:
+ *   増えた: `<kind> dew gained: <数>`／消費: `<n> <kind> dew consumed: <残り>`／月露の設定: `moonridge dew set to <数>`
+ * どれも、変化の後の数が分かる。数が 1 以上の間を、数が変わるたびの区間にする。最後の区間は、ログの最後のフレームまで。
+ * （草露の「set」のログは、gcsim が月露の数を出す不具合があるため、読まない）
+ */
+function dewSegments(logs: GcsimLogEvent[], kind: 'verdant' | 'moonridge', endFrame: number): FrameSegment[] {
+  const gained = new RegExp(`^${kind} dew gained: (\\d+)$`);
+  const consumed = new RegExp(`^\\d+ ${kind} dew consumed: (\\d+)$`);
+  const setTo = kind === 'moonridge' ? /^moonridge dew set to (\d+)$/ : null;
+  const steps: { frame: number; count: number }[] = [];
+  for (const e of logs) {
+    if (e.event !== 'element') continue;
+    const m = e.msg.match(gained) ?? e.msg.match(consumed) ?? (setTo ? e.msg.match(setTo) : null);
+    if (m) steps.push({ frame: e.frame, count: Number(m[1]) });
+  }
+  steps.sort((a, b) => a.frame - b.frame);
+  const segments: FrameSegment[] = [];
+  for (let i = 0; i < steps.length; i++) {
+    const next = steps[i + 1]?.frame ?? endFrame;
+    if (steps[i].count > 0 && next > steps[i].frame) segments.push({ startFrame: steps[i].frame, endFrame: next, count: steps[i].count });
+  }
+  return segments;
+}
+
 export function extractReactionRows(logs: GcsimLogEvent[]): FrameReactionRow[] {
   const rows: FrameReactionRow[] = [];
 
@@ -88,6 +115,15 @@ export function extractReactionRows(logs: GcsimLogEvent[]): FrameReactionRow[] {
       if (count > 0 && next !== undefined && next > steps[i].frame) segments.push({ startFrame: steps[i].frame, endFrame: next, count });
     }
     if (segments.length) rows.push({ kind: 'lunarcrystallize', max: Math.max(3, max), segments });
+  }
+
+  // 草露（月開花で増える。ラウマのスキル・コロンビーナの重撃が消費する）と、月露（コロンビーナの固有天賦2）
+  {
+    const endFrame = logs.reduce((m, e) => Math.max(m, e.frame), 0);
+    const verdant = dewSegments(logs, 'verdant', endFrame);
+    if (verdant.length) rows.push({ kind: 'verdantdew', max: 3, segments: verdant });
+    const moonridge = dewSegments(logs, 'moonridge', endFrame);
+    if (moonridge.length) rows.push({ kind: 'moonridgedew', max: 3, segments: moonridge });
   }
 
   // 星電導のフィールド（フィールドの区間を、適用中のスタックの更新で分ける）

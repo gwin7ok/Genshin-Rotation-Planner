@@ -1,0 +1,74 @@
+# GitHub Pages へのデプロイ（docs/公開サーバー構築の実装計画.md の 3-B）
+#
+# 起動: Actions タブから手動（workflow_dispatch）、または `release-*` のタグの push。
+# 事前の設定（リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にする）が要る。
+#
+# 流れ: gcsim の WebAssembly 版をビルド（gcsim.config.json のコミットのソースを無改変で。AGPL のため、
+#       フォークのタグ `app-wasm-<version>` が無い版は、check:release で止める）→ 画面をビルド → 検査 → 公開。
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'release-*'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+
+      - name: 依存関係
+        run: npm ci
+
+      - name: gcsim の WebAssembly 版をビルド
+        run: npm run wasm:build
+
+      - name: 計算結果のスナップショットの確認
+        run: npm run check:snapshots
+
+      - name: バックアップの往復の確認
+        run: npm run check:backup
+
+      - name: 画面をビルド（base = /<リポジトリ名>/）
+        run: npm run build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+
+      - name: 公開前の検査（WASM の SHA-256・コミットの一致・フォークのタグ・LICENSE）
+        run: npm run check:release
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -6,6 +6,8 @@ import { defineConfig } from 'vite';
 export default defineConfig(() => {
   return {
     root: __dirname,
+    // 公開先の URL のパス（GitHub Pages のプロジェクトサイトは /<リポジトリ名>/）。開発・独自ドメインは '/'
+    base: process.env.VITE_BASE || '/',
     plugins: [react(), tailwindcss()],
     json: {
       stringify: true,

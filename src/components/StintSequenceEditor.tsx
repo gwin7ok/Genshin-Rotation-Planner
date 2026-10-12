@@ -602,10 +602,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 const isSelected = selectedAction?.stintId === stint.id;
 
                 const handleChipClick = () => {
+                  // 出場トラックだけをフォーカスする（先頭のアクションは選択しない。カードの背景のクリックと同じ状態）
                   const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
-                  if (targetAct && onSelectAction) {
-                    onSelectAction(stint.id, targetAct.id);
-                  }
+                  onSelectAction?.(stint.id, '');
                   if (targetAct && onSeek) {
                     onSeek(targetAct.startTime ?? 0);
                   }
@@ -646,7 +645,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <div
                         onClick={handleChipClick}
                         className="flex items-center gap-1.5 select-none cursor-pointer"
-                        title={`${char.name}の出場ブロックを選択フォーカス（クリックでガントチャート＆設定画面に連動強調表示）`}
+                        title={`${char.name}の出場ブロックを選択フォーカス（アクションは選択しない。ガントチャート＆設定画面に連動強調表示）`}
                       >
                         <span className={`w-4 h-4 rounded-full text-[10px] font-mono font-bold flex items-center justify-center border ${
                           isSelected
@@ -943,16 +942,15 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       {/* Character Avatar & Name (Click to focus stint and action) */}
                       <div 
                         onClick={() => {
+                          // 出場トラックだけをフォーカスする（先頭のアクションは選択しない。パイプラインのチップと同じ）
                           const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
-                          if (targetAct && onSelectAction) {
-                            onSelectAction(stint.id, targetAct.id);
-                          }
+                          onSelectAction?.(stint.id, '');
                           if (targetAct && onSeek) {
                             onSeek(targetAct.startTime ?? 0);
                           }
                         }}
                         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                        title="この出場ブロックを選択フォーカス（クリックでガントチャート＆設定画面に連動強調表示）"
+                        title="この出場ブロックを選択フォーカス（アクションは選択しない。ガントチャート＆設定画面に連動強調表示）"
                       >
                         <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                         <span className="font-bold text-sm text-white">{char.name}</span>

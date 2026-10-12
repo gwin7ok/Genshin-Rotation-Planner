@@ -1,0 +1,21 @@
+name: "[質問] 使い方への質問"
+description: 使い方が分からない、この表示の意味は何か、など
+title: "[質問] "
+labels: ["質問"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        画面の右上の「使い方」ボタンにも、基本の流れ・画面の見方・操作の説明があります。先にご確認いただくと、早く解決することがあります。
+  - type: textarea
+    id: what
+    attributes:
+      label: 質問の内容
+      description: 何をしたいか、どこで分からなくなったかを書いてください
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: アプリのバージョン（任意）
+      description: 画面の下部に「バージョン v○.○.○」と表示されています

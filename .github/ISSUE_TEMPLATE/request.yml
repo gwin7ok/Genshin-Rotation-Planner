@@ -1,0 +1,17 @@
+name: "[要望] 機能の要望・改善の提案"
+description: こんな機能が欲しい、ここを直してほしい、という要望
+title: "[要望] "
+labels: ["要望"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 要望の内容
+      description: どんな機能・改善が欲しいかを書いてください
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 困っていること・理由（任意）
+      description: 今どんなことで困っているか、なぜ必要かが分かると、検討しやすくなります

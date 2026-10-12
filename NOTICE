@@ -21,7 +21,7 @@ Copyright (c) 2021 The gcsim contributors
 
 このアプリでの使い方:
   (c) gcsim の WebAssembly 版（public/gcsim/main.wasm・wasm_exec.js。このアプリの公開サイトが、画面と一緒に配る）
-      - gcsim.config.json のコミットのソースを、**無改変**で、`npm run wasm:build`（GOOS=js GOARCH=wasm go build -trimpath ./cmd/wasm）でビルドしたもの。
+      - gcsim.config.json のコミットのソースを、**無改変**で、`npm run wasm:build`（GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w" ./cmd/wasm）でビルドしたもの。
         ビルドの条件（コミット・Go のバージョン・コマンド・SHA-256）は、public/gcsim/wasm-info.json に残す。
       - 利用者のブラウザの中（Web Worker）で動く。画面の JavaScript とは、メッセージ（JSON の文字列）だけでやり取りする。
       - 配布に当たるので、AGPL-3.0 の義務として、(1) ソースの入手先を画面の下部に出す (2) LICENSE（全文）と本 NOTICE を同梱する (3) ビルドを再現できるようにする。

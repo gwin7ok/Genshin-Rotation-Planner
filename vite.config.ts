@@ -1,7 +1,19 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
+
+// アプリの版（package.json の version。唯一の出どころ）と、ビルドしたコミット（画面のフッター・バックアップに記録する）
+const APP_VERSION: string = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8')).version;
+const APP_COMMIT: string = (() => {
+  try {
+    return execSync('git rev-parse --short HEAD', { cwd: __dirname, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return (process.env.GITHUB_SHA ?? '').slice(0, 7) || 'unknown';
+  }
+})();
 
 export default defineConfig(() => {
   return {
@@ -9,6 +21,10 @@ export default defineConfig(() => {
     // 公開先の URL のパス（GitHub Pages のプロジェクトサイトは /<リポジトリ名>/）。開発・独自ドメインは '/'
     base: process.env.VITE_BASE || '/',
     plugins: [react(), tailwindcss()],
+    define: {
+      __APP_VERSION__: JSON.stringify(APP_VERSION),
+      __APP_COMMIT__: JSON.stringify(APP_COMMIT),
+    },
     json: {
       stringify: true,
     },

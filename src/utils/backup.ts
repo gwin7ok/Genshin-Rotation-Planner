@@ -13,6 +13,7 @@ import { loadActiveState, saveActiveState, getSavedSlots, replaceSavedSlots, typ
 import { loadDatabase, saveDatabase } from './databaseService';
 import { BACKUP_SETTING_KEYS, readString, writeString } from './persistence';
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
+import { APP_VERSION } from './appVersion';
 
 export const BACKUP_FORMAT = 'genshin-rotation-planner-backup';
 export const BACKUP_VERSION = 1;
@@ -22,7 +23,8 @@ export interface BackupFile {
   format: typeof BACKUP_FORMAT;
   version: number;
   exportedAt: string;
-  app: { gcsimVersion: string };
+  /** 書き出したときの、アプリの版と gcsim の版（問い合わせ・移行の切り分け用。復元には使わない） */
+  app: { version: string; gcsimVersion: string };
   /** 現在編集中の編成（無いときは null） */
   currentState: Omit<ActiveRotationState, 'lastSavedAt'> | null;
   savedSlots: SavedRotationSlot[];
@@ -60,7 +62,7 @@ export function buildBackup(now: Date = new Date()): BackupFile {
     format: BACKUP_FORMAT,
     version: BACKUP_VERSION,
     exportedAt: now.toISOString(),
-    app: { gcsimVersion: GCSIM_VERSION },
+    app: { version: APP_VERSION, gcsimVersion: GCSIM_VERSION },
     currentState,
     savedSlots: getSavedSlots(),
     settings,
@@ -101,7 +103,7 @@ export function parseBackup(text: string): ParseBackupResult {
       format: BACKUP_FORMAT,
       version: b.version,
       exportedAt: String(b.exportedAt ?? ''),
-      app: { gcsimVersion: String(b.app?.gcsimVersion ?? '') },
+      app: { version: String(b.app?.version ?? ''), gcsimVersion: String(b.app?.gcsimVersion ?? '') },
       currentState: b.currentState ?? null,
       savedSlots: b.savedSlots.filter(s => s && typeof s.id === 'string' && Array.isArray(s.party)),
       settings: Object.fromEntries(Object.entries(b.settings ?? {}).filter(([k, v]) => BACKUP_SETTING_KEYS.includes(k) && typeof v === 'string')) as Record<string, string>,

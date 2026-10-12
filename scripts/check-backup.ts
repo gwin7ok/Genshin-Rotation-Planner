@@ -66,6 +66,11 @@ check('書き出し: 内容の数', () => {
   assert.equal(s.weapons, 1);
   assert.equal(s.artifacts, 0);
 });
+check('書き出し: アプリの版と gcsim の版を記録する', () => {
+  assert.equal(typeof file.app.version, 'string');
+  assert.ok(file.app.version.length > 0);
+  assert.match(file.app.gcsimVersion, /^v\d+\.\d+\.\d+/);
+});
 check('書き出し: マスターの項目を含めない（利用者のものだけ）', () => {
   assert.ok(file.database.characters.every((c: any) => c.isCustom || c.isLocked || c.id.startsWith('custom_')));
   assert.ok(text.length < 200_000, `大きすぎる: ${text.length}`);

@@ -1,0 +1,279 @@
+{
+  "name": "サンドローネ星電導",
+  "description": "オデット・八重神子・七七・サンドローネ",
+  "party": [
+    {
+      "characterId": "10000150-cryo",
+      "constellation": 0,
+      "energyRecharge": 100,
+      "weaponId": "11522",
+      "weaponRefinementRank": 1,
+      "artifactSetId": "15048"
+    },
+    {
+      "characterId": "10000058-electro",
+      "constellation": 2,
+      "energyRecharge": 100,
+      "weaponId": "14402",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15046"
+    },
+    {
+      "characterId": "10000035-cryo",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "11425",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15017"
+    },
+    {
+      "characterId": "10000133-cryo",
+      "constellation": 0,
+      "energyRecharge": 100,
+      "weaponId": "12516",
+      "weaponRefinementRank": 1,
+      "artifactSetId": "15046"
+    }
+  ],
+  "stints": [
+    {
+      "id": "stint_1791158011137",
+      "characterId": "10000133-cryo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791158026313_n0k6",
+          "actionTypeId": "10000133-cryo_e",
+          "name": "元素スキル: 事象式：自在な解析",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.8
+        }
+      ],
+      "startTime": 0,
+      "endTime": 1.4,
+      "duration": 1.4
+    },
+    {
+      "id": "stint_1791158013214",
+      "characterId": "10000058-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791158030996_djub",
+          "actionTypeId": "10000058-electro_e",
+          "name": "元素スキル: 野干役呪·殺生櫻",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.617,
+          "naturalDuration": 0.617
+        },
+        {
+          "id": "act_1791799010052_4o6w",
+          "actionTypeId": "10000058-electro_e",
+          "name": "元素スキル: 野干役呪·殺生櫻",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.617,
+          "naturalDuration": 0.617
+        },
+        {
+          "id": "act_1791799011949_9f53",
+          "actionTypeId": "10000058-electro_e",
+          "name": "元素スキル: 野干役呪·殺生櫻",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.333,
+          "naturalDuration": 0.333
+        }
+      ],
+      "startTime": 1.4,
+      "endTime": 3.767,
+      "duration": 2.367
+    },
+    {
+      "id": "stint_1791158015563",
+      "characterId": "10000150-cryo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791158070140_9g7a",
+          "actionTypeId": "10000150-cryo_e",
+          "name": "元素スキル: 柔きファントムの夜の舞",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.683,
+          "naturalDuration": 0.683
+        },
+        {
+          "id": "act_1791158071663_phmh",
+          "actionTypeId": "10000150-cryo_e_recast",
+          "name": "特殊元素スキル（柔きファントムの夜の舞の後）",
+          "shortName": "spE",
+          "type": "skill",
+          "duration": 1.233,
+          "naturalDuration": 1.233,
+          "cooldownPool": "special"
+        }
+      ],
+      "startTime": 3.767,
+      "endTime": 6.383,
+      "duration": 2.616
+    },
+    {
+      "id": "stint_1791158016429",
+      "characterId": "10000035-cryo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791158097826_pu63",
+          "actionTypeId": "10000035-cryo_q",
+          "name": "元素爆発: 仙法·救苦度厄",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.883,
+          "naturalDuration": 1.883
+        },
+        {
+          "id": "act_1791158098524_ez82",
+          "actionTypeId": "10000035-cryo_e",
+          "name": "元素スキル: 仙法·寒病鬼差",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.95,
+          "naturalDuration": 0.95
+        }
+      ],
+      "startTime": 6.383,
+      "endTime": 9.916,
+      "duration": 3.5330000000000004
+    },
+    {
+      "id": "stint_1791799116705",
+      "characterId": "10000133-cryo",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791799128723_3mst",
+          "actionTypeId": "10000133-cryo_e",
+          "name": "元素スキル: 事象式：自在な解析",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.38,
+          "durationManual": true,
+          "groupId": "grp_1791802073430_gl73"
+        },
+        {
+          "id": "act_1791799136765_y8x7",
+          "actionTypeId": "10000133-cryo_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.1,
+          "naturalDuration": 0.533,
+          "durationManual": true,
+          "groupId": "grp_1791802073430_gl73"
+        },
+        {
+          "id": "act_1791799137780_byqd",
+          "actionTypeId": "10000133-cryo_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 3.47,
+          "durationManual": true,
+          "groupId": "grp_1791802073430_gl73"
+        },
+        {
+          "id": "act_1791799128723_3mst_r1",
+          "actionTypeId": "10000133-cryo_e",
+          "name": "元素スキル: 事象式：自在な解析",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.38,
+          "durationManual": true,
+          "groupId": "grp_1791802334737_uw6n"
+        },
+        {
+          "id": "act_1791800024768_helc",
+          "actionTypeId": "10000133-cryo_q",
+          "name": "元素爆発: 事象式：Q.E.D",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.383,
+          "groupId": "grp_1791802334737_uw6n"
+        },
+        {
+          "id": "act_1791799137780_byqd_r1",
+          "actionTypeId": "10000133-cryo_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 3.47,
+          "durationManual": true,
+          "groupId": "grp_1791802334737_uw6n"
+        },
+        {
+          "id": "act_1791799128723_3mst_r2",
+          "actionTypeId": "10000133-cryo_e",
+          "name": "元素スキル: 事象式：自在な解析",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.38,
+          "durationManual": true,
+          "groupId": "grp_1791802112643_z2hj"
+        },
+        {
+          "id": "act_1791799136765_y8x7_r2",
+          "actionTypeId": "10000133-cryo_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.1,
+          "naturalDuration": 0.533,
+          "durationManual": true,
+          "groupId": "grp_1791802112643_z2hj"
+        },
+        {
+          "id": "act_1791799137780_byqd_r2",
+          "actionTypeId": "10000133-cryo_ca",
+          "name": "重撃",
+          "shortName": "C",
+          "type": "charged",
+          "duration": 3.47,
+          "durationManual": true,
+          "groupId": "grp_1791802112643_z2hj"
+        },
+        {
+          "id": "act_1791802266696_o24a",
+          "actionTypeId": "10000133-cryo_e",
+          "name": "元素スキル: 事象式：自在な解析",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.733
+        }
+      ],
+      "startTime": 9.916,
+      "endTime": 25.282,
+      "duration": 15.366,
+      "groups": [
+        {
+          "id": "grp_1791802073430_gl73",
+          "repeat": 1
+        },
+        {
+          "id": "grp_1791802112643_z2hj",
+          "repeat": 1
+        },
+        {
+          "id": "grp_1791802334737_uw6n",
+          "repeat": 1
+        }
+      ]
+    }
+  ],
+  "loopStartIndex": 1,
+  "loopStartTime": 1.4,
+  "totalDuration": 25.28,
+  "switchDelay": 0.5
+}

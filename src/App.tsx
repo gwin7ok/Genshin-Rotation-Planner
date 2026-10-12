@@ -27,6 +27,7 @@ import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { packReactions, unpackReactions } from './utils/gcsim/savedReactions';
+import { seedPresetsOnFirstRun } from './utils/presets';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
@@ -115,7 +116,11 @@ export default function App() {
   });
 
   // User saved rotation slots (shown in the header's 編成選択) & currently loaded slot
-  const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>(() => getSavedSlots());
+  // 初めて使うとき（保存編成の保存先が無いとき）は、同梱のプリセット編成を保存編成に入れる
+  const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>(() => {
+    seedPresetsOnFirstRun();
+    return getSavedSlots();
+  });
   const [activeSlotId, setActiveSlotId] = useState<string | null>(() => savedInitialState?.activeSlotId ?? null);
 
   // 2. Playback / Scrubber State

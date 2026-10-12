@@ -247,6 +247,63 @@ check('反応の行: 保存編成・現在の編成・バックアップの往�
   assert.deepEqual(savedReactions.unpackReactions(parsed.backup.currentState.reactions), sampleRows);
 });
 
+// --- プリセット編成（同梱の 5 編成。D207） ---
+const presets = await server.ssrLoadModule('/src/utils/presets.ts');
+const SLOTS_KEY = 'genshin_rotation_saved_slots_v2';
+const masterRaw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+const masterIds = new Set<string>((Array.isArray(masterRaw) ? masterRaw : masterRaw.characters ?? Object.values(masterRaw)).map((c: any) => c.id));
+
+check('プリセット: 5 編成・名前の先頭は「[プリセット]」・ID は重ならない・キャラはマスターにある', () => {
+  const list = presets.buildPresetSlots(new Date('2026-10-12T00:00:00Z'));
+  assert.equal(list.length, 5);
+  assert.equal(presets.PRESET_COUNT, 5);
+  assert.ok(list.every((s: any) => s.name.startsWith('[プリセット]')));
+  assert.equal(new Set(list.map((s: any) => s.id)).size, 5);
+  for (const s of list) {
+    assert.ok(s.party.length === 4 && s.stints.length > 0, s.name);
+    for (const m of s.party) assert.ok(masterIds.has(m.characterId), `${s.name}: ${m.characterId} がマスターにありません`);
+    for (const st of s.stints) assert.ok(s.party.some((m: any) => m.characterId === st.characterId), `${s.name}: 出場のキャラが編成にいません`);
+  }
+});
+check('プリセット: 初めて使うとき（保存先が無い）だけ、入れる', () => {
+  const backupSlots = store.get(SLOTS_KEY);
+  store.delete(SLOTS_KEY);
+  assert.equal(presets.seedPresetsOnFirstRun(), true);
+  assert.equal(JSON.parse(store.get(SLOTS_KEY)!).length, 5);
+  // 保存先があるときは、何もしない（全部消した利用者に、勝手に足さない）
+  store.set(SLOTS_KEY, '[]');
+  assert.equal(presets.seedPresetsOnFirstRun(), false);
+  assert.equal(JSON.parse(store.get(SLOTS_KEY)!).length, 0);
+  if (backupSlots !== undefined) store.set(SLOTS_KEY, backupSlots);
+});
+check('プリセット: 復元は、同じ名前を上書き（ID を引き継ぐ）・ほかの保存編成は残す', () => {
+  const backupSlots = store.get(SLOTS_KEY);
+  const base = presets.buildPresetSlots();
+  const edited = { ...structuredClone(base[0]), id: 'slot_user_copy', description: '利用者が編集した説明', stints: [] };
+  const other = slot('slot_other', '自分の編成', '2026-10-01T00:00:00.000Z');
+  store.set(SLOTS_KEY, JSON.stringify([other, edited]));
+  const r = presets.restorePresets(new Date('2026-10-12T01:00:00Z'));
+  assert.equal(r.overwritten, 1);
+  assert.equal(r.added, 4);
+  assert.equal(r.slots.length, 6);
+  const back = r.slots.find((s: any) => s.id === 'slot_user_copy');
+  assert.equal(back.name, base[0].name);
+  assert.equal(back.description, base[0].description);
+  assert.ok(back.stints.length > 0, '同梱の内容で上書きされていません');
+  assert.ok(r.slots.some((s: any) => s.id === 'slot_other'));
+  // もう一度復元しても、増えない（すべて上書き）
+  const r2 = presets.restorePresets();
+  assert.equal(r2.slots.length, 6);
+  assert.equal(r2.added, 0);
+  assert.equal(r2.overwritten, 5);
+  if (backupSlots !== undefined) store.set(SLOTS_KEY, backupSlots);
+});
+check('プリセット: 豊穣月開花の反応の行は、今の gcsim のバージョンで読める', () => {
+  const lb = presets.buildPresetSlots().find((s: any) => s.id === 'preset_lunar-bloom');
+  assert.ok(lb.reactions, '反応の行がありません');
+  assert.ok(savedReactions.unpackReactions(lb.reactions), 'gcsim のバージョンが違います（プリセットを作り直してください）');
+});
+
 // --- 規則: localStorage を、persistence.ts 以外から直接呼ばない ---
 check('規則: src/ の localStorage の直接呼び出しは persistence.ts だけ', () => {
   const offenders: string[] = [];

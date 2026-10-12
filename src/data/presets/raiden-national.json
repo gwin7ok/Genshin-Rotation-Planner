@@ -1,0 +1,430 @@
+{
+  "name": "雷電ナショナル",
+  "description": "雷電将軍・行秋・ベネット・香菱",
+  "party": [
+    {
+      "characterId": "10000052-electro",
+      "constellation": 0,
+      "energyRecharge": 100,
+      "weaponId": "13502",
+      "weaponRefinementRank": 1,
+      "artifactSetId": "15020"
+    },
+    {
+      "characterId": "10000025-hydro",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "11401",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15020"
+    },
+    {
+      "characterId": "10000032-pyro",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "11401",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "10007"
+    },
+    {
+      "characterId": "10000023-pyro",
+      "constellation": 6,
+      "energyRecharge": 100,
+      "weaponId": "13415",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15020"
+    }
+  ],
+  "stints": [
+    {
+      "id": "stint_1791807165720",
+      "characterId": "10000052-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791807188054_bcml",
+          "actionTypeId": "10000052-electro_e",
+          "name": "元素スキル: 神変·悪曜開眼",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.6,
+          "naturalDuration": 0.6,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.6,
+          "cooldown": 10,
+          "gcsimCdResonance": 1,
+          "effectDuration": 26,
+          "gcsimCtOffset": 0.1
+        }
+      ],
+      "startTime": 0,
+      "endTime": 1.2,
+      "duration": 1.2
+    },
+    {
+      "id": "stint_1791807168049",
+      "characterId": "10000025-hydro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791808070866_uzm5",
+          "actionTypeId": "10000025-hydro_e",
+          "name": "元素スキル: 古華剣·画雨籠山",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.683,
+          "naturalDuration": 0.517,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.683,
+          "cooldown": 21,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0.167,
+          "effectDuration": 19.333
+        },
+        {
+          "id": "act_1791808073769_p4b1",
+          "actionTypeId": "10000025-hydro_dash",
+          "name": "ダッシュ",
+          "shortName": "D",
+          "type": "dash",
+          "duration": 0.35,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.35
+        },
+        {
+          "id": "act_1791808076844_ttdy",
+          "actionTypeId": "10000025-hydro_q",
+          "name": "元素爆発: 古華剣·裁雨留虹",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 0.55,
+          "naturalDuration": 0.55,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.55,
+          "cooldown": 20,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0,
+          "effectDuration": 18.65
+        },
+        {
+          "id": "act_1791808091428_s4zh",
+          "actionTypeId": "10000025-hydro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.267,
+          "naturalDuration": 0.167,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.267
+        }
+      ],
+      "startTime": 1.2,
+      "endTime": 3.534,
+      "duration": 2.3339999999999996,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv580uy1_x",
+          "passiveEffectId": "10000025-hydro_c2",
+          "name": "2凸「青空の虹」",
+          "offset": 2.867,
+          "duration": 22.017,
+          "gcsimKey": "xingqiu-c2"
+        }
+      ]
+    },
+    {
+      "id": "stint_1791807170030",
+      "characterId": "10000032-pyro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791807217970_y1ap",
+          "actionTypeId": "10000032-pyro_q",
+          "name": "元素爆発: 素晴らしい旅",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 0.883,
+          "naturalDuration": 0.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.883,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "effectDuration": 12.567,
+          "gcsimCtOffset": 0.567
+        },
+        {
+          "id": "act_1791807319065_816c",
+          "actionTypeId": "10000032-pyro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.317,
+          "naturalDuration": 0.317,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.317
+        },
+        {
+          "id": "act_1791807321833_08vj",
+          "actionTypeId": "10000032-pyro_e",
+          "name": "元素スキル: 溢れる情熱",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.833,
+          "naturalDuration": 0.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.833,
+          "cooldown": 2,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0.233
+        }
+      ],
+      "startTime": 3.534,
+      "endTime": 6.351,
+      "duration": 2.817,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv580uy1_y",
+          "passiveEffectId": "abuff_10007",
+          "name": "教官4: 全員元素熟知+120",
+          "offset": 1.133,
+          "duration": 9.45,
+          "gcsimKey": "instructor-4pc"
+        }
+      ]
+    },
+    {
+      "id": "stint_1791807171157",
+      "characterId": "10000023-pyro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791807347094_tnzl",
+          "actionTypeId": "10000023-pyro_e",
+          "name": "元素スキル: グゥオパァー出撃",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.65,
+          "naturalDuration": 0.65,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.65,
+          "cooldown": 12,
+          "gcsimCdResonance": 1,
+          "effectDuration": 7.3,
+          "gcsimCtOffset": 0.217
+        },
+        {
+          "id": "act_1791807260347_2w5o",
+          "actionTypeId": "10000023-pyro_q",
+          "name": "元素爆発: 旋火輪",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.633,
+          "naturalDuration": 1.633,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.633,
+          "cooldown": 20,
+          "gcsimCdResonance": 1,
+          "effectDuration": 14,
+          "gcsimCtOffset": 0.3
+        },
+        {
+          "id": "act_1791807353987_m5pr",
+          "actionTypeId": "10000023-pyro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.3,
+          "naturalDuration": 0.3,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.3
+        }
+      ],
+      "startTime": 6.351,
+      "endTime": 9.734,
+      "duration": 3.383,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv580uy1_11",
+          "passiveEffectId": "10000023-pyro_c1",
+          "name": "1凸「外カリ中フワ」",
+          "offset": 2.617,
+          "duration": 11.667,
+          "gcsimKey": "xiangling-c1"
+        },
+        {
+          "id": "ptrg_gcsim_mv580uy1_12",
+          "passiveEffectId": "10000023-pyro_c6",
+          "name": "6凸「竜巻旋火輪」",
+          "offset": 2.4,
+          "duration": 14,
+          "gcsimKey": "xlc6"
+        }
+      ]
+    },
+    {
+      "id": "stint_1791807178766",
+      "characterId": "10000052-electro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791807376228_hdlo",
+          "actionTypeId": "10000052-electro_q",
+          "name": "元素爆発: 奥義·夢想真説",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.85,
+          "naturalDuration": 1.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.85,
+          "cooldown": 18,
+          "gcsimCdResonance": 1,
+          "effectDuration": 9.467,
+          "gcsimCtOffset": 0
+        },
+        {
+          "id": "act_1791807504211_hbs5",
+          "actionTypeId": "10000052-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.367,
+          "naturalDuration": 0.367,
+          "groupId": "grp_1791807522241_0vjy",
+          "durationManual": true,
+          "gcsimBaseDuration": 0.367
+        },
+        {
+          "id": "act_1791808290970_carj",
+          "actionTypeId": "10000052-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.333,
+          "groupId": "grp_1791807522241_0vjy",
+          "naturalDuration": 0.267,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.333
+        },
+        {
+          "id": "act_1791807505145_8eiy",
+          "actionTypeId": "10000052-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.333,
+          "naturalDuration": 0.333,
+          "groupId": "grp_1791807522241_0vjy",
+          "durationManual": true,
+          "gcsimBaseDuration": 0.333
+        },
+        {
+          "id": "act_1791807505994_30n1",
+          "actionTypeId": "10000052-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.667,
+          "naturalDuration": 0.333,
+          "groupId": "grp_1791807522241_0vjy",
+          "durationManual": true,
+          "gcsimBaseDuration": 0.667
+        },
+        {
+          "id": "act_1791807507212_551o",
+          "actionTypeId": "10000052-electro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.633,
+          "naturalDuration": 0.55,
+          "groupId": "grp_1791807522241_0vjy",
+          "durationManual": true,
+          "gcsimBaseDuration": 0.633
+        },
+        {
+          "id": "act_1791807509522_2cb3",
+          "actionTypeId": "10000052-electro_dash",
+          "name": "ダッシュ",
+          "shortName": "D",
+          "type": "dash",
+          "duration": 0.367,
+          "groupId": "grp_1791807522241_0vjy",
+          "durationManual": true,
+          "gcsimBaseDuration": 0.367,
+          "naturalDuration": 0.367
+        },
+        {
+          "id": "act_1791807532846_6nea",
+          "actionTypeId": "10000052-electro_e",
+          "name": "元素スキル: 神変·悪曜開眼",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.6,
+          "naturalDuration": 0.6,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.6,
+          "cooldown": 10,
+          "gcsimCdResonance": 1,
+          "effectDuration": 26,
+          "gcsimCtOffset": 0.1
+        }
+      ],
+      "startTime": 9.734,
+      "endTime": 24.102,
+      "duration": 14.368,
+      "holdMode": false,
+      "groups": [
+        {
+          "id": "grp_1791807522241_0vjy",
+          "repeat": 3
+        }
+      ]
+    },
+    {
+      "id": "stint_1791807179953",
+      "characterId": "10000032-pyro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1791807606622_8nmv",
+          "actionTypeId": "10000032-pyro_e",
+          "name": "元素スキル: 溢れる情熱",
+          "shortName": "tE",
+          "type": "skill",
+          "duration": 0.833,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.833,
+          "cooldown": 4,
+          "gcsimCdResonance": 1,
+          "naturalDuration": 0.833,
+          "gcsimCtOffset": 0.233
+        }
+      ],
+      "startTime": 24.102,
+      "endTime": 25.535,
+      "duration": 1.4329999999999998,
+      "passiveTriggers": [
+        {
+          "id": "ptrg_gcsim_mv580uy1_z",
+          "passiveEffectId": "abuff_10007",
+          "name": "教官4: 全員元素熟知+120",
+          "offset": 0.783,
+          "duration": 8,
+          "gcsimKey": "instructor-4pc"
+        },
+        {
+          "id": "ptrg_gcsim_mv580uy1_10",
+          "passiveEffectId": "abuff_10007",
+          "name": "教官4: 全員元素熟知+120",
+          "offset": 2.167,
+          "duration": 6.883,
+          "gcsimKey": "instructor-4pc"
+        }
+      ]
+    }
+  ],
+  "loopStartIndex": 1,
+  "loopStartTime": 1.2,
+  "totalDuration": 24.65,
+  "switchDelay": 0.5
+}

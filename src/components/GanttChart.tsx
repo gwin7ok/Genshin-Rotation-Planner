@@ -268,6 +268,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+  // ホバーの経過時間の表示の高さ（ポインタの位置。チャートの上端からの px）
+  const [hoveredY, setHoveredY] = useState<number>(0);
   // 出場ブロックごとの、キャラ名の行の高さ（時間指定のない効果が折り返すと、高くなる。左の見出しをそろえる）
   const [topRowHeights, setTopRowHeights] = useState<Record<string, number>>({});
   const setTopRowHeight = (stintId: string, h: number) =>
@@ -521,6 +523,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH;
     if (clickX >= 0) {
       setHoveredTime(Number((clickX / pixelsPerSecond).toFixed(2)));
+      setHoveredY(Math.max(0, e.clientY - rect.top + containerRef.current.scrollTop));
     } else {
       setHoveredTime(null);
     }
@@ -2266,7 +2269,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 style={{ left: `${hoveredTime * pixelsPerSecond + GANTT_LABEL_WIDTH}px` }}
                 className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-10"
               >
-                <div className="absolute top-4 left-1 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded">
+                <div
+                  className="absolute left-2 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded whitespace-nowrap"
+                  style={{ top: `${hoveredY + 14}px` }}
+                >
                   {fmtTime(hoveredTime, 1)}
                 </div>
               </div>

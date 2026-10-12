@@ -1,4 +1,5 @@
 import { GCSIM_CONFIG } from '../utils/gcsim/gcsimConfig.ts';
+import { APP_VERSION, APP_COMMIT } from '../utils/appVersion';
 
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
 
@@ -14,6 +15,9 @@ export function SourceNotice() {
     <div className="mt-1 space-y-0.5 text-[11px] text-slate-600">
       <p>
         非公式のファンツールです。ゲームの名称・画像などの権利は、各権利者（HoYoverse）に帰属します。無保証です。
+      </p>
+      <p>
+        バージョン v{APP_VERSION}（コミット {APP_COMMIT}）
       </p>
       <p>
         編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。サーバーには何も送りません（gcsim も、ブラウザの中で動きます）。

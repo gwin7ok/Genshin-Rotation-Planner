@@ -24,3 +24,7 @@
 - gcsim 連携の作業は、`docs/gcsim-integration/README.md` の運用ルールに従う（作業前に計画・進捗を読む、作業中・完了時に更新、ユーザーの決定は `progress.md` の決定ログに記録）。
 - マスターデータ・編成のデータは、名前ではなく ID をキーにする。
 - 返答は日本語。コミットはユーザーが行う。
+- **ブランチ・公開**（2026-10-12）: 作業は、ユーザーが切ったブランチの上で行う（`main` への直接の変更は、ユーザーが指示したときだけ。ブランチの作成・切り替え・コミット・push・マージはユーザーが行う。作業中に、別のブランチへ切り替えない）。公開サイト（GitHub Pages）は、GitHub Actions の `deploy`（ブランチ `main` から、手動の Run workflow）で更新する（`github-pages` 環境が main 以外を拒否する）。デプロイの前の検査は `npm run check:release`（詳細: `docs/公開サーバー構築の実装計画.md`）。
+- **バージョン管理**（2026-10-12。D177）: 版は `package.json` の `version`（SemVer。唯一の出どころ）。変更履歴は `CHANGELOG.md`（利用者に見える変更を `[Unreleased]` に足す）。リリースの手順は `docs/リリース手順.md`（版の更新・タグ `v<版>`・deploy・GitHub Releases）。機能の追加・修正をしたら、`CHANGELOG.md` の `[Unreleased]` に、1 行足す。
+- **gcsim の WebAssembly 版**（公開サイトの計算エンジン。D169）: 生成物（`public/gcsim/main.wasm` など）は Git に入れない（`npm run wasm:build`）。gcsim のバージョンを上げたら、WASM の再ビルドと、フォークのタグ（`app-wasm-<version>`）の更新が要る（`docs/gcsim-サーバー更新手順.md` の 6-B）。開発中の画面は、`main.wasm` があれば WASM、無ければ localhost のサーバーで計算する。
+- **保存**: `localStorage` を、`src/utils/persistence.ts` 以外から直接呼ばない（`npm run check:backup` が検査する）。設定を足すときは `SETTING_KEYS` に足す（バックアップに自動で入る）。キーの文字列は変えない。

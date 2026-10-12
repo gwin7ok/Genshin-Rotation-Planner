@@ -10,7 +10,8 @@
  *   3. wasm-info.json の gcsimCommit・gcsimVersion が、gcsim.config.json と一致する（WASM の作り直し忘れの検出）
  *   4. dist/gcsim/main.wasm があれば、public/ のものと同一（ビルドが古くないか）
  *   5. LICENSE・NOTICE がある
- *   6. gcsim.config.json の sourceMirror のタグ（<tagPrefix><version>）が、フォークに存在し、commit を指す（AGPL のソースの控え）
+ *   6. package.json の version が SemVer で、CHANGELOG.md の先頭の版（[Unreleased] を除く）と一致する。タグ v<version> があれば、HEAD を指す（docs/リリース手順.md）
+ *   7. gcsim.config.json の sourceMirror のタグ（<tagPrefix><version>）が、フォークに存在し、commit を指す（AGPL のソースの控え）
  * 1 つでも失敗したら、終了コード 1。
  */
 import crypto from 'node:crypto';
@@ -60,6 +61,31 @@ if (missing.length > 0) {
 for (const f of ['LICENSE', 'NOTICE']) {
   if (fs.existsSync(f)) ok(`${f} がある`);
   else ng(`${f} がありません`);
+}
+
+// 版と変更履歴
+{
+  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { version?: string };
+  const version = pkg.version ?? '';
+  if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(version)) {
+    ng(`package.json の version が SemVer ではありません: "${version}"`);
+  } else if (!fs.existsSync('CHANGELOG.md')) {
+    ng('CHANGELOG.md がありません');
+  } else {
+    const heads = [...fs.readFileSync('CHANGELOG.md', 'utf8').matchAll(/^## \[([^\]]+)\]/gm)].map(m => m[1]).filter(v => v.toLowerCase() !== 'unreleased');
+    if (heads[0] === version) ok(`版 ${version} が、CHANGELOG.md の先頭の版と一致`);
+    else ng(`package.json の版（${version}）が、CHANGELOG.md の先頭の版（${heads[0] ?? 'なし'}）と違います（docs/リリース手順.md の 1・2）`);
+
+    try {
+      const { execFileSync } = await import('node:child_process');
+      const tagCommit = execFileSync('git', ['rev-list', '-n', '1', `v${version}`], { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+      const head = execFileSync('git', ['rev-parse', 'HEAD']).toString().trim();
+      if (tagCommit === head) ok(`タグ v${version} が HEAD を指している`);
+      else console.log(`- タグ v${version} は、HEAD とは別のコミットを指している（リリースの後の作業中なら、問題なし）`);
+    } catch {
+      console.log(`- タグ v${version} は、まだ無い（リリースの手順 5 で付ける）`);
+    }
+  }
 }
 
 const mirror = (config as { sourceMirror?: { url: string; tagPrefix: string } }).sourceMirror;

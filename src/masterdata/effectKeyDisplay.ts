@@ -44,11 +44,26 @@ const ELEMENT_JA: Record<string, string> = {
 };
 
 /**
+ * 名前が同じ定義の中の、別の効果のキー（キーごとに、固定の名前）。
+ *   - コロンビーナ 2 凸（cons.go の c2OnGravityTick）: `columbina-c2` = 最大 HP +40%（コロンビーナ自身）。
+ *     `columbina-c2-lb` / `-lc` / `-lcr` = 月兆レベル 2 以上のとき、反応ごとに 1 つだけ付く、フィールド上のキャラへの補正
+ *     （月開花: 元素熟知 +最大 HP の 0.35%／月感電: 攻撃力 +1%／月結晶: 防御力 +1%。どれも 8 秒）
+ */
+const KEY_LABELS: Readonly<Record<string, string>> = {
+  'columbina-c2': '2凸: 最大HP+40%（コロンビーナ）',
+  'columbina-c2-lb': '2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）',
+  'columbina-c2-lc': '2凸: 月感電の補正（フィールド上のキャラの攻撃力 +最大HP×1%）',
+  'columbina-c2-lcr': '2凸: 月結晶の補正（フィールド上のキャラの防御力 +最大HP×1%）',
+};
+
+/**
  * キーごとの、バーの名前（定義の名前では区別がつかないとき）。無ければ undefined。
  *   - 灰燼の都に立つ英雄の絵巻 4 セット: `scroll-4pc-<元素>` = 元素ダメージ+12%・15 秒、
  *     `scroll-4pc-nightsoul-<元素>` = +28%・20 秒（持ち主が夜魂の加護中のときだけ追加）。定義の名前は、合計の「+40%」。
  */
 export function labelForKey(key: string): string | undefined {
+  const fixed = KEY_LABELS[key];
+  if (fixed) return fixed;
   const night = key.match(/^scroll-4pc-nightsoul-([a-z]+)$/);
   if (night) return `絵巻4: ${ELEMENT_JA[night[1]] ?? night[1]}元素ダメージ+28%（夜魂の加護中）`;
   const base = key.match(/^scroll-4pc-([a-z]+)$/);

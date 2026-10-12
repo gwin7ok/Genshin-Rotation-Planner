@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-10-13
+
+### 変更
+- アクション構築の、登場順序のパイプラインのチップと、出場カードの見出し（アバター・キャラ名）をクリックしたとき、出場トラックだけを選択し、先頭のアクションは選択しないようにした（ガントチャートのアクションをクリックしたときは、これまでどおり、そのアクションを選択する）。
+- ガントチャートの左の見出しの、アバター・キャラ名をクリックできるようにした（出場トラックだけを選択し、その出場の先頭の時刻へ移動して、アクション構築の出場カードへスクロールする）。
+
 ## [1.1.2] - 2026-10-13
 
 ### 追加
@@ -73,7 +79,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.0.0...v1.1.0

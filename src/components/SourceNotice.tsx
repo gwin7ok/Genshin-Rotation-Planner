@@ -1,5 +1,6 @@
 import { GCSIM_CONFIG } from '../utils/gcsim/gcsimConfig.ts';
 import { APP_VERSION, APP_COMMIT } from '../utils/appVersion';
+import { ANALYTICS_ENABLED } from '../utils/analytics';
 
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
 
@@ -20,9 +21,14 @@ export function SourceNotice() {
         バージョン v{APP_VERSION}（コミット {APP_COMMIT}）
       </p>
       <p>
-        編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。サーバーには何も送りません（gcsim も、ブラウザの中で動きます）。
+        編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。編成のデータをサーバーに送ることはありません（gcsim も、ブラウザの中で動きます）。
         ブラウザのデータを消す・別のブラウザや端末に移すときは、「JSON 書き出し」で保存してください。
       </p>
+      {ANALYTICS_ENABLED && (
+        <p>
+          アクセス数の集計に、Cloudflare Web Analytics（Cookie なし）を使っています。送られるのは、ページの URL・ブラウザの種類などのアクセス情報だけで、編成・設定のデータは送りません。
+        </p>
+      )}
       <p>
         このアプリは AGPL-3.0-or-later で公開しています（ソース:{' '}
         <a className={linkClass} href={APP_REPO_URL} target="_blank" rel="noreferrer">{APP_REPO_URL.replace('https://', '')}</a>）。

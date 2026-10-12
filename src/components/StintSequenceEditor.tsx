@@ -1141,9 +1141,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     </div>
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
                     {renderBuffSection('palette')}
-                    {/* 「+ 登録」の行と、アクション要素の行を分ける実線 */}
-                    <div className="mt-2 border-t border-solid border-slate-600/80" />
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                    {/* 追加済みのアクション要素・バフの領域（「+ 追加」「+ 登録」の行と、背景色・実線の枠で区別する） */}
+                    <div className="mt-2 p-2 rounded-lg border border-solid border-slate-600/80 bg-indigo-950/40" data-testid="stint-added-area">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* ラベル（「連動・発動バフ:」と同じスタイル） */}
+                      <span className="text-[11px] font-bold text-amber-300 shrink-0 flex items-center gap-1">
+                        <span>🎬 アクション要素:</span>
+                      </span>
                       {renderActionSegments(stint, stintIndex, (act, actIdx) => {
                         const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
                         const isActionActive = (act.startTime ?? 0) <= activeTime && activeTime < (act.endTime ?? 0);
@@ -1421,6 +1425,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                     {/* 連動・発動バフの一覧（登録済みのもの） */}
                     {renderBuffSection('list')}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -16,6 +16,10 @@ export function SourceNotice() {
         非公式のファンツールです。ゲームの名称・画像などの権利は、各権利者（HoYoverse）に帰属します。無保証です。
       </p>
       <p>
+        編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。サーバーには何も送りません（gcsim も、ブラウザの中で動きます）。
+        ブラウザのデータを消す・別のブラウザや端末に移すときは、「JSON 書き出し」で保存してください。
+      </p>
+      <p>
         このアプリは AGPL-3.0-or-later で公開しています（ソース:{' '}
         <a className={linkClass} href={APP_REPO_URL} target="_blank" rel="noreferrer">{APP_REPO_URL.replace('https://', '')}</a>）。
         計算に、gcsim {version}（AGPL-3.0。無改変）を使っています（ソース:{' '}

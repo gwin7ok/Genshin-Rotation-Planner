@@ -14,6 +14,7 @@
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
+    "check:release": "node scripts/check-release.ts",
     "wasm:build": "node scripts/build-gcsim-wasm.ts",
     "build:master:appside": "node scripts/regenerate-appside-characters.ts",
     "build:master": "node scripts/build-character-master.ts",

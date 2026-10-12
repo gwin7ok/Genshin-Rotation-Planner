@@ -9,27 +9,19 @@
 export type GcsimEngine = 'wasm' | 'server';
 export type GcsimEnginePreference = 'auto' | GcsimEngine;
 
-const PREFERENCE_KEY = 'gcsim_engine';
+import { DEVICE_KEYS, readString, removeKey, writeString } from '../persistence';
 
 const baseUrl = (): string => (import.meta as unknown as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
 
 export function getEnginePreference(): GcsimEnginePreference {
-  try {
-    const v = localStorage.getItem(PREFERENCE_KEY);
-    if (v === 'wasm' || v === 'server') return v;
-  } catch {
-    // localStorage が使えないときは既定
-  }
+  const v = readString(DEVICE_KEYS.gcsimEngine);
+  if (v === 'wasm' || v === 'server') return v;
   return 'auto';
 }
 
 export function setEnginePreference(pref: GcsimEnginePreference): void {
-  try {
-    if (pref === 'auto') localStorage.removeItem(PREFERENCE_KEY);
-    else localStorage.setItem(PREFERENCE_KEY, pref);
-  } catch {
-    // 保存できなくても、そのセッションでは動く
-  }
+  if (pref === 'auto') removeKey(DEVICE_KEYS.gcsimEngine);
+  else writeString(DEVICE_KEYS.gcsimEngine, pref);
   cachedWasmAvailable = null;
 }
 

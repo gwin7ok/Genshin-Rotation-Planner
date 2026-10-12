@@ -25,6 +25,7 @@ import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
 import { ACTION_EFFECT_INCLUDED } from '../masterdata/actionEffectIncluded';
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
 import { fetchRuntimeData } from './gcsim/runtimeData';
+import { STORAGE_KEYS, readString, writeJson } from './persistence';
 
 /** 発動バフと gcsim の辞書の結び付け（5-6）用。辞書は大きいので、動的生成のときだけ読み込む */
 async function loadCatalogIndex() {
@@ -33,7 +34,6 @@ async function loadCatalogIndex() {
   return { index: indexCatalog(catalog), commit: String(catalog.gcsimCommit ?? '').slice(0, 7) };
 }
 
-const DB_LOCALSTORAGE_KEY = 'genshin_app_db_v1';
 
 const isCustomCharacter = (c: CharacterConfig) => c.id.startsWith('custom_') || !!c.isCustom;
 const isLockedCharacter = (c: CharacterConfig) => !!c.isLocked;
@@ -134,7 +134,7 @@ function mergeMasterWithProtected(
  */
 export function loadDatabase(): AppDatabase {
   try {
-    const raw = localStorage.getItem(DB_LOCALSTORAGE_KEY);
+    const raw = readString(STORAGE_KEYS.database);
     if (!raw) {
       return INITIAL_MASTER_DATABASE;
     }
@@ -188,10 +188,8 @@ export function loadDatabase(): AppDatabase {
  * Persists current database to LocalStorage
  */
 export function saveDatabase(db: AppDatabase): void {
-  try {
-    localStorage.setItem(DB_LOCALSTORAGE_KEY, JSON.stringify(db));
-  } catch (err) {
-    console.error('Failed to save database to localStorage:', err);
+  if (!writeJson(STORAGE_KEYS.database, db)) {
+    console.error('データベースを保存できませんでした（容量超過・保存が無効の可能性）');
   }
 }
 

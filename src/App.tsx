@@ -8,8 +8,7 @@ import { Header } from './components/Header';
 import { StintSequenceEditor } from './components/StintSequenceEditor';
 import { GanttChart } from './components/GanttChart';
 import { PartyConfigModal } from './components/PartyConfigModal';
-import { RotationSummaryModal } from './components/RotationSummaryModal';
-import { HelpGuideModal } from './components/HelpGuideModal';
+import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
@@ -105,8 +104,8 @@ export default function App() {
 
   // 3. Modals & Action Selection State
   const [isPartyModalOpen, setIsPartyModalOpen] = useState<boolean>(false);
-  const [isSummaryModalOpen, setIsSummaryModalOpen] = useState<boolean>(false);
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
+  // 使い方
+  const [isUsageOpen, setIsUsageOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState<boolean>(false);
   const [copiedNotation, setCopiedNotation] = useState<boolean>(false);
@@ -609,8 +608,7 @@ export default function App() {
         playbackSpeed={playbackSpeed}
         onChangeSpeed={setPlaybackSpeed}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
-        onOpenSummaryModal={() => setIsSummaryModalOpen(true)}
-        onOpenHelpModal={() => setIsHelpModalOpen(true)}
+        onOpenHelpModal={() => setIsUsageOpen(true)}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
         onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
         onExportJson={handleExportJson}
@@ -680,7 +678,6 @@ export default function App() {
           onUpdateDefHalt={setDefHalt}
           hurt={hurt}
           onUpdateHurt={setHurt}
-          onOpenHelpModal={() => setIsHelpModalOpen(true)}
           selectedAction={selectedAction}
           onSelectAction={(stintId, actionId) => setSelectedAction(stintId ? { stintId, actionId } : null)}
           loopStartTime={loopStartTime}
@@ -753,17 +750,8 @@ export default function App() {
         onUpdateDatabase={setDatabase}
       />
 
-      {/* Rotation Cheat Sheet & Step-by-Step Modal */}
-      <RotationSummaryModal
-        isOpen={isSummaryModalOpen}
-        onClose={() => setIsSummaryModalOpen(false)}
-        characters={characters}
-        stints={calculatedResult.calculatedStints}
-        totalDuration={totalDuration}
-        loopStartIndex={loopStartIndex}
-        notationMode={notationMode}
-        onChangeNotationMode={setNotationMode}
-      />
+      {/* 使い方（基本の流れ・操作・gcsim・保存・記法） */}
+      <UsageGuideModal isOpen={isUsageOpen} onClose={() => setIsUsageOpen(false)} />
 
       {/* gcsim 設定文 */}
       <GcsimConfigDialog
@@ -781,12 +769,6 @@ export default function App() {
         buffsByCharacter={buffsByCharacter}
         actionLinks={actionLinks}
         onApplyStints={updateStints}
-      />
-
-      {/* Help & Reordering Guide Modal */}
-      <HelpGuideModal
-        isOpen={isHelpModalOpen}
-        onClose={() => setIsHelpModalOpen(false)}
       />
 
       {/* Footer */}

@@ -819,7 +819,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             {/* Title & Duration */}
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
-              <h2 className="text-xs sm:text-sm font-bold text-white tracking-wide truncate">
+              <h2 className="text-base sm:text-lg font-extrabold text-white tracking-wide truncate">
                 ローテーション ガントチャート
               </h2>
               <span className="text-[11px] text-slate-400 font-mono shrink-0">
@@ -1772,7 +1772,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         key={`${act.id}_modehold`}
                                         style={{ left: `${((stint.endTime ?? 0) - hold - (stint.startTime ?? 0)) * pixelsPerSecond}px`, width: `${hold * pixelsPerSecond}px` }}
                                         className={`absolute h-full flex items-center justify-center border-r border-dashed border-slate-400/50 text-[9px] text-slate-200/70 select-none ${
-                                          act.type === 'burst' ? 'bg-purple-600/30' : act.type === 'skill' || act.type === 'skill_hold' ? 'bg-sky-600/30' : 'bg-slate-500/30'
+                                          act.type === 'burst' ? 'bg-purple-600/30' : act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset' ? 'bg-amber-600/30' : 'bg-slate-500/30'
                                         }`}
                                         title={`【モード維持】${stint.modeHold?.label ?? 'モード'}が最大時間まで続くように、「${act.name}」の後を自動で延ばしています（+${hold.toFixed(2)}s。保存しません）。\n切り替えは、アクション構築エリアの出場ブロックの「モード維持」`}
                                       >

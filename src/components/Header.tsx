@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, FileText, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
 
@@ -18,7 +18,6 @@ interface HeaderProps {
   playbackSpeed: number;
   onChangeSpeed: (speed: number) => void;
   onOpenPartyModal: () => void;
-  onOpenSummaryModal: () => void;
   onOpenHelpModal: () => void;
   onOpenSaveModal: () => void;
   onOpenDatabaseModal: () => void;
@@ -59,7 +58,6 @@ export const Header: React.FC<HeaderProps> = ({
   playbackSpeed,
   onChangeSpeed,
   onOpenPartyModal,
-  onOpenSummaryModal,
   onOpenHelpModal,
   onOpenSaveModal,
   onOpenDatabaseModal,
@@ -274,40 +272,34 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Overall CT Collision Status Badge (Always Visible between Play Controls & Collapse Toggle) */}
           {totalCTCollisions > 0 ? (
-            <button
-              type="button"
-              onClick={onOpenSummaryModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 hover:bg-red-900 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0 cursor-pointer transition-colors"
-              title={`【⚠️ CT違反あり】ローテーション全体で ${totalCTCollisions} 件のクールタイム未回復違反が検出されています（クリックでサマリー表示）`}
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0"
+              title={`【⚠️ CT違反あり】ローテーション全体で ${totalCTCollisions} 件のクールタイム未回復違反が検出されています（該当のアクションには、ガントチャートに赤い印が付きます）`}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
               <span>CT違反あり ({totalCTCollisions}件)</span>
-            </button>
+            </div>
           ) : (
-            <button
-              type="button"
-              onClick={onOpenSummaryModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500/70 text-emerald-300 text-xs font-bold shadow-sm shrink-0 cursor-pointer transition-colors"
-              title="【✅ CT全解消】ローテーション全体のすべてのアクションでクールタイムが回復済みです（クリックでサマリー表示）"
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 text-xs font-bold shadow-sm shrink-0"
+              title="【✅ CT全解消】ローテーション全体のすべてのアクションでクールタイムが回復済みです"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>✅ 全体CT違反なし</span>
-            </button>
+            </div>
           )}
 
           {totalCTWarnings > 0 && (
-            <button
-              type="button"
-              onClick={onOpenSummaryModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0 cursor-pointer transition-colors"
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0"
               title={`【CT警告】発動バフ（固有天賦・武器・聖遺物）がCT中に発動する配置、特殊スキルが受付時間外にある配置、落下攻撃が gcsim の前提を満たさない配置が、合計 ${totalCTWarnings} 件あります（発動バフは効果が発動しないだけ、特殊スキルは通常のスキルとして扱われます。落下攻撃は gcsim で実行エラーになります）`}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>CT警告 ({totalCTWarnings}件)</span>
-            </button>
+            </div>
           )}
 
-          {/* Toggle Button for Collapsing/Expanding DB管理, 並び替え・使い方, etc. */}
+          {/* ボタン列の表示・非表示 */}
           <button
             type="button"
             onClick={() => setIsCollapsed(prev => !prev)}
@@ -322,9 +314,18 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Collapsible Action Tools Row (編成設定, 編成管理, DB管理, 並び替え・使い方, 手順書, 記法コピー, 記法表示) */}
+        {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → 記法コピー（と記法の表示）） */}
         {!isCollapsed && (
           <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
+            <button
+              onClick={onOpenHelpModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
+              title="使い方（基本の流れ・画面の見方・操作・gcsim・保存・記法）"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span>使い方</span>
+            </button>
+
             <button
               onClick={onOpenPartyModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
@@ -350,33 +351,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Database className="w-3.5 h-3.5 text-emerald-400" />
               <span>DB管理</span>
-            </button>
-
-            <button
-              onClick={onOpenHelpModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
-              title="登場キャラの順番入れ替え・操作ガイドを開く"
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
-              <span>並び替え・使い方</span>
-            </button>
-
-            <button
-              onClick={onOpenSummaryModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="ローテーション手順書・チートシート表示"
-            >
-              <FileText className="w-3.5 h-3.5 text-sky-400" />
-              <span>手順書</span>
-            </button>
-
-            <button
-              onClick={onCopyNotation}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)"
-            >
-              {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
-              <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>
             </button>
 
             {onGcsimCompute && (
@@ -411,9 +385,18 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Notation Text Display right next to 記法コピー */}
+            <button
+              onClick={onCopyNotation}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
+              title="テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)"
+            >
+              {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+              <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>
+            </button>
+
+            {/* 現在の記法の表示（記法コピーの隣） */}
             {rotationNotation && (
-              <div 
+              <div
                 className="flex items-center gap-1 px-2.5 py-1 text-xs font-mono bg-slate-950/90 text-amber-300/90 border border-slate-800 rounded-lg max-w-full overflow-x-auto whitespace-nowrap custom-scrollbar shrink min-w-0"
                 title="現在のローテーション記法"
               >

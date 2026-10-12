@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trash2 } from 'lucide-react';
 import { CharacterConfig, PassiveTriggerInstance, Stint } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
 import {
@@ -132,7 +133,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
         return (
           <div
             key={trigger.id}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs shadow-sm ${badgeCfg.badgeClass}`}
+            className={`flex items-center gap-1 h-7 px-2 rounded-lg border text-xs shadow-sm ${badgeCfg.badgeClass}`}
             title={matchedDef?.description ?? trigger.name}
           >
             <span className="text-[10px] select-none">{badgeCfg.icon}</span>
@@ -164,10 +165,11 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
             <button
               type="button"
               onClick={() => handleRemoveTrigger(trigger.id)}
-              className="text-slate-400 hover:text-red-400 ml-0.5 p-0.5 transition-colors"
+              className="p-0.5 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 ml-0.5 transition-colors flex items-center justify-center shrink-0"
               title="この連動バフを削除"
+              aria-label="連動バフを削除"
             >
-              ✕
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
         );
@@ -176,7 +178,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
       {/* バフ登録パレット（天賦 / 武器 / 聖遺物） */}
       {showPalette && (
       <div className="basis-full flex flex-wrap items-center gap-1.5 mt-1">
-        <span className="text-[11px] text-slate-400 font-medium">+ 登録:</span>
+        <span className="h-7 w-14 shrink-0 mr-2 inline-flex items-center justify-center text-[11px] font-semibold text-red-300/70 bg-red-950/40 border border-red-900/60 rounded" title="連動・発動バフ（固有天賦・武器・聖遺物・命ノ星座の効果）を登録します">+ 登録</span>
 
         {trackBuffs.length === 0 ? (
           <span className="text-[11px] text-slate-500 italic">
@@ -192,7 +194,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 key={def.id}
                 type="button"
                 onClick={() => handleAddTrigger(def)}
-                className="px-2 py-1 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 hover:text-white text-[11px] font-semibold border border-emerald-800/80 hover:border-emerald-500 transition-all flex items-center gap-1"
+                className="h-7 px-2 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 hover:text-white text-[11px] font-semibold border border-emerald-800/80 hover:border-emerald-500 transition-all flex items-center gap-1"
                 title={`【固有天賦】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
               >
                 <span>🎯</span>
@@ -207,7 +209,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 key={def.id}
                 type="button"
                 onClick={() => handleAddTrigger(def)}
-                className="px-2 py-1 rounded bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 hover:text-white text-[11px] font-semibold border border-rose-800/80 hover:border-rose-500 transition-all flex items-center gap-1"
+                className="h-7 px-2 rounded bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 hover:text-white text-[11px] font-semibold border border-rose-800/80 hover:border-rose-500 transition-all flex items-center gap-1"
                 title={`【命ノ星座】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
               >
                 <span>✦</span>
@@ -222,7 +224,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 key={def.id}
                 type="button"
                 onClick={() => handleAddTrigger(def)}
-                className="px-2 py-1 rounded bg-sky-950/60 hover:bg-sky-900/80 text-sky-200 hover:text-white text-[11px] font-semibold border border-sky-800/80 hover:border-sky-500 transition-all flex items-center gap-1"
+                className="h-7 px-2 rounded bg-sky-950/60 hover:bg-sky-900/80 text-sky-200 hover:text-white text-[11px] font-semibold border border-sky-800/80 hover:border-sky-500 transition-all flex items-center gap-1"
                 title={`【武器: ${def.sourceName}】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
               >
                 <span>⚔️</span>
@@ -237,7 +239,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 key={def.id}
                 type="button"
                 onClick={() => handleAddTrigger(def)}
-                className="px-2 py-1 rounded bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 hover:text-white text-[11px] font-semibold border border-purple-800/80 hover:border-purple-500 transition-all flex items-center gap-1"
+                className="h-7 px-2 rounded bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 hover:text-white text-[11px] font-semibold border border-purple-800/80 hover:border-purple-500 transition-all flex items-center gap-1"
                 title={`【聖遺物: ${def.sourceName}】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
               >
                 <span>🛡️</span>

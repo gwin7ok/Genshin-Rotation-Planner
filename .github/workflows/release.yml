@@ -1,0 +1,88 @@
+# リリースの生成（タグ起点）。VSCode の ctrl+shift+3（release-tag-and-push-short）が、タグ vX.Y.Z を push すると起動する。
+#
+# 流れ: 版の検証（タグ = package.json の version / タグのコミットが main に含まれる）
+#       → CHANGELOG.md から、その版の節を抽出 → GitHub Release を作成
+#       → deploy（GitHub Pages への公開）を、main から起動（タグのチェックアウトを指定）
+#
+# なぜ deploy を別ワークフローから起動するか:
+#   `github-pages` 環境は、既定で main ブランチからのデプロイだけを許可する（タグのままでは拒否される）。
+#   そのため、タグの push で起動した、この workflow が、`gh workflow run deploy.yml --ref main -f ref=<タグ>` で、
+#   main の上で deploy を実行する（環境の保護ルールを変えずに済む）。GITHUB_TOKEN による workflow_dispatch は、許可されている。
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 版の検証（タグ = package.json の version）
+        id: ver
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          if ! [[ "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::タグが vX.Y.Z の形ではありません: $tag"; exit 1
+          fi
+          v="${BASH_REMATCH[1]}"
+          pkg=$(node -p "require('./package.json').version")
+          if [ "$pkg" != "$v" ]; then
+            echo "::error::タグの版 ($v) が package.json の version ($pkg) と違います"; exit 1
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: タグのコミットが main に含まれることの確認
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::タグのコミットが main に含まれていません（main に push してから、タグを付けてください）"; exit 1
+          fi
+
+      - name: 変更履歴の抽出（CHANGELOG.md の該当の版）
+        run: |
+          v="${{ steps.ver.outputs.version }}"
+          node -e '
+            const fs = require("fs");
+            const v = process.argv[1];
+            const raw = fs.readFileSync("CHANGELOG.md", "utf8").replace(/\r\n/g, "\n");
+            const lines = raw.split("\n");
+            const i = lines.findIndex(l => l.startsWith("## [" + v + "]"));
+            if (i < 0) { console.error("CHANGELOG.md に、版 " + v + " の節がありません"); process.exit(1); }
+            const out = [];
+            for (let j = i + 1; j < lines.length; j++) {
+              if (/^## \[/.test(lines[j]) || /^\[[^\]]+\]: /.test(lines[j])) break;
+              out.push(lines[j]);
+            }
+            const body = out.join("\n").trim();
+            if (!body) { console.error("版 " + v + " の変更履歴が空です"); process.exit(1); }
+            fs.writeFileSync("changes.md", body + "\n");
+          ' "$v"
+          echo "----- リリースノート -----"; cat changes.md
+
+      - name: GitHub Release の作成
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag は、すでにあります（作り直しません）"
+          else
+            gh release create "$tag" --title "$tag" --notes-file changes.md --verify-tag
+          fi
+
+      - name: deploy（GitHub Pages への公開）を main から起動
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy.yml --ref main -f ref="${GITHUB_REF_NAME}"
+          echo "deploy を起動しました（タグ ${GITHUB_REF_NAME} をビルドして公開します）"

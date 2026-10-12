@@ -1,9 +1,10 @@
 # GitHub Pages へのデプロイ（docs/公開サーバー構築の実装計画.md の 3-B）
 #
-# 起動: Actions タブから手動（Run workflow。ブランチは main）。
-#   （github-pages の環境は、既定で main ブランチからのデプロイだけを許可する。タグの push では、
-#   「Tag is not allowed to deploy to github-pages due to environment protection rules」で失敗する。
-#   タグで起動したいときは、環境（Settings → Environments → github-pages）に、タグのルールを足す）
+# 起動: ① release.yml（タグ vX.Y.Z の push で起動）が、`gh workflow run deploy.yml --ref main -f ref=<タグ>` で起動する（通常）
+#       ② Actions タブから手動（Run workflow。ブランチは main。ref は空 = main の先頭）
+#   github-pages の環境は、既定で main ブランチからのデプロイだけを許可する（タグの push では、
+#   「Tag is not allowed to deploy to github-pages due to environment protection rules」で失敗する）。
+#   そのため、この workflow は常に main の上で動かし、公開するソースは `ref`（タグ）で指定する。
 # 事前の設定（リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にする）が要る。
 #
 # 流れ: gcsim の WebAssembly 版をビルド（gcsim.config.json のコミットのソースを無改変で。AGPL のため、
@@ -12,6 +13,11 @@ name: deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: '公開するソースのタグ・ブランチ・コミット（空なら、この workflow を動かしたブランチ = main）'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -27,6 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
 
       - uses: actions/setup-node@v4
         with:

@@ -1,0 +1,51 @@
+{
+  // リリース用のタスク（docs/リリース手順.md）。基本は、次の 2 つのキーで、リモートの公開まで行う:
+  //   ctrl+shift+2 → "Update Changelog"            … 更新履歴の更新と、版の更新
+  //   ctrl+shift+3 → "release-tag-and-push-short"  … コミット → push → タグ → Actions が Release 作成と公開
+  // （keybindings.json の割り当て: ctrl+shift+2 / ctrl+shift+3 の args に、上のラベルを指定）
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // 更新履歴の更新（package.json の version 更新 + CHANGELOG.md の [Unreleased] を版に切り出し）。
+      // [Unreleased] が空なら、前のリリース以降のコミットから生成する（確認あり）。次の版（パッチ/マイナー/メジャー）を選ぶ。
+      "label": "Update Changelog",
+      "type": "shell",
+      "command": "npm run release:bump",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false, "focus": true }
+    },
+    {
+      // リリース生成（Release vX.Y.Z をコミット → push → タグ発行 → Actions が Release の作成・GitHub Pages への公開）
+      "label": "release-tag-and-push-short",
+      "type": "shell",
+      "command": "npm run release:tag",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false, "focus": true }
+    },
+    {
+      // リリース内容の事前確認（何も実行しない）
+      "label": "release-tag: dry run",
+      "type": "shell",
+      "command": "npm run release:tag -- --dry-run",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false, "focus": true }
+    },
+    {
+      // 更新履歴の更新の事前確認（ファイルは変えない）
+      "label": "Update Changelog: dry run",
+      "type": "shell",
+      "command": "npm run release:bump -- --dry-run",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false, "focus": true }
+    },
+    {
+      // リリース前の検査（型・計算のスナップショット・バックアップ・公開前の検査）
+      "label": "Run Checks",
+      "type": "shell",
+      "command": "npx tsc --noEmit && npm run check:snapshots && npm run check:backup && npm run check:release",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared", "showReuseMessage": false }
+    }
+  ]
+}

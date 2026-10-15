@@ -126,6 +126,46 @@ for (const c of characters) {
     }
   }
 }
+// ---- 武器の常時の攻撃速度（src/data/weapon_atk_spd.json。D216）: 通常攻撃の連続を、武器つきで比べる ----
+const weaponsMaster: any[] = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+const speeds = JSON.parse(fs.readFileSync('src/data/weapon_atk_spd.json', 'utf8')).entries as Record<string, Record<string, number>>;
+const CHARS: Record<string, string> = { sword: '行秋', claymore: 'ライオス', polearm: '香菱', bow: 'アンバー', catalyst: 'リサ' };
+for (const [weaponKey, byRefine] of Object.entries(speeds)) {
+  const w = weaponsMaster.find(x => x.gcsimKey === weaponKey);
+  if (!w) continue;
+  const candidates = characters.filter(c => c.weaponType === w.weaponType);
+  const c = candidates.find(x => x.name === CHARS[w.weaponType]) ?? candidates[0];
+  const hits: any[] = c.availableActions.find((a: any) => a.id === `${c.id}_n`)?.normalHits ?? [];
+  for (const refine of Object.keys(byRefine).filter((_, i) => i === 0)) {
+    for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
+      const k = c.source.gcsimKey as string;
+      const n = Math.min(hits.length, 4);
+      const cmds = Array.from({ length: n + 1 }, () => 'attack');
+      const cfg = [
+        `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
+        `${k} add weapon="${weaponKey}" refine=${refine} lvl=90/90;`,
+        `${k} add stats cr=1;`,
+        `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
+        'target lvl=100 resist=0.1;',
+        `active ${k};`,
+        cmds.map(x => `${k} ${x};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`).join(' '),
+      ].join('\n');
+      const res = await fetch(`${GCSIM_SERVER_URL}/sample/cw_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+      const logs = (await res.json()).logs as any[];
+      const g = logs.filter(l => l.event === 'action' && l.msg === 'executed attack').map(l => l.frame as number);
+      const cw = { ...structuredClone(c), weaponId: w.id, weaponRefinementRank: Number(refine) };
+      const stints = [{ id: 's1', characterId: c.id, actions: cmds.map(() => act(c, 'n', delayFrames / 60)) }];
+      const r = calculateRotation([cw], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster } });
+      const acts = r.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap');
+      for (let i = 0; i < n; i++) {
+        const gi = g[i + 1] - g[i];
+        const ai = Math.round((acts[i + 1].startTime - acts[i].startTime) * 60);
+        checked++;
+        if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}+${w.name}(精錬${refine}) n${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+      }
+    }
+  }
+}
 await server.close();
 console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件`);
 for (const f of fails.slice(0, 60)) console.log('  ✗', f);

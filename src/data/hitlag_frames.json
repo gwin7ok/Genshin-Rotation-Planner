@@ -1,22 +1,7 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T15:44:27.303Z",
+ "generatedAt": "2026-10-15T15:52:19.193Z",
  "excludedNext": [
-  "10000027-geo_n[0]|skill",
-  "10000027-geo_n[0]|burst",
-  "10000027-geo_n[0]|dash",
-  "10000027-geo_n[0]|jump",
-  "10000027-geo_n[0]|swap",
-  "10000027-geo_n[1]|skill",
-  "10000027-geo_n[1]|burst",
-  "10000027-geo_n[1]|dash",
-  "10000027-geo_n[1]|jump",
-  "10000027-geo_n[1]|swap",
-  "10000027-geo_n[2]|skill",
-  "10000027-geo_n[2]|burst",
-  "10000027-geo_n[2]|dash",
-  "10000027-geo_n[2]|jump",
-  "10000027-geo_n[2]|swap",
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
   "10000114-cryo_n[4]|skill",
@@ -975,15 +960,81 @@
   "10000027-geo_n": [
    {
     "with": 5,
-    "without": 5
+    "without": 5,
+    "byNext": {
+     "skill": {
+      "with": -2,
+      "without": -2
+     },
+     "burst": {
+      "with": -2,
+      "without": -2
+     },
+     "dash": {
+      "with": -2,
+      "without": -2
+     },
+     "jump": {
+      "with": -2,
+      "without": -2
+     },
+     "swap": {
+      "with": -2,
+      "without": -2
+     }
+    }
    },
    {
     "with": 5,
-    "without": 5
+    "without": 5,
+    "byNext": {
+     "skill": {
+      "with": 10,
+      "without": 10
+     },
+     "burst": {
+      "with": 10,
+      "without": 10
+     },
+     "dash": {
+      "with": 10,
+      "without": 10
+     },
+     "jump": {
+      "with": 10,
+      "without": 10
+     },
+     "swap": {
+      "with": 10,
+      "without": 10
+     }
+    }
    },
    {
     "with": -10,
-    "without": -10
+    "without": -10,
+    "byNext": {
+     "skill": {
+      "with": -8,
+      "without": -8
+     },
+     "burst": {
+      "with": -8,
+      "without": -8
+     },
+     "dash": {
+      "with": -8,
+      "without": -8
+     },
+     "jump": {
+      "with": -8,
+      "without": -8
+     },
+     "swap": {
+      "with": -8,
+      "without": -8
+     }
+    }
    }
   ],
   "10000029-pyro_e": {

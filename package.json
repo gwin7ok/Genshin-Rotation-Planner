@@ -33,6 +33,7 @@
     "probe:queue-frames": "node scripts/probe-can-queue-after.ts",
     "probe:dash-jump": "node scripts/probe-dash-jump.ts",
     "probe:hitlag": "node scripts/probe-hitlag.ts",
+    "probe:weapon-speed": "node scripts/probe-weapon-speed.ts",
     "check:hitlag": "node scripts/check-hitlag.ts",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",
     "review:effects": "node scripts/review-effect-keys.ts",

@@ -9,6 +9,7 @@ import { SACRIFICIAL_WEAPON_KEYS, sacrificialIcdSeconds } from './gcsim/sacrific
 import skillHitFrameData from '../data/skill_hit_frames.json';
 import canQueueAfterData from '../data/can_queue_after.json';
 import hitlagData from '../data/hitlag_frames.json';
+import weaponAtkSpdData from '../data/weapon_atk_spd.json';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -118,6 +119,18 @@ type HitlagBase = HitlagPair & { d0?: HitlagPair };
 type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair };
 const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
 
+/**
+ * 武器の常時の通常攻撃速度（gcsim の AtkSpd。scripts/probe-weapon-speed.ts が実測で作る。D216）。キー = 武器の gcsim のキー、値 = 精錬ランク → 速度。
+ * 条件つき・スタックで増えるもの（天空の刃・リングボウ・トゥライトゥーラなど）は入っていない。
+ */
+const WEAPON_ATK_SPD = (weaponAtkSpdData as { entries: Record<string, Record<string, number>> }).entries;
+
+/** gcsim の `frames.AtkSpdAdjust`: 通常攻撃のフレームを、攻撃速度で縮める（速度は 0.6 で頭打ち） */
+const atkSpdAdjust = (frames: number, spd: number): number => {
+  const s = Math.min(spd, 0.6);
+  return frames - Math.trunc(Math.min(s, 0.1 + (s - 0.1) / 2) * frames);
+};
+
 /** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代。'wait' = 次が待機（CanQueueAfter） */
 type NextKey = CancelTarget | 'wait';
 
@@ -208,6 +221,13 @@ export function calculateRotation(
     if (!w?.gcsimKey || !(SACRIFICIAL_WEAPON_KEYS as readonly string[]).includes(w.gcsimKey)) return undefined;
     const refine = c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5);
     return { icdSeconds: sacrificialIcdSeconds(refine) };
+  };
+  // 装備の武器の常時の通常攻撃速度（無ければ 0）
+  const weaponAtkSpdOf = (c: CharacterConfig): number => {
+    const w = options?.database?.weapons.find(x => x.id === c.weaponId);
+    if (!w?.gcsimKey) return 0;
+    const refine = c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5);
+    return WEAPON_ATK_SPD[w.gcsimKey]?.[String(refine)] ?? 0;
   };
   const burstCooldowns: CooldownSpan[] = [];
   const validationIssues: ValidationIssue[] = [];
@@ -894,7 +914,10 @@ export function calculateRotation(
             }
           }
           const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
-          autoDuration = Number(((motion + hitlagFrames) / 60).toFixed(3));
+          // 通常攻撃は、武器の攻撃速度で縮む（ヒットストップの延びは、縮んだ後に足される）
+          const atkSpd = act.type === 'normal' ? weaponAtkSpdOf(char) : 0;
+          const motionAdjusted = atkSpd > 0 ? atkSpdAdjust(motion, atkSpd) : motion;
+          autoDuration = Number(((motionAdjusted + hitlagFrames) / 60).toFixed(3));
           if (hitlagFrames !== 0) hitlagIncluded.add(act.id);
         } else {
           autoDuration = hitFallbackDuration;

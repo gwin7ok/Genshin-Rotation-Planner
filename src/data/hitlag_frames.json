@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T16:36:12.793Z",
+ "generatedAt": "2026-10-15T18:00:23.333Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -982,6 +982,32 @@
       "with": -2,
       "without": -2
      }
+    },
+    "afterCharged": {
+     "with": -5,
+     "without": -5,
+     "byNext": {
+      "skill": {
+       "with": 2,
+       "without": 2
+      },
+      "burst": {
+       "with": 2,
+       "without": 2
+      },
+      "dash": {
+       "with": 2,
+       "without": 2
+      },
+      "jump": {
+       "with": 2,
+       "without": 2
+      },
+      "swap": {
+       "with": 2,
+       "without": 2
+      }
+     }
     }
    },
    {
@@ -1056,7 +1082,29 @@
   "10000029-pyro_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterBurst": {
+     "with": 0,
+     "without": 0,
+     "d0": {
+      "with": 9,
+      "without": 9
+     },
+     "byNext": {
+      "skill": {
+       "with": 0,
+       "without": 0
+      },
+      "dash": {
+       "with": 0,
+       "without": 0
+      },
+      "jump": {
+       "with": 0,
+       "without": 0
+      }
+     }
+    }
    },
    {
     "with": 0,
@@ -2550,7 +2598,15 @@
   "10000075-anemo_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterCharged": {
+     "with": -2,
+     "without": -2
+    },
+    "afterBurst": {
+     "with": -2,
+     "without": -2
+    }
    },
    {
     "with": 0,
@@ -3244,7 +3300,57 @@
   "10000101-dendro_n": [
    {
     "with": 8,
-    "without": 4
+    "without": 4,
+    "afterCharged": {
+     "with": 1,
+     "without": 2,
+     "d0": {
+      "with": 2,
+      "without": 2
+     },
+     "byNext": {
+      "skill": {
+       "with": 1,
+       "without": 2,
+       "d0": {
+        "with": 1,
+        "without": 1
+       }
+      },
+      "burst": {
+       "with": 1,
+       "without": 2,
+       "d0": {
+        "with": 1,
+        "without": 1
+       }
+      },
+      "dash": {
+       "with": 1,
+       "without": 2,
+       "d0": {
+        "with": 1,
+        "without": 1
+       }
+      },
+      "jump": {
+       "with": 1,
+       "without": 2,
+       "d0": {
+        "with": 1,
+        "without": 1
+       }
+      },
+      "swap": {
+       "with": 1,
+       "without": 2,
+       "d0": {
+        "with": 1,
+        "without": 1
+       }
+      }
+     }
+    }
    },
    {
     "with": 9,
@@ -3522,7 +3628,29 @@
   "10000111-electro_n": [
    {
     "with": -2,
-    "without": -6
+    "without": -6,
+    "afterBurst": {
+     "with": 0,
+     "without": 0,
+     "byNext": {
+      "skill": {
+       "with": -2,
+       "without": -2
+      },
+      "dash": {
+       "with": -2,
+       "without": -2
+      },
+      "jump": {
+       "with": -2,
+       "without": -2
+      },
+      "swap": {
+       "with": -2,
+       "without": -2
+      }
+     }
+    }
    },
    {
     "with": 4,
@@ -3618,6 +3746,10 @@
       "with": -12,
       "without": -12
      }
+    },
+    "afterBurst": {
+     "with": -2,
+     "without": -2
     }
    },
    {
@@ -3918,7 +4050,11 @@
   "10000125-hydro_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterCharged": {
+     "with": 2,
+     "without": 2
+    }
    },
    {
     "with": 0,
@@ -3996,7 +4132,15 @@
   "10000128-anemo_n": [
    {
     "with": 11,
-    "without": 7
+    "without": 7,
+    "afterCharged": {
+     "with": -5,
+     "without": -5
+    },
+    "afterBurst": {
+     "with": -5,
+     "without": -5
+    }
    },
    {
     "with": 8,
@@ -4038,7 +4182,15 @@
   "10000131-pyro_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterCharged": {
+     "with": 0,
+     "without": 0,
+     "d0": {
+      "with": 3,
+      "without": 3
+     }
+    }
    },
    {
     "with": 0,

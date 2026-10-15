@@ -92,7 +92,8 @@ type Base = Base0 & { byNext?: Record<string, Base0> };
  * `afterCharged` = 通常攻撃の 1 段目だけ、重撃の直後に使うときの、通常のときとの差（構え = windup が変わる。放浪者は −2f。gcsim の attackWindupNormal）。
  * 次のアクションの種類によらず同じなので、差として記録する（`d0` は、直前の重撃の遅延がないとき）。差が 0 のキャラは記録しない
  */
-type NormalBase = Base & { afterCharged?: Base0 };
+type AfterBase = Base0 & { /** 次のアクションの種類ごとの差（次が通常攻撃のときと違うものだけ） */ byNext?: Record<string, Base0> };
+type NormalBase = Base & { afterCharged?: AfterBase; /** 爆発の直後の、通常のときとの差（同じ意味） */ afterBurst?: AfterBase };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（gcsim の `mod extended`。モードの通常攻撃・重撃だけ） */
 type Entry = Base & { afterNormal?: Base; ext?: Pair };
 const entries: Record<string, Entry | NormalBase[]> = {};
@@ -218,17 +219,41 @@ for (const c of characters) {
       // 1 段目を、重撃の直後に使うとき（重撃のあとは、1 段目に戻る）
       const ca = actions.find(a => a.id === `${c.id}_ca`);
       const caCommand = ca && !ca.gcsimUnsupported ? mapAction(ca.id, c.weaponType).command : undefined;
-      if (caCommand && caCommand !== 'aim') {
-        const exp = cancelAttack(hits[0].frames)!;
-        const af = await measureBase(k, weapon, ['attack', caCommand, 'attack', 'attack'], 2, exp, `${n.id}[0]+afterCharged`, false, undefined);
-        if (af) {
-          const b = arr[0];
-          const diff = (x: Pair, y: Pair): Pair => ({ with: x.with - y.with, without: x.without - y.without });
-          const std = diff(af, b);
-          const d0 = diff(af.d0 ?? af, b.d0 ?? b);
-          if (std.with !== 0 || std.without !== 0 || d0.with !== 0 || d0.without !== 0) {
-            (arr[0] as NormalBase).afterCharged = same(std, d0) ? std : { ...std, d0 };
+      const q = actions.find(a => a.id === `${c.id}_q`);
+      // モードを開く爆発（状態の中の通常攻撃は、別の仕組み。爆発自身の攻撃速度の効果も、表で別に足すので、差に混ぜない）は測らない
+      const qCommand = q && !q.gcsimUnsupported && !q.cooldownPool && !q.specialBurst && !q.mode ? mapAction(q.id, c.weaponType).command : undefined;
+      const diff = (x: Pair, y: Pair): Pair => ({ with: x.with - y.with, without: x.without - y.without });
+      const exp = cancelAttack(hits[0].frames)!;
+      // 重撃（単独で使えない剣・大剣・長柄は、直前に通常攻撃を入れる。重撃で 1 段目に戻る）と爆発の直後の 1 段目を測る
+      for (const [label, prefix] of [['afterCharged', caCommand && caCommand !== 'aim' ? ['attack', caCommand] : undefined], ['afterBurst', qCommand ? [qCommand] : undefined]] as const) {
+        if (!prefix) continue;
+        // 1 段目の次の n1 → attack の測定が、次の種類の測定で除外されているキャラ（凝光: 通常攻撃の種類が毎回変わる）は、測らない
+        if (excludedNext.some(x => x.startsWith(`${n.id}[0]|`))) continue;
+        const af = await measureBase(k, weapon, [...prefix, 'attack', 'attack'], prefix.length, exp, `${n.id}[0]+${label}`, false, undefined);
+        if (!af) continue;
+        const b = arr[0];
+        const std = diff(af, b);
+        const d0 = diff(af.d0 ?? af, b.d0 ?? b);
+        {
+          // 次のアクションの種類（skill・burst・dash・jump・swap）ごとの差。通常のときの値との差で、次が通常攻撃のときと違うものだけ記録する
+          const byNext: Record<string, Pair & { d0?: Pair }> = {};
+          for (const [key, command] of NEXT_COMMANDS) {
+            const expKey = hits[0].frames?.cancels?.[key] ?? hits[0].frames?.total;
+            if (expKey === undefined) continue;
+            const cmds = [...prefix, 'attack', command];
+            tried += 2;
+            const a1 = await deltaPair(k, weapon, cmds, prefix.length, expKey, STD_DELAY);
+            const a0 = await deltaPair(k, weapon, cmds, prefix.length, expKey, 0);
+            if (!a1 || !a0) continue;
+            const bk: Base0 = (b.byNext?.[key] as Base0 | undefined) ?? b;
+            const ds = diff(a1, bk);
+            const dz = diff(a0, bk.d0 ?? bk);
+            if (Math.abs(ds.with) > MAX_NEGATIVE || Math.abs(dz.with) > MAX_NEGATIVE) continue;
+            if (same(ds, std) && same(dz, d0)) continue;
+            byNext[key] = same(ds, dz) ? ds : { ...ds, d0: dz };
           }
+          const nonZero = std.with !== 0 || std.without !== 0 || d0.with !== 0 || d0.without !== 0;
+          if (nonZero || Object.keys(byNext).length > 0) (arr[0] as NormalBase)[label] = { ...(same(std, d0) ? std : { ...std, d0 }), ...(Object.keys(byNext).length > 0 ? { byNext } : {}) };
         }
       }
     }

@@ -93,7 +93,7 @@ type Base = Base0 & { byNext?: Record<string, Base0> };
  * 次のアクションの種類によらず同じなので、差として記録する（`d0` は、直前の重撃の遅延がないとき）。差が 0 のキャラは記録しない
  */
 type AfterBase = Base0 & { /** 次のアクションの種類ごとの差（次が通常攻撃のときと違うものだけ） */ byNext?: Record<string, Base0> };
-type NormalBase = Base & { afterCharged?: AfterBase; /** 爆発の直後の、通常のときとの差（同じ意味） */ afterBurst?: AfterBase };
+type NormalBase = Base & { afterCharged?: AfterBase; /** 爆発・スキル・ダッシュ・ジャンプの直後の、通常のときとの差（同じ意味） */ afterBurst?: AfterBase; afterSkill?: AfterBase; afterDash?: AfterBase; afterJump?: AfterBase };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（gcsim の `mod extended`。モードの通常攻撃・重撃だけ） */
 type Entry = Base & { afterNormal?: Base; ext?: Pair };
 const entries: Record<string, Entry | NormalBase[]> = {};
@@ -225,7 +225,18 @@ for (const c of characters) {
       const diff = (x: Pair, y: Pair): Pair => ({ with: x.with - y.with, without: x.without - y.without });
       const exp = cancelAttack(hits[0].frames)!;
       // 重撃（単独で使えない剣・大剣・長柄は、直前に通常攻撃を入れる。重撃で 1 段目に戻る）と爆発の直後の 1 段目を測る
-      for (const [label, prefix] of [['afterCharged', caCommand && caCommand !== 'aim' ? ['attack', caCommand] : undefined], ['afterBurst', qCommand ? [qCommand] : undefined]] as const) {
+      const e = actions.find(a => a.id === `${c.id}_e`);
+      // スキルも、モードを開く・複数回・長押しの別の仕組みのものは測らない
+      const eCommand = e && !e.gcsimUnsupported && !e.cooldownPool && !e.specialBurst && !e.mode ? mapAction(e.id, c.weaponType).command : undefined;
+      const dashCommand = actions.some(a => a.id === `${c.id}_dash`) ? 'dash' : undefined;
+      const jumpCommand = actions.some(a => a.id === `${c.id}_jump`) ? 'jump' : undefined;
+      for (const [label, prefix] of [
+        ['afterCharged', caCommand && caCommand !== 'aim' ? ['attack', caCommand] : undefined],
+        ['afterBurst', qCommand ? [qCommand] : undefined],
+        ['afterSkill', eCommand ? [eCommand] : undefined],
+        ['afterDash', dashCommand ? [dashCommand] : undefined],
+        ['afterJump', jumpCommand ? [jumpCommand] : undefined],
+      ] as const) {
         if (!prefix) continue;
         // 1 段目の次の n1 → attack の測定が、次の種類の測定で除外されているキャラ（凝光: 通常攻撃の種類が毎回変わる）は、測らない
         if (excludedNext.some(x => x.startsWith(`${n.id}[0]|`))) continue;

@@ -55,7 +55,6 @@ npm run probe:skill-hits   # スキルの命中時刻の表（skill_hit_frames.j
 npm run probe:queue-frames # スキル・爆発の「次の行動を受け付け始めるフレーム」（can_queue_after.json。待機の位置を gcsim に合わせる）
 npm run probe:dash-jump    # ダッシュ・ジャンプの所要時間（dash_jump_frames.json。マスターの defaultDuration も差し替える。D215）
 npm run probe:hitlag       # ヒットストップで延びるフレーム（hitlag_frames.json。アプリの自動の所要時間に足す。D215）
-npm run probe:weapon-speed # 武器の常時の通常攻撃速度（weapon_atk_spd.json。天空の脊 +12% など。D216）
 npm run check:hitlag       # アプリの事前計算と gcsim の実測が、ヒットストップ・武器の攻撃速度を含めて 1f 以内で一致するか
 ```
 - **`probe:dash-jump` と `probe:hitlag` は、gcsim のバージョンを上げたとき、必ず実行する**（フレーム・ヒットストップの値が、バージョンで変わる）。`probe:hitlag` は、マスターのフレーム表（`build:master` の結果）を基準にするので、`build:master` の**後**に実行する。差分（`git diff src/data/dash_jump_frames.json src/data/hitlag_frames.json`）で、想定外の変化がないかを見る。

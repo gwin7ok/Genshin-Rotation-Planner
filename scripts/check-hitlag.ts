@@ -251,6 +251,8 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
       scenarios.push({ name: `出場 → ${icd} 秒後に戻る`, steps: [...A(2), ...A(1, 'other'), ...A(3), { who: 'other', cmd: 'attack', delay: icd * 60 }, ...A(3)] });
     }
     // 命ノ星座で値が変わる効果（レイザーの爆発は、命ノ星座 3 で天賦レベル +3）だけ、別の凸も測る
+    // 放浪者: 風の加護の間は、gcsim は交代できない（実行が止まる）。アプリの状態は 10 秒（gcsim は 20 秒）なので、効果の終わり近くは比べられない
+    if (k === 'wanderer') scenarios.splice(1);
     const cons = k === 'razor' ? [0, 3] : [minCons];
     for (const cn of cons) {
       for (const sc of scenarios) {

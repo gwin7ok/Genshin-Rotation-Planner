@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T15:52:19.193Z",
+ "generatedAt": "2026-10-15T16:36:12.793Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -4185,6 +4185,62 @@
      "with": 2,
      "without": 2
     }
+   }
+  ],
+  "10000071-electro_q#n": [
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 2,
+    "without": 2,
+    "ext": {
+     "with": 2,
+     "without": 2
+    }
+   },
+   {
+    "with": 4,
+    "without": 1,
+    "ext": {
+     "with": 4,
+     "without": 1
+    }
+   }
+  ],
+  "10000075-anemo_e#n": [
+   {
+    "with": 0,
+    "without": 0
+   },
+   {
+    "with": 0,
+    "without": 0
+   },
+   {
+    "with": 0,
+    "without": 0
    }
   ],
   "10000098-electro_e#n": [

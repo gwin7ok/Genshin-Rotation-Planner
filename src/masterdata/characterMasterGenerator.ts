@@ -434,6 +434,12 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       holdByDefault: false,
       noHold: true,
       cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+      // 風の加護の間の通常攻撃（attackFramesE。3 段。D224）。構え（windup）は、直前のアクションで変わる（ダッシュ −3f・重撃/ジャンプ −2f）が、基本の通常攻撃と同じく含めない
+      normalFrames: [
+        {total:43,hitmark:15,cancels:{attack:30,charge:31,skill:15,burst:15,dash:15,jump:15,swap:15},source:'attack.go:attackFramesE[0]（InitNormalCancelSlice(15, 43)・N1→N2 30f・N1→CA 31f）'},
+        {total:34,hitmark:3,cancels:{attack:17,charge:23,skill:4,burst:6,dash:5,jump:5,swap:3},source:'attack.go:attackFramesE[1]（InitNormalCancelSlice(3, 34)）'},
+        {total:70,hitmark:40,cancels:{attack:54,charge:53,skill:33,burst:33,dash:40,jump:33,swap:40},source:'attack.go:attackFramesE[2]（InitNormalCancelSlice(40, 70)。CanQueueAfter 33f）'},
+      ],
       source: 'wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）',
     },
   }],
@@ -850,7 +856,16 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   ],
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
-  '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる')],
+  // 冥祭の間の通常攻撃は 5 段（attackBFrames）。キャンセルは、ヒット判定（CanQueueAfter = 最後のヒット）より前にはできないので、4 段目（ヒット 5f・14f）は 14f（D224）
+  '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる', {
+    normalFrames: [
+      {total:28,hitmark:12,cancels:{attack:16,skill:12,burst:12,dash:12,jump:12,swap:12},source:'attack.go:attackBFrames[0]（InitNormalCancelSlice(12, 28)・N1→N2 16f）'},
+      {total:35,hitmark:14,cancels:{attack:31,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[1]（InitNormalCancelSlice(14, 35)・N2→N3 31f）'},
+      {total:41,hitmark:18,cancels:{charge:39,skill:18,burst:18,dash:18,jump:18,swap:18},source:'attack.go:attackBFrames[2]（InitNormalCancelSlice(18, 41)・N3→CA 39f）'},
+      {total:36,hitmark:14,cancels:{attack:27,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[3]（InitNormalCancelSlice(5, 36)・N4→N5 27f。CanQueueAfter = 最後のヒット 14f なので、14f より前にはキャンセルできない）'},
+      {total:62,hitmark:40,cancels:{skill:40,burst:40,dash:40,jump:40,swap:40},source:'attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）'},
+    ],
+  })],
   '10000092-pyro': [stateMode('q', '瑞獣の舞', 36, 720, 'gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる')],
   '10000057-geo': [stateMode('q', '怒目鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],
   '10000054-hydro': [stateMode('q', '儀来羽衣', 0, 600, 'kokomi/burst.go: kokomiburst（実行: 爆発と同時に 600f）。交代で終わる')],

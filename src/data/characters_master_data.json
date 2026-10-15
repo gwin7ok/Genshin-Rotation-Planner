@@ -24616,7 +24616,73 @@
           "swap": "ends",
           "enders": [],
           "holdByDefault": true,
-          "source": "cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる"
+          "source": "cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる",
+          "normalFrames": [
+            {
+              "total": 28,
+              "hitmark": 12,
+              "cancels": {
+                "attack": 16,
+                "skill": 12,
+                "burst": 12,
+                "dash": 12,
+                "jump": 12,
+                "swap": 12
+              },
+              "source": "attack.go:attackBFrames[0]（InitNormalCancelSlice(12, 28)・N1→N2 16f）"
+            },
+            {
+              "total": 35,
+              "hitmark": 14,
+              "cancels": {
+                "attack": 31,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackBFrames[1]（InitNormalCancelSlice(14, 35)・N2→N3 31f）"
+            },
+            {
+              "total": 41,
+              "hitmark": 18,
+              "cancels": {
+                "charge": 39,
+                "skill": 18,
+                "burst": 18,
+                "dash": 18,
+                "jump": 18,
+                "swap": 18
+              },
+              "source": "attack.go:attackBFrames[2]（InitNormalCancelSlice(18, 41)・N3→CA 39f）"
+            },
+            {
+              "total": 36,
+              "hitmark": 14,
+              "cancels": {
+                "attack": 27,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackBFrames[3]（InitNormalCancelSlice(5, 36)・N4→N5 27f。CanQueueAfter = 最後のヒット 14f なので、14f より前にはキャンセルできない）"
+            },
+            {
+              "total": 62,
+              "hitmark": 40,
+              "cancels": {
+                "skill": 40,
+                "burst": 40,
+                "dash": 40,
+                "jump": 40,
+                "swap": 40
+              },
+              "source": "attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）"
+            }
+          ]
         },
         "description": "神霊を憑依召喚して、「啓途誓使」と化す。\n\n啓途誓使\nセノの通常攻撃、重撃、落下攻撃ダメージは、元素付与によって他の元素に変化しない雷元素ダメージへと変わる。\n·セノの元素熟知と中断耐性がアップし、感電反応によるダメージを無効化する。\n\nこの効果はセノが退場する時に解除され、最大18秒継続できる。",
         "cooldownStart": {
@@ -25961,6 +26027,50 @@
               "timeout": 0
             }
           },
+          "normalFrames": [
+            {
+              "total": 43,
+              "hitmark": 15,
+              "cancels": {
+                "attack": 30,
+                "charge": 31,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15
+              },
+              "source": "attack.go:attackFramesE[0]（InitNormalCancelSlice(15, 43)・N1→N2 30f・N1→CA 31f）"
+            },
+            {
+              "total": 34,
+              "hitmark": 3,
+              "cancels": {
+                "attack": 17,
+                "charge": 23,
+                "skill": 4,
+                "burst": 6,
+                "dash": 5,
+                "jump": 5,
+                "swap": 3
+              },
+              "source": "attack.go:attackFramesE[1]（InitNormalCancelSlice(3, 34)）"
+            },
+            {
+              "total": 70,
+              "hitmark": 40,
+              "cancels": {
+                "attack": 54,
+                "charge": 53,
+                "skill": 33,
+                "burst": 33,
+                "dash": 40,
+                "jump": 33,
+                "swap": 40
+              },
+              "source": "attack.go:attackFramesE[2]（InitNormalCancelSlice(40, 70)。CanQueueAfter 33f）"
+            }
+          ],
           "source": "wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）"
         },
         "description": "大気の力を凝集し、その力を借りて大地の束縛を振り払う。周囲に風元素ダメージを与え、空中に飛び上がり「児姿優風」状態に入る。\n\n児姿優風\nこの状態の時、放浪者は落下攻撃を行うことができない。また、通常攻撃と重撃はそれぞれ空居·不生断と空居·風刀界へと変わり、与えるダメージおよび影響範囲がアップする。これらのダメージは、それぞれ通常攻撃ダメージと重撃ダメージに見なされる。なお、空居·風刀界を行う際にスタミナは消費されない。\nこの状態の時、放浪者は空中を浮遊し続け、行動は以下の特性を持つ。\n·継続的に「空居力」を消費し、浮遊状態を維持する。\n·ダッシュすると、追加で空居力を消費して空中を素早く移動する。長押しによるダッシュは継続的に空居力を消費し、高速移動を維持する。この効果はダッシュに取って代わる。\n·ジャンプすると、追加で空居力を消費して浮遊する高度を上げる。長押しによるジャンプは継続的に空居力を消費し、高度を上げ続ける。\n\n空居力が尽きると、この状態は解除される。\n児姿優風の継続時間中に再び元素スキルを発動すると、この状態は解除される。",

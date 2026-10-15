@@ -93,6 +93,24 @@ for (const c of characters) {
       cases.push({ id: n.id, label: `n${i + 1}`, suffixes: Array.from({ length: i + 2 }, () => 'n'), cmds: Array.from({ length: i + 2 }, () => 'attack'), index: i, tableExp: hits[i].frames?.cancels?.attack ?? hits[i].frames?.total });
     }
   }
+  // モード（状態）の間の通常攻撃・重撃（`<opener>#n` / `#ca`）: opener の後に attack を続ける
+  for (const [key, value] of Object.entries(hitlag)) {
+    if (!key.startsWith(`${c.id}_`) || !key.includes('#')) continue;
+    const [openerId, kind] = key.split('#');
+    const openerSuffix = openerId.slice(c.id.length + 1);
+    const opener = A.find(a => a.id === openerId);
+    const command = opener && mapAction(openerId, c.weaponType).command;
+    if (!opener?.mode || !command) continue;
+    if (kind === 'n' && Array.isArray(value)) {
+      const m = opener.mode.normalFrames as any[];
+      for (let i = 0; i < m.length; i++) {
+        cases.push({ id: key, label: `${openerSuffix}モード n${i + 1}`, suffixes: [openerSuffix, ...Array.from({ length: m.length + 1 }, () => 'n')], cmds: [command, ...Array.from({ length: m.length + 1 }, () => 'attack')], index: 1 + i, tableExp: m[i].cancels?.attack ?? m[i].total });
+      }
+    } else if (kind === 'ca') {
+      const cf = opener.mode.chargedFrames;
+      cases.push({ id: key, label: `${openerSuffix}モード ca`, suffixes: [openerSuffix, 'n', 'ca', 'n'], cmds: [command, 'attack', c.weaponType === 'bow' ? 'aim' : 'charge', 'attack'], index: 2, tableExp: cf.cancels?.attack ?? cf.total });
+    }
+  }
   for (const cs of cases) {
     for (const [defHalt, delayFrames] of [[true, 0], [false, 0], [true, 6], [false, 6]] as const) {
       const g = await gcsimFrames(k, weapon, defHalt, cs.cmds, delayFrames);

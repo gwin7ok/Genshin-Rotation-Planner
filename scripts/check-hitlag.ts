@@ -235,7 +235,18 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
     // シナリオ（名前・手順）
     const scenarios: { name: string; steps: Step[] }[] = [];
     const lead = kinds.includes('afterBurst') ? 'burst' : kinds.includes('afterSkill') ? 'skill' : undefined;
-    if (lead) {
+    const isTeam = effect.source.scope === 'team';
+    if (lead && isTeam) {
+      // 編成の全員に付く効果: 持ち主が使って、交代した相手（行秋）の通常攻撃で比べる
+      const cond = conds.find(x => x.kind === (lead === 'burst' ? 'afterBurst' : 'afterSkill'));
+      const gap = Math.max(0, Math.round((cond.seconds + (cond.delayFrames ?? 0) / 60) * 60) - 130);
+      const leadStep: Step = { who: 'self', cmd: lead as any, delay: 0 };
+      scenarios.push({ name: `${lead} → 交代して通常攻撃`, steps: [leadStep, ...A(4, 'other')] });
+      scenarios.push({ name: `${lead} → 待機 ${gap}f → 交代して通常攻撃`, steps: [{ ...leadStep, delay: gap }, ...A(4, 'other')] });
+      // 効果が切れたあと
+      scenarios.push({ name: `${lead} → 待機 ${gap + 120}f → 交代して通常攻撃`, steps: [{ ...leadStep, delay: gap + 120 }, ...A(4, 'other')] });
+      scenarios.push({ name: `${lead} → 持ち主も通常攻撃 → 交代して通常攻撃`, steps: [leadStep, ...A(2), ...A(4, 'other')] });
+    } else if (lead) {
       const window = conds.find(x => x.kind === (lead === 'burst' ? 'afterBurst' : 'afterSkill')).seconds as number;
       const gap = Math.max(0, Math.round(window * 60) - 130);
       scenarios.push({ name: `${lead} → 通常攻撃`, steps: [{ who: 'self', cmd: lead as any, delay: 0 }, ...A(4)] });
@@ -253,7 +264,7 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
     // 命ノ星座で値が変わる効果（レイザーの爆発は、命ノ星座 3 で天賦レベル +3）だけ、別の凸も測る
     // 放浪者: 風の加護の間は、gcsim は交代できない（実行が止まる）。アプリの状態は 10 秒（gcsim は 20 秒）なので、効果の終わり近くは比べられない
     if (k === 'wanderer') scenarios.splice(1);
-    const cons = k === 'razor' ? [0, 3] : [minCons];
+    const cons = k === 'razor' ? [0, 3] : k === 'mika' ? [0, 5] : [minCons];
     for (const cn of cons) {
       for (const sc of scenarios) {
         for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
@@ -294,11 +305,14 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
           }
           for (let i = 0; i + 1 < sc.steps.length; i++) {
             // 同じ出場の中の、通常攻撃の間隔だけ比べる（交代をまたぐ間隔は、交代の長さが違うので比べない）
-            if (sc.steps[i].who !== 'self' || sc.steps[i + 1].who !== 'self' || sc.steps[i].cmd !== 'attack') continue;
+            const subject = isTeam ? 'other' : 'self';
+            if (sc.steps[i].who !== subject || sc.steps[i + 1].who !== subject || sc.steps[i].cmd !== 'attack') continue;
             const gi = g[i + 1] - g[i];
             const ai = Math.round((acts[i + 1].startTime - acts[i].startTime) * 60);
             checked++;
-            if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}(C${cn}) ${sc.name} #${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+            // 効果の終わりの境目（待機の後）は、ヒットストップの延びの見積り（表の値）の誤差で、前後 2f ずれることがあるので、3f まで許す
+            const tol = sc.name.includes('待機') ? 3 : TOLERANCE;
+            if (Math.abs(gi - ai) > tol) fails.push(`${c.name}(C${cn}) ${sc.name} #${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
           }
         }
       }

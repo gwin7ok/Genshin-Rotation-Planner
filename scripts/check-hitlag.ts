@@ -421,6 +421,81 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
     }
   }
 }
+// ---- アクションの後の待機（wait）: N → N → wait(W) → N の、2 つ目の N から次の N までの間隔（D239）----
+// gcsim の待機は、CanQueueAfter の時点から始まり、ヒットストップの凍結は待機の中に入る（間隔 = max(キャンセル + ヒットストップ, CanQueueAfter + 待機)）
+if (!speedOnly) {
+  for (const c of characters) {
+    const n = (c.availableActions as any[]).find(a => a.id === `${c.id}_n`);
+    const hits: any[] = n?.normalHits ?? [];
+    if (hits.length < 2 || !Array.isArray(hitlag[n.id])) continue;
+    const k = c.source.gcsimKey as string;
+    // 待機の後の通常攻撃が、gcsim で別の動きをするキャラ（スカーク・マーヴィカ・シロネン・藍硯 = 夜魂・状態の通常攻撃、凝光 = 通常攻撃の種類が毎回変わる）は、対象外
+    if (['skirk', 'mavuika', 'xilonen', 'lanyan', 'ningguang'].includes(k)) continue;
+    const weapon = weapons[c.weaponType];
+    for (const W of [6, 20, 60]) {
+      for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
+        const other = swapTarget(k);
+        const d = delayFrames > 0 ? ` delay(${delayFrames});` : '';
+        const cfg = [
+          `${k} char lvl=90/90 cons=0 talent=9,9,9;`, `${k} add weapon="${weapon}" refine=1 lvl=90/90;`, `${k} add stats cr=1;`,
+          `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
+          'target lvl=100 resist=0.1;', `active ${k};`,
+          `${k} attack;${d} ${k} attack;${d} wait(${W}); ${k} attack;${d}`,
+        ].join('\n');
+        const res = await fetch(`${GCSIM_SERVER_URL}/sample/cwt_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+        let logs: any[];
+        try { logs = (await res.json()).logs; } catch { continue; }
+        const f = logs.filter(l => l.event === 'action' && /^executed attack/.test(l.msg)).map(l => l.frame as number);
+        if (f.length < 3) continue;
+        const stints = [{ id: 's', characterId: c.id, holdMode: false, actions: [act(c, 'n', delayFrames / 60), act(c, 'n', delayFrames / 60), { id: `w${++seq}`, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: W / 60, delayAfter: 0 }, act(c, 'n', delayFrames / 60)] }];
+        const res2 = calculateRotation([c], stints, { switchDelay: 0.5, defHalt });
+        const acts = res2.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap' && a.type !== 'wait');
+        const gi = f[2] - f[1];
+        const ai = Math.round((acts[2].startTime - acts[1].startTime) * 60);
+        checked++;
+        void other;
+        if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name} N → N → wait(${W}f) → N (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+      }
+    }
+  }
+}
+// ---- スキル・爆発の後の待機: E → wait(W) → N（D239）----
+if (!speedOnly) {
+  for (const c of characters) {
+    const k = c.source.gcsimKey as string;
+    const weapon = weapons[c.weaponType];
+    for (const suffix of ['e', 'q'] as const) {
+      const def = (c.availableActions as any[]).find(a => a.id === `${c.id}_${suffix}`);
+      if (!def || !Array.isArray(hitlag[`${c.id}_n`]) || !hitlag[def.id] || def.cooldownPool || def.specialBurst || def.mode?.normalFrames) continue;
+      const command = mapAction(def.id, c.weaponType).command;
+      if (!command) continue;
+      for (const W of [20, 60]) {
+        for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
+          const d = delayFrames > 0 ? ` delay(${delayFrames});` : '';
+          const cfg = [
+            `${k} char lvl=90/90 cons=0 talent=9,9,9;`, `${k} add weapon="${weapon}" refine=1 lvl=90/90;`, `${k} add stats cr=1;`,
+            `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
+            'target lvl=100 resist=0.1;', `active ${k};`,
+            `${k} ${command};${d} wait(${W}); ${k} attack;${d}`,
+          ].join('\n');
+          const res = await fetch(`${GCSIM_SERVER_URL}/sample/cwe_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+          let logs: any[];
+          try { logs = (await res.json()).logs; } catch { continue; }
+          if (logs.some(l => l.event === 'sim' && /not ready/.test(l.msg))) continue;
+          const ex = logs.filter(l => l.event === 'action' && /^executed (skill|burst|attack)/.test(l.msg)).map(l => l.frame as number);
+          if (ex.length < 2) continue;
+          const stints = [{ id: 's', characterId: c.id, holdMode: false, actions: [act(c, suffix, delayFrames / 60), { id: `w${++seq}`, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: W / 60, delayAfter: 0 }, act(c, 'n', delayFrames / 60)] }];
+          const r = calculateRotation([c], stints, { switchDelay: 0.5, defHalt });
+          const acts = r.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap' && a.type !== 'wait');
+          const gi = ex[1] - ex[0];
+          const ai = Math.round((acts[1].startTime - acts[0].startTime) * 60);
+          checked++;
+          if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name} ${suffix} → wait(${W}f) → N (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+        }
+      }
+    }
+  }
+}
 await server.close();
 console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件 / 次の種類の測定で除外（対象外）${skippedNext} 組`);
 for (const f of fails.slice(0, 60)) console.log('  ✗', f);

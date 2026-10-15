@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
- "generatedAt": "2026-10-08T18:17:05.060Z",
+ "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+ "generatedAt": "2026-10-15T10:25:12.494Z",
  "maxFrames": 2400,
  "entries": {
   "10000002-cryo_e": {
@@ -18,6 +18,15 @@
    "hits": [
     21
    ]
+  },
+  "10000003-anemo_e_hold": {
+   "char": "ジン",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    22
+   ],
+   "holdFramesMax": 300
   },
   "10000005-anemo_e": {
    "char": "空(風)",
@@ -360,6 +369,14 @@
     530
    ]
   },
+  "10000021-pyro_e_hold": {
+   "char": "アンバー",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    531
+   ]
+  },
   "10000022-anemo_e": {
    "char": "ウェンティ",
    "command": "skill",
@@ -630,6 +647,18 @@
     329
    ]
   },
+  "10000041-hydro_e_hold": {
+   "char": "モナ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    101,
+    160,
+    219,
+    278,
+    344
+   ]
+  },
   "10000042-electro_e": {
    "char": "刻晴",
    "command": "skill",
@@ -820,6 +849,14 @@
     20
    ]
   },
+  "10000059-anemo_e_hold": {
+   "char": "鹿野院平蔵",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    200
+   ]
+  },
   "10000060-hydro_e": {
    "char": "夜蘭",
    "command": "skill",
@@ -885,6 +922,22 @@
    "status": "ok",
    "hits": [
     13
+   ]
+  },
+  "10000064-geo_e_shorthold": {
+   "char": "雲菫",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    50
+   ]
+  },
+  "10000064-geo_e_hold": {
+   "char": "雲菫",
+   "command": "skill[hold=2]",
+   "status": "ok",
+   "hits": [
+    93
    ]
   },
   "10000065-electro_e": {
@@ -1287,6 +1340,16 @@
     75
    ]
   },
+  "10000091-geo_e_hold": {
+   "char": "ナヴィア",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    50,
+    105
+   ],
+   "holdFramesMax": 241
+  },
   "10000092-pyro_e": {
    "char": "嘉明",
    "command": "skill",
@@ -1314,6 +1377,19 @@
     924
    ]
   },
+  "10000094-geo_e_hold": {
+   "char": "千織",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    37,
+    75,
+    291,
+    507,
+    723,
+    939
+   ]
+  },
   "10000095-hydro_e": {
    "char": "シグウィン",
    "command": "skill",
@@ -1338,6 +1414,60 @@
      677,
      717,
      784
+    ]
+   }
+  },
+  "10000095-hydro_e_shorthold": {
+   "char": "シグウィン",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    66,
+    106,
+    173,
+    280,
+    387,
+    494
+   ],
+   "byConstellation": {
+    "1": [
+     66,
+     106,
+     173,
+     280,
+     387,
+     494,
+     601,
+     708,
+     748,
+     815
+    ]
+   }
+  },
+  "10000095-hydro_e_hold": {
+   "char": "シグウィン",
+   "command": "skill[hold=2]",
+   "status": "ok",
+   "hits": [
+    90,
+    130,
+    197,
+    304,
+    411,
+    518
+   ],
+   "byConstellation": {
+    "1": [
+     90,
+     130,
+     197,
+     304,
+     411,
+     518,
+     625,
+     732,
+     772,
+     839
     ]
    }
   },
@@ -1392,6 +1522,12 @@
   "10000101-dendro_e": {
    "char": "キィニチ",
    "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
+  "10000101-dendro_e_hold": {
+   "char": "キィニチ",
+   "command": "skill[hold=1]",
    "status": "ok",
    "hits": []
   },
@@ -1656,6 +1792,13 @@
     16
    ]
   },
+  "10000119-dendro_e_hold": {
+   "char": "ラウマ",
+   "command": "skill[hold=1]",
+   "status": "unprobed",
+   "hits": [],
+   "reason": "error encountered on lauma executing skill: lauma: Cannot use Skill Hold without Dew"
+  },
   "10000120-electro_e": {
    "char": "フリンズ",
    "command": "skill",
@@ -1705,17 +1848,27 @@
     1425
    ]
   },
+  "10000126-geo_e": {
+   "char": "兹白",
+   "command": "skill",
+   "status": "ok",
+   "hits": []
+  },
   "10000127-geo_e": {
    "char": "イルーガ",
    "command": "skill",
    "status": "ok",
-   "hits": []
+   "hits": [
+    27
+   ]
   },
   "10000127-geo_e_hold": {
    "char": "イルーガ",
    "command": "skill[hold=1]",
    "status": "ok",
-   "hits": []
+   "hits": [
+    36
+   ]
   },
   "10000128-anemo_e": {
    "char": "ファルカ",
@@ -1747,6 +1900,22 @@
    "status": "ok",
    "hits": [
     26
+   ]
+  },
+  "10000148-electro_e": {
+   "char": "アリョーシャ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    18
+   ]
+  },
+  "10000148-electro_e_hold": {
+   "char": "アリョーシャ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "hits": [
+    113
    ]
   },
   "10000150-cryo_e": {

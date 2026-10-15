@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
-  "generatedAt": "2026-10-08T12:34:14.781Z",
+  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+  "generatedAt": "2026-10-15T10:24:29.032Z",
   "effects": [
     {
       "id": "a-day-carved-from-rising-winds-2pc",
@@ -1837,6 +1837,26 @@
       "name": "アルハイゼン 命ノ星座6「ストラクタレーション」",
       "durationFrames": 360,
       "observed": true
+    },
+    {
+      "id": "alyosha-c1-icd",
+      "category": "constellation",
+      "kind": "cooldown",
+      "ownerType": "character",
+      "ownerKey": "alyosha",
+      "ownerName": "アリョーシャ",
+      "name": "アリョーシャ 命ノ星座1「寒谷の轟雷」: 発動間隔",
+      "durationFrames": 1080
+    },
+    {
+      "id": "alyosha-c6-em",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "alyosha",
+      "ownerName": "アリョーシャ",
+      "name": "アリョーシャ 命ノ星座6「御旗の奪還」: 元素熟知",
+      "permanent": true
     },
     {
       "id": "amber-c2",
@@ -5142,6 +5162,56 @@
       "observed": true
     },
     {
+      "id": "zibai-c1",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 命ノ星座1「疾く出でて粛然と帰す」",
+      "durationFrames": 900
+    },
+    {
+      "id": "zibai-c1-buff",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 命ノ星座1「疾く出でて粛然と帰す」: バフ",
+      "permanent": true
+    },
+    {
+      "id": "zibai-c2-buff",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 命ノ星座2「生は変じて屍と化する」: バフ",
+      "permanent": true
+    },
+    {
+      "id": "zibai-c4",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 命ノ星座4「魂向かひて身も従ずる」",
+      "durationFrames": 1800
+    },
+    {
+      "id": "zibai-c6",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 命ノ星座6「天地の人は過客の如し」",
+      "durationFrames": 180
+    },
+    {
       "id": "albedo-c2",
       "category": "skill",
       "kind": "effect",
@@ -5151,6 +5221,16 @@
       "name": "アルベド 命ノ星座2「顕生の宇宙」",
       "durationFrames": 1800,
       "observed": true
+    },
+    {
+      "id": "alyosha-hunters-mark",
+      "category": "skill",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "alyosha",
+      "ownerName": "アリョーシャ",
+      "name": "アリョーシャ 元素スキル「伏撃の雷鳴」: hunters 印",
+      "durationFrames": 902
     },
     {
       "id": "center-of-attention",
@@ -5412,6 +5492,16 @@
       "ownerName": "アーロイ",
       "name": "アーロイ: strong strike",
       "durationFrames": 600
+    },
+    {
+      "id": "alyosha-a4",
+      "category": "talent",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "alyosha",
+      "ownerName": "アリョーシャ",
+      "name": "アリョーシャ 固有天賦2「冬の麦と落ち葉に告げる別れ」",
+      "permanent": true
     },
     {
       "id": "amber-a1",
@@ -7519,6 +7609,26 @@
       "observed": true
     },
     {
+      "id": "zibai-a1",
+      "category": "talent",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 固有天賦1「月下に舞い降りる天女」",
+      "durationFrames": 240
+    },
+    {
+      "id": "zibai-a4",
+      "category": "talent",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "zibai",
+      "ownerName": "兹白",
+      "name": "兹白 固有天賦2「雲間に連なる山々」",
+      "permanent": true
+    },
+    {
       "id": "a-teaspoon-of-transcendence-atk",
       "category": "weapon",
       "kind": "effect",
@@ -7945,6 +8055,36 @@
       "durationFrames": 2700
     },
     {
+      "id": "beyond-the-chrysalis-crit-dmg",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "beyondthechrysalis",
+      "ownerName": "蝶の羽化",
+      "name": "蝶の羽化（繭を破りし自由の舞）: 会心 ダメージ",
+      "durationFrames": 600
+    },
+    {
+      "id": "beyond-the-chrysalis-energy-icd",
+      "category": "weapon",
+      "kind": "internal",
+      "ownerType": "weapon",
+      "ownerKey": "beyondthechrysalis",
+      "ownerName": "蝶の羽化",
+      "name": "蝶の羽化（繭を破りし自由の舞）: エネルギー 発動間隔",
+      "durationFrames": 240
+    },
+    {
+      "id": "beyond-the-chrysalis-stellar-buff",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "beyondthechrysalis",
+      "ownerName": "蝶の羽化",
+      "name": "蝶の羽化（繭を破りし自由の舞）: stellar バフ",
+      "durationFrames": 600
+    },
+    {
       "id": "black-sword-icd",
       "category": "weapon",
       "kind": "cooldown",
@@ -8057,6 +8197,16 @@
       "name": "龍血を浴びた剣（炎と雷の破滅）",
       "permanent": true,
       "observed": true
+    },
+    {
+      "id": "breezeborne-refrain-er",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "breezebornerefrain",
+      "ownerName": "風に遊ぶ弦",
+      "name": "風に遊ぶ弦（毒蛇のバラッド）: er",
+      "permanent": true
     },
     {
       "id": "calamity-consummation",
@@ -9567,6 +9717,16 @@
       "observed": true
     },
     {
+      "id": "hymn-of-the-pure-stack-icd",
+      "category": "weapon",
+      "kind": "internal",
+      "ownerType": "weapon",
+      "ownerKey": "breezebornerefrain",
+      "ownerName": "風に遊ぶ弦",
+      "name": "風に遊ぶ弦（毒蛇のバラッド）: hymn of the pure スタック 発動間隔",
+      "durationFrames": 2
+    },
+    {
       "id": "ibispiercer-icd",
       "category": "weapon",
       "kind": "internal",
@@ -10813,6 +10973,7 @@
       "ownerType": "weapon",
       "ownerKey": "silverlight",
       "ownerName": "銀灯",
+      "name": "銀灯（水上にたなびく霞）: 元素熟知",
       "durationFrames": 720,
       "isPattern": true
     },
@@ -10823,6 +10984,7 @@
       "ownerType": "weapon",
       "ownerKey": "silverlight",
       "ownerName": "銀灯",
+      "name": "銀灯（水上にたなびく霞）: スタック 発動間隔",
       "durationFrames": 12
     },
     {
@@ -11414,6 +11576,16 @@
       "observed": true
     },
     {
+      "id": "thus-lied-the-viper",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "breezebornerefrain",
+      "ownerName": "風に遊ぶ弦",
+      "name": "風に遊ぶ弦（毒蛇のバラッド）: thus lied the viper",
+      "permanent": true
+    },
+    {
       "id": "tidal-shadow-atk-boost",
       "category": "weapon",
       "kind": "effect",
@@ -11764,6 +11936,46 @@
       "name": "白影の剣（注入の刃）: 発動間隔",
       "durationFrames": 30,
       "observed": true
+    },
+    {
+      "id": "whitelake-frostfeather-atk-*",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "whitelakefrostfeather",
+      "ownerName": "白銀の湖を舞う翼",
+      "name": "白銀の湖を舞う翼（雪鳥のフィナーレ）: 攻撃力",
+      "durationFrames": 480,
+      "isPattern": true
+    },
+    {
+      "id": "whitelake-frostfeather-energy-icd",
+      "category": "weapon",
+      "kind": "internal",
+      "ownerType": "weapon",
+      "ownerKey": "whitelakefrostfeather",
+      "ownerName": "白銀の湖を舞う翼",
+      "name": "白銀の湖を舞う翼（雪鳥のフィナーレ）: エネルギー 発動間隔",
+      "durationFrames": 210
+    },
+    {
+      "id": "whitelake-frostfeather-stack-icd",
+      "category": "weapon",
+      "kind": "internal",
+      "ownerType": "weapon",
+      "ownerKey": "whitelakefrostfeather",
+      "ownerName": "白銀の湖を舞う翼",
+      "name": "白銀の湖を舞う翼（雪鳥のフィナーレ）: スタック 発動間隔",
+      "durationFrames": 6
+    },
+    {
+      "id": "whitelake-frostfeather-stellar",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "whitelakefrostfeather",
+      "ownerName": "白銀の湖を舞う翼",
+      "name": "白銀の湖を舞う翼（雪鳥のフィナーレ）: stellar"
     },
     {
       "id": "whitetassel",
@@ -12497,14 +12709,23 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000148-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000148-electro",
+      "ownerName": "アリョーシャ",
+      "name": "遠吠えの合図",
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 15.033
+    },
+    {
       "id": "constellation:10000148-electro_c6",
       "type": "constellation",
       "ownerId": "10000148-electro",
       "ownerName": "アリョーシャ",
       "name": "御旗の奪還",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000078-dendro_c4",
@@ -14954,14 +15175,33 @@
       "duration": 15
     },
     {
+      "id": "constellation:10000126-geo_c4",
+      "type": "constellation",
+      "ownerId": "10000126-geo",
+      "ownerName": "兹白",
+      "name": "魂向かひて身も従ずる",
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 30
+    },
+    {
+      "id": "constellation:10000126-geo_c1",
+      "type": "constellation",
+      "ownerId": "10000126-geo",
+      "ownerName": "兹白",
+      "name": "疾く出でて粛然と帰す",
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 15
+    },
+    {
       "id": "constellation:10000126-geo_c2",
       "type": "constellation",
       "ownerId": "10000126-geo",
       "ownerName": "兹白",
       "name": "生は変じて屍と化する",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000126-geo_c6",
@@ -14969,10 +15209,9 @@
       "ownerId": "10000126-geo",
       "ownerName": "兹白",
       "name": "天地の人は過客の如し",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 3,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 3
     },
     {
       "id": "constellation:10000026-anemo_c2",
@@ -15097,9 +15336,18 @@
       "ownerId": "10000148-electro",
       "ownerName": "アリョーシャ",
       "name": "冬の麦と落ち葉に告げる別れ",
+      "timing": "always",
+      "gcsimTarget": true
+    },
+    {
+      "id": "talent:10000148-electro_p1",
+      "type": "talent",
+      "ownerId": "10000148-electro",
+      "ownerName": "アリョーシャ",
+      "name": "微睡む林の目覚め",
       "timing": "conditional",
       "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
     },
     {
       "id": "talent:10000078-dendro_p1",
@@ -17654,9 +17902,8 @@
       "ownerId": "10000126-geo",
       "ownerName": "兹白",
       "name": "雲間に連なる山々",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "talent:10000126-geo_p1",
@@ -17664,10 +17911,9 @@
       "ownerId": "10000126-geo",
       "ownerName": "兹白",
       "name": "月下に舞い降りる天女",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 4,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 4
     },
     {
       "id": "talent:10000026-anemo_p2",
@@ -19179,10 +19425,9 @@
       "ownerId": "11522",
       "ownerName": "蝶の羽化",
       "name": "蝶の羽化: 繭を破りし自由の舞",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 10,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 10
     },
     {
       "id": "weapon:12516:wbuff_12516",
@@ -19454,10 +19699,9 @@
       "ownerId": "11520",
       "ownerName": "白銀の湖を舞う翼",
       "name": "白銀の湖を舞う翼: 雪鳥のフィナーレ",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 8,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 8
     },
     {
       "id": "weapon:14414:wbuff_14414",
@@ -19563,10 +19807,9 @@
       "ownerId": "15437",
       "ownerName": "風に遊ぶ弦",
       "name": "風に遊ぶ弦: 毒蛇のバラッド",
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 12,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true,
+      "duration": 12
     },
     {
       "id": "weapon:15413:wbuff_15413",
@@ -20186,6 +20429,24 @@
       "approval": "generated"
     },
     {
+      "effectId": "alyosha-a4",
+      "targetId": "talent:10000148-electro_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "alyosha-c6-em",
+      "targetId": "constellation:10000148-electro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "alyosha-hunters-mark",
+      "targetId": "constellation:10000148-electro_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "amber-a1",
       "targetId": "talent:10000021-pyro_p1",
       "role": "effect",
@@ -20559,6 +20820,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "beyond-the-chrysalis-crit-dmg",
+      "targetId": "weapon:11522:wbuff_11522",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "beyond-the-chrysalis-stellar-buff",
+      "targetId": "weapon:11522:wbuff_11522",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "black-sword-icd",
       "targetId": "weapon:11409:wbuff_11409",
       "role": "cooldown",
@@ -20663,6 +20936,12 @@
     {
       "effectId": "braveheart-4pc",
       "targetId": "artifact:10002:abuff_10002",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "breezeborne-refrain-er",
+      "targetId": "weapon:15437:wbuff_15437",
       "role": "effect",
       "approval": "generated"
     },
@@ -24825,6 +25104,12 @@
       "approval": "generated"
     },
     {
+      "effectId": "thus-lied-the-viper",
+      "targetId": "weapon:15437:wbuff_15437",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "tidal-shadow-atk-boost",
       "targetId": "weapon:12425:wbuff_12425",
       "role": "effect",
@@ -25389,6 +25674,18 @@
       "approval": "generated"
     },
     {
+      "effectId": "whitelake-frostfeather-atk-*",
+      "targetId": "weapon:11520:wbuff_11520",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "whitelake-frostfeather-stellar",
+      "targetId": "weapon:11520:wbuff_11520",
+      "role": "extra",
+      "approval": "generated"
+    },
+    {
       "effectId": "whitetassel",
       "targetId": "weapon:13301:wbuff_13301",
       "role": "effect",
@@ -25861,6 +26158,48 @@
       "targetId": "talent:10000030-geo_p1",
       "role": "effect",
       "approval": "generated"
+    },
+    {
+      "effectId": "zibai-a1",
+      "targetId": "talent:10000126-geo_p1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-a4",
+      "targetId": "talent:10000126-geo_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-c1",
+      "targetId": "constellation:10000126-geo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-c1-buff",
+      "targetId": "constellation:10000126-geo_c1",
+      "role": "extra",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-c2-buff",
+      "targetId": "constellation:10000126-geo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-c4",
+      "targetId": "constellation:10000126-geo_c4",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "zibai-c6",
+      "targetId": "constellation:10000126-geo_c6",
+      "role": "effect",
+      "approval": "generated"
     }
   ],
   "unlinked": [
@@ -25905,6 +26244,13 @@
       "state": "excluded",
       "reason": "internal-interval",
       "note": "内部の重複防止の間隔（1 秒）。ユーザーに見せる発動制限ではない"
+    },
+    {
+      "side": "effect",
+      "id": "alyosha-c1-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）"
     },
     {
       "side": "effect",
@@ -25968,6 +26314,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "beyond-the-chrysalis-energy-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている"
     },
     {
       "side": "effect",
@@ -26423,6 +26776,13 @@
       "state": "excluded",
       "reason": "two-piece-effect",
       "note": "D5: 2セット効果は発動バフのバーにしない"
+    },
+    {
+      "side": "effect",
+      "id": "hymn-of-the-pure-stack-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている"
     },
     {
       "side": "effect",
@@ -27077,6 +27437,20 @@
     },
     {
       "side": "effect",
+      "id": "whitelake-frostfeather-energy-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
+      "id": "whitelake-frostfeather-stack-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている"
+    },
+    {
+      "side": "effect",
       "id": "wolf-fang-burst-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -27176,20 +27550,6 @@
     {
       "side": "target",
       "id": "constellation:10000122-dendro_c6",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "constellation:10000126-geo_c2",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "constellation:10000126-geo_c6",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"
@@ -27302,13 +27662,6 @@
     {
       "side": "target",
       "id": "constellation:10000143-anemo_c6",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "constellation:10000148-electro_c6",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"
@@ -28015,20 +28368,6 @@
     },
     {
       "side": "target",
-      "id": "talent:10000126-geo_p1",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "talent:10000126-geo_p2",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
       "id": "talent:10000127-geo_p2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
@@ -28113,10 +28452,10 @@
     },
     {
       "side": "target",
-      "id": "talent:10000148-electro_p2",
+      "id": "talent:10000148-electro_p1",
       "state": "unsupported",
       "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
+      "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
     },
     {
       "side": "target",
@@ -28170,20 +28509,6 @@
     {
       "side": "target",
       "id": "weapon:11437:wbuff_11437",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "weapon:11520:wbuff_11520",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
-    },
-    {
-      "side": "target",
-      "id": "weapon:11522:wbuff_11522",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装"
@@ -28257,13 +28582,6 @@
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
-    },
-    {
-      "side": "target",
-      "id": "weapon:15437:wbuff_15437",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装"
     }
   ]
 }

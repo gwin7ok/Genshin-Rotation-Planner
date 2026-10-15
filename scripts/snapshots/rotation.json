@@ -4772,19 +4772,19 @@
     "end": 2.283,
     "actions": [
      [
-      "E",
+      "tE",
       0.5,
       0.55,
       "CT違反8.5"
      ],
      [
-      "E",
+      "tE",
       1.15,
       0.55,
       "CT違反7.9"
      ],
      [
-      "E",
+      "tE",
       1.8,
       0.383,
       "CT違反10.8"
@@ -4886,13 +4886,13 @@
     "end": 1.633,
     "actions": [
      [
-      "E",
+      "tE",
       0.5,
       0.55,
       "CT違反12.8"
      ],
      [
-      "E",
+      "tE",
       1.15,
       0.383,
       "CT違反14.4"
@@ -9283,9 +9283,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(696);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -9364,9 +9365,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(404);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -9457,9 +9459,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(344);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -9751,9 +9754,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(479);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -9835,9 +9839,10 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  wait(840);\n  zibai attack;\n  delay(32);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -10078,9 +10083,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -11092,7 +11098,7 @@
     },
     "actions": [
      [
-      "E",
+      "tE",
       1.833,
       0.7,
       "CT違反6",
@@ -11742,7 +11748,7 @@
     "end": 13.5,
     "modeHold": {
      "on": true,
-     "seconds": 9.016,
+     "seconds": 8.999,
      "label": "奇策"
     },
     "actions": [
@@ -11760,24 +11766,24 @@
      [
       "N",
       1.65,
-      0.35
+      0.367
      ],
      [
       "N",
-      2.1,
+      2.117,
       0.517
      ],
      [
       "N",
-      2.717,
+      2.734,
       0.65
      ],
      [
       "E",
-      3.467,
+      3.484,
       0.917,
       "window",
-      "hold9.016"
+      "hold8.999"
      ]
     ]
    },
@@ -11838,7 +11844,7 @@
     "end": 13.5,
     "modeHold": {
      "on": true,
-     "seconds": 10.383,
+     "seconds": 10.366,
      "label": "奇策"
     },
     "actions": [
@@ -11856,15 +11862,15 @@
      [
       "N",
       1.65,
-      0.35
+      0.367
      ],
      [
       "E",
-      2.1,
+      2.117,
       0.917,
       "window",
       "「愉悦」が足りません（見込み 34 / 100）。通常攻撃・重撃の命中数は wiki の記述からの推定です。闘争心・命ノ星座の効果は数えていません。足りないと特殊元素スキルは使えません",
-      "hold10.383"
+      "hold10.366"
      ]
     ]
    },
@@ -11930,7 +11936,7 @@
     "end": 13.5,
     "modeHold": {
      "on": true,
-     "seconds": 5.633,
+     "seconds": 5.501,
      "label": "奇策"
     },
     "actions": [
@@ -11943,35 +11949,35 @@
      [
       "C",
       1.217,
-      1
+      1.033
      ],
      [
       "C",
-      2.317,
-      1
+      2.35,
+      1.033
      ],
      [
       "E",
-      3.417,
+      3.483,
       1.133,
       "window"
      ],
      [
       "C",
-      4.65,
-      1
+      4.716,
+      1.033
      ],
      [
       "C",
-      5.75,
-      1
+      5.849,
+      1.033
      ],
      [
       "E",
-      6.85,
+      6.982,
       0.917,
       "window",
-      "hold5.633"
+      "hold5.501"
      ]
     ]
    },
@@ -12032,35 +12038,35 @@
     "end": 15.5,
     "modeHold": {
      "on": true,
-     "seconds": 11.132,
+     "seconds": 11.149,
      "label": "風巡りの臨戦"
     },
     "actions": [
      [
       "E",
       0.5,
-      0.717,
+      0.7,
       "CT違反1.2"
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "E",
-      2.334,
+      2.317,
       0.917,
       "window"
      ],
      [
       "E",
-      3.351,
+      3.334,
       0.917,
       "window",
       "「剣気」が足りません（見込み 0 / 100）。剣気は 100 = 1 枚として数えています（wiki の記述による。実測ではありません）。足りないと飛翔の剣は使えません",
-      "hold11.132"
+      "hold11.149"
      ]
     ]
    },
@@ -12086,19 +12092,19 @@
    ],
    [
     "ヴェスナ 粛清（1層目）",
-    1.317,
+    1.3,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
-    2.334,
+    2.317,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（3層目）",
-    3.351,
+    3.334,
     15.5,
     "noSynergy"
    ]
@@ -12144,39 +12150,39 @@
     "end": 15.5,
     "modeHold": {
      "on": true,
-     "seconds": 9.749,
+     "seconds": 9.766,
      "label": "風巡りの臨戦"
     },
     "actions": [
      [
       "E",
       0.5,
-      0.717,
+      0.7,
       "CT違反1.2"
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "E",
-      2.334,
+      2.317,
       0.917,
       "window"
      ],
      [
       "Q",
-      3.351,
+      3.334,
       1.283
      ],
      [
       "E",
-      4.734,
+      4.717,
       0.917,
       "window",
-      "hold9.749"
+      "hold9.766"
      ]
     ]
    },
@@ -12202,25 +12208,25 @@
    ],
    [
     "ヴェスナ 粛清（1層目）",
-    1.317,
+    1.3,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
-    2.334,
+    2.317,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（3層目）",
-    3.351,
+    3.334,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（4層目）",
-    4.734,
+    4.717,
     15.5,
     "noSynergy"
    ]
@@ -12235,8 +12241,8 @@
    [
     "ヴェスナ",
     "burst",
-    3.351,
-    18.351
+    3.334,
+    18.334
    ],
    [
     "ベネット",
@@ -12264,7 +12270,7 @@
    {
     "char": "ヴェスナ",
     "start": 0,
-    "end": 16.317,
+    "end": 16.3,
     "modeHold": {
      "on": true,
      "seconds": 0,
@@ -12274,117 +12280,117 @@
      [
       "E",
       0.5,
-      0.717,
+      0.7,
       "CT違反0.4"
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "E",
-      2.334,
+      2.317,
       0.917,
       "window"
      ],
      [
       "N",
-      3.351,
+      3.334,
       0.317
      ],
      [
       "N",
-      3.768,
+      3.751,
       0.35
      ],
      [
       "N",
-      4.218,
+      4.201,
       0.533
      ],
      [
       "N",
-      4.851,
+      4.834,
       0.633
      ],
      [
       "N",
-      5.584,
+      5.567,
       0.633
      ],
      [
       "E",
-      6.317,
+      6.3,
       0.917,
       "window"
      ],
      [
       "N",
-      7.334,
+      7.317,
       0.317
      ],
      [
       "N",
-      7.751,
+      7.734,
       0.35
      ],
      [
       "N",
-      8.201,
+      8.184,
       0.533
      ],
      [
       "N",
-      8.834,
+      8.817,
       0.633
      ],
      [
       "N",
-      9.567,
+      9.55,
       0.633
      ],
      [
       "E",
-      10.3,
+      10.283,
       0.917,
       "window"
      ],
      [
       "N",
-      11.317,
+      11.3,
       0.317
      ],
      [
       "N",
-      11.734,
+      11.717,
       0.35
      ],
      [
       "N",
-      12.184,
+      12.167,
       0.533
      ],
      [
       "N",
-      12.817,
+      12.8,
       0.633
      ],
      [
       "N",
-      13.55,
+      13.533,
       0.633
      ],
      [
       "E",
-      14.283,
+      14.266,
       0.917,
       "window"
      ],
      [
       "E",
-      15.3,
+      15.283,
       0.917,
       "window"
      ]
@@ -12392,12 +12398,12 @@
    },
    {
     "char": "ベネット",
-    "start": 16.317,
-    "end": 17.6,
+    "start": 16.3,
+    "end": 17.583,
     "actions": [
      [
       "tE",
-      16.817,
+      16.8,
       0.683
      ]
     ]
@@ -12407,43 +12413,43 @@
    [
     "ヴェスナ 風巡りの臨戦",
     0.5,
-    15.3,
+    15.283,
     ""
    ],
    [
     "ヴェスナ 粛清（1層目）",
-    1.317,
-    16.317,
+    1.3,
+    16.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
-    2.334,
-    16.317,
+    2.317,
+    16.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（3層目）",
-    6.317,
-    16.317,
+    6.3,
+    16.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（4層目）",
-    10.3,
-    16.317,
+    10.283,
+    16.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（5層目）",
-    14.283,
-    16.317,
+    14.266,
+    16.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（6層目）",
-    15.3,
-    16.317,
+    15.283,
+    16.3,
     "noSynergy"
    ]
   ],
@@ -12457,8 +12463,8 @@
    [
     "ベネット",
     "skill",
-    17.05,
-    22.05
+    17.033,
+    22.033
    ]
   ],
   "issues": [
@@ -12577,9 +12583,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(540);\n  zibai skill;\n  delay(6);\n  wait(480);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -12673,9 +12680,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(718);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -12780,9 +12788,10 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(360);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(286);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "兹白: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "兹白: 武器が未設定です（武器なしで計算されます）",
+   "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -13171,7 +13180,7 @@
     "end": 14.75,
     "modeHold": {
      "on": true,
-     "seconds": 6.198,
+     "seconds": 6.181,
      "label": "奇策"
     },
     "actions": [
@@ -13189,48 +13198,48 @@
      [
       "N",
       1.65,
-      0.35
+      0.367
      ],
      [
       "N",
-      2.1,
+      2.117,
       0.517
      ],
      [
       "N",
-      2.717,
+      2.734,
       0.65
      ],
      [
       "E",
-      3.467,
+      3.484,
       0.917,
       "window"
      ],
      [
       "E",
-      4.484,
+      4.501,
       0.917,
       "window"
      ],
      [
       "E",
-      5.501,
+      5.518,
       0.917,
       "window"
      ],
      [
       "E",
-      6.518,
+      6.535,
       0.917,
       "window"
      ],
      [
       "E",
-      7.535,
+      7.552,
       0.917,
       "window",
-      "hold6.198"
+      "hold6.181"
      ]
     ]
    },
@@ -13291,41 +13300,41 @@
     "end": 15.5,
     "modeHold": {
      "on": true,
-     "seconds": 10.115,
+     "seconds": 10.132,
      "label": "風巡りの臨戦"
     },
     "actions": [
      [
       "E",
       0.5,
-      0.717,
+      0.7,
       "CT違反1.2"
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "E",
-      2.334,
+      2.317,
       0.917,
       "window"
      ],
      [
       "E",
-      3.351,
+      3.334,
       0.917,
       "window"
      ],
      [
       "E",
-      4.368,
+      4.351,
       0.917,
       "window",
       "「剣気」が足りません（見込み 0 / 100）。剣気は 100 = 1 枚として数えています（wiki の記述による。実測ではありません）。足りないと飛翔の剣は使えません",
-      "hold10.115"
+      "hold10.132"
      ]
     ]
    },
@@ -13351,25 +13360,25 @@
    ],
    [
     "ヴェスナ 粛清（1層目）",
-    1.317,
+    1.3,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
-    2.334,
+    2.317,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（3層目）",
-    3.351,
+    3.334,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（4層目）",
-    4.368,
+    4.351,
     15.5,
     "noSynergy"
    ]
@@ -14251,9 +14260,10 @@
     "スキル「元素スキル: 伏撃の雷鳴」の発動時点で CT がまだ 11.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  wait(180);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "アリョーシャ: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
+   "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -14353,9 +14363,10 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  wait(60);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "アリョーシャ: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
+   "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -14443,9 +14454,10 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  alyosha burst;\n  delay(6);\n  wait(960);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "アリョーシャ: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
+   "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -14576,9 +14588,10 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha burst;\n  delay(6);\n  wait(180);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "アリョーシャ: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
+   "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -14728,9 +14741,10 @@
     "スキル「元素スキル: 伏撃の雷鳴」の発動時点で CT がまだ 13.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive bennett;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
-   "アリョーシャ: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）",
+   "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
+   "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
    "ベネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）"
   ]
@@ -14743,37 +14757,37 @@
     "end": 15.5,
     "modeHold": {
      "on": true,
-     "seconds": 8.766,
+     "seconds": 8.783,
      "label": "風巡りの臨戦"
     },
     "actions": [
      [
       "E",
       0.5,
-      0.717
+      0.7
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "E",
-      2.334,
+      2.317,
       0.917,
       "window"
      ],
      [
       "Q",
-      3.351,
+      3.334,
       1.283
      ],
      [
       "w",
-      4.734,
+      4.717,
       2,
-      "hold8.766"
+      "hold8.783"
      ]
     ]
    },
@@ -14804,19 +14818,19 @@
    ],
    [
     "ヴェスナ 粛清（1層目）",
-    1.317,
+    1.3,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
-    2.334,
+    2.317,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（3層目）",
-    3.351,
+    3.334,
     15.5,
     "noSynergy"
    ]
@@ -14831,8 +14845,8 @@
    [
     "ヴェスナ",
     "burst",
-    3.351,
-    18.351
+    3.334,
+    18.334
    ],
    [
     "ベネット",
@@ -14857,31 +14871,31 @@
     "end": 15.5,
     "modeHold": {
      "on": true,
-     "seconds": 10.783,
+     "seconds": 10.8,
      "label": "風巡りの臨戦"
     },
     "actions": [
      [
       "E",
       0.5,
-      0.717
+      0.7
      ],
      [
       "E",
-      1.317,
+      1.3,
       0.917,
       "window"
      ],
      [
       "Q",
-      2.334,
+      2.317,
       1.283
      ],
      [
       "w",
-      3.717,
+      3.7,
       1,
-      "hold10.783"
+      "hold10.8"
      ]
     ]
    },
@@ -14907,13 +14921,13 @@
    [
     "ヴェスナ 粛清（1層目）",
     0.5,
-    1.317,
+    1.3,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（2層目）",
     0.5,
-    2.334,
+    2.317,
     "noSynergy"
    ],
    [
@@ -14954,13 +14968,13 @@
    ],
    [
     "ヴェスナ 粛清（6層目）",
-    1.317,
+    1.3,
     15.5,
     "noSynergy"
    ],
    [
     "ヴェスナ 粛清（6層目）",
-    2.334,
+    2.317,
     15.5,
     "noSynergy"
    ]
@@ -14975,8 +14989,8 @@
    [
     "ヴェスナ",
     "burst",
-    2.334,
-    17.334
+    2.317,
+    17.317
    ],
    [
     "ベネット",

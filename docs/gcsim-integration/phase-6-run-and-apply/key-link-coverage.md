@@ -1,22 +1,23 @@
 # gcsim の効果キーの紐付け: 全体のカバレッジ
 
-作成: 2026-10-11 / gcsim の辞書のコミット 1f9c1f2e / 生成: `npm run coverage:links`（`scripts/coverage-links.ts`）
+作成: 2026-10-15 / gcsim の辞書のコミット 4eda9fc5 / 生成: `npm run coverage:links`（`scripts/coverage-links.ts`）
 
 新キャラ・gcsim の更新のときは、この文書の「未検討」だけを見る。詳しい内訳は、A（スキル・爆発）= `effect-key-coverage.md`、B（固有天賦・命ノ星座・武器・聖遺物・元素共鳴）= `master-effect-coverage.md`。
 決定（紐づけない理由・個別の例外）の置き場は、`src/masterdata/keyLinkDecisions.ts`（一覧と、実際の場所の案内）。
 
 ## 未検討・保留
 
-- 未検討: **0 件**（なし）
+- 未検討: **1 件**
+  - A 効果 `alyosha-hunters-precision`
 - 保留: 1 件
-- アクション定義の紐付けと入力の食い違い（check:action-links）: **エラーあり。上の出力を確認**
+- アクション定義の紐付けと入力の食い違い（check:action-links）: なし
 
 ## A: スキル・爆発（アクション定義の gcsimEffect・gcsimExtras・gcsimIncluded。中間データ ＋ 手で補う一覧から取り込む）
 
-- gcsim の効果 299 件: linked 197 / decided-not-linked 49 / covered-by-master 20 / covered-by-main 19 / grace-window 10 / covered-by-passive 4
-- アプリの対象（アクション定義）333 件: linked 202 / no-bar 76 / not-in-gcsim 20 / covered-by-passive 16 / app-bar 12 / decided-not-linked 6 / deferred 1
+- gcsim の効果 305 件: linked 200 / decided-not-linked 49 / covered-by-master 20 / covered-by-main 19 / grace-window 10 / covered-by-passive 4 / permanent 2 / unreviewed 1
+- アプリの対象（アクション定義）333 件: linked 206 / no-bar 76 / covered-by-passive 16 / not-in-gcsim 15 / app-bar 12 / decided-not-linked 6 / deferred 1 / no-event 1
 
 ## B: 固有天賦・命ノ星座・武器・聖遺物・元素共鳴（定義の gcsimKeys など。辞書から自動で結び付ける）
 
-- gcsim の効果 1120 件: linked 939 / excluded 181
-- アプリの対象（定義）829 件: linked 667 / excluded 162
+- gcsim の効果 1141 件: linked 955 / excluded 186
+- アプリの対象（定義）833 件: linked 679 / excluded 154

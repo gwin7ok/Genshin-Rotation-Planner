@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
- "generatedAt": "2026-10-08T15:06:04.053Z",
+ "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+ "generatedAt": "2026-10-15T10:24:50.959Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -38,6 +38,11 @@
   "10000003-anemo_e": {
    "char": "ジン",
    "type": "skill",
+   "candidates": []
+  },
+  "10000003-anemo_e_hold": {
+   "char": "ジン",
+   "type": "skill_hold",
    "candidates": []
   },
   "10000005-anemo_e": {
@@ -614,6 +619,11 @@
    "type": "skill",
    "candidates": []
   },
+  "10000021-pyro_e_hold": {
+   "char": "アンバー",
+   "type": "skill_hold",
+   "candidates": []
+  },
   "10000021-pyro_q": {
    "char": "アンバー",
    "type": "burst",
@@ -727,13 +737,19 @@
   "10000027-geo_e": {
    "char": "凝光",
    "type": "skill",
+   "master": 30,
    "candidates": [
     {
      "source": "construct",
      "key": "construct:NingSkill",
      "seconds": 30
     }
-   ]
+   ],
+   "match": {
+    "source": "construct",
+    "key": "construct:NingSkill",
+    "seconds": 30
+   }
   },
   "10000027-geo_q": {
    "char": "凝光",
@@ -1097,6 +1113,18 @@
     }
    ]
   },
+  "10000041-hydro_e_hold": {
+   "char": "モナ",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "damage",
+     "key": "damage:Mirror Reflection of Doom (Tick)",
+     "mode": "expiry",
+     "seconds": 3.93
+    }
+   ]
+  },
   "10000042-electro_q": {
    "char": "刻晴",
    "type": "burst",
@@ -1329,6 +1357,11 @@
    "type": "skill",
    "candidates": []
   },
+  "10000059-anemo_e_hold": {
+   "char": "鹿野院平蔵",
+   "type": "skill_hold",
+   "candidates": []
+  },
   "10000059-anemo_q": {
    "char": "鹿野院平蔵",
    "type": "burst",
@@ -1397,6 +1430,28 @@
      "source": "shield",
      "key": "shield:Opening Flourish (Shield)",
      "seconds": 0.22
+    }
+   ]
+  },
+  "10000064-geo_e_shorthold": {
+   "char": "雲菫",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Opening Flourish (Shield)",
+     "seconds": 0.83
+    }
+   ]
+  },
+  "10000064-geo_e_hold": {
+   "char": "雲菫",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "shield",
+     "key": "shield:Opening Flourish (Shield)",
+     "seconds": 1.55
     }
    ]
   },
@@ -1845,6 +1900,28 @@
     }
    ]
   },
+  "10000091-geo_e_hold": {
+   "char": "ナヴィア",
+   "type": "skill_hold",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "navia-a1-dmg",
+     "mode": "expiry",
+     "seconds": 4,
+     "category": "talent",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "navia-arkhe-icd",
+     "mode": "expiry",
+     "seconds": 7,
+     "category": "skill",
+     "kind": "cooldown"
+    }
+   ]
+  },
   "10000092-pyro_e": {
    "char": "嘉明",
    "type": "skill",
@@ -1860,6 +1937,21 @@
      "key": "chiori-a1-window",
      "mode": "expiry",
      "seconds": 1.3,
+     "category": "talent",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000094-geo_e_hold": {
+   "char": "千織",
+   "type": "skill_hold",
+   "master": 17,
+   "candidates": [
+    {
+     "source": "status",
+     "key": "chiori-a1-window",
+     "mode": "expiry",
+     "seconds": 1.28,
      "category": "talent",
      "kind": "effect"
     }
@@ -1914,6 +2006,20 @@
   "10000101-dendro_e": {
    "char": "キィニチ",
    "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "expiry",
+     "seconds": 10.17,
+     "category": "template",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000101-dendro_e_hold": {
+   "char": "キィニチ",
+   "type": "skill_hold",
    "candidates": [
     {
      "source": "status",
@@ -2362,6 +2468,13 @@
    "type": "skill",
    "candidates": []
   },
+  "10000119-dendro_e_hold": {
+   "char": "ラウマ",
+   "type": "skill_hold",
+   "master": 15,
+   "candidates": [],
+   "note": "実行エラー: error encountered on lauma executing skill: lauma: Cannot use Skill Hold without Dew"
+  },
   "10000120-electro_q": {
    "char": "フリンズ",
    "type": "burst",
@@ -2375,6 +2488,11 @@
   "10000121-hydro_e": {
    "char": "アイノ",
    "type": "skill",
+   "candidates": []
+  },
+  "10000126-geo_q": {
+   "char": "兹白",
+   "type": "burst",
    "candidates": []
   },
   "10000127-geo_e": {

@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
- "generatedAt": "2026-10-08T15:06:01.213Z",
+ "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+ "generatedAt": "2026-10-15T10:24:47.871Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -30,6 +30,13 @@
   "10000003-anemo_e": {
    "char": "ジン",
    "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000003-anemo_e_hold": {
+   "char": "ジン",
+   "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
    "keys": []
@@ -677,6 +684,13 @@
    "via": "plain",
    "keys": []
   },
+  "10000021-pyro_e_hold": {
+   "char": "アンバー",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
   "10000021-pyro_q": {
    "char": "アンバー",
    "command": "burst",
@@ -856,9 +870,20 @@
   "10000027-geo_e": {
    "char": "凝光",
    "command": "skill",
-   "status": "nokey",
-   "via": "plain",
-   "keys": []
+   "status": "ok",
+   "via": "duration-match",
+   "keys": [
+    {
+     "key": "construct:NingSkill",
+     "events": 1,
+     "casts": 1,
+     "seconds": [
+      30
+     ]
+    }
+   ],
+   "master": 30,
+   "primary": "construct:NingSkill"
   },
   "10000027-geo_q": {
    "char": "凝光",
@@ -1236,6 +1261,13 @@
   "10000041-hydro_e": {
    "char": "モナ",
    "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000041-hydro_e_hold": {
+   "char": "モナ",
+   "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
    "keys": []
@@ -1858,6 +1890,13 @@
    "via": "plain",
    "keys": []
   },
+  "10000059-anemo_e_hold": {
+   "char": "鹿野院平蔵",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
   "10000059-anemo_q": {
    "char": "鹿野院平蔵",
    "command": "burst",
@@ -2056,6 +2095,20 @@
   "10000064-geo_e": {
    "char": "雲菫",
    "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000064-geo_e_shorthold": {
+   "char": "雲菫",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000064-geo_e_hold": {
+   "char": "雲菫",
+   "command": "skill[hold=2]",
    "status": "nokey",
    "via": "plain",
    "keys": []
@@ -3001,6 +3054,13 @@
    "via": "plain",
    "keys": []
   },
+  "10000091-geo_e_hold": {
+   "char": "ナヴィア",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
   "10000091-geo_q": {
    "char": "ナヴィア",
    "command": "burst",
@@ -3109,6 +3169,14 @@
    "keys": [],
    "master": 17
   },
+  "10000094-geo_e_hold": {
+   "char": "千織",
+   "command": "skill[hold=1]",
+   "status": "nokey",
+   "via": "plain",
+   "keys": [],
+   "master": 17
+  },
   "10000094-geo_q": {
    "char": "千織",
    "command": "burst",
@@ -3119,6 +3187,36 @@
   "10000095-hydro_e": {
    "char": "シグウィン",
    "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sigewinne-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "primary": "sigewinne-skill"
+  },
+  "10000095-hydro_e_shorthold": {
+   "char": "シグウィン",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "sigewinne-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": []
+    }
+   ],
+   "primary": "sigewinne-skill"
+  },
+  "10000095-hydro_e_hold": {
+   "char": "シグウィン",
+   "command": "skill[hold=2]",
    "status": "ok",
    "via": "plain",
    "keys": [
@@ -3310,6 +3408,13 @@
   "10000101-dendro_e": {
    "char": "キィニチ",
    "command": "skill",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
+  "10000101-dendro_e_hold": {
+   "char": "キィニチ",
+   "command": "skill[hold=1]",
    "status": "nokey",
    "via": "plain",
    "keys": []
@@ -3834,6 +3939,13 @@
    "master": 15,
    "primary": "lauma-frostgrove-sanctuary"
   },
+  "10000119-dendro_e_hold": {
+   "char": "ラウマ",
+   "command": "skill[hold=1]",
+   "status": "unprobed",
+   "keys": [],
+   "reason": "error encountered on lauma executing skill: lauma: Cannot use Skill Hold without Dew"
+  },
   "10000119-dendro_q": {
    "char": "ラウマ",
    "command": "burst",
@@ -4052,6 +4164,31 @@
    "master": 20,
    "primary": "columbina-q"
   },
+  "10000126-geo_e": {
+   "char": "兹白",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "zibai-skill",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.3,
+      15.3
+     ]
+    }
+   ],
+   "primary": "zibai-skill"
+  },
+  "10000126-geo_q": {
+   "char": "兹白",
+   "command": "burst",
+   "status": "nokey",
+   "via": "plain",
+   "keys": []
+  },
   "10000127-geo_e": {
    "char": "イルーガ",
    "command": "skill",
@@ -4217,6 +4354,61 @@
    ],
    "master": 12,
    "primary": "prune-burst"
+  },
+  "10000148-electro_e": {
+   "char": "アリョーシャ",
+   "command": "skill",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "alyosha-hunters-mark",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.03,
+      15.03
+     ]
+    }
+   ],
+   "primary": "alyosha-hunters-mark"
+  },
+  "10000148-electro_e_hold": {
+   "char": "アリョーシャ",
+   "command": "skill[hold=1]",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "alyosha-hunters-mark",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      15.03,
+      15.03
+     ]
+    }
+   ],
+   "primary": "alyosha-hunters-mark"
+  },
+  "10000148-electro_q": {
+   "char": "アリョーシャ",
+   "command": "burst",
+   "status": "ok",
+   "via": "plain",
+   "keys": [
+    {
+     "key": "alyosha-burst",
+     "events": 2,
+     "casts": 2,
+     "seconds": [
+      14,
+      14
+     ]
+    }
+   ],
+   "master": 14,
+   "primary": "alyosha-burst"
   },
   "10000150-cryo_e": {
    "char": "オデット",

@@ -359,7 +359,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={onGcsimCompute}
                 disabled={gcsimComputing}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 disabled:opacity-60 disabled:cursor-wait text-white border border-sky-500/70 transition-colors"
-                title="gcsim で計算: 現在の編成・ローテーションを gcsim で実行し、所要時間・CT・効果時間・発動バフなどを一括で反映します（CT 違反があると実行しません。取り消しは「アプリの計算に戻す」）"
+                title="gcsim で計算: 現在の編成・ローテーションを gcsim で実行し、所要時間・CT・効果時間・発動バフなどを一括で反映します（アプリの CT 違反があっても実行して確認し、gcsim で待ちが出たら反映しません。取り消しは「アプリの計算に戻す」）"
               >
                 <Play className="w-3.5 h-3.5" />
                 <span>{gcsimComputing ? '計算中…' : 'gcsim で計算'}</span>

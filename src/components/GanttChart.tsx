@@ -378,7 +378,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       actions: s.actions
         .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
         .map(a => {
-          const { hasCTCollision, collisionRemainingCT, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, gcsimCommand, startTime, endTime, ...rest } = a;
+          const { hasCTCollision, collisionRemainingCT, ctGcsimVerified, specialWindowWarning, usedSpecialCharge, holdSeconds, modeHoldSeconds, gcsimCommand, startTime, endTime, ...rest } = a;
           return rest;
         })
     }));
@@ -446,7 +446,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const totalCTCollisions = useMemo(() => {
     let count = 0;
     stints.forEach(s => {
-      count += s.actions.filter(a => a.hasCTCollision).length;
+      count += s.actions.filter(a => a.hasCTCollision && !a.ctGcsimVerified).length;
     });
     return count;
   }, [stints]);
@@ -1545,7 +1545,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           <div className="h-10 px-2 flex flex-col justify-center border-b border-slate-800/60 text-[9px] font-mono leading-tight">
                             <div className="flex items-center justify-between text-amber-300/90 font-semibold truncate">
                               <span className="truncate flex items-center gap-1">
-                                {stint.actions.some(a => a.hasCTCollision) && (
+                                {stint.actions.some(a => a.hasCTCollision && !a.ctGcsimVerified) && (
                                   <span title="CT未回復あり" className="inline-flex items-center">
                                     <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
                                   </span>
@@ -1714,7 +1714,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     const isBeingDragged = !!draggingAction?.moved && draggingAction.actionId === act.id;
                                     const isSwapAction = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
 
-                                    const hasCollision = act.hasCTCollision;
+                                    // gcsim で待たずに実行できると確認済みのアプリの CT 違反は、赤ではなく灰色の印（D214）
+                                    const ctVerified = !!act.hasCTCollision && !!act.ctGcsimVerified;
+                                    const hasCollision = act.hasCTCollision && !act.ctGcsimVerified;
                                     const colRem = act.collisionRemainingCT;
                                     const windowWarning = act.specialWindowWarning;
 
@@ -1774,6 +1776,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
                                           {hasCollision && <AlertTriangle className="w-3 h-3 text-red-400 shrink-0" />}
                                           {!hasCollision && windowWarning && <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />}
+                                          {ctVerified && (
+                                            <span
+                                              title={`gcsim 確認済み: アプリの計算では CT がまだ ${colRem ?? '?'} 秒残っていますが、gcsim では待たずに実行できました`}
+                                              className="text-[9px] bg-slate-500 text-white font-black px-1 rounded ml-0.5 shrink-0"
+                                            >
+                                              gcsim確認済み
+                                            </span>
+                                          )}
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
                                             ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
@@ -1879,7 +1889,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 return (
                                   <React.Fragment key={cd.id}>
                                   {violatingAction && (
-                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} verified={violatingAction.ctGcsimVerified} />
                                   )}
                                   <div
                                     key={cd.id}
@@ -1929,7 +1939,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 return (
                                   <React.Fragment key={cd.id}>
                                   {violatingAction && (
-                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} verified={violatingAction.ctGcsimVerified} />
                                   )}
                                   <div
                                     key={cd.id}
@@ -1979,7 +1989,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 return (
                                   <React.Fragment key={cd.id}>
                                   {violatingAction && (
-                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} />
+                                    <CTViolationMarker x={(violatingAction.startTime ?? cd.startTime) * pixelsPerSecond} remaining={violatingAction.collisionRemainingCT} verified={violatingAction.ctGcsimVerified} />
                                   )}
                                   <div
                                     key={cd.id}
@@ -2335,12 +2345,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
 /** CT違反マーク（キャラカードの違反マークと同じ）。x = バーの先頭（発動位置）の横座標。その左側に表示する */
 /** CT違反（スキル・爆発。赤）/ CT警告（発動バフ。黄色。`warning`）のマーク */
-const CTViolationMarker: React.FC<{ x: number; remaining?: number; warning?: boolean }> = ({ x, remaining, warning }) => (
+const CTViolationMarker: React.FC<{ x: number; remaining?: number; warning?: boolean; verified?: boolean }> = ({ x, remaining, warning, verified }) => (
   <span
     className="absolute top-1/2 -translate-y-1/2 inline-flex items-center pointer-events-auto"
     style={{ left: `${x - 15}px`, zIndex: 30 }}
-    title={warning ? `CT警告: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています（効果は発動しません）` : `CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
+    title={verified
+      ? `gcsim 確認済み: アプリの計算では CT がまだ ${remaining ?? '?'} 秒残っていますが、gcsim では待たずに実行できました`
+      : warning ? `CT警告: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています（効果は発動しません）` : `CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
   >
-    <AlertTriangle className={`w-3 h-3 shrink-0 ${warning ? 'text-amber-400' : 'text-red-400 animate-pulse'}`} />
+    <AlertTriangle className={`w-3 h-3 shrink-0 ${verified ? 'text-slate-400' : warning ? 'text-amber-400' : 'text-red-400 animate-pulse'}`} />
   </span>
 );

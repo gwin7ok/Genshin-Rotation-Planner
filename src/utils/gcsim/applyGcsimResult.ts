@@ -104,11 +104,13 @@ export function applyActionDurations(
     const delayFrames = Math.max(0, Math.round((actionDelayOf(act) + extra) * 60));
     // モードの維持のための自動の待ちは、保存する所要時間に含めない（計算のたびに、出場の終わりに足す）
     // 直後の待機（待機のアクション・維持）は、gcsim のログではアクションの間隔に含まれる。所要時間には含めない
-    const seconds = Number((framesToSeconds(executed.frames - delayFrames) + extra - (ref.modeHoldSeconds ?? 0) - (ref.waitAfterSeconds ?? 0)).toFixed(3));
-    if (seconds < 0) {
+    const rawSeconds = Number((framesToSeconds(executed.frames - delayFrames) + extra - (ref.modeHoldSeconds ?? 0) - (ref.waitAfterSeconds ?? 0)).toFixed(3));
+    if (rawSeconds < 0) {
       skipped++;
       continue;
     }
+    // アプリのアクションの長さは、最小 0.05 秒（gcsim が 0f でキャンセルできるもの。0 のままだと、未設定として 0.5 秒に戻ってしまう）
+    const seconds = Math.max(0.05, rawSeconds);
     const value = { seconds, base: Number(Math.max(0.05, seconds - (extra - (ref.modeHoldSeconds ?? 0))).toFixed(3)) };
     if (copyOf) {
       const byK = copyNext.get(copyOf.orig) ?? new Map<string, { seconds: number; base: number }>();

@@ -47,3 +47,21 @@ export function unpackReactions(saved: unknown, currentGcsimVersion: string = GC
   }
   return rows;
 }
+
+/**
+ * 保存された反応の行の状態。
+ *   none = 保存なし（または空）／ok = 今の gcsim のバージョンで読める／stale = 形は正しいが、gcsim のバージョンが違う（古い計算結果。出さない）／invalid = 壊れている
+ * stale のとき、savedVersion に、保存されたバージョンを返す（画面の案内に使う）
+ */
+export function reactionsStatus(saved: unknown, currentGcsimVersion: string = GCSIM_VERSION): { status: 'none' | 'ok' | 'stale' | 'invalid'; savedVersion?: string } {
+  if (!saved || typeof saved !== 'object') return { status: 'none' };
+  const s = saved as { gcsimVersion?: unknown; rows?: unknown };
+  if (!Array.isArray(s.rows) || s.rows.length === 0) return { status: 'none' };
+  if (s.gcsimVersion !== currentGcsimVersion) {
+    // バージョン以外の形が正しいかは、今のバージョンとして読めるかで確かめる
+    return unpackReactions({ ...s, gcsimVersion: currentGcsimVersion }, currentGcsimVersion)
+      ? { status: 'stale', savedVersion: typeof s.gcsimVersion === 'string' ? s.gcsimVersion : undefined }
+      : { status: 'invalid' };
+  }
+  return unpackReactions(saved, currentGcsimVersion) ? { status: 'ok' } : { status: 'invalid' };
+}

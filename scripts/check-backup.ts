@@ -228,6 +228,17 @@ check('反応の行: gcsim のバージョンが違う（古い計算結果）�
   assert.equal(savedReactions.unpackReactions({ rows: sampleRows }), null);
   assert.deepEqual(savedReactions.unpackReactions({ gcsimVersion: 'v9.9.9', rows: sampleRows }, 'v9.9.9'), sampleRows);
 });
+check('反応の行: 状態の判定（none / ok / stale / invalid。旧バージョンの案内・印に使う）', () => {
+  const v = gcsimConfig.GCSIM_VERSION;
+  assert.equal(savedReactions.reactionsStatus(undefined).status, 'none');
+  assert.equal(savedReactions.reactionsStatus({ gcsimVersion: v, rows: [] }).status, 'none');
+  assert.equal(savedReactions.reactionsStatus({ gcsimVersion: v, rows: sampleRows }).status, 'ok');
+  const stale = savedReactions.reactionsStatus({ gcsimVersion: 'v0.0.0', rows: sampleRows });
+  assert.equal(stale.status, 'stale');
+  assert.equal(stale.savedVersion, 'v0.0.0');
+  assert.equal(savedReactions.reactionsStatus({ gcsimVersion: 'v0.0.0', rows: [{ kind: 'unknown', lap: 1, segments: [] }] }).status, 'invalid');
+  assert.equal(savedReactions.reactionsStatus({ gcsimVersion: v, rows: [{ kind: 'unknown', lap: 1, segments: [] }] }).status, 'invalid');
+});
 check('反応の行: 形が壊れているものは、出さない（落ちない）', () => {
   const v = gcsimConfig.GCSIM_VERSION;
   assert.equal(savedReactions.unpackReactions({ gcsimVersion: v, rows: [{ kind: 'unknown', lap: 1, segments: [] }] }), null);

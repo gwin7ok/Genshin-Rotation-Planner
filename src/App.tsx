@@ -16,7 +16,7 @@ import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
-import { GCSIM_COMMIT } from './utils/gcsim/gcsimConfig.ts';
+import { GCSIM_COMMIT, GCSIM_VERSION } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { useDialogs } from './components/DialogProvider';
 import { SaveAsDialog } from './components/SaveAsDialog';
@@ -28,7 +28,7 @@ import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
-import { packReactions, unpackReactions } from './utils/gcsim/savedReactions';
+import { packReactions, unpackReactions, reactionsStatus } from './utils/gcsim/savedReactions';
 import { seedPresetsOnFirstRun } from './utils/presets';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
@@ -172,9 +172,16 @@ export default function App() {
   });
   const gcsimReactions: ReactionRowRef[] | null =
     gcsimReactionState && gcsimReactionState.signature === reactionSignature ? gcsimReactionState.rows : null;
+  // 読み込んだ編成の反応の行が、古い gcsim のバージョンの計算結果で、出していないとき、そのバージョン（画面に案内を出す。再計算・保存で消す）
+  const [staleReactionsVersion, setStaleReactionsVersion] = useState<string | null>(() => {
+    const r = reactionsStatus(savedInitialState?.reactions);
+    return r.status === 'stale' ? r.savedVersion ?? '旧バージョン' : null;
+  });
   /** 反応の行を、今の状態の結果として置く（null で消す） */
-  const setGcsimReactions = (rows: ReactionRowRef[] | null) =>
+  const setGcsimReactions = (rows: ReactionRowRef[] | null) => {
     setGcsimReactionState(rows ? { rows, signature: reactionSignatureRef.current } : null);
+    if (rows) setStaleReactionsVersion(null);
+  };
 
   // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
   useEffect(() => {
@@ -335,6 +342,8 @@ export default function App() {
     setSwitchDelay(slot.switchDelay ?? 0.50);
     // 反応の行: 読み込む編成の署名で置く（gcsim のバージョンが違えば、出さない）
     const restoredReactions = unpackReactions(slot.reactions);
+    const restoredStatus = reactionsStatus(slot.reactions);
+    setStaleReactionsVersion(restoredStatus.status === 'stale' ? restoredStatus.savedVersion ?? '旧バージョン' : null);
     setGcsimReactionState(restoredReactions
       ? { rows: restoredReactions, signature: makeReactionSignature(loadedChars, slot.switchDelay ?? 0.50, loopIndex, loadedStints) }
       : null);
@@ -368,6 +377,7 @@ export default function App() {
     setSwitchDelay(0.50);
     setActiveSlotId(null);
     setGcsimReactionState(null);
+    setStaleReactionsVersion(null);
   };
 
   // 10. Handle Playback Controls
@@ -412,6 +422,7 @@ export default function App() {
       reactions: packReactions(gcsimReactions),
     });
     setSavedSlots(updated);
+    setStaleReactionsVersion(null);
     setOverwriteSaved(true);
     setTimeout(() => setOverwriteSaved(false), 2000);
   };
@@ -435,6 +446,7 @@ export default function App() {
       reactions: packReactions(gcsimReactions),
     };
     setSavedSlots(saveSlot(newSlot));
+    setStaleReactionsVersion(null);
     setActiveSlotId(newSlot.id);
     setIsSaveAsOpen(false);
   };
@@ -717,6 +729,17 @@ export default function App() {
 
       {/* 「gcsim で計算」の結果（実行中・反映・警告・エラー） */}
       <GcsimComputeBanner state={gcsimBanner} onClose={() => setGcsimBanner(null)} />
+
+      {/* 読み込んだ編成の反応の行が、古い gcsim のバージョンの計算結果のとき（反応の行を出していない理由と、再計算の案内） */}
+      {staleReactionsVersion && !gcsimReactions && (
+        <div className="mx-auto max-w-[1600px] my-2 px-3 py-2 rounded-lg border border-amber-700/60 bg-amber-950/40 text-amber-100 text-xs flex items-start gap-2" data-testid="stale-reactions-notice">
+          <span className="flex-1">
+            この編成の「反応の行」は、gcsim {staleReactionsVersion} の計算結果のため、今の gcsim（{GCSIM_VERSION}）では表示しません。
+            「gcsim で計算」で再計算すると、表示されます（アクションの並び・CT などは、そのまま使えます）。
+          </span>
+          <button type="button" className="underline shrink-0" onClick={() => setStaleReactionsVersion(null)}>閉じる</button>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col">

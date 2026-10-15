@@ -1,6 +1,30 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T14:34:51.461Z",
+ "generatedAt": "2026-10-15T15:44:27.303Z",
+ "excludedNext": [
+  "10000027-geo_n[0]|skill",
+  "10000027-geo_n[0]|burst",
+  "10000027-geo_n[0]|dash",
+  "10000027-geo_n[0]|jump",
+  "10000027-geo_n[0]|swap",
+  "10000027-geo_n[1]|skill",
+  "10000027-geo_n[1]|burst",
+  "10000027-geo_n[1]|dash",
+  "10000027-geo_n[1]|jump",
+  "10000027-geo_n[1]|swap",
+  "10000027-geo_n[2]|skill",
+  "10000027-geo_n[2]|burst",
+  "10000027-geo_n[2]|dash",
+  "10000027-geo_n[2]|jump",
+  "10000027-geo_n[2]|swap",
+  "10000057-geo_ca|dash",
+  "10000057-geo_ca|jump",
+  "10000114-cryo_n[4]|skill",
+  "10000114-cryo_n[4]|burst",
+  "10000114-cryo_n[4]|dash",
+  "10000114-cryo_n[4]|jump",
+  "10000114-cryo_n[4]|swap"
+ ],
  "entries": {
   "10000002-cryo_e": {
    "with": 0,
@@ -680,7 +704,25 @@
   ],
   "10000020-electro_e": {
    "with": 10,
-   "without": 6
+   "without": 6,
+   "byNext": {
+    "dash": {
+     "with": 10,
+     "without": 6,
+     "d0": {
+      "with": 0,
+      "without": 0
+     }
+    },
+    "jump": {
+     "with": 10,
+     "without": 6,
+     "d0": {
+      "with": 0,
+      "without": 0
+     }
+    }
+   }
   },
   "10000020-electro_n": [
    {
@@ -915,6 +957,16 @@
   "10000027-geo_ca": {
    "with": 30,
    "without": 30,
+   "byNext": {
+    "skill": {
+     "with": 29,
+     "without": 29
+    },
+    "dash": {
+     "with": 29,
+     "without": 29
+    }
+   },
    "afterNormal": {
     "with": -15,
     "without": -15
@@ -1098,6 +1150,16 @@
    "d0": {
     "with": 0,
     "without": 0
+   },
+   "byNext": {
+    "burst": {
+     "with": 4,
+     "without": 0
+    },
+    "swap": {
+     "with": 4,
+     "without": 0
+    }
    }
   },
   "10000034-geo_q": {
@@ -1124,7 +1186,17 @@
   ],
   "10000035-cryo_e": {
    "with": 7,
-   "without": 3
+   "without": 3,
+   "byNext": {
+    "dash": {
+     "with": 0,
+     "without": 0
+    },
+    "jump": {
+     "with": 0,
+     "without": 0
+    }
+   }
   },
   "10000035-cryo_q": {
    "with": 0,
@@ -1158,7 +1230,25 @@
   ],
   "10000036-cryo_e": {
    "with": 6,
-   "without": 6
+   "without": 6,
+   "byNext": {
+    "dash": {
+     "with": 6,
+     "without": 6,
+     "d0": {
+      "with": 0,
+      "without": 0
+     }
+    },
+    "jump": {
+     "with": 6,
+     "without": 6,
+     "d0": {
+      "with": 0,
+      "without": 0
+     }
+    }
+   }
   },
   "10000036-cryo_q": {
    "with": 0,
@@ -1529,12 +1619,76 @@
   "10000048-pyro_ca": {
    "with": 4,
    "without": 0,
+   "byNext": {
+    "skill": {
+     "with": 0,
+     "without": 0
+    },
+    "burst": {
+     "with": 0,
+     "without": 0
+    },
+    "dash": {
+     "with": 0,
+     "without": 0
+    },
+    "jump": {
+     "with": 0,
+     "without": 0
+    },
+    "swap": {
+     "with": 0,
+     "without": 0
+    }
+   },
    "afterNormal": {
     "with": 4,
     "without": 0,
     "d0": {
      "with": -12,
      "without": -16
+    },
+    "byNext": {
+     "skill": {
+      "with": 0,
+      "without": 0,
+      "d0": {
+       "with": -16,
+       "without": -16
+      }
+     },
+     "burst": {
+      "with": 0,
+      "without": 0,
+      "d0": {
+       "with": -16,
+       "without": -16
+      }
+     },
+     "dash": {
+      "with": 0,
+      "without": 0,
+      "d0": {
+       "with": -16,
+       "without": -16
+      }
+     },
+     "jump": {
+      "with": 0,
+      "without": 0,
+      "d0": {
+       "with": -16,
+       "without": -16
+      }
+     },
+     "swap": {
+      "with": 0,
+      "without": 0,
+      "d0": {
+       "with": -16,
+       "without": -16
+      }
+     }
     }
    }
   },
@@ -1850,7 +2004,21 @@
   ],
   "10000059-anemo_e": {
    "with": 6,
-   "without": 6
+   "without": 6,
+   "byNext": {
+    "dash": {
+     "with": 26,
+     "without": 26
+    },
+    "jump": {
+     "with": 26,
+     "without": 26
+    },
+    "swap": {
+     "with": 26,
+     "without": 26
+    }
+   }
   },
   "10000059-anemo_q": {
    "with": 0,
@@ -3094,7 +3262,17 @@
   ],
   "10000104-anemo_e": {
    "with": 0,
-   "without": 0
+   "without": 0,
+   "byNext": {
+    "jump": {
+     "with": 1,
+     "without": 1
+    },
+    "swap": {
+     "with": 1,
+     "without": 1
+    }
+   }
   },
   "10000104-anemo_q": {
    "with": 0,
@@ -3367,19 +3545,107 @@
   "10000114-cryo_n": [
    {
     "with": 2,
-    "without": 2
+    "without": 2,
+    "byNext": {
+     "skill": {
+      "with": -12,
+      "without": -12
+     },
+     "burst": {
+      "with": -12,
+      "without": -12
+     },
+     "dash": {
+      "with": -12,
+      "without": -12
+     },
+     "jump": {
+      "with": -12,
+      "without": -12
+     },
+     "swap": {
+      "with": -12,
+      "without": -12
+     }
+    }
    },
    {
     "with": 2,
-    "without": 2
+    "without": 2,
+    "byNext": {
+     "skill": {
+      "with": -16,
+      "without": -16
+     },
+     "burst": {
+      "with": -16,
+      "without": -16
+     },
+     "dash": {
+      "with": -16,
+      "without": -16
+     },
+     "jump": {
+      "with": -16,
+      "without": -16
+     },
+     "swap": {
+      "with": -16,
+      "without": -16
+     }
+    }
    },
    {
     "with": 2,
-    "without": 2
+    "without": 2,
+    "byNext": {
+     "skill": {
+      "with": -19,
+      "without": -19
+     },
+     "burst": {
+      "with": -19,
+      "without": -19
+     },
+     "dash": {
+      "with": -19,
+      "without": -19
+     },
+     "jump": {
+      "with": -19,
+      "without": -19
+     },
+     "swap": {
+      "with": -19,
+      "without": -19
+     }
+    }
    },
    {
     "with": 3,
-    "without": 3
+    "without": 3,
+    "byNext": {
+     "skill": {
+      "with": -9,
+      "without": -9
+     },
+     "burst": {
+      "with": -9,
+      "without": -9
+     },
+     "dash": {
+      "with": -9,
+      "without": -9
+     },
+     "jump": {
+      "with": -9,
+      "without": -9
+     },
+     "swap": {
+      "with": -9,
+      "without": -9
+     }
+    }
    },
    {
     "with": 4,
@@ -3456,7 +3722,21 @@
   },
   "10000119-dendro_ca": {
    "with": -6,
-   "without": -6
+   "without": -6,
+   "byNext": {
+    "skill": {
+     "with": -4,
+     "without": -4
+    },
+    "burst": {
+     "with": -4,
+     "without": -4
+    },
+    "swap": {
+     "with": -18,
+     "without": -18
+    }
+   }
   },
   "10000119-dendro_n": [
    {
@@ -3871,6 +4151,48 @@
     "ext": {
      "with": 4,
      "without": 0
+    },
+    "byNext": {
+     "skill": {
+      "with": 6,
+      "without": 2,
+      "d0": {
+       "with": 2,
+       "without": 2
+      }
+     },
+     "burst": {
+      "with": 6,
+      "without": 2,
+      "d0": {
+       "with": 2,
+       "without": 2
+      }
+     },
+     "dash": {
+      "with": 4,
+      "without": 0,
+      "d0": {
+       "with": 0,
+       "without": 0
+      }
+     },
+     "jump": {
+      "with": 4,
+      "without": 0,
+      "d0": {
+       "with": 0,
+       "without": 0
+      }
+     },
+     "swap": {
+      "with": 4,
+      "without": 0,
+      "d0": {
+       "with": 0,
+       "without": 0
+      }
+     }
     }
    }
   ],

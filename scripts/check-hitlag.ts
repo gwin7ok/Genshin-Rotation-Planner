@@ -18,21 +18,32 @@ import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
 const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');
 
-const hitlag = JSON.parse(fs.readFileSync('src/data/hitlag_frames.json', 'utf8')).entries as Record<string, unknown>;
+const hitlagJson = JSON.parse(fs.readFileSync('src/data/hitlag_frames.json', 'utf8'));
+const hitlag = hitlagJson.entries as Record<string, unknown>;
+/** `probe:hitlag` が、次のアクションの種類ごとの測定で除外した組（`<id>|<次の種類>`）。表の読み取りの違い（凝光の通常攻撃など）で、対象外 */
+const excludedNext = new Set<string>(hitlagJson.excludedNext ?? []);
+let skippedNext = 0;
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 const TOLERANCE = 1; // フレーム
 
+/** 次のアクションが交代のとき、交代先にするキャラ */
+const swapTarget = (k: string) => (k === 'xiangling' ? 'bennett' : 'xiangling');
+
 async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: string[], delayFrames: number): Promise<number[] | undefined> {
+  const other = swapTarget(k);
   const cfg = [
     `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
     `${k} add weapon="${weapon}" refine=1 lvl=90/90;`,
     `${k} add stats cr=1;`,
+    `${other} char lvl=90/90 cons=0 talent=9,9,9;`,
+    `${other} add weapon="${other === 'bennett' ? 'favoniussword' : 'beginnersprotector'}" refine=1 lvl=90/90;`,
+    `${other} add stats cr=1;`,
     `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defhalt ? '' : ' defhalt=false'};`,
     'target lvl=100 resist=0.1;',
     `active ${k};`,
-    cmds.map(c => `${k} ${c};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`).join(' '),
+    cmds.map(c => (c === 'swap' ? `${other} swap;` : `${k} ${c};`) + (delayFrames > 0 ? ` delay(${delayFrames});` : '')).join(' '),
   ].join('\n');
   const res = await fetch(`${GCSIM_SERVER_URL}/sample/ch_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
   let logs: any[];
@@ -48,7 +59,9 @@ async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: st
   let from = 0;
   for (const c of cmds) {
     const base = c.replace(/\[.*\]$/, '');
-    const l = logs.slice(from).find(x => x.event === 'action' && x.msg.replace(/\[.*\]$/, '') === `executed ${base}`);
+    const l = base === 'swap'
+      ? logs.slice(from).find(x => x.event === 'action' && x.msg.startsWith('swapping '))
+      : logs.slice(from).find(x => x.event === 'action' && x.msg.replace(/\[.*\]$/, '') === `executed ${base}`);
     if (!l) return undefined;
     from = logs.indexOf(l) + 1;
     out.push(l.frame);
@@ -111,6 +124,22 @@ for (const c of characters) {
       cases.push({ id: key, label: `${openerSuffix}モード ca`, suffixes: [openerSuffix, 'n', 'ca', 'n'], cmds: [command, 'attack', c.weaponType === 'bow' ? 'aim' : 'charge', 'attack'], index: 2, tableExp: cf.cancels?.attack ?? cf.total });
     }
   }
+  // 次のアクションの種類（skill・burst・dash・jump・swap）ごとの値: 次が通常攻撃のケースを、次を入れ替えて検査する（D219）
+  const nextVariants: typeof cases = [];
+  const NEXTS: [string, string | undefined, string][] = [['skill', 'e', 'skill'], ['burst', 'q', 'burst'], ['dash', 'dash', 'dash'], ['jump', 'jump', 'jump'], ['swap', undefined, 'swap']];
+  for (const cs of cases) {
+    for (const [label, suffix, command] of NEXTS) {
+      if (suffix !== undefined && !A.some(a => a.id === `${c.id}_${suffix}`)) continue;
+      // 次の行は、最後の（次の通常攻撃の）要素を置き換える。交代は、出場の最後（次の要素なし）
+      const suffixes = suffix === undefined ? cs.suffixes.slice(0, -1) : [...cs.suffixes.slice(0, -1), suffix];
+      // 除外の組（probe の id）: 通常攻撃 `<id>_n[段]`・モードの通常攻撃 `<opener>#n[段]`・それ以外は id
+      const m = /^n(\d+)$/.exec(cs.label) ?? /モード n(\d+)$/.exec(cs.label);
+      const exId = m ? `${cs.id}[${Number(m[1]) - 1}]` : cs.id;
+      if (excludedNext.has(`${exId}|${label}`)) { skippedNext++; continue; }
+      nextVariants.push({ ...cs, label: `${cs.label} → ${label}`, suffixes, cmds: [...cs.cmds.slice(0, -1), command], tableExp: undefined });
+    }
+  }
+  cases.push(...nextVariants);
   for (const cs of cases) {
     for (const [defHalt, delayFrames] of [[true, 0], [false, 0], [true, 6], [false, 6]] as const) {
       const g = await gcsimFrames(k, weapon, defHalt, cs.cmds, delayFrames);
@@ -120,7 +149,10 @@ for (const c of characters) {
       const stints = [{ id: 's1', characterId: c.id, actions: cs.suffixes.map(s => act(c, s, delayFrames / 60)) }];
       const res = calculateRotation([c], stints, { switchDelay: 0.5, defHalt });
       const acts = res.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap');
-      const appInterval = Math.round((acts[cs.index + 1].startTime - acts[cs.index].startTime) * 60);
+      // 交代は、アクションの終わり（所要時間 + 遅延）まで
+      const appInterval = acts[cs.index + 1]
+        ? Math.round((acts[cs.index + 1].startTime - acts[cs.index].startTime) * 60)
+        : Math.round((acts[cs.index].duration + delayFrames / 60) * 60);
       checked++;
       if (Math.abs(appInterval - gInterval) > TOLERANCE) fails.push(`${c.name} ${cs.label} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${appInterval}f / gcsim ${gInterval}f（差 ${appInterval - gInterval}f）`);
     }
@@ -140,7 +172,9 @@ for (const [weaponKey, byRefine] of Object.entries(speeds)) {
     for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
       const k = c.source.gcsimKey as string;
       const n = Math.min(hits.length, 4);
-      const cmds = Array.from({ length: n + 1 }, () => 'attack');
+      // 通常攻撃の連続 + 次（attack と skill。縮めたキャンセルが hitmark より早くなる遷移を含める）
+      for (const nextCmd of ['attack', 'skill']) {
+      const cmds = [...Array.from({ length: n }, () => 'attack'), nextCmd];
       const cfg = [
         `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
         `${k} add weapon="${weaponKey}" refine=${refine} lvl=90/90;`,
@@ -154,7 +188,7 @@ for (const [weaponKey, byRefine] of Object.entries(speeds)) {
       const logs = (await res.json()).logs as any[];
       const g = logs.filter(l => l.event === 'action' && l.msg === 'executed attack').map(l => l.frame as number);
       const cw = { ...structuredClone(c), weaponId: w.id, weaponRefinementRank: Number(refine) };
-      const stints = [{ id: 's1', characterId: c.id, actions: cmds.map(() => act(c, 'n', delayFrames / 60)) }];
+      const stints = [{ id: 's1', characterId: c.id, actions: cmds.map((x, i) => act(c, i === cmds.length - 1 && x === 'skill' ? 'e' : 'n', delayFrames / 60)) }];
       const r = calculateRotation([cw], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster } });
       const acts = r.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap');
       for (let i = 0; i < n; i++) {
@@ -163,11 +197,12 @@ for (const [weaponKey, byRefine] of Object.entries(speeds)) {
         checked++;
         if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}+${w.name}(精錬${refine}) n${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
       }
+      }
     }
   }
 }
 await server.close();
-console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件`);
+console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件 / 次の種類の測定で除外（対象外）${skippedNext} 組`);
 for (const f of fails.slice(0, 60)) console.log('  ✗', f);
 if (fails.length > 0) process.exit(1);
 console.log('✓ アプリの事前計算と gcsim の実測が、ヒットストップを含めて一致している');

@@ -79,11 +79,21 @@ export function applyActionDurations(
   for (const st of stints) for (const a of st.actions) actionById.set(a.id, a);
 
   const next = new Map<string, { seconds: number; base: number }>();
+  // グループの複製（`<元の id>~<回>`）: 元のアクション ID → 回 → 値（複製ごとに別の値を持つ。D217）
+  const copyNext = new Map<string, Map<string, { seconds: number; base: number }>>();
   const changes: DurationChange[] = [];
   let skipped = 0;
   for (const { executed, ref } of pairs) {
     if (!isFirstLap(ref)) continue;
-    const act = actionById.get(ref.actionId);
+    let act = actionById.get(ref.actionId);
+    let copyOf: { orig: string; k: string } | undefined;
+    if (!act) {
+      const m = /^(.*)~(\d+)$/.exec(ref.actionId);
+      if (m && actionById.has(m[1])) {
+        act = actionById.get(m[1]);
+        copyOf = { orig: m[1], k: m[2] };
+      }
+    }
     if (!act) continue;
     if (executed.frames === undefined) {
       skipped++;
@@ -99,18 +109,38 @@ export function applyActionDurations(
       skipped++;
       continue;
     }
-    next.set(ref.actionId, { seconds, base: Number(Math.max(0.05, seconds - (extra - (ref.modeHoldSeconds ?? 0))).toFixed(3)) });
+    const value = { seconds, base: Number(Math.max(0.05, seconds - (extra - (ref.modeHoldSeconds ?? 0))).toFixed(3)) };
+    if (copyOf) {
+      const byK = copyNext.get(copyOf.orig) ?? new Map<string, { seconds: number; base: number }>();
+      byK.set(copyOf.k, value);
+      copyNext.set(copyOf.orig, byK);
+    } else {
+      next.set(ref.actionId, value);
+    }
     const before = effectiveDurations?.[ref.actionId] ?? act.duration;
     if (Math.abs(seconds - before) >= 0.0005) {
-      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: act.name, before, after: seconds });
+      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: copyOf ? `${act.name}（${Number(copyOf.k) + 1} 回目）` : act.name, before, after: seconds });
     }
   }
 
   const updated = stints.map(st => {
-    if (!st.actions.some(a => next.has(a.id))) return st;
+    if (!st.actions.some(a => next.has(a.id) || copyNext.has(a.id))) return st;
     return {
       ...st,
-      actions: st.actions.map(a => (next.has(a.id) ? { ...a, duration: next.get(a.id)!.seconds, durationManual: true, gcsimBaseDuration: next.get(a.id)!.base } : a)),
+      actions: st.actions.map(a => {
+        const own = next.get(a.id);
+        const copies = copyNext.get(a.id);
+        if (!own && !copies) return a;
+        const duration = own ? own.seconds : a.duration;
+        const result = own ? { ...a, duration, durationManual: true, gcsimBaseDuration: own.base } : { ...a };
+        if (copies) {
+          // 複製の値は、元の所要時間（書き戻し後）と対にして持つ（元が手で編集されたら、無視される）
+          const merged: NonNullable<CharacterActionInstance['copyDurations']> = {};
+          for (const [k, v] of copies) merged[k] = { duration: v.seconds, gcsimBaseDuration: v.base, base: duration };
+          result.copyDurations = merged;
+        }
+        return result;
+      }),
     };
   });
   return { stints: updated, changes, skipped };

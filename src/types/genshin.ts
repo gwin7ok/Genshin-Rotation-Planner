@@ -469,6 +469,11 @@ export interface CharacterActionInstance {
   groupId?: string;
   /** グループの展開で増えた複製の何回目か（2 回目 = 1）。計算用で、保存しない（utils/actionGroups.ts） */
   groupCopy?: number;
+  /**
+   * グループの複製（2 回目以降）ごとの、gcsim から書き戻した所要時間（キー = 複製の回: 2 回目 = "1"）。保存する（D217）。
+   * `base` = 書き戻したときの、元のアクションの所要時間。元が手で編集されて `duration` が変わったら、無視する（複製は元と同じに戻る）。
+   */
+  copyDurations?: Record<string, { duration: number; gcsimBaseDuration: number; base: number }>;
   actionTypeId: string; // reference to predefined or custom action
   name: string;
   shortName: string;

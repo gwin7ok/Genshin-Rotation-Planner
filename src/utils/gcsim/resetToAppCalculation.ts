@@ -18,7 +18,7 @@ export interface ResetSummary {
 }
 
 const ACTION_OVERRIDE_KEYS = [
-  'durationManual', 'gcsimBaseDuration', 'cooldown', 'effectDuration', 'gcsimCtOffset', 'gcsimCdResonance', 'extraEffects',
+  'durationManual', 'gcsimBaseDuration', 'copyDurations', 'cooldown', 'effectDuration', 'gcsimCtOffset', 'gcsimCdResonance', 'extraEffects',
 ] as const satisfies readonly (keyof CharacterActionInstance)[];
 
 export function resetToAppCalculation(stints: Stint[]): ResetSummary {

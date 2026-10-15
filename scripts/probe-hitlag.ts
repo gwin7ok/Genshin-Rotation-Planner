@@ -70,10 +70,12 @@ async function frames(k: string, weapon: string, defhalt: boolean, cmds: string[
 const cancelAttack = (f: any): number | undefined => (f ? f.cancels?.attack ?? f.total : undefined);
 
 type Pair = { with: number; without: number };
-/** `d0` = 遅延なしのときの値（標準の遅延のときと違うときだけ）。`afterNormal` = 重撃だけ、通常攻撃の直後に使うときの値（`d0` は、直前の通常攻撃の遅延がないとき） */
+/**
+ * `d0` = 遅延なしのときの値（標準の遅延のときと違うときだけ）。`afterNormal` = 重撃だけ、通常攻撃の直後に使うときの値（`d0` は、直前の通常攻撃の遅延がないとき） */
 type Base = Pair & { d0?: Pair };
-type Entry = Base & { afterNormal?: Base };
-const entries: Record<string, Entry | Base[]> = {};
+/** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（gcsim の `mod extended`。モードの通常攻撃・重撃だけ） */
+type Entry = Base & { afterNormal?: Base; ext?: Pair };
+const entries: Record<string, Entry | Entry[]> = {};
 let tried = 0;
 let failed = 0;
 let dropped = 0;
@@ -157,6 +159,122 @@ for (const c of characters) {
       arr.push(p);
     }
     if (arr.length === hits.length) entries[n.id] = arr;
+  }
+}
+
+// ---- モード（状態）の間の通常攻撃・重撃: マスターの `mode.normalFrames` / `mode.chargedFrames` を使う動作（雷電の爆発・綾人のスキルなど） ----
+// 開いたアクション（opener）を実行した後の attack を続けて測る。キー = `<opener のアクション定義 ID>#n`（段ごとの配列）・`#ca`（重撃）。
+// ヒットストップの延びに加え、モードの状態の終わりが延びたフレーム（`ext`）も記録する。
+const modeRun = async (k: string, weapon: string, defhalt: boolean, cmds: string[], delay: number) => {
+  const script = cmds.map(c => `${k} ${c};${delay > 0 ? ` delay(${delay});` : ''}`).join(' ');
+  const cfg = [
+    `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
+    `${k} add weapon="${weapon}" refine=1 lvl=90/90;`,
+    `${k} add stats cr=1;`,
+    `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defhalt ? '' : ' defhalt=false'};`,
+    'target lvl=100 resist=0.1;',
+    `active ${k};`,
+    script,
+  ].join('\n');
+  const logs = await run(cfg);
+  if (!logs || logs.some(l => l.event === 'sim' && /not ready/.test(l.msg))) return undefined;
+  const execs = logs.filter(l => l.event === 'action' && /^executed /.test(l.msg) && !/^executed (wait|swap)/.test(l.msg));
+  if (execs.length < cmds.length) return undefined;
+  const fr = execs.slice(0, cmds.length).map(l => l.frame as number);
+  // モードの状態: 開いたアクションの実行の直後（5f 以内）に付き、ヒットストップで延びた（`mod extended`）状態のキー
+  const added = logs.filter(l => l.event === 'status' && l.msg.endsWith('added') && l.logs?.key && l.frame >= fr[0] && l.frame <= fr[0] + 5 + 60);
+  const extendedKeys = new Set(logs.filter(l => l.event === 'status' && /extended$/.test(l.msg) && l.logs?.amt !== undefined).map(l => l.logs.key));
+  const key = added.map(l => l.logs.key).find(kk => extendedKeys.has(kk));
+  const ext: number[] = Array(cmds.length).fill(0);
+  if (key) {
+    for (const l of logs) {
+      if (l.event !== 'status' || !/extended$/.test(l.msg) || l.logs?.key !== key) continue;
+      let idx = -1;
+      for (let i = 0; i < fr.length; i++) if (fr[i] <= l.frame) idx = i;
+      if (idx >= 0) ext[idx] += Number(l.logs.amt) || 0;
+    }
+  }
+  return { fr, ext };
+};
+
+for (const c of characters) {
+  const k = c.source.gcsimKey as string;
+  const weapon = weapons[c.weaponType];
+  for (const opener of (c.availableActions ?? []) as any[]) {
+    const mode = opener.mode;
+    if (!mode || (!mode.normalFrames && !mode.chargedFrames)) continue;
+    const command = mapAction(opener.id, c.weaponType).command;
+    if (!command) continue;
+    const jobs: { key: string; index: number; exp: number }[] = [];
+    (mode.normalFrames ?? []).forEach((f: any, i: number) => jobs.push({ key: `${opener.id}#n`, index: i, exp: cancelAttack(f) as number }));
+    const nHits = (mode.normalFrames ?? []).length;
+    if (nHits > 0) {
+      const res: Record<string, Entry[]> = {};
+      let ok = true;
+      const cmds = [command, ...Array.from({ length: nHits + 1 }, () => 'attack')];
+      const got: Record<string, { fr: number[]; ext: number[] }> = {};
+      for (const [dk, delay] of [['s', STD_DELAY], ['0', 0]] as const) {
+        for (const [hk, defhalt] of [['w', true], ['o', false]] as const) {
+          tried++;
+          const r = await modeRun(k, weapon, defhalt, cmds, delay);
+          if (!r) { ok = false; failed++; break; }
+          got[dk + hk] = r;
+        }
+        if (!ok) break;
+      }
+      if (ok) {
+        const arr: Entry[] = [];
+        for (let i = 0; i < nHits; i++) {
+          const exp = jobs[i].exp;
+          const at = (dk: 's' | '0', hk: 'w' | 'o') => {
+            const g = got[dk + hk];
+            const delay = dk === 's' ? STD_DELAY : 0;
+            // cmds[0] = opener、cmds[1 + i] = i 段目の attack。次の attack との差
+            return { delta: g.fr[i + 2] - g.fr[i + 1] - exp - delay, ext: g.ext[i + 1] };
+          };
+          const std: Pair = { with: at('s', 'w').delta, without: at('s', 'o').delta };
+          const d0: Pair = { with: at('0', 'w').delta, without: at('0', 'o').delta };
+          const ext: Pair = { with: at('s', 'w').ext, without: at('s', 'o').ext };
+          const bad = [std, d0].some(p => Math.abs(p.with) > MAX_DELTA || Math.abs(p.without) > MAX_DELTA || p.with < p.without || Math.min(p.with, p.without) < -MAX_NEGATIVE);
+          if (bad) { dropped++; dropList.push(`${opener.id}#n[${i}]: std=${JSON.stringify(std)} d0=${JSON.stringify(d0)}`); ok = false; break; }
+          if (Math.min(std.with, std.without, d0.with, d0.without) < 0) clampList.push(`${opener.id}#n[${i}]: std=${JSON.stringify(std)} d0=${JSON.stringify(d0)}`);
+          const e: Entry = same(std, d0) ? { ...std } : { ...std, d0 };
+          if (ext.with !== 0 || ext.without !== 0) e.ext = ext;
+          arr.push(e);
+        }
+        if (ok) entries[`${opener.id}#n`] = arr;
+      }
+      void res;
+    }
+    // 重撃（モードの重撃のフレーム）: opener → attack → charge → attack。charge の次の attack との差
+    if (mode.chargedFrames) {
+      const exp = cancelAttack(mode.chargedFrames) as number;
+      const cmds = [command, 'attack', c.weaponType === 'bow' ? 'aim' : 'charge', 'attack'];
+      const got: Record<string, { fr: number[]; ext: number[] }> = {};
+      let ok = true;
+      for (const [dk, delay] of [['s', STD_DELAY], ['0', 0]] as const) {
+        for (const [hk, defhalt] of [['w', true], ['o', false]] as const) {
+          tried++;
+          const r = await modeRun(k, weapon, defhalt, cmds, delay);
+          if (!r) { ok = false; failed++; break; }
+          got[dk + hk] = r;
+        }
+        if (!ok) break;
+      }
+      if (ok) {
+        const g = (dk: 's' | '0', hk: 'w' | 'o') => ({ delta: got[dk + hk].fr[3] - got[dk + hk].fr[2] - exp - (dk === 's' ? STD_DELAY : 0), ext: got[dk + hk].ext[2] });
+        const std: Pair = { with: g('s', 'w').delta, without: g('s', 'o').delta };
+        const d0: Pair = { with: g('0', 'w').delta, without: g('0', 'o').delta };
+        const ext: Pair = { with: g('s', 'w').ext, without: g('s', 'o').ext };
+        const bad = [std, d0].some(p => Math.abs(p.with) > MAX_DELTA || Math.abs(p.without) > MAX_DELTA || p.with < p.without || Math.min(p.with, p.without) < -MAX_NEGATIVE);
+        if (bad) { dropped++; dropList.push(`${opener.id}#ca: std=${JSON.stringify(std)} d0=${JSON.stringify(d0)}`); }
+        else {
+          const e: Entry = same(std, d0) ? { ...std } : { ...std, d0 };
+          if (ext.with !== 0 || ext.without !== 0) e.ext = ext;
+          entries[`${opener.id}#ca`] = e;
+        }
+      }
+    }
   }
 }
 

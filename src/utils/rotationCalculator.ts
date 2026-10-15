@@ -114,7 +114,8 @@ type HitlagPair = { with: number; without: number };
  * gcsim の動きはキャラごとに違い、遅延が 1f でもあると省かないキャラ（リサ）がいる。`d0` は、直前の通常攻撃の遅延がないときの値）
  */
 type HitlagBase = HitlagPair & { d0?: HitlagPair };
-type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase };
+/** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（モードの通常攻撃・重撃のキー `<opener>#n` / `#ca` だけ。gcsim の `mod extended`） */
+type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair };
 const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
 
 /** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代。'wait' = 次が待機（CanQueueAfter） */
@@ -771,6 +772,8 @@ export function calculateRotation(
       let hitFallbackDuration: number | undefined;
       let normalHitIndex = 0;
       let normalHitFrames: ActionFrames | undefined;
+      // モードの専用のフレーム（`mode.normalFrames` / `chargedFrames`）を使った通常攻撃・重撃（ヒットストップの延びのキーと段）
+      let modeHit: { key: string; index: number; window: ModeWindow } | undefined;
       // モードの間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの夜巡り）
       const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames || m.def.chargedFrames));
       if (act.type === 'normal') {
@@ -784,7 +787,10 @@ export function calculateRotation(
         }
         const ridingDrain = [...modeWindows.values()].find(m => m.def.drain && m.drain?.riding && isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001);
         const modeNormal = frameMode?.def.normalFrames ?? ridingDrain?.def.drain?.riddenNormalFrames;
-        if (modeNormal?.length) frames = modeNormal[normalStreak % modeNormal.length];
+        if (modeNormal?.length) {
+          frames = modeNormal[normalStreak % modeNormal.length];
+          if (frameMode?.def.normalFrames) modeHit = { key: `${frameMode.actionDefId}#n`, index: normalStreak % modeNormal.length, window: frameMode };
+        }
         normalStreak += 1;
       } else {
         // 命ノ星座で、モードの間は通常攻撃の段が戻らない（兹白の C4。gcsim: ResetNormalCounter。モードを開く E もモードの中で数える）
@@ -795,7 +801,10 @@ export function calculateRotation(
         if (!keepChain) normalStreak = 0;
       }
       if (act.type === 'burst' && frameMode?.def.burstFrames) frames = frameMode.def.burstFrames;
-      if (act.type === 'charged' && frameMode?.def.chargedFrames) frames = frameMode.def.chargedFrames;
+      if (act.type === 'charged' && frameMode?.def.chargedFrames) {
+        frames = frameMode.def.chargedFrames;
+        modeHit = { key: `${frameMode.actionDefId}#ca`, index: 0, window: frameMode };
+      }
       // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
       if (modeEnder?.ender.frames) {
         const ns = modeEnder.window.def.nStacks;
@@ -856,6 +865,19 @@ export function calculateRotation(
             : undefined);
         if (pair) hitlagFrames = options?.defHalt === false ? pair.without : pair.with;
       }
+      // モードの専用のフレームの通常攻撃・重撃: ヒットストップの延び（遅延で値が変わるものは d0）と、モードの終わりの延び（ext）。
+      // フレームを、後のモードの上書き（終わらせる動作・もう一度使った動作など）で置き換えたときは足さない
+      let modeExtFrames = 0;
+      if (modeHit && frames && (frames === modeHit.window.def.chargedFrames || modeHit.window.def.normalFrames?.includes(frames))) {
+        const raw = HITLAG_FRAMES[modeHit.key];
+        const e = Array.isArray(raw) ? raw[modeHit.index] : raw;
+        if (e) {
+          const base = actionDelayOf(act) === 0 && e.d0 ? e.d0 : e;
+          const noDef = options?.defHalt === false;
+          hitlagFrames = noDef ? base.without : base.with;
+          if (e.ext) modeExtFrames = noDef ? e.ext.without : e.ext.with;
+        }
+      }
       {
         if (frames) {
           const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
@@ -886,6 +908,8 @@ export function calculateRotation(
         ? (act.durationManual ? Math.max(0, act.duration || 0) : holdRemainingAt(actionStartTime))
         : Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
+      // モードの終わりを、そのヒットのヒットストップで延ばす（gcsim の `mod extended`。雷電の爆発・綾人のスキルなど。D215）
+      if (modeHit && modeExtFrames > 0) extendSpecial(modeHit.window, modeExtFrames / 60);
 
       // 長押しの秒数（CT開始位置が「長押し終了」のアクション）: 所要時間 −（ホールド 0 のときのモーション）。
       // モーション = 次に続くアクションに応じたキャンセルフレーム。frames に長押しが含まれる分（holdInFrames）は差し引く

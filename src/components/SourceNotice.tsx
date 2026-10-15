@@ -18,7 +18,7 @@ export function SourceNotice() {
         非公式のファンツールです。ゲームの名称・画像などの権利は、各権利者（HoYoverse）に帰属します。無保証です。
       </p>
       <p>
-        バージョン v{APP_VERSION}（コミット {APP_COMMIT}）
+        バージョン v{APP_VERSION}（コミット {APP_COMMIT}）・対応 gcsim {version}
       </p>
       <p>
         編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。編成のデータをサーバーに送ることはありません（gcsim も、ブラウザの中で動きます）。

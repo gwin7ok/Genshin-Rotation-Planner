@@ -102,6 +102,8 @@ export interface RotationOptions {
  * 待機（`wait`）は、アクションの実行の後、この時刻から始まる（gcsim run.go: queuePhase → handleWait）
  */
 const CAN_QUEUE_AFTER = (canQueueAfterData as { entries: Record<string, number> }).entries;
+/** 防御ヒットストップなしのときの値（ありのときと違うものだけ） */
+const CAN_QUEUE_AFTER_NO_DEFHALT = ((canQueueAfterData as { entriesNoDefHalt?: Record<string, number> }).entriesNoDefHalt) ?? {};
 
 /**
  * ヒットストップで延びるフレーム（gcsim の実測。scripts/probe-hitlag.ts が作る。D215）。キー = アクション定義 ID。
@@ -131,8 +133,8 @@ type NextKey = CancelTarget | 'wait';
  * 次が待機のときの、アクションの所要時間（フレーム）。gcsim は、アクションの実行の後、CanQueueAfter（最も早いキャンセル）まで進めてから待機を始める。
  * 実測の表（スキル・爆発）があればそれ、無ければキャンセルの表の最小値（実測と 374 件中 322 件が一致、349 件が 6 フレーム以内）、それも無ければ全体のフレーム
  */
-function canQueueFrames(frames: { total: number; cancels: Partial<Record<CancelTarget, number>> }, def: { id: string; frames?: unknown } | undefined): number {
-  const measured = def && frames === def.frames ? CAN_QUEUE_AFTER[def.id] : undefined;
+function canQueueFrames(frames: { total: number; cancels: Partial<Record<CancelTarget, number>> }, def: { id: string; frames?: unknown } | undefined, defHalt = true): number {
+  const measured = def && frames === def.frames ? (!defHalt ? CAN_QUEUE_AFTER_NO_DEFHALT[def.id] : undefined) ?? CAN_QUEUE_AFTER[def.id] : undefined;
   if (measured !== undefined) return measured;
   const values = Object.values(frames.cancels).filter((v): v is number => typeof v === 'number' && v > 0);
   return values.length > 0 ? Math.min(...values) : frames.total;
@@ -1000,9 +1002,21 @@ export function calculateRotation(
               if (matches && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) { burstCharged = bf; break; }
             }
           }
-          const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
+          const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef, options?.defHalt !== false) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
           // ヒットストップの延びは、次のアクションの種類で値が違うことがある（次が待機・不明のときは、次が通常攻撃のときの値）
-          hitlagFrames = hitlagFor(nextKey === 'wait' ? undefined : nextKey);
+          if (nextKey === 'wait') {
+            // 次が待機のとき: gcsim の待機は、CanQueueAfter（ヒット判定）の時点から始まり、ヒットストップの凍結は待機の中に入る。
+            // 待機の後のアクションが、このアクションのキャンセル（+ ヒットストップ）より前に始められないときだけ、その不足分が延びる
+            // （N → wait(N) → N の間隔 = max(キャンセル + ヒットストップ, CanQueueAfter + 待機)。D239）
+            const waitAct = rawActions[aIdx + 1];
+            const waitFrames = waitAct.actionTypeId === MODE_HOLD_ACTION_ID ? Infinity : Math.round(Math.max(0, waitAct.duration || 0) * 60);
+            const afterKey = cancelKeyOf(rawActions[aIdx + 2], char.weaponType);
+            const afterHit = hitlagFor(afterKey === 'wait' ? undefined : afterKey);
+            const afterCancel = (afterKey && afterKey !== 'wait' ? frames.cancels[afterKey] : undefined) ?? frames.total;
+            hitlagFrames = Math.max(0, afterCancel + afterHit - motion - waitFrames);
+          } else {
+            hitlagFrames = hitlagFor(nextKey);
+          }
           // 通常攻撃は、武器の攻撃速度で縮む（ヒットストップの延びは、縮んだ後に足される）
           const atkSpd = act.type === 'normal' || (act.type === 'charged' && CHARGED_ATTACK_SPEED_KEYS.has(char.source?.gcsimKey ?? '')) ? attackSpeedOf(char, actionStartTime, sIdx, rawActions[aIdx - 1]?.type === 'normal' ? previousNormal : undefined) : 0;
           // 縮めたキャンセルが、ヒット判定（hitmark）より早くなるときは、ヒット判定まで待つ（gcsim: CanQueueAfter = hitmark。雷電の爆発中の 5 段目 → E など）
@@ -1048,7 +1062,7 @@ export function calculateRotation(
       let holdSeconds: number | undefined;
       if (cooldownStart?.from === 'holdEnd') {
         const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
-        const motionFrames = frames ? (nextKey === 'wait' ? canQueueFrames(frames, actionDef) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) : undefined;
+        const motionFrames = frames ? (nextKey === 'wait' ? canQueueFrames(frames, actionDef, options?.defHalt !== false) : (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total) : undefined;
         holdSeconds = motionFrames === undefined
           ? 0
           // モードの間に別の動作になった長押し（キィニチの廻狩貫鱗砲）は、フレームが長押しを含まない（既定は最短の照準）

@@ -8,6 +8,7 @@
  * 待機（`wait(N)`）が続くとき、待機はこの時刻から始まる（run.go: queuePhase → handleWait）。アプリの「待機」の位置を gcsim に合わせるために使う。
  * 単独のキャラで、`<アクション>; wait(60);` を実行し、実行のフレームから、続く `wait` が実行されたフレームまでの差を記録する。
  * 対象: マスターの skill（CT を始める通常のスキル）・burst（特殊爆発を除く）。結果は src/data/can_queue_after.json に書く。
+ * `entries` = 防御ヒットストップあり（既定）。`entriesNoDefHalt` = なし（defhalt=false）のとき、ありと違うものだけ（ヒットストップの凍結が、CanQueueAfter の前に入るため。D239）。
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
@@ -19,7 +20,7 @@ const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.v
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
 async function run(config: string): Promise<any[] | undefined> {
-  const res = await fetch(`${GCSIM_SERVER_URL}/sample/cqa_${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
+  const res = await fetch(`${GCSIM_SERVER_URL}/sample/cqa_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
   const text = await res.text();
   try {
     const j = JSON.parse(text);
@@ -30,8 +31,28 @@ async function run(config: string): Promise<any[] | undefined> {
 }
 
 const entries: Record<string, number> = {};
+const entriesNoDefHalt: Record<string, number> = {};
 let tried = 0;
 let failed = 0;
+
+/** `<アクション>; wait(60);` を実行して、実行から続く `wait` の実行までのフレーム数 */
+async function measure(k: string, weapon: string, command: string, defhalt: boolean): Promise<number | undefined> {
+  const cfg = [
+    `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
+    `${k} add weapon="${weapon}" refine=1 lvl=90/90;`,
+    `${k} add stats cr=1;`,
+    `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defhalt ? '' : ' defhalt=false'};`,
+    'target lvl=100 resist=0.1;',
+    `active ${k};`,
+    `wait(30); ${k} ${command}; wait(60); wait(60);`,
+  ].join('\n');
+  const logs = await run(cfg);
+  const base = command.replace(/\[.*$/, '');
+  const exec = logs?.find(l => l.event === 'action' && l.msg.startsWith(`executed ${base}`));
+  const wait = exec ? logs!.find(l => l.event === 'action' && /^executed wait/.test(l.msg) && l.frame > exec.frame) : undefined;
+  return exec && wait ? wait.frame - exec.frame : undefined;
+}
+
 for (const c of characters) {
   const k = c.source.gcsimKey as string;
   const defs = (c.availableActions ?? []).filter((a: any) => (a.type === 'skill' && !a.cooldownPool && a.startsSkillCooldown === true) || (a.type === 'burst' && !a.specialBurst));
@@ -39,22 +60,12 @@ for (const c of characters) {
     const command = mapAction(def.id, c.weaponType).command;
     if (!command) continue;
     tried++;
-    const cfg = [
-      `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
-      `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`,
-      `${k} add stats cr=1;`,
-      'options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true;',
-      'target lvl=100 resist=0.1;',
-      `active ${k};`,
-      `wait(30); ${k} ${command}; wait(60); wait(60);`,
-    ].join('\n');
-    const logs = await run(cfg);
-    const base = command.replace(/\[.*$/, '');
-    const exec = logs?.find(l => l.event === 'action' && l.msg.startsWith(`executed ${base}`));
-    const wait = exec ? logs!.find(l => l.event === 'action' && /^executed wait/.test(l.msg) && l.frame > exec.frame) : undefined;
-    if (!exec || !wait) { failed++; continue; }
-    entries[def.id] = wait.frame - exec.frame;
+    const withHalt = await measure(k, weapons[c.weaponType], command, true);
+    if (withHalt === undefined) { failed++; continue; }
+    entries[def.id] = withHalt;
+    const noHalt = await measure(k, weapons[c.weaponType], command, false);
+    if (noHalt !== undefined && noHalt !== withHalt) entriesNoDefHalt[def.id] = noHalt;
   }
 }
-fs.writeFileSync('src/data/can_queue_after.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), entries }, null, 1) + '\n');
-console.log(`定義 ${tried} 件 / 記録 ${Object.keys(entries).length} / 未収集 ${failed}`);
+fs.writeFileSync('src/data/can_queue_after.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), entries, entriesNoDefHalt }, null, 1) + '\n');
+console.log(`定義 ${tried} 件 / 記録 ${Object.keys(entries).length} / 未収集 ${failed} / 防御ヒットストップなしで違う ${Object.keys(entriesNoDefHalt).length}`);

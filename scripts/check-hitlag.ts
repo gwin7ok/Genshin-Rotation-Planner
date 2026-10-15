@@ -209,7 +209,9 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
   const c = candidates.find(x => x.name === CHARS[w.weaponType]) ?? candidates[0];
   const hits: any[] = c.availableActions.find((a: any) => a.id === `${c.id}_n`)?.normalHits ?? [];
   const k = c.source.gcsimKey as string;
-  const n = Math.min(hits.length, 4);
+  // 命中でスタックする効果（複合弓・松韻の響く頃）は、効果が付くまで・上限まで、通常攻撃を続ける
+  const stackish = (Array.isArray(effect.when) ? effect.when : [effect.when]).some((x: any) => x.kind === 'hitStacks' || x.kind === 'stackProc');
+  const n = stackish ? 8 : Math.min(hits.length, 4);
   // シナリオ: 爆発の後なら、爆発 → 通常攻撃 ×(n + 1)。重撃の後なら、通常攻撃 → 重撃 → 通常攻撃 ×(n + 1)。それ以外は、通常攻撃 ×(n + 1)
   const kinds: string[] = (Array.isArray(effect.when) ? effect.when : [effect.when]).map((x: any) => x.kind);
   const prefix: string[] = kinds.includes('afterBurst') ? ['burst'] : kinds.includes('afterChargedAttack') ? ['attack', 'charge'] : [];

@@ -44,6 +44,16 @@ export type AttackSpeedCondition =
    * `hitlag`: ヒットストップで延びる効果（上と同じ）
    */
   | { kind: 'afterCritHit'; seconds: number; icdSeconds: number; hitlag?: boolean }
+  /**
+   * 命中のたびに積むスタック（武器: 複合弓）。通常攻撃・重撃の命中が `tags`、内部 CT `icdSeconds`、最大 `maxStacks`、
+   * 最後に積んでから `seconds` 秒で全て消える。効果の `perStack: true` のとき、速度 = 1 スタックの値 × スタック数
+   */
+  | { kind: 'hitStacks'; tags: string[]; icdSeconds: number; maxStacks: number; seconds: number }
+  /**
+   * 命中を `stacksNeeded` 回数えて発動する効果（武器: 松韻の響く頃）。命中が `tags`、内部 CT `icdSeconds`（スタックは消えない）、
+   * 発動したら `cooldownSeconds` の間は数えない。発動から `seconds` 秒の間が有効
+   */
+  | { kind: 'stackProc'; tags: string[]; icdSeconds: number; stacksNeeded: number; cooldownSeconds: number; seconds: number }
   /** 効果を受けるキャラの武器の種類（重雲の固有天賦 1: 片手剣・両手剣・長柄武器） */
   | { kind: 'weaponType'; types: string[] }
   /**
@@ -58,6 +68,8 @@ export interface AttackSpeedEffect {
    * 効果の持ち主（武器・聖遺物セット・キャラの gcsim のキー）。聖遺物は 4 セットの効果。
    * キャラは、`minConstellation`（命ノ星座がこれ以上のとき）。天賦レベルは、gcsim の設定と同じ 9 で決める
    */
+  /** true: 速度 = amount × `hitStacks` のスタック数 */
+  perStack?: boolean;
   source: {
     type: 'weapon' | 'artifact' | 'character';
     gcsimKey: string;
@@ -103,6 +115,24 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
     amount: () => 0.1,
     when: [{ kind: 'afterChargedAttack', seconds: 15 }, { kind: 'afterNormalAttack' }],
     evidence: 'internal/artifacts/desertpavilionchronicle/desertpavilionchronicle.go: 4pc。重撃（AttackTagExtra）が命中すると 15 秒（desert-4pc-spd。ヒットストップで延びる）、CurrentState() == NormalAttackState のときだけ AtkSpd + 0.1',
+  },
+
+  // ---- 命中でスタックする武器（D231）。命中は、攻撃のヒット判定のフレーム（矢の飛行時間は見ない）----
+  {
+    source: { type: 'weapon', gcsimKey: 'compoundbow' },
+    amount: refine => 0.009 + refine * 0.003,
+    perStack: true,
+    when: { kind: 'hitStacks', tags: ['normal', 'charged'], icdSeconds: 0.3, maxStacks: 4, seconds: 6 },
+    evidence: 'internal/weapons/bow/compound/compound.go: 通常攻撃・重撃（AttackTagNormal / AttackTagExtra）の命中で、内部 CT 18f、最大 4 スタック、最後から 360f（NewBaseWithHitlag）。AtkSpd = (0.009 + r × 0.003) × スタック',
+  },
+  {
+    source: { type: 'weapon', gcsimKey: 'songofbrokenpines', scope: 'team' },
+    amount: refine => 0.09 + refine * 0.03,
+    when: [
+      { kind: 'stackProc', tags: ['normal', 'charged'], icdSeconds: 0.3, stacksNeeded: 4, cooldownSeconds: 20, seconds: 12 },
+      { kind: 'afterNormalAttack' },
+    ],
+    evidence: 'internal/weapons/claymore/pines/pines.go: 通常攻撃・重撃の命中を、内部 CT 18f で数え、4 回で発動 → 編成の全員に 12 秒（pines-proc。NormalAttackState のときだけ AtkSpd 0.09 + r × 0.03）、発動後 20 秒は数えない',
   },
 
   // ---- キャラ（自分のアクションだけで決まる効果。D223）。持続は、効果が付く時刻（フレーム）から数える ----
@@ -237,6 +267,10 @@ export interface AttackSpeedContext {
    */
   teamOwners?: {
     characterKey: string;
+    /** 持ち主の武器（gcsim のキー・精錬）と、攻撃の命中（武器の効果が、編成の全員に付くとき） */
+    weaponKey?: string;
+    refine: number;
+    hitTimes?: { t: number; hitlag: number; tag: 'normal' | 'charged' | 'skill' | 'burst' }[];
     constellation: number;
     secondsSinceBurst?: number;
     hitlagSinceBurst?: number;
@@ -244,7 +278,7 @@ export interface AttackSpeedContext {
     hitlagSinceSkill?: number;
   }[];
   /** このキャラの攻撃の命中の時刻（秒。昇順）と、そのときのキャラ自身のヒットストップの合計（秒） */
-  hitTimes?: { t: number; hitlag: number }[];
+  hitTimes?: { t: number; hitlag: number; tag: 'normal' | 'charged' | 'skill' | 'burst' }[];
   /** このキャラが、交代で出場した時刻（秒。先頭の出場を除く）の一覧と、このアクションの開始時刻 */
   enterFieldTimes?: { t: number; hitlag: number }[];
   /** このアクションの開始時刻（秒）と、そこまでのキャラ自身のヒットストップの合計（秒） */
@@ -268,26 +302,44 @@ export function attackSpeedFor(ctx: AttackSpeedContext): number {
     if (e.source.scope === 'team') {
       // 編成の持ち主の状態で判定する（受け取るキャラの、通常攻撃の状態などは、そのまま使う）
       for (const o of ctx.teamOwners ?? []) {
-        if (o.characterKey !== e.source.gcsimKey) continue;
+        if ((e.source.type === 'weapon' ? o.weaponKey : o.characterKey) !== e.source.gcsimKey) continue;
         if (e.source.minConstellation !== undefined && o.constellation < e.source.minConstellation) continue;
         const oc: AttackSpeedContext = {
           ...ctx,
+          hitTimes: o.hitTimes,
           secondsSinceBurst: o.secondsSinceBurst,
           hitlagSinceBurst: o.hitlagSinceBurst,
           secondsSinceSkill: o.secondsSinceSkill,
           hitlagSinceSkill: o.hitlagSinceSkill,
           burstInSameStint: false,
         };
-        if (conditions.every(w => conditionHolds(w, oc))) total += e.amount(ctx.refine, o.constellation);
+        if (conditions.every(w => conditionHolds(w, oc))) total += e.amount(o.refine, o.constellation) * (e.perStack ? stackCount(conditions, oc) : 1);
       }
       continue;
     }
     const owned = e.source.type === 'weapon' ? ctx.weaponKey : e.source.type === 'artifact' ? ctx.artifactKey : ctx.characterKey;
     if (!owned || e.source.gcsimKey !== owned) continue;
     if (e.source.minConstellation !== undefined && ctx.constellation < e.source.minConstellation) continue;
-    if (conditions.every(w => conditionHolds(w, ctx))) total += e.amount(ctx.refine, ctx.constellation);
+    if (conditions.every(w => conditionHolds(w, ctx))) total += e.amount(ctx.refine, ctx.constellation) * (e.perStack ? stackCount(conditions, ctx) : 1);
   }
   return total;
+}
+
+/** 命中のスタック数（`hitStacks`）。命中を時刻の順に見て、内部 CT・最後に積んでからの持続で数える */
+function stackCount(conditions: AttackSpeedCondition[], ctx: AttackSpeedContext): number {
+  const w = conditions.find((x): x is Extract<AttackSpeedCondition, { kind: 'hitStacks' }> => x.kind === 'hitStacks');
+  if (!w || ctx.now === undefined) return 0;
+  let stacks = 0;
+  let lastGain = -Infinity;
+  for (const e of ctx.hitTimes ?? []) {
+    if (e.t > ctx.now + 1e-9) break;
+    if (!w.tags.includes(e.tag)) continue;
+    if (e.t - lastGain < w.icdSeconds - 1e-9) continue;
+    if (e.t - lastGain > w.seconds + 1e-9) stacks = 0;
+    stacks = Math.min(stacks + 1, w.maxStacks);
+    lastGain = e.t;
+  }
+  return ctx.now - lastGain > w.seconds + 1e-9 ? 0 : stacks;
 }
 
 function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boolean {
@@ -295,10 +347,28 @@ function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boole
     case 'always': return true;
     case 'afterBurst':
       return ctx.secondsSinceBurst !== undefined && ctx.secondsSinceBurst - (w.hitlag ? ctx.hitlagSinceBurst ?? 0 : 0) <= w.seconds + 1e-9 && (!w.sameStint || !!ctx.burstInSameStint);
+    case 'hitStacks': return stackCount([w], ctx) > 0;
+    case 'stackProc': {
+      let count = 0;
+      let lastStack = -Infinity;
+      let cooldownUntil = -Infinity;
+      let proc: number | undefined;
+      for (const e of ctx.hitTimes ?? []) {
+        if (ctx.now !== undefined && e.t > ctx.now + 1e-9) break;
+        if (!w.tags.includes(e.tag)) continue;
+        if (e.t < cooldownUntil - 1e-9) continue;
+        if (e.t - lastStack < w.icdSeconds - 1e-9) continue;
+        lastStack = e.t;
+        count++;
+        if (count >= w.stacksNeeded) { count = 0; proc = e.t; cooldownUntil = e.t + w.cooldownSeconds; }
+      }
+      return proc !== undefined && ctx.now !== undefined && ctx.now - proc <= w.seconds + 1e-9;
+    }
     case 'afterCritHit': {
       let triggered: { t: number; hitlag: number } | undefined;
       for (const e of ctx.hitTimes ?? []) {
         if (ctx.now !== undefined && e.t > ctx.now + 1e-9) break;
+        if (e.tag === 'charged') continue;
         if (triggered === undefined || e.t - triggered.t >= w.icdSeconds - 1e-9) triggered = e;
       }
       if (triggered === undefined || ctx.now === undefined) return false;

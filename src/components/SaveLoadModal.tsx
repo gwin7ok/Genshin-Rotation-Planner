@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { PRESET_COUNT, PRESET_NAME_PREFIX, restorePresets } from '../utils/presets';
+import { useDialogs } from './DialogProvider';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
@@ -76,6 +77,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   onLoadSlot,
   onResetToDefault,
 }) => {
+  const { confirm, alert: showAlert } = useDialogs();
   const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>([]);
   const [newSlotName, setNewSlotName] = useState('');
   const [newSlotDesc, setNewSlotDesc] = useState('');
@@ -163,8 +165,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   };
 
   // プリセット編成（同梱の 5 編成）を、保存編成に復元する（同じ名前の保存編成は、上書き）
-  const handleRestorePresets = () => {
-    const ok = window.confirm(
+  const handleRestorePresets = async () => {
+    const ok = await confirm(
       `プリセット ${PRESET_COUNT} 編成を復元します。\n\n` +
       `・名前が「${PRESET_NAME_PREFIX}」で始まる、同じ名前の保存編成は、同梱の内容で上書きされます\n` +
       `・ほかの保存編成は、そのままです\n\n` +
@@ -287,10 +289,10 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           });
           onClose();
         } else {
-          alert('無効なローテーションJSONファイルです。');
+          showAlert('無効なローテーションJSONファイルです。');
         }
       } catch (err) {
-        alert('JSONファイルの読み込みに失敗しました。');
+        showAlert('JSONファイルの読み込みに失敗しました。');
       }
     };
     reader.readAsText(file);
@@ -317,10 +319,10 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     e.target.value = '';
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       const parsed = parseBackup(String(ev.target?.result ?? ''));
       if (!parsed.ok) {
-        alert((parsed as { ok: false; error: string }).error);
+        showAlert((parsed as { ok: false; error: string }).error);
         return;
       }
       const s = summarizeBackup(parsed.backup);
@@ -333,7 +335,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         '',
         '復元後、画面を再読み込みします。よろしいですか？',
       ];
-      if (!window.confirm(lines.join('\n'))) return;
+      if (!(await confirm(lines.join('\n')))) return;
       restoreBackup(parsed.backup, { restoreCurrent: true });
       window.location.reload();
     };
@@ -357,10 +359,10 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         });
         onClose();
       } else {
-        alert('無効なローテーションJSON形式です。');
+        showAlert('無効なローテーションJSON形式です。');
       }
     } catch (err) {
-      alert('JSON構文が正しくありません。');
+      showAlert('JSON構文が正しくありません。');
     }
   };
 
@@ -769,8 +771,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         {/* Footer */}
         <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-t border-slate-800 bg-slate-950/70">
           <button
-            onClick={() => {
-              if (window.confirm('現在の編集内容を初期状態（キャラ未設定の編成）に戻しますか？')) {
+            onClick={async () => {
+              if (await confirm('現在の編集内容を初期状態（キャラ未設定の編成）に戻しますか？', { danger: true })) {
                 clearActiveState();
                 onResetToDefault();
                 onClose();

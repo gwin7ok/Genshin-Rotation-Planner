@@ -18,6 +18,7 @@ import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
+import { useDialogs } from './components/DialogProvider';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
@@ -70,6 +71,7 @@ function makeReactionSignature(
 }
 
 export default function App() {
+  const { confirm, alert: showAlert, prompt } = useDialogs();
   // 0. Active App Database (Characters, Weapons, Artifacts persisted in LocalStorage)
   const [database, setDatabase] = useState<AppDatabase>(() => loadDatabase());
 
@@ -287,7 +289,7 @@ export default function App() {
   }, [isPlaying, playbackSpeed, totalDuration, loopPeriod]);
 
   // 8. Handle Custom Slot Loading
-  const handleLoadCustomSlot = (slot: {
+  const handleLoadCustomSlot = async (slot: {
     party: PartyMember[];
     stints: Stint[];
     loopStartIndex?: number;
@@ -309,7 +311,7 @@ export default function App() {
       for (;;) {
         const dup = findSlotByName(getSavedSlots(), importName);
         if (!dup) break;
-        const overwrite = window.confirm(
+        const overwrite = await confirm(
           `「${importName}」と同じ名前の編成が、すでにあります。\n\n` +
           `OK: その編成を上書きして保存する\n` +
           `キャンセル: 名前を変更して保存する`,
@@ -318,7 +320,7 @@ export default function App() {
           overwriteTarget = dup;
           break;
         }
-        const input = window.prompt('変更後の編成名を入力してください', importName);
+        const input = await prompt('変更後の編成名を入力してください', importName);
         if (input === null || !input.trim()) return; // やめる
         importName = input.trim();
       }
@@ -438,7 +440,7 @@ export default function App() {
   };
 
   // 「アプリの計算に戻す」: 今のアクションの並びを基準に、gcsim の反映・個別の変更を外して、アプリの計算を全体に再適用する
-  const handleResetToAppCalculation = () => {
+  const handleResetToAppCalculation = async () => {
     // 戻した後に、前回の「gcsim で計算」の結果の表示・CT 待ちの印・反応の行が残らないようにする
     setGcsimBanner(null);
     setGcsimReactions(null);
@@ -449,7 +451,7 @@ export default function App() {
       updateStints(visibleStints.map(st => ({ ...st, actions: st.actions.map(a => ({ ...a })) })));
       return;
     }
-    const ok = window.confirm(
+    const ok = await confirm(
       `アクションの並びはそのままに、アプリの計算に戻します。\n\n` +
       `・アクション ${summary.actionsChanged} 件の、所要時間の固定・個別の CT・効果時間・gcsim の補正を外します\n` +
       `・出場ブロック ${summary.stintsChanged} 件の、gcsim から書き込んだ効果を外します（gcsim の結果から追加した発動バフ ${summary.passivesRemoved} 件を削除）\n\n` +
@@ -656,10 +658,10 @@ export default function App() {
             name: parsed.name || nameFromFileName(file.name),
           });
         } else {
-          alert('無効なローテーションJSONファイルです。');
+          showAlert('無効なローテーションJSONファイルです。');
         }
       } catch (err) {
-        alert('JSONファイルの読み込みに失敗しました。');
+        showAlert('JSONファイルの読み込みに失敗しました。');
       }
     };
     reader.readAsText(file);

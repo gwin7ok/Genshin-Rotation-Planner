@@ -88,9 +88,14 @@ type Base0 = Pair & { d0?: Pair };
  * 次が通常攻撃のときより、キャンセルが早いと、ヒットストップの延びが、大きく効くことがある（雷電の 5 段目 → E で +3f。D219）
  */
 type Base = Base0 & { byNext?: Record<string, Base0> };
+/**
+ * `afterCharged` = 通常攻撃の 1 段目だけ、重撃の直後に使うときの、通常のときとの差（構え = windup が変わる。放浪者は −2f。gcsim の attackWindupNormal）。
+ * 次のアクションの種類によらず同じなので、差として記録する（`d0` は、直前の重撃の遅延がないとき）。差が 0 のキャラは記録しない
+ */
+type NormalBase = Base & { afterCharged?: Base0 };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（gcsim の `mod extended`。モードの通常攻撃・重撃だけ） */
 type Entry = Base & { afterNormal?: Base; ext?: Pair };
-const entries: Record<string, Entry | Entry[]> = {};
+const entries: Record<string, Entry | NormalBase[]> = {};
 let tried = 0;
 let failed = 0;
 let dropped = 0;
@@ -208,7 +213,25 @@ for (const c of characters) {
       if (!p) break;
       arr.push(p);
     }
-    if (arr.length === hits.length) entries[n.id] = arr;
+    if (arr.length === hits.length) {
+      entries[n.id] = arr;
+      // 1 段目を、重撃の直後に使うとき（重撃のあとは、1 段目に戻る）
+      const ca = actions.find(a => a.id === `${c.id}_ca`);
+      const caCommand = ca && !ca.gcsimUnsupported ? mapAction(ca.id, c.weaponType).command : undefined;
+      if (caCommand && caCommand !== 'aim') {
+        const exp = cancelAttack(hits[0].frames)!;
+        const af = await measureBase(k, weapon, ['attack', caCommand, 'attack', 'attack'], 2, exp, `${n.id}[0]+afterCharged`, false, undefined);
+        if (af) {
+          const b = arr[0];
+          const diff = (x: Pair, y: Pair): Pair => ({ with: x.with - y.with, without: x.without - y.without });
+          const std = diff(af, b);
+          const d0 = diff(af.d0 ?? af, b.d0 ?? b);
+          if (std.with !== 0 || std.without !== 0 || d0.with !== 0 || d0.without !== 0) {
+            (arr[0] as NormalBase).afterCharged = same(std, d0) ? std : { ...std, d0 };
+          }
+        }
+      }
+    }
   }
 }
 

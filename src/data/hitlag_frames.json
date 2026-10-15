@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T18:07:26.360Z",
+ "generatedAt": "2026-10-15T18:23:14.948Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -9,6 +9,13 @@
   "10000114-cryo_n[4]|dash",
   "10000114-cryo_n[4]|jump",
   "10000114-cryo_n[4]|swap"
+ ],
+ "excludedAfter": [
+  "10000036-cryo_n|afterSkill",
+  "10000080-cryo_n|afterSkill",
+  "10000102-hydro_n|afterSkill",
+  "10000111-electro_n|afterSkill",
+  "10000113-anemo_n|afterSkill"
  ],
  "entries": {
   "10000002-cryo_e": {
@@ -1512,29 +1519,7 @@
   "10000036-cryo_n": [
    {
     "with": 10,
-    "without": 6,
-    "afterSkill": {
-     "with": -2,
-     "without": -2,
-     "byNext": {
-      "burst": {
-       "with": 0,
-       "without": 0
-      },
-      "dash": {
-       "with": 0,
-       "without": 0
-      },
-      "jump": {
-       "with": 0,
-       "without": 0
-      },
-      "swap": {
-       "with": 0,
-       "without": 0
-      }
-     }
-    }
+    "without": 6
    },
    {
     "with": 9,
@@ -2922,29 +2907,7 @@
   "10000080-cryo_n": [
    {
     "with": 2,
-    "without": 2,
-    "afterSkill": {
-     "with": -3,
-     "without": -3,
-     "byNext": {
-      "burst": {
-       "with": 0,
-       "without": 0
-      },
-      "dash": {
-       "with": 0,
-       "without": 0
-      },
-      "jump": {
-       "with": 0,
-       "without": 0
-      },
-      "swap": {
-       "with": 0,
-       "without": 0
-      }
-     }
-    }
+    "without": 2
    },
    {
     "with": 5,
@@ -3976,11 +3939,7 @@
   "10000113-anemo_n": [
    {
     "with": 0,
-    "without": 0,
-    "afterSkill": {
-     "with": 39,
-     "without": 39
-    }
+    "without": 0
    },
    {
     "with": 0,

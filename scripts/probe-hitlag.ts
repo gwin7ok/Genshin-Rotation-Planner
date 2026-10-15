@@ -16,6 +16,7 @@
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import { ATTACK_SPEED_EFFECTS } from '../src/masterdata/attackSpeedEffects.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
@@ -103,6 +104,8 @@ let dropped = 0;
 const dropList: string[] = [];
 /** 次のアクションの種類ごとの測定で、除外した組（`<id>|<次の種類>`）。`check:hitlag` が、対象外にする（表の読み取りの違い・別の仕組み） */
 const excludedNext: string[] = [];
+/** 直前のアクションごとの 1 段目の差（`<通常攻撃の ID>|<afterXxx>`）で、測れなかった・使えないもの。`check:hitlag` が、対象外にする */
+const excludedAfter: string[] = [];
 /**
  * 表より短かった（負の差）ものも、そのまま記録する（gcsim の実際の動きに合わせる）。一覧に出す。
  * 例: 触媒の重撃は、通常攻撃の直後だと、窓（windup）14f 前後を省く（gcsim の charge.go: `skip CA windup if we're in NA`）。
@@ -239,12 +242,16 @@ for (const c of characters) {
       ] as const) {
         if (!prefix) continue;
         // 1 段目の次の n1 → attack の測定が、次の種類の測定で除外されているキャラ（凝光: 通常攻撃の種類が毎回変わる）は、測らない
-        if (excludedNext.some(x => x.startsWith(`${n.id}[0]|`))) continue;
+        if (excludedNext.some(x => x.startsWith(`${n.id}[0]|`))) { excludedAfter.push(`${n.id}|${label}`); continue; }
+        // スキルの後の効果を、攻撃速度の表で別に足すキャラ（ミカ・重雲など）は、差に効果が混ざるので、測らない
+        if (label === 'afterSkill' && ATTACK_SPEED_EFFECTS.some(x => x.source.gcsimKey === k && (Array.isArray(x.when) ? x.when : [x.when]).some(w => w.kind === 'afterSkill'))) { excludedAfter.push(`${n.id}|${label}`); continue; }
         const af = await measureBase(k, weapon, [...prefix, 'attack', 'attack'], prefix.length, exp, `${n.id}[0]+${label}`, false, undefined);
-        if (!af) continue;
+        if (!af) { excludedAfter.push(`${n.id}|${label}`); continue; }
         const b = arr[0];
         const std = diff(af, b);
         const d0 = diff(af.d0 ?? af, b.d0 ?? b);
+        // 構えの違い（windup。数 f〜十数 f）より大きい差は、状態が変わる別の仕組み（夜魂の通常攻撃など。イファのスキルの後は +39f）なので、使わない
+        if ([std, d0].some(p => Math.abs(p.with) > MAX_NEGATIVE || Math.abs(p.without) > MAX_NEGATIVE)) { excludedAfter.push(`${n.id}|${label}`); continue; }
         {
           // 次のアクションの種類（skill・burst・dash・jump・swap）ごとの差。通常のときの値との差で、次が通常攻撃のときと違うものだけ記録する
           const byNext: Record<string, Pair & { d0?: Pair }> = {};
@@ -392,7 +399,7 @@ for (const c of characters) {
   }
 }
 
-fs.writeFileSync('src/data/hitlag_frames.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), excludedNext, entries }, null, 1) + '\n');
+fs.writeFileSync('src/data/hitlag_frames.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), excludedNext, excludedAfter, entries }, null, 1) + '\n');
 console.log(`測定 ${tried} 件 / 記録 ${Object.keys(entries).length} アクション / 測定できず ${failed} / 除外 ${dropped}`);
 for (const l of dropList.slice(0, 40)) console.log('  除外:', l);
 console.log(`表より短い（負の差のまま記録）: ${clampList.length} 件`);

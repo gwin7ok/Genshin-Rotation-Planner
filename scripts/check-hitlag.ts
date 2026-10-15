@@ -23,6 +23,8 @@ const hitlag = hitlagJson.entries as Record<string, unknown>;
 /** `probe:hitlag` が、次のアクションの種類ごとの測定で除外した組（`<id>|<次の種類>`）。表の読み取りの違い（凝光の通常攻撃など）で、対象外 */
 const excludedNext = new Set<string>(hitlagJson.excludedNext ?? []);
 let skippedNext = 0;
+/** probe が、直前のアクションごとの 1 段目の差を、測れなかった・使えないとしたもの（`<通常攻撃の ID>|<afterXxx>`）。対象外 */
+const excludedAfter = new Set<string>(hitlagJson.excludedAfter ?? []);
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
 // gcsim の設定は cons=0。アプリの既定（星 4 のキャラは 6 凸）の命ノ星座の効果が入らないように、0 凸にそろえる
@@ -113,7 +115,7 @@ for (const c of speedOnly ? [] : characters) {
   // 重撃の直後の通常攻撃の 1 段目（構え = windup の違い。D229）
   if (ca && hitlag[ca.id] && n && Array.isArray(hitlag[n.id]) && hits.length > 0) {
     const caCommand = mapAction(ca.id, c.weaponType).command;
-    if (caCommand && caCommand !== 'aim') {
+    if (caCommand && caCommand !== 'aim' && !excludedAfter.has(`${n.id}|afterCharged`)) {
       cases.push({ id: n.id, label: 'ca の後の n1', suffixes: ['n', 'ca', 'n', 'n'], cmds: ['attack', caCommand, 'attack', 'attack'], index: 2, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
     }
   }
@@ -126,7 +128,8 @@ for (const c of speedOnly ? [] : characters) {
       ['jump', A.some(x => x.id === `${c.id}_jump`) ? 'jump' : undefined],
     ];
     for (const [suffix, command] of prefixes) {
-      if (command) cases.push({ id: n.id, label: `${suffix} の後の n1`, suffixes: [suffix, 'n', 'n'], cmds: [command, 'attack', 'attack'], index: 1, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
+      const afterLabel = { e: 'afterSkill', dash: 'afterDash', jump: 'afterJump' }[suffix] as string;
+      if (command && !excludedAfter.has(`${n.id}|${afterLabel}`)) cases.push({ id: n.id, label: `${suffix} の後の n1`, suffixes: [suffix, 'n', 'n'], cmds: [command, 'attack', 'attack'], index: 1, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
     }
   }
   // 爆発の直後の通常攻撃の 1 段目（同じ。D229）
@@ -135,7 +138,7 @@ for (const c of speedOnly ? [] : characters) {
     // 測る対象は、probe と同じ（モードを開く爆発・特殊爆発・複数回の爆発は、別の仕組み）
     if (q && !q.mode && !q.specialBurst && !q.cooldownPool && !q.gcsimUnsupported && n && Array.isArray(hitlag[n.id]) && hits.length > 0 && hitlag[q.id]) {
       const qCommand = mapAction(q.id, c.weaponType).command;
-      if (qCommand) cases.push({ id: n.id, label: 'q の後の n1', suffixes: ['q', 'n', 'n'], cmds: [qCommand, 'attack', 'attack'], index: 1, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
+      if (qCommand && !excludedAfter.has(`${n.id}|afterBurst`)) cases.push({ id: n.id, label: 'q の後の n1', suffixes: ['q', 'n', 'n'], cmds: [qCommand, 'attack', 'attack'], index: 1, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
     }
   }
   // モード（状態）の間の通常攻撃・重撃（`<opener>#n` / `#ca`）: opener の後に attack を続ける

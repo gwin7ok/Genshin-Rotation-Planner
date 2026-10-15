@@ -11,12 +11,22 @@ import fs from 'node:fs';
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
+import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
+import { deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
+import { loadRuntimeLinks } from './link-buffs.ts';
 
 const table = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 'utf8')).entries as Record<string, any>;
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const characters: any[] = Array.isArray(raw) ? raw : raw.characters;
 const defs = new Map<string, any>();
 for (const c of characters) for (const a of c.availableActions ?? []) defs.set(a.id, a);
+// 副次効果の入力 = 手で補う一覧 + 自動（D213 案 1）
+const autoExtras = deriveAutoExtras({
+  catalogEntries: JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8')).entries,
+  characters, table, overrides: ACTION_EFFECT_KEY_OVERRIDES as any, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED,
+  characterLinked: CHARACTER_LINKED_EFFECTS as any, runtimeLinks: loadRuntimeLinks(),
+});
+const EXPECTED_EXTRAS = mergeExtras(ACTION_EFFECT_EXTRAS, autoExtras);
 
 /** 旧経路: { missing } | { skip } | { keys, mode, self } */
 function oldResolve(defId: string): any {
@@ -51,7 +61,7 @@ for (const id of ids) {
   compared++;
   if (a !== b) problems.push(`本体の紐付けが食い違う: ${id}\n    入力から: ${a}\n    マスター: ${b}`);
 }
-for (const [src, field, name] of [[ACTION_EFFECT_EXTRAS, 'gcsimExtras', '副次効果'], [ACTION_EFFECT_INCLUDED, 'gcsimIncluded', '含まれる効果']] as const) {
+for (const [src, field, name] of [[EXPECTED_EXTRAS, 'gcsimExtras', '副次効果'], [ACTION_EFFECT_INCLUDED, 'gcsimIncluded', '含まれる効果']] as const) {
   for (const id of new Set([...Object.keys(src), ...[...defs.values()].filter(d => d[field]?.length).map(d => d.id)])) {
     const a = JSON.stringify((src as any)[id] ?? []);
     const b = JSON.stringify(defs.get(id)?.[field] ?? []);

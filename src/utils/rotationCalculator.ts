@@ -8,6 +8,7 @@ import { TotemTracker, totemTiming } from './totemTracker';
 import { SACRIFICIAL_WEAPON_KEYS, sacrificialIcdSeconds } from './gcsim/sacrificialSeed';
 import skillHitFrameData from '../data/skill_hit_frames.json';
 import canQueueAfterData from '../data/can_queue_after.json';
+import hitlagData from '../data/hitlag_frames.json';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -101,6 +102,14 @@ export interface RotationOptions {
  */
 const CAN_QUEUE_AFTER = (canQueueAfterData as { entries: Record<string, number> }).entries;
 
+/**
+ * ヒットストップで延びるフレーム（gcsim の実測。scripts/probe-hitlag.ts が作る。D215）。キー = アクション定義 ID。
+ * 通常攻撃は段ごとの配列。`with` = 敵の防御ヒットストップあり（既定）、`without` = なし。
+ * マスターのフレーム表（gcsim の skillFrames など）は、これを含まない。
+ */
+type HitlagPair = { with: number; without: number };
+const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagPair | HitlagPair[]> }).entries;
+
 /** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代。'wait' = 次が待機（CanQueueAfter） */
 type NextKey = CancelTarget | 'wait';
 
@@ -178,7 +187,9 @@ export function calculateRotation(
     options?.defHalt === false ? sp.hitlagNoDefHalt ?? sp.hitlag : sp.hitlag;
   // このアクションの所要時間に、ヒットストップで止まった分が含まれているか（gcsim から書き戻した所要時間だけ）。
   // 受付（疾風怒濤）のヒットストップ延長は、所要時間に止まった分が含まれるときだけ足す（両方足すか、両方足さないか）
-  const durationHasHitlag = (a: { gcsimBaseDuration?: number }) => a.gcsimBaseDuration !== undefined;
+  // 表（hitlag_frames.json）の延びを足した所要時間のアクション ID（受付の延長の判定で、書き戻した値と同じ扱い）
+  const hitlagIncluded = new Set<string>();
+  const durationHasHitlag = (a: { id?: string; gcsimBaseDuration?: number }) => a.gcsimBaseDuration !== undefined || (a.id !== undefined && hitlagIncluded.has(a.id));
   const cdResonanceScale = characters.filter(c => c.element === 'anemo').length >= 2 ? 0.95 : 1;
   // 領域が操作中のキャラに付ける CT 短縮の期間（重雲の命ノ星座 2。gcsim は、領域の間 1 秒ごと・交代のたびに付け直す）。マスターの値から計算する CT にだけ掛ける
   const ctReductionWindows: { start: number; end: number; rate: number }[] = [];
@@ -751,12 +762,16 @@ export function calculateRotation(
       // 通常攻撃: 連続した N の段（gcsim と同じく、他のアクションを挟むと1段目に戻り、最大段数を超えたら1段目に戻る）
       let frames = actionDef?.frames;
       let hitFallbackDuration: number | undefined;
+      let normalHitIndex = 0;
+      let normalHitFrames: ActionFrames | undefined;
       // モードの間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの夜巡り）
       const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames || m.def.chargedFrames));
       if (act.type === 'normal') {
         const hits = actionDef?.normalHits;
         if (hits && hits.length > 0) {
           const hit = hits[normalStreak % hits.length];
+          normalHitIndex = normalStreak % hits.length;
+          normalHitFrames = hit.frames;
           frames = hit.frames ?? frames;
           hitFallbackDuration = hit.duration;
         }
@@ -813,6 +828,15 @@ export function calculateRotation(
       // 所要時間: 編集済み（durationManual）ならその値。未編集なら、次に続くアクションに応じたキャンセルフレーム
       // （出場の最後は次が交代）。フレームが無いアクションは、登録時の値を使う
       let autoDuration: number | undefined;
+      // ヒットストップで延びるフレーム（フレーム表そのものを使うときだけ。モードなどで別のフレームに置き換えたときは、足さない）
+      let hitlagFrames = 0;
+      if (frames && actionDef) {
+        const entry = HITLAG_FRAMES[actionDef.id];
+        const pair = Array.isArray(entry)
+          ? (act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined)
+          : (entry && frames === actionDef.frames ? entry : undefined);
+        if (pair) hitlagFrames = options?.defHalt === false ? pair.without : pair.with;
+      }
       {
         if (frames) {
           const nextKey = cancelKeyOf(rawActions[aIdx + 1], char.weaponType);
@@ -829,7 +853,8 @@ export function calculateRotation(
             }
           }
           const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
-          autoDuration = Number((motion / 60).toFixed(3));
+          autoDuration = Number(((motion + hitlagFrames) / 60).toFixed(3));
+          if (hitlagFrames > 0) hitlagIncluded.add(act.id);
         } else {
           autoDuration = hitFallbackDuration;
         }
@@ -853,7 +878,7 @@ export function calculateRotation(
         holdSeconds = motionFrames === undefined
           ? 0
           // モードの間に別の動作になった長押し（キィニチの廻狩貫鱗砲）は、フレームが長押しを含まない（既定は最短の照準）
-          : Number(Math.max(0, duration - (motionFrames / 60 - (modeRepress ? 0 : actionDef?.holdInFrames ?? 0))).toFixed(3));
+          : Number(Math.max(0, duration - ((motionFrames + hitlagFrames) / 60 - (modeRepress ? 0 : actionDef?.holdInFrames ?? 0))).toFixed(3));
       }
 
       // 状態によって爆発の種類が変わるキャラ（ドゥリン: 漆黒の否の間は漆黒の法則）: アクションと効果バーの名前を、その種類にする

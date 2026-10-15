@@ -110,6 +110,13 @@ for (const c of speedOnly ? [] : characters) {
       cases.push({ id: n.id, label: `n${i + 1}`, suffixes: Array.from({ length: i + 2 }, () => 'n'), cmds: Array.from({ length: i + 2 }, () => 'attack'), index: i, tableExp: hits[i].frames?.cancels?.attack ?? hits[i].frames?.total });
     }
   }
+  // 重撃の直後の通常攻撃の 1 段目（構え = windup の違い。D229）
+  if (ca && hitlag[ca.id] && n && Array.isArray(hitlag[n.id]) && hits.length > 0) {
+    const caCommand = mapAction(ca.id, c.weaponType).command;
+    if (caCommand && caCommand !== 'aim') {
+      cases.push({ id: n.id, label: 'ca の後の n1', suffixes: ['n', 'ca', 'n', 'n'], cmds: ['attack', caCommand, 'attack', 'attack'], index: 2, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
+    }
+  }
   // モード（状態）の間の通常攻撃・重撃（`<opener>#n` / `#ca`）: opener の後に attack を続ける
   for (const [key, value] of Object.entries(hitlag)) {
     if (!key.startsWith(`${c.id}_`) || !key.includes('#')) continue;
@@ -137,7 +144,7 @@ for (const c of speedOnly ? [] : characters) {
       // 次の行は、最後の（次の通常攻撃の）要素を置き換える。交代は、出場の最後（次の要素なし）
       const suffixes = suffix === undefined ? cs.suffixes.slice(0, -1) : [...cs.suffixes.slice(0, -1), suffix];
       // 除外の組（probe の id）: 通常攻撃 `<id>_n[段]`・モードの通常攻撃 `<opener>#n[段]`・それ以外は id
-      const m = /^n(\d+)$/.exec(cs.label) ?? /モード n(\d+)$/.exec(cs.label);
+      const m = /^n(\d+)$/.exec(cs.label) ?? /モード n(\d+)$/.exec(cs.label) ?? /^ca の後の n(\d+)$/.exec(cs.label);
       const exId = m ? `${cs.id}[${Number(m[1]) - 1}]` : cs.id;
       if (excludedNext.has(`${exId}|${label}`)) { skippedNext++; continue; }
       nextVariants.push({ ...cs, label: `${cs.label} → ${label}`, suffixes, cmds: [...cs.cmds.slice(0, -1), command], tableExp: undefined });
@@ -325,6 +332,51 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
             const tol = sc.name.includes('待機') ? 3 : TOLERANCE;
             if (Math.abs(gi - ai) > tol) fails.push(`${c.name}(C${cn}) ${sc.name} #${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
           }
+        }
+      }
+    }
+  }
+}
+// ---- 重撃にも攻撃速度が掛かるキャラ（放浪者。D228）: ミカのスキル（編成の全員 +21%・12 秒）を受けた放浪者の、通常攻撃 → 重撃 → 通常攻撃 ----
+{
+  const owner = characters.find(x => x.source.gcsimKey === 'mika')!;
+  const wan = characters.find(x => x.source.gcsimKey === 'wanderer')!;
+  const ok = owner.source.gcsimKey as string, wk = wan.source.gcsimKey as string;
+  const seqs: { name: string; wanSteps: string[] }[] = [
+    { name: 'N → CA → N → CA → N', wanSteps: ['attack', 'charge', 'attack', 'charge', 'attack'] },
+    { name: 'N N → CA → N', wanSteps: ['attack', 'attack', 'charge', 'attack'] },
+    { name: 'CA（単独）→ N → CA', wanSteps: ['charge', 'attack', 'charge'] },
+  ];
+  for (const withBuff of [true, false]) {
+    for (const sq of seqs) {
+      for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
+        const cfg = [
+          `${ok} char lvl=90/90 cons=0 talent=9,9,9;`, `${ok} add weapon="${weapons[owner.weaponType]}" refine=1 lvl=90/90;`, `${ok} add stats cr=1;`,
+          `${wk} char lvl=90/90 cons=0 talent=9,9,9;`, `${wk} add weapon="${weapons[wan.weaponType]}" refine=1 lvl=90/90;`, `${wk} add stats cr=1;`,
+          `options iteration=1 duration=60 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
+          'target lvl=100 resist=0.1;', `active ${ok};`,
+          [...(withBuff ? [`${ok} skill;`] : [`${ok} attack;`]), ...sq.wanSteps.map(x => `${wk} ${x};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`)].join(' '),
+        ].join('\n');
+        const res = await fetch(`${GCSIM_SERVER_URL}/sample/wc_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+        const logs = ((await res.json()).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|charge|skill)/.test(l.msg));
+        const g = logs.map(l => l.frame as number).slice(1);
+        const cw = structuredClone(wan);
+        const ow = structuredClone(owner);
+        ow.constellation = 0;
+        const sfx = (x: string) => (x === 'attack' ? 'n' : 'ca');
+        const stints = [
+          { id: 'o', characterId: ow.id, actions: [act(ow, withBuff ? 'e' : 'n', 0)], holdMode: false },
+          { id: 'w', characterId: cw.id, actions: sq.wanSteps.map(x => act(cw, sfx(x), delayFrames / 60)), holdMode: false },
+        ];
+        const r = calculateRotation([ow, cw], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster } });
+        const acts = r.calculatedStints[1].actions.filter((a: any) => a.type !== 'swap');
+        for (let i = 0; i + 1 < sq.wanSteps.length; i++) {
+          // 重撃の直後の通常攻撃は、構え（windup）が −2f になる（gcsim の attackWindupNormal）。アプリは、通常攻撃のこの違いを持っていない（攻撃速度とは別の、前からの差）ので、比べない
+          if (sq.wanSteps[i] === 'attack' && sq.wanSteps[i - 1] === 'charge') continue;
+          const gi = g[i + 1] - g[i];
+          const ai = Math.round((acts[i + 1].startTime - acts[i].startTime) * 60);
+          checked++;
+          if (Math.abs(gi - ai) > TOLERANCE) fails.push(`放浪者（ミカのスキル${withBuff ? 'あり' : 'なし'}）${sq.name} #${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
         }
       }
     }

@@ -329,6 +329,13 @@ function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boole
   }
 }
 
+/**
+ * 重撃のフレームにも、攻撃速度（`Stat(AtkSpd)`）を掛けるキャラ（gcsim の `charge.go` が AtkSpdAdjust を呼ぶもの。D228）。
+ * 放浪者（通常・風の加護の重撃）・イファ。荒瀧一斗・ノエルの重撃も AtkSpdAdjust を呼ぶが、フレームが状態（スタック・構え）で大きく変わり、
+ * アプリの事前計算の対象外なので、入れない。多くのキャラの重撃は、攻撃速度の影響を受けない
+ */
+export const CHARGED_ATTACK_SPEED_KEYS: ReadonlySet<string> = new Set(['wanderer', 'ifa']);
+
 /** gcsim の `frames.AtkSpdAdjust`: 通常攻撃のフレームを、攻撃速度で縮める（速度は 0.6 で頭打ち） */
 export function atkSpdAdjust(frames: number, spd: number): number {
   const s = Math.min(spd, 0.6);

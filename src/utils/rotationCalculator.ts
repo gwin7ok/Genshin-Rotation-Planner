@@ -9,7 +9,7 @@ import { SACRIFICIAL_WEAPON_KEYS, sacrificialIcdSeconds } from './gcsim/sacrific
 import skillHitFrameData from '../data/skill_hit_frames.json';
 import canQueueAfterData from '../data/can_queue_after.json';
 import hitlagData from '../data/hitlag_frames.json';
-import { attackSpeedFor, atkSpdAdjust } from '../masterdata/attackSpeedEffects';
+import { attackSpeedFor, atkSpdAdjust, CHARGED_ATTACK_SPEED_KEYS } from '../masterdata/attackSpeedEffects';
 import { actionDelayOf } from './actionDelay';
 
 import { 
@@ -118,7 +118,7 @@ type HitlagBase0 = HitlagPair & { d0?: HitlagPair };
 /** `byNext` = 次のアクションの種類（skill・burst・dash・jump・swap）が、次が通常攻撃のときと値が違うときだけ（D219） */
 type HitlagBase = HitlagBase0 & { byNext?: Record<string, HitlagBase0> };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（モードの通常攻撃・重撃のキー `<opener>#n` / `#ca` だけ。gcsim の `mod extended`） */
-type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair };
+type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair; /** 通常攻撃の 1 段目だけ。重撃の直後の、通常のときとの差（構えの違い。D229） */ afterCharged?: HitlagBase0 };
 const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
 
 
@@ -914,19 +914,33 @@ export function calculateRotation(
       // ヒットストップで延びるフレーム（フレーム表そのものを使うときだけ。モードなどで別のフレームに置き換えたときは、足さない）
       let hitlagFrames = 0;
       // 選んだ表の値（次のアクションの種類で、値を選ぶ）と、遅延なしの値を使うか
-      let hitlagSrc: { base: HitlagBase; noDelay: boolean } | undefined;
+      let hitlagSrc: { base: HitlagBase; noDelay: boolean; charged?: HitlagBase0; chargedNoDelay?: boolean } | undefined;
       const hitlagFor = (nextKey: string | undefined): number => {
         if (!hitlagSrc) return 0;
         const { base, noDelay } = hitlagSrc;
         const v: HitlagBase0 = (nextKey && base.byNext?.[nextKey]) || base;
         const p = noDelay && v.d0 ? v.d0 : v;
-        return options?.defHalt === false ? p.without : p.with;
+        let total = options?.defHalt === false ? p.without : p.with;
+        // 重撃の直後の通常攻撃の 1 段目: 構えの違い（差）を足す
+        const o = hitlagSrc.charged;
+        if (o) {
+          const q = hitlagSrc.chargedNoDelay && o.d0 ? o.d0 : o;
+          total += options?.defHalt === false ? q.without : q.with;
+        }
+        return total;
       };
       if (frames && actionDef) {
         const entry = HITLAG_FRAMES[actionDef.id];
         if (Array.isArray(entry)) {
           const e = act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined;
-          if (e) hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
+          if (e) {
+            hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
+            const prevAct = rawActions[aIdx - 1];
+            if (normalHitIndex === 0 && prevAct?.type === 'charged' && e.afterCharged) {
+              hitlagSrc.charged = e.afterCharged;
+              hitlagSrc.chargedNoDelay = actionDelayOf(prevAct) === 0;
+            }
+          }
         } else if (entry && frames === actionDef.frames) {
           const prev = rawActions[aIdx - 1];
           const afterNormal = act.type === 'charged' && prev?.type === 'normal' && entry.afterNormal;
@@ -967,7 +981,7 @@ export function calculateRotation(
           // ヒットストップの延びは、次のアクションの種類で値が違うことがある（次が待機・不明のときは、次が通常攻撃のときの値）
           hitlagFrames = hitlagFor(nextKey === 'wait' ? undefined : nextKey);
           // 通常攻撃は、武器の攻撃速度で縮む（ヒットストップの延びは、縮んだ後に足される）
-          const atkSpd = act.type === 'normal' ? attackSpeedOf(char, actionStartTime, sIdx, rawActions[aIdx - 1]?.type === 'normal' ? previousNormal : undefined) : 0;
+          const atkSpd = act.type === 'normal' || (act.type === 'charged' && CHARGED_ATTACK_SPEED_KEYS.has(char.source?.gcsimKey ?? '')) ? attackSpeedOf(char, actionStartTime, sIdx, rawActions[aIdx - 1]?.type === 'normal' ? previousNormal : undefined) : 0;
           // 縮めたキャンセルが、ヒット判定（hitmark）より早くなるときは、ヒット判定まで待つ（gcsim: CanQueueAfter = hitmark。雷電の爆発中の 5 段目 → E など）
           const motionAdjusted = atkSpd > 0 ? Math.max(atkSpdAdjust(motion, atkSpd), Math.min(motion, frames.hitmark ?? 0)) : motion;
           autoDuration = Number(((motionAdjusted + hitlagFrames) / 60).toFixed(3));

@@ -37,6 +37,13 @@ export type AttackSpeedCondition =
   | { kind: 'afterEnterField'; seconds: number; icdSeconds: number; hitlag?: boolean }
   /** 重撃を使ってから `seconds` 秒の間（重撃が敵に当たると付く状態。当たる前提。ヒットストップによる延長は、見ない） */
   | { kind: 'afterChargedAttack'; seconds: number }
+  /**
+   * 自分の攻撃（通常攻撃・スキル・爆発）の命中の後 `seconds` 秒の間（gcsim の「会心のヒット」が引き金の効果。ロザリア・辛炎）。
+   * 会心は、gcsim の設定（`cr=1`）と同じく、必ず起きる前提。命中は、攻撃のヒット判定のフレーム。
+   * `icdSeconds`: 発動の内部 CT（効果が付いてから、この秒数が経つまで、次の命中では付かない。0 = 命中のたびに付け直す）。
+   * `hitlag`: ヒットストップで延びる効果（上と同じ）
+   */
+  | { kind: 'afterCritHit'; seconds: number; icdSeconds: number; hitlag?: boolean }
   /** 効果を受けるキャラの武器の種類（重雲の固有天賦 1: 片手剣・両手剣・長柄武器） */
   | { kind: 'weaponType'; types: string[] }
   /**
@@ -169,6 +176,20 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
     when: [{ kind: 'afterSkill', seconds: 600 / 60 + 2.8, delayFrames: 36 }, { kind: 'weaponType', types: ['sword', 'claymore', 'polearm'] }],
     evidence: 'internal/characters/chongyun/skill.go: 領域（chongyunfield 600f。ヒット判定 36f から）の間、1 秒ごと・交代のたびに、操作中のキャラへ infuse → 片手剣・両手剣・長柄武器なら chongyun-field AtkSpd 0.08・infuseDur[TalentLvlSkill()] 秒（Lv9 = 2.8）',
   },
+  // ---- 会心のヒットが引き金の効果（会心は必ず起きる前提。gcsim の設定 cr=1 と同じ。D227）----
+  {
+    source: { type: 'character', gcsimKey: 'rosaria', minConstellation: 1 },
+    amount: () => 0.1,
+    when: [{ kind: 'afterCritHit', seconds: 4, icdSeconds: 0, hitlag: true }, { kind: 'afterNormalAttack' }],
+    evidence: 'internal/characters/rosaria/cons.go c1: 会心のヒット（通常攻撃・スキル・爆発）で rosaria-c1-speed AtkSpd 0.1・240f（命中のたびに付け直す。内部 CT なし）、CurrentState() == NormalAttackState のときだけ',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'xinyan', minConstellation: 1 },
+    amount: () => 0.12,
+    // 通常攻撃の状態と重撃の状態のとき（重撃の速度は、まだ見ていない）
+    when: [{ kind: 'afterCritHit', seconds: 5, icdSeconds: 5, hitlag: true }, { kind: 'afterNormalAttack' }],
+    evidence: 'internal/characters/xinyan/cons.go c1: 会心のヒット（通常攻撃・スキル・爆発）で xinyan-c1 AtkSpd 0.12・5*60（内部 CT 5 秒）、NormalAttackState または ChargeAttackState のとき',
+  },
   {
     source: { type: 'character', gcsimKey: 'cyno', minConstellation: 1 },
     amount: () => 0.2,
@@ -222,6 +243,8 @@ export interface AttackSpeedContext {
     secondsSinceSkill?: number;
     hitlagSinceSkill?: number;
   }[];
+  /** このキャラの攻撃の命中の時刻（秒。昇順）と、そのときのキャラ自身のヒットストップの合計（秒） */
+  hitTimes?: { t: number; hitlag: number }[];
   /** このキャラが、交代で出場した時刻（秒。先頭の出場を除く）の一覧と、このアクションの開始時刻 */
   enterFieldTimes?: { t: number; hitlag: number }[];
   /** このアクションの開始時刻（秒）と、そこまでのキャラ自身のヒットストップの合計（秒） */
@@ -272,6 +295,16 @@ function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boole
     case 'always': return true;
     case 'afterBurst':
       return ctx.secondsSinceBurst !== undefined && ctx.secondsSinceBurst - (w.hitlag ? ctx.hitlagSinceBurst ?? 0 : 0) <= w.seconds + 1e-9 && (!w.sameStint || !!ctx.burstInSameStint);
+    case 'afterCritHit': {
+      let triggered: { t: number; hitlag: number } | undefined;
+      for (const e of ctx.hitTimes ?? []) {
+        if (ctx.now !== undefined && e.t > ctx.now + 1e-9) break;
+        if (triggered === undefined || e.t - triggered.t >= w.icdSeconds - 1e-9) triggered = e;
+      }
+      if (triggered === undefined || ctx.now === undefined) return false;
+      const lag = w.hitlag ? (ctx.hitlagNow ?? 0) - triggered.hitlag : 0;
+      return ctx.now - triggered.t - lag <= w.seconds + 1e-9;
+    }
     case 'weaponType': return !!ctx.weaponType && w.types.includes(ctx.weaponType);
     case 'afterSkill':
       return ctx.secondsSinceSkill !== undefined

@@ -224,18 +224,26 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       const char = charById.get(stint.characterId);
       const key = keyOf.get(stint.characterId);
       if (!char || !key) continue; // キーが無いキャラは上で error 済み
+      // 交代の実行（`swap`）は 1 フレームかかる（gcsim の実測: 要求から次のアクションまでは、`swap; wait(N)` で N + 1 フレーム。どの場合も一定。D225）。
+      // アプリの交代遅延は、要求から最初のアクションまでなので、`wait` は、その 1f を引いた長さにする（交代しない出場は、そのまま）
+      let swapFrames = 0; // 0: 交代しない / 1: 交代する / 条件つきは、交代しないときだけ足りない 1f を足す
+      let missingWhen: string | undefined;
       if (isFirst && loopPrevKeys) {
         const needFirst = loopPrevKeys.first !== undefined && loopPrevKeys.first !== key;
         const needLater = loopPrevKeys.later !== undefined && loopPrevKeys.later !== key;
-        if (needFirst && needLater) out.push(`${indent}${key} swap;`);
-        else if (needLater) out.push(`${indent}if i > 1 {`, `${indent}  ${key} swap;`, `${indent}}`);
-        else if (needFirst) out.push(`${indent}if i < 2 {`, `${indent}  ${key} swap;`, `${indent}}`);
+        if (needFirst && needLater) { out.push(`${indent}${key} swap;`); swapFrames = 1; }
+        else if (needLater) { out.push(`${indent}if i > 1 {`, `${indent}  ${key} swap;`, `${indent}}`); swapFrames = 1; missingWhen = 'i < 2'; }
+        else if (needFirst) { out.push(`${indent}if i < 2 {`, `${indent}  ${key} swap;`, `${indent}}`); swapFrames = 1; missingWhen = 'i > 1'; }
       } else if (prevKey !== undefined && prevKey !== key) {
         out.push(`${indent}${key} swap;`);
+        swapFrames = 1;
       }
       // 交代遅延は `wait`（交代の直後にその時間を使う）。`delay` は次のアクションが実行できる状態になった「後」に入るため、
       // 最初のアクションのCT待ちと重ならず、アプリの時間より長くなってしまう
-      if (switchFrames > 0) out.push(`${indent}wait(${switchFrames});`);
+      const waitFrames = Math.max(0, switchFrames - swapFrames);
+      if (waitFrames > 0) out.push(`${indent}wait(${waitFrames});`);
+      // 条件つきの交代で、交代しない周: 交代の 1f がないので、その分を足す
+      if (missingWhen && switchFrames > 0) out.push(`${indent}if ${missingWhen} {`, `${indent}  wait(1);`, `${indent}}`);
       isFirst = false;
       prevKey = key;
       // 出場の最後のアクション（次は交代）: 標準より長くした分は `wait` で渡す。`delay` は次の交代が実行できる状態になった「後」に入り、

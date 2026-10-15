@@ -91,7 +91,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 1.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -200,7 +200,7 @@
     "特殊スキル「特殊元素スキル（柔きファントムの夜の舞の後）」の発動時点で CT がまだ 9.3 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -293,7 +293,7 @@
     "特殊スキル「特殊元素スキル（柔きファントムの夜の舞の後）」: 特殊スキルの受付時間外: 受付（6.6 秒。ヒットストップ・爆発の延長を含む最大）を 1.2 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  wait(420);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  wait(420);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -393,7 +393,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 0.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette burst;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette burst;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -504,7 +504,7 @@
     "特殊スキル「特殊元素スキル（柔きファントムの夜の舞の後）」: 特殊スキルの受付は、すでに特殊スキルを使って閉じています（受付の間に 1 回だけ使えます）。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -622,7 +622,7 @@
     "特殊スキル「特殊元素スキル（柔きファントムの夜の舞の後）」: 特殊スキルの受付時間外: 受付（6.8 秒。ヒットストップ・爆発の延長を含む最大）を 0.8 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  wait(264);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  odette attack;\n  delay(6);\n  wait(264);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -687,7 +687,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(30);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    odette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -788,7 +788,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 0.7 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  odette swap;\n  wait(30);\n  odette skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive odette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  odette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  odette swap;\n  wait(29);\n  odette skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "オデット: 武器が未設定です（武器なしで計算されます）",
    "オデット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -893,7 +893,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 9.8 秒残っています"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(579);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(579);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1059,7 +1059,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 4.1 秒残っています"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(49);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(49);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1199,7 +1199,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 9.6 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka burst;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(280);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka burst;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(280);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1291,7 +1291,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」: 特殊スキルの受付時間外: 受付（12.7 秒。ヒットストップ・爆発の延長を含む最大）を 1.3 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  wait(780);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  wait(780);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1405,7 +1405,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 6 秒残っています"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka charge;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka charge;\n  delay(6);\n  varka skill;\n  delay(459);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka charge;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka charge;\n  delay(6);\n  varka skill;\n  delay(459);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1522,7 +1522,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」: 特殊スキルの受付時間外: 受付（13.5 秒。ヒットストップ・爆発の延長を含む最大）を 0.0 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  wait(570);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  wait(570);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1639,7 +1639,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」: 特殊スキルの受付時間外: 受付（13.1 秒。ヒットストップ・爆発の延長を含む最大）を 0.4 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  wait(570);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  wait(570);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1775,7 +1775,7 @@
     "スキル「元素スキル: 夜巡りの翼」の発動時点で CT がまだ 9.9 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(342);\n  fischl swap;\n  wait(30);\n  fischl skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(342);\n  fischl swap;\n  wait(29);\n  fischl skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1833,7 +1833,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 2.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1934,7 +1934,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」: 特殊スキルの受付時間外: 同じ出場の中でスキルを使った後でないと使えません。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  varka skill;\n  delay(710);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  varka swap;\n  wait(30);\n  varka skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  varka skill;\n  delay(710);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  varka swap;\n  wait(29);\n  varka skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2029,7 +2029,7 @@
     "スキル「元素スキル: 堕ちる烈風」の発動時点で CT がまだ 2.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(579);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(579);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2122,7 +2122,7 @@
     "スキル「元素スキル: 古律・孤灯の秘密」の発動時点で CT がまだ 4.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(476);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(476);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2216,7 +2216,7 @@
     "特殊爆発「特殊元素爆発（嵐槍の後）」: 特殊爆発の受付時間外: 同じ出場の中で、状態中のスキル（北国の嵐槍）を使った後でないと使えません。gcsim では通常の爆発（CT が始まる）として扱われます"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(513);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(513);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2332,7 +2332,7 @@
     "特殊スキル「特殊元素スキル「北国の嵐槍」（古律・孤灯の秘密の後）」の発動時点で CT がまだ 1 秒残っています"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(270);\n  flins skill;\n  delay(247);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(270);\n  flins skill;\n  delay(247);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2442,7 +2442,7 @@
     "スキル「元素スキル: 古律・孤灯の秘密」の発動時点で CT がまだ 4.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(270);\n  flins skill;\n  delay(247);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(270);\n  flins skill;\n  delay(247);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2528,7 +2528,7 @@
     "特殊スキル「特殊元素スキル「北国の嵐槍」（古律・孤灯の秘密の後）」: 特殊スキルの受付時間外: 受付（10.3 秒。ヒットストップ・爆発の延長を含む最大）を 0.6 秒過ぎています。gcsim では通常のスキルとして扱われます"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  wait(630);\n  flins skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  wait(630);\n  flins skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2644,7 +2644,7 @@
     "特殊爆発「特殊元素爆発（嵐槍の後）」: 特殊爆発の受付は、すでに特殊爆発を使って閉じています（受付の間に 1 回だけ使えます）。gcsim では通常の爆発（CT が始まる）として扱われます"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(6);\n  flins burst;\n  delay(389);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  flins burst;\n  delay(6);\n  flins burst;\n  delay(389);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2760,7 +2760,7 @@
     "特殊爆発「特殊元素爆発（嵐槍の後）」: 特殊爆発の受付時間外: 受付（6.0 秒。ヒットストップ・爆発の延長を含む最大）を 1.5 秒過ぎています。gcsim では通常の爆発（CT が始まる）として扱われます"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(420);\n  flins burst;\n  delay(58);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  flins skill;\n  delay(6);\n  wait(420);\n  flins burst;\n  delay(58);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2818,7 +2818,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 2.5 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(30);\n  flins skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive flins;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    flins swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  flins skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フリンズ: 武器が未設定です（武器なしで計算されます）",
    "フリンズ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -2943,7 +2943,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3159,7 +3159,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3257,7 +3257,7 @@
     "元素爆発「特殊元素爆発（マキシマムドライブ）」の発動時点で CT がまだ 13.6 秒残っています"
    ]
   ],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa burst;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa burst;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3373,7 +3373,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3512,7 +3512,7 @@
     "特殊爆発「特殊元素爆発（マキシマムドライブ）」: 特殊爆発の受付は、スキルを使ったため閉じています。gcsim では通常の爆発（CT が始まる）として扱われます"
    ]
   ],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  varesa skill;\n  delay(6);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3646,7 +3646,7 @@
     "特殊爆発「特殊元素爆発（マキシマムドライブ）」: 特殊爆発の受付時間外: 受付（2.3 秒。ヒットストップ・爆発の延長を含む最大）を 1.4 秒過ぎています。gcsim では通常の爆発（CT が始まる）として扱われます"
    ]
   ],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  wait(180);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa skill;\n  delay(6);\n  varesa charge;\n  delay(6);\n  varesa high_plunge;\n  delay(6);\n  wait(180);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3717,7 +3717,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 2.5 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(30);\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varesa;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varesa swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  varesa burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ヴァレサ: 武器が未設定です（武器なしで計算されます）",
    "ヴァレサ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3834,7 +3834,7 @@
     "スキル「元素スキル: 秋沙歌枕巡り」の発動時点で CT がまだ 8.4 秒残っています"
    ]
   ],
-  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  yumemizukimizuki skill;\n  delay(270);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  yumemizukimizuki swap;\n  wait(30);\n  yumemizukimizuki skill;\n  delay(6);\n  wait(120);\n  yumemizukimizuki skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  yumemizukimizuki skill;\n  delay(270);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  yumemizukimizuki swap;\n  wait(29);\n  yumemizukimizuki skill;\n  delay(6);\n  wait(120);\n  yumemizukimizuki skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "夢見月瑞希: 武器が未設定です（武器なしで計算されます）",
    "夢見月瑞希: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -3966,7 +3966,7 @@
     "元素爆発「元素爆発: 炎哮獅子咬」の発動時点で CT がまだ 10.4 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive dehya;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    dehya swap;\n  }\n  wait(30);\n  dehya skill;\n  delay(6);\n  dehya burst;\n  delay(6);\n  dehya attack;\n  delay(6);\n  dehya attack;\n  delay(6);\n  dehya skill;\n  delay(6);\n  dehya jump;\n  delay(6);\n  dehya skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive dehya;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    dehya swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  dehya skill;\n  delay(6);\n  dehya burst;\n  delay(6);\n  dehya attack;\n  delay(6);\n  dehya attack;\n  delay(6);\n  dehya skill;\n  delay(6);\n  dehya jump;\n  delay(6);\n  dehya skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ディシア: 武器が未設定です（武器なしで計算されます）",
    "ディシア: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4088,7 +4088,7 @@
     "スキル「元素スキル: 魔王の武装·荒波」の発動時点で CT がまだ 44.5 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive tartaglia;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  tartaglia skill;\n  delay(6);\n  tartaglia attack;\n  delay(6);\n  tartaglia attack;\n  delay(6);\n  tartaglia skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  tartaglia swap;\n  wait(30);\n  tartaglia skill;\n  delay(1761);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive tartaglia;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  tartaglia skill;\n  delay(6);\n  tartaglia attack;\n  delay(6);\n  tartaglia attack;\n  delay(6);\n  tartaglia skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  tartaglia swap;\n  wait(29);\n  tartaglia skill;\n  delay(1761);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "タルタリヤ: 武器が未設定です（武器なしで計算されます）",
    "タルタリヤ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4194,7 +4194,7 @@
     "スキル「元素スキル: 蝶導来世」の発動時点で CT がまだ 5.1 秒残っています"
    ]
   ],
-  "gcsim": "\nactive hutao;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  hutao skill;\n  delay(502);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  hutao swap;\n  wait(30);\n  hutao skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive hutao;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  hutao skill;\n  delay(502);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  hutao swap;\n  wait(29);\n  hutao skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "胡桃: 武器が未設定です（武器なしで計算されます）",
    "胡桃: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4294,7 +4294,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 0.4 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(30);\n  lanyan skill[hold=87];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  lanyan skill[hold=87];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "藍硯: 武器が未設定です（武器なしで計算されます）",
    "藍硯: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4406,7 +4406,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 0.3 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive diluc;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    diluc swap;\n  }\n  wait(30);\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive diluc;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    diluc swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  diluc skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ディルック: 武器が未設定です（武器なしで計算されます）",
    "ディルック: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4534,7 +4534,7 @@
     "「夢浮かみ」の間は「通常攻撃」を置けません。gcsim では夢浮かみが終わるまで（あと 4.1 秒）待ちます。先に E（解除）を置いてください"
    ]
   ],
-  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki attack;\n  delay(231);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  yumemizukimizuki swap;\n  wait(30);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki attack;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki attack;\n  delay(231);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  yumemizukimizuki swap;\n  wait(29);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki skill;\n  delay(6);\n  yumemizukimizuki attack;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "夢見月瑞希: 武器が未設定です（武器なしで計算されます）",
    "夢見月瑞希: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4654,7 +4654,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 3.8 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  xianyun skill;\n  delay(6);\n  xianyun attack;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  xianyun swap;\n  wait(30);\n  xianyun skill;\n  delay(6);\n  xianyun low_plunge;\n  delay(6);\n  xianyun attack;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  xianyun skill;\n  delay(6);\n  xianyun attack;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  xianyun swap;\n  wait(29);\n  xianyun skill;\n  delay(6);\n  xianyun low_plunge;\n  delay(6);\n  xianyun attack;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4738,7 +4738,7 @@
     "「七相一閃」の間は「元素スキル: 極悪技・閃」を置けません。gcsim では実行エラーになります。七相一閃が終わってから置いてください"
    ]
   ],
-  "gcsim": "\nactive skirk;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    skirk swap;\n  }\n  wait(30);\n  skirk skill;\n  delay(6);\n  skirk skill;\n  delay(695);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive skirk;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    skirk swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  skirk skill;\n  delay(6);\n  skirk skill;\n  delay(695);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "スカーク: 武器が未設定です（武器なしで計算されます）",
    "スカーク: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4852,7 +4852,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 1.5 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive amber;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    amber swap;\n  }\n  wait(30);\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive amber;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    amber swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アンバー: 武器が未設定です（武器なしで計算されます）",
    "アンバー: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -4933,7 +4933,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 2.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive amber;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    amber swap;\n  }\n  wait(30);\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive amber;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    amber swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  amber skill;\n  delay(6);\n  amber skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アンバー: 武器が未設定です（武器なしで計算されます）",
    "アンバー: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5066,7 +5066,7 @@
     "スキル「元素スキル(長押し): 仰霊威召将役呪」の発動時点で CT がまだ 5.6 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive shenhe;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    shenhe swap;\n  }\n  wait(30);\n  shenhe skill;\n  delay(6);\n  shenhe skill[hold=1];\n  delay(6);\n  shenhe skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive shenhe;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    shenhe swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  shenhe skill;\n  delay(6);\n  shenhe skill[hold=1];\n  delay(6);\n  shenhe skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "申鶴: 武器が未設定です（武器なしで計算されます）",
    "申鶴: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5194,7 +5194,7 @@
     "「羽月の輪の受付」の間は「元素スキル(長押し): 鳳跡随翦舞」を置けません。ゲームでは何も起きません。gcsim では別の動作として実行されます。ゲームでは、受付の間の長押し E は何も起きません（CT も使いません。回数 1 のとき。6 凸の回数 2 は未確認）。受付が終わってから置いてください"
    ]
   ],
-  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(30);\n  lanyan skill;\n  delay(6);\n  lanyan skill[hold=610];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  lanyan skill;\n  delay(6);\n  lanyan skill[hold=610];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "藍硯: 武器が未設定です（武器なしで計算されます）",
    "藍硯: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5277,7 +5277,7 @@
     "スキル「元素スキル(長押し): 鳳跡随翦舞」の発動時点で CT がまだ 12.7 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(30);\n  lanyan skill[hold=87];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive lanyan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lanyan swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  lanyan skill[hold=87];\n  delay(6);\n  lanyan skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "藍硯: 武器が未設定です（武器なしで計算されます）",
    "藍硯: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5391,7 +5391,7 @@
     "スキル「元素スキル: エニグマティック·フェイント」の発動時点で CT がまだ 7.8 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive lynette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lynette swap;\n  }\n  wait(30);\n  lynette skill;\n  delay(6);\n  lynette skill;\n  delay(6);\n  lynette skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive lynette;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    lynette swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  lynette skill;\n  delay(6);\n  lynette skill;\n  delay(6);\n  lynette skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "リネット: 武器が未設定です（武器なしで計算されます）",
    "リネット: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5505,7 +5505,7 @@
     "スキル「元素スキル: 太素診要」の発動時点で CT がまだ 8.8 秒残っています"
    ]
   ],
-  "gcsim": "\nactive baizhu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    baizhu swap;\n  }\n  wait(30);\n  baizhu skill;\n  delay(6);\n  baizhu skill;\n  delay(6);\n  baizhu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive baizhu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    baizhu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  baizhu skill;\n  delay(6);\n  baizhu skill;\n  delay(6);\n  baizhu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "白朮: 武器が未設定です（武器なしで計算されます）",
    "白朮: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5638,7 +5638,7 @@
     "スキル「元素スキル: 山沢麟跡」の発動時点で CT がまだ 9 秒残っています"
    ]
   ],
-  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  ganyu skill;\n  delay(6);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ganyu skill;\n  delay(6);\n  ganyu skill;\n  delay(6);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "甘雨: 武器が未設定です（武器なしで計算されます）",
    "甘雨: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5752,7 +5752,7 @@
     "スキル「元素スキル: 溢れる情熱」の発動時点で CT がまだ 0.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive sucrose;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    sucrose swap;\n  }\n  wait(30);\n  sucrose skill;\n  delay(6);\n  sucrose skill;\n  delay(6);\n  sucrose skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive sucrose;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    sucrose swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  sucrose skill;\n  delay(6);\n  sucrose skill;\n  delay(6);\n  sucrose skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "スクロース: 武器が未設定です（武器なしで計算されます）",
    "スクロース: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5866,7 +5866,7 @@
     "スキル「元素スキル: 絡み合う命の糸」の発動時点で CT がまだ 9 秒残っています"
    ]
   ],
-  "gcsim": "\nactive yelan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yelan swap;\n  }\n  wait(30);\n  yelan skill;\n  delay(6);\n  yelan skill;\n  delay(6);\n  yelan skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yelan;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yelan swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yelan skill;\n  delay(6);\n  yelan skill;\n  delay(6);\n  yelan skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "夜蘭: 武器が未設定です（武器なしで計算されます）",
    "夜蘭: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -5965,7 +5965,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 7.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(30);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -6069,7 +6069,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 3.4 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(30);\n  xianyun skill;\n  delay(6);\n  xianyun low_plunge;\n  delay(6);\n  wait(780);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  xianyun skill;\n  delay(6);\n  xianyun low_plunge;\n  delay(6);\n  wait(780);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -6181,7 +6181,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 9.6 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(30);\n  xianyun skill;\n  delay(6);\n  xianyun skill;\n  delay(6);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  xianyun skill;\n  delay(6);\n  xianyun skill;\n  delay(6);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -6293,7 +6293,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 7.2 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(180);\n  xianyun swap;\n  wait(30);\n  xianyun skill;\n  delay(184);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  wait(30);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(180);\n  xianyun swap;\n  wait(29);\n  xianyun skill;\n  delay(184);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -6451,7 +6451,7 @@
     "スキル「元素スキル: 朝翔の鶴雲」の発動時点で CT がまだ 6.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(30);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive xianyun;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    xianyun swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(6);\n  wait(300);\n  xianyun skill;\n  delay(184);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "閑雲: 武器が未設定です（武器なしで計算されます）",
    "閑雲: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -6544,7 +6544,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "甘雨: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -6665,7 +6665,7 @@
     "スキル「元素スキル: 山沢麟跡」の発動時点で CT がまだ 8.6 秒残っています"
    ]
   ],
-  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "甘雨: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -6785,7 +6785,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(1200);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ganyu skill;\n  delay(6);\n  wait(1200);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "甘雨: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -6871,7 +6871,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yumemizukimizuki swap;\n  }\n  wait(30);\n  yumemizukimizuki skill;\n  delay(6);\n  wait(60);\n  yumemizukimizuki skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yumemizukimizuki;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yumemizukimizuki swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yumemizukimizuki skill;\n  delay(6);\n  wait(60);\n  yumemizukimizuki skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "夢見月瑞希: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7061,7 +7061,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive klee;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    klee swap;\n  }\n  wait(30);\n  klee skill;\n  delay(6);\n  klee skill;\n  delay(6);\n  klee skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive klee;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    klee swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  klee skill;\n  delay(6);\n  klee skill;\n  delay(6);\n  klee skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "クレー: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7319,7 +7319,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7416,7 +7416,7 @@
     "スキル「元素スキル: 焔硝の庭火舞い」の発動時点で CT がまだ 16.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive yoimiya;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yoimiya swap;\n  }\n  wait(30);\n  yoimiya skill;\n  delay(6);\n  wait(60);\n  yoimiya skill;\n  delay(580);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yoimiya;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yoimiya swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yoimiya skill;\n  delay(6);\n  wait(60);\n  yoimiya skill;\n  delay(580);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "宵宮: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7537,7 +7537,7 @@
     "スキル「元素スキル: 越祓雷草の輪」の発動時点で CT がまだ 0.8 秒残っています"
    ]
   ],
-  "gcsim": "\nactive kukishinobu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    kukishinobu swap;\n  }\n  wait(30);\n  kukishinobu skill;\n  delay(6);\n  wait(60);\n  kukishinobu skill;\n  delay(6);\n  wait(840);\n  kukishinobu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive kukishinobu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    kukishinobu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  kukishinobu skill;\n  delay(6);\n  wait(60);\n  kukishinobu skill;\n  delay(6);\n  wait(840);\n  kukishinobu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "久岐忍: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7663,7 +7663,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl skill;\n  delay(6);\n  wait(780);\n  fischl skill;\n  delay(6);\n  wait(1620);\n  fischl skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl skill;\n  delay(6);\n  wait(780);\n  fischl skill;\n  delay(6);\n  wait(1620);\n  fischl skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
    "ベネット: 武器が未設定です（武器なしで計算されます）",
@@ -7754,7 +7754,7 @@
     "スキル「元素スキル: 山沢麟跡」の発動時点で CT がまだ 8.6 秒残っています"
    ]
   ],
-  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(30);\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ganyu;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ganyu swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ganyu skill;\n  delay(6);\n  wait(60);\n  ganyu skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(4800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "甘雨: 武器が未設定です（武器なしで計算されます）",
    "甘雨: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8010,7 +8010,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(300);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(300);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8180,7 +8180,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8345,7 +8345,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko burst;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko burst;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8516,7 +8516,7 @@
     "スキル「元素スキル: 野干役呪·殺生櫻」の発動時点で CT がまだ 0.8 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(180);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(180);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8725,7 +8725,7 @@
     "スキル「元素スキル: 野干役呪·殺生櫻」の発動時点で CT がまだ 3.4 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(60);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  wait(60);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8855,7 +8855,7 @@
     "出場時間が 0.93秒です。原神の交代内部CT(約1.0秒)に近い素早い交代です。"
    ]
   ],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -8985,7 +8985,7 @@
     "出場時間が 0.93秒です。原神の交代内部CT(約1.0秒)に近い素早い交代です。"
    ]
   ],
-  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(30);\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive yaemiko;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    yaemiko swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  yaemiko skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(1800);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "八重神子: 武器が未設定です（武器なしで計算されます）",
    "八重神子: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9070,7 +9070,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive qiqi;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    qiqi swap;\n  }\n  wait(30);\n  qiqi skill;\n  delay(6);\n  wait(1200);\n  qiqi skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(2400);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive qiqi;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    qiqi swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  qiqi skill;\n  delay(6);\n  wait(1200);\n  qiqi skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(2400);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "七七: 武器が未設定です（武器なしで計算されます）",
    "七七: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9162,7 +9162,7 @@
     "スキル「元素スキル: 仙法·寒病鬼差」の発動時点で CT がまだ 9.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive qiqi;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    qiqi swap;\n  }\n  wait(30);\n  qiqi skill;\n  delay(6);\n  wait(1200);\n  qiqi skill;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(2400);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive qiqi;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    qiqi swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  qiqi skill;\n  delay(6);\n  wait(1200);\n  qiqi skill;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(2400);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "七七: 武器が未設定です（武器なしで計算されます）",
    "七七: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9265,7 +9265,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(674);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(674);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9347,7 +9347,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(404);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(404);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9441,7 +9441,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(344);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  wait(420);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(344);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9730,7 +9730,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(435);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(435);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -9815,7 +9815,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  wait(840);\n  zibai attack;\n  delay(27);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  zibai burst;\n  delay(6);\n  wait(840);\n  zibai attack;\n  delay(27);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -10053,7 +10053,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -12553,7 +12553,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(540);\n  zibai skill;\n  delay(6);\n  wait(480);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  wait(540);\n  zibai skill;\n  delay(6);\n  wait(480);\n  zibai skill;\n  delay(6);\n  zibai skill;\n  delay(823);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -12650,7 +12650,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(696);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(696);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -12758,7 +12758,7 @@
     "スキル「元素スキル: 衆生は忽然たるのみ」の発動時点で CT がまだ 1.1 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(30);\n  zibai skill;\n  delay(6);\n  wait(360);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(264);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive zibai;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    zibai swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  zibai skill;\n  delay(6);\n  wait(360);\n  zibai skill;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai attack;\n  delay(6);\n  zibai skill;\n  delay(264);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "兹白: 武器が未設定です（武器なしで計算されます）",
    "兹白: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13571,7 +13571,7 @@
     "スキル「元素スキル: 璇璣屏」の発動時点で CT がまだ 10.9 秒残っています"
    ]
   ],
-  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(30);\n  ningguang skill;\n  delay(6);\n  wait(720);\n  ningguang skill;\n  delay(6);\n  ningguang skill;\n  delay(6);\n  wait(780);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ningguang skill;\n  delay(6);\n  wait(720);\n  ningguang skill;\n  delay(6);\n  ningguang skill;\n  delay(6);\n  wait(780);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "凝光: 武器が未設定です（武器なしで計算されます）",
    "凝光: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13683,7 +13683,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(30);\n  ningguang skill;\n  delay(6);\n  wait(720);\n  ningguang skill;\n  delay(6);\n  ningguang skill;\n  delay(6);\n  wait(780);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ningguang skill;\n  delay(6);\n  wait(720);\n  ningguang skill;\n  delay(6);\n  ningguang skill;\n  delay(6);\n  wait(780);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "凝光: 武器が未設定です（武器なしで計算されます）",
    "凝光: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13768,7 +13768,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(30);\n  ningguang skill;\n  delay(6);\n  wait(2100);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive ningguang;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    ningguang swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  ningguang skill;\n  delay(6);\n  wait(2100);\n  ningguang skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "凝光: 武器が未設定です（武器なしで計算されます）",
    "凝光: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13837,7 +13837,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl skill;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl skill;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 武器が未設定です（武器なしで計算されます）",
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13906,7 +13906,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl burst;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl burst;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 武器が未設定です（武器なしで計算されます）",
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -13974,7 +13974,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl skill;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl skill;\n  delay(6);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 武器が未設定です（武器なしで計算されます）",
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14048,7 +14048,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl burst;\n  delay(6);\n  wait(660);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl burst;\n  delay(6);\n  wait(660);\n  fischl skill[recast=1];\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 武器が未設定です（武器なしで計算されます）",
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14133,7 +14133,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(30);\n  fischl burst;\n  delay(6);\n  wait(660);\n  fischl skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive fischl;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    fischl swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  fischl burst;\n  delay(6);\n  wait(660);\n  fischl skill;\n  delay(6);\n  wait(3600);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "フィッシュル: 武器が未設定です（武器なしで計算されます）",
    "フィッシュル: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14242,7 +14242,7 @@
     "スキル「元素スキル: 伏撃の雷鳴」の発動時点で CT がまだ 11.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  wait(180);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  alyosha skill;\n  delay(6);\n  wait(180);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
    "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14332,7 +14332,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  wait(60);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  wait(60);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  alyosha attack;\n  delay(6);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
    "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14423,7 +14423,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  alyosha burst;\n  delay(6);\n  wait(960);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  alyosha skill;\n  delay(6);\n  alyosha burst;\n  delay(6);\n  wait(960);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
    "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14491,7 +14491,7 @@
    ]
   ],
   "issues": [],
-  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha burst;\n  delay(6);\n  wait(180);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  alyosha burst;\n  delay(6);\n  wait(180);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
    "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -14668,7 +14668,7 @@
     "スキル「元素スキル: 伏撃の雷鳴」の発動時点で CT がまだ 13.7 秒残っています"
    ]
   ],
-  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(30);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive alyosha;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    alyosha swap;\n  }\n  wait(29);\n  if i < 2 {\n    wait(1);\n  }\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  alyosha skill;\n  delay(6);\n  wait(60);\n  bennett swap;\n  wait(29);\n  bennett skill;\n  delay(6);\n  wait(3600);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "アリョーシャ: 武器が未設定です（武器なしで計算されます）",
    "アリョーシャ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",

@@ -99,7 +99,7 @@
           "id": "ptrg_gcsim_mv4y8not_d",
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-hydro）",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 12.3,
           "gcsimKey": "citlali-a1-hydro",
           "cooldown": 8
@@ -108,7 +108,7 @@
           "id": "ptrg_gcsim_mv4y8not_f",
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-pyro）",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 12.3,
           "gcsimKey": "citlali-a1-pyro",
           "cooldown": 8
@@ -117,7 +117,7 @@
           "id": "ptrg_gcsim_mv4y8not_h",
           "passiveEffectId": "wbuff_14517",
           "name": "祭星者の眺め: 風と陽に捧げる祭儀",
-          "offset": 1.133,
+          "offset": 1.117,
           "duration": 15,
           "gcsimKey": "starcallerswatch",
           "cooldown": 14
@@ -126,7 +126,7 @@
           "id": "ptrg_gcsim_mv4y8not_i",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+12%",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 15.3,
           "gcsimKey": "scroll-4pc-cryo"
         },
@@ -134,7 +134,7 @@
           "id": "ptrg_gcsim_mv4y8not_k",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 20.3,
           "gcsimKey": "scroll-4pc-nightsoul-cryo"
         },
@@ -142,7 +142,7 @@
           "id": "ptrg_gcsim_mv4y8not_m",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+12%",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 15.3,
           "gcsimKey": "scroll-4pc-hydro"
         },
@@ -150,7 +150,7 @@
           "id": "ptrg_gcsim_mv4y8not_o",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
-          "offset": 0.85,
+          "offset": 0.833,
           "duration": 20.3,
           "gcsimKey": "scroll-4pc-nightsoul-hydro"
         }
@@ -185,7 +185,7 @@
           "id": "ptrg_gcsim_mv4y8not_8",
           "passiveEffectId": "10000089-hydro_p1",
           "name": "終わりなき円舞",
-          "offset": 8.717,
+          "offset": 8.65,
           "duration": 13.95,
           "gcsimKey": "furina-a1"
         },
@@ -193,9 +193,17 @@
           "id": "ptrg_gcsim_mv4y8not_a",
           "passiveEffectId": "wbuff_11511",
           "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-buff）",
-          "offset": 1.2,
-          "duration": 20,
+          "offset": 0.017,
+          "duration": 21.2,
           "gcsimKey": "khaj-nisut-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mva0jvzc_0",
+          "passiveEffectId": "wbuff_11511",
+          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-team-buff）",
+          "offset": 1.217,
+          "duration": 20.3,
+          "gcsimKey": "khaj-nisut-team-buff"
         }
       ],
       "groups": []
@@ -244,7 +252,7 @@
           "id": "ptrg_gcsim_mv4y8not_b",
           "passiveEffectId": "10000023-pyro_c1",
           "name": "1凸「外カリ中フワ」",
-          "offset": 2.617,
+          "offset": 2.6,
           "duration": 11.217,
           "gcsimKey": "xiangling-c1"
         },
@@ -252,7 +260,7 @@
           "id": "ptrg_gcsim_mv4y8not_c",
           "passiveEffectId": "10000023-pyro_c6",
           "name": "6凸「竜巻旋火輪」",
-          "offset": 2.4,
+          "offset": 2.383,
           "duration": 14,
           "gcsimKey": "xlc6"
         }
@@ -287,7 +295,7 @@
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-hydro）",
           "offset": 2.667,
-          "duration": 22.583,
+          "duration": 22.567,
           "gcsimKey": "citlali-a1-hydro",
           "cooldown": 8
         },
@@ -296,7 +304,7 @@
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-pyro）",
           "offset": 2.667,
-          "duration": 22.583,
+          "duration": 22.567,
           "gcsimKey": "citlali-a1-pyro",
           "cooldown": 8
         },
@@ -304,39 +312,39 @@
           "id": "ptrg_gcsim_mv4y8not_j",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+12%",
-          "offset": 3.167,
-          "duration": 25.083,
+          "offset": 3.133,
+          "duration": 25.1,
           "gcsimKey": "scroll-4pc-cryo"
         },
         {
           "id": "ptrg_gcsim_mv4y8not_l",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.167,
-          "duration": 30.083,
+          "offset": 3.133,
+          "duration": 30.1,
           "gcsimKey": "scroll-4pc-nightsoul-cryo"
         },
         {
           "id": "ptrg_gcsim_mv4y8not_n",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+12%",
-          "offset": 3.167,
-          "duration": 25.083,
+          "offset": 3.133,
+          "duration": 25.1,
           "gcsimKey": "scroll-4pc-hydro"
         },
         {
           "id": "ptrg_gcsim_mv4y8not_p",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.167,
-          "duration": 30.083,
+          "offset": 3.133,
+          "duration": 30.1,
           "gcsimKey": "scroll-4pc-nightsoul-hydro"
         },
         {
           "id": "ptrg_gcsim_mv4y8not_q",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 炎元素ダメージ+12%",
-          "offset": 3.417,
+          "offset": 3.4,
           "duration": 15.033,
           "gcsimKey": "scroll-4pc-pyro"
         },
@@ -344,7 +352,7 @@
           "id": "ptrg_gcsim_mv4y8nou_r",
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 炎元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.417,
+          "offset": 3.4,
           "duration": 20.033,
           "gcsimKey": "scroll-4pc-nightsoul-pyro"
         }
@@ -376,13 +384,13 @@
           "name": "元素スキル(長押し): 嗚呼流·風隠急進",
           "shortName": "hE",
           "type": "skill_hold",
-          "duration": 9.067,
+          "duration": 9.1,
           "durationManual": true,
-          "cooldown": 9.633,
-          "gcsimBaseDuration": 9.067,
+          "cooldown": 9.65,
+          "gcsimBaseDuration": 9.1,
           "gcsimCdResonance": 1,
           "naturalDuration": 9.033,
-          "gcsimCtOffset": 8.1
+          "gcsimCtOffset": 8.133
         }
       ],
       "startTime": 10.916,
@@ -393,7 +401,7 @@
           "id": "ptrg_gcsim_mv4y8nos_0",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 0.717,
+          "offset": 0.7,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
           "cooldown": 2.033
@@ -402,7 +410,7 @@
           "id": "ptrg_gcsim_mv4y8nos_1",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 2.967,
+          "offset": 2.95,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
           "cooldown": 2
@@ -411,7 +419,7 @@
           "id": "ptrg_gcsim_mv4y8nos_2",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 5.967,
+          "offset": 5.95,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
           "cooldown": 2
@@ -420,7 +428,7 @@
           "id": "ptrg_gcsim_mv4y8nos_3",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 8.567,
+          "offset": 8.55,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
           "cooldown": 2.033
@@ -429,7 +437,7 @@
           "id": "ptrg_gcsim_mv4y8not_4",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvpyro）",
-          "offset": 0.717,
+          "offset": 0.7,
           "duration": 10.3,
           "gcsimKey": "vvpyro"
         },
@@ -437,7 +445,7 @@
           "id": "ptrg_gcsim_mv4y8not_5",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvcryo）",
-          "offset": 2.967,
+          "offset": 2.95,
           "duration": 14.217,
           "gcsimKey": "vvcryo"
         },
@@ -445,16 +453,16 @@
           "id": "ptrg_gcsim_mv4y8not_6",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvhydro）",
-          "offset": 4.567,
-          "duration": 15.6,
+          "offset": 4.55,
+          "duration": 15.633,
           "gcsimKey": "vvhydro"
         },
         {
           "id": "ptrg_gcsim_mv4y8not_7",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvhydro）",
-          "offset": 17.767,
-          "duration": 2.7,
+          "offset": 17.717,
+          "duration": 2.767,
           "gcsimKey": "vvhydro"
         }
       ]
@@ -462,6 +470,6 @@
   ],
   "loopStartIndex": 0,
   "loopStartTime": 0,
-  "totalDuration": 21.83,
+  "totalDuration": 21.87,
   "switchDelay": 0.5
 }

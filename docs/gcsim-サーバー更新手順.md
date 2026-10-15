@@ -92,6 +92,7 @@ npm run check:backup       # 保存・バックアップ・同梱プリセット
 3. 保存した編成を JSON で書き出し（`id`・`updatedAt`・`exportedAt` を除き、`name` の先頭の「[プリセット]」を外す）、同名のファイルを置き換える。
 4. `npm run check:backup` が通ること。
 - 反応の行を持つプリセットが増えたら、その編成も同じ手順で作り直す（`node -e` で `reactions.gcsimVersion` を確認できる）。
+- **5 つのプリセットを、最新の計算（ヒットストップ・攻撃速度・交代の 1f など）に合わせて作り直すとき**（D241）: gcsim が対応しているキャラの 4 編成（`keqing-intensify`・`furina-vaporize`・`raiden-national`・`lunar-bloom`）は、画面に読み込む → 「gcsim で計算」 → 名前をつけて保存。gcsim が対応していないキャラを含む `sandrone-stellar-conduct` は、読み込んで保存だけ（gcsim では計算しない）。保存した編成を、上の 3 のとおり JSON にして、`src/data/presets/` の同名のファイルを置き換える。作り直した後は、`totalDuration`・所要時間が変わっていてよい（アプリの計算の更新で変わる。編成・アクションの並びは変わらない）。
 - 「gcsim で計算」の後の保存データには、副次効果が空の行動に `extraEffects: []` が入る（実行した印。D213 案 2。実行前のバーを出さないため）。置き換えてよい。
 
 ### 7. 画面で通し確認する

@@ -86,7 +86,7 @@
           "passiveEffectId": "10000073-dendro_p1",
           "name": "浄善摂受明論",
           "offset": 2.767,
-          "duration": 17.5,
+          "duration": 17,
           "gcsimKey": "nahida-a1"
         },
         {
@@ -94,7 +94,7 @@
           "passiveEffectId": "abuff_15025",
           "name": "深林4: 草元素耐性-30%",
           "offset": 0.75,
-          "duration": 24.267,
+          "duration": 24.233,
           "gcsimKey": "dm-4pc"
         }
       ]
@@ -178,7 +178,7 @@
           "id": "ptrg_gcsim_mv559xa7_2",
           "passiveEffectId": "10000070-hydro_p1_1",
           "name": "落花廻旋の庭 (30秒)",
-          "offset": 2.783,
+          "offset": 2.767,
           "duration": 30,
           "gcsimKey": "nilou-a1"
         },
@@ -186,7 +186,7 @@
           "id": "ptrg_gcsim_mv559xa7_3",
           "passiveEffectId": "10000070-hydro_p1_2",
           "name": "落花廻旋の庭 (10秒)",
-          "offset": 3.717,
+          "offset": 3.7,
           "duration": 22,
           "gcsimKey": "nilou-a1-em"
         },
@@ -194,7 +194,7 @@
           "id": "ptrg_gcsim_mv559xa7_4",
           "passiveEffectId": "10000070-hydro_p1_2",
           "name": "落花廻旋の庭 (10秒)",
-          "offset": 16.717,
+          "offset": 16.683,
           "duration": 11.95,
           "gcsimKey": "nilou-a1-em"
         },
@@ -202,7 +202,7 @@
           "id": "ptrg_gcsim_mv559xa7_5",
           "passiveEffectId": "10000070-hydro_p2",
           "name": "軽やかに舞う永世の夢",
-          "offset": 2.783,
+          "offset": 2.767,
           "duration": 30,
           "gcsimKey": "nilou-a4"
         },
@@ -210,7 +210,7 @@
           "id": "ptrg_gcsim_mv559xa7_6",
           "passiveEffectId": "wbuff_11511",
           "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-buff）",
-          "offset": 0.783,
+          "offset": 0.767,
           "duration": 22.05,
           "gcsimKey": "khaj-nisut-buff"
         },
@@ -218,7 +218,7 @@
           "id": "ptrg_gcsim_mv559xa7_7",
           "passiveEffectId": "wbuff_11511",
           "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-team-buff）",
-          "offset": 1.967,
+          "offset": 1.95,
           "duration": 20.867,
           "gcsimKey": "khaj-nisut-team-buff"
         },
@@ -226,15 +226,15 @@
           "id": "ptrg_gcsim_mv559xa7_8",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-hydro）",
-          "offset": 2.833,
-          "duration": 22.967,
+          "offset": 2.817,
+          "duration": 22.95,
           "gcsimKey": "nilou-c2-hydro"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_9",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-hydro）",
-          "offset": 17.75,
+          "offset": 17.717,
           "duration": 10,
           "gcsimKey": "nilou-c2-hydro"
         },
@@ -242,7 +242,7 @@
           "id": "ptrg_gcsim_mv559xa7_a",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-dendro）",
-          "offset": 3.717,
+          "offset": 3.7,
           "duration": 22,
           "gcsimKey": "nilou-c2-dendro"
         },
@@ -250,8 +250,8 @@
           "id": "ptrg_gcsim_mv559xa7_b",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-dendro）",
-          "offset": 16.267,
-          "duration": 12.4,
+          "offset": 16.2,
+          "duration": 12.433,
           "gcsimKey": "nilou-c2-dendro"
         }
       ]
@@ -279,8 +279,8 @@
             {
               "key": "columbina-gravity",
               "name": "重力（月の反応）",
-              "offset": 1.05,
-              "duration": 19.8
+              "offset": 1.067,
+              "duration": 19.25
             }
           ]
         },
@@ -327,8 +327,8 @@
           "id": "ptrg_gcsim_mv559xa7_c",
           "passiveEffectId": "10000125-hydro_p1",
           "name": "月が呼んだ狂気",
-          "offset": 0.867,
-          "duration": 15.15,
+          "offset": 0.85,
+          "duration": 15.167,
           "gcsimKey": "columbina-a1"
         },
         {
@@ -351,16 +351,16 @@
           "id": "ptrg_gcsim_mv559xa7_i",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 最大HP+40%（コロンビーナ）",
-          "offset": 0.867,
-          "duration": 13.15,
+          "offset": 0.85,
+          "duration": 13.167,
           "gcsimKey": "columbina-c2"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_l",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
-          "offset": 0.867,
-          "duration": 13.15,
+          "offset": 0.85,
+          "duration": 13.167,
           "gcsimKey": "columbina-c2-lb"
         }
       ]
@@ -424,7 +424,7 @@
           "id": "ptrg_gcsim_mv559xa7_o",
           "passiveEffectId": "10000119-dendro_p1",
           "name": "霜夜に捧ぐ光（light-for-the-frosty-night）",
-          "offset": 0.517,
+          "offset": 0.5,
           "duration": 20,
           "gcsimKey": "light-for-the-frosty-night"
         },
@@ -432,7 +432,7 @@
           "id": "ptrg_gcsim_mv559xa8_p",
           "passiveEffectId": "wbuff_14432",
           "name": "天光のリュート: 最後の歌い手",
-          "offset": 0.517,
+          "offset": 0.5,
           "duration": 20,
           "gcsimKey": "etherlight"
         },
@@ -440,7 +440,7 @@
           "id": "ptrg_gcsim_mv559xa8_q",
           "passiveEffectId": "abuff_15042",
           "name": "月を紡ぐ夜の歌4: 効果",
-          "offset": 0.783,
+          "offset": 0.767,
           "duration": 14.617,
           "gcsimKey": "gleaming-moon-devotion-em"
         },
@@ -448,8 +448,8 @@
           "id": "ptrg_gcsim_mv559xa8_r",
           "passiveEffectId": "abuff_15042",
           "name": "月を紡ぐ夜の歌4: 効果",
-          "offset": 9.35,
-          "duration": 14.767,
+          "offset": 9.333,
+          "duration": 13.85,
           "gcsimKey": "gleaming-moon-devotion-em"
         }
       ]
@@ -511,7 +511,7 @@
           "id": "ptrg_gcsim_mv559xa7_d",
           "passiveEffectId": "10000125-hydro_p1",
           "name": "月が呼んだ狂気",
-          "offset": 3.183,
+          "offset": 3.217,
           "duration": 10,
           "gcsimKey": "columbina-a1"
         },
@@ -519,7 +519,7 @@
           "id": "ptrg_gcsim_mv559xa7_e",
           "passiveEffectId": "10000125-hydro_p1",
           "name": "月が呼んだ狂気",
-          "offset": 7.683,
+          "offset": 7.717,
           "duration": 10,
           "gcsimKey": "columbina-a1"
         },
@@ -535,7 +535,7 @@
           "id": "ptrg_gcsim_mv559xa7_j",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 最大HP+40%（コロンビーナ）",
-          "offset": 3.183,
+          "offset": 3.217,
           "duration": 8,
           "gcsimKey": "columbina-c2"
         },
@@ -543,7 +543,7 @@
           "id": "ptrg_gcsim_mv559xa7_k",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 最大HP+40%（コロンビーナ）",
-          "offset": 7.683,
+          "offset": 7.717,
           "duration": 8,
           "gcsimKey": "columbina-c2"
         },
@@ -551,7 +551,7 @@
           "id": "ptrg_gcsim_mv559xa7_m",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
-          "offset": 3.183,
+          "offset": 3.217,
           "duration": 8,
           "gcsimKey": "columbina-c2-lb"
         },
@@ -559,7 +559,7 @@
           "id": "ptrg_gcsim_mv559xa7_n",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
-          "offset": 7.683,
+          "offset": 7.717,
           "duration": 8,
           "gcsimKey": "columbina-c2-lb"
         }
@@ -585,14 +585,14 @@
             },
             "end": {
               "actionId": "act_1790639819417_w612",
-              "offset": 1.35
+              "offset": 1.367
             },
             "count": 1
           },
           {
             "start": {
               "actionId": "act_1790639819417_w612",
-              "offset": 1.35
+              "offset": 1.367
             },
             "end": {
               "actionId": "act_1790701217629_7jgv",
@@ -607,25 +607,25 @@
             },
             "end": {
               "actionId": "act_1790639826184_rwwd",
-              "offset": 0.183
+              "offset": 0.217
             },
             "count": 1
           },
           {
             "start": {
               "actionId": "act_1790639826184_rwwd",
-              "offset": 0.183
+              "offset": 0.217
             },
             "end": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 1.883
+              "offset": 1.917
             },
             "count": 2
           },
           {
             "start": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 1.883
+              "offset": 1.917
             },
             "end": {
               "actionId": "act_1790658661178_tzwe",
@@ -687,7 +687,7 @@
           {
             "start": {
               "actionId": "act_1790639819417_w612",
-              "offset": 2.033
+              "offset": 2.05
             },
             "end": {
               "actionId": "act_1790639826184_rwwd",
@@ -713,7 +713,7 @@
             },
             "end": {
               "actionId": "act_1791803040675_9zk2",
-              "offset": 1.333
+              "offset": 1.317
             },
             "count": 3
           }
@@ -727,29 +727,29 @@
           {
             "start": {
               "actionId": "act_1790639793975_533l",
-              "offset": 0.15
+              "offset": 0.167
             },
             "end": {
               "actionId": "act_1790639794922_a6b6",
-              "offset": 1.95
+              "offset": 1.967
             },
             "count": 1
           },
           {
             "start": {
               "actionId": "act_1790639794922_a6b6",
-              "offset": 1.95
+              "offset": 1.967
             },
             "end": {
               "actionId": "act_1790657507648_0k6e",
-              "offset": 0.317
+              "offset": 0.35
             },
             "count": 2
           },
           {
             "start": {
               "actionId": "act_1790657507648_0k6e",
-              "offset": 0.317
+              "offset": 0.35
             },
             "end": {
               "actionId": "act_1790701217629_7jgv",
@@ -764,14 +764,14 @@
             },
             "end": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 1.983
+              "offset": 1.3
             },
             "count": 2
           },
           {
             "start": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 1.983
+              "offset": 1.3
             },
             "end": {
               "actionId": "act_1790658661178_tzwe",
@@ -852,7 +852,7 @@
             },
             "end": {
               "actionId": "act_1791803040675_9zk2",
-              "offset": 12.85
+              "offset": 26.533
             },
             "count": 3
           }
@@ -870,7 +870,7 @@
             },
             "end": {
               "actionId": "act_1791803040675_9zk2",
-              "offset": 12.85
+              "offset": 26.533
             },
             "count": 3
           }

@@ -142,24 +142,24 @@
           "id": "ptrg_gcsim_mv57a5h9_m",
           "passiveEffectId": "10000073-dendro_p1",
           "name": "浄善摂受明論",
-          "offset": 2.75,
-          "duration": 19.5,
+          "offset": 2.733,
+          "duration": 19,
           "gcsimKey": "nahida-a1"
         },
         {
           "id": "ptrg_gcsim_mv57a5h9_n",
           "passiveEffectId": "abuff_15025",
           "name": "深林4: 草元素耐性-30%",
-          "offset": 0.733,
-          "duration": 26.183,
+          "offset": 0.717,
+          "duration": 26.1,
           "gcsimKey": "dm-4pc"
         },
         {
           "id": "ptrg_gcsim_mv57a5h9_o",
           "passiveEffectId": "10000073-dendro_c2",
           "name": "2凸「正覚善見の根」",
-          "offset": 3.75,
-          "duration": 24.783,
+          "offset": 3.717,
+          "duration": 24.717,
           "gcsimKey": "nahida-c2"
         }
       ]
@@ -193,7 +193,7 @@
           "id": "ptrg_gcsim_mv57a5h9_v",
           "passiveEffectId": "wbuff_15503",
           "name": "終焉: 別れの歌（elegy-proc）",
-          "offset": 3.3,
+          "offset": 3.267,
           "duration": 12.6,
           "gcsimKey": "elegy-proc",
           "cooldown": 20
@@ -202,7 +202,7 @@
           "id": "ptrg_gcsim_mv57a5h9_w",
           "passiveEffectId": "wbuff_15503",
           "name": "終焉: 別れの歌（millennial-atk%）",
-          "offset": 3.3,
+          "offset": 3.267,
           "duration": 12.6,
           "gcsimKey": "millennial-atk%",
           "cooldown": 20
@@ -259,7 +259,7 @@
           "id": "ptrg_gcsim_mv57a5h9_p",
           "passiveEffectId": "10000047-anemo_p2",
           "name": "風物の詩吟（kazuha-a4-electro）",
-          "offset": 1.1,
+          "offset": 1.083,
           "duration": 9.133,
           "gcsimKey": "kazuha-a4-electro"
         },
@@ -267,7 +267,7 @@
           "id": "ptrg_gcsim_mv57a5h9_r",
           "passiveEffectId": "wbuff_11407",
           "name": "鉄蜂の刺し: 注入の棘",
-          "offset": 1.1,
+          "offset": 1.083,
           "duration": 6,
           "gcsimKey": "ironsting",
           "cooldown": 1
@@ -276,7 +276,7 @@
           "id": "ptrg_gcsim_mv57a5h9_t",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvelectro）",
-          "offset": 1.1,
+          "offset": 1.083,
           "duration": 11.15,
           "gcsimKey": "vvelectro"
         }
@@ -361,7 +361,7 @@
           "id": "ptrg_gcsim_mv57a5h8_1",
           "passiveEffectId": "10000042-electro_p1",
           "name": "抵天の雷罰",
-          "offset": 1.5,
+          "offset": 1.483,
           "duration": 5.533,
           "gcsimKey": "keqinginfuse"
         },
@@ -369,7 +369,7 @@
           "id": "ptrg_gcsim_mv57a5h8_3",
           "passiveEffectId": "10000042-electro_p2",
           "name": "玉衡の貴",
-          "offset": 3.5,
+          "offset": 3.483,
           "duration": 8,
           "gcsimKey": "keqing-a4"
         },
@@ -377,7 +377,7 @@
           "id": "ptrg_gcsim_mv57a5h8_5",
           "passiveEffectId": "wbuff_11509",
           "name": "霧切の廻光: 霧切の御腰物（mistsplitter-normal）",
-          "offset": 2.567,
+          "offset": 2.55,
           "duration": 5.65,
           "gcsimKey": "mistsplitter-normal"
         },
@@ -385,7 +385,7 @@
           "id": "ptrg_gcsim_mv57a5h8_7",
           "passiveEffectId": "wbuff_11509",
           "name": "霧切の廻光: 霧切の御腰物（mistsplitter-burst）",
-          "offset": 3.5,
+          "offset": 3.483,
           "duration": 10,
           "gcsimKey": "mistsplitter-burst"
         },
@@ -393,7 +393,7 @@
           "id": "ptrg_gcsim_mv57a5h8_9",
           "passiveEffectId": "10000042-electro_c2",
           "name": "2凸「苛捐」",
-          "offset": 2.567,
+          "offset": 2.55,
           "duration": 0,
           "gcsimKey": "keqing-c2-icd",
           "cooldown": 5
@@ -402,7 +402,7 @@
           "id": "ptrg_gcsim_mv57a5h8_b",
           "passiveEffectId": "10000042-electro_c4",
           "name": "4凸「調律」",
-          "offset": 0.933,
+          "offset": 0.917,
           "duration": 15.85,
           "gcsimKey": "keqing-c4"
         },
@@ -410,7 +410,7 @@
           "id": "ptrg_gcsim_mv57a5h8_e",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-skill）",
-          "offset": 0.517,
+          "offset": 0.5,
           "duration": 8.2,
           "gcsimKey": "keqing-c6-skill"
         },
@@ -418,7 +418,7 @@
           "id": "ptrg_gcsim_mv57a5h9_g",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-attack）",
-          "offset": 2.4,
+          "offset": 2.383,
           "duration": 8.1,
           "gcsimKey": "keqing-c6-attack"
         },
@@ -426,7 +426,7 @@
           "id": "ptrg_gcsim_mv57a5h9_i",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-charge）",
-          "offset": 2.817,
+          "offset": 2.8,
           "duration": 8,
           "gcsimKey": "keqing-c6-charge"
         },
@@ -434,7 +434,7 @@
           "id": "ptrg_gcsim_mv57a5h9_k",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-burst）",
-          "offset": 3.5,
+          "offset": 3.483,
           "duration": 8,
           "gcsimKey": "keqing-c6-burst"
         }
@@ -479,7 +479,7 @@
           "id": "ptrg_gcsim_mv57a5h9_q",
           "passiveEffectId": "10000047-anemo_p2",
           "name": "風物の詩吟（kazuha-a4-electro）",
-          "offset": 1.617,
+          "offset": 1.6,
           "duration": 8.5,
           "gcsimKey": "kazuha-a4-electro"
         },
@@ -487,7 +487,7 @@
           "id": "ptrg_gcsim_mv57a5h9_s",
           "passiveEffectId": "wbuff_11407",
           "name": "鉄蜂の刺し: 注入の棘",
-          "offset": 0.683,
+          "offset": 0.667,
           "duration": 6,
           "gcsimKey": "ironsting",
           "cooldown": 1
@@ -496,7 +496,7 @@
           "id": "ptrg_gcsim_mv57a5h9_u",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvelectro）",
-          "offset": 1.617,
+          "offset": 1.6,
           "duration": 10.517,
           "gcsimKey": "vvelectro"
         }
@@ -545,7 +545,19 @@
           "durationManual": true,
           "gcsimBaseDuration": 0.317,
           "naturalDuration": 0.317,
-          "groupId": "grp_1791806664765_trfd"
+          "groupId": "grp_1791806664765_trfd",
+          "copyDurations": {
+            "1": {
+              "duration": 0.317,
+              "gcsimBaseDuration": 0.317,
+              "base": 0.317
+            },
+            "2": {
+              "duration": 0.317,
+              "gcsimBaseDuration": 0.317,
+              "base": 0.317
+            }
+          }
         },
         {
           "id": "act_1790659670941_r34l",
@@ -557,7 +569,19 @@
           "durationManual": true,
           "gcsimBaseDuration": 0.6,
           "naturalDuration": 0.6,
-          "groupId": "grp_1791806664765_trfd"
+          "groupId": "grp_1791806664765_trfd",
+          "copyDurations": {
+            "1": {
+              "duration": 0.6,
+              "gcsimBaseDuration": 0.6,
+              "base": 0.6
+            },
+            "2": {
+              "duration": 0.583,
+              "gcsimBaseDuration": 0.583,
+              "base": 0.6
+            }
+          }
         },
         {
           "id": "act_1791806714245_pybk",
@@ -571,8 +595,8 @@
           "gcsimBaseDuration": 0.583,
           "cooldown": 6.5,
           "gcsimCdResonance": 1,
-          "gcsimCtOffset": 0.333,
-          "effectDuration": 5.333
+          "effectDuration": 5.333,
+          "gcsimCtOffset": 0.333
         },
         {
           "id": "act_1791806715914_87ev",
@@ -595,7 +619,7 @@
           "id": "ptrg_gcsim_mv57a5h8_2",
           "passiveEffectId": "10000042-electro_p1",
           "name": "抵天の雷罰",
-          "offset": 1.2,
+          "offset": 1.183,
           "duration": 10.35,
           "gcsimKey": "keqinginfuse"
         },
@@ -603,15 +627,15 @@
           "id": "ptrg_gcsim_mv57a5h8_4",
           "passiveEffectId": "10000042-electro_p2",
           "name": "玉衡の貴",
-          "offset": 1.467,
-          "duration": 2.75,
+          "offset": 1.45,
+          "duration": 2.783,
           "gcsimKey": "keqing-a4"
         },
         {
           "id": "ptrg_gcsim_mv57a5h8_6",
           "passiveEffectId": "wbuff_11509",
           "name": "霧切の廻光: 霧切の御腰物（mistsplitter-normal）",
-          "offset": 2.267,
+          "offset": 2.25,
           "duration": 7.983,
           "gcsimKey": "mistsplitter-normal"
         },
@@ -619,24 +643,24 @@
           "id": "ptrg_gcsim_mv57a5h8_8",
           "passiveEffectId": "wbuff_11509",
           "name": "霧切の廻光: 霧切の御腰物（mistsplitter-burst）",
-          "offset": 1.467,
-          "duration": 4.85,
+          "offset": 1.45,
+          "duration": 4.883,
           "gcsimKey": "mistsplitter-burst"
         },
         {
           "id": "ptrg_gcsim_mv57a5h8_a",
           "passiveEffectId": "10000042-electro_c2",
           "name": "2凸「苛捐」",
-          "offset": 3.383,
+          "offset": 2.25,
           "duration": 0,
           "gcsimKey": "keqing-c2-icd",
-          "cooldown": 5.2
+          "cooldown": 5.3
         },
         {
           "id": "ptrg_gcsim_mv57a5h8_c",
           "passiveEffectId": "10000042-electro_c4",
           "name": "4凸「調律」",
-          "offset": 0.933,
+          "offset": 0.917,
           "duration": 15.333,
           "gcsimKey": "keqing-c4"
         },
@@ -644,7 +668,7 @@
           "id": "ptrg_gcsim_mv57a5h8_f",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-skill）",
-          "offset": 0.517,
+          "offset": 0.5,
           "duration": 13.017,
           "gcsimKey": "keqing-c6-skill"
         },
@@ -652,7 +676,7 @@
           "id": "ptrg_gcsim_mv57a5h9_h",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-attack）",
-          "offset": 1.467,
+          "offset": 1.45,
           "duration": 11.067,
           "gcsimKey": "keqing-c6-attack"
         },
@@ -660,7 +684,7 @@
           "id": "ptrg_gcsim_mv57a5h9_j",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-charge）",
-          "offset": 1.467,
+          "offset": 1.45,
           "duration": 11.383,
           "gcsimKey": "keqing-c6-charge"
         },
@@ -668,8 +692,8 @@
           "id": "ptrg_gcsim_mv57a5h9_l",
           "passiveEffectId": "10000042-electro_c6",
           "name": "6凸「廉貞」（keqing-c6-burst）",
-          "offset": 1.467,
-          "duration": 2.75,
+          "offset": 1.45,
+          "duration": 2.783,
           "gcsimKey": "keqing-c6-burst"
         }
       ],
@@ -683,6 +707,6 @@
   ],
   "loopStartIndex": 1,
   "loopStartTime": 2.383,
-  "totalDuration": 23.58,
+  "totalDuration": 23.57,
   "switchDelay": 0.5
 }

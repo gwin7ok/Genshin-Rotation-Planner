@@ -78,8 +78,8 @@
           "gcsimBaseDuration": 0.683,
           "cooldown": 21,
           "gcsimCdResonance": 1,
-          "gcsimCtOffset": 0.167,
-          "effectDuration": 19.333
+          "effectDuration": 19.333,
+          "gcsimCtOffset": 0.167
         },
         {
           "id": "act_1791808073769_p4b1",
@@ -103,8 +103,8 @@
           "gcsimBaseDuration": 0.55,
           "cooldown": 20,
           "gcsimCdResonance": 1,
-          "gcsimCtOffset": 0,
-          "effectDuration": 18.65
+          "effectDuration": 18.65,
+          "gcsimCtOffset": 0
         },
         {
           "id": "act_1791808091428_s4zh",
@@ -126,8 +126,8 @@
           "id": "ptrg_gcsim_mv580uy1_x",
           "passiveEffectId": "10000025-hydro_c2",
           "name": "2凸「青空の虹」",
-          "offset": 2.867,
-          "duration": 22.017,
+          "offset": 2.85,
+          "duration": 21.967,
           "gcsimKey": "xingqiu-c2"
         }
       ]
@@ -186,7 +186,7 @@
           "id": "ptrg_gcsim_mv580uy1_y",
           "passiveEffectId": "abuff_10007",
           "name": "教官4: 全員元素熟知+120",
-          "offset": 1.133,
+          "offset": 1.117,
           "duration": 9.45,
           "gcsimKey": "instructor-4pc"
         }
@@ -247,7 +247,7 @@
           "id": "ptrg_gcsim_mv580uy1_11",
           "passiveEffectId": "10000023-pyro_c1",
           "name": "1凸「外カリ中フワ」",
-          "offset": 2.617,
+          "offset": 2.6,
           "duration": 11.667,
           "gcsimKey": "xiangling-c1"
         },
@@ -255,7 +255,7 @@
           "id": "ptrg_gcsim_mv580uy1_12",
           "passiveEffectId": "10000023-pyro_c6",
           "name": "6凸「竜巻旋火輪」",
-          "offset": 2.4,
+          "offset": 2.383,
           "duration": 14,
           "gcsimKey": "xlc6"
         }
@@ -291,7 +291,19 @@
           "naturalDuration": 0.367,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
-          "gcsimBaseDuration": 0.367
+          "gcsimBaseDuration": 0.367,
+          "copyDurations": {
+            "1": {
+              "duration": 0.367,
+              "gcsimBaseDuration": 0.367,
+              "base": 0.367
+            },
+            "2": {
+              "duration": 0.367,
+              "gcsimBaseDuration": 0.367,
+              "base": 0.367
+            }
+          }
         },
         {
           "id": "act_1791808290970_carj",
@@ -303,7 +315,19 @@
           "groupId": "grp_1791807522241_0vjy",
           "naturalDuration": 0.267,
           "durationManual": true,
-          "gcsimBaseDuration": 0.333
+          "gcsimBaseDuration": 0.333,
+          "copyDurations": {
+            "1": {
+              "duration": 0.333,
+              "gcsimBaseDuration": 0.333,
+              "base": 0.333
+            },
+            "2": {
+              "duration": 0.333,
+              "gcsimBaseDuration": 0.333,
+              "base": 0.333
+            }
+          }
         },
         {
           "id": "act_1791807505145_8eiy",
@@ -315,7 +339,19 @@
           "naturalDuration": 0.333,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
-          "gcsimBaseDuration": 0.333
+          "gcsimBaseDuration": 0.333,
+          "copyDurations": {
+            "1": {
+              "duration": 0.333,
+              "gcsimBaseDuration": 0.333,
+              "base": 0.333
+            },
+            "2": {
+              "duration": 0.333,
+              "gcsimBaseDuration": 0.333,
+              "base": 0.333
+            }
+          }
         },
         {
           "id": "act_1791807505994_30n1",
@@ -327,7 +363,19 @@
           "naturalDuration": 0.333,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
-          "gcsimBaseDuration": 0.667
+          "gcsimBaseDuration": 0.667,
+          "copyDurations": {
+            "1": {
+              "duration": 0.667,
+              "gcsimBaseDuration": 0.667,
+              "base": 0.667
+            },
+            "2": {
+              "duration": 0.617,
+              "gcsimBaseDuration": 0.617,
+              "base": 0.667
+            }
+          }
         },
         {
           "id": "act_1791807507212_551o",
@@ -339,7 +387,19 @@
           "naturalDuration": 0.55,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
-          "gcsimBaseDuration": 0.633
+          "gcsimBaseDuration": 0.633,
+          "copyDurations": {
+            "1": {
+              "duration": 0.633,
+              "gcsimBaseDuration": 0.633,
+              "base": 0.633
+            },
+            "2": {
+              "duration": 0.65,
+              "gcsimBaseDuration": 0.65,
+              "base": 0.633
+            }
+          }
         },
         {
           "id": "act_1791807509522_2cb3",
@@ -351,7 +411,19 @@
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
           "gcsimBaseDuration": 0.367,
-          "naturalDuration": 0.367
+          "naturalDuration": 0.367,
+          "copyDurations": {
+            "1": {
+              "duration": 0.367,
+              "gcsimBaseDuration": 0.367,
+              "base": 0.367
+            },
+            "2": {
+              "duration": 0.367,
+              "gcsimBaseDuration": 0.367,
+              "base": 0.367
+            }
+          }
         },
         {
           "id": "act_1791807532846_6nea",
@@ -408,7 +480,7 @@
           "id": "ptrg_gcsim_mv580uy1_z",
           "passiveEffectId": "abuff_10007",
           "name": "教官4: 全員元素熟知+120",
-          "offset": 0.783,
+          "offset": 0.767,
           "duration": 8,
           "gcsimKey": "instructor-4pc"
         },
@@ -416,8 +488,8 @@
           "id": "ptrg_gcsim_mv580uy1_10",
           "passiveEffectId": "abuff_10007",
           "name": "教官4: 全員元素熟知+120",
-          "offset": 2.167,
-          "duration": 6.883,
+          "offset": 2.133,
+          "duration": 6.9,
           "gcsimKey": "instructor-4pc"
         }
       ]
@@ -425,6 +497,6 @@
   ],
   "loopStartIndex": 1,
   "loopStartTime": 1.2,
-  "totalDuration": 24.65,
+  "totalDuration": 24.62,
   "switchDelay": 0.5
 }

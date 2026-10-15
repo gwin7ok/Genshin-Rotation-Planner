@@ -21,6 +21,7 @@ import {
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { PRESET_COUNT, PRESET_NAME_PREFIX, restorePresets } from '../utils/presets';
 import { useDialogs } from './DialogProvider';
+import { staleReactionsBadge } from './StaleReactionsBadge';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
@@ -542,7 +543,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                       type="button"
                       onClick={handleRestorePresets}
                       className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors"
-                      title={`同梱のプリセット ${PRESET_COUNT} 編成（名前の先頭が「${PRESET_NAME_PREFIX}」）を、保存編成に入れ直します。同じ名前の保存編成は、上書きされます`}
+                      title={`同梱のプリセット ${PRESET_COUNT} 編成（名前の先頭が「${PRESET_NAME_PREFIX}」）を、保存編成に入れ直します。同じ名前の保存編成は、上書きされます。古い gcsim の計算結果（「旧 gcsim」の印）のプリセットも、最新になります`}
                       data-testid="restore-presets"
                     >
                       プリセット({PRESET_COUNT}編成)を復元する
@@ -579,6 +580,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                           <div className="space-y-1.5 min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-sm text-white">{slot.name}</span>
+                              {staleReactionsBadge(slot.reactions)}
                               <span className="text-[10px] text-slate-400 font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
                                 ⏱️ {(slot.totalDuration ?? 0).toFixed(1)}s / {slot.stints.length}ターン ({slotActionCount}手)
                               </span>

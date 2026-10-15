@@ -1,3 +1,4 @@
+import { staleReactionsBadge } from './StaleReactionsBadge';
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
@@ -131,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
                 placeholder="保存スロットに未保存"
                 options={[
                   { value: '', label: '保存スロットに未保存', disabled: true },
-                  ...savedSlots.map(slot => ({ value: slot.id, label: slot.name })),
+                  ...savedSlots.map(slot => ({ value: slot.id, label: slot.name, badge: staleReactionsBadge(slot.reactions) })),
                 ]}
                 onChange={(v) => {
                   const slot = savedSlots.find(s => s.id === v);

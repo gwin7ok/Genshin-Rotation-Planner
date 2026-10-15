@@ -40305,7 +40305,7 @@
       {
         "id": "10000113-anemo_e",
         "name": "元素スキル: 天翔ける守護",
-        "shortName": "E",
+        "shortName": "tE",
         "type": "skill",
         "startsSkillCooldown": true,
         "cooldown": 7.5,
@@ -40332,12 +40332,6 @@
           "startDelayFrames": 0,
           "durationFrames": 589,
           "swap": "blocks",
-          "enders": [
-            {
-              "by": "self",
-              "cooldown": "start"
-            }
-          ],
           "holdByDefault": false,
           "noHold": true,
           "cooldownAtEnd": {
@@ -40346,6 +40340,39 @@
               "swap": 0,
               "timeout": 0
             }
+          },
+          "enders": [
+            {
+              "by": "self",
+              "cooldown": "start",
+              "frames": {
+                "total": 44,
+                "cancels": {
+                  "attack": 43,
+                  "burst": 42,
+                  "jump": 43,
+                  "swap": 42
+                },
+                "source": "skill.go:skillCancelFrames（E → Jump 43f ほか。夜魂を終わらせる）"
+              }
+            },
+            {
+              "by": "skill_hold",
+              "cooldown": "start"
+            }
+          ],
+          "chargedFrames": {
+            "total": 42,
+            "hitmark": 1,
+            "cancels": {
+              "attack": 54,
+              "skill": 0,
+              "burst": 0,
+              "dash": 0,
+              "jump": 0,
+              "swap": 0
+            },
+            "source": "charge.go:skillAttackHoldFrames（InitNormalCancelSlice(0, chargeSkillInterval 42)。CA → N 54f。CanQueueAfter = 0）"
           },
           "normalFrames": [
             {
@@ -40377,6 +40404,29 @@
           "self": true,
           "status": "manual"
         }
+      },
+      {
+        "id": "10000113-anemo_e_cancelplunge",
+        "name": "元素スキル(長押し・落下): 天翔ける守護",
+        "shortName": "hE(落下)",
+        "type": "skill_hold",
+        "startsSkillCooldown": false,
+        "defaultDuration": 1.15,
+        "frames": {
+          "total": 69,
+          "hitmark": 39,
+          "cancels": {
+            "attack": 50,
+            "charge": 49,
+            "skill": 39,
+            "burst": 49,
+            "dash": 44,
+            "jump": 58,
+            "swap": 55
+          },
+          "source": "skill.go:skillCancelPlungeFrames"
+        },
+        "description": "お前の出番だ、きょうだい！イファがカクークを呼び出して一緒に戦う。\n発動後、イファは夜魂値を80獲得し、**夜魂の加護**状態に入る。夜魂の加護状態期間中、イファはカクークの協力によって浮遊状態になり、通常攻撃を行う時、一回押しと長押しによって異なる**「援護射撃」**を行い、チーム全員のHPを回復するアンプルショットを発射する。\n\nまた、夜魂の加護状態時、長押しして元素スキル天翔ける守護を発動すると、イファは代わりに夜魂性質の落下攻撃を行う。スキルボタンを離すと落下攻撃を中断でき、浮遊状態を維持する。落下攻撃中に着地すると、イファの夜魂の加護状態は終了する。"
       },
       {
         "id": "10000113-anemo_q",

@@ -188,7 +188,7 @@ for (const c of characters) {
   // 元素スキル・元素爆発・重撃
   for (const suffix of ['e', 'q', 'ca'] as const) {
     const def = actions.find(a => a.id === `${c.id}_${suffix}`);
-    if (!def?.frames || def.cooldownPool || def.specialBurst || def.mode || def.gcsimUnsupported) continue;
+    if (!def?.frames || def.cooldownPool || def.specialBurst || def.gcsimUnsupported) continue;
     const command = mapAction(def.id, c.weaponType).command;
     if (!command) continue;
     const exp = cancelAttack(def.frames);

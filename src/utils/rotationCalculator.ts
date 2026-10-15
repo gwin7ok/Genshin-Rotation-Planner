@@ -214,24 +214,42 @@ export function calculateRotation(
     return { icdSeconds: sacrificialIcdSeconds(refine) };
   };
   // 通常攻撃速度（gcsim の AtkSpd）。効果の表は masterdata/attackSpeedEffects.ts。アクションの開始時点の状態から、速度の合計を求める
-  const burstStartByChar = new Map<string, number>();
+  const burstStartByChar = new Map<string, { t: number; sIdx: number; hitlag: number }>();
+  // キャラ自身のヒットストップの合計（秒。ヒットストップで延びる効果の経過から引く）
+  const hitlagTotalByChar = new Map<string, number>();
   const chargedStartByChar = new Map<string, number>();
-  const attackSpeedOf = (c: CharacterConfig, start: number, previousNormal: { start: number; total: number } | undefined): number => {
+  const skillStartByChar = new Map<string, { t: number; hitlag: number }>();
+  const normalsSinceSkillByChar = new Map<string, number>();
+  // 交代で出場した時刻（先頭の出場を除く。交代アクションの開始 = gcsim の OnCharacterSwap）
+  const enterFieldByChar = new Map<string, { t: number; hitlag: number }[]>();
+  const attackSpeedOf = (c: CharacterConfig, start: number, sIdx: number, previousNormal: { start: number; total: number; cancel: number } | undefined): number => {
     const w = options?.database?.weapons.find(x => x.id === c.weaponId);
     // 聖遺物は、4 セットの効果が有効なとき（組み合わせが 2+2 でない）だけ
     const art = c.artifactSetMode === '2+2' ? undefined : options?.database?.artifacts?.find(x => x.id === c.artifactSetId);
-    if (!w?.gcsimKey && !art?.gcsimKey) return 0;
+    if (!w?.gcsimKey && !art?.gcsimKey && !c.source?.gcsimKey) return 0;
     const refine = w ? c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5) : 1;
     const burstAt = burstStartByChar.get(c.id);
     const chargedAt = chargedStartByChar.get(c.id);
+    const skillAt = skillStartByChar.get(c.id);
+    const hitlagNow = hitlagTotalByChar.get(c.id) ?? 0;
     return attackSpeedFor({
       weaponKey: w?.gcsimKey,
       artifactKey: art?.gcsimKey,
+      characterKey: c.source?.gcsimKey,
+      constellation: CharacterModel.fromConfig(c).constellation,
       refine,
-      secondsSinceBurst: burstAt === undefined ? undefined : start - burstAt,
+      secondsSinceBurst: burstAt === undefined ? undefined : start - burstAt.t,
+      burstInSameStint: burstAt?.sIdx === sIdx,
+      hitlagSinceBurst: burstAt === undefined ? undefined : hitlagNow - burstAt.hitlag,
+      secondsSinceSkill: skillAt === undefined ? undefined : start - skillAt.t,
+      hitlagSinceSkill: skillAt === undefined ? undefined : hitlagNow - skillAt.hitlag,
+      hitlagNow,
+      normalAttacksSinceSkill: normalsSinceSkillByChar.get(c.id),
+      enterFieldTimes: enterFieldByChar.get(c.id),
+      now: start,
       secondsSinceChargedAttack: chargedAt === undefined ? undefined : start - chargedAt,
       previousNormalAttack: previousNormal
-        ? { animationFrames: previousNormal.total, elapsedFrames: Math.round((start - previousNormal.start) * 60) }
+        ? { animationFrames: previousNormal.total, cancelFrames: previousNormal.cancel, elapsedFrames: Math.round((start - previousNormal.start) * 60) }
         : undefined,
     });
   };
@@ -490,10 +508,11 @@ export function calculateRotation(
     // 連続した通常攻撃の段（gcsim と同じく、他のアクションを挟むと1段目に戻る）
     let normalStreak = 0;
     // 直前のアクションが通常攻撃のとき、その開始時刻と全体のフレーム（通常攻撃速度の効果の判定用）
-    let previousNormal: { start: number; total: number } | undefined;
+    let previousNormal: { start: number; total: number; cancel: number } | undefined;
 
     // 2-C: 先頭キャラも含め、全出場に交代時間を設ける（switchDelay > 0の場合）
     // これにより先頭キャラの例外処理が不要になり、ループ開始位置へ戻った時も自然に交代時間が入る
+    if (sIdx > 0) enterFieldByChar.set(char.id, [...(enterFieldByChar.get(char.id) ?? []), { t: currentTime, hitlag: hitlagTotalByChar.get(char.id) ?? 0 }]);
     if (switchDelay > 0) {
       const switchActionStartTime = currentTime;
       const switchActionEndTime = Number((currentTime + switchDelay).toFixed(3));
@@ -928,7 +947,7 @@ export function calculateRotation(
           // ヒットストップの延びは、次のアクションの種類で値が違うことがある（次が待機・不明のときは、次が通常攻撃のときの値）
           hitlagFrames = hitlagFor(nextKey === 'wait' ? undefined : nextKey);
           // 通常攻撃は、武器の攻撃速度で縮む（ヒットストップの延びは、縮んだ後に足される）
-          const atkSpd = act.type === 'normal' ? attackSpeedOf(char, actionStartTime, rawActions[aIdx - 1]?.type === 'normal' ? previousNormal : undefined) : 0;
+          const atkSpd = act.type === 'normal' ? attackSpeedOf(char, actionStartTime, sIdx, rawActions[aIdx - 1]?.type === 'normal' ? previousNormal : undefined) : 0;
           // 縮めたキャンセルが、ヒット判定（hitmark）より早くなるときは、ヒット判定まで待つ（gcsim: CanQueueAfter = hitmark。雷電の爆発中の 5 段目 → E など）
           const motionAdjusted = atkSpd > 0 ? Math.max(atkSpdAdjust(motion, atkSpd), Math.min(motion, frames.hitmark ?? 0)) : motion;
           autoDuration = Number(((motionAdjusted + hitlagFrames) / 60).toFixed(3));
@@ -947,10 +966,17 @@ export function calculateRotation(
         : Math.max(0.05, autoDuration ?? (act.duration || 0.5));
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
       // 元素爆発の開始（攻撃速度の効果の「爆発の後 N 秒」に使う）と、直前の通常攻撃（「通常攻撃の状態」に使う）
-      if (act.type === 'burst') burstStartByChar.set(char.id, actionStartTime);
+      // 効果は、このアクションの命中（ヒットストップ）より前に付くので、ヒットストップの合計は、このアクションの分を足す前の値
+      const hitlagBefore = hitlagTotalByChar.get(char.id) ?? 0;
+      hitlagTotalByChar.set(char.id, hitlagBefore + Math.max(0, hitlagFrames) / 60);
+      if (act.type === 'burst') burstStartByChar.set(char.id, { t: actionStartTime, sIdx, hitlag: hitlagBefore });
+      if (act.type === 'skill') { skillStartByChar.set(char.id, { t: actionStartTime, hitlag: hitlagBefore }); normalsSinceSkillByChar.set(char.id, 0); }
+      if (act.type === 'normal' && normalsSinceSkillByChar.has(char.id)) normalsSinceSkillByChar.set(char.id, normalsSinceSkillByChar.get(char.id)! + 1);
       if (act.type === 'charged') chargedStartByChar.set(char.id, actionStartTime);
       // 通常攻撃の状態は、アニメーションが終わると外れる。ヒットストップで止まった分、アニメーションも延びる
-      previousNormal = act.type === 'normal' && frames ? { start: actionStartTime, total: frames.total + Math.max(0, hitlagFrames) } : undefined;
+      previousNormal = act.type === 'normal' && frames
+        ? { start: actionStartTime, total: frames.total + Math.max(0, hitlagFrames), cancel: (frames.cancels.attack ?? frames.total) + Math.max(0, hitlagFrames) }
+        : undefined;
       // モードの終わりを、そのヒットのヒットストップで延ばす（gcsim の `mod extended`。雷電の爆発・綾人のスキルなど。D215）
       if (modeHit && modeExtFrames > 0) extendSpecial(modeHit.window, modeExtFrames / 60);
 

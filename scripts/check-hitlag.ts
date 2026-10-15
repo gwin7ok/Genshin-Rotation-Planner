@@ -166,6 +166,7 @@ const weaponsMaster: any[] = JSON.parse(fs.readFileSync('src/data/weapons_master
 const artifactsMaster: any[] = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'));
 const CHARS: Record<string, string> = { sword: '行秋', claymore: 'ライオス', polearm: '香菱', bow: 'アンバー', catalyst: 'リサ' };
 for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
+  if (effect.source.type === 'character') continue;
   const isArtifact = effect.source.type === 'artifact';
   const art = isArtifact ? artifactsMaster.find(x => x.gcsimKey === effect.source.gcsimKey) : undefined;
   // 聖遺物の効果は、剣のキャラ（行秋）と標準の剣で測る。武器の効果は、その武器の持ち主
@@ -211,6 +212,92 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
           const ai = Math.round((acts[offset + i + 1].startTime - acts[offset + i].startTime) * 60);
           checked++;
           if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}+${w.name}(精錬${refine}・${kinds.join('+')}) n${i + 1} → ${nextCmd} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+        }
+      }
+    }
+  }
+}
+// ---- キャラの効果（D223）: 自分のアクションの列（と、交代の出入り）を gcsim と同じに並べて、通常攻撃の間隔を比べる ----
+{
+  const other = characters.find(x => x.name === CHARS.sword)!;
+  type Step = { who: 'self' | 'other'; cmd: 'attack' | 'skill' | 'burst'; delay: number };
+  const SUFFIX = { attack: 'n', skill: 'e', burst: 'q' } as const;
+  for (const effect of (ATTACK_SPEED_EFFECTS as any[]).filter(e => e.source.type === 'character')) {
+    const c = characters.find(x => x.source.gcsimKey === effect.source.gcsimKey);
+    if (!c) { fails.push(`表のキャラが、マスターに見つかりません: ${effect.source.gcsimKey}`); continue; }
+    const k = c.source.gcsimKey as string;
+    if (process.env.HL_ONLY && process.env.HL_ONLY !== k) continue;
+    const ok = other.source.gcsimKey as string;
+    const kinds: string[] = (Array.isArray(effect.when) ? effect.when : [effect.when]).map((x: any) => x.kind);
+    const conds: any[] = Array.isArray(effect.when) ? effect.when : [effect.when];
+    const minCons = effect.source.minConstellation ?? 0;
+    const A = (n: number, who: Step['who'] = 'self'): Step[] => Array.from({ length: n }, () => ({ who, cmd: 'attack', delay: 0 }));
+    // シナリオ（名前・手順）
+    const scenarios: { name: string; steps: Step[] }[] = [];
+    const lead = kinds.includes('afterBurst') ? 'burst' : kinds.includes('afterSkill') ? 'skill' : undefined;
+    if (lead) {
+      const window = conds.find(x => x.kind === (lead === 'burst' ? 'afterBurst' : 'afterSkill')).seconds as number;
+      const gap = Math.max(0, Math.round(window * 60) - 130);
+      scenarios.push({ name: `${lead} → 通常攻撃`, steps: [{ who: 'self', cmd: lead as any, delay: 0 }, ...A(4)] });
+      // 効果の終わりの近く（途中で切れる）
+      scenarios.push({ name: `${lead} → 待機 ${gap}f → 通常攻撃`, steps: [{ who: 'self', cmd: lead as any, delay: gap }, ...A(4)] });
+      // 控えに下がって戻る
+      scenarios.push({ name: `${lead} → 通常攻撃 → 交代して戻る`, steps: [{ who: 'self', cmd: lead as any, delay: 0 }, ...A(2), ...A(1, 'other'), ...A(4)] });
+    } else if (kinds.includes('afterEnterField')) {
+      const icd = conds.find(x => x.kind === 'afterEnterField').icdSeconds as number;
+      // 先頭 → 交代で出場（付く）→ すぐ交代して戻る（内部 CT で付かない）
+      scenarios.push({ name: '出場 → 戻る（内部 CT）', steps: [...A(2), ...A(1, 'other'), ...A(3), ...A(1, 'other'), ...A(3)] });
+      // 内部 CT が明けたあとに、また出場
+      scenarios.push({ name: `出場 → ${icd} 秒後に戻る`, steps: [...A(2), ...A(1, 'other'), ...A(3), { who: 'other', cmd: 'attack', delay: icd * 60 }, ...A(3)] });
+    }
+    // 命ノ星座で値が変わる効果（レイザーの爆発は、命ノ星座 3 で天賦レベル +3）だけ、別の凸も測る
+    const cons = k === 'razor' ? [0, 3] : [minCons];
+    for (const cn of cons) {
+      for (const sc of scenarios) {
+        for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
+          const cfg = [
+            `${k} char lvl=90/90 cons=${cn} talent=9,9,9;`,
+            `${k} add weapon="${weapons[c.weaponType]}" refine=1 lvl=90/90;`,
+            `${k} add stats cr=1;`,
+            `${ok} char lvl=90/90 cons=0 talent=9,9,9;`,
+            `${ok} add weapon="dullblade" refine=1 lvl=90/90;`,
+            `${ok} add stats cr=1;`,
+            `options iteration=1 duration=90 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
+            'target lvl=100 resist=0.1;',
+            `active ${k};`,
+            sc.steps.map(st => `${st.who === 'self' ? k : ok} ${st.cmd};${st.delay + delayFrames > 0 ? ` delay(${st.delay + delayFrames});` : ''}`).join(' '),
+          ].join('\n');
+          const res = await fetch(`${GCSIM_SERVER_URL}/sample/cc_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
+          const logs = ((await res.json()).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|skill|burst)/.test(l.msg));
+          const g = logs.map(l => l.frame as number);
+          if (g.length !== sc.steps.length) { fails.push(`${c.name}(C${cn}) ${sc.name}: gcsim の実行数が合いません（${g.length} / ${sc.steps.length}）`); continue; }
+          const cw = { ...structuredClone(c), constellation: cn };
+          const ow = structuredClone(other);
+          // 連続する同じキャラの手順を、1 つの出場にまとめる
+          const stints: any[] = [];
+          for (const st of sc.steps) {
+            const who = st.who === 'self' ? cw : ow;
+            const last = stints[stints.length - 1];
+            const a = act(who, SUFFIX[st.cmd], (st.delay + delayFrames) / 60);
+            if (last && last.characterId === who.id) last.actions.push(a);
+            else stints.push({ id: `s${stints.length + 1}`, characterId: who.id, actions: [a], holdMode: false });
+          }
+          const r = calculateRotation([cw, ow], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster } });
+          const acts = r.calculatedStints.flatMap((s: any) => s.actions.filter((a: any) => a.type !== 'swap'));
+          if (acts.length !== sc.steps.length) { fails.push(`${c.name}(C${cn}) ${sc.name}: アプリの行数が合いません（${acts.length} / ${sc.steps.length}）`); continue; }
+          if (process.env.HL_DEBUG && defHalt) {
+            console.log(`${c.name}(C${cn}) ${sc.name}`);
+            console.log('  gcsim', g.slice(1).map((x, i) => x - g[i]).join(' '));
+            console.log('  app  ', acts.slice(1).map((x: any, i: number) => Math.round((x.startTime - acts[i].startTime) * 60)).join(' '));
+          }
+          for (let i = 0; i + 1 < sc.steps.length; i++) {
+            // 同じ出場の中の、通常攻撃の間隔だけ比べる（交代をまたぐ間隔は、交代の長さが違うので比べない）
+            if (sc.steps[i].who !== 'self' || sc.steps[i + 1].who !== 'self' || sc.steps[i].cmd !== 'attack') continue;
+            const gi = g[i + 1] - g[i];
+            const ai = Math.round((acts[i + 1].startTime - acts[i].startTime) * 60);
+            checked++;
+            if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}(C${cn}) ${sc.name} #${i + 1} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+          }
         }
       }
     }

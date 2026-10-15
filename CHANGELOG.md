@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-16
+
+### 追加
+- 豊穣月開花プリセットを最新計算に合わせて作り直し
+
 ## [1.3.0] - 2026-10-16
 
 ### 追加
@@ -122,7 +127,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...v1.1.3

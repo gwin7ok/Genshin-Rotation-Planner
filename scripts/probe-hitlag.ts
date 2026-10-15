@@ -224,13 +224,14 @@ for (const c of characters) {
       const caCommand = ca && !ca.gcsimUnsupported ? mapAction(ca.id, c.weaponType).command : undefined;
       const q = actions.find(a => a.id === `${c.id}_q`);
       // モードを開く爆発（状態の中の通常攻撃は、別の仕組み。爆発自身の攻撃速度の効果も、表で別に足すので、差に混ぜない）は測らない
-      const qCommand = q && !q.gcsimUnsupported && !q.cooldownPool && !q.specialBurst && !q.mode ? mapAction(q.id, c.weaponType).command : undefined;
+      // モードを開く爆発・スキルでも、モードが通常攻撃のフレーム（normalFrames）を持たなければ、1 段目は基本の通常攻撃（ファルカなど）
+      const qCommand = q && !q.gcsimUnsupported && !q.cooldownPool && !q.specialBurst && !q.mode?.normalFrames ? mapAction(q.id, c.weaponType).command : undefined;
       const diff = (x: Pair, y: Pair): Pair => ({ with: x.with - y.with, without: x.without - y.without });
       const exp = cancelAttack(hits[0].frames)!;
       // 重撃（単独で使えない剣・大剣・長柄は、直前に通常攻撃を入れる。重撃で 1 段目に戻る）と爆発の直後の 1 段目を測る
       const e = actions.find(a => a.id === `${c.id}_e`);
       // スキルも、モードを開く・複数回・長押しの別の仕組みのものは測らない
-      const eCommand = e && !e.gcsimUnsupported && !e.cooldownPool && !e.specialBurst && !e.mode ? mapAction(e.id, c.weaponType).command : undefined;
+      const eCommand = e && !e.gcsimUnsupported && !e.cooldownPool && !e.specialBurst && !e.mode?.normalFrames ? mapAction(e.id, c.weaponType).command : undefined;
       const dashCommand = actions.some(a => a.id === `${c.id}_dash`) ? 'dash' : undefined;
       const jumpCommand = actions.some(a => a.id === `${c.id}_jump`) ? 'jump' : undefined;
       for (const [label, prefix] of [
@@ -244,6 +245,8 @@ for (const c of characters) {
         // 1 段目の次の n1 → attack の測定が、次の種類の測定で除外されているキャラ（凝光: 通常攻撃の種類が毎回変わる）は、測らない
         if (excludedNext.some(x => x.startsWith(`${n.id}[0]|`))) { excludedAfter.push(`${n.id}|${label}`); continue; }
         // スキルの後の効果を、攻撃速度の表で別に足すキャラ（ミカ・重雲など）は、差に効果が混ざるので、測らない
+        // 爆発の後の効果を、攻撃速度の表で別に足すキャラ（レザー・一斗・サイノなど）も、同じ（差に効果が混ざる）
+        if (label === 'afterBurst' && ATTACK_SPEED_EFFECTS.some(x => x.source.gcsimKey === k && (Array.isArray(x.when) ? x.when : [x.when]).some(w => w.kind === 'afterBurst'))) { excludedAfter.push(`${n.id}|${label}`); continue; }
         if (label === 'afterSkill' && ATTACK_SPEED_EFFECTS.some(x => x.source.gcsimKey === k && (Array.isArray(x.when) ? x.when : [x.when]).some(w => w.kind === 'afterSkill'))) { excludedAfter.push(`${n.id}|${label}`); continue; }
         const af = await measureBase(k, weapon, [...prefix, 'attack', 'attack'], prefix.length, exp, `${n.id}[0]+${label}`, false, undefined);
         if (!af) { excludedAfter.push(`${n.id}|${label}`); continue; }
@@ -275,6 +278,27 @@ for (const c of characters) {
         }
       }
     }
+  }
+}
+
+// ---- モードの窓の中の、スキルの再押し（ディルックの 2・3 回目の E など。`mode.repress.frames`）: キー = `<opener の ID>#r`（再押しの順の配列）----
+for (const c of characters) {
+  const k = c.source.gcsimKey as string;
+  const weapon = weapons[c.weaponType];
+  for (const opener of (c.availableActions ?? []) as any[]) {
+    const rp = opener.mode?.repress;
+    if (!rp?.frames?.length || rp.actions || rp.framesByAction || opener.gcsimUnsupported || opener.cooldownPool) continue;
+    const command = mapAction(opener.id, c.weaponType).command;
+    if (!command) continue;
+    const arr: Base[] = [];
+    for (let i = 0; i < rp.frames.length; i++) {
+      const exp = cancelAttack(rp.frames[i]);
+      if (exp === undefined) break;
+      const p = await measureBase(k, weapon, [...Array.from({ length: i + 2 }, () => command), 'attack'], i + 1, exp, `${opener.id}#r[${i}]`, false, undefined);
+      if (!p) break;
+      arr.push(p);
+    }
+    if (arr.length === rp.frames.length) entries[`${opener.id}#r`] = arr;
   }
 }
 

@@ -847,6 +847,8 @@ export function calculateRotation(
       let normalHitFrames: ActionFrames | undefined;
       // モードの専用のフレーム（`mode.normalFrames` / `chargedFrames`）を使った通常攻撃・重撃（ヒットストップの延びのキーと段）
       let modeHit: { key: string; index: number; window: ModeWindow } | undefined;
+      // モードの窓の中の、スキルの再押し（ディルックの 2・3 回目の E など）のフレームと、ヒットストップの表のキー
+      let repressHit: { key: string; index: number; frames: ActionFrames } | undefined;
       // モードの間だけ、通常攻撃・元素爆発が別の動作になるキャラ（クロリンデの夜巡り）
       const frameMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && (m.def.normalFrames || m.def.burstFrames || m.def.chargedFrames));
       if (act.type === 'normal') {
@@ -895,7 +897,11 @@ export function calculateRotation(
         if (byAction) {
           frames = Array.isArray(byAction) ? byAction[Math.min(modeRepress.index, byAction.length - 1)] : byAction;
           if (act.type === 'normal') normalStreak = 0;
-        } else if (rpFrames.length) frames = rpFrames[Math.min(modeRepress.index, rpFrames.length - 1)];
+        } else if (rpFrames.length) {
+          const ri = Math.min(modeRepress.index, rpFrames.length - 1);
+          frames = rpFrames[ri];
+          repressHit = { key: `${modeRepress.window.actionDefId}#r`, index: ri, frames: rpFrames[ri] };
+        }
       }
       if (modeKind && burstModeDef && mw) {
         if (modeKind === 'punch') {
@@ -960,6 +966,14 @@ export function calculateRotation(
       }
       // モードの専用のフレームの通常攻撃・重撃: ヒットストップの延び（遅延で値が変わるものは d0）と、モードの終わりの延び（ext）。
       // フレームを、後のモードの上書き（終わらせる動作・もう一度使った動作など）で置き換えたときは足さない
+      if (repressHit && frames === repressHit.frames) {
+        const raw = HITLAG_FRAMES[repressHit.key];
+        const e = Array.isArray(raw) ? raw[repressHit.index] : undefined;
+        if (e) {
+          hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
+          hitlagFrames = hitlagFor(undefined);
+        }
+      }
       let modeExtFrames = 0;
       if (modeHit && frames && (frames === modeHit.window.def.chargedFrames || modeHit.window.def.normalFrames?.includes(frames))) {
         const raw = HITLAG_FRAMES[modeHit.key];

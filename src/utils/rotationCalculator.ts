@@ -118,7 +118,7 @@ type HitlagBase0 = HitlagPair & { d0?: HitlagPair };
 /** `byNext` = 次のアクションの種類（skill・burst・dash・jump・swap）が、次が通常攻撃のときと値が違うときだけ（D219） */
 type HitlagBase = HitlagBase0 & { byNext?: Record<string, HitlagBase0> };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（モードの通常攻撃・重撃のキー `<opener>#n` / `#ca` だけ。gcsim の `mod extended`） */
-type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair; /** 通常攻撃の 1 段目だけ。重撃の直後の、通常のときとの差（構えの違い。D229） */ afterCharged?: HitlagAfter; /** 爆発の直後の差（同じ意味） */ afterBurst?: HitlagAfter };
+type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair; /** 通常攻撃の 1 段目だけ。重撃の直後の、通常のときとの差（構えの違い。D229） */ afterCharged?: HitlagAfter; /** 爆発の直後の差（同じ意味） */ afterBurst?: HitlagAfter; afterSkill?: HitlagAfter; afterDash?: HitlagAfter; afterJump?: HitlagAfter };
 /** `byNext` = 次のアクションの種類ごとの差（次が通常攻撃のときと違うものだけ） */
 type HitlagAfter = HitlagBase0 & { byNext?: Record<string, HitlagBase0> };
 const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
@@ -939,7 +939,8 @@ export function calculateRotation(
           if (e) {
             hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
             const prevAct = rawActions[aIdx - 1];
-            const afterPrev = prevAct?.type === 'charged' ? e.afterCharged : prevAct?.type === 'burst' ? e.afterBurst : undefined;
+            const afterPrev = prevAct?.type === 'charged' ? e.afterCharged : prevAct?.type === 'burst' ? e.afterBurst
+              : prevAct?.type === 'skill' ? e.afterSkill : prevAct?.type === 'dash' ? e.afterDash : prevAct?.type === 'jump' ? e.afterJump : undefined;
             if (normalHitIndex === 0 && prevAct && afterPrev) {
               hitlagSrc.charged = afterPrev;
               hitlagSrc.chargedNoDelay = actionDelayOf(prevAct) === 0;

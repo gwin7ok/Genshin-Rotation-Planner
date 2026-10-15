@@ -117,6 +117,18 @@ for (const c of speedOnly ? [] : characters) {
       cases.push({ id: n.id, label: 'ca の後の n1', suffixes: ['n', 'ca', 'n', 'n'], cmds: ['attack', caCommand, 'attack', 'attack'], index: 2, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
     }
   }
+  // スキル・ダッシュ・ジャンプの直後の通常攻撃の 1 段目（同じ。D230）
+  if (n && Array.isArray(hitlag[n.id]) && hits.length > 0) {
+    const e = A.find(x => x.id === `${c.id}_e`);
+    const prefixes: [string, string | undefined][] = [
+      ['e', e && !e.mode && !e.specialBurst && !e.cooldownPool && !e.gcsimUnsupported ? mapAction(e.id, c.weaponType).command : undefined],
+      ['dash', A.some(x => x.id === `${c.id}_dash`) ? 'dash' : undefined],
+      ['jump', A.some(x => x.id === `${c.id}_jump`) ? 'jump' : undefined],
+    ];
+    for (const [suffix, command] of prefixes) {
+      if (command) cases.push({ id: n.id, label: `${suffix} の後の n1`, suffixes: [suffix, 'n', 'n'], cmds: [command, 'attack', 'attack'], index: 1, tableExp: hits[0].frames?.cancels?.attack ?? hits[0].frames?.total });
+    }
+  }
   // 爆発の直後の通常攻撃の 1 段目（同じ。D229）
   {
     const q = A.find(x => x.id === `${c.id}_q`);
@@ -153,7 +165,7 @@ for (const c of speedOnly ? [] : characters) {
       // 次の行は、最後の（次の通常攻撃の）要素を置き換える。交代は、出場の最後（次の要素なし）
       const suffixes = suffix === undefined ? cs.suffixes.slice(0, -1) : [...cs.suffixes.slice(0, -1), suffix];
       // 除外の組（probe の id）: 通常攻撃 `<id>_n[段]`・モードの通常攻撃 `<opener>#n[段]`・それ以外は id
-      const m = /^n(\d+)$/.exec(cs.label) ?? /モード n(\d+)$/.exec(cs.label) ?? /^[caq]+ の後の n(\d+)$/.exec(cs.label);
+      const m = /^n(\d+)$/.exec(cs.label) ?? /モード n(\d+)$/.exec(cs.label) ?? /^[a-z]+ の後の n(\d+)$/.exec(cs.label);
       const exId = m ? `${cs.id}[${Number(m[1]) - 1}]` : cs.id;
       if (excludedNext.has(`${exId}|${label}`)) { skippedNext++; continue; }
       nextVariants.push({ ...cs, label: `${cs.label} → ${label}`, suffixes, cmds: [...cs.cmds.slice(0, -1), command], tableExp: undefined });

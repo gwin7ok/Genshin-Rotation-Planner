@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T18:00:23.333Z",
+ "generatedAt": "2026-10-15T18:07:26.360Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -264,7 +264,15 @@
   "10000005-hydro_n": [
    {
     "with": 6,
-    "without": 2
+    "without": 2,
+    "afterSkill": {
+     "with": 4,
+     "without": 0,
+     "d0": {
+      "with": 0,
+      "without": 0
+     }
+    }
    },
    {
     "with": 6,
@@ -540,7 +548,49 @@
   "10000007-hydro_n": [
    {
     "with": 6,
-    "without": 2
+    "without": 2,
+    "afterSkill": {
+     "with": 3,
+     "without": 0,
+     "d0": {
+      "with": 4,
+      "without": 0
+     },
+     "byNext": {
+      "burst": {
+       "with": 3,
+       "without": 0,
+       "d0": {
+        "with": 0,
+        "without": 0
+       }
+      },
+      "dash": {
+       "with": 3,
+       "without": 0,
+       "d0": {
+        "with": 0,
+        "without": 0
+       }
+      },
+      "jump": {
+       "with": 3,
+       "without": 0,
+       "d0": {
+        "with": 0,
+        "without": 0
+       }
+      },
+      "swap": {
+       "with": 3,
+       "without": 0,
+       "d0": {
+        "with": 0,
+        "without": 0
+       }
+      }
+     }
+    }
    },
    {
     "with": 6,
@@ -1008,6 +1058,56 @@
        "without": 2
       }
      }
+    },
+    "afterDash": {
+     "with": 0,
+     "without": 0,
+     "d0": {
+      "with": -5,
+      "without": -5
+     },
+     "byNext": {
+      "skill": {
+       "with": 0,
+       "without": 0,
+       "d0": {
+        "with": 2,
+        "without": 2
+       }
+      },
+      "burst": {
+       "with": 0,
+       "without": 0,
+       "d0": {
+        "with": 2,
+        "without": 2
+       }
+      },
+      "dash": {
+       "with": 0,
+       "without": 0,
+       "d0": {
+        "with": 2,
+        "without": 2
+       }
+      },
+      "jump": {
+       "with": 0,
+       "without": 0,
+       "d0": {
+        "with": 2,
+        "without": 2
+       }
+      },
+      "swap": {
+       "with": 0,
+       "without": 0,
+       "d0": {
+        "with": 2,
+        "without": 2
+       }
+      }
+     }
     }
    },
    {
@@ -1092,6 +1192,54 @@
      },
      "byNext": {
       "skill": {
+       "with": 0,
+       "without": 0
+      },
+      "dash": {
+       "with": 0,
+       "without": 0
+      },
+      "jump": {
+       "with": 0,
+       "without": 0
+      }
+     }
+    },
+    "afterSkill": {
+     "with": 9,
+     "without": 9,
+     "byNext": {
+      "skill": {
+       "with": 0,
+       "without": 0
+      },
+      "burst": {
+       "with": 0,
+       "without": 0
+      },
+      "dash": {
+       "with": 0,
+       "without": 0
+      },
+      "jump": {
+       "with": 0,
+       "without": 0
+      }
+     }
+    },
+    "afterDash": {
+     "with": 0,
+     "without": 0,
+     "d0": {
+      "with": 9,
+      "without": 9
+     },
+     "byNext": {
+      "skill": {
+       "with": 0,
+       "without": 0
+      },
+      "burst": {
        "with": 0,
        "without": 0
       },
@@ -1268,7 +1416,15 @@
   "10000034-geo_n": [
    {
     "with": 10,
-    "without": 6
+    "without": 6,
+    "afterSkill": {
+     "with": 0,
+     "without": 0,
+     "d0": {
+      "with": 4,
+      "without": 0
+     }
+    }
    },
    {
     "with": 10,
@@ -1356,7 +1512,29 @@
   "10000036-cryo_n": [
    {
     "with": 10,
-    "without": 6
+    "without": 6,
+    "afterSkill": {
+     "with": -2,
+     "without": -2,
+     "byNext": {
+      "burst": {
+       "with": 0,
+       "without": 0
+      },
+      "dash": {
+       "with": 0,
+       "without": 0
+      },
+      "jump": {
+       "with": 0,
+       "without": 0
+      },
+      "swap": {
+       "with": 0,
+       "without": 0
+      }
+     }
+    }
    },
    {
     "with": 9,
@@ -2744,7 +2922,29 @@
   "10000080-cryo_n": [
    {
     "with": 2,
-    "without": 2
+    "without": 2,
+    "afterSkill": {
+     "with": -3,
+     "without": -3,
+     "byNext": {
+      "burst": {
+       "with": 0,
+       "without": 0
+      },
+      "dash": {
+       "with": 0,
+       "without": 0
+      },
+      "jump": {
+       "with": 0,
+       "without": 0
+      },
+      "swap": {
+       "with": 0,
+       "without": 0
+      }
+     }
+    }
    },
    {
     "with": 5,
@@ -2838,7 +3038,11 @@
   "10000083-anemo_n": [
    {
     "with": 6,
-    "without": 2
+    "without": 2,
+    "afterSkill": {
+     "with": 4,
+     "without": 0
+    }
    },
    {
     "with": 6,
@@ -2946,7 +3150,11 @@
   "10000087-hydro_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterSkill": {
+     "with": 4,
+     "without": 0
+    }
    },
    {
     "with": 0,
@@ -3406,7 +3614,29 @@
   "10000103-geo_n": [
    {
     "with": 6,
-    "without": 2
+    "without": 2,
+    "afterSkill": {
+     "with": 0,
+     "without": 0,
+     "byNext": {
+      "burst": {
+       "with": -1,
+       "without": -1
+      },
+      "dash": {
+       "with": -1,
+       "without": -1
+      },
+      "jump": {
+       "with": -1,
+       "without": -1
+      },
+      "swap": {
+       "with": -1,
+       "without": -1
+      }
+     }
+    }
    },
    {
     "with": 12,
@@ -3442,7 +3672,25 @@
   "10000104-anemo_n": [
    {
     "with": 5,
-    "without": 5
+    "without": 5,
+    "afterSkill": {
+     "with": 12,
+     "without": 12,
+     "byNext": {
+      "skill": {
+       "with": 16,
+       "without": 16
+      },
+      "burst": {
+       "with": -4,
+       "without": -4
+      },
+      "dash": {
+       "with": -4,
+       "without": -4
+      }
+     }
+    }
    },
    {
     "with": 0,
@@ -3602,7 +3850,33 @@
   "10000110-electro_n": [
    {
     "with": 5,
-    "without": 1
+    "without": 1,
+    "afterSkill": {
+     "with": 9,
+     "without": 13,
+     "byNext": {
+      "burst": {
+       "with": 8,
+       "without": 12,
+       "d0": {
+        "with": 5,
+        "without": 9
+       }
+      },
+      "dash": {
+       "with": 14,
+       "without": 18
+      },
+      "jump": {
+       "with": 11,
+       "without": 15
+      },
+      "swap": {
+       "with": 15,
+       "without": 19
+      }
+     }
+    }
    },
    {
     "with": 8,
@@ -3702,7 +3976,11 @@
   "10000113-anemo_n": [
    {
     "with": 0,
-    "without": 0
+    "without": 0,
+    "afterSkill": {
+     "with": 39,
+     "without": 39
+    }
    },
    {
     "with": 0,

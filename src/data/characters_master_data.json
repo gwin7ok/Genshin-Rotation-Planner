@@ -47177,7 +47177,13 @@
             "alyosha-hunters-mark"
           ],
           "status": "ok"
-        }
+        },
+        "gcsimExtras": [
+          {
+            "key": "alyosha-hunters-precision",
+            "label": "アリョーシャ 元素スキル「伏撃の雷鳴」: hunters precision"
+          }
+        ]
       },
       {
         "id": "10000148-electro_e_hold",
@@ -47242,7 +47248,13 @@
             "alyosha-hunters-mark"
           ],
           "status": "ok"
-        }
+        },
+        "gcsimExtras": [
+          {
+            "key": "alyosha-hunters-precision",
+            "label": "アリョーシャ 元素スキル「伏撃の雷鳴」: hunters precision"
+          }
+        ]
       },
       {
         "id": "10000148-electro_q",

@@ -30,6 +30,7 @@ import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.t
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
 import { KEY_DECISIONS, DEF_DECISIONS } from '../src/masterdata/effectKeyDecisions.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
+import { deriveAutoExtras } from '../src/masterdata/autoEffectExtras.ts';
 import {
   UNLINKED_REASON_LABELS,
   type EffectKeyCoverage, type EffectRow, type LinkRow, type TargetRow, type UnlinkedReason, type UnlinkedRow,
@@ -74,6 +75,14 @@ for (const [defId, ov] of Object.entries(ACTION_EFFECT_KEY_OVERRIDES)) {
 }
 for (const [defId, extras] of Object.entries(ACTION_EFFECT_EXTRAS)) {
   for (const x of extras) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'extra', label: x.label, ...(x.self ? { self: true } : {}), approval: 'approved' });
+}
+// 自動の副次効果（紐づけも決定も無い効果。D213 案 1。マスターへの取り込みは link:actions と同じ規則）
+const autoExtras = deriveAutoExtras({
+  catalogEntries: catalog.entries, characters: chars, table, overrides: ACTION_EFFECT_KEY_OVERRIDES as any,
+  extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED, characterLinked: CHARACTER_LINKED_EFFECTS as any, runtimeLinks,
+});
+for (const [defId, extras] of Object.entries(autoExtras)) {
+  for (const x of extras) links.push({ effectId: x.key, targetId: `action:${defId}`, role: 'extra', label: x.label, approval: 'auto' });
 }
 
 for (const [defId, list] of Object.entries(ACTION_EFFECT_INCLUDED)) {

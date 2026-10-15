@@ -10,14 +10,13 @@
 
 | 状態 | 件数 |
 |---|---|
-| 紐づけ済み | 200 |
+| 紐づけ済み | 201 |
 | gcsim は効果を出すが、紐づけず・バーも出さない | 49 |
 | マスター側の命ノ星座の定義で扱う | 20 |
 | 本体のバーで表示済み | 19 |
 | 猶予時間・短い窓（効果ではない） | 10 |
 | 発動バフ（固有天賦）として扱う | 4 |
 | 常時の効果 | 2 |
-| 未検討 | 1 |
 
 設置物名（gcsim のソース）: 7 件
 
@@ -34,16 +33,14 @@
 | 保留 | 1 |
 | gcsim が効果のイベントを出さない（暫定） | 1 |
 
-## links（効果 ↔ 対象。242 件）
+## links（効果 ↔ 対象。244 件）
 
-内訳: main/auto=163 / main/approved=35 / extra/approved=30 / included/approved=9 / character/approved=5
+内訳: main/auto=163 / main/approved=35 / extra/approved=30 / extra/auto=2 / included/approved=9 / character/approved=5
 整合性: 存在しない効果・対象を指す紐づけ 0 件 / 重複 0 件
 
 ## 未検討のアクション定義（0 件）
 
 なし
 
-## 未検討の効果（1 件。持ち主ごと）
+## 未検討の効果（0 件。持ち主ごと）
 
-### alyosha
-- `alyosha-hunters-precision` [skill] アリョーシャ 元素スキル「伏撃の雷鳴」: hunters precision

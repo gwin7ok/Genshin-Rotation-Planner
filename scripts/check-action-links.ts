@@ -12,6 +12,7 @@ import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOv
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
+import { PRE_RUN_DECISIONS } from '../src/masterdata/preRunDecisions.ts';
 import { attachDurations, deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
 import { loadRuntimeLinks } from './link-buffs.ts';
 
@@ -61,6 +62,23 @@ for (const id of ids) {
   const b = JSON.stringify(newResolve(id));
   compared++;
   if (a !== b) problems.push(`本体の紐付けが食い違う: ${id}\n    入力から: ${a}\n    マスター: ${b}`);
+}
+// 実行前のバー（D213 案 2）: 辞書に継続時間がある副次効果は、preRun を付けるか、理由つきで「しない」と決める（どちらか一方）
+{
+  const catalogByKey = new Map<string, any>(JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8')).entries.map((e: any) => [e.key, e]));
+  const seenKeys = new Set<string>();
+  for (const d of defs.values()) {
+    for (const x of d.gcsimExtras ?? []) {
+      const c = catalogByKey.get(x.key);
+      if (!c || c.permanent || x.key.includes('*') || !(c.durationFrames > 0)) continue;
+      seenKeys.add(x.key);
+      const decided = !!PRE_RUN_DECISIONS[x.key];
+      if (x.preRun && decided) problems.push(`実行前のバー: preRun と「しない」の決定が両方ある: ${d.id} ${x.key}`);
+      if (!x.preRun && !decided) problems.push(`実行前のバー: 未決定（preRun を付けるか、preRunDecisions.ts に理由を書く）: ${d.id} ${x.key}`);
+      if (x.preRun && !(x.durationFrames > 0)) problems.push(`実行前のバー: preRun なのに継続時間が無い: ${d.id} ${x.key}`);
+    }
+  }
+  for (const k of Object.keys(PRE_RUN_DECISIONS)) if (!seenKeys.has(k)) problems.push(`実行前のバー: 決定が、存在しない副次効果を指している: ${k}`);
 }
 for (const [src, field, name] of [[EXPECTED_EXTRAS, 'gcsimExtras', '副次効果'], [ACTION_EFFECT_INCLUDED, 'gcsimIncluded', '含まれる効果']] as const) {
   for (const id of new Set([...Object.keys(src), ...[...defs.values()].filter(d => d[field]?.length).map(d => d.id)])) {

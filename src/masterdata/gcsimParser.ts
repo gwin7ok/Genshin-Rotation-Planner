@@ -217,7 +217,13 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
     return typeof cur === 'number' ? cur : undefined;
   };
   const lookupArray: ArrayLookup = ident => intArrays.get(ident);
-  const evaluate = (expr: string) => evalExpr(expr, lookup, lookupArray);
+  // `attackLockout[attackTypeLeft] = 15` のように、識別子を添字にして 1 要素ずつ代入された値（凝光の attackLockout など）は、
+  // 定数に `名前[添字]` のキーで持ち、式の中の `名前[添字]` を、その数値に置き換えて評価する
+  const withElementConsts = (expr: string) => expr.replace(/([A-Za-z_]\w*)\[([A-Za-z_]\w*)\]/g, (whole, name: string, idx: string) => {
+    const v = consts.get(`${name}[${idx}]`);
+    return v === undefined ? whole : String(v);
+  });
+  const evaluate = (expr: string) => evalExpr(withElementConsts(expr), lookup, lookupArray);
 
   // 2nd pass: スカラー定数 (`name = expr` / `name := expr`)
   // 前方参照があるため数回繰り返す。
@@ -229,6 +235,19 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
       if (/frames\.|\[\]|make\(|func|\{/.test(m[2])) continue;
       const v = evaluate(m[2]);
       if (v !== undefined) consts.set(m[1], v);
+    }
+  }
+
+  // 2nd pass（続き）: 識別子の添字への 1 要素の代入（`attackLockout[attackTypeLeft] = 15`）。テーブル・フレームの初期化の行は除く
+  const elementRe = /^\s*([A-Za-z_]\w*)\[([A-Za-z_]\w*)\]\s*=\s*([^=].*)$/;
+  for (let iter = 0; iter < 3; iter++) {
+    for (const line of lines) {
+      const m = elementRe.exec(line);
+      if (!m) continue;
+      const key = `${m[1]}[${m[2]}]`;
+      if (consts.has(key) || /frames\.|\[\]|make\(|func|\{/.test(m[3])) continue;
+      const v = evaluate(m[3]);
+      if (v !== undefined) consts.set(key, v);
     }
   }
 

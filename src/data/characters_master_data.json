@@ -9530,7 +9530,14 @@
         "defaultDuration": 1.017,
         "frames": {
           "total": 61,
+          "hitmark": 15,
           "cancels": {
+            "aim": 15,
+            "skill": 15,
+            "burst": 15,
+            "dash": 15,
+            "jump": 15,
+            "swap": 15,
             "charge": 42,
             "walk": 44
           },
@@ -9541,7 +9548,14 @@
             "duration": 1.017,
             "frames": {
               "total": 61,
+              "hitmark": 15,
               "cancels": {
+                "aim": 15,
+                "skill": 15,
+                "burst": 15,
+                "dash": 15,
+                "jump": 15,
+                "swap": 15,
                 "charge": 42,
                 "walk": 44
               },
@@ -9552,7 +9566,14 @@
             "duration": 0.933,
             "frames": {
               "total": 56,
+              "hitmark": 5,
               "cancels": {
+                "aim": 5,
+                "skill": 5,
+                "burst": 5,
+                "dash": 5,
+                "jump": 5,
+                "swap": 5,
                 "charge": 40,
                 "walk": 41
               },
@@ -9563,7 +9584,14 @@
             "duration": 1.1,
             "frames": {
               "total": 66,
+              "hitmark": 13,
               "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
                 "charge": 40,
                 "walk": 42
               },

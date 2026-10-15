@@ -40326,6 +40326,44 @@
           "cooldownStart": "manual: ifa/skill.go: exitNightsoul() の SetCD(7.5秒)"
         },
         "defaultDuration": 10.517,
+        "mode": {
+          "label": "夜魂の加護",
+          "description": "夜魂の加護（トニックショット）。状態の間の通常攻撃は、トニックショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる",
+          "startDelayFrames": 0,
+          "durationFrames": 589,
+          "swap": "blocks",
+          "enders": [
+            {
+              "by": "self",
+              "cooldown": "start"
+            }
+          ],
+          "holdByDefault": false,
+          "noHold": true,
+          "cooldownAtEnd": {
+            "delayFrames": {
+              "ender": 0,
+              "swap": 0,
+              "timeout": 0
+            }
+          },
+          "normalFrames": [
+            {
+              "total": 54,
+              "hitmark": 3,
+              "cancels": {
+                "charge": 42,
+                "skill": 0,
+                "burst": 0,
+                "dash": 0,
+                "jump": 0,
+                "swap": 0
+              },
+              "source": "attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。トニックショットは 3f 後に出る）"
+            }
+          ],
+          "source": "ifa/skill.go: enterNightsoul（EnterBlessing(80)・4f ごとではなく 6f ごとに 0.8 減る = 8 毎秒）、skillFrames[Swap] = 589 + 42（夜魂が尽きるのを待つ）。exitNightsoul で SetCD(skill, 7.5 * 60)。ifa.go ActionReady: 夜魂が残っている間は交代できない"
+        },
         "description": "お前の出番だ、きょうだい！イファがカクークを呼び出して一緒に戦う。\n発動後、イファは夜魂値を80獲得し、**夜魂の加護**状態に入る。夜魂の加護状態期間中、イファはカクークの協力によって浮遊状態になり、通常攻撃を行う時、一回押しと長押しによって異なる**「援護射撃」**を行い、チーム全員のHPを回復するアンプルショットを発射する。\n\nまた、夜魂の加護状態時、長押しして元素スキル天翔ける守護を発動すると、イファは代わりに夜魂性質の落下攻撃を行う。スキルボタンを離すと落下攻撃を中断でき、浮遊状態を維持する。落下攻撃中に着地すると、イファの夜魂の加護状態は終了する。",
         "cooldownStart": {
           "from": "stateEnd",

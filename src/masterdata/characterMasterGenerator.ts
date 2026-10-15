@@ -443,6 +443,27 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）',
     },
   }],
+  // イファ: 夜魂の加護（トニックショット。夜魂 80 を 8 毎秒で使い切るまで。589f）。状態の間は、通常攻撃がトニックショット（54f ごと。攻撃速度で縮む）になる。
+  // E の再押しで終わる（CT 7.5 秒は終わりから）。夜魂が残っている間は、交代できない（ActionReady）。D233
+  '10000113-anemo': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '夜魂の加護',
+      description: '夜魂の加護（トニックショット）。状態の間の通常攻撃は、トニックショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
+      startDelayFrames: 0,
+      durationFrames: 589,
+      swap: 'blocks',
+      enders: [{ by: 'self', cooldown: 'start' }],
+      holdByDefault: false,
+      noHold: true,
+      cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+      normalFrames: [
+        { total: 54, hitmark: 3, cancels: { charge: 42, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。トニックショットは 3f 後に出る）' },
+      ],
+      source: 'ifa/skill.go: enterNightsoul（EnterBlessing(80)・4f ごとではなく 6f ごとに 0.8 減る = 8 毎秒）、skillFrames[Swap] = 589 + 42（夜魂が尽きるのを待つ）。exitNightsoul で SetCD(skill, 7.5 * 60)。ifa.go ActionReady: 夜魂が残っている間は交代できない',
+    },
+  }],
   // フレミネ: 潜水（加圧。10 秒）。状態の間の E で起爆（CT は最初の E で始まっている）。交代しても続く（ゲーム・gcsim とも）
   '10000085-cryo': [{
     action: 'e',

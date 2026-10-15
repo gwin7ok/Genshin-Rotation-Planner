@@ -163,24 +163,30 @@ for (const c of speedOnly ? [] : characters) {
 // ---- 通常攻撃速度の効果の表（src/masterdata/attackSpeedEffects.ts。D221）: 表の行ごとに、シナリオを gcsim で実行して比べる ----
 const { ATTACK_SPEED_EFFECTS } = await server.ssrLoadModule('/src/masterdata/attackSpeedEffects.ts');
 const weaponsMaster: any[] = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+const artifactsMaster: any[] = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'));
 const CHARS: Record<string, string> = { sword: '行秋', claymore: 'ライオス', polearm: '香菱', bow: 'アンバー', catalyst: 'リサ' };
 for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
-  const w = weaponsMaster.find(x => x.gcsimKey === effect.source.gcsimKey);
-  if (!w) { fails.push(`表の武器が、マスターに見つかりません: ${effect.source.gcsimKey}`); continue; }
+  const isArtifact = effect.source.type === 'artifact';
+  const art = isArtifact ? artifactsMaster.find(x => x.gcsimKey === effect.source.gcsimKey) : undefined;
+  // 聖遺物の効果は、剣のキャラ（行秋）と標準の剣で測る。武器の効果は、その武器の持ち主
+  const w = isArtifact ? { name: '標準の剣', weaponType: 'sword', gcsimKey: 'dullblade', id: undefined } : weaponsMaster.find(x => x.gcsimKey === effect.source.gcsimKey);
+  if (!w || (isArtifact && !art)) { fails.push(`表の持ち主が、マスターに見つかりません: ${effect.source.gcsimKey}`); continue; }
   const candidates = characters.filter(c => c.weaponType === w.weaponType);
   const c = candidates.find(x => x.name === CHARS[w.weaponType]) ?? candidates[0];
   const hits: any[] = c.availableActions.find((a: any) => a.id === `${c.id}_n`)?.normalHits ?? [];
   const k = c.source.gcsimKey as string;
   const n = Math.min(hits.length, 4);
-  // シナリオ: 爆発の後なら、爆発 → 通常攻撃 ×(n + 1)。それ以外は、通常攻撃 ×(n + 1)
-  const prefix: string[] = effect.when.kind === 'afterBurst' ? ['burst'] : [];
-  for (const refine of [1, 5]) {
+  // シナリオ: 爆発の後なら、爆発 → 通常攻撃 ×(n + 1)。重撃の後なら、通常攻撃 → 重撃 → 通常攻撃 ×(n + 1)。それ以外は、通常攻撃 ×(n + 1)
+  const kinds: string[] = (Array.isArray(effect.when) ? effect.when : [effect.when]).map((x: any) => x.kind);
+  const prefix: string[] = kinds.includes('afterBurst') ? ['burst'] : kinds.includes('afterChargedAttack') ? ['attack', 'charge'] : [];
+  for (const refine of isArtifact ? [1] : [1, 5]) {
     for (const [defHalt, delayFrames] of [[true, 6], [false, 0]] as const) {
       for (const nextCmd of ['attack', 'skill']) {
         const cmds = [...prefix, ...Array.from({ length: n }, () => 'attack'), nextCmd];
         const cfg = [
           `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
-          `${k} add weapon="${effect.source.gcsimKey}" refine=${refine} lvl=90/90;`,
+          `${k} add weapon="${isArtifact ? w.gcsimKey : effect.source.gcsimKey}" refine=${refine} lvl=90/90;`,
+          ...(isArtifact ? [`${k} add set="${effect.source.gcsimKey}" count=4;`] : []),
           `${k} add stats cr=1;`,
           `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defHalt ? '' : ' defhalt=false'};`,
           'target lvl=100 resist=0.1;',
@@ -189,21 +195,22 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
         ].join('\n');
         const res = await fetch(`${GCSIM_SERVER_URL}/sample/cw_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
         const logs = (await res.json()).logs as any[];
-        // 先頭の（爆発を除いた）通常攻撃の実行フレームから、n 段 + 次
-        const g = logs.filter(l => l.event === 'action' && (l.msg === 'executed attack' || (nextCmd === 'skill' && l.msg === 'executed skill'))).map(l => l.frame as number);
-        const cw = { ...structuredClone(c), weaponId: w.id, weaponRefinementRank: refine };
+        // 前置き（爆発・重撃）の後の、通常攻撃 n 段 + 次の実行フレーム
+        const g = logs.filter(l => l.event === 'action' && /^executed (attack|charge|burst|skill)/.test(l.msg)).map(l => l.frame as number).slice(prefix.length);
+        const cw: any = { ...structuredClone(c), weaponId: w.id ?? c.weaponId, weaponRefinementRank: refine, ...(isArtifact ? { artifactSetId: art.id, artifactSetMode: '4pc' } : {}) };
+        const suffixOf = (x: string, i: number) => (x === 'burst' ? 'q' : x === 'charge' ? 'ca' : i === cmds.length - 1 && x === 'skill' ? 'e' : 'n');
         const stints = [{
           id: 's1', characterId: c.id,
-          actions: cmds.map((x, i) => act(c, x === 'burst' ? 'q' : i === cmds.length - 1 && x === 'skill' ? 'e' : 'n', delayFrames / 60)),
+          actions: cmds.map((x, i) => act(c, suffixOf(x, i), delayFrames / 60)),
         }];
-        const r = calculateRotation([cw], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster } });
+        const r = calculateRotation([cw], stints, { switchDelay: 0.5, defHalt, database: { weapons: weaponsMaster, artifacts: artifactsMaster } });
         const acts = r.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap');
         const offset = prefix.length;
         for (let i = 0; i < n; i++) {
           const gi = g[i + 1] - g[i];
           const ai = Math.round((acts[offset + i + 1].startTime - acts[offset + i].startTime) * 60);
           checked++;
-          if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}+${w.name}(精錬${refine}・${effect.when.kind}) n${i + 1} → ${nextCmd} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
+          if (Math.abs(gi - ai) > TOLERANCE) fails.push(`${c.name}+${w.name}(精錬${refine}・${kinds.join('+')}) n${i + 1} → ${nextCmd} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${ai}f / gcsim ${gi}f（差 ${ai - gi}f）`);
         }
       }
     }

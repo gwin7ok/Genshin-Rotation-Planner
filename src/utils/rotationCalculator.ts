@@ -215,15 +215,21 @@ export function calculateRotation(
   };
   // 通常攻撃速度（gcsim の AtkSpd）。効果の表は masterdata/attackSpeedEffects.ts。アクションの開始時点の状態から、速度の合計を求める
   const burstStartByChar = new Map<string, number>();
+  const chargedStartByChar = new Map<string, number>();
   const attackSpeedOf = (c: CharacterConfig, start: number, previousNormal: { start: number; total: number } | undefined): number => {
     const w = options?.database?.weapons.find(x => x.id === c.weaponId);
-    if (!w?.gcsimKey) return 0;
-    const refine = c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5);
+    // 聖遺物は、4 セットの効果が有効なとき（組み合わせが 2+2 でない）だけ
+    const art = c.artifactSetMode === '2+2' ? undefined : options?.database?.artifacts?.find(x => x.id === c.artifactSetId);
+    if (!w?.gcsimKey && !art?.gcsimKey) return 0;
+    const refine = w ? c.weaponRefinementRank ?? w.refinementRank ?? (w.rarity >= 5 ? 1 : 5) : 1;
     const burstAt = burstStartByChar.get(c.id);
+    const chargedAt = chargedStartByChar.get(c.id);
     return attackSpeedFor({
-      weaponKey: w.gcsimKey,
+      weaponKey: w?.gcsimKey,
+      artifactKey: art?.gcsimKey,
       refine,
       secondsSinceBurst: burstAt === undefined ? undefined : start - burstAt,
+      secondsSinceChargedAttack: chargedAt === undefined ? undefined : start - chargedAt,
       previousNormalAttack: previousNormal
         ? { animationFrames: previousNormal.total, elapsedFrames: Math.round((start - previousNormal.start) * 60) }
         : undefined,
@@ -942,7 +948,9 @@ export function calculateRotation(
       const actionEndTime = Number((actionStartTime + duration).toFixed(3));
       // 元素爆発の開始（攻撃速度の効果の「爆発の後 N 秒」に使う）と、直前の通常攻撃（「通常攻撃の状態」に使う）
       if (act.type === 'burst') burstStartByChar.set(char.id, actionStartTime);
-      previousNormal = act.type === 'normal' && frames ? { start: actionStartTime, total: frames.total } : undefined;
+      if (act.type === 'charged') chargedStartByChar.set(char.id, actionStartTime);
+      // 通常攻撃の状態は、アニメーションが終わると外れる。ヒットストップで止まった分、アニメーションも延びる
+      previousNormal = act.type === 'normal' && frames ? { start: actionStartTime, total: frames.total + Math.max(0, hitlagFrames) } : undefined;
       // モードの終わりを、そのヒットのヒットストップで延ばす（gcsim の `mod extended`。雷電の爆発・綾人のスキルなど。D215）
       if (modeHit && modeExtFrames > 0) extendSpecial(modeHit.window, modeExtFrames / 60);
 

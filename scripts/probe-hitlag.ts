@@ -34,8 +34,16 @@ async function run(config: string): Promise<any[] | undefined> {
   }
 }
 
+/**
+ * 標準の遅延（アクション遅延 0.1 秒 = 6f）。アプリは、アクションごとに `delay(6)` を足して gcsim に渡す。
+ * gcsim の動きは、遅延の有無で変わるものがある（リサの重撃の windup 省略は、通常攻撃の直後に遅延が 1f でもあると、働かない）ので、
+ * 標準の遅延（6f）と、遅延なし（0f）の両方で測る。
+ */
+const STD_DELAY = 6;
+
 /** 命令列を実行し、実行された各命令のフレームを返す（`wait` は除く）。待ち（not ready）が出たときは undefined（CT を含む測定は無効） */
-async function frames(k: string, weapon: string, defhalt: boolean, script: string, names: string[]): Promise<number[] | undefined> {
+async function frames(k: string, weapon: string, defhalt: boolean, cmds: string[], delay: number, names: string[]): Promise<number[] | undefined> {
+  const script = cmds.map(c => `${k} ${c};${delay > 0 ? ` delay(${delay});` : ''}`).join(' ');
   const cfg = [
     `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
     `${k} add weapon="${weapon}" refine=1 lvl=90/90;`,
@@ -62,37 +70,54 @@ async function frames(k: string, weapon: string, defhalt: boolean, script: strin
 const cancelAttack = (f: any): number | undefined => (f ? f.cancels?.attack ?? f.total : undefined);
 
 type Pair = { with: number; without: number };
-const entries: Record<string, Pair | Pair[]> = {};
+/** `d0` = 遅延なしのときの値（標準の遅延のときと違うときだけ）。`afterNormal` = 重撃だけ、通常攻撃の直後に使うときの値（`d0` は、直前の通常攻撃の遅延がないとき） */
+type Base = Pair & { d0?: Pair };
+type Entry = Base & { afterNormal?: Base };
+const entries: Record<string, Entry | Base[]> = {};
 let tried = 0;
 let failed = 0;
 let dropped = 0;
 const dropList: string[] = [];
-/** 表より短かった（負の差）ものは、0 にして記録する（延びを足さない。gcsim の動きの違いなので、一覧に出す） */
+/**
+ * 表より短かった（負の差）ものも、そのまま記録する（gcsim の実際の動きに合わせる）。一覧に出す。
+ * 例: 触媒の重撃は、通常攻撃の直後だと、窓（windup）14f 前後を省く（gcsim の charge.go: `skip CA windup if we're in NA`）。
+ */
 const clampList: string[] = [];
-const clamp = (p: Pair, id: string): Pair => {
-  if (p.with >= 0 && p.without >= 0) return p;
-  clampList.push(`${id}: with=${p.with} without=${p.without}`);
-  return { with: Math.max(0, p.with), without: Math.max(0, p.without) };
-};
+/**
+ * 負の差が、窓（windup。最大でも十数 f）より大きいものは、「サンプルの最初の状態」に依存する別の仕組み
+ * （夜蘭の「突破の矢」が最初から使える・タルタリヤの最初の状態の爆発など）なので、記録しない。弓の `aim` も、同じ理由で、負の差は記録しない
+ */
+const MAX_NEGATIVE = 20;
+const same = (a: Pair, b: Pair) => a.with === b.with && a.without === b.without;
 
-const measure = async (k: string, weapon: string, prefix: string, cmd: string, exp: number, id: string): Promise<Pair | undefined> => {
-  tried++;
-  const names = [...(prefix ? [prefix] : []), cmd.replace(/\[.*\]$/, ''), 'attack'];
-  const script = [...(prefix ? [prefix] : []), cmd, 'attack'].map(c => `${k} ${c};`).join(' ');
+/** 命令列のうち、`index` 番目の命令の実行から、次の命令の実行までの差 − 表の値 − 遅延（防御ヒットストップありとなし） */
+const deltaPair = async (k: string, weapon: string, cmds: string[], index: number, exp: number, delay: number): Promise<Pair | undefined> => {
+  const names = cmds.map(c => c.replace(/\[.*\]$/, ''));
   const out: Partial<Pair> = {};
   for (const [key, defhalt] of [['with', true], ['without', false]] as const) {
-    const f = await frames(k, weapon, defhalt, script, names);
-    if (!f) { failed++; return undefined; }
-    const interval = f[f.length - 1] - f[f.length - 2];
-    out[key] = interval - exp;
+    const f = await frames(k, weapon, defhalt, cmds, delay, names);
+    if (!f) return undefined;
+    out[key] = f[index + 1] - f[index] - exp - delay;
   }
-  const p = out as Pair;
-  if (Math.abs(p.with) > MAX_DELTA || Math.abs(p.without) > MAX_DELTA || p.with < p.without - 0) {
-    dropped++;
-    dropList.push(`${id}: with=${p.with} without=${p.without}`);
-    return undefined;
+  return out as Pair;
+};
+
+/** 標準の遅延と遅延なしの両方で測り、記録する形にまとめる。使えない値（除外）は undefined */
+const measureBase = async (k: string, weapon: string, cmds: string[], index: number, exp: number, id: string, isAim = false): Promise<Base | undefined> => {
+  tried += 2;
+  const std = await deltaPair(k, weapon, cmds, index, exp, STD_DELAY);
+  const d0 = await deltaPair(k, weapon, cmds, index, exp, 0);
+  if (!std || !d0) { failed++; return undefined; }
+  for (const [label, p] of [['', std], ['d0 ', d0]] as const) {
+    const m = Math.min(p.with, p.without);
+    if (Math.abs(p.with) > MAX_DELTA || Math.abs(p.without) > MAX_DELTA || p.with < p.without || m < -MAX_NEGATIVE || (isAim && m < 0)) {
+      dropped++;
+      dropList.push(`${id}: ${label}with=${p.with} without=${p.without}`);
+      return undefined;
+    }
+    if (m < 0) clampList.push(`${id}: ${label}with=${p.with} without=${p.without}`);
   }
-  return clamp(p, id);
+  return same(std, d0) ? std : { ...std, d0 };
 };
 
 for (const c of characters) {
@@ -107,31 +132,29 @@ for (const c of characters) {
     if (!command) continue;
     const exp = cancelAttack(def.frames);
     if (exp === undefined) continue;
-    const p = await measure(k, weapon, suffix === 'ca' && command === 'charge' ? 'attack' : '', command, exp, def.id);
+    const isAim = command === 'aim';
+    if (suffix === 'ca') {
+      // 通常攻撃の直後（windup を省くキャラがある）と、単独（剣などは、直前の attack が要るため測れない）
+      const afterN = await measureBase(k, weapon, ['attack', command, 'attack'], 1, exp, def.id, isAim);
+      const alone = command === 'charge' && ['sword', 'claymore', 'polearm'].includes(c.weaponType) ? undefined : await measureBase(k, weapon, [command, 'attack'], 0, exp, def.id, isAim);
+      const base = alone ?? afterN;
+      if (base) entries[def.id] = afterN && alone && JSON.stringify(afterN) !== JSON.stringify(alone) ? { ...base, afterNormal: afterN } : base;
+      continue;
+    }
+    const p = await measureBase(k, weapon, [command, 'attack'], 0, exp, def.id, isAim);
     if (p) entries[def.id] = p;
   }
   // 通常攻撃: 段ごと（attack を (段 + 2) 回。段 i の attack → 次の attack の差）
   const n = actions.find(a => a.id === `${c.id}_n`);
   const hits: any[] = n?.normalHits ?? [];
   if (hits.length > 0) {
-    const arr: Pair[] = [];
+    const arr: Base[] = [];
     for (let i = 0; i < hits.length; i++) {
       const exp = cancelAttack(hits[i].frames);
       if (exp === undefined) break;
-      tried++;
-      const names = Array.from({ length: i + 2 }, () => 'attack');
-      const script = names.map(() => `${k} attack;`).join(' ');
-      const out: Partial<Pair> = {};
-      let ok = true;
-      for (const [key, defhalt] of [['with', true], ['without', false]] as const) {
-        const f = await frames(k, weapon, defhalt, script, names);
-        if (!f) { ok = false; break; }
-        out[key] = f[i + 1] - f[i] - exp;
-      }
-      if (!ok) { failed++; break; }
-      const p = out as Pair;
-      if (Math.abs(p.with) > MAX_DELTA || p.with < p.without) { dropped++; dropList.push(`${c.id}_n[${i}]: with=${p.with} without=${p.without}`); break; }
-      arr.push(clamp(p, `${c.id}_n[${i}]`));
+      const p = await measureBase(k, weapon, Array.from({ length: i + 2 }, () => 'attack'), i, exp, `${c.id}_n[${i}]`);
+      if (!p) break;
+      arr.push(p);
     }
     if (arr.length === hits.length) entries[n.id] = arr;
   }
@@ -140,5 +163,5 @@ for (const c of characters) {
 fs.writeFileSync('src/data/hitlag_frames.json', JSON.stringify({ gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), entries }, null, 1) + '\n');
 console.log(`測定 ${tried} 件 / 記録 ${Object.keys(entries).length} アクション / 測定できず ${failed} / 除外 ${dropped}`);
 for (const l of dropList.slice(0, 40)) console.log('  除外:', l);
-console.log(`表より短い（0 にして記録）: ${clampList.length} 件`);
+console.log(`表より短い（負の差のまま記録）: ${clampList.length} 件`);
 for (const l of clampList.slice(0, 60)) console.log('  短い:', l);

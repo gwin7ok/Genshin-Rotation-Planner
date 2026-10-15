@@ -29,6 +29,16 @@ export function groupRuns(stint: Pick<Stint, 'groups'> & { actions: Pick<Charact
   return runs;
 }
 
+/**
+ * グループの複製（k 回目 = 1, 2, …）の、元のアクションとの差（gcsim から書き戻した所要時間。D217）。
+ * 元の所要時間が、書き戻したときから変わっていれば、使わない（元と同じにする）
+ */
+export function copyDurationOverride(m: CharacterActionInstance, k: number): Partial<CharacterActionInstance> {
+  const o = m.copyDurations?.[String(k)];
+  if (!o || Math.abs(o.base - m.duration) >= 0.0005) return {};
+  return { duration: o.duration, durationManual: true, gcsimBaseDuration: o.gcsimBaseDuration };
+}
+
 /** 回数のあるグループを、計算用に展開した出場ブロック（複製の id は `<元の id>~<回>`）。グループが無ければ、そのまま */
 export function expandGroupedStints(stints: Stint[]): Stint[] {
   if (!stints.some(s => s.groups?.length || s.actions.some(a => a.groupId || a.groupCopy))) return stints;
@@ -43,7 +53,7 @@ export function expandGroupedStints(stints: Stint[]): Stint[] {
       if (!run) return;
       const members = base.slice(run.start, run.end + 1);
       for (let k = 1; k < run.repeat; k++) {
-        for (const m of members) out.push({ ...m, id: `${m.id}~${k}`, groupCopy: k });
+        for (const m of members) out.push({ ...m, ...copyDurationOverride(m, k), id: `${m.id}~${k}`, groupCopy: k });
       }
     });
     return { ...s, actions: out };
@@ -118,7 +128,10 @@ export function ungroup(stint: Stint, groupId: string): Stint {
     if (!run || repeat <= 1 || run.end !== i) return;
     const members = base.slice(run.start, run.end + 1);
     for (let k = 1; k < repeat; k++) {
-      for (const m of members) actions.push({ ...withoutGroup(m), id: freshId(m.id, k) });
+      for (const m of members) {
+        const { copyDurations: _cd, ...plain } = withoutGroup(m);
+        actions.push({ ...plain, ...copyDurationOverride(m, k), id: freshId(m.id, k) });
+      }
     }
   });
   const groups = (stint.groups ?? []).filter(g => g.id !== groupId);

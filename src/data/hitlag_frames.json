@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T18:23:14.948Z",
+ "generatedAt": "2026-10-15T18:46:23.900Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -14,8 +14,7 @@
   "10000036-cryo_n|afterSkill",
   "10000080-cryo_n|afterSkill",
   "10000102-hydro_n|afterSkill",
-  "10000111-electro_n|afterSkill",
-  "10000113-anemo_n|afterSkill"
+  "10000111-electro_n|afterSkill"
  ],
  "entries": {
   "10000002-cryo_e": {
@@ -3924,10 +3923,6 @@
     "without": 8
    }
   ],
-  "10000113-anemo_e": {
-   "with": 0,
-   "without": 0
-  },
   "10000113-anemo_q": {
    "with": 0,
    "without": 0
@@ -4707,6 +4702,12 @@
     "with": 0,
     "without": 0
    },
+   {
+    "with": 0,
+    "without": 0
+   }
+  ],
+  "10000113-anemo_e#n": [
    {
     "with": 0,
     "without": 0

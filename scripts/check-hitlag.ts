@@ -189,6 +189,8 @@ for (const c of speedOnly ? [] : characters) {
         ? Math.round((acts[cs.index + 1].startTime - acts[cs.index].startTime) * 60)
         : Math.round((acts[cs.index].duration + delayFrames / 60) * 60);
       checked++;
+      // アプリのアクションの長さは、最小 0.05 秒（3f）。gcsim が 0f でキャンセルできるもの（イファのトニックショット → 爆発など）は、比べない
+      if (gInterval - delayFrames < 3 && appInterval - delayFrames <= 3) continue;
       if (Math.abs(appInterval - gInterval) > TOLERANCE) fails.push(`${c.name} ${cs.label} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${appInterval}f / gcsim ${gInterval}f（差 ${appInterval - gInterval}f）`);
     }
   }

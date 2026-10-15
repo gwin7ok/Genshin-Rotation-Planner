@@ -6,6 +6,8 @@ export interface ListSelectOption {
   value: string;
   label: string;
   disabled?: boolean;
+  /** 項目の右側に出す印（「gcsim未実装」のバーなど）。一覧と、選択中の表示の両方に出す */
+  badge?: React.ReactNode;
 }
 
 interface ListSelectProps {
@@ -157,7 +159,8 @@ export const ListSelect: React.FC<ListSelectProps> = ({ value, options, onChange
         onKeyDown={onKeyDown}
         className={`flex items-center justify-between gap-1 text-left cursor-pointer disabled:cursor-not-allowed ${className}`}
       >
-        <span className="truncate">{selected?.label ?? placeholder ?? ''}</span>
+        <span className="truncate flex-1 min-w-0">{selected?.label ?? placeholder ?? ''}</span>
+        {selected?.badge}
         <ChevronDown className="w-3.5 h-3.5 shrink-0 opacity-70" />
       </button>
 
@@ -189,7 +192,10 @@ export const ListSelect: React.FC<ListSelectProps> = ({ value, options, onChange
                   : 'cursor-pointer'
               }`}
             >
-              {o.label}
+              <span className="flex items-center justify-between gap-2">
+                <span>{o.label}</span>
+                {o.badge}
+              </span>
             </li>
           ))}
         </ul>,

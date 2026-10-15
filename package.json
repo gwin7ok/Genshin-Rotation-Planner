@@ -31,6 +31,7 @@
     "probe:effects": "node scripts/probe-effect-keys.ts",
     "probe:skill-hits": "node scripts/probe-skill-hits.ts",
     "probe:queue-frames": "node scripts/probe-can-queue-after.ts",
+    "probe:dash-jump": "node scripts/probe-dash-jump.ts",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",
     "review:effects": "node scripts/review-effect-keys.ts",
     "review:buff-scopes": "node scripts/review-buff-scopes.ts",

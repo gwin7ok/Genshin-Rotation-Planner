@@ -254,14 +254,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.583
       },
       {
         "id": "10000002-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -612,14 +612,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000003-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -947,14 +947,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -1268,14 +1268,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -1584,14 +1584,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -1897,14 +1897,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -2199,14 +2199,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -2610,14 +2610,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -2935,14 +2935,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000005-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -3344,14 +3344,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000006-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -3669,14 +3669,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -4030,14 +4030,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -4346,14 +4346,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -4657,14 +4657,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -4961,14 +4961,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -5372,14 +5372,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -5737,14 +5737,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000007-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -6118,14 +6118,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000014-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -6467,14 +6467,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000015-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -6826,14 +6826,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000016-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -7227,14 +7227,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000020-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -7606,14 +7606,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000021-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -7988,14 +7988,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000022-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -8359,14 +8359,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000023-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -8686,14 +8686,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000024-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -9007,14 +9007,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000025-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -9382,14 +9382,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000026-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -9675,14 +9675,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000027-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -9987,14 +9987,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000029-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -10358,14 +10358,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000030-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -10727,14 +10727,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000031-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -11113,14 +11113,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000032-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -11489,14 +11489,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000033-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -11816,14 +11816,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000034-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -12170,14 +12170,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000035-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -12516,14 +12516,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000036-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -12850,14 +12850,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000037-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -13227,14 +13227,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000038-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -13593,14 +13593,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000039-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -13940,14 +13940,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.7
       },
       {
         "id": "10000041-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -14367,14 +14367,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000042-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -14750,14 +14750,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.4
       },
       {
         "id": "10000043-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -15089,14 +15089,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000044-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -15463,14 +15463,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000045-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -15870,14 +15870,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000046-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -16266,14 +16266,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000047-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -16603,14 +16603,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000048-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -16913,14 +16913,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000049-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -17231,14 +17231,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000050-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -17619,14 +17619,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000051-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -18058,14 +18058,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000052-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -18395,14 +18395,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000053-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -18684,14 +18684,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000054-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -18984,14 +18984,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000055-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -19286,14 +19286,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000056-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -19642,14 +19642,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000057-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -19975,14 +19975,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000058-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -20395,14 +20395,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000059-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -20685,14 +20685,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000060-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -21089,14 +21089,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000061-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -21371,14 +21371,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000062-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -21725,14 +21725,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000063-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -22145,14 +22145,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000064-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -22460,14 +22460,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000065-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -22844,14 +22844,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000066-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -23148,14 +23148,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000067-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -23461,14 +23461,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000068-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -23745,14 +23745,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000069-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -24208,14 +24208,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000070-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -24607,14 +24607,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000071-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -25001,14 +25001,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000072-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -25350,14 +25350,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000073-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -25660,14 +25660,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000074-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -25988,14 +25988,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000075-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 1
       }
     ],
     "passiveEffects": [
@@ -26311,14 +26311,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000076-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -26612,14 +26612,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000077-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -27020,14 +27020,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000078-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -27468,14 +27468,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000079-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -27868,14 +27868,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000080-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -28200,14 +28200,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000081-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -28533,14 +28533,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000082-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -28919,14 +28919,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000083-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -29233,14 +29233,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000084-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -29627,14 +29627,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000085-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -30004,14 +30004,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000086-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -30301,14 +30301,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000087-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -30670,14 +30670,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000088-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -31036,14 +31036,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000089-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -31387,14 +31387,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000090-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -31766,14 +31766,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000091-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -32101,14 +32101,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000092-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -32539,14 +32539,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000093-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -32969,14 +32969,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000094-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -33324,14 +33324,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000095-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -33736,14 +33736,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000096-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -34043,14 +34043,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000097-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -34456,14 +34456,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000098-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -34815,14 +34815,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000099-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -35917,14 +35917,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000101-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -36237,14 +36237,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000102-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -36558,14 +36558,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000103-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -36918,14 +36918,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000104-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -37192,14 +37192,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000105-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -37678,14 +37678,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000106-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -37984,14 +37984,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000107-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -38455,14 +38455,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000108-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -38786,14 +38786,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000109-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -39105,14 +39105,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000110-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -39555,14 +39555,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000111-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -39916,14 +39916,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000112-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -40242,14 +40242,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000113-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -40583,14 +40583,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000114-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -40895,14 +40895,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000115-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -41200,14 +41200,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000116-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -41559,14 +41559,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000119-dendro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -42030,14 +42030,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000120-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -42337,14 +42337,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000121-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -43074,14 +43074,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000123-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -43377,14 +43377,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000124-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -43678,14 +43678,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000125-hydro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.8
       }
     ],
     "passiveEffects": [
@@ -44074,14 +44074,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000126-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -44454,14 +44454,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000127-geo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -44981,14 +44981,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.317
       },
       {
         "id": "10000128-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.467
       }
     ],
     "passiveEffects": [
@@ -45828,14 +45828,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.367
       },
       {
         "id": "10000131-pyro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.533
       }
     ],
     "passiveEffects": [
@@ -46182,14 +46182,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000132-anemo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.483
       }
     ],
     "passiveEffects": [
@@ -47221,14 +47221,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.35
       },
       {
         "id": "10000148-electro_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [
@@ -47669,14 +47669,14 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2
+        "defaultDuration": 0.333
       },
       {
         "id": "10000150-cryo_jump",
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55
+        "defaultDuration": 0.517
       }
     ],
     "passiveEffects": [

@@ -1,0 +1,514 @@
+{
+ "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+ "generatedAt": "2026-10-15T13:54:24.323Z",
+ "entries": {
+  "10000002-cryo": {
+   "dash": 35,
+   "jump": 31
+  },
+  "10000003-anemo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000005-anemo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-cryo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-dendro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-electro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-geo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-hydro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000005-pyro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000006-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000007-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-dendro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-geo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-hydro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000007-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000014-hydro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000015-cryo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000016-pyro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000020-electro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000021-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000022-anemo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000023-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000024-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000025-hydro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000026-anemo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000027-geo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000029-pyro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000030-geo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000031-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000032-pyro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000033-hydro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000034-geo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000035-cryo": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000036-cryo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000037-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000038-geo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000039-cryo": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000041-hydro": {
+   "dash": 42,
+   "jump": 31
+  },
+  "10000042-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000043-anemo": {
+   "dash": 24,
+   "jump": 31
+  },
+  "10000044-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000045-cryo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000046-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000047-anemo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000048-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000049-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000050-pyro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000051-cryo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000052-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000053-anemo": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000054-hydro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000055-geo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000056-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000057-geo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000058-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000059-anemo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000060-hydro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000061-dendro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000062-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000063-cryo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000064-geo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000065-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000066-hydro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000067-dendro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000068-electro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000069-dendro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000070-hydro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000071-electro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000072-hydro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000073-dendro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000074-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000075-anemo": {
+   "dash": 21,
+   "jump": 60
+  },
+  "10000076-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000077-dendro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000078-dendro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000079-pyro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000080-cryo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000081-dendro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000082-dendro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000083-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000084-pyro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000085-cryo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000086-cryo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000087-hydro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000088-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000089-hydro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000090-pyro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000091-geo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000092-pyro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000093-anemo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000094-geo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000095-hydro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000096-pyro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000097-electro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000098-electro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000099-dendro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000101-dendro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000102-hydro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000103-geo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000104-anemo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000105-electro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000106-pyro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000107-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000108-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000109-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000110-electro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000111-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000112-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000113-anemo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000114-cryo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000115-hydro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000116-electro": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000119-dendro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000120-electro": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000121-hydro": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000123-pyro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000124-anemo": {
+   "dash": 20,
+   "jump": 31
+  },
+  "10000125-hydro": {
+   "dash": 20,
+   "jump": 48
+  },
+  "10000126-geo": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000127-geo": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000128-anemo": {
+   "dash": 19,
+   "jump": 28
+  },
+  "10000131-pyro": {
+   "dash": 22,
+   "jump": 32
+  },
+  "10000132-anemo": {
+   "dash": 21,
+   "jump": 29
+  },
+  "10000148-electro": {
+   "dash": 21,
+   "jump": 31
+  },
+  "10000150-cryo": {
+   "dash": 20,
+   "jump": 31
+  }
+ }
+}

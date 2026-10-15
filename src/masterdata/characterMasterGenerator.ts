@@ -26,6 +26,7 @@ export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 /** genshin-db の mihoyo_icon は新しいキャラほどリンク切れが多いため、ゲーム内ファイル名から enka の画像を使う */
 const ICON_BASE_URL = 'https://enka.network/ui';
 import { appSideSourceByGenshinId, type AppSideSource } from './appSideCharacterSources.ts';
+import dashJumpFrames from '../data/dash_jump_frames.json' with { type: 'json' };
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
 const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
@@ -1772,9 +1773,11 @@ function buildActions(ctx: BuildContext): BuildResult {
     }
   }
 
-  // --- ダッシュ (キャラ固有フレームは gcsim 側で共通処理のため仮値) --------------
-  actions.push({ id: `${id}_dash`, name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: PLACEHOLDER_DURATION.dash! });
-  actions.push({ id: `${id}_jump`, name: 'ジャンプ', shortName: 'J', type: 'jump', defaultDuration: PLACEHOLDER_DURATION.jump! });
+  // --- ダッシュ・ジャンプ（フレーム表が無い。gcsim の実測 = scripts/probe-dash-jump.ts の src/data/dash_jump_frames.json。無ければ仮値。D215） --------------
+  const djFrames = (dashJumpFrames as { entries: Record<string, { dash?: number; jump?: number }> }).entries[id];
+  const djSeconds = (frames: number | undefined, fallback: number) => (frames !== undefined ? Number((frames / 60).toFixed(3)) : fallback);
+  actions.push({ id: `${id}_dash`, name: 'ダッシュ', shortName: 'D', type: 'dash', defaultDuration: djSeconds(djFrames?.dash, PLACEHOLDER_DURATION.dash!) });
+  actions.push({ id: `${id}_jump`, name: 'ジャンプ', shortName: 'J', type: 'jump', defaultDuration: djSeconds(djFrames?.jump, PLACEHOLDER_DURATION.jump!) });
 
   // 説明文（ホバー表示。スキル・爆発・通常攻撃・重撃・落下攻撃。ダッシュ・ジャンプなどは、表示側の共通の説明）
   const skillDescription = talent?.combat2?.description;

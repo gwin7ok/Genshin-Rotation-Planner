@@ -112,6 +112,17 @@ for (const c of speedOnly ? [] : characters) {
       cases.push({ id: n.id, label: `n${i + 1}`, suffixes: Array.from({ length: i + 2 }, () => 'n'), cmds: Array.from({ length: i + 2 }, () => 'attack'), index: i, tableExp: hits[i].frames?.cancels?.attack ?? hits[i].frames?.total });
     }
   }
+  // モードの窓の中の、スキルの再押し（ディルックの 2・3 回目の E など。D238）
+  for (const opener of A) {
+    const rp = opener.mode?.repress;
+    if (!rp?.frames?.length || !Array.isArray(hitlag[`${opener.id}#r`])) continue;
+    const command = mapAction(opener.id, c.weaponType).command;
+    const sfx = opener.id.slice(c.id.length + 1);
+    if (!command) continue;
+    for (let i = 0; i < rp.frames.length; i++) {
+      cases.push({ id: `${opener.id}#r`, label: `${sfx} 再押し ${i + 1}`, suffixes: [...Array.from({ length: i + 2 }, () => sfx), 'n'], cmds: [...Array.from({ length: i + 2 }, () => command), 'attack'], index: i + 1, tableExp: rp.frames[i].cancels?.attack ?? rp.frames[i].total });
+    }
+  }
   // 重撃の直後の通常攻撃の 1 段目（構え = windup の違い。D229）
   if (ca && hitlag[ca.id] && n && Array.isArray(hitlag[n.id]) && hits.length > 0) {
     const caCommand = mapAction(ca.id, c.weaponType).command;

@@ -12,9 +12,7 @@
  * 対象は、通常攻撃のフレームだけ（重撃・スキルは、キャラごとに gcsim の扱いが違うため、対象外）。
  * まだ入れていない効果: スタック系（リングボウ・パインズ・キャッシュフロー。ヒット回数のモデルが要る）、
  * キャラの効果のうち、敵への命中・被ダメージ・回復・粒子などが引き金のもの、チーム全体に付くもの。
- * 次の 2 つは、効果の持ち主の状態の中の通常攻撃のフレームが、マスターに無いので、入れていない（入れても、基になるフレームが違う）:
- *   サイノの命ノ星座 1（爆発中の通常攻撃 = attackBFrames。+20%・600f・通常攻撃の状態のとき）
- *   放浪者の命ノ星座 1（風力の状態の通常攻撃 = attackFramesE。+10%・1200f）
+ * 持ち主の状態の中の通常攻撃（サイノの爆発中・放浪者の風の加護の間）は、マスターのモードの通常攻撃のフレーム（`mode.normalFrames`）を使う。
  */
 
 /** いつ有効か */
@@ -132,6 +130,20 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
     amount: () => 0.15,
     when: { kind: 'afterEnterField', seconds: 5, icdSeconds: 10, hitlag: true },
     evidence: 'internal/characters/heizou/cons.go c1 + heizou.go: 交代で出場すると heizou-c1 AtkSpd 0.15・300f（内部 CT 600f）。最初の出場（交代なし）では付かない',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'cyno', minConstellation: 1 },
+    amount: () => 0.2,
+    when: [{ kind: 'afterBurst', seconds: 10, hitlag: true }, { kind: 'afterNormalAttack' }],
+    evidence: 'internal/characters/cyno/cons.go c1: AtkSpd 0.2・600f、CurrentState() == NormalAttackState のときだけ。burst.go: 爆発の使用時に付く。固有天賦 1（審判: 爆発中にスキルを、エンシーアの間に使う）による更新は、未対応',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'wanderer', minConstellation: 1 },
+    amount: () => 0.1,
+    // スキルの使用時に付く 1200f（風の加護の状態と同じ 20 秒）。状態が終わると外れる（checkForSkillEnd）が、アプリの状態の長さは、空居点 100 × 6f（10 秒）。
+    // 通常攻撃は、風の加護の間のフレーム（attackFramesE。マスターのモードの通常攻撃）に掛かる
+    when: { kind: 'afterSkill', seconds: 20, hitlag: true },
+    evidence: 'internal/characters/wanderer/cons.go c1: wanderer-c1-atkspd AtkSpd 0.1・1200f。skill.go: スキルの使用時に付く。風の加護が終わる（checkForSkillEnd）と DeleteStatus。attack.go: WindfavoredAttack が AtkSpdAdjust(attackFramesE)',
   },
 ];
 

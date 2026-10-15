@@ -26,7 +26,7 @@ export type AttackSpeedCondition =
    */
   | { kind: 'afterBurst'; seconds: number; sameStint?: boolean; hitlag?: boolean }
   /** 元素スキルを使ってから `seconds` 秒の間（同じキャラが使ったスキル）。`hitlag`: 上と同じ */
-  | { kind: 'afterSkill'; seconds: number; hitlag?: boolean }
+  | { kind: 'afterSkill'; seconds: number; hitlag?: boolean; /** スキルの使用から、効果が付くまでのフレーム（ミカ: 16f）。終わりも、その分後ろにずれる */ delayFrames?: number }
   /** 最後のスキルの後の、通常攻撃の回数が `count` 回未満のとき（その攻撃を数えない。ディルック C6 の「次の 2 回」= 2） */
   | { kind: 'normalAttacksSinceSkillBelow'; count: number }
   /**
@@ -37,6 +37,8 @@ export type AttackSpeedCondition =
   | { kind: 'afterEnterField'; seconds: number; icdSeconds: number; hitlag?: boolean }
   /** 重撃を使ってから `seconds` 秒の間（重撃が敵に当たると付く状態。当たる前提。ヒットストップによる延長は、見ない） */
   | { kind: 'afterChargedAttack'; seconds: number }
+  /** 効果を受けるキャラの武器の種類（重雲の固有天賦 1: 片手剣・両手剣・長柄武器） */
+  | { kind: 'weaponType'; types: string[] }
   /**
    * 直前のアクションが通常攻撃のとき（gcsim の `CurrentState() == NormalAttackState` で付く効果）。
    * `endsAtCancel`: 通常攻撃の状態が、次の通常攻撃へのキャンセルのフレームで終わる（アニメーションの長さが、そのキャンセルと同じ）とき。
@@ -49,7 +51,13 @@ export interface AttackSpeedEffect {
    * 効果の持ち主（武器・聖遺物セット・キャラの gcsim のキー）。聖遺物は 4 セットの効果。
    * キャラは、`minConstellation`（命ノ星座がこれ以上のとき）。天賦レベルは、gcsim の設定と同じ 9 で決める
    */
-  source: { type: 'weapon' | 'artifact' | 'character'; gcsimKey: string; minConstellation?: number };
+  source: {
+    type: 'weapon' | 'artifact' | 'character';
+    gcsimKey: string;
+    minConstellation?: number;
+    /** 効果が付く範囲。`team`: 編成の全員（持ち主を含む。綾人 C4・ミカ）。省略: 持ち主だけ */
+    scope?: 'team';
+  };
   /** 速度（0.12 = +12%）。精錬ランク（1〜5。武器）と命ノ星座（0〜6。キャラ）で決まる */
   amount: (refine: number, constellation: number) => number;
   /** いつ有効か。配列のときは、すべてを満たすとき（AND） */
@@ -131,6 +139,36 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
     when: { kind: 'afterEnterField', seconds: 5, icdSeconds: 10, hitlag: true },
     evidence: 'internal/characters/heizou/cons.go c1 + heizou.go: 交代で出場すると heizou-c1 AtkSpd 0.15・300f（内部 CT 600f）。最初の出場（交代なし）では付かない',
   },
+  // ---- チーム全体に付く効果（持ち主の爆発・スキルの時刻から、編成の全員の通常攻撃に掛かる。D226）。ヒットストップは、受け取るキャラ自身の分を引く ----
+  {
+    source: { type: 'character', gcsimKey: 'kamisatoayato', minConstellation: 4, scope: 'team' },
+    amount: () => 0.15,
+    when: { kind: 'afterBurst', seconds: 15, hitlag: true },
+    evidence: 'internal/characters/ayato/burst.go: Cons >= 4 → 編成の全員に ayato-c4 AtkSpd 0.15・15*60（NewBaseWithHitlag。爆発の使用時に付く）',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'mika', scope: 'team' },
+    // 天賦レベル 9 = 0.21。スキルの天賦 +3（命ノ星座 5）で Lv12 = 0.25
+    amount: (_r, cons) => (cons >= 5 ? 0.25 : 0.21),
+    // 押し: 16f 後に付く（長押しは 12f 後。押しの値で近似）。12 秒
+    when: { kind: 'afterSkill', seconds: 12, hitlag: true, delayFrames: 16 },
+    evidence: 'internal/characters/mika/skill.go: applyBuffs（QueueCharTask(skillPressCDStart 16f / skillHoldCDStart + 1)）→ 編成の全員に soulwind AtkSpd atkSpdBuff[TalentLvlSkill()]・12*60（NewBaseWithHitlag）。mika.go: SkillCon = 5',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'yunjin', minConstellation: 6, scope: 'team' },
+    amount: () => 0.12,
+    // 爆発のヒット判定（35f）から 12 秒（旗の効果 = 720f と同じ長さ）。旗の回数（30 回。通常攻撃のヒットごとに 1 減る）が尽きると外れるが、それは見ていない
+    when: { kind: 'afterBurst', seconds: (35 + 12 * 60) / 60, hitlag: true },
+    evidence: 'internal/characters/yunjin/cons.go c6: Cons >= 6 → 編成の全員に c6Key AtkSpd 0.12・12*60（NewBaseWithHitlag）、Tags[yunjin-q] > 0 のときだけ。burst.go: burstHitmark(35f) に付く（旗は 30 回・720f）',
+  },
+  {
+    source: { type: 'character', gcsimKey: 'chongyun', scope: 'team' },
+    amount: () => 0.08,
+    // 領域は、ヒット判定（36f）から 600f（1 秒ごとに、操作中のキャラへ付け直す。持続は天賦 Lv9 = 2.8 秒）。命ノ星座 5（Lv12）は 3.0 秒だが、見ていない。
+    // 領域の中の位置（IsWithinArea）は、中にいる前提
+    when: [{ kind: 'afterSkill', seconds: 600 / 60 + 2.8, delayFrames: 36 }, { kind: 'weaponType', types: ['sword', 'claymore', 'polearm'] }],
+    evidence: 'internal/characters/chongyun/skill.go: 領域（chongyunfield 600f。ヒット判定 36f から）の間、1 秒ごと・交代のたびに、操作中のキャラへ infuse → 片手剣・両手剣・長柄武器なら chongyun-field AtkSpd 0.08・infuseDur[TalentLvlSkill()] 秒（Lv9 = 2.8）',
+  },
   {
     source: { type: 'character', gcsimKey: 'cyno', minConstellation: 1 },
     amount: () => 0.2,
@@ -157,6 +195,8 @@ export interface AttackSpeedContext {
   characterKey?: string;
   /** 命ノ星座（0〜6） */
   constellation: number;
+  /** 効果を受けるキャラの武器の種類（sword・claymore・polearm・bow・catalyst） */
+  weaponType?: string;
   /** 精錬ランク（1〜5） */
   refine: number;
   /** 同じキャラの、最後の元素爆発の開始から、このアクションの開始までの秒数（爆発を使っていなければ undefined） */
@@ -170,6 +210,18 @@ export interface AttackSpeedContext {
   secondsSinceSkill?: number;
   /** 最後のスキルの後の、通常攻撃（このアクションを除く）の回数 */
   normalAttacksSinceSkill?: number;
+  /**
+   * 編成のキャラ（受け取るキャラ自身を含む）の、爆発・スキルの使用の状態。`scope: 'team'` の効果が使う。
+   * hitlagSince〜: 受け取るキャラ自身のヒットストップの合計（その爆発・スキルの使用から）
+   */
+  teamOwners?: {
+    characterKey: string;
+    constellation: number;
+    secondsSinceBurst?: number;
+    hitlagSinceBurst?: number;
+    secondsSinceSkill?: number;
+    hitlagSinceSkill?: number;
+  }[];
   /** このキャラが、交代で出場した時刻（秒。先頭の出場を除く）の一覧と、このアクションの開始時刻 */
   enterFieldTimes?: { t: number; hitlag: number }[];
   /** このアクションの開始時刻（秒）と、そこまでのキャラ自身のヒットストップの合計（秒） */
@@ -189,10 +241,27 @@ export interface AttackSpeedContext {
 export function attackSpeedFor(ctx: AttackSpeedContext): number {
   let total = 0;
   for (const e of ATTACK_SPEED_EFFECTS) {
+    const conditions = Array.isArray(e.when) ? e.when : [e.when];
+    if (e.source.scope === 'team') {
+      // 編成の持ち主の状態で判定する（受け取るキャラの、通常攻撃の状態などは、そのまま使う）
+      for (const o of ctx.teamOwners ?? []) {
+        if (o.characterKey !== e.source.gcsimKey) continue;
+        if (e.source.minConstellation !== undefined && o.constellation < e.source.minConstellation) continue;
+        const oc: AttackSpeedContext = {
+          ...ctx,
+          secondsSinceBurst: o.secondsSinceBurst,
+          hitlagSinceBurst: o.hitlagSinceBurst,
+          secondsSinceSkill: o.secondsSinceSkill,
+          hitlagSinceSkill: o.hitlagSinceSkill,
+          burstInSameStint: false,
+        };
+        if (conditions.every(w => conditionHolds(w, oc))) total += e.amount(ctx.refine, o.constellation);
+      }
+      continue;
+    }
     const owned = e.source.type === 'weapon' ? ctx.weaponKey : e.source.type === 'artifact' ? ctx.artifactKey : ctx.characterKey;
     if (!owned || e.source.gcsimKey !== owned) continue;
     if (e.source.minConstellation !== undefined && ctx.constellation < e.source.minConstellation) continue;
-    const conditions = Array.isArray(e.when) ? e.when : [e.when];
     if (conditions.every(w => conditionHolds(w, ctx))) total += e.amount(ctx.refine, ctx.constellation);
   }
   return total;
@@ -203,8 +272,10 @@ function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boole
     case 'always': return true;
     case 'afterBurst':
       return ctx.secondsSinceBurst !== undefined && ctx.secondsSinceBurst - (w.hitlag ? ctx.hitlagSinceBurst ?? 0 : 0) <= w.seconds + 1e-9 && (!w.sameStint || !!ctx.burstInSameStint);
+    case 'weaponType': return !!ctx.weaponType && w.types.includes(ctx.weaponType);
     case 'afterSkill':
-      return ctx.secondsSinceSkill !== undefined && ctx.secondsSinceSkill - (w.hitlag ? ctx.hitlagSinceSkill ?? 0 : 0) <= w.seconds + 1e-9;
+      return ctx.secondsSinceSkill !== undefined
+        && ctx.secondsSinceSkill - (w.hitlag ? ctx.hitlagSinceSkill ?? 0 : 0) - (w.delayFrames ?? 0) / 60 <= w.seconds + 1e-9;
     case 'normalAttacksSinceSkillBelow': return (ctx.normalAttacksSinceSkill ?? Infinity) < w.count;
     case 'afterEnterField': {
       // 内部 CT を見て、効果が付いた交代だけを数える。今の時刻が、その後 `seconds` 秒以内か

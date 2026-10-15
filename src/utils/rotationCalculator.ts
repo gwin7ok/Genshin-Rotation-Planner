@@ -215,6 +215,9 @@ export function calculateRotation(
   };
   // 通常攻撃速度（gcsim の AtkSpd）。効果の表は masterdata/attackSpeedEffects.ts。アクションの開始時点の状態から、速度の合計を求める
   const burstStartByChar = new Map<string, { t: number; sIdx: number; hitlag: number }>();
+  // 編成の全員に付く効果（綾人 C4・ミカ）用: 爆発・スキルの使用時の、全員のヒットストップの合計（受け取るキャラ自身の分を引くため）
+  const burstSnapshotByChar = new Map<string, Map<string, number>>();
+  const skillSnapshotByChar = new Map<string, Map<string, number>>();
   // キャラ自身のヒットストップの合計（秒。ヒットストップで延びる効果の経過から引く）
   const hitlagTotalByChar = new Map<string, number>();
   const chargedStartByChar = new Map<string, number>();
@@ -232,11 +235,25 @@ export function calculateRotation(
     const chargedAt = chargedStartByChar.get(c.id);
     const skillAt = skillStartByChar.get(c.id);
     const hitlagNow = hitlagTotalByChar.get(c.id) ?? 0;
+    const teamOwners = characters.filter(o => o.source?.gcsimKey).map(o => {
+      const b = burstStartByChar.get(o.id);
+      const s = skillStartByChar.get(o.id);
+      return {
+        characterKey: o.source!.gcsimKey as string,
+        constellation: CharacterModel.fromConfig(o).constellation,
+        secondsSinceBurst: b === undefined ? undefined : start - b.t,
+        hitlagSinceBurst: b === undefined ? undefined : hitlagNow - (burstSnapshotByChar.get(o.id)?.get(c.id) ?? 0),
+        secondsSinceSkill: s === undefined ? undefined : start - s.t,
+        hitlagSinceSkill: s === undefined ? undefined : hitlagNow - (skillSnapshotByChar.get(o.id)?.get(c.id) ?? 0),
+      };
+    });
     return attackSpeedFor({
+      teamOwners,
       weaponKey: w?.gcsimKey,
       artifactKey: art?.gcsimKey,
       characterKey: c.source?.gcsimKey,
       constellation: CharacterModel.fromConfig(c).constellation,
+      weaponType: c.weaponType,
       refine,
       secondsSinceBurst: burstAt === undefined ? undefined : start - burstAt.t,
       burstInSameStint: burstAt?.sIdx === sIdx,
@@ -968,6 +985,8 @@ export function calculateRotation(
       // 元素爆発の開始（攻撃速度の効果の「爆発の後 N 秒」に使う）と、直前の通常攻撃（「通常攻撃の状態」に使う）
       // 効果は、このアクションの命中（ヒットストップ）より前に付くので、ヒットストップの合計は、このアクションの分を足す前の値
       const hitlagBefore = hitlagTotalByChar.get(char.id) ?? 0;
+      if (act.type === 'burst') burstSnapshotByChar.set(char.id, new Map(hitlagTotalByChar));
+      if (act.type === 'skill') skillSnapshotByChar.set(char.id, new Map(hitlagTotalByChar));
       hitlagTotalByChar.set(char.id, hitlagBefore + Math.max(0, hitlagFrames) / 60);
       if (act.type === 'burst') burstStartByChar.set(char.id, { t: actionStartTime, sIdx, hitlag: hitlagBefore });
       if (act.type === 'skill') { skillStartByChar.set(char.id, { t: actionStartTime, hitlag: hitlagBefore }); normalsSinceSkillByChar.set(char.id, 0); }

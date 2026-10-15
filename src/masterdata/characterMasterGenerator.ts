@@ -454,10 +454,16 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       startDelayFrames: 0,
       durationFrames: 589,
       swap: 'blocks',
-      enders: [{ by: 'self', cooldown: 'start' }],
       holdByDefault: false,
       noHold: true,
       cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
+      // E の再押しは、夜魂を終わらせる動作（skillCancelFrames）。長押し（落下）は、落下攻撃で終わる（skillCancelPlungeFrames。ヒット判定 39f で夜魂が終わる）
+      enders: [
+        { by: 'self', cooldown: 'start', frames: { total: 44, cancels: { attack: 43, burst: 42, jump: 43, swap: 42 }, source: 'skill.go:skillCancelFrames（E → Jump 43f ほか。夜魂を終わらせる）' } },
+        { by: 'skill_hold', cooldown: 'start' },
+      ],
+      // 夜魂の間の重撃も、トニックショット（長押し。1f 後に出る）。通常攻撃と同じ間隔
+      chargedFrames: { total: 42, hitmark: 1, cancels: { attack: 54, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'charge.go:skillAttackHoldFrames（InitNormalCancelSlice(0, chargeSkillInterval 42)。CA → N 54f。CanQueueAfter = 0）' },
       normalFrames: [
         { total: 54, hitmark: 3, cancels: { charge: 42, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。トニックショットは 3f 後に出る）' },
       ],
@@ -1635,6 +1641,22 @@ function buildActions(ctx: BuildContext): BuildResult {
         type: notation.type,
         startsSkillCooldown: startsCooldown,
         ...(startsCooldown ? { cooldown: timings.skillTapCooldown?.value, dataSource: { cooldown: timings.skillTapCooldown?.label } } : {}),
+        defaultDuration: framesToSec(table.total),
+        frames: toActionFrames(table, 'skill', skill.consts),
+      });
+    }
+  }
+
+  // イファ: 夜魂の加護の間の、スキル長押し（落下攻撃で夜魂を終わらせる。`skill[hold=1]`）。D234
+  if (id === '10000113-anemo' && skill) {
+    const table = skill.tables.find(t => t.name === 'skillCancelPlungeFrames');
+    if (table) {
+      actions.push({
+        id: `${id}_e_cancelplunge`,
+        name: `元素スキル(長押し・落下): ${skillName ?? ''}`.trim(),
+        shortName: 'hE(落下)',
+        type: 'skill_hold',
+        startsSkillCooldown: false,
         defaultDuration: framesToSec(table.total),
         frames: toActionFrames(table, 'skill', skill.consts),
       });

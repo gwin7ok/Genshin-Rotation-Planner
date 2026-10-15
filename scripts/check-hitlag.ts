@@ -25,6 +25,8 @@ const excludedNext = new Set<string>(hitlagJson.excludedNext ?? []);
 let skippedNext = 0;
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw)).filter((c: any) => c.source?.gcsimKey);
+// gcsim の設定は cons=0。アプリの既定（星 4 のキャラは 6 凸）の命ノ星座の効果が入らないように、0 凸にそろえる
+for (const c of characters) c.constellation = 0;
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 const TOLERANCE = 1; // フレーム
 
@@ -236,6 +238,15 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
     const scenarios: { name: string; steps: Step[] }[] = [];
     const lead = kinds.includes('afterBurst') ? 'burst' : kinds.includes('afterSkill') ? 'skill' : undefined;
     const isTeam = effect.source.scope === 'team';
+    // 会心のヒットが引き金: 通常攻撃の連続・スキルの後・内部 CT の前後（待機）
+    if (kinds.includes('afterCritHit')) {
+      const cond = conds.find(x => x.kind === 'afterCritHit');
+      const wait = Math.round((cond.seconds + 0.5) * 60);
+      scenarios.push({ name: '通常攻撃 ×6', steps: A(6) });
+      scenarios.push({ name: 'スキル → 通常攻撃 ×4', steps: [{ who: 'self', cmd: 'skill', delay: 0 }, ...A(4)] });
+      scenarios.push({ name: `通常攻撃 ×2 → 待機 ${wait}f → 通常攻撃 ×4`, steps: [...A(1), { who: 'self', cmd: 'attack', delay: wait }, ...A(4)] });
+      scenarios.push({ name: '爆発 → 通常攻撃 ×4', steps: [{ who: 'self', cmd: 'burst', delay: 0 }, ...A(4)] });
+    }
     if (lead && isTeam) {
       // 編成の全員に付く効果: 持ち主が使って、交代した相手（行秋）の通常攻撃で比べる
       const cond = conds.find(x => x.kind === (lead === 'burst' ? 'afterBurst' : 'afterSkill'));

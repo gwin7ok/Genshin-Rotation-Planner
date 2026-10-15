@@ -225,6 +225,8 @@ export function calculateRotation(
   const normalsSinceSkillByChar = new Map<string, number>();
   // 交代で出場した時刻（先頭の出場を除く。交代アクションの開始 = gcsim の OnCharacterSwap）
   const enterFieldByChar = new Map<string, { t: number; hitlag: number }[]>();
+  // 自分の攻撃（通常攻撃・スキル・爆発）の命中の時刻（会心が引き金の効果用）
+  const hitTimesByChar = new Map<string, { t: number; hitlag: number }[]>();
   const attackSpeedOf = (c: CharacterConfig, start: number, sIdx: number, previousNormal: { start: number; total: number; cancel: number } | undefined): number => {
     const w = options?.database?.weapons.find(x => x.id === c.weaponId);
     // 聖遺物は、4 セットの効果が有効なとき（組み合わせが 2+2 でない）だけ
@@ -263,6 +265,7 @@ export function calculateRotation(
       hitlagNow,
       normalAttacksSinceSkill: normalsSinceSkillByChar.get(c.id),
       enterFieldTimes: enterFieldByChar.get(c.id),
+      hitTimes: hitTimesByChar.get(c.id),
       now: start,
       secondsSinceChargedAttack: chargedAt === undefined ? undefined : start - chargedAt,
       previousNormalAttack: previousNormal
@@ -992,6 +995,9 @@ export function calculateRotation(
       if (act.type === 'skill') { skillStartByChar.set(char.id, { t: actionStartTime, hitlag: hitlagBefore }); normalsSinceSkillByChar.set(char.id, 0); }
       if (act.type === 'normal' && normalsSinceSkillByChar.has(char.id)) normalsSinceSkillByChar.set(char.id, normalsSinceSkillByChar.get(char.id)! + 1);
       if (act.type === 'charged') chargedStartByChar.set(char.id, actionStartTime);
+      if ((act.type === 'normal' || act.type === 'skill' || act.type === 'burst') && frames?.hitmark !== undefined) {
+        hitTimesByChar.set(char.id, [...(hitTimesByChar.get(char.id) ?? []), { t: Number((actionStartTime + frames.hitmark / 60).toFixed(3)), hitlag: hitlagBefore }]);
+      }
       // 通常攻撃の状態は、アニメーションが終わると外れる。ヒットストップで止まった分、アニメーションも延びる
       previousNormal = act.type === 'normal' && frames
         ? { start: actionStartTime, total: frames.total + Math.max(0, hitlagFrames), cancel: (frames.cancels.attack ?? frames.total) + Math.max(0, hitlagFrames) }

@@ -927,6 +927,8 @@ export function calculateRotation(
       let autoDuration: number | undefined;
       // ヒットストップで延びるフレーム（フレーム表そのものを使うときだけ。モードなどで別のフレームに置き換えたときは、足さない）
       let hitlagFrames = 0;
+      // 次が待機で、ヒットストップが待機に吸収された（所要時間には足さないが、受付の延長などの判定では「含まれる」扱い）
+      let hitlagAbsorbed = false;
       // 選んだ表の値（次のアクションの種類で、値を選ぶ）と、遅延なしの値を使うか
       let hitlagSrc: { base: HitlagBase; noDelay: boolean; charged?: HitlagAfter; chargedNoDelay?: boolean } | undefined;
       const hitlagFor = (nextKey: string | undefined): number => {
@@ -1014,6 +1016,7 @@ export function calculateRotation(
             const afterHit = hitlagFor(afterKey === 'wait' ? undefined : afterKey);
             const afterCancel = (afterKey && afterKey !== 'wait' ? frames.cancels[afterKey] : undefined) ?? frames.total;
             hitlagFrames = Math.max(0, afterCancel + afterHit - motion - waitFrames);
+            hitlagAbsorbed = afterHit !== 0;
           } else {
             hitlagFrames = hitlagFor(nextKey);
           }
@@ -1022,7 +1025,7 @@ export function calculateRotation(
           // 縮めたキャンセルが、ヒット判定（hitmark）より早くなるときは、ヒット判定まで待つ（gcsim: CanQueueAfter = hitmark。雷電の爆発中の 5 段目 → E など）
           const motionAdjusted = atkSpd > 0 ? Math.max(atkSpdAdjust(motion, atkSpd), Math.min(motion, frames.hitmark ?? 0)) : motion;
           autoDuration = Number(((motionAdjusted + hitlagFrames) / 60).toFixed(3));
-          if (hitlagFrames !== 0) hitlagIncluded.add(act.id);
+          if (hitlagFrames !== 0 || hitlagAbsorbed) hitlagIncluded.add(act.id);
         } else {
           // フレーム表が無いダッシュ・ジャンプは、マスターの値（gcsim の実測。D215）を使う。手で編集していなければ、保存した値（追加した時点の古い値）ではなく、今のマスターの値にする
           autoDuration = hitFallbackDuration ?? ((act.type === 'dash' || act.type === 'jump') && actionDef?.defaultDuration !== undefined ? actionDef.defaultDuration : undefined);

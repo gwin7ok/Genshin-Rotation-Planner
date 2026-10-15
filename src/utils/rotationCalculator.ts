@@ -114,7 +114,9 @@ type HitlagPair = { with: number; without: number };
  * 重撃だけ `afterNormal`（通常攻撃の直後の値。触媒の重撃などは、通常攻撃の直後だと、窓（windup）を省いて短くなる。
  * gcsim の動きはキャラごとに違い、遅延が 1f でもあると省かないキャラ（リサ）がいる。`d0` は、直前の通常攻撃の遅延がないときの値）
  */
-type HitlagBase = HitlagPair & { d0?: HitlagPair };
+type HitlagBase0 = HitlagPair & { d0?: HitlagPair };
+/** `byNext` = 次のアクションの種類（skill・burst・dash・jump・swap）が、次が通常攻撃のときと値が違うときだけ（D219） */
+type HitlagBase = HitlagBase0 & { byNext?: Record<string, HitlagBase0> };
 /** `ext` = モード（状態）の終わりが、そのヒットのヒットストップで延びるフレーム（モードの通常攻撃・重撃のキー `<opener>#n` / `#ca` だけ。gcsim の `mod extended`） */
 type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase; ext?: HitlagPair };
 const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
@@ -866,24 +868,27 @@ export function calculateRotation(
       let autoDuration: number | undefined;
       // ヒットストップで延びるフレーム（フレーム表そのものを使うときだけ。モードなどで別のフレームに置き換えたときは、足さない）
       let hitlagFrames = 0;
+      // 選んだ表の値（次のアクションの種類で、値を選ぶ）と、遅延なしの値を使うか
+      let hitlagSrc: { base: HitlagBase; noDelay: boolean } | undefined;
+      const hitlagFor = (nextKey: string | undefined): number => {
+        if (!hitlagSrc) return 0;
+        const { base, noDelay } = hitlagSrc;
+        const v: HitlagBase0 = (nextKey && base.byNext?.[nextKey]) || base;
+        const p = noDelay && v.d0 ? v.d0 : v;
+        return options?.defHalt === false ? p.without : p.with;
+      };
       if (frames && actionDef) {
         const entry = HITLAG_FRAMES[actionDef.id];
-        const pair = Array.isArray(entry)
-          ? (() => {
-            const e = act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined;
-            return e && actionDelayOf(act) === 0 && e.d0 ? e.d0 : e;
-          })()
-          : (entry && frames === actionDef.frames
-            ? (() => {
-              const prev = rawActions[aIdx - 1];
-              const afterNormal = act.type === 'charged' && prev?.type === 'normal' && entry.afterNormal;
-              const chosen = afterNormal || entry;
-              // 遅延なしの値は、重撃の直前の通常攻撃の遅延がないとき（それ以外は、そのアクション自身の遅延がないとき）
-              const noDelay = afterNormal ? actionDelayOf(prev) === 0 : actionDelayOf(act) === 0;
-              return noDelay && chosen.d0 ? chosen.d0 : chosen;
-            })()
-            : undefined);
-        if (pair) hitlagFrames = options?.defHalt === false ? pair.without : pair.with;
+        if (Array.isArray(entry)) {
+          const e = act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined;
+          if (e) hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
+        } else if (entry && frames === actionDef.frames) {
+          const prev = rawActions[aIdx - 1];
+          const afterNormal = act.type === 'charged' && prev?.type === 'normal' && entry.afterNormal;
+          // 遅延なしの値は、重撃の直前の通常攻撃の遅延がないとき（それ以外は、そのアクション自身の遅延がないとき）
+          hitlagSrc = { base: afterNormal || entry, noDelay: afterNormal ? actionDelayOf(prev) === 0 : actionDelayOf(act) === 0 };
+        }
+        hitlagFrames = hitlagFor(undefined);
       }
       // モードの専用のフレームの通常攻撃・重撃: ヒットストップの延び（遅延で値が変わるものは d0）と、モードの終わりの延び（ext）。
       // フレームを、後のモードの上書き（終わらせる動作・もう一度使った動作など）で置き換えたときは足さない
@@ -892,9 +897,9 @@ export function calculateRotation(
         const raw = HITLAG_FRAMES[modeHit.key];
         const e = Array.isArray(raw) ? raw[modeHit.index] : raw;
         if (e) {
-          const base = actionDelayOf(act) === 0 && e.d0 ? e.d0 : e;
+          hitlagSrc = { base: e, noDelay: actionDelayOf(act) === 0 };
+          hitlagFrames = hitlagFor(undefined);
           const noDef = options?.defHalt === false;
-          hitlagFrames = noDef ? base.without : base.with;
           if (e.ext) modeExtFrames = noDef ? e.ext.without : e.ext.with;
         }
       }
@@ -914,13 +919,17 @@ export function calculateRotation(
             }
           }
           const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
+          // ヒットストップの延びは、次のアクションの種類で値が違うことがある（次が待機・不明のときは、次が通常攻撃のときの値）
+          hitlagFrames = hitlagFor(nextKey === 'wait' ? undefined : nextKey);
           // 通常攻撃は、武器の攻撃速度で縮む（ヒットストップの延びは、縮んだ後に足される）
           const atkSpd = act.type === 'normal' ? weaponAtkSpdOf(char) : 0;
-          const motionAdjusted = atkSpd > 0 ? atkSpdAdjust(motion, atkSpd) : motion;
+          // 縮めたキャンセルが、ヒット判定（hitmark）より早くなるときは、ヒット判定まで待つ（gcsim: CanQueueAfter = hitmark。雷電の爆発中の 5 段目 → E など）
+          const motionAdjusted = atkSpd > 0 ? Math.max(atkSpdAdjust(motion, atkSpd), Math.min(motion, frames.hitmark ?? 0)) : motion;
           autoDuration = Number(((motionAdjusted + hitlagFrames) / 60).toFixed(3));
           if (hitlagFrames !== 0) hitlagIncluded.add(act.id);
         } else {
-          autoDuration = hitFallbackDuration;
+          // フレーム表が無いダッシュ・ジャンプは、マスターの値（gcsim の実測。D215）を使う。手で編集していなければ、保存した値（追加した時点の古い値）ではなく、今のマスターの値にする
+          autoDuration = hitFallbackDuration ?? ((act.type === 'dash' || act.type === 'jump') && actionDef?.defaultDuration !== undefined ? actionDef.defaultDuration : undefined);
         }
       }
       // gcsim 自身の標準の所要時間（編集済みでも）。ユーザーが標準より長くした分を gcsim に渡すために使う

@@ -117,7 +117,8 @@
           "cooldown": 18,
           "gcsimCdResonance": 1,
           "effectDuration": 10,
-          "gcsimCtOffset": 0
+          "gcsimCtOffset": 0,
+          "extraEffects": []
         },
         {
           "id": "act_1790657505462_18dq",
@@ -130,7 +131,8 @@
           "durationManual": true,
           "gcsimBaseDuration": 0.45,
           "cooldown": 0,
-          "gcsimCdResonance": 1
+          "gcsimCdResonance": 1,
+          "extraEffects": []
         },
         {
           "id": "act_1790657506812_wx8d",
@@ -143,7 +145,8 @@
           "durationManual": true,
           "gcsimBaseDuration": 0.533,
           "cooldown": 0,
-          "gcsimCdResonance": 1
+          "gcsimCdResonance": 1,
+          "extraEffects": []
         },
         {
           "id": "act_1790657507648_0k6e",
@@ -409,7 +412,8 @@
           "cooldown": 15,
           "gcsimCdResonance": 1,
           "effectDuration": 15,
-          "gcsimCtOffset": 0
+          "gcsimCtOffset": 0,
+          "extraEffects": []
         }
       ],
       "startTime": 10.684,
@@ -567,7 +571,7 @@
   "totalDuration": 19.22,
   "switchDelay": 0.5,
   "reactions": {
-    "gcsimVersion": "v2.48.8",
+    "gcsimVersion": "v2.49.0",
     "rows": [
       {
         "kind": "verdantdew",

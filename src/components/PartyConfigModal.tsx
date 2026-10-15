@@ -1,4 +1,4 @@
-import { GcsimMissingBadge } from './GcsimMissingBadge';
+import { GcsimMissingBadge, GcsimMissingTag, isGcsimMissingEquipment } from './GcsimMissingBadge';
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
 import { hasRevelationSetting, hasRevelationInfo, REVELATION_INFO, revelationTooltip } from '../masterdata/revelationCharacters';
 import React, { useState, useEffect, useMemo } from 'react';
@@ -362,7 +362,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         ...database.weapons
                           .filter(w => w.weaponType === currentSlotChar.weaponType)
                           .sort((a, b) => Number(b.id) - Number(a.id))
-                          .map(w => ({ value: w.id, label: `${'★'.repeat(w.rarity)} ${w.name}` })),
+                          .map(w => ({
+                            value: w.id,
+                            label: `${'★'.repeat(w.rarity)} ${w.name}`,
+                            badge: isGcsimMissingEquipment(w) ? <GcsimMissingTag title="gcsim に未実装の武器です。gcsim での計算では、この武器は使えません（実行エラーになります）。" /> : undefined,
+                          })),
                       ]}
                       onChange={(v) => {
                         const newWeaponId = v || undefined;
@@ -450,7 +454,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         { value: '', label: currentSlotChar.artifactSetMode === '2+2' ? '効果なし（2+2）' : '-- DBから聖遺物を選択 --' },
                         ...[...database.artifacts]
                           .sort((a, b) => Number(b.id) - Number(a.id))
-                          .map(a => ({ value: a.id, label: `${'★'.repeat(a.rarity)} ${a.name}` })),
+                          .map(a => ({
+                            value: a.id,
+                            label: `${'★'.repeat(a.rarity)} ${a.name}`,
+                            badge: isGcsimMissingEquipment(a) ? <GcsimMissingTag title="gcsim に未実装の聖遺物セットです。gcsim での計算では、このセットは使えません（実行エラーになります）。" /> : undefined,
+                          })),
                       ]}
                       onChange={(v) => handleUpdateCurrentField('artifactSetId', v || undefined)}
                       className="flex-1 bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold min-w-0 disabled:opacity-60"

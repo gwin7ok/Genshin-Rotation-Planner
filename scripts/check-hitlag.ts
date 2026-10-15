@@ -7,7 +7,7 @@
  * 全キャラ（命ノ星座 0・遅延なし）の、通常攻撃（段ごと）・元素スキル・元素爆発・重撃を、`A → attack` で並べ、
  *  - アプリ: calculateRotation の A の所要時間（次の attack へのキャンセル + ヒットストップの延び。src/data/hitlag_frames.json）
  *  - gcsim: A を実行したフレームから、次の attack を実行したフレームまでの差
- * を、防御ヒットストップありとなしの両方で比べる。gcsim の方が表より短いもの（`probe:hitlag` が 0 にして記録したもの）は、対象外にして件数だけ出す。
+ * を、防御ヒットストップありとなしの両方で比べる（重撃は、通常攻撃の直後と単独の両方）。
  * 表に無いアクション（長押し・派生・特殊スキル・モード・落下）は対象外。
  */
 import fs from 'node:fs';
@@ -24,7 +24,7 @@ const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.v
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 const TOLERANCE = 1; // フレーム
 
-async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: string[]): Promise<number[] | undefined> {
+async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: string[], delayFrames: number): Promise<number[] | undefined> {
   const cfg = [
     `${k} char lvl=90/90 cons=0 talent=9,9,9;`,
     `${k} add weapon="${weapon}" refine=1 lvl=90/90;`,
@@ -32,7 +32,7 @@ async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: st
     `options iteration=1 duration=30 swap_delay=12 ignore_burst_energy=true${defhalt ? '' : ' defhalt=false'};`,
     'target lvl=100 resist=0.1;',
     `active ${k};`,
-    cmds.map(c => `${k} ${c};`).join(' '),
+    cmds.map(c => `${k} ${c};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`).join(' '),
   ].join('\n');
   const res = await fetch(`${GCSIM_SERVER_URL}/sample/ch_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
   let logs: any[];
@@ -57,14 +57,13 @@ async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: st
 }
 
 let seq = 0;
-const act = (c: any, suffix: string) => {
+const act = (c: any, suffix: string, delay: number) => {
   const def = c.availableActions.find((a: any) => a.id === `${c.id}_${suffix}`);
-  return { id: `a${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: def.defaultDuration, delayAfter: 0 };
+  return { id: `a${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: def.defaultDuration, delayAfter: delay };
 };
 
 const fails: string[] = [];
 let checked = 0;
-let shorter = 0;
 for (const c of characters) {
   const k = c.source.gcsimKey as string;
   const weapon = weapons[c.weaponType];
@@ -79,8 +78,13 @@ for (const c of characters) {
   const ca = A.find(a => a.id === `${c.id}_ca`);
   if (ca && hitlag[`${c.id}_ca`]) {
     const command = mapAction(ca.id, c.weaponType).command!;
-    const pre = command === 'charge';
-    cases.push({ id: ca.id, label: 'ca', suffixes: [...(pre ? ['n'] : []), 'ca', 'n'], cmds: [...(pre ? ['attack'] : []), command, 'attack'], index: pre ? 1 : 0, tableExp: ca.frames?.cancels?.attack ?? ca.frames?.total });
+    const exp = ca.frames?.cancels?.attack ?? ca.frames?.total;
+    // 通常攻撃の直後
+    cases.push({ id: ca.id, label: 'ca（N の直後）', suffixes: ['n', 'ca', 'n'], cmds: ['attack', command, 'attack'], index: 1, tableExp: exp });
+    // 単独（剣・大剣・長柄は、直前の attack が要るので測れない）
+    if (!(command === 'charge' && ['sword', 'claymore', 'polearm'].includes(c.weaponType))) {
+      cases.push({ id: ca.id, label: 'ca（単独）', suffixes: ['ca', 'n'], cmds: [command, 'attack'], index: 0, tableExp: exp });
+    }
   }
   const n = A.find(a => a.id === `${c.id}_n`);
   const hits: any[] = n?.normalHits ?? [];
@@ -90,22 +94,22 @@ for (const c of characters) {
     }
   }
   for (const cs of cases) {
-    for (const defHalt of [true, false]) {
-      const g = await gcsimFrames(k, weapon, defHalt, cs.cmds);
+    for (const [defHalt, delayFrames] of [[true, 0], [false, 0], [true, 6], [false, 6]] as const) {
+      const g = await gcsimFrames(k, weapon, defHalt, cs.cmds, delayFrames);
       if (!g) continue;
+      // gcsim の間隔は、遅延（delay）を含む。アプリの開始時刻の差も、遅延（delayAfter）を含む
       const gInterval = g[cs.index + 1] - g[cs.index];
-      if (cs.tableExp !== undefined && gInterval < cs.tableExp) { if (defHalt) shorter++; continue; }
-      const stints = [{ id: 's1', characterId: c.id, actions: cs.suffixes.map(s => act(c, s)) }];
+      const stints = [{ id: 's1', characterId: c.id, actions: cs.suffixes.map(s => act(c, s, delayFrames / 60)) }];
       const res = calculateRotation([c], stints, { switchDelay: 0.5, defHalt });
       const acts = res.calculatedStints[0].actions.filter((a: any) => a.type !== 'swap');
       const appInterval = Math.round((acts[cs.index + 1].startTime - acts[cs.index].startTime) * 60);
       checked++;
-      if (Math.abs(appInterval - gInterval) > TOLERANCE) fails.push(`${c.name} ${cs.label} (defhalt=${defHalt}): アプリ ${appInterval}f / gcsim ${gInterval}f（差 ${appInterval - gInterval}f）`);
+      if (Math.abs(appInterval - gInterval) > TOLERANCE) fails.push(`${c.name} ${cs.label} (defhalt=${defHalt}・遅延 ${delayFrames}f): アプリ ${appInterval}f / gcsim ${gInterval}f（差 ${appInterval - gInterval}f）`);
     }
   }
 }
 await server.close();
-console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件 / gcsim が表より短い（対象外）${shorter} 件`);
+console.log(`検査 ${checked} 件 / 差が ${TOLERANCE}f を超える ${fails.length} 件`);
 for (const f of fails.slice(0, 60)) console.log('  ✗', f);
 if (fails.length > 0) process.exit(1);
 console.log('✓ アプリの事前計算と gcsim の実測が、ヒットストップを含めて一致している');

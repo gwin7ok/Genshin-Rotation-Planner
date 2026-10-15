@@ -108,7 +108,14 @@ const CAN_QUEUE_AFTER = (canQueueAfterData as { entries: Record<string, number> 
  * マスターのフレーム表（gcsim の skillFrames など）は、これを含まない。
  */
 type HitlagPair = { with: number; without: number };
-const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagPair | HitlagPair[]> }).entries;
+/**
+ * `d0` = 遅延（アクション遅延）なしのときの値（標準の遅延のときと違うときだけ）。
+ * 重撃だけ `afterNormal`（通常攻撃の直後の値。触媒の重撃などは、通常攻撃の直後だと、窓（windup）を省いて短くなる。
+ * gcsim の動きはキャラごとに違い、遅延が 1f でもあると省かないキャラ（リサ）がいる。`d0` は、直前の通常攻撃の遅延がないときの値）
+ */
+type HitlagBase = HitlagPair & { d0?: HitlagPair };
+type HitlagEntry = HitlagBase & { afterNormal?: HitlagBase };
+const HITLAG_FRAMES = (hitlagData as { entries: Record<string, HitlagEntry | HitlagEntry[]> }).entries;
 
 /** 次に続くアクションの種類 → キャンセルフレームの表のキー（gcsim の action.ActionXxx）。出場の最後は次が交代。'wait' = 次が待機（CanQueueAfter） */
 type NextKey = CancelTarget | 'wait';
@@ -833,8 +840,20 @@ export function calculateRotation(
       if (frames && actionDef) {
         const entry = HITLAG_FRAMES[actionDef.id];
         const pair = Array.isArray(entry)
-          ? (act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined)
-          : (entry && frames === actionDef.frames ? entry : undefined);
+          ? (() => {
+            const e = act.type === 'normal' && frames === normalHitFrames ? entry[normalHitIndex] : undefined;
+            return e && actionDelayOf(act) === 0 && e.d0 ? e.d0 : e;
+          })()
+          : (entry && frames === actionDef.frames
+            ? (() => {
+              const prev = rawActions[aIdx - 1];
+              const afterNormal = act.type === 'charged' && prev?.type === 'normal' && entry.afterNormal;
+              const chosen = afterNormal || entry;
+              // 遅延なしの値は、重撃の直前の通常攻撃の遅延がないとき（それ以外は、そのアクション自身の遅延がないとき）
+              const noDelay = afterNormal ? actionDelayOf(prev) === 0 : actionDelayOf(act) === 0;
+              return noDelay && chosen.d0 ? chosen.d0 : chosen;
+            })()
+            : undefined);
         if (pair) hitlagFrames = options?.defHalt === false ? pair.without : pair.with;
       }
       {
@@ -854,7 +873,7 @@ export function calculateRotation(
           }
           const motion = nextKey === 'wait' ? canQueueFrames(frames, actionDef) : burstCharged ?? (nextKey ? frames.cancels[nextKey] : undefined) ?? frames.total;
           autoDuration = Number(((motion + hitlagFrames) / 60).toFixed(3));
-          if (hitlagFrames > 0) hitlagIncluded.add(act.id);
+          if (hitlagFrames !== 0) hitlagIncluded.add(act.id);
         } else {
           autoDuration = hitFallbackDuration;
         }

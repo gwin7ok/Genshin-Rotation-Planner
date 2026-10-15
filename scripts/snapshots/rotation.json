@@ -909,7 +909,7 @@
     "end": 14.516,
     "modeHold": {
      "on": true,
-     "seconds": 0.88,
+     "seconds": 0.714,
      "label": "疾風怒濤"
     },
     "actions": [
@@ -937,56 +937,56 @@
      [
       "N",
       3.951,
-      0.817
+      0.9
      ],
      [
       "N",
-      4.868,
+      4.951,
       0.917
      ],
      [
       "spE",
-      5.885,
+      5.968,
       0.917,
-      "CT違反1.8"
+      "CT違反1.7"
      ],
      [
       "N",
-      6.902,
+      6.985,
       0.567
      ],
      [
       "N",
-      7.569,
+      7.652,
       0.617
      ],
      [
       "N",
-      8.286,
+      8.369,
       1.05
      ],
      [
       "N",
-      9.436,
-      0.817
+      9.519,
+      0.9
      ],
      [
       "N",
-      10.353,
+      10.519,
       0.917
      ],
      [
       "spE",
-      11.37,
+      11.536,
       0.933,
-      "CT違反4.3"
+      "CT違反4.1"
      ],
      [
       "spE",
-      12.403,
+      12.569,
       1.133,
-      "CT違反3.2",
-      "hold0.88"
+      "CT違反3.1",
+      "hold0.714"
      ]
     ]
    },
@@ -1046,20 +1046,20 @@
    [
     "error",
     "ファルカ: 特殊スキルCT違反",
-    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 1.8 秒残っています"
+    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 1.7 秒残っています"
    ],
    [
     "error",
     "ファルカ: 特殊スキルCT違反",
-    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 3.2 秒残っています"
+    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 3.1 秒残っています"
    ],
    [
     "error",
     "ファルカ: 特殊スキルCT違反",
-    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 4.3 秒残っています"
+    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 4.1 秒残っています"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(59);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(49);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1075,7 +1075,7 @@
     "end": 16.133,
     "modeHold": {
      "on": true,
-     "seconds": 4.65,
+     "seconds": 4.567,
      "label": "疾風怒濤"
     },
     "actions": [
@@ -1107,30 +1107,30 @@
      [
       "N",
       6.25,
-      0.817
+      0.9
      ],
      [
       "N",
-      7.167,
+      7.25,
       0.917
      ],
      [
       "spE",
-      8.184,
+      8.267,
       0.933
      ],
      [
       "spE",
-      9.217,
+      9.3,
       0.933,
-      "CT違反9.4"
+      "CT違反9.3"
      ],
      [
       "spE",
-      10.25,
+      10.333,
       1.133,
       "CT違反9.6",
-      "hold4.65"
+      "hold4.567"
      ]
     ]
    },
@@ -1191,7 +1191,7 @@
    [
     "error",
     "ファルカ: 特殊スキルCT違反",
-    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 9.4 秒残っています"
+    "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 9.3 秒残っています"
    ],
    [
     "error",
@@ -1199,7 +1199,7 @@
     "特殊スキル「特殊元素スキル（堕ちる烈風の後）」の発動時点で CT がまだ 9.6 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka burst;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(285);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka burst;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(280);\n  bennett swap;\n  wait(30);\n  bennett skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",
@@ -1655,7 +1655,7 @@
     "end": 13.833,
     "modeHold": {
      "on": true,
-     "seconds": 5.682,
+     "seconds": 5.599,
      "label": "疾風怒濤"
     },
     "actions": [
@@ -1683,24 +1683,24 @@
      [
       "N",
       3.951,
-      0.817
+      0.9
      ],
      [
       "N",
-      4.868,
+      4.951,
       0.917
      ],
      [
       "spE",
-      5.885,
+      5.968,
       0.933
      ],
      [
       "spE",
-      6.918,
+      7.001,
       1.133,
       "CT違反8",
-      "hold5.682"
+      "hold5.599"
      ]
     ]
    },
@@ -1743,13 +1743,13 @@
     "ファルカ",
     "special",
     1.15,
-    4.868
+    4.951
    ],
    [
     "ファルカ",
     "special",
-    4.868,
-    14.868
+    4.951,
+    14.951
    ],
    [
     "フィッシュル",
@@ -1775,7 +1775,7 @@
     "スキル「元素スキル: 夜巡りの翼」の発動時点で CT がまだ 9.9 秒残っています（ループ2周目の発動時）"
    ]
   ],
-  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(347);\n  fischl swap;\n  wait(30);\n  fischl skill;\n  delay(6);\n  i = i + 1;\n}\n",
+  "gcsim": "\nactive varka;\n\nlet i = 1;\nwhile i <= 2 {\n  print(\"loop \", i);\n  if i > 1 {\n    varka swap;\n  }\n  wait(30);\n  varka skill;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka attack;\n  delay(6);\n  varka skill;\n  delay(6);\n  varka skill;\n  delay(342);\n  fischl swap;\n  wait(30);\n  fischl skill;\n  delay(6);\n  i = i + 1;\n}\n",
   "gcsimMessages": [
    "ファルカ: 武器が未設定です（武器なしで計算されます）",
    "ファルカ: 聖遺物セットが未設定です（聖遺物なしで計算されます）",

@@ -29,7 +29,7 @@ import { CooldownQueue, type QueueHead } from './cooldownQueue';
 import { getAvailableBuffsForCharacter, BuffCategory, type TriggerableBuffDefinition } from './buffUtils';
 import { CharacterModel } from '../models/CharacterModel';
 import { MODE_HOLD_ACTION_ID } from './modeHoldAction';
-import { simulateLayers, simulateMarks, type LayerBuffRule, type LayerEvent, type MarkCycleRule, type MarkEvent } from './stateBars';
+import { simulateLayers, type LayerBuffRule, type LayerEvent } from './stateBars';
 
 /** バフ重複行の1区間（この区間の間はバフ数が変わらない） */
 export interface BuffOverlapSegment {
@@ -242,9 +242,8 @@ export function calculateRotation(
   const isModeActive = (m: ModeWindow, charId: string, sIdx: number, t: number) =>
     m.charId === charId && !m.endedBy && t < m.end - 0.001 && (m.sIdx === sIdx || m.def.swap === 'persists');
   const modeWindows = new Map<string, ModeWindow>();
-  // 層が溜まる効果（ヴェスナの粛清）・印と印の発動で付くバフ（アリョーシャの狩人の照準）の引き金の記録（キャラ ID → ）。計算の最後に、期間（バー）にする
+  // 層が溜まる効果（ヴェスナの粛清）の引き金の記録（キャラ ID → ）。計算の最後に、期間（バー）にする
   const layerEventsByChar = new Map<string, { rule: LayerBuffRule; events: LayerEvent[] }>();
-  const markEventsByChar = new Map<string, { rule: MarkCycleRule; events: MarkEvent[] }>();
   // 同じモードを開き直して置き換えられた、前の窓（終わった後の計算に使う）
   const retiredModes: ModeWindow[] = [];
   // 八重神子の殺生桜（キャラ ID → 桜の数え方。効果バーを、押し出し・爆発で壊れた時刻で切る）。CT の判定と同じ数え方（totemTracker.ts）
@@ -886,26 +885,6 @@ export function calculateRotation(
           layerEventsByChar.set(char.id, entry);
         }
       }
-      // 印と、印の発動で付くバフ（アリョーシャ）: E の命中で印（2 回目の命中で発動）、爆発の領域・トゥガリンの攻撃
-      const markDef = actionDef?.markCycle;
-      // 通常攻撃で印を付けるもの（アリョーシャの 4 段目）は、その段のときだけ
-      const markNormalOk = markDef?.normalIndex === undefined
-        || (act.type === 'normal' && normalStreak > 0 && (normalStreak - 1) % Math.max(1, actionDef?.normalHits?.length ?? 4) === markDef.normalIndex);
-      if (markDef && markNormalOk && !blockedMessage && !inStateWindow) {
-        const entry = markEventsByChar.get(char.id) ?? { rule: markDef.rule, events: [] };
-        const rule = markDef.rule;
-        if (markDef.role === 'skill') {
-          entry.events.push({ kind: 'skill', time: Number((actionStartTime + ((markDef.hitFrames ?? 0) + rule.resolveDelayFrames) / 60).toFixed(3)) });
-        } else {
-          const c2 = CharacterModel.fromConfig(char).constellation >= rule.burst.c2.minConstellation;
-          const burstFrames = rule.burst.durationFrames + (c2 ? rule.burst.c2.extraFrames : 0);
-          for (let f = rule.burst.firstTickFrames; f < burstFrames; f += rule.burst.intervalFrames) {
-            if (c2) entry.events.push({ kind: 'field', time: Number((actionStartTime + f / 60).toFixed(3)) });
-            entry.events.push({ kind: 'tugarin', time: Number((actionStartTime + (f + rule.burst.tugarinDelayFrames + rule.resolveDelayFrames) / 60).toFixed(3)) });
-          }
-        }
-        markEventsByChar.set(char.id, entry);
-      }
       if (blockedMessage) {
         computedAction.specialWindowWarning = blockedMessage;
         validationIssues.push({
@@ -1441,6 +1420,27 @@ export function calculateRotation(
       }
       if (effectSpan) activeBuffs.push(effectSpan);
 
+      // 実行前（gcsim の結果がまだ無い）の副次効果: マスターの継続時間で、アクションの開始から 1 本（D213 案 2）。実行後は、下の gcsim の値で置き換わる
+      if (act.extraEffects === undefined && !inStateWindow) {
+        (actionDef?.gcsimExtras ?? []).forEach((ex, exIdx) => {
+          if (!(ex.durationFrames && ex.durationFrames > 0)) return;
+          const exDuration = Number((ex.durationFrames / 60).toFixed(3));
+          activeBuffs.push({
+            id: `effect_extra_${char.id}_${act.id}_pre${exIdx}`,
+            buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
+            name: `${char.name} ${act.shortName}: ${ex.label}`,
+            sourceCharacterId: char.id,
+            sourceType: 'talent',
+            startTime: actionStartTime,
+            endTime: Number((actionStartTime + exDuration).toFixed(3)),
+            duration: exDuration,
+            color: char.color,
+            description: `${act.name}（副次効果: ${ex.label}。実行前のマスターの値）`,
+            ownerStintId: rawStint.id,
+          });
+        });
+      }
+
       // gcsim から書き戻した副次効果（アクションの開始からの位置・継続時間つき）
       (act.extraEffects ?? []).forEach((ex, exIdx) => {
         if (!(ex.duration > 0) || inStateWindow) return;
@@ -1765,13 +1765,6 @@ export function calculateRotation(
     const { layers, fullPeriods } = simulateLayers(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
     layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, `${entry.rule.label}（${l.index}層目）`, l.start, l.end, entry.rule.description, true));
     fullPeriods.forEach((p, i) => stateBar(char, `layerfull_${charId}_${i}`, entry.rule.fullBuff!.label, p.start, p.end, entry.rule.fullBuff!.description, true));
-  }
-  for (const [charId, entry] of markEventsByChar) {
-    const char = characters.find(c => c.id === charId);
-    if (!char) continue;
-    const { marks, buffs } = simulateMarks(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
-    marks.forEach((m, i) => stateBar(char, `mark_${charId}_${i}`, entry.rule.markLabel, m.start, m.end, entry.rule.markDescription, true));
-    buffs.forEach((b, i) => stateBar(char, `markbuff_${charId}_${i}`, b.stacks > 1 ? `${entry.rule.buffLabel}（${b.stacks}層）` : entry.rule.buffLabel, b.start, b.end, entry.rule.buffDescription, false));
   }
 
   // CT違反の判定（1周目・2周目を区別せず、ループを必要な周数だけ並べた時間軸で時刻順に判定）

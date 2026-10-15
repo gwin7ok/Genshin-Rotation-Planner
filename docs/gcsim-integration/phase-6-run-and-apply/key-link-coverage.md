@@ -9,7 +9,7 @@
 
 - 未検討: **0 件**（なし）
 - 保留: 1 件
-- アクション定義の紐付けと入力の食い違い（check:action-links）: なし
+- アクション定義の紐付けと入力の食い違い（check:action-links）: **エラーあり。上の出力を確認**
 
 ## A: スキル・爆発（アクション定義の gcsimEffect・gcsimExtras・gcsimIncluded。中間データ ＋ 手で補う一覧から取り込む）
 

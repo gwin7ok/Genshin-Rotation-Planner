@@ -35,7 +35,7 @@
 
 ## links（効果 ↔ 対象。244 件）
 
-内訳: main/auto=163 / main/approved=35 / extra/approved=30 / extra/auto=2 / included/approved=9 / character/approved=5
+内訳: main/auto=163 / main/approved=35 / extra/approved=32 / included/approved=9 / character/approved=5
 整合性: 存在しない効果・対象を指す紐づけ 0 件 / 重複 0 件
 
 ## 未検討のアクション定義（0 件）

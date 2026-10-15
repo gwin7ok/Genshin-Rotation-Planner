@@ -36,6 +36,9 @@ export const EFFECT_DURATION_OVERRIDES: Record<string, EffectDurationOverride> =
   '10000096-pyro_e': { frames: 1800, label: '血の契約', source: 'arlecchino/skill.go: directive' },
   // 凝光: 璇璣屏 30 秒（光幕。命ノ星座 2 の CT リセットは、この間の使い直しで起きる。recastReset）
   '10000027-geo_e': { frames: 1800, label: '璇璣屏', source: 'ningguang/skill.go: newScreen(1800)（construct:NingSkill）' },
+  // アリョーシャ: 狩猟の印 15 秒（辞書 alyosha-hunters-mark 902f。長押し E も同じ。印の発動で付く狩人の照準は、副次効果 alyosha-hunters-precision。D213 案 2）
+  '10000148-electro_e': { frames: 902, label: '狩猟の印', source: 'alyosha/skill.go: skillMarkKey（辞書 alyosha-hunters-mark 902f）' },
+  '10000148-electro_e_hold': { frames: 902, label: '狩猟の印', source: 'alyosha/skill.go: skillMarkKey（辞書 alyosha-hunters-mark 902f）' },
   // ジン: 蒲公英の風 10 秒 + 40 フレーム（発動の遅れを含む）
   '10000003-anemo_q': { frames: 640, label: '蒲公英の風', source: 'jean/burst.go: jean-q' },
 };
@@ -54,8 +57,6 @@ export const EFFECT_DURATION_SUPPRESSED: Record<string, string> = {
   '10000003-anemo_e_hold': 'ジン: 5 秒は溜めの最大時間（動作の長さ）で、効果ではない',
   '10000091-geo_e_hold': 'ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない',
   '10000053-anemo_e_hold': '早柚: 10 秒は長押しの最大時間（動作の長さ）で、効果ではない',
-  '10000148-electro_e': 'アリョーシャ: 狩猟の印（15 秒）は、印のバー（markCycle。印の発動・更新を含む）で表す',
-  '10000148-electro_e_hold': 'アリョーシャ: 狩猟の印（15 秒）は、印のバー（markCycle。印の発動・更新を含む）で表す',
   '10000020-electro_e_hold': 'レザー: 18 秒（雷の印）は短押しの効果。長押しは印を作らず消費する動作',
   '10000091-geo_e': 'ナヴィア: 裂晶の欠片 300 秒はローテーション全体を覆う長さでバーにしない',
   '10000059-anemo_e_hold': '鹿野院平蔵: 変格 60 秒はローテーション全体を覆う長さでバーにしない',

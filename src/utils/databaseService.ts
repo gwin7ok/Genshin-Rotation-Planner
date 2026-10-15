@@ -24,6 +24,8 @@ import { linkActionEffects, type ActionEffectKeyTable } from '../masterdata/acti
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
 import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
 import { ACTION_EFFECT_INCLUDED } from '../masterdata/actionEffectIncluded';
+import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
+import { attachDurations, deriveAutoExtras, mergeExtras } from '../masterdata/autoEffectExtras';
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
 import { fetchRuntimeData } from './gcsim/runtimeData';
 import { STORAGE_KEYS, readString, writeJson } from './persistence';
@@ -32,7 +34,7 @@ import { STORAGE_KEYS, readString, writeJson } from './persistence';
 async function loadCatalogIndex() {
   // 生成のたびに、必ずサーバーから取り直す（ブラウザのキャッシュ・モジュールのキャッシュを使わない）
   const catalog = await fetchRuntimeData<KeyCatalog>('gcsim_key_catalog.json');
-  return { index: indexCatalog(catalog), commit: String(catalog.gcsimCommit ?? '').slice(0, 7) };
+  return { index: indexCatalog(catalog), commit: String(catalog.gcsimCommit ?? '').slice(0, 7), entries: catalog.entries as unknown[] };
 }
 
 
@@ -206,12 +208,20 @@ export async function syncCharactersMasterOnline(
   onProgress?: (p: GenerationProgress) => void,
 ): Promise<{ db: AppDatabase; report: CharacterGenerationReport }> {
   const { characters: latestChars, report } = await generateCharacterMaster(onProgress);
-  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
+  const { index: catalogIndex, commit: catalogCommit, entries: catalogEntries } = await loadCatalogIndex();
   report.catalogCommit = catalogCommit;
   linkCharacterBuffs(latestChars, catalogIndex);
   // スキル・爆発の紐付け: 中間データ（gcsim を実行して集めた結果）を取得して、アクション定義に取り込む（D95）
   const actionTable = (await fetchRuntimeData<{ entries: ActionEffectKeyTable }>('action_effect_keys.json')).entries;
-  linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED });
+  // 副次効果: 手で補う一覧 + 自動（D213 案 1）+ 実行前に出すバーの継続時間（案 2）。スクリプト（link:actions）と同じ規則
+  const runtimeLinks = ((await import('../data/action_effect_links_by_duration.json')) as { default: { entries?: Record<string, unknown> } }).default.entries ?? {};
+  const extras = mergeExtras(ACTION_EFFECT_EXTRAS, deriveAutoExtras({
+    catalogEntries: catalogEntries as any[],
+    characters: latestChars as any, table: actionTable as any, overrides: ACTION_EFFECT_KEY_OVERRIDES as any, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED,
+    characterLinked: CHARACTER_LINKED_EFFECTS as any, runtimeLinks: runtimeLinks as Record<string, any>,
+  }));
+  attachDurations(extras, catalogEntries as any[]);
+  linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });

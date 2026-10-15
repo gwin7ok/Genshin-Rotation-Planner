@@ -344,7 +344,7 @@ export interface ApplyExtraEffectsResult {
  * 副次効果（スキル・爆発に付随して繰り返し発生する継続効果）を書き戻す。
  * 対応表（アクション定義 ID → キーと表示名）にあるアクションだけが対象。
  * アクションの開始から、同じキャラの同じ種類の次のアクションの開始までの間に起きたイベント（added / refreshed）ごとに1本のバーにする。
- * 対応表にあるアクションで、イベントが無ければ、副次効果を空にする（前回の結果を残さない）。書き込みは1周目のアクションだけ。
+ * 対応表にあるアクションで、イベントが無ければ、副次効果を空の配列にする（前回の結果を残さない。空は「実行した」印で、実行前のバーを出さない）。書き込みは1周目のアクションだけ。
  */
 export function applyActionExtraEffects(
   stints: Stint[],
@@ -421,7 +421,8 @@ export function applyActionExtraEffects(
         const v = next.get(a.id);
         if (!v) return a;
         const { extraEffects: _old, ...rest } = a;
-        return v.length > 0 ? { ...rest, extraEffects: v } : rest;
+        // 空でも残す（実行した印。実行前のバー〔マスターの継続時間〕を出さない）
+        return { ...rest, extraEffects: v };
       }),
     };
   });

@@ -224,34 +224,6 @@ const LAYER_BUFFS: Record<string, NonNullable<ActionDefinition['layerBuff']>> = 
 };
 
 /**
- * 印と、印の発動で付くバフ（アリョーシャの狩猟の印・狩人の照準。2026-10-11。issue #36）。キー: キャラ ID。スキル（`_e`・`_e_hold`）と爆発に付く。
- * 出典: gcsim の未マージ PR #3207（alyosha/skill.go・burst.go・cons.go。未検証）。効果量（ATK%・EM +100）は、アプリでは使わない（いつ有効かを示す）
- */
-const MARK_CYCLES: Record<string, { skillHitFrames: Record<string, number>; rule: NonNullable<NonNullable<ActionDefinition['markCycle']>['rule']> }> = {
-  '10000148-electro': {
-    // 通常攻撃 4 段目の命中（17f）でも印を付ける（gcsim PR #3207 attack.go: normalHitNum-1 で triggerSkillMarkCB(true)。wiki も同じ）
-    skillHitFrames: { e: 18, e_hold: 113, n: 17 },
-    rule: {
-      markLabel: '狩猟の印',
-      markDescription: '狩猟の印（敵に付く。15 秒）。印が付いた敵に、もう一度印を付けると、印が発動して「狩人の照準」になる',
-      buffLabel: '狩人の照準',
-      buffDescription: '狩人の照準（15 秒）。フィールド上のキャラの攻撃力アップ（命ノ星座 6 で 2 層まで重ね掛け、2 層で元素熟知 +100）。印の発動のたびに更新される',
-      durationFrames: 902,
-      resolveDelayFrames: 6,
-      extraStacks: { minConstellation: 6, extra: 1 },
-      burst: {
-        firstTickFrames: 79,
-        intervalFrames: 118,
-        durationFrames: 840,
-        tugarinDelayFrames: 39,
-        c2: { minConstellation: 2, extraFrames: 360 },
-      },
-      source: 'alyosha/skill.go: skillMarkKey・skillBuffKey（skillBuffDur 902f）、triggerSkillMarkCB（命中の 6f 後。印があれば発動、無ければ付ける〔canApply〕。E は付ける・トゥガリンは付けない）。skillHitmark 18・skillHoldHitmark 113。burst.go: burstTicker（79f 後から 118f ごと。トゥガリンは tick の 39f 後）、14 秒。cons.go: C2（爆発 +6 秒・領域の tick で印を付ける）、C6（最大 2 層。2 層で EM +100）',
-    },
-  },
-};
-
-/**
  * 効果が残っている間に使い直すと、CT がすぐリセットされるスキル（凝光の命ノ星座 2。2026-10-11）。キー: キャラ ID。スキルの `_e` に付く
  */
 const RECAST_RESETS: Record<string, NonNullable<ActionDefinition['recastReset']>> = {
@@ -1739,23 +1711,13 @@ function buildActions(ctx: BuildContext): BuildResult {
     }
   }
 
-  // 層が溜まる効果（ヴェスナ）・印と印の発動で付くバフ（アリョーシャ）
+  // 層が溜まる効果（ヴェスナ）
   const layerBuff = LAYER_BUFFS[id];
   if (layerBuff) {
     for (const a of actions) {
       if (a.id === `${id}_e`) a.layerBuff = layerBuff;
     }
   }
-  const markCycle = MARK_CYCLES[id];
-  if (markCycle) {
-    for (const a of actions) {
-      const suffix = a.id.slice(id.length + 1);
-      if (suffix === 'n' && markCycle.skillHitFrames.n !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames.n, normalIndex: 3, rule: markCycle.rule };
-      else if (markCycle.skillHitFrames[suffix] !== undefined) a.markCycle = { role: 'skill', hitFrames: markCycle.skillHitFrames[suffix], rule: markCycle.rule };
-      else if (a.type === 'burst' && !a.specialBurst) a.markCycle = { role: 'burst', rule: markCycle.rule };
-    }
-  }
-
   // 効果が残っている間に使い直すと、CT がすぐリセットされるスキル（凝光）
   const recastReset = RECAST_RESETS[id];
   if (recastReset) {

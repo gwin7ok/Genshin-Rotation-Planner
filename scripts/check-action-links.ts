@@ -12,7 +12,7 @@ import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOv
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
-import { deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
+import { attachDurations, deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
 import { loadRuntimeLinks } from './link-buffs.ts';
 
 const table = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 'utf8')).entries as Record<string, any>;
@@ -27,6 +27,7 @@ const autoExtras = deriveAutoExtras({
   characterLinked: CHARACTER_LINKED_EFFECTS as any, runtimeLinks: loadRuntimeLinks(),
 });
 const EXPECTED_EXTRAS = mergeExtras(ACTION_EFFECT_EXTRAS, autoExtras);
+attachDurations(EXPECTED_EXTRAS, JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8')).entries);
 
 /** 旧経路: { missing } | { skip } | { keys, mode, self } */
 function oldResolve(defId: string): any {

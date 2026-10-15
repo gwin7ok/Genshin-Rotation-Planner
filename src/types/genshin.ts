@@ -284,6 +284,13 @@ export interface ActionGcsimExtra {
   self?: boolean;
   /** each = added / refreshed のイベントごとに1本（既定）/ chain = 更新・延長が続く間を1本 */
   mode?: 'each' | 'chain';
+  /**
+   * 実行前に出すバーの継続時間（フレーム。辞書 gcsim_key_catalog.json の durationFrames。D213 案 2）。
+   * 実行前は、アクションの開始から 1 本。gcsim で実行した後は、gcsim の結果（開始位置・継続時間・本数）で置き換わる。`*` を含むキーには付かない
+   */
+  durationFrames?: number;
+  /** true のものだけ、実行前のバーを出す（durationFrames を付ける）。アプリ独自の計算を廃止して gcsim の効果に置き換えたものに付ける（D213 案 2） */
+  preRun?: boolean;
 }
 
 /** スキル・爆発に「含まれる」効果（別のバーにしない・書き戻しにも使わない。対応表では included として持つ） */
@@ -393,38 +400,6 @@ export interface ActionDefinition {
     fullOnEnter?: { minConstellation: number };
     fullBuff?: { minConstellation: number; label: string; description: string };
     source: string;
-  };
-  /**
-   * 印と、印の発動で付くバフ（アリョーシャの狩猟の印・狩人の照準。2026-10-11）。skill = E の命中で印を付ける（印があれば発動）。
-   * burst = 爆発: 領域の tick・トゥガリンの攻撃（印があれば発動するだけ）。出典: gcsim の未マージ PR #3207（未検証）
-   */
-  markCycle?: {
-    role: 'skill' | 'burst';
-    /** skill: アクションの開始から命中までのフレーム */
-    hitFrames?: number;
-    /** 通常攻撃で印を付けるとき、連続した N の何段目か（0 から。アリョーシャの 4 段目 = 3）。無ければ、アクション自身の命中 */
-    normalIndex?: number;
-    rule: {
-      markLabel: string;
-      markDescription: string;
-      buffLabel: string;
-      buffDescription: string;
-      /** 印・バフの継続時間 */
-      durationFrames: number;
-      /** 命中から印の処理までのフレーム */
-      resolveDelayFrames: number;
-      /** 命ノ星座 minConstellation 以上で、バフの層が extra 増える */
-      extraStacks?: { minConstellation: number; extra: number };
-      burst: {
-        firstTickFrames: number;
-        intervalFrames: number;
-        durationFrames: number;
-        tugarinDelayFrames: number;
-        /** 命ノ星座 minConstellation 以上: 爆発が extraFrames 延び、領域の tick で印が付く */
-        c2: { minConstellation: number; extraFrames: number };
-      };
-      source: string;
-    };
   };
   /**
    * 効果（設置物）が残っている間に、このスキルを使い直すと、その効果が置き換わり（破裂し）、CT がすぐリセットされる（凝光の命ノ星座 2: 璇璣屏。2026-10-11）。

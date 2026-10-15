@@ -1,13 +1,11 @@
 /**
- * 自分の操作が引き金になる、層・印の効果の時間軸の計算（issue #36。D165）。
+ * 自分の操作が引き金になる、層の効果の時間軸の計算（issue #36。D165）。
  *   - 層が溜まる効果（ヴェスナの粛清）: 層ごとに独立した継続時間。最大層を超えると、最も古い層が置き換わる
- *   - 印と、印の発動で付くバフ（アリョーシャの狩猟の印・狩人の照準）: 2 回目の命中で印が発動し、バフが付く
  * 結果は、期間（バー）の一覧だけ。ダメージ・ステータスの値は計算しない（いつ有効か、を示す）
  */
 import type { ActionDefinition } from '../types/genshin';
 
 export type LayerBuffRule = NonNullable<ActionDefinition['layerBuff']>;
-export type MarkCycleRule = NonNullable<ActionDefinition['markCycle']>['rule'];
 
 export interface LayerEvent {
   time: number;
@@ -73,62 +71,4 @@ export function simulateLayers(events: LayerEvent[], rule: LayerBuffRule, conste
     }
   }
   return { layers, fullPeriods };
-}
-
-export interface MarkEvent {
-  /** skill = E の命中（印を付ける。印があれば発動）／tugarin = 爆発の攻撃（印があれば発動するだけ。付けない）／field = 爆発の領域（命ノ星座で印を付ける） */
-  kind: 'skill' | 'tugarin' | 'field';
-  /** 印の処理をする時刻（命中 + 遅れ） */
-  time: number;
-}
-
-export interface MarkPeriod {
-  start: number;
-  end: number;
-}
-
-/** 印・バフの期間の一覧（バフは、発動のたびに更新される 1 本。層数は発動時点の層数） */
-export function simulateMarks(events: MarkEvent[], rule: MarkCycleRule, constellation: number): { marks: MarkPeriod[]; buffs: (MarkPeriod & { stacks: number })[] } {
-  const duration = rule.durationFrames / 60;
-  const maxStacks = 1 + (rule.extraStacks && constellation >= rule.extraStacks.minConstellation ? rule.extraStacks.extra : 0);
-  const sorted = [...events].sort((a, b) => a.time - b.time);
-  const marks: MarkPeriod[] = [];
-  const buffs: (MarkPeriod & { stacks: number })[] = [];
-  let mark: MarkPeriod | undefined;
-  let buff: (MarkPeriod & { stacks: number }) | undefined;
-  for (const ev of sorted) {
-    const markAlive = !!mark && ev.time < mark.end - 1e-9;
-    const trigger = () => {
-      if (mark) mark.end = Math.min(mark.end, ev.time);
-      mark = undefined;
-      const buffAlive = !!buff && ev.time < buff.end - 1e-9;
-      const stacks = Math.min((buffAlive ? buff!.stacks : 0) + 1, maxStacks);
-      // 発動のたびに、バフを 1 本の期間として更新する（前のバーは、ここで終わり、新しいバーが始まる）
-      if (buff && buffAlive) buff.end = ev.time;
-      buff = { start: ev.time, end: Number((ev.time + duration).toFixed(3)), stacks };
-      buffs.push(buff);
-    };
-    const apply = () => {
-      mark = { start: ev.time, end: Number((ev.time + duration).toFixed(3)) };
-      marks.push(mark);
-    };
-    if (ev.kind === 'skill') {
-      if (markAlive) trigger();
-      else apply();
-    } else if (ev.kind === 'tugarin') {
-      if (markAlive) trigger();
-    } else {
-      // 爆発の領域: 命ノ星座で、印を付ける（発動はしない。すでにある印は更新）
-      if (mark && markAlive) mark.end = Math.min(mark.end, ev.time);
-      apply();
-    }
-  }
-  // 続けて更新される同じ層数のバフは、1 本にまとめる（爆発の間の、2 秒ごとの更新など）
-  const merged: (MarkPeriod & { stacks: number })[] = [];
-  for (const b of buffs) {
-    const last = merged[merged.length - 1];
-    if (last && last.stacks === b.stacks && b.start <= last.end + 1e-6) last.end = Math.max(last.end, b.end);
-    else merged.push({ ...b });
-  }
-  return { marks, buffs: merged };
 }

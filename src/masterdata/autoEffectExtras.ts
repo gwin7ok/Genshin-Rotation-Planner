@@ -89,7 +89,24 @@ export function mergeExtras(
   auto: Record<string, ActionGcsimExtra[]>,
 ): Record<string, ActionGcsimExtra[]> {
   const out: Record<string, ActionGcsimExtra[]> = {};
-  for (const [id, list] of Object.entries(manual)) out[id] = [...list];
-  for (const [id, list] of Object.entries(auto)) out[id] = [...(out[id] ?? []), ...list];
+  for (const [id, list] of Object.entries(manual)) out[id] = list.map(x => ({ ...x }));
+  for (const [id, list] of Object.entries(auto)) out[id] = [...(out[id] ?? []), ...list.map(x => ({ ...x }))];
   return out;
+}
+
+/**
+ * 実行前に出すバーの継続時間を、辞書の durationFrames から副次効果に付ける（D213 案 2。extras を書き換える）。
+ * `preRun: true` の副次効果だけ（独自計算を廃止して置き換えたもの）。`*` を含むキー・常時の効果・辞書に時間が無いものには付けない。取り込み（link:actions）と検査（check:action-links）で同じ規則を使う
+ */
+export function attachDurations(extras: Record<string, ActionGcsimExtra[]>, catalogEntries: any[]): void {
+  const frameByKey = new Map<string, number>();
+  for (const e of catalogEntries) {
+    if (e.kind === 'effect' && !e.permanent && typeof e.durationFrames === 'number' && e.durationFrames > 0) frameByKey.set(e.key, e.durationFrames);
+  }
+  for (const list of Object.values(extras)) {
+    for (const x of list) {
+      const f = !x.preRun || x.key.includes('*') ? undefined : frameByKey.get(x.key);
+      if (f !== undefined) x.durationFrames = f;
+    }
+  }
 }

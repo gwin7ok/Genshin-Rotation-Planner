@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T19:03:03.819Z",
+ "generatedAt": "2026-10-15T19:21:58.401Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -721,6 +721,10 @@
     "without": 6
    }
   ],
+  "10000016-pyro_e": {
+   "with": 11,
+   "without": 8
+  },
   "10000016-pyro_q": {
    "with": 9,
    "without": 6
@@ -764,6 +768,10 @@
      }
     }
    }
+  },
+  "10000020-electro_q": {
+   "with": 0,
+   "without": 0
   },
   "10000020-electro_n": [
    {
@@ -954,6 +962,10 @@
    }
   ],
   "10000026-anemo_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000026-anemo_q": {
    "with": 0,
    "without": 0
   },
@@ -1307,6 +1319,14 @@
     "without": 2
    }
   ],
+  "10000031-electro_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000031-electro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000031-electro_ca": {
    "with": 0,
    "without": 0
@@ -1367,6 +1387,10 @@
     "without": 8
    }
   ],
+  "10000033-hydro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000033-hydro_ca": {
    "with": 0,
    "without": 0
@@ -1677,6 +1701,10 @@
     "without": 0
    }
   ],
+  "10000042-electro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000042-electro_q": {
    "with": 0,
    "without": 0
@@ -1801,6 +1829,10 @@
     "without": 8
    }
   ],
+  "10000046-pyro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000046-pyro_q": {
    "with": 0,
    "without": 0
@@ -1967,6 +1999,10 @@
     "without": 0
    }
   ],
+  "10000049-pyro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000049-pyro_q": {
    "with": 0,
    "without": 0
@@ -2057,6 +2093,10 @@
    "with": 0,
    "without": 0
   },
+  "10000052-electro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000052-electro_ca": {
    "with": 5,
    "without": 2
@@ -2110,6 +2150,10 @@
    }
   ],
   "10000054-hydro_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000054-hydro_q": {
    "with": 0,
    "without": 0
   },
@@ -2200,6 +2244,10 @@
    }
   ],
   "10000057-geo_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000057-geo_q": {
    "with": 0,
    "without": 0
   },
@@ -2495,6 +2543,10 @@
     "without": 6
    }
   ],
+  "10000066-hydro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000066-hydro_q": {
    "with": 0,
    "without": 0
@@ -2607,6 +2659,10 @@
     "without": 0
    }
   ],
+  "10000070-hydro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000070-hydro_q": {
    "with": 0,
    "without": 0
@@ -2630,6 +2686,10 @@
    }
   ],
   "10000071-electro_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000071-electro_q": {
    "with": 0,
    "without": 0
   },
@@ -2745,6 +2805,10 @@
     "without": 4
    }
   ],
+  "10000075-anemo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000075-anemo_q": {
    "with": 0,
    "without": 0
@@ -2873,6 +2937,14 @@
     "without": 2
    }
   ],
+  "10000079-pyro_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000079-pyro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000079-pyro_n": [
    {
     "with": 9,
@@ -3049,6 +3121,14 @@
     "without": 0
    }
   ],
+  "10000085-cryo_e": {
+   "with": 5,
+   "without": 5
+  },
+  "10000085-cryo_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000085-cryo_n": [
    {
     "with": 8,
@@ -3251,6 +3331,10 @@
    "with": 0,
    "without": 0
   },
+  "10000092-pyro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000092-pyro_n": [
    {
     "with": 10,
@@ -3269,6 +3353,10 @@
     "without": 8
    }
   ],
+  "10000093-anemo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000093-anemo_q": {
    "with": 0,
    "without": 0
@@ -3299,6 +3387,10 @@
     "without": 0
    }
   ],
+  "10000094-geo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000094-geo_q": {
    "with": 0,
    "without": 0
@@ -3385,6 +3477,10 @@
    "with": 0,
    "without": 0
   },
+  "10000097-electro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000097-electro_n": [
    {
     "with": 0,
@@ -3399,6 +3495,10 @@
     "without": 0
    }
   ],
+  "10000098-electro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000098-electro_q": {
    "with": 5,
    "without": 5
@@ -3459,6 +3559,10 @@
     "without": 6
    }
   ],
+  "10000101-dendro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000101-dendro_q": {
    "with": 0,
    "without": 0
@@ -3697,6 +3801,10 @@
    "with": 0,
    "without": 0
   },
+  "10000106-pyro_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000106-pyro_ca": {
    "with": 13,
    "without": 9
@@ -3745,6 +3853,28 @@
     "without": 0
    }
   ],
+  "10000108-anemo_e": {
+   "with": 0,
+   "without": 0,
+   "byNext": {
+    "burst": {
+     "with": -5,
+     "without": -5
+    },
+    "dash": {
+     "with": -3,
+     "without": -3
+    },
+    "jump": {
+     "with": -5,
+     "without": -5
+    },
+    "swap": {
+     "with": -6,
+     "without": -6
+    }
+   }
+  },
   "10000108-anemo_q": {
    "with": 0,
    "without": 0
@@ -3923,6 +4053,10 @@
     "without": 8
    }
   ],
+  "10000113-anemo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000113-anemo_q": {
    "with": 0,
    "without": 0
@@ -3945,6 +4079,10 @@
     "without": 0
    }
   ],
+  "10000114-cryo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000114-cryo_q": {
    "with": 0,
    "without": 0
@@ -4167,6 +4305,10 @@
     "without": 0
    }
   ],
+  "10000120-electro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000120-electro_q": {
    "with": 0,
    "without": 0
@@ -4219,6 +4361,10 @@
     "without": 5
    }
   ],
+  "10000123-pyro_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000123-pyro_q": {
    "with": 0,
    "without": 0
@@ -4297,6 +4443,10 @@
     "without": 0
    }
   ],
+  "10000126-geo_e": {
+   "with": 0,
+   "without": 0
+  },
   "10000126-geo_q": {
    "with": 0,
    "without": 0
@@ -4353,6 +4503,10 @@
     "without": 6
    }
   ],
+  "10000128-anemo_e": {
+   "with": 9,
+   "without": 6
+  },
   "10000128-anemo_q": {
    "with": 0,
    "without": 0
@@ -4433,6 +4587,10 @@
     "without": 0
    }
   ],
+  "10000132-anemo_e": {
+   "with": 2,
+   "without": 2
+  },
   "10000132-anemo_q": {
    "with": 0,
    "without": 0
@@ -4489,6 +4647,14 @@
     "without": 0
    }
   ],
+  "10000150-cryo_e": {
+   "with": 0,
+   "without": 0
+  },
+  "10000150-cryo_q": {
+   "with": 0,
+   "without": 0
+  },
   "10000150-cryo_ca": {
    "with": 0,
    "without": 0

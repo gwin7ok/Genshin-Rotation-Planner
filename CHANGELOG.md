@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-16
+
 ### 追加
 - スキルの CT（クールタイム）やスタミナの違反があっても、「gcsim で計算」を実行できるようにした（確認ダイアログで進める。違反の状態で計算した結果には、グレーの「確認済み」の印が付く。結果への自動スクロールも追加）。
 - アプリの事前計算（gcsim で計算する前の所要時間）を、gcsim の結果に近づけた。通常攻撃・重撃の攻撃速度の効果を、武器・聖遺物・キャラ・チーム全体の効果として表にまとめて反映する。
@@ -120,7 +122,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...v1.1.2

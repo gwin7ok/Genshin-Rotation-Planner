@@ -175,6 +175,7 @@ MANUAL_PATTERN_KEYS.push({
  * 新しい曖昧なキーが出たら、`npm run build:catalog` のレポートの「分類が未確定の曖昧なキー」に出るので、ここに追加する。
  */
 export const AMBIGUOUS_KEY_CATEGORIES: Record<string, AmbiguousKeyPin> = {
+  'alyosha-hunters-mark': { category: 'skill', reason: 'アリョーシャ: スキル（skill.go）が敵に付ける狩人の印（定義もスキル）。凸（cons.go）でも付与する' },
   'a1-icd': { category: 'talent', reason: 'キニチ・クレーの固有天賦1の発動間隔（どちらも asc.go）' },
   'chasca-plunge-available': { category: 'burst', reason: 'チャスカ: 爆発（burst.go）で落下攻撃が可能な窓を開く。スキル終了（skill.go）でも登録' },
   'dehya-skill-icd': { category: 'skill', reason: 'ディシア: スキルの発動間隔（内部）。爆発の連撃（burst.go）でも使う' },

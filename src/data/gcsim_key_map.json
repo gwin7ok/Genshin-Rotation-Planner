@@ -1,6 +1,6 @@
 {
   "characters": {
-    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
     "records": [
       {
         "id": "10000121-hydro",
@@ -28,6 +28,13 @@
         "genshinId": 10000062,
         "name": "アーロイ",
         "gcsimKey": "aloy",
+        "source": "dm.json"
+      },
+      {
+        "id": "10000148-electro",
+        "genshinId": 10000148,
+        "name": "アリョーシャ",
+        "gcsimKey": "alyosha",
         "source": "dm.json"
       },
       {
@@ -780,6 +787,13 @@
         "source": "dm.json"
       },
       {
+        "id": "10000126-geo",
+        "genshinId": 10000126,
+        "name": "兹白",
+        "gcsimKey": "zibai",
+        "source": "dm.json"
+      },
+      {
         "id": "10000005-pyro",
         "genshinId": 10000005,
         "name": "空(pyro)",
@@ -880,10 +894,6 @@
     ],
     "genshinOnly": [
       {
-        "id": "10000148-electro",
-        "name": "アリョーシャ"
-      },
-      {
         "id": "10000100-geo",
         "name": "カチーナ"
       },
@@ -910,16 +920,12 @@
       {
         "id": "10000140-hydro",
         "name": "ヴォジャニーツァ"
-      },
-      {
-        "id": "10000126-geo",
-        "name": "兹白"
       }
     ],
     "gcsimOnly": []
   },
   "weapons": {
-    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
     "records": [
       {
         "id": "15502",
@@ -1244,6 +1250,13 @@
         "source": "dm.json"
       },
       {
+        "id": "11522",
+        "genshinId": 11522,
+        "name": "蝶の羽化",
+        "gcsimKey": "beyondthechrysalis",
+        "source": "dm.json"
+      },
+      {
         "id": "12516",
         "genshinId": 12516,
         "name": "超越の鍵",
@@ -1318,6 +1331,13 @@
         "genshinId": 15513,
         "name": "白雨心弦",
         "gcsimKey": "silvershowerheartstrings",
+        "source": "dm.json"
+      },
+      {
+        "id": "11520",
+        "genshinId": 11520,
+        "name": "白銀の湖を舞う翼",
+        "gcsimKey": "whitelakefrostfeather",
         "source": "dm.json"
       },
       {
@@ -2217,6 +2237,13 @@
         "source": "dm.json"
       },
       {
+        "id": "15437",
+        "genshinId": 15437,
+        "name": "風に遊ぶ弦",
+        "gcsimKey": "breezebornerefrain",
+        "source": "dm.json"
+      },
+      {
         "id": "15413",
         "genshinId": 15413,
         "name": "風花の頌歌",
@@ -2573,14 +2600,6 @@
         "name": "旋流の讃美歌"
       },
       {
-        "id": "11522",
-        "name": "蝶の羽化"
-      },
-      {
-        "id": "11520",
-        "name": "白銀の湖を舞う翼"
-      },
-      {
         "id": "11419",
         "name": "「一心伝」名刀"
       },
@@ -2603,10 +2622,6 @@
       {
         "id": "14437",
         "name": "雪に沈む心"
-      },
-      {
-        "id": "15437",
-        "name": "風に遊ぶ弦"
       }
     ],
     "gcsimOnly": [
@@ -2653,7 +2668,7 @@
     ]
   },
   "artifacts": {
-    "gcsimCommit": "1f9c1f2e9698239a24b44e38a21358a00fd16bff",
+    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
     "records": [
       {
         "id": "15031",

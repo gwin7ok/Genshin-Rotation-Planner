@@ -91,6 +91,8 @@ export interface RotationOptions {
   defHalt?: boolean;
   /** gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。CT違反と同じ印を付ける（フェーズ6 / D21） */
   externalCtWaits?: Record<string, number>;
+  /** externalCtWaits のうち、原因がスタミナ不足だったアクション ID（表示の理由だけが変わる。D214） */
+  externalStaminaWaitIds?: string[];
 }
 
 /**
@@ -918,7 +920,11 @@ export function calculateRotation(
       if (externalWait !== undefined) {
         computedAction.hasCTCollision = true;
         computedAction.collisionRemainingCT = externalWait;
-        addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: gcsim でCT待ち`, `「${act.name}」`, externalWait, 0);
+        addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: gcsim で${options?.externalStaminaWaitIds?.includes(act.id) ? 'スタミナ待ち' : 'CT待ち'}`, `「${act.name}」`, externalWait, 0);
+        if (options?.externalStaminaWaitIds?.includes(act.id)) {
+          const issue = validationIssues.find(v => v.id === `skill_ct_gcsim_${act.id}`);
+          if (issue) issue.message = `「${act.name}」は、スタミナが足りず、gcsim で ${externalWait} 秒待ちました`;
+        }
       }
 
       const isSkill = act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset';

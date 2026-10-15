@@ -11,6 +11,8 @@ import { framesToSeconds, type GcsimLogSummary } from './readGcsimLog.ts';
 export interface CtWaitMarks {
   /** アプリのアクション ID → gcsim で待った秒数（複数の周・待ちがあれば最大） */
   byActionId: Record<string, number>;
+  /** byActionId のうち、原因がスタミナ不足だったもの（D214）。無いアクションは、CT 待ち */
+  staminaActionIds: string[];
   /** 対応付けできなかった待ち（設定文とログの並びが合わない）。開発時に気づけるよう記録する */
   unmatched: { action: string; charIndex: number; frame: number }[];
   /** 交代の待ち（対象外）の件数 */
@@ -19,7 +21,7 @@ export interface CtWaitMarks {
 
 export function mapCtWaitsToActions(summary: GcsimLogSummary, refs: GcsimActionRef[]): CtWaitMarks {
   const executed = summary.stints.flatMap(st => st.actions).sort((a, b) => a.frame - b.frame);
-  const marks: CtWaitMarks = { byActionId: {}, unmatched: [], swapWaits: 0 };
+  const marks: CtWaitMarks = { byActionId: {}, staminaActionIds: [], unmatched: [], swapWaits: 0 };
 
   for (const wait of summary.cooldownWaits) {
     if (wait.action === 'swap') {
@@ -36,6 +38,11 @@ export function mapCtWaitsToActions(summary: GcsimLogSummary, refs: GcsimActionR
     // 「実行できない」と出た最後のフレームの次で実行される。待ち始めからそのフレームまで
     const seconds = Number(framesToSeconds(wait.toFrame - wait.fromFrame + 1).toFixed(2));
     marks.byActionId[ref.actionId] = Math.max(marks.byActionId[ref.actionId] ?? 0, seconds);
+    // 同じアクションに CT 待ちとスタミナ待ちが両方あるときは、CT 待ちを優先して表示する
+    const isStamina = wait.cause === 'stamina';
+    const listed = marks.staminaActionIds.includes(ref.actionId);
+    if (isStamina && marks.byActionId[ref.actionId] === seconds && !listed) marks.staminaActionIds.push(ref.actionId);
+    if (!isStamina && listed) marks.staminaActionIds = marks.staminaActionIds.filter(id => id !== ref.actionId);
   }
   return marks;
 }

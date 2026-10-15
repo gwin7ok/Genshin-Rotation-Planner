@@ -155,9 +155,15 @@ export default function App() {
   // 5. Calculate Rotation (strictly non-overlapping consecutive stints & action cascades)
   // gcsim の結果でCT待ちが生じたアクション（アクション ID → 待った秒数）。編集したら消す（結果が古くなるため）
   const [gcsimCtWaits, setGcsimCtWaits] = useState<Record<string, number> | null>(null);
+  // 待った原因がスタミナ不足だったアクション ID（表示の理由だけが変わる。D214）
+  const [gcsimStaminaWaitIds, setGcsimStaminaWaitIds] = useState<string[]>([]);
   useEffect(() => {
     setGcsimCtWaits(null);
+    setGcsimStaminaWaitIds([]);
   }, [characters, visibleStints, switchDelay, loopStartIndex]);
+  // gcsim が待たずに実行できたと確認した、アプリの CT 違反のアクション（D214）。保存しない。
+  // 反映したときの gcsim の設定文（編成・ローテーション・設定がすべて入る）を覚え、今の設定文と違ったら使わない
+  const [gcsimVerified, setGcsimVerified] = useState<{ configText: string; actionIds: string[] } | null>(null);
 
   // gcsim の結果から読み取った反応の状態（月感電の雲・星電導・草露・月露など。アクション基準。D112）。
   // 実行する前は null（何も出さない）。編成に保存され（gcsim のバージョンつき）、読み込みで戻る。
@@ -199,8 +205,8 @@ export default function App() {
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
   const previewedStints = useMemo(() => applyDragPreview(visibleStints, dragPreview), [visibleStints, dragPreview]);
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, previewedStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined });
-  }, [characters, previewedStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits]);
+    return calculateRotation(characters, previewedStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined, externalStaminaWaitIds: gcsimStaminaWaitIds });
+  }, [characters, previewedStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits, gcsimStaminaWaitIds]);
 
   // 反応の区間を、現在のアクションの開始時刻に直す（アクションが見つからない区間は出さない）
   const reactionRows = useMemo<ReactionRow[]>(() => {
@@ -242,14 +248,6 @@ export default function App() {
     setElapsedTime(0);
   }, [calculatedResult]);
 
-  // 全体のCT違反件数計算（スキル・爆発の発動時点でのクールタイム未終了。gcsim では実行できずCT待ちになる）
-  const totalCTCollisions = useMemo(() => {
-    let count = 0;
-    calculatedResult.calculatedStints.forEach(s => {
-      count += s.actions.filter(a => a.hasCTCollision).length;
-    });
-    return count;
-  }, [calculatedResult]);
   // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）、落下攻撃の前提を満たさない配置（gcsim では実行エラー）
   const totalCTWarnings = useMemo(
     () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length
@@ -457,6 +455,7 @@ export default function App() {
     setGcsimBanner(null);
     setGcsimReactions(null);
     setGcsimCtWaits(null);
+    setGcsimVerified(null);
     const summary = resetToAppCalculation(visibleStints);
     // 外す内容がなくても、全体を計算し直す（保存されたアクションの値をすべて作り直した新しい並びで、計算・表示・再生位置を更新する）
     if (summary.actionsChanged === 0 && summary.stintsChanged === 0) {
@@ -472,11 +471,6 @@ export default function App() {
     if (ok) updateStints(summary.stints);
   };
 
-  // アプリ自身のCT違反（スキル・爆発。ガントチャートの判定と同じ。gcsim の計算を止める）
-  const ctViolationIssues = useMemo(
-    () => calculatedResult.validationIssues.filter(v => /^(skill|burst)_ct_/.test(v.id)),
-    [calculatedResult],
-  );
   // アプリ自身のCT警告（発動バフ・特殊スキルの受付時間外。gcsim の計算は止めない）
   const ctWarningIssues = useMemo(
     () => calculatedResult.validationIssues.filter(v => /^(passive_ct_|special_window_|plunge_prereq_|gcsim_unsupported_|mode_blocks_|mode_blocked_)/.test(v.id)),
@@ -501,10 +495,10 @@ export default function App() {
   );
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
-  // 現在の編成・ローテーションから gcsim の設定文を作る（コピーと「gcsim で計算」の両方で使う）
-  const buildCurrentGcsimConfig = () => buildGcsimConfig({
+  // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult) => buildGcsimConfig({
       characters,
-      stints: visibleStints,
+      stints: stintsArg,
       loopStartIndex,
       switchDelay,
       defHalt,
@@ -513,7 +507,7 @@ export default function App() {
       artifacts: database.artifacts,
       // 標準より長くした分（所要時間の編集）と、モードの維持のための自動の待ち（出場の最後のアクション。待機のアクションにも足す）
       extraWaitByActionId: Object.fromEntries(
-        calculatedResult.calculatedStints.flatMap(s => s.actions)
+        calculatedArg.calculatedStints.flatMap(s => s.actions)
           .filter(a => a.type !== 'swap')
           .map(a => {
             const manual = a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'wait' ? Math.max(0, a.duration - a.naturalDuration) : 0;
@@ -524,15 +518,46 @@ export default function App() {
           .filter(([, extra]) => extra > 0),
       ),
       modeHoldByActionId: Object.fromEntries(
-        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.modeHoldSeconds).map(a => [a.id, a.modeHoldSeconds as number]),
+        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.modeHoldSeconds).map(a => [a.id, a.modeHoldSeconds as number]),
       ),
       holdSecondsByActionId: Object.fromEntries(
-        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
+        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
       ),
       commandByActionId: Object.fromEntries(
-        calculatedResult.calculatedStints.flatMap(s => s.actions).filter(a => a.gcsimCommand).map(a => [a.id, a.gcsimCommand as string]),
+        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.gcsimCommand).map(a => [a.id, a.gcsimCommand as string]),
       ),
     });
+  const buildCurrentGcsimConfig = () => buildGcsimConfigFor(visibleStints, calculatedResult);
+
+  // 確認済みの印（D214）: 今の設定文が、確認したときと同じときだけ有効
+  const verifiedActionIds = useMemo(() => {
+    if (!gcsimVerified) return null;
+    const text = buildGcsimConfigFor(visibleStints, calculatedResult).config;
+    return text === gcsimVerified.configText ? new Set(gcsimVerified.actionIds) : null;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gcsimVerified, characters, visibleStints, switchDelay, loopStartIndex, defHalt, hurt, database.weapons, database.artifacts, calculatedResult]);
+  // 画面に出す出場（確認済みのアクションに印を付ける。計算結果そのものは変えない）
+  const displayStints = useMemo(() => {
+    if (!verifiedActionIds || verifiedActionIds.size === 0) return calculatedResult.calculatedStints;
+    return calculatedResult.calculatedStints.map(st =>
+      st.actions.some(a => a.hasCTCollision && verifiedActionIds.has(a.id))
+        ? { ...st, actions: st.actions.map(a => (a.hasCTCollision && verifiedActionIds.has(a.id) ? { ...a, ctGcsimVerified: true } : a)) }
+        : st);
+  }, [calculatedResult, verifiedActionIds]);
+  // アプリ自身のCT違反（スキル・爆発。ガントチャートの判定と同じ）。gcsim で確認済みのものは除く
+  const ctViolationIssues = useMemo(
+    () => calculatedResult.validationIssues.filter(v => /^(skill|burst)_ct_/.test(v.id) && !(v.actionId && verifiedActionIds?.has(v.actionId))),
+    [calculatedResult, verifiedActionIds],
+  );
+  // 全体のCT違反件数（スキル・爆発の発動時点でのクールタイム未終了。確認済みは除く）
+  const totalCTCollisions = useMemo(() => {
+    let count = 0;
+    displayStints.forEach(s => {
+      count += s.actions.filter(a => a.hasCTCollision && !a.ctGcsimVerified).length;
+    });
+    return count;
+  }, [displayStints]);
+
   const handleCopyGcsimConfig = () => {
     const result = buildCurrentGcsimConfig();
     setGcsimResult(result);
@@ -552,8 +577,16 @@ export default function App() {
       cancelled = true;
     };
   }, []);
+  // 「gcsim で計算」の結果（反映した・しなかった・エラー）を、画面の位置にかかわらず見られるよう、結果が出たら最上部へスクロールする
+  const scrollToResultRef = useRef(false);
+  useEffect(() => {
+    if (!scrollToResultRef.current || !gcsimBanner || gcsimBanner.level === 'running') return;
+    scrollToResultRef.current = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [gcsimBanner]);
   const handleGcsimCompute = async () => {
     if (gcsimComputing) return;
+    scrollToResultRef.current = true;
     const result = buildCurrentGcsimConfig();
     const errors = result.warnings.filter(w => w.level === 'error');
     if (errors.length > 0) {
@@ -565,14 +598,17 @@ export default function App() {
       });
       return;
     }
+    // アプリでは CT 違反でも、gcsim で実際に計算すると待たないことがある。実行して確かめる（待ちが出たら反映しない）
     if (ctViolationIssues.length > 0) {
-      setGcsimBanner({
-        level: 'error',
-        title: `アプリのCT違反が ${ctViolationIssues.length} 件あるため、計算しませんでした`,
-        message: '先に、CT 違反を解消してください（ガントチャートの赤い印のアクション）。',
-        details: ctViolationIssues.map(v => `${v.title}: ${v.message}`),
-      });
-      return;
+      const ok = await confirm(
+        `アプリでは CT 違反が ${ctViolationIssues.length} 件あります。gcsim で実際に計算して確認します（gcsim でも CT 待ちが出たら反映しません）。\n\n` +
+        `祭礼の武器があると、数十秒かかります。実行しますか？`,
+        { okLabel: '実行する' },
+      );
+      if (!ok) {
+        scrollToResultRef.current = false;
+        return;
+      }
     }
     setGcsimComputing(true);
     setGcsimBanner({ level: 'running', title: 'gcsim で計算しています…', message: '祭礼の武器があると、種を探すので、数十秒かかることがあります。' });
@@ -588,13 +624,25 @@ export default function App() {
     }
     const waitIds = Object.keys(outcome.waits.byActionId);
     setGcsimCtWaits(waitIds.length > 0 ? outcome.waits.byActionId : null);
+    setGcsimStaminaWaitIds(outcome.waits.staminaActionIds);
     if (waitIds.length > 0 || outcome.align.mismatch) {
       setGcsimReactions(null);
+      setGcsimVerified(null);
+      const staminaIds = new Set(outcome.waits.staminaActionIds);
+      const staminaCount = waitIds.filter(id => staminaIds.has(id)).length;
+      const ctCount = waitIds.length - staminaCount;
+      const detailLines = waitIds.map(id => {
+        const idx = visibleStints.findIndex(st => st.actions.some(a => a.id === id));
+        const action = idx >= 0 ? visibleStints[idx].actions.find(a => a.id === id) : undefined;
+        const name = idx >= 0 ? characters.find(c => c.id === visibleStints[idx].characterId)?.name : undefined;
+        return `${name ?? '?'}（出場 #${idx + 1}）「${action?.name ?? id}」: ${staminaIds.has(id) ? 'スタミナ待ち' : 'CT 待ち'} ${outcome.waits.byActionId[id]} 秒`;
+      });
       setGcsimBanner(waitIds.length > 0
         ? {
           level: 'warn',
-          title: `gcsim でCT待ちが生じたため、結果を反映していません（${waitIds.length} 件）`,
-          message: '該当アクションに、CT 違反と同じ印を付けました（残りCT = gcsim で実際に待った秒数）。ガントチャートの該当アクションを直して、もう一度計算してください。',
+          title: `gcsim で待ちが生じたため、結果を反映していません（CT 待ち ${ctCount} 件・スタミナ待ち ${staminaCount} 件）`,
+          message: '該当アクションに、CT 違反と同じ印を付けました（残り = gcsim で実際に待った秒数）。ガントチャートの該当アクションを直して、もう一度計算してください。',
+          details: detailLines,
         }
         : {
           level: 'warn',
@@ -606,6 +654,18 @@ export default function App() {
     // 反応の状態（月反応・星反応）
     setGcsimReactions(anchorReactionRows(extractReactionRows(outcome.logs), reactionLapInputs(outcome.align.pairs)));
     const plan = computeGcsimApply({ stints: visibleStints, calculated: calculatedResult, result, buffsByCharacter, actionLinks, outcome });
+    // 反映後も残るアプリの CT 違反は、gcsim が待たずに実行できているので「確認済み」にする（D214）。
+    // 反映後の状態の設定文を覚え、編集で設定文が変わったら、自動で赤に戻る
+    {
+      const nextStints = plan.total > 0 ? plan.stints.map(normalizeGroups) : visibleStints;
+      const post = plan.total > 0
+        ? calculateRotation(characters, nextStints, { switchDelay, database, loopStartIndex, defHalt })
+        : calculatedResult;
+      const residual = post.calculatedStints.flatMap(st => st.actions).filter(a => a.hasCTCollision).map(a => a.id);
+      setGcsimVerified(residual.length > 0
+        ? { configText: buildGcsimConfigFor(nextStints, post).config, actionIds: residual }
+        : null);
+    }
     const warnCount = result.warnings.filter(w => w.level === 'warn').length;
     if (plan.total > 0) updateStints(plan.stints);
     setGcsimBanner({
@@ -747,7 +807,7 @@ export default function App() {
         <GanttChart
           database={database}
           characters={characters}
-          stints={calculatedResult.calculatedStints}
+          stints={displayStints}
           onPreviewReorder={setDragPreview}
           activeBuffs={calculatedResult.activeBuffs}
           skillCooldowns={calculatedResult.skillCooldowns}

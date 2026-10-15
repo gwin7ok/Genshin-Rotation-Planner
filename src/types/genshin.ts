@@ -524,6 +524,8 @@ export interface CharacterActionInstance {
   hasCTCollision?: boolean;
   /** CT衝突時の残り秒数 */
   collisionRemainingCT?: number;
+  /** アプリの CT 違反だが、gcsim では待たずに実行できると確認済み（画面側で付ける。保存しない。D214） */
+  ctGcsimVerified?: boolean;
 }
 
 /**

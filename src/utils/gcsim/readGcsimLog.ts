@@ -101,6 +101,11 @@ export interface GcsimCooldownWaitRecord {
   /** 待ち始めと、待ち終わり（最後に「実行できない」と出たフレーム）。実際に実行されるのは終わりの直後 */
   fromFrame: number;
   toFrame: number;
+  /**
+   * 待った原因。ログの `action not ready` には原因が入らないため、待ちの間にスタミナ不足の警告（`insufficient stam: ...`）が
+   * 出ていれば 'stamina'、無ければ 'ct'（D214）
+   */
+  cause: 'ct' | 'stamina';
 }
 
 export interface GcsimLogSummary {
@@ -123,6 +128,8 @@ export interface GcsimLogSummary {
 }
 
 const STATUS_MSG = /^(?:.+ )?(?:mod|status) (added|refreshed|extended)$/;
+/** スタミナ不足の警告（`insufficient stam: charge attack` / `insufficient stam: dash`。event は warnings） */
+const STAMINA_WARN_MSG = /^insufficient stam/;
 const CT_WAIT_MSG = /^could not execute ([^\s[;]+)(?:\[[^\]]*\])?; action not ready$/;
 
 export interface ReadGcsimLogOptions {
@@ -385,9 +392,17 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
     if (w && l.frame - w.toFrame <= 1) {
       w.toFrame = l.frame;
     } else {
-      const rec = { action: m[1], charIndex, fromFrame: l.frame, toFrame: l.frame };
+      const rec: GcsimCooldownWaitRecord = { action: m[1], charIndex, fromFrame: l.frame, toFrame: l.frame, cause: 'ct' };
       cooldownWaits.push(rec);
       openWait.set(idx, rec);
+    }
+  }
+
+  // 待ちの間にスタミナ不足の警告が出ていれば、スタミナ待ち（警告は、待ちの間、毎フレーム出る）
+  const staminaFrames = logs.filter(l => STAMINA_WARN_MSG.test(l.msg) && (l.event === 'warnings' || l.event === 'warning')).map(l => l.frame);
+  if (staminaFrames.length > 0) {
+    for (const w of cooldownWaits) {
+      if (staminaFrames.some(f => f >= w.fromFrame - 1 && f <= w.toFrame + 1)) w.cause = 'stamina';
     }
   }
 

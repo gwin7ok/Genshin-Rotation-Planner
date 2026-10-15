@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-15
+
 ### 追加
 - gcsim を v2.48.8 から **v2.49.0** に更新した。新キャラ（兹白・アリョーシャ）を、gcsim で計算できるようにした。新しい武器（蝶の羽化など）の効果も反映される。
 - 画面の下部に、対応している gcsim のバージョンを表示するようにした（「バージョン v…（コミット …）・対応 gcsim v…」）。
@@ -93,7 +95,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.0...v1.1.1

@@ -63,6 +63,7 @@ npm run probe:queue-frames # スキル・爆発の「次の行動を受け付け
 ```bash
 npm run gcsim:check        # 実行ファイル・辞書・対応表の gcsim のコミットが、設定と全部一致していること
 npm run lint               # 型チェック
+npm run check:backup       # 保存・バックアップ・同梱プリセット（反応の行の gcsim のバージョン。6-C）
 ```
 `gcsim_key_map.json` などのコミットが設定と食い違うと ✗ が出る。
 
@@ -77,6 +78,15 @@ npm run lint               # 型チェック
 3. `gcsim.config.json` の `sourceMirror`（url・tagPrefix）が、フォークと一致していることを確かめる（画面の下部・NOTICE のリンク先になる）。
 4. 画面の確認: アプリの「gcsim で計算」と「gcsim で文法チェック」が、WASM（ブラウザ内）で動くこと。`gcsim_engine` を localStorage に `server` と書くと、localhost のサーバーに切り替えられる。
 5. WASM とサーバーの結果が一致していることを確かめる（`docs/提供方法の検討-WASM検証結果.md` の再現手順 4）。
+
+### 6-C. 同梱のプリセットを作り直す（反応の行の gcsim のバージョン）
+同梱のプリセット（`src/data/presets/*.json`）のうち、反応の行（`reactions`）を持つ編成は、gcsim のバージョンを記録している。バージョンが違うと、古い結果を出さないため、反応の行が出なくなり、`npm run check:backup` が「プリセット: …反応の行は、今の gcsim のバージョンで読める」で失敗する。
+1. 画面で、編成管理の「プリセットを復元する」を押す（同じ名前の保存編成は、同梱の内容で上書きされる）。
+2. 反応の行を持つプリセット（今は `lunar-bloom` = 豊穣月開花）を呼び出し →「gcsim で計算」→「上書き保存」。
+3. 保存した編成を JSON で書き出し（`id`・`updatedAt`・`exportedAt` を除き、`name` の先頭の「[プリセット]」を外す）、同名のファイルを置き換える。
+4. `npm run check:backup` が通ること。
+- 反応の行を持つプリセットが増えたら、その編成も同じ手順で作り直す（`node -e` で `reactions.gcsimVersion` を確認できる）。
+- 「gcsim で計算」の後の保存データには、副次効果が空の行動に `extraEffects: []` が入る（実行した印。D213 案 2。実行前のバーを出さないため）。置き換えてよい。
 
 ### 7. 画面で通し確認する
 - マスターを全件削除 → 再生成 → 登録した状態で、代表的な編成（4キャラ）で「gcsim設定文をコピー」→「gcsim で実行して読み取り結果を見る」を行う。

@@ -10,7 +10,7 @@ import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOv
 import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
-import { deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
+import { attachDurations, deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
 import type { CharacterConfig } from '../src/types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../src/types/database.ts';
 
@@ -63,12 +63,14 @@ export function linkActions(characters: CharacterConfig[]): void {
   }
   const table = (JSON.parse(fs.readFileSync(tablePath, 'utf-8')) as { entries: ActionEffectKeyTable }).entries;
   // 紐づけも決定も無い効果は、自動で副次効果にする（D213 案 1。src/masterdata/autoEffectExtras.ts）
+  const catalogEntries: any[] = fs.existsSync(catalogPath) ? JSON.parse(fs.readFileSync(catalogPath, 'utf-8')).entries : [];
   const extras = mergeExtras(ACTION_EFFECT_EXTRAS, deriveAutoExtras({
-    catalogEntries: fs.existsSync(catalogPath) ? JSON.parse(fs.readFileSync(catalogPath, 'utf-8')).entries : [],
+    catalogEntries,
     characters, table, overrides: ACTION_EFFECT_KEY_OVERRIDES as any, extras: ACTION_EFFECT_EXTRAS, included: ACTION_EFFECT_INCLUDED,
     characterLinked: CHARACTER_LINKED_EFFECTS as any,
     runtimeLinks: loadRuntimeLinks(),
   }));
+  attachDurations(extras, catalogEntries);
   const report = linkActionEffects(characters, { table, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
   console.log(`スキル・爆発の紐付けの取り込み: 本体 ${report.effects} 件・副次効果 ${report.extras} 件・含まれる効果 ${report.included} 件`);
   if (report.unknownDefIds.length > 0) console.log(`  入力にあるが、マスターのアクション定義に無い ID: ${report.unknownDefIds.length} 件（${report.unknownDefIds.slice(0, 8).join(', ')}${report.unknownDefIds.length > 8 ? ' …' : ''}）`);

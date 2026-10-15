@@ -16,6 +16,13 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   '10000079-pyro_e': [
     { key: 'dehya-redmanes-blood', label: '紅鬃の血（自己ダメージ）' },
   ],
+  // アリョーシャのスキル: 印が付いた敵に当てると発動する狩人の照準（15 秒。発動のたびに更新。D213 案 2: アプリ独自の markCycle を廃止して、gcsim の効果に一本化）
+  '10000148-electro_e': [
+    { key: 'alyosha-hunters-precision', label: '狩人の照準', mode: 'chain', preRun: true },
+  ],
+  '10000148-electro_e_hold': [
+    { key: 'alyosha-hunters-precision', label: '狩人の照準', mode: 'chain', preRun: true },
+  ],
   // ムアラニのスキル: サーフィン中の命中で敵に付く印（10 秒）
   '10000102-hydro_e': [
     { key: 'marked-as-prey', label: '獲物の印（敵）' },

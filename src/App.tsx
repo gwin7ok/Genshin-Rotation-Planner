@@ -389,7 +389,9 @@ export default function App() {
         setSavedSlots(saved.slots);
         setActiveSlotId(imported.id);
       } else {
-        // 編成は読み込めたが、保存編成には登録できなかった（読み込み中の編成にはしない）
+        // 編成は読み込めたが、保存編成には登録できなかった（読み込み中の編成にはしない）。
+        // 前に開いていた保存編成を指したままだと、「上書き保存」で、取り込んだ内容が、その保存編成を置き換えてしまう
+        setActiveSlotId(null);
         showAlert(`編成は読み込みましたが、保存編成には登録できませんでした。
 ${SLOT_WRITE_FAILED_MESSAGE}`);
       }
@@ -787,7 +789,7 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
         <div role="alert" className="flex items-start justify-between gap-3 bg-red-950 border-b border-red-800 px-4 py-2 text-xs text-red-100">
           <span>
             ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。
-            このまま編集すると、画面を閉じたときに内容を失います。「保存/読み込み」からバックアップを書き出してください。
+            このまま編集すると、画面を閉じたときに内容を失います。「保存/読み込み」の「JSONファイル書き出し」で、今の編成をファイルに保存してください（「全データを書き出す」は、保存先を読むので、保存に失敗した最新の編集は入りません）。
           </span>
           <button type="button" onClick={() => setSaveFailed(false)} className="shrink-0 rounded border border-red-700 px-2 py-0.5 hover:bg-red-900">閉じる</button>
         </div>

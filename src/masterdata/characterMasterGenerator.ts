@@ -2125,10 +2125,15 @@ export async function generateCharacterMaster(
         const texts = await Promise.all(names.map(f => fetchText(`${base}internal/characters/${dir}/${f}.go`)));
         // ファイル間で定数を共有するため、先に全ファイルの定数を集めてから解析する
         const shared = new Map<string, number>();
-        texts.forEach(t => parseGoFile(t).consts.forEach((v, k) => shared.set(k, v)));
+        const sharedFloats = new Set<string>();
+        texts.forEach(t => {
+          const parsed = parseGoFile(t);
+          parsed.consts.forEach((v, k) => shared.set(k, v));
+          parsed.floats.forEach(k => sharedFloats.add(k));
+        });
         const files: Record<string, ParsedGoFile> = {};
         names.forEach((f, i) => {
-          files[f] = parseGoFile(texts[i], shared);
+          files[f] = parseGoFile(texts[i], shared, sharedFloats);
         });
         const cooldownCalls = names.flatMap((f, i) => (f === 'skill' || f === 'burst') ? parseCooldownCalls(texts[i], files[f]) : []);
         parsedById.set(u.id, { files, cooldownCalls });

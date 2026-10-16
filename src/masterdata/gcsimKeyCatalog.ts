@@ -251,15 +251,20 @@ function collectStringConsts(files: Record<string, string>): Map<string, Map<str
 /** パッケージごとの数値定数（継続時間の式の評価用） */
 function collectNumberConsts(files: Record<string, string>): Map<string, ParsedGoFile> {
   const merged = new Map<string, Map<string, number>>();
+  const mergedFloats = new Map<string, Set<string>>();
   for (const [path, text] of sortedEntries(files)) {
     const pkg = packageOf(path);
     if (!merged.has(pkg)) merged.set(pkg, new Map());
+    if (!mergedFloats.has(pkg)) mergedFloats.set(pkg, new Set());
     const target = merged.get(pkg)!;
-    parseGoFile(text).consts.forEach((v, k) => { if (!target.has(k)) target.set(k, v); });
+    const floats = mergedFloats.get(pkg)!;
+    const parsed = parseGoFile(text);
+    parsed.consts.forEach((v, k) => { if (!target.has(k)) target.set(k, v); });
+    parsed.floats.forEach(k => floats.add(k));
   }
   const result = new Map<string, ParsedGoFile>();
   for (const [pkg, consts] of merged) {
-    result.set(pkg, { consts, intArrays: new Map(), tables: [], attackFuncTables: [], genderIndexPositions: {}, unresolved: [], methods: [] });
+    result.set(pkg, { consts, floats: mergedFloats.get(pkg) ?? new Set(), intArrays: new Map(), tables: [], attackFuncTables: [], genderIndexPositions: {}, unresolved: [], methods: [] });
   }
   return result;
 }

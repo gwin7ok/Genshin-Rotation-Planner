@@ -27,6 +27,8 @@ const backup = await server.ssrLoadModule('/src/utils/backup.ts');
 const presets = await server.ssrLoadModule('/src/utils/presets.ts');
 const rotationFile = await server.ssrLoadModule('/src/utils/rotationFile.ts');
 const recovery = await server.ssrLoadModule('/src/utils/recoveryDump.ts');
+const dbValidation = await server.ssrLoadModule('/src/utils/databaseValidation.ts');
+const dbImport = await server.ssrLoadModule('/src/utils/databaseImport.ts');
 
 let passed = 0;
 const check = (name: string, fn: () => void) => {
@@ -218,6 +220,74 @@ check('型の検査: メモ・名前など画面に出す項目が、文字列�
   // 保存編成の説明が文字列でなければ外す
   const slot = v.sanitizeSlot({ id: 'x', name: 'n', description: bad, updatedAt: '', party: [member('c1')], stints: [] });
   assert.equal('description' in slot.slot, false);
+});
+
+check('DB 項目の検査: 同梱のマスター（キャラ・武器・聖遺物の全件）は、すべて通る', () => {
+  const dbv = dbValidation;
+  const chars = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+  const list = Array.isArray(chars) ? chars : chars.characters ?? Object.values(chars);
+  const weapons = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+  const artifacts = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'));
+  assert.equal(dbv.sanitizeDbItems(list, dbv.isValidCharacterItem).skipped, 0);
+  assert.equal(dbv.sanitizeDbItems(weapons, dbv.isValidWeaponItem).skipped, 0);
+  assert.equal(dbv.sanitizeDbItems(artifacts, dbv.isValidArtifactItem).skipped, 0);
+});
+check('DB 項目の検査: 画面が使う項目の型が違う項目は、取り込み・復元の前に除外する', () => {
+  const dbv = dbValidation;
+  const baseChar = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+  const c0 = (Array.isArray(baseChar) ? baseChar : baseChar.characters ?? Object.values(baseChar))[0];
+  const w0 = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'))[0];
+  const a0 = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'))[0];
+  const badChars = [{ ...c0, id: 'c1', availableActions: null }, { ...c0, id: 'c2', availableActions: [{ id: 'x', name: 1 }] }, { ...c0, id: 'c3', element: undefined }, { ...c0, id: 'c4', passiveEffects: {} }, { ...c0, id: 'c5', color: { a: 1 } }];
+  for (const b of badChars) assert.equal(dbv.isValidCharacterItem(b), false, JSON.stringify(b).slice(0, 80));
+  const badWeapons = [{ ...w0, id: 'w1', passiveName: undefined }, { ...w0, id: 'w2', rarity: '5' }, { ...w0, id: 'w3', refinements: 'x' }];
+  for (const b of badWeapons) assert.equal(dbv.isValidWeaponItem(b), false);
+  const badArtifacts = [{ ...a0, id: 'a1', effect2p: null }, { ...a0, id: 'a2', effect4p: 4 }];
+  for (const b of badArtifacts) assert.equal(dbv.isValidArtifactItem(b), false);
+  // DB 管理の JSON 取り込み
+  const imp = dbImport.parseDatabaseFile(JSON.stringify({ version: 1, characters: [c0, ...badChars], weapons: [w0, ...badWeapons], artifacts: [a0, ...badArtifacts] }));
+  assert.equal(imp.ok, true);
+  assert.equal(imp.counts.characters + imp.counts.weapons + imp.counts.artifacts, 3);
+  assert.equal(imp.skipped, badChars.length + badWeapons.length + badArtifacts.length);
+  // バックアップの復元
+  const file = JSON.parse(JSON.stringify(backup.buildBackup()));
+  file.database = { characters: [c0, ...badChars], weapons: [w0, ...badWeapons], artifacts: [a0, ...badArtifacts] };
+  const parsedBackup = backup.parseBackup(JSON.stringify(file));
+  assert.equal(parsedBackup.ok, true);
+  assert.equal(parsedBackup.skipped.items, badChars.length + badWeapons.length + badArtifacts.length);
+});
+
+check('検査の補強: グループの複製の所要時間（copyDurations）の各値・グループの回数（1〜99 の整数）', () => {
+  const cd = (o: Record<string, unknown>) => ({ '1': { base: 1, duration: 1, gcsimBaseDuration: 1, ...o } });
+  const r = v.sanitizeStints([stint('s1', [act('a1', { copyDurations: cd({ duration: 'bad' }) }), act('a2', { copyDurations: cd({ gcsimBaseDuration: NaN }) }), act('ok', { copyDurations: cd({}) })])]);
+  assert.deepEqual(r.stints[0].actions.map((a: any) => a.id), ['ok']);
+  assert.equal(r.skipped.actions, 2);
+  for (const repeat of [0, 100, 1e20, 2.5, -3, '3']) {
+    const g = v.sanitizeStints([stint('s1', [act('a1', { groupId: 'g' })], { groups: [{ id: 'g', repeat }] })]);
+    assert.equal(g.stints[0].groups.length, 0, `repeat=${String(repeat)} は除外`);
+  }
+  for (const repeat of [1, 3, 99]) {
+    const g = v.sanitizeStints([stint('s1', [act('a1', { groupId: 'g' })], { groups: [{ id: 'g', repeat }] })]);
+    assert.equal(g.stints[0].groups.length, 1);
+  }
+});
+check('検査の補強: 保存編成・自動保存・バックアップの数値項目（総時間・交代遅延など）が文字列なら取り除く', () => {
+  const bad = { totalDuration: 'broken', switchDelay: 'bad', loopStartIndex: -1, loopStartTime: NaN };
+  const slot = v.sanitizeSlot({ id: 'x', name: 'n', updatedAt: '', party: [member('c1')], stints: [], ...bad, totalDuration: 'broken' });
+  for (const k of Object.keys(bad)) assert.equal(k in slot.slot, false, `${k} を取り除く`);
+  const ok = v.sanitizeSlot({ id: 'x', name: 'n', updatedAt: '', party: [member('c1')], stints: [], totalDuration: 10, switchDelay: 0.5, loopStartIndex: 1, loopStartTime: 2 });
+  assert.equal(ok.slot.switchDelay, 0.5);
+  // 自動保存（起動時に読む）
+  store.clear();
+  store.set('genshin_rotation_current_state_v2', JSON.stringify({ party: [member('c1')], stints: [], switchDelay: 'bad', loopStartIndex: 0, lastSavedAt: '' }));
+  const active = storage.loadActiveState();
+  assert.equal('switchDelay' in active, false);
+  // バックアップの現在の編成
+  const file = JSON.parse(JSON.stringify(backup.buildBackup()));
+  file.currentState = { party: [member('c1')], stints: [], switchDelay: 'bad' };
+  const parsedBackup = backup.parseBackup(JSON.stringify(file));
+  assert.equal(parsedBackup.ok, true);
+  assert.equal('switchDelay' in parsedBackup.backup.currentState, false);
 });
 
 console.log(`\n✓ 編成の検査: ${passed} 項目すべて合格`);

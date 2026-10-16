@@ -34,6 +34,8 @@ const NORMAL_CANCEL_AT_HITMARK: CancelTarget[] = ['aim', 'skill', 'burst', 'dash
 
 export interface ParsedGoFile {
   consts: Map<string, number>;
+  /** consts のうち、Go で小数（float64）の値の名前。整数の割り算（切り捨て）か、小数の割り算かを決める */
+  floats: Set<string>;
   intArrays: Map<string, number[] | number[][]>;
   tables: FrameTable[];
   /** NewAttackFunc(c.Character, X) で参照されているテーブル名 */
@@ -66,15 +68,23 @@ const ACTION_NAME_MAP: Record<string, CancelTarget> = {
 
 type Lookup = (ident: string, indices: number[]) => number | undefined;
 type ArrayLookup = (ident: string) => unknown[] | undefined;
+/** 参照した定数が、小数（float64）か。整数同士の割り算は切り捨て、片方が小数なら、そのまま割る（Go の型の規則） */
+type FloatLookup = (ident: string, indices: number[]) => boolean;
 
-function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): number | undefined {
+/** 式の値と、Go での型（小数か） */
+interface TypedValue { v: number; f: boolean }
+
+/**
+ * 式を評価する。値ごとに「小数か」を持ち、Go と同じく、整数同士の割り算だけ切り捨てる（7 / 2 = 3、7.0 / 2 = 3.5、float64(7) / 2 = 3.5）。
+ * 定数の型は、参照先の定義（isFloat）で決まる（`t = 7.0` は小数）。int(x) は、整数にする（小数点以下を切り捨て）
+ */
+function evalExprTyped(expr: string, lookup: Lookup, lookupArray: ArrayLookup, isFloat: FloatLookup = () => false): TypedValue | undefined {
   const src = expr.trim();
   let pos = 0;
-  const floatExpr = /float64|\d\.\d/.test(src);
 
   const skipWs = () => { while (pos < src.length && /\s/.test(src[pos])) pos++; };
 
-  const parsePrimary = (): number | undefined => {
+  const parsePrimary = (): TypedValue | undefined => {
     skipWs();
     const ch = src[pos];
     if (ch === '(') {
@@ -88,12 +98,12 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
     if (ch === '-') {
       pos++;
       const v = parsePrimary();
-      return v === undefined ? undefined : -v;
+      return v === undefined ? undefined : { v: -v.v, f: v.f };
     }
     const num = /^\d+(?:\.\d+)?/.exec(src.slice(pos));
     if (num) {
       pos += num[0].length;
-      return parseFloat(num[0]);
+      return { v: parseFloat(num[0]), f: num[0].includes('.') };
     }
     const ident = /^[A-Za-z_][\w.]*/.exec(src.slice(pos));
     if (ident) {
@@ -107,7 +117,7 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
         for (const idx of inner[2].match(/\d+/g) ?? []) {
           arr = Array.isArray(arr) ? arr[Number(idx)] : undefined;
         }
-        return Array.isArray(arr) ? arr.length : undefined;
+        return Array.isArray(arr) ? { v: arr.length, f: false } : undefined;
       }
       const indices: number[] = [];
       while (src[pos] === '[') {
@@ -116,18 +126,21 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
         skipWs();
         if (src[pos] !== ']' || idx === undefined) return undefined;
         pos++;
-        indices.push(idx);
+        indices.push(idx.v);
       }
-      // 型変換 int(x) / float64(x) はそのまま中身を評価
+      // 型変換: float64(x) は小数にし、int(x) は整数にする（小数点以下を切り捨てる）
       if ((ident[0] === 'int' || ident[0] === 'float64') && src[pos] === '(') {
-        return parsePrimary();
+        const inner = parsePrimary();
+        if (inner === undefined) return undefined;
+        return ident[0] === 'float64' ? { v: inner.v, f: true } : { v: Math.trunc(inner.v), f: false };
       }
-      return lookup(ident[0], indices);
+      const v = lookup(ident[0], indices);
+      return v === undefined ? undefined : { v, f: isFloat(ident[0], indices) };
     }
     return undefined;
   };
 
-  const parseMul = (): number | undefined => {
+  const parseMul = (): TypedValue | undefined => {
     let left = parsePrimary();
     for (;;) {
       skipWs();
@@ -136,14 +149,15 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
       pos++;
       const right = parsePrimary();
       if (left === undefined || right === undefined) return undefined;
-      if (op === '*') left = left * right;
-      else if (right === 0) return undefined;
-      // Go は、整数同士の割り算を切り捨てる（7 / 2 = 3）。小数・float64 を含む式は、そのまま割る
-      else left = !floatExpr && Number.isInteger(left) && Number.isInteger(right) ? Math.trunc(left / right) : left / right;
+      const f = left.f || right.f;
+      if (op === '*') left = { v: left.v * right.v, f };
+      else if (right.v === 0) return undefined;
+      // Go は、整数同士の割り算を切り捨てる（7 / 2 = 3）。どちらかが小数なら、そのまま割る
+      else left = { v: f ? left.v / right.v : Math.trunc(left.v / right.v), f };
     }
   };
 
-  function parseAdd(): number | undefined {
+  function parseAdd(): TypedValue | undefined {
     let left = parseMul();
     for (;;) {
       skipWs();
@@ -152,14 +166,18 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
       pos++;
       const right = parseMul();
       if (left === undefined || right === undefined) return undefined;
-      left = op === '+' ? left + right : left - right;
+      left = { v: op === '+' ? left.v + right.v : left.v - right.v, f: left.f || right.f };
     }
   }
 
   const value = parseAdd();
   skipWs();
-  if (pos !== src.length || value === undefined || !Number.isFinite(value)) return undefined;
+  if (pos !== src.length || value === undefined || !Number.isFinite(value.v)) return undefined;
   return value;
+}
+
+function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup, isFloat?: FloatLookup): number | undefined {
+  return evalExprTyped(expr, lookup, lookupArray, isFloat)?.v;
 }
 
 /** 要素は数値か、数値だけの式（`16 + 15`、`11 + 9 + 8 + 34`）。定数を含む式は評価できない（配列ごと落とす） */
@@ -194,9 +212,10 @@ const normalizeLine = (line: string) => line.replace(/\/\/.*$/, '').replace(/^(\
  * 1ファイル分の Go ソースを解析する。
  * sharedConsts には同じキャラの他ファイルで見つかった定数を渡す (ファイル間参照の解決用)。
  */
-export function parseGoFile(source: string, sharedConsts?: Map<string, number>): ParsedGoFile {
+export function parseGoFile(source: string, sharedConsts?: Map<string, number>, sharedFloats?: Set<string>): ParsedGoFile {
   const lines = source.split('\n').map(normalizeLine);
   const consts = new Map<string, number>(sharedConsts ?? []);
+  const floats = new Set<string>(sharedFloats ?? []);
   const intArrays = new Map<string, number[] | number[][]>();
   const unresolved: string[] = [];
 
@@ -221,13 +240,17 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
     return typeof cur === 'number' ? cur : undefined;
   };
   const lookupArray: ArrayLookup = ident => intArrays.get(ident);
+  const isFloat: FloatLookup = (ident, indices) => indices.length === 0 && floats.has(ident);
   // `attackLockout[attackTypeLeft] = 15` のように、識別子を添字にして 1 要素ずつ代入された値（凝光の attackLockout など）は、
   // 定数に `名前[添字]` のキーで持ち、式の中の `名前[添字]` を、その数値に置き換えて評価する
   const withElementConsts = (expr: string) => expr.replace(/([A-Za-z_]\w*)\[([A-Za-z_]\w*)\]/g, (whole, name: string, idx: string) => {
     const v = consts.get(`${name}[${idx}]`);
-    return v === undefined ? whole : String(v);
+    if (v === undefined) return whole;
+    // 小数の値は、小数のまま（整数の書き方にすると、割り算が切り捨てになる）
+    return floats.has(`${name}[${idx}]`) && Number.isInteger(v) ? v.toFixed(1) : String(v);
   });
-  const evaluate = (expr: string) => evalExpr(withElementConsts(expr), lookup, lookupArray);
+  const evaluateTyped = (expr: string) => evalExprTyped(withElementConsts(expr), lookup, lookupArray, isFloat);
+  const evaluate = (expr: string) => evaluateTyped(expr)?.v;
 
   // 2nd pass: スカラー定数 (`name = expr` / `name := expr`)
   // 前方参照があるため数回繰り返す。
@@ -237,8 +260,11 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
       const m = scalarRe.exec(line);
       if (!m || consts.has(m[1])) continue;
       if (/frames\.|\[\]|make\(|func|\{/.test(m[2])) continue;
-      const v = evaluate(m[2]);
-      if (v !== undefined) consts.set(m[1], v);
+      const v = evaluateTyped(m[2]);
+      if (v !== undefined) {
+        consts.set(m[1], v.v);
+        if (v.f) floats.add(m[1]);
+      }
     }
   }
 
@@ -250,8 +276,11 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
       if (!m) continue;
       const key = `${m[1]}[${m[2]}]`;
       if (consts.has(key) || /frames\.|\[\]|make\(|func|\{/.test(m[3])) continue;
-      const v = evaluate(m[3]);
-      if (v !== undefined) consts.set(key, v);
+      const v = evaluateTyped(m[3]);
+      if (v !== undefined) {
+        consts.set(key, v.v);
+        if (v.f) floats.add(key);
+      }
     }
   }
 
@@ -308,7 +337,7 @@ export function parseGoFile(source: string, sharedConsts?: Map<string, number>):
 
   const methods = [...joined.matchAll(/func \(\w+ \*\w+\) (\w+)\(/g)].map(m => m[1]);
 
-  return { consts, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved, methods };
+  return { consts, floats, intArrays, tables: [...tables.values()], attackFuncTables, genderIndexPositions, unresolved, methods };
 }
 
 /** 解析済みファイルの定数・整数配列を使って、算術式（定数参照・配列添字・+ - * /）を評価する。評価できなければ undefined */
@@ -322,7 +351,7 @@ export function evaluateGoExpr(expr: string, parsed: ParsedGoFile): number | und
     }
     return typeof cur === 'number' ? cur : undefined;
   };
-  return evalExpr(expr, lookup, ident => parsed.intArrays.get(ident));
+  return evalExpr(expr, lookup, ident => parsed.intArrays.get(ident), (ident, indices) => indices.length === 0 && parsed.floats.has(ident));
 }
 
 /** テーブル名から対応するヒットマーク定数を推定する (例: skillPressFrames → skillPressHitmark) */

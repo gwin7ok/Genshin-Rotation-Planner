@@ -1,7 +1,7 @@
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
-import { isValidParty, sanitizeSlot, sanitizeStints } from './rotationValidation';
+import { isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints } from './rotationValidation';
 
 export interface ActiveRotationState {
   /** 編成（キャラの ID と編成ごとの設定） */
@@ -73,7 +73,7 @@ export function loadActiveState(): ActiveRotationState | null {
   // 壊れた保存データ（編成の枠・出場・アクションの欠け）で、画面が落ちないように、読み込みのときに検査する
   if (parsed && isValidParty(parsed.party) && Array.isArray(parsed.stints)) {
     const { stints } = sanitizeStints(parsed.stints);
-    return { ...parsed, stints } as ActiveRotationState;
+    return sanitizeRotationNumbers({ ...parsed, stints } as ActiveRotationState);
   }
   return null;
 }

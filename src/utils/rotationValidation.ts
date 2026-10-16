@@ -41,22 +41,47 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
 const isNonEmptyString = (v: unknown): v is string => typeof v === 'string' && v.length > 0;
 const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 
-/** 編成: 配列で、すべての枠が、キャラの ID（空でない文字列）を持つ */
-export function isValidParty(v: unknown): v is PartyMember[] {
-  return Array.isArray(v) && v.every(m => isRecord(m) && isNonEmptyString(m.characterId));
+/**
+ * 任意の項目の型の検査: 無い（undefined）か、期待する型のときだけ true。
+ * 画面にそのまま出す・計算に使う項目が、別の型（オブジェクトなど）だと、描画や計算で例外になる
+ */
+function optionalTypes(o: Record<string, unknown>, types: { string?: string[]; number?: string[]; boolean?: string[] }): boolean {
+  return (types.string ?? []).every(k => o[k] === undefined || typeof o[k] === 'string')
+    && (types.number ?? []).every(k => o[k] === undefined || isFiniteNumber(o[k]))
+    && (types.boolean ?? []).every(k => o[k] === undefined || typeof o[k] === 'boolean');
 }
+
+/** 編成: 配列で、すべての枠が、キャラの ID（空でない文字列）を持ち、任意の項目は、型が合う */
+export function isValidParty(v: unknown): v is PartyMember[] {
+  return Array.isArray(v) && v.every(m => isRecord(m) && isNonEmptyString(m.characterId)
+    && optionalTypes(m, {
+      string: ['weaponId', 'artifactSetId', 'artifactSetMode'],
+      number: ['constellation', 'weaponRefinementRank', 'energyRecharge'],
+      boolean: ['hexerei', 'revelation'],
+    }));
+}
+
+const isValidExtraEffect = (e: unknown): boolean =>
+  isRecord(e) && typeof e.key === 'string' && isFiniteNumber(e.offset) && isFiniteNumber(e.duration)
+  && (e.name === undefined || typeof e.name === 'string');
 
 const isValidAction = (a: unknown): a is CharacterActionInstance =>
   isRecord(a) && isNonEmptyString(a.id) && isNonEmptyString(a.actionTypeId) && typeof a.type === 'string' && isFiniteNumber(a.duration)
-  // 名前・略号は、画面にそのまま出す。文字列でないもの（オブジェクトなど）は、描画で例外になる
-  && (a.name === undefined || typeof a.name === 'string') && (a.shortName === undefined || typeof a.shortName === 'string');
+  // 名前・略号・メモは、画面にそのまま出す。文字列でないもの（オブジェクトなど）は、描画で例外になる
+  && optionalTypes(a, {
+    string: ['name', 'shortName', 'note', 'groupId', 'cooldownPool', 'gcsimCommand', 'specialWindowWarning'],
+    number: ['groupCopy', 'gcsimBaseDuration', 'cooldown', 'effectDuration', 'gcsimCtOffset', 'gcsimCdResonance', 'delayAfter',
+      'startTime', 'endTime', 'naturalDuration', 'holdSeconds', 'modeHoldSeconds'],
+    boolean: ['durationManual', 'inStateWindow'],
+  })
+  && (a.copyDurations === undefined || isRecord(a.copyDurations))
+  && (a.extraEffects === undefined || (Array.isArray(a.extraEffects) && a.extraEffects.every(isValidExtraEffect)));
 
 const isValidGroup = (g: unknown): boolean => isRecord(g) && isNonEmptyString(g.id) && isFiniteNumber(g.repeat);
 
-const isValidTrigger = (t: unknown): boolean => isRecord(t) && isNonEmptyString(t.id) && isNonEmptyString(t.passiveEffectId) && isFiniteNumber(t.offset);
-
-const isValidExtraEffect = (e: unknown): boolean =>
-  isRecord(e) && typeof e.key === 'string' && isFiniteNumber(e.offset) && isFiniteNumber(e.duration);
+const isValidTrigger = (t: unknown): boolean =>
+  isRecord(t) && isNonEmptyString(t.id) && isNonEmptyString(t.passiveEffectId) && isFiniteNumber(t.offset)
+  && optionalTypes(t, { string: ['name', 'gcsimKey'], number: ['duration', 'cooldown'], boolean: ['gcsimMissed'] });
 
 /** 要素を検査して、合うものだけ残す。除外が無ければ、同じ配列を返す */
 function filterValid<T>(list: unknown[], ok: (v: unknown) => boolean, skipped: { n: number }): T[] {
@@ -98,6 +123,14 @@ export function sanitizeStints(list: unknown): { stints: Stint[]; skipped: Skipp
       const kept = filterValid<unknown>(v, ok, oth);
       if (kept !== v) {
         next[key] = kept;
+        changed = true;
+      }
+    }
+    // 出場のメモ・モード維持の指定が、別の型なら、その項目だけ外す（出場は残す）
+    for (const [key, type] of [['note', 'string'], ['holdMode', 'boolean']] as const) {
+      if (raw[key] !== undefined && typeof raw[key] !== type) {
+        delete next[key];
+        oth.n++;
         changed = true;
       }
     }
@@ -161,6 +194,12 @@ export function sanitizeSlot(raw: unknown): { slot: SavedRotationSlot; skipped: 
   const { stints, skipped } = sanitizeStints(raw.stints ?? []);
   const unchanged = Array.isArray(raw.stints) && stints.length === raw.stints.length && skipped.actions === 0 && skipped.others === 0
     && stints.every((s, i) => s === (raw.stints as unknown[])[i]);
-  const slot = (unchanged ? raw : { ...raw, stints }) as unknown as SavedRotationSlot;
-  return { slot: typeof slot.name === 'string' ? slot : { ...slot, name: '（名前なし）' }, skipped };
+  let slot = (unchanged ? raw : { ...raw, stints }) as unknown as SavedRotationSlot;
+  if (typeof slot.name !== 'string') slot = { ...slot, name: '（名前なし）' };
+  // 説明は、画面にそのまま出す。文字列でなければ外す
+  if (slot.description !== undefined && typeof slot.description !== 'string') {
+    const { description: _drop, ...rest } = slot;
+    slot = rest as SavedRotationSlot;
+  }
+  return { slot, skipped };
 }

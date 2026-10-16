@@ -190,6 +190,36 @@ check('復旧用の書き出し: 保存先の文字列を、解釈せずに、�
   assert.ok('genshin_rotation_saved_slots_v2' in d.keys);
 });
 
+check('型の検査: メモ・名前など画面に出す項目が、文字列でなければ除外する（オブジェクトのままでは、描画で落ちる）', () => {
+  const bad = { x: 1 };
+  // 出場のメモ・モード維持: その項目だけ外し、出場は残す
+  const r1 = v.sanitizeStints([stint('s1', [act('a1')], { note: bad, holdMode: 'yes' }), stint('s2', [act('a2')], { note: 'ok', holdMode: true })]);
+  assert.equal(r1.stints.length, 2);
+  assert.equal('note' in r1.stints[0], false);
+  assert.equal('holdMode' in r1.stints[0], false);
+  assert.equal(r1.skipped.others, 2);
+  assert.equal(r1.stints[1].note, 'ok');
+  // アクション: メモ・数値の項目が別の型なら、そのアクションを除外する
+  const r2 = v.sanitizeStints([stint('s1', [act('a1', { note: bad }), act('a2', { cooldown: '3' }), act('a3', { inStateWindow: 1 }), act('a4', { extraEffects: [{ key: 'k', name: bad, offset: 0, duration: 1 }] }), act('ok', { note: 'メモ', cooldown: 3 })])]);
+  assert.deepEqual(r2.stints[0].actions.map((a: any) => a.id), ['ok']);
+  assert.equal(r2.skipped.actions, 4);
+  // 発動バフ・副次効果
+  const r3 = v.sanitizeStints([stint('s1', [act('a1')], {
+    passiveTriggers: [{ id: 't1', passiveEffectId: 'p', offset: 0, name: bad }, { id: 't2', passiveEffectId: 'p', offset: 0, name: 'ok', duration: 5 }],
+    extraEffects: [{ key: 'k', name: bad, offset: 0, duration: 1 }],
+  })]);
+  assert.deepEqual(r3.stints[0].passiveTriggers.map((t: any) => t.id), ['t2']);
+  assert.equal(r3.stints[0].extraEffects.length, 0);
+  // 編成: 任意の項目が別の型なら、編成ごと受け付けない
+  for (const m of [{ weaponId: bad }, { constellation: '6' }, { hexerei: 'true' }, { artifactSetId: 5 }]) {
+    assert.equal(v.isValidParty([{ characterId: 'c1', ...m }]), false);
+  }
+  assert.equal(v.isValidParty([{ characterId: 'c1', weaponId: 'w', constellation: 2, hexerei: false }]), true);
+  // 保存編成の説明が文字列でなければ外す
+  const slot = v.sanitizeSlot({ id: 'x', name: 'n', description: bad, updatedAt: '', party: [member('c1')], stints: [] });
+  assert.equal('description' in slot.slot, false);
+});
+
 console.log(`\n✓ 編成の検査: ${passed} 項目すべて合格`);
 await server.close();
 process.exit(0);

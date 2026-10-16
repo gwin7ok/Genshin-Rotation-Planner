@@ -8,7 +8,7 @@
  */
 import type { PartyMember, SavedReactions, SavedRotationSlot, Stint } from '../types/genshin';
 import { STORAGE_KEYS, readString, writeJson } from './persistence';
-import { findSlotByName, getSavedSlots, saveSlot } from './storage';
+import { findSlotByName, getSavedSlots, trySaveSlot } from './storage';
 
 import keqingIntensify from '../data/presets/keqing-intensify.json';
 import furinaVaporize from '../data/presets/furina-vaporize.json';
@@ -68,6 +68,8 @@ export interface RestorePresetsResult {
   added: number;
   /** 同じ名前の保存編成を上書きした数 */
   overwritten: number;
+  /** false のとき、途中で保存できなかった（容量超過など）。added・overwritten は、保存できた分だけ */
+  ok: boolean;
 }
 
 /**
@@ -78,19 +80,23 @@ export function restorePresets(now: Date = new Date()): RestorePresetsResult {
   let slots = getSavedSlots();
   let added = 0;
   let overwritten = 0;
+  let ok = true;
   // 先頭に入れるので、逆順に処理して、編成管理の表示順を、定義の並びにする
   for (const preset of [...buildPresetSlots(now)].reverse()) {
     const dup = findSlotByName(slots, preset.name);
-    if (dup) {
-      slots = saveSlot({ ...preset, id: dup.id });
-      overwritten += 1;
-    } else {
-      const idTaken = slots.some(s => s.id === preset.id);
-      slots = saveSlot({ ...preset, id: idTaken ? `${preset.id}_${now.getTime()}` : preset.id });
-      added += 1;
+    const target = dup
+      ? { ...preset, id: dup.id }
+      : { ...preset, id: slots.some(s => s.id === preset.id) ? `${preset.id}_${now.getTime()}` : preset.id };
+    const result = trySaveSlot(target);
+    slots = result.slots;
+    if (!result.ok) {
+      ok = false;
+      break;
     }
+    if (dup) overwritten += 1;
+    else added += 1;
   }
-  return { slots, added, overwritten };
+  return { slots, added, overwritten, ok };
 }
 
 /**

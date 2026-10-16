@@ -259,6 +259,40 @@ check('DB 取り込み: 形の検査・壊れた要素の除外・ID の重複',
   assert.equal(r.db.version, 0);
 });
 
+const presetsForFailure = await server.ssrLoadModule('/src/utils/presets.ts');
+check('保存編成の保存・削除: 容量超過のときは ok: false で、保存済みの内容を返す（成功にしない）', () => {
+  store.clear();
+  const base = slot('slot_keep', '残す編成', '2026-10-01T00:00:00.000Z');
+  assert.equal(storage.trySaveSlot(base).ok, true);
+  const ls = (globalThis as any).localStorage;
+  const realSet = ls.setItem;
+  const failures: string[] = [];
+  pers.setWriteFailureHandler((k: string) => failures.push(k));
+  ls.setItem = () => {
+    throw new Error('QuotaExceededError');
+  };
+  try {
+    const added = storage.trySaveSlot(slot('slot_new', '新しい編成', '2026-10-02T00:00:00.000Z'));
+    assert.equal(added.ok, false);
+    assert.deepEqual(added.slots.map((s: any) => s.id), ['slot_keep'], '保存されている内容を返す');
+    const removed = storage.tryDeleteSlot('slot_keep');
+    assert.equal(removed.ok, false);
+    assert.deepEqual(removed.slots.map((s: any) => s.id), ['slot_keep'], '削除できていない');
+    const restored = presetsForFailure.restorePresets();
+    assert.equal(restored.ok, false);
+    assert.equal(restored.added + restored.overwritten, 0);
+  } finally {
+    ls.setItem = realSet;
+    pers.setWriteFailureHandler(null);
+  }
+  assert.ok(failures.length >= 3, '書き込みの失敗が、通知される');
+  assert.deepEqual(storage.getSavedSlots().map((s: any) => s.id), ['slot_keep'], '保存先は、変わっていない');
+  const ok = storage.trySaveSlot(slot('slot_new', '新しい編成', '2026-10-02T00:00:00.000Z'));
+  assert.equal(ok.ok, true);
+  assert.deepEqual(ok.slots.map((s: any) => s.id), ['slot_new', 'slot_keep']);
+  assert.equal(storage.tryDeleteSlot('slot_new').ok, true);
+  assert.equal(storage.saveSlot(slot('slot_x', 'x', '2026-10-03T00:00:00.000Z'))[0].id, 'slot_x', '従来の saveSlot も、一覧を返す');
+});
 // --- 保存層（persistence.ts。D175） ---
 const persistence = await server.ssrLoadModule('/src/utils/persistence.ts');
 const settings = await server.ssrLoadModule('/src/utils/appSettings.ts');

@@ -28,7 +28,7 @@ import { describeSkipped, parseRotationPayload, totalSkipped } from '../utils/ro
 import { isEmptySlotCharacter } from '../data/characters';
 import { rotationFileName, nameFromFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
-import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
+import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -138,7 +138,12 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       switchDelay,
       reactions,
     };
-    const updated = saveSlot(newSlot);
+    const saved = trySaveSlot(newSlot);
+    if (!saved.ok) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    const updated = saved.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated, newSlot.id);
     setDuplicateSlot(null);
@@ -168,7 +173,12 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       reactions,
       updatedAt: new Date().toISOString(),
     };
-    const updated = saveSlot(updatedSlot);
+    const saved = trySaveSlot(updatedSlot);
+    if (!saved.ok) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    const updated = saved.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated, slot.id);
     setSaveSuccessMsg(`「${slot.name}」を上書き保存しました！`);
@@ -187,6 +197,12 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const result = restorePresets();
     setSavedSlots(result.slots);
     onSlotsChanged(result.slots);
+    if (!result.ok) {
+      showAlert(`${SLOT_WRITE_FAILED_MESSAGE}
+
+（保存できたプリセット: 新規 ${result.added} 件・上書き ${result.overwritten} 件）`);
+      return;
+    }
     setSaveSuccessMsg(`プリセット ${PRESET_COUNT} 編成を復元しました（新規 ${result.added} 件・上書き ${result.overwritten} 件）`);
     setTimeout(() => setSaveSuccessMsg(null), 4000);
   };
@@ -202,7 +218,12 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       { okLabel: '削除する', danger: true },
     );
     if (!ok) return;
-    const updated = deleteSlot(slotId);
+    const deleted = tryDeleteSlot(slotId);
+    if (!deleted.ok) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    const updated = deleted.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated);
     setSaveSuccessMsg(`「${name}」を削除しました。`);

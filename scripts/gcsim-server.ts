@@ -40,13 +40,34 @@ function portOpen(): Promise<boolean> {
   });
 }
 
-function readPid(): number | undefined {
+/** そのプロセスが、gcsim サーバーの実行ファイルか（PID は再起動などで別のプロセスに再利用されるため、停止の前に確かめる）。確かめられないときは false */
+function isGcsimServerProcess(pid: number): boolean {
+  if (!asset) return false;
   try {
-    const pid = Number(fs.readFileSync(pidFile, 'utf8').trim());
+    if (process.platform === 'win32') {
+      const out = cp.execFileSync('tasklist', ['/FI', `PID eq ${pid}`, '/FO', 'CSV', '/NH'], { encoding: 'utf8', timeout: 10000 });
+      const image = out.trim().split(/\r?\n/)[0]?.match(/^"([^"]+)"/)?.[1];
+      return image?.toLowerCase() === asset.name.toLowerCase();
+    }
+    // ps の comm は、15 文字に切り詰められることがある
+    const comm = cp.execFileSync('ps', ['-p', String(pid), '-o', 'comm='], { encoding: 'utf8', timeout: 10000 }).trim();
+    const name = path.basename(comm);
+    return name.length > 0 && asset.name.startsWith(name);
+  } catch { return false; }
+}
+
+/** PID ファイルの PID。生きていて、gcsim サーバーのプロセスのときだけ返す（別のプロセスに再利用された古い PID は、PID ファイルごと消す） */
+function readPid(): number | undefined {
+  let pid: number;
+  try {
+    pid = Number(fs.readFileSync(pidFile, 'utf8').trim());
     if (!Number.isInteger(pid) || pid <= 0) return undefined;
     process.kill(pid, 0); // 生きているか
-    return pid;
   } catch { return undefined; }
+  if (isGcsimServerProcess(pid)) return pid;
+  fs.rmSync(pidFile, { force: true });
+  console.log(`注意: PID ファイルの PID ${pid} は、gcsim サーバーではないプロセスです（停止しません。PID ファイルを消しました）`);
+  return undefined;
 }
 
 function installedVersion(): string | undefined {

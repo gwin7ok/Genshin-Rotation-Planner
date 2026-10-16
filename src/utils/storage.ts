@@ -31,10 +31,44 @@ export function saveActiveState(state: Omit<ActiveRotationState, 'lastSavedAt'>)
   return writeJson(STORAGE_KEYS.activeRotation, payload);
 }
 
+/** 自動保存の待ち時間（ミリ秒）。最後の変更から、この時間が経ってから、1 回だけ書く */
+export const ACTIVE_STATE_SAVE_DELAY_MS = 400;
+
+let pendingActiveState: Omit<ActiveRotationState, 'lastSavedAt'> | null = null;
+let pendingActiveTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * 編集中の編成を、少し待ってから保存する（自動保存）。
+ * 連続した操作（秒数のスピン・ドラッグなど）の間に、全状態を何度も JSON にして書き込まないよう、最後の変更から一定時間後に 1 回だけ書く。
+ * 待っている間に、ほかの場所が保存先を読む・消す・上書きするときは、flushActiveState / clearActiveState で、先に確定する・取り消す
+ */
+export function saveActiveStateDebounced(state: Omit<ActiveRotationState, 'lastSavedAt'>): void {
+  pendingActiveState = state;
+  if (pendingActiveTimer !== null) clearTimeout(pendingActiveTimer);
+  pendingActiveTimer = setTimeout(flushActiveState, ACTIVE_STATE_SAVE_DELAY_MS);
+}
+
+/** 待っている自動保存があれば、今すぐ書く（画面を閉じる前・保存先を読む前に呼ぶ）。失敗は、保存先の書き込み失敗の通知（persistence.ts）で伝わる */
+export function flushActiveState(): void {
+  if (pendingActiveTimer !== null) clearTimeout(pendingActiveTimer);
+  pendingActiveTimer = null;
+  const state = pendingActiveState;
+  pendingActiveState = null;
+  if (state) saveActiveState(state);
+}
+
+/** 待っている自動保存を、書かずに捨てる */
+function cancelPendingActiveState(): void {
+  if (pendingActiveTimer !== null) clearTimeout(pendingActiveTimer);
+  pendingActiveTimer = null;
+  pendingActiveState = null;
+}
+
 /**
  * 保存してある、編集中の編成を読む
  */
 export function loadActiveState(): ActiveRotationState | null {
+  flushActiveState(); // 待っている保存があれば、先に書く（最新の内容を読む）
   const parsed = readJson<Partial<ActiveRotationState>>(STORAGE_KEYS.activeRotation);
   // 壊れた保存データ（編成の枠・出場・アクションの欠け）で、画面が落ちないように、読み込みのときに検査する
   if (parsed && isValidParty(parsed.party) && Array.isArray(parsed.stints)) {
@@ -48,6 +82,7 @@ export function loadActiveState(): ActiveRotationState | null {
  * 編集中の編成の保存を消す（初期状態に戻す）
  */
 export function clearActiveState(): void {
+  cancelPendingActiveState(); // 待っている保存が、消した直後に、古い内容を書き戻さない
   removeKey(STORAGE_KEYS.activeRotation);
 }
 

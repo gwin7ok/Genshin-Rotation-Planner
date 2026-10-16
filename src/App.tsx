@@ -36,7 +36,7 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
+import { loadActiveState, saveActiveStateDebounced, flushActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
 import { rotationFileName, nameFromFileName, buildRotationExport } from './utils/rotationFile';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
@@ -198,8 +198,9 @@ export default function App() {
   };
 
   // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
+  // 連続した操作の間は、書き込みを待つ（最後の変更から少し後に 1 回だけ書く）。画面を閉じる・隠すときは、待たずに書く
   useEffect(() => {
-    saveActiveState({
+    saveActiveStateDebounced({
       party,
       stints,
       loopStartIndex,
@@ -208,6 +209,21 @@ export default function App() {
       reactions: packReactions(gcsimReactions),
     });
   }, [party, stints, loopStartIndex, switchDelay, activeSlotId, gcsimReactions]);
+  useEffect(() => {
+    const flush = () => flushActiveState();
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    window.addEventListener('pagehide', flush);
+    window.addEventListener('beforeunload', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      window.removeEventListener('beforeunload', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+      flush(); // 画面の部品が外れるとき（開発中の再読み込みなど）も、書き残さない
+    };
+  }, []);
 
   // ガントチャートのドラッグ中の仮の並び（ドロップするまで保存しない。計算だけをこの並びで行う。追加作業 21）
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);

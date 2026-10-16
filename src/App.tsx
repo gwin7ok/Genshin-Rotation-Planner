@@ -723,11 +723,8 @@ export default function App() {
       try {
         const parsed = JSON.parse(ev.target?.result as string);
         if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-          const importedParty: PartyMember[] = parsed.party;
-          const importedChars = resolvePartyCharacters(importedParty, database.characters);
-          const importedStints: Stint[] = filterStintsForCharacters(parsed.stints, importedChars);
           handleLoadCustomSlot({
-            party: importedParty,
+            party: parsed.party as PartyMember[],
             stints: parsed.stints,
             loopStartIndex: parsed.loopStartIndex,
             loopStartTime: parsed.loopStartTime ?? 0,

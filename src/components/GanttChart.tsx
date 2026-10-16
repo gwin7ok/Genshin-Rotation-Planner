@@ -1239,7 +1239,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           className="absolute top-1 bottom-1 left-0 border-y border-slate-400/50"
                           style={{
                             width: `${segments[segments.length - 1].end * pixelsPerSecond}px`,
-                            background: `linear-gradient(to right, ${band})`,
+                            backgroundImage: `linear-gradient(to right, ${band})`,
                             backgroundClip: 'padding-box',
                           }}
                         />

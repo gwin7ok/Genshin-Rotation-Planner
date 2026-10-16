@@ -71,9 +71,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
   // 通知は、新しい通知が出たら前のタイマーを止める（前のタイマーが、新しい通知を早く消さないように）
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const showStatus = (msg: string | null, clearAfterMs?: number) => {
+  // 通知の種類（成功は緑・エラーは赤の枠で出す）
+  const [statusKind, setStatusKind] = useState<'success' | 'error'>('success');
+  const showStatus = (msg: string | null, clearAfterMs?: number, kind: 'success' | 'error' = 'success') => {
     if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
     statusTimerRef.current = null;
+    setStatusKind(kind);
     setSyncSuccessMsg(msg);
     if (msg !== null && clearAfterMs) statusTimerRef.current = setTimeout(() => setSyncSuccessMsg(null), clearAfterMs);
   };
@@ -267,9 +270,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     const reader = new FileReader();
     reader.onload = (event) => {
       const showMsg = (msg: string) => showStatus(msg, 4000);
+      const showError = (msg: string) => showStatus(msg, 10000, 'error');
       const parsed = parseDatabaseFile(String(event.target?.result ?? ''));
       if (!parsed.ok) {
-        showMsg(`エラー: ${(parsed as { ok: false; error: string }).error}`);
+        showError(`取り込めませんでした: ${(parsed as { ok: false; error: string }).error}`);
         return;
       }
       const { db, counts, skipped } = parsed;
@@ -288,7 +292,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         onConfirm: () => {
           setConfirmDialog(null);
           if (!saveDatabase(db)) {
-            showMsg('エラー: ブラウザに保存できませんでした（保存容量の不足の可能性）。データベースは変更していません。');
+            showError('ブラウザに保存できませんでした（保存容量の不足の可能性）。データベースは変更していません。');
             return;
           }
           onUpdateDatabase(db);
@@ -506,8 +510,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
           </div>
         )}
 
-        {/* Sync Success / Alert Toast */}
-        {syncSuccessMsg && (
+        {/* Sync Success / Error Toast（成功は緑・エラーは赤） */}
+        {syncSuccessMsg && statusKind === 'error' && (
+          <div role="alert" className="bg-red-950/90 border-b border-red-700/60 px-4 py-2 flex items-start justify-between gap-3 text-xs text-red-200 animate-fadeIn">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+              <span>{syncSuccessMsg}</span>
+            </div>
+            <button type="button" onClick={() => showStatus(null)} className="text-red-300 hover:text-white shrink-0" title="閉じる">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+        {syncSuccessMsg && statusKind !== 'error' && (
           <div className="bg-emerald-950/90 border-b border-emerald-600/60 px-4 py-2 flex items-center justify-between text-xs text-emerald-200 animate-fadeIn">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-emerald-400" />

@@ -32,7 +32,11 @@ function isWasmAvailable(): Promise<boolean> {
   if (!cachedWasmAvailable) {
     cachedWasmAvailable = fetch(`${baseUrl()}gcsim/main.wasm`, { method: 'HEAD' })
       .then(r => r.ok && (r.headers.get('content-type') ?? '').includes('wasm'))
-      .catch(() => false);
+      // 通信の失敗（オフラインなど）は、答えが出ていないので、覚えない（次の呼び出しで、もう一度調べる）
+      .catch(() => {
+        cachedWasmAvailable = null;
+        return false;
+      });
   }
   return cachedWasmAvailable;
 }

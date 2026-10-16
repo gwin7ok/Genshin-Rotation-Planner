@@ -12,6 +12,7 @@ import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { UpdateNoticeModal } from './components/UpdateNoticeModal';
 import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
+import { setWriteFailureHandler } from './utils/persistence';
 import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
@@ -144,6 +145,12 @@ export default function App() {
     // 通知しないとき（初めての利用など）は、今の DB のバージョンを、確認済みとして記録する
     if (!versionNotice.show) markVersionSeen(DATABASE_VERSION);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // 保存の失敗（容量超過・保存が無効）の警告。閉じるまで出す（保存できないまま編集を続けると、データを失うため）
+  const [saveFailed, setSaveFailed] = useState<boolean>(false);
+  useEffect(() => {
+    setWriteFailureHandler(() => setSaveFailed(true));
+    return () => setWriteFailureHandler(null);
   }, []);
   const dismissVersionNotice = () => {
     markVersionSeen(DATABASE_VERSION);
@@ -742,6 +749,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
+      {saveFailed && (
+        <div role="alert" className="flex items-start justify-between gap-3 bg-red-950 border-b border-red-800 px-4 py-2 text-xs text-red-100">
+          <span>
+            ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。
+            このまま編集すると、画面を閉じたときに内容を失います。「保存/読み込み」からバックアップを書き出してください。
+          </span>
+          <button type="button" onClick={() => setSaveFailed(false)} className="shrink-0 rounded border border-red-700 px-2 py-0.5 hover:bg-red-900">閉じる</button>
+        </div>
+      )}
       {/* Top Navigation & Controls */}
       <Header
         savedSlots={savedSlots}

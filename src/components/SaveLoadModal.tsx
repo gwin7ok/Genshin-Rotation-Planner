@@ -327,17 +327,23 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         return;
       }
       const s = summarizeBackup(parsed.backup);
+      const skippedCount = parsed.skipped.slots + parsed.skipped.items;
       const lines = [
         'このバックアップから、次の内容を復元します。',
         `・保存編成 ${s.slots} 件（同じ ID は、バックアップのほうが新しいときだけ置き換え）`,
         `・設定 ${s.settings} 件`,
         `・作成・ロックしたキャラ ${s.characters} 件・武器 ${s.weapons} 件・聖遺物 ${s.artifacts} 件`,
         s.hasCurrentState ? '・現在の編成（今の編集内容は、バックアップのものに置き換わります）' : '・現在の編成は含まれていません',
+        ...(skippedCount > 0 ? [`※ 壊れていた項目 ${skippedCount} 件（保存編成 ${parsed.skipped.slots} 件・キャラ/武器/聖遺物 ${parsed.skipped.items} 件）は、読み飛ばします`] : []),
         '',
         '復元後、画面を再読み込みします。よろしいですか？',
       ];
       if (!(await confirm(lines.join('\n')))) return;
-      restoreBackup(parsed.backup, { restoreCurrent: true });
+      const result = restoreBackup(parsed.backup, { restoreCurrent: true });
+      if (!result.ok) {
+        showAlert(`復元できませんでした。${result.error ?? ''}`);
+        return;
+      }
       window.location.reload();
     };
     reader.readAsText(file);

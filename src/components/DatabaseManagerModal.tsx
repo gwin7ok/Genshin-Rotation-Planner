@@ -9,6 +9,8 @@ import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../typ
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../types/genshin';
 import { ELEMENT_COLORS, ELEMENT_NAMES_JA, WEAPON_TYPE_NAMES_JA } from '../data/characters';
 import { formatCharacterCooldowns } from '../utils/characterActions';
+import { compareIdDesc } from '../utils/idSort';
+import { parseDatabaseFile } from '../utils/databaseImport';
 import { CharacterFilterBar, matchesCharacterFilter, ElementChip, WeaponChip } from './CharacterFilterBar';
 import { WeaponModel } from '../models/WeaponModel';
 import type { CharacterGenerationReport, GenerationProgress } from '../masterdata/characterMasterGenerator';
@@ -260,21 +262,38 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      try {
-        const imported = JSON.parse(event.target?.result as string) as AppDatabase;
-        if (imported && Array.isArray(imported.characters) && Array.isArray(imported.weapons) && Array.isArray(imported.artifacts)) {
-          saveDatabase(imported);
-          onUpdateDatabase(imported);
-          setSyncSuccessMsg('データベースファイルの復元に成功しました！');
-          setTimeout(() => setSyncSuccessMsg(null), 4000);
-        } else {
-          setSyncSuccessMsg('エラー: 無効なデータベースファイル形式です。');
-          setTimeout(() => setSyncSuccessMsg(null), 4000);
-        }
-      } catch (err) {
-        setSyncSuccessMsg('エラー: ファイルの読み込みに失敗しました。');
+      const showMsg = (msg: string) => {
+        setSyncSuccessMsg(msg);
         setTimeout(() => setSyncSuccessMsg(null), 4000);
+      };
+      const parsed = parseDatabaseFile(String(event.target?.result ?? ''));
+      if (!parsed.ok) {
+        showMsg(`エラー: ${(parsed as { ok: false; error: string }).error}`);
+        return;
       }
+      const { db, counts, skipped } = parsed;
+      setConfirmDialog({
+        title: 'データベースファイルの復元',
+        message: [
+          '今のデータベースを、このファイルの内容で置き換えます（元に戻せません）。',
+          `・今: キャラ ${database.characters.length}・武器 ${database.weapons.length}・聖遺物 ${database.artifacts.length}`,
+          `・ファイル: キャラ ${counts.characters}・武器 ${counts.weapons}・聖遺物 ${counts.artifacts}`,
+          ...(skipped > 0 ? [`※ 形が壊れている・ID が重複している ${skipped} 件は、読み飛ばします`] : []),
+          '',
+          '必要なら、先に「保存/読み込み」からバックアップを書き出してください。',
+        ].join('\n'),
+        confirmText: '置き換える',
+        confirmColor: 'amber',
+        onConfirm: () => {
+          setConfirmDialog(null);
+          if (!saveDatabase(db)) {
+            showMsg('エラー: ブラウザに保存できませんでした（保存容量の不足の可能性）。データベースは変更していません。');
+            return;
+          }
+          onUpdateDatabase(db);
+          showMsg(skipped > 0 ? `データベースファイルを復元しました（${skipped} 件を読み飛ばし）。` : 'データベースファイルの復元に成功しました！');
+        },
+      });
     };
     reader.readAsText(file);
     if (e.target) e.target.value = '';
@@ -423,7 +442,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
       return matchesSearch && matchesWeapon && (!lockedOnly || !!w.isLocked) && (!gcsimMissingOnly || (!w.gcsimKey && !w.isCustom));
     })
-    .sort((a, b) => Number(b.id) - Number(a.id));
+    .sort((a, b) => compareIdDesc(a.id, b.id));
 
   const filteredArtifacts = database.artifacts
     .filter(a => {
@@ -431,7 +450,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       if (gcsimMissingOnly && (a.gcsimKey || a.isCustom)) return false;
       return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
     })
-    .sort((a, b) => Number(b.id) - Number(a.id));
+    .sort((a, b) => compareIdDesc(a.id, b.id));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-3 sm:p-5">

@@ -22,12 +22,12 @@ export interface ActiveRotationState {
 /**
  * 現在編集中の編成を保存する（自動保存。保存先は persistence.ts）
  */
-export function saveActiveState(state: Omit<ActiveRotationState, 'lastSavedAt'>): void {
+export function saveActiveState(state: Omit<ActiveRotationState, 'lastSavedAt'>): boolean {
   const payload: ActiveRotationState = {
     ...state,
     lastSavedAt: new Date().toISOString(),
   };
-  writeJson(STORAGE_KEYS.activeRotation, payload);
+  return writeJson(STORAGE_KEYS.activeRotation, payload);
 }
 
 /**
@@ -56,7 +56,7 @@ export function getSavedSlots(): SavedRotationSlot[] {
   if (!Array.isArray(list)) return [];
   // 旧形式（キャラを丸ごと持つ）の保存編成は読み込まない（D13）
   return (list as SavedRotationSlot[])
-    .filter(slot => Array.isArray(slot.party))
+    .filter(slot => !!slot && Array.isArray(slot.party))
     .map(slot => ({ ...slot, stints: slot.stints ?? [] }));
 }
 
@@ -80,8 +80,8 @@ export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
 /**
  * 保存編成の一覧を、そのまま置き換える（バックアップの復元用。更新日時は書き換えない）
  */
-export function replaceSavedSlots(slots: SavedRotationSlot[]): void {
-  writeJson(STORAGE_KEYS.savedSlots, slots);
+export function replaceSavedSlots(slots: SavedRotationSlot[]): boolean {
+  return writeJson(STORAGE_KEYS.savedSlots, slots);
 }
 
 /**

@@ -193,10 +193,10 @@ export function loadDatabase(): AppDatabase {
 /**
  * Persists current database to LocalStorage
  */
-export function saveDatabase(db: AppDatabase): void {
-  if (!writeJson(STORAGE_KEYS.database, db)) {
-    console.error('データベースを保存できませんでした（容量超過・保存が無効の可能性）');
-  }
+export function saveDatabase(db: AppDatabase): boolean {
+  const ok = writeJson(STORAGE_KEYS.database, db);
+  if (!ok) console.error('データベースを保存できませんでした（容量超過・保存が無効の可能性）');
+  return ok;
 }
 
 /**

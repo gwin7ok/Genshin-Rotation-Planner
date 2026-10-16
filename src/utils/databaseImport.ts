@@ -1,8 +1,9 @@
 /**
  * DB 管理の「JSON 取り込み」の読み取りと検査（キャラ・武器・聖遺物の全データを、ファイルの内容で置き換える）。
- * 形の合わない項目（ID・名前が文字列でない、ID の重複）は除外して、その数を返す。
+ * 形の合わない項目（ID・名前が文字列でない、画面・計算が使う項目の型が違う、ID の重複）は除外して、その数を返す。
  */
 import type { AppDatabase } from '../types/database';
+import { isValidArtifactItem, isValidCharacterItem, isValidWeaponItem, sanitizeDbItems } from './databaseValidation';
 
 export interface DatabaseImportSummary {
   characters: number;
@@ -16,17 +17,6 @@ export type ParseDatabaseFileResult =
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
-function sanitize<T>(list: unknown[]): { items: T[]; skipped: number } {
-  const seen = new Set<string>();
-  const items: T[] = [];
-  for (const v of list) {
-    if (!isRecord(v) || typeof v.id !== 'string' || v.id.length === 0 || typeof v.name !== 'string' || seen.has(v.id)) continue;
-    seen.add(v.id);
-    items.push(v as unknown as T);
-  }
-  return { items, skipped: list.length - items.length };
-}
-
 export function parseDatabaseFile(text: string): ParseDatabaseFileResult {
   let raw: unknown;
   try {
@@ -37,9 +27,9 @@ export function parseDatabaseFile(text: string): ParseDatabaseFileResult {
   if (!isRecord(raw) || !Array.isArray(raw.characters) || !Array.isArray(raw.weapons) || !Array.isArray(raw.artifacts)) {
     return { ok: false, error: '無効なデータベースファイル形式です（characters・weapons・artifacts の配列がありません）。' };
   }
-  const characters = sanitize<AppDatabase['characters'][number]>(raw.characters);
-  const weapons = sanitize<AppDatabase['weapons'][number]>(raw.weapons);
-  const artifacts = sanitize<AppDatabase['artifacts'][number]>(raw.artifacts);
+  const characters = sanitizeDbItems<AppDatabase['characters'][number]>(raw.characters, isValidCharacterItem);
+  const weapons = sanitizeDbItems<AppDatabase['weapons'][number]>(raw.weapons, isValidWeaponItem);
+  const artifacts = sanitizeDbItems<AppDatabase['artifacts'][number]>(raw.artifacts, isValidArtifactItem);
   return {
     ok: true,
     db: {

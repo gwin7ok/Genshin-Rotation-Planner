@@ -65,6 +65,9 @@ const isValidExtraEffect = (e: unknown): boolean =>
   isRecord(e) && typeof e.key === 'string' && isFiniteNumber(e.offset) && isFiniteNumber(e.duration)
   && (e.name === undefined || typeof e.name === 'string');
 
+const isValidCopyDuration = (c: unknown): boolean =>
+  isRecord(c) && isFiniteNumber(c.base) && isFiniteNumber(c.duration) && isFiniteNumber(c.gcsimBaseDuration);
+
 const isValidAction = (a: unknown): a is CharacterActionInstance =>
   isRecord(a) && isNonEmptyString(a.id) && isNonEmptyString(a.actionTypeId) && typeof a.type === 'string' && isFiniteNumber(a.duration)
   // 名前・略号・メモは、画面にそのまま出す。文字列でないもの（オブジェクトなど）は、描画で例外になる
@@ -74,10 +77,13 @@ const isValidAction = (a: unknown): a is CharacterActionInstance =>
       'startTime', 'endTime', 'naturalDuration', 'holdSeconds', 'modeHoldSeconds'],
     boolean: ['durationManual', 'inStateWindow'],
   })
-  && (a.copyDurations === undefined || isRecord(a.copyDurations))
+  // グループの複製ごとの所要時間: 各値の base・duration・gcsimBaseDuration が有限数（グループの展開で、そのまま所要時間に書き戻される。NaN だと、計算の時刻が壊れる）
+  && (a.copyDurations === undefined || (isRecord(a.copyDurations) && Object.values(a.copyDurations).every(isValidCopyDuration)))
   && (a.extraEffects === undefined || (Array.isArray(a.extraEffects) && a.extraEffects.every(isValidExtraEffect)));
 
-const isValidGroup = (g: unknown): boolean => isRecord(g) && isNonEmptyString(g.id) && isFiniteNumber(g.repeat);
+/** グループの回数: 1〜99 の整数（画面の編集と同じ範囲。大きな値だと、展開が大量のアクションを作って、画面が止まる） */
+const isValidGroup = (g: unknown): boolean =>
+  isRecord(g) && isNonEmptyString(g.id) && isFiniteNumber(g.repeat) && Number.isInteger(g.repeat) && g.repeat >= 1 && g.repeat <= 99;
 
 const isValidTrigger = (t: unknown): boolean =>
   isRecord(t) && isNonEmptyString(t.id) && isNonEmptyString(t.passiveEffectId) && isFiniteNumber(t.offset)
@@ -188,13 +194,26 @@ export function parseRotationPayload(raw: unknown): ParseRotationResult {
   };
 }
 
+/**
+ * 編成の数値項目（ループ位置・基準・総時間・交代遅延）を検査する。有限の非負数でないものは取り除く（既定値が使われる）。
+ * 文字列などのままだと、表示の .toFixed() などで画面が落ちる。正しければ、同じオブジェクトを返す
+ */
+export function sanitizeRotationNumbers<T extends object>(o: T): T {
+  const r = o as Record<string, unknown>;
+  const bad = ['loopStartIndex', 'loopStartTime', 'totalDuration', 'switchDelay'].filter(k => r[k] !== undefined && !(isFiniteNumber(r[k]) && (r[k] as number) >= 0));
+  if (bad.length === 0) return o;
+  const next = { ...r };
+  for (const k of bad) delete next[k];
+  return next as T;
+}
+
 /** 保存編成 1 件を検査する。使えないものは null。使えるものは、壊れた出場・アクションを除いて返す */
 export function sanitizeSlot(raw: unknown): { slot: SavedRotationSlot; skipped: SkippedRotationItems } | null {
   if (!isRecord(raw) || !isNonEmptyString(raw.id) || !isValidParty(raw.party)) return null;
   const { stints, skipped } = sanitizeStints(raw.stints ?? []);
   const unchanged = Array.isArray(raw.stints) && stints.length === raw.stints.length && skipped.actions === 0 && skipped.others === 0
     && stints.every((s, i) => s === (raw.stints as unknown[])[i]);
-  let slot = (unchanged ? raw : { ...raw, stints }) as unknown as SavedRotationSlot;
+  let slot = sanitizeRotationNumbers((unchanged ? raw : { ...raw, stints }) as unknown as SavedRotationSlot);
   if (typeof slot.name !== 'string') slot = { ...slot, name: '（名前なし）' };
   // 説明は、画面にそのまま出す。文字列でなければ外す
   if (slot.description !== undefined && typeof slot.description !== 'string') {

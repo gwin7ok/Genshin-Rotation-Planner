@@ -9,12 +9,13 @@
  */
 import type { SavedRotationSlot, CharacterConfig } from '../types/genshin';
 import type { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
+import { isValidArtifactItem, isValidCharacterItem, isValidWeaponItem, sanitizeDbItems } from './databaseValidation';
 import { loadActiveState, saveActiveState, flushActiveState, getSavedSlots, replaceSavedSlots, type ActiveRotationState } from './storage';
 import { loadDatabase, saveDatabase } from './databaseService';
 import { BACKUP_SETTING_KEYS, STORAGE_KEYS, readString, removeKey, writeString } from './persistence';
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
 import { APP_VERSION } from './appVersion';
-import { addSkipped, emptySkipped, isValidParty, sanitizeSlot, sanitizeStints, totalSkipped } from './rotationValidation';
+import { addSkipped, emptySkipped, isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints, totalSkipped } from './rotationValidation';
 
 export const BACKUP_FORMAT = 'genshin-rotation-planner-backup';
 export const BACKUP_VERSION = 1;
@@ -87,22 +88,6 @@ export type ParseBackupResult = { ok: true; backup: BackupFile; skipped: Skipped
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
-/** 利用者のデータ（キャラ・武器・聖遺物）の項目として最低限の形か（ID と名前が文字列） */
-const isItem = (v: unknown): v is { id: string; name: string } =>
-  isRecord(v) && typeof v.id === 'string' && v.id.length > 0 && typeof v.name === 'string';
-
-/** 形の合う項目だけを残す。同じ ID は最初の 1 件だけ。除外した数を返す */
-function sanitizeItems<T>(list: unknown[]): { items: T[]; skipped: number } {
-  const seen = new Set<string>();
-  const items: T[] = [];
-  for (const v of list) {
-    if (!isItem(v) || seen.has(v.id)) continue;
-    seen.add(v.id);
-    items.push(v as unknown as T);
-  }
-  return { items, skipped: list.length - items.length };
-}
-
 /** ファイルの内容を、バックアップとして読む（形式・版・主な項目の型を検査し、壊れた項目は除外して数を返す） */
 export function parseBackup(text: string): ParseBackupResult {
   let raw: unknown;
@@ -136,11 +121,11 @@ export function parseBackup(text: string): ParseBackupResult {
   if (currentState) {
     const cleaned = sanitizeStints(currentState.stints);
     inner = addSkipped(inner, cleaned.skipped);
-    currentState = { ...currentState, stints: cleaned.stints };
+    currentState = sanitizeRotationNumbers({ ...currentState, stints: cleaned.stints });
   }
-  const characters = sanitizeItems<CharacterConfig>(b.database.characters);
-  const weapons = sanitizeItems<WeaponDatabaseItem>(b.database.weapons);
-  const artifacts = sanitizeItems<ArtifactSetDatabaseItem>(b.database.artifacts);
+  const characters = sanitizeDbItems<CharacterConfig>(b.database.characters, isValidCharacterItem);
+  const weapons = sanitizeDbItems<WeaponDatabaseItem>(b.database.weapons, isValidWeaponItem);
+  const artifacts = sanitizeDbItems<ArtifactSetDatabaseItem>(b.database.artifacts, isValidArtifactItem);
   return {
     ok: true,
     skipped: {
@@ -257,30 +242,46 @@ export function restoreBackup(b: BackupFile, options: { restoreCurrent: boolean 
   flushActiveState(); // 待っている自動保存を先に書く（退避・巻き戻しの対象に、最新の内容を含める）
   const keys = [STORAGE_KEYS.savedSlots, STORAGE_KEYS.database, STORAGE_KEYS.activeRotation, ...Object.keys(b.settings)];
   const before = new Map<string, string | null>(keys.map(k => [k, readString(k)]));
-  const rollback = () => {
-    for (const [k, v] of before) {
-      if (v === null) removeKey(k);
-      else writeString(k, v);
+  // 書き込みを始めた順（巻き戻しは、逆の順に行う）。
+  // 順に戻さないと、保存編成を小さくして空いた容量を、大きな設定が使っているときに、元の大きな保存編成を先に書き戻すことになり、容量超過で失敗する
+  const attempted: string[] = [];
+  const write = (key: string, fn: () => boolean): boolean => {
+    attempted.push(key);
+    return fn();
+  };
+  /** 退避した内容に戻す。すべて戻せたか（戻せなかったキーがあれば false。保存先の状態が、一部変わったまま） */
+  const rollback = (): boolean => {
+    let all = true;
+    for (const k of [...attempted].reverse()) {
+      const v = before.get(k);
+      if (v === null || v === undefined) {
+        removeKey(k);
+      } else if (!writeString(k, v)) {
+        all = false;
+      }
     }
+    return all;
   };
 
   let settingsWritten = 0;
-  let ok = replaceSavedSlots(slots);
+  let ok = write(STORAGE_KEYS.savedSlots, () => replaceSavedSlots(slots));
   if (ok) {
     for (const [key, value] of Object.entries(b.settings)) {
-      if (!writeString(key, value)) { ok = false; break; }
+      if (!write(key, () => writeString(key, value))) { ok = false; break; }
       settingsWritten++;
     }
   }
-  if (ok && mergedDb) ok = saveDatabase(mergedDb);
+  if (ok && mergedDb) ok = write(STORAGE_KEYS.database, () => saveDatabase(mergedDb));
   let currentStateRestored = false;
   if (ok && options.restoreCurrent && b.currentState) {
-    ok = saveActiveState(b.currentState);
+    ok = write(STORAGE_KEYS.activeRotation, () => saveActiveState(b.currentState!));
     currentStateRestored = ok;
   }
   if (!ok) {
-    rollback();
-    return failed('ブラウザに保存できませんでした（保存容量の不足、または保存が無効になっている可能性があります）。今のデータは、変更していません。');
+    const restored = rollback();
+    return failed(restored
+      ? 'ブラウザに保存できませんでした（保存容量の不足、または保存が無効になっている可能性があります）。今のデータは、変更していません。'
+      : 'ブラウザに保存できませんでした（保存容量の不足、または保存が無効になっている可能性があります）。さらに、元の状態に戻すことにも失敗し、保存してあるデータの一部が、変わったままの可能性があります。先に「全データを書き出す」で、バックアップを取り直してください。');
   }
   return { ok: true, slotsAdded, slotsUpdated, slotsKept, settings: settingsWritten, items, currentStateRestored };
 }

@@ -163,8 +163,9 @@ check('拒否ではなく除外: database に壊れた要素・ID の重複が�
   const dirty = {
     ...file,
     database: {
-      characters: [null, 5, { name: 'ID なし' }, { id: 'custom_a', name: 'A' }, { id: 'custom_a', name: 'A 重複' }, { id: 'custom_b' }],
-      weapons: [{ id: 'weapon_custom_1', name: 'W' }],
+      // 有効な項目（マスターの複製）と、壊れた項目（ID なし・ID の重複・画面が使う項目の型が違う）
+      characters: [null, 5, { name: 'ID なし' }, { ...structuredClone(someChar), id: 'custom_a', name: 'A' }, { ...structuredClone(someChar), id: 'custom_a', name: 'A 重複' }, { id: 'custom_b' }],
+      weapons: [{ ...structuredClone(masterDb.weapons[0]), id: 'weapon_custom_1', name: 'W' }],
       artifacts: [],
     },
     savedSlots: [null, { id: 'ok', party: [], name: 'n', updatedAt: '2026-10-01T00:00:00.000Z' }, { id: 'no_party' }],
@@ -249,8 +250,8 @@ check('DB 取り込み: 形の検査・壊れた要素の除外・ID の重複',
   assert.equal(dbImport.parseDatabaseFile('x').ok, false);
   assert.equal(dbImport.parseDatabaseFile(JSON.stringify({ characters: [], weapons: [] })).ok, false);
   const r = dbImport.parseDatabaseFile(JSON.stringify({
-    characters: [{ id: 'a', name: 'A' }, { id: 'a', name: 'A2' }, null, { id: 3 }],
-    weapons: [{ id: 'w', name: 'W' }],
+    characters: [{ ...structuredClone(someChar), id: 'a', name: 'A' }, { ...structuredClone(someChar), id: 'a', name: 'A2' }, null, { id: 3 }],
+    weapons: [{ ...structuredClone(masterDb.weapons[0]), id: 'w', name: 'W' }],
     artifacts: [],
   }));
   assert.equal(r.ok, true);
@@ -260,6 +261,58 @@ check('DB 取り込み: 形の検査・壊れた要素の除外・ID の重複',
 });
 
 const presetsForFailure = await server.ssrLoadModule('/src/utils/presets.ts');
+check('保存の失敗: 容量がぎりぎりのときも、書いた順の逆に戻して、元の状態に戻せる（戻す順が悪いと、戻す書き込みも容量超過になる）', () => {
+  store.clear();
+  const bigSlot = slot('slot_x', 'あ'.repeat(600), '2026-10-01T00:00:00.000Z');
+  store.set('genshin_rotation_saved_slots_v2', JSON.stringify([bigSlot]));
+  store.set('gcsimDefHalt', 'true');
+  const total = () => [...store.entries()].reduce((n, [k, v]) => n + k.length + v.length, 0);
+  const CAP = total() + 60;
+  const ls = (globalThis as any).localStorage;
+  const realSet = ls.setItem;
+  pers.setWriteFailureHandler(() => {});
+  ls.setItem = (k: string, v: string) => {
+    if (k === 'genshin_app_db_v1') throw new Error('QuotaExceededError');
+    const others = [...store.entries()].reduce((n, [kk, vv]) => (kk === k ? n : n + kk.length + vv.length), 0);
+    if (others + k.length + v.length > CAP) throw new Error('QuotaExceededError');
+    realSet(k, v);
+  };
+  try {
+    // 保存編成は、新しい（小さい）ものに置き換わって容量が空き、その容量を、大きな設定が使う。そのあと、データベースの保存で失敗する
+    const small = slot('slot_x', '小', '2026-10-05T00:00:00.000Z');
+    const r = backup.restoreBackup({ ...parsed.backup, savedSlots: [small], settings: { gcsimDefHalt: 'x'.repeat(500) } }, { restoreCurrent: false });
+    assert.equal(r.ok, false);
+    assert.match(r.error, /今のデータは、変更していません/, '元に戻せたことを、正しく伝える');
+  } finally {
+    ls.setItem = realSet;
+    pers.setWriteFailureHandler(null);
+  }
+  assert.deepEqual(storage.getSavedSlots(), [bigSlot], '保存編成が、元の大きな内容に戻っている');
+  assert.equal(store.get('gcsimDefHalt'), 'true', '設定が元に戻っている');
+});
+check('保存の失敗: 元に戻すことにも失敗したときは、そう伝える（「変更していません」と言わない）', () => {
+  store.clear();
+  store.set('genshin_rotation_saved_slots_v2', JSON.stringify([slot('slot_x', '元', '2026-10-01T00:00:00.000Z')]));
+  const ls = (globalThis as any).localStorage;
+  const realSet = ls.setItem;
+  pers.setWriteFailureHandler(() => {});
+  // 保存編成の書き込みだけ成功し、そのあとは、すべて失敗する（巻き戻しの書き込みも失敗）
+  let writes = 0;
+  ls.setItem = (k: string, v: string) => {
+    writes++;
+    if (writes > 1) throw new Error('QuotaExceededError');
+    realSet(k, v);
+  };
+  try {
+    const r = backup.restoreBackup({ ...parsed.backup, savedSlots: [slot('slot_y', '新', '2026-10-05T00:00:00.000Z')], settings: { gcsimDefHalt: 'false' } }, { restoreCurrent: false });
+    assert.equal(r.ok, false);
+    assert.match(r.error, /元の状態に戻すことにも失敗/);
+    assert.doesNotMatch(r.error, /今のデータは、変更していません/);
+  } finally {
+    ls.setItem = realSet;
+    pers.setWriteFailureHandler(null);
+  }
+});
 check('保存編成の保存・削除: 容量超過のときは ok: false で、保存済みの内容を返す（成功にしない）', () => {
   store.clear();
   const base = slot('slot_keep', '残す編成', '2026-10-01T00:00:00.000Z');

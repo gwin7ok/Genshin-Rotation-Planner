@@ -209,14 +209,31 @@ const SCENARIOS: Scenario[] = [
   S('アリョーシャ 凸 6 E ×4（狩人の照準が 2 層になる）', [['アリョーシャ', { constellation: 6 }], B], [[0, ['e', 'w1', 'e', 'w1', 'e', 'w1', 'e', 'w1']], [1, ['e', 'w60']]]),
   S('ヴェスナ 凸 0 E → E → E → Q（粛清 1・2・3 層。退場でクリア）', [['ヴェスナ', { constellation: 0 }], B], [[0, ['e', 'e', 'e', 'q', 'w2']], [1, ['e', 'w60']]]),
   S('ヴェスナ 凸 2 E → E → Q（入ると最大層から。最大層で攻撃力 +40%）', [['ヴェスナ', { constellation: 2 }], B], [[0, ['e', 'e', 'q', 'w1']], [1, ['e', 'w60']]]),
+  // --- 2 周目の折り返し（loopStartIndex が 0 以外）・グループ・4 人の通し（calculateRotation の分割の前に足した検査。2026-10-17） ---
+  S('ループ基準 1: フィッシュル・ベネット・甘雨・八重神子の通し', [['フィッシュル'], B, ['甘雨'], ['八重神子']], [[0, ['q', 'e', 'n', 'n']], [1, ['e', 'q']], [2, ['e', 'n', 'n', 'ca']], [3, ['e', 'e', 'q', 'w1']]], { loopStartIndex: 1 }),
+  S('ループ基準 2: 同じ通し', [['フィッシュル'], B, ['甘雨'], ['八重神子']], [[0, ['q', 'e', 'n', 'n']], [1, ['e', 'q']], [2, ['e', 'n', 'n', 'ca']], [3, ['e', 'e', 'q', 'w1']]], { loopStartIndex: 2 }),
+  S('ループ基準 3: 同じ通し', [['フィッシュル'], B, ['甘雨'], ['八重神子']], [[0, ['q', 'e', 'n', 'n']], [1, ['e', 'q']], [2, ['e', 'n', 'n', 'ca']], [3, ['e', 'e', 'q', 'w1']]], { loopStartIndex: 3 }),
+  S('ループ基準 0: 同じ通し（基準なし）', [['フィッシュル'], B, ['甘雨'], ['八重神子']], [[0, ['q', 'e', 'n', 'n']], [1, ['e', 'q']], [2, ['e', 'n', 'n', 'ca']], [3, ['e', 'e', 'q', 'w1']]]),
+  S('ループ基準 2: 祭礼の甘雨・CT が 2 周目へ持ち越し', [['甘雨', SAC('bow')], B, ['フィッシュル']], [[0, ['e', 'w1', 'e']], [1, ['e', 'q']], [2, ['e', 'q', 'w2']], [0, ['e', 'n']]], { loopStartIndex: 2 }),
+  S('グループ: 甘雨 N N ×3 回（グループの途中を含む出場）', [['甘雨'], B], [[0, ['e', 'n', 'n', 'ca'], { groupSpec: { from: 1, to: 2, repeat: 3 } }], [1, ['e']]]),
+  S('グループ: ベネット E Q ×2 回 → 八重神子 E ×3（2 つの出場にグループ）', [B, ['八重神子']], [[0, ['e', 'q'], { groupSpec: { from: 0, to: 1, repeat: 2 } }], [1, ['e', 'e', 'n'], { groupSpec: { from: 0, to: 0, repeat: 3 } }]]),
+  S('グループ + ループ基準 1: フィッシュル E ×2 → ベネット N ×2 ×2 回', [['フィッシュル'], B], [[0, ['e', 'n'], { groupSpec: { from: 0, to: 0, repeat: 2 } }], [1, ['n', 'n', 'e'], { groupSpec: { from: 0, to: 1, repeat: 2 } }]], { loopStartIndex: 1 }),
 ];
+
+/** 並び替えの比較（文字コード順）。localeCompare は、OS のロケール（Windows と Linux の CI）で、同じ時刻の項目の並びが変わるため使わない */
+const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 const r3 = (v: number | undefined) => (v === undefined ? undefined : Number(v.toFixed(3)));
 
 function runScenario(sc: Scenario) {
   seq = 0;
   const chars = sc.chars.map(([name, extra]) => byName(name, extra));
-  const stints = sc.stints.map(([ci, steps, extra], i) => ({ id: `s${i}`, characterId: chars[ci].id, actions: steps.map(s => makeAction(chars[ci], s)), ...(extra ?? {}) }));
+  const stints = sc.stints.map(([ci, steps, extra], i) => {
+    const { groupSpec, ...rest } = (extra ?? {}) as { groupSpec?: { from: number; to: number; repeat: number } };
+    const actions: any[] = steps.map(s => makeAction(chars[ci], s));
+    if (groupSpec) for (let k = groupSpec.from; k <= groupSpec.to; k++) actions[k] = { ...actions[k], groupId: `g${i}` };
+    return { id: `s${i}`, characterId: chars[ci].id, actions, ...(groupSpec ? { groups: [{ id: `g${i}`, repeat: groupSpec.repeat }] } : {}), ...rest };
+  });
   const res = calculateRotation(chars, stints, { switchDelay: 0.5, loopStartIndex: sc.loopStartIndex ?? 0, defHalt: sc.defHalt ?? true, database: { weapons: WEAPON_DB } as any });
   const actions = res.calculatedStints.flatMap((s: any) => s.actions);
   const built = buildGcsimConfig({
@@ -234,13 +251,13 @@ function runScenario(sc: Scenario) {
       char: chars.find(c => c.id === s.characterId)?.name, start: r3(s.startTime), end: r3(s.endTime), modeHold: s.modeHold,
       actions: s.actions.filter((a: any) => a.type !== 'swap').map((a: any) => [a.shortName, r3(a.startTime), r3(a.duration), a.inStateWindow ? 'window' : '', a.hasCTCollision ? `CT違反${a.collisionRemainingCT}` : '', a.specialWindowWarning ?? '', a.modeHoldSeconds ? `hold${a.modeHoldSeconds}` : ''].filter(v => v !== '')),
     })),
-    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), (b.noSynergy ? 'noSynergy' : '') + (b.lane !== undefined ? `L${b.lane}` : '')]).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
-    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || String(a[1]).localeCompare(String(b[1]))),
+    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), (b.noSynergy ? 'noSynergy' : '') + (b.lane !== undefined ? `L${b.lane}` : '')]).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
+    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || cmp(String(a[1]), String(b[1]))),
     ...(res.carryOverBuffs.some((x: any) => x.lane !== undefined) ? { carryTotems: res.carryOverBuffs.filter((x: any) => x.lane !== undefined).map((x: any) => [x.lane, r3(x.startTime), r3(x.endTime)]) } : {}),
     ...(res.activeBuffs.some((x: any) => x.lane !== undefined) ? { totemOverlap: res.loopedBuffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]) } : {}),
     ...(res.stockSpans.length > 0 ? { stock: res.stockSpans.map((x: any) => [x.characterId.slice(0, 14), x.lap, r3(x.startTime), r3(x.endTime), x.count]) } : {}),
     ...(res.passiveSpans.some((p: any) => p.auto) ? { autoPassives: res.passiveSpans.filter((p: any) => p.auto).map((p: any) => [p.name, r3(p.startTime), r3(p.cooldown), r3(p.cooldownEnd)]) } : {}),
-    issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => (a[1] + a[2]).localeCompare(b[1] + b[2])),
+    issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => cmp(a[1] + a[2], b[1] + b[2])),
     gcsim: built.config.split('\n').filter((l: string) => !/^\S+ (char|add) |^options|^target|^energy|^#/.test(l)).join('\n'),
     gcsimMessages: [...(built.errors ?? []), ...(built.warnings ?? [])].map((w: any) => (typeof w === 'string' ? w : w.message)),
   };
@@ -248,6 +265,33 @@ function runScenario(sc: Scenario) {
 
 const current: Record<string, unknown> = {};
 for (const sc of SCENARIOS) current[sc.name] = runScenario(sc);
+
+// 同梱のプリセット 5 編成（実際の編成・武器・聖遺物つき。持ち越し・パッシブ・重なりまで、計算の全体を見る）
+const { resolvePartyCharacters } = await server.ssrLoadModule('/src/utils/party.ts');
+const ARTIFACTS: any[] = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'));
+const span = (x: any) => [x.name ?? x.type ?? x.id, r3(x.startTime), r3(x.endTime), r3(x.duration), r3(x.cooldown), r3(x.cooldownEnd), x.hasCTViolation ? 'CT違反' : '', x.isCarryOver ? 'carry' : '', x.gcsimKey ?? '', x.lane ?? ''].filter(v => v !== '');
+const presetFiles = fs.readdirSync(path.join('src', 'data', 'presets')).filter(f => f.endsWith('.json')).sort();
+for (const f of presetFiles) {
+  const p = JSON.parse(fs.readFileSync(path.join('src', 'data', 'presets', f), 'utf8'));
+  const characters = resolvePartyCharacters(p.party, all);
+  const res = calculateRotation(characters, p.stints, { switchDelay: p.switchDelay ?? 0.5, loopStartIndex: p.loopStartIndex ?? 0, database: { characters: all, weapons: MASTER_WEAPONS, artifacts: ARTIFACTS } as any });
+  current[`プリセット ${f}`] = {
+    totalDuration: res.totalDuration, loopStartTime: r3(res.loopStartTime), loopPeriod: r3(res.loopPeriod), cdResonanceScale: res.cdResonanceScale,
+    stints: res.calculatedStints.map((s: any) => ({
+      char: characters.find((c: any) => c.id === s.characterId)?.name, start: r3(s.startTime), end: r3(s.endTime), modeHold: s.modeHold,
+      actions: s.actions.map((a: any) => [a.shortName, r3(a.startTime), r3(a.duration), a.hasCTCollision ? `CT違反${a.collisionRemainingCT}` : '', a.inStateWindow ? 'window' : '', a.groupCopy ? `copy${a.groupCopy}` : '', a.specialWindowWarning ?? ''].filter(v => v !== '')),
+    })),
+    bars: res.activeBuffs.map(span).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
+    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].map(span).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
+    passives: res.passiveSpans.map(span),
+    carry: { cooldowns: res.carryOverCooldowns.map(span), buffs: res.carryOverBuffs.map(span), passives: res.carryOverPassives.map(span) },
+    overlap: res.buffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]),
+    loopedOverlap: res.loopedBuffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]),
+    stock: res.stockSpans.map((x: any) => [x.characterId.slice(0, 14), x.lap, r3(x.startTime), r3(x.endTime), x.count]),
+    sacrificial: res.sacrificialProcs.map((x: any) => JSON.parse(JSON.stringify(x, (_k, v) => (typeof v === 'number' ? r3(v) : v)))),
+    issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]),
+  };
+}
 await server.close();
 
 if (update || !fs.existsSync(SNAPSHOT_FILE)) {
@@ -275,5 +319,5 @@ for (const name of new Set([...Object.keys(saved), ...Object.keys(current)])) {
     for (const x of after) if (!beforeSet.has(show(x))) console.log(`  + ${key}: ${show(x)}`);
   }
 }
-console.log(diffCount === 0 ? `\n✓ 全 ${SCENARIOS.length} 並びが、保存した結果と同じ` : `\n${diffCount} 並びに差があります（意図した変更なら --update で保存し直す）`);
+console.log(diffCount === 0 ? `\n✓ 全 ${Object.keys(current).length} 並び（プリセット ${presetFiles.length} 編成を含む）が、保存した結果と同じ` : `\n${diffCount} 並びに差があります（意図した変更なら --update で保存し直す）`);
 process.exit(diffCount === 0 ? 0 : 1);

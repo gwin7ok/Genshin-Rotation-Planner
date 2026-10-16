@@ -28,8 +28,10 @@ const ICON_BASE_URL = 'https://enka.network/ui';
 import { appSideSourceByGenshinId, type AppSideSource } from './appSideCharacterSources.ts';
 import dashJumpFrames from '../data/dash_jump_frames.json' with { type: 'json' };
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
+import { assertGitTreeComplete, fetchJson, fetchText } from './fetchUtil.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
-const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
+// 参照先は、ブランチ名ではなく、gcsim.config.json のコミット（ハッシュ）に固定する（リリースにない最新の変更を取り込まない）
+const GCSIM_REF = CONFIG_GCSIM_COMMIT;
 const GCSIM_CHAR_DM_PATH = 'ui/packages/ui/src/data/character.dm.json';
 
 /**
@@ -1187,30 +1189,9 @@ interface GenshinDbTalent {
 }
 
 // ---------------------------------------------------------------------------
-// 取得ヘルパー
+// 取得ヘルパー（通信そのもの〔タイムアウト・再試行・トークン〕は fetchUtil.ts）
 // ---------------------------------------------------------------------------
 
-async function fetchWithRetry(url: string, init?: RequestInit, retries = 2): Promise<Response> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      // Node（スクリプト）から実行するときは、環境変数 GITHUB_TOKEN があれば、GitHub API の認証に使う（未認証は 1 時間に 60 回まで）
-      const token = typeof process !== 'undefined' ? process.env?.GITHUB_TOKEN : undefined;
-      const auth = token && url.startsWith('https://api.github.com/') ? { headers: { ...(init?.headers as Record<string, string> | undefined), Authorization: `Bearer ${token}` } } : {};
-      const res = await fetch(url, { ...init, ...auth });
-      if (res.ok) return res;
-      lastError = new Error(`HTTP ${res.status} ${res.statusText}: ${url}`);
-      if (res.status === 403 || res.status === 404) break; // レート制限・存在しないものは再試行しない
-    } catch (e) {
-      lastError = e;
-    }
-    await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
-  }
-  throw lastError instanceof Error ? lastError : new Error(String(lastError));
-}
-
-const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> => (await fetchWithRetry(url, init)).json() as Promise<T>;
-const fetchText = async (url: string): Promise<string> => (await fetchWithRetry(url)).text();
 
 async function runPool<T>(items: T[], concurrency: number, worker: (item: T) => Promise<void>): Promise<void> {
   let index = 0;
@@ -1990,13 +1971,14 @@ export async function generateCharacterMaster(
     fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=Japanese`),
     fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=Japanese`),
     fetchJson<{ sha: string; truncated: boolean; tree: Array<{ path: string; type: string }> }>(
-      `https://api.github.com/repos/${GCSIM_REPO}/git/trees/${GCSIM_BRANCH}?recursive=1`,
+      `https://api.github.com/repos/${GCSIM_REPO}/git/trees/${GCSIM_REF}?recursive=1`,
       { headers: { Accept: 'application/vnd.github+json' } },
     ),
     fetchJson<{ data: Record<string, { id: number; key: string }> }>(
-      `https://raw.githubusercontent.com/${GCSIM_REPO}/${GCSIM_BRANCH}/${GCSIM_CHAR_DM_PATH}`,
+      `https://raw.githubusercontent.com/${GCSIM_REPO}/${GCSIM_REF}/${GCSIM_CHAR_DM_PATH}`,
     ),
   ]);
+  assertGitTreeComplete(tree, 'gcsim のファイル');
   report.gcsimCommit = tree.sha;
   const rawBase = `https://raw.githubusercontent.com/${GCSIM_REPO}/${tree.sha}/`;
 
@@ -2143,10 +2125,15 @@ export async function generateCharacterMaster(
         const texts = await Promise.all(names.map(f => fetchText(`${base}internal/characters/${dir}/${f}.go`)));
         // ファイル間で定数を共有するため、先に全ファイルの定数を集めてから解析する
         const shared = new Map<string, number>();
-        texts.forEach(t => parseGoFile(t).consts.forEach((v, k) => shared.set(k, v)));
+        const sharedFloats = new Set<string>();
+        texts.forEach(t => {
+          const parsed = parseGoFile(t);
+          parsed.consts.forEach((v, k) => shared.set(k, v));
+          parsed.floats.forEach(k => sharedFloats.add(k));
+        });
         const files: Record<string, ParsedGoFile> = {};
         names.forEach((f, i) => {
-          files[f] = parseGoFile(texts[i], shared);
+          files[f] = parseGoFile(texts[i], shared, sharedFloats);
         });
         const cooldownCalls = names.flatMap((f, i) => (f === 'skill' || f === 'burst') ? parseCooldownCalls(texts[i], files[f]) : []);
         parsedById.set(u.id, { files, cooldownCalls });

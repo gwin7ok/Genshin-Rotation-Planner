@@ -12,6 +12,8 @@ import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { UpdateNoticeModal } from './components/UpdateNoticeModal';
 import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
+import { setWriteFailureHandler } from './utils/persistence';
+import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
@@ -34,8 +36,8 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
-import { rotationFileName, nameFromFileName } from './utils/rotationFile';
+import { loadActiveState, saveActiveStateDebounced, flushActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
+import { rotationFileName, nameFromFileName, buildRotationExport } from './utils/rotationFile';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
@@ -145,6 +147,12 @@ export default function App() {
     if (!versionNotice.show) markVersionSeen(DATABASE_VERSION);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // 保存の失敗（容量超過・保存が無効）の警告。閉じるまで出す（保存できないまま編集を続けると、データを失うため）
+  const [saveFailed, setSaveFailed] = useState<boolean>(false);
+  useEffect(() => {
+    setWriteFailureHandler(() => setSaveFailed(true));
+    return () => setWriteFailureHandler(null);
+  }, []);
   const dismissVersionNotice = () => {
     markVersionSeen(DATABASE_VERSION);
     setVersionNotice(n => ({ ...n, show: false }));
@@ -190,8 +198,9 @@ export default function App() {
   };
 
   // 4. Automatic Persistence (Every change to characters, stints, loopStartTime is saved)
+  // 連続した操作の間は、書き込みを待つ（最後の変更から少し後に 1 回だけ書く）。画面を閉じる・隠すときは、待たずに書く
   useEffect(() => {
-    saveActiveState({
+    saveActiveStateDebounced({
       party,
       stints,
       loopStartIndex,
@@ -200,6 +209,21 @@ export default function App() {
       reactions: packReactions(gcsimReactions),
     });
   }, [party, stints, loopStartIndex, switchDelay, activeSlotId, gcsimReactions]);
+  useEffect(() => {
+    const flush = () => flushActiveState();
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    window.addEventListener('pagehide', flush);
+    window.addEventListener('beforeunload', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      window.removeEventListener('beforeunload', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+      flush(); // 画面の部品が外れるとき（開発中の再読み込みなど）も、書き残さない
+    };
+  }, []);
 
   // ガントチャートのドラッグ中の仮の並び（ドロップするまで保存しない。計算だけをこの並びで行う。追加作業 21）
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
@@ -360,8 +384,17 @@ export default function App() {
         switchDelay: slot.switchDelay ?? 0.50,
         reactions: packReactions(restoredReactions),
       };
-      setSavedSlots(saveSlot(imported));
-      setActiveSlotId(imported.id);
+      const saved = trySaveSlot(imported);
+      if (saved.ok) {
+        setSavedSlots(saved.slots);
+        setActiveSlotId(imported.id);
+      } else {
+        // 編成は読み込めたが、保存編成には登録できなかった（読み込み中の編成にはしない）。
+        // 前に開いていた保存編成を指したままだと、「上書き保存」で、取り込んだ内容が、その保存編成を置き換えてしまう
+        setActiveSlotId(null);
+        showAlert(`編成は読み込みましたが、保存編成には登録できませんでした。
+${SLOT_WRITE_FAILED_MESSAGE}`);
+      }
       return;
     }
     setActiveSlotId(slot.slotId ?? null);
@@ -406,10 +439,11 @@ export default function App() {
 
   // 現在のメイン画面の状態を、読み込み中の保存編成（スロット）へ上書き保存
   const [overwriteSaved, setOverwriteSaved] = useState<boolean>(false);
+  // ヘッダーの「上書き保存」: 読み込み中の編成を、よく上書きする操作なので、確認は出さない（編成管理の「上書」は、確認する）
   const handleOverwriteActiveSlot = () => {
     const slot = savedSlots.find(s => s.id === activeSlotId);
     if (!slot) return;
-    const updated = saveSlot({
+    const saved = trySaveSlot({
       ...slot,
       party,
       stints,
@@ -419,7 +453,11 @@ export default function App() {
       switchDelay,
       reactions: packReactions(gcsimReactions),
     });
-    setSavedSlots(updated);
+    if (!saved.ok) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    setSavedSlots(saved.slots);
     setStaleReactionsVersion(null);
     setOverwriteSaved(true);
     setTimeout(() => setOverwriteSaved(false), 2000);
@@ -443,7 +481,13 @@ export default function App() {
       switchDelay,
       reactions: packReactions(gcsimReactions),
     };
-    setSavedSlots(saveSlot(newSlot));
+    const saved = trySaveSlot(newSlot);
+    if (!saved.ok) {
+      // 保存できていないので、保存編成を読み込み中にはしない。ダイアログは開いたままにする（名前を変えて、やり直せる）
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    setSavedSlots(saved.slots);
     setStaleReactionsVersion(null);
     setActiveSlotId(newSlot.id);
     setIsSaveAsOpen(false);
@@ -688,7 +732,7 @@ export default function App() {
   const handleExportJson = () => {
     // 編成名: 読み込み中の保存編成の名前。未保存なら「メンバー名（時間）」。ファイル名にも使う（issue #23）
     const name = buildDefaultSlotName(characters, totalDuration, activeSlot);
-    const data = {
+    const data = buildRotationExport({
       name,
       party,
       stints,
@@ -696,8 +740,8 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
-      exportDate: new Date().toISOString(),
-    };
+      reactions: packReactions(gcsimReactions),
+    });
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -714,24 +758,23 @@ export default function App() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-          const importedParty: PartyMember[] = parsed.party;
-          const importedChars = resolvePartyCharacters(importedParty, database.characters);
-          const importedStints: Stint[] = filterStintsForCharacters(parsed.stints, importedChars);
-          handleLoadCustomSlot({
-            party: importedParty,
-            stints: parsed.stints,
-            loopStartIndex: parsed.loopStartIndex,
-            loopStartTime: parsed.loopStartTime ?? 0,
-            switchDelay: parsed.switchDelay ?? switchDelay,
-            totalDuration: parsed.totalDuration,
-            reactions: parsed.reactions,
-            name: parsed.name || nameFromFileName(file.name),
-          });
-        } else {
-          showAlert('無効なローテーションJSONファイルです。');
+        const result = parseRotationPayload(JSON.parse(ev.target?.result as string));
+        if (result.ok === false) {
+          showAlert(result.error);
+          return;
         }
+        const v = result.value;
+        handleLoadCustomSlot({
+          party: v.party,
+          stints: v.stints,
+          loopStartIndex: v.loopStartIndex,
+          loopStartTime: v.loopStartTime ?? 0,
+          switchDelay: v.switchDelay ?? switchDelay,
+          totalDuration: v.totalDuration,
+          reactions: v.reactions,
+          name: v.name || nameFromFileName(file.name),
+        });
+        if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
       } catch (err) {
         showAlert('JSONファイルの読み込みに失敗しました。');
       }
@@ -742,6 +785,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
+      {saveFailed && (
+        <div role="alert" className="flex items-start justify-between gap-3 bg-red-950 border-b border-red-800 px-4 py-2 text-xs text-red-100">
+          <span>
+            ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。
+            このまま編集すると、画面を閉じたときに内容を失います。「保存/読み込み」の「JSONファイル書き出し」で、今の編成をファイルに保存してください（「全データを書き出す」は、保存先を読むので、保存に失敗した最新の編集は入りません）。
+          </span>
+          <button type="button" onClick={() => setSaveFailed(false)} className="shrink-0 rounded border border-red-700 px-2 py-0.5 hover:bg-red-900">閉じる</button>
+        </div>
+      )}
       {/* Top Navigation & Controls */}
       <Header
         savedSlots={savedSlots}

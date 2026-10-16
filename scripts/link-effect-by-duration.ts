@@ -16,6 +16,7 @@ import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import './require-gcsim-server.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const exact = new Map<string, any>(catalog.entries.filter((e: any) => !e.isPattern).map((e: any) => [e.key, e]));

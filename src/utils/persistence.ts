@@ -81,15 +81,34 @@ export function readString(key: string): string | null {
   }
 }
 
-/** 文字列を書く。書けたら true（容量超過・無効のときは false。例外は投げない） */
+let writeFailureHandler: ((key: string) => void) | null = null;
+
+/** 書き込みの失敗（容量超過・保存が無効）を知らせるハンドラを登録する（画面の警告用。null で解除） */
+export function setWriteFailureHandler(handler: ((key: string) => void) | null): void {
+  writeFailureHandler = handler;
+}
+
+function notifyWriteFailure(key: string): void {
+  try {
+    writeFailureHandler?.(key);
+  } catch {
+    // 通知の失敗で、保存の呼び出し元を落とさない
+  }
+}
+
+/** 文字列を書く。書けたら true（容量超過・無効のときは false。例外は投げず、登録されたハンドラに知らせる） */
 export function writeString(key: string, value: string): boolean {
   try {
     const b = backend();
-    if (!b) return false;
+    if (!b) {
+      notifyWriteFailure(key);
+      return false;
+    }
     b.setItem(key, value);
     return true;
   } catch (e) {
     console.warn(`保存できませんでした（${key}）:`, e);
+    notifyWriteFailure(key);
     return false;
   }
 }

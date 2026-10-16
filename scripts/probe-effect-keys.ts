@@ -18,6 +18,7 @@
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import './require-gcsim-server.ts';
 
 const SERVER = GCSIM_SERVER_URL;
 const MAX_LAG_FRAMES = 6 * 60;

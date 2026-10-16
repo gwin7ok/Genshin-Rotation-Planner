@@ -470,6 +470,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   // アクション要素以外をドラッグすると上下左右にスクロール（横: チャート / 縦: ページ）。
   // 5px 未満の移動はクリック扱いのまま（再生位置の移動）、それ以上動いたら直後のクリックを打ち消す
   const PAN_THRESHOLD_PX = 5;
+  const panCleanupRef = useRef<(() => void) | null>(null);
   const handlePanMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.button !== 0 || !containerRef.current) return;
     const target = e.target as HTMLElement;
@@ -483,6 +484,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       scrollY: window.scrollY,
     };
     let panning = false;
+    panCleanupRef.current?.(); // 前の操作が終わっていなければ、先に片づける
 
     const onMove = (ev: MouseEvent) => {
       const dx = ev.clientX - start.x;
@@ -498,12 +500,19 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.scrollTo(window.scrollX, start.scrollY - dy);
     };
 
-    const onUp = () => {
+    const cleanup = () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
-      if (!panning) return;
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      if (panning) {
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+      panCleanupRef.current = null;
+    };
+    const onUp = () => {
+      const wasPanning = panning;
+      cleanup();
+      if (!wasPanning) return;
       // ドラッグ終了時に発生するクリック（再生位置の移動）を1回だけ打ち消す
       const suppressClick = (ce: MouseEvent) => {
         ce.stopPropagation();
@@ -515,7 +524,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
 
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
+    panCleanupRef.current = cleanup;
   };
+  // 画面を閉じるとき（ドラッグの途中を含む）に、リスナと表示の状態を片づける
+  useEffect(() => () => panCleanupRef.current?.(), []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -610,6 +622,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     return closest.index;
   };
 
+  // ドラッグ中のウィンドウの mousemove / mouseup の監視は、ドラッグの開始・終了のときだけ付け外しする。
+  // 毎回の移動で、状態（や、親から来る関数）が変わるたびに付け直すと、付け直しの合間に mouseup が来たとき、最後の移動が抜ける。
+  // 監視の中では、この入れ物から最新の値を読む（描画のたびに更新する）
+  const live = useRef({} as {
+    totalDuration: number; pixelsPerSecond: number; stints: typeof stints;
+    onUpdateLoopStartIndex: typeof onUpdateLoopStartIndex; onUpdateStints: typeof onUpdateStints; onPreviewReorder: typeof onPreviewReorder;
+    findClosestLoopBoundaryIndex: (t: number) => number; dragPassiveOffset: typeof dragPassiveOffset;
+  });
+  live.current = { totalDuration, pixelsPerSecond, stints, onUpdateLoopStartIndex, onUpdateStints, onPreviewReorder, findClosestLoopBoundaryIndex, dragPassiveOffset };
+  const trackDragRef = useRef(draggingTrackStint);
+  trackDragRef.current = draggingTrackStint;
+  const actionDragRef = useRef(draggingAction);
+  actionDragRef.current = draggingAction;
+  const passiveDragRef = useRef(draggingPassive);
+  passiveDragRef.current = draggingPassive;
+
   // Window-level mouseup/mousemove listeners for dragging the loop marker smoothly
   useEffect(() => {
     if (!isDraggingLoopMarker) return;
@@ -619,10 +647,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       const rect = containerRef.current.getBoundingClientRect();
       const clickX = e.clientX - rect.left + containerRef.current.scrollLeft - GANTT_LABEL_WIDTH;
       if (clickX >= 0) {
-        const rawTime = Math.min(totalDuration, Math.max(0, clickX / pixelsPerSecond));
-        onUpdateLoopStartIndex?.(findClosestLoopBoundaryIndex(rawTime));
+        const l = live.current;
+        const rawTime = Math.min(l.totalDuration, Math.max(0, clickX / l.pixelsPerSecond));
+        l.onUpdateLoopStartIndex?.(l.findClosestLoopBoundaryIndex(rawTime));
       } else {
-        onUpdateLoopStartIndex?.(0);
+        live.current.onUpdateLoopStartIndex?.(0);
       }
     };
 
@@ -636,17 +665,25 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mousemove', onWindowMouseMove);
       window.removeEventListener('mouseup', onWindowMouseUp);
     };
-  }, [isDraggingLoopMarker, totalDuration, pixelsPerSecond, onUpdateLoopStartIndex, loopBoundaries]);
+  }, [isDraggingLoopMarker]);
 
+  const passiveDragging = draggingPassive !== null;
   useEffect(() => {
-    if (!draggingPassive) return;
+    if (!passiveDragging || !passiveDragRef.current) return;
+    // 最新の状態（mouseup が、再描画より先に来ても、直前の移動の結果で確定するため、ここで持つ）
+    let latest = passiveDragRef.current;
     const onMove = (e: MouseEvent) => {
-      const delta = (e.clientX - draggingPassive.startClientX) / pixelsPerSecond;
-      const offset = dragPassiveOffset(draggingPassive, delta);
-      setDraggingPassive(prev => (prev && prev.offset !== offset ? { ...prev, offset } : prev));
+      const l = live.current;
+      const delta = (e.clientX - latest.startClientX) / l.pixelsPerSecond;
+      const offset = l.dragPassiveOffset(latest, delta);
+      if (latest.offset !== offset) {
+        latest = { ...latest, offset };
+        setDraggingPassive(latest);
+      }
     };
     const onUp = () => {
-      const d = draggingPassive;
+      const d = latest;
+      const { onUpdateStints, stints } = live.current;
       setDraggingPassive(null);
       document.body.style.cursor = '';
       if (!onUpdateStints || Math.abs(d.offset - d.originOffset) < 0.001) return;
@@ -661,25 +698,29 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
-  }, [draggingPassive, pixelsPerSecond, stints, onUpdateStints, totalDuration, loopStartTime]);
+  }, [passiveDragging]);
 
+  const trackDragging = draggingTrackStint !== null;
   useEffect(() => {
-    if (!draggingTrackStint) return;
+    if (!trackDragging || !trackDragRef.current) return;
     const DRAG_THRESHOLD_PX = 5;
+    // 最新の状態（mouseup が、再描画より先に来ても、直前の移動の結果で確定するため、ここで持つ）
+    let latest = trackDragRef.current;
     const onMove = (e: MouseEvent) => {
-      setDraggingTrackStint(prev => {
-        if (!prev) return prev;
-        const dx = e.clientX - prev.startClientX;
-        const moved = prev.moved || Math.abs(dx) >= DRAG_THRESHOLD_PX;
-        // ポインター位置の時刻より中点が左にある出場の数 = 挿入先
-        const pointerTime = (e.clientX - prev.trackLeft) / pixelsPerSecond;
-        const others = prev.base.filter((_, i) => i !== prev.fromIndex);
-        const targetIndex = others.filter(st => ((st.startTime ?? 0) + (st.endTime ?? 0)) / 2 < pointerTime).length;
-        return { ...prev, dx, moved, targetIndex };
-      });
+      const prev = latest;
+      const { pixelsPerSecond } = live.current;
+      const dx = e.clientX - prev.startClientX;
+      const moved = prev.moved || Math.abs(dx) >= DRAG_THRESHOLD_PX;
+      // ポインター位置の時刻より中点が左にある出場の数 = 挿入先
+      const pointerTime = (e.clientX - prev.trackLeft) / pixelsPerSecond;
+      const others = prev.base.filter((_, i) => i !== prev.fromIndex);
+      const targetIndex = others.filter(st => ((st.startTime ?? 0) + (st.endTime ?? 0)) / 2 < pointerTime).length;
+      latest = { ...prev, dx, moved, targetIndex };
+      setDraggingTrackStint(latest);
     };
     const onUp = () => {
-      const d = draggingTrackStint;
+      const d = latest;
+      const { onUpdateStints, onPreviewReorder } = live.current;
       setDraggingTrackStint(null);
       onPreviewReorder?.(null);
       document.body.style.cursor = '';
@@ -697,7 +738,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       setDraggingTrackStint(null);
-      onPreviewReorder?.(null);
+      live.current.onPreviewReorder?.(null);
       document.body.style.cursor = '';
     };
     window.addEventListener('mousemove', onMove);
@@ -708,28 +749,32 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mouseup', onUp);
       window.removeEventListener('keydown', onKey);
     };
-  }, [draggingTrackStint, pixelsPerSecond, onUpdateStints, onPreviewReorder]);
+  }, [trackDragging]);
 
   // アクションのドラッグ
+  const actionDragging = draggingAction !== null;
   useEffect(() => {
-    if (!draggingAction) return;
+    if (!actionDragging || !actionDragRef.current) return;
     const DRAG_THRESHOLD_PX = 5;
+    // 最新の状態（mouseup が、再描画より先に来ても、直前の移動の結果で確定するため、ここで持つ）
+    let latest = actionDragRef.current;
     const onMove = (e: MouseEvent) => {
-      setDraggingAction(prev => {
-        if (!prev) return prev;
-        const moved = prev.moved || Math.abs(e.clientX - prev.startClientX) >= DRAG_THRESHOLD_PX;
-        const stint = prev.base.find(st => st.id === prev.stintId);
-        if (!stint) return prev;
-        const pointerTime = (stint.startTime ?? 0) + (e.clientX - prev.rowLeft) / pixelsPerSecond;
-        const others = stint.actions.filter(a => a.id !== prev.actionId && !isGroupCopy(a));
-        // ポインターの時刻より中点が左にあるアクションの数 = 挿入先（先頭の交代アクションの前には入らない。グループの複製は数えない）
-        const minIndex = stint.actions[0]?.type === 'swap' ? 1 : 0;
-        const targetIndex = Math.max(minIndex, others.filter(a => ((a.startTime ?? 0) + (a.endTime ?? 0)) / 2 < pointerTime).length);
-        return { ...prev, moved, targetIndex };
-      });
+      const prev = latest;
+      const { pixelsPerSecond } = live.current;
+      const moved = prev.moved || Math.abs(e.clientX - prev.startClientX) >= DRAG_THRESHOLD_PX;
+      const stint = prev.base.find(st => st.id === prev.stintId);
+      if (!stint) return;
+      const pointerTime = (stint.startTime ?? 0) + (e.clientX - prev.rowLeft) / pixelsPerSecond;
+      const others = stint.actions.filter(a => a.id !== prev.actionId && !isGroupCopy(a));
+      // ポインターの時刻より中点が左にあるアクションの数 = 挿入先（先頭の交代アクションの前には入らない。グループの複製は数えない）
+      const minIndex = stint.actions[0]?.type === 'swap' ? 1 : 0;
+      const targetIndex = Math.max(minIndex, others.filter(a => ((a.startTime ?? 0) + (a.endTime ?? 0)) / 2 < pointerTime).length);
+      latest = { ...prev, moved, targetIndex };
+      setDraggingAction(latest);
     };
     const onUp = () => {
-      const d = draggingAction;
+      const d = latest;
+      const { onUpdateStints, onPreviewReorder } = live.current;
       setDraggingAction(null);
       onPreviewReorder?.(null);
       if (!d.moved) return; // クリック扱い（選択・再生位置の移動）
@@ -748,7 +793,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       setDraggingAction(null);
-      onPreviewReorder?.(null);
+      live.current.onPreviewReorder?.(null);
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
@@ -758,7 +803,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       window.removeEventListener('mouseup', onUp);
       window.removeEventListener('keydown', onKey);
     };
-  }, [draggingAction, pixelsPerSecond, onUpdateStints, onPreviewReorder]);
+  }, [actionDragging]);
   const actionPreviewKey = draggingAction?.moved ? `${draggingAction.stintId}:${draggingAction.fromIndex}>${draggingAction.targetIndex}` : '';
   useEffect(() => {
     if (!draggingAction?.moved) return;
@@ -1225,7 +1270,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           className="absolute top-1 bottom-1 left-0 border-y border-slate-400/50"
                           style={{
                             width: `${segments[segments.length - 1].end * pixelsPerSecond}px`,
-                            background: `linear-gradient(to right, ${band})`,
+                            backgroundImage: `linear-gradient(to right, ${band})`,
                             backgroundClip: 'padding-box',
                           }}
                         />

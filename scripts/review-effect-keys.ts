@@ -10,6 +10,7 @@ const table = JSON.parse(fs.readFileSync('public/data/action_effect_keys.json', 
 // 手で補う一覧（actionEffectKeyOverrides.ts）で指定済みの定義は「対応済み」として扱う（'' = 書き戻さない指定は対象外のまま）
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../src/masterdata/actionEffectKeyOverrides.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import './require-gcsim-server.ts';
 for (const [id, v] of Object.entries(ACTION_EFFECT_KEY_OVERRIDES)) {
   if (!table[id]) continue;
   if (v === '') table[id].status = table[id].status === 'ok' ? 'nokey' : table[id].status;

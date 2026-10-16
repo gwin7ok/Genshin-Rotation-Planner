@@ -171,7 +171,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
               return (
                 <div
-                  key={idx}
+                  key={c.id}
                   role="button"
                   tabIndex={0}
                   onClick={() => setSelectedSlot(idx)}

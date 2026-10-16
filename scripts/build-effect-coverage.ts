@@ -100,7 +100,13 @@ for (const [gcsimKey, defs] of Object.entries(CHARACTER_LINKED_EFFECTS)) {
 const CHECK_ONLY = process.argv.includes('--check');
 let constructNames: string[] = [];
 try {
-  if (CHECK_ONLY) throw new Error('--check のため取得しない');
+  if (CHECK_ONLY) {
+    // --check は通信しない。前回の生成結果（src/data/effect_key_coverage.json）に入っている設置物名を使う
+    // （使わないと、設置物の効果が無いものとして扱われ、決定が「存在しない効果を指している」と誤って警告される）
+    const prev = JSON.parse(fs.readFileSync('src/data/effect_key_coverage.json', 'utf-8')) as { gcsimCommit?: string; effects?: Array<{ id: string; source: string }> };
+    if (prev.gcsimCommit === GCSIM_COMMIT) constructNames = (prev.effects ?? []).filter(e => e.source === 'construct').map(e => e.id.slice('construct:'.length));
+    throw new Error('--check のため取得しない');
+  }
   const res = await fetch(`https://raw.githubusercontent.com/${GCSIM_REPO}/${GCSIM_COMMIT}/pkg/core/construct/construct.go`);
   if (res.ok) {
     const text = await res.text();

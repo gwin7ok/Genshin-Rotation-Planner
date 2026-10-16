@@ -1,0 +1,74 @@
+# 検査（型・確認スクリプト）。プルリクエストと main への push で動かす。
+#
+# gcsim のサーバー・WebAssembly を使わない検査だけを動かす（高速・ネットワーク不要）。
+#   動かさないもの: check:hitlag・check:sacrificial-seed（gcsim の実行が要る）、check:release（WASM が要る。deploy.yml が動かす）、
+#                   verify:master-effects（生成物の改行コードの差が出る環境があるため。ローカルで確認する）
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: 依存関係
+        run: npm ci
+
+      - name: 型の検査
+        run: npm run lint
+
+      - name: バックアップの往復の確認
+        run: npm run check:backup
+
+      - name: 編成の中身の検査の確認
+        run: npm run check:rotation-validation
+
+      - name: マスターデータ取得の通信の確認
+        run: npm run check:fetch-util
+
+      - name: Go の算術式の評価の確認
+        run: npm run check:go-expr
+
+      - name: WASM のビルド元の確認の確認
+        run: npm run check:wasm-source
+
+      - name: グループ化の確認
+        run: npm run check:groups
+
+      - name: 効果のキーの扱いの確認
+        run: npm run check:effects
+
+      - name: 更新の通知の判定の確認
+        run: npm run check:version-notice
+
+      - name: 計算結果のスナップショットの確認
+        run: npm run check:snapshots
+
+      - name: アクションの紐付けの確認
+        run: npm run check:action-links
+
+      - name: CT のログの確認
+        run: npm run check:cooldown-log
+
+      - name: 効果キーの網羅の確認
+        run: npm run verify:effectkeys
+
+      - name: マスターの効果の網羅の確認
+        run: npm run verify:master-effects

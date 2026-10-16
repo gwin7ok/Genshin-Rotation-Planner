@@ -196,6 +196,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
     updateStintsKeepingScroll(sanitizeStintsForUpdate(next));
   };
 
+  // フォーカス（選択）中の出場の位置（無ければ -1）。出場のチップ・カードのクリック、その中のアクションの選択で、フォーカスされる
+  const focusedStintIndex = selectedAction ? stints.findIndex(s => s.id === selectedAction.stintId) : -1;
+
   const addStint = (characterId: string) => {
     const char = characterMap.get(characterId);
     if (!char) return;
@@ -207,7 +210,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       note: '',
       actions: [],
     };
-    updateStintsKeepingScroll(sanitizeStintsForUpdate([...stints, newStint]));
+    // 追加位置（アクションの追加と同じ仕様。issue #48）: フォーカス（選択）中の出場があれば、その直前。フォーカスが無いときは、末尾。
+    // 追加しても、フォーカスは変えない（連続して追加すると、追加した順に並ぶ）
+    const next = [...stints];
+    next.splice(focusedStintIndex >= 0 ? focusedStintIndex : next.length, 0, newStint);
+    updateStintsKeepingScroll(sanitizeStintsForUpdate(next));
   };
 
   // --- Action Micro Operations ---
@@ -336,6 +343,39 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   /** 「待機」（何もしないで待つアクション。issue #28）。長さの既定は 1 秒。所要時間の欄で変える */
   const WAIT_DEFAULT_SECONDS = 1;
 
+  /**
+   * アクションの追加位置（追加作業 21 / issue #26）: 選択中のアクションが、この出場の中にあれば、その直前（交代アクションなら、その直後）。
+   * 別の出場のアクションを選択中・アクションの選択なしのときは、末尾。追加しても、選択は変えない（連続して追加すると、追加した順に並ぶ）。
+   * グループの途中（前後の両方が同じグループ）に入れるときは、そのグループに入る。
+   * 追加ボタンのツールチップ（describeInsertPosition）も、この結果から説明を作る
+   */
+  const actionInsertPosition = (targetStint: Stint) => {
+    let insertAt = targetStint.actions.length;
+    let anchor: CharacterActionInstance | undefined;
+    if (selectedAction && selectedAction.stintId === targetStint.id && selectedAction.actionId) {
+      const idx = targetStint.actions.findIndex(a => a.id === selectedAction.actionId);
+      if (idx >= 0) {
+        anchor = targetStint.actions[idx];
+        insertAt = anchor.type === 'swap' ? idx + 1 : idx;
+      }
+    }
+    const before = targetStint.actions[insertAt - 1];
+    const after = targetStint.actions[insertAt];
+    const joinsGroup = !!before?.groupId && before.groupId === after?.groupId;
+    return { insertAt, anchor, joinsGroup };
+  };
+
+  /** 追加ボタンのツールチップの先頭に出す、追加位置の説明 */
+  const describeInsertPosition = (targetStint: Stint): string => {
+    const { anchor, joinsGroup } = actionInsertPosition(targetStint);
+    const where = !anchor
+      ? 'この出場の末尾に追加します（アクションを選択すると、その直前に追加します）'
+      : anchor.type === 'swap'
+        ? '出場の先頭（キャラ交代の直後）に追加します'
+        : `選択中のアクション「${anchor.name}」の直前に追加します`;
+    return `【追加位置】${where}${joinsGroup ? '\n（グループの途中なので、そのグループに入ります）' : ''}`;
+  };
+
   const addActionToStint = (stintIndex: number, actionDef: ActionDefinition | 'wait') => {
     const targetStint = stints[stintIndex];
     if (!targetStint) return;
@@ -352,18 +392,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         duration: actionDef.defaultDuration,
       };
 
-    // 追加位置（追加作業 21 / issue #26）: 選択中のアクションが、この出場の中にあれば、その直前（交代アクションなら、その直後）。
-    // 別の出場のアクションを選択中・アクションの選択なしのときは、末尾。追加しても、選択は変えない（連続して追加すると、追加した順に並ぶ）
-    let insertAt = targetStint.actions.length;
-    if (selectedAction && selectedAction.stintId === targetStint.id && selectedAction.actionId) {
-      const idx = targetStint.actions.findIndex(a => a.id === selectedAction.actionId);
-      if (idx >= 0) insertAt = targetStint.actions[idx].type === 'swap' ? idx + 1 : idx;
-    }
+    // 追加位置は、actionInsertPosition（ツールチップの説明と同じ規則）
+    const { insertAt, joinsGroup } = actionInsertPosition(targetStint);
     const actions = [...targetStint.actions];
     // グループの途中（前後の両方が同じグループ）に入れるときは、そのグループに入れる
-    const before = actions[insertAt - 1];
-    const after = actions[insertAt];
-    if (before?.groupId && before.groupId === after?.groupId) newAction.groupId = before.groupId;
+    if (joinsGroup) newAction.groupId = actions[insertAt - 1].groupId;
     actions.splice(insertAt, 0, newAction);
 
     const nextStints = [...stints];
@@ -552,7 +585,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     <button
                       onClick={() => addStint(c.id)}
                       className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
-                      title={`${c.name}の出場ブロックを末尾に追加`}
+                      title={focusedStintIndex >= 0
+                        ? `${c.name}の出場ブロックを、フォーカス中の出場（#${focusedStintIndex + 1}）の前に追加`
+                        : `${c.name}の出場ブロックを末尾に追加（出場をフォーカスすると、その前に追加します）`}
                     >
                       <span className={`w-2 h-2 rounded-full ${elemTheme.bg} border ${elemTheme.border}`}></span>
                       <span>{c.name}</span>
@@ -569,7 +604,17 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               1. Prominent Quick Reorder Pipeline (登場順序クイック並び替えバー)
           ========================================================================= */}
           {/* ガイド（凡例・ヒント）を直下に出すときは、下の余白を無くして、すき間なく並べる */}
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800" style={showGuide ? { marginBottom: 0 } : undefined}>
+          <div
+            className="bg-slate-950 p-3 rounded-xl border border-slate-800"
+            style={showGuide ? { marginBottom: 0 } : undefined}
+            onClick={(e) => {
+              // パイプラインの背景のクリック: 出場のフォーカスを解除する（追加は末尾になる。issue #48）。
+              // チップ（出場のフォーカス・ドラッグ・削除）・ボタンのクリックは、対象外
+              const t = e.target as HTMLElement;
+              if (t.closest('button, input, select, textarea, a, label, [draggable="true"]')) return;
+              onSelectAction?.('', '');
+            }}
+          >
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-amber-300 flex items-center gap-1">
@@ -1111,7 +1156,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
                           className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
-                          title={`${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
+                          title={`${describeInsertPosition(stint)}\n---------\n${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
                         >
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
@@ -1132,7 +1177,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <button
                         onClick={() => addActionToStint(stintIndex, 'wait')}
                         className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'w' }).box}`}
-                        title={`待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
+                        title={`${describeInsertPosition(stint)}\n---------\n待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
                       >
                         <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'w' }).label}`}>+待機</strong>
                       </button>

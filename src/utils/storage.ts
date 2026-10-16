@@ -1,6 +1,7 @@
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
+import { isValidParty, sanitizeSlot, sanitizeStints } from './rotationValidation';
 
 export interface ActiveRotationState {
   /** 編成（キャラの ID と編成ごとの設定） */
@@ -35,8 +36,10 @@ export function saveActiveState(state: Omit<ActiveRotationState, 'lastSavedAt'>)
  */
 export function loadActiveState(): ActiveRotationState | null {
   const parsed = readJson<Partial<ActiveRotationState>>(STORAGE_KEYS.activeRotation);
-  if (parsed && Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-    return parsed as ActiveRotationState;
+  // 壊れた保存データ（編成の枠・出場・アクションの欠け）で、画面が落ちないように、読み込みのときに検査する
+  if (parsed && isValidParty(parsed.party) && Array.isArray(parsed.stints)) {
+    const { stints } = sanitizeStints(parsed.stints);
+    return { ...parsed, stints } as ActiveRotationState;
   }
   return null;
 }
@@ -54,10 +57,11 @@ export function clearActiveState(): void {
 export function getSavedSlots(): SavedRotationSlot[] {
   const list = readJson<unknown>(STORAGE_KEYS.savedSlots);
   if (!Array.isArray(list)) return [];
-  // 旧形式（キャラを丸ごと持つ）の保存編成は読み込まない（D13）
-  return (list as SavedRotationSlot[])
-    .filter(slot => !!slot && Array.isArray(slot.party))
-    .map(slot => ({ ...slot, stints: slot.stints ?? [] }));
+  // 旧形式（キャラを丸ごと持つ）の保存編成と、壊れた保存編成は読み込まない（D13）。使えるものも、壊れた出場・アクションは除く
+  return list.flatMap(raw => {
+    const r = sanitizeSlot(raw);
+    return r ? [r.slot] : [];
+  });
 }
 
 /**

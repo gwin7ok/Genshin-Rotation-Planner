@@ -1745,12 +1745,20 @@ const StepperNumberInput: React.FC<{
   className: string;
 }> = ({ value, decimals, onCommit, className }) => {
   const [draft, setDraft] = useState<string | null>(null);
+  // この入力欄の打鍵で値が変わった（呼び出し側が、最小値などに丸めて返した）ときは、打った文字を書き換えない
+  // （所要時間の最小値 0.1 秒で、先頭の「0」が「0.10」に書き換わり、「0.5」と打てなくなるのを防ぐ）。
+  // 丸めた値は、入力欄を離れたとき（onBlur）に表示される
+  const ownChange = useRef(false);
   // ▲▼ などで外から値が変わったら、入力中の表示も追従させる
   useEffect(() => {
-    if (draft === null) return;
+    if (ownChange.current || draft === null) return;
     const parsed = parseFloat(draft);
     if (Number.isFinite(parsed) && Math.abs(parsed - value) > 1e-9) setDraft(value.toFixed(decimals));
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  // 描画のたびに、フラグを戻す（上の効果は、この効果より先に走る。値が変わらなかったときにも、次の外からの変更を妨げない）
+  useEffect(() => {
+    ownChange.current = false;
+  });
 
   return (
     <input
@@ -1764,7 +1772,10 @@ const StepperNumberInput: React.FC<{
       onChange={(e) => {
         setDraft(e.target.value);
         const parsed = parseFloat(e.target.value);
-        if (Number.isFinite(parsed)) onCommit(parsed);
+        if (Number.isFinite(parsed)) {
+          ownChange.current = true;
+          onCommit(parsed);
+        }
       }}
       onBlur={() => setDraft(null)}
       onKeyDown={(e) => {

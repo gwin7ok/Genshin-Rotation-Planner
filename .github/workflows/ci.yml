@@ -37,6 +37,9 @@ jobs:
       - name: バックアップの往復の確認
         run: npm run check:backup
 
+      - name: 編成の中身の検査の確認
+        run: npm run check:rotation-validation
+
       - name: グループ化の確認
         run: npm run check:groups
 

@@ -14,6 +14,7 @@ import { loadDatabase, saveDatabase } from './databaseService';
 import { BACKUP_SETTING_KEYS, STORAGE_KEYS, readString, removeKey, writeString } from './persistence';
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
 import { APP_VERSION } from './appVersion';
+import { addSkipped, emptySkipped, isValidParty, sanitizeSlot, sanitizeStints, totalSkipped } from './rotationValidation';
 
 export const BACKUP_FORMAT = 'genshin-rotation-planner-backup';
 export const BACKUP_VERSION = 1;
@@ -78,6 +79,8 @@ export function buildBackup(now: Date = new Date()): BackupFile {
 export interface SkippedItems {
   slots: number;
   items: number;
+  /** 使える編成の中で除外した、出場・アクション・グループ・発動バフなどの数 */
+  rotationParts: number;
 }
 
 export type ParseBackupResult = { ok: true; backup: BackupFile; skipped: SkippedItems } | { ok: false; error: string };
@@ -118,11 +121,23 @@ export function parseBackup(text: string): ParseBackupResult {
   if (!Array.isArray(b.savedSlots) || !b.database || !Array.isArray(b.database.characters) || !Array.isArray(b.database.weapons) || !Array.isArray(b.database.artifacts)) {
     return { ok: false, error: 'バックアップの内容が壊れています（保存編成・データベースの項目がありません）。' };
   }
-  if (b.currentState && (!isRecord(b.currentState) || !Array.isArray(b.currentState.party) || !Array.isArray(b.currentState.stints)
-    || !b.currentState.party.every(isRecord) || !b.currentState.stints.every(isRecord))) {
+  if (b.currentState && (!isRecord(b.currentState) || !isValidParty(b.currentState.party) || !Array.isArray(b.currentState.stints))) {
     return { ok: false, error: 'バックアップの内容が壊れています（現在の編成の形が違います）。' };
   }
-  const slots = b.savedSlots.filter(s => isRecord(s) && typeof s.id === 'string' && Array.isArray(s.party));
+  // 保存編成・現在の編成: 壊れた編成は除外し、使える編成も、壊れた出場・アクションは除く
+  let inner = emptySkipped();
+  const slots = b.savedSlots.flatMap(raw => {
+    const r = sanitizeSlot(raw);
+    if (!r) return [];
+    inner = addSkipped(inner, r.skipped);
+    return [r.slot];
+  });
+  let currentState = b.currentState ?? null;
+  if (currentState) {
+    const cleaned = sanitizeStints(currentState.stints);
+    inner = addSkipped(inner, cleaned.skipped);
+    currentState = { ...currentState, stints: cleaned.stints };
+  }
   const characters = sanitizeItems<CharacterConfig>(b.database.characters);
   const weapons = sanitizeItems<WeaponDatabaseItem>(b.database.weapons);
   const artifacts = sanitizeItems<ArtifactSetDatabaseItem>(b.database.artifacts);
@@ -131,13 +146,14 @@ export function parseBackup(text: string): ParseBackupResult {
     skipped: {
       slots: b.savedSlots.length - slots.length,
       items: characters.skipped + weapons.skipped + artifacts.skipped,
+      rotationParts: totalSkipped(inner),
     },
     backup: {
       format: BACKUP_FORMAT,
       version: b.version,
       exportedAt: String(b.exportedAt ?? ''),
       app: { version: String(b.app?.version ?? ''), gcsimVersion: String(b.app?.gcsimVersion ?? '') },
-      currentState: b.currentState ?? null,
+      currentState,
       savedSlots: slots,
       settings: Object.fromEntries(Object.entries(b.settings ?? {}).filter(([k, v]) => BACKUP_SETTING_KEYS.includes(k) && typeof v === 'string')) as Record<string, string>,
       database: { characters: characters.items, weapons: weapons.items, artifacts: artifacts.items },

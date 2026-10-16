@@ -13,6 +13,7 @@ import { SourceNotice } from './components/SourceNotice';
 import { UpdateNoticeModal } from './components/UpdateNoticeModal';
 import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
 import { setWriteFailureHandler } from './utils/persistence';
+import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
 import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
@@ -721,21 +722,23 @@ export default function App() {
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-          handleLoadCustomSlot({
-            party: parsed.party as PartyMember[],
-            stints: parsed.stints,
-            loopStartIndex: parsed.loopStartIndex,
-            loopStartTime: parsed.loopStartTime ?? 0,
-            switchDelay: parsed.switchDelay ?? switchDelay,
-            totalDuration: parsed.totalDuration,
-            reactions: parsed.reactions,
-            name: parsed.name || nameFromFileName(file.name),
-          });
-        } else {
-          showAlert('無効なローテーションJSONファイルです。');
+        const result = parseRotationPayload(JSON.parse(ev.target?.result as string));
+        if (result.ok === false) {
+          showAlert(result.error);
+          return;
         }
+        const v = result.value;
+        handleLoadCustomSlot({
+          party: v.party,
+          stints: v.stints,
+          loopStartIndex: v.loopStartIndex,
+          loopStartTime: v.loopStartTime ?? 0,
+          switchDelay: v.switchDelay ?? switchDelay,
+          totalDuration: v.totalDuration,
+          reactions: v.reactions,
+          name: v.name || nameFromFileName(file.name),
+        });
+        if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
       } catch (err) {
         showAlert('JSONファイルの読み込みに失敗しました。');
       }

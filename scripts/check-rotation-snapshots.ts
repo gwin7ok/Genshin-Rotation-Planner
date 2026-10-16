@@ -220,6 +220,9 @@ const SCENARIOS: Scenario[] = [
   S('グループ + ループ基準 1: フィッシュル E ×2 → ベネット N ×2 ×2 回', [['フィッシュル'], B], [[0, ['e', 'n'], { groupSpec: { from: 0, to: 0, repeat: 2 } }], [1, ['n', 'n', 'e'], { groupSpec: { from: 0, to: 1, repeat: 2 } }]], { loopStartIndex: 1 }),
 ];
 
+/** 並び替えの比較（文字コード順）。localeCompare は、OS のロケール（Windows と Linux の CI）で、同じ時刻の項目の並びが変わるため使わない */
+const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+
 const r3 = (v: number | undefined) => (v === undefined ? undefined : Number(v.toFixed(3)));
 
 function runScenario(sc: Scenario) {
@@ -248,13 +251,13 @@ function runScenario(sc: Scenario) {
       char: chars.find(c => c.id === s.characterId)?.name, start: r3(s.startTime), end: r3(s.endTime), modeHold: s.modeHold,
       actions: s.actions.filter((a: any) => a.type !== 'swap').map((a: any) => [a.shortName, r3(a.startTime), r3(a.duration), a.inStateWindow ? 'window' : '', a.hasCTCollision ? `CT違反${a.collisionRemainingCT}` : '', a.specialWindowWarning ?? '', a.modeHoldSeconds ? `hold${a.modeHoldSeconds}` : ''].filter(v => v !== '')),
     })),
-    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), (b.noSynergy ? 'noSynergy' : '') + (b.lane !== undefined ? `L${b.lane}` : '')]).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
-    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || String(a[1]).localeCompare(String(b[1]))),
+    bars: res.activeBuffs.filter((b: any) => !b.isCarryOver).map((b: any) => [b.name, r3(b.startTime), r3(b.endTime), (b.noSynergy ? 'noSynergy' : '') + (b.lane !== undefined ? `L${b.lane}` : '')]).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
+    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].filter((c: any) => !c.isCarryOver).map((c: any) => [chars.find(x => x.id === c.characterId)?.name, c.type, r3(c.startTime), r3(c.endTime)]).sort((a: any, b: any) => a[2] - b[2] || cmp(String(a[1]), String(b[1]))),
     ...(res.carryOverBuffs.some((x: any) => x.lane !== undefined) ? { carryTotems: res.carryOverBuffs.filter((x: any) => x.lane !== undefined).map((x: any) => [x.lane, r3(x.startTime), r3(x.endTime)]) } : {}),
     ...(res.activeBuffs.some((x: any) => x.lane !== undefined) ? { totemOverlap: res.loopedBuffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]) } : {}),
     ...(res.stockSpans.length > 0 ? { stock: res.stockSpans.map((x: any) => [x.characterId.slice(0, 14), x.lap, r3(x.startTime), r3(x.endTime), x.count]) } : {}),
     ...(res.passiveSpans.some((p: any) => p.auto) ? { autoPassives: res.passiveSpans.filter((p: any) => p.auto).map((p: any) => [p.name, r3(p.startTime), r3(p.cooldown), r3(p.cooldownEnd)]) } : {}),
-    issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => (a[1] + a[2]).localeCompare(b[1] + b[2])),
+    issues: res.validationIssues.map((v: any) => [v.severity, v.title, v.message]).sort((a: any, b: any) => cmp(a[1] + a[2], b[1] + b[2])),
     gcsim: built.config.split('\n').filter((l: string) => !/^\S+ (char|add) |^options|^target|^energy|^#/.test(l)).join('\n'),
     gcsimMessages: [...(built.errors ?? []), ...(built.warnings ?? [])].map((w: any) => (typeof w === 'string' ? w : w.message)),
   };
@@ -278,8 +281,8 @@ for (const f of presetFiles) {
       char: characters.find((c: any) => c.id === s.characterId)?.name, start: r3(s.startTime), end: r3(s.endTime), modeHold: s.modeHold,
       actions: s.actions.map((a: any) => [a.shortName, r3(a.startTime), r3(a.duration), a.hasCTCollision ? `CT違反${a.collisionRemainingCT}` : '', a.inStateWindow ? 'window' : '', a.groupCopy ? `copy${a.groupCopy}` : '', a.specialWindowWarning ?? ''].filter(v => v !== '')),
     })),
-    bars: res.activeBuffs.map(span).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
-    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].map(span).sort((a: any, b: any) => a[1] - b[1] || String(a[0]).localeCompare(String(b[0]))),
+    bars: res.activeBuffs.map(span).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
+    cooldowns: [...res.skillCooldowns, ...res.burstCooldowns].map(span).sort((a: any, b: any) => a[1] - b[1] || cmp(String(a[0]), String(b[0]))),
     passives: res.passiveSpans.map(span),
     carry: { cooldowns: res.carryOverCooldowns.map(span), buffs: res.carryOverBuffs.map(span), passives: res.carryOverPassives.map(span) },
     overlap: res.buffOverlapSegments.map((x: any) => [r3(x.start), r3(x.end), x.count]),

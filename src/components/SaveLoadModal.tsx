@@ -147,7 +147,16 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   };
 
   // Overwrite existing slot
-  const handleOverwrite = (slot: SavedRotationSlot) => {
+  const handleOverwrite = async (slot: SavedRotationSlot) => {
+    const ok = await confirm(
+      `保存編成「${slot.name}」を、いまの編集内容で上書きします。
+
+・元の内容には戻せません
+
+よろしいですか？`,
+      { okLabel: '上書きする', danger: true },
+    );
+    if (!ok) return;
     const updatedSlot: SavedRotationSlot = {
       ...slot,
       party,
@@ -183,7 +192,16 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   };
 
   // Delete slot
-  const handleDelete = (slotId: string, name: string) => {
+  const handleDelete = async (slotId: string, name: string) => {
+    const ok = await confirm(
+      `保存編成「${name}」を削除します。
+
+・元に戻せません
+
+よろしいですか？`,
+      { okLabel: '削除する', danger: true },
+    );
+    if (!ok) return;
     const updated = deleteSlot(slotId);
     setSavedSlots(updated);
     onSlotsChanged(updated);

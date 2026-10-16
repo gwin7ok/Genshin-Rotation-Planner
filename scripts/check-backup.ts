@@ -154,6 +154,111 @@ check('設定: 未知のキーは取り込まない', () => {
   assert.equal('evilKey' in r.backup.settings, false);
 });
 
+// --- 壊れたバックアップ・保存の失敗（レビュー後の修正） ---
+const pers = await server.ssrLoadModule('/src/utils/persistence.ts');
+const idSort = await server.ssrLoadModule('/src/utils/idSort.ts');
+const dbImport = await server.ssrLoadModule('/src/utils/databaseImport.ts');
+
+check('拒否ではなく除外: database に壊れた要素・ID の重複があっても読める（落ちない）', () => {
+  const dirty = {
+    ...file,
+    database: {
+      characters: [null, 5, { name: 'ID なし' }, { id: 'custom_a', name: 'A' }, { id: 'custom_a', name: 'A 重複' }, { id: 'custom_b' }],
+      weapons: [{ id: 'weapon_custom_1', name: 'W' }],
+      artifacts: [],
+    },
+    savedSlots: [null, { id: 'ok', party: [], name: 'n', updatedAt: '2026-10-01T00:00:00.000Z' }, { id: 'no_party' }],
+  };
+  const r = backup.parseBackup(JSON.stringify(dirty));
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.backup.database.characters.map((c: any) => c.id), ['custom_a']);
+  assert.equal(r.backup.database.characters[0].name, 'A');
+  assert.equal(r.skipped.items, 5);
+  assert.equal(r.skipped.slots, 2);
+  store.clear();
+  const res = backup.restoreBackup(r.backup, { restoreCurrent: false });
+  assert.equal(res.ok, true);
+  assert.equal(res.items, 2);
+});
+check('拒否: 現在の編成の party に null が混ざっているもの', () => {
+  const r = backup.parseBackup(JSON.stringify({ ...file, currentState: { party: [null], stints: [] } }));
+  assert.equal(r.ok, false);
+});
+check('規則: 更新日時が読めないときの扱い（今のものが読めない→置き換え／バックアップが読めない→今のものを残す）', () => {
+  store.clear();
+  storage.replaceSavedSlots([{ ...SLOTS[0], updatedAt: 'ふ明' }, { ...SLOTS[1] }]);
+  const r1 = backup.restoreBackup({ ...parsed.backup, savedSlots: [{ ...SLOTS[0], name: '置換される' }, { ...SLOTS[1], updatedAt: 'ふ明', name: '残される' }] }, { restoreCurrent: false });
+  assert.equal(r1.slotsUpdated, 1);
+  assert.equal(r1.slotsKept, 1);
+  const slots = storage.getSavedSlots();
+  assert.equal(slots.find((s: any) => s.id === 'slot_1').name, '置換される');
+  assert.equal(slots.find((s: any) => s.id === 'slot_2').name, '編成B');
+});
+check('保存の失敗: 復元の途中で書き込みが失敗したら、元の状態に戻し、ok: false を返す', () => {
+  store.clear();
+  const originalSlots = [slot('slot_x', '元の編成', '2026-10-01T00:00:00.000Z')];
+  store.set('genshin_rotation_saved_slots_v2', JSON.stringify(originalSlots));
+  store.set('gcsimDefHalt', 'true');
+  const ls = (globalThis as any).localStorage;
+  const realSet = ls.setItem;
+  const failures: string[] = [];
+  pers.setWriteFailureHandler((k: string) => failures.push(k));
+  // データベースの保存で容量超過にする（保存編成・設定は、すでに書き込まれたあと）
+  ls.setItem = (k: string, v: string) => {
+    if (k === 'genshin_app_db_v1') throw new Error('QuotaExceededError');
+    realSet(k, v);
+  };
+  try {
+    const r = backup.restoreBackup(parsed.backup, { restoreCurrent: true });
+    assert.equal(r.ok, false);
+    assert.match(r.error, /保存できませんでした/);
+    assert.equal(r.slotsAdded + r.items + r.settings, 0);
+  } finally {
+    ls.setItem = realSet;
+    pers.setWriteFailureHandler(null);
+  }
+  assert.deepEqual(storage.getSavedSlots(), originalSlots, '保存編成が元に戻っている');
+  assert.equal(store.get('gcsimDefHalt'), 'true', '設定が元に戻っている');
+  assert.equal(store.has('genshin_app_db_v1'), false);
+  assert.equal(storage.loadActiveState(), null);
+  assert.ok(failures.includes('genshin_app_db_v1'), '書き込みの失敗がハンドラに伝わる');
+});
+check('保存の失敗: 保存先が無い環境でもハンドラに知らせる（例外にしない）', () => {
+  let called = 0;
+  pers.setWriteFailureHandler(() => called++);
+  pers.setPersistenceBackend({ getItem: () => null, setItem: () => { throw new Error('x'); }, removeItem: () => {} });
+  try {
+    assert.equal(storage.saveActiveState({ party: [], stints: [] }), false);
+    assert.equal(storage.replaceSavedSlots([]), false);
+    assert.equal(dbService.saveDatabase(dbService.loadDatabase()), false);
+  } finally {
+    pers.setPersistenceBackend(null);
+    pers.setWriteFailureHandler(null);
+  }
+  assert.equal(called, 3);
+});
+check('保存編成: 一覧に null が混ざっていても読める', () => {
+  store.set('genshin_rotation_saved_slots_v2', JSON.stringify([null, SLOTS[0]]));
+  assert.equal(storage.getSavedSlots().length, 1);
+});
+check('並び: 武器・聖遺物の ID（利用者の作成が先・新しい順 → マスターは数値の降順）', () => {
+  const ids = ['11101', 'weapon_custom_100', '15502', 'art_custom_200', 'weapon_custom_300', 'zzz', '11201'];
+  assert.deepEqual([...ids].sort(idSort.compareIdDesc), ['weapon_custom_300', 'art_custom_200', 'weapon_custom_100', '15502', '11201', '11101', 'zzz']);
+});
+check('DB 取り込み: 形の検査・壊れた要素の除外・ID の重複', () => {
+  assert.equal(dbImport.parseDatabaseFile('x').ok, false);
+  assert.equal(dbImport.parseDatabaseFile(JSON.stringify({ characters: [], weapons: [] })).ok, false);
+  const r = dbImport.parseDatabaseFile(JSON.stringify({
+    characters: [{ id: 'a', name: 'A' }, { id: 'a', name: 'A2' }, null, { id: 3 }],
+    weapons: [{ id: 'w', name: 'W' }],
+    artifacts: [],
+  }));
+  assert.equal(r.ok, true);
+  assert.equal(r.skipped, 3);
+  assert.deepEqual(r.counts, { characters: 1, weapons: 1, artifacts: 0 });
+  assert.equal(r.db.version, 0);
+});
+
 // --- 保存層（persistence.ts。D175） ---
 const persistence = await server.ssrLoadModule('/src/utils/persistence.ts');
 const settings = await server.ssrLoadModule('/src/utils/appSettings.ts');

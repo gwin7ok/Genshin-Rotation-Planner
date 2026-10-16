@@ -2,7 +2,41 @@
  * ローテーションの JSON ファイルの名前と、読み込んだときの編成名（issue #23）。
  * ファイル名: アプリ名 + 日時 + 編成名（保存編成の名前。無ければ、パーティメンバーの名前を「・」でつないだもの）
  */
+import type { PartyMember, SavedReactions, Stint } from '../types/genshin';
+
 export const APP_FILE_PREFIX = '原神ローテーションプランナー';
+
+/** 書き出し・コピーする編成の内容 */
+export interface RotationExportSource {
+  name: string;
+  description?: string;
+  party: PartyMember[];
+  stints: Stint[];
+  loopStartIndex?: number;
+  loopStartTime?: number;
+  totalDuration?: number;
+  switchDelay?: number;
+  reactions?: SavedReactions;
+}
+
+/**
+ * 編成の JSON（ファイル書き出し・クリップボードへのコピーで、同じ内容にする）。
+ * 読み込み（rotationValidation.ts の parseRotationPayload）が読む項目を、すべて入れる。
+ */
+export function buildRotationExport(src: RotationExportSource, now: Date = new Date()) {
+  return {
+    name: src.name,
+    description: src.description,
+    party: src.party,
+    stints: src.stints,
+    loopStartIndex: src.loopStartIndex,
+    loopStartTime: src.loopStartTime ?? 0,
+    totalDuration: src.totalDuration,
+    switchDelay: src.switchDelay,
+    reactions: src.reactions,
+    exportedAt: now.toISOString(),
+  };
+}
 
 const pad = (n: number) => String(n).padStart(2, '0');
 

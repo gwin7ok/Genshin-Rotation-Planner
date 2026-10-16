@@ -37,7 +37,7 @@ import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
 import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
-import { rotationFileName, nameFromFileName } from './utils/rotationFile';
+import { rotationFileName, nameFromFileName, buildRotationExport } from './utils/rotationFile';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
@@ -696,7 +696,7 @@ export default function App() {
   const handleExportJson = () => {
     // 編成名: 読み込み中の保存編成の名前。未保存なら「メンバー名（時間）」。ファイル名にも使う（issue #23）
     const name = buildDefaultSlotName(characters, totalDuration, activeSlot);
-    const data = {
+    const data = buildRotationExport({
       name,
       party,
       stints,
@@ -704,8 +704,8 @@ export default function App() {
       loopStartTime,
       totalDuration,
       switchDelay,
-      exportDate: new Date().toISOString(),
-    };
+      reactions: packReactions(gcsimReactions),
+    });
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

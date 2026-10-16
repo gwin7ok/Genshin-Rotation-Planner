@@ -414,6 +414,7 @@ export default function App() {
 
   // 現在のメイン画面の状態を、読み込み中の保存編成（スロット）へ上書き保存
   const [overwriteSaved, setOverwriteSaved] = useState<boolean>(false);
+  // ヘッダーの「上書き保存」: 読み込み中の編成を、よく上書きする操作なので、確認は出さない（編成管理の「上書」は、確認する）
   const handleOverwriteActiveSlot = () => {
     const slot = savedSlots.find(s => s.id === activeSlotId);
     if (!slot) return;

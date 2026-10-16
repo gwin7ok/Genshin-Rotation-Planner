@@ -180,6 +180,9 @@ function skillHitFrames(actionId: string, constellation: number, holdSeconds: nu
   return hits;
 }
 
+/** 0 以上 length 未満に収めた添字（負の値も、末尾から数える） */
+const wrapIndex = (i: number, length: number): number => ((i % length) + length) % length;
+
 export function calculateRotation(
   characters: CharacterConfig[],
   inputStints: Stint[],
@@ -1509,7 +1512,7 @@ export function calculateRotation(
         if (act.type === 'burst') extendSpecial(skillWindow, sp.extendOnBurst ?? 0);
         else if (act.type === 'normal') {
           const steps = durationHasHitlag(act) ? hitlagOf(sp)?.normal ?? [] : [];
-          extendSpecial(skillWindow, steps.length ? steps[(normalStreak - 1 + steps.length * 8) % steps.length] ?? 0 : 0);
+          extendSpecial(skillWindow, steps.length ? steps[wrapIndex(normalStreak - 1, steps.length)] ?? 0 : 0);
         }
         else if (act.type === 'charged' && pool) {
           extendSpecial(skillWindow, durationHasHitlag(act) ? hitlagOf(sp)?.charged ?? 0 : 0);
@@ -1542,7 +1545,7 @@ export function calculateRotation(
       if (act.type === 'normal' && skillWindow && reducePool?.reducePerHit && actionStartTime <= skillWindow.end && skillWindow.reductions < (reducePool.maxReductions ?? 15)) {
         // 連続した N の何段目か（上で normalStreak を進めたあと）。ヒット数は段ごと
         const stepHits = reducePool.hitsPerNormal ?? [1];
-        const hits = Math.min(stepHits[(normalStreak - 1 + stepHits.length * 8) % stepHits.length] ?? 1, (reducePool.maxReductions ?? 15) - skillWindow.reductions);
+        const hits = Math.min(stepHits[wrapIndex(normalStreak - 1, stepHits.length)] ?? 1, (reducePool.maxReductions ?? 15) - skillWindow.reductions);
         skillWindow.reductions += hits;
         // ヘクセレイ：秘儀（ヘクセレイのキャラが 2 人以上で、本人もヘクセレイ）のとき、1 ヒットあたりの短縮が増える
         const perHit = reducePool.reducePerHitHexerei !== undefined && isHexerei(char) && hexereiCount(characters) >= 2

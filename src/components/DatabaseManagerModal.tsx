@@ -1,5 +1,5 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
   Sparkles, Check, AlertTriangle, Shield, Zap, Sword, Flame, Layers, Clock, 
@@ -69,6 +69,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // どの生成を実行中か（回転するアイコンを、押したボタンの種類だけにする。issue #2）
   const [syncingKind, setSyncingKind] = useState<'character' | 'weapon' | 'artifact' | null>(null);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
+  // 通知は、新しい通知が出たら前のタイマーを止める（前のタイマーが、新しい通知を早く消さないように）
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showStatus = (msg: string | null, clearAfterMs?: number) => {
+    if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    statusTimerRef.current = null;
+    setSyncSuccessMsg(msg);
+    if (msg !== null && clearAfterMs) statusTimerRef.current = setTimeout(() => setSyncSuccessMsg(null), clearAfterMs);
+  };
+  useEffect(() => () => { if (statusTimerRef.current) clearTimeout(statusTimerRef.current); }, []);
   // 「最新データ（キャラ・武器・聖遺物）をオンライン生成」（3 種を順に再生成）の、実行中の段階と、失敗の表示
   const [bulkStep, setBulkStep] = useState<{ index: number; label: string } | null>(null);
   const [bulkError, setBulkError] = useState<string | null>(null);
@@ -109,15 +118,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleSyncCharacters = async () => {
     setIsSyncing(true);
     setSyncingKind('character');
-    setSyncSuccessMsg(null);
+    showStatus(null);
     setCharSyncError(null);
     setCharSyncReport(null);
     try {
       const { db, report } = await syncCharactersMasterOnline(database, setCharSyncProgress);
       onUpdateDatabase(db);
       setCharSyncReport(report);
-      setSyncSuccessMsg(`⚡ genshin-db ＋ gcsim から ${report.totalCharacters} キャラクターのマスターデータを生成しました (モーションフレームあり: ${report.charactersWithFrames})`);
-      setTimeout(() => setSyncSuccessMsg(null), 5000);
+      showStatus(`⚡ genshin-db ＋ gcsim から ${report.totalCharacters} キャラクターのマスターデータを生成しました (モーションフレームあり: ${report.charactersWithFrames})`, 5000);
     } catch (e) {
       setCharSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -131,15 +139,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleSyncWeapons = async () => {
     setIsSyncing(true);
     setSyncingKind('weapon');
-    setSyncSuccessMsg(null);
+    showStatus(null);
     setWeaponSyncError(null);
     setWeaponSyncReport(null);
     try {
       const { db, report } = await syncWeaponsMasterOnline(database, setWeaponSyncProgress);
       onUpdateDatabase(db);
       setWeaponSyncReport(report);
-      setSyncSuccessMsg(`⚔️ genshin-db から最新の武器 ${report.totalWeapons} 種類をオンライン生成しました (発動バフ解析: ${report.weaponsWithBuffs} 件)`);
-      setTimeout(() => setSyncSuccessMsg(null), 5000);
+      showStatus(`⚔️ genshin-db から最新の武器 ${report.totalWeapons} 種類をオンライン生成しました (発動バフ解析: ${report.weaponsWithBuffs} 件)`, 5000);
     } catch (e) {
       setWeaponSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -153,15 +160,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleSyncArtifacts = async () => {
     setIsSyncing(true);
     setSyncingKind('artifact');
-    setSyncSuccessMsg(null);
+    showStatus(null);
     setArtifactSyncError(null);
     setArtifactSyncReport(null);
     try {
       const { db, report } = await syncArtifactsMasterOnline(database, setArtifactSyncProgress);
       onUpdateDatabase(db);
       setArtifactSyncReport(report);
-      setSyncSuccessMsg(`🏺 genshin-db から最新の聖遺物 ${report.totalArtifacts} セットをオンライン生成しました (発動バフ解析: ${report.artifactsWithBuffs} 件)`);
-      setTimeout(() => setSyncSuccessMsg(null), 5000);
+      showStatus(`🏺 genshin-db から最新の聖遺物 ${report.totalArtifacts} セットをオンライン生成しました (発動バフ解析: ${report.artifactsWithBuffs} 件)`, 5000);
     } catch (e) {
       setArtifactSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -175,7 +181,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // 生成のたびに、結果を DB に反映・保存する（途中で失敗しても、成功した分は残る）。ロック中・カスタムは上書きしない。
   const handleSyncAll = async () => {
     setIsSyncing(true);
-    setSyncSuccessMsg(null);
+    showStatus(null);
     setBulkError(null);
     setCharSyncError(null);
     setCharSyncReport(null);
@@ -213,8 +219,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       onUpdateDatabase(db);
       setArtifactSyncReport(a.report);
 
-      setSyncSuccessMsg(`🔄 最新データをオンライン生成しました（キャラクター ${c.report.totalCharacters} 件・武器 ${w.report.totalWeapons} 種類・聖遺物 ${a.report.totalArtifacts} セット）`);
-      setTimeout(() => setSyncSuccessMsg(null), 6000);
+      showStatus(`🔄 最新データをオンライン生成しました（キャラクター ${c.report.totalCharacters} 件・武器 ${w.report.totalWeapons} 種類・聖遺物 ${a.report.totalArtifacts} セット）`, 6000);
     } catch (e) {
       setBulkError(`${step}の生成に失敗しました（${step}より前の生成結果は反映・保存済みです）: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
@@ -238,8 +243,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const reset = resetDatabaseToMaster();
         onUpdateDatabase(reset);
         setConfirmDialog(null);
-        setSyncSuccessMsg('データベースを初期マスターデータにリセットしました。');
-        setTimeout(() => setSyncSuccessMsg(null), 4000);
+        showStatus('データベースを初期マスターデータにリセットしました。', 4000);
       }
     });
   };
@@ -262,10 +266,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const showMsg = (msg: string) => {
-        setSyncSuccessMsg(msg);
-        setTimeout(() => setSyncSuccessMsg(null), 4000);
-      };
+      const showMsg = (msg: string) => showStatus(msg, 4000);
       const parsed = parseDatabaseFile(String(event.target?.result ?? ''));
       if (!parsed.ok) {
         showMsg(`エラー: ${(parsed as { ok: false; error: string }).error}`);
@@ -325,8 +326,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteCharacterFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg(`キャラクター「${name}」を削除しました。`);
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus(`キャラクター「${name}」を削除しました。`, 3000);
       }
     });
   };
@@ -341,8 +341,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteAllCharactersFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg('全キャラクターを一括削除しました。');
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus('全キャラクターを一括削除しました。', 3000);
       }
     });
   };
@@ -357,8 +356,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteAllWeaponsFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg('全武器を一括削除しました。');
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus('全武器を一括削除しました。', 3000);
       }
     });
   };
@@ -373,8 +371,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteAllArtifactsFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg('全聖遺物を一括削除しました。');
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus('全聖遺物を一括削除しました。', 3000);
       }
     });
   };
@@ -390,8 +387,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const empty = clearAllDatabaseData(database);
         onUpdateDatabase(empty);
         setConfirmDialog(null);
-        setSyncSuccessMsg('データベースの全データを完全クリアしました。');
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus('データベースの全データを完全クリアしました。', 3000);
       }
     });
   };
@@ -406,8 +402,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteWeaponFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg(`武器「${name}」を削除しました。`);
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus(`武器「${name}」を削除しました。`, 3000);
       }
     });
   };
@@ -422,8 +417,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         const updated = deleteArtifactFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        setSyncSuccessMsg(`聖遺物「${name}」を削除しました。`);
-        setTimeout(() => setSyncSuccessMsg(null), 3000);
+        showStatus(`聖遺物「${name}」を削除しました。`, 3000);
       }
     });
   };

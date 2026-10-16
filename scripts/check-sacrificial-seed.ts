@@ -11,6 +11,7 @@
  */
 import fs from 'node:fs';
 import { createServer } from 'vite';
+import './require-gcsim-server.ts';
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
 const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');

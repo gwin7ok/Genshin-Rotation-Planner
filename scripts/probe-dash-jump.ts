@@ -10,6 +10,7 @@
  */
 import fs from 'node:fs';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import './require-gcsim-server.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const masterPath = 'src/data/characters_master_data.json';

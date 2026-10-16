@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import { HOLD_FRAMES_ACTIONS, mapAction } from '../src/utils/gcsim/actionMapping.ts';
 import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import './require-gcsim-server.ts';
 
 const SERVER = GCSIM_SERVER_URL;
 /** 記録する長さ（フレーム）。祭礼の内部 CT（最長 16 秒）とスキルの CT（最長 30 秒台）を覆う */

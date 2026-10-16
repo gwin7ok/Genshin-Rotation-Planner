@@ -29,6 +29,6 @@ export function rotationFileName(name: string, date: Date = new Date()): string 
 /** ファイル名から、編成名を推定する（`<アプリ名>_<日時>_<編成名>.json` の形のとき。それ以外は、拡張子を除いた名前） */
 export function nameFromFileName(fileName: string): string {
   const base = fileName.replace(/\.json$/i, '');
-  const m = base.match(new RegExp(`^${APP_FILE_PREFIX}_\d{8}-\d{6}_(.+)$`));
+  const m = base.match(new RegExp(`^${APP_FILE_PREFIX}_\\d{8}-\\d{6}_(.+)$`));
   return (m ? m[1] : base).replace(/_/g, ' ');
 }

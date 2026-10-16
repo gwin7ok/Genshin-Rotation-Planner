@@ -24,6 +24,7 @@ import { useDialogs } from './DialogProvider';
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
+import { describeSkipped, parseRotationPayload, totalSkipped } from '../utils/rotationValidation';
 import { isEmptySlotCharacter } from '../data/characters';
 import { rotationFileName, nameFromFileName, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
@@ -276,22 +277,24 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-          onLoadSlot({
-            party: parsed.party,
-            stints: parsed.stints,
-            loopStartIndex: parsed.loopStartIndex,
-            loopStartTime: parsed.loopStartTime ?? 0,
-            name: parsed.name || nameFromFileName(file.name),
-            totalDuration: parsed.totalDuration,
-            switchDelay: parsed.switchDelay,
-            reactions: parsed.reactions,
-          });
-          onClose();
-        } else {
-          showAlert('無効なローテーションJSONファイルです。');
+        const result = parseRotationPayload(JSON.parse(ev.target?.result as string));
+        if (result.ok === false) {
+          showAlert(result.error);
+          return;
         }
+        const v = result.value;
+        onLoadSlot({
+          party: v.party,
+          stints: v.stints,
+          loopStartIndex: v.loopStartIndex,
+          loopStartTime: v.loopStartTime ?? 0,
+          name: v.name || nameFromFileName(file.name),
+          totalDuration: v.totalDuration,
+          switchDelay: v.switchDelay,
+          reactions: v.reactions,
+        });
+        onClose();
+        if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
       } catch (err) {
         showAlert('JSONファイルの読み込みに失敗しました。');
       }
@@ -327,14 +330,14 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
         return;
       }
       const s = summarizeBackup(parsed.backup);
-      const skippedCount = parsed.skipped.slots + parsed.skipped.items;
+      const skippedCount = parsed.skipped.slots + parsed.skipped.items + parsed.skipped.rotationParts;
       const lines = [
         'このバックアップから、次の内容を復元します。',
         `・保存編成 ${s.slots} 件（同じ ID は、バックアップのほうが新しいときだけ置き換え）`,
         `・設定 ${s.settings} 件`,
         `・作成・ロックしたキャラ ${s.characters} 件・武器 ${s.weapons} 件・聖遺物 ${s.artifacts} 件`,
         s.hasCurrentState ? '・現在の編成（今の編集内容は、バックアップのものに置き換わります）' : '・現在の編成は含まれていません',
-        ...(skippedCount > 0 ? [`※ 壊れていた項目 ${skippedCount} 件（保存編成 ${parsed.skipped.slots} 件・キャラ/武器/聖遺物 ${parsed.skipped.items} 件）は、読み飛ばします`] : []),
+        ...(skippedCount > 0 ? [`※ 壊れていた項目 ${skippedCount} 件（保存編成 ${parsed.skipped.slots} 件・キャラ/武器/聖遺物 ${parsed.skipped.items} 件・編成の中の出場やアクションなど ${parsed.skipped.rotationParts} 件）は、読み飛ばします`] : []),
         '',
         '復元後、画面を再読み込みします。よろしいですか？',
       ];
@@ -352,22 +355,24 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // Import JSON from text area
   const handleImportText = () => {
     try {
-      const parsed = JSON.parse(importJsonText.trim());
-      if (Array.isArray(parsed.party) && Array.isArray(parsed.stints)) {
-        onLoadSlot({
-          party: parsed.party,
-          stints: parsed.stints,
-          loopStartIndex: parsed.loopStartIndex,
-          loopStartTime: parsed.loopStartTime ?? 0,
-          name: parsed.name,
-          totalDuration: parsed.totalDuration,
-          switchDelay: parsed.switchDelay,
-          reactions: parsed.reactions,
-        });
-        onClose();
-      } else {
-        showAlert('無効なローテーションJSON形式です。');
+      const result = parseRotationPayload(JSON.parse(importJsonText.trim()));
+      if (result.ok === false) {
+        showAlert(result.error);
+        return;
       }
+      const v = result.value;
+      onLoadSlot({
+        party: v.party,
+        stints: v.stints,
+        loopStartIndex: v.loopStartIndex,
+        loopStartTime: v.loopStartTime ?? 0,
+        name: v.name,
+        totalDuration: v.totalDuration,
+        switchDelay: v.switchDelay,
+        reactions: v.reactions,
+      });
+      onClose();
+      if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
     } catch (err) {
       showAlert('JSON構文が正しくありません。');
     }

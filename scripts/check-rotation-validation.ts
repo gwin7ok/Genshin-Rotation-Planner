@@ -153,6 +153,31 @@ check('ファイル名: 書き出したファイル名から、編成名を戻�
   assert.equal(rotationFile.nameFromFileName(rotationFile.rotationFileName('雷電 ナショナル')), '雷電 ナショナル');
   assert.equal(rotationFile.nameFromFileName('勝手な名前.json'), '勝手な名前');
 });
+check('書き出し・コピー: 内容が同じで、読み込みの検査が読む項目（交代遅延・ループ・反応など）を、すべて含む（往復で変わらない）', () => {
+  const src = {
+    name: '往復テスト',
+    description: 'メモ',
+    party: [member('c1')],
+    stints: [stint('s1', [act('a1')])],
+    loopStartIndex: 1,
+    loopStartTime: 2.5,
+    totalDuration: 12.3,
+    switchDelay: 0.35,
+    reactions: { gcsimVersion: 'v0', rows: [] },
+  };
+  const out = rotationFile.buildRotationExport(src, new Date('2026-10-17T00:00:00Z'));
+  assert.equal(out.switchDelay, 0.35);
+  assert.equal(out.exportedAt, '2026-10-17T00:00:00.000Z');
+  const r = v.parseRotationPayload(JSON.parse(JSON.stringify(out)));
+  assert.equal(r.ok, true);
+  assert.deepEqual({ ...r.value }, { ...src, reactions: src.reactions });
+  assert.equal(v.totalSkipped(r.skipped), 0);
+  // 項目の無い編成（交代遅延・反応なし）も、読み込める（loopStartTime は 0 になる）
+  const bare = v.parseRotationPayload(JSON.parse(JSON.stringify(rotationFile.buildRotationExport({ name: 'n', party: [member('c1')], stints: [] }))));
+  assert.equal(bare.ok, true);
+  assert.equal(bare.value.switchDelay, undefined);
+  assert.equal(bare.value.loopStartTime, 0);
+});
 check('復旧用の書き出し: 保存先の文字列を、解釈せずに、そのまま出す（壊れた JSON でも失敗しない）', () => {
   store.clear();
   store.set('genshin_rotation_current_state_v2', '{これは壊れた JSON');

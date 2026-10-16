@@ -26,7 +26,7 @@ import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
 import { describeSkipped, parseRotationPayload, totalSkipped } from '../utils/rotationValidation';
 import { isEmptySlotCharacter } from '../data/characters';
-import { rotationFileName, nameFromFileName, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
+import { rotationFileName, nameFromFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
 import { getSavedSlots, saveSlot, deleteSlot, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 
@@ -207,29 +207,20 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   };
 
   // Export slot or current rotation as JSON file
+  /** 書き出し・コピーする内容（保存編成、または現在の編成）。ファイルとコピーで、同じ内容にする */
+  const exportPayload = (slot?: SavedRotationSlot) => buildRotationExport(slot ?? {
+    name: newSlotName || '原神ローテーション',
+    party,
+    stints,
+    loopStartIndex,
+    loopStartTime,
+    totalDuration,
+    switchDelay,
+    reactions,
+  });
+
   const handleExportJsonFile = (slot?: SavedRotationSlot) => {
-    const payload = slot ? {
-      name: slot.name,
-      description: slot.description,
-      party: slot.party,
-      stints: slot.stints,
-      loopStartIndex: slot.loopStartIndex,
-      loopStartTime: slot.loopStartTime ?? 0,
-      totalDuration: slot.totalDuration,
-      switchDelay: slot.switchDelay,
-      reactions: slot.reactions,
-      exportedAt: new Date().toISOString(),
-    } : {
-      name: newSlotName || '原神ローテーション',
-      party,
-      stints,
-      loopStartIndex,
-      loopStartTime,
-      totalDuration,
-      switchDelay,
-      reactions,
-      exportedAt: new Date().toISOString(),
-    };
+    const payload = exportPayload(slot);
 
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -241,29 +232,16 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   };
 
   // Copy JSON to clipboard
-  const handleCopyJson = (slot?: SavedRotationSlot) => {
-    const payload = slot ? {
-      name: slot.name,
-      description: slot.description,
-      party: slot.party,
-      stints: slot.stints,
-      loopStartIndex: slot.loopStartIndex,
-      loopStartTime: slot.loopStartTime ?? 0,
-      totalDuration: slot.totalDuration,
-      reactions: slot.reactions,
-      exportedAt: new Date().toISOString(),
-    } : {
-      name: newSlotName || '原神ローテーション',
-      party,
-      stints,
-      loopStartIndex,
-      loopStartTime,
-      totalDuration,
-      reactions,
-      exportedAt: new Date().toISOString(),
-    };
-
-    navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+  const handleCopyJson = async (slot?: SavedRotationSlot) => {
+    const payload = exportPayload(slot);
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+    } catch (e) {
+      // 許可がない・安全でない接続などで、コピーできないとき（コピーできたように見せない）
+      showAlert(`クリップボードにコピーできませんでした: ${e instanceof Error ? e.message : String(e)}
+JSONファイル書き出しを使ってください。`);
+      return;
+    }
     const targetId = slot ? slot.id : 'current';
     setCopiedId(targetId);
     setTimeout(() => setCopiedId(null), 2000);

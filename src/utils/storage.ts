@@ -64,10 +64,20 @@ export function getSavedSlots(): SavedRotationSlot[] {
   });
 }
 
+/** 保存編成を保存・削除できなかったときに、利用者に出す文（容量超過・ブラウザの保存が無効のとき） */
+export const SLOT_WRITE_FAILED_MESSAGE =
+  'ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。内容は変更していません。「JSONファイル書き出し」で、控えを保存してください。';
+
+/** 保存編成の書き込みの結果。ok が false のとき、保存できていない（slots は、保存されている内容） */
+export interface SlotWriteResult {
+  ok: boolean;
+  slots: SavedRotationSlot[];
+}
+
 /**
- * 保存編成を、追加または更新する
+ * 保存編成を、追加または更新する（成否つき。容量超過・保存が無効のときは、ok: false）
  */
-export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
+export function trySaveSlot(slot: SavedRotationSlot): SlotWriteResult {
   const current = getSavedSlots();
   const existingIdx = current.findIndex(s => s.id === slot.id);
   const stamped = { ...slot, updatedAt: new Date().toISOString() };
@@ -78,7 +88,14 @@ export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
   } else {
     updated = [stamped, ...current];
   }
-  return writeJson(STORAGE_KEYS.savedSlots, updated) ? updated : getSavedSlots();
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: updated } : { ok: false, slots: getSavedSlots() };
+}
+
+/**
+ * 保存編成を、追加または更新する（成否が要らない呼び出し用。失敗は、書き込みの失敗の通知〔persistence.ts〕に出る）
+ */
+export function saveSlot(slot: SavedRotationSlot): SavedRotationSlot[] {
+  return trySaveSlot(slot).slots;
 }
 
 /**
@@ -89,11 +106,18 @@ export function replaceSavedSlots(slots: SavedRotationSlot[]): boolean {
 }
 
 /**
+ * 保存編成を削除する（成否つき）
+ */
+export function tryDeleteSlot(slotId: string): SlotWriteResult {
+  const updated = getSavedSlots().filter(s => s.id !== slotId);
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: updated } : { ok: false, slots: getSavedSlots() };
+}
+
+/**
  * 保存編成を削除する
  */
 export function deleteSlot(slotId: string): SavedRotationSlot[] {
-  const updated = getSavedSlots().filter(s => s.id !== slotId);
-  return writeJson(STORAGE_KEYS.savedSlots, updated) ? updated : getSavedSlots();
+  return tryDeleteSlot(slotId).slots;
 }
 
 /**

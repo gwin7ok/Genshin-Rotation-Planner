@@ -36,7 +36,7 @@ import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
-import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, saveSlot, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
+import { loadActiveState, saveActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
 import { rotationFileName, nameFromFileName, buildRotationExport } from './utils/rotationFile';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
@@ -368,8 +368,15 @@ export default function App() {
         switchDelay: slot.switchDelay ?? 0.50,
         reactions: packReactions(restoredReactions),
       };
-      setSavedSlots(saveSlot(imported));
-      setActiveSlotId(imported.id);
+      const saved = trySaveSlot(imported);
+      if (saved.ok) {
+        setSavedSlots(saved.slots);
+        setActiveSlotId(imported.id);
+      } else {
+        // 編成は読み込めたが、保存編成には登録できなかった（読み込み中の編成にはしない）
+        showAlert(`編成は読み込みましたが、保存編成には登録できませんでした。
+${SLOT_WRITE_FAILED_MESSAGE}`);
+      }
       return;
     }
     setActiveSlotId(slot.slotId ?? null);
@@ -418,7 +425,7 @@ export default function App() {
   const handleOverwriteActiveSlot = () => {
     const slot = savedSlots.find(s => s.id === activeSlotId);
     if (!slot) return;
-    const updated = saveSlot({
+    const saved = trySaveSlot({
       ...slot,
       party,
       stints,
@@ -428,7 +435,11 @@ export default function App() {
       switchDelay,
       reactions: packReactions(gcsimReactions),
     });
-    setSavedSlots(updated);
+    if (!saved.ok) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    setSavedSlots(saved.slots);
     setStaleReactionsVersion(null);
     setOverwriteSaved(true);
     setTimeout(() => setOverwriteSaved(false), 2000);
@@ -452,7 +463,13 @@ export default function App() {
       switchDelay,
       reactions: packReactions(gcsimReactions),
     };
-    setSavedSlots(saveSlot(newSlot));
+    const saved = trySaveSlot(newSlot);
+    if (!saved.ok) {
+      // 保存できていないので、保存編成を読み込み中にはしない。ダイアログは開いたままにする（名前を変えて、やり直せる）
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    setSavedSlots(saved.slots);
     setStaleReactionsVersion(null);
     setActiveSlotId(newSlot.id);
     setIsSaveAsOpen(false);

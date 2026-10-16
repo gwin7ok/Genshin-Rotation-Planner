@@ -471,6 +471,65 @@ check('規則: src/ の localStorage の直接呼び出しは persistence.ts だ
   assert.deepEqual(offenders, [], `persistence.ts を通してください: ${offenders.join(', ')}`);
 });
 
+// --- 自動保存の待ち（debounce）---
+{
+  const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
+  const ACTIVE = 'genshin_rotation_current_state_v2';
+  const st = (id: string) => ({ party: [member('10000025-hydro')], stints: [{ id, characterId: '10000025-hydro', note: '', actions: [] }], loopStartIndex: 0 });
+  const stored = () => (store.has(ACTIVE) ? JSON.parse(store.get(ACTIVE)!).stints[0].id : null);
+  const run = async (name: string, fn: () => Promise<void>) => {
+    store.clear();
+    await fn();
+    results.push(name);
+    console.log(`✓ ${name}`);
+  };
+
+  await run('自動保存の待ち: 連続した変更は、待った後に 1 回だけ、最後の内容で書く', async () => {
+    let writes = 0;
+    const ls = (globalThis as any).localStorage;
+    const realSet = ls.setItem;
+    ls.setItem = (k: string, v: string) => { if (k === ACTIVE) writes++; realSet(k, v); };
+    try {
+      for (const id of ['a', 'b', 'c']) storage.saveActiveStateDebounced(st(id));
+      assert.equal(stored(), null, '待っている間は、まだ書かない');
+      await wait(storage.ACTIVE_STATE_SAVE_DELAY_MS + 150);
+      assert.equal(stored(), 'c');
+      assert.equal(writes, 1);
+    } finally {
+      ls.setItem = realSet;
+    }
+  });
+  await run('自動保存の待ち: flush で、待たずに書く（画面を閉じる前）。待っていなければ、何もしない', async () => {
+    storage.saveActiveStateDebounced(st('f1'));
+    storage.flushActiveState();
+    assert.equal(stored(), 'f1');
+    storage.flushActiveState();
+    assert.equal(stored(), 'f1');
+  });
+  await run('自動保存の待ち: 保存先を読む前（読み込み・バックアップ作成）に、先に書く', async () => {
+    storage.saveActiveStateDebounced(st('r1'));
+    assert.equal(storage.loadActiveState().stints[0].id, 'r1');
+    storage.saveActiveStateDebounced(st('r2'));
+    assert.equal(backup.buildBackup().currentState.stints[0].id, 'r2');
+  });
+  await run('自動保存の待ち: 保存を消したあとに、待っていた古い内容を書き戻さない', async () => {
+    storage.saveActiveStateDebounced(st('x1'));
+    storage.clearActiveState();
+    await wait(storage.ACTIVE_STATE_SAVE_DELAY_MS + 150);
+    assert.equal(stored(), null);
+  });
+  await run('自動保存の待ち: 復元の前に、待っている保存を先に書く（巻き戻しの対象に含める）', async () => {
+    storage.saveActiveStateDebounced(st('b1'));
+    const file = backup.parseBackup(JSON.stringify(backup.buildBackup()));
+    assert.equal(file.ok, true);
+    storage.saveActiveStateDebounced(st('b2'));
+    const r = backup.restoreBackup(file.backup);
+    assert.equal(r.ok, true);
+    await wait(storage.ACTIVE_STATE_SAVE_DELAY_MS + 150);
+    assert.equal(stored(), 'b1', '復元した内容が、待っていた保存で、上書きされない');
+  });
+}
+
 await server.close();
 console.log(`\n✓ バックアップの往復: ${results.length} 項目すべて合格`);
 process.exit(0);

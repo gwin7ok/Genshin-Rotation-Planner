@@ -9,7 +9,7 @@
  */
 import type { SavedRotationSlot, CharacterConfig } from '../types/genshin';
 import type { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
-import { loadActiveState, saveActiveState, getSavedSlots, replaceSavedSlots, type ActiveRotationState } from './storage';
+import { loadActiveState, saveActiveState, flushActiveState, getSavedSlots, replaceSavedSlots, type ActiveRotationState } from './storage';
 import { loadDatabase, saveDatabase } from './databaseService';
 import { BACKUP_SETTING_KEYS, STORAGE_KEYS, readString, removeKey, writeString } from './persistence';
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
@@ -254,6 +254,7 @@ export function restoreBackup(b: BackupFile, options: { restoreCurrent: boolean 
   }
 
   // --- 書き込む前の内容を退避してから、順に書く ---
+  flushActiveState(); // 待っている自動保存を先に書く（退避・巻き戻しの対象に、最新の内容を含める）
   const keys = [STORAGE_KEYS.savedSlots, STORAGE_KEYS.database, STORAGE_KEYS.activeRotation, ...Object.keys(b.settings)];
   const before = new Map<string, string | null>(keys.map(k => [k, readString(k)]));
   const rollback = () => {

@@ -41,7 +41,7 @@ import { actionDelayOf } from '../utils/actionDelay';
 import { actionTone, actionOrderRank } from '../utils/actionTone';
 import { actionDescription } from '../utils/actionDescription';
 import { DEVICE_KEYS, readString, writeString } from '../utils/persistence';
-import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup } from '../utils/actionGroups';
+import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup, type GroupRun } from '../utils/actionGroups';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 
@@ -93,6 +93,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   // Ctrl+クリックで複数選択したアクション（グループ化の対象）と、ドラッグ中のグループ
   const [multiSel, setMultiSel] = useState<{ stintId: string; ids: string[] } | null>(null);
   const [draggedGroup, setDraggedGroup] = useState<{ stintIndex: number; groupId: string } | null>(null);
+  // フォーカス中のグループ（グループの枠の、アクション要素ではない部分をクリックすると、フォーカスされる）。
+  // 有効なのは、その出場がフォーカスされていて、アクションが選択されていないとき（アクションの選択・別の出場のフォーカスで、自然に外れる）
+  const [focusedGroup, setFocusedGroup] = useState<{ stintId: string; groupId: string } | null>(null);
+  const activeFocusedGroup = focusedGroup && selectedAction && selectedAction.stintId === focusedGroup.stintId && !selectedAction.actionId ? focusedGroup : null;
   const [draggedStintIndex, setDraggedStintIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [draggedAction, setDraggedAction] = useState<{ stintIndex: number; actionIndex: number } | null>(null);
@@ -275,17 +279,29 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         continue;
       }
       const members = stint.actions.slice(run.start, run.end + 1);
+      const isGroupFocused = activeFocusedGroup?.stintId === stint.id && activeFocusedGroup.groupId === run.id;
       nodes.push(
         <div
           key={`group_${run.id}`}
           draggable
           onDragStart={() => setDraggedGroup({ stintIndex, groupId: run.id })}
           onDragEnd={() => setDraggedGroup(null)}
-          title="グループ（枠の背景をドラッグすると、グループごと移動します。中のアクションをドラッグすると、グループの中で並び替わります）"
-          className={`flex flex-wrap items-center gap-2 p-1.5 rounded-xl border border-dashed border-fuchsia-400/70 bg-fuchsia-500/5 cursor-grab ${draggedGroup?.groupId === run.id ? 'opacity-60' : ''}`}
+          onClick={(e) => {
+            // 枠の、アクション要素・ボタン・入力欄ではない部分のクリック: グループをフォーカスする（アクションの選択は外れる）
+            const t = e.target as HTMLElement;
+            if (t.closest('button, input, select, textarea, a, label, [id^="action-item-"]')) return;
+            e.stopPropagation();
+            setMultiSel(null);
+            onSelectAction?.(stint.id, '');
+            setFocusedGroup({ stintId: stint.id, groupId: run.id });
+          }}
+          title="グループ（枠の背景をクリックすると、グループをフォーカスします。ドラッグすると、グループごと移動します。中のアクションをドラッグすると、グループの中で並び替わります）"
+          className={`flex flex-wrap items-center gap-2 p-1.5 rounded-xl border border-dashed bg-fuchsia-500/5 cursor-grab ${
+            isGroupFocused ? 'border-yellow-400 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)]' : 'border-fuchsia-400/70'
+          } ${draggedGroup?.groupId === run.id ? 'opacity-60' : ''}`}
         >
           {/* グループ × [回数] 回 [▲▼] [解除]（秒数の入力欄と同じ形） */}
-          <div className="flex items-center gap-1 text-[11px] font-mono text-fuchsia-200 select-none" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center gap-1 text-[11px] font-mono text-fuchsia-200 select-none">
             <span className="font-sans font-bold text-[10px]">グループ</span>
             <span>×</span>
             <div
@@ -344,36 +360,43 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const WAIT_DEFAULT_SECONDS = 1;
 
   /**
-   * アクションの追加位置（追加作業 21 / issue #26）: 選択中のアクションが、この出場の中にあれば、その直前（交代アクションなら、その直後）。
-   * 別の出場のアクションを選択中・アクションの選択なしのときは、末尾。追加しても、選択は変えない（連続して追加すると、追加した順に並ぶ）。
-   * グループの途中（前後の両方が同じグループ）に入れるときは、そのグループに入る。
+   * アクションの追加位置（追加作業 21 / issue #26）:
+   *   - この出場のアクションを選択中: その直前（交代アクションなら、その直後）。選択中のアクションがグループの中にあれば、グループの中の、そのアクションの直前（追加したアクションは、グループに入る）
+   *   - この出場のグループをフォーカス中（アクションは選択していない）: グループの外の、グループの直前
+   *   - それ以外（選択なし・別の出場を選択中）: 末尾
+   * 追加しても、選択・フォーカスは変えない（連続して追加すると、追加した順に並ぶ）。
    * 追加ボタンのツールチップ（describeInsertPosition）も、この結果から説明を作る
    */
   const actionInsertPosition = (targetStint: Stint) => {
     let insertAt = targetStint.actions.length;
     let anchor: CharacterActionInstance | undefined;
+    let joinGroupId: string | undefined;
+    let groupRun: GroupRun | undefined;
     if (selectedAction && selectedAction.stintId === targetStint.id && selectedAction.actionId) {
       const idx = targetStint.actions.findIndex(a => a.id === selectedAction.actionId);
       if (idx >= 0) {
         anchor = targetStint.actions[idx];
         insertAt = anchor.type === 'swap' ? idx + 1 : idx;
+        if (anchor.type !== 'swap' && anchor.groupId) joinGroupId = anchor.groupId;
       }
+    } else if (activeFocusedGroup && activeFocusedGroup.stintId === targetStint.id) {
+      groupRun = groupRuns(targetStint).find(r => r.id === activeFocusedGroup.groupId);
+      if (groupRun) insertAt = groupRun.start;
     }
-    const before = targetStint.actions[insertAt - 1];
-    const after = targetStint.actions[insertAt];
-    const joinsGroup = !!before?.groupId && before.groupId === after?.groupId;
-    return { insertAt, anchor, joinsGroup };
+    return { insertAt, anchor, joinGroupId, groupRun };
   };
 
   /** 追加ボタンのツールチップの先頭に出す、追加位置の説明 */
   const describeInsertPosition = (targetStint: Stint): string => {
-    const { anchor, joinsGroup } = actionInsertPosition(targetStint);
-    const where = !anchor
-      ? 'この出場の末尾に追加します（アクションを選択すると、その直前に追加します）'
-      : anchor.type === 'swap'
-        ? '出場の先頭（キャラ交代の直後）に追加します'
-        : `選択中のアクション「${anchor.name}」の直前に追加します`;
-    return `【追加位置】${where}${joinsGroup ? '\n（グループの途中なので、そのグループに入ります）' : ''}`;
+    const { anchor, joinGroupId, groupRun } = actionInsertPosition(targetStint);
+    const where = groupRun
+      ? `フォーカス中のグループ（× ${groupRun.repeat} 回）の直前（グループの外）に追加します`
+      : !anchor
+        ? 'この出場の末尾に追加します（アクションまたはグループを選択すると、その直前に追加します）'
+        : anchor.type === 'swap'
+          ? '出場の先頭（キャラ交代の直後）に追加します'
+          : `選択中のアクション「${anchor.name}」の直前に追加します`;
+    return `【追加位置】${where}${joinGroupId ? '\n（選択中のアクションがグループの中なので、追加したアクションもグループに入ります）' : ''}`;
   };
 
   const addActionToStint = (stintIndex: number, actionDef: ActionDefinition | 'wait') => {
@@ -393,10 +416,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       };
 
     // 追加位置は、actionInsertPosition（ツールチップの説明と同じ規則）
-    const { insertAt, joinsGroup } = actionInsertPosition(targetStint);
+    const { insertAt, joinGroupId } = actionInsertPosition(targetStint);
     const actions = [...targetStint.actions];
-    // グループの途中（前後の両方が同じグループ）に入れるときは、そのグループに入れる
-    if (joinsGroup) newAction.groupId = actions[insertAt - 1].groupId;
+    // 選択中のアクションがグループの中なら、追加したアクションも、そのグループに入れる
+    if (joinGroupId) newAction.groupId = joinGroupId;
     actions.splice(insertAt, 0, newAction);
 
     const nextStints = [...stints];
@@ -649,6 +672,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 const handleChipClick = () => {
                   // 出場トラックだけをフォーカスする（先頭のアクションは選択しない。カードの背景のクリックと同じ状態）
                   const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+                  setFocusedGroup(null);
                   onSelectAction?.(stint.id, '');
                   if (targetAct && onSeek) {
                     onSeek(targetAct.startTime ?? 0);
@@ -940,6 +964,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   // ボタン・入力・説明つきの要素・アクション自身のクリックは、対象外
                   const t = e.target as HTMLElement;
                   if (t.closest('button, input, select, textarea, a, label, [title], [id^="action-item-"]')) return;
+                  setFocusedGroup(null);
                   onSelectAction?.(stint.id, '');
                 }}
                 draggable
@@ -989,6 +1014,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         onClick={() => {
                           // 出場トラックだけをフォーカスする（先頭のアクションは選択しない。パイプラインのチップと同じ）
                           const targetAct = stint.actions.find(a => a.type !== 'swap') || stint.actions[0];
+                          setFocusedGroup(null);
                           onSelectAction?.(stint.id, '');
                           if (targetAct && onSeek) {
                             onSeek(targetAct.startTime ?? 0);
@@ -1150,7 +1176,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <div className="pt-2.5">
                   {/* アクション追加ボタン（出場の見出しの直下。アクションが増えて折り返しても、位置が動かない。追加作業 27 / issue #35） */}
                     <div className="flex flex-wrap items-center gap-1">
-                      <span className="h-7 w-14 shrink-0 mr-2.5 inline-flex items-center justify-center text-xs font-extrabold text-red-100 bg-red-600/60 border border-red-400 rounded shadow-sm shadow-red-900/50" title="アクションを追加します（選択中のアクションの直前に入ります）">+ 追加</span>
+                      <span className="h-7 w-14 shrink-0 mr-2.5 inline-flex items-center justify-center text-xs font-extrabold text-red-100 bg-red-600/60 border border-red-400 rounded shadow-sm shadow-red-900/50" title="アクションを追加します（選択中のアクション・グループの直前に入ります。各ボタンのツールチップに、追加位置を表示します）">+ 追加</span>
                       {[...CharacterModel.fromConfig(char).actions].sort((a, b) => actionOrderRank(a) - actionOrderRank(b)).map(actionDef => (
                         <button
                           key={actionDef.id}

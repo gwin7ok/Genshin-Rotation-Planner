@@ -6,6 +6,19 @@
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-10-17
+
+### 修正
+- 保存まわりを堅くした: 壊れたデータ（JSON の取り込み・バックアップの復元）を除外して読み込む。復元に失敗したときは元の状態に戻す。ブラウザの保存容量が足りずに書き込めないときは、警告を出し、「JSONファイル書き出し」を案内する。
+- 保存スロットの上書き・削除の前に、確認ダイアログを出すようにした。
+- 編集内容の自動保存を、まとめて書き込む方式にした（閉じる・切り替えの直前にも確実に保存）。
+- ガントチャートのドラッグ操作、編成の並び替え、入力欄の下書き、アクション・出場の追加位置の動作を直した。
+- gcsim のソースの算術式（整数の割り算の切り捨てと、小数の扱い）を Go と同じにした。
+- 通知の表示、JSON の書き出し（クリップボードに失敗したときの警告を含む）を直した。
+
+### 変更
+- 内部の整理: 所要時間の計算（calculateRotation）をモジュールに分割し、DB 管理画面も分割した。結果が変わらないことを確かめる検査（スナップショット）と、CI を追加した。
+
 ## [1.3.1] - 2026-10-16
 
 ### 追加
@@ -127,7 +140,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.1.3...v1.2.0

@@ -17,6 +17,8 @@ import type {
 } from '../src/masterdata/masterEffectCoverage.ts';
 
 const CHECK_ONLY = process.argv.includes('--check');
+/** 並び替えの比較（文字コード順）。localeCompare は、OS のロケール（Windows と Linux の CI）で並びが変わり、生成物の検査が環境で食い違うため使わない */
+const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 const readJson = (path: string) => JSON.parse(fs.readFileSync(path, 'utf8'));
 const catalog = readJson('public/data/gcsim_key_catalog.json');
 const characters: any[] = readJson('src/data/characters_master_data.json');
@@ -247,10 +249,10 @@ const coverage: MasterEffectCoverage = {
   schemaVersion: 1,
   gcsimCommit: catalog.gcsimCommit,
   generatedAt: catalog.generatedAt,
-  effects: [...effectsById.values()].sort((a, b) => a.category.localeCompare(b.category) || a.id.localeCompare(b.id)),
-  targets: [...targetsById.values()].sort((a, b) => a.type.localeCompare(b.type) || a.ownerName.localeCompare(b.ownerName) || a.name.localeCompare(b.name)),
-  links: links.sort((a, b) => a.effectId.localeCompare(b.effectId) || a.targetId.localeCompare(b.targetId) || a.role.localeCompare(b.role)),
-  unlinked: unlinked.sort((a, b) => a.side.localeCompare(b.side) || a.state.localeCompare(b.state) || a.id.localeCompare(b.id)),
+  effects: [...effectsById.values()].sort((a, b) => cmp(a.category, b.category) || cmp(a.id, b.id)),
+  targets: [...targetsById.values()].sort((a, b) => cmp(a.type, b.type) || cmp(a.ownerName, b.ownerName) || cmp(a.name, b.name)),
+  links: links.sort((a, b) => cmp(a.effectId, b.effectId) || cmp(a.targetId, b.targetId) || cmp(a.role, b.role)),
+  unlinked: unlinked.sort((a, b) => cmp(a.side, b.side) || cmp(a.state, b.state) || cmp(a.id, b.id)),
 };
 
 const jsonPath = 'src/data/master_effect_coverage.json';
@@ -267,7 +269,7 @@ const targetState = (row: MasterEffectTargetRow) => targetDisposition.get(row.id
 const effectCounts = counts(coverage.effects, effectState);
 const targetCounts = counts(coverage.targets, targetState);
 const groupCounts = (items: any[], group: (item: any) => string, state: (item: any) => string) =>
-  Object.entries(counts(items, item => `${group(item)} / ${state(item)}`)).sort(([a], [b]) => a.localeCompare(b));
+  Object.entries(counts(items, item => `${group(item)} / ${state(item)}`)).sort(([a], [b]) => cmp(a, b));
 const unreviewedRows = coverage.unlinked.filter(row => row.state === 'unreviewed');
 const pendingRows = coverage.unlinked.filter(row => row.state === 'pending');
 const md = [
@@ -277,7 +279,7 @@ const md = [
   '「未確認」はマスター側の対象またはgcsimキー側の効果について、対応付け・理由付き対象外・保留のいずれも無い状態。', '',
   `## gcsimキー（${coverage.effects.length}件）`, '', '| 分類 / 状態 | 件数 |', '|---|---:|', ...groupCounts(coverage.effects, e => e.category, effectState).map(([label, count]) => `| ${label} | ${count} |`), '',
   `## マスター対象（${coverage.targets.length}件）`, '', '| 種別 / 状態 | 件数 |', '|---|---:|', ...groupCounts(coverage.targets, t => t.type, targetState).map(([label, count]) => `| ${label} | ${count} |`), '',
-  `## links（${coverage.links.length}件）`, '', '| 関係 | 件数 |', '|---|---:|', ...Object.entries(counts(coverage.links, row => row.role)).sort(([a], [b]) => a.localeCompare(b)).map(([label, count]) => `| ${label} | ${count} |`), '',
+  `## links（${coverage.links.length}件）`, '', '| 関係 | 件数 |', '|---|---:|', ...Object.entries(counts(coverage.links, row => row.role)).sort(([a], [b]) => cmp(a, b)).map(([label, count]) => `| ${label} | ${count} |`), '',
   `## 保留（${pendingRows.length}件）`, '', ...(pendingRows.length ? pendingRows.map(row => `- ${row.side} ${row.id}: ${row.note}`) : ['なし']), '',
   `## 未確認（${unreviewedRows.length}件）`, '', ...(unreviewedRows.length ? unreviewedRows.map(row => `- ${row.side} ${row.id}: ${row.note}`) : ['なし']), '',
   `整合性: 孤立リンク ${errors.length}件${errors.length ? `（${errors.join(' / ')}）` : ''}`, '',

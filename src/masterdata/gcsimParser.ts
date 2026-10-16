@@ -70,6 +70,7 @@ type ArrayLookup = (ident: string) => unknown[] | undefined;
 function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): number | undefined {
   const src = expr.trim();
   let pos = 0;
+  const floatExpr = /float64|\d\.\d/.test(src);
 
   const skipWs = () => { while (pos < src.length && /\s/.test(src[pos])) pos++; };
 
@@ -135,7 +136,10 @@ function evalExpr(expr: string, lookup: Lookup, lookupArray: ArrayLookup): numbe
       pos++;
       const right = parsePrimary();
       if (left === undefined || right === undefined) return undefined;
-      left = op === '*' ? left * right : left / right;
+      if (op === '*') left = left * right;
+      else if (right === 0) return undefined;
+      // Go は、整数同士の割り算を切り捨てる（7 / 2 = 3）。小数・float64 を含む式は、そのまま割る
+      else left = !floatExpr && Number.isInteger(left) && Number.isInteger(right) ? Math.trunc(left / right) : left / right;
     }
   };
 

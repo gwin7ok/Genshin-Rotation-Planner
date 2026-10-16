@@ -18,8 +18,10 @@ import { buildKeyMapSection, keyMapLookup, type GcsimDmData, type KeyMapSection 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
+import { fetchJson } from './fetchUtil.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
-const GCSIM_BRANCH = CONFIG_GCSIM_COMMIT; // gcsim.config.json のコミットに固定（リリースにない最新の変更を取り込まない）
+// 参照先は、ブランチ名ではなく、gcsim.config.json のコミット（ハッシュ）に固定する（リリースにない最新の変更を取り込まない）
+const GCSIM_REF = CONFIG_GCSIM_COMMIT;
 const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/data/weapon.dm.json';
 const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/data/artifact.dm.json';
 
@@ -125,24 +127,6 @@ const WEAPON_TYPE_MAP: Record<string, WeaponType> = {
 // 取得ヘルパー
 // ---------------------------------------------------------------------------
 
-async function fetchWithRetry(url: string, init?: RequestInit, retries = 2): Promise<Response> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const res = await fetch(url, init);
-      if (res.ok) return res;
-      lastError = new Error(`HTTP ${res.status} ${res.statusText}: ${url}`);
-      if (res.status === 403 || res.status === 404) break;
-    } catch (e) {
-      lastError = e;
-    }
-    await new Promise(r => setTimeout(r, 600 * (attempt + 1)));
-  }
-  throw lastError instanceof Error ? lastError : new Error(String(lastError));
-}
-
-const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> =>
-  (await fetchWithRetry(url, init)).json() as Promise<T>;
 
 /**
  * 最新の武器データを genshin-db API からオンライン取得・解析して生成する
@@ -547,7 +531,7 @@ async function fetchGcsimEquipmentKeys(): Promise<{
   artifactDm: GcsimDmData;
 }> {
   const { sha } = await fetchJson<{ sha: string }>(
-    `https://api.github.com/repos/${GCSIM_REPO}/commits/${GCSIM_BRANCH}`,
+    `https://api.github.com/repos/${GCSIM_REPO}/commits/${GCSIM_REF}`,
     { headers: { Accept: 'application/vnd.github+json' } },
   );
   const rawBase = `https://raw.githubusercontent.com/${GCSIM_REPO}/${sha}/`;

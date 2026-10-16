@@ -40,6 +40,15 @@ jobs:
       - name: 編成の中身の検査の確認
         run: npm run check:rotation-validation
 
+      - name: マスターデータ取得の通信の確認
+        run: npm run check:fetch-util
+
+      - name: Go の算術式の評価の確認
+        run: npm run check:go-expr
+
+      - name: WASM のビルド元の確認の確認
+        run: npm run check:wasm-source
+
       - name: グループ化の確認
         run: npm run check:groups
 
@@ -60,3 +69,6 @@ jobs:
 
       - name: 効果キーの網羅の確認
         run: npm run verify:effectkeys
+
+      - name: マスターの効果の網羅の確認
+        run: npm run verify:master-effects

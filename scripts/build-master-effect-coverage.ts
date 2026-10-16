@@ -288,7 +288,8 @@ if (!CHECK_ONLY) {
   fs.writeFileSync(mdPath, md.join('\n'));
 } else {
   for (const [path, expected] of [[jsonPath, generatedJson], [mdPath, md.join('\n')]] as const) {
-    if (!fs.existsSync(path) || fs.readFileSync(path, 'utf8') !== expected) errors.push(`${path} が生成結果と異なる`);
+    // 改行は比べない（Windows のクローンは、Git の設定（autocrlf）で CRLF になる。生成物は LF）
+    if (!fs.existsSync(path) || fs.readFileSync(path, 'utf8').replace(/\r\n/g, '\n') !== expected) errors.push(`${path} が生成結果と異なる`);
   }
 }
 

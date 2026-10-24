@@ -1,28 +1,28 @@
-name: "[不具合報告] 不具合・おかしな動き"
-description: 動作がおかしい、計算結果が合わない、画面が崩れる、など
-title: "[不具合報告] "
-labels: ["不具合報告"]
+name: "[Bug Report / 不具合報告] 不具合・おかしな動き"
+description: "Report unexpected behavior, incorrect results, or display issues / 動作がおかしい、計算結果が合わない、画面が崩れる、など"
+title: "[🐛Bug Report / 不具合報告] "
+labels: ["🐛Bug Report / 不具合報告"]
 body:
   - type: textarea
     id: what
     attributes:
-      label: 起きたこと
-      description: どうなりましたか。期待していた動きと、実際の動きを書いてください
+      label: "What happened / 起きたこと"
+      description: "Describe what you expected and what actually happened / 期待していた動きと、実際の動きを書いてください"
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: 再現の手順（任意）
-      description: どの操作をしたら起きるかを、順番に書いてください
+      label: "Steps to reproduce (optional) / 再現の手順（任意）"
+      description: "List the actions that cause the issue, in order / どの操作をしたら起きるかを、順番に書いてください"
   - type: input
     id: version
     attributes:
-      label: アプリのバージョン（任意）
-      description: 画面の下部に「バージョン v○.○.○」と表示されています
+      label: "App version (optional) / アプリのバージョン（任意）"
+      description: 'Shown at the bottom of the screen as "Version vX.X.X" / 画面の下部に「バージョン v○.○.○」と表示されています'
   - type: textarea
     id: json
     attributes:
-      label: 編成の JSON（任意）
-      description: 編成管理の「JSON 書き出し」の内容を貼ると、再現しやすくなります
+      label: "Party JSON (optional) / 編成の JSON（任意）"
+      description: 'Paste the contents of "Export JSON" in Party Management to help reproduce the issue / 編成管理の「JSON 書き出し」の内容を貼ると、再現しやすくなります'
       render: json

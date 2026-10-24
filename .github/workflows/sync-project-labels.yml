@@ -39,9 +39,9 @@ jobs:
       PROJECT_NUMBER: "2"
       # Status の名前 → ラベル（ここを書き換えると、対応を変えられる）
       STATUS_WORKING: "In Progress"
-      LABEL_WORKING: "作業中"
+      LABEL_WORKING: "⏳In progress / 作業中"
       STATUS_HOLD: "On Hold"
-      LABEL_HOLD: "保留"
+      LABEL_HOLD: "📦on hold / 保留"
     steps:
       - name: トークンの確認
         run: |

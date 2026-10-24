@@ -1,4 +1,4 @@
-name: "[Bug Report / 不具合報告] 不具合・おかしな動き"
+name: "[Bug Report / 不具合報告] Unexpected behavior / 不具合・おかしな動き"
 description: "Report unexpected behavior, incorrect results, or display issues / 動作がおかしい、計算結果が合わない、画面が崩れる、など"
 title: "[🐛Bug Report / 不具合報告] "
 labels: ["🐛Bug Report / 不具合報告"]

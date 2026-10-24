@@ -1,4 +1,4 @@
-name: "[Development / 開発] 開発用（管理者用）"
+name: "[Development / 開発] Developer use (administrators) / 開発用（管理者用）"
 description: "Developer task memo. Users should choose Feature Request or Bug Report / 開発者用のタスク・メモです。利用者の方は、「要望」か「不具合報告」を選んでください"
 title: "[🛠️Development / 開発] "
 labels: ["🛠️Development / 開発"]

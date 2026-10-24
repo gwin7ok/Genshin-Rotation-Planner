@@ -1,21 +1,21 @@
-name: "[質問] 使い方への質問"
-description: 使い方が分からない、この表示の意味は何か、など
-title: "[質問] "
-labels: ["質問"]
+name: "[Question / 質問] 使い方への質問"
+description: "Ask about how to use the app or what a display means / 使い方が分からない、この表示の意味は何か、など"
+title: "[💬question / 質問] "
+labels: ["💬question / 質問"]
 body:
   - type: markdown
     attributes:
       value: |
-        画面の右上の「使い方」ボタンにも、基本の流れ・画面の見方・操作の説明があります。先にご確認いただくと、早く解決することがあります。
+        The "How to use" button in the upper-right corner explains the basic workflow, screens, and controls. Checking it first may help resolve your question sooner. / 画面の右上の「使い方」ボタンにも、基本の流れ・画面の見方・操作の説明があります。先にご確認いただくと、早く解決することがあります。
   - type: textarea
     id: what
     attributes:
-      label: 質問の内容
-      description: 何をしたいか、どこで分からなくなったかを書いてください
+      label: "Your question / 質問の内容"
+      description: "Tell us what you are trying to do and where you got stuck / 何をしたいか、どこで分からなくなったかを書いてください"
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: アプリのバージョン（任意）
-      description: 画面の下部に「バージョン v○.○.○」と表示されています
+      label: "App version (optional) / アプリのバージョン（任意）"
+      description: 'Shown at the bottom of the screen as "Version vX.X.X" / 画面の下部に「バージョン v○.○.○」と表示されています'

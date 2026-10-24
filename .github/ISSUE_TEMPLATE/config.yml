@@ -1,2 +1,2 @@
-# Issue の作り方の設定。白紙の Issue は禁止して、必ず、下のテンプレートのどれかを選んでもらう。
+# Issue template settings. Require users to choose one of the templates below / Issue の作り方の設定。白紙の Issue は禁止して、必ず、下のテンプレートのどれかを選んでもらう。
 blank_issues_enabled: false

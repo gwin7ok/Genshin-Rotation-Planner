@@ -1,11 +1,11 @@
-name: "[開発] 開発用（管理者用）"
-description: 開発者用のタスク・メモです。利用者の方は、「要望」か「不具合報告」を選んでください
-title: "[開発] "
-labels: ["開発"]
+name: "[Development / 開発] 開発用（管理者用）"
+description: "Developer task memo. Users should choose Feature Request or Bug Report / 開発者用のタスク・メモです。利用者の方は、「要望」か「不具合報告」を選んでください"
+title: "[🛠️Development / 開発] "
+labels: ["🛠️Development / 開発"]
 body:
   - type: textarea
     id: detail
     attributes:
-      label: 内容
+      label: "Details / 内容"
     validations:
       required: true

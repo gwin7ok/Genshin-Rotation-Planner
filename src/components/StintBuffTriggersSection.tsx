@@ -22,9 +22,11 @@ const paletteTitle = (source: string, def: TriggerableBuffDefinition) =>
     cooldown: def.cooldown ? `${def.cooldown}s` : t('noneShort'),
   });
 
-/** 名前に効果時間が含まれていなければ、名前の後ろに効果時間を足す */
-const withDuration = (def: TriggerableBuffDefinition) =>
-  def.duration && !def.name.includes(`${def.duration}秒`) && !def.name.includes(`${def.duration}s`) ? ` (${def.duration}s)` : '';
+/** 表示する名前（表示の言語）に効果時間が含まれていなければ、名前の後ろに効果時間を足す */
+const withDuration = (def: TriggerableBuffDefinition) => {
+  const shown = loc(def, 'name');
+  return def.duration && !shown.includes(`${def.duration}秒`) && !shown.includes(`${def.duration}s`) ? ` (${def.duration}s)` : '';
+};
 
 /** 「gcsim 対象外」のバッジ（gcsim の計算結果では置かれず、手動で置いたときだけ表示される。D41-3・D53） */
 const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ def }) =>

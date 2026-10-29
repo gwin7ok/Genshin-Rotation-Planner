@@ -10,6 +10,7 @@ import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { currentLanguage, t } from '../../i18n';
 import { charName, actionName, loc } from '../../i18n/loc';
+import { actionKindOf } from '../characterActions';
 
 /** CT の計算: 共鳴・書き戻した値・領域による短縮・CT の開始位置 */
 export function computeCooldown(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -260,6 +261,7 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
     const span: ActiveBuffSpan = {
       id: `mode_${actionDef.id}_${act.id}`,
       buffId: `mode_${actionDef.id}`,
+      actionKind: actionKindOf(actionDef.type),
       name: `${charName(char)} ${loc(md, 'label')}${md.barNote ? (currentLanguage === 'en' ? ` (${loc(md, 'barNote')})` : `（${md.barNote}）`) : ''}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',
@@ -271,7 +273,7 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
       // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
       ...(md.noSynergy ? { noSynergy: true } : {}),
       // スキルの後の受付のバー（ガントチャートで、スキルストックとスキル CT の間の行に出す）
-      ...(md.description.includes('受付') ? { windowBar: true, standardDuration: Number((md.durationFrames / 60).toFixed(3)) } : {}),
+      ...(md.isWindow ? { windowBar: true, standardDuration: Number((md.durationFrames / 60).toFixed(3)) } : {}),
     };
     // バーを出さないモード（受付型）は、効果バーが兼ねる
     if (!md.noBar) activeBuffs.push(span);

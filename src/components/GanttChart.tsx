@@ -55,42 +55,11 @@ export interface BuffRowInfo {
 }
 
 export function getBuffClassification(buff: ActiveBuffSpan) {
-  const bId = (buff.buffId || '').toLowerCase();
-  const name = (buff.name || '').toLowerCase();
-  // 名前での判定は、日本語の名前のときだけ（英語の名前は、ほぼすべてに 'e' を含むため）。ID・種類での判定に置き換えるのはフェーズ 3（docs/i18n/plan.md 4.3）
-  const byName = currentLanguage === 'ja';
-
-  const isSkill = 
-    bId.includes('skill') || 
-    bId.includes('guoba') || 
-    bId.includes('pepper') || 
-    bId.includes('ring') || 
-    bId.includes('tri_karma') || 
-    bId.includes('salon') || 
-    bId.includes('paramita') ||
-    bId.includes('mirror') ||
-    (byName && (
-      name.includes('スキル') || 
-      name.includes('グゥオパァー') || 
-      name.includes('唐辛子') || 
-      name.includes('e')));
-
-  const isBurst = 
-    bId.includes('burst') || 
-    bId.includes('pyronado') || 
-    bId.includes('raincutter') || 
-    bId.includes('fanfare') || 
-    bId.includes('shrine') || 
-    bId.includes('eye_buff') || 
-    (byName && (
-      name.includes('爆発') || 
-      name.includes('旋火輪') || 
-      name.includes('q')));
-
-  if (isSkill) {
+  // スキル・爆発から出たバーは、バーを作るときに付けた種類（actionKind）で判定する（名前では判定しない。表示の言語で名前が変わるため。docs/i18n 3-5）
+  if (buff.actionKind === 'skill') {
     return { rank: 1, tag: '[E]' };
   }
-  if (isBurst) {
+  if (buff.actionKind === 'burst') {
     return { rank: 2, tag: '[Q]' };
   }
   if (buff.sourceType === 'weapon') {

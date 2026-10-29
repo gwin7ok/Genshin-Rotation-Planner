@@ -3,7 +3,7 @@ import { isRevelation } from '../../masterdata/revelationCharacters';
 import { TotemTracker, totemTiming } from '../totemTracker';
 import { actionDelayOf } from '../actionDelay';
 import { ActiveBuffSpan } from '../../types/genshin';
-import { buildActionEffectSpan } from '../characterActions';
+import { actionKindOf, buildActionEffectSpan } from '../characterActions';
 import { CharacterModel } from '../../models/CharacterModel';
 import { wrapIndex } from './frameTables';
 import { cutBar } from './modeHelpers';
@@ -149,6 +149,7 @@ export function buildEffectBars(state: RotationState, sc: StintContext, ac: Acti
       activeBuffs.push({
         id: `field_ct_${act.id}`,
         buffId: `field_ct_${actionDef.id}`,
+        actionKind: actionKindOf(actionDef.type),
         name: `${charName(char)} ${loc(cr, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'constellation',
@@ -178,6 +179,7 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
       activeBuffs.push({
         id: `effect_extra_${char.id}_${act.id}_pre${exIdx}`,
         buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
+        actionKind: actionKindOf(act.type),
         name: `${charName(char)} ${act.shortName}: ${loc(ex, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'talent',
@@ -198,6 +200,7 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
     activeBuffs.push({
       id: `effect_extra_${char.id}_${act.id}_${exIdx}`,
       buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
+      actionKind: actionKindOf(act.type),
       name: `${char.name} ${act.shortName}: ${ex.name}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',

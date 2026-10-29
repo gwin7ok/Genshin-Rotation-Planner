@@ -8106,6 +8106,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -17276,6 +17277,7 @@
           "noHold": true,
           "noBar": true,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -33212,6 +33214,7 @@
           "noHold": true,
           "noBar": true,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -39854,6 +39857,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -39925,6 +39929,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -46411,6 +46416,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -46500,6 +46506,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -47692,6 +47699,7 @@
           "holdByDefault": false,
           "noHold": true,
           "noSynergy": true,
+          "isWindow": true,
           "barNote": "落下攻撃",
           "keepEffectBar": true,
           "special": {
@@ -47752,6 +47760,7 @@
           "holdByDefault": false,
           "noHold": true,
           "noSynergy": true,
+          "isWindow": true,
           "barNote": "落下攻撃",
           "keepEffectBar": true,
           "special": {
@@ -50914,6 +50923,7 @@
           "holdByDefault": false,
           "noHold": true,
           "noSynergy": true,
+          "isWindow": true,
           "barNote": "嵐槍",
           "keepEffectBar": true,
           "special": {
@@ -52152,6 +52162,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "followUps": {
               "e": {
@@ -55204,6 +55215,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -56017,6 +56029,7 @@
           "noHold": true,
           "noBar": false,
           "noSynergy": true,
+          "isWindow": true,
           "repress": {
             "frames": [
               {
@@ -57834,6 +57847,7 @@
           "holdByDefault": false,
           "noHold": true,
           "noSynergy": true,
+          "isWindow": true,
           "barNote": "スキル",
           "keepEffectBar": true,
           "special": {
@@ -57956,6 +57970,7 @@
           "holdByDefault": false,
           "noHold": true,
           "noSynergy": true,
+          "isWindow": true,
           "barNote": "爆発",
           "keepEffectBar": true,
           "special": {

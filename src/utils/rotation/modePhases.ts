@@ -6,6 +6,7 @@ import { isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, mode
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { actionName, charName, loc } from '../../i18n/loc';
+import { actionKindOf } from '../characterActions';
 import { t } from '../../i18n';
 
 /** モードの判定: このアクションが、続いているモードを終わらせる・もう一度使う・ブロックされる・新しいモードを開くか */
@@ -168,6 +169,7 @@ export function applyModeEnderAndRepress(state: RotationState, sc: StintContext,
         const fSpan: ActiveBuffSpan = {
           id: `mode_${m.actionDefId}_${act.id}_followup`,
           buffId: `mode_${m.actionDefId}_followup`,
+          actionKind: actionKindOf(char.availableActions.find(a => a.id === m.actionDefId)?.type),
           name: `${charName(char)} ${loc(fu, 'label')}`,
           sourceCharacterId: char.id,
           sourceType: 'talent',
@@ -243,6 +245,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       const reSpan: ActiveBuffSpan = {
         id: `mode_${reopenDef.id}_${act.id}_reopen`,
         buffId: `mode_${reopenDef.id}`,
+        actionKind: actionKindOf(reopenDef.type),
         name: `${charName(char)} ${loc(md, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'talent',

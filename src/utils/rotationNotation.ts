@@ -32,10 +32,10 @@ const NAME_OF_SHORT: Record<string, string> = {
   hP: t('messages:notation.hP'),
 };
 
-/** 略号 → 名称。`hE(short)` のような後ろの印は、括弧つきで残す。対応が無い略号は、そのまま */
+/** 略号 → 名称。`hE(short)`・`hE↓`（落下で終える）のような後ろの印は、そのまま残す。対応が無い略号は、そのまま */
 function nameOfShort(short: string): string {
   if (NAME_OF_SHORT[short]) return NAME_OF_SHORT[short];
-  const m = /^([A-Za-z]+)(\(.+\))$/.exec(short);
+  const m = /^([A-Za-z]+)(\(.+\)|↓)$/.exec(short);
   if (m && NAME_OF_SHORT[m[1]]) return `${NAME_OF_SHORT[m[1]]}${m[2]}`;
   return short;
 }

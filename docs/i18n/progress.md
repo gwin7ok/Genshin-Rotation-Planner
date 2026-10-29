@@ -70,7 +70,7 @@
   - genshin-db で公式の英語が見つからなかった語は、原神 Wiki（fandom）の日本語版・英語版の同じページを突き合わせて確かめた（ユーザー指示 2026-10-29。キャラのページの天賦の説明・魔女の諭示のページ。API の parse で本文と言語間リンクを取得）。約 30 語を公式名に直した（例: 燔天の時 = Crucible of Death and Life・粛清 = Disciplinary Action・風の加護 = Windfavored・輝映 = Radiance・星電導 = Stellar-Conduct）。結果は glossary.md の「アプリが手で書いた名前」。「速攻状態」（イアンサ）はゲームに名前が無いアプリの呼び名で、Quick Stormflight window に確定（D259）
   - 日本語の表記も、ゲーム内の公式の名前（genshin-db の日本語）に合わせた（D259。約 30 語。例: 近接の構え → 近接モード・パンチ連打モード → 熾炎獅子・粛清 → 粛正・月相転移 → 隙を過ぐる月）。定義・手で補う一覧・gcsim の辞書の名前・プリセット（lunar-bloom）・辞書のキーを直し、build:catalog・build:master で作り直した。マスターの差は文字列だけ（名前・説明・出典のメモ・boostedBy）。check:snapshots の差 28 並び・92 行は、名前の置き換えだけであることを機械的に確かめてから保存。検証データ（網羅状況）も作り直した（effect_key_coverage の「未検討 1 件」はイファの 10000113-anemo_e_cancelplunge で、今回の変更の前からのもの）
   - 注意: link:actions だけでは、すでに付いている英語は上書きされない（辞書を直したら build:master で作り直す）
-  - 画面の確認（英語・同梱のマスター）: メイン画面・編成設定・DB 管理（キャラ・武器・聖遺物）で、画面の文字と title に日本語が残らないことを確認。残るもの: DB 管理のアクションの title のフレームの出典 `frames.source`（gcsim のソースの位置と補足。9 種。開発者向け → フェーズ 4）、略号 `hE(落下)`（1 件。記法の処理に使う → 3-5 で扱いを決める）。日本語の画面でコンソールのエラーなし
+  - 画面の確認（英語・同梱のマスター）: メイン画面・編成設定・DB 管理（キャラ・武器・聖遺物）で、画面の文字と title に日本語が残らないことを確認。残るもの: DB 管理のアクションの title のフレームの出典 `frames.source`（gcsim のソースの位置と補足。9 種。開発者向け → フェーズ 4）、略号 `hE(落下)`（1 件 → 3-5 で `rE↓` に変更。D260）。日本語の画面でコンソールのエラーなし
   - genshin-db の英語で確認した公式名: Oz・Lightning Stiletto・Musou Isshin・Ceremonial Garment・Shunsuiken・Sword Dance・Mortuary Rite・Night Vigil・Turbo Twirly・Nightsoul's Blessing・Nightsoul points・Dreamdrifter・Apex Drive・Seven-Phase Flash・Manifest Flame・Thunderous Symphony・Northland Spearstorm・Shadow Dance・Sturm und Drang・Masterstroke・Joy・Armed for Action・Sword Essence・Windborne Sword・Hunter's Precision・Adagio: Coda at Dawn's Tolling・Dandelion Breeze・Jade Screen・Scarlet Seal・Blood Blossom・Prayerful Wind's Benefit・Perfidious Wind's Bale・Redmane's Blood・Grin-Malkin Hat・Ranging Flame・Confirmation of Purity・Denial of Darkness・Principle of Purity: As the Light Shifts・Principle of Darkness: As the Stars Smolder・Dragon of White Flame・Dragon of Dark Decay
   - genshin-db で見つからなかったもの（→ 原神 Wiki で確認済み）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
 - [x] 3-4 要約の英語の組み立てと、英語の説明文からの根拠の引用（D258）
@@ -84,7 +84,7 @@
   - 発動バフの名前に効果時間を足すか（`StintBuffTriggersSection` の `withDuration`）: 日本語の名前ではなく、表示する名前（`loc()`）に「N秒」「Ns」が含まれるかを見る
   - 受付の行（`windowBar`）: モードの説明文に「受付」を含むかで判定していた → モードの定義の `isWindow`（受付を作る 2 つの関数 `windowMode`・`specialWindowMode` が付ける）。マスターの差は `isWindow: true` の 15 か所だけ（説明文に「受付」を含む 15 か所と一致）。check:snapshots は差なし
   - 利用者の DB のマスターに `isWindow` が入るのは、3-7 で DATABASE_VERSION を上げたとき（未リリースのため、それまでの古い DB は考えない）
-  - 調べて、そのままにしたもの: 処理が日本語の欄（モードの label = modeKeyOf・説明文の夜魂バーストの判定など）を見る箇所は、表示の言語に関係なく動く。略号 `hE(落下)`（1 件）は表示だけで、記法の処理では使っていない（扱いはユーザーに確認）
+  - 調べて、そのままにしたもの: 処理が日本語の欄（モードの label = modeKeyOf・説明文の夜魂バーストの判定など）を見る箇所は、表示の言語に関係なく動く。略号 `hE(落下)`（1 件。イファの、夜魂の加護を落下で終えるアクション）は表示だけで、記法の処理では使っていない → `rE↓` に変更（D260）。ゲームでは E の再押しで終えるので、長押しの hE ではなく再発動の rE。名前も「元素スキル(再押し・落下)」（英語 Elemental Skill (press again, plunge)）。種類（skill_hold）と gcsim の命令（`skill[hold=1]`）は変えない。記法の名称表示は「再発動スキル↓」（`nameOfShort` が後ろの ↓ を残す）。マスターの差は文字列 3 か所だけ
 - [ ] 3-6 保存編成・プリセットの名前を、表示のときに DB から ID で引く
 - [ ] 3-7 `DATABASE_VERSION` を上げる（利用者の DB に `en` を入れる。更新の通知が出る）・保存容量の実測・`check:snapshots`
 
@@ -116,6 +116,7 @@
 | 2026-10-29 | D257 | **DB 管理の編集は、表示中の言語の欄を編集する** | ユーザー決定（推奨案） |
 | 2026-10-29 | D258 | **要約は英語で組み立て、根拠の引用（継続時間・CT の dataSource）も英語の説明文から探す**（見つからないときは日本語の原文） | ユーザー決定（推奨は「引用は原文のまま」） |
 | 2026-10-29 | D259 | **状態・効果の名前は、日本語・英語ともゲーム内の公式の名前に合わせる**（日本語は genshin-db の日本語、英語は原神 Wiki の英語版で確認）。公式の名前が無いもの（イアンサの「速攻状態」= Quick Stormflight window など）はアプリの呼び名 | ユーザー決定。アプリ独自の表記（近接の構え・粛清など）が、ゲームの表記と違っていた |
+| 2026-10-29 | D260 | **略号は言語に関係ない記号にする。イファの、夜魂の加護を落下で終えるアクションは `rE↓`**（前は `hE(落下)`） | ユーザー決定。ゲームでは E の再押しで終えるので、長押しの hE は操作と合わない（gcsim の `hold=1` は命令の指定）。再発動の rE + 落下の記号 |
 
 ## 作業ログ
 

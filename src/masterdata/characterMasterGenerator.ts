@@ -1639,8 +1639,9 @@ function buildActions(ctx: BuildContext): BuildResult {
     if (table) {
       actions.push({
         id: `${id}_e_cancelplunge`,
-        name: `元素スキル(長押し・落下): ${skillName ?? ''}`.trim(),
-        shortName: 'hE(落下)',
+        name: `元素スキル(再押し・落下): ${skillName ?? ''}`.trim(),
+        // 略号: ゲームでは E の再押しで夜魂の加護を終える（gcsim の hold=1 は命令の指定）ので、再発動の rE + 落下の記号「↓」（言語に関係ない記号。ユーザー決定 2026-10-29。D260）
+        shortName: 'rE↓',
         type: 'skill_hold',
         startsSkillCooldown: false,
         defaultDuration: framesToSec(table.total),

@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-10-29
+
 ### 修正
 - ヴァレサ: 元素スキルの後の「追撃」の間に出す最初の重撃を、すぐに落下攻撃(高)へつながる速い動作として計算するようにした（ゲーム・gcsim と同じ。猛烈パッション中も対応）。これまでは通常の重撃の長さで計算していたため、ローテーションの 1 周が長く出て、gcsim で計算したときだけ CT 待ちが出ることがあった。マスターデータの版が上がるので、更新の案内が出る。
 - 旅人(氷): 4 凸「溶けざる堅氷」で、元素スキルの凛冽の寒星の効果時間が 12 秒のままだったのを、15 秒（25% 延長）にした。マスターデータの版が上がるので、更新の案内が出る。
@@ -150,7 +152,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...v1.3.1

@@ -2,7 +2,7 @@
   "name": "genshin-rotation-planner",
   "license": "AGPL-3.0-or-later",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.4.1",
   "type": "module",
   "engines": {
     "node": ">=22.18"

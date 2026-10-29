@@ -440,6 +440,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           ...(noDuration ? {} : { duration: textDuration ?? s.duration }),
           ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
           ...(data?.description ? { description: data.description } : {}),
+          ...(data?.en ? { en: { ...data.en } } : {}), // 英語の表示用の文（命ノ星座の段階から。D255）
           dataSource: {
             ...(noDuration ? {} : { duration: textDuration !== undefined ? 'genshin-db: 説明文の継続時間' : `gcsim: ${s.durationKey}` }),
             ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}),
@@ -467,6 +468,7 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
           ...(e.duration !== undefined ? { duration: e.duration } : {}),
           ...(e.cooldown !== undefined ? { cooldown: e.cooldown } : {}),
           ...(data?.description ? { description: data.description } : {}),
+          ...(data?.en ? { en: { ...data.en } } : {}), // 英語の表示用の文（命ノ星座の段階から。D255）
           dataSource: {
             ...(e.duration !== undefined ? { duration: 'アプリ側の分類（genshin-db の説明文）' } : {}),
             ...(e.cooldown !== undefined ? { cooldown: 'アプリ側の分類（genshin-db の説明文）' } : {}),

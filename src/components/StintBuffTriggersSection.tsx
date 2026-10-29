@@ -11,12 +11,13 @@ import {
   isGlobalRowBuff,
 } from '../utils/buffUtils';
 import { t } from '../i18n';
+import { loc } from '../i18n/loc';
 
 /** 発動バフのパレットのボタンの説明（出どころ・説明・効果時間・CT） */
 const paletteTitle = (source: string, def: TriggerableBuffDefinition) =>
   t('chart:buff.paletteTitle', {
     source,
-    description: def.description ?? def.name,
+    description: def.description ? loc(def, 'description') : loc(def, 'name'),
     duration: def.duration ?? t('notSet'),
     cooldown: def.cooldown ? `${def.cooldown}s` : t('noneShort'),
   });
@@ -138,6 +139,8 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
 
         const defaultDuration = matchedDef?.duration ?? 0;
         const defaultCooldown = matchedDef?.cooldown ?? 0;
+        // 表示名（D255）: 保存されている名前が定義の名前と同じなら、表示の言語の名前
+        const shownName = matchedDef && trigger.name === matchedDef.name ? loc(matchedDef, 'name') : trigger.name;
 
         const hoverProps = {
           onHoverChange: (hovering: boolean) =>
@@ -148,11 +151,11 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
           <div
             key={trigger.id}
             className={`flex items-center gap-1 h-7 px-2 rounded-lg border text-xs shadow-sm ${badgeCfg.badgeClass}`}
-            title={matchedDef?.description ?? trigger.name}
+            title={matchedDef?.description ? loc(matchedDef, 'description') : shownName}
           >
             <span className="text-[10px] select-none">{badgeCfg.icon}</span>
-            <span className="font-semibold max-w-[180px] truncate" title={trigger.name}>
-              {trigger.name}
+            <span className="font-semibold max-w-[180px] truncate" title={shownName}>
+              {shownName}
             </span>
             {matchedDef && <GcsimOutOfScopeBadge def={matchedDef} />}
             <span className="text-[10px] font-mono text-slate-400" title={t('chart:buff.offsetTitle')}>
@@ -212,7 +215,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 title={paletteTitle(t('category.talent'), def)}
               >
                 <span>🎯</span>
-                <span>+{def.name}{withDuration(def)}</span>
+                <span>+{loc(def, 'name')}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -227,7 +230,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 title={paletteTitle(t('category.constellation'), def)}
               >
                 <span>✦</span>
-                <span>+{def.name}{withDuration(def)}</span>
+                <span>+{loc(def, 'name')}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -239,10 +242,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-sky-950/60 hover:bg-sky-900/80 text-sky-200 hover:text-white text-[11px] font-semibold border border-sky-800/80 hover:border-sky-500 transition-all flex items-center gap-1"
-                title={paletteTitle(t('category.weapon', { name: def.sourceName }), def)}
+                title={paletteTitle(t('category.weapon', { name: loc(def, 'sourceName') }), def)}
               >
                 <span>⚔️</span>
-                <span>+{def.name}{withDuration(def)}</span>
+                <span>+{loc(def, 'name')}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -254,10 +257,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 hover:text-white text-[11px] font-semibold border border-purple-800/80 hover:border-purple-500 transition-all flex items-center gap-1"
-                title={paletteTitle(t('category.artifact', { name: def.sourceName }), def)}
+                title={paletteTitle(t('category.artifact', { name: loc(def, 'sourceName') }), def)}
               >
                 <span>🛡️</span>
-                <span>+{def.name}{withDuration(def)}</span>
+                <span>+{loc(def, 'name')}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}

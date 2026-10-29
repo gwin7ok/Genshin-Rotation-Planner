@@ -14,6 +14,7 @@ import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import type { GcsimMemberInfo } from './readGcsimLog.ts';
 import { t } from '../../i18n';
+import { charName, actionName, loc } from '../../i18n/loc';
 
 /** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル固定、会心率100% */
 const CHARACTER_LINE_PARAMS = 'lvl=90/90';
@@ -146,7 +147,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   for (const c of members) {
     const key = c.source?.gcsimKey;
     if (!key) {
-      error(t('messages:config.noCharKey', { name: c.name }));
+      error(t('messages:config.noCharKey', { name: charName(c) }));
       continue;
     }
     keyOf.set(c.id, key);
@@ -154,7 +155,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     const artifactForInfo = c.artifactSetMode !== '2+2' ? input.artifacts.find(a => a.id === c.artifactSetId) : undefined;
     memberInfos.push({
       characterId: c.id,
-      name: c.name,
+      name: charName(c),
       gcsimKey: key,
       weaponKey: weaponForInfo?.gcsimKey,
       artifactKey: artifactForInfo?.gcsimKey,
@@ -171,11 +172,11 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);
     if (!c.weaponId) {
-      warn(t('messages:config.noWeapon', { name: c.name }));
+      warn(t('messages:config.noWeapon', { name: charName(c) }));
     } else if (!weapon) {
-      error(t('messages:config.weaponNotFound', { name: c.name }));
+      error(t('messages:config.weaponNotFound', { name: charName(c) }));
     } else if (!weapon.gcsimKey) {
-      error(t('messages:config.noWeaponKey', { name: c.name, weapon: weapon.name }));
+      error(t('messages:config.noWeaponKey', { name: charName(c), weapon: loc(weapon, 'name') }));
     } else {
       const refine = c.weaponRefinementRank ?? weapon.refinementRank ?? (weapon.rarity >= 5 ? 1 : 5);
       lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${WEAPON_LEVEL};`);
@@ -185,11 +186,11 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     if (c.artifactSetMode !== '2+2') {
       const artifact = input.artifacts.find(a => a.id === c.artifactSetId);
       if (!c.artifactSetId) {
-        warn(t('messages:config.noArtifact', { name: c.name }));
+        warn(t('messages:config.noArtifact', { name: charName(c) }));
       } else if (!artifact) {
-        error(t('messages:config.artifactNotFound', { name: c.name }));
+        error(t('messages:config.artifactNotFound', { name: charName(c) }));
       } else if (!artifact.gcsimKey) {
-        error(t('messages:config.noArtifactKey', { name: c.name, artifact: artifact.name }));
+        error(t('messages:config.noArtifactKey', { name: charName(c), artifact: loc(artifact, 'name') }));
       } else {
         lines.push(`${key} add set="${artifact.gcsimKey}" count=4;`);
       }
@@ -267,12 +268,12 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         }
         // gcsim が実装していないアクション（大剣の重撃など）は、実行すると「action ... not implemented」のエラーになるので、設定文に入れない
         if (char.availableActions.find(a => a.id === act.actionTypeId)?.gcsimUnsupported) {
-          error(t('messages:config.actionMissing', { name: char.name, action: act.name }));
+          error(t('messages:config.actionMissing', { name: charName(char), action: actionName(char, act) }));
           continue;
         }
         const mapped = mapAction(act.actionTypeId, char.weaponType);
         if (!mapped.command) {
-          error(t('messages:config.noRule', { name: char.name, action: act.name, type: act.actionTypeId }));
+          error(t('messages:config.noRule', { name: charName(char), action: actionName(char, act), type: act.actionTypeId }));
           continue;
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
@@ -340,7 +341,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !reported.has(act.id)) {
           reported.add(act.id);
           const prevLabel = prev === 'none' ? t('messages:config.rotationStart') : t('messages:config.quoted', { label: PREVIOUS_ACTION_LABELS[prev] ?? prev });
-          error(t('messages:config.chargeNeedsNormal', { name: char.name, index: stintNumber.get(stint.id), action: act.name, prev: prevLabel }));
+          error(t('messages:config.chargeNeedsNormal', { name: charName(char), index: stintNumber.get(stint.id), action: actionName(char, act), prev: prevLabel }));
         }
         prev = base;
       }

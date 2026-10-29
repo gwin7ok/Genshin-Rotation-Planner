@@ -46,6 +46,7 @@ import { normalizeModeHoldActions, isModeHoldAction } from './utils/modeHoldActi
 import { runGcsimForConfig, computeGcsimApply, summarizeApplyPlan, describeApplyPlan } from './utils/gcsim/gcsimCompute';
 import { GcsimComputeBanner, type GcsimComputeBannerState } from './components/GcsimComputeBanner';
 import { buildRotationNotation, type NotationMode } from './utils/rotationNotation';
+import { charName, actionName } from './i18n/loc';
 
 // 累積再生時間 → 周回数と周内の位置（2周目以降は loopStartTime〜totalDuration を繰り返す）
 function toLapPosition(elapsed: number, totalDuration: number, loopStartTime: number, loopPeriod: number) {
@@ -672,8 +673,8 @@ export default function App() {
       const detailLines = waitIds.map(id => {
         const idx = visibleStints.findIndex(st => st.actions.some(a => a.id === id));
         const action = idx >= 0 ? visibleStints[idx].actions.find(a => a.id === id) : undefined;
-        const name = idx >= 0 ? characters.find(c => c.id === visibleStints[idx].characterId)?.name : undefined;
-        return t('app:gcsim.waitLine', { name: name ?? '?', index: idx + 1, action: action?.name ?? id, kind: staminaIds.has(id) ? t('app:gcsim.staminaWait') : t('app:gcsim.cooldownWait'), seconds: outcome.waits.byActionId[id] });
+        const name = idx >= 0 ? charName(characters.find(c => c.id === visibleStints[idx].characterId)) : undefined;
+        return t('app:gcsim.waitLine', { name: name ?? '?', index: idx + 1, action: action ? actionName(characters.find(c => c.id === visibleStints[idx].characterId), action) : id, kind: staminaIds.has(id) ? t('app:gcsim.staminaWait') : t('app:gcsim.cooldownWait'), seconds: outcome.waits.byActionId[id] });
       });
       setGcsimBanner(waitIds.length > 0
         ? {

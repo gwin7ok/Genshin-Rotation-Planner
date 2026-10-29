@@ -4,6 +4,7 @@ import { WeaponDatabaseItem } from '../../types/database';
 import { WeaponModel } from '../../models/WeaponModel';
 import { ItemLockButton } from './ItemLockButton';
 import { t } from '../../i18n';
+import { loc } from '../../i18n/loc';
 
 /** 武器カード（精錬ランク R1〜R5 切り替えプレビュー対応） */
 interface DatabaseWeaponCardItemProps {
@@ -43,7 +44,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
             <span className="text-amber-400 font-bold text-xs">
               {'★'.repeat(weapon.rarity)}
             </span>
-            <h3 className="font-bold text-sm text-white">{weapon.name}</h3>
+            <h3 className="font-bold text-sm text-white">{loc(weapon, 'name')}</h3>
             {weapon.isCustom && (
               <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">
                 {t('custom')}
@@ -107,14 +108,14 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
       {/* Passive Details for Selected Refinement */}
       <div className="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
         <div className="font-bold text-amber-200">
-          {weapon.passiveName} <span className="font-mono text-xs text-amber-400">(R{model.rank})</span>
+          {loc(weapon, 'passiveName')} <span className="font-mono text-xs text-amber-400">(R{model.rank})</span>
         </div>
-        <p className="text-[11px] text-slate-400 leading-relaxed">{model.description}</p>
+        <p className="text-[11px] text-slate-400 leading-relaxed">{model.displayDescription}</p>
       </div>
 
       {model.primaryBuffEffect && (
         <div className="flex items-center justify-between text-[11px] font-mono bg-sky-950/40 border border-sky-800/50 px-2.5 py-1 rounded text-sky-200">
-          <span className="truncate mr-2">{t('database:weapon.linkedBuff', { name: model.primaryBuffEffect.name })}</span>
+          <span className="truncate mr-2">{t('database:weapon.linkedBuff', { name: loc(model.primaryBuffEffect, 'name') })}</span>
           <div className="flex items-center gap-1.5 shrink-0">
             {model.duration !== undefined && (
               <strong className="text-amber-300">{t('database:weapon.duration', { seconds: Number(model.duration).toFixed(1) })}</strong>

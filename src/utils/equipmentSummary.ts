@@ -7,6 +7,7 @@ import type { CharacterConfig } from '../types/genshin';
 import type { GenshinDatabase } from '../types/database';
 import { defaultConstellation } from '../models/CharacterModel';
 import { t } from '../i18n';
+import { loc } from '../i18n/loc';
 
 export interface EquipmentSummary {
   /** 例: "舟歌 R5"。武器が未設定なら null */
@@ -20,14 +21,14 @@ export function summarizeEquipment(char: CharacterConfig, database?: Pick<Genshi
   if (char.weaponId) {
     const w = database?.weapons.find(x => x.id === char.weaponId);
     const refine = char.weaponRefinementRank ?? w?.refinementRank ?? (w && w.rarity >= 5 ? 1 : 5);
-    weapon = `${w?.name ?? char.weaponId} R${refine}`;
+    weapon = `${w ? loc(w, 'name') : char.weaponId} R${refine}`;
   }
   let artifact: string | null = null;
   if (char.artifactSetMode === '2+2') {
     artifact = t('messages:equipment.twoTwo');
   } else if (char.artifactSetId) {
     const a = database?.artifacts.find(x => x.id === char.artifactSetId);
-    artifact = t('messages:equipment.fourPiece', { name: a?.name ?? char.artifactSetId });
+    artifact = t('messages:equipment.fourPiece', { name: a ? loc(a, 'name') : char.artifactSetId });
   }
   return { weapon, artifact };
 }

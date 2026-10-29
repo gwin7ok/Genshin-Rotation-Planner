@@ -7,6 +7,7 @@ import { modeKeyOf, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { StintContext } from './context';
 import type { RotationState } from './state';
 import { t } from '../../i18n';
+import { charName, loc } from '../../i18n/loc';
 
 /** 出場の準備: キャラ・アクション定義・特殊スキルの受付の補助を揃え、交代のアクションを足して、StintContext を作る。キャラが見つからない出場は undefined */
 export function beginStint(state: RotationState, sIdx: number): StintContext | undefined {
@@ -147,10 +148,10 @@ export function finishStint(state: RotationState, sc: StintContext): void {
         stintId: rawStint.id,
         actionId: lastAction?.id,
         time: stintEndTime,
-        title: t('messages:rotation.modeNotEndedTitle', { name: char.name }),
+        title: t('messages:rotation.modeNotEndedTitle', { name: charName(char) }),
         message: m.def.noHold
-          ? t('messages:rotation.modeNotEndedHold', { mode: m.def.label, remaining: (m.end - stintEndTime).toFixed(1) })
-          : t('messages:rotation.modeNotEnded', { mode: m.def.label, remaining: (m.end - stintEndTime).toFixed(1) }),
+          ? t('messages:rotation.modeNotEndedHold', { mode: loc(m.def, 'label'), remaining: (m.end - stintEndTime).toFixed(1) })
+          : t('messages:rotation.modeNotEnded', { mode: loc(m.def, 'label'), remaining: (m.end - stintEndTime).toFixed(1) }),
       });
     }
   }
@@ -184,7 +185,7 @@ export function finishStint(state: RotationState, sc: StintContext): void {
     duration: stintDuration,
     actions: computedActions,
     modeHold: holdableModes.length > 0
-      ? { on: holdableModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(holdableModes.map(m => m.def.label))].join('・') }
+      ? { on: holdableModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(holdableModes.map(m => loc(m.def, 'label')))].join('・') }
       : undefined,
   };
 

@@ -559,6 +559,7 @@ export function linkEquipmentBuffs(
         duration: s.duration,
         ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
         description: w.description,
+        en: { ...(w.en?.passiveName || w.en?.name ? { name: w.en?.passiveName || w.en?.name } : {}), ...(w.en?.description ? { description: w.en.description } : {}) }, // 英語の表示用の文（D255）
         dataSource: { duration: `gcsim: ${s.durationKey}`, ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
       };
       applyLink(def, s);
@@ -574,6 +575,7 @@ export function linkEquipmentBuffs(
         sourceId: w.id,
         ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
         description: w.description,
+        en: { ...(w.en?.passiveName || w.en?.name ? { name: w.en?.passiveName || w.en?.name } : {}), ...(w.en?.description ? { description: w.en.description } : {}) }, // 英語の表示用の文（D255）
         dataSource: { ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
       };
       applyLink(def, s);
@@ -596,6 +598,7 @@ export function linkEquipmentBuffs(
         sourceId: a.id,
         ...(s.cooldown !== undefined ? { cooldown: s.cooldown } : {}),
         description: a.effect4p ?? '',
+        en: { ...(a.en?.name ? { name: `${a.en.name} 4-Piece` } : {}), ...(a.en?.effect4p ? { description: a.en.effect4p } : {}) }, // 英語の表示用の文（D255）
         dataSource: { ...(s.cooldownKey ? { cooldown: `gcsim: ${s.cooldownKey}` } : {}) },
       };
       applyLink(def, s);

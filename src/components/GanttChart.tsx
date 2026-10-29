@@ -41,6 +41,7 @@ import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
 import { summarizeEquipment, constellationOf } from '../utils/equipmentSummary';
 import { t, currentLanguage } from '../i18n';
+import { charName, actionName } from '../i18n/loc';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -185,7 +186,7 @@ function ctActionInfo(char: CharacterConfig, stint: Stint, actionId: string | un
   const act = actionId ? stint.actions.find(a => a.id === actionId) : undefined;
   if (!act) return '';
   const desc = descOf(char, act);
-  return `\n${act.name}${desc ? `\n\n${desc}` : ''}`;
+  return `\n${actionName(char, act)}${desc ? `\n\n${desc}` : ''}`;
 }
 
 // バフ重複行の色（寒色→暖色）: 0 = 無色、1 以上は、ローテーション全体の最大数を基準に 4 等分（最大の 25% 以下 / 50% 以下 / 75% 以下 / それより多い）。
@@ -436,8 +437,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     ];
     stints.forEach((stint, sIdx) => {
       if (sIdx === 0) return;
-      const prevName = characterMap.get(stints[sIdx - 1].characterId)?.name || '';
-      const name = characterMap.get(stint.characterId)?.name || '';
+      const prevName = charName(characterMap.get(stints[sIdx - 1].characterId)) || '';
+      const name = charName(characterMap.get(stint.characterId)) || '';
       list.push({
         index: sIdx,
         time: stint.startTime ?? 0,
@@ -1219,7 +1220,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold'
                             : 'border-slate-700/80 hover:border-slate-500'
                         }`}
-                        title={t('chart:gantt.stintTitle', { name: char.name, start: (stint.startTime ?? 0).toFixed(2), end: (stint.endTime ?? 0).toFixed(2), duration: (stint.duration ?? 0).toFixed(2) })}
+                        title={t('chart:gantt.stintTitle', { name: charName(char), start: (stint.startTime ?? 0).toFixed(2), end: (stint.endTime ?? 0).toFixed(2), duration: (stint.duration ?? 0).toFixed(2) })}
                       >
                         <div 
                           className="absolute inset-0 opacity-40"
@@ -1227,7 +1228,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                         />
                         <div className="relative z-10 flex items-center gap-1 truncate text-white">
                           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: char.accentColor }} />
-                          <span className="font-semibold text-[11px] truncate">{char.name}</span>
+                          <span className="font-semibold text-[11px] truncate">{charName(char)}</span>
                           <span className="text-[10px] opacity-75 font-mono">({(stint.duration ?? 0).toFixed(1)}s)</span>
                         </div>
                       </div>
@@ -1528,11 +1529,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   if (first) onSeek(first.startTime ?? 0);
                                   scrollStintCardBelowSticky(stint.id);
                                 }}
-                                title={t('chart:gantt.focusTitle', { name: char.name })}
+                                title={t('chart:gantt.focusTitle', { name: charName(char) })}
                                 className="flex items-center gap-1.5 min-w-0 cursor-pointer hover:opacity-80 transition-opacity"
                               >
                                 <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
-                                <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                                <span className="font-bold text-xs text-white truncate">{charName(char)}</span>
                               </button>
                               <div className="flex items-center gap-1 min-w-0">
                                 <span
@@ -1565,7 +1566,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   }}
                                   disabled={stintIdx === 0}
-                                  title={t('chart:gantt.moveUpTitle', { index: stintIdx + 1, name: char.name })}
+                                  title={t('chart:gantt.moveUpTitle', { index: stintIdx + 1, name: charName(char) })}
                                   className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
                                 >
                                   ▲
@@ -1582,7 +1583,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   }}
                                   disabled={stintIdx === stints.length - 1}
-                                  title={t('chart:gantt.moveDownTitle', { index: stintIdx + 1, name: char.name })}
+                                  title={t('chart:gantt.moveDownTitle', { index: stintIdx + 1, name: charName(char) })}
                                   className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
                                 >
                                   ▼
@@ -1605,7 +1606,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                                   </span>
                                 )}
-                                <span className="truncate">{stint.note || t('chart:gantt.stintActions', { name: char.name })}</span>
+                                <span className="truncate">{stint.note || t('chart:gantt.stintActions', { name: charName(char) })}</span>
                               </span>
                               <span className="shrink-0 text-slate-400 font-mono text-[9px] ml-1">
                                 {(stint.duration ?? 0).toFixed(1)}s
@@ -1727,7 +1728,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     </div>
                                   )}
                                   {timeless.length > 0 && (
-                                    <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={t('chart:gantt.selfOnlyTitle', { name: char.name })}>{t('chart:gantt.selfOnly', { name: char.name })}</span>
+                                    <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={t('chart:gantt.selfOnlyTitle', { name: charName(char) })}>{t('chart:gantt.selfOnly', { name: charName(char) })}</span>
                                   )}
                                   {timeless.map(item => <TimelessBuffChip key={item.key} item={item} />)}
                                 </div>
@@ -1817,10 +1818,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }`}
                                         title={
                                           hasCollision
-                                            ? t('chart:gantt.actionCollision', { time: (act.startTime ?? 0).toFixed(2), remaining: colRem ?? '?', name: act.name })
+                                            ? t('chart:gantt.actionCollision', { time: (act.startTime ?? 0).toFixed(2), remaining: colRem ?? '?', name: actionName(char, act) })
                                             : windowWarning
-                                            ? t('chart:gantt.actionWarning', { warning: windowWarning, name: act.name })
-                                            : `${t('chart:gantt.actionTitle', { name: act.name, duration: act.duration.toFixed(2), start: (act.startTime ?? 0).toFixed(2), end: (act.endTime ?? 0).toFixed(2) })}${act.usedSpecialCharge ? t('chart:gantt.specialCharged') : ''}${descOf(char, act) ? `\n\n${descOf(char, act)}` : ''}`
+                                            ? t('chart:gantt.actionWarning', { warning: windowWarning, name: actionName(char, act) })
+                                            : `${t('chart:gantt.actionTitle', { name: actionName(char, act), duration: act.duration.toFixed(2), start: (act.startTime ?? 0).toFixed(2), end: (act.endTime ?? 0).toFixed(2) })}${act.usedSpecialCharge ? t('chart:gantt.specialCharged') : ''}${descOf(char, act) ? `\n\n${descOf(char, act)}` : ''}`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
@@ -1883,7 +1884,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         className={`absolute h-full flex items-center justify-center border-r border-dashed border-slate-400/50 text-[9px] text-slate-200/70 select-none ${
                                           act.type === 'burst' ? 'bg-purple-600/30' : act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset' ? 'bg-amber-600/30' : 'bg-slate-500/30'
                                         }`}
-                                        title={t('chart:gantt.modeHoldTitle', { mode: stint.modeHold?.label ?? t('chart:gantt.mode'), name: act.name, seconds: hold.toFixed(2) })}
+                                        title={t('chart:gantt.modeHoldTitle', { mode: stint.modeHold?.label ?? t('chart:gantt.mode'), name: actionName(char, act), seconds: hold.toFixed(2) })}
                                       >
                                         <span className="truncate px-0.5">{t('chart:gantt.hold')}</span>
                                       </div>

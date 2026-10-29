@@ -4,6 +4,7 @@ import {
   type PlungeRule,
 } from '../data/plungeRules';
 import { t } from '../i18n';
+import { actionName } from '../i18n/loc';
 
 export interface PlungeWarning {
   stintId: string;
@@ -56,13 +57,14 @@ export function checkPlungePrerequisites(characters: CharacterConfig[], stints: 
     if (byAction || bySkill || byAirborne) continue;
 
     const kind = act.type === 'plunge_low' ? t('messages:plunge.low') : t('messages:plunge.high');
-    const prevName = prev ? `「${prev.name}」` : t('messages:plunge.noPrev');
+    const owner = characters.find(c => c.id === stint.characterId);
+    const prevName = prev ? `「${actionName(owner, prev)}」` : t('messages:plunge.noPrev');
     warnings.push({
       stintId: stint.id,
       characterId: stint.characterId,
       actionId: act.id,
       time,
-      actionName: act.name,
+      actionName: actionName(owner, act),
       message: t('messages:plunge.message', { kind, needs: rule.needs, prev: prevName }),
     });
   }

@@ -1,3 +1,4 @@
+import { loc } from '../i18n/loc';
 /**
  * Types for Genshin Impact Rotation Gantt Chart Planner
  */
@@ -325,7 +326,7 @@ export interface ActionDefinition {
   /** 説明文（スキル・爆発・通常攻撃・重撃・落下攻撃: genshin-db の天賦の説明。ホバー表示に使う。無いものは、共通の説明を表示側で補う） */
   description?: string;
   /** 英語の表示用の文（D255） */
-  en?: EnglishTexts<'name' | 'buttonLabel' | 'description'>;
+  en?: EnglishTexts<'name' | 'buttonLabel' | 'description' | 'effectLabel'>;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
   /**

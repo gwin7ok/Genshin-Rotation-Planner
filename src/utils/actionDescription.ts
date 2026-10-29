@@ -1,5 +1,6 @@
 import type { ActionDefinition, ActionType } from '../types/genshin';
 import { t } from '../i18n';
+import { loc } from '../i18n/loc';
 
 /**
  * アクションの説明文（ホバー表示用。追加作業 25-3b / issue #20）。
@@ -19,8 +20,8 @@ const GENERIC: Partial<Record<ActionType, string>> = {
 
 export function actionDescription(
   act: { type: ActionType; actionTypeId?: string },
-  def?: Pick<ActionDefinition, 'description'>,
+  def?: Pick<ActionDefinition, 'description' | 'en'>,
 ): string | undefined {
   if (act.actionTypeId === 'mode_hold') return t('messages:action.modeHold');
-  return def?.description ?? GENERIC[act.type];
+  return (def?.description ? loc(def, 'description') : undefined) ?? GENERIC[act.type];
 }

@@ -13,6 +13,8 @@
 import type { WeaponDatabaseItem, ArtifactSetDatabaseItem, WeaponRefinementData } from '../types/database';
 import type { WeaponType } from '../types/genshin';
 import { parseWeaponBuffs, parseArtifactBuffs } from './equipmentBuffParser.ts';
+import { attachArtifactEnglish, attachWeaponEnglish } from './englishTexts.ts';
+import { ARTIFACT_BUFF_OVERRIDES, WEAPON_BUFF_OVERRIDES } from './equipmentBuffOverrides.ts';
 import { buildKeyMapSection, keyMapLookup, type GcsimDmData, type KeyMapSection } from './gcsimKeyMap.ts';
 
 export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
@@ -196,7 +198,8 @@ export async function generateWeaponsMasterOnline(
     // 戦闘プランナー向けに主に3星以上の武器（1,2星はスキルを持たないため除外）
     if (rarity < 3) continue;
 
-    const wEn = weaponsEnMap.get(wJa.name) || weaponsEn[i] || {};
+    // 英語は公式 ID で突き合わせる（無ければ、並び順）
+    const wEn = weaponsEn.find(e => e?.id !== undefined && String(e.id) === String(wJa.id)) || weaponsEnMap.get(wJa.name) || weaponsEn[i] || {};
     const englishName = wEn.name || wJa.name;
 
     // ID: genshin-db公式ID (例: "15503") を主キーとして使用
@@ -321,7 +324,7 @@ export async function generateWeaponsMasterOnline(
         }
       : undefined;
 
-    weaponsList.push({
+    const weaponItem: WeaponDatabaseItem = {
       id,
       name: wJa.name,
       englishName,
@@ -337,7 +340,10 @@ export async function generateWeaponsMasterOnline(
       buffEffect: legacyBuffEffect,
       isCustom: false,
       updatedAt: nowStr,
-    });
+    };
+    // 英語の表示用の文（D255。日本語の欄は変えない）
+    attachWeaponEnglish(weaponItem, wEn, Boolean(WEAPON_BUFF_OVERRIDES[id]?.name));
+    weaponsList.push(weaponItem);
   }
 
   // レアリティ降順、名前昇順でソート
@@ -415,7 +421,8 @@ export async function generateArtifactsMasterOnline(
     const aJa = artifactsJa[i];
     if (!aJa || !aJa.name) continue;
 
-    const aEn = artifactsEnMap.get(aJa.name) || artifactsEn[i] || {};
+    // 英語は公式 ID で突き合わせる（無ければ、並び順）
+    const aEn = artifactsEn.find(e => e?.id !== undefined && String(e.id) === String(aJa.id)) || artifactsEnMap.get(aJa.name) || artifactsEn[i] || {};
     const englishName = aEn.name || aJa.name;
 
     // ID: genshin-db公式ID (例: "15002") を主キーとして使用
@@ -494,7 +501,7 @@ export async function generateArtifactsMasterOnline(
         }
       : undefined;
 
-    artifactsList.push({
+    const artifactItem: ArtifactSetDatabaseItem = {
       id,
       name: aJa.name,
       englishName,
@@ -507,7 +514,10 @@ export async function generateArtifactsMasterOnline(
       buffEffect: legacyBuffEffect,
       isCustom: false,
       updatedAt: nowStr,
-    });
+    };
+    // 英語の表示用の文（D255。日本語の欄は変えない）
+    attachArtifactEnglish(artifactItem, aEn, Boolean(ARTIFACT_BUFF_OVERRIDES[id]?.name));
+    artifactsList.push(artifactItem);
   }
 
   // レアリティ降順、名前昇順でソート

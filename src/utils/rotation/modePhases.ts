@@ -5,6 +5,8 @@ import { type ModeWindow } from './types';
 import { isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, modeGainScale, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
+import { actionName, charName, loc } from '../../i18n/loc';
+import { t } from '../../i18n';
 
 /** モードの判定: このアクションが、続いているモードを終わらせる・もう一度使う・ブロックされる・新しいモードを開くか */
 export function detectModeContext(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -78,9 +80,14 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
   const blockingMode = [...modeWindows.values()].find(m => isModeActive(m, char.id, sIdx, actionStartTime) && actionStartTime >= m.start - 0.001 && !!m.def.blocked?.types.includes(act.type)
     && !m.def.blocked.except?.some(s => act.actionTypeId === `${char.id}_${s}`));
   const blockedMessage = blockingMode?.def.blocked
-    ? `「${blockingMode.def.label}」の間は「${act.name}」を置けません。${blockingMode.def.blocked.result === 'wait'
-      ? `gcsim では${blockingMode.def.label}が終わるまで（あと ${(blockingMode.end - actionStartTime).toFixed(1)} 秒）待ちます`
-      : blockingMode.def.blocked.result === 'none' ? 'ゲームでは何も起きません。gcsim では別の動作として実行されます' : 'gcsim では実行エラーになります'}。${blockingMode.def.blocked.hint}`
+    ? t('messages:rotation.blocked', {
+      mode: loc(blockingMode.def, 'label'),
+      action: actionName(char, act),
+      result: blockingMode.def.blocked.result === 'wait'
+        ? t('messages:rotation.blockedWait', { mode: loc(blockingMode.def, 'label'), seconds: (blockingMode.end - actionStartTime).toFixed(1) })
+        : blockingMode.def.blocked.result === 'none' ? t('messages:rotation.blockedNone') : t('messages:rotation.blockedError'),
+      hint: blockingMode.def.blocked.hint,
+    })
     : undefined;
   // gcsim で実行エラーになる操作（スカークの七相一閃の間の E）は、自分の CT・効果バーを持たない
   if ((blockingMode?.def.blocked?.result === 'error' || blockingMode?.def.blocked?.result === 'none') && (act.type === 'skill' || act.type === 'skill_hold')) ac.inStateWindow = true;
@@ -161,7 +168,7 @@ export function applyModeEnderAndRepress(state: RotationState, sc: StintContext,
         const fSpan: ActiveBuffSpan = {
           id: `mode_${m.actionDefId}_${act.id}_followup`,
           buffId: `mode_${m.actionDefId}_followup`,
-          name: `${char.name} ${fu.label}`,
+          name: `${charName(char)} ${loc(fu, 'label')}`,
           sourceCharacterId: char.id,
           sourceType: 'talent',
           startTime: fStart,
@@ -236,7 +243,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       const reSpan: ActiveBuffSpan = {
         id: `mode_${reopenDef.id}_${act.id}_reopen`,
         buffId: `mode_${reopenDef.id}`,
-        name: `${char.name} ${md.label}`,
+        name: `${charName(char)} ${loc(md, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'talent',
         startTime: reStart,
@@ -275,7 +282,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       const freeIndex = consValue(m.def, m.opener.constellation, 'repressFreeIndex');
       const free = freeIndex !== undefined && modeRepress.index === freeIndex;
       const need = free ? 0 : g.cost ?? g.max;
-      if (gaugeState.value < need) gaugeMessage = `「${g.label}」が足りません（見込み ${Math.floor(gaugeState.value)} / ${need}）。${g.hint}`;
+      if (gaugeState.value < need) gaugeMessage = t('messages:rotation.gauge', { gauge: g.label, value: Math.floor(gaugeState.value), need, hint: g.hint });
       if (!free) {
         const costAll = !!consValue(m.def, m.opener.constellation, 'gaugeCostAll');
         gaugeState.value = costAll || g.cost === undefined ? 0 : Math.max(0, gaugeState.value - g.cost);

@@ -43,6 +43,7 @@ import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, set
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
 import { t } from '../i18n';
+import { charName, actionName, loc } from '../i18n/loc';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -440,7 +441,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
         ? t('editor:insertAtEnd')
         : anchor.type === 'swap'
           ? t('editor:insertAtStart')
-          : t('editor:insertBefore', { name: anchor.name });
+          : t('editor:insertBefore', { name: actionName(characterMap.get(targetStint.characterId), anchor) });
     return `${t('editor:insertPosition', { where })}${joinGroupId ? t('editor:insertJoinsGroup') : ''}`;
   };
 
@@ -654,11 +655,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       onClick={() => addStint(c.id)}
                       className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
                       title={focusedStintIndex >= 0
-                        ? t('editor:addStintBefore', { name: c.name, index: focusedStintIndex + 1 })
-                        : t('editor:addStintEnd', { name: c.name })}
+                        ? t('editor:addStintBefore', { name: charName(c), index: focusedStintIndex + 1 })
+                        : t('editor:addStintEnd', { name: charName(c) })}
                     >
                       <span className={`w-2 h-2 rounded-full ${elemTheme.bg} border ${elemTheme.border}`}></span>
-                      <span>{c.name}</span>
+                      <span>{charName(c)}</span>
                       <Plus className="w-3 h-3 text-slate-400" />
                     </button>
                     </React.Fragment>
@@ -759,7 +760,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <div
                         onClick={handleChipClick}
                         className="flex items-center gap-1.5 select-none cursor-pointer"
-                        title={t('editor:chipFocusTitle', { name: char.name })}
+                        title={t('editor:chipFocusTitle', { name: charName(char) })}
                       >
                         <span className={`w-4 h-4 rounded-full text-[10px] font-mono font-bold flex items-center justify-center border ${
                           isSelected
@@ -770,7 +771,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         </span>
                         <CharacterAvatar char={char} className="w-5 h-5 rounded-md text-[10px]" borderWidth={1} />
                         <span className="text-xs font-bold text-white truncate max-w-[80px]">
-                          {char.name}
+                          {charName(char)}
                         </span>
                         {isSelected && (
                           <span className="px-1 py-0.2 rounded text-[9px] font-black bg-yellow-400 text-slate-950 animate-pulse shrink-0">
@@ -790,7 +791,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           removeStint(idx);
                         }}
                         className="p-0.5 rounded flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors shrink-0"
-                        title={t('editor:deleteStintTitle', { name: char.name, index: idx + 1 })}
+                        title={t('editor:deleteStintTitle', { name: charName(char), index: idx + 1 })}
                         aria-label={t('editor:deleteStintLabel')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -957,9 +958,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <div className="absolute -top-3 left-8 z-10 flex items-center gap-1 text-[10px] text-sky-300 font-mono bg-slate-900 px-2 py-0.5 rounded border border-sky-700 shadow-sm">
                     <CornerDownRight className="w-3 h-3 text-sky-400" />
                     {switchDelay > 0 ? (
-                      <span>{t('editor:switchIn', { delay: switchDelay.toFixed(2), name: char.name, time: fmtRel(stint.startTime ?? 0) })}</span>
+                      <span>{t('editor:switchIn', { delay: switchDelay.toFixed(2), name: charName(char), time: fmtRel(stint.startTime ?? 0) })}</span>
                     ) : (
-                      <span>{t('editor:switchInstant', { time: fmtRel(stint.startTime ?? 0), name: char.name })}</span>
+                      <span>{t('editor:switchInstant', { time: fmtRel(stint.startTime ?? 0), name: charName(char) })}</span>
                     )}
                   </div>
                 )}
@@ -991,7 +992,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         title={t('editor:focusStintTitle')}
                       >
                         <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
-                        <span className="font-bold text-sm text-white">{char.name}</span>
+                        <span className="font-bold text-sm text-white">{charName(char)}</span>
                         <ElementIcon element={char.element} className="w-5 h-5" />
                         {isStintSelected && (
                           <span className="px-1.5 py-0.5 rounded font-black text-[10px] bg-yellow-400 text-slate-950 animate-pulse">
@@ -1149,9 +1150,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
                           className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
-                          title={`${describeInsertPosition(stint)}\n---------\n${t('editor:addActionTitle', { name: actionDef.name, duration: actionDef.defaultDuration, short: actionDef.shortName })}${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
+                          title={`${describeInsertPosition(stint)}\n---------\n${t('editor:addActionTitle', { name: loc(actionDef, 'name'), duration: actionDef.defaultDuration, short: actionDef.shortName })}${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
                         >
-                          <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
+                          <strong className={`font-bold ${actionTone(actionDef).label}`}>+{loc(actionDef, 'buttonLabel') || actionDef.shortName}</strong>
                         </button>
                       ))}
                       {/* グループ化（Ctrl+クリックで選んだ、隣接するアクション。追加作業 20-A） */}
@@ -1365,10 +1366,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 className="font-medium max-w-[150px] truncate"
                                 title={(() => {
                                   const desc = actionDescription(act, char.availableActions.find(d => d.id === act.actionTypeId));
-                                  return desc ? `${act.name}\n\n${desc}` : act.name;
+                                  return desc ? `${actionName(char, act)}\n\n${desc}` : actionName(char, act);
                                 })()}
                               >
-                                {act.name}
+                                {actionName(char, act)}
                               </span>
 
                               {/* 特殊重撃（蒼牙）: 特殊スキルの使用回数を 1 回分使った重撃 */}

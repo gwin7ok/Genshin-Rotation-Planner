@@ -1,6 +1,7 @@
 import { CharacterConfig, Stint } from '../types/genshin';
 import { groupRuns, stripGroupCopies } from './actionGroups';
 import { t } from '../i18n';
+import { charName } from '../i18n/loc';
 
 const isSwapAction = (a: Stint['actions'][number]) =>
   a.type === 'swap' || a.actionTypeId === 'action_switch_char';
@@ -119,7 +120,7 @@ export function buildRotationNotation(
   loopStartIndex: number,
   mode: NotationMode = 'short',
 ): string {
-  const charMap = new Map(characters.map(c => [c.id, c.name]));
+  const charMap = new Map(characters.map(c => [c.id, charName(c)]));
   const parts = stints.map(s => {
     const charName = charMap.get(s.characterId) || t('messages:notation.unknown');
     const acts = buildStintNotation(s, mode);

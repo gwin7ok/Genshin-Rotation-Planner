@@ -9,6 +9,7 @@ import { cutBar, modeKeyOf, modeGaugeInitial, modeGainScale, drainProject, endMo
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { t } from '../../i18n';
+import { charName, actionName, loc } from '../../i18n/loc';
 
 /** CT の計算: 共鳴・書き戻した値・領域による短縮・CT の開始位置 */
 export function computeCooldown(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -20,10 +21,10 @@ export function computeCooldown(state: RotationState, sc: StintContext, ac: Acti
   if (externalWait !== undefined) {
     computedAction.hasCTCollision = true;
     computedAction.collisionRemainingCT = externalWait;
-    addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.gcsimWait', { name: char.name, kind: options?.externalStaminaWaitIds?.includes(act.id) ? t('messages:ct.staminaWait') : t('messages:ct.cooldownWait') }), `「${act.name}」`, externalWait, 0);
+    addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.gcsimWait', { name: charName(char), kind: options?.externalStaminaWaitIds?.includes(act.id) ? t('messages:ct.staminaWait') : t('messages:ct.cooldownWait') }), `「${act.name}」`, externalWait, 0);
     if (options?.externalStaminaWaitIds?.includes(act.id)) {
       const issue = validationIssues.find(v => v.id === `skill_ct_gcsim_${act.id}`);
-      if (issue) issue.message = t('messages:ct.staminaWaited', { action: act.name, seconds: externalWait });
+      if (issue) issue.message = t('messages:ct.staminaWaited', { action: actionName(char, act), seconds: externalWait });
     }
   }
 
@@ -72,8 +73,8 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
       stintId: rawStint.id,
       actionId: act.id,
       time: actionStartTime,
-      title: t('messages:ct.noDefTitle', { name: char.name }),
-      message: t('messages:ct.noDefMessage', { action: act.name }),
+      title: t('messages:ct.noDefTitle', { name: charName(char) }),
+      message: t('messages:ct.noDefMessage', { action: actionName(char, act) }),
     });
   }
 
@@ -116,7 +117,7 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', isSpecial ? t('messages:ct.specialViolation', { name: char.name }) : t('messages:ct.skillViolation', { name: char.name }), isSpecial ? t('messages:ct.specialWhat', { action: act.name }) : t('messages:ct.skillWhat', { action: act.name }), remaining, cycle);
+          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', isSpecial ? t('messages:ct.specialViolation', { name: charName(char) }) : t('messages:ct.skillViolation', { name: charName(char) }), isSpecial ? t('messages:ct.specialWhat', { action: actionName(char, act) }) : t('messages:ct.skillWhat', { action: actionName(char, act) }), remaining, cycle);
         },
       });
     }
@@ -148,7 +149,7 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.skillViolation', { name: char.name }), t('messages:ct.skillWhat', { action: act.name }), remaining, cycle);
+          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.skillViolation', { name: charName(char) }), t('messages:ct.skillWhat', { action: actionName(char, act) }), remaining, cycle);
         },
       });
     }
@@ -259,7 +260,7 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
     const span: ActiveBuffSpan = {
       id: `mode_${actionDef.id}_${act.id}`,
       buffId: `mode_${actionDef.id}`,
-      name: `${char.name} ${md.label}${md.barNote ? `（${md.barNote}）` : ''}`,
+      name: `${charName(char)} ${loc(md, 'label')}${md.barNote ? `（${md.barNote}）` : ''}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',
       startTime: start,
@@ -364,7 +365,7 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`burst_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.burstViolation', { name: char.name }), t('messages:ct.burstWhat', { action: act.name }), remaining, cycle);
+          addViolationIssue(`burst_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.burstViolation', { name: charName(char) }), t('messages:ct.burstWhat', { action: actionName(char, act) }), remaining, cycle);
         },
       });
     }
@@ -404,8 +405,8 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
         stintId: rawStint.id,
         actionId: act.id,
         time: actionStartTime,
-        title: t('messages:ct.windowTitle', { name: char.name, kind: kindName }),
-        message: `${kindName}「${act.name}」: ${windowMessage}`,
+        title: t('messages:ct.windowTitle', { name: charName(char), kind: kindName }),
+        message: `${kindName}「${actionName(char, act)}」: ${windowMessage}`,
       });
     }
   }

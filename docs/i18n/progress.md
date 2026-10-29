@@ -67,10 +67,10 @@
   - 実行時の定数: 魔女の諭示の説明（`REVELATION_INFO` の `en`・`revelationTooltip(key, language)`・アプリ側の発動バフ）、gcsim のキーごとの名前（`labelForKeyEn`。保存する名前・照合は日本語のまま。表示は `triggerName()` で引く）
   - 手で書いた名前の装備の発動バフ（WEAPON_BUFF_OVERRIDES など）は、`buffUtils` で `en` を丸ごと捨てていた → 名前がマスターと同じときは英語を使う
   - `check:action-links` は、副次効果の比較で `en` を除く（入力の一覧には英語が無いため）
-  - 公式の英語が見つからなかった語は、glossary.md の「アプリが手で書いた名前」に「要確認」で載せた
+  - genshin-db で公式の英語が見つからなかった語は、原神 Wiki（fandom）の日本語版・英語版の同じページを突き合わせて確かめた（ユーザー指示 2026-10-29。キャラのページの天賦の説明・魔女の諭示のページ。API の parse で本文と言語間リンクを取得）。約 30 語を公式名に直した（例: 燔天の時 = Crucible of Death and Life・粛清 = Disciplinary Action・風の加護 = Windfavored・輝映 = Radiance・星電導 = Stellar-Conduct）。結果は glossary.md の「アプリが手で書いた名前」。残る要確認は、公式の名前が無い「速攻状態」（イアンサ）だけ
   - 画面の確認（英語・同梱のマスター）: メイン画面・編成設定・DB 管理（キャラ・武器・聖遺物）で、画面の文字と title に日本語が残らないことを確認。残るもの: DB 管理のアクションの title のフレームの出典 `frames.source`（gcsim のソースの位置と補足。9 種。開発者向け → フェーズ 4）、略号 `hE(落下)`（1 件。記法の処理に使う → 3-5 で扱いを決める）。日本語の画面でコンソールのエラーなし
   - genshin-db の英語で確認した公式名: Oz・Lightning Stiletto・Musou Isshin・Ceremonial Garment・Shunsuiken・Sword Dance・Mortuary Rite・Night Vigil・Turbo Twirly・Nightsoul's Blessing・Nightsoul points・Dreamdrifter・Apex Drive・Seven-Phase Flash・Manifest Flame・Thunderous Symphony・Northland Spearstorm・Shadow Dance・Sturm und Drang・Masterstroke・Joy・Armed for Action・Sword Essence・Windborne Sword・Hunter's Precision・Adagio: Coda at Dawn's Tolling・Dandelion Breeze・Jade Screen・Scarlet Seal・Blood Blossom・Prayerful Wind's Benefit・Perfidious Wind's Bale・Redmane's Blood・Grin-Malkin Hat・Ranging Flame・Confirmation of Purity・Denial of Darkness・Principle of Purity: As the Light Shifts・Principle of Darkness: As the Stars Smolder・Dragon of White Flame・Dragon of Dark Decay
-  - 見つからなかったもの（glossary.md に「要確認」で載せた）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
+  - genshin-db で見つからなかったもの（→ 原神 Wiki で確認済み）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
 - [ ] 3-4 要約の英語の組み立てと、英語の説明文からの根拠の引用（D258）
 - [ ] 3-5 名前で判定している処理の置き換え
 - [ ] 3-6 保存編成・プリセットの名前を、表示のときに DB から ID で引く

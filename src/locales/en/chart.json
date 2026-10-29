@@ -42,8 +42,8 @@
       "help": "Columbina's Passive Talent 2: gains 1 with each Lunar reaction (Lunar-Charged, Lunar-Bloom, Lunar-Crystallize), max 3. Each Charged Attack consumes 1 (Verdant Dew first). Number = held at that time"
     },
     "stellarconduct": {
-      "label": "⭐ Stellar Conduct field",
-      "help": "Triggering Stellar Conduct creates a field (6 s, extended by each reaction). Number = active stacks, updated every 4 s (max 12; Cryo/Electro DMG +)"
+      "label": "⭐ Stellar-Conduct field",
+      "help": "Triggering Stellar-Conduct creates a field (6 s, extended by each reaction). Number = active stacks, updated every 4 s (max 12; Cryo/Electro DMG +)"
     },
     "stellarswirl": {
       "label": "⭐ Stellar Swirl vortex (stacks)",

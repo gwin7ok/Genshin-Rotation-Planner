@@ -5,7 +5,7 @@ import artifactsMasterJson from './artifacts_master_data.json';
 import { t } from '../i18n';
 
 /** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
-export const DATABASE_VERSION = 82; // 82: 旅人(氷) 4 凸の凛冽の寒星の延長（D263）
+export const DATABASE_VERSION = 83; // 83: プルーネ 6 凸のハンティングモードの延長（D264）
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

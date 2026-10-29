@@ -56295,6 +56295,13 @@
         "level": 6,
         "name": "物語はこれでおしまい みんなに話してあげて",
         "description": "元素爆発**魔女狩りの時間なのだ！**における「魔女を誘う鈴」の「ハンティング」モード継続時間が4秒間延長される。 また、「鈴の鼓舞」状態にあるチーム内キャラクターが敵に元素反応を起こすと、プルーネ自身と付近にいる「鈴の鼓舞」状態のフィールド上キャラクター全員の攻撃力が350アップする。継続時間5秒。",
+        "actionChanges": [
+          {
+            "actionId": "10000132-anemo_q",
+            "effectDuration": 16,
+            "source": "モード継続時間が4秒"
+          }
+        ],
         "en": {
           "name": "And That's the Story! Share It With Your Friends!",
           "description": "The duration of the Witchlure Bell's Hunter-Seeker mode from the Elemental Burst **The Bell Tolls! The Hunt Is On!** is extended by 4s.\nAdditionally, after party members affected by Tolling Rally trigger any Elemental Reaction, they will cause Prune and the other current active character(s) affected by Tolling Rally to gain 350 ATK for 5s."

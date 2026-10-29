@@ -105,7 +105,7 @@ export function warnPlungePrerequisites(a: { characters: CharacterConfig[]; calc
 /** 層が溜まる効果・印のバフを、期間（バー）にして activeBuffs に足す */
 export function addStateBars(a: { characters: CharacterConfig[]; activeBuffs: ActiveBuffSpan[]; layerEventsByChar: Map<string, { rule: LayerBuffRule; events: LayerEvent[] }> }): void {
   const { characters, activeBuffs, layerEventsByChar } = a;
-  // 層が溜まる効果・印のバフを、期間（バー）にする（ヴェスナの粛清・アリョーシャの狩猟の印と狩人の照準）
+  // 層が溜まる効果・印のバフを、期間（バー）にする（ヴェスナの粛正・アリョーシャの狩猟の印と狩人の照準）
   const stateBar = (char: CharacterConfig, id: string, name: string, start: number, end: number, description: string, noSynergy: boolean) => {
     const startTime = Number(start.toFixed(3));
     const endTime = Number(end.toFixed(3));

@@ -1,6 +1,6 @@
 # gcsim キーの辞書の差分（前回の作成との比較）
 
-作成: 2026-10-15 / gcsim commit 4eda9fc
+作成: 2026-10-29 / gcsim commit 4eda9fc
 
 増えたキー 0 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: 0 件）/ 消えたキー 0 件（うち対象 0 件）
 

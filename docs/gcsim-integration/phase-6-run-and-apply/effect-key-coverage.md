@@ -1,6 +1,6 @@
 # スキル・爆発の効果の対応表（カバレッジ）
 
-作成: 2026-10-15 / gcsim の辞書のコミット 4eda9fc5 / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
+作成: 2026-10-29 / gcsim の辞書のコミット 4eda9fc5 / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
 
 4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。
 「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。
@@ -20,7 +20,7 @@
 
 設置物名（gcsim のソース）: 7 件
 
-## targets（アプリのスキル・爆発のアクション定義。333 件）
+## targets（アプリのスキル・爆発のアクション定義。334 件）
 
 | 状態 | 件数 |
 |---|---|
@@ -31,6 +31,7 @@
 | gcsim の効果なし・アプリ側の値でバーを表示 | 12 |
 | gcsim は効果を出すが、紐づけず・バーも出さない | 6 |
 | 保留 | 1 |
+| 未検討 | 1 |
 | gcsim が効果のイベントを出さない（暫定） | 1 |
 
 ## links（効果 ↔ 対象。244 件）
@@ -38,9 +39,9 @@
 内訳: main/auto=163 / main/approved=35 / extra/approved=32 / included/approved=9 / character/approved=5
 整合性: 存在しない効果・対象を指す紐づけ 0 件 / 重複 0 件
 
-## 未検討のアクション定義（0 件）
+## 未検討のアクション定義（1 件）
 
-なし
+- イファ `action:10000113-anemo_e_cancelplunge`
 
 ## 未検討の効果（0 件。持ち主ごと）
 

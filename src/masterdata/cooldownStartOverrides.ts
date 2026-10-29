@@ -90,7 +90,7 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000003-anemo_e_hold': { from: 'holdEnd', delayFrames: 19, holdInFrames: 300, note: 'jean/skill.go: SetCDWithDelay(…, 360, hitmark-2)、hitmark = skillHitmark(21) + hold' },
   // ナヴィアの長押し（hold 1〜241 → 長押しの長さ 0〜240f）: firingTime = skillHoldCDStart(41) + hold − 1
   '10000091-geo_e_hold': { from: 'holdEnd', delayFrames: 41, holdInFrames: 240, note: 'navia/skill.go: firingTime = skillHoldCDStart(41) + hold（hold は 1 引いた後）' },
-  '10000108-anemo_e_hold': { from: 'holdEnd', delayFrames: 4, holdInFrames: 610, note: 'lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。羽月の輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）' },
+  '10000108-anemo_e_hold': { from: 'holdEnd', delayFrames: 4, holdInFrames: 610, note: 'lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。翦月輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）' },
   '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, holdInFrames: 600, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
   // 旅人(風): 長押し（2 ティック以上）。gcsim の SkillHold は hitmark - 5 で CT を始める。hitmark = 31 + 15 × ティック数 + 5 - 15 + 5 なので、
   // 長押し（15f × ティック数）の終了から 21f。1 ティック以下は CT 5 秒・遅れ 16f（ホールド秒数を使う 5-5 で扱う）

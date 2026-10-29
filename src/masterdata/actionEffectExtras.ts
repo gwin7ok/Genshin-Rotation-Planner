@@ -41,9 +41,9 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   '10000103-geo_e': [
     { key: 'xilonen-e-shred-*', label: '耐性ダウン（敵）', mode: 'chain' },
   ],
-  // コロンビーナのスキル: 月の反応が起きるたびに更新される重力の蓄積
+  // コロンビーナのスキル: 月の反応が起きるたびに更新される引力値の蓄積
   '10000125-hydro_e': [
-    { key: 'columbina-gravity', label: '重力（月の反応）', mode: 'chain' },
+    { key: 'columbina-gravity', label: '引力のさざ波（月の反応）', mode: 'chain' },
   ],
   // コロンビーナの爆発: 爆発中の反応ボーナス（更新され続ける）
   '10000125-hydro_q': [
@@ -63,24 +63,24 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   '10000099-dendro_q': [
     { key: 'emilie-burst-mark', label: '印（アロマティック・アナライズ）', mode: 'chain' },
   ],
-  // ニィロウ（ユーザー決定 2026-09-30）: スキルを4回続けると、4回目の +0.7 秒に静謐の光環（12 秒。凸1で +6 秒）。スキルの後に通常攻撃を3回続けると、3回目の +0.5 秒に月の祈り（8 秒）
+  // ニィロウ（ユーザー決定 2026-09-30）: スキルを4回続けると、4回目の +0.7 秒に天を滌う水環（12 秒。凸1で +6 秒）。スキルの後に通常攻撃を3回続けると、3回目の +0.5 秒に祈月（8 秒）
   '10000070-hydro_e': [
-    { key: 'tranquilityaura', label: '静謐の光環' },
+    { key: 'tranquilityaura', label: '天を滌う水環' },
   ],
   '10000070-hydro_n': [
-    { key: 'lunarprayer', label: '月の祈り' },
+    { key: 'lunarprayer', label: '祈月' },
   ],
   // リネの爆発: 変身（3 秒。本体の lyney-q）が終わった +4.7 秒に、帽子の召喚物（約 4.1 秒）
   '10000084-pyro_q': [
     { key: 'lyney-grinmalkinhat', label: 'ファニーハット（帽子の召喚物）' },
   ],
-  // ヤフォダのスキル: フラスコのゲージが満ちて（命中で溜まる）排出されたときに出る猫玉（約 19.6 秒）。gcsim が返したときだけ表示（命中由来）
+  // ヤフォダのスキル: フラスコのゲージが満ちて（命中で溜まる）排出されたときに出るもふもふニャンコボール（約 19.6 秒）。gcsim が返したときだけ表示（命中由来）
   '10000124-anemo_e': [
-    { key: 'jahoda-meowball', label: '猫玉（フラスコ排出）' },
+    { key: 'jahoda-meowball', label: 'もふもふニャンコボール（フラスコ排出）' },
   ],
-  // ラウマの爆発: 爆発中に月の反応が起きたときの「月の歌」（15 秒）。gcsim が返したときだけ表示（反応由来）
+  // ラウマの爆発: 爆発中に月の反応が起きたときの「詠月」（15 秒）。gcsim が返したときだけ表示（反応由来）
   '10000119-dendro_q': [
-    { key: 'lauma-pale-hymn-moonsong', label: '蒼白の賛歌・月の歌' },
+    { key: 'lauma-pale-hymn-moonsong', label: '蒼の讃歌・詠月' },
   ],
   // デュリンのスキル: 1回目で 6 秒の窓が開き、窓の中の 2回目のスキルで白の姿（30 秒）。窓の中の通常攻撃で黒の姿（30 秒。下の通常攻撃に登録）。ユーザー決定（2026-09-30）
   '10000123-pyro_e': [
@@ -90,9 +90,9 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
     { key: 'denial-of-darkness', label: '黒の姿（暗黒の否認）' },
   ],
   // （オデットの独舞者の強化 `odette-dance-double-upgrade` は、特殊スキル `10000150-cryo_e_recast` の本体の効果にした。2026-10-01）
-  // フリンズのスキル: 2回目のスキルで、雷鳴の交響（6 秒）
+  // フリンズのスキル: 2回目のスキルで、雷霆のシンフォニー（6 秒）
   '10000120-electro_e': [
-    { key: 'thunderous-symphony', label: '雷鳴の交響' },
+    { key: 'thunderous-symphony', label: '雷霆のシンフォニー' },
   ],
   // ラウマのスキル（月霜の聖域）: スキルの命中と聖域の tick ごとに敵へ付く耐性ダウン（各10秒。約0.3〜24.7秒の一続き）。gcsim は草・水を別のキーで出すので、2本に分けて登録（ユーザー決定 2026-09-30）
   '10000119-dendro_e': [

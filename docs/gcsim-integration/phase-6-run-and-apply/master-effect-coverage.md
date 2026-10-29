@@ -1,6 +1,6 @@
 # マスター効果とgcsimキーの対応表（カバレッジ）
 
-作成: 2026-10-15 / gcsim辞書コミット 4eda9fc5 / 生成: `npm run coverage:master-effects`
+作成: 2026-10-29 / gcsim辞書コミット 4eda9fc5 / 生成: `npm run coverage:master-effects`
 
 対象は固有天賦・命ノ星座・武器・聖遺物・元素共鳴。アクション効果用の `effect_key_coverage.json` とは別ファイルで管理し、将来統合できる `effects` / `targets` / `links` / `unlinked` 形式を使う。
 「未確認」はマスター側の対象またはgcsimキー側の効果について、対応付け・理由付き対象外・保留のいずれも無い状態。

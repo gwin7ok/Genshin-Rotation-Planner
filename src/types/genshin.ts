@@ -103,12 +103,12 @@ export interface ActionMode {
     /** 使うたびに、前のバーをその時刻で終わらせ、新しいバーを同じ行に置く（ディルックの連撃の受付。最後の 1 回の後は、新しいバーを置かない）。無ければ、1 本のバーを延ばす */
     barPerUse?: boolean;
     endsOnLast?: boolean;
-    /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も羽月の輪） */
+    /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も翦月輪） */
     actions?: string[];
     /** アクション（定義 ID の末尾）ごとのフレーム。あれば frames より優先（ドゥリン: 受付の間の E は白・N は黒の再発動で、フレームが違う） */
     framesByAction?: Record<string, ActionFrames | ActionFrames[]>;
     /**
-     * 使い切って終わった（endsOnLast）とき、そのアクション（定義 ID の末尾）で終わったなら、続けて開くモード（ニィロウ: 剣舞を N で終えると、8 秒の月の祈りに入る）。
+     * 使い切って終わった（endsOnLast）とき、そのアクション（定義 ID の末尾）で終わったなら、続けて開くモード（ニィロウ: 剣舞を N で終えると、8 秒の祈月に入る）。
      * 開始 = そのアクションの開始 + followUp.startDelayFrames
      */
     followUps?: Record<string, ActionMode>;
@@ -117,7 +117,7 @@ export interface ActionMode {
   noBar?: boolean;
   /** モードが、長押しの終わりから始まる（開始 = 長押しの終わり + startDelayFrames。藍硯の長押し） */
   startAfterHold?: boolean;
-  /** モードのバーを、バフ重複の集計に数えない（ディシアのパンチ連打モード・受付） */
+  /** モードのバーを、バフ重複の集計に数えない（ディシアの熾炎獅子・受付） */
   noSynergy?: boolean;
   /** モードのバーの名前の後ろに付ける、開いたものの説明（オデットの受付:「スキル」「爆発」） */
   barNote?: string;
@@ -139,14 +139,14 @@ export interface ActionMode {
    */
   plusEffectDuration?: boolean;
   /**
-   * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 雲の変化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
+   * モードが時間切れで終わったとき（終わらせるアクションを使わなかったとき）、モードを開いたアクションのスキルの CT を短縮する（閑雲: 鶴雲幻化の間に落下攻撃を使わないと、次の CT が 3 秒短くなる。2026-10-09）。
    * afterSwap = 交代でモードが終わっても、本来の終わりの時刻に短縮する（gcsim は交代しても短縮の処理が残る。ゲームでも同じことを確認済み: ユーザー 2026-10-09）
    */
   cooldownReduceOnExpire?: { seconds: number; afterSwap: boolean };
   /** モードの間の通常攻撃のフレーム（連続した N の何段目か〔1 段目から順〕。足りなければ繰り返す）。クロリンデの狩りの N */
   normalFrames?: ActionFrames[];
   /**
-   * 通常攻撃（N）のたびに溜まるスタック（フレミネの加圧。2026-10-10）。スタックが max に達した後の N は、起爆（detonate のフレーム。モードを終わらせる）になる。
+   * 通常攻撃（N）のたびに溜まるスタック（フレミネのペールスタイマー。2026-10-10）。スタックが max に達した後の N は、起爆（detonate のフレーム。モードを終わらせる）になる。
    * 終わらせる E（enders の self）も、スタックが max のときは detonate のフレームになる。boostedBy = このラベルのモードが続いている間は、1 回で boostedPerUse 溜まる
    */
   nStacks?: { perUse: number; boostedBy?: string; boostedPerUse?: number; max: number; detonate: ActionFrames; source: string };
@@ -159,11 +159,11 @@ export interface ActionMode {
     label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string;
     /** 英語の表示用の文（D255） */
     en?: EnglishTexts<'label' | 'hint'>;
-    /** 別の動作になった E の消費量（兹白の月相の輝き 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
+    /** 別の動作になった E の消費量（兹白の隙に浮かぶ光 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
     cost?: number;
     /** 通常攻撃（N）の、連続した N の段ごとの増加量（段の数で繰り返す。あれば gainByType.normal より優先。ローエンの愉悦・ヴェスナの剣気） */
     gainByNormalIndex?: number[];
-    /** モードが終わっても、ゲージの値を次のモードへ持ち越す（兹白の月相の輝き。gcsim は、モードの外では増減しない）。次のモードの初期値 = 持ち越し + 命ノ星座の gaugeInitial（上限まで） */
+    /** モードが終わっても、ゲージの値を次のモードへ持ち越す（兹白の隙に浮かぶ光。gcsim は、モードの外では増減しない）。次のモードの初期値 = 持ち越し + 命ノ星座の gaugeInitial（上限まで） */
     persists?: boolean;
   };
   /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
@@ -363,7 +363,7 @@ export interface ActionDefinition {
   nightsoul?: { role: 'skill' | 'plunge' | 'burst'; gain: number; max: number; blessingSeconds: number };
   /** 特殊スキルは、スキル・爆発が開く受付の間だけ使える（オデット。受付の外では通常のスキルになる）。ファルカは charges > 1 で同じ扱い */
   requiresWindow?: boolean;
-  /** このアクションで入るモード（状態）。夢見月瑞希の夢浮かみ・ディシアのパンチ連打モードなど */
+  /** このアクションで入るモード（状態）。夢見月瑞希の夢浮かみ・ディシアの熾炎獅子など */
   mode?: ActionMode;
   /**
    * 爆発の後のモード（mode）の間、通常攻撃（N）・元素スキル（E）がパンチに置き換わる（ディシアの炎哮獅子咬）。モードの共通の定義（mode）に入らない、固有の項目。
@@ -411,7 +411,7 @@ export interface ActionDefinition {
     source: string;
   };
   /**
-   * 層が溜まる効果（ヴェスナの粛清。2026-10-11）。E に付く（爆発の分も、E の定義から引く）。
+   * 層が溜まる効果（ヴェスナの粛正。2026-10-11）。E に付く（爆発の分も、E の定義から引く）。
    * 別の動作になった E（飛翔の剣）・元素爆発で 1 層増える（層ごとに独立した継続時間。最大 max。最大のとき、最も古い層が置き換わる）。
    * E で新しい状態に入る（モードを開く）・退場でクリア。命ノ星座 fullOnEnter 以上は、入るときに最大層から。fullBuff = 最大層の間だけ付く効果
    */

@@ -33,8 +33,8 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
 
   // --- ニィロウ ---------------------------------------------------------------
   'pirouette': o('ニィロウ 元素スキル「七域のダンス」: 旋舞（剣舞・ステップ）状態'),
-  'lunarprayer': o('ニィロウ 元素スキル: 月の祈り'),
-  'tranquilityaura': o('ニィロウ 元素爆発「浮蓮のダンス・遠夢聆泉」: 静謐の光環'),
+  'lunarprayer': o('ニィロウ 元素スキル: 祈月'),
+  'tranquilityaura': o('ニィロウ 元素爆発「浮蓮のダンス・遠夢聆泉」: 天を滌う水環'),
   'lingeringaeon': o('ニィロウ 元素爆発「浮蓮のダンス・遠夢聆泉」: 遠夢'),
   'nilou-initial-particle-icd': o('ニィロウ 元素スキル: 元素粒子の発生間隔（初撃）'),
   'nilou-pirouette-particle-icd': o('ニィロウ 元素スキル: 元素粒子の発生間隔（旋舞）'),
@@ -50,7 +50,7 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
 
   // --- コロンビーナ -----------------------------------------------------------
   'columbina-skill': o('コロンビーナ 元素スキル「万古の潮汐」'),
-  'columbina-gravity': o('コロンビーナ 元素スキル「万古の潮汐」: 重力'),
+  'columbina-gravity': o('コロンビーナ 元素スキル「万古の潮汐」: 引力のさざ波'),
   'columbina-particle-icd': o('コロンビーナ 元素スキル: 元素粒子の発生間隔'),
   'columbina-q': o('コロンビーナ 元素爆発「月明かりの郷愁」'),
   'columbina-q-buff': o('コロンビーナ 元素爆発「月明かりの郷愁」: 強化'),
@@ -75,12 +75,12 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
   'lauma-frostgrove-sanctuary-particle-icd': o('ラウマ 元素スキル: 元素粒子の発生間隔'),
   'lauma-skill-shred-dendro': o('ラウマ 元素スキル: 草元素耐性ダウン'),
   'lauma-skill-shred-hydro': o('ラウマ 元素スキル: 水元素耐性ダウン'),
-  'moonsong-icd': o('ラウマ 元素スキル: 月の歌の発動間隔', { kind: 'internal' }),
+  'moonsong-icd': o('ラウマ 元素スキル: 詠月の発動間隔', { kind: 'internal' }),
   'lauma-spirit-envoy': o('ラウマ 通常攻撃: 精霊の使者'),
   'lauma-burst': o('ラウマ 元素爆発「聖言のルノ・月の心」'),
-  'lauma-pale-hymn-burst': o('ラウマ 元素爆発「聖言のルノ・月の心」: 蒼白の賛歌'),
-  'lauma-pale-hymn-moonsong': o('ラウマ 元素爆発「聖言のルノ・月の心」: 蒼白の賛歌・月の歌'),
-  'lauma-pale-hymn-c6': o('ラウマ 命ノ星座6「我が血と涙を 月に捧げ奉らん」: 蒼白の賛歌', { category: 'constellation', note: 'burst.go で登録' }),
+  'lauma-pale-hymn-burst': o('ラウマ 元素爆発「聖言のルノ・月の心」: 蒼の讃歌'),
+  'lauma-pale-hymn-moonsong': o('ラウマ 元素爆発「聖言のルノ・月の心」: 蒼の讃歌・詠月'),
+  'lauma-pale-hymn-c6': o('ラウマ 命ノ星座6「我が血と涙を 月に捧げ奉らん」: 蒼の讃歌', { category: 'constellation', note: 'burst.go で登録' }),
   'lauma-c1': o('ラウマ 命ノ星座1「唇よ歌を紡ぎて 詩を織りなせ」', { category: 'constellation', note: 'cons.go と skill.go の両方で登録' }),
   'lauma-c1-icd': o('ラウマ 命ノ星座1: 発動間隔', { cooldownOf: 'lauma-c1' }),
   'lauma-c2-lunarbloom-buff': o('ラウマ 命ノ星座2「北の戒めを綴りて 伝承を語れ」: 月開花'),

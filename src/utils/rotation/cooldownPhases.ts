@@ -284,7 +284,7 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
         constellation: CharacterModel.fromConfig(char).constellation,
       },
     };
-    // 持ち越すゲージ（兹白の月相の輝き）: 前のモードが終わったときの値 + 命ノ星座の初期増加（上限まで）
+    // 持ち越すゲージ（兹白の隙に浮かぶ光）: 前のモードが終わったときの値 + 命ノ星座の初期増加（上限まで）
     if (md.gauge?.persists) {
       const g = md.gauge;
       let carry = 0;

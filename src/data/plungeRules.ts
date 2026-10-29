@@ -70,7 +70,7 @@ export const PLUNGE_RULES: Record<string, CharacterPlungeRules> = {
     low: AIRBORNE_ONLY,
     high: { after: ['skill', 'skill_hold'], needs: t('messages:plunge.afterSkill') },
   },
-  // 閑雲: 雲の変化の状態の間（元素スキルの跳躍の直後）なら実行できる（xianyun/plunge.go: skillStateKey）
+  // 閑雲: 鶴雲幻化の状態の間（元素スキルの跳躍の直後）なら実行できる（xianyun/plunge.go: skillStateKey）
   [XIANYUN_ID]: {
     low: { after: ['skill'], needs: t('messages:plunge.afterLeapSkill') },
     high: { after: ['skill'], needs: t('messages:plunge.afterLeapSkill') },

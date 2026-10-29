@@ -42,7 +42,7 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
   const tooltip = [
     t('chart:timeless.tooltipHead', { timing, owner: charName(owner), source: sourceLabel }),
     def.description ? loc(def, 'description') : loc(def, 'name'),
-    ...(outOfScope ? [t('gcsim.outOfScopeNote', { reason: def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON })] : []),
+    ...(outOfScope ? [t('gcsim.outOfScopeNote', { reason: loc(def, 'gcsimNote') || GCSIM_OUT_OF_SCOPE_DEFAULT_REASON })] : []),
   ].join('\n');
   return (
     <span

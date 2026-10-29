@@ -13,7 +13,7 @@ import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, ty
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
-import { t } from '../i18n';
+import { currentLanguage, t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 import { charName, actionName, loc } from '../i18n/loc';
 
@@ -227,7 +227,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <label
                       className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-sky-300 cursor-pointer select-none"
                       onClick={(e) => e.stopPropagation()}
-                      title={revelationTooltip(c.source?.gcsimKey)}
+                      title={revelationTooltip(c.source?.gcsimKey, currentLanguage)}
                     >
                       <input
                         type="checkbox"
@@ -514,7 +514,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
               {/* 魔女の諭示（追加天賦）の強化内容と、gcsim・アプリでの扱い */}
               {hasRevelationInfo(currentSlotChar) && (() => {
-                const info = REVELATION_INFO[currentSlotChar.source?.gcsimKey ?? ''];
+                const infoJa = REVELATION_INFO[currentSlotChar.source?.gcsimKey ?? ''];
+                // 英語の表示用の文（D255）。gcsim の状況（status）は日本語の側の値
+                const info = currentLanguage === 'en' && infoJa.en
+                  ? { ...infoJa, talentName: infoJa.en.talentName, summary: infoJa.en.summary, app: infoJa.en.app, gcsim: { ...infoJa.gcsim, note: infoJa.en.gcsimNote } }
+                  : infoJa;
                 const badge = info.gcsim.status === 'implemented'
                   ? { text: t('party:revelationImplemented'), cls: 'bg-emerald-950 text-emerald-300 border-emerald-700/60' }
                   : info.gcsim.status === 'open-pr'
@@ -560,9 +564,9 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                               className={`rounded p-2 border text-[10px] space-y-0.5 ${active ? 'bg-slate-950/70 border-amber-500/40' : 'bg-slate-950/30 border-slate-800 opacity-50'}`}
                             >
                               <div className={`font-mono font-bold ${active ? 'text-amber-300' : 'text-slate-400'}`}>
-                                {t('party:constellationName', { level: lv.level, name: lv.name })}
+                                {t('party:constellationName', { level: lv.level, name: loc(lv, 'name') })}
                               </div>
-                              <p className="text-slate-300 line-clamp-2 leading-relaxed">{lv.description}</p>
+                              <p className="text-slate-300 line-clamp-2 leading-relaxed">{loc(lv, 'description')}</p>
                               {lv.actionChanges?.map(ch => (
                                 <p key={ch.actionId} className="text-sky-300 font-semibold">
                                   ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? t('party:changeDuration', { seconds: ch.effectDuration }) : ''}{ch.cooldown !== undefined ? t('party:changeCooldown', { seconds: ch.cooldown }) : ''}{ch.charges !== undefined ? t('party:changeCharges', { count: ch.charges }) : ''}

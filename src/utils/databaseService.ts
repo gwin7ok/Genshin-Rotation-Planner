@@ -21,6 +21,7 @@ import {
 
 import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs } from '../masterdata/buffGcsimLink';
 import { linkActionEffects, type ActionEffectKeyTable } from '../masterdata/actionGcsimLink';
+import { attachHandwrittenCharacterEnglish, attachHandwrittenEquipmentEnglish } from '../masterdata/handwrittenEnglish';
 import { ACTION_EFFECT_KEY_OVERRIDES } from '../masterdata/actionEffectKeyOverrides';
 import { ACTION_EFFECT_EXTRAS } from '../masterdata/actionEffectExtras';
 import { ACTION_EFFECT_INCLUDED } from '../masterdata/actionEffectIncluded';
@@ -223,6 +224,7 @@ export async function syncCharactersMasterOnline(
   }));
   attachDurations(extras, catalogEntries as any[]);
   linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
+  attachHandwrittenCharacterEnglish(latestChars); // 手で書いた名前・説明の英語（D255。結び付けの後）
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
   const nowStr = new Date().toLocaleString(dateLocale);
@@ -251,6 +253,7 @@ export async function syncWeaponsMasterOnline(
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
   report.catalogCommit = catalogCommit;
   linkEquipmentBuffs(latestWeapons, [], catalogIndex);
+  attachHandwrittenEquipmentEnglish(latestWeapons, []);
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
     currentDb.weapons,
@@ -283,6 +286,7 @@ export async function syncArtifactsMasterOnline(
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
   report.catalogCommit = catalogCommit;
   linkEquipmentBuffs([], latestArtifacts, catalogIndex);
+  attachHandwrittenEquipmentEnglish([], latestArtifacts);
   const mergedArtifacts = mergeItemsWithProtected(
     latestArtifacts,
     currentDb.artifacts,
@@ -312,6 +316,7 @@ export async function syncEquipmentMasterOnline(
   const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
   const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
   linkEquipmentBuffs(latestWeapons, latestArtifacts, catalogIndex);
+  attachHandwrittenEquipmentEnglish(latestWeapons, latestArtifacts);
   const mergedWeapons = mergeItemsWithProtected(
     latestWeapons,
     currentDb.weapons,

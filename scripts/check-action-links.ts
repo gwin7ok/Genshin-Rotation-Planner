@@ -83,7 +83,7 @@ for (const id of ids) {
 for (const [src, field, name] of [[EXPECTED_EXTRAS, 'gcsimExtras', '副次効果'], [ACTION_EFFECT_INCLUDED, 'gcsimIncluded', '含まれる効果']] as const) {
   for (const id of new Set([...Object.keys(src), ...[...defs.values()].filter(d => d[field]?.length).map(d => d.id)])) {
     const a = JSON.stringify((src as any)[id] ?? []);
-    const b = JSON.stringify(defs.get(id)?.[field] ?? []);
+    const b = JSON.stringify(defs.get(id)?.[field] ?? [], (k, v) => (k === 'en' ? undefined : v)); // en は表示用の英語（D255）。入力には無い
     if (a !== b) problems.push(`${name}が食い違う: ${id}`);
   }
 }

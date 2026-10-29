@@ -11,6 +11,7 @@ import { ACTION_EFFECT_EXTRAS } from '../src/masterdata/actionEffectExtras.ts';
 import { ACTION_EFFECT_INCLUDED } from '../src/masterdata/actionEffectIncluded.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
 import { attachDurations, deriveAutoExtras, mergeExtras } from '../src/masterdata/autoEffectExtras.ts';
+import { attachHandwrittenCharacterEnglish, attachHandwrittenEquipmentEnglish } from '../src/masterdata/handwrittenEnglish.ts';
 import type { CharacterConfig } from '../src/types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../src/types/database.ts';
 
@@ -55,7 +56,16 @@ export function loadRuntimeLinks(): Record<string, any> {
   return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf-8')).entries ?? {} : {};
 }
 
+/**
+ * スキル・爆発の紐付けを取り込み、最後に、手で書いた名前・説明の英語を付ける（D255。副次効果の名前も英語にするため、紐付けの後）。
+ * マスターを書き出すスクリプト（build:master・link:actions・regenerate-appside-characters）は、すべてここを通る
+ */
 export function linkActions(characters: CharacterConfig[]): void {
+  linkActionsCore(characters);
+  attachHandwrittenCharacterEnglish(characters);
+}
+
+function linkActionsCore(characters: CharacterConfig[]): void {
   const tablePath = path.join(process.cwd(), 'public/data/action_effect_keys.json');
   if (!fs.existsSync(tablePath)) {
     console.log('（中間データ public/data/action_effect_keys.json が無いため、スキル・爆発の紐付けの取り込みは行っていません。npm run probe:effects で作ってください）');
@@ -78,6 +88,11 @@ export function linkActions(characters: CharacterConfig[]): void {
 
 /** 武器・聖遺物の発動バフを結び付ける（weapons / artifacts を書き換える） */
 export function linkEquipment(weapons: WeaponDatabaseItem[], artifacts: ArtifactSetDatabaseItem[]): void {
+  linkEquipmentCore(weapons, artifacts);
+  attachHandwrittenEquipmentEnglish(weapons, artifacts); // 手で書いた名前・説明の英語（D255。結び付けの後）
+}
+
+function linkEquipmentCore(weapons: WeaponDatabaseItem[], artifacts: ArtifactSetDatabaseItem[]): void {
   const index = loadIndex();
   if (!index) return;
   const report = linkEquipmentBuffs(weapons, artifacts, index);

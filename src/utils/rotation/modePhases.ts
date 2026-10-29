@@ -86,7 +86,7 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
       result: blockingMode.def.blocked.result === 'wait'
         ? t('messages:rotation.blockedWait', { mode: loc(blockingMode.def, 'label'), seconds: (blockingMode.end - actionStartTime).toFixed(1) })
         : blockingMode.def.blocked.result === 'none' ? t('messages:rotation.blockedNone') : t('messages:rotation.blockedError'),
-      hint: blockingMode.def.blocked.hint,
+      hint: loc(blockingMode.def.blocked, 'hint'),
     })
     : undefined;
   // gcsim で実行エラーになる操作（スカークの七相一閃の間の E）は、自分の CT・効果バーを持たない
@@ -175,7 +175,7 @@ export function applyModeEnderAndRepress(state: RotationState, sc: StintContext,
           endTime: fEnd,
           duration: Number((fEnd - fStart).toFixed(3)),
           color: char.color,
-          description: fu.description,
+          description: loc(fu, 'description'),
           noSynergy: true,
         };
         if (!fu.noBar) activeBuffs.push(fSpan);
@@ -250,7 +250,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
         endTime: Number((reStart + md.durationFrames / 60).toFixed(3)),
         duration: Number((md.durationFrames / 60).toFixed(3)),
         color: char.color,
-        description: md.description,
+        description: loc(md, 'description'),
         ...(md.noSynergy ? { noSynergy: true } : {}),
       };
       const reopened: ModeWindow = {
@@ -282,7 +282,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       const freeIndex = consValue(m.def, m.opener.constellation, 'repressFreeIndex');
       const free = freeIndex !== undefined && modeRepress.index === freeIndex;
       const need = free ? 0 : g.cost ?? g.max;
-      if (gaugeState.value < need) gaugeMessage = t('messages:rotation.gauge', { gauge: g.label, value: Math.floor(gaugeState.value), need, hint: g.hint });
+      if (gaugeState.value < need) gaugeMessage = t('messages:rotation.gauge', { gauge: loc(g, 'label'), value: Math.floor(gaugeState.value), need, hint: loc(g, 'hint') });
       if (!free) {
         const costAll = !!consValue(m.def, m.opener.constellation, 'gaugeCostAll');
         gaugeState.value = costAll || g.cost === undefined ? 0 : Math.max(0, gaugeState.value - g.cost);

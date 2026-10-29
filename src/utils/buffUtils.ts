@@ -31,7 +31,7 @@ export interface TriggerableBuffDefinition {
   /** true = アプリの計算が自動で出す効果（祭礼の武器: スキルのダメージが当たったとき、確率 100% で発動）。手で置く候補には出さない */
   autoApplied?: boolean;
   /** 英語の表示用の文（D255）。name・description は処理（編成の中の発動バフとの照合）にも使うので、日本語のまま */
-  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary' | 'sourceName'>;
+  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary' | 'sourceName' | 'gcsimNote'>;
 }
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
@@ -100,6 +100,7 @@ export function getAvailableBuffsForCharacter(
         timing: 'conditional',
         gcsimTarget: false,
         gcsimNote: t('messages:buff.revelationNote'),
+        en: { ...b.en, sourceName: charName(character) },
       });
     }
   }
@@ -138,7 +139,8 @@ export function getAvailableBuffsForCharacter(
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
           ...(b.gcsimCooldownKeys?.includes('sacrificial-cd') ? { autoApplied: true } : {}),
-          en: { ...(override?.name ? {} : b.en), sourceName: loc(weaponModel.data, 'name') },
+          // 英語（D255）: 手で書いた名前はマスターの名前と同じ（英語は生成で付けた en.name）。違うときだけ英語の名前を使わない
+          en: { ...b.en, ...(override?.name && override.name !== b.name ? { name: undefined } : {}), sourceName: loc(weaponModel.data, 'name') },
         });
       }
     }
@@ -191,7 +193,7 @@ export function getAvailableBuffsForCharacter(
           gcsimNote: b.gcsimNote,
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
-          en: { ...(artOverride?.name ? {} : b.en), sourceName: loc(matchedArtifact, 'name') },
+          en: { ...b.en, ...(artOverride?.name && artOverride.name !== b.name ? { name: undefined } : {}), sourceName: loc(matchedArtifact, 'name') },
         });
       }
     }
@@ -218,7 +220,7 @@ export function getAvailableBuffsForCharacter(
         gcsimNote: c.gcsimNote,
         gcsimKeys: c.gcsimKeys,
         gcsimCooldownKeys: c.gcsimCooldownKeys,
-        en: { name: t('messages:buff.constellationName', { level: c.level, name: loc(c, 'name') }), ...(c.en?.description ? { description: c.en.description } : {}), sourceName: charName(character) },
+        en: { name: t('messages:buff.constellationName', { level: c.level, name: loc(c, 'name') }), ...(c.en?.description ? { description: c.en.description } : {}), ...(c.en?.gcsimNote ? { gcsimNote: c.en.gcsimNote } : {}), sourceName: charName(character) },
       });
     }
   }

@@ -130,6 +130,7 @@ export class WeaponModel {
         description: this.description,
         color: this.data.buffEffect.color,
         statEffectSummary: this.statEffectSummary,
+        ...(this.data.buffEffect.en?.name ? { en: { name: this.data.buffEffect.en.name } } : {}),
       }];
     }
     return [];

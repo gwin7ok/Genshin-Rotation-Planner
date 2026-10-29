@@ -44,7 +44,7 @@ const { characters, report, keyMap } = await generateCharacterMaster(p => {
 });
 
 linkCharacters(characters); // 発動バフと gcsim の辞書の結び付け（5-6）
-linkActions(characters); // スキル・爆発の効果と gcsim のキーの紐付け（中間データの取り込み。D95）
+linkActions(characters); // スキル・爆発の効果と gcsim のキーの紐付け（中間データの取り込み。D95）。手で書いた名前・説明の英語も付ける（D255）
 fs.writeFileSync(outputPath, JSON.stringify(characters, null, 2) + '\n', 'utf-8');
 updateKeyMapFile({ characters: keyMap });
 

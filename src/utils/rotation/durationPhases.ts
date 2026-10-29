@@ -11,7 +11,7 @@ import { isModeActive, modeMaxUses, consValue } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { t } from '../../i18n';
-import { charName } from '../../i18n/loc';
+import { charName, loc } from '../../i18n/loc';
 
 /** フレーム表の選択: 通常攻撃の段・モード専用のフレーム・モードを終わらせる動作のフレーム */
 export function selectFrames(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -277,7 +277,7 @@ export function buildComputedAction(state: RotationState, sc: StintContext, ac: 
     ...act,
     // 略号は、保存データのコピーではなく、アクション定義から引く（略号を変えても、保存済みの出場ブロックに反映される）
     ...(actionDef?.shortName ? { shortName: actionDef.shortName } : {}),
-    ...(burstVariantMode?.def.burstVariant ? { name: burstVariantMode.def.burstVariant.name } : {}),
+    ...(burstVariantMode?.def.burstVariant ? { name: loc(burstVariantMode.def.burstVariant, 'name') } : {}),
     hasCTCollision: false,
     collisionRemainingCT: undefined,
     ...(ac.repressGcsimCommand ? { gcsimCommand: ac.repressGcsimCommand } : {}),

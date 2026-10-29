@@ -2,7 +2,7 @@
 
 ## 現在の状態
 
-フェーズ 3（ゲームデータ）: 進行中（次は 3-3 アプリ独自の定義の英語）。進め方は plan.md 4.3.2
+フェーズ 3（ゲームデータ）: 進行中（3-3 まで完了。次は 3-4 要約・引用の英語の確認）。進め方は plan.md 4.3.2
 
 ## フェーズ状態
 
@@ -58,12 +58,19 @@
   - 英語の名前を作れなかったもの 51 件（モードの名前 48・アクション 3）→ 3-3
 - [x] 3-2 武器・聖遺物: 名前・パッシブ名・精錬ごとの説明・発動バフ（名前・説明・英語の要約 `generateStatSummaryEn`・根拠の引用 `findEnglishQuote`。D258）。英語は公式 ID で突き合わせる（今までは並び順）。常時の効果の定義（`buffGcsimLink.ts`）にも `en`
   - `npm run build:equipment` で作り直し、**`en`（と生成日時）を除くと今の JSON と完全に一致**。武器 79 万字 → 177 万字・聖遺物 6 万字 → 10 万字。根拠の引用は 229 件中 213 件を英語の説明文で見つけた（16 件は日本語の原文を出す）
-- [ ] 3-3 アプリ独自の定義（進行中。2026-10-29 に利用上限のため中断）
-  - 済: 型に `en` を足した（モードの barNote・gauge・blocked・drain・burstVariant・ctReduction・layerBuff・fullBuff、アクションの specialBurstHint、gcsimNote、キャラの frameSource、武器・聖遺物の旧形式 buffEffect）
-  - 方針: 英訳の辞書（日本語 → 英語。完全一致 + 決まった文の型「Xの状態。入力がなければ N 秒続く。キャラ交代で終わる」「X（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない」）を作り、生成・結び付けの後の 1 つの関数（attachHandwrittenEnglish）で `en` を付ける。呼ぶ場所: build-character-master.ts（linkActions の後）・build-equipment-master.ts・databaseService.ts（link〜Buffs の後）。表示側は loc() に置き換える（barNote・gauge・blocked.hint・specialBurstHint・layerBuff・ctReduction・gcsimNote・frameSource・旧形式 buffEffect.name）
-  - 対象（画面に出るもの、約 190 件）: モード名 38・説明 42・副次効果名 27・効果名 9・gcsimNote 9・ヒント類・アクション名 3・frameSource 7・手で書いた発動バフ名（武器 19・聖遺物 15。「X: 接尾」の X は英語の装備名にし、接尾だけ訳す）・旧形式 buffEffect（最初の発動バフの en を写す）。dataSource・source などの開発者向けメモは画面に出ないので対象外（D252）
+- [x] 3-3 アプリ独自の定義
+  - 型に `en` を足した（モードの barNote・gauge・blocked・drain・burstVariant・ctReduction・layerBuff・fullBuff、アクションの specialBurstHint、gcsimNote、キャラの frameSource、武器・聖遺物の旧形式 buffEffect）
+  - 英訳の辞書と付ける関数: `src/masterdata/handwrittenEnglish.ts`（名前 `TERMS`・文 `SENTENCES`・装備の発動バフ名の接尾 `BUFF_SUFFIXES`・決まった文の型 `PATTERNS`）。マスターの木をたどって、表示用の欄（name・label・description・hint・gcsimNote など）に日本語があり `en` に無いものへ足す。手で書いた発動バフ名「X: 接尾」は英語の装備名 + 訳した接尾。旧形式 buffEffect は最初の発動バフの `en` を写す
+  - 呼ぶ場所: `scripts/link-buffs.ts` の `linkActions`・`linkEquipment` の最後（build:master・build:equipment・link:actions・regenerate-appside-characters がすべて通る）と、`databaseService.ts`（オンライン生成の結び付けの後）
+  - マスターを作り直し、`en`（と生成日時）を除くと今の JSON と完全に一致。画面に出る欄で `en` の無い日本語は 0 件（精錬・命ノ星座の中も含む）。キャラ 174 万字・武器 185 万字・聖遺物 11 万字
+  - 表示を `loc()` に: モードの説明・barNote・blocked.hint・gauge・followUps・burstVariant・ctReduction・layerBuff / fullBuff・specialBurstHint・gcsimNote（GlobalBuffRow・StintBuffTriggersSection）・frameSource（`frameSourceOf()`）・旧形式の発動バフ名・DB 管理のアクションの名前とボタン名・編成設定の命ノ星座の一覧
+  - 実行時の定数: 魔女の諭示の説明（`REVELATION_INFO` の `en`・`revelationTooltip(key, language)`・アプリ側の発動バフ）、gcsim のキーごとの名前（`labelForKeyEn`。保存する名前・照合は日本語のまま。表示は `triggerName()` で引く）
+  - 手で書いた名前の装備の発動バフ（WEAPON_BUFF_OVERRIDES など）は、`buffUtils` で `en` を丸ごと捨てていた → 名前がマスターと同じときは英語を使う
+  - `check:action-links` は、副次効果の比較で `en` を除く（入力の一覧には英語が無いため）
+  - 公式の英語が見つからなかった語は、glossary.md の「アプリが手で書いた名前」に「要確認」で載せた
+  - 画面の確認（英語・同梱のマスター）: メイン画面・編成設定・DB 管理（キャラ・武器・聖遺物）で、画面の文字と title に日本語が残らないことを確認。残るもの: DB 管理のアクションの title のフレームの出典 `frames.source`（gcsim のソースの位置と補足。9 種。開発者向け → フェーズ 4）、略号 `hE(落下)`（1 件。記法の処理に使う → 3-5 で扱いを決める）。日本語の画面でコンソールのエラーなし
   - genshin-db の英語で確認した公式名: Oz・Lightning Stiletto・Musou Isshin・Ceremonial Garment・Shunsuiken・Sword Dance・Mortuary Rite・Night Vigil・Turbo Twirly・Nightsoul's Blessing・Nightsoul points・Dreamdrifter・Apex Drive・Seven-Phase Flash・Manifest Flame・Thunderous Symphony・Northland Spearstorm・Shadow Dance・Sturm und Drang・Masterstroke・Joy・Armed for Action・Sword Essence・Windborne Sword・Hunter's Precision・Adagio: Coda at Dawn's Tolling・Dandelion Breeze・Jade Screen・Scarlet Seal・Blood Blossom・Prayerful Wind's Benefit・Perfidious Wind's Bale・Redmane's Blood・Grin-Malkin Hat・Ranging Flame・Confirmation of Purity・Denial of Darkness・Principle of Purity: As the Light Shifts・Principle of Darkness: As the Stars Smolder・Dragon of White Flame・Dragon of Dark Decay
-  - 見つからなかったもの（訳したら glossary.md に「要確認」で載せる）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
+  - 見つからなかったもの（glossary.md に「要確認」で載せた）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
 - [ ] 3-4 要約の英語の組み立てと、英語の説明文からの根拠の引用（D258）
 - [ ] 3-5 名前で判定している処理の置き換え
 - [ ] 3-6 保存編成・プリセットの名前を、表示のときに DB から ID で引く
@@ -102,6 +109,7 @@
 | 日付 | 内容 |
 |---|---|
 | 2026-10-29 | 調査・選択肢の提示・ユーザーの決定（D243〜D254）。計画書を作成 |
+| 2026-10-29 | 3-3 を実装（手で書いた名前・説明の英語。handwrittenEnglish.ts）。マスターを作り直し、en を除いて一致。英語の画面で、ゲームデータの日本語は開発者向けのフレームの出典と略号 1 件だけ。検査はすべて合格（hitlag・sacrificial-seed も実行） |
 | 2026-10-29 | 3-1 の表示の置き換えと 3-2 の武器・聖遺物を実装。英語の画面で、残る日本語はアプリ独自の名前（モード・手で書いた発動バフ名）だけ（同梱のマスターで確認）。検査はすべて合格 |
 | 2026-10-29 | 3-1（型・表示の関数）と 3-2（キャラの英語）を実装。キャラのマスターを作り直し、en を除いて一致を確認 |
 | 2026-10-29 | フェーズ 3 を開始。容量を実測（日本語の文 69 万字・うち重複 37 万字。DB 174 万字）。D255〜D258 を決定 |

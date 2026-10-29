@@ -9,7 +9,7 @@ import type { ModeWindow, SacrificialProc } from './types';
 import type { CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
 import { t } from '../../i18n';
-import { charName, actionName } from '../../i18n/loc';
+import { charName, actionName, loc } from '../../i18n/loc';
 
 /** モードの終わりに関わる CT を、CT の発動（ctEvents）に足す: 時間切れで終わったモードのスキルの CT 短縮（閑雲）と、モードの終わりから始まる CT（タルタリヤ・放浪者） */
 export function addModeEndCooldowns(a: { retiredModes: ModeWindow[]; modeWindows: Map<string, ModeWindow>; ctEvents: CooldownEvent[]; skillCooldowns: CooldownSpan[]; charStates: Record<string, CharacterRuntimeState>; switchDelay: number }): void {
@@ -128,8 +128,8 @@ export function addStateBars(a: { characters: CharacterConfig[]; activeBuffs: Ac
     const char = characters.find(c => c.id === charId);
     if (!char) continue;
     const { layers, fullPeriods } = simulateLayers(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
-    layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, t('messages:rotation.layer', { label: entry.rule.label, index: l.index }), l.start, l.end, entry.rule.description, true));
-    fullPeriods.forEach((p, i) => stateBar(char, `layerfull_${charId}_${i}`, entry.rule.fullBuff!.label, p.start, p.end, entry.rule.fullBuff!.description, true));
+    layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, t('messages:rotation.layer', { label: loc(entry.rule, 'label'), index: l.index }), l.start, l.end, loc(entry.rule, 'description'), true));
+    fullPeriods.forEach((p, i) => stateBar(char, `layerfull_${charId}_${i}`, loc(entry.rule.fullBuff, 'label'), p.start, p.end, loc(entry.rule.fullBuff, 'description'), true));
   }
 }
 
@@ -156,7 +156,7 @@ export function addSacrificialPassiveSpans(a: { sacrificialProcs: SacrificialPro
       characterId: p.charId,
       passiveEffectId: def.id,
       effectGroup: passiveGroupOf(def.id),
-      name: def.name,
+      name: loc(def, 'name'),
       category: 'weapon',
       startTime: p.time,
       duration,
@@ -165,7 +165,7 @@ export function addSacrificialPassiveSpans(a: { sacrificialProcs: SacrificialPro
       cooldownEnd: Number((p.time + p.icdSeconds).toFixed(3)),
       hasCTViolation: false,
       color: def.color,
-      description: def.description,
+      description: loc(def, 'description'),
     });
   }
 }

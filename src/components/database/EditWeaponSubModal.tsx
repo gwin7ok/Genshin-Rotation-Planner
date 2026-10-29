@@ -3,6 +3,7 @@ import { X, Sword } from 'lucide-react';
 import { WeaponDatabaseItem } from '../../types/database';
 import { WeaponType } from '../../types/genshin';
 import { ItemLockButton } from './ItemLockButton';
+import { t } from '../../i18n';
 
 /* =========================================================================
    SUB-MODALS: WEAPON EDIT FORM
@@ -66,8 +67,8 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Sword className="w-4 h-4 text-sky-400" />
-            <span>武器定義編集: {form.name}</span>
-            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="武器ID">
+            <span>{t('database:edit.weaponTitle', { name: form.name })}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title={t('database:edit.weaponId')}>
               （ID:{form.id}）
             </span>
           </h3>
@@ -79,7 +80,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
                 setForm(prev => ({ ...prev, isLocked: locked }));
                 onToggleLock?.(locked);
               }}
-              itemTypeLabel="武器"
+              itemTypeLabel={t('item.weapon')}
             />
             <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
           </div>
@@ -88,7 +89,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
-              <label className="block text-slate-400 mb-1">武器名</label>
+              <label className="block text-slate-400 mb-1">{t('database:edit.weaponName')}</label>
               <input
                 type="text"
                 value={form.name}
@@ -99,7 +100,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">武器種類</label>
+              <label className="block text-slate-400 mb-1">{t('database:edit.weaponKind')}</label>
               <select
                 value={form.weaponType}
                 onChange={e => setForm({ ...form, weaponType: e.target.value as WeaponType })}
@@ -112,21 +113,21 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">レアリティ (★)</label>
+              <label className="block text-slate-400 mb-1">{t('database:edit.rarity')}</label>
               <select
                 value={form.rarity}
                 onChange={e => setForm({ ...form, rarity: parseInt(e.target.value) as any })}
                 className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-amber-300 font-bold"
               >
-                <option value={5}>★★★★★ (5星)</option>
-                <option value={4}>★★★★ (4星)</option>
-                <option value={3}>★★★ (3星)</option>
+                <option value={5}>{t('database:edit.rarity5')}</option>
+                <option value={4}>{t('database:edit.rarity4')}</option>
+                <option value={3}>{t('database:edit.rarity3')}</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">パッシブスキル名</label>
+            <label className="block text-slate-400 mb-1">{t('database:edit.passiveName')}</label>
             <input
               type="text"
               value={form.passiveName}
@@ -136,7 +137,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">パッシブ効果説明</label>
+            <label className="block text-slate-400 mb-1">{t('database:edit.passiveDescription')}</label>
             <textarea
               rows={3}
               value={form.description}
@@ -159,9 +160,9 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
                         ...form,
                         buffEffect: {
                           id: `buff_w_${Date.now()}`,
-                          name: `${form.name}: パッシブバフ`,
+                          name: t('database:edit.weaponBuffName', { name: form.name }),
                           duration: 12.0,
-                          statEffect: '特有バフ発動',
+                          statEffect: t('database:edit.weaponBuffEffect'),
                           description: form.description || '',
                           color: '#38bdf8'
                         }
@@ -170,7 +171,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
                   }}
                   className="rounded border-slate-700 text-sky-500 focus:ring-sky-500"
                 />
-                <span>タイムライン連動バフを有効化</span>
+                <span>{t('database:edit.enableBuff')}</span>
               </label>
             </div>
 
@@ -178,7 +179,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
               <div className="space-y-2 pt-2 border-t border-slate-800 font-mono">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div>
-                    <label className="block text-slate-400 text-[10px]">バフ表示名</label>
+                    <label className="block text-slate-400 text-[10px]">{t('database:edit.buffName')}</label>
                     <input
                       type="text"
                       value={form.buffEffect.name}
@@ -190,7 +191,7 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-400 text-[10px]">持続時間 (秒)</label>
+                    <label className="block text-slate-400 text-[10px]">{t('database:edit.durationSeconds')}</label>
                     <input
                       type="number"
                       step="any"
@@ -204,12 +205,12 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-400 text-[10px]">CT / クールタイム (秒)</label>
+                    <label className="block text-slate-400 text-[10px]">{t('database:edit.cooldownSeconds')}</label>
                     <input
                       type="number"
                       step="any"
                       min="0"
-                      placeholder="なし"
+                      placeholder={t('noneShort')}
                       value={form.buffEffect.cooldown ?? ''}
                       onChange={e => {
                         const val = e.target.value === '' ? undefined : (parseFloat(e.target.value) || undefined);
@@ -228,10 +229,10 @@ export const EditWeaponSubModal: React.FC<EditWeaponSubModalProps> = ({ weapon, 
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
             <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
-              キャンセル
+              {t('action.cancel')}
             </button>
             <button type="submit" className="px-5 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg shadow-md">
-              保存
+              {t('action.save')}
             </button>
           </div>
         </form>

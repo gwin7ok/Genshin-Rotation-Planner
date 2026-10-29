@@ -10,6 +10,20 @@ import {
   isGcsimOutOfScope,
   isGlobalRowBuff,
 } from '../utils/buffUtils';
+import { t } from '../i18n';
+
+/** 発動バフのパレットのボタンの説明（出どころ・説明・効果時間・CT） */
+const paletteTitle = (source: string, def: TriggerableBuffDefinition) =>
+  t('chart:buff.paletteTitle', {
+    source,
+    description: def.description ?? def.name,
+    duration: def.duration ?? t('notSet'),
+    cooldown: def.cooldown ? `${def.cooldown}s` : t('noneShort'),
+  });
+
+/** 名前に効果時間が含まれていなければ、名前の後ろに効果時間を足す */
+const withDuration = (def: TriggerableBuffDefinition) =>
+  def.duration && !def.name.includes(`${def.duration}秒`) && !def.name.includes(`${def.duration}s`) ? ` (${def.duration}s)` : '';
 
 /** 「gcsim 対象外」のバッジ（gcsim の計算結果では置かれず、手動で置いたときだけ表示される。D41-3・D53） */
 const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ def }) =>
@@ -18,7 +32,7 @@ const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ de
       className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 font-normal shrink-0"
       title={def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON}
     >
-      gcsim対象外
+      {t('gcsim.outOfScope')}
     </span>
   ) : null;
 
@@ -112,7 +126,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
     <div className={`${part === 'palette' ? 'mt-1.5' : 'mt-2.5 pt-2 border-t border-dashed border-slate-700/80'} flex flex-wrap items-center gap-2`}>
       {showList && (
       <span className="text-[11px] font-bold text-amber-300 shrink-0 flex items-center gap-1">
-        <span>✨ 連動・発動バフ:</span>
+        <span>{t('chart:buff.linked')}</span>
       </span>
       )}
 
@@ -141,15 +155,15 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               {trigger.name}
             </span>
             {matchedDef && <GcsimOutOfScopeBadge def={matchedDef} />}
-            <span className="text-[10px] font-mono text-slate-400" title="発動位置（出場の先頭から）。ガントチャートでドラッグして調整">
+            <span className="text-[10px] font-mono text-slate-400" title={t('chart:buff.offsetTitle')}>
               @{trigger.offset >= 0 ? '+' : ''}{trigger.offset.toFixed(2)}s
             </span>
             {renderTimingInput(
-              '効果',
+              t('chart:buff.effect'),
               trigger.duration ?? defaultDuration,
               defaultDuration,
               'text-pink-300',
-              `効果継続時間（初期値 ${defaultDuration}s）`,
+              t('chart:buff.durationTitle', { seconds: defaultDuration }),
               v => handleUpdateTiming(trigger.id, 'duration', v, defaultDuration),
               hoverProps.onHoverChange
             )}
@@ -158,7 +172,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               trigger.cooldown ?? defaultCooldown,
               defaultCooldown,
               badgeCfg.timingValueClass,
-              `クールタイム（初期値 ${defaultCooldown}s。0sでCTなし）`,
+              t('chart:buff.cooldownTitle', { seconds: defaultCooldown }),
               v => handleUpdateTiming(trigger.id, 'cooldown', v, defaultCooldown),
               hoverProps.onHoverChange
             )}
@@ -166,8 +180,8 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
               type="button"
               onClick={() => handleRemoveTrigger(trigger.id)}
               className="p-0.5 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 ml-0.5 transition-colors flex items-center justify-center shrink-0"
-              title="この連動バフを削除"
-              aria-label="連動バフを削除"
+              title={t('chart:buff.remove')}
+              aria-label={t('chart:buff.removeLabel')}
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
@@ -178,13 +192,13 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
       {/* バフ登録パレット（天賦 / 武器 / 聖遺物） */}
       {showPalette && (
       <div className="basis-full flex flex-wrap items-center gap-1.5 mt-1">
-        <span className="h-7 w-14 shrink-0 mr-2 inline-flex items-center justify-center text-[11px] font-semibold text-red-300/70 bg-red-950/40 border border-red-900/60 rounded" title="連動・発動バフ（固有天賦・武器・聖遺物・命ノ星座の効果）を登録します">+ 登録</span>
+        <span className="h-7 w-14 shrink-0 mr-2 inline-flex items-center justify-center text-[11px] font-semibold text-red-300/70 bg-red-950/40 border border-red-900/60 rounded" title={t('chart:buff.registerTitle')}>{t('chart:buff.register')}</span>
 
         {trackBuffs.length === 0 ? (
           <span className="text-[11px] text-slate-500 italic">
             {availableBuffs.length > 0
-              ? '時間のある発動バフはありません（常時・時間の無い効果は、ガントチャートの「時間指定のない効果」の行に表示されます）'
-              : '発動バフデータがありません（編成設定で武器・聖遺物を選ぶと追加できます）'}
+              ? t('chart:buff.noTimed')
+              : t('chart:buff.noData')}
           </span>
         ) : (
           <>
@@ -195,10 +209,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 hover:text-white text-[11px] font-semibold border border-emerald-800/80 hover:border-emerald-500 transition-all flex items-center gap-1"
-                title={`【固有天賦】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+                title={paletteTitle(t('category.talent'), def)}
               >
                 <span>🎯</span>
-                <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <span>+{def.name}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -210,10 +224,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 hover:text-white text-[11px] font-semibold border border-rose-800/80 hover:border-rose-500 transition-all flex items-center gap-1"
-                title={`【命ノ星座】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+                title={paletteTitle(t('category.constellation'), def)}
               >
                 <span>✦</span>
-                <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <span>+{def.name}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -225,10 +239,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-sky-950/60 hover:bg-sky-900/80 text-sky-200 hover:text-white text-[11px] font-semibold border border-sky-800/80 hover:border-sky-500 transition-all flex items-center gap-1"
-                title={`【武器: ${def.sourceName}】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+                title={paletteTitle(t('category.weapon', { name: def.sourceName }), def)}
               >
                 <span>⚔️</span>
-                <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <span>+{def.name}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}
@@ -240,10 +254,10 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
                 type="button"
                 onClick={() => handleAddTrigger(def)}
                 className="h-7 px-2 rounded bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 hover:text-white text-[11px] font-semibold border border-purple-800/80 hover:border-purple-500 transition-all flex items-center gap-1"
-                title={`【聖遺物: ${def.sourceName}】${def.description ?? def.name}\n効果: ${def.duration ?? '未設定'}s / CT: ${def.cooldown ?? 'なし'}${def.cooldown ? 's' : ''}`}
+                title={paletteTitle(t('category.artifact', { name: def.sourceName }), def)}
               >
                 <span>🛡️</span>
-                <span>+{def.name}{def.duration && !def.name.includes(`${def.duration}秒`) ? ` (${def.duration}s)` : ''}</span>
+                <span>+{def.name}{withDuration(def)}</span>
                 <GcsimOutOfScopeBadge def={def} />
               </button>
             ))}

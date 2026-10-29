@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CharacterConfig } from '../types/genshin';
+import { t } from '../i18n';
 
 /** gcsim に未実装のキャラか（マスターに gcsim のキーが無い。カスタムキャラ・空きスロットは対象外） */
 export function isGcsimMissingCharacter(c: Pick<CharacterConfig, 'id' | 'isCustom' | 'source'>): boolean {
@@ -11,9 +12,9 @@ export function isGcsimMissingCharacter(c: Pick<CharacterConfig, 'id' | 'isCusto
 export const GcsimMissingBadge: React.FC<{ char: Pick<CharacterConfig, 'id' | 'isCustom' | 'source'>; className?: string }> = ({ char, className = '' }) => {
   if (!isGcsimMissingCharacter(char)) return null;
   const framesNote = char.source?.frameSource
-    ? `動作の長さは、${char.source.frameSource}の値を使っています（検証前の値を含む）。`
-    : '動作の長さは、仮の秒数です（実測のフレームがありません）。';
-  return <GcsimMissingTag className={className} title={`gcsim に未実装のキャラです。gcsim での計算はできません（アプリの計算のみ）。${framesNote}`} />;
+    ? t('gcsim:missing.framesFrom', { source: char.source.frameSource })
+    : t('gcsim:missing.framesTentative');
+  return <GcsimMissingTag className={className} title={t('gcsim:missing.character', { framesNote })} />;
 };
 
 /** gcsim に未実装の武器・聖遺物か（gcsim のキーが無い。カスタムは対象外） */
@@ -26,6 +27,6 @@ export const GcsimMissingTag: React.FC<{ title: string; className?: string }> = 
     className={`inline-flex items-center shrink-0 px-1.5 py-px rounded border border-rose-500/50 bg-rose-500/15 text-rose-300 text-[9px] font-bold leading-tight whitespace-nowrap select-none ${className}`}
     title={title}
   >
-    gcsim未実装
+    {t('gcsim:missing.label')}
   </span>
 );

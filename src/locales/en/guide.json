@@ -1,0 +1,86 @@
+{
+  "title": "Guide",
+  "intro": "A tool for building Genshin Impact combat rotations (who uses what, and when) along a timeline, and checking Skill/Burst cooldowns and buff overlaps. Rotations are saved only in this browser.",
+  "sections": {
+    "basic": {
+      "title": "Basic flow (start here)",
+      "items": {
+        "1": "Open <b>Team Setup</b> and choose the 4 party members (character, constellation, weapon, artifacts).",
+        "2": "Under \"<b>Add stint</b>\" in the middle of the screen, press a character's button to line up <b>stints</b> (one on-field turn of that character). The same character can appear any number of times.",
+        "3": "Inside each stint, press buttons such as <b>+N +C +tE +hE +Q +D +J +Wait</b> to add actions.",
+        "4": "Check the timeline, Skill/Burst cooldowns, effect durations, buff overlaps and cooldown conflicts on the <b>Gantt chart</b> below.",
+        "5": "For precise numbers, press <b>Run gcsim</b> (the real simulator measures action times, cooldowns, durations and triggered buffs, and applies them).",
+        "6": "When you are happy with it, use <b>Save as</b> (saved rotation). <b>Copy notation</b> creates a one-line notation you can post on social media."
+      }
+    },
+    "screen": {
+      "title": "Reading the screen",
+      "items": {
+        "1": "<b>Top row</b>: choose a saved rotation, Save, Save as / play and reset (cycle, time, speed 0.5x–2x) / cooldown status (<ok>No cooldown conflicts</ok> / <ng>Cooldown conflicts</ng> / <warn>Cooldown warnings</warn>) / <b>Hide</b> (show or hide the button row below).",
+        "2": "<b>Button row</b>: Guide / Team Setup, Rotations, Database / Run gcsim, Copy gcsim config, Back to app calculation / Copy notation (and the current notation, with Short/Names switch).",
+        "3": "<b>Build area</b> (list of stints): edit the order and the actions here. The chips of \"Quick reorder\" above change the stint order at a glance.",
+        "4": "<b>Gantt chart</b>: the horizontal axis is time (seconds). From the top: stint flow, number of overlapping buffs (Synergy), and one row per character (actions, cooldowns, effects, triggered buffs). Zoom with the slider at the top right."
+      }
+    },
+    "edit": {
+      "title": "Editing actions",
+      "items": {
+        "1": "<b>Where actions are added</b>: when one action is selected with a click, the add buttons insert <b>before</b> it (in the same stint). With nothing selected, or another stint selected, actions are added at the end. Click the stint background to clear the selection.",
+        "2": "<b>Reordering</b>: drag and drop actions (within the same stint; the switch action stays first). Stints can be moved with the card's <b>drag handle</b>, \"Up/Down\", dragging the quick reorder chips, or dragging on the Gantt chart. After reordering, later times reconnect automatically (serial snapping).",
+        "3": "<b>Action time</b>: change each action's time with ▲▼ (0.05 s, 0.1 s) or by typing a number. For hold skills (hE), you can also set how long to hold. Changed values are marked, and \"Back to app calculation\" restores them all.",
+        "4": "<b>Delete</b>: the ✕ on an action. For a stint, the delete button on the right of the card (or the × on its quick reorder chip).",
+        "5": "<b>Add memo</b>: you can leave a memo on each stint."
+      }
+    },
+    "group": {
+      "title": "Groups (repeating the same moves)",
+      "items": {
+        "1": "<b>Ctrl+click</b> actions (Cmd+click on Mac) to select adjacent ones → \"<b>Group N</b>\". With only one selected, \"<b>Repeat 1</b>\".",
+        "2": "Set the group's <b>count</b> (▲▼ or a number) and the actions inside are calculated as done that many times in a row. The default is 1.",
+        "3": "The notation becomes <code>3C</code> (one action 3 times) or <code>2[N1C]</code> (N1 and C twice).",
+        "4": "Pressing <b>Ungroup</b> lays the actions out as normal actions <b>with the current count</b> (with a count of 3, three repetitions remain).",
+        "5": "Actions inside a group can only be reordered within the group. The whole group can also be moved."
+      }
+    },
+    "chart": {
+      "title": "Gantt chart colors and marks",
+      "items": {
+        "1": "<b>Cooldown bars</b> (Skill CD, Burst CD): the wait until the action can be used again. Actions with a <b>red mark</b> have a <b>cooldown conflict</b> (used before the cooldown ended).",
+        "2": "<b>Effect bars</b> (shields, fields, transformations, etc.): while the action's effect lasts.",
+        "3": "<b>Dashed-border bars</b> (triggered buffs): effects of passive talents, weapons, artifacts and constellations, colored by type. <b>Carried</b> means the effect continues from the previous cycle.",
+        "4": "<b>Amber border / cooldown warning</b>: triggered buffs placed during their cooldown, special skills outside their window, plunging attacks without their prerequisites, etc. Hover over the bar to see the reason.",
+        "5": "<b>Loop point</b>: the start of the range repeated from the 2nd cycle on. Drag to move it. Playback lets you check the 1st and 2nd cycles.",
+        "6": "Hover over a bar to see its name, timing and description."
+      }
+    },
+    "gcsim": {
+      "title": "Run gcsim (apply measured values)",
+      "items": {
+        "1": "\"<b>Run gcsim</b>\" runs the current team and rotation in gcsim (the simulator, running inside your browser) and <b>applies the results at once</b>. Nothing is sent to a server.",
+        "2": "Applied values: action times, Skill/Burst cooldowns, effect durations, and positions and lengths of triggered buffs. If there are cooldown conflicts, it does not run (fix them first).",
+        "3": "To discard applied values and return to the app's calculation (master frames and cooldowns), use \"<b>Back to app calculation</b>\".",
+        "4": "\"<b>Copy gcsim config</b>\" gives you the gcsim config (to run it in gcsim elsewhere; conversion warnings are shown too).",
+        "5": "Characters and effects gcsim does not support are marked \"Not simulated\" and keep the app's calculation."
+      }
+    },
+    "save": {
+      "title": "Saving and backup",
+      "items": {
+        "1": "Your edits are <b>saved automatically in this browser</b> (nothing is sent to a server). They are lost if you clear the browser data.",
+        "2": "<b>Rotations</b>: save, load and delete named rotations (slots). A single rotation can also be exported to or imported from a JSON file.",
+        "3": "<b>Back up all data</b> (Rotations → JSON backup & share): bundles all saved rotations, the current rotation, settings and the data you created into one file. Use it when moving to another browser or device, or before clearing data.",
+        "4": "<b>Database</b>: sync, edit and add character, weapon and artifact data."
+      }
+    },
+    "notation": {
+      "title": "Notation (sharing as text)",
+      "items": {
+        "1": "\"<b>Copy notation</b>\" copies the rotation as a one-line string. Example: <code>{{example}}</code>",
+        "2": "You can switch between <b>Short</b> (E, Q, N1, C, etc., written compactly) and <b>Names</b>.",
+        "3": "The part enclosed in <code>{{braces}}</code> is the range repeated from the 2nd cycle on (after the loop point).",
+        "4": "Consecutive Normal Attacks are written <code>N3</code> (3 times), groups <code>3C</code> or <code>2[N1C]</code>, and holds <code>hE@2.0s</code>."
+      },
+      "example": "{Furina E > Citlali E > Furina Q > Xiangling EQ}"
+    }
+  }
+}

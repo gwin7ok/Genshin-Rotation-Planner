@@ -1,0 +1,56 @@
+{
+  "timeless": {
+    "label": "Effects without timing",
+    "empty": "No always-on effects or passive talents without a duration"
+  },
+  "buff": {
+    "linked": "✨ Linked / triggered buffs:",
+    "offsetTitle": "Trigger position (from the start of the stint). Drag on the Gantt chart to adjust",
+    "effect": "Dur",
+    "durationTitle": "Effect duration (default {{seconds}}s)",
+    "cooldownTitle": "Cooldown (default {{seconds}}s; 0s = no cooldown)",
+    "remove": "Remove this linked buff",
+    "removeLabel": "Remove linked buff",
+    "register": "+ Add",
+    "registerTitle": "Add a linked/triggered buff (effects of passive talents, weapons, artifacts and constellations)",
+    "noTimed": "No triggered buffs with a duration (always-on and duration-less effects are shown in the \"Effects without timing\" row of the Gantt chart)",
+    "noData": "No triggered buff data (choose a weapon and artifacts in Team Setup to add some)",
+    "paletteTitle": "[{{source}}] {{description}}\nDuration: {{duration}}s / CD: {{cooldown}}"
+  },
+  "reaction": {
+    "header": "🌀 Reactions (cycle {{lap}})",
+    "gcsimResult": "gcsim result",
+    "max": "max {{max}}",
+    "barNote": "* Result of running gcsim (cycle {{lap}}). After editing, positions may be off until you run it again (click to seek to the start)",
+    "unitPieces": "",
+    "unitStacks": " stacks",
+    "lunarcharged": {
+      "label": "🌙 Lunar-Charged cloud",
+      "help": "Triggering Lunar-Charged creates a cloud; while it exists, Lunar-Charged DMG hits enemies about every 2 s. Each reaction extends it to 5.5 s"
+    },
+    "lunarcrystallize": {
+      "label": "🌙 Lunar-Crystallize (objects)",
+      "help": "Triggering Lunar-Crystallize creates up to 3 moon crystal objects (9 s). Number = objects at that time"
+    },
+    "verdantdew": {
+      "label": "🌿 Verdant Dew (held)",
+      "help": "Triggering Lunar-Bloom adds 1 Verdant Dew about every 2.4 s for about 2.5 s (max 3; leftover progress carries over to the next Lunar-Bloom). Consumed by Lauma's Skill (up to 3) and Columbina's Charged Attack (1). Number = held at that time"
+    },
+    "moonridgedew": {
+      "label": "🌙 Moonridge Dew (held)",
+      "help": "Columbina's Passive Talent 2: gains 1 with each Lunar reaction (Lunar-Charged, Lunar-Bloom, Lunar-Crystallize), max 3. Each Charged Attack consumes 1 (Verdant Dew first). Number = held at that time"
+    },
+    "stellarconduct": {
+      "label": "⭐ Stellar Conduct field",
+      "help": "Triggering Stellar Conduct creates a field (6 s, extended by each reaction). Number = active stacks, updated every 4 s (max 12; Cryo/Electro DMG +)"
+    },
+    "stellarswirl": {
+      "label": "⭐ Stellar Swirl vortex (stacks)",
+      "help": "Triggering Stellar Swirl creates a vortex; each trigger adds 1 stack (max 6). It bursts after about 3 s or at 6 stacks. Number = stacks at that time"
+    },
+    "stellarswirl_airborne": {
+      "label": "⭐ After Stellar Swirl burst",
+      "help": "State for 5 s after the Stellar Swirl vortex bursts"
+    }
+  }
+}

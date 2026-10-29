@@ -3,6 +3,7 @@ import { X, Check, AlertTriangle, Copy, ShieldCheck, Loader2, Play } from 'lucid
 import type { GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
 import { validateGcsimConfig, type GcsimValidateResult } from '../utils/gcsim/gcsimClient';
 import { GcsimLogSummaryView } from './GcsimLogSummaryView';
+import { t } from '../i18n';
 import { runGcsimForConfig, computeGcsimApply, type GcsimRunOutcome } from '../utils/gcsim/gcsimCompute';
 import type { TriggerableBuffDefinition } from '../utils/buffUtils';
 import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
@@ -112,9 +113,9 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       >
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/60">
           <div>
-            <h3 className="font-bold text-base text-white">gcsim 設定文</h3>
+            <h3 className="font-bold text-base text-white">{t('gcsim:dialog.title')}</h3>
             <p className="text-[11px] text-slate-400">
-              {copied ? 'クリップボードにコピーしました' : 'コピーできませんでした。下の文をコピーしてください'}
+              {copied ? t('gcsim:dialog.copied') : t('gcsim:dialog.copyFailed')}
             </p>
           </div>
           <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
@@ -126,13 +127,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
           {result.warnings.length === 0 ? (
             <div className="flex items-center gap-1.5 text-xs text-emerald-300">
               <Check className="w-4 h-4" />
-              <span>警告はありません</span>
+              <span>{t('gcsim:dialog.noWarnings')}</span>
             </div>
           ) : (
             <div className="space-y-1.5">
               {errors.length > 0 && (
                 <div className="text-[11px] font-bold text-red-300">
-                  gcsim で実行できない要素があります（設定文はできる範囲で出力しています）
+                  {t('gcsim:dialog.hasErrors')}
                 </div>
               )}
               {[...errors, ...warns].map((w, i) => (
@@ -156,11 +157,11 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
             {ctIssues.length === 0 ? (
               <div className="flex items-center gap-1.5 text-xs text-emerald-300">
                 <Check className="w-4 h-4" />
-                <span>アプリのCT違反: なし</span>
+                <span>{t('gcsim:dialog.noCtIssues')}</span>
               </div>
             ) : (
               <>
-                <div className="text-[11px] font-bold text-red-300">アプリのCT違反: {ctIssues.length}件（先に解消してください）</div>
+                <div className="text-[11px] font-bold text-red-300">{t('gcsim:dialog.ctIssues', { count: ctIssues.length })}</div>
                 {ctIssues.map(issue => (
                   <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
                     <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
@@ -171,7 +172,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
             )}
             {ctWarnings.length > 0 && (
               <>
-                <div className="text-[11px] font-bold text-amber-300">アプリのCT警告: {ctWarnings.length}件（発動バフがCT中に発動する配置は、効果が発動しないだけ。特殊スキルの受付時間外は、gcsim では通常のスキルになる。どちらも gcsim の計算は制限されません）</div>
+                <div className="text-[11px] font-bold text-amber-300">{t('gcsim:dialog.ctWarnings', { count: ctWarnings.length })}</div>
                 {ctWarnings.map(issue => (
                   <div key={issue.id} className="flex items-start gap-1.5 text-xs rounded-lg px-2.5 py-1.5 border bg-amber-950/40 border-amber-700/60 text-amber-200">
                     <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
@@ -181,7 +182,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               </>
             )}
             <div className="text-[10px] text-slate-500">
-              ※ アプリ自身の判定です。gcsim で実際に実行したときのCT待ち（アプリの判定と一致しないことがあります）は、下の「gcsim で実行して読み取り結果を見る」で確認できます。
+              {t('gcsim:dialog.ctNote')}
             </div>
           </div>
 
@@ -191,10 +192,10 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               onClick={handleValidate}
               disabled={validating}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700/80 hover:bg-emerald-600 disabled:opacity-50 text-white border border-emerald-500/60"
-              title="gcsim で、この設定文の文法をチェックします（実行はしません。ブラウザ内の WebAssembly 版。無ければ localhost:54321 のサーバー）"
+              title={t('gcsim:dialog.validateTitle')}
             >
               {validating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
-              <span>{validating ? 'チェック中...' : 'gcsim で文法チェック'}</span>
+              <span>{validating ? t('gcsim:dialog.validating') : t('gcsim:dialog.validate')}</span>
             </button>
             {validation && (
               <div
@@ -206,7 +207,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                     : 'bg-amber-950/40 border-amber-700/60 text-amber-200'
                 }`}
               >
-                {validation.status === 'invalid' && <div className="font-bold mb-0.5">文法エラー</div>}
+                {validation.status === 'invalid' && <div className="font-bold mb-0.5">{t('gcsim:dialog.syntaxError')}</div>}
                 {validation.message}
               </div>
             )}
@@ -218,15 +219,15 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               onClick={handleRun}
               disabled={running || !result.runnable}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-700/80 hover:bg-sky-600 disabled:opacity-50 text-white border border-sky-500/60"
-              title={result.runnable ? 'gcsim ローカルサーバーでこの設定文を1回実行し、ログの読み取り結果を表示します（アプリの値は書き換えません）' : '実行できない要素があります（上の赤い警告を解消してください）'}
+              title={result.runnable ? t('gcsim:dialog.runTitle') : t('gcsim:dialog.runDisabledTitle')}
             >
               {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
-              <span>{running ? '実行中...' : 'gcsim で実行して読み取り結果を見る'}</span>
+              <span>{running ? t('gcsim:dialog.running') : t('gcsim:dialog.run')}</span>
             </button>
             {runOutcome && runOutcome.status === 'blocked' && (
               <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
-                <div className="font-bold mb-0.5">gcsim を実行しませんでした</div>
-                アプリのCT違反が {ctIssues.length} 件あります。先に解消してください（上の「アプリのCT違反」の一覧を参照）。
+                <div className="font-bold mb-0.5">{t('gcsim:dialog.blocked')}</div>
+                {t('gcsim:dialog.blockedDetail', { count: ctIssues.length })}
               </div>
             )}
             {runOutcome && (runOutcome.status === 'error' || runOutcome.status === 'unreachable') && (
@@ -237,24 +238,23 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                     : 'bg-amber-950/40 border-amber-700/60 text-amber-200'
                 }`}
               >
-                {runOutcome.status === 'error' && <div className="font-bold mb-0.5">gcsim の実行エラー</div>}
+                {runOutcome.status === 'error' && <div className="font-bold mb-0.5">{t('gcsim:dialog.runError')}</div>}
                 {runOutcome.message}
               </div>
             )}
             {runOutcome && runOutcome.status === 'ok' && waitCount > 0 && (
               <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-red-950/50 border-red-800/70 text-red-200">
-                <div className="font-bold mb-0.5">gcsim でCT待ちが生じたため、結果を反映していません</div>
-                {waitCount} 件のアクションに、CT違反と同じ印を付けました（残りCT = gcsim で実際に待った秒数）。
-                ガントチャートの該当アクションを直して、もう一度実行してください。
-                {runOutcome.waits.swapWaits > 0 && `（交代の内部CT待ち ${runOutcome.waits.swapWaits} 件は対象外）`}
-                {runOutcome.waits.unmatched.length > 0 && `（アプリのアクションに対応付けできなかった待ち ${runOutcome.waits.unmatched.length} 件）`}
+                <div className="font-bold mb-0.5">{t('gcsim:dialog.waited')}</div>
+                {t('gcsim:dialog.waitedDetail', { count: waitCount })}
+                {runOutcome.waits.swapWaits > 0 && t('gcsim:dialog.swapWaits', { count: runOutcome.waits.swapWaits })}
+                {runOutcome.waits.unmatched.length > 0 && t('gcsim:dialog.unmatchedWaits', { count: runOutcome.waits.unmatched.length })}
               </div>
             )}
             {runOutcome && runOutcome.status === 'ok' && waitCount === 0 && (() => {
               if (runOutcome.align.mismatch) {
                 return (
                   <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-amber-950/40 border-amber-700/60 text-amber-200">
-                    設定文と gcsim のログのアクションの並びが合わないため、反映できません: {runOutcome.align.mismatch}
+                    {t('gcsim:dialog.mismatch', { detail: runOutcome.align.mismatch })}
                   </div>
                 );
               }
@@ -264,11 +264,11 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
               const ownerLabel = (stintId: string) => {
                 const idx = stints.findIndex(st => st.id === stintId);
                 const owner = idx >= 0 ? result.members.find(m => m.characterId === stints[idx].characterId)?.name : undefined;
-                return `${owner ?? '?'}${idx >= 0 ? `（出場 #${idx + 1}）` : ''}`;
+                return `${owner ?? '?'}${idx >= 0 ? t('gcsim:dialog.stintNo', { index: idx + 1 }) : ''}`;
               };
               return (
                 <div className="text-xs rounded-lg px-2.5 py-1.5 border bg-sky-950/40 border-sky-700/60 text-sky-100 space-y-1">
-                  <div className="font-bold">アクションの所要時間: {durations.changes.length} 件が変わります（1周目の値。遅延は変えません）</div>
+                  <div className="font-bold">{t('gcsim:dialog.durations', { count: durations.changes.length })}</div>
                   {durations.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {durations.changes.map(c => (
@@ -276,77 +276,77 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">スキル・爆発のCT: {cooldowns.changes.length} 件が変わります（CTの長さ / 開始位置 = アクション開始から）</div>
+                  <div className="font-bold">{t('gcsim:dialog.cooldowns', { count: cooldowns.changes.length })}</div>
                   {cooldowns.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {cooldowns.changes.map(c => (
                         <div key={c.actionId}>
                           {ownerLabel(c.stintId)} {c.name}: CT {c.before.toFixed(2)}s → {c.after.toFixed(2)}s
-                          {c.startOffset !== undefined ? `（開始 +${c.startOffset.toFixed(2)}s）` : '（CTなし）'}
+                          {c.startOffset !== undefined ? t('gcsim:dialog.cooldownStart', { seconds: c.startOffset.toFixed(2) }) : t('gcsim:dialog.noCooldown')}
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">スキル・爆発の効果時間: {effects.changes.length} 件が変わります（gcsim のキーの状態。ある分だけ）</div>
+                  <div className="font-bold">{t('gcsim:dialog.effects', { count: effects.changes.length })}</div>
                   {effects.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {effects.changes.map(c => (
                         <div key={c.actionId} title={c.key}>
-                          {ownerLabel(c.stintId)} {c.name}: 効果 {c.before.toFixed(2)}s → {c.after.toFixed(2)}s
+                          {ownerLabel(c.stintId)} {c.name}: {t('gcsim:dialog.effectChange', { before: c.before.toFixed(2), after: c.after.toFixed(2) })}
                           <span className="text-sky-400/70"> [{c.key}]</span>
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">副次効果のバー: {extras.changes.length} 件のアクションが変わります（1つのアクションから繰り返し発生する効果）</div>
+                  <div className="font-bold">{t('gcsim:dialog.extras', { count: extras.changes.length })}</div>
                   {extras.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {extras.changes.map(c => (
                         <div key={c.actionId}>
-                          {ownerLabel(c.stintId)} {c.name}: {c.extras.length === 0 ? '（なし）' : c.extras.map(x => `${x.name.replace(/（.*$/, '')} +${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                          {ownerLabel(c.stintId)} {c.name}: {c.extras.length === 0 ? t('gcsim:dialog.none') : c.extras.map(x => `${x.name.replace(/（.*$/, '')} +${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">発動バフ（固有天賦・武器・聖遺物）: {passives.changes.length} 件が変わります（追加 {passives.changes.filter(c => c.kind === 'add').length} / 更新 {passives.changes.filter(c => c.kind === 'update').length} / gcsim に出なかった手動の発動 {passives.changes.filter(c => c.kind === 'missed').length} / 同じ効果の統合 {passives.changes.filter(c => c.kind === 'merged').length}）</div>
+                  <div className="font-bold">{t('gcsim:dialog.passives', { count: passives.changes.length, added: passives.changes.filter(c => c.kind === 'add').length, updated: passives.changes.filter(c => c.kind === 'update').length, missed: passives.changes.filter(c => c.kind === 'missed').length, merged: passives.changes.filter(c => c.kind === 'merged').length })}</div>
                   {passives.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {passives.changes.map((c, i) => (
                         <div key={i} title={c.key}>
                           {ownerLabel(c.stintId)} {c.name}:{' '}
                           {c.kind === 'missed'
-                            ? `gcsim の結果に出ませんでした（残して印を付けます。+${(c.offset ?? 0).toFixed(2)}s）`
+                            ? t('gcsim:dialog.passiveMissed', { offset: (c.offset ?? 0).toFixed(2) })
                             : c.kind === 'merged'
-                            ? `同じ効果の別のキー（${c.key}）のため、統合して取り除きます（+${(c.offset ?? 0).toFixed(2)}s）`
-                            : `${c.kind === 'add' ? '追加' : '更新'} +${(c.offset ?? 0).toFixed(2)}s / 効果 ${(c.duration ?? 0).toFixed(2)}s${c.cooldown !== undefined ? ` / CT ${c.cooldown.toFixed(2)}s` : ''}`}
-                          {c.before && <span className="text-sky-400/70">（変更前 +{c.before.offset.toFixed(2)}s{c.before.duration !== undefined ? ` / 効果 ${c.before.duration.toFixed(2)}s` : ''}）</span>}
-                          {c.warnBeforeStint && <span className="text-amber-300"> ※発動元の出場の前に起きた効果。出場の先頭に置きます</span>}
+                            ? t('gcsim:dialog.passiveMerged', { key: c.key, offset: (c.offset ?? 0).toFixed(2) })
+                            : `${t('gcsim:dialog.passiveTiming', { kind: c.kind === 'add' ? t('gcsim:dialog.passiveAdd') : t('gcsim:dialog.passiveUpdate'), offset: (c.offset ?? 0).toFixed(2), duration: (c.duration ?? 0).toFixed(2) })}${c.cooldown !== undefined ? t('gcsim:dialog.passiveCooldown', { seconds: c.cooldown.toFixed(2) }) : ''}`}
+                          {c.before && <span className="text-sky-400/70">{t('gcsim:dialog.passiveBefore', { offset: c.before.offset.toFixed(2), duration: c.before.duration !== undefined ? t('gcsim:dialog.passiveBeforeDuration', { seconds: c.before.duration.toFixed(2) }) : '' })}</span>}
+                          {c.warnBeforeStint && <span className="text-amber-300">{t('gcsim:dialog.passiveBeforeStint')}</span>}
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">キャラクターに紐づく効果: {charEffects.changes.length} 件の出場ブロックが変わります（命中・反応由来。直前の出場ブロックに表示）</div>
+                  <div className="font-bold">{t('gcsim:dialog.charEffects', { count: charEffects.changes.length })}</div>
                   {charEffects.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {charEffects.changes.map(c => (
                         <div key={c.stintId}>
-                          {ownerLabel(c.stintId)}: {c.effects.length === 0 ? '（なし）' : c.effects.map(x => `${x.name.replace(/（.*$/, '')} ${x.offset >= 0 ? '+' : ''}${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                          {ownerLabel(c.stintId)}: {c.effects.length === 0 ? t('gcsim:dialog.none') : c.effects.map(x => `${x.name.replace(/（.*$/, '')} ${x.offset >= 0 ? '+' : ''}${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
                         </div>
                       ))}
                     </div>
                   )}
                   {effects.missingDefs.length > 0 && (
                     <div className="text-[11px] text-amber-200">
-                      効果のキーの対応表に無いアクション定義があり、効果時間は書き戻していません: {effects.missingDefs.join(' / ')}（scripts/probe-effect-keys.ts で表を作り直してください）
+                      {t('gcsim:dialog.missingDefs', { defs: effects.missingDefs.join(' / ') })}
                     </div>
                   )}
                   <button
                     onClick={() => { onApplyStints(charEffects.stints); setApplied(true); }}
                     disabled={applied || total === 0}
                     className="px-3 py-1 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white border border-sky-400/60"
-                    title="編集済みの所要時間・CTも、gcsim の値で上書きします"
+                    title={t('gcsim:dialog.applyTitle')}
                   >
-                    {applied ? '反映しました' : 'gcsim の結果をアプリに反映'}
+                    {applied ? t('gcsim:dialog.applied') : t('gcsim:dialog.apply')}
                   </button>
                 </div>
               );
@@ -370,13 +370,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
           >
             <Copy className="w-3.5 h-3.5" />
-            <span>もう一度コピー</span>
+            <span>{t('gcsim:dialog.copyAgain')}</span>
           </button>
           <button
             onClick={onClose}
             className="px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950"
           >
-            閉じる
+            {t('action.close')}
           </button>
         </div>
       </div>

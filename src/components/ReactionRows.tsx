@@ -1,5 +1,6 @@
 import React from 'react';
 import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
+import { t } from '../i18n';
 import type { ReactionKind, ReactionRow } from '../types/genshin';
 
 /**
@@ -22,53 +23,53 @@ const KIND_ORDER: ReactionKind[] = ['lunarcharged', 'lunarcrystallize', 'verdant
 
 const KIND_INFO: Record<ReactionKind, { label: string; unit: string; barClass: string; labelClass: string; help: string }> = {
   lunarcharged: {
-    label: '🌙 月感電の雲',
+    label: t('chart:reaction.lunarcharged.label'),
     unit: '',
     barClass: 'bg-indigo-950 border-indigo-400/80 text-indigo-200',
     labelClass: 'text-indigo-300',
-    help: '月感電を起こすと雲ができ、雲がある間、約 2 秒ごとに敵へ月感電のダメージが出る。反応のたびに 5.5 秒に延びる',
+    help: t('chart:reaction.lunarcharged.help'),
   },
   lunarcrystallize: {
-    label: '🌙 月結晶（設置物の数）',
-    unit: '個',
+    label: t('chart:reaction.lunarcrystallize.label'),
+    unit: t('chart:reaction.unitPieces'),
     barClass: 'bg-amber-950 border-amber-400/80 text-amber-200',
     labelClass: 'text-amber-300',
-    help: '月結晶を起こすと、月の結晶の設置物が最大 3 つできる（9 秒）。数字 = そのときの設置物の数',
+    help: t('chart:reaction.lunarcrystallize.help'),
   },
   verdantdew: {
-    label: '🌿 草露（所持数）',
-    unit: '個',
+    label: t('chart:reaction.verdantdew.label'),
+    unit: t('chart:reaction.unitPieces'),
     barClass: 'bg-lime-950 border-lime-400/80 text-lime-200',
     labelClass: 'text-lime-300',
-    help: '月開花を起こすと、約 2.5 秒の間、約 2.4 秒ごとに草露が 1 つ増える（最大 3。途中の端数は次の月開花へ持ち越す）。ラウマのスキル（最大 3 個）・コロンビーナの重撃（1 個）が消費する。数字 = そのときの数',
+    help: t('chart:reaction.verdantdew.help'),
   },
   moonridgedew: {
-    label: '🌙 月露（所持数）',
-    unit: '個',
+    label: t('chart:reaction.moonridgedew.label'),
+    unit: t('chart:reaction.unitPieces'),
     barClass: 'bg-sky-950 border-sky-400/80 text-sky-200',
     labelClass: 'text-sky-300',
-    help: 'コロンビーナの固有天賦2: 月反応（月感電・月開花・月結晶）のたびに 1 つ増える（最大 3）。重撃 1 回ごとに 1 個消費する（草露が先）。数字 = そのときの数',
+    help: t('chart:reaction.moonridgedew.help'),
   },
   stellarconduct: {
-    label: '⭐ 星電導のフィールド',
-    unit: 'スタック',
+    label: t('chart:reaction.stellarconduct.label'),
+    unit: t('chart:reaction.unitStacks'),
     barClass: 'bg-cyan-950 border-cyan-400/80 text-cyan-200',
     labelClass: 'text-cyan-300',
-    help: '星電導を起こすと北辰のフィールドができる（6 秒。反応のたびに延びる）。数字 = 4 秒ごとに更新される、適用中のスタック（最大 12。氷・雷元素ダメージ +）',
+    help: t('chart:reaction.stellarconduct.help'),
   },
   stellarswirl: {
-    label: '⭐ 星拡散の渦（スタック）',
-    unit: 'スタック',
+    label: t('chart:reaction.stellarswirl.label'),
+    unit: t('chart:reaction.unitStacks'),
     barClass: 'bg-teal-950 border-teal-400/80 text-teal-200',
     labelClass: 'text-teal-300',
-    help: '星拡散を起こすと渦ができ、起こすたびにスタックが 1 増える（最大 6）。約 3 秒後か、6 スタックで爆発する。数字 = そのときのスタック',
+    help: t('chart:reaction.stellarswirl.help'),
   },
   stellarswirl_airborne: {
-    label: '⭐ 星拡散の爆発後',
+    label: t('chart:reaction.stellarswirl_airborne.label'),
     unit: '',
     barClass: 'bg-emerald-950 border-emerald-400/80 text-emerald-200',
     labelClass: 'text-emerald-300',
-    help: '星拡散の渦が爆発した後の 5 秒間の状態',
+    help: t('chart:reaction.stellarswirl_airborne.help'),
   },
 };
 
@@ -97,8 +98,8 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
         {/* 左の列（横スクロールしても見えるよう固定） */}
         <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
           <div className="h-6 px-2 flex items-center justify-between text-violet-300 text-[10px] font-bold border-b border-slate-800/60">
-            <span>🌀 反応（{lap}周目）</span>
-            <span className="text-[9px] text-slate-500 font-mono font-normal">gcsim の結果</span>
+            <span>{t('chart:reaction.header', { lap })}</span>
+            <span className="text-[9px] text-slate-500 font-mono font-normal">{t('chart:reaction.gcsimResult')}</span>
           </div>
           {ordered.map(row => (
             <div
@@ -107,7 +108,7 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
               title={KIND_INFO[row.kind].help}
             >
               <span className="truncate">{KIND_INFO[row.kind].label}</span>
-              {row.max !== undefined && <span className="shrink-0 ml-1 text-slate-500">最大{row.max}</span>}
+              {row.max !== undefined && <span className="shrink-0 ml-1 text-slate-500">{t('chart:reaction.max', { max: row.max })}</span>}
             </div>
           ))}
         </div>
@@ -142,7 +143,7 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
                       }}
                       style={{ left: `${startX}px`, width: `${width}px` }}
                       className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center justify-center px-1 border hover:brightness-125 cursor-pointer ${info.barClass}`}
-                      title={`【${info.label.replace(/^\S+\s/, '')}】${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n※ gcsim を実行した結果（${lap}周目）。編集すると、実行し直すまで位置のずれが残ることがあります（クリックで開始位置へシーク）`}
+                      title={`【${info.label.replace(/^\S+\s/, '')}】${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n${t('chart:reaction.barNote', { lap })}`}
                     >
                       <span className="truncate">{sp.count !== undefined && width < 60 ? sp.count : countText}</span>
                     </div>

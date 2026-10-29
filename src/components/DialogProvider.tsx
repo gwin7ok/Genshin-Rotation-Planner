@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { t } from '../i18n';
 
 /**
  * アプリ内の確認・通知・入力ダイアログ（window.confirm / alert / prompt の代わり）。
@@ -102,7 +103,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                   onClick={cancel}
                   className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
                 >
-                  {current.kind === 'confirm' ? current.options.cancelLabel ?? 'キャンセル' : 'キャンセル'}
+                  {current.kind === 'confirm' ? current.options.cancelLabel ?? t('action.cancel') : t('action.cancel')}
                 </button>
               )}
               <button

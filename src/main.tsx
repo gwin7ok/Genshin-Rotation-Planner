@@ -1,3 +1,5 @@
+// 言語の初期化は、ほかのモジュールより先に行う（React の外の文言も i18n.t() で引けるように。docs/i18n/plan.md 4.2）
+import './i18n';
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';

@@ -1,0 +1,79 @@
+{
+  "title": "Genshin Rotation",
+  "badge": "Chained stints · full CD tracking",
+  "subtitle": "Serial snapping of on-field stints & Skill/Burst cooldown and buff overlap simulator",
+  "slot": {
+    "label": "Team:",
+    "unsaved": "Not saved to a slot",
+    "noneTitle": "No saved rotations (save one with \"Save as\")",
+    "selectTitle": "Load a saved rotation"
+  },
+  "overwrite": {
+    "button": "Save",
+    "saved": "Saved",
+    "title": "Overwrite \"{{name}}\" with the current state",
+    "disabledTitle": "Load a saved rotation from the Team list to overwrite it"
+  },
+  "saveAs": {
+    "button": "Save as",
+    "title": "Save the current state to a new slot"
+  },
+  "playback": {
+    "play": "Play",
+    "pause": "Pause",
+    "resetToOpener": "Back to the start of the opener (-{{seconds}}s)",
+    "resetToStart": "Back to the start (0.0s)",
+    "cycle": "Cycle {{count}}",
+    "cycleTitle": "Playback cycle: currently cycle {{count}} (kept while paused or when seeking inside the loop; seeking into the opener or resetting returns to cycle 1)",
+    "positionCycle": "Position: {{time}}s (cycle {{count}})",
+    "positionFirst": "Position: {{time}}s (cycle 1)",
+    "loopPeriod": "Length of one loop",
+    "loopPeriodFromStart": "Length of one loop (from the loop start to the end)",
+    "total": "Total time"
+  },
+  "ct": {
+    "collision_one": "Cooldown conflict ({{count}})",
+    "collision_other": "Cooldown conflicts ({{count}})",
+    "collisionTitle_one": "[⚠️ Cooldown conflict] {{count}} action is used before its cooldown has recovered (marked in red on the Gantt chart)",
+    "collisionTitle_other": "[⚠️ Cooldown conflicts] {{count}} actions are used before their cooldowns have recovered (marked in red on the Gantt chart)",
+    "ok": "✅ No cooldown conflicts",
+    "okTitle": "[✅ All clear] Every action in the rotation is used after its cooldown has recovered",
+    "warning_one": "Cooldown warning ({{count}})",
+    "warning_other": "Cooldown warnings ({{count}})",
+    "warningTitle": "[Cooldown warnings] {{count}} in total: triggered buffs (passive talents, weapons, artifacts) placed during their cooldown, special skills placed outside their window, and plunging attacks that do not meet gcsim's requirements (triggered buffs simply do not activate, special skills are treated as normal skills, and plunging attacks cause a gcsim error)"
+  },
+  "collapse": {
+    "expand": "▼ Show menu",
+    "collapse": "△ Hide",
+    "expandTitle": "Show the database and tools menu (▼)",
+    "collapseTitle": "Hide the database and tools menu (△)"
+  },
+  "menu": {
+    "help": "Guide",
+    "helpTitle": "How to use (basic flow, reading the screen, controls, gcsim, saving, notation)",
+    "party": "Team Setup",
+    "partyTitle": "Set the 4 party members, weapons and artifacts",
+    "save": "Rotations",
+    "saveTitle": "Manage rotations (save, load, slots, backup)",
+    "database": "Database",
+    "databaseTitle": "Sync the latest official data for characters, weapons and artifacts, and edit custom entries",
+    "gcsimCompute": "Run gcsim",
+    "gcsimComputing": "Running…",
+    "gcsimComputeTitle": "Run gcsim: runs the current team and rotation in gcsim and applies action times, cooldowns, durations and triggered buffs at once (runs even if the app finds cooldown conflicts; nothing is applied if gcsim has to wait. Undo with \"Back to app calculation\")",
+    "copyGcsimConfig": "Copy gcsim config",
+    "copyGcsimConfigTitle": "Convert the current team and rotation to a gcsim config and copy it to the clipboard (warnings are shown too)",
+    "resetToApp": "Back to app calculation",
+    "resetToAppTitle": "Keep the action order, but remove gcsim results and individually changed action times, cooldowns and durations, and go back to the app's calculation (master frames and cooldowns)",
+    "copyNotation": "Copy notation",
+    "copied": "Copied",
+    "copyNotationTitle": "Copy the text notation (e.g. Xingqiu(Q E) ➔ [Bennett(Q E) ➔ Xiangling(Q E)]; [ ] is the part repeated from the 2nd cycle on)"
+  },
+  "notation": {
+    "title": "Current rotation notation",
+    "label": "Notation:",
+    "short": "Short",
+    "name": "Names",
+    "shortTitle": "Short notation (KQM style, compact)",
+    "nameTitle": "Name notation (separated by spaces)"
+  }
+}

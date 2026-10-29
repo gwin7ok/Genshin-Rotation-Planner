@@ -3,6 +3,7 @@ import { Edit2, Trash2 } from 'lucide-react';
 import { WeaponDatabaseItem } from '../../types/database';
 import { WeaponModel } from '../../models/WeaponModel';
 import { ItemLockButton } from './ItemLockButton';
+import { t } from '../../i18n';
 
 /** 武器カード（精錬ランク R1〜R5 切り替えプレビュー対応） */
 interface DatabaseWeaponCardItemProps {
@@ -45,13 +46,13 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
             <h3 className="font-bold text-sm text-white">{weapon.name}</h3>
             {weapon.isCustom && (
               <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">
-                カスタム
+                {t('custom')}
               </span>
             )}
           </div>
           <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5 font-mono">
             <span className="capitalize">{weapon.weaponType}</span>
-            {weapon.baseAttack && <span>/ 基礎攻撃 {weapon.baseAttack}</span>}
+            {weapon.baseAttack && <span>{t('database:weapon.baseAttack', { value: weapon.baseAttack })}</span>}
           </div>
         </div>
 
@@ -59,7 +60,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
           <ItemLockButton
             locked={!!weapon.isLocked}
             onToggle={onToggleLock}
-            itemTypeLabel="武器"
+            itemTypeLabel={t('item.weapon')}
           />
           <button
             onClick={onEdit}
@@ -79,7 +80,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
       {/* Refinement Rank Switcher (R1..R5) */}
       <div className="flex items-center justify-between gap-2 border-t border-slate-800/60 pt-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] font-bold text-amber-400 font-mono">精錬:</span>
+          <span className="text-[10px] font-bold text-amber-400 font-mono">{t('database:weapon.refinement')}</span>
           <div className="flex gap-0.5 bg-slate-950 p-0.5 rounded border border-slate-800">
             {[1, 2, 3, 4, 5].map(r => (
               <button
@@ -99,7 +100,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
         </div>
         <div className="text-[10px] text-slate-400 font-mono">
           {model.cooldown ? `⏱️ CT ${model.cooldown}s` : ''}
-          {model.duration ? ` / 効果 ${model.duration}s` : ''}
+          {model.duration ? t('database:weapon.effectDuration', { seconds: model.duration }) : ''}
         </div>
       </div>
 
@@ -113,10 +114,10 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
 
       {model.primaryBuffEffect && (
         <div className="flex items-center justify-between text-[11px] font-mono bg-sky-950/40 border border-sky-800/50 px-2.5 py-1 rounded text-sky-200">
-          <span className="truncate mr-2">連動バフ: {model.primaryBuffEffect.name}</span>
+          <span className="truncate mr-2">{t('database:weapon.linkedBuff', { name: model.primaryBuffEffect.name })}</span>
           <div className="flex items-center gap-1.5 shrink-0">
             {model.duration !== undefined && (
-              <strong className="text-amber-300">{Number(model.duration).toFixed(1)}s 持続</strong>
+              <strong className="text-amber-300">{t('database:weapon.duration', { seconds: Number(model.duration).toFixed(1) })}</strong>
             )}
             {model.cooldown !== undefined && model.cooldown > 0 && (
               <span className="text-cyan-300 text-[10px]">/ CT {Number(model.cooldown).toFixed(1)}s</span>

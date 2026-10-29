@@ -3,32 +3,33 @@ import { Filter, Sword } from 'lucide-react';
 import { ElementType, WeaponType } from '../types/genshin';
 import { ELEMENT_ICON_DATA_URLS } from '../data/elementIcons';
 import { ELEMENT_COLORS } from '../data/characters';
+import { t } from '../i18n';
 
 export type ElementFilterValue = ElementType | 'all';
 export type WeaponFilterValue = WeaponType | 'all';
 
 /** icon: 画像が無い・読み込めないときの代わりの絵文字。iconUrl: 元素は genshin-db の埋め込み画像 */
 export const ELEMENT_FILTER_OPTIONS: Array<{ id: ElementFilterValue; label: string; color: string; icon: string; iconUrl?: string }> = [
-  { id: 'all', label: '全元素', color: '#94a3b8', icon: '✦' },
-  { id: 'pyro', label: '炎', color: '#ef4444', icon: '🔥', iconUrl: ELEMENT_ICON_DATA_URLS.pyro },
-  { id: 'hydro', label: '水', color: '#0284c7', icon: '💧', iconUrl: ELEMENT_ICON_DATA_URLS.hydro },
-  { id: 'electro', label: '雷', color: '#a855f7', icon: '⚡', iconUrl: ELEMENT_ICON_DATA_URLS.electro },
-  { id: 'dendro', label: '草', color: '#10b981', icon: '🌿', iconUrl: ELEMENT_ICON_DATA_URLS.dendro },
-  { id: 'cryo', label: '氷', color: '#06b6d4', icon: '❄️', iconUrl: ELEMENT_ICON_DATA_URLS.cryo },
-  { id: 'anemo', label: '風', color: '#14b8a6', icon: '🌀', iconUrl: ELEMENT_ICON_DATA_URLS.anemo },
-  { id: 'geo', label: '岩', color: '#f59e0b', icon: '🪨', iconUrl: ELEMENT_ICON_DATA_URLS.geo },
+  { id: 'all', label: t('element.all'), color: '#94a3b8', icon: '✦' },
+  { id: 'pyro', label: t('element.pyro'), color: '#ef4444', icon: '🔥', iconUrl: ELEMENT_ICON_DATA_URLS.pyro },
+  { id: 'hydro', label: t('element.hydro'), color: '#0284c7', icon: '💧', iconUrl: ELEMENT_ICON_DATA_URLS.hydro },
+  { id: 'electro', label: t('element.electro'), color: '#a855f7', icon: '⚡', iconUrl: ELEMENT_ICON_DATA_URLS.electro },
+  { id: 'dendro', label: t('element.dendro'), color: '#10b981', icon: '🌿', iconUrl: ELEMENT_ICON_DATA_URLS.dendro },
+  { id: 'cryo', label: t('element.cryo'), color: '#06b6d4', icon: '❄️', iconUrl: ELEMENT_ICON_DATA_URLS.cryo },
+  { id: 'anemo', label: t('element.anemo'), color: '#14b8a6', icon: '🌀', iconUrl: ELEMENT_ICON_DATA_URLS.anemo },
+  { id: 'geo', label: t('element.geo'), color: '#f59e0b', icon: '🪨', iconUrl: ELEMENT_ICON_DATA_URLS.geo },
 ];
 
 /** 武器種アイコン: enka.network のゲーム内アイコン（キャラアイコンと同じ取得元） */
 const WEAPON_ICON_BASE_URL = 'https://enka.network/ui';
 
 export const WEAPON_FILTER_OPTIONS: Array<{ id: WeaponFilterValue; label: string; icon: string; iconUrl?: string }> = [
-  { id: 'all', label: '全武器', icon: '✦' },
-  { id: 'sword', label: '片手剣', icon: '🗡️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Sword.png` },
-  { id: 'claymore', label: '両手剣', icon: '⚔️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Claymore.png` },
-  { id: 'polearm', label: '長柄武器', icon: '🔱', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Pole.png` },
-  { id: 'bow', label: '弓', icon: '🏹', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Bow.png` },
-  { id: 'catalyst', label: '法器', icon: '📖', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Catalyst.png` },
+  { id: 'all', label: t('weaponType.all'), icon: '✦' },
+  { id: 'sword', label: t('weaponType.sword'), icon: '🗡️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Sword.png` },
+  { id: 'claymore', label: t('weaponType.claymore'), icon: '⚔️', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Claymore.png` },
+  { id: 'polearm', label: t('weaponType.polearm'), icon: '🔱', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Pole.png` },
+  { id: 'bow', label: t('weaponType.bow'), icon: '🏹', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Bow.png` },
+  { id: 'catalyst', label: t('weaponType.catalyst'), icon: '📖', iconUrl: `${WEAPON_ICON_BASE_URL}/UI_GachaTypeIcon_Catalyst.png` },
 ];
 
 /** フィルターボタンのアイコン。画像が無い・読み込めないときは絵文字を表示 */
@@ -67,7 +68,7 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
     {/* Element Filter Bar */}
     <div className="flex flex-wrap items-center gap-1">
       <span className="text-[10px] font-bold text-slate-400 mr-1 flex items-center gap-1">
-        <Filter className="w-3 h-3 text-amber-400" /> 元素:
+        <Filter className="w-3 h-3 text-amber-400" /> {t('filter.element')}
       </span>
       {ELEMENT_FILTER_OPTIONS.map((elem) => {
         const isActive = elementFilter === elem.id;
@@ -103,7 +104,7 @@ export const CharacterFilterBar: React.FC<CharacterFilterBarProps> = ({
     {/* Weapon Filter Bar */}
     <div className="flex flex-wrap items-center gap-1 pt-1.5 border-t border-slate-800/60">
       <span className="text-[10px] font-bold text-slate-400 mr-1 flex items-center gap-1">
-        <Sword className="w-3 h-3 text-amber-400" /> 武器:
+        <Sword className="w-3 h-3 text-amber-400" /> {t('filter.weapon')}
       </span>
       {WEAPON_FILTER_OPTIONS.map((w) => {
         const isActive = weaponFilter === w.id;

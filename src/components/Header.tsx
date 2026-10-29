@@ -3,6 +3,8 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { t } from '../i18n';
 
 interface HeaderProps {
   savedSlots: SavedRotationSlot[];
@@ -110,14 +112,14 @@ export const Header: React.FC<HeaderProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <h1 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-1">
-                  原神ローテーション <span className="text-amber-400 font-extrabold text-xs sm:text-sm">Gantt</span>
+                  {t('header:title')} <span className="text-amber-400 font-extrabold text-xs sm:text-sm">Gantt</span>
                 </h1>
                 <span className="hidden lg:inline-flex px-1.5 py-0.2 rounded-full text-[9px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  数珠つなぎ・CT完全追従
+                  {t('header:badge')}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden md:block">
-                出場ターンの直列スナップ &amp; スキル/爆発CT・バフ重複シミュレーター
+                {t('header:subtitle')}
               </p>
             </div>
           </div>
@@ -126,12 +128,12 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-700/70">
               <Users className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="text-xs font-medium text-slate-300 hidden xl:inline">編成選択:</span>
+              <span className="text-xs font-medium text-slate-300 hidden xl:inline">{t('header:slot.label')}</span>
               <ListSelect
                 value={activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? activeSlotId : ''}
-                placeholder="保存スロットに未保存"
+                placeholder={t('header:slot.unsaved')}
                 options={[
-                  { value: '', label: '保存スロットに未保存', disabled: true },
+                  { value: '', label: t('header:slot.unsaved'), disabled: true },
                   ...savedSlots.map(slot => ({ value: slot.id, label: slot.name, badge: staleReactionsBadge(slot.reactions) })),
                 ]}
                 onChange={(v) => {
@@ -142,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className={`bg-slate-900 text-xs font-semibold rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:border-amber-400 max-w-[130px] sm:max-w-xs ${
                   activeSlotId && savedSlots.some(s => s.id === activeSlotId) ? 'text-amber-200' : 'text-slate-400'
                 }`}
-                title={savedSlots.length === 0 ? '保存された編成はありません（「名前をつけて保存」で保存できます）' : '保存した編成を呼び出します'}
+                title={savedSlots.length === 0 ? t('header:slot.noneTitle') : t('header:slot.selectTitle')}
               />
             </div>
 
@@ -158,11 +160,11 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-amber-500/40 hover:border-amber-400'
                   }`}
                   title={activeSlot
-                    ? `現在の画面の状態で「${activeSlot.name}」を上書き保存します`
-                    : '編成選択で保存編成を呼び出すと上書き保存できます'}
+                    ? t('header:overwrite.title', { name: activeSlot.name })
+                    : t('header:overwrite.disabledTitle')}
                 >
                   {overwriteSaved ? <Check className="w-3.5 h-3.5 shrink-0" /> : <Save className="w-3.5 h-3.5 shrink-0" />}
-                  <span>{overwriteSaved ? '保存しました' : '上書き保存'}</span>
+                  <span>{overwriteSaved ? t('header:overwrite.saved') : t('header:overwrite.button')}</span>
                 </button>
               );
             })()}
@@ -170,10 +172,10 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenSaveAs}
               className="flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20 transition-all"
-              title="現在の画面の状態を新しい保存スロットとして保存します"
+              title={t('header:saveAs.title')}
             >
               <FilePlus2 className="w-3.5 h-3.5 shrink-0" />
-              <span>名前をつけて保存</span>
+              <span>{t('header:saveAs.button')}</span>
             </button>
           </div>
 
@@ -181,7 +183,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-1.5 bg-slate-950/80 px-2 py-1 rounded-xl border border-slate-800">
             <button
               onClick={onTogglePlay}
-              title={isPlaying ? '一時停止' : '再生'}
+              title={isPlaying ? t('header:playback.pause') : t('header:playback.play')}
               className={`p-1 rounded-lg font-medium transition-all ${
                 isPlaying 
                   ? 'bg-amber-500 text-slate-950 shadow ring-2 ring-amber-400/50' 
@@ -193,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
             
             <button
               onClick={onResetPlayback}
-              title={loopStartTime > 0 ? `初動の先頭に戻る (-${loopStartTime.toFixed(1)}s)` : "先頭に戻る (0.0s)"}
+              title={loopStartTime > 0 ? t('header:playback.resetToOpener', { seconds: loopStartTime.toFixed(1) }) : t('header:playback.resetToStart')}
               className="p-1 rounded-lg bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
             >
               <RotateCcw className="w-3 h-3" />
@@ -206,9 +208,9 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-purple-900/90 text-purple-200 border border-purple-500 shadow-sm shadow-purple-500/20'
                   : 'bg-slate-800 text-slate-300 border border-slate-700'
               }`}
-              title={`再生周回数: 現在${playbackCycleCount}周目（一時停止中やループ区間内のシークでは周回数を維持。初動部分へのシークやリセットで1周目に戻ります）`}
+              title={t('header:playback.cycleTitle', { count: playbackCycleCount })}
             >
-              {playbackCycleCount}周目
+              {t('header:playback.cycle', { count: playbackCycleCount })}
             </span>
 
             {/* Time indicator */}
@@ -217,11 +219,11 @@ export const Header: React.FC<HeaderProps> = ({
                 if (playbackCycleCount >= 2 && loopPeriod > 0) {
                   const rel = Math.max(0, currentTime - loopStartTime);
                   return (
-                    <div title={`再生位置: ${currentTime.toFixed(2)}s (${playbackCycleCount}周目)`}>
+                    <div title={t('header:playback.positionCycle', { time: currentTime.toFixed(2), count: playbackCycleCount })}>
                       <span className="text-purple-300 font-bold">
                         +{rel.toFixed(1)}s
                       </span>
-                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数">
+                      <span className="text-sky-300 font-semibold" title={t('header:playback.loopPeriod')}>
                         /{loopPeriod.toFixed(1)}s
                       </span>
                     </div>
@@ -233,11 +235,11 @@ export const Header: React.FC<HeaderProps> = ({
                   const relStr = Math.abs(rel) < 0.05 ? '0.0s' : rel < 0 ? `-${Math.abs(rel).toFixed(1)}s` : `+${rel.toFixed(1)}s`;
                   const curLoopPeriod = loopPeriod > 0 ? loopPeriod : Math.max(0, totalDuration - loopStartTime);
                   return (
-                    <div title={`再生位置: ${currentTime.toFixed(2)}s（1周目）`}>
+                    <div title={t('header:playback.positionFirst', { time: currentTime.toFixed(2) })}>
                       <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
                         {relStr}
                       </span>
-                      <span className="text-sky-300 font-semibold" title="ループ1周の秒数（ループ開始地点から最後まで）">
+                      <span className="text-sky-300 font-semibold" title={t('header:playback.loopPeriodFromStart')}>
                         /{curLoopPeriod.toFixed(1)}s
                       </span>
                     </div>
@@ -247,7 +249,7 @@ export const Header: React.FC<HeaderProps> = ({
                 return (
                   <div>
                     <span className="text-amber-400 font-bold">{currentTime.toFixed(1)}s</span>
-                    <span className="text-sky-300 font-semibold" title="総時間">/{totalDuration.toFixed(1)}s</span>
+                    <span className="text-sky-300 font-semibold" title={t('header:playback.total')}>/{totalDuration.toFixed(1)}s</span>
                   </div>
                 );
               })()}
@@ -275,28 +277,28 @@ export const Header: React.FC<HeaderProps> = ({
           {totalCTCollisions > 0 ? (
             <div
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0"
-              title={`【⚠️ CT違反あり】ローテーション全体で ${totalCTCollisions} 件のクールタイム未回復違反が検出されています（該当のアクションには、ガントチャートに赤い印が付きます）`}
+              title={t('header:ct.collisionTitle', { count: totalCTCollisions })}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-              <span>CT違反あり ({totalCTCollisions}件)</span>
+              <span>{t('header:ct.collision', { count: totalCTCollisions })}</span>
             </div>
           ) : (
             <div
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 text-xs font-bold shadow-sm shrink-0"
-              title="【✅ CT全解消】ローテーション全体のすべてのアクションでクールタイムが回復済みです"
+              title={t('header:ct.okTitle')}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span>✅ 全体CT違反なし</span>
+              <span>{t('header:ct.ok')}</span>
             </div>
           )}
 
           {totalCTWarnings > 0 && (
             <div
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0"
-              title={`【CT警告】発動バフ（固有天賦・武器・聖遺物）がCT中に発動する配置、特殊スキルが受付時間外にある配置、落下攻撃が gcsim の前提を満たさない配置が、合計 ${totalCTWarnings} 件あります（発動バフは効果が発動しないだけ、特殊スキルは通常のスキルとして扱われます。落下攻撃は gcsim で実行エラーになります）`}
+              title={t('header:ct.warningTitle', { count: totalCTWarnings })}
             >
               <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>CT警告 ({totalCTWarnings}件)</span>
+              <span>{t('header:ct.warning', { count: totalCTWarnings })}</span>
             </div>
           )}
 
@@ -309,10 +311,12 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30 shadow-sm'
                 : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
             }`}
-            title={isCollapsed ? 'DB管理・便利ツールメニューを展開 (▼)' : 'DB管理・便利ツールメニューを省略 (△)'}
+            title={isCollapsed ? t('header:collapse.expandTitle') : t('header:collapse.collapseTitle')}
           >
-            <span>{isCollapsed ? '▼ メニュー展開' : '△ 省略'}</span>
+            <span>{isCollapsed ? t('header:collapse.expand') : t('header:collapse.collapse')}</span>
           </button>
+
+          <LanguageSwitcher />
         </div>
 
         {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → 記法コピー（と記法の表示）） */}
@@ -321,37 +325,37 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenHelpModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
-              title="使い方（基本の流れ・画面の見方・操作・gcsim・保存・記法）"
+              title={t('header:menu.helpTitle')}
             >
               <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
-              <span>使い方</span>
+              <span>{t('header:menu.help')}</span>
             </button>
 
             <button
               onClick={onOpenPartyModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 text-white border border-sky-500/70 transition-colors shrink-0"
-              title="パーティ4人の編成・武器・聖遺物変更"
+              title={t('header:menu.partyTitle')}
             >
               <Settings2 className="w-3.5 h-3.5" />
-              <span>編成設定</span>
+              <span>{t('header:menu.party')}</span>
             </button>
 
             <button
               onClick={onOpenSaveModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 transition-colors shadow-sm shrink-0"
-              title="編成管理（保存・読込・スロット管理・バックアップ）"
+              title={t('header:menu.saveTitle')}
             >
               <FolderCog className="w-3.5 h-3.5 text-violet-400" />
-              <span>編成管理</span>
+              <span>{t('header:menu.save')}</span>
             </button>
 
             <button
               onClick={onOpenDatabaseModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 transition-colors shadow-sm shrink-0"
-              title="キャラ・武器・聖遺物の最新公式データ同期とカスタム編集"
+              title={t('header:menu.databaseTitle')}
             >
               <Database className="w-3.5 h-3.5 text-violet-400" />
-              <span>DB管理</span>
+              <span>{t('header:menu.database')}</span>
             </button>
 
             {onGcsimCompute && (
@@ -359,51 +363,51 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={onGcsimCompute}
                 disabled={gcsimComputing}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 disabled:opacity-60 disabled:cursor-wait text-white border border-sky-500/70 transition-colors"
-                title="gcsim で計算: 現在の編成・ローテーションを gcsim で実行し、所要時間・CT・効果時間・発動バフなどを一括で反映します（アプリの CT 違反があっても実行して確認し、gcsim で待ちが出たら反映しません。取り消しは「アプリの計算に戻す」）"
+                title={t('header:menu.gcsimComputeTitle')}
               >
                 <Play className="w-3.5 h-3.5" />
-                <span>{gcsimComputing ? '計算中…' : 'gcsim で計算'}</span>
+                <span>{gcsimComputing ? t('header:menu.gcsimComputing') : t('header:menu.gcsimCompute')}</span>
               </button>
             )}
 
             <button
               onClick={onCopyGcsimConfig}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="現在の編成・ローテーションを gcsim の設定文に変換してクリップボードにコピー（警告も表示）"
+              title={t('header:menu.copyGcsimConfigTitle')}
             >
               <Copy className="w-3.5 h-3.5 text-emerald-400" />
-              <span>gcsim設定文をコピー</span>
+              <span>{t('header:menu.copyGcsimConfig')}</span>
             </button>
 
             {onResetToAppCalculation && (
               <button
                 onClick={onResetToAppCalculation}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-                title="アクションの並びはそのままに、gcsim の結果の反映や個別に変更した所要時間・CT・効果時間をすべて外して、アプリの計算（マスターのフレームと CT）に戻す"
+                title={t('header:menu.resetToAppTitle')}
               >
                 <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-                <span>アプリの計算に戻す</span>
+                <span>{t('header:menu.resetToApp')}</span>
               </button>
             )}
 
             <button
               onClick={onCopyNotation}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors shrink-0"
-              title="テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)"
+              title={t('header:menu.copyNotationTitle')}
             >
               {copiedNotation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
-              <span>{copiedNotation ? 'コピー完了' : '記法コピー'}</span>
+              <span>{copiedNotation ? t('header:menu.copied') : t('header:menu.copyNotation')}</span>
             </button>
 
             {/* 現在の記法の表示（記法コピーの隣） */}
             {rotationNotation && (
               <div
                 className="flex items-center gap-1 px-2.5 py-1 text-xs font-mono bg-slate-950/90 text-amber-300/90 border border-slate-800 rounded-lg max-w-full overflow-x-auto whitespace-nowrap custom-scrollbar shrink min-w-0"
-                title="現在のローテーション記法"
+                title={t('header:notation.title')}
               >
-                <span className="text-[10px] text-slate-500 font-sans shrink-0 select-none">記法:</span>
+                <span className="text-[10px] text-slate-500 font-sans shrink-0 select-none">{t('header:notation.label')}</span>
                 <div className="flex items-center gap-0.5 shrink-0 font-sans">
-                  {([['short', '略号'], ['name', '名称']] as const).map(([value, label]) => (
+                  {([['short', t('header:notation.short')], ['name', t('header:notation.name')]] as const).map(([value, label]) => (
                     <button
                       key={value}
                       type="button"
@@ -413,7 +417,7 @@ export const Header: React.FC<HeaderProps> = ({
                           ? 'bg-sky-500 text-slate-950 border-sky-400'
                           : 'bg-slate-900 text-slate-300 border-slate-700 hover:border-sky-400'
                       }`}
-                      title={value === 'short' ? '略号の記法（KQM の形。詰めて書く）' : '名称の記法（日本語。スペースで区切る）'}
+                      title={value === 'short' ? t('header:notation.shortTitle') : t('header:notation.nameTitle')}
                     >
                       {label}
                     </button>

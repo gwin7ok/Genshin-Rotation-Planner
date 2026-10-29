@@ -1,0 +1,22 @@
+{
+  "source": {
+    "disclaimer": "This is an unofficial fan tool. Game names, images and other materials belong to their respective owners (HoYoverse). No warranty.",
+    "version": "Version v{{appVersion}} (commit {{appCommit}}) · gcsim {{gcsimVersion}}",
+    "storage": "Teams and rotations are stored only in your browser (localStorage). Team data is never sent to a server (gcsim also runs in your browser). Before clearing browser data or moving to another browser or device, save with \"Export all data\" in Rotations.",
+    "analytics": "Visits are counted with Cloudflare Web Analytics (no cookies). Only access information such as the page URL and browser type is sent; team and settings data are not.",
+    "license": "This app is released under AGPL-3.0-or-later (source: <appLink>{{appRepo}}</appLink>). Calculations use gcsim {{gcsimVersion}} (AGPL-3.0, unmodified; source: <gcsimLink>{{gcsimRepo}}</gcsimLink>, commit {{commit}}). See NOTICE and LICENSE in the repository for details."
+  },
+  "update": {
+    "title": "Master data has been updated",
+    "versionChanged": "Master data version {{previous}} → <strong>{{current}}</strong>",
+    "version": "Master data version <strong>{{current}}</strong>",
+    "intro": "An app update changed the bundled master data (characters, weapons, artifacts). The master data saved in this browser may be out of date. Update it with the following steps.",
+    "step1": "Press \"<b>Open Database</b>\" below.",
+    "step2": "Press \"<b>Generate latest data online (characters, weapons, artifacts)</b>\" at the top right (characters, weapons and artifacts are overwritten with the latest master data, in that order).",
+    "step3": "When the completion message appears, close the Database.",
+    "noteLocked": "・Locked characters, weapons and artifacts, and entries you created, are not deleted.",
+    "noteRotations": "・Your rotations (saved and current) are kept. To be safe, first export a backup of all data from \"Rotations → JSON backup & share\".",
+    "closeTitle": "Do not show again for this master data version",
+    "openDatabase": "Open Database"
+  }
+}

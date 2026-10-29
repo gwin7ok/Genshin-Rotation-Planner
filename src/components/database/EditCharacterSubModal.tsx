@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Trash2, Zap } from 'lucide-react';
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../../types/genshin';
-import { ELEMENT_NAMES_JA } from '../../data/characters';
+import { t } from '../../i18n';
+import { elementLabel } from '../../i18n/labels';
 import { CharacterLockButton } from './ItemLockButton';
 
 /* =========================================================================
@@ -42,11 +43,11 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
       ...actions,
       {
         id: `act_${Date.now()}`,
-        name: '新規アクション',
+        name: t('database:edit.newAction'),
         shortName: 'Act',
         type: 'normal',
         defaultDuration: 0.5,
-        description: '追加アクション定義',
+        description: t('database:edit.newActionDescription'),
       }
     ]);
   };
@@ -61,8 +62,8 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            <span>キャラクター定義編集: {form.name}</span>
-            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="キャラクターのキー（公式キャラID-元素 / カスタムキャラは custom_…）">
+            <span>{t('database:edit.characterTitle', { name: form.name })}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title={t('database:edit.characterKeyTitle')}>
               （ID:{form.id}）
             </span>
           </h3>
@@ -83,11 +84,11 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
           
           {/* Basic Information */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
-            <h4 className="font-bold text-amber-300 text-xs">基本属性パラメータ</h4>
+            <h4 className="font-bold text-amber-300 text-xs">{t('database:edit.basic')}</h4>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-400 mb-1">キャラクター名</label>
+                <label className="block text-slate-400 mb-1">{t('database:edit.characterName')}</label>
                 <input
                   type="text"
                   value={form.name}
@@ -98,20 +99,20 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">元素属性</label>
+                <label className="block text-slate-400 mb-1">{t('database:edit.element')}</label>
                 <select
                   value={form.element}
                   onChange={e => setForm({ ...form, element: e.target.value as ElementType })}
                   className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-amber-200"
                 >
                   {(['pyro', 'hydro', 'electro', 'dendro', 'cryo', 'anemo', 'geo', 'physical'] as ElementType[]).map(elem => (
-                    <option key={elem} value={elem}>{ELEMENT_NAMES_JA[elem]}</option>
+                    <option key={elem} value={elem}>{elementLabel(elem)}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">武器種</label>
+                <label className="block text-slate-400 mb-1">{t('database:edit.weaponType')}</label>
                 <select
                   value={form.weaponType}
                   onChange={e => setForm({ ...form, weaponType: e.target.value as WeaponType })}
@@ -124,7 +125,7 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">アイコン画像URL</label>
+                <label className="block text-slate-400 mb-1">{t('database:edit.iconUrl')}</label>
                 <input
                   type="text"
                   value={form.avatarUrl}
@@ -138,23 +139,23 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
           {/* 固有天賦の効果（発動バフ）: アクション構築で出場ごとに登録し、ガントチャートで発動位置を動かす */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
             <div className="flex items-center justify-between">
-              <h4 className="font-bold text-lime-300 text-xs">固有天賦の効果（発動バフ） ({passives.length})</h4>
+              <h4 className="font-bold text-lime-300 text-xs">{t('database:edit.passives', { count: passives.length })}</h4>
               <button
                 type="button"
                 onClick={() => setPassives(prev => [...prev, {
                   id: `${form.id}_pcustom_${Date.now()}`,
-                  name: '新しい効果',
-                  talentName: '新しい効果',
+                  name: t('database:edit.newEffect'),
+                  talentName: t('database:edit.newEffect'),
                   talentSlot: 1,
                   duration: 10,
                 }])}
                 className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-lime-900/60 hover:bg-lime-800 text-lime-100 text-xs font-bold border border-lime-700/70"
               >
-                <Plus className="w-3.5 h-3.5" /> 効果追加
+                <Plus className="w-3.5 h-3.5" /> {t('database:edit.addEffect')}
               </button>
             </div>
             {passives.length === 0 ? (
-              <p className="text-[11px] text-slate-500">固有天賦の効果が登録されていません。</p>
+              <p className="text-[11px] text-slate-500">{t('database:edit.noPassives')}</p>
             ) : (
               <div className="space-y-2">
                 {passives.map((p, idx) => (
@@ -166,13 +167,13 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                         onChange={e => updatePassive(idx, { name: e.target.value })}
                         className="flex-1 min-w-[160px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold"
                       />
-                      <span className="text-lime-400 font-bold">効果持続時間:</span>
+                      <span className="text-lime-400 font-bold">{t('database:edit.effectDuration')}</span>
                       <input
                         type="number"
                         min={0}
                         step="any" /* ▲▼は1秒単位。小数も保存できるよう step 制限はかけない */
                         value={p.duration ?? ''}
-                        placeholder="未設定"
+                        placeholder={t('notSet')}
                         onChange={e => updatePassive(idx, { duration: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
                         className="w-16 bg-slate-950 border border-lime-900/60 focus:border-lime-500 rounded px-1.5 py-0.5 text-lime-300 font-mono font-bold text-center"
                       />
@@ -183,7 +184,7 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                         min={0}
                         step="any"
                         value={p.cooldown ?? ''}
-                        placeholder="なし"
+                        placeholder={t('noneShort')}
                         onChange={e => updatePassive(idx, { cooldown: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
                         className="w-16 bg-slate-950 border border-sky-900/60 focus:border-sky-500 rounded px-1.5 py-0.5 text-sky-300 font-mono font-bold text-center"
                       />
@@ -192,14 +193,14 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                         type="button"
                         onClick={() => setPassives(prev => prev.filter((_, i) => i !== idx))}
                         className="p-1 text-slate-500 hover:text-red-400"
-                        title="この効果を削除"
+                        title={t('database:edit.deleteEffect')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                     {p.description && (
                       <p className="text-[10px] text-slate-400 leading-relaxed">
-                        <span className="text-slate-500">固有天賦「{p.talentName}」: </span>{p.description}
+                        <span className="text-slate-500">{t('database:edit.passiveSource', { name: p.talentName })}</span>{p.description}
                       </p>
                     )}
                   </div>
@@ -211,14 +212,14 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
           {/* Action Templates Manager */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
             <div className="flex items-center justify-between">
-              <h4 className="font-bold text-sky-300 text-xs">選択可能アクション定義リスト ({actions.length})</h4>
+              <h4 className="font-bold text-sky-300 text-xs">{t('database:edit.actions', { count: actions.length })}</h4>
               <button
                 type="button"
                 onClick={handleAddAction}
                 className="flex items-center gap-1 px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded text-[11px] font-bold"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>アクション追加</span>
+                <span>{t('database:edit.addAction')}</span>
               </button>
             </div>
 
@@ -234,45 +235,45 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                         onChange={e => handleActionChange(idx, 'type', e.target.value)}
                         className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-sky-300 font-bold text-[11px]"
                       >
-                        <option value="normal">通常 (Normal)</option>
-                        <option value="charged">重撃 (C)</option>
-                        <option value="plunge_low">落下・低 (LP)</option>
-                        <option value="plunge_high">落下・高 (HP)</option>
-                        <option value="skill">スキル (E)</option>
-                        <option value="skill_hold">スキル長押し (Hold E)</option>
-                        <option value="burst">元素爆発 (Q)</option>
-                        <option value="dash">ダッシュ (Dash)</option>
-                        <option value="jump">ジャンプ (Jump)</option>
-                        <option value="swap">交代 (Swap)</option>
+                        <option value="normal">{t('database:edit.typeNormal')}</option>
+                        <option value="charged">{t('database:edit.typeCharged')}</option>
+                        <option value="plunge_low">{t('database:edit.typePlungeLow')}</option>
+                        <option value="plunge_high">{t('database:edit.typePlungeHigh')}</option>
+                        <option value="skill">{t('database:edit.typeSkill')}</option>
+                        <option value="skill_hold">{t('database:edit.typeSkillHold')}</option>
+                        <option value="burst">{t('database:edit.typeBurst')}</option>
+                        <option value="dash">{t('database:edit.typeDash')}</option>
+                        <option value="jump">{t('database:edit.typeJump')}</option>
+                        <option value="swap">{t('database:edit.typeSwap')}</option>
                       </select>
 
                       <input
                         type="text"
                         value={act.name}
-                        placeholder="アクション名"
+                        placeholder={t('database:edit.actionName')}
                         onChange={e => handleActionChange(idx, 'name', e.target.value)}
                         className="flex-1 min-w-[130px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold text-xs"
                       />
 
                       <div className="flex items-center gap-1">
-                        <span className="text-slate-400 text-[10px]">記法略称:</span>
+                        <span className="text-slate-400 text-[10px]">{t('database:edit.shortName')}</span>
                         <input
                           type="text"
                           value={act.shortName}
-                          placeholder="記法略称 (E等)"
-                          title="タイムラインや記法テキストに表示される略称"
+                          placeholder={t('database:edit.shortNamePlaceholder')}
+                          title={t('database:edit.shortNameTitle')}
                           onChange={e => handleActionChange(idx, 'shortName', e.target.value)}
                           className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-amber-300 font-bold font-mono text-center text-xs"
                         />
                       </div>
 
                       <div className="flex items-center gap-1">
-                        <span className="text-slate-400 text-[10px]">ボタン表示名:</span>
+                        <span className="text-slate-400 text-[10px]">{t('database:edit.buttonLabel')}</span>
                         <input
                           type="text"
                           value={act.buttonLabel ?? ''}
-                          placeholder={act.shortName || "ボタン名"}
-                          title="アクション構築エリアの追加ボタンに表示する名称（空欄時は記法略称を使用）"
+                          placeholder={act.shortName || t('database:edit.buttonLabelPlaceholder')}
+                          title={t('database:edit.buttonLabelTitle')}
                           onChange={e => handleActionChange(idx, 'buttonLabel', e.target.value)}
                           className="w-24 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-sky-300 font-bold text-center text-xs"
                         />
@@ -290,7 +291,7 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                     {/* Per-action timing specs: Motion Duration, Cooldown (CT), and Effect Duration */}
                     <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] font-mono border-t border-slate-800/60">
                       <div className="flex items-center gap-1">
-                        <span className="text-slate-400">モーション所要:</span>
+                        <span className="text-slate-400">{t('database:edit.motionTime')}</span>
                         <input
                           type="number"
                           step="0.05"
@@ -302,7 +303,7 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                       </div>
 
                       <div className="flex items-center gap-1">
-                        <span className="text-amber-400 font-bold">固有CT:</span>
+                        <span className="text-amber-400 font-bold">{t('database:edit.cooldown')}</span>
                         <input
                           type="number"
                           step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
@@ -324,7 +325,7 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                       </div>
 
                       <div className="flex items-center gap-1">
-                        <span className="text-purple-400 font-bold">効果持続時間:</span>
+                        <span className="text-purple-400 font-bold">{t('database:edit.effectDuration')}</span>
                         <input
                           type="number"
                           step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
@@ -351,10 +352,10 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
             <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
-              キャンセル
+              {t('action.cancel')}
             </button>
             <button type="submit" className="px-5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow-md">
-              データベースに保存
+              {t('database:edit.saveToDatabase')}
             </button>
           </div>
 

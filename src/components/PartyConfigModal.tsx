@@ -10,9 +10,11 @@ import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { CharacterModel, MAX_CONSTELLATION, defaultConstellation } from '../models/CharacterModel';
 import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, type WeaponFilterValue } from './CharacterFilterBar';
-import { ELEMENT_COLORS, ELEMENT_NAMES_JA, isEmptySlotCharacter } from '../data/characters';
+import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
+import { t } from '../i18n';
+import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 
 interface PartyConfigModalProps {
   isOpen: boolean;
@@ -77,7 +79,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     // Avoid duplicates in party
     const alreadyInParty = editingChars.some((c, i) => c.id === newRosterChar.id && i !== selectedSlot);
     if (alreadyInParty) {
-      setWarningMsg(`「${newRosterChar.name}」はすでに他のスロットに編成されています。`);
+      setWarningMsg(t('party:alreadyInParty', { name: newRosterChar.name }));
       setTimeout(() => setWarningMsg(null), 3000);
       return;
     }
@@ -147,10 +149,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <UserCheck className="w-5 h-5 text-amber-400" />
             <div>
               <h3 className="font-bold text-base text-white">
-                パーティ編成・ステータス設定 (Party Configuration)
+                {t('party:title')}
               </h3>
               <p className="text-[11px] text-slate-400">
-                スロットの入れ替えは、ガントチャートの縦軸（レーン）の並び順に反映されます
+                {t('party:subtitle')}
               </p>
             </div>
           </div>
@@ -193,7 +195,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         <GcsimMissingBadge char={c} />
                       </div>
                       <div className={`text-[10px] font-medium ${elemTheme.text}`}>
-                        {isEmptySlotCharacter(c) ? '下の一覧から選択' : ELEMENT_NAMES_JA[c.element]}
+                        {isEmptySlotCharacter(c) ? t('party:pickBelow') : elementLabel(c.element)}
                       </div>
                     </div>
                   </div>
@@ -203,7 +205,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <label
                       className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-purple-300 cursor-pointer select-none"
                       onClick={(e) => e.stopPropagation()}
-                      title="「魔女の宿題」をクリア済み（ヘクセレイのキャラ）。パーティーにヘクセレイのキャラが 2 人以上いると「ヘクセレイ：秘儀」の効果を獲得します（gcsim の `hex` パラメータ。既定はクリア済み）"
+                      title={t('party:hexereiTitle')}
                     >
                       <input
                         type="checkbox"
@@ -215,7 +217,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         }}
                         className="w-3 h-3 accent-purple-500"
                       />
-                      <span>魔女の宿題</span>
+                      <span>{t('party:hexerei')}</span>
                     </label>
                   )}
 
@@ -236,7 +238,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         }}
                         className="w-3 h-3 accent-sky-500"
                       />
-                      <span>諭示達成</span>
+                      <span>{t('party:revelation')}</span>
                     </label>
                   )}
 
@@ -252,10 +254,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         setEditingParty(updated);
                       }}
                       className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
-                      title="命ノ星座（凸数）"
+                      title={t('party:constellationTitle')}
                     >
                       {Array.from({ length: MAX_CONSTELLATION + 1 }, (_, n) => (
-                        <option key={n} value={n}>{n}凸</option>
+                        <option key={n} value={n}>{t('constellationLevel', { count: n })}</option>
                       ))}
                     </select>
                   )}
@@ -280,20 +282,20 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
           <div className="flex flex-wrap items-center gap-2">
           {confirmClearAll ? (
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] font-bold text-red-300">全キャラ・全アクションを消去しますか？</span>
+              <span className="text-[11px] font-bold text-red-300">{t('party:clearConfirm')}</span>
               <button
                 type="button"
                 onClick={handleClearAll}
                 className="px-2.5 py-1 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors shadow-sm"
               >
-                消去する
+                {t('party:clear')}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmClearAll(false)}
                 className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
               >
-                やめる
+                {t('save:saveAs.back')}
               </button>
             </div>
           ) : (
@@ -301,10 +303,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               type="button"
               onClick={() => setConfirmClearAll(true)}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/40 transition-colors shadow-sm"
-              title="4スロットのキャラ登録と、タイムライン上の全アクション（出場ブロック）を空にします（「編成を保存・適用」で確定）"
+              title={t('party:clearAllTitle')}
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>編成・アクションを全クリア</span>
+              <span>{t('party:clearAll')}</span>
             </button>
           )}
           </div>
@@ -316,7 +318,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>選択中スロット {selectedSlot + 1}: {currentSlotChar.name} の設定</span>
+                  <span>{t('party:selectedSlot', { slot: selectedSlot + 1, name: currentSlotChar.name })}</span>
                 </h4>
 
                 {/* Swap Slot Buttons */}
@@ -325,17 +327,17 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     onClick={() => handleMoveSlot(selectedSlot, selectedSlot - 1)}
                     disabled={selectedSlot === 0}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 disabled:opacity-25 disabled:pointer-events-none transition-colors"
-                    title="このキャラを左のスロットへ移動"
+                    title={t('party:moveLeftTitle')}
                   >
-                    ◀ 左のスロットへ
+                    {t('party:moveLeft')}
                   </button>
                   <button
                     onClick={() => handleMoveSlot(selectedSlot, selectedSlot + 1)}
                     disabled={selectedSlot === editingChars.length - 1}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 disabled:opacity-25 disabled:pointer-events-none transition-colors"
-                    title="このキャラを右のスロットへ移動"
+                    title={t('party:moveRightTitle')}
                   >
-                    右のスロットへ ▶
+                    {t('party:moveRight')}
                   </button>
                 </div>
               </div>
@@ -344,28 +346,25 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 {/* Weapon Selection from Database & Refinement Rank */}
                 <div className="space-y-1.5">
                   <label className="text-slate-400 font-medium flex items-center justify-between">
-                    <span>装備武器 (DB連動)</span>
+                    <span>{t('party:weapon')}</span>
                     <span className="text-[10px] text-sky-400 font-bold">
-                      {currentSlotChar.weaponType === 'sword' ? '片手剣' :
-                       currentSlotChar.weaponType === 'claymore' ? '両手剣' :
-                       currentSlotChar.weaponType === 'polearm' ? '長柄武器' :
-                       currentSlotChar.weaponType === 'bow' ? '弓' : '法器'}
+                      {weaponTypeLabel(currentSlotChar.weaponType)}
                     </span>
                   </label>
 
                   <div className="flex gap-1.5">
                     <ListSelect
                       value={currentSlotChar.weaponId || ''}
-                      placeholder="-- DBから武器を選択 --"
+                      placeholder={t('party:selectWeapon')}
                       options={[
-                        { value: '', label: '-- DBから武器を選択 --' },
+                        { value: '', label: t('party:selectWeapon') },
                         ...database.weapons
                           .filter(w => w.weaponType === currentSlotChar.weaponType)
                           .sort((a, b) => Number(b.id) - Number(a.id))
                           .map(w => ({
                             value: w.id,
                             label: `${'★'.repeat(w.rarity)} ${w.name}`,
-                            badge: isGcsimMissingEquipment(w) ? <GcsimMissingTag title="gcsim に未実装の武器です。gcsim での計算では、この武器は使えません（実行エラーになります）。" /> : undefined,
+                            badge: isGcsimMissingEquipment(w) ? <GcsimMissingTag title={t('party:weaponMissing')} /> : undefined,
                           })),
                       ]}
                       onChange={(v) => {
@@ -392,8 +391,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       );
                       if (!weaponModel) return null;
                       return (
-                        <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="精錬ランク（R1〜R5）">
-                          <span className="text-[10px] text-amber-400 font-black">精錬</span>
+                        <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title={t('party:refinementTitle')}>
+                          <span className="text-[10px] text-amber-400 font-black">{t('refinementShort')}</span>
                           <select
                             value={weaponModel.rank}
                             onChange={(e) => {
@@ -429,7 +428,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           </span>
                           <span className="text-slate-400">
                             {weaponModel.cooldown ? `⏱️ CT ${weaponModel.cooldown}s` : ''}
-                            {weaponModel.duration ? ` / 効果 ${weaponModel.duration}s` : ''}
+                            {weaponModel.duration ? t('database:weapon.effectDuration', { seconds: weaponModel.duration }) : ''}
                           </span>
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
@@ -443,21 +442,21 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 {/* Artifact Set Selection from Database */}
                 <div className="space-y-1.5">
                   <label className="text-slate-400 font-medium flex items-center justify-between">
-                    <span>聖遺物セット (DB連動)</span>
+                    <span>{t('party:artifact')}</span>
                   </label>
                   <div className="flex gap-1.5">
                     <ListSelect
                       value={currentSlotChar.artifactSetId || ''}
                       disabled={currentSlotChar.artifactSetMode === '2+2'}
-                      title={currentSlotChar.artifactSetMode === '2+2' ? '2+2 はセット効果の発動バフなしのため、聖遺物セットは選べません（4セットに戻すと選べます）' : undefined}
+                      title={currentSlotChar.artifactSetMode === '2+2' ? t('party:artifact22Title') : undefined}
                       options={[
-                        { value: '', label: currentSlotChar.artifactSetMode === '2+2' ? '効果なし（2+2）' : '-- DBから聖遺物を選択 --' },
+                        { value: '', label: currentSlotChar.artifactSetMode === '2+2' ? t('party:artifact22None') : t('party:selectArtifact') },
                         ...[...database.artifacts]
                           .sort((a, b) => Number(b.id) - Number(a.id))
                           .map(a => ({
                             value: a.id,
                             label: `${'★'.repeat(a.rarity)} ${a.name}`,
-                            badge: isGcsimMissingEquipment(a) ? <GcsimMissingTag title="gcsim に未実装の聖遺物セットです。gcsim での計算では、このセットは使えません（実行エラーになります）。" /> : undefined,
+                            badge: isGcsimMissingEquipment(a) ? <GcsimMissingTag title={t('party:artifactMissing')} /> : undefined,
                           })),
                       ]}
                       onChange={(v) => handleUpdateCurrentField('artifactSetId', v || undefined)}
@@ -465,7 +464,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     />
 
                     {/* 4セット / 2+2（2+2 は4セット効果の発動バフなし。セット未選択でも選べる） */}
-                    <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title="聖遺物の組み合わせ（2+2 は4セット効果の発動バフなし）">
+                    <div className="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 shrink-0" title={t('party:artifactModeTitle')}>
                       <select
                         value={currentSlotChar.artifactSetMode ?? '4pc'}
                         onChange={(e) => {
@@ -481,7 +480,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         }}
                         className="bg-slate-950 text-purple-300 font-mono text-xs font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
                       >
-                        <option value="4pc">4セット</option>
+                        <option value="4pc">{t('party:fourPiece')}</option>
                         <option value="2+2">2+2</option>
                       </select>
                     </div>
@@ -492,7 +491,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     if (currentSlotChar.artifactSetMode === '2+2') {
                       return (
                         <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[10px] text-slate-400">
-                          2+2: セット効果の発動バフなし（聖遺物セットは効果なしで固定）
+                          {t('party:twoTwoNote')}
                         </div>
                       );
                     }
@@ -501,10 +500,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     return (
                       <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
                         <div className="text-[10px] font-mono font-bold text-purple-300">
-                          {art.name} (4セット効果)
+                          {t('party:fourPieceEffect', { name: art.name })}
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
-                          {art.effect4p || art.effect2p || 'セット効果なし'}
+                          {art.effect4p || art.effect2p || t('party:noSetEffect')}
                         </p>
                       </div>
                     );
@@ -516,21 +515,21 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               {hasRevelationInfo(currentSlotChar) && (() => {
                 const info = REVELATION_INFO[currentSlotChar.source?.gcsimKey ?? ''];
                 const badge = info.gcsim.status === 'implemented'
-                  ? { text: 'gcsim 実装済み', cls: 'bg-emerald-950 text-emerald-300 border-emerald-700/60' }
+                  ? { text: t('party:revelationImplemented'), cls: 'bg-emerald-950 text-emerald-300 border-emerald-700/60' }
                   : info.gcsim.status === 'open-pr'
-                  ? { text: 'gcsim は PR 待ち', cls: 'bg-amber-950 text-amber-300 border-amber-700/60' }
-                  : { text: 'gcsim 未実装', cls: 'bg-slate-900 text-slate-400 border-slate-700' };
+                  ? { text: t('party:revelationOpenPr'), cls: 'bg-amber-950 text-amber-300 border-amber-700/60' }
+                  : { text: t('party:revelationMissing'), cls: 'bg-slate-900 text-slate-400 border-slate-700' };
                 return (
                   <div className="mt-3 space-y-1.5 text-xs" data-testid="revelation-info">
                     <div className="text-slate-400 font-medium flex items-center justify-between gap-2">
-                      <span>魔女の諭示: <span className="text-sky-300 font-bold">{info.talentName}</span></span>
+                      <span>{t('party:revelationLabel')} <span className="text-sky-300 font-bold">{info.talentName}</span></span>
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${badge.cls}`} title={info.gcsim.note}>{badge.text}</span>
                     </div>
                     <div className="rounded p-2 border bg-slate-950/60 border-sky-500/30 space-y-1">
                       <ul className="list-disc list-outside pl-4 space-y-0.5 text-[10px] text-slate-300 leading-relaxed">
-                        {info.summary.map((t, i) => <li key={i}>{t}</li>)}
+                        {info.summary.map((line, i) => <li key={i}>{line}</li>)}
                       </ul>
-                      <p className="text-[10px] text-sky-300 font-semibold">アプリでの扱い: <span className="text-slate-300 font-normal">{info.app}</span></p>
+                      <p className="text-[10px] text-sky-300 font-semibold">{t('party:revelationApp')} <span className="text-slate-300 font-normal">{info.app}</span></p>
                       <p className="text-[10px] text-slate-500">gcsim: {info.gcsim.note}</p>
                     </div>
                   </div>
@@ -545,11 +544,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 return (
                   <div className="mt-3 space-y-1.5 text-xs">
                     <div className="text-slate-400 font-medium flex items-center justify-between">
-                      <span>命ノ星座</span>
-                      <span className="text-[10px] font-mono font-bold text-amber-300">{model.constellation}凸</span>
+                      <span>{t('party:constellation')}</span>
+                      <span className="text-[10px] font-mono font-bold text-amber-300">{t('constellationLevel', { count: model.constellation })}</span>
                     </div>
                     {levels.length === 0 ? (
-                      <p className="text-[10px] text-slate-500">凸データなし</p>
+                      <p className="text-[10px] text-slate-500">{t('party:noConstellation')}</p>
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                         {levels.map(lv => {
@@ -560,12 +559,12 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                               className={`rounded p-2 border text-[10px] space-y-0.5 ${active ? 'bg-slate-950/70 border-amber-500/40' : 'bg-slate-950/30 border-slate-800 opacity-50'}`}
                             >
                               <div className={`font-mono font-bold ${active ? 'text-amber-300' : 'text-slate-400'}`}>
-                                {lv.level}凸: {lv.name}
+                                {t('party:constellationName', { level: lv.level, name: lv.name })}
                               </div>
                               <p className="text-slate-300 line-clamp-2 leading-relaxed">{lv.description}</p>
                               {lv.actionChanges?.map(ch => (
                                 <p key={ch.actionId} className="text-sky-300 font-semibold">
-                                  ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? ` 効果 ${ch.effectDuration}s` : ''}{ch.cooldown !== undefined ? ` CT ${ch.cooldown}s` : ''}{ch.charges !== undefined ? ` 回数 ${ch.charges}` : ''}
+                                  ⏱️ {actionName(ch.actionId)}:{ch.effectDuration !== undefined ? t('party:changeDuration', { seconds: ch.effectDuration }) : ''}{ch.cooldown !== undefined ? t('party:changeCooldown', { seconds: ch.cooldown }) : ''}{ch.charges !== undefined ? t('party:changeCharges', { count: ch.charges }) : ''}
                                 </p>
                               ))}
                             </div>
@@ -584,7 +583,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
               <span className="text-xs font-bold text-white flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>キャラクター入替 ({filteredRoster.length} / 全 {database.characters.length} 人)</span>
+                <span>{t('party:roster', { shown: filteredRoster.length, total: database.characters.length })}</span>
               </span>
 
               {/* Search Box */}
@@ -592,7 +591,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="キャラ名・英語名・ID検索..."
+                  placeholder={t('party:searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full sm:w-48 bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-6 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-semibold"
@@ -620,8 +619,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-1 bg-slate-950/50 rounded-xl border border-slate-800/80 custom-scrollbar">
               {filteredRoster.length === 0 ? (
                 <div className="col-span-full py-8 text-center text-xs text-slate-400 space-y-1">
-                  <p className="font-bold text-slate-300">条件に該当するキャラクターが見つかりません</p>
-                  <p className="text-[11px] text-slate-500">元素・武器フィルター解除または検索キーワードを変更してください。</p>
+                  <p className="font-bold text-slate-300">{t('party:noMatch')}</p>
+                  <p className="text-[11px] text-slate-500">{t('party:noMatchHint')}</p>
                 </div>
               ) : (
                 filteredRoster.map(rosterChar => {
@@ -651,7 +650,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           {isCustom && <span className="text-[8px] text-amber-300 font-mono">✦</span>}
                         </div>
                         <div className={`text-[10px] ${elemTheme.text}`}>
-                          {ELEMENT_NAMES_JA[rosterChar.element]}
+                          {elementLabel(rosterChar.element)}
                         </div>
                       </div>
                     </button>
@@ -665,20 +664,20 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
         {/* Modal Footer */}
         <div className="flex items-center justify-between px-5 py-3 border-t border-slate-800 bg-slate-950/80">
           <div className="text-[11px] text-slate-400">
-            「編成を保存・適用」を押すと変更が反映されます
+            {t('party:footerHint')}
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
               className="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
             >
-              キャンセル
+              {t('action.cancel')}
             </button>
             <button
               onClick={handleSave}
               className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors shadow"
             >
-              編成を保存・適用
+              {t('party:apply')}
             </button>
           </div>
         </div>

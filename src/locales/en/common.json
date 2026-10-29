@@ -1,0 +1,66 @@
+{
+  "app": {
+    "title": "Genshin Rotation Planner – Gantt chart"
+  },
+  "language": {
+    "label": "Language",
+    "auto": "Auto",
+    "autoTitle": "Follow the browser language ({{language}} in this browser)",
+    "ja": "日本語",
+    "en": "English",
+    "switchTitle": "Change the display language (reloads the page)"
+  },
+  "action": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "showDetails_one": "Details ({{count}} line)",
+    "showDetails_other": "Details ({{count}} lines)",
+    "hideDetails": "Hide details",
+    "save": "Save"
+  },
+  "count": "{{count}}",
+  "none": "None",
+  "custom": "Custom",
+  "item": {
+    "item": "items",
+    "character": "characters",
+    "weapon": "weapons",
+    "artifact": "artifacts"
+  },
+  "category": {
+    "talent": "Passive Talent",
+    "constellation": "Constellation",
+    "weapon": "Weapon: {{name}}",
+    "artifact": "Artifact: {{name}}"
+  },
+  "gcsim": {
+    "outOfScope": "Not simulated",
+    "outOfScopeNote": "* Not handled by gcsim: {{reason}}"
+  },
+  "element": {
+    "all": "All elements",
+    "pyro": "Pyro",
+    "hydro": "Hydro",
+    "electro": "Electro",
+    "dendro": "Dendro",
+    "cryo": "Cryo",
+    "anemo": "Anemo",
+    "geo": "Geo"
+  },
+  "weaponType": {
+    "all": "All weapons",
+    "sword": "Sword",
+    "claymore": "Claymore",
+    "polearm": "Polearm",
+    "bow": "Bow",
+    "catalyst": "Catalyst"
+  },
+  "filter": {
+    "element": "Element:",
+    "weapon": "Weapon:"
+  },
+  "constellationLevel": "C{{count}}",
+  "refinementShort": "Ref.",
+  "notSet": "Not set",
+  "noneShort": "None"
+}

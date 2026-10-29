@@ -1,0 +1,47 @@
+{
+  "error": {
+    "title": "Something went wrong while displaying the page",
+    "description": "The saved data may be corrupted, or the app may have a bug. First try \"Reload\". If that does not help, press \"Reset the current rotation and restart\" (saved rotations, the database and settings are kept).",
+    "reload": "Reload",
+    "reset": "Reset the current rotation and restart",
+    "export": "Export saved data",
+    "exportFileLabel": "saved-data",
+    "exported": "Saved data exported.",
+    "exportFailed": "Could not export: {{message}}",
+    "details": "Error details (please include them when reporting the problem)"
+  },
+  "oldVersion": "an older version",
+  "import": {
+    "duplicate": "A rotation named \"{{name}}\" already exists.\n\nOK: overwrite that rotation\nCancel: save under a different name",
+    "rename": "Enter a new rotation name",
+    "notRegistered": "The rotation was loaded, but could not be added to the saved rotations."
+  },
+  "resetConfirm": "Go back to the app's calculation, keeping the action order.\n\n・Remove fixed action times, individual cooldowns, durations and gcsim corrections from {{actions}} actions\n・Remove effects written from gcsim from {{stints}} stints (delete {{passives}} triggered buffs added from gcsim results)\n\n* Not only gcsim values, but also action times, cooldowns and durations you edited by hand are reset. Continue?",
+  "gcsim": {
+    "versionMismatch": "The gcsim version does not match",
+    "notRunnable": "Not calculated because some parts cannot be run in gcsim",
+    "notRunnableHint": "See the detailed warnings in the \"Copy gcsim config\" popup.",
+    "confirmWithConflicts": "The app finds {{count}} cooldown conflicts. gcsim will actually calculate to check them (nothing is applied if gcsim also has to wait).\n\nWith Sacrificial weapons, this takes tens of seconds. Run it?",
+    "run": "Run",
+    "running": "Running gcsim…",
+    "runningHint": "With Sacrificial weapons, searching for a seed can take tens of seconds.",
+    "wasmFailed": "Could not run gcsim (in-browser WebAssembly build)",
+    "wasmFailedHint": "Please reload the page. If that does not help, try another browser.",
+    "serverUnreachable": "Could not connect to the gcsim server",
+    "serverUnreachableHint": "Please start the server (npm run gcsim:start).",
+    "runError": "gcsim run error",
+    "waitLine": "{{name}} (stint #{{index}}) \"{{action}}\": {{kind}} {{seconds}} s",
+    "staminaWait": "stamina wait",
+    "cooldownWait": "cooldown wait",
+    "waited": "gcsim had to wait, so the results were not applied ({{ct}} cooldown waits, {{stamina}} stamina waits)",
+    "waitedHint": "Those actions were marked the same way as cooldown conflicts (remaining = seconds gcsim actually waited). Fix them on the Gantt chart and calculate again.",
+    "mismatch": "The action order in the config and the gcsim log does not match, so the results cannot be applied",
+    "applied": "Applied the gcsim results",
+    "noChange": "Calculated with gcsim (same as the app's values, so nothing changed)",
+    "configWarnings": "The config has {{count}} warnings (see them in the \"Copy gcsim config\" popup).",
+    "undoHint": "To undo, press \"Back to app calculation\"."
+  },
+  "saveFailed": "Could not save to the browser (storage may be full, or saving may be disabled in the browser settings). If you keep editing, your changes will be lost when you close the page. Save the current rotation to a file with \"Export JSON file\" in Rotations (\"Export all data\" reads from storage, so it does not include the latest edits that failed to save).",
+  "staleReactions": "The \"reaction rows\" of this rotation are results from gcsim {{saved}}, so they are not shown with the current gcsim ({{current}}). Recalculate with \"Run gcsim\" to show them (the action order, cooldowns, etc. can be used as is).",
+  "footer": "Genshin Impact combat rotation Gantt chart planner ✦ chained on-field stints (serial snapping) and cooldown/buff overlap visualization"
+}

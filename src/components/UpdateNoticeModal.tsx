@@ -1,5 +1,7 @@
 import React from 'react';
 import { Database, X, RefreshCw } from 'lucide-react';
+import { Trans } from 'react-i18next';
+import { t } from '../i18n';
 
 interface UpdateNoticeModalProps {
   isOpen: boolean;
@@ -30,33 +32,33 @@ export const UpdateNoticeModal: React.FC<UpdateNoticeModalProps> = ({ isOpen, pr
               <RefreshCw className="w-5 h-5" />
             </div>
             <div>
-              <h3 id="update-notice-title" className="font-bold text-base text-white">マスターデータが更新されました</h3>
+              <h3 id="update-notice-title" className="font-bold text-base text-white">{t('notice:update.title')}</h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                {previous !== null ? <>マスターデータのバージョン {previous} → <strong className="text-amber-300">{current}</strong></> : <>マスターデータのバージョン <strong className="text-amber-300">{current}</strong></>}
+                <Trans
+                  i18nKey={previous !== null ? 'notice:update.versionChanged' : 'notice:update.version'}
+                  values={{ previous, current }}
+                  components={{ strong: <strong className="text-amber-300" /> }}
+                />
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="閉じる">
+          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title={t('action.close')}>
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-5 space-y-3 text-sm text-slate-200">
           <p className="text-xs leading-relaxed text-slate-300">
-            アプリの更新で、同梱のマスターデータ（キャラ・武器・聖遺物）が変わりました。このブラウザに保存されているマスターデータは、最新の内容と、ずれている可能性があります。
-            次の手順で、最新にしてください。
+            {t('notice:update.intro')}
           </p>
           <ol className="list-decimal list-outside pl-5 space-y-1.5 text-xs leading-relaxed">
-            <li>下の「<b>DB管理を開く</b>」を押す。</li>
-            <li>
-              右上の「<b>最新データ（キャラ・武器・聖遺物）をオンライン生成</b>」を押す
-              （キャラクター → 武器 → 聖遺物の順に、最新のマスターデータで上書きされます）。
-            </li>
-            <li>完了のメッセージが出たら、DB管理を閉じる。</li>
+            <li><Trans i18nKey="notice:update.step1" components={{ b: <b /> }} /></li>
+            <li><Trans i18nKey="notice:update.step2" components={{ b: <b /> }} /></li>
+            <li>{t('notice:update.step3')}</li>
           </ol>
           <div className="text-[11px] text-slate-400 bg-slate-950 border border-slate-800 rounded-lg p-2.5 leading-relaxed">
-            ・ロックしたキャラ・武器・聖遺物と、自分で作成したものは、削除されません。<br />
-            ・編成（保存編成・現在の編成）は消えません。不安なときは、先に「編成管理 → JSON バックアップ・共有」で、全データのバックアップを書き出してください。
+            {t('notice:update.noteLocked')}<br />
+            {t('notice:update.noteRotations')}
           </div>
         </div>
 
@@ -64,16 +66,16 @@ export const UpdateNoticeModal: React.FC<UpdateNoticeModalProps> = ({ isOpen, pr
           <button
             onClick={onClose}
             className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
-            title="このバージョンのマスターデータでは、もう表示しません"
+            title={t('notice:update.closeTitle')}
           >
-            閉じる
+            {t('action.close')}
           </button>
           <button
             onClick={onOpenDatabase}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors shadow"
           >
             <Database className="w-3.5 h-3.5" />
-            <span>DB管理を開く</span>
+            <span>{t('notice:update.openDatabase')}</span>
           </button>
         </div>
       </div>

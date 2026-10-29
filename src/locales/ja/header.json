@@ -1,0 +1,76 @@
+{
+  "title": "原神ローテーション",
+  "badge": "数珠つなぎ・CT完全追従",
+  "subtitle": "出場ターンの直列スナップ & スキル/爆発CT・バフ重複シミュレーター",
+  "slot": {
+    "label": "編成選択:",
+    "unsaved": "保存スロットに未保存",
+    "noneTitle": "保存された編成はありません（「名前をつけて保存」で保存できます）",
+    "selectTitle": "保存した編成を呼び出します"
+  },
+  "overwrite": {
+    "button": "上書き保存",
+    "saved": "保存しました",
+    "title": "現在の画面の状態で「{{name}}」を上書き保存します",
+    "disabledTitle": "編成選択で保存編成を呼び出すと上書き保存できます"
+  },
+  "saveAs": {
+    "button": "名前をつけて保存",
+    "title": "現在の画面の状態を新しい保存スロットとして保存します"
+  },
+  "playback": {
+    "play": "再生",
+    "pause": "一時停止",
+    "resetToOpener": "初動の先頭に戻る (-{{seconds}}s)",
+    "resetToStart": "先頭に戻る (0.0s)",
+    "cycle": "{{count}}周目",
+    "cycleTitle": "再生周回数: 現在{{count}}周目（一時停止中やループ区間内のシークでは周回数を維持。初動部分へのシークやリセットで1周目に戻ります）",
+    "positionCycle": "再生位置: {{time}}s ({{count}}周目)",
+    "positionFirst": "再生位置: {{time}}s（1周目）",
+    "loopPeriod": "ループ1周の秒数",
+    "loopPeriodFromStart": "ループ1周の秒数（ループ開始地点から最後まで）",
+    "total": "総時間"
+  },
+  "ct": {
+    "collision": "CT違反あり ({{count}}件)",
+    "collisionTitle": "【⚠️ CT違反あり】ローテーション全体で {{count}} 件のクールタイム未回復違反が検出されています（該当のアクションには、ガントチャートに赤い印が付きます）",
+    "ok": "✅ 全体CT違反なし",
+    "okTitle": "【✅ CT全解消】ローテーション全体のすべてのアクションでクールタイムが回復済みです",
+    "warning": "CT警告 ({{count}}件)",
+    "warningTitle": "【CT警告】発動バフ（固有天賦・武器・聖遺物）がCT中に発動する配置、特殊スキルが受付時間外にある配置、落下攻撃が gcsim の前提を満たさない配置が、合計 {{count}} 件あります（発動バフは効果が発動しないだけ、特殊スキルは通常のスキルとして扱われます。落下攻撃は gcsim で実行エラーになります）"
+  },
+  "collapse": {
+    "expand": "▼ メニュー展開",
+    "collapse": "△ 省略",
+    "expandTitle": "DB管理・便利ツールメニューを展開 (▼)",
+    "collapseTitle": "DB管理・便利ツールメニューを省略 (△)"
+  },
+  "menu": {
+    "help": "使い方",
+    "helpTitle": "使い方（基本の流れ・画面の見方・操作・gcsim・保存・記法）",
+    "party": "編成設定",
+    "partyTitle": "パーティ4人の編成・武器・聖遺物変更",
+    "save": "編成管理",
+    "saveTitle": "編成管理（保存・読込・スロット管理・バックアップ）",
+    "database": "DB管理",
+    "databaseTitle": "キャラ・武器・聖遺物の最新公式データ同期とカスタム編集",
+    "gcsimCompute": "gcsim で計算",
+    "gcsimComputing": "計算中…",
+    "gcsimComputeTitle": "gcsim で計算: 現在の編成・ローテーションを gcsim で実行し、所要時間・CT・効果時間・発動バフなどを一括で反映します（アプリの CT 違反があっても実行して確認し、gcsim で待ちが出たら反映しません。取り消しは「アプリの計算に戻す」）",
+    "copyGcsimConfig": "gcsim設定文をコピー",
+    "copyGcsimConfigTitle": "現在の編成・ローテーションを gcsim の設定文に変換してクリップボードにコピー（警告も表示）",
+    "resetToApp": "アプリの計算に戻す",
+    "resetToAppTitle": "アクションの並びはそのままに、gcsim の結果の反映や個別に変更した所要時間・CT・効果時間をすべて外して、アプリの計算（マスターのフレームと CT）に戻す",
+    "copyNotation": "記法コピー",
+    "copied": "コピー完了",
+    "copyNotationTitle": "テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)"
+  },
+  "notation": {
+    "title": "現在のローテーション記法",
+    "label": "記法:",
+    "short": "略号",
+    "name": "名称",
+    "shortTitle": "略号の記法（KQM の形。詰めて書く）",
+    "nameTitle": "名称の記法（日本語。スペースで区切る）"
+  }
+}

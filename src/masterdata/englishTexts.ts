@@ -7,6 +7,7 @@
  * - 処理（数値の抽出・判定・gcsim）は、日本語の欄だけを見る。ここで作るのは表示用の `en` の欄だけ。
  */
 import type { CharacterConfig } from '../types/genshin';
+import { handwrittenEnglish } from './handwrittenEnglish.ts';
 
 const JAPANESE = /[぀-ヿ一-鿿]/;
 
@@ -178,27 +179,28 @@ export function attachCharacterEnglish(c: CharacterConfig, src: CharacterEnglish
 // 武器・聖遺物
 // ---------------------------------------------------------------------------
 
-/** 英語の効果の説明文から、要約を作る（日本語の generateStatSummary と同じ考え方。表示用） */
-export function generateStatSummaryEn(text: string): string {
-  if (!text) return 'Buff';
-  const fav = /CRIT Hits? (?:have|has) a (\d+%) chance to generate .*?once every (\d+(?:\.\d+)?)s/i.exec(text);
+/** 日本語の要約（generateStatSummary）の項目名 → 英語 */
+const SUMMARY_LABELS: Record<string, string> = {
+  '攻撃力': 'ATK', '熟知': 'EM', '会心率': 'CRIT Rate', '会心ダメ': 'CRIT DMG', 'ダメ': 'DMG', '耐性': 'RES',
+};
+
+/**
+ * 要約の英語（D258）。日本語の要約（generateStatSummary が日本語の説明文から抽出した値で作ったもの）を、同じ値のまま英語にする
+ * （英語の説明文から別に抽出すると、日本語と違う値を拾うことがあるため）。
+ * 手で書いた要約は handwrittenEnglish.ts の英語。決まった形でない要約（日本語の説明文の先頭を切ったもの）は、英語の説明文の先頭を切る
+ */
+export function generateStatSummaryEn(summaryJa: string | undefined, textEn: string | undefined): string {
+  if (!summaryJa || summaryJa === 'バフ効果') return 'Buff';
+  const handwritten = handwrittenEnglish(summaryJa); // 手で書いた要約（equipmentBuffOverrides.ts）
+  if (handwritten) return handwritten;
+  const fav = /^会心時(\d+%)で粒子生成\(CT(\d+(?:\.\d+)?)s\)$/.exec(summaryJa);
   if (fav) return `On CRIT ${fav[1]} particles (CD ${fav[2]}s)`;
-  const sac = /Elemental Skill deals DMG.*?(\d+%) chance to end its own CD.*?once every (\d+(?:\.\d+)?)s/i.exec(text);
+  const sac = /^スキル命中時(\d+%)でCTリセット\(CT(\d+(?:\.\d+)?)s\)$/.exec(summaryJa);
   if (sac) return `Skill hit ${sac[1]} CD reset (CD ${sac[2]}s)`;
-  const parts: string[] = [];
-  // 正規表現の最初に一致したグループの値で、要約の 1 項目を作る
-  const pick = (re: RegExp, label: (v: string) => string) => {
-    const v = re.exec(text)?.slice(1).find(Boolean);
-    if (v) parts.push(label(v));
-  };
-  pick(/ATK (?:is )?(?:increased|increases|increase) by (\d+(?:\.\d+)?%?)|increases? [^.]*?ATK by (\d+(?:\.\d+)?%)/i, v => `ATK +${v}`);
-  pick(/Elemental Mastery (?:is )?(?:increased|increases) by (\d+)|(\d+) Elemental Mastery/i, v => `EM +${v}`);
-  pick(/CRIT Rate (?:is )?(?:increased|increases) by (\d+(?:\.\d+)?%)/i, v => `CRIT Rate +${v}`);
-  pick(/CRIT DMG (?:is )?(?:increased|increases) by (\d+(?:\.\d+)?%)/i, v => `CRIT DMG +${v}`);
-  pick(/DMG (?:is )?(?:increased|increases|dealt (?:is )?increased) by (\d+(?:\.\d+)?%)|DMG Bonus of (\d+(?:\.\d+)?%)/i, v => `DMG +${v}`);
-  pick(/RES (?:is )?(?:decreased|reduced) by (\d+(?:\.\d+)?%)/i, v => `RES -${v}`);
-  if (parts.length > 0) return parts.slice(0, 2).join(' / ');
-  const first = text.split(/(?<=\.)\s/)[0].trim();
+  const parts = summaryJa.split(' / ').map(p => /^(攻撃力|熟知|会心率|会心ダメ|ダメ|耐性)([+-]\d+(?:\.\d+)?%?)$/.exec(p));
+  if (parts.every(Boolean)) return parts.map(m => `${SUMMARY_LABELS[m![1]]} ${m![2]}`).join(' / ');
+  const first = (textEn ?? '').split(/(?<=\.)\s/)[0].trim();
+  if (!first) return 'Buff';
   return first.length > 40 ? `${first.slice(0, 38)}...` : first;
 }
 
@@ -224,6 +226,7 @@ type EquipmentBuffLike = {
   name: string;
   duration?: number;
   cooldown?: number;
+  statEffectSummary?: string;
   dataSource?: { duration?: string; cooldown?: string };
   en?: import('../types/genshin').EnglishTexts<'name' | 'description' | 'statEffectSummary'>;
 };
@@ -238,7 +241,7 @@ function equipmentBuffEnglish(b: EquipmentBuffLike, nameEn: string | undefined, 
   const ds = Object.fromEntries(Object.entries(dataSource).filter(([, v]) => v));
   return {
     ...(nameEn ? { name: nameEn } : {}),
-    ...(descriptionEn ? { description: descriptionEn, statEffectSummary: generateStatSummaryEn(descriptionEn) } : {}),
+    ...(descriptionEn ? { description: descriptionEn, statEffectSummary: generateStatSummaryEn(b.statEffectSummary, descriptionEn) } : {}),
     ...(Object.keys(ds).length > 0 ? { dataSource: ds } : {}),
   };
 }
@@ -269,7 +272,7 @@ export function attachWeaponEnglish(
   for (const r of w.refinements ?? []) {
     const d = rankDesc(r.rank);
     if (!d) continue;
-    r.en = { description: d, statEffectSummary: generateStatSummaryEn(d) };
+    r.en = { description: d, statEffectSummary: generateStatSummaryEn(r.statEffectSummary, d) };
     for (const b of r.buffEffects ?? []) b.en = equipmentBuffEnglish(b, buffNameEn, d);
   }
   const activeDesc = rankDesc(w.refinementRank ?? 1);

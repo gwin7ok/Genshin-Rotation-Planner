@@ -5,6 +5,7 @@ import { CharacterModel } from '../models/CharacterModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
 import { classifyBuffScope, type BuffScope } from './buffScope';
 import { APP_SIDE_REVELATION_BUFFS, isRevelationAppSide } from '../masterdata/revelationCharacters';
+import { handwrittenEnglish } from '../masterdata/handwrittenEnglish';
 import { t } from '../i18n';
 import { charName, loc } from '../i18n/loc';
 
@@ -36,6 +37,10 @@ export interface TriggerableBuffDefinition {
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
 export const GCSIM_OUT_OF_SCOPE_DEFAULT_REASON = t('messages:buff.outOfScope');
+
+/** 手で書いた要約（装備の補正辞書）を使うときの英語（D258）。マスターの要約と同じなら、マスターの英語のまま */
+const summaryEn = (overrideSummary: string | undefined, masterSummary: string | undefined): { statEffectSummary?: string } =>
+  overrideSummary && overrideSummary !== masterSummary ? { statEffectSummary: handwrittenEnglish(overrideSummary) } : {};
 
 /** 「gcsim 対象外」のバッジの表示が必要か */
 export const isGcsimOutOfScope = (def: Pick<TriggerableBuffDefinition, 'gcsimTarget'>): boolean => def.gcsimTarget === false;
@@ -140,7 +145,7 @@ export function getAvailableBuffsForCharacter(
           gcsimCooldownKeys: b.gcsimCooldownKeys,
           ...(b.gcsimCooldownKeys?.includes('sacrificial-cd') ? { autoApplied: true } : {}),
           // 英語（D255）: 手で書いた名前はマスターの名前と同じ（英語は生成で付けた en.name）。違うときだけ英語の名前を使わない
-          en: { ...b.en, ...(override?.name && override.name !== b.name ? { name: undefined } : {}), sourceName: loc(weaponModel.data, 'name') },
+          en: { ...b.en, ...(override?.name && override.name !== b.name ? { name: undefined } : {}), ...summaryEn(override?.statEffectSummary, b.statEffectSummary), sourceName: loc(weaponModel.data, 'name') },
         });
       }
     }
@@ -193,7 +198,7 @@ export function getAvailableBuffsForCharacter(
           gcsimNote: b.gcsimNote,
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
-          en: { ...b.en, ...(artOverride?.name && artOverride.name !== b.name ? { name: undefined } : {}), sourceName: loc(matchedArtifact, 'name') },
+          en: { ...b.en, ...(artOverride?.name && artOverride.name !== b.name ? { name: undefined } : {}), ...summaryEn(artOverride?.statEffectSummary, b.statEffectSummary), sourceName: loc(matchedArtifact, 'name') },
         });
       }
     }

@@ -42,6 +42,8 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
   // 旅人(氷) 4凸: 凛冽の寒星の存在時間 +25%（12 秒 → 15 秒）。gcsim traveler/common/cryo の cons.go c4SkillBonusDur（3*60）を skill.go の状態に足す
   '10000005-cryo_c4': { target: 'e', keyword: '凛冽の寒星' },
   '10000007-cryo_c4': { target: 'e', keyword: '凛冽の寒星' },
+  // プルーネ 6凸: ハンティングモードの継続時間 +4秒（元素爆発）。説明文の抽出部分は「モード」（「」の後ろから）。gcsim prune/cons.go c6BurstBonusDur（4*60）を burst.go の状態に足す（実測 756f → 996f）
+  '10000132-anemo_c6': { target: 'q', keyword: 'モード' },
   '10000023-pyro_c4': { target: 'q', keyword: '旋火輪' }, // 香菱
   '10000065-electro_c2': { target: 'e', keyword: '越祓草輪' }, // 久岐忍
   '10000025-hydro_c2': { target: 'q', keyword: '裁雨留虹' }, // 行秋
@@ -61,6 +63,8 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
 const NOT_APPLICABLE: Record<string, string> = {
   '10000078-dendro_c6': '琢光鏡の残り時間の延長（条件付き）', // アルハイゼン
   '10000067-dendro_c2': '固有天賦「芽生え」状態の延長', // コレイ
+  // イファ: 「3秒に延長する」（置き換え）の書き方で、延長の正規表現にはかからない。記録のために載せる（D264。ユーザー決定）
+  '10000113-anemo_c4': '抑制風域（引き寄せ）の継続時間。爆発は効果バーなし、gcsim も状態を持たない', // イファ
   '10000079-pyro_c2': 'E 再発動時に再生成された領域のみ延長（条件付き）', // ディシア
   '10000079-pyro_c6': '会心発生ごとに +0.5秒（条件付き）', // ディシア
   '10000112-cryo_c4': 'ヒーリング・ディッシュの延長（マスターの効果はチルドモード）', // エスコフィエ

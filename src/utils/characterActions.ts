@@ -5,6 +5,10 @@ import { charName, loc } from '../i18n/loc';
 
 const SKILL_TYPES = new Set(['skill', 'skill_hold', 'skill_reset']);
 
+/** アクションの種類から、バーの種類（スキル・爆発。それ以外は undefined） */
+export const actionKindOf = (type: string | undefined): ActiveBuffSpan['actionKind'] =>
+  type === 'burst' ? 'burst' : type && SKILL_TYPES.has(type) ? 'skill' : undefined;
+
 /**
  * ガントチャート・記法に出すアクション名。長押しの秒数が決まるもの（CT開始位置が「長押し終了」の hE）は「hE(2.5s)」の形にする（D36・D47）。
  * 秒数は計算時に付く holdSeconds（所要時間から逆算した値）
@@ -99,6 +103,7 @@ export function buildActionEffectSpan(
   return {
     id: `${idPrefix}_${char.id}_${act.id}_${startTime}`,
     buffId: `effect_${kind}_${char.id}_${act.actionTypeId}`,
+    ...(kind !== 'other' ? { actionKind: kind } : {}),
     name: `${charName(char)} ${act.shortName}: ${info.label}`,
     sourceCharacterId: char.id,
     sourceType: 'talent',

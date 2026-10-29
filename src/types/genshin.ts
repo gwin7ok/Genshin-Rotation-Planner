@@ -119,6 +119,8 @@ export interface ActionMode {
   startAfterHold?: boolean;
   /** モードのバーを、バフ重複の集計に数えない（ディシアの熾炎獅子・受付） */
   noSynergy?: boolean;
+  /** 受付（短い期間だけ、別の動作・特殊スキル / 特殊爆発を使える）。チャートで受付の行にまとめ、標準の長さを出す（windowBar）。説明文では判定しない（docs/i18n 3-5） */
+  isWindow?: boolean;
   /** モードのバーの名前の後ろに付ける、開いたものの説明（オデットの受付:「スキル」「爆発」） */
   barNote?: string;
   /** モードを開くアクションの効果バーを、モードのバーと別に出す（オデット: 受付と、スキル・爆発の効果は別のもの） */
@@ -818,6 +820,8 @@ export interface BuffDefinition {
 export interface ActiveBuffSpan {
   id: string;
   buffId: string;
+  /** スキル・爆発から出たバー（チャートの並び順・[E]/[Q] の札。名前では判定しない。D243 の 3-5） */
+  actionKind?: 'skill' | 'burst';
   name: string;
   sourceCharacterId: string;
   sourceType: 'talent' | 'weapon' | 'artifact' | 'constellation';

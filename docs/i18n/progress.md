@@ -2,7 +2,7 @@
 
 ## 現在の状態
 
-フェーズ 3（ゲームデータ）: 進行中（3-3 まで完了。次は 3-4 要約・引用の英語の確認）。進め方は plan.md 4.3.2
+フェーズ 3（ゲームデータ）: 進行中（3-4 まで完了。次は 3-5 名前で判定している処理の置き換え）。進め方は plan.md 4.3.2
 
 ## フェーズ状態
 
@@ -73,7 +73,12 @@
   - 画面の確認（英語・同梱のマスター）: メイン画面・編成設定・DB 管理（キャラ・武器・聖遺物）で、画面の文字と title に日本語が残らないことを確認。残るもの: DB 管理のアクションの title のフレームの出典 `frames.source`（gcsim のソースの位置と補足。9 種。開発者向け → フェーズ 4）、略号 `hE(落下)`（1 件。記法の処理に使う → 3-5 で扱いを決める）。日本語の画面でコンソールのエラーなし
   - genshin-db の英語で確認した公式名: Oz・Lightning Stiletto・Musou Isshin・Ceremonial Garment・Shunsuiken・Sword Dance・Mortuary Rite・Night Vigil・Turbo Twirly・Nightsoul's Blessing・Nightsoul points・Dreamdrifter・Apex Drive・Seven-Phase Flash・Manifest Flame・Thunderous Symphony・Northland Spearstorm・Shadow Dance・Sturm und Drang・Masterstroke・Joy・Armed for Action・Sword Essence・Windborne Sword・Hunter's Precision・Adagio: Coda at Dawn's Tolling・Dandelion Breeze・Jade Screen・Scarlet Seal・Blood Blossom・Prayerful Wind's Benefit・Perfidious Wind's Bale・Redmane's Blood・Grin-Malkin Hat・Ranging Flame・Confirmation of Purity・Denial of Darkness・Principle of Purity: As the Light Shifts・Principle of Darkness: As the Stars Smolder・Dragon of White Flame・Dragon of Dark Decay
   - genshin-db で見つからなかったもの（→ 原神 Wiki で確認済み）: 近接の構え・庭火焔硝・怒目鬼王・風の加護・パンチ連打モード・潜水（加圧）・影狩り・瑞獣の舞・雲の変化・黄昏の祈り・燔天の時・羽月の輪・月相転移・月相の輝き・粛清・血の契約・標的の印・速攻状態・蒼白の賛歌・月の歌・雷鳴の交響・各「印」・猫玉・重力 など
-- [ ] 3-4 要約の英語の組み立てと、英語の説明文からの根拠の引用（D258）
+- [x] 3-4 要約の英語の組み立てと、英語の説明文からの根拠の引用（D258）
+  - 調べた結果: 要約（statEffectSummary）・根拠の引用（dataSource）は、今の画面のどこにも表示されていない（使うのは日本語の効果名の出典「（継続時間）」だけで、英語では出さない）。DB に入るデータとして整える
+  - 要約の英語を、英語の説明文から別に抽出する方式から、**日本語の要約と同じ値を英語にする方式**に変えた（`generateStatSummaryEn(summaryJa, textEn)`）。前の方式は 292 件中 117 件が文の先頭を切っただけ、日本語と違う値のものもあった（例: 三日月の含光 ダメ+64% → Increases DEF by 20%）。いまは、決まった形（攻撃力 / 熟知 / 会心率 / 会心ダメ / ダメ / 耐性・西風・祭礼）は同じ値の英語、手で書いた要約（equipmentBuffOverrides.ts の 27 件）は handwrittenEnglish.ts の英語、日本語も文の先頭を切っているものだけ英語の説明文の先頭を切る（2128 件中 472 件）
+  - 画面で発動バフを作るとき（buffUtils）、補正辞書の手で書いた要約を使う場合は、英語もその要約の英語にする
+  - 根拠の引用: 武器・聖遺物は 3-2 で英語の説明文から探して `en.dataSource` に入れた（229 件中 213 件）。キャラの dataSource は画面に出ないため、英語にしない（D252 の「画面に出るもの」に当たらない。フェーズ 4 で開発用の表示に出すときに改めて決める）。`locDataSource()` は、表示する箇所ができたときに使う
+  - build:equipment で作り直し、`en`（と生成日時）を除くと今の JSON と一致。検査はすべて合格
 - [ ] 3-5 名前で判定している処理の置き換え
 - [ ] 3-6 保存編成・プリセットの名前を、表示のときに DB から ID で引く
 - [ ] 3-7 `DATABASE_VERSION` を上げる（利用者の DB に `en` を入れる。更新の通知が出る）・保存容量の実測・`check:snapshots`
@@ -112,6 +117,7 @@
 | 日付 | 内容 |
 |---|---|
 | 2026-10-29 | 調査・選択肢の提示・ユーザーの決定（D243〜D254）。計画書を作成 |
+| 2026-10-29 | 3-4: 装備の要約の英語を、日本語の要約と同じ値から作る方式に変更（手で書いた要約 27 件は辞書）。要約・根拠の引用は画面に出ていないことを確認。状態・効果の日本語の名前をゲームの公式に統一（D259） |
 | 2026-10-29 | 3-3 を実装（手で書いた名前・説明の英語。handwrittenEnglish.ts）。マスターを作り直し、en を除いて一致。英語の画面で、ゲームデータの日本語は開発者向けのフレームの出典と略号 1 件だけ。検査はすべて合格（hitlag・sacrificial-seed も実行） |
 | 2026-10-29 | 3-1 の表示の置き換えと 3-2 の武器・聖遺物を実装。英語の画面で、残る日本語はアプリ独自の名前（モード・手で書いた発動バフ名）だけ（同梱のマスターで確認）。検査はすべて合格 |
 | 2026-10-29 | 3-1（型・表示の関数）と 3-2（キャラの英語）を実装。キャラのマスターを作り直し、en を除いて一致を確認 |

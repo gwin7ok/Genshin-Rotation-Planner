@@ -38,7 +38,7 @@ const CONSTELLATION_KEYS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
 /** 名前の中の決まった語（長いものから置き換える） */
 const NAME_TERMS: [string, string][] = [
   ['元素スキル(長押し（低い段）)', 'Elemental Skill (Hold, low)'],
-  ['元素スキル(長押し・落下)', 'Elemental Skill (Hold, plunge)'],
+  ['元素スキル(再押し・落下)', 'Elemental Skill (press again, plunge)'],
   ['元素スキル(最大ホールド)', 'Elemental Skill (max hold)'],
   ['元素スキル(長押し)', 'Elemental Skill (Hold)'],
   ['元素スキル派生', 'Elemental Skill variant'],

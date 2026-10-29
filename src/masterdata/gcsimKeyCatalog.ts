@@ -89,6 +89,8 @@ export interface ManualPatternInput {
   elements: string[];
   file: string;
   name: string;
+  /** 英語の表示名（自動で組み立てられないとき） */
+  nameEn?: string;
   durationFrames?: number;
   note?: string;
 }
@@ -96,6 +98,8 @@ export interface ManualPatternInput {
 /** 手で補う一覧（src/masterdata/gcsimKeyCatalogOverrides.ts）の1件 */
 export interface KeyOverride {
   name: string;
+  /** 英語の表示名（持ち主が無いなど、自動で組み立てられないとき） */
+  nameEn?: string;
   /** 自動判定の種類（名前からの候補）を変えるとき */
   kind?: KeyKind;
   /** 自動判定の分類（定義場所）を変えるとき（複数の定義場所にまたがるキーなど） */
@@ -617,6 +621,7 @@ export function extractKeyCatalog(
     const override = overrides[key];
     if (override) {
       entry.name = override.name;
+      if (override.nameEn) entry.nameEn = override.nameEn;
       if (override.kind && override.kind !== entry.kind) { entry.autoKind = entry.kind; entry.kind = override.kind; }
       if (override.category && override.category !== entry.category) { entry.autoCategory = entry.category; entry.category = override.category; }
       if (override.cooldownOf) entry.cooldownOf = override.cooldownOf;
@@ -641,6 +646,7 @@ export function extractKeyCatalog(
       kind: mp.kind ?? 'effect',
       ...(mp.durationFrames !== undefined ? { durationFrames: mp.durationFrames } : {}),
       name: mp.name,
+      ...(mp.nameEn ? { nameEn: mp.nameEn } : {}),
       ...(mp.note ? { note: mp.note } : {}),
       sources: [{ file: mp.file, api: 'mod' }],
       source: 'manual',
@@ -667,6 +673,7 @@ export function extractKeyCatalog(
       const override = overrides[o.key];
       if (override) {
         entry.name = override.name;
+        if (override.nameEn) entry.nameEn = override.nameEn;
         if (override.kind) entry.kind = override.kind;
         if (override.category) entry.category = override.category;
         if (override.cooldownOf) entry.cooldownOf = override.cooldownOf;

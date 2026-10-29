@@ -1,13 +1,13 @@
 # スキル・爆発の効果キーが無い定義の一覧（根拠つき）
 
-作成: 2026-09-30 / gcsim v2.47.6（辞書のコミット 1e6c1a86）/ 収集スクリプト: `scripts/probe-effect-keys.ts`
+作成: 2026-10-29 / gcsim v2.49.0（辞書のコミット 4eda9fc5）/ 収集スクリプト: `scripts/probe-effect-keys.ts`
 
 各定義を、単独のキャラ（凸0・仮の武器）で1回実行し、発動から15秒間のログを調べた根拠を付けている。
 「判定」は根拠からの機械的な分類で、見落とし（本当はキーがある）が無いかを確認してもらうための一覧。
 
-判定の内訳（キー無し・未収集の定義）: 状態なし（瞬間・持続ダメージ等） 96 件 / シールド 4 件 / 要確認（効果のキー候補あり） 1 件 / 未収集（手で補う） 6 件
+判定の内訳（キー無し・未収集の定義）: 状態なし（瞬間・持続ダメージ等） 100 件 / シールド 6 件 / 要確認（効果のキー候補あり） 5 件 / 未収集（手で補う） 3 件
 
-## A. 全定義にキーが無いキャラ（9 キャラ）
+## A. 全定義にキーが無いキャラ（8 キャラ）
 
 ### 空(水)
 - ❌ 元素スキル: 水紋の剣（hydro_e） — **状態なし（瞬間・持続ダメージ等）**
@@ -47,18 +47,14 @@
 - ❌ 元素爆発: 昇流統水（hydro_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Rising Waters
 
-### 早柚
-- ❌ 元素スキル: 嗚呼流·風隠急進（anemo_e） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: sayu-kick-particle-icd
-  - ダメージのみ: Fuufuu Windwheel (DoT Press) / Fuufuu Whirlwind (Kick Press)
-- ❌ 元素スキル(長押し): 嗚呼流·風隠急進（anemo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: sayu-roll-particle-icd, sayu-kick-particle-icd
-  - ダメージのみ: Fuufuu Windwheel (DoT Hold) / Fuufuu Whirlwind (Kick Hold)
-- ❌ 元素スキル派生: shortHold（anemo_e_shorthold） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: sayu-roll-particle-icd, sayu-kick-particle-icd
-  - ダメージのみ: Fuufuu Windwheel (DoT Hold) / Fuufuu Whirlwind (Kick Hold)
-- ❌ 元素爆発: 嗚呼流·影貉繚乱（anemo_q） — **状態なし（瞬間・持続ダメージ等）**
-  - ダメージのみ: Yoohoo Art: Mujina Flurry / Muji-Muji Daruma
+### 重雲
+- ❌ 元素スキル: 霊刃·重華積霜（cryo_e） — **要確認（効果のキー候補あり）**
+  - 辞書の効果キーが出たが条件を満たさなかった: chongyunfield[skill], chongyun-field[skill]
+  - 天賦・命ノ星座の状態のみ: chongyun-a4
+  - 内部（粒子CTなど）のみ: chongyun-particle-icd
+  - ダメージのみ: Spirit Blade: Chonghua's Layer
+- ❌ 元素爆発: 霊刃·雲開星落（cryo_q） — **状態なし（瞬間・持続ダメージ等）**
+  - ダメージのみ: Spirit Blade: Cloud-Parting St
 
 ### 八重神子
 - ❌ 元素スキル: 野干役呪·殺生櫻（electro_e） — **要確認（効果のキー候補あり）**
@@ -72,6 +68,9 @@
 - ❌ 元素スキル: 戮心拳（anemo_e） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: heizou-particle-icd
   - ダメージのみ: Heartstopper Strike
+- ❌ 元素スキル(長押し): 戮心拳（anemo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: heizou-particle-icd
+  - ダメージのみ: Heartstopper Strike (Max Stack
 - ❌ 元素爆発: 廻風蹴（anemo_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Windmuster Iris (Aura check) / Fudou Style Vacuum Slugger
 
@@ -95,16 +94,12 @@
   - 天賦・命ノ星座の状態のみ: chiori-a1-window
   - 内部（粒子CTなど）のみ: chiori-particle-icd
   - ダメージのみ: Fluttering Hasode (Upward Swee / Fluttering Hasode (Tamato)
+- ❌ 元素スキル(長押し): 羽袖一触（geo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
+  - 天賦・命ノ星座の状態のみ: chiori-a1-window
+  - 内部（粒子CTなど）のみ: chiori-particle-icd
+  - ダメージのみ: Fluttering Hasode (Upward Swee / Fluttering Hasode (Tamato)
 - ❌ 元素爆発: 二刀の型·比翼（geo_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Hiyoku: Twin Blades
-
-### イルーガ
-- ⚠️ 元素スキル: 暁を破る夜鳴鶯（geo_e） — **未収集（手で補う）**
-  - 収集できなかった: ln1:8: expecting ; at end of  statement, got char
-- ⚠️ 元素スキル(長押し): 暁を破る夜鳴鶯（geo_e_hold） — **未収集（手で補う）**
-  - 収集できなかった: ln1:8: expecting ; at end of  statement, got char
-- ⚠️ 元素爆発: 影無き灯り（geo_q） — **未収集（手で補う）**
-  - 収集できなかった: ln1:8: expecting ; at end of  statement, got char
 
 ## B. 一部の定義だけキーが無いキャラ（キーがある定義も参考に表示）（68 キャラ）
 
@@ -117,6 +112,9 @@
 
 ### ジン
 - ❌ 元素スキル: 風圧剣（anemo_e） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: jean-base-particle-icd, jean-extra-particle-icd
+  - ダメージのみ: Gale Blade
+- ❌ 元素スキル(長押し): 風圧剣（anemo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: jean-base-particle-icd, jean-extra-particle-icd
   - ダメージのみ: Gale Blade
 - ✅ 元素爆発: 蒲公英の風（anemo_q）: キーあり `jean-q`
@@ -142,9 +140,7 @@
 - ✅ 元素爆発: 臥草若化（dendro_q）: キーあり `travelerdendro-q`
 
 ### 空(炎)
-- ❌ 元素スキル: 流火の剣（pyro_e） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: travelerpyro-particle-icd
-  - ダメージのみ: Blazing Threshold DMG
+- ✅ 元素スキル: 流火の剣（pyro_e）: キーあり `nightsoul-blessing`
 - ✅ 元素スキル(長押し): 流火の剣（pyro_e_hold）: キーあり `travelerpyro-e`
 - ❌ 元素爆発: 燎原の灼炎（pyro_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Plains Scorcher
@@ -178,9 +174,7 @@
 - ✅ 元素爆発: 臥草若化（dendro_q）: キーあり `travelerdendro-q`
 
 ### 蛍(炎)
-- ❌ 元素スキル: 流火の剣（pyro_e） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: travelerpyro-particle-icd
-  - ダメージのみ: Blazing Threshold DMG
+- ✅ 元素スキル: 流火の剣（pyro_e）: キーあり `nightsoul-blessing`
 - ✅ 元素スキル(長押し): 流火の剣（pyro_e_hold）: キーあり `travelerpyro-e`
 - ❌ 元素爆発: 燎原の灼炎（pyro_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Plains Scorcher
@@ -205,6 +199,8 @@
 
 ### アンバー
 - ❌ 元素スキル: 爆弾人形（pyro_e） — **状態なし（瞬間・持続ダメージ等）**
+  - ダメージのみ: Baron Bunny
+- ❌ 元素スキル(長押し): 爆弾人形（pyro_e_hold） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Baron Bunny
 - ✅ 元素爆発: 矢の雨（pyro_q）: キーあり `damage:Fiery Rain`
 
@@ -255,11 +251,6 @@
   - ダメージのみ: Passion Overload (Level 1)
 - ✅ 元素爆発: 素晴らしい旅（pyro_q）: キーあり `bennettburst`
 
-### 重雲
-- ✅ 元素スキル: 霊刃·重華積霜（cryo_e）: キーあり `chongyunfield`
-- ❌ 元素爆発: 霊刃·雲開星落（cryo_q） — **状態なし（瞬間・持続ダメージ等）**
-  - ダメージのみ: Spirit Blade: Cloud-Parting St
-
 ### 甘雨
 - ❌ 元素スキル: 山沢麟跡（cryo_e） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Ice Lotus
@@ -270,12 +261,6 @@
 - ❌ 元素爆発: 誕生式·大地の潮（geo_q） — **状態なし（瞬間・持続ダメージ等）**
   - 天賦・命ノ星座の状態のみ: albedo-a4
   - ダメージのみ: Rite of Progeniture: Tectonic 
-
-### モナ
-- ❌ 元素スキル: 水中幻願（hydro_e） — **状態なし（瞬間・持続ダメージ等）**
-  - 内部（粒子CTなど）のみ: mona-particle-icd
-  - ダメージのみ: Mirror Reflection of Doom (Tic / Mirror Reflection of Doom (Exp
-- ✅ 元素爆発: 星命定軌（hydro_q）: キーあり `mona-c2-hexerei-post-burst-ca, mona-bubble`
 
 ### 刻晴
 - ✅ 元素スキル: 星辰帰位（electro_e）: キーあり `keqingstiletto`
@@ -317,6 +302,18 @@
   - ダメージのみ: Icetide Vortex (Hold)
 - ✅ 元素爆発: 氷浪の光剣（cryo_q）: キーあり `eula-q`
 
+### 早柚
+- ❌ 元素スキル: 嗚呼流·風隠急進（anemo_e） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: sayu-kick-particle-icd
+  - ダメージのみ: Fuufuu Windwheel (DoT Press) / Fuufuu Whirlwind (Kick Press)
+- ❌ 元素スキル(長押し): 嗚呼流·風隠急進（anemo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: sayu-roll-particle-icd, sayu-kick-particle-icd
+  - ダメージのみ: Fuufuu Windwheel (DoT Hold) / Fuufuu Whirlwind (Kick Hold)
+- ❌ 元素スキル派生: shortHold（anemo_e_shorthold） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: sayu-roll-particle-icd, sayu-kick-particle-icd
+  - ダメージのみ: Fuufuu Windwheel (DoT Hold) / Fuufuu Whirlwind (Kick Hold)
+- ✅ 元素爆発: 嗚呼流·影貉繚乱（anemo_q）: キーあり `damage:Muji-Muji Daruma`
+
 ### 夜蘭
 - ❌ 元素スキル: 絡み合う命の糸（hydro_e） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: yelan-particle-icd
@@ -333,6 +330,14 @@
   - シールドのイベントあり: shield added / shield expired
   - 内部（粒子CTなど）のみ: yunjin-particle-icd
   - ダメージのみ: Opening Flourish (Press)
+- ❌ 元素スキル(長押し（低い段）): 旋雲開相（geo_e_shorthold） — **シールド**
+  - シールドのイベントあり: shield added / shield expired
+  - 内部（粒子CTなど）のみ: yunjin-particle-icd
+  - ダメージのみ: Opening Flourish (Level 1)
+- ❌ 元素スキル(長押し): 旋雲開相（geo_e_hold） — **シールド**
+  - シールドのイベントあり: shield added / shield expired
+  - 内部（粒子CTなど）のみ: yunjin-particle-icd
+  - ダメージのみ: Opening Flourish (Level 2)
 - ✅ 元素爆発: 破嶂の旌儀（geo_q）: キーあり `yunjin-q`
 
 ### ドリー
@@ -383,6 +388,9 @@
 - ❌ 元素スキル: エニグマティック·フェイント（anemo_e） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: lynette-aligned-icd, lynette-particle-icd
   - ダメージのみ: Enigmatic Feint / Surging Blade (lynette)
+- ❌ 元素スキル(長押し): エニグマティック·フェイント（anemo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: lynette-aligned-icd, lynette-particle-icd
+  - ダメージのみ: Enigmatic Feint / Surging Blade (lynette)
 - ✅ 元素爆発: 魔術·アストニシングシフト（anemo_q）: キーあり `lynette-q`
 
 ### リネ
@@ -397,12 +405,6 @@
   - 内部（粒子CTなど）のみ: wriothesley-ousia-icd
   - ダメージのみ: Darkgold Wolfbite / Surging Blade
 
-### シャルロット
-- ✅ 元素スキル: フレーミング·氷点法（cryo_e）: キーあり `charlotte-e`
-- ✅ 元素スキル(長押し): フレーミング·氷点法（cryo_e_hold）: キーあり `charlotte-hold-e`
-- ❌ 元素爆発: スチルフォト·多角的立証（cryo_q） — **状態なし（瞬間・持続ダメージ等）**
-  - ダメージのみ: Still Photo: Comprehensive Con / Still Photo: Kamera
-
 ### シュヴルーズ
 - ✅ 元素スキル: 近迫阻止射撃·速（pyro_e）: キーあり `chev-skill-heal`
 - ✅ 元素スキル(長押し): 近迫阻止射撃·速（pyro_e_hold）: キーあり `chev-skill-heal`
@@ -411,6 +413,10 @@
 
 ### ナヴィア
 - ❌ 元素スキル: セレモニアル·クリスタルショット（geo_e） — **状態なし（瞬間・持続ダメージ等）**
+  - 天賦・命ノ星座の状態のみ: navia-a1-dmg
+  - 内部（粒子CTなど）のみ: navia-particle-icd, navia-arkhe-icd
+  - ダメージのみ: Rosula Shardshot / Surging Blade
+- ❌ 元素スキル(長押し): セレモニアル·クリスタルショット（geo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
   - 天賦・命ノ星座の状態のみ: navia-a1-dmg
   - 内部（粒子CTなど）のみ: navia-particle-icd, navia-arkhe-icd
   - ダメージのみ: Rosula Shardshot / Surging Blade
@@ -437,11 +443,6 @@
 - ❌ 元素爆発: 消えゆく残光（electro_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Last Lightfall
 
-### キィニチ
-- ❌ 元素スキル: 懸狩り·宙の遊猟（dendro_e） — **状態なし（瞬間・持続ダメージ等）**
-  - 状態・設置物・ダメージのイベントなし
-- ✅ 元素爆発: 偉大なる聖龍を崇拝せよ（dendro_q）: キーあり `ajaw`
-
 ### ムアラニ
 - ✅ 元素スキル: サメサメウェーブブレイカー（hydro_e）: キーあり `mualani-surfing`
 - ❌ 元素爆発: 爆瀑ロケット（hydro_q） — **状態なし（瞬間・持続ダメージ等）**
@@ -454,6 +455,13 @@
   - 天賦・命ノ星座の状態のみ: xilonen-a4
   - 内部（粒子CTなど）のみ: nightsoul-burst-icd
   - ダメージのみ: Ocelotlicue Point! / Follow-Up Beat
+
+### チャスカ
+- ✅ 元素スキル: スピリット・レインズ（anemo_e）: キーあり `nightsoul-blessing`
+- ❌ 元素爆発: ソウルリーパーの猛襲（anemo_q） — **要確認（効果のキー候補あり）**
+  - 辞書の効果キーが出たが条件を満たさなかった: chasca-plunge-available[burst]
+  - 内部（粒子CTなど）のみ: nightsoul-burst-icd
+  - ダメージのみ: Galesplitting Soulseeker Shell / Soulseeker Shell / Burning Shadowhunt Shell
 
 ### オロルン
 - ❌ 元素スキル: 冥色のタイトロープ（electro_e） — **状態なし（瞬間・持続ダメージ等）**
@@ -478,13 +486,15 @@
   - ダメージのみ: Ice Storm DMG / Spiritvessel Skull DMG
 
 ### 藍硯
-- ✅ 元素スキル: 鳳跡随翦舞（anemo_e）: キーあり `leap-back`
+- ✅ 元素スキル: 鳳跡随翦舞（anemo_e）: キーあり `shield:Swallow-Wisp Pinion Dance (Shield)`
+- ✅ 元素スキル(長押し): 鳳跡随翦舞（anemo_e_hold）: キーあり `shield:Swallow-Wisp Pinion Dance (Shield)`
 - ❌ 元素爆発: 月踏む鶴弦（anemo_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Lustrous Moonrise
 
 ### ヴァレサ
 - ✅ 元素スキル: ホッピング・ナイトレインボー（electro_e）: キーあり `follow-up`
-- ❌ 元素爆発: シャイニングヴェント！（electro_q） — **状態なし（瞬間・持続ダメージ等）**
+- ✅ 元素爆発: シャイニングヴェント！（electro_q）: キーあり `nightsoul-blessing`
+- ❌ 特殊元素爆発（マキシマムドライブ）（electro_q_special） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: nightsoul-burst-icd
   - ダメージのみ: Flying Kick
 
@@ -505,7 +515,8 @@
 
 ### スカーク
 - ✅ 元素スキル: 極悪技・閃（cryo_e）: キーあり `seven-phase-flash`
-- ✅ 元素スキル(長押し): 極悪技・閃（cryo_e_hold）: キーあり `skirk-hold-e-anim`
+- ❌ 元素スキル(長押し): 極悪技・閃（cryo_e_hold） — **要確認（効果のキー候補あり）**
+  - 辞書の効果キーが出たが条件を満たさなかった: skirk-hold-e-anim[skill]
 - ❌ 元素爆発: 極悪技・滅（cryo_q） — **状態なし（瞬間・持続ダメージ等）**
   - 内部（粒子CTなど）のみ: skirk-particle-icd
   - ダメージのみ: Havoc: Ruin (DoT) / Havoc: Ruin (Final)
@@ -518,7 +529,10 @@
 
 ### フリンズ
 - ✅ 元素スキル: 古律・孤灯の秘密（electro_e）: キーあり `manifest-flame`
+- ✅ 特殊元素スキル「北国の嵐槍」（古律・孤灯の秘密の後）（electro_e_spearstorm）: キーあり `manifest-flame`
 - ❌ 元素爆発: 旧儀・夜の賓客（electro_q） — **状態なし（瞬間・持続ダメージ等）**
+  - ダメージのみ: Cometh the Night (Initial) / Cometh the Night (Mid) / Cometh the Night (Final)
+- ❌ 特殊元素爆発（嵐槍の後）（electro_q_special） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Cometh the Night (Initial) / Cometh the Night (Mid) / Cometh the Night (Final)
 
 ### アイノ
@@ -527,9 +541,27 @@
   - ダメージのみ: Musecatcher 0 / Musecatcher 1
 - ✅ 元素爆発: お水ひえひえ装置（hydro_q）: キーあり `aino-q`
 
+### 兹白
+- ✅ 元素スキル: 衆生は忽然たるのみ（geo_e）: キーあり `zibai-skill`
+- ❌ 元素爆発: 三垣の威儀法（geo_q） — **状態なし（瞬間・持続ダメージ等）**
+  - ダメージのみ: Burst / Burst (Lunar-Crystallize)
+
+### イルーガ
+- ❌ 元素スキル: 暁を破る夜鳴鶯（geo_e） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: illuga-particle-icd
+  - ダメージのみ: Dawnbearing Songbird (Tap)
+- ❌ 元素スキル(長押し): 暁を破る夜鳴鶯（geo_e_hold） — **状態なし（瞬間・持続ダメージ等）**
+  - 内部（粒子CTなど）のみ: illuga-particle-icd
+  - ダメージのみ: Dawnbearing Songbird (Hold)
+- ✅ 元素爆発: 影無き灯り（geo_q）: キーあり `haunted-night-oriole-song`
+
 ### ファルカ
 - ✅ 元素スキル: 堕ちる烈風（anemo_e）: キーあり `sturm-und-drang`
 - ✅ 元素スキル(長押し): 堕ちる烈風（anemo_e_hold）: キーあり `sturm-und-drang`
+- ❌ 特殊元素スキル（堕ちる烈風の後）（anemo_e_specialskill） — **要確認（効果のキー候補あり）**
+  - 辞書の効果キーが出たが条件を満たさなかった: sturm-und-drang[skill]
+  - 内部（粒子CTなど）のみ: varka-particle-icd
+  - ダメージのみ: Windbound Execution
 - ❌ 元素爆発: 我こそ朔風（anemo_q） — **状態なし（瞬間・持続ダメージ等）**
   - ダメージのみ: Northwind Avatar
 

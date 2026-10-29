@@ -27,8 +27,11 @@ const GCSIM_REF = CONFIG_GCSIM_COMMIT;
 const GCSIM_WEAPON_DM_PATH = 'ui/packages/ui/src/data/weapon.dm.json';
 const GCSIM_ARTIFACT_DM_PATH = 'ui/packages/ui/src/data/artifact.dm.json';
 
+/** 生成の段階（画面では database:progress.<段階> の文にする） */
+export type EquipmentGenerationPhase = 'weaponFetch' | 'weaponParse' | 'weaponDone' | 'artifactFetch' | 'artifactParse' | 'artifactDone' | 'weaponAll' | 'artifactAll' | 'keyMap' | 'allDone';
+
 export interface EquipmentGenerationProgress {
-  phase: string;
+  phase: EquipmentGenerationPhase;
   done: number;
   total: number;
 }
@@ -146,7 +149,7 @@ export async function generateWeaponsMasterOnline(
     errors,
   };
 
-  onProgress?.({ phase: '最新の武器データを API からオンライン取得中...', done: 0, total: 3 });
+  onProgress?.({ phase: 'weaponFetch', done: 0, total: 3 });
 
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let weaponsJa: any[] = [];
@@ -183,7 +186,7 @@ export async function generateWeaponsMasterOnline(
     }
   }
 
-  onProgress?.({ phase: '武器パッシブ効果・発動バフを解析・構造化中...', done: 1, total: 3 });
+  onProgress?.({ phase: 'weaponParse', done: 1, total: 3 });
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const weaponsEnMap = new Map<string, any>(weaponsEn.map(w => [w.name, w]));
@@ -353,7 +356,7 @@ export async function generateWeaponsMasterOnline(
   });
 
   report.totalWeapons = weaponsList.length;
-  onProgress?.({ phase: '武器マスター生成完了', done: 3, total: 3 });
+  onProgress?.({ phase: 'weaponDone', done: 3, total: 3 });
 
   return { weapons: weaponsList, report };
 }
@@ -374,7 +377,7 @@ export async function generateArtifactsMasterOnline(
     errors,
   };
 
-  onProgress?.({ phase: '最新の聖遺物データを API からオンライン取得中...', done: 0, total: 3 });
+  onProgress?.({ phase: 'artifactFetch', done: 0, total: 3 });
 
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let artifactsJa: any[] = [];
@@ -410,7 +413,7 @@ export async function generateArtifactsMasterOnline(
     }
   }
 
-  onProgress?.({ phase: '聖遺物セット効果・発動バフを解析・構造化中...', done: 1, total: 3 });
+  onProgress?.({ phase: 'artifactParse', done: 1, total: 3 });
 
   const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const artifactsEnMap = new Map<string, any>(artifactsEn.map(a => [a.name, a]));
@@ -527,7 +530,7 @@ export async function generateArtifactsMasterOnline(
   });
 
   report.totalArtifacts = artifactsList.length;
-  onProgress?.({ phase: '聖遺物マスター生成完了', done: 3, total: 3 });
+  onProgress?.({ phase: 'artifactDone', done: 3, total: 3 });
 
   return { artifacts: artifactsList, report };
 }
@@ -590,19 +593,19 @@ export async function attachGcsimEquipmentKeys(
 export async function generateEquipmentMaster(
   onProgress?: (progress: EquipmentGenerationProgress) => void,
 ): Promise<EquipmentMasterResult> {
-  onProgress?.({ phase: '武器マスターデータをオンライン生成中...', done: 0, total: 4 });
+  onProgress?.({ phase: 'weaponAll', done: 0, total: 4 });
 
   const { weapons, report: wReport } = await generateWeaponsMasterOnline(p => {
     onProgress?.({ phase: p.phase, done: Math.min(2, p.done), total: 4 });
   });
 
-  onProgress?.({ phase: '聖遺物マスターデータをオンライン生成中...', done: 2, total: 4 });
+  onProgress?.({ phase: 'artifactAll', done: 2, total: 4 });
 
   const { artifacts, report: aReport } = await generateArtifactsMasterOnline(p => {
     onProgress?.({ phase: p.phase, done: 2 + Math.min(2, p.done), total: 4 });
   });
 
-  onProgress?.({ phase: 'gcsim のキー対応表を取得中...', done: 4, total: 4 });
+  onProgress?.({ phase: 'keyMap', done: 4, total: 4 });
   const gcsim = await fetchGcsimEquipmentKeys();
   const weaponMap = attachGcsimKeys(weapons, gcsim.weaponDm, gcsim.commit);
   const artifactMap = attachGcsimKeys(artifacts, gcsim.artifactDm, gcsim.commit);
@@ -623,7 +626,7 @@ export async function generateEquipmentMaster(
     artifactsWithoutGcsimKey,
   };
 
-  onProgress?.({ phase: '全マスターデータ生成完了', done: 4, total: 4 });
+  onProgress?.({ phase: 'allDone', done: 4, total: 4 });
 
   return {
     weapons,

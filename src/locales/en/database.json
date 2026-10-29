@@ -253,5 +253,19 @@
     "autoSaved": "* Changes to the database are saved automatically in the browser's LocalStorage.",
     "done": "Done",
     "confirmLabel": "Confirm"
+  },
+  "progress": {
+    "charLists": "Fetching the genshin-db / gcsim lists",
+    "charFrames": "Parsing gcsim motion frames",
+    "weaponFetch": "Fetching the latest weapon data from the API...",
+    "weaponParse": "Parsing weapon passives and buffs...",
+    "weaponDone": "Weapon master generated",
+    "artifactFetch": "Fetching the latest artifact data from the API...",
+    "artifactParse": "Parsing artifact set effects and buffs...",
+    "artifactDone": "Artifact master generated",
+    "weaponAll": "Generating weapon master data online...",
+    "artifactAll": "Generating artifact master data online...",
+    "keyMap": "Fetching the gcsim key map...",
+    "allDone": "All master data generated"
   }
 }

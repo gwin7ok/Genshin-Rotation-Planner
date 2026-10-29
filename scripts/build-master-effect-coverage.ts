@@ -7,8 +7,10 @@
  *
  * アクション効果用の effect_key_coverage.json は変更せず、将来統合しやすい
  * effects / targets / links / unlinked の構造で別レポートを出力する。
+ * 文書は日本語（.md）と英語（.en.md）。JSON の行には英語の欄（en）を足す（D252）。
  */
 import fs from 'node:fs';
+import { DOC_LANGUAGES, docPath, enFields, nameEnOf, pick, reportMissingEnglish, verificationEnglish, type DocLanguage } from '../src/masterdata/verificationEnglish.ts';
 import { IGNORED_KEYS, INTERNAL_INTERVAL_KEYS, slotOfEntry } from '../src/masterdata/buffGcsimLink.ts';
 import { NATURE_EXCEPTIONS, NATURE_LABEL, isDisplayWorthyNature, natureOfText } from '../src/masterdata/effectNature.ts';
 import type {
@@ -48,6 +50,9 @@ const RESONANCE_WITHOUT_KEY: Record<string, string> = {
 };
 const RESONANCE_ELEMENTS = ['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'];
 
+/** 英語の欄（en）を付ける（無ければ何も付けない） */
+const withEn = <T>(en: T | undefined) => (en ? { en } : {});
+
 const effectsById = new Map<string, MasterEffectKeyRow>();
 const targetsById = new Map<string, MasterEffectTargetRow>();
 const links: MasterEffectLinkRow[] = [];
@@ -77,6 +82,7 @@ for (const entry of catalog.entries as any[]) {
     ownerKey,
     ...(owner?.name ? { ownerName: owner.name } : {}),
     ...(entry.name ?? entry.nameEn ? { name: entry.name ?? entry.nameEn } : {}),
+    ...withEn(enFields({ ownerName: owner?.name, name: entry.name ?? entry.nameEn }, { ownerName: owner ? nameEnOf(owner) : undefined, name: entry.nameEn })),
     ...(entry.durationFrames !== undefined ? { durationFrames: entry.durationFrames } : {}),
     ...(entry.permanent ? { permanent: true } : {}),
     ...(entry.isPattern ? { isPattern: true } : {}),
@@ -92,13 +98,16 @@ function addMasterTarget(
   type: Exclude<MasterEffectTargetType, 'resonance'>,
   ownerId: string,
   ownerName: string,
+  ownerNameEn: string | undefined,
   definition: any,
   prefix = type,
 ): void {
   const id = `${prefix}:${definition.id}`;
+  const name = definition.name ?? definition.talentName ?? definition.id;
   addTarget({
     id, type, ownerId, ownerName,
-    name: definition.name ?? definition.talentName ?? definition.id,
+    name,
+    ...withEn(enFields({ ownerName, name, gcsimNote: definition.gcsimNote }, { ownerName: ownerNameEn, name: definition.en?.name ?? definition.en?.talentName, gcsimNote: definition.en?.gcsimNote ?? verificationEnglish(definition.gcsimNote) })),
     ...(definition.timing ? { timing: definition.timing } : {}),
     ...(definition.gcsimTarget !== undefined ? { gcsimTarget: definition.gcsimTarget } : {}),
     ...(definition.duration !== undefined ? { duration: definition.duration } : {}),
@@ -117,11 +126,11 @@ function addMasterTarget(
 }
 
 for (const c of characters) {
-  for (const definition of c.passiveEffects ?? []) addMasterTarget('talent', c.id, c.name, definition);
-  for (const definition of c.constellationEffects ?? []) addMasterTarget('constellation', c.id, c.name, definition);
+  for (const definition of c.passiveEffects ?? []) addMasterTarget('talent', c.id, c.name, nameEnOf(c), definition);
+  for (const definition of c.constellationEffects ?? []) addMasterTarget('constellation', c.id, c.name, nameEnOf(c), definition);
 }
-for (const w of weapons) for (const definition of w.buffEffects ?? []) addMasterTarget('weapon', w.id, w.name, definition, `weapon:${w.id}`);
-for (const a of artifacts) for (const definition of a.buffEffects ?? []) addMasterTarget('artifact', a.id, a.name, definition, `artifact:${a.id}`);
+for (const w of weapons) for (const definition of w.buffEffects ?? []) addMasterTarget('weapon', w.id, w.name, nameEnOf(w), definition, `weapon:${w.id}`);
+for (const a of artifacts) for (const definition of a.buffEffects ?? []) addMasterTarget('artifact', a.id, a.name, nameEnOf(a), definition, `artifact:${a.id}`);
 
 // Keep master references to keys omitted from the catalog in the report so they are
 // visible as a broken reverse lookup instead of disappearing from the coverage.
@@ -135,6 +144,7 @@ for (const element of RESONANCE_ELEMENTS) addTarget({
   ownerId: element,
   ownerName: '元素共鳴',
   name: `${element}元素共鳴`,
+  en: { ownerName: 'Elemental Resonance', name: `Elemental Resonance (${element.charAt(0).toUpperCase()}${element.slice(1)})` },
 });
 for (const [key, element] of Object.entries(RESONANCE_KEY_TO_ELEMENT)) {
   if (!effectsById.has(key)) continue;
@@ -245,6 +255,11 @@ for (const row of unlinked) {
   }
 }
 
+for (const row of [...links, ...unlinked]) {
+  const en = enFields({ note: row.note }, { note: verificationEnglish(row.note) });
+  if (en) row.en = en;
+}
+
 const coverage: MasterEffectCoverage = {
   schemaVersion: 1,
   gcsimCommit: catalog.gcsimCommit,
@@ -272,24 +287,32 @@ const groupCounts = (items: any[], group: (item: any) => string, state: (item: a
   Object.entries(counts(items, item => `${group(item)} / ${state(item)}`)).sort(([a], [b]) => cmp(a, b));
 const unreviewedRows = coverage.unlinked.filter(row => row.state === 'unreviewed');
 const pendingRows = coverage.unlinked.filter(row => row.state === 'pending');
-const md = [
-  '# マスター効果とgcsimキーの対応表（カバレッジ）', '',
-  `作成: ${String(catalog.generatedAt).slice(0, 10)} / gcsim辞書コミット ${String(catalog.gcsimCommit).slice(0, 8)} / 生成: \`npm run coverage:master-effects\``, '',
-  '対象は固有天賦・命ノ星座・武器・聖遺物・元素共鳴。アクション効果用の `effect_key_coverage.json` とは別ファイルで管理し、将来統合できる `effects` / `targets` / `links` / `unlinked` 形式を使う。',
-  '「未確認」はマスター側の対象またはgcsimキー側の効果について、対応付け・理由付き対象外・保留のいずれも無い状態。', '',
-  `## gcsimキー（${coverage.effects.length}件）`, '', '| 分類 / 状態 | 件数 |', '|---|---:|', ...groupCounts(coverage.effects, e => e.category, effectState).map(([label, count]) => `| ${label} | ${count} |`), '',
-  `## マスター対象（${coverage.targets.length}件）`, '', '| 種別 / 状態 | 件数 |', '|---|---:|', ...groupCounts(coverage.targets, t => t.type, targetState).map(([label, count]) => `| ${label} | ${count} |`), '',
-  `## links（${coverage.links.length}件）`, '', '| 関係 | 件数 |', '|---|---:|', ...Object.entries(counts(coverage.links, row => row.role)).sort(([a], [b]) => cmp(a, b)).map(([label, count]) => `| ${label} | ${count} |`), '',
-  `## 保留（${pendingRows.length}件）`, '', ...(pendingRows.length ? pendingRows.map(row => `- ${row.side} ${row.id}: ${row.note}`) : ['なし']), '',
-  `## 未確認（${unreviewedRows.length}件）`, '', ...(unreviewedRows.length ? unreviewedRows.map(row => `- ${row.side} ${row.id}: ${row.note}`) : ['なし']), '',
-  `整合性: 孤立リンク ${errors.length}件${errors.length ? `（${errors.join(' / ')}）` : ''}`, '',
-];
+const renderMd = (lang: DocLanguage) => {
+  const L = (ja: string, en: string) => pick(lang, ja, en);
+  const noteOf = (row: MasterEffectDisposition) => (lang === 'en' ? row.en?.note ?? row.note : row.note);
+  return [
+    L('# マスター効果とgcsimキーの対応表（カバレッジ）', '# Master effect ↔ gcsim key coverage'), '',
+    L(`作成: ${String(catalog.generatedAt).slice(0, 10)} / gcsim辞書コミット ${String(catalog.gcsimCommit).slice(0, 8)} / 生成: \`npm run coverage:master-effects\``,
+      `Generated: ${String(catalog.generatedAt).slice(0, 10)} / gcsim dictionary commit ${String(catalog.gcsimCommit).slice(0, 8)} / by \`npm run coverage:master-effects\``), '',
+    L('対象は固有天賦・命ノ星座・武器・聖遺物・元素共鳴。アクション効果用の `effect_key_coverage.json` とは別ファイルで管理し、将来統合できる `effects` / `targets` / `links` / `unlinked` 形式を使う。',
+      'Covers passive talents, constellations, weapons, artifacts and elemental resonances. Kept in a separate file from `effect_key_coverage.json` (action effects), using the same `effects` / `targets` / `links` / `unlinked` shape so they can be merged later.'),
+    L('「未確認」はマスター側の対象またはgcsimキー側の効果について、対応付け・理由付き対象外・保留のいずれも無い状態。',
+      '"Unreviewed" means a master target or gcsim key effect that is neither linked, excluded with a reason, nor pending.'), '',
+    L(`## gcsimキー（${coverage.effects.length}件）`, `## gcsim keys (${coverage.effects.length})`), '', L('| 分類 / 状態 | 件数 |', '| Category / state | Count |'), '|---|---:|', ...groupCounts(coverage.effects, e => e.category, effectState).map(([label, count]) => `| ${label} | ${count} |`), '',
+    L(`## マスター対象（${coverage.targets.length}件）`, `## Master targets (${coverage.targets.length})`), '', L('| 種別 / 状態 | 件数 |', '| Type / state | Count |'), '|---|---:|', ...groupCounts(coverage.targets, t => t.type, targetState).map(([label, count]) => `| ${label} | ${count} |`), '',
+    L(`## links（${coverage.links.length}件）`, `## links (${coverage.links.length})`), '', L('| 関係 | 件数 |', '| Role | Count |'), '|---|---:|', ...Object.entries(counts(coverage.links, row => row.role)).sort(([a], [b]) => cmp(a, b)).map(([label, count]) => `| ${label} | ${count} |`), '',
+    L(`## 保留（${pendingRows.length}件）`, `## Pending (${pendingRows.length})`), '', ...(pendingRows.length ? pendingRows.map(row => `- ${row.side} ${row.id}: ${noteOf(row)}`) : [L('なし', 'None')]), '',
+    L(`## 未確認（${unreviewedRows.length}件）`, `## Unreviewed (${unreviewedRows.length})`), '', ...(unreviewedRows.length ? unreviewedRows.map(row => `- ${row.side} ${row.id}: ${noteOf(row)}`) : [L('なし', 'None')]), '',
+    L(`整合性: 孤立リンク ${errors.length}件`, `Consistency: orphan links ${errors.length}`) + (errors.length ? L(`（${errors.join(' / ')}）`, ` (${errors.join(' / ')})`) : ''), '',
+  ];
+};
 
+const outputs: [string, string][] = [[jsonPath, generatedJson], ...DOC_LANGUAGES.map(lang => [docPath(mdPath, lang), renderMd(lang).join('\n')] as [string, string])];
 if (!CHECK_ONLY) {
-  fs.writeFileSync(jsonPath, generatedJson);
-  fs.writeFileSync(mdPath, md.join('\n'));
+  for (const [path, text] of outputs) fs.writeFileSync(path, text);
+  reportMissingEnglish();
 } else {
-  for (const [path, expected] of [[jsonPath, generatedJson], [mdPath, md.join('\n')]] as const) {
+  for (const [path, expected] of outputs) {
     // 改行は比べない（Windows のクローンは、Git の設定（autocrlf）で CRLF になる。生成物は LF）
     if (!fs.existsSync(path) || fs.readFileSync(path, 'utf8').replace(/\r\n/g, '\n') !== expected) errors.push(`${path} が生成結果と異なる`);
   }

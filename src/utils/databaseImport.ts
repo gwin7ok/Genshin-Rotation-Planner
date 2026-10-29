@@ -18,6 +18,15 @@ export type ParseDatabaseFileResult =
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
+/** 同期の記録（lastSync）。形が合わなければ捨てる（表示は lastSyncedAt の文になる） */
+function sanitizeLastSync(v: unknown): AppDatabase['lastSync'] {
+  if (!isRecord(v) || typeof v.key !== 'string' || !v.key.startsWith('messages:db.')) return undefined;
+  const params = isRecord(v.params)
+    ? Object.fromEntries(Object.entries(v.params).filter((e): e is [string, string | number] => typeof e[1] === 'string' || typeof e[1] === 'number'))
+    : undefined;
+  return { key: v.key as `messages:db.${string}`, ...(params ? { params } : {}), ...(typeof v.at === 'string' ? { at: v.at } : {}) };
+}
+
 export function parseDatabaseFile(text: string): ParseDatabaseFileResult {
   let raw: unknown;
   try {
@@ -37,6 +46,7 @@ export function parseDatabaseFile(text: string): ParseDatabaseFileResult {
       // version が無い・数値でないファイルは 0 として扱い、読み込み時に最新のマスターとマージして更新する
       version: typeof raw.version === 'number' ? raw.version : 0,
       lastSyncedAt: typeof raw.lastSyncedAt === 'string' ? raw.lastSyncedAt : '',
+      lastSync: sanitizeLastSync(raw.lastSync),
       characters: characters.items,
       weapons: weapons.items,
       artifacts: artifacts.items,

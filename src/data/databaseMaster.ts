@@ -14,6 +14,7 @@ export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[]
 export const INITIAL_MASTER_DATABASE: AppDatabase = {
   version: DATABASE_VERSION,
   lastSyncedAt: t('messages:db.bundled'),
+  lastSync: { key: 'messages:db.bundled' },
   characters: MASTER_CHARACTERS,
   weapons: MASTER_WEAPONS,
   artifacts: MASTER_ARTIFACTS,

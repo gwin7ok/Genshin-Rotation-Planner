@@ -17,6 +17,8 @@ export interface MasterEffectKeyRow {
   ownerKey: string;
   ownerName?: string;
   name?: string;
+  /** 英語（D252。日本語と同じなら無し） */
+  en?: { ownerName?: string; name?: string };
   durationFrames?: number;
   permanent?: boolean;
   isPattern?: boolean;
@@ -29,6 +31,8 @@ export interface MasterEffectTargetRow {
   ownerId: string;
   ownerName: string;
   name: string;
+  /** 英語（D252） */
+  en?: { ownerName?: string; name?: string; gcsimNote?: string };
   timing?: 'always' | 'conditional' | 'computed';
   gcsimTarget?: boolean;
   duration?: number;
@@ -41,6 +45,8 @@ export interface MasterEffectLinkRow {
   role: MasterEffectLinkRole;
   approval: 'generated' | 'manual';
   note?: string;
+  /** 英語（D252） */
+  en?: { note?: string };
 }
 
 export interface MasterEffectDisposition {
@@ -49,6 +55,8 @@ export interface MasterEffectDisposition {
   state: Exclude<MasterEffectKeyState, 'linked'> | Exclude<MasterEffectTargetState, 'linked'>;
   reason: string;
   note: string;
+  /** 英語（D252） */
+  en?: { note?: string };
 }
 
 export interface MasterEffectCoverage {

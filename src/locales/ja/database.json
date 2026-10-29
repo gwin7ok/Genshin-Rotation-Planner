@@ -253,5 +253,19 @@
     "autoSaved": "※ 変更されたデータベースはブラウザのLocalStorageに全自動保存されます。",
     "done": "完了して閉じる",
     "confirmLabel": "実行確認"
+  },
+  "progress": {
+    "charLists": "genshin-db / gcsim の一覧を取得中",
+    "charFrames": "gcsim のモーションフレームを解析中",
+    "weaponFetch": "最新の武器データを API からオンライン取得中...",
+    "weaponParse": "武器パッシブ効果・発動バフを解析・構造化中...",
+    "weaponDone": "武器マスター生成完了",
+    "artifactFetch": "最新の聖遺物データを API からオンライン取得中...",
+    "artifactParse": "聖遺物セット効果・発動バフを解析・構造化中...",
+    "artifactDone": "聖遺物マスター生成完了",
+    "weaponAll": "武器マスターデータをオンライン生成中...",
+    "artifactAll": "聖遺物マスターデータをオンライン生成中...",
+    "keyMap": "gcsim のキー対応表を取得中...",
+    "allDone": "全マスターデータ生成完了"
   }
 }

@@ -13,7 +13,7 @@
  *   - 手で補う一覧（actionEffectKeyOverrides.ts / actionEffectExtras.ts）、承認済みの一覧（actionEffectApproved.ts）
  *   - 紐づけない決定（effectKeyDecisions.ts）
  *   - マスター（characters_master_data.json）のスキル・爆発のアクション定義
- * 出力: src/data/effect_key_coverage.json と docs/gcsim-integration/phase-6-run-and-apply/effect-key-coverage.md
+ * 出力: src/data/effect_key_coverage.json と docs/gcsim-integration/phase-6-run-and-apply/effect-key-coverage.md（英語は .en.md。D252）
  *
  * 読み方: 「紐づけた」でも「紐づけないと決めた（理由つき）」でもない行が「未検討」= gcsim の更新や新キャラのとき検討する範囲。
  * 整合性の検査（エラーがあれば終了コード 1）:
@@ -31,8 +31,9 @@ import { APPROVED_STATUS_LINKS } from '../src/masterdata/actionEffectApproved.ts
 import { KEY_DECISIONS, DEF_DECISIONS } from '../src/masterdata/effectKeyDecisions.ts';
 import { CHARACTER_LINKED_EFFECTS } from '../src/masterdata/characterLinkedEffects.ts';
 import { deriveAutoExtras } from '../src/masterdata/autoEffectExtras.ts';
+import { DOC_LANGUAGES, docPath, enFields, nameEnOf, pick, reportMissingEnglish, verificationEnglish, type DocLanguage } from '../src/masterdata/verificationEnglish.ts';
 import {
-  UNLINKED_REASON_LABELS,
+  UNLINKED_REASON_LABELS, UNLINKED_REASON_LABELS_EN,
   type EffectKeyCoverage, type EffectRow, type LinkRow, type TargetRow, type UnlinkedReason, type UnlinkedRow,
 } from '../src/masterdata/effectKeyCoverage.ts';
 
@@ -93,7 +94,7 @@ for (const [defId, list] of Object.entries(ACTION_EFFECT_INCLUDED)) {
 for (const [gcsimKey, defs] of Object.entries(CHARACTER_LINKED_EFFECTS)) {
   const c = chars.find(x => x.source?.gcsimKey === gcsimKey);
   if (!c) continue;
-  for (const d of defs) links.push({ effectId: d.key, targetId: `character:${c.id}`, role: 'character', label: d.label, approval: 'approved' });
+  for (const d of defs) links.push({ effectId: d.key, targetId: `character:${c.id}`, role: 'character', label: d.label, approval: 'approved', ...(d.en?.label ? { en: { label: d.en.label } } : {}) });
 }
 
 // ---- gcsim のソースの設置物名 ----
@@ -194,13 +195,35 @@ for (const id of Object.keys(DEF_DECISIONS)) {
   else if (!targetIds.has(`action:${id}`)) warnings.push(`決定が存在しないアクション定義を指している: ${id}`);
 }
 
+// ---- 英語の欄（D252。検証データも両言語。日本語と同じなら付けない）----
+const catalogByKey = new Map<string, any>(catalog.entries.map((e: any) => [e.key, e]));
+const charByName = new Map<string, any>(chars.map(c => [c.name, c]));
+for (const e of effects.values()) {
+  const en = enFields({ name: e.name }, { name: catalogByKey.get(e.id)?.nameEn });
+  if (en) e.en = en;
+}
+for (const t of targets) {
+  const en = enFields({ char: t.char }, { char: nameEnOf(charByName.get(t.char)) });
+  if (en) t.en = en;
+}
+for (const l of links) {
+  if (!l.label || l.en) continue; // 定義に英語があるもの（キャラクターに紐づく効果）はそのまま
+  const entry = catalogByKey.get(l.effectId);
+  const en = enFields({ label: l.label }, { label: entry?.name === l.label ? entry?.nameEn : verificationEnglish(l.label) });
+  if (en) l.en = en;
+}
+for (const u of unlinked) {
+  const en = enFields({ note: u.note }, { note: verificationEnglish(u.note) });
+  if (en) u.en = en;
+}
+
 const coverage: EffectKeyCoverage = { gcsimCommit: catalog.gcsimCommit, generatedAt: new Date().toISOString(), effects: [...effects.values()], targets, links, unlinked };
 if (!CHECK_ONLY) fs.writeFileSync('src/data/effect_key_coverage.json', JSON.stringify(coverage));
 
 // ---- 報告 ----
 const count = <T>(list: T[], f: (x: T) => string) => list.reduce<Record<string, number>>((m, x) => { const k = f(x); m[k] = (m[k] ?? 0) + 1; return m; }, {});
-const label = (r: string) => (r === 'linked' ? '紐づけ済み' : UNLINKED_REASON_LABELS[r as UnlinkedReason]);
-const fmtCounts = (m: Record<string, number>) => Object.entries(m).sort((a, b) => b[1] - a[1]).map(([k, v]) => `| ${label(k)} | ${v} |`).join('\n');
+const label = (r: string, lang: DocLanguage = 'ja') => (r === 'linked' ? pick(lang, '紐づけ済み', 'Linked') : (lang === 'en' ? UNLINKED_REASON_LABELS_EN : UNLINKED_REASON_LABELS)[r as UnlinkedReason]);
+const fmtCounts = (m: Record<string, number>, lang: DocLanguage) => Object.entries(m).sort((a, b) => b[1] - a[1]).map(([k, v]) => `| ${label(k, lang)} | ${v} |`).join('\n');
 const stateOf = (side: 'effect' | 'target') => new Map(unlinked.filter(u => u.side === side).map(u => [u.id, u]));
 const effState = stateOf('effect');
 const tgtState = stateOf('target');
@@ -212,46 +235,59 @@ const unreviewedEffects = coverage.effects.filter(e => effState.get(e.id)?.reaso
 const unreviewedTargets = coverage.targets.filter(t => tgtState.get(t.id)?.reason === 'unreviewed');
 const byOwner = new Map<string, EffectRow[]>();
 for (const e of unreviewedEffects) {
-  const o = e.owner ?? '(持ち主なし)';
+  const o = e.owner ?? '';
   byOwner.set(o, [...(byOwner.get(o) ?? []), e]);
 }
 
-const md = [
-  '# スキル・爆発の効果の対応表（カバレッジ）',
-  '',
-  `作成: ${new Date().toISOString().slice(0, 10)} / gcsim の辞書のコミット ${String(catalog.gcsimCommit).slice(0, 8)} / 生成: \`npm run check:effectkeys\`（\`scripts/build-effect-coverage.ts\`）`,
-  '',
-  '4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。',
-  '「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。',
-  '決定は `src/masterdata/effectKeyDecisions.ts`、紐づけは `actionEffectKeyOverrides.ts` / `actionEffectExtras.ts` に書く。',
-  '',
-  `## effects（gcsim の効果。分類が skill / burst / character / attack と、実行時に見つかった設置物・シールド・継続ダメージ。${coverage.effects.length} 件）`,
-  '',
-  '| 状態 | 件数 |', '|---|---|', fmtCounts(effectCounts), '',
-  `設置物名（gcsim のソース）: ${constructNames.length} 件${constructNames.length === 0 ? '（取得できなかった）' : ''}`,
-  '',
-  `## targets（アプリのスキル・爆発のアクション定義。${coverage.targets.length} 件）`,
-  '',
-  '| 状態 | 件数 |', '|---|---|', fmtCounts(targetCounts), '',
-  `## links（効果 ↔ 対象。${links.length} 件）`,
-  '',
-  `内訳: ${Object.entries(approvalCounts).map(([k, v]) => `${k}=${v}`).join(' / ')}`,
-  `整合性: 存在しない効果・対象を指す紐づけ ${orphanLinks.length} 件 / 重複 ${duplicateLinks.length} 件`,
-  ...orphanLinks.map(l => `- 孤立: ${l.effectId} ↔ ${l.targetId}`),
-  '',
-  `## 未検討のアクション定義（${unreviewedTargets.length} 件）`,
-  '',
-  ...(unreviewedTargets.length === 0 ? ['なし'] : unreviewedTargets.map(t => `- ${t.char} \`${t.id}\``)),
-  '',
-  `## 未検討の効果（${unreviewedEffects.length} 件。持ち主ごと）`,
-  '',
-  ...[...byOwner.entries()].sort((a, b) => a[0].localeCompare(b[0])).flatMap(([owner, rows]) => [
-    `### ${owner}`,
-    ...rows.map(r => `- \`${r.id}\` [${r.category}] ${r.name ?? ''}`),
-  ]),
-  '',
-];
-if (!CHECK_ONLY) fs.writeFileSync('docs/gcsim-integration/phase-6-run-and-apply/effect-key-coverage.md', md.join('\n'));
+const renderMd = (lang: DocLanguage) => {
+  const L = (ja: string, en: string) => pick(lang, ja, en);
+  return [
+    L('# スキル・爆発の効果の対応表（カバレッジ）', '# Skill / Burst effect coverage'),
+    '',
+    L(`作成: ${new Date().toISOString().slice(0, 10)} / gcsim の辞書のコミット ${String(catalog.gcsimCommit).slice(0, 8)} / 生成: \`npm run check:effectkeys\`（\`scripts/build-effect-coverage.ts\`）`,
+      `Generated: ${new Date().toISOString().slice(0, 10)} / gcsim dictionary commit ${String(catalog.gcsimCommit).slice(0, 8)} / by \`npm run check:effectkeys\` (\`scripts/build-effect-coverage.ts\`)`),
+    '',
+    L('4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。',
+      'Four tables: `effects` (gcsim effects) / `targets` (app-side targets) / `links` (effect ↔ target pairs; a junction table) / `unlinked` (reasons for not linking).'),
+    L('「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。',
+      '"Not reviewed" = neither linked nor decided not to link (with a reason). This is what to review when gcsim is updated or a new character is added.'),
+    L('決定は `src/masterdata/effectKeyDecisions.ts`、紐づけは `actionEffectKeyOverrides.ts` / `actionEffectExtras.ts` に書く。',
+      'Write decisions in `src/masterdata/effectKeyDecisions.ts` and links in `actionEffectKeyOverrides.ts` / `actionEffectExtras.ts`.'),
+    '',
+    L(`## effects（gcsim の効果。分類が skill / burst / character / attack と、実行時に見つかった設置物・シールド・継続ダメージ。${coverage.effects.length} 件）`,
+      `## effects (gcsim effects: categories skill / burst / character / attack, plus constructs, shields and damage-over-time found at run time; ${coverage.effects.length})`),
+    '',
+    L('| 状態 | 件数 |', '| State | Count |'), '|---|---|', fmtCounts(effectCounts, lang), '',
+    L(`設置物名（gcsim のソース）: ${constructNames.length} 件${constructNames.length === 0 ? '（取得できなかった）' : ''}`,
+      `Construct names (gcsim source): ${constructNames.length}${constructNames.length === 0 ? ' (could not be fetched)' : ''}`),
+    '',
+    L(`## targets（アプリのスキル・爆発のアクション定義。${coverage.targets.length} 件）`, `## targets (the app's Skill / Burst action definitions; ${coverage.targets.length})`),
+    '',
+    L('| 状態 | 件数 |', '| State | Count |'), '|---|---|', fmtCounts(targetCounts, lang), '',
+    L(`## links（効果 ↔ 対象。${links.length} 件）`, `## links (effect ↔ target; ${links.length})`),
+    '',
+    L(`内訳: `, `Breakdown: `) + Object.entries(approvalCounts).map(([k, v]) => `${k}=${v}`).join(' / '),
+    L(`整合性: 存在しない効果・対象を指す紐づけ ${orphanLinks.length} 件 / 重複 ${duplicateLinks.length} 件`,
+      `Consistency: links to missing effects / targets ${orphanLinks.length} / duplicates ${duplicateLinks.length}`),
+    ...orphanLinks.map(l => `- ${L('孤立', 'Orphan')}: ${l.effectId} ↔ ${l.targetId}`),
+    '',
+    L(`## 未検討のアクション定義（${unreviewedTargets.length} 件）`, `## Action definitions not reviewed (${unreviewedTargets.length})`),
+    '',
+    ...(unreviewedTargets.length === 0 ? [L('なし', 'None')] : unreviewedTargets.map(t => `- ${lang === 'en' ? t.en?.char ?? t.char : t.char} \`${t.id}\``)),
+    '',
+    L(`## 未検討の効果（${unreviewedEffects.length} 件。持ち主ごと）`, `## Effects not reviewed (${unreviewedEffects.length}; by owner)`),
+    '',
+    ...[...byOwner.entries()].sort((a, b) => a[0].localeCompare(b[0])).flatMap(([owner, rows]) => [
+      `### ${owner || L('(持ち主なし)', '(no owner)')}`,
+      ...rows.map(r => `- \`${r.id}\` [${r.category}] ${(lang === 'en' ? r.en?.name ?? r.name : r.name) ?? ''}`),
+    ]),
+    '',
+  ];
+};
+if (!CHECK_ONLY) {
+  for (const lang of DOC_LANGUAGES) fs.writeFileSync(docPath('docs/gcsim-integration/phase-6-run-and-apply/effect-key-coverage.md', lang), renderMd(lang).join('\n'));
+  reportMissingEnglish();
+}
 
 console.log(`effects ${coverage.effects.length} 件:`, JSON.stringify(Object.fromEntries(Object.entries(effectCounts).map(([k, v]) => [label(k), v]))));
 console.log(`targets ${coverage.targets.length} 件:`, JSON.stringify(Object.fromEntries(Object.entries(targetCounts).map(([k, v]) => [label(k), v]))));

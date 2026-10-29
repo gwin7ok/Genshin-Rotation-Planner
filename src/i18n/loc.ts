@@ -8,6 +8,7 @@ import type { DataSourceQuote } from '../types/genshin';
 import { currentLanguage, t } from './index';
 import { labelForKey, labelForKeyEn } from '../masterdata/effectKeyDisplay';
 import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
+import { frameSourceEnglish, reportTextEnglish } from '../masterdata/handwrittenEnglish';
 
 type Localizable<K extends string> = { [P in K]?: string } & { en?: { [P in K]?: string } };
 
@@ -79,6 +80,18 @@ export function frameSourceOf(c: { source?: { frameSource?: string }; en?: { fra
   const ja = c?.source?.frameSource ?? '';
   if (currentLanguage !== 'en') return ja;
   return c?.en?.frameSource || ja;
+}
+
+/** アクションのフレームの出典（frames.source。英語のときは日本語の補足を英語に） */
+export function frameSourceText(source: string | undefined): string {
+  if (currentLanguage !== 'en') return source ?? '';
+  return frameSourceEnglish(source) ?? source ?? '';
+}
+
+/** マスターの生成のレポートの文（理由・エラー）。英語のときは決まった形の文を英語に。nameEn はキャラ名（日本語）→ 英語の名前 */
+export function reportText(text: string, nameEn?: (ja: string) => string | undefined): string {
+  if (currentLanguage !== 'en') return text;
+  return reportTextEnglish(text, nameEn) ?? text;
 }
 
 /** 根拠の引用（D258。英語のときは en.dataSource、無ければ日本語の原文） */

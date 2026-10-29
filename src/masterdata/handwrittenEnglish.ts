@@ -308,6 +308,45 @@ export function handwrittenEnglish(ja: string | undefined): string | undefined {
   return undefined;
 }
 
+/** フレームの出典（frames.source。gcsim のソースの位置 + 日本語の補足）の補足の部分 */
+const FRAME_SOURCE_NOTES: [RegExp, string][] = [
+  [/（\+ 長押し (-?\d+) \+ 最大 (\d+)f）/g, ' (+ hold $1 + max $2f)'],
+  [/（爆発の長さ。全部の次のアクションで同じ）/g, ' (burst length; same for every next action)'],
+  [/。重撃へのつなぎ（charge）は PR に無いため、通常攻撃へのつなぎ（attack (\d+)f）で補った（推定。(D\d+)）/g,
+    '. The PR has no transition to a charged attack (charge), so the transition to a normal attack (attack $1f) is used instead (estimated; $2)'],
+  [/（入力のパンチ）/g, ' (input punches)'],
+  [/（フィニッシュの蹴り）/g, ' (finishing kick)'],
+  [/（ジャンプへ）/g, ' (to jump)'],
+];
+
+/** フレームの出典の英語。日本語の補足が無ければ undefined（そのまま表示） */
+export function frameSourceEnglish(source: string | undefined): string | undefined {
+  if (!source || !JAPANESE.test(source)) return undefined;
+  return FRAME_SOURCE_NOTES.reduce((s, [re, en]) => s.replace(re, en), source);
+}
+
+/** マスターの生成のレポートの文（理由・エラー。characterMasterGenerator.ts）。$name はキャラ名（英語の名前に置き換える） */
+const REPORT_TEXTS: [RegExp, string][] = [
+  [/^gcsim 未実装キャラ$/, 'Character not implemented in gcsim'],
+  [/^gcsim 未実装$/, 'Not implemented in gcsim'],
+  [/^gcsim ソース取得失敗$/, 'Failed to fetch the gcsim source'],
+  [/^gcsim にフレーム定義が見つからない$/, 'No frame definition found in gcsim'],
+  [/^元素 (\S+) が未対応$/, 'Element $1 is not supported'],
+  [/^genshin-db: (?<name>.+) の天賦データが見つかりません$/, 'genshin-db: talent data not found for $<name>'],
+];
+
+/** 生成のレポートの文の英語。決まった形でなければ undefined（そのまま表示） */
+export function reportTextEnglish(text: string | undefined, nameEn: (ja: string) => string | undefined = () => undefined): string | undefined {
+  if (!text || !JAPANESE.test(text)) return undefined;
+  for (const [re, en] of REPORT_TEXTS) {
+    const m = re.exec(text);
+    if (!m) continue;
+    const name = m.groups?.name;
+    return text.replace(re, name ? en.replace('$<name>', nameEn(name) ?? name) : en);
+  }
+  return undefined;
+}
+
 /** 表示用の文の欄（この名前の欄に日本語があり、en に無ければ足す） */
 const TEXT_FIELDS = ['name', 'label', 'description', 'barNote', 'hint', 'effectLabel', 'specialBurstHint', 'gcsimNote', 'buttonLabel', 'statEffectSummary', 'statEffect', 'effect2p', 'effect4p'];
 /** 中を見ない欄（開発者向けのメモ・英語そのもの） */

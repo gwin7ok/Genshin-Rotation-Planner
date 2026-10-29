@@ -36,7 +36,8 @@ import {
   deleteWeaponFromDb,
   upsertArtifactInDb,
   deleteArtifactFromDb,
-  saveDatabase
+  saveDatabase,
+  lastSyncedText
 } from '../utils/databaseService';
 
 import { ItemLockButton } from './database/ItemLockButton';
@@ -44,7 +45,30 @@ import { DatabaseWeaponCardItem } from './database/DatabaseWeaponCardItem';
 import { EditCharacterSubModal } from './database/EditCharacterSubModal';
 import { EditWeaponSubModal } from './database/EditWeaponSubModal';
 import { EditArtifactSubModal } from './database/EditArtifactSubModal';
-import { charName, loc, frameSourceOf } from '../i18n/loc';
+import { charName, loc, frameSourceOf, frameSourceText, reportText } from '../i18n/loc';
+import type { GenerationPhase } from '../masterdata/characterMasterGenerator';
+import type { EquipmentGenerationPhase } from '../masterdata/equipmentMasterGenerator';
+
+/** マスターの生成の段階の表示 */
+const progressPhaseLabel = (phase: GenerationPhase | EquipmentGenerationPhase) => t(`database:progress.${phase}`);
+
+/** 生成のレポートのキャラ名（表示の言語。DB に無ければレポートの名前のまま） */
+const reportCharName = (db: AppDatabase, name: string, id?: string) => {
+  const c = db.characters.find(x => (id ? x.id === id : x.name === name));
+  return c ? charName(c) : name;
+};
+
+/** 生成のレポートの発動バフの例（表示の言語。レポートは日本語の名前なので、DB の項目と発動バフを名前で引く） */
+const reportBuff = (db: AppDatabase, b: { sourceType: 'weapon' | 'artifact'; sourceName: string; buffName: string; statSummary?: string }) => {
+  const items: (WeaponDatabaseItem | ArtifactSetDatabaseItem)[] = b.sourceType === 'weapon' ? db.weapons : db.artifacts;
+  const item = items.find(i => i.name === b.sourceName);
+  const buff = item?.buffEffects?.find(x => x.name === b.buffName);
+  return {
+    source: item ? loc(item, 'name') : b.sourceName,
+    buff: buff ? loc(buff, 'name') : b.buffName,
+    summary: buff ? loc(buff, 'statEffectSummary') : b.statSummary ?? '',
+  };
+};
 
 interface DatabaseManagerModalProps {
   isOpen: boolean;
@@ -536,7 +560,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <span>{syncSuccessMsg}</span>
             </div>
             <span className="text-[10px] text-emerald-400 font-mono">
-              {t('database:manager.lastUpdated', { time: database.lastSyncedAt })}
+              {t('database:manager.lastUpdated', { time: lastSyncedText(database) })}
             </span>
           </div>
         )}
@@ -594,7 +618,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
           </div>
 
           <div className="text-[11px] font-mono text-slate-500 pb-2">
-            {t('database:manager.syncState')} <span className="text-slate-300">{database.lastSyncedAt || t('database:manager.notSynced')}</span>
+            {t('database:manager.syncState')} <span className="text-slate-300">{lastSyncedText(database) || t('database:manager.notSynced')}</span>
           </div>
         </div>
 
@@ -672,7 +696,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
                     <span>
                       {syncingKind === 'character' && charSyncProgress
-                        ? `${t('database:manager.generating', { phase: charSyncProgress.phase })}${charSyncProgress.total > 1 ? ` ${charSyncProgress.done}/${charSyncProgress.total}` : ''}`
+                        ? `${t('database:manager.generating', { phase: progressPhaseLabel(charSyncProgress.phase) })}${charSyncProgress.total > 1 ? ` ${charSyncProgress.done}/${charSyncProgress.total}` : ''}`
                         : t('database:manager.charSync')}
                     </span>
                   </button>
@@ -801,7 +825,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                               <span
                                 key={act.id}
                                 className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300"
-                                title={`${t('database:manager.actionChipTitle', { name: loc(act, 'name'), duration: act.defaultDuration, frames: act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : t('database:manager.tentative'), short: act.shortName })}${hasDistinctLabel ? t('database:manager.buttonName', { label: loc(act, 'buttonLabel') }) : ''}${ct > 0 ? t('database:manager.chipCt', { seconds: ct }) : ''}${dur > 0 ? t('database:manager.chipEffect', { seconds: dur }) : ''}`}
+                                title={`${t('database:manager.actionChipTitle', { name: loc(act, 'name'), duration: act.defaultDuration, frames: act.frames ? ` (${act.frames.total}f / ${frameSourceText(act.frames.source)})` : t('database:manager.tentative'), short: act.shortName })}${hasDistinctLabel ? t('database:manager.buttonName', { label: loc(act, 'buttonLabel') }) : ''}${ct > 0 ? t('database:manager.chipCt', { seconds: ct }) : ''}${dur > 0 ? t('database:manager.chipEffect', { seconds: dur }) : ''}`}
                               >
                                 <span className="font-bold text-amber-300">{act.shortName}</span>
                                 {hasDistinctLabel && (
@@ -1171,7 +1195,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {charSyncProgress && (
                     <div className="text-xs text-amber-200 font-mono">
-                      {charSyncProgress.phase}… {charSyncProgress.total > 1 ? `${charSyncProgress.done}/${charSyncProgress.total}` : ''}
+                      {progressPhaseLabel(charSyncProgress.phase)}… {charSyncProgress.total > 1 ? `${charSyncProgress.done}/${charSyncProgress.total}` : ''}
                     </div>
                   )}
 
@@ -1189,23 +1213,23 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)}{charSyncReport.catalogCommit ? t('database:manager.dictionary', { commit: charSyncReport.catalogCommit }) : ''})</span>
                       </div>
                       {charSyncReport.skipped.length > 0 && (
-                        <div><span className="text-slate-400">{t('database:manager.skipped')}</span> {charSyncReport.skipped.map(s => `${s.name} (${s.reason})`).join(' / ')}</div>
+                        <div><span className="text-slate-400">{t('database:manager.skipped')}</span> {charSyncReport.skipped.map(s => `${s.name} (${reportText(s.reason)})`).join(' / ')}</div>
                       )}
                       {charSyncReport.placeholderDurations.length > 0 && (
                         <div>
                           <div className="text-amber-300">{t('database:manager.placeholders')}</div>
                           <ul className="pl-3 list-disc text-slate-400">
                             {charSyncReport.placeholderDurations.map(p => (
-                              <li key={p.characterId}>{p.name}: {p.actions.map(a => a.replace(`${p.characterId}_`, '')).join(', ')} ({p.reason})</li>
+                              <li key={p.characterId}>{reportCharName(database, p.name, p.characterId)}: {p.actions.map(a => a.replace(`${p.characterId}_`, '')).join(', ')} ({reportText(p.reason)})</li>
                             ))}
                           </ul>
                         </div>
                       )}
                       {charSyncReport.missingCooldowns.length > 0 && (
-                        <div><span className="text-red-300">{t('database:manager.missingCooldowns')}</span> {charSyncReport.missingCooldowns.map(m => `${m.name} ${m.actionId}`).join(' / ')}</div>
+                        <div><span className="text-red-300">{t('database:manager.missingCooldowns')}</span> {charSyncReport.missingCooldowns.map(m => `${reportCharName(database, m.name, m.characterId)} ${m.actionId}`).join(' / ')}</div>
                       )}
                       {charSyncReport.errors.length > 0 && (
-                        <div><span className="text-red-300">{t('database:manager.errors')}</span> {charSyncReport.errors.join(' / ')}</div>
+                        <div><span className="text-red-300">{t('database:manager.errors')}</span> {charSyncReport.errors.map(e => reportText(e, ja => reportCharName(database, ja))).join(' / ')}</div>
                       )}
                     </div>
                   )}
@@ -1258,7 +1282,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {weaponSyncProgress && (
                     <div className="text-xs text-sky-200 font-mono animate-pulse">
-                      {weaponSyncProgress.phase} {weaponSyncProgress.total > 1 ? `(${weaponSyncProgress.done}/${weaponSyncProgress.total})` : ''}
+                      {progressPhaseLabel(weaponSyncProgress.phase)} {weaponSyncProgress.total > 1 ? `(${weaponSyncProgress.done}/${weaponSyncProgress.total})` : ''}
                     </div>
                   )}
 
@@ -1286,11 +1310,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       )}
                       <div className="text-slate-400">{t('database:manager.buffSamples', { count: weaponSyncReport.extractedBuffsList.length })}</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
-                        {weaponSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 rounded bg-sky-950/80 border border-sky-800/50 text-[10px] text-sky-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
-                            <strong className="text-amber-300">{b.sourceName}</strong>: {b.buffName} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
+                        {weaponSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => { const shown = reportBuff(database, b); return (
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-sky-950/80 border border-sky-800/50 text-[10px] text-sky-200" title={`${shown.source}: ${shown.buff} - ${shown.summary}`}>
+                            <strong className="text-amber-300">{shown.source}</strong>: {shown.buff} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
                           </span>
-                        ))}
+                        ); })}
                         {weaponSyncReport.extractedBuffsList.length > 30 && (
                           <span className="text-[10px] text-slate-500 self-center">{t('database:manager.more', { count: weaponSyncReport.extractedBuffsList.length - 30 })}</span>
                         )}
@@ -1346,7 +1370,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {artifactSyncProgress && (
                     <div className="text-xs text-pink-200 font-mono animate-pulse">
-                      {artifactSyncProgress.phase} {artifactSyncProgress.total > 1 ? `(${artifactSyncProgress.done}/${artifactSyncProgress.total})` : ''}
+                      {progressPhaseLabel(artifactSyncProgress.phase)} {artifactSyncProgress.total > 1 ? `(${artifactSyncProgress.done}/${artifactSyncProgress.total})` : ''}
                     </div>
                   )}
 
@@ -1374,11 +1398,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       )}
                       <div className="text-slate-400">{t('database:manager.buffSamples', { count: artifactSyncReport.extractedBuffsList.length })}</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
-                        {artifactSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 rounded bg-pink-950/80 border border-pink-800/50 text-[10px] text-pink-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
-                            <strong className="text-amber-300">{b.sourceName}</strong>: {b.buffName} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
+                        {artifactSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => { const shown = reportBuff(database, b); return (
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-pink-950/80 border border-pink-800/50 text-[10px] text-pink-200" title={`${shown.source}: ${shown.buff} - ${shown.summary}`}>
+                            <strong className="text-amber-300">{shown.source}</strong>: {shown.buff} ({b.duration}s{b.cooldown ? ` / CT ${b.cooldown}s` : ''})
                           </span>
-                        ))}
+                        ); })}
                         {artifactSyncReport.extractedBuffsList.length > 30 && (
                           <span className="text-[10px] text-slate-500 self-center">{t('database:manager.more', { count: artifactSyncReport.extractedBuffsList.length - 30 })}</span>
                         )}

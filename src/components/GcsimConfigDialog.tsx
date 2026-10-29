@@ -8,7 +8,7 @@ import { runGcsimForConfig, computeGcsimApply, type GcsimRunOutcome } from '../u
 import type { TriggerableBuffDefinition } from '../utils/buffUtils';
 import type { ActionLinkTables } from '../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../utils/rotationCalculator';
-import type { Stint, ReactionRowRef } from '../types/genshin';
+import type { CharacterConfig, Stint, ReactionRowRef } from '../types/genshin';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from '../utils/gcsim/readReactions';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
@@ -37,12 +37,14 @@ interface GcsimConfigDialogProps {
   buffsByCharacter: Record<string, TriggerableBuffDefinition[]>;
   /** スキル・爆発の効果と gcsim のキーの紐付け（アクション定義の gcsimEffect・gcsimExtras から作る。D95） */
   actionLinks: ActionLinkTables;
+  /** 編成のキャラ（変更の一覧の名前を、表示の言語で引く） */
+  characters: CharacterConfig[];
   /** gcsim の結果を反映した出場ブロックを渡す（6-3。確認用の反映ボタン） */
   onApplyStints: (next: Stint[]) => void;
 }
 
 /** 「gcsim設定文をコピー」の結果（設定文と警告）を表示するポップアップ */
-export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, onReactions, stints, calculated, buffsByCharacter, actionLinks, onApplyStints }) => {
+export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, onClose, result, copied, onCopyAgain, ctIssues, ctWarnings = [], onCtWaits, onReactions, stints, calculated, buffsByCharacter, actionLinks, characters, onApplyStints }) => {
   // gcsim サーバーでの文法チェック（/validate）の結果
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<GcsimValidateResult | null>(null);
@@ -258,7 +260,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                   </div>
                 );
               }
-              const plan = computeGcsimApply({ stints, calculated, result, buffsByCharacter, actionLinks, outcome: runOutcome });
+              const plan = computeGcsimApply({ stints, calculated, result, buffsByCharacter, actionLinks, outcome: runOutcome, characters });
               const { durations, cooldowns, effects, extras, passives, charEffects, total } = plan;
               // 誰の（何番目の出場の）アクションか
               const ownerLabel = (stintId: string) => {
@@ -303,7 +305,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {extras.changes.map(c => (
                         <div key={c.actionId}>
-                          {ownerLabel(c.stintId)} {c.name}: {c.extras.length === 0 ? t('gcsim:dialog.none') : c.extras.map(x => `${x.name.replace(/（.*$/, '')} +${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                          {ownerLabel(c.stintId)} {c.name}: {c.extras.length === 0 ? t('gcsim:dialog.none') : c.extras.map(x => `${x.name.replace(/（.*$| \(.*$/, '')} +${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
                         </div>
                       ))}
                     </div>
@@ -330,7 +332,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {charEffects.changes.map(c => (
                         <div key={c.stintId}>
-                          {ownerLabel(c.stintId)}: {c.effects.length === 0 ? t('gcsim:dialog.none') : c.effects.map(x => `${x.name.replace(/（.*$/, '')} ${x.offset >= 0 ? '+' : ''}${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
+                          {ownerLabel(c.stintId)}: {c.effects.length === 0 ? t('gcsim:dialog.none') : c.effects.map(x => `${x.name.replace(/（.*$| \(.*$/, '')} ${x.offset >= 0 ? '+' : ''}${x.offset.toFixed(2)}s/${x.duration.toFixed(1)}s`).join(', ')}
                         </div>
                       ))}
                     </div>

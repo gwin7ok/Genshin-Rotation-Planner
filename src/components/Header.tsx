@@ -5,6 +5,7 @@ import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { t } from '../i18n';
+import { slotDisplayName } from '../utils/presets';
 
 interface HeaderProps {
   savedSlots: SavedRotationSlot[];
@@ -134,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({
                 placeholder={t('header:slot.unsaved')}
                 options={[
                   { value: '', label: t('header:slot.unsaved'), disabled: true },
-                  ...savedSlots.map(slot => ({ value: slot.id, label: slot.name, badge: staleReactionsBadge(slot.reactions) })),
+                  ...savedSlots.map(slot => ({ value: slot.id, label: slotDisplayName(slot), badge: staleReactionsBadge(slot.reactions) })),
                 ]}
                 onChange={(v) => {
                   const slot = savedSlots.find(s => s.id === v);

@@ -4,7 +4,7 @@ import { getAvailableBuffsForCharacter, BuffCategory } from '../buffUtils';
 import { type CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
 import { t } from '../../i18n';
-import { charName, loc, triggerName } from '../../i18n/loc';
+import { charName, loc, triggerName, extraEffectName } from '../../i18n/loc';
 
 /** 出場の終わりで、交代の内部 CT（約 1 秒）に近い素早い交代を、情報として知らせる */
 export function warnQuickSwap(a: { rawStints: Stint[]; sIdx: number; rawStint: Stint; char: CharacterConfig; stintStartTime: number; stintDuration: number; validationIssues: ValidationIssue[] }): void {
@@ -115,14 +115,14 @@ export function addCharacterEffectBars(a: { char: CharacterConfig; rawStint: Sti
     activeBuffs.push({
       id: `effect_char_${char.id}_${rawStint.id}_${exIdx}`,
       buffId: `effect_char_${char.id}_${ex.key}`,
-      name: `${char.name}: ${ex.name}`,
+      name: `${charName(char)}: ${extraEffectName(char, undefined, ex)}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',
       startTime: exStart,
       endTime: Number((exStart + ex.duration).toFixed(3)),
       duration: ex.duration,
       color: char.color,
-      description: t('messages:rotation.charEffect', { name: ex.name }),
+      description: t('messages:rotation.charEffect', { name: extraEffectName(char, undefined, ex) }),
       ownerStintId: rawStint.id,
     });
   });

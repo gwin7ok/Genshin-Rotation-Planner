@@ -16,7 +16,7 @@ import type { CharacterLinkedEffectDef } from '../utils/gcsim/applyBuffEffects.t
  *   - 星拡散が起きると、オデット・七七・旅人(氷)は、8 秒の状態（同じキー `radiance-stellar-swirl`）を、自分自身に付ける（`OnStellarSwirl`）
  * 月兆（月感電・月開花・月結晶。コロンビーナ・ラウマなどのナド・クライのキャラ）の反応は、別のキー・別の仕組み。
  */
-const STELLAR_SWIRL: CharacterLinkedEffectDef = { key: 'radiance-stellar-swirl', label: '星拡散反応の状態（光輝）', mode: 'chain' };
+const STELLAR_SWIRL: CharacterLinkedEffectDef = { key: 'radiance-stellar-swirl', label: '輝映・星拡散', en: { label: 'Radiance: Stellar Swirl' }, mode: 'chain' }; // 名前は公式（D259）
 
 export const CHARACTER_LINKED_EFFECTS: Record<string, CharacterLinkedEffectDef[]> = {
   odette: [STELLAR_SWIRL],
@@ -24,6 +24,6 @@ export const CHARACTER_LINKED_EFFECTS: Record<string, CharacterLinkedEffectDef[]
   aethercryo: [STELLAR_SWIRL],
   luminecryo: [STELLAR_SWIRL],
   yaemiko: [
-    { key: 'yae-revelation', label: '超電導・星電導反応の状態（天啓）', mode: 'chain' },
+    { key: 'yae-revelation', label: '超電導・星電導反応の状態（天啓）', en: { label: 'Superconduct / Stellar-Conduct state (Revelation)' }, mode: 'chain' },
   ],
 };

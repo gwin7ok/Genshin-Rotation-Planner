@@ -307,8 +307,10 @@ export function applyPassiveTriggers(
 export interface CharacterLinkedEffectDef {
   /** gcsim の効果のキー */
   key: string;
-  /** バーの表示名 */
+  /** バーの表示名（保存する名前。日本語） */
   label: string;
+  /** 英語の表示用の文（D255） */
+  en?: { label?: string };
   /** 各回の発動を別のバーにする（each。既定）か、更新が続く間を1本にする（chain） */
   mode?: 'each' | 'chain';
 }

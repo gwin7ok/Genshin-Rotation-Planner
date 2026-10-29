@@ -19,7 +19,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
-import { PRESET_COUNT, PRESET_NAME_PREFIX, restorePresets } from '../utils/presets';
+import { PRESET_COUNT, presetNamePrefixLabel, restorePresets, slotDisplayDescription, slotDisplayName } from '../utils/presets';
 import { useDialogs } from './DialogProvider';
 import { Trans } from 'react-i18next';
 import { t, dateLocale } from '../i18n';
@@ -157,7 +157,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // Overwrite existing slot
   const handleOverwrite = async (slot: SavedRotationSlot) => {
     const ok = await confirm(
-      t('save:message.confirmOverwrite', { name: slot.name }),
+      t('save:message.confirmOverwrite', { name: slotDisplayName(slot) }),
       { okLabel: t('save:saveAs.overwrite'), danger: true },
     );
     if (!ok) return;
@@ -180,14 +180,14 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = saved.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated, slot.id);
-    setSaveSuccessMsg(t('save:message.overwritten', { name: slot.name }));
+    setSaveSuccessMsg(t('save:message.overwritten', { name: slotDisplayName(slot) }));
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
   // プリセット編成（同梱の 5 編成）を、保存編成に復元する（同じ名前の保存編成は、上書き）
   const handleRestorePresets = async () => {
     const ok = await confirm(
-      t('save:message.confirmRestorePresets', { count: PRESET_COUNT, prefix: PRESET_NAME_PREFIX }),
+      t('save:message.confirmRestorePresets', { count: PRESET_COUNT, prefix: presetNamePrefixLabel() }),
     );
     if (!ok) return;
     const result = restorePresets();
@@ -560,7 +560,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                       type="button"
                       onClick={handleRestorePresets}
                       className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors"
-                      title={t('save:manager.restorePresetsTitle', { count: PRESET_COUNT, prefix: PRESET_NAME_PREFIX })}
+                      title={t('save:manager.restorePresetsTitle', { count: PRESET_COUNT, prefix: presetNamePrefixLabel() })}
                       data-testid="restore-presets"
                     >
                       {t('save:manager.restorePresets', { count: PRESET_COUNT })}
@@ -596,7 +596,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                         >
                           <div className="space-y-1.5 min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-sm text-white">{slot.name}</span>
+                              <span className="font-bold text-sm text-white">{slotDisplayName(slot)}</span>
                               {staleReactionsBadge(slot.reactions)}
                               <span className="text-[10px] text-slate-400 font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
                                 {t('save:manager.slotSummary', { total: (slot.totalDuration ?? 0).toFixed(1), stints: slot.stints.length, actions: slotActionCount })}
@@ -605,7 +605,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                             </div>
 
                             {slot.description && (
-                              <p className="text-xs text-slate-300">{slot.description}</p>
+                              <p className="text-xs text-slate-300">{slotDisplayDescription(slot, database.characters)}</p>
                             )}
 
                             {/* Character Badges */}
@@ -662,7 +662,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                               <Download className="w-4 h-4" />
                             </button>
                             <button
-                              onClick={() => handleDelete(slot.id, slot.name)}
+                              onClick={() => handleDelete(slot.id, slotDisplayName(slot))}
                               className="p-1.5 bg-slate-800 hover:bg-red-950 text-slate-400 hover:text-red-400 rounded-lg transition-colors"
                               title={t('save:manager.deleteTitle')}
                             >

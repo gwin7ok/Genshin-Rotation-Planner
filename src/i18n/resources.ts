@@ -11,12 +11,16 @@ import jaChart from '../locales/ja/chart.json';
 import enChart from '../locales/en/chart.json';
 import jaDatabase from '../locales/ja/database.json';
 import enDatabase from '../locales/en/database.json';
+import jaEditor from '../locales/ja/editor.json';
+import enEditor from '../locales/en/editor.json';
 import jaGcsim from '../locales/ja/gcsim.json';
 import enGcsim from '../locales/en/gcsim.json';
 import jaGuide from '../locales/ja/guide.json';
 import enGuide from '../locales/en/guide.json';
 import jaHeader from '../locales/ja/header.json';
 import enHeader from '../locales/en/header.json';
+import jaMessages from '../locales/ja/messages.json';
+import enMessages from '../locales/en/messages.json';
 import jaNotice from '../locales/ja/notice.json';
 import enNotice from '../locales/en/notice.json';
 import jaParty from '../locales/ja/party.json';
@@ -32,9 +36,11 @@ export const resources = {
     app: jaApp,
     chart: jaChart,
     database: jaDatabase,
+    editor: jaEditor,
     gcsim: jaGcsim,
     guide: jaGuide,
     header: jaHeader,
+    messages: jaMessages,
     notice: jaNotice,
     party: jaParty,
     save: jaSave,
@@ -44,9 +50,11 @@ export const resources = {
     app: enApp,
     chart: enChart,
     database: enDatabase,
+    editor: enEditor,
     gcsim: enGcsim,
     guide: enGuide,
     header: enHeader,
+    messages: enMessages,
     notice: enNotice,
     party: enParty,
     save: enSave,

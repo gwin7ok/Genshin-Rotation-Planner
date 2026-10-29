@@ -3,6 +3,7 @@ import { passiveGroupOf } from '../../types/genshin';
 import { getAvailableBuffsForCharacter, BuffCategory } from '../buffUtils';
 import { type CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
+import { t } from '../../i18n';
 
 /** 出場の終わりで、交代の内部 CT（約 1 秒）に近い素早い交代を、情報として知らせる */
 export function warnQuickSwap(a: { rawStints: Stint[]; sIdx: number; rawStint: Stint; char: CharacterConfig; stintStartTime: number; stintDuration: number; validationIssues: ValidationIssue[] }): void {
@@ -17,8 +18,8 @@ export function warnQuickSwap(a: { rawStints: Stint[]; sIdx: number; rawStint: S
         characterId: char.id,
         stintId: rawStint.id,
         time: stintStartTime,
-        title: 'キャラ交代CT近接 (Swap CD)',
-        message: `出場時間が ${stintDuration.toFixed(2)}秒です。原神の交代内部CT(約1.0秒)に近い素早い交代です。`
+        title: t('messages:rotation.swapCdTitle'),
+        message: t('messages:rotation.swapCd', { seconds: stintDuration.toFixed(2) })
       });
     }
   }
@@ -53,7 +54,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       gcsimKey: trigger.gcsimKey,
       effectGroup: passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey),
       gcsimMissed: trigger.gcsimMissed,
-      name: trigger.gcsimMissed ? `${trigger.name}（gcsim では発動せず）` : trigger.name,
+      name: trigger.gcsimMissed ? t('messages:rotation.gcsimMissed', { name: trigger.name }) : trigger.name,
       category,
       startTime,
       duration,
@@ -66,7 +67,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       description: def?.description ?? trigger.name,
     });
     const passiveSpan = passiveSpans[passiveSpans.length - 1];
-    const catLabel = category === 'weapon' ? '武器バフ' : category === 'artifact' ? '聖遺物バフ' : category === 'constellation' ? '命ノ星座の効果' : '固有天賦バフ';
+    const catLabel = category === 'weapon' ? t('messages:ct.catWeapon') : category === 'artifact' ? t('messages:ct.catArtifact') : category === 'constellation' ? t('messages:ct.catConstellation') : t('messages:ct.catTalent');
     ctEvents.push({
       key: `${char.id}:passive:${passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey)}`,
       time: startTime,
@@ -78,7 +79,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       onViolation: (remaining, cycle) => {
         passiveSpan.hasCTViolation = true;
         passiveSpan.collisionRemainingCT = Math.max(passiveSpan.collisionRemainingCT ?? 0, remaining);
-        addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', `${char.name}: ${catLabel}CT警告`, `「${trigger.name}」`, remaining, cycle);
+        addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', t('messages:ct.passiveWarning', { name: char.name, category: catLabel }), `「${trigger.name}」`, remaining, cycle);
       },
     });
 
@@ -117,7 +118,7 @@ export function addCharacterEffectBars(a: { char: CharacterConfig; rawStint: Sti
       endTime: Number((exStart + ex.duration).toFixed(3)),
       duration: ex.duration,
       color: char.color,
-      description: `キャラクターに紐づく効果: ${ex.name}`,
+      description: t('messages:rotation.charEffect', { name: ex.name }),
       ownerStintId: rawStint.id,
     });
   });

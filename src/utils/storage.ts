@@ -2,6 +2,7 @@ import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions 
 import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
 import { isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints } from './rotationValidation';
+import { t } from '../i18n';
 
 export interface ActiveRotationState {
   /** 編成（キャラの ID と編成ごとの設定） */
@@ -101,7 +102,7 @@ export function getSavedSlots(): SavedRotationSlot[] {
 
 /** 保存編成を保存・削除できなかったときに、利用者に出す文（容量超過・ブラウザの保存が無効のとき） */
 export const SLOT_WRITE_FAILED_MESSAGE =
-  'ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。内容は変更していません。「JSONファイル書き出し」で、控えを保存してください。';
+  t('messages:file.slotWriteFailed');
 
 /** 保存編成の書き込みの結果。ok が false のとき、保存できていない（slots は、保存されている内容） */
 export interface SlotWriteResult {

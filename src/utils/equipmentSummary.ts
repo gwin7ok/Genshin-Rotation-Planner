@@ -6,6 +6,7 @@
 import type { CharacterConfig } from '../types/genshin';
 import type { GenshinDatabase } from '../types/database';
 import { defaultConstellation } from '../models/CharacterModel';
+import { t } from '../i18n';
 
 export interface EquipmentSummary {
   /** 例: "舟歌 R5"。武器が未設定なら null */
@@ -23,10 +24,10 @@ export function summarizeEquipment(char: CharacterConfig, database?: Pick<Genshi
   }
   let artifact: string | null = null;
   if (char.artifactSetMode === '2+2') {
-    artifact = '2+2（効果なし）';
+    artifact = t('messages:equipment.twoTwo');
   } else if (char.artifactSetId) {
     const a = database?.artifacts.find(x => x.id === char.artifactSetId);
-    artifact = `${a?.name ?? char.artifactSetId} 4セット`;
+    artifact = t('messages:equipment.fourPiece', { name: a?.name ?? char.artifactSetId });
   }
   return { weapon, artifact };
 }

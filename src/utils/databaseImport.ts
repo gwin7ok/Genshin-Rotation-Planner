@@ -4,6 +4,7 @@
  */
 import type { AppDatabase } from '../types/database';
 import { isValidArtifactItem, isValidCharacterItem, isValidWeaponItem, sanitizeDbItems } from './databaseValidation';
+import { t } from '../i18n';
 
 export interface DatabaseImportSummary {
   characters: number;
@@ -22,10 +23,10 @@ export function parseDatabaseFile(text: string): ParseDatabaseFileResult {
   try {
     raw = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'JSON として読めません。' };
+    return { ok: false, error: t('messages:file.notJson') };
   }
   if (!isRecord(raw) || !Array.isArray(raw.characters) || !Array.isArray(raw.weapons) || !Array.isArray(raw.artifacts)) {
-    return { ok: false, error: '無効なデータベースファイル形式です（characters・weapons・artifacts の配列がありません）。' };
+    return { ok: false, error: t('messages:file.invalidDatabase') };
   }
   const characters = sanitizeDbItems<AppDatabase['characters'][number]>(raw.characters, isValidCharacterItem);
   const weapons = sanitizeDbItems<AppDatabase['weapons'][number]>(raw.weapons, isValidWeaponItem);

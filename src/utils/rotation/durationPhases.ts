@@ -10,6 +10,7 @@ import { HITLAG_FRAMES, canQueueFrames, cancelKeyOf, type HitlagBase0, type Hitl
 import { isModeActive, modeMaxUses, consValue } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
+import { t } from '../../i18n';
 
 /** フレーム表の選択: 通常攻撃の段・モード専用のフレーム・モードを終わらせる動作のフレーム */
 export function selectFrames(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -307,7 +308,7 @@ export function buildComputedAction(state: RotationState, sc: StintContext, ac: 
       stintId: rawStint.id,
       actionId: act.id,
       time: actionStartTime,
-      title: `${char.name}: モードの間に置けない操作`,
+      title: t('messages:rotation.blockedTitle', { name: char.name }),
       message: blockedMessage,
     });
   }
@@ -321,7 +322,7 @@ export function buildComputedAction(state: RotationState, sc: StintContext, ac: 
       stintId: rawStint.id,
       actionId: act.id,
       time: actionStartTime,
-      title: `${char.name}: ゲージが足りません`,
+      title: t('messages:rotation.gaugeTitle', { name: char.name }),
       message: gaugeMessage,
     });
   }

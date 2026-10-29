@@ -5,6 +5,7 @@
  */
 import { GCSIM_SERVER_URL as CONFIGURED_SERVER_URL } from './gcsimConfig.ts';
 import { resolveEngine, wasmCall, type GcsimEngine } from './gcsimWasm.ts';
+import { t } from '../../i18n';
 export const GCSIM_SERVER_URL = CONFIGURED_SERVER_URL;
 const REQUEST_TIMEOUT_MS = 10000;
 
@@ -55,12 +56,12 @@ const unreachableMessage = (e: unknown, timeoutMs: number): string => {
   const timedOut = e instanceof DOMException && e.name === 'AbortError';
   if (lastEngine === 'wasm') {
     return timedOut
-      ? `gcsim（ブラウザ内の WebAssembly 版）が ${timeoutMs / 1000}秒以内に終わりませんでした`
-      : `gcsim（ブラウザ内の WebAssembly 版）を起動できません: ${e instanceof Error ? e.message : String(e)}`;
+      ? t('messages:client.wasmTimeout', { seconds: timeoutMs / 1000 })
+      : t('messages:client.wasmStartFailed', { message: e instanceof Error ? e.message : String(e) });
   }
   return timedOut
-    ? `gcsim サーバー（${GCSIM_SERVER_URL}）からの応答がありません（${timeoutMs / 1000}秒でタイムアウト）`
-    : `gcsim サーバー（${GCSIM_SERVER_URL}）に接続できません。公式リリースの server を起動してください`;
+    ? t('messages:client.serverTimeout', { url: GCSIM_SERVER_URL, seconds: timeoutMs / 1000 })
+    : t('messages:client.serverUnreachable', { url: GCSIM_SERVER_URL });
 };
 
 /** 詳細ログの1イベント（読み取りはフェーズ6の 6-2。ここでは形だけ定義し、未知の項目は無視する） */
@@ -101,7 +102,7 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
     try {
       parsed = JSON.parse(body);
     } catch {
-      return { status: 'error', message: body.trim() || '設定文を実行できませんでした' };
+      return { status: 'error', message: body.trim() || t('messages:client.runFailed') };
     }
     if (parsed === null || typeof parsed !== 'object') {
       return { status: 'error', message: body.trim() };
@@ -111,7 +112,7 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
       return { status: 'error', message: extractErrorText(body) };
     }
     if (!Array.isArray(obj.logs)) {
-      return { status: 'error', message: '詳細ログ（logs）が含まれていません' };
+      return { status: 'error', message: t('messages:client.noLogs') };
     }
     return {
       status: 'ok',
@@ -142,12 +143,12 @@ export async function validateGcsimConfig(config: string): Promise<GcsimValidate
     try {
       parsed = JSON.parse(body);
     } catch {
-      return { status: 'invalid', message: body.trim() || '設定文を解析できませんでした' };
+      return { status: 'invalid', message: body.trim() || t('messages:client.parseFailed') };
     }
     if (parsed === null || typeof parsed !== 'object' || 'error' in parsed || 'errors' in parsed) {
       return { status: 'invalid', message: extractErrorText(body) };
     }
-    return { status: 'ok', message: lastEngine === 'wasm' ? '文法エラーはありません（gcsim で設定文を解析できました）' : '文法エラーはありません（gcsim サーバーで設定文を解析できました）' };
+    return { status: 'ok', message: lastEngine === 'wasm' ? t('messages:client.validWasm') : t('messages:client.validServer') };
   } catch (e) {
     return { status: 'unreachable', message: unreachableMessage(e, REQUEST_TIMEOUT_MS) };
   } finally {

@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig, ElementType, WeaponType } from '../types/genshin';
-import { WEAPON_TYPE_NAMES_JA } from '../data/characters';
+import { t } from '../i18n';
+import { weaponTypeLabel } from '../i18n/labels';
 import { formatCharacterCooldowns } from '../utils/characterActions';
 import { compareIdDesc } from '../utils/idSort';
 import { parseDatabaseFile } from '../utils/databaseImport';
@@ -159,7 +160,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const { db, report } = await syncCharactersMasterOnline(database, setCharSyncProgress);
       onUpdateDatabase(db);
       setCharSyncReport(report);
-      showStatus(`⚡ genshin-db ＋ gcsim から ${report.totalCharacters} キャラクターのマスターデータを生成しました (モーションフレームあり: ${report.charactersWithFrames})`, 5000);
+      showStatus(t('database:manager.charGenerated', { total: report.totalCharacters, withFrames: report.charactersWithFrames }), 5000);
     } catch (e) {
       setCharSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -180,7 +181,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const { db, report } = await syncWeaponsMasterOnline(database, setWeaponSyncProgress);
       onUpdateDatabase(db);
       setWeaponSyncReport(report);
-      showStatus(`⚔️ genshin-db から最新の武器 ${report.totalWeapons} 種類をオンライン生成しました (発動バフ解析: ${report.weaponsWithBuffs} 件)`, 5000);
+      showStatus(t('database:manager.weaponGenerated', { total: report.totalWeapons, withBuffs: report.weaponsWithBuffs }), 5000);
     } catch (e) {
       setWeaponSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -201,7 +202,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const { db, report } = await syncArtifactsMasterOnline(database, setArtifactSyncProgress);
       onUpdateDatabase(db);
       setArtifactSyncReport(report);
-      showStatus(`🏺 genshin-db から最新の聖遺物 ${report.totalArtifacts} セットをオンライン生成しました (発動バフ解析: ${report.artifactsWithBuffs} 件)`, 5000);
+      showStatus(t('database:manager.artifactGenerated', { total: report.totalArtifacts, withBuffs: report.artifactsWithBuffs }), 5000);
     } catch (e) {
       setArtifactSyncError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -227,7 +228,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     try {
       let db = database;
 
-      step = 'キャラクター';
+      step = t('database:manager.stepCharacters');
       setBulkStep({ index: 1, label: step });
       setSyncingKind('character');
       const c = await syncCharactersMasterOnline(db, setCharSyncProgress);
@@ -236,7 +237,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       setCharSyncReport(c.report);
       setCharSyncProgress(null);
 
-      step = '武器';
+      step = t('database:manager.stepWeapons');
       setBulkStep({ index: 2, label: step });
       setSyncingKind('weapon');
       const w = await syncWeaponsMasterOnline(db, setWeaponSyncProgress);
@@ -245,7 +246,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       setWeaponSyncReport(w.report);
       setWeaponSyncProgress(null);
 
-      step = '聖遺物';
+      step = t('database:manager.stepArtifacts');
       setBulkStep({ index: 3, label: step });
       setSyncingKind('artifact');
       const a = await syncArtifactsMasterOnline(db, setArtifactSyncProgress);
@@ -253,9 +254,9 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       onUpdateDatabase(db);
       setArtifactSyncReport(a.report);
 
-      showStatus(`🔄 最新データをオンライン生成しました（キャラクター ${c.report.totalCharacters} 件・武器 ${w.report.totalWeapons} 種類・聖遺物 ${a.report.totalArtifacts} セット）`, 6000);
+      showStatus(t('database:manager.bulkGenerated', { characters: c.report.totalCharacters, weapons: w.report.totalWeapons, artifacts: a.report.totalArtifacts }), 6000);
     } catch (e) {
-      setBulkError(`${step}の生成に失敗しました（${step}より前の生成結果は反映・保存済みです）: ${e instanceof Error ? e.message : String(e)}`);
+      setBulkError(t('database:manager.bulkFailed', { step, message: e instanceof Error ? e.message : String(e) }));
     } finally {
       setIsSyncing(false);
       setSyncingKind(null);
@@ -269,15 +270,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Full reset
   const handleFullReset = () => {
     setConfirmDialog({
-      title: '初期状態へリセット',
-      message: 'すべてのカスタム変更をクリアし、データベースを初期の公式マスター状態に戻しますか？',
-      confirmText: '初期状態へリセット',
+      title: t('database:manager.resetTitle'),
+      message: t('database:manager.resetMessage'),
+      confirmText: t('database:manager.resetTitle'),
       confirmColor: 'amber',
       onConfirm: () => {
         const reset = resetDatabaseToMaster();
         onUpdateDatabase(reset);
         setConfirmDialog(null);
-        showStatus('データベースを初期マスターデータにリセットしました。', 4000);
+        showStatus(t('database:manager.resetDone'), 4000);
       }
     });
   };
@@ -304,30 +305,30 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
       const showError = (msg: string) => showStatus(msg, 10000, 'error');
       const parsed = parseDatabaseFile(String(event.target?.result ?? ''));
       if (!parsed.ok) {
-        showError(`取り込めませんでした: ${(parsed as { ok: false; error: string }).error}`);
+        showError(t('database:manager.importFailed', { error: (parsed as { ok: false; error: string }).error }));
         return;
       }
       const { db, counts, skipped } = parsed;
       setConfirmDialog({
-        title: 'データベースファイルの復元',
+        title: t('database:manager.restoreTitle'),
         message: [
-          '今のデータベースを、このファイルの内容で置き換えます（元に戻せません）。',
-          `・今: キャラ ${database.characters.length}・武器 ${database.weapons.length}・聖遺物 ${database.artifacts.length}`,
-          `・ファイル: キャラ ${counts.characters}・武器 ${counts.weapons}・聖遺物 ${counts.artifacts}`,
-          ...(skipped > 0 ? [`※ 形が壊れている・ID が重複している ${skipped} 件は、読み飛ばします`] : []),
+          t('database:manager.restoreIntro'),
+          t('database:manager.restoreNow', { characters: database.characters.length, weapons: database.weapons.length, artifacts: database.artifacts.length }),
+          t('database:manager.restoreFile', { characters: counts.characters, weapons: counts.weapons, artifacts: counts.artifacts }),
+          ...(skipped > 0 ? [t('database:manager.restoreSkipped', { count: skipped })] : []),
           '',
-          '必要なら、先に「保存/読み込み」からバックアップを書き出してください。',
+          t('database:manager.restoreBackupHint'),
         ].join('\n'),
-        confirmText: '置き換える',
+        confirmText: t('database:manager.replace'),
         confirmColor: 'amber',
         onConfirm: () => {
           setConfirmDialog(null);
           if (!saveDatabase(db)) {
-            showError('ブラウザに保存できませんでした（保存容量の不足の可能性）。データベースは変更していません。');
+            showError(t('database:manager.saveFailed'));
             return;
           }
           onUpdateDatabase(db);
-          showMsg(skipped > 0 ? `データベースファイルを復元しました（${skipped} 件を読み飛ばし）。` : 'データベースファイルの復元に成功しました！');
+          showMsg(skipped > 0 ? t('database:manager.restoredSkipped', { count: skipped }) : t('database:manager.restored'));
         },
       });
     };
@@ -350,60 +351,60 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // Delete Handlers using Custom In-App Modal
   const handleDeleteChar = (id: string, name: string) => {
     setConfirmDialog({
-      title: `キャラクター「${name}」の削除`,
-      message: `キャラクター「${name}」をデータベースから削除しますか？\n（メイン画面および選択画面からも即座に除外されます）`,
-      confirmText: '削除する',
+      title: t('database:manager.deleteCharTitle', { name }),
+      message: t('database:manager.deleteCharMessage', { name }),
+      confirmText: t('database:manager.delete'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteCharacterFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus(`キャラクター「${name}」を削除しました。`, 3000);
+        showStatus(t('database:manager.charDeleted', { name }), 3000);
       }
     });
   };
 
   const handleDeleteAllCharacters = () => {
     setConfirmDialog({
-      title: '全キャラクター一括削除',
-      message: `警告: データベース内の全 ${database.characters.length} キャラクターを一括削除しますか？\n（アプリ全画面から削除したキャラが除去されます）${lockedCharCount > 0 ? `\n※ロック中の ${lockedCharCount} キャラは削除されません` : ''}`,
-      confirmText: '全キャラ一括削除を実行',
+      title: t('database:manager.deleteAllCharsTitle'),
+      message: `${t('database:manager.deleteAllCharsMessage', { count: database.characters.length })}${lockedCharCount > 0 ? t('database:manager.lockedCharsKept', { count: lockedCharCount }) : ''}`,
+      confirmText: t('database:manager.deleteAllCharsConfirm'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteAllCharactersFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus('全キャラクターを一括削除しました。', 3000);
+        showStatus(t('database:manager.allCharsDeleted'), 3000);
       }
     });
   };
 
   const handleDeleteAllWeapons = () => {
     setConfirmDialog({
-      title: '全武器一括削除',
-      message: `警告: データベース内の全 ${database.weapons.length} 武器を一括削除しますか？${lockedWeaponCount > 0 ? `\n※ロック中の ${lockedWeaponCount} 武器は削除されません` : ''}`,
-      confirmText: '全武器一括削除を実行',
+      title: t('database:manager.deleteAllWeaponsTitle'),
+      message: `${t('database:manager.deleteAllWeaponsMessage', { count: database.weapons.length })}${lockedWeaponCount > 0 ? t('database:manager.lockedWeaponsKept', { count: lockedWeaponCount }) : ''}`,
+      confirmText: t('database:manager.deleteAllWeaponsConfirm'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteAllWeaponsFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus('全武器を一括削除しました。', 3000);
+        showStatus(t('database:manager.allWeaponsDeleted'), 3000);
       }
     });
   };
 
   const handleDeleteAllArtifacts = () => {
     setConfirmDialog({
-      title: '全聖遺物一括削除',
-      message: `警告: データベース内の全 ${database.artifacts.length} 聖遺物セットを一括削除しますか？${lockedArtifactCount > 0 ? `\n※ロック中の ${lockedArtifactCount} 聖遺物は削除されません` : ''}`,
-      confirmText: '全聖遺物一括削除を実行',
+      title: t('database:manager.deleteAllArtifactsTitle'),
+      message: `${t('database:manager.deleteAllArtifactsMessage', { count: database.artifacts.length })}${lockedArtifactCount > 0 ? t('database:manager.lockedArtifactsKept', { count: lockedArtifactCount }) : ''}`,
+      confirmText: t('database:manager.deleteAllArtifactsConfirm'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteAllArtifactsFromDb(database);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus('全聖遺物を一括削除しました。', 3000);
+        showStatus(t('database:manager.allArtifactsDeleted'), 3000);
       }
     });
   };
@@ -411,45 +412,45 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   const handleClearAllData = () => {
     const totalLocked = lockedCharCount + lockedWeaponCount + lockedArtifactCount;
     setConfirmDialog({
-      title: 'データベース全データ完全消去',
-      message: `危険: データベースの全データ（全キャラクター ${database.characters.length}人、全武器 ${database.weapons.length}個、全聖遺物 ${database.artifacts.length}セット）を完全に消去しますか？${totalLocked > 0 ? `\n※ロック中のアイテム（キャラ:${lockedCharCount} 武器:${lockedWeaponCount} 聖遺物:${lockedArtifactCount}）は保護されます` : ''}`,
-      confirmText: '全データ完全消去',
+      title: t('database:manager.clearAllTitle'),
+      message: `${t('database:manager.clearAllMessage', { characters: database.characters.length, weapons: database.weapons.length, artifacts: database.artifacts.length })}${totalLocked > 0 ? t('database:manager.lockedItemsKept', { characters: lockedCharCount, weapons: lockedWeaponCount, artifacts: lockedArtifactCount }) : ''}`,
+      confirmText: t('database:manager.clearAllConfirm'),
       confirmColor: 'rose',
       onConfirm: () => {
         const empty = clearAllDatabaseData(database);
         onUpdateDatabase(empty);
         setConfirmDialog(null);
-        showStatus('データベースの全データを完全クリアしました。', 3000);
+        showStatus(t('database:manager.allCleared'), 3000);
       }
     });
   };
 
   const handleDeleteWeapon = (id: string, name: string) => {
     setConfirmDialog({
-      title: `武器「${name}」の削除`,
-      message: `武器「${name}」をデータベースから削除しますか？`,
-      confirmText: '削除する',
+      title: t('database:manager.deleteWeaponTitle', { name }),
+      message: t('database:manager.deleteWeaponMessage', { name }),
+      confirmText: t('database:manager.delete'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteWeaponFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus(`武器「${name}」を削除しました。`, 3000);
+        showStatus(t('database:manager.weaponDeleted', { name }), 3000);
       }
     });
   };
 
   const handleDeleteArtifact = (id: string, name: string) => {
     setConfirmDialog({
-      title: `聖遺物「${name}」の削除`,
-      message: `聖遺物「${name}」をデータベースから削除しますか？`,
-      confirmText: '削除する',
+      title: t('database:manager.deleteArtifactTitle', { name }),
+      message: t('database:manager.deleteArtifactMessage', { name }),
+      confirmText: t('database:manager.delete'),
       confirmColor: 'red',
       onConfirm: () => {
         const updated = deleteArtifactFromDb(database, id);
         onUpdateDatabase(updated);
         setConfirmDialog(null);
-        showStatus(`聖遺物「${name}」を削除しました。`, 3000);
+        showStatus(t('database:manager.artifactDeleted', { name }), 3000);
       }
     });
   };
@@ -468,15 +469,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-base text-white">
-                  データベース管理・カスタマイズ (Genshin Database Manager)
+                  {t('database:manager.title')}
                 </h2>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60 flex items-center gap-1">
                   <Check className="w-3 h-3 text-emerald-400" />
-                  ローカル保存有効
+                  {t('database:manager.localSave')}
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                キャラクター性能・武器パッシブ・聖遺物効果の最新同期と、ユーザー自身による自由な数値編集・保存
+                {t('database:manager.subtitle')}
               </p>
             </div>
           </div>
@@ -487,13 +488,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               onClick={handleSyncAll}
               disabled={isSyncing}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-wait text-white border border-emerald-500/70 shadow-sm transition-colors"
-              title="キャラクター → 武器 → 聖遺物の順に、最新のマスターデータをオンライン生成して上書きします（ロック中・カスタムは上書きしません）"
+              title={t('database:manager.bulkTitle')}
             >
               <RefreshCw className={`w-3.5 h-3.5 ${bulkStep ? 'animate-spin' : ''}`} />
               <span>
                 {bulkStep
-                  ? `生成中… (${bulkStep.index}/3 ${bulkStep.label})`
-                  : '最新データ（キャラ・武器・聖遺物）をオンライン生成'}
+                  ? t('database:manager.generatingStep', { index: bulkStep.index, label: bulkStep.label })
+                  : t('database:manager.bulkButton')}
               </span>
             </button>
             <button
@@ -509,7 +510,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         {bulkError && (
           <div className="bg-red-950/90 border-b border-red-700/60 px-4 py-2 flex items-start justify-between gap-3 text-xs text-red-200">
             <span>{bulkError}</span>
-            <button type="button" onClick={() => setBulkError(null)} className="text-red-300 hover:text-white shrink-0" title="閉じる">
+            <button type="button" onClick={() => setBulkError(null)} className="text-red-300 hover:text-white shrink-0" title={t('action.close')}>
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -522,7 +523,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
               <span>{syncSuccessMsg}</span>
             </div>
-            <button type="button" onClick={() => showStatus(null)} className="text-red-300 hover:text-white shrink-0" title="閉じる">
+            <button type="button" onClick={() => showStatus(null)} className="text-red-300 hover:text-white shrink-0" title={t('action.close')}>
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -534,7 +535,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <span>{syncSuccessMsg}</span>
             </div>
             <span className="text-[10px] text-emerald-400 font-mono">
-              最終更新: {database.lastSyncedAt}
+              {t('database:manager.lastUpdated', { time: database.lastSyncedAt })}
             </span>
           </div>
         )}
@@ -551,7 +552,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               }`}
             >
               <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span>キャラクター ({database.characters.length})</span>
+              <span>{t('database:manager.tabCharacters', { count: database.characters.length })}</span>
             </button>
 
             <button
@@ -563,7 +564,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               }`}
             >
               <Sword className="w-3.5 h-3.5 text-sky-400" />
-              <span>武器 ({database.weapons.length})</span>
+              <span>{t('database:manager.tabWeapons', { count: database.weapons.length })}</span>
             </button>
 
             <button
@@ -575,7 +576,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               }`}
             >
               <Shield className="w-3.5 h-3.5 text-purple-400" />
-              <span>聖遺物 ({database.artifacts.length})</span>
+              <span>{t('database:manager.tabArtifacts', { count: database.artifacts.length })}</span>
             </button>
 
             <button
@@ -587,12 +588,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               }`}
             >
               <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`} />
-              <span>最新データ同期・バックアップ</span>
+              <span>{t('database:manager.tabSync')}</span>
             </button>
           </div>
 
           <div className="text-[11px] font-mono text-slate-500 pb-2">
-            同期状態: <span className="text-slate-300">{database.lastSyncedAt || '未同期'}</span>
+            {t('database:manager.syncState')} <span className="text-slate-300">{database.lastSyncedAt || t('database:manager.notSynced')}</span>
           </div>
         </div>
 
@@ -608,7 +609,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
-                    placeholder="キャラ名・英語名・IDで検索..."
+                    placeholder={t('database:manager.charSearch')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
@@ -631,10 +632,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="ロック中のものだけを表示"
+                  title={t('database:manager.lockedOnlyTitle')}
                 >
                   <Lock className="w-3 h-3" />
-                  <span>ロック中のみ</span>
+                  <span>{t('database:manager.lockedOnly')}</span>
                 </button>
 
                 {/* gcsim 未実装のみ表示 */}
@@ -644,10 +645,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                  title={t('database:manager.missingOnlyTitle')}
                 >
                   <AlertTriangle className="w-3 h-3" />
-                  <span>gcsim 未実装のみ</span>
+                  <span>{t('database:manager.missingOnly')}</span>
                 </button>
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -657,7 +658,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0"
                   >
                     <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                    <span>全キャラ一括削除 ({database.characters.length})</span>
+                    <span>{t('database:manager.deleteAllChars', { count: database.characters.length })}</span>
                   </button>
 
                   {/* 最新マスターデータの動的生成（キャラ）。武器・聖遺物のタブと同じ位置・形（issue #27） */}
@@ -665,13 +666,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     onClick={handleSyncCharacters}
                     disabled={isSyncing}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700/90 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
-                    title="genshin-db API と gcsim から最新の全キャラクターデータをオンライン取得して生成"
+                    title={t('database:manager.charSyncTitle')}
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
                     <span>
                       {syncingKind === 'character' && charSyncProgress
-                        ? `生成中… ${charSyncProgress.phase}${charSyncProgress.total > 1 ? ` ${charSyncProgress.done}/${charSyncProgress.total}` : ''}`
-                        : '最新キャラをオンライン生成'}
+                        ? `${t('database:manager.generating', { phase: charSyncProgress.phase })}${charSyncProgress.total > 1 ? ` ${charSyncProgress.done}/${charSyncProgress.total}` : ''}`
+                        : t('database:manager.charSync')}
                     </span>
                   </button>
 
@@ -679,23 +680,23 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     onClick={() => {
                       setEditingCharacter({
                         id: `custom_${Date.now()}`,
-                        name: '新規キャラクター',
+                        name: t('database:manager.newCharacter'),
                         element: 'pyro',
                         weaponType: 'sword',
                         avatarUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150&auto=format&fit=crop&q=80',
                         color: '#ef4444',
                         accentColor: '#f87171',
                         availableActions: [
-                          { id: 'act_e', name: '元素スキル', shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 6.0, effectDuration: 0 },
-                          { id: 'act_q', name: '元素爆発', shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, cooldown: 15.0, effectDuration: 0 },
-                          { id: 'act_n', name: '通常攻撃', shortName: 'N', type: 'normal', defaultDuration: 0.3 }
+                          { id: 'act_e', name: t('database:manager.actionSkill'), shortName: 'E', type: 'skill', defaultDuration: 0.8, startsSkillCooldown: true, cooldown: 6.0, effectDuration: 0 },
+                          { id: 'act_q', name: t('database:manager.actionBurst'), shortName: 'Q', type: 'burst', defaultDuration: 1.2, startsBurstCooldown: true, cooldown: 15.0, effectDuration: 0 },
+                          { id: 'act_n', name: t('database:manager.actionNormal'), shortName: 'N', type: 'normal', defaultDuration: 0.3 }
                         ]
                       });
                     }}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>カスタムキャラ追加</span>
+                    <span>{t('database:manager.addCustomChar')}</span>
                   </button>
                 </div>
               </div>
@@ -726,7 +727,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                               <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{char.name}</span><GcsimMissingBadge char={char} /></h3>
                               {isCustom && (
                                 <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                                  カスタム
+                                  {t('custom')}
                                 </span>
                               )}
                             </div>
@@ -742,19 +743,19 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           <ItemLockButton
                             locked={!!char.isLocked}
                             onToggle={() => handleToggleCharLock(char.id, !char.isLocked)}
-                            itemTypeLabel="キャラ"
+                            itemTypeLabel={t('item.character')}
                           />
                           <button
                             onClick={() => setEditingCharacter(char)}
                             className="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-slate-800 rounded-lg transition-colors"
-                            title="パラメータ編集"
+                            title={t('database:manager.editTitle')}
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteChar(char.id, char.name)}
                             className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
-                            title="削除"
+                            title={t('database:manager.deleteTitle')}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -764,23 +765,23 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       {/* Params Summary (CT はアクションごとの値をまとめて表示) */}
                       <div className="grid grid-cols-2 gap-1.5 text-[11px] font-mono bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
                         <div>
-                          <span className="text-slate-400">スキルCT:</span>{' '}
+                          <span className="text-slate-400">{t('database:manager.skillCt')}</span>{' '}
                           <strong className="text-amber-300">{formatCharacterCooldowns(char, 'skill')}</strong>
                         </div>
                         <div>
-                          <span className="text-slate-400">爆発CT:</span>{' '}
+                          <span className="text-slate-400">{t('database:manager.burstCt')}</span>{' '}
                           <strong className="text-purple-300">{formatCharacterCooldowns(char, 'burst')}</strong>
                         </div>
                         <div className="col-span-2">
-                          <span className="text-slate-400">モーション:</span>{' '}
+                          <span className="text-slate-400">{t('database:manager.motion')}</span>{' '}
                           {char.availableActions.some(a => a.frames) ? (
-                            <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? `gcsim のリリースには入っていない実装のフレームです（出典: ${char.source.frameSource}）` : undefined}>
-                              {char.source?.frameSource ? `出典: ${char.source.frameSource}` : 'gcsim フレーム'} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
+                            <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? t('database:manager.framesUnreleasedTitle', { source: char.source.frameSource }) : undefined}>
+                              {char.source?.frameSource ? t('database:manager.source', { source: char.source.frameSource }) : t('database:manager.gcsimFrames')} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
                             </strong>
                           ) : char.source?.frameSource ? (
-                            <strong className="text-amber-300" title="実測のフレームがありません。同じ武器種のキャラの中央値からの推定です">出典: {char.source.frameSource}</strong>
+                            <strong className="text-amber-300" title={t('database:manager.framesEstimatedTitle')}>{t('database:manager.source', { source: char.source.frameSource })}</strong>
                           ) : (
-                            <strong className="text-slate-500">フレーム未取得 (仮の秒数)</strong>
+                            <strong className="text-slate-500">{t('database:manager.framesMissing')}</strong>
                           )}
                         </div>
                       </div>
@@ -788,7 +789,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       {/* Action Templates with per-action CT & Duration */}
                       <div className="border-t border-slate-800/60 pt-2 space-y-1.5">
                         <div className="text-[11px] text-slate-400 flex items-center justify-between">
-                          <span className="font-semibold text-slate-300">登録アクション ({char.availableActions.length}種):</span>
+                          <span className="font-semibold text-slate-300">{t('database:manager.actions', { count: char.availableActions.length })}</span>
                         </div>
                         <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1">
                           {char.availableActions.map((act) => {
@@ -799,7 +800,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                               <span
                                 key={act.id}
                                 className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300"
-                                title={`${act.name}: モーション ${act.defaultDuration}s${act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : ' (仮の秒数)'} | 記法略称: ${act.shortName}${hasDistinctLabel ? ` | ボタン名: ${act.buttonLabel}` : ''}${ct > 0 ? ` | CT: ${ct}s` : ''}${dur > 0 ? ` | 効果: ${dur}s` : ''}`}
+                                title={`${t('database:manager.actionChipTitle', { name: act.name, duration: act.defaultDuration, frames: act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : t('database:manager.tentative'), short: act.shortName })}${hasDistinctLabel ? t('database:manager.buttonName', { label: act.buttonLabel }) : ''}${ct > 0 ? t('database:manager.chipCt', { seconds: ct }) : ''}${dur > 0 ? t('database:manager.chipEffect', { seconds: dur }) : ''}`}
                               >
                                 <span className="font-bold text-amber-300">{act.shortName}</span>
                                 {hasDistinctLabel && (
@@ -809,7 +810,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                                   <span className="text-amber-400/90 font-mono text-[9px] bg-amber-950/60 px-1 rounded border border-amber-800/40">CT:{ct}s</span>
                                 )}
                                 {dur > 0 && (
-                                  <span className="text-purple-300/90 font-mono text-[9px] bg-purple-950/60 px-1 rounded border border-purple-800/40">効果:{dur}s</span>
+                                  <span className="text-purple-300/90 font-mono text-[9px] bg-purple-950/60 px-1 rounded border border-purple-800/40">{t('database:manager.effectShort', { seconds: dur })}</span>
                                 )}
                               </span>
                             );
@@ -832,7 +833,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
-                    placeholder="武器名・効果で検索..."
+                    placeholder={t('database:manager.weaponSearch')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
@@ -847,7 +848,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       weaponTypeFilter === 'all' ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800'
                     }`}
                   >
-                    全武器種
+                    {t('database:manager.allWeaponTypes')}
                   </button>
                   {(['sword', 'claymore', 'polearm', 'bow', 'catalyst'] as WeaponType[]).map(wt => (
                     <button
@@ -857,7 +858,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         weaponTypeFilter === wt ? 'bg-sky-500/20 text-sky-300 border-sky-500/50' : 'bg-slate-900 text-slate-400 border-slate-800'
                       }`}
                     >
-                      {WEAPON_TYPE_NAMES_JA[wt]}
+                      {weaponTypeLabel(wt)}
                     </button>
                   ))}
                 </div>
@@ -869,10 +870,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="ロック中のものだけを表示"
+                  title={t('database:manager.lockedOnlyTitle')}
                 >
                   <Lock className="w-3 h-3" />
-                  <span>ロック中のみ</span>
+                  <span>{t('database:manager.lockedOnly')}</span>
                 </button>
 
                 {/* gcsim 未実装のみ表示 */}
@@ -882,10 +883,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                  title={t('database:manager.missingOnlyTitle')}
                 >
                   <AlertTriangle className="w-3 h-3" />
-                  <span>gcsim 未実装のみ</span>
+                  <span>{t('database:manager.missingOnly')}</span>
                 </button>
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -895,36 +896,36 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                    <span>全武器一括削除 ({database.weapons.length})</span>
+                    <span>{t('database:manager.deleteAllWeapons', { count: database.weapons.length })}</span>
                   </button>
 
                   <button
                     onClick={handleSyncWeapons}
                     disabled={isSyncing}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-700/90 hover:bg-sky-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
-                    title="genshin-db API から最新の全武器データをオンライン取得して生成"
+                    title={t('database:manager.weaponSyncTitle')}
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'weapon' ? 'animate-spin' : ''}`} />
-                    <span>最新武器をオンライン生成</span>
+                    <span>{t('database:manager.weaponSync')}</span>
                   </button>
 
                   <button
                     onClick={() => {
                       setEditingWeapon({
                         id: `weapon_custom_${Date.now()}`,
-                        name: 'カスタム新規武器',
+                        name: t('database:manager.customWeaponName'),
                         weaponType: 'sword',
                         rarity: 5,
                         baseAttack: 608,
-                        passiveName: '独自パッシブスキル',
-                        description: '元素スキル発動後、12秒間攻撃力+20%',
+                        passiveName: t('database:manager.customWeaponPassive'),
+                        description: t('database:manager.customWeaponDescription'),
                         buffEffect: {
                           id: `buff_w_${Date.now()}`,
-                          name: 'カスタム武器バフ (攻撃力+20%)',
+                          name: t('database:manager.customWeaponBuff'),
                           duration: 12.0,
                           cooldown: 20.0,
-                          statEffect: '攻撃力 +20%',
-                          description: '12秒間攻撃力+20%',
+                          statEffect: t('database:manager.customWeaponStat'),
+                          description: t('database:manager.customWeaponBuffDescription'),
                           color: '#f59e0b'
                         }
                       });
@@ -932,7 +933,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>カスタム武器追加</span>
+                    <span>{t('database:manager.addCustomWeapon')}</span>
                   </button>
                 </div>
               </div>
@@ -961,7 +962,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
-                    placeholder="聖遺物名・2セット/4セット効果で検索..."
+                    placeholder={t('database:manager.artifactSearch')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-slate-900 text-xs text-white placeholder-slate-500 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-amber-400 w-full"
@@ -975,10 +976,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     lockedOnly ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="ロック中のものだけを表示"
+                  title={t('database:manager.lockedOnlyTitle')}
                 >
                   <Lock className="w-3 h-3" />
-                  <span>ロック中のみ</span>
+                  <span>{t('database:manager.lockedOnly')}</span>
                 </button>
 
                 {/* gcsim 未実装のみ表示 */}
@@ -988,10 +989,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                   className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-colors shrink-0 ${
                     gcsimMissingOnly ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                   }`}
-                  title="genshin-db にあって gcsim に未実装（gcsim キーが無い）ものだけを表示"
+                  title={t('database:manager.missingOnlyTitle')}
                 >
                   <AlertTriangle className="w-3 h-3" />
-                  <span>gcsim 未実装のみ</span>
+                  <span>{t('database:manager.missingOnly')}</span>
                 </button>
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -1001,33 +1002,33 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/80 hover:bg-red-900 disabled:opacity-40 border border-red-800/80 text-red-300 font-bold text-xs rounded-lg shadow transition-all shrink-0 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                    <span>全聖遺物一括削除 ({database.artifacts.length})</span>
+                    <span>{t('database:manager.deleteAllArtifacts', { count: database.artifacts.length })}</span>
                   </button>
 
                   <button
                     onClick={handleSyncArtifacts}
                     disabled={isSyncing}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-700/90 hover:bg-purple-600 disabled:opacity-50 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0 cursor-pointer"
-                    title="genshin-db API から最新の全聖遺物データをオンライン取得して生成"
+                    title={t('database:manager.artifactSyncTitle')}
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${syncingKind === 'artifact' ? 'animate-spin' : ''}`} />
-                    <span>最新聖遺物をオンライン生成</span>
+                    <span>{t('database:manager.artifactSync')}</span>
                   </button>
 
                   <button
                     onClick={() => {
                       setEditingArtifact({
                         id: `art_custom_${Date.now()}`,
-                        name: 'カスタム聖遺物 4セット',
+                        name: t('database:manager.customArtifactName'),
                         rarity: 5,
-                        effect2p: '攻撃力 +18%',
-                        effect4p: '元素爆発命中後、10秒間全ダメバフ+24%',
+                        effect2p: t('database:manager.customArtifact2p'),
+                        effect4p: t('database:manager.customArtifact4p'),
                         buffEffect: {
                           id: `buff_art_${Date.now()}`,
-                          name: 'カスタム聖遺物: 全ダメバフ+24%',
+                          name: t('database:manager.customArtifactBuff'),
                           duration: 10.0,
-                          statEffect: '全ダメージ +24%',
-                          description: '元素爆発命中後10秒間、全ダメバフ+24%',
+                          statEffect: t('database:manager.customArtifactStat'),
+                          description: t('database:manager.customArtifactBuffDescription'),
                           color: '#c084fc'
                         }
                       });
@@ -1035,7 +1036,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg shadow-md transition-all shrink-0"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>カスタム聖遺物追加</span>
+                    <span>{t('database:manager.addCustomArtifact')}</span>
                   </button>
                 </div>
               </div>
@@ -1061,7 +1062,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <h3 className="font-bold text-sm text-white">{art.name}</h3>
                         {art.isCustom && (
                           <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                            カスタム
+                            {t('custom')}
                           </span>
                         )}
                       </div>
@@ -1070,7 +1071,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <ItemLockButton
                           locked={!!art.isLocked}
                           onToggle={() => handleToggleArtifactLock(art.id, !art.isLocked)}
-                          itemTypeLabel="聖遺物"
+                          itemTypeLabel={t('item.artifact')}
                         />
                         <button
                           onClick={() => setEditingArtifact(art)}
@@ -1089,20 +1090,20 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                     <div className="space-y-1 text-xs bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
                       <div>
-                        <span className="text-purple-300 font-bold">2セット:</span>{' '}
+                        <span className="text-purple-300 font-bold">{t('database:manager.twoPiece')}</span>{' '}
                         <span className="text-slate-300">{art.effect2p}</span>
                       </div>
                       <div>
-                        <span className="text-amber-300 font-bold">4セット:</span>{' '}
+                        <span className="text-amber-300 font-bold">{t('database:manager.fourPiece')}</span>{' '}
                         <span className="text-slate-300">{art.effect4p}</span>
                       </div>
                     </div>
 
                     {art.buffEffect && (
                       <div className="flex items-center justify-between text-[11px] font-mono bg-purple-950/40 border border-purple-800/50 px-2.5 py-1 rounded text-purple-200">
-                        <span>連動バフ: {art.buffEffect.name}</span>
+                        <span>{t('database:weapon.linkedBuff', { name: art.buffEffect.name })}</span>
                         <div className="flex items-center gap-1.5">
-                          <strong className="text-amber-300">{Number(art.buffEffect.duration).toFixed(1)}s 持続</strong>
+                          <strong className="text-amber-300">{t('database:weapon.duration', { seconds: Number(art.buffEffect.duration).toFixed(1) })}</strong>
                           {art.buffEffect.cooldown !== undefined && art.buffEffect.cooldown > 0 && (
                             <span className="text-cyan-300 text-[10px]">/ CT {Number(art.buffEffect.cooldown).toFixed(1)}s</span>
                           )}
@@ -1130,20 +1131,20 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                        <span>⚡ 最新マスターデータの動的生成 (キャラ)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">オンライン取得</span>
+                        <span>{t('database:manager.charGenTitle')}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">{t('database:manager.online')}</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db API (基本データ・アクションごとのCT/効果継続時間・公式アイコン) と gcsim の GitHub ソース (60 FPS モーションフレーム) を毎回ネットから取得し、全キャラのマスターデータを生成してアプリ内DBを更新します。
+                        {t('database:manager.charGenDescription')}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
                     <div className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <span>登録数: <strong className="font-mono text-amber-300 font-bold">{database.characters.length} キャラ</strong></span>
+                      <span>{t('database:manager.registered')} <strong className="font-mono text-amber-300 font-bold">{t('database:manager.charCount', { count: database.characters.length })}</strong></span>
                       {lockedCharCount > 0 && (
-                        <span className="text-[10px] text-sky-400 font-mono font-bold">({lockedCharCount} ロック保護中)</span>
+                        <span className="text-[10px] text-sky-400 font-mono font-bold">{t('database:manager.lockedCount', { count: lockedCharCount })}</span>
                       )}
                     </div>
                     <div className="flex flex-col sm:items-end gap-2">
@@ -1153,16 +1154,16 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
                         <RefreshCw className={`w-4 h-4 ${syncingKind === 'character' ? 'animate-spin' : ''}`} />
-                        <span>最新マスターデータの動的生成 (キャラ)</span>
+                        <span>{t('database:manager.charGen')}</span>
                       </button>
                       <button
                         onClick={handleDeleteAllCharacters}
                         disabled={database.characters.length === 0}
                         className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
-                        title="ロック中以外の全キャラクターを一括削除"
+                        title={t('database:manager.deleteAllCharsTitleShort')}
                       >
                         <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                        <span>全キャラ一括削除</span>
+                        <span>{t('database:manager.deleteAllCharsShort')}</span>
                       </button>
                     </div>
                   </div>
@@ -1175,23 +1176,23 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {charSyncError && (
                     <div className="p-2 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
-                      生成に失敗しました: {charSyncError}
-                      <div className="text-red-300/70 mt-0.5">ネット接続、または GitHub API の回数制限 (1時間60回) を確認してください。DBは変更されていません。</div>
+                      {t('database:manager.genFailed', { error: charSyncError })}
+                      <div className="text-red-300/70 mt-0.5">{t('database:manager.charGenFailedHint')}</div>
                     </div>
                   )}
 
                   {charSyncReport && (
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-1.5 max-h-64 overflow-y-auto">
                       <div className="font-bold text-slate-200">
-                        生成レポート: {charSyncReport.totalCharacters} キャラ / gcsim フレームあり {charSyncReport.charactersWithFrames}
-                        <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)}{charSyncReport.catalogCommit ? ` / 辞書 ${charSyncReport.catalogCommit}` : ''})</span>
+                        {t('database:manager.charReport', { total: charSyncReport.totalCharacters, withFrames: charSyncReport.charactersWithFrames })}
+                        <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)}{charSyncReport.catalogCommit ? t('database:manager.dictionary', { commit: charSyncReport.catalogCommit }) : ''})</span>
                       </div>
                       {charSyncReport.skipped.length > 0 && (
-                        <div><span className="text-slate-400">対象外:</span> {charSyncReport.skipped.map(s => `${s.name} (${s.reason})`).join(' / ')}</div>
+                        <div><span className="text-slate-400">{t('database:manager.skipped')}</span> {charSyncReport.skipped.map(s => `${s.name} (${s.reason})`).join(' / ')}</div>
                       )}
                       {charSyncReport.placeholderDurations.length > 0 && (
                         <div>
-                          <div className="text-amber-300">仮の秒数を使用 (フレーム未取得):</div>
+                          <div className="text-amber-300">{t('database:manager.placeholders')}</div>
                           <ul className="pl-3 list-disc text-slate-400">
                             {charSyncReport.placeholderDurations.map(p => (
                               <li key={p.characterId}>{p.name}: {p.actions.map(a => a.replace(`${p.characterId}_`, '')).join(', ')} ({p.reason})</li>
@@ -1200,10 +1201,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         </div>
                       )}
                       {charSyncReport.missingCooldowns.length > 0 && (
-                        <div><span className="text-red-300">CT 未取得:</span> {charSyncReport.missingCooldowns.map(m => `${m.name} ${m.actionId}`).join(' / ')}</div>
+                        <div><span className="text-red-300">{t('database:manager.missingCooldowns')}</span> {charSyncReport.missingCooldowns.map(m => `${m.name} ${m.actionId}`).join(' / ')}</div>
                       )}
                       {charSyncReport.errors.length > 0 && (
-                        <div><span className="text-red-300">エラー:</span> {charSyncReport.errors.join(' / ')}</div>
+                        <div><span className="text-red-300">{t('database:manager.errors')}</span> {charSyncReport.errors.join(' / ')}</div>
                       )}
                     </div>
                   )}
@@ -1217,20 +1218,20 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                        <span>⚔️ 最新マスターデータの動的生成 (武器)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">オンライン取得</span>
+                        <span>{t('database:manager.weaponGenTitle')}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">{t('database:manager.online')}</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db API から毎回ネット経由で全武器データをオンライン取得し、基礎攻撃力 (Lv.90)、サブステータス、パッシブ効果および発動バフ（継続時間・CT・ステータス要約）を自動解析・構造化してアプリ内DBを最新化します。
+                        {t('database:manager.weaponGenDescription')}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
                     <div className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <span>登録数: <strong className="font-mono text-sky-300 font-bold">{database.weapons.length} 武器</strong></span>
+                      <span>{t('database:manager.registered')} <strong className="font-mono text-sky-300 font-bold">{t('database:manager.weaponCount', { count: database.weapons.length })}</strong></span>
                       {lockedWeaponCount > 0 && (
-                        <span className="text-[10px] text-sky-400 font-mono font-bold">({lockedWeaponCount} ロック保護中)</span>
+                        <span className="text-[10px] text-sky-400 font-mono font-bold">{t('database:manager.lockedCount', { count: lockedWeaponCount })}</span>
                       )}
                     </div>
                     <div className="flex flex-col sm:items-end gap-2">
@@ -1240,16 +1241,16 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
                         <RefreshCw className={`w-4 h-4 ${syncingKind === 'weapon' ? 'animate-spin' : ''}`} />
-                        <span>最新マスターデータの動的生成 (武器)</span>
+                        <span>{t('database:manager.weaponGen')}</span>
                       </button>
                       <button
                         onClick={handleDeleteAllWeapons}
                         disabled={database.weapons.length === 0}
                         className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
-                        title="ロック中以外の全武器を一括削除"
+                        title={t('database:manager.deleteAllWeaponsTitleShort')}
                       >
                         <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                        <span>全武器一括削除</span>
+                        <span>{t('database:manager.deleteAllWeaponsShort')}</span>
                       </button>
                     </div>
                   </div>
@@ -1262,27 +1263,27 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {weaponSyncError && (
                     <div className="p-2.5 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
-                      生成に失敗しました: {weaponSyncError}
-                      <div className="text-red-300/70 mt-0.5">ネットワーク環境または API サーバーの状態を確認してください。DBは変更されていません。</div>
+                      {t('database:manager.genFailed', { error: weaponSyncError })}
+                      <div className="text-red-300/70 mt-0.5">{t('database:manager.genFailedHint')}</div>
                     </div>
                   )}
 
                   {weaponSyncReport && (
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
                       <div className="font-bold text-sky-200 flex items-center justify-between">
-                        <span>武器マスター生成レポート: 全 {weaponSyncReport.totalWeapons} 件 / 発動バフ抽出 {weaponSyncReport.weaponsWithBuffs} 件
-                          {weaponSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {weaponSyncReport.gcsimCommit.slice(0, 7)} / 辞書 {weaponSyncReport.catalogCommit ?? '-'})</span>}
+                        <span>{t('database:manager.weaponReport', { total: weaponSyncReport.totalWeapons, withBuffs: weaponSyncReport.weaponsWithBuffs })}
+                          {weaponSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {weaponSyncReport.gcsimCommit.slice(0, 7)}{t('database:manager.dictionary', { commit: weaponSyncReport.catalogCommit ?? '-' })})</span>}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-mono">常時効果 {weaponSyncReport.constantPassiveItems.length} 件</span>
+                        <span className="text-[10px] text-slate-500 font-mono">{t('database:manager.constantEffects', { count: weaponSyncReport.constantPassiveItems.length })}</span>
                       </div>
                       {weaponSyncReport.sourceApiUrl && (
                         <div className="flex flex-wrap items-center gap-2 p-1.5 rounded bg-sky-950/60 border border-sky-800/40 text-[10px] font-mono text-sky-300">
-                          <span>🌐 オンラインAPI取得: {weaponSyncReport.sourceApiUrl}</span>
-                          <span>• 通信時間: {((weaponSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2)}s</span>
-                          <span>• 取得生データ: 日本語 {weaponSyncReport.fetchedRawCountJa}件 / 英語 {weaponSyncReport.fetchedRawCountEn}件</span>
+                          <span>{t('database:manager.apiSource', { url: weaponSyncReport.sourceApiUrl })}</span>
+                          <span>{t('database:manager.networkTime', { seconds: ((weaponSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2) })}</span>
+                          <span>{t('database:manager.rawCounts', { ja: weaponSyncReport.fetchedRawCountJa, en: weaponSyncReport.fetchedRawCountEn })}</span>
                         </div>
                       )}
-                      <div className="text-slate-400">発動バフ抽出サンプル (全 {weaponSyncReport.extractedBuffsList.length} 件中):</div>
+                      <div className="text-slate-400">{t('database:manager.buffSamples', { count: weaponSyncReport.extractedBuffsList.length })}</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
                         {weaponSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
                           <span key={idx} className="px-1.5 py-0.5 rounded bg-sky-950/80 border border-sky-800/50 text-[10px] text-sky-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
@@ -1290,7 +1291,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           </span>
                         ))}
                         {weaponSyncReport.extractedBuffsList.length > 30 && (
-                          <span className="text-[10px] text-slate-500 self-center">...他 {weaponSyncReport.extractedBuffsList.length - 30} 件</span>
+                          <span className="text-[10px] text-slate-500 self-center">{t('database:manager.more', { count: weaponSyncReport.extractedBuffsList.length - 30 })}</span>
                         )}
                       </div>
                     </div>
@@ -1305,20 +1306,20 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     </div>
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                        <span>🏺 最新マスターデータの動的生成 (聖遺物)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono">オンライン取得</span>
+                        <span>{t('database:manager.artifactGenTitle')}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono">{t('database:manager.online')}</span>
                       </h3>
                       <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-                        genshin-db API から毎回ネット経由で全聖遺物セットをオンライン取得し、2セット・4セット効果および4セット効果発動バフ（継続時間・CT・ステータス要約）を自動解析・構造化してアプリ内DBを最新化します。
+                        {t('database:manager.artifactGenDescription')}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
                     <div className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <span>登録数: <strong className="font-mono text-pink-300 font-bold">{database.artifacts.length} セット</strong></span>
+                      <span>{t('database:manager.registered')} <strong className="font-mono text-pink-300 font-bold">{t('database:manager.artifactCount', { count: database.artifacts.length })}</strong></span>
                       {lockedArtifactCount > 0 && (
-                        <span className="text-[10px] text-purple-400 font-mono font-bold">({lockedArtifactCount} ロック保護中)</span>
+                        <span className="text-[10px] text-purple-400 font-mono font-bold">{t('database:manager.lockedCount', { count: lockedArtifactCount })}</span>
                       )}
                     </div>
                     <div className="flex flex-col sm:items-end gap-2">
@@ -1328,16 +1329,16 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 disabled:opacity-50 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
                       >
                         <RefreshCw className={`w-4 h-4 ${syncingKind === 'artifact' ? 'animate-spin' : ''}`} />
-                        <span>最新マスターデータの動的生成 (聖遺物)</span>
+                        <span>{t('database:manager.artifactGen')}</span>
                       </button>
                       <button
                         onClick={handleDeleteAllArtifacts}
                         disabled={database.artifacts.length === 0}
                         className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-950/70 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded-lg border border-red-800/80 transition-all cursor-pointer"
-                        title="ロック中以外の全聖遺物を一括削除"
+                        title={t('database:manager.deleteAllArtifactsTitleShort')}
                       >
                         <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                        <span>全聖遺物一括削除</span>
+                        <span>{t('database:manager.deleteAllArtifactsShort')}</span>
                       </button>
                     </div>
                   </div>
@@ -1350,27 +1351,27 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                   {artifactSyncError && (
                     <div className="p-2.5 rounded bg-red-950/60 border border-red-800/60 text-[11px] text-red-200">
-                      生成に失敗しました: {artifactSyncError}
-                      <div className="text-red-300/70 mt-0.5">ネットワーク環境または API サーバーの状態を確認してください。DBは変更されていません。</div>
+                      {t('database:manager.genFailed', { error: artifactSyncError })}
+                      <div className="text-red-300/70 mt-0.5">{t('database:manager.genFailedHint')}</div>
                     </div>
                   )}
 
                   {artifactSyncReport && (
                     <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300 space-y-2 max-h-64 overflow-y-auto">
                       <div className="font-bold text-pink-200 flex items-center justify-between">
-                        <span>聖遺物マスター生成レポート: 全 {artifactSyncReport.totalArtifacts} セット / 発動バフ抽出 {artifactSyncReport.artifactsWithBuffs} 件
-                          {artifactSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {artifactSyncReport.gcsimCommit.slice(0, 7)} / 辞書 {artifactSyncReport.catalogCommit ?? '-'})</span>}
+                        <span>{t('database:manager.artifactReport', { total: artifactSyncReport.totalArtifacts, withBuffs: artifactSyncReport.artifactsWithBuffs })}
+                          {artifactSyncReport.gcsimCommit && <span className="text-slate-500 font-mono font-normal"> (gcsim {artifactSyncReport.gcsimCommit.slice(0, 7)}{t('database:manager.dictionary', { commit: artifactSyncReport.catalogCommit ?? '-' })})</span>}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-mono">常時効果 {artifactSyncReport.constantPassiveItems.length} 件</span>
+                        <span className="text-[10px] text-slate-500 font-mono">{t('database:manager.constantEffects', { count: artifactSyncReport.constantPassiveItems.length })}</span>
                       </div>
                       {artifactSyncReport.sourceApiUrl && (
                         <div className="flex flex-wrap items-center gap-2 p-1.5 rounded bg-pink-950/60 border border-pink-800/40 text-[10px] font-mono text-pink-300">
-                          <span>🌐 オンラインAPI取得: {artifactSyncReport.sourceApiUrl}</span>
-                          <span>• 通信時間: {((artifactSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2)}s</span>
-                          <span>• 取得生データ: 日本語 {artifactSyncReport.fetchedRawCountJa}件 / 英語 {artifactSyncReport.fetchedRawCountEn}件</span>
+                          <span>{t('database:manager.apiSource', { url: artifactSyncReport.sourceApiUrl })}</span>
+                          <span>{t('database:manager.networkTime', { seconds: ((artifactSyncReport.networkDurationMs ?? 0) / 1000).toFixed(2) })}</span>
+                          <span>{t('database:manager.rawCounts', { ja: artifactSyncReport.fetchedRawCountJa, en: artifactSyncReport.fetchedRawCountEn })}</span>
                         </div>
                       )}
-                      <div className="text-slate-400">発動バフ抽出サンプル (全 {artifactSyncReport.extractedBuffsList.length} 件中):</div>
+                      <div className="text-slate-400">{t('database:manager.buffSamples', { count: artifactSyncReport.extractedBuffsList.length })}</div>
                       <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950/70 rounded-lg border border-slate-800/60">
                         {artifactSyncReport.extractedBuffsList.slice(0, 30).map((b, idx) => (
                           <span key={idx} className="px-1.5 py-0.5 rounded bg-pink-950/80 border border-pink-800/50 text-[10px] text-pink-200" title={`${b.sourceName}: ${b.buffName} - ${b.statSummary || ''}`}>
@@ -1378,7 +1379,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           </span>
                         ))}
                         {artifactSyncReport.extractedBuffsList.length > 30 && (
-                          <span className="text-[10px] text-slate-500 self-center">...他 {artifactSyncReport.extractedBuffsList.length - 30} 件</span>
+                          <span className="text-[10px] text-slate-500 self-center">{t('database:manager.more', { count: artifactSyncReport.extractedBuffsList.length - 30 })}</span>
                         )}
                       </div>
                     </div>
@@ -1391,13 +1392,13 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed space-y-1.5">
                 <div className="font-bold text-amber-300 flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-amber-400" />
-                  <span>同期仕様とデータソースについての解説</span>
+                  <span>{t('database:manager.aboutTitle')}</span>
                 </div>
                 <p>
-                  genshin-db (公式数値・テキスト) ＋ gcsim (60 FPSモーションフレーム) を組み合わせた全124キャラ完全マスターDBに対応しています。
+                  {t('database:manager.about1')}
                 </p>
                 <p className="text-slate-500">
-                  ※ スキル・爆発の各種CT、効果継続時間、および60 FPS基準のアニメーションフレーム秒数は「キャラクター」タブの各キャラ編集画面からコンマ0.01秒単位で自由にカスタマイズ・保存できます。
+                  {t('database:manager.about2')}
                 </p>
               </div>
 
@@ -1406,27 +1407,27 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
                   <div className="flex items-center gap-2 text-amber-300 font-bold text-sm">
                     <Download className="w-4 h-4 text-amber-400" />
-                    <span>JSON形式で出力 (バックアップ)</span>
+                    <span>{t('database:manager.exportTitle')}</span>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    現在保存されているデータベース (ユーザーによるカスタマイズデータを含む) をJSONファイル形式で出力・ダウンロードします。
+                    {t('database:manager.exportDescription')}
                   </p>
                   <button
                     onClick={handleExportJson}
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 font-bold text-xs rounded-lg border border-slate-700 transition-colors"
                   >
                     <Download className="w-4 h-4" />
-                    <span>DBファイル(.json)をダウンロード</span>
+                    <span>{t('database:manager.exportButton')}</span>
                   </button>
                 </div>
 
                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
                   <div className="flex items-center gap-2 text-sky-300 font-bold text-sm">
                     <Upload className="w-4 h-4 text-sky-400" />
-                    <span>JSON形式から復元 (インポート)</span>
+                    <span>{t('database:manager.importTitle')}</span>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    保存したJSONファイルを読み込み、キャラクター・武器・聖遺物の最新カスタマイズ環境を復元・更新します。
+                    {t('database:manager.importDescription')}
                   </p>
                   <input
                     type="file"
@@ -1440,7 +1441,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-sky-200 font-bold text-xs rounded-lg border border-slate-700 transition-colors"
                   >
                     <Upload className="w-4 h-4" />
-                    <span>DBファイルを選択して読み込み</span>
+                    <span>{t('database:manager.importButton')}</span>
                   </button>
                 </div>
               </div>
@@ -1449,14 +1450,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <div className="bg-red-950/30 p-5 rounded-xl border border-red-900/60 space-y-4">
                 <div className="flex items-center gap-2 text-red-400 font-bold text-sm">
                   <AlertTriangle className="w-4.5 h-4.5 text-red-400" />
-                  <span>データ消去・リセット操作 (Danger Zone)</span>
+                  <span>{t('database:manager.danger')}</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                   <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
                     <div>
-                      <div className="font-bold text-xs text-red-300">全キャラ一括削除</div>
-                      <p className="text-[11px] text-slate-400 mt-0.5">登録中の全 {database.characters.length} キャラクターのみ消去します。</p>
+                      <div className="font-bold text-xs text-red-300">{t('database:manager.deleteAllCharsShort')}</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{t('database:manager.dangerCharsDescription', { count: database.characters.length })}</p>
                     </div>
                     <button
                       onClick={handleDeleteAllCharacters}
@@ -1464,35 +1465,35 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                       className="w-full py-1.5 bg-red-950 hover:bg-red-900 disabled:opacity-40 text-red-300 text-xs font-bold rounded border border-red-800 transition-colors flex items-center justify-center gap-1"
                     >
                       <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                      <span>全キャラ一括削除</span>
+                      <span>{t('database:manager.deleteAllCharsShort')}</span>
                     </button>
                   </div>
 
                   <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
                     <div>
-                      <div className="font-bold text-xs text-amber-300">初期マスターへ戻す</div>
-                      <p className="text-[11px] text-slate-400 mt-0.5">公式の初期実装キャラ構成にデータベースを復元します。</p>
+                      <div className="font-bold text-xs text-amber-300">{t('database:manager.restoreMaster')}</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{t('database:manager.restoreMasterDescription')}</p>
                     </div>
                     <button
                       onClick={handleFullReset}
                       className="w-full py-1.5 bg-amber-950/80 hover:bg-amber-900 text-amber-200 text-xs font-bold rounded border border-amber-800 transition-colors flex items-center justify-center gap-1"
                     >
                       <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-                      <span>初期状態に復元</span>
+                      <span>{t('database:manager.restoreMasterButton')}</span>
                     </button>
                   </div>
 
                   <div className="bg-slate-900/80 p-3 rounded-lg border border-red-900/40 flex flex-col justify-between space-y-2">
                     <div>
-                      <div className="font-bold text-xs text-rose-400">DB完全消去 (クリア)</div>
-                      <p className="text-[11px] text-slate-400 mt-0.5">全キャラ・全武器・全聖遺物データを完全クリアします。</p>
+                      <div className="font-bold text-xs text-rose-400">{t('database:manager.clearDb')}</div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{t('database:manager.clearDbDescription')}</p>
                     </div>
                     <button
                       onClick={handleClearAllData}
                       className="w-full py-1.5 bg-rose-950 hover:bg-rose-900 text-rose-200 text-xs font-bold rounded border border-rose-800 transition-colors flex items-center justify-center gap-1"
                     >
                       <Trash2 className="w-3.5 h-3.5 text-rose-400" />
-                      <span>全データクリア</span>
+                      <span>{t('database:manager.clearDbButton')}</span>
                     </button>
                   </div>
                 </div>
@@ -1505,12 +1506,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
         {/* Modal Footer */}
         <div className="px-5 py-3 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between text-xs text-slate-400">
-          <span>※ 変更されたデータベースはブラウザのLocalStorageに全自動保存されます。</span>
+          <span>{t('database:manager.autoSaved')}</span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg transition-colors shadow-md"
           >
-            完了して閉じる
+            {t('database:manager.done')}
           </button>
         </div>
 
@@ -1526,7 +1527,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               </div>
               <div>
                 <h3 className="font-extrabold text-base text-white">{confirmDialog.title}</h3>
-                <p className="text-xs text-slate-400">実行確認</p>
+                <p className="text-xs text-slate-400">{t('database:manager.confirmLabel')}</p>
               </div>
             </div>
 
@@ -1540,7 +1541,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                 onClick={() => setConfirmDialog(null)}
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition-colors"
               >
-                キャンセル
+                {t('action.cancel')}
               </button>
               <button
                 type="button"

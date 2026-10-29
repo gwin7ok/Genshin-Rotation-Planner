@@ -39,7 +39,7 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
   const outOfScope = isGcsimOutOfScope(def);
   const sourceLabel = def.category === 'talent' ? t('category.talent') : def.category === 'constellation' ? t('category.constellation') : def.category === 'weapon' ? t('category.weapon', { name: def.sourceName ?? '' }) : t('category.artifact', { name: def.sourceName ?? '' });
   const tooltip = [
-    `【${timing}】${owner.name} / ${sourceLabel}`,
+    t('chart:timeless.tooltipHead', { timing, owner: owner.name, source: sourceLabel }),
     def.description ?? def.name,
     ...(outOfScope ? [t('gcsim.outOfScopeNote', { reason: def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON })] : []),
   ].join('\n');

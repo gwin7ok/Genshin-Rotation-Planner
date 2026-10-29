@@ -10,6 +10,7 @@
  * 維持のアクションの出し入れ（モード維持のオン・オフ、モードを開いたとき）は、normalizeModeHoldActions が行う。
  */
 import type { CharacterActionInstance, Stint } from '../types/genshin';
+import { t } from '../i18n';
 
 export const MODE_HOLD_ACTION_ID = 'mode_hold';
 
@@ -19,8 +20,8 @@ export function createModeHoldAction(): CharacterActionInstance {
   return {
     id: `act_hold_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     actionTypeId: MODE_HOLD_ACTION_ID,
-    name: '維持',
-    shortName: '維',
+    name: t('messages:rotation.modeHoldName'),
+    shortName: t('messages:rotation.modeHoldShort'),
     type: 'wait',
     duration: 0,
   };

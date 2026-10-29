@@ -8,6 +8,7 @@
  * 判定はアプリの計算（1 周目）で、直前のアクション（同じ出場の中。待機・交代をはさむと、直前なし）を見る。gcsim の結果の確認ではないので、状態の条件（夜魂など）は一部しか見られない。
  */
 import type { ActionType } from '../types/genshin';
+import { t } from '../i18n';
 
 export interface PlungeRule {
   /** 直前のアクションがこの種類のどれかなら、空中状態でなくても実行できる */
@@ -32,47 +33,47 @@ export const XIANYUN_AIRBORNE_PLUNGES = 8;
 
 const AIRBORNE_ONLY: PlungeRule = {
   airborne: true,
-  needs: '空中状態（閑雲の爆発から 16 秒の間のジャンプの直後など）',
+  needs: t('messages:plunge.airborne'),
 };
 
 export const PLUNGE_RULES: Record<string, CharacterPlungeRules> = {
   // 魈: ジャンプの直後なら、空中状態にならなくても実行できる（xiao/plunge.go: CurrentState == JumpState。爆発中は 5/6f でキャンセル）
   '10000026-anemo': {
-    low: { after: ['jump'], needs: '直前のアクションがジャンプ' },
-    high: { after: ['jump'], needs: '直前のアクションがジャンプ' },
+    low: { after: ['jump'], needs: t('messages:plunge.afterJump') },
+    high: { after: ['jump'], needs: t('messages:plunge.afterJump') },
   },
   // マーヴィカ: 夜魂のバイクの状態で、歩行中にジャンプした後なら低空（mavuika/jump.go: canBikePlunge。バイクの状態はアプリでは判定できない）。高空は空中状態のみ
   '10000106-pyro': {
-    low: { after: ['jump'], needs: '夜魂のバイクの状態でのジャンプの直後（空中状態でも可）' },
+    low: { after: ['jump'], needs: t('messages:plunge.afterBikeJump') },
     high: AIRBORNE_ONLY,
   },
   // ヴァレサ: 重撃の直後なら高空。低空は空中状態のみ
   '10000111-electro': {
     low: AIRBORNE_ONLY,
-    high: { after: ['charged'], needs: '直前のアクションが重撃（空中状態でも可）' },
+    high: { after: ['charged'], needs: t('messages:plunge.afterCharged') },
   },
   // 放浪者・チャスカ・イファ: 夜魂の飛行（元素スキル）が終わった直後の 26f だけ、低空
-  '10000075-anemo': { low: { skillInStint: true, needs: '元素スキルの飛行が終わった直後（元素スキルより後）' }, high: AIRBORNE_ONLY },
-  '10000104-anemo': { low: { skillInStint: true, needs: '元素スキルの夜魂の状態が終わった直後（元素スキルより後）' }, high: AIRBORNE_ONLY },
-  '10000113-anemo': { low: { skillInStint: true, needs: '元素スキルの夜魂の状態が終わった直後（元素スキルより後）' }, high: AIRBORNE_ONLY },
+  '10000075-anemo': { low: { skillInStint: true, needs: t('messages:plunge.afterFlight') }, high: AIRBORNE_ONLY },
+  '10000104-anemo': { low: { skillInStint: true, needs: t('messages:plunge.afterNightsoul') }, high: AIRBORNE_ONLY },
+  '10000113-anemo': { low: { skillInStint: true, needs: t('messages:plunge.afterNightsoul') }, high: AIRBORNE_ONLY },
   // ウェンティ: 一回押しの元素スキルの直後に、高空だけ（venti/plunge.go: 直前が自分のスキルで hold = 0。低空の落下攻撃は gcsim が未実装）
-  '10000022-anemo': { high: { after: ['skill'], needs: '直前のアクションが元素スキル（一回押し）' } },
+  '10000022-anemo': { high: { after: ['skill'], needs: t('messages:plunge.afterTapSkill') } },
   // 千織: 長押しの元素スキルの直後に、低空だけ
-  '10000094-geo': { low: { after: ['skill_hold'], needs: '直前のアクションが長押しの元素スキル（空中状態でも可）' } },
+  '10000094-geo': { low: { after: ['skill_hold'], needs: t('messages:plunge.afterHoldSkill') } },
   // アルハイゼン: 長押しの元素スキルの直後に低空（空中状態でも可）。高空は空中状態のみ
   '10000078-dendro': {
-    low: { after: ['skill_hold'], needs: '直前のアクションが長押しの元素スキル（空中状態でも可）' },
+    low: { after: ['skill_hold'], needs: t('messages:plunge.afterHoldSkill') },
     high: AIRBORNE_ONLY,
   },
   // 楓原万葉: 元素スキルの直後に、高空。低空は、元素スキルの直後は不可（空中状態のみ）
   '10000047-anemo': {
     low: AIRBORNE_ONLY,
-    high: { after: ['skill', 'skill_hold'], needs: '直前のアクションが元素スキル（空中状態でも可）' },
+    high: { after: ['skill', 'skill_hold'], needs: t('messages:plunge.afterSkill') },
   },
   // 閑雲: 雲の変化の状態の間（元素スキルの跳躍の直後）なら実行できる（xianyun/plunge.go: skillStateKey）
   [XIANYUN_ID]: {
-    low: { after: ['skill'], needs: '直前のアクションが元素スキル（跳躍の状態の間。空中状態でも可）' },
-    high: { after: ['skill'], needs: '直前のアクションが元素スキル（跳躍の状態の間。空中状態でも可）' },
+    low: { after: ['skill'], needs: t('messages:plunge.afterLeapSkill') },
+    high: { after: ['skill'], needs: t('messages:plunge.afterLeapSkill') },
   },
 };
 

@@ -49,6 +49,8 @@ export const autoLanguage = (): Language => detectBrowserLanguage(browserLanguag
 
 /** 今回の起動で使う言語 */
 export function resolveLanguage(): Language {
+  // ブラウザの外（検査スクリプトなど。Node にも navigator があり en-US になる）は日本語
+  if (typeof window === 'undefined') return 'ja';
   if (!isLanguageSwitchEnabled()) return 'ja';
   const pref = getLanguagePreference();
   return pref === 'auto' ? autoLanguage() : pref;

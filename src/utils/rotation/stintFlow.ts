@@ -6,6 +6,7 @@ import { warnQuickSwap, addPassiveTriggers, addCharacterEffectBars } from './sti
 import { modeKeyOf, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { StintContext } from './context';
 import type { RotationState } from './state';
+import { t } from '../../i18n';
 
 /** 出場の準備: キャラ・アクション定義・特殊スキルの受付の補助を揃え、交代のアクションを足して、StintContext を作る。キャラが見つからない出場は undefined */
 export function beginStint(state: RotationState, sIdx: number): StintContext | undefined {
@@ -72,8 +73,8 @@ export function beginStint(state: RotationState, sIdx: number): StintContext | u
     const switchAction: CharacterActionInstance = {
       id: `switch_stint_${rawStint.id}`,
       actionTypeId: 'action_switch_char',
-      name: 'キャラ交代',
-      shortName: '交代',
+      name: t('messages:rotation.swapName'),
+      shortName: t('messages:rotation.swapShort'),
       type: 'swap',
       duration: switchDelay,
       startTime: switchActionStartTime,
@@ -146,10 +147,10 @@ export function finishStint(state: RotationState, sc: StintContext): void {
         stintId: rawStint.id,
         actionId: lastAction?.id,
         time: stintEndTime,
-        title: `${char.name}: モードを終わらせずに交代`,
+        title: t('messages:rotation.modeNotEndedTitle', { name: char.name }),
         message: m.def.noHold
-          ? `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。交代の前に、終わらせるアクション（E の再押しなど）を置いてください（gcsim では交代できず、実行が止まります）`
-          : `「${m.def.label}」は、終わらせないと交代できません（残り ${(m.end - stintEndTime).toFixed(1)} 秒）。終わらせるアクションを置くか、この出場の「モード維持」をオンにしてください`,
+          ? t('messages:rotation.modeNotEndedHold', { mode: m.def.label, remaining: (m.end - stintEndTime).toFixed(1) })
+          : t('messages:rotation.modeNotEnded', { mode: m.def.label, remaining: (m.end - stintEndTime).toFixed(1) }),
       });
     }
   }

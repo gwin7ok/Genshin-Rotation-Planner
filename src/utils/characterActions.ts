@@ -1,5 +1,6 @@
 import { ActionDefinition, ActiveBuffSpan, CharacterActionInstance, CharacterConfig } from '../types/genshin';
 import { actionDescription } from './actionDescription';
+import { t } from '../i18n';
 
 const SKILL_TYPES = new Set(['skill', 'skill_hold', 'skill_reset']);
 
@@ -54,7 +55,7 @@ function buildEffectLabel(sourceLabel: string | undefined, actionName: string): 
   const isSourceNote = /^(gcsim|manual)\s*:|\.go\b/.test(label);
   if (!GENERIC_EFFECT_LABELS.has(label) && !isSourceNote) return label;
   const skillName = (actionName.includes(':') ? actionName.split(':').slice(1).join(':') : actionName).trim();
-  return skillName || '効果';
+  return skillName || t('messages:action.effect');
 }
 
 /**

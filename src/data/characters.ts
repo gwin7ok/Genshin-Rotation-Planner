@@ -1,5 +1,6 @@
 import { CharacterConfig, ElementType, WeaponType } from '../types/genshin';
 import masterDataJson from './characters_master_data.json';
+import { t } from '../i18n';
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; text: string; light: string; hex: string }> = {
   pyro: { bg: 'bg-red-950/70', border: 'border-red-500', text: 'text-red-400', light: 'bg-red-500/20', hex: '#ef4444' },
@@ -20,7 +21,7 @@ export const isEmptySlotCharacter = (c: Pick<CharacterConfig, 'id'>): boolean =>
 
 export const createEmptySlotCharacter = (slotIndex: number): CharacterConfig => ({
   id: `${EMPTY_SLOT_ID_PREFIX}${slotIndex + 1}`,
-  name: '未設定',
+  name: t('messages:emptySlot'),
   element: 'physical',
   weaponType: 'sword',
   avatarUrl: '',

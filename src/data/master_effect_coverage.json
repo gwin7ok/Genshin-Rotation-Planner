@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
-  "generatedAt": "2026-10-15T10:24:29.032Z",
+  "generatedAt": "2026-10-29T06:14:01.187Z",
   "effects": [
     {
       "id": "a-day-carved-from-rising-winds-2pc",
@@ -3567,7 +3567,7 @@
       "ownerType": "character",
       "ownerKey": "lauma",
       "ownerName": "ラウマ",
-      "name": "ラウマ 命ノ星座6「我が血と涙を 月に捧げ奉らん」: 蒼白の賛歌",
+      "name": "ラウマ 命ノ星座6「我が血と涙を 月に捧げ奉らん」: 蒼の讃歌",
       "durationFrames": 900,
       "observed": true
     },

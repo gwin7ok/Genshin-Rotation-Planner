@@ -68,7 +68,7 @@ export interface RotationState {
   modeWindows: Map<string, ModeWindow>;
   /** 同じモードを開き直して置き換えられた、前の窓（終わった後の計算に使う） */
   retiredModes: ModeWindow[];
-  /** 層が溜まる効果（ヴェスナの粛清）の引き金の記録（キャラ ID → ）。計算の最後に、期間（バー）にする */
+  /** 層が溜まる効果（ヴェスナの粛正）の引き金の記録（キャラ ID → ）。計算の最後に、期間（バー）にする */
   layerEventsByChar: Map<string, { rule: LayerBuffRule; events: LayerEvent[] }>;
   /** 八重神子の殺生桜（キャラ ID → 桜の数え方。効果バーを、押し出し・爆発で壊れた時刻で切る）。CT の判定と同じ数え方（totemTracker.ts） */
   barTotems: Map<string, TotemTracker<ActiveBuffSpan>>;

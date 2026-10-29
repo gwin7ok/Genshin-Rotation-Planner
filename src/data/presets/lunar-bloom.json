@@ -163,7 +163,7 @@
           "extraEffects": [
             {
               "key": "tranquilityaura",
-              "name": "静謐の光環",
+              "name": "天を滌う水環",
               "offset": 0.667,
               "duration": 18
             }
@@ -278,7 +278,7 @@
           "extraEffects": [
             {
               "key": "columbina-gravity",
-              "name": "重力（月の反応）",
+              "name": "引力のさざ波（月の反応）",
               "offset": 1.067,
               "duration": 20.05
             }
@@ -416,7 +416,7 @@
           "extraEffects": [
             {
               "key": "lauma-pale-hymn-moonsong",
-              "name": "蒼白の賛歌・月の歌",
+              "name": "蒼の讃歌・詠月",
               "offset": 1.6,
               "duration": 15
             }

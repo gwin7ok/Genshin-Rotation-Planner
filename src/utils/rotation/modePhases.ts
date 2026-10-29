@@ -38,7 +38,7 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
     }
   }
 
-  // 通常攻撃で溜まるスタック（フレミネの加圧）: N のたびに溜まり、max の後の N は起爆（モードを終わらせる）になる
+  // 通常攻撃で溜まるスタック（フレミネのペールスタイマー）: N のたびに溜まり、max の後の N は起爆（モードを終わらせる）になる
   let stackDetonation: { window: ModeWindow; frames: ActionFrames } | undefined;
   if (!modeEnder && act.type === 'normal') {
     for (const m of modeWindows.values()) {
@@ -155,7 +155,7 @@ export function applyModeEnderAndRepress(state: RotationState, sc: StintContext,
     // 使い切るとモードが終わる（ニィロウのステップ 3 段目）
     if (rp.endsOnLast && modeMaxUses(m) !== undefined && m.repressUsed >= modeMaxUses(m)!) {
       endMode(m, actionStartTime, 'ender');
-      // そのアクションで終えたときだけ続けて開くモード（ニィロウ: N で 3 段目を終えると月の祈り）
+      // そのアクションで終えたときだけ続けて開くモード（ニィロウ: N で 3 段目を終えると祈月）
       const fu = rp.followUps?.[act.actionTypeId.slice(char.id.length + 1)];
       if (fu) {
         // 置き換えるモード（純白の正 ⇔ 漆黒の否）は、ここで終わる
@@ -193,7 +193,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
   const { activeBuffs, modeWindows, placePickedField, retiredModes } = state;
   const { burstModeDef, char, charActions, sIdx } = sc;
   const { act, actionStartTime, modeKind, modeRepress, mw } = ac;
-  // モードの間の自分の元素爆発で、モードの終わりが延びる（兹白: 月相転移 +1.7 秒。gcsim: ExtendStatus(skillKey, 1.7*60)）
+  // モードの間の自分の元素爆発で、モードの終わりが延びる（兹白: 隙を過ぐる月 +1.7 秒。gcsim: ExtendStatus(skillKey, 1.7*60)）
   if (act.type === 'burst') {
     for (const m of modeWindows.values()) {
       const ext = m.def.extendByBurstFrames;

@@ -48,35 +48,34 @@ const TERMS: Record<string, string> = {
   '雷牙': 'Lightning Fang',
   '靖妖儺舞': 'Bane of All Evil',
   '蝶導来世': 'Guide to Afterlife',
-  '雲の変化': 'Cloud Transmogrification',
-  '怒目鬼王': 'Raging Oni King',
-  '庭火焔硝': 'Niwabi Fire-Dance',
+  '鶴雲幻化': 'Cloud Transmogrification',
+  '憤怒の鬼王': 'Raging Oni King',
+  '焔硝の庭火舞い': 'Niwabi Fire-Dance',
   // 公式の英語（原神 Wiki の日本語版・英語版の同じページで確認。2026-10-29）
-  '燔天の時': 'Crucible of Death and Life',
-  '近接の構え': 'Melee Stance',
-  '風の加護': 'Windfavored',
+  '死生の炉': 'Crucible of Death and Life',
+  '近接モード': 'Melee Stance',
+  '児姿優風': 'Windfavored',
   '剣域熾焔': 'Ranging Flame',
-  'パンチ連打モード': 'Blazing Lioness',
-  '加圧': 'Pers Timer',
-  '潜水（加圧）': 'Pers Timer',
-  '影狩り': 'Subnautical Hunter',
-  '瑞獣の舞': 'Wushou Stance',
-  '黄昏の祈り': 'Twilight Meditation',
-  '羽月の輪': 'Feathermoon Ring',
+  '熾炎獅子': 'Blazing Lioness',
+  'ペールスタイマー': 'Pers Timer',
+  '潜猟モード': 'Subnautical Hunter',
+  '獣舞態勢': 'Wushou Stance',
+  '静思瞑影': 'Twilight Meditation',
+  '翦月輪': 'Feathermoon Ring',
   '雷霆のシンフォニー': 'Thunderous Symphony',
-  '月相転移': 'Lunar Phase Shift',
-  '月相の輝き': 'Phase Shift Radiance',
-  '血の契約': 'Blood-Debt Directive',
-  '標的の印': 'Marked as Prey',
-  '粛清': 'Disciplinary Action',
-  '月の祈り': 'Lunar Prayer',
-  // 公式の名前が無いもの（アプリの呼び名。glossary.md の「要確認」）
+  '隙を過ぐる月': 'Lunar Phase Shift',
+  '隙に浮かぶ光': 'Phase Shift Radiance',
+  '血償の勅令': 'Blood-Debt Directive',
+  '獲物マーク': 'Marked as Prey',
+  '粛正': 'Disciplinary Action',
+  '祈月': 'Lunar Prayer',
+  // 公式の名前が無いもの（アプリの呼び名。ユーザー確認 2026-10-29）
   '速攻状態': 'Quick Stormflight window',
   '連撃の受付': 'Combo window',
   '再発動の受付': 'Recast window',
   'ルミの再発動の受付': 'Lumi recast window',
   '変換の受付': 'Conversion window',
-  '羽月の輪の受付': 'Feathermoon Ring window',
+  '翦月輪の受付': 'Feathermoon Ring window',
   '雷霆のシンフォニーの受付': 'Thunderous Symphony window',
   '柔き払暁のコーダの受付': "Adagio: Coda at Dawn's Tolling window",
   '柔き払暁のコーダ後の強化': "Buff after Adagio: Coda at Dawn's Tolling",
@@ -94,7 +93,7 @@ const TERMS: Record<string, string> = {
   // 副次効果（gcsimExtras）の名前
   '印（降衆天華）': 'Sigil (Celestial Shower)',
   '血梅香（敵に付く継続ダメージ）': 'Blood Blossom (DoT on enemy)',
-  '静謐の光環': 'Tranquility Aura',
+  '天を滌う水環': 'Tranquility Aura',
   '領域内（心景幻成）': 'In field (Illusory Heart)',
   '祈風の恵み（風元素ダメージアップ）': "Prayerful Wind's Benefit (Anemo DMG Up)",
   '詭風の禍つ（風元素耐性ダウン）': "Perfidious Wind's Bale (Anemo RES Down)",
@@ -109,17 +108,16 @@ const TERMS: Record<string, string> = {
   '氷元素耐性ダウン（敵）': 'Cryo RES Down (enemy)',
   '草元素耐性ダウン（敵）': 'Dendro RES Down (enemy)',
   '水元素耐性ダウン（敵）': 'Hydro RES Down (enemy)',
-  '蒼白の賛歌・月の歌': 'Pale Hymn / Moon Song',
-  '雷鳴の交響': 'Thunderous Symphony',
+  '蒼の讃歌・詠月': 'Pale Hymn / Moon Song',
   '印（お水ひえひえ装置）': 'Mark (Precision Hydronic Cooler)',
   '黒の姿（暗黒の否認）': 'Dark form (Denial of Darkness)',
   '白の姿（純粋の確認）': 'Light form (Confirmation of Purity)',
-  '猫玉（フラスコ排出）': 'Fluffy Meowball (flask ejection)',
-  '重力（月の反応）': 'Gravity Ripple (Lunar reaction)',
+  'もふもふニャンコボール（フラスコ排出）': 'Fluffy Meowball (flask ejection)',
+  '引力のさざ波（月の反応）': 'Gravity Ripple (Lunar reaction)',
   '反応ボーナス（爆発中）': 'Reaction Bonus (during Burst)',
   // CT の短縮・層の効果
   '周天の回転（CT −15%）': 'Atmospheric Revolution (CD −15%)',
-  '粛清（最大層）攻撃力 +40%': 'Disciplinary Action (max stacks) ATK +40%',
+  '粛正（最大層）攻撃力 +40%': 'Disciplinary Action (max stacks) ATK +40%',
 };
 
 /** 説明文・ヒント・注記（完全一致） */
@@ -127,15 +125,15 @@ const SENTENCES: Record<string, string> = {
   // モードの説明
   'オズがいる間（効果時間は、夜巡りの翼・夜の幻現の効果継続時間）。この間の元素スキル（E）は再発動になり、CT を使わない（オズを呼び寄せる）':
     "While Oz is on the field (duration of Nightrider / Midnight Phantasmagoria). Elemental Skill (E) becomes a recast during this time and doesn't use CD (summons Oz back)",
-  '近接の構え（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）':
+  '近接モード（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）':
     'Melee Stance (Foul Legacy: Raging Tide). Elemental Skill (E) during the stance returns to ranged. Also ends on character switch. CD starts when the stance ends, and its length depends on time spent in the stance (45s after the 30s timeout)',
-  '風の加護（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる':
+  '児姿優風（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる':
     "Windfavored (flight). Ends with Elemental Skill (E) during the state. You can't switch until it ends. CD starts when the state ends",
   '通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。モードの間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り':
     "A mode where Normal Attack (N) and Elemental Skill (E) become punches. N and E during the mode don't use the Skill CD. Ends on jump or character switch. The first N or E after it ends is the finishing kick",
-  '加圧の状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く':
+  'ペールスタイマー状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く':
     "Pers Timer state. Elemental Skill (E) during the state detonates it (CD doesn't start). Continues after character switch",
-  '雲の変化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる':
+  '鶴雲幻化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる':
     'Cloud Transmogrification state. Elemental Skill (E) during the state is the 2nd/3rd leap (refreshes the state). Ends on Plunging Attack or character switch',
   '夜巡りの状態。状態の間の元素スキル（E）は突き（CT なし）、通常攻撃は狩りの N になる。キャラ交代で終わる':
     'Night Vigil state. Elemental Skill (E) becomes a thrust (no CD) and Normal Attacks become hunting N during the state. Ends on character switch',
@@ -147,7 +145,7 @@ const SENTENCES: Record<string, string> = {
     "Dreamdrifter state. Elemental Skill (E) during the state cancels it (CD doesn't start). Also ends on character switch",
   '特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる':
     'Window in which the special Burst can be used. Closes once used. Outside the window, gcsim uses the normal Burst (CD starts)',
-  '夜魂の加護（トニックショット）。状態の間の通常攻撃は、トニックショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる':
+  '夜魂の加護（アンプルショット）。状態の間の通常攻撃は、アンプルショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる':
     "Nightsoul's Blessing (Tonicshot). Normal Attacks during the state become Tonicshots (about every 0.9s). Ends by pressing Elemental Skill (E) again. You can't switch until it ends. CD starts when the state ends",
   '幽炎の露顕の状態。この間、特殊スキル「北国の嵐槍」（spE）を使える。キャラ交代で終わる':
     'Manifest Flame state. The special Skill "Northland Spearstorm" (spE) can be used during it. Ends on character switch',
@@ -155,7 +153,7 @@ const SENTENCES: Record<string, string> = {
     "Shadow Dance state (9s). With at least 1 Verdant Dew, Charged Attacks become Phantasm Performance, a special Charged Attack that doesn't use Stamina (up to 3 per E; Verdant Dew is not counted). Ends on character switch",
   '再発動の受付（受付）。この間の元素スキル（E）は白、通常攻撃（N）は黒の再発動になり、CT を使わない。どちらを使っても受付は閉じる':
     "Recast window. During it, Elemental Skill (E) becomes the light recast and Normal Attack (N) the dark recast, without using CD. Using either closes the window",
-  '月相転移の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は月相の輝きを 70 消費して霊駿の駆けになる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる':
+  '隙を過ぐる月の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は隙に浮かぶ光を 70 消費して翔ける霊駒になる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる':
     "Lunar Phase Shift state (15s). Normal and Charged Attacks deal Geo DMG, and Elemental Skill (E) consumes 70 Phase Shift Radiance for Spirit Steed's Stride (no CD; ends after 4 uses). Extended by 1.7s by Elemental Burst. Ends on character switch",
   '疾風怒濤の状態。この間、特殊スキル（spE）を使える。ヒットストップ・自分の元素爆発で延びる。キャラ交代で終わる':
     'Sturm und Drang state. The special Skill (spE) can be used during it. Extended by hitlag and by her own Elemental Burst. Ends on character switch',
@@ -167,7 +165,7 @@ const SENTENCES: Record<string, string> = {
     'Armed for Action state (15s). Normal, Charged and Plunging Attacks and Elemental Burst build Sword Essence, and Elemental Skill (E) becomes Windborne Sword (Special Elemental Skill; consumes 1 Sword Essence; no CD). Ends after 5 uses. Ends on character switch',
   '特殊スキルを使える期間（受付）。通常攻撃のヒットストップで延びる。受付の外では、gcsim では通常のスキルになる':
     'Window in which the special Skill can be used. Extended by Normal Attack hitlag. Outside the window, gcsim uses the normal Skill',
-  '月の祈りの状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる':
+  '祈月の状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる':
     "Lunar Prayer state (8s). Normal Attacks become Sword Dance N. Ends on character switch",
   '漆黒の否の状態（30 秒）。元素爆発は「漆黒の法則・燻る星」（黒蝕の龍）になる。純白の正の状態に置き換わる':
     'Denial of Darkness state (30s). Elemental Burst becomes "Principle of Darkness: As the Stars Smolder" (Dragon of Dark Decay). Replaced by the Confirmation of Purity state',
@@ -176,14 +174,14 @@ const SENTENCES: Record<string, string> = {
   // CT の短縮・層の効果
   '霊刃·重華積霜の領域の間、操作中のキャラのスキル・爆発・特殊スキルのクールタイム −15%（命ノ星座 2。gcsim は、1 秒ごと・交代のたびに付け直す）':
     "While the Layered Frost field is active, the active character's Skill, Burst and special Skill CD −15% (C2. gcsim reapplies it every 1s and on each switch)",
-  '粛清（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる':
+  '粛正（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる':
     'Disciplinary Action (20s, each stack independent, max 6 stacks). Windborne Sword and Elemental Burst add 1 stack. Spirit blade DMG +10% per stack. Cleared on Elemental Skill or switching out',
-  '命ノ星座 2: 最大層の「粛清」を持っている間、ヴェスナの攻撃力 +40%':
+  '命ノ星座 2: 最大層の「粛正」を持っている間、ヴェスナの攻撃力 +40%':
     'C2: While at max Disciplinary Action stacks, ATK +40%',
   // 置けないときのヒント
   '瞬水剣の間は重撃を使えません（gcsim は実行エラー）。瞬水剣が終わってから置いてください':
     "Charged Attacks can't be used during Shunsuiken (gcsim errors). Place it after Shunsuiken ends",
-  '先に落下攻撃を置いて、雲の変化を終わらせてください':
+  '先に落下攻撃を置いて、鶴雲幻化を終わらせてください':
     'Place a Plunging Attack first to end Cloud Transmogrification',
   '夜魂の加護の間は、重撃・落下攻撃は使えません':
     "Charged and Plunging Attacks can't be used during Nightsoul's Blessing",

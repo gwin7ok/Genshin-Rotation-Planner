@@ -212,17 +212,17 @@ const FIELD_EFFECTS: Record<string, NonNullable<ActionDefinition['fieldEffect']>
 };
 
 /**
- * 層が溜まる効果（ヴェスナの粛清。2026-10-11。issue #36）。キー: キャラ ID。スキルの `_e` に付く（爆発での +1 層も、この定義を使う）。
+ * 層が溜まる効果（ヴェスナの粛正。2026-10-11。issue #36）。キー: キャラ ID。スキルの `_e` に付く（爆発での +1 層も、この定義を使う）。
  * 仕様は説明文（genshin-db）と wiki。gcsim に実装が無く、未検証。効果量（霊剣のダメージ +10% / 層・最大層で攻撃力 +40%）は、アプリでは使わない（いつ有効かを示す）
  */
 const LAYER_BUFFS: Record<string, NonNullable<ActionDefinition['layerBuff']>> = {
   '10000143-anemo': {
-    label: '粛清',
-    description: '粛清（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる',
+    label: '粛正',
+    description: '粛正（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる',
     durationFrames: 1200,
     max: 6,
     fullOnEnter: { minConstellation: 2 },
-    fullBuff: { minConstellation: 2, label: '粛清（最大層）攻撃力 +40%', description: '命ノ星座 2: 最大層の「粛清」を持っている間、ヴェスナの攻撃力 +40%' },
+    fullBuff: { minConstellation: 2, label: '粛正（最大層）攻撃力 +40%', description: '命ノ星座 2: 最大層の「粛正」を持っている間、ヴェスナの攻撃力 +40%' },
     source: 'genshin-db（儀典「春の行列」・命ノ星座 2）: 飛翔の剣・爆発で 1 層・20 秒（層ごとに独立）・最大 6 層。操典「勝利への道筋」の発動または退場でクリア。命ノ星座 2: 風巡りの臨戦に入ると最大層、最大層で ATK+40%',
   },
 };
@@ -239,7 +239,7 @@ const RECAST_RESETS: Record<string, NonNullable<ActionDefinition['recastReset']>
 };
 
 /**
- * 爆発の後のモード（ディシアのパンチ連打モード。2026-10-05）。gcsim dehya/burst.go・dash.go・jump.go。キー: キャラ ID
+ * 爆発の後のモード（ディシアの熾炎獅子。2026-10-05）。gcsim dehya/burst.go・dash.go・jump.go。キー: キャラ ID
  * 爆発のアクションの長さは、gcsim では 105f（burstPunch1Hitmark。frames は全部この値）。フレーム表の最初（kickFrames）を取るのは誤りなので、置き換える
  */
 const BURST_MODES: Record<string, NonNullable<ActionDefinition['burstMode']> & { burstFrames: number }> = {
@@ -369,7 +369,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）',
     },
   }],
-  // ディシア: 爆発の 105f 後から 4.1 秒のパンチ連打モード。ジャンプで終わる（ダッシュ → ジャンプは蹴り）。交代で終わる。固有の項目は BURST_MODES
+  // ディシア: 爆発の 105f 後から 4.1 秒の熾炎獅子。ジャンプで終わる（ダッシュ → ジャンプは蹴り）。交代で終わる。固有の項目は BURST_MODES
   '10000079-pyro': [{
     // 炎場（12 秒。E の命中の 1f 後から）の間の E は置き直し（剣域熾焔。CT なし・1 回）。炎場は設置物なので交代しても続く（gcsim も、交代して戻った後の E が置き直し。2026-10-08 に実行で確認）。
     // 爆発が炎場を拾って置き直すと、受付は新しい炎場の終わりまで延びる（計算側。モードを開いたアクションが fieldRecast を持つ）
@@ -383,7 +383,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   }, {
     action: 'q',
     mode: {
-      label: 'パンチ連打モード',
+      label: '熾炎獅子',
       description: '通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。モードの間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り',
       startDelayFrames: 105,
       durationFrames: Math.round(4.1 * 60),
@@ -394,13 +394,13 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる',
     },
   }],
-  // タルタリヤ: 近接の構え（30 秒）。構えの間の E で遠距離に戻る。交代で終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる。既定は維持しない（D75）
+  // タルタリヤ: 近接モード（30 秒）。構えの間の E で遠距離に戻る。交代で終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる。既定は維持しない（D75）
   '10000033-hydro': [{
     action: 'e',
     keepEffectDuration: true,
     mode: {
-      label: '近接の構え',
-      description: '近接の構え（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）',
+      label: '近接モード',
+      description: '近接モード（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）',
       startDelayFrames: 0,
       durationFrames: 30 * 60,
       swap: 'ends',
@@ -422,14 +422,14 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'tartaglia/skill.go: AddStatus(meleeKey, 30*60)、入る E は SetCDWithDelay(ActionSkill, 60, 14)。onExitMeleeStance: 構えに居た時間で CT（<2 秒 7 秒・<4 秒 8 秒・<5 秒 9 秒・<8 秒 5 秒 + 時間・<30 秒 6 秒 + 時間・以上 45 秒。C1 ×0.8）。E の再押しは 11f 後、交代（onExitField）・時間切れは遅れ 0。2026-10-08 に実行で確認',
     },
   }],
-  // 放浪者: 風の加護（飛行。10 秒）。E の再押しで終わる。終わらせないと交代できない（ゲーム・gcsim とも）。CT（6 秒）は状態の終わりから。
+  // 放浪者: 児姿優風（飛行。10 秒）。E の再押しで終わる。終わらせないと交代できない（ゲーム・gcsim とも）。CT（6 秒）は状態の終わりから。
   // 維持の延長は出さない（gcsim は `wait` だけでは時間切れの処理をせず、交代が約 546 秒待ちになる。D76）
   '10000075-anemo': [{
     action: 'e',
     keepEffectDuration: true,
     mode: {
-      label: '風の加護',
-      description: '風の加護（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
+      label: '児姿優風',
+      description: '児姿優風（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
       startDelayFrames: 0,
       durationFrames: 100 * 6,
       swap: 'blocks',
@@ -437,7 +437,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       holdByDefault: false,
       noHold: true,
       cooldownAtEnd: { delayFrames: { ender: 0, swap: 0, timeout: 0 } },
-      // 風の加護の間の通常攻撃（attackFramesE。3 段。D224）。構え（windup）は、直前のアクションで変わる（ダッシュ −3f・重撃/ジャンプ −2f）が、基本の通常攻撃と同じく含めない
+      // 児姿優風の間の通常攻撃（attackFramesE。3 段。D224）。構え（windup）は、直前のアクションで変わる（ダッシュ −3f・重撃/ジャンプ −2f）が、基本の通常攻撃と同じく含めない
       normalFrames: [
         {total:43,hitmark:15,cancels:{attack:30,charge:31,skill:15,burst:15,dash:15,jump:15,swap:15},source:'attack.go:attackFramesE[0]（InitNormalCancelSlice(15, 43)・N1→N2 30f・N1→CA 31f）'},
         {total:34,hitmark:3,cancels:{attack:17,charge:23,skill:4,burst:6,dash:5,jump:5,swap:3},source:'attack.go:attackFramesE[1]（InitNormalCancelSlice(3, 34)）'},
@@ -446,14 +446,14 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）',
     },
   }],
-  // イファ: 夜魂の加護（トニックショット。夜魂 80 を 8 毎秒で使い切るまで。589f）。状態の間は、通常攻撃がトニックショット（54f ごと。攻撃速度で縮む）になる。
+  // イファ: 夜魂の加護（アンプルショット。夜魂 80 を 8 毎秒で使い切るまで。589f）。状態の間は、通常攻撃がアンプルショット（54f ごと。攻撃速度で縮む）になる。
   // E の再押しで終わる（CT 7.5 秒は終わりから）。夜魂が残っている間は、交代できない（ActionReady）。D233
   '10000113-anemo': [{
     action: 'e',
     keepEffectDuration: true,
     mode: {
       label: '夜魂の加護',
-      description: '夜魂の加護（トニックショット）。状態の間の通常攻撃は、トニックショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
+      description: '夜魂の加護（アンプルショット）。状態の間の通常攻撃は、アンプルショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる',
       startDelayFrames: 0,
       durationFrames: 589,
       swap: 'blocks',
@@ -465,33 +465,33 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         { by: 'self', cooldown: 'start', frames: { total: 44, cancels: { attack: 43, burst: 42, jump: 43, swap: 42 }, source: 'skill.go:skillCancelFrames（E → Jump 43f ほか。夜魂を終わらせる）' } },
         { by: 'skill_hold', cooldown: 'start' },
       ],
-      // 夜魂の間の重撃も、トニックショット（長押し。1f 後に出る）。通常攻撃と同じ間隔
+      // 夜魂の間の重撃も、アンプルショット（長押し。1f 後に出る）。通常攻撃と同じ間隔
       chargedFrames: { total: 42, hitmark: 1, cancels: { attack: 54, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'charge.go:skillAttackHoldFrames（InitNormalCancelSlice(0, chargeSkillInterval 42)。CA → N 54f。CanQueueAfter = 0）' },
       normalFrames: [
-        { total: 54, hitmark: 3, cancels: { charge: 42, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。トニックショットは 3f 後に出る）' },
+        { total: 54, hitmark: 3, cancels: { charge: 42, skill: 0, burst: 0, dash: 0, jump: 0, swap: 0 }, source: 'attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。アンプルショットは 3f 後に出る）' },
       ],
       source: 'ifa/skill.go: enterNightsoul（EnterBlessing(80)・4f ごとではなく 6f ごとに 0.8 減る = 8 毎秒）、skillFrames[Swap] = 589 + 42（夜魂が尽きるのを待つ）。exitNightsoul で SetCD(skill, 7.5 * 60)。ifa.go ActionReady: 夜魂が残っている間は交代できない',
     },
   }],
-  // フレミネ: 潜水（加圧。10 秒）。状態の間の E で起爆（CT は最初の E で始まっている）。交代しても続く（ゲーム・gcsim とも）
+  // フレミネ: ペールスタイマー（10 秒）。状態の間の E で起爆（CT は最初の E で始まっている）。交代しても続く（ゲーム・gcsim とも）
   '10000085-cryo': [{
     action: 'e',
     keepEffectDuration: true,
     mode: {
-      label: '潜水（加圧）',
-      description: '加圧の状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く',
+      label: 'ペールスタイマー',
+      description: 'ペールスタイマー状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く',
       startDelayFrames: 0,
       durationFrames: 10 * 60,
       swap: 'persists',
       enders: [{ by: 'self', cooldown: 'none', frames: { total: 55, cancels: { attack: 53, skill: 47, burst: 47, dash: 47, jump: 47, swap: 51 }, source: 'skill.go:skillPressureFrames[0]' } }],
       holdByDefault: false,
-      // N のたびにスタックが溜まり（影狩りの間は 2）、4 になった後の N（と E）は、起爆のフレームになる（2026-10-10）
-      nStacks: {perUse:1,boostedBy:'影狩り',boostedPerUse:2,max:4,detonate:{total:59,cancels:{attack:53,skill:42,burst:42,dash:43,jump:41,swap:51},source:'skill.go:skillPressureFrames[1]（スタック 4 の起爆。N・E どちらでも）'},source:'freminet/attack.go: skillStacks >= 4 の N は detonateSkill。persTimeKey の間の N で skillStacks +1（影狩りの間は +2。最大 4）'},
+      // N のたびにスタックが溜まり（潜猟モードの間は 2）、4 になった後の N（と E）は、起爆のフレームになる（2026-10-10）
+      nStacks: {perUse:1,boostedBy:'潜猟モード',boostedPerUse:2,max:4,detonate:{total:59,cancels:{attack:53,skill:42,burst:42,dash:43,jump:41,swap:51},source:'skill.go:skillPressureFrames[1]（スタック 4 の起爆。N・E どちらでも）'},source:'freminet/attack.go: skillStacks >= 4 の N は detonateSkill。persTimeKey の間の N で skillStacks +1（潜猟モードの間は +2。最大 4）'},
       source: 'freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）',
     },
   },
-  // フレミネの爆発: 影狩り（10 秒）
-  stateMode('q', '影狩り', 0, 600, 'freminet/burst.go: freminet-stalking（実行: 爆発と同時に 600f）')],
+  // フレミネの爆発: 潜猟モード（10 秒）
+  stateMode('q', '潜猟モード', 0, 600, 'freminet/burst.go: freminet-stalking（実行: 爆発と同時に 600f）')],
   // --- A-2: スキルで入る、ボタン操作で終わらないモード（2026-10-08） ---
   // スカーク: 七相一閃（E の 19f 後から 754f）。蛇の秘計は gcsim の既定で 100 点から始まり（毎秒 7 点減る）、上限の 754f まで続く（実効。D74）。
   // 状態中の E は使えない。CT（8 秒）は状態の終わりから（skill.go: exitSkillState）
@@ -502,8 +502,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   })],
   // 胡桃: 蝶導来世（554f。実行で、交代して戻ると状態が消えていることを確認）
   '10000046-pyro': [stateMode('e', '蝶導来世', 0, 554, 'hutao/skill.go: paramita（実行: E と同時に 554f）。交代で解除')],
-  // 宵宮: 庭火焔硝（611f）
-  '10000049-pyro': [stateMode('e', '庭火焔硝', 0, 611, 'yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除')],
+  // 宵宮: 焔硝の庭火舞い（611f）
+  '10000049-pyro': [stateMode('e', '焔硝の庭火舞い', 0, 611, 'yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除')],
   // 神里綾人: 瞬水剣（360f）
   // 瞬水剣の間の通常攻撃は、全段 23f（取り消しは 5f）の瞬水剣。重撃は gcsim が実行エラーにする（2026-10-10）
   '10000066-hydro': [stateMode('e', '瞬水剣', 0, 360, 'kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除', {
@@ -641,11 +641,11 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       actions: ['e', 'e_hold'],
     }, 'chiori/skill.go: skillA1WindowStarts[1]=42, skillA1WindowDurations[1]=77 → activateA1Window', { noBar: false, keepEffectBar: true }),
   }],
-  // 藍硯: 探知が命中した 7f 後から 66f の間の E が羽月の輪（CT なし）。一回押しでも長押しでも開く（長押しは、長押しの終わりから）。命中する前提。窓の規則から移した
+  // 藍硯: 探知が命中した 7f 後から 66f の間の E が翦月輪（CT なし）。一回押しでも長押しでも開く（長押しは、長押しの終わりから）。命中する前提。窓の規則から移した
   '10000108-anemo': [{
     action: ['e', 'e_hold'],
     keepEffectDuration: true,
-    mode: windowMode('羽月の輪の受付', 7, 66, 'ends', {
+    mode: windowMode('翦月輪の受付', 7, 66, 'ends', {
       frames: [{ total: 41, cancels: { attack: 37, burst: 39, dash: 38, jump: 39 }, source: 'attack.go:ringsFrames' }],
       maxUses: 1,
       endsOnLast: true,
@@ -660,10 +660,10 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         { total: 62, cancels: { attack: 40, skill: 32, burst: 40, dash: 36, jump: 37 }, source: 'skill.go:whirlingStepsFrames[1]' },
         { total: 63, cancels: { dash: 57, jump: 57, swap: 61 }, source: 'skill.go:whirlingStepsFrames[2]' },
       ],
-      // 状態の間の N は剣舞の N（歩みと同じ 3 段の数え方。2026-10-10）。N で 3 段目を終えると、8 秒の月の祈りに入る（その間の N も剣舞の N）
+      // 状態の間の N は剣舞の N（歩みと同じ 3 段の数え方。2026-10-10）。N で 3 段目を終えると、8 秒の祈月に入る（その間の N も剣舞の N）
       actions: ['e', 'n'],
       framesByAction: { n: [{total:20,hitmark:14,cancels:{attack:18,skill:14,burst:14,dash:14,jump:14,swap:14},source:'skill.go:swordDanceFrames[0]（剣舞の N 1 段。InitNormalCancelSlice(hitmark, 20)）'},{total:23,hitmark:12,cancels:{skill:12,burst:12,dash:12,jump:12,swap:12},source:'skill.go:swordDanceFrames[1]'},{total:60,hitmark:35,cancels:{attack:55,skill:35,burst:35,dash:35,jump:35,swap:35},source:'skill.go:swordDanceFrames[2]'}] },
-      followUps: { n: {label:'月の祈り',description:'月の祈りの状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる',startDelayFrames:30,durationFrames:480,swap:'ends',enders:[],holdByDefault:false,noHold:true,noBar:true,normalFrames:[{total:20,hitmark:14,cancels:{attack:18,skill:14,burst:14,dash:14,jump:14,swap:14},source:'skill.go:swordDanceFrames[0]（剣舞の N 1 段。InitNormalCancelSlice(hitmark, 20)）'},{total:23,hitmark:12,cancels:{skill:12,burst:12,dash:12,jump:12,swap:12},source:'skill.go:swordDanceFrames[1]'},{total:60,hitmark:35,cancels:{attack:55,skill:35,burst:35,dash:35,jump:35,swap:35},source:'skill.go:swordDanceFrames[2]'}],source:'nilou/skill.go: Pirouette（N で 3 段目を終えると AddStatus(lunarPrayerStatus, 8*60)。delayDance = 30）、attack.go: lunarPrayerStatus の間の N は SwordDance。バーは gcsim の副次効果（lunarprayer）'} },
+      followUps: { n: {label:'祈月',description:'祈月の状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる',startDelayFrames:30,durationFrames:480,swap:'ends',enders:[],holdByDefault:false,noHold:true,noBar:true,normalFrames:[{total:20,hitmark:14,cancels:{attack:18,skill:14,burst:14,dash:14,jump:14,swap:14},source:'skill.go:swordDanceFrames[0]（剣舞の N 1 段。InitNormalCancelSlice(hitmark, 20)）'},{total:23,hitmark:12,cancels:{skill:12,burst:12,dash:12,jump:12,swap:12},source:'skill.go:swordDanceFrames[1]'},{total:60,hitmark:35,cancels:{attack:55,skill:35,burst:35,dash:35,jump:35,swap:35},source:'skill.go:swordDanceFrames[2]'}],source:'nilou/skill.go: Pirouette（N で 3 段目を終えると AddStatus(lunarPrayerStatus, 8*60)。delayDance = 30）、attack.go: lunarPrayerStatus の間の N は SwordDance。バーは gcsim の副次効果（lunarprayer）'} },
       maxUses: 3,
       endsOnLast: true,
     },
@@ -708,16 +708,16 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul',
     },
   }],
-  // 兹白（issue #36。gcsim main の PR #3093）: 月相転移（E の 18f 後から 900f。E の発動から 918f）。この間、E は霊駿の駆け（月相の輝き 70 を消費。CT なし）になり、4 回使うと終わる（C1: 5 回）。
-  // 月相の輝き: 時間で 1 秒に 10（6f ごとに +1）、通常攻撃が敵に当たると +5（0.5 秒に 1 回まで。重撃は数えない）。上限 100。C1: E の直後に +100。
-  // 輝きは、モードの外では増減せず、終わった後も残る（gcsim: radiance は skillKey が消えても保持。次の月相転移へ持ち越す。D160。ゲームでの確認は #37）。
-  // C4: モードの間は、通常攻撃の段が戻らない（N1 N2 E N3 と続く）。C6: 輝きの獲得 1.5 倍（時間・通常攻撃）、霊駿の駆けが輝きを全部消費する。月の結晶反応 +35 は未対応。
-  // 元素爆発を使うと、月相転移が 1.7 秒（102f）延びる。交代で終わる（OnCharacterSwap で skillKey を削除）。E の CT（18 秒）は最初の E で始まる
+  // 兹白（issue #36。gcsim main の PR #3093）: 隙を過ぐる月（E の 18f 後から 900f。E の発動から 918f）。この間、E は翔ける霊駒（隙に浮かぶ光 70 を消費。CT なし）になり、4 回使うと終わる（C1: 5 回）。
+  // 隙に浮かぶ光: 時間で 1 秒に 10（6f ごとに +1）、通常攻撃が敵に当たると +5（0.5 秒に 1 回まで。重撃は数えない）。上限 100。C1: E の直後に +100。
+  // 輝きは、モードの外では増減せず、終わった後も残る（gcsim: radiance は skillKey が消えても保持。次の隙を過ぐる月へ持ち越す。D160。ゲームでの確認は #37）。
+  // C4: モードの間は、通常攻撃の段が戻らない（N1 N2 E N3 と続く）。C6: 輝きの獲得 1.5 倍（時間・通常攻撃）、翔ける霊駒が輝きを全部消費する。月の結晶反応 +35 は未対応。
+  // 元素爆発を使うと、隙を過ぐる月が 1.7 秒（102f）延びる。交代で終わる（OnCharacterSwap で skillKey を削除）。E の CT（18 秒）は最初の E で始まる
   '10000126-geo': [{
     action: 'e',
     mode: {
-      label: '月相転移',
-      description: '月相転移の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は月相の輝きを 70 消費して霊駿の駆けになる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる',
+      label: '隙を過ぐる月',
+      description: '隙を過ぐる月の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は隙に浮かぶ光を 70 消費して翔ける霊駒になる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる',
       startDelayFrames: 18,
       durationFrames: 900,
       swap: 'ends',
@@ -735,7 +735,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         endsOnLast: true,
       },
       gauge: {
-        label: '月相の輝き',
+        label: '隙に浮かぶ光',
         max: 100,
         cost: 70,
         persists: true,
@@ -743,7 +743,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         gainByType: { normal: 5 },
         hint: '月の結晶反応（+35）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください',
       },
-      source: 'zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）',
+      source: 'zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（翔ける霊駒。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）',
     },
   }],
   // ネフェル（issue #36。gcsim PR #3045・未マージ・未検証）: 影の舞（E の発動から 9 秒。CT 9 秒・2 回分）。この間、草露を 1 滴以上持つとき、重撃が「幻の戯」（スタミナを消費しない特殊な重撃）になる（E 1 回につき 3 回まで）。
@@ -848,7 +848,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     },
   }],
   // ヴェスナ（issue #36。gcsim に実装なし。wiki: 操典「勝利への道筋」）: 風巡りの臨戦（E の発動から 15 秒。CT 18 秒）。この間の E は飛翔の剣（特殊元素スキル。剣気 1 枚を消費。CT なし。ランク 1→2→3→3→3 で計 5 回使うと終わる。C1: 6 回）。
-  // 剣気: 最初の E で 2 枚（上限 3 枚）。攻撃で溜まる（通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35）。元素爆発で +1 枚。交代で終わる。フレームは推定（特殊スキルの中央値 68f）。粛清（スタック）・星拡散は未対応
+  // 剣気: 最初の E で 2 枚（上限 3 枚）。攻撃で溜まる（通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35）。元素爆発で +1 枚。交代で終わる。フレームは推定（特殊スキルの中央値 68f）。粛正（スタック）・星拡散は未対応
   '10000143-anemo': [{
     action: 'e',
     mode: {
@@ -896,17 +896,17 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       {total:62,hitmark:40,cancels:{skill:40,burst:40,dash:40,jump:40,swap:40},source:'attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）'},
     ],
   })],
-  '10000092-pyro': [stateMode('q', '瑞獣の舞', 36, 720, 'gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる')],
-  '10000057-geo': [stateMode('q', '怒目鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],
+  '10000092-pyro': [stateMode('q', '獣舞態勢', 36, 720, 'gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる')],
+  '10000057-geo': [stateMode('q', '憤怒の鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],
   '10000054-hydro': [stateMode('q', '儀来羽衣', 0, 600, 'kokomi/burst.go: kokomiburst（実行: 爆発と同時に 600f）。交代で終わる')],
-  '10000106-pyro': [stateMode('q', '燔天の時', 105, 420, 'mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる')],
+  '10000106-pyro': [stateMode('q', '死生の炉', 105, 420, 'mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる')],
   // 夢想の一心の間の通常攻撃は刀の 5 段、重撃は刀の重撃（2 回ヒット 56f）（2026-10-10）
   '10000052-electro': [stateMode('q', '夢想の一心', 0, 518, 'raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる', {
     normalFrames: [{total:21,hitmark:12,cancels:{attack:19,skill:12,burst:12,dash:12,jump:12,swap:12},source:'attack.go:swordFrames[0]'},{total:26,hitmark:13,cancels:{attack:16,skill:13,burst:13,dash:13,jump:13,swap:13},source:'attack.go:swordFrames[1]'},{total:34,hitmark:11,cancels:{attack:16,skill:11,burst:11,dash:11,jump:11,swap:11},source:'attack.go:swordFrames[2]'},{total:67,hitmark:33,cancels:{attack:44,skill:33,burst:33,dash:33,jump:33,swap:33},source:'attack.go:swordFrames[3]'},{total:59,hitmark:33,cancels:{skill:33,burst:33,dash:33,jump:33,swap:33},source:'attack.go:swordFrames[4]'}],
     chargedFrames: {total:56,hitmark:32,cancels:{dash:32,jump:32},source:'charge.go:swordCAFrames（2 回ヒット。24f・32f）'},
   })],
   '10000020-electro': [stateMode('q', '雷牙', 32, 900, 'razor/burst.go: razor-q（実行: 爆発の 32f 後から 900f）。交代で終わる')],
-  '10000097-electro': [stateMode('q', '黄昏の祈り', 0, 480, 'sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる')],
+  '10000097-electro': [stateMode('q', '静思瞑影', 0, 480, 'sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる')],
   // クロリンデ: 夜巡り（E の 6f 後から 7.5 秒）。状態の間の E は突き（CT なし・回数の制限なし・状態は延びない）、通常攻撃は狩りの N、爆発は別のフレーム。
   // 交代で終わる（ゲーム。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）
   '10000098-electro': [{
@@ -930,16 +930,16 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       source: 'clorinde/skill.go: AddStatus(skillStateKey, skillStart(6)+skillStateDuration(7.5)*60, true)。状態の間の E は skillDash（SetCD なし）。攻撃は attack.go の skillAttack、爆発は burstSkillStateFrames',
     },
   }],
-  // 閑雲: 雲の変化（1 段目の跳躍から 220f）。状態の間の E は 2・3 段目の跳躍（状態が 238f・179f に更新）。落下攻撃で終わる。
+  // 閑雲: 鶴雲幻化（1 段目の跳躍から 220f）。状態の間の E は 2・3 段目の跳躍（状態が 238f・179f に更新）。落下攻撃で終わる。
   // 交代で終わる（ゲーム: 交代して戻ると 2 回目の E が CT。ユーザーの確認 D76）。gcsim は交代しても続く（交代のフックなし）。
   // 時間切れで終わったとき（落下攻撃を使わなかったとき）は、スキルの CT が 3 秒短くなる（cooldownReduceOnExpire。xianyun/skill.go cooldownReduce）。凸 6 の CT なし跳躍は含めない
   '10000093-anemo': [{
     action: 'e',
     mode: {
-      label: '雲の変化',
-      description: '雲の変化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる',
-      // xianyun.go: ActionReady が、雲の変化の間の通常攻撃・重撃を false にする（実行で確認: E → N の N は、状態の期限 222f まで待つ）
-      blocked: { types: ['normal', 'charged'], result: 'wait', hint: '先に落下攻撃を置いて、雲の変化を終わらせてください' },
+      label: '鶴雲幻化',
+      description: '鶴雲幻化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる',
+      // xianyun.go: ActionReady が、鶴雲幻化の間の通常攻撃・重撃を false にする（実行で確認: E → N の N は、状態の期限 222f まで待つ）
+      blocked: { types: ['normal', 'charged'], result: 'wait', hint: '先に落下攻撃を置いて、鶴雲幻化を終わらせてください' },
       startDelayFrames: 0,
       durationFrames: 220,
       swap: 'ends',
@@ -1018,11 +1018,11 @@ const FORCED_INDEXED_VARIANTS: Record<string, { shortHoldIndex: number; holdInde
 
 /**
  * 一回押しの E のフレーム表を、表の並び順の最初ではなく、名前で選ぶキャラ（キー: キャラ ID、値: 表の名前）。
- * タルタリヤ: skill.go の最初の表は近接の構えを終わらせる E（skillMeleeFrames。モードの終わらせるアクションのフレームに入れた）で、構えに入る E は skillRangedFrames
+ * タルタリヤ: skill.go の最初の表は近接モードを終わらせる E（skillMeleeFrames。モードの終わらせるアクションのフレームに入れた）で、構えに入る E は skillRangedFrames
  */
 const SKILL_TAP_TABLES: Record<string, string> = {
   '10000033-hydro': 'skillRangedFrames',
-  // 藍硯: 探知が命中した場合のフレーム（窓の規則〔羽月の輪〕と同じく命中する前提。2026-10-08 の実行で、交代は命中のフレーム〔80f〕）
+  // 藍硯: 探知が命中した場合のフレーム（窓の規則〔翦月輪〕と同じく命中する前提。2026-10-08 の実行で、交代は命中のフレーム〔80f〕）
   '10000108-anemo': 'skillHitFrames',
 };
 

@@ -13741,8 +13741,8 @@
         },
         "defaultDuration": 0.65,
         "mode": {
-          "label": "近接の構え",
-          "description": "近接の構え（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）",
+          "label": "近接モード",
+          "description": "近接モード（魔王の武装）。構えの間の元素スキル（E）で遠距離に戻る。キャラ交代でも終わる。CT は構えの終わりから始まり、長さは構えに居た時間で決まる（30 秒の時間切れは 45 秒）",
           "startDelayFrames": 0,
           "durationFrames": 1800,
           "swap": "ends",
@@ -15057,7 +15057,7 @@
             "label": "周天の回転（CT −15%）",
             "description": "霊刃·重華積霜の領域の間、操作中のキャラのスキル・爆発・特殊スキルのクールタイム −15%（命ノ星座 2。gcsim は、1 秒ごと・交代のたびに付け直す）",
             "en": {
-              "label": "Celestial Rotation (CD −15%)",
+              "label": "Atmospheric Revolution (CD −15%)",
               "description": "While the Layered Frost field is active, the active character's Skill, Burst and special Skill CD −15% (C2. gcsim reapplies it every 1s and on each switch)"
             }
           },
@@ -20366,8 +20366,8 @@
         },
         "defaultDuration": 0.567,
         "mode": {
-          "label": "庭火焔硝",
-          "description": "庭火焔硝の状態。入力がなければ 10.2 秒続く。キャラ交代で終わる",
+          "label": "焔硝の庭火舞い",
+          "description": "焔硝の庭火舞いの状態。入力がなければ 10.2 秒続く。キャラ交代で終わる",
           "startDelayFrames": 0,
           "durationFrames": 611,
           "swap": "ends",
@@ -23718,8 +23718,8 @@
         },
         "defaultDuration": 1.517,
         "mode": {
-          "label": "怒目鬼王",
-          "description": "怒目鬼王の状態。入力がなければ 13.3 秒続く。キャラ交代で終わる",
+          "label": "憤怒の鬼王",
+          "description": "憤怒の鬼王の状態。入力がなければ 13.3 秒続く。キャラ交代で終わる",
           "startDelayFrames": 0,
           "durationFrames": 795,
           "swap": "ends",
@@ -29003,7 +29003,7 @@
         "gcsimExtras": [
           {
             "key": "lunarprayer",
-            "label": "月の祈り",
+            "label": "祈月",
             "en": {
               "label": "Lunar Prayer"
             }
@@ -29149,8 +29149,8 @@
             },
             "followUps": {
               "n": {
-                "label": "月の祈り",
-                "description": "月の祈りの状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる",
+                "label": "祈月",
+                "description": "祈月の状態（8 秒）。通常攻撃が剣舞の N になる。キャラ交代で終わる",
                 "startDelayFrames": 30,
                 "durationFrames": 480,
                 "swap": "ends",
@@ -29200,8 +29200,8 @@
                 ],
                 "source": "nilou/skill.go: Pirouette（N で 3 段目を終えると AddStatus(lunarPrayerStatus, 8*60)。delayDance = 30）、attack.go: lunarPrayerStatus の間の N は SwordDance。バーは gcsim の副次効果（lunarprayer）",
                 "en": {
-                  "label": "Moon's Prayer",
-                  "description": "Moon's Prayer state (8s). Normal Attacks become Sword Dance N. Ends on character switch"
+                  "label": "Lunar Prayer",
+                  "description": "Lunar Prayer state (8s). Normal Attacks become Sword Dance N. Ends on character switch"
                 }
               }
             },
@@ -29231,7 +29231,7 @@
         "gcsimExtras": [
           {
             "key": "tranquilityaura",
-            "label": "静謐の光環",
+            "label": "天を滌う水環",
             "en": {
               "label": "Tranquility Aura"
             }
@@ -31436,8 +31436,8 @@
         },
         "defaultDuration": 0.467,
         "mode": {
-          "label": "風の加護",
-          "description": "風の加護（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる",
+          "label": "児姿優風",
+          "description": "児姿優風（飛行）。状態の間の元素スキル（E）で終わる。終わらせないと交代できない。CT は状態の終わりから始まる",
           "startDelayFrames": 0,
           "durationFrames": 600,
           "swap": "blocks",
@@ -31502,12 +31502,12 @@
           ],
           "source": "wanderer/skill.go: skillActivate（SwapCD = MaxInt16、空居点 100 × 6f）、skillEndRoutine（SwapCD = 26、SetCD(ActionSkill, 360)）。2026-10-08 に実行で確認（E の再押しの時点で CT 6 秒）",
           "en": {
-            "label": "Wind's Blessing",
-            "description": "Wind's Blessing (flight). Ends with Elemental Skill (E) during the state. You can't switch until it ends. CD starts when the state ends"
+            "label": "Windfavored",
+            "description": "Windfavored (flight). Ends with Elemental Skill (E) during the state. You can't switch until it ends. CD starts when the state ends"
           }
         },
         "description": "大気の力を凝集し、その力を借りて大地の束縛を振り払う。周囲に風元素ダメージを与え、空中に飛び上がり「児姿優風」状態に入る。\n\n児姿優風\nこの状態の時、放浪者は落下攻撃を行うことができない。また、通常攻撃と重撃はそれぞれ空居·不生断と空居·風刀界へと変わり、与えるダメージおよび影響範囲がアップする。これらのダメージは、それぞれ通常攻撃ダメージと重撃ダメージに見なされる。なお、空居·風刀界を行う際にスタミナは消費されない。\nこの状態の時、放浪者は空中を浮遊し続け、行動は以下の特性を持つ。\n·継続的に「空居力」を消費し、浮遊状態を維持する。\n·ダッシュすると、追加で空居力を消費して空中を素早く移動する。長押しによるダッシュは継続的に空居力を消費し、高速移動を維持する。この効果はダッシュに取って代わる。\n·ジャンプすると、追加で空居力を消費して浮遊する高度を上げる。長押しによるジャンプは継続的に空居力を消費し、高度を上げ続ける。\n\n空居力が尽きると、この状態は解除される。\n児姿優風の継続時間中に再び元素スキルを発動すると、この状態は解除される。",
-        "effectLabel": "風の加護",
+        "effectLabel": "児姿優風",
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
@@ -31515,7 +31515,7 @@
         "en": {
           "name": "Elemental Skill: Hanega: Song of the Wind",
           "description": "Concentrates the power of the winds to break free from the shackles of the earth, dealing AoE Anemo DMG before leaping into the air and entering the Windfavored state.\n\nWindfavored\nThe Wanderer cannot perform Plunging Attacks in this state. When he uses Normal and Charged Attacks, they will be converted into Kuugo: Fushoudan and Kuugo: Toufukai respectively; the DMG they deal and their AoE will be increased, and their DMG will be considered Normal and Charged Attack DMG respectively. Kuugo: Toufukai will not consume Stamina.\nThe Wanderer will hover persistently during this time. While this state is active, the Wanderer's movements gain the following properties:\n·Persistently consumes Kuugoryoku Points to maintain this hovering state.\n·When sprinting, additional Kuugoryoku Points will be consumed for the Wanderer to accelerate mid-air. Holding sprint will cause persistent Kuugoryoku Point consumption to maintain speed. This effect will replace his default sprint.\n·Jumping expends extra Kuugoryoku Points to increase hovering height. Holding jump will cause persistent Kuugoryoku Point consumption to keep increasing hovering height.\n\nRunning out of Kuugoryoku Points will end the Windfavored state.\nA second cast during the duration of Windfavored will also end it.",
-          "effectLabel": "Wind's Blessing"
+          "effectLabel": "Windfavored"
         },
         "gcsimEffect": {
           "keys": [
@@ -33231,8 +33231,8 @@
           },
           "source": "dehya/skill.go: skillHitmark=20 の 1f 後に addField(12*60)。hasRecastSkill で再発動は 1 回（窓の規則から移した）",
           "en": {
-            "label": "Blazing Sword Domain",
-            "description": "Blazing Sword Domain. Elemental Skill (E) becomes a different action during it and doesn't use CD"
+            "label": "Ranging Flame",
+            "description": "Ranging Flame. Elemental Skill (E) becomes a different action during it and doesn't use CD"
           }
         },
         "description": "戦況に応じて、ディシアが独自に編み出したさまざまな戦闘技を繰り出す。\n\n浄焔怒涛\nフィールド上にディシア自身の「浄焔剣獄」が存在しない時に繰り出される。\n炎元素範囲ダメージを与え、「浄焔剣獄」領域を生成する。\n\n剣域熾焔\nフィールド上にディシア自身の「浄焔剣獄」が存在する時に繰り出される。\n跳躍攻撃を行い、炎元素範囲ダメージを与え、新たな位置に「浄焔剣獄」領域を再生成する。\nこの方法で再生成された「浄焔剣獄」領域は元の領域の継続時間を引き継ぐ。\n\n1回の「浄焔剣獄」継続時間中に剣域熾焔は1回のみ発動可能。\n\n浄焔剣獄\n領域内にいる敵がダメージを受けた時、「浄焔剣獄」はディシアの攻撃力とHP上限を基に連携攻撃を行って、その敵に炎元素範囲ダメージを与える。この効果は2.5秒毎に1回のみ発動可能。\n領域内フィールド上キャラクターの中断耐性をアップさせ、それらのキャラクターがダメージを受けた際に、その一部のダメージをカットして「赤鬣の血」に蓄積させ、ディシアが10秒間肩代わりする。「赤鬣の血」に蓄積されたダメージ量が、ディシアのHP上限の一定割合に到達または超過した時、ダメージカットが行われなくなる。\n\nディシア自身が生成した「浄焔剣獄」は1つのみ存在可能。",
@@ -33316,7 +33316,7 @@
           "source": "dehya/burst.go: burstDuration = 4.1*60、burstPunchSlowHitmark = 50（自動のパンチ）、punchHitmarks（入力のパンチ）、kickFrames（蹴り）。UseBurstAction: 状態の間の attack・skill はパンチ（ActionReady は CT を見ない）。dash.go: 状態の間の dash は、ジャンプへ 7f でキャンセルでき、17f 以内のジャンプは蹴り。jump.go: それ以外のジャンプは状態を終わらせる"
         },
         "mode": {
-          "label": "パンチ連打モード",
+          "label": "熾炎獅子",
           "description": "通常攻撃（N）・元素スキル（E）がパンチになるモード。モードの間の N・E はスキルの CT を使わない。モードの間のジャンプ、キャラ交代で終わる。終わった後の最初の N・E は、フィニッシュの蹴り",
           "startDelayFrames": 105,
           "durationFrames": 246,
@@ -33331,7 +33331,7 @@
           "noSynergy": true,
           "source": "dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる",
           "en": {
-            "label": "Rapid Punch Mode",
+            "label": "Blazing Lioness",
             "description": "A mode where Normal Attack (N) and Elemental Skill (E) become punches. N and E during the mode don't use the Skill CD. Ends on jump or character switch. The first N or E after it ends is the finishing kick"
           }
         },
@@ -35841,8 +35841,8 @@
         },
         "defaultDuration": 0.767,
         "mode": {
-          "label": "潜水（加圧）",
-          "description": "加圧の状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く",
+          "label": "ペールスタイマー",
+          "description": "ペールスタイマー状態。状態の間の元素スキル（E）で起爆する（CT は始まらない）。キャラ交代しても続く",
           "startDelayFrames": 0,
           "durationFrames": 600,
           "swap": "persists",
@@ -35867,7 +35867,7 @@
           "holdByDefault": false,
           "nStacks": {
             "perUse": 1,
-            "boostedBy": "影狩り",
+            "boostedBy": "潜猟モード",
             "boostedPerUse": 2,
             "max": 4,
             "detonate": {
@@ -35882,16 +35882,16 @@
               },
               "source": "skill.go:skillPressureFrames[1]（スタック 4 の起爆。N・E どちらでも）"
             },
-            "source": "freminet/attack.go: skillStacks >= 4 の N は detonateSkill。persTimeKey の間の N で skillStacks +1（影狩りの間は +2。最大 4）"
+            "source": "freminet/attack.go: skillStacks >= 4 の N は detonateSkill。persTimeKey の間の N で skillStacks +1（潜猟モードの間は +2。最大 4）"
           },
           "source": "freminet/skill.go: AddStatus(persTimeKey, 10*60)。状態の間の E は detonateSkill。2026-10-08 に実行で確認（交代して戻った後の E も起爆）",
           "en": {
-            "label": "Diving (Pressurized)",
-            "description": "Pressurized state. Elemental Skill (E) during the state detonates it (CD doesn't start). Continues after character switch"
+            "label": "Pers Timer",
+            "description": "Pers Timer state. Elemental Skill (E) during the state detonates it (CD doesn't start). Continues after character switch"
           }
         },
         "description": "斬り上げ攻撃を繰り出し、氷元素ダメージを与え、継続時間10秒のペールスタイマー状態に入る。\nペールスタイマー状態時、元素スキルは高圧粉砕へと変わる。\n\n高圧粉砕\nペールスタイマーの圧力ランクに応じて異なる攻撃を行い、ペールスタイマー状態を解除する。\n·ランク0：縦斬りを繰り出し、氷元素ダメージを与える。\n·ランク1~3：縦斬りを繰り出し、ペールスと協同攻撃を行い、氷元素ダメージと物理ダメージを与える。ダメージは圧力ランクに応じて変化する。\n·ランク4：圧力で満たされたペールスの力を借り、物理ダメージを与える。この時、「通常攻撃·潜流の剣」は高圧粉砕に切り替わる。\n\nペールスタイマー\nフレミネが通常攻撃を行う際に霜寒を放ち、氷元素ダメージを与え、ペールスタイマーの圧力ランクを上昇させる。\nなお、与える氷元素ダメージは元素スキルダメージと見なされる。\n\nアルケー：プネウマ\n斬り上げ攻撃を発動した後、斬り上げ攻撃を行う霊息の棘が生成され、プネウマを帯びた氷元素ダメージを与える。一定時間ごとに発動が可能。",
-        "effectLabel": "加圧",
+        "effectLabel": "ペールスタイマー",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.583
@@ -35899,7 +35899,7 @@
         "en": {
           "name": "Elemental Skill: Pressurized Floe",
           "description": "Performs an upward thrust that deals Cryo DMG and causes Freminet to enter Pers Timer for 10s.\nWhile Pers Timer is active, his Elemental Skill will turn into Shattering Pressure.\n\nShattering Pressure\nExecutes different sorts of attacks based on the Pressure Level of Pers Timer, and then cancels Pers Timer.\n·Level 0: Unleashes a vertical cut, dealing Cryo DMG.\n·Levels 1 to 3: Unleashes a vertical cut alongside Pers, dealing Cryo DMG and Physical DMG. DMG dealt scales based on Pressure Level.\n·Level 4: Borrows the power of a fully-pressurized Pers to deal Physical DMG. Meanwhile, Normal Attack: Flowing Eddies will be replaced by Shattering Pressure.\n\nPers Timer\nWhen Freminet uses Normal Attacks, he will also unleash waves of frost that deal Cryo DMG and increase Pers's Pressure Level.\nThe accompanying Cryo DMG dealt this way is considered Elemental Skill DMG.\n\nArkhe: Pneuma\nAt certain intervals, after using the upward thrust, a Spiritbreath Thorn in the form of another upward thrust will be created, dealing Pneuma-aligned Cryo DMG.",
-          "effectLabel": "Pressurized"
+          "effectLabel": "Pers Timer"
         },
         "gcsimEffect": {
           "keys": [
@@ -35935,8 +35935,8 @@
         },
         "defaultDuration": 1.083,
         "mode": {
-          "label": "影狩り",
-          "description": "影狩りの状態。入力がなければ 10.0 秒続く。キャラ交代で終わる",
+          "label": "潜猟モード",
+          "description": "潜猟モードの状態。入力がなければ 10.0 秒続く。キャラ交代で終わる",
           "startDelayFrames": 0,
           "durationFrames": 600,
           "swap": "ends",
@@ -35944,8 +35944,8 @@
           "holdByDefault": true,
           "source": "freminet/burst.go: freminet-stalking（実行: 爆発と同時に 600f）",
           "en": {
-            "label": "Shadowhunt",
-            "description": "Shadowhunt state. Lasts 10.0s without input. Ends on character switch"
+            "label": "Subnautical Hunter",
+            "description": "Subnautical Hunter state. Lasts 10.0s without input. Ends on character switch"
           }
         },
         "description": "触れることのできない寒気を放ち、氷元素範囲ダメージを与え、元素スキル「プレッシャー·フロウ」のクールタイムをリセットし、継続時間10秒の潜猟モードに入る。\n\n潜猟モード状態時、フレミネの中断耐性がアップし、元素スキル「プレッシャー·フロウ」は以下の強化効果を獲得する。\n·クールタイム-70%。\n·通常攻撃を行う時、追加でペールスタイマーの圧力ランクを1ランクアップさせ、通常攻撃による霜寒の与えるダメージが元の200%分となる。\n\nこの効果はフレミネが退場する時に解除される。",
@@ -38933,8 +38933,8 @@
         },
         "defaultDuration": 1.283,
         "mode": {
-          "label": "瑞獣の舞",
-          "description": "瑞獣の舞の状態。入力がなければ 12.0 秒続く。キャラ交代で終わる",
+          "label": "獣舞態勢",
+          "description": "獣舞態勢の状態。入力がなければ 12.0 秒続く。キャラ交代で終わる",
           "startDelayFrames": 36,
           "durationFrames": 720,
           "swap": "ends",
@@ -38942,8 +38942,8 @@
           "holdByDefault": true,
           "source": "gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる",
           "en": {
-            "label": "Auspicious Beast Dance",
-            "description": "Auspicious Beast Dance state. Lasts 12.0s without input. Ends on character switch"
+            "label": "Wushou Stance",
+            "description": "Wushou Stance state. Lasts 12.0s without input. Ends on character switch"
           }
         },
         "description": "嘉明は獣舞の態勢に入り、短時間炎元素付着状態となる。この時、一定のHPを回復すると共に、頼れる仲間の猊獣·ウェンツァイを召喚して目標に投げつけ、炎元素範囲ダメージを与える。\n猊獣·ウェンツァイは目標に当たった後、付近に転がり、その後嘉明の位置に戻ってくる。嘉明と合流すると猊獣·ウェンツァイは退場し、嘉明の元素スキル「瑞獣登楼」のクールタイムをリセットする。\n獣舞態勢の継続期間中、嘉明の中断耐性がアップし、落下攻撃·踏雲献瑞が着地したとき、または瑞獣登楼の前方跳躍を行ったとき、嘉明のHPが50%を超えていた場合、猊獣·ウェンツァイが再び召喚される。\nフィールド上に嘉明自身が召喚した猊獣·ウェンツァイは1体のみ存在可能。\n効果は嘉明退場時に解除される。",
@@ -39343,15 +39343,15 @@
         },
         "defaultDuration": 4.067,
         "mode": {
-          "label": "雲の変化",
-          "description": "雲の変化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる",
+          "label": "鶴雲幻化",
+          "description": "鶴雲幻化の状態。状態の間の元素スキル（E）は 2・3 段目の跳躍（状態が更新される）。落下攻撃、キャラ交代で終わる",
           "blocked": {
             "types": [
               "normal",
               "charged"
             ],
             "result": "wait",
-            "hint": "先に落下攻撃を置いて、雲の変化を終わらせてください",
+            "hint": "先に落下攻撃を置いて、鶴雲幻化を終わらせてください",
             "en": {
               "hint": "Place a Plunging Attack first to end Cloud Transmogrification"
             }
@@ -40851,7 +40851,7 @@
         },
         "defaultDuration": 1.283,
         "description": "凶月血炎を遣わして近くの複数の敵に炎元素ダメージを与え、そのうち1名の敵には猛進の斬撃を繰り出し、炎元素範囲ダメージを与える。\nこの攻撃が命中した敵には血償の勅令が付与される。\n\n血償の勅令\n·血償の勅令は30秒間継続し、5秒毎に敵に炎元素ダメージを1回与える（最大2回まで）。これによるダメージは元素スキルダメージと見なされる。\n·アルレッキーノが重撃、または元素爆発「昇りゆく凶月」を行う時、周囲の血償の勅令は回収され、1つ回収するたびにアルレッキーノにHP上限65%の「命の契約」を付与する。\n·元素スキルを発動した後の35秒間、血償の勅令でアルレッキーノに付与できる「命の契約」はHP上限の145%まで。継続期間中に再び元素スキルを発動すると、継続時間と、血償の勅令で付与可能な「命の契約」の上限が再計算される。",
-        "effectLabel": "血の契約",
+        "effectLabel": "血償の勅令",
         "cooldownStart": {
           "from": "motionStart",
           "delay": 0.267
@@ -40859,7 +40859,7 @@
         "en": {
           "name": "Elemental Skill: All Is Ash",
           "description": "Summons forth Balemoon Bloodfire, dealing Pyro DMG to multiple nearby opponents and performing a dash-cleave against one of them, dealing AoE Pyro DMG.\nOpponents hit by the aforementioned attack will have a Blood-Debt Directive applied to them.\n\nBlood-Debt Directive\n·Lasts 30s. Every 5s, it will deal 1 instance of Pyro DMG to the opponent. Max 2 instances. This DMG will be considered Elemental Skill DMG.\n·When Arlecchino uses a Charged Attack or her Elemental Burst, Balemoon Rising, she will absorb and clear nearby Blood-Debt Directives. Each Directive absorbed grants her a Bond of Life worth 65% of her Max HP.\n·The maximum value of the Bond of Life she can be granted through Blood-Debt Directives within 35s after using her Elemental Skill is 145% of her Max HP. Using the Elemental Skill again during this duration will restart the count on duration and the limit on the value of Bond of Life she may gain from Blood-Debt Directives.",
-          "effectLabel": "Blood Pact"
+          "effectLabel": "Blood-Debt Directive"
         },
         "gcsimEffect": {
           "keys": [
@@ -41267,8 +41267,8 @@
         },
         "defaultDuration": 0.833,
         "mode": {
-          "label": "黄昏の祈り",
-          "description": "黄昏の祈りの状態。入力がなければ 8.0 秒続く。キャラ交代で終わる",
+          "label": "静思瞑影",
+          "description": "静思瞑影の状態。入力がなければ 8.0 秒続く。キャラ交代で終わる",
           "startDelayFrames": 0,
           "durationFrames": 480,
           "swap": "ends",
@@ -41276,8 +41276,8 @@
           "holdByDefault": true,
           "source": "sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる",
           "en": {
-            "label": "Twilight Prayer",
-            "description": "Twilight Prayer state. Lasts 8.0s without input. Ends on character switch"
+            "label": "Twilight Meditation",
+            "description": "Twilight Meditation state. Lasts 8.0s without input. Ends on character switch"
           }
         },
         "description": "秘儀を行い、「静思瞑影」状態に入る。その間、セトスの通常攻撃は敵を貫く瞑弦の矢に変化する。経路上の敵に雷元素ダメージを与え、セトスの元素熟知を基に与えるダメージをアップする。\nこの状態のとき、セトスは狙い撃ちができなくなる。\n瞑弦の矢によるダメージは重撃ダメージと見なされる。\nこの状態はセトスが退場すると解除される。",
@@ -43269,7 +43269,7 @@
             "hint": "A1（燃焼・烈開花で +7）・盲点（+4）による増加は数えていません。gcsim では、満タンでないと実行エラーになります。通常攻撃を足すか、時間を空けてください",
             "en": {
               "label": "Nightsoul points",
-              "hint": "Gains from A1 (+7 on Burning/Burgeon) and blind spot (+4) aren't counted. gcsim errors unless it's full. Add Normal Attacks or leave more time"
+              "hint": "Gains from A1 (+7 on Burning/Burgeon) and Blind Spot (+4) aren't counted. gcsim errors unless it's full. Add Normal Attacks or leave more time"
             }
           },
           "blocked": {
@@ -43287,7 +43287,7 @@
           "source": "kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul",
           "en": {
             "label": "Nightsoul's Blessing",
-            "description": "Nightsoul's Blessing state (10s). Normal Attacks become orbital shots, and Elemental Skill (E) becomes the special shot when Nightsoul points are full (20) (no CD). Ends on character switch"
+            "description": "Nightsoul's Blessing state (10s). Normal Attacks become Loop Shots, and Elemental Skill (E) becomes Scalespiker Cannon when Nightsoul points are full (20) (no CD). Ends on character switch"
           }
         },
         "description": "巨獣を狩る時の要領で素早く移動したり、敵を攻撃したりする。\n近くに敵、または攻撃を受けられるオブジェクトが存在する場合、カギ縄を飛ばして目標とリンクし、夜魂値0で夜魂の加護状態に入る。特に対象がいない場合、前方上方にカギ縄を飛ばして跳躍する。クールタイム-60%。\n長押しでも発動可能。長押しで発動した場合、照準モードでカギ縄の発射方向を決められる。\n\n夜魂の加護·キィニチ\nキィニチの夜魂の加護状態の継続時間は10秒、1秒ごとに夜魂値を2生成する。\n夜魂の加護状態中、キィニチはカギ縄で周囲にいる最も近くの敵とリンクし、攻撃スタイルを変更する。\n·通常攻撃では、発動時の移動方向に基づいてリンクしている目標を中心とした円軌道射撃を行い、夜魂性質の草元素ダメージを与え、夜魂値を3生成する。これによるダメージは元素スキルダメージと見なされる。\n·夜魂値が上限に達すると、元素スキルボタンで「廻狩貫鱗砲」を発動できるようになる。発動すると、すべての夜魂値を消費し、夜魂性質の草元素ダメージを与える。長押しで廻狩貫鱗砲を発動した場合は、照準モードで攻撃する目標を決められる。廻狩貫鱗砲を発動後、キィニチは目標とのリンクを試みる。\n夜魂の加護状態中、敵とリンクした後、または廻狩貫鱗砲を発動後、敵の周りに死角エリアが発生する。キィニチが死角エリアに入ると夜魂値が4生成され、死角エリアは消滅する。\n接続距離オーバーなどの理由でリンクが切断された時、通常攻撃を行うと周囲にいる最も近くの敵と再びリンクでき、円軌道射撃を行える。",
@@ -43428,7 +43428,7 @@
             "hint": "A1（燃焼・烈開花で +7）・盲点（+4）による増加は数えていません。gcsim では、満タンでないと実行エラーになります。通常攻撃を足すか、時間を空けてください",
             "en": {
               "label": "Nightsoul points",
-              "hint": "Gains from A1 (+7 on Burning/Burgeon) and blind spot (+4) aren't counted. gcsim errors unless it's full. Add Normal Attacks or leave more time"
+              "hint": "Gains from A1 (+7 on Burning/Burgeon) and Blind Spot (+4) aren't counted. gcsim errors unless it's full. Add Normal Attacks or leave more time"
             }
           },
           "blocked": {
@@ -43446,7 +43446,7 @@
           "source": "kinich/skill.go: EnterTimedBlessing(0, 10*60+10)（skillStart 9 + hold の後）、timePassGenerateNSPoints（30f ごと +1）。attack.go: 加護の間の N は skillAttack（loopShotGenerateNSPoints +3）。Skill: 夜魂値が MaxPoints(20) のとき ScalespikerCannon。kinich.go: NextQueueItemIsValid（加護の間の CA・LP・HP はエラー）、OnCharacterSwap で cancelNightsoul",
           "en": {
             "label": "Nightsoul's Blessing",
-            "description": "Nightsoul's Blessing state (10s). Normal Attacks become orbital shots, and Elemental Skill (E) becomes the special shot when Nightsoul points are full (20) (no CD). Ends on character switch"
+            "description": "Nightsoul's Blessing state (10s). Normal Attacks become Loop Shots, and Elemental Skill (E) becomes Scalespiker Cannon when Nightsoul points are full (20) (no CD). Ends on character switch"
           }
         },
         "description": "巨獣を狩る時の要領で素早く移動したり、敵を攻撃したりする。\n近くに敵、または攻撃を受けられるオブジェクトが存在する場合、カギ縄を飛ばして目標とリンクし、夜魂値0で夜魂の加護状態に入る。特に対象がいない場合、前方上方にカギ縄を飛ばして跳躍する。クールタイム-60%。\n長押しでも発動可能。長押しで発動した場合、照準モードでカギ縄の発射方向を決められる。\n\n夜魂の加護·キィニチ\nキィニチの夜魂の加護状態の継続時間は10秒、1秒ごとに夜魂値を2生成する。\n夜魂の加護状態中、キィニチはカギ縄で周囲にいる最も近くの敵とリンクし、攻撃スタイルを変更する。\n·通常攻撃では、発動時の移動方向に基づいてリンクしている目標を中心とした円軌道射撃を行い、夜魂性質の草元素ダメージを与え、夜魂値を3生成する。これによるダメージは元素スキルダメージと見なされる。\n·夜魂値が上限に達すると、元素スキルボタンで「廻狩貫鱗砲」を発動できるようになる。発動すると、すべての夜魂値を消費し、夜魂性質の草元素ダメージを与える。長押しで廻狩貫鱗砲を発動した場合は、照準モードで攻撃する目標を決められる。廻狩貫鱗砲を発動後、キィニチは目標とのリンクを試みる。\n夜魂の加護状態中、敵とリンクした後、または廻狩貫鱗砲を発動後、敵の周りに死角エリアが発生する。キィニチが死角エリアに入ると夜魂値が4生成され、死角エリアは消滅する。\n接続距離オーバーなどの理由でリンクが切断された時、通常攻撃を行うと周囲にいる最も近くの敵と再びリンクでき、円軌道射撃を行える。",
@@ -43837,7 +43837,7 @@
         },
         "defaultDuration": 1.15,
         "description": "スピードと波を操る術を駆使し、いつでもどこでもサーフィンの姿勢に入る。\n発動後、ムアラニは夜魂値を60獲得し、夜魂の加護状態に入る。\n\n夜魂の加護·ムアラニ\n継続的に夜魂値を消費する。夜魂値が尽きた時や、再発動時、ムアラニの夜魂の加護状態は終了する。夜魂の加護状態は以下の特性を持つ。\n·ざぶざぶサメくんに乗ることで、ムアラニの移動速度と中断耐性がアップする。この状態にあるムアラニは水面と液体燃素の上を移動でき、液体燃素によるダメージを無効化できる。\n·通常攻撃を行う時、代わりにサメサメバイトを行い、ムアラニのHP上限を基に夜魂性質の水元素ダメージを与える。サメサメバイトは空中でも発動でき、与えるダメージは通常攻撃ダメージと見なされる。\n·この状態で敵に触れると、ムアラニは敵に獲物マークを付与し、ウェーブチャージを1層獲得する。ウェーブチャージは最大3層まで重ね掛け可能。同じ敵から獲得できるウェーブチャージは0.7秒毎に1層のみ。\n\nウェーブチャージと獲物マーク\nサメサメバイトを行う時、ムアラニはウェーブチャージの層数を基に、与えるダメージをアップする。ウェーブチャージが3層の場合、ムアラニのサメサメバイトはサメサメバイト·ビッグウェーブとなり、与えるダメージがさらにアップする。サメサメバイトやサメサメバイト·ビッグウェーブが敵に命中した後、ウェーブチャージをクリアする。\nまた、これらが敵に命中すると、その敵の獲物マークは解除される。さらに、付近の獲物マークをまだ持っている最大5体の敵にサメサメロケットを発射して獲物マークを解除する。サメサメロケットの与えるダメージはその時のサメサメバイトのダメージに相当する。サメサメバイトとサメサメロケットの目標の敵が1体を超えると、与えるダメージが下がり、最低で元の72%になる（敵が3体以上いる時）。",
-        "effectLabel": "標的の印",
+        "effectLabel": "獲物マーク",
         "cooldownStart": {
           "from": "stateEnd",
           "delay": 0
@@ -43845,7 +43845,7 @@
         "en": {
           "name": "Elemental Skill: Surfshark Wavebreaker",
           "description": "Combining her mastery of speed and the waves and water, Mualani can surf anytime, anywhere.\nAfter using this skill, Mualani will gain 60 Nightsoul points and enter the Nightsoul's Blessing state.\n\nNightsoul's Blessing: Mualani\nContinuously consume Nightsoul points. When they are depleted or when the skill is used again, Mualani's Nightsoul's Blessing will end. The state itself has the following traits:\n·Mualani mounts her Sharky Surfboard, increasing Mualani's Movement SPD and interruption resistance. Mualani can move on water and liquid Phlogiston while this state is active, and she will take no DMG from the latter.\n·Normal Attacks will be converted to Sharky's Bites, dealing Nightsoul-aligned Hydro DMG based on Mualani's Max HP. Sharky's Bites can be used in mid-air. DMG dealt this way is considered Normal Attack DMG.\n·When she makes contact with opponents in this state, Mualani applies \"Marked as Prey\" to them and gains 1 Wave Momentum stack. Max 3 stacks. 1 stack can be gained from the same opponent every 0.7s.\n\nWave Momentum and Marked as Prey\nWhen Mualani uses Sharky's Bite, her DMG dealt increases based on Wave Momentum stacks. When she has 3 stacks, Sharky's Bite will be converted to Sharky's Surging Bite, further increasing her DMG and removing all her stacks when hitting an opponent.\nWhen Sharky's Bite hits an opponent Marked as Prey, that mark will be removed, and she will fire Shark Missiles at up to 5 nearby opponents Marked as Prey, dealing DMG to them equal to this Sharky's Bite instance and clearing their Marks. If more than 1 opponent is the target of Sharky's Bite and Shark Missiles, the DMG dealt will decrease, decreasing at most to 72% of the original DMG when 3 opponents are targeted.",
-          "effectLabel": "Target Mark"
+          "effectLabel": "Marked as Prey"
         },
         "gcsimEffect": {
           "keys": [
@@ -45624,8 +45624,8 @@
         },
         "defaultDuration": 2.35,
         "mode": {
-          "label": "燔天の時",
-          "description": "燔天の時の状態。入力がなければ 7.0 秒続く。キャラ交代で終わる",
+          "label": "死生の炉",
+          "description": "死生の炉の状態。入力がなければ 7.0 秒続く。キャラ交代で終わる",
           "startDelayFrames": 105,
           "durationFrames": 420,
           "swap": "ends",
@@ -45633,8 +45633,8 @@
           "holdByDefault": true,
           "source": "mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる",
           "en": {
-            "label": "Hour of Burning Skies",
-            "description": "Hour of Burning Skies state. Lasts 7.0s without input. Ends on character switch"
+            "label": "Crucible of Death and Life",
+            "description": "Crucible of Death and Life state. Lasts 7.0s without input. Ends on character switch"
           }
         },
         "description": "人々の心の声を、高天の神座に届ける。\nマーヴィカの元素爆発は元素エネルギーではなく、「戦意」によって発動する。\n\n戦意\n戦意が50%以上ある時、マーヴィカはすべての戦意を消費して、元素爆発を発動できる。\nマーヴィカは以下の方法で戦意を獲得する。\n・戦闘状態にある時、付近にいるチーム内キャラクターが消費した夜魂値がマーヴィカの戦意に変換される。\n・付近にいるチーム内キャラクターの通常攻撃が敵に命中した時、マーヴィカは戦意を1.5獲得する。この効果は0.1秒毎に1回のみ発動可能。\n\n発動後、マーヴィカは夜魂値を10獲得し、夜魂の加護状態に入る。さらに、双駆輪に乗って空中に跳び上がり、地面にいる敵に強力な「墜陽斬」を繰り出して夜魂性質の炎元素範囲ダメージを与え、「死生の炉」状態に入る。\n\n死生の炉\n継続期間中、マーヴィカの各種行動は夜魂値を消費しなくなり、中断耐性がアップする。同時に、元素爆発発動時の戦意を基に、墜陽斬および「古名解放」時の通常攻撃と重撃ダメージをアップする。\n死生の炉状態はマーヴィカの退場時に解除される。",
@@ -46401,8 +46401,8 @@
         },
         "defaultDuration": 1.333,
         "mode": {
-          "label": "羽月の輪の受付",
-          "description": "羽月の輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "label": "翦月輪の受付",
+          "description": "翦月輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
           "startDelayFrames": 7,
           "durationFrames": 66,
           "swap": "ends",
@@ -46486,12 +46486,12 @@
         "dataSource": {
           "cooldown": "クールタイム",
           "effectDuration": "シールド継続時間",
-          "cooldownStart": "manual: lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。羽月の輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）"
+          "cooldownStart": "manual: lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。翦月輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）"
         },
         "defaultDuration": 11.5,
         "mode": {
-          "label": "羽月の輪の受付",
-          "description": "羽月の輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
+          "label": "翦月輪の受付",
+          "description": "翦月輪の受付（受付）。この間の元素スキル（E）は別の動作になり、CT を使わない",
           "startDelayFrames": 7,
           "durationFrames": 66,
           "swap": "ends",
@@ -47329,7 +47329,7 @@
         "en": {
           "name": "Elemental Skill: Thunderbolt Rush",
           "description": "Iansan charges forward a certain distance, dealing Nightsoul-aligned Electro DMG to all opponents in her path.\nAfter this Skill is used, Iansan will regain 54 Nightsoul points and enter the Nightsoul's Blessing state. Within 5s after this is done, using a Normal Attack will trigger 1 quick Swift Stormflight stomp from Iansan that will not consume Stamina.\n\nNightsoul's Blessing: Iansan\nContinuously consumes Nightsoul points. If she runs out, or uses this Skill again, her Nightsoul's Blessing state will end. It has the following properties:\n· Increases Iansan's Movement SPD.\n· Holding sprint will switch Iansan to Rushing Thunderbolt mode, greatly increasing her Movement SPD temporarily. In this mode, Iansan can make flying leaps using terrain, or consume additional Nightsoul points to move on water or liquid Phlogiston while being immune to DMG from the latter.",
-          "effectLabel": "Rapid Assault"
+          "effectLabel": "Quick Stormflight window"
         },
         "gcsimEffect": {
           "keys": [
@@ -47915,7 +47915,7 @@
         "en": {
           "description": "Leaps into the air before using the momentum of the drop to unleash a powerful flying kick, dealing Nightsoul-aligned AoE Electro DMG to opponents — just like those heroes of justice in woven scrolls for kids!\nAfter using this Skill, Varesa's Nightsoul points will be restored to maximum and she will enter the Fiery Passion state.\n\nIn the Fiery Passion state, Varesa's Elemental Burst will deal a greater amount of Nightsoul-aligned AoE Electro DMG.\n\nAdditionally, she will briefly activate Apex Drive after using a Plunging Attack while in her Fiery Passion state.\n\nApex Drive\nIncreases Varesa's interruption resistance. While affected by Apex Drive, Varesa can ignore her Elemental Burst CD and consume less Energy to use her special Elemental Burst, \"Guardian Vent: Volcano Kablam\": This causes her to use the especially powerful Plunging Attack, the \"Thunderous Tornado Eruption,\" which deals Nightsoul-aligned AoE Electro DMG upon landing before causing her to exit Apex Drive. This DMG is considered Plunging Attack DMG.\nVaresa will exit Apex Drive after using her Elemental Skill.",
           "name": "Special Elemental Burst (Apex Drive)",
-          "specialBurstHint": "Requires being within 2.3s after a Plunging Attack (C2+ or during the passion state) with no Skill used in between"
+          "specialBurstHint": "Requires being within 2.3s after a Plunging Attack (C2+ or during Fiery Passion) with no Skill used in between"
         },
         "gcsimEffect": {
           "keys": [],
@@ -48704,7 +48704,7 @@
         "defaultDuration": 10.517,
         "mode": {
           "label": "夜魂の加護",
-          "description": "夜魂の加護（トニックショット）。状態の間の通常攻撃は、トニックショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる",
+          "description": "夜魂の加護（アンプルショット）。状態の間の通常攻撃は、アンプルショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる",
           "startDelayFrames": 0,
           "durationFrames": 589,
           "swap": "blocks",
@@ -48762,13 +48762,13 @@
                 "jump": 0,
                 "swap": 0
               },
-              "source": "attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。トニックショットは 3f 後に出る）"
+              "source": "attack.go:skillAttackTapFrames（InitNormalCancelSlice(0, attackSkillInterval 54)。N → CA 42f。CanQueueAfter = 0。アンプルショットは 3f 後に出る）"
             }
           ],
           "source": "ifa/skill.go: enterNightsoul（EnterBlessing(80)・4f ごとではなく 6f ごとに 0.8 減る = 8 毎秒）、skillFrames[Swap] = 589 + 42（夜魂が尽きるのを待つ）。exitNightsoul で SetCD(skill, 7.5 * 60)。ifa.go ActionReady: 夜魂が残っている間は交代できない",
           "en": {
             "label": "Nightsoul's Blessing",
-            "description": "Nightsoul's Blessing (Tonic Shot). Normal Attacks during the state become Tonic Shots (about every 0.9s). Ends by pressing Elemental Skill (E) again. You can't switch until it ends. CD starts when the state ends"
+            "description": "Nightsoul's Blessing (Tonicshot). Normal Attacks during the state become Tonicshots (about every 0.9s). Ends by pressing Elemental Skill (E) again. You can't switch until it ends. CD starts when the state ends"
           }
         },
         "description": "お前の出番だ、きょうだい！イファがカクークを呼び出して一緒に戦う。\n発動後、イファは夜魂値を80獲得し、**夜魂の加護**状態に入る。夜魂の加護状態期間中、イファはカクークの協力によって浮遊状態になり、通常攻撃を行う時、一回押しと長押しによって異なる**「援護射撃」**を行い、チーム全員のHPを回復するアンプルショットを発射する。\n\nまた、夜魂の加護状態時、長押しして元素スキル天翔ける守護を発動すると、イファは代わりに夜魂性質の落下攻撃を行う。スキルボタンを離すと落下攻撃を中断でき、浮遊状態を維持する。落下攻撃中に着地すると、イファの夜魂の加護状態は終了する。",
@@ -50453,7 +50453,7 @@
         "gcsimExtras": [
           {
             "key": "lauma-pale-hymn-moonsong",
-            "label": "蒼白の賛歌・月の歌",
+            "label": "蒼の讃歌・詠月",
             "en": {
               "label": "Pale Hymn / Moon Song"
             }
@@ -50868,7 +50868,7 @@
         "gcsimExtras": [
           {
             "key": "thunderous-symphony",
-            "label": "雷鳴の交響",
+            "label": "雷霆のシンフォニー",
             "en": {
               "label": "Thunderous Symphony"
             }
@@ -50933,7 +50933,7 @@
         "description": "ランプに宿る古の力を呼び起こし、幽炎の露顕状態に入る。このモードには下記の特性がある。\n・フリンズの通常攻撃と重撃が、元素付与によって他の元素に変化しない雷元素ダメージへと変わり、落下攻撃ができなくなる。\n・フリンズの中断耐性をアップする。\n・元素スキル古律・孤灯の秘密は、特殊な元素スキル北国の嵐槍に切り替わる。\n\n北国の嵐槍\n前方に槍陣を生成し、雷元素範囲ダメージを与える。さらにその後の6秒間、フリンズの元素爆発旧儀・夜の賓客は特殊な元素爆発**雷霆のシンフォニー**に切り替わる。\n北国の嵐槍の基本クールタイムは6秒であり、他の効果の影響を受けない。",
         "en": {
           "description": "Flins summons forth the ancient power concealed within his lamp and switches to his Manifest Flame form. This form has the following characteristics:\n· Flins's Normal and Charged Attacks deal Electro DMG that cannot be overridden by other Elemental infusions, and he is unable to perform Plunging Attacks.\n· His interruption resistance is increased.\n· His Elemental Skill Ancient Rite: Arcane Light is replaced with the special Elemental Skill Northland Spearstorm.\n\nNorthland Spearstorm\nFlins summons a flurry of spears in front, dealing AoE Electro DMG and causing his Elemental Burst Ancient Ritual: Cometh the Night to be replaced with the special Elemental Burst **Thunderous Symphony** for the next 6s.\nThe base CD of Northland Spearstorm is 6s and will not be affected by other effects.",
-          "name": "Special Elemental Skill \"Northland Spearstorm\" (after Ancient Law: Lone Lamp's Secret)",
+          "name": "Special Elemental Skill \"Northland Spearstorm\" (after Ancient Rite: Arcane Light)",
           "effectLabel": "Northland Spearstorm"
         },
         "gcsimEffect": {
@@ -51764,7 +51764,7 @@
           "source": "nefer/skill.go: AddStatus(shadowDanceKey, 9*60)、phantasmCharges = 3（phantasmChargesPerSkill）、SetCDWithDelay(skill, 9*60, 22)。nefer.go: canTriggerPhantasm = 影の舞 + 幻の戯の残り + 草露 > 0、OnCharacterSwap で状態を消す。charge.go: tapPhantasmChargeAttack（ActionStam = 0）",
           "en": {
             "label": "Shadow Dance",
-            "description": "Shadow Dance state (9s). With at least 1 Verdant Dew, Charged Attacks become a special Charged Attack that doesn't use Stamina (up to 3 per E; Verdant Dew is not counted). Ends on character switch"
+            "description": "Shadow Dance state (9s). With at least 1 Verdant Dew, Charged Attacks become Phantasm Performance, a special Charged Attack that doesn't use Stamina (up to 3 per E; Verdant Dew is not counted). Ends on character switch"
           }
         },
         "charges": 2,
@@ -52637,7 +52637,7 @@
         "gcsimExtras": [
           {
             "key": "jahoda-meowball",
-            "label": "猫玉（フラスコ排出）",
+            "label": "もふもふニャンコボール（フラスコ排出）",
             "en": {
               "label": "Fluffy Meowball (flask ejection)"
             }
@@ -52997,7 +52997,7 @@
         "gcsimExtras": [
           {
             "key": "columbina-gravity",
-            "label": "重力（月の反応）",
+            "label": "引力のさざ波（月の反応）",
             "mode": "chain",
             "en": {
               "label": "Gravity Ripple (Lunar reaction)"
@@ -53412,8 +53412,8 @@
         },
         "defaultDuration": 0.867,
         "mode": {
-          "label": "月相転移",
-          "description": "月相転移の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は月相の輝きを 70 消費して霊駿の駆けになる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる",
+          "label": "隙を過ぐる月",
+          "description": "隙を過ぐる月の状態（15 秒）。通常攻撃・重撃は岩元素ダメージになり、元素スキル（E）は隙に浮かぶ光を 70 消費して翔ける霊駒になる（CT なし。4 回使うと終わる）。元素爆発で 1.7 秒延びる。キャラ交代で終わる",
           "startDelayFrames": 18,
           "durationFrames": 900,
           "swap": "ends",
@@ -53455,7 +53455,7 @@
             "endsOnLast": true
           },
           "gauge": {
-            "label": "月相の輝き",
+            "label": "隙に浮かぶ光",
             "max": 100,
             "cost": 70,
             "persists": true,
@@ -53468,14 +53468,14 @@
             },
             "hint": "月の結晶反応（+35）は数えていません。gcsim では、足りないと実行エラー（InsufficientStamina）になります。通常攻撃を足すか、時間を空けてください",
             "en": {
-              "label": "Lunar Radiance",
+              "label": "Phase Shift Radiance",
               "hint": "Lunar-Crystallize (+35) isn't counted. gcsim errors (InsufficientStamina) if there isn't enough. Add Normal Attacks or leave more time"
             }
           },
-          "source": "zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（霊駿の駆け。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）",
+          "source": "zibai/skill.go: Skill（AddStatus(skillKey, 15*60 + skillHitmark(18))、SetCDWithDelay(skill, 18*60, 18)、radianceTicker 6f ごと +1）、skillSkill（翔ける霊駒。radiance >= 70 で消費 70、skillsUsed >= 4〔C1: 5〕で終わる）。attack.go: skillAttack の radianceCB（+5・0.5 秒に 1 回）。burst.go: ExtendStatus(skillKey, 1.7*60)。zibai.go: ActionReady（radiance < 70 は不可）、onExitField（交代で skillKey を削除）。cons.go: C1 = 100 獲得・5 回、C4 = ResetNormalCounter をモードの間は行わない、C6 = c6RadianceEff 1.5・c6ConsumeRadiance（全消費）",
           "en": {
             "label": "Lunar Phase Shift",
-            "description": "Lunar Phase Shift state (15s). Normal and Charged Attacks deal Geo DMG, and Elemental Skill (E) consumes 70 Lunar Radiance for a special dash (no CD; ends after 4 uses). Extended by 1.7s by Elemental Burst. Ends on character switch"
+            "description": "Lunar Phase Shift state (15s). Normal and Charged Attacks deal Geo DMG, and Elemental Skill (E) consumes 70 Phase Shift Radiance for Spirit Steed's Stride (no CD; ends after 4 uses). Extended by 1.7s by Elemental Burst. Ends on character switch"
           }
         },
         "description": "古の権能を呼び起こし、**「隙を過ぐる月」**状態に入る。\nこの状態の時、兹白の通常攻撃と重撃は、元素付与によって他の元素に変化しない岩元素ダメージへと変わる。同時に、異なる方法で特殊な「隙に浮かぶ光」を蓄積できるようになる。この「隙に浮かぶ光」を消費することで、特殊な元素スキル翔ける霊駒を発動できる。\n\n月兆・満照\n「隙を過ぐる月」状態にある時、兹白の通常攻撃の4段目は岩元素ダメージを追加で与える。このダメージは、月結晶反応によるダメージと見なされる。",
@@ -54904,7 +54904,7 @@
           "source": "wiki（掟破りの奇兵・魂を穿つ痛み・愉悦）: 奇策 13 秒、愉悦 100 で特殊元素スキル、1 回の奇策で 3 回まで、元素爆発で +1.65 秒、退場で解除。フレームは推定",
           "en": {
             "label": "Masterstroke",
-            "description": "Masterstroke state (13s). Normal and Charged Attack hits build Joy; at 100, Elemental Skill (E) becomes a Special Elemental Skill (no CD; up to 3 per Masterstroke). Extended by 1.65s by Elemental Burst. Ends on character switch"
+            "description": "Masterstroke state (13s). Normal and Charged Attack hits build Joy; at 100, Elemental Skill (E) becomes Etched Into Bone and Soul, a Special Elemental Skill (no CD; up to 3 per Masterstroke). Extended by 1.65s by Elemental Burst. Ends on character switch"
           }
         },
         "description": "敵の隙をついて、**奇策**状態に入る。この状態では、次の効果が発動する。\n・ローエンは**愉悦**を蓄積することで、特殊な元素スキル**魂を穿つ痛み**を発動できるようになる。\n・周囲にいるチーム内の他キャラクターはローエンに**闘争心**を蓄積させることができ、これにより魂を穿つ痛みがダメージアップする。\n奇策状態では魂を穿つ痛みを最大3回まで発動でき、その後愉悦を蓄積できなくなる。",
@@ -56884,8 +56884,8 @@
         },
         "defaultDuration": 0.7,
         "layerBuff": {
-          "label": "粛清",
-          "description": "粛清（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる",
+          "label": "粛正",
+          "description": "粛正（20 秒。層ごとに独立。最大 6 層）。飛翔の剣・元素爆発で 1 層増える。霊剣のダメージが、層数 × 10% アップする。元素スキルを発動または退場でクリアされる",
           "durationFrames": 1200,
           "max": 6,
           "fullOnEnter": {
@@ -56893,17 +56893,17 @@
           },
           "fullBuff": {
             "minConstellation": 2,
-            "label": "粛清（最大層）攻撃力 +40%",
-            "description": "命ノ星座 2: 最大層の「粛清」を持っている間、ヴェスナの攻撃力 +40%",
+            "label": "粛正（最大層）攻撃力 +40%",
+            "description": "命ノ星座 2: 最大層の「粛正」を持っている間、ヴェスナの攻撃力 +40%",
             "en": {
-              "label": "Purge (max stacks) ATK +40%",
-              "description": "C2: While at max Purge stacks, ATK +40%"
+              "label": "Disciplinary Action (max stacks) ATK +40%",
+              "description": "C2: While at max Disciplinary Action stacks, ATK +40%"
             }
           },
           "source": "genshin-db（儀典「春の行列」・命ノ星座 2）: 飛翔の剣・爆発で 1 層・20 秒（層ごとに独立）・最大 6 層。操典「勝利への道筋」の発動または退場でクリア。命ノ星座 2: 風巡りの臨戦に入ると最大層、最大層で ATK+40%",
           "en": {
-            "label": "Purge",
-            "description": "Purge (20s, each stack independent, max 6 stacks). Windborne Sword and Elemental Burst add 1 stack. Spirit blade DMG +10% per stack. Cleared on Elemental Skill or switching out"
+            "label": "Disciplinary Action",
+            "description": "Disciplinary Action (20s, each stack independent, max 6 stacks). Windborne Sword and Elemental Burst add 1 stack. Spirit blade DMG +10% per stack. Cleared on Elemental Skill or switching out"
           }
         },
         "mode": {

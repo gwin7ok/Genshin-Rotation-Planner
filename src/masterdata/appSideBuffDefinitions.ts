@@ -33,7 +33,7 @@ export const APP_SIDE_CONSTELLATION_EFFECTS: Record<string, AppSideConstellation
   ],
   // 兹白
   '10000126-geo': [
-    { level: 2, note: '隙を過ぐる月（月相転移）の間、チーム全員の月結晶反応ダメージ +30%' },
+    { level: 2, note: '隙を過ぐる月（隙を過ぐる月）の間、チーム全員の月結晶反応ダメージ +30%' },
     { level: 6, duration: 3, note: '消費した輝きが 70 を超えた分 ×1.6% の月結晶反応ダメージ（3 秒。値は消費量で変わる。最大 100 消費の 48% で固定）' },
   ],
   // ローエン

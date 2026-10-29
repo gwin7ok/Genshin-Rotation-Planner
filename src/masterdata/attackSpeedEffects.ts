@@ -12,7 +12,7 @@
  * 対象は、通常攻撃のフレームだけ（重撃・スキルは、キャラごとに gcsim の扱いが違うため、対象外）。
  * まだ入れていない効果: スタック系（リングボウ・パインズ・キャッシュフロー。ヒット回数のモデルが要る）、
  * キャラの効果のうち、敵への命中・被ダメージ・回復・粒子などが引き金のもの、チーム全体に付くもの。
- * 持ち主の状態の中の通常攻撃（サイノの爆発中・放浪者の風の加護の間）は、マスターのモードの通常攻撃のフレーム（`mode.normalFrames`）を使う。
+ * 持ち主の状態の中の通常攻撃（サイノの爆発中・放浪者の児姿優風の間）は、マスターのモードの通常攻撃のフレーム（`mode.normalFrames`）を使う。
  */
 
 /** いつ有効か */
@@ -229,10 +229,10 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
   {
     source: { type: 'character', gcsimKey: 'wanderer', minConstellation: 1 },
     amount: () => 0.1,
-    // スキルの使用時に付く 1200f（風の加護の状態と同じ 20 秒）。状態が終わると外れる（checkForSkillEnd）が、アプリの状態の長さは、空居点 100 × 6f（10 秒）。
-    // 通常攻撃は、風の加護の間のフレーム（attackFramesE。マスターのモードの通常攻撃）に掛かる
+    // スキルの使用時に付く 1200f（児姿優風の状態と同じ 20 秒）。状態が終わると外れる（checkForSkillEnd）が、アプリの状態の長さは、空居点 100 × 6f（10 秒）。
+    // 通常攻撃は、児姿優風の間のフレーム（attackFramesE。マスターのモードの通常攻撃）に掛かる
     when: { kind: 'afterSkill', seconds: 20, hitlag: true },
-    evidence: 'internal/characters/wanderer/cons.go c1: wanderer-c1-atkspd AtkSpd 0.1・1200f。skill.go: スキルの使用時に付く。風の加護が終わる（checkForSkillEnd）と DeleteStatus。attack.go: WindfavoredAttack が AtkSpdAdjust(attackFramesE)',
+    evidence: 'internal/characters/wanderer/cons.go c1: wanderer-c1-atkspd AtkSpd 0.1・1200f。skill.go: スキルの使用時に付く。児姿優風が終わる（checkForSkillEnd）と DeleteStatus。attack.go: WindfavoredAttack が AtkSpdAdjust(attackFramesE)',
   },
 ];
 
@@ -401,7 +401,7 @@ function conditionHolds(w: AttackSpeedCondition, ctx: AttackSpeedContext): boole
 
 /**
  * 重撃のフレームにも、攻撃速度（`Stat(AtkSpd)`）を掛けるキャラ（gcsim の `charge.go` が AtkSpdAdjust を呼ぶもの。D228）。
- * 放浪者（通常・風の加護の重撃）・イファ。荒瀧一斗・ノエルの重撃も AtkSpdAdjust を呼ぶが、フレームが状態（スタック・構え）で大きく変わり、
+ * 放浪者（通常・児姿優風の重撃）・イファ。荒瀧一斗・ノエルの重撃も AtkSpdAdjust を呼ぶが、フレームが状態（スタック・構え）で大きく変わり、
  * アプリの事前計算の対象外なので、入れない。多くのキャラの重撃は、攻撃速度の影響を受けない
  */
 export const CHARGED_ATTACK_SPEED_KEYS: ReadonlySet<string> = new Set(['wanderer', 'ifa']);

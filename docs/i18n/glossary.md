@@ -65,38 +65,43 @@
 
 ## アプリが手で書いた名前（3-3。`src/masterdata/handwrittenEnglish.ts`）
 
-原神 Wiki の日本語版・英語版の同じページ（キャラのページの天賦の説明）を突き合わせて、公式の英語を確かめた（2026-10-29）。名前を直したら `handwrittenEnglish.ts` を直して、`npm run link:actions`（キャラ）・`npm run build:equipment`（武器・聖遺物）で付け直す。
+状態・効果の名前は、ゲーム内の公式の名前に合わせる（2026-10-29 ユーザー指示）。日本語は genshin-db の日本語（ゲーム内の文）、英語は原神 Wiki の英語版・genshin-db の英語で確認した。
+名前を変えたら、定義（`characterMasterGenerator.ts`・`effectDurationOverrides.ts`・`actionEffectExtras.ts`・`gcsimKeyCatalogOverrides.ts` など）と `handwrittenEnglish.ts` のキーを両方直し、`npm run build:catalog`・`npm run build:master`（作り直さないと、付いている英語は上書きされない）・`npm run check:snapshots`（名前だけの差なら `--update`）を行う。
 
-| アプリの日本語 | 公式の英語 | キャラ | 備考（日本語版 Wiki の公式の日本語） |
+| 日本語（公式） | 英語（公式） | キャラ | 2026-10-29 までのアプリの表記 |
 |---|---|---|---|
-| 近接の構え | Melee Stance | タルタリヤ | 公式は「近接モード」 |
-| 風の加護 | Windfavored | 放浪者 | 公式は「優風」状態 |
-| 剣域熾焔 | Ranging Flame | ディシア | |
-| パンチ連打モード | Blazing Lioness | ディシア | 公式は「熾炎獅子」状態 |
-| 加圧 / 潜水（加圧） | Pers Timer | フレミネ | |
-| 影狩り | Subnautical Hunter | フレミネ | |
-| 瑞獣の舞 | Wushou Stance | 嘉明 | |
-| 黄昏の祈り | Twilight Meditation | セトス | |
-| 羽月の輪 | Feathermoon Ring | 藍硯 | |
-| 雷霆のシンフォニー / 雷鳴の交響 | Thunderous Symphony | フリンズ | 元素スキル「古律・孤灯の秘密」= Ancient Rite: Arcane Light |
-| 月相転移 / 月相の輝き / 霊駿の駆け | Lunar Phase Shift / Phase Shift Radiance / Spirit Steed's Stride | 兹白 | |
-| 血の契約 | Blood-Debt Directive | アルレッキーノ | |
-| 標的の印 | Marked as Prey | ムアラニ | |
-| 燔天の時 | Crucible of Death and Life | マーヴィカ | 先の訳（Hour of Burning Skies）は元素爆発の名前で、誤り |
-| 粛清 | Disciplinary Action | ヴェスナ | |
-| 月の祈り / 静謐の光環 | Lunar Prayer / Tranquility Aura | ニィロウ | |
-| 蒼白の賛歌・月の歌 | Pale Hymn / Moon Song | ラウマ | |
-| 猫玉 | Fluffy Meowball | ヤフォダ | |
-| 重力（月の反応） | Gravity Ripple | コロンビーナ | |
-| 周天の回転 | Atmospheric Revolution | 重雲 | 命ノ星座 2 の名前 |
-| 円軌道射撃 / 廻狩貫鱗砲 | Loop Shot / Scalespiker Cannon | キィニチ | |
-| トニックショット | Tonicshot | イファ | 1 語 |
-| 幻の戯 | Phantasm Performance | ネフェル | |
-| 魂を穿つ痛み | Etched Into Bone and Soul | ローエン | |
-| 猛烈パッション | Fiery Passion | ヴァレサ | |
+| 近接モード | Melee Stance | タルタリヤ | 近接の構え |
+| 児姿優風 | Windfavored | 放浪者 | 風の加護 |
+| 剣域熾焔 | Ranging Flame | ディシア | （同じ） |
+| 熾炎獅子 | Blazing Lioness | ディシア | パンチ連打モード |
+| ペールスタイマー | Pers Timer | フレミネ | 加圧 / 潜水（加圧） |
+| 潜猟モード | Subnautical Hunter | フレミネ | 影狩り |
+| 獣舞態勢 | Wushou Stance | 嘉明 | 瑞獣の舞 |
+| 静思瞑影 | Twilight Meditation | セトス | 黄昏の祈り |
+| 翦月輪 | Feathermoon Ring | 藍硯 | 羽月の輪 |
+| 雷霆のシンフォニー | Thunderous Symphony | フリンズ | 雷鳴の交響（副次効果） |
+| 隙を過ぐる月 / 隙に浮かぶ光 / 翔ける霊駒 | Lunar Phase Shift / Phase Shift Radiance / Spirit Steed's Stride | 兹白 | 月相転移 / 月相の輝き / 霊駿の駆け |
+| 血償の勅令 | Blood-Debt Directive | アルレッキーノ | 血の契約 |
+| 獲物マーク | Marked as Prey | ムアラニ | 標的の印 |
+| 死生の炉 | Crucible of Death and Life | マーヴィカ | 燔天の時 |
+| 粛正 | Disciplinary Action | ヴェスナ | 粛清 |
+| 祈月 / 天を滌う水環 | Lunar Prayer / Tranquility Aura | ニィロウ | 月の祈り / 静謐の光環 |
+| 蒼の讃歌 / 詠月 | Pale Hymn / Moon Song | ラウマ | 蒼白の賛歌 / 月の歌 |
+| もふもふニャンコボール | Fluffy Meowball | ヤフォダ | 猫玉 |
+| 引力のさざ波 | Gravity Ripple | コロンビーナ | 重力 |
+| アンプルショット | Tonicshot | イファ | トニックショット |
+| 鶴雲幻化 | Cloud Transmogrification | 閑雲 | 雲の変化 |
+| 憤怒の鬼王 | Raging Oni King | 荒瀧一斗 | 怒目鬼王 |
+| 焔硝の庭火舞い | Niwabi Fire-Dance | 宵宮 | 庭火焔硝 |
+| 周天の回転 | Atmospheric Revolution | 重雲 | （同じ。命ノ星座 2 の名前） |
+| 円軌道射撃 / 廻狩貫鱗砲 | Loop Shot / Scalespiker Cannon | キィニチ | （同じ） |
+| 幻の戯 / 影の舞 | Phantasm Performance / Shadow Dance | ネフェル | （同じ） |
+| 奇策 / 愉悦 / 魂を穿つ痛み | Masterstroke / Joy / Etched Into Bone and Soul | ローエン | （同じ） |
+| 猛烈パッション | Fiery Passion | ヴァレサ | （同じ） |
+| 風巡りの臨戦 / 剣気 / 飛翔の剣 | Armed for Action / Sword Essence / Windborne Sword | ヴェスナ | （同じ） |
 | 印（アロマティック・アナライズ） / 印（お水ひえひえ装置） | Mark (Aromatic Explication) / Mark (Precision Hydronic Cooler) | エミリエ / アイノ | 「印」は gcsim の効果。括弧の中が公式の元素爆発の名前 |
 | 魔女の諭示の追加天賦名 | Seven Sacred Treasures（七七）・Edict of Cleansing（八重神子）・There Shall Be an Unveiling for Injustice（リオセスリ）・Vast Be the Dream（瑞希）・Choice Treasures（ディオナ）・Polaris（北斗）・A Star With Which to Start the Journey（セノ） | | `revelationCharacters.ts` の `en.talentName` |
 | 昔日4: 彼方の効果 | "Waves of Days Past" effect | 昔日の歌 | |
 | 〜の受付 | 〜 window | | アプリの呼び名 |
-| 速攻状態 | Quick Stormflight window | イアンサ | 要確認（公式の名前が無い。スキルの後 5 秒間、通常攻撃でスタミナを使わずに Swift Stormflight を出せる期間） |
+| 速攻状態 | Quick Stormflight window | イアンサ | アプリの呼び名（ゲームに名前が無い。ユーザー確認 2026-10-29）。スキルの後 5 秒間、通常攻撃でスタミナを使わずにライトニング・ステップ（Swift Stormflight）を出せる期間 |
 | 手で書いた武器・聖遺物の発動バフ名「X: 接尾」 | 英語の装備名 + 訳した接尾 | | 例: 千岩4: 全員攻撃力+20% → Tenacity of the Millelith 4P: Party ATK +20%。接尾はアプリの要約 |

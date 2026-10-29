@@ -20,20 +20,20 @@ export const EFFECT_DURATION_OVERRIDES: Record<string, EffectDurationOverride> =
   // フィッシュル: オズ 10 秒（skill.go の `oz-active`。爆発のオズも同じ長さ）
   '10000031-electro_e': { frames: 600, label: 'オズ', source: 'fischl/skill.go: oz-active' },
   '10000031-electro_q': { frames: 600, label: 'オズ', source: 'fischl/burst.go: オズ（skill.go の oz-active と同じ）' },
-  // フレミネ: 加圧 10 秒
-  '10000085-cryo_e': { frames: 600, label: '加圧', source: 'freminet/skill.go: freminet-pers-time' },
-  // ムアラニ: 標的の印 10 秒
-  '10000102-hydro_e': { frames: 600, label: '標的の印', source: 'mualani/skill.go: marked-as-prey' },
+  // フレミネ: ペールスタイマー 10 秒
+  '10000085-cryo_e': { frames: 600, label: 'ペールスタイマー', source: 'freminet/skill.go: freminet-pers-time' },
+  // ムアラニ: 獲物マーク 10 秒
+  '10000102-hydro_e': { frames: 600, label: '獲物マーク', source: 'mualani/skill.go: marked-as-prey' },
   // 煙緋: 丹火の印 10 秒（付与は元素スキル。キーは burst.go で登録）
   '10000048-pyro_e': { frames: 600, label: '丹火の印', source: 'yanfei/burst.go: yanfei-seal（印は元素スキルで付与）' },
-  // 放浪者: 風の加護 20 秒
-  '10000075-anemo_e': { frames: 1200, label: '風の加護', source: 'wanderer/skill.go: windfavored-state' },
+  // 放浪者: 児姿優風 20 秒
+  '10000075-anemo_e': { frames: 1200, label: '児姿優風', source: 'wanderer/skill.go: windfavored-state' },
   // 刻晴: 雷楔 5 秒 + 20 フレーム
   '10000042-electro_e': { frames: 320, label: '雷楔', source: 'keqing/skill.go: keqingstiletto' },
   // イアンサ: 速攻状態 5 秒
   '10000110-electro_e': { frames: 300, label: '速攻状態', source: 'iansan/skill.go: fast-skill' },
-  // アルレッキーノ: 血の契約 30 秒
-  '10000096-pyro_e': { frames: 1800, label: '血の契約', source: 'arlecchino/skill.go: directive' },
+  // アルレッキーノ: 血償の勅令 30 秒
+  '10000096-pyro_e': { frames: 1800, label: '血償の勅令', source: 'arlecchino/skill.go: directive' },
   // 凝光: 璇璣屏 30 秒（光幕。命ノ星座 2 の CT リセットは、この間の使い直しで起きる。recastReset）
   '10000027-geo_e': { frames: 1800, label: '璇璣屏', source: 'ningguang/skill.go: newScreen(1800)（construct:NingSkill）' },
   // アリョーシャ: 狩猟の印 15 秒（辞書 alyosha-hunters-mark 902f。長押し E も同じ。印の発動で付く狩人の照準は、副次効果 alyosha-hunters-precision。D213 案 2）

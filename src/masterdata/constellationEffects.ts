@@ -39,6 +39,9 @@ const VERIFIED_RULES: Record<string, VerifiedRule | VerifiedRule[]> = {
   // 旅人(草) 2凸: 草蓮灯の存在時間 +3秒（元素爆発）
   '10000005-dendro_c2': { target: 'q', keyword: '草蓮灯' },
   '10000007-dendro_c2': { target: 'q', keyword: '草蓮灯' },
+  // 旅人(氷) 4凸: 凛冽の寒星の存在時間 +25%（12 秒 → 15 秒）。gcsim traveler/common/cryo の cons.go c4SkillBonusDur（3*60）を skill.go の状態に足す
+  '10000005-cryo_c4': { target: 'e', keyword: '凛冽の寒星' },
+  '10000007-cryo_c4': { target: 'e', keyword: '凛冽の寒星' },
   '10000023-pyro_c4': { target: 'q', keyword: '旋火輪' }, // 香菱
   '10000065-electro_c2': { target: 'e', keyword: '越祓草輪' }, // 久岐忍
   '10000025-hydro_c2': { target: 'q', keyword: '裁雨留虹' }, // 行秋
@@ -103,8 +106,8 @@ const CHARGE_CHANGES: Record<string, { actionSuffix: string | string[]; charges:
   '10000060-hydro_c1': { actionSuffix: 'e', charges: 2, keyword: '絡み合う命の糸の使用可能回数+1', note: 'yelan/yelan.go: Cons >= 1 で SetNumCharges(ActionSkill, 2)' },
 };
 
-// 「継続時間+6秒」と「継続時間が6秒延長される」（アリョーシャ 2 凸）の両方
-const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?(?:[+＋]\s*|(?=[\d.]+\s*秒延長))([\d.]+)\s*(%|秒)/g;
+// 「継続時間+6秒」と「継続時間が6秒延長される」（アリョーシャ 2 凸）・「存在時間が25%延長される」（旅人(氷) 4 凸）・「継続時間が4秒間延長される」（プルーネ 6 凸）
+const DURATION_BONUS_PATTERN_ALL = /([^、。「」\s]+?)の?(?:継続|存在)時間(?:が|を)?(?:[+＋]\s*|(?=[\d.]+\s*(?:%|秒間?)延長))([\d.]+)\s*(%|秒)/g;
 
 export interface ConstellationReport {
   /** 凸の段階データを作ったキャラ数 */

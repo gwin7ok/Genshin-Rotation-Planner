@@ -5,7 +5,7 @@
  * - 無ければ、ブラウザの優先言語の一覧を先頭から見て、最初の ja / en。どちらも無ければ英語。
  * - 自動の判定の結果は保存しない（「自動」を選ぶと、保存を消す）。
  * - 切り替えたら、ページを再読み込みする（言語は起動時に 1 回だけ決まる）。
- * - 公開（D253）までは、本番のビルドでは常に日本語にする。
+ * - 公開サイトでも切り替えを使える（D253 のとおり、全部訳し終えたフェーズ 5 で有効にした）。
  */
 import { SETTING_KEYS, readString, removeKey, writeString } from '../utils/persistence';
 
@@ -13,12 +13,6 @@ export const LANGUAGES = ['ja', 'en'] as const;
 export type Language = (typeof LANGUAGES)[number];
 /** 言語の選択肢（'auto' = 保存しない・ブラウザに従う） */
 export type LanguagePreference = Language | 'auto';
-
-/** 英語モードを公開サイトでも有効にするか（D253: 全部訳し終わるまで false。フェーズ 5 で true にする） */
-const ENABLED_IN_PRODUCTION = false;
-
-/** 言語の切り替えを使えるか（無効のときは常に日本語で、切り替えも表示しない） */
-export const isLanguageSwitchEnabled = (): boolean => ENABLED_IN_PRODUCTION || import.meta.env.DEV;
 
 function isLanguage(value: unknown): value is Language {
   return (LANGUAGES as readonly unknown[]).includes(value);
@@ -51,7 +45,6 @@ export const autoLanguage = (): Language => detectBrowserLanguage(browserLanguag
 export function resolveLanguage(): Language {
   // ブラウザの外（検査スクリプトなど。Node にも navigator があり en-US になる）は日本語
   if (typeof window === 'undefined') return 'ja';
-  if (!isLanguageSwitchEnabled()) return 'ja';
   const pref = getLanguagePreference();
   return pref === 'auto' ? autoLanguage() : pref;
 }

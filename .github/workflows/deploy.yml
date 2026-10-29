@@ -67,6 +67,9 @@ jobs:
       - name: 更新の通知の判定の確認
         run: npm run check:version-notice
 
+      - name: 言語ファイルの確認（未訳が残っていれば失敗）
+        run: npm run check:i18n -- --strict
+
       - name: 画面をビルド（base = /<リポジトリ名>/）
         run: npm run build
         env:

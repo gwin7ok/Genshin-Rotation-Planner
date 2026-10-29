@@ -72,3 +72,6 @@ jobs:
 
       - name: マスターの効果の網羅の確認
         run: npm run verify:master-effects
+
+      - name: 言語ファイルの確認（未訳が残っていれば失敗）
+        run: npm run check:i18n -- --strict

@@ -14,8 +14,8 @@
     "step1": "Press \"<b>Open Database</b>\" below.",
     "step2": "Press \"<b>Generate latest data online (characters, weapons, artifacts)</b>\" at the top right (characters, weapons and artifacts are overwritten with the latest master data, in that order).",
     "step3": "When the completion message appears, close the Database.",
-    "noteLocked": "・Locked characters, weapons and artifacts, and entries you created, are not deleted.",
-    "noteRotations": "・Your rotations (saved and current) are kept. To be safe, first export a backup of all data from \"Rotations → JSON backup & share\".",
+    "noteLocked": "• Locked characters, weapons and artifacts, and entries you created, are not deleted.",
+    "noteRotations": "• Your rotations (saved and current) are kept. To be safe, first export a backup of all data from \"Rotations → JSON backup & share\".",
     "closeTitle": "Do not show again for this master data version",
     "openDatabase": "Open Database"
   }

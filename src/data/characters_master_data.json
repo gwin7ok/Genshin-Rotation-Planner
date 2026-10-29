@@ -29005,7 +29005,7 @@
             "key": "lunarprayer",
             "label": "月の祈り",
             "en": {
-              "label": "Moon's Prayer"
+              "label": "Lunar Prayer"
             }
           }
         ]
@@ -29233,7 +29233,7 @@
             "key": "tranquilityaura",
             "label": "静謐の光環",
             "en": {
-              "label": "Serene Halo"
+              "label": "Tranquility Aura"
             }
           }
         ]
@@ -42217,7 +42217,7 @@
             "label": "印（アロマティック・アナライズ）",
             "mode": "chain",
             "en": {
-              "label": "Mark (Aromatic Analysis)"
+              "label": "Mark (Aromatic Explication)"
             }
           }
         ]
@@ -50870,7 +50870,7 @@
             "key": "thunderous-symphony",
             "label": "雷鳴の交響",
             "en": {
-              "label": "Thunder Symphony"
+              "label": "Thunderous Symphony"
             }
           }
         ]
@@ -51400,7 +51400,7 @@
             "label": "印（お水ひえひえ装置）",
             "mode": "chain",
             "en": {
-              "label": "Mark (Chilly Water Device)"
+              "label": "Mark (Precision Hydronic Cooler)"
             }
           }
         ]
@@ -52639,7 +52639,7 @@
             "key": "jahoda-meowball",
             "label": "猫玉（フラスコ排出）",
             "en": {
-              "label": "Cat Ball (flask ejection)"
+              "label": "Fluffy Meowball (flask ejection)"
             }
           }
         ]
@@ -53000,7 +53000,7 @@
             "label": "重力（月の反応）",
             "mode": "chain",
             "en": {
-              "label": "Gravity (Lunar reaction)"
+              "label": "Gravity Ripple (Lunar reaction)"
             }
           }
         ]

@@ -62,7 +62,7 @@ export interface RevelationInfo {
   gcsim: { status: RevelationGcsimStatus; note: string };
   /** アプリでの扱い（時間・CT・効果に反映するもの / しないもの） */
   app: string;
-  /** 英語の表示用の文（D255。追加天賦の名前は、公式の英語が見つからないので要確認） */
+  /** 英語の表示用の文（D255。追加天賦の名前・輝映（Radiance）は、原神 Wiki の英語版で確認） */
   en?: { talentName: string; summary: string[]; gcsimNote: string; app: string };
 }
 
@@ -78,14 +78,14 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。マージ済み（PR #3046）' },
     app: 'スキルの CT 15 秒を、時間の計算に反映。固有天賦2 の短縮は、輝映の状態に依存するため、反映しない。',
     en: {
-      talentName: "Seven Treasures of Truth",
+      talentName: "Seven Sacred Treasures",
       summary: [
         "Adeptus Art: Herald of Frost (Skill) CD is reduced to 15s.",
-        "Moonsign-style boost: during Herald of Frost, reaction DMG +50% (Superconduct / Stellar Conduct, Cryo Swirl / Stellar Swirl). Inside the field, it becomes the enhanced variant for 8s after the reaction.",
-        "A2 talisman becomes 100% chance with a 15s CD while boosted. C1, C2, C4 and C6 are also enhanced.",
+        "Radiance: during Herald of Frost, reaction DMG +50% (Superconduct / Stellar-Conduct, Cryo Swirl / Stellar Swirl). Inside the field, it becomes Radiance: Stellar-Conduct, and for 8s after Stellar Swirl, Radiance: Stellar Swirl.",
+        "A2 talisman becomes 100% chance with a 15s CD while in Radiance. C1, C2, C4 and C6 are also enhanced.",
       ],
       gcsimNote: "revelation parameter (default: achieved). Merged (PR #3046)",
-      app: "The 15s Skill CD is applied to timing. The A2 reduction depends on the boosted state and is not applied.",
+      app: "The 15s Skill CD is applied to timing. The A2 reduction depends on the Radiance state and is not applied.",
     },
   },
   yaemiko: {
@@ -98,11 +98,11 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。マージ済み（PR #2775）' },
     app: '殺生桜の寿命 +10 秒と、爆発で桜が壊れない動きを、時間の計算に反映済み。',
     en: {
-      talentName: "Grand Purification Oracle",
+      talentName: "Edict of Cleansing",
       summary: [
         "Sesshou Sakura duration +10s. Bursts no longer destroy the Sakura; it possesses the Sakura and strikes as lightning.",
-        "After Superconduct / Stellar Conduct, the next strike is enhanced by 80% of ATK (once every 2.5s).",
-        "Boosted Stellar Conduct: extra Electro DMG after the enhanced strike. C1, C2, C4 and C6 are also enhanced.",
+        "After Superconduct / Stellar-Conduct, the next strike is enhanced by 80% of ATK (once every 2.5s).",
+        "Radiance: Stellar-Conduct: extra Electro DMG after the enhanced strike. C1, C2, C4 and C6 are also enhanced.",
       ],
       gcsimNote: "revelation parameter (default: achieved). Merged (PR #2775)",
       app: "Sakura lifetime +10s and Sakura surviving the Burst are applied to timing.",
@@ -118,10 +118,10 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'open-pr', note: 'gcsim に未マージの PR #3212（Add Wrio Revelation。revelation パラメータ。既定は達成済み）' },
     app: '未反映（gcsim の実装を待つ。マージされたら、対応キャラに追加して反映）。',
     en: {
-      talentName: "Injustice Will Be Revealed",
+      talentName: "There Shall Be an Unveiling for Injustice",
       summary: [
-        "While boosted with Stellar Conduct and below 60% HP, Charged Attacks become an enhanced Vaulting Fist (no Stamina, heals 30% HP, once every 2s).",
-        "The 3rd and 5th hits of Icicle Punishment and the enhanced Vaulting Fist deal Stellar Conduct DMG; Stellar Conduct DMG +30%.",
+        "In Radiance: Stellar-Conduct and below 60% HP, Charged Attacks become an enhanced Vaulting Fist (no Stamina, heals 30% HP, once every 2s).",
+        "The 3rd and 5th hits of Icicle Punishment and the enhanced Vaulting Fist deal Stellar-Conduct DMG; Stellar-Conduct DMG +30%.",
         "C1: when the enhanced Vaulting Fist hits, Icicle Punishment is extended by 4s (once). C2, C4 and C6 are also enhanced.",
       ],
       gcsimNote: "Unmerged gcsim PR #3212 (Add Wrio Revelation; revelation parameter, default: achieved)",
@@ -138,10 +138,10 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'open-pr', note: 'gcsim に未マージの PR #3208（Add Mizuki Revelation。revelation パラメータ。既定は達成済み）。凸6 の星拡散の会心は、すでに常時有効' },
     app: '未反映（gcsim の実装を待つ）。',
     en: {
-      talentName: "Expansive Dream",
+      talentName: "Vast Be the Dream",
       summary: [
         "Triggering Swirl / Stellar Swirl in the Dreamdrifter state enhances the next periodic DMG by 1000% of EM (once every 2.5s).",
-        "Boosted Stellar Swirl: extra DMG, and party EM increases by 10% of hers (for 8s after Stellar Swirl).",
+        "Radiance: Stellar Swirl: extra DMG, and party EM increases by 10% of hers (for 8s after Stellar Swirl).",
         "C1, C2 (Pyro/Hydro/Cryo/Electro/Anemo RES -20%), C4 (extra healing) and C6 are also enhanced.",
       ],
       gcsimNote: "Unmerged gcsim PR #3208 (Add Mizuki Revelation; revelation parameter, default: achieved). C6 Stellar Swirl CRIT is already always active",
@@ -160,9 +160,9 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     en: {
       talentName: "Choice Treasures",
       summary: [
-        "For 20s after using her Skill, when the party triggers Stellar Conduct, Superconduct, Cryo Swirl or Stellar Swirl, she fires 3 coordinated Icy Paws (once every 3.5s; no particles or shield).",
-        "Inside the field and for 8s after Stellar Swirl, these become the boosted variants.",
-        "C6: Max HP +25%. While boosted, characters inside Signature Mix gain reaction DMG +40%.",
+        "For 20s after using her Skill, when the party triggers Stellar-Conduct, Superconduct, Cryo Swirl or Stellar Swirl, she fires 3 coordinated Icy Paws (once every 3.5s; no particles or shield).",
+        "Inside the field and for 8s after Stellar Swirl, these become Radiance: Stellar-Conduct / Radiance: Stellar Swirl.",
+        "C6: Max HP +25%. In Radiance, characters inside Signature Mix gain reaction DMG +40%.",
       ],
       gcsimNote: "Not implemented in gcsim (no PR)",
       app: "Shown as a manually placed buff: \"coordinated Icy Paws window, 20s\". DMG is not calculated.",
@@ -178,11 +178,11 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'none', note: 'gcsim に実装なし（PR なし）' },
     app: '未反映（CT 短縮は、長押しの溜め方で変わるため、仕様が確認できるまで保留）。',
     en: {
-      talentName: "Guiding Star",
+      talentName: "Polaris",
       summary: [
         "When Tidecaller is held, it charges automatically every 0.8s even without being hit.",
         "Each charge stack on release reduces the Skill CD by 4s and restores 8 Energy (once every 15s).",
-        "C6: during Stormbreaker, while boosted, enemy Cryo RES -15% and active character EM +200.",
+        "C6: during Stormbreaker, in Radiance, enemy Cryo RES -15% and active character EM +200.",
       ],
       gcsimNote: "Not implemented in gcsim (no PR)",
       app: "Not applied (the CD reduction depends on how the hold is charged; on hold until confirmed).",
@@ -197,12 +197,12 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
     gcsim: { status: 'none', note: 'gcsim に実装なし（PR なし）。コードにあるのは、凸4 の対象反応に星電導が入っているだけ' },
     app: '未反映（情報が揃うまで保留）。',
     en: {
-      talentName: "Companion Star",
+      talentName: "A Star With Which to Start the Journey",
       summary: [
         "Besides the extra talent, Secret Rite: Chasmic Soulfarer (Skill), both passive talents, and C1, C2, C4 and C6 are enhanced.",
         "Details are incomplete even on the wiki.",
       ],
-      gcsimNote: "Not implemented in gcsim (no PR). The code only includes Stellar Conduct in the C4 reaction list",
+      gcsimNote: "Not implemented in gcsim (no PR). The code only includes Stellar-Conduct in the C4 reaction list",
       app: "Not applied (on hold until details are available).",
     },
   },
@@ -225,7 +225,7 @@ export const APP_SIDE_REVELATION_BUFFS: Record<string, { idSuffix: string; name:
       description: 'スキルを発動してから 20 秒間、チームが星電導・超電導・氷拡散・星拡散を起こすと、連携でフリーズキャッツクローを 3 つ発射する（3.5 秒に 1 回）。スキルの発動に合わせて置く。ダメージは計算しない',
       en: {
         name: 'Revelation: coordinated Icy Paws window',
-        description: 'For 20s after using her Skill, when the party triggers Stellar Conduct, Superconduct, Cryo Swirl or Stellar Swirl, she fires 3 coordinated Icy Paws (once every 3.5s). Place it with the Skill. DMG is not calculated',
+        description: 'For 20s after using her Skill, when the party triggers Stellar-Conduct, Superconduct, Cryo Swirl or Stellar Swirl, she fires 3 coordinated Icy Paws (once every 3.5s). Place it with the Skill. DMG is not calculated',
       },
     },
   ],

@@ -38,9 +38,10 @@
 | 開花 / 超開花 / 烈開花 | Bloom / Hyperbloom / Burgeon | |
 | 原激化 / 超激化 / 草激化 | Quicken / Aggravate / Spread | |
 | 月感電 / 月開花 / 月結晶 | Lunar-Charged / Lunar-Bloom / Lunar-Crystallize | |
-| 星電導 / 星拡散 | Stellar Conduct / Stellar Swirl | 要確認（genshin-db で未照合） |
+| 星電導 / 星拡散 / 星閃 | Stellar-Conduct / Stellar Swirl / Stellar Glimmer | 原神 Wiki（英語版）で確認。輝映・星電導 = Radiance: Stellar-Conduct |
+| 輝映 | Radiance | 原神 Wiki で確認（魔女の諭示） |
 | 草露 / 月露 | Verdant Dew / Moonridge Dew | 要確認（genshin-db で未照合） |
-| 魔女の諭示 / 諭示達成 | Witch's Revelation / Revelation | 要確認 |
+| 魔女の諭示 / 諭示達成 | Witch's Revelation / Revelation | 名前は原神 Wiki で確認。「諭示達成」はアプリの呼び名 |
 
 ## アプリの用語
 
@@ -64,32 +65,38 @@
 
 ## アプリが手で書いた名前（3-3。`src/masterdata/handwrittenEnglish.ts`）
 
-genshin-db の英語の説明文で、公式の英語が見つからなかったもの。Claude が訳した（要確認）。公式名が分かったら、`handwrittenEnglish.ts` の `TERMS` を直して、`npm run link:actions`（キャラ）・`npm run build:equipment`（武器・聖遺物）で付け直す。
+原神 Wiki の日本語版・英語版の同じページ（キャラのページの天賦の説明）を突き合わせて、公式の英語を確かめた（2026-10-29）。名前を直したら `handwrittenEnglish.ts` を直して、`npm run link:actions`（キャラ）・`npm run build:equipment`（武器・聖遺物）で付け直す。
 
-| 日本語 | 英語 | 備考 |
-|---|---|---|
-| 近接の構え | Melee Stance | 要確認（タルタリヤ） |
-| 風の加護 | Wind's Blessing | 要確認 |
-| 剣域熾焔 | Blazing Sword Domain | 要確認 |
-| パンチ連打モード | Rapid Punch Mode | 要確認 |
-| 加圧 / 潜水（加圧） | Pressurized / Diving (Pressurized) | 要確認 |
-| 影狩り | Shadowhunt | 要確認 |
-| 瑞獣の舞 | Auspicious Beast Dance | 要確認 |
-| 黄昏の祈り | Twilight Prayer | 要確認 |
-| 羽月の輪 | Feathermoon Ring | 要確認 |
-| 雷霆のシンフォニー / 雷鳴の交響 | Thunderous Symphony / Thunder Symphony | 要確認（前者は公式名と一致の可能性が高い） |
-| 月相転移 / 月相の輝き | Lunar Phase Shift / Lunar Radiance | 要確認 |
-| 血の契約 / 標的の印 / 速攻状態 | Blood Pact / Target Mark / Rapid Assault | 要確認 |
-| 粛清 | Purge | 要確認（ヴェスナ） |
-| 月の祈り | Moon's Prayer | 要確認 |
-| 静謐の光環 | Serene Halo | 要確認 |
-| 蒼白の賛歌・月の歌 | Pale Hymn / Moon Song | 要確認 |
-| 印（アロマティック・アナライズ） / 印（お水ひえひえ装置） | Mark (Aromatic Analysis) / Mark (Chilly Water Device) | 要確認 |
-| 猫玉（フラスコ排出） | Cat Ball (flask ejection) | 要確認 |
-| 重力（月の反応） | Gravity (Lunar reaction) | 要確認 |
-| 周天の回転 | Celestial Rotation | 要確認 |
-| 〜の受付 | 〜 window | 例: 再発動の受付 = Recast window |
-| 輝映 | boosted | 要確認（魔女の諭示の説明） |
-| 魔女の諭示の追加天賦名（七宝奉真・大祓之宣託 など 7 件） | Seven Treasures of Truth など | 要確認（`src/masterdata/revelationCharacters.ts` の `en.talentName`） |
-| 昔日4: 彼方の効果 | Waves of Days Past | 要確認 |
-| 手で書いた武器・聖遺物の発動バフ名「X: 接尾」 | 英語の装備名 + 訳した接尾 | 例: 千岩4: 全員攻撃力+20% → Tenacity of the Millelith 4P: Party ATK +20% |
+| アプリの日本語 | 公式の英語 | キャラ | 備考（日本語版 Wiki の公式の日本語） |
+|---|---|---|---|
+| 近接の構え | Melee Stance | タルタリヤ | 公式は「近接モード」 |
+| 風の加護 | Windfavored | 放浪者 | 公式は「優風」状態 |
+| 剣域熾焔 | Ranging Flame | ディシア | |
+| パンチ連打モード | Blazing Lioness | ディシア | 公式は「熾炎獅子」状態 |
+| 加圧 / 潜水（加圧） | Pers Timer | フレミネ | |
+| 影狩り | Subnautical Hunter | フレミネ | |
+| 瑞獣の舞 | Wushou Stance | 嘉明 | |
+| 黄昏の祈り | Twilight Meditation | セトス | |
+| 羽月の輪 | Feathermoon Ring | 藍硯 | |
+| 雷霆のシンフォニー / 雷鳴の交響 | Thunderous Symphony | フリンズ | 元素スキル「古律・孤灯の秘密」= Ancient Rite: Arcane Light |
+| 月相転移 / 月相の輝き / 霊駿の駆け | Lunar Phase Shift / Phase Shift Radiance / Spirit Steed's Stride | 兹白 | |
+| 血の契約 | Blood-Debt Directive | アルレッキーノ | |
+| 標的の印 | Marked as Prey | ムアラニ | |
+| 燔天の時 | Crucible of Death and Life | マーヴィカ | 先の訳（Hour of Burning Skies）は元素爆発の名前で、誤り |
+| 粛清 | Disciplinary Action | ヴェスナ | |
+| 月の祈り / 静謐の光環 | Lunar Prayer / Tranquility Aura | ニィロウ | |
+| 蒼白の賛歌・月の歌 | Pale Hymn / Moon Song | ラウマ | |
+| 猫玉 | Fluffy Meowball | ヤフォダ | |
+| 重力（月の反応） | Gravity Ripple | コロンビーナ | |
+| 周天の回転 | Atmospheric Revolution | 重雲 | 命ノ星座 2 の名前 |
+| 円軌道射撃 / 廻狩貫鱗砲 | Loop Shot / Scalespiker Cannon | キィニチ | |
+| トニックショット | Tonicshot | イファ | 1 語 |
+| 幻の戯 | Phantasm Performance | ネフェル | |
+| 魂を穿つ痛み | Etched Into Bone and Soul | ローエン | |
+| 猛烈パッション | Fiery Passion | ヴァレサ | |
+| 印（アロマティック・アナライズ） / 印（お水ひえひえ装置） | Mark (Aromatic Explication) / Mark (Precision Hydronic Cooler) | エミリエ / アイノ | 「印」は gcsim の効果。括弧の中が公式の元素爆発の名前 |
+| 魔女の諭示の追加天賦名 | Seven Sacred Treasures（七七）・Edict of Cleansing（八重神子）・There Shall Be an Unveiling for Injustice（リオセスリ）・Vast Be the Dream（瑞希）・Choice Treasures（ディオナ）・Polaris（北斗）・A Star With Which to Start the Journey（セノ） | | `revelationCharacters.ts` の `en.talentName` |
+| 昔日4: 彼方の効果 | "Waves of Days Past" effect | 昔日の歌 | |
+| 〜の受付 | 〜 window | | アプリの呼び名 |
+| 速攻状態 | Quick Stormflight window | イアンサ | 要確認（公式の名前が無い。スキルの後 5 秒間、通常攻撃でスタミナを使わずに Swift Stormflight を出せる期間） |
+| 手で書いた武器・聖遺物の発動バフ名「X: 接尾」 | 英語の装備名 + 訳した接尾 | | 例: 千岩4: 全員攻撃力+20% → Tenacity of the Millelith 4P: Party ATK +20%。接尾はアプリの要約 |

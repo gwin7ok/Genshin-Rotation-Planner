@@ -16,7 +16,7 @@
     "rename": "Enter a new rotation name",
     "notRegistered": "The rotation was loaded, but could not be added to the saved rotations."
   },
-  "resetConfirm": "Go back to the app's calculation, keeping the action order.\n\n・Remove fixed action times, individual cooldowns, durations and gcsim corrections from {{actions}} actions\n・Remove effects written from gcsim from {{stints}} stints (delete {{passives}} triggered buffs added from gcsim results)\n\n* Not only gcsim values, but also action times, cooldowns and durations you edited by hand are reset. Continue?",
+  "resetConfirm": "Go back to the app's calculation, keeping the action order.\n\n• Remove fixed action times, individual cooldowns, durations and gcsim corrections from {{actions}} actions\n• Remove effects written from gcsim from {{stints}} stints (delete {{passives}} triggered buffs added from gcsim results)\n\n* Not only gcsim values, but also action times, cooldowns and durations you edited by hand are reset. Continue?",
   "gcsim": {
     "versionMismatch": "The gcsim version does not match",
     "notRunnable": "Not calculated because some parts cannot be run in gcsim",

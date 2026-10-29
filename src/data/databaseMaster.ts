@@ -5,7 +5,7 @@ import artifactsMasterJson from './artifacts_master_data.json';
 import { t } from '../i18n';
 
 /** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
-export const DATABASE_VERSION = 79;
+export const DATABASE_VERSION = 80; // 80: 英語の表示用の文（en）・受付の印（isWindow）・公式の名前（D255〜D260）
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

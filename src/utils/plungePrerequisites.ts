@@ -3,6 +3,7 @@ import {
   DEFAULT_PLUNGE_RULE, PLUNGE_RULES, XIANYUN_AIRBORNE_PLUNGES, XIANYUN_AIRBORNE_SECONDS, XIANYUN_ID,
   type PlungeRule,
 } from '../data/plungeRules';
+import { t } from '../i18n';
 
 export interface PlungeWarning {
   stintId: string;
@@ -54,15 +55,15 @@ export function checkPlungePrerequisites(characters: CharacterConfig[], stints: 
     if (buffActive) plungesLeft--;
     if (byAction || bySkill || byAirborne) continue;
 
-    const kind = act.type === 'plunge_low' ? '低空落下攻撃' : '高空落下攻撃';
-    const prevName = prev ? `「${prev.name}」` : 'なし（出場の最初、または待機・交代の直後）';
+    const kind = act.type === 'plunge_low' ? t('messages:plunge.low') : t('messages:plunge.high');
+    const prevName = prev ? `「${prev.name}」` : t('messages:plunge.noPrev');
     warnings.push({
       stintId: stint.id,
       characterId: stint.characterId,
       actionId: act.id,
       time,
       actionName: act.name,
-      message: `${kind}は、gcsim では「${rule.needs}」でないと実行エラーになります（直前のアクション: ${prevName}）`,
+      message: t('messages:plunge.message', { kind, needs: rule.needs, prev: prevName }),
     });
   }
   return warnings;

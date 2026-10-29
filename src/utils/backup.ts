@@ -16,6 +16,7 @@ import { BACKUP_SETTING_KEYS, STORAGE_KEYS, readString, removeKey, writeString }
 import { GCSIM_VERSION } from './gcsim/gcsimConfig.ts';
 import { APP_VERSION } from './appVersion';
 import { addSkipped, emptySkipped, isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints, totalSkipped } from './rotationValidation';
+import { t } from '../i18n';
 
 export const BACKUP_FORMAT = 'genshin-rotation-planner-backup';
 export const BACKUP_VERSION = 1;
@@ -94,20 +95,20 @@ export function parseBackup(text: string): ParseBackupResult {
   try {
     raw = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'JSON として読めません。' };
+    return { ok: false, error: t('messages:file.notJson') };
   }
   const b = raw as Partial<BackupFile> | null;
   if (!b || typeof b !== 'object' || b.format !== BACKUP_FORMAT) {
-    return { ok: false, error: 'このアプリの「全データのバックアップ」ファイルではありません（1 つの編成の JSON は、「JSONファイル読み込み」から読み込んでください）。' };
+    return { ok: false, error: t('messages:file.notBackup') };
   }
   if (typeof b.version !== 'number' || b.version > BACKUP_VERSION) {
-    return { ok: false, error: `新しい版のバックアップ（形式 ${String(b.version)}）です。アプリを更新してから、読み込んでください。` };
+    return { ok: false, error: t('messages:file.newerBackup', { version: String(b.version) }) };
   }
   if (!Array.isArray(b.savedSlots) || !b.database || !Array.isArray(b.database.characters) || !Array.isArray(b.database.weapons) || !Array.isArray(b.database.artifacts)) {
-    return { ok: false, error: 'バックアップの内容が壊れています（保存編成・データベースの項目がありません）。' };
+    return { ok: false, error: t('messages:file.brokenBackup') };
   }
   if (b.currentState && (!isRecord(b.currentState) || !isValidParty(b.currentState.party) || !Array.isArray(b.currentState.stints))) {
-    return { ok: false, error: 'バックアップの内容が壊れています（現在の編成の形が違います）。' };
+    return { ok: false, error: t('messages:file.brokenCurrent') };
   }
   // 保存編成・現在の編成: 壊れた編成は除外し、使える編成も、壊れた出場・アクションは除く
   let inner = emptySkipped();
@@ -280,8 +281,8 @@ export function restoreBackup(b: BackupFile, options: { restoreCurrent: boolean 
   if (!ok) {
     const restored = rollback();
     return failed(restored
-      ? 'ブラウザに保存できませんでした（保存容量の不足、または保存が無効になっている可能性があります）。今のデータは、変更していません。'
-      : 'ブラウザに保存できませんでした（保存容量の不足、または保存が無効になっている可能性があります）。さらに、元の状態に戻すことにも失敗し、保存してあるデータの一部が、変わったままの可能性があります。先に「全データを書き出す」で、バックアップを取り直してください。');
+      ? t('messages:file.restoreSaveFailed')
+      : t('messages:file.restoreRollbackFailed'));
   }
   return { ok: true, slotsAdded, slotsUpdated, slotsKept, settings: settingsWritten, items, currentStateRestored };
 }

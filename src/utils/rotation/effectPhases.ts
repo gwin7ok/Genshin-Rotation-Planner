@@ -9,6 +9,7 @@ import { wrapIndex } from './frameTables';
 import { cutBar } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
+import { t } from '../../i18n';
 
 /** 特殊スキル・特殊爆発の受付の延長・閉じ方・CT の短縮 */
 export function applySpecialWindows(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -183,7 +184,7 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
         endTime: Number((actionStartTime + exDuration).toFixed(3)),
         duration: exDuration,
         color: char.color,
-        description: `${act.name}（副次効果: ${ex.label}。実行前のマスターの値）`,
+        description: t('messages:rotation.extraFromMaster', { action: act.name, label: ex.label }),
         ownerStintId: rawStint.id,
       });
     });
@@ -203,7 +204,7 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
       endTime: Number((exStart + ex.duration).toFixed(3)),
       duration: ex.duration,
       color: char.color,
-      description: `${act.name}（副次効果: ${ex.name}）`,
+      description: t('messages:rotation.extra', { action: act.name, label: ex.name }),
       ownerStintId: rawStint.id,
     });
   });

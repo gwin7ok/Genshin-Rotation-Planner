@@ -40,6 +40,7 @@ import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
 import { summarizeEquipment, constellationOf } from '../utils/equipmentSummary';
+import { t, currentLanguage } from '../i18n';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -55,6 +56,8 @@ export interface BuffRowInfo {
 export function getBuffClassification(buff: ActiveBuffSpan) {
   const bId = (buff.buffId || '').toLowerCase();
   const name = (buff.name || '').toLowerCase();
+  // 名前での判定は、日本語の名前のときだけ（英語の名前は、ほぼすべてに 'e' を含むため）。ID・種類での判定に置き換えるのはフェーズ 3（docs/i18n/plan.md 4.3）
+  const byName = currentLanguage === 'ja';
 
   const isSkill = 
     bId.includes('skill') || 
@@ -65,10 +68,11 @@ export function getBuffClassification(buff: ActiveBuffSpan) {
     bId.includes('salon') || 
     bId.includes('paramita') ||
     bId.includes('mirror') ||
-    name.includes('スキル') || 
-    name.includes('グゥオパァー') || 
-    name.includes('唐辛子') || 
-    name.includes('e');
+    (byName && (
+      name.includes('スキル') || 
+      name.includes('グゥオパァー') || 
+      name.includes('唐辛子') || 
+      name.includes('e')));
 
   const isBurst = 
     bId.includes('burst') || 
@@ -77,9 +81,10 @@ export function getBuffClassification(buff: ActiveBuffSpan) {
     bId.includes('fanfare') || 
     bId.includes('shrine') || 
     bId.includes('eye_buff') || 
-    name.includes('爆発') || 
-    name.includes('旋火輪') || 
-    name.includes('q');
+    (byName && (
+      name.includes('爆発') || 
+      name.includes('旋火輪') || 
+      name.includes('q')));
 
   if (isSkill) {
     return { rank: 1, tag: '[E]' };
@@ -88,15 +93,15 @@ export function getBuffClassification(buff: ActiveBuffSpan) {
     return { rank: 2, tag: '[Q]' };
   }
   if (buff.sourceType === 'weapon') {
-    return { rank: 4, tag: '[武器]' };
+    return { rank: 4, tag: t('chart:gantt.tagWeapon') };
   }
   if (buff.sourceType === 'artifact') {
-    return { rank: 5, tag: '[聖遺物]' };
+    return { rank: 5, tag: t('chart:gantt.tagArtifact') };
   }
   if (buff.sourceType === 'constellation') {
-    return { rank: 3.5, tag: '[凸]' };
+    return { rank: 3.5, tag: t('chart:gantt.tagConstellation') };
   }
-  return { rank: 3, tag: '[天賦]' };
+  return { rank: 3, tag: t('chart:gantt.tagTalent') };
 }
 
 export function organizeBuffsIntoRows(buffs: ActiveBuffSpan[]): BuffRowInfo[] {
@@ -427,7 +432,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   // ループ基準を置ける位置（出場キャラの境目）。index は「何番目の出場キャラの前か」（0=先頭・基準なし）
   const loopBoundaries = useMemo(() => {
     const list: { index: number; time: number; label: string }[] = [
-      { index: 0, time: 0, label: '先頭（基準なし・全周同一）' },
+      { index: 0, time: 0, label: t('chart:gantt.loopFirst') },
     ];
     stints.forEach((stint, sIdx) => {
       if (sIdx === 0) return;
@@ -436,7 +441,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       list.push({
         index: sIdx,
         time: stint.startTime ?? 0,
-        label: `${sIdx + 1}番目の出場（${prevName} と ${name} の間）`,
+        label: t('chart:gantt.loopBetween', { index: sIdx + 1, prev: prevName, next: name }),
       });
     });
     return list;
@@ -870,14 +875,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
               <h2 className="text-base sm:text-lg font-extrabold text-white tracking-wide truncate">
-                ローテーション ガントチャート
+                {t('chart:gantt.title')}
               </h2>
               <span className="text-[11px] text-slate-400 font-mono shrink-0">
-                総時間: <strong className="text-amber-300 font-bold">{totalDuration.toFixed(1)}s</strong>
+                {t('chart:gantt.total')} <strong className="text-amber-300 font-bold">{totalDuration.toFixed(1)}s</strong>
               </span>
               <span className="text-[11px] text-slate-600 font-mono hidden sm:inline shrink-0">|</span>
               <span className="text-[11px] text-slate-400 font-mono hidden sm:inline shrink-0">
-                再生位置: <strong className="text-cyan-300 font-bold">{activeTime.toFixed(1)}s</strong>
+                {t('chart:gantt.position')} <strong className="text-cyan-300 font-bold">{activeTime.toFixed(1)}s</strong>
               </span>
             </div>
 
@@ -891,24 +896,24 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   onChange={(e) => setShowConnectors(e.target.checked)}
                   className="rounded text-amber-500 focus:ring-0 focus:ring-offset-0 bg-slate-800 border-slate-700 w-3 h-3"
                 />
-                <span>交代垂直スナップ線 (端点一致)</span>
+                <span>{t('chart:gantt.snapLines')}</span>
               </label>
 
               {/* Loop Boundary Marker Info / Reset */}
               <div className="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-purple-500/40 text-[11px]">
                 <Repeat className="w-3 h-3 text-purple-400" />
-                <span className="text-purple-300 font-semibold">ループ基準点:</span>
+                <span className="text-purple-300 font-semibold">{t('chart:gantt.loopPoint')}</span>
                 <span className="font-mono text-purple-200 font-bold">
-                  {loopStartIndex === 0 ? '先頭 (全周同一)' : `${loopStartIndex + 1}番目の前 (${loopStartTime.toFixed(2)}s)`}
+                  {loopStartIndex === 0 ? t('chart:gantt.loopAtStart') : t('chart:gantt.loopBefore', { index: loopStartIndex + 1, time: loopStartTime.toFixed(2) })}
                 </span>
                 {loopStartIndex > 0 && onUpdateLoopStartIndex && (
                   <button
                     type="button"
                     onClick={() => onUpdateLoopStartIndex(0)}
                     className="ml-1 text-[9px] text-slate-400 hover:text-white underline decoration-slate-600"
-                    title="0s (先頭) にリセット"
+                    title={t('chart:gantt.loopResetTitle')}
                   >
-                    リセット
+                    {t('chart:gantt.loopReset')}
                   </button>
                 )}
               </div>
@@ -976,10 +981,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-[11px] font-bold text-purple-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Repeat className="w-3 h-3 text-purple-400 shrink-0" />
-                    <span className="truncate">ループ基準点 (0s)</span>
+                    <span className="truncate">{t('chart:gantt.loopRow')}</span>
                   </span>
                   <span className="text-[9px] text-purple-400/80 font-mono shrink-0">
-                    {loopStartIndex === 0 ? '全周同一' : `${loopStartIndex + 1}番目の前`}
+                    {loopStartIndex === 0 ? t('chart:gantt.loopAll') : t('chart:gantt.loopBeforeShort', { index: loopStartIndex + 1 })}
                   </span>
                 </div>
 
@@ -1002,7 +1007,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       className="absolute inset-y-0.5 bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-purple-500/20 border-r border-dashed border-purple-400/60 flex items-center px-2 pr-16 pointer-events-none"
                     >
                       <span className="text-[10px] font-bold text-amber-300/90 truncate">
-                        ◀ 1周目初動 (-{loopStartTime.toFixed(1)}s ~ 0.0s)
+                        {t('chart:gantt.opener', { time: loopStartTime.toFixed(1) })}
                       </span>
                     </div>
                   )}
@@ -1018,7 +1023,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     }`}
                   >
                     <span className="text-[10px] font-bold text-purple-200 truncate">
-                      🔁 1周目ループ (0.0s ~ +{(totalDuration - loopStartTime).toFixed(1)}s) ▶
+                      {t('chart:gantt.loop1', { time: (totalDuration - loopStartTime).toFixed(1) })}
                     </span>
                   </div>
 
@@ -1040,7 +1045,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             ? 'w-3 h-3 bg-purple-400 ring-2 ring-purple-300 shadow scale-110' 
                             : 'w-1.5 h-1.5 bg-purple-600/60 hover:scale-150 hover:bg-purple-300'
                         }`}
-                        title={`【ループ基準に設定】\n${b.label} (${fmtTime(b.time, 2)})`}
+                        title={t('chart:gantt.setLoopTitle', { label: b.label, time: fmtTime(b.time, 2) })}
                       />
                     );
                   })}
@@ -1056,12 +1061,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                     className={`absolute top-0 bottom-0 -translate-x-1/2 z-10 flex flex-col items-center cursor-ew-resize group/marker ${
                       isDraggingLoopMarker ? 'scale-105' : ''
                     }`}
-                    title="【ドラッグで移動】1周目初動と定常ループの区切りマーク（0.0s基準点）"
+                    title={t('chart:gantt.loopMarkerTitle')}
                   >
                     {/* Pin Handle Badge */}
                     <div className="flex items-center gap-1 bg-purple-600 hover:bg-purple-500 text-white font-black text-[9px] px-1.5 py-0.5 rounded-full shadow-lg border border-purple-300 ring-1 ring-purple-400/50 cursor-grab active:cursor-grabbing transition-transform">
                       <Repeat className="w-2.5 h-2.5" />
-                      <span>0.00s 基準 ({loopStartTime.toFixed(2)}s)</span>
+                      <span>{t('chart:gantt.loopMarker', { time: loopStartTime.toFixed(2) })}</span>
                     </div>
                     {/* Pin stem */}
                     <div className="w-0.5 flex-1 bg-purple-400 shadow" />
@@ -1073,7 +1078,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               <div className="flex border-b border-slate-800 bg-slate-900 h-6">
                 {/* Left Column Label (Corner: Sticky Left) */}
                 <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 flex items-center justify-between border-r border-slate-800 bg-slate-950 text-[10px] leading-none font-bold text-slate-400 tracking-wider sticky left-0 z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
-                  <span>経過時間</span>
+                  <span>{t('chart:gantt.elapsed')}</span>
                   <Clock className="w-3 h-3 text-slate-500" />
                 </div>
 
@@ -1121,8 +1126,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       className="absolute top-0 bottom-0 flex items-center z-20 pointer-events-none -translate-x-1/2"
                       title={
                         conn.isCycle2
-                          ? `【2周目 交代垂直スナップ】\n2周目開始より: +${conn.relTime.toFixed(2)}s (通算 ${conn.snapTime.toFixed(2)}s)`
-                          : `【1周目 交代垂直スナップ】\n交代時刻: ${conn.snapTime.toFixed(2)}s`
+                          ? t('chart:gantt.snap2Title', { rel: conn.relTime.toFixed(2), abs: conn.snapTime.toFixed(2) })
+                          : t('chart:gantt.snap1Title', { time: conn.snapTime.toFixed(2) })
                       }
                     >
                       <span className="bg-amber-500 text-slate-950 text-[9px] leading-none font-bold px-1.5 py-0.5 rounded shadow whitespace-nowrap">
@@ -1165,9 +1170,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-amber-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-amber-400" />
-                    <span>統合出場トラック</span>
+                    <span>{t('chart:gantt.stintTrack')}</span>
                   </span>
-                  <span className="text-[10px] text-slate-500 font-mono font-normal">全周連結</span>
+                  <span className="text-[10px] text-slate-500 font-mono font-normal">{t('chart:gantt.allLaps')}</span>
                 </div>
 
                 <div 
@@ -1214,7 +1219,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold'
                             : 'border-slate-700/80 hover:border-slate-500'
                         }`}
-                        title={`${char.name} 出場: ${(stint.startTime ?? 0).toFixed(2)}s ~ ${(stint.endTime ?? 0).toFixed(2)}s (${(stint.duration ?? 0).toFixed(2)}s)\nドラッグで出場順を入れ替え / クリックでこの行へ移動`}
+                        title={t('chart:gantt.stintTitle', { name: char.name, start: (stint.startTime ?? 0).toFixed(2), end: (stint.endTime ?? 0).toFixed(2), duration: (stint.duration ?? 0).toFixed(2) })}
                       >
                         <div 
                           className="absolute inset-0 opacity-40"
@@ -1237,9 +1242,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-400 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full">
                   <span className="flex items-center gap-1.5 truncate">
                     <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span className="truncate">バフ重複 (Synergy)</span>
+                    <span className="truncate">{t('chart:gantt.synergy')}</span>
                   </span>
-                  <span className="text-[9px] text-slate-500 font-mono shrink-0" title="色は、ローテーション全体の最大数を基準に 4 等分しています">最大 {Math.max(0, ...buffOverlapSegments.map(p => p.count), ...loopedBuffOverlapSegments.map(p => p.count))}</span>
+                  <span className="text-[9px] text-slate-500 font-mono shrink-0" title={t('chart:gantt.synergyMaxTitle')}>{t('chart:gantt.synergyMax', { max: Math.max(0, ...buffOverlapSegments.map(p => p.count), ...loopedBuffOverlapSegments.map(p => p.count)) })}</span>
                 </div>
 
                 <div 
@@ -1281,7 +1286,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               key={pt.start}
                               style={{ left: `${pt.start * pixelsPerSecond}px`, width: `${w}px`, color: buffCountStyle(pt.count, maxCount).color }}
                               className="absolute top-1 bottom-1 flex items-center justify-center text-[10px] font-mono select-none"
-                              title={`${pt.start.toFixed(2)}s ~ ${pt.end.toFixed(2)}s: 有効バフ ${pt.count}個（最大 ${maxCount}個）[${pt.activeBuffs.join(', ')}]`}
+                              title={t('chart:gantt.synergySegment', { start: pt.start.toFixed(2), end: pt.end.toFixed(2), count: pt.count, max: maxCount, buffs: pt.activeBuffs.join(', ') })}
                             >
                               {pt.count > 0 && w >= 10 && <span className="font-bold text-[9px]">{pt.count}</span>}
                             </div>
@@ -1411,7 +1416,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             <div 
                               key={`stint_buff_lbl_${stint.id}_${rIdx}`} 
                               className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] truncate font-mono border-b border-slate-800/40" 
-                              title={`【${bRow.tag} 効果持続時間】\n${bRow.sample.name} (${bRow.sample.duration.toFixed(2)}s)\n${bRow.sample.description}`}
+                              title={t('chart:gantt.effectRowTitle', { tag: bRow.tag, name: bRow.sample.name, duration: bRow.sample.duration.toFixed(2), description: bRow.sample.description })}
                             >
                               <span className="truncate flex items-center gap-1">
                                 <span className="text-emerald-400 font-bold shrink-0">{bRow.tag}</span>
@@ -1455,10 +1460,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-200 opacity-90'
                                           : 'bg-emerald-950 border-emerald-400 text-emerald-100 opacity-90 hover:border-emerald-300'
                                       }`}
-                                      title={`【${bRow.tag} 効果持続時間】${isCarryOver ? ' (1周目からの持ち越しバフ)' : ''}${!isBarActive ? ' (※元の発動位置を通過すると有効化)' : ''}\n${buff.name} (${buff.duration.toFixed(2)}s)\n期間: [${buff.startTime.toFixed(2)}s ~ ${buff.endTime.toFixed(2)}s] (クリックで開始位置へシーク)\n詳細: ${buff.description}`}
+                                      title={t('chart:gantt.effectBarTitle', { tag: bRow.tag, carry: isCarryOver ? t('chart:gantt.carryBuff') : '', inactive: !isBarActive ? t('chart:gantt.inactive') : '', name: buff.name, duration: buff.duration.toFixed(2), start: buff.startTime.toFixed(2), end: buff.endTime.toFixed(2), description: buff.description })}
                                     >
                                       <span className="truncate">
-                                        ✨ {isCarryOver ? '[持越] ' : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(1)}s)`} {isBuffActive ? `[残${remaining.toFixed(1)}s]` : ''}
+                                        ✨ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}{bRow.tag} {buff.name.replace(/^[^:]+:\s*/, '')} {isCarryOver ? `(${buff.duration.toFixed(1)}s)` : `(${buff.duration.toFixed(1)}s)`} {isBuffActive ? t('chart:gantt.remaining', { seconds: remaining.toFixed(1) }) : ''}
                                       </span>
                                     </div>
                                   );
@@ -1523,7 +1528,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                   if (first) onSeek(first.startTime ?? 0);
                                   scrollStintCardBelowSticky(stint.id);
                                 }}
-                                title={`${char.name}の出場ブロックを選択フォーカス（アクションは選択しない。アクション構築の出場カードへ移動）`}
+                                title={t('chart:gantt.focusTitle', { name: char.name })}
                                 className="flex items-center gap-1.5 min-w-0 cursor-pointer hover:opacity-80 transition-opacity"
                               >
                                 <CharacterAvatar char={char} className="w-6 h-6 rounded-md text-xs shadow-inner shrink-0" borderWidth={1.5} />
@@ -1532,15 +1537,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                               <div className="flex items-center gap-1 min-w-0">
                                 <span
                                   className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-rose-500/50 text-rose-300 font-bold shrink-0"
-                                  title={`命ノ星座: ${constellationOf(char)}凸（編成設定で変更）`}
+                                  title={t('chart:gantt.constellationTitle', { level: constellationOf(char) })}
                                 >
-                                  {constellationOf(char)}凸
+                                  {t('constellationLevel', { count: constellationOf(char) })}
                                 </span>
                                 <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-700 text-amber-300 font-bold shrink-0">
                                   #{stintIdx + 1}
                                 </span>
                                 {isStintCurrentlyOnField && (
-                                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" title="現在出場中" />
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" title={t('chart:gantt.onField')} />
                                 )}
                               </div>
                             </div>
@@ -1560,7 +1565,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   }}
                                   disabled={stintIdx === 0}
-                                  title={`#${stintIdx + 1} (${char.name}) の登場順を上（前）へ`}
+                                  title={t('chart:gantt.moveUpTitle', { index: stintIdx + 1, name: char.name })}
                                   className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
                                 >
                                   ▲
@@ -1577,7 +1582,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }
                                   }}
                                   disabled={stintIdx === stints.length - 1}
-                                  title={`#${stintIdx + 1} (${char.name}) の登場順を下（次）へ`}
+                                  title={t('chart:gantt.moveDownTitle', { index: stintIdx + 1, name: char.name })}
                                   className="leading-none text-slate-500 hover:text-white disabled:opacity-20 text-[9px] px-1 py-0.5"
                                 >
                                   ▼
@@ -1591,23 +1596,23 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                             <div className="flex items-center justify-between text-amber-300/90 font-semibold truncate">
                               <span className="truncate flex items-center gap-1">
                                 {stint.actions.some(a => a.hasCTCollision && !a.ctGcsimVerified) && (
-                                  <span title="CT未回復あり" className="inline-flex items-center">
+                                  <span title={t('chart:gantt.ctUnrecovered')} className="inline-flex items-center">
                                     <AlertTriangle className="w-3 h-3 text-red-400 shrink-0 animate-pulse" />
                                   </span>
                                 )}
                                 {stintPassives.some(p => p.hasCTViolation) && (
-                                  <span title="CT警告あり（発動バフがCT中に発動する配置。効果が発動しないだけ）" className="inline-flex items-center">
+                                  <span title={t('chart:gantt.ctWarningTitle')} className="inline-flex items-center">
                                     <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                                   </span>
                                 )}
-                                <span className="truncate">{stint.note || `${char.name}の行動`}</span>
+                                <span className="truncate">{stint.note || t('chart:gantt.stintActions', { name: char.name })}</span>
                               </span>
                               <span className="shrink-0 text-slate-400 font-mono text-[9px] ml-1">
                                 {(stint.duration ?? 0).toFixed(1)}s
                               </span>
                             </div>
                             <div className="flex items-center justify-between text-slate-400 mt-0.5">
-                              <span>時間帯</span>
+                              <span>{t('chart:gantt.timeRange')}</span>
                               <span className="font-mono">{(stint.startTime ?? 0).toFixed(1)}s ~ {(stint.endTime ?? 0).toFixed(1)}s</span>
                             </div>
                           </div>
@@ -1615,8 +1620,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* スキルストック数の行（1 周目・2 周目で 1 行ずつ） */}
                           {stockLaps.map(l => (
                             <div key={`stock_label_${l.lap}`} className="h-6 px-2 flex items-center justify-between text-emerald-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">🔢 スキルストック</span>
-                              <span className="shrink-0 ml-1">{stockLaps.length > 1 ? `${l.lap}周目` : ''}</span>
+                              <span className="truncate">{t('chart:gantt.skillStock')}</span>
+                              <span className="shrink-0 ml-1">{stockLaps.length > 1 ? t('chart:gantt.lap', { lap: l.lap }) : ''}</span>
                             </div>
                           ))}
 
@@ -1626,7 +1631,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* Row 2: Skill (E) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintSkillCDs.length > 0 && (
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ スキルCT</span>
+                              <span className="truncate">{t('chart:gantt.skillCt')}</span>
                               <span className="shrink-0 ml-1">{originalCtSeconds(allStintSkillCDs).toFixed(1)}s</span>
                             </div>
                           )}
@@ -1635,7 +1640,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* 特殊スキルのCTは、1本ごとに別の行にする（重なって見えなくなるのを防ぐ） */}
                           {allStintSpecialCDs.map((cd, i) => (
                             <div key={cd.id} className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ 特殊スキルCT{allStintSpecialCDs.length > 1 ? ` ${i + 1}` : ''}</span>
+                              <span className="truncate">{t('chart:gantt.specialCt')}{allStintSpecialCDs.length > 1 ? ` ${i + 1}` : ''}</span>
                               <span className="shrink-0 ml-1">{originalCtSeconds([cd]).toFixed(1)}s</span>
                             </div>
                           ))}
@@ -1643,7 +1648,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           {/* Row 3: Burst (Q) Cooldown Row (Height: h-6 = 24px) */}
                           {allStintBurstCDs.length > 0 && (
                             <div className="h-6 px-2 flex items-center justify-between text-sky-300 text-[9px] font-mono border-b border-slate-800/40">
-                              <span className="truncate">⏱️ 爆発CT</span>
+                              <span className="truncate">{t('chart:gantt.burstCt')}</span>
                               <span className="shrink-0 ml-1">{originalCtSeconds(allStintBurstCDs).toFixed(1)}s</span>
                             </div>
                           )}
@@ -1662,15 +1667,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 truncate ${
                                       category === 'weapon' ? 'text-blue-400 font-semibold' : category === 'artifact' ? 'text-purple-300' : category === 'constellation' ? 'text-rose-300' : 'text-lime-300'
                                     }`} 
-                                    title={`【発動バフ（${badgeCfg.label}）】\n${grp.name}${grp.description ? `\n${grp.description}` : ''}\n効果 ${grp.duration.toFixed(2)}s / CT ${grp.cooldown > 0 ? `${grp.cooldown}s` : 'なし'}`}
+                                    title={t('chart:gantt.passiveRowTitle', { label: badgeCfg.label, name: grp.name, description: grp.description ? `\n${grp.description}` : '', duration: grp.duration.toFixed(2), cooldown: grp.cooldown > 0 ? `${grp.cooldown}s` : t('noneShort') })}
                                   >
-                                    <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {grp.name}{grp.hasCarryOver ? ' [持越]' : ''}</span>
+                                    <span className="truncate"><span className="font-bold">[{badgeCfg.label}]</span> {grp.name}{grp.hasCarryOver ? ` ${t('chart:gantt.carried')}` : ''}</span>
                                     <span className={`shrink-0 ml-1 ${category === 'weapon' ? 'text-blue-400' : ''}`}>{grp.duration.toFixed(1)}s</span>
                                   </div>
                                 )}
                                 {grp.cooldown > 0 && (
                                   <div className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 ${badgeCfg.timingValueClass}`}>
-                                    <span>⏱️ {badgeCfg.label}CT{grp.hasCarryOver ? ' [持越]' : ''}</span>
+                                    <span>⏱️ {t('chart:gantt.passiveCtLabel', { label: badgeCfg.label })}{grp.hasCarryOver ? ` ${t('chart:gantt.carried')}` : ''}</span>
                                     <span>{grp.cooldown.toFixed(1)}s</span>
                                   </div>
                                 )}
@@ -1717,12 +1722,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                       className="basis-full flex flex-wrap items-center gap-x-3 text-[10px] font-semibold select-none"
                                       data-testid={`equipment-${char.id}-${stintIdx}`}
                                     >
-                                      {eq.weapon && <span className="text-blue-300"><span className="text-slate-500 font-normal">武器</span> {eq.weapon}</span>}
-                                      {eq.artifact && <span className="text-purple-300"><span className="text-slate-500 font-normal">聖遺物</span> {eq.artifact}</span>}
+                                      {eq.weapon && <span className="text-blue-300"><span className="text-slate-500 font-normal">{t('chart:gantt.weapon')}</span> {eq.weapon}</span>}
+                                      {eq.artifact && <span className="text-purple-300"><span className="text-slate-500 font-normal">{t('chart:gantt.artifact')}</span> {eq.artifact}</span>}
                                     </div>
                                   )}
                                   {timeless.length > 0 && (
-                                    <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={`時間指定のない効果のうち、${char.name} だけに効くもの`}>{char.name} だけ:</span>
+                                    <span className="text-[10px] text-teal-300 font-bold shrink-0 select-none" title={t('chart:gantt.selfOnlyTitle', { name: char.name })}>{t('chart:gantt.selfOnly', { name: char.name })}</span>
                                   )}
                                   {timeless.map(item => <TimelessBuffChip key={item.key} item={item} />)}
                                 </div>
@@ -1812,10 +1817,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         }`}
                                         title={
                                           hasCollision
-                                            ? `【⚠️ CT衝突エラー】発動時点（${(act.startTime ?? 0).toFixed(2)}s）でクールタイムがまだ解消されていません！\n残りCT: ${colRem ?? '?'}s\nアクション: ${act.name}`
+                                            ? t('chart:gantt.actionCollision', { time: (act.startTime ?? 0).toFixed(2), remaining: colRem ?? '?', name: act.name })
                                             : windowWarning
-                                            ? `【⚠️ 警告】${windowWarning}\nアクション: ${act.name}（gcsim の計算は制限されません）`
-                                            : `【ドラッグで順序入れ替え / クリックで選択】\n${act.name} (${act.duration.toFixed(2)}s) [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s]${act.usedSpecialCharge ? '\n【特殊重撃（蒼牙）】特殊スキルの使用回数を 1 回分使います（スタミナは使いません）' : ''}${descOf(char, act) ? `\n\n${descOf(char, act)}` : ''}`
+                                            ? t('chart:gantt.actionWarning', { warning: windowWarning, name: act.name })
+                                            : `${t('chart:gantt.actionTitle', { name: act.name, duration: act.duration.toFixed(2), start: (act.startTime ?? 0).toFixed(2), end: (act.endTime ?? 0).toFixed(2) })}${act.usedSpecialCharge ? t('chart:gantt.specialCharged') : ''}${descOf(char, act) ? `\n\n${descOf(char, act)}` : ''}`
                                         }
                                       >
                                         <span className="truncate px-0.5 flex items-center gap-0.5">
@@ -1823,22 +1828,22 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           {!hasCollision && windowWarning && <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />}
                                           {ctVerified && (
                                             <span
-                                              title={`gcsim 確認済み: アプリの計算では CT がまだ ${colRem ?? '?'} 秒残っていますが、gcsim では待たずに実行できました`}
+                                              title={t('chart:gantt.verifiedTitle', { remaining: colRem ?? '?' })}
                                               className="text-[9px] bg-slate-500 text-white font-black px-1 rounded ml-0.5 shrink-0"
                                             >
-                                              gcsim確認済み
+                                              {t('chart:gantt.verified')}
                                             </span>
                                           )}
                                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping inline-block shrink-0" />}
                                           {act.type === 'swap' || act.actionTypeId === 'action_switch_char'
-                                            ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label="キャラ交代" />
+                                            ? <RefreshCw className="w-3.5 h-3.5 text-sky-300 shrink-0" aria-label={t('chart:gantt.swap')} />
                                             : actionDisplayName(act)}
                                           {act.usedSpecialCharge && (
-                                            <span className="text-[9px] bg-cyan-400 text-slate-950 font-black px-1 rounded ml-0.5 shrink-0">特殊</span>
+                                            <span className="text-[9px] bg-cyan-400 text-slate-950 font-black px-1 rounded ml-0.5 shrink-0">{t('chart:gantt.special')}</span>
                                           )}
                                           {hasCollision && colRem !== undefined && (
                                             <span className="text-[9px] bg-red-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                              残{colRem}s
+                                              {t('chart:gantt.remainingShort', { seconds: colRem })}
                                             </span>
                                           )}
                                         </span>
@@ -1860,7 +1865,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         key={`group_frame_${f.id}`}
                                         className="absolute top-0 bottom-0 border-2 border-dashed border-fuchsia-400/70 rounded pointer-events-none z-20"
                                         style={{ left: `${(f.start - (stint.startTime ?? 0)) * pixelsPerSecond}px`, width: `${Math.max(2, (f.end - f.start) * pixelsPerSecond)}px` }}
-                                        title={`グループ ×${f.repeat}`}
+                                        title={t('chart:gantt.groupTitle', { count: f.repeat })}
                                       >
                                         {f.repeat > 1 && (
                                           <span className="absolute -top-2 left-0 text-[8px] font-mono px-0.5 rounded bg-fuchsia-950 text-fuchsia-200 leading-none">×{f.repeat}</span>
@@ -1878,9 +1883,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         className={`absolute h-full flex items-center justify-center border-r border-dashed border-slate-400/50 text-[9px] text-slate-200/70 select-none ${
                                           act.type === 'burst' ? 'bg-purple-600/30' : act.type === 'skill' || act.type === 'skill_hold' || act.type === 'skill_reset' ? 'bg-amber-600/30' : 'bg-slate-500/30'
                                         }`}
-                                        title={`【モード維持】${stint.modeHold?.label ?? 'モード'}が最大時間まで続くように、「${act.name}」の後を自動で延ばしています（+${hold.toFixed(2)}s。保存しません）。\n切り替えは、アクション構築エリアの出場ブロックの「モード維持」`}
+                                        title={t('chart:gantt.modeHoldTitle', { mode: stint.modeHold?.label ?? t('chart:gantt.mode'), name: act.name, seconds: hold.toFixed(2) })}
                                       >
-                                        <span className="truncate px-0.5">維持</span>
+                                        <span className="truncate px-0.5">{t('chart:gantt.hold')}</span>
                                       </div>
                                     );
                                   })}
@@ -1904,7 +1909,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }}
                                     style={{ left: `${startX}px`, width: `${width}px` }}
                                     className="absolute h-3.5 rounded text-[9px] font-mono flex items-center justify-center px-1 border bg-emerald-950 border-emerald-400/80 text-emerald-200 hover:border-emerald-300 cursor-pointer select-none shadow-sm"
-                                    title={`【スキルのストック ${sp.count} / ${sp.max}】${l.lap}周目 [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s]（クリックで開始位置へシーク）${l.lap === 1 ? '\n時間 0 は満タンの仮定' : ''}`}
+                                    title={`${t('chart:gantt.stockTitle', { count: sp.count, max: sp.max, lap: l.lap, start: sp.startTime.toFixed(2), end: sp.endTime.toFixed(2) })}${l.lap === 1 ? t('chart:gantt.stockFull') : ''}`}
                                   >
                                     <span className="truncate">{sp.count}</span>
                                   </div>
@@ -1952,12 +1957,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }`}
                                     title={
                                       isCarryOver
-                                        ? `【1周目からの持ち越しスキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
+                                        ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindSkillCt'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
+                                        : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindSkillCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
                                   >
                                     <span className="truncate">
-                                      ⏱️ {isCarryOver ? '[持越] ' : ''}E-CT {(cd.endTime - cd.startTime).toFixed(1)}s
+                                      ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}E-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>
@@ -2002,12 +2007,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }`}
                                     title={
                                       isCarryOver
-                                        ? `【1周目からの持ち越し特殊スキルCT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【特殊スキルCT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
+                                        ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindSpecialCt'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
+                                        : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindSpecialCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
                                   >
                                     <span className="truncate">
-                                      ⏱️ {isCarryOver ? '[持越] ' : ''}spE-CT {(cd.endTime - cd.startTime).toFixed(1)}s
+                                      ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}spE-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>
@@ -2052,12 +2057,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     }`}
                                     title={
                                       isCarryOver
-                                        ? `【1周目からの持ち越し元素爆発CT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n期間: [${cd.startTime.toFixed(2)}s ~ ${cd.endTime.toFixed(2)}s]\n残りCT: ${(cd.endTime - cd.startTime).toFixed(1)}s (クリックで開始位置へシーク)`
-                                        : `【爆発CT】${cd.duration.toFixed(1)}s [${cd.startTime.toFixed(1)}s ~ ${cd.endTime.toFixed(1)}s] (クリックで開始位置へシーク)${ctActionInfo(char, stint, cd.actionInstanceId)}`
+                                        ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindBurstCtLong'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
+                                        : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindBurstCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
                                   >
                                     <span className="truncate">
-                                      ⏱️ {isCarryOver ? '[持越] ' : ''}Q-CT {(cd.endTime - cd.startTime).toFixed(1)}s
+                                      ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}Q-CT {(cd.endTime - cd.startTime).toFixed(1)}s
                                     </span>
                                   </div>
                                   </React.Fragment>
@@ -2114,12 +2119,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 hover:opacity-100 hover:border-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${isBuffActive ? runningRingClass : isBarActive ? 'opacity-90' : ''}`}
-                                          title={`【1周目からの持ち越し発動バフ（${badgeCfg.label}）】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n${cp.name} (${cp.duration.toFixed(2)}s)${cp.description ? `\n${cp.description}` : ''}\n期間: [${start.toFixed(2)}s ~ ${cp.endTime.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                          title={t('chart:gantt.carryPassiveTitle', { label: badgeCfg.label, inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', name: cp.name, duration: cp.duration.toFixed(2), description: cp.description ? `\n${cp.description}` : '', start: start.toFixed(2), end: cp.endTime.toFixed(2) })}
                                         >
                                           <span className="truncate flex items-center gap-1">
                                             {badgeCfg.icon}
-                                            <span>[持越] [{badgeCfg.label}] {cp.name} ({dur.toFixed(1)}s)</span>
-                                            {isBuffActive ? ` [残${remaining.toFixed(1)}s]` : ''}
+                                            <span>{t('chart:gantt.carried')} [{badgeCfg.label}] {cp.name} ({dur.toFixed(1)}s)</span>
+                                            {isBuffActive ? ` ${t('chart:gantt.remaining', { seconds: remaining.toFixed(1) })}` : ''}
                                           </span>
                                         </div>
                                       );
@@ -2176,17 +2181,29 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400'
                                               : badgeCfg.ganttBarClass
                                           } ${activeRingClass}`}
-                                          title={`【発動バフ（${badgeCfg.label}）${isLapTwoBar ? '・2周目の発動' : ''}】${isPending ? '(※再生位置が発動位置に届くまでグレー) ' : ''}${p.auto ? '自動（アプリの計算。確率 100%・スキルのダメージが当たったとき）' : `ドラッグで発動位置を調整（出場の先頭から ${fmtOffset(offset)}s）`}\n${p.name} (${p.duration.toFixed(2)}s)${p.description ? `\n${p.description}` : ''}\n発動: ${realStart.toFixed(2)}s${isLapTwoBar ? `（2周目。表示位置 ${drawX.toFixed(2)}s）` : ''}（出場の先頭から ${fmtOffset(offset)}s）${p.hasCTViolation ? `\n⚠️ 【CT警告】CTがまだ ${p.collisionRemainingCT ?? '?'}s 残っています。この発動では効果は発動しません（gcsim の計算は制限されません）` : ''}`}
+                                          title={t('chart:gantt.passiveBarTitle', {
+                                            label: badgeCfg.label,
+                                            lap2: isLapTwoBar ? t('chart:gantt.lap2Trigger') : '',
+                                            pending: isPending ? t('chart:gantt.pending') : '',
+                                            how: p.auto ? t('chart:gantt.auto') : t('chart:gantt.dragOffset', { offset: fmtOffset(offset) }),
+                                            name: p.name,
+                                            duration: p.duration.toFixed(2),
+                                            description: p.description ? `\n${p.description}` : '',
+                                            start: realStart.toFixed(2),
+                                            lap2Pos: isLapTwoBar ? t('chart:gantt.lap2Pos', { x: drawX.toFixed(2) }) : '',
+                                            offset: fmtOffset(offset),
+                                            violation: p.hasCTViolation ? t('chart:gantt.passiveViolation', { remaining: p.collisionRemainingCT ?? '?' }) : '',
+                                          })}
                                         >
                                           <span className="truncate flex items-center gap-1">
                                             {p.hasCTViolation ? <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" /> : badgeCfg.icon}
                                             <span>[{badgeCfg.label}] {p.name} ({p.duration.toFixed(1)}s)</span>
                                             {p.hasCTViolation && p.collisionRemainingCT !== undefined && (
                                               <span className="text-[9px] bg-amber-600 text-white font-black px-1 rounded shadow ml-0.5 shrink-0">
-                                                残{p.collisionRemainingCT}s
+                                                {t('chart:gantt.remainingShort', { seconds: p.collisionRemainingCT })}
                                               </span>
                                             )}
-                                            {isBuffActive && !p.hasCTViolation ? ` [残${remaining.toFixed(1)}s]` : ''}
+                                            {isBuffActive && !p.hasCTViolation ? ` ${t('chart:gantt.remaining', { seconds: remaining.toFixed(1) })}` : ''}
                                             {isDragging ? ` @${fmtOffset(offset)}s` : ''}
                                           </span>
                                         </div>
@@ -2222,9 +2239,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60 border-dashed hover:opacity-100 hover:border-slate-400'
                                               : badgeCfg.cooldownBarClass
                                           }`}
-                                          title={`【1周目からの持ち越し${badgeCfg.label}CT】${!isBarActive ? '(※元の発動位置を通過すると有効化)' : ''}\n${cp.name}${cp.description ? `\n${cp.description}` : ''}\nCT残り: ${cdDur.toFixed(2)}s [${start.toFixed(2)}s ~ ${cdEnd.toFixed(2)}s] (クリックで開始位置へシーク)`}
+                                          title={t('chart:gantt.carryPassiveCtTitle', { label: badgeCfg.label, inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', name: cp.name, description: cp.description ? `\n${cp.description}` : '', remaining: cdDur.toFixed(2), start: start.toFixed(2), end: cdEnd.toFixed(2) })}
                                         >
-                                          <span className="truncate">⏱️ [持越] {badgeCfg.label}CT {cdDur.toFixed(1)}s</span>
+                                          <span className="truncate">⏱️ {t('chart:gantt.carried')} {t('chart:gantt.passiveCtLabel', { label: badgeCfg.label })} {cdDur.toFixed(1)}s</span>
                                         </div>
                                       );
                                     })}
@@ -2270,7 +2287,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                           onClick={(e) => e.stopPropagation()}
                                           style={{ left: `${start * pixelsPerSecond}px`, width: `${Math.max(16, (visualEnd - start) * pixelsPerSecond)}px`, zIndex: 20 }}
                                           className={`${barCommon} ${cursor} font-mono ${isPending ? 'bg-slate-800/60 border-slate-600/70 text-slate-400 opacity-60' : badgeCfg.cooldownBarClass}`}
-                                          title={`【${badgeCfg.label}バフのCT${isLapTwoBar ? '・2周目' : ''}】${p.name}${p.description ? `\n${p.description}` : ''}\nCT ${p.cooldown.toFixed(2)}s [${start.toFixed(2)}s ~ ${(start + p.cooldown).toFixed(2)}s]${p.auto ? '（自動。精錬で長さが決まる）' : '（ドラッグで効果と一緒に移動）'}`}
+                                          title={t('chart:gantt.passiveCtTitle', { label: badgeCfg.label, lap2: isLapTwoBar ? t('chart:gantt.lap2') : '', name: p.name, description: p.description ? `\n${p.description}` : '', cooldown: p.cooldown.toFixed(2), start: start.toFixed(2), end: (start + p.cooldown).toFixed(2), how: p.auto ? t('chart:gantt.ctAuto') : t('chart:gantt.ctDrag') })}
                                         >
                                           <span className="truncate">⏱️ {badgeCfg.label}CT {p.cooldown.toFixed(1)}s</span>
                                         </div>
@@ -2352,35 +2369,35 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         {/* Legend / Guide */}
         <div className="flex flex-wrap items-center justify-between gap-3 mt-3 px-1 text-xs text-slate-400">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-semibold text-slate-300">凡例:</span>
+            <span className="font-semibold text-slate-300">{t('chart:gantt.legend')}</span>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-2.5 rounded bg-amber-500/50 border border-amber-400"></span>
-              <span className="text-slate-200">出場・行動時間</span>
+              <span className="text-slate-200">{t('chart:gantt.legendStint')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-2.5 rounded bg-sky-950 border border-sky-400"></span>
-              <span className="text-sky-300 font-semibold">CT（クールタイム / スキル・爆発統一）</span>
+              <span className="text-sky-300 font-semibold">{t('chart:gantt.legendCt')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-2.5 rounded bg-emerald-950 border border-emerald-400"></span>
-              <span className="text-emerald-300 font-semibold">効果持続時間（バフ・設置物・継続効果統一）</span>
+              <span className="text-emerald-300 font-semibold">{t('chart:gantt.legendEffect')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-0 border-t border-dashed border-amber-400"></span>
-              <span className="text-amber-300 font-medium">交代垂直スナップ (前の退場＝次の登場)</span>
+              <span className="text-amber-300 font-medium">{t('chart:gantt.legendSnap')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-0 border-t-2 border-dotted border-purple-400"></span>
-              <span className="text-purple-300 font-medium">🔁 2周目以降ループ区切り</span>
+              <span className="text-purple-300 font-medium">{t('chart:gantt.legendLoop')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3.5 h-2.5 rounded bg-slate-800/80 border border-dashed border-slate-500"></span>
-              <span className="text-slate-300 font-medium">[持越] 1周目からの持ち越し（元の発動位置を通過すると有効化）</span>
+              <span className="text-slate-300 font-medium">{t('chart:gantt.legendCarry')}</span>
             </div>
           </div>
 
           <div className="text-[11px] text-slate-400">
-            ※ タイムライン上の任意の場所をクリックして再生位置をシークできます
+            {t('chart:gantt.seekHint')}
           </div>
         </div>
       </div>
@@ -2395,8 +2412,8 @@ const CTViolationMarker: React.FC<{ x: number; remaining?: number; warning?: boo
     className="absolute top-1/2 -translate-y-1/2 inline-flex items-center pointer-events-auto"
     style={{ left: `${x - 15}px`, zIndex: 30 }}
     title={verified
-      ? `gcsim 確認済み: アプリの計算では CT がまだ ${remaining ?? '?'} 秒残っていますが、gcsim では待たずに実行できました`
-      : warning ? `CT警告: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています（効果は発動しません）` : `CT違反: 発動時点で CT がまだ ${remaining ?? '?'} 秒残っています`}
+      ? t('chart:gantt.verifiedTitle', { remaining: remaining ?? '?' })
+      : warning ? t('chart:gantt.markWarning', { remaining: remaining ?? '?' }) : t('chart:gantt.markViolation', { remaining: remaining ?? '?' })}
   >
     <AlertTriangle className={`w-3 h-3 shrink-0 ${verified ? 'text-slate-400' : warning ? 'text-amber-400' : 'text-red-400 animate-pulse'}`} />
   </span>

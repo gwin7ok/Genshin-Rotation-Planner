@@ -1,5 +1,6 @@
 import { CharacterConfig } from '../../types/genshin';
 import type { RotationState } from './state';
+import { t } from '../../i18n';
 
 /** CT違反の検証メッセージ（同じアクションは1件にまとめ、残り秒数は最大値） */
 export const addViolationIssueIn = (
@@ -16,8 +17,8 @@ export const addViolationIssueIn = (
   cycle: number,
 ) => {
   const { violationRemaining, validationIssues } = state;
-  const where = cycle === 0 ? '' : `（ループ${cycle + 1}周目の発動時）`;
-  const message = `${what}の発動時点で CT がまだ ${remaining} 秒残っています${where}`;
+  const where = cycle === 0 ? '' : t('messages:ct.violationCycle', { cycle: cycle + 1 });
+  const message = t('messages:ct.violationMessage', { what, remaining, where });
   const prev = violationRemaining.get(id);
   if (prev !== undefined) {
     if (remaining > prev) {

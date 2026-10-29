@@ -29,6 +29,7 @@ import { attachDurations, deriveAutoExtras, mergeExtras } from '../masterdata/au
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
 import { fetchRuntimeData } from './gcsim/runtimeData';
 import { STORAGE_KEYS, readString, writeJson } from './persistence';
+import { t, dateLocale } from '../i18n';
 
 /** 発動バフと gcsim の辞書の結び付け（5-6）用。辞書は大きいので、動的生成のときだけ読み込む */
 async function loadCatalogIndex() {
@@ -224,11 +225,11 @@ export async function syncCharactersMasterOnline(
   linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db + gcsim ${report.gcsimCommit.slice(0, 7)} から生成 / 辞書 ${catalogCommit})`,
+    lastSyncedAt: t('messages:db.characters', { time: nowStr, commit: report.gcsimCommit.slice(0, 7), catalog: catalogCommit }),
     characters: mergedCharacters
   };
 
@@ -257,11 +258,11 @@ export async function syncWeaponsMasterOnline(
     isCustomWeapon,
   );
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より武器 ${report.totalWeapons} 件をオンライン生成 / 辞書 ${catalogCommit})`,
+    lastSyncedAt: t('messages:db.weapons', { time: nowStr, count: report.totalWeapons, catalog: catalogCommit }),
     weapons: mergedWeapons
   };
 
@@ -289,11 +290,11 @@ export async function syncArtifactsMasterOnline(
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より聖遺物 ${report.totalArtifacts} セットをオンライン生成 / 辞書 ${catalogCommit})`,
+    lastSyncedAt: t('messages:db.artifacts', { time: nowStr, count: report.totalArtifacts, catalog: catalogCommit }),
     artifacts: mergedArtifacts
   };
 
@@ -324,11 +325,11 @@ export async function syncEquipmentMasterOnline(
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: `${nowStr} (genshin-db API より武器・聖遺物をオンライン生成 / 辞書 ${catalogCommit})`,
+    lastSyncedAt: t('messages:db.equipment', { time: nowStr, catalog: catalogCommit }),
     weapons: mergedWeapons,
     artifacts: mergedArtifacts,
   };
@@ -349,10 +350,10 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
     isCustomWeapon,
   );
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: `${nowStr} (同梱の武器マスターを反映)`,
+    lastSyncedAt: t('messages:db.bundledWeapons', { time: nowStr }),
     weapons: mergedWeapons
   };
 
@@ -372,10 +373,10 @@ export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: `${nowStr} (同梱の聖遺物マスターを反映)`,
+    lastSyncedAt: t('messages:db.bundledArtifacts', { time: nowStr }),
     artifacts: mergedArtifacts
   };
 
@@ -389,7 +390,7 @@ export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
 export function resetDatabaseToMaster(): AppDatabase {
   const resetDb = {
     ...INITIAL_MASTER_DATABASE,
-    lastSyncedAt: new Date().toLocaleString('ja-JP') + ' (初期化リセット済)',
+    lastSyncedAt: t('messages:db.reset', { time: new Date().toLocaleString(dateLocale) }),
   };
   saveDatabase(resetDb);
   return resetDb;
@@ -464,7 +465,7 @@ export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
 export function clearAllDatabaseData(db: AppDatabase): AppDatabase {
   const emptyDb: AppDatabase = {
     version: 1.0,
-    lastSyncedAt: new Date().toLocaleString('ja-JP') + ' (全データクリア済)',
+    lastSyncedAt: t('messages:db.cleared', { time: new Date().toLocaleString(dateLocale) }),
     characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
     weapons: db.weapons.filter(isLockedWeapon),          // ロック中の武器は残す
     artifacts: db.artifacts.filter(isLockedArtifact),     // ロック中の聖遺物は残す

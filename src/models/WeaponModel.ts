@@ -5,6 +5,7 @@
 
 import { WeaponDatabaseItem, WeaponRefinementData, EquipmentBuffDefinition } from '../types/database';
 import { WeaponType } from '../types/genshin';
+import { t } from '../i18n';
 
 export class WeaponModel {
   public rank: number;
@@ -87,7 +88,7 @@ export class WeaponModel {
 
   /** 現在ランクでの効果要約 */
   get statEffectSummary(): string {
-    return this.currentRefinement?.statEffectSummary || this.data.buffEffect?.statEffect || 'バフ効果';
+    return this.currentRefinement?.statEffectSummary || this.data.buffEffect?.statEffect || t('messages:buff.weaponDefault');
   }
 
   /** 現在ランクでの発動バフ定義一覧 (ガントチャート・タイムライン連携用) */

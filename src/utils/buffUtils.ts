@@ -5,6 +5,7 @@ import { CharacterModel } from '../models/CharacterModel';
 import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/equipmentBuffOverrides';
 import { classifyBuffScope, type BuffScope } from './buffScope';
 import { APP_SIDE_REVELATION_BUFFS, isRevelationAppSide } from '../masterdata/revelationCharacters';
+import { t } from '../i18n';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact' | 'constellation';
 
@@ -31,7 +32,7 @@ export interface TriggerableBuffDefinition {
 }
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
-export const GCSIM_OUT_OF_SCOPE_DEFAULT_REASON = 'gcsim に状態のキーが無い(または未対応)ため、gcsim の計算結果では置かれません。手動で置いたときだけ表示されます';
+export const GCSIM_OUT_OF_SCOPE_DEFAULT_REASON = t('messages:buff.outOfScope');
 
 /** 「gcsim 対象外」のバッジの表示が必要か */
 export const isGcsimOutOfScope = (def: Pick<TriggerableBuffDefinition, 'gcsimTarget'>): boolean => def.gcsimTarget === false;
@@ -46,8 +47,8 @@ export const isGlobalRowBuff = (def: Pick<TriggerableBuffDefinition, 'timing' | 
   def.timing === 'always' || ((def.category === 'talent' || def.category === 'constellation') && !(def.duration && def.duration > 0));
 
 /** 全体の行の表示名の先頭に付ける分類（既定は「条件付き」。辞書で確認できたものだけ「常時」） */
-export const buffTimingLabel = (def: Pick<TriggerableBuffDefinition, 'timing'>): '常時' | '条件付き' =>
-  def.timing === 'always' ? '常時' : '条件付き';
+export const buffTimingLabel = (def: Pick<TriggerableBuffDefinition, 'timing'>): string =>
+  def.timing === 'always' ? t('messages:buff.always') : t('messages:buff.conditional');
 
 /**
  * 指定されたキャラクターが発動可能な全バフ（固有天賦・装備武器・装備聖遺物）を収集する
@@ -94,7 +95,7 @@ export function getAvailableBuffsForCharacter(
         color: character.color || '#84cc16',
         timing: 'conditional',
         gcsimTarget: false,
-        gcsimNote: 'gcsim に諭示の実装が無いため、gcsim の計算結果では置かれません。手動で置いたときだけ表示されます',
+        gcsimNote: t('messages:buff.revelationNote'),
       });
     }
   }
@@ -197,7 +198,7 @@ export function getAvailableBuffsForCharacter(
       if (c.level > constellation) continue;
       result.push({
         id: c.id,
-        name: `${c.level}凸「${c.name}」`,
+        name: t('messages:buff.constellationName', { level: c.level, name: c.name }),
         category: 'constellation',
         sourceId: character.id,
         sourceName: character.name,
@@ -229,7 +230,7 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
   switch (category) {
     case 'weapon':
       return {
-        label: '武器',
+        label: t('messages:buff.weapon'),
         icon: '⚔️',
         badgeClass: 'bg-blue-950/70 border-blue-600/80 text-blue-200',
         hoverButtonClass: 'bg-blue-950/60 hover:bg-blue-900/80 text-blue-200 hover:text-white border-blue-700/80 hover:border-blue-400',
@@ -239,7 +240,7 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
       };
     case 'artifact':
       return {
-        label: '聖遺物',
+        label: t('messages:buff.artifact'),
         icon: '🛡️',
         badgeClass: 'bg-purple-950/60 border-purple-700/70 text-purple-200',
         hoverButtonClass: 'bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 hover:text-white border-purple-800/70 hover:border-purple-500',
@@ -249,7 +250,7 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
       };
     case 'constellation':
       return {
-        label: '凸',
+        label: t('messages:buff.constellation'),
         icon: '✦',
         badgeClass: 'bg-rose-950/60 border-rose-700/70 text-rose-200',
         hoverButtonClass: 'bg-rose-950/50 hover:bg-rose-900/60 text-rose-200 hover:text-white border-rose-800/70 hover:border-rose-500',
@@ -260,7 +261,7 @@ export function getBuffBadgeConfig(category: BuffCategory = 'talent') {
     case 'talent':
     default:
       return {
-        label: '天賦',
+        label: t('messages:buff.talent'),
         icon: '🎯',
         badgeClass: 'bg-emerald-950/60 border-emerald-700/70 text-emerald-200',
         hoverButtonClass: 'bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 hover:text-white border-emerald-800/70 hover:border-emerald-500',

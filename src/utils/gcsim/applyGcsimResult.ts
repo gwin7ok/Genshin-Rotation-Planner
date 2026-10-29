@@ -9,6 +9,7 @@ import type { ActionGcsimEffect, CharacterActionInstance, EffectDurationMode, St
 import { actionDelayOf } from '../actionDelay.ts';
 import type { GcsimActionRef } from './buildGcsimConfig.ts';
 import { framesToSeconds, type GcsimActionRecord, type GcsimLogSummary } from './readGcsimLog.ts';
+import { t } from '../../i18n';
 
 export interface AlignedAction {
   /** gcsim のログのアクション */
@@ -38,13 +39,13 @@ export function alignActions(summary: GcsimLogSummary, refs: GcsimActionRef[]): 
     if (executed[i].name !== refs[i].command) {
       return {
         pairs: [],
-        mismatch: `${i + 1} 番目のアクションが一致しません（設定文: ${refs[i].command} / gcsim のログ: ${executed[i].name}）`,
+        mismatch: t('messages:client.actionMismatch', { index: i + 1, command: refs[i].command, executed: executed[i].name }),
       };
     }
     pairs.push({ executed: executed[i], ref: refs[i] });
   }
   if (executed.length < refs.length) {
-    return { pairs, mismatch: `gcsim のログのアクションが設定文より少ないです（${executed.length} / ${refs.length} 件）。途中で止まった可能性があります` };
+    return { pairs, mismatch: t('messages:client.logShorter', { executed: executed.length, expected: refs.length }) };
   }
   return { pairs };
 }
@@ -121,7 +122,7 @@ export function applyActionDurations(
     }
     const before = effectiveDurations?.[ref.actionId] ?? act.duration;
     if (Math.abs(seconds - before) >= 0.0005) {
-      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: copyOf ? `${act.name}（${Number(copyOf.k) + 1} 回目）` : act.name, before, after: seconds });
+      changes.push({ stintId: ref.stintId, actionId: ref.actionId, name: copyOf ? t('messages:rotation.copyNth', { name: act.name, n: Number(copyOf.k) + 1 }) : act.name, before, after: seconds });
     }
   }
 

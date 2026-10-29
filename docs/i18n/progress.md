@@ -2,14 +2,14 @@
 
 ## 現在の状態
 
-フェーズ 2（画面の文言）: 進行中。残りは「フェーズ 2 のチェックリスト」の未完了の項目
+フェーズ 2（画面の文言）: 確認待ち（実装・検査済み。コミットはユーザー）。次はフェーズ 3（ゲームデータ）
 
 ## フェーズ状態
 
 | フェーズ | 状態 | 備考 |
 |---|---|---|
 | 1. 仕組み | 確認待ち | 下の「フェーズ 1 のチェックリスト」 |
-| 2. 画面の文言 | 進行中 | 下の「フェーズ 2 のチェックリスト」 |
+| 2. 画面の文言 | 確認待ち | 下の「フェーズ 2 のチェックリスト」 |
 | 3. ゲームデータ | 未着手 | 最初に保存容量を測る（plan.md 2.1） |
 | 4. 開発・検証用の表示 | 未着手 | |
 | 5. 公開 | 未着手 | |
@@ -28,23 +28,31 @@
 
 ## フェーズ 2 のチェックリスト
 
-名前空間（`src/locales/<言語>/`）: common・app・header・chart・database・gcsim・guide・notice・party・save
+名前空間（`src/locales/<言語>/`）: common・app・header・chart・database・editor・gcsim・guide・messages・notice・party・save
 
 - [x] ヘッダー（`Header.tsx`）・言語の切り替え
 - [x] 小さい部品（ErrorBoundary・GlobalBuffRow・SourceNotice・GcsimMissingBadge・StaleReactionsBadge・GcsimComputeBanner・DialogProvider・ItemLockButton・DatabaseWeaponCardItem・ElementIcon・CharacterFilterBar）
 - [x] ダイアログ（UpdateNoticeModal・SaveAsDialog・SaveLoadModal・PartyConfigModal・GcsimConfigDialog・GcsimLogSummaryView・UsageGuideModal・EditCharacter/Weapon/ArtifactSubModal）
 - [x] 構築エリアの部品（StintBuffTriggersSection・ReactionRows）、`App.tsx`
-- [ ] `GanttChart.tsx`（日本語を含む行 約 130）
-- [ ] `StintSequenceEditor.tsx`（約 134）。英語の「使い方」が参照する表記（Add stint・Quick reorder・Group N・Repeat 1・Ungroup・+Wait）に合わせる
-- [ ] `DatabaseManagerModal.tsx`（約 204）。`WEAPON_TYPE_NAMES_JA` を `weaponTypeLabel` に置き換える
-- [ ] React の外の文言（`src/utils/`: 検証メッセージ・`SLOT_WRITE_FAILED_MESSAGE`・`describeSkipped`・`summarizeApplyPlan` / `describeApplyPlan`・`GCSIM_OUT_OF_SCOPE_DEFAULT_REASON` など）
-- [ ] 日付の整形（`databaseService.ts` の `ja-JP`・`Asia/Tokyo` 固定。`lastSyncedAt` に日本語の文字列を保存している）
-- [ ] 画面での確認（英語の長さによるはみ出し）
+- [x] `GanttChart.tsx`
+- [x] `StintSequenceEditor.tsx`（英語の「使い方」の表記 Add stint・Quick reorder・Group N・Repeat 1・Ungroup・+Wait に合わせた）
+- [x] `DatabaseManagerModal.tsx`（`WEAPON_TYPE_NAMES_JA` → `weaponTypeLabel`）
+- [x] React の外の文言（`src/utils/`・`src/data/plungeRules.ts`・`characters.ts` の空き枠の名前。名前空間 messages）
+- [x] 日付の整形（`databaseService.ts` を `dateLocale` に。タイムゾーンは端末のまま）
+- [x] 画面での確認: 英語でメイン画面・編成設定・編成管理・DB 管理・使い方を開き、画面の文言に日本語が残らないこと（残るのはゲームデータと保存済みのデータ）、日本語の画面で翻訳キーが出ないこと、コンソールのエラーなしを確認。ヘッダー・ガントチャートのはみ出しなし（全画面の細かい確認は未）
 
 メモ:
+- 検査スクリプトなどブラウザの外（`window` が無い）では、常に日本語（`language.ts`。Node 22 には `navigator` があり en-US になるため）。
 - 日付のロケールは `src/i18n` の `dateLocale`（表示の言語に合わせる）。元素・武器種の表示名は `src/i18n/labels.ts`。
 - 置き換えで、日本語の画面の表記が変わった箇所: gcsim の読み取り結果の表の括弧（全角 → 半角）・範囲の記号（〜 → –）。
 - 英語の数の表記（`_one` / `_other`）は、1 件になりうる短い表示から付けている（すべてではない）。
+
+### フェーズ 3 へ持ち越すもの（フェーズ 2 で見つけたもの）
+
+- 名前で判定している処理: `GanttChart.tsx` の `getBuffClassification`（`name.includes('スキル')` など）は、日本語のときだけ名前を見るようにした（英語の名前はほぼすべて 'e' を含むため）。ID・種類での判定に置き換える。`StintBuffTriggersSection` の `${duration}秒` も同様（英語は `s` も見る）。
+- `src/masterdata/` の文（諭示の説明・`frameSource`・モードの名前・特殊爆発の受付の説明・ゲージの説明・状態バーの名前・発動バフの名前「〜 4セット」など）。
+- `lastSyncedAt` は、生成したときの言語の文字列で保存する（言語を切り替えても前の言語のまま）。D250 の DB の形の変更と合わせて決める。
+- そのままにしたもの: `PRESET_NAME_PREFIX`（「[プリセット]」。保存編成の名前の一部で、プリセットの判定に使う）・`APP_FILE_PREFIX`（書き出すファイル名）・名前の並びの区切り「・」（メモ欄・ファイル名）。
 
 ## 決定ログ
 
@@ -68,5 +76,6 @@
 | 日付 | 内容 |
 |---|---|
 | 2026-10-29 | 調査・選択肢の提示・ユーザーの決定（D243〜D254）。計画書を作成 |
+| 2026-10-29 | フェーズ 2 の実装を完了（GanttChart・StintSequenceEditor・DatabaseManagerModal・src/utils の文言・日付）。名前空間は 12。既存の検査（backup・groups・rotation-validation・fetch-util・version-notice・effects・cooldown-log・go-expr・action-links・wasm-source）は合格。hitlag・sacrificial-seed は gcsim サーバーが止まっていて未実行 |
 | 2026-10-29 | フェーズ 2 を開始。ヘッダー・小さい部品・ダイアログ・App.tsx を言語ファイルへ移し英訳（名前空間 10）。既存の検査（backup・groups・rotation-validation・fetch-util・version-notice・effects）はすべて合格 |
 | 2026-10-29 | フェーズ 1 を実装。i18next の型の宣言は strictNullChecks が前提で使えないため、キーの型を自前で作る形に変更（plan.md 4.1.1） |

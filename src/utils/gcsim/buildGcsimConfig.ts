@@ -13,6 +13,7 @@ import { actionDelayOf } from '../actionDelay.ts';
 import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import type { GcsimMemberInfo } from './readGcsimLog.ts';
+import { t } from '../../i18n';
 
 /** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル固定、会心率100% */
 const CHARACTER_LINE_PARAMS = 'lvl=90/90';
@@ -138,14 +139,14 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   const lines: string[] = [];
   const memberInfos: GcsimMemberInfo[] = [];
 
-  if (members.length === 0) error('編成にキャラがいません');
-  if (input.stints.length === 0) error('出場ブロックがありません（ローテーションが空です）');
+  if (members.length === 0) error(t('messages:config.noMembers'));
+  if (input.stints.length === 0) error(t('messages:config.noStints'));
 
   // 1. キャラごと（キャラ・武器・聖遺物・仮ステータス）
   for (const c of members) {
     const key = c.source?.gcsimKey;
     if (!key) {
-      error(`${c.name}: gcsim のキーがありません（gcsim 未対応のキャラ、またはカスタムキャラ）`);
+      error(t('messages:config.noCharKey', { name: c.name }));
       continue;
     }
     keyOf.set(c.id, key);
@@ -170,11 +171,11 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);
     if (!c.weaponId) {
-      warn(`${c.name}: 武器が未設定です（武器なしで計算されます）`);
+      warn(t('messages:config.noWeapon', { name: c.name }));
     } else if (!weapon) {
-      error(`${c.name}: 武器がデータベースに見つかりません`);
+      error(t('messages:config.weaponNotFound', { name: c.name }));
     } else if (!weapon.gcsimKey) {
-      error(`${c.name}: 武器「${weapon.name}」に gcsim のキーがありません（gcsim 未対応の武器、またはカスタム武器）`);
+      error(t('messages:config.noWeaponKey', { name: c.name, weapon: weapon.name }));
     } else {
       const refine = c.weaponRefinementRank ?? weapon.refinementRank ?? (weapon.rarity >= 5 ? 1 : 5);
       lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${WEAPON_LEVEL};`);
@@ -184,11 +185,11 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     if (c.artifactSetMode !== '2+2') {
       const artifact = input.artifacts.find(a => a.id === c.artifactSetId);
       if (!c.artifactSetId) {
-        warn(`${c.name}: 聖遺物セットが未設定です（聖遺物なしで計算されます）`);
+        warn(t('messages:config.noArtifact', { name: c.name }));
       } else if (!artifact) {
-        error(`${c.name}: 聖遺物セットがデータベースに見つかりません`);
+        error(t('messages:config.artifactNotFound', { name: c.name }));
       } else if (!artifact.gcsimKey) {
-        error(`${c.name}: 聖遺物「${artifact.name}」に gcsim のキーがありません（gcsim 未対応の聖遺物、またはカスタム聖遺物）`);
+        error(t('messages:config.noArtifactKey', { name: c.name, artifact: artifact.name }));
       } else {
         lines.push(`${key} add set="${artifact.gcsimKey}" count=4;`);
       }
@@ -266,12 +267,12 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         }
         // gcsim が実装していないアクション（大剣の重撃など）は、実行すると「action ... not implemented」のエラーになるので、設定文に入れない
         if (char.availableActions.find(a => a.id === act.actionTypeId)?.gcsimUnsupported) {
-          error(`${char.name}: アクション「${act.name}」は、gcsim が未実装のため、gcsim では実行できません（設定文には入れていません。アクションを外してください）`);
+          error(t('messages:config.actionMissing', { name: char.name, action: act.name }));
           continue;
         }
         const mapped = mapAction(act.actionTypeId, char.weaponType);
         if (!mapped.command) {
-          error(`${char.name}: アクション「${act.name}」（${act.actionTypeId}）に gcsim への変換規則がありません`);
+          error(t('messages:config.noRule', { name: char.name, action: act.name, type: act.actionTypeId }));
           continue;
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
@@ -315,7 +316,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   ];
 
   if (plungeChars.size > 0) {
-    warn(`${[...plungeChars].join('・')}: 落下攻撃は、gcsim では空中状態（直前のアクション）などの前提条件があり、条件を満たさないと実行エラーになる場合があります`);
+    warn(t('messages:config.plungeWarning', { names: [...plungeChars].join('・') }));
   }
 
   // 重撃の直前が通常攻撃でないキャラ（gcsim は実行エラーにする）。初動 → ループ → ループ（2周）の順に、直前のアクションを追う
@@ -338,8 +339,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         const base = command.replace(/\[.*$/, '');
         if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !reported.has(act.id)) {
           reported.add(act.id);
-          const prevLabel = prev === 'none' ? 'ローテーションの最初' : PREVIOUS_ACTION_LABELS[prev] ?? prev;
-          error(`${char.name}: 出場 #${stintNumber.get(stint.id)} の「${act.name}」の直前が${prev === 'none' ? '' : '「'}${prevLabel}${prev === 'none' ? '' : '」'}です。gcsim では重撃の直前に通常攻撃（N）が必要です（ゲームでは長押しで通常攻撃1段目のあとに重撃が出ます）。この重撃の前に N を追加してください`);
+          const prevLabel = prev === 'none' ? t('messages:config.rotationStart') : t('messages:config.quoted', { label: PREVIOUS_ACTION_LABELS[prev] ?? prev });
+          error(t('messages:config.chargeNeedsNormal', { name: char.name, index: stintNumber.get(stint.id), action: act.name, prev: prevLabel }));
         }
         prev = base;
       }

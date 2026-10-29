@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 /**
  * 重撃（charge）の直前に通常攻撃（attack）が必要なキャラ（gcsim の制約）
  *
@@ -23,14 +24,14 @@ export const CHARGE_REQUIRES_ATTACK = new Set<string>([
 
 /** 直前のアクション（gcsim の命令）の表示名 */
 export const PREVIOUS_ACTION_LABELS: Record<string, string> = {
-  swap: 'キャラ交代',
-  skill: '元素スキル',
-  burst: '元素爆発',
-  charge: '重撃',
-  attack: '通常攻撃',
-  dash: 'ダッシュ',
-  jump: 'ジャンプ',
-  low_plunge: '低空落下攻撃',
-  high_plunge: '高空落下攻撃',
-  aim: '狙い撃ち',
+  swap: t('messages:config.prev.swap'),
+  skill: t('messages:config.prev.skill'),
+  burst: t('messages:config.prev.burst'),
+  charge: t('messages:config.prev.charge'),
+  attack: t('messages:config.prev.attack'),
+  dash: t('messages:config.prev.dash'),
+  jump: t('messages:config.prev.jump'),
+  low_plunge: t('messages:config.prev.low_plunge'),
+  high_plunge: t('messages:config.prev.high_plunge'),
+  aim: t('messages:config.prev.aim'),
 };

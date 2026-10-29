@@ -1,5 +1,6 @@
 import { CharacterConfig, Stint } from '../types/genshin';
 import { groupRuns, stripGroupCopies } from './actionGroups';
+import { t } from '../i18n';
 
 const isSwapAction = (a: Stint['actions'][number]) =>
   a.type === 'swap' || a.actionTypeId === 'action_switch_char';
@@ -15,19 +16,19 @@ export type NotationMode = 'short' | 'name';
 
 /** 名称モードの、アクションの名前（略号 → 名称。元素は省略。ユーザー決定 2026-10-11） */
 const NAME_OF_SHORT: Record<string, string> = {
-  E: 'スキル',
-  tE: '短押しスキル',
-  hE: '長押しスキル',
-  rE: '再発動スキル',
-  spE: '特殊スキル',
-  Q: '爆発',
-  spQ: '特殊爆発',
-  N: '通常',
-  C: '重撃',
-  D: 'ダッシュ',
-  J: 'ジャンプ',
-  lP: '落下攻撃(低)',
-  hP: '落下攻撃(高)',
+  E: t('messages:notation.E'),
+  tE: t('messages:notation.tE'),
+  hE: t('messages:notation.hE'),
+  rE: t('messages:notation.rE'),
+  spE: t('messages:notation.spE'),
+  Q: t('messages:notation.Q'),
+  spQ: t('messages:notation.spQ'),
+  N: t('messages:notation.N'),
+  C: t('messages:notation.C'),
+  D: t('messages:notation.D'),
+  J: t('messages:notation.J'),
+  lP: t('messages:notation.lP'),
+  hP: t('messages:notation.hP'),
 };
 
 /** 略号 → 名称。`hE(short)` のような後ろの印は、括弧つきで残す。対応が無い略号は、そのまま */
@@ -46,7 +47,7 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
   const out: string[] = [];
   let normals = 0;
   const flush = () => {
-    if (normals > 0) out.push(mode === 'name' ? (normals > 1 ? `通常×${normals}` : '通常') : `N${normals}`);
+    if (normals > 0) out.push(mode === 'name' ? (normals > 1 ? t('messages:notation.normals', { count: normals }) : t('messages:notation.N')) : `N${normals}`);
     normals = 0;
   };
   for (const a of actions) {
@@ -56,7 +57,7 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
       continue;
     }
     flush();
-    if (a.type === 'wait') out.push(`${mode === 'name' ? '待機' : 'w'}@${sec(a.duration ?? 0)}`);
+    if (a.type === 'wait') out.push(`${mode === 'name' ? t('messages:notation.wait') : 'w'}@${sec(a.duration ?? 0)}`);
     else {
       const label = mode === 'name' ? nameOfShort(a.shortName) : a.shortName;
       out.push(a.holdSeconds === undefined ? label : `${label}@${sec(a.holdSeconds)}`);
@@ -120,7 +121,7 @@ export function buildRotationNotation(
 ): string {
   const charMap = new Map(characters.map(c => [c.id, c.name]));
   const parts = stints.map(s => {
-    const charName = charMap.get(s.characterId) || '不明';
+    const charName = charMap.get(s.characterId) || t('messages:notation.unknown');
     const acts = buildStintNotation(s, mode);
     return acts ? `${charName} ${acts}` : charName;
   });

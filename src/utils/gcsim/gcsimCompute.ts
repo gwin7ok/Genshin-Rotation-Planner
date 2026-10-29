@@ -24,6 +24,7 @@ import {
 import type { ActionLinkTables } from '../../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../rotationCalculator';
 import type { Stint } from '../../types/genshin';
+import { t } from '../../i18n';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
 export const DEFAULT_SEED = 1;
@@ -100,12 +101,12 @@ export type GcsimApplyPlan = ReturnType<typeof computeGcsimApply>;
 /** 書き戻しの内訳を 1 行にする（「gcsim で計算」の結果の表示用） */
 export function summarizeApplyPlan(plan: GcsimApplyPlan): string {
   const parts = [
-    `所要時間 ${plan.durations.changes.length} 件`,
-    `スキル・爆発の CT ${plan.cooldowns.changes.length} 件`,
-    `効果時間 ${plan.effects.changes.length} 件`,
-    `副次効果 ${plan.extras.changes.length} 件`,
-    `発動バフ ${plan.passives.changes.length} 件`,
-    `キャラの効果 ${plan.charEffects.changes.length} 件`,
+    t('messages:summary.durations', { count: plan.durations.changes.length }),
+    t('messages:summary.cooldowns', { count: plan.cooldowns.changes.length }),
+    t('messages:summary.effects', { count: plan.effects.changes.length }),
+    t('messages:summary.extras', { count: plan.extras.changes.length }),
+    t('messages:summary.passives', { count: plan.passives.changes.length }),
+    t('messages:summary.charEffects', { count: plan.charEffects.changes.length }),
   ];
   return parts.join(' / ');
 }
@@ -115,14 +116,14 @@ export function describeApplyPlan(plan: GcsimApplyPlan, stints: Stint[], members
   const owner = (stintId: string) => {
     const idx = stints.findIndex(st => st.id === stintId);
     const name = idx >= 0 ? members.find(m => m.characterId === stints[idx].characterId)?.name : undefined;
-    return `${name ?? '?'}（出場 #${idx + 1}）`;
+    return t('messages:summary.owner', { name: name ?? '?', index: idx + 1 });
   };
   const lines: string[] = [];
-  for (const c of plan.durations.changes) lines.push(`所要時間 ${owner(c.stintId)} ${c.name}: ${c.before.toFixed(2)}s → ${c.after.toFixed(2)}s`);
+  for (const c of plan.durations.changes) lines.push(t('messages:summary.durationLine', { owner: owner(c.stintId), name: c.name, before: c.before.toFixed(2), after: c.after.toFixed(2) }));
   for (const c of plan.cooldowns.changes) lines.push(`CT ${owner(c.stintId)} ${c.name}: ${c.before.toFixed(1)}s → ${c.after.toFixed(1)}s`);
-  for (const c of plan.effects.changes) lines.push(`効果時間 ${owner(c.stintId)} ${c.name}: ${c.before.toFixed(1)}s → ${c.after.toFixed(1)}s`);
-  if (plan.extras.changes.length) lines.push(`副次効果のバー: ${plan.extras.changes.length} 件のアクション`);
-  if (plan.passives.changes.length) lines.push(`発動バフ: ${plan.passives.changes.length} 件の追加・更新`);
-  if (plan.charEffects.changes.length) lines.push(`キャラクターに紐づく効果: ${plan.charEffects.changes.length} 件の出場`);
+  for (const c of plan.effects.changes) lines.push(t('messages:summary.effectLine', { owner: owner(c.stintId), name: c.name, before: c.before.toFixed(1), after: c.after.toFixed(1) }));
+  if (plan.extras.changes.length) lines.push(t('messages:summary.extrasLine', { count: plan.extras.changes.length }));
+  if (plan.passives.changes.length) lines.push(t('messages:summary.passivesLine', { count: plan.passives.changes.length }));
+  if (plan.charEffects.changes.length) lines.push(t('messages:summary.charEffectsLine', { count: plan.charEffects.changes.length }));
   return lines;
 }

@@ -42,6 +42,7 @@ import { DEVICE_KEYS, readString, writeString } from '../utils/persistence';
 import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup, type GroupRun } from '../utils/actionGroups';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
+import { t } from '../i18n';
 
 interface StintSequenceEditorProps {
   characters: CharacterConfig[];
@@ -339,18 +340,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             onSelectAction?.(stint.id, '');
             setFocusedGroup({ stintId: stint.id, groupId: run.id });
           }}
-          title="グループ（枠の背景をクリックすると、グループをフォーカスします。ドラッグすると、グループごと移動します。中のアクションをドラッグすると、グループの中で並び替わります）"
+          title={t('editor:groupTitle')}
           className={`flex flex-wrap items-center gap-2 p-1.5 rounded-xl border border-dashed bg-fuchsia-500/5 cursor-grab ${
             isGroupFocused ? 'border-yellow-400 ring-2 ring-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)]' : 'border-fuchsia-400/70'
           } ${draggedGroup?.groupId === run.id ? 'opacity-60' : ''}`}
         >
           {/* グループ × [回数] 回 [▲▼] [解除]（秒数の入力欄と同じ形） */}
           <div className="flex items-center gap-1 text-[11px] font-mono text-fuchsia-200 select-none">
-            <span className="font-sans font-bold text-[10px]">グループ</span>
+            <span className="font-sans font-bold text-[10px]">{t('editor:group')}</span>
             <span>×</span>
             <div
               className="flex items-center gap-0.5 rounded px-1 py-0.5 border bg-slate-950/60 border-slate-800"
-              title="グループの回数（この回数だけ、中のアクションを続けて行います）"
+              title={t('editor:repeatTitle')}
             >
               <StepperNumberInput
                 value={run.repeat}
@@ -358,19 +359,19 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 onCommit={(v) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, v))}
                 className="w-7 text-fuchsia-100"
               />
-              <span className="text-slate-400 font-sans text-[10px]">回</span>
+              <span className="text-slate-400 font-sans text-[10px]">{t('editor:times')}</span>
               <div className="flex flex-col">
-                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat + 1))} title="回数 +1（長押しで連続）">▲</RepeatButton>
-                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat - 1))} title="回数 -1（長押しで連続）">▼</RepeatButton>
+                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat + 1))} title={t('editor:repeatUp')}>▲</RepeatButton>
+                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat - 1))} title={t('editor:repeatDown')}>▼</RepeatButton>
               </div>
             </div>
             <button
               type="button"
               onClick={() => updateStintAt(stintIndex, cur => ungroup(cur, run.id))}
               className="px-1.5 py-0.5 rounded border border-fuchsia-500/50 text-fuchsia-200 hover:bg-fuchsia-500/20 font-sans text-[10px]"
-              title="グループを解除します（今の回数のまま、中のアクションを回数ぶん並べた通常のアクションにします）"
+              title={t('editor:ungroupTitle')}
             >
-              解除
+              {t('editor:ungroup')}
             </button>
           </div>
           {members.map((m, k) => renderOne(m, run.start + k))}
@@ -434,13 +435,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
   const describeInsertPosition = (targetStint: Stint): string => {
     const { anchor, joinGroupId, groupRun } = actionInsertPosition(targetStint);
     const where = groupRun
-      ? `フォーカス中のグループ（× ${groupRun.repeat} 回）の直前（グループの外）に追加します`
+      ? t('editor:insertBeforeGroup', { count: groupRun.repeat })
       : !anchor
-        ? 'この出場の末尾に追加します（アクションまたはグループを選択すると、その直前に追加します）'
+        ? t('editor:insertAtEnd')
         : anchor.type === 'swap'
-          ? '出場の先頭（キャラ交代の直後）に追加します'
-          : `選択中のアクション「${anchor.name}」の直前に追加します`;
-    return `【追加位置】${where}${joinGroupId ? '\n（選択中のアクションがグループの中なので、追加したアクションもグループに入ります）' : ''}`;
+          ? t('editor:insertAtStart')
+          : t('editor:insertBefore', { name: anchor.name });
+    return `${t('editor:insertPosition', { where })}${joinGroupId ? t('editor:insertJoinsGroup') : ''}`;
   };
 
   const addActionToStint = (stintIndex: number, actionDef: ActionDefinition | 'wait') => {
@@ -449,7 +450,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
     const newId = `act_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const newAction: CharacterActionInstance = actionDef === 'wait'
-      ? { id: newId, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: WAIT_DEFAULT_SECONDS }
+      ? { id: newId, actionTypeId: 'wait', name: t('editor:waitName'), shortName: 'w', type: 'wait', duration: WAIT_DEFAULT_SECONDS }
       : {
         id: newId,
         actionTypeId: actionDef.id,
@@ -600,13 +601,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-base sm:text-lg font-extrabold text-white tracking-wide flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-amber-400"></span>
-                  アクション構築
+                  {t('editor:title')}
                 </h2>
 
                 {/* 出場ブロック・アクションのみ全クリア（編成のキャラ登録は維持） */}
                 {confirmClearStints ? (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-bold text-red-300">出場キャラ・アクションを全て消去しますか？（編成は残ります）</span>
+                    <span className="text-[11px] font-bold text-red-300">{t('editor:clearConfirm')}</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -615,14 +616,14 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       }}
                       className="px-2.5 py-1 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors shadow-sm"
                     >
-                      消去する
+                      {t('party:clear')}
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmClearStints(false)}
                       className="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
                     >
-                      やめる
+                      {t('save:saveAs.back')}
                     </button>
                   </div>
                 ) : (
@@ -631,10 +632,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     onClick={() => setConfirmClearStints(true)}
                     disabled={stints.length === 0}
                     className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/40 transition-colors shadow-sm disabled:opacity-40 disabled:pointer-events-none"
-                    title="編成のキャラ登録は残したまま、タイムライン上の出場ブロックとアクションをすべて消去します"
+                    title={t('editor:clearAllTitle')}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    <span>出場キャラ・アクションを全クリア</span>
+                    <span>{t('editor:clearAll')}</span>
                   </button>
                 )}
               </div>
@@ -643,7 +644,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             <div className="flex items-center gap-2">
               {/* Add Stint Button Group */}
               <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400 px-2 font-medium">出場追加:</span>
+                <span className="text-xs text-slate-400 px-2 font-medium">{t('editor:addStint')}</span>
                 {characters.filter(c => !isEmptySlotCharacter(c)).map(c => {
                   const elemTheme = ELEMENT_COLORS[c.element];
                   return (
@@ -653,8 +654,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       onClick={() => addStint(c.id)}
                       className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
                       title={focusedStintIndex >= 0
-                        ? `${c.name}の出場ブロックを、フォーカス中の出場（#${focusedStintIndex + 1}）の前に追加`
-                        : `${c.name}の出場ブロックを末尾に追加（出場をフォーカスすると、その前に追加します）`}
+                        ? t('editor:addStintBefore', { name: c.name, index: focusedStintIndex + 1 })
+                        : t('editor:addStintEnd', { name: c.name })}
                     >
                       <span className={`w-2 h-2 rounded-full ${elemTheme.bg} border ${elemTheme.border}`}></span>
                       <span>{c.name}</span>
@@ -686,19 +687,19 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-amber-300 flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>登場順序クイック並び替えパイプライン</span>
+                  <span>{t('editor:quickReorder')}</span>
                 </span>
                 <span className="text-[11px] text-slate-400 hidden sm:inline">
-                  （チップをドラッグして順番を変更できます）
+                  {t('editor:quickReorderHint')}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={toggleGuide}
                   className="text-[11px] text-slate-400 hover:text-slate-200 underline"
-                  title="アクション凡例と、操作のヒントの表示・非表示を切り替えます"
+                  title={t('editor:guideToggleTitle')}
                 >
-                  {showGuide ? 'ガイドを非表示' : 'ガイドを表示'}
+                  {showGuide ? t('editor:hideGuide') : t('editor:showGuide')}
                 </button>
               </div>
             </div>
@@ -758,7 +759,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <div
                         onClick={handleChipClick}
                         className="flex items-center gap-1.5 select-none cursor-pointer"
-                        title={`${char.name}の出場ブロックを選択フォーカス（アクションは選択しない。ガントチャート＆設定画面に連動強調表示）`}
+                        title={t('editor:chipFocusTitle', { name: char.name })}
                       >
                         <span className={`w-4 h-4 rounded-full text-[10px] font-mono font-bold flex items-center justify-center border ${
                           isSelected
@@ -773,7 +774,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         </span>
                         {isSelected && (
                           <span className="px-1 py-0.2 rounded text-[9px] font-black bg-yellow-400 text-slate-950 animate-pulse shrink-0">
-                            選択中
+                            {t('editor:selected')}
                           </span>
                         )}
                         <span className="text-[10px] font-mono text-amber-300/80">
@@ -789,8 +790,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           removeStint(idx);
                         }}
                         className="p-0.5 rounded flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors shrink-0"
-                        title={`${char.name}の出場ブロック（${idx + 1}番目）を削除`}
-                        aria-label="出場ブロックを削除"
+                        title={t('editor:deleteStintTitle', { name: char.name, index: idx + 1 })}
+                        aria-label={t('editor:deleteStintLabel')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -815,35 +816,35 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             <div className="flex flex-wrap items-center gap-2 px-3 py-2 bg-slate-950/90 rounded-xl border border-slate-800 text-xs">
               <span className="font-bold text-amber-300 text-[11px] shrink-0 flex items-center gap-1">
                 <Info className="w-3.5 h-3.5 text-amber-400" />
-                <span>【アクション凡例】</span>
+                <span>{t('editor:legendTitle')}</span>
               </span>
               <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
                 <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                  <strong className="font-bold text-amber-200">E</strong>: 元素スキル
+                  <strong className="font-bold text-amber-200">E</strong>: {t('editor:legendE')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                  <strong className="font-bold text-amber-200">hE</strong>: スキル長押し（tE: 長押しがあるキャラの一回押し、rE: 再発動）
+                  <strong className="font-bold text-amber-200">hE</strong>: {t('editor:legendHE')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
-                  <strong className="font-bold text-purple-200">Q</strong>: 元素爆発
+                  <strong className="font-bold text-purple-200">Q</strong>: {t('editor:legendQ')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
-                  <strong className="font-bold text-sky-200">N</strong>: 通常攻撃（連続した N は自動で1段目・2段目…と数えます）
+                  <strong className="font-bold text-sky-200">N</strong>: {t('editor:legendN')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  <strong className="font-bold text-emerald-200">C</strong>: チャージアタック(重撃)
+                  <strong className="font-bold text-emerald-200">C</strong>: {t('editor:legendC')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  <strong className="font-bold text-white">J</strong>: ジャンプ
+                  <strong className="font-bold text-white">J</strong>: {t('editor:legendJ')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  <strong className="font-bold text-white">lP / hP</strong>: 落下攻撃（低 / 高）
+                  <strong className="font-bold text-white">lP / hP</strong>: {t('editor:legendP')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  <strong className="font-bold text-white">D</strong>: ダッシュ(回避)
+                  <strong className="font-bold text-white">D</strong>: {t('editor:legendD')}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  <strong className="font-bold text-white">待機</strong>: 何もしないで待つ（記法は w）
+                  <strong className="font-bold text-white">{t('editor:legendWait')}</strong>: {t('editor:legendWaitText')}
                 </span>
               </div>
             </div>
@@ -851,7 +852,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
             <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-xl text-xs text-slate-400 flex items-center justify-between shadow-sm">
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-400 font-bold">💡</span>
-                <span>ガントチャート上のアクション（E / Q / 通常など）をクリックすると、該当する出場キャラのカードへ移動し、アクションが選択表示されます。また、アクションの順序入れ替えはガントチャート上で直接ドラッグ＆ドロップでも可能です。Ctrl+クリックで隣接するアクションを複数選択すると、グループにして回数を設定できます。</span>
+                <span>{t('editor:hint')}</span>
               </span>
             </div>
             </div>
@@ -956,9 +957,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <div className="absolute -top-3 left-8 z-10 flex items-center gap-1 text-[10px] text-sky-300 font-mono bg-slate-900 px-2 py-0.5 rounded border border-sky-700 shadow-sm">
                     <CornerDownRight className="w-3 h-3 text-sky-400" />
                     {switchDelay > 0 ? (
-                      <span>🔄 キャラチェンジ (+{switchDelay.toFixed(2)}s) ➔ {char.name}登場 @ {fmtRel(stint.startTime ?? 0)}</span>
+                      <span>{t('editor:switchIn', { delay: switchDelay.toFixed(2), name: char.name, time: fmtRel(stint.startTime ?? 0) })}</span>
                     ) : (
-                      <span>⚡ 即時交代 @ {fmtRel(stint.startTime ?? 0)} ➔ {char.name}登場</span>
+                      <span>{t('editor:switchInstant', { time: fmtRel(stint.startTime ?? 0), name: char.name })}</span>
                     )}
                   </div>
                 )}
@@ -987,14 +988,14 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           }
                         }}
                         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                        title="この出場ブロックを選択フォーカス（アクションは選択しない。ガントチャート＆設定画面に連動強調表示）"
+                        title={t('editor:focusStintTitle')}
                       >
                         <CharacterAvatar char={char} className="w-7 h-7 rounded-lg text-xs shadow-inner" borderWidth={1.5} />
                         <span className="font-bold text-sm text-white">{char.name}</span>
                         <ElementIcon element={char.element} className="w-5 h-5" />
                         {isStintSelected && (
                           <span className="px-1.5 py-0.5 rounded font-black text-[10px] bg-yellow-400 text-slate-950 animate-pulse">
-                            フォーカス中
+                            {t('editor:focused')}
                           </span>
                         )}
                       </div>
@@ -1008,7 +1009,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             ? 'bg-purple-950/80 text-purple-300 border-purple-600/70'
                             : 'bg-indigo-950/80 text-indigo-300 border-indigo-600/70'
                         }`}>
-                          {isSetupStint ? '1周目初動' : isLoopStint ? '定常ループ' : '初動➔ループ跨ぎ'}
+                          {isSetupStint ? t('editor:phaseOpener') : isLoopStint ? t('editor:phaseLoop') : t('editor:phaseCross')}
                         </span>
                       )}
 
@@ -1027,30 +1028,30 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           onClick={() => moveStint(stintIndex, stintIndex - 1)}
                           disabled={isFirst}
                           className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
-                          title="このキャラの登場順を1つ前（上）へ"
+                          title={t('editor:upTitle')}
                         >
                           <ChevronUp className="w-3.5 h-3.5" />
-                          <span>上へ</span>
+                          <span>{t('editor:up')}</span>
                         </button>
 
                         <button
                           onClick={() => moveStint(stintIndex, stintIndex + 1)}
                           disabled={isLast}
                           className="flex items-center gap-0.5 px-2 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-200 hover:bg-amber-500 hover:text-slate-950 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-sm"
-                          title="このキャラの登場順を1つ次（下）へ"
+                          title={t('editor:downTitle')}
                         >
                           <ChevronDown className="w-3.5 h-3.5" />
-                          <span>下へ</span>
+                          <span>{t('editor:down')}</span>
                         </button>
                       </div>
 
                       {/* Drag Handle with explicit label */}
                       <div 
                         className="hidden sm:flex items-center gap-1 text-[11px] text-slate-400 hover:text-amber-300 bg-slate-900 px-2 py-1 rounded border border-slate-700/60 cursor-grab active:cursor-grabbing select-none"
-                        title="ドラッグ＆ドロップで上下に並び替え"
+                        title={t('editor:dragTitle')}
                       >
                         <GripVertical className="w-3.5 h-3.5 text-amber-400" />
-                        <span>ドラッグ移動</span>
+                        <span>{t('editor:drag')}</span>
                       </div>
 
                       {/* ガントチャートの該当出場行へ移動 */}
@@ -1058,10 +1059,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         type="button"
                         onClick={() => focusStintInGantt(stint, onSelectAction)}
                         className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-sky-300 border border-sky-700/60 hover:bg-sky-500 hover:text-slate-950 transition-all shadow-sm"
-                        title="ガントチャートのこの出場の行へ移動"
+                        title={t('editor:toGanttTitle')}
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
-                        <span>ガントチャートへ</span>
+                        <span>{t('editor:toGantt')}</span>
                       </button>
                     </div>
 
@@ -1077,9 +1078,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               ? 'bg-emerald-900/40 text-emerald-300 border-emerald-600/60 hover:bg-emerald-800/60'
                               : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-slate-200'
                           }`}
-                          title={`【モード維持】「${stint.modeHold.label}」が最大時間まで続くように、出場の最後のアクションの後を自動で延ばします（延ばした秒数は保存しません。gcsim の設定文には wait として出します）。\nオフにすると、最後のアクションの直後に交代します。途中で終わらせたいときは、終わらせるアクションを置いてください。`}
+                          title={t('editor:modeHoldTitle', { mode: stint.modeHold.label })}
                         >
-                          モード維持: {stint.modeHold.on ? `オン${stint.modeHold.seconds > 0 ? `（+${stint.modeHold.seconds.toFixed(1)}s）` : ''}` : 'オフ'}
+                          {t('editor:modeHold', { state: stint.modeHold.on ? (stint.modeHold.seconds > 0 ? t('editor:onSeconds', { seconds: stint.modeHold.seconds.toFixed(1) }) : t('editor:on')) : t('editor:off') })}
                         </button>
                       )}
                       {/* Note button */}
@@ -1089,7 +1090,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             type="text"
                             value={noteText}
                             onChange={(e) => setNoteText(e.target.value)}
-                            placeholder="メモ (例: スナップショット)"
+                            placeholder={t('editor:memoPlaceholder')}
                             className="bg-slate-900 text-xs text-white px-2 py-1 rounded border border-slate-700 w-40 focus:outline-none focus:border-amber-400"
                             autoFocus
                             onKeyDown={(e) => {
@@ -1101,7 +1102,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             onClick={() => saveNote(stintIndex)}
                             className="px-2 py-1 text-xs bg-amber-500 text-slate-950 font-bold rounded hover:bg-amber-400"
                           >
-                            保存
+                            {t('action.save')}
                           </button>
                         </div>
                       ) : (
@@ -1111,10 +1112,10 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             setNoteText(stint.note || '');
                           }}
                           className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 px-2 py-1 rounded hover:bg-slate-800 transition-colors"
-                          title="メモを編集"
+                          title={t('editor:editMemo')}
                         >
                           <Edit3 className="w-3 h-3" />
-                          <span className="max-w-[120px] truncate">{stint.note || 'メモ追加'}</span>
+                          <span className="max-w-[120px] truncate">{stint.note || t('editor:addMemo')}</span>
                         </button>
                       )}
 
@@ -1122,7 +1123,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <button
                         onClick={() => duplicateStint(stintIndex)}
                         className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800"
-                        title="この登場ブロックを複製"
+                        title={t('editor:duplicateTitle')}
                       >
                         <Copy className="w-3.5 h-3.5" />
                       </button>
@@ -1131,7 +1132,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                       <button
                         onClick={() => removeStint(stintIndex)}
                         className="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none"
-                        title="登場ブロックを削除"
+                        title={t('editor:deleteTitle')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -1142,13 +1143,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   <div className="pt-2.5">
                   {/* アクション追加ボタン（出場の見出しの直下。アクションが増えて折り返しても、位置が動かない。追加作業 27 / issue #35） */}
                     <div className="flex flex-wrap items-center gap-1">
-                      <span className="h-7 w-14 shrink-0 mr-2.5 inline-flex items-center justify-center text-xs font-extrabold text-red-100 bg-red-600/60 border border-red-400 rounded shadow-sm shadow-red-900/50" title="アクションを追加します（選択中のアクション・グループの直前に入ります。各ボタンのツールチップに、追加位置を表示します）">+ 追加</span>
+                      <span className="h-7 w-14 shrink-0 mr-2.5 inline-flex items-center justify-center text-xs font-extrabold text-red-100 bg-red-600/60 border border-red-400 rounded shadow-sm shadow-red-900/50" title={t('editor:addTitle')}>{t('editor:add')}</span>
                       {[...CharacterModel.fromConfig(char).actions].sort((a, b) => actionOrderRank(a) - actionOrderRank(b)).map(actionDef => (
                         <button
                           key={actionDef.id}
                           onClick={() => addActionToStint(stintIndex, actionDef)}
                           className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone(actionDef).box}`}
-                          title={`${describeInsertPosition(stint)}\n---------\n${actionDef.name} (${actionDef.defaultDuration}s) を追加 [記法略称: ${actionDef.shortName}]${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
+                          title={`${describeInsertPosition(stint)}\n---------\n${t('editor:addActionTitle', { name: actionDef.name, duration: actionDef.defaultDuration, short: actionDef.shortName })}${actionDescription(actionDef, actionDef) ? `\n\n${actionDescription(actionDef, actionDef)}` : ''}`}
                         >
                           <strong className={`font-bold ${actionTone(actionDef).label}`}>+{actionDef.buttonLabel || actionDef.shortName}</strong>
                         </button>
@@ -1160,18 +1161,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           onClick={() => groupSelected(stintIndex)}
                           disabled={createGroup(stint, multiSel.ids) === null}
                           className="px-2 py-0.5 rounded border border-fuchsia-500/60 bg-fuchsia-500/10 text-fuchsia-200 font-mono text-[11px] hover:bg-fuchsia-500/20 disabled:opacity-40"
-                          title={createGroup(stint, multiSel.ids) === null ? '隣接していて、グループに入っていないアクションを選んでください' : multiSel.ids.length === 1 ? '選んだアクションを、繰り返すグループにします（作成後に回数を設定します。記法は 3C のように書きます）' : '選んだアクションを、1 つのグループにします（回数を設定できます）'}
+                          title={createGroup(stint, multiSel.ids) === null ? t('editor:groupNeedAdjacent') : multiSel.ids.length === 1 ? t('editor:groupOneTitle') : t('editor:groupManyTitle')}
                         >
-                          {multiSel.ids.length === 1 ? '1 個を繰り返す（グループ化）' : `${multiSel.ids.length} 個をグループ化`}
+                          {multiSel.ids.length === 1 ? t('editor:groupOne') : t('editor:groupMany', { count: multiSel.ids.length })}
                         </button>
                       )}
                       {/* 待機（何もしないで待つ。長さは、アクションの所要時間の欄で変える） */}
                       <button
                         onClick={() => addActionToStint(stintIndex, 'wait')}
                         className={`h-7 px-2 inline-flex items-center rounded border font-mono text-[11px] hover:brightness-125 transition-all ${actionTone({ type: 'wait', shortName: 'w' }).box}`}
-                        title={`${describeInsertPosition(stint)}\n---------\n待機（何もしないで ${WAIT_DEFAULT_SECONDS} 秒待つ。長さは、追加したアクションの所要時間の欄で変えられます）`}
+                        title={`${describeInsertPosition(stint)}\n---------\n${t('editor:waitTitle', { seconds: WAIT_DEFAULT_SECONDS })}`}
                       >
-                        <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'w' }).label}`}>+待機</strong>
+                        <strong className={`font-bold ${actionTone({ type: 'wait', shortName: 'w' }).label}`}>{t('editor:addWait')}</strong>
                       </button>
                     </div>
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
@@ -1181,7 +1182,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     <div className="flex flex-wrap items-center gap-2">
                       {/* ラベル（「連動・発動バフ:」と同じスタイル） */}
                       <span className="text-[11px] font-bold text-amber-300 shrink-0 flex items-center gap-1">
-                        <span>🎬 アクション要素:</span>
+                        <span>{t('editor:actions')}</span>
                       </span>
                       {renderActionSegments(stint, stintIndex, (act, actIdx) => {
                         const isSwap = act.type === 'swap' || act.actionTypeId === 'action_switch_char';
@@ -1197,7 +1198,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                           <div
                             key={`gap-${act.id}`}
                             className="flex items-center gap-0.5 h-7 px-1.5 rounded bg-slate-950/80 border border-dashed border-amber-500/40 shrink-0 text-[10px] font-mono text-amber-300 select-none shadow-sm"
-                            title={`【このアクションの後の遅延】: +${delayValue.toFixed(2)}s\nこのアクションの終了後に入る空白です（▲▼で0.05秒ずつ変更）。`}
+                            title={t('editor:delayTitle', { seconds: delayValue.toFixed(2) })}
                           >
                             <Clock className="w-2.5 h-2.5 text-amber-400" />
                             <span className="font-bold">+{delayValue.toFixed(2)}s</span>
@@ -1206,7 +1207,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue + 0.05); }}
                                 className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
-                                title="遅延を+0.05秒"
+                                title={t('editor:delayUp')}
                               >
                                 ▲
                               </button>
@@ -1214,7 +1215,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue - 0.05); }}
                                 className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
-                                title="遅延を-0.05秒"
+                                title={t('editor:delayDown')}
                               >
                                 ▼
                               </button>
@@ -1239,22 +1240,22 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                     ? 'ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold'
                                     : isActionActive ? 'border-amber-400 ring-1 ring-amber-400/50 shadow' : ''
                                 }`}
-                                title={`【キャラ交代所要時間（出場時間の先頭）】\n所要時間: ${act.duration.toFixed(2)}s\n期間: [${(act.startTime ?? 0).toFixed(2)}s ~ ${(act.endTime ?? 0).toFixed(2)}s] (クリックで選択フォーカス)`}
+                                title={t('editor:swapTitle', { duration: act.duration.toFixed(2), start: (act.startTime ?? 0).toFixed(2), end: (act.endTime ?? 0).toFixed(2) })}
                               >
                                 {/* Action Type Badge */}
                                 <span className={`px-0.5 font-mono font-extrabold text-[11px] flex items-center gap-1 whitespace-nowrap shrink-0 ${actionTone(act).label}`}>
                                   <RefreshCw className="w-3 h-3 text-sky-300" />
-                                  交代
+                                  {t('editor:swapShort')}
                                 </span>
 
                                 {/* Action Name */}
                                 <span className="font-medium truncate">
-                                  キャラ交代
+                                  {t('editor:swap')}
                                 </span>
 
                                 {isSelected && (
                                   <span className="px-1.5 py-0.2 rounded font-black text-[9px] bg-yellow-400 text-slate-950 animate-pulse">
-                                    選択中
+                                    {t('editor:selected')}
                                   </span>
                                 )}
 
@@ -1269,7 +1270,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                         onUpdateSwitchDelay?.(Number((switchDelay + 0.05).toFixed(2)));
                                       }}
                                       className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold"
-                                      title="交代所要時間を+0.05秒"
+                                      title={t('editor:swapUp')}
                                     >
                                       ▲
                                     </button>
@@ -1280,7 +1281,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                         onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05).toFixed(2))));
                                       }}
                                       className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold"
-                                      title="交代所要時間を-0.05秒"
+                                      title={t('editor:swapDown')}
                                     >
                                       ▼
                                     </button>
@@ -1374,16 +1375,16 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                               {act.usedSpecialCharge && (
                                 <span
                                   className="px-1.5 py-0.2 rounded font-black text-[9px] bg-cyan-400 text-slate-950 shrink-0"
-                                  title="特殊重撃（蒼牙）: 特殊スキルの使用回数を 1 回分使います（スタミナは使いません）。回数が空いていなければ、普通の重撃になります"
+                                  title={t('editor:specialChargedTitle')}
                                 >
-                                  特殊重撃
+                                  {t('editor:specialCharged')}
                                 </span>
                               )}
 
                               {/* Selected Badge */}
                               {isSelected && (
                                 <span className="px-1.5 py-0.2 rounded font-black text-[9px] bg-yellow-400 text-slate-950 animate-pulse">
-                                  選択中
+                                  {t('editor:selected')}
                                 </span>
                               )}
 
@@ -1393,7 +1394,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 onClick={(e) => e.stopPropagation()}
                                 onMouseEnter={() => setCtHoverActionId(act.id)}
                                 onMouseLeave={() => setCtHoverActionId(prev => (prev === act.id ? null : prev))}
-                                title="モーション時間（直接入力、または ▲▼ で0.1秒ずつ。押し続けると連続で増減）"
+                                title={t('editor:motionTitle')}
                               >
                                 <StepperNumberInput
                                   value={act.duration}
@@ -1403,8 +1404,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 />
                                 <span className="text-slate-400">s</span>
                                 <div className="flex flex-col ml-0.5">
-                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, 0.1)} title="+0.1秒（長押しで連続）">▲</RepeatButton>
-                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, -0.1)} title="-0.1秒（長押しで連続）">▼</RepeatButton>
+                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, 0.1)} title={t('editor:plus01')}>▲</RepeatButton>
+                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, -0.1)} title={t('editor:minus01')}>▼</RepeatButton>
                                 </div>
                               </div>
 
@@ -1426,18 +1427,18 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                         value={ctInfo.cooldown}
                                         defaultValue={ctInfo.defaultCooldown}
                                         valueClassName="text-emerald-300"
-                                        title={`${ctInfo.kind === 'burst' ? '元素爆発' : '元素スキル'}のCT（初期値 ${ctInfo.defaultCooldown}s）`}
+                                        title={t('editor:ctTitle', { kind: ctInfo.kind === 'burst' ? t('editor:burst') : t('editor:skill'), seconds: ctInfo.defaultCooldown })}
                                         onChange={(v) => updateActionTiming(stintIndex, actIdx, 'cooldown', v, ctInfo.defaultCooldown)}
                                         {...hoverProps}
                                       />
                                     )}
                                     {effectInfo && (
                                       <ActionTimingInput
-                                        label="効果"
+                                        label={t('editor:effect')}
                                         value={effectInfo.duration}
                                         defaultValue={effectInfo.defaultDuration}
                                         valueClassName="text-pink-300"
-                                        title={`効果継続時間: ${effectInfo.label}（初期値 ${effectInfo.defaultDuration}s）\nガントチャートに効果バーとして表示されます（0sで非表示）`}
+                                        title={t('editor:effectTitle', { label: effectInfo.label, seconds: effectInfo.defaultDuration })}
                                         onChange={(v) => updateActionTiming(stintIndex, actIdx, 'effectDuration', v, effectInfo.defaultDuration)}
                                         {...hoverProps}
                                       />
@@ -1451,8 +1452,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 onClick={() => removeActionFromStint(stintIndex, actIdx)}
                                 disabled={stint.actions.filter(a => a.type !== 'swap').length === 0}
                                 className="p-0.5 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none ml-0.5 flex items-center justify-center shrink-0"
-                                title="アクション削除"
-                                aria-label="アクションを削除"
+                                title={t('editor:deleteActionTitle')}
+                                aria-label={t('editor:deleteActionLabel')}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -1487,14 +1488,14 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-sky-200">
-                    🔄 キャラチェンジ所要時間（交代遅延）
+                    {t('editor:switchDelay')}
                   </span>
                   <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-900/60 text-sky-300 border border-sky-700">
-                    全交代箇所に自動挿入
+                    {t('editor:switchDelayBadge')}
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 mt-0.5">
-                  キャラ切替時の操作硬直・交代内部CTを設定（初期値 0.50秒）。全登場ターン間に自動反映されます。
+                  {t('editor:switchDelayHint')}
                 </div>
               </div>
             </div>
@@ -1507,7 +1508,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   type="button"
                   onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.10).toFixed(2))))}
                   className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.10秒"
+                  title={t('editor:minus010')}
                 >
                   -0.1s
                 </button>
@@ -1515,7 +1516,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   type="button"
                   onClick={() => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05).toFixed(2))))}
                   className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="-0.05秒"
+                  title={t('editor:minus005')}
                 >
                   -0.05s
                 </button>
@@ -1526,7 +1527,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   type="button"
                   onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.05).toFixed(2)))}
                   className="px-1.5 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.05秒"
+                  title={t('editor:plus005')}
                 >
                   +0.05s
                 </button>
@@ -1534,7 +1535,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   type="button"
                   onClick={() => onUpdateSwitchDelay?.(Number((switchDelay + 0.10).toFixed(2)))}
                   className="px-2 py-1 rounded bg-slate-800 hover:bg-sky-500 hover:text-slate-950 text-sky-300 font-mono font-bold text-xs transition-colors"
-                  title="+0.10秒"
+                  title={t('editor:plus010')}
                 >
                   +0.1s
                 </button>
@@ -1543,9 +1544,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               {/* Quick Presets */}
               <div className="flex items-center gap-1">
                 {[
-                  { label: '0.00s (即時)', value: 0.00 },
+                  { label: t('editor:instant'), value: 0.00 },
                   { label: '0.30s', value: 0.30 },
-                  { label: '0.50s (標準)', value: 0.50 },
+                  { label: t('editor:standard'), value: 0.50 },
                   { label: '0.80s', value: 0.80 },
                   { label: '1.00s', value: 1.00 },
                 ].map(preset => (
@@ -1577,28 +1578,28 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-amber-200">
-                    ⏱️ アクション遅延（アクションごと）
+                    {t('editor:actionDelay')}
                   </span>
                   <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-900/60 text-amber-300 border border-amber-700">
-                    各アクションの終了後に挿入
+                    {t('editor:actionDelayBadge')}
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 mt-0.5">
-                  入力硬直・先行入力の遅れを、アクションごとに設定します（初期値 0.10秒。下の各アクションの右の「+0.10s」で個別に変更）。
+                  {t('editor:actionDelayHint')}
                 </div>
               </div>
             </div>
 
             {/* 一括設定 */}
             <div className="flex items-center gap-1 flex-wrap">
-              <span className="text-[11px] text-slate-400 mr-1">全アクションに一括設定:</span>
+              <span className="text-[11px] text-slate-400 mr-1">{t('editor:setAll')}</span>
               {[0.00, 0.05, 0.10, 0.15, 0.20].map(value => (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setAllActionDelays(value)}
                   className="px-2 py-1 rounded text-[11px] font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 hover:border-amber-400"
-                  title={`全アクションの遅延を ${value.toFixed(2)}秒 にする`}
+                  title={t('editor:setAllTitle', { seconds: value.toFixed(2) })}
                 >
                   {value.toFixed(2)}s
                 </button>
@@ -1611,13 +1612,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {/* 敵の防御ヒットストップ（gcsim の defhalt） */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="text-xs">
-              <div className="font-bold text-slate-200">🛡️ 敵の防御ヒットストップ（gcsim の defhalt）</div>
+              <div className="font-bold text-slate-200">{t('editor:defHalt')}</div>
               <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
-                有効: 体幹が崩れない敵（大型のボスなど）。攻撃のヒットストップが 1 ヒットあたり 0.06 秒長くなる。無効: 体幹が崩れる敵（小型の敵）。gcsim にも `defhalt=false` を渡す。アクションの自動の所要時間（ヒットストップで延びる分。gcsim の実測の表）と、疾風怒濤の受付の延長にも反映される。
+                {t('editor:defHaltHint')}
               </div>
             </div>
             <div className="flex items-center gap-1">
-              {[{ label: '有効（既定）', value: true }, { label: '無効', value: false }].map(opt => (
+              {[{ label: t('editor:enabledDefault'), value: true }, { label: t('editor:disabled'), value: false }].map(opt => (
                 <button
                   key={String(opt.value)}
                   type="button"
@@ -1639,26 +1640,26 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
           {/* 敵から受けるダメージ（gcsim の hurt。追加作業 18） */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="text-xs">
-              <div className="font-bold text-slate-200">💥 敵から受けるダメージ（gcsim の hurt）</div>
+              <div className="font-bold text-slate-200">{t('editor:hurt')}</div>
               <div className="text-[10px] text-slate-400 mt-0.5 max-w-xl">
-                有効にすると、gcsim の実行で、出場中のキャラが一定の間隔で物理ダメージを受ける（間隔・量とも範囲の中の乱数）。ディシアの「紅き血」など、自分が受けたダメージで HP が減ることが条件の効果を再現する。無効のときは、ダメージを受けない。アプリの計算は変わらない。
+                {t('editor:hurtHint')}
               </div>
               {hurt.enabled && (
                 <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
-                  <span>間隔（秒）</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最小（秒）" />
+                  <span>{t('editor:interval')}</span>
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMin')} />
                   <span>〜</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="間隔の最大（秒）" />
-                  <span className="ml-2">ダメージ（HP）</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最小" />
+                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMax')} />
+                  <span className="ml-2">{t('editor:damage')}</span>
+                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMin')} />
                   <span>〜</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label="ダメージの最大" />
-                  {!hurtStatement(hurt) && <span className="text-amber-300">値が不正です（最小 ≤ 最大・1 以上）。gcsim には渡しません</span>}
+                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMax')} />
+                  {!hurtStatement(hurt) && <span className="text-amber-300">{t('editor:hurtInvalid')}</span>}
                 </div>
               )}
             </div>
             <div className="flex items-center gap-1">
-              {[{ label: '無効（既定）', value: false }, { label: '有効', value: true }].map(opt => (
+              {[{ label: t('editor:disabledDefault'), value: false }, { label: t('editor:enabled'), value: true }].map(opt => (
                 <button
                   key={String(opt.value)}
                   type="button"
@@ -1701,7 +1702,7 @@ const ActionTimingInput: React.FC<{
       onClick={(e) => e.stopPropagation()}
       onMouseEnter={() => onHoverChange(true)}
       onMouseLeave={() => onHoverChange(false)}
-      title={`${title}${isCustom ? '\n※個別に変更されています' : ''}`}
+      title={`${title}${isCustom ? t('editor:customized') : ''}`}
     >
       <span className="font-sans font-bold text-[10px] text-slate-400">{label}</span>
       {/* 小数第1位まで表示。2桁（99.9）まで収まる幅 */}
@@ -1713,15 +1714,15 @@ const ActionTimingInput: React.FC<{
       />
       <span className="text-slate-400">s</span>
       <div className="flex flex-col">
-        <RepeatButton onStep={() => onChange(value + 1)} title={`${label} +1秒（長押しで連続）`}>▲</RepeatButton>
-        <RepeatButton onStep={() => onChange(value - 1)} title={`${label} -1秒（長押しで連続）`}>▼</RepeatButton>
+        <RepeatButton onStep={() => onChange(value + 1)} title={t('editor:plus1', { label })}>▲</RepeatButton>
+        <RepeatButton onStep={() => onChange(value - 1)} title={t('editor:minus1', { label })}>▼</RepeatButton>
       </div>
       {isCustom && (
         <button
           type="button"
           onClick={() => onChange(defaultValue)}
           className="ml-0.5 text-amber-400 hover:text-white text-[11px] leading-none"
-          title={`初期値 ${defaultValue}s に戻す`}
+          title={t('editor:resetDefault', { seconds: defaultValue })}
         >
           ↺
         </button>

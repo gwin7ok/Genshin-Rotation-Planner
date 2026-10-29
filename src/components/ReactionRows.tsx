@@ -143,7 +143,7 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
                       }}
                       style={{ left: `${startX}px`, width: `${width}px` }}
                       className={`absolute h-3.5 rounded text-[9px] font-mono flex items-center justify-center px-1 border hover:brightness-125 cursor-pointer ${info.barClass}`}
-                      title={`【${info.label.replace(/^\S+\s/, '')}】${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n${t('chart:reaction.barNote', { lap })}`}
+                      title={`${t('chart:reaction.barHead', { label: info.label.replace(/^\S+\s/, '') })}${sp.count !== undefined ? ` ${sp.count}${info.unit}${row.max !== undefined ? ` / ${row.max}` : ''}` : ''} [${sp.startTime.toFixed(2)}s ~ ${sp.endTime.toFixed(2)}s] (${dur.toFixed(2)}s)\n${info.help}\n${t('chart:reaction.barNote', { lap })}`}
                     >
                       <span className="truncate">{sp.count !== undefined && width < 60 ? sp.count : countText}</span>
                     </div>

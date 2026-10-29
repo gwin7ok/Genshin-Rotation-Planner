@@ -9,6 +9,7 @@
  *   - 正しい要素は、そのまま（同じオブジェクト）残す。正しいデータは、1 つも変わらない。
  */
 import type { CharacterActionInstance, PartyMember, SavedRotationSlot, Stint } from '../types/genshin';
+import { t } from '../i18n';
 
 /** 除外した要素の数 */
 export interface SkippedRotationItems {
@@ -31,9 +32,9 @@ export const addSkipped = (a: SkippedRotationItems, b: SkippedRotationItems): Sk
 /** 除外した数の説明（確認・結果の文に使う）。無ければ空文字 */
 export function describeSkipped(s: SkippedRotationItems): string {
   const parts: string[] = [];
-  if (s.stints > 0) parts.push(`出場 ${s.stints} 件`);
-  if (s.actions > 0) parts.push(`アクション ${s.actions} 件`);
-  if (s.others > 0) parts.push(`グループ・発動バフなど ${s.others} 件`);
+  if (s.stints > 0) parts.push(t('messages:file.skippedStints', { count: s.stints }));
+  if (s.actions > 0) parts.push(t('messages:file.skippedActions', { count: s.actions }));
+  if (s.others > 0) parts.push(t('messages:file.skippedOthers', { count: s.others }));
   return parts.join('・');
 }
 
@@ -169,10 +170,10 @@ export type ParseRotationResult =
 /** 1 つの編成の JSON（書き出し・コピーと同じ形）を検査する。raw は、JSON.parse した結果 */
 export function parseRotationPayload(raw: unknown): ParseRotationResult {
   if (!isRecord(raw) || !Array.isArray(raw.party) || !Array.isArray(raw.stints)) {
-    return { ok: false, error: '無効なローテーション JSON です（party・stints の配列がありません）。' };
+    return { ok: false, error: t('messages:file.invalidRotation') };
   }
   if (!isValidParty(raw.party)) {
-    return { ok: false, error: 'ローテーション JSON の編成（party）が壊れています（キャラの ID がない枠があります）。' };
+    return { ok: false, error: t('messages:file.brokenParty') };
   }
   const { stints, skipped } = sanitizeStints(raw.stints);
   const loopStartIndex = finiteOrUndefined(raw.loopStartIndex);
@@ -214,7 +215,7 @@ export function sanitizeSlot(raw: unknown): { slot: SavedRotationSlot; skipped: 
   const unchanged = Array.isArray(raw.stints) && stints.length === raw.stints.length && skipped.actions === 0 && skipped.others === 0
     && stints.every((s, i) => s === (raw.stints as unknown[])[i]);
   let slot = sanitizeRotationNumbers((unchanged ? raw : { ...raw, stints }) as unknown as SavedRotationSlot);
-  if (typeof slot.name !== 'string') slot = { ...slot, name: '（名前なし）' };
+  if (typeof slot.name !== 'string') slot = { ...slot, name: t('messages:file.noName') };
   // 説明は、画面にそのまま出す。文字列でなければ外す
   if (slot.description !== undefined && typeof slot.description !== 'string') {
     const { description: _drop, ...rest } = slot;

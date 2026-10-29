@@ -8,6 +8,7 @@ import { simulateLayers, type LayerBuffRule, type LayerEvent } from '../stateBar
 import type { ModeWindow, SacrificialProc } from './types';
 import type { CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
+import { t } from '../../i18n';
 
 /** モードの終わりに関わる CT を、CT の発動（ctEvents）に足す: 時間切れで終わったモードのスキルの CT 短縮（閑雲）と、モードの終わりから始まる CT（タルタリヤ・放浪者） */
 export function addModeEndCooldowns(a: { retiredModes: ModeWindow[]; modeWindows: Map<string, ModeWindow>; ctEvents: CooldownEvent[]; skillCooldowns: CooldownSpan[]; charStates: Record<string, CharacterRuntimeState>; switchDelay: number }): void {
@@ -63,7 +64,7 @@ export function warnGcsimUnsupportedActions(a: { characters: CharacterConfig[]; 
     if (!stChar) continue;
     for (const a of st.actions) {
       if (!stChar.availableActions.find(d => d.id === a.actionTypeId)?.gcsimUnsupported) continue;
-      const message = 'gcsim が未実装のアクションです。gcsim で実行するとエラーになり、設定文には入れられません';
+      const message = t('messages:rotation.gcsimMissingAction');
       a.specialWindowWarning = message;
       validationIssues.push({
         id: `gcsim_unsupported_${a.id}`,
@@ -72,7 +73,7 @@ export function warnGcsimUnsupportedActions(a: { characters: CharacterConfig[]; 
         stintId: st.id,
         actionId: a.id,
         time: a.startTime ?? 0,
-        title: `${stChar.name}: gcsim 未実装のアクション`,
+        title: t('messages:rotation.gcsimMissingActionTitle', { name: stChar.name }),
         message: `「${a.name}」: ${message}`,
       });
     }
@@ -94,7 +95,7 @@ export function warnPlungePrerequisites(a: { characters: CharacterConfig[]; calc
       stintId: w.stintId,
       actionId: w.actionId,
       time: w.time,
-      title: `${charName}: 落下攻撃の前提`,
+      title: t('messages:plunge.title', { name: charName }),
       message: `「${w.actionName}」: ${w.message}`,
     });
   }
@@ -126,7 +127,7 @@ export function addStateBars(a: { characters: CharacterConfig[]; activeBuffs: Ac
     const char = characters.find(c => c.id === charId);
     if (!char) continue;
     const { layers, fullPeriods } = simulateLayers(entry.events, entry.rule, CharacterModel.fromConfig(char).constellation);
-    layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, `${entry.rule.label}（${l.index}層目）`, l.start, l.end, entry.rule.description, true));
+    layers.forEach((l, i) => stateBar(char, `layer_${charId}_${i}`, t('messages:rotation.layer', { label: entry.rule.label, index: l.index }), l.start, l.end, entry.rule.description, true));
     fullPeriods.forEach((p, i) => stateBar(char, `layerfull_${charId}_${i}`, entry.rule.fullBuff!.label, p.start, p.end, entry.rule.fullBuff!.description, true));
   }
 }
@@ -190,8 +191,8 @@ export function applyNightsoulBurstInterval(a: { characters: CharacterConfig[]; 
         characterId: first.characterId,
         stintId: first.stintId,
         time: first.startTime,
-        title: `${ch?.name ?? ''}: 夜魂バーストが起きません`,
-        message: '夜魂バーストは、チーム内にナタのキャラがいるときだけ起きます。このチームにはナタのキャラがいません',
+        title: t('messages:rotation.noNightsoulBurstTitle', { name: ch?.name ?? '' }),
+        message: t('messages:rotation.noNightsoulBurst'),
       });
     } else if (triggered.length > 0 && burstCd !== undefined) {
       let anchor = -Infinity;
@@ -211,8 +212,8 @@ export function applyNightsoulBurstInterval(a: { characters: CharacterConfig[]; 
             characterId: sp.characterId,
             stintId: sp.stintId,
             time: sp.startTime,
-            title: `${ch?.name ?? ''}: 夜魂バーストの間隔`,
-            message: `「${sp.name}」の発動は、前の夜魂バーストからあと ${remaining} 秒空ける必要があります（チーム内のナタのキャラ ${natlan} 人 → ${burstCd} 秒に 1 回）`,
+            title: t('messages:rotation.nightsoulIntervalTitle', { name: ch?.name ?? '' }),
+            message: t('messages:rotation.nightsoulInterval', { action: sp.name, remaining, count: natlan, interval: burstCd }),
           });
         } else {
           anchor = sp.startTime;

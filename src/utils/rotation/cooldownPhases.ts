@@ -8,6 +8,7 @@ import { skillHitFrames } from './frameTables';
 import { cutBar, modeKeyOf, modeGaugeInitial, modeGainScale, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
+import { t } from '../../i18n';
 
 /** CT の計算: 共鳴・書き戻した値・領域による短縮・CT の開始位置 */
 export function computeCooldown(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -19,10 +20,10 @@ export function computeCooldown(state: RotationState, sc: StintContext, ac: Acti
   if (externalWait !== undefined) {
     computedAction.hasCTCollision = true;
     computedAction.collisionRemainingCT = externalWait;
-    addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: gcsim で${options?.externalStaminaWaitIds?.includes(act.id) ? 'スタミナ待ち' : 'CT待ち'}`, `「${act.name}」`, externalWait, 0);
+    addViolationIssue(`skill_ct_gcsim_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.gcsimWait', { name: char.name, kind: options?.externalStaminaWaitIds?.includes(act.id) ? t('messages:ct.staminaWait') : t('messages:ct.cooldownWait') }), `「${act.name}」`, externalWait, 0);
     if (options?.externalStaminaWaitIds?.includes(act.id)) {
       const issue = validationIssues.find(v => v.id === `skill_ct_gcsim_${act.id}`);
-      if (issue) issue.message = `「${act.name}」は、スタミナが足りず、gcsim で ${externalWait} 秒待ちました`;
+      if (issue) issue.message = t('messages:ct.staminaWaited', { action: act.name, seconds: externalWait });
     }
   }
 
@@ -71,8 +72,8 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
       stintId: rawStint.id,
       actionId: act.id,
       time: actionStartTime,
-      title: `${char.name}: アクション定義が見つかりません`,
-      message: `「${act.name}」の定義がキャラデータにないため、CT を判定できません（DB 管理で、そのキャラのアクションを確認してください）`,
+      title: t('messages:ct.noDefTitle', { name: char.name }),
+      message: t('messages:ct.noDefMessage', { action: act.name }),
     });
   }
 
@@ -115,7 +116,7 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: ${isSpecial ? '特殊スキルCT違反' : 'スキルCT違反'}`, `${isSpecial ? '特殊スキル' : 'スキル'}「${act.name}」`, remaining, cycle);
+          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', isSpecial ? t('messages:ct.specialViolation', { name: char.name }) : t('messages:ct.skillViolation', { name: char.name }), isSpecial ? t('messages:ct.specialWhat', { action: act.name }) : t('messages:ct.skillWhat', { action: act.name }), remaining, cycle);
         },
       });
     }
@@ -147,7 +148,7 @@ export function registerCooldownEvents(state: RotationState, sc: StintContext, a
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: スキルCT違反`, `スキル「${act.name}」`, remaining, cycle);
+          addViolationIssue(`skill_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.skillViolation', { name: char.name }), t('messages:ct.skillWhat', { action: act.name }), remaining, cycle);
         },
       });
     }
@@ -341,7 +342,7 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
 
   // スキルを使うと閉じる受付（ヴァレサのマキシマムドライブ）
   const burstMode = specialModes.burst;
-  if ((act.type === 'skill' || act.type === 'skill_hold') && !actionDef?.cooldownPool && burstMode?.def.special?.closedBySkill && !burstMode.closed) closeSpecial(burstMode, actionStartTime, 'スキル');
+  if ((act.type === 'skill' || act.type === 'skill_hold') && !actionDef?.cooldownPool && burstMode?.def.special?.closedBySkill && !burstMode.closed) closeSpecial(burstMode, actionStartTime, t('messages:ct.closedBySkill'));
 
   if (act.type === 'burst') {
     // 特殊爆発（フリンズ・ヴァレサ）: 受付の中は、短い CT（ヴァレサ 1 秒・フリンズ なし）。外では通常の爆発になり、通常の CT が始まる
@@ -363,7 +364,7 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
         onViolation: (remaining, cycle) => {
           computedAction.hasCTCollision = true;
           computedAction.collisionRemainingCT = Math.max(computedAction.collisionRemainingCT ?? 0, remaining);
-          addViolationIssue(`burst_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', `${char.name}: 元素爆発CT違反`, `元素爆発「${act.name}」`, remaining, cycle);
+          addViolationIssue(`burst_ct_${act.id}`, char, rawStint.id, act.id, actionStartTime, 'error', t('messages:ct.burstViolation', { name: char.name }), t('messages:ct.burstWhat', { action: act.name }), remaining, cycle);
         },
       });
     }
@@ -389,12 +390,12 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
     const winFor = specialModes[isSpecialBurst ? 'burst' : 'skill'];
     if (!specialOpenAt(isSpecialBurst ? 'burst' : 'skill', actionStartTime)) {
       const windowClosed = !!winFor?.closed;
-      const kindName = isSpecialBurst ? '特殊爆発' : '特殊スキル';
-      const normalName = isSpecialBurst ? '通常の爆発（CT が始まる）' : '通常のスキル';
-      const noWindowHint = isSpecialBurst ? (actionDef?.specialBurstHint ?? '受付の中でないと使えません') : '同じ出場の中でスキルを使った後でないと使えません';
-      const windowMessage = windowClosed && winFor?.closedBy ? `${kindName}の受付は、${winFor.closedBy}を使ったため閉じています。gcsim では${normalName}として扱われます` : windowClosed ? `${kindName}の受付は、すでに${kindName}を使って閉じています（受付の間に 1 回だけ使えます）。gcsim では${normalName}として扱われます` : winFor
-        ? `${kindName}の受付時間外: 受付（${(winFor.end - winFor.opener.start).toFixed(1)} 秒。ヒットストップ・爆発の延長を含む最大）を ${(actionStartTime - winFor.end).toFixed(1)} 秒過ぎています。gcsim では${normalName}として扱われます`
-        : `${kindName}の受付時間外: ${noWindowHint}。gcsim では${normalName}として扱われます`;
+      const kindName = isSpecialBurst ? t('messages:ct.specialBurst') : t('messages:ct.specialSkill');
+      const normalName = isSpecialBurst ? t('messages:ct.normalBurst') : t('messages:ct.normalSkill');
+      const noWindowHint = isSpecialBurst ? (actionDef?.specialBurstHint ?? t('messages:ct.burstNoWindow')) : t('messages:ct.skillNoWindow');
+      const windowMessage = windowClosed && winFor?.closedBy ? t('messages:ct.windowClosedBy', { kind: kindName, by: winFor.closedBy, normal: normalName }) : windowClosed ? t('messages:ct.windowUsed', { kind: kindName, normal: normalName }) : winFor
+        ? t('messages:ct.windowPassed', { kind: kindName, window: (winFor.end - winFor.opener.start).toFixed(1), over: (actionStartTime - winFor.end).toFixed(1), normal: normalName })
+        : t('messages:ct.windowNone', { kind: kindName, hint: noWindowHint, normal: normalName });
       computedAction.specialWindowWarning = windowMessage;
       validationIssues.push({
         id: `special_window_${act.id}`,
@@ -403,7 +404,7 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
         stintId: rawStint.id,
         actionId: act.id,
         time: actionStartTime,
-        title: `${char.name}: ${kindName}の受付時間外`,
+        title: t('messages:ct.windowTitle', { name: char.name, kind: kindName }),
         message: `${kindName}「${act.name}」: ${windowMessage}`,
       });
     }

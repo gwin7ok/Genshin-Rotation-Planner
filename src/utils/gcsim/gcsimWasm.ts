@@ -10,6 +10,7 @@ export type GcsimEngine = 'wasm' | 'server';
 export type GcsimEnginePreference = 'auto' | GcsimEngine;
 
 import { DEVICE_KEYS, readString, removeKey, writeString } from '../persistence';
+import { t } from '../../i18n';
 
 const baseUrl = (): string => (import.meta as unknown as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
 
@@ -65,10 +66,10 @@ function ensureWorker(): Worker {
     if (!p) return;
     pending.delete(e.data.id);
     if (e.data.ok) p.resolve(e.data.out ?? '');
-    else p.reject(new Error(e.data.error ?? 'gcsim の WASM を実行できませんでした'));
+    else p.reject(new Error(e.data.error ?? t('messages:client.wasmFailed')));
   };
   w.onerror = (ev: ErrorEvent) => {
-    failAll(new Error(ev.message || 'gcsim の WASM の Worker を起動できませんでした'));
+    failAll(new Error(ev.message || t('messages:client.workerFailed')));
     w.terminate();
     if (worker === w) worker = null;
   };
@@ -131,7 +132,7 @@ export async function checkWasmVersionMismatch(expectedCommit: string): Promise<
     if (!res.ok) return null;
     const info = (await res.json()) as { gcsimCommit?: unknown; gcsimVersion?: unknown };
     if (typeof info.gcsimCommit !== 'string' || info.gcsimCommit === expectedCommit) return null;
-    return `この画面は gcsim ${expectedCommit.slice(0, 8)} 用ですが、配信されている gcsim は ${info.gcsimCommit.slice(0, 8)}（${String(info.gcsimVersion ?? '不明')}）です。ページを再読み込みしてください（直らないときは、管理者に連絡してください）。`;
+    return t('messages:client.versionMismatch', { expected: expectedCommit.slice(0, 8), served: info.gcsimCommit.slice(0, 8), version: String(info.gcsimVersion ?? t('messages:client.unknown')) });
   } catch {
     return null;
   }

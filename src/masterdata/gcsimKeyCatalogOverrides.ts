@@ -3,6 +3,7 @@
  *
  * 自動生成（gcsimKeyCatalog.ts）で決まらないもの・誤るものを、ここで上書きする。
  *   - name: 日本語の表示名（必須）
+ *   - nameEn: 英語の表示名（持ち主が無いなど、自動で組み立てられないときだけ）
  *   - kind: 種類の確定（effect = 効果 / cooldown = ユーザーに見せる発動制限 / internal = 内部。名前からの候補を変えるときだけ）
  *   - category: 分類の確定（複数の定義場所にまたがるキーなど。変えるときだけ）
  *   - cooldownOf: CT のとき、どの効果（キー）の CT か
@@ -114,10 +115,10 @@ export const KEY_OVERRIDES: Record<string, KeyOverride> = {
   'gd-4pc-icd': o('金メッキの夢 4セット: 発動間隔（8秒）', { cooldownOf: 'gd-4pc' }),
 
   // --- 元素共鳴・システム -----------------------------------------------------
-  'hydro-res-hpp': o('元素共鳴（水）: HP'),
-  'dendro-res-50': o('元素共鳴（草）: 元素熟知（常時）'),
-  'dendro-res-30': o('元素共鳴（草）: 元素熟知（反応時）'),
-  'ascendant-gleam': o('月兆: 反応ボーナス（月兆・満輝）'),
+  'hydro-res-hpp': o('元素共鳴（水）: HP', { nameEn: 'Elemental Resonance (Hydro): HP' }),
+  'dendro-res-50': o('元素共鳴（草）: 元素熟知（常時）', { nameEn: 'Elemental Resonance (Dendro): Elemental Mastery (always)' }),
+  'dendro-res-30': o('元素共鳴（草）: 元素熟知（反応時）', { nameEn: 'Elemental Resonance (Dendro): Elemental Mastery (on reaction)' }),
+  'ascendant-gleam': o('月兆: 反応ボーナス（月兆・満輝）', { nameEn: 'Moonsign: Reaction Bonus (Moonsign: Ascendant Gleam)' }),
 };
 
 /**
@@ -135,6 +136,8 @@ export interface ManualPatternKey {
   /** 定義場所のファイル（分類・持ち主を決める） */
   file: string;
   name: string;
+  /** 英語の表示名 */
+  nameEn?: string;
   durationFrames?: number;
   note?: string;
 }
@@ -204,6 +207,7 @@ MANUAL_PATTERN_KEYS.push({
   elements: [],
   file: 'pkg/reactable/stellarswirl_gadget.go',
   name: '星拡散の渦: 滞空状態',
+  nameEn: 'Stellar Swirl vortex: Airborne state',
   durationFrames: 300,
   note: 'stellarswirl_gadget.go: Core.Status.Add(player.StellarSwirlAirborneBuff, 5*60)。星拡散の渦に巻き込まれたときの滞空（5 秒）。キャラの効果ではなく、反応の仕組み上の状態（`Core.Status.Add` は自動抽出の対象外）',
 });

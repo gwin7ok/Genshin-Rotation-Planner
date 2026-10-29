@@ -1,4 +1,4 @@
-import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
+import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem, type SyncMessageKey } from '../types/database';
 import { ActionDefinition, CharacterConfig } from '../types/genshin';
 import { INITIAL_MASTER_DATABASE, DATABASE_VERSION, MASTER_WEAPONS, MASTER_ARTIFACTS } from '../data/databaseMaster';
 import { noteStoredDbVersion } from './versionNotice';
@@ -30,13 +30,26 @@ import { attachDurations, deriveAutoExtras, mergeExtras } from '../masterdata/au
 import type { KeyCatalog } from '../masterdata/gcsimKeyCatalog';
 import { fetchRuntimeData } from './gcsim/runtimeData';
 import { STORAGE_KEYS, readString, writeJson } from './persistence';
-import { t, dateLocale } from '../i18n';
+import { t, dateLocale, type TranslationKey } from '../i18n';
 
 /** 発動バフと gcsim の辞書の結び付け（5-6）用。辞書は大きいので、動的生成のときだけ読み込む */
 async function loadCatalogIndex() {
   // 生成のたびに、必ずサーバーから取り直す（ブラウザのキャッシュ・モジュールのキャッシュを使わない）
   const catalog = await fetchRuntimeData<KeyCatalog>('gcsim_key_catalog.json');
   return { index: indexCatalog(catalog), commit: String(catalog.gcsimCommit ?? '').slice(0, 7), entries: catalog.entries as unknown[] };
+}
+
+/** 同期の記録。lastSyncedAt（そのときの言語の文）と、表示の言語で組み立て直すための lastSync を入れる */
+function syncStamp(key: SyncMessageKey, params: Record<string, string | number> = {}): Pick<AppDatabase, 'lastSyncedAt' | 'lastSync'> {
+  const at = new Date().toISOString();
+  return { lastSyncedAt: t(key as TranslationKey, { ...params, time: new Date(at).toLocaleString(dateLocale) }), lastSync: { key, params, at } };
+}
+
+/** 同期の記録の表示（表示の言語。lastSync が無い DB は、保存されている文のまま） */
+export function lastSyncedText(db: Pick<AppDatabase, 'lastSyncedAt' | 'lastSync'>): string {
+  if (!db.lastSync) return db.lastSyncedAt;
+  const { key, params, at } = db.lastSync;
+  return t(key as TranslationKey, { ...params, time: at ? new Date(at).toLocaleString(dateLocale) : '' });
 }
 
 
@@ -227,11 +240,10 @@ export async function syncCharactersMasterOnline(
   attachHandwrittenCharacterEnglish(latestChars); // 手で書いた名前・説明の英語（D255。結び付けの後）
   const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: t('messages:db.characters', { time: nowStr, commit: report.gcsimCommit.slice(0, 7), catalog: catalogCommit }),
+    ...syncStamp('messages:db.characters', { commit: report.gcsimCommit.slice(0, 7), catalog: catalogCommit }),
     characters: mergedCharacters
   };
 
@@ -261,11 +273,10 @@ export async function syncWeaponsMasterOnline(
     isCustomWeapon,
   );
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: t('messages:db.weapons', { time: nowStr, count: report.totalWeapons, catalog: catalogCommit }),
+    ...syncStamp('messages:db.weapons', { count: report.totalWeapons, catalog: catalogCommit }),
     weapons: mergedWeapons
   };
 
@@ -294,11 +305,10 @@ export async function syncArtifactsMasterOnline(
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: t('messages:db.artifacts', { time: nowStr, count: report.totalArtifacts, catalog: catalogCommit }),
+    ...syncStamp('messages:db.artifacts', { count: report.totalArtifacts, catalog: catalogCommit }),
     artifacts: mergedArtifacts
   };
 
@@ -330,11 +340,10 @@ export async function syncEquipmentMasterOnline(
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
     version: DATABASE_VERSION,
-    lastSyncedAt: t('messages:db.equipment', { time: nowStr, catalog: catalogCommit }),
+    ...syncStamp('messages:db.equipment', { catalog: catalogCommit }),
     weapons: mergedWeapons,
     artifacts: mergedArtifacts,
   };
@@ -355,10 +364,9 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
     isCustomWeapon,
   );
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: t('messages:db.bundledWeapons', { time: nowStr }),
+    ...syncStamp('messages:db.bundledWeapons'),
     weapons: mergedWeapons
   };
 
@@ -378,10 +386,9 @@ export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
     isCustomArtifact,
   );
 
-  const nowStr = new Date().toLocaleString(dateLocale);
   const updatedDb: AppDatabase = {
     ...currentDb,
-    lastSyncedAt: t('messages:db.bundledArtifacts', { time: nowStr }),
+    ...syncStamp('messages:db.bundledArtifacts'),
     artifacts: mergedArtifacts
   };
 
@@ -395,7 +402,7 @@ export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
 export function resetDatabaseToMaster(): AppDatabase {
   const resetDb = {
     ...INITIAL_MASTER_DATABASE,
-    lastSyncedAt: t('messages:db.reset', { time: new Date().toLocaleString(dateLocale) }),
+    ...syncStamp('messages:db.reset'),
   };
   saveDatabase(resetDb);
   return resetDb;
@@ -470,7 +477,7 @@ export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
 export function clearAllDatabaseData(db: AppDatabase): AppDatabase {
   const emptyDb: AppDatabase = {
     version: 1.0,
-    lastSyncedAt: t('messages:db.cleared', { time: new Date().toLocaleString(dateLocale) }),
+    ...syncStamp('messages:db.cleared'),
     characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
     weapons: db.weapons.filter(isLockedWeapon),          // ロック中の武器は残す
     artifacts: db.artifacts.filter(isLockedArtifact),     // ロック中の聖遺物は残す

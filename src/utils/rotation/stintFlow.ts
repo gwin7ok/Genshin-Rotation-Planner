@@ -6,7 +6,7 @@ import { warnQuickSwap, addPassiveTriggers, addCharacterEffectBars } from './sti
 import { modeKeyOf, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { StintContext } from './context';
 import type { RotationState } from './state';
-import { t } from '../../i18n';
+import { t, joinList } from '../../i18n';
 import { charName, loc } from '../../i18n/loc';
 
 /** 出場の準備: キャラ・アクション定義・特殊スキルの受付の補助を揃え、交代のアクションを足して、StintContext を作る。キャラが見つからない出場は undefined */
@@ -185,7 +185,7 @@ export function finishStint(state: RotationState, sc: StintContext): void {
     duration: stintDuration,
     actions: computedActions,
     modeHold: holdableModes.length > 0
-      ? { on: holdableModes.some(holdOn), seconds: modeHoldSeconds, label: [...new Set(holdableModes.map(m => loc(m.def, 'label')))].join('・') }
+      ? { on: holdableModes.some(holdOn), seconds: modeHoldSeconds, label: joinList([...new Set(holdableModes.map(m => loc(m.def, 'label')))]) }
       : undefined,
   };
 

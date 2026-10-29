@@ -1113,8 +1113,11 @@ const WEAPON_MAP: Record<string, WeaponType> = {
 // 型
 // ---------------------------------------------------------------------------
 
+/** 生成の段階（画面では database:progress.<段階> の文にする） */
+export type GenerationPhase = 'charLists' | 'charFrames';
+
 export interface GenerationProgress {
-  phase: string;
+  phase: GenerationPhase;
   done: number;
   total: number;
 }
@@ -1970,7 +1973,7 @@ export async function generateCharacterMaster(
   };
 
   // 1. genshin-db + gcsim のインデックスを並列取得
-  onProgress?.({ phase: 'genshin-db / gcsim の一覧を取得中', done: 0, total: 1 });
+  onProgress?.({ phase: 'charLists', done: 0, total: 1 });
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   const [charsJa, charsEn, talentsJa, constellationsJa, talentsEn, constellationsEn, tree, charDm] = await Promise.all([
     fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=Japanese`),
@@ -2171,7 +2174,7 @@ export async function generateCharacterMaster(
       }
     }
     done++;
-    onProgress?.({ phase: 'gcsim のモーションフレームを解析中', done, total: units.length });
+    onProgress?.({ phase: 'charFrames', done, total: units.length });
   });
 
   // 4. キャラクター組み立て

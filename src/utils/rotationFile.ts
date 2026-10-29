@@ -3,8 +3,11 @@
  * ファイル名: アプリ名 + 日時 + 編成名（保存編成の名前。無ければ、パーティメンバーの名前を「・」でつないだもの）
  */
 import type { PartyMember, SavedReactions, Stint } from '../types/genshin';
+import { currentLanguage, joinList, t } from '../i18n';
 
-export const APP_FILE_PREFIX = '原神ローテーションプランナー';
+export const APP_FILE_PREFIX = currentLanguage === 'en' ? 'GenshinRotationPlanner' : '原神ローテーションプランナー';
+/** ファイル名から編成名を読むときに認める接頭辞（どちらの言語で書き出したファイルも読む） */
+const APP_FILE_PREFIXES = ['原神ローテーションプランナー', 'GenshinRotationPlanner'];
 
 /** 書き出し・コピーする編成の内容 */
 export interface RotationExportSource {
@@ -53,7 +56,7 @@ export function rotationDisplayName(slotName: string | undefined, memberNames: s
   const trimmed = slotName?.trim();
   if (trimmed) return trimmed;
   const members = memberNames.filter(Boolean);
-  return members.length > 0 ? members.join('・') : '原神ローテーション';
+  return members.length > 0 ? joinList(members) : t('save:manager.defaultName');
 }
 
 export function rotationFileName(name: string, date: Date = new Date()): string {
@@ -63,6 +66,6 @@ export function rotationFileName(name: string, date: Date = new Date()): string 
 /** ファイル名から、編成名を推定する（`<アプリ名>_<日時>_<編成名>.json` の形のとき。それ以外は、拡張子を除いた名前） */
 export function nameFromFileName(fileName: string): string {
   const base = fileName.replace(/\.json$/i, '');
-  const m = base.match(new RegExp(`^${APP_FILE_PREFIX}_\\d{8}-\\d{6}_(.+)$`));
+  const m = base.match(new RegExp(`^(?:${APP_FILE_PREFIXES.join('|')})_\\d{8}-\\d{6}_(.+)$`));
   return (m ? m[1] : base).replace(/_/g, ' ');
 }

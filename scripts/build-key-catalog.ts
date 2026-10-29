@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { extractKeyCatalog } from '../src/masterdata/gcsimKeyCatalog.ts';
 import { AMBIGUOUS_KEY_CATEGORIES, KEY_OVERRIDES, MANUAL_PATTERN_KEYS } from '../src/masterdata/gcsimKeyCatalogOverrides.ts';
+import { DOC_LANGUAGES, docPath, pick } from '../src/masterdata/verificationEnglish.ts';
 import { assignNames } from '../src/masterdata/gcsimKeyNames.ts';
 import { loadNameSources } from './genshin-db-names.ts';
 
@@ -73,26 +74,33 @@ const naming = assignNames(catalog.entries, await loadNameSources());
   const inScope = (e: { category?: string; kind?: string }) => e.kind === 'effect' && ['skill', 'burst', 'character', 'attack'].includes(e.category ?? '');
   const fmt = (e: { key: string; category?: string; kind?: string; owner?: { gcsimKey?: string } }) => `- \`${e.key}\` [${e.category}/${e.kind}] ${e.owner?.gcsimKey ?? ''}`;
   const diffPath = path.join(process.cwd(), 'docs/gcsim-integration/phase-6-run-and-apply/catalog-diff.md');
-  fs.writeFileSync(diffPath, [
-    '# gcsim キーの辞書の差分（前回の作成との比較）',
-    '',
-    `作成: ${new Date().toISOString().slice(0, 10)} / gcsim commit ${tree.sha.slice(0, 7)}`,
-    '',
-    `増えたキー ${added.length} 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: ${added.filter(inScope).length} 件）/ 消えたキー ${removed.length} 件（うち対象 ${removed.filter(inScope).length} 件）`,
-    '',
-    '## 増えたキー（対象のもの）',
-    ...(added.filter(inScope).length ? added.filter(inScope).map(fmt) : ['なし']),
-    '',
-    '## 消えたキー（対象のもの。紐づけ・決定が残っていれば孤立する）',
-    ...(removed.filter(inScope).length ? removed.filter(inScope).map(fmt) : ['なし']),
-    '',
-    '## 増えたキー（その他）',
-    ...(added.filter(e => !inScope(e)).length ? added.filter(e => !inScope(e)).map(fmt) : ['なし']),
-    '',
-    '## 消えたキー（その他）',
-    ...(removed.filter(e => !inScope(e)).length ? removed.filter(e => !inScope(e)).map(fmt) : ['なし']),
-    '',
-  ].join('\n'));
+  const listOr = (list: typeof added, none: string) => (list.length ? list.map(fmt) : [none]);
+  // 日本語（.md）と英語（.en.md）を書く（D252）
+  for (const lang of DOC_LANGUAGES) {
+    const L = (ja: string, en: string) => pick(lang, ja, en);
+    const none = L('なし', 'None');
+    fs.writeFileSync(docPath(diffPath, lang), [
+      L('# gcsim キーの辞書の差分（前回の作成との比較）', '# gcsim key dictionary diff (compared with the previous build)'),
+      '',
+      L(`作成: ${new Date().toISOString().slice(0, 10)} / gcsim commit ${tree.sha.slice(0, 7)}`, `Generated: ${new Date().toISOString().slice(0, 10)} / gcsim commit ${tree.sha.slice(0, 7)}`),
+      '',
+      L(`増えたキー ${added.length} 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: ${added.filter(inScope).length} 件）/ 消えたキー ${removed.length} 件（うち対象 ${removed.filter(inScope).length} 件）`,
+        `Added keys ${added.length} (in coverage scope = effects in categories skill / burst / character / attack: ${added.filter(inScope).length}) / removed keys ${removed.length} (in scope: ${removed.filter(inScope).length})`),
+      '',
+      L('## 増えたキー（対象のもの）', '## Added keys (in scope)'),
+      ...listOr(added.filter(inScope), none),
+      '',
+      L('## 消えたキー（対象のもの。紐づけ・決定が残っていれば孤立する）', '## Removed keys (in scope; any remaining links or decisions become orphans)'),
+      ...listOr(removed.filter(inScope), none),
+      '',
+      L('## 増えたキー（その他）', '## Added keys (other)'),
+      ...listOr(added.filter(e => !inScope(e)), none),
+      '',
+      L('## 消えたキー（その他）', '## Removed keys (other)'),
+      ...listOr(removed.filter(e => !inScope(e)), none),
+      '',
+    ].join('\n'));
+  }
   console.log(`辞書の差分: 増えたキー ${added.length} 件（対象 ${added.filter(inScope).length}）/ 消えたキー ${removed.length} 件（対象 ${removed.filter(inScope).length}）→ ${path.relative(process.cwd(), diffPath)}`);
 }
 

@@ -103,9 +103,15 @@ export interface ArtifactSetDatabaseItem {
 
 export type ArtifactSetMasterItem = ArtifactSetDatabaseItem;
 
+/** 同期の記録の文のキー（messages の db.*） */
+export type SyncMessageKey = `messages:db.${string}`;
+
 export interface AppDatabase {
   version: number;
+  /** 同期の記録（そのときの言語の文。lastSync が無いときの表示） */
   lastSyncedAt: string;
+  /** 同期の記録を、表示の言語で組み立て直すための値（文のキー・差し込む値・日時 ISO） */
+  lastSync?: { key: SyncMessageKey; params?: Record<string, string | number>; at?: string };
   characters: CharacterConfig[];
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];

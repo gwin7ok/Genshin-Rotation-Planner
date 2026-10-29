@@ -250,12 +250,14 @@ export interface NamingReport {
   unnamed: number;
 }
 
-/** 手で補う一覧に表示名が無いキーへ、表示名（日本語 name / 英語 nameEn）を付ける */
+/** 手で補う一覧に表示名が無いキーへ、表示名（日本語 name / 英語 nameEn）を付ける（手で補う一覧の nameEn があれば、それを使う） */
 export function assignNames(entries: KeyCatalogEntry[], sources: NameSources): NamingReport {
   const report: NamingReport = { manual: 0, rule: 0, partial: 0, unnamed: 0 };
   for (const e of entries) {
-    const en = compose(e, 'en', sources.en, sources.en);
-    if (en) e.nameEn = en.text;
+    if (!e.nameEn) {
+      const en = compose(e, 'en', sources.en, sources.en);
+      if (en) e.nameEn = en.text;
+    }
     if (e.name) {
       e.nameSource = 'manual';
       report.manual++;

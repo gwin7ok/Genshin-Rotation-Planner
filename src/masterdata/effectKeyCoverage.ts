@@ -61,6 +61,26 @@ export const UNLINKED_REASON_LABELS: Record<UnlinkedReason, string> = {
   'unreviewed': '未検討',
 };
 
+/** 紐づけない理由の英語（検証データの英語の文書。D252） */
+export const UNLINKED_REASON_LABELS_EN: Record<UnlinkedReason, string> = {
+  'covered-by-main': 'Already shown by the main bar',
+  'grace-window': 'Grace period / short window (not an effect)',
+  'hit-driven': 'Internal state kept refreshed by hits, etc.',
+  'deferred': 'Deferred',
+  'covered-by-master': 'Handled by the constellation definition in the master',
+  'covered-by-passive': 'Handled as a buff (passive talent)',
+  'decided-not-linked': 'gcsim reports the effect, but it is not linked and gets no bar',
+  'not-runnable': 'Cannot run in gcsim (not registered)',
+  'not-in-gcsim': 'Character not registered in gcsim',
+  'not-in-app': 'Character not in the app master',
+  'no-event': 'gcsim reports no effect event (tentative)',
+  'no-bar': 'No gcsim effect; no bar',
+  'app-bar': 'No gcsim effect; bar from the app value',
+  'unprobable': 'Cannot run alone; not collected',
+  'permanent': 'Permanent effect',
+  'unreviewed': 'Not reviewed',
+};
+
 /** main = 本体の効果時間 / extra = 副次効果のバー / included = そのアクションに含まれる効果 / character = キャラクターに紐づく効果（D57） */
 export type LinkRole = 'main' | 'extra' | 'included' | 'character';
 /** 紐づけの確度: approved = ユーザーが確認して承認 / auto = 自動（マスターの効果時間との一致・実測）で作った */
@@ -88,6 +108,8 @@ export interface EffectRow {
   owner?: string;
   name?: string;
   permanent?: boolean;
+  /** 英語（D252。日本語と同じなら無し） */
+  en?: { name?: string };
 }
 
 /** アプリ側の対象の種類（今はアクション定義。発動バフ・命ノ星座は、今後この表に加える） */
@@ -100,6 +122,8 @@ export interface TargetRow {
   char: string;
   /** アクションの種類（skill / skill_hold / burst）。キャラクターに紐づけるときは 'character' */
   actionType: string;
+  /** 英語（D252） */
+  en?: { char?: string };
 }
 
 export interface LinkRow {
@@ -115,6 +139,8 @@ export interface LinkRow {
   self?: boolean;
   label?: string;
   approval: LinkApproval;
+  /** 英語（D252） */
+  en?: { label?: string };
 }
 
 export interface UnlinkedRow {
@@ -124,6 +150,8 @@ export interface UnlinkedRow {
   id: string;
   reason: UnlinkedReason;
   note?: string;
+  /** 英語（D252） */
+  en?: { note?: string };
 }
 
 export interface EffectKeyCoverage {

@@ -2,7 +2,7 @@ import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions 
 import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
 import { isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints } from './rotationValidation';
-import { t } from '../i18n';
+import { t, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 
 export interface ActiveRotationState {
@@ -171,9 +171,9 @@ export function buildDefaultSlotName(
   return `${buildPartyMemberNames(characters)} (${totalDuration.toFixed(1)}s)`;
 }
 
-/** 編成メンバー名を「・」でつないだ文字列（未設定スロットは除く） */
+/** 編成メンバー名をつないだ文字列（日本語は「・」、英語は「, 」。未設定スロットは除く） */
 export function buildPartyMemberNames(characters: CharacterConfig[]): string {
-  return characters.filter(c => !isEmptySlotCharacter(c)).map(c => charName(c)).join('・');
+  return joinList(characters.filter(c => !isEmptySlotCharacter(c)).map(c => charName(c)));
 }
 
 /** 編成名の同一判定用に正規化（前後空白・全角半角・大文字小文字の違いを無視） */

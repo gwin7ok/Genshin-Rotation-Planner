@@ -17,6 +17,10 @@ export const currentLanguage = resolveLanguage();
 /** 日付・数値の整形に使うロケール（表示の言語に合わせる。タイムゾーンは利用者の端末のまま） */
 export const dateLocale = currentLanguage === 'ja' ? 'ja-JP' : 'en-US';
 
+/** 名前を並べるときの区切り（日本語「・」・英語「, 」） */
+export const listSeparator = currentLanguage === 'en' ? ', ' : '・';
+export const joinList = (items: readonly string[]): string => items.join(listSeparator);
+
 void i18n.use(initReactI18next).init({
   resources,
   lng: currentLanguage,

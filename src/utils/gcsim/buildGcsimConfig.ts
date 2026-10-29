@@ -13,7 +13,7 @@ import { actionDelayOf } from '../actionDelay.ts';
 import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import type { GcsimMemberInfo } from './readGcsimLog.ts';
-import { t } from '../../i18n';
+import { t, joinList } from '../../i18n';
 import { charName, actionName, loc } from '../../i18n/loc';
 
 /** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル固定、会心率100% */
@@ -317,7 +317,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   ];
 
   if (plungeChars.size > 0) {
-    warn(t('messages:config.plungeWarning', { names: [...plungeChars].join('・') }));
+    warn(t('messages:config.plungeWarning', { names: joinList([...plungeChars]) }));
   }
 
   // 重撃の直前が通常攻撃でないキャラ（gcsim は実行エラーにする）。初動 → ループ → ループ（2周）の順に、直前のアクションを追う

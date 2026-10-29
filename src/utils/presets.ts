@@ -11,7 +11,7 @@ import { isEmptySlotCharacter } from '../data/characters';
 import { charName } from '../i18n/loc';
 import { STORAGE_KEYS, readString, writeJson } from './persistence';
 import { findSlotByName, getSavedSlots, trySaveSlot } from './storage';
-import { currentLanguage } from '../i18n';
+import { currentLanguage, joinList } from '../i18n';
 
 import keqingIntensify from '../data/presets/keqing-intensify.json';
 import furinaVaporize from '../data/presets/furina-vaporize.json';
@@ -39,11 +39,11 @@ interface PresetFile {
 /** キー: 保存編成の ID の一部（preset_<キー>）。並びは、編成管理の表示順 */
 /** en: 英語の表示用の名前・説明（D255。保存する名前は日本語のまま。表示のときに slotDisplayName などで選ぶ） */
 const PRESET_FILES: { key: string; file: PresetFile; en: { name: string; description: string } }[] = [
-  { key: 'keqing-intensify', file: keqingIntensify as unknown as PresetFile, en: { name: 'Aggravate Keqing', description: 'Keqing・Nahida・Kaedehara Kazuha・Fischl' } },
-  { key: 'furina-vaporize', file: furinaVaporize as unknown as PresetFile, en: { name: 'Rolling Vaporize Furina (Revised)', description: 'Sayu・Furina・Xiangling・Citlali' } },
-  { key: 'sandrone-stellar-conduct', file: sandroneStellarConduct as unknown as PresetFile, en: { name: 'Sandrone Stellar-Conduct', description: 'Odette・Yae Miko・Qiqi・Sandrone' } },
-  { key: 'raiden-national', file: raidenNational as unknown as PresetFile, en: { name: 'Raiden National', description: 'Raiden Shogun・Xingqiu・Bennett・Xiangling' } },
-  { key: 'lunar-bloom', file: lunarBloom as unknown as PresetFile, en: { name: 'Bountiful Lunar-Bloom', description: 'Nahida・Nilou・Columbina・Lauma' } },
+  { key: 'keqing-intensify', file: keqingIntensify as unknown as PresetFile, en: { name: 'Aggravate Keqing', description: 'Keqing, Nahida, Kaedehara Kazuha, Fischl' } },
+  { key: 'furina-vaporize', file: furinaVaporize as unknown as PresetFile, en: { name: 'Rolling Vaporize Furina (Revised)', description: 'Sayu, Furina, Xiangling, Citlali' } },
+  { key: 'sandrone-stellar-conduct', file: sandroneStellarConduct as unknown as PresetFile, en: { name: 'Sandrone Stellar-Conduct', description: 'Odette, Yae Miko, Qiqi, Sandrone' } },
+  { key: 'raiden-national', file: raidenNational as unknown as PresetFile, en: { name: 'Raiden National', description: 'Raiden Shogun, Xingqiu, Bennett, Xiangling' } },
+  { key: 'lunar-bloom', file: lunarBloom as unknown as PresetFile, en: { name: 'Bountiful Lunar-Bloom', description: 'Nahida, Nilou, Columbina, Lauma' } },
 ];
 
 /** 保存されている名前が、プリセットの名前のまま（ユーザーが変えていない）なら、そのプリセット */
@@ -57,7 +57,7 @@ export function slotDisplayName(slot: { name: string }): string {
 
 /**
  * 保存編成の説明の表示。プリセットの説明のままなら、表示の言語の説明。
- * 保存したときに自動で付けた説明（編成のキャラ名を「・」でつないだもの。保存したときの言語）のままなら、いまの言語のキャラ名で作り直す。
+ * 保存したときに自動で付けた説明（編成のキャラ名を、日本語は「・」・英語は「, 」でつないだもの。保存したときの言語）のままなら、いまの言語のキャラ名で作り直す。
  * それ以外（ユーザーが書いた説明）は、そのまま
  */
 export function slotDisplayDescription(
@@ -68,9 +68,9 @@ export function slotDisplayDescription(
   if (preset && slot.description === preset.file.description) return preset.en.description;
   const members = (slot.party ?? []).map(m => dbCharacters.find(c => c.id === m.characterId)).filter((c): c is CharacterConfig => !!c && !isEmptySlotCharacter(c));
   if (!slot.description || members.length === 0) return slot.description;
-  const autoJa = members.map(c => c.name).join('・');
-  const autoEn = members.map(c => c.en?.name || c.englishName || c.name).join('・');
-  return slot.description === autoJa || slot.description === autoEn ? members.map(c => charName(c)).join('・') : slot.description;
+  const enNames = members.map(c => c.en?.name || c.englishName || c.name);
+  const autos = [members.map(c => c.name).join('・'), enNames.join(', ')];
+  return autos.includes(slot.description) ? joinList(members.map(c => charName(c))) : slot.description;
 }
 
 export const PRESET_COUNT = PRESET_FILES.length;

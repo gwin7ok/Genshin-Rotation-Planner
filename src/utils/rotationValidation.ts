@@ -9,7 +9,7 @@
  *   - 正しい要素は、そのまま（同じオブジェクト）残す。正しいデータは、1 つも変わらない。
  */
 import type { CharacterActionInstance, PartyMember, SavedRotationSlot, Stint } from '../types/genshin';
-import { t } from '../i18n';
+import { t, joinList } from '../i18n';
 
 /** 除外した要素の数 */
 export interface SkippedRotationItems {
@@ -35,7 +35,7 @@ export function describeSkipped(s: SkippedRotationItems): string {
   if (s.stints > 0) parts.push(t('messages:file.skippedStints', { count: s.stints }));
   if (s.actions > 0) parts.push(t('messages:file.skippedActions', { count: s.actions }));
   if (s.others > 0) parts.push(t('messages:file.skippedOthers', { count: s.others }));
-  return parts.join('・');
+  return joinList(parts);
 }
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);

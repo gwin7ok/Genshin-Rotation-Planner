@@ -3,7 +3,7 @@ import { AlertTriangle } from 'lucide-react';
 import type { GcsimLogSummary, GcsimMemberInfo } from '../utils/gcsim/readGcsimLog';
 import { framesToSeconds } from '../utils/gcsim/readGcsimLog';
 import type { SacrificialSearchInfo } from '../utils/gcsim/sacrificialSeed';
-import { t, currentLanguage } from '../i18n';
+import { t, currentLanguage, joinList } from '../i18n';
 
 interface GcsimLogSummaryViewProps {
   summary: GcsimLogSummary;
@@ -41,7 +41,7 @@ export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summar
 
       {sacrificial && (
         <div className={`rounded-lg border p-2 ${sacrificial.ok ? 'border-emerald-800/70 bg-emerald-950/40 text-emerald-200' : 'border-amber-800/70 bg-amber-950/40 text-amber-200'}`}>
-          {t('gcsim:log.sacrificial', { users: sacrificial.users.map(u => t('gcsim:log.sacrificialUser', { name: members[u.index]?.name ?? u.charKey, refine: u.refine })).join(currentLanguage === 'en' ? ', ' : '・') })}{' '}
+          {t('gcsim:log.sacrificial', { users: joinList(sacrificial.users.map(u => t('gcsim:log.sacrificialUser', { name: members[u.index]?.name ?? u.charKey, refine: u.refine }))) })}{' '}
           {sacrificial.ok
             ? t('gcsim:log.sacrificialOk', { expected: sacrificial.expected, seed: sacrificial.seed, searched: sacrificial.searched })
             : t('gcsim:log.sacrificialNg', { searched: sacrificial.searched, seed: sacrificial.seed, expected: sacrificial.expected, matched: sacrificial.matched, missing: sacrificial.missing, extras: sacrificial.extras })}
@@ -113,7 +113,7 @@ export const GcsimLogSummaryView: React.FC<GcsimLogSummaryViewProps> = ({ summar
                 <td className={td}>{nameOf(e.sourceCharIndex)}</td>
                 <td className={td}>{sec(e.startFrame)}s – {e.endFrame < 0 ? t('gcsim:log.never') : `${sec(e.endFrame)}s (${sec(e.endFrame - e.startFrame)}s)`}</td>
                 <td className={td}>{e.refreshFrames.length > 0 ? t('gcsim:log.times', { count: e.refreshFrames.length }) : '—'}</td>
-                <td className={td}>{e.recipients.map(nameOf).join(currentLanguage === 'en' ? ', ' : '・')}</td>
+                <td className={td}>{joinList(e.recipients.map(nameOf))}</td>
               </tr>
             ))}
           </tbody>

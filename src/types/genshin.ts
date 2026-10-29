@@ -8,6 +8,18 @@ export type WeaponType = 'sword' | 'claymore' | 'polearm' | 'bow' | 'catalyst';
 
 export type ArtifactSetMode = '4pc' | '2+2';
 
+/** 根拠の引用（継続時間・CT を抽出した説明文の文言） */
+export interface DataSourceQuote {
+  duration?: string;
+  cooldown?: string;
+}
+
+/**
+ * 英語の表示用の文（D255。docs/i18n/plan.md 4.3.1）。無い欄は、日本語の欄を表示する。
+ * 処理（数値の抽出・判定・gcsim の設定文）は、日本語の欄だけを見る。表示は src/i18n/loc.ts の loc() で選ぶ
+ */
+export type EnglishTexts<K extends string> = { [P in K]?: string } & { dataSource?: DataSourceQuote };
+
 export type ActionType = 
   | 'normal'     // N（連続した N の段は計算時に自動で数える）
   | 'combo'      // e.g. N3C, 3N3C
@@ -59,6 +71,8 @@ export interface ActionMode {
   label: string;
   /** モードのバーの説明 */
   description: string;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'label' | 'description'>;
   /** アクションの開始から、モードが始まるまでのフレーム */
   startDelayFrames: number;
   /** 入力がないときの最大時間（フレーム） */
@@ -280,6 +294,8 @@ export interface ActionGcsimExtra {
   key: string;
   /** ガントチャートに出す名前 */
   label: string;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'label'>;
   /** 実行したキャラ自身のイベントだけ使う */
   self?: boolean;
   /** each = added / refreshed のイベントごとに1本（既定）/ chain = 更新・延長が続く間を1本 */
@@ -308,6 +324,8 @@ export interface ActionDefinition {
   defaultDuration: number; // in seconds
   /** 説明文（スキル・爆発・通常攻撃・重撃・落下攻撃: genshin-db の天賦の説明。ホバー表示に使う。無いものは、共通の説明を表示側で補う） */
   description?: string;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'name' | 'buttonLabel' | 'description'>;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
   /**
@@ -568,7 +586,9 @@ export interface PassiveEffectDefinition extends GcsimBuffLink {
   /** クールタイム（秒）。説明文に「○秒毎に1回」があれば設定 */
   cooldown?: number;
   description?: string;
-  dataSource?: { duration?: string; cooldown?: string };
+  dataSource?: DataSourceQuote;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'name' | 'talentName' | 'description'>;
 }
 
 export type ConstellationLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -585,7 +605,9 @@ export interface ConstellationBuffDefinition extends GcsimBuffLink {
   duration?: number;
   cooldown?: number;
   description?: string;
-  dataSource?: { duration?: string; cooldown?: string };
+  dataSource?: DataSourceQuote;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'name' | 'description'>;
 }
 
 /** 命ノ星座の1段階（マスターデータ） */
@@ -593,6 +615,8 @@ export interface CharacterConstellationData {
   level: ConstellationLevel;
   name: string;
   description: string;
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'name' | 'description'>;
   /** この段階で変わるアクションの値（今は効果継続時間の延長のみ） */
   actionChanges?: ConstellationActionChange[];
 }
@@ -722,6 +746,8 @@ export interface CharacterConfig {
   id: string;
   name: string;
   englishName?: string;
+  /** 英語の表示用の文（D255。名前は englishName と同じ値） */
+  en?: EnglishTexts<'name'>;
   element: ElementType;
   weaponType: WeaponType;
   rarity?: number;

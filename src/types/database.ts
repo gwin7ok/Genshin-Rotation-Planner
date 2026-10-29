@@ -1,4 +1,4 @@
-import { CharacterConfig, GcsimBuffLink, WeaponType } from './genshin';
+import { CharacterConfig, EnglishTexts, GcsimBuffLink, WeaponType } from './genshin';
 
 /** 武器・聖遺物の発動バフ定義 */
 export interface EquipmentBuffDefinition extends GcsimBuffLink {
@@ -15,6 +15,8 @@ export interface EquipmentBuffDefinition extends GcsimBuffLink {
     duration?: string;             // 抽出元の文言 例: "12秒間"
     cooldown?: string;             // 抽出元の文言 例: "20秒に1回"
   };
+  /** 英語の表示用の文（D255。dataSource は英語の説明文の中の同じ値の箇所。D258） */
+  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary'>;
 }
 
 export interface WeaponRefinementData {
@@ -23,6 +25,8 @@ export interface WeaponRefinementData {
   duration?: number; // 効果持続時間 (秒)
   cooldown?: number; // クールタイム (秒)
   statEffectSummary?: string; // 効果要約
+  /** 英語の表示用の文（D255） */
+  en?: EnglishTexts<'description' | 'statEffectSummary'>;
   buffEffects?: EquipmentBuffDefinition[];
 }
 
@@ -34,6 +38,8 @@ export interface WeaponDatabaseItem {
   rarity: number; // 1 | 2 | 3 | 4 | 5
   passiveName: string;
   description: string;
+  /** 英語の表示用の文（D255。名前は englishName と同じ値） */
+  en?: EnglishTexts<'name' | 'passiveName' | 'description'>;
   baseAttack?: number;
   avatarUrl?: string;
   /** gcsim の武器キー（例: "athousandfloatingdreams"）。無ければ gcsim 未対応 */
@@ -72,6 +78,8 @@ export interface ArtifactSetDatabaseItem {
   gcsimKey?: string;
   effect2p: string;
   effect4p: string;
+  /** 英語の表示用の文（D255。名前は englishName と同じ値） */
+  en?: EnglishTexts<'name' | 'effect2p' | 'effect4p'>;
   buffEffects?: EquipmentBuffDefinition[];
   // 旧形式互換用
   buffEffect?: {

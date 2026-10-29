@@ -71,5 +71,11 @@ console.log(`凸データ: ${report.constellations.charactersWithConstellations}
 for (const a of report.constellations.added) console.log(`  凸の効果時間延長: ${a.name} ${a.constellation}凸 ${a.actionId} (${a.from}s → ${a.to}s)`);
 for (const u of report.constellations.unreviewed) console.log(`  凸延長 未確認: ${u.name} ${u.constellation}凸「${u.description.slice(0, 60)}」 → src/masterdata/constellationEffects.ts で確認して一覧に追加`);
 for (const e of report.constellations.errors) console.log(`  凸延長 エラー: ${e}`);
+{
+  // 英語の表示用の文（D255）: 作れなかった名前は日本語のまま表示される（アプリ独自の名前は 3-3 で足す）
+  const byField = new Map<string, number>();
+  for (const m of report.englishMissing) byField.set(m.field.split(':')[0], (byField.get(m.field.split(':')[0]) ?? 0) + 1);
+  console.log(`英語の名前を作れなかったもの: ${report.englishMissing.length} 件（${[...byField].map(([k, v]) => `${k} ${v}`).join('・') || 'なし'}）`);
+}
 for (const e of report.errors) console.log(`  エラー: ${e}`);
 console.log(`\n出力: ${outputPath}\n      ${keyMapPath}`);

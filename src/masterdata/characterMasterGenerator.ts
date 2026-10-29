@@ -18,6 +18,7 @@ import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
+import { attachCharacterEnglish, type EnglishMissing } from './englishTexts.ts';
 import { EFFECT_DURATION_OVERRIDES, EFFECT_DURATION_SUPPRESSED } from './effectDurationOverrides.ts';
 import { parseCooldownCalls, resolveCooldownStart, type CooldownCall, type CooldownStartResolution } from './cooldownStart.ts';
 import { buildKeyMapSection, keyMapLookup, type KeyMapItem, type KeyMapSection, type ManualKeyMapping } from './gcsimKeyMap.ts';
@@ -1151,6 +1152,8 @@ export interface CharacterGenerationReport {
   };
   /** 命ノ星座で効果継続時間が延びる「(n凸)」アクションの生成結果 */
   constellations: ConstellationReport;
+  /** 英語の表示用の文を作れなかった名前（日本語のまま表示される。D255・docs/i18n） */
+  englishMissing: EnglishMissing[];
   errors: string[];
 }
 
@@ -1959,17 +1962,21 @@ export async function generateCharacterMaster(
     effectDuration: { supplemented: [], mismatches: [], orphans: [], suppressed: [] },
     cooldownStart: { read: 0, manual: 0, unresolved: [], mismatches: [] },
     constellations: emptyConstellationReport(),
+    englishMissing: [],
     errors,
   };
 
   // 1. genshin-db + gcsim のインデックスを並列取得
   onProgress?.({ phase: 'genshin-db / gcsim の一覧を取得中', done: 0, total: 1 });
   const verbose = 'query=names&matchCategories=true&verboseCategories=true';
-  const [charsJa, charsEn, talentsJa, constellationsJa, tree, charDm] = await Promise.all([
+  const [charsJa, charsEn, talentsJa, constellationsJa, talentsEn, constellationsEn, tree, charDm] = await Promise.all([
     fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=Japanese`),
     fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=English`),
     fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=Japanese`),
     fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=Japanese`),
+    // 英語の表示用の文（D249・D255）。数値の抽出には使わない
+    fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=English`),
+    fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=English`),
     fetchJson<{ sha: string; truncated: boolean; tree: Array<{ path: string; type: string }> }>(
       `https://api.github.com/repos/${GCSIM_REPO}/git/trees/${GCSIM_REF}?recursive=1`,
       { headers: { Accept: 'application/vnd.github+json' } },
@@ -2023,6 +2030,15 @@ export async function generateCharacterMaster(
     const element = m ? TRAVELER_ELEMENT_JA[m[1]] : undefined;
     if (element) travelerConstellationByElement.set(element, c);
   }
+  // 英語の天賦・命ノ星座（id は日本語と同じ。旅人は名前 "Traveler (Anemo)" の元素で判別）
+  const talentEnById = new Map(talentsEn.map(t => [t.id, t]));
+  const constellationEnById = new Map(constellationsEn.map(c => [c.id, c]));
+  const travelerElementOfEnglish = (name: string): ElementType | undefined => {
+    const m = /^Traveler\s*\((\w+)\)$/.exec(name);
+    return m ? (m[1].toLowerCase() as ElementType) : undefined;
+  };
+  const travelerTalentEn = new Map(talentsEn.flatMap(t => { const e = travelerElementOfEnglish(t.name); return e ? [[e, t] as const] : []; }));
+  const travelerConstellationEn = new Map(constellationsEn.flatMap(c => { const e = travelerElementOfEnglish(c.name); return e ? [[e, c] as const] : []; }));
   const iconUrl = (c?: GenshinDbCharacter) =>
     c?.images?.filename_icon ? `${ICON_BASE_URL}/${c.images.filename_icon}.png` : (c?.images?.mihoyo_icon ?? '');
 
@@ -2038,6 +2054,10 @@ export async function generateCharacterMaster(
     genshinId: number;
     talent?: GenshinDbTalent;
     constellation?: GenshinDbConstellation;
+    /** 英語の表示名・天賦・命ノ星座（D255） */
+    nameEn: string;
+    talentEn?: GenshinDbTalent;
+    constellationEn?: GenshinDbConstellation;
     gcsimKey?: string;
     gcsimDir?: string;
     /** gcsim 未実装のキャラの、アプリ側だけの対応: フレームを読む別のコミット（appSideCharacterSources.ts） */
@@ -2070,6 +2090,9 @@ export async function generateCharacterMaster(
       genshinId: c.id,
       talent,
       constellation: constellationById.get((c.id - 10000000) * 100 + 1),
+      nameEn: englishName,
+      talentEn: talent ? talentEnById.get(talent.id) : undefined,
+      constellationEn: constellationEnById.get((c.id - 10000000) * 100 + 1),
       gcsimKey,
       gcsimDir: gcsimKey ? dirByKey.get(gcsimKey) : undefined,
       appSide: gcsimKey ? undefined : appSideSourceByGenshinId(c.id),
@@ -2097,6 +2120,9 @@ export async function generateCharacterMaster(
         genshinId: traveler.genshinId,
         talent: t,
         constellation: travelerConstellationByElement.get(element),
+        nameEn: `${traveler.englishLabel} (${element.charAt(0).toUpperCase()}${element.slice(1)})`,
+        talentEn: travelerTalentEn.get(element),
+        constellationEn: travelerConstellationEn.get(element),
         gcsimKey: gcsimKeyById.get(characterKey(traveler.genshinId, element)),
         gcsimDir: filesByDir.has(gcsimDir) ? gcsimDir : undefined,
         genderIndex: traveler.genderIndex,
@@ -2244,6 +2270,15 @@ export async function generateCharacterMaster(
     };
     // 命ノ星座（1〜6凸）の段階データ。確認済みの効果継続時間の延長を含む
     if (u.constellation) character.constellations = buildConstellations(character, u.constellation, report.constellations);
+    // 英語の表示用の文（D255。日本語の欄は変えない）
+    attachCharacterEnglish(character, {
+      name: u.nameEn,
+      nameJa: u.name,
+      talentJa: u.talent as unknown as Record<string, unknown>,
+      talentEn: u.talentEn as unknown as Record<string, unknown>,
+      constellationJa: u.constellation as unknown as Record<string, unknown>,
+      constellationEn: u.constellationEn as unknown as Record<string, unknown>,
+    }, report.englishMissing);
     characters.push(character);
   }
 

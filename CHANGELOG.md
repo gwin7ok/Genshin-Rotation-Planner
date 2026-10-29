@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-29
+
 ### 追加
 - 英語の表示に対応した。ヘッダーの言語の切り替えで「自動 / 日本語 / English」を選べる（自動は、ブラウザの言語に従う）。ゲームデータ（キャラ・武器・聖遺物・天賦の名前と説明）は公式の英語で表示する。
 
@@ -143,7 +145,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.2.0...v1.3.0

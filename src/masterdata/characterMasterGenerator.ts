@@ -569,6 +569,30 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
     mode: specialWindowMode('マキシマムドライブ', '落下攻撃', 140, '特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる',
       { kind: 'burst', singleUse: true, closedBySkill: true, openCondition: { minConstellation: 2, orBlessing: true } },
       'varesa/plunge.go: getApexDrive（落下攻撃の開始時に、Cons >= 2 または猛烈パッション中なら AddStatus(apexState, 140, true)）。burst.go: volcanicKablam で状態を消す。skill.go: スキルで状態が消える'),
+  }, {
+    // 追撃（D262）: スキルの後 5 秒の間の最初の重撃は、落下攻撃(高)へ 57f（猛烈パッション中は 58f）早くつながる（命中 11f）。重撃で終わる。
+    // ゲームでも速い（ユーザー確認）。ヒットストップは通常の重撃と同じ（実測: 防御ヒットストップあり +6f・なし +2f）。バーは E の効果バー（追撃 5 秒）のまま
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '追撃',
+      description: '追撃の状態（5 秒）。この間の最初の重撃は、すぐに落下攻撃(高)へつながる。重撃で終わる',
+      startDelayFrames: 0,
+      durationFrames: 5 * 60,
+      swap: 'persists',
+      enders: [{
+        by: 'charged',
+        cooldown: 'none',
+        frames: { total: 143, hitmark: 11, cancels: { attack: 142, charge: 141, skill: 142, walk: 142, swap: 139, highPlunge: 77 - 57 }, source: 'charge.go: quickAbilFunc(chargeFrames, fastChargedFrame = 57), fastChargeHitmark = 11' },
+        framesInBlessing: { total: 143, hitmark: 11, cancels: { attack: 142, skill: 141, burst: 141, dash: 142, walk: 141, swap: 138, highPlunge: 81 - 58 }, source: 'charge.go: quickAbilFunc(fieryChargeFrames, fastFieryChargedFrame = 58), fastFieryChargeHitmark = 11' },
+        actionHitlag: true,
+      }],
+      holdByDefault: false,
+      noHold: true,
+      noBar: true,
+      noSynergy: true,
+      source: 'varesa/skill.go: AddStatus(skillStatus, 5*60, true)。charge.go: skillStatus の間の重撃は Follow-Up Strike（quickAbilFunc。次が落下攻撃(高)のときだけ短い）で、DeleteStatus(skillStatus)。交代では消えない',
+    },
   }],
   // 刻晴・プルーネ・ドゥリン・ディルック: 窓の規則から移した受付型（2026-10-08）。4 人とも、交代しても続く（ゲームでの確認: ユーザー。gcsim も、交代して戻った後の E が再発動）
   // 刻晴: 雷楔（5 秒 + 20f）の間の E が再発動（雷楔を消費）

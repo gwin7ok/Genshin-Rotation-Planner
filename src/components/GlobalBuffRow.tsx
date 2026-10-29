@@ -3,6 +3,7 @@ import { Globe, User } from 'lucide-react';
 import { CharacterConfig } from '../types/genshin';
 import { GenshinDatabase } from '../types/database';
 import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
+import { t } from '../i18n';
 import {
   GCSIM_OUT_OF_SCOPE_DEFAULT_REASON,
   TriggerableBuffDefinition,
@@ -36,11 +37,11 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
   const badgeCfg = getBuffBadgeConfig(def.category);
   const timing = buffTimingLabel(def);
   const outOfScope = isGcsimOutOfScope(def);
-  const sourceLabel = def.category === 'talent' ? '固有天賦' : def.category === 'constellation' ? '命ノ星座' : def.category === 'weapon' ? `武器: ${def.sourceName ?? ''}` : `聖遺物: ${def.sourceName ?? ''}`;
+  const sourceLabel = def.category === 'talent' ? t('category.talent') : def.category === 'constellation' ? t('category.constellation') : def.category === 'weapon' ? t('category.weapon', { name: def.sourceName ?? '' }) : t('category.artifact', { name: def.sourceName ?? '' });
   const tooltip = [
     `【${timing}】${owner.name} / ${sourceLabel}`,
     def.description ?? def.name,
-    ...(outOfScope ? [`※ gcsim 対象外: ${def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON}`] : []),
+    ...(outOfScope ? [t('gcsim.outOfScopeNote', { reason: def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON })] : []),
   ].join('\n');
   return (
     <span
@@ -52,7 +53,7 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
       <span className={`text-[9px] font-bold ${def.timing === 'always' ? 'text-amber-300' : 'text-slate-400'}`}>{timing}</span>
       <span className="max-w-[220px] truncate">{def.name}</span>
       {outOfScope && (
-        <span className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 shrink-0">gcsim対象外</span>
+        <span className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 shrink-0">{t('gcsim.outOfScope')}</span>
       )}
     </span>
   );
@@ -77,14 +78,14 @@ export const TimelessBuffRow: React.FC<{
         {perCharacter ? <User className="w-3.5 h-3.5 text-teal-400 shrink-0" /> : <Globe className="w-3.5 h-3.5 text-teal-400 shrink-0" />}
         <span className="truncate" title={label}>{label}</span>
       </span>
-      <span className="text-[10px] text-slate-500 font-mono font-normal shrink-0">{items.length}件</span>
+      <span className="text-[10px] text-slate-500 font-mono font-normal shrink-0">{t('count', { count: items.length })}</span>
     </div>
 
     <div className="relative flex-1 py-1">
       {/* 横スクロールしても見えるよう、左端に固定して折り返す */}
       <div className="sticky flex flex-wrap items-center gap-1 pr-2" style={{ left: GANTT_LABEL_WIDTH + 8, maxWidth: `calc(100vw - ${GANTT_LABEL_WIDTH + 40}px)` }}>
         {items.length === 0 ? (
-          <span className="text-[11px] text-slate-500 italic">{emptyText ?? 'ありません'}</span>
+          <span className="text-[11px] text-slate-500 italic">{emptyText ?? t('none')}</span>
         ) : (
           items.map(item => <TimelessBuffChip key={item.key} item={item} />)
         )}
@@ -110,5 +111,5 @@ export const GlobalBuffRow: React.FC<GlobalBuffRowProps> = ({ characters, databa
     return result;
   }, [characters, database]);
 
-  return <TimelessBuffRow items={items} label="時間指定のない効果" emptyText="常時の効果・時間の無い固有天賦はありません" />;
+  return <TimelessBuffRow items={items} label={t('chart:timeless.label')} emptyText={t('chart:timeless.empty')} />;
 };

@@ -1,6 +1,8 @@
 import { GCSIM_CONFIG } from '../utils/gcsim/gcsimConfig.ts';
 import { APP_VERSION, APP_COMMIT } from '../utils/appVersion';
 import { ANALYTICS_ENABLED } from '../utils/analytics';
+import { Trans } from 'react-i18next';
+import { t } from '../i18n';
 
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
 
@@ -15,26 +17,28 @@ export function SourceNotice() {
   return (
     <div className="mt-1 space-y-0.5 text-[11px] text-slate-600">
       <p>
-        非公式のファンツールです。ゲームの名称・画像などの権利は、各権利者（HoYoverse）に帰属します。無保証です。
+        {t('notice:source.disclaimer')}
       </p>
       <p>
-        バージョン v{APP_VERSION}（コミット {APP_COMMIT}）・対応 gcsim {version}
+        {t('notice:source.version', { appVersion: APP_VERSION, appCommit: APP_COMMIT, gcsimVersion: version })}
       </p>
       <p>
-        編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。編成のデータをサーバーに送ることはありません（gcsim も、ブラウザの中で動きます）。
-        ブラウザのデータを消す・別のブラウザや端末に移すときは、「JSON 書き出し」で保存してください。
+        {t('notice:source.storage')}
       </p>
       {ANALYTICS_ENABLED && (
         <p>
-          アクセス数の集計に、Cloudflare Web Analytics（Cookie なし）を使っています。送られるのは、ページの URL・ブラウザの種類などのアクセス情報だけで、編成・設定のデータは送りません。
+          {t('notice:source.analytics')}
         </p>
       )}
       <p>
-        このアプリは AGPL-3.0-or-later で公開しています（ソース:{' '}
-        <a className={linkClass} href={APP_REPO_URL} target="_blank" rel="noreferrer">{APP_REPO_URL.replace('https://', '')}</a>）。
-        計算に、gcsim {version}（AGPL-3.0。無改変）を使っています（ソース:{' '}
-        <a className={linkClass} href={gcsimUrl} target="_blank" rel="noreferrer">{gcsimUrl.replace('https://', '')}</a>
-        ・コミット {commit.slice(0, 8)}）。詳しくは、リポジトリの NOTICE と LICENSE を参照してください。
+        <Trans
+          i18nKey="notice:source.license"
+          values={{ appRepo: APP_REPO_URL.replace('https://', ''), gcsimRepo: gcsimUrl.replace('https://', ''), gcsimVersion: version, commit: commit.slice(0, 8) }}
+          components={{
+            appLink: <a className={linkClass} href={APP_REPO_URL} target="_blank" rel="noreferrer" />,
+            gcsimLink: <a className={linkClass} href={gcsimUrl} target="_blank" rel="noreferrer" />,
+          }}
+        />
       </p>
     </div>
   );

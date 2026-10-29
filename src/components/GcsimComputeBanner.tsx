@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2, CheckCircle2, AlertTriangle, XCircle, X } from 'lucide-react';
+import { t } from '../i18n';
 
 /** 「gcsim で計算」の結果の表示（実行中・成功・警告・エラー。D120）。詳細は、押すと開く */
 export interface GcsimComputeBannerState {
@@ -28,7 +29,7 @@ export const GcsimComputeBanner: React.FC<{ state: GcsimComputeBannerState | nul
           {state.details && state.details.length > 0 && (
             <>
               <button type="button" className="mt-1 underline text-[11px]" onClick={() => setOpen(v => !v)}>
-                {open ? '詳細を閉じる' : `詳細（${state.details.length} 行）`}
+                {open ? t('action.hideDetails') : t('action.showDetails', { count: state.details.length })}
               </button>
               {open && (
                 <div className="mt-1 font-mono text-[11px] max-h-48 overflow-y-auto space-y-0.5 opacity-90">
@@ -39,7 +40,7 @@ export const GcsimComputeBanner: React.FC<{ state: GcsimComputeBannerState | nul
           )}
         </div>
         {state.level !== 'running' && (
-          <button type="button" onClick={onClose} className="shrink-0 p-0.5 rounded hover:bg-black/20" title="閉じる">
+          <button type="button" onClick={onClose} className="shrink-0 p-0.5 rounded hover:bg-black/20" title={t('action.close')}>
             <X className="w-3.5 h-3.5" />
           </button>
         )}

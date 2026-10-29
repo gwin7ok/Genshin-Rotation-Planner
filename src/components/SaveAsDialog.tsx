@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, FilePlus2, AlertTriangle, Users } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { findSlotByName } from '../utils/storage';
+import { Trans } from 'react-i18next';
+import { t } from '../i18n';
 
 interface SaveAsDialogProps {
   isOpen: boolean;
@@ -77,7 +79,7 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/50">
           <h2 className="text-sm font-bold text-white flex items-center gap-2">
             <FilePlus2 className="w-4 h-4 text-amber-400" />
-            <span>名前をつけて保存</span>
+            <span>{t('save:saveAs.title')}</span>
           </h2>
           <button
             onClick={onClose}
@@ -89,7 +91,7 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
 
         <div className="p-5 space-y-3">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-300">編成名</label>
+            <label className="text-xs font-semibold text-slate-300">{t('save:saveAs.name')}</label>
             <input
               ref={nameInputRef}
               type="text"
@@ -104,17 +106,17 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
                   else handleSave();
                 }
               }}
-              placeholder="例: 雷電ナショナル (高速ループ最適化版)"
+              placeholder={t('save:saveAs.namePlaceholder')}
               className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-300">メモ</label>
+            <label className="text-xs font-semibold text-slate-300">{t('save:saveAs.memo')}</label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="メモ・備考（任意）"
+              placeholder={t('save:saveAs.memoPlaceholder')}
               className="w-full bg-slate-950/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
             />
             <button
@@ -122,10 +124,10 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
               onClick={() => setDescription(memberNames)}
               disabled={!memberNames}
               className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors disabled:opacity-40 disabled:pointer-events-none"
-              title={memberNames ? `メモ欄を「${memberNames}」に置き換えます` : '編成メンバーがいません'}
+              title={memberNames ? t('save:saveAs.setMembersTitle', { names: memberNames }) : t('save:saveAs.noMembers')}
             >
               <Users className="w-3 h-3 text-amber-400" />
-              <span>編成メンバーをメモ欄にセット</span>
+              <span>{t('save:saveAs.setMembers')}</span>
             </button>
           </div>
 
@@ -133,13 +135,12 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
             <div className="p-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-xs text-amber-200 flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <span>
-                「<strong>{duplicateSlot.name}</strong>」という編成は既に保存されています。<br />
-                現在の内容で上書きしますか？
+                <Trans i18nKey="save:saveAs.duplicate" values={{ name: duplicateSlot.name }} components={{ strong: <strong />, br: <br /> }} />
               </span>
             </div>
           ) : (
             <p className="text-[11px] text-slate-500">
-              新しい保存スロットとして保存します。同じ名前の編成がある場合は上書き確認が表示されます。
+              {t('save:saveAs.hint')}
             </p>
           )}
         </div>
@@ -151,13 +152,13 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
                 onClick={handleCancelOverwrite}
                 className="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
               >
-                やめる
+                {t('save:saveAs.back')}
               </button>
               <button
                 onClick={handleConfirmOverwrite}
                 className="px-4 py-1.5 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-500 text-white transition-colors shadow"
               >
-                上書きする
+                {t('save:saveAs.overwrite')}
               </button>
             </>
           ) : (
@@ -166,14 +167,14 @@ export const SaveAsDialog: React.FC<SaveAsDialogProps> = ({
                 onClick={onClose}
                 className="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
               >
-                キャンセル
+                {t('action.cancel')}
               </button>
               <button
                 onClick={handleSave}
                 disabled={!name.trim()}
                 className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 transition-colors shadow"
               >
-                名前をつけて保存
+                {t('save:saveAs.save')}
               </button>
             </>
           )}

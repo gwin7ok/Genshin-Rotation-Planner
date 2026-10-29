@@ -18,6 +18,7 @@
     "check:groups": "node scripts/check-groups.ts",
     "check:effects": "node scripts/check-effect-keys.ts",
     "check:backup": "node scripts/check-backup.ts",
+    "check:i18n": "node scripts/check-i18n.ts",
     "check:rotation-validation": "node scripts/check-rotation-validation.ts",
     "check:fetch-util": "node scripts/check-fetch-util.ts",
     "check:go-expr": "node scripts/check-go-expr.ts",
@@ -60,10 +61,12 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "i18next": "^26.4.3",
     "lucide-react": "^0.475.0",
     "motion": "^12.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-i18next": "^17.0.16",
     "vite": "^6.0.1"
   },
   "devDependencies": {

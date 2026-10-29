@@ -21,6 +21,7 @@ import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT, GCSIM_VERSION } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
 import { useDialogs } from './components/DialogProvider';
+import { t } from './i18n';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
@@ -189,7 +190,7 @@ export default function App() {
   // 読み込んだ編成の反応の行が、古い gcsim のバージョンの計算結果で、出していないとき、そのバージョン（画面に案内を出す。再計算・保存で消す）
   const [staleReactionsVersion, setStaleReactionsVersion] = useState<string | null>(() => {
     const r = reactionsStatus(savedInitialState?.reactions);
-    return r.status === 'stale' ? r.savedVersion ?? '旧バージョン' : null;
+    return r.status === 'stale' ? r.savedVersion ?? t('app:oldVersion') : null;
   });
   /** 反応の行を、今の状態の結果として置く（null で消す） */
   const setGcsimReactions = (rows: ReactionRowRef[] | null) => {
@@ -341,15 +342,13 @@ export default function App() {
         const dup = findSlotByName(getSavedSlots(), importName);
         if (!dup) break;
         const overwrite = await confirm(
-          `「${importName}」と同じ名前の編成が、すでにあります。\n\n` +
-          `OK: その編成を上書きして保存する\n` +
-          `キャンセル: 名前を変更して保存する`,
+          t('app:import.duplicate', { name: importName }),
         );
         if (overwrite) {
           overwriteTarget = dup;
           break;
         }
-        const input = await prompt('変更後の編成名を入力してください', importName);
+        const input = await prompt(t('app:import.rename'), importName);
         if (input === null || !input.trim()) return; // やめる
         importName = input.trim();
       }
@@ -365,7 +364,7 @@ export default function App() {
     // 反応の行: 読み込む編成の署名で置く（gcsim のバージョンが違えば、出さない）
     const restoredReactions = unpackReactions(slot.reactions);
     const restoredStatus = reactionsStatus(slot.reactions);
-    setStaleReactionsVersion(restoredStatus.status === 'stale' ? restoredStatus.savedVersion ?? '旧バージョン' : null);
+    setStaleReactionsVersion(restoredStatus.status === 'stale' ? restoredStatus.savedVersion ?? t('app:oldVersion') : null);
     setGcsimReactionState(restoredReactions
       ? { rows: restoredReactions, signature: makeReactionSignature(loadedChars, slot.switchDelay ?? 0.50, loopIndex, loadedStints) }
       : null);
@@ -392,8 +391,7 @@ export default function App() {
         // 編成は読み込めたが、保存編成には登録できなかった（読み込み中の編成にはしない）。
         // 前に開いていた保存編成を指したままだと、「上書き保存」で、取り込んだ内容が、その保存編成を置き換えてしまう
         setActiveSlotId(null);
-        showAlert(`編成は読み込みましたが、保存編成には登録できませんでした。
-${SLOT_WRITE_FAILED_MESSAGE}`);
+        showAlert(`${t('app:import.notRegistered')}\n${SLOT_WRITE_FAILED_MESSAGE}`);
       }
       return;
     }
@@ -507,10 +505,7 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
       return;
     }
     const ok = await confirm(
-      `アクションの並びはそのままに、アプリの計算に戻します。\n\n` +
-      `・アクション ${summary.actionsChanged} 件の、所要時間の固定・個別の CT・効果時間・gcsim の補正を外します\n` +
-      `・出場ブロック ${summary.stintsChanged} 件の、gcsim から書き込んだ効果を外します（gcsim の結果から追加した発動バフ ${summary.passivesRemoved} 件を削除）\n\n` +
-      `※ gcsim の値だけでなく、手で編集した所要時間・CT・効果時間も戻ります。よろしいですか？`,
+      t('app:resetConfirm', { actions: summary.actionsChanged, stints: summary.stintsChanged, passives: summary.passivesRemoved }),
     );
     if (ok) updateStints(summary.stints);
   };
@@ -615,7 +610,7 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
   useEffect(() => {
     let cancelled = false;
     checkWasmVersionMismatch(GCSIM_COMMIT).then(message => {
-      if (!cancelled && message) setGcsimBanner({ level: 'warn', title: 'gcsim の版が合っていません', message });
+      if (!cancelled && message) setGcsimBanner({ level: 'warn', title: t('app:gcsim.versionMismatch'), message });
     });
     return () => {
       cancelled = true;
@@ -636,8 +631,8 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
     if (errors.length > 0) {
       setGcsimBanner({
         level: 'error',
-        title: 'gcsim で実行できない要素があるため、計算しませんでした',
-        message: '「gcsim設定文をコピー」のポップアップで、詳しい警告を確認できます。',
+        title: t('app:gcsim.notRunnable'),
+        message: t('app:gcsim.notRunnableHint'),
         details: errors.map(w => w.message),
       });
       return;
@@ -645,9 +640,8 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
     // アプリでは CT 違反でも、gcsim で実際に計算すると待たないことがある。実行して確かめる（待ちが出たら反映しない）
     if (ctViolationIssues.length > 0) {
       const ok = await confirm(
-        `アプリでは CT 違反が ${ctViolationIssues.length} 件あります。gcsim で実際に計算して確認します（gcsim でも CT 待ちが出たら反映しません）。\n\n` +
-        `祭礼の武器があると、数十秒かかります。実行しますか？`,
-        { okLabel: '実行する' },
+        t('app:gcsim.confirmWithConflicts', { count: ctViolationIssues.length }),
+        { okLabel: t('app:gcsim.run') },
       );
       if (!ok) {
         scrollToResultRef.current = false;
@@ -655,15 +649,15 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
       }
     }
     setGcsimComputing(true);
-    setGcsimBanner({ level: 'running', title: 'gcsim で計算しています…', message: '祭礼の武器があると、種を探すので、数十秒かかることがあります。' });
+    setGcsimBanner({ level: 'running', title: t('app:gcsim.running'), message: t('app:gcsim.runningHint') });
     const outcome = await runGcsimForConfig(result, calculatedResult);
     setGcsimComputing(false);
     if (outcome.status !== 'ok') {
       setGcsimBanner(outcome.status === 'unreachable'
         ? (getLastGcsimEngine() === 'wasm'
-          ? { level: 'error', title: 'gcsim（ブラウザ内の WebAssembly 版）を実行できませんでした', message: outcome.message + '\nページを再読み込みしてください。直らないときは、別のブラウザをお試しください。' }
-          : { level: 'error', title: 'gcsim サーバーに接続できませんでした', message: outcome.message + '\nサーバーを起動してください（npm run gcsim:start）。' })
-        : { level: 'error', title: 'gcsim の実行エラー', message: outcome.message });
+          ? { level: 'error', title: t('app:gcsim.wasmFailed'), message: outcome.message + '\n' + t('app:gcsim.wasmFailedHint') }
+          : { level: 'error', title: t('app:gcsim.serverUnreachable'), message: outcome.message + '\n' + t('app:gcsim.serverUnreachableHint') })
+        : { level: 'error', title: t('app:gcsim.runError'), message: outcome.message });
       return;
     }
     const waitIds = Object.keys(outcome.waits.byActionId);
@@ -679,18 +673,18 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
         const idx = visibleStints.findIndex(st => st.actions.some(a => a.id === id));
         const action = idx >= 0 ? visibleStints[idx].actions.find(a => a.id === id) : undefined;
         const name = idx >= 0 ? characters.find(c => c.id === visibleStints[idx].characterId)?.name : undefined;
-        return `${name ?? '?'}（出場 #${idx + 1}）「${action?.name ?? id}」: ${staminaIds.has(id) ? 'スタミナ待ち' : 'CT 待ち'} ${outcome.waits.byActionId[id]} 秒`;
+        return t('app:gcsim.waitLine', { name: name ?? '?', index: idx + 1, action: action?.name ?? id, kind: staminaIds.has(id) ? t('app:gcsim.staminaWait') : t('app:gcsim.cooldownWait'), seconds: outcome.waits.byActionId[id] });
       });
       setGcsimBanner(waitIds.length > 0
         ? {
           level: 'warn',
-          title: `gcsim で待ちが生じたため、結果を反映していません（CT 待ち ${ctCount} 件・スタミナ待ち ${staminaCount} 件）`,
-          message: '該当アクションに、CT 違反と同じ印を付けました（残り = gcsim で実際に待った秒数）。ガントチャートの該当アクションを直して、もう一度計算してください。',
+          title: t('app:gcsim.waited', { ct: ctCount, stamina: staminaCount }),
+          message: t('app:gcsim.waitedHint'),
           details: detailLines,
         }
         : {
           level: 'warn',
-          title: '設定文と gcsim のログのアクションの並びが合わないため、反映できません',
+          title: t('app:gcsim.mismatch'),
           message: outcome.align.mismatch,
         });
       return;
@@ -714,10 +708,10 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
     if (plan.total > 0) updateStints(plan.stints);
     setGcsimBanner({
       level: warnCount > 0 ? 'warn' : 'success',
-      title: plan.total > 0 ? 'gcsim の計算結果を反映しました' : 'gcsim で計算しました（アプリの値と同じため、変更はありません）',
+      title: plan.total > 0 ? t('app:gcsim.applied') : t('app:gcsim.noChange'),
       message: summarizeApplyPlan(plan)
-        + (warnCount > 0 ? '\n設定文の警告が ' + warnCount + ' 件あります（「gcsim設定文をコピー」のポップアップで確認できます）。' : '')
-        + (plan.total > 0 ? '\n取り消すには「アプリの計算に戻す」を押してください。' : ''),
+        + (warnCount > 0 ? '\n' + t('app:gcsim.configWarnings', { count: warnCount }) : '')
+        + (plan.total > 0 ? '\n' + t('app:gcsim.undoHint') : ''),
       details: describeApplyPlan(plan, visibleStints, result.members),
     });
   };
@@ -774,9 +768,9 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
           reactions: v.reactions,
           name: v.name || nameFromFileName(file.name),
         });
-        if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
+        if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
       } catch (err) {
-        showAlert('JSONファイルの読み込みに失敗しました。');
+        showAlert(t('save:message.importFileFailed'));
       }
     };
     reader.readAsText(file);
@@ -788,10 +782,9 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
       {saveFailed && (
         <div role="alert" className="flex items-start justify-between gap-3 bg-red-950 border-b border-red-800 px-4 py-2 text-xs text-red-100">
           <span>
-            ブラウザに保存できませんでした（保存容量の不足、またはブラウザの設定で保存が無効になっている可能性があります）。
-            このまま編集すると、画面を閉じたときに内容を失います。「保存/読み込み」の「JSONファイル書き出し」で、今の編成をファイルに保存してください（「全データを書き出す」は、保存先を読むので、保存に失敗した最新の編集は入りません）。
+            {t('app:saveFailed')}
           </span>
-          <button type="button" onClick={() => setSaveFailed(false)} className="shrink-0 rounded border border-red-700 px-2 py-0.5 hover:bg-red-900">閉じる</button>
+          <button type="button" onClick={() => setSaveFailed(false)} className="shrink-0 rounded border border-red-700 px-2 py-0.5 hover:bg-red-900">{t('action.close')}</button>
         </div>
       )}
       {/* Top Navigation & Controls */}
@@ -846,10 +839,9 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
       {staleReactionsVersion && !gcsimReactions && (
         <div className="mx-auto max-w-[1600px] my-2 px-3 py-2 rounded-lg border border-amber-700/60 bg-amber-950/40 text-amber-100 text-xs flex items-start gap-2" data-testid="stale-reactions-notice">
           <span className="flex-1">
-            この編成の「反応の行」は、gcsim {staleReactionsVersion} の計算結果のため、今の gcsim（{GCSIM_VERSION}）では表示しません。
-            「gcsim で計算」で再計算すると、表示されます（アクションの並び・CT などは、そのまま使えます）。
+            {t('app:staleReactions', { saved: staleReactionsVersion, current: GCSIM_VERSION })}
           </span>
-          <button type="button" className="underline shrink-0" onClick={() => setStaleReactionsVersion(null)}>閉じる</button>
+          <button type="button" className="underline shrink-0" onClick={() => setStaleReactionsVersion(null)}>{t('action.close')}</button>
         </div>
       )}
 
@@ -1008,7 +1000,7 @@ ${SLOT_WRITE_FAILED_MESSAGE}`);
       {/* Footer */}
       <footer className="bg-slate-950 border-t border-slate-800/80 px-4 py-3 text-center text-xs text-slate-500">
         <p>
-          原神戦闘ローテーション ガントチャート設計ツール ✦ 出場ターンの数珠つなぎ（直列スナップ）とクールタイム・バフ重複可視化
+          {t('app:footer')}
         </p>
         <SourceNotice />
       </footer>

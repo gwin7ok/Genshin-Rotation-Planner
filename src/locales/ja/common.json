@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "原神ローテーション ガントチャート (Genshin Rotation Planner)"
+  },
+  "language": {
+    "label": "言語",
+    "auto": "自動",
+    "autoTitle": "ブラウザの言語に従う（このブラウザでは {{language}}）",
+    "ja": "日本語",
+    "en": "English",
+    "switchTitle": "表示の言語を切り替える（ページを再読み込みします）"
+  },
+  "action": {
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "showDetails": "詳細（{{count}} 行）",
+    "hideDetails": "詳細を閉じる",
+    "save": "保存"
+  },
+  "count": "{{count}}件",
+  "none": "ありません",
+  "custom": "カスタム",
+  "item": {
+    "item": "アイテム",
+    "character": "キャラ",
+    "weapon": "武器",
+    "artifact": "聖遺物"
+  },
+  "category": {
+    "talent": "固有天賦",
+    "constellation": "命ノ星座",
+    "weapon": "武器: {{name}}",
+    "artifact": "聖遺物: {{name}}"
+  },
+  "gcsim": {
+    "outOfScope": "gcsim対象外",
+    "outOfScopeNote": "※ gcsim 対象外: {{reason}}"
+  },
+  "element": {
+    "all": "全元素",
+    "pyro": "炎",
+    "hydro": "水",
+    "electro": "雷",
+    "dendro": "草",
+    "cryo": "氷",
+    "anemo": "風",
+    "geo": "岩"
+  },
+  "weaponType": {
+    "all": "全武器",
+    "sword": "片手剣",
+    "claymore": "両手剣",
+    "polearm": "長柄武器",
+    "bow": "弓",
+    "catalyst": "法器"
+  },
+  "filter": {
+    "element": "元素:",
+    "weapon": "武器:"
+  },
+  "constellationLevel": "{{count}}凸",
+  "refinementShort": "精錬",
+  "notSet": "未設定",
+  "noneShort": "なし"
+}

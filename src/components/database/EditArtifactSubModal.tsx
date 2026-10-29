@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Shield } from 'lucide-react';
 import { ArtifactSetDatabaseItem } from '../../types/database';
 import { ItemLockButton } from './ItemLockButton';
+import { t } from '../../i18n';
 
 /* =========================================================================
    SUB-MODALS: ARTIFACT EDIT FORM
@@ -65,8 +66,8 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950">
           <h3 className="font-bold text-sm text-white flex items-center gap-2">
             <Shield className="w-4 h-4 text-purple-400" />
-            <span>聖遺物定義編集: {form.name}</span>
-            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title="聖遺物ID">
+            <span>{t('database:edit.artifactTitle', { name: form.name })}</span>
+            <span className="font-mono text-xs font-semibold text-slate-400 select-all" title={t('database:edit.artifactId')}>
               （ID:{form.id}）
             </span>
           </h3>
@@ -78,7 +79,7 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                 setForm(prev => ({ ...prev, isLocked: locked }));
                 onToggleLock?.(locked);
               }}
-              itemTypeLabel="聖遺物"
+              itemTypeLabel={t('item.artifact')}
             />
             <button onClick={onClose} className="p-1 text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
           </div>
@@ -86,7 +87,7 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto max-h-[80vh]">
           <div>
-            <label className="block text-slate-400 mb-1">聖遺物セット名</label>
+            <label className="block text-slate-400 mb-1">{t('database:edit.artifactName')}</label>
             <input
               type="text"
               value={form.name}
@@ -97,7 +98,7 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">2セット効果説明</label>
+            <label className="block text-slate-400 mb-1">{t('database:edit.effect2p')}</label>
             <input
               type="text"
               value={form.effect2p}
@@ -107,7 +108,7 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">4セット効果説明</label>
+            <label className="block text-slate-400 mb-1">{t('database:edit.effect4p')}</label>
             <textarea
               rows={3}
               value={form.effect4p}
@@ -129,9 +130,9 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                       ...form,
                       buffEffect: {
                         id: `buff_art_${Date.now()}`,
-                        name: `${form.name}: 4Pバフ`,
+                        name: t('database:edit.artifactBuffName', { name: form.name }),
                         duration: 12.0,
-                        statEffect: '4Pセットバフ',
+                        statEffect: t('database:edit.artifactBuffEffect'),
                         description: form.effect4p || '',
                         color: '#c084fc'
                       }
@@ -140,13 +141,13 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                 }}
                 className="rounded border-slate-700 text-purple-500 focus:ring-purple-500"
               />
-              <span>タイムライン連動バフを有効化</span>
+              <span>{t('database:edit.enableBuff')}</span>
             </label>
 
             {hasBuff && form.buffEffect && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono pt-2 border-t border-slate-800">
                 <div>
-                  <label className="block text-slate-400 text-[10px]">バフ表示名</label>
+                  <label className="block text-slate-400 text-[10px]">{t('database:edit.buffName')}</label>
                   <input
                     type="text"
                     value={form.buffEffect.name}
@@ -158,7 +159,7 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 text-[10px]">持続時間 (秒)</label>
+                  <label className="block text-slate-400 text-[10px]">{t('database:edit.durationSeconds')}</label>
                   <input
                     type="number"
                     step="any"
@@ -172,12 +173,12 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 text-[10px]">CT / クールタイム (秒)</label>
+                  <label className="block text-slate-400 text-[10px]">{t('database:edit.cooldownSeconds')}</label>
                   <input
                     type="number"
                     step="any"
                     min="0"
-                    placeholder="なし"
+                    placeholder={t('noneShort')}
                     value={form.buffEffect.cooldown ?? ''}
                     onChange={e => {
                       const val = e.target.value === '' ? undefined : (parseFloat(e.target.value) || undefined);
@@ -195,10 +196,10 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
             <button type="button" onClick={onClose} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg">
-              キャンセル
+              {t('action.cancel')}
             </button>
             <button type="submit" className="px-5 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg shadow-md">
-              保存
+              {t('action.save')}
             </button>
           </div>
         </form>

@@ -21,6 +21,8 @@ import {
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { PRESET_COUNT, PRESET_NAME_PREFIX, restorePresets } from '../utils/presets';
 import { useDialogs } from './DialogProvider';
+import { Trans } from 'react-i18next';
+import { t, dateLocale } from '../i18n';
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
@@ -147,19 +149,15 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     setSavedSlots(updated);
     onSlotsChanged(updated, newSlot.id);
     setDuplicateSlot(null);
-    setSaveSuccessMsg(dup ? `「${newSlot.name}」を上書き保存しました！` : `「${newSlot.name}」を保存しました！`);
+    setSaveSuccessMsg(dup ? t('save:message.overwritten', { name: newSlot.name }) : t('save:message.saved', { name: newSlot.name }));
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
   // Overwrite existing slot
   const handleOverwrite = async (slot: SavedRotationSlot) => {
     const ok = await confirm(
-      `保存編成「${slot.name}」を、いまの編集内容で上書きします。
-
-・元の内容には戻せません
-
-よろしいですか？`,
-      { okLabel: '上書きする', danger: true },
+      t('save:message.confirmOverwrite', { name: slot.name }),
+      { okLabel: t('save:saveAs.overwrite'), danger: true },
     );
     if (!ok) return;
     const updatedSlot: SavedRotationSlot = {
@@ -181,41 +179,32 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = saved.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated, slot.id);
-    setSaveSuccessMsg(`「${slot.name}」を上書き保存しました！`);
+    setSaveSuccessMsg(t('save:message.overwritten', { name: slot.name }));
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
   // プリセット編成（同梱の 5 編成）を、保存編成に復元する（同じ名前の保存編成は、上書き）
   const handleRestorePresets = async () => {
     const ok = await confirm(
-      `プリセット ${PRESET_COUNT} 編成を復元します。\n\n` +
-      `・名前が「${PRESET_NAME_PREFIX}」で始まる、同じ名前の保存編成は、同梱の内容で上書きされます\n` +
-      `・ほかの保存編成は、そのままです\n\n` +
-      `よろしいですか？`,
+      t('save:message.confirmRestorePresets', { count: PRESET_COUNT, prefix: PRESET_NAME_PREFIX }),
     );
     if (!ok) return;
     const result = restorePresets();
     setSavedSlots(result.slots);
     onSlotsChanged(result.slots);
     if (!result.ok) {
-      showAlert(`${SLOT_WRITE_FAILED_MESSAGE}
-
-（保存できたプリセット: 新規 ${result.added} 件・上書き ${result.overwritten} 件）`);
+      showAlert(`${SLOT_WRITE_FAILED_MESSAGE}\n\n${t('save:message.presetsPartial', { added: result.added, overwritten: result.overwritten })}`);
       return;
     }
-    setSaveSuccessMsg(`プリセット ${PRESET_COUNT} 編成を復元しました（新規 ${result.added} 件・上書き ${result.overwritten} 件）`);
+    setSaveSuccessMsg(t('save:message.presetsRestored', { count: PRESET_COUNT, added: result.added, overwritten: result.overwritten }));
     setTimeout(() => setSaveSuccessMsg(null), 4000);
   };
 
   // Delete slot
   const handleDelete = async (slotId: string, name: string) => {
     const ok = await confirm(
-      `保存編成「${name}」を削除します。
-
-・元に戻せません
-
-よろしいですか？`,
-      { okLabel: '削除する', danger: true },
+      t('save:message.confirmDelete', { name }),
+      { okLabel: t('save:message.delete'), danger: true },
     );
     if (!ok) return;
     const deleted = tryDeleteSlot(slotId);
@@ -226,7 +215,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = deleted.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated);
-    setSaveSuccessMsg(`「${name}」を削除しました。`);
+    setSaveSuccessMsg(t('save:message.deleted', { name }));
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
@@ -248,7 +237,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // Export slot or current rotation as JSON file
   /** 書き出し・コピーする内容（保存編成、または現在の編成）。ファイルとコピーで、同じ内容にする */
   const exportPayload = (slot?: SavedRotationSlot) => buildRotationExport(slot ?? {
-    name: newSlotName || '原神ローテーション',
+    name: newSlotName || t('save:manager.defaultName'),
     party,
     stints,
     loopStartIndex,
@@ -277,8 +266,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
     } catch (e) {
       // 許可がない・安全でない接続などで、コピーできないとき（コピーできたように見せない）
-      showAlert(`クリップボードにコピーできませんでした: ${e instanceof Error ? e.message : String(e)}
-JSONファイル書き出しを使ってください。`);
+      showAlert(t('save:message.copyFailed', { message: e instanceof Error ? e.message : String(e) }));
       return;
     }
     const targetId = slot ? slot.id : 'current';
@@ -311,9 +299,9 @@ JSONファイル書き出しを使ってください。`);
           reactions: v.reactions,
         });
         onClose();
-        if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
+        if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
       } catch (err) {
-        showAlert('JSONファイルの読み込みに失敗しました。');
+        showAlert(t('save:message.importFileFailed'));
       }
     };
     reader.readAsText(file);
@@ -327,11 +315,11 @@ JSONファイル書き出しを使ってください。`);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${APP_FILE_PREFIX}_バックアップ_${fileTimestamp()}.json`;
+    a.download = `${APP_FILE_PREFIX}_${t('save:manager.backupFileLabel')}_${fileTimestamp()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     const s = summarizeBackup(backup);
-    setSaveSuccessMsg(`全データのバックアップを書き出しました（保存編成 ${s.slots} 件・設定 ${s.settings} 件・作成したデータ ${s.characters + s.weapons + s.artifacts} 件）`);
+    setSaveSuccessMsg(t('save:message.backupExported', { slots: s.slots, settings: s.settings, items: s.characters + s.weapons + s.artifacts }));
   };
 
   // 全データのバックアップの復元（確認 → 復元 → 画面の再読み込み）
@@ -349,19 +337,19 @@ JSONファイル書き出しを使ってください。`);
       const s = summarizeBackup(parsed.backup);
       const skippedCount = parsed.skipped.slots + parsed.skipped.items + parsed.skipped.rotationParts;
       const lines = [
-        'このバックアップから、次の内容を復元します。',
-        `・保存編成 ${s.slots} 件（同じ ID は、バックアップのほうが新しいときだけ置き換え）`,
-        `・設定 ${s.settings} 件`,
-        `・作成・ロックしたキャラ ${s.characters} 件・武器 ${s.weapons} 件・聖遺物 ${s.artifacts} 件`,
-        s.hasCurrentState ? '・現在の編成（今の編集内容は、バックアップのものに置き換わります）' : '・現在の編成は含まれていません',
-        ...(skippedCount > 0 ? [`※ 壊れていた項目 ${skippedCount} 件（保存編成 ${parsed.skipped.slots} 件・キャラ/武器/聖遺物 ${parsed.skipped.items} 件・編成の中の出場やアクションなど ${parsed.skipped.rotationParts} 件）は、読み飛ばします`] : []),
+        t('save:message.restoreIntro'),
+        t('save:message.restoreSlots', { count: s.slots }),
+        t('save:message.restoreSettings', { count: s.settings }),
+        t('save:message.restoreItems', { characters: s.characters, weapons: s.weapons, artifacts: s.artifacts }),
+        s.hasCurrentState ? t('save:message.restoreCurrent') : t('save:message.restoreNoCurrent'),
+        ...(skippedCount > 0 ? [t('save:message.restoreSkipped', { count: skippedCount, slots: parsed.skipped.slots, items: parsed.skipped.items, parts: parsed.skipped.rotationParts })] : []),
         '',
-        '復元後、画面を再読み込みします。よろしいですか？',
+        t('save:message.restoreConfirm'),
       ];
       if (!(await confirm(lines.join('\n')))) return;
       const result = restoreBackup(parsed.backup, { restoreCurrent: true });
       if (!result.ok) {
-        showAlert(`復元できませんでした。${result.error ?? ''}`);
+        showAlert(t('save:message.restoreFailed', { error: result.error ?? '' }));
         return;
       }
       window.location.reload();
@@ -389,9 +377,9 @@ JSONファイル書き出しを使ってください。`);
         reactions: v.reactions,
       });
       onClose();
-      if (totalSkipped(result.skipped) > 0) showAlert(`壊れていた項目（${describeSkipped(result.skipped)}）は、読み飛ばして読み込みました。`);
+      if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
     } catch (err) {
-      showAlert('JSON構文が正しくありません。');
+      showAlert(t('save:message.invalidJson'));
     }
   };
 
@@ -406,10 +394,10 @@ JSONファイル書き出しを使ってください。`);
             </div>
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>編成管理</span>
+                <span>{t('save:manager.title')}</span>
               </h2>
               <p className="text-xs text-slate-400">
-                編集した内容は自動保存されています。名前を付けてスロット保存やJSONバックアップも可能です。
+                {t('save:manager.subtitle')}
               </p>
             </div>
           </div>
@@ -426,11 +414,11 @@ JSONファイル書き出しを使ってください。`);
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
-              <strong>常時自動保存中:</strong> アクション順序や持続時間の編集はブラウザ内に自動記録されます。
+              <Trans i18nKey="save:manager.autoSave" components={{ strong: <strong /> }} />
             </span>
           </div>
           <div className="text-[11px] text-emerald-400/80 font-mono">
-            現在: {characters.length}キャラ / 計{stints.length}ターン / {totalActionsCount}動作用
+            {t('save:manager.current', { characters: characters.length, stints: stints.length, actions: totalActionsCount })}
           </div>
         </div>
 
@@ -452,7 +440,7 @@ JSONファイル書き出しを使ってください。`);
             }`}
           >
             <FolderOpen className="w-4 h-4" />
-            <span>保存スロット一覧 ({savedSlots.length})</span>
+            <span>{t('save:manager.tabSlots', { count: savedSlots.length })}</span>
           </button>
           <button
             onClick={() => setActiveTab('json')}
@@ -463,7 +451,7 @@ JSONファイル書き出しを使ってください。`);
             }`}
           >
             <FileCode className="w-4 h-4" />
-            <span>JSON バックアップ・共有</span>
+            <span>{t('save:manager.tabJson')}</span>
           </button>
         </div>
 
@@ -476,10 +464,10 @@ JSONファイル書き出しを使ってください。`);
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                     <Save className="w-4 h-4" />
-                    <span>現在のローテーションを名前をつけて保存</span>
+                    <span>{t('save:manager.saveCurrent')}</span>
                   </h3>
                   <span className="text-[10px] text-slate-400 font-mono">
-                    計 {totalDuration.toFixed(1)}s / ループ開始 {loopStartTime.toFixed(1)}s
+                    {t('save:manager.totals', { total: totalDuration.toFixed(1), loopStart: loopStartTime.toFixed(1) })}
                   </span>
                 </div>
 
@@ -498,7 +486,7 @@ JSONファイル書き出しを使ってください。`);
                           else handleSaveNew();
                         }
                       }}
-                      placeholder="例: 雷電ナショナル (高速ループ最適化版)"
+                      placeholder={t('save:saveAs.namePlaceholder')}
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
                     />
                   </div>
@@ -508,7 +496,7 @@ JSONファイル書き出しを使ってください。`);
                     className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 shadow transition-all"
                   >
                     <Save className="w-4 h-4" />
-                    <span>名前をつけて保存</span>
+                    <span>{t('save:saveAs.save')}</span>
                   </button>
                 </div>
 
@@ -517,7 +505,7 @@ JSONファイル書き出しを使ってください。`);
                     type="text"
                     value={newSlotDesc}
                     onChange={(e) => setNewSlotDesc(e.target.value)}
-                    placeholder="メモ・備考（任意: 聖遺物、チャージ効率、立ち回り注意点など）"
+                    placeholder={t('save:manager.memoPlaceholder')}
                     className="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg px-3 py-1.5 text-[11px] text-slate-300 placeholder-slate-500 focus:outline-none focus:border-amber-400"
                   />
                   <button
@@ -525,10 +513,10 @@ JSONファイル書き出しを使ってください。`);
                     onClick={() => setNewSlotDesc(memberNames)}
                     disabled={!memberNames}
                     className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors disabled:opacity-40 disabled:pointer-events-none"
-                    title={memberNames ? `メモ欄を「${memberNames}」に置き換えます` : '編成メンバーがいません'}
+                    title={memberNames ? t('save:saveAs.setMembersTitle', { names: memberNames }) : t('save:saveAs.noMembers')}
                   >
                     <Users className="w-3 h-3 text-amber-400" />
-                    <span>編成メンバーをメモ欄にセット</span>
+                    <span>{t('save:saveAs.setMembers')}</span>
                   </button>
                 </div>
 
@@ -536,20 +524,20 @@ JSONファイル書き出しを使ってください。`);
                   <div className="p-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">
                     <span className="flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span>「<strong>{duplicateSlot.name}</strong>」という編成は既に保存されています。現在の内容で上書きしますか？</span>
+                      <span><Trans i18nKey="save:manager.duplicate" values={{ name: duplicateSlot.name }} components={{ strong: <strong /> }} /></span>
                     </span>
                     <span className="flex items-center gap-1.5">
                       <button
                         onClick={() => setDuplicateSlot(null)}
                         className="px-3 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
                       >
-                        やめる
+                        {t('save:saveAs.back')}
                       </button>
                       <button
                         onClick={() => handleSaveNew(duplicateSlot)}
                         className="px-3 py-1 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-500 text-white transition-colors shadow"
                       >
-                        上書きする
+                        {t('save:saveAs.overwrite')}
                       </button>
                     </span>
                   </div>
@@ -561,20 +549,20 @@ JSONファイル書き出しを使ってください。`);
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
                     <FolderOpen className="w-4 h-4 text-amber-400" />
-                    <span>保存済みスロット</span>
+                    <span>{t('save:manager.savedSlots')}</span>
                   </h3>
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] text-slate-500">
-                      {savedSlots.length === 0 ? '保存されたスロットはありません' : `${savedSlots.length} 件`}
+                      {savedSlots.length === 0 ? t('save:manager.noSlots') : t('count', { count: savedSlots.length })}
                     </span>
                     <button
                       type="button"
                       onClick={handleRestorePresets}
                       className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 transition-colors"
-                      title={`同梱のプリセット ${PRESET_COUNT} 編成（名前の先頭が「${PRESET_NAME_PREFIX}」）を、保存編成に入れ直します。同じ名前の保存編成は、上書きされます。古い gcsim の計算結果（「旧 gcsim」の印）のプリセットも、最新になります`}
+                      title={t('save:manager.restorePresetsTitle', { count: PRESET_COUNT, prefix: PRESET_NAME_PREFIX })}
                       data-testid="restore-presets"
                     >
-                      プリセット({PRESET_COUNT}編成)を復元する
+                      {t('save:manager.restorePresets', { count: PRESET_COUNT })}
                     </button>
                   </div>
                 </div>
@@ -583,16 +571,16 @@ JSONファイル書き出しを使ってください。`);
                   <div className="p-8 text-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/30">
                     <FolderOpen className="w-8 h-8 text-slate-600 mx-auto mb-2" />
                     <p className="text-xs text-slate-400">
-                      まだ保存されたカスタムローテーションがありません。
+                      {t('save:manager.emptyTitle')}
                     </p>
                     <p className="text-[11px] text-slate-500 mt-1">
-                      上の入力欄から現在のローテーションを保存できます。
+                      {t('save:manager.emptyHint')}
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-2.5">
                     {savedSlots.map((slot) => {
-                      const dateStr = new Date(slot.updatedAt).toLocaleString('ja-JP', {
+                      const dateStr = new Date(slot.updatedAt).toLocaleString(dateLocale, {
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
@@ -610,7 +598,7 @@ JSONファイル書き出しを使ってください。`);
                               <span className="font-bold text-sm text-white">{slot.name}</span>
                               {staleReactionsBadge(slot.reactions)}
                               <span className="text-[10px] text-slate-400 font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
-                                ⏱️ {(slot.totalDuration ?? 0).toFixed(1)}s / {slot.stints.length}ターン ({slotActionCount}手)
+                                {t('save:manager.slotSummary', { total: (slot.totalDuration ?? 0).toFixed(1), stints: slot.stints.length, actions: slotActionCount })}
                               </span>
                               <span className="text-[10px] text-slate-500">{dateStr}</span>
                             </div>
@@ -641,23 +629,23 @@ JSONファイル書き出しを使ってください。`);
                             <button
                               onClick={() => handleLoad(slot)}
                               className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg flex items-center gap-1 shadow transition-colors"
-                              title="このローテーションを読み込んで適用"
+                              title={t('save:manager.loadTitle')}
                             >
                               <FolderOpen className="w-3.5 h-3.5" />
-                              <span>呼出</span>
+                              <span>{t('save:manager.load')}</span>
                             </button>
                             <button
                               onClick={() => handleOverwrite(slot)}
                               className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs rounded-lg flex items-center gap-1 transition-colors"
-                              title="現在の編集内容でこのスロットを上書き"
+                              title={t('save:manager.overwriteTitle')}
                             >
                               <Save className="w-3.5 h-3.5 text-amber-400" />
-                              <span>上書</span>
+                              <span>{t('save:manager.overwrite')}</span>
                             </button>
                             <button
                               onClick={() => handleCopyJson(slot)}
                               className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors"
-                              title="JSON形式でクリップボードにコピー"
+                              title={t('save:manager.copyJsonTitle')}
                             >
                               {copiedId === slot.id ? (
                                 <Check className="w-4 h-4 text-emerald-400" />
@@ -668,14 +656,14 @@ JSONファイル書き出しを使ってください。`);
                             <button
                               onClick={() => handleExportJsonFile(slot)}
                               className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors"
-                              title="JSONファイルとしてダウンロード"
+                              title={t('save:manager.downloadJsonTitle')}
                             >
                               <Download className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(slot.id, slot.name)}
                               className="p-1.5 bg-slate-800 hover:bg-red-950 text-slate-400 hover:text-red-400 rounded-lg transition-colors"
-                              title="削除"
+                              title={t('save:manager.deleteTitle')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -693,10 +681,9 @@ JSONファイル書き出しを使ってください。`);
               {/* 全データのバックアップ（引っ越し・端末の変更・配信先の移行用） */}
               <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-700/40 space-y-3">
                 <div>
-                  <h4 className="text-xs font-bold text-amber-200">全データのバックアップ（引っ越し・端末の変更用）</h4>
+                  <h4 className="text-xs font-bold text-amber-200">{t('save:manager.backupTitle')}</h4>
                   <p className="text-[11px] text-slate-400 mt-0.5">
-                    保存編成（すべて）・現在の編成・設定・作成/ロックしたキャラ・武器・聖遺物を、1 つのファイルにまとめます。
-                    ブラウザのデータを消す前や、別のブラウザ・端末・サイトの URL が変わるときに使います。
+                    {t('save:manager.backupDescription')}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -705,11 +692,11 @@ JSONファイル書き出しを使ってください。`);
                     className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-2 text-left"
                   >
                     <Download className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-bold text-white">全データを書き出す</span>
+                    <span className="text-xs font-bold text-white">{t('save:manager.exportAll')}</span>
                   </button>
                   <label className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-sky-400 transition-all flex items-center gap-2 cursor-pointer">
                     <Upload className="w-4 h-4 text-sky-400" />
-                    <span className="text-xs font-bold text-white">バックアップから復元する</span>
+                    <span className="text-xs font-bold text-white">{t('save:manager.restoreBackup')}</span>
                     <input type="file" accept=".json" onChange={handleImportBackup} className="hidden" />
                   </label>
                 </div>
@@ -724,9 +711,9 @@ JSONファイル書き出しを使ってください。`);
                     <Download className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xs text-white">JSONファイル書き出し</h4>
+                    <h4 className="font-bold text-xs text-white">{t('save:manager.exportJson')}</h4>
                     <p className="text-[11px] text-slate-400">
-                      現在のローテーション設定を .json ファイルで保存
+                      {t('save:manager.exportJsonHint')}
                     </p>
                   </div>
                 </button>
@@ -736,9 +723,9 @@ JSONファイル書き出しを使ってください。`);
                     <Upload className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xs text-white">JSONファイル読み込み</h4>
+                    <h4 className="font-bold text-xs text-white">{t('save:manager.importJson')}</h4>
                     <p className="text-[11px] text-slate-400">
-                      保存した .json ファイルを選択して復元
+                      {t('save:manager.importJsonHint')}
                     </p>
                   </div>
                   <input
@@ -755,7 +742,7 @@ JSONファイル書き出しを使ってください。`);
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
                     <FileCode className="w-4 h-4 text-amber-400" />
-                    <span>JSONテキスト直接編集・貼り付け復元</span>
+                    <span>{t('save:manager.jsonText')}</span>
                   </h4>
                   <button
                     onClick={() => handleCopyJson()}
@@ -764,12 +751,12 @@ JSONファイル書き出しを使ってください。`);
                     {copiedId === 'current' ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>コピー完了</span>
+                        <span>{t('header:menu.copied')}</span>
                       </>
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5" />
-                        <span>現在のJSONをコピー</span>
+                        <span>{t('save:manager.copyCurrentJson')}</span>
                       </>
                     )}
                   </button>
@@ -779,7 +766,7 @@ JSONファイル書き出しを使ってください。`);
                   rows={6}
                   value={importJsonText}
                   onChange={(e) => setImportJsonText(e.target.value)}
-                  placeholder="ここに保存したJSONテキストを貼り付けて復元できます..."
+                  placeholder={t('save:manager.jsonPlaceholder')}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-400"
                 />
 
@@ -790,7 +777,7 @@ JSONファイル書き出しを使ってください。`);
                     className="bg-sky-600 hover:bg-sky-500 disabled:opacity-40 text-white font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors"
                   >
                     <Upload className="w-4 h-4" />
-                    <span>貼り付けたJSONから復元</span>
+                    <span>{t('save:manager.restoreFromText')}</span>
                   </button>
                 </div>
               </div>
@@ -802,7 +789,7 @@ JSONファイル書き出しを使ってください。`);
         <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-t border-slate-800 bg-slate-950/70">
           <button
             onClick={async () => {
-              if (await confirm('現在の編集内容を初期状態（キャラ未設定の編成）に戻しますか？', { danger: true })) {
+              if (await confirm(t('save:message.confirmReset'), { danger: true })) {
                 clearActiveState();
                 onResetToDefault();
                 onClose();
@@ -811,14 +798,14 @@ JSONファイル書き出しを使ってください。`);
             className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1.5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>初期状態（キャラ未設定）にリセット</span>
+            <span>{t('save:manager.reset')}</span>
           </button>
 
           <button
             onClick={onClose}
             className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition-colors"
           >
-            閉じる
+            {t('action.close')}
           </button>
         </div>
       </div>

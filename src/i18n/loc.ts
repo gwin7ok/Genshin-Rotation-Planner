@@ -7,6 +7,7 @@
 import type { DataSourceQuote } from '../types/genshin';
 import { currentLanguage, t } from './index';
 import { labelForKey, labelForKeyEn } from '../masterdata/effectKeyDisplay';
+import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
 
 type Localizable<K extends string> = { [P in K]?: string } & { en?: { [P in K]?: string } };
 
@@ -57,6 +58,20 @@ export function triggerName(
     if (trigger.name === `${def.name}（${key}）`) return `${loc(def, 'name')} (${key})`;
   }
   return trigger.name;
+}
+
+/**
+ * gcsim から書き戻した副次効果・キャラクターに紐づく効果の表示名（3-6）。保存されている名前は、書き戻したときの定義の名前なので、
+ * キーで定義（アクションの gcsimExtras・キャラクターに紐づく効果の表）を引いて、表示の言語の名前にする。定義が無ければ保存されている名前
+ */
+export function extraEffectName(
+  char: { source?: { gcsimKey?: string } } | undefined | null,
+  actionDef: { gcsimExtras?: Array<{ key: string; label: string; en?: { label?: string } }> } | undefined | null,
+  ex: { key: string; name: string },
+): string {
+  const def = actionDef?.gcsimExtras?.find(x => x.key === ex.key)
+    ?? (CHARACTER_LINKED_EFFECTS[char?.source?.gcsimKey ?? ''] ?? []).find(x => x.key === ex.key);
+  return def ? loc(def, 'label') : ex.name;
 }
 
 /** フレームの出典の表示（キャラの source.frameSource。英語は en.frameSource） */

@@ -10,7 +10,7 @@ import { cutBar } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { t } from '../../i18n';
-import { actionName, charName, loc } from '../../i18n/loc';
+import { actionName, charName, loc, extraEffectName } from '../../i18n/loc';
 
 /** 特殊スキル・特殊爆発の受付の延長・閉じ方・CT の短縮 */
 export function applySpecialWindows(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -201,14 +201,14 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
       id: `effect_extra_${char.id}_${act.id}_${exIdx}`,
       buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
       actionKind: actionKindOf(act.type),
-      name: `${char.name} ${act.shortName}: ${ex.name}`,
+      name: `${charName(char)} ${act.shortName}: ${extraEffectName(char, actionDef, ex)}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',
       startTime: exStart,
       endTime: Number((exStart + ex.duration).toFixed(3)),
       duration: ex.duration,
       color: char.color,
-      description: t('messages:rotation.extra', { action: actionName(char, act), label: ex.name }),
+      description: t('messages:rotation.extra', { action: actionName(char, act), label: extraEffectName(char, actionDef, ex) }),
       ownerStintId: rawStint.id,
     });
   });

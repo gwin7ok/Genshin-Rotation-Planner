@@ -23,7 +23,8 @@ import {
 } from './applyGcsimResult';
 import type { ActionLinkTables } from '../../masterdata/actionGcsimLink';
 import type { CalculatedRotation } from '../rotationCalculator';
-import type { Stint } from '../../types/genshin';
+import type { CharacterConfig, Stint } from '../../types/genshin';
+import { actionName, extraEffectName, triggerName } from '../../i18n/loc';
 import { t } from '../../i18n';
 
 /** 実行の乱数の種（祭礼リセットの種の探索は 6-4） */
@@ -61,10 +62,49 @@ export interface GcsimApplyInput {
   buffsByCharacter: Record<string, TriggerableBuffDefinition[]>;
   actionLinks: ActionLinkTables;
   outcome: GcsimRunOk;
+  /** 編成のキャラ（変更の一覧の名前を、表示の言語で ID から引く。無ければ保存されている名前のまま） */
+  characters?: CharacterConfig[];
+}
+
+/**
+ * 変更の一覧（表示用）の名前を、表示の言語の名前にする（3-6）。各段が写すのは保存されている名前（追加したときの言語）なので、
+ * アクションはアクション定義、副次効果・キャラクターに紐づく効果は定義のキー、発動バフは定義から引く。反映する出場ブロック（stints）は変えない
+ */
+function localizeChangeNames<P extends ReturnType<typeof computeGcsimApplyRaw>>(plan: P, stints: Stint[], characters: CharacterConfig[], buffsByCharacter: Record<string, TriggerableBuffDefinition[]>): P {
+  const stintOf = (stintId: string) => stints.find(st => st.id === stintId);
+  const charOf = (stintId: string) => characters.find(c => c.id === stintOf(stintId)?.characterId);
+  const actName = (c: { stintId: string; actionId: string; name: string }) => {
+    const act = stintOf(c.stintId)?.actions.find(a => a.id === c.actionId);
+    // 2 回目以降の写し（「〜（2 回目）」など）は、保存されている名前の部分だけを置き換える
+    return act ? c.name.split(act.name).join(actionName(charOf(c.stintId), act)) : c.name;
+  };
+  const defOf = (stintId: string, actionId: string) => {
+    const act = stintOf(stintId)?.actions.find(a => a.id === actionId);
+    return charOf(stintId)?.availableActions.find(d => d.id === act?.actionTypeId);
+  };
+  const withName = <C extends { stintId: string; actionId: string; name: string }>(list: C[]) => list.map(c => ({ ...c, name: actName(c) }));
+  return {
+    ...plan,
+    durations: { ...plan.durations, changes: withName(plan.durations.changes) },
+    cooldowns: { ...plan.cooldowns, changes: withName(plan.cooldowns.changes) },
+    effects: { ...plan.effects, changes: withName(plan.effects.changes) },
+    extras: { ...plan.extras, changes: plan.extras.changes.map(c => ({ ...c, name: actName(c), extras: c.extras.map(x => ({ ...x, name: extraEffectName(charOf(c.stintId), defOf(c.stintId, c.actionId), x) })) })) },
+    passives: { ...plan.passives, changes: plan.passives.changes.map(c => {
+      const char = charOf(c.stintId);
+      const def = char ? buffsByCharacter[char.id]?.find(d => d.id === c.defId) : undefined;
+      return { ...c, name: triggerName(def, { name: c.name, gcsimKey: c.key }) };
+    }) },
+    charEffects: { ...plan.charEffects, changes: plan.charEffects.changes.map(c => ({ ...c, effects: c.effects.map(x => ({ ...x, name: extraEffectName(charOf(c.stintId), undefined, x) })) })) },
+  };
 }
 
 /** 書き戻しの計画（各段の変更の一覧と、全部を反映した後の出場ブロック） */
 export function computeGcsimApply(input: GcsimApplyInput) {
+  const plan = computeGcsimApplyRaw(input);
+  return input.characters ? localizeChangeNames(plan, input.stints, input.characters, input.buffsByCharacter) : plan;
+}
+
+function computeGcsimApplyRaw(input: GcsimApplyInput) {
   const { stints, calculated, result, buffsByCharacter, actionLinks, outcome } = input;
   // 変更前は、画面に出ている値（計算後）を使う
   const effectiveDurations: Record<string, number> = {};

@@ -692,7 +692,7 @@ export default function App() {
     }
     // 反応の状態（月反応・星反応）
     setGcsimReactions(anchorReactionRows(extractReactionRows(outcome.logs), reactionLapInputs(outcome.align.pairs)));
-    const plan = computeGcsimApply({ stints: visibleStints, calculated: calculatedResult, result, buffsByCharacter, actionLinks, outcome });
+    const plan = computeGcsimApply({ stints: visibleStints, calculated: calculatedResult, result, buffsByCharacter, actionLinks, outcome, characters });
     // 反映後も残るアプリの CT 違反は、gcsim が待たずに実行できているので「確認済み」にする（D214）。
     // 反映後の状態の設定文を覚え、編集で設定文が変わったら、自動で赤に戻る
     {
@@ -995,6 +995,7 @@ export default function App() {
         calculated={calculatedResult}
         buffsByCharacter={buffsByCharacter}
         actionLinks={actionLinks}
+        characters={characters}
         onApplyStints={updateStints}
       />
 

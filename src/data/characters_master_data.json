@@ -47818,6 +47818,56 @@
           "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.717,
+        "mode": {
+          "label": "追撃",
+          "description": "追撃の状態（5 秒）。この間の最初の重撃は、すぐに落下攻撃(高)へつながる。重撃で終わる",
+          "startDelayFrames": 0,
+          "durationFrames": 300,
+          "swap": "persists",
+          "enders": [
+            {
+              "by": "charged",
+              "cooldown": "none",
+              "frames": {
+                "total": 143,
+                "hitmark": 11,
+                "cancels": {
+                  "attack": 142,
+                  "charge": 141,
+                  "skill": 142,
+                  "walk": 142,
+                  "swap": 139,
+                  "highPlunge": 20
+                },
+                "source": "charge.go: quickAbilFunc(chargeFrames, fastChargedFrame = 57), fastChargeHitmark = 11"
+              },
+              "framesInBlessing": {
+                "total": 143,
+                "hitmark": 11,
+                "cancels": {
+                  "attack": 142,
+                  "skill": 141,
+                  "burst": 141,
+                  "dash": 142,
+                  "walk": 141,
+                  "swap": 138,
+                  "highPlunge": 23
+                },
+                "source": "charge.go: quickAbilFunc(fieryChargeFrames, fastFieryChargedFrame = 58), fastFieryChargeHitmark = 11"
+              },
+              "actionHitlag": true
+            }
+          ],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "source": "varesa/skill.go: AddStatus(skillStatus, 5*60, true)。charge.go: skillStatus の間の重撃は Follow-Up Strike（quickAbilFunc。次が落下攻撃(高)のときだけ短い）で、DeleteStatus(skillStatus)。交代では消えない",
+          "en": {
+            "label": "Follow-Up Strike",
+            "description": "Follow-Up Strike state (5s). The first Charged Attack during the state links quickly into a high Plunging Attack. Ends on Charged Attack"
+          }
+        },
         "charges": 2,
         "nightsoul": {
           "role": "skill",

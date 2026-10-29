@@ -28,6 +28,7 @@ const TERMS: Record<string, string> = {
   '夜魂値': 'Nightsoul points',
   '夢浮かみ': 'Dreamdrifter',
   'マキシマムドライブ': 'Apex Drive',
+  '追撃': 'Follow-Up Strike',
   '七相一閃': 'Seven-Phase Flash',
   '幽炎の露顕': 'Manifest Flame',
   '北国の嵐槍': 'Northland Spearstorm',
@@ -143,6 +144,8 @@ const SENTENCES: Record<string, string> = {
     "Nightsoul's Blessing state (10s). Normal Attacks become Loop Shots, and Elemental Skill (E) becomes Scalespiker Cannon when Nightsoul points are full (20) (no CD). Ends on character switch",
   '夢浮かみ状態。状態の間の元素スキル（E）で解除する（CT は始まらない）。キャラ交代でも終わる':
     "Dreamdrifter state. Elemental Skill (E) during the state cancels it (CD doesn't start). Also ends on character switch",
+  '追撃の状態（5 秒）。この間の最初の重撃は、すぐに落下攻撃(高)へつながる。重撃で終わる':
+    'Follow-Up Strike state (5s). The first Charged Attack during the state links quickly into a high Plunging Attack. Ends on Charged Attack',
   '特殊爆発を使える期間（受付）。使うと閉じる。受付の外では、gcsim では通常の爆発（CT が始まる）になる':
     'Window in which the special Burst can be used. Closes once used. Outside the window, gcsim uses the normal Burst (CD starts)',
   '夜魂の加護（アンプルショット）。状態の間の通常攻撃は、アンプルショット（約 0.9 秒ごと）になる。元素スキル（E）の再押しで終わる。終わらせないと交代できない。CT は状態の終わりから始まる':

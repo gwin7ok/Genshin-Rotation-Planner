@@ -263,6 +263,10 @@ export interface ModeEnder {
   by: 'self' | ActionType;
   /** 終わらせる動作のフレーム（無ければ、そのアクションの通常のフレーム） */
   frames?: ActionFrames;
+  /** 夜魂の加護の間（ヴァレサの猛烈パッション）の、終わらせる動作のフレーム（無ければ frames） */
+  framesInBlessing?: ActionFrames;
+  /** 終わらせる動作のヒットストップは、そのアクションの通常の表（hitlag_frames.json のアクション定義 ID）と同じ（ヴァレサの追撃の重撃。D262） */
+  actionHitlag?: boolean;
   /**
    * そのアクションでの CT の扱い。どちらも、そのアクション自身の CT は始めない（効果バーも出さない）。
    * none = CT と関係しない（夢見月瑞希の解除。CT 中でも使える）／start = ここで、モードを開いたアクションの CT が始まる（cooldownAtEnd。タルタリヤ・放浪者）。CT 中なら使えない（違反の判定をする）

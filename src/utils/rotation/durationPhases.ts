@@ -61,7 +61,9 @@ export function selectFrames(state: RotationState, sc: StintContext, ac: ActionC
   // モードを終わらせる動作・もう一度使った動作のフレーム（夢見月瑞希の状態の解除・クロリンデの突き・閑雲の跳躍）
   if (modeEnder?.ender.frames) {
     const ns = modeEnder.window.def.nStacks;
-    frames = ns && (modeEnder.window.stacks ?? 0) >= ns.max ? ns.detonate : modeEnder.ender.frames;
+    // 夜魂の加護の間（ヴァレサの猛烈パッション）は、その間のフレーム
+    const inBlessing = !!modeEnder.ender.framesInBlessing && !!state.nightsoulTrackers.get(char.id)?.inBlessing(actionStartTime);
+    frames = ns && (modeEnder.window.stacks ?? 0) >= ns.max ? ns.detonate : inBlessing ? modeEnder.ender.framesInBlessing! : modeEnder.ender.frames;
   }
   if (stackDetonation) {
     frames = stackDetonation.frames;
@@ -147,7 +149,7 @@ export function resolveDuration(state: RotationState, sc: StintContext, ac: Acti
           hitlagSrc.chargedNoDelay = actionDelayOf(prevAct) === 0;
         }
       }
-    } else if (entry && frames === actionDef.frames) {
+    } else if (entry && (frames === actionDef.frames || (ac.modeEnder?.ender.actionHitlag && (frames === ac.modeEnder.ender.frames || frames === ac.modeEnder.ender.framesInBlessing)))) {
       const prev = rawActions[aIdx - 1];
       const afterNormal = act.type === 'charged' && prev?.type === 'normal' && entry.afterNormal;
       // 遅延なしの値は、重撃の直前の通常攻撃の遅延がないとき（それ以外は、そのアクション自身の遅延がないとき）

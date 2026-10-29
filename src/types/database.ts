@@ -16,7 +16,7 @@ export interface EquipmentBuffDefinition extends GcsimBuffLink {
     cooldown?: string;             // 抽出元の文言 例: "20秒に1回"
   };
   /** 英語の表示用の文（D255。dataSource は英語の説明文の中の同じ値の箇所。D258） */
-  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary'>;
+  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary' | 'gcsimNote'>;
 }
 
 export interface WeaponRefinementData {
@@ -59,6 +59,8 @@ export interface WeaponDatabaseItem {
     description: string;
     color: string;
     snapshotable?: boolean;
+    /** 英語の表示用の文（D255。buffEffects の最初の発動バフの英語を写す） */
+    en?: EnglishTexts<'name' | 'description' | 'statEffect'>;
   };
   isLocked?: boolean;
   isCustom?: boolean;
@@ -91,6 +93,8 @@ export interface ArtifactSetDatabaseItem {
     description: string;
     color: string;
     snapshotable?: boolean;
+    /** 英語の表示用の文（D255。buffEffects の最初の発動バフの英語を写す） */
+    en?: EnglishTexts<'name' | 'description' | 'statEffect'>;
   };
   isLocked?: boolean;
   isCustom?: boolean;

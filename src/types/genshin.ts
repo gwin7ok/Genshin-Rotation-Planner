@@ -73,7 +73,7 @@ export interface ActionMode {
   /** モードのバーの説明 */
   description: string;
   /** 英語の表示用の文（D255） */
-  en?: EnglishTexts<'label' | 'description'>;
+  en?: EnglishTexts<'label' | 'description' | 'barNote'>;
   /** アクションの開始から、モードが始まるまでのフレーム */
   startDelayFrames: number;
   /** 入力がないときの最大時間（フレーム） */
@@ -132,7 +132,7 @@ export interface ActionMode {
    * モードの間に置けない操作（段階 ④。2026-10-08）。置くと黄色の警告（アプリの時間は変えない。D12・D21 と同じ考え方）。
    * result: wait = gcsim はモードが終わるまで待つ（夢見月瑞希・閑雲。ActionReady が false）／error = gcsim は実行エラー（スカーク。NextQueueItemIsValid）／none = ゲームでは何も起きない（CT も効果も無し。藍硯の受付の間の長押し E。gcsim は別の動作として実行する）。hint = 警告に添える、終わらせ方などの案内
    */
-  blocked?: { types: ActionType[]; result: 'wait' | 'error' | 'none'; hint: string; /** 置ける別のアクション（定義 ID の末尾。フィッシュルのオズの間の再発動 e_recast） */ except?: string[] };
+  blocked?: { types: ActionType[]; result: 'wait' | 'error' | 'none'; hint: string; /** 置ける別のアクション（定義 ID の末尾。フィッシュルのオズの間の再発動 e_recast） */ except?: string[]; en?: EnglishTexts<'hint'> };
   /**
    * モードの終わりを、「durationFrames（開始から効果が出るまでの遅れ）+ 効果継続時間（アクション定義の値。命ノ星座の延長を含む）」にする
    * （フィッシュルのオズ: 出現までの遅れ + 10 秒〔凸 6 で 12 秒〕）
@@ -157,6 +157,8 @@ export interface ActionMode {
    */
   gauge?: {
     label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string;
+    /** 英語の表示用の文（D255） */
+    en?: EnglishTexts<'label' | 'hint'>;
     /** 別の動作になった E の消費量（兹白の月相の輝き 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
     cost?: number;
     /** 通常攻撃（N）の、連続した N の段ごとの増加量（段の数で繰り返す。あれば gainByType.normal より優先。ローエンの愉悦・ヴェスナの剣気） */
@@ -174,6 +176,8 @@ export interface ActionMode {
    */
   drain?: {
     label: string;
+    /** 英語の表示用の文（D255） */
+    en?: EnglishTexts<'label'>;
     max: number;
     /** 降りている間: 開始から最初の消費まで・降りた直後から最初の消費まで・以降の間隔・1 回の消費量（フレーム） */
     idle: { firstFrames: number; resumeFrames: number; everyFrames: number; amount: number };
@@ -209,7 +213,7 @@ export interface ActionMode {
   /** このモードが開いたとき、終わらせる（置き換える）モードのラベル（ドゥリンの純白の正 ⇔ 漆黒の否） */
   replaces?: string[];
   /** このモードの間の元素爆発の名前と、効果バーの名前（ドゥリンの漆黒の否の間の爆発 = 漆黒の法則・黒蝕の龍） */
-  burstVariant?: { name: string; effectLabel: string };
+  burstVariant?: { name: string; effectLabel: string; en?: EnglishTexts<'name' | 'effectLabel'> };
   /** モードの間の元素爆発のフレーム */
   burstFrames?: ActionFrames;
   /** モードの間の重撃のフレーム（雷電将軍の夢想の一心: 刀の重撃） */
@@ -326,7 +330,7 @@ export interface ActionDefinition {
   /** 説明文（スキル・爆発・通常攻撃・重撃・落下攻撃: genshin-db の天賦の説明。ホバー表示に使う。無いものは、共通の説明を表示側で補う） */
   description?: string;
   /** 英語の表示用の文（D255） */
-  en?: EnglishTexts<'name' | 'buttonLabel' | 'description' | 'effectLabel'>;
+  en?: EnglishTexts<'name' | 'buttonLabel' | 'description' | 'effectLabel' | 'specialBurstHint'>;
   startsSkillCooldown?: boolean;
   startsBurstCooldown?: boolean;
   /**
@@ -403,7 +407,7 @@ export interface ActionDefinition {
   fieldEffect?: {
     startDelayFrames: number;
     fieldFrames: number;
-    ctReduction?: { minConstellation: number; rate: number; label: string; description: string };
+    ctReduction?: { minConstellation: number; rate: number; label: string; description: string; en?: EnglishTexts<'label' | 'description'> };
     source: string;
   };
   /**
@@ -414,10 +418,12 @@ export interface ActionDefinition {
   layerBuff?: {
     label: string;
     description: string;
+    /** 英語の表示用の文（D255） */
+    en?: EnglishTexts<'label' | 'description'>;
     durationFrames: number;
     max: number;
     fullOnEnter?: { minConstellation: number };
-    fullBuff?: { minConstellation: number; label: string; description: string };
+    fullBuff?: { minConstellation: number; label: string; description: string; en?: EnglishTexts<'label' | 'description'> };
     source: string;
   };
   /**
@@ -589,7 +595,7 @@ export interface PassiveEffectDefinition extends GcsimBuffLink {
   description?: string;
   dataSource?: DataSourceQuote;
   /** 英語の表示用の文（D255） */
-  en?: EnglishTexts<'name' | 'talentName' | 'description'>;
+  en?: EnglishTexts<'name' | 'talentName' | 'description' | 'gcsimNote'>;
 }
 
 export type ConstellationLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -608,7 +614,7 @@ export interface ConstellationBuffDefinition extends GcsimBuffLink {
   description?: string;
   dataSource?: DataSourceQuote;
   /** 英語の表示用の文（D255） */
-  en?: EnglishTexts<'name' | 'description'>;
+  en?: EnglishTexts<'name' | 'description' | 'gcsimNote'>;
 }
 
 /** 命ノ星座の1段階（マスターデータ） */
@@ -748,7 +754,7 @@ export interface CharacterConfig {
   name: string;
   englishName?: string;
   /** 英語の表示用の文（D255。名前は englishName と同じ値） */
-  en?: EnglishTexts<'name'>;
+  en?: EnglishTexts<'name' | 'frameSource'>;
   element: ElementType;
   weaponType: WeaponType;
   rarity?: number;

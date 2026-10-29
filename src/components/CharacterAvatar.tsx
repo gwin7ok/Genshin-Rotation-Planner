@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CharacterConfig } from '../types/genshin';
+import { charName } from '../i18n/loc';
 
 interface CharacterAvatarProps {
   char: Pick<CharacterConfig, 'name' | 'avatarUrl' | 'color' | 'accentColor'>;
@@ -28,14 +29,14 @@ export const CharacterAvatar: React.FC<CharacterAvatarProps> = ({
       {showImage ? (
         <img
           src={char.avatarUrl}
-          alt={char.name}
+          alt={charName(char)}
           className="w-full h-full object-cover"
           loading="lazy"
           draggable={false}
           onError={() => setFailed(true)}
         />
       ) : (
-        char.name.slice(0, 1)
+        charName(char).slice(0, 1)
       )}
     </div>
   );

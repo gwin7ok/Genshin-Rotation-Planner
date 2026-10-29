@@ -5,7 +5,7 @@
  * - 処理（数値の抽出・判定・gcsim の設定文）では使わない。日本語の欄をそのまま見る。
  */
 import type { DataSourceQuote } from '../types/genshin';
-import { currentLanguage } from './index';
+import { currentLanguage, t } from './index';
 
 type Localizable<K extends string> = { [P in K]?: string } & { en?: { [P in K]?: string } };
 
@@ -22,6 +22,22 @@ export function charName(c: { name: string; englishName?: string; en?: { name?: 
   if (!c) return '';
   if (currentLanguage !== 'en') return c.name;
   return c.en?.name || c.englishName || c.name;
+}
+
+/**
+ * 編成の中のアクションの表示名（D250・3-6）。保存されている名前は、追加したときの言語の文字列なので、
+ * キャラのアクション定義（actionTypeId）から表示の言語で引く。定義が無いもの（削除済み・カスタム）は保存されている名前。
+ * 待機・維持・キャラ交代は、アプリの文言
+ */
+export function actionName(
+  char: { availableActions?: Array<{ id: string; name: string; en?: { name?: string } }> } | undefined | null,
+  act: { actionTypeId?: string; name: string; type?: string },
+): string {
+  if (act.actionTypeId === 'wait') return t('editor:waitName');
+  if (act.actionTypeId === 'mode_hold') return t('messages:rotation.modeHoldName');
+  if (act.actionTypeId === 'action_switch_char') return t('messages:rotation.swapName');
+  const def = act.actionTypeId ? char?.availableActions?.find(d => d.id === act.actionTypeId) : undefined;
+  return def ? loc(def, 'name') : act.name;
 }
 
 /** 根拠の引用（D258。英語のときは en.dataSource、無ければ日本語の原文） */

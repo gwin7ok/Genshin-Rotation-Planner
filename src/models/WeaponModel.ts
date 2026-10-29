@@ -6,6 +6,7 @@
 import { WeaponDatabaseItem, WeaponRefinementData, EquipmentBuffDefinition } from '../types/database';
 import { WeaponType } from '../types/genshin';
 import { t } from '../i18n';
+import { loc } from '../i18n/loc';
 
 export class WeaponModel {
   public rank: number;
@@ -84,6 +85,18 @@ export class WeaponModel {
   /** 現在ランクでのクールタイム (秒) */
   get cooldown(): number | undefined {
     return this.currentRefinement?.cooldown ?? this.data.buffEffect?.cooldown;
+  }
+
+  /** 表示の言語の名前・パッシブ名・現在ランクの説明（D255。処理は name / passiveName / description を使う） */
+  get displayName(): string {
+    return loc(this.data, 'name');
+  }
+  get displayPassiveName(): string {
+    return loc(this.data, 'passiveName');
+  }
+  get displayDescription(): string {
+    const ref = this.currentRefinement;
+    return ref?.description ? loc(ref, 'description') : loc(this.data, 'description');
   }
 
   /** 現在ランクでの効果要約 */

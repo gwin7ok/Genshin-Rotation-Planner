@@ -15,6 +15,7 @@ import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
 import { t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
+import { charName, actionName, loc } from '../i18n/loc';
 
 interface PartyConfigModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const filteredRoster = database.characters.filter(rosterChar => {
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch = !q || 
-      rosterChar.name.toLowerCase().includes(q) || 
+      rosterChar.name.toLowerCase().includes(q) || (rosterChar.en?.name ?? '').toLowerCase().includes(q) || 
       rosterChar.id.toLowerCase().includes(q) ||
       (rosterChar.englishName ?? '').toLowerCase().includes(q);
     return matchesCharacterFilter(rosterChar, elementFilter, weaponFilter) && matchesSearch;
@@ -191,7 +192,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     <CharacterAvatar char={c} className="w-7 h-7 rounded-lg text-xs" borderWidth={1.5} />
                     <div className="truncate">
                       <div className="font-bold text-xs text-white flex items-center gap-1 min-w-0">
-                        <span className="truncate">{c.name}</span>
+                        <span className="truncate">{charName(c)}</span>
                         <GcsimMissingBadge char={c} />
                       </div>
                       <div className={`text-[10px] font-medium ${elemTheme.text}`}>
@@ -318,7 +319,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>{t('party:selectedSlot', { slot: selectedSlot + 1, name: currentSlotChar.name })}</span>
+                  <span>{t('party:selectedSlot', { slot: selectedSlot + 1, name: charName(currentSlotChar) })}</span>
                 </h4>
 
                 {/* Swap Slot Buttons */}
@@ -363,7 +364,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           .sort((a, b) => Number(b.id) - Number(a.id))
                           .map(w => ({
                             value: w.id,
-                            label: `${'★'.repeat(w.rarity)} ${w.name}`,
+                            label: `${'★'.repeat(w.rarity)} ${loc(w, 'name')}`,
                             badge: isGcsimMissingEquipment(w) ? <GcsimMissingTag title={t('party:weaponMissing')} /> : undefined,
                           })),
                       ]}
@@ -424,7 +425,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-mono">
                           <span className="font-bold text-amber-300">
-                            {weaponModel.passiveName} (R{weaponModel.rank})
+                            {weaponModel.displayPassiveName} (R{weaponModel.rank})
                           </span>
                           <span className="text-slate-400">
                             {weaponModel.cooldown ? `⏱️ CT ${weaponModel.cooldown}s` : ''}
@@ -432,7 +433,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           </span>
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
-                          {weaponModel.description}
+                          {weaponModel.displayDescription}
                         </p>
                       </div>
                     );
@@ -455,7 +456,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           .sort((a, b) => Number(b.id) - Number(a.id))
                           .map(a => ({
                             value: a.id,
-                            label: `${'★'.repeat(a.rarity)} ${a.name}`,
+                            label: `${'★'.repeat(a.rarity)} ${loc(a, 'name')}`,
                             badge: isGcsimMissingEquipment(a) ? <GcsimMissingTag title={t('party:artifactMissing')} /> : undefined,
                           })),
                       ]}
@@ -500,10 +501,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     return (
                       <div className="bg-slate-950/70 border border-slate-800 rounded p-2 text-[11px] space-y-1">
                         <div className="text-[10px] font-mono font-bold text-purple-300">
-                          {t('party:fourPieceEffect', { name: art.name })}
+                          {t('party:fourPieceEffect', { name: loc(art, 'name') })}
                         </div>
                         <p className="text-slate-300 line-clamp-2 text-[10px] leading-relaxed">
-                          {art.effect4p || art.effect2p || t('party:noSetEffect')}
+                          {(art.effect4p ? loc(art, 'effect4p') : '') || (art.effect2p ? loc(art, 'effect2p') : '') || t('party:noSetEffect')}
                         </p>
                       </div>
                     );
@@ -645,7 +646,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       <CharacterAvatar char={rosterChar} className="w-8 h-8 rounded-lg text-sm" />
                       <div className="min-w-0">
                         <div className="font-bold text-xs text-white truncate flex items-center gap-1">
-                          <span className="truncate">{rosterChar.name}</span>
+                          <span className="truncate">{charName(rosterChar)}</span>
                           <GcsimMissingBadge char={rosterChar} />
                           {isCustom && <span className="text-[8px] text-amber-300 font-mono">✦</span>}
                         </div>

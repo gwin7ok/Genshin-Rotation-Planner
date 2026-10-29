@@ -10,6 +10,7 @@ import { cutBar } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { t } from '../../i18n';
+import { actionName, charName, loc } from '../../i18n/loc';
 
 /** 特殊スキル・特殊爆発の受付の延長・閉じ方・CT の短縮 */
 export function applySpecialWindows(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -40,7 +41,7 @@ export function applySpecialWindows(state: RotationState, sc: StintContext, ac: 
         actionId: act.id,
         checked: false,
         stintIndex: sIdx,
-        name: act.name,
+        name: actionName(char, act),
         onViolation: () => {},
       });
     }
@@ -73,7 +74,7 @@ export function applySpecialWindows(state: RotationState, sc: StintContext, ac: 
         reduceBy: perHit,
         checked: false,
         stintIndex: sIdx,
-        name: act.name,
+        name: actionName(char, act),
         onViolation: () => {},
       });
     }
@@ -148,7 +149,7 @@ export function buildEffectBars(state: RotationState, sc: StintContext, ac: Acti
       activeBuffs.push({
         id: `field_ct_${act.id}`,
         buffId: `field_ct_${actionDef.id}`,
-        name: `${char.name} ${cr.label}`,
+        name: `${charName(char)} ${cr.label}`,
         sourceCharacterId: char.id,
         sourceType: 'constellation',
         startTime: hit,
@@ -177,14 +178,14 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
       activeBuffs.push({
         id: `effect_extra_${char.id}_${act.id}_pre${exIdx}`,
         buffId: `effect_extra_${char.id}_${act.actionTypeId}_${ex.key}`,
-        name: `${char.name} ${act.shortName}: ${ex.label}`,
+        name: `${charName(char)} ${act.shortName}: ${loc(ex, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'talent',
         startTime: actionStartTime,
         endTime: Number((actionStartTime + exDuration).toFixed(3)),
         duration: exDuration,
         color: char.color,
-        description: t('messages:rotation.extraFromMaster', { action: act.name, label: ex.label }),
+        description: t('messages:rotation.extraFromMaster', { action: actionName(char, act), label: loc(ex, 'label') }),
         ownerStintId: rawStint.id,
       });
     });
@@ -204,7 +205,7 @@ export function buildSideEffects(state: RotationState, sc: StintContext, ac: Act
       endTime: Number((exStart + ex.duration).toFixed(3)),
       duration: ex.duration,
       color: char.color,
-      description: t('messages:rotation.extra', { action: act.name, label: ex.name }),
+      description: t('messages:rotation.extra', { action: actionName(char, act), label: ex.name }),
       ownerStintId: rawStint.id,
     });
   });

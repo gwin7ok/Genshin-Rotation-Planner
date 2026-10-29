@@ -1,4 +1,4 @@
-import { BuffTiming, CharacterConfig } from '../types/genshin';
+import { BuffTiming, CharacterConfig, EnglishTexts } from '../types/genshin';
 import { EquipmentBuffDefinition, GenshinDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
 import { CharacterModel } from '../models/CharacterModel';
@@ -6,6 +6,7 @@ import { WEAPON_BUFF_OVERRIDES, ARTIFACT_BUFF_OVERRIDES } from '../masterdata/eq
 import { classifyBuffScope, type BuffScope } from './buffScope';
 import { APP_SIDE_REVELATION_BUFFS, isRevelationAppSide } from '../masterdata/revelationCharacters';
 import { t } from '../i18n';
+import { charName, loc } from '../i18n/loc';
 
 export type BuffCategory = 'talent' | 'weapon' | 'artifact' | 'constellation';
 
@@ -29,6 +30,8 @@ export interface TriggerableBuffDefinition {
   scope?: BuffScope;
   /** true = アプリの計算が自動で出す効果（祭礼の武器: スキルのダメージが当たったとき、確率 100% で発動）。手で置く候補には出さない */
   autoApplied?: boolean;
+  /** 英語の表示用の文（D255）。name・description は処理（編成の中の発動バフとの照合）にも使うので、日本語のまま */
+  en?: EnglishTexts<'name' | 'description' | 'statEffectSummary' | 'sourceName'>;
 }
 
 /** gcsim 対象外（gcsimTarget = false）のバッジに出す理由。理由が無いときの既定文 */
@@ -77,6 +80,7 @@ export function getAvailableBuffsForCharacter(
         gcsimNote: p.gcsimNote,
         gcsimKeys: p.gcsimKeys,
         gcsimCooldownKeys: p.gcsimCooldownKeys,
+        en: { ...p.en, sourceName: charName(character) },
       });
     }
   }
@@ -134,6 +138,7 @@ export function getAvailableBuffsForCharacter(
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
           ...(b.gcsimCooldownKeys?.includes('sacrificial-cd') ? { autoApplied: true } : {}),
+          en: { ...(override?.name ? {} : b.en), sourceName: loc(weaponModel.data, 'name') },
         });
       }
     }
@@ -186,6 +191,7 @@ export function getAvailableBuffsForCharacter(
           gcsimNote: b.gcsimNote,
           gcsimKeys: b.gcsimKeys,
           gcsimCooldownKeys: b.gcsimCooldownKeys,
+          en: { ...(artOverride?.name ? {} : b.en), sourceName: loc(matchedArtifact, 'name') },
         });
       }
     }
@@ -198,7 +204,8 @@ export function getAvailableBuffsForCharacter(
       if (c.level > constellation) continue;
       result.push({
         id: c.id,
-        name: t('messages:buff.constellationName', { level: c.level, name: c.name }),
+        // name は編成の中の発動バフとの照合に使うので、日本語の決まった形（表示は en）
+        name: `${c.level}凸「${c.name}」`,
         category: 'constellation',
         sourceId: character.id,
         sourceName: character.name,
@@ -211,6 +218,7 @@ export function getAvailableBuffsForCharacter(
         gcsimNote: c.gcsimNote,
         gcsimKeys: c.gcsimKeys,
         gcsimCooldownKeys: c.gcsimCooldownKeys,
+        en: { name: t('messages:buff.constellationName', { level: c.level, name: loc(c, 'name') }), ...(c.en?.description ? { description: c.en.description } : {}), sourceName: charName(character) },
       });
     }
   }

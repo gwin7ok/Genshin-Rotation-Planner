@@ -1,6 +1,7 @@
 import { ActionDefinition, ActiveBuffSpan, CharacterActionInstance, CharacterConfig } from '../types/genshin';
 import { actionDescription } from './actionDescription';
-import { t } from '../i18n';
+import { t, currentLanguage } from '../i18n';
+import { charName, loc } from '../i18n/loc';
 
 const SKILL_TYPES = new Set(['skill', 'skill_hold', 'skill_reset']);
 
@@ -74,7 +75,10 @@ export function getActionEffectInfo(
   return {
     duration: act.effectDuration ?? defaultDuration,
     defaultDuration,
-    label: def?.effectLabel ?? buildEffectLabel(def?.dataSource?.effectDuration, def?.name ?? ''),
+    // 英語（D255）: 出典ラベルは日本語の文なので使わず、英語の効果名（3-3 で手で書いたもの）か、英語のスキル名
+    label: currentLanguage === 'en'
+      ? def?.en?.effectLabel ?? buildEffectLabel(undefined, def ? loc(def, 'name') : '')
+      : def?.effectLabel ?? buildEffectLabel(def?.dataSource?.effectDuration, def?.name ?? ''),
   };
 }
 
@@ -95,14 +99,14 @@ export function buildActionEffectSpan(
   return {
     id: `${idPrefix}_${char.id}_${act.id}_${startTime}`,
     buffId: `effect_${kind}_${char.id}_${act.actionTypeId}`,
-    name: `${char.name} ${act.shortName}: ${info.label}`,
+    name: `${charName(char)} ${act.shortName}: ${info.label}`,
     sourceCharacterId: char.id,
     sourceType: 'talent',
     startTime,
     endTime: startTime + info.duration,
     duration: info.duration,
     color: char.color,
-    description: `${act.name}${def?.dataSource?.effectDuration ? `（${def.dataSource.effectDuration}）` : ''}${actionDescription(act, def) ? `
+    description: `${def ? loc(def, 'name') : act.name}${def?.dataSource?.effectDuration && currentLanguage !== 'en' ? `（${def.dataSource.effectDuration}）` : ''}${actionDescription(act, def) ? `
 ${actionDescription(act, def)}` : ''}`,
   };
 }

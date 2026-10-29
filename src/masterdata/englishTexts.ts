@@ -173,3 +173,128 @@ export function attachCharacterEnglish(c: CharacterConfig, src: CharacterEnglish
   }
   // 命ノ星座の効果（発動バフ）は、この後の linkCharacterBuffs（buffGcsimLink.ts）が、段階の en を写して作る
 }
+
+// ---------------------------------------------------------------------------
+// 武器・聖遺物
+// ---------------------------------------------------------------------------
+
+/** 英語の効果の説明文から、要約を作る（日本語の generateStatSummary と同じ考え方。表示用） */
+export function generateStatSummaryEn(text: string): string {
+  if (!text) return 'Buff';
+  const fav = /CRIT Hits? (?:have|has) a (\d+%) chance to generate .*?once every (\d+(?:\.\d+)?)s/i.exec(text);
+  if (fav) return `On CRIT ${fav[1]} particles (CD ${fav[2]}s)`;
+  const sac = /Elemental Skill deals DMG.*?(\d+%) chance to end its own CD.*?once every (\d+(?:\.\d+)?)s/i.exec(text);
+  if (sac) return `Skill hit ${sac[1]} CD reset (CD ${sac[2]}s)`;
+  const parts: string[] = [];
+  // 正規表現の最初に一致したグループの値で、要約の 1 項目を作る
+  const pick = (re: RegExp, label: (v: string) => string) => {
+    const v = re.exec(text)?.slice(1).find(Boolean);
+    if (v) parts.push(label(v));
+  };
+  pick(/ATK (?:is )?(?:increased|increases|increase) by (\d+(?:\.\d+)?%?)|increases? [^.]*?ATK by (\d+(?:\.\d+)?%)/i, v => `ATK +${v}`);
+  pick(/Elemental Mastery (?:is )?(?:increased|increases) by (\d+)|(\d+) Elemental Mastery/i, v => `EM +${v}`);
+  pick(/CRIT Rate (?:is )?(?:increased|increases) by (\d+(?:\.\d+)?%)/i, v => `CRIT Rate +${v}`);
+  pick(/CRIT DMG (?:is )?(?:increased|increases) by (\d+(?:\.\d+)?%)/i, v => `CRIT DMG +${v}`);
+  pick(/DMG (?:is )?(?:increased|increases|dealt (?:is )?increased) by (\d+(?:\.\d+)?%)|DMG Bonus of (\d+(?:\.\d+)?%)/i, v => `DMG +${v}`);
+  pick(/RES (?:is )?(?:decreased|reduced) by (\d+(?:\.\d+)?%)/i, v => `RES -${v}`);
+  if (parts.length > 0) return parts.slice(0, 2).join(' / ');
+  const first = text.split(/(?<=\.)\s/)[0].trim();
+  return first.length > 40 ? `${first.slice(0, 38)}...` : first;
+}
+
+/**
+ * 根拠の引用（D258）: 英語の説明文から、抽出した値（秒）と同じ数の箇所を探す。見つからなければ undefined（表示は日本語の原文）
+ * kind = duration: "for 12s" / "lasts 12s" / "12s" の順、cooldown: "once every 20s" / "every 20s" / "20s" の順
+ */
+export function findEnglishQuote(text: string | undefined, seconds: number | undefined, kind: 'duration' | 'cooldown'): string | undefined {
+  if (!text || seconds === undefined) return undefined;
+  const n = String(seconds).replace('.', '\\.');
+  const num = `${n}(?:\\.0)?\\s*(?:s\\b|seconds?\\b)`;
+  const patterns = kind === 'duration'
+    ? [new RegExp(`(?:for|lasts?|lasting|duration of)\\s+(?:the next\\s+)?${num}`, 'i'), new RegExp(`\\b${num}`, 'i')]
+    : [new RegExp(`(?:once every|every|once per)\\s+${num}`, 'i'), new RegExp(`(?:within|for)\\s+${num}[^.]*?(?:cannot|can't|again)`, 'i'), new RegExp(`\\b${num}`, 'i')];
+  for (const re of patterns) {
+    const m = re.exec(text);
+    if (m) return m[0];
+  }
+  return undefined;
+}
+
+type EquipmentBuffLike = {
+  name: string;
+  duration?: number;
+  cooldown?: number;
+  dataSource?: { duration?: string; cooldown?: string };
+  en?: import('../types/genshin').EnglishTexts<'name' | 'description' | 'statEffectSummary'>;
+};
+
+/** 発動バフの英語（名前・説明・要約・根拠の引用）。名前は、手で書いた名前（overrideName）があれば英語を作らない（3-3） */
+function equipmentBuffEnglish(b: EquipmentBuffLike, nameEn: string | undefined, descriptionEn: string | undefined): EquipmentBuffLike['en'] {
+  if (!descriptionEn && !nameEn) return undefined;
+  const dataSource = {
+    ...(b.dataSource?.duration ? { duration: findEnglishQuote(descriptionEn, b.duration, 'duration') } : {}),
+    ...(b.dataSource?.cooldown ? { cooldown: findEnglishQuote(descriptionEn, b.cooldown, 'cooldown') } : {}),
+  };
+  const ds = Object.fromEntries(Object.entries(dataSource).filter(([, v]) => v));
+  return {
+    ...(nameEn ? { name: nameEn } : {}),
+    ...(descriptionEn ? { description: descriptionEn, statEffectSummary: generateStatSummaryEn(descriptionEn) } : {}),
+    ...(Object.keys(ds).length > 0 ? { dataSource: ds } : {}),
+  };
+}
+
+/** genshin-db の英語の武器（必要な欄だけ） */
+export interface WeaponEnglishSource {
+  name?: string;
+  effectName?: string;
+  description?: string;
+  [rank: string]: unknown;
+}
+
+/** 武器のマスターに英語の表示用の文を付ける（その場で書き換える）。hasOverrideName: 手で書いた発動バフの名前がある（英語は 3-3） */
+export function attachWeaponEnglish(
+  w: import('../types/database').WeaponDatabaseItem,
+  en: WeaponEnglishSource | undefined,
+  hasOverrideName: boolean,
+): void {
+  if (!en) return;
+  const rankDesc = (r: number) => textOf(en, `r${r}`)?.description ?? (typeof en.description === 'string' ? en.description : undefined);
+  const passiveEn = en.effectName;
+  const buffNameEn = !hasOverrideName && en.name ? `${en.name}: ${passiveEn || 'Effect'}` : undefined;
+  w.en = {
+    ...(en.name ? { name: en.name } : {}),
+    ...(passiveEn ? { passiveName: passiveEn } : {}),
+    ...(rankDesc(w.refinementRank ?? 1) ? { description: rankDesc(w.refinementRank ?? 1) } : {}),
+  };
+  for (const r of w.refinements ?? []) {
+    const d = rankDesc(r.rank);
+    if (!d) continue;
+    r.en = { description: d, statEffectSummary: generateStatSummaryEn(d) };
+    for (const b of r.buffEffects ?? []) b.en = equipmentBuffEnglish(b, buffNameEn, d);
+  }
+  const activeDesc = rankDesc(w.refinementRank ?? 1);
+  for (const b of w.buffEffects ?? []) b.en = equipmentBuffEnglish(b, buffNameEn, activeDesc);
+}
+
+/** genshin-db の英語の聖遺物（必要な欄だけ） */
+export interface ArtifactEnglishSource {
+  name?: string;
+  effect2Pc?: string;
+  effect4Pc?: string;
+}
+
+/** 聖遺物のマスターに英語の表示用の文を付ける（その場で書き換える） */
+export function attachArtifactEnglish(
+  a: import('../types/database').ArtifactSetDatabaseItem,
+  en: ArtifactEnglishSource | undefined,
+  hasOverrideName: boolean,
+): void {
+  if (!en) return;
+  a.en = {
+    ...(en.name ? { name: en.name } : {}),
+    ...(en.effect2Pc ? { effect2p: en.effect2Pc } : {}),
+    ...(en.effect4Pc ? { effect4p: en.effect4Pc } : {}),
+  };
+  const buffNameEn = !hasOverrideName && en.name ? `${en.name} 4P: Effect` : undefined;
+  for (const b of a.buffEffects ?? []) b.en = equipmentBuffEnglish(b, buffNameEn, en.effect4Pc);
+}

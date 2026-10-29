@@ -13,6 +13,7 @@ import {
   isGcsimOutOfScope,
   isGlobalRowBuff,
 } from '../utils/buffUtils';
+import { charName, loc } from '../i18n/loc';
 
 interface GlobalBuffRowProps {
   characters: CharacterConfig[];
@@ -37,10 +38,10 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
   const badgeCfg = getBuffBadgeConfig(def.category);
   const timing = buffTimingLabel(def);
   const outOfScope = isGcsimOutOfScope(def);
-  const sourceLabel = def.category === 'talent' ? t('category.talent') : def.category === 'constellation' ? t('category.constellation') : def.category === 'weapon' ? t('category.weapon', { name: def.sourceName ?? '' }) : t('category.artifact', { name: def.sourceName ?? '' });
+  const sourceLabel = def.category === 'talent' ? t('category.talent') : def.category === 'constellation' ? t('category.constellation') : def.category === 'weapon' ? t('category.weapon', { name: loc(def, 'sourceName') }) : t('category.artifact', { name: loc(def, 'sourceName') });
   const tooltip = [
-    t('chart:timeless.tooltipHead', { timing, owner: owner.name, source: sourceLabel }),
-    def.description ?? def.name,
+    t('chart:timeless.tooltipHead', { timing, owner: charName(owner), source: sourceLabel }),
+    def.description ? loc(def, 'description') : loc(def, 'name'),
     ...(outOfScope ? [t('gcsim.outOfScopeNote', { reason: def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON })] : []),
   ].join('\n');
   return (
@@ -49,9 +50,9 @@ export const TimelessBuffChip: React.FC<{ item: TimelessBuffItem }> = ({ item: {
       title={tooltip}
     >
       <span className="text-[10px]">{badgeCfg.icon}</span>
-      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: owner.accentColor }} title={owner.name} />
+      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: owner.accentColor }} title={charName(owner)} />
       <span className={`text-[9px] font-bold ${def.timing === 'always' ? 'text-amber-300' : 'text-slate-400'}`}>{timing}</span>
-      <span className="max-w-[220px] truncate">{def.name}</span>
+      <span className="max-w-[220px] truncate">{loc(def, 'name')}</span>
       {outOfScope && (
         <span className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 shrink-0">{t('gcsim.outOfScope')}</span>
       )}

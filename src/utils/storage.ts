@@ -3,6 +3,7 @@ import { isEmptySlotCharacter } from '../data/characters';
 import { STORAGE_KEYS, readJson, removeKey, writeJson } from './persistence';
 import { isValidParty, sanitizeRotationNumbers, sanitizeSlot, sanitizeStints } from './rotationValidation';
 import { t } from '../i18n';
+import { charName } from '../i18n/loc';
 
 export interface ActiveRotationState {
   /** 編成（キャラの ID と編成ごとの設定） */
@@ -172,7 +173,7 @@ export function buildDefaultSlotName(
 
 /** 編成メンバー名を「・」でつないだ文字列（未設定スロットは除く） */
 export function buildPartyMemberNames(characters: CharacterConfig[]): string {
-  return characters.filter(c => !isEmptySlotCharacter(c)).map(c => c.name).join('・');
+  return characters.filter(c => !isEmptySlotCharacter(c)).map(c => charName(c)).join('・');
 }
 
 /** 編成名の同一判定用に正規化（前後空白・全角半角・大文字小文字の違いを無視） */

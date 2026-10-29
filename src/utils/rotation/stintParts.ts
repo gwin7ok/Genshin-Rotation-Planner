@@ -4,6 +4,7 @@ import { getAvailableBuffsForCharacter, BuffCategory } from '../buffUtils';
 import { type CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
 import { t } from '../../i18n';
+import { charName, loc } from '../../i18n/loc';
 
 /** 出場の終わりで、交代の内部 CT（約 1 秒）に近い素早い交代を、情報として知らせる */
 export function warnQuickSwap(a: { rawStints: Stint[]; sIdx: number; rawStint: Stint; char: CharacterConfig; stintStartTime: number; stintDuration: number; validationIssues: ValidationIssue[] }): void {
@@ -44,6 +45,9 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
     const startTime = Number(Math.max(0, stintStartTime + trigger.offset).toFixed(3));
 
     const buffColor = def?.color || (category === 'weapon' ? '#0284c7' : category === 'artifact' ? '#c084fc' : char.color);
+    // 表示名・説明（D255）: 保存されている名前が定義の名前と同じなら、表示の言語の名前（キーごとに分けた名前などは、保存されている名前）
+    const shownName = def && trigger.name === def.name ? loc(def, 'name') : trigger.name;
+    const shownDescription = def?.description ? loc(def, 'description') : trigger.name;
 
     passiveSpans.push({
       id: `passive_${trigger.id}`,
@@ -54,7 +58,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       gcsimKey: trigger.gcsimKey,
       effectGroup: passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey),
       gcsimMissed: trigger.gcsimMissed,
-      name: trigger.gcsimMissed ? t('messages:rotation.gcsimMissed', { name: trigger.name }) : trigger.name,
+      name: trigger.gcsimMissed ? t('messages:rotation.gcsimMissed', { name: shownName }) : shownName,
       category,
       startTime,
       duration,
@@ -64,7 +68,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       hasCTViolation: false,
       collisionRemainingCT: undefined,
       color: buffColor,
-      description: def?.description ?? trigger.name,
+      description: shownDescription,
     });
     const passiveSpan = passiveSpans[passiveSpans.length - 1];
     const catLabel = category === 'weapon' ? t('messages:ct.catWeapon') : category === 'artifact' ? t('messages:ct.catArtifact') : category === 'constellation' ? t('messages:ct.catConstellation') : t('messages:ct.catTalent');
@@ -79,7 +83,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       onViolation: (remaining, cycle) => {
         passiveSpan.hasCTViolation = true;
         passiveSpan.collisionRemainingCT = Math.max(passiveSpan.collisionRemainingCT ?? 0, remaining);
-        addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', t('messages:ct.passiveWarning', { name: char.name, category: catLabel }), `「${trigger.name}」`, remaining, cycle);
+        addViolationIssue(`passive_ct_${trigger.id}`, char, rawStint.id, undefined, startTime, 'warning', t('messages:ct.passiveWarning', { name: charName(char), category: catLabel }), `「${shownName}」`, remaining, cycle);
       },
     });
 
@@ -87,14 +91,14 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
       activeBuffs.push({
         id: `passive_buff_${trigger.id}`,
         buffId: `buff_${char.id}_${passiveGroupOf(trigger.passiveEffectId, trigger.gcsimKey)}`, // 同じバフ（キー単位）は重複集計で1つとして数える
-        name: `${char.name}: ${trigger.name}`,
+        name: `${charName(char)}: ${shownName}`,
         sourceCharacterId: char.id,
         sourceType: category,
         startTime,
         endTime: startTime + duration,
         duration,
         color: buffColor,
-        description: def?.description ?? trigger.name,
+        description: shownDescription,
         origin: 'passive',
       });
     }

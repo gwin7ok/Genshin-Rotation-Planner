@@ -31,6 +31,7 @@ import { isEmptySlotCharacter } from '../data/characters';
 import { rotationFileName, nameFromFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
 import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
+import { charName } from '../i18n/loc';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -618,7 +619,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                                     className="w-2 h-2 rounded-full shrink-0"
                                     style={{ backgroundColor: c.color }}
                                   />
-                                  <span>{c.name}</span>
+                                  <span>{charName(c)}</span>
                                 </div>
                               ))}
                             </div>

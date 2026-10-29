@@ -9,6 +9,7 @@ import type { ModeWindow, SacrificialProc } from './types';
 import type { CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
 import { t } from '../../i18n';
+import { charName, actionName } from '../../i18n/loc';
 
 /** モードの終わりに関わる CT を、CT の発動（ctEvents）に足す: 時間切れで終わったモードのスキルの CT 短縮（閑雲）と、モードの終わりから始まる CT（タルタリヤ・放浪者） */
 export function addModeEndCooldowns(a: { retiredModes: ModeWindow[]; modeWindows: Map<string, ModeWindow>; ctEvents: CooldownEvent[]; skillCooldowns: CooldownSpan[]; charStates: Record<string, CharacterRuntimeState>; switchDelay: number }): void {
@@ -73,8 +74,8 @@ export function warnGcsimUnsupportedActions(a: { characters: CharacterConfig[]; 
         stintId: st.id,
         actionId: a.id,
         time: a.startTime ?? 0,
-        title: t('messages:rotation.gcsimMissingActionTitle', { name: stChar.name }),
-        message: `「${a.name}」: ${message}`,
+        title: t('messages:rotation.gcsimMissingActionTitle', { name: charName(stChar) }),
+        message: `「${actionName(stChar, a)}」: ${message}`,
       });
     }
   }
@@ -87,7 +88,7 @@ export function warnPlungePrerequisites(a: { characters: CharacterConfig[]; calc
   for (const w of checkPlungePrerequisites(characters, calculatedStints)) {
     const action = calculatedStints.find(s => s.id === w.stintId)?.actions.find(a => a.id === w.actionId);
     if (action) action.specialWindowWarning = w.message;
-    const charName = characters.find(c => c.id === w.characterId)?.name ?? '';
+    const ownerName = charName(characters.find(c => c.id === w.characterId));
     validationIssues.push({
       id: `plunge_prereq_${w.actionId}`,
       severity: 'warning',
@@ -95,7 +96,7 @@ export function warnPlungePrerequisites(a: { characters: CharacterConfig[]; calc
       stintId: w.stintId,
       actionId: w.actionId,
       time: w.time,
-      title: t('messages:plunge.title', { name: charName }),
+      title: t('messages:plunge.title', { name: ownerName }),
       message: `「${w.actionName}」: ${w.message}`,
     });
   }
@@ -191,7 +192,7 @@ export function applyNightsoulBurstInterval(a: { characters: CharacterConfig[]; 
         characterId: first.characterId,
         stintId: first.stintId,
         time: first.startTime,
-        title: t('messages:rotation.noNightsoulBurstTitle', { name: ch?.name ?? '' }),
+        title: t('messages:rotation.noNightsoulBurstTitle', { name: charName(ch) }),
         message: t('messages:rotation.noNightsoulBurst'),
       });
     } else if (triggered.length > 0 && burstCd !== undefined) {
@@ -212,7 +213,7 @@ export function applyNightsoulBurstInterval(a: { characters: CharacterConfig[]; 
             characterId: sp.characterId,
             stintId: sp.stintId,
             time: sp.startTime,
-            title: t('messages:rotation.nightsoulIntervalTitle', { name: ch?.name ?? '' }),
+            title: t('messages:rotation.nightsoulIntervalTitle', { name: charName(ch) }),
             message: t('messages:rotation.nightsoulInterval', { action: sp.name, remaining, count: natlan, interval: burstCd }),
           });
         } else {

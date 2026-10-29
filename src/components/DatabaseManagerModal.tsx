@@ -44,6 +44,7 @@ import { DatabaseWeaponCardItem } from './database/DatabaseWeaponCardItem';
 import { EditCharacterSubModal } from './database/EditCharacterSubModal';
 import { EditWeaponSubModal } from './database/EditWeaponSubModal';
 import { EditArtifactSubModal } from './database/EditArtifactSubModal';
+import { charName, loc } from '../i18n/loc';
 
 interface DatabaseManagerModalProps {
   isOpen: boolean;
@@ -126,14 +127,14 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
   const filteredCharacters = useMemo(() => database.characters.filter(c => {
     const q = searchQuery.toLowerCase();
-    const matchesSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.englishName ?? '').toLowerCase().includes(q);
+    const matchesSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.englishName ?? '').toLowerCase().includes(q) || (c.en?.name ?? '').toLowerCase().includes(q);
     const matchesFilter = matchesCharacterFilter(c, elementFilter, weaponTypeFilter);
     return matchesSearch && matchesFilter && (!lockedOnly || !!c.isLocked) && (!gcsimMissingOnly || (!c.source?.gcsimKey && !c.isCustom && !c.id.startsWith('custom_')));
   }), [database.characters, searchQuery, elementFilter, weaponTypeFilter, lockedOnly, gcsimMissingOnly]);
 
   const filteredWeapons = useMemo(() => database.weapons
     .filter(w => {
-      const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase()) || (w.id ?? '').includes(searchQuery);
+      const matchesSearch = w.name.toLowerCase().includes(searchQuery.toLowerCase()) || (w.en?.name ?? w.englishName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) || w.passiveName.toLowerCase().includes(searchQuery.toLowerCase()) || (w.id ?? '').includes(searchQuery);
       const matchesWeapon = weaponTypeFilter === 'all' || w.weaponType === weaponTypeFilter;
       return matchesSearch && matchesWeapon && (!lockedOnly || !!w.isLocked) && (!gcsimMissingOnly || (!w.gcsimKey && !w.isCustom));
     })
@@ -143,7 +144,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
     .filter(a => {
       if (lockedOnly && !a.isLocked) return false;
       if (gcsimMissingOnly && (a.gcsimKey || a.isCustom)) return false;
-      return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
+      return a.name.toLowerCase().includes(searchQuery.toLowerCase()) || (a.en?.name ?? a.englishName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) || a.effect2p.toLowerCase().includes(searchQuery.toLowerCase()) || a.effect4p.toLowerCase().includes(searchQuery.toLowerCase()) || (a.id ?? '').includes(searchQuery);
     })
     .sort((a, b) => compareIdDesc(a.id, b.id)), [database.artifacts, searchQuery, lockedOnly, gcsimMissingOnly]);
 
@@ -719,12 +720,12 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <div className="flex items-center gap-2.5">
                           <img
                             src={char.avatarUrl}
-                            alt={char.name}
+                            alt={charName(char)}
                             className="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0"
                           />
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{char.name}</span><GcsimMissingBadge char={char} /></h3>
+                              <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{charName(char)}</span><GcsimMissingBadge char={char} /></h3>
                               {isCustom && (
                                 <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                                   {t('custom')}
@@ -753,7 +754,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
-                            onClick={() => handleDeleteChar(char.id, char.name)}
+                            onClick={() => handleDeleteChar(char.id, charName(char))}
                             className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
                             title={t('database:manager.deleteTitle')}
                           >
@@ -946,7 +947,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     weapon={weapon}
                     onToggleLock={() => handleToggleWeaponLock(weapon.id, !weapon.isLocked)}
                     onEdit={() => setEditingWeapon(weapon)}
-                    onDelete={() => handleDeleteWeapon(weapon.id, weapon.name)}
+                    onDelete={() => handleDeleteWeapon(weapon.id, loc(weapon, 'name'))}
                   />
                 ))}
               </div>
@@ -1059,7 +1060,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <span className="text-amber-400 font-bold text-xs">
                           {'★'.repeat(art.rarity)}
                         </span>
-                        <h3 className="font-bold text-sm text-white">{art.name}</h3>
+                        <h3 className="font-bold text-sm text-white">{loc(art, 'name')}</h3>
                         {art.isCustom && (
                           <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
                             {t('custom')}
@@ -1080,7 +1081,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
-                          onClick={() => handleDeleteArtifact(art.id, art.name)}
+                          onClick={() => handleDeleteArtifact(art.id, loc(art, 'name'))}
                           className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1091,11 +1092,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     <div className="space-y-1 text-xs bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
                       <div>
                         <span className="text-purple-300 font-bold">{t('database:manager.twoPiece')}</span>{' '}
-                        <span className="text-slate-300">{art.effect2p}</span>
+                        <span className="text-slate-300">{loc(art, 'effect2p')}</span>
                       </div>
                       <div>
                         <span className="text-amber-300 font-bold">{t('database:manager.fourPiece')}</span>{' '}
-                        <span className="text-slate-300">{art.effect4p}</span>
+                        <span className="text-slate-300">{loc(art, 'effect4p')}</span>
                       </div>
                     </div>
 

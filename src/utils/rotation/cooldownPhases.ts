@@ -8,7 +8,7 @@ import { skillHitFrames } from './frameTables';
 import { cutBar, modeKeyOf, modeGaugeInitial, modeGainScale, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
-import { t } from '../../i18n';
+import { currentLanguage, t } from '../../i18n';
 import { charName, actionName, loc } from '../../i18n/loc';
 
 /** CT の計算: 共鳴・書き戻した値・領域による短縮・CT の開始位置 */
@@ -260,14 +260,14 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
     const span: ActiveBuffSpan = {
       id: `mode_${actionDef.id}_${act.id}`,
       buffId: `mode_${actionDef.id}`,
-      name: `${charName(char)} ${loc(md, 'label')}${md.barNote ? `（${md.barNote}）` : ''}`,
+      name: `${charName(char)} ${loc(md, 'label')}${md.barNote ? (currentLanguage === 'en' ? ` (${loc(md, 'barNote')})` : `（${md.barNote}）`) : ''}`,
       sourceCharacterId: char.id,
       sourceType: 'talent',
       startTime: start,
       endTime: end,
       duration: Number((end - start).toFixed(3)),
       color: char.color,
-      description: md.description,
+      description: loc(md, 'description'),
       // モードを開くアクションの効果バーの代わりなので、既定はバフ重複に数える
       ...(md.noSynergy ? { noSynergy: true } : {}),
       // スキルの後の受付のバー（ガントチャートで、スキルストックとスキル CT の間の行に出す）
@@ -393,7 +393,7 @@ export function applySpecialRules(state: RotationState, sc: StintContext, ac: Ac
       const windowClosed = !!winFor?.closed;
       const kindName = isSpecialBurst ? t('messages:ct.specialBurst') : t('messages:ct.specialSkill');
       const normalName = isSpecialBurst ? t('messages:ct.normalBurst') : t('messages:ct.normalSkill');
-      const noWindowHint = isSpecialBurst ? (actionDef?.specialBurstHint ?? t('messages:ct.burstNoWindow')) : t('messages:ct.skillNoWindow');
+      const noWindowHint = isSpecialBurst ? ((actionDef && loc(actionDef, 'specialBurstHint')) || t('messages:ct.burstNoWindow')) : t('messages:ct.skillNoWindow');
       const windowMessage = windowClosed && winFor?.closedBy ? t('messages:ct.windowClosedBy', { kind: kindName, by: winFor.closedBy, normal: normalName }) : windowClosed ? t('messages:ct.windowUsed', { kind: kindName, normal: normalName }) : winFor
         ? t('messages:ct.windowPassed', { kind: kindName, window: (winFor.end - winFor.opener.start).toFixed(1), over: (actionStartTime - winFor.end).toFixed(1), normal: normalName })
         : t('messages:ct.windowNone', { kind: kindName, hint: noWindowHint, normal: normalName });

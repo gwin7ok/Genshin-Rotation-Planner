@@ -1,6 +1,7 @@
 import React from 'react';
 import type { CharacterConfig } from '../types/genshin';
 import { t } from '../i18n';
+import { frameSourceOf } from '../i18n/loc';
 
 /** gcsim に未実装のキャラか（マスターに gcsim のキーが無い。カスタムキャラ・空きスロットは対象外） */
 export function isGcsimMissingCharacter(c: Pick<CharacterConfig, 'id' | 'isCustom' | 'source'>): boolean {
@@ -12,7 +13,7 @@ export function isGcsimMissingCharacter(c: Pick<CharacterConfig, 'id' | 'isCusto
 export const GcsimMissingBadge: React.FC<{ char: Pick<CharacterConfig, 'id' | 'isCustom' | 'source'>; className?: string }> = ({ char, className = '' }) => {
   if (!isGcsimMissingCharacter(char)) return null;
   const framesNote = char.source?.frameSource
-    ? t('gcsim:missing.framesFrom', { source: char.source.frameSource })
+    ? t('gcsim:missing.framesFrom', { source: frameSourceOf(char) })
     : t('gcsim:missing.framesTentative');
   return <GcsimMissingTag className={className} title={t('gcsim:missing.character', { framesNote })} />;
 };

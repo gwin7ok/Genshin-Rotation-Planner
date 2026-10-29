@@ -6,6 +6,7 @@
  */
 import type { DataSourceQuote } from '../types/genshin';
 import { currentLanguage, t } from './index';
+import { labelForKey, labelForKeyEn } from '../masterdata/effectKeyDisplay';
 
 type Localizable<K extends string> = { [P in K]?: string } & { en?: { [P in K]?: string } };
 
@@ -38,6 +39,31 @@ export function actionName(
   if (act.actionTypeId === 'action_switch_char') return t('messages:rotation.swapName');
   const def = act.actionTypeId ? char?.availableActions?.find(d => d.id === act.actionTypeId) : undefined;
   return def ? loc(def, 'name') : act.name;
+}
+
+/**
+ * 編成の中の発動バフの表示名。保存されている名前（日本語。照合に使う）が、定義の名前・gcsim のキーごとの名前と同じなら、表示の言語で引く。
+ * それ以外（ユーザーが変えた名前など）は、保存されている名前
+ */
+export function triggerName(
+  def: { name: string; en?: { name?: string } } | undefined | null,
+  trigger: { name: string; gcsimKey?: string },
+): string {
+  if (!def) return trigger.name;
+  if (trigger.name === def.name) return loc(def, 'name');
+  const key = trigger.gcsimKey;
+  if (currentLanguage === 'en' && key) {
+    if (trigger.name === labelForKey(key)) return labelForKeyEn(key) ?? trigger.name;
+    if (trigger.name === `${def.name}（${key}）`) return `${loc(def, 'name')} (${key})`;
+  }
+  return trigger.name;
+}
+
+/** フレームの出典の表示（キャラの source.frameSource。英語は en.frameSource） */
+export function frameSourceOf(c: { source?: { frameSource?: string }; en?: { frameSource?: string } } | undefined | null): string {
+  const ja = c?.source?.frameSource ?? '';
+  if (currentLanguage !== 'en') return ja;
+  return c?.en?.frameSource || ja;
 }
 
 /** 根拠の引用（D258。英語のときは en.dataSource、無ければ日本語の原文） */

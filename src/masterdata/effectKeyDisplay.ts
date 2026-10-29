@@ -70,3 +70,25 @@ export function labelForKey(key: string): string | undefined {
   if (base) return `絵巻4: ${ELEMENT_JA[base[1]] ?? base[1]}元素ダメージ+12%`;
   return undefined;
 }
+
+const ELEMENT_EN: Record<string, string> = {
+  cryo: 'Cryo', hydro: 'Hydro', pyro: 'Pyro', electro: 'Electro', anemo: 'Anemo', geo: 'Geo', dendro: 'Dendro', physical: 'Physical',
+};
+
+const KEY_LABELS_EN: Readonly<Record<string, string>> = {
+  'columbina-c2': 'C2: Max HP +40% (Columbina)',
+  'columbina-c2-lb': 'C2: Lunar-Bloom bonus (on-field character EM + Max HP × 0.35%)',
+  'columbina-c2-lc': 'C2: Lunar-Charged bonus (on-field character ATK + Max HP × 1%)',
+  'columbina-c2-lcr': 'C2: Lunar-Crystallize bonus (on-field character DEF + Max HP × 1%)',
+};
+
+/** labelForKey の英語（表示用。D255。保存する名前・照合は日本語の labelForKey） */
+export function labelForKeyEn(key: string): string | undefined {
+  const fixed = KEY_LABELS_EN[key];
+  if (fixed) return fixed;
+  const night = key.match(/^scroll-4pc-nightsoul-([a-z]+)$/);
+  if (night) return `Scroll 4P: ${ELEMENT_EN[night[1]] ?? night[1]} DMG +28% (Nightsoul's Blessing)`;
+  const base = key.match(/^scroll-4pc-([a-z]+)$/);
+  if (base) return `Scroll 4P: ${ELEMENT_EN[base[1]] ?? base[1]} DMG +12%`;
+  return undefined;
+}

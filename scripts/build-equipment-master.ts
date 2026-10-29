@@ -19,7 +19,7 @@ const { weapons, artifacts, report, keyMap } = await generateEquipmentMaster(p =
   console.log(`[${p.phase}] ${p.done}/${p.total}`);
 });
 
-linkEquipment(weapons, artifacts); // 発動バフと gcsim の辞書の結び付け（5-6）
+linkEquipment(weapons, artifacts); // 発動バフと gcsim の辞書の結び付け（5-6）。手で書いた名前・説明の英語も付ける（D255）
 fs.writeFileSync(weaponsOutputPath, JSON.stringify(weapons, null, 2) + '\n', 'utf-8');
 fs.writeFileSync(artifactsOutputPath, JSON.stringify(artifacts, null, 2) + '\n', 'utf-8');
 updateKeyMapFile({ weapons: keyMap.weapons, artifacts: keyMap.artifacts });

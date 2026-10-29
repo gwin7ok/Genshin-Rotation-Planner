@@ -29,7 +29,8 @@
           "statEffectSummary": "When current HP increases or decreases...",
           "dataSource": {
             "duration": "for 5s"
-          }
+          },
+          "name": "Marechaussee Hunter 4P: CRIT Rate up"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -44,10 +45,15 @@
       "duration": 5,
       "statEffect": "HP増減時、会心率+12% (最大3層=+36%)",
       "description": "現在HPが増減する時、会心率+12%、継続時間5秒、最大3層まで重ね掛け可能。",
-      "color": "#60a5fa"
+      "color": "#60a5fa",
+      "en": {
+        "name": "Marechaussee Hunter 4P: CRIT Rate up",
+        "description": "When current HP increases or decreases, CRIT Rate will be increased by 12% for 5s. Max 3 stacks.",
+        "statEffect": "When current HP increases or decreases..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Marechaussee Hunter",
       "effect2p": "Normal and Charged Attack DMG +15%",
@@ -101,10 +107,15 @@
       "duration": 10,
       "statEffect": "元素スキルまたは元素爆発を発動した後10秒間...",
       "description": "元素スキルまたは元素爆発を発動した後10秒間、チーム全員の受ける治療効果+20%。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Maiden Beloved 4P: Effect",
+        "description": "Using an Elemental Skill or Burst increases healing received by all party members by 20% for 10s.",
+        "statEffect": "Using an Elemental Skill or Burst incr..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Maiden Beloved",
       "effect2p": "Character Healing Effectiveness +15%",
@@ -145,7 +156,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Disenchantment in Deep Shadow",
       "effect2p": "ATK +18%.",
@@ -178,7 +189,8 @@
         "dataSource": {},
         "en": {
           "description": "Increases Elemental Skill DMG by 25%. Additionally, when not on the field, Elemental Skill DMG will be further increased by 25%. This effect will be cleared 2s after taking the field.",
-          "statEffectSummary": "Increases Elemental Skill DMG by 25%."
+          "statEffectSummary": "Increases Elemental Skill DMG by 25%.",
+          "name": "Golden Troupe 4P: Off-field Skill DMG +25%"
         },
         "timing": "always",
         "gcsimTarget": true,
@@ -193,10 +205,15 @@
       "duration": 2,
       "statEffect": "待機時、元素スキルダメージさらに+25%",
       "description": "元素スキルのダメージ+25%。また、装備者が待機中の時、元素スキルのダメージがさらに+25%。この効果は装備キャラクターが登場してから2秒後に解除される。",
-      "color": "#fbbf24"
+      "color": "#fbbf24",
+      "en": {
+        "name": "Golden Troupe 4P: Off-field Skill DMG +25%",
+        "description": "Increases Elemental Skill DMG by 25%. Additionally, when not on the field, Elemental Skill DMG will be further increased by 25%. This effect will be cleared 2s after taking the field.",
+        "statEffect": "Increases Elemental Skill DMG by 25%."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Golden Troupe",
       "effect2p": "Increases Elemental Skill DMG by 20%.",
@@ -253,10 +270,15 @@
       "duration": 5,
       "statEffect": "ダメ+10%",
       "description": "元素スキルと元素爆発のダメージ+10%。装備者がダメージを受けた後の5秒間、上記強化効果が80%アップする。最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Vourukasha's Glow 4P: Effect",
+        "description": "Elemental Skill and Elemental Burst DMG will be increased by 10%. After the equipping character takes DMG, the aforementioned DMG Bonus is increased by 80% for 5s. This effect increase can have 5 stacks. The duration of each stack is counted independently. These effects can be triggered even when the equipping character is not on the field.",
+        "statEffect": "Elemental Skill and Elemental Burst DM..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Vourukasha's Glow",
       "effect2p": "HP +20%",
@@ -296,7 +318,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Husk of Opulent Dreams",
       "effect2p": "DEF +30%",
@@ -337,7 +359,9 @@
           "dataSource": {
             "duration": "for 3 seconds",
             "cooldown": "every 3.5 seconds"
-          }
+          },
+          "name": "Ocean-Hued Clam 4P: Bubble DMG",
+          "gcsimNote": "gcsim has no status key for this effect (instant effects, stat bonuses, healing, Energy, etc.). Not overwritten by gcsim results"
         },
         "timing": "conditional",
         "gcsimTarget": false,
@@ -351,10 +375,15 @@
       "cooldown": 3.5,
       "statEffect": "回復量を記録し3秒後に物理ダメージ発生",
       "description": "この聖遺物セットを装備したキャラクターがチーム内のキャラクターに治療を行うと、治療によるHP回復量（HP上限を超えた回復量も含む）を記録する海染の泡を生成する。海染の泡は3秒継続する。継続時間終了時、海染の泡は破裂し、周囲の敵に記録した回復量の90%分のダメージを与える（このダメージは感電や超電導などの元素反応と同じように計算されるが、元素熟知、キャラクターLv、または元素反応のダメージアップ効果の影響は受けない）。海染の泡は3.5秒毎に1回のみ生成可能。海染の泡が記録できる回復量は最大30000までとなり、HP上限超過分の回復量を含む。自身のチーム内に、海染の泡は1つのみ存在可能。この聖遺物セットを装備したキャラクターは待機中でも、この効果を発動できる。",
-      "color": "#38bdf8"
+      "color": "#38bdf8",
+      "en": {
+        "name": "Ocean-Hued Clam 4P: Bubble DMG",
+        "description": "When the character equipping this artifact set heals a character in the party, a Sea-Dyed Foam will appear for 3 seconds, accumulating the amount of HP recovered from healing (including overflow healing). At the end of the duration, the Sea-Dyed Foam will explode, dealing DMG to nearby opponents based on 90% of the accumulated healing. (This DMG is calculated similarly to Reactions such as Electro-Charged, and Superconduct, but is not affected by Elemental Mastery, Character Levels, or Reaction DMG Bonuses). Only one Sea-Dyed Foam can be produced every 3.5 seconds. Each Sea-Dyed Foam can accumulate up to 30,000 HP (including overflow healing). There can be no more than one Sea-Dyed Foam active at any given time. This effect can still be triggered even when the character who is using this artifact set is not on the field.",
+        "statEffect": "When the character equipping this arti..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Ocean-Hued Clam",
       "effect2p": "Healing Bonus +15%.",
@@ -392,7 +421,8 @@
           "statEffectSummary": "After the equipping character triggers...",
           "dataSource": {
             "duration": "for 15s"
-          }
+          },
+          "name": "Scroll of the Hero of Cinder City 4P: Elemental DMG +40%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -408,10 +438,15 @@
       "duration": 15,
       "statEffect": "夜魂性質反応後、関連元素ダメバフ+12%〜40%",
       "description": "装備者が自身の元素タイプの関連元素反応を起こした後、周囲のチーム全員の、該当元素反応の関連元素タイプのダメージ+12%、継続時間15秒。この効果を発動した時に、装備者が「夜魂の加護」状態にあった場合、周囲チーム全員の前述の元素タイプのダメージがさらに+28%、継続時間20秒。装備者が待機中でも、上記効果を発動できる。同名の聖遺物セットによるダメージアップ効果は重ね掛け不可。",
-      "color": "#fbbf24"
+      "color": "#fbbf24",
+      "en": {
+        "name": "Scroll of the Hero of Cinder City 4P: Elemental DMG +40%",
+        "description": "After the equipping character triggers a reaction related to their Elemental Type, all nearby party members gain a 12% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 15s. If the equipping character is in the Nightsoul's Blessing state when triggering this effect, all nearby party members gain an additional 28% Elemental DMG Bonus for the Elemental Types involved in the elemental reaction for 20s. The equipping character can trigger this effect while off-field, and the DMG bonus from Artifact Sets with the same name do not stack.",
+        "statEffect": "After the equipping character triggers..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Scroll of the Hero of Cinder City",
       "effect2p": "When a nearby party member triggers a Nightsoul Burst, the equipping character regenerates 6 Elemental Energy.",
@@ -471,10 +506,15 @@
       "duration": 10,
       "statEffect": "ダメ+40%",
       "description": "開花、超開花、烈開花反応によるダメージ+40%、月開花反応によるダメージ+10%。また、装備者自身が開花、超開花、烈開花、または月開花を起こした後、上記強化効果が25%アップする。継続時間10秒、最大4層まで重ねられ、1秒毎に最大1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#10b981"
+      "color": "#10b981",
+      "en": {
+        "name": "Flower of Paradise Lost 4P: Effect",
+        "description": "The equipping character's Bloom, Hyperbloom, and Burgeon reaction DMG are increased by 40%, and their Lunar-Bloom reaction DMG is increased by 10%. Additionally, after the equipping character triggers Bloom, Hyperbloom, Lunar-Bloom, or Burgeon, they will gain another 25% bonus to the effects mentioned prior. Each stack of this lasts 10s. Max 4 stacks simultaneously. This effect can only be triggered once per second. The character who equips this can still trigger its effects when not on the field.",
+        "statEffect": "DMG +10%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Flower of Paradise Lost",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -514,7 +554,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Retracing Bolide",
       "effect2p": "Increases Shield Strength by 35%.",
@@ -552,7 +592,8 @@
           "statEffectSummary": "ATK +20%",
           "dataSource": {
             "duration": "for 12s"
-          }
+          },
+          "name": "Noblesse Oblige 4P: Party ATK +20%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -567,10 +608,15 @@
       "duration": 12,
       "statEffect": "元素爆発発動後、チーム全員の攻撃力+20%",
       "description": "元素爆発を発動すると、チーム全員の攻撃力+20%、継続時間12秒、重ねがけ不可。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "Noblesse Oblige 4P: Party ATK +20%",
+        "description": "Using an Elemental Burst increases all party members' ATK by 20% for 12s. This effect cannot stack.",
+        "statEffect": "ATK +20%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Noblesse Oblige",
       "effect2p": "Elemental Burst DMG +20%",
@@ -627,10 +673,15 @@
       "duration": 3,
       "statEffect": "ダメ+20%",
       "description": "装備者が待機中の時、与える月反応のダメージ+20%。チーム全体の月兆レベルが満照以上の時、与える月反応のダメージがさらに+40%。上記効果は装備者がフィールド上に3秒間滞在すると解除される。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Aubade of Morningstar and Moon 4P: Effect",
+        "description": "When the equipping character is off-field, Lunar Reaction DMG is increased by 20%. When the party's Moonsign Level is at least Ascendant Gleam, Lunar Reaction DMG will be further increased by 40%. This effect will disappear after the equipping character is active for 3s.",
+        "statEffect": "DMG +20%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Aubade of Morningstar and Moon",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -691,10 +742,15 @@
       "cooldown": 8,
       "statEffect": "攻撃力+14% / 熟知+50",
       "description": "元素反応を起こした後の8秒間、装備キャラクターは、チーム内自身以外のキャラクターの元素タイプに応じて強化効果を獲得する。チームに装備キャラクターと同じ元素タイプのキャラクターが1名存在する毎に攻撃力+14%、異なる元素タイプのキャラクターが1名存在する毎に元素熟知+50。上記効果は、それぞれ最大でキャラクター3名までカウントされる。この効果は8秒毎に1回のみ発動可能。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#10b981"
+      "color": "#10b981",
+      "en": {
+        "name": "Gilded Dreams 4P: Effect",
+        "description": "Within 8s of triggering an Elemental Reaction, the character equipping this will obtain buffs based on the Elemental Type of the other party members. ATK is increased by 14% for each party member whose Elemental Type is the same as the equipping character, and Elemental Mastery is increased by 50 for every party member with a different Elemental Type. Each of the aforementioned buffs will count up to 3 characters. This effect can be triggered once every 8s. The character who equips this can still trigger its effects when not on the field.",
+        "statEffect": "ATK +14% / EM +50"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Gilded Dreams",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -748,10 +804,15 @@
       "duration": 10,
       "statEffect": "ダメ+50%",
       "description": "敵を倒した後の10秒間、重撃の際にスタミナを消費しない。また、重撃のダメージ+50%。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Bloodstained Chivalry 4P: Effect",
+        "description": "After defeating an opponent, increases Charged Attack DMG by 50%, and reduces its Stamina cost to 0 for 10s.",
+        "statEffect": "After defeating an opponent, increases..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Bloodstained Chivalry",
       "effect2p": "Physical DMG +25%",
@@ -808,10 +869,15 @@
       "duration": 8,
       "statEffect": "熟知+60 / ダメ+10%",
       "description": "元素ダメージを与えた時、8秒間継続する「月輝明光・崇拝」効果を獲得する。「月輝明光・崇拝」：チームの月兆が初照/満照の時、チーム全員の元素熟知+60/120。装備者が待機中でも、上記効果を発動できる。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
-      "color": "#10b981"
+      "color": "#10b981",
+      "en": {
+        "name": "Silken Moon's Serenade 4P: Effect",
+        "description": "When dealing Elemental DMG, gain the Gleaming Moon: Devotion effect for 8s: Increases all party members' Elemental Mastery by 60/120 when the party's Moonsign is Nascent Gleam/Ascendant Gleam. The equipping character can trigger this effect while off-field. All party members' Lunar Reaction DMG is increased by 10% for each different Gleaming Moon effect that party members have. Effects from Gleaming Moon cannot stack.",
+        "statEffect": "DMG +10%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Silken Moon's Serenade",
       "effect2p": "Energy Recharge +20%.",
@@ -851,7 +917,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Gladiator's Finale",
       "effect2p": "ATK +18%.",
@@ -906,10 +972,15 @@
       "duration": 10,
       "statEffect": "会心率+16% / ダメ+40%",
       "description": "装備者が星拡散反応を起こした後の10秒間、会心率+16%、星拡散反応ダメージ+40%。",
-      "color": "#14b8a6"
+      "color": "#14b8a6",
+      "en": {
+        "name": "Scarlet Proof 4P: Effect",
+        "description": "Increases the equipping character's CRIT Rate by 16%, and their Stellar Swirl reaction DMG dealt by 40%, for 10s after they trigger a Stellar Swirl reaction.",
+        "statEffect": "Increases the equipping character's CR..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Scarlet Proof",
       "effect2p": "ATK +18%.",
@@ -949,7 +1020,8 @@
           "statEffectSummary": "CRIT Rate +40%",
           "dataSource": {
             "duration": "for 6s"
-          }
+          },
+          "name": "Obsidian Codex 4P: CRIT Rate +40%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -968,10 +1040,15 @@
       "cooldown": 1,
       "statEffect": "夜魂値消費時、会心率+40%",
       "description": "装備者がフィールド上で夜魂値を1消費すると、会心率+40%、継続時間6秒。この効果は1秒毎に1回のみ発動可能。",
-      "color": "#a855f7"
+      "color": "#a855f7",
+      "en": {
+        "name": "Obsidian Codex 4P: CRIT Rate +40%",
+        "description": "After the equipping character consumes 1 Nightsoul point while on the field, CRIT Rate increases by 40% for 6s. This effect can trigger once every second.",
+        "statEffect": "CRIT Rate +40%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Obsidian Codex",
       "effect2p": "While the equipping character is in Nightsoul's Blessing and is on the field, their DMG dealt is increased by 15%.",
@@ -1026,10 +1103,15 @@
       "duration": 15,
       "statEffect": "ダメ+40%",
       "description": "重撃が敵に命中すると、該当キャラクターの通常攻撃の攻撃速度+10%、通常攻撃、重撃および落下攻撃ダメージ+40%、継続時間15秒。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Desert Pavilion Chronicle 4P: Effect",
+        "description": "When Charged Attacks hit opponents, the equipping character's Normal Attack SPD will increase by 10% while Normal, Charged, and Plunging Attack DMG will increase by 40% for 15s.",
+        "statEffect": "When Charged Attacks hit opponents, th..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Desert Pavilion Chronicle",
       "effect2p": "Anemo DMG Bonus +15%",
@@ -1068,7 +1150,8 @@
           "statEffectSummary": "When the equipping character heals a p...",
           "dataSource": {
             "duration": "for 6s"
-          }
+          },
+          "name": "Song of Days Past 4P: Waves of Days Past"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1085,10 +1168,15 @@
       "cooldown": 6,
       "statEffect": "回復記録後、通常重撃スキル爆発の基礎ダメ加算",
       "description": "装備者がチームにいるキャラクターのHPを回復した時、継続時間6秒の「渇望」効果が発動し、HP回復量（HP上限を超えた回復量も含む）を記録する。継続時間終了時、「渇望」効果は「かの時の潮」効果に変化する。「かの時の潮」効果発動中、フィールド上にいるチーム内の自身キャラクターの通常攻撃、重撃、落下攻撃、元素スキル、元素爆発が敵に命中すると、「渇望」効果で記録した回復量の8%分を基に与えるダメージをアップする。「かの時の潮」効果は、5回発動、または10秒後にクリアされる。1回の「渇望」効果が記録する回復量は最大15000ポイントまで。なお、「渇望」は1つのみ存在でき、複数の装備者の与える回復量を記録可能。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#fb7185"
+      "color": "#fb7185",
+      "en": {
+        "name": "Song of Days Past 4P: Waves of Days Past",
+        "description": "When the equipping character heals a party member, the Yearning effect will be created for 6s, which records the total amount of healing provided (including overflow healing). When the duration expires, the Yearning effect will be transformed into the \"Waves of Days Past\" effect: When your active party member hits an opponent with a Normal Attack, Charged Attack, Plunging Attack, Elemental Skill, or Elemental Burst, the DMG dealt will be increased by 8% of the total healing amount recorded by the Yearning effect. The \"Waves of Days Past\" effect is removed after it has taken effect 5 times or after 10s. A single instance of the Yearning effect can record up to 15,000 healing, and only a single instance can exist at once, but it can record the healing from multiple equipping characters. Equipping characters on standby can still trigger this effect.",
+        "statEffect": "When the equipping character heals a p..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Song of Days Past",
       "effect2p": "Healing Bonus +15%.",
@@ -1142,10 +1230,15 @@
       "duration": 10,
       "statEffect": "ダメ+20%",
       "description": "元素スキルを発動した後の10秒間、岩元素ダメージ+20%。結晶反応によるシールド状態にある時、または周囲に月結晶反応で生成された月籠が存在する時、上記強化効果が150%アップする。追加された効果量は、条件を満たさなくなった1秒後に解除される。",
-      "color": "#f59e0b"
+      "color": "#f59e0b",
+      "en": {
+        "name": "Nighttime Whispers in the Echoing Woods 4P: Effect",
+        "description": "After using an Elemental Skill, gain a 20% Geo DMG Bonus for 10s. When under a shield granted by the Crystallize reaction, or when Moondrifts formed by Lunar-Crystallize reactions are nearby, the above effect is increased by 150%. When these conditions are no longer met, this additional increase disappears after 1s.",
+        "statEffect": "After using an Elemental Skill, gain a..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Nighttime Whispers in the Echoing Woods",
       "effect2p": "ATK +18%.",
@@ -1183,7 +1276,8 @@
           "statEffectSummary": "After Elemental Skills or Bursts hit o...",
           "dataSource": {
             "duration": "for 8s"
-          }
+          },
+          "name": "Deepwood Memories 4P: Dendro RES -30%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1198,10 +1292,15 @@
       "duration": 8,
       "statEffect": "スキルまたは爆発命中で敵の草元素耐性-30%",
       "description": "元素スキルまたは元素爆発が敵に命中すると、その敵の草元素耐性-30%、継続時間8秒。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#10b981"
+      "color": "#10b981",
+      "en": {
+        "name": "Deepwood Memories 4P: Dendro RES -30%",
+        "description": "After Elemental Skills or Bursts hit opponents, the targets' Dendro RES will be decreased by 30% for 8s. This effect can be triggered even if the equipping character is not on the field.",
+        "statEffect": "After Elemental Skills or Bursts hit o..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Deepwood Memories",
       "effect2p": "Dendro DMG Bonus +15%.",
@@ -1259,10 +1358,15 @@
       "duration": 6,
       "statEffect": "ダメ+60%",
       "description": "装備者の元素エネルギーが0の時、通常攻撃ダメージ+60%、元素爆発ダメージ+60%。装備者の通常攻撃がダメージを与えた後、上記元素爆発ダメージアップ効果は6秒間無効になる。装備者の元素爆発がダメージを与えた後、上記通常攻撃ダメージアップ効果は6秒間無効になる。キャラクターが待機中でも発動できる。",
-      "color": "#c084fc"
+      "color": "#c084fc",
+      "en": {
+        "name": "Finale of the Deep Galleries 4P: Effect",
+        "description": "When the equipping character has 0 Elemental Energy, Normal Attack DMG is increased by 60% and Elemental Burst DMG is increased by 60%. After the equipping character deals Normal Attack DMG, the aforementioned Elemental Burst effect will stop applying for 6s. After the equipping character deals Elemental Burst DMG, the aforementioned Normal Attack effect will stop applying for 6s. This effect can trigger even if the equipping character is off the field.",
+        "statEffect": "DMG +60%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Finale of the Deep Galleries",
       "effect2p": "Cryo DMG Bonus +15%",
@@ -1323,10 +1427,15 @@
       "duration": 8,
       "statEffect": "攻撃力+7% / ダメ+4%",
       "description": "通常攻撃、重撃、落下攻撃、元素スキル、または元素爆発が敵に命中すると、8秒間継続する「鏡中の水仙」効果を1層獲得する。1/2/3層以上の「鏡中の水仙」効果を持つ時、それぞれ攻撃力+7%/16%/25%、水元素ダメージ+4%/9%/15%。通常攻撃、重撃、落下攻撃、元素スキル、元素爆発による「鏡中の水仙」効果はそれぞれ独立してカウントされる。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "Nymph's Dream 4P: Effect",
+        "description": "After Normal, Charged, and Plunging Attacks, Elemental Skills, and Elemental Bursts hit opponents, 1 stack of Mirrored Nymph will be triggered, lasting 8s. When under the effect of 1, 2, or 3 or more Mirrored Nymph stacks, ATK will be increased by 7%/16%/25%, and Hydro DMG Bonus will be increased by 4%/9%/15%. Mirrored Nymph stacks created by Normal, Charged, and Plunging Attacks, Elemental Skills, and Elemental Bursts exist independently.",
+        "statEffect": "After Normal, Charged, and Plunging At..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Nymph's Dream",
       "effect2p": "Hydro DMG Bonus +15%",
@@ -1364,7 +1473,8 @@
           "statEffectSummary": "Increases Swirl reaction DMG dealt by ...",
           "dataSource": {
             "duration": "for 10s"
-          }
+          },
+          "name": "Viridescent Venerer 4P: Swirled element RES -40%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1382,10 +1492,15 @@
       "duration": 10,
       "statEffect": "拡散された元素の敵耐性-40%",
       "description": "拡散反応によるダメージ+60%、星拡散反応によるダメージ+20%。拡散された元素タイプに応じて、影響を受けた敵の当該元素耐性-40%。継続時間10秒。敵に対して星拡散反応を起こした時も、その氷元素耐性-40%。同じ元素タイプの耐性ダウン効果は重ね掛けできない。",
-      "color": "#34d399"
+      "color": "#34d399",
+      "en": {
+        "name": "Viridescent Venerer 4P: Swirled element RES -40%",
+        "description": "Increases Swirl reaction DMG dealt by 60%, and Stellar Swirl reaction DMG dealt by 20%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s. Upon triggering a Stellar Swirl in the opponent, will also decrease their Cryo RES by 40%. RES debuffs of the same elemental type do not stack.",
+        "statEffect": "Increases Swirl reaction DMG dealt by ..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Viridescent Venerer",
       "effect2p": "Anemo DMG Bonus +15%",
@@ -1425,7 +1540,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Unfinished Reverie",
       "effect2p": "ATK +18%.",
@@ -1465,7 +1580,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Emblem of Severed Fate",
       "effect2p": "Energy Recharge +20%",
@@ -1503,7 +1618,8 @@
           "statEffectSummary": "When an Elemental Skill hits an oppone...",
           "dataSource": {
             "duration": "for 3s"
-          }
+          },
+          "name": "Tenacity of the Millelith 4P: Party ATK +20%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1518,10 +1634,15 @@
       "duration": 3,
       "statEffect": "スキル命中でチーム全員攻撃力+20% / シールド強化+30%",
       "description": "元素スキルが敵に命中すると、周囲のチーム全員の攻撃力+20%、シールド強化+30%、持続時間3秒。この効果は0.5秒毎に1回のみ発動可能。この聖遺物セットを装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#f59e0b"
+      "color": "#f59e0b",
+      "en": {
+        "name": "Tenacity of the Millelith 4P: Party ATK +20%",
+        "description": "When an Elemental Skill hits an opponent, the ATK of all nearby party members is increased by 20% and their Shield Strength is increased by 30% for 3s. This effect can be triggered once every 0.5s. This effect can still be triggered even when the character who is using this artifact set is not on the field.",
+        "statEffect": "When an Elemental Skill hits an oppone..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Tenacity of the Millelith",
       "effect2p": "HP +20%",
@@ -1575,10 +1696,15 @@
       "duration": 7,
       "statEffect": "攻撃力+9%",
       "description": "元素スキルが敵に命中すると、攻撃力+9%。持続時間7秒、最大2重まで、0.3秒毎に1回のみ発動可能。2重まで重ねると、2セットの効果が2倍になる。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "Pale Flame 4P: Effect",
+        "description": "When an Elemental Skill hits an opponent, ATK is increased by 9% for 7s. This effect stacks up to 2 times and can be triggered once every 0.3s. Once 2 stacks are reached, the 2-set effect is increased by 100%.",
+        "statEffect": "ATK +9%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Pale Flame",
       "effect2p": "Physical DMG is increased by 25%.",
@@ -1618,7 +1744,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Wanderer's Troupe",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -1656,7 +1782,8 @@
           "statEffectSummary": "After using an Elemental Burst, this c...",
           "dataSource": {
             "duration": "for 16s"
-          }
+          },
+          "name": "Vermillion Hereafter 4P: Nascent Light (ATK up)"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1671,10 +1798,15 @@
       "duration": 16,
       "statEffect": "爆発後HP減少で攻撃力最大+66%",
       "description": "元素爆発を発動すると、継続時間16秒の「潜光」効果が発動する。「潜光」：攻撃力+8%、キャラクターがHPを失うたびに攻撃力がさらに10%アップする。HPの損失による攻撃力アップ効果は0.8秒毎に1回のみ発動でき、最大4回重ね掛けできる。「潜光」効果はキャラクターが戦闘不能、または退場する時に解除される。「潜光」効果の継続時間中に再び元素爆発を発動すると、既存の「潜光」効果が先にクリアされる。",
-      "color": "#34d399"
+      "color": "#34d399",
+      "en": {
+        "name": "Vermillion Hereafter 4P: Nascent Light (ATK up)",
+        "description": "After using an Elemental Burst, this character will gain the Nascent Light effect, increasing their ATK by 8% for 16s. When the character's HP decreases, their ATK will further increase by 10%. This further increase can occur this way a maximum of 4 times. This effect can be triggered once every 0.8s. Nascent Light will be dispelled when the character leaves the field. If an Elemental Burst is used again during the duration of Nascent Light, the original Nascent Light will be dispelled.",
+        "statEffect": "After using an Elemental Burst, this c..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Vermillion Hereafter",
       "effect2p": "ATK +18%.",
@@ -1736,10 +1868,15 @@
       "cooldown": 1,
       "statEffect": "ダメ+15%",
       "description": "装備者の落下攻撃/重撃/元素スキルが敵に命中した後、「永遠に輝く流光」効果を1/2/2層獲得する。落下攻撃、重撃、または元素スキルによるこの効果はそれぞれ1秒毎に1回のみ発動可能。「永遠に輝く流光」：落下攻撃ダメージ+15%、継続時間6秒、最大5層まで重ね掛け可能。継続時間は層ごとに独立してカウントされる。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Long Night's Oath 4P: Effect",
+        "description": "After the equipping character's Plunging Attack/Charged Attack/Elemental Skill hits an opponent, they will gain 1/2/2 stack(s) of \"Radiance Everlasting.\" Plunging Attacks, Charged Attacks, or Elemental Skills can each trigger this effect once every 1s. Radiance Everlasting: Plunging Attacks deal 15% increased DMG for 6s. Max 5 stacks. Each stack's duration is counted independently.",
+        "statEffect": "After the equipping character's Plungi..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Long Night's Oath",
       "effect2p": "Plunging Attack DMG increased by 25%.",
@@ -1793,10 +1930,15 @@
       "duration": 15,
       "statEffect": "ダメ+30%",
       "description": "元素スキルを発動した後の15秒間、通常攻撃と重撃のダメージ+30%。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Heart of Depth 4P: Effect",
+        "description": "After using Elemental Skill, increases Normal Attack and Charged Attack DMG by 30% for 15s.",
+        "statEffect": "After using Elemental Skill, increases..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Heart of Depth",
       "effect2p": "Hydro DMG Bonus +15%",
@@ -1834,7 +1976,8 @@
           "statEffectSummary": "DMG +50%",
           "dataSource": {
             "duration": "for 10s"
-          }
+          },
+          "name": "Shimenawa's Reminiscence 4P: Normal/Charged/Plunging DMG +50%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -1852,10 +1995,15 @@
       "duration": 10,
       "statEffect": "スキル時エネルギー15消費し通常重撃落下ダメ+50%",
       "description": "元素スキルを発動した時、キャラクターの元素エネルギーが15以上の場合、元素エネルギーを15消費し、次の10秒間通常攻撃、重撃、落下攻撃ダメージ+50%。継続時間中この効果は再発動できない。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "Shimenawa's Reminiscence 4P: Normal/Charged/Plunging DMG +50%",
+        "description": "When casting an Elemental Skill, if the character has 15 or more Energy, they lose 15 Energy and Normal/Charged/Plunging Attack DMG is increased by 50% for 10s. This effect will not trigger again during that duration.",
+        "statEffect": "DMG +50%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Shimenawa's Reminiscence",
       "effect2p": "ATK +18%.",
@@ -1914,10 +2062,15 @@
       "duration": 20,
       "statEffect": "ダメ+20%",
       "description": "装備者が「魔女の課題」をクリアしている場合、元素スキルを発動すると、「天光の導き」効果を獲得する。この効果は装備者の元素タイプに基づき、付近にいるチーム全員に当該元素ダメージ+20%のバフを付与する。継続時間20秒。装備者が待機中でも発動可能。同じ聖遺物セットによるダメージアップ効果は重ね掛けできない。\n・チームが「魔導秘儀」効果を持っている時、「天光の導き」効果は「浮世の頌歌」に強化される。装備者の元素タイプに加え、フィールド上にいる自身のキャラクターの元素タイプに基づき、周囲のチーム全員に当該元素のダメージアップ効果を付与する。さらに、上記2種類の元素ダメージアップ効果は40%までアップする。同じ元素タイプの元素ダメージアップ効果は重ね掛けできない。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Celestial Gift 4P: Effect",
+        "description": "If the equipping character has completed Witch's Homework, after they use an Elemental Skill, they gain \"Light's Guidance\" for 20s: All nearby party members gain a 20% Elemental DMG Bonus corresponding to the equipping character's Elemental Type. The equipping character can trigger this effect while off-field. DMG Bonuses provided by Artifact Sets with the same name do not stack.\n· When your party has the Hexerei: Secret Rite effect, Light's Guidance is upgraded to \"Mortal Hymn\": All nearby party members gain a 40% Elemental DMG Bonus corresponding to both the equipping character and the current active party member's Elemental Type instead. If both characters have the same Elemental Type, these bonuses will not stack.",
+        "statEffect": "If the equipping character has complet..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Celestial Gift",
       "effect2p": "Energy Recharge +20%.",
@@ -1974,10 +2127,15 @@
       "duration": 4,
       "statEffect": "会心率+15% / ダメ+10%",
       "description": "付近にいるチーム内キャラクターが月反応を起こした時に装備者がフィールドにいる場合、4秒間継続する「月輝明光・蓄念」効果を獲得する。「月輝明光・蓄念」：チームの月兆が初照/満照の時、会心率+15%/30%。チーム内キャラクターの「月輝明光」効果が1種類存在するごとに、チーム内キャラクターが起こす月反応のダメージ+10%。「月輝明光」によって生じた効果は重ね掛け不可。",
-      "color": "#fbbf24"
+      "color": "#fbbf24",
+      "en": {
+        "name": "Night of the Sky's Unveiling 4P: Effect",
+        "description": "When nearby party members trigger Lunar Reactions, if the equipping character is on the field, gain the Gleaming Moon: Intent effect for 4s: Increases CRIT Rate by 15%/30% when the party's Moonsign is Nascent Gleam/Ascendant Gleam. All party members' Lunar Reaction DMG is increased by 10% for each different Gleaming Moon effect that party members have. Effects from Gleaming Moon cannot stack.",
+        "statEffect": "DMG +10%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Night of the Sky's Unveiling",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -2034,10 +2192,15 @@
       "duration": 10,
       "statEffect": "ダメ+40%",
       "description": "過負荷、燃焼、烈開花反応によるダメージ+40%。蒸発、溶解反応による加算効果+15%。元素スキルを発動した10秒間、2セットの効果が50%アップし、最大3重まで。",
-      "color": "#10b981"
+      "color": "#10b981",
+      "en": {
+        "name": "Crimson Witch of Flames 4P: Effect",
+        "description": "Increases Overloaded, Burning, and Burgeon DMG by 40%. Increases Vaporize and Melt DMG by 15%. Using Elemental Skill increases the 2-Piece Set Bonus by 50% of its starting value for 10s. Max 3 stacks.",
+        "statEffect": "Increases Overloaded, Burning, and Bur..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Crimson Witch of Flames",
       "effect2p": "Pyro DMG Bonus +15%",
@@ -2077,7 +2240,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Blizzard Strayer",
       "effect2p": "Cryo DMG Bonus +15%",
@@ -2132,10 +2295,15 @@
       "duration": 6,
       "statEffect": "攻撃力+25% / 会心率+20%",
       "description": "通常攻撃、重撃、元素スキル、または元素爆発が敵に命中すると、継続時間6秒の「風と牧歌の寵愛」を獲得する。「風と牧歌の寵愛」：攻撃力+25%。装備者が「魔女の課題」をクリアしている場合、「風と牧歌の寵愛」は「風と牧歌の決意」に強化され、「魔女の課題」をクリアした装備者の会心率+20%。装備したキャラクターが待機している場合にも効果を発動できる。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "A Day Carved From Rising Winds 4P: Effect",
+        "description": "After a Normal Attack, Charged Attack, Elemental Skill, or Elemental Burst hits an opponent, gain the Blessing of Pastoral Winds effect for 6s: ATK is increased by 25%. If the equipping character has completed Witch's Homework, Blessing of Pastoral Winds will be upgraded to Resolve of Pastoral Winds, which additionally increases the CRIT Rate of the equipping character by 20%. This effect can be triggered even when the character is off-field.",
+        "statEffect": "ATK +25%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "A Day Carved From Rising Winds",
       "effect2p": "ATK +18%.",
@@ -2173,7 +2341,8 @@
           "statEffectSummary": "Upon obtaining an Elemental Shard crea...",
           "dataSource": {
             "duration": "for 10s"
-          }
+          },
+          "name": "Archaic Petra 4P: Elemental DMG +35%"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -2188,10 +2357,15 @@
       "duration": 10,
       "statEffect": "結晶反応の欠片を拾うと、該当元素ダメ+35%",
       "description": "結晶反応で形成された欠片を獲得、または月結晶反応を起こすと、チーム全員の該当元素ダメージ+35%、継続時間10秒。元素ダメージアップは1種類のみ獲得可能。",
-      "color": "#f59e0b"
+      "color": "#f59e0b",
+      "en": {
+        "name": "Archaic Petra 4P: Elemental DMG +35%",
+        "description": "Upon obtaining an Elemental Shard created through Crystallize or triggering a Lunar-Crystallize reaction, all party members gain a 35% DMG Bonus for that particular element for 10s. Only one form of Elemental DMG Bonus can be gained in this manner at any one time.",
+        "statEffect": "Upon obtaining an Elemental Shard crea..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Archaic Petra",
       "effect2p": "Gain a 15% Geo DMG Bonus.",
@@ -2213,7 +2387,7 @@
     "effect4p": "通常攻撃が敵に命中すると、36%の確率で「幽谷祭祀」が発動する。「幽谷祭祀」：通常攻撃ダメージが攻撃力70%分アップする。この効果は通常攻撃でダメージを与えた0.05秒後にクリアされる。通常攻撃後に「幽谷祭祀」が発動しなかった場合、次回の発動確率+20%。発動判定は0.2秒毎に1回のみ行われる。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Echoes of an Offering",
       "effect2p": "ATK +18%.",
@@ -2253,7 +2427,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Thundering Fury",
       "effect2p": "Electro DMG Bonus +15%",
@@ -2293,7 +2467,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Thundersoother",
       "effect2p": "Electro RES increased by 40%.",
@@ -2333,7 +2507,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Lavawalker",
       "effect2p": "Pyro RES increased by 40%.",
@@ -2388,10 +2562,15 @@
       "duration": 12,
       "statEffect": "攻撃力+12% / ダメ+50%",
       "description": "装備者が星反応を起こす、または星反応ダメージを与えた後の12秒間、攻撃力+12%、近くにいるチーム内のすべてのキャラクターが与える星反応ダメージ+50%。装備したキャラクターが待機している場合にも効果を発動できる。同じ名前の聖遺物セットによるダメージアップ効果は重ね掛けできない。",
-      "color": "#f87171"
+      "color": "#f87171",
+      "en": {
+        "name": "Heart of the Furnace 4P: Effect",
+        "description": "Increases the equipping character's ATK by 12% for 12s when they trigger a Stellar Glimmer reaction or deal Stellar Glimmer reaction DMG. Also increases Stellar Glimmer reaction DMG dealt by all nearby party members by 50%. The above effects can trigger even when the equipping character is not on the field, and the DMG bonus from multiple Artifact Sets with the same name do not stack.",
+        "statEffect": "ATK +12%"
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Heart of the Furnace",
       "effect2p": "ATK +18%.",
@@ -2445,10 +2624,15 @@
       "duration": 6,
       "statEffect": "ダメ+18%",
       "description": "命の契約の数値が増減する時、キャラクターの与えるダメージ+18%、継続時間6秒、最大3層まで重ね掛け可能。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Fragment of Harmonic Whimsy 4P: Effect",
+        "description": "When the value of a Bond of Life increases or decreases, this character deals 18% increased DMG for 6s. Max 3 stacks.",
+        "statEffect": "When the value of a Bond of Life incre..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Fragment of Harmonic Whimsy",
       "effect2p": "ATK +18%.",
@@ -2470,9 +2654,11 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
-      "name": "Prayers for Illumination"
+      "name": "Prayers for Illumination",
+      "effect2p": "No 2-piece effect",
+      "effect4p": "No 4-piece effect"
     }
   },
   {
@@ -2522,10 +2708,15 @@
       "cooldown": 3,
       "statEffect": "元素オーブまたは元素粒子を獲得した時、チーム...",
       "description": "元素オーブまたは元素粒子を獲得した時、チーム内全ての弓と法器キャラの元素エネルギーが3回復する。3秒毎に1回のみ発動可能。",
-      "color": "#c084fc"
+      "color": "#c084fc",
+      "en": {
+        "name": "Scholar 4P: Effect",
+        "description": "Gaining Elemental Particles or Orbs gives 3 Energy to all party members who have a bow or a catalyst equipped. Can only occur once every 3s.",
+        "statEffect": "Gaining Elemental Particles or Orbs gi..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Scholar",
       "effect2p": "Energy Recharge +20%",
@@ -2567,7 +2758,8 @@
           "dataSource": {
             "duration": "for 10s",
             "cooldown": "once every 10s"
-          }
+          },
+          "gcsimNote": "Not implemented in gcsim"
         },
         "timing": "conditional",
         "gcsimTarget": false,
@@ -2581,10 +2773,15 @@
       "cooldown": 10,
       "statEffect": "元素ダメージを受けると、その元素の耐性+30...",
       "description": "元素ダメージを受けると、その元素の耐性+30%、継続時間10秒。10秒毎に1回のみ発動可能。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Tiny Miracle 4P: Effect",
+        "description": "Incoming elemental DMG increases corresponding Elemental RES by 30% for 10s. Can only occur once every 10s.",
+        "statEffect": "Incoming elemental DMG increases corre..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Tiny Miracle",
       "effect2p": "All Elemental RES increased by 20%.",
@@ -2621,7 +2818,8 @@
           "statEffectSummary": "Upon triggering an Elemental Reaction,...",
           "dataSource": {
             "duration": "for 8s"
-          }
+          },
+          "name": "Instructor 4P: Party EM +120"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -2636,10 +2834,15 @@
       "duration": 8,
       "statEffect": "元素反応を起こすとチーム全員の元素熟知+120",
       "description": "元素反応を引き起こした後、チーム全員の元素熟知+120、継続時間8秒。",
-      "color": "#38bdf8"
+      "color": "#38bdf8",
+      "en": {
+        "name": "Instructor 4P: Party EM +120",
+        "description": "Upon triggering an Elemental Reaction, increases all party members' Elemental Mastery by 120 for 8s.",
+        "statEffect": "Upon triggering an Elemental Reaction,..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Instructor",
       "effect2p": "Increases Elemental Mastery by 80.",
@@ -2679,7 +2882,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Berserker",
       "effect2p": "CRIT Rate +12%",
@@ -2701,7 +2904,7 @@
     "effect4p": "チーム内の自身のキャラクターの元素タイプ1種類につき、自身にその元素の耐性+30%。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Defender's Will",
       "effect2p": "DEF +30%",
@@ -2723,9 +2926,11 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
-      "name": "Prayers for Destiny"
+      "name": "Prayers for Destiny",
+      "effect2p": "No 2-piece effect",
+      "effect4p": "No 4-piece effect"
     }
   },
   {
@@ -2775,10 +2980,15 @@
       "cooldown": 15,
       "statEffect": "敵を倒した時、100%の確率で元素スキルのク...",
       "description": "敵を倒した時、100%の確率で元素スキルのクールタイムをリセットする。15秒に1回のみ発動可能。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Gambler 4P: Effect",
+        "description": "Defeating an opponent has a 100% chance to remove Elemental Skill CD. Can only occur once every 15s.",
+        "statEffect": "Defeating an opponent has a 100% chanc..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Gambler",
       "effect2p": "Increases Elemental Skill DMG by 20%.",
@@ -2800,9 +3010,11 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
-      "name": "Prayers to Springtime"
+      "name": "Prayers to Springtime",
+      "effect2p": "No 2-piece effect",
+      "effect4p": "No 4-piece effect"
     }
   },
   {
@@ -2851,10 +3063,15 @@
       "duration": 8,
       "statEffect": "ダメ+25%",
       "description": "元素スキル発動後、通常攻撃と重撃ダメージ+25%、継続時間8秒。",
-      "color": "#6366f1"
+      "color": "#6366f1",
+      "en": {
+        "name": "Martial Artist 4P: Effect",
+        "description": "After using Elemental Skill, increases Normal Attack and Charged Attack DMG by 25% for 8s.",
+        "statEffect": "After using Elemental Skill, increases..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Martial Artist",
       "effect2p": "Normal and Charged Attack DMG +15%",
@@ -2892,7 +3109,8 @@
           "statEffectSummary": "Using an Elemental Burst regenerates 2...",
           "dataSource": {
             "duration": "for 6s"
-          }
+          },
+          "name": "The Exile 4P: Party Energy regen"
         },
         "timing": "computed",
         "gcsimTarget": true,
@@ -2907,10 +3125,15 @@
       "duration": 6,
       "statEffect": "爆発発動後6秒間、他キャラのエネルギーを計6回復",
       "description": "元素爆発を発動すると、2秒毎にチーム全員（自分を除く）の元素エネルギーを2回復する、継続時間6秒。重ね掛け不可。",
-      "color": "#818cf8"
+      "color": "#818cf8",
+      "en": {
+        "name": "The Exile 4P: Party Energy regen",
+        "description": "Using an Elemental Burst regenerates 2 Energy for all party members (excluding the wearer) every 2s for 6s. This effect cannot stack.",
+        "statEffect": "Using an Elemental Burst regenerates 2..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "The Exile",
       "effect2p": "Energy Recharge +20%",
@@ -2950,7 +3173,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Brave Heart",
       "effect2p": "ATK +18%.",
@@ -2972,9 +3195,11 @@
     "effect4p": "4セット効果なし",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
-      "name": "Prayers for Wisdom"
+      "name": "Prayers for Wisdom",
+      "effect2p": "No 2-piece effect",
+      "effect4p": "No 4-piece effect"
     }
   },
   {
@@ -3009,7 +3234,7 @@
       }
     ],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Resolution of Sojourner",
       "effect2p": "ATK +18%.",
@@ -3032,7 +3257,7 @@
     "effect4p": "元素爆発を発動すると、HPを20%回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Traveling Doctor",
       "effect2p": "Increases incoming healing by 20%.",
@@ -3054,7 +3279,7 @@
     "effect4p": "モラを拾得すると、HPを300回復する。",
     "buffEffects": [],
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Lucky Dog",
       "effect2p": "DEF increased by 100.",
@@ -3093,7 +3318,8 @@
           "statEffectSummary": "Opening a chest regenerates 30% Max HP...",
           "dataSource": {
             "duration": "5s"
-          }
+          },
+          "gcsimNote": "Not implemented in gcsim"
         },
         "timing": "conditional",
         "gcsimTarget": false,
@@ -3106,10 +3332,15 @@
       "duration": 5,
       "statEffect": "宝箱を開けた後5秒間、HPの30%を徐々に回...",
       "description": "宝箱を開けた後5秒間、HPの30%を徐々に回復する。",
-      "color": "#38bdf8"
+      "color": "#38bdf8",
+      "en": {
+        "name": "Adventurer 4P: Effect",
+        "description": "Opening a chest regenerates 30% Max HP over 5s.",
+        "statEffect": "Opening a chest regenerates 30% Max HP..."
+      }
     },
     "isCustom": false,
-    "updatedAt": "2026/10/29 13:37:00",
+    "updatedAt": "2026/10/29 14:41:45",
     "en": {
       "name": "Adventurer",
       "effect2p": "Max HP increased by 1,000.",

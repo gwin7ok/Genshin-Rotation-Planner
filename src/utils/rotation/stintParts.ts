@@ -4,7 +4,7 @@ import { getAvailableBuffsForCharacter, BuffCategory } from '../buffUtils';
 import { type CooldownEvent } from './cooldownCheck';
 import type { GenshinDatabase } from '../../types/database';
 import { t } from '../../i18n';
-import { charName, loc } from '../../i18n/loc';
+import { charName, loc, triggerName } from '../../i18n/loc';
 
 /** 出場の終わりで、交代の内部 CT（約 1 秒）に近い素早い交代を、情報として知らせる */
 export function warnQuickSwap(a: { rawStints: Stint[]; sIdx: number; rawStint: Stint; char: CharacterConfig; stintStartTime: number; stintDuration: number; validationIssues: ValidationIssue[] }): void {
@@ -46,7 +46,7 @@ export function addPassiveTriggers(a: { char: CharacterConfig; rawStint: Stint; 
 
     const buffColor = def?.color || (category === 'weapon' ? '#0284c7' : category === 'artifact' ? '#c084fc' : char.color);
     // 表示名・説明（D255）: 保存されている名前が定義の名前と同じなら、表示の言語の名前（キーごとに分けた名前などは、保存されている名前）
-    const shownName = def && trigger.name === def.name ? loc(def, 'name') : trigger.name;
+    const shownName = triggerName(def, trigger);
     const shownDescription = def?.description ? loc(def, 'description') : trigger.name;
 
     passiveSpans.push({

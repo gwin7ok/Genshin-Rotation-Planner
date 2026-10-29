@@ -44,7 +44,7 @@ import { DatabaseWeaponCardItem } from './database/DatabaseWeaponCardItem';
 import { EditCharacterSubModal } from './database/EditCharacterSubModal';
 import { EditWeaponSubModal } from './database/EditWeaponSubModal';
 import { EditArtifactSubModal } from './database/EditArtifactSubModal';
-import { charName, loc } from '../i18n/loc';
+import { charName, loc, frameSourceOf } from '../i18n/loc';
 
 interface DatabaseManagerModalProps {
   isOpen: boolean;
@@ -776,11 +776,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <div className="col-span-2">
                           <span className="text-slate-400">{t('database:manager.motion')}</span>{' '}
                           {char.availableActions.some(a => a.frames) ? (
-                            <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? t('database:manager.framesUnreleasedTitle', { source: char.source.frameSource }) : undefined}>
-                              {char.source?.frameSource ? t('database:manager.source', { source: char.source.frameSource }) : t('database:manager.gcsimFrames')} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
+                            <strong className={char.source?.frameSource ? 'text-amber-300' : 'text-emerald-300'} title={char.source?.frameSource ? t('database:manager.framesUnreleasedTitle', { source: frameSourceOf(char) }) : undefined}>
+                              {char.source?.frameSource ? t('database:manager.source', { source: frameSourceOf(char) }) : t('database:manager.gcsimFrames')} ({char.availableActions.filter(a => a.frames).length}/{char.availableActions.length})
                             </strong>
                           ) : char.source?.frameSource ? (
-                            <strong className="text-amber-300" title={t('database:manager.framesEstimatedTitle')}>{t('database:manager.source', { source: char.source.frameSource })}</strong>
+                            <strong className="text-amber-300" title={t('database:manager.framesEstimatedTitle')}>{t('database:manager.source', { source: frameSourceOf(char) })}</strong>
                           ) : (
                             <strong className="text-slate-500">{t('database:manager.framesMissing')}</strong>
                           )}
@@ -801,11 +801,11 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                               <span
                                 key={act.id}
                                 className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300"
-                                title={`${t('database:manager.actionChipTitle', { name: act.name, duration: act.defaultDuration, frames: act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : t('database:manager.tentative'), short: act.shortName })}${hasDistinctLabel ? t('database:manager.buttonName', { label: act.buttonLabel }) : ''}${ct > 0 ? t('database:manager.chipCt', { seconds: ct }) : ''}${dur > 0 ? t('database:manager.chipEffect', { seconds: dur }) : ''}`}
+                                title={`${t('database:manager.actionChipTitle', { name: loc(act, 'name'), duration: act.defaultDuration, frames: act.frames ? ` (${act.frames.total}f / ${act.frames.source})` : t('database:manager.tentative'), short: act.shortName })}${hasDistinctLabel ? t('database:manager.buttonName', { label: loc(act, 'buttonLabel') }) : ''}${ct > 0 ? t('database:manager.chipCt', { seconds: ct }) : ''}${dur > 0 ? t('database:manager.chipEffect', { seconds: dur }) : ''}`}
                               >
                                 <span className="font-bold text-amber-300">{act.shortName}</span>
                                 {hasDistinctLabel && (
-                                  <span className="text-sky-300 text-[9px]">[{act.buttonLabel}]</span>
+                                  <span className="text-sky-300 text-[9px]">[{loc(act, 'buttonLabel')}]</span>
                                 )}
                                 {ct > 0 && (
                                   <span className="text-amber-400/90 font-mono text-[9px] bg-amber-950/60 px-1 rounded border border-amber-800/40">CT:{ct}s</span>
@@ -1102,7 +1102,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
 
                     {art.buffEffect && (
                       <div className="flex items-center justify-between text-[11px] font-mono bg-purple-950/40 border border-purple-800/50 px-2.5 py-1 rounded text-purple-200">
-                        <span>{t('database:weapon.linkedBuff', { name: art.buffEffect.name })}</span>
+                        <span>{t('database:weapon.linkedBuff', { name: loc(art.buffEffect, 'name') })}</span>
                         <div className="flex items-center gap-1.5">
                           <strong className="text-amber-300">{t('database:weapon.duration', { seconds: Number(art.buffEffect.duration).toFixed(1) })}</strong>
                           {art.buffEffect.cooldown !== undefined && art.buffEffect.cooldown > 0 && (

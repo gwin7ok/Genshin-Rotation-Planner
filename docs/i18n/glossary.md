@@ -61,3 +61,35 @@
 | 記法（略号 / 名称） | Notation（Short / Names） | |
 | DB 管理 | Database | |
 | マスター（データ） | Master data | |
+
+## アプリが手で書いた名前（3-3。`src/masterdata/handwrittenEnglish.ts`）
+
+genshin-db の英語の説明文で、公式の英語が見つからなかったもの。Claude が訳した（要確認）。公式名が分かったら、`handwrittenEnglish.ts` の `TERMS` を直して、`npm run link:actions`（キャラ）・`npm run build:equipment`（武器・聖遺物）で付け直す。
+
+| 日本語 | 英語 | 備考 |
+|---|---|---|
+| 近接の構え | Melee Stance | 要確認（タルタリヤ） |
+| 風の加護 | Wind's Blessing | 要確認 |
+| 剣域熾焔 | Blazing Sword Domain | 要確認 |
+| パンチ連打モード | Rapid Punch Mode | 要確認 |
+| 加圧 / 潜水（加圧） | Pressurized / Diving (Pressurized) | 要確認 |
+| 影狩り | Shadowhunt | 要確認 |
+| 瑞獣の舞 | Auspicious Beast Dance | 要確認 |
+| 黄昏の祈り | Twilight Prayer | 要確認 |
+| 羽月の輪 | Feathermoon Ring | 要確認 |
+| 雷霆のシンフォニー / 雷鳴の交響 | Thunderous Symphony / Thunder Symphony | 要確認（前者は公式名と一致の可能性が高い） |
+| 月相転移 / 月相の輝き | Lunar Phase Shift / Lunar Radiance | 要確認 |
+| 血の契約 / 標的の印 / 速攻状態 | Blood Pact / Target Mark / Rapid Assault | 要確認 |
+| 粛清 | Purge | 要確認（ヴェスナ） |
+| 月の祈り | Moon's Prayer | 要確認 |
+| 静謐の光環 | Serene Halo | 要確認 |
+| 蒼白の賛歌・月の歌 | Pale Hymn / Moon Song | 要確認 |
+| 印（アロマティック・アナライズ） / 印（お水ひえひえ装置） | Mark (Aromatic Analysis) / Mark (Chilly Water Device) | 要確認 |
+| 猫玉（フラスコ排出） | Cat Ball (flask ejection) | 要確認 |
+| 重力（月の反応） | Gravity (Lunar reaction) | 要確認 |
+| 周天の回転 | Celestial Rotation | 要確認 |
+| 〜の受付 | 〜 window | 例: 再発動の受付 = Recast window |
+| 輝映 | boosted | 要確認（魔女の諭示の説明） |
+| 魔女の諭示の追加天賦名（七宝奉真・大祓之宣託 など 7 件） | Seven Treasures of Truth など | 要確認（`src/masterdata/revelationCharacters.ts` の `en.talentName`） |
+| 昔日4: 彼方の効果 | Waves of Days Past | 要確認 |
+| 手で書いた武器・聖遺物の発動バフ名「X: 接尾」 | 英語の装備名 + 訳した接尾 | 例: 千岩4: 全員攻撃力+20% → Tenacity of the Millelith 4P: Party ATK +20% |

@@ -11,7 +11,7 @@ import {
   isGlobalRowBuff,
 } from '../utils/buffUtils';
 import { t } from '../i18n';
-import { loc } from '../i18n/loc';
+import { loc, triggerName } from '../i18n/loc';
 
 /** 発動バフのパレットのボタンの説明（出どころ・説明・効果時間・CT） */
 const paletteTitle = (source: string, def: TriggerableBuffDefinition) =>
@@ -31,7 +31,7 @@ const GcsimOutOfScopeBadge: React.FC<{ def: TriggerableBuffDefinition }> = ({ de
   isGcsimOutOfScope(def) ? (
     <span
       className="text-[9px] px-1 rounded bg-slate-700/80 text-slate-300 border border-slate-500/60 font-normal shrink-0"
-      title={def.gcsimNote ?? GCSIM_OUT_OF_SCOPE_DEFAULT_REASON}
+      title={loc(def, 'gcsimNote') || GCSIM_OUT_OF_SCOPE_DEFAULT_REASON}
     >
       {t('gcsim.outOfScope')}
     </span>
@@ -140,7 +140,7 @@ export const StintBuffTriggersSection: React.FC<StintBuffTriggersSectionProps> =
         const defaultDuration = matchedDef?.duration ?? 0;
         const defaultCooldown = matchedDef?.cooldown ?? 0;
         // 表示名（D255）: 保存されている名前が定義の名前と同じなら、表示の言語の名前
-        const shownName = matchedDef && trigger.name === matchedDef.name ? loc(matchedDef, 'name') : trigger.name;
+        const shownName = triggerName(matchedDef, trigger);
 
         const hoverProps = {
           onHoverChange: (hovering: boolean) =>

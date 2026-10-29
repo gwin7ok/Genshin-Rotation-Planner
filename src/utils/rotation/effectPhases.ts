@@ -90,8 +90,8 @@ export function buildEffectBars(state: RotationState, sc: StintContext, ac: Acti
   // モードを開くアクションの効果バーは、モードのバーが兼ねる（終わらせるアクション・出場の終わりで切れる）
   const effectSpan = ac.inStateWindow || (actionDef?.mode && !actionDef.mode.noBar && !actionDef.mode.keepEffectBar) ? null : buildActionEffectSpan(char, act, actionDef, actionStartTime);
   if (effectSpan && burstVariantMode?.def.burstVariant) {
-    effectSpan.name = `${char.name} ${act.shortName}: ${burstVariantMode.def.burstVariant.effectLabel}`;
-    effectSpan.description = burstVariantMode.def.burstVariant.name;
+    effectSpan.name = `${charName(char)} ${act.shortName}: ${loc(burstVariantMode.def.burstVariant, 'effectLabel')}`;
+    effectSpan.description = loc(burstVariantMode.def.burstVariant, 'name');
   }
   // 殺生桜（八重神子）: バーは、桜が現れる位置から始まり、寿命（効果継続時間 + 諭示で +10 秒）で終わる。4 つ目が出ると最古が消え、バーをそこで切る
   if (effectSpan && isSkill && actionDef?.spawnsTotem) {
@@ -149,14 +149,14 @@ export function buildEffectBars(state: RotationState, sc: StintContext, ac: Acti
       activeBuffs.push({
         id: `field_ct_${act.id}`,
         buffId: `field_ct_${actionDef.id}`,
-        name: `${charName(char)} ${cr.label}`,
+        name: `${charName(char)} ${loc(cr, 'label')}`,
         sourceCharacterId: char.id,
         sourceType: 'constellation',
         startTime: hit,
         endTime: fieldEnd,
         duration: Number((fieldEnd - hit).toFixed(3)),
         color: char.color,
-        description: cr.description,
+        description: loc(cr, 'description'),
         noSynergy: true,
         ownerStintId: rawStint.id,
       });

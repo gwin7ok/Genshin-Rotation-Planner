@@ -525,7 +525,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                   <div className="p-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">
                     <span className="flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span><Trans i18nKey="save:manager.duplicate" values={{ name: duplicateSlot.name }} components={{ strong: <strong /> }} /></span>
+                      <span><Trans i18nKey="save:manager.duplicate" values={{ name: slotDisplayName(duplicateSlot) }} components={{ strong: <strong /> }} /></span>
                     </span>
                     <span className="flex items-center gap-1.5">
                       <button

@@ -1,12 +1,10 @@
 import React from 'react';
 import { Languages } from 'lucide-react';
 import { t } from '../i18n';
-import { autoLanguage, changeLanguagePreference, getLanguagePreference, isLanguageSwitchEnabled, LanguagePreference } from '../i18n/language';
+import { autoLanguage, changeLanguagePreference, getLanguagePreference, LanguagePreference } from '../i18n/language';
 
 /** 表示の言語の切り替え（自動 / 日本語 / English。D246）。選ぶと保存して再読み込みする（D245） */
 export const LanguageSwitcher: React.FC = () => {
-  if (!isLanguageSwitchEnabled()) return null;
-
   const preference = getLanguagePreference();
   const options: { value: LanguagePreference; label: string; title: string }[] = [
     { value: 'auto', label: t('language.auto'), title: t('language.autoTitle', { language: t(autoLanguage() === 'ja' ? 'language.ja' : 'language.en') }) },

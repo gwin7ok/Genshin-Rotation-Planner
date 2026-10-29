@@ -161,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-amber-500/40 hover:border-amber-400'
                   }`}
                   title={activeSlot
-                    ? t('header:overwrite.title', { name: activeSlot.name })
+                    ? t('header:overwrite.title', { name: slotDisplayName(activeSlot) })
                     : t('header:overwrite.disabledTitle')}
                 >
                   {overwriteSaved ? <Check className="w-3.5 h-3.5 shrink-0" /> : <Save className="w-3.5 h-3.5 shrink-0" />}

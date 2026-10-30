@@ -53,6 +53,8 @@
     "helpTitle": "How to use (basic flow, reading the screen, controls, gcsim, saving, notation)",
     "party": "Team Setup",
     "partyTitle": "Set the 4 party members, weapons and artifacts",
+    "energyRecharge": "ER Calc",
+    "energyRechargeTitle": "Calculate the Energy Recharge needed to burst every lap (gcsim)",
     "save": "Rotations",
     "saveTitle": "Manage rotations (save, load, slots, backup)",
     "database": "Database",

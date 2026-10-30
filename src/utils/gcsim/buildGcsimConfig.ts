@@ -78,6 +78,13 @@ export interface GcsimConfigInput {
   defHalt?: boolean;
   /** 敵から受けるダメージ（gcsim の `hurt every`。出場中のキャラが一定の間隔でダメージを受ける）。無い・無効なら、設定文に出さない */
   hurt?: HurtSetting;
+  /**
+   * 爆発のエネルギーを無視するか（gcsim の `ignore_burst_energy`。既定 true = 通常の計算）。
+   * false のとき、爆発はエネルギーが足りるまで実行されない（必要な元素チャージ効率の算出で使う。フェーズ7）
+   */
+  ignoreBurstEnergy?: boolean;
+  /** キャラ ID → 仮ステータスに足す元素チャージ効率（割合。1 = +100%。武器・聖遺物のサブステの分は gcsim が別に足す）。無いキャラは足さない */
+  addedEnergyRechargeByCharacterId?: Record<string, number>;
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
   /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
@@ -195,7 +202,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         lines.push(`${key} add set="${artifact.gcsimKey}" count=4;`);
       }
     }
-    lines.push(`${key} add stats ${TEMP_STATS};`);
+    const addedEr = input.addedEnergyRechargeByCharacterId?.[c.id];
+    lines.push(`${key} add stats ${TEMP_STATS}${addedEr !== undefined ? ` er=${Number(addedEr.toFixed(4))}` : ''};`);
   }
 
   // 2. ローテーション本体
@@ -362,7 +370,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   const config: string[] = [
     ...lines,
     '',
-    `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES} ignore_burst_energy=true${input.defHalt === false ? ' defhalt=false' : ''};`,
+    `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES}${input.ignoreBurstEnergy === false ? '' : ' ignore_burst_energy=true'}${input.defHalt === false ? ' defhalt=false' : ''};`,
     'target lvl=100 resist=0.1;',
     ...(hurtStatement(input.hurt) ? [hurtStatement(input.hurt)!] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),

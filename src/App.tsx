@@ -25,6 +25,7 @@ import { t } from './i18n';
 import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
+import { EnergyRechargeDialog } from './components/EnergyRechargeDialog';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
@@ -102,6 +103,7 @@ export default function App() {
   const updateStints = (next: Stint[]) => setStints(mergeHiddenStints(next.map(normalizeGroups), stints, characters, party));
   // Character switch delay (default 0.50s or restored from storage)
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
+  const [isEnergyRechargeOpen, setIsEnergyRechargeOpen] = useState(false);
   const [defHalt, setDefHaltState] = useState<boolean>(() => loadDefHalt());
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
@@ -536,8 +538,9 @@ export default function App() {
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
-  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult) => buildGcsimConfig({
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number> }) => buildGcsimConfig({
       characters,
+      ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added } : {}),
       stints: stintsArg,
       loopStartIndex,
       switchDelay,
@@ -812,6 +815,7 @@ export default function App() {
         playbackSpeed={playbackSpeed}
         onChangeSpeed={setPlaybackSpeed}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
+        onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
         onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
@@ -979,6 +983,14 @@ export default function App() {
 
       {/* 使い方（基本の流れ・操作・gcsim・保存・記法） */}
       <UsageGuideModal isOpen={isUsageOpen} onClose={() => setIsUsageOpen(false)} />
+
+      {/* チャージ効率計算（必要な元素チャージ効率。フェーズ7） */}
+      <EnergyRechargeDialog
+        isOpen={isEnergyRechargeOpen}
+        onClose={() => setIsEnergyRechargeOpen(false)}
+        build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, extra)}
+        characters={characters}
+      />
 
       {/* gcsim 設定文 */}
       <GcsimConfigDialog

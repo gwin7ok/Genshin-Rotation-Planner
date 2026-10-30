@@ -30,6 +30,8 @@ export const SETTING_KEYS = {
   gcsimHurt: 'gcsimHurt',
   /** 記法の表示（'short' | 'name'。既定: short） */
   rotationNotationMode: 'rotationNotationMode',
+  /** 必要元素チャージ効率の最後の算出結果（JSON。「チャージ効率計算」画面） */
+  requiredEnergyRecharge: 'requiredEnergyRecharge',
   /** 表示の言語（'ja' | 'en'。無ければブラウザの言語に従う。D246〜D248） */
   language: 'appLanguage',
 } as const;

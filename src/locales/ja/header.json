@@ -50,6 +50,8 @@
     "helpTitle": "使い方（基本の流れ・画面の見方・操作・gcsim・保存・記法）",
     "party": "編成設定",
     "partyTitle": "パーティ4人の編成・武器・聖遺物変更",
+    "energyRecharge": "チャージ効率",
+    "energyRechargeTitle": "必要な元素チャージ効率を gcsim で算出",
     "save": "編成管理",
     "saveTitle": "編成管理（保存・読込・スロット管理・バックアップ）",
     "database": "DB管理",

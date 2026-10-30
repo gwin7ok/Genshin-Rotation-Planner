@@ -98,5 +98,33 @@
     "cooldownKeysTitle": "Trigger interval (internal cooldown) keys",
     "unknownKeys": "Keys not in the dictionary (excluded): {{count}}",
     "none": "None"
+  },
+  "er": {
+    "title": "Energy Recharge Calculator",
+    "intro": "Uses gcsim to find the total Energy Recharge (ER%) each character needs so that every burst in the current rotation is ready every lap. It is the lowest value that succeeds for all {{seeds}} random seeds.",
+    "start": "Start calculation",
+    "running": "Calculating…",
+    "cancel": "Cancel",
+    "progress": "Calculating {{name}} ({{done}} / {{total}})",
+    "lastRun": "Last run: {{date}} ({{seeds}} seeds)",
+    "never": "Not calculated yet. Press “Start calculation”.",
+    "stale": "The party or rotation has changed since this calculation. Please recalculate.",
+    "oldVersion": "This result was computed with gcsim {{saved}} (now {{current}}). Please recalculate.",
+    "colName": "Character",
+    "colCurrent": "Party ER",
+    "colRequired": "Required ER (total)",
+    "colDiff": "Margin",
+    "colAdded": "Added (gcsim add stats)",
+    "noBurst": "No burst",
+    "unreachable": "Unreachable (short even at +{{max}}%)",
+    "enough": "Enough",
+    "short": "{{diff}}% short",
+    "surplus": "+{{diff}}%",
+    "notRunnable": "gcsim cannot run this:",
+    "errorMismatch": "Even with very high ER, burst timing does not match the baseline (run ignoring energy). Bursts are shifted for a reason other than energy.",
+    "note": "Required ER is the total, including weapon and artifact substats. Characters start with full energy, so the first-lap bursts always succeed. The normal calculation (applying results to the chart) is not affected.",
+    "close": "Close",
+    "failed": "Calculation failed: {{message}}",
+    "cancelled": "Cancelled (the previous result is kept)"
   }
 }

@@ -3,6 +3,7 @@
  * 保存先は persistence.ts（キーは SETTING_KEYS）。画面の初期値の読み込みと、変更の保存に使う。
  */
 import { DEFAULT_HURT, type HurtSetting } from './gcsim/buildGcsimConfig';
+import type { RequiredErResult } from './gcsim/requiredEnergyRecharge';
 import type { NotationMode } from './rotationNotation';
 import { SETTING_KEYS, readJson, readString, writeJson, writeString } from './persistence';
 
@@ -24,6 +25,18 @@ export function loadHurt(): HurtSetting {
 
 export function saveHurt(value: HurtSetting): void {
   writeJson(SETTING_KEYS.gcsimHurt, value);
+}
+
+/** 必要元素チャージ効率の最後の算出結果（無い・形が違うときは null） */
+export function loadRequiredEr(): RequiredErResult | null {
+  const v = readJson<Partial<RequiredErResult>>(SETTING_KEYS.requiredEnergyRecharge);
+  if (!v || typeof v !== 'object' || !Array.isArray(v.entries) || typeof v.fingerprint !== 'string' || typeof v.gcsimVersion !== 'string' || !Number.isFinite(v.ranAt)) return null;
+  return v as RequiredErResult;
+}
+
+/** 算出結果を保存する（前の結果は上書き） */
+export function saveRequiredEr(value: RequiredErResult): void {
+  writeJson(SETTING_KEYS.requiredEnergyRecharge, value);
 }
 
 /** 記法のモード（既定: 略号） */

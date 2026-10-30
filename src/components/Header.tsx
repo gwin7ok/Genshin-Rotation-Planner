@@ -1,6 +1,6 @@
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, Pause, RotateCcw, Users, Settings2, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -22,6 +22,7 @@ interface HeaderProps {
   playbackSpeed: number;
   onChangeSpeed: (speed: number) => void;
   onOpenPartyModal: () => void;
+  onOpenEnergyRechargeModal: () => void;
   onOpenHelpModal: () => void;
   onOpenSaveModal: () => void;
   onOpenDatabaseModal: () => void;
@@ -62,6 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
   playbackSpeed,
   onChangeSpeed,
   onOpenPartyModal,
+  onOpenEnergyRechargeModal,
   onOpenHelpModal,
   onOpenSaveModal,
   onOpenDatabaseModal,
@@ -339,6 +341,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Settings2 className="w-3.5 h-3.5" />
               <span>{t('header:menu.party')}</span>
+            </button>
+
+            <button
+              onClick={onOpenEnergyRechargeModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-600/20 hover:bg-yellow-600/30 text-yellow-300 border border-yellow-500/40 transition-colors shrink-0"
+              title={t('header:menu.energyRechargeTitle')}
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>{t('header:menu.energyRecharge')}</span>
             </button>
 
             <button

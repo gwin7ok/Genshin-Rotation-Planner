@@ -36,6 +36,17 @@ const ER_OTHERS_ADDED = 10;
 const VERIFY_BUMP = 0.05;
 /** 上げ幅の上限（倍々に増やしても、ここまで） */
 const VERIFY_MAX_STEP = 0.4;
+/**
+ * 確実の値を gcsim で検証するキャラ（gcsim のキー）。提供者自身の ER で、他のキャラへの回復量が決まるため、
+ * 集計の実行（全員の ER が約 1100%）の記録からは、回復量を正しく求められない（docs/gcsim-integration/phase-7-required-er/検証で値が変わる効果.md の区分 A）。
+ * 雷電将軍・九条裟羅（サラ）・ドリー
+ */
+export const ER_VERIFY_CHARACTER_KEYS = ['raidenshogun', 'kujousara', 'dori'] as const;
+/** 編成のメンバーのうち、検証が要るキャラ */
+export const verifyCharacters = <T extends { gcsimKey: string }>(members: T[]): T[] => members.filter(m => (ER_VERIFY_CHARACTER_KEYS as readonly string[]).includes(m.gcsimKey));
+
+/** 目安・安定の求め直し（その値で動かし直す）の最大回数 */
+const REFINE_MAX_ROUNDS = 6;
 /** 確かめで、値を絞るのをやめる幅（足す分の割合）。概算 = 0.1（ER 10%）、精密 = 0.01（ER 1%。細かいほど時間が延びる） */
 export const ER_VERIFY_TOLERANCE_ROUGH = 0.1;
 export const ER_VERIFY_TOLERANCE_PRECISE = 0.01;
@@ -96,6 +107,10 @@ export interface RequiredErResult {
   enemyParticles?: EnemyParticles;
   /** 精密（確かめを細かく絞った）で求めたか。古い保存・概算は無い */
   precise?: boolean;
+  /** 確実の値を gcsim で検証したか。false = 計算のみ。古い保存は無い（検証した扱い） */
+  verified?: boolean;
+  /** 目安・安定も gcsim で検証したか（雷電将軍・九条裟羅・ドリーがいる編成）。古い保存は無い */
+  levelsVerified?: boolean;
   /** 爆発の前に待ってよいとした秒数（古い保存には無い。無いときは 0.5 秒だった） */
   burstWaitSeconds?: number;
   /** 求めたときの編成・ローテーションの指紋（今の設定文と比べて、変わっていないかを調べる） */
@@ -103,7 +118,7 @@ export interface RequiredErResult {
   entries: RequiredErEntry[];
 }
 
-export type RequiredErPhase = 'baseline' | 'collect' | 'verify';
+export type RequiredErPhase = 'baseline' | 'collect' | 'verify' | 'refine';
 
 export interface RequiredErProgress {
   phase: RequiredErPhase;
@@ -156,7 +171,7 @@ export function energyRechargeByCharIndex(logs: GcsimLogEvent[]): Map<number, nu
 export interface EnergyTimeline {
   /** エネルギーの上限（爆発のエネルギー） */
   max: number;
-  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number })[];
+  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number; exec: number })[];
 }
 
 /**
@@ -166,7 +181,9 @@ export interface EnergyTimeline {
  */
 export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, EnergyTimeline> {
   const out = new Map<number, EnergyTimeline>();
+  const lastExec = new Map<number, number>(); // キャラごとの、直近の爆発の実行（executed burst）のフレーム
   for (const l of logs) {
+    if (l.msg === 'executed burst' && l.char_index !== undefined) { lastExec.set(l.char_index, Number(l.frame)); continue; }
     if (l.event !== 'energy' || l.char_index === undefined) continue;
     const tl = out.get(l.char_index) ?? { max: 0, events: [] };
     out.set(l.char_index, tl);
@@ -176,7 +193,7 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
     if (l.msg === 'draining energy') {
       const pre = Number(l.logs?.pre_drain);
       const post = Number(l.logs?.post_drain);
-      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max, frame });
+      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max, frame, exec: lastExec.get(l.char_index) ?? frame });
     } else if (l.msg === 'particle') {
       const er = Number(l.logs?.ER);
       const amt = Number(l.logs?.amt);
@@ -193,6 +210,16 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
 }
 
 /**
+ * 爆発を基準のタイミングで出す実行（ignore_burst_energy）では、エネルギーが足りないまま爆発するので、ログの消費量が実際より小さい。
+ * 消費量は、通常の実行（同じ種）の、同じ順の爆発の値に置き換える（無ければ上限）
+ */
+function withReferenceCosts(tl: EnergyTimeline, ref: EnergyTimeline | undefined): EnergyTimeline {
+  const refCosts = (ref?.events ?? []).flatMap(ev => ev.kind === 'burst' ? [ev.cost] : []);
+  let n = 0;
+  return { max: tl.max, events: tl.events.map(ev => ev.kind === 'burst' ? { ...ev, cost: refCosts[n++] ?? tl.max } : ev) };
+}
+
+/**
  * ER（合計 %）のときの、爆発ごとの成否を数える（最初の爆発は、初期エネルギーが満タンなので数えない）。
  * エネルギーは、粒子 × ER + 固定の回復を足して上限で切り、爆発で消費量を引く（足りなかった爆発も、消費したものとして続ける。窓どうしを独立に数えるため）。
  */
@@ -203,19 +230,28 @@ export function passCount(timelines: EnergyTimeline[], erPercent: number, delayF
     let energy = tl.max;
     let bursts = 0;
     const gain = (ev: EnergyTimeline['events'][number]) => ev.kind === 'particle' ? (ev.raw * erPercent) / 100 : ev.kind === 'flat' ? ev.amount : 0;
+    let windowStart = 0; // 直前の爆発の次のイベント
+    const before: number[] = []; // イベントごとの、足す前のエネルギー（窓の中）
     for (let i = 0; i < tl.events.length; i++) {
       const ev = tl.events[i];
-      if (ev.kind === 'particle' || ev.kind === 'flat') energy = Math.min(tl.max, energy + gain(ev));
-      else {
+      if (ev.kind === 'particle' || ev.kind === 'flat') {
+        before[i] = energy;
+        energy = Math.min(tl.max, energy + gain(ev));
+      } else {
         if (++bursts <= 1 + warmupWindows) { /* 最初の爆発と、立ち上がりの窓は数えない */ }
         else {
           total++;
-          // 爆発が delayFrames 以内に遅れてもよいとして、その間に入るエネルギー（次の爆発まで）も足して判定する
-          let e = energy;
-          for (let j = i + 1; j < tl.events.length && tl.events[j].kind !== 'burst' && tl.events[j].frame <= ev.frame + delayFrames; j++) e = Math.min(tl.max, e + gain(tl.events[j]));
+          // 爆発は、実行（executed burst）の時点のエネルギーで判定される（エネルギーを消費するログは、実行の少し後）。
+          // 実行から消費までに入った分は数えない。爆発が delayFrames 以内に遅れてもよいとして、その間に入る分は足す
+          const limit = ev.exec + delayFrames;
+          let k = windowStart;
+          while (k < i && tl.events[k].frame <= limit) k++;
+          let e = k < i ? before[k] : energy;
+          for (let j = i + 1; j < tl.events.length && tl.events[j].kind !== 'burst' && tl.events[j].frame <= limit; j++) e = Math.min(tl.max, e + gain(tl.events[j]));
           if (e >= ev.cost - 1e-9) passed++;
         }
         energy = Math.max(0, energy - ev.cost);
+        windowStart = i + 1;
       }
     }
   }
@@ -275,6 +311,10 @@ export async function computeRequiredEr(args: {
   enemyParticles?: EnemyParticles;
   /** 確かめの許容（足す分の割合）。既定は概算 */
   verifyTolerance?: number;
+  /** 確実の値を gcsim で検証するか（既定 true）。false は、記録した窓から計算するだけで、検証と見直しの実行をしない */
+  verify?: boolean;
+  /** 目安・安定も gcsim で検証するか（その値で動かし直して求め直す）。省略すると、編成に ER_VERIFY_CHARACTER_KEYS のキャラがいるときだけ検証する。verify が false のときは検証しない */
+  verifyLevels?: boolean;
   /** 試す種の数（既定 ER_DEFAULT_SEEDS） */
   seeds?: number;
   /** 爆発の前に待ってよい秒数（既定 ER_DEFAULT_BURST_WAIT_SECONDS） */
@@ -288,7 +328,7 @@ export async function computeRequiredEr(args: {
 }): Promise<RequiredErOutcome> {
   const { gcsimVersion, onProgress, shouldCancel } = args;
   const enemyParticles = args.enemyParticles;
-  const verifyTolerance = args.verifyTolerance ?? ER_VERIFY_TOLERANCE_ROUGH;
+  const verifyTolerance = args.verifyTolerance ?? ER_VERIFY_TOLERANCE_PRECISE;
   const burstWaitSeconds = Math.max(0, args.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS);
   const delayFrames = Math.round(burstWaitSeconds * 60);
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
@@ -305,16 +345,19 @@ export async function computeRequiredEr(args: {
   const runsEstimate = seedTotal * 6;
   let seedCount = seedTotal;
   let inFinal = false; // 見直しの実行（最後の段）に入ったか
+  let refineChunksDone = 0; // 目安・安定の求め直しで実行した塊の数（求め直しは 2 段 × 2〜5 回の見込み）
   const chunkCost = () => Math.ceil(seedCount / parallel);
   const priorTrials = 5 + 1.5 * Math.max(0, Math.log2(0.2 / verifyTolerance));
   const estimateLeft = (): { low: number; high: number } => {
-    const finalChunks = inFinal ? Math.max(0, chunkCost() - phaseChunksDone) : chunkCost();
+    if (!verify) return { low: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone), high: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) };
+    const finalChunks = levelsVerify ? (inFinal ? Math.max(0, chunkCost() - phaseChunksDone) : chunkCost()) : 0;
+    const refine = levelsVerify ? { low: Math.max(0, 4 * chunkCost() - refineChunksDone), high: Math.max(chunkCost(), 10 * chunkCost() - refineChunksDone) } : { low: 0, high: 0 };
     const trialChunks = (chunkCost() + 1) / 2; // 絞りの 1 回は、通る（全種）かずれる（1 塊）かが半々
     const prior = { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
     const v = phase === 'verify' && verifyEstimate ? verifyEstimate() : prior;
     const early = phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel)
       : phase === 'collect' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) : 0;
-    return { low: early + v.low + finalChunks, high: early + v.high + finalChunks };
+    return { low: early + v.low + finalChunks + refine.low, high: early + v.high + finalChunks + refine.high };
   };
   const report = () => {
     const left = estimateLeft();
@@ -331,6 +374,7 @@ export async function computeRequiredEr(args: {
     const results = await Promise.all(chunk.map(seed => run(config, seed)));
     chunksDone++;
     phaseChunksDone++;
+    if (phase === 'refine') refineChunksDone++;
     report();
     return results;
   };
@@ -340,6 +384,8 @@ export async function computeRequiredEr(args: {
     return { status: 'error', message: base.warnings.filter(w => w.level === 'error').map(w => w.message).join('\n') };
   }
   const members = base.members;
+  const verify = args.verify !== false;
+  const levelsVerify = verify && (args.verifyLevels ?? verifyCharacters(members).length > 0);
   const memberIds = members.map(m => m.characterId);
   report();
   /** 種のリストを parallel 個ずつの塊に分ける */
@@ -372,6 +418,7 @@ export async function computeRequiredEr(args: {
   const highConfig = build({ ignoreBurstEnergy: false, added: Object.fromEntries(memberIds.map(id => [id, ER_OTHERS_ADDED])) }).config;
   const seeds: number[] = [];
   const timelines = new Map<number, EnergyTimeline[]>();
+  const referenceBySeed = new Map<number, Map<number, EnergyTimeline>>(); // 種ごとの集計の実行（爆発の消費量の基準）
   for (const chunk of chunksOf(allSeeds)) {
     if (cancelled()) return { status: 'cancelled' };
     const results = await runChunk(highConfig, chunk);
@@ -380,7 +427,9 @@ export async function computeRequiredEr(args: {
       if (res.status !== 'ok') return { status: res.status, message: res.message };
       if (burstSignature(res.logs) !== baseline.get(chunk[k])) continue;
       seeds.push(chunk[k]);
-      for (const [i, tl] of collectEnergyTimelines(res.logs)) timelines.set(i, [...(timelines.get(i) ?? []), tl]);
+      const collected = collectEnergyTimelines(res.logs);
+      referenceBySeed.set(chunk[k], collected);
+      for (const [i, tl] of collected) timelines.set(i, [...(timelines.get(i) ?? []), tl]);
     }
   }
   if (seeds.length === 0) return { status: 'error', message: t('gcsim:er.errorMismatch') };
@@ -420,7 +469,7 @@ export async function computeRequiredEr(args: {
   // 4. 確実の値の確かめ（全員を確実の値にして、全種で爆発が基準と一致するか。ずれたら、そのキャラを上げる。
   //    上げ幅は倍々に増やし、通ったあとは、ずれた値との間を半分ずつに絞る）
   //    集計の実行は全員が十分大きい ER なので、他のキャラの ER で量が変わる回復（雷電将軍の爆発など）は、ここで初めて分かる
-  phase = 'verify';
+  if (verify) phase = 'verify';
   phaseChunksDone = 0;
   report();
   const failedAt = new Map<number, number>(); // ずれた値の最大（足す分）
@@ -451,7 +500,7 @@ export async function computeRequiredEr(args: {
     members.forEach((m, idx) => { added[m.characterId] = certainAdded.get(idx) ?? ER_OTHERS_ADDED; });
     return build({ ignoreBurstEnergy: false, added }).config;
   };
-  for (let round = 0; round < VERIFY_MAX_ROUNDS; round++) {
+  for (let round = 0; verify && round < VERIFY_MAX_ROUNDS; round++) {
     verifyRound = round;
     const config = verifyConfig();
     let bump: number | undefined;
@@ -506,13 +555,13 @@ export async function computeRequiredEr(args: {
       certainAdded.set(bump, next);
     }
   }
-  if (!verified && certainAdded.size > 0) return { status: 'error', message: t('gcsim:er.errorVerify') };
+  if (verify && !verified && certainAdded.size > 0) return { status: 'error', message: t('gcsim:er.errorVerify') };
 
   // 5. 目安・安定の見直し: 確かめた値で実行し直し、そのときのエネルギーの出入りで求め直す
   //    （集計の実行では、他のキャラの ER で量が変わる回復が実際より多く、必要な ER が低く出るため）
   let finalTimelines: Map<number, EnergyTimeline[]> | undefined;
   verifyEstimate = () => ({ low: 0, high: 0 });
-  if (certainAdded.size > 0) {
+  if (levelsVerify && certainAdded.size > 0) {
     phase = 'verify';
     inFinal = true;
     phaseChunksDone = 0;
@@ -535,6 +584,46 @@ export async function computeRequiredEr(args: {
       if (stable !== undefined && Number.isFinite(stable)) e.stableEr = ceil1(stable);
     });
   }
+  // 6. 目安・安定の検証: 全員を、いまの目安（安定）の値にして動かし直し（爆発は基準のタイミングで出す = ignore_burst_energy）、
+  //    そのときのエネルギーの出入りで求め直す。値が許容の中で動かなくなるまで繰り返す
+  //    （他のキャラの ER で量が変わる回復は、その水準の ER で見積もられる）
+  const levelTimelines = new Map<'typicalEr' | 'stableEr', Map<number, EnergyTimeline[]>>();
+  if (levelsVerify && entries.some(e => e.status === 'ok')) {
+    phase = 'refine';
+    for (const [pick, rate] of [['stableEr', 0.9], ['typicalEr', 0.7]] as const) {
+      let tls = new Map<number, EnergyTimeline[]>();
+      for (let round = 0; round < REFINE_MAX_ROUNDS; round++) {
+        const added: Record<string, number> = {};
+        members.forEach((m, idx) => {
+          const e = entries[idx];
+          const er = e.status === 'ok' ? e[pick] : undefined;
+          added[m.characterId] = er !== undefined ? Math.max(0, er / 100 - baseFraction(idx)) : ER_OTHERS_ADDED;
+        });
+        const config = build({ ignoreBurstEnergy: true, added }).config;
+        tls = new Map<number, EnergyTimeline[]>();
+        for (const chunk of chunksOf(seeds)) {
+          if (cancelled()) return { status: 'cancelled' };
+          const results = await runChunk(config, chunk);
+          for (let k = 0; k < chunk.length; k++) {
+            const res = results[k];
+            if (res.status !== 'ok') return { status: res.status, message: res.message };
+            for (const [i, tl] of collectEnergyTimelines(res.logs)) tls.set(i, [...(tls.get(i) ?? []), withReferenceCosts(tl, referenceBySeed.get(chunk[k])?.get(i))]);
+          }
+        }
+        let moved = false;
+        entries.forEach((e, idx) => {
+          if (e.status !== 'ok' || e[pick] === undefined) return;
+          const v = requiredErForRate(tls.get(idx) ?? [], rate, delayFrames, ER_WARMUP_WINDOWS);
+          if (v === undefined || !Number.isFinite(v)) return;
+          const next = ceil1(v);
+          if (Math.abs(next - e[pick]!) > verifyTolerance * 100) moved = true;
+          e[pick] = next;
+        });
+        if (!moved) break;
+      }
+      levelTimelines.set(pick, tls);
+    }
+  }
   // 確かめた値を、確実の値として反映する（目安・安定が確実より大きくならないようにする。確かめで上がるのは確実だけ）
   entries.forEach((e, idx) => {
     const added = certainAdded.get(idx);
@@ -547,21 +636,20 @@ export async function computeRequiredEr(args: {
   // 足りる確率の推定（表示する値で、集計した窓のうち足りた割合。全窓が足りた確実は N÷(N+1)）
   entries.forEach((e, idx) => {
     if (e.status !== 'ok') return;
-    const list = (finalTimelines ?? timelines).get(idx) ?? [];
-    const pct = (er: number | undefined, lastOne: boolean): number | undefined => {
+    const pct = (er: number | undefined, lastOne: boolean, list: EnergyTimeline[]): number | undefined => {
       if (er === undefined) return undefined;
       const { passed, total } = passCount(list, er, delayFrames, ER_WARMUP_WINDOWS);
       if (total === 0) return undefined;
       return Math.round((lastOne && passed === total ? total / (total + 1) : passed / total) * 100);
     };
-    e.typicalPct = pct(e.typicalEr, false);
-    e.stablePct = pct(e.stableEr, false);
-    e.certainPct = pct(e.certainEr, true);
+    e.typicalPct = pct(e.typicalEr, false, (levelTimelines.get('typicalEr') ?? finalTimelines ?? timelines).get(idx) ?? []);
+    e.stablePct = pct(e.stableEr, false, (levelTimelines.get('stableEr') ?? finalTimelines ?? timelines).get(idx) ?? []);
+    e.certainPct = pct(e.certainEr, true, (finalTimelines ?? timelines).get(idx) ?? []);
   });
 
   report();
   return {
     status: 'ok',
-    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, burstWaitSeconds, fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
+    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
   };
 }

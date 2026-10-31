@@ -59,6 +59,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
   const [precise, setPrecise] = useState(false);
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
+  // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
+  const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
   const [wait, setWait] = useState(String(ER_DEFAULT_BURST_WAIT_SECONDS));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   const cancelRef = useRef(false);
@@ -83,6 +85,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setCurrentFingerprint(fingerprintOf(base.config));
     // 回復量が自分の ER で決まるキャラ（雷電将軍・九条裟羅・ドリー）がいる編成は、確実の値を精密検証で求める（自動）
     setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
+    setCurrentMembers(base.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
 
@@ -205,7 +208,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 {progress ? t(`gcsim:er.${PHASE_KEY[progress.phase]}`) : t('gcsim:er.running')}
                 {startedAt !== null && (() => {
                   const elapsed = now - startedAt;
-                  // 残り時間 = 塊（同時に実行する種のまとまり）の平均時間 × 残りの塊の数。確かめは何回で収まるか分からないので、最小〜最大の幅で出す
+                  // 残り時間 = 塊（同時に実行する種のまとまり）の平均時間 × 残りの塊の数。検証は何回で収まるか分からないので、最小〜最大の幅で出す
                   if (!progress || progress.chunksDone < 2 || elapsed < 5000) return ` ・ ${t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
                   const perChunk = elapsed / progress.chunksDone;
                   const low = progress.chunksLeftLow * perChunk;
@@ -235,7 +238,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             <p className="text-xs text-amber-300 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.oldVersion', { saved: shown.gcsimVersion, current: GCSIM_VERSION })}</p>
           )}
 
-          {shown ? (
+          {(shown || currentMembers.length > 0) && (
             <table className="w-full text-xs border-collapse">
               <thead>
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
@@ -246,12 +249,14 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 </tr>
               </thead>
               <tbody>
-                {shown.entries.map(e => {
+                {(shown?.entries ?? currentMembers.map(m => ({ characterId: m.characterId, name: m.name, status: 'blank' as const }))).map(e => {
                   const c = charOf(e.characterId);
                   return (
                     <tr key={e.characterId} className="border-b border-slate-800/60">
                       <td className="py-1.5 pr-2 text-slate-200">{c ? charName(c) : e.name}</td>
-                      {e.status === 'ok' ? (
+                      {e.status === 'blank' ? (
+                        <td colSpan={3} className="py-1.5">&nbsp;</td>
+                      ) : e.status === 'ok' ? (
                         <>
                           <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%{pctLabel(e.typicalPct)}</td>
                           <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%{pctLabel(e.stablePct)}</td>
@@ -268,9 +273,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 })}
               </tbody>
             </table>
-          ) : (
-            !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>
           )}
+          {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
           <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: shown?.seeds ?? ER_DEFAULT_SEEDS, laps: ER_LOOP_ITERATIONS })}</p>
 

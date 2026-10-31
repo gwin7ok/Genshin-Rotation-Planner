@@ -110,17 +110,18 @@ for (const e of result.entries.filter((x: any) => x.status === 'ok')) check(e.ty
 
 // 検証: 確実の値で全種が一致し、小さくすると外れる
 const baselineSig = async (seed: number) => er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: true, added: {} }).config, seed)).logs);
+const differs = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES) !== undefined;
 const sigAt = async (id: string, x: number, seed: number) => {
   const added = { ...Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED])), [id]: x };
   return er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: false, added }).config, seed)).logs);
 };
 for (const e of result.entries.filter((x: any) => x.status === 'ok')) {
   let allMatch = true;
-  for (let seed = 1; seed <= result.seeds; seed++) if ((await sigAt(e.characterId, e.addedEr, seed)) !== (await baselineSig(seed))) allMatch = false;
-  check(allMatch, `${e.name}: 確実の値（+${e.addedEr}）で、全種の爆発が基準と一致`);
+  for (let seed = 1; seed <= result.seeds; seed++) if (differs(await baselineSig(seed), await sigAt(e.characterId, e.addedEr, seed))) allMatch = false;
+  check(allMatch, `${e.name}: 確実の値（+${e.addedEr}）で、全種の爆発が基準と一致（30 フレームまでの遅れは許す）`);
   if (e.addedEr > 0.03) {
     let anyMismatch = false;
-    for (let seed = 1; seed <= result.seeds && !anyMismatch; seed++) if ((await sigAt(e.characterId, e.addedEr - 0.03, seed)) !== (await baselineSig(seed))) anyMismatch = true;
+    for (let seed = 1; seed <= result.seeds && !anyMismatch; seed++) if (differs(await baselineSig(seed), await sigAt(e.characterId, e.addedEr - 0.03, seed))) anyMismatch = true;
     check(anyMismatch, `${e.name}: 3 刻み分小さくすると、どれかの種で爆発がずれる`);
   }
 }

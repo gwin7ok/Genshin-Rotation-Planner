@@ -25,8 +25,9 @@ import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
 export const ER_LOOP_ITERATIONS = 4;
 /** 立ち上がりとして数えない窓の数（最初の爆発から 2 回目の爆発まで。1 周目は粒子の入り方が 2 周目以降と違うため） */
 export const ER_WARMUP_WINDOWS = 1;
-/** 試す乱数の種の数（1 〜 この数）。粒子の出方は種で変わる */
-export const ER_SEEDS = 10;
+/** 試す乱数の種の数の既定（1 〜 この数）。粒子の出方は種で変わる。画面で変えられる */
+export const ER_DEFAULT_SEEDS = 20;
+export const ER_MAX_SEEDS = 100;
 /** 探索の上限（足す分の割合。5 = +500%）。確実の値がこれを超えれば「届かない」 */
 export const ER_MAX_ADDED = 5;
 /** 他のキャラの ER（足す分。エネルギー不足で止まらない十分大きい値） */
@@ -35,17 +36,16 @@ const ER_OTHERS_ADDED = 10;
 const VERIFY_BUMP = 0.05;
 /** 上げ幅の上限（倍々に増やしても、ここまで） */
 const VERIFY_MAX_STEP = 0.4;
-/** 確かめで、値を絞るのをやめる幅（足す分の割合）。概算 = 0.2（ER 20%）、精密 = 0.01（ER 1%。時間は 5 分前後延びる） */
-export const ER_VERIFY_TOLERANCE_ROUGH = 0.2;
+/** 確かめで、値を絞るのをやめる幅（足す分の割合）。概算 = 0.1（ER 10%）、精密 = 0.01（ER 1%。細かいほど時間が延びる） */
+export const ER_VERIFY_TOLERANCE_ROUGH = 0.1;
 export const ER_VERIFY_TOLERANCE_PRECISE = 0.01;
 /** 確かめの繰り返しの上限（無限ループの防止） */
 const VERIFY_MAX_ROUNDS = 100;
 /** 爆発の前に、エネルギーが貯まるのを待ってよい秒数の既定値（これ以内の遅れは「足りた」とみなす） */
-export const ER_DEFAULT_BURST_WAIT_SECONDS = 1;
+export const ER_DEFAULT_BURST_WAIT_SECONDS = 0;
 /** 同、フレーム数（60 フレーム = 1 秒） */
 export const ER_BURST_DELAY_FRAMES = ER_DEFAULT_BURST_WAIT_SECONDS * 60;
 /** 実行回数の見積り（基準 + 集計 + 確かめ。残り時間の推定に使う） */
-const RUNS_ESTIMATE = ER_SEEDS * 6;
 
 /** 敵から出る粒子（秒の間隔のランダム範囲と、1 回の個数。クリア粒子） */
 export interface EnemyParticles {
@@ -275,6 +275,8 @@ export async function computeRequiredEr(args: {
   enemyParticles?: EnemyParticles;
   /** 確かめの許容（足す分の割合）。既定は概算 */
   verifyTolerance?: number;
+  /** 試す種の数（既定 ER_DEFAULT_SEEDS） */
+  seeds?: number;
   /** 爆発の前に待ってよい秒数（既定 ER_DEFAULT_BURST_WAIT_SECONDS） */
   burstWaitSeconds?: number;
   /** 同時に実行する種の数（既定 1。WASM の Worker を並べるときに増やす） */
@@ -299,22 +301,24 @@ export async function computeRequiredEr(args: {
   let phaseChunksDone = 0;
   /** 確かめの残りの塊の数（最小・最大）。確かめの状態ができてから、状態から求める。それまでは、事前の見積り */
   let verifyEstimate: (() => { low: number; high: number }) | null = null;
-  let seedCount = ER_SEEDS;
+  const seedTotal = Math.min(ER_MAX_SEEDS, Math.max(1, Math.floor(args.seeds ?? ER_DEFAULT_SEEDS)));
+  const runsEstimate = seedTotal * 6;
+  let seedCount = seedTotal;
   let inFinal = false; // 見直しの実行（最後の段）に入ったか
   const chunkCost = () => Math.ceil(seedCount / parallel);
-  const priorTrials = 5 + 1.5 * Math.max(0, Math.log2(ER_VERIFY_TOLERANCE_ROUGH / verifyTolerance));
+  const priorTrials = 5 + 1.5 * Math.max(0, Math.log2(0.2 / verifyTolerance));
   const estimateLeft = (): { low: number; high: number } => {
     const finalChunks = inFinal ? Math.max(0, chunkCost() - phaseChunksDone) : chunkCost();
     const trialChunks = (chunkCost() + 1) / 2; // 絞りの 1 回は、通る（全種）かずれる（1 塊）かが半々
     const prior = { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
     const v = phase === 'verify' && verifyEstimate ? verifyEstimate() : prior;
-    const early = phase === 'baseline' ? Math.max(0, Math.ceil(ER_SEEDS / parallel) - phaseChunksDone) + Math.ceil(ER_SEEDS / parallel)
-      : phase === 'collect' ? Math.max(0, Math.ceil(ER_SEEDS / parallel) - phaseChunksDone) : 0;
+    const early = phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel)
+      : phase === 'collect' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) : 0;
     return { low: early + v.low + finalChunks, high: early + v.high + finalChunks };
   };
   const report = () => {
     const left = estimateLeft();
-    onProgress?.({ phase, runsDone, runsExpected: Math.max(RUNS_ESTIMATE, runsDone + 1), chunksDone, chunksLeftLow: left.low, chunksLeftHigh: left.high });
+    onProgress?.({ phase, runsDone, runsExpected: Math.max(runsEstimate, runsDone + 1), chunksDone, chunksLeftLow: left.low, chunksLeftHigh: left.high });
   };
   const run: RunSample = async (config, seed) => {
     const res = await args.run(config, seed);
@@ -344,7 +348,7 @@ export async function computeRequiredEr(args: {
     for (let i = 0; i < list.length; i += parallel) out.push(list.slice(i, i + parallel));
     return out;
   };
-  const allSeeds = Array.from({ length: ER_SEEDS }, (_, i) => i + 1);
+  const allSeeds = Array.from({ length: seedTotal }, (_, i) => i + 1);
 
   // 1. 基準（種ごと）。実行の失敗はそのまま返す
   const baseline = new Map<number, string>();

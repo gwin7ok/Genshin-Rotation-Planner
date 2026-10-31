@@ -30,6 +30,8 @@ export const ER_DEFAULT_SEEDS = 20;
 export const ER_MAX_SEEDS = 100;
 /** 探索の上限（足す分の割合。5 = +500%）。確実の値がこれを超えれば「届かない」 */
 export const ER_MAX_ADDED = 5;
+/** 求める合計 ER の下限（100% = 元素チャージ効率の補正なし）。武器・聖遺物の ER は考慮せず、ここから探す */
+export const ER_FLOOR_FRACTION = 1;
 /** 他のキャラの ER（足す分。エネルギー不足で止まらない十分大きい値） */
 const ER_OTHERS_ADDED = 10;
 /** 確実の値が確かめで足りなかったときに、上げる幅（足す分の割合） */
@@ -291,7 +293,8 @@ export function firstMismatchChar(baseline: string, test: string, delayFrames = 
   let offset = 0; // 立ち上がりの窓での遅れ（以降の爆発は、この分ずれた位置からの遅れで見る）
   for (let i = 0; i < a.length; i++) {
     // 立ち上がりで遅れた分だけ、最後の爆発が実行時間の外に出ることがある（その分は見ない）
-    if (b[i] === undefined) return offset > delayFrames ? undefined : Number(a[i].split('@')[0]);
+    // （ただし、見ない爆発は、キャラの数まで。エネルギーが足りずに爆発が出なくなった場合は、残りが多いので、ずれとして数える）
+    if (b[i] === undefined) return offset > delayFrames && a.length - i <= new Set(a.map(x => x.split('@')[0])).size ? undefined : Number(a[i].split('@')[0]);
     const [ca, fa] = a[i].split('@').map(Number);
     const [cb, fb] = b[i].split('@').map(Number);
     if (ca !== cb) return ca;
@@ -350,10 +353,11 @@ export async function computeRequiredEr(args: {
   const priorTrials = 5 + 1.5 * Math.max(0, Math.log2(0.2 / verifyTolerance));
   const estimateLeft = (): { low: number; high: number } => {
     if (!verify) return { low: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone), high: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) };
-    const finalChunks = levelsVerify ? (inFinal ? Math.max(0, chunkCost() - phaseChunksDone) : chunkCost()) : 0;
-    const refine = levelsVerify ? { low: Math.max(0, 4 * chunkCost() - refineChunksDone), high: Math.max(chunkCost(), 10 * chunkCost() - refineChunksDone) } : { low: 0, high: 0 };
+    const finalChunks = 0;
+    const refine = levelsVerify ? { low: Math.max(0, 6 * chunkCost() - refineChunksDone), high: Math.max(chunkCost(), 15 * chunkCost() - refineChunksDone) } : { low: 0, high: 0 };
     const trialChunks = (chunkCost() + 1) / 2; // 絞りの 1 回は、通る（全種）かずれる（1 塊）かが半々
-    const prior = { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
+    // 見直しをする編成は、確かめは見直しの値の確認（ふつうは 1 周で通る）
+    const prior = levelsVerify ? { low: chunkCost(), high: 4 * chunkCost() } : { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
     const v = phase === 'verify' && verifyEstimate ? verifyEstimate() : prior;
     const early = phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel)
       : phase === 'collect' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) : 0;
@@ -448,13 +452,14 @@ export async function computeRequiredEr(args: {
       return;
     }
     maxWindows = Math.max(maxWindows, passCount(list, 0, delayFrames, ER_WARMUP_WINDOWS).total);
-    const added = certain / 100 - baseFraction(idx);
+    // 装備（武器・聖遺物）の ER は考慮しない。合計 ER が 100% 未満にはならないとして、そこから探す（足す分は、装備の ER との差で、マイナスもある）
+    const added = Math.max(certain / 100, ER_FLOOR_FRACTION) - baseFraction(idx);
     if (!Number.isFinite(certain) || added > ER_MAX_ADDED) {
       entries.push({ characterId: m.characterId, name: m.name, status: 'unreachable' });
       return;
     }
-    // 足す分は 0 以上（武器・聖遺物のセットですでに足りているキャラは、確実の値がその合計 ER になる。
-    // マイナスまで下げて探すと、他のキャラの回復量と絡んで確かめが収まらず、計算が長引く）
+    // 確かめは、装備の ER（足す分 0）から上げる。マイナスから探すと、他のキャラの回復量と絡んで確かめが収まらない。
+    // 装備の ER より低くてよいキャラは、確かめが通ったあとの下げ直しで、合計 ER 100% を下限に下げる
     certainAdded.set(idx, Math.max(0, added));
     entries.push({
       characterId: m.characterId,
@@ -465,6 +470,70 @@ export async function computeRequiredEr(args: {
       certainEr: ceil1(certain),
     });
   });
+
+  // 3-B. 目安・安定・確実の見直し（雷電将軍・サラ・ドリーがいる編成）: 3 段とも同じ方法で求める。
+  //      全員をその段の値にして動かし（爆発は基準のタイミングで出す = ignore_burst_energy）、そのときのエネルギーの出入りで、窓ごとの必要量から段の割合（70%・90%・100%）の値を求め直す。
+  //      値が許容の中で動かなくなるまで繰り返す（他のキャラの ER で量が変わる回復は、その水準の ER で見積もられる）。
+  //      順序: 回復量が自分の ER で決まるキャラ（雷電将軍・サラ・ドリー）の値を先に確定し、その値を前提に、他のキャラの値を確定する（段ごと）。
+  //      雷電などの値が高いと、他のキャラの値が、下の段より低くなることがあるが、そのまま表示する（修正しない）
+  const levelTimelines = new Map<'typicalEr' | 'stableEr' | 'certainEr', Map<number, EnergyTimeline[]>>();
+  const isProviderIdx = (idx: number) => (ER_VERIFY_CHARACTER_KEYS as readonly string[]).includes(members[idx].gcsimKey);
+  if (levelsVerify && entries.some(e => e.status === 'ok')) {
+    phase = 'refine';
+    for (const [pick, rate] of [['stableEr', 0.9], ['typicalEr', 0.7], ['certainEr', 1]] as const) {
+      let tls = new Map<number, EnergyTimeline[]>();
+      /** movable のキャラだけを動かして、値が動かなくなるまで繰り返す（それ以外は、いまの値のまま） */
+      const iterate = async (movable: (idx: number) => boolean): Promise<RequiredErOutcome | undefined> => {
+        for (let round = 0; round < REFINE_MAX_ROUNDS; round++) {
+          const added: Record<string, number> = {};
+          members.forEach((m, idx) => {
+            const e = entries[idx];
+            const er = e.status === 'ok' ? e[pick] : undefined;
+            added[m.characterId] = er !== undefined ? Math.max(ER_FLOOR_FRACTION, er / 100) - baseFraction(idx) : ER_OTHERS_ADDED;
+          });
+          const config = build({ ignoreBurstEnergy: true, added }).config;
+          tls = new Map<number, EnergyTimeline[]>();
+          for (const chunk of chunksOf(seeds)) {
+            if (cancelled()) return { status: 'cancelled' };
+            const results = await runChunk(config, chunk);
+            for (let k = 0; k < chunk.length; k++) {
+              const res = results[k];
+              if (res.status !== 'ok') return { status: res.status, message: res.message };
+              for (const [i, tl] of collectEnergyTimelines(res.logs)) tls.set(i, [...(tls.get(i) ?? []), withReferenceCosts(tl, referenceBySeed.get(chunk[k])?.get(i))]);
+            }
+          }
+          let moved = false;
+          entries.forEach((e, idx) => {
+            if (e.status !== 'ok' || e[pick] === undefined || !movable(idx)) return;
+            const v = requiredErForRate(tls.get(idx) ?? [], rate, delayFrames, ER_WARMUP_WINDOWS);
+            if (v === undefined || !Number.isFinite(v)) return;
+            const next = ceil1(v);
+            if (Math.abs(next - e[pick]!) > verifyTolerance * 100) moved = true;
+            e[pick] = next;
+          });
+          if (!moved) break;
+        }
+        return undefined;
+      };
+      const hasOthers = entries.some((e, idx) => e.status === 'ok' && !isProviderIdx(idx));
+      const first = await iterate(idx => isProviderIdx(idx));
+      if (first) return first;
+      if (hasOthers) {
+        const second = await iterate(idx => !isProviderIdx(idx));
+        if (second) return second;
+      }
+      levelTimelines.set(pick, tls);
+    }
+    entries.forEach((e, idx) => {
+      if (e.status !== 'ok') return;
+      if (isProviderIdx(idx)) {
+        // 雷電などは、確実 ≥ 安定 ≥ 目安に揃える（他のキャラは、揃えずそのまま）
+        e.stableEr = Math.max(e.stableEr ?? 0, e.typicalEr ?? 0);
+        e.certainEr = Math.max(e.certainEr ?? 0, e.stableEr);
+      }
+      certainAdded.set(idx, Math.max(ER_FLOOR_FRACTION, (e.certainEr ?? 0) / 100) - baseFraction(idx));
+    });
+  }
 
   // 4. 確実の値の確かめ（全員を確実の値にして、全種で爆発が基準と一致するか。ずれたら、そのキャラを上げる。
   //    上げ幅は倍々に増やし、通ったあとは、ずれた値との間を半分ずつに絞る）
@@ -481,6 +550,7 @@ export async function computeRequiredEr(args: {
   // 最初の周回の結果が出るまでは、事前の見積り（priorTrials）
   verifyEstimate = () => {
     const trialChunks = (chunkCost() + 1) / 2;
+    if (verifyRound === 0 && failedAt.size === 0 && levelsVerify) return { low: chunkCost(), high: 4 * chunkCost() };
     if (verifyRound === 0 && failedAt.size === 0) return { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
     let trials = 0;
     for (const [idx, cur] of certainAdded) {
@@ -557,81 +627,68 @@ export async function computeRequiredEr(args: {
   }
   if (verify && !verified && certainAdded.size > 0) return { status: 'error', message: t('gcsim:er.errorVerify') };
 
-  // 5. 目安・安定の見直し: 確かめた値で実行し直し、そのときのエネルギーの出入りで求め直す
-  //    （集計の実行では、他のキャラの ER で量が変わる回復が実際より多く、必要な ER が低く出るため）
-  let finalTimelines: Map<number, EnergyTimeline[]> | undefined;
-  verifyEstimate = () => ({ low: 0, high: 0 });
-  if (levelsVerify && certainAdded.size > 0) {
-    phase = 'verify';
-    inFinal = true;
-    phaseChunksDone = 0;
-    const finalConfig = verifyConfig();
-    finalTimelines = new Map<number, EnergyTimeline[]>();
-    for (const chunk of chunksOf(seeds)) {
-      if (cancelled()) return { status: 'cancelled' };
-      const results = await runChunk(finalConfig, chunk);
-      for (const res of results) {
-        if (res.status !== 'ok') return { status: res.status, message: res.message };
-        for (const [i, tl] of collectEnergyTimelines(res.logs)) finalTimelines!.set(i, [...(finalTimelines!.get(i) ?? []), tl]);
-      }
-    }
-    entries.forEach((e, idx) => {
-      if (e.status !== 'ok') return;
-      const list = finalTimelines!.get(idx) ?? [];
-      const typical = requiredErForRate(list, 0.7, delayFrames, ER_WARMUP_WINDOWS);
-      const stable = requiredErForRate(list, 0.9, delayFrames, ER_WARMUP_WINDOWS);
-      if (typical !== undefined && Number.isFinite(typical)) e.typicalEr = ceil1(typical);
-      if (stable !== undefined && Number.isFinite(stable)) e.stableEr = ceil1(stable);
-    });
-  }
-  // 6. 目安・安定の検証: 全員を、いまの目安（安定）の値にして動かし直し（爆発は基準のタイミングで出す = ignore_burst_energy）、
-  //    そのときのエネルギーの出入りで求め直す。値が許容の中で動かなくなるまで繰り返す
-  //    （他のキャラの ER で量が変わる回復は、その水準の ER で見積もられる）
-  const levelTimelines = new Map<'typicalEr' | 'stableEr', Map<number, EnergyTimeline[]>>();
-  if (levelsVerify && entries.some(e => e.status === 'ok')) {
-    phase = 'refine';
-    for (const [pick, rate] of [['stableEr', 0.9], ['typicalEr', 0.7]] as const) {
-      let tls = new Map<number, EnergyTimeline[]>();
-      for (let round = 0; round < REFINE_MAX_ROUNDS; round++) {
-        const added: Record<string, number> = {};
-        members.forEach((m, idx) => {
-          const e = entries[idx];
-          const er = e.status === 'ok' ? e[pick] : undefined;
-          added[m.characterId] = er !== undefined ? Math.max(0, er / 100 - baseFraction(idx)) : ER_OTHERS_ADDED;
-        });
-        const config = build({ ignoreBurstEnergy: true, added }).config;
-        tls = new Map<number, EnergyTimeline[]>();
-        for (const chunk of chunksOf(seeds)) {
-          if (cancelled()) return { status: 'cancelled' };
-          const results = await runChunk(config, chunk);
-          for (let k = 0; k < chunk.length; k++) {
-            const res = results[k];
-            if (res.status !== 'ok') return { status: res.status, message: res.message };
-            for (const [i, tl] of collectEnergyTimelines(res.logs)) tls.set(i, [...(tls.get(i) ?? []), withReferenceCosts(tl, referenceBySeed.get(chunk[k])?.get(i))]);
-          }
+  // 4-B. 下げ直し: 確かめは「最初にずれた爆発のキャラ」を上げるが、足りないのが別のキャラ（雷電将軍など）のとき、
+  //      その回復を受けるキャラの爆発が先にずれて見え、足りているキャラまで上がる。通ったあとに、他を固定して 1 キャラずつ下げ直す
+  //      （立ち上がりの窓も遅れ 0 で見る（確かめは、立ち上がりの遅れが以降も続いても通すので、下げすぎる）。通らない値には下げないので、最終の組み合わせは必ず全種で通る）
+  if (verify && verified && !levelsVerify && certainAdded.size > 1) {
+    const allMatch = async (): Promise<{ ok: boolean } | { error: RequiredErOutcome }> => {
+      const config = verifyConfig();
+      const order = lastFailSeed !== undefined && seeds.includes(lastFailSeed) ? [lastFailSeed, ...seeds.filter(s => s !== lastFailSeed)] : seeds;
+      for (const chunk of chunksOf(order)) {
+        if (cancelled()) return { error: { status: 'cancelled' } };
+        const results = await runChunk(config, chunk);
+        for (let k = 0; k < chunk.length; k++) {
+          const res = results[k];
+          if (res.status !== 'ok') return { error: { status: res.status, message: res.message } };
+          if (firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0) !== undefined) { lastFailSeed = chunk[k]; return { ok: false }; }
         }
-        let moved = false;
-        entries.forEach((e, idx) => {
-          if (e.status !== 'ok' || e[pick] === undefined) return;
-          const v = requiredErForRate(tls.get(idx) ?? [], rate, delayFrames, ER_WARMUP_WINDOWS);
-          if (v === undefined || !Number.isFinite(v)) return;
-          const next = ceil1(v);
-          if (Math.abs(next - e[pick]!) > verifyTolerance * 100) moved = true;
-          e[pick] = next;
-        });
-        if (!moved) break;
       }
-      levelTimelines.set(pick, tls);
+      return { ok: true };
+    };
+    // 下限: 足す分 0（武器・聖遺物の合計 ER）。これより下は、爆発が大きく遅れても「立ち上がりの遅れ」として許されて通ってしまうため探さない
+    const lowerOf = (idx: number) => Math.min(certainAdded.get(idx)!, ER_FLOOR_FRACTION - baseFraction(idx));
+    const isProvider = (idx: number) => (ER_VERIFY_CHARACTER_KEYS as readonly string[]).includes(members[idx].gcsimKey);
+    const order = [...certainAdded.keys()]
+      .filter(idx => certainAdded.get(idx)! - lowerOf(idx) > 1e-6) // 上げ幅が許容以内でも、下限で通るかを試す（概算の最初の上げ幅は許容と同じ大きさ）
+      .sort((a, b) => Number(isProvider(a)) - Number(isProvider(b)) || (certainAdded.get(b)! - lowerOf(b)) - (certainAdded.get(a)! - lowerOf(a)));
+    const shrinkTrials = (idx: number) => Math.max(1, Math.ceil(Math.log2(Math.max(certainAdded.get(idx)! - lowerOf(idx), verifyTolerance) / verifyTolerance))) + 1;
+    let shrinkLeft = order.reduce((sum, idx) => sum + shrinkTrials(idx), 0);
+    verifyEstimate = () => ({ low: shrinkLeft * 0.4 * ((chunkCost() + 1) / 2), high: shrinkLeft * 1.2 * ((chunkCost() + 1) / 2) });
+    phaseChunksDone = 0;
+    report();
+    for (const idx of order) {
+      let lo = lowerOf(idx);
+      let hi = certainAdded.get(idx)!;
+      certainAdded.set(idx, lo);
+      const first = await allMatch();
+      shrinkLeft = Math.max(0, shrinkLeft - 1);
+      if ('error' in first) return first.error;
+      if (first.ok) continue;
+      while (hi - lo > verifyTolerance) {
+        const mid = (lo + hi) / 2;
+        certainAdded.set(idx, mid);
+        const r = await allMatch();
+        shrinkLeft = Math.max(0, shrinkLeft - 1);
+        if ('error' in r) return r.error;
+        if (r.ok) hi = mid; else lo = mid;
+      }
+      certainAdded.set(idx, hi);
     }
+    verifyEstimate = () => ({ low: 0, high: 0 });
   }
-  // 確かめた値を、確実の値として反映する（目安・安定が確実より大きくならないようにする。確かめで上がるのは確実だけ）
+
+  // 確かめた値を、確実の値として反映する（確かめで上がるのは確実だけ）
   entries.forEach((e, idx) => {
     const added = certainAdded.get(idx);
     if (e.status !== 'ok' || added === undefined) return;
     e.addedEr = Number(added.toFixed(4));
-    e.certainEr = Math.max(e.certainEr ?? 0, ceil1((baseFraction(idx) + added) * 100));
-    e.stableEr = Math.min(e.stableEr ?? e.certainEr, e.certainEr);
-    e.typicalEr = Math.min(e.typicalEr ?? e.stableEr, e.stableEr);
+    // 確かめた値を採る（計算のみの値は、記録した窓の最大。連鎖した遅れで高く出ることがあるので、確かめて下げ直した値のほうが正確）。
+    // 雷電などの回復を与えるキャラは、安定より低くしない。ほかのキャラは、そのまま（雷電などの値が高いために、下の段より低くなることがある）
+    const verifiedEr = verify ? ceil1((baseFraction(idx) + added) * 100) : Math.max(e.certainEr ?? 0, ceil1((baseFraction(idx) + added) * 100));
+    e.certainEr = levelsVerify && !isProviderIdx(idx) ? verifiedEr : Math.max(verifiedEr, e.stableEr ?? 0);
+    e.stableEr = e.stableEr ?? e.certainEr;
+    if (!levelsVerify || isProviderIdx(idx)) e.typicalEr = Math.min(e.typicalEr ?? e.stableEr, e.stableEr);
+    e.typicalEr = e.typicalEr ?? e.stableEr;
   });
   // 足りる確率の推定（表示する値で、集計した窓のうち足りた割合。全窓が足りた確実は N÷(N+1)）
   entries.forEach((e, idx) => {
@@ -642,9 +699,9 @@ export async function computeRequiredEr(args: {
       if (total === 0) return undefined;
       return Math.round((lastOne && passed === total ? total / (total + 1) : passed / total) * 100);
     };
-    e.typicalPct = pct(e.typicalEr, false, (levelTimelines.get('typicalEr') ?? finalTimelines ?? timelines).get(idx) ?? []);
-    e.stablePct = pct(e.stableEr, false, (levelTimelines.get('stableEr') ?? finalTimelines ?? timelines).get(idx) ?? []);
-    e.certainPct = pct(e.certainEr, true, (finalTimelines ?? timelines).get(idx) ?? []);
+    e.typicalPct = pct(e.typicalEr, false, (levelTimelines.get('typicalEr') ?? timelines).get(idx) ?? []);
+    e.stablePct = pct(e.stableEr, false, (levelTimelines.get('stableEr') ?? timelines).get(idx) ?? []);
+    e.certainPct = pct(e.certainEr, true, (levelTimelines.get('certainEr') ?? timelines).get(idx) ?? []);
   });
 
   report();

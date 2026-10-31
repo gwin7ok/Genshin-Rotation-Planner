@@ -29,12 +29,15 @@ export const ER_SEEDS = 10;
 export const ER_MAX_ADDED = 5;
 /** 他のキャラの ER（足す分。エネルギー不足で止まらない十分大きい値） */
 const ER_OTHERS_ADDED = 10;
+/** 合計 ER の下限（割合。0.5 = 50%）。武器・聖遺物の ER が多いキャラで、足す分をマイナスにして、本当に必要な ER を求めるときの下限 */
 /** 確実の値が確かめで足りなかったときに、上げる幅（足す分の割合） */
 const VERIFY_BUMP = 0.05;
 /** 確かめで、値を絞るのをやめる幅（足す分の割合。0.05 = 5%） */
 const VERIFY_TOLERANCE = 0.05;
 /** 確かめの繰り返しの上限（無限ループの防止） */
 const VERIFY_MAX_ROUNDS = 60;
+/** 爆発が基準より遅れてもよいフレーム数（これ以内のずれは「足りた」とみなす） */
+export const ER_BURST_DELAY_FRAMES = 30;
 /** 実行回数の見積り（基準 + 集計 + 確かめ。残り時間の推定に使う） */
 const RUNS_ESTIMATE = ER_SEEDS * 6;
 
@@ -134,7 +137,7 @@ export function energyRechargeByCharIndex(logs: GcsimLogEvent[]): Map<number, nu
 export interface EnergyTimeline {
   /** エネルギーの上限（爆発のエネルギー） */
   max: number;
-  events: ({ kind: 'particle'; raw: number } | { kind: 'flat'; amount: number } | { kind: 'burst'; cost: number })[];
+  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number })[];
 }
 
 /**
@@ -150,20 +153,21 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
     out.set(l.char_index, tl);
     const maxEnergy = Number(l.logs?.max_energy);
     if (Number.isFinite(maxEnergy) && maxEnergy > 0) tl.max = maxEnergy;
+    const frame = Number(l.frame);
     if (l.msg === 'draining energy') {
       const pre = Number(l.logs?.pre_drain);
       const post = Number(l.logs?.post_drain);
-      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max });
+      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max, frame });
     } else if (l.msg === 'particle') {
       const er = Number(l.logs?.ER);
       const amt = Number(l.logs?.amt);
-      if (Number.isFinite(er) && er > 0 && Number.isFinite(amt)) tl.events.push({ kind: 'particle', raw: amt / er });
+      if (Number.isFinite(er) && er > 0 && Number.isFinite(amt)) tl.events.push({ kind: 'particle', raw: amt / er, frame });
     } else if (l.msg === 'adding energy') {
       const rec = Number(l.logs?.["rec'd"]);
       const pre = Number(l.logs?.pre_recovery);
       const post = Number(l.logs?.post_recovery);
       const amount = Number.isFinite(rec) ? rec : Number.isFinite(pre) && Number.isFinite(post) ? post - pre : 0;
-      tl.events.push({ kind: 'flat', amount });
+      tl.events.push({ kind: 'flat', amount, frame });
     }
   }
   return out;
@@ -173,18 +177,25 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
  * ER（合計 %）のときの、爆発ごとの成否を数える（最初の爆発は、初期エネルギーが満タンなので数えない）。
  * エネルギーは、粒子 × ER + 固定の回復を足して上限で切り、爆発で消費量を引く（足りなかった爆発も、消費したものとして続ける。窓どうしを独立に数えるため）。
  */
-export function passCount(timelines: EnergyTimeline[], erPercent: number): { passed: number; total: number } {
+export function passCount(timelines: EnergyTimeline[], erPercent: number, delayFrames = 0): { passed: number; total: number } {
   let passed = 0;
   let total = 0;
   for (const tl of timelines) {
     let energy = tl.max;
     let first = true;
-    for (const ev of tl.events) {
-      if (ev.kind === 'particle') energy = Math.min(tl.max, energy + (ev.raw * erPercent) / 100);
-      else if (ev.kind === 'flat') energy = Math.min(tl.max, energy + ev.amount);
+    const gain = (ev: EnergyTimeline['events'][number]) => ev.kind === 'particle' ? (ev.raw * erPercent) / 100 : ev.kind === 'flat' ? ev.amount : 0;
+    for (let i = 0; i < tl.events.length; i++) {
+      const ev = tl.events[i];
+      if (ev.kind === 'particle' || ev.kind === 'flat') energy = Math.min(tl.max, energy + gain(ev));
       else {
         if (first) first = false;
-        else { total++; if (energy >= ev.cost - 1e-9) passed++; }
+        else {
+          total++;
+          // 爆発が delayFrames 以内に遅れてもよいとして、その間に入るエネルギー（次の爆発まで）も足して判定する
+          let e = energy;
+          for (let j = i + 1; j < tl.events.length && tl.events[j].kind !== 'burst' && tl.events[j].frame <= ev.frame + delayFrames; j++) e = Math.min(tl.max, e + gain(tl.events[j]));
+          if (e >= ev.cost - 1e-9) passed++;
+        }
         energy = Math.max(0, energy - ev.cost);
       }
     }
@@ -199,9 +210,9 @@ const ER_SEARCH_CAP_PERCENT = (ER_MAX_ADDED + 2) * 100;
  * 爆発の rate（0〜1）の割合が足りる最小の ER（合計 %）。rate = 0.7 で目安、0.9 で安定、1 で確実（全ての爆発）。
  * 爆発が無い（数える爆発が 0）ときは undefined。上限でも足りないときは Infinity
  */
-export function requiredErForRate(timelines: EnergyTimeline[], rate: number): number | undefined {
-  const ok = (er: number) => { const { passed, total } = passCount(timelines, er); return passed >= Math.ceil(total * rate - 1e-9); };
-  if (passCount(timelines, 0).total === 0) return undefined;
+export function requiredErForRate(timelines: EnergyTimeline[], rate: number, delayFrames = 0): number | undefined {
+  const ok = (er: number) => { const { passed, total } = passCount(timelines, er, delayFrames); return passed >= Math.ceil(total * rate - 1e-9); };
+  if (passCount(timelines, 0, delayFrames).total === 0) return undefined;
   if (ok(0)) return 0;
   if (!ok(ER_SEARCH_CAP_PERCENT)) return Infinity;
   let lo = 0;
@@ -217,12 +228,15 @@ export function requiredErForRate(timelines: EnergyTimeline[], rate: number): nu
 const ceil1 = (x: number): number => Math.ceil(x * 10 - 1e-9) / 10 + 0; // + 0 で -0 を 0 にする
 
 /** 並びの違いから、最初にずれた爆発のキャラ（char_index）。同じなら undefined */
-function firstMismatchChar(baseline: string, test: string): number | undefined {
+export function firstMismatchChar(baseline: string, test: string, delayFrames = 0): number | undefined {
   if (baseline === test) return undefined;
   const a = baseline.split(',');
   const b = test.split(',');
   for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return Number(a[i].split('@')[0]);
+    if (b[i] === undefined) return Number(a[i].split('@')[0]);
+    const [ca, fa] = a[i].split('@').map(Number);
+    const [cb, fb] = b[i].split('@').map(Number);
+    if (ca !== cb || Math.abs(fa - fb) > delayFrames) return ca;
   }
   return undefined;
 }
@@ -295,24 +309,26 @@ export async function computeRequiredEr(args: {
   let maxWindows = 0;
   members.forEach((m, idx) => {
     const list = timelines.get(idx) ?? [];
-    const certain = requiredErForRate(list, 1);
+    const certain = requiredErForRate(list, 1, ER_BURST_DELAY_FRAMES);
     if (certain === undefined) {
       entries.push({ characterId: m.characterId, name: m.name, status: 'noBurst' });
       return;
     }
-    maxWindows = Math.max(maxWindows, passCount(list, 0).total);
+    maxWindows = Math.max(maxWindows, passCount(list, 0, ER_BURST_DELAY_FRAMES).total);
     const added = certain / 100 - baseFraction(idx);
     if (!Number.isFinite(certain) || added > ER_MAX_ADDED) {
       entries.push({ characterId: m.characterId, name: m.name, status: 'unreachable' });
       return;
     }
+    // 足す分は 0 以上（武器・聖遺物のセットですでに足りているキャラは、確実の値がその合計 ER になる。
+    // マイナスまで下げて探すと、他のキャラの回復量と絡んで確かめが収まらず、計算が長引く）
     certainAdded.set(idx, Math.max(0, added));
     entries.push({
       characterId: m.characterId,
       name: m.name,
       status: 'ok',
-      typicalEr: ceil1(requiredErForRate(list, 0.7)!),
-      stableEr: ceil1(requiredErForRate(list, 0.9)!),
+      typicalEr: ceil1(requiredErForRate(list, 0.7, ER_BURST_DELAY_FRAMES)!),
+      stableEr: ceil1(requiredErForRate(list, 0.9, ER_BURST_DELAY_FRAMES)!),
       certainEr: ceil1(certain),
     });
   });
@@ -340,7 +356,7 @@ export async function computeRequiredEr(args: {
       if (cancelled()) return { status: 'cancelled' };
       const res = await run(config, seed);
       if (res.status !== 'ok') return { status: res.status, message: res.message };
-      const ng = firstMismatchChar(baseline.get(seed)!, burstSignature(res.logs));
+      const ng = firstMismatchChar(baseline.get(seed)!, burstSignature(res.logs), ER_BURST_DELAY_FRAMES);
       if (ng !== undefined) { bump = ng; lastFailSeed = seed; break; }
     }
     if (bump === undefined) {
@@ -393,8 +409,8 @@ export async function computeRequiredEr(args: {
     entries.forEach((e, idx) => {
       if (e.status !== 'ok') return;
       const list = finalTimelines.get(idx) ?? [];
-      const typical = requiredErForRate(list, 0.7);
-      const stable = requiredErForRate(list, 0.9);
+      const typical = requiredErForRate(list, 0.7, ER_BURST_DELAY_FRAMES);
+      const stable = requiredErForRate(list, 0.9, ER_BURST_DELAY_FRAMES);
       if (typical !== undefined && Number.isFinite(typical)) e.typicalEr = ceil1(typical);
       if (stable !== undefined && Number.isFinite(stable)) e.stableEr = ceil1(stable);
     });

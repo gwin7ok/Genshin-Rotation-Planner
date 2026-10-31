@@ -13,6 +13,8 @@ import {
   ER_LOOP_ITERATIONS,
   ER_MAX_ADDED,
   ER_DEFAULT_BURST_WAIT_SECONDS,
+  ER_DEFAULT_SEEDS,
+  ER_MAX_SEEDS,
   ER_DEFAULT_ENEMY_PARTICLES,
   ER_VERIFY_TOLERANCE_PRECISE,
   ER_VERIFY_TOLERANCE_ROUGH,
@@ -56,6 +58,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
   const [precise, setPrecise] = useState(false);
   const [wait, setWait] = useState(String(ER_DEFAULT_BURST_WAIT_SECONDS));
+  const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
@@ -72,6 +75,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setPAmount(String(p.amount));
     setPrecise(last?.precise === true);
     setWait(String(last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS));
+    setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
     setCurrentFingerprint(fingerprintOf(base.config));
@@ -105,6 +109,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         build: extra => buildRef.current(extra),
         enemyParticles: particles,
         parallel,
+        seeds: (() => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; })(),
         burstWaitSeconds: (() => { const v = Number(wait); return Number.isFinite(v) && v >= 0 ? Math.round(v * 10) / 10 : ER_DEFAULT_BURST_WAIT_SECONDS; })(),
         verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
         run: runGcsimSample,
@@ -133,7 +138,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const stale = saved !== null && currentFingerprint !== null && saved.fingerprint !== currentFingerprint;
   // 編成・ローテーションが前回の計算のときから変わっているときは、前回の結果を表示しない（指紋が出るまでも出さない）
   const shown = saved !== null && currentFingerprint !== null && saved.fingerprint === currentFingerprint ? saved : null;
-  // 足りる確率: 概算は値を最大 ER 20% 高めに丸めているので「以上」、精密は「約」
+  // 足りる確率: 概算は値を最大 ER 10% 高めに丸めているので「以上」、精密は「約」
   const pctLabel = (p?: number) => p === undefined ? null : <span className="ml-1 text-[10px] font-normal text-slate-400">({t(shown?.precise ? 'gcsim:er.pctAbout' : 'gcsim:er.pctAtLeast', { pct: p })})</span>;
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
 
@@ -163,20 +168,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           )}
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <input type="number" min={0} step={0.5} value={pMin} onChange={e => setPMin(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
-              <span>〜</span>
-              <input type="number" min={0} step={0.5} value={pMax} onChange={e => setPMax(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
-              <span>{t('gcsim:er.enemyParticlesEvery')}</span>
-              <input type="number" min={0} step={1} value={pAmount} onChange={e => setPAmount(e.target.value)} disabled={running} className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
-              <span>{t('gcsim:er.enemyParticlesUnit')}</span>
-              <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.enemyParticlesNote')}</p>
-          </div>
-
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.precision')}</p>
             <div className="flex items-center gap-1.5">
               {([false, true] as const).map(v => (
@@ -186,16 +177,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               ))}
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
-          </div>
-
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:er.burstWait')}</p>
-            <div className="flex items-center gap-1.5">
-              <input type="number" min={0} step={0.1} value={wait} onChange={e => setWait(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
-              <span>{t('gcsim:er.burstWaitUnit')}</span>
-              <button onClick={() => setWait(String(ER_DEFAULT_BURST_WAIT_SECONDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.burstWaitNote')}</p>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
@@ -248,7 +229,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <thead>
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
                   <th className="py-1.5 pr-2 font-semibold">{t('gcsim:er.colName')}</th>
-                  <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:er.colCurrent')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colTypicalTitle')}>{t('gcsim:er.colTypical')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colStableTitle')}>{t('gcsim:er.colStable')}</th>
                   <th className="py-1.5 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
@@ -260,7 +240,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   return (
                     <tr key={e.characterId} className="border-b border-slate-800/60">
                       <td className="py-1.5 pr-2 text-slate-200">{c ? charName(c) : e.name}</td>
-                      <td className="py-1.5 pr-2 text-right text-slate-400">{c ? `${c.energyRecharge ?? 100}%` : '-'}</td>
                       {e.status === 'ok' ? (
                         <>
                           <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%{pctLabel(e.typicalPct)}</td>
@@ -282,7 +261,41 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>
           )}
 
-          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: shown?.seeds ?? 10, laps: ER_LOOP_ITERATIONS })}</p>
+          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: shown?.seeds ?? ER_DEFAULT_SEEDS, laps: ER_LOOP_ITERATIONS })}</p>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.seeds')}</p>
+            <div className="flex items-center gap-1.5">
+              <input type="number" min={1} max={ER_MAX_SEEDS} step={1} value={seeds} onChange={e => setSeeds(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.seedsUnit')}</span>
+              <button onClick={() => setSeeds(String(ER_DEFAULT_SEEDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })}</p>
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <input type="number" min={0} step={0.5} value={pMin} onChange={e => setPMin(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>〜</span>
+              <input type="number" min={0} step={0.5} value={pMax} onChange={e => setPMax(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.enemyParticlesEvery')}</span>
+              <input type="number" min={0} step={1} value={pAmount} onChange={e => setPAmount(e.target.value)} disabled={running} className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.enemyParticlesUnit')}</span>
+              <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.enemyParticlesNote')}</p>
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.burstWait')}</p>
+            <div className="flex items-center gap-1.5">
+              <input type="number" min={0} step={0.1} value={wait} onChange={e => setWait(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.burstWaitUnit')}</span>
+              <button onClick={() => setWait(String(ER_DEFAULT_BURST_WAIT_SECONDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.burstWaitNote')}</p>
+          </div>
         </div>
       </div>
     </div>

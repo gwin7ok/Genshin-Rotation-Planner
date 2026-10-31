@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
-import { t, dateLocale } from '../i18n';
+import { t, dateLocale, currentLanguage } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
@@ -9,8 +9,8 @@ import { loadRequiredEr, saveRequiredEr } from '../utils/appSettings';
 import {
   computeRequiredEr,
   fingerprintOf,
+  ER_LOOP_ITERATIONS,
   ER_MAX_ADDED,
-  ER_SEEDS,
   type BuildForEr,
   type RequiredErProgress,
   type RequiredErResult,
@@ -25,6 +25,16 @@ interface EnergyRechargeDialogProps {
   characters: CharacterConfig[];
 }
 
+const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify' } as const;
+
+/** 秒数を「m分ss秒」（英語は m:ss）にする */
+const formatDuration = (ms: number): string => {
+  const total = Math.max(0, Math.round(ms / 1000));
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return currentLanguage === 'en' ? `${m}:${String(s).padStart(2, '0')}` : m > 0 ? `${m}分${String(s).padStart(2, '0')}秒` : `${s}秒`;
+};
+
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
 export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters }) => {
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
@@ -33,6 +43,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<RequiredErProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [now, setNow] = useState(() => Date.now());
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
@@ -47,6 +59,13 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
 
+  // 計算中は、1 秒ごとに経過時間を更新する
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [running]);
+
   if (!isOpen) return null;
 
   const start = async () => {
@@ -54,6 +73,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setRunning(true);
     setMessage(null);
     setProgress(null);
+    setStartedAt(Date.now());
+    setNow(Date.now());
     const outcome = await computeRequiredEr({
       build: extra => buildRef.current(extra),
       run: runGcsimSample,
@@ -79,9 +100,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
 
   const diffCell = (entry: RequiredErResult['entries'][number]) => {
-    if (entry.status !== 'ok' || entry.totalEr === undefined) return null;
+    if (entry.status !== 'ok' || entry.stableEr === undefined) return null;
     const current = charOf(entry.characterId)?.energyRecharge ?? 100;
-    const diff = Math.round((current - entry.totalEr) * 10) / 10;
+    const diff = Math.round((current - entry.stableEr) * 10) / 10;
     return diff >= 0
       ? <span className="text-emerald-400">{diff === 0 ? t('gcsim:er.enough') : t('gcsim:er.surplus', { diff })}</span>
       : <span className="text-rose-400">{t('gcsim:er.short', { diff: Math.abs(diff) })}</span>;
@@ -103,7 +124,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         </div>
 
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
-          <p className="text-xs text-slate-400 leading-relaxed">{t('gcsim:er.intro', { seeds: ER_SEEDS })}</p>
+          <p className="text-xs text-slate-400 leading-relaxed">{t('gcsim:er.intro', { laps: ER_LOOP_ITERATIONS })}</p>
 
           {notRunnable.length > 0 && (
             <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-900/60 rounded-lg p-3 space-y-1">
@@ -124,14 +145,22 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             )}
             {running && (
               <span className="text-xs text-slate-300">
-                {progress && progress.name
-                  ? t('gcsim:er.progress', { name: progress.name, done: progress.done + 1, total: progress.total })
-                  : t('gcsim:er.running')}
+                {progress ? t(`gcsim:er.${PHASE_KEY[progress.phase]}`) : t('gcsim:er.running')}
+                {startedAt !== null && (() => {
+                  const elapsed = now - startedAt;
+                  // 実行回数の割合から、残り時間を推定する（探索の回数は見積りなので、目安）
+                  const fraction = progress && progress.runsExpected > 0 ? Math.min(0.97, progress.runsDone / progress.runsExpected) : 0;
+                  return ` ・ ${fraction >= 0.05 && elapsed > 5000
+                    ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(elapsed * (1 - fraction) / fraction) })
+                    : t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
+                })()}
               </span>
             )}
             {saved && !running && (
               <span className="text-xs text-slate-500">
-                {t('gcsim:er.lastRun', { date: new Date(saved.ranAt).toLocaleString(dateLocale), seeds: saved.seeds })}
+                {saved.elapsedMs !== undefined
+                  ? t('gcsim:er.lastRunWithTime', { date: new Date(saved.ranAt).toLocaleString(dateLocale), seeds: saved.seeds, elapsed: formatDuration(saved.elapsedMs) })
+                  : t('gcsim:er.lastRun', { date: new Date(saved.ranAt).toLocaleString(dateLocale), seeds: saved.seeds })}
               </span>
             )}
           </div>
@@ -150,7 +179,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
                   <th className="py-1.5 pr-2 font-semibold">{t('gcsim:er.colName')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:er.colCurrent')}</th>
-                  <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:er.colRequired')}</th>
+                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colTypicalTitle')}>{t('gcsim:er.colTypical')}</th>
+                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colStableTitle')}>{t('gcsim:er.colStable')}</th>
+                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
                   <th className="py-1.5 font-semibold text-right">{t('gcsim:er.colDiff')}</th>
                 </tr>
               </thead>
@@ -161,11 +192,18 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                     <tr key={e.characterId} className="border-b border-slate-800/60">
                       <td className="py-1.5 pr-2 text-slate-200">{c ? charName(c) : e.name}</td>
                       <td className="py-1.5 pr-2 text-right text-slate-400">{c ? `${c.energyRecharge ?? 100}%` : '-'}</td>
-                      <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">
-                        {e.status === 'ok' && `${e.totalEr}%`}
-                        {e.status === 'noBurst' && <span className="font-normal text-slate-500">{t('gcsim:er.noBurst')}</span>}
-                        {e.status === 'unreachable' && <span className="font-normal text-rose-400">{t('gcsim:er.unreachable', { max: ER_MAX_ADDED * 100 })}</span>}
-                      </td>
+                      {e.status === 'ok' ? (
+                        <>
+                          <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%</td>
+                          <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%</td>
+                          <td className="py-1.5 pr-2 text-right text-amber-500">{e.certainEr}%</td>
+                        </>
+                      ) : (
+                        <td colSpan={3} className="py-1.5 pr-2 text-right">
+                          {e.status === 'noBurst' && <span className="text-slate-500">{t('gcsim:er.noBurst')}</span>}
+                          {e.status === 'unreachable' && <span className="text-rose-400">{t('gcsim:er.unreachable', { max: ER_MAX_ADDED * 100 })}</span>}
+                        </td>
+                      )}
                       <td className="py-1.5 text-right">{diffCell(e)}</td>
                     </tr>
                   );
@@ -176,7 +214,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             !running && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>
           )}
 
-          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note')}</p>
+          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: saved?.seeds ?? 10, laps: ER_LOOP_ITERATIONS })}</p>
         </div>
       </div>
     </div>

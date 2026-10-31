@@ -83,6 +83,8 @@ export interface GcsimConfigInput {
    * false のとき、爆発はエネルギーが足りるまで実行されない（必要な元素チャージ効率の算出で使う。フェーズ7）
    */
   ignoreBurstEnergy?: boolean;
+  /** ループ部分を回す周数（既定 LOOP_ITERATIONS = 2）。必要な元素チャージ効率の算出は、エネルギーが落ち着く周まで回すため、多くする */
+  loopIterations?: number;
   /** キャラ ID → 仮ステータスに足す元素チャージ効率（割合。1 = +100%。武器・聖遺物のサブステの分は gcsim が別に足す）。無いキャラは足さない */
   addedEnergyRechargeByCharacterId?: Record<string, number>;
   weapons: WeaponDatabaseItem[];
@@ -138,6 +140,7 @@ const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
 export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult {
   // グループの回数を展開する（追加作業 20-A）
   const input: GcsimConfigInput = { ...rawInput, stints: expandGroupedStints(rawInput.stints) };
+  const loopIterations = Math.max(1, Math.floor(rawInput.loopIterations ?? LOOP_ITERATIONS));
   const warnings: GcsimWarning[] = [];
   const error = (message: string) => warnings.push({ level: 'error', message });
   const warn = (message: string) => warnings.push({ level: 'warn', message });
@@ -321,7 +324,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   });
   const actionRefs: GcsimActionRef[] = [
     ...initialRefs.map(r => ({ ...r, phase: 'initial' as const })),
-    ...Array.from({ length: LOOP_ITERATIONS }, (_, i) => loopRefs.map(r => ({ ...r, phase: 'loop' as const, loopIteration: i + 1 }))).flat(),
+    ...Array.from({ length: loopIterations }, (_, i) => loopRefs.map(r => ({ ...r, phase: 'loop' as const, loopIteration: i + 1 }))).flat(),
   ];
 
   if (plungeChars.size > 0) {
@@ -362,7 +365,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
       .reduce((sum, a) => sum + Math.max(0, a.duration || 0) + actionDelayOf(a), 0);
   const estimated = initialStints.reduce((t, s) => t + stintSeconds(s), 0)
-    + loopStints.reduce((t, s) => t + stintSeconds(s), 0) * LOOP_ITERATIONS;
+    + loopStints.reduce((t, s) => t + stintSeconds(s), 0) * loopIterations;
   const duration = Math.ceil(estimated * DURATION_MARGIN_FACTOR + DURATION_MARGIN_SECONDS);
 
   const firstKey = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
@@ -377,7 +380,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     '',
     ...initialLines,
     'let i = 1;',
-    `while i <= ${LOOP_ITERATIONS} {`,
+    `while i <= ${loopIterations} {`,
     '  print("loop ", i);',
     ...loopLines,
     '  i = i + 1;',

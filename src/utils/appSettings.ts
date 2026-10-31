@@ -30,7 +30,7 @@ export function saveHurt(value: HurtSetting): void {
 /** 必要元素チャージ効率の最後の算出結果（無い・形が違うときは null） */
 export function loadRequiredEr(): RequiredErResult | null {
   const v = readJson<Partial<RequiredErResult>>(SETTING_KEYS.requiredEnergyRecharge);
-  if (!v || typeof v !== 'object' || !Array.isArray(v.entries) || typeof v.fingerprint !== 'string' || typeof v.gcsimVersion !== 'string' || !Number.isFinite(v.ranAt)) return null;
+  if (!v || typeof v !== 'object' || !Array.isArray(v.entries) || typeof v.fingerprint !== 'string' || v.entries.some(e => !e || typeof e.status !== 'string' || (e.status === 'ok' && !Number.isFinite(e.certainEr))) || typeof v.gcsimVersion !== 'string' || !Number.isFinite(v.ranAt)) return null;
   return v as RequiredErResult;
 }
 

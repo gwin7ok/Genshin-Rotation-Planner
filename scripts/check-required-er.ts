@@ -110,7 +110,7 @@ for (const e of result.entries.filter((x: any) => x.status === 'ok')) check(e.ty
 
 // 検証: 確実の値で全種が一致し、小さくすると外れる
 const baselineSig = async (seed: number) => er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: true, added: {} }).config, seed)).logs);
-const differs = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES) !== undefined;
+const differs = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES, er.ER_WARMUP_WINDOWS) !== undefined;
 const sigAt = async (id: string, x: number, seed: number) => {
   const added = { ...Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED])), [id]: x };
   return er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: false, added }).config, seed)).logs);

@@ -385,7 +385,12 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES}${input.ignoreBurstEnergy === false ? '' : ' ignore_burst_energy=true'}${input.defHalt === false ? ' defhalt=false' : ''};`,
     'target lvl=100 resist=0.1;',
     ...(input.enemyParticles && input.enemyParticles.amount > 0
-      ? [`energy every interval=${Math.round(input.enemyParticles.minSeconds * 60)},${Math.round(Math.max(input.enemyParticles.minSeconds, input.enemyParticles.maxSeconds) * 60)} amount=${input.enemyParticles.amount};`]
+      ? (() => {
+        // 最小と最大が同じだと gcsim が止まる（Intn の引数が 0）。最大を 1 フレーム広げる
+        const minF = Math.round(input.enemyParticles.minSeconds * 60);
+        const maxF = Math.max(Math.round(input.enemyParticles.maxSeconds * 60), minF + 1);
+        return [`energy every interval=${minF},${maxF} amount=${input.enemyParticles.amount};`];
+      })()
       : []),
     ...(hurtStatement(input.hurt) ? [hurtStatement(input.hurt)!] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),

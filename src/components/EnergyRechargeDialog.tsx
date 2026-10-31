@@ -4,6 +4,7 @@ import { t, dateLocale, currentLanguage } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
+import { resolveEngine, wasmParallelism } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { loadRequiredEr, saveRequiredEr } from '../utils/appSettings';
 import {
@@ -11,7 +12,10 @@ import {
   fingerprintOf,
   ER_LOOP_ITERATIONS,
   ER_MAX_ADDED,
+  ER_DEFAULT_BURST_WAIT_SECONDS,
   ER_DEFAULT_ENEMY_PARTICLES,
+  ER_VERIFY_TOLERANCE_PRECISE,
+  ER_VERIFY_TOLERANCE_ROUGH,
   type BuildForEr,
   type RequiredErProgress,
   type RequiredErResult,
@@ -50,6 +54,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
+  const [precise, setPrecise] = useState(false);
+  const [wait, setWait] = useState(String(ER_DEFAULT_BURST_WAIT_SECONDS));
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
@@ -64,6 +70,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
     setPAmount(String(p.amount));
+    setPrecise(last?.precise === true);
+    setWait(String(last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
     setCurrentFingerprint(fingerprintOf(base.config));
@@ -89,14 +97,25 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setProgress(null);
     setStartedAt(Date.now());
     setNow(Date.now());
-    const outcome = await computeRequiredEr({
-      build: extra => buildRef.current(extra),
-      enemyParticles: particles,
-      run: runGcsimSample,
-      gcsimVersion: GCSIM_VERSION,
-      onProgress: setProgress,
-      shouldCancel: () => cancelRef.current,
-    });
+    // WASM（ブラウザの中で実行）のときは、Worker を並べて、種を同時に実行する
+    const parallel = (await resolveEngine()) === 'wasm' ? wasmParallelism() : 1;
+    let outcome: Awaited<ReturnType<typeof computeRequiredEr>>;
+    try {
+      outcome = await computeRequiredEr({
+        build: extra => buildRef.current(extra),
+        enemyParticles: particles,
+        parallel,
+        burstWaitSeconds: (() => { const v = Number(wait); return Number.isFinite(v) && v >= 0 ? Math.round(v * 10) / 10 : ER_DEFAULT_BURST_WAIT_SECONDS; })(),
+        verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
+        run: runGcsimSample,
+        gcsimVersion: GCSIM_VERSION,
+        onProgress: setProgress,
+        shouldCancel: () => cancelRef.current,
+      });
+    } catch (e) {
+      // 想定外の例外でも、「計算中」のまま止まらないようにする
+      outcome = { status: 'error', message: e instanceof Error ? e.message : String(e) };
+    }
     setRunning(false);
     setProgress(null);
     if (outcome.status === 'ok') {
@@ -114,6 +133,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const stale = saved !== null && currentFingerprint !== null && saved.fingerprint !== currentFingerprint;
   // 編成・ローテーションが前回の計算のときから変わっているときは、前回の結果を表示しない（指紋が出るまでも出さない）
   const shown = saved !== null && currentFingerprint !== null && saved.fingerprint === currentFingerprint ? saved : null;
+  // 足りる確率: 概算は値を最大 ER 20% 高めに丸めているので「以上」、精密は「約」
+  const pctLabel = (p?: number) => p === undefined ? null : <span className="ml-1 text-[10px] font-normal text-slate-400">({t(shown?.precise ? 'gcsim:er.pctAbout' : 'gcsim:er.pctAtLeast', { pct: p })})</span>;
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
 
   return (
@@ -155,6 +176,28 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.enemyParticlesNote')}</p>
           </div>
 
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.precision')}</p>
+            <div className="flex items-center gap-1.5">
+              {([false, true] as const).map(v => (
+                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
+                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.burstWait')}</p>
+            <div className="flex items-center gap-1.5">
+              <input type="number" min={0} step={0.1} value={wait} onChange={e => setWait(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.burstWaitUnit')}</span>
+              <button onClick={() => setWait(String(ER_DEFAULT_BURST_WAIT_SECONDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.burstWaitNote')}</p>
+          </div>
+
           <div className="flex items-center gap-3 flex-wrap">
             {running ? (
               <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white">
@@ -170,13 +213,16 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 {progress ? t(`gcsim:er.${PHASE_KEY[progress.phase]}`) : t('gcsim:er.running')}
                 {startedAt !== null && (() => {
                   const elapsed = now - startedAt;
-                  // 実行回数の割合から、残り時間を推定する（探索の回数は見積りなので、目安）
-                  // 見積りの回数を超えたら（確かめが長引いているとき）、残り時間は出さない
-                  const overrun = progress !== null && progress.runsDone + 1 >= progress.runsExpected;
-                  const fraction = progress && !overrun && progress.runsExpected > 0 ? Math.min(0.97, progress.runsDone / progress.runsExpected) : 0;
-                  return ` ・ ${fraction >= 0.05 && elapsed > 5000
-                    ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(elapsed * (1 - fraction) / fraction) })
-                    : t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
+                  // 残り時間 = 塊（同時に実行する種のまとまり）の平均時間 × 残りの塊の数。確かめは何回で収まるか分からないので、最小〜最大の幅で出す
+                  if (!progress || progress.chunksDone < 2 || elapsed < 5000) return ` ・ ${t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
+                  const perChunk = elapsed / progress.chunksDone;
+                  const low = progress.chunksLeftLow * perChunk;
+                  const high = progress.chunksLeftHigh * perChunk;
+                  if (high < 4000) return ` ・ ${t('gcsim:er.elapsedRunningSoon', { elapsed: formatDuration(elapsed) })}`;
+                  const mid = (low + high) / 2;
+                  return ` ・ ${high - low < Math.max(8000, mid * 0.25)
+                    ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(mid) })
+                    : t('gcsim:er.elapsedRunningRange', { elapsed: formatDuration(elapsed), low: formatDuration(low), high: formatDuration(high) })}`;
                 })()}
               </span>
             )}
@@ -217,9 +263,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                       <td className="py-1.5 pr-2 text-right text-slate-400">{c ? `${c.energyRecharge ?? 100}%` : '-'}</td>
                       {e.status === 'ok' ? (
                         <>
-                          <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%</td>
-                          <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%</td>
-                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%</td>
+                          <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%{pctLabel(e.typicalPct)}</td>
+                          <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%{pctLabel(e.stablePct)}</td>
+                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%{pctLabel(e.certainPct)}</td>
                         </>
                       ) : (
                         <td colSpan={3} className="py-1.5 text-right">

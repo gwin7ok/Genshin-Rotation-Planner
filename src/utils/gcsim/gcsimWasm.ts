@@ -52,29 +52,54 @@ export async function resolveEngine(): Promise<GcsimEngine> {
 interface Pending {
   resolve: (out: string) => void;
   reject: (e: Error) => void;
+  worker: Worker;
 }
 
-let worker: Worker | null = null;
+/** 同時に動かす Worker の数の上限（コア数 − 1 を上限 4 まで。1 コアなら 1） */
+export function wasmParallelism(): number {
+  const cores = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || 2 : 2;
+  return Math.max(1, Math.min(4, cores - 1));
+}
+
+const workers: Worker[] = [];
+const inFlight = new Map<Worker, number>();
 let nextId = 1;
 const pending = new Map<number, Pending>();
 
-function ensureWorker(): Worker {
-  if (worker) return worker;
+function dropWorker(w: Worker): void {
+  w.terminate();
+  const i = workers.indexOf(w);
+  if (i >= 0) workers.splice(i, 1);
+  inFlight.delete(w);
+}
+
+function createWorker(): Worker {
   const w = new Worker(`${baseUrl()}gcsim/worker.js`);
   w.onmessage = (e: MessageEvent<{ id: number; ok: boolean; out?: string; error?: string }>) => {
     const p = pending.get(e.data.id);
     if (!p) return;
     pending.delete(e.data.id);
+    inFlight.set(w, Math.max(0, (inFlight.get(w) ?? 1) - 1));
     if (e.data.ok) p.resolve(e.data.out ?? '');
     else p.reject(new Error(e.data.error ?? t('messages:client.wasmFailed')));
   };
   w.onerror = (ev: ErrorEvent) => {
-    failAll(new Error(ev.message || t('messages:client.workerFailed')));
-    w.terminate();
-    if (worker === w) worker = null;
+    // この Worker に任せていた要求だけを失敗にする
+    const err = new Error(ev.message || t('messages:client.workerFailed'));
+    for (const [id, p] of pending) if (p.worker === w) { pending.delete(id); p.reject(err); }
+    dropWorker(w);
   };
-  worker = w;
+  workers.push(w);
+  inFlight.set(w, 0);
   return w;
+}
+
+/** 空いている Worker を返す（全部使用中で、上限未満なら、新しく作る。上限なら、一番空いているものに並べる） */
+function pickWorker(): Worker {
+  const idle = workers.find(w => (inFlight.get(w) ?? 0) === 0);
+  if (idle) return idle;
+  if (workers.length < wasmParallelism()) return createWorker();
+  return workers.reduce((a, b) => ((inFlight.get(a) ?? 0) <= (inFlight.get(b) ?? 0) ? a : b));
 }
 
 function failAll(e: Error): void {
@@ -82,14 +107,13 @@ function failAll(e: Error): void {
   pending.clear();
 }
 
-/** Worker を捨てる（タイムアウト・中断のとき。次の要求で作り直す） */
+/** Worker を全部捨てる（タイムアウト・中断のとき。次の要求で作り直す） */
 function resetWorker(reason: Error): void {
-  if (worker) worker.terminate();
-  worker = null;
+  for (const w of [...workers]) dropWorker(w);
   failAll(reason);
 }
 
-/** WASM の gcsim を実行して、JSON 文字列を得る（signal が中断されたら、Worker を捨てて AbortError にする） */
+/** WASM の gcsim を実行して、JSON 文字列を得る（signal が中断されたら、Worker を捨てて AbortError にする。同時に複数呼べば、Worker を並べて動かす） */
 export function wasmCall(
   kind: 'sample' | 'validate',
   payload: { config: string; seed?: number },
@@ -107,7 +131,9 @@ export function wasmCall(
       reject(new DOMException('aborted', 'AbortError'));
     };
     signal.addEventListener('abort', onAbort, { once: true });
+    const w = pickWorker();
     pending.set(id, {
+      worker: w,
       resolve: out => {
         signal.removeEventListener('abort', onAbort);
         resolve(out);
@@ -117,7 +143,8 @@ export function wasmCall(
         reject(e);
       },
     });
-    ensureWorker().postMessage({ id, t: kind, config: payload.config, seed: payload.seed });
+    inFlight.set(w, (inFlight.get(w) ?? 0) + 1);
+    w.postMessage({ id, t: kind, config: payload.config, seed: payload.seed });
   });
 }
 

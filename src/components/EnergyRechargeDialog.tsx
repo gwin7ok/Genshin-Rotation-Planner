@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
-import { t, dateLocale, currentLanguage } from '../i18n';
+import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
@@ -16,6 +16,7 @@ import {
   ER_DEFAULT_SEEDS,
   ER_MAX_SEEDS,
   ER_DEFAULT_ENEMY_PARTICLES,
+  verifyCharacters,
   ER_VERIFY_TOLERANCE_PRECISE,
   ER_VERIFY_TOLERANCE_ROUGH,
   type BuildForEr,
@@ -32,7 +33,7 @@ interface EnergyRechargeDialogProps {
   characters: CharacterConfig[];
 }
 
-const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify' } as const;
+const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify', refine: 'phaseRefine' } as const;
 
 /** 秒数を「m分ss秒」（英語は m:ss）にする */
 const formatDuration = (ms: number): string => {
@@ -57,6 +58,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
   const [precise, setPrecise] = useState(false);
+  const [verifyNames, setVerifyNames] = useState<string[]>([]);
   const [wait, setWait] = useState(String(ER_DEFAULT_BURST_WAIT_SECONDS));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   const cancelRef = useRef(false);
@@ -73,12 +75,14 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
     setPAmount(String(p.amount));
-    setPrecise(last?.precise === true);
     setWait(String(last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS));
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
+    setPrecise(last?.precise === true);
     setCurrentFingerprint(fingerprintOf(base.config));
+    // 回復量が自分の ER で決まるキャラ（雷電将軍・九条裟羅・ドリー）がいる編成は、確実の値を精密検証で求める（自動）
+    setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
 
@@ -109,9 +113,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         build: extra => buildRef.current(extra),
         enemyParticles: particles,
         parallel,
+        verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
         seeds: (() => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; })(),
         burstWaitSeconds: (() => { const v = Number(wait); return Number.isFinite(v) && v >= 0 ? Math.round(v * 10) / 10 : ER_DEFAULT_BURST_WAIT_SECONDS; })(),
-        verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
         run: runGcsimSample,
         gcsimVersion: GCSIM_VERSION,
         onProgress: setProgress,
@@ -138,8 +142,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const stale = saved !== null && currentFingerprint !== null && saved.fingerprint !== currentFingerprint;
   // 編成・ローテーションが前回の計算のときから変わっているときは、前回の結果を表示しない（指紋が出るまでも出さない）
   const shown = saved !== null && currentFingerprint !== null && saved.fingerprint === currentFingerprint ? saved : null;
-  // 足りる確率: 概算は値を最大 ER 10% 高めに丸めているので「以上」、精密は「約」
-  const pctLabel = (p?: number) => p === undefined ? null : <span className="ml-1 text-[10px] font-normal text-slate-400">({t(shown?.precise ? 'gcsim:er.pctAbout' : 'gcsim:er.pctAtLeast', { pct: p })})</span>;
+  // 足りる確率: 概算検証は値を最大 ER 10% 高めに丸めているので「以上」、精密検証・計算のみは「約」
+  // 「以上」は確実だけ（概算検証は値を最大 ER 10% 高めに丸める）。目安・安定は丸めないので「約」
+  const pctLabel = (p: number | undefined, estimated = false) => p === undefined ? null : <span className="ml-1 text-[10px] font-normal text-slate-400">({t(estimated ? 'gcsim:er.pctEstimated' : 'gcsim:er.pctMeasured', { pct: p })})</span>;
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
 
   return (
@@ -178,6 +183,12 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
           </div>
+
+          {verifyNames.length > 0 && (
+            <div className="text-xs text-amber-200 bg-amber-950/30 border border-amber-900/60 rounded-lg p-3 leading-relaxed">
+              {t('gcsim:er.verifyAuto', { names: joinList(verifyNames) })}
+            </div>
+          )}
 
           <div className="flex items-center gap-3 flex-wrap">
             {running ? (
@@ -244,7 +255,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                         <>
                           <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%{pctLabel(e.typicalPct)}</td>
                           <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%{pctLabel(e.stablePct)}</td>
-                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%{pctLabel(e.certainPct)}</td>
+                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%{pctLabel(e.certainPct, true)}</td>
                         </>
                       ) : (
                         <td colSpan={3} className="py-1.5 text-right">

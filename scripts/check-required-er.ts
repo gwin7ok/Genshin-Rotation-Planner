@@ -96,7 +96,7 @@ const partial = [er.collectEnergyTimelines([
 const pr = er.requiredErForRate(partial, 1);
 check(Math.abs(pr - 600) < 0.1, `必要 ERの計算: 一部だけ消費した残りのエネルギーを引き継ぐ（${pr}）`);
 
-const outcome = await er.computeRequiredEr({ build, run: runGcsimSample, gcsimVersion: 'check' });
+const outcome = await er.computeRequiredEr({ build, run: runGcsimSample, gcsimVersion: "check", verify: true, verifyTolerance: er.ER_VERIFY_TOLERANCE_ROUGH });
 if (outcome.status !== 'ok') {
   console.log(`✗ 算出が成功しなかった: ${outcome.status} ${outcome.message ?? ''}`);
   await server.close();

@@ -53,7 +53,7 @@ const stints = [
 const build = (extra?: { ignoreBurstEnergy: boolean; added: Record<string, number> }) =>
   buildGcsimConfig({
     characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [],
-    ...(extra ? { ignoreBurstEnergy: extra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: extra.added, loopIterations: er.ER_LOOP_ITERATIONS } : {}),
+    ...(extra ? { ignoreBurstEnergy: extra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: extra.added, loopIterations: er.ER_LOOP_ITERATIONS, tightDuration: true } : {}),
   });
 
 let failed = 0;
@@ -66,6 +66,8 @@ const plain = build();
 check(plain.config.includes('ignore_burst_energy=true') && !/ er=/.test(plain.config), '通常の設定文: ignore_burst_energy=true が残り、ER の指定が出ない');
 const withEr = build({ ignoreBurstEnergy: false, added: { [chars[1].id]: 1.5 } });
 check(!withEr.config.includes('ignore_burst_energy') && withEr.config.includes('add stats cr=1 er=1.5;'), '算出用の設定文: ignore_burst_energy が無く、ER の行が出る');
+const withParticles = buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], enemyParticles: { minSeconds: 8, maxSeconds: 12, amount: 1 } });
+check(withParticles.config.includes('energy every interval=480,720 amount=1;') && !plain.config.includes('energy every'), '敵の粒子: 指定したときだけ `energy every` の行が出る（8〜12 秒 = 480〜720 フレーム）');
 
 // 必要 ER の計算（合成ログ）: 爆発 4 回。最初は数えない。
 //   2 回目 = 粒子 (10÷2)+(6÷2) = 8（ER 100% 換算）・固定 10 → (50−10)÷8 = 500% で足りる / 3 回目 = 粒子なし → 届かない / 4 回目 = 固定 60 → 0 でも足りる

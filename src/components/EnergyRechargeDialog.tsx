@@ -11,6 +11,7 @@ import {
   fingerprintOf,
   ER_LOOP_ITERATIONS,
   ER_MAX_ADDED,
+  ER_DEFAULT_ENEMY_PARTICLES,
   type BuildForEr,
   type RequiredErProgress,
   type RequiredErResult,
@@ -45,6 +46,10 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [message, setMessage] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  // 敵の粒子の設定（実行前に変えられる。入力中は文字列。最後に実行した値があればそれを使う）
+  const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
+  const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
+  const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
@@ -52,7 +57,13 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // 開いたとき: 最後の結果を読み、今の設定文の指紋を求める（編成・ローテーションが変わっていないかの判定に使う）
   useEffect(() => {
     if (!isOpen) return;
-    setSaved(loadRequiredEr());
+    const last = loadRequiredEr();
+    setSaved(last);
+    // 古い保存（この設定が無かった頃）は、既定にする
+    const p = last?.enemyParticles ?? ER_DEFAULT_ENEMY_PARTICLES;
+    setPMin(String(p.minSeconds));
+    setPMax(String(p.maxSeconds));
+    setPAmount(String(p.amount));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
     setCurrentFingerprint(fingerprintOf(base.config));
@@ -69,6 +80,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   if (!isOpen) return null;
 
   const start = async () => {
+    const num = (s: string) => { const v = Number(s); return Number.isFinite(v) && v >= 0 ? v : 0; };
+    const minS = num(pMin);
+    const particles = num(pAmount) > 0 && num(pMax) > 0 ? { minSeconds: Math.min(minS, num(pMax)), maxSeconds: Math.max(minS, num(pMax)), amount: num(pAmount) } : undefined;
     cancelRef.current = false;
     setRunning(true);
     setMessage(null);
@@ -77,6 +91,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setNow(Date.now());
     const outcome = await computeRequiredEr({
       build: extra => buildRef.current(extra),
+      enemyParticles: particles,
       run: runGcsimSample,
       gcsimVersion: GCSIM_VERSION,
       onProgress: setProgress,
@@ -97,16 +112,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
   const charOf = (id: string) => characters.find(c => c.id === id);
   const stale = saved !== null && currentFingerprint !== null && saved.fingerprint !== currentFingerprint;
+  // 編成・ローテーションが前回の計算のときから変わっているときは、前回の結果を表示しない（指紋が出るまでも出さない）
+  const shown = saved !== null && currentFingerprint !== null && saved.fingerprint === currentFingerprint ? saved : null;
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
-
-  const diffCell = (entry: RequiredErResult['entries'][number]) => {
-    if (entry.status !== 'ok' || entry.stableEr === undefined) return null;
-    const current = charOf(entry.characterId)?.energyRecharge ?? 100;
-    const diff = Math.round((current - entry.stableEr) * 10) / 10;
-    return diff >= 0
-      ? <span className="text-emerald-400">{diff === 0 ? t('gcsim:er.enough') : t('gcsim:er.surplus', { diff })}</span>
-      : <span className="text-rose-400">{t('gcsim:er.short', { diff: Math.abs(diff) })}</span>;
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
@@ -133,6 +141,20 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
           )}
 
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <input type="number" min={0} step={0.5} value={pMin} onChange={e => setPMin(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>〜</span>
+              <input type="number" min={0} step={0.5} value={pMax} onChange={e => setPMax(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.enemyParticlesEvery')}</span>
+              <input type="number" min={0} step={1} value={pAmount} onChange={e => setPAmount(e.target.value)} disabled={running} className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <span>{t('gcsim:er.enemyParticlesUnit')}</span>
+              <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.enemyParticlesNote')}</p>
+          </div>
+
           <div className="flex items-center gap-3 flex-wrap">
             {running ? (
               <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white">
@@ -149,18 +171,20 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 {startedAt !== null && (() => {
                   const elapsed = now - startedAt;
                   // 実行回数の割合から、残り時間を推定する（探索の回数は見積りなので、目安）
-                  const fraction = progress && progress.runsExpected > 0 ? Math.min(0.97, progress.runsDone / progress.runsExpected) : 0;
+                  // 見積りの回数を超えたら（確かめが長引いているとき）、残り時間は出さない
+                  const overrun = progress !== null && progress.runsDone + 1 >= progress.runsExpected;
+                  const fraction = progress && !overrun && progress.runsExpected > 0 ? Math.min(0.97, progress.runsDone / progress.runsExpected) : 0;
                   return ` ・ ${fraction >= 0.05 && elapsed > 5000
                     ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(elapsed * (1 - fraction) / fraction) })
                     : t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
                 })()}
               </span>
             )}
-            {saved && !running && (
+            {shown && !running && (
               <span className="text-xs text-slate-500">
-                {saved.elapsedMs !== undefined
-                  ? t('gcsim:er.lastRunWithTime', { date: new Date(saved.ranAt).toLocaleString(dateLocale), seeds: saved.seeds, elapsed: formatDuration(saved.elapsedMs) })
-                  : t('gcsim:er.lastRun', { date: new Date(saved.ranAt).toLocaleString(dateLocale), seeds: saved.seeds })}
+                {shown.elapsedMs !== undefined
+                  ? t('gcsim:er.lastRunWithTime', { date: new Date(shown.ranAt).toLocaleString(dateLocale), seeds: shown.seeds, elapsed: formatDuration(shown.elapsedMs) })
+                  : t('gcsim:er.lastRun', { date: new Date(shown.ranAt).toLocaleString(dateLocale), seeds: shown.seeds })}
               </span>
             )}
           </div>
@@ -169,11 +193,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {stale && !running && (
             <p className="text-xs text-amber-300 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.stale')}</p>
           )}
-          {oldVersion && !running && saved && (
-            <p className="text-xs text-amber-300 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.oldVersion', { saved: saved.gcsimVersion, current: GCSIM_VERSION })}</p>
+          {oldVersion && !running && shown && (
+            <p className="text-xs text-amber-300 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.oldVersion', { saved: shown.gcsimVersion, current: GCSIM_VERSION })}</p>
           )}
 
-          {saved ? (
+          {shown ? (
             <table className="w-full text-xs border-collapse">
               <thead>
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
@@ -181,12 +205,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:er.colCurrent')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colTypicalTitle')}>{t('gcsim:er.colTypical')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colStableTitle')}>{t('gcsim:er.colStable')}</th>
-                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
-                  <th className="py-1.5 font-semibold text-right">{t('gcsim:er.colDiff')}</th>
+                  <th className="py-1.5 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
                 </tr>
               </thead>
               <tbody>
-                {saved.entries.map(e => {
+                {shown.entries.map(e => {
                   const c = charOf(e.characterId);
                   return (
                     <tr key={e.characterId} className="border-b border-slate-800/60">
@@ -196,25 +219,24 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                         <>
                           <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%</td>
                           <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%</td>
-                          <td className="py-1.5 pr-2 text-right text-amber-500">{e.certainEr}%</td>
+                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%</td>
                         </>
                       ) : (
-                        <td colSpan={3} className="py-1.5 pr-2 text-right">
+                        <td colSpan={3} className="py-1.5 text-right">
                           {e.status === 'noBurst' && <span className="text-slate-500">{t('gcsim:er.noBurst')}</span>}
                           {e.status === 'unreachable' && <span className="text-rose-400">{t('gcsim:er.unreachable', { max: ER_MAX_ADDED * 100 })}</span>}
                         </td>
                       )}
-                      <td className="py-1.5 text-right">{diffCell(e)}</td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
           ) : (
-            !running && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>
+            !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>
           )}
 
-          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: saved?.seeds ?? 10, laps: ER_LOOP_ITERATIONS })}</p>
+          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: shown?.seeds ?? 10, laps: ER_LOOP_ITERATIONS })}</p>
         </div>
       </div>
     </div>

@@ -27,6 +27,9 @@ export const LOOP_ITERATIONS = 2;
 /** duration の余裕（CT待ちで周が延びても足りるように、見積りの倍＋固定秒） */
 const DURATION_MARGIN_FACTOR = 2;
 const DURATION_MARGIN_SECONDS = 30;
+/** 余裕を少なくした見積り（必要な元素チャージ効率の算出。実行回数が多いので、動作が終わったあとの空き時間を減らす） */
+const TIGHT_DURATION_MARGIN_FACTOR = 1.3;
+const TIGHT_DURATION_MARGIN_SECONDS = 10;
 
 /** gcsim の `swap_delay`（交代の要求から実行までのフレーム数）。交代遅延は `swap; delay(...)` で入れるため、最小にする */
 const SWAP_DELAY_FRAMES = 1;
@@ -85,6 +88,10 @@ export interface GcsimConfigInput {
   ignoreBurstEnergy?: boolean;
   /** ループ部分を回す周数（既定 LOOP_ITERATIONS = 2）。必要な元素チャージ効率の算出は、エネルギーが落ち着く周まで回すため、多くする */
   loopIterations?: number;
+  /** シミュレーション時間の余裕を少なくする（算出で、エネルギー待ちによる遅れが小さいときだけ使う。足りないと、爆発が基準より少なく出て「ずれ」と判定される） */
+  tightDuration?: boolean;
+  /** 敵から出る粒子（gcsim の `energy every`。クリア粒子 = 元素なし）。必要な元素チャージ効率の算出で使う。無い・amount 0 以下なら出さない */
+  enemyParticles?: { minSeconds: number; maxSeconds: number; amount: number };
   /** キャラ ID → 仮ステータスに足す元素チャージ効率（割合。1 = +100%。武器・聖遺物のサブステの分は gcsim が別に足す）。無いキャラは足さない */
   addedEnergyRechargeByCharacterId?: Record<string, number>;
   weapons: WeaponDatabaseItem[];
@@ -366,7 +373,9 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       .reduce((sum, a) => sum + Math.max(0, a.duration || 0) + actionDelayOf(a), 0);
   const estimated = initialStints.reduce((t, s) => t + stintSeconds(s), 0)
     + loopStints.reduce((t, s) => t + stintSeconds(s), 0) * loopIterations;
-  const duration = Math.ceil(estimated * DURATION_MARGIN_FACTOR + DURATION_MARGIN_SECONDS);
+  const duration = input.tightDuration
+    ? Math.ceil(estimated * TIGHT_DURATION_MARGIN_FACTOR + TIGHT_DURATION_MARGIN_SECONDS)
+    : Math.ceil(estimated * DURATION_MARGIN_FACTOR + DURATION_MARGIN_SECONDS);
 
   const firstKey = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
 
@@ -375,6 +384,9 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     '',
     `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES}${input.ignoreBurstEnergy === false ? '' : ' ignore_burst_energy=true'}${input.defHalt === false ? ' defhalt=false' : ''};`,
     'target lvl=100 resist=0.1;',
+    ...(input.enemyParticles && input.enemyParticles.amount > 0
+      ? [`energy every interval=${Math.round(input.enemyParticles.minSeconds * 60)},${Math.round(Math.max(input.enemyParticles.minSeconds, input.enemyParticles.maxSeconds) * 60)} amount=${input.enemyParticles.amount};`]
+      : []),
     ...(hurtStatement(input.hurt) ? [hurtStatement(input.hurt)!] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',

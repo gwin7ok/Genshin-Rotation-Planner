@@ -10,8 +10,8 @@
  *      爆発のエネルギーに足りる ER を、ログの粒子（ER 100% 換算）と固定の回復から直接求める
  *        必要な ER(%) = (爆発のエネルギー − 固定の回復) ÷ 粒子の合計（ER 100% 換算）
  *   3. 3 段: 窓の分布の 70% = 目安 / 90% = 安定 / 100% = 確実（全ての窓で足りる）
- *   4. 確実の値を gcsim で確かめる（全員を確実の値にして、全種で爆発が基準と一致するか。足りなければ、上げ幅を倍々に増やして上げ、通ったあとは半分ずつに絞る）
- *   5. 確かめた値で実行し直し、そのときのエネルギーの出入りで、目安・安定を求め直す（他のキャラの ER で量が変わる回復 = 雷電将軍の爆発などへの対策）
+ *   4. 確実の値を gcsim で検証する（全員を確実の値にして、全種で爆発が基準と一致するか。足りなければ、上げ幅を倍々に増やして上げ、通ったあとは半分ずつに絞る）
+ *   5. 検証した値で実行し直し、そのときのエネルギーの出入りで、目安・安定を求め直す（他のキャラの ER で量が変わる回復 = 雷電将軍の爆発などへの対策）
  * 周数は ER_LOOP_ITERATIONS。粒子は乱数なので、最大（全窓）は周・種が増えるほど少しずつ上がる（最悪の窓を拾う）。目安・安定は、あまり動かない
  */
 import { t } from '../../i18n';
@@ -23,8 +23,8 @@ import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
  * （実測: ラウマ +15% → 5 周 +78%）。窓は、爆発の間（周数 − 1 個）。
  */
 export const ER_LOOP_ITERATIONS = 4;
-/** 立ち上がりとして数えない窓の数（最初の爆発から 2 回目の爆発まで。1 周目は粒子の入り方が 2 周目以降と違うため） */
-export const ER_WARMUP_WINDOWS = 1;
+/** 立ち上がりとして数えない窓の数。0 = 最初の窓（最初の爆発から 2 回目の爆発まで）も、遅れの許容の設定にしたがって数える（1 周目は粒子が少なく、ここで遅れると次の窓の粒子が捨てられて連鎖するため。D308・D309） */
+export const ER_WARMUP_WINDOWS = 0;
 /** 試す乱数の種の数の既定（1 〜 この数）。粒子の出方は種で変わる。画面で変えられる */
 export const ER_DEFAULT_SEEDS = 20;
 export const ER_MAX_SEEDS = 100;
@@ -34,7 +34,7 @@ export const ER_MAX_ADDED = 5;
 export const ER_FLOOR_FRACTION = 1;
 /** 他のキャラの ER（足す分。エネルギー不足で止まらない十分大きい値） */
 const ER_OTHERS_ADDED = 10;
-/** 確実の値が確かめで足りなかったときに、上げる幅（足す分の割合） */
+/** 確実の値が検証で足りなかったときに、上げる幅（足す分の割合） */
 const VERIFY_BUMP = 0.05;
 /** 上げ幅の上限（倍々に増やしても、ここまで） */
 const VERIFY_MAX_STEP = 0.4;
@@ -49,16 +49,16 @@ export const verifyCharacters = <T extends { gcsimKey: string }>(members: T[]): 
 
 /** 目安・安定の求め直し（その値で動かし直す）の最大回数 */
 const REFINE_MAX_ROUNDS = 6;
-/** 確かめで、値を絞るのをやめる幅（足す分の割合）。概算 = 0.1（ER 10%）、精密 = 0.01（ER 1%。細かいほど時間が延びる） */
+/** 検証で、値を絞るのをやめる幅（足す分の割合）。概算 = 0.1（ER 10%）、精密 = 0.01（ER 1%。細かいほど時間が延びる） */
 export const ER_VERIFY_TOLERANCE_ROUGH = 0.1;
 export const ER_VERIFY_TOLERANCE_PRECISE = 0.01;
-/** 確かめの繰り返しの上限（無限ループの防止） */
+/** 検証の繰り返しの上限（無限ループの防止） */
 const VERIFY_MAX_ROUNDS = 100;
 /** 爆発の前に、エネルギーが貯まるのを待ってよい秒数の既定値（これ以内の遅れは「足りた」とみなす） */
 export const ER_DEFAULT_BURST_WAIT_SECONDS = 0;
 /** 同、フレーム数（60 フレーム = 1 秒） */
 export const ER_BURST_DELAY_FRAMES = ER_DEFAULT_BURST_WAIT_SECONDS * 60;
-/** 実行回数の見積り（基準 + 集計 + 確かめ。残り時間の推定に使う） */
+/** 実行回数の見積り（基準 + 集計 + 検証。残り時間の推定に使う） */
 
 /** 敵から出る粒子（秒の間隔のランダム範囲と、1 回の個数。クリア粒子） */
 export interface EnemyParticles {
@@ -84,7 +84,7 @@ export interface RequiredErEntry {
   typicalEr?: number;
   /** 安定: 爆発の 90% が足りる ER（%） */
   stableEr?: number;
-  /** 確実: 全ての窓で足りる値（%。gcsim で確かめ済み） */
+  /** 確実: 全ての窓で足りる値（%。gcsim で検証済み） */
   certainEr?: number;
   /** 目安・安定・確実の値で、窓が足りる確率の推定（%）。試した窓での実際の割合。確実は、全窓が足りたとき N÷(N+1)（次の 1 窓が最大を超える確率が 1÷(N+1) のため） */
   typicalPct?: number;
@@ -107,7 +107,7 @@ export interface RequiredErResult {
   windows: number;
   /** 求めたときの敵の粒子の設定（古い保存には無い） */
   enemyParticles?: EnemyParticles;
-  /** 精密（確かめを細かく絞った）で求めたか。古い保存・概算は無い */
+  /** 精密（検証を細かく絞った）で求めたか。古い保存・概算は無い */
   precise?: boolean;
   /** 確実の値を gcsim で検証したか。false = 計算のみ。古い保存は無い（検証した扱い） */
   verified?: boolean;
@@ -130,7 +130,7 @@ export interface RequiredErProgress {
   runsExpected: number;
   /** 同時に実行する塊（Promise.all 1 回分。並列のときは 1 塊 = 並列数の実行）を終えた回数。残り時間は、塊の平均時間 × 残りの塊の数で出す */
   chunksDone: number;
-  /** 残りの塊の数の見積り（最小〜最大。確かめは何回で収まるか分からないので、幅を持たせる） */
+  /** 残りの塊の数の見積り（最小〜最大。検証は何回で収まるか分からないので、幅を持たせる） */
   chunksLeftLow: number;
   chunksLeftHigh: number;
 }
@@ -312,7 +312,7 @@ export async function computeRequiredEr(args: {
   build: BuildForEr;
   /** 敵の粒子（無ければ出さない） */
   enemyParticles?: EnemyParticles;
-  /** 確かめの許容（足す分の割合）。既定は概算 */
+  /** 検証の許容（足す分の割合）。既定は概算 */
   verifyTolerance?: number;
   /** 確実の値を gcsim で検証するか（既定 true）。false は、記録した窓から計算するだけで、検証と見直しの実行をしない */
   verify?: boolean;
@@ -342,7 +342,7 @@ export async function computeRequiredEr(args: {
   let chunksDone = 0;
   let phase: RequiredErPhase = 'baseline';
   let phaseChunksDone = 0;
-  /** 確かめの残りの塊の数（最小・最大）。確かめの状態ができてから、状態から求める。それまでは、事前の見積り */
+  /** 検証の残りの塊の数（最小・最大）。検証の状態ができてから、状態から求める。それまでは、事前の見積り */
   let verifyEstimate: (() => { low: number; high: number }) | null = null;
   const seedTotal = Math.min(ER_MAX_SEEDS, Math.max(1, Math.floor(args.seeds ?? ER_DEFAULT_SEEDS)));
   const runsEstimate = seedTotal * 6;
@@ -356,7 +356,7 @@ export async function computeRequiredEr(args: {
     const finalChunks = 0;
     const refine = levelsVerify ? { low: Math.max(0, 6 * chunkCost() - refineChunksDone), high: Math.max(chunkCost(), 15 * chunkCost() - refineChunksDone) } : { low: 0, high: 0 };
     const trialChunks = (chunkCost() + 1) / 2; // 絞りの 1 回は、通る（全種）かずれる（1 塊）かが半々
-    // 見直しをする編成は、確かめは見直しの値の確認（ふつうは 1 周で通る）
+    // 見直しをする編成は、検証は見直しの値の確認（ふつうは 1 周で通る）
     const prior = levelsVerify ? { low: chunkCost(), high: 4 * chunkCost() } : { low: priorTrials * trialChunks * 0.6 + chunkCost(), high: priorTrials * trialChunks * 1.6 + chunkCost() };
     const v = phase === 'verify' && verifyEstimate ? verifyEstimate() : prior;
     const early = phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel)
@@ -415,7 +415,7 @@ export async function computeRequiredEr(args: {
   }
 
   // 2. 集計: 全員を十分大きい ER にして実行し、窓ごとの必要な ER を集める。基準と一致する種だけを使う（祭礼の武器など、種で展開が変わる場合の対策）
-  //    （他のキャラの ER で量が変わる回復 = 雷電将軍の爆発などは、ここでは多く出て、必要な ER が低く出る。確かめ・見直しで直す）
+  //    （他のキャラの ER で量が変わる回復 = 雷電将軍の爆発などは、ここでは多く出て、必要な ER が低く出る。検証・見直しで直す）
   phase = 'collect';
   phaseChunksDone = 0;
   report();
@@ -458,8 +458,8 @@ export async function computeRequiredEr(args: {
       entries.push({ characterId: m.characterId, name: m.name, status: 'unreachable' });
       return;
     }
-    // 確かめは、装備の ER（足す分 0）から上げる。マイナスから探すと、他のキャラの回復量と絡んで確かめが収まらない。
-    // 装備の ER より低くてよいキャラは、確かめが通ったあとの下げ直しで、合計 ER 100% を下限に下げる
+    // 検証は、装備の ER（足す分 0）から上げる。マイナスから探すと、他のキャラの回復量と絡んで検証が収まらない。
+    // 装備の ER より低くてよいキャラは、検証が通ったあとの下げ直しで、合計 ER 100% を下限に下げる
     certainAdded.set(idx, Math.max(0, added));
     entries.push({
       characterId: m.characterId,
@@ -535,7 +535,7 @@ export async function computeRequiredEr(args: {
     });
   }
 
-  // 4. 確実の値の確かめ（全員を確実の値にして、全種で爆発が基準と一致するか。ずれたら、そのキャラを上げる。
+  // 4. 確実の値の検証（全員を確実の値にして、全種で爆発が基準と一致するか。ずれたら、そのキャラを上げる。
   //    上げ幅は倍々に増やし、通ったあとは、ずれた値との間を半分ずつに絞る）
   //    集計の実行は全員が十分大きい ER なので、他のキャラの ER で量が変わる回復（雷電将軍の爆発など）は、ここで初めて分かる
   if (verify) phase = 'verify';
@@ -546,7 +546,7 @@ export async function computeRequiredEr(args: {
   const stepOf = new Map<number, number>();
   let verified = false;
   let verifyRound = 0;
-  // 確かめの残り: ずれた記録があるキャラは、通った値（無ければ次の上げ幅）とずれた値の間を、許容まで半分ずつ絞る回数 × 1 回の平均の塊数。
+  // 検証の残り: ずれた記録があるキャラは、通った値（無ければ次の上げ幅）とずれた値の間を、許容まで半分ずつ絞る回数 × 1 回の平均の塊数。
   // 最初の周回の結果が出るまでは、事前の見積り（priorTrials）
   verifyEstimate = () => {
     const trialChunks = (chunkCost() + 1) / 2;
@@ -581,7 +581,8 @@ export async function computeRequiredEr(args: {
       for (let k = 0; k < chunk.length; k++) {
         const res = results[k];
         if (res.status !== 'ok') return { status: res.status, message: res.message };
-        const ng = firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, ER_WARMUP_WINDOWS);
+        // 検証は、立ち上がりの窓（数えない窓）も含め、全ての窓に遅れの許容（delayFrames）を適用する（立ち上がりの窓で遅れると、次の窓の粒子がエネルギーの上限で捨てられ、以降が連鎖して遅れるため）
+        const ng = firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0);
         if (ng !== undefined) { bump = ng; lastFailSeed = chunk[k]; break; }
       }
       if (bump !== undefined) break;
@@ -627,9 +628,9 @@ export async function computeRequiredEr(args: {
   }
   if (verify && !verified && certainAdded.size > 0) return { status: 'error', message: t('gcsim:er.errorVerify') };
 
-  // 4-B. 下げ直し: 確かめは「最初にずれた爆発のキャラ」を上げるが、足りないのが別のキャラ（雷電将軍など）のとき、
+  // 4-B. 下げ直し: 検証は「最初にずれた爆発のキャラ」を上げるが、足りないのが別のキャラ（雷電将軍など）のとき、
   //      その回復を受けるキャラの爆発が先にずれて見え、足りているキャラまで上がる。通ったあとに、他を固定して 1 キャラずつ下げ直す
-  //      （立ち上がりの窓も遅れ 0 で見る（確かめは、立ち上がりの遅れが以降も続いても通すので、下げすぎる）。通らない値には下げないので、最終の組み合わせは必ず全種で通る）
+  //      （検証・下げ直しとも、立ち上がりの窓にも遅れの許容を適用する。通らない値には下げないので、最終の組み合わせは必ず全種で通る）
   if (verify && verified && !levelsVerify && certainAdded.size > 1) {
     const allMatch = async (): Promise<{ ok: boolean } | { error: RequiredErOutcome }> => {
       const config = verifyConfig();
@@ -677,12 +678,12 @@ export async function computeRequiredEr(args: {
     verifyEstimate = () => ({ low: 0, high: 0 });
   }
 
-  // 確かめた値を、確実の値として反映する（確かめで上がるのは確実だけ）
+  // 検証した値を、確実の値として反映する（検証で上がるのは確実だけ）
   entries.forEach((e, idx) => {
     const added = certainAdded.get(idx);
     if (e.status !== 'ok' || added === undefined) return;
     e.addedEr = Number(added.toFixed(4));
-    // 確かめた値を採る（計算のみの値は、記録した窓の最大。連鎖した遅れで高く出ることがあるので、確かめて下げ直した値のほうが正確）。
+    // 検証した値を採る（計算のみの値は、記録した窓の最大。連鎖した遅れで高く出ることがあるので、検証して下げ直した値のほうが正確）。
     // 雷電などの回復を与えるキャラは、安定より低くしない。ほかのキャラは、そのまま（雷電などの値が高いために、下の段より低くなることがある）
     const verifiedEr = verify ? ceil1((baseFraction(idx) + added) * 100) : Math.max(e.certainEr ?? 0, ceil1((baseFraction(idx) + added) * 100));
     e.certainEr = levelsVerify && !isProviderIdx(idx) ? verifiedEr : Math.max(verifiedEr, e.stableEr ?? 0);

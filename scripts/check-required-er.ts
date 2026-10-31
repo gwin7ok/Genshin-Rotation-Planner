@@ -3,7 +3,7 @@
  *
  *   npm run check:required-er
  *
- * 固定した小さな編成（ベネット + 香菱。E → Q を繰り返す）で、実際の画面と同じ関数（buildGcsimConfig・computeRequiredEr）を使い、次を確かめる。
+ * 固定した小さな編成（ベネット + 香菱。E → Q を繰り返す）で、実際の画面と同じ関数（buildGcsimConfig・computeRequiredEr）を使い、次を検証する。
  *   - 算出が成功し、爆発のあるキャラの必要 ER が求まること
  *   - 求めた値（足す分）で、全ての種で爆発が基準と一致すること
  *   - 求めた値より小さく（2 刻み分）すると、どれかの種で爆発がずれること（境界が正しいこと）
@@ -110,7 +110,7 @@ for (const e of result.entries.filter((x: any) => x.status === 'ok')) check(e.ty
 
 // 検証: 確実の値で全種が一致し、小さくすると外れる
 const baselineSig = async (seed: number) => er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: true, added: {} }).config, seed)).logs);
-const differs = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES, er.ER_WARMUP_WINDOWS) !== undefined;
+const differs = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES, 0) !== undefined;
 const sigAt = async (id: string, x: number, seed: number) => {
   const added = { ...Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED])), [id]: x };
   return er.burstSignature((await runGcsimSample(build({ ignoreBurstEnergy: false, added }).config, seed)).logs);

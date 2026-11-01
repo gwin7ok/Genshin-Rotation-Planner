@@ -322,7 +322,7 @@ export const Header: React.FC<HeaderProps> = ({
           <LanguageSwitcher />
         </div>
 
-        {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → 記法コピー（と記法の表示）） */}
+        {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → チャージ効率計算 ⏎ 記法コピー（と記法の表示）） */}
         {!isCollapsed && (
           <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
             <button
@@ -341,15 +341,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Settings2 className="w-3.5 h-3.5" />
               <span>{t('header:menu.party')}</span>
-            </button>
-
-            <button
-              onClick={onOpenEnergyRechargeModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-600/20 hover:bg-yellow-600/30 text-yellow-300 border border-yellow-500/40 transition-colors shrink-0"
-              title={t('header:menu.energyRechargeTitle')}
-            >
-              <Zap className="w-3.5 h-3.5" />
-              <span>{t('header:menu.energyRecharge')}</span>
             </button>
 
             <button
@@ -401,6 +392,18 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{t('header:menu.resetToApp')}</span>
               </button>
             )}
+
+            <button
+              onClick={onOpenEnergyRechargeModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-600/20 hover:bg-yellow-600/30 text-yellow-300 border border-yellow-500/40 transition-colors shrink-0"
+              title={t('header:menu.energyRechargeTitle')}
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>{t('header:menu.energyRecharge')}</span>
+            </button>
+
+            {/* 改行（記法コピーは、次の行から） */}
+            <div className="basis-full h-0" aria-hidden="true" />
 
             <button
               onClick={onCopyNotation}

@@ -142,6 +142,15 @@ export interface GcsimActionRef {
   loopIteration?: number;
 }
 
+/**
+ * 設定文の先頭に編成名のコメント行（`# 編成名`）を付ける（コピー用。gcsim の設定文に編成名の項目は無いので、コメントで持つ。D326）。
+ * 読込（parseGcsimConfig）は、先頭のコメントを編成名にする。名前が空なら、そのまま返す。確認済みの判定（設定文の一致）には使わない
+ */
+export function withConfigTitle(config: string, name: string | undefined): string {
+  const title = (name ?? '').replace(/\s+/g, ' ').trim();
+  return title ? `# ${title}\n${config}` : config;
+}
+
 const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
 
 export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult {

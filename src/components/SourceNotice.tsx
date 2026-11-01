@@ -5,6 +5,8 @@ import { Trans } from 'react-i18next';
 import { t } from '../i18n';
 
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
+/** プライバシーポリシー（docs/privacy.md。Google の同意画面にも、この URL を登録している） */
+const PRIVACY_URL = `${APP_REPO_URL}/blob/main/docs/privacy.md`;
 
 /**
  * ライセンスとソースの入手先の表示（AGPL-3.0。画面の下部）。
@@ -30,6 +32,9 @@ export function SourceNotice() {
           {t('notice:source.analytics')}
         </p>
       )}
+      <p>
+        <a className={linkClass} href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('notice:source.privacy')}</a>
+      </p>
       <p>
         <Trans
           i18nKey="notice:source.license"

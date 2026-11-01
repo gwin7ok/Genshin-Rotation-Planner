@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
+import { X, Zap, Play, Square, AlertTriangle, ChevronUp, ChevronDown } from 'lucide-react';
 import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
@@ -23,6 +23,31 @@ import {
   type RequiredErProgress,
   type RequiredErResult,
 } from '../utils/gcsim/requiredEnergyRecharge';
+
+/** 数の入力。右の上下ボタンで step ずつ増減する（範囲内に収める）。decimals を指定すると、小数 decimals 桁（x.x など）にそろえて表示する */
+const Stepper: React.FC<{ value: string; onChange: (v: string) => void; step: number; min?: number; max?: number; decimals?: number; disabled?: boolean; widthClass: string }> = ({ value, onChange, step, min, max, decimals, disabled, widthClass }) => {
+  const fmt = (n: number) => decimals === undefined ? String(n) : n.toFixed(decimals);
+  const move = (dir: 1 | -1) => {
+    const cur = Number(value);
+    const next = (Number.isFinite(cur) ? cur : 0) + dir * step;
+    const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, next));
+    onChange(fmt(Math.round(clamped * 1000) / 1000));
+  };
+  return (
+    <span className="inline-flex items-stretch">
+      <input
+        type="number" min={min} max={max} step={step} value={value} disabled={disabled}
+        onChange={e => onChange(e.target.value)}
+        onBlur={() => { const n = Number(value); if (decimals !== undefined && value !== '' && Number.isFinite(n)) onChange(fmt(n)); }}
+        className={`${widthClass} bg-slate-800 border border-slate-700 rounded-l px-1.5 py-0.5 text-right [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+      />
+      <span className="flex flex-col border border-l-0 border-slate-700 rounded-r overflow-hidden">
+        <button type="button" onClick={() => move(1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center"><ChevronUp className="w-3 h-3" /></button>
+        <button type="button" onClick={() => move(-1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center border-t border-slate-700"><ChevronDown className="w-3 h-3" /></button>
+      </span>
+    </span>
+  );
+};
 
 interface EnergyRechargeDialogProps {
   isOpen: boolean;
@@ -61,7 +86,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
   // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
-  const [wait, setWait] = useState(String(ER_DEFAULT_BURST_WAIT_SECONDS));
+  const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
@@ -77,7 +102,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
     setPAmount(String(p.amount));
-    setWait(String(last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS));
+    setWait((last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS).toFixed(1));
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
@@ -289,7 +314,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.seeds')}</p>
             <div className="flex items-center gap-1.5">
-              <input type="number" min={1} max={ER_MAX_SEEDS} step={1} value={seeds} onChange={e => setSeeds(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <Stepper value={seeds} onChange={setSeeds} step={10} min={1} max={ER_MAX_SEEDS} disabled={running} widthClass="w-14" />
               <span>{t('gcsim:er.seedsUnit')}</span>
               <button onClick={() => setSeeds(String(ER_DEFAULT_SEEDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
             </div>
@@ -299,11 +324,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>
             <div className="flex items-center gap-1.5 flex-wrap">
-              <input type="number" min={0} step={0.5} value={pMin} onChange={e => setPMin(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
               <span>〜</span>
-              <input type="number" min={0} step={0.5} value={pMax} onChange={e => setPMax(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
               <span>{t('gcsim:er.enemyParticlesEvery')}</span>
-              <input type="number" min={0} step={1} value={pAmount} onChange={e => setPAmount(e.target.value)} disabled={running} className="w-14 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
               <span>{t('gcsim:er.enemyParticlesUnit')}</span>
               <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
             </div>
@@ -313,9 +338,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.burstWait')}</p>
             <div className="flex items-center gap-1.5">
-              <input type="number" min={0} step={0.1} value={wait} onChange={e => setWait(e.target.value)} disabled={running} className="w-16 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-right" />
+              <Stepper value={wait} onChange={setWait} step={0.1} min={0} decimals={1} disabled={running} widthClass="w-14" />
               <span>{t('gcsim:er.burstWaitUnit')}</span>
-              <button onClick={() => setWait(String(ER_DEFAULT_BURST_WAIT_SECONDS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              <button onClick={() => setWait(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.burstWaitNote')}</p>
           </div>

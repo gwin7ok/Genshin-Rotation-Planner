@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-11-01
+
+### 追加
+- プリセットのスナップショットデータを更新（furina-vaporize、lunar-bloom、raiden-national のループ時間とバフを修正）
+
 ## [1.5.1] - 2026-11-01
 
 ### 追加
@@ -173,7 +178,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.0...v1.4.1

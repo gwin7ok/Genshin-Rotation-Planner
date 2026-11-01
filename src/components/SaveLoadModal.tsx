@@ -26,9 +26,8 @@ import { t, dateLocale } from '../i18n';
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import { AppDatabase } from '../types/database';
 import { resolvePartyCharacters } from '../utils/party';
-import { describeSkipped, parseRotationPayload, totalSkipped } from '../utils/rotationValidation';
 import { isEmptySlotCharacter } from '../data/characters';
-import { rotationFileName, nameFromFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
+import { rotationFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
 import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 import { charName } from '../i18n/loc';
@@ -63,6 +62,8 @@ interface SaveLoadModalProps {
     reactions?: unknown;
   }) => void;
   onResetToDefault: () => void;
+  /** JSON の文字列を読み込む（検証・確認・読み込みは App と共通）。読み込みを始めたら true */
+  onImportText: (text: string, fileName?: string, source?: 'file' | 'text') => boolean;
 }
 
 export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
@@ -81,6 +82,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   onSlotsChanged,
   onLoadSlot,
   onResetToDefault,
+  onImportText,
 }) => {
   const { confirm, alert: showAlert } = useDialogs();
   const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>([]);
@@ -275,35 +277,14 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Import JSON from file
+  // Import JSON from file（検証・読み込みは、App の importRotationText と共通）
   const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (ev) => {
-      try {
-        const result = parseRotationPayload(JSON.parse(ev.target?.result as string));
-        if (result.ok === false) {
-          showAlert(result.error);
-          return;
-        }
-        const v = result.value;
-        onLoadSlot({
-          party: v.party,
-          stints: v.stints,
-          loopStartIndex: v.loopStartIndex,
-          loopStartTime: v.loopStartTime ?? 0,
-          name: v.name || nameFromFileName(file.name),
-          totalDuration: v.totalDuration,
-          switchDelay: v.switchDelay,
-          reactions: v.reactions,
-        });
-        onClose();
-        if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
-      } catch (err) {
-        showAlert(t('save:message.importFileFailed'));
-      }
+      if (onImportText(String(ev.target?.result ?? ''), file.name, 'file')) onClose();
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -360,28 +341,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
 
   // Import JSON from text area
   const handleImportText = () => {
-    try {
-      const result = parseRotationPayload(JSON.parse(importJsonText.trim()));
-      if (result.ok === false) {
-        showAlert(result.error);
-        return;
-      }
-      const v = result.value;
-      onLoadSlot({
-        party: v.party,
-        stints: v.stints,
-        loopStartIndex: v.loopStartIndex,
-        loopStartTime: v.loopStartTime ?? 0,
-        name: v.name,
-        totalDuration: v.totalDuration,
-        switchDelay: v.switchDelay,
-        reactions: v.reactions,
-      });
-      onClose();
-      if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
-    } catch (err) {
-      showAlert(t('save:message.invalidJson'));
-    }
+    if (onImportText(importJsonText.trim(), '', 'text')) onClose();
   };
 
   return (

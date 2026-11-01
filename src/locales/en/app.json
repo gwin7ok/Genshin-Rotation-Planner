@@ -43,5 +43,14 @@
   },
   "saveFailed": "Could not save to the browser (storage may be full, or saving may be disabled in the browser settings). If you keep editing, your changes will be lost when you close the page. Save the current rotation to a file with \"Export JSON file\" in Rotations (\"Export all data\" reads from storage, so it does not include the latest edits that failed to save).",
   "staleReactions": "The \"reaction rows\" of this rotation are results from gcsim {{saved}}, so they are not shown with the current gcsim ({{current}}). Recalculate with \"Run gcsim\" to show them (the action order, cooldowns, etc. can be used as is).",
-  "footer": "Genshin Impact combat rotation Gantt chart planner ✦ chained on-field stints (serial snapping) and cooldown/buff overlap visualization"
+  "footer": "Genshin Impact combat rotation Gantt chart planner ✦ chained on-field stints (serial snapping) and cooldown/buff overlap visualization",
+  "importUrl": {
+    "confirm": "Load a rotation from this link.\n\n{{url}}\n\nThis is an external file. Press OK only if you trust it. Loading replaces the rotation currently shown (a saved rotation is only overwritten after a further confirmation if one has the same name).",
+    "invalid": "The link given in the URL's import parameter is not valid, so nothing was loaded.\n\n{{url}}",
+    "insecure": "The link given in the URL's import parameter is not https, so nothing was loaded.\n\n{{url}}",
+    "network": "Could not fetch the file from {{host}}.\n\n• No network connection, or the link is wrong\n• The target of a short URL does not allow reading from other sites (CORS)\n\nDownload the file and load it with \"Import JSON file\" in Rotations.",
+    "http": "{{host}} returned an error (HTTP {{status}}). Check that the link is correct and the file is public.",
+    "tooLarge": "The file at {{host}} is too large, so nothing was loaded.",
+    "timeout": "{{host}} took too long to respond, so the fetch was cancelled."
+  }
 }

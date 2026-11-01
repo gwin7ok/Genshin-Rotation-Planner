@@ -57,7 +57,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
-  const [precise, setPrecise] = useState(false);
+  const [precise, setPrecise] = useState(true);
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
   // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
@@ -81,7 +81,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
-    setPrecise(last?.precise === true);
+    setPrecise(last?.precise ?? true); // 初期値は精密検証（最後の実行があれば、そのときの選択）
     setCurrentFingerprint(fingerprintOf(base.config));
     // 回復量が自分の ER で決まるキャラ（雷電将軍・九条裟羅・ドリー）がいる編成は、確実の値を精密検証で求める（自動）
     setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
@@ -148,6 +148,14 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // 足りる確率: 概算検証は値を最大 ER 10% 高めに丸めているので「以上」、精密検証・計算のみは「約」
   // 「以上」は確実だけ（概算検証は値を最大 ER 10% 高めに丸める）。目安・安定は丸めないので「約」
   const pctLabel = (p: number | undefined, estimated = false) => p === undefined ? null : <span className="ml-1 text-[10px] font-normal text-slate-400">({t(estimated ? 'gcsim:er.pctEstimated' : 'gcsim:er.pctMeasured', { pct: p })})</span>;
+  // 目安・安定: 種の数による誤差（80%の範囲の、値からの下・上の幅 -?%〜+?%。範囲そのものはツールチップ）。確実: 検証の丸め（最大 +。概算 = 10、精密 = 1。上方向）
+  const rangeLabel = (value: number | undefined, low: number | undefined, high: number | undefined) => {
+    if (value === undefined || (low === undefined && high === undefined)) return null;
+    const part = (sign: string, d: number) => `${sign}${(Math.ceil(Math.max(0, d) * 10 - 1e-9) / 10).toFixed(1)}%`;
+    return <div className="text-[10px] font-normal text-slate-500" title={t('gcsim:er.rangeTitle', { low: low === undefined ? '' : low.toFixed(1), high: high === undefined ? '' : high.toFixed(1) })}>{t('gcsim:er.range', { minus: low === undefined ? '' : part('-', value - low), plus: high === undefined ? '' : part('+', high - value) })}</div>;
+  };
+  const roundingLabel = shown && shown.verified !== false && shown.precise !== undefined
+    ? <div className="text-[10px] font-normal text-slate-500">{t('gcsim:er.rounding', { max: ((shown.precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH) * 100).toFixed(1) })}</div> : null;
   const oldVersion = saved !== null && saved.gcsimVersion !== GCSIM_VERSION;
 
   return (
@@ -258,9 +266,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                         <td colSpan={3} className="py-1.5">&nbsp;</td>
                       ) : e.status === 'ok' ? (
                         <>
-                          <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr}%{pctLabel(e.typicalPct)}</td>
-                          <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr}%{pctLabel(e.stablePct)}</td>
-                          <td className="py-1.5 text-right text-amber-500">{e.certainEr}%{pctLabel(e.certainPct, true)}</td>
+                          <td className="py-1.5 pr-2 text-right text-yellow-200">{e.typicalEr?.toFixed(1)}%{pctLabel(e.typicalPct)}{rangeLabel(e.typicalEr, e.typicalErLow, e.typicalErHigh)}</td>
+                          <td className="py-1.5 pr-2 text-right font-bold text-yellow-300">{e.stableEr?.toFixed(1)}%{pctLabel(e.stablePct)}{rangeLabel(e.stableEr, e.stableErLow, e.stableErHigh)}</td>
+                          <td className="py-1.5 text-right text-amber-500">{e.certainEr?.toFixed(1)}%{pctLabel(e.certainPct, true)}{roundingLabel}</td>
                         </>
                       ) : (
                         <td colSpan={3} className="py-1.5 text-right">
@@ -276,7 +284,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           )}
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
-          <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.note', { seeds: shown?.seeds ?? ER_DEFAULT_SEEDS, laps: ER_LOOP_ITERATIONS })}</p>
+          <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.seeds')}</p>

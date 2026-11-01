@@ -90,6 +90,15 @@ export interface RequiredErEntry {
   typicalPct?: number;
   stablePct?: number;
   certainPct?: number;
+  /**
+   * 目安・安定の、種の数による誤差の範囲（信頼度 80%（ER_INTERVAL_CONFIDENCE）で、真の値がこの間に入る。%）。
+   * 種を取り直す（ブートストラップ）区間。窓のデータだけから求める（追加の実行なし）。
+   * 下・上の片方が無いとき（窓が少なすぎて決まらないとき）は、その側を出さない。雷電将軍・九条裟羅・ドリーがいる編成（検証で値が決まる）には、出さない
+   */
+  typicalErLow?: number;
+  typicalErHigh?: number;
+  stableErLow?: number;
+  stableErHigh?: number;
   /** 確実の値の、仮ステータスに足す ER（割合） */
   addedEr?: number;
 }
@@ -279,6 +288,32 @@ export function requiredErForRate(timelines: EnergyTimeline[], rate: number, del
     if (ok(mid)) hi = mid; else lo = mid;
   }
   return hi;
+}
+
+/** 信頼区間の信頼度（目安・安定の、種の数による誤差の範囲） */
+export const ER_INTERVAL_CONFIDENCE = 0.8;
+/** 範囲を求める再標本化の回数 */
+export const ER_INTERVAL_RESAMPLES = 1000;
+
+/**
+ * 目安・安定の、種の数による誤差の範囲（ブートストラップ）。種を、種ごとのまとまりのまま、重複を許して取り直し（同じ数）、その値を求め直す。
+ * これを繰り返した値の分布の、両端（信頼度 80% なら 10%・90% の位置）を範囲にする。同じ種の窓どうしの相関も含まれる。
+ * 乱数は固定の種から出すので、同じデータなら毎回同じ結果になる。決まらない側（取り直した値が上限に届かないなど）は undefined
+ */
+export function requiredErInterval(timelines: EnergyTimeline[], rate: number, delayFrames = 0, warmupWindows = 0, confidence = ER_INTERVAL_CONFIDENCE, resamples = ER_INTERVAL_RESAMPLES): { low?: number; high?: number } | undefined {
+  if (timelines.length < 2 || passCount(timelines, 0, delayFrames, warmupWindows).total < 1) return undefined;
+  let state = 0x9e3779b9;
+  const rnd = (): number => { state = (state + 0x6d2b79f5) | 0; let x = Math.imul(state ^ (state >>> 15), 1 | state); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+  const values: number[] = [];
+  for (let b = 0; b < resamples; b++) {
+    const list = Array.from({ length: timelines.length }, () => timelines[Math.floor(rnd() * timelines.length)]);
+    const v = requiredErForRate(list, rate, delayFrames, warmupWindows);
+    values.push(v === undefined ? Infinity : v);
+  }
+  values.sort((a, c) => a - c);
+  const alpha = 1 - confidence;
+  const at = (q: number): number | undefined => { const v = values[Math.min(values.length - 1, Math.max(0, Math.round(q * (values.length - 1))))]; return Number.isFinite(v) ? v : undefined; };
+  return { low: at(alpha / 2), high: at(1 - alpha / 2) };
 }
 
 /** 0.1% 単位に切り上げる */
@@ -703,6 +738,18 @@ export async function computeRequiredEr(args: {
     e.typicalPct = pct(e.typicalEr, false, (levelTimelines.get('typicalEr') ?? timelines).get(idx) ?? []);
     e.stablePct = pct(e.stableEr, false, (levelTimelines.get('stableEr') ?? timelines).get(idx) ?? []);
     e.certainPct = pct(e.certainEr, true, (levelTimelines.get('certainEr') ?? timelines).get(idx) ?? []);
+    // 目安・安定の、種の数による誤差の範囲（検証で値が決まる編成は、窓の集計だけでは求まらないので出さない）
+    if (!levelsVerify) {
+      const list = timelines.get(idx) ?? [];
+      const floor1 = (x: number | undefined) => x === undefined ? undefined : Math.floor(x * 10 + 1e-9) / 10;
+      const ceil1o = (x: number | undefined) => x === undefined ? undefined : ceil1(x);
+      const ti = requiredErInterval(list, 0.7, delayFrames, ER_WARMUP_WINDOWS);
+      const si = requiredErInterval(list, 0.9, delayFrames, ER_WARMUP_WINDOWS);
+      e.typicalErLow = floor1(ti?.low);
+      e.typicalErHigh = ceil1o(ti?.high);
+      e.stableErLow = floor1(si?.low);
+      e.stableErHigh = ceil1o(si?.high);
+    }
   });
 
   report();

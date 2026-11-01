@@ -31,10 +31,10 @@ import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { normalizeGroups } from './utils/actionGroups';
-import { buildGcsimConfig, DEFAULT_HURT, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
+import { buildGcsimConfig, DEFAULT_HURT, withConfigTitle, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { packReactions, unpackReactions, reactionsStatus } from './utils/gcsim/savedReactions';
-import { seedPresetsOnFirstRun } from './utils/presets';
+import { seedPresetsOnFirstRun, slotDisplayName } from './utils/presets';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
@@ -607,7 +607,9 @@ export default function App() {
   }, [displayStints]);
 
   const handleCopyGcsimConfig = () => {
-    const result = buildCurrentGcsimConfig();
+    const built = buildCurrentGcsimConfig();
+    // 読み込み中の保存編成があれば、その名前を、先頭のコメントに付ける（設定文を読み込み直したとき、編成名が戻る）
+    const result = { ...built, config: withConfigTitle(built.config, activeSlot ? slotDisplayName(activeSlot) : undefined) };
     setGcsimResult(result);
     void copyGcsimText(result.config);
   };
@@ -959,6 +961,7 @@ export default function App() {
         }}
         onLoadSlot={handleLoadCustomSlot}
         onImportText={importRotationText}
+        onCopyGcsimConfig={handleCopyGcsimConfig}
         onResetToDefault={handleResetToDefault}
       />
 

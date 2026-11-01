@@ -20,6 +20,7 @@
     "check:backup": "node scripts/check-backup.ts",
     "check:i18n": "node scripts/check-i18n.ts",
     "check:rotation-validation": "node scripts/check-rotation-validation.ts",
+    "check:gcsim-import": "node scripts/check-gcsim-import.ts",
     "check:fetch-util": "node scripts/check-fetch-util.ts",
     "check:go-expr": "node scripts/check-go-expr.ts",
     "check:wasm-source": "node scripts/check-wasm-source.ts",

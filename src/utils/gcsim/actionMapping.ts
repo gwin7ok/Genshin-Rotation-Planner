@@ -59,6 +59,14 @@ const HOLD_PARAM_OFFSET = new Map<string, number>([
   ['10000101-dendro_e_hold', 1],
 ]);
 
+/** 命令の `hold=<フレーム数>` から、長押しの秒数を求める（applyHoldSeconds の逆。対象外のアクション・読めない命令は undefined） */
+export function holdSecondsFromCommand(actionTypeId: string, command: string): number | undefined {
+  if (!HOLD_FRAMES_ACTIONS.has(actionTypeId)) return undefined;
+  const m = command.match(/hold=(\d+)/);
+  if (!m) return undefined;
+  return Math.max(0, Number(m[1]) - (HOLD_PARAM_OFFSET.get(actionTypeId) ?? 0)) / 60;
+}
+
 /** 長押しの秒数を gcsim の命令に反映する（対象外のアクション・秒数が不明なときは、そのまま返す） */
 export function applyHoldSeconds(actionTypeId: string, command: string, holdSeconds: number | undefined): string {
   const maxFrames = HOLD_FRAMES_ACTIONS.get(actionTypeId);

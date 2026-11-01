@@ -33,6 +33,8 @@ import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, c
 import { charName } from '../i18n/loc';
 import { DRIVE_FOLDER_NAME, DriveError, ensureSignedIn, isDriveConfigured, uploadSharedJson } from '../utils/googleDrive';
 import { buildImportLink } from '../utils/rotationUrlImport';
+import { parseGcsimConfig } from '../utils/gcsim/parseGcsimConfig';
+import { describeIgnored } from '../utils/gcsim/describeIgnored';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -66,6 +68,8 @@ interface SaveLoadModalProps {
   onResetToDefault: () => void;
   /** JSON の文字列を読み込む（検証・確認・読み込みは App と共通）。読み込みを始めたら true */
   onImportText: (text: string, fileName?: string, source?: 'file' | 'text') => boolean;
+  /** 現在の編成を gcsim の設定文にしてコピーする（ヘッダーのボタンと同じ処理。書き出しの区画から呼ぶ） */
+  onCopyGcsimConfig?: () => void;
 }
 
 export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
@@ -85,6 +89,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   onLoadSlot,
   onResetToDefault,
   onImportText,
+  onCopyGcsimConfig,
 }) => {
   const { confirm, alert: showAlert, prompt } = useDialogs();
   const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>([]);
@@ -93,7 +98,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // 同じ編成名の既存スロット（上書き確認中）
   const [duplicateSlot, setDuplicateSlot] = useState<SavedRotationSlot | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [importJsonText, setImportJsonText] = useState('');
+  // gcsim の設定文から読み込む（D326）
+  const [gcsimText, setGcsimText] = useState('');
   const [showJsonArea, setShowJsonArea] = useState(false);
   const [activeTab, setActiveTab] = useState<'slots' | 'json'>('slots');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
@@ -380,9 +386,29 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     reader.readAsText(file);
   };
 
-  // Import JSON from text area
-  const handleImportText = () => {
-    if (onImportText(importJsonText.trim(), '', 'text')) onClose();
+  // gcsim の設定文から、編成と行動の並びを読み込む（D326）。適用の前に、読み取った内容と、読めなかった行の一覧を見せて確認する
+  const handleImportGcsim = async () => {
+    const result = parseGcsimConfig(gcsimText, { characters: database.characters, weapons: database.weapons, artifacts: database.artifacts });
+    if (result.ok === false) {
+      showAlert(result.error);
+      return;
+    }
+    const v = result.value;
+    const name = v.name || t('save:gcsimImport.defaultName');
+    const actions = v.stints.reduce((n, s) => n + s.actions.filter(a => a.type !== 'wait').length, 0);
+    const chars = v.party.filter(m => !m.characterId.startsWith('empty_slot_')).length;
+    const lines = [t('save:gcsimImport.confirm', { name, chars, actions })];
+    if (v.ignored.length > 0) lines.push('', describeIgnored(v.ignored));
+    if (!(await confirm(lines.join('\n')))) return;
+    onLoadSlot({
+      party: v.party,
+      stints: v.stints,
+      loopStartIndex: v.loopStartIndex,
+      loopStartTime: 0,
+      switchDelay: v.switchDelay,
+      name,
+    });
+    onClose();
   };
 
   return (
@@ -680,8 +706,120 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           ) : (
             /* JSON Tab */
             <div className="space-y-4">
+              {/* 読み込み（外から、この編成に取り込む） */}
+              <section className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/80 space-y-4">
+                <div>
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-sky-400" />
+                    <span>{t('save:manager.importSection')}</span>
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-1">{t('save:manager.importNotice')}</p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-xs font-bold text-slate-300">{t('save:manager.formatJson')}</div>
+                  <label className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-sky-400 transition-all flex items-center gap-2 cursor-pointer">
+                    <Upload className="w-4 h-4 text-sky-400" />
+                    <span className="text-xs font-bold text-white">{t('save:manager.importJson')}</span>
+                    <span className="text-[11px] text-slate-400">{t('save:manager.importJsonHint')}</span>
+                    <input
+                      type="file"
+                      accept=".json"
+                      onChange={handleImportFile}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                <div className="space-y-2 border-t border-slate-800 pt-3">
+                  <div className="text-xs font-bold text-slate-300">{t('save:manager.formatGcsim')}</div>
+                  <p className="text-[11px] text-slate-500">{t('save:gcsimImport.hint')}</p>
+                  <textarea
+                    rows={5}
+                    value={gcsimText}
+                    onChange={(e) => setGcsimText(e.target.value)}
+                    placeholder={t('save:gcsimImport.placeholder')}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-400"
+                  />
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleImportGcsim}
+                      disabled={!gcsimText.trim()}
+                      className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors"
+                    >
+                      <FileCode className="w-4 h-4" />
+                      <span>{t('save:gcsimImport.run')}</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* 書き出し（この編成を、外に出す） */}
+              <section className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/80 space-y-4">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Download className="w-4 h-4 text-amber-400" />
+                  <span>{t('save:manager.exportSection')}</span>
+                </h3>
+
+                <div className="space-y-2">
+                  <div className="text-xs font-bold text-slate-300">{t('save:manager.formatJson')}</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleExportJsonFile()}
+                      title={t('save:manager.exportJsonHint')}
+                      className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-2 text-left"
+                    >
+                      <Download className="w-4 h-4 text-amber-400" />
+                      <span className="text-xs font-bold text-white">{t('save:manager.exportJson')}</span>
+                    </button>
+                    <button
+                      onClick={() => handleCopyJson()}
+                      className="p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-2 text-left"
+                    >
+                      {copiedId === 'current' ? (
+                        <>
+                          <Check className="w-4 h-4 text-emerald-400" />
+                          <span className="text-xs font-bold text-white">{t('header:menu.copied')}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 text-amber-400" />
+                          <span className="text-xs font-bold text-white">{t('save:manager.copyCurrentJson')}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-xs font-bold text-slate-300">{t('save:manager.formatShare')}</div>
+                  <button
+                    onClick={handleShareUrl}
+                    disabled={sharing}
+                    title={t('save:share.hint')}
+                    className="w-full text-xs text-sky-300 hover:text-sky-200 font-semibold flex items-center justify-center gap-1.5 py-2 rounded-lg border border-sky-500/30 bg-sky-500/10 disabled:opacity-50"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>{sharing ? t('save:share.working') : t('save:share.button')}</span>
+                  </button>
+                </div>
+
+                {onCopyGcsimConfig && (
+                  <div className="space-y-2">
+                    <div className="text-xs font-bold text-slate-300">{t('save:manager.formatGcsim')}</div>
+                    <button
+                      onClick={() => { onCopyGcsimConfig(); onClose(); }}
+                      className="w-full p-3 rounded-lg bg-slate-800/70 border border-slate-700 hover:border-emerald-400 transition-all flex items-center gap-2 text-left"
+                    >
+                      <Copy className="w-4 h-4 text-emerald-400" />
+                      <span className="text-xs font-bold text-white">{t('save:manager.copyGcsim')}</span>
+                    </button>
+                  </div>
+                )}
+              </section>
+
               {/* 全データのバックアップ（引っ越し・端末の変更・配信先の移行用） */}
-              <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-700/40 space-y-3">
+              <section className="p-4 rounded-xl bg-amber-950/20 border border-amber-700/40 space-y-3">
                 <div>
                   <h4 className="text-xs font-bold text-amber-200">{t('save:manager.backupTitle')}</h4>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -702,97 +840,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                     <input type="file" accept=".json" onChange={handleImportBackup} className="hidden" />
                   </label>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  onClick={() => handleExportJsonFile()}
-                  className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-3 text-left group"
-                >
-                  <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                    <Download className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xs text-white">{t('save:manager.exportJson')}</h4>
-                    <p className="text-[11px] text-slate-400">
-                      {t('save:manager.exportJsonHint')}
-                    </p>
-                  </div>
-                </button>
-
-                <label className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-amber-400 transition-all flex items-center gap-3 cursor-pointer group">
-                  <div className="p-2.5 rounded-lg bg-sky-500/10 text-sky-400 group-hover:bg-sky-500 group-hover:text-slate-950 transition-colors">
-                    <Upload className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xs text-white">{t('save:manager.importJson')}</h4>
-                    <p className="text-[11px] text-slate-400">
-                      {t('save:manager.importJsonHint')}
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={handleImportFile}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-
-              {/* Direct JSON Text Area */}
-              <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/80 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                    <FileCode className="w-4 h-4 text-amber-400" />
-                    <span>{t('save:manager.jsonText')}</span>
-                  </h4>
-                  <button
-                    onClick={() => handleCopyJson()}
-                    className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1"
-                  >
-                    {copiedId === 'current' ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>{t('header:menu.copied')}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>{t('save:manager.copyCurrentJson')}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                <button
-                  onClick={handleShareUrl}
-                  disabled={sharing}
-                  title={t('save:share.hint')}
-                  className="w-full text-xs text-sky-300 hover:text-sky-200 font-semibold flex items-center justify-center gap-1.5 py-2 rounded-lg border border-sky-500/30 bg-sky-500/10 disabled:opacity-50"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>{sharing ? t('save:share.working') : t('save:share.button')}</span>
-                </button>
-
-                <textarea
-                  rows={6}
-                  value={importJsonText}
-                  onChange={(e) => setImportJsonText(e.target.value)}
-                  placeholder={t('save:manager.jsonPlaceholder')}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-400"
-                />
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={handleImportText}
-                    disabled={!importJsonText.trim()}
-                    className="bg-sky-600 hover:bg-sky-500 disabled:opacity-40 text-white font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors"
-                  >
-                    <Upload className="w-4 h-4" />
-                    <span>{t('save:manager.restoreFromText')}</span>
-                  </button>
-                </div>
-              </div>
+              </section>
             </div>
           )}
         </div>

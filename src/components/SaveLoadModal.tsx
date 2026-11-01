@@ -31,6 +31,8 @@ import { rotationFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp }
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
 import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 import { charName } from '../i18n/loc';
+import { DRIVE_FOLDER_NAME, DriveError, ensureSignedIn, isDriveConfigured, uploadSharedJson } from '../utils/googleDrive';
+import { buildImportLink } from '../utils/rotationUrlImport';
 
 interface SaveLoadModalProps {
   isOpen: boolean;
@@ -84,7 +86,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   onResetToDefault,
   onImportText,
 }) => {
-  const { confirm, alert: showAlert } = useDialogs();
+  const { confirm, alert: showAlert, prompt } = useDialogs();
   const [savedSlots, setSavedSlots] = useState<SavedRotationSlot[]>([]);
   const [newSlotName, setNewSlotName] = useState('');
   const [newSlotDesc, setNewSlotDesc] = useState('');
@@ -95,6 +97,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   const [showJsonArea, setShowJsonArea] = useState(false);
   const [activeTab, setActiveTab] = useState<'slots' | 'json'>('slots');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+  // 編成付き読込 URL の生成中（D325）
+  const [sharing, setSharing] = useState(false);
 
   // 開いたときだけリセットするもの
   useEffect(() => {
@@ -260,6 +264,43 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     a.download = rotationFileName(slot?.name || newSlotName || buildDefaultSlotName(characters, totalDuration, savedSlots.find(s => s.id === activeSlotId)));
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  // 編成付き読込 URL の生成（D325）: ログイン → 名前の入力 → Google ドライブに共有（リンクを知っている全員が閲覧可）で保存 → URL をコピー
+  const handleShareUrl = async () => {
+    if (sharing) return;
+    if (!isDriveConfigured()) {
+      showAlert(t('save:share.notConfigured'));
+      return;
+    }
+    setSharing(true);
+    try {
+      // ログインのポップアップは、ボタンを押した直後でないとブロックされるので、名前の入力より先に行う
+      const accessToken = await ensureSignedIn();
+      const activeSlot = savedSlots.find(s => s.id === activeSlotId) ?? null;
+      const defaultName = activeSlot ? slotDisplayName(activeSlot) : buildDefaultSlotName(characters, totalDuration, null);
+      const input = await prompt(t('save:share.namePrompt'), defaultName);
+      if (input === null || !input.trim()) return;
+      const name = input.trim();
+      const payload = exportPayload();
+      payload.name = name;
+      const fileName = `${name.replace(/[\/:*?"<>|]/g, '_')}.json`;
+      const shareLink = await uploadSharedJson(accessToken, fileName, JSON.stringify(payload, null, 2));
+      const url = buildImportLink(shareLink);
+      try {
+        await navigator.clipboard.writeText(url);
+        showAlert(t('save:share.done', { name: fileName, folder: DRIVE_FOLDER_NAME }));
+      } catch {
+        // ログインや保存の待ちの間に、コピーの許可が切れることがある。URL を見せて、手でコピーしてもらう
+        showAlert(t('save:share.copyFailed', { url }));
+      }
+    } catch (e) {
+      const reason = e instanceof DriveError ? e.reason : 'api';
+      const detail = e instanceof DriveError ? e.detail : String(e);
+      showAlert(t(`save:share.error.${reason}` as 'save:share.error.api', { detail }));
+    } finally {
+      setSharing(false);
+    }
   };
 
   // Copy JSON to clipboard
@@ -722,6 +763,16 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                     )}
                   </button>
                 </div>
+
+                <button
+                  onClick={handleShareUrl}
+                  disabled={sharing}
+                  title={t('save:share.hint')}
+                  className="w-full text-xs text-sky-300 hover:text-sky-200 font-semibold flex items-center justify-center gap-1.5 py-2 rounded-lg border border-sky-500/30 bg-sky-500/10 disabled:opacity-50"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{sharing ? t('save:share.working') : t('save:share.button')}</span>
+                </button>
 
                 <textarea
                   rows={6}

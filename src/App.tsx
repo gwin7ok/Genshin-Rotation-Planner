@@ -800,11 +800,11 @@ export default function App() {
     (async () => {
       const check = checkImportUrl(raw);
       if (check.ok === false) {
-        showAlert(t(check.reason === 'insecure' ? 'app:importUrl.insecure' : 'app:importUrl.invalid', { url: raw }));
+        showAlert(t(check.reason === 'insecure' ? 'app:importUrl.insecure' : check.reason === 'driveNoKey' ? 'app:importUrl.driveNoKey' : 'app:importUrl.invalid', { url: raw }));
         return;
       }
       if (!(await confirm(t('app:importUrl.confirm', { host: check.host, url: check.url })))) return;
-      const fetched = await fetchImportText(check.url);
+      const fetched = await fetchImportText(check.fetchUrl);
       if (fetched.ok === false) {
         const key = ({ network: 'app:importUrl.network', http: 'app:importUrl.http', tooLarge: 'app:importUrl.tooLarge', timeout: 'app:importUrl.timeout' } as const)[fetched.reason];
         showAlert(t(key, { host: check.host, status: fetched.status ?? '' }));

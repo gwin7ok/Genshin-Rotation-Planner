@@ -41,6 +41,7 @@ import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
 import { loadActiveState, saveActiveStateDebounced, flushActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
 import { rotationFileName, nameFromFileName, buildRotationExport } from './utils/rotationFile';
+import { takeImportUrlParam, checkImportUrl, fetchImportText } from './utils/rotationUrlImport';
 import { loadDatabase } from './utils/databaseService';
 import { createEmptyParty, resolvePartyCharacters, filterStintsForCharacters, mergeHiddenStints } from './utils/party';
 import { resolveLoopStartIndex, normalizeLoopStartIndex } from './utils/loopBoundary';
@@ -75,6 +76,9 @@ function makeReactionSignature(
     stints.map(st => [st.characterId, st.actions.map(a => a.id)]),
   ]);
 }
+
+// URL の引数で指定された読み込み先。モジュールの読み込み時に 1 度だけ取り出して、アドレス欄から外す
+let pendingImportUrl: string | null = takeImportUrlParam();
 
 export default function App() {
   const { confirm, alert: showAlert, prompt } = useDialogs();
@@ -750,37 +754,66 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  /** 編成の JSON の文字列を読み込む（ファイル選択・URL の引数で共通。検証 → 同名の確認 → 読み込み） */
+  const importRotationText = (text: string, fileName = '', source: 'file' | 'text' = 'file'): boolean => {
+    try {
+      const result = parseRotationPayload(JSON.parse(text));
+      if (result.ok === false) {
+        showAlert(result.error);
+        return false;
+      }
+      const v = result.value;
+      handleLoadCustomSlot({
+        party: v.party,
+        stints: v.stints,
+        loopStartIndex: v.loopStartIndex,
+        loopStartTime: v.loopStartTime ?? 0,
+        switchDelay: v.switchDelay ?? switchDelay,
+        totalDuration: v.totalDuration,
+        reactions: v.reactions,
+        name: v.name || nameFromFileName(fileName),
+      });
+      if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
+      return true;
+    } catch (err) {
+      showAlert(t(source === 'text' ? 'save:message.invalidJson' : 'save:message.importFileFailed'));
+      return false;
+    }
+  };
+
   const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const result = parseRotationPayload(JSON.parse(ev.target?.result as string));
-        if (result.ok === false) {
-          showAlert(result.error);
-          return;
-        }
-        const v = result.value;
-        handleLoadCustomSlot({
-          party: v.party,
-          stints: v.stints,
-          loopStartIndex: v.loopStartIndex,
-          loopStartTime: v.loopStartTime ?? 0,
-          switchDelay: v.switchDelay ?? switchDelay,
-          totalDuration: v.totalDuration,
-          reactions: v.reactions,
-          name: v.name || nameFromFileName(file.name),
-        });
-        if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
-      } catch (err) {
-        showAlert(t('save:message.importFileFailed'));
-      }
-    };
+    reader.onload = (ev) => importRotationText(String(ev.target?.result ?? ''), file.name);
     reader.readAsText(file);
     e.target.value = '';
   };
+
+  // URL の引数（?import=<JSON のリンク>）で指定された編成を、読み込む（D324）。
+  // 外部のリンクなので、取得の前に必ず確認する（現在の編成が置き換わるため）。読み込みは、手動の JSON 読込と同じ
+  useEffect(() => {
+    const raw = pendingImportUrl;
+    pendingImportUrl = null;
+    if (!raw) return;
+    (async () => {
+      const check = checkImportUrl(raw);
+      if (check.ok === false) {
+        showAlert(t(check.reason === 'insecure' ? 'app:importUrl.insecure' : 'app:importUrl.invalid', { url: raw }));
+        return;
+      }
+      if (!(await confirm(t('app:importUrl.confirm', { host: check.host, url: check.url })))) return;
+      const fetched = await fetchImportText(check.url);
+      if (fetched.ok === false) {
+        const key = ({ network: 'app:importUrl.network', http: 'app:importUrl.http', tooLarge: 'app:importUrl.tooLarge', timeout: 'app:importUrl.timeout' } as const)[fetched.reason];
+        showAlert(t(key, { host: check.host, status: fetched.status ?? '' }));
+        return;
+      }
+      importRotationText(fetched.text, fetched.fileName);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
@@ -925,6 +958,7 @@ export default function App() {
           else if (activeSlotId && !slots.some(s => s.id === activeSlotId)) setActiveSlotId(null);
         }}
         onLoadSlot={handleLoadCustomSlot}
+        onImportText={importRotationText}
         onResetToDefault={handleResetToDefault}
       />
 

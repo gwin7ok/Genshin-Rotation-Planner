@@ -51,6 +51,7 @@
     "network": "Could not fetch the file from {{host}}.\n\n• No network connection, or the link is wrong\n• The target of a short URL does not allow reading from other sites (CORS)\n\nDownload the file and load it with \"Import JSON file\" in Rotations.",
     "http": "{{host}} returned an error (HTTP {{status}}). Check that the link is correct and the file is public.",
     "tooLarge": "The file at {{host}} is too large, so nothing was loaded.",
-    "timeout": "{{host}} took too long to respond, so the fetch was cancelled."
+    "timeout": "{{host}} took too long to respond, so the fetch was cancelled.",
+    "driveNoKey": "This is a Google Drive share link, but no API key is configured on this site, so it cannot be loaded."
   }
 }

@@ -7,6 +7,8 @@
 /** URL の引数の名前（手動の「JSON 読込」= import に合わせた） */
 export const IMPORT_URL_PARAM = 'import';
 
+import { driveFileIdFromLink, driveMediaUrl } from './googleDrive';
+
 /** 取得できる最大サイズ（編成 1 件の JSON は数百 KB 以下。外部のデータなので、上限を置く） */
 export const IMPORT_MAX_BYTES = 5 * 1024 * 1024;
 /** 取得の待ち時間（短縮 URL のリダイレクトを含む） */
@@ -28,8 +30,8 @@ export function takeImportUrlParam(): string | null {
 }
 
 export type ImportUrlCheck =
-  | { ok: true; url: string; host: string }
-  | { ok: false; reason: 'invalid' | 'insecure' };
+  | { ok: true; url: string; host: string; fetchUrl: string }
+  | { ok: false; reason: 'invalid' | 'insecure' | 'driveNoKey' };
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
 
@@ -54,7 +56,14 @@ export function checkImportUrl(raw: string): ImportUrlCheck {
     const m = u.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/);
     if (m) u = new URL(`https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`);
   }
-  return { ok: true, url: u.toString(), host: u.host };
+  // Google ドライブの共有リンクは、画面のリンクのままでは CORS で読めないため、Drive API の URL（API キーつき）で取得する（D325）
+  const driveId = driveFileIdFromLink(u);
+  if (driveId) {
+    const media = driveMediaUrl(driveId);
+    if (!media) return { ok: false, reason: 'driveNoKey' };
+    return { ok: true, url: u.toString(), host: u.host, fetchUrl: media };
+  }
+  return { ok: true, url: u.toString(), host: u.host, fetchUrl: u.toString() };
 }
 
 export type ImportFetchResult =
@@ -84,4 +93,13 @@ export async function fetchImportText(url: string): Promise<ImportFetchResult> {
   } finally {
     clearTimeout(timer);
   }
+}
+
+/** 共有リンクを引数につけた、編成付き読込 URL（このアプリの今のページ + ?import=<リンク>） */
+export function buildImportLink(shareLink: string): string {
+  const u = new URL(window.location.href);
+  u.search = '';
+  u.hash = '';
+  u.searchParams.set(IMPORT_URL_PARAM, shareLink);
+  return u.toString();
 }

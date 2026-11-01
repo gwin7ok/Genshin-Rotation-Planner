@@ -80,5 +80,21 @@
     "restoreConfirm": "The page will reload after restoring. Continue?",
     "restoreFailed": "Could not restore. {{error}}",
     "confirmReset": "Reset the current edits to the initial state (a team with no characters)?"
+  },
+  "share": {
+    "button": "Create import URL and copy (Google Drive)",
+    "working": "Working…",
+    "hint": "Saves the current rotation as JSON to Google Drive and copies a URL that carries its link",
+    "notConfigured": "Google Drive integration (client ID / API key) is not configured on this site, so it is unavailable.",
+    "namePrompt": "Enter a file name (rotation name).\n\n• It is saved in the \"Genshin Rotation Planner\" folder on Google Drive\n• Anyone with the link can view it (the rotation becomes public)",
+    "done": "Saved \"{{name}}\" in the \"{{folder}}\" folder on Google Drive and copied the import URL to the clipboard.\n\nOpening this URL loads this rotation.",
+    "copyFailed": "Saved, but could not copy to the clipboard. Please copy this URL by hand.\n\n{{url}}",
+    "error": {
+      "notConfigured": "Google Drive integration is not configured on this site.",
+      "script": "Could not load Google's sign-in script. Check your network or ad blocker.",
+      "auth": "Could not sign in to Google. Please try again. ({{detail}})",
+      "denied": "Cancelled because access to Google Drive was not granted (sign-in was aborted).",
+      "api": "Failed to save to Google Drive. ({{detail}})"
+    }
   }
 }

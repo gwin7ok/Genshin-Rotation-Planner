@@ -74,6 +74,9 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
+          # Google ドライブ連携（公開される値。リポジトリの Variables に登録。docs/Googleドライブ連携の設定手順.md）
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_GOOGLE_API_KEY: ${{ vars.VITE_GOOGLE_API_KEY }}
 
       - name: 公開前の検査（WASM の SHA-256・コミットの一致・フォークのタグ・LICENSE）
         run: npm run check:release

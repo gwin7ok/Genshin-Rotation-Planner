@@ -40,6 +40,7 @@ npm run gcsim:start
 npm run build:catalog      # 効果キーの辞書（gcsim_key_catalog.json）。差分は catalog-diff.md に出る
 npm run build:master       # キャラ（フレーム・効果時間・CT開始位置）
 npm run build:equipment    # 武器・聖遺物
+npm run build:aliases      # gcsim の設定文の別名（raiden = raidenshogun など。gcsim_key_aliases.json。設定文の読み込みが使う）
 ```
 - 出力のレポート（補完・食い違い・凸延長の未確認・孤立した一覧）を読む。新キャラ・新武器の手当ては、[新キャラ実装時の作業.md](新キャラ実装時の作業.md) を参照。
 - `build:catalog` の差分（増えたキー・消えたキー）を確認する。消えたキーが、対応表・発動バフで使われていないか。

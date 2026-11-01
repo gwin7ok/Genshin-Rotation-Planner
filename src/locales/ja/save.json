@@ -72,7 +72,6 @@
     "copyFailed": "クリップボードにコピーできませんでした: {{message}}\nJSONファイル書き出しを使ってください。",
     "skipped": "壊れていた項目（{{items}}）は、読み飛ばして読み込みました。",
     "importFileFailed": "JSONファイルの読み込みに失敗しました。",
-    "invalidJson": "JSON構文が正しくありません。",
     "backupExported": "全データのバックアップを書き出しました（保存編成 {{slots}} 件・設定 {{settings}} 件・作成したデータ {{items}} 件）",
     "restoreIntro": "このバックアップから、次の内容を復元します。",
     "restoreSlots": "・保存編成 {{count}} 件（同じ ID は、バックアップのほうが新しいときだけ置き換え）",

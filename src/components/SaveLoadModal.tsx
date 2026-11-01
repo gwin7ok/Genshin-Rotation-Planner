@@ -67,7 +67,7 @@ interface SaveLoadModalProps {
   }) => void;
   onResetToDefault: () => void;
   /** JSON の文字列を読み込む（検証・確認・読み込みは App と共通）。読み込みを始めたら true */
-  onImportText: (text: string, fileName?: string, source?: 'file' | 'text') => boolean;
+  onImportText: (text: string, fileName?: string) => boolean;
   /** 現在の編成を gcsim の設定文にしてコピーする（ヘッダーのボタンと同じ処理。書き出しの区画から呼ぶ） */
   onCopyGcsimConfig?: () => void;
 }
@@ -331,7 +331,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
 
     const reader = new FileReader();
     reader.onload = (ev) => {
-      if (onImportText(String(ev.target?.result ?? ''), file.name, 'file')) onClose();
+      if (onImportText(String(ev.target?.result ?? ''), file.name)) onClose();
     };
     reader.readAsText(file);
     e.target.value = '';

@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-01
+
 ### 追加
 - チャージ効率計算: ヘッダーの「チャージ効率計算」から開く画面で、編成の全キャラが元素爆発を回し続けるのに必要な元素チャージ効率を、gcsim で算出して表示する。目安（70%）・安定（90%）・確実（100%）の 3 段で出し、爆発が間に合う割合の違いが分かる。5 周ぶんを複数の種で計算し、敵の粒子（既定は 5〜8 秒に 1 個）・試す種の数・爆発の前に待つ時間を、上下ボタンで変えられる。結果は編成ごとに保存され、開き直すと最後の結果が出る（編成やローテーションが変わっているときは、結果欄だけが空欄になる）。計算中は経過時間と残り時間、終わると所要時間を表示する。確実は、実際の爆発のずれまで確かめる（精密検証 / 概算検証を選べる）。目安・安定には、種の数による誤差の範囲（80%）を併記する。
 - URL の引数で編成を読み込む: `/?import=<https のリンク>` で開くと、そのリンクの編成 JSON を自動で読み込む。短縮 URL と GitHub の blob リンクに対応。取得の前に確認が出る（5MB・15 秒の制限つき）。
@@ -164,7 +166,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.3.1...v1.3.2

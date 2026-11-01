@@ -113,7 +113,7 @@
     "unreachable": "Unreachable (short even at +{{max}}%)",
     "notRunnable": "gcsim cannot run this:",
     "errorMismatch": "Even with very high ER, burst timing does not match the baseline (run ignoring energy). Bursts are shifted for a reason other than energy.",
-    "note": "Required ER is the total, including weapon and artifact substats. Particles are random, so three levels are shown (windows: {{seeds}} seeds × {{laps}} laps). Characters start with full energy, so the first-lap bursts always succeed. The first window (first-lap burst to second-lap burst) is counted too; particles are fewer in lap 1, so the required ER can be higher. The figure in parentheses is the share of bursts that can fire without waiting for energy. Typical and Stable are \"measured\": the share of tried bursts that fired without waiting at that value. Certain is an \"estimate\": when every tried burst fired without waiting, it is N/(N+1) (the next untried burst exceeds the maximum with probability 1/(N+1)). The share is per burst, so even at Stable not every burst over several laps is guaranteed to fire without waiting; use Certain if no burst may wait. The normal calculation (applying results to the chart) is not affected.",
+    "note": "The number in parentheses is the share of bursts that can fire without waiting for energy.\nTypical and Stable are “measured”: the share of tried bursts that fired without waiting at that value.\nCertain is an “estimate”: when every tried burst fired without waiting, it is N/(N+1) (the next untried burst exceeds the maximum with probability 1/(N+1)).\nThe share is per burst, so even at Stable not every burst over several laps is guaranteed to fire without waiting.\nUse Certain if no burst may wait.\nThe “[-…% to +…%]” under Typical and Stable is the error from the number of seeds tried.\nThe “[min -…%]” under Certain means the actual value can be lower than shown by up to this much.",
     "close": "Close",
     "failed": "Calculation failed: {{message}}",
     "cancelled": "Cancelled (the previous result is kept)",
@@ -150,6 +150,9 @@
     "burstWaitNote": "When a burst lacks energy, it counts as enough if the burst can go off within this many seconds once particles arrive (0.1 s steps; default 0 s). The longer it is, the lower and steadier the required ER. Raise it only if you can wait in real play.",
     "pctMeasured": "measured {{pct}}%",
     "pctEstimated": "est. {{pct}}%",
+    "range": "[{{minus}} to {{plus}}]",
+    "rangeTitle": "80% range {{low}}–{{high}}",
+    "rounding": "[min -{{max}}%]",
     "enemyParticlesReset": "Reset to default",
     "enemyParticlesNote": "The default is 1 particle every 5–8 s (gcsim's official example is every 8–12 s). Set the count to 0 for no enemy particles. Adjust it to your fight.",
     "errorVerify": "Could not settle the Certain value within the verification limit. Review the party or rotation, or try again."

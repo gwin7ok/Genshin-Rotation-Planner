@@ -73,7 +73,7 @@
           "shortName": "E",
           "type": "skill",
           "duration": 0.683,
-          "naturalDuration": 0.517,
+          "naturalDuration": 0.683,
           "durationManual": true,
           "gcsimBaseDuration": 0.683,
           "cooldown": 21,
@@ -89,7 +89,8 @@
           "type": "dash",
           "duration": 0.35,
           "durationManual": true,
-          "gcsimBaseDuration": 0.35
+          "gcsimBaseDuration": 0.35,
+          "naturalDuration": 0.35
         },
         {
           "id": "act_1791808076844_ttdy",
@@ -113,14 +114,14 @@
           "shortName": "N",
           "type": "normal",
           "duration": 0.267,
-          "naturalDuration": 0.167,
+          "naturalDuration": 0.267,
           "durationManual": true,
           "gcsimBaseDuration": 0.267
         }
       ],
       "startTime": 1.2,
-      "endTime": 3.534,
-      "duration": 2.3339999999999996,
+      "endTime": 3.95,
+      "duration": 2.75,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv580uy1_x",
@@ -144,7 +145,7 @@
           "shortName": "Q",
           "type": "burst",
           "duration": 0.883,
-          "naturalDuration": 0.85,
+          "naturalDuration": 0.883,
           "durationManual": true,
           "gcsimBaseDuration": 0.883,
           "cooldown": 15,
@@ -170,7 +171,7 @@
           "shortName": "tE",
           "type": "skill",
           "duration": 0.833,
-          "naturalDuration": 0.85,
+          "naturalDuration": 0.833,
           "durationManual": true,
           "gcsimBaseDuration": 0.833,
           "cooldown": 2,
@@ -178,9 +179,9 @@
           "gcsimCtOffset": 0.233
         }
       ],
-      "startTime": 3.534,
-      "endTime": 6.351,
-      "duration": 2.817,
+      "startTime": 3.95,
+      "endTime": 6.783,
+      "duration": 2.833,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv580uy1_y",
@@ -239,8 +240,8 @@
           "gcsimBaseDuration": 0.3
         }
       ],
-      "startTime": 6.351,
-      "endTime": 9.734,
+      "startTime": 6.783,
+      "endTime": 10.166,
       "duration": 3.383,
       "passiveTriggers": [
         {
@@ -313,7 +314,7 @@
           "type": "normal",
           "duration": 0.333,
           "groupId": "grp_1791807522241_0vjy",
-          "naturalDuration": 0.267,
+          "naturalDuration": 0.333,
           "durationManual": true,
           "gcsimBaseDuration": 0.333,
           "copyDurations": {
@@ -360,7 +361,7 @@
           "shortName": "N",
           "type": "normal",
           "duration": 0.667,
-          "naturalDuration": 0.333,
+          "naturalDuration": 0.667,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
           "gcsimBaseDuration": 0.667,
@@ -384,7 +385,7 @@
           "shortName": "N",
           "type": "normal",
           "duration": 0.633,
-          "naturalDuration": 0.55,
+          "naturalDuration": 0.633,
           "groupId": "grp_1791807522241_0vjy",
           "durationManual": true,
           "gcsimBaseDuration": 0.633,
@@ -441,9 +442,9 @@
           "gcsimCtOffset": 0.1
         }
       ],
-      "startTime": 9.734,
-      "endTime": 24.102,
-      "duration": 14.368,
+      "startTime": 10.166,
+      "endTime": 23.183,
+      "duration": 13.017,
       "holdMode": false,
       "groups": [
         {
@@ -451,52 +452,10 @@
           "repeat": 3
         }
       ]
-    },
-    {
-      "id": "stint_1791807179953",
-      "characterId": "10000032-pyro",
-      "note": "",
-      "actions": [
-        {
-          "id": "act_1791807606622_8nmv",
-          "actionTypeId": "10000032-pyro_e",
-          "name": "元素スキル: 溢れる情熱",
-          "shortName": "tE",
-          "type": "skill",
-          "duration": 0.833,
-          "durationManual": true,
-          "gcsimBaseDuration": 0.833,
-          "cooldown": 4,
-          "gcsimCdResonance": 1,
-          "naturalDuration": 0.833,
-          "gcsimCtOffset": 0.233
-        }
-      ],
-      "startTime": 24.102,
-      "endTime": 25.535,
-      "duration": 1.4329999999999998,
-      "passiveTriggers": [
-        {
-          "id": "ptrg_gcsim_mv580uy1_z",
-          "passiveEffectId": "abuff_10007",
-          "name": "教官4: 全員元素熟知+120",
-          "offset": 0.767,
-          "duration": 8,
-          "gcsimKey": "instructor-4pc"
-        },
-        {
-          "id": "ptrg_gcsim_mv580uy1_10",
-          "passiveEffectId": "abuff_10007",
-          "name": "教官4: 全員元素熟知+120",
-          "offset": 2.133,
-          "duration": 6.9,
-          "gcsimKey": "instructor-4pc"
-        }
-      ]
     }
   ],
   "loopStartIndex": 1,
   "loopStartTime": 1.2,
-  "totalDuration": 24.62,
+  "totalDuration": 23.18,
   "switchDelay": 0.5
 }

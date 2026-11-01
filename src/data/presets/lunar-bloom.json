@@ -37,6 +37,27 @@
   ],
   "stints": [
     {
+      "id": "stint_1793505167723",
+      "characterId": "10000125-hydro",
+      "note": "",
+      "actions": [
+        {
+          "id": "act_1793505172648_c145",
+          "actionTypeId": "10000125-hydro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.383,
+          "naturalDuration": 0.383,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.383
+        }
+      ],
+      "startTime": 0,
+      "endTime": 0.983,
+      "duration": 0.983
+    },
+    {
       "id": "stint_1790639768334",
       "characterId": "10000073-dendro",
       "note": "",
@@ -47,11 +68,22 @@
           "name": "元素スキル: 所聞遍計",
           "shortName": "tE",
           "type": "skill",
-          "duration": 0.533,
-          "naturalDuration": 0.533,
+          "duration": 0.467,
+          "naturalDuration": 0.467,
           "durationManual": true,
-          "gcsimBaseDuration": 0.533,
+          "gcsimBaseDuration": 0.467,
           "effectDuration": 25
+        },
+        {
+          "id": "act_1793505161971_x57t",
+          "actionTypeId": "10000073-dendro_n",
+          "name": "通常攻撃",
+          "shortName": "N",
+          "type": "normal",
+          "duration": 0.35,
+          "naturalDuration": 0.35,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.35
         },
         {
           "id": "act_1790639794922_a6b6",
@@ -72,29 +104,29 @@
               "key": "nahida-q-within",
               "name": "領域内（心景幻成）",
               "offset": 1.6,
-              "duration": 18.5
+              "duration": 19.5
             }
           ]
         }
       ],
-      "startTime": 0,
-      "endTime": 3.083,
-      "duration": 3.083,
+      "startTime": 0.983,
+      "endTime": 4.45,
+      "duration": 3.467,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv559xa7_0",
           "passiveEffectId": "10000073-dendro_p1",
           "name": "浄善摂受明論",
-          "offset": 2.767,
-          "duration": 17.5,
+          "offset": 3.117,
+          "duration": 18,
           "gcsimKey": "nahida-a1"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_1",
           "passiveEffectId": "abuff_15025",
           "name": "深林4: 草元素耐性-30%",
-          "offset": 0.75,
-          "duration": 24.117,
+          "offset": 0.717,
+          "duration": 27.483,
           "gcsimKey": "dm-4pc"
         }
       ]
@@ -170,8 +202,8 @@
           ]
         }
       ],
-      "startTime": 3.083,
-      "endTime": 6.3,
+      "startTime": 4.45,
+      "endTime": 7.667,
       "duration": 3.2169999999999996,
       "passiveTriggers": [
         {
@@ -186,16 +218,16 @@
           "id": "ptrg_gcsim_mv559xa7_3",
           "passiveEffectId": "10000070-hydro_p1_2",
           "name": "落花廻旋の庭 (10秒)",
-          "offset": 3.7,
-          "duration": 22,
+          "offset": 2.767,
+          "duration": 23.917,
           "gcsimKey": "nilou-a1-em"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_4",
           "passiveEffectId": "10000070-hydro_p1_2",
           "name": "落花廻旋の庭 (10秒)",
-          "offset": 16.683,
-          "duration": 11.95,
+          "offset": 17.7,
+          "duration": 12,
           "gcsimKey": "nilou-a1-em"
         },
         {
@@ -235,23 +267,23 @@
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-hydro）",
           "offset": 17.717,
-          "duration": 10,
+          "duration": 11.95,
           "gcsimKey": "nilou-c2-hydro"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_a",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-dendro）",
-          "offset": 3.7,
-          "duration": 22,
+          "offset": 2.767,
+          "duration": 23.917,
           "gcsimKey": "nilou-c2-dendro"
         },
         {
           "id": "ptrg_gcsim_mv559xa7_b",
           "passiveEffectId": "10000070-hydro_c2",
           "name": "2凸「星天の花雨」（nilou-c2-dendro）",
-          "offset": 16.533,
-          "duration": 12.967,
+          "offset": 17.017,
+          "duration": 12.917,
           "gcsimKey": "nilou-c2-dendro"
         }
       ]
@@ -280,7 +312,7 @@
               "key": "columbina-gravity",
               "name": "引力のさざ波（月の反応）",
               "offset": 1.067,
-              "duration": 20.05
+              "duration": 21.317
             }
           ]
         },
@@ -290,10 +322,10 @@
           "name": "元素爆発: 月明かりの郷愁",
           "shortName": "Q",
           "type": "burst",
-          "duration": 2.167,
-          "naturalDuration": 2.167,
+          "duration": 2.033,
+          "naturalDuration": 2.033,
           "durationManual": true,
-          "gcsimBaseDuration": 2.167,
+          "gcsimBaseDuration": 2.033,
           "cooldown": 15,
           "gcsimCdResonance": 1,
           "effectDuration": 20,
@@ -303,25 +335,14 @@
               "key": "columbina-q-buff",
               "name": "反応ボーナス（爆発中）",
               "offset": 1.433,
-              "duration": 18.8
+              "duration": 19.6
             }
           ]
-        },
-        {
-          "id": "act_1790701217629_7jgv",
-          "actionTypeId": "10000125-hydro_ca",
-          "name": "重撃",
-          "shortName": "C",
-          "type": "charged",
-          "duration": 0.717,
-          "naturalDuration": 0.717,
-          "durationManual": true,
-          "gcsimBaseDuration": 0.717
         }
       ],
-      "startTime": 6.3,
-      "endTime": 10.451,
-      "duration": 4.151000000000001,
+      "startTime": 7.667,
+      "endTime": 10.867,
+      "duration": 3.200000000000001,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv559xa7_c",
@@ -382,8 +403,8 @@
           "gcsimBaseDuration": 0.967,
           "cooldown": 12,
           "gcsimCdResonance": 1,
-          "gcsimCtOffset": 0.217,
           "effectDuration": 15,
+          "gcsimCtOffset": 0.217,
           "extraEffects": [
             {
               "key": "lauma-skill-shred-dendro",
@@ -423,8 +444,8 @@
           ]
         }
       ],
-      "startTime": 10.451,
-      "endTime": 13.935,
+      "startTime": 10.867,
+      "endTime": 14.351,
       "duration": 3.484,
       "passiveTriggers": [
         {
@@ -448,15 +469,15 @@
           "passiveEffectId": "abuff_15042",
           "name": "月を紡ぐ夜の歌4: 効果",
           "offset": 1.25,
-          "duration": 14.133,
+          "duration": 16.083,
           "gcsimKey": "gleaming-moon-devotion-em"
         },
         {
           "id": "ptrg_gcsim_mv559xa8_r",
           "passiveEffectId": "abuff_15042",
           "name": "月を紡ぐ夜の歌4: 効果",
-          "offset": 9.333,
-          "duration": 13.85,
+          "offset": 11.283,
+          "duration": 11.9,
           "gcsimKey": "gleaming-moon-devotion-em"
         }
       ]
@@ -489,6 +510,11 @@
               "base": 1.333
             },
             "3": {
+              "duration": 1.333,
+              "gcsimBaseDuration": 1.333,
+              "base": 1.333
+            },
+            "4": {
               "duration": 0.717,
               "gcsimBaseDuration": 0.717,
               "base": 1.333
@@ -496,15 +522,15 @@
           }
         }
       ],
-      "startTime": 13.935,
-      "endTime": 18.734,
-      "duration": 4.799000000000001,
+      "startTime": 14.351,
+      "endTime": 19.967,
+      "duration": 5.615999999999998,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv559xa7_d",
           "passiveEffectId": "10000125-hydro_p1",
           "name": "月が呼んだ狂気",
-          "offset": 2.883,
+          "offset": 3.833,
           "duration": 10,
           "gcsimKey": "columbina-a1"
         },
@@ -512,7 +538,7 @@
           "id": "ptrg_gcsim_mv559xa7_e",
           "passiveEffectId": "10000125-hydro_p1",
           "name": "月が呼んだ狂気",
-          "offset": 7.383,
+          "offset": 8.333,
           "duration": 14.5,
           "gcsimKey": "columbina-a1"
         },
@@ -528,7 +554,7 @@
           "id": "ptrg_gcsim_mv559xa7_j",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 最大HP+40%（コロンビーナ）",
-          "offset": 2.883,
+          "offset": 3.833,
           "duration": 8,
           "gcsimKey": "columbina-c2"
         },
@@ -536,7 +562,7 @@
           "id": "ptrg_gcsim_mv559xa7_k",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 最大HP+40%（コロンビーナ）",
-          "offset": 7.383,
+          "offset": 8.333,
           "duration": 12.5,
           "gcsimKey": "columbina-c2"
         },
@@ -544,7 +570,7 @@
           "id": "ptrg_gcsim_mv559xa7_m",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
-          "offset": 2.883,
+          "offset": 3.833,
           "duration": 8,
           "gcsimKey": "columbina-c2-lb"
         },
@@ -552,22 +578,31 @@
           "id": "ptrg_gcsim_mv559xa7_n",
           "passiveEffectId": "10000125-hydro_c2",
           "name": "2凸: 月開花の補正（フィールド上のキャラの元素熟知 +最大HP×0.35%）",
-          "offset": 7.383,
+          "offset": 8.333,
           "duration": 12.5,
           "gcsimKey": "columbina-c2-lb"
+        },
+        {
+          "id": "ptrg_gcsim_mvxap4w0_7",
+          "passiveEffectId": "10000125-hydro_p2",
+          "name": "新月の法則",
+          "offset": 14.633,
+          "duration": 18,
+          "gcsimKey": "moonridge-dew-timer",
+          "gcsimMissed": true
         }
       ],
       "groups": [
         {
           "id": "grp_1792099861400_1d0w",
-          "repeat": 4
+          "repeat": 5
         }
       ]
     }
   ],
-  "loopStartIndex": 0,
-  "loopStartTime": 0,
-  "totalDuration": 19.55,
+  "loopStartIndex": 1,
+  "loopStartTime": 0.983,
+  "totalDuration": 21.4,
   "switchDelay": 0.5,
   "reactions": {
     "gcsimVersion": "v2.49.0",
@@ -579,52 +614,41 @@
         "segments": [
           {
             "start": {
-              "actionId": "act_1790657507648_0k6e",
-              "offset": 1.117
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.65
             },
             "end": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1.367
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 1.083
             },
             "count": 1
           },
           {
             "start": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1.367
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 1.083
             },
             "end": {
-              "actionId": "act_1790701217629_7jgv",
-              "offset": 0.917
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.333
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790701217629_7jgv",
-              "offset": 0.917
-            },
-            "end": {
-              "actionId": "act_1792099753586_cp1e",
-              "offset": 0.217
-            },
-            "count": 1
-          },
-          {
-            "start": {
-              "actionId": "act_1792099753586_cp1e",
-              "offset": 0.217
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.333
             },
             "end": {
               "actionId": "act_1792099753586_cp1e",
               "offset": 0.483
             },
-            "count": 2
+            "count": 3
           },
           {
             "start": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 1.583
+              "offset": 1.85
             },
             "end": {
               "actionId": "act_1790658661178_tzwe",
@@ -635,7 +659,7 @@
           {
             "start": {
               "actionId": "act_1790658661178_tzwe~1",
-              "offset": 0.167
+              "offset": 0.433
             },
             "end": {
               "actionId": "act_1790658661178_tzwe~1",
@@ -645,12 +669,23 @@
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~2",
-              "offset": 1.167
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0
             },
             "end": {
               "actionId": "act_1790658661178_tzwe~3",
               "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1.317
             },
             "count": 1
           }
@@ -668,7 +703,7 @@
             },
             "end": {
               "actionId": "act_1792099753586_cp1e",
-              "offset": 0.483
+              "offset": 0.75
             },
             "count": 1
           },
@@ -679,28 +714,39 @@
             },
             "end": {
               "actionId": "act_1792099753586_cp1e",
-              "offset": 0.917
+              "offset": 1.05
             },
-            "count": 1
+            "count": 2
           },
           {
             "start": {
               "actionId": "act_1792099753586_cp1e",
-              "offset": 0.917
+              "offset": 1.05
             },
             "end": {
               "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
               "offset": 0.767
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~2",
+              "actionId": "act_1790658661178_tzwe~4",
               "offset": 0.767
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
+              "actionId": "act_1790658661178_tzwe~4",
               "offset": 1.317
             },
             "count": 1
@@ -714,52 +760,41 @@
         "segments": [
           {
             "start": {
-              "actionId": "act_1790639794922_a6b6",
-              "offset": 0.217
+              "actionId": "act_1790639793975_533l",
+              "offset": 0
             },
             "end": {
-              "actionId": "act_1790639800608_107n",
-              "offset": 0.2
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.1
             },
             "count": 1
           },
           {
             "start": {
-              "actionId": "act_1790639800608_107n",
-              "offset": 0.2
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.1
             },
             "end": {
-              "actionId": "act_1790657507648_0k6e",
-              "offset": 1.033
+              "actionId": "act_1790657506812_wx8d",
+              "offset": 0.117
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790657507648_0k6e",
-              "offset": 1.033
-            },
-            "end": {
-              "actionId": "act_1790701217629_7jgv",
-              "offset": 0.917
-            },
-            "count": 3
-          },
-          {
-            "start": {
-              "actionId": "act_1790701217629_7jgv",
-              "offset": 0.917
+              "actionId": "act_1790657506812_wx8d",
+              "offset": 0.117
             },
             "end": {
               "actionId": "act_1792099753586_cp1e",
               "offset": 0.483
             },
-            "count": 2
+            "count": 3
           },
           {
             "start": {
               "actionId": "act_1790639828963_rcb8",
-              "offset": 0.967
+              "offset": 2.133
             },
             "end": {
               "actionId": "act_1790658661178_tzwe",
@@ -769,8 +804,8 @@
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe",
-              "offset": 0.983
+              "actionId": "act_1790658661178_tzwe~1",
+              "offset": 0.717
             },
             "end": {
               "actionId": "act_1790658661178_tzwe~1",
@@ -780,45 +815,45 @@
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~2",
-              "offset": 0.55
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0.283
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~2",
+              "actionId": "act_1790658661178_tzwe~3",
               "offset": 0.767
             },
             "count": 1
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 1.55
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1.283
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 3.983
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 3.717
             },
             "count": 1
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 3.983
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 3.717
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 6.417
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 6.15
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 6.417
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 6.15
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 25.867
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 14.85
             },
             "count": 3
           }
@@ -835,65 +870,54 @@
               "offset": 0
             },
             "end": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
             },
             "count": 1
           },
           {
             "start": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
             },
             "end": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1.683
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.8
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790639819417_w612",
-              "offset": 1.683
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.8
             },
             "end": {
-              "actionId": "act_1792099753586_cp1e",
-              "offset": 0.483
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
             },
             "count": 3
           },
           {
             "start": {
-              "actionId": "act_1792099753586_cp1e",
-              "offset": 0.483
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
+              "actionId": "act_1790658661178_tzwe~4",
               "offset": 0.767
             },
             "count": 2
           },
           {
             "start": {
-              "actionId": "act_1790658661178_tzwe~3",
+              "actionId": "act_1790658661178_tzwe~4",
               "offset": 0.767
             },
             "end": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 7.867
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 14.85
             },
             "count": 1
-          },
-          {
-            "start": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 7.867
-            },
-            "end": {
-              "actionId": "act_1790658661178_tzwe~3",
-              "offset": 25.867
-            },
-            "count": 2
           }
         ]
       }

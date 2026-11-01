@@ -13,6 +13,7 @@ import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/da
 import { DEFAULT_ACTION_DELAY } from '../actionDelay.ts';
 import { HOLD_FRAMES_ACTIONS, holdSecondsFromCommand, mapAction } from './actionMapping.ts';
 import { canQueueFrames, cancelKeyOf } from '../rotation/frameTables.ts';
+import aliasData from '../../data/gcsim_key_aliases.json';
 import { t } from '../../i18n';
 
 /** 読み飛ばした行の理由（画面の文言は `save:gcsimImport.reason.<reason>`） */
@@ -53,6 +54,19 @@ export interface ParseGcsimInput {
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
 }
+
+/** gcsim の別名（`raiden` = `raidenshogun` など）の組。gcsim の pkg/shortcut から作る（scripts/build-key-aliases.ts） */
+const ALIAS_GROUPS = aliasData as { characters: string[][]; weapons: string[][]; artifacts: string[][] };
+
+/** 別名を、組の代表の名前にそろえる関数（組に無い名前は、そのまま） */
+const canonicalizer = (groups: string[][]) => {
+  const map = new Map<string, string>();
+  for (const g of groups) for (const name of g) map.set(name, g[0]);
+  return (key: string): string => map.get(key) ?? key;
+};
+const canonChar = canonicalizer(ALIAS_GROUPS.characters);
+const canonWeapon = canonicalizer(ALIAS_GROUPS.weapons);
+const canonArtifact = canonicalizer(ALIAS_GROUPS.artifacts);
 
 const PARTY_SIZE = 4;
 /** アプリの設定文の options に出る項目（buildGcsimConfig）。これだけなら、読み込まないことを知らせない */
@@ -177,10 +191,10 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
   const charByKey = new Map<string, CharacterConfig>();
   for (const c of input.characters) {
     const k = c.source?.gcsimKey;
-    if (k && !c.id.startsWith('empty_slot_') && !charByKey.has(k)) charByKey.set(k, c);
+    if (k && !c.id.startsWith('empty_slot_') && !charByKey.has(canonChar(k))) charByKey.set(canonChar(k), c);
   }
-  const weaponByKey = new Map(input.weapons.filter(w => w.gcsimKey).map(w => [w.gcsimKey!, w]));
-  const artifactByKey = new Map(input.artifacts.filter(a => a.gcsimKey).map(a => [a.gcsimKey!, a]));
+  const weaponByKey = new Map(input.weapons.filter(w => w.gcsimKey).map(w => [canonWeapon(w.gcsimKey!), w]));
+  const artifactByKey = new Map(input.artifacts.filter(a => a.gcsimKey).map(a => [canonArtifact(a.gcsimKey!), a]));
 
   const members: MemberDraft[] = [];
   const memberByKey = new Map<string, MemberDraft>();
@@ -248,7 +262,7 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
     if (inSwapIf()) {
       // アプリの出力の条件つき交代: 交代は出場の切れ目で表すので、`swap` の有無だけ見る。`wait(1)` は交代遅延の端数
       const m = text.match(/^([a-z0-9_]+)\s+swap$/);
-      if (m && memberByKey.has(m[1])) { enter(m[1]); pendingSwap = true; }
+      if (m && memberByKey.has(canonChar(m[1]))) { enter(canonChar(m[1])); pendingSwap = true; }
       else if (!/^wait\(\s*\d+\s*\)$/.test(text)) ignore(tok, 'conditional');
       continue;
     }
@@ -273,7 +287,7 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
 
     const head = text.match(/^([a-z0-9_]+)\s+(.*)$/);
     const swapTo = text.match(/^swap\s+([a-z0-9_]+)$/);
-    if (swapTo && memberByKey.has(swapTo[1])) { enter(swapTo[1]); pendingSwap = true; continue; }
+    if (swapTo && memberByKey.has(canonChar(swapTo[1]))) { enter(canonChar(swapTo[1])); pendingSwap = true; continue; }
     if (!head) {
       const w = text.match(/^(wait|delay)\(\s*(\d+)\s*\)$/);
       if (w) {
@@ -294,7 +308,8 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
       ignore(tok, 'unknownStatement');
       continue;
     }
-    const key = head[1];
+    const keyText = head[1];
+    const key = canonChar(keyText);
     const rest = head[2];
 
     // --- キャラ行 ---
@@ -327,7 +342,7 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
       const d = memberByKey.get(key);
       if (!d) { ignore(tok, 'unknownCharacter'); continue; }
       const kv = parseKv(rest);
-      const w = weaponByKey.get(kv.weapon ?? '');
+      const w = weaponByKey.get(canonWeapon(kv.weapon ?? ''));
       if (!w) { ignore(tok, 'unknownWeapon'); continue; }
       d.weaponId = w.id;
       const refine = Number(kv.refine);
@@ -338,7 +353,7 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
       const d = memberByKey.get(key);
       if (!d) { ignore(tok, 'unknownCharacter'); continue; }
       const kv = parseKv(rest);
-      const a = artifactByKey.get(kv.set ?? '');
+      const a = artifactByKey.get(canonArtifact(kv.set ?? ''));
       if (!a) { ignore(tok, 'unknownArtifact'); continue; }
       d.sets.push({ id: a.id, count: Number(kv.count) });
       continue;
@@ -365,8 +380,8 @@ export function parseGcsimConfig(source: string, input: ParseGcsimInput): ParseG
       const repeat = m[3] ? Math.max(1, Number(m[3])) : 1;
       if (m[1] === 'swap') { enter(key); sawSwap = true; continue; }
       const found = findActionForCommand(member.char, command);
-      if (!found) { ignore(tok, 'unknownAction', `${key} ${item}`); continue; }
-      if (found.paramsIgnored) ignore(tok, 'paramsIgnored', `${key} ${item}`);
+      if (!found) { ignore(tok, 'unknownAction', `${keyText} ${item}`); continue; }
+      if (found.paramsIgnored) ignore(tok, 'paramsIgnored', `${keyText} ${item}`);
       const def = member.char.availableActions.find(a => a.id === found.id)!;
       enter(key);
       for (let r = 0; r < repeat; r++) {

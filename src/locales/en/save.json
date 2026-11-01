@@ -72,7 +72,6 @@
     "copyFailed": "Could not copy to the clipboard: {{message}}\nPlease use \"Export JSON file\".",
     "skipped": "Broken items ({{items}}) were skipped while loading.",
     "importFileFailed": "Failed to read the JSON file.",
-    "invalidJson": "The JSON syntax is invalid.",
     "backupExported": "Exported a backup of all data ({{slots}} saved rotations, {{settings}} settings, {{items}} created entries)",
     "restoreIntro": "The following will be restored from this backup.",
     "restoreSlots": "• {{count}} saved rotations (for the same ID, replaced only when the backup is newer)",

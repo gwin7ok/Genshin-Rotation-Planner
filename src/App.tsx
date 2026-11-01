@@ -757,7 +757,7 @@ export default function App() {
   };
 
   /** 編成の JSON の文字列を読み込む（ファイル選択・URL の引数で共通。検証 → 同名の確認 → 読み込み） */
-  const importRotationText = (text: string, fileName = '', source: 'file' | 'text' = 'file'): boolean => {
+  const importRotationText = (text: string, fileName = ''): boolean => {
     try {
       const result = parseRotationPayload(JSON.parse(text));
       if (result.ok === false) {
@@ -778,7 +778,7 @@ export default function App() {
       if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
       return true;
     } catch (err) {
-      showAlert(t(source === 'text' ? 'save:message.invalidJson' : 'save:message.importFileFailed'));
+      showAlert(t('save:message.importFileFailed'));
       return false;
     }
   };

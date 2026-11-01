@@ -126,6 +126,45 @@ check('キャラが 1 人も読めない設定文は、エラー', () => {
   assert.equal(r.ok, false);
 });
 
+// --- 別名（gcsim の pkg/shortcut）: raiden = raidenshogun など ---
+const aliasData = readJson('src/data/gcsim_key_aliases.json');
+check('別名の表が、設定の gcsim のコミットで作られている', () => {
+  const config = readJson('gcsim.config.json');
+  assert.equal(aliasData.gcsimCommit, config.commit, 'gcsim のバージョンを上げたら npm run build:aliases で作り直す');
+  for (const k of ['characters', 'weapons', 'artifacts']) assert.ok(aliasData[k].length > 0, k);
+});
+check('別名で書いた設定文が、正式なキーと同じ編成になる', () => {
+  // マスターのキーが、別名のある組に入っているキャラ・武器・聖遺物を、1 つずつ選ぶ
+  const pick = (items: any[], groups: string[][], keyOf: (x: any) => string | undefined) => {
+    for (const item of items) {
+      const k = keyOf(item);
+      const g = k ? groups.find(x => x.includes(k)) : undefined;
+      const alias = g?.find(n => n !== k);
+      if (item && alias) return { item, key: k!, alias };
+    }
+    throw new Error('別名のあるものが見つかりません');
+  };
+  const c = pick(characters.filter((x: any) => (x.availableActions ?? []).length > 0), aliasData.characters, (x: any) => x.source?.gcsimKey);
+  const w = pick(weapons, aliasData.weapons, (x: any) => x.gcsimKey);
+  const a = pick(artifacts, aliasData.artifacts, (x: any) => x.gcsimKey);
+  const text = (ck: string, wk: string, ak: string) => [
+    `${ck} char lvl=90/90 cons=1 talent=9,9,9;`,
+    `${ck} add weapon="${wk}" refine=2 lvl=90/90;`,
+    `${ck} add set="${ak}" count=4;`,
+    `${ck} skill, burst;`,
+  ].join('\n');
+  const official = parseGcsimConfig(text(c.key, w.key, a.key), master);
+  const aliased = parseGcsimConfig(text(c.alias, w.alias, a.alias), master);
+  assert.equal(official.ok, true);
+  assert.equal(aliased.ok, true);
+  assert.deepEqual(aliased.value.party, official.value.party);
+  assert.equal(aliased.value.party[0].weaponId, w.item.id);
+  assert.equal(aliased.value.party[0].artifactSetId, a.item.id);
+  assert.equal(aliased.value.stints[0].characterId, c.item.id);
+  assert.equal(aliased.value.stints[0].actions.length, 2);
+  assert.deepEqual(aliased.value.ignored.filter((i: any) => i.reason.startsWith('unknown')), []);
+});
+
 // --- 長押し hold=N: 所要時間を編集した長押しが、設定文の hold=N を経て、同じ長さで戻る ---
 const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');
 check('長押し hold=N: 往復で、同じ長押しの長さ（±2 フレーム）に戻る', () => {

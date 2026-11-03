@@ -358,6 +358,8 @@ check('保存層: キーの文字列が、公開済みのデータと同じ（�
   });
   assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', language: 'appLanguage' });
   assert.equal(persistence.DEVICE_KEYS.gcsimEngine, 'gcsim_engine');
+  assert.equal(persistence.DEVICE_KEYS.gcsimCores, 'gcsim_cores');
+  assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_cores'), '端末だけの設定（コアの数）は、バックアップに含めない');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '端末だけの設定は、バックアップに含めない');
 });
 check('保存層: 書き込みが失敗しても例外を投げない（容量超過）', () => {

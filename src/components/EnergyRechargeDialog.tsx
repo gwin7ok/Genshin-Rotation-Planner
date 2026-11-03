@@ -4,7 +4,7 @@ import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
-import { resolveEngine, wasmParallelism } from '../utils/gcsim/gcsimWasm';
+import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { loadRequiredEr, saveRequiredEr } from '../utils/appSettings';
 import {
@@ -88,6 +88,13 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
+  // 使うコアの数（この端末の設定。変えると、すぐ保存する）
+  const [cores, setCores] = useState(String(getWasmCores()));
+  const changeCores = (v: string) => {
+    setCores(v);
+    const n = Math.floor(Number(v));
+    if (Number.isFinite(n) && n >= 1) setWasmCores(n);
+  };
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
@@ -310,6 +317,16 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.cores')}</p>
+            <div className="flex items-center gap-1.5">
+              <Stepper value={cores} onChange={changeCores} step={1} min={1} max={wasmMaxCores()} disabled={running} widthClass="w-14" />
+              <span>{t('gcsim:er.coresUnit')}</span>
+              <button onClick={() => changeCores(String(Math.min(WASM_DEFAULT_CORES, wasmMaxCores())))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.coresNote', { max: wasmMaxCores(), def: WASM_DEFAULT_CORES })}</p>
+          </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.seeds')}</p>

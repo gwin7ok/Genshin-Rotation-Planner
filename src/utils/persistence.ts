@@ -40,6 +40,8 @@ export const SETTING_KEYS = {
 export const DEVICE_KEYS = {
   /** gcsim の実行エンジンの選択（'auto' | 'wasm' | 'server'。開発・検証用） */
   gcsimEngine: 'gcsim_engine',
+  /** WASM の gcsim を同時に動かすコア（Worker）の数（整数。端末のコア数で変わるので、この端末だけ。既定: 12。上限は端末のコア数 − 1） */
+  gcsimCores: 'gcsim_cores',
   /** 構築エリアのガイド（アクション凡例・操作のヒント）の表示（'false' = 非表示。既定: 表示） */
   editorGuideVisible: 'editor_guide_visible',
   /** 利用者が最後に確認した、DB（マスターデータ）のバージョン。更新の通知（versionNotice.ts）に使う */

@@ -55,10 +55,32 @@ interface Pending {
   worker: Worker;
 }
 
-/** 同時に動かす Worker の数の上限（コア数 − 1 を上限 4 まで。1 コアなら 1） */
-export function wasmParallelism(): number {
+/** 使うコア（Worker）の数の既定（端末のコアが少ないときは、上限に収める） */
+export const WASM_DEFAULT_CORES = 12;
+
+/** 選べるコアの数の上限（端末のコア数 − 1。1 コアなら 1。画面の操作のため、1 つは空けておく） */
+export function wasmMaxCores(): number {
   const cores = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || 2 : 2;
-  return Math.max(1, Math.min(4, cores - 1));
+  return Math.max(1, cores - 1);
+}
+
+/** 保存したコアの数（無い・壊れているときは既定。上限・下限に収める） */
+export function getWasmCores(): number {
+  const v = Math.floor(Number(readString(DEVICE_KEYS.gcsimCores)));
+  const n = Number.isFinite(v) && v >= 1 ? v : WASM_DEFAULT_CORES;
+  return Math.max(1, Math.min(wasmMaxCores(), n));
+}
+
+/** コアの数を保存する（既定と同じなら、保存を消す） */
+export function setWasmCores(n: number): void {
+  const v = Math.max(1, Math.min(wasmMaxCores(), Math.floor(n)));
+  if (v === Math.max(1, Math.min(wasmMaxCores(), WASM_DEFAULT_CORES))) removeKey(DEVICE_KEYS.gcsimCores);
+  else writeString(DEVICE_KEYS.gcsimCores, String(v));
+}
+
+/** 同時に動かす Worker の数（利用者が選んだコアの数。既定 12。端末のコア数 − 1 まで） */
+export function wasmParallelism(): number {
+  return getWasmCores();
 }
 
 const workers: Worker[] = [];

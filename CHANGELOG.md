@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-03
+
 ### 追加
 - チャージ効率計算の画面に、「使用するコアの数」を追加した（「試す種の数」の上。既定は 12 で、この端末のコア数 − 1 まで選べる。この端末の設定として保存される）。これまでは、使うコアの数が最大 4 に固定されていた。コアを増やすと速くなるが、頭打ちがあり、メモリと CPU の発熱が増える（目安: 3 キャラ・概算・種 20 個で、4 コア 20 秒 → 8 コア 16 秒 → 12 コア 15 秒）。
 ## [1.6.0] - 2026-11-03
@@ -193,7 +195,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.0...v1.5.1

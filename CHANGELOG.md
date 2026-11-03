@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-03
+
 ### 追加
 - gcsim を v2.49.4 に更新した。魔女の諭示（追加天賦）に、リオセスリ・夢見月瑞希・ディオナが対応した。編成の「諭示達成」が gcsim の計算に反映される。ディオナは、スキルの後 20 秒間の連携フリーズキャッツクローの受付が、gcsim の結果としてバーで表示される。
 - 新しい武器（Winter's Heavy Heart・New Bough）と、6.7 の変更（Kagura's Verity・Cashflow Supervision）に対応した。
@@ -189,7 +191,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.4.1...v1.5.0

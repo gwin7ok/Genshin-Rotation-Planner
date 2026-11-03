@@ -16333,13 +16333,13 @@
         "dataSource": {
           "cooldown": "一回押しクールタイム",
           "effectDuration": "継続時間",
-          "cooldownStart": "skill.go:skillPressHitmark"
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.567,
         "description": "フリーズキャッツクローを放ち、敵に氷元素ダメージを与え、命中時にシールドを生成する。\nシールドのダメージ吸収量はディオナのHP上限によって決まり、継続時間は命中したフリーズキャッツクローの数によって決まる。\n\n一回押し\n素早くフリーズキャッツクローを2枚発射する。\n\n長押し\n素早く後退し、フリーズキャッツクローを5枚発射する。\n長押しで生成したシールドのダメージ吸収量+75%。\n\nシールドは氷元素ダメージに対して、250%の吸収効果がある。また、シールド生成時、キャラクターに短時間の氷元素付着を与える。",
         "cooldownStart": {
           "from": "motionStart",
-          "delay": 0.083
+          "delay": 0
         },
         "en": {
           "name": "Elemental Skill: Icy Paws",
@@ -16350,7 +16350,15 @@
             "shield:Icy Paws (Shield)"
           ],
           "status": "manual"
-        }
+        },
+        "gcsimExtras": [
+          {
+            "key": "diona-revelation-skill",
+            "label": "諭示: 連携フリーズキャッツクローの受付",
+            "preRun": true,
+            "durationFrames": 1200
+          }
+        ]
       },
       {
         "id": "10000039-cryo_e_hold",
@@ -16375,13 +16383,13 @@
         "dataSource": {
           "cooldown": "長押しクールタイム",
           "effectDuration": "継続時間",
-          "cooldownStart": "skill.go:skillHoldHitmark"
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
         "defaultDuration": 0.817,
         "description": "フリーズキャッツクローを放ち、敵に氷元素ダメージを与え、命中時にシールドを生成する。\nシールドのダメージ吸収量はディオナのHP上限によって決まり、継続時間は命中したフリーズキャッツクローの数によって決まる。\n\n一回押し\n素早くフリーズキャッツクローを2枚発射する。\n\n長押し\n素早く後退し、フリーズキャッツクローを5枚発射する。\n長押しで生成したシールドのダメージ吸収量+75%。\n\nシールドは氷元素ダメージに対して、250%の吸収効果がある。また、シールド生成時、キャラクターに短時間の氷元素付着を与える。",
         "cooldownStart": {
           "from": "motionStart",
-          "delay": 0.483
+          "delay": 0
         },
         "en": {
           "name": "Elemental Skill (Hold): Icy Paws",
@@ -16392,7 +16400,15 @@
             "shield:Icy Paws (Shield)"
           ],
           "status": "manual"
-        }
+        },
+        "gcsimExtras": [
+          {
+            "key": "diona-revelation-skill",
+            "label": "諭示: 連携フリーズキャッツクローの受付",
+            "preRun": true,
+            "durationFrames": 1200
+          }
+        ]
       },
       {
         "id": "10000039-cryo_q",
@@ -16589,7 +16605,12 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "diona-c6",
-          "diona-c6-healbonus"
+          "diona-c6-healbonus",
+          "diona-revelation-c6-ssc",
+          "diona-revelation-c6-ssw"
+        ],
+        "gcsimExtraKeys": [
+          "diona-c6-revelation"
         ]
       }
     ]
@@ -36478,10 +36499,12 @@
         "timing": "always",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "wriothesley-a1"
+          "wriothesley-a1",
+          "wriothesley-a1-stellar"
         ],
         "gcsimCooldownKeys": [
-          "wriothesley-a1-icd"
+          "wriothesley-a1-icd",
+          "wriothesley-a1-stellar-icd"
         ]
       },
       {
@@ -36571,15 +36594,22 @@
         "id": "10000086-cryo_c1",
         "level": 1,
         "name": "悪を為す者に恐れを",
+        "duration": 5,
         "description": "固有天賦「やがて公義は弁ぜらる」の「恩典の戒め」は以下のように変化する。 リオセスリのHPが60%未満、またはアイスファング・ラッシュによる烈霜の懲戒状態を継続中に、リペルブローの5段目が命中すると「恩典の戒め」を獲得する。「恩典の戒め」は2.5秒毎に1回のみ獲得可能。 また、誅罰・ヴォールティングアッパーは以下のように強化される。 ・ダメージアップ効果が200%になる。 ・命中した時に烈霜の懲戒状態だった場合、烈霜の懲戒状態が4秒延長される。烈霜の懲戒状態中、この方法による継続時間の延長は1回のみ。 固有天賦「やがて公義は弁ぜらる」を解放する必要がある。",
         "en": {
           "name": "Terror for the Evildoers",
           "description": "The Gracious Rebuke from the Ascension Talent \"There Shall Be a Plea for Justice\" is changed to this:\nWhen Wriothesley's HP is less than 60% or while he is in the Chilling Penalty state caused by Icefang Rush, when the fifth attack of Repelling Fists hits, it will create a Gracious Rebuke. 1 Gracious Rebuke effect can be obtained every 2.5s.\n\nAdditionally, Rebuke: Vaulting Fist will obtain the following enhancement:\n· The DMG Bonus gained will be further increased to 200%.\n· When it hits while Wriothesley is in the Chilling Penalty state, that state's duration is extended by 4s. 1 such extension can occur per 1 Chilling Penalty duration.\n\nYou must first unlock the Ascension Talent \"There Shall Be a Plea for Justice.\""
         },
-        "dataSource": {},
-        "timing": "always",
+        "dataSource": {
+          "duration": "gcsim: wriothesley-c1-revelation-ca"
+        },
+        "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "wriothesley-c1-revelation-ca",
+          "wriothesley-c1-revelation-n5"
+        ],
+        "gcsimExtraKeys": [
           "wriothesley-c1"
         ]
       },
@@ -36600,6 +36630,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "wriothesley-c4-spd"
+        ],
+        "gcsimExtraKeys": [
+          "wriothesley-c4-spd-revelation"
         ]
       }
     ]
@@ -47166,15 +47199,25 @@
         "id": "10000109-anemo_c2",
         "level": 2,
         "name": "希なる朝の",
+        "duration": 1,
         "description": "夢浮かみ状態に入る時、夢見月瑞希の元素熟知1ごとに、周囲のチーム全員（夢見月瑞希を除く）の炎元素、水元素、氷元素、雷元素ダメージ+0.04%。この効果は夢浮かみ状態終了まで継続する。",
         "en": {
           "name": "Your Echo I Meet in Dreams",
           "description": "When Yumemizuki Mizuki enters the Dreamdrifter state, every Elemental Mastery point she has will increase all nearby party members' Pyro, Hydro, Cryo, and Electro DMG Bonuses by 0.04% until the Dreamdrifter state ends."
         },
-        "dataSource": {},
-        "timing": "always",
+        "dataSource": {
+          "duration": "gcsim: mizuki-c2-anemo"
+        },
+        "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
+          "mizuki-c2-anemo",
+          "mizuki-c2-cryo",
+          "mizuki-c2-electro",
+          "mizuki-c2-hydro",
+          "mizuki-c2-pyro"
+        ],
+        "gcsimExtraKeys": [
           "mizuki-c2"
         ]
       },
@@ -47191,7 +47234,8 @@
         "timing": "always",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "mizuki-c6"
+          "mizuki-c6",
+          "mizuki-c6-revelation"
         ]
       }
     ]
@@ -48887,6 +48931,10 @@
         "en": {
           "name": "Elemental Skill (press again, plunge): Airborne Disease Prevention",
           "description": "It's time for the real bash bros to step up! Ifa calls Cacucu in as backup.\nAfter using this skill, Ifa gains 80 Nightsoul points and enters the **Nightsoul's Blessing** state. In the Nightsoul's Blessing state, Ifa will hover with Cacucu's help. When he uses Normal Attacks in this state, he will use different kinds of **Supporting Fire** depending on whether you Tap or Hold, firing Tonicshots that are capable of healing all party members.\n\nAdditionally, Holding the Elemental Skill Airborne Disease Prevention while Ifa is in Nightsoul's Blessing will cause him to use a Nightsoul-aligned Plunging Attack. Letting go of the skill button will interrupt this Plunging Attack to maintain his hover. If Ifa lands due to this Plunging Attack, his Nightsoul's Blessing state will end."
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {

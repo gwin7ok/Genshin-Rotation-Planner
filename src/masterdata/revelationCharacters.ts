@@ -3,7 +3,7 @@
  *
  * gcsim では、キャラの設定文のパラメータ `revelation`（`<キャラ> char ... +params=[revelation=0]`）で切り替える
  * （internal/characters/<キャラ>/<キャラ>.go: `p.Params["revelation"]`。**指定しないと有効（1）**）。
- * 対応するキャラ: gcsim のソースで `p.Params["revelation"]` を読んでいる 2 キャラ（v2.48.8 で確認。ほかのキャラの `Revelation` は技名）。
+ * 対応するキャラ: gcsim のソースで `p.Params["revelation"]` を読んでいるキャラ（v2.49.4 で、リオセスリ・夢見月瑞希・ディオナが加わり 5 キャラ。ほかのキャラの `Revelation` は技名）。
  *
  * 達成済みのときの違い（gcsim の実装）:
  *   - 八重神子: 殺生桜が爆発で壊れない／殺生桜の寿命が 10 秒長い（25 秒。未達成は 15 秒）／超電導・星電導の反応で、次の殺生桜の雷が強化される（ダメージのみ）
@@ -14,7 +14,7 @@
 import type { CharacterConfig } from '../types/genshin.ts';
 
 /** 諭示に対応するキャラの gcsim のキー */
-export const REVELATION_GCSIM_KEYS = new Set(['yaemiko', 'qiqi']);
+export const REVELATION_GCSIM_KEYS = new Set(['yaemiko', 'qiqi', 'wriothesley', 'yumemizukimizuki', 'diona']);
 
 /** 設定文のパラメータ名（gcsim: `+params=[revelation=0|1]`） */
 export const REVELATION_GCSIM_PARAM = 'revelation';
@@ -41,12 +41,18 @@ export const revelationTooltip = (gcsimKey: string | undefined, language: 'ja' |
     const tailEn = ' (gcsim `revelation` parameter; default: achieved)';
     if (gcsimKey === 'qiqi') return `Revelation achieved. Skill CD becomes 30s → 15s. Particle generation, coordinated attacks and reaction DMG boosts are also enabled${tailEn}`;
     if (gcsimKey === 'yaemiko') return `Revelation achieved. Sesshou Sakura is no longer destroyed by the Burst and lasts 10s longer${tailEn}`;
+    if (gcsimKey === 'wriothesley') return `Revelation achieved. DMG boosts (Stellar-Conduct DMG, constellation enhancements) are enabled${tailEn}`;
+    if (gcsimKey === 'yumemizukimizuki') return `Revelation achieved. Dreamdrifter enhancements (periodic DMG at 1000% of EM, party EM after Stellar Swirl) are enabled${tailEn}`;
+    if (gcsimKey === 'diona') return `Revelation achieved. Coordinated Icy Paws for 20s after the Skill are enabled${tailEn}`;
     return 'Revelation achieved. Not implemented in gcsim, so it only affects the app-side buffs (placed manually)';
   }
   const base = '「諭示」を達成済み。';
   const tail = '（gcsim の `revelation` パラメータ。既定は達成済み）';
   if (gcsimKey === 'qiqi') return `${base}スキルの CT が 30 秒 → 15 秒になります。ほかに、元素粒子の発生・連携攻撃・反応ダメージの強化が有効になります${tail}`;
   if (gcsimKey === 'yaemiko') return `${base}殺生桜が爆発で壊れなくなり、寿命が 10 秒長くなります${tail}`;
+  if (gcsimKey === 'wriothesley') return `${base}ダメージの強化（星電導ダメージ・凸の強化）が有効になります${tail}`;
+  if (gcsimKey === 'yumemizukimizuki') return `${base}夢浮かみの強化（元素熟知の 1000% の周期ダメージ・星拡散後のチームの元素熟知）が有効になります${tail}`;
+  if (gcsimKey === 'diona') return `${base}スキルの発動から 20 秒間、連携フリーズキャッツクローが有効になります${tail}`;
   return `${base}gcsim には未実装のため、アプリ側の発動バフ（手で置く効果）にだけ反映されます`;
 };
 
@@ -115,8 +121,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
       '烈霜の懲戒の第 3 段・第 5 段と天輝・ヴォールティングアッパーが星電導ダメージになり、星電導ダメージ +30%。',
       '凸1: 天輝・ヴォールティングアッパーが命中したとき、烈霜の懲戒が 4 秒延びる（1 回のみ）。凸2・4・6 も強化される。',
     ],
-    gcsim: { status: 'open-pr', note: 'gcsim に未マージの PR #3212（Add Wrio Revelation。revelation パラメータ。既定は達成済み）' },
-    app: '未反映（gcsim の実装を待つ。マージされたら、対応キャラに追加して反映）。',
+    gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。v2.49.4 でマージ（PR #3212）' },
+    app: '編成の「諭示達成」を gcsim に渡す。ダメージの強化は gcsim の計算に任せ、時間・CT への反映はなし（確認できた範囲）。',
     en: {
       talentName: "There Shall Be an Unveiling for Injustice",
       summary: [
@@ -124,8 +130,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
         "The 3rd and 5th hits of Icicle Punishment and the enhanced Vaulting Fist deal Stellar-Conduct DMG; Stellar-Conduct DMG +30%.",
         "C1: when the enhanced Vaulting Fist hits, Icicle Punishment is extended by 4s (once). C2, C4 and C6 are also enhanced.",
       ],
-      gcsimNote: "Unmerged gcsim PR #3212 (Add Wrio Revelation; revelation parameter, default: achieved)",
-      app: "Not applied (waiting for gcsim; will be added once merged).",
+      gcsimNote: "revelation parameter (default: achieved). Merged in v2.49.4 (PR #3212)",
+      app: "The Revelation setting is passed to gcsim. DMG boosts are left to gcsim; no timing / CD changes are applied (as far as confirmed).",
     },
   },
   yumemizukimizuki: {
@@ -135,8 +141,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
       '輝映・星拡散: 追加ダメージが出て、チームの元素熟知が自身の 10% 分上がる（星拡散の後 8 秒間）。',
       '凸1・2（炎・水・氷・雷・風の耐性 -20%）・4（追加の回復）・6 も強化される。',
     ],
-    gcsim: { status: 'open-pr', note: 'gcsim に未マージの PR #3208（Add Mizuki Revelation。revelation パラメータ。既定は達成済み）。凸6 の星拡散の会心は、すでに常時有効' },
-    app: '未反映（gcsim の実装を待つ）。',
+    gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。v2.49.4 でマージ（PR #3208）' },
+    app: '編成の「諭示達成」を gcsim に渡す。ダメージ・元素熟知の強化は gcsim の計算に任せ、時間・CT への反映はなし（確認できた範囲）。',
     en: {
       talentName: "Vast Be the Dream",
       summary: [
@@ -144,8 +150,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
         "Radiance: Stellar Swirl: extra DMG, and party EM increases by 10% of hers (for 8s after Stellar Swirl).",
         "C1, C2 (Pyro/Hydro/Cryo/Electro/Anemo RES -20%), C4 (extra healing) and C6 are also enhanced.",
       ],
-      gcsimNote: "Unmerged gcsim PR #3208 (Add Mizuki Revelation; revelation parameter, default: achieved). C6 Stellar Swirl CRIT is already always active",
-      app: "Not applied (waiting for gcsim).",
+      gcsimNote: "revelation parameter (default: achieved). Merged in v2.49.4 (PR #3208)",
+      app: "The Revelation setting is passed to gcsim. DMG / EM boosts are left to gcsim; no timing / CD changes are applied (as far as confirmed).",
     },
   },
   diona: {
@@ -155,8 +161,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
       '極星フィールド内・星拡散の後 8 秒間は、それぞれ輝映・星電導 / 輝映・星拡散になる。',
       '凸6: HP 上限 +25%。輝映のとき、特製スピリッツの範囲内のキャラの反応ダメージが +40%。',
     ],
-    gcsim: { status: 'none', note: 'gcsim に実装なし（PR なし）' },
-    app: '「連携フリーズキャッツクローの受付 20 秒」を、発動バフ（手で置く効果）として出す。ダメージは計算しない。',
+    gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。v2.49.4 でマージ（PR #3254）' },
+    app: '編成の「諭示達成」を gcsim に渡す。「連携フリーズキャッツクローの受付 20 秒」は、gcsim の効果（diona-revelation-skill）をバーで出す。ダメージは gcsim の計算に任せる。',
     en: {
       talentName: "Choice Treasures",
       summary: [
@@ -164,8 +170,8 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
         "Inside the field and for 8s after Stellar Swirl, these become Radiance: Stellar-Conduct / Radiance: Stellar Swirl.",
         "C6: Max HP +25%. In Radiance, characters inside Signature Mix gain reaction DMG +40%.",
       ],
-      gcsimNote: "Not implemented in gcsim (no PR)",
-      app: "Shown as a manually placed buff: \"coordinated Icy Paws window, 20s\". DMG is not calculated.",
+      gcsimNote: "revelation parameter (default: achieved). Merged in v2.49.4 (PR #3254)",
+      app: "The Revelation setting is passed to gcsim. The 20s coordinated Icy Paws window is shown as a bar from gcsim's effect (diona-revelation-skill). DMG is left to gcsim.",
     },
   },
   beidou: {
@@ -214,22 +220,9 @@ export const hasRevelationInfo = (char: Pick<CharacterConfig, 'source'>): boolea
 
 /**
  * gcsim に実装が無いキャラの、諭示のアプリ側の発動バフ（手で置く効果。時間の分かるものだけ）。
- * 編成で「諭示達成」が有効のときだけ、候補に出す。gcsim が実装したら、この表の行を消す
+ * 編成で「諭示達成」が有効のときだけ、候補に出す。gcsim が実装したら、この表の行を消す（v2.49.4 でディオナの行を消した。今は空）
  */
-export const APP_SIDE_REVELATION_BUFFS: Record<string, { idSuffix: string; name: string; duration: number; description: string; en?: { name: string; description: string } }[]> = {
-  diona: [
-    {
-      idSuffix: 'revelation_claws',
-      name: '諭示: 連携フリーズキャッツクローの受付',
-      duration: 20,
-      description: 'スキルを発動してから 20 秒間、チームが星電導・超電導・氷拡散・星拡散を起こすと、連携でフリーズキャッツクローを 3 つ発射する（3.5 秒に 1 回）。スキルの発動に合わせて置く。ダメージは計算しない',
-      en: {
-        name: 'Revelation: coordinated Icy Paws window',
-        description: 'For 20s after using her Skill, when the party triggers Stellar-Conduct, Superconduct, Cryo Swirl or Stellar Swirl, she fires 3 coordinated Icy Paws (once every 3.5s). Place it with the Skill. DMG is not calculated',
-      },
-    },
-  ],
-};
+export const APP_SIDE_REVELATION_BUFFS: Record<string, { idSuffix: string; name: string; duration: number; description: string; en?: { name: string; description: string } }[]> = {};
 
 /** 編成で「諭示達成」を設定できるか（gcsim に実装がある、またはアプリ側の効果がある） */
 export const hasRevelationSetting = (char: Pick<CharacterConfig, 'source'>): boolean =>

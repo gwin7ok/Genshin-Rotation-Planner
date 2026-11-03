@@ -1,6 +1,6 @@
 {
   "characters": {
-    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
     "records": [
       {
         "id": "10000121-hydro",
@@ -925,7 +925,7 @@
     "gcsimOnly": []
   },
   "weapons": {
-    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
     "records": [
       {
         "id": "15502",
@@ -1943,6 +1943,13 @@
         "source": "dm.json"
       },
       {
+        "id": "11437",
+        "genshinId": 11437,
+        "name": "新たなる枝",
+        "gcsimKey": "newbough",
+        "source": "dm.json"
+      },
+      {
         "id": "12417",
         "genshinId": 12417,
         "name": "森林のレガリア",
@@ -2031,6 +2038,13 @@
         "genshinId": 11433,
         "name": "静謐の笛",
         "gcsimKey": "serenityscall",
+        "source": "dm.json"
+      },
+      {
+        "id": "14437",
+        "genshinId": 14437,
+        "name": "雪に沈む心",
+        "gcsimKey": "wintersheavyheart",
         "source": "dm.json"
       },
       {
@@ -2614,14 +2628,6 @@
       {
         "id": "11435",
         "name": "異端を狩る熔刃"
-      },
-      {
-        "id": "11437",
-        "name": "新たなる枝"
-      },
-      {
-        "id": "14437",
-        "name": "雪に沈む心"
       }
     ],
     "gcsimOnly": [
@@ -2668,7 +2674,7 @@
     ]
   },
   "artifacts": {
-    "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
     "records": [
       {
         "id": "15031",

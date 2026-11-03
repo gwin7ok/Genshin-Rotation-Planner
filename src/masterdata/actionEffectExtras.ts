@@ -23,6 +23,13 @@ export const ACTION_EFFECT_EXTRAS: Record<string, ActionEffectExtra[]> = {
   '10000148-electro_e_hold': [
     { key: 'alyosha-hunters-precision', label: '狩人の照準', mode: 'chain', preRun: true },
   ],
+  // ディオナのスキル: 諭示達成のとき、発動から 20 秒間の連携フリーズキャッツクローの受付（v2.49.4 で gcsim が実装。アプリ側の手で置く効果を置き換え）
+  '10000039-cryo_e': [
+    { key: 'diona-revelation-skill', label: '諭示: 連携フリーズキャッツクローの受付', preRun: true },
+  ],
+  '10000039-cryo_e_hold': [
+    { key: 'diona-revelation-skill', label: '諭示: 連携フリーズキャッツクローの受付', preRun: true },
+  ],
   // ムアラニのスキル: サーフィン中の命中で敵に付く印（10 秒）
   '10000102-hydro_e': [
     { key: 'marked-as-prey', label: '獲物の印（敵）' },

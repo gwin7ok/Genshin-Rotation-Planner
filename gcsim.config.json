@@ -1,9 +1,9 @@
 {
   "$comment": "このアプリのデータ（辞書・マスター・対応表）が依存する gcsim のバージョン。gcsim のバージョンを上げるときは docs/gcsim-サーバー更新手順.md に従い、この設定を先に更新する。",
   "repo": "genshinsim/gcsim",
-  "version": "v2.49.0",
-  "commit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
-  "releasedAt": "2026-10-15",
+  "version": "v2.49.4",
+  "commit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
+  "releasedAt": "2026-11-02",
   "license": "AGPL-3.0-or-later（v2.47.3 以降。v2.47.2 までは MIT）",
   "sourceMirror": {
     "url": "https://github.com/gwin7ok/gcsim",
@@ -16,39 +16,39 @@
   "assets": {
     "win32-x64": {
       "name": "server_windows_amd64.exe",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_windows_amd64.exe",
-      "sha256": "7f64a72d120b6b7e4b526d3143233c8991198a31c293f4f81f667d5e37494234",
-      "size": 37185536
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_windows_amd64.exe",
+      "sha256": "0a668a3e31fe3a3452b43ee0408ed45d7d7151639d4c342d714a86850dadbd4b",
+      "size": 37280256
     },
     "win32-arm64": {
       "name": "server_windows_arm64.exe",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_windows_arm64.exe",
-      "sha256": "97db653f8bc4feb1c7809b753fa867fa2a904a9e0921402420316c8d791ced27",
-      "size": 34395136
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_windows_arm64.exe",
+      "sha256": "3284f115ebed1cf3297bd067fbfcbd905784dcd8efd309e2206caa2e299636a9",
+      "size": 34485760
     },
     "linux-x64": {
       "name": "server_linux_amd64",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_linux_amd64",
-      "sha256": "e679818d2ec6718861a7f2ced30d0821a226cb7ea3ce6617ecafb7a019465074",
-      "size": 36920918
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_linux_amd64",
+      "sha256": "b8808f3d03d5774e92f1155e53c3f9e3fb605ce5c75f88445b9818b2a0fb2cda",
+      "size": 37017333
     },
     "linux-arm64": {
       "name": "server_linux_arm64",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_linux_arm64",
-      "sha256": "670a8f5c1af741e616555c3b9552391952db48502fce0323803b420552177e74",
-      "size": 34548122
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_linux_arm64",
+      "sha256": "ad524b688dfe854839d07ed91d619052d18eef55d2b54c62c2d5382db54a2a45",
+      "size": 34575873
     },
     "darwin-x64": {
       "name": "server_darwin_amd64",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_darwin_amd64",
-      "sha256": "aa866561dca832b7b64a8b6515d03a3abbade2e3a90d821b924e6d1c2b7ddc02",
-      "size": 37737088
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_darwin_amd64",
+      "sha256": "203f31bad977cc1b8e4eef8170ab7b54b4b558dce9d38a46fbe0cdece3a6e619",
+      "size": 37839744
     },
     "darwin-arm64": {
       "name": "server_darwin_arm64",
-      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.0/server_darwin_arm64",
-      "sha256": "e2fa16ed18f2035620ac554346ab612d2885c35f360709daaedd5c47d315f870",
-      "size": 35600722
+      "url": "https://github.com/genshinsim/gcsim/releases/download/v2.49.4/server_darwin_arm64",
+      "sha256": "77fb302dda83587ff55b824c3c3061aa21bee1040ed7160c511e7b86fc157fd4",
+      "size": 35675282
     }
   }
 }

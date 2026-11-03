@@ -1,6 +1,6 @@
 {
   "$comment": "gcsim のキーの別名の組（同じキャラ・武器・聖遺物を指す名前）。scripts/build-key-aliases.ts が、gcsim の pkg/shortcut から作る。",
-  "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
+  "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
   "characters": [
     ["alhaitham","haitham"],
     ["amy","fischl","fish"],
@@ -197,6 +197,7 @@
     ["vivid","vividnotions"],
     ["vortex","vortexvanquisher"],
     ["wavebreaker","wavebreakersfin"],
+    ["whh","wintersheavyheart"],
     ["xiphos","xiphosmoonlight"]
   ],
   "artifacts": [

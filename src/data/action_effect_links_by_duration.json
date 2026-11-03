@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "4eda9fc5f818d7a742f2a967f38fbbde6db84303",
- "generatedAt": "2026-10-15T10:24:50.959Z",
+ "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
+ "generatedAt": "2026-11-03T02:36:22.463Z",
  "entries": {
   "10000002-cryo_e": {
    "char": "神里綾華",
@@ -1077,6 +1077,14 @@
    "master": 1.8,
    "candidates": [
     {
+     "source": "status",
+     "key": "diona-revelation-skill",
+     "mode": "expiry",
+     "seconds": 20,
+     "category": "character",
+     "kind": "effect"
+    },
+    {
      "source": "shield",
      "key": "shield:Icy Paws (Shield)",
      "seconds": 4.8
@@ -1088,6 +1096,14 @@
    "type": "skill_hold",
    "master": 1.8,
    "candidates": [
+    {
+     "source": "status",
+     "key": "diona-revelation-skill",
+     "mode": "expiry",
+     "seconds": 20,
+     "category": "character",
+     "kind": "effect"
+    },
     {
      "source": "damage",
      "key": "damage:Icy Paw",
@@ -2387,6 +2403,28 @@
   "10000113-anemo_e": {
    "char": "イファ",
    "type": "skill",
+   "candidates": [
+    {
+     "source": "status",
+     "key": "nightsoul-blessing",
+     "mode": "ended",
+     "seconds": 9.97,
+     "category": "template",
+     "kind": "effect"
+    },
+    {
+     "source": "status",
+     "key": "ifa-plunge-available",
+     "mode": "expiry",
+     "seconds": 0.43,
+     "category": "skill",
+     "kind": "effect"
+    }
+   ]
+  },
+  "10000113-anemo_e_cancelplunge": {
+   "char": "イファ",
+   "type": "skill_hold",
    "candidates": [
     {
      "source": "status",

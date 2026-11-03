@@ -95,8 +95,8 @@ export const ATTACK_SPEED_EFFECTS: readonly AttackSpeedEffect[] = [
   {
     source: { type: 'weapon', gcsimKey: 'gestofthemightywolf' },
     amount: () => 0.1,
-    when: { kind: 'always' },
-    evidence: 'internal/weapons/claymore/gestofthemightywolf/gestofthemightywolf.go: m[attributes.AtkSpd] = 0.1（常時）',
+    when: { kind: 'afterNormalAttack' },
+    evidence: 'internal/weapons/claymore/gestofthemightywolf/gestofthemightywolf.go: m[attributes.AtkSpd] = 0.1（CurrentState() == NormalAttackState のときだけ。v2.49.4 の #3217 で追加）',
   },
   {
     source: { type: 'weapon', gcsimKey: 'skywardblade' },

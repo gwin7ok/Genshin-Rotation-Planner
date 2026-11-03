@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({
     >
       <div className="w-full flex flex-col items-center gap-2">
         {/* Main Header Row */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 w-full">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 gap-y-1.5 w-full">
           {/* Logo & Title */}
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 flex items-center justify-center shadow-md text-slate-950 font-black text-base shrink-0">

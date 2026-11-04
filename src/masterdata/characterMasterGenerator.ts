@@ -353,6 +353,15 @@ const specialWindowMode = (label: string, barNote: string, durationFrames: numbe
   source,
 });
 
+/** セノの冥祭の間の通常攻撃（5 段。爆発・諭示のスキルで入る冥祭で共通） */
+const CYNO_PACTSWORN_NORMAL: ActionFrames[] = [
+    {total:28,hitmark:12,cancels:{attack:16,skill:12,burst:12,dash:12,jump:12,swap:12},source:'attack.go:attackBFrames[0]（InitNormalCancelSlice(12, 28)・N1→N2 16f）'},
+    {total:35,hitmark:14,cancels:{attack:31,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[1]（InitNormalCancelSlice(14, 35)・N2→N3 31f）'},
+    {total:41,hitmark:18,cancels:{charge:39,skill:18,burst:18,dash:18,jump:18,swap:18},source:'attack.go:attackBFrames[2]（InitNormalCancelSlice(18, 41)・N3→CA 39f）'},
+    {total:36,hitmark:14,cancels:{attack:27,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[3]（InitNormalCancelSlice(5, 36)・N4→N5 27f。CanQueueAfter = 最後のヒット 14f なので、14f より前にはキャンセルできない）'},
+    {total:62,hitmark:40,cancels:{skill:40,burst:40,dash:40,jump:40,swap:40},source:'attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）'},
+  ];
+
 const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // 夢見月瑞希: 夢浮かみ（5 秒。固有天賦 1 の延長は反応が条件なので含めない）。状態の間の E で解除（CT なし）。交代で解除（実行で確認: 交代の時点で「DreamDrifter effect cancelled」）
   '10000109-anemo': [{
@@ -913,14 +922,13 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // --- D-2: 爆発で入る、ボタン操作で終わらないモード（2026-10-08） ---
   '10000026-anemo': [stateMode('q', '靖妖儺舞', 0, 957, 'xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる')],
   // 冥祭の間の通常攻撃は 5 段（attackBFrames）。キャンセルは、ヒット判定（CanQueueAfter = 最後のヒット）より前にはできないので、4 段目（ヒット 5f・14f）は 14f（D224）
+  // 諭示を達成していて、冥祭でないときにスキルを使うと、379f（約 6.3 秒）の冥祭に入る。延長はできない（v2.49.5。gcsim cyno/stellar.go revelationOnSkill: burstKey を 379f で付ける。burstExtension = 2）
   '10000071-electro': [stateMode('q', '冥祭', 0, 712, 'cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる', {
-    normalFrames: [
-      {total:28,hitmark:12,cancels:{attack:16,skill:12,burst:12,dash:12,jump:12,swap:12},source:'attack.go:attackBFrames[0]（InitNormalCancelSlice(12, 28)・N1→N2 16f）'},
-      {total:35,hitmark:14,cancels:{attack:31,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[1]（InitNormalCancelSlice(14, 35)・N2→N3 31f）'},
-      {total:41,hitmark:18,cancels:{charge:39,skill:18,burst:18,dash:18,jump:18,swap:18},source:'attack.go:attackBFrames[2]（InitNormalCancelSlice(18, 41)・N3→CA 39f）'},
-      {total:36,hitmark:14,cancels:{attack:27,skill:14,burst:14,dash:14,jump:14,swap:14},source:'attack.go:attackBFrames[3]（InitNormalCancelSlice(5, 36)・N4→N5 27f。CanQueueAfter = 最後のヒット 14f なので、14f より前にはキャンセルできない）'},
-      {total:62,hitmark:40,cancels:{skill:40,burst:40,dash:40,jump:40,swap:40},source:'attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）'},
-    ],
+    normalFrames: [...CYNO_PACTSWORN_NORMAL],
+  }),
+  stateMode('e', '冥祭', 0, 379, 'cyno/stellar.go: revelationOnSkill（諭示の達成が条件・冥祭でないときのスキルで 379f の冥祭。延長不可）。交代で終わる', {
+    opensWhen: { revelation: true, notInMode: true },
+    normalFrames: [...CYNO_PACTSWORN_NORMAL],
   })],
   '10000092-pyro': [stateMode('q', '獣舞態勢', 36, 720, 'gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる')],
   '10000057-geo': [stateMode('q', '憤怒の鬼王', 0, 795, 'itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる')],

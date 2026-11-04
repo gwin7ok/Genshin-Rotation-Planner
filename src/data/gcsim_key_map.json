@@ -1,6 +1,6 @@
 {
   "characters": {
-    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
+    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
     "records": [
       {
         "id": "10000121-hydro",
@@ -925,7 +925,7 @@
     "gcsimOnly": []
   },
   "weapons": {
-    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
+    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
     "records": [
       {
         "id": "15502",
@@ -1618,6 +1618,13 @@
         "genshinId": 15427,
         "name": "レンジゲージ",
         "gcsimKey": "rangegauge",
+        "source": "dm.json"
+      },
+      {
+        "id": "11435",
+        "genshinId": 11435,
+        "name": "異端を狩る熔刃",
+        "gcsimKey": "hereticsmoltenblade",
         "source": "dm.json"
       },
       {
@@ -2624,10 +2631,6 @@
       {
         "id": "11421",
         "name": "「一心伝」名刀"
-      },
-      {
-        "id": "11435",
-        "name": "異端を狩る熔刃"
       }
     ],
     "gcsimOnly": [
@@ -2674,7 +2677,7 @@
     ]
   },
   "artifacts": {
-    "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
+    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
     "records": [
       {
         "id": "15031",

@@ -181,6 +181,7 @@ export const AMBIGUOUS_KEY_CATEGORIES: Record<string, AmbiguousKeyPin> = {
   'alyosha-hunters-mark': { category: 'skill', reason: 'アリョーシャ: スキル（skill.go）が敵に付ける狩人の印（定義もスキル）。凸（cons.go）でも付与する' },
   'a1-icd': { category: 'talent', reason: 'キニチ・クレーの固有天賦1の発動間隔（どちらも asc.go）' },
   'chasca-plunge-available': { category: 'burst', reason: 'チャスカ: 爆発（burst.go）で落下攻撃が可能な窓を開く。スキル終了（skill.go）でも登録' },
+  'cyno-q': { category: 'burst', reason: 'セノ: 爆発（burst.go）の冥祭状態（712f）。v2.49.5 の諭示で、スキル（stellar.go の revelationOnSkill）も 379f で同じキーを登録する' },
   'dehya-skill-icd': { category: 'skill', reason: 'ディシア: スキルの発動間隔（内部）。爆発の連撃（burst.go）でも使う' },
   'forest-sanctuary': { category: 'weapon', reason: '森林のレガリア・樹液の刃で共通（持ち主は両方）' },
   'ganyu-c4': { category: 'burst', reason: '甘雨: 爆発（burst.go）の氷の領域内に付く4凸の効果' },

@@ -70,6 +70,11 @@ export interface CooldownStart {
 export interface ActionMode {
   /** モードのバーの名前 */
   label: string;
+  /**
+   * モードを開く条件（無ければ、使えば必ず開く）。revelation = 編成の「諭示達成」が有効のときだけ／notInMode = 同じ名前のモードが続いていないときだけ
+   * （セノのスキル: 諭示を達成していて、冥祭の状態でないときだけ、6 秒の冥祭に入る。gcsim cyno/stellar.go revelationOnSkill）
+   */
+  opensWhen?: { revelation?: boolean; notInMode?: boolean };
   /** モードのバーの説明 */
   description: string;
   /** 英語の表示用の文（D255） */

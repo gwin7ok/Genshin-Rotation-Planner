@@ -3,7 +3,7 @@
  *
  * gcsim では、キャラの設定文のパラメータ `revelation`（`<キャラ> char ... +params=[revelation=0]`）で切り替える
  * （internal/characters/<キャラ>/<キャラ>.go: `p.Params["revelation"]`。**指定しないと有効（1）**）。
- * 対応するキャラ: gcsim のソースで `p.Params["revelation"]` を読んでいるキャラ（v2.49.4 で、リオセスリ・夢見月瑞希・ディオナが加わり 5 キャラ。ほかのキャラの `Revelation` は技名）。
+ * 対応するキャラ: gcsim のソースで `p.Params["revelation"]` を読んでいるキャラ（v2.49.4 で、リオセスリ・夢見月瑞希・ディオナが加わり、v2.49.5 でセノが加わって 6 キャラ。ほかのキャラの `Revelation` は技名）。
  *
  * 達成済みのときの違い（gcsim の実装）:
  *   - 八重神子: 殺生桜が爆発で壊れない／殺生桜の寿命が 10 秒長い（25 秒。未達成は 15 秒）／超電導・星電導の反応で、次の殺生桜の雷が強化される（ダメージのみ）
@@ -14,7 +14,7 @@
 import type { CharacterConfig } from '../types/genshin.ts';
 
 /** 諭示に対応するキャラの gcsim のキー */
-export const REVELATION_GCSIM_KEYS = new Set(['yaemiko', 'qiqi', 'wriothesley', 'yumemizukimizuki', 'diona']);
+export const REVELATION_GCSIM_KEYS = new Set(['yaemiko', 'qiqi', 'wriothesley', 'yumemizukimizuki', 'diona', 'cyno']);
 
 /** 設定文のパラメータ名（gcsim: `+params=[revelation=0|1]`） */
 export const REVELATION_GCSIM_PARAM = 'revelation';
@@ -44,6 +44,7 @@ export const revelationTooltip = (gcsimKey: string | undefined, language: 'ja' |
     if (gcsimKey === 'wriothesley') return `Revelation achieved. DMG boosts (Stellar-Conduct DMG, constellation enhancements) are enabled${tailEn}`;
     if (gcsimKey === 'yumemizukimizuki') return `Revelation achieved. Dreamdrifter enhancements (periodic DMG at 1000% of EM, party EM after Stellar Swirl) are enabled${tailEn}`;
     if (gcsimKey === 'diona') return `Revelation achieved. Coordinated Icy Paws for 20s after the Skill are enabled${tailEn}`;
+    if (gcsimKey === 'cyno') return `Revelation achieved. Using the Skill while not in Pactsworn Pathclearer puts Cyno in that state for 6s (not extendable). Constellation enhancements (Together We Rise, etc.) are also enabled${tailEn}`;
     return 'Revelation achieved. Not implemented in gcsim, so it only affects the app-side buffs (placed manually)';
   }
   const base = '「諭示」を達成済み。';
@@ -53,6 +54,7 @@ export const revelationTooltip = (gcsimKey: string | undefined, language: 'ja' |
   if (gcsimKey === 'wriothesley') return `${base}ダメージの強化（星電導ダメージ・凸の強化）が有効になります${tail}`;
   if (gcsimKey === 'yumemizukimizuki') return `${base}夢浮かみの強化（元素熟知の 1000% の周期ダメージ・星拡散後のチームの元素熟知）が有効になります${tail}`;
   if (gcsimKey === 'diona') return `${base}スキルの発動から 20 秒間、連携フリーズキャッツクローが有効になります${tail}`;
+  if (gcsimKey === 'cyno') return `${base}冥祭（爆発の状態）でないときにスキルを使うと、6 秒間、冥祭の状態に入ります（延長はできません）。ほかに、凸の強化（共に昇る など）が有効になります${tail}`;
   return `${base}gcsim には未実装のため、アプリ側の発動バフ（手で置く効果）にだけ反映されます`;
 };
 
@@ -197,19 +199,21 @@ export const REVELATION_INFO: Record<string, RevelationInfo> = {
   cyno: {
     talentName: '旅立ちの伴星',
     summary: [
-      '追加天賦のほか、秘儀・律淵渡魂（スキル）・固有天賦2つ・凸1・2・4・6 が強化される。',
-      '強化の内容は、Wiki でも情報が揃っていない（■ の表示）。',
+      '冥祭（聖儀·狼駆憑走の状態）でないときに秘儀·律淵渡魂（スキル）を使うと、6 秒間、冥祭の状態に入る（延長はできない）。',
+      '輝映・星電導のとき、スキルの追撃（雷光の矢）が星電導ダメージ（元素熟知の倍率が上がる）になる。固有天賦1 は、スキルから発動する。',
+      '凸1: 冥祭の間、元素熟知 +200（共に昇る）。キャラを交代すると、出てくるキャラに残りの時間を引き継ぐ。凸2: 共に昇る中の通常攻撃・重撃の命中で、星電導ダメージ +16%（最大 5 層）。凸4: 共に昇る中のキャラの反応で、セノのエネルギーを 20 回復（18 秒に 1 回）。凸6: 輝映のとき、追撃が星電導ダメージになる。',
     ],
-    gcsim: { status: 'none', note: 'gcsim に実装なし（PR なし）。コードにあるのは、凸4 の対象反応に星電導が入っているだけ' },
-    app: '未反映（情報が揃うまで保留）。',
+    gcsim: { status: 'implemented', note: 'revelation パラメータ（既定は達成済み）。v2.49.5 でマージ（PR #3250）' },
+    app: '編成の「諭示達成」を gcsim に渡す。ダメージ・元素熟知・エネルギーの強化は gcsim の計算に任せる。「スキルから 6 秒の冥祭」は、gcsim の効果（cyno-q。スキルから 6.32 秒）をバーで出す。',
     en: {
       talentName: "A Star With Which to Start the Journey",
       summary: [
-        "Besides the extra talent, Secret Rite: Chasmic Soulfarer (Skill), both passive talents, and C1, C2, C4 and C6 are enhanced.",
-        "Details are incomplete even on the wiki.",
+        "Using Secret Rite: Chasmic Soulfarer (Skill) while not in Pactsworn Pathclearer puts Cyno in that state for 6s (not extendable).",
+        "In Radiance: Stellar-Conduct, the Skill's follow-up bolts deal Stellar-Conduct DMG (higher EM scaling), and A1 triggers from the Skill.",
+        "C1: EM +200 during Pactsworn Pathclearer (Together We Rise), passed on to the incoming character on swap. C2: Stellar-Conduct DMG +16% on Normal / Charged Attack hits (max 5 stacks). C4: reactions by affected characters restore 20 Energy to Cyno (once every 18s). C6: in Radiance, the follow-up bolts deal Stellar-Conduct DMG.",
       ],
-      gcsimNote: "Not implemented in gcsim (no PR). The code only includes Stellar-Conduct in the C4 reaction list",
-      app: "Not applied (on hold until details are available).",
+      gcsimNote: "revelation parameter (default: achieved). Merged in v2.49.5 (PR #3250)",
+      app: "The Revelation setting is passed to gcsim. DMG / EM / Energy boosts are left to gcsim. The 6s Pactsworn Pathclearer after the Skill is shown as a bar from gcsim's effect (cyno-q, 6.32s from the Skill).",
     },
   },
 };

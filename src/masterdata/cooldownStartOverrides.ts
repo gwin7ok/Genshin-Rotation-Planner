@@ -16,7 +16,7 @@ export interface CooldownStartOverride {
   cooldownPerHold?: number;
   /** cooldownPerHold があるとき、ホールド 0 のときの CT（秒）。マスターの cooldown をこの値にする（genshin-db の値は最大ホールドのときのもの） */
   baseCooldown?: number;
-  /** frames に含まれる長押しのフレーム数（早柚・綺良々は最大ホールド 600f 込み）。生成時に秒へ換算して holdInFrames にする */
+  /** frames に含まれる長押しのフレーム数（早柚・綺良々は最大ホールド 600f 込み）。生成時に秒へ換算して holdInFrames にする。gcsim の実測（hold を固定して所要時間を測った値）と表の長さがずれるキャラは、そのずれの分だけ補正した値にする（D330。所要時間 → 長押し → 所要時間 が元に戻らず、計算のたびに延びるのを防ぐ） */
   holdInFrames?: number;
   note: string;
 }
@@ -83,15 +83,15 @@ export const COOLDOWN_START_OVERRIDES: Record<string, CooldownStartOverride> = {
   '10000088-cryo_e_hold': { from: 'holdEnd', delayFrames: 109, note: 'charlotte/skill.go: hitmark-2（hitmark = hold + skillHoldHitmark(111)）' },
   '10000090-pyro_e_hold': { from: 'holdEnd', delayFrames: 13, note: 'chevreuse/skill.go: cdStart = hold + skillHoldCDStart(13)' },
   '10000114-cryo_e_hold': { from: 'holdEnd', delayFrames: 18, note: 'skirk/skill.go: extraDuration + skillHoldGainSS(18)' },
-  '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, holdInFrames: 600, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
+  '10000053-anemo_e_hold': { from: 'holdEnd', delayFrames: 50, cooldownPerHold: 0.5, baseCooldown: 6, holdInFrames: 598, note: 'sayu/skill.go: (skillHoldCDStart(648) - 600) + duration + 2。CT は 6秒 + 長押し × 0.5' },
   // リネット・藍硯の長押し（`hold=<フレーム数>` で渡す。モード維持の段階 ③。2026-10-08）。frames は最大の長押し込み
-  '10000083-anemo_e_hold': { from: 'holdEnd', delayFrames: 34 + 14, holdInFrames: 150, note: 'lynette/skill.go: SetCDWithDelay(..., duration + skillHoldEndCDStart(14))、duration = hold + 34' },
+  '10000083-anemo_e_hold': { from: 'holdEnd', delayFrames: 34 + 14, holdInFrames: 146, note: 'lynette/skill.go: SetCDWithDelay(..., duration + skillHoldEndCDStart(14))、duration = hold + 34' },
   // ジンの長押し（0〜300f）: 遅れは hitmark − 2 = 21 + hold − 2（長押しの終わりから 19f）
   '10000003-anemo_e_hold': { from: 'holdEnd', delayFrames: 19, holdInFrames: 300, note: 'jean/skill.go: SetCDWithDelay(…, 360, hitmark-2)、hitmark = skillHitmark(21) + hold' },
   // ナヴィアの長押し（hold 1〜241 → 長押しの長さ 0〜240f）: firingTime = skillHoldCDStart(41) + hold − 1
   '10000091-geo_e_hold': { from: 'holdEnd', delayFrames: 41, holdInFrames: 240, note: 'navia/skill.go: firingTime = skillHoldCDStart(41) + hold（hold は 1 引いた後）' },
   '10000108-anemo_e_hold': { from: 'holdEnd', delayFrames: 4, holdInFrames: 610, note: 'lanyan/skill.go: SetCDWithDelay(ActionSkill, 16*60, 4+hold)。翦月輪の受付が終わった後に CT の残りが表示されるのは、表示の話で、CT の開始位置は gcsim と同じ（ユーザー確認 2026-10-09）' },
-  '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, holdInFrames: 600, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
+  '10000061-dendro_e_hold': { from: 'holdEnd', delayFrames: 14, cooldownPerHold: 0.4, baseCooldown: 8, holdInFrames: 590, note: 'kirara/skill.go: (skillHoldCDStart(614) - 600) + duration。CT は 8秒 + duration/30 × 12f（長押し 1 秒あたり 0.4 秒）' },
   // 旅人(風): 長押し（2 ティック以上）。gcsim の SkillHold は hitmark - 5 で CT を始める。hitmark = 31 + 15 × ティック数 + 5 - 15 + 5 なので、
   // 長押し（15f × ティック数）の終了から 21f。1 ティック以下は CT 5 秒・遅れ 16f（ホールド秒数を使う 5-5 で扱う）
   '10000005-anemo_e_hold': { from: 'holdEnd', delayFrames: 21, note: 'traveler/common/anemo/skill.go: SkillHold の hitmark(2ティック以上) - 5。長押し = 15f × ティック数' },

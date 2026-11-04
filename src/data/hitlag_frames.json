@@ -1,6 +1,6 @@
 {
  "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
- "generatedAt": "2026-11-04T00:19:11.735Z",
+ "generatedAt": "2026-11-04T01:39:31.794Z",
  "excludedNext": [
   "10000057-geo_ca|dash",
   "10000057-geo_ca|jump",
@@ -2761,29 +2761,7 @@
   "10000071-electro_n": [
    {
     "with": 1,
-    "without": 1,
-    "afterSkill": {
-     "with": 1,
-     "without": 1,
-     "byNext": {
-      "burst": {
-       "with": -2,
-       "without": -2
-      },
-      "dash": {
-       "with": -2,
-       "without": -2
-      },
-      "jump": {
-       "with": -2,
-       "without": -2
-      },
-      "swap": {
-       "with": -2,
-       "without": -2
-      }
-     }
-    }
+    "without": 1
    },
    {
     "with": 4,
@@ -4923,6 +4901,48 @@
     "ext": {
      "with": 2,
      "without": 2
+    }
+   }
+  ],
+  "10000071-electro_e#n": [
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 1,
+    "without": 1,
+    "ext": {
+     "with": 1,
+     "without": 1
+    }
+   },
+   {
+    "with": 2,
+    "without": 2,
+    "ext": {
+     "with": 2,
+     "without": 2
+    }
+   },
+   {
+    "with": 4,
+    "without": 1,
+    "ext": {
+     "with": 4,
+     "without": 1
     }
    }
   ],

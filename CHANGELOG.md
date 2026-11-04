@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-04
+
 ### 追加
 - gcsim を v2.49.5 に更新した。魔女の諭示に、セノが対応した。「諭示達成」のセノは、冥祭（爆発の状態）でないときにスキルを使うと、6 秒間、冥祭に入る（延長はできない）。その間の通常攻撃は冥祭の 5 段になり、gcsim の計算にも反映される。スキルに「冥祭」のバーが出る。
 - 新しい武器 Heretic's Molten Blade（異端を狩る熔刃）に対応した。
@@ -14,7 +16,6 @@
 - Skirk の Void Rifts が、スキル・爆発のアニメーション中に 2 回吸収される不具合と、いくつかのキャラの固有天賦 1・4 の抜けていた条件（アルレッキーノ・セノ・ニコル・セトス・スカーク・トーマ・ヴァルカ）が、gcsim 側で修正されたものを取り込んだ。
 - 早柚・綺良々・リネットの長押しスキルが、「gcsim で計算」を押すたびに所要時間が少しずつ延びていた不具合を修正した（長押しの秒数と所要時間の換算を、gcsim の実測に合わせた）。
 - データベースの版が上がる（86）ので、更新の案内が出る。
-
 
 ## [1.6.1] - 2026-11-03
 
@@ -205,7 +206,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.1...v1.5.2

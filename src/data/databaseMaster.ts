@@ -5,7 +5,7 @@ import artifactsMasterJson from './artifacts_master_data.json';
 import { t } from '../i18n';
 
 /** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
-export const DATABASE_VERSION = 85; // 85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）
+export const DATABASE_VERSION = 86; // 86: gcsim v2.49.5 に更新（辞書・マスター再生成。セノの諭示・新武器 Heretic's Molten Blade）。85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

@@ -8,6 +8,7 @@ import type { StintContext, ActionContext } from './context';
 import { actionName, charName, loc } from '../../i18n/loc';
 import { actionKindOf } from '../characterActions';
 import { t } from '../../i18n';
+import { isRevelation } from '../../masterdata/revelationCharacters';
 
 /** モードの判定: このアクションが、続いているモードを終わらせる・もう一度使う・ブロックされる・新しいモードを開くか */
 export function detectModeContext(state: RotationState, sc: StintContext, ac: ActionContext): void {
@@ -94,6 +95,9 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
   if ((blockingMode?.def.blocked?.result === 'error' || blockingMode?.def.blocked?.result === 'none') && (act.type === 'skill' || act.type === 'skill_hold')) ac.inStateWindow = true;
   const opensMode = !!actionDef?.mode && !(modeEnder && modeEnder.window.key === modeKeyOf(char.id, actionDef.mode)) && !modeRepress
     && modeKind !== 'punch' && modeKind !== 'kick' && specialConditionOk(actionDef.mode, actionStartTime)
+    // 開く条件（セノのスキル: 諭示を達成していて、冥祭の状態でないときだけ）
+    && (!actionDef.mode.opensWhen?.revelation || isRevelation(char))
+    && (!actionDef.mode.opensWhen?.notInMode || ![...modeWindows.values()].some(m => m.key === modeKeyOf(char.id, actionDef.mode!) && isModeActive(m, char.id, sIdx, actionStartTime)))
     // モードの間に置けない操作（スカークの七相一閃の間の E）は、新しいモードを開かない
     && !blockedMessage;
   // スキルが全回数分の特殊スキルの CT を積むとき（ファルカ）の、受付の終わり（このアクションが開く受付に付ける）

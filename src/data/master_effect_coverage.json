@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "gcsimCommit": "3877a1a3534c77c015e3da83f98b5e520533d0e4",
-  "generatedAt": "2026-11-03T02:35:29.591Z",
+  "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
+  "generatedAt": "2026-11-04T00:13:37.621Z",
   "effects": [
     {
       "id": "a-day-carved-from-rising-winds-2pc",
@@ -3382,6 +3382,48 @@
       "observed": true
     },
     {
+      "id": "cyno-c2-revelation",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "cyno",
+      "ownerName": "セノ",
+      "name": "セノ 命ノ星座2「令儀·拝謁返霊」: revelation",
+      "en": {
+        "ownerName": "Cyno",
+        "name": "Cyno Constellation 2 \"Ceremony: Homecoming of Spirits\": Revelation"
+      },
+      "permanent": true
+    },
+    {
+      "id": "cyno-c2-revelation-icd",
+      "category": "constellation",
+      "kind": "internal",
+      "ownerType": "character",
+      "ownerKey": "cyno",
+      "ownerName": "セノ",
+      "name": "セノ 命ノ星座2「令儀·拝謁返霊」: revelation 発動間隔",
+      "en": {
+        "ownerName": "Cyno",
+        "name": "Cyno Constellation 2 \"Ceremony: Homecoming of Spirits\": Revelation Interval"
+      },
+      "durationFrames": 6
+    },
+    {
+      "id": "cyno-c4-revelation-icd",
+      "category": "constellation",
+      "kind": "cooldown",
+      "ownerType": "character",
+      "ownerKey": "cyno",
+      "ownerName": "セノ",
+      "name": "セノ 命ノ星座4「巡儀·貫徹禁網」: revelation 発動間隔",
+      "en": {
+        "ownerName": "Cyno",
+        "name": "Cyno Constellation 4 \"Austerity: Forbidding Guard\": Revelation Interval"
+      },
+      "durationFrames": 1080
+    },
+    {
       "id": "cyno-c6",
       "category": "constellation",
       "kind": "effect",
@@ -3410,6 +3452,20 @@
       },
       "durationFrames": 24,
       "observed": true
+    },
+    {
+      "id": "cyno-together-we-rise",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "cyno",
+      "ownerName": "セノ",
+      "name": "セノ: together we rise",
+      "en": {
+        "ownerName": "Cyno",
+        "name": "Cyno: Together We Rise"
+      },
+      "durationFrames": 379
     },
     {
       "id": "dahlia-c6-icd",
@@ -13469,6 +13525,34 @@
       "observed": true
     },
     {
+      "id": "heretics-molten-blade-atk",
+      "category": "weapon",
+      "kind": "effect",
+      "ownerType": "weapon",
+      "ownerKey": "hereticsmoltenblade",
+      "ownerName": "異端を狩る熔刃",
+      "name": "異端を狩る熔刃（孤光の賜り物）: 攻撃力",
+      "en": {
+        "ownerName": "Heretic's Molten Blade",
+        "name": "Heretic's Molten Blade (Lone Light's Blessing): ATK"
+      },
+      "durationFrames": 840
+    },
+    {
+      "id": "heretics-molten-blade-icd",
+      "category": "weapon",
+      "kind": "cooldown",
+      "ownerType": "weapon",
+      "ownerKey": "hereticsmoltenblade",
+      "ownerName": "異端を狩る熔刃",
+      "name": "異端を狩る熔刃（孤光の賜り物）: 発動間隔",
+      "en": {
+        "ownerName": "Heretic's Molten Blade",
+        "name": "Heretic's Molten Blade (Lone Light's Blessing): Interval"
+      },
+      "durationFrames": 840
+    },
+    {
       "id": "homa-atk-buff",
       "category": "weapon",
       "kind": "effect",
@@ -14328,8 +14412,10 @@
       "ownerType": "weapon",
       "ownerKey": "newbough",
       "ownerName": "新たなる枝",
+      "name": "新たなる枝（蔓生の葉脈）: 発動間隔",
       "en": {
-        "ownerName": "New Bough"
+        "ownerName": "New Bough",
+        "name": "New Bough (Wildgrowth): Interval"
       },
       "durationFrames": 60
     },
@@ -14340,8 +14426,10 @@
       "ownerType": "weapon",
       "ownerKey": "newbough",
       "ownerName": "新たなる枝",
+      "name": "新たなる枝（蔓生の葉脈）: スキル",
       "en": {
-        "ownerName": "New Bough"
+        "ownerName": "New Bough",
+        "name": "New Bough (Wildgrowth): Skill"
       },
       "durationFrames": 720
     },
@@ -14352,8 +14440,10 @@
       "ownerType": "weapon",
       "ownerKey": "newbough",
       "ownerName": "新たなる枝",
+      "name": "新たなる枝（蔓生の葉脈）: verdant",
       "en": {
-        "ownerName": "New Bough"
+        "ownerName": "New Bough",
+        "name": "New Bough (Wildgrowth): Verdant"
       },
       "durationFrames": 360
     },
@@ -14364,8 +14454,10 @@
       "ownerType": "weapon",
       "ownerKey": "newbough",
       "ownerName": "新たなる枝",
+      "name": "新たなる枝（蔓生の葉脈）: verdant stellar",
       "en": {
-        "ownerName": "New Bough"
+        "ownerName": "New Bough",
+        "name": "New Bough (Wildgrowth): Verdant Stellar"
       },
       "durationFrames": 360
     },
@@ -16797,8 +16889,10 @@
       "ownerType": "weapon",
       "ownerKey": "wintersheavyheart",
       "ownerName": "雪に沈む心",
+      "name": "雪に沈む心（氷霜に遺された秘密）",
       "en": {
-        "ownerName": "Winter's Heavy Heart"
+        "ownerName": "Winter's Heavy Heart",
+        "name": "Winter's Heavy Heart (Secrets of Frost)"
       },
       "permanent": true
     },
@@ -16809,8 +16903,10 @@
       "ownerType": "weapon",
       "ownerKey": "wintersheavyheart",
       "ownerName": "雪に沈む心",
+      "name": "雪に沈む心（氷霜に遺された秘密）: react",
       "en": {
-        "ownerName": "Winter's Heavy Heart"
+        "ownerName": "Winter's Heavy Heart",
+        "name": "Winter's Heavy Heart (Secrets of Frost): React"
       },
       "permanent": true
     },
@@ -27075,13 +27171,11 @@
       "name": "異端を狩る熔刃: 孤光の賜り物",
       "en": {
         "ownerName": "Heretic's Molten Blade",
-        "name": "Heretic's Molten Blade: Lone Light's Blessing",
-        "gcsimNote": "Not implemented in gcsim"
+        "name": "Heretic's Molten Blade: Lone Light's Blessing"
       },
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "duration": 1,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "computed",
+      "gcsimTarget": true,
+      "duration": 1
     },
     {
       "id": "weapon:12407:wbuff_12407",
@@ -29764,8 +29858,20 @@
       "approval": "generated"
     },
     {
+      "effectId": "cyno-c2-revelation",
+      "targetId": "constellation:10000071-electro_c2",
+      "role": "extra",
+      "approval": "generated"
+    },
+    {
       "effectId": "cyno-c6",
       "targetId": "constellation:10000071-electro_c6",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "cyno-together-we-rise",
+      "targetId": "constellation:10000071-electro_c1",
       "role": "effect",
       "approval": "generated"
     },
@@ -31032,6 +31138,18 @@
     {
       "effectId": "heizou-c1-icd",
       "targetId": "constellation:10000059-anemo_c1",
+      "role": "cooldown",
+      "approval": "generated"
+    },
+    {
+      "effectId": "heretics-molten-blade-atk",
+      "targetId": "weapon:11435:wbuff_11435",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "heretics-molten-blade-icd",
+      "targetId": "weapon:11435:wbuff_11435",
       "role": "cooldown",
       "approval": "generated"
     },
@@ -35011,6 +35129,26 @@
     },
     {
       "side": "effect",
+      "id": "cyno-c2-revelation-icd",
+      "state": "excluded",
+      "reason": "internal-key",
+      "note": "gcsim辞書で内部キーに分類されている",
+      "en": {
+        "note": "Classified as an internal key in the gcsim dictionary"
+      }
+    },
+    {
+      "side": "effect",
+      "id": "cyno-c4-revelation-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「エネルギー回復」で、画面に出す価値が低い（D91）",
+      "en": {
+        "note": "The effect is of the \"Energy recovery\" kind and is not worth showing on screen (D91)"
+      }
+    },
+    {
+      "side": "effect",
       "id": "cyno-c6-icd",
       "state": "excluded",
       "reason": "internal-key",
@@ -37927,16 +38065,6 @@
       "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない",
       "en": {
         "note": "gcsim has no status key for this effect (instant effects, stat bonuses, healing, Energy, etc.). Not overwritten by gcsim results"
-      }
-    },
-    {
-      "side": "target",
-      "id": "weapon:11435:wbuff_11435",
-      "state": "unsupported",
-      "reason": "gcsim-target-false",
-      "note": "gcsim が未実装",
-      "en": {
-        "note": "Not implemented in gcsim"
       }
     },
     {

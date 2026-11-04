@@ -29738,6 +29738,90 @@
           "cooldownStart": "manual: cyno/skill.go: skillCDDelay（爆発中の skillBCDDelay は 26f）"
         },
         "defaultDuration": 0.717,
+        "mode": {
+          "label": "冥祭",
+          "description": "冥祭の状態。入力がなければ 6.3 秒続く。キャラ交代で終わる",
+          "startDelayFrames": 0,
+          "durationFrames": 379,
+          "swap": "ends",
+          "enders": [],
+          "holdByDefault": true,
+          "source": "cyno/stellar.go: revelationOnSkill（諭示の達成が条件・冥祭でないときのスキルで 379f の冥祭。延長不可）。交代で終わる",
+          "opensWhen": {
+            "revelation": true,
+            "notInMode": true
+          },
+          "normalFrames": [
+            {
+              "total": 28,
+              "hitmark": 12,
+              "cancels": {
+                "attack": 16,
+                "skill": 12,
+                "burst": 12,
+                "dash": 12,
+                "jump": 12,
+                "swap": 12
+              },
+              "source": "attack.go:attackBFrames[0]（InitNormalCancelSlice(12, 28)・N1→N2 16f）"
+            },
+            {
+              "total": 35,
+              "hitmark": 14,
+              "cancels": {
+                "attack": 31,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackBFrames[1]（InitNormalCancelSlice(14, 35)・N2→N3 31f）"
+            },
+            {
+              "total": 41,
+              "hitmark": 18,
+              "cancels": {
+                "charge": 39,
+                "skill": 18,
+                "burst": 18,
+                "dash": 18,
+                "jump": 18,
+                "swap": 18
+              },
+              "source": "attack.go:attackBFrames[2]（InitNormalCancelSlice(18, 41)・N3→CA 39f）"
+            },
+            {
+              "total": 36,
+              "hitmark": 14,
+              "cancels": {
+                "attack": 27,
+                "skill": 14,
+                "burst": 14,
+                "dash": 14,
+                "jump": 14,
+                "swap": 14
+              },
+              "source": "attack.go:attackBFrames[3]（InitNormalCancelSlice(5, 36)・N4→N5 27f。CanQueueAfter = 最後のヒット 14f なので、14f より前にはキャンセルできない）"
+            },
+            {
+              "total": 62,
+              "hitmark": 40,
+              "cancels": {
+                "skill": 40,
+                "burst": 40,
+                "dash": 40,
+                "jump": 40,
+                "swap": 40
+              },
+              "source": "attack.go:attackBFrames[4]（InitNormalCancelSlice(40, 62)）"
+            }
+          ],
+          "en": {
+            "label": "Mortuary Rite",
+            "description": "Mortuary Rite state. Lasts 6.3s without input. Ends on character switch"
+          }
+        },
         "description": "疾駆して突進し、経路上の敵に雷元素ダメージを与える。\n\n元素爆発「聖儀·狼駆憑走」の啓途誓使状態にある時、セノは冥祭を発動して驚雷の力を放ち、雷元素範囲ダメージを与える。また啓途誓使状態の継続時間を延長する。",
         "cooldownStart": {
           "from": "motionStart",
@@ -29748,8 +29832,10 @@
           "description": "Performs a swift thrust, dealing Electro DMG to opponents along the path.\n\nWhen Cyno is under the Pactsworn Pathclearer state triggered by Sacred Rite: Wolf's Swiftness, he will instead unleash a Mortuary Rite that deals thunderous AoE Electro DMG and extends the duration of Pactsworn Pathclearer."
         },
         "gcsimEffect": {
-          "keys": [],
-          "status": "nokey"
+          "keys": [
+            "cyno-q"
+          ],
+          "status": "ok"
         }
       },
       {
@@ -30011,7 +30097,8 @@
         "timing": "computed",
         "gcsimTarget": true,
         "gcsimKeys": [
-          "cyno-c1"
+          "cyno-c1",
+          "cyno-together-we-rise"
         ]
       },
       {
@@ -30031,6 +30118,9 @@
         "gcsimTarget": true,
         "gcsimKeys": [
           "cyno-c2"
+        ],
+        "gcsimExtraKeys": [
+          "cyno-c2-revelation"
         ]
       },
       {

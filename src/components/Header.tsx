@@ -115,15 +115,12 @@ export const Header: React.FC<HeaderProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <h1 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-1">
-                  {t('header:title')} <span className="text-amber-400 font-extrabold text-xs sm:text-sm">Gantt</span>
+                  {t('header:title')}
                 </h1>
                 <span className="hidden lg:inline-flex px-1.5 py-0.2 rounded-full text-[9px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   {t('header:badge')}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden md:block">
-                {t('header:subtitle')}
-              </p>
             </div>
           </div>
 

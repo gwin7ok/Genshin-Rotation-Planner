@@ -1,7 +1,6 @@
 {
-  "title": "Genshin Rotation",
+  "title": "Genshin Rotation Planner",
   "badge": "Chained stints · full CD tracking",
-  "subtitle": "Serial snapping of on-field stints & Skill/Burst cooldown and buff overlap simulator",
   "slot": {
     "label": "Team:",
     "unsaved": "Not saved to a slot",

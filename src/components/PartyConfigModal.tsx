@@ -5,6 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { ListSelect } from './ListSelect';
+import { EquipmentIcon } from './ItemIcon';
 import { ArtifactSetMode, CharacterConfig, PartyMember, Stint, ElementType, WeaponType } from '../types/genshin';
 import { AppDatabase } from '../types/database';
 import { WeaponModel } from '../models/WeaponModel';
@@ -365,6 +366,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           .map(w => ({
                             value: w.id,
                             label: `${'★'.repeat(w.rarity)} ${loc(w, 'name')}`,
+                            icon: <EquipmentIcon item={w} kind="weapon" className="w-5 h-5 rounded text-[10px]" />,
                             badge: isGcsimMissingEquipment(w) ? <GcsimMissingTag title={t('party:weaponMissing')} /> : undefined,
                           })),
                       ]}
@@ -457,6 +459,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           .map(a => ({
                             value: a.id,
                             label: `${'★'.repeat(a.rarity)} ${loc(a, 'name')}`,
+                            icon: <EquipmentIcon item={a} kind="artifact" className="w-5 h-5 rounded text-[10px]" />,
                             badge: isGcsimMissingEquipment(a) ? <GcsimMissingTag title={t('party:artifactMissing')} /> : undefined,
                           })),
                       ]}

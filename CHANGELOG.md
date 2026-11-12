@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.3] - 2026-11-13
+
+### 追加
+- ガントチャートの「反応」の見出し行をなくし、各行の名前の頭に周回数（[1周目]）を付けた
+
 ## [1.8.2] - 2026-11-13
 
 ### 修正
@@ -237,7 +242,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...HEAD
+[1.8.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...v1.8.0

@@ -33,6 +33,18 @@ export const consValue = <K extends keyof NonNullable<ActionMode['byConstellatio
   for (const c of def.byConstellation ?? []) if (constellation >= c.minConstellation && c[key] !== undefined) v = c[key];
   return v;
 };
+/** 期限つきのゲージ（def.gauge.expireFrames）の、期限を過ぎた獲得分を消す。消えたら true */
+export const gaugeExpire = (m: ModeWindow, now: number): boolean => {
+  const g = m.def.gauge;
+  const st = m.gauge;
+  if (!g?.expireFrames || !st?.batches) return false;
+  const kept = st.batches.filter(b => b.at + g.expireFrames! / 60 > now + 0.0005);
+  if (kept.length === st.batches.length) return false;
+  st.batches = kept;
+  st.value = kept.reduce((s, b) => s + b.amount, 0);
+  st.expiredLost = true;
+  return true;
+};
 export const modeGainScale = (m: ModeWindow): number => consValue(m.def, m.opener.constellation, 'gaugeGainScale') ?? 1;
 // 減る値（カチーナの夜魂値）: 時刻 to まで、時間による消費を数える（乗っている間は連続、降りている間は一定の間隔の離散）
 export const drainAdvance = (m: ModeWindow, to: number) => {

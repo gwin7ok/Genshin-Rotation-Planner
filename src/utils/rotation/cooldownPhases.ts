@@ -5,7 +5,7 @@ import { ActiveBuffSpan, CooldownSpan } from '../../types/genshin';
 import { CharacterModel } from '../../models/CharacterModel';
 import { type ModeWindow } from './types';
 import { skillHitFrames } from './frameTables';
-import { cutBar, modeKeyOf, modeGaugeInitial, modeGainScale, drainProject, endMode } from './modeHelpers';
+import { gaugeExpire, cutBar, modeKeyOf, modeGaugeInitial, modeGainScale, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { currentLanguage, t } from '../../i18n';
@@ -298,6 +298,13 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
         carry = Math.min(g.max, ps.value + Math.max(0, ticks - ps.ticks) * g.timeGain.amount * modeGainScale(prevMode));
       }
       opened.gauge = { value: Math.min(g.max, carry + modeGaugeInitial(opened)), ticks: 0 };
+      // 期限つきのゲージ（ミティヤの変形ビーコン）: 前のモードの獲得分を、期限を過ぎていないものだけ引き継ぎ、初期増加は今の獲得として足す
+      if (g.expireFrames) {
+        if (prevMode?.gauge) gaugeExpire(prevMode, actionStartTime);
+        const init = modeGaugeInitial(opened);
+        const batches = [...(prevMode?.gauge?.batches ?? []), ...(init > 0 ? [{ at: actionStartTime, amount: init }] : [])];
+        opened.gauge = { value: Math.min(g.max, batches.reduce((s, b) => s + b.amount, 0)), ticks: 0, batches, ...(prevMode?.gauge?.expiredLost && init <= 0 ? { expiredLost: true } : {}) };
+      }
     }
     // 減る値のあるモード（カチーナ）: 開いた E が長押しなら乗っている・一回押しなら降りている（独立して存在）
     if (md.drain) {

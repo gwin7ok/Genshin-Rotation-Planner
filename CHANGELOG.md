@@ -6,6 +6,14 @@
 
 ## [Unreleased]
 
+## [1.8.5] - 2026-11-13
+
+### 追加
+- 武器・聖遺物にもアイコンを表示（DB 管理のカードと、編成画面の選択欄。画像が無いときは名前の先頭 1 文字）
+
+### 修正
+- DB 管理のキャラのアイコンが読み込めないとき、パーティ編成画面と同じく名前の先頭 1 文字を表示するようにした
+
 ## [1.8.4] - 2026-11-13
 
 ### 修正
@@ -247,7 +255,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.4...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.5...HEAD
+[1.8.5]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...v1.8.2

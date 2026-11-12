@@ -153,9 +153,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               <h3 className="font-bold text-base text-white">
                 {t('party:title')}
               </h3>
-              <p className="text-[11px] text-slate-400">
-                {t('party:subtitle')}
-              </p>
             </div>
           </div>
           <button

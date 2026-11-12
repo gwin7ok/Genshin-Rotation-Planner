@@ -4,6 +4,7 @@ import { WeaponDatabaseItem } from '../../types/database';
 import { WeaponModel } from '../../models/WeaponModel';
 import { ItemLockButton } from './ItemLockButton';
 import { EquipmentIcon } from '../ItemIcon';
+import { GcsimMissingTag, isGcsimMissingEquipment } from '../GcsimMissingBadge';
 import { t } from '../../i18n';
 import { loc } from '../../i18n/loc';
 
@@ -48,6 +49,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
               {'★'.repeat(weapon.rarity)}
             </span>
             <h3 className="font-bold text-sm text-white">{loc(weapon, 'name')}</h3>
+            {isGcsimMissingEquipment(weapon) && <GcsimMissingTag title={t('party:weaponMissing')} />}
             {weapon.isCustom && (
               <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">
                 {t('custom')}

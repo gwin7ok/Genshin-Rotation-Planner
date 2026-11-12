@@ -1,6 +1,5 @@
 {
-  "title": "パーティ編成・ステータス設定 (Party Configuration)",
-  "subtitle": "スロットの入れ替えは、ガントチャートの縦軸（レーン）の並び順に反映されます",
+  "title": "編成設定",
   "alreadyInParty": "「{{name}}」はすでに他のスロットに編成されています。",
   "pickBelow": "下の一覧から選択",
   "hexerei": "魔女の宿題",

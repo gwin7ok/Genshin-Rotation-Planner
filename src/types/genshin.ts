@@ -224,6 +224,10 @@ export interface ActionMode {
     gaugeRefillOnRepress?: boolean;
     /** 別の動作になった E のうち、この番号（0 から。モードの中での何回目か）の回は、ゲージを消費しない（ヴェスナの C1: 最高ランクの 1 回目 = 2） */
     repressFreeIndex?: number;
+    /** ゲージの上限に足す量（バレリーの C4: +30） */
+    gaugeMaxBonus?: number;
+    /** 最初のモード（前のモードが無いとき）の開始で、初期値に足す量（バレリーの C1: 最初の E は通常の 150% を追加で獲得 = +60） */
+    gaugeInitialFirst?: number;
   }[];
   /** モードの間（別の動作になる E が残っているとき）、元素爆発の次の重撃へのつなぎ（フレーム。ネフェル: 幻の戯が使えるときは 124f。使えないときは通常のフレーム） */
   burstToChargedFrames?: number;

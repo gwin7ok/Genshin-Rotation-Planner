@@ -5,7 +5,7 @@ import artifactsMasterJson from './artifacts_master_data.json';
 import { t } from '../i18n';
 
 /** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
-export const DATABASE_VERSION = 90; // 90: ミティヤの変形ビーコンに期限（10 秒）を追加。89: ミティヤの長押し E（オーバーロード）とバレリーの進撃指令（18 秒）を追加（wiki の記述）。88: gcsim v2.50.0 に更新（辞書・マスター再生成。サンドローネが gcsim 対応・重撃はビームの本数を選ぶ）。87: 原神 v7.2（genshin-db 5.2.15）を取り込み（ミティヤ・バレリー・秘星の聖典）。86: gcsim v2.49.5 に更新（辞書・マスター再生成。セノの諭示・新武器 Heretic's Molten Blade）。85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）
+export const DATABASE_VERSION = 91; // 91: バレリーの命ノ星座 1・4 を衝撃エネルギーに反映。90: ミティヤの変形ビーコンに期限（10 秒）を追加。89: ミティヤの長押し E（オーバーロード）とバレリーの進撃指令（18 秒）を追加（wiki の記述）。88: gcsim v2.50.0 に更新（辞書・マスター再生成。サンドローネが gcsim 対応・重撃はビームの本数を選ぶ）。87: 原神 v7.2（genshin-db 5.2.15）を取り込み（ミティヤ・バレリー・秘星の聖典）。86: gcsim v2.49.5 に更新（辞書・マスター再生成。セノの諭示・新武器 Heretic's Molten Blade）。85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）
 
 export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
 export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];

@@ -971,7 +971,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       noHold: true,
       noBar: true,
       noSynergy: true,
-      byConstellation: [{ minConstellation: 0, gaugeInitial: 40, gaugeCostAll: true }, { minConstellation: 4, gaugeGainScale: 1.3 }],
+      // C1: 最初の E は通常の 150% を追加で獲得（+60）。C4: 上限 +30・獲得効率 +30%（E の 40 → 52、C1 の追加 60 → 78。上限 130）
+      byConstellation: [{ minConstellation: 0, gaugeInitial: 40, gaugeCostAll: true }, { minConstellation: 1, gaugeInitialFirst: 60 }, { minConstellation: 4, gaugeGainScale: 1.3, gaugeInitial: 52, gaugeInitialFirst: 78, gaugeMaxBonus: 30 }],
       repress: {
         frames: [],
         actions: ['ca'],
@@ -986,7 +987,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         persists: true,
         timeGain: { everyFrames: 1000000, amount: 0 },
         gainByType: {},
-        hint: '上限 100 は wiki の記述です（命ノ星座 4 で 130。数えていません）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃）・命ノ星座 1 の 150% は数えていません。足りないとき、重撃は普通の重撃になります',
+        hint: '上限 100 は wiki の記述です（命ノ星座 4 で 130）。命ノ星座 1 の最初の E の追加（+60）・命ノ星座 4 の獲得効率 +30% は数えています（最初の E は、編成の最初の 1 回だけ）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃 +5。命中数が分からないため）は数えていません。足りないとき、重撃は普通の重撃になります',
       },
       source: 'genshin-db（近衛戦法・剣攻盾守 / 攻勢防御・要塞突撃 / 命ノ星座 1・4）と wiki（バレリー）: 元素スキルで衝撃エネルギー 40 獲得、40 以上で特殊重撃（すべて消費）、上限 100。フレームは推定',
     },

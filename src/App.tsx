@@ -7,7 +7,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { StintSequenceEditor } from './components/StintSequenceEditor';
 import { GanttChart } from './components/GanttChart';
-import { PlaybackControls } from './components/PlaybackControls';
 import { PartyConfigModal } from './components/PartyConfigModal';
 import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
@@ -851,6 +850,15 @@ export default function App() {
         onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
         onExportJson={handleExportJson}
         onImportJson={handleImportJson}
+        isPlaying={isPlaying}
+        onTogglePlay={togglePlay}
+        onResetPlayback={resetPlayback}
+        currentTime={currentTime}
+        totalDuration={totalDuration}
+        playbackSpeed={playbackSpeed}
+        onChangeSpeed={setPlaybackSpeed}
+        playbackCycleCount={playbackCycleCount}
+        loopPeriod={loopPeriod}
         onCopyNotation={handleCopyNotation}
         onCopyGcsimConfig={handleCopyGcsimConfig}
         onGcsimCompute={() => void handleGcsimCompute()}
@@ -882,20 +890,6 @@ export default function App() {
       <main className="flex-1 flex flex-col">
         {/* Visual Gantt Chart (Swimlanes with strict vertical alignment) */}
         <GanttChart
-          playbackControls={
-            <PlaybackControls
-              isPlaying={isPlaying}
-              onTogglePlay={togglePlay}
-              onResetPlayback={resetPlayback}
-              currentTime={currentTime}
-              totalDuration={totalDuration}
-              playbackSpeed={playbackSpeed}
-              onChangeSpeed={setPlaybackSpeed}
-              loopStartTime={loopStartTime}
-              playbackCycleCount={playbackCycleCount}
-              loopPeriod={loopPeriod}
-            />
-          }
           database={database}
           characters={characters}
           stints={displayStints}

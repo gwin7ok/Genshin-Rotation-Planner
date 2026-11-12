@@ -15,7 +15,7 @@ interface PlaybackControlsProps {
   loopPeriod?: number;
 }
 
-/** 再生の操作（再生・周回・時間・速度）。ガントチャートのタイトルの右に出す */
+/** 再生の操作（再生・周回・時間・速度）。ヘッダーの記法コピーの行の左端に出す */
 export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   isPlaying,
   onTogglePlay,

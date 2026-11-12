@@ -208,13 +208,10 @@ interface GanttChartProps {
   elapsedTime: number;
   /** 全体の行で、武器・聖遺物の発動バフを引くマスターデータ */
   database?: GenshinDatabase;
-  /** タイトルの右に出す、再生の操作 */
-  playbackControls?: React.ReactNode;
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
   database,
-  playbackControls,
   characters,
   stints,
   activeBuffs,
@@ -850,7 +847,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               <h2 className="text-base sm:text-lg font-extrabold text-white tracking-wide truncate">
                 {t('chart:gantt.title')}
               </h2>
-              {playbackControls}
             </div>
 
             {/* Header Controls (snap lines, loop reset, zoom) */}

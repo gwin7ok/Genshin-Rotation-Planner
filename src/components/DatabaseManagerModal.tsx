@@ -1,4 +1,4 @@
-import { GcsimMissingBadge } from './GcsimMissingBadge';
+import { GcsimMissingBadge, GcsimMissingTag, isGcsimMissingEquipment } from './GcsimMissingBadge';
 import { CharacterAvatar } from './CharacterAvatar';
 import { EquipmentIcon } from './ItemIcon';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
@@ -1094,6 +1094,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           {'★'.repeat(art.rarity)}
                         </span>
                         <h3 className="font-bold text-sm text-white">{loc(art, 'name')}</h3>
+                        {isGcsimMissingEquipment(art) && <GcsimMissingTag title={t('party:artifactMissing')} />}
                         {art.isCustom && (
                           <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
                             {t('custom')}

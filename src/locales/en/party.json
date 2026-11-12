@@ -1,6 +1,5 @@
 {
   "title": "Team Setup (party and stats)",
-  "subtitle": "Reordering slots changes the order of the lanes on the Gantt chart",
   "alreadyInParty": "\"{{name}}\" is already in another slot.",
   "pickBelow": "Choose from the list below",
   "hexerei": "Hexerei",

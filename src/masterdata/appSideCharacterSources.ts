@@ -26,7 +26,7 @@ export interface AppSideSource {
 export const APP_SIDE_SOURCES: AppSideSource[] = [
   { genshinId: 10000100, dir: 'kachina', ref: '72cff353067312bcb182f4bd61e6135bc8170e93', label: 'gcsim PR #2697（未マージ・未検証。2026-08-12 時点）', status: 'open-pr' },
   { genshinId: 10000122, dir: 'nefer', ref: '4932d0e7c4d84713a33e6289d82712bae5871fdf', label: 'gcsim PR #3045（未マージ・未検証。2026-09-20 時点）', status: 'open-pr' },
-  { genshinId: 10000130, dir: 'linnea', ref: 'ef71cdb05e55c649d88ecf7a7e7ae21cf09ebb8c', label: 'gcsim PR #2596（未マージ・未検証。2026-10-06 時点）', status: 'open-pr' },
+  { genshinId: 10000130, dir: 'linnea', ref: '0e439a5d4859db29846c08c19ae5137e4a7a0abf', label: 'gcsim PR #2596（未マージ・未検証。2026-11-10 時点）', status: 'open-pr' },
 ];
 
 export const appSideSourceByGenshinId = (genshinId: number): AppSideSource | undefined =>

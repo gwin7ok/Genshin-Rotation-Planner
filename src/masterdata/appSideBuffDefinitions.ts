@@ -47,12 +47,6 @@ export const APP_SIDE_CONSTELLATION_EFFECTS: Record<string, AppSideConstellation
     { level: 4, duration: 5, note: '月籠の共鳴の後 5 秒、リンネアとフィールド上のキャラの防御力 +25%' },
     { level: 6, note: '月兆・満照: 月結晶反応ダメージ +25%（文献調査の強化は凸 1 の効果）' },
   ],
-  // サンドローネ
-  '10000133-cryo': [
-    { level: 1, note: '演算モードの間、演算負荷の上昇 -50%・チーム全員の星反応ダメージ +30%' },
-    { level: 2, note: '輝映・星閃の冷却ビームの会心ダメージ +40%（演算モードの間。3 層まで +20% ずつ）' },
-    { level: 6, note: 'サンドローネが与える星反応ダメージ +20%（集束型冷却ビームの追加は対象外）' },
-  ],
   // ヴォジャニーツァ
   '10000140-hydro': [
     { level: 1, duration: 5, note: '悠久の歌の回復後 5 秒、チーム全員の攻撃力 +HP 上限の 0.8%' },

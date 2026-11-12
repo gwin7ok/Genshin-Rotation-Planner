@@ -82,30 +82,30 @@ genshin-db 5.2.15 で追加されたもの（リポジトリの 7.2 のコミッ
 
 ### 作業 B. gcsim v2.50.0 への更新（手順書「gcsim-サーバー更新手順」の 1〜6）
 
-- [ ] B-1. `gcsim.config.json` を更新する（`version`・`commit`・`releasedAt: 2026-11-10`・`assets` 6 個）。値は付録 1。`NOTICE` と gcsim の LICENSE（AGPL-3.0 のままか）を確認する。
-- [ ] B-2. サーバーを入れ替える。`npm run gcsim:status` とポート 54321 の待ち受けを確認 → `npm run gcsim:stop` → `npm run gcsim:start`。
+- [x] B-1. `gcsim.config.json` を更新する（`version`・`commit`・`releasedAt: 2026-11-10`・`assets` 6 個）。値は付録 1。`NOTICE` と gcsim の LICENSE（AGPL-3.0 のままか）を確認する。
+- [x] B-2. サーバーを入れ替える。`npm run gcsim:status` とポート 54321 の待ち受けを確認 → `npm run gcsim:stop` → `npm run gcsim:start`。
   - **取得の確認が要る**（CLAUDE.md）: `server_windows_amd64.exe`・出典 `https://github.com/genshinsim/gcsim/releases/download/v2.50.0/`・37,444,096 バイト。実行前にユーザーへ示して確認を取る。
   - 他のセッションがサーバーを使っているときは、止める前にユーザーに聞く。
-- [ ] B-3. 辞書とマスターを作り直す: `build:catalog` → `build:master` → `build:equipment` → `build:aliases`。
+- [x] B-3. 辞書とマスターを作り直す: `build:catalog` → `build:master` → `build:equipment` → `build:aliases`。
   - `catalog-diff.md` で、増えたキー（サンドローネ）・消えたキー（セノの A1 まわりに注意）を確認する。消えたキーが、対応表・発動バフで使われていないこと。
   - 別名の表に `sandrone` / `marionette` が入ったこと。
-- [ ] B-4. サンドローネを、アプリ側だけの対応から gcsim 対応へ切り替える（手順書 B-7・B-8）。
+- [x] B-4. サンドローネを、アプリ側だけの対応から gcsim 対応へ切り替える（手順書 B-7・B-8）。
   - `effectKeyDecisions.ts`: `10000133-cryo_e`・`_q` の `not-in-gcsim` を消す。
   - `appSideBuffDefinitions.ts`: `10000133-cryo` の命ノ星座の定義（1・2・6 凸）と、外した固有天賦の行を消す（辞書から作り直される）。
   - `characterMasterGenerator.ts:1926` の通常攻撃の段数（`10000133: 3`）: gcsim のフレームから決まるので、要らなくなれば消す。
   - `buffScopeOverrides.ts` の `10000133-cryo_c1: 'team'`: 定義 ID が変わらなければ残す。作り直した定義で判定が合うなら消す。
   - `appSideCharacterSources.ts` には、サンドローネの行は無い（確認済み。消すものなし）。
-- [ ] B-5. サンドローネの新キャラ作業（`新キャラ実装時の作業.md` の 1〜3）。
+- [ ] B-5. サンドローネの新キャラ作業（`新キャラ実装時の作業.md` の 1〜3）。 ← **一部済（2026-11-12）: Q1（重撃の本数 `_ca_beams<N>`）・「未確認のキー」0 件。残り: 効果の日本語名（辞書の上書き）・スキル中のジャンプ/walk 禁止の検証は、画面確認（作業 E）で必要になれば行う**
   - 効果継続時間の補完の候補・凸延長の未確認・「未確認のキー」を 0 件にする。
   - 変換規則（`actionMapping.ts`・`chargeRules.ts`）: 重撃の `beams` / `frames` を、アプリの長押しの重撃にどう対応させるか（Q1）。スキル中のジャンプ・walk の禁止を、行動の検証に入れるか。
   - 両手剣だが、重撃がビーム（射撃）の特殊な形。既存の両手剣の規則が当てはまらない見込み。
   - 新キャラの効果の日本語名を `gcsimKeyCatalogOverrides.ts` で直す。
-- [ ] B-6. gcsim 連携のデータを再収集する（この順。`link:effects` は 1 回だけ）。
+- [x] B-6. gcsim 連携のデータを再収集する（この順。`link:effects` は 1 回だけ）。
   `probe:effects` → `link:effects` → `link:actions` → `coverage:links` → `probe:skill-hits` → `probe:queue-frames` → `probe:dash-jump` → `probe:hitlag` → `check:hitlag`
   - `coverage:links` の「未検討」（サンドローネの E・Q・固有天賦・命ノ星座）を決める。判断は、単独実行の結果と gcsim のソースで行い、**gcsim とゲームの差がありそうなものは、実行結果を表で示してユーザーにゲームでの動きを聞く**（ゲーム優先）。
   - `git diff src/data/action_effect_*.json src/data/dash_jump_frames.json src/data/hitlag_frames.json` で、サンドローネ・セノ以外の想定外の変化が無いこと。
   - `check:hitlag` が ✗ のときは、一覧を調べる（サンドローネの重撃・モードは、表に出ない仕組みの可能性）。
-- [ ] B-7. `DATABASE_VERSION` を上げる（A-6 とまとめて 1 回でもよい）。
+- [x] B-7. `DATABASE_VERSION` を上げる（A-6 とまとめて 1 回でもよい）。
 
 ### 作業 C. 検査
 

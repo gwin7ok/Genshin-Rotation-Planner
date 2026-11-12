@@ -1561,6 +1561,27 @@ function buildActions(ctx: BuildContext): BuildResult {
     actions.push(withDuration({ id: `${id}_ca`, name: '重撃', shortName: 'C', type: 'charged' }));
   }
 
+  // ビームの本数で長さが決まる重撃（サンドローネ。D333。ユーザー決定 Q1: 本数を選ぶ）。gcsim は `charge[beams=N]`（本数を省くと既定の 3 本）。
+  // 実測（v2.50.0。単独で重撃 → 次の行動）: 1 本 104f・2 本 164f・3 本 224f・4 本 284f・5 本 344f・6 本 404f（= 44 + 60 × 本数）。凸 0 は 3 本まで（4 本以上は実行エラー）。
+  // 通常攻撃の直後は、詠唱 25f が省かれる（19 + 60 × 本数）。`_ca` = 既定の 3 本。派生は `_ca_beams<N>`（actionMapping.ts の対応表で `charge[beams=N]` に渡す）
+  const beamCharge = BEAM_CHARGES[id];
+  if (beamCharge) {
+    const base = actions.find(a => a.id === `${id}_ca`);
+    const mk = (n: number): Pick<ActionDefinition, 'defaultDuration' | 'frames' | 'dataSource'> => {
+      const total = beamCharge.baseFrames + beamCharge.perBeamFrames * n;
+      return {
+        defaultDuration: framesToSec(total),
+        frames: { total, cancels: {}, source: `${beamCharge.source}（ビーム ${n} 本 = ${beamCharge.baseFrames} + ${beamCharge.perBeamFrames} × ${n}）` },
+      };
+    };
+    if (base) {
+      Object.assign(base, mk(beamCharge.defaultBeams), { name: `重撃（ビーム ${beamCharge.defaultBeams} 本）` });
+      for (const n of beamCharge.variants) {
+        actions.push({ id: `${id}_ca_beams${n}`, name: `重撃（ビーム ${n} 本${n > beamCharge.defaultBeams ? '。凸 1 以上' : ''}）`, shortName: `C(${n})`, type: 'charged', ...mk(n) });
+      }
+    }
+  }
+
   // gcsim が重撃・狙い撃ちを実装していない（メソッド ChargeAttack / Aimed が無い）キャラ: 実行すると「action charge not implemented」のエラーになる（ディシアなど）。
   // gcsim のキャラが無い（解析できていない）場合は、全部が対象なので、印は付けない
   if (parsed && !Object.values(parsed.files).some(f => f.methods.includes('ChargeAttack') || f.methods.includes('Aimed'))) {
@@ -1999,11 +2020,22 @@ const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst', 'plun
  */
 const ESTIMATE_NORMAL_HITS: Record<number, number> = {
   10000129: 5, // ローエン（wiki: ナイフ投げ→槍突き→ナイフ3連→蹴り上げ→槍2連の全5段）
-  10000133: 3, // サンドローネ（wiki: 最大3段）
   10000136: 3, // ミティヤ（説明文: 最大3段。原神 7.2）
   10000137: 3, // バレリー（説明文: 剣による最大3段。原神 7.2）
   10000140: 4, // ヴォジャニーツァ（wiki: 4段）
   10000143: 6, // ヴェスナ（wiki: 6段）
+};
+/**
+ * ビームの本数で長さが決まる重撃（サンドローネ）: 長さ = baseFrames + perBeamFrames × 本数。gcsim の実測（D333）
+ */
+const BEAM_CHARGES: Record<string, { baseFrames: number; perBeamFrames: number; defaultBeams: number; variants: number[]; source: string }> = {
+  '10000133-cryo': {
+    baseFrames: 44,
+    perBeamFrames: 60,
+    defaultBeams: 3,
+    variants: [1, 2, 4, 5, 6],
+    source: 'gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）',
+  },
 };
 const DEFAULT_ESTIMATE_NORMAL_HITS = 4;
 const median = (values: number[]): number | undefined => {

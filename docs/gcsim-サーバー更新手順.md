@@ -15,6 +15,9 @@
 
 ライセンス: gcsim は v2.47.3 以降 AGPL-3.0（v2.47.2 までは MIT）。実行ファイルを改変しない・このリポジトリで配布しないことで、義務を最小にしている。詳しくは `NOTICE`。
 
+## genshin-db（キャラ・武器の元データ）の取得元（D331）
+`build:catalog`・`build:master`・`build:equipment` は、genshin-db のデータを、公開 API か手元の npm（genshin-db）から取る。環境変数 `GENSHIN_DB_SOURCE`（`auto` 既定 / `api` / `local`）で切り替える。ゲームの新しい版に上げるときは、`npm install genshin-db@<版>` → `build:master` → `build:equipment`（定型）。詳しくは [ゲーム新キャラの取り込み手順.md](ゲーム新キャラの取り込み手順.md) の A。画面のオンライン生成は API だけに頼る。
+
 ## 更新の手順
 
 ### 1. 新しいバージョンを決める

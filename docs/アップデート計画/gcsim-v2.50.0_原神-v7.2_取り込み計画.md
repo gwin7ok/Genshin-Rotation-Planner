@@ -64,19 +64,21 @@ genshin-db 5.2.15 で追加されたもの（リポジトリの 7.2 のコミッ
 
 ### 作業 A. 原神 v7.2 の新キャラ・新武器（手順書「ゲーム新キャラの取り込み手順」の A・D）
 
-- [ ] A-1. genshin-db を 5.2.15 に上げる（`npm install genshin-db@5.2.15`。`package.json`・`package-lock.json` が変わる）。
-- [ ] A-2. `npm run build:master` → 出力に、ミティヤ・バレリーがいること（gcsim フレームなし = 天賦の文から作った仮のアクション）、名前が化けていないこと（`scripts/genshin-db-names.ts`）を確認する。
-- [ ] A-3. `npm run build:equipment` → 秘星の聖典が入ったこと、新しい聖遺物セットの有無を確認する。武器の発動バフは gcsim の辞書に無いため「gcsim 対象外」になる（正しい）。
-- [ ] A-4. アプリ側の表を足す（gcsim の辞書から作れない分。人が説明文から分類する）。
+- [x] A-0.（2026-11-12 追加。D331）取得元を、API と手元の npm の両対応にする。公開 API が原神 7.2 に未対応（キャラ 124 件・武器 255 件のまま）で、`build:master` に新キャラが出なかったため。`GENSHIN_DB_SOURCE`（auto / api / local）。`src/masterdata/genshinDbSource.ts` ほか。api モードで従来と同じ結果（差 0）・auto で手元を選んだことを確認。手順書 2 本を更新。
+
+- [x] A-1. genshin-db を 5.2.15 に上げる（`npm install genshin-db@5.2.15`。`package.json`・`package-lock.json` が変わる）。 ← **済（2026-11-12）: genshin-db 5.2.15（package.json・package-lock.json）**
+- [x] A-2. `npm run build:master` → 出力に、ミティヤ・バレリーがいること（gcsim フレームなし = 天賦の文から作った仮のアクション）、名前が化けていないこと（`scripts/genshin-db-names.ts`）を確認する。 ← **済（2026-11-12）: build:master（136 キャラ。ミティヤ・バレリーが仮のアクションで入った。A-0 の local 取得）**
+- [x] A-3. `npm run build:equipment` → 秘星の聖典が入ったこと、新しい聖遺物セットの有無を確認する。武器の発動バフは gcsim の辞書に無いため「gcsim 対象外」になる（正しい）。 ← **済（2026-11-12）: build:equipment（秘星の聖典 14525 が入った。新しい聖遺物セットは無し・gcsim 対象外）**
+- [x] A-4. アプリ側の表を足す（gcsim の辞書から作れない分。人が説明文から分類する）。 ← **済（2026-11-12）: 通常攻撃の段数・appSideBuffDefinitions・effectKeyDecisions（constellationEffects の追加は不要＝「凸延長 未確認」は 0 件）**
   - `characterMasterGenerator.ts` の通常攻撃の段数の表: ミティヤ 3 段・バレリー 3 段（説明文より）。
   - スキルの形（一回押し / 長押し・再発動）・特殊重撃・効果継続時間: `build:master` の出力を見て、既存の同種のキャラ（ヴェスナ `10000143`・ローエン `10000129` の記述）にならって足す。
   - `appSideBuffDefinitions.ts`: 2 人の命ノ星座の効果の定義・定義から外す固有天賦（issue #38 の分類の例にならう）。
   - `constellationEffects.ts`: 「凸延長 未確認」に出たものを `VERIFIED_RULES` / `NOT_APPLICABLE` へ。
   - `effectKeyDecisions.ts` の `DEF_DECISIONS`: `10000136-electro_e`・`_q`、`10000137-electro_e`・`_q` を `reason: 'not-in-gcsim'` で登録（note のバージョンは v2.50.0）。
-- [ ] A-5. `npm run review:buff-scopes` → 新しい行（2 人の固有天賦・命ノ星座、秘星の聖典）の「全体 / 自分だけ」を確認し、違うものを `buffScopeOverrides.ts` に足す。
+- [x] A-5. `npm run review:buff-scopes` → 新しい行（2 人の固有天賦・命ノ星座、秘星の聖典）の「全体 / 自分だけ」を確認し、違うものを `buffScopeOverrides.ts` に足す。 ← **済（2026-11-12）: review:buff-scopes（ミティヤ c6 を team に。ほかは自動判定どおり。秘星の聖典は時間つきなので対象外）**
   - 見込み: ミティヤの固有天賦 1（チーム全員の元素熟知 +30）・固有天賦 3（チームの星電導の基礎ダメージ）は全体。固有天賦 2（ミティヤの会心率）は自分だけ。秘星の聖典は自分だけ。
-- [ ] A-6. `DATABASE_VERSION` を上げる。
-- [ ] A-7. 未実装の仕組みの洗い出し: 星電導（超電導 → 星電導への変化）・変形ビーコン・衝撃エネルギーが、アプリの既存の仕組み（サンドローネの星反応・ゲージの行）で表せるか。表せないものは、`issue-36-残りの未対応.md` に追記する（実装するかは Q2）。
+- [x] A-6. `DATABASE_VERSION` を上げる。 ← **済（2026-11-12）: DATABASE_VERSION 87**
+- [x] A-7. 未実装の仕組みの洗い出し: 星電導（超電導 → 星電導への変化）・変形ビーコン・衝撃エネルギーが、アプリの既存の仕組み（サンドローネの星反応・ゲージの行）で表せるか。表せないものは、`issue-36-残りの未対応.md` に追記する（実装するかは Q2）。 ← **済（2026-11-12）: 両方作る（Q2）: バレリーの衝撃エネルギー・特殊重撃、ミティヤの検知コア切り替え・変形ビーコン・特殊重撃を、モードの仕組みで実装（未対応の点は issue-36-残りの未対応.md の 5）**
 
 ### 作業 B. gcsim v2.50.0 への更新（手順書「gcsim-サーバー更新手順」の 1〜6）
 

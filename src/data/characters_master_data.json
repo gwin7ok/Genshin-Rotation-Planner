@@ -56746,6 +56746,584 @@
     ]
   },
   {
+    "id": "10000136-electro",
+    "name": "ミティヤ",
+    "englishName": "Mitya",
+    "element": "electro",
+    "weaponType": "catalyst",
+    "rarity": 5,
+    "avatarUrl": "",
+    "color": "#a855f7",
+    "accentColor": "#a855f7",
+    "availableActions": [
+      {
+        "id": "10000136-electro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.383,
+        "description": "通常攻撃\n最大3段の攻撃を行い、雷元素ダメージを与える。\n\n重撃\n一定のスタミナを消費し、短い詠唱をした後、前方の敵に雷元素範囲ダメージを与える。\nフィールド上にミティヤ自身が生成した**検知コア・オーバーロード**が存在し、かつミティヤが1つ以上の**変形ビーコン**を所持している場合、ミティヤは代わりにスタミナを消費しない特殊重撃段階的爆破を繰り出す。段階的爆破は前方エリアに雷元素範囲ダメージを1回与える。長押し中は継続して変形ビーコンを消費し、変形ビーコンを1つ消費するごとに、前方エリアに星電導反応ダメージと見なされる雷元素範囲ダメージを1回与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に雷元素範囲ダメージを与える。",
+        "en": {
+          "name": "Normal Attack",
+          "description": "Normal Attack\nPerforms a maximum of 3 attacks that deal Electro DMG.\n\nCharged Attack\nConsumes a certain amount of Stamina to deal AoE Electro DMG to the area in front after a short casting time.\nMitya will instead perform the special Charged Attack Gradient Detonation, which consumes no Stamina, if a **Detection Core: Overload** created by Mitya himself is currently on the field and he has at least 1 **Gradient Beacon**: Deals 1 instance of AoE Electro DMG to the area in front and continuously consumes Gradient Beacons while held. Each Gradient Beacon consumed deals 1 instance of AoE Electro DMG to the area in front that is considered Stellar-Conduct reaction DMG.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE Electro DMG upon impact."
+        },
+        "normalHits": [
+          {
+            "duration": 0.383
+          },
+          {
+            "duration": 0.467
+          },
+          {
+            "duration": 1.117
+          }
+        ]
+      },
+      {
+        "id": "10000136-electro_ca",
+        "name": "重撃",
+        "shortName": "C",
+        "type": "charged",
+        "defaultDuration": 1.35,
+        "description": "通常攻撃\n最大3段の攻撃を行い、雷元素ダメージを与える。\n\n重撃\n一定のスタミナを消費し、短い詠唱をした後、前方の敵に雷元素範囲ダメージを与える。\nフィールド上にミティヤ自身が生成した**検知コア・オーバーロード**が存在し、かつミティヤが1つ以上の**変形ビーコン**を所持している場合、ミティヤは代わりにスタミナを消費しない特殊重撃段階的爆破を繰り出す。段階的爆破は前方エリアに雷元素範囲ダメージを1回与える。長押し中は継続して変形ビーコンを消費し、変形ビーコンを1つ消費するごとに、前方エリアに星電導反応ダメージと見なされる雷元素範囲ダメージを1回与える。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に雷元素範囲ダメージを与える。",
+        "en": {
+          "name": "Charged Attack",
+          "description": "Normal Attack\nPerforms a maximum of 3 attacks that deal Electro DMG.\n\nCharged Attack\nConsumes a certain amount of Stamina to deal AoE Electro DMG to the area in front after a short casting time.\nMitya will instead perform the special Charged Attack Gradient Detonation, which consumes no Stamina, if a **Detection Core: Overload** created by Mitya himself is currently on the field and he has at least 1 **Gradient Beacon**: Deals 1 instance of AoE Electro DMG to the area in front and continuously consumes Gradient Beacons while held. Each Gradient Beacon consumed deals 1 instance of AoE Electro DMG to the area in front that is considered Stellar-Conduct reaction DMG.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE Electro DMG upon impact."
+        }
+      },
+      {
+        "id": "10000136-electro_e",
+        "name": "元素スキル: 定律・変数検知",
+        "shortName": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 18,
+        "effectDuration": 25,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "検知コア継続時間"
+        },
+        "defaultDuration": 0.7,
+        "mode": {
+          "label": "検知コア",
+          "description": "検知コアが存在する間（25 秒）。元素スキル（E）を 6 秒以内にもう一度使うと、検知コアの状態を切り替える（CT なし）。変形ビーコンが 1 つ以上あるとき、重撃が特殊重撃「段階的爆破」になり、ビーコンをすべて消費する",
+          "startDelayFrames": 0,
+          "durationFrames": 1500,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "byConstellation": [
+            {
+              "minConstellation": 0,
+              "gaugeCostAll": true
+            },
+            {
+              "minConstellation": 1,
+              "gaugeInitial": 100
+            }
+          ],
+          "repress": {
+            "frames": [
+              {
+                "total": 30,
+                "cancels": {},
+                "source": "推定（特殊スキル・切り替えの動作。実測ではありません）"
+              }
+            ],
+            "actions": [
+              "e",
+              "ca"
+            ],
+            "conditions": {
+              "e": {
+                "withinFrames": 360
+              },
+              "ca": {
+                "requiresGauge": true
+              }
+            },
+            "framesByAction": {
+              "ca": {
+                "total": 90,
+                "cancels": {},
+                "source": "推定（段階的爆破。長押しの間、ビーコン 1 つにつき 1 回。実測ではありません）"
+              }
+            }
+          },
+          "gauge": {
+            "label": "変形ビーコン",
+            "max": 500,
+            "cost": 100,
+            "costActions": [
+              "ca"
+            ],
+            "persists": true,
+            "timeGain": {
+              "everyFrames": 1000000,
+              "amount": 0
+            },
+            "gainByType": {
+              "burst": 300
+            },
+            "hint": "変形ビーコンは、検知コアの間の元素爆発（3 つ）と命ノ星座 1 の元素スキル（1 つ）だけを数えています。固有天賦による獲得・10 秒の期限・検知コアの状態（オーバーロード）は数えていません。ビーコンが足りないとき、重撃は普通の重撃になります"
+          },
+          "source": "genshin-db（定律・変数検知・連鎖反応・解析・変化ノ理・命ノ星座 1）: 検知コア 25 秒、6 秒以内の再発動で状態切り替え（1.5 秒に 1 回）、爆発でビーコン 3 つ、特殊重撃「段階的爆破」は検知コア・オーバーロードとビーコン 1 つ以上が条件。フレームは推定"
+        },
+        "description": "理論上比較的安全な当量で、理論上比較的安全な実験を適度に行い、雷元素範囲ダメージを与える。さらに、一回押しと長押しによって異なる方法で**検知コア**を生成する。\n\n元素スキル定律・変数検知を発動してから6秒以内に再度元素スキルを一回押しすると、検知コアの状態を切り替えることができる。この方法で状態を切り替えることができるのは、1.5秒ごとに一回のみ。",
+        "en": {
+          "name": "Elemental Skill: Principle: Variable Detection",
+          "description": "Conducts a theoretically relatively safe experiment at a theoretically relatively safe yield, dealing AoE Electro DMG and creating a **Detection Core** in different ways depending on whether the Skill is tapped or held.\n\nTapping the Elemental Skill Principle: Variable Detection again within 6s after using it changes the Detection Core's state. The Detection Core's state can be changed in this way every 1.5s."
+        }
+      },
+      {
+        "id": "10000136-electro_q",
+        "name": "元素爆発: 解析・変化ノ理",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 0,
+        "dataSource": {
+          "cooldown": "クールタイム"
+        },
+        "defaultDuration": 1.733,
+        "description": "元素をインスピレーションのように爆発させよう！雷元素範囲ダメージを与え、**変形ビーコン**を3つ生成する。",
+        "en": {
+          "name": "Elemental Burst: Analysis: Gradient Theory",
+          "description": "Let the elements burst forth like inspiration itself! Deals AoE Electro DMG and creates 3 **Gradient Beacons**."
+        }
+      },
+      {
+        "id": "10000136-electro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2,
+        "en": {
+          "name": "Sprint"
+        }
+      },
+      {
+        "id": "10000136-electro_jump",
+        "name": "ジャンプ",
+        "shortName": "J",
+        "type": "jump",
+        "defaultDuration": 0.55,
+        "en": {
+          "name": "Jump"
+        }
+      }
+    ],
+    "passiveEffects": [
+      {
+        "talentName": "臨界爆発性試薬",
+        "talentSlot": 2,
+        "description": "**変形ビーコン**の継続時間が10秒まで延長される。さらに、変形ビーコンを生成してから15秒間、ミティヤの会心率+5%。この効果は最大4層まで重ね掛け可能。",
+        "id": "10000136-electro_p2",
+        "name": "臨界爆発性試薬",
+        "duration": 15,
+        "dataSource": {
+          "duration": "15秒間"
+        },
+        "en": {
+          "name": "Explosive Reagent: Safe Limits Exceeded",
+          "talentName": "Explosive Reagent: Safe Limits Exceeded",
+          "description": "The duration of **Gradient Beacons** is increased to 10s. Additionally, Mitya's CRIT Rate increases by 5% for 15s after creating a Gradient Beacon. This effect can stack up to 4 times.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      }
+    ],
+    "source": {
+      "genshinId": 10000136,
+      "frameSource": "推定（同じ武器種の 27 キャラの中央値。実測ではありません）"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "欠落の痕跡を追う観察者",
+        "description": "**変形ビーコン**の所持上限が5つにアップする。元素スキル定律・変数検知を発動した時、追加で変形ビーコンを1つ生成する。 **検知コア**が存在している間、チーム内の自身のフィールド上キャラクターの会心ダメージ+40%。 また、変形ビーコンを生成した時、ミティヤ自身の元素エネルギーを10回復する。この効果は8秒ごとに1回のみ発動可能。",
+        "en": {
+          "name": "The Observer Seeking What Is Missing",
+          "description": "The maximum number of **Gradient Beacons** Mitya can carry is increased to 5. Using the Elemental Skill Principle: Variable Detection additionally creates 1 Gradient Beacon.\nWhile the **Detection Core** is present, your own active character's CRIT DMG is increased by 40%.\nAdditionally, Mitya regenerates 10 Elemental Energy when a Gradient Beacon is created. This effect can be triggered once every 8s."
+        }
+      },
+      {
+        "level": 2,
+        "name": "慣性の彼方に微睡むもの",
+        "description": "**検知コア**が存在している間、極星フィールド内にいるすべての敵の氷元素耐性と雷元素耐性-20%。 また、生成した検知コアの状態に応じて以下の効果が発動する。 ・安定状態の場合、付近にいるチーム内キャラクター全員の元素熟知+123。 ・オーバーロードの場合、チーム内の自身のフィールド上キャラクターの元素熟知+234。",
+        "en": {
+          "name": "The Matter That Slumbers Beyond Inertness",
+          "description": "While the **Detection Core** is present, all opponents within the Polestar Field have their Cryo RES and Electro RES decreased by 20%.\nAdditionally, if the Detection Core created is:\n·Steady State: All nearby party members gain 123 Elemental Mastery;\n·Overloaded: Your own active character gains 234 Elemental Mastery."
+        }
+      },
+      {
+        "level": 3,
+        "name": "不変なる位相の超弦理論",
+        "description": "元素スキル**定律・変数検知**のスキルLv.+3。 最大Lv.15まで。",
+        "en": {
+          "name": "The Knotted String of Invariant Topology",
+          "description": "Increases the Level of the Elemental Skill **Principle: Variable Detection** by 3.\nMaximum upgrade level is 15."
+        }
+      },
+      {
+        "level": 4,
+        "name": "崩壊より生まれし同位体",
+        "description": "フィールド上にミティヤ自身が生成した**検知コア**が存在する時、**変形ビーコン**を5つ消費するたびに、検知コアは周囲の敵にミティヤの元素熟知の300%に相当する、星電導反応ダメージと見なされる雷元素範囲ダメージを1回与える。",
+        "en": {
+          "name": "The Isotopes Born of Decay",
+          "description": "**Detection Cores** created by Mitya himself deals 1 instance of AoE Electro DMG equal to 300% of Mitya's Elemental Mastery to nearby opponents for every 5 **Gradient Beacons** consumed while it is on the field. This DMG is considered Stellar-Conduct reaction DMG."
+        }
+      },
+      {
+        "level": 5,
+        "name": "万物の秩序定めし周期律",
+        "description": "通常攻撃**連鎖反応**のスキルLv.+3。 最大Lv.15まで。",
+        "en": {
+          "name": "The Periodic Law That Orders All",
+          "description": "Increases the Level of Normal Attack: **Chain Reaction** by 3.\nMaximum upgrade level is 15."
+        }
+      },
+      {
+        "level": 6,
+        "name": "段階的元素跳躍の理の門",
+        "description": "**検知コア**が強化される。生成した検知コアの状態に応じて以下の効果が発動する。 ・安定状態の場合、検知コアは本来の115%のダメージを与える。 ・オーバーロードの場合、**変形ビーコン**を消費する時、34%の確率で新たな変形ビーコンを1つ生成する。 さらに、付近にいるチームのキャラクター全員の与える星電導反応ダメージが20%**向上**する。",
+        "en": {
+          "name": "Elemental Transition at the Gate of Reason",
+          "description": "**Detection Core** is enhanced. If the Detection Core:\n · Is in the Steady State: Detection Core deals 115% of its original DMG.\n· Is Overloaded: There is a 34% chance to create 1 new **Gradient Beacon** whenever Mitya consumes a Gradient Beacon with the **Detection Core**.\nAdditionally, Stellar-Conduct reaction DMG dealt by all nearby party members is **Elevated** by 20%."
+        }
+      }
+    ],
+    "en": {
+      "name": "Mitya",
+      "frameSource": "Estimated (median of 27 characters with the same weapon type; not measured)"
+    },
+    "constellationEffects": [
+      {
+        "id": "10000136-electro_c1",
+        "level": 1,
+        "name": "欠落の痕跡を追う観察者",
+        "duration": 25,
+        "description": "**変形ビーコン**の所持上限が5つにアップする。元素スキル定律・変数検知を発動した時、追加で変形ビーコンを1つ生成する。 **検知コア**が存在している間、チーム内の自身のフィールド上キャラクターの会心ダメージ+40%。 また、変形ビーコンを生成した時、ミティヤ自身の元素エネルギーを10回復する。この効果は8秒ごとに1回のみ発動可能。",
+        "en": {
+          "name": "The Observer Seeking What Is Missing",
+          "description": "The maximum number of **Gradient Beacons** Mitya can carry is increased to 5. Using the Elemental Skill Principle: Variable Detection additionally creates 1 Gradient Beacon.\nWhile the **Detection Core** is present, your own active character's CRIT DMG is increased by 40%.\nAdditionally, Mitya regenerates 10 Elemental Energy when a Gradient Beacon is created. This effect can be triggered once every 8s.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "dataSource": {
+          "duration": "アプリ側の分類（genshin-db の説明文）"
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      },
+      {
+        "id": "10000136-electro_c2",
+        "level": 2,
+        "name": "慣性の彼方に微睡むもの",
+        "duration": 25,
+        "description": "**検知コア**が存在している間、極星フィールド内にいるすべての敵の氷元素耐性と雷元素耐性-20%。 また、生成した検知コアの状態に応じて以下の効果が発動する。 ・安定状態の場合、付近にいるチーム内キャラクター全員の元素熟知+123。 ・オーバーロードの場合、チーム内の自身のフィールド上キャラクターの元素熟知+234。",
+        "en": {
+          "name": "The Matter That Slumbers Beyond Inertness",
+          "description": "While the **Detection Core** is present, all opponents within the Polestar Field have their Cryo RES and Electro RES decreased by 20%.\nAdditionally, if the Detection Core created is:\n·Steady State: All nearby party members gain 123 Elemental Mastery;\n·Overloaded: Your own active character gains 234 Elemental Mastery.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "dataSource": {
+          "duration": "アプリ側の分類（genshin-db の説明文）"
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      },
+      {
+        "id": "10000136-electro_c6",
+        "level": 6,
+        "name": "段階的元素跳躍の理の門",
+        "description": "**検知コア**が強化される。生成した検知コアの状態に応じて以下の効果が発動する。 ・安定状態の場合、検知コアは本来の115%のダメージを与える。 ・オーバーロードの場合、**変形ビーコン**を消費する時、34%の確率で新たな変形ビーコンを1つ生成する。 さらに、付近にいるチームのキャラクター全員の与える星電導反応ダメージが20%**向上**する。",
+        "en": {
+          "name": "Elemental Transition at the Gate of Reason",
+          "description": "**Detection Core** is enhanced. If the Detection Core:\n · Is in the Steady State: Detection Core deals 115% of its original DMG.\n· Is Overloaded: There is a 34% chance to create 1 new **Gradient Beacon** whenever Mitya consumes a Gradient Beacon with the **Detection Core**.\nAdditionally, Stellar-Conduct reaction DMG dealt by all nearby party members is **Elevated** by 20%.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "dataSource": {},
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      }
+    ]
+  },
+  {
+    "id": "10000137-electro",
+    "name": "バレリー",
+    "englishName": "Valeriy",
+    "element": "electro",
+    "weaponType": "sword",
+    "rarity": 4,
+    "avatarUrl": "",
+    "color": "#a855f7",
+    "accentColor": "#a855f7",
+    "availableActions": [
+      {
+        "id": "10000137-electro_n",
+        "name": "通常攻撃",
+        "shortName": "N",
+        "type": "normal",
+        "defaultDuration": 0.317,
+        "description": "通常攻撃\n剣による最大3段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費して前方へとびかかり、叩き付け攻撃で周囲の敵に物理ダメージを与える。\nバレリーが40以上の**衝撃エネルギー**を所持している時、すべての衝撃エネルギーを消費し、代わりに特殊重撃**重砲直射・至近爆撃**を行う。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。****",
+        "en": {
+          "name": "Normal Attack",
+          "description": "Normal Attack\nPerforms up to 3 consecutive sword strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to leap forward and slam the ground, dealing Physical DMG to nearby opponents.\nWhen Valeriy has at least 40 **Impact Momentum**, he will consume all Impact Momentum to instead perform the special Charged Attack **Direct-Fire Mortar: Point-Blank Bombardment**.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.****"
+        },
+        "normalHits": [
+          {
+            "duration": 0.317
+          },
+          {
+            "duration": 0.35
+          },
+          {
+            "duration": 1.1
+          }
+        ]
+      },
+      {
+        "id": "10000137-electro_ca",
+        "name": "重撃",
+        "shortName": "C",
+        "type": "charged",
+        "defaultDuration": 0.917,
+        "description": "通常攻撃\n剣による最大3段の連続攻撃を行う。\n\n重撃\n一定のスタミナを消費して前方へとびかかり、叩き付け攻撃で周囲の敵に物理ダメージを与える。\nバレリーが40以上の**衝撃エネルギー**を所持している時、すべての衝撃エネルギーを消費し、代わりに特殊重撃**重砲直射・至近爆撃**を行う。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。****",
+        "en": {
+          "name": "Charged Attack",
+          "description": "Normal Attack\nPerforms up to 3 consecutive sword strikes.\n\nCharged Attack\nConsumes a certain amount of Stamina to leap forward and slam the ground, dealing Physical DMG to nearby opponents.\nWhen Valeriy has at least 40 **Impact Momentum**, he will consume all Impact Momentum to instead perform the special Charged Attack **Direct-Fire Mortar: Point-Blank Bombardment**.\n\nPlunging Attack\nPlunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact.****"
+        }
+      },
+      {
+        "id": "10000137-electro_e",
+        "name": "元素スキル: 攻勢防御・要塞突撃",
+        "shortName": "E",
+        "type": "skill",
+        "startsSkillCooldown": true,
+        "cooldown": 10,
+        "effectDuration": 18,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "シールド継続時間"
+        },
+        "defaultDuration": 0.7,
+        "mode": {
+          "label": "衝撃エネルギー",
+          "description": "衝撃エネルギー（元素スキルで 40 獲得）。40 以上のとき、重撃が特殊重撃「重砲直射・至近爆撃」になり、衝撃エネルギーをすべて消費する。交代しても続く",
+          "startDelayFrames": 0,
+          "durationFrames": 6000,
+          "swap": "persists",
+          "enders": [],
+          "holdByDefault": false,
+          "noHold": true,
+          "noBar": true,
+          "noSynergy": true,
+          "byConstellation": [
+            {
+              "minConstellation": 0,
+              "gaugeInitial": 40,
+              "gaugeCostAll": true
+            },
+            {
+              "minConstellation": 4,
+              "gaugeGainScale": 1.3
+            }
+          ],
+          "repress": {
+            "frames": [],
+            "actions": [
+              "ca"
+            ],
+            "conditions": {
+              "ca": {
+                "requiresGauge": true
+              }
+            },
+            "framesByAction": {
+              "ca": {
+                "total": 55,
+                "cancels": {},
+                "source": "推定（通常の重撃 0.917 秒と同じ。実測ではありません）"
+              }
+            }
+          },
+          "gauge": {
+            "label": "衝撃エネルギー",
+            "max": 80,
+            "cost": 40,
+            "costActions": [
+              "ca"
+            ],
+            "persists": true,
+            "timeGain": {
+              "everyFrames": 1000000,
+              "amount": 0
+            },
+            "gainByType": {},
+            "hint": "上限 80 は推定です（固有天賦の説明の「最大 80」から。命ノ星座 4 の +30 は数えていません）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃）・命ノ星座 1 の 150% は数えていません。足りないとき、重撃は普通の重撃になります"
+          },
+          "source": "genshin-db（近衛戦法・剣攻盾守 / 攻勢防御・要塞突撃 / 命ノ星座 1・4）: 元素スキルで衝撃エネルギー 40 獲得、40 以上で特殊重撃（すべて消費）。上限・フレームは推定"
+        },
+        "description": "盾を構えて前方に突撃し、雷元素範囲ダメージを与え、**衝撃エネルギー**を40獲得し、蓄雷シールドを展開する。\n蓄雷シールドのダメージ吸収量はバレリーの攻撃力によって決まり、雷元素ダメージに対して250%の吸収効果を持つ。",
+        "en": {
+          "name": "Elemental Skill: Active Defense: Bastion Charge",
+          "description": "Valeriy raises his shield cannon and charges forward, dealing AoE Electro DMG, gaining 40 **Impact Momentum**, and deploying a Supercharged Shield.\nThe Supercharged Shield's DMG Absorption scales with Valeriy's ATK, and has 250% absorption efficiency against Electro DMG."
+        }
+      },
+      {
+        "id": "10000137-electro_q",
+        "name": "元素爆発: 集中砲火・雷弾強襲",
+        "shortName": "Q",
+        "type": "burst",
+        "startsBurstCooldown": true,
+        "cooldown": 15,
+        "effectDuration": 12,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "effectDuration": "継続時間"
+        },
+        "defaultDuration": 1.283,
+        "description": "周囲の敵に雷元素範囲ダメージを与え、上空へ向けて雷霰重弾を発射する。雷霰重弾は弾幕となって地上へ降り注ぎ、周囲の敵に雷元素範囲ダメージを与える。",
+        "en": {
+          "name": "Elemental Burst: Focused Fire: Lightning Salvo",
+          "description": "Deals AoE Electro DMG to nearby opponents and fires a Thunderburst Shell high into the air. The Thunderburst Shell disperses into a barrage of projectiles that rain down, dealing AoE Electro DMG to nearby opponents."
+        }
+      },
+      {
+        "id": "10000137-electro_dash",
+        "name": "ダッシュ",
+        "shortName": "D",
+        "type": "dash",
+        "defaultDuration": 0.2,
+        "en": {
+          "name": "Sprint"
+        }
+      },
+      {
+        "id": "10000137-electro_jump",
+        "name": "ジャンプ",
+        "shortName": "J",
+        "type": "jump",
+        "defaultDuration": 0.55,
+        "en": {
+          "name": "Jump"
+        }
+      }
+    ],
+    "passiveEffects": [],
+    "source": {
+      "genshinId": 10000137,
+      "frameSource": "推定（同じ武器種の 39 キャラの中央値。実測ではありません）"
+    },
+    "constellations": [
+      {
+        "level": 1,
+        "name": "持続的制圧の法則",
+        "description": "特殊重撃**重砲直射・至近爆撃**を行った後、バレリーの元素エネルギーが6回復する。特殊重撃を行う際に消費した**衝撃エネルギー**が40を超えている場合、超えた分10につき、バレリーの元素エネルギーが追加で1.5回復する。1回の特殊重撃重砲直射・至近爆撃につき、この方法による元素エネルギーの回復量は最大15まで。この効果は15秒ごとに最大1回まで発動可能。 また、戦闘状態に入るたびに、バレリーが初めて元素スキル**攻勢防御・要塞突撃**を発動する際、通常の150%に相当する衝撃エネルギーを追加で獲得する。",
+        "en": {
+          "name": "The Cadence of Suppressive Fire",
+          "description": "Valeriy regenerates 6 Elemental Energy after performing the special Charged Attack **Direct-Fire Mortar: Point-Blank Bombardment**. For every 10 **Impact Momentum** consumed beyond 40 when performing this special Charged Attack, he regenerates an additional 1.5 Elemental Energy. Each time he performs Direct-Fire Mortar: Point-Blank Bombardment, he can regenerate up to 15 Elemental Energy in this way. This effect can trigger once every 15s.\nAdditionally, each time Valeriy enters combat, the first time he uses his Elemental Skill **Active Defense: Bastion Charge**, he gains an additional amount of Impact Momentum equal to 150% of the amount normally gained."
+        }
+      },
+      {
+        "level": 2,
+        "name": "一斉突撃の陣構え",
+        "description": "元素スキル**攻勢防御・要塞突撃**を発動してから18秒間、付近にいるチームのキャラクター全員の元素熟知+100。 また、蓄雷シールドの展開中にバレリーの**衝撃エネルギー**が上限に達した場合、衝撃エネルギーを獲得できる効果が発動すると、代わりに蓄雷シールドのダメージ吸収量をアップさせる。衝撃エネルギーが上限を1超過するごとに、蓄雷シールドのダメージ吸収量がバレリーの攻撃力の8%分アップする。この方法で変換できる上限を超過した衝撃エネルギーは最大20まで。",
+        "en": {
+          "name": "Ranks That Charge as One",
+          "description": "All nearby party members gain 100 Elemental Mastery for 18s after Valeriy uses his Elemental Skill **Active Defense: Bastion Charge**.\nAdditionally, while protected by a Supercharged Shield, if Valeriy is already at maximum **Impact Momentum**, any further Impact Momentum he would gain is instead converted into increased DMG Absorption for the shield. Each point of excess Impact Momentum increases the Supercharged Shield's DMG Absorption by an amount equal to 8% of Valeriy's ATK. Up to 20 excess Impact Momentum can be converted in this way."
+        }
+      },
+      {
+        "level": 3,
+        "name": "白兵戦への心構え",
+        "description": "通常攻撃**近衛戦法・剣攻盾守**のスキルLv.+3。 最大Lv.15まで。",
+        "en": {
+          "name": "Vigilance at Close Quarters",
+          "description": "Increases the Level of Normal Attack **Guard Tactics: Sword and Shield** by 3.\nMaximum upgrade level is 15."
+        }
+      },
+      {
+        "level": 4,
+        "name": "消耗を恐れぬ意思",
+        "description": "**衝撃エネルギー**の上限+30、獲得効率+30%。 さらに、固有天賦**弾幕攻撃の奇襲**の効果が強化される。元素爆発を発動するたび、この天賦によって最大104の衝撃エネルギーを獲得できる。固有天賦「弾幕攻撃の奇襲」を解放する必要がある。",
+        "en": {
+          "name": "Fortitude Unshaken by Attrition",
+          "description": "**Impact Momentum**'s limit is increased by 30, and its charging efficiency is increased by 30%.\nAdditionally, the Ascension Talent **Advance With the Creeping Barrage** is enhanced: The maximum amount of Impact Momentum that can be gained from this Talent after using the Elemental Burst is 104. You must unlock the Ascension Talent Advance With the Creeping Barrage to gain access to this effect."
+        }
+      },
+      {
+        "level": 5,
+        "name": "各個撃破の気負い",
+        "description": "元素スキル**攻勢防御・要塞突撃**のスキルLv.+3。 最大Lv.15まで。",
+        "en": {
+          "name": "Resolve to Divide and Destroy",
+          "description": "Increases the Level of the Elemental Skill **Active Defense: Bastion Charge** by 3.\nMaximum upgrade level is 15."
+        }
+      },
+      {
+        "level": 6,
+        "name": "敵陣をも貫く威厳",
+        "description": "特殊重撃**重砲直射・至近爆撃**および元素爆発**集中砲火・雷弾強襲**の雷霰重弾が強化される。与えるダメージ+100%、さらに敵に命中後7秒間、その敵が受ける雷元素ダメージの会心率+10%。もし受ける雷元素ダメージが星電導反応ダメージである場合、さらにそのダメージの会心ダメージ+40%。",
+        "en": {
+          "name": "The Strength to Breach Enemy Lines",
+          "description": "The special Charged Attack **Direct-Fire Mortar: Point-Blank Bombardment** and Thunderburst Shells from Elemental Burst **Focused Fire: Lightning Salvo** are enhanced: Their DMG is increased by 100%, and opponents they hit have the CRIT Rate of Electro DMG they take increased by 10% for 7s. If the Electro DMG taken is Stellar-Conduct reaction DMG, that DMG instance's CRIT DMG is also increased by 40%."
+        }
+      }
+    ],
+    "en": {
+      "name": "Valeriy",
+      "frameSource": "Estimated (median of 39 characters with the same weapon type; not measured)"
+    },
+    "constellationEffects": [
+      {
+        "id": "10000137-electro_c2",
+        "level": 2,
+        "name": "一斉突撃の陣構え",
+        "duration": 18,
+        "description": "元素スキル**攻勢防御・要塞突撃**を発動してから18秒間、付近にいるチームのキャラクター全員の元素熟知+100。 また、蓄雷シールドの展開中にバレリーの**衝撃エネルギー**が上限に達した場合、衝撃エネルギーを獲得できる効果が発動すると、代わりに蓄雷シールドのダメージ吸収量をアップさせる。衝撃エネルギーが上限を1超過するごとに、蓄雷シールドのダメージ吸収量がバレリーの攻撃力の8%分アップする。この方法で変換できる上限を超過した衝撃エネルギーは最大20まで。",
+        "en": {
+          "name": "Ranks That Charge as One",
+          "description": "All nearby party members gain 100 Elemental Mastery for 18s after Valeriy uses his Elemental Skill **Active Defense: Bastion Charge**.\nAdditionally, while protected by a Supercharged Shield, if Valeriy is already at maximum **Impact Momentum**, any further Impact Momentum he would gain is instead converted into increased DMG Absorption for the shield. Each point of excess Impact Momentum increases the Supercharged Shield's DMG Absorption by an amount equal to 8% of Valeriy's ATK. Up to 20 excess Impact Momentum can be converted in this way.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "dataSource": {
+          "duration": "アプリ側の分類（genshin-db の説明文）"
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      },
+      {
+        "id": "10000137-electro_c6",
+        "level": 6,
+        "name": "敵陣をも貫く威厳",
+        "duration": 7,
+        "description": "特殊重撃**重砲直射・至近爆撃**および元素爆発**集中砲火・雷弾強襲**の雷霰重弾が強化される。与えるダメージ+100%、さらに敵に命中後7秒間、その敵が受ける雷元素ダメージの会心率+10%。もし受ける雷元素ダメージが星電導反応ダメージである場合、さらにそのダメージの会心ダメージ+40%。",
+        "en": {
+          "name": "The Strength to Breach Enemy Lines",
+          "description": "The special Charged Attack **Direct-Fire Mortar: Point-Blank Bombardment** and Thunderburst Shells from Elemental Burst **Focused Fire: Lightning Salvo** are enhanced: Their DMG is increased by 100%, and opponents they hit have the CRIT Rate of Electro DMG they take increased by 10% for 7s. If the Electro DMG taken is Stellar-Conduct reaction DMG, that DMG instance's CRIT DMG is also increased by 40%.",
+          "gcsimNote": "Not implemented in gcsim"
+        },
+        "dataSource": {
+          "duration": "アプリ側の分類（genshin-db の説明文）"
+        },
+        "timing": "conditional",
+        "gcsimTarget": false,
+        "gcsimNote": "gcsim が未実装"
+      }
+    ]
+  },
+  {
     "id": "10000140-hydro",
     "name": "ヴォジャニーツァ",
     "englishName": "Vodyanitsa",
@@ -56810,7 +57388,7 @@
         "description": "水の精としての本来の姿を現し、水元素範囲ダメージを与える。また、「悠久の歌」効果を獲得し、効果の継続期間中、ヴォジャニーツァは古の春を呼ぶ角笛を呼び出し、一定時間ごとに素早く敵の近くに移動させて攻撃を行い、水元素ダメージを与える。\n上記二種類のダメージが命中した時、敵の水元素耐性と氷元素耐性をダウンさせる。また、「悠久の歌」効果の継続期間中、チーム内のフィールド上にいる自身のキャラクターの中断耐性を高め、一定時間ごとにそのキャラクターのHPを回復する。回復量はヴォジャニーツァのHP上限に基づく。",
         "en": {
           "name": "Elemental Skill: Rechitativ: Sonorous Dawn",
-          "description": "Reveals her true Water Imp form, dealing AoE Hydro DMG and gaining the Song of Ages Past effect: While this effect is active, Vodyanitsa summons the ancient Horn of Spring's Call, periodically moving closer to an opponent in a swift movement to attack them, dealing Hydro DMG.\nThe above two types of attacks will also decrease the Hydro RES and Cryo RES of opponents hit. Additionally, while the Song of Ages Past effect is active, the party's active character gains increased resistance to interruption and periodically regenerates HP based on Vodyanitsa's Max HP."
+          "description": "Reveals her true Water Imp form, dealing AoE Hydro DMG and gaining the Song of Ages Past effect: While this effect is active, Vodyanitsa summons the ancient Horn of Spring's Call, periodically moving closer to an opponent in a swift movement to attack them, dealing Hydro DMG.\nThe above two types of attacks will also decrease the Hydro RES and Cryo RES of opponents hit. Additionally, while the Song of Ages Past effect is active, your active character gains increased resistance to interruption and periodically regenerates HP based on Vodyanitsa's Max HP."
         }
       },
       {
@@ -56911,7 +57489,7 @@
       {
         "level": 2,
         "name": "風雪を穿つこだま",
-        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チーム内のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチーム内のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。",
+        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チームにいる自身のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチームにいる自身のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。",
         "actionChanges": [
           {
             "actionId": "10000140-hydro_e",
@@ -56921,7 +57499,7 @@
         ],
         "en": {
           "name": "Echoes That Pierce the Snow",
-          "description": "When the Horn of Spring's Call from the Elemental Skill Rechitativ: Sonorous Dawn attacks the opponent, Vodyanitsa gains the \"Two Voices in Black and White\" effect which increases the CRIT DMG from Hydro DMG and Cryo DMG dealt by the currently active party member by 50% for 5s.\nIf there is a Wandering Vortex present on the field or in the 5s after a Wandering Vortex explodes, the effect changes to: increases the CRIT DMG from Stellar Swirl reaction DMG caused by the currently active party member by 60% for 5s.\nAdditionally, the Elemental Skill Rechitativ: Sonorous Dawn is enhanced as follows: the duration of the **Song of Ages Past** effect is extended by 9s."
+          "description": "When the Horn of Spring's Call from the Elemental Skill Rechitativ: Sonorous Dawn attacks the opponent, Vodyanitsa gains the \"Two Voices in Black and White\" effect which increases the CRIT DMG from Hydro DMG and Cryo DMG dealt by your own currently active party member by 50% for 5s.\nIf there is a Wandering Vortex present on the field or in the 5s after a Wandering Vortex explodes, the effect changes to: increases the CRIT DMG from Stellar Swirl reaction DMG caused by your own currently active party member by 60% for 5s.\nAdditionally, the Elemental Skill Rechitativ: Sonorous Dawn is enhanced as follows: the duration of the **Song of Ages Past** effect is extended by 9s."
         }
       },
       {
@@ -56989,10 +57567,10 @@
         "level": 2,
         "name": "風雪を穿つこだま",
         "duration": 5,
-        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チーム内のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチーム内のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。",
+        "description": "元素スキル流れる朝のレチタティーヴォの春を呼ぶ角笛が敵を攻撃した時、ヴォジャニーツァは「黒と白のデュエット」効果を獲得し、チームにいる自身のフィールド上キャラクターが与える水元素ダメージと氷元素ダメージの会心ダメージ+50%、継続時間5秒。 フィールド上に流星の嵐が存在する、または流星の嵐の起爆後5秒以内である場合、代わりにチームにいる自身のフィールド上キャラクターが与える星拡散反応ダメージの会心ダメージ+60%、継続時間5秒。 さらに、元素スキル流れる朝のレチタティーヴォが強化され、**悠久の歌**効果の継続時間+9秒。",
         "en": {
           "name": "Echoes That Pierce the Snow",
-          "description": "When the Horn of Spring's Call from the Elemental Skill Rechitativ: Sonorous Dawn attacks the opponent, Vodyanitsa gains the \"Two Voices in Black and White\" effect which increases the CRIT DMG from Hydro DMG and Cryo DMG dealt by the currently active party member by 50% for 5s.\nIf there is a Wandering Vortex present on the field or in the 5s after a Wandering Vortex explodes, the effect changes to: increases the CRIT DMG from Stellar Swirl reaction DMG caused by the currently active party member by 60% for 5s.\nAdditionally, the Elemental Skill Rechitativ: Sonorous Dawn is enhanced as follows: the duration of the **Song of Ages Past** effect is extended by 9s.",
+          "description": "When the Horn of Spring's Call from the Elemental Skill Rechitativ: Sonorous Dawn attacks the opponent, Vodyanitsa gains the \"Two Voices in Black and White\" effect which increases the CRIT DMG from Hydro DMG and Cryo DMG dealt by your own currently active party member by 50% for 5s.\nIf there is a Wandering Vortex present on the field or in the 5s after a Wandering Vortex explodes, the effect changes to: increases the CRIT DMG from Stellar Swirl reaction DMG caused by your own currently active party member by 60% for 5s.\nAdditionally, the Elemental Skill Rechitativ: Sonorous Dawn is enhanced as follows: the duration of the **Song of Ages Past** effect is extended by 9s.",
           "gcsimNote": "Not implemented in gcsim"
         },
         "dataSource": {
@@ -57200,7 +57778,7 @@
             "description": "Armed for Action state (15s). Normal, Charged and Plunging Attacks and Elemental Burst build Sword Essence, and Elemental Skill (E) becomes Windborne Sword (Special Elemental Skill; consumes 1 Sword Essence; no CD). Ends after 5 uses. Ends on character switch"
           }
         },
-        "description": "風の精一族に伝わる霊剣を呼び出し、風元素範囲ダメージを与え、**風巡りの臨戦**モードに切り替わり、**「剣気」**を2層獲得する。\n\n風巡りの臨戦\nヴェスナが通常攻撃・重撃・落下攻撃を行う際、元素付与によって他の元素に変化しない風元素ダメージに変わり、風羽を呼び出して敵に追加攻撃を行い、追加の風元素ダメージを与える。風羽を呼び出すたびに、ヴェスナの「剣気」が一定量回復する。\nヴェスナは「剣気」を消費し、特殊元素スキル**飛翔の剣**を発動して敵に風元素ダメージを与えることができる。\n「風巡りの臨戦」モードの継続期間中、特殊元素スキル飛翔の剣を発動するたびに「飛翔の剣」のランクが上がり、より大きな風元素ダメージを与えるようになる。飛翔の剣の初期ランクはランク1で、最大ランク3まで上がる。ランクが上がった飛翔の剣を発動する際、さらに**霊剣**を呼び出し、敵に風元素ダメージを与える。\n継続時間終了時、または最高ランクの飛翔の剣を3回発動した後、ヴェスナはこのモードを終了し、すべての剣気がクリアされる。\nさらに、このモード中、ヴェスナの中断耐性がアップする。\n輝映・星拡散：霊剣は星拡散反応ダメージとみなされる風元素ダメージを与えるようになる。",
+        "description": "風の精一族に伝わる霊剣を呼び出し、風元素範囲ダメージを与え、**風巡りの臨戦**モードに切り替わり、**「剣気」**を2層獲得する。\n\n風巡りの臨戦\nヴェスナが通常攻撃、重撃、または落下攻撃を行う際、元素付与によって他の元素に変化しない風元素ダメージに変わり、風羽を呼び出して敵に追加攻撃を行い、追加の風元素ダメージを与える。風羽を呼び出すたびに、ヴェスナの「剣気」が一定量回復する。\nヴェスナは「剣気」を消費し、特殊元素スキル**飛翔の剣**を発動して敵に風元素ダメージを与えることができる。\n「風巡りの臨戦」モードの継続期間中、特殊元素スキル飛翔の剣を発動するたびに「飛翔の剣」のランクが上がり、より大きな風元素ダメージを与えるようになる。飛翔の剣の初期ランクはランク1で、最大ランク3まで上がる。ランクが上がった飛翔の剣を発動する際、さらに**霊剣**を呼び出し、敵に風元素ダメージを与える。\n継続時間終了時、または最高ランクの飛翔の剣を3回発動した後、ヴェスナはこのモードを終了し、すべての剣気がクリアされる。\nさらに、このモード中、ヴェスナの中断耐性がアップする。\n輝映・星拡散：霊剣は星拡散反応ダメージとみなされる風元素ダメージを与えるようになる。",
         "en": {
           "name": "Elemental Skill: The Art of Victory",
           "description": "Calls forth Spirit Blades passed down through generations of the Vila to deal AoE Anemo DMG, then switches to the **Armed for Action** mode and gains 2 stacks of **Sword Essence**.\n\nArmed for Action\nDMG dealt by Vesna with her Normal Attacks, Charged Attacks, and Plunging Attacks become Anemo DMG that cannot be overridden by another elemental infusion instead. She will also summon a wind pinion that attacks the opponent at the same time, dealing additional Anemo DMG. Each time the wind pinion is summoned, Vesna will regenerate a certain amount of Sword Essence.\nVesna can consume Sword Essence to unleash the special Elemental Skill **Windborne Sword**, which deals to the opponent Anemo DMG.\nEach use of the special Elemental Skill Windborne Sword in the same instance of Armed for Action will increase the level of Windborne Sword, beginning from Lv. 1 to Lv. 3 max, for more Anemo DMG. Using Windborne Sword at Lv. 2 and Lv. 3 will also summon **Spirit Blades** which deal Anemo DMG.\nVesna will exit the mode when its duration ends or when she has used Windborne Sword at the highest level 3 times. Exiting will clear all remaining Sword Essence she has accrued.\nAdditionally, when in this mode, Vesna's resistance to interruption is increased.\nRadiance: Stellar Swirl: DMG dealt with the Spirit Blades becomes Anemo DMG that is also considered Stellar Swirl reaction DMG."

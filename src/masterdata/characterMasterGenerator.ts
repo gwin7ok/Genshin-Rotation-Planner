@@ -30,6 +30,7 @@ import { appSideSourceByGenshinId, type AppSideSource } from './appSideCharacter
 import dashJumpFrames from '../data/dash_jump_frames.json' with { type: 'json' };
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
 import { assertGitTreeComplete, fetchJson, fetchText } from './fetchUtil.ts';
+import { fetchGenshinDb } from './genshinDbSource.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
 // 参照先は、ブランチ名ではなく、gcsim.config.json のコミット（ハッシュ）に固定する（リリースにない最新の変更を取り込まない）
 const GCSIM_REF = CONFIG_GCSIM_COMMIT;
@@ -911,6 +912,81 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         hint: '剣気は 100 = 1 枚として数えています（wiki の記述による。実測ではありません）。足りないと飛翔の剣は使えません',
       },
       source: 'wiki（操典「勝利への道筋」・風巡りの臨戦・飛翔の剣）: 15 秒、剣気ゲージ 3 枚（最初の E で 2 枚）、飛翔の剣は 1 枚消費・5 回で終了、通常 1〜5 段 0.2・6 段 0.5・重撃 0.3・落下 0.35・元素爆発 1。フレームは推定',
+    },
+  }],
+  // ミティヤ（原神 7.2。D332。gcsim に実装なし。値は genshin-db の説明文が根拠で、フレーム・条件は推定）: 検知コア（E の発動から 25 秒。CT 18 秒）。
+  // E を 6 秒以内にもう一度使うと、検知コアの状態（安定 ⇔ オーバーロード）を切り替える（CT なし。1.5 秒に 1 回）。
+  // 変形ビーコン: 元素爆発で 3 つ・命ノ星座 1 の E で 1 つ（上限 3、命ノ星座 1 で 5）。ビーコンが 1 つ以上あるとき、重撃が特殊重撃「段階的爆破」（スタミナなし。長押しの間、ビーコンを 1 つずつ消費）になる
+  // （説明文では、検知コア・オーバーロードが存在することも条件。状態の追跡はしない）。未対応: 固有天賦による獲得（星電導反応・1.5 秒ごと）・オーバーロードの条件・ビーコンの 10 秒の期限
+  '10000136-electro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '検知コア',
+      description: '検知コアが存在する間（25 秒）。元素スキル（E）を 6 秒以内にもう一度使うと、検知コアの状態を切り替える（CT なし）。変形ビーコンが 1 つ以上あるとき、重撃が特殊重撃「段階的爆破」になり、ビーコンをすべて消費する',
+      startDelayFrames: 0,
+      durationFrames: 1500,
+      swap: 'persists',
+      enders: [],
+      holdByDefault: false,
+      noHold: true,
+      noBar: true,
+      noSynergy: true,
+      // 命ノ星座 1: E でビーコンを追加で 1 つ生成する（上限 5）。ビーコンは 100 = 1 つとして数える
+      byConstellation: [{ minConstellation: 0, gaugeCostAll: true }, { minConstellation: 1, gaugeInitial: 100 }],
+      repress: {
+        frames: [{ total: 30, cancels: {}, source: '推定（特殊スキル・切り替えの動作。実測ではありません）' }],
+        actions: ['e', 'ca'],
+        conditions: { e: { withinFrames: 360 }, ca: { requiresGauge: true } },
+        framesByAction: { ca: { total: 90, cancels: {}, source: '推定（段階的爆破。長押しの間、ビーコン 1 つにつき 1 回。実測ではありません）' } },
+      },
+      gauge: {
+        label: '変形ビーコン',
+        max: 500,
+        cost: 100,
+        costActions: ['ca'],
+        persists: true,
+        timeGain: { everyFrames: 1000000, amount: 0 },
+        gainByType: { burst: 300 },
+        hint: '変形ビーコンは、検知コアの間の元素爆発（3 つ）と命ノ星座 1 の元素スキル（1 つ）だけを数えています。固有天賦による獲得・10 秒の期限・検知コアの状態（オーバーロード）は数えていません。ビーコンが足りないとき、重撃は普通の重撃になります',
+      },
+      source: 'genshin-db（定律・変数検知・連鎖反応・解析・変化ノ理・命ノ星座 1）: 検知コア 25 秒、6 秒以内の再発動で状態切り替え（1.5 秒に 1 回）、爆発でビーコン 3 つ、特殊重撃「段階的爆破」は検知コア・オーバーロードとビーコン 1 つ以上が条件。フレームは推定',
+    },
+  }],
+  // バレリー（原神 7.2。D332。gcsim に実装なし。値は genshin-db の説明文が根拠で、フレーム・上限は推定）: 衝撃エネルギー（元素スキルで 40 獲得。上限 80 と仮定。命ノ星座 4 で +30・獲得効率 +30%）。
+  // 40 以上のとき、重撃が特殊重撃「重砲直射・至近爆撃」になり、衝撃エネルギーをすべて消費する。時間で減らない・元素スキル 1 回目の命ノ星座 1 の 150%・固有天賦による獲得（爆発の雷霰重弾が降る間の他のキャラの雷攻撃 +5）は数えない
+  '10000137-electro': [{
+    action: 'e',
+    keepEffectDuration: true,
+    mode: {
+      label: '衝撃エネルギー',
+      description: '衝撃エネルギー（元素スキルで 40 獲得）。40 以上のとき、重撃が特殊重撃「重砲直射・至近爆撃」になり、衝撃エネルギーをすべて消費する。交代しても続く',
+      startDelayFrames: 0,
+      durationFrames: 6000,
+      swap: 'persists',
+      enders: [],
+      holdByDefault: false,
+      noHold: true,
+      noBar: true,
+      noSynergy: true,
+      byConstellation: [{ minConstellation: 0, gaugeInitial: 40, gaugeCostAll: true }, { minConstellation: 4, gaugeGainScale: 1.3 }],
+      repress: {
+        frames: [],
+        actions: ['ca'],
+        conditions: { ca: { requiresGauge: true } },
+        framesByAction: { ca: { total: 55, cancels: {}, source: '推定（通常の重撃 0.917 秒と同じ。実測ではありません）' } },
+      },
+      gauge: {
+        label: '衝撃エネルギー',
+        max: 80,
+        cost: 40,
+        costActions: ['ca'],
+        persists: true,
+        timeGain: { everyFrames: 1000000, amount: 0 },
+        gainByType: {},
+        hint: '上限 80 は推定です（固有天賦の説明の「最大 80」から。命ノ星座 4 の +30 は数えていません）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃）・命ノ星座 1 の 150% は数えていません。足りないとき、重撃は普通の重撃になります',
+      },
+      source: 'genshin-db（近衛戦法・剣攻盾守 / 攻勢防御・要塞突撃 / 命ノ星座 1・4）: 元素スキルで衝撃エネルギー 40 獲得、40 以上で特殊重撃（すべて消費）。上限・フレームは推定',
     },
   }],
   // フィッシュル（A3。D163）: オズがいる間は、E を使えない（gcsim の ActionReady。再発動 recast だけ使える）。gcsim は、オズが消えるまで待つ（アプリの時間は変えず、黄色の警告）。
@@ -1924,6 +2000,8 @@ const GCSIM_FILES = ['attack', 'charge', 'aimed', 'aim', 'skill', 'burst', 'plun
 const ESTIMATE_NORMAL_HITS: Record<number, number> = {
   10000129: 5, // ローエン（wiki: ナイフ投げ→槍突き→ナイフ3連→蹴り上げ→槍2連の全5段）
   10000133: 3, // サンドローネ（wiki: 最大3段）
+  10000136: 3, // ミティヤ（説明文: 最大3段。原神 7.2）
+  10000137: 3, // バレリー（説明文: 剣による最大3段。原神 7.2）
   10000140: 4, // ヴォジャニーツァ（wiki: 4段）
   10000143: 6, // ヴェスナ（wiki: 6段）
 };
@@ -2006,15 +2084,14 @@ export async function generateCharacterMaster(
 
   // 1. genshin-db + gcsim のインデックスを並列取得
   onProgress?.({ phase: 'charLists', done: 0, total: 1 });
-  const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   const [charsJa, charsEn, talentsJa, constellationsJa, talentsEn, constellationsEn, tree, charDm] = await Promise.all([
-    fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=Japanese`),
-    fetchJson<GenshinDbCharacter[]>(`${GENSHIN_DB_API}/characters?${verbose}&resultLanguage=English`),
-    fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=Japanese`),
-    fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=Japanese`),
+    fetchGenshinDb<GenshinDbCharacter>('characters', 'Japanese'),
+    fetchGenshinDb<GenshinDbCharacter>('characters', 'English'),
+    fetchGenshinDb<GenshinDbTalent>('talents', 'Japanese'),
+    fetchGenshinDb<GenshinDbConstellation>('constellations', 'Japanese'),
     // 英語の表示用の文（D249・D255）。数値の抽出には使わない
-    fetchJson<GenshinDbTalent[]>(`${GENSHIN_DB_API}/talents?${verbose}&resultLanguage=English`),
-    fetchJson<GenshinDbConstellation[]>(`${GENSHIN_DB_API}/constellations?${verbose}&resultLanguage=English`),
+    fetchGenshinDb<GenshinDbTalent>('talents', 'English'),
+    fetchGenshinDb<GenshinDbConstellation>('constellations', 'English'),
     fetchJson<{ sha: string; truncated: boolean; tree: Array<{ path: string; type: string }> }>(
       `https://api.github.com/repos/${GCSIM_REPO}/git/trees/${GCSIM_REF}?recursive=1`,
       { headers: { Accept: 'application/vnd.github+json' } },

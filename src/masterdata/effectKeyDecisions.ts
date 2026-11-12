@@ -256,6 +256,10 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   '10000140-hydro_e': { reason: 'not-in-gcsim', note: 'ヴォジャニーツァのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000140-hydro_q': { reason: 'not-in-gcsim', note: 'ヴォジャニーツァの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000143-anemo_e': { reason: 'not-in-gcsim', note: 'ヴェスナのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
+  '10000136-electro_e': { reason: 'not-in-gcsim', note: 'ミティヤのスキル: gcsim（v2.50.0）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
+  '10000136-electro_q': { reason: 'not-in-gcsim', note: 'ミティヤの爆発: gcsim（v2.50.0）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
+  '10000137-electro_e': { reason: 'not-in-gcsim', note: 'バレリーのスキル: gcsim（v2.50.0）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
+  '10000137-electro_q': { reason: 'not-in-gcsim', note: 'バレリーの爆発: gcsim（v2.50.0）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000143-anemo_q': { reason: 'not-in-gcsim', note: 'ヴェスナの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   // 反撃用の短いシールド（継続 1 秒未満）: バーにしない
   '10000024-electro_e': { reason: 'decided-not-linked', note: '北斗のスキル: gcsim は反撃用の短いシールド（0.38 秒）を出すが、効果として短すぎるので、紐づけず・バーも出さない' },

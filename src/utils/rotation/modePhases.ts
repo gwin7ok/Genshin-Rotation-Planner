@@ -34,7 +34,13 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
     }
     const rp = m.def.repress;
     const repressMatches = rp && (rp.actions ? rp.actions.some(s => act.actionTypeId === `${char.id}_${s}`) : act.actionTypeId === m.actionDefId);
-    if (rp && repressMatches && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) {
+    // 別の動作になる条件（モードの開始からの時間・ゲージの残り）。満たさないときは、普通の動作
+    const cond = rp?.conditions?.[act.actionTypeId.slice(char.id.length + 1)];
+    const g = m.def.gauge;
+    const conditionOk = !cond
+      || ((cond.withinFrames === undefined || actionStartTime - m.start <= cond.withinFrames / 60 + 0.001)
+        && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(g.max, modeGaugeInitial(m))) >= (g.cost ?? g.max)));
+    if (rp && repressMatches && conditionOk && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) {
       modeRepress = { window: m, index: m.repressUsed };
       break;
     }
@@ -284,7 +290,9 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
     const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
     gaugeState.value = Math.min(g.max, gaugeState.value + (ticksNow - gaugeState.ticks) * g.timeGain.amount * scale);
     gaugeState.ticks = ticksNow;
-    if (modeRepress?.window === m && (act.type === 'skill' || act.type === 'skill_hold')) {
+    const costing = modeRepress?.window === m
+      && (g.costActions ? g.costActions.includes(act.actionTypeId.slice(char.id.length + 1)) : (act.type === 'skill' || act.type === 'skill_hold'));
+    if (costing) {
       // 命ノ星座で、この回は消費しない（ヴェスナの C1: 最高ランクの 1 回目）
       const freeIndex = consValue(m.def, m.opener.constellation, 'repressFreeIndex');
       const free = freeIndex !== undefined && modeRepress.index === freeIndex;

@@ -83,6 +83,8 @@ export interface ModeWindow {
   span: ActiveBuffSpan;
   /** モードの間に、開いたアクションをもう一度使った回数（repress） */
   repressUsed: number;
+  /** モードの状態: 最後に使ったスキル（E）の種類（定義 ID の末尾。例: 'e' = 一回押し・'e_hold' = 長押し）。条件 requiresState に使う（ミティヤの検知コア） */
+  state?: string;
   /** 通常攻撃で溜まったスタック（def.nStacks のモードだけ） */
   stacks?: number;
   /** ゲージ（def.gauge のモードだけ）: 現在値と、時間で数え終えた回数 */

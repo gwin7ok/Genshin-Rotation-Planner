@@ -39,7 +39,8 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
     const g = m.def.gauge;
     const conditionOk = !cond
       || ((cond.withinFrames === undefined || actionStartTime - m.start <= cond.withinFrames / 60 + 0.001)
-        && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(g.max, modeGaugeInitial(m))) >= (g.cost ?? g.max)));
+        && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(g.max, modeGaugeInitial(m))) >= (g.cost ?? g.max))
+        && (!cond.requiresState || (m.state !== undefined && cond.requiresState.includes(m.state))));
     if (rp && repressMatches && conditionOk && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) {
       modeRepress = { window: m, index: m.repressUsed };
       break;
@@ -130,6 +131,8 @@ export function applyModeEnderAndRepress(state: RotationState, sc: StintContext,
   if (modeRepress) {
     const { window: m, index } = modeRepress;
     m.repressUsed += 1;
+    // スキル（E）で状態が切り替わる（ミティヤ: 一回押し = 安定状態・長押し = オーバーロード）
+    if (act.type === 'skill' || act.type === 'skill_hold') m.state = act.actionTypeId.slice(char.id.length + 1);
     ac.inStateWindow = true;
     ac.repressGcsimCommand = m.def.repress?.gcsimCommand;
     // 命ノ星座で、使うたびにモードの終わりが延びる（ローエンの C6: 1.25 秒。icdFrames に 1 回まで）

@@ -20,13 +20,13 @@ Write decisions in `src/masterdata/effectKeyDecisions.ts` and links in `actionEf
 
 Construct names (gcsim source): 7
 
-## targets (the app's Skill / Burst action definitions; 338)
+## targets (the app's Skill / Burst action definitions; 339)
 
 | State | Count |
 |---|---|
 | Linked | 207 |
 | No gcsim effect; no bar | 75 |
-| Character not registered in gcsim | 17 |
+| Character not registered in gcsim | 18 |
 | Handled as a buff (passive talent) | 16 |
 | No gcsim effect; bar from the app value | 12 |
 | gcsim reports the effect, but it is not linked and gets no bar | 6 |

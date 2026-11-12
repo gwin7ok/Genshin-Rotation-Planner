@@ -115,7 +115,7 @@ export interface ActionMode {
      * withinFrames = モードの開始からこの間だけ（ミティヤの検知コアの状態切り替え: 6 秒以内）／requiresGauge = モードのゲージが、消費に足りるときだけ
      * （バレリーの特殊重撃: 衝撃エネルギー 40 以上）。足りないときは、別の動作ではなく、普通の動作になる（警告も出さない）
      */
-    conditions?: Record<string, { withinFrames?: number; requiresGauge?: boolean }>;
+    conditions?: Record<string, { withinFrames?: number; requiresGauge?: boolean; /** モードの状態（最後に使ったスキルの種類。ModeWindow.state）が、このどれかのときだけ（ミティヤの特殊重撃: 長押し = オーバーロードのとき） */ requiresState?: string[] }>;
     /** アクション（定義 ID の末尾）ごとのフレーム。あれば frames より優先（ドゥリン: 受付の間の E は白・N は黒の再発動で、フレームが違う） */
     framesByAction?: Record<string, ActionFrames | ActionFrames[]>;
     /**

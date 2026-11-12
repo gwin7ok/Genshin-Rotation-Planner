@@ -279,6 +279,7 @@ export function openMode(state: RotationState, sc: StintContext, ac: ActionConte
     if (!md.noBar) activeBuffs.push(span);
     const opened: ModeWindow = {
       key, charId: char.id, actionDefId: actionDef.id, def: md, sIdx, start, end, span, repressUsed: 0, inputs: 0, finished: false, reductions: 0,
+      state: actionDef.id.slice(char.id.length + 1),
       ...(actionDef.fieldRecast ? { hasField: true } : {}),
       opener: {
         actionId: act.id, name: act.name, start: actionStartTime, cooldown,

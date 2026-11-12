@@ -14,7 +14,7 @@
 import { isDisplayWorthyNature, natureOfText, NATURE_EXCEPTIONS } from './effectNature.ts';
 import type { KeyCatalog, KeyCatalogEntry } from './gcsimKeyCatalog.ts';
 import { findDurations } from './passiveEffects.ts';
-import { APP_SIDE_CONSTELLATION_EFFECTS, APP_SIDE_EXCLUDED_PASSIVES } from './appSideBuffDefinitions.ts';
+import { APP_SIDE_CONSTELLATION_EFFECTS, APP_SIDE_EXCLUDED_PASSIVES, APP_SIDE_PASSIVE_DURATIONS } from './appSideBuffDefinitions.ts';
 import type {
   BuffTiming, CharacterConfig, ConstellationBuffDefinition, ConstellationLevel, GcsimBuffLink, PassiveEffectDefinition,
 } from '../types/genshin.ts';
@@ -348,6 +348,11 @@ export function linkCharacterBuffs(characters: CharacterConfig[], index: Catalog
     if (!key && char.passiveEffects) {
       const kept = char.passiveEffects.filter(p => !APP_SIDE_EXCLUDED_PASSIVES[p.id]);
       if (kept.length !== char.passiveEffects.length) char.passiveEffects = kept;
+      // 説明文に継続時間が無い固有天賦に、アプリ側で継続時間を足す（バレリーの進撃指令 18 秒）
+      for (const p of char.passiveEffects) {
+        const add = APP_SIDE_PASSIVE_DURATIONS[p.id];
+        if (add && p.duration === undefined) { p.duration = add.duration; p.dataSource = { ...p.dataSource, duration: add.note }; }
+      }
     }
 
     // 固有天賦

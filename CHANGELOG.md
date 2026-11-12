@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.6] - 2026-11-13
+
+### 追加
+- DB 管理の武器・聖遺物のカードにも「gcsim未実装」の印を表示。編成設定画面のタイトルを「編成設定」にし、誤った説明文を削除
+
 ## [1.8.5] - 2026-11-13
 
 ### 追加
@@ -255,7 +260,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.5...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.6...HEAD
+[1.8.6]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...v1.8.3

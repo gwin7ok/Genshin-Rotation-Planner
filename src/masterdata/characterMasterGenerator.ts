@@ -918,12 +918,13 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
   // E を 6 秒以内にもう一度使うと、検知コアの状態（安定 ⇔ オーバーロード）を切り替える（CT なし。1.5 秒に 1 回）。
   // 変形ビーコン: 元素爆発で 3 つ・命ノ星座 1 の E で 1 つ（上限 3、命ノ星座 1 で 5）。ビーコンが 1 つ以上あるとき、重撃が特殊重撃「段階的爆破」（スタミナなし。長押しの間、ビーコンを 1 つずつ消費）になる
   // （説明文では、検知コア・オーバーロードが存在することも条件。状態の追跡はしない）。未対応: 固有天賦による獲得（星電導反応・1.5 秒ごと）・オーバーロードの条件・ビーコンの 10 秒の期限
+  // wiki（ミティヤ）: 一回押し = 安定状態、長押し = オーバーロード。特殊重撃はオーバーロードのコアがあり、ビーコンが 1 つ以上のときだけ。E の再発動は、押し方で状態が決まる（長押し = オーバーロード）
   '10000136-electro': [{
-    action: 'e',
+    action: ['e', 'e_hold'],
     keepEffectDuration: true,
     mode: {
       label: '検知コア',
-      description: '検知コアが存在する間（25 秒）。元素スキル（E）を 6 秒以内にもう一度使うと、検知コアの状態を切り替える（CT なし）。変形ビーコンが 1 つ以上あるとき、重撃が特殊重撃「段階的爆破」になり、ビーコンをすべて消費する',
+      description: '検知コアが存在する間（25 秒）。一回押しの E は安定状態・長押しの E はオーバーロード。E を 6 秒以内にもう一度使うと、検知コアの状態を切り替える（CT なし）。オーバーロードのとき、変形ビーコンが 1 つ以上あれば、重撃が特殊重撃「段階的爆破」になり、ビーコンをすべて消費する',
       startDelayFrames: 0,
       durationFrames: 1500,
       swap: 'persists',
@@ -936,8 +937,8 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       byConstellation: [{ minConstellation: 0, gaugeCostAll: true }, { minConstellation: 1, gaugeInitial: 100 }],
       repress: {
         frames: [{ total: 30, cancels: {}, source: '推定（特殊スキル・切り替えの動作。実測ではありません）' }],
-        actions: ['e', 'ca'],
-        conditions: { e: { withinFrames: 360 }, ca: { requiresGauge: true } },
+        actions: ['e', 'e_hold', 'ca'],
+        conditions: { e: { withinFrames: 360 }, e_hold: { withinFrames: 360 }, ca: { requiresGauge: true, requiresState: ['e_hold'] } },
         framesByAction: { ca: { total: 90, cancels: {}, source: '推定（段階的爆破。長押しの間、ビーコン 1 つにつき 1 回。実測ではありません）' } },
       },
       gauge: {
@@ -948,9 +949,9 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
         persists: true,
         timeGain: { everyFrames: 1000000, amount: 0 },
         gainByType: { burst: 300 },
-        hint: '変形ビーコンは、検知コアの間の元素爆発（3 つ）と命ノ星座 1 の元素スキル（1 つ）だけを数えています。固有天賦による獲得・10 秒の期限・検知コアの状態（オーバーロード）は数えていません。ビーコンが足りないとき、重撃は普通の重撃になります',
+        hint: '変形ビーコンは、検知コアの間の元素爆発（3 つ）と命ノ星座 1 の元素スキル（1 つ）だけを数えています。固有天賦による獲得・ビーコンの期限（wiki: 6 秒。固有天賦 2 で 10 秒）は数えていません（期限を過ぎたビーコンで特殊重撃を出していないか、確認してください）。特殊重撃は、長押しの E（オーバーロード）のときだけです。ビーコンが足りない・安定状態のとき、重撃は普通の重撃になります',
       },
-      source: 'genshin-db（定律・変数検知・連鎖反応・解析・変化ノ理・命ノ星座 1）: 検知コア 25 秒、6 秒以内の再発動で状態切り替え（1.5 秒に 1 回）、爆発でビーコン 3 つ、特殊重撃「段階的爆破」は検知コア・オーバーロードとビーコン 1 つ以上が条件。フレームは推定',
+      source: 'genshin-db（定律・変数検知・連鎖反応・解析・変化ノ理・命ノ星座 1）と wiki（ミティヤ）: 検知コア 25 秒、一回押し = 安定状態・長押し = オーバーロード、6 秒以内の再発動で状態切り替え（1.5 秒に 1 回）、爆発でビーコン 3 つ、特殊重撃「段階的爆破」はオーバーロードのコアとビーコン 1 つ以上が条件。フレームは推定',
     },
   }],
   // バレリー（原神 7.2。D332。gcsim に実装なし。値は genshin-db の説明文が根拠で、フレーム・上限は推定）: 衝撃エネルギー（元素スキルで 40 獲得。上限 80 と仮定。命ノ星座 4 で +30・獲得効率 +30%）。
@@ -978,15 +979,15 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       },
       gauge: {
         label: '衝撃エネルギー',
-        max: 80,
+        max: 100,
         cost: 40,
         costActions: ['ca'],
         persists: true,
         timeGain: { everyFrames: 1000000, amount: 0 },
         gainByType: {},
-        hint: '上限 80 は推定です（固有天賦の説明の「最大 80」から。命ノ星座 4 の +30 は数えていません）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃）・命ノ星座 1 の 150% は数えていません。足りないとき、重撃は普通の重撃になります',
+        hint: '上限 100 は wiki の記述です（命ノ星座 4 で 130。数えていません）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃）・命ノ星座 1 の 150% は数えていません。足りないとき、重撃は普通の重撃になります',
       },
-      source: 'genshin-db（近衛戦法・剣攻盾守 / 攻勢防御・要塞突撃 / 命ノ星座 1・4）: 元素スキルで衝撃エネルギー 40 獲得、40 以上で特殊重撃（すべて消費）。上限・フレームは推定',
+      source: 'genshin-db（近衛戦法・剣攻盾守 / 攻勢防御・要塞突撃 / 命ノ星座 1・4）と wiki（バレリー）: 元素スキルで衝撃エネルギー 40 獲得、40 以上で特殊重撃（すべて消費）、上限 100。フレームは推定',
     },
   }],
   // フィッシュル（A3。D163）: オズがいる間は、E を使えない（gcsim の ActionReady。再発動 recast だけ使える）。gcsim は、オズが消えるまで待つ（アプリの時間は変えず、黄色の警告）。
@@ -1141,6 +1142,8 @@ const SKILL_TAP_TABLES: Record<string, string> = {
  * 長押し（hE）と誤って生成されるのを防ぐ。
  */
 const NO_HOLD_SKILL = new Set(['10000033-hydro']);
+/** 長押しのアクションを、アプリ側で足すキャラ（gcsim 未実装。ミティヤ: 長押し E = オーバーロード。wiki） */
+const APP_SIDE_HOLD_SKILL = new Set(['10000136-electro']);
 
 /** 旅人 (空 / 蛍)。genshin-db ではキャラとしては元素なし、天賦は元素ごとに別エントリ。空・蛍は別キャラとして元素ごとに登録する (D35) */
 const AETHER_ID = 10000005;
@@ -1663,6 +1666,24 @@ function buildActions(ctx: BuildContext): BuildResult {
         effectDuration: timings.skillHoldDuration?.label,
       },
     }, resolvedHoldTable ? framesToSec(resolvedHoldTable.total) : undefined));
+  }
+
+  // gcsim に実装がなく、長押しを別のアクションにするキャラ（ミティヤ: 長押し = オーバーロード。wiki）。CT・効果は一回押しと同じ。フレームは推定（作らない）
+  if (APP_SIDE_HOLD_SKILL.has(id) && !actions.some(a => a.id === `${id}_e_hold`)) {
+    actions.push({
+      id: `${id}_e_hold`,
+      name: skillName ? `元素スキル(長押し): ${skillName}` : '元素スキル(長押し)',
+      shortName: 'hE',
+      type: 'skill_hold',
+      startsSkillCooldown: true,
+      cooldown: timings.skillTapCooldown?.value,
+      effectDuration: timings.skillTapDuration?.value ?? 0,
+      defaultDuration: 0.7,
+      dataSource: {
+        cooldown: timings.skillTapCooldown?.label,
+        effectDuration: timings.skillTapDuration?.label,
+      },
+    });
   }
 
   // 長押しの長さを gcsim の `hold=<フレーム数>` で渡すスキル（リネット・藍硯。モード維持の段階 ③）。

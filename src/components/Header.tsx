@@ -99,6 +99,21 @@ export const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('resize', updateHeight);
   }, [isCollapsed, isPlaying, currentTime, totalDuration]);
 
+  const collapseToggle = (
+  <button
+    type="button"
+    onClick={() => setIsCollapsed(prev => !prev)}
+    className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg border transition-all ${
+      isCollapsed
+        ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30 shadow-sm'
+        : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
+    }`}
+    title={isCollapsed ? t('header:collapse.expandTitle') : t('header:collapse.collapseTitle')}
+  >
+    <span>{isCollapsed ? t('header:collapse.expand') : t('header:collapse.collapse')}</span>
+  </button>
+  );
+
   const playbackControls = (
   <div className="flex items-center gap-1.5 bg-slate-950/80 px-2 py-1 rounded-xl border border-slate-800">
     <button
@@ -271,8 +286,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          {/* 再生の操作: ボタン列を省略しているときだけ、ここに出す（ふだんはボタン列の、チャージ効率計算の右） */}
-          {isCollapsed && playbackControls}
 
           {/* Overall CT Collision Status Badge (Always Visible between Play Controls & Collapse Toggle) */}
           {totalCTCollisions > 0 ? (
@@ -303,26 +316,16 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* ボタン列の表示・非表示 */}
-          <button
-            type="button"
-            onClick={() => setIsCollapsed(prev => !prev)}
-            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg border transition-all ${
-              isCollapsed
-                ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30 shadow-sm'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
-            }`}
-            title={isCollapsed ? t('header:collapse.expandTitle') : t('header:collapse.collapseTitle')}
-          >
-            <span>{isCollapsed ? t('header:collapse.expand') : t('header:collapse.collapse')}</span>
-          </button>
-
           <LanguageSwitcher />
+
+          {/* ボタン列の表示・非表示（1 行目の一番右） */}
+          {collapseToggle}
         </div>
 
         {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → チャージ効率計算 ⏎ 記法コピー（と記法の表示）） */}
         {!isCollapsed && (
-          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
+          <div className="flex items-start gap-2 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 flex-1 min-w-0">
             <button
               onClick={onOpenHelpModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"
@@ -442,6 +445,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="select-all font-semibold tracking-wide">{rotationNotation}</span>
               </div>
             )}
+          </div>
           </div>
         )}
       </div>

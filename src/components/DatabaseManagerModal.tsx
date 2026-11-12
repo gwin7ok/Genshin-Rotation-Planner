@@ -1,4 +1,5 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
+import { CharacterAvatar } from './CharacterAvatar';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
@@ -752,11 +753,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2.5">
-                          <img
-                            src={char.avatarUrl}
-                            alt={charName(char)}
-                            className="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0"
-                          />
+                          <CharacterAvatar char={char} className="w-10 h-10 rounded-lg text-base" borderWidth={1.5} />
                           <div>
                             <div className="flex items-center gap-1.5">
                               <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{charName(char)}</span><GcsimMissingBadge char={char} /></h3>

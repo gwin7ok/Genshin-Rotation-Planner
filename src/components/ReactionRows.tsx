@@ -97,17 +97,13 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
       <div className="flex">
         {/* 左の列（横スクロールしても見えるよう固定） */}
         <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 border-r border-slate-800 flex flex-col sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
-          <div className="h-6 px-2 flex items-center justify-between text-violet-300 text-[10px] font-bold border-b border-slate-800/60">
-            <span>{t('chart:reaction.header', { lap })}</span>
-            <span className="text-[9px] text-slate-500 font-mono font-normal">{t('chart:reaction.gcsimResult')}</span>
-          </div>
           {ordered.map(row => (
             <div
               key={`reaction_label_${lap}_${row.kind}`}
               className={`h-6 px-2 flex items-center justify-between text-[9px] font-mono border-b border-slate-800/40 ${KIND_INFO[row.kind].labelClass}`}
               title={KIND_INFO[row.kind].help}
             >
-              <span className="truncate">{KIND_INFO[row.kind].label}</span>
+              <span className="truncate">{t('chart:reaction.lapPrefix', { lap })}{KIND_INFO[row.kind].label}</span>
               {row.max !== undefined && <span className="shrink-0 ml-1 text-slate-500">{t('chart:reaction.max', { max: row.max })}</span>}
             </div>
           ))}
@@ -122,7 +118,6 @@ const ReactionArea: React.FC<ReactionRowsProps & { lap: 1 | 2; areaRows: Reactio
               style={{ left: `${t.absTime * pixelsPerSecond}px` }}
             />
           ))}
-          <div className="h-6 border-b border-slate-800/60" />
           {ordered.map(row => {
             const info = KIND_INFO[row.kind];
             return (

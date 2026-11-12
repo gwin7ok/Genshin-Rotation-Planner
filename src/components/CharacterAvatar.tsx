@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { CharacterConfig } from '../types/genshin';
 import { charName } from '../i18n/loc';
+import { ItemIcon } from './ItemIcon';
 
 interface CharacterAvatarProps {
   char: Pick<CharacterConfig, 'name' | 'avatarUrl' | 'color' | 'accentColor'>;
@@ -11,33 +12,8 @@ interface CharacterAvatarProps {
 
 /**
  * キャラアイコン。マスターデータの avatarUrl の画像を表示し、URL が無い・読み込めない場合は名前の先頭1文字を表示する
+ * （表示の仕組みは、武器・聖遺物と共通の ItemIcon）
  */
-export const CharacterAvatar: React.FC<CharacterAvatarProps> = ({
-  char,
-  className = 'w-7 h-7 rounded-lg text-xs',
-  borderWidth = 1.5,
-}) => {
-  const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [char.avatarUrl]);
-  const showImage = !!char.avatarUrl && !failed;
-
-  return (
-    <div
-      className={`flex items-center justify-center font-bold shrink-0 overflow-hidden ${className}`}
-      style={{ backgroundColor: `${char.color}33`, color: char.accentColor, border: `${borderWidth}px solid ${char.color}` }}
-    >
-      {showImage ? (
-        <img
-          src={char.avatarUrl}
-          alt={charName(char)}
-          className="w-full h-full object-cover"
-          loading="lazy"
-          draggable={false}
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        charName(char).slice(0, 1)
-      )}
-    </div>
-  );
-};
+export const CharacterAvatar: React.FC<CharacterAvatarProps> = ({ char, className, borderWidth }) => (
+  <ItemIcon name={charName(char)} iconUrl={char.avatarUrl} color={char.color} accentColor={char.accentColor} className={className} borderWidth={borderWidth} />
+);

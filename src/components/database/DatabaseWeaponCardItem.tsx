@@ -3,6 +3,7 @@ import { Edit2, Trash2 } from 'lucide-react';
 import { WeaponDatabaseItem } from '../../types/database';
 import { WeaponModel } from '../../models/WeaponModel';
 import { ItemLockButton } from './ItemLockButton';
+import { EquipmentIcon } from '../ItemIcon';
 import { t } from '../../i18n';
 import { loc } from '../../i18n/loc';
 
@@ -39,7 +40,9 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <div>
+        <div className="flex items-center gap-2.5">
+          <EquipmentIcon item={weapon} kind="weapon" className="w-10 h-10 rounded-lg text-base" />
+          <div>
           <div className="flex items-center gap-2">
             <span className="text-amber-400 font-bold text-xs">
               {'★'.repeat(weapon.rarity)}
@@ -54,6 +57,7 @@ export const DatabaseWeaponCardItem: React.FC<DatabaseWeaponCardItemProps> = ({
           <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5 font-mono">
             <span className="capitalize">{weapon.weaponType}</span>
             {weapon.baseAttack && <span>{t('database:weapon.baseAttack', { value: weapon.baseAttack })}</span>}
+          </div>
           </div>
         </div>
 

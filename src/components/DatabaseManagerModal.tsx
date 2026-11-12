@@ -1,5 +1,6 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { CharacterAvatar } from './CharacterAvatar';
+import { EquipmentIcon } from './ItemIcon';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   X, Database, Search, Plus, Edit2, Trash2, RefreshCw, Download, Upload, 
@@ -1087,7 +1088,8 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <EquipmentIcon item={art} kind="artifact" className="w-10 h-10 rounded-lg text-base" />
                         <span className="text-amber-400 font-bold text-xs">
                           {'★'.repeat(art.rarity)}
                         </span>

@@ -43,7 +43,6 @@
   },
   "saveFailed": "Could not save to the browser (storage may be full, or saving may be disabled in the browser settings). If you keep editing, your changes will be lost when you close the page. Save the current rotation to a file with \"Export JSON file\" in Rotations (\"Export all data\" reads from storage, so it does not include the latest edits that failed to save).",
   "staleReactions": "The \"reaction rows\" of this rotation are results from gcsim {{saved}}, so they are not shown with the current gcsim ({{current}}). Recalculate with \"Run gcsim\" to show them (the action order, cooldowns, etc. can be used as is).",
-  "footer": "Genshin Impact combat rotation Gantt chart planner ✦ chained on-field stints (serial snapping) and cooldown/buff overlap visualization",
   "importUrl": {
     "confirm": "Load a rotation from this link.\n\n{{url}}\n\nThis is an external file. Press OK only if you trust it. Loading replaces the rotation currently shown (a saved rotation is only overwritten after a further confirmation if one has the same name).",
     "invalid": "The link given in the URL's import parameter is not valid, so nothing was loaded.\n\n{{url}}",

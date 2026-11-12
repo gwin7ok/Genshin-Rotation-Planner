@@ -1,7 +1,7 @@
 {
   "source": {
     "disclaimer": "This is an unofficial fan tool. Game names, images and other materials belong to their respective owners (HoYoverse). No warranty.",
-    "version": "Version v{{appVersion}} (commit {{appCommit}}) · gcsim {{gcsimVersion}}",
+    "version": "Version v{{appVersion}} (commit {{appCommit}}) · gcsim {{gcsimVersion}} · server DB v{{dbVersion}}",
     "storage": "Teams and rotations are stored only in your browser (localStorage). Team data is never sent to a server (gcsim also runs in your browser). Before clearing browser data or moving to another browser or device, save with \"Export all data\" in Rotations.",
     "analytics": "Visits are counted with Cloudflare Web Analytics (no cookies). Only access information such as the page URL and browser type is sent; team and settings data are not.",
     "license": "This app is released under AGPL-3.0-or-later (source: <appLink>{{appRepo}}</appLink>). Calculations use gcsim {{gcsimVersion}} (AGPL-3.0, unmodified; source: <gcsimLink>{{gcsimRepo}}</gcsimLink>, commit {{commit}}). See NOTICE and LICENSE in the repository for details.",

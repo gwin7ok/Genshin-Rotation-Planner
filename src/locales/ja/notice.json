@@ -1,7 +1,7 @@
 {
   "source": {
     "disclaimer": "非公式のファンツールです。ゲームの名称・画像などの権利は、各権利者（HoYoverse）に帰属します。無保証です。",
-    "version": "バージョン v{{appVersion}}（コミット {{appCommit}}）・対応 gcsim {{gcsimVersion}}",
+    "version": "バージョン v{{appVersion}}（コミット {{appCommit}}）・対応 gcsim {{gcsimVersion}}・サーバー側 DB v{{dbVersion}}",
     "storage": "編成・ローテーションは、お使いのブラウザの中（localStorage）にだけ保存されます。編成のデータをサーバーに送ることはありません（gcsim も、ブラウザの中で動きます）。ブラウザのデータを消す・別のブラウザや端末に移すときは、「JSON 書き出し」で保存してください。",
     "analytics": "アクセス数の集計に、Cloudflare Web Analytics（Cookie なし）を使っています。送られるのは、ページの URL・ブラウザの種類などのアクセス情報だけで、編成・設定のデータは送りません。",
     "license": "このアプリは AGPL-3.0-or-later で公開しています（ソース: <appLink>{{appRepo}}</appLink>）。計算に、gcsim {{gcsimVersion}}（AGPL-3.0。無改変）を使っています（ソース: <gcsimLink>{{gcsimRepo}}</gcsimLink>・コミット {{commit}}）。詳しくは、リポジトリの NOTICE と LICENSE を参照してください。",

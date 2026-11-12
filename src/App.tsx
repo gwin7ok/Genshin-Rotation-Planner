@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Header } from './components/Header';
 import { StintSequenceEditor } from './components/StintSequenceEditor';
 import { GanttChart } from './components/GanttChart';
+import { PlaybackControls } from './components/PlaybackControls';
 import { PartyConfigModal } from './components/PartyConfigModal';
 import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
@@ -843,13 +844,6 @@ export default function App() {
           slotId: slot.id,
           reactions: slot.reactions,
         })}
-        isPlaying={isPlaying}
-        onTogglePlay={togglePlay}
-        onResetPlayback={resetPlayback}
-        currentTime={currentTime}
-        totalDuration={totalDuration}
-        playbackSpeed={playbackSpeed}
-        onChangeSpeed={setPlaybackSpeed}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
@@ -869,8 +863,6 @@ export default function App() {
         onChangeNotationMode={setNotationMode}
         totalCTCollisions={totalCTCollisions}
         totalCTWarnings={totalCTWarnings}
-        playbackCycleCount={playbackCycleCount}
-        loopPeriod={loopPeriod}
       />
 
       {/* 「gcsim で計算」の結果（実行中・反映・警告・エラー） */}
@@ -890,6 +882,20 @@ export default function App() {
       <main className="flex-1 flex flex-col">
         {/* Visual Gantt Chart (Swimlanes with strict vertical alignment) */}
         <GanttChart
+          playbackControls={
+            <PlaybackControls
+              isPlaying={isPlaying}
+              onTogglePlay={togglePlay}
+              onResetPlayback={resetPlayback}
+              currentTime={currentTime}
+              totalDuration={totalDuration}
+              playbackSpeed={playbackSpeed}
+              onChangeSpeed={setPlaybackSpeed}
+              loopStartTime={loopStartTime}
+              playbackCycleCount={playbackCycleCount}
+              loopPeriod={loopPeriod}
+            />
+          }
           database={database}
           characters={characters}
           stints={displayStints}

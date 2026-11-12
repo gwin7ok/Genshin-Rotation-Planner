@@ -1,6 +1,6 @@
 # Skill / Burst effect coverage
 
-Generated: 2026-11-04 / gcsim dictionary commit 377c9ce4 / by `npm run check:effectkeys` (`scripts/build-effect-coverage.ts`)
+Generated: 2026-11-12 / gcsim dictionary commit 377c9ce4 / by `npm run check:effectkeys` (`scripts/build-effect-coverage.ts`)
 
 Four tables: `effects` (gcsim effects) / `targets` (app-side targets) / `links` (effect ↔ target pairs; a junction table) / `unlinked` (reasons for not linking).
 "Not reviewed" = neither linked nor decided not to link (with a reason). This is what to review when gcsim is updated or a new character is added.
@@ -20,14 +20,14 @@ Write decisions in `src/masterdata/effectKeyDecisions.ts` and links in `actionEf
 
 Construct names (gcsim source): 7
 
-## targets (the app's Skill / Burst action definitions; 334)
+## targets (the app's Skill / Burst action definitions; 338)
 
 | State | Count |
 |---|---|
 | Linked | 207 |
 | No gcsim effect; no bar | 75 |
+| Character not registered in gcsim | 19 |
 | Handled as a buff (passive talent) | 16 |
-| Character not registered in gcsim | 15 |
 | No gcsim effect; bar from the app value | 12 |
 | gcsim reports the effect, but it is not linked and gets no bar | 6 |
 | gcsim reports no effect event (tentative) | 2 |

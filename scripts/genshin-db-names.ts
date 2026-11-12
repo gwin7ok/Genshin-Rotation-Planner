@@ -4,10 +4,9 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { fetchGenshinDb } from '../src/masterdata/genshinDbSource.ts';
 import type { CharacterNames, LanguageNames, NameSources } from '../src/masterdata/gcsimKeyNames.ts';
 
-const API = 'https://genshin-db-api.vercel.app/api/v5';
-const QUERY = 'query=names&matchCategories=true&verboseCategories=true';
 
 /** 旅人の天賦・命ノ星座は元素ごとに別エントリ（genshin-db の id）。gcsim のキーは `aether<元素>` / `lumine<元素>` */
 const TRAVELER_TALENT_ID: Record<string, number> = { anemo: 704, cryo: 705, dendro: 708, electro: 707, geo: 706, hydro: 703, pyro: 702 };
@@ -19,10 +18,8 @@ interface GdbWeapon { id: number; name: string; effectName?: string }
 interface GdbArtifact { id: number; name: string }
 interface GdbCharacter { id: number; name: string }
 
-async function fetchList<T>(category: string, language: 'Japanese' | 'English'): Promise<T[]> {
-  const res = await fetch(`${API}/${category}?${QUERY}&resultLanguage=${language}`);
-  if (!res.ok) throw new Error(`genshin-db ${category} (${language}): HTTP ${res.status}`);
-  return res.json() as Promise<T[]>;
+async function fetchList<T>(category: 'characters' | 'talents' | 'constellations' | 'weapons' | 'artifacts', language: 'Japanese' | 'English'): Promise<T[]> {
+  return fetchGenshinDb<T>(category, language);
 }
 
 interface KeyMapRecord { genshinId: number; name: string; gcsimKey: string }

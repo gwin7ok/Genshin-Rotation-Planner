@@ -110,6 +110,12 @@ export interface ActionMode {
     endsOnLast?: boolean;
     /** 別の動作になるアクション（定義 ID の末尾。例: ['e']）。無ければ、モードを開いたアクション（藍硯: 長押しで開いたモードの中の一回押しの E も翦月輪） */
     actions?: string[];
+    /**
+     * アクション（定義 ID の末尾）ごとの、別の動作になる条件（D332。ミティヤ・バレリー）。
+     * withinFrames = モードの開始からこの間だけ（ミティヤの検知コアの状態切り替え: 6 秒以内）／requiresGauge = モードのゲージが、消費に足りるときだけ
+     * （バレリーの特殊重撃: 衝撃エネルギー 40 以上）。足りないときは、別の動作ではなく、普通の動作になる（警告も出さない）
+     */
+    conditions?: Record<string, { withinFrames?: number; requiresGauge?: boolean }>;
     /** アクション（定義 ID の末尾）ごとのフレーム。あれば frames より優先（ドゥリン: 受付の間の E は白・N は黒の再発動で、フレームが違う） */
     framesByAction?: Record<string, ActionFrames | ActionFrames[]>;
     /**
@@ -166,6 +172,8 @@ export interface ActionMode {
     label: string; max: number; timeGain: { everyFrames: number; amount: number }; gainByType: Partial<Record<ActionType, number>>; hint: string;
     /** 英語の表示用の文（D255） */
     en?: EnglishTexts<'label' | 'hint'>;
+    /** ゲージを消費する「別の動作」（定義 ID の末尾）。無ければ、スキル（E）。バレリーの特殊重撃（衝撃エネルギーを消費）は ['ca'] */
+    costActions?: string[];
     /** 別の動作になった E の消費量（兹白の隙に浮かぶ光 70）。あれば、ゲージが cost 以上のとき使え、使うと cost だけ減る（無ければ、満タンのとき使え、0 になる） */
     cost?: number;
     /** 通常攻撃（N）の、連続した N の段ごとの増加量（段の数で繰り返す。あれば gainByType.normal より優先。ローエンの愉悦・ヴェスナの剣気） */

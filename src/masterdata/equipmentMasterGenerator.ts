@@ -21,6 +21,7 @@ export const GENSHIN_DB_API = 'https://genshin-db-api.vercel.app/api/v5';
 const ICON_BASE_URL = 'https://enka.network/ui';
 import { GCSIM_REPO as CONFIG_GCSIM_REPO, GCSIM_COMMIT as CONFIG_GCSIM_COMMIT } from '../utils/gcsim/gcsimConfig.ts';
 import { fetchJson } from './fetchUtil.ts';
+import { fetchGenshinDb } from './genshinDbSource.ts';
 const GCSIM_REPO = CONFIG_GCSIM_REPO;
 // 参照先は、ブランチ名ではなく、gcsim.config.json のコミット（ハッシュ）に固定する（リリースにない最新の変更を取り込まない）
 const GCSIM_REF = CONFIG_GCSIM_COMMIT;
@@ -151,15 +152,14 @@ export async function generateWeaponsMasterOnline(
 
   onProgress?.({ phase: 'weaponFetch', done: 0, total: 3 });
 
-  const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let weaponsJa: any[] = [];
   let weaponsEn: any[] = [];
   const networkStart = Date.now();
 
   try {
     const results = await Promise.all([
-      fetchJson<any[]>(`${GENSHIN_DB_API}/weapons?${verbose}&resultLanguage=Japanese`),
-      fetchJson<any[]>(`${GENSHIN_DB_API}/weapons?${verbose}&resultLanguage=English`),
+      fetchGenshinDb<any>('weapons', 'Japanese'),
+      fetchGenshinDb<any>('weapons', 'English'),
     ]);
     weaponsJa = results[0];
     weaponsEn = results[1];
@@ -168,22 +168,7 @@ export async function generateWeaponsMasterOnline(
     report.fetchedRawCountJa = weaponsJa.length;
     report.fetchedRawCountEn = weaponsEn.length;
   } catch (apiErr) {
-    // Node.js 環境のみローカル genshin-db パッケージをフォールバックとして試行
-    if (typeof window === 'undefined') {
-      try {
-        const pkgName = 'genshin-db';
-        // @ts-ignore
-        const genshinDb = await import(/* @vite-ignore */ pkgName);
-        const g = genshinDb.default || genshinDb;
-        const wNames = g.weapons('names', { matchCategories: true }) || [];
-        weaponsJa = wNames.map((n: string) => g.weapons(n, { resultLanguage: 'Japanese' as any })).filter(Boolean);
-        weaponsEn = wNames.map((n: string) => g.weapons(n, { resultLanguage: 'English' as any })).filter(Boolean);
-      } catch (localErr) {
-        throw new Error(`武器データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)}`);
-      }
-    } else {
-      throw new Error(`武器データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)} (ネットワーク環境を確認してください)`);
-    }
+    throw new Error(`武器データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)}`);
   }
 
   onProgress?.({ phase: 'weaponParse', done: 1, total: 3 });
@@ -379,15 +364,14 @@ export async function generateArtifactsMasterOnline(
 
   onProgress?.({ phase: 'artifactFetch', done: 0, total: 3 });
 
-  const verbose = 'query=names&matchCategories=true&verboseCategories=true';
   let artifactsJa: any[] = [];
   let artifactsEn: any[] = [];
   const networkStart = Date.now();
 
   try {
     const results = await Promise.all([
-      fetchJson<any[]>(`${GENSHIN_DB_API}/artifacts?${verbose}&resultLanguage=Japanese`),
-      fetchJson<any[]>(`${GENSHIN_DB_API}/artifacts?${verbose}&resultLanguage=English`),
+      fetchGenshinDb<any>('artifacts', 'Japanese'),
+      fetchGenshinDb<any>('artifacts', 'English'),
     ]);
     artifactsJa = results[0];
     artifactsEn = results[1];
@@ -396,21 +380,7 @@ export async function generateArtifactsMasterOnline(
     report.fetchedRawCountJa = artifactsJa.length;
     report.fetchedRawCountEn = artifactsEn.length;
   } catch (apiErr) {
-    if (typeof window === 'undefined') {
-      try {
-        const pkgName = 'genshin-db';
-        // @ts-ignore
-        const genshinDb = await import(/* @vite-ignore */ pkgName);
-        const g = genshinDb.default || genshinDb;
-        const aNames = g.artifacts('names', { matchCategories: true }) || [];
-        artifactsJa = aNames.map((n: string) => g.artifacts(n, { resultLanguage: 'Japanese' as any })).filter(Boolean);
-        artifactsEn = aNames.map((n: string) => g.artifacts(n, { resultLanguage: 'English' as any })).filter(Boolean);
-      } catch (localErr) {
-        throw new Error(`聖遺物データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)}`);
-      }
-    } else {
-      throw new Error(`聖遺物データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)} (ネットワーク環境を確認してください)`);
-    }
+    throw new Error(`聖遺物データのオンライン取得に失敗しました: ${apiErr instanceof Error ? apiErr.message : String(apiErr)}`);
   }
 
   onProgress?.({ phase: 'artifactParse', done: 1, total: 3 });

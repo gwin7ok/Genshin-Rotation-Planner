@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.4] - 2026-11-13
+
+### 修正
+- マスターの効果の網羅表を再生成（バレリーの固有天賦の追加分）。CI の網羅の確認が通るようにした
+
 ## [1.8.3] - 2026-11-13
 
 ### 追加
@@ -242,7 +247,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.4...HEAD
+[1.8.4]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...v1.8.1

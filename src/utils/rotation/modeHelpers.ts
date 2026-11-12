@@ -45,6 +45,7 @@ export const gaugeExpire = (m: ModeWindow, now: number): boolean => {
   st.expiredLost = true;
   return true;
 };
+export const modeGaugeMax = (m: ModeWindow): number => (m.def.gauge?.max ?? 0) + (consValue(m.def, m.opener.constellation, 'gaugeMaxBonus') ?? 0);
 export const modeGainScale = (m: ModeWindow): number => consValue(m.def, m.opener.constellation, 'gaugeGainScale') ?? 1;
 // 減る値（カチーナの夜魂値）: 時刻 to まで、時間による消費を数える（乗っている間は連続、降りている間は一定の間隔の離散）
 export const drainAdvance = (m: ModeWindow, to: number) => {

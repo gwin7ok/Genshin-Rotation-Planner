@@ -2,7 +2,7 @@ import { ActiveBuffSpan } from '../../types/genshin';
 import type { ActionFrames, ModeEnder } from '../../types/genshin';
 import { CharacterModel } from '../../models/CharacterModel';
 import { type ModeWindow } from './types';
-import { gaugeExpire, isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, modeGainScale, drainAdvance, drainProject, endMode } from './modeHelpers';
+import { modeGaugeMax, gaugeExpire, isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, modeGainScale, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { actionName, charName, loc } from '../../i18n/loc';
@@ -40,7 +40,7 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
     if (cond?.requiresGauge && g?.expireFrames) gaugeExpire(m, actionStartTime);
     const conditionOk = !cond
       || ((cond.withinFrames === undefined || actionStartTime - m.start <= cond.withinFrames / 60 + 0.001)
-        && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(g.max, modeGaugeInitial(m))) >= (g.cost ?? g.max))
+        && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(modeGaugeMax(m), modeGaugeInitial(m))) >= (g.cost ?? modeGaugeMax(m)))
         && (!cond.requiresState || (m.state !== undefined && cond.requiresState.includes(m.state))));
     if (rp && repressMatches && conditionOk && (modeMaxUses(m) === undefined || m.repressUsed < modeMaxUses(m)!)) {
       modeRepress = { window: m, index: m.repressUsed };
@@ -290,14 +290,14 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
     const usedUp = modeRepress?.window === m;
     if (!g || m.charId !== char.id || !(isModeActive(m, char.id, sIdx, actionStartTime) || usedUp) || actionStartTime < m.start - 0.001) continue;
     const scale = modeGainScale(m);
-    const gaugeState = m.gauge ?? { value: Math.min(g.max, modeGaugeInitial(m)), ticks: 0 };
+    const gaugeState = m.gauge ?? { value: Math.min(modeGaugeMax(m), modeGaugeInitial(m)), ticks: 0 };
     if (g.expireFrames) {
-      gaugeState.batches ??= modeGaugeInitial(m) > 0 ? [{ at: m.start, amount: Math.min(g.max, modeGaugeInitial(m)) }] : [];
+      gaugeState.batches ??= modeGaugeInitial(m) > 0 ? [{ at: m.start, amount: Math.min(modeGaugeMax(m), modeGaugeInitial(m)) }] : [];
       m.gauge = gaugeState;
       gaugeExpire(m, actionStartTime);
     }
     const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
-    gaugeState.value = Math.min(g.max, gaugeState.value + (ticksNow - gaugeState.ticks) * g.timeGain.amount * scale);
+    gaugeState.value = Math.min(modeGaugeMax(m), gaugeState.value + (ticksNow - gaugeState.ticks) * g.timeGain.amount * scale);
     gaugeState.ticks = ticksNow;
     const costing = modeRepress?.window === m
       && (g.costActions ? g.costActions.includes(act.actionTypeId.slice(char.id.length + 1)) : (act.type === 'skill' || act.type === 'skill_hold'));
@@ -305,7 +305,7 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       // 命ノ星座で、この回は消費しない（ヴェスナの C1: 最高ランクの 1 回目）
       const freeIndex = consValue(m.def, m.opener.constellation, 'repressFreeIndex');
       const free = freeIndex !== undefined && modeRepress.index === freeIndex;
-      const need = free ? 0 : g.cost ?? g.max;
+      const need = free ? 0 : g.cost ?? modeGaugeMax(m);
       if (gaugeState.value < need) gaugeMessage = t('messages:rotation.gauge', { gauge: loc(g, 'label'), value: Math.floor(gaugeState.value), need, hint: loc(g, 'hint') });
       if (!free) {
         const costAll = !!consValue(m.def, m.opener.constellation, 'gaugeCostAll');
@@ -316,13 +316,13 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
         }
       }
       // 命ノ星座で、使った後に上限まで回復する（ローエンの C6）
-      if (consValue(m.def, m.opener.constellation, 'gaugeRefillOnRepress')) gaugeState.value = g.max;
+      if (consValue(m.def, m.opener.constellation, 'gaugeRefillOnRepress')) gaugeState.value = modeGaugeMax(m);
     } else {
       // 通常攻撃は、連続した N の何段目か（ここで数える normalStreak は、この N の前までの連続数）で増加量が変わる場合がある
       const gain = act.type === 'normal' && g.gainByNormalIndex?.length
         ? g.gainByNormalIndex[sc.normalStreak % g.gainByNormalIndex.length]
         : g.gainByType[act.type] ?? 0;
-      gaugeState.value = Math.min(g.max, gaugeState.value + gain * scale);
+      gaugeState.value = Math.min(modeGaugeMax(m), gaugeState.value + gain * scale);
       if (gaugeState.batches && gain > 0) { gaugeState.batches.push({ at: actionStartTime, amount: gain * scale }); gaugeState.expiredLost = false; }
       // 期限切れで、別の動作（特殊重撃）にならなかった（条件の状態は満たしている）
       const condKey = act.actionTypeId.slice(char.id.length + 1);

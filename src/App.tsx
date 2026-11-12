@@ -1051,9 +1051,6 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-slate-950 border-t border-slate-800/80 px-4 py-3 text-center text-xs text-slate-500">
-        <p>
-          {t('app:footer')}
-        </p>
         <SourceNotice />
       </footer>
     </div>

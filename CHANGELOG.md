@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.2] - 2026-11-13
+
+### 修正
+- 秒数などの▲▼を長押ししたとき、離しても数値が動き続けたり、画面が固まったりするのを防いだ（長押しで加速・所要時間に上限）
+
 ## [1.8.1] - 2026-11-12
 
 ### 追加
@@ -232,7 +237,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.2...HEAD
+[1.8.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...v1.7.0

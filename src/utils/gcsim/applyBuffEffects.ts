@@ -224,7 +224,10 @@ export function applyPassiveTriggers(
             .sort((a, b) => a.offset - b.offset);
           list.forEach(({ rec, place }, i) => {
             const duration = ctOnly ? 0 : Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3));
-            const cooldown = ctOnly ? Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3)) : cooldownFor(rec, cts);
+            // 効果と CT のキーを両方持つ定義で、この実行に CT のキーの記録が 1 つも無いときは、CT は始まっていない（0 秒）。
+            // 例: 七七の固有天賦 2 は、お札のキー（qiqi-talisman）を爆発のお札（15 秒）とも共有する。通常攻撃・重撃でお札が付かなかった実行では、CT のキー（qiqi-a4-icd）が出ない
+            const cooldown = ctOnly ? Number(framesToSeconds(rec.endFrame - rec.startFrame).toFixed(3))
+              : cooldownFor(rec, cts) ?? ((def.gcsimCooldownKeys?.length ?? 0) > 0 && cts.length === 0 ? 0 : undefined);
             const name = labelForKey(key) ?? (multiKey ? `${def.name}（${key}）` : def.name);
             const t = existing[i];
             if (t) {

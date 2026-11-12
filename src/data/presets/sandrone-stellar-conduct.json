@@ -268,7 +268,8 @@
           "name": "玉籤偶開",
           "offset": 1.167,
           "duration": 16.883,
-          "gcsimKey": "qiqi-talisman"
+          "gcsimKey": "qiqi-talisman",
+          "cooldown": 0
         },
         {
           "id": "ptrg_gcsim_mwd7zomg_l",

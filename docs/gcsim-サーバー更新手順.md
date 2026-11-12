@@ -74,6 +74,7 @@ npm run check:hitlag       # アプリの事前計算と gcsim の実測が、�
 npm run gcsim:check        # 実行ファイル・辞書・対応表の gcsim のコミットが、設定と全部一致していること
 npm run lint               # 型チェック
 npm run check:backup       # 保存・バックアップ・同梱プリセット（反応の行の gcsim のバージョン。6-C）
+npm run verify:master-effects  # マスターの効果の網羅表が最新か（古ければ `npm run coverage:master-effects` で再生成してコミット。CI でも検査される）
 ```
 `gcsim_key_map.json` などのコミットが設定と食い違うと ✗ が出る。
 

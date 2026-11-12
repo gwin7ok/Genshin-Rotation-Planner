@@ -1,6 +1,6 @@
 {
   "characters": {
-    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
+    "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
     "records": [
       {
         "id": "10000121-hydro",
@@ -577,6 +577,13 @@
         "source": "dm.json"
       },
       {
+        "id": "10000133-cryo",
+        "genshinId": 10000133,
+        "name": "サンドローネ",
+        "gcsimKey": "sandrone",
+        "source": "dm.json"
+      },
+      {
         "id": "10000054-hydro",
         "genshinId": 10000054,
         "name": "珊瑚宮心海",
@@ -914,10 +921,6 @@
         "name": "ネフェル"
       },
       {
-        "id": "10000133-cryo",
-        "name": "サンドローネ"
-      },
-      {
         "id": "10000137-electro",
         "name": "バレリー"
       },
@@ -933,7 +936,7 @@
     "gcsimOnly": []
   },
   "weapons": {
-    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
+    "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
     "records": [
       {
         "id": "15502",
@@ -2689,7 +2692,7 @@
     ]
   },
   "artifacts": {
-    "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
+    "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
     "records": [
       {
         "id": "15031",

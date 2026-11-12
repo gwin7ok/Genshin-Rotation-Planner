@@ -104,6 +104,7 @@ export const KEY_DECISIONS: Record<string, Decision> = {
   "directive-limit": { reason: "decided-not-linked", note: "アルレッキーノ: 血の債務の上限を決める 35 秒の内部の窓。効果本体は directive（30 秒）" },
   // ---- E（継続ダメージ）の整理（2026-09-30 ユーザー決定）----
   "damage:Palm Vortex Max Cutting (Hold)": { reason: "decided-not-linked", note: "継続ダメージが短い単発（0.08〜2.4 秒）で、攻撃の動作時間の内側。バーにしない（ユーザー決定 2026-09-30）" },
+  "damage:Bombardment": { reason: "decided-not-linked", note: "サンドローネの Q の連続ダメージ（3 発。ヒットは 123〜147 フレーム）。短い単発で、攻撃の動作時間（128 フレーム）の内側。バーにしない（2026-09-30 の決定を適用。v2.50.0 の取り込み）" },
   "damage:Frostbound Javelin": { reason: "decided-not-linked", note: "継続ダメージが短い単発（0.08〜2.4 秒）で、攻撃の動作時間の内側。バーにしない（ユーザー決定 2026-09-30）" },
   "damage:Wake of Earth": { reason: "decided-not-linked", note: "継続ダメージが短い単発（0.08〜2.4 秒）で、攻撃の動作時間の内側。バーにしない（ユーザー決定 2026-09-30）" },
   "damage:Starshatter": { reason: "decided-not-linked", note: "継続ダメージが短い単発（0.08〜2.4 秒）で、攻撃の動作時間の内側。バーにしない（ユーザー決定 2026-09-30）" },
@@ -251,8 +252,6 @@ export const DEF_DECISIONS: Record<string, Decision> = {
   '10000129-cryo_q': { reason: 'not-in-gcsim', note: 'ローエンの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000130-geo_e': { reason: 'not-in-gcsim', note: 'リンネアのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000130-geo_q': { reason: 'not-in-gcsim', note: 'リンネアの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
-  '10000133-cryo_e': { reason: 'not-in-gcsim', note: 'サンドローネのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
-  '10000133-cryo_q': { reason: 'not-in-gcsim', note: 'サンドローネの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000140-hydro_e': { reason: 'not-in-gcsim', note: 'ヴォジャニーツァのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000140-hydro_q': { reason: 'not-in-gcsim', note: 'ヴォジャニーツァの爆発: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },
   '10000143-anemo_e': { reason: 'not-in-gcsim', note: 'ヴェスナのスキル: gcsim（v2.47.6）にキャラ自体が未実装（マスターに gcsim のキーが無い）。gcsim が対応したら、マスターと対応表を再生成して扱いを決める（gcsim の更新待ち）' },

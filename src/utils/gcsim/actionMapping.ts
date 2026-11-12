@@ -29,6 +29,12 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000128-anemo_e_specialskill': 'skill',
   // イファの夜魂の加護の間の、スキル長押し（落下）。夜魂の外で使うと、ふつうの E（夜魂に入る）
   '10000113-anemo_e_cancelplunge': 'skill[hold=1]',
+  // サンドローネの重撃（ビームの本数。`_ca` = 既定の 3 本）。凸 0 は 3 本まで（4 本以上は gcsim の実行エラー）
+  '10000133-cryo_ca_beams1': 'charge[beams=1]',
+  '10000133-cryo_ca_beams2': 'charge[beams=2]',
+  '10000133-cryo_ca_beams4': 'charge[beams=4]',
+  '10000133-cryo_ca_beams5': 'charge[beams=5]',
+  '10000133-cryo_ca_beams6': 'charge[beams=6]',
   // 特殊爆発（フリンズ。嵐槍の後 6 秒の間、gcsim は同じ `burst` 命令を特殊爆発に自動で切り替える）
   '10000120-electro_q_special': 'burst',
   // ヴァレサの特殊爆発（マキシマムドライブの間、gcsim は同じ `burst` 命令を大火山おろしに自動で切り替える）

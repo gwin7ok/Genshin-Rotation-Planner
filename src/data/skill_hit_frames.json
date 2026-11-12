@@ -1,6 +1,6 @@
 {
- "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
- "generatedAt": "2026-11-04T00:15:31.568Z",
+ "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
+ "generatedAt": "2026-11-12T06:46:53.076Z",
  "maxFrames": 2400,
  "entries": {
   "10000002-cryo_e": {
@@ -1900,6 +1900,14 @@
    "status": "ok",
    "hits": [
     26
+   ]
+  },
+  "10000133-cryo_e": {
+   "char": "サンドローネ",
+   "command": "skill",
+   "status": "ok",
+   "hits": [
+    34
    ]
   },
   "10000148-electro_e": {

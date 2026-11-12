@@ -55542,7 +55542,7 @@
     ],
     "source": {
       "genshinId": 10000130,
-      "frameSource": "gcsim PR #2596（未マージ・未検証。2026-10-06 時点）"
+      "frameSource": "gcsim PR #2596（未マージ・未検証。2026-11-10 時点）"
     },
     "constellations": [
       {
@@ -55602,7 +55602,7 @@
     ],
     "en": {
       "name": "Linnea",
-      "frameSource": "gcsim PR #2596 (unmerged, unverified, as of 2026-10-06)"
+      "frameSource": "gcsim PR #2596 (unmerged, unverified, as of 2026-11-10)"
     },
     "constellationEffects": [
       {
@@ -56507,33 +56507,176 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.533,
+        "defaultDuration": 0.5,
+        "frames": {
+          "total": 53,
+          "hitmark": 24,
+          "cancels": {
+            "aim": 24,
+            "skill": 24,
+            "burst": 24,
+            "dash": 24,
+            "jump": 24,
+            "swap": 24,
+            "attack": 30,
+            "walk": 38
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.5,
+            "frames": {
+              "total": 53,
+              "hitmark": 24,
+              "cancels": {
+                "aim": 24,
+                "skill": 24,
+                "burst": 24,
+                "dash": 24,
+                "jump": 24,
+                "swap": 24,
+                "attack": 30,
+                "walk": 38
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.517,
+            "frames": {
+              "total": 46,
+              "hitmark": 25,
+              "cancels": {
+                "aim": 25,
+                "skill": 25,
+                "burst": 25,
+                "dash": 25,
+                "jump": 25,
+                "swap": 25,
+                "attack": 31
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 1.45,
+            "frames": {
+              "total": 87,
+              "hitmark": 49,
+              "cancels": {
+                "aim": 49,
+                "skill": 49,
+                "burst": 49,
+                "dash": 49,
+                "jump": 49,
+                "swap": 49,
+                "attack": 69,
+                "walk": 79
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          }
+        ],
         "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
         "en": {
           "name": "Normal Attack",
           "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
-        },
-        "normalHits": [
-          {
-            "duration": 0.533
-          },
-          {
-            "duration": 0.6
-          },
-          {
-            "duration": 1.55
-          }
-        ]
+        }
       },
       {
         "id": "10000133-cryo_ca",
-        "name": "重撃",
+        "name": "重撃（ビーム 3 本）",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 1.65,
+        "frames": {
+          "total": 224,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 3 本 = 44 + 60 × 3）"
+        },
+        "defaultDuration": 3.733,
         "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
         "en": {
-          "name": "Charged Attack",
+          "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
+        }
+      },
+      {
+        "id": "10000133-cryo_ca_beams1",
+        "name": "重撃（ビーム 1 本）",
+        "shortName": "C(1)",
+        "type": "charged",
+        "defaultDuration": 1.733,
+        "frames": {
+          "total": 104,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 1 本 = 44 + 60 × 1）"
+        },
+        "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
+        "en": {
+          "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
+        }
+      },
+      {
+        "id": "10000133-cryo_ca_beams2",
+        "name": "重撃（ビーム 2 本）",
+        "shortName": "C(2)",
+        "type": "charged",
+        "defaultDuration": 2.733,
+        "frames": {
+          "total": 164,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 2 本 = 44 + 60 × 2）"
+        },
+        "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
+        "en": {
+          "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
+        }
+      },
+      {
+        "id": "10000133-cryo_ca_beams4",
+        "name": "重撃（ビーム 4 本。凸 1 以上）",
+        "shortName": "C(4)",
+        "type": "charged",
+        "defaultDuration": 4.733,
+        "frames": {
+          "total": 284,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 4 本 = 44 + 60 × 4）"
+        },
+        "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
+        "en": {
+          "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
+        }
+      },
+      {
+        "id": "10000133-cryo_ca_beams5",
+        "name": "重撃（ビーム 5 本。凸 1 以上）",
+        "shortName": "C(5)",
+        "type": "charged",
+        "defaultDuration": 5.733,
+        "frames": {
+          "total": 344,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 5 本 = 44 + 60 × 5）"
+        },
+        "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
+        "en": {
+          "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
+        }
+      },
+      {
+        "id": "10000133-cryo_ca_beams6",
+        "name": "重撃（ビーム 6 本。凸 1 以上）",
+        "shortName": "C(6)",
+        "type": "charged",
+        "defaultDuration": 6.733,
+        "frames": {
+          "total": 404,
+          "cancels": {},
+          "source": "gcsim v2.50.0 の実測: sandrone/charge.go（windup 25f + 最初の 18f + ビーム 1 本につき 60f + 1f。charge[beams=N]。凸 1 以上で最大 6 本）（ビーム 6 本 = 44 + 60 × 6）"
+        },
+        "description": "通常攻撃\n数式によって刃を操る糸を紡ぎ出し、最大3段の連続斬りを行う。\n\n重撃\n多機能汎用支援型自動マシナリー「ファジオ」を召喚し、**演算**モードに切り替えて前方の敵に一定時間ごとに冷却ビームを発射する掃射攻撃を行い、氷元素範囲ダメージを与える。\n**輝映・星閃**：冷却ビームが、対応する星反応ダメージと見なされる氷元素範囲ダメージに変わる。\n演算モード中、ファジオの**演算負荷**は上昇し続ける。また、冷却ビームを発射した際、演算負荷はさらに上昇する。\n演算負荷が上限の100に達すると、ファジオは高負荷モードに切り替わり、氷元素ダメージを与える射撃の間隔が長くなり、演算モードへの切り替えができなくなる。\n演算モード以外の状態では、ファジオの演算負荷は緩やかに低下し続ける。サンドローネが待機中の場合、ファジオの整備に集中し、演算負荷の低下速度が元の300%に上がる。\n演算負荷が50未満まで低下すると、ファジオは高負荷モードを終了する。\n\n落下攻撃\n空中から落下し地面に衝撃を与える。経路上の敵を攻撃し、落下時に範囲ダメージを与える。",
+        "en": {
           "description": "Normal Attack\nGenerates threads that control her weapon using formulae, performing up to 3 consecutive strikes.\n\nCharged Attack\nSummons the Facilitatrice Automatisee Generaliste Interactive et Omnitache, or \"Fagio,\" and switches it to **Decoding** mode: Unleashes a sweeping fire attack on enemies in front, as well as periodically fires condensed beams, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The condensed beams will instead deal AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\nWhile in Decoding mode, Fagio's **Decoding Power** will continuously increase. Firing condensed beams will also further increase its Decoding Power.\nWhen Fagio's Decoding Power reaches the maximum of 100 points, it switches to Power Overdrive mode, in which it fires at opponents with longer intervals, dealing Cryo DMG. It will be unable to switch to Decoding mode at this time.\nWhen not in Decoding mode, Fagio's Decoding Power gradually decreases. When Sandrone is off-field, she will focus on maintaining Fagio, causing its Decoding Power to decrease at 300% the original rate.\nFagio exits Power Overdrive mode when its Decoding Power has decreased to under 50.\n\nPlunging Attack\nPlunges from midair to strike the ground below, dealing DMG to opponents along their path and causing AoE DMG on landing."
         }
       },
@@ -56545,14 +56688,33 @@
         "startsSkillCooldown": true,
         "cooldown": 4,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 46,
+          "cancels": {
+            "attack": 10,
+            "burst": 6,
+            "dash": 26,
+            "swap": 27
+          },
+          "source": "skill.go:skillFrames"
         },
-        "defaultDuration": 0.733,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
+        },
+        "defaultDuration": 0.767,
         "description": "淑女の完璧な所作でお茶会用アサルト浮遊装置に搭乗し、浮遊したまま6秒間前進する。搭乗中は移動の方向を操作でき、ダッシュを一回押しするとスタミナを10消費して優雅な高速浮遊モードに入り、毎秒スタミナを15ずつ消費しながらより速い速度で前進する。\n\n浮遊開始時、近くに敵がいた場合、サンドローネはさらにプリズム共振砲を1台呼び出し、凶暴な敵に向かってプリズム弾を2発発射して氷元素ダメージを与える。\n**輝映・星閃**：2発目のプリズム弾が対応する星反応ダメージとみなされる氷元素ダメージに変化する。\n\nお茶会用アサルト浮遊装置に搭乗中、サンドローネは優雅にそして秘密裏にファジオを修理し、その**演算負荷**を素早く低下させる。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        },
         "en": {
           "name": "Elemental Skill: Formule Phenomenale: Differential Analysis",
           "description": "With her impeccable, ladylike poise, Sandrone boards the Tea Party Tactical Assault Hovermech and hovers forward for 6s. During this time, Sandrone can control the travel direction of the craft. Pressing Sprint consumes 10 Stamina and launches her into an elegant high-speed hover mode, in which she will move even faster at the cost of 15 Stamina per second.\n\nWhen Sandrone starts hovering, if there are opponents nearby, she will also summon a Prismatic Resonance Cannon and fire 2 Prism Shots at any opponents who have yet to cool down, dealing Cryo DMG.\n**Radiance: Stellar Glimmer**: The second Prism Shot will instead deal Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG.\n\nWhen on the Tea Party Tactical Assault Hovermech, Sandrone will also elegantly and quietly repair Fagio, causing **Decoding Power** to swiftly decrease."
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -56563,14 +56725,35 @@
         "startsBurstCooldown": true,
         "cooldown": 15,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 128,
+          "cancels": {
+            "attack": 101,
+            "skill": 100,
+            "dash": 103,
+            "jump": 103,
+            "walk": 105,
+            "swap": 102
+          },
+          "source": "burst.go:burstFrames"
         },
-        "defaultDuration": 1.383,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:0"
+        },
+        "defaultDuration": 2.133,
         "description": "淑女の優雅な礼儀をもって、大量のプリズム共振砲で前方に広域砲撃を行った後、敵に負温度エネルギー光線を発射し、氷元素範囲ダメージを与える。\n**輝映・星閃**：負温度エネルギー光線は対応する星反応ダメージとみなされる氷元素範囲ダメージを与えるようになる。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        },
         "en": {
           "name": "Elemental Burst: Formule Phenomenale: Q.E.D.",
           "description": "In line with established ladylike behavior, Sandrone summons a large number of Prismatic Resonance Cannons for a frontal bombardment before firing on her foes with a Convective Inhibition Ray, dealing AoE Cryo DMG.\n**Radiance: Stellar Glimmer**: The Convective Inhibition Ray instead deals AoE Cryo DMG that is considered the corresponding Stellar Glimmer reaction DMG."
+        },
+        "gcsimEffect": {
+          "keys": [],
+          "status": "nokey"
         }
       },
       {
@@ -56578,7 +56761,7 @@
         "name": "ダッシュ",
         "shortName": "D",
         "type": "dash",
-        "defaultDuration": 0.2,
+        "defaultDuration": 0.333,
         "en": {
           "name": "Sprint"
         }
@@ -56588,7 +56771,7 @@
         "name": "ジャンプ",
         "shortName": "J",
         "type": "jump",
-        "defaultDuration": 0.55,
+        "defaultDuration": 0.517,
         "en": {
           "name": "Jump"
         }
@@ -56609,11 +56792,11 @@
           "name": "Eternal Speculation Engine",
           "talentName": "Eternal Speculation Engine",
           "description": "**Radiance: Stellar Glimmer**: When using the Elemental Skill **Formule Phenomenale: Differential Analysis**, if Fagio's **Decoding Power** is greater than 50, the second Prism Shot fired by Fagio at nearby opponents will deal 400% of its original DMG as Fagio's Decoding Power is decreased.\nAdditionally, for every 10 points of Decoding Power Fagio loses, it gains 1 stack of Refined Tactics for 60s (max 10 stacks). When Sandrone uses the Elemental Burst **Formule Phenomenale: Q.E.D.** while in the Radiance: Stellar Glimmer state, all stacks of Refined Tactics are cleared, causing the Convective Inhibition Ray to deal 100% + (number of stacks cleared) × 10% of its original DMG.",
-          "gcsimNote": "Not implemented in gcsim"
+          "gcsimNote": "gcsim has no status key for this effect (instant effects, stat bonuses, healing, Energy, etc.). Not overwritten by gcsim results"
         },
         "timing": "conditional",
         "gcsimTarget": false,
-        "gcsimNote": "gcsim が未実装"
+        "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
       },
       {
         "talentName": "淑女の礼儀作法",
@@ -56625,17 +56808,18 @@
         "en": {
           "name": "A Lady's Code of Conduct",
           "talentName": "A Lady's Code of Conduct",
-          "description": "Increases Sandrone's Elemental Mastery based on her ATK. Every 100 ATK will increase her Elemental Mastery by 8. The maximum increase she can gain this way is 160.",
-          "gcsimNote": "Not implemented in gcsim"
+          "description": "Increases Sandrone's Elemental Mastery based on her ATK. Every 100 ATK will increase her Elemental Mastery by 8. The maximum increase she can gain this way is 160."
         },
-        "timing": "conditional",
-        "gcsimTarget": false,
-        "gcsimNote": "gcsim が未実装"
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sandrone-a4"
+        ]
       }
     ],
     "source": {
       "genshinId": 10000133,
-      "frameSource": "推定（同じ武器種の 19 キャラの中央値。実測ではありません）"
+      "gcsimKey": "sandrone"
     },
     "constellations": [
       {
@@ -56694,8 +56878,7 @@
       }
     ],
     "en": {
-      "name": "Sandrone",
-      "frameSource": "Estimated (median of 19 characters with the same weapon type; not measured)"
+      "name": "Sandrone"
     },
     "constellationEffects": [
       {
@@ -56705,13 +56888,14 @@
         "description": "**演算**モード中、ファジオの**演算負荷**の上昇速度が50%低下し、チーム内の全キャラクターの与える星反応のダメージ+30%。",
         "en": {
           "name": "Morrow After the Golden Dusk",
-          "description": "When in **Decoding** mode, Fagio's **Decoding Power** increases at a 50% lower rate, and all party members deal 30% increased Stellar Glimmer reaction DMG.",
-          "gcsimNote": "Not implemented in gcsim"
+          "description": "When in **Decoding** mode, Fagio's **Decoding Power** increases at a 50% lower rate, and all party members deal 30% increased Stellar Glimmer reaction DMG."
         },
         "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false,
-        "gcsimNote": "gcsim が未実装"
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sandrone-c1"
+        ]
       },
       {
         "id": "10000133-cryo_c2",
@@ -56720,28 +56904,14 @@
         "description": "輝映・星閃：重撃で発射した冷却ビームの会心ダメージ+40%。冷却ビームを発射するたび、その回の**演算**モード中に発射したすべての冷却ビームの与える会心ダメージがさらに20%アップする。この効果は最大3層まで重ね掛けできる。",
         "en": {
           "name": "An Heiress Gazed Into the Looking-Glass",
-          "description": "Radiance: Stellar Glimmer: Increases CRIT DMG from Charged Attack condensed beams by 40%. Also, each time a beam is fired, CRIT DMG dealt by all condensed beams fired during this **Decoding** mode period will be further increased by 20%. Max 3 stacks.",
-          "gcsimNote": "Not implemented in gcsim"
+          "description": "Radiance: Stellar Glimmer: Increases CRIT DMG from Charged Attack condensed beams by 40%. Also, each time a beam is fired, CRIT DMG dealt by all condensed beams fired during this **Decoding** mode period will be further increased by 20%. Max 3 stacks."
         },
         "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false,
-        "gcsimNote": "gcsim が未実装"
-      },
-      {
-        "id": "10000133-cryo_c6",
-        "level": 6,
-        "name": "てづから水仙の夢から醒めて 薄明を掴まん",
-        "description": "**演算**モード中、ファジオが3回目の冷却ビームを発射する際、より威力の強い集束型冷却ビームを発射し続けるようになり、本来後に発射される冷却ビームを基準として、サンドローネの攻撃力100%分の氷元素範囲ダメージを最大4段追加で与える。 輝映・星閃：集束型冷却ビームが対応する星反応ダメージとみなされる氷元素範囲ダメージを最大4段追加で与えるようになる。このダメージはサンドローネの攻撃力の以下の割合に相当する。 輝映・星電導：80%。 輝映・星拡散：120%。 また、サンドローネが与えるすべての星反応ダメージは20%**向上**する。",
-        "en": {
-          "name": "Narcissus Wakes, Her Eyes Upon the Dawn",
-          "description": "When Fagio fires a condensed beam for the third time while in **Decoding** mode, the beam becomes a more powerful Condensed Cluster Beam that fires continuously. This beam will deal up to 4 additional instances of AoE Cryo DMG at 100% of Sandrone's ATK on top of any subsequent original beam fired.\nRadiance: Stellar Glimmer: The Condensed Cluster Beam attack deals 4 additional instances of AoE Cryo DMG. The DMG dealt with this attack, which is considered the corresponding Stellar Glimmer reaction DMG, is equal to:\nRadiance: Stellar-Conduct: 80% of Sandrone's ATK.\nRadiance: Stellar Swirl: 120% of Sandrone's ATK.\nAdditionally, all Stellar Glimmer reaction DMG dealt by Sandrone is **elevated** by 20%.",
-          "gcsimNote": "Not implemented in gcsim"
-        },
-        "dataSource": {},
-        "timing": "conditional",
-        "gcsimTarget": false,
-        "gcsimNote": "gcsim が未実装"
+        "timing": "always",
+        "gcsimTarget": true,
+        "gcsimKeys": [
+          "sandrone-c2"
+        ]
       }
     ]
   },

@@ -1,6 +1,6 @@
 {
   "$comment": "gcsim のキーの別名の組（同じキャラ・武器・聖遺物を指す名前）。scripts/build-key-aliases.ts が、gcsim の pkg/shortcut から作る。",
-  "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
+  "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
   "characters": [
     ["alhaitham","haitham"],
     ["amy","fischl","fish"],
@@ -36,6 +36,7 @@
     ["luminegeo","travelergeo"],
     ["luminehydro","travelerhydro"],
     ["luminepyro","travelerpyro"],
+    ["marionette","sandrone"],
     ["mav","mavuika"],
     ["mizuki","yumemizukimizuki"],
     ["ning","ningguang"],

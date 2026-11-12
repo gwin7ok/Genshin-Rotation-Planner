@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "gcsimCommit": "377c9ce4c03895a5ab2be8fa69192ae8f08568b5",
-  "generatedAt": "2026-11-04T00:13:37.621Z",
+  "gcsimCommit": "b107b5dc5cb88977bed5270e5d83e64934730d4d",
+  "generatedAt": "2026-11-12T06:39:18.170Z",
   "effects": [
     {
       "id": "a-day-carved-from-rising-winds-2pc",
@@ -6117,6 +6117,42 @@
       "observed": true
     },
     {
+      "id": "sandrone-c1",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "sandrone",
+      "ownerName": "サンドローネ",
+      "en": {
+        "ownerName": "Sandrone"
+      },
+      "permanent": true
+    },
+    {
+      "id": "sandrone-c2",
+      "category": "constellation",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "sandrone",
+      "ownerName": "サンドローネ",
+      "en": {
+        "ownerName": "Sandrone"
+      },
+      "permanent": true
+    },
+    {
+      "id": "sandrone-c4-icd",
+      "category": "constellation",
+      "kind": "cooldown",
+      "ownerType": "character",
+      "ownerKey": "sandrone",
+      "ownerName": "サンドローネ",
+      "en": {
+        "ownerName": "Sandrone"
+      },
+      "durationFrames": 240
+    },
+    {
       "id": "sara-c1-icd",
       "category": "constellation",
       "kind": "cooldown",
@@ -9808,6 +9844,18 @@
         "name": "Rosaria Ascension 2 Passive \"Shadow Samaritan\""
       },
       "durationFrames": 600
+    },
+    {
+      "id": "sandrone-a4",
+      "category": "talent",
+      "kind": "effect",
+      "ownerType": "character",
+      "ownerKey": "sandrone",
+      "ownerName": "サンドローネ",
+      "en": {
+        "ownerName": "Sandrone"
+      },
+      "permanent": true
     },
     {
       "id": "sara-a4-icd",
@@ -18531,21 +18579,6 @@
       "duration": 12
     },
     {
-      "id": "constellation:10000133-cryo_c6",
-      "type": "constellation",
-      "ownerId": "10000133-cryo",
-      "ownerName": "サンドローネ",
-      "name": "てづから水仙の夢から醒めて 薄明を掴まん",
-      "en": {
-        "ownerName": "Sandrone",
-        "name": "Narcissus Wakes, Her Eyes Upon the Dawn",
-        "gcsimNote": "Not implemented in gcsim"
-      },
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
-    },
-    {
       "id": "constellation:10000133-cryo_c1",
       "type": "constellation",
       "ownerId": "10000133-cryo",
@@ -18553,12 +18586,10 @@
       "name": "まばゆき黄金は 遠き日の夕暮れ",
       "en": {
         "ownerName": "Sandrone",
-        "name": "Morrow After the Golden Dusk",
-        "gcsimNote": "Not implemented in gcsim"
+        "name": "Morrow After the Golden Dusk"
       },
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000133-cryo_c2",
@@ -18568,12 +18599,10 @@
       "name": "りりしき影を鏡に 遺して巡る歳月",
       "en": {
         "ownerName": "Sandrone",
-        "name": "An Heiress Gazed Into the Looking-Glass",
-        "gcsimNote": "Not implemented in gcsim"
+        "name": "An Heiress Gazed Into the Looking-Glass"
       },
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "constellation:10000095-hydro_c2",
@@ -19343,6 +19372,38 @@
       "gcsimTarget": true
     },
     {
+      "id": "constellation:10000137-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000137-electro",
+      "ownerName": "バレリー",
+      "name": "一斉突撃の陣構え",
+      "en": {
+        "ownerName": "Valeriy",
+        "name": "Ranks That Charge as One",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 18,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000137-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000137-electro",
+      "ownerName": "バレリー",
+      "name": "敵陣をも貫く威厳",
+      "en": {
+        "ownerName": "Valeriy",
+        "name": "The Strength to Breach Enemy Lines",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 7,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "constellation:10000014-hydro_c2",
       "type": "constellation",
       "ownerId": "10000014-hydro",
@@ -19599,6 +19660,53 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "constellation:10000136-electro_c2",
+      "type": "constellation",
+      "ownerId": "10000136-electro",
+      "ownerName": "ミティヤ",
+      "name": "慣性の彼方に微睡むもの",
+      "en": {
+        "ownerName": "Mitya",
+        "name": "The Matter That Slumbers Beyond Inertness",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 25,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000136-electro_c1",
+      "type": "constellation",
+      "ownerId": "10000136-electro",
+      "ownerName": "ミティヤ",
+      "name": "欠落の痕跡を追う観察者",
+      "en": {
+        "ownerName": "Mitya",
+        "name": "The Observer Seeking What Is Missing",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 25,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
+      "id": "constellation:10000136-electro_c6",
+      "type": "constellation",
+      "ownerId": "10000136-electro",
+      "ownerName": "ミティヤ",
+      "name": "段階的元素跳躍の理の門",
+      "en": {
+        "ownerName": "Mitya",
+        "name": "Elemental Transition at the Gate of Reason",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "constellation:10000102-hydro_c4",
@@ -22303,12 +22411,12 @@
       "en": {
         "ownerName": "Sandrone",
         "name": "Eternal Speculation Engine",
-        "gcsimNote": "Not implemented in gcsim"
+        "gcsimNote": "gcsim has no status key for this effect (instant effects, stat bonuses, healing, Energy, etc.). Not overwritten by gcsim results"
       },
       "timing": "conditional",
       "gcsimTarget": false,
       "duration": 60,
-      "gcsimNote": "gcsim が未実装"
+      "gcsimNote": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない"
     },
     {
       "id": "talent:10000133-cryo_p2",
@@ -22318,12 +22426,10 @@
       "name": "淑女の礼儀作法",
       "en": {
         "ownerName": "Sandrone",
-        "name": "A Lady's Code of Conduct",
-        "gcsimNote": "Not implemented in gcsim"
+        "name": "A Lady's Code of Conduct"
       },
-      "timing": "conditional",
-      "gcsimTarget": false,
-      "gcsimNote": "gcsim が未実装"
+      "timing": "always",
+      "gcsimTarget": true
     },
     {
       "id": "talent:10000095-hydro_p2",
@@ -23433,6 +23539,22 @@
       "timing": "computed",
       "gcsimTarget": true,
       "duration": 12
+    },
+    {
+      "id": "talent:10000136-electro_p2",
+      "type": "talent",
+      "ownerId": "10000136-electro",
+      "ownerName": "ミティヤ",
+      "name": "臨界爆発性試薬",
+      "en": {
+        "ownerName": "Mitya",
+        "name": "Explosive Reagent: Safe Limits Exceeded",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 15,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "talent:10000102-hydro_p2",
@@ -27440,6 +27562,22 @@
       "timing": "conditional",
       "gcsimTarget": true,
       "duration": 0.1
+    },
+    {
+      "id": "weapon:14525:wbuff_14525",
+      "type": "weapon",
+      "ownerId": "14525",
+      "ownerName": "秘星の聖典",
+      "name": "秘星の聖典: 星々の軌跡",
+      "en": {
+        "ownerName": "Starsealed Edict",
+        "name": "Starsealed Edict: Dawnstar's Flowing Trail",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 20,
+      "gcsimNote": "gcsim が未実装"
     },
     {
       "id": "weapon:15418:wbuff_15418",
@@ -33020,6 +33158,24 @@
       "approval": "generated"
     },
     {
+      "effectId": "sandrone-a4",
+      "targetId": "talent:10000133-cryo_p2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "sandrone-c1",
+      "targetId": "constellation:10000133-cryo_c1",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
+      "effectId": "sandrone-c2",
+      "targetId": "constellation:10000133-cryo_c2",
+      "role": "effect",
+      "approval": "generated"
+    },
+    {
       "effectId": "sapwoodblade-icd",
       "targetId": "weapon:11417:wbuff_11417",
       "role": "cooldown",
@@ -36199,6 +36355,16 @@
     },
     {
       "side": "effect",
+      "id": "sandrone-c4-icd",
+      "state": "excluded",
+      "reason": "low-value-nature",
+      "note": "効果の性質が「追加攻撃」で、画面に出す価値が低い（D91）",
+      "en": {
+        "note": "The effect is of the \"additional attack\" kind and is not worth showing on screen (D91)"
+      }
+    },
+    {
+      "side": "effect",
       "id": "scarletproof-2pc",
       "state": "excluded",
       "reason": "two-piece-effect",
@@ -36769,7 +36935,7 @@
     },
     {
       "side": "target",
-      "id": "constellation:10000133-cryo_c1",
+      "id": "constellation:10000136-electro_c1",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",
@@ -36779,7 +36945,7 @@
     },
     {
       "side": "target",
-      "id": "constellation:10000133-cryo_c2",
+      "id": "constellation:10000136-electro_c2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",
@@ -36789,7 +36955,27 @@
     },
     {
       "side": "target",
-      "id": "constellation:10000133-cryo_c6",
+      "id": "constellation:10000136-electro_c6",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装",
+      "en": {
+        "note": "Not implemented in gcsim"
+      }
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000137-electro_c2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装",
+      "en": {
+        "note": "Not implemented in gcsim"
+      }
+    },
+    {
+      "side": "target",
+      "id": "constellation:10000137-electro_c6",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",
@@ -37942,14 +38128,14 @@
       "id": "talent:10000133-cryo_p1",
       "state": "unsupported",
       "reason": "gcsim-target-false",
-      "note": "gcsim が未実装",
+      "note": "gcsim に、この効果の状態のキーが無い（即時の効果・ステータス加算・回復・エネルギー回復など）。gcsim の結果では上書きされない",
       "en": {
-        "note": "Not implemented in gcsim"
+        "note": "gcsim has no status key for this effect (instant effects, stat bonuses, healing, Energy, etc.). Not overwritten by gcsim results"
       }
     },
     {
       "side": "target",
-      "id": "talent:10000133-cryo_p2",
+      "id": "talent:10000136-electro_p2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",
@@ -38140,6 +38326,16 @@
     {
       "side": "target",
       "id": "weapon:14524:wbuff_14524",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装",
+      "en": {
+        "note": "Not implemented in gcsim"
+      }
+    },
+    {
+      "side": "target",
+      "id": "weapon:14525:wbuff_14525",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",

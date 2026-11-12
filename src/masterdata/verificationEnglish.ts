@@ -40,6 +40,7 @@ const VERIFICATION_TEXTS: Record<string, string> = {
   '同じ効果・同じ持続期間のものが、本体のバー（別のキー）で紐づけ済み': 'The same effect with the same duration is already linked through the main bar (another key)',
   '命ノ星座の効果。マスター側の命ノ星座の定義（constellationEffects）に結び付け済み（6-A2。D91。2026-10-09）': 'Constellation effect. Already linked to the constellation definition in the master (constellationEffects) (6-A2; D91; 2026-10-09)',
   '固有天賦の効果。発動バフ（固有天賦）として扱う（6-3c。ユーザー決定 2026-09-30）': 'Passive talent effect. Handled as a buff (passive talent) (6-3c; user decision 2026-09-30)',
+  'サンドローネの Q の連続ダメージ（3 発。ヒットは 123〜147 フレーム）。短い単発で、攻撃の動作時間（128 フレーム）の内側。バーにしない（2026-09-30 の決定を適用。v2.50.0 の取り込み）': 'Sandrone burst: 3 consecutive hits (frames 123–147). Short bursts inside the attack animation (128 frames). No bar (applies the 2026-09-30 decision; v2.50.0 import).',
   '継続ダメージが短い単発（0.08〜2.4 秒）で、攻撃の動作時間の内側。バーにしない（ユーザー決定 2026-09-30）': 'Damage over time is a short single burst (0.08–2.4s) inside the attack animation. No bar (user decision 2026-09-30)',
   '枠が読めない固有天賦（関数名 passive）': 'Passive talent whose slot cannot be read (function name passive)',
   '風元素共鳴のCT短縮。アプリでは計算ロジックに実装済み': 'Anemo resonance CD reduction. Already implemented in the app calculation logic',

@@ -1,8 +1,8 @@
 # gcsim キーの辞書の差分（前回の作成との比較）
 
-作成: 2026-11-04 / gcsim commit 377c9ce
+作成: 2026-11-12 / gcsim commit b107b5d
 
-増えたキー 0 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: 0 件）/ 消えたキー 0 件（うち対象 0 件）
+増えたキー 5 件（うち対応表の対象 = 分類が skill / burst / character / attack の効果: 0 件）/ 消えたキー 0 件（うち対象 0 件）
 
 ## 増えたキー（対象のもの）
 なし
@@ -11,7 +11,11 @@
 なし
 
 ## 増えたキー（その他）
-なし
+- `sandrone-a4` [talent/effect] sandrone
+- `sandrone-c1` [constellation/effect] sandrone
+- `sandrone-c2` [constellation/effect] sandrone
+- `sandrone-c4-icd` [constellation/cooldown] sandrone
+- `sandrone-particle-icd` [skill/internal] sandrone
 
 ## 消えたキー（その他）
 なし

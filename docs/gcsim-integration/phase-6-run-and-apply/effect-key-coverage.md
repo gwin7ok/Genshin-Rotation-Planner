@@ -1,17 +1,17 @@
 # スキル・爆発の効果の対応表（カバレッジ）
 
-作成: 2026-11-12 / gcsim の辞書のコミット 377c9ce4 / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
+作成: 2026-11-12 / gcsim の辞書のコミット b107b5dc / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
 
 4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。
 「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。
 決定は `src/masterdata/effectKeyDecisions.ts`、紐づけは `actionEffectKeyOverrides.ts` / `actionEffectExtras.ts` に書く。
 
-## effects（gcsim の効果。分類が skill / burst / character / attack と、実行時に見つかった設置物・シールド・継続ダメージ。309 件）
+## effects（gcsim の効果。分類が skill / burst / character / attack と、実行時に見つかった設置物・シールド・継続ダメージ。310 件）
 
 | 状態 | 件数 |
 |---|---|
 | 紐づけ済み | 202 |
-| gcsim は効果を出すが、紐づけず・バーも出さない | 49 |
+| gcsim は効果を出すが、紐づけず・バーも出さない | 50 |
 | マスター側の命ノ星座の定義で扱う | 20 |
 | 本体のバーで表示済み | 19 |
 | 猶予時間・短い窓（効果ではない） | 10 |
@@ -26,11 +26,11 @@
 |---|---|
 | 紐づけ済み | 207 |
 | gcsim の効果なし・バーを出さない | 75 |
-| gcsim にキャラが未登録 | 19 |
+| gcsim にキャラが未登録 | 17 |
 | 発動バフ（固有天賦）として扱う | 16 |
 | gcsim の効果なし・アプリ側の値でバーを表示 | 12 |
 | gcsim は効果を出すが、紐づけず・バーも出さない | 6 |
-| gcsim が効果のイベントを出さない（暫定） | 2 |
+| gcsim が効果のイベントを出さない（暫定） | 4 |
 | 保留 | 1 |
 
 ## links（効果 ↔ 対象。247 件）

@@ -22,7 +22,7 @@ Covers passive talents, constellations, weapons, artifacts and elemental resonan
 | weapon / excluded | 42 |
 | weapon / linked | 393 |
 
-## Master targets (840)
+## Master targets (841)
 
 | Type / state | Count |
 |---|---:|
@@ -33,7 +33,7 @@ Covers passive talents, constellations, weapons, artifacts and elemental resonan
 | resonance / linked | 6 |
 | resonance / unsupported | 1 |
 | talent / linked | 158 |
-| talent / unsupported | 113 |
+| talent / unsupported | 114 |
 | weapon / linked | 223 |
 | weapon / unsupported | 16 |
 

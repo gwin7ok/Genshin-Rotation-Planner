@@ -23229,6 +23229,22 @@
       "duration": 20
     },
     {
+      "id": "talent:10000137-electro_p2",
+      "type": "talent",
+      "ownerId": "10000137-electro",
+      "ownerName": "バレリー",
+      "name": "突破口への突撃",
+      "en": {
+        "ownerName": "Valeriy",
+        "name": "Into the Breach",
+        "gcsimNote": "Not implemented in gcsim"
+      },
+      "timing": "conditional",
+      "gcsimTarget": false,
+      "duration": 18,
+      "gcsimNote": "gcsim が未実装"
+    },
+    {
       "id": "talent:10000014-hydro_p2",
       "type": "talent",
       "ownerId": "10000014-hydro",
@@ -38136,6 +38152,16 @@
     {
       "side": "target",
       "id": "talent:10000136-electro_p2",
+      "state": "unsupported",
+      "reason": "gcsim-target-false",
+      "note": "gcsim が未実装",
+      "en": {
+        "note": "Not implemented in gcsim"
+      }
+    },
+    {
+      "side": "target",
+      "id": "talent:10000137-electro_p2",
       "state": "unsupported",
       "reason": "gcsim-target-false",
       "note": "gcsim が未実装",

@@ -23,8 +23,8 @@
 ## 進め方
 - gcsim 連携の作業は、`docs/gcsim-integration/README.md` の運用ルールに従う（作業前に計画・進捗を読む、作業中・完了時に更新、ユーザーの決定は `progress.md` の決定ログに記録）。
 - マスターデータ・編成のデータは、名前ではなく ID をキーにする。
-- 返答は日本語。コミットはユーザーが行う。
-- **ブランチ・公開**（2026-10-12）: 作業は、ユーザーが切ったブランチの上で行う（`main` への直接の変更は、ユーザーが指示したときだけ。ブランチの作成・切り替え・コミット・push・マージはユーザーが行う。作業中に、別のブランチへ切り替えない）。公開サイト（GitHub Pages）の更新は、VSCode の **`ctrl+shift+2`（Update Changelog = `npm run release:bump`）→ `ctrl+shift+3`（release-tag-and-push-short = `npm run release:tag`）** で行う（タグの push → Actions の `release.yml` が Release を作成し、`deploy.yml` を main の上で起動する）。`github-pages` 環境は main 以外を拒否するため、タグから deploy を直接起動しない。詳細: `docs/リリース手順.md`。
+- 返答は日本語。**コミットは、エージェントが行う**（ユーザー指示 2026-11-12。区切りのよいところで `git add -A` → コミット。1 行目は `feat:` / `fix:` ＋利用者に分かる文。末尾に Co-Authored-By を付ける）。
+- **ブランチ・公開**（2026-10-12）: 作業は、ユーザーが切ったブランチの上で行う（`main` への直接の変更は、ユーザーが指示したときだけ。ブランチの作成・切り替え・push・マージ・タグはユーザーが行う（コミットはエージェント）。作業中に、別のブランチへ切り替えない）。公開サイト（GitHub Pages）の更新は、VSCode の **`ctrl+shift+2`（Update Changelog = `npm run release:bump`）→ `ctrl+shift+3`（release-tag-and-push-short = `npm run release:tag`）** で行う（タグの push → Actions の `release.yml` が Release を作成し、`deploy.yml` を main の上で起動する）。`github-pages` 環境は main 以外を拒否するため、タグから deploy を直接起動しない。詳細: `docs/リリース手順.md`。
 - **バージョン管理**（2026-10-12。D177・D179）: 版は `package.json` の `version`（SemVer。唯一の出どころ。Update Changelog が更新する）。変更履歴は `CHANGELOG.md`（`[Unreleased]` に書く。空なら、前のリリース以降のコミットから生成される）。**コミットの 1 行目は、`feat:` / `fix:` などの種類 + 利用者に分かる文で書くと、そのまま変更履歴になる**。リリースの手順は `docs/リリース手順.md`。
 - **gcsim の WebAssembly 版**（公開サイトの計算エンジン。D169）: 生成物（`public/gcsim/main.wasm` など）は Git に入れない（`npm run wasm:build`）。gcsim のバージョンを上げたら、WASM の再ビルドと、フォークのタグ（`app-wasm-<version>`）の更新が要る（`docs/gcsim-サーバー更新手順.md` の 6-B）。開発中の画面は、`main.wasm` があれば WASM、無ければ localhost のサーバーで計算する。
 - **保存**: `localStorage` を、`src/utils/persistence.ts` 以外から直接呼ばない（`npm run check:backup` が検査する）。設定を足すときは `SETTING_KEYS` に足す（バックアップに自動で入る）。キーの文字列は変えない。

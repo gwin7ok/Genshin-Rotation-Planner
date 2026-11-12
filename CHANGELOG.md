@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-12
+
 ### 追加
 - gcsim を v2.50.0 に更新した。サンドローネが gcsim の計算に対応した（スキル・爆発・固有天賦・命ノ星座の効果が、gcsim の結果で反映される）。
 - サンドローネの重撃は、ビームの本数（1〜6 本。命ノ星座 0 は最大 3 本）ごとに別のアクションとして置けるようにした。所要時間は gcsim の実測に合わせた。
@@ -222,7 +224,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.5.2...v1.6.0

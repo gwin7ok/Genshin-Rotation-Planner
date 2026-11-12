@@ -362,8 +362,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               />
               <span className="text-slate-400 font-sans text-[10px]">{t('editor:times')}</span>
               <div className="flex flex-col">
-                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat + 1))} title={t('editor:repeatUp')}>▲</RepeatButton>
-                <RepeatButton onStep={() => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat - 1))} title={t('editor:repeatDown')}>▼</RepeatButton>
+                <RepeatButton onStep={(m) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat + m))} title={t('editor:repeatUp')}>▲</RepeatButton>
+                <RepeatButton onStep={(m) => updateStintAt(stintIndex, cur => setGroupRepeat(cur, run.id, run.repeat - m))} title={t('editor:repeatDown')}>▼</RepeatButton>
               </div>
             </div>
             <button
@@ -565,7 +565,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       return;
     }
 
-    const newDuration = Math.max(0.1, Number((act.duration + delta).toFixed(2)));
+    const newDuration = Math.min(MAX_ACTION_DURATION, Math.max(0.1, Number((act.duration + delta).toFixed(2))));
 
     const nextStints = [...stints];
     const nextActions = [...targetStint.actions];
@@ -1405,8 +1405,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 />
                                 <span className="text-slate-400">s</span>
                                 <div className="flex flex-col ml-0.5">
-                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, 0.1)} title={t('editor:plus01')}>▲</RepeatButton>
-                                  <RepeatButton onStep={() => updateActionDuration(stintIndex, actIdx, -0.1)} title={t('editor:minus01')}>▼</RepeatButton>
+                                  <RepeatButton onStep={(m) => updateActionDuration(stintIndex, actIdx, 0.1 * m)} title={t('editor:plus01')}>▲</RepeatButton>
+                                  <RepeatButton onStep={(m) => updateActionDuration(stintIndex, actIdx, -0.1 * m)} title={t('editor:minus01')}>▼</RepeatButton>
                                 </div>
                               </div>
 
@@ -1715,8 +1715,8 @@ const ActionTimingInput: React.FC<{
       />
       <span className="text-slate-400">s</span>
       <div className="flex flex-col">
-        <RepeatButton onStep={() => onChange(value + 1)} title={t('editor:plus1', { label })}>▲</RepeatButton>
-        <RepeatButton onStep={() => onChange(value - 1)} title={t('editor:minus1', { label })}>▼</RepeatButton>
+        <RepeatButton onStep={(m) => onChange(value + m)} title={t('editor:plus1', { label })}>▲</RepeatButton>
+        <RepeatButton onStep={(m) => onChange(value - m)} title={t('editor:minus1', { label })}>▼</RepeatButton>
       </div>
       {isCustom && (
         <button
@@ -1733,20 +1733,67 @@ const ActionTimingInput: React.FC<{
 };
 
 
+/** アクションの所要時間の上限（秒）。上限がないと、長押しで際限なく伸びて描画が重くなる */
+const MAX_ACTION_DURATION = 999;
+
+/** 長押しの繰り返しの設定（待ち時間・間隔・加速・強制停止） */
+const REPEAT_FIRST_DELAY_MS = 400;
+const REPEAT_INTERVAL_MS = 80;
+const REPEAT_MAX_HOLD_MS = 10000; // 押しっぱなしの検出もれがあっても、この時間で必ず止める
+/** 繰り返した回数に応じた増減の倍率（長く押すほど大きく動く） */
+const repeatMultiplier = (ticks: number) => (ticks < 15 ? 1 : ticks < 40 ? 5 : 10);
+
 /**
  * 押している間、繰り返し実行するボタン（押した瞬間に1回、0.4秒後から0.08秒ごと）。
- * 実行する処理は毎回最新のもの（最新の値・状態）を使う
+ * 実行する処理は毎回最新のもの（最新の値・状態）を使う。引数は増減の倍率（1 → 5 → 10 と長押しで加速）。
+ * 暴走の防止: ①ポインタキャプチャで離した操作を必ず受ける ②window の離す・キャンセル・フォーカス喪失でも止める
+ * ③ボタンが押されていない状態を検出したら止める ④前の処理が終わってから次を予約する（処理が積み重ならない）
+ * ⑤最長 10 秒で強制停止
  */
-const RepeatButton: React.FC<{ onStep: () => void; title: string; children: React.ReactNode }> = ({ onStep, title, children }) => {
+const RepeatButton: React.FC<{ onStep: (multiplier: number) => void; title: string; children: React.ReactNode }> = ({ onStep, title, children }) => {
   const stepRef = useRef(onStep);
   stepRef.current = onStep;
-  const timers = useRef<{ delay?: number; repeat?: number }>({});
+  const timer = useRef<number | undefined>(undefined);
+  const cleanup = useRef<(() => void) | null>(null);
   const stop = () => {
-    window.clearTimeout(timers.current.delay);
-    window.clearInterval(timers.current.repeat);
-    timers.current = {};
+    window.clearTimeout(timer.current);
+    timer.current = undefined;
+    cleanup.current?.();
+    cleanup.current = null;
   };
   useEffect(() => stop, []);
+
+  const start = (target: HTMLButtonElement, pointerId: number) => {
+    stop();
+    const startedAt = performance.now();
+    let ticks = 0;
+    stepRef.current(1);
+    try { target.setPointerCapture(pointerId); } catch { /* 取れなくても、window 側の保険で止める */ }
+    const onRelease = () => stop();
+    const onMove = (ev: PointerEvent) => { if (ev.buttons === 0) stop(); };
+    const onVisibility = () => { if (document.visibilityState === 'hidden') stop(); };
+    window.addEventListener('pointerup', onRelease, true);
+    window.addEventListener('pointercancel', onRelease, true);
+    window.addEventListener('pointermove', onMove, true);
+    window.addEventListener('blur', onRelease);
+    document.addEventListener('visibilitychange', onVisibility);
+    cleanup.current = () => {
+      window.removeEventListener('pointerup', onRelease, true);
+      window.removeEventListener('pointercancel', onRelease, true);
+      window.removeEventListener('pointermove', onMove, true);
+      window.removeEventListener('blur', onRelease);
+      document.removeEventListener('visibilitychange', onVisibility);
+      try { target.releasePointerCapture(pointerId); } catch { /* すでに解放済み */ }
+    };
+    // setInterval ではなく、1 回ごとに次を予約する（処理が重くても、待ち行列に積み重ならない）
+    const tick = () => {
+      if (performance.now() - startedAt > REPEAT_MAX_HOLD_MS) { stop(); return; }
+      stepRef.current(repeatMultiplier(ticks));
+      ticks++;
+      timer.current = window.setTimeout(tick, REPEAT_INTERVAL_MS);
+    };
+    timer.current = window.setTimeout(tick, REPEAT_FIRST_DELAY_MS);
+  };
 
   return (
     <button
@@ -1757,20 +1804,16 @@ const RepeatButton: React.FC<{ onStep: () => void; title: string; children: Reac
         if (e.button !== 0) return;
         e.preventDefault(); // 入力欄のフォーカスを奪わない
         e.stopPropagation();
-        stop();
-        stepRef.current();
-        timers.current.delay = window.setTimeout(() => {
-          timers.current.repeat = window.setInterval(() => stepRef.current(), 80);
-        }, 400);
+        start(e.currentTarget, e.pointerId);
       }}
       onPointerUp={stop}
-      onPointerLeave={stop}
       onPointerCancel={stop}
+      onLostPointerCapture={stop}
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          stepRef.current();
+          stepRef.current(1);
         }
       }}
     >

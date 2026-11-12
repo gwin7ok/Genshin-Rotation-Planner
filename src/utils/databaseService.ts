@@ -148,6 +148,15 @@ function mergeMasterWithProtected(
 }
 
 /**
+ * オンライン生成の結果に、同梱マスターにあって取得元（genshin-db の API）にまだ無い品目を足す。
+ * 公開 API が新キャラ・新武器に追いつく前に「オンライン生成」を押しても、同梱の品目が消えないようにする。
+ */
+function withBundledMissing<T extends { id: string }>(latest: T[], bundled: T[]): T[] {
+  const ids = new Set(latest.map(item => item.id));
+  return [...latest, ...bundled.filter(item => !ids.has(item.id))];
+}
+
+/**
  * Loads database from LocalStorage or generates default master DB
  */
 export function loadDatabase(): AppDatabase {
@@ -238,7 +247,7 @@ export async function syncCharactersMasterOnline(
   attachDurations(extras, catalogEntries as any[]);
   linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
   attachHandwrittenCharacterEnglish(latestChars); // 手で書いた名前・説明の英語（D255。結び付けの後）
-  const mergedCharacters = mergeMasterWithProtected(latestChars, currentDb.characters, isLockedCharacter);
+  const mergedCharacters = mergeMasterWithProtected(withBundledMissing(latestChars, INITIAL_MASTER_DATABASE.characters), currentDb.characters, isLockedCharacter);
 
   const updatedDb: AppDatabase = {
     ...currentDb,
@@ -267,7 +276,7 @@ export async function syncWeaponsMasterOnline(
   linkEquipmentBuffs(latestWeapons, [], catalogIndex);
   attachHandwrittenEquipmentEnglish(latestWeapons, []);
   const mergedWeapons = mergeItemsWithProtected(
-    latestWeapons,
+    withBundledMissing(latestWeapons, MASTER_WEAPONS),
     currentDb.weapons,
     isLockedWeapon,
     isCustomWeapon,
@@ -299,7 +308,7 @@ export async function syncArtifactsMasterOnline(
   linkEquipmentBuffs([], latestArtifacts, catalogIndex);
   attachHandwrittenEquipmentEnglish([], latestArtifacts);
   const mergedArtifacts = mergeItemsWithProtected(
-    latestArtifacts,
+    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
     currentDb.artifacts,
     isLockedArtifact,
     isCustomArtifact,
@@ -328,13 +337,13 @@ export async function syncEquipmentMasterOnline(
   linkEquipmentBuffs(latestWeapons, latestArtifacts, catalogIndex);
   attachHandwrittenEquipmentEnglish(latestWeapons, latestArtifacts);
   const mergedWeapons = mergeItemsWithProtected(
-    latestWeapons,
+    withBundledMissing(latestWeapons, MASTER_WEAPONS),
     currentDb.weapons,
     isLockedWeapon,
     isCustomWeapon,
   );
   const mergedArtifacts = mergeItemsWithProtected(
-    latestArtifacts,
+    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
     currentDb.artifacts,
     isLockedArtifact,
     isCustomArtifact,
@@ -358,7 +367,7 @@ export async function syncEquipmentMasterOnline(
 export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
   const latestWeapons = MASTER_WEAPONS;
   const mergedWeapons = mergeItemsWithProtected(
-    latestWeapons,
+    withBundledMissing(latestWeapons, MASTER_WEAPONS),
     currentDb.weapons,
     isLockedWeapon,
     isCustomWeapon,
@@ -380,7 +389,7 @@ export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
 export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
   const latestArtifacts = MASTER_ARTIFACTS;
   const mergedArtifacts = mergeItemsWithProtected(
-    latestArtifacts,
+    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
     currentDb.artifacts,
     isLockedArtifact,
     isCustomArtifact,

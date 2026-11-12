@@ -119,6 +119,7 @@
     "blockedWait": "gcsim では{{mode}}が終わるまで（あと {{seconds}} 秒）待ちます",
     "blockedNone": "ゲームでは何も起きません。gcsim では別の動作として実行されます",
     "blockedError": "gcsim では実行エラーになります",
+    "gaugeExpired": "「{{gauge}}」が期限（{{seconds}} 秒）を過ぎて消えているため、別の動作にならず、普通の動作になります。{{hint}}",
     "gauge": "「{{gauge}}」が足りません（見込み {{value}} / {{need}}）。{{hint}}",
     "extraFromMaster": "{{action}}（副次効果: {{label}}。実行前のマスターの値）",
     "extra": "{{action}}（副次効果: {{label}}）",

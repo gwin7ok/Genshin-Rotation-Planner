@@ -180,6 +180,8 @@ export interface ActionMode {
     gainByNormalIndex?: number[];
     /** モードが終わっても、ゲージの値を次のモードへ持ち越す（兹白の隙に浮かぶ光。gcsim は、モードの外では増減しない）。次のモードの初期値 = 持ち越し + 命ノ星座の gaugeInitial（上限まで） */
     persists?: boolean;
+    /** ゲージの獲得分が消えるまでのフレーム（獲得ごとに期限を持つ。ミティヤの変形ビーコン: wiki で 6 秒、固有天賦 2 で 10 秒）。期限を過ぎた分は、使えない */
+    expireFrames?: number;
   };
   /** モードの間に、自分の元素爆発を使うと、モードの終わりが延びる（フレーム。兹白: 1.7 秒 = 102f） */
   extendByBurstFrames?: number;

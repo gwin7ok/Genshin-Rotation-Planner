@@ -2,7 +2,7 @@ import { ActiveBuffSpan } from '../../types/genshin';
 import type { ActionFrames, ModeEnder } from '../../types/genshin';
 import { CharacterModel } from '../../models/CharacterModel';
 import { type ModeWindow } from './types';
-import { isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, modeGainScale, drainAdvance, drainProject, endMode } from './modeHelpers';
+import { gaugeExpire, isModeActive, modeKeyOf, modeMaxUses, modeGaugeInitial, consValue, modeGainScale, drainAdvance, drainProject, endMode } from './modeHelpers';
 import type { RotationState } from './state';
 import type { StintContext, ActionContext } from './context';
 import { actionName, charName, loc } from '../../i18n/loc';
@@ -37,6 +37,7 @@ export function detectModeContext(state: RotationState, sc: StintContext, ac: Ac
     // 別の動作になる条件（モードの開始からの時間・ゲージの残り）。満たさないときは、普通の動作
     const cond = rp?.conditions?.[act.actionTypeId.slice(char.id.length + 1)];
     const g = m.def.gauge;
+    if (cond?.requiresGauge && g?.expireFrames) gaugeExpire(m, actionStartTime);
     const conditionOk = !cond
       || ((cond.withinFrames === undefined || actionStartTime - m.start <= cond.withinFrames / 60 + 0.001)
         && (!cond.requiresGauge || !g || (m.gauge?.value ?? Math.min(g.max, modeGaugeInitial(m))) >= (g.cost ?? g.max))
@@ -290,6 +291,11 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
     if (!g || m.charId !== char.id || !(isModeActive(m, char.id, sIdx, actionStartTime) || usedUp) || actionStartTime < m.start - 0.001) continue;
     const scale = modeGainScale(m);
     const gaugeState = m.gauge ?? { value: Math.min(g.max, modeGaugeInitial(m)), ticks: 0 };
+    if (g.expireFrames) {
+      gaugeState.batches ??= modeGaugeInitial(m) > 0 ? [{ at: m.start, amount: Math.min(g.max, modeGaugeInitial(m)) }] : [];
+      m.gauge = gaugeState;
+      gaugeExpire(m, actionStartTime);
+    }
     const ticksNow = Math.max(0, Math.floor((actionStartTime - m.start + 0.0005) / (g.timeGain.everyFrames / 60)));
     gaugeState.value = Math.min(g.max, gaugeState.value + (ticksNow - gaugeState.ticks) * g.timeGain.amount * scale);
     gaugeState.ticks = ticksNow;
@@ -304,6 +310,10 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
       if (!free) {
         const costAll = !!consValue(m.def, m.opener.constellation, 'gaugeCostAll');
         gaugeState.value = costAll || g.cost === undefined ? 0 : Math.max(0, gaugeState.value - g.cost);
+        if (gaugeState.batches) {
+          if (costAll || g.cost === undefined) gaugeState.batches = [];
+          else { let left = g.cost; gaugeState.batches = gaugeState.batches.map(b => { const use = Math.min(b.amount, left); left -= use; return { ...b, amount: b.amount - use }; }).filter(b => b.amount > 0); }
+        }
       }
       // 命ノ星座で、使った後に上限まで回復する（ローエンの C6）
       if (consValue(m.def, m.opener.constellation, 'gaugeRefillOnRepress')) gaugeState.value = g.max;
@@ -313,6 +323,14 @@ export function updateModeGaugesAndDrain(state: RotationState, sc: StintContext,
         ? g.gainByNormalIndex[sc.normalStreak % g.gainByNormalIndex.length]
         : g.gainByType[act.type] ?? 0;
       gaugeState.value = Math.min(g.max, gaugeState.value + gain * scale);
+      if (gaugeState.batches && gain > 0) { gaugeState.batches.push({ at: actionStartTime, amount: gain * scale }); gaugeState.expiredLost = false; }
+      // 期限切れで、別の動作（特殊重撃）にならなかった（条件の状態は満たしている）
+      const condKey = act.actionTypeId.slice(char.id.length + 1);
+      const reqState = m.def.repress?.conditions?.[condKey]?.requiresState;
+      const stateOk = !reqState || (m.state !== undefined && reqState.includes(m.state));
+      if (g.expireFrames && gaugeState.expiredLost && modeRepress?.window !== m && g.costActions?.includes(condKey) && stateOk) {
+        gaugeMessage = t('messages:rotation.gaugeExpired', { gauge: loc(g, 'label'), seconds: (g.expireFrames / 60).toFixed(0), hint: loc(g, 'hint') });
+      }
     }
     m.gauge = gaugeState;
   }

@@ -119,6 +119,7 @@
     "blockedWait": "gcsim waits until {{mode}} ends ({{seconds}} s left)",
     "blockedNone": "Nothing happens in the game; gcsim runs it as a different action",
     "blockedError": "gcsim gives a run error",
+    "gaugeExpired": "\"{{gauge}}\" has expired (after {{seconds}}s), so this becomes the normal action instead of the special one. {{hint}}",
     "gauge": "Not enough \"{{gauge}}\" (expected {{value}} / {{need}}). {{hint}}",
     "extraFromMaster": "{{action}} (secondary effect: {{label}}; master value before running)",
     "extra": "{{action}} (secondary effect: {{label}})",

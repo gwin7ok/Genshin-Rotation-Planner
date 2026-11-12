@@ -88,7 +88,7 @@ export interface ModeWindow {
   /** 通常攻撃で溜まったスタック（def.nStacks のモードだけ） */
   stacks?: number;
   /** ゲージ（def.gauge のモードだけ）: 現在値と、時間で数え終えた回数 */
-  gauge?: { value: number; ticks: number };
+  gauge?: { value: number; ticks: number; /** 期限つきのゲージ（def.gauge.expireFrames）の、獲得ごとの時刻と量 */ batches?: Array<{ at: number; amount: number }>; /** 期限切れで消えた分があり、その後に獲得していない */ expiredLost?: boolean };
   /** モードの終わりを延ばした最後の時刻（命ノ星座の repressExtend。間隔の制限に使う） */
   lastExtendAt?: number;
   /** 減る値（def.drain のモードだけ）: 残り・乗っているか・最後に数えた時刻・次の消費の時刻（降りている間） */

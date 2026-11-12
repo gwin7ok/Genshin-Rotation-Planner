@@ -120,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
       ref={headerRef}
       className="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-3 sm:px-4 py-2 shadow-xl transition-all"
     >
-      <div className="w-full flex flex-col items-center gap-2">
+      <div className="w-full flex flex-col items-center gap-1">
         {/* Main Header Row */}
         <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 gap-y-1.5 w-full">
           {/* Logo & Title */}
@@ -230,8 +230,8 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → チャージ効率計算 ⏎ 記法コピー（と記法の表示）） */}
         {!isCollapsed && (
-          <div className="flex items-start gap-2 pt-1.5 border-t border-slate-800/80 animate-fade-in w-full">
-          <div className="flex flex-wrap items-center justify-center gap-1.5 flex-1 min-w-0">
+          <div className="flex items-start gap-2 pt-1 border-t border-slate-800/80 animate-fade-in w-full">
+          <div className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 flex-1 min-w-0">
             <button
               onClick={onOpenHelpModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-colors shadow-sm shrink-0"

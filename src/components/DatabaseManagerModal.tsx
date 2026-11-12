@@ -7,6 +7,7 @@ import {
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
 import { CharacterConfig, ElementType, WeaponType } from '../types/genshin';
 import { t } from '../i18n';
+import { DATABASE_VERSION } from '../data/databaseMaster';
 import { weaponTypeLabel } from '../i18n/labels';
 import { formatCharacterCooldowns } from '../utils/characterActions';
 import { compareIdDesc } from '../utils/idSort';
@@ -529,6 +530,15 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
               <X className="w-5 h-5" />
             </button>
           </div>
+        </div>
+
+        {/* DB のバージョン（ブラウザ保存 / サーバー側）。開いた直後に見える位置 */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-1.5 border-b border-slate-800 bg-slate-950/40 text-[11px] font-mono text-slate-300" title={t('database:manager.dbVersionTitle')}>
+          <span>{t('database:manager.dbVersionBrowser', { version: database.version ?? 0 })}</span>
+          <span>{t('database:manager.dbVersionServer', { version: DATABASE_VERSION })}</span>
+          <span className={(database.version ?? 0) === DATABASE_VERSION ? 'text-emerald-400' : 'text-amber-400'}>
+            {(database.version ?? 0) === DATABASE_VERSION ? t('database:manager.dbVersionSame') : t('database:manager.dbVersionDiffer')}
+          </span>
         </div>
 
         {/* 一括生成の失敗 */}

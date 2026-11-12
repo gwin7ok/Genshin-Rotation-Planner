@@ -109,20 +109,20 @@ genshin-db 5.2.15 で追加されたもの（リポジトリの 7.2 のコミッ
 
 ### 作業 C. 検査
 
-- [ ] C-1. `npm run gcsim:check`・`npm run lint`・`npm run check:backup`。
-- [ ] C-2. `npm run check:snapshots` → 差を説明する（見込み: セノの A1・サンドローネを含む並び）。説明できたら `--update`。
-- [ ] C-3. `npm run check:effectkeys`・`check:action-links`（`coverage:links` に含まれる）で、エラー 0・未検討 0。
-- [ ] C-4. 既存の検査一式（`check:gcsim-import`・`check:rotation-validation`・`check:i18n`・`check:required-er`・`check:sacrificial-seed`）。新キャラ・新武器の名前の英語（i18n）が入っていること。
+- [x] C-1. `npm run gcsim:check`・`npm run lint`・`npm run check:backup`。
+- [x] C-2. `npm run check:snapshots` → 差を説明する（見込み: セノの A1・サンドローネを含む並び）。説明できたら `--update`。
+- [x] C-3. `npm run check:effectkeys`・`check:action-links`（`coverage:links` に含まれる）で、エラー 0・未検討 0。
+- [x] C-4. 既存の検査一式（`check:gcsim-import`・`check:rotation-validation`・`check:i18n`・`check:required-er`・`check:sacrificial-seed`）。新キャラ・新武器の名前の英語（i18n）が入っていること。
 
 ### 作業 D. WebAssembly 版・プリセット（手順書 6-B・6-C）
 
-- [ ] D-1. `npm run wasm:build`（Go が要る）。`wasm-info.json` のコミットが `b107b5dc` であること。
-- [ ] D-2. ソースの控え（AGPL）: フォーク `gwin7ok/gcsim` を同期し、タグ `app-wasm-v2.50.0` を `b107b5dc` に付けて push する。**push はユーザーが行う**（または、ユーザーの確認を取ってから実行する）。古いタグは消さない。
-- [ ] D-3. 同梱プリセット。
+- [x] D-1. `npm run wasm:build`（Go が要る）。`wasm-info.json` のコミットが `b107b5dc` であること。
+- [ ] D-2. （ユーザーの作業待ち。wasm:build は済み。SHA-256 cb8c3d68…）ソースの控え（AGPL）: フォーク `gwin7ok/gcsim` を同期し、タグ `app-wasm-v2.50.0` を `b107b5dc` に付けて push する。**push はユーザーが行う**（または、ユーザーの確認を取ってから実行する）。古いタグは消さない。
+- [x] D-3. 同梱プリセット。 ← **済（2026-11-12）: lunar-bloom を WASM で 2 回計算（所要時間 0 件・2 回目も同じ）し、反応の行の版だけ v2.50.0 に更新（行の内容は不変）。sandrone-stellar-conduct は gcsim 未対応のメンバー（10000150）がいるため読み込み・保存のみ（ファイルは変更せず、スナップショットだけ更新）**
   - `lunar-bloom`（反応の行を持つ）: 手順書 6-C のとおり作り直す（gcsim のバージョンが変わるため必須）。
   - `sandrone-stellar-conduct`: メンバーは 10000150・八重神子・七七・サンドローネ。サンドローネが gcsim 対応になっても、10000150 が gcsim 未対応なら「読み込んで保存だけ」のまま。4 人とも対応していれば、「gcsim で計算」で作り直す対象に変わる（B-3 の後に、4 人の `gcsimKey` の有無で判定する）。
   - 作り直すとき、2 回続けて計算して「所要時間 N 件」が 0 になることを確かめる（教訓。D330）。
-- [ ] D-4. WASM とサーバーの結果の一致（`提供方法の検討-WASM検証結果.md` の再現手順 4）。
+- [x] D-4. WASM とサーバーの結果の一致（`提供方法の検討-WASM検証結果.md` の再現手順 4）。
 
 ### 作業 E. 画面の通し確認（手順書 7）
 

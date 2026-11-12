@@ -4,6 +4,7 @@ import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, 
 import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { PlaybackControls } from './PlaybackControls';
 import { t } from '../i18n';
 import { slotDisplayName } from '../utils/presets';
 
@@ -21,6 +22,15 @@ interface HeaderProps {
   onOpenDatabaseModal: () => void;
   onExportJson: () => void;
   onImportJson: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isPlaying: boolean;
+  onTogglePlay: () => void;
+  onResetPlayback: () => void;
+  currentTime: number;
+  totalDuration: number;
+  playbackSpeed: number;
+  onChangeSpeed: (speed: number) => void;
+  playbackCycleCount?: number;
+  loopPeriod?: number;
   onCopyNotation: () => void;
   onCopyGcsimConfig: () => void;
   /** 「gcsim で計算」: 設定文を作って gcsim を実行し、結果を一括で反映する（D120） */
@@ -53,6 +63,15 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDatabaseModal,
   onExportJson,
   onImportJson,
+  isPlaying,
+  onTogglePlay,
+  onResetPlayback,
+  currentTime,
+  totalDuration,
+  playbackSpeed,
+  onChangeSpeed,
+  playbackCycleCount = 1,
+  loopPeriod = 0,
   onCopyNotation,
   onCopyGcsimConfig,
   onGcsimCompute,
@@ -79,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
     updateHeight();
     window.addEventListener('resize', updateHeight);
     return () => window.removeEventListener('resize', updateHeight);
-  }, [isCollapsed]);
+  }, [isCollapsed, isPlaying, currentTime, totalDuration]);
 
   const collapseToggle = (
   <button
@@ -290,10 +309,22 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{t('header:menu.energyRecharge')}</span>
             </button>
 
-            {/* 再生の操作（チャージ効率計算の右） */}
-
             {/* 改行（記法コピーは、次の行から） */}
             <div className="basis-full h-0" aria-hidden="true" />
+
+            {/* 再生の操作（記法コピーの行の一番左） */}
+            <PlaybackControls
+              isPlaying={isPlaying}
+              onTogglePlay={onTogglePlay}
+              onResetPlayback={onResetPlayback}
+              currentTime={currentTime}
+              totalDuration={totalDuration}
+              playbackSpeed={playbackSpeed}
+              onChangeSpeed={onChangeSpeed}
+              loopStartTime={loopStartTime}
+              playbackCycleCount={playbackCycleCount}
+              loopPeriod={loopPeriod}
+            />
 
             <button
               onClick={onCopyNotation}

@@ -117,9 +117,6 @@ export const Header: React.FC<HeaderProps> = ({
                 <h1 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-1">
                   {t('header:title')}
                 </h1>
-                <span className="hidden lg:inline-flex px-1.5 py-0.2 rounded-full text-[9px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  {t('header:badge')}
-                </span>
               </div>
             </div>
           </div>

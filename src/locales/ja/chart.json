@@ -19,8 +19,7 @@
     "paletteTitle": "【{{source}}】{{description}}\n効果: {{duration}}s / CT: {{cooldown}}"
   },
   "reaction": {
-    "header": "🌀 反応（{{lap}}周目）",
-    "gcsimResult": "gcsim の結果",
+    "lapPrefix": "[{{lap}}周目]",
     "max": "最大{{max}}",
     "barNote": "※ gcsim を実行した結果（{{lap}}周目）。編集すると、実行し直すまで位置のずれが残ることがあります（クリックで開始位置へシーク）",
     "unitPieces": "個",

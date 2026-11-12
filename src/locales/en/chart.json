@@ -19,8 +19,7 @@
     "paletteTitle": "[{{source}}] {{description}}\nDuration: {{duration}}s / CD: {{cooldown}}"
   },
   "reaction": {
-    "header": "🌀 Reactions (cycle {{lap}})",
-    "gcsimResult": "gcsim result",
+    "lapPrefix": "[Cycle {{lap}}]",
     "max": "max {{max}}",
     "barNote": "* Result of running gcsim (cycle {{lap}}). After editing, positions may be off until you run it again (click to seek to the start)",
     "unitPieces": "",

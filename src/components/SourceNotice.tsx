@@ -1,6 +1,6 @@
 import { GCSIM_CONFIG } from '../utils/gcsim/gcsimConfig.ts';
 import { APP_VERSION, APP_COMMIT } from '../utils/appVersion';
-import { DATABASE_VERSION } from '../data/databaseMaster';
+import { DATABASE_VERSION, GAME_VERSION } from '../data/databaseMaster';
 import { ANALYTICS_ENABLED } from '../utils/analytics';
 import { Trans } from 'react-i18next';
 import { t } from '../i18n';
@@ -23,7 +23,7 @@ export function SourceNotice() {
         {t('notice:source.disclaimer')}
       </p>
       <p>
-        {t('notice:source.version', { appVersion: APP_VERSION, appCommit: APP_COMMIT, gcsimVersion: version, dbVersion: DATABASE_VERSION })}
+        {t('notice:source.version', { appVersion: APP_VERSION, appCommit: APP_COMMIT, gcsimVersion: version, gameVersion: GAME_VERSION, dbVersion: DATABASE_VERSION })}
       </p>
       <p>
         {t('notice:source.storage')}

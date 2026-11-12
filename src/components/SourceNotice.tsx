@@ -18,7 +18,7 @@ export function SourceNotice() {
   const gcsimUrl = sourceMirror ? `${sourceMirror.url}/tree/${sourceMirror.tagPrefix}${version}` : `https://github.com/${GCSIM_CONFIG.repo}/tree/${commit}`;
   const linkClass = 'underline hover:text-slate-300';
   return (
-    <div className="mt-1 space-y-0.5 text-[11px] text-slate-500">
+    <div className="mt-1 space-y-2 text-[11px] text-slate-500 whitespace-pre-line">
       <p>
         {t('notice:source.disclaimer')}
       </p>
@@ -33,6 +33,7 @@ export function SourceNotice() {
           {t('notice:source.analytics')}
         </p>
       )}
+      <div className="space-y-0.5">
       <p>
         <a className={linkClass} href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('notice:source.privacy')}</a>
       </p>
@@ -46,6 +47,7 @@ export function SourceNotice() {
           }}
         />
       </p>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.8.1] - 2026-11-12
+
 ### 追加
 - 画面下部の出典表示に、対応する原神本体のバージョン（Ver.7.2）を追加した。
 
@@ -230,7 +232,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.1...HEAD
+[1.8.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.6.0...v1.6.1

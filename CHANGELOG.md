@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.7] - 2026-11-14
+
+### 追加
+- 出場トラックの「アクション要素」の行の背景を明るくし、追加されたことが分かりやすいようにした
+
 ## [1.8.6] - 2026-11-13
 
 ### 追加
@@ -260,7 +265,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.6...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.7...HEAD
+[1.8.7]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.5...v1.8.6
 [1.8.5]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.4...v1.8.5
 [1.8.4]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.3...v1.8.4

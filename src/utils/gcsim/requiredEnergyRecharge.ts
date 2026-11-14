@@ -193,6 +193,16 @@ export interface EnergyTimeline {
 export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, EnergyTimeline> {
   const out = new Map<number, EnergyTimeline>();
   const lastExec = new Map<number, number>(); // キャラごとの、直近の爆発の実行（executed burst）のフレーム
+  // キャラごとの、爆発の実行のフレーム（全部）。ヴァレサなどは、エネルギーの消費ログが「実行」のログより先に出る（同じフレーム）ため、
+  // 直近の実行だけを使うと 1 つ前の爆発のフレームになってしまう。同じフレームの実行があれば、それを使う
+  const execFrames = new Map<number, Set<number>>();
+  for (const l of logs) {
+    if (l.msg === 'executed burst' && l.char_index !== undefined) {
+      const set = execFrames.get(l.char_index) ?? new Set<number>();
+      set.add(Number(l.frame));
+      execFrames.set(l.char_index, set);
+    }
+  }
   for (const l of logs) {
     if (l.msg === 'executed burst' && l.char_index !== undefined) { lastExec.set(l.char_index, Number(l.frame)); continue; }
     if (l.event !== 'energy' || l.char_index === undefined) continue;
@@ -204,7 +214,7 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
     if (l.msg === 'draining energy') {
       const pre = Number(l.logs?.pre_drain);
       const post = Number(l.logs?.post_drain);
-      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max, frame, exec: lastExec.get(l.char_index) ?? frame });
+      tl.events.push({ kind: 'burst', cost: Number.isFinite(pre) && Number.isFinite(post) ? pre - post : tl.max, frame, exec: execFrames.get(l.char_index)?.has(frame) ? frame : lastExec.get(l.char_index) ?? frame });
     } else if (l.msg === 'particle') {
       const er = Number(l.logs?.ER);
       const amt = Number(l.logs?.amt);

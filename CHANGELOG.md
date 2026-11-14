@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.8.9] - 2026-11-14
+
+### 修正
+- チャージ効率計算で、ヴァレサの必要 ER が実際より高く出る不具合を修正（爆発の実行フレームが 1 つ前の爆発になっていた）
+
 ## [1.8.8] - 2026-11-14
 
 ### 追加
@@ -270,7 +275,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.8...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...HEAD
+[1.8.9]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.7...v1.8.8
 [1.8.7]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.5...v1.8.6

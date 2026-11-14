@@ -16,8 +16,10 @@ import {
   FileCode,
   Layers,
   Users,
+  Pencil,
   ChevronRight
 } from 'lucide-react';
+import { RenameSlotDialog } from './RenameSlotDialog';
 import { CharacterConfig, PartyMember, Stint, SavedRotationSlot, SavedReactions } from '../types/genshin';
 import { PRESET_COUNT, presetNamePrefixLabel, restorePresets, slotDisplayDescription, slotDisplayName } from '../utils/presets';
 import { useDialogs } from './DialogProvider';
@@ -29,7 +31,7 @@ import { resolvePartyCharacters } from '../utils/party';
 import { isEmptySlotCharacter } from '../data/characters';
 import { rotationFileName, buildRotationExport, APP_FILE_PREFIX, fileTimestamp } from '../utils/rotationFile';
 import { buildBackup, parseBackup, summarizeBackup, restoreBackup } from '../utils/backup';
-import { getSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
+import { getSavedSlots, replaceSavedSlots, trySaveSlot, tryDeleteSlot, SLOT_WRITE_FAILED_MESSAGE, clearActiveState, buildDefaultSlotName, findSlotByName, buildPartyMemberNames } from '../utils/storage';
 import { charName } from '../i18n/loc';
 import { DRIVE_FOLDER_NAME, DriveError, ensureSignedIn, isDriveConfigured, uploadSharedJson } from '../utils/googleDrive';
 import { buildImportLink } from '../utils/rotationUrlImport';
@@ -98,6 +100,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // 同じ編成名の既存スロット（上書き確認中）
   const [duplicateSlot, setDuplicateSlot] = useState<SavedRotationSlot | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  // 名前を変更中の保存編成
+  const [renamingSlot, setRenamingSlot] = useState<SavedRotationSlot | null>(null);
   // gcsim の設定文から読み込む（D326）
   const [gcsimText, setGcsimText] = useState('');
   const [showJsonArea, setShowJsonArea] = useState(false);
@@ -111,6 +115,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     if (isOpen) {
       setSaveSuccessMsg(null);
       setDuplicateSlot(null);
+      setRenamingSlot(null);
     }
   }, [isOpen]);
 
@@ -163,6 +168,27 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     onSlotsChanged(updated, newSlot.id);
     setDuplicateSlot(null);
     setSaveSuccessMsg(dup ? t('save:message.overwritten', { name: newSlot.name }) : t('save:message.saved', { name: newSlot.name }));
+    setTimeout(() => setSaveSuccessMsg(null), 3000);
+  };
+
+  // 保存編成の名前を変える（内容・更新日時は、そのまま）
+  const handleRename = (slot: SavedRotationSlot, newName: string) => {
+    // 保存直前に、最新の一覧で同名を確認する（ほかのタブでの変更に備える）
+    const dup = findSlotByName(getSavedSlots(), newName);
+    if (dup && dup.id !== slot.id) {
+      setSavedSlots(getSavedSlots());
+      return;
+    }
+    // 更新日時・並び順は変えない（trySaveSlot は日時を現在にするので使わない）
+    const updated = getSavedSlots().map(s => (s.id === slot.id ? { ...s, name: newName } : s));
+    if (!replaceSavedSlots(updated)) {
+      showAlert(SLOT_WRITE_FAILED_MESSAGE);
+      return;
+    }
+    setSavedSlots(updated);
+    onSlotsChanged(updated);
+    setRenamingSlot(null);
+    setSaveSuccessMsg(t('save:rename.renamed', { name: newName }));
     setTimeout(() => setSaveSuccessMsg(null), 3000);
   };
 
@@ -671,6 +697,14 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
                               <span>{t('save:manager.overwrite')}</span>
                             </button>
                             <button
+                              onClick={() => setRenamingSlot(slot)}
+                              className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors"
+                              title={t('save:manager.renameTitle')}
+                              data-testid="rename-slot"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
                               onClick={() => handleCopyJson(slot)}
                               className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors"
                               title={t('save:manager.copyJsonTitle')}
@@ -869,6 +903,14 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
           </button>
         </div>
       </div>
+
+      <RenameSlotDialog
+        slot={renamingSlot}
+        initialName={renamingSlot ? slotDisplayName(renamingSlot) : ''}
+        savedSlots={savedSlots}
+        onClose={() => setRenamingSlot(null)}
+        onRename={handleRename}
+      />
     </div>
   );
 };

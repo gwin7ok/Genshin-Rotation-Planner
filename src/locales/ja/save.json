@@ -14,6 +14,13 @@
     "overwrite": "上書きする",
     "save": "名前をつけて保存"
   },
+  "rename": {
+    "title": "編成の名前を変更",
+    "hint": "ほかの保存編成と同じ名前にはできません。編成の内容と更新日時は変わりません。",
+    "duplicate": "「<strong>{{name}}</strong>」という編成は既に保存されています。別の名前にしてください。",
+    "submit": "名前を変更",
+    "renamed": "「{{name}}」に名前を変更しました。"
+  },
   "manager": {
     "title": "編成管理",
     "subtitle": "編集した内容は自動保存されています。名前を付けてスロット保存やJSONバックアップも可能です。",
@@ -36,6 +43,7 @@
     "loadTitle": "このローテーションを読み込んで適用",
     "overwrite": "上書",
     "overwriteTitle": "現在の編集内容でこのスロットを上書き",
+    "renameTitle": "名前を変更",
     "copyJsonTitle": "JSON形式でクリップボードにコピー",
     "downloadJsonTitle": "JSONファイルとしてダウンロード",
     "deleteTitle": "削除",

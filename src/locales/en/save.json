@@ -14,6 +14,13 @@
     "overwrite": "Overwrite",
     "save": "Save as"
   },
+  "rename": {
+    "title": "Rename rotation",
+    "hint": "It can't have the same name as another saved rotation. The content and the updated time stay as they are.",
+    "duplicate": "A rotation named \"<strong>{{name}}</strong>\" is already saved. Please choose a different name.",
+    "submit": "Rename",
+    "renamed": "Renamed to \"{{name}}\"."
+  },
   "manager": {
     "title": "Rotations",
     "subtitle": "Your edits are saved automatically. You can also save them to a named slot or back them up as JSON.",
@@ -36,6 +43,7 @@
     "loadTitle": "Load and apply this rotation",
     "overwrite": "Save",
     "overwriteTitle": "Overwrite this slot with the current edits",
+    "renameTitle": "Rename",
     "copyJsonTitle": "Copy to the clipboard as JSON",
     "downloadJsonTitle": "Download as a JSON file",
     "deleteTitle": "Delete",

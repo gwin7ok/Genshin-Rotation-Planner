@@ -1179,9 +1179,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     {/* 連動・発動バフの登録（「+ 登録」の行） */}
                     {renderBuffSection('palette')}
                     {/* 追加済みのアクション要素・バフの領域（「+ 追加」「+ 登録」の行と、背景色・実線の枠で区別する） */}
-                    <div className="mt-2 p-2 rounded-lg border border-solid border-slate-600/80 bg-indigo-950/40" data-testid="stint-added-area">
+                    <div className="mt-2 rounded-lg border border-solid border-slate-600/80 bg-indigo-950/40 overflow-hidden" data-testid="stint-added-area">
                     {/* アクション要素の行: 追加されたことが分かるよう、外枠より明るい背景にする（連動・発動バフの一覧は外枠の背景のまま） */}
-                    <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-md bg-indigo-700/25" data-testid="stint-action-row">
+                    <div className="flex flex-wrap items-center gap-2 p-2 bg-indigo-600/35" data-testid="stint-action-row">
                       {/* ラベル（「連動・発動バフ:」と同じスタイル） */}
                       <span className="text-[11px] font-bold text-amber-300 shrink-0 flex items-center gap-1">
                         <span>{t('editor:actions')}</span>
@@ -1468,7 +1468,9 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                     </div>
 
                     {/* 連動・発動バフの一覧（登録済みのもの） */}
-                    {renderBuffSection('list')}
+                    <div className="px-2 pb-2 -mt-2.5 [&:empty]:hidden">
+                      {renderBuffSection('list')}
+                    </div>
                     </div>
                   </div>
                 </div>

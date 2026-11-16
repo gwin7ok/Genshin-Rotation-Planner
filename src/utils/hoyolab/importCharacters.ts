@@ -8,6 +8,8 @@
  * - マスターとの対応は、キャラ・武器は ID、聖遺物セットは名前（HoYoLAB のセット ID はゲームの ID と形式が違うため）。
  */
 
+import type { PartyMember } from '../../types/genshin';
+
 /** HoYoLAB のレスポンス（使う項目だけ） */
 export interface HoyolabProperty { property_type: number; value: string; times: number }
 export interface HoyolabCharacter {
@@ -32,6 +34,8 @@ export interface OwnedCharacter {
   /** HoYoLAB（ゲーム）のキャラ ID（マスターの `<id>-<元素>` の前半と同じ） */
   genshinId: number;
   name: string;
+  /** 元素（HoYoLAB の表記。例: Hydro）。旅人は、今の元素 */
+  element: string;
   level: number;
   /** 突破後の最大レベル（20/40/50/60/70/80/90） */
   maxLevel: number;
@@ -114,6 +118,7 @@ export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
   return {
     genshinId: c.base.id,
     name: c.base.name,
+    element: c.base.element,
     level: c.base.level,
     maxLevel,
     ambiguousAscension: ambiguous,
@@ -125,6 +130,13 @@ export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
     artifactStats: sumArtifactStats(c, warnings),
     warnings,
   };
+}
+
+/** 持ちキャラに対応するマスターのキャラ ID（`<ゲームの ID>-<元素>`）。無ければ undefined（ドール男女など） */
+export function matchMasterCharacterId(owned: Pick<OwnedCharacter, 'genshinId' | 'element'>, masterIds: string[]): string | undefined {
+  const prefix = String(owned.genshinId);
+  const list = masterIds.filter(id => id.split('-')[0] === prefix);
+  return list.find(id => id.endsWith(`-${owned.element.toLowerCase()}`)) ?? list[0];
 }
 
 export const convertResponse = (res: HoyolabDetailResponse): OwnedCharacter[] => res.list.map(convertCharacter);
@@ -168,4 +180,43 @@ export function buildOwnedCharacterLines(
   const stats = Object.entries(owned.artifactStats).map(([k, v]) => `${k}=${v}`).join(' ');
   if (stats) lines.push(`${key} add stats ${stats};`);
   return { lines, warnings };
+}
+
+/** 持ちキャラを編成の 1 枠に入れるときの値（既存の項目 + build）。マスターに対応が無いものは warnings に出し、その項目は入れない */
+export function ownedToPartyFields(
+  owned: OwnedCharacter,
+  masters: { weapons: MasterRef[]; artifacts: MasterRef[] },
+): { fields: Pick<PartyMember, 'constellation' | 'weaponId' | 'weaponRefinementRank' | 'artifactSetId' | 'artifactSetMode' | 'build'>; warnings: string[] } {
+  const warnings: string[] = [];
+  const weapon = masters.weapons.find(w => w.id === String(owned.weapon.genshinId)) ?? masters.weapons.find(w => w.name === owned.weapon.name);
+  if (!weapon) warnings.push(`武器「${owned.weapon.name}」がマスターにありません`);
+  const sets: { id: string; count: number }[] = [];
+  for (const s of owned.artifactSets) {
+    if (s.count < 2) continue;
+    const art = masters.artifacts.find(a => a.name === s.name);
+    if (!art) { warnings.push(`聖遺物セット「${s.name}」がマスターにありません`); continue; }
+    sets.push({ id: art.id, count: s.count >= 4 ? 4 : 2 });
+  }
+  const four = sets.find(s => s.count === 4);
+  const biggest = four ?? sets[0];
+  return {
+    fields: {
+      constellation: owned.constellation,
+      weaponId: weapon?.id,
+      weaponRefinementRank: owned.weapon.refinement,
+      artifactSetId: biggest?.id,
+      // 4 個セット以外（2+2・セット無し）は、既存の意味の '2+2'（聖遺物の発動バフなし）。聖遺物の `add set` は build のセット数から出す
+      artifactSetMode: four ? '4pc' : '2+2',
+      build: {
+        level: owned.level,
+        maxLevel: owned.maxLevel,
+        talents: owned.talents,
+        weaponLevel: owned.weapon.level,
+        weaponMaxLevel: owned.weapon.maxLevel,
+        artifactSets: sets,
+        artifactStats: owned.artifactStats,
+      },
+    },
+    warnings,
+  };
 }

@@ -12,6 +12,7 @@ import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/da
 import { actionDelayOf } from '../actionDelay.ts';
 import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
+import { isTravelerKey, travelerParams } from '../hoyolab/importCharacters';
 import type { GcsimMemberInfo } from './readGcsimLog.ts';
 import { t, joinList } from '../../i18n';
 import { charName, actionName, loc } from '../../i18n/loc';
@@ -186,15 +187,21 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       weaponKey: weaponForInfo?.gcsimKey,
       artifactKey: artifactForInfo?.gcsimKey,
     });
+    // 持ちキャラの装備（build）があれば、その値を使う。必要チャージ効率の算出（addedEnergyRecharge が渡る実行）は、仮値の編成で行う（設計 #2）
+    const build = input.addedEnergyRechargeByCharacterId === undefined ? c.build : undefined;
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
     // ヘクセレイ（魔女の宿題クリア）に対応するキャラは、明示的に渡す（gcsim の既定は有効）
     // 諭示（八重神子・七七）も同じく、明示的に渡す（gcsim の既定は達成済み）
     const paramList = [
       ...(HEXEREI_GCSIM_KEYS.has(key) ? [`${HEXEREI_GCSIM_PARAM}=${c.hexerei === false ? 0 : 1}`] : []),
       ...(REVELATION_GCSIM_KEYS.has(key) ? [`${REVELATION_GCSIM_PARAM}=${c.revelation === false ? 0 : 1}`] : []),
+      // 旅人の真月（gcsim の既定は有効なので、未達成のときだけ渡す）
+      ...(build && isTravelerKey(key) ? travelerParams(c.trueMoon !== false) : []),
     ];
     const hexText = paramList.length > 0 ? ` +params=[${paramList.join(',')}]` : '';
-    lines.push(`${key} char ${CHARACTER_LINE_PARAMS} cons=${cons} talent=${TALENT_LEVELS}${hexText};`);
+    const charLevel = build ? `lvl=${build.level}/${build.maxLevel}` : CHARACTER_LINE_PARAMS;
+    const talentLevels = build ? build.talents.join(',') : TALENT_LEVELS;
+    lines.push(`${key} char ${charLevel} cons=${cons} talent=${talentLevels}${hexText};`);
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);
     if (!c.weaponId) {
@@ -205,11 +212,19 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       error(t('messages:config.noWeaponKey', { name: charName(c), weapon: loc(weapon, 'name') }));
     } else {
       const refine = c.weaponRefinementRank ?? weapon.refinementRank ?? (weapon.rarity >= 5 ? 1 : 5);
-      lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${WEAPON_LEVEL};`);
+      lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${build ? `${build.weaponLevel}/${build.weaponMaxLevel}` : WEAPON_LEVEL};`);
     }
 
-    // 2+2 は聖遺物の発動バフなし（D5）なので出力しない
-    if (c.artifactSetMode !== '2+2') {
+    if (build) {
+      // 持ちキャラ: 実際のセット数（2 個以上のもの）から出す（2+2 の組み合わせも、gcsim が両方の 2 個効果を数える）
+      for (const set of build.artifactSets) {
+        const artifact = input.artifacts.find(a => a.id === set.id);
+        if (!artifact) error(t('messages:config.artifactNotFound', { name: charName(c) }));
+        else if (!artifact.gcsimKey) error(t('messages:config.noArtifactKey', { name: charName(c), artifact: loc(artifact, 'name') }));
+        else lines.push(`${key} add set="${artifact.gcsimKey}" count=${set.count >= 4 ? 4 : 2};`);
+      }
+    } else if (c.artifactSetMode !== '2+2') {
+      // 2+2 は聖遺物の発動バフなし（D5）なので出力しない
       const artifact = input.artifacts.find(a => a.id === c.artifactSetId);
       if (!c.artifactSetId) {
         warn(t('messages:config.noArtifact', { name: charName(c) }));
@@ -222,7 +237,10 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       }
     }
     const addedEr = input.addedEnergyRechargeByCharacterId?.[c.id];
-    lines.push(`${key} add stats ${TEMP_STATS}${addedEr !== undefined ? ` er=${Number(addedEr.toFixed(4))}` : ''};`);
+    if (build) {
+      const stats = Object.entries(build.artifactStats).map(([k, v]) => `${k}=${v}`).join(' ');
+      if (stats) lines.push(`${key} add stats ${stats};`);
+    } else lines.push(`${key} add stats ${TEMP_STATS}${addedEr !== undefined ? ` er=${Number(addedEr.toFixed(4))}` : ''};`);
   }
 
   // 2. ローテーション本体

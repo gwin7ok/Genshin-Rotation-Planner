@@ -21,7 +21,11 @@ const weapons = readJson('weapons_master_data.json');
 const artifacts = readJson('artifacts_master_data.json');
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
-const { convertCharacter, buildOwnedCharacterLines, isTravelerKey, travelerParams } = await server.ssrLoadModule('/src/utils/hoyolab/importCharacters.ts');
+const { convertCharacter, buildOwnedCharacterLines, isTravelerKey, travelerParams, ownedToPartyFields, matchMasterCharacterId } = await server.ssrLoadModule('/src/utils/hoyolab/importCharacters.ts');
+const { resolvePartyCharacters, createEmptyParty } = await server.ssrLoadModule('/src/utils/party.ts');
+const { buildGcsimConfig } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
+const { isValidParty } = await server.ssrLoadModule('/src/utils/rotationValidation.ts');
+const { isValidOwnedCharacter } = await server.ssrLoadModule('/src/utils/hoyolab/ownedStore.ts');
 
 // gcsim の snapshot の並び（Stat の列挙）: 2=DEF 3=HP 5=ATK 7=ER 8=EM 9=CR 10=CD 11=Heal 12..18=炎水氷雷風岩草 19=物理
 const SNAP: Record<string, number> = { def: 2, hp: 3, atk: 5, er: 7, em: 8, cr: 9, cd: 10 };
@@ -87,6 +91,32 @@ for (const hc of raw.list) {
     problems.push(`${owned.name}（Lv.${owned.level}/${owned.maxLevel}、武器=${owned.weapon.name}、聖遺物=${owned.artifactSets.map(x => x.name + x.count).join('+')}）: ` + diffs.map(([n, a, b]) => `${n} HoYoLAB=${a} gcsim=${Number(b.toFixed(4))}`).join(' / '));
   }
 }
+// 3. 編成への反映: 編成の枠（ownedToPartyFields）→ 設定文（buildGcsimConfig）の行が、変換の行（buildOwnedCharacterLines）と一致すること
+let wired = 0;
+for (const hc of raw.list) {
+  const owned = convertCharacter(hc);
+  if (!isValidOwnedCharacter(owned)) problems.push(`${owned.name}: 持ちキャラの検査に通りません`);
+  const id = matchMasterCharacterId(owned, characters.map(c => c.id));
+  const master = characters.find(c => c.id === id);
+  const key = master?.source?.gcsimKey;
+  if (!master || !key) continue;
+  const { fields, warnings } = ownedToPartyFields(owned, { weapons, artifacts });
+  if (warnings.length > 0) continue;
+  const party = createEmptyParty();
+  party[0] = { characterId: master.id, energyRecharge: 100, ...fields };
+  if (!isValidParty(party)) { problems.push(`${owned.name}: 編成の検査に通りません`); continue; }
+  const chars = resolvePartyCharacters(party, characters);
+  const cfg = buildGcsimConfig({ characters: chars, stints: [], loopStartIndex: 0, switchDelay: 0.5, weapons, artifacts });
+  const mine = cfg.config.split(/\r?\n/).filter((l: string) => l.startsWith(`${key} `) && !l.startsWith(`${key} add stats cr=1`)).map((l: string) => l.replace(/ \+params=\[[^\]]*\]/, ''));
+  const expected = buildOwnedCharacterLines(owned, key, { weapons, artifacts }).lines.map((l: string) => l.replace(/ \+params=\[[^\]]*\]/, ''));
+  // 4 個セット以外（2+2）は、設定文の `add set` が、build のセット数から出る（変換の行と同じ）
+  const head = mine.filter((l: string) => / char | add weapon| add set| add stats/.test(l));
+  if (JSON.stringify(head) !== JSON.stringify(expected)) problems.push(`${owned.name}: 設定文の行が変換の行と違う
+      設定文: ${head.join(' | ')}
+      変換  : ${expected.join(' | ')}`);
+  else wired++;
+}
+console.log(`編成への反映: 設定文と変換の行が一致 ${wired} キャラ`);
 console.log(`変換 ${converted} キャラ / マスターに無い ${noMaster} / gcsim 未実装 ${noKey}（突き合わせ対象外） / 突破段階が不明 ${ambiguous}`);
 console.log(`突き合わせ: 一致 ${ok} / 差あり ${ng} / gcsim エラー ${errors}`);
 for (const p of problems) console.log('  - ' + p);

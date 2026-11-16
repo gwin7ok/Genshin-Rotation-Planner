@@ -14,6 +14,8 @@ import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, ty
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
+import { isTravelerKey, matchMasterCharacterId, ownedToPartyFields } from '../utils/hoyolab/importCharacters';
+import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
 import { currentLanguage, t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 import { charName, actionName, loc } from '../i18n/loc';
@@ -27,7 +29,11 @@ interface PartyConfigModalProps {
   onUpdatePartyAndStints: (newParty: PartyMember[], newStints: Stint[]) => void;
 }
 
+/** 手で変えたら、持ちキャラの装備（build）の使用を解除する項目 */
+const BUILD_LINKED_FIELDS: string[] = ['constellation', 'weaponId', 'weaponRefinementRank', 'artifactSetId', 'artifactSetMode'];
+
 const updatedHexerei = (m: { hexerei?: boolean } | undefined): boolean => m?.hexerei !== false;
+const updatedTrueMoon = (m: { trueMoon?: boolean } | undefined): boolean => m?.trueMoon !== false;
 const updatedRevelation = (m: { revelation?: boolean } | undefined): boolean => m?.revelation !== false;
 
 export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
@@ -53,6 +59,9 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [warningMsg, setWarningMsg] = useState<string | null>(null);
   const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
+  // 取り込み済みの持ちキャラ（HoYoLAB。画面を開くたびに読み直す）
+  const [ownedStore, setOwnedStore] = useState<OwnedStore | null>(null);
+  const [ownedWarnings, setOwnedWarnings] = useState<string[]>([]);
 
   useEffect(() => {
     if (isOpen) {
@@ -60,6 +69,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       setEditingStints(stints);
       setWarningMsg(null);
       setConfirmClearAll(false);
+      setOwnedStore(loadOwned());
+      setOwnedWarnings([]);
     }
   }, [isOpen, party, stints]);
 
@@ -133,8 +144,33 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     updated[selectedSlot] = {
       ...updated[selectedSlot],
       [field]: val,
+      // 武器・聖遺物・精錬・凸を手で変えたら、持ちキャラの装備（build）の使用は解除する（値が食い違わないように）
+      ...(BUILD_LINKED_FIELDS.includes(field as string) ? { build: undefined } : {}),
     };
     setEditingParty(updated);
+  };
+
+  /** 今のスロットのキャラに対応する、取り込み済みの持ちキャラ */
+  const ownedForCurrent = (char: CharacterConfig | undefined) =>
+    char && !isEmptySlotCharacter(char)
+      ? ownedStore?.characters.find(o => matchMasterCharacterId(o, [char.id]) === char.id)
+      : undefined;
+
+  const handleUseOwned = () => {
+    const owned = ownedForCurrent(currentSlotChar);
+    if (!owned) return;
+    const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+    setEditingParty(updated);
+    setOwnedWarnings(warnings);
+  };
+
+  const handleRevertOwned = () => {
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined };
+    setEditingParty(updated);
+    setOwnedWarnings([]);
   };
 
   const handleSave = () => {
@@ -220,6 +256,27 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     </label>
                   )}
 
+                  {/* 真月（旅人）: 旅人だけ。キャラカードの左下 */}
+                  {!isEmptySlotCharacter(c) && isTravelerKey(c.source?.gcsimKey ?? '') && (
+                    <label
+                      className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-cyan-300 cursor-pointer select-none"
+                      onClick={(e) => e.stopPropagation()}
+                      title={t('party:trueMoonTitle')}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={updatedTrueMoon(editingParty[idx])}
+                        onChange={(e) => {
+                          const updated = [...editingParty];
+                          updated[idx] = { ...updated[idx], trueMoon: e.target.checked };
+                          setEditingParty(updated);
+                        }}
+                        className="w-3 h-3 accent-cyan-500"
+                      />
+                      <span>{t('party:trueMoon')}</span>
+                    </label>
+                  )}
+
                   {/* 諭示（八重神子・七七）: 対応するキャラだけ。キャラカードの左下 */}
                   {!isEmptySlotCharacter(c) && hasRevelationSetting(c) && (
                     <label
@@ -249,7 +306,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       onKeyDown={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         const updated = [...editingParty];
-                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10) };
+                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10), build: undefined };
                         setEditingParty(updated);
                       }}
                       className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
@@ -341,6 +398,41 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 </div>
               </div>
 
+              {/* 持ちキャラの装備（HoYoLAB から取り込んだ値）。使うと、Lv・天賦・武器Lv・聖遺物のステータスを実際の値で gcsim に渡す */}
+              {(() => {
+                const owned = ownedForCurrent(currentSlotChar);
+                const build = editingParty[selectedSlot]?.build;
+                if (!owned && !build) return null;
+                return (
+                  <div className="mb-3 rounded-lg border border-sky-500/30 bg-sky-950/20 p-2.5 text-xs space-y-1.5" data-testid="owned-build-section">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sky-300">{t('party:owned.title')}</span>
+                      {build ? (
+                        <>
+                          <span className="text-emerald-300 text-[10px] font-semibold">{t('party:owned.active')}</span>
+                          <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
+                            {t('party:owned.revert')}
+                          </button>
+                        </>
+                      ) : (
+                        <button onClick={handleUseOwned} data-testid="owned-build-use" className="ml-auto px-2.5 py-0.5 rounded bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold">
+                          {t('party:owned.use')}
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-slate-400">
+                      {build
+                        ? t('party:owned.summaryActive', { level: build.level, max: build.maxLevel, talents: build.talents.join('/'), weaponLevel: build.weaponLevel, stats: Object.keys(build.artifactStats).length })
+                        : t('party:owned.summaryAvailable', { level: owned.level, max: owned.maxLevel, cons: owned.constellation, weapon: owned.weapon.name })}
+                    </p>
+                    {build && <p className="text-[10px] text-slate-500">{t('party:owned.note')}</p>}
+                    {ownedWarnings.map(w => (
+                      <p key={w} className="text-[10px] text-amber-300">{w}</p>
+                    ))}
+                  </div>
+                );
+              })()}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {/* Weapon Selection from Database & Refinement Rank */}
                 <div className="space-y-1.5">
@@ -376,6 +468,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           ...updated[selectedSlot],
                           weaponId: newWeaponId,
                           weaponRefinementRank: defaultRank,
+                          build: undefined,
                         };
                         setEditingParty(updated);
                       }}
@@ -475,6 +568,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           updated[selectedSlot] = {
                             ...updated[selectedSlot],
                             artifactSetMode: mode,
+                            build: undefined,
                             ...(mode === '2+2' ? { artifactSetId: undefined } : {}),
                           };
                           setEditingParty(updated);

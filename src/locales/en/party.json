@@ -45,5 +45,16 @@
   "noMatch": "No characters match the filters",
   "noMatchHint": "Clear the element/weapon filters or change the search keyword.",
   "footerHint": "Changes are applied when you press \"Save & apply team\"",
-  "apply": "Save & apply team"
+  "apply": "Save & apply team",
+  "trueMoon": "True Moon",
+  "trueMoonTitle": "Traveler: whether the story quest \"True Moon\" is completed (the buffs apply if it is; gcsim's default is completed). Switchable per party, like constellations and Revelation",
+  "owned": {
+    "title": "Owned character's build",
+    "use": "Use the owned build",
+    "active": "In use",
+    "revert": "Stop using (back to defaults)",
+    "summaryAvailable": "Imported: Lv.{{level}}/{{max}}, C{{cons}}, {{weapon}}. Using it sets weapon, artifacts and constellation, plus level, talents and artifact stats, to the imported values",
+    "summaryActive": "Lv.{{level}}/{{max}} / Talents {{talents}} / Weapon Lv.{{weaponLevel}} / {{stats}} artifact stats",
+    "note": "Changing the weapon, artifacts, refinement or constellation by hand stops using the owned build (back to defaults). The required energy recharge calculation uses the defaults"
+  }
 }

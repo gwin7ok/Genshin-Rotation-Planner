@@ -4,6 +4,7 @@ import { t, dateLocale } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
+import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { useDialogs } from './DialogProvider';
 import { fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
@@ -94,7 +95,6 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     const master = id ? masterById.get(id) : undefined;
     const out: string[] = [];
     if (!master) out.push(t('hoyolab:list.noMaster'));
-    else if (!master.source?.gcsimKey) out.push(t('hoyolab:list.noGcsim'));
     if (o.ambiguousAscension) out.push(t('hoyolab:list.ambiguous'));
     if (!database.weapons.some(w => w.id === String(o.weapon.genshinId) || w.name === o.weapon.name)) out.push(t('hoyolab:list.noWeaponMaster'));
     if (o.artifactSets.some(s => s.count >= 2 && !database.artifacts.some(a => a.name === s.name))) out.push(t('hoyolab:list.noSetMaster'));
@@ -213,6 +213,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="font-semibold text-slate-100">{master ? charName(master) : o.name}</span>
+                          {master && <GcsimMissingBadge char={master} />}
                           <span className="text-slate-400">{t('hoyolab:list.level', { level: o.level })}</span>
                           <span className="text-slate-400">{t('hoyolab:list.cons', { count: o.constellation })}</span>
                         </div>

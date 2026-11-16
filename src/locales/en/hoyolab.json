@@ -40,7 +40,6 @@
     "cons": "C{{count}}",
     "refine": "R{{rank}}",
     "noMaster": "This character is not in the app's data, so it cannot be added to a party",
-    "noGcsim": "Not supported by gcsim (it can be added to a party, but gcsim calculations cannot run)",
     "ambiguous": "Could not determine the ascension phase (treated as not ascended)",
     "noWeaponMaster": "The weapon is not in the app's data",
     "noSetMaster": "The artifact set is not in the app's data"

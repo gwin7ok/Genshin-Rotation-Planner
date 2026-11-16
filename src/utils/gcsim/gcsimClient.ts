@@ -78,7 +78,7 @@ export interface GcsimLogEvent {
 }
 
 export type GcsimSampleResult =
-  | { status: 'ok'; logs: GcsimLogEvent[]; seed: number; /** 最初に出場するキャラの gcsim キー（initial_character） */ initialCharacter?: string }
+  | { status: 'ok'; logs: GcsimLogEvent[]; seed: number; /** 最初に出場するキャラの gcsim キー（initial_character） */ initialCharacter?: string; /** キャラごとの開始時のステータス（character_details[].snapshot。並びは gcsim の Stat の列挙: 23=基礎HP 24=基礎攻撃 25=基礎防御 など） */ characterDetails?: { snapshot?: number[] }[] }
   /** 設定文の文法エラー・実行エラー（message にサーバーの返した内容） */
   | { status: 'error'; message: string }
   /** サーバーに接続できない（未起動・タイムアウトなど） */
@@ -107,7 +107,7 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
     if (parsed === null || typeof parsed !== 'object') {
       return { status: 'error', message: body.trim() };
     }
-    const obj = parsed as { error?: unknown; logs?: unknown; initial_character?: unknown };
+    const obj = parsed as { error?: unknown; logs?: unknown; initial_character?: unknown; character_details?: unknown };
     if (obj.error !== undefined) {
       return { status: 'error', message: extractErrorText(body) };
     }
@@ -119,6 +119,7 @@ export async function runGcsimSample(config: string, seed: number): Promise<Gcsi
       logs: obj.logs as GcsimLogEvent[],
       seed,
       initialCharacter: typeof obj.initial_character === 'string' ? obj.initial_character : undefined,
+      characterDetails: Array.isArray(obj.character_details) ? (obj.character_details as { snapshot?: number[] }[]) : undefined,
     };
   } catch (e) {
     return { status: 'unreachable', message: unreachableMessage(e, SAMPLE_TIMEOUT_MS) };

@@ -1,6 +1,6 @@
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2, UserCheck } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import { ListSelect } from './ListSelect';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -16,6 +16,7 @@ interface HeaderProps {
   overwriteSaved: boolean;
   onOpenSaveAs: () => void;
   onOpenPartyModal: () => void;
+  onOpenOwnedModal: () => void;
   onOpenEnergyRechargeModal: () => void;
   onOpenHelpModal: () => void;
   onOpenSaveModal: () => void;
@@ -57,6 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
   overwriteSaved,
   onOpenSaveAs,
   onOpenPartyModal,
+  onOpenOwnedModal,
   onOpenEnergyRechargeModal,
   onOpenHelpModal,
   onOpenSaveModal,
@@ -248,6 +250,16 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Settings2 className="w-3.5 h-3.5" />
               <span>{t('header:menu.party')}</span>
+            </button>
+
+            <button
+              onClick={onOpenOwnedModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 transition-colors shrink-0"
+              title={t('header:menu.ownedTitle')}
+              data-testid="open-owned-modal"
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>{t('header:menu.owned')}</span>
             </button>
 
             <button

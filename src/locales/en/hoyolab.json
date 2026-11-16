@@ -1,0 +1,48 @@
+{
+  "title": "Import owned characters from HoYoLAB",
+  "intro": "Imports the weapons, artifacts, talent levels and more of your owned characters from your HoYoLAB Battle Chronicle, so you can use them in the party settings. The imported data is stored only in this browser and is never sent anywhere.",
+  "ext": {
+    "checking": "Checking for the extension…",
+    "ok": "Extension detected (v{{version}})",
+    "missing": "The extension was not found",
+    "recheck": "Check again",
+    "installTitle": "How to install the extension",
+    "step1": "Download the extension zip (grp-hoyolab-importer) from the release page and extract it.",
+    "step2": "In Chrome, open chrome://extensions and turn on \"Developer mode\" at the top right.",
+    "step3": "Click \"Load unpacked\" and choose the extracted folder.",
+    "step4": "Reload this page, then open this screen again.",
+    "releaseLink": "Open the release page",
+    "note": "The extension only communicates with HoYoLAB (hoyolab.com). Neither the extension nor this app reads the value of your login cookie."
+  },
+  "uid": {
+    "label": "Genshin UID",
+    "placeholder": "9 digits",
+    "hint": "In the browser where you are logged in to HoYoLAB, make your Battle Chronicle character details public."
+  },
+  "import": {
+    "button": "Import",
+    "running": "Fetching from HoYoLAB…",
+    "resolving": "Checking ascension phases…",
+    "done": "Imported {{count}} characters",
+    "invalidUid": "Enter the UID as 9 digits",
+    "noExtension": "No response from the extension. Check that it is installed",
+    "errorPrivate": "Your Battle Chronicle is not public. In the HoYoLAB settings, make the character details public ({{message}})",
+    "errorLogin": "You are not logged in to HoYoLAB. Log in to HoYoLAB in this browser ({{message}})",
+    "errorGeneric": "Could not import: {{message}}"
+  },
+  "list": {
+    "title": "Imported owned characters",
+    "summary": "{{count}} characters (imported: {{date}})",
+    "empty": "Nothing imported yet",
+    "clear": "Delete imported data",
+    "clearConfirm": "This deletes the imported owned-character data. Values already applied to a party stay as they are. Continue?",
+    "level": "Lv.{{level}}",
+    "cons": "C{{count}}",
+    "refine": "R{{rank}}",
+    "noMaster": "This character is not in the app's data, so it cannot be added to a party",
+    "noGcsim": "Not supported by gcsim (it can be added to a party, but gcsim calculations cannot run)",
+    "ambiguous": "Could not determine the ascension phase (treated as not ascended)",
+    "noWeaponMaster": "The weapon is not in the app's data",
+    "noSetMaster": "The artifact set is not in the app's data"
+  }
+}

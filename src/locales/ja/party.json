@@ -51,9 +51,9 @@
   "notOwned": "未所持",
   "notOwnedTitle": "取り込んだ持ちキャラにいません（持ちキャラの取り込みを行っていない場合は、全キャラに付きます）",
   "owned": {
-    "title": "持ちキャラの装備",
+    "title": "持ちキャラの装備・ステータス",
     "use": "持ちキャラの装備を使う",
-    "active": "使用中",
+    "active": "適用中",
     "revert": "使わない（仮値に戻す）",
     "summaryAvailable": "取り込み済み: Lv.{{level}}/{{max}}・{{cons}}凸・{{weapon}}。使うと、武器・聖遺物・凸と、Lv・天賦・聖遺物ステータスを、取り込んだ値にします",
     "summaryActive": "Lv.{{level}}/{{max}} ／ 天賦 {{talents}} ／ 武器 Lv.{{weaponLevel}} ／ 聖遺物ステータス {{stats}} 項目",

@@ -51,9 +51,9 @@
   "notOwned": "Not owned",
   "notOwnedTitle": "Not in the imported owned characters (shown on every character if you have not imported yet)",
   "owned": {
-    "title": "Owned character's build",
+    "title": "Owned character's build & stats",
     "use": "Use the owned build",
-    "active": "In use",
+    "active": "Applied",
     "revert": "Stop using (back to defaults)",
     "summaryAvailable": "Imported: Lv.{{level}}/{{max}}, C{{cons}}, {{weapon}}. Using it sets weapon, artifacts and constellation, plus level, talents and artifact stats, to the imported values",
     "summaryActive": "Lv.{{level}}/{{max}} / Talents {{talents}} / Weapon Lv.{{weaponLevel}} / {{stats}} artifact stats",

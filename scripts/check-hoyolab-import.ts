@@ -21,7 +21,7 @@ const weapons = readJson('weapons_master_data.json');
 const artifacts = readJson('artifacts_master_data.json');
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
-const { convertCharacter, buildOwnedCharacterLines, isTravelerKey, TRAVELER_DEFAULT_PARAMS } = await server.ssrLoadModule('/src/utils/hoyolab/importCharacters.ts');
+const { convertCharacter, buildOwnedCharacterLines, isTravelerKey, travelerParams } = await server.ssrLoadModule('/src/utils/hoyolab/importCharacters.ts');
 
 // gcsim の snapshot の並び（Stat の列挙）: 2=DEF 3=HP 5=ATK 7=ER 8=EM 9=CR 10=CD 11=Heal 12..18=炎水氷雷風岩草 19=物理
 const SNAP: Record<string, number> = { def: 2, hp: 3, atk: 5, er: 7, em: 8, cr: 9, cd: 10 };
@@ -51,7 +51,7 @@ for (const hc of raw.list) {
   if (!master) { noMaster++; problems.push(`${owned.name}: マスターに無いキャラ`); continue; }
   const key = master.source?.gcsimKey;
   if (!key) { noKey++; continue; } // gcsim 未実装のキャラ（突き合わせ不可）
-  const { lines, warnings } = buildOwnedCharacterLines(owned, key, { weapons, artifacts }, isTravelerKey(key) ? TRAVELER_DEFAULT_PARAMS : []);
+  const { lines, warnings } = buildOwnedCharacterLines(owned, key, { weapons, artifacts }, isTravelerKey(key) ? travelerParams(false) /* この旅人は真月未達成 */ : []);
   for (const w of [...owned.warnings.filter(w => !w.includes('突破前か突破後か')), ...warnings]) problems.push(`${owned.name}: ${w}`);
   const config = [...lines, 'options iteration=1 duration=1;', 'target lvl=100 resist=0.1;', `active ${key};`, `${key} attack;`].join('\n');
   let snap: number[];

@@ -130,11 +130,12 @@ export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
 export const convertResponse = (res: HoyolabDetailResponse): OwnedCharacter[] => res.list.map(convertCharacter);
 
 /**
- * 旅人のストーリークエストの強化（gcsim の既定は全て有効）。HoYoLAB の最終値は、達成済みの分だけを含む。
- * 実データ（旅人 星鋒の剣）では、真月（夜蘭ノ国 Song of the Welkin Moon）だけ未達成で、これを 0 にすると HP・攻撃・防御・熟知・会心率が HoYoLAB と一致した。
- * 達成状況は取れないので、取り込みでは true_moon_story_buff=0 を既定にし、利用者が切り替えられるようにする。
+ * 旅人のストーリークエストの強化（真月: Song of the Welkin Moon の達成）。gcsim の既定は有効。
+ * HoYoLAB の最終値は達成済みの分だけを含む。実データ（旅人 星鋒の剣）は真月だけ未達成で、これをオフにすると HP・攻撃・防御・熟知・会心率が HoYoLAB と一致した。
+ * 達成状況は取れないので、既定は有効（gcsim と同じ）とし、編成の設定（PartyMember.trueMoon。ヘクセレイ・諭示と同じ形）で切り替える。
  */
-export const TRAVELER_DEFAULT_PARAMS = ['true_moon_story_buff=0'];
+export const TRUE_MOON_PARAM = 'true_moon_story_buff';
+export const travelerParams = (trueMoon: boolean): string[] => (trueMoon ? [] : [`${TRUE_MOON_PARAM}=0`]);
 export const isTravelerKey = (gcsimKey: string) => /^(aether|lumine)/.test(gcsimKey);
 
 /** マスターの最小の形（ID・名前・gcsim キー） */

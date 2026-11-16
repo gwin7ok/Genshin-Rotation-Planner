@@ -129,6 +129,14 @@ export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
 
 export const convertResponse = (res: HoyolabDetailResponse): OwnedCharacter[] => res.list.map(convertCharacter);
 
+/**
+ * 旅人のストーリークエストの強化（gcsim の既定は全て有効）。HoYoLAB の最終値は、達成済みの分だけを含む。
+ * 実データ（旅人 星鋒の剣）では、真月（夜蘭ノ国 Song of the Welkin Moon）だけ未達成で、これを 0 にすると HP・攻撃・防御・熟知・会心率が HoYoLAB と一致した。
+ * 達成状況は取れないので、取り込みでは true_moon_story_buff=0 を既定にし、利用者が切り替えられるようにする。
+ */
+export const TRAVELER_DEFAULT_PARAMS = ['true_moon_story_buff=0'];
+export const isTravelerKey = (gcsimKey: string) => /^(aether|lumine)/.test(gcsimKey);
+
 /** マスターの最小の形（ID・名前・gcsim キー） */
 export interface MasterRef { id: string; name: string; gcsimKey?: string }
 
@@ -137,10 +145,12 @@ export function buildOwnedCharacterLines(
   owned: OwnedCharacter,
   gcsimCharacterKey: string,
   masters: { weapons: MasterRef[]; artifacts: MasterRef[] },
+  /** キャラ行の `+params=[...]`（例: 旅人の `true_moon_story_buff=0`。ヘクセレイ・諭示など） */
+  params: string[] = [],
 ): { lines: string[]; warnings: string[] } {
   const warnings: string[] = [];
   const key = gcsimCharacterKey;
-  const lines = [`${key} char lvl=${owned.level}/${owned.maxLevel} cons=${owned.constellation} talent=${owned.talents.join(',')};`];
+  const lines = [`${key} char lvl=${owned.level}/${owned.maxLevel} cons=${owned.constellation} talent=${owned.talents.join(',')}${params.length > 0 ? ` +params=[${params.join(',')}]` : ''};`];
 
   const weapon = masters.weapons.find(w => w.id === String(owned.weapon.genshinId))
     ?? masters.weapons.find(w => w.name === owned.weapon.name);

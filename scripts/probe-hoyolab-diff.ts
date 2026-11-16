@@ -48,6 +48,13 @@ for (const name of process.argv.slice(2)) {
   console.log(`  セット無し   : ${fmt(a)}`);
   console.log(`  武器無し     : ${fmt(b)}`);
   console.log(`  キャラのみ   : ${fmt(c)}`);
+  if (/^(aether|lumine)/.test(key)) {
+    // 旅人: gcsim は、ストーリークエストの強化（既定は全て有効）を足す。パラメータで切り替えて、HoYoLAB の値に合うものを探す
+    for (const params of ['', 'true_moon_story_buff=0', 'skirk_story_buff=0,true_moon_story_buff=0', 'base_atk_buff=0,skirk_story_buff=0,true_moon_story_buff=0']) {
+      const v = lines.map((l, i) => (i === 0 && params ? l.replace(';', ` +params=[${params}];`) : l));
+      console.log(`  旅人 params=[${params || '既定（全部あり）'}]: ${fmt(await run(v, key))}`);
+    }
+  }
   if (owned.ambiguousAscension) {
     const next = lines.map(l => l.replace(`lvl=${owned.level}/${owned.maxLevel} cons`, `lvl=${owned.level}/${owned.maxLevel + 10} cons`));
     const n = await run(next, key);

@@ -755,6 +755,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         <div className="font-bold text-xs text-white truncate flex items-center gap-1">
                           <span className="truncate">{charName(rosterChar)}</span>
                           <GcsimMissingBadge char={rosterChar} />
+                          {!isCustom && !ownedForCurrent(rosterChar) && (
+                            <span
+                              data-testid="not-owned-badge"
+                              title={t('party:notOwnedTitle')}
+                              className="inline-flex items-center shrink-0 px-1.5 py-px rounded border border-slate-500/50 bg-slate-500/15 text-slate-300 text-[9px] font-bold leading-tight whitespace-nowrap select-none"
+                            >
+                              {t('party:notOwned')}
+                            </span>
+                          )}
                           {isCustom && <span className="text-[8px] text-amber-300 font-mono">✦</span>}
                         </div>
                         <div className={`text-[10px] ${elemTheme.text}`}>

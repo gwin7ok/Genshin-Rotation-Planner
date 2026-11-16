@@ -22,6 +22,7 @@ export interface HoyolabCharacter {
     sub_property_list: HoyolabProperty[];
   }[];
   constellations: { pos: number; effect: string; is_actived: boolean }[];
+  base_properties?: { property_type: number; base: string }[];
   skills: { skill_id: number; skill_type: number; name: string; level: number }[];
 }
 export interface HoyolabDetailResponse { list: HoyolabCharacter[] }
@@ -36,6 +37,8 @@ export interface OwnedCharacter {
   maxLevel: number;
   /** 突破段階がレベルから決まらない（境界ちょうどのレベル）。突破前として扱っている */
   ambiguousAscension: boolean;
+  /** HoYoLAB が返す基礎 HP（キャラ・Lv・突破で決まる）。突破段階が不明なとき、gcsim の基礎 HP と比べて決める（イファ Lv.80 で確認: 突破前 8934 / 突破後 9383 → HoYoLAB は 9383） */
+  hoyolabBaseHp?: number;
   constellation: number;
   /** 基礎の天賦レベル（通常・スキル・爆発。凸の加算を除いた値） */
   talents: [number, number, number];
@@ -114,6 +117,7 @@ export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
     level: c.base.level,
     maxLevel,
     ambiguousAscension: ambiguous,
+    hoyolabBaseHp: Number(c.base_properties?.find(p => p.property_type === 2000)?.base) || undefined,
     constellation: c.base.actived_constellation_num,
     talents: baseTalentLevels(c, warnings),
     weapon: { genshinId: c.weapon.id, name: c.weapon.name, level: c.weapon.level, maxLevel: wCap, refinement: c.weapon.affix_level },

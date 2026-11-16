@@ -104,6 +104,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       constellation: defaultConstellation(newRosterChar.rarity),
       energyRecharge: 100,
     };
+    // 取り込み済みの持ちキャラがいれば、持ちキャラの装備を既定値にする（「持ちキャラの装備を使う」を押した状態）
+    const owned = ownedForCurrent(newRosterChar);
+    if (owned) {
+      const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
+      updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+      setOwnedWarnings(warnings);
+    } else {
+      setOwnedWarnings([]);
+    }
     setEditingParty(updated);
 
     // 右隣のスロットが空（未設定）なら、続けて選べるようフォーカスを移す

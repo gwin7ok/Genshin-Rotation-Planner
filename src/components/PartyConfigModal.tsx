@@ -415,10 +415,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 return (
                   <div className="mb-3 rounded-lg border border-sky-500/30 bg-sky-950/20 p-2.5 text-xs space-y-1.5" data-testid="owned-build-section">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sky-300">{t('party:owned.title')}</span>
+                      <span className={`font-bold ${build ? 'text-emerald-300' : 'text-slate-300'}`} data-testid="owned-build-state">
+                        {build ? t('party:owned.appliedOwned') : t('party:owned.appliedDefault')}
+                      </span>
                       {build ? (
                         <>
-                          <span className="text-emerald-300 text-[10px] font-semibold">{t('party:owned.active')}</span>
                           <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
                             {t('party:owned.revert')}
                           </button>

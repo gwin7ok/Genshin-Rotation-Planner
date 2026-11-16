@@ -80,6 +80,17 @@ jobs:
             gh release create "$tag" --title "$tag" --notes-file changes.md --verify-tag
           fi
 
+      - name: HoYoLAB 取り込みの拡張機能の zip を、Release に添付
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 拡張機能（extension/hoyolab-importer）を zip にして、Release に添付する。利用者は、展開して「パッケージ化されていない拡張機能を読み込む」で導入する
+          ev=$(node -p "require('./extension/hoyolab-importer/manifest.json').version")
+          zip_name="grp-hoyolab-importer-${ev}.zip"
+          (cd extension/hoyolab-importer && zip -r "../../${zip_name}" . -x "README.md")
+          gh release upload "${GITHUB_REF_NAME}" "${zip_name}" --clobber
+          echo "拡張機能 ${zip_name} を添付しました"
+
       - name: deploy（GitHub Pages への公開）を main から起動
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

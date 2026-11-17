@@ -79,15 +79,24 @@ const isReliquary = (e: EnkaAvatar['equipList'][number]): e is EnkaReliquary => 
 const isWeapon = (e: EnkaAvatar['equipList'][number]): e is EnkaWeapon => 'weapon' in e;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** 基礎の天賦レベル [通常, スキル, 爆発]。skillLevelMap のキー（スキル ID）の昇順で、先頭=通常・2 番目=スキル・最後=爆発 */
-function talentLevels(map: Record<string, number>, warnings: string[]): [number, number, number] {
-  const ids = Object.keys(map).map(Number).sort((a, b) => a - b);
-  if (ids.length < 3) {
-    warnings.push(`天賦の数が想定外です（${ids.length} 個）。足りない分は Lv.1 にします`);
-    const lv = (i: number) => map[String(ids[i])] ?? 1;
-    return [lv(0), lv(1), lv(ids.length - 1)];
-  }
-  return [map[String(ids[0])], map[String(ids[1])], map[String(ids[ids.length - 1])]];
+/**
+ * スキル ID の並びが、[通常, スキル, 爆発] の昇順にならないキャラ（ゲームのデータ上の例外。Enka のドキュメントの SkillOrder による）。
+ * 神里綾華は、ダッシュの代わりの技（10013）も skillLevelMap に入る。旅人の通常攻撃は、10 万以上の ID。
+ */
+const SKILL_ORDER_EXCEPTIONS: Record<number, [number, number, number]> = {
+  10000002: [10024, 10018, 10019], // 神里綾華
+  10000021: [10041, 10032, 10017], // アンバー
+};
+
+/** 基礎の天賦レベル [通常, スキル, 爆発]。ふつうは、skillLevelMap のキー（スキル ID）の昇順で、先頭=通常・2 番目=スキル・最後=爆発 */
+function talentLevels(avatarId: number, map: Record<string, number>, warnings: string[]): [number, number, number] {
+  const exception = SKILL_ORDER_EXCEPTIONS[avatarId];
+  if (exception) return [map[String(exception[0])] ?? 1, map[String(exception[1])] ?? 1, map[String(exception[2])] ?? 1];
+  let ids = Object.keys(map).map(Number).sort((a, b) => a - b);
+  if (isTraveler(avatarId)) ids = [...ids.filter(i => i >= 100000), ...ids.filter(i => i < 100000)]; // 旅人: 通常攻撃（10 万以上）を先頭に
+  if (ids.length !== 3) warnings.push(`天賦の数が想定外です（${ids.length} 個）。先頭・2 番目・最後を、通常・スキル・爆発として使います`);
+  const lv = (i: number) => map[String(ids[i])] ?? 1;
+  return [lv(0), lv(1), lv(ids.length - 1)];
 }
 
 export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCharacter {
@@ -135,7 +144,7 @@ export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCha
     maxLevel,
     ambiguousAscension: false,
     constellation: a.talentIdList?.length ?? 0,
-    talents: talentLevels(a.skillLevelMap, warnings),
+    talents: talentLevels(a.avatarId, a.skillLevelMap, warnings),
     weapon: {
       genshinId: weaponEquip?.itemId ?? 0,
       name: weaponMaster?.name ?? `武器 ${weaponEquip?.itemId ?? 0}`,

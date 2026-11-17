@@ -28,7 +28,10 @@ HoYoLAB の戦績（全キャラクター）から、所持キャラの詳細（
 - **Enka.Network の利用条件**（2026-11-17 確認）: API のライセンス表記・利用規約のページは見つからない。守るルールは「Before You Request」の 4 つ（UID の総当たり・大量取得をしない／独自の User-Agent を付ける／回数制限（429）／`ttl` の間は再取得しない）。実装: 1 回の取り込みで 1 UID だけ取得、拡張機能の通信にだけ User-Agent を付ける（`declarativeNetRequestWithHostAccess`。通常の fetch は User-Agent を変えられない）、`ttl` の間はメモリに保存。ドキュメントの対応表（store/*.json）は、ライセンス不明のためコピーしない（ID はマスターと同じゲームの ID で直接対応できた）。
 - **Enka の応答と変換**: 突破段階は propMap の 1002 で正確（曖昧さなし）。天賦は skillLevelMap が基礎レベル。聖遺物セット `setId`・武器 `itemId` は、マスターの ID と同じ。元素は返らないので、旅人だけ skillDepotId の下 1 桁で決める。実装: `src/utils/hoyolab/enkaConvert.ts`。
 - **確認**（UID 829******、12 キャラ）: 変換して gcsim で計算した最終値が、Enka の最終値（fightPropMap）と、gcsim 対応の 9 キャラ中 8 キャラで一致（`npm run check:enka-convert -- <Enka の JSON>`）。フリンズの熟知だけ差があり、gcsim が開始時に足す効果と見られる（未調査）。展示キャラは、最大 8 ではなく、12 キャラ並んでいる UID もある。UID 807****** は、Enka でもキャラが 0 件（展示に並べていない）で、取り込めるキャラが無い。
-- **未確認**: 拡張機能 v0.2.0 の実機（service worker の User-Agent・Enka への通信）。凸 3 以上のキャラの天賦レベルが、基礎レベルかどうか（ご自身の UID の Enka と HoYoLAB で比べる）。
+- **未確認**: 拡張機能 v0.2.0 の実機（service worker の User-Agent・Enka への通信）。（解消）凸 3 以上のキャラの天賦レベル。
+
+- **HoYoLAB と Enka の突き合わせ**（2026-11-17。UID 808******。ゲーム内で詳細表示をオンにして、Enka から 12 キャラ）: 両方をアプリの変換で持ちキャラにして比べ、**12 キャラすべて一致**（レベル・突破・凸・天賦・武器の ID/Lv/精錬・聖遺物セット・聖遺物ステータス）。凸 6 のキャラ（刻晴・ファルザン・フィッシュル・早柚・香菱）も、天賦が基礎レベルで一致 → Enka の skillLevelMap は基礎レベル。
+  最初は神里綾華の通常攻撃だけ不一致だった（Enka の skillLevelMap に、ダッシュの代わりの技 10013 が入り、通常攻撃のスキル ID が最大のため、ID の昇順で並べると外れる）。綾華・アンバー・旅人は、並びを明示して直した（`SKILL_ORDER_EXCEPTIONS`）。確認: `npm run check:enka-vs-hoyolab -- <HoYoLAB の JSON> <Enka の JSON>`。
 
 ## 変換時の注意（未実装）
 

@@ -10,7 +10,7 @@
       "weaponRefinementRank": 5,
       "artifactSetId": "15025",
       "artifactSetMode": "4pc",
-      "build": {
+      "customStats": {
         "level": 90,
         "maxLevel": 90,
         "talents": [
@@ -20,12 +20,6 @@
         ],
         "weaponLevel": 90,
         "weaponMaxLevel": 90,
-        "artifactSets": [
-          {
-            "id": "15025",
-            "count": 4
-          }
-        ],
         "artifactStats": {
           "hp": 4989,
           "er": 0.687,
@@ -728,5 +722,324 @@
   "loopStartTime": 0.983,
   "totalDuration": 21.4,
   "switchDelay": 0.5,
-  "exportedAt": "2026-11-17T10:10:45.424Z"
+  "reactions": {
+    "gcsimVersion": "v2.50.0",
+    "rows": [
+      {
+        "kind": "verdantdew",
+        "lap": 1,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.65
+            },
+            "end": {
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 1.083
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790657507648_0k6e",
+              "offset": 1.083
+            },
+            "end": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.333
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 1.333
+            },
+            "end": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.483
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 1.85
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~1",
+              "offset": 0.433
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~1",
+              "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1.317
+            },
+            "count": 1
+          }
+        ]
+      },
+      {
+        "kind": "moonridgedew",
+        "lap": 1,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639819417_w612",
+              "offset": 2.05
+            },
+            "end": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
+            },
+            "end": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 1.05
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 1.05
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1.317
+            },
+            "count": 1
+          }
+        ]
+      },
+      {
+        "kind": "verdantdew",
+        "lap": 2,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639793975_533l",
+              "offset": 0
+            },
+            "end": {
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.1
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790639794922_a6b6",
+              "offset": 1.1
+            },
+            "end": {
+              "actionId": "act_1790657506812_wx8d",
+              "offset": 0.117
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790657506812_wx8d",
+              "offset": 0.117
+            },
+            "end": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.483
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 2.133
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe",
+              "offset": 0.917
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~1",
+              "offset": 0.717
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~1",
+              "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0.283
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~3",
+              "offset": 0.767
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 1.283
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 3.717
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 3.717
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 6.15
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 6.15
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 14.85
+            },
+            "count": 3
+          }
+        ]
+      },
+      {
+        "kind": "moonridgedew",
+        "lap": 2,
+        "max": 3,
+        "segments": [
+          {
+            "start": {
+              "actionId": "act_1790639793975_533l",
+              "offset": 0
+            },
+            "end": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
+            },
+            "count": 1
+          },
+          {
+            "start": {
+              "actionId": "act_1792099753586_cp1e",
+              "offset": 0.75
+            },
+            "end": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.8
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790639828963_rcb8",
+              "offset": 0.8
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~2",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 0.767
+            },
+            "count": 2
+          },
+          {
+            "start": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 0.767
+            },
+            "end": {
+              "actionId": "act_1790658661178_tzwe~4",
+              "offset": 14.85
+            },
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "exportedAt": "2026-11-17T10:11:56.709Z"
 }

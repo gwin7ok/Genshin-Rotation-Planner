@@ -824,6 +824,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
           key={`${selectedSlot}-${editingParty[selectedSlot]?.characterId}`}
           initial={editingParty[selectedSlot]?.build ? statsOfBuild(editingParty[selectedSlot].build!) : editingParty[selectedSlot]?.customStats ?? DEFAULT_CUSTOM_STATS}
           fromOwned={!!editingParty[selectedSlot]?.build}
+          previewChar={currentSlotChar}
+          database={database}
           onSave={handleSaveStats}
           onClose={() => setIsStatsOpen(false)}
         />

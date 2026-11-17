@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { X } from 'lucide-react';
 import { t, type TranslationKey } from '../i18n';
-import type { CustomStats } from '../types/genshin';
+import type { CharacterConfig, CustomStats } from '../types/genshin';
+import type { AppDatabase } from '../types/database';
+import { previewFinalStats, type FinalStatsResult } from '../utils/gcsim/finalStatsPreview';
 import { ARTIFACT_STAT_KEYS, DEFAULT_CUSTOM_STATS } from '../utils/customStats';
 
 interface StatsEditModalProps {
@@ -9,15 +11,19 @@ interface StatsEditModalProps {
   initial: CustomStats;
   /** 持ちキャラの装備を適用中か（説明の出し分け用） */
   fromOwned: boolean;
+  /** 最終ステータス（参考）の計算に使う、この枠のキャラ（武器・聖遺物・凸を解決済み）と DB */
+  previewChar?: CharacterConfig;
+  database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
   onSave: (stats: CustomStats) => void;
   onClose: () => void;
 }
 
 const MAX_LEVELS = [20, 40, 50, 60, 70, 80, 90, 95, 100];
 const toText = (n: number) => String(Number(n.toFixed(4)));
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 
 /** 編成の設定にある項目（凸・諭示・魔女の課題・武器・聖遺物）以外のステータスを変更する画面。保存した値は、その枠の仮値になる */
-export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwned, onSave, onClose }) => {
+export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwned, previewChar, database, onSave, onClose }) => {
   const [level, setLevel] = useState(String(initial.level));
   const [maxLevel, setMaxLevel] = useState(initial.maxLevel);
   const [talents, setTalents] = useState(initial.talents.map(String));
@@ -47,14 +53,32 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
   });
   const valid = levelN !== null && weaponLevelN !== null && talentNs.every(n => n !== null) && statNs.every(s => s.ok);
 
-  const handleSave = () => {
-    if (!valid) return;
+  // 入力中の値（検査に通らないときは null）
+  const current = useMemo((): CustomStats | null => {
+    if (!valid) return null;
     const artifactStats: Record<string, number> = {};
     for (const s of statNs) if (s.value !== undefined && s.value !== 0) artifactStats[s.key] = Number(s.value.toFixed(6));
-    onSave({
+    return {
       level: levelN!, maxLevel, talents: talentNs as unknown as [number, number, number],
       weaponLevel: weaponLevelN!, weaponMaxLevel, artifactStats,
-    });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [level, maxLevel, talents, weaponLevel, weaponMaxLevel, statTexts]);
+
+  // gcsim が計算する最終ステータス（参考）。入力を止めてから、少し待って 1 回だけ実行する
+  const [preview, setPreview] = useState<FinalStatsResult | 'loading' | null>(null);
+  useEffect(() => {
+    if (!previewChar || !current) { setPreview(null); return; }
+    let cancelled = false;
+    setPreview('loading');
+    const timer = setTimeout(() => {
+      previewFinalStats(previewChar, current, database).then(r => { if (!cancelled) setPreview(r); }).catch(e => { if (!cancelled) setPreview({ status: 'error', message: String(e) }); });
+    }, 400);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [previewChar, current, database]);
+
+  const handleSave = () => {
+    if (current) onSave(current);
   };
 
   const handleReset = () => {
@@ -107,6 +131,34 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
               </select>
             </span>
           </div>
+
+          {previewChar && (
+            <div className="rounded-lg border border-slate-700 bg-slate-950/50 p-3 space-y-1.5" data-testid="stats-final-preview">
+              <h3 className="font-bold text-slate-200">{t('party:stats.finalTitle')}</h3>
+              {preview === null || preview === 'loading' ? (
+                <p className="text-[11px] text-slate-500">{preview === 'loading' ? t('party:stats.finalLoading') : t('party:stats.finalInvalid')}</p>
+              ) : preview.status === 'unsupported' ? (
+                <p className="text-[11px] text-slate-500">{t('party:stats.finalUnsupported')}</p>
+              ) : preview.status === 'error' ? (
+                <p className="text-[11px] text-amber-300">{t('party:stats.finalError', { message: preview.message })}</p>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 font-mono">
+                  {([
+                    ['hp', Math.round(preview.stats.hp)], ['atk', Math.round(preview.stats.atk)], ['def', Math.round(preview.stats.def)],
+                    ['em', Math.round(preview.stats.em)], ['cr', pct(preview.stats.cr)], ['cd', pct(preview.stats.cd)],
+                    ['er', pct(preview.stats.er)], ['heal', pct(preview.stats.heal)], ['elementDmg', pct(preview.stats.elementDmg)],
+                    ['phys%', pct(preview.stats.physDmg)],
+                  ] as [string, string | number][]).map(([k, v]) => (
+                    <div key={k} className="flex justify-between gap-2">
+                      <span className="text-slate-400 font-sans">{t(`party:stats.final.${k}` as TranslationKey)}</span>
+                      <span className="text-slate-100" data-testid={`stats-final-${k}`}>{v}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="text-[10px] text-slate-500">{t('party:stats.finalNote')}</p>
+            </div>
+          )}
 
           <div>
             <h3 className="font-bold text-slate-200 mb-1">{t('party:stats.artifactStats')}</h3>

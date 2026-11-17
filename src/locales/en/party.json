@@ -95,6 +95,24 @@
       "geo%": "Geo DMG Bonus",
       "dendro%": "Dendro DMG Bonus",
       "phys%": "Physical DMG Bonus"
+    },
+    "finalTitle": "Final stats calculated by gcsim (reference)",
+    "finalLoading": "Calculating…",
+    "finalInvalid": "Cannot calculate: some inputs are invalid",
+    "finalUnsupported": "Not shown: this character is not implemented in gcsim",
+    "finalError": "gcsim could not calculate: {{message}}",
+    "finalNote": "Base stats of the character and weapon, plus the artifact stats below and the weapon/talent effects gcsim adds at the start. Read-only; it changes when you edit the artifact stats below.",
+    "final": {
+      "hp": "HP",
+      "atk": "ATK",
+      "def": "DEF",
+      "em": "Elemental Mastery",
+      "cr": "CRIT Rate",
+      "cd": "CRIT DMG",
+      "er": "Energy Recharge",
+      "heal": "Healing Bonus",
+      "elementDmg": "Elemental DMG Bonus",
+      "phys%": "Physical DMG Bonus"
     }
   }
 }

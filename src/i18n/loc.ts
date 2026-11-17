@@ -26,6 +26,14 @@ export function charName(c: { name: string; englishName?: string; en?: { name?: 
   return c.en?.name || c.englishName || c.name;
 }
 
+/** マスターに無いキャラ（ドール男女。Miliastra Wonderland のキャラ）の、英語の名前 */
+const UNLISTED_CHARACTER_EN: Record<string, string> = { 'ドール（男）': 'Manekin', 'ドール（女）': 'Manekina' };
+
+/** マスターに無いキャラの表示名（英語のときは対応表の英語名。無ければ元の名前） */
+export function unlistedCharName(name: string): string {
+  return currentLanguage === 'en' ? UNLISTED_CHARACTER_EN[name] ?? name : name;
+}
+
 /**
  * 編成の中のアクションの表示名（D250・3-6）。保存されている名前は、追加したときの言語の文字列なので、
  * キャラのアクション定義（actionTypeId）から表示の言語で引く。定義が無いもの（削除済み・カスタム）は保存されている名前。

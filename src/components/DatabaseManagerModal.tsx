@@ -48,7 +48,7 @@ import { DatabaseWeaponCardItem } from './database/DatabaseWeaponCardItem';
 import { EditCharacterSubModal } from './database/EditCharacterSubModal';
 import { EditWeaponSubModal } from './database/EditWeaponSubModal';
 import { EditArtifactSubModal } from './database/EditArtifactSubModal';
-import { charName, loc, frameSourceOf, frameSourceText, reportText } from '../i18n/loc';
+import { charName, unlistedCharName, loc, frameSourceOf, frameSourceText, reportText } from '../i18n/loc';
 import type { GenerationPhase } from '../masterdata/characterMasterGenerator';
 import type { EquipmentGenerationPhase } from '../masterdata/equipmentMasterGenerator';
 
@@ -1224,7 +1224,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                         <span className="text-slate-500 font-mono font-normal"> (gcsim {charSyncReport.gcsimCommit.slice(0, 7)}{charSyncReport.catalogCommit ? t('database:manager.dictionary', { commit: charSyncReport.catalogCommit }) : ''})</span>
                       </div>
                       {charSyncReport.skipped.length > 0 && (
-                        <div><span className="text-slate-400">{t('database:manager.skipped')}</span> {charSyncReport.skipped.map(s => `${s.name} (${reportText(s.reason)})`).join(' / ')}</div>
+                        <div><span className="text-slate-400">{t('database:manager.skipped')}</span> {charSyncReport.skipped.map(s => `${unlistedCharName(s.name)} (${reportText(s.reason)})`).join(' / ')}</div>
                       )}
                       {charSyncReport.placeholderDurations.length > 0 && (
                         <div>

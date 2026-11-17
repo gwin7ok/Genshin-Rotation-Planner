@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2, Download, Copy, Check } from 'lucide-react';
 import { t, dateLocale, currentLanguage } from '../i18n';
-import { charName, loc } from '../i18n/loc';
+import { charName, loc, unlistedCharName } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
 import { GcsimMissingBadge } from './GcsimMissingBadge';
@@ -414,7 +414,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                       {master ? <CharacterAvatar char={master} className="w-9 h-9 rounded-lg text-sm shrink-0" /> : <div className="w-9 h-9 rounded-lg bg-slate-800 shrink-0" />}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-semibold text-slate-100">{master ? charName(master) : o.name}</span>
+                          <span className="font-semibold text-slate-100">{master ? charName(master) : unlistedCharName(o.name)}</span>
                           {master && <GcsimMissingBadge char={master} />}
                           <span className="text-slate-400">{t('hoyolab:list.level', { level: o.level })}</span>
                           <span className="text-slate-400">{t('hoyolab:list.cons', { count: o.constellation })}</span>

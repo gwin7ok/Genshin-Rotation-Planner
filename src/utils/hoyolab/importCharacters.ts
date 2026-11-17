@@ -31,6 +31,8 @@ export interface HoyolabDetailResponse {
   list: HoyolabCharacter[];
   /** 他のアカウントの UID で、取得できなかったキャラの数（拡張機能が、1 キャラずつ取得したときだけ付く） */
   skipped?: number;
+  /** プレイヤー名（拡張機能 v0.2.2 以降）。取れなかったときは無い */
+  nickname?: string;
 }
 
 /** 持ちキャラ（取り込んだ結果）。マスターの ID で参照する */

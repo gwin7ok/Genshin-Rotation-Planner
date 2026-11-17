@@ -8,6 +8,8 @@ import type { OwnedCharacter } from './importCharacters';
 export interface OwnedStore {
   /** 取り込んだ日時（ISO） */
   importedAt: string;
+  /** 取り込んだアカウントのプレイヤー名（取れなかったときは無い） */
+  nickname?: string;
   characters: OwnedCharacter[];
 }
 
@@ -32,12 +34,16 @@ export function isValidOwnedCharacter(v: unknown): v is OwnedCharacter {
 export function loadOwned(): OwnedStore | null {
   const raw = readJson<unknown>(SETTING_KEYS.ownedCharacters);
   if (!isRecord(raw) || typeof raw.importedAt !== 'string' || !Array.isArray(raw.characters)) return null;
-  return { importedAt: raw.importedAt, characters: raw.characters.filter(isValidOwnedCharacter) };
+  return {
+    importedAt: raw.importedAt,
+    ...(typeof raw.nickname === 'string' && raw.nickname !== '' ? { nickname: raw.nickname.slice(0, 40) } : {}),
+    characters: raw.characters.filter(isValidOwnedCharacter),
+  };
 }
 
 /** 取り込んだ持ちキャラを保存する（前回の分は置き換える）。書き込めなかったら false */
-export function saveOwned(characters: OwnedCharacter[], now: Date = new Date()): boolean {
-  const store: OwnedStore = { importedAt: now.toISOString(), characters };
+export function saveOwned(characters: OwnedCharacter[], nickname?: string, now: Date = new Date()): boolean {
+  const store: OwnedStore = { importedAt: now.toISOString(), ...(nickname ? { nickname } : {}), characters };
   return writeJson(SETTING_KEYS.ownedCharacters, store);
 }
 

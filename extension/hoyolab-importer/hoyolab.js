@@ -67,6 +67,20 @@ const call = async (endpoint, uid, server, body) => {
   return json.data;
 };
 
+/** プレイヤー名（index の role.nickname）。取れなくても、取り込みは続ける（undefined を返す） */
+const fetchNickname = async (uid, server) => {
+  try {
+    const res = await fetch(`${BASE}index?${new URLSearchParams({ role_id: String(uid), server })}`, {
+      credentials: 'include',
+      headers: { 'x-rpc-app_version': '1.5.0', 'x-rpc-client_type': '5', 'x-rpc-language': 'ja-jp', 'x-rpc-lang': 'ja-jp', ds: makeDs() },
+    });
+    const json = await res.json();
+    return json.retcode === 0 && typeof json.data?.role?.nickname === 'string' ? json.data.role.nickname : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 /** 他のアカウントの UID: 詳細の一括取得は許可されない（retcode 10104）。1 キャラずつ取得し、取得できたものだけ集める */
 const NOT_ALLOWED = 10104;
 const MAX_CONSECUTIVE_DENIED = 20; // 1 つも取得できないまま、これだけ続けて拒否されたら、あきらめる
@@ -101,10 +115,12 @@ export const fetchCharacters = async (uid) => {
   if (!server) throw new Error('UID からサーバーを判別できません');
   const list = await call('character/list', uid, server, {});
   const ids = list.list.map((c) => c.id);
+  const nickname = await fetchNickname(uid, server);
+  const withNickname = (data) => (nickname ? { ...data, nickname } : data);
   try {
-    return await call('character/detail', uid, server, { character_ids: ids });
+    return withNickname(await call('character/detail', uid, server, { character_ids: ids }));
   } catch (e) {
     if (e.retcode !== NOT_ALLOWED) throw e;
-    return fetchOneByOne(uid, server, ids, e);
+    return withNickname(await fetchOneByOne(uid, server, ids, e));
   }
 };

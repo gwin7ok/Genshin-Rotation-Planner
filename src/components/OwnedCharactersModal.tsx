@@ -168,7 +168,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
       return;
     }
     saveHoyolabUid(uid);
-    if (saveOwned(converted)) {
+    if (saveOwned(converted, res.data?.playerInfo?.nickname)) {
       setStore(loadOwned());
       setMessage({ kind: 'ok', text: t('hoyolab:import.doneEnka', { count: converted.length }) });
     } else {
@@ -199,7 +199,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
       resolved.push(owned.ambiguousAscension ? await resolveAscension(owned, masterById.get(id ?? '')?.source?.gcsimKey, masters) : owned);
     }
     saveHoyolabUid(uid);
-    if (saveOwned(resolved)) {
+    if (saveOwned(resolved, res.data.nickname)) {
       setStore(loadOwned());
       const skipped = res.data.skipped ?? 0;
       setMessage({ kind: 'ok', text: skipped > 0 ? t('hoyolab:import.donePartial', { count: resolved.length, skipped }) : t('hoyolab:import.done', { count: resolved.length }) });
@@ -320,6 +320,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <h3 className="font-bold text-slate-200">{t('hoyolab:list.title')}</h3>
+              {store?.nickname && <span className="text-xs font-semibold text-sky-300" data-testid="owned-nickname">{store.nickname}</span>}
               {store && <span className="text-[10px] text-slate-500">{t('hoyolab:list.summary', { count: characters.length, date: new Date(store.importedAt).toLocaleString(dateLocale) })}</span>}
               {store && (
                 <button onClick={() => void handleClear()} className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded border border-slate-600 text-slate-400 hover:text-red-300 hover:border-red-500/50">

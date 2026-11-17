@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Genshin Rotation Planner - HoYoLAB 取り込み",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "HoYoLAB の戦績（ご自身の UID）または Enka.Network（他のアカウントの UID）から、持ちキャラの詳細を取得し、Genshin Rotation Planner に渡します。Cookie の値は読み取りません。",
   "icons": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png" },
   "permissions": ["declarativeNetRequestWithHostAccess"],

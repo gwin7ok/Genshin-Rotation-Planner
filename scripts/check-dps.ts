@@ -40,6 +40,18 @@ const logs = [
 ];
 const run = dps.summarizeDamage(logs, 2);
 check(run.total === 150.5 && run.byChar[0] === 100 && run.byChar[1] === 50.5 && run.seconds === 3, '合成ログ: 総ダメージ・キャラ別・時間（最後のアクション 3 秒）');
+const wl = [
+  { event: 'cooldown', frame: 10, msg: 'burst cooldown triggered', char_index: 0 },
+  { event: 'sim', frame: 20, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 21, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'cooldown', frame: 22, msg: 'burst cooldown ready', char_index: 0 },
+  { event: 'sim', frame: 22, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 23, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 100, msg: 'could not execute burst; action not ready', char_index: 1 },
+  { event: 'sim', frame: 150, msg: 'could not execute burst; action not ready', char_index: 1 },
+];
+const wr = dps.summarizeDamage(wl, 2);
+check(wr.energyWaits[0] === 1 && wr.energyWaits[1] === 2, '爆発のエネルギー待ち: CT 待ちは数えず、CT 明けの待ちを 1 かたまり 1 回と数える');
 const agg = dps.aggregateDps([{ total: 300, seconds: 3, byChar: [200, 100] }, { total: 500, seconds: 5, byChar: [400, 100] }], 2);
 check(agg.dps.mean === 100 && agg.dps.sd === 0 && agg.runs === 2 && Math.abs(agg.byChar[0].share - 0.75) < 1e-9, '統計: DPS 平均・標準偏差・割合');
 

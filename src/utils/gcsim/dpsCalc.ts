@@ -39,11 +39,21 @@ export interface DpsRun {
   seconds: number;
   /** キャラ別のダメージ（char_index の順） */
   byChar: number[];
+  /** キャラ別の、爆発のエネルギー待ちの回数（char_index の順。爆発がエネルギー不足で撃てず、待った回数） */
+  energyWaits: number[];
 }
 
-/** ログから 1 回分を集計する。char_index が範囲外のダメージは、総ダメージにだけ入れる */
+/**
+ * ログから 1 回分を集計する。char_index が範囲外のダメージは、総ダメージにだけ入れる */
 export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): DpsRun {
   const byChar = new Array<number>(memberCount).fill(0);
+  const energyWaits = new Array<number>(memberCount).fill(0);
+  // 爆発のエネルギー待ち: gcsim は、撃てない爆発を毎フレーム「could not execute burst; action not ready」と記録する（CT 待ちも同じ）。
+  // 連続したフレームを 1 回の待ちとし、その間に、爆発の CT が明けている（CT 中でない）フレームがあれば、エネルギー待ちと数える
+  const burstCd = new Array<boolean>(memberCount).fill(false);
+  const waitLast = new Array<number>(memberCount).fill(-2);
+  const waitIsEnergy = new Array<boolean>(memberCount).fill(false);
+  const closeWait = (i: number) => { if (waitIsEnergy[i]) energyWaits[i]++; waitIsEnergy[i] = false; };
   let total = 0;
   let endFrame = 0;
   for (const l of logs) {
@@ -55,9 +65,18 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
       if (l.frame > endFrame) endFrame = l.frame;
     } else if (l.event === 'action' && l.msg.startsWith('executed ') && l.frame > endFrame) {
       endFrame = l.frame;
+    } else if (l.event === 'cooldown' && l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) {
+      if (l.msg === 'burst cooldown triggered') burstCd[l.char_index] = true;
+      else if (l.msg === 'burst cooldown ready') burstCd[l.char_index] = false;
+    } else if (l.event === 'sim' && l.msg.startsWith('could not execute burst') && l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) {
+      const i = l.char_index;
+      if (l.frame !== waitLast[i] && l.frame !== waitLast[i] + 1) closeWait(i);
+      waitLast[i] = l.frame;
+      if (!burstCd[i]) waitIsEnergy[i] = true;
     }
   }
-  return { total, seconds: endFrame / GCSIM_FPS, byChar };
+  for (let i = 0; i < memberCount; i++) closeWait(i);
+  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits };
 }
 
 export interface DpsStats {
@@ -84,7 +103,9 @@ export interface DpsResult {
   /** 経過時間（秒）の平均 */
   seconds: number;
   /** キャラ別（char_index の順）: ダメージの平均・DPS の平均・全体に占める割合（平均ダメージの比） */
-  byChar: { damage: number; dps: number; share: number }[];
+  byChar: { damage: number; dps: number; share: number; /** 1 回の実行あたりの、爆発のエネルギー待ちの回数の平均 */ energyWaits: number }[];
+  /** 全員の、1 回の実行あたりの爆発のエネルギー待ちの回数の平均 */
+  energyWaits: number;
 }
 
 /** 実行ごとの集計から、結果を作る */
@@ -97,9 +118,10 @@ export function aggregateDps(runs: DpsRun[], memberCount: number): DpsResult {
   const byChar = Array.from({ length: memberCount }, (_, i) => {
     const damage = valid.length ? valid.reduce((a, r) => a + (r.byChar[i] ?? 0), 0) / valid.length : 0;
     const cdps = valid.length ? valid.reduce((a, r) => a + (r.byChar[i] ?? 0) / r.seconds, 0) / valid.length : 0;
-    return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0 };
+    const energyWaits = valid.length ? valid.reduce((a, r) => a + (r.energyWaits?.[i] ?? 0), 0) / valid.length : 0;
+    return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0, energyWaits };
   });
-  return { runs: valid.length, dps, total, seconds, byChar };
+  return { runs: valid.length, dps, total, seconds, byChar, energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0) };
 }
 
 export interface DpsProgress {

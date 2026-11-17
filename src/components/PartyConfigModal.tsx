@@ -16,6 +16,7 @@ import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
 import { isTravelerKey, matchMasterCharacterId, ownedToPartyFields } from '../utils/hoyolab/importCharacters';
 import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
+import { buildMatchesOwned } from '../utils/hoyolab/ownedMatch';
 import { StatsEditModal } from './StatsEditModal';
 import { DEFAULT_CUSTOM_STATS, statsOfBuild } from '../utils/customStats';
 import type { CustomStats } from '../types/genshin';
@@ -438,15 +439,26 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 const build = editingParty[selectedSlot]?.build;
                 if (!owned && !build && isEmptySlotCharacter(currentSlotChar)) return null;
                 const customStats = editingParty[selectedSlot]?.customStats;
+                // 装備・ステータス（build）が、取り込み済みのデータと一致するか（D344）。一致しない（プリセットの値・他の人の値・取り込み前の値）は、別の表示にする
+                const ownedFields = owned ? ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts }).fields : undefined;
+                const matches = !!(build && ownedFields && buildMatchesOwned(editingParty[selectedSlot], ownedFields));
+                // 取り込みデータが無い・そのキャラが無いときは、比べられない（相違とは別の表示）
+                const uncompared = !!build && !ownedFields;
+                const differs = !!build && !!ownedFields && !matches;
                 return (
                   <div className="mb-3 rounded-lg border border-sky-500/30 bg-sky-950/20 p-2.5 text-xs space-y-1.5" data-testid="owned-build-section">
                     <div className="flex items-center gap-2">
-                      <span className={`font-bold ${build ? 'text-emerald-300' : 'text-slate-300'}`} data-testid="owned-build-state">
-                        {build ? t('party:owned.appliedOwned') : t('party:owned.appliedDefault')}
+                      <span className={`font-bold ${matches ? 'text-emerald-300' : differs ? 'text-amber-300' : 'text-slate-300'}`} data-testid="owned-build-state" data-state={matches ? 'owned' : differs ? 'differs' : uncompared ? 'uncompared' : 'default'}>
+                        {matches ? t('party:owned.appliedOwned') : differs ? t('party:owned.appliedDiffers') : uncompared ? t('party:owned.appliedUncompared') : t('party:owned.appliedDefault')}
                       </span>
                       <button onClick={() => setIsStatsOpen(true)} data-testid="owned-build-edit-stats" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
                         {t('party:stats.open')}
                       </button>
+                      {differs && (
+                        <button onClick={handleUseOwned} data-testid="owned-build-use" className="px-2.5 py-0.5 rounded bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold">
+                          {t('party:owned.use')}
+                        </button>
+                      )}
                       {build ? (
                         <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
                           {t('party:owned.revert')}
@@ -464,7 +476,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       })()}
                     </p>
                     {!build && owned && <p className="text-[10px] text-slate-500">{t('party:owned.summaryAvailable', { level: owned.level, max: owned.maxLevel, cons: owned.constellation, weapon: owned.weapon.name })}</p>}
-                    {build && <p className="text-[10px] text-slate-500">{t('party:owned.note')}</p>}
+                    {build && <p className="text-[10px] text-slate-500">{differs ? t('party:owned.differsNote') : uncompared ? t('party:owned.uncomparedNote') : t('party:owned.note')}</p>}
                     {ownedWarnings.map(w => (
                       <p key={w} className="text-[10px] text-amber-300">{w}</p>
                     ))}

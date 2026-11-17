@@ -57,7 +57,11 @@
     "revert": "Use defaults",
     "summaryAvailable": "Imported: Lv.{{level}}/{{max}}, C{{cons}}, {{weapon}}. Using it sets weapon, artifacts and constellation, plus level, talents and artifact stats, to the imported values",
     "summaryActive": "Lv.{{level}}/{{max}} / Talents {{talents}} / Weapon Lv.{{weaponLevel}} / {{stats}} artifact stats",
-    "note": "Changing the weapon, artifacts, refinement or constellation by hand stops applying the owned build, but its level, talents, weapon level and artifact stats carry over as tentative values (only the item you changed differs). Defaults are restored only when you press \"Use defaults\". The required energy recharge calculation also uses these values (only the artifact Energy Recharge is replaced by the value being swept)"
+    "note": "Changing the weapon, artifacts, refinement or constellation by hand stops applying the owned build, but its level, talents, weapon level and artifact stats carry over as tentative values (only the item you changed differs). Defaults are restored only when you press \"Use defaults\". The required energy recharge calculation also uses these values (only the artifact Energy Recharge is replaced by the value being swept)",
+    "appliedDiffers": "Applying values that differ from your imported build",
+    "differsNote": "This build & stats do not match your imported owned character (they may come from a preset, someone else, or an earlier import). DPS and the required energy recharge are calculated with these values. \"Use owned\" replaces them with your imported values",
+    "appliedUncompared": "Applying build & stats (cannot compare with imported data)",
+    "uncomparedNote": "This character is not in your imported data, so the values cannot be compared (they may come from a preset, someone else, or a character you have not imported). DPS and the required energy recharge are calculated with these values. \"Use defaults\" returns to the default tentative values"
   },
   "stats": {
     "open": "Edit stats",

@@ -49,6 +49,7 @@
     "check:enka-vs-hoyolab": "node scripts/check-enka-vs-hoyolab.ts",
     "check:required-er": "node scripts/check-required-er.ts",
     "check:dps": "node scripts/check-dps.ts",
+    "check:owned-match": "node scripts/check-owned-match.ts",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",
     "review:effects": "node scripts/review-effect-keys.ts",
     "review:buff-scopes": "node scripts/review-buff-scopes.ts",

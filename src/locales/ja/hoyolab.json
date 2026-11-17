@@ -37,6 +37,8 @@
   "uid": {
     "label": "原神の UID",
     "placeholder": "9 桁の数字",
+    "loginHint": "取り込む前に、この Chrome で HoYoLAB にログインしておいてください。ログインしていないと、取り込めません。",
+    "loginLink": "HoYoLAB を開く",
     "hint": "HoYoLAB にログインしたブラウザで、戦績の「キャラクターの詳細」を公開にしておいてください。"
   },
   "import": {

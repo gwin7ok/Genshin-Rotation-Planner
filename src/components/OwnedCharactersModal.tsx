@@ -243,6 +243,14 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                 {busy === 'fetch' ? t('hoyolab:import.running') : busy === 'resolve' ? t('hoyolab:import.resolving') : t('hoyolab:import.button')}
               </button>
             </div>
+            <p className="text-[11px] text-amber-300 flex items-start gap-1" data-testid="owned-login-hint">
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-px" />
+              <span>{t('hoyolab:uid.loginHint')}{' '}
+                <a href="https://www.hoyolab.com/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-sky-300 hover:text-sky-200 underline">
+                  <ExternalLink className="w-3 h-3" />{t('hoyolab:uid.loginLink')}
+                </a>
+              </span>
+            </p>
             <p className="text-[10px] text-slate-500">{t('hoyolab:uid.hint')}</p>
             {message && (
               <div

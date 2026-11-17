@@ -37,6 +37,8 @@
   "uid": {
     "label": "Genshin UID",
     "placeholder": "9 digits",
+    "loginHint": "Before importing, log in to HoYoLAB in this Chrome. You cannot import without logging in.",
+    "loginLink": "Open HoYoLAB",
     "hint": "In the browser where you are logged in to HoYoLAB, make your Battle Chronicle character details public."
   },
   "import": {

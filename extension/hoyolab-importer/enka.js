@@ -2,7 +2,7 @@
 // Enka.Network は、ゲームが公開している展示キャラの情報を API にしている、非公式のサービス（HoYoLAB とは別）。
 // API のルール（https://github.com/EnkaNetwork/API-docs の「Before You Request」）に従う:
 //   ・UID の総当たり・大量取得をしない（取り込みボタンを押したときの 1 UID だけ）
-//   ・独自の User-Agent を付ける（rules.json が、この拡張機能自身の通信だけに付ける）
+//   ・独自の User-Agent を付ける（background.js が、この拡張機能自身の通信だけに付ける）
 //   ・レスポンスの ttl（次に更新されるまでの秒数）の間は、同じ UID を再取得しない（下のキャッシュ）
 // ログイン・Cookie は使わない。
 

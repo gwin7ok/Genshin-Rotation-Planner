@@ -41,6 +41,7 @@ export function resolvePartyCharacters(
       revelation: m.revelation,
       trueMoon: m.trueMoon,
       build: m.build,
+      customStats: m.customStats,
     };
   });
 }

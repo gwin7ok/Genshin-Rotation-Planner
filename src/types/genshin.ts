@@ -755,7 +755,7 @@ export interface Stint {
  * 凸・武器・精錬・聖遺物セットは、PartyMember の既存の項目に入れる（重複して持たない）。ここには、その分だけを持つ。
  * 設計: docs/hoyolab-import/design.md
  */
-export interface OwnedBuild {
+export interface CustomStats {
   /** キャラのレベルと、突破後の最大レベル（gcsim の `lvl=<level>/<maxLevel>`） */
   level: number;
   maxLevel: number;
@@ -763,10 +763,13 @@ export interface OwnedBuild {
   talents: [number, number, number];
   weaponLevel: number;
   weaponMaxLevel: number;
-  /** 聖遺物セットごとの装備数（DB の聖遺物セット id。2 個以上のものだけ） */
-  artifactSets: { id: string; count: number }[];
   /** 聖遺物の合計ステータス（gcsim の `add stats` のキー。割合は小数: 0.466 = 46.6%） */
   artifactStats: Record<string, number>;
+}
+
+export interface OwnedBuild extends CustomStats {
+  /** 聖遺物セットごとの装備数（DB の聖遺物セット id。2 個以上のものだけ） */
+  artifactSets: { id: string; count: number }[];
 }
 
 /**
@@ -796,6 +799,8 @@ export interface PartyMember {
   trueMoon?: boolean;
   /** 持ちキャラの装備を使うとき、その値（無いときは、従来の仮値で gcsim に渡す） */
   build?: OwnedBuild;
+  /** 仮値のステータス（「ステータスを変更」で保存した値。持ちキャラの装備（build）を使っていないときに使う。無ければ既定の仮値） */
+  customStats?: CustomStats;
 }
 
 export interface CharacterConfig {
@@ -830,6 +835,8 @@ export interface CharacterConfig {
   trueMoon?: boolean;
   /** 持ちキャラの装備（編成の設定から解決して入る）。無ければ仮値 */
   build?: OwnedBuild;
+  /** 仮値のステータス（編成の設定から解決して入る） */
+  customStats?: CustomStats;
 
   // Common action presets for this character (CT・効果継続時間・フレームはアクションごとに保持):
   availableActions: ActionDefinition[];

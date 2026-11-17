@@ -16,6 +16,9 @@ import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
 import { isTravelerKey, matchMasterCharacterId, ownedToPartyFields } from '../utils/hoyolab/importCharacters';
 import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
+import { StatsEditModal } from './StatsEditModal';
+import { DEFAULT_CUSTOM_STATS, statsOfBuild } from '../utils/customStats';
+import type { CustomStats } from '../types/genshin';
 import { currentLanguage, t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 import { charName, actionName, loc } from '../i18n/loc';
@@ -62,6 +65,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   // 取り込み済みの持ちキャラ（HoYoLAB。画面を開くたびに読み直す）
   const [ownedStore, setOwnedStore] = useState<OwnedStore | null>(null);
   const [ownedWarnings, setOwnedWarnings] = useState<string[]>([]);
+  // 「ステータスを変更」の画面
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -71,6 +76,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       setConfirmClearAll(false);
       setOwnedStore(loadOwned());
       setOwnedWarnings([]);
+      setIsStatsOpen(false);
     }
   }, [isOpen, party, stints]);
 
@@ -180,6 +186,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     updated[selectedSlot] = { ...updated[selectedSlot], build: undefined };
     setEditingParty(updated);
     setOwnedWarnings([]);
+  };
+
+  /** 「ステータスを変更」で保存: 持ちキャラの装備の使用は解除され、その値が、この枠の仮値になる */
+  const handleSaveStats = (stats: CustomStats) => {
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined, customStats: stats };
+    setEditingParty(updated);
+    setOwnedWarnings([]);
+    setIsStatsOpen(false);
   };
 
   const handleSave = () => {
@@ -411,30 +426,34 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               {(() => {
                 const owned = ownedForCurrent(currentSlotChar);
                 const build = editingParty[selectedSlot]?.build;
-                if (!owned && !build) return null;
+                if (!owned && !build && isEmptySlotCharacter(currentSlotChar)) return null;
+                const customStats = editingParty[selectedSlot]?.customStats;
                 return (
                   <div className="mb-3 rounded-lg border border-sky-500/30 bg-sky-950/20 p-2.5 text-xs space-y-1.5" data-testid="owned-build-section">
                     <div className="flex items-center gap-2">
                       <span className={`font-bold ${build ? 'text-emerald-300' : 'text-slate-300'}`} data-testid="owned-build-state">
                         {build ? t('party:owned.appliedOwned') : t('party:owned.appliedDefault')}
                       </span>
+                      <button onClick={() => setIsStatsOpen(true)} data-testid="owned-build-edit-stats" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
+                        {t('party:stats.open')}
+                      </button>
                       {build ? (
-                        <>
-                          <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
-                            {t('party:owned.revert')}
-                          </button>
-                        </>
-                      ) : (
-                        <button onClick={handleUseOwned} data-testid="owned-build-use" className="ml-auto px-2.5 py-0.5 rounded bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold">
+                        <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
+                          {t('party:owned.revert')}
+                        </button>
+                      ) : owned ? (
+                        <button onClick={handleUseOwned} data-testid="owned-build-use" className="px-2.5 py-0.5 rounded bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold">
                           {t('party:owned.use')}
                         </button>
-                      )}
+                      ) : null}
                     </div>
                     <p className="text-[10px] text-slate-400">
-                      {build
-                        ? t('party:owned.summaryActive', { level: build.level, max: build.maxLevel, talents: build.talents.join('/'), weaponLevel: build.weaponLevel, stats: Object.keys(build.artifactStats).length })
-                        : t('party:owned.summaryAvailable', { level: owned.level, max: owned.maxLevel, cons: owned.constellation, weapon: owned.weapon.name })}
+                      {(() => {
+                        const s = build ?? customStats ?? DEFAULT_CUSTOM_STATS;
+                        return t('party:owned.summaryActive', { level: s.level, max: s.maxLevel, talents: s.talents.join('/'), weaponLevel: s.weaponLevel, stats: Object.keys(s.artifactStats).length });
+                      })()}
                     </p>
+                    {!build && owned && <p className="text-[10px] text-slate-500">{t('party:owned.summaryAvailable', { level: owned.level, max: owned.maxLevel, cons: owned.constellation, weapon: owned.weapon.name })}</p>}
                     {build && <p className="text-[10px] text-slate-500">{t('party:owned.note')}</p>}
                     {ownedWarnings.map(w => (
                       <p key={w} className="text-[10px] text-amber-300">{w}</p>
@@ -800,6 +819,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
           </div>
         </div>
       </div>
+      {isStatsOpen && (
+        <StatsEditModal
+          key={`${selectedSlot}-${editingParty[selectedSlot]?.characterId}`}
+          initial={editingParty[selectedSlot]?.build ? statsOfBuild(editingParty[selectedSlot].build!) : editingParty[selectedSlot]?.customStats ?? DEFAULT_CUSTOM_STATS}
+          fromOwned={!!editingParty[selectedSlot]?.build}
+          onSave={handleSaveStats}
+          onClose={() => setIsStatsOpen(false)}
+        />
+      )}
     </div>
   );
 };

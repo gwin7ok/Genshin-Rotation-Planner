@@ -53,15 +53,19 @@ function optionalTypes(o: Record<string, unknown>, types: { string?: string[]; n
 }
 
 /** 持ちキャラの装備（編成の枠のコピー）: 数値・配列・ステータスの値が、型と範囲に合う（gcsim の設定文に、そのまま出すため） */
-export function isValidOwnedBuild(v: unknown): boolean {
+export function isValidCustomStats(v: unknown): boolean {
   if (!isRecord(v)) return false;
   const lv = (n: unknown) => isFiniteNumber(n) && Number.isInteger(n) && n >= 1 && n <= 100;
   return lv(v.level) && lv(v.maxLevel) && lv(v.weaponLevel) && lv(v.weaponMaxLevel)
     && Array.isArray(v.talents) && v.talents.length === 3 && v.talents.every(n => isFiniteNumber(n) && Number.isInteger(n) && n >= 1 && n <= 15)
-    && Array.isArray(v.artifactSets) && v.artifactSets.length <= 5
-    && v.artifactSets.every(s => isRecord(s) && isNonEmptyString(s.id) && isFiniteNumber(s.count) && Number.isInteger(s.count) && s.count >= 2 && s.count <= 5)
     && isRecord(v.artifactStats)
     && Object.entries(v.artifactStats).every(([k, n]) => /^[a-z]+%?$/.test(k) && isFiniteNumber(n) && Math.abs(n) < 100000);
+}
+
+export function isValidOwnedBuild(v: unknown): boolean {
+  return isValidCustomStats(v) && isRecord(v)
+    && Array.isArray(v.artifactSets) && v.artifactSets.length <= 5
+    && v.artifactSets.every(s => isRecord(s) && isNonEmptyString(s.id) && isFiniteNumber(s.count) && Number.isInteger(s.count) && s.count >= 2 && s.count <= 5);
 }
 
 /** 編成: 配列で、すべての枠が、キャラの ID（空でない文字列）を持ち、任意の項目は、型が合う */
@@ -72,7 +76,8 @@ export function isValidParty(v: unknown): v is PartyMember[] {
       number: ['constellation', 'weaponRefinementRank', 'energyRecharge'],
       boolean: ['hexerei', 'revelation', 'trueMoon'],
     })
-    && (m.build === undefined || isValidOwnedBuild(m.build)));
+    && (m.build === undefined || isValidOwnedBuild(m.build))
+    && (m.customStats === undefined || isValidCustomStats(m.customStats)));
 }
 
 const isValidExtraEffect = (e: unknown): boolean =>

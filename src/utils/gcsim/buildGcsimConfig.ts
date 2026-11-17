@@ -17,11 +17,7 @@ import type { GcsimMemberInfo } from './readGcsimLog.ts';
 import { t, joinList } from '../../i18n';
 import { charName, actionName, loc } from '../../i18n/loc';
 
-/** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル固定、会心率100% */
-const CHARACTER_LINE_PARAMS = 'lvl=90/90';
-const TALENT_LEVELS = '9,9,9';
-const WEAPON_LEVEL = '90/90';
-const TEMP_STATS = 'cr=1';
+import { DEFAULT_CUSTOM_STATS } from '../customStats';
 
 /** ループ部分を回す周数（2周目の先頭で、1周目から続くCTが間に合うかを確かめるため 2周） */
 export const LOOP_ITERATIONS = 2;
@@ -199,8 +195,10 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       ...(build && isTravelerKey(key) ? travelerParams(c.trueMoon !== false) : []),
     ];
     const hexText = paramList.length > 0 ? ` +params=[${paramList.join(',')}]` : '';
-    const charLevel = build ? `lvl=${build.level}/${build.maxLevel}` : CHARACTER_LINE_PARAMS;
-    const talentLevels = build ? build.talents.join(',') : TALENT_LEVELS;
+    // 持ちキャラの装備が無ければ、「ステータスを変更」で保存した仮値、それも無ければ既定の仮値（D2）。必要チャージ効率の算出は、既定の仮値
+    const stats = build ?? (input.addedEnergyRechargeByCharacterId === undefined ? c.customStats : undefined) ?? DEFAULT_CUSTOM_STATS;
+    const charLevel = `lvl=${stats.level}/${stats.maxLevel}`;
+    const talentLevels = stats.talents.join(',');
     lines.push(`${key} char ${charLevel} cons=${cons} talent=${talentLevels}${hexText};`);
 
     const weapon = input.weapons.find(w => w.id === c.weaponId);
@@ -212,7 +210,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       error(t('messages:config.noWeaponKey', { name: charName(c), weapon: loc(weapon, 'name') }));
     } else {
       const refine = c.weaponRefinementRank ?? weapon.refinementRank ?? (weapon.rarity >= 5 ? 1 : 5);
-      lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${build ? `${build.weaponLevel}/${build.weaponMaxLevel}` : WEAPON_LEVEL};`);
+      lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${refine} lvl=${stats.weaponLevel}/${stats.weaponMaxLevel};`);
     }
 
     if (build) {
@@ -237,10 +235,9 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       }
     }
     const addedEr = input.addedEnergyRechargeByCharacterId?.[c.id];
-    if (build) {
-      const stats = Object.entries(build.artifactStats).map(([k, v]) => `${k}=${v}`).join(' ');
-      if (stats) lines.push(`${key} add stats ${stats};`);
-    } else lines.push(`${key} add stats ${TEMP_STATS}${addedEr !== undefined ? ` er=${Number(addedEr.toFixed(4))}` : ''};`);
+    const statEntries = Object.entries(stats.artifactStats).map(([k, v]) => `${k}=${v}`);
+    if (!build && addedEr !== undefined) statEntries.push(`er=${Number(addedEr.toFixed(4))}`);
+    if (statEntries.length > 0) lines.push(`${key} add stats ${statEntries.join(' ')};`);
   }
 
   // 2. ローテーション本体

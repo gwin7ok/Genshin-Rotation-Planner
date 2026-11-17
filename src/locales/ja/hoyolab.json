@@ -39,7 +39,7 @@
     "placeholder": "9 桁の数字",
     "loginHint": "取り込む前に、この Chrome で HoYoLAB にログインしておいてください。ログインしていないと、取り込めません。",
     "loginLink": "HoYoLAB を開く",
-    "hint": "HoYoLAB にログインしたブラウザで、戦績の「キャラクターの詳細」を公開にしておいてください。"
+    "hint": "ログインしているアカウントの UID なら、HoYoLAB の「キャラクターの詳細」の公開設定が、オフでも取り込めます。"
   },
   "import": {
     "button": "取り込む",
@@ -48,7 +48,7 @@
     "done": "{{count}} キャラを取り込みました",
     "invalidUid": "UID は 9 桁の数字で入力してください",
     "noExtension": "拡張機能から応答がありません。拡張機能が入っているか、確認してください",
-    "errorPrivate": "戦績が公開されていません。HoYoLAB の設定で、キャラクターの詳細を公開にしてください（{{message}}）",
+    "errorPrivate": "戦績を取得できませんでした。ログインしているアカウントと、入力した UID が同じか確認してください。別のアカウントの UID は、相手が戦績を公開している必要があります（{{message}}）",
     "errorLogin": "HoYoLAB にログインしていません。このブラウザで HoYoLAB にログインしてください（{{message}}）",
     "errorGeneric": "取り込めませんでした: {{message}}"
   },

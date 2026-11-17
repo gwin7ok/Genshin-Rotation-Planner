@@ -12,6 +12,8 @@ HoYoLAB の戦績（全キャラクター）から、所持キャラの詳細（
 
 ## 調査結果（実機で確認済み）
 
+- **公開設定は不要（ご自身の UID）**（2026-11-17 実機で確認）: HoYoLAB の「キャラクターの詳細」の公開設定をオフにしていても、ログインしているアカウント自身の UID なら、全キャラを取り込めた。別アカウントの UID は、未確認（genshin.py の実装では、非公開のとき 10102 を返す）。画面の案内は、この結果に合わせた。
+
 - **API**: `POST https://sg-public-api.hoyolab.com/event/game_record/genshin/api/character/list` と `character/detail`
   （本文 `{role_id, server, character_ids}`）。出どころは genshin.py（MIT）の実装。
 - **認証**: ブラウザのログイン Cookie（`ltuid_v2` / `ltoken_v2`）が自動で付く。ページ上のスクリプトなら、Cookie の値を読まずに呼べる。

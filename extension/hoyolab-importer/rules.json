@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
+        { "header": "User-Agent", "operation": "set", "value": "Genshin-Rotation-Planner-Extension/0.2.0 (+https://github.com/gwin7ok/Genshin-Rotation-Planner)" }
+      ]
+    },
+    "condition": {
+      "urlFilter": "||enka.network/api/",
+      "resourceTypes": ["xmlhttprequest"],
+      "tabIds": [-1]
+    }
+  }
+]

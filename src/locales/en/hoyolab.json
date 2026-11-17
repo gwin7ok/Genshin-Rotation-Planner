@@ -10,7 +10,7 @@
     "updateBody": "With an older version, some features may not work (for example, some characters may not be imported). Please update with the steps below.",
     "installTitle": "How to install the extension",
     "releaseLink": "Open the release page",
-    "note": "The extension only communicates with HoYoLAB (hoyolab.com). Neither the extension nor this app reads the value of your login cookie."
+    "note": "The extension communicates only with HoYoLAB (hoyolab.com) and, for another account's UID, with Enka.Network (enka.network, an unofficial service). Neither the extension nor this app reads the value of your login information (cookies)."
   },
   "install": {
     "intro": "Install the extension in Chrome in 5 steps (only once; about 3-5 minutes).",
@@ -41,14 +41,19 @@
     "placeholder": "9 digits",
     "loginHint": "Before importing, log in to HoYoLAB in this Chrome. You cannot import without logging in.",
     "loginLink": "Open HoYoLAB",
-    "hint": "For the UID of the account you are logged in with, all characters are imported even if the HoYoLAB \"Character Details\" privacy setting is off. For another account's UID, only the characters its owner has made public are imported. Importing again replaces the previous import."
+    "hint": "For the UID of the account you are logged in with, all characters are imported even if the HoYoLAB \"Character Details\" privacy setting is off. For another account's UID, HoYoLAB does not provide the details, so only the characters that account has placed in its in-game \"Character Showcase\" are imported from Enka.Network (an unofficial service). Importing again replaces the previous import."
   },
   "import": {
     "button": "Import",
     "running": "Fetching from HoYoLAB…",
+    "runningEnka": "Fetching from Enka.Network…",
     "resolving": "Checking ascension phases…",
     "done": "Imported {{count}} characters",
     "donePartial": "{{count}} characters imported (only the characters the owner has made public; {{skipped}} could not be fetched)",
+    "doneEnka": "{{count}} characters imported (because this is another account's UID, only the characters shown in its in-game \"Character Showcase\" were imported from Enka.Network)",
+    "enkaEmpty": "HoYoLAB does not provide character details for other accounts. On Enka.Network, that account has no characters in its \"Character Showcase\", so there was nothing to import (the owner needs to place characters in the in-game profile showcase).",
+    "enkaNeedUpdate": "Importing another account's UID requires extension v{{version}} or later. Please update the extension (see the steps above).",
+    "errorEnka": "Could not import from Enka.Network: {{message}}",
     "invalidUid": "Enter the UID as 9 digits",
     "noExtension": "No response from the extension. Check that it is installed",
     "errorPrivate": "Could not get the Battle Chronicle. Check that the UID you entered belongs to the account you are logged in with. The UID of another account can only be imported if its owner has made the Battle Chronicle public ({{message}})",

@@ -6,7 +6,8 @@ import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
 import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { useDialogs } from './DialogProvider';
-import { fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
+import { fetchEnkaFromExtension, fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
+import { convertEnkaResponse } from '../utils/hoyolab/enkaConvert';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
@@ -19,6 +20,9 @@ const EXTENSION_ZIP_URL = `${import.meta.env.BASE_URL}downloads/grp-hoyolab-impo
 const EXTENSIONS_PAGE = 'chrome://extensions';
 
 /** 拡張機能の導入手順（5 つの手順カード＋うまくいかないとき）。拡張機能を検知できないときだけ出す */
+/** Enka.Network からの取り込みに要る、拡張機能の最低の版 */
+const ENKA_MIN_EXTENSION_VERSION = '0.2.0';
+
 const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'install' }) => {
   const isUpdate = mode === 'update';
   const [copied, setCopied] = useState(false);
@@ -111,7 +115,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   const { confirm } = useDialogs();
   const [extVersion, setExtVersion] = useState<string | null | 'checking'>('checking');
   const [uid, setUid] = useState('');
-  const [busy, setBusy] = useState<null | 'fetch' | 'resolve'>(null);
+  const [busy, setBusy] = useState<null | 'fetch' | 'fetchEnka' | 'resolve'>(null);
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
   const [store, setStore] = useState<OwnedStore | null>(null);
 
@@ -140,11 +144,46 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     return t('hoyolab:import.errorGeneric', { message: error });
   };
 
+  /** 他のアカウントの UID: Enka.Network から取り込む（ゲーム内の「キャラクター詳細表示」に並べたキャラだけ） */
+  const importFromEnka = async () => {
+    if (extVersion === 'checking' || extVersion === null || isOlderVersion(extVersion, ENKA_MIN_EXTENSION_VERSION)) {
+      setBusy(null);
+      setMessage({ kind: 'error', text: t('hoyolab:import.enkaNeedUpdate', { version: ENKA_MIN_EXTENSION_VERSION }) });
+      return;
+    }
+    setBusy('fetchEnka');
+    const res = await fetchEnkaFromExtension(uid);
+    if (!res.ok) {
+      setBusy(null);
+      setMessage({ kind: 'error', text: res.noExtension ? t('hoyolab:import.noExtension') : t('hoyolab:import.errorEnka', { message: res.error ?? '' }) });
+      return;
+    }
+    const converted = convertEnkaResponse(res.data ?? {}, {
+      characters: database.characters.map(c => ({ id: c.id, name: c.name, element: c.element })),
+      weapons: database.weapons, artifacts: database.artifacts,
+    });
+    if (converted.length === 0) {
+      setBusy(null);
+      setMessage({ kind: 'error', text: t('hoyolab:import.enkaEmpty') });
+      return;
+    }
+    saveHoyolabUid(uid);
+    if (saveOwned(converted)) {
+      setStore(loadOwned());
+      setMessage({ kind: 'ok', text: t('hoyolab:import.doneEnka', { count: converted.length }) });
+    } else {
+      setMessage({ kind: 'error', text: t('hoyolab:import.errorGeneric', { message: 'storage' }) });
+    }
+    setBusy(null);
+  };
+
   const handleImport = async () => {
     if (!/^\d{9}$/.test(uid)) { setMessage({ kind: 'error', text: t('hoyolab:import.invalidUid') }); return; }
     setMessage(null);
     setBusy('fetch');
     const res = await fetchFromExtension(uid);
+    // 他のアカウントの UID は、HoYoLAB の詳細が許可されない（retcode 10104）。Enka.Network（ゲーム内の詳細表示のキャラだけ）で取り込む
+    if (!res.ok && res.retcode === 10104) { await importFromEnka(); return; }
     if (!res.ok) {
       setBusy(null);
       setMessage({ kind: 'error', text: res.noExtension ? t('hoyolab:import.noExtension') : errorText(res.retcode, res.error ?? '') });
@@ -254,7 +293,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                 data-testid="owned-import-button"
                 className="px-4 py-1.5 rounded-lg font-bold bg-sky-500 hover:bg-sky-400 disabled:opacity-50 disabled:pointer-events-none text-slate-950 transition-colors"
               >
-                {busy === 'fetch' ? t('hoyolab:import.running') : busy === 'resolve' ? t('hoyolab:import.resolving') : t('hoyolab:import.button')}
+                {busy === 'fetch' ? t('hoyolab:import.running') : busy === 'fetchEnka' ? t('hoyolab:import.runningEnka') : busy === 'resolve' ? t('hoyolab:import.resolving') : t('hoyolab:import.button')}
               </button>
             </div>
             <p className="text-[11px] text-amber-300 flex items-start gap-1" data-testid="owned-login-hint">

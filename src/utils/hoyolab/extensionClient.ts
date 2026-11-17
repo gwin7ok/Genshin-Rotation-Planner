@@ -4,6 +4,7 @@
  * Cookie の値は、拡張機能もアプリも読まない（ブラウザが HoYoLAB への通信に自動で付ける）。
  */
 import type { HoyolabDetailResponse } from './importCharacters';
+import type { EnkaResponse } from './enkaConvert';
 
 let seq = 0;
 const nextId = () => `grp-${Date.now()}-${++seq}`;
@@ -45,4 +46,22 @@ export async function fetchFromExtension(uid: string, timeoutMs = 60000): Promis
   if (!res) return { ok: false, error: 'timeout', noExtension: true };
   if (res.ok && res.data && Array.isArray(res.data.list)) return { ok: true, data: res.data };
   return { ok: false, error: res.error ?? 'unknown', retcode: res.retcode };
+}
+
+/** Enka.Network（他のアカウントの UID）の取得結果。code は拡張機能が付ける種類（not_found・rate_limited など） */
+export interface EnkaFetchResult {
+  ok: boolean;
+  data?: EnkaResponse;
+  error?: string;
+  code?: string;
+  noExtension?: boolean;
+}
+
+/** Enka.Network から、他のアカウントの UID の「キャラクター詳細表示」のキャラを取得する（拡張機能 v0.2.0 以降） */
+export async function fetchEnkaFromExtension(uid: string, timeoutMs = 20000): Promise<EnkaFetchResult> {
+  const res = await request<{ ok: boolean; data?: EnkaResponse; error?: string; code?: string }>(
+    { type: 'enka-fetch', uid }, 'enka-result', timeoutMs);
+  if (!res) return { ok: false, error: 'timeout', noExtension: true };
+  if (res.ok && res.data) return { ok: true, data: res.data };
+  return { ok: false, error: res.error ?? 'unknown', code: res.code };
 }

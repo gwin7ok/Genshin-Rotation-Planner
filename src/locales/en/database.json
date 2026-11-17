@@ -91,7 +91,7 @@
     "restoreNow": "• Current: {{characters}} characters, {{weapons}} weapons, {{artifacts}} artifacts",
     "restoreFile": "• File: {{characters}} characters, {{weapons}} weapons, {{artifacts}} artifacts",
     "restoreSkipped": "* {{count}} malformed or duplicate-ID entries are skipped",
-    "restoreBackupHint": "If needed, export a backup from Rotations first.",
+    "restoreBackupHint": "If needed, export a backup from Manage Teams first.",
     "replace": "Replace",
     "saveFailed": "Could not save to the browser (storage may be full). The database was not changed.",
     "restoredSkipped": "Restored the database file ({{count}} entries skipped).",

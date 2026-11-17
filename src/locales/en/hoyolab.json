@@ -27,7 +27,7 @@
     "s4Title": "Load the extracted folder",
     "s4Body": "Click \"Load unpacked\" at the top left and choose the folder you extracted in step 2 (the one that contains manifest.json). It worked if \"Genshin Rotation Planner - HoYoLAB import\" appears in the list.",
     "s5Title": "Reload this page",
-    "s5Body": "Reload with the button below, then open \"Import\" again. If \"Extension detected\" appears, you are done.",
+    "s5Body": "Reload with the button below, then open \"Import Chars\" again. If \"Extension detected\" appears, you are done.",
     "s5Button": "Reload page",
     "troubleTitle": "If it does not work",
     "trouble1": "Still \"Extension not found\": check that you reloaded in step 5 and that the extension switch is on in the extensions page.",

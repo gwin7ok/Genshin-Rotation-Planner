@@ -7,7 +7,7 @@
   },
   "stale": {
     "label": "Old gcsim",
-    "title": "The reaction rows are results from gcsim {{savedVersion}}. The current version is {{currentVersion}}, so the reaction rows are hidden. Recalculate with \"Run gcsim\"",
+    "title": "The reaction rows are results from gcsim {{savedVersion}}. The current version is {{currentVersion}}, so the reaction rows are hidden. Recalculate with \"Apply gcsim\"",
     "oldVersion": "(an older version)"
   },
   "dialog": {

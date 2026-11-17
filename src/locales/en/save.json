@@ -22,7 +22,7 @@
     "renamed": "Renamed to \"{{name}}\"."
   },
   "manager": {
-    "title": "Rotations",
+    "title": "Manage Teams",
     "subtitle": "Your edits are saved automatically. You can also save them to a named slot or back them up as JSON.",
     "autoSave": "<strong>Auto-save on:</strong> edits to action order and durations are recorded in your browser automatically.",
     "current": "Current: {{characters}} characters / {{stints}} stints / {{actions}} actions",

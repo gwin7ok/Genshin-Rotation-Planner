@@ -23,7 +23,7 @@
     "cooldownWait": "cooldown wait",
     "staminaWaited": "\"{{action}}\" did not have enough stamina, so gcsim waited {{seconds}} s",
     "noDefTitle": "{{name}}: action definition not found",
-    "noDefMessage": "The definition of \"{{action}}\" is missing from the character data, so its cooldown cannot be checked (check the character's actions in Database)",
+    "noDefMessage": "The definition of \"{{action}}\" is missing from the character data, so its cooldown cannot be checked (check the character's actions in Manage DB)",
     "skillViolation": "{{name}}: Skill cooldown conflict",
     "specialViolation": "{{name}}: Special Skill cooldown conflict",
     "skillWhat": "Skill \"{{action}}\"",

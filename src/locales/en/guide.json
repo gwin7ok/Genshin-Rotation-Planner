@@ -9,7 +9,7 @@
         "2": "Under \"<b>Add stint</b>\" in the middle of the screen, press a character's button to line up <b>stints</b> (one on-field turn of that character). The same character can appear any number of times.",
         "3": "Inside each stint, press buttons such as <b>+N +C +tE +hE +Q +D +J +Wait</b> to add actions.",
         "4": "Check the timeline, Skill/Burst cooldowns, effect durations, buff overlaps and cooldown conflicts on the <b>Gantt chart</b> below.",
-        "5": "For precise numbers, press <b>Run gcsim</b> (the real simulator measures action times, cooldowns, durations and triggered buffs, and applies them).",
+        "5": "For precise numbers, press <b>Apply gcsim</b> (the real simulator measures action times, cooldowns, durations and triggered buffs, and applies them).",
         "6": "When you are happy with it, use <b>Save as</b> (saved rotation). <b>Copy notation</b> creates a one-line notation you can post on social media."
       }
     },
@@ -17,7 +17,7 @@
       "title": "Reading the screen",
       "items": {
         "1": "<b>Top row</b>: choose a saved rotation, Save, Save as / play and reset (cycle, time, speed 0.5x–2x) / cooldown status (<ok>No cooldown conflicts</ok> / <ng>Cooldown conflicts</ng> / <warn>Cooldown warnings</warn>) / <b>Hide</b> (show or hide the button row below).",
-        "2": "<b>Button row</b>: Guide / Team Setup, Rotations, Database / Run gcsim, Copy gcsim config, Back to app calculation / Copy notation (and the current notation, with Short/Names switch).",
+        "2": "<b>Button row</b>: Guide / Import Chars, Team Setup, Manage Teams, Manage DB / Apply gcsim, Copy gcsim config, Back to app calculation / Copy notation (and the current notation, with Short/Names switch).",
         "3": "<b>Build area</b> (list of stints): edit the order and the actions here. The chips of \"Quick reorder\" above change the stint order at a glance.",
         "4": "<b>Gantt chart</b>: the horizontal axis is time (seconds). From the top: stint flow, number of overlapping buffs (Synergy), and one row per character (actions, cooldowns, effects, triggered buffs). Zoom with the slider at the top right."
       }
@@ -54,9 +54,9 @@
       }
     },
     "gcsim": {
-      "title": "Run gcsim (apply measured values)",
+      "title": "Apply gcsim (apply measured values)",
       "items": {
-        "1": "\"<b>Run gcsim</b>\" runs the current team and rotation in gcsim (the simulator, running inside your browser) and <b>applies the results at once</b>. Nothing is sent to a server.",
+        "1": "\"<b>Apply gcsim</b>\" runs the current team and rotation in gcsim (the simulator, running inside your browser) and <b>applies the results at once</b>. Nothing is sent to a server.",
         "2": "Applied values: action times, Skill/Burst cooldowns, effect durations, and positions and lengths of triggered buffs. If there are cooldown conflicts, it does not run (fix them first).",
         "3": "To discard applied values and return to the app's calculation (master frames and cooldowns), use \"<b>Back to app calculation</b>\".",
         "4": "\"<b>Copy gcsim config</b>\" gives you the gcsim config (to run it in gcsim elsewhere; conversion warnings are shown too).",
@@ -66,7 +66,7 @@
     "owned": {
       "title": "Owned characters (use your HoYoLAB build and stats)",
       "items": {
-        "1": "Install the <b>Chrome extension</b> once. Open \"<b>Import</b>\" in the header and follow the steps on the screen (get the zip from the release page → extract → turn on \"Developer mode\" in <code>chrome://extensions</code> → \"Load unpacked\"). Then reload this page.",
+        "1": "Install the <b>Chrome extension</b> once. Open \"<b>Import Chars</b>\" in the header and follow the steps on the screen (get the zip from the release page → extract → turn on \"Developer mode\" in <code>chrome://extensions</code> → \"Load unpacked\"). Then reload this page.",
         "2": "In Chrome <b>logged in to HoYoLAB</b>, use it with your own account (the \"<b>Character Details</b>\" privacy setting can stay off for your own UID). Enter that account's <b>Genshin UID</b> in the import screen and press \"<b>Import</b>\" to bring in the level, talents, weapon and artifacts of all your characters. The data is stored only in this browser (it is not sent to the operator's servers). For <b>another account's UID</b>, HoYoLAB does not provide the details, so only the characters whose details that account has made public in the in-game \"<b>Character Showcase</b>\" are imported from Enka.Network (an unofficial service); the owner must have set this up in the game.",
         "3": "You can import again at any time (after changing equipment, import again). \"Delete imported data\" removes it.",
         "4": "When you pick a character in the <b>party settings</b>, if it has been imported, its <b>owned build and stats are applied automatically</b> (constellation, weapon, refinement, artifacts, plus level, talents, weapon level and artifact stats). Characters you have not imported show \"<b>Not owned</b>\".",
@@ -79,9 +79,9 @@
       "title": "Saving and backup",
       "items": {
         "1": "Your edits are <b>saved automatically in this browser</b> (nothing is sent to a server). They are lost if you clear the browser data.",
-        "2": "<b>Rotations</b>: save, load and delete named rotations (slots). A single rotation can also be exported to or imported from a JSON file.",
-        "3": "<b>Back up all data</b> (Rotations → JSON backup & share): bundles all saved rotations, the current rotation, settings and the data you created into one file. Use it when moving to another browser or device, or before clearing data.",
-        "4": "<b>Database</b>: sync, edit and add character, weapon and artifact data."
+        "2": "<b>Manage Teams</b>: save, load and delete named rotations (slots). A single rotation can also be exported to or imported from a JSON file.",
+        "3": "<b>Back up all data</b> (Manage Teams → JSON backup & share): bundles all saved rotations, the current rotation, settings and the data you created into one file. Use it when moving to another browser or device, or before clearing data.",
+        "4": "<b>Manage DB</b>: sync, edit and add character, weapon and artifact data."
       }
     },
     "notation": {

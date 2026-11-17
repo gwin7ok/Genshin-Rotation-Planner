@@ -233,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
           {collapseToggle}
         </div>
 
-        {/* ボタン列（使い方 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → チャージ効率計算 ⏎ 記法コピー（と記法の表示）） */}
+        {/* ボタン列（使い方 → 持ちキャラ取込 → 編成設定 → 編成管理 → DB管理 → gcsim で計算 → gcsim設定文をコピー → アプリの計算に戻す → チャージ効率計算 ⏎ 記法コピー（と記法の表示）） */}
         {!isCollapsed && (
           <div className="flex items-start gap-2 pt-1 border-t border-slate-800/80 animate-fade-in w-full">
           <div className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 flex-1 min-w-0">
@@ -247,15 +247,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
-              onClick={onOpenPartyModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 text-white border border-sky-500/70 transition-colors shrink-0"
-              title={t('header:menu.partyTitle')}
-            >
-              <Settings2 className="w-3.5 h-3.5" />
-              <span>{t('header:menu.party')}</span>
-            </button>
-
-            <button
               onClick={onOpenOwnedModal}
               className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 transition-colors shrink-0"
               title={t('header:menu.ownedTitle')}
@@ -263,6 +254,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <UserCheck className="w-3.5 h-3.5" />
               <span>{t('header:menu.owned')}</span>
+            </button>
+
+            <button
+              onClick={onOpenPartyModal}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-sky-700 hover:bg-sky-600 text-white border border-sky-500/70 transition-colors shrink-0"
+              title={t('header:menu.partyTitle')}
+            >
+              <Settings2 className="w-3.5 h-3.5" />
+              <span>{t('header:menu.party')}</span>
             </button>
 
             <button

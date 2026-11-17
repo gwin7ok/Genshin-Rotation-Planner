@@ -5,7 +5,8 @@
  *
  * 入力は、tools/wiki-default-builds/extract.js（原神 Wiki のページから、おすすめの装備の事実だけを取る）の出力。
  * キャラ・武器・聖遺物セットを、マスターの名前から ID にして、src/data/default_builds.json に**統合**する（入力に無いキャラは、そのまま残す）。
- * 武器・セットは、gcsim で扱えるもの（gcsimKey がある）だけを使う。見つからないものは、そのキャラでは省く（警告に出す）。
+ * 武器は、マスターにあるもの（gcsim 未対応で gcsimKey が無くてもよい。対応したとき、マスターの gcsimKey を更新すればそのまま使える）を入れる。セットは、gcsimKey があるものだけを使う。
+ * 見つからないものは、そのキャラでは省く（警告に出す）。
  * 手順の全体は tools/wiki-default-builds/README.md と docs/ゲーム新キャラの取り込み手順.md。
  */
 import fs from 'node:fs';
@@ -38,8 +39,8 @@ for (const [name, r] of Object.entries(raw)) {
   const entry: Record<string, unknown> = { name, sands: r.main.sands, goblet: r.main.goblet, circlet: r.main.circlet, sub: r.sub };
 
   if (r.weapon) {
-    const w = weapons.find(x => norm(x.name) === norm(r.weapon) && x.weaponType === weaponType && x.gcsimKey);
-    if (w) entry.weaponId = String(w.id); else warnings.push(`${name}: 武器「${r.weapon}」がマスターに無い・種類が違う・gcsim 未対応`);
+    const w = weapons.find(x => norm(x.name) === norm(r.weapon) && x.weaponType === weaponType);
+    if (w) entry.weaponId = String(w.id); else warnings.push(`${name}: 武器「${r.weapon}」がマスターに無い・種類が違う`);
   } else {
     warnings.push(`${name}: 武器を取得できていない`);
   }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
 import { Stepper } from './Stepper';
-import { t, dateLocale, currentLanguage, joinList } from '../i18n';
+import { t, dateLocale, currentLanguage, joinList, rangeMark, dotMark } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
@@ -235,13 +235,13 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 {startedAt !== null && (() => {
                   const elapsed = now - startedAt;
                   // 残り時間 = 塊（同時に実行する種のまとまり）の平均時間 × 残りの塊の数。検証は何回で収まるか分からないので、最小〜最大の幅で出す
-                  if (!progress || progress.chunksDone < 2 || elapsed < 5000) return ` ・ ${t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
+                  if (!progress || progress.chunksDone < 2 || elapsed < 5000) return `${dotMark}${t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
                   const perChunk = elapsed / progress.chunksDone;
                   const low = progress.chunksLeftLow * perChunk;
                   const high = progress.chunksLeftHigh * perChunk;
-                  if (high < 4000) return ` ・ ${t('gcsim:er.elapsedRunningSoon', { elapsed: formatDuration(elapsed) })}`;
+                  if (high < 4000) return `${dotMark}${t('gcsim:er.elapsedRunningSoon', { elapsed: formatDuration(elapsed) })}`;
                   const mid = (low + high) / 2;
-                  return ` ・ ${high - low < Math.max(8000, mid * 0.25)
+                  return `${dotMark}${high - low < Math.max(8000, mid * 0.25)
                     ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(mid) })
                     : t('gcsim:er.elapsedRunningRange', { elapsed: formatDuration(elapsed), low: formatDuration(low), high: formatDuration(high) })}`;
                 })()}
@@ -354,7 +354,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>
             <div className="flex items-center gap-1.5 flex-wrap">
               <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
-              <span>〜</span>
+              <span>{rangeMark}</span>
               <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
               <span>{t('gcsim:er.enemyParticlesEvery')}</span>
               <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />

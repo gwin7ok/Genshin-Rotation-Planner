@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Swords, Play, Square, Plus, Trash2 } from 'lucide-react';
 import { Stepper } from './Stepper';
-import { t } from '../i18n';
+import { t, rangeMark, dotMark } from '../i18n';
 import { charName, loc } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
@@ -159,7 +159,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
       ? c.build.artifactSets
       : c.artifactSetId ? [{ id: c.artifactSetId, count: c.artifactSetMode === '2+2' ? 2 : 4 }] : [];
     const setNames = sets.map(s => { const a = database.artifacts.find(x => x.id === s.id); return a ? `${loc(a, 'name')}×${s.count}` : null; }).filter(Boolean).join(' / ');
-    return [w ? `${loc(w, 'name')} R${c.weaponRefinementRank ?? '?'}` : null, setNames || null].filter(Boolean).join(' ・ ');
+    return [w ? `${loc(w, 'name')} R${c.weaponRefinementRank ?? '?'}` : null, setNames || null].filter(Boolean).join(dotMark);
   };
 
   // 計算中は、ここまでの途中経過の平均を出す（終わると、最終結果になる）
@@ -283,7 +283,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span>{t('gcsim:er.enemyParticles')}</span>
                 <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>〜</span>
+                <span>{rangeMark}</span>
                 <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
                 <span>{t('gcsim:er.enemyParticlesEvery')}</span>
                 <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />

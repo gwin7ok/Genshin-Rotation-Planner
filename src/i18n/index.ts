@@ -19,6 +19,9 @@ export const dateLocale = currentLanguage === 'ja' ? 'ja-JP' : 'en-US';
 
 /** 名前を並べるときの区切り（日本語「・」・英語「, 」） */
 export const listSeparator = currentLanguage === 'en' ? ', ' : '・';
+/** 範囲の記号（例: 10〜20 / 10–20）と、項目の区切りの点（例: 武器 ・ 聖遺物 / weapon · artifacts） */
+export const rangeMark = currentLanguage === 'en' ? '–' : '〜';
+export const dotMark = currentLanguage === 'en' ? ' · ' : ' ・ ';
 export const joinList = (items: readonly string[]): string => items.join(listSeparator);
 
 void i18n.use(initReactI18next).init({

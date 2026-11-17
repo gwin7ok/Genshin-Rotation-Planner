@@ -350,7 +350,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
           error(t('messages:config.noRule', { name: charName(char), action: actionName(char, act), type: act.actionTypeId }));
           continue;
         }
-        if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(char.name);
+        if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(charName(char));
         const command = input.commandByActionId?.[act.id] ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);

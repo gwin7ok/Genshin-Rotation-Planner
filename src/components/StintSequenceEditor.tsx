@@ -42,7 +42,7 @@ import { DEVICE_KEYS, readString, writeString } from '../utils/persistence';
 import { createGroup, groupRuns, moveActionRespectingGroups, moveGroupBlock, setGroupRepeat, stripGroupCopies, ungroup, type GroupRun } from '../utils/actionGroups';
 import { DEFAULT_HURT, hurtStatement, type HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { isModeHoldAction } from '../utils/modeHoldAction';
-import { t } from '../i18n';
+import { t, rangeMark } from '../i18n';
 import { charName, actionName, loc } from '../i18n/loc';
 
 interface StintSequenceEditorProps {
@@ -1652,11 +1652,11 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                 <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
                   <span>{t('editor:interval')}</span>
                   <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMin')} />
-                  <span>〜</span>
+                  <span>{rangeMark}</span>
                   <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMax')} />
                   <span className="ml-2">{t('editor:damage')}</span>
                   <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMin')} />
-                  <span>〜</span>
+                  <span>{rangeMark}</span>
                   <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMax')} />
                   {!hurtStatement(hurt) && <span className="text-amber-300">{t('editor:hurtInvalid')}</span>}
                 </div>

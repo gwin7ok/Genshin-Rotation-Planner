@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2, Download, Copy, Check } from 'lucide-react';
-import { t, dateLocale } from '../i18n';
+import { t, dateLocale, currentLanguage } from '../i18n';
 import { charName, loc } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -429,7 +429,9 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                           )}
                         </div>
                         <div className="text-[10px] text-slate-400 truncate">
-                          {weaponLabel(o)}（{t('hoyolab:list.refine', { rank: o.weapon.refinement })}）
+                          {currentLanguage === 'en'
+                            ? `${weaponLabel(o)} (${t('hoyolab:list.refine', { rank: o.weapon.refinement })})`
+                            : `${weaponLabel(o)}（${t('hoyolab:list.refine', { rank: o.weapon.refinement })}）`}
                           {o.artifactSets.filter(s => s.count >= 2).map(s => ` / ${setLabel(s.name)}×${s.count}`).join('')}
                         </div>
                         {ns.map(n => (

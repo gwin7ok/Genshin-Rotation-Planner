@@ -292,6 +292,8 @@ const PATTERNS: [RegExp, (m: RegExpExecArray, term: (s: string) => string | unde
     (m, term) => { const x = term(m[1]); return x && `${x}. Elemental Skill (E) becomes a different action during it and doesn't use CD`; }],
   [/^gcsim PR #(\d+)（未マージ・未検証。(\d{4}-\d{2}-\d{2}) 時点）$/,
     m => `gcsim PR #${m[1]} (unmerged, unverified, as of ${m[2]})`],
+  [/^重撃（ビーム (\d+) 本(。凸 1 以上)?）$/,
+    m => `Charged Attack (${m[1]} ${m[1] === '1' ? 'beam' : 'beams'}${m[2] ? '; C1+' : ''})`],
   [/^推定（同じ武器種の (\d+) キャラの中央値。実測ではありません）$/,
     m => `Estimated (median of ${m[1]} characters with the same weapon type; not measured)`],
 ];
@@ -313,6 +315,10 @@ export function handwrittenEnglish(ja: string | undefined): string | undefined {
 
 /** フレームの出典（frames.source。gcsim のソースの位置 + 日本語の補足）の補足の部分 */
 const FRAME_SOURCE_NOTES: [RegExp, string][] = [
+  [/ の実測: /g, ' measured: '],
+  [/（windup 25f \+ 最初の 18f \+ ビーム 1 本につき 60f \+ 1f。charge\[beams=N\]。凸 1 以上で最大 6 本）/g, ' (windup 25f + first 18f + 60f + 1f per beam; charge[beams=N]; up to 6 beams at C1+)'],
+  [/（ビーム 1 本 = ([^）]+)）/g, ' (1 beam = $1)'],
+  [/（ビーム (\d+) 本 = ([^）]+)）/g, ' ($1 beams = $2)'],
   [/（\+ 長押し (-?\d+) \+ 最大 (\d+)f）/g, ' (+ hold $1 + max $2f)'],
   [/（爆発の長さ。全部の次のアクションで同じ）/g, ' (burst length; same for every next action)'],
   [/。重撃へのつなぎ（charge）は PR に無いため、通常攻撃へのつなぎ（attack (\d+)f）で補った（推定。(D\d+)）/g,

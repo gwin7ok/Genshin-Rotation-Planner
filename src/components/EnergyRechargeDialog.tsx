@@ -4,6 +4,8 @@ import { Stepper } from './Stepper';
 import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
+import type { AppDatabase } from '../types/database';
+import { previewFinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
@@ -32,6 +34,8 @@ interface EnergyRechargeDialogProps {
   build: BuildForEr;
   /** 編成のキャラ（名前と、編成の ER の表示に使う） */
   characters: CharacterConfig[];
+  /** いまの元素チャージ効率（枠の設定から gcsim で計算）に使う */
+  database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
 }
 
 const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify', refine: 'phaseRefine' } as const;
@@ -45,7 +49,7 @@ const formatDuration = (ms: number): string => {
 };
 
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
-export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters }) => {
+export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database }) => {
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
   const [currentFingerprint, setCurrentFingerprint] = useState<string | null>(null);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
@@ -62,6 +66,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
   // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
+  // いまの元素チャージ効率（キャラ ID → 割合。枠の設定（持ちキャラの装備・仮値）から、gcsim で計算した最終値。計算できなかったキャラは無い）
+  const [currentEr, setCurrentEr] = useState<Record<string, number>>({});
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
@@ -96,6 +102,22 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setCurrentMembers(base.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
+
+  // いまの元素チャージ効率: 開いたとき、編成の各キャラについて、設定（持ちキャラの装備・保存した仮値・既定の仮値）のまま gcsim で計算する
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    setCurrentEr({});
+    (async () => {
+      for (const c of characters) {
+        if (c.id.startsWith('empty_slot_')) continue;
+        const r = await previewFinalStats(c, undefined, database).catch(() => null);
+        if (cancelled) return;
+        if (r && r.status === 'ok') setCurrentEr(prev => ({ ...prev, [c.id]: r.stats.er }));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isOpen, characters, database]);
 
   // 計算中は、1 秒ごとに経過時間を更新する
   useEffect(() => {
@@ -259,6 +281,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <thead>
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
                   <th className="py-1.5 pr-2 font-semibold">{t('gcsim:er.colName')}</th>
+                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colCurrentTitle')}>{t('gcsim:er.colCurrent')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colTypicalTitle')}>{t('gcsim:er.colTypical')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colStableTitle')}>{t('gcsim:er.colStable')}</th>
                   <th className="py-1.5 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
@@ -270,6 +293,19 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   return (
                     <tr key={e.characterId} className="border-b border-slate-800/60">
                       <td className="py-1.5 pr-2 text-slate-200">{c ? charName(c) : e.name}</td>
+                      <td className="py-1.5 pr-2 text-right font-mono" data-testid={`er-current-${e.characterId}`}>
+                        {(() => {
+                          const cur = currentEr[e.characterId];
+                          if (cur === undefined) return <span className="text-slate-600">-</span>;
+                          const pct = cur * 100;
+                          // 必要な値（確実 → 安定）と比べて、足りているかを色で示す（結果が無い・爆発なしは、色なし）
+                          const cls = e.status !== 'ok' ? 'text-slate-200'
+                            : e.certainEr !== undefined && pct >= e.certainEr ? 'text-emerald-300'
+                            : e.stableEr !== undefined && pct >= e.stableEr ? 'text-yellow-300'
+                            : 'text-rose-300';
+                          return <span className={cls}>{pct.toFixed(1)}%</span>;
+                        })()}
+                      </td>
                       {e.status === 'blank' ? (
                         <td colSpan={3} className="py-1.5">&nbsp;</td>
                       ) : e.status === 'ok' ? (

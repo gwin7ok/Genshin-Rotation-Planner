@@ -27,13 +27,14 @@ export type FinalStatsResult =
 
 export async function previewFinalStats(
   char: CharacterConfig,
-  stats: CustomStats,
+  /** 入力中のステータス（仮値として計算する）。省略すると、キャラの設定（持ちキャラの装備・保存した仮値・既定の仮値）のまま計算する */
+  stats: CustomStats | undefined,
   database: Pick<AppDatabase, 'weapons' | 'artifacts'>,
 ): Promise<FinalStatsResult> {
   const key = char.source?.gcsimKey;
   if (!key) return { status: 'unsupported' };
   const cfg = buildGcsimConfig({
-    characters: [{ ...char, build: undefined, customStats: stats }],
+    characters: [stats ? { ...char, build: undefined, customStats: stats } : char],
     stints: [],
     loopStartIndex: 0,
     switchDelay: 0.5,

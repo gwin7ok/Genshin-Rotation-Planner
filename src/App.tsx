@@ -1034,6 +1034,7 @@ export default function App() {
         onClose={() => setIsEnergyRechargeOpen(false)}
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, extra)}
         characters={characters}
+        database={database}
       />
 
       {/* gcsim 設定文 */}

@@ -4,7 +4,7 @@
  */
 import { DEFAULT_HURT, DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type HurtSetting, type EnemySetting } from './gcsim/buildGcsimConfig';
 import { DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsSettings } from './gcsim/dpsCalc';
-import type { RequiredErResult } from './gcsim/requiredEnergyRecharge';
+import { ER_DEFAULT_ENEMY_PARTICLES, type RequiredErResult } from './gcsim/requiredEnergyRecharge';
 import type { NotationMode } from './rotationNotation';
 import { SETTING_KEYS, readJson, readString, writeJson, writeString } from './persistence';
 
@@ -50,7 +50,7 @@ export function saveNotationMode(mode: NotationMode): void {
 }
 
 /** DPS 計算の設定の既定 */
-export const defaultDpsSettings = (): DpsSettings => ({ loops: DPS_DEFAULT_LOOPS, runs: DPS_DEFAULT_RUNS, enemies: [structuredClone(DEFAULT_ENEMY)] });
+export const defaultDpsSettings = (): DpsSettings => ({ loops: DPS_DEFAULT_LOOPS, runs: DPS_DEFAULT_RUNS, enemies: [structuredClone(DEFAULT_ENEMY)], energy: true, particles: { ...ER_DEFAULT_ENEMY_PARTICLES } });
 
 /** DPS 計算の設定（無い・壊れた項目は既定に戻す） */
 export function loadDpsSettings(): DpsSettings {
@@ -64,7 +64,10 @@ export function loadDpsSettings(): DpsSettings {
       resist: Object.fromEntries(ENEMY_RESIST_KEYS.map(k => [k, Number.isFinite((e as EnemySetting).resist?.[k]) ? (e as EnemySetting).resist[k] : DEFAULT_ENEMY.resist[k]])) as EnemySetting['resist'],
     }))
     : [];
-  return { loops: int(v.loops, 1, DPS_MAX_LOOPS, d.loops), runs: int(v.runs, 1, DPS_MAX_RUNS, d.runs), enemies: enemies.length ? enemies : d.enemies };
+  const pv = v.particles as Partial<DpsSettings['particles']> | undefined;
+  const nn = (x: unknown, fb: number) => (Number.isFinite(x) && (x as number) >= 0 ? (x as number) : fb);
+  const particles = { minSeconds: nn(pv?.minSeconds, d.particles.minSeconds), maxSeconds: nn(pv?.maxSeconds, d.particles.maxSeconds), amount: nn(pv?.amount, d.particles.amount) };
+  return { loops: int(v.loops, 1, DPS_MAX_LOOPS, d.loops), runs: int(v.runs, 1, DPS_MAX_RUNS, d.runs), enemies: enemies.length ? enemies : d.enemies, energy: v.energy !== false, particles };
 }
 
 export function saveDpsSettings(value: DpsSettings): void {

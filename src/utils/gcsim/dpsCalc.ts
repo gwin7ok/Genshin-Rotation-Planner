@@ -4,11 +4,12 @@
  *
  * - 時間: 初動 + ループ N 周（設定文の loopIterations = N）。0 フレームから、最後のアクションの開始・最後のダメージのうち遅いほうまで
  * - 総ダメージ: すべての敵へのダメージ（反応・追加ダメージを含む）の合計。キャラ別は、ログの char_index（設定文のキャラの並び）で分ける
- * - 爆発のエネルギーは、アプリの計算と同じく無視する（設定文の `ignore_burst_energy=true`）
+ * - 爆発のエネルギー: 既定は考慮する（足りない爆発は、溜まるまで待つ。敵の粒子は設定）。切ると、アプリの計算と同じく無視する（`ignore_burst_energy=true`）
  */
 import type { GcsimConfigResult, EnemySetting } from './buildGcsimConfig';
 import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
 import { GCSIM_FPS } from './readGcsimLog';
+import type { EnemyParticles } from './requiredEnergyRecharge';
 
 /** 周数の既定・上限 */
 export const DPS_DEFAULT_LOOPS = 5;
@@ -24,6 +25,10 @@ export interface DpsSettings {
   loops: number;
   runs: number;
   enemies: EnemySetting[];
+  /** 爆発のエネルギーを考慮するか（既定 true。false = 爆発をいつでも撃てる理想の場合。`ignore_burst_energy=true`） */
+  energy: boolean;
+  /** 敵から出る粒子（エネルギーを考慮するときだけ使う。個数 0 = 出さない） */
+  particles: EnemyParticles;
 }
 
 /** 1 回の実行の集計 */

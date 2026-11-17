@@ -76,6 +76,10 @@ if (o2.status === 'ok' && o5.status === 'ok') {
   check(o5.result.seconds > r.seconds, '周数が多いほど、時間が延びる');
   const two = await dps.computeDps({ config: build(2, [DEFAULT_ENEMY, DEFAULT_ENEMY]), runs: 3, parallel: 3, run: runGcsimSample });
   check(two.status === 'ok', '敵 2 体の設定文が実行できる');
+  const withEnergy = buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], loopIterations: 2, ignoreBurstEnergy: false, enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } });
+  check(!withEnergy.config.includes('ignore_burst_energy') && withEnergy.config.includes('energy every interval=300,480 amount=1;') && c2.config.includes('ignore_burst_energy=true') && !c2.config.includes('energy every'), 'エネルギーを考慮: ignore_burst_energy が無く、敵の粒子の行が出る（考慮しない場合は、従来どおり）');
+  const oe = await dps.computeDps({ config: withEnergy, runs: 3, parallel: 3, run: runGcsimSample });
+  check(oe.status === 'ok' && oe.result.dps.mean > 0, 'エネルギーを考慮した設定文が実行できる');
   const seen: { done: number; mean?: number }[] = [];
   await dps.computeDps({ config: c2, runs: 4, parallel: 2, run: runGcsimSample, onProgress: (pr: any) => seen.push({ done: pr.done, mean: pr.partial?.dps.mean }) });
   check(seen.length === 3 && seen[0].mean === undefined && seen[1].done === 2 && (seen[1].mean ?? 0) > 0 && seen[2].done === 4, '途中経過: 実行を終えるごとに、ここまでの平均 DPS が渡る');

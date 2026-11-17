@@ -12,12 +12,13 @@ import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCore
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult } from '../utils/gcsim/dpsCalc';
 import { loadDpsSettings, saveDpsSettings } from '../utils/appSettings';
+import { ER_DEFAULT_ENEMY_PARTICLES, type EnemyParticles } from '../utils/gcsim/requiredEnergyRecharge';
 
 interface DpsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   /** 今の編成・ローテーションから、DPS 計算用の gcsim 設定文を作る（周数と敵を渡す） */
-  build: (extra: { loopIterations: number; enemies: EnemySetting[] }) => GcsimConfigResult;
+  build: (extra: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles }) => GcsimConfigResult;
   characters: CharacterConfig[];
   database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
 }
@@ -38,6 +39,10 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const [loops, setLoops] = useState(String(DPS_DEFAULT_LOOPS));
   const [runs, setRuns] = useState(String(DPS_DEFAULT_RUNS));
   const [enemies, setEnemies] = useState<EnemyInput[]>([toInput(DEFAULT_ENEMY)]);
+  const [energy, setEnergy] = useState(true);
+  const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
+  const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
+  const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
   const [cores, setCores] = useState(String(getWasmCores()));
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<DpsProgress | null>(null);
@@ -62,6 +67,17 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     loops: Math.min(DPS_MAX_LOOPS, Math.max(1, Math.floor(num(loops, DPS_DEFAULT_LOOPS)))),
     runs: Math.min(DPS_MAX_RUNS, Math.max(1, Math.floor(num(runs, DPS_DEFAULT_RUNS)))),
     enemies: enemies.map(fromInput),
+    energy,
+    particles: (() => {
+      const lo = Math.max(0, num(pMin, ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
+      const hi = Math.max(0, num(pMax, ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
+      return { minSeconds: Math.min(lo, hi), maxSeconds: Math.max(lo, hi), amount: Math.max(0, num(pAmount, ER_DEFAULT_ENEMY_PARTICLES.amount)) };
+    })(),
+  });
+  /** 設定文を作る（エネルギーを考慮しないときは、爆発を無視し、粒子も出さない） */
+  const buildFor = (s: ReturnType<typeof settingsNow>) => buildRef.current({
+    loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy,
+    enemyParticles: s.energy && s.particles.amount > 0 ? s.particles : undefined,
   });
 
   // 開いたとき: 保存した設定を読み、実行できるかを確かめる
@@ -71,8 +87,12 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     setLoops(String(s.loops));
     setRuns(String(s.runs));
     setEnemies(s.enemies.map(toInput));
+    setEnergy(s.energy);
+    setPMin(String(s.particles.minSeconds));
+    setPMax(String(s.particles.maxSeconds));
+    setPAmount(String(s.particles.amount));
     setMessage(null);
-    const base = buildRef.current({ loopIterations: s.loops, enemies: s.enemies });
+    const base = buildRef.current({ loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy });
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
 
@@ -97,7 +117,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const start = async () => {
     const s = settingsNow();
     saveDpsSettings(s);
-    const config = buildRef.current({ loopIterations: s.loops, enemies: s.enemies });
+    const config = buildFor(s);
     cancelRef.current = false;
     setRunMembers(config.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setRunning(true);
@@ -253,6 +273,26 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
               <Stepper value={cores} onChange={changeCores} step={1} min={1} max={wasmMaxCores()} disabled={running} widthClass="w-14" />
               <span className="text-[11px] text-slate-500">{t('gcsim:er.coresNote', { max: wasmMaxCores(), def: WASM_DEFAULT_CORES })}</span>
             </div>
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <label className="flex items-center gap-2 font-bold cursor-pointer">
+              <input type="checkbox" checked={energy} onChange={e => setEnergy(e.target.checked)} disabled={running} data-testid="dps-energy" />
+              {t('gcsim:dps.energy')}
+            </label>
+            {energy && (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span>{t('gcsim:er.enemyParticles')}</span>
+                <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>〜</span>
+                <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>{t('gcsim:er.enemyParticlesEvery')}</span>
+                <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>{t('gcsim:er.enemyParticlesUnit')}</span>
+                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              </div>
+            )}
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
           </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-2">

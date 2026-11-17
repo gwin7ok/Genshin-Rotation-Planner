@@ -89,3 +89,7 @@ HoYoLAB の戦績（全キャラクター）から、所持キャラの詳細（
 - [ ] 公開サイトでの確認（デプロイ後）: 拡張機能の zip のダウンロード、拡張機能の検知（`https://gwin7ok.github.io/...`）、Release への zip 添付（`release.yml`）
 - [ ] Edge での動作確認（Chrome だけ確認済み）
 - [x] 利用者向けの使い方（ヘルプ画面）の追記（guide.json の `owned` の節）
+
+## 拡張（PhaseX1）
+
+- [PhaseX1: 戦績（深境螺旋・幻想シアター・幽境の危戦）の使用編成を取り込む](phase-x1-record-teams/plan.md)（案。2026-11-18。未着手）

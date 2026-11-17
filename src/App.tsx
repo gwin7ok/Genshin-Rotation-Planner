@@ -27,12 +27,13 @@ import { SaveAsDialog } from './components/SaveAsDialog';
 import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { EnergyRechargeDialog } from './components/EnergyRechargeDialog';
+import { DpsDialog } from './components/DpsDialog';
 import { ER_LOOP_ITERATIONS, type EnemyParticles } from './utils/gcsim/requiredEnergyRecharge';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
 import { normalizeGroups } from './utils/actionGroups';
-import { buildGcsimConfig, DEFAULT_HURT, withConfigTitle, type GcsimConfigResult, type HurtSetting } from './utils/gcsim/buildGcsimConfig';
+import { buildGcsimConfig, DEFAULT_HURT, withConfigTitle, type GcsimConfigResult, type HurtSetting, type EnemySetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
 import { packReactions, unpackReactions, reactionsStatus } from './utils/gcsim/savedReactions';
 import { seedPresetsOnFirstRun, slotDisplayName } from './utils/presets';
@@ -110,6 +111,7 @@ export default function App() {
   // Character switch delay (default 0.50s or restored from storage)
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
   const [isEnergyRechargeOpen, setIsEnergyRechargeOpen] = useState(false);
+  const [isDpsOpen, setIsDpsOpen] = useState(false);
   const [defHalt, setDefHaltState] = useState<boolean>(() => loadDefHalt());
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
@@ -545,8 +547,9 @@ export default function App() {
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
-  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles }) => buildGcsimConfig({
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[] }) => buildGcsimConfig({
       characters,
+      ...(dpsExtra ? { loopIterations: dpsExtra.loopIterations, enemies: dpsExtra.enemies } : {}),
       ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
       stints: stintsArg,
       loopStartIndex,
@@ -848,6 +851,7 @@ export default function App() {
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
         onOpenOwnedModal={() => setIsOwnedModalOpen(true)}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
+        onOpenDpsModal={() => setIsDpsOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
         onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
@@ -1033,6 +1037,15 @@ export default function App() {
         isOpen={isEnergyRechargeOpen}
         onClose={() => setIsEnergyRechargeOpen(false)}
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, extra)}
+        characters={characters}
+        database={database}
+      />
+
+      {/* DPS 計算（D343） */}
+      <DpsDialog
+        isOpen={isDpsOpen}
+        onClose={() => setIsDpsOpen(false)}
+        build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, undefined, extra)}
         characters={characters}
         database={database}
       />

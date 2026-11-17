@@ -68,7 +68,9 @@
     "resetToAppTitle": "Keep the action order, but remove gcsim results and individually changed action times, cooldowns and durations, and go back to the app's calculation (master frames and cooldowns)",
     "copyNotation": "Copy notation",
     "copied": "Copied",
-    "copyNotationTitle": "Copy the text notation (e.g. Xingqiu(Q E) ➔ [Bennett(Q E) ➔ Xiangling(Q E)]; [ ] is the part repeated from the 2nd cycle on)"
+    "copyNotationTitle": "Copy the text notation (e.g. Xingqiu(Q E) ➔ [Bennett(Q E) ➔ Xiangling(Q E)]; [ ] is the part repeated from the 2nd cycle on)",
+    "dps": "DPS Calc",
+    "dpsTitle": "Calculate the party DPS of the current rotation with gcsim"
   },
   "notation": {
     "title": "Current rotation notation",

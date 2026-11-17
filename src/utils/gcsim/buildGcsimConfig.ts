@@ -65,6 +65,34 @@ export function hurtStatement(h: HurtSetting | undefined): string | undefined {
   return `hurt every interval=${lo},${hi} amount=${a},${b} element=physical;`;
 }
 
+/** 敵の元素・物理耐性の種類（gcsim の `target` の項目名） */
+export const ENEMY_RESIST_KEYS = ['physical', 'pyro', 'hydro', 'cryo', 'electro', 'anemo', 'geo', 'dendro'] as const;
+export type EnemyResistKey = (typeof ENEMY_RESIST_KEYS)[number];
+
+/** 敵 1 体の設定（DPS 計算。耐性は割合: 0.1 = 10%、マイナスも可） */
+export interface EnemySetting {
+  level: number;
+  resist: Record<EnemyResistKey, number>;
+}
+
+/** 既定の敵（Lv100・全耐性 10%。これまでの固定値） */
+export const DEFAULT_ENEMY: EnemySetting = {
+  level: 100,
+  resist: { physical: 0.1, pyro: 0.1, hydro: 0.1, cryo: 0.1, electro: 0.1, anemo: 0.1, geo: 0.1, dendro: 0.1 },
+};
+
+/** 敵の `target` の行を作る（無い・空なら、これまでと同じ 1 体の固定値）。全員が同じ位置（原点）にいる = 範囲攻撃はすべての敵に当たる */
+export function targetStatements(enemies: EnemySetting[] | undefined): string[] {
+  // 指定が無いときは、これまでと同じ行（確認済みの判定の設定文の一致を変えない）
+  if (!enemies || enemies.length === 0) return ['target lvl=100 resist=0.1;'];
+  return enemies.map(e => {
+    const lvl = Math.max(1, Math.min(200, Math.round(Number.isFinite(e.level) ? e.level : 100)));
+    const vals = ENEMY_RESIST_KEYS.map(k => (Number.isFinite(e.resist?.[k]) ? e.resist[k] : 0.1));
+    const res = vals.every(v => v === vals[0]) ? `resist=${vals[0]}` : ENEMY_RESIST_KEYS.map((k, i) => `${k}=${vals[i]}`).join(' ');
+    return `target lvl=${lvl} ${res};`;
+  });
+}
+
 export interface GcsimConfigInput {
   /** 編成を DB と合わせて解決したキャラ（未設定枠を含む 4 枠） */
   characters: CharacterConfig[];
@@ -76,6 +104,8 @@ export interface GcsimConfigInput {
   switchDelay: number;
   /** 敵の防御ヒットストップ（gcsim の defhalt）。既定 true。false のとき `defhalt=false` を渡す（体幹が崩れる敵に当てる場合） */
   defHalt?: boolean;
+  /** 敵（DPS 計算で指定。無ければ Lv100・全耐性 10% の 1 体） */
+  enemies?: EnemySetting[];
   /** 敵から受けるダメージ（gcsim の `hurt every`。出場中のキャラが一定の間隔でダメージを受ける）。無い・無効なら、設定文に出さない */
   hurt?: HurtSetting;
   /**
@@ -409,7 +439,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     ...lines,
     '',
     `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES}${input.ignoreBurstEnergy === false ? '' : ' ignore_burst_energy=true'}${input.defHalt === false ? ' defhalt=false' : ''};`,
-    'target lvl=100 resist=0.1;',
+    ...targetStatements(input.enemies),
     ...(input.enemyParticles && input.enemyParticles.amount > 0
       ? (() => {
         // 最小と最大が同じだと gcsim が止まる（Intn の引数が 0）。最大を 1 フレーム広げる

@@ -32,6 +32,8 @@ export const SETTING_KEYS = {
   rotationNotationMode: 'rotationNotationMode',
   /** 必要元素チャージ効率の最後の算出結果（JSON。「チャージ効率計算」画面） */
   requiredEnergyRecharge: 'requiredEnergyRecharge',
+  /** DPS 計算の設定（JSON。周数・実行回数・敵。「DPS 計算」画面） */
+  dpsSettings: 'dpsSettings',
   /** 表示の言語（'ja' | 'en'。無ければブラウザの言語に従う。D246〜D248） */
   language: 'appLanguage',
   /** HoYoLAB から取り込んだ持ちキャラ（JSON。{ importedAt, characters }。src/utils/hoyolab/ownedStore.ts） */

@@ -1,0 +1,82 @@
+/**
+ * DPS 計算の確認（D343）。gcsim のサーバーが要る（npm run gcsim:start）。
+ *
+ *   npm run check:dps
+ *
+ * - 敵の設定: 指定なしは従来の `target lvl=100 resist=0.1;`、指定ありは耐性・体数が設定文に出る
+ * - 集計: 合成したログで、総ダメージ・キャラ別・時間・統計が正しいこと
+ * - 実機: ベネット + 香菱の編成を gcsim で 6 回実行し、DPS が正の値で、キャラ別の合計が総ダメージと一致し、周数が多いほど時間が延びること
+ * 合わなければ、終了コード 1。
+ */
+import fs from 'node:fs';
+import { createServer } from 'vite';
+import './require-gcsim-server.ts';
+
+const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
+const { buildGcsimConfig, targetStatements, DEFAULT_ENEMY } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
+const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');
+const dps = await server.ssrLoadModule('/src/utils/gcsim/dpsCalc.ts');
+
+let failed = 0;
+const check = (ok: boolean, label: string) => {
+  console.log(`${ok ? '✓' : '✗'} ${label}`);
+  if (!ok) failed++;
+};
+
+// 1. 敵の設定
+check(targetStatements(undefined).join() === 'target lvl=100 resist=0.1;', '敵の指定なし: 従来と同じ `target lvl=100 resist=0.1;`');
+const e2 = [DEFAULT_ENEMY, { level: 90, resist: { ...DEFAULT_ENEMY.resist, hydro: -0.2 } }];
+const t2 = targetStatements(e2);
+check(t2.length === 2 && t2[0] === 'target lvl=100 resist=0.1;' && t2[1].startsWith('target lvl=90 ') && t2[1].includes('hydro=-0.2') && t2[1].includes('pyro=0.1'), '敵 2 体: 体数ぶんの行が出て、耐性が個別に出る');
+
+// 2. 集計（合成ログ）
+const logs = [
+  { event: 'action', frame: 0, msg: 'executed skill', char_index: 0 },
+  { event: 'damage', frame: 60, msg: 'a', char_index: 0, logs: { damage: 100 } },
+  { event: 'damage', frame: 120, msg: 'b', char_index: 1, logs: { damage: 50.5 } },
+  { event: 'damage', frame: 120, msg: 'c', char_index: 1, logs: { damage: 'x' } },
+  { event: 'action', frame: 180, msg: 'executed attack', char_index: 1 },
+  { event: 'status', frame: 600, msg: 'ignored' },
+];
+const run = dps.summarizeDamage(logs, 2);
+check(run.total === 150.5 && run.byChar[0] === 100 && run.byChar[1] === 50.5 && run.seconds === 3, '合成ログ: 総ダメージ・キャラ別・時間（最後のアクション 3 秒）');
+const agg = dps.aggregateDps([{ total: 300, seconds: 3, byChar: [200, 100] }, { total: 500, seconds: 5, byChar: [400, 100] }], 2);
+check(agg.dps.mean === 100 && agg.dps.sd === 0 && agg.runs === 2 && Math.abs(agg.byChar[0].share - 0.75) < 1e-9, '統計: DPS 平均・標準偏差・割合');
+
+// 3. 実機（ベネット + 香菱）
+const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+const all: any[] = Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw);
+const weapons: any[] = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+const weaponOf = (type: string) => weapons.find(x => x.weaponType === type && x.gcsimKey && x.rarity === 4);
+let seq = 0;
+const byName = (name: string, extra: Record<string, unknown> = {}) => ({ ...structuredClone(all.find(x => x.name === name)), ...extra });
+const makeAction = (char: any, step: string) => {
+  const def = char.availableActions.find((a: any) => a.id === `${char.id}_${step}`);
+  return { id: `a${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: def.defaultDuration };
+};
+const wB = weaponOf(byName('ベネット').weaponType);
+const wX = weaponOf(byName('香菱').weaponType);
+const chars = [byName('ベネット', { weaponId: wB.id, weaponRefinementRank: 1 }), byName('香菱', { weaponId: wX.id, weaponRefinementRank: 1 })];
+const stints = [
+  { id: 's0', characterId: chars[0].id, actions: ['e', 'q'].map(s => makeAction(chars[0], s)) },
+  { id: 's1', characterId: chars[1].id, actions: ['e', 'q'].map(s => makeAction(chars[1], s)) },
+];
+const build = (loops: number, enemies?: unknown) => buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], loopIterations: loops, enemies });
+const c2 = build(2);
+const c5 = build(5);
+const o2 = await dps.computeDps({ config: c2, runs: 6, parallel: 3, run: runGcsimSample });
+const o5 = await dps.computeDps({ config: c5, runs: 6, parallel: 3, run: runGcsimSample });
+check(o2.status === 'ok' && o5.status === 'ok', `実行が成功する（${o2.status}/${o5.status}${o2.message ? ' ' + o2.message : ''}）`);
+if (o2.status === 'ok' && o5.status === 'ok') {
+  const r = o2.result;
+  console.log(`  2 周: DPS ${r.dps.mean.toFixed(0)} ±${r.dps.sd.toFixed(0)}・総ダメージ ${r.total.mean.toFixed(0)}・${r.seconds.toFixed(1)} 秒`);
+  console.log(`  5 周: DPS ${o5.result.dps.mean.toFixed(0)}・${o5.result.seconds.toFixed(1)} 秒`);
+  check(r.runs === 6 && r.dps.mean > 0 && r.byChar.length === 2, 'DPS が正の値で、キャラ別が編成の人数ぶん');
+  check(Math.abs(r.byChar.reduce((a: number, b: any) => a + b.damage, 0) - r.total.mean) < 1e-6 * r.total.mean, 'キャラ別の合計 = 総ダメージ');
+  check(o5.result.seconds > r.seconds, '周数が多いほど、時間が延びる');
+  const two = await dps.computeDps({ config: build(2, [DEFAULT_ENEMY, DEFAULT_ENEMY]), runs: 3, parallel: 3, run: runGcsimSample });
+  check(two.status === 'ok', '敵 2 体の設定文が実行できる');
+}
+await server.close();
+if (failed) { console.error(`\n${failed} 件失敗`); process.exit(1); }
+console.log('\nすべて合格');

@@ -32,7 +32,7 @@
     "trouble2": "\"Manifest file is missing\": if there is another folder with the same name inside the extracted folder, choose the inner one.",
     "trouble3": "\"This extension is disabled\" (for example after restarting Chrome): turn the switch on again in the extensions page.",
     "trouble4": "Edge works the same way (address: edge://extensions), but it has only been tested in Chrome.",
-    "update": "To update: extract the new zip over the same folder and press the extension's \"Update\" button in the extensions page."
+    "update": "To update (no need to remove and reinstall): extract the new zip over the same folder as before, then press the \"Reload\" (circular arrow) button on this extension's card in the extensions page. If you extracted to a different folder, remove the old extension and load the new folder."
   },
   "uid": {
     "label": "Genshin UID",

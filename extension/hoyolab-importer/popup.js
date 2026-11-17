@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 $('go').addEventListener('click', () => {
   const uid = $('uid').value.trim();
-  if (!/^\d{9}$/.test(uid)) { $('msg').textContent = 'UID は 9 桁の数字です'; return; }
+  if (!/^\d{9,10}$/.test(uid)) { $('msg').textContent = 'UID は 9〜10 桁の数字です'; return; }
   $('msg').textContent = '取得中…';
   chrome.runtime.sendMessage({ type: 'hoyolab-fetch', uid }, (res) => {
     if (chrome.runtime.lastError) { $('msg').textContent = '失敗: ' + chrome.runtime.lastError.message; return; }

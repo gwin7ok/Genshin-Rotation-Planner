@@ -1,6 +1,6 @@
 {
   "title": "Import owned characters from HoYoLAB",
-  "intro": "Imports the weapons, artifacts, talent levels and more of your owned characters from your HoYoLAB Battle Chronicle, so you can use them in the party settings. The imported data is stored only in this browser and is never sent anywhere.",
+  "intro": "Imports the weapons, artifacts, talent levels and more of your owned characters from your HoYoLAB Battle Chronicle, so you can use them in the party settings. The imported data is stored only in this browser and is not sent to the operator's servers.",
   "ext": {
     "checking": "Checking for the extension…",
     "ok": "Extension detected (v{{version}})",
@@ -38,7 +38,7 @@
   },
   "uid": {
     "label": "Genshin UID",
-    "placeholder": "9 digits",
+    "placeholder": "9-10 digits",
     "loginHint": "Before importing, log in to HoYoLAB in this Chrome. You cannot import without logging in.",
     "loginLink": "Open HoYoLAB",
     "hint": "For the UID of the account you are logged in with, all characters are imported even if the HoYoLAB \"Character Details\" privacy setting is off. For another account's UID, HoYoLAB does not provide the details, so only the characters that account has placed in its in-game \"Character Showcase\" are imported from Enka.Network (an unofficial service). Importing again replaces the previous import."
@@ -54,7 +54,7 @@
     "enkaEmpty": "HoYoLAB does not provide character details for other accounts. On Enka.Network, that account has no characters in its \"Character Showcase\", so there was nothing to import (the owner needs to place characters in the in-game profile showcase).",
     "enkaNeedUpdate": "Importing another account's UID requires extension v{{version}} or later. Please update the extension (see the steps above).",
     "errorEnka": "Could not import from Enka.Network: {{message}}",
-    "invalidUid": "Enter the UID as 9 digits",
+    "invalidUid": "Enter the UID as 9-10 digits",
     "noExtension": "No response from the extension. Check that it is installed",
     "errorPrivate": "Could not get the Battle Chronicle. Check that the UID you entered belongs to the account you are logged in with. The UID of another account can only be imported if its owner has made the Battle Chronicle public ({{message}})",
     "errorLogin": "You are not logged in to HoYoLAB. Log in to HoYoLAB in this browser ({{message}})",

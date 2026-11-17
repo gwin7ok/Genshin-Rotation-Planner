@@ -178,7 +178,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   };
 
   const handleImport = async () => {
-    if (!/^\d{9}$/.test(uid)) { setMessage({ kind: 'error', text: t('hoyolab:import.invalidUid') }); return; }
+    if (!/^\d{9,10}$/.test(uid)) { setMessage({ kind: 'error', text: t('hoyolab:import.invalidUid') }); return; }
     setMessage(null);
     setBusy('fetch');
     const res = await fetchFromExtension(uid);

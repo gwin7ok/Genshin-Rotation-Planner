@@ -41,7 +41,9 @@ const makeDs = () => {
   return `${t},${r},${md5(`salt=${SALT}&t=${t}&r=${r}`)}`;
 };
 
-const SERVERS = { 6: 'os_usa', 7: 'os_euro', 8: 'os_asia', 9: 'os_cht' };
+// UID の先頭の桁でサーバーを決める（genshin.py の GENSHIN_SERVER_RANGE と同じ。10 桁の UID は、先頭 2 桁）
+const SERVERS = { 6: 'os_usa', 7: 'os_euro', 8: 'os_asia', 18: 'os_asia', 9: 'os_cht' };
+const serverOf = (uid) => SERVERS[String(uid).slice(0, -8)];
 const BASE = 'https://sg-public-api.hoyolab.com/event/game_record/genshin/api/';
 
 const call = async (endpoint, uid, server, body) => {
@@ -111,7 +113,7 @@ const fetchOneByOne = async (uid, server, ids, firstError) => {
 
 /** 所持キャラの詳細（生のレスポンス）を返す。 */
 export const fetchCharacters = async (uid) => {
-  const server = SERVERS[String(uid)[0]];
+  const server = serverOf(uid);
   if (!server) throw new Error('UID からサーバーを判別できません');
   const list = await call('character/list', uid, server, {});
   const ids = list.list.map((c) => c.id);

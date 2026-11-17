@@ -18,7 +18,7 @@ const fail = (message, code) => {
 
 /** 展示キャラの詳細（生のレスポンス）を返す。キャラが 1 つも無いときは、avatarInfoList が無い（空）ものを返す */
 export const fetchEnka = async (uid) => {
-  if (!/^\d{9}$/.test(String(uid))) throw fail('UID は 9 桁の数字です', 'bad_uid');
+  if (!/^\d{9,10}$/.test(String(uid))) throw fail('UID は 9〜10 桁の数字です', 'bad_uid');
   const hit = cache.get(uid);
   if (hit && hit.expires > Date.now()) return hit.data;
 

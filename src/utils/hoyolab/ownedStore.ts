@@ -52,6 +52,6 @@ export const clearOwned = (): void => removeKey(SETTING_KEYS.ownedCharacters);
 /** 原神の UID（取り込み画面の入力の手間を減らす。9 桁の数字のときだけ保存・返す） */
 export const loadHoyolabUid = (): string => {
   const v = readString(SETTING_KEYS.hoyolabUid);
-  return v && /^\d{9}$/.test(v) ? v : '';
+  return v && /^\d{9,10}$/.test(v) ? v : '';
 };
-export const saveHoyolabUid = (uid: string): boolean => (/^\d{9}$/.test(uid) ? writeString(SETTING_KEYS.hoyolabUid, uid) : false);
+export const saveHoyolabUid = (uid: string): boolean => (/^\d{9,10}$/.test(uid) ? writeString(SETTING_KEYS.hoyolabUid, uid) : false);

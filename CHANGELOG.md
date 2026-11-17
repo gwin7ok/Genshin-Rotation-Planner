@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-17
+
 ### 追加
 - **持ちキャラの取り込み**: Chrome 拡張機能（アプリに同梱の zip。導入手順は 5 つの手順カードで案内）で、HoYoLAB のご自身の UID から、持ちキャラ（Lv・突破・凸・天賦・武器・聖遺物）を取り込めるようにした。取り込み済みの一覧には、プレイヤー名・取得元・取得日時を表示
 - 他のアカウントの UID と、中国サーバー・Bilibili 版の UID は、Enka.Network（ゲーム内の「キャラクター詳細表示」の最大 12 キャラ）から取り込める。10 桁の UID にも対応。HoYoLAB の全キャラに、Enka の最新の値を重ねることもできる
@@ -297,7 +299,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...v1.9.0
 [1.8.9]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.7...v1.8.8
 [1.8.7]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.6...v1.8.7

@@ -327,7 +327,7 @@ const stateMode = (action: 'e' | 'q', label: string, startDelayFrames: number, d
     durationFrames,
     swap: 'ends',
     enders: [],
-    holdByDefault: true,
+    holdByDefault: false,
     source,
     ...extra,
   },
@@ -377,7 +377,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 5 * 60,
       swap: 'ends',
       enders: [{ by: 'self', cooldown: 'none', frames: { total: 50, cancels: { burst: 34, swap: 30 }, source: 'skill.go:skillFrames（状態の解除）' } }],
-      holdByDefault: true,
+      holdByDefault: false,
       source: 'mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）',
     },
   }],
@@ -401,7 +401,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: Math.round(4.1 * 60),
       swap: 'ends',
       enders: [{ by: 'jump', cooldown: 'none' }],
-      holdByDefault: true,
+      holdByDefault: false,
       noSynergy: true,
       source: 'dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる',
     },
@@ -718,7 +718,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       startAfterHold: true,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       normalFrames: [
         { total: 53, hitmark: 38, cancels: { attack: 40, skill: 33, burst: 35, dash: 26, jump: 32, walk: 50, swap: 38 }, source: 'attack.go:skillAttackFrames[0]（N1(E)。InitNormalCancelSlice(38, 53)）' },
         { total: 53, hitmark: 38, cancels: { attack: 40, skill: 33, burst: 32, dash: 21, jump: 34, walk: 51, swap: 38 }, source: 'attack.go:skillAttackFrames[1]（N2(E)）' },
@@ -758,7 +758,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 900,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       extendByBurstFrames: 102,
       byConstellation: [
         { minConstellation: 1, repressMaxUses: 5, gaugeInitial: 100 },
@@ -793,7 +793,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 540,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       // 爆発の次の重撃: 幻の戯が使えるとき 124f、使えないとき 131f（burst.go: burstPhantasmChargeCancelFrame / burstNormalChargeCancelFrame）。草露の数は数えない
       burstToChargedFrames: 124,
       repress: {
@@ -864,7 +864,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 780,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       extendByBurstFrames: 99,
       // C6: 魂を穿つ痛み +2 回・命中で奇策が 1.25 秒延びる（7 秒に 1 回まで。使った時刻で数える）・愉悦が上限まで回復（使った後に上限へ。ユーザー決定 D160 の 4-②。説明文の読みで、ゲームでの確認は #37）
       byConstellation: [{ minConstellation: 6, repressMaxUses: 5, repressExtend: { frames: 75, icdFrames: 420 }, gaugeRefillOnRepress: true }],
@@ -894,7 +894,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 900,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       // C1: 最高ランクの飛翔の剣が 4 回まで（計 6 回）・最高ランクの 1 回目（3 回目の使用 = 番号 2）は剣気を消費しない
       byConstellation: [{ minConstellation: 0, gaugeInitial: 200 }, { minConstellation: 1, repressMaxUses: 6, repressFreeIndex: 2 }],
       repress: {
@@ -1032,7 +1032,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 7.5 * 60,
       swap: 'ends',
       enders: [],
-      holdByDefault: true,
+      holdByDefault: false,
       repress: { frames: [{ total: 43, cancels: { attack: 24, skill: 24, burst: 24, dash: 25, jump: 25, swap: 42 }, source: 'skill.go:skillDashFrames' }] },
       normalFrames: [
         { total: 18, hitmark: 8, cancels: { skill: 11, burst: 10, dash: 8, jump: 8, swap: 8 }, source: 'attack.go:skillAttackFrames[0]（InitNormalCancelSlice は skill 以外へ hitmark でキャンセル）' },
@@ -1057,7 +1057,7 @@ const ACTION_MODES: Record<string, ActionModeEntry[]> = {
       durationFrames: 220,
       swap: 'ends',
       enders: [{ by: 'plunge_low', cooldown: 'none' }, { by: 'plunge_high', cooldown: 'none' }],
-      holdByDefault: true,
+      holdByDefault: false,
       // xianyun/skill.go: QueueCharTask(cooldownReduce(src), skillStateDur[counter]) → 最後の跳躍から状態の長さの後に ReduceActionCooldown(skill, 3*60)。plunge.go driftcloudWave が skillSrc を無効にして取り消す。交代では取り消されない
       cooldownReduceOnExpire: { seconds: 3, afterSwap: true },
       repress: {

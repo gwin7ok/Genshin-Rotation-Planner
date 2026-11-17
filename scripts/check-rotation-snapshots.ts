@@ -96,7 +96,8 @@ const SCENARIOS: Scenario[] = [
   // --- モードを持つキャラ（今日の実装。統一の作業で変わらないことの確認） ---
   S('夢見月瑞希 E → 交代 / E → E', [['夢見月瑞希'], B], [[0, ['e']], [1, ['e']], [0, ['e', 'w2', 'e']]]),
   S('ディシア E → Q → N N → E → ジャンプ → E', [['ディシア'], B], [[0, ['e', 'q', 'n', 'n', 'e', 'jump', 'e']], [1, ['e']]]),
-  S('タルタリヤ E → N N → E / 維持オン', [['タルタリヤ', { constellation: 0 }], B], [[0, ['e', 'n', 'n', 'e']], [1, ['e']], [0, ['e'], { holdMode: true }]]),
+  S('タルタリヤ E → N N → E / 維持オン', [['タルタリヤ', { constellation: 0 }], B], [[0, ['e', 'n', 'n', 'e'], { holdMode: false }], [1, ['e']], [0, ['e'], { holdMode: true }]]),
+  S('胡桃 E → 交代（切り替えが未指定 = 既定の維持しない）', [['胡桃'], B], [[0, ['e'], { holdMode: undefined }], [1, ['e']]]),
   S('胡桃 E → 交代 / 維持オフ', [['胡桃'], B], [[0, ['e']], [1, ['e']], [0, ['e'], { holdMode: false }]]),
   S('藍硯 hE（2 秒）→ E', [['藍硯'], B], [[0, ['e_hold@2', 'e']], [1, ['e']]]),
   S('ディルック E E E → E', [['ディルック'], B], [[0, ['e', 'e', 'e', 'e']], [1, ['e']]]),
@@ -247,7 +248,8 @@ function runScenario(sc: Scenario) {
     const { groupSpec, ...rest } = (extra ?? {}) as { groupSpec?: { from: number; to: number; repeat: number } };
     const actions: any[] = steps.map(s => makeAction(chars[ci], s));
     if (groupSpec) for (let k = groupSpec.from; k <= groupSpec.to; k++) actions[k] = { ...actions[k], groupId: `g${i}` };
-    return { id: `s${i}`, characterId: chars[ci].id, actions, ...(groupSpec ? { groups: [{ id: `g${i}`, repeat: groupSpec.repeat }] } : {}), ...rest };
+    // 既定は「維持しない」（2026-11-17）。この確認の並びは、維持あり前提で作ったので、未指定のものは維持ありにする（維持なしの確認は、holdMode: false を明示）
+    return { id: `s${i}`, characterId: chars[ci].id, actions, holdMode: true, ...(groupSpec ? { groups: [{ id: `g${i}`, repeat: groupSpec.repeat }] } : {}), ...rest };
   });
   const res = calculateRotation(chars, stints, { switchDelay: 0.5, loopStartIndex: sc.loopStartIndex ?? 0, defHalt: sc.defHalt ?? true, database: { weapons: WEAPON_DB } as any });
   const actions = res.calculatedStints.flatMap((s: any) => s.actions);

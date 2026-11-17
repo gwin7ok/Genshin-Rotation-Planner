@@ -8691,7 +8691,7 @@
           "durationFrames": 900,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "razor/burst.go: razor-q（実行: 爆発の 32f 後から 900f）。交代で終わる",
           "en": {
             "label": "Lightning Fang",
@@ -11294,7 +11294,7 @@
           "durationFrames": 957,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "xiao/burst.go: xiaoburst（実行: 爆発と同時に 957f）。交代で終わる",
           "en": {
             "label": "Bane of All Evil",
@@ -19136,7 +19136,7 @@
           "durationFrames": 554,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "hutao/skill.go: paramita（実行: E と同時に 554f）。交代で解除",
           "en": {
             "label": "Guide to Afterlife",
@@ -20409,7 +20409,7 @@
           "durationFrames": 611,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "yoimiya/skill.go: yoimiyaskill（実行: E と同時に 611f）。交代で解除",
           "en": {
             "label": "Niwabi Fire-Dance",
@@ -21750,7 +21750,7 @@
           "durationFrames": 518,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "raiden/burst.go: raidenburst（実行: 爆発と同時に 518f）。交代で終わる",
           "normalFrames": [
             {
@@ -22591,7 +22591,7 @@
           "durationFrames": 600,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "kokomi/burst.go: kokomiburst（実行: 爆発と同時に 600f）。交代で終わる",
           "en": {
             "label": "Ceremonial Garment",
@@ -23761,7 +23761,7 @@
           "durationFrames": 795,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "itto/burst.go: itto-q（実行: 爆発と同時に 795f）。交代で終わる",
           "en": {
             "label": "Raging Oni King",
@@ -27565,7 +27565,7 @@
           "durationFrames": 360,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "kamisatoayato/skill.go: soukaikanka（実行: E と同時に 360f）。交代で解除",
           "normalFrames": [
             {
@@ -29102,7 +29102,7 @@
           "durationFrames": 600,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "nilou/skill.go: AddStatus(pirouetteStatus, 10*60)、whirlingStepsFrames。3 段目で pirouette が終わる。交代で解除",
           "repress": {
             "frames": [
@@ -29745,7 +29745,7 @@
           "durationFrames": 379,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "cyno/stellar.go: revelationOnSkill（諭示の達成が条件・冥祭でないときのスキルで 379f の冥祭。延長不可）。交代で終わる",
           "opensWhen": {
             "revelation": true,
@@ -29869,7 +29869,7 @@
           "durationFrames": 712,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "cyno/burst.go: cyno-q（実行: 爆発と同時に 712f）。交代で終わる",
           "normalFrames": [
             {
@@ -33455,7 +33455,7 @@
               "cooldown": "none"
             }
           ],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "noSynergy": true,
           "source": "dehya/burst.go: burstDuration = 4.1*60（爆発の 105f 後から）。jump.go: 状態の間のジャンプは状態を終わらせる。onExitField: 交代で終わる",
           "en": {
@@ -36069,7 +36069,7 @@
           "durationFrames": 600,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "freminet/burst.go: freminet-stalking（実行: 爆発と同時に 600f）",
           "en": {
             "label": "Subnautical Hunter",
@@ -39079,7 +39079,7 @@
           "durationFrames": 720,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "gaming/burst.go: gaming-q（実行: 爆発の 36f 後から 720f）。交代で終わる",
           "en": {
             "label": "Wushou Stance",
@@ -39509,7 +39509,7 @@
               "cooldown": "none"
             }
           ],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "cooldownReduceOnExpire": {
             "seconds": 3,
             "afterSwap": true
@@ -41415,7 +41415,7 @@
           "durationFrames": 480,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "sethos/burst.go: sethos-burst（実行: 爆発と同時に 480f）。交代で終わる",
           "en": {
             "label": "Twilight Meditation",
@@ -41805,7 +41805,7 @@
           "durationFrames": 450,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "repress": {
             "frames": [
               {
@@ -43321,7 +43321,7 @@
           "startAfterHold": true,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "normalFrames": [
             {
               "total": 53,
@@ -43480,7 +43480,7 @@
           "startAfterHold": true,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "normalFrames": [
             {
               "total": 53,
@@ -45772,7 +45772,7 @@
           "durationFrames": 420,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "mavuika/burst.go: mavuika-burst（実行: 爆発の 105f 後から 420f）。交代で終わる",
           "en": {
             "label": "Crucible of Death and Life",
@@ -47066,7 +47066,7 @@
               }
             }
           ],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "mizuki/skill.go: dreamDrifterBaseDuration = 5*60、AddStatus(dreamDrifterStateKey, …, true)。状態の間の E は cancelDreamDrifterState。交代で解除（OnCharacterSwap）",
           "en": {
             "label": "Dreamdrifter",
@@ -49359,7 +49359,7 @@
           "durationFrames": 754,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "skirk/skill.go: skillDur = 754、enterSkillState（実行: E の 19f 後に seven-phase-flash、774f に exit skirk skill と CT 480f）。onExitField: 交代で終わる",
           "cooldownAtEnd": {
             "delayFrames": {
@@ -51051,7 +51051,7 @@
           "durationFrames": 619,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "flins/skill.go: AddStatus(skillKey, 10*60+skillHitmark, true)（manifest-flame。実行: E と同時に 619f）。嵐槍を使っても消えず、交代で消える",
           "special": {
             "kind": "skill"
@@ -51955,7 +51955,7 @@
           "durationFrames": 540,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "burstToChargedFrames": 124,
           "repress": {
             "actions": [
@@ -53631,7 +53631,7 @@
           "durationFrames": 900,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "extendByBurstFrames": 102,
           "byConstellation": [
             {
@@ -54552,7 +54552,7 @@
           "durationFrames": 720,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)（sturm-und-drang。実行: E の 39f 後に 720f）。varka/burst.go: ExtendStatus(skillKey, 2.3*60)。交代で解除。状態の間の E は specialSkill",
           "repress": {
             "frames": [
@@ -54658,7 +54658,7 @@
           "durationFrames": 720,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "source": "varka/skill.go: QueueCharTask(…, skillHitmark-1) で AddStatus(skillKey, 12*60, true)（sturm-und-drang。実行: E の 39f 後に 720f）。varka/burst.go: ExtendStatus(skillKey, 2.3*60)。交代で解除。状態の間の E は specialSkill",
           "repress": {
             "frames": [
@@ -55060,7 +55060,7 @@
           "durationFrames": 780,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "extendByBurstFrames": 99,
           "byConstellation": [
             {
@@ -58014,7 +58014,7 @@
           "durationFrames": 900,
           "swap": "ends",
           "enders": [],
-          "holdByDefault": true,
+          "holdByDefault": false,
           "byConstellation": [
             {
               "minConstellation": 0,

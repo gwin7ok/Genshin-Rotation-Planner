@@ -68,7 +68,7 @@
 | `startDelayFrames`・`durationFrames` | 開始の遅れ・最大時間（入力なし） |
 | `swap` | 交代での扱い（3 値）: `ends` = 交代で終わる／`persists` = 交代しても続く／`blocks` = 終わらせないと交代できない |
 | `enders` | モードを終わらせるアクションの一覧。`by`（`self` = モードを開いたアクションの再押し／アクションの種別〔`jump` など〕）、`frames`（解除の動作の長さ）、`cooldown`（`none` = CT を始めない／`start` = ここで CT を始める） |
-| `holdByDefault` | 既定で維持するか（キャラごとの既定。タルタリヤは「いいえ」） |
+| `holdByDefault` | 既定で維持するか（2026-11-17 から、全キャラ「いいえ」。D347。出場ごとの切り替えで ON にする） |
 
 生成元は `characterMasterGenerator.ts` の `ACTION_MODES`（キー: キャラ ID）。ディシア固有の項目（パンチのフレーム・蹴り・炎場の拾い）は、共通の定義に入れず、`burstMode`（`BURST_MODES`）に残す。
 

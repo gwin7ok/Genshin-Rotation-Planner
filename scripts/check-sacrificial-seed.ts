@@ -72,7 +72,7 @@ for (const [name, steps, cons = 0] of CASES) {
   const c0 = all.find((x: any) => x.name === name);
   const chars = [byName(name, { weaponId: SAC_IDS[c0.weaponType], weaponRefinementRank: 5, constellation: cons }), byName('ベネット', { weaponId: dull.id, weaponRefinementRank: 1 })];
   const stints = [
-    { id: 's0', characterId: chars[0].id, actions: steps.map(s => makeAction(chars[0], s)) },
+    { id: 's0', characterId: chars[0].id, actions: steps.map(s => makeAction(chars[0], s)), holdMode: true },
     { id: 's1', characterId: chars[1].id, actions: ['e', 'w80'].map(s => makeAction(chars[1], s)) },
   ];
   const res = calculateRotation(chars, stints, { switchDelay: 0.5, loopStartIndex: 0, defHalt: true, database: { weapons: weaponDb } });

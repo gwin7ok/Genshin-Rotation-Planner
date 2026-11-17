@@ -66,4 +66,5 @@ gcsim のバージョンを上げたとき、または新しい第三者のデ�
 - Enka.Network（https://enka.network）の API: 他のアカウントの UID の取り込みと、自分の UID の取り込みで HoYoLAB の反映が遅れているキャラの更新に使う（後者は、取り込み画面のチェックで、使わないようにできる。既定はオン）。HoYoverse・HoYoLAB とは別の、非公式のサービス。
   API のライセンス表記・利用規約は見つからなかったため、公開されている「Before You Request」のルール（総当たりをしない・User-Agent を付ける・ttl の間は再取得しない）に従う。
   Enka のドキュメントのデータ表（store/*.json）は、コピーしていない。
+- 原神 Wiki（https://wikiwiki.jp/genshinwiki/）: 「仮値を使う」の既定の装備（聖遺物のメイン・サブの優先順・セット・武器）を決めるため、各キャラのページの「おすすめ」の内容（事実）だけを参照した（文章・画像は写していない。取得は 1 ページごとに間隔を空けた）。詳細は tools/wiki-default-builds/README.md。
 - このアプリは、HoYoverse・HoYoLAB・Enka.Network と、提携・承認の関係にない。

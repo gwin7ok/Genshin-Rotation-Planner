@@ -18,7 +18,7 @@ import { isTravelerKey, matchMasterCharacterId, ownedToPartyFields } from '../ut
 import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
 import { buildMatchesOwned } from '../utils/hoyolab/ownedMatch';
 import { StatsEditModal } from './StatsEditModal';
-import { DEFAULT_CUSTOM_STATS, defaultCustomStatsFor, statsOfBuild } from '../utils/customStats';
+import { DEFAULT_CUSTOM_STATS, defaultCustomStatsFor, defaultEquipmentFor, statsOfBuild } from '../utils/customStats';
 import type { CustomStats } from '../types/genshin';
 import { currentLanguage, t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
@@ -195,9 +195,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
   const handleRevertOwned = () => {
     const updated = [...editingParty];
-    // 「仮値を使う」: 持ちキャラの値も捨てて、そのキャラの仮値（聖遺物ステータスは、攻撃・HP・防御・熟知の型の目安）にする
+    // 「仮値を使う」: 持ちキャラの値も捨てて、そのキャラの仮値にする（聖遺物ステータス・武器・聖遺物セットは、原神 Wiki のおすすめ。データが無いキャラは型の目安）
     const characterId = updated[selectedSlot]?.characterId;
-    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined, customStats: characterId ? defaultCustomStatsFor(characterId) : undefined };
+    const equipment = characterId ? defaultEquipmentFor(characterId, { weapons: database.weapons, artifacts: database.artifacts }) : {};
+    updated[selectedSlot] = { ...updated[selectedSlot], ...equipment, build: undefined, customStats: characterId ? defaultCustomStatsFor(characterId) : undefined };
     setEditingParty(updated);
     setOwnedWarnings([]);
   };

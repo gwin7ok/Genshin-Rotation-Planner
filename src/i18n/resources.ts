@@ -17,6 +17,8 @@ import jaGcsim from '../locales/ja/gcsim.json';
 import enGcsim from '../locales/en/gcsim.json';
 import jaGuide from '../locales/ja/guide.json';
 import enGuide from '../locales/en/guide.json';
+import jaHoyolab from '../locales/ja/hoyolab.json';
+import enHoyolab from '../locales/en/hoyolab.json';
 import jaHeader from '../locales/ja/header.json';
 import enHeader from '../locales/en/header.json';
 import jaMessages from '../locales/ja/messages.json';
@@ -40,6 +42,7 @@ export const resources = {
     gcsim: jaGcsim,
     guide: jaGuide,
     header: jaHeader,
+    hoyolab: jaHoyolab,
     messages: jaMessages,
     notice: jaNotice,
     party: jaParty,
@@ -54,6 +57,7 @@ export const resources = {
     gcsim: enGcsim,
     guide: enGuide,
     header: enHeader,
+    hoyolab: enHoyolab,
     messages: enMessages,
     notice: enNotice,
     party: enParty,

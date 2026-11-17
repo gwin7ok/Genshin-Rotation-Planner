@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Zap, Play, Square, AlertTriangle, ChevronUp, ChevronDown } from 'lucide-react';
+import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
+import { Stepper } from './Stepper';
 import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
+import type { AppDatabase } from '../types/database';
+import { previewFinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
@@ -24,31 +27,6 @@ import {
   type RequiredErResult,
 } from '../utils/gcsim/requiredEnergyRecharge';
 
-/** 数の入力。右の上下ボタンで step ずつ増減する（範囲内に収める）。decimals を指定すると、小数 decimals 桁（x.x など）にそろえて表示する */
-const Stepper: React.FC<{ value: string; onChange: (v: string) => void; step: number; min?: number; max?: number; decimals?: number; disabled?: boolean; widthClass: string }> = ({ value, onChange, step, min, max, decimals, disabled, widthClass }) => {
-  const fmt = (n: number) => decimals === undefined ? String(n) : n.toFixed(decimals);
-  const move = (dir: 1 | -1) => {
-    const cur = Number(value);
-    const next = (Number.isFinite(cur) ? cur : 0) + dir * step;
-    const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, next));
-    onChange(fmt(Math.round(clamped * 1000) / 1000));
-  };
-  return (
-    <span className="inline-flex items-stretch">
-      <input
-        type="number" min={min} max={max} step={step} value={value} disabled={disabled}
-        onChange={e => onChange(e.target.value)}
-        onBlur={() => { const n = Number(value); if (decimals !== undefined && value !== '' && Number.isFinite(n)) onChange(fmt(n)); }}
-        className={`${widthClass} bg-slate-800 border border-slate-700 rounded-l px-1.5 py-0.5 text-right [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
-      />
-      <span className="flex flex-col border border-l-0 border-slate-700 rounded-r overflow-hidden">
-        <button type="button" onClick={() => move(1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center"><ChevronUp className="w-3 h-3" /></button>
-        <button type="button" onClick={() => move(-1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center border-t border-slate-700"><ChevronDown className="w-3 h-3" /></button>
-      </span>
-    </span>
-  );
-};
-
 interface EnergyRechargeDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -56,6 +34,8 @@ interface EnergyRechargeDialogProps {
   build: BuildForEr;
   /** 編成のキャラ（名前と、編成の ER の表示に使う） */
   characters: CharacterConfig[];
+  /** いまの元素チャージ効率（枠の設定から gcsim で計算）に使う */
+  database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
 }
 
 const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify', refine: 'phaseRefine' } as const;
@@ -69,7 +49,7 @@ const formatDuration = (ms: number): string => {
 };
 
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
-export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters }) => {
+export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database }) => {
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
   const [currentFingerprint, setCurrentFingerprint] = useState<string | null>(null);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
@@ -82,10 +62,12 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
-  const [precise, setPrecise] = useState(true);
+  const [precise, setPrecise] = useState(false);
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
   // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
+  // いまの元素チャージ効率（キャラ ID → 割合。枠の設定（持ちキャラの装備・仮値）から、gcsim で計算した最終値。計算できなかったキャラは無い）
+  const [currentEr, setCurrentEr] = useState<Record<string, number>>({});
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
@@ -113,13 +95,29 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
-    setPrecise(last?.precise ?? true); // 初期値は精密検証（最後の実行があれば、そのときの選択）
+    setPrecise(last?.precise ?? false); // 初期値は概算検証（最後の実行があれば、そのときの選択）
     setCurrentFingerprint(fingerprintOf(base.config));
     // 回復量が自分の ER で決まるキャラ（雷電将軍・九条裟羅・ドリー）がいる編成は、確実の値を精密検証で求める（自動）
     setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
     setCurrentMembers(base.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen]);
+
+  // いまの元素チャージ効率: 開いたとき、編成の各キャラについて、設定（持ちキャラの装備・保存した仮値・既定の仮値）のまま gcsim で計算する
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    setCurrentEr({});
+    (async () => {
+      for (const c of characters) {
+        if (c.id.startsWith('empty_slot_')) continue;
+        const r = await previewFinalStats(c, undefined, database).catch(() => null);
+        if (cancelled) return;
+        if (r && r.status === 'ok') setCurrentEr(prev => ({ ...prev, [c.id]: r.stats.er }));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isOpen, characters, database]);
 
   // 計算中は、1 秒ごとに経過時間を更新する
   useEffect(() => {
@@ -215,18 +213,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
           )}
 
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:er.precision')}</p>
-            <div className="flex items-center gap-1.5">
-              {([false, true] as const).map(v => (
-                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
-                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
-                </button>
-              ))}
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
-          </div>
-
           {verifyNames.length > 0 && (
             <div className="text-xs text-amber-200 bg-amber-950/30 border border-amber-900/60 rounded-lg p-3 leading-relaxed">
               {t('gcsim:er.verifyAuto', { names: joinList(verifyNames) })}
@@ -283,6 +269,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <thead>
                 <tr className="text-slate-400 border-b border-slate-800 text-left">
                   <th className="py-1.5 pr-2 font-semibold">{t('gcsim:er.colName')}</th>
+                  <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colCurrentTitle')}>{t('gcsim:er.colCurrent')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colTypicalTitle')}>{t('gcsim:er.colTypical')}</th>
                   <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:er.colStableTitle')}>{t('gcsim:er.colStable')}</th>
                   <th className="py-1.5 font-semibold text-right" title={t('gcsim:er.colCertainTitle')}>{t('gcsim:er.colCertain')}</th>
@@ -294,6 +281,19 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   return (
                     <tr key={e.characterId} className="border-b border-slate-800/60">
                       <td className="py-1.5 pr-2 text-slate-200">{c ? charName(c) : e.name}</td>
+                      <td className="py-1.5 pr-2 text-right font-mono" data-testid={`er-current-${e.characterId}`}>
+                        {(() => {
+                          const cur = currentEr[e.characterId];
+                          if (cur === undefined) return <span className="text-slate-600">-</span>;
+                          const pct = cur * 100;
+                          // 必要な値（確実 → 安定）と比べて、足りているかを色で示す（結果が無い・爆発なしは、色なし）
+                          const cls = e.status !== 'ok' ? 'text-slate-200'
+                            : e.certainEr !== undefined && pct >= e.certainEr ? 'text-emerald-300'
+                            : e.stableEr !== undefined && pct >= e.stableEr ? 'text-yellow-300'
+                            : 'text-rose-300';
+                          return <span className={cls}>{pct.toFixed(1)}%</span>;
+                        })()}
+                      </td>
                       {e.status === 'blank' ? (
                         <td colSpan={3} className="py-1.5">&nbsp;</td>
                       ) : e.status === 'ok' ? (
@@ -317,6 +317,18 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.precision')}</p>
+            <div className="flex items-center gap-1.5">
+              {([false, true] as const).map(v => (
+                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
+                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
+          </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.cores')}</p>

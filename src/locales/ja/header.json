@@ -48,6 +48,8 @@
     "helpTitle": "使い方（基本の流れ・画面の見方・操作・gcsim・保存・記法）",
     "party": "編成設定",
     "partyTitle": "パーティ4人の編成・武器・聖遺物変更",
+    "owned": "持ちキャラ取込",
+    "ownedTitle": "HoYoLAB から持ちキャラ（武器・聖遺物・天賦レベル）を取り込みます",
     "energyRecharge": "チャージ効率計算",
     "energyRechargeTitle": "必要な元素チャージ効率を gcsim で算出",
     "save": "編成管理",

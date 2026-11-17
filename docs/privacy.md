@@ -1,6 +1,6 @@
 # プライバシーポリシー / Privacy Policy
 
-最終更新: 2026-11-01 / Last updated: 2026-11-01
+最終更新: 2026-11-17 / Last updated: 2026-11-17
 
 [日本語](#日本語) ｜ [English](#english)
 
@@ -27,6 +27,13 @@ Google API サービスから受け取った情報の、本アプリでの使用
 
 ### 3. 「?import=」でリンクから読み込む機能
 URL の `import` 引数に指定されたリンクから、編成を読み込むことがあります。読み込む前に、必ず確認画面を出し、利用者が承認したときだけ、リンク先（外部のサイト）に通信します。リンク先に送られるのは、通常のウェブの取得リクエスト（利用者の IP アドレスなど）だけで、本アプリのデータは送りません。
+
+### 3-2. HoYoLAB からの持ちキャラの取り込み（任意・拡張機能）
+別配布の Chrome 拡張機能（Genshin Rotation Planner - HoYoLAB 取り込み）を、利用者が自分で導入して使うときだけ、HoYoLAB の戦績から、持ちキャラのデータ（武器・聖遺物・天賦レベルなど）を取り込めます。使わなければ、HoYoLAB とは通信しません。
+
+- **通信先**: 拡張機能が、HoYoLAB（`sg-public-api.hoyolab.com`）と、他のアカウントの UID のときだけ Enka.Network（`enka.network`。ゲーム内の「キャラクター詳細表示」の情報を公開している、非公式のサービス）に通信します。通信は、利用者のブラウザとそれぞれのサービスの間だけです。運営者のサーバーには送られません。Enka.Network には、入力した UID が送られます（Cookie・ログイン情報は送りません）。
+- **ログイン情報**: ブラウザが HoYoLAB への通信に、自動でログイン情報（Cookie）を付けます。拡張機能も本アプリも、Cookie の値を読み取らず、保存せず、送りません。
+- **保存されるもの**: 取り込んだ持ちキャラ（変換済み。UID・所持品の生データは保存しません）と、入力した UID は、利用者のブラウザの `localStorage` にだけ保存されます（「編成管理」のバックアップに含まれます）。取り込み画面の「取り込んだデータを削除」で消せます。
 
 ### 4. アクセス解析
 公開サイトでは、アクセス数の集計に、Cloudflare Web Analytics を使っています。Cookie は使いません。送られるのは、ページの URL・ブラウザの種類などの、アクセス情報だけで、編成や設定のデータは送りません。
@@ -65,6 +72,13 @@ The App's use and transfer to any other app of information received from Google 
 
 ### 3. Loading from a link ("?import=")
 The App may load a rotation from a link given in the URL's `import` parameter. It always shows a confirmation first, and contacts the linked (external) site only if you approve. Only an ordinary web request (e.g., your IP address) is sent to that site; no App data is sent.
+
+### 3-2. Importing owned characters from HoYoLAB (optional, extension)
+Only if you install and use the separately distributed Chrome extension ("Genshin Rotation Planner - HoYoLAB import"), you can import your owned characters' data (weapons, artifacts, talent levels, etc.) from your HoYoLAB Battle Chronicle. If you do not use it, the app does not communicate with HoYoLAB.
+
+- **Destination**: The extension communicates with HoYoLAB (`sg-public-api.hoyolab.com`) and, only for another account's UID, with Enka.Network (`enka.network`, an unofficial service that publishes the in-game "Character Showcase" information), directly between your browser and each service. Nothing is sent to the operator's servers. The UID you entered is sent to Enka.Network (no cookies or login information are sent).
+- **Login information**: Your browser attaches your HoYoLAB login cookie to requests to HoYoLAB automatically. Neither the extension nor the app reads, stores or sends the cookie's value.
+- **What is stored**: The imported owned characters (converted; raw UID and inventory data are not stored) and the UID you entered are stored only in your browser's `localStorage` (and included in the backup). You can delete them with "Delete imported data" in the import screen.
 
 ### 4. Analytics
 The public site uses Cloudflare Web Analytics to count visits. It uses no cookies. Only access information such as the page URL and browser type is sent; rotation and settings data are not.

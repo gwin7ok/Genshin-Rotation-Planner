@@ -7,6 +7,8 @@ import { defineConfig } from 'vite';
 
 // アプリの版（package.json の version。唯一の出どころ）と、ビルドしたコミット（画面のフッター・バックアップに記録する）
 const APP_VERSION: string = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8')).version;
+// アプリに同梱する拡張機能の版（拡張機能の manifest.json の version。取り込み画面で、入っている拡張機能が古いときに更新をうながす）
+const EXTENSION_VERSION: string = JSON.parse(readFileSync(path.resolve(__dirname, 'extension/hoyolab-importer/manifest.json'), 'utf8')).version;
 const APP_COMMIT: string = (() => {
   try {
     return execSync('git rev-parse --short HEAD', { cwd: __dirname, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
@@ -20,9 +22,22 @@ export default defineConfig(() => {
     root: __dirname,
     // 公開先の URL のパス（GitHub Pages のプロジェクトサイトは /<リポジトリ名>/）。開発・独自ドメインは '/'
     base: process.env.VITE_BASE || '/',
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        // 拡張機能の版（manifest.json）が変わったら、開発サーバーを再起動して、__EXTENSION_VERSION__ を読み直す
+        name: 'restart-on-extension-manifest',
+        configureServer(server) {
+          const manifest = path.resolve(__dirname, 'extension/hoyolab-importer/manifest.json');
+          server.watcher.add(manifest);
+          server.watcher.on('change', (f) => { if (path.resolve(f) === manifest) void server.restart(); });
+        },
+      },
+    ],
     define: {
       __APP_VERSION__: JSON.stringify(APP_VERSION),
+      __EXTENSION_VERSION__: JSON.stringify(EXTENSION_VERSION),
       __APP_COMMIT__: JSON.stringify(APP_COMMIT),
     },
     json: {

@@ -14,6 +14,11 @@ import { CharacterFilterBar, matchesCharacterFilter, type ElementFilterValue, ty
 import { ELEMENT_COLORS, isEmptySlotCharacter } from '../data/characters';
 import { migrateStintsToNewCharacter } from '../utils/stintReorder';
 import { createEmptyParty, resolvePartyCharacters } from '../utils/party';
+import { isTravelerKey, matchMasterCharacterId, ownedToPartyFields } from '../utils/hoyolab/importCharacters';
+import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
+import { StatsEditModal } from './StatsEditModal';
+import { DEFAULT_CUSTOM_STATS, statsOfBuild } from '../utils/customStats';
+import type { CustomStats } from '../types/genshin';
 import { currentLanguage, t } from '../i18n';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 import { charName, actionName, loc } from '../i18n/loc';
@@ -27,7 +32,11 @@ interface PartyConfigModalProps {
   onUpdatePartyAndStints: (newParty: PartyMember[], newStints: Stint[]) => void;
 }
 
+/** 手で変えたら、持ちキャラの装備（build）の使用を解除する項目 */
+const BUILD_LINKED_FIELDS: string[] = ['constellation', 'weaponId', 'weaponRefinementRank', 'artifactSetId', 'artifactSetMode'];
+
 const updatedHexerei = (m: { hexerei?: boolean } | undefined): boolean => m?.hexerei !== false;
+const updatedTrueMoon = (m: { trueMoon?: boolean } | undefined): boolean => m?.trueMoon !== false;
 const updatedRevelation = (m: { revelation?: boolean } | undefined): boolean => m?.revelation !== false;
 
 export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
@@ -53,6 +62,11 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [warningMsg, setWarningMsg] = useState<string | null>(null);
   const [confirmClearAll, setConfirmClearAll] = useState<boolean>(false);
+  // 取り込み済みの持ちキャラ（HoYoLAB。画面を開くたびに読み直す）
+  const [ownedStore, setOwnedStore] = useState<OwnedStore | null>(null);
+  const [ownedWarnings, setOwnedWarnings] = useState<string[]>([]);
+  // 「ステータスを変更」の画面
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -60,6 +74,9 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       setEditingStints(stints);
       setWarningMsg(null);
       setConfirmClearAll(false);
+      setOwnedStore(loadOwned());
+      setOwnedWarnings([]);
+      setIsStatsOpen(false);
     }
   }, [isOpen, party, stints]);
 
@@ -93,6 +110,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       constellation: defaultConstellation(newRosterChar.rarity),
       energyRecharge: 100,
     };
+    // 取り込み済みの持ちキャラがいれば、持ちキャラの装備を既定値にする（「持ちキャラの装備を使う」を押した状態）
+    const owned = ownedForCurrent(newRosterChar);
+    if (owned) {
+      const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
+      updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+      setOwnedWarnings(warnings);
+    } else {
+      setOwnedWarnings([]);
+    }
     setEditingParty(updated);
 
     // 右隣のスロットが空（未設定）なら、続けて選べるようフォーカスを移す
@@ -133,8 +159,42 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     updated[selectedSlot] = {
       ...updated[selectedSlot],
       [field]: val,
+      // 武器・聖遺物・精錬・凸を手で変えたら、持ちキャラの装備（build）の使用は解除する（値が食い違わないように）
+      ...(BUILD_LINKED_FIELDS.includes(field as string) ? { build: undefined } : {}),
     };
     setEditingParty(updated);
+  };
+
+  /** 今のスロットのキャラに対応する、取り込み済みの持ちキャラ */
+  const ownedForCurrent = (char: CharacterConfig | undefined) =>
+    char && !isEmptySlotCharacter(char)
+      ? ownedStore?.characters.find(o => matchMasterCharacterId(o, [char.id]) === char.id)
+      : undefined;
+
+  const handleUseOwned = () => {
+    const owned = ownedForCurrent(currentSlotChar);
+    if (!owned) return;
+    const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+    setEditingParty(updated);
+    setOwnedWarnings(warnings);
+  };
+
+  const handleRevertOwned = () => {
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined };
+    setEditingParty(updated);
+    setOwnedWarnings([]);
+  };
+
+  /** 「ステータスを変更」で保存: 持ちキャラの装備の使用は解除され、その値が、この枠の仮値になる */
+  const handleSaveStats = (stats: CustomStats) => {
+    const updated = [...editingParty];
+    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined, customStats: stats };
+    setEditingParty(updated);
+    setOwnedWarnings([]);
+    setIsStatsOpen(false);
   };
 
   const handleSave = () => {
@@ -220,6 +280,27 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                     </label>
                   )}
 
+                  {/* 真月（旅人）: 旅人だけ。キャラカードの左下 */}
+                  {!isEmptySlotCharacter(c) && isTravelerKey(c.source?.gcsimKey ?? '') && (
+                    <label
+                      className="absolute bottom-2 left-2 flex items-center gap-1 text-[9px] font-bold text-cyan-300 cursor-pointer select-none"
+                      onClick={(e) => e.stopPropagation()}
+                      title={t('party:trueMoonTitle')}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={updatedTrueMoon(editingParty[idx])}
+                        onChange={(e) => {
+                          const updated = [...editingParty];
+                          updated[idx] = { ...updated[idx], trueMoon: e.target.checked };
+                          setEditingParty(updated);
+                        }}
+                        className="w-3 h-3 accent-cyan-500"
+                      />
+                      <span>{t('party:trueMoon')}</span>
+                    </label>
+                  )}
+
                   {/* 諭示（八重神子・七七）: 対応するキャラだけ。キャラカードの左下 */}
                   {!isEmptySlotCharacter(c) && hasRevelationSetting(c) && (
                     <label
@@ -249,7 +330,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       onKeyDown={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         const updated = [...editingParty];
-                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10) };
+                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10), build: undefined };
                         setEditingParty(updated);
                       }}
                       className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
@@ -341,6 +422,46 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 </div>
               </div>
 
+              {/* 持ちキャラの装備（HoYoLAB から取り込んだ値）。使うと、Lv・天賦・武器Lv・聖遺物のステータスを実際の値で gcsim に渡す */}
+              {(() => {
+                const owned = ownedForCurrent(currentSlotChar);
+                const build = editingParty[selectedSlot]?.build;
+                if (!owned && !build && isEmptySlotCharacter(currentSlotChar)) return null;
+                const customStats = editingParty[selectedSlot]?.customStats;
+                return (
+                  <div className="mb-3 rounded-lg border border-sky-500/30 bg-sky-950/20 p-2.5 text-xs space-y-1.5" data-testid="owned-build-section">
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold ${build ? 'text-emerald-300' : 'text-slate-300'}`} data-testid="owned-build-state">
+                        {build ? t('party:owned.appliedOwned') : t('party:owned.appliedDefault')}
+                      </span>
+                      <button onClick={() => setIsStatsOpen(true)} data-testid="owned-build-edit-stats" className="ml-auto px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
+                        {t('party:stats.open')}
+                      </button>
+                      {build ? (
+                        <button onClick={handleRevertOwned} data-testid="owned-build-revert" className="px-2 py-0.5 rounded border border-slate-600 text-slate-300 hover:bg-slate-800">
+                          {t('party:owned.revert')}
+                        </button>
+                      ) : owned ? (
+                        <button onClick={handleUseOwned} data-testid="owned-build-use" className="px-2.5 py-0.5 rounded bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold">
+                          {t('party:owned.use')}
+                        </button>
+                      ) : null}
+                    </div>
+                    <p className="text-[10px] text-slate-400">
+                      {(() => {
+                        const s = build ?? customStats ?? DEFAULT_CUSTOM_STATS;
+                        return t('party:owned.summaryActive', { level: s.level, max: s.maxLevel, talents: s.talents.join('/'), weaponLevel: s.weaponLevel, stats: Object.keys(s.artifactStats).length });
+                      })()}
+                    </p>
+                    {!build && owned && <p className="text-[10px] text-slate-500">{t('party:owned.summaryAvailable', { level: owned.level, max: owned.maxLevel, cons: owned.constellation, weapon: owned.weapon.name })}</p>}
+                    {build && <p className="text-[10px] text-slate-500">{t('party:owned.note')}</p>}
+                    {ownedWarnings.map(w => (
+                      <p key={w} className="text-[10px] text-amber-300">{w}</p>
+                    ))}
+                  </div>
+                );
+              })()}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {/* Weapon Selection from Database & Refinement Rank */}
                 <div className="space-y-1.5">
@@ -376,6 +497,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           ...updated[selectedSlot],
                           weaponId: newWeaponId,
                           weaponRefinementRank: defaultRank,
+                          build: undefined,
                         };
                         setEditingParty(updated);
                       }}
@@ -475,6 +597,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           updated[selectedSlot] = {
                             ...updated[selectedSlot],
                             artifactSetMode: mode,
+                            build: undefined,
                             ...(mode === '2+2' ? { artifactSetId: undefined } : {}),
                           };
                           setEditingParty(updated);
@@ -652,6 +775,15 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                         <div className="font-bold text-xs text-white truncate flex items-center gap-1">
                           <span className="truncate">{charName(rosterChar)}</span>
                           <GcsimMissingBadge char={rosterChar} />
+                          {!isCustom && !ownedForCurrent(rosterChar) && (
+                            <span
+                              data-testid="not-owned-badge"
+                              title={t('party:notOwnedTitle')}
+                              className="inline-flex items-center shrink-0 px-1.5 py-px rounded border border-slate-500/50 bg-slate-500/15 text-slate-300 text-[9px] font-bold leading-tight whitespace-nowrap select-none"
+                            >
+                              {t('party:notOwned')}
+                            </span>
+                          )}
                           {isCustom && <span className="text-[8px] text-amber-300 font-mono">✦</span>}
                         </div>
                         <div className={`text-[10px] ${elemTheme.text}`}>
@@ -687,6 +819,17 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
           </div>
         </div>
       </div>
+      {isStatsOpen && (
+        <StatsEditModal
+          key={`${selectedSlot}-${editingParty[selectedSlot]?.characterId}`}
+          initial={editingParty[selectedSlot]?.build ? statsOfBuild(editingParty[selectedSlot].build!) : editingParty[selectedSlot]?.customStats ?? DEFAULT_CUSTOM_STATS}
+          fromOwned={!!editingParty[selectedSlot]?.build}
+          previewChar={currentSlotChar}
+          database={database}
+          onSave={handleSaveStats}
+          onClose={() => setIsStatsOpen(false)}
+        />
+      )}
     </div>
   );
 };

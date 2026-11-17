@@ -8,6 +8,7 @@ import { Header } from './components/Header';
 import { StintSequenceEditor } from './components/StintSequenceEditor';
 import { GanttChart } from './components/GanttChart';
 import { PartyConfigModal } from './components/PartyConfigModal';
+import { OwnedCharactersModal } from './components/OwnedCharactersModal';
 import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { UpdateNoticeModal } from './components/UpdateNoticeModal';
@@ -70,7 +71,7 @@ function makeReactionSignature(
   stints: Stint[],
 ): string {
   return JSON.stringify([
-    characters.map(c => [c.id, c.weaponId, c.weaponRefinementRank, c.artifactSetId, c.artifactSetMode, c.constellation, c.hexerei, c.revelation, c.energyRecharge]),
+    characters.map(c => [c.id, c.weaponId, c.weaponRefinementRank, c.artifactSetId, c.artifactSetMode, c.constellation, c.hexerei, c.revelation, c.energyRecharge, c.trueMoon, c.build, c.customStats]),
     switchDelay,
     loopStartIndex,
     stints.map(st => [st.characterId, st.actions.map(a => a.id)]),
@@ -145,6 +146,7 @@ export default function App() {
 
   // 3. Modals & Action Selection State
   const [isPartyModalOpen, setIsPartyModalOpen] = useState<boolean>(false);
+  const [isOwnedModalOpen, setIsOwnedModalOpen] = useState<boolean>(false);
   // 使い方
   const [isUsageOpen, setIsUsageOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
@@ -844,6 +846,7 @@ export default function App() {
           reactions: slot.reactions,
         })}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
+        onOpenOwnedModal={() => setIsOwnedModalOpen(true)}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
@@ -976,6 +979,9 @@ export default function App() {
         onSave={handleSaveAs}
       />
 
+      {/* 持ちキャラの取り込み（HoYoLAB） */}
+      <OwnedCharactersModal isOpen={isOwnedModalOpen} onClose={() => setIsOwnedModalOpen(false)} database={database} />
+
       {/* Party Configuration Modal */}
       <PartyConfigModal
         isOpen={isPartyModalOpen}
@@ -1028,6 +1034,7 @@ export default function App() {
         onClose={() => setIsEnergyRechargeOpen(false)}
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, extra)}
         characters={characters}
+        database={database}
       />
 
       {/* gcsim 設定文 */}

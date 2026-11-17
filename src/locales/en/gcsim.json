@@ -134,6 +134,8 @@
     "colCertain": "Certain",
     "colCertainTitle": "Enough for every collected burst (100%; verified in gcsim). Works even with the worst luck, so it reads high because it picks the worst random window",
     "colName": "Character",
+    "colCurrent": "Current",
+    "colCurrentTitle": "Energy Recharge calculated by gcsim from the current settings (owned build & stats, or defaults), including weapon, character and artifact set bonuses. Green: at or above the certain value; yellow: at or above the stable value; red: below",
     "enemyParticles": "Enemy particles (non-elemental particles from enemies, crystals, drops, etc.)",
     "enemyParticlesEvery": "seconds, every",
     "enemyParticlesUnit": "particle(s)",

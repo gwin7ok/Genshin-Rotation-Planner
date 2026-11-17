@@ -15,5 +15,9 @@ public/gcsim/main.wasm
 public/gcsim/wasm_exec.js
 public/gcsim/wasm-info.json
 
+# 拡張機能の zip（npm run ext:pack で、extension/hoyolab-importer から生成。dev・build の前に自動で作る）
+public/downloads/
+
+
 # HoYoLAB の API の生データの保存先（調査用。2MB 級・アカウントの情報を含むため Git に入れない）
 tools/hoyolab-fetch/out/

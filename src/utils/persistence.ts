@@ -34,6 +34,10 @@ export const SETTING_KEYS = {
   requiredEnergyRecharge: 'requiredEnergyRecharge',
   /** 表示の言語（'ja' | 'en'。無ければブラウザの言語に従う。D246〜D248） */
   language: 'appLanguage',
+  /** HoYoLAB から取り込んだ持ちキャラ（JSON。{ importedAt, characters }。src/utils/hoyolab/ownedStore.ts） */
+  ownedCharacters: 'ownedCharacters',
+  /** HoYoLAB の取り込みで入力した原神の UID（文字列。入力の手間を減らすため） */
+  hoyolabUid: 'hoyolabUid',
 } as const;
 
 /** この端末だけの設定のキー（バックアップに含めない） */

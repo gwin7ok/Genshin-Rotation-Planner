@@ -67,11 +67,44 @@ const call = async (endpoint, uid, server, body) => {
   return json.data;
 };
 
+/** 他のアカウントの UID: 詳細の一括取得は許可されない（retcode 10104）。1 キャラずつ取得し、取得できたものだけ集める */
+const NOT_ALLOWED = 10104;
+const MAX_CONSECUTIVE_DENIED = 20; // 1 つも取得できないまま、これだけ続けて拒否されたら、あきらめる
+const fetchOneByOne = async (uid, server, ids, firstError) => {
+  const merged = { list: [] };
+  let denied = 0;
+  for (const id of ids) {
+    try {
+      const part = await call('character/detail', uid, server, { character_ids: [id] });
+      merged.list.push(...(part.list ?? []));
+      for (const [k, v] of Object.entries(part)) {
+        if (k !== 'list' && v && typeof v === 'object') merged[k] = { ...(merged[k] ?? {}), ...v };
+      }
+      denied = 0;
+    } catch (e) {
+      if (e.retcode !== NOT_ALLOWED) {
+        if (merged.list.length === 0) throw e; // 1 つも取れていなければ、そのエラーを返す
+        break; // 取れた分だけ返す（回数制限など）
+      }
+      denied++;
+      if (merged.list.length === 0 && denied >= MAX_CONSECUTIVE_DENIED) break;
+    }
+  }
+  if (merged.list.length === 0) throw firstError;
+  merged.skipped = ids.length - merged.list.length;
+  return merged;
+};
+
 /** 所持キャラの詳細（生のレスポンス）を返す。 */
 export const fetchCharacters = async (uid) => {
   const server = SERVERS[String(uid)[0]];
   if (!server) throw new Error('UID からサーバーを判別できません');
   const list = await call('character/list', uid, server, {});
   const ids = list.list.map((c) => c.id);
-  return call('character/detail', uid, server, { character_ids: ids });
+  try {
+    return await call('character/detail', uid, server, { character_ids: ids });
+  } catch (e) {
+    if (e.retcode !== NOT_ALLOWED) throw e;
+    return fetchOneByOne(uid, server, ids, e);
+  }
 };

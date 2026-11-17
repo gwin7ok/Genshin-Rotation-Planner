@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Genshin Rotation Planner - HoYoLAB 取り込み",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HoYoLAB の戦績から所持キャラの詳細を取得し、Genshin Rotation Planner に渡します。Cookie の値は読み取りません。",
   "permissions": [],
   "host_permissions": [

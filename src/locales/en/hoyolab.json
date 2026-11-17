@@ -39,13 +39,14 @@
     "placeholder": "9 digits",
     "loginHint": "Before importing, log in to HoYoLAB in this Chrome. You cannot import without logging in.",
     "loginLink": "Open HoYoLAB",
-    "hint": "For the UID of the account you are logged in with, you can import even if the HoYoLAB \"Character Details\" privacy setting is off."
+    "hint": "For the UID of the account you are logged in with, all characters are imported even if the HoYoLAB \"Character Details\" privacy setting is off. For another account's UID, only the characters its owner has made public are imported. Importing again replaces the previous import."
   },
   "import": {
     "button": "Import",
     "running": "Fetching from HoYoLAB…",
     "resolving": "Checking ascension phases…",
     "done": "Imported {{count}} characters",
+    "donePartial": "{{count}} characters imported (only the characters the owner has made public; {{skipped}} could not be fetched)",
     "invalidUid": "Enter the UID as 9 digits",
     "noExtension": "No response from the extension. Check that it is installed",
     "errorPrivate": "Could not get the Battle Chronicle. Check that the UID you entered belongs to the account you are logged in with. The UID of another account can only be imported if its owner has made the Battle Chronicle public ({{message}})",

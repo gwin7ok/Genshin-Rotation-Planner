@@ -27,7 +27,11 @@ export interface HoyolabCharacter {
   base_properties?: { property_type: number; base: string }[];
   skills: { skill_id: number; skill_type: number; name: string; level: number }[];
 }
-export interface HoyolabDetailResponse { list: HoyolabCharacter[] }
+export interface HoyolabDetailResponse {
+  list: HoyolabCharacter[];
+  /** 他のアカウントの UID で、取得できなかったキャラの数（拡張機能が、1 キャラずつ取得したときだけ付く） */
+  skipped?: number;
+}
 
 /** 持ちキャラ（取り込んだ結果）。マスターの ID で参照する */
 export interface OwnedCharacter {

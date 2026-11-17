@@ -156,7 +156,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     saveHoyolabUid(uid);
     if (saveOwned(resolved)) {
       setStore(loadOwned());
-      setMessage({ kind: 'ok', text: t('hoyolab:import.done', { count: resolved.length }) });
+      const skipped = res.data.skipped ?? 0;
+      setMessage({ kind: 'ok', text: skipped > 0 ? t('hoyolab:import.donePartial', { count: resolved.length, skipped }) : t('hoyolab:import.done', { count: resolved.length }) });
     } else {
       setMessage({ kind: 'error', text: t('hoyolab:import.errorGeneric', { message: 'storage' }) });
     }

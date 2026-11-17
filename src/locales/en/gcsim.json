@@ -209,6 +209,7 @@
       "dendro": "Dendro"
     },
     "enemiesNote": "Up to {{max}} enemies, all at the same position, so AoE hits every enemy. Resistances are in % (negative allowed). Starting elemental application on enemies cannot be set in a gcsim config (apply it with attacks in the rotation).",
-    "note": "- Burst energy is ignored, as in the app's calculation (bursts are always available).\n- Time runs from 0 s to the later of the last action start and the last damage.\n- Totals are the damage events (including reactions and extra damage) in the gcsim {{version}} detailed log.\n- Real fights differ (enemy movement, missed actions, etc.)."
+    "note": "- Burst energy is ignored, as in the app's calculation (bursts are always available).\n- Time runs from 0 s to the later of the last action start and the last damage.\n- Totals are the damage events (including reactions and extra damage) in the gcsim {{version}} detailed log.\n- Real fights differ (enemy movement, missed actions, etc.).",
+    "totalDpsPartial": "Average so far ({{done}} of {{total}} runs)"
   }
 }

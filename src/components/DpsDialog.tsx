@@ -43,6 +43,8 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const [progress, setProgress] = useState<DpsProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [result, setResult] = useState<{ result: DpsResult; members: { characterId: string; name: string }[]; ranAt: number; elapsedMs: number; settingsText: string } | null>(null);
+  // 計算中の途中経過の表に使う、編成のキャラ（結果が出るまでの間）
+  const [runMembers, setRunMembers] = useState<{ characterId: string; name: string }[]>([]);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
   // キャラごとの最終ステータス（持ちキャラの装備・仮値のまま gcsim で計算した開始時の値）
   const [stats, setStats] = useState<Record<string, FinalStats>>({});
@@ -97,6 +99,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     saveDpsSettings(s);
     const config = buildRef.current({ loopIterations: s.loops, enemies: s.enemies });
     cancelRef.current = false;
+    setRunMembers(config.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setRunning(true);
     setMessage(null);
     setProgress(null);
@@ -132,7 +135,8 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     return [w ? `${loc(w, 'name')} R${c.weaponRefinementRank ?? '?'}` : null, setNames || null].filter(Boolean).join(' ・ ');
   };
 
-  const r = result?.result;
+  // 計算中は、ここまでの途中経過の平均を出す（終わると、最終結果になる）
+  const r = running ? progress?.partial : result?.result;
   const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
 
   return (
@@ -170,7 +174,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
           {r && r.runs > 0 && (
             <div className="space-y-3" data-testid="dps-result">
               <div className="bg-slate-950/50 border border-slate-800 rounded-lg p-4">
-                <div className="text-[11px] text-slate-400">{t('gcsim:dps.totalDps')}</div>
+                <div className="text-[11px] text-slate-400">{running ? t('gcsim:dps.totalDpsPartial', { done: progress?.done ?? 0, total: progress?.total ?? 0 }) : t('gcsim:dps.totalDps')}</div>
                 <div className="text-3xl font-bold text-rose-300 font-mono" data-testid="dps-value">{fmt(r.dps.mean)}<span className="text-sm font-normal text-slate-400 ml-1">DPS</span></div>
                 <div className="text-[11px] text-slate-500 mt-1">
                   {t('gcsim:dps.spread', { sd: fmt(r.dps.sd), min: fmt(r.dps.min), max: fmt(r.dps.max) })}
@@ -187,7 +191,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                   </tr>
                 </thead>
                 <tbody>
-                  {result!.members.map((m, i) => {
+                  {(running ? runMembers : result!.members).map((m, i) => {
                     const c = charOf(m.characterId);
                     const row = r.byChar[i];
                     return (

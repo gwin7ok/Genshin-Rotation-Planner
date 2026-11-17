@@ -100,6 +100,8 @@ export function aggregateDps(runs: DpsRun[], memberCount: number): DpsResult {
 export interface DpsProgress {
   done: number;
   total: number;
+  /** ここまでに終えた実行の平均（計算中の途中経過。まだ 1 回も終えていなければ無い） */
+  partial?: DpsResult;
 }
 
 export type DpsOutcome =
@@ -130,7 +132,7 @@ export async function computeDps(args: {
       if (r.status !== 'ok') return { status: r.status, message: r.message };
       collected.push(summarizeDamage(r.logs, config.members.length));
     }
-    args.onProgress?.({ done: collected.length, total: runs });
+    args.onProgress?.({ done: collected.length, total: runs, partial: aggregateDps(collected, config.members.length) });
   }
   return { status: 'ok', result: aggregateDps(collected, config.members.length), members: config.members };
 }

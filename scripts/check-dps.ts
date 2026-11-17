@@ -76,6 +76,9 @@ if (o2.status === 'ok' && o5.status === 'ok') {
   check(o5.result.seconds > r.seconds, '周数が多いほど、時間が延びる');
   const two = await dps.computeDps({ config: build(2, [DEFAULT_ENEMY, DEFAULT_ENEMY]), runs: 3, parallel: 3, run: runGcsimSample });
   check(two.status === 'ok', '敵 2 体の設定文が実行できる');
+  const seen: { done: number; mean?: number }[] = [];
+  await dps.computeDps({ config: c2, runs: 4, parallel: 2, run: runGcsimSample, onProgress: (pr: any) => seen.push({ done: pr.done, mean: pr.partial?.dps.mean }) });
+  check(seen.length === 3 && seen[0].mean === undefined && seen[1].done === 2 && (seen[1].mean ?? 0) > 0 && seen[2].done === 4, '途中経過: 実行を終えるごとに、ここまでの平均 DPS が渡る');
 }
 await server.close();
 if (failed) { console.error(`\n${failed} 件失敗`); process.exit(1); }

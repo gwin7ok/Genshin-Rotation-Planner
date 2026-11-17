@@ -80,11 +80,11 @@
       "characterId": "10000023-pyro",
       "constellation": 6,
       "energyRecharge": 100,
-      "weaponId": "13415",
+      "weaponId": "13407",
       "weaponRefinementRank": 5,
       "artifactSetId": "15020",
       "artifactSetMode": "4pc",
-      "build": {
+      "customStats": {
         "level": 90,
         "maxLevel": 90,
         "talents": [
@@ -94,12 +94,6 @@
         ],
         "weaponLevel": 90,
         "weaponMaxLevel": 90,
-        "artifactSets": [
-          {
-            "id": "15020",
-            "count": 4
-          }
-        ],
         "artifactStats": {
           "hp": 5856,
           "cd": 0.66,
@@ -165,19 +159,34 @@
           "name": "元素スキル: サロン·ソリティア",
           "shortName": "E",
           "type": "skill",
-          "duration": 0.883,
+          "duration": 0.9,
           "durationManual": true,
-          "gcsimBaseDuration": 0.883,
+          "gcsimBaseDuration": 0.9,
           "cooldown": 20,
           "gcsimCdResonance": 1,
           "effectDuration": 29.233,
           "naturalDuration": 0.883,
           "gcsimCtOffset": 0
+        },
+        {
+          "id": "act_1794896599584_hn8q",
+          "actionTypeId": "10000089-hydro_q",
+          "name": "元素爆発: 万民のカルナバル",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.85,
+          "naturalDuration": 1.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.85,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "effectDuration": 18.2,
+          "gcsimCtOffset": 0
         }
       ],
       "startTime": 0,
-      "endTime": 1.483,
-      "duration": 1.483,
+      "endTime": 3.433,
+      "duration": 3.433,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv4y8not_9",
@@ -192,16 +201,24 @@
           "passiveEffectId": "wbuff_11513",
           "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-hp-buff）",
           "offset": 2.033,
-          "duration": 6,
+          "duration": 23.683,
           "gcsimKey": "splendoroftranquilwaters-hp-buff"
         },
         {
           "id": "ptrg_gcsim_mwk50xqp_3",
           "passiveEffectId": "wbuff_11513",
           "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-skill-buff）",
-          "offset": 2.033,
-          "duration": 6,
+          "offset": 3.683,
+          "duration": 22.217,
           "gcsimKey": "splendoroftranquilwaters-skill-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwkba689_0",
+          "passiveEffectId": "10000089-hydro_p1",
+          "name": "終わりなき円舞",
+          "offset": 11.267,
+          "duration": 12.45,
+          "gcsimKey": "furina-a1"
         }
       ]
     },
@@ -223,18 +240,43 @@
           "gcsimCdResonance": 1,
           "naturalDuration": 0.683,
           "gcsimCtOffset": 0.3
+        },
+        {
+          "id": "act_1794896608543_a9iu",
+          "actionTypeId": "10000107-cryo_q",
+          "name": "元素爆発: 諸曜の令",
+          "shortName": "Q",
+          "type": "burst",
+          "duration": 1.85,
+          "naturalDuration": 1.85,
+          "durationManual": true,
+          "gcsimBaseDuration": 1.85,
+          "cooldown": 15,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0
+        },
+        {
+          "id": "act_1794896610192_sm53",
+          "actionTypeId": "10000107-cryo_e",
+          "name": "元素スキル: 霜暁の黒星",
+          "shortName": "E",
+          "type": "skill",
+          "duration": 0.683,
+          "naturalDuration": 0.683,
+          "durationManual": true,
+          "gcsimBaseDuration": 0.683
         }
       ],
-      "startTime": 1.483,
-      "endTime": 2.766,
-      "duration": 1.283,
+      "startTime": 3.433,
+      "endTime": 7.449,
+      "duration": 4.016,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv4y8not_d",
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-hydro）",
           "offset": 0.833,
-          "duration": 12.3,
+          "duration": 27.333,
           "gcsimKey": "citlali-a1-hydro",
           "cooldown": 8
         },
@@ -243,7 +285,7 @@
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-pyro）",
           "offset": 0.833,
-          "duration": 12.3,
+          "duration": 27.333,
           "gcsimKey": "citlali-a1-pyro",
           "cooldown": 8
         },
@@ -261,7 +303,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+12%",
           "offset": 0.833,
-          "duration": 15.3,
+          "duration": 28.217,
           "gcsimKey": "scroll-4pc-cryo"
         },
         {
@@ -269,7 +311,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
           "offset": 0.833,
-          "duration": 20.3,
+          "duration": 33.217,
           "gcsimKey": "scroll-4pc-nightsoul-cryo"
         },
         {
@@ -277,7 +319,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+12%",
           "offset": 0.833,
-          "duration": 15.3,
+          "duration": 20.417,
           "gcsimKey": "scroll-4pc-hydro"
         },
         {
@@ -285,78 +327,26 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
           "offset": 0.833,
-          "duration": 20.3,
+          "duration": 25.417,
           "gcsimKey": "scroll-4pc-nightsoul-hydro"
+        },
+        {
+          "id": "ptrg_gcsim_mwkba68a_1",
+          "passiveEffectId": "abuff_15037",
+          "name": "絵巻4: 炎元素ダメージ+12%",
+          "offset": 8.117,
+          "duration": 20.933,
+          "gcsimKey": "scroll-4pc-pyro"
+        },
+        {
+          "id": "ptrg_gcsim_mwkba68a_2",
+          "passiveEffectId": "abuff_15037",
+          "name": "絵巻4: 炎元素ダメージ+28%（夜魂の加護中）",
+          "offset": 8.117,
+          "duration": 25.933,
+          "gcsimKey": "scroll-4pc-nightsoul-pyro"
         }
       ]
-    },
-    {
-      "id": "stint_1790750005957",
-      "characterId": "10000089-hydro",
-      "note": "",
-      "actions": [
-        {
-          "id": "act_1790750048155_xohf",
-          "actionTypeId": "10000089-hydro_q",
-          "name": "元素爆発: 万民のカルナバル",
-          "shortName": "Q",
-          "type": "burst",
-          "duration": 1.85,
-          "durationManual": true,
-          "cooldown": 15,
-          "effectDuration": 18.2,
-          "gcsimBaseDuration": 1.85,
-          "gcsimCdResonance": 1,
-          "naturalDuration": 1.85,
-          "gcsimCtOffset": 0
-        }
-      ],
-      "startTime": 2.766,
-      "endTime": 5.216,
-      "duration": 2.45,
-      "passiveTriggers": [
-        {
-          "id": "ptrg_gcsim_mv4y8not_8",
-          "passiveEffectId": "10000089-hydro_p1",
-          "name": "終わりなき円舞",
-          "offset": 8.65,
-          "duration": 12.45,
-          "gcsimKey": "furina-a1"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_a",
-          "passiveEffectId": "wbuff_11511",
-          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-buff）",
-          "offset": 0.017,
-          "duration": 21.2,
-          "gcsimKey": "khaj-nisut-buff"
-        },
-        {
-          "id": "ptrg_gcsim_mva0jvzc_0",
-          "passiveEffectId": "wbuff_11511",
-          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-team-buff）",
-          "offset": 1.217,
-          "duration": 20.3,
-          "gcsimKey": "khaj-nisut-team-buff"
-        },
-        {
-          "id": "ptrg_gcsim_mwk50xqp_2",
-          "passiveEffectId": "wbuff_11513",
-          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-hp-buff）",
-          "offset": 0.85,
-          "duration": 22.167,
-          "gcsimKey": "splendoroftranquilwaters-hp-buff"
-        },
-        {
-          "id": "ptrg_gcsim_mwk50xqp_4",
-          "passiveEffectId": "wbuff_11513",
-          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-skill-buff）",
-          "offset": 2.5,
-          "duration": 20.517,
-          "gcsimKey": "splendoroftranquilwaters-skill-buff"
-        }
-      ],
-      "groups": []
     },
     {
       "id": "stint_1790750011163",
@@ -394,16 +384,16 @@
           "gcsimCtOffset": 0.3
         }
       ],
-      "startTime": 5.216,
-      "endTime": 8.483,
-      "duration": 3.2670000000000003,
+      "startTime": 7.449,
+      "endTime": 10.716,
+      "duration": 3.2669999999999995,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv4y8not_b",
           "passiveEffectId": "10000023-pyro_c1",
           "name": "1凸「外カリ中フワ」",
           "offset": 2.6,
-          "duration": 11.217,
+          "duration": 11.183,
           "gcsimKey": "xiangling-c1"
         },
         {
@@ -413,152 +403,6 @@
           "offset": 2.383,
           "duration": 14,
           "gcsimKey": "xlc6"
-        }
-      ]
-    },
-    {
-      "id": "stint_1790750012086",
-      "characterId": "10000107-cryo",
-      "note": "",
-      "actions": [
-        {
-          "id": "act_1790750078034_op93",
-          "actionTypeId": "10000107-cryo_q",
-          "name": "元素爆発: 諸曜の令",
-          "shortName": "Q",
-          "type": "burst",
-          "duration": 1.833,
-          "durationManual": true,
-          "cooldown": 15,
-          "gcsimBaseDuration": 1.833,
-          "gcsimCdResonance": 1,
-          "naturalDuration": 1.833,
-          "gcsimCtOffset": 0
-        }
-      ],
-      "startTime": 8.483,
-      "endTime": 10.916,
-      "duration": 2.433,
-      "passiveTriggers": [
-        {
-          "id": "ptrg_gcsim_mv4y8not_e",
-          "passiveEffectId": "10000107-cryo_p1",
-          "name": "五重天の寒雨（citlali-a1-hydro）",
-          "offset": 2.667,
-          "duration": 20.633,
-          "gcsimKey": "citlali-a1-hydro",
-          "cooldown": 8
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_g",
-          "passiveEffectId": "10000107-cryo_p1",
-          "name": "五重天の寒雨（citlali-a1-pyro）",
-          "offset": 2.667,
-          "duration": 20.633,
-          "gcsimKey": "citlali-a1-pyro",
-          "cooldown": 8
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_j",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 氷元素ダメージ+12%",
-          "offset": 3.133,
-          "duration": 23.167,
-          "gcsimKey": "scroll-4pc-cryo"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_l",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.133,
-          "duration": 28.167,
-          "gcsimKey": "scroll-4pc-nightsoul-cryo"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_n",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 水元素ダメージ+12%",
-          "offset": 3.133,
-          "duration": 15.817,
-          "gcsimKey": "scroll-4pc-hydro"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_p",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.133,
-          "duration": 20.817,
-          "gcsimKey": "scroll-4pc-nightsoul-hydro"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_q",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 炎元素ダメージ+12%",
-          "offset": 3.4,
-          "duration": 22.9,
-          "gcsimKey": "scroll-4pc-pyro"
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8nou_r",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 炎元素ダメージ+28%（夜魂の加護中）",
-          "offset": 3.4,
-          "duration": 27.9,
-          "gcsimKey": "scroll-4pc-nightsoul-pyro"
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_1",
-          "passiveEffectId": "10000107-cryo_p1",
-          "name": "五重天の寒雨（citlali-a1-hydro）",
-          "offset": 13.233,
-          "duration": 12,
-          "gcsimKey": "citlali-a1-hydro",
-          "gcsimMissed": true
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_2",
-          "passiveEffectId": "10000107-cryo_p1",
-          "name": "五重天の寒雨（citlali-a1-pyro）",
-          "offset": 13.233,
-          "duration": 12,
-          "gcsimKey": "citlali-a1-pyro",
-          "gcsimMissed": true
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_3",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 氷元素ダメージ+12%",
-          "offset": 13.233,
-          "duration": 15,
-          "gcsimKey": "scroll-4pc-cryo",
-          "gcsimMissed": true
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_4",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
-          "offset": 13.233,
-          "duration": 20,
-          "gcsimKey": "scroll-4pc-nightsoul-cryo",
-          "gcsimMissed": true
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_5",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 水元素ダメージ+12%",
-          "offset": 13.233,
-          "duration": 15,
-          "gcsimKey": "scroll-4pc-hydro",
-          "gcsimMissed": true
-        },
-        {
-          "id": "ptrg_gcsim_mvxa5m6e_6",
-          "passiveEffectId": "abuff_15037",
-          "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
-          "offset": 13.233,
-          "duration": 20,
-          "gcsimKey": "scroll-4pc-nightsoul-hydro",
-          "gcsimMissed": true
         }
       ]
     },
@@ -588,18 +432,18 @@
           "name": "元素スキル(長押し): 嗚呼流·風隠急進",
           "shortName": "hE",
           "type": "skill_hold",
-          "duration": 7.8,
+          "duration": 8.4,
           "durationManual": true,
-          "cooldown": 9,
-          "gcsimBaseDuration": 7.8,
+          "cooldown": 9.3,
+          "gcsimBaseDuration": 8.4,
           "gcsimCdResonance": 1,
-          "naturalDuration": 9.133,
-          "gcsimCtOffset": 6.833
+          "naturalDuration": 7.8,
+          "gcsimCtOffset": 7.433
         }
       ],
-      "startTime": 10.916,
-      "endTime": 20.597,
-      "duration": 9.681000000000001,
+      "startTime": 10.716,
+      "endTime": 20.867,
+      "duration": 10.151000000000002,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mv4y8nos_0",
@@ -623,7 +467,7 @@
           "id": "ptrg_gcsim_mv4y8nos_2",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 5.95,
+          "offset": 7.05,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
           "cooldown": 2
@@ -642,7 +486,7 @@
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvpyro）",
           "offset": 0.7,
-          "duration": 18.25,
+          "duration": 16.45,
           "gcsimKey": "vvpyro"
         },
         {
@@ -687,14 +531,15 @@
           "name": "翠緑4: 拡散耐性-40%（vvpyro）",
           "offset": 16.417,
           "duration": 2.833,
-          "gcsimKey": "vvpyro"
+          "gcsimKey": "vvpyro",
+          "gcsimMissed": true
         }
       ]
     }
   ],
   "loopStartIndex": 0,
   "loopStartTime": 0,
-  "totalDuration": 20.57,
+  "totalDuration": 20.98,
   "switchDelay": 0.5,
-  "exportedAt": "2026-11-17T05:48:30.888Z"
+  "exportedAt": "2026-11-17T06:34:04.475Z"
 }

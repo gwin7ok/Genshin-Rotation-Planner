@@ -34,10 +34,12 @@ const crc32 = (buf: Buffer): number => {
 const DOS_TIME = 0;
 const DOS_DATE = ((2020 - 1980) << 9) | (1 << 5) | 1;
 
-const files = fs.readdirSync(SRC_DIR, { withFileTypes: true })
-  .filter(e => e.isFile() && !EXCLUDE.has(e.name))
-  .map(e => e.name)
-  .sort();
+/** SRC_DIR の下のファイルを、zip の中のパス（/ 区切り）で並べる（icons/ などの下のフォルダも含む） */
+const listFiles = (dir: string, prefix = ''): string[] =>
+  fs.readdirSync(dir, { withFileTypes: true }).flatMap(e =>
+    e.isDirectory() ? listFiles(path.join(dir, e.name), `${prefix}${e.name}/`)
+      : e.isFile() && !EXCLUDE.has(e.name) ? [`${prefix}${e.name}`] : []);
+const files = listFiles(SRC_DIR).sort();
 if (!files.includes('manifest.json')) throw new Error(`${SRC_DIR} に manifest.json がありません`);
 
 const locals: Buffer[] = [];

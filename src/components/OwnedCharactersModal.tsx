@@ -9,6 +9,7 @@ import { useDialogs } from './DialogProvider';
 import { fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
+import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
 import { clearOwned, loadHoyolabUid, loadOwned, saveHoyolabUid, saveOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
 
 /** 拡張機能の zip を置く、GitHub のリリースページ */
@@ -220,6 +221,16 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
               </button>
             </div>
             {extVersion === null && <InstallGuide />}
+            {extOk && isOlderVersion(extVersion, BUNDLED_EXTENSION_VERSION) && (
+              <div className="rounded-lg border border-amber-500/50 bg-amber-950/30 p-2.5 space-y-1.5" data-testid="ext-update-notice">
+                <p className="font-semibold text-amber-200 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 shrink-0" />{t('hoyolab:ext.updateTitle', { installed: extVersion, latest: BUNDLED_EXTENSION_VERSION })}</p>
+                <p className="text-[11px] text-amber-100/90 leading-relaxed">{t('hoyolab:ext.updateBody')}</p>
+                <p className="text-[11px] text-slate-300 leading-relaxed">{t('hoyolab:install.update')}</p>
+                <a href={EXTENSION_ZIP_URL} download="grp-hoyolab-importer.zip" data-testid="ext-update-download" className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/60 bg-sky-500/15 text-sky-200 hover:bg-sky-500/25 font-semibold transition-colors">
+                  <Download className="w-3.5 h-3.5" />{t('hoyolab:install.s1Button')}
+                </a>
+              </div>
+            )}
             <p className="text-[10px] text-slate-500">{t('hoyolab:ext.note')}</p>
           </div>
 

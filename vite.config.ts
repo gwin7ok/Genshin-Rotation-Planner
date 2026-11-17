@@ -7,6 +7,8 @@ import { defineConfig } from 'vite';
 
 // アプリの版（package.json の version。唯一の出どころ）と、ビルドしたコミット（画面のフッター・バックアップに記録する）
 const APP_VERSION: string = JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8')).version;
+// アプリに同梱する拡張機能の版（拡張機能の manifest.json の version。取り込み画面で、入っている拡張機能が古いときに更新をうながす）
+const EXTENSION_VERSION: string = JSON.parse(readFileSync(path.resolve(__dirname, 'extension/hoyolab-importer/manifest.json'), 'utf8')).version;
 const APP_COMMIT: string = (() => {
   try {
     return execSync('git rev-parse --short HEAD', { cwd: __dirname, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
@@ -23,6 +25,7 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     define: {
       __APP_VERSION__: JSON.stringify(APP_VERSION),
+      __EXTENSION_VERSION__: JSON.stringify(EXTENSION_VERSION),
       __APP_COMMIT__: JSON.stringify(APP_COMMIT),
     },
     json: {

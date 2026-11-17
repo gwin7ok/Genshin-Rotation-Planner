@@ -6,6 +6,8 @@
     "ok": "拡張機能を検出しました（v{{version}}）",
     "missing": "拡張機能が見つかりません",
     "recheck": "再確認",
+    "updateTitle": "拡張機能の新しい版があります（入っている版: v{{installed}} → 新しい版: v{{latest}}）",
+    "updateBody": "古い版のままだと、取り込めないキャラが出るなど、一部の機能が使えないことがあります。次の手順で、更新してください。",
     "installTitle": "拡張機能の導入手順",
     "releaseLink": "リリースページを開く",
     "note": "拡張機能は、HoYoLAB（hoyolab.com）にだけ通信します。ログイン情報（Cookie）の値は、拡張機能もこのアプリも読み取りません。"

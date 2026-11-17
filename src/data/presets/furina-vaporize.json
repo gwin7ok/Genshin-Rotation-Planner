@@ -189,14 +189,6 @@
       "duration": 3.433,
       "passiveTriggers": [
         {
-          "id": "ptrg_gcsim_mv4y8not_9",
-          "passiveEffectId": "wbuff_11511",
-          "name": "聖顕の鍵: 全員熟知バフ（khaj-nisut-buff）",
-          "offset": 0.833,
-          "duration": 20,
-          "gcsimKey": "khaj-nisut-buff"
-        },
-        {
           "id": "ptrg_gcsim_mwk50xqp_1",
           "passiveEffectId": "wbuff_11513",
           "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-hp-buff）",
@@ -288,15 +280,6 @@
           "duration": 27.333,
           "gcsimKey": "citlali-a1-pyro",
           "cooldown": 8
-        },
-        {
-          "id": "ptrg_gcsim_mv4y8not_h",
-          "passiveEffectId": "wbuff_14517",
-          "name": "祭星者の眺め: 風と陽に捧げる祭儀",
-          "offset": 1.117,
-          "duration": 15,
-          "gcsimKey": "starcallerswatch",
-          "cooldown": 14
         },
         {
           "id": "ptrg_gcsim_mv4y8not_i",
@@ -541,5 +524,5 @@
   "loopStartTime": 0,
   "totalDuration": 20.98,
   "switchDelay": 0.5,
-  "exportedAt": "2026-11-17T06:34:04.475Z"
+  "exportedAt": "2026-11-17T10:39:10.708Z"
 }

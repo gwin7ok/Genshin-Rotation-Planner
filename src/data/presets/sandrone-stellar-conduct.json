@@ -229,15 +229,6 @@
       "duration": 2.367,
       "passiveTriggers": [
         {
-          "id": "ptrg_gcsim_mwd7zomf_h",
-          "passiveEffectId": "wbuff_14402",
-          "name": "流浪楽章: 主題曲バフ",
-          "offset": 0.017,
-          "duration": 10,
-          "gcsimKey": "widsith",
-          "cooldown": 30
-        },
-        {
           "id": "ptrg_gcsim_mwd7zomf_i",
           "passiveEffectId": "10000058-electro_c1",
           "name": "1凸「野狐供真編」（yae-c1-electro）",
@@ -306,8 +297,8 @@
           "gcsimBaseDuration": 0.517,
           "cooldown": 16,
           "gcsimCdResonance": 1,
-          "gcsimCtOffset": 0,
-          "effectDuration": 20
+          "effectDuration": 20,
+          "gcsimCtOffset": 0
         }
       ],
       "startTime": 3.417,
@@ -770,5 +761,5 @@
       }
     ]
   },
-  "exportedAt": "2026-11-17T05:48:27.123Z"
+  "exportedAt": "2026-11-17T10:39:06.502Z"
 }

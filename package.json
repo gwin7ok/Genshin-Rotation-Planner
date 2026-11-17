@@ -8,8 +8,10 @@
     "node": ">=22.18"
   },
   "scripts": {
+    "predev": "node scripts/pack-extension.ts",
     "dev": "vite --port 3000 --host 0.0.0.0",
     "start": "vite --port 3000 --host 0.0.0.0",
+    "prebuild": "node scripts/pack-extension.ts",
     "build": "vite build",
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "clean": "rm -rf dist server.js",
@@ -28,6 +30,7 @@
     "release:tag": "node scripts/release-tag.ts",
     "check:release": "node scripts/check-release.ts",
     "wasm:build": "node scripts/build-gcsim-wasm.ts",
+    "ext:pack": "node scripts/pack-extension.ts",
     "build:master:appside": "node scripts/regenerate-appside-characters.ts",
     "build:master": "node scripts/build-character-master.ts",
     "build:equipment": "node scripts/build-equipment-master.ts",

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2 } from 'lucide-react';
+import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2, Download, Copy, Check } from 'lucide-react';
 import { t, dateLocale } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
@@ -13,6 +13,83 @@ import { clearOwned, loadHoyolabUid, loadOwned, saveHoyolabUid, saveOwned, type 
 
 /** 拡張機能の zip を置く、GitHub のリリースページ */
 const RELEASES_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner/releases';
+/** 拡張機能の zip（アプリに同梱。ビルドのとき npm run ext:pack で作る）。サイトの公開先のパスに合わせる */
+const EXTENSION_ZIP_URL = `${import.meta.env.BASE_URL}downloads/grp-hoyolab-importer.zip`;
+const EXTENSIONS_PAGE = 'chrome://extensions';
+
+/** 拡張機能の導入手順（5 つの手順カード＋うまくいかないとき）。拡張機能を検知できないときだけ出す */
+const InstallGuide: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+  const copyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(EXTENSIONS_PAGE);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* コピーできないときは、画面の文字を手で写す */ }
+  };
+  const btn = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border font-semibold transition-colors';
+  const steps: { n: number; title: string; body: string; note?: string; action?: React.ReactNode }[] = [
+    {
+      n: 1, title: t('hoyolab:install.s1Title'), body: t('hoyolab:install.s1Body'),
+      action: (
+        <a href={EXTENSION_ZIP_URL} download="grp-hoyolab-importer.zip" data-testid="ext-download" className={`${btn} border-sky-500/60 bg-sky-500/15 text-sky-200 hover:bg-sky-500/25`}>
+          <Download className="w-3.5 h-3.5" />{t('hoyolab:install.s1Button')}
+        </a>
+      ),
+    },
+    { n: 2, title: t('hoyolab:install.s2Title'), body: t('hoyolab:install.s2Body'), note: t('hoyolab:install.s2Note') },
+    {
+      n: 3, title: t('hoyolab:install.s3Title'), body: t('hoyolab:install.s3Body'),
+      action: (
+        <button type="button" onClick={() => void copyAddress()} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? t('hoyolab:install.s3Copied') : t('hoyolab:install.s3Button', { address: EXTENSIONS_PAGE })}
+        </button>
+      ),
+    },
+    { n: 4, title: t('hoyolab:install.s4Title'), body: t('hoyolab:install.s4Body') },
+    {
+      n: 5, title: t('hoyolab:install.s5Title'), body: t('hoyolab:install.s5Body'),
+      action: (
+        <button type="button" onClick={() => window.location.reload()} data-testid="ext-reload" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
+          <RefreshCw className="w-3.5 h-3.5" />{t('hoyolab:install.s5Button')}
+        </button>
+      ),
+    },
+  ];
+  return (
+    <div className="space-y-2" data-testid="ext-install-guide">
+      <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>
+      <p className="text-[11px] text-slate-400">{t('hoyolab:install.intro')}</p>
+      <ol className="space-y-1.5">
+        {steps.map(st => (
+          <li key={st.n} className="flex gap-2.5 rounded-lg border border-slate-700/70 bg-slate-900/60 p-2.5">
+            <span className="shrink-0 w-5 h-5 rounded-full bg-sky-500/20 border border-sky-500/50 text-sky-300 text-[11px] font-bold flex items-center justify-center">{st.n}</span>
+            <div className="min-w-0 flex-1 space-y-1">
+              <p className="font-semibold text-slate-100">{st.title}</p>
+              <p className="text-slate-300 leading-relaxed">{st.body}</p>
+              {st.note && <p className="text-[11px] text-amber-300/90 leading-relaxed">{st.note}</p>}
+              {st.action && <div className="pt-0.5">{st.action}</div>}
+            </div>
+          </li>
+        ))}
+      </ol>
+      <details className="rounded-lg border border-slate-700/70 bg-slate-900/40 p-2.5 text-[11px] text-slate-300">
+        <summary className="cursor-pointer font-semibold text-slate-200">{t('hoyolab:install.troubleTitle')}</summary>
+        <ul className="list-disc pl-5 mt-1.5 space-y-1 text-slate-400 leading-relaxed">
+          <li>{t('hoyolab:install.trouble1')}</li>
+          <li>{t('hoyolab:install.trouble2')}</li>
+          <li>{t('hoyolab:install.trouble3')}</li>
+          <li>{t('hoyolab:install.trouble4')}</li>
+        </ul>
+      </details>
+      <p className="text-[11px] text-slate-500">{t('hoyolab:install.update')}</p>
+      <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-sky-200 underline">
+        <ExternalLink className="w-3 h-3" />{t('hoyolab:ext.releaseLink')}
+      </a>
+    </div>
+  );
+};
 
 interface OwnedCharactersModalProps {
   isOpen: boolean;
@@ -138,20 +215,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                 <RefreshCw className="w-3 h-3" />{t('hoyolab:ext.recheck')}
               </button>
             </div>
-            {extVersion === null && (
-              <div className="space-y-1.5">
-                <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>
-                <ol className="list-decimal pl-5 space-y-0.5 text-slate-400">
-                  <li>{t('hoyolab:ext.step1')}</li>
-                  <li>{t('hoyolab:ext.step2')}</li>
-                  <li>{t('hoyolab:ext.step3')}</li>
-                  <li>{t('hoyolab:ext.step4')}</li>
-                </ol>
-                <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200 underline">
-                  <ExternalLink className="w-3 h-3" />{t('hoyolab:ext.releaseLink')}
-                </a>
-              </div>
-            )}
+            {extVersion === null && <InstallGuide />}
             <p className="text-[10px] text-slate-500">{t('hoyolab:ext.note')}</p>
           </div>
 

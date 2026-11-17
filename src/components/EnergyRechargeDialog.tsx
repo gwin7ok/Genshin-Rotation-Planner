@@ -62,7 +62,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
-  const [precise, setPrecise] = useState(true);
+  const [precise, setPrecise] = useState(false);
   const [verifyNames, setVerifyNames] = useState<string[]>([]);
   // 今の編成のキャラ（結果が無い・古いときに、名前だけの空欄の表を出すため）
   const [currentMembers, setCurrentMembers] = useState<{ characterId: string; name: string }[]>([]);
@@ -95,7 +95,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
-    setPrecise(last?.precise ?? true); // 初期値は精密検証（最後の実行があれば、そのときの選択）
+    setPrecise(last?.precise ?? false); // 初期値は概算検証（最後の実行があれば、そのときの選択）
     setCurrentFingerprint(fingerprintOf(base.config));
     // 回復量が自分の ER で決まるキャラ（雷電将軍・九条裟羅・ドリー）がいる編成は、確実の値を精密検証で求める（自動）
     setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
@@ -213,18 +213,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
           )}
 
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:er.precision')}</p>
-            <div className="flex items-center gap-1.5">
-              {([false, true] as const).map(v => (
-                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
-                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
-                </button>
-              ))}
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
-          </div>
-
           {verifyNames.length > 0 && (
             <div className="text-xs text-amber-200 bg-amber-950/30 border border-amber-900/60 rounded-lg p-3 leading-relaxed">
               {t('gcsim:er.verifyAuto', { names: joinList(verifyNames) })}
@@ -329,6 +317,18 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.precision')}</p>
+            <div className="flex items-center gap-1.5">
+              {([false, true] as const).map(v => (
+                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
+                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
+          </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.cores')}</p>

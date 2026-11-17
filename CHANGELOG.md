@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-17
+
 ### 変更
 - 編成設定の「仮値を使う」で、会心率 100% だけではなく、原神 Wiki のおすすめ（聖遺物のメイン・サブの優先順）に合わせた聖遺物ステータスと、おすすめの武器・聖遺物セットを入れるようにした（データの無いキャラは、攻撃・HP・防御・熟知の型の目安）。旅人も、元素ごとの Wiki のおすすめを使う。持ちキャラが無いキャラを編成設定で選んだときも、同じ既定になる
 - 同梱のプリセット 5 編成を、いまの実装で gcsim の結果を反映した編成に入れ替え（「[プリセット]」の接頭辞が 2 重にならないようにした。「豊穣月開花」のナヒーダの武器は祭礼の断片）
@@ -306,7 +308,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...v1.9.0
 [1.8.9]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.7...v1.8.8

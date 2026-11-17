@@ -53,7 +53,7 @@
     "partyTitle": "Set the 4 party members, weapons and artifacts",
     "owned": "Import",
     "ownedTitle": "Import owned characters (weapons, artifacts, talent levels) from HoYoLAB",
-    "energyRecharge": "ER Calc",
+    "energyRecharge": "ER Calc (gcsim)",
     "energyRechargeTitle": "Calculate the Energy Recharge needed to burst every lap (gcsim)",
     "save": "Rotations",
     "saveTitle": "Manage rotations (save, load, slots, backup)",
@@ -69,7 +69,7 @@
     "copyNotation": "Copy notation",
     "copied": "Copied",
     "copyNotationTitle": "Copy the text notation (e.g. Xingqiu(Q E) ➔ [Bennett(Q E) ➔ Xiangling(Q E)]; [ ] is the part repeated from the 2nd cycle on)",
-    "dps": "DPS Calc",
+    "dps": "DPS Calc (gcsim)",
     "dpsTitle": "Calculate the party DPS of the current rotation with gcsim"
   },
   "notation": {

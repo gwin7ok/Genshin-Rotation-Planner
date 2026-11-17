@@ -50,7 +50,7 @@
     "partyTitle": "パーティ4人の編成・武器・聖遺物変更",
     "owned": "持ちキャラ取込",
     "ownedTitle": "HoYoLAB から持ちキャラ（武器・聖遺物・天賦レベル）を取り込みます",
-    "energyRecharge": "チャージ効率計算",
+    "energyRecharge": "チャージ効率計算(gcsim)",
     "energyRechargeTitle": "必要な元素チャージ効率を gcsim で算出",
     "save": "編成管理",
     "saveTitle": "編成管理（保存・読込・スロット管理・バックアップ）",
@@ -66,7 +66,7 @@
     "copyNotation": "記法コピー",
     "copied": "コピー完了",
     "copyNotationTitle": "テキスト記法コピー (例: 行秋(Q E) ➔ [ベネット(Q E) ➔ 香菱(Q E)]、[ ] は2周目以降も繰り返す部分)",
-    "dps": "DPS 計算",
+    "dps": "DPS 計算(gcsim)",
     "dpsTitle": "今の編成・ローテーションの秒間ダメージ（DPS）を gcsim で計算"
   },
   "notation": {

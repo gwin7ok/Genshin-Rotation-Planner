@@ -71,7 +71,7 @@ function makeReactionSignature(
   stints: Stint[],
 ): string {
   return JSON.stringify([
-    characters.map(c => [c.id, c.weaponId, c.weaponRefinementRank, c.artifactSetId, c.artifactSetMode, c.constellation, c.hexerei, c.revelation, c.energyRecharge]),
+    characters.map(c => [c.id, c.weaponId, c.weaponRefinementRank, c.artifactSetId, c.artifactSetMode, c.constellation, c.hexerei, c.revelation, c.energyRecharge, c.trueMoon, c.build, c.customStats]),
     switchDelay,
     loopStartIndex,
     stints.map(st => [st.characterId, st.actions.map(a => a.id)]),

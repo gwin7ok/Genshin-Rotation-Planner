@@ -57,7 +57,7 @@
     "revert": "Use defaults",
     "summaryAvailable": "Imported: Lv.{{level}}/{{max}}, C{{cons}}, {{weapon}}. Using it sets weapon, artifacts and constellation, plus level, talents and artifact stats, to the imported values",
     "summaryActive": "Lv.{{level}}/{{max}} / Talents {{talents}} / Weapon Lv.{{weaponLevel}} / {{stats}} artifact stats",
-    "note": "Changing the weapon, artifacts, refinement or constellation by hand, or editing the stats, stops applying the owned build & stats (back to defaults). The required energy recharge calculation uses the initial defaults"
+    "note": "Changing the weapon, artifacts, refinement or constellation by hand, or editing the stats, stops applying the owned build & stats (back to defaults). The required energy recharge calculation also uses these values (only the artifact Energy Recharge is replaced by the value being swept)"
   },
   "stats": {
     "open": "Edit stats",

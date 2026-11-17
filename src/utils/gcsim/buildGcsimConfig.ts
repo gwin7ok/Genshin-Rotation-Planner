@@ -183,8 +183,9 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       weaponKey: weaponForInfo?.gcsimKey,
       artifactKey: artifactForInfo?.gcsimKey,
     });
-    // 持ちキャラの装備（build）があれば、その値を使う。必要チャージ効率の算出（addedEnergyRecharge が渡る実行）は、仮値の編成で行う（設計 #2）
-    const build = input.addedEnergyRechargeByCharacterId === undefined ? c.build : undefined;
+    // 持ちキャラの装備（build）があれば、その値を使う。必要チャージ効率の算出（addedEnergyRecharge が渡る実行）も、同じ設定値で行う
+    // （聖遺物ステータスの元素チャージ効率だけは、算出で動かす値に置き換える。下の add stats）
+    const build = c.build;
     const cons = c.constellation ?? (c.rarity === 4 ? 6 : 0);
     // ヘクセレイ（魔女の宿題クリア）に対応するキャラは、明示的に渡す（gcsim の既定は有効）
     // 諭示（八重神子・七七）も同じく、明示的に渡す（gcsim の既定は達成済み）
@@ -195,8 +196,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       ...(build && isTravelerKey(key) ? travelerParams(c.trueMoon !== false) : []),
     ];
     const hexText = paramList.length > 0 ? ` +params=[${paramList.join(',')}]` : '';
-    // 持ちキャラの装備が無ければ、「ステータスを変更」で保存した仮値、それも無ければ既定の仮値（D2）。必要チャージ効率の算出は、既定の仮値
-    const stats = build ?? (input.addedEnergyRechargeByCharacterId === undefined ? c.customStats : undefined) ?? DEFAULT_CUSTOM_STATS;
+    // 持ちキャラの装備が無ければ、「ステータスを変更」で保存した仮値、それも無ければ既定の仮値（D2）
+    const stats = build ?? c.customStats ?? DEFAULT_CUSTOM_STATS;
     const charLevel = `lvl=${stats.level}/${stats.maxLevel}`;
     const talentLevels = stats.talents.join(',');
     lines.push(`${key} char ${charLevel} cons=${cons} talent=${talentLevels}${hexText};`);
@@ -235,8 +236,9 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       }
     }
     const addedEr = input.addedEnergyRechargeByCharacterId?.[c.id];
-    const statEntries = Object.entries(stats.artifactStats).map(([k, v]) => `${k}=${v}`);
-    if (!build && addedEr !== undefined) statEntries.push(`er=${Number(addedEr.toFixed(4))}`);
+    // 必要チャージ効率の算出では、聖遺物の元素チャージ効率（er）を、算出で動かす値に置き換える
+    const statEntries = Object.entries(stats.artifactStats).filter(([k]) => addedEr === undefined || k !== 'er').map(([k, v]) => `${k}=${v}`);
+    if (addedEr !== undefined) statEntries.push(`er=${Number(addedEr.toFixed(4))}`);
     if (statEntries.length > 0) lines.push(`${key} add stats ${statEntries.join(' ')};`);
   }
 

@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.10.2] - 2026-11-17
+
 ### 修正
 - 英語表示のとき、持ちキャラ取り込み画面の武器・聖遺物セットの名前が日本語のままだったのを、英語で表示する
 - 英語表示のとき、持ちキャラ取り込み画面の武器の精錬ランクのカッコ、DPS 計算・ER 計算の区切り記号（・、〜）、サンドローネの重撃（ビーム N 本）の名前と説明、gcsim 設定の落下攻撃の注意のキャラ名が、日本語のままだったのを、英語に直す
@@ -319,7 +321,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...HEAD
+[1.10.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...v1.9.0

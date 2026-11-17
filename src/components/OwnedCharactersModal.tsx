@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2, Download, Copy, Check } from 'lucide-react';
 import { t, dateLocale } from '../i18n';
-import { charName } from '../i18n/loc';
+import { charName, loc } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
 import { GcsimMissingBadge } from './GcsimMissingBadge';
@@ -280,6 +280,16 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     return out;
   };
 
+  /** 武器・聖遺物の表示名。マスターにあれば表示の言語の名前、無ければ取り込んだ名前 */
+  const weaponLabel = (o: OwnedCharacter): string => {
+    const w = database.weapons.find(x => x.id === String(o.weapon.genshinId) || x.name === o.weapon.name);
+    return w ? loc(w, 'name') : o.weapon.name;
+  };
+  const setLabel = (name: string): string => {
+    const a = database.artifacts.find(x => x.name === name);
+    return a ? loc(a, 'name') : name;
+  };
+
   const characters = store?.characters ?? [];
   const extOk = extVersion !== 'checking' && extVersion !== null;
 
@@ -419,8 +429,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                           )}
                         </div>
                         <div className="text-[10px] text-slate-400 truncate">
-                          {o.weapon.name}（{t('hoyolab:list.refine', { rank: o.weapon.refinement })}）
-                          {o.artifactSets.filter(s => s.count >= 2).map(s => ` / ${s.name}×${s.count}`).join('')}
+                          {weaponLabel(o)}（{t('hoyolab:list.refine', { rank: o.weapon.refinement })}）
+                          {o.artifactSets.filter(s => s.count >= 2).map(s => ` / ${setLabel(s.name)}×${s.count}`).join('')}
                         </div>
                         {ns.map(n => (
                           <div key={n} className="text-[10px] text-amber-300 flex items-start gap-1"><AlertTriangle className="w-3 h-3 shrink-0 mt-px" />{n}</div>

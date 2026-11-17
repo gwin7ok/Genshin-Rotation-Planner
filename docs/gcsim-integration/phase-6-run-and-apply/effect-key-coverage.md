@@ -1,6 +1,6 @@
 # スキル・爆発の効果の対応表（カバレッジ）
 
-作成: 2026-11-12 / gcsim の辞書のコミット b107b5dc / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
+作成: 2026-11-17 / gcsim の辞書のコミット b107b5dc / 生成: `npm run check:effectkeys`（`scripts/build-effect-coverage.ts`）
 
 4 つのテーブル: `effects`（gcsim の効果）/ `targets`（アプリ側の対象）/ `links`（効果 ↔ 対象の組。中間表）/ `unlinked`（紐づけない理由）。
 「未検討」= 紐づけも「紐づけない」の決定（理由）も無いもの。gcsim の更新・新キャラのとき、検討する範囲。

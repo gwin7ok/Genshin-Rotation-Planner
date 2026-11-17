@@ -1,6 +1,6 @@
 # Skill / Burst effect coverage
 
-Generated: 2026-11-12 / gcsim dictionary commit b107b5dc / by `npm run check:effectkeys` (`scripts/build-effect-coverage.ts`)
+Generated: 2026-11-17 / gcsim dictionary commit b107b5dc / by `npm run check:effectkeys` (`scripts/build-effect-coverage.ts`)
 
 Four tables: `effects` (gcsim effects) / `targets` (app-side targets) / `links` (effect ↔ target pairs; a junction table) / `unlinked` (reasons for not linking).
 "Not reviewed" = neither linked nor decided not to link (with a reason). This is what to review when gcsim is updated or a new character is added.

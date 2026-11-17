@@ -57676,33 +57676,122 @@
         "name": "通常攻撃",
         "shortName": "N",
         "type": "normal",
-        "defaultDuration": 0.383,
+        "defaultDuration": 0.333,
+        "frames": {
+          "total": 26,
+          "hitmark": 13,
+          "cancels": {
+            "aim": 13,
+            "skill": 13,
+            "burst": 13,
+            "dash": 13,
+            "jump": 13,
+            "swap": 13,
+            "attack": 20,
+            "walk": 24
+          },
+          "source": "attack.go:attackFrames[0]"
+        },
+        "normalHits": [
+          {
+            "duration": 0.333,
+            "frames": {
+              "total": 26,
+              "hitmark": 13,
+              "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
+                "attack": 20,
+                "walk": 24
+              },
+              "source": "attack.go:attackFrames[0]"
+            }
+          },
+          {
+            "duration": 0.5,
+            "frames": {
+              "total": 34,
+              "hitmark": 13,
+              "cancels": {
+                "aim": 13,
+                "skill": 13,
+                "burst": 13,
+                "dash": 13,
+                "jump": 13,
+                "swap": 13,
+                "attack": 30,
+                "charge": 28
+              },
+              "source": "attack.go:attackFrames[1]"
+            }
+          },
+          {
+            "duration": 0.617,
+            "frames": {
+              "total": 48,
+              "hitmark": 23,
+              "cancels": {
+                "aim": 23,
+                "skill": 23,
+                "burst": 23,
+                "dash": 23,
+                "jump": 23,
+                "swap": 23,
+                "attack": 37,
+                "charge": 36
+              },
+              "source": "attack.go:attackFrames[2]"
+            }
+          },
+          {
+            "duration": 1.75,
+            "frames": {
+              "total": 105,
+              "hitmark": 34,
+              "cancels": {
+                "aim": 34,
+                "skill": 34,
+                "burst": 34,
+                "dash": 34,
+                "jump": 34,
+                "swap": 34,
+                "attack": 67,
+                "walk": 99
+              },
+              "source": "attack.go:attackFrames[3]"
+            }
+          }
+        ],
         "description": "通常攻撃\n古の水の精の歌を歌うことで、最大4段の連続攻撃を行い、水元素ダメージを与える。\n\n重撃\n一定のスタミナを消費し、前方に水の珠を投げ、水元素ダメージを与える。\n\n落下攻撃\n空中から落下し、地面に衝撃を与える。経路上の敵を攻撃し、落下時に水元素範囲ダメージを与える。",
         "en": {
           "name": "Normal Attack",
           "description": "Normal Attack\nSings an ancient song of the Water Imps, unleashing up to 4 strikes. This deals Hydro DMG to the opponent.\n\nCharged Attack\nConsumes a certain amount of Stamina to hurl a water ball forward, dealing Hydro DMG.\n\nPlunging Attack\nPlunges towards the ground from mid-air, damaging all opponents along the path. Deals AoE Hydro DMG upon impact with the ground."
-        },
-        "normalHits": [
-          {
-            "duration": 0.383
-          },
-          {
-            "duration": 0.467
-          },
-          {
-            "duration": 0.667
-          },
-          {
-            "duration": 1.117
-          }
-        ]
+        }
       },
       {
         "id": "10000140-hydro_ca",
         "name": "重撃",
         "shortName": "C",
         "type": "charged",
-        "defaultDuration": 1.35,
+        "frames": {
+          "total": 60,
+          "hitmark": 37,
+          "cancels": {
+            "charge": 46,
+            "skill": 41,
+            "burst": 39,
+            "dash": 37,
+            "jump": 37,
+            "walk": 53,
+            "swap": 45
+          },
+          "source": "charge.go:chargeFrames"
+        },
+        "defaultDuration": 1,
         "description": "通常攻撃\n古の水の精の歌を歌うことで、最大4段の連続攻撃を行い、水元素ダメージを与える。\n\n重撃\n一定のスタミナを消費し、前方に水の珠を投げ、水元素ダメージを与える。\n\n落下攻撃\n空中から落下し、地面に衝撃を与える。経路上の敵を攻撃し、落下時に水元素範囲ダメージを与える。",
         "en": {
           "name": "Charged Attack",
@@ -57717,12 +57806,31 @@
         "startsSkillCooldown": true,
         "cooldown": 16,
         "effectDuration": 16,
+        "frames": {
+          "total": 59,
+          "hitmark": 34,
+          "cancels": {
+            "attack": 57,
+            "charge": 57,
+            "skill": 58,
+            "burst": 58,
+            "dash": 57,
+            "walk": 57,
+            "swap": 57
+          },
+          "source": "skill.go:skillFrames"
+        },
         "dataSource": {
           "cooldown": "スキルクールタイム",
-          "effectDuration": "継続時間"
+          "effectDuration": "継続時間",
+          "cooldownStart": "skill.go:SetCD（遅れなし）"
         },
-        "defaultDuration": 0.7,
+        "defaultDuration": 0.983,
         "description": "水の精としての本来の姿を現し、水元素範囲ダメージを与える。また、「悠久の歌」効果を獲得し、効果の継続期間中、ヴォジャニーツァは古の春を呼ぶ角笛を呼び出し、一定時間ごとに素早く敵の近くに移動させて攻撃を行い、水元素ダメージを与える。\n上記二種類のダメージが命中した時、敵の水元素耐性と氷元素耐性をダウンさせる。また、「悠久の歌」効果の継続期間中、チーム内のフィールド上にいる自身のキャラクターの中断耐性を高め、一定時間ごとにそのキャラクターのHPを回復する。回復量はヴォジャニーツァのHP上限に基づく。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        },
         "en": {
           "name": "Elemental Skill: Rechitativ: Sonorous Dawn",
           "description": "Reveals her true Water Imp form, dealing AoE Hydro DMG and gaining the Song of Ages Past effect: While this effect is active, Vodyanitsa summons the ancient Horn of Spring's Call, periodically moving closer to an opponent in a swift movement to attack them, dealing Hydro DMG.\nThe above two types of attacks will also decrease the Hydro RES and Cryo RES of opponents hit. Additionally, while the Song of Ages Past effect is active, your active character gains increased resistance to interruption and periodically regenerates HP based on Vodyanitsa's Max HP."
@@ -57736,11 +57844,29 @@
         "startsBurstCooldown": true,
         "cooldown": 15,
         "effectDuration": 0,
-        "dataSource": {
-          "cooldown": "クールタイム"
+        "frames": {
+          "total": 102,
+          "hitmark": 95,
+          "cancels": {
+            "attack": 101,
+            "charge": 99,
+            "dash": 101,
+            "jump": 101,
+            "walk": 100,
+            "swap": 99
+          },
+          "source": "burst.go:burstFrames"
         },
-        "defaultDuration": 1.733,
+        "dataSource": {
+          "cooldown": "クールタイム",
+          "cooldownStart": "burst.go:SetCD（遅れなし）"
+        },
+        "defaultDuration": 1.7,
         "description": "聴く者を破滅へ導く水の精の歌を歌い、水元素範囲ダメージを与える。\n**「悠久の歌」**効果を受けている場合、与えるダメージがさらにアップする。",
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0
+        },
         "en": {
           "name": "Elemental Burst: Koda: Sink With Thee",
           "description": "Leads a song of the Water Imps which lures its listeners to their doom. This deals AoE Hydro DMG to the opponent.\nWhen in the **Song of Ages Past** state, DMG dealt is further increased."
@@ -57811,7 +57937,7 @@
     ],
     "source": {
       "genshinId": 10000140,
-      "frameSource": "推定（同じ武器種の 27 キャラの中央値。実測ではありません）"
+      "frameSource": "gcsim PR #3274（未マージ・未検証。2026-11-18 時点）"
     },
     "constellations": [
       {
@@ -57878,7 +58004,7 @@
     ],
     "en": {
       "name": "Vodyanitsa",
-      "frameSource": "Estimated (median of 27 characters with the same weapon type; not measured)"
+      "frameSource": "gcsim PR #3274 (unmerged, unverified, as of 2026-11-18)"
     },
     "constellationEffects": [
       {

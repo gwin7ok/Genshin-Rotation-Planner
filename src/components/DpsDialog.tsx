@@ -251,6 +251,26 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
           </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <label className="flex items-center gap-2 font-bold cursor-pointer">
+              <input type="checkbox" checked={energy} onChange={e => setEnergy(e.target.checked)} disabled={running} data-testid="dps-energy" />
+              {t('gcsim:dps.energy')}
+            </label>
+            {energy && (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span>{t('gcsim:er.enemyParticles')}</span>
+                <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>〜</span>
+                <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>{t('gcsim:er.enemyParticlesEvery')}</span>
+                <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
+                <span>{t('gcsim:er.enemyParticlesUnit')}</span>
+                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              </div>
+            )}
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:dps.loops')}</p>
             <div className="flex items-center gap-1.5">
               <Stepper value={loops} onChange={setLoops} step={1} min={1} max={DPS_MAX_LOOPS} disabled={running} widthClass="w-14" />
@@ -273,26 +293,6 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
               <Stepper value={cores} onChange={changeCores} step={1} min={1} max={wasmMaxCores()} disabled={running} widthClass="w-14" />
               <span className="text-[11px] text-slate-500">{t('gcsim:er.coresNote', { max: wasmMaxCores(), def: WASM_DEFAULT_CORES })}</span>
             </div>
-          </div>
-
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <label className="flex items-center gap-2 font-bold cursor-pointer">
-              <input type="checkbox" checked={energy} onChange={e => setEnergy(e.target.checked)} disabled={running} data-testid="dps-energy" />
-              {t('gcsim:dps.energy')}
-            </label>
-            {energy && (
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span>{t('gcsim:er.enemyParticles')}</span>
-                <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>〜</span>
-                <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>{t('gcsim:er.enemyParticlesEvery')}</span>
-                <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>{t('gcsim:er.enemyParticlesUnit')}</span>
-                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
-              </div>
-            )}
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
           </div>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-2">

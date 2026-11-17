@@ -8,6 +8,7 @@ import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { useDialogs } from './DialogProvider';
 import { fetchEnkaFromExtension, fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
 import { convertEnkaResponse } from '../utils/hoyolab/enkaConvert';
+import { isHoyolabUid } from '../utils/hoyolab/uid';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
@@ -180,6 +181,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   const handleImport = async () => {
     if (!/^\d{9,10}$/.test(uid)) { setMessage({ kind: 'error', text: t('hoyolab:import.invalidUid') }); return; }
     setMessage(null);
+    // 中国サーバー・Bilibili 版の UID は、HoYoLAB（海外版）では扱えない。最初から Enka.Network で取り込む
+    if (!isHoyolabUid(uid)) { await importFromEnka(); return; }
     setBusy('fetch');
     const res = await fetchFromExtension(uid);
     // 他のアカウントの UID は、HoYoLAB の詳細が許可されない（retcode 10104）。Enka.Network（ゲーム内の詳細表示のキャラだけ）で取り込む

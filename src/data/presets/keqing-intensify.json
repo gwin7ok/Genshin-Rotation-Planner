@@ -48,29 +48,6 @@
       "weaponRefinementRank": 5,
       "artifactSetId": "15025",
       "artifactSetMode": "4pc",
-      "customStats": {
-        "level": 90,
-        "maxLevel": 90,
-        "talents": [
-          9,
-          10,
-          10
-        ],
-        "weaponLevel": 90,
-        "weaponMaxLevel": 90,
-        "artifactStats": {
-          "hp": 4989,
-          "er": 0.687,
-          "hp%": 0.105,
-          "em": 624,
-          "def": 53,
-          "atk": 329,
-          "atk%": 0.403,
-          "cd": 0.458,
-          "def%": 0.182,
-          "cr": 0.105
-        }
-      },
       "build": {
         "level": 90,
         "maxLevel": 90,

@@ -124,7 +124,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     const owned = ownedForCurrent(newRosterChar);
     if (owned) {
       const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
-      updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+      // 持ちキャラの装備（build）を使うので、仮値（customStats）は消す（build と二重に持たない）
+      updated[selectedSlot] = { ...updated[selectedSlot], ...fields, customStats: undefined };
       setOwnedWarnings(warnings);
     } else {
       setOwnedWarnings([]);
@@ -186,7 +187,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     if (!owned) return;
     const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
     const updated = [...editingParty];
-    updated[selectedSlot] = { ...updated[selectedSlot], ...fields };
+    // 持ちキャラの装備（build）を使うので、仮値（customStats）は消す（build と二重に持たない）
+    updated[selectedSlot] = { ...updated[selectedSlot], ...fields, customStats: undefined };
     setEditingParty(updated);
     setOwnedWarnings(warnings);
   };

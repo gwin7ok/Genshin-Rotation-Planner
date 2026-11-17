@@ -68,5 +68,15 @@
     "ambiguous": "Could not determine the ascension phase (treated as not ascended)",
     "noWeaponMaster": "The weapon is not in the app's data",
     "noSetMaster": "The artifact set is not in the app's data"
+  },
+  "update": {
+    "intro": "Update in 5 steps (no need to remove and reinstall).",
+    "s2Title": "Extract over the previous folder",
+    "s2Body": "Extract the downloaded zip to the same folder as before and overwrite the files with the same names (right-click > Extract All, and choose the previous folder).",
+    "s2Note": "If you extracted to a different folder, in step 4 remove the old extension and load the new folder again.",
+    "s3Body": "Press the button below to open a blank new tab and copy the extensions page address. Paste it into the address bar of the opened tab (Ctrl+V) and press Enter.",
+    "s4Title": "Reload the extension",
+    "s4Body": "On the card of \"Genshin Rotation Planner - HoYoLAB Importer\", press the \"Reload\" (circular arrow) button. The version is updated.",
+    "s5Body": "Press the button below to reload, then open \"Import owned characters\" again. If the version shown in \"Extension detected\" is the new one, the update is complete."
   }
 }

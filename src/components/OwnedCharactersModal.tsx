@@ -19,7 +19,8 @@ const EXTENSION_ZIP_URL = `${import.meta.env.BASE_URL}downloads/grp-hoyolab-impo
 const EXTENSIONS_PAGE = 'chrome://extensions';
 
 /** 拡張機能の導入手順（5 つの手順カード＋うまくいかないとき）。拡張機能を検知できないときだけ出す */
-const InstallGuide: React.FC = () => {
+const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'install' }) => {
+  const isUpdate = mode === 'update';
   const [copied, setCopied] = useState(false);
   // Chrome は、Web ページから chrome:// のページを開くことを禁止している。代わりに、アドレスをコピーしたうえで、空の新しいタブを開く
   // （このアプリのタブを、拡張機能の画面に置き換えてしまわないように）。利用者は、開いたタブのアドレス欄に貼り付ける
@@ -41,9 +42,11 @@ const InstallGuide: React.FC = () => {
         </a>
       ),
     },
-    { n: 2, title: t('hoyolab:install.s2Title'), body: t('hoyolab:install.s2Body'), note: t('hoyolab:install.s2Note') },
+    isUpdate
+      ? { n: 2, title: t('hoyolab:update.s2Title'), body: t('hoyolab:update.s2Body'), note: t('hoyolab:update.s2Note') }
+      : { n: 2, title: t('hoyolab:install.s2Title'), body: t('hoyolab:install.s2Body'), note: t('hoyolab:install.s2Note') },
     {
-      n: 3, title: t('hoyolab:install.s3Title'), body: t('hoyolab:install.s3Body'),
+      n: 3, title: t('hoyolab:install.s3Title'), body: isUpdate ? t('hoyolab:update.s3Body') : t('hoyolab:install.s3Body'),
       action: (
         <button type="button" onClick={() => void copyAddress()} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
           {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
@@ -51,9 +54,11 @@ const InstallGuide: React.FC = () => {
         </button>
       ),
     },
-    { n: 4, title: t('hoyolab:install.s4Title'), body: t('hoyolab:install.s4Body') },
+    isUpdate
+      ? { n: 4, title: t('hoyolab:update.s4Title'), body: t('hoyolab:update.s4Body') }
+      : { n: 4, title: t('hoyolab:install.s4Title'), body: t('hoyolab:install.s4Body') },
     {
-      n: 5, title: t('hoyolab:install.s5Title'), body: t('hoyolab:install.s5Body'),
+      n: 5, title: t('hoyolab:install.s5Title'), body: isUpdate ? t('hoyolab:update.s5Body') : t('hoyolab:install.s5Body'),
       action: (
         <button type="button" onClick={() => window.location.reload()} data-testid="ext-reload" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
           <RefreshCw className="w-3.5 h-3.5" />{t('hoyolab:install.s5Button')}
@@ -63,8 +68,8 @@ const InstallGuide: React.FC = () => {
   ];
   return (
     <div className="space-y-2" data-testid="ext-install-guide">
-      <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>
-      <p className="text-[11px] text-slate-400">{t('hoyolab:install.intro')}</p>
+      {!isUpdate && <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>}
+      <p className="text-[11px] text-slate-400">{isUpdate ? t('hoyolab:update.intro') : t('hoyolab:install.intro')}</p>
       <ol className="space-y-1.5">
         {steps.map(st => (
           <li key={st.n} className="flex gap-2.5 rounded-lg border border-slate-700/70 bg-slate-900/60 p-2.5">
@@ -78,7 +83,7 @@ const InstallGuide: React.FC = () => {
           </li>
         ))}
       </ol>
-      <details className="rounded-lg border border-slate-700/70 bg-slate-900/40 p-2.5 text-[11px] text-slate-300">
+      {!isUpdate && <details className="rounded-lg border border-slate-700/70 bg-slate-900/40 p-2.5 text-[11px] text-slate-300">
         <summary className="cursor-pointer font-semibold text-slate-200">{t('hoyolab:install.troubleTitle')}</summary>
         <ul className="list-disc pl-5 mt-1.5 space-y-1 text-slate-400 leading-relaxed">
           <li>{t('hoyolab:install.trouble1')}</li>
@@ -86,11 +91,11 @@ const InstallGuide: React.FC = () => {
           <li>{t('hoyolab:install.trouble3')}</li>
           <li>{t('hoyolab:install.trouble4')}</li>
         </ul>
-      </details>
-      <p className="text-[11px] text-slate-500">{t('hoyolab:install.update')}</p>
-      <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-sky-200 underline">
+      </details>}
+      {!isUpdate && <p className="text-[11px] text-slate-500">{t('hoyolab:install.update')}</p>}
+      {!isUpdate && <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-sky-200 underline">
         <ExternalLink className="w-3 h-3" />{t('hoyolab:ext.releaseLink')}
-      </a>
+      </a>}
     </div>
   );
 };
@@ -225,10 +230,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
               <div className="rounded-lg border border-amber-500/50 bg-amber-950/30 p-2.5 space-y-1.5" data-testid="ext-update-notice">
                 <p className="font-semibold text-amber-200 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 shrink-0" />{t('hoyolab:ext.updateTitle', { installed: extVersion, latest: BUNDLED_EXTENSION_VERSION })}</p>
                 <p className="text-[11px] text-amber-100/90 leading-relaxed">{t('hoyolab:ext.updateBody')}</p>
-                <p className="text-[11px] text-slate-300 leading-relaxed">{t('hoyolab:install.update')}</p>
-                <a href={EXTENSION_ZIP_URL} download="grp-hoyolab-importer.zip" data-testid="ext-update-download" className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/60 bg-sky-500/15 text-sky-200 hover:bg-sky-500/25 font-semibold transition-colors">
-                  <Download className="w-3.5 h-3.5" />{t('hoyolab:install.s1Button')}
-                </a>
+                <InstallGuide mode="update" />
               </div>
             )}
             <p className="text-[10px] text-slate-500">{t('hoyolab:ext.note')}</p>

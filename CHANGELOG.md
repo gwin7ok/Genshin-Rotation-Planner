@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-11-17
+
+### 修正
+- CI から、手元でしか動かない HoYoLAB 取り込みの確認（個人の取得データと gcsim サーバーが要る）を外す
+
 ## [1.10.0] - 2026-11-17
 
 ### 変更
@@ -308,7 +313,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...HEAD
+[1.10.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.9...v1.9.0
 [1.8.9]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.8.8...v1.8.9

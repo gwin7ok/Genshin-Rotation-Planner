@@ -322,7 +322,7 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                       ))}
                     </div>
                   )}
-                  <div className="font-bold">{t('gcsim:dialog.passives', { count: passives.changes.length, added: passives.changes.filter(c => c.kind === 'add').length, updated: passives.changes.filter(c => c.kind === 'update').length, missed: passives.changes.filter(c => c.kind === 'missed').length, merged: passives.changes.filter(c => c.kind === 'merged').length })}</div>
+                  <div className="font-bold">{t('gcsim:dialog.passives', { count: passives.changes.length, added: passives.changes.filter(c => c.kind === 'add').length, updated: passives.changes.filter(c => c.kind === 'update').length, missed: passives.changes.filter(c => c.kind === 'missed').length, merged: passives.changes.filter(c => c.kind === 'merged').length, removed: passives.changes.filter(c => c.kind === 'removed').length })}</div>
                   {passives.changes.length > 0 && (
                     <div className="font-mono text-[11px] text-sky-200 max-h-32 overflow-y-auto">
                       {passives.changes.map((c, i) => (
@@ -330,6 +330,8 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
                           {ownerLabel(c.stintId)} {c.name}:{' '}
                           {c.kind === 'missed'
                             ? t('gcsim:dialog.passiveMissed', { offset: (c.offset ?? 0).toFixed(2) })
+                            : c.kind === 'removed'
+                            ? t('gcsim:dialog.passiveRemoved', { offset: (c.offset ?? 0).toFixed(2) })
                             : c.kind === 'merged'
                             ? t('gcsim:dialog.passiveMerged', { key: c.key, offset: (c.offset ?? 0).toFixed(2) })
                             : `${t('gcsim:dialog.passiveTiming', { kind: c.kind === 'add' ? t('gcsim:dialog.passiveAdd') : t('gcsim:dialog.passiveUpdate'), offset: (c.offset ?? 0).toFixed(2), duration: (c.duration ?? 0).toFixed(2) })}${c.cooldown !== undefined ? t('gcsim:dialog.passiveCooldown', { seconds: c.cooldown.toFixed(2) }) : ''}`}

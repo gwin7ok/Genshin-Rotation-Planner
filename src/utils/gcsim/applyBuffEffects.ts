@@ -121,7 +121,7 @@ export interface PassiveChange {
   defId: string;
   name: string;
   key: string;
-  kind: 'add' | 'update' | 'missed' | 'merged';
+  kind: 'add' | 'update' | 'missed' | 'merged' | 'removed';
   offset?: number;
   duration?: number;
   cooldown?: number;
@@ -273,6 +273,16 @@ export function applyPassiveTriggers(
       const def = gcsimDefs.get(t.passiveEffectId);
       if (!def || !t.gcsimKey || claimed.has(t.id) || !isAliasKeyInDef(t.gcsimKey, def.gcsimKeys ?? [])) return true;
       changes.push({ stintId, defId: def.id, name: t.name, key: t.gcsimKey, kind: 'merged', offset: t.offset });
+      return false;
+    });
+    if (kept.length !== arr.length) triggers.set(stintId, kept);
+  }
+  // いまの装備に無い効果（武器・聖遺物を変えて、定義の表から消えた効果）の発動は、取り除く。残すと、使っていない装備のバフが出続ける
+  const knownIds = new Set(Object.values(buffsByCharacter).flatMap(defs => defs.map(d => d.id)));
+  for (const [stintId, arr] of triggers) {
+    const kept = arr.filter(t => {
+      if (knownIds.has(t.passiveEffectId)) return true;
+      changes.push({ stintId, defId: t.passiveEffectId, name: t.name ?? t.passiveEffectId, key: t.gcsimKey ?? '', kind: 'removed', offset: t.offset });
       return false;
     });
     if (kept.length !== arr.length) triggers.set(stintId, kept);

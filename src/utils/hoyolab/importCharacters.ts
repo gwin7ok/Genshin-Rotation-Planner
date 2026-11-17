@@ -59,6 +59,10 @@ export interface OwnedCharacter {
   artifactStats: Record<string, number>;
   /** 取り込み時に気づいた注意（日本語の文） */
   warnings: string[];
+  /** 取得元（HoYoLAB の戦績 / Enka.Network のキャラクター詳細表示）。古い保存には無い */
+  source?: 'hoyolab' | 'enka';
+  /** このキャラを取得した日時（ISO）。古い保存には無い */
+  fetchedAt?: string;
 }
 
 const ASCENSION_CAPS = [20, 40, 50, 60, 70, 80, 90];

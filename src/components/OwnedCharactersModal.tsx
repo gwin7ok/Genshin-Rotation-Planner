@@ -8,6 +8,7 @@ import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { useDialogs } from './DialogProvider';
 import { fetchEnkaFromExtension, fetchFromExtension, pingExtension } from '../utils/hoyolab/extensionClient';
 import { convertEnkaResponse } from '../utils/hoyolab/enkaConvert';
+import { mergeEnkaOverHoyolab, stamp } from '../utils/hoyolab/mergeOwned';
 import { isHoyolabUid } from '../utils/hoyolab/uid';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
@@ -202,10 +203,35 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
       resolved.push(owned.ambiguousAscension ? await resolveAscension(owned, masterById.get(id ?? '')?.source?.gcsimKey, masters) : owned);
     }
     saveHoyolabUid(uid);
-    if (saveOwned(resolved, res.data.nickname)) {
+    // HoYoLAB は、ゲームでの装備変更の反映が遅いので、Enka.Network（ゲーム内「キャラクター詳細表示」の最大 12 キャラ）で取得できたキャラだけ、Enka の値で上書きする（D345）。
+    // Enka が使えない・取れないときも、HoYoLAB の結果は保存する
+    let characters = stamp(resolved, 'hoyolab', new Date());
+    let enkaNote: string;
+    if (extVersion === 'checking' || extVersion === null || isOlderVersion(extVersion, ENKA_MIN_EXTENSION_VERSION)) {
+      enkaNote = t('hoyolab:import.enkaSkippedOldExt', { version: ENKA_MIN_EXTENSION_VERSION });
+    } else {
+      setBusy('fetchEnka');
+      const er = await fetchEnkaFromExtension(uid);
+      if (!er.ok) {
+        enkaNote = t('hoyolab:import.enkaFailedKept', { message: er.error ?? '' });
+      } else {
+        const enkaChars = convertEnkaResponse(er.data ?? {}, {
+          characters: database.characters.map(c => ({ id: c.id, name: c.name, element: c.element })),
+          weapons: database.weapons, artifacts: database.artifacts,
+        });
+        if (enkaChars.length === 0) {
+          enkaNote = t('hoyolab:import.enkaEmptyKept');
+        } else {
+          const merged = mergeEnkaOverHoyolab(resolved, enkaChars);
+          characters = merged.characters;
+          enkaNote = t('hoyolab:import.enkaMerged', { updated: merged.updated, added: merged.added, skipped: merged.skipped, rest: characters.length - merged.updated - merged.added });
+        }
+      }
+    }
+    if (saveOwned(characters, res.data.nickname)) {
       setStore(loadOwned());
       const skipped = res.data.skipped ?? 0;
-      setMessage({ kind: 'ok', text: skipped > 0 ? t('hoyolab:import.donePartial', { count: resolved.length, skipped }) : t('hoyolab:import.done', { count: resolved.length }) });
+      setMessage({ kind: 'ok', text: (skipped > 0 ? t('hoyolab:import.donePartial', { count: characters.length, skipped }) : t('hoyolab:import.done', { count: characters.length })) + ' ' + enkaNote });
     } else {
       setMessage({ kind: 'error', text: t('hoyolab:import.errorGeneric', { message: 'storage' }) });
     }
@@ -348,6 +374,15 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                           {master && <GcsimMissingBadge char={master} />}
                           <span className="text-slate-400">{t('hoyolab:list.level', { level: o.level })}</span>
                           <span className="text-slate-400">{t('hoyolab:list.cons', { count: o.constellation })}</span>
+                          {o.source && (
+                            <span
+                              className={`text-[9px] px-1 py-0.5 rounded border ${o.source === 'enka' ? 'border-emerald-500/40 text-emerald-300' : 'border-slate-600 text-slate-400'}`}
+                              title={o.fetchedAt ? t('hoyolab:list.sourceTitle', { date: new Date(o.fetchedAt).toLocaleString(dateLocale) }) : undefined}
+                              data-testid={`owned-source-${o.genshinId}`}
+                            >
+                              {t(o.source === 'enka' ? 'hoyolab:list.sourceEnka' : 'hoyolab:list.sourceHoyolab')}
+                            </span>
+                          )}
                         </div>
                         <div className="text-[10px] text-slate-400 truncate">
                           {o.weapon.name}（{t('hoyolab:list.refine', { rank: o.weapon.refinement })}）

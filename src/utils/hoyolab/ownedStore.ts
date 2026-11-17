@@ -27,7 +27,9 @@ export function isValidOwnedCharacter(v: unknown): v is OwnedCharacter {
     && isInt(v.weapon.level, 1, 100) && isInt(v.weapon.maxLevel, 1, 100) && isInt(v.weapon.refinement, 1, 5)
     && Array.isArray(v.artifactSets) && v.artifactSets.every(s => isRecord(s) && typeof s.name === 'string' && isInt(s.count, 1, 5))
     && isRecord(v.artifactStats) && Object.entries(v.artifactStats).every(([k, n]) => /^[a-z]+%?$/.test(k) && typeof n === 'number' && Number.isFinite(n))
-    && Array.isArray(v.warnings) && v.warnings.every(w => typeof w === 'string');
+    && Array.isArray(v.warnings) && v.warnings.every(w => typeof w === 'string')
+    && (v.source === undefined || v.source === 'hoyolab' || v.source === 'enka')
+    && (v.fetchedAt === undefined || typeof v.fetchedAt === 'string');
 }
 
 /** 保存された持ちキャラを読む。無い・壊れているときは null（壊れた要素だけ除く） */

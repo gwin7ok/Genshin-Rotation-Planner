@@ -1,7 +1,7 @@
 import { GcsimMissingBadge, GcsimMissingTag, isGcsimMissingEquipment } from './GcsimMissingBadge';
 import { isHexereiCapable } from '../masterdata/hexereiCharacters';
 import { hasRevelationSetting, hasRevelationInfo, REVELATION_INFO, revelationTooltip } from '../masterdata/revelationCharacters';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Check, Shield, Zap, Sparkles, UserCheck, RefreshCw, ArrowLeftRight, Sword, Search, Filter, Trash2 } from 'lucide-react';
 import { CharacterAvatar } from './CharacterAvatar';
 import { ListSelect } from './ListSelect';
@@ -77,16 +77,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const [ownedWarnings, setOwnedWarnings] = useState<string[]>([]);
   // 「ステータスを変更」の画面
   const [isStatsOpen, setIsStatsOpen] = useState(false);
-  // 空の枠へ続けてキャラを選んでいるとき（選んだ枠の設定を見せたまま、次の選択は空の枠に入れる）
-  const [fillNext, setFillNext] = useState(false);
-  // 空の枠にキャラを選んだら、下のキャラ一覧が見えるよう、縦スクロールを一番下にする
-  const detailScrollRef = useRef<HTMLDivElement>(null);
-  const [scrollTick, setScrollTick] = useState(0);
-  useEffect(() => {
-    if (scrollTick === 0) return;
-    const el = detailScrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [scrollTick]);
 
   useEffect(() => {
     if (isOpen) {
@@ -97,7 +87,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       setOwnedStore(loadOwned());
       setOwnedWarnings([]);
       setIsStatsOpen(false);
-      setFillNext(false);
     }
   }, [isOpen, party, stints]);
 
@@ -116,20 +105,17 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
   const currentSlotChar = editingChars[selectedSlot];
 
   const handleSwapCharacter = (newRosterChar: CharacterConfig) => {
-    // 続けて空の枠を埋めているときは、最初の空の枠に入れる。そうでなければ、選択中の枠に入れる
-    const firstEmpty = editingChars.findIndex(c => isEmptySlotCharacter(c));
-    const target = fillNext && firstEmpty >= 0 ? firstEmpty : selectedSlot;
     // Avoid duplicates in party
-    const alreadyInParty = editingChars.some((c, i) => c.id === newRosterChar.id && i !== target);
+    const alreadyInParty = editingChars.some((c, i) => c.id === newRosterChar.id && i !== selectedSlot);
     if (alreadyInParty) {
       setWarningMsg(t('party:alreadyInParty', { name: newRosterChar.name }));
       setTimeout(() => setWarningMsg(null), 3000);
       return;
     }
 
-    const oldChar = editingChars[target];
+    const oldChar = editingChars[selectedSlot];
     const updated = [...editingParty];
-    updated[target] = {
+    updated[selectedSlot] = {
       characterId: newRosterChar.id,
       constellation: defaultConstellation(newRosterChar.rarity),
       energyRecharge: 100,
@@ -139,24 +125,20 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     if (owned) {
       const { fields, warnings } = ownedToPartyFields(owned, { weapons: database.weapons, artifacts: database.artifacts });
       // 持ちキャラの装備（build）を使うので、仮値（customStats）は消す（build と二重に持たない）
-      updated[target] = { ...updated[target], ...fields, customStats: undefined };
+      updated[selectedSlot] = { ...updated[selectedSlot], ...fields, customStats: undefined };
       setOwnedWarnings(warnings);
     } else {
       // 持ちキャラが無いときは、「仮値を使う」と同じ既定（Wiki のおすすめの武器・聖遺物セット・聖遺物ステータス）にする
       const equipment = defaultEquipmentFor(newRosterChar.id, { weapons: database.weapons, artifacts: database.artifacts });
-      updated[target] = { ...updated[target], ...equipment, customStats: defaultCustomStatsFor(newRosterChar.id) };
+      updated[selectedSlot] = { ...updated[selectedSlot], ...equipment, customStats: defaultCustomStatsFor(newRosterChar.id) };
       setOwnedWarnings([]);
     }
     setEditingParty(updated);
 
-    // 空の枠に選んだときは、選んだ枠の設定（武器・聖遺物）を見せたまま、続けて空の枠を埋められるようにし、一覧が見えるよう一番下までスクロールする
-    const wasEmpty = isEmptySlotCharacter(oldChar);
-    setSelectedSlot(target);
-    if (wasEmpty) {
-      setFillNext(editingChars.some((c, i) => i !== target && isEmptySlotCharacter(c)));
-      setScrollTick(n => n + 1);
-    } else {
-      setFillNext(false);
+    // 右隣のスロットが空（未設定）なら、続けて選べるようフォーカスを移す
+    const nextSlot = selectedSlot + 1;
+    if (nextSlot < editingChars.length && isEmptySlotCharacter(editingChars[nextSlot])) {
+      setSelectedSlot(nextSlot);
     }
 
     // Automatically migrate old character's timeline stints to the new character!
@@ -176,7 +158,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     updated[toSlot] = memberA;
     setEditingParty(updated);
     setSelectedSlot(toSlot);
-    setFillNext(false);
 
   };
 
@@ -184,7 +165,6 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     setEditingParty(createEmptyParty());
     setEditingStints([]);
     setSelectedSlot(0);
-    setFillNext(false);
     setConfirmClearAll(false);
   };
 
@@ -273,8 +253,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                   key={c.id}
                   role="button"
                   tabIndex={0}
-                  onClick={() => { setSelectedSlot(idx); setFillNext(false); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSlot(idx); setFillNext(false); } }}
+                  onClick={() => setSelectedSlot(idx)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSlot(idx); } }}
                   className={`relative p-2.5 rounded-xl border text-left transition-all cursor-pointer ${!isEmptySlotCharacter(c) ? 'pb-8' : ''} ${
                     isSelected 
                       ? 'bg-slate-950/80 border-yellow-400 shadow-md ring-2 ring-yellow-400' 
@@ -431,7 +411,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
         </div>
 
         {/* Slot Detail & Swap Roster */}
-        <div ref={detailScrollRef} className="p-5 overflow-y-auto space-y-5 flex-1">
+        <div className="p-5 overflow-y-auto space-y-5 flex-1">
           {currentSlotChar && !isEmptySlotCharacter(currentSlotChar) && (
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">

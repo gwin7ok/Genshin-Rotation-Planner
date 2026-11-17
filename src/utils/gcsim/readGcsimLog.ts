@@ -243,7 +243,7 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
   const effectEvents: GcsimEffectEvent[] = [];
   const effectEventKeys = new Set<string>();
   const pushEffectEvent = (ev: GcsimEffectEvent) => {
-    const id = `${ev.key} ${ev.frame}`;
+    const id = `${ev.key}\u0000${ev.frame}`;
     if (effectEventKeys.has(id)) return;
     effectEventKeys.add(id);
     effectEvents.push(ev);
@@ -353,13 +353,13 @@ export function readGcsimLog(logs: GcsimLogEvent[], options: ReadGcsimLogOptions
     const groups = new Map<string, number[]>();
     for (const l of logs) {
       if (l.event !== 'damage') continue;
-      const gk = `${l.char_index ?? 0} ${l.msg}`;
+      const gk = `${l.char_index ?? 0}\u0000${l.msg}`;
       const arr = groups.get(gk) ?? [];
       arr.push(l.frame);
       groups.set(gk, arr);
     }
     for (const [gk, frames] of groups) {
-      const [ci, abil] = gk.split(' ');
+      const [ci, abil] = gk.split('\u0000');
       frames.sort((a, b) => a - b);
       let cluster: number[] = [];
       const flush = () => {

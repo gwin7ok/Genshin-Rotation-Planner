@@ -29,6 +29,8 @@ const rotationFile = await server.ssrLoadModule('/src/utils/rotationFile.ts');
 const recovery = await server.ssrLoadModule('/src/utils/recoveryDump.ts');
 const dbValidation = await server.ssrLoadModule('/src/utils/databaseValidation.ts');
 const dbImport = await server.ssrLoadModule('/src/utils/databaseImport.ts');
+const { loadMasterData } = await server.ssrLoadModule('/src/data/masterBundle.ts');
+await loadMasterData(); // 同梱のマスターは、使う前に読み込む（D354）
 
 let passed = 0;
 const check = (name: string, fn: () => void) => {

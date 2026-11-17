@@ -70,6 +70,32 @@ export type ImportFetchResult =
   | { ok: true; text: string; fileName: string }
   | { ok: false; reason: 'network' | 'http' | 'tooLarge' | 'timeout'; status?: number };
 
+/** 応答の本文を、上限バイトまで読む。上限を超えたら、読むのをやめて（abort）null を返す */
+async function readBodyLimited(res: Response, maxBytes: number, abort: () => void): Promise<string | null> {
+  if (!res.body) {
+    const text = await res.text();
+    return new TextEncoder().encode(text).length > maxBytes ? null : text;
+  }
+  const reader = res.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      abort();
+      try { await reader.cancel(); } catch { /* すでに閉じている */ }
+      return null;
+    }
+    chunks.push(value);
+  }
+  const all = new Uint8Array(total);
+  let pos = 0;
+  for (const c of chunks) { all.set(c, pos); pos += c.byteLength; }
+  return new TextDecoder().decode(all);
+}
+
 /** リンク先を取得する。短縮 URL のリダイレクトは、ブラウザが辿る（リダイレクト先が CORS を許可していないと、network になる） */
 export async function fetchImportText(url: string): Promise<ImportFetchResult> {
   const ctrl = new AbortController();
@@ -79,8 +105,9 @@ export async function fetchImportText(url: string): Promise<ImportFetchResult> {
     if (!res.ok) return { ok: false, reason: 'http', status: res.status };
     const declared = Number(res.headers.get('content-length') ?? 0);
     if (declared > IMPORT_MAX_BYTES) return { ok: false, reason: 'tooLarge' };
-    const text = await res.text();
-    if (text.length > IMPORT_MAX_BYTES) return { ok: false, reason: 'tooLarge' };
+    // 本文は、少しずつ読み、上限を超えた時点で打ち切る（Content-Length が無い・偽の応答でも、巨大な本文を全部は読まない。D349）
+    const text = await readBodyLimited(res, IMPORT_MAX_BYTES, () => ctrl.abort());
+    if (text === null) return { ok: false, reason: 'tooLarge' };
     // 最終的なリンク（リダイレクト後）の末尾を、ファイル名の候補にする
     let fileName = '';
     try {

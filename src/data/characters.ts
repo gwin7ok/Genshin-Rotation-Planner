@@ -1,5 +1,4 @@
-import { CharacterConfig, ElementType, WeaponType } from '../types/genshin';
-import masterDataJson from './characters_master_data.json';
+import { CharacterConfig, ElementType } from '../types/genshin';
 import { t } from '../i18n';
 
 export const ELEMENT_COLORS: Record<ElementType, { bg: string; border: string; text: string; light: string; hex: string }> = {
@@ -30,24 +29,4 @@ export const createEmptySlotCharacter = (slotIndex: number): CharacterConfig => 
   availableActions: [],
 });
 
-export const ELEMENT_NAMES_JA: Record<ElementType, string> = {
-  pyro: '炎元素',
-  hydro: '水元素',
-  electro: '雷元素',
-  dendro: '草元素',
-  cryo: '氷元素',
-  anemo: '風元素',
-  geo: '岩元素',
-  physical: '物理',
-};
-
-export const WEAPON_TYPE_NAMES_JA: Record<WeaponType, string> = {
-  sword: '片手剣',
-  claymore: '両手剣',
-  polearm: '長柄武器',
-  bow: '弓',
-  catalyst: '法器',
-};
-
-/** genshin-db + gcsim から生成したキャラクターマスター (npm run build:master で再生成) */
-export const MASTER_CHARACTERS = masterDataJson as CharacterConfig[];
+// 同梱のキャラクターマスター（characters_master_data.json。npm run build:master で再生成）は、masterData.ts で読み込む（D354）

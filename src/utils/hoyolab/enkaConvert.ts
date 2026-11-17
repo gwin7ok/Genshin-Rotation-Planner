@@ -10,6 +10,7 @@
  */
 
 import type { OwnedCharacter } from './importCharacters';
+import { t } from '../../i18n';
 
 /** Enka の応答（使う項目だけ） */
 export interface EnkaReliquary {
@@ -94,7 +95,7 @@ function talentLevels(avatarId: number, map: Record<string, number>, warnings: s
   if (exception) return [map[String(exception[0])] ?? 1, map[String(exception[1])] ?? 1, map[String(exception[2])] ?? 1];
   let ids = Object.keys(map).map(Number).sort((a, b) => a - b);
   if (isTraveler(avatarId)) ids = [...ids.filter(i => i >= 100000), ...ids.filter(i => i < 100000)]; // 旅人: 通常攻撃（10 万以上）を先頭に
-  if (ids.length !== 3) warnings.push(`天賦の数が想定外です（${ids.length} 個）。先頭・2 番目・最後を、通常・スキル・爆発として使います`);
+  if (ids.length !== 3) warnings.push(`talentCount:${ids.length}`); // 先頭・2 番目・最後を、通常・スキル・爆発として使う
   const lv = (i: number) => map[String(ids[i])] ?? 1;
   return [lv(0), lv(1), lv(ids.length - 1)];
 }
@@ -110,7 +111,7 @@ export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCha
   let element = '';
   if (isTraveler(a.avatarId)) {
     element = TRAVELER_ELEMENT_BY_DIGIT[a.skillDepotId % 10] ?? '';
-    if (!element) warnings.push('旅人の元素を判別できません');
+    if (!element) warnings.push('travelerElement');
   } else if (candidates[0]) {
     element = cap(candidates[0].element);
   }
@@ -119,14 +120,14 @@ export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCha
   const weaponEquip = a.equipList.find(isWeapon);
   const weaponMaster = weaponEquip ? masters.weapons.find(w => w.id === String(weaponEquip.itemId)) : undefined;
   const refinement = weaponEquip ? (Object.values(weaponEquip.weapon.affixMap ?? {})[0] ?? 0) + 1 : 1;
-  if (!weaponEquip) warnings.push('武器の情報がありません');
+  if (!weaponEquip) warnings.push('noWeaponInfo');
 
   const reliquaries = a.equipList.filter(isReliquary);
   const setCounts = new Map<number, number>();
   const stats: Record<string, number> = {};
   const add = (propId: string, value: number) => {
     const def = STAT_KEYS[propId];
-    if (!def) { warnings.push(`未対応のステータス（${propId}）を無視しました`); return; }
+    if (!def) { warnings.push(`unsupportedStat:${propId}`); return; }
     stats[def.key] = (stats[def.key] ?? 0) + (def.percent ? value / 100 : value);
   };
   for (const r of reliquaries) {
@@ -138,7 +139,7 @@ export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCha
 
   return {
     genshinId: a.avatarId,
-    name: master?.name ?? `キャラ ${a.avatarId}`,
+    name: master?.name ?? t('hoyolab:fallback.character', { id: a.avatarId }),
     element,
     level,
     maxLevel,
@@ -147,14 +148,15 @@ export function convertEnkaAvatar(a: EnkaAvatar, masters: EnkaMasters): OwnedCha
     talents: talentLevels(a.avatarId, a.skillLevelMap, warnings),
     weapon: {
       genshinId: weaponEquip?.itemId ?? 0,
-      name: weaponMaster?.name ?? `武器 ${weaponEquip?.itemId ?? 0}`,
+      name: weaponMaster?.name ?? t('hoyolab:fallback.weapon', { id: weaponEquip?.itemId ?? 0 }),
       level: weaponEquip?.weapon.level ?? 1,
       maxLevel: ASCENSION_CAPS[weaponEquip?.weapon.promoteLevel ?? 0] ?? 90,
       refinement,
     },
-    artifactSets: [...setCounts].map(([id, count]) => ({ name: masters.artifacts.find(x => x.id === String(id))?.name ?? `聖遺物セット ${id}`, count })),
+    artifactSets: [...setCounts].map(([id, count]) => ({ name: masters.artifacts.find(x => x.id === String(id))?.name ?? t('hoyolab:fallback.set', { id }), count })),
     artifactStats: stats,
     warnings,
+    ...(weaponEquip ? {} : { incomplete: true }),
   };
 }
 

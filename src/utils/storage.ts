@@ -92,13 +92,26 @@ export function clearActiveState(): void {
  * 保存編成（スロット）の一覧を読む
  */
 export function getSavedSlots(): SavedRotationSlot[] {
+  return sanitizeSlotList(readRawSlots());
+}
+
+/** 保存先にある保存編成を、検査せずそのまま読む（書き込みは、これを元にする。読めない編成も、消さずに残すため） */
+function readRawSlots(): unknown[] {
   const list = readJson<unknown>(STORAGE_KEYS.savedSlots);
-  if (!Array.isArray(list)) return [];
-  // 旧形式（キャラを丸ごと持つ）の保存編成と、壊れた保存編成は読み込まない（D13）。使えるものも、壊れた出場・アクションは除く
+  return Array.isArray(list) ? list : [];
+}
+
+/** 旧形式（キャラを丸ごと持つ）の保存編成と、壊れた保存編成は読み込まない（D13）。使えるものも、壊れた出場・アクションは除く */
+function sanitizeSlotList(list: unknown[]): SavedRotationSlot[] {
   return list.flatMap(raw => {
     const r = sanitizeSlot(raw);
     return r ? [r.slot] : [];
   });
+}
+
+/** 保存編成の ID（読めない編成は null） */
+function rawSlotId(raw: unknown): string | null {
+  return raw && typeof raw === 'object' && typeof (raw as { id?: unknown }).id === 'string' ? (raw as { id: string }).id : null;
 }
 
 /** 保存編成を保存・削除できなかったときに、利用者に出す文（容量超過・ブラウザの保存が無効のとき） */
@@ -115,17 +128,18 @@ export interface SlotWriteResult {
  * 保存編成を、追加または更新する（成否つき。容量超過・保存が無効のときは、ok: false）
  */
 export function trySaveSlot(slot: SavedRotationSlot): SlotWriteResult {
-  const current = getSavedSlots();
-  const existingIdx = current.findIndex(s => s.id === slot.id);
+  // 保存先の中身（検査前）を元に書く。読めない旧形式・壊れた編成を、ここで消してしまわないため（D350）
+  const current = readRawSlots();
+  const existingIdx = current.findIndex(r => rawSlotId(r) === slot.id);
   const stamped = { ...slot, updatedAt: new Date().toISOString() };
-  let updated: SavedRotationSlot[];
+  let updated: unknown[];
   if (existingIdx >= 0) {
     updated = [...current];
     updated[existingIdx] = stamped;
   } else {
     updated = [stamped, ...current];
   }
-  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: updated } : { ok: false, slots: getSavedSlots() };
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: sanitizeSlotList(updated) } : { ok: false, slots: getSavedSlots() };
 }
 
 /**
@@ -146,15 +160,8 @@ export function replaceSavedSlots(slots: SavedRotationSlot[]): boolean {
  * 保存編成を削除する（成否つき）
  */
 export function tryDeleteSlot(slotId: string): SlotWriteResult {
-  const updated = getSavedSlots().filter(s => s.id !== slotId);
-  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: updated } : { ok: false, slots: getSavedSlots() };
-}
-
-/**
- * 保存編成を削除する
- */
-export function deleteSlot(slotId: string): SavedRotationSlot[] {
-  return tryDeleteSlot(slotId).slots;
+  const updated = readRawSlots().filter(r => rawSlotId(r) !== slotId); // 読めない編成は、消さずに残す
+  return writeJson(STORAGE_KEYS.savedSlots, updated) ? { ok: true, slots: sanitizeSlotList(updated) } : { ok: false, slots: getSavedSlots() };
 }
 
 /**

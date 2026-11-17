@@ -62,8 +62,6 @@
     "loopFirst": "Start (no loop point; all cycles identical)",
     "loopBetween": "Stint {{index}} (between {{prev}} and {{next}})",
     "title": "Rotation Gantt chart",
-    "total": "Total:",
-    "position": "Position:",
     "snapLines": "Switch snap lines (endpoints aligned)",
     "loopPoint": "Loop point:",
     "loopAtStart": "Start (all cycles identical)",

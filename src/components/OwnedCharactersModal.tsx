@@ -13,7 +13,7 @@ import { isHoyolabUid } from '../utils/hoyolab/uid';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
-import { clearOwned, loadHoyolabUid, loadOwned, saveHoyolabUid, saveOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
+import { clearOwned, loadHoyolabUid, loadOwned, loadUseEnka, saveHoyolabUid, saveOwned, saveUseEnka, type OwnedStore } from '../utils/hoyolab/ownedStore';
 
 /** 拡張機能の zip を置く、GitHub のリリースページ */
 const RELEASES_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner/releases';
@@ -117,6 +117,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   const { confirm } = useDialogs();
   const [extVersion, setExtVersion] = useState<string | null | 'checking'>('checking');
   const [uid, setUid] = useState('');
+  // HoYoLAB の取り込みのあと、Enka.Network の最新の値で上書きするか（保存される。既定: する）
+  const [useEnka, setUseEnka] = useState(true);
   const [busy, setBusy] = useState<null | 'fetch' | 'fetchEnka' | 'resolve'>(null);
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
   const [store, setStore] = useState<OwnedStore | null>(null);
@@ -129,6 +131,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   useEffect(() => {
     if (!isOpen) return;
     setUid(loadHoyolabUid());
+    setUseEnka(loadUseEnka());
     setStore(loadOwned());
     setMessage(null);
     void checkExtension();
@@ -148,6 +151,16 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
 
   /** 他のアカウントの UID: Enka.Network から取り込む（ゲーム内の「キャラクター詳細表示」に並べたキャラだけ） */
   const importFromEnka = async () => {
+    try {
+      await importFromEnkaBody();
+    } catch (e) {
+      // 想定外の例外でも、「取得中」のまま固まらないようにする（D351）
+      setMessage({ kind: 'error', text: t('hoyolab:import.errorGeneric', { message: e instanceof Error ? e.message : String(e) }) });
+    } finally {
+      setBusy(null);
+    }
+  };
+  const importFromEnkaBody = async () => {
     if (extVersion === 'checking' || extVersion === null || isOlderVersion(extVersion, ENKA_MIN_EXTENSION_VERSION)) {
       setBusy(null);
       setMessage({ kind: 'error', text: t('hoyolab:import.enkaNeedUpdate', { version: ENKA_MIN_EXTENSION_VERSION }) });
@@ -157,7 +170,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     const res = await fetchEnkaFromExtension(uid);
     if (!res.ok) {
       setBusy(null);
-      setMessage({ kind: 'error', text: res.noExtension ? t('hoyolab:import.noExtension') : t('hoyolab:import.errorEnka', { message: res.error ?? '' }) });
+      setMessage({ kind: 'error', text: res.timedOut ? t('hoyolab:import.timedOut') : t('hoyolab:import.errorEnka', { message: res.error ?? '' }) });
       return;
     }
     const converted = convertEnkaResponse(res.data ?? {}, {
@@ -180,6 +193,15 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
   };
 
   const handleImport = async () => {
+    try {
+      await handleImportBody();
+    } catch (e) {
+      setMessage({ kind: 'error', text: t('hoyolab:import.errorGeneric', { message: e instanceof Error ? e.message : String(e) }) });
+    } finally {
+      setBusy(null);
+    }
+  };
+  const handleImportBody = async () => {
     if (!/^\d{9,10}$/.test(uid)) { setMessage({ kind: 'error', text: t('hoyolab:import.invalidUid') }); return; }
     setMessage(null);
     // 中国サーバー・Bilibili 版の UID は、HoYoLAB（海外版）では扱えない。最初から Enka.Network で取り込む
@@ -190,7 +212,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     if (!res.ok && res.retcode === 10104) { await importFromEnka(); return; }
     if (!res.ok) {
       setBusy(null);
-      setMessage({ kind: 'error', text: res.noExtension ? t('hoyolab:import.noExtension') : errorText(res.retcode, res.error ?? '') });
+      setMessage({ kind: 'error', text: res.timedOut ? t('hoyolab:import.timedOut') : errorText(res.retcode, res.error ?? '') });
       return;
     }
     // 突破段階が不明なキャラは、gcsim の基礎 HP で決める（gcsim が使えなければ、突破前のまま）
@@ -207,7 +229,9 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     // Enka が使えない・取れないときも、HoYoLAB の結果は保存する
     let characters = stamp(resolved, 'hoyolab', new Date());
     let enkaNote: string;
-    if (extVersion === 'checking' || extVersion === null || isOlderVersion(extVersion, ENKA_MIN_EXTENSION_VERSION)) {
+    if (!useEnka) {
+      enkaNote = t('hoyolab:import.enkaOff');
+    } else if (extVersion === 'checking' || extVersion === null || isOlderVersion(extVersion, ENKA_MIN_EXTENSION_VERSION)) {
       enkaNote = t('hoyolab:import.enkaSkippedOldExt', { version: ENKA_MIN_EXTENSION_VERSION });
     } else {
       setBusy('fetchEnka');
@@ -309,7 +333,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
             <label className="font-semibold text-slate-200" htmlFor="owned-uid">{t('hoyolab:uid.label')}</label>
             <div className="flex items-center gap-2">
               <input
-                id="owned-uid" type="text" inputMode="numeric" maxLength={9} value={uid}
+                id="owned-uid" type="text" inputMode="numeric" maxLength={10} value={uid}
                 onChange={e => setUid(e.target.value.replace(/\D/g, ''))}
                 onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing && extOk && !busy) void handleImport(); }}
                 placeholder={t('hoyolab:uid.placeholder')}
@@ -325,6 +349,16 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                 {busy === 'fetch' ? t('hoyolab:import.running') : busy === 'fetchEnka' ? t('hoyolab:import.runningEnka') : busy === 'resolve' ? t('hoyolab:import.resolving') : t('hoyolab:import.button')}
               </button>
             </div>
+            <label className="flex items-start gap-2 text-[11px] text-slate-300 cursor-pointer">
+              <input
+                type="checkbox" checked={useEnka} data-testid="owned-use-enka" className="mt-0.5 accent-sky-500"
+                onChange={e => { setUseEnka(e.target.checked); saveUseEnka(e.target.checked); }}
+              />
+              <span>
+                {t('hoyolab:uid.useEnka')}
+                <span className="block text-[10px] text-slate-500">{t('hoyolab:uid.useEnkaHint')}</span>
+              </span>
+            </label>
             <p className="text-[11px] text-amber-300 flex items-start gap-1" data-testid="owned-login-hint">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-px" />
               <span>{t('hoyolab:uid.loginHint')}{' '}

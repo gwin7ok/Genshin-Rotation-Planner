@@ -18,7 +18,7 @@ const ch = (id: number, level: number, extra: Record<string, unknown> = {}) => (
 });
 const now = new Date('2026-11-17T00:00:00Z');
 const hoyo = [ch(1, 80), ch(2, 80), ch(3, 80, { ambiguousAscension: true })];
-const enka = [ch(2, 90), ch(3, 90), ch(9, 90), ch(1, 99, { warnings: ['武器の情報がありません'] })];
+const enka = [ch(2, 90), ch(3, 90), ch(9, 90), ch(1, 99, { warnings: ['noWeaponInfo'], incomplete: true })];
 const r = mergeEnkaOverHoyolab(hoyo, enka, now);
 
 check(r.characters.map((c: any) => c.genshinId).join() === '1,2,3,9', '並び: HoYoLAB の順のあとに、新しいキャラが足される');

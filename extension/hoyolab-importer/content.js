@@ -1,7 +1,8 @@
 // アプリのページと拡張機能の橋渡し。
 // アプリ → { source:'grp-app', type:'ping' | 'hoyolab-fetch' | 'enka-fetch', uid, requestId }
 // 拡張 → { source:'grp-ext', type:'pong' | 'hoyolab-result' | 'enka-result', ..., requestId }
-const reply = (type, requestId, body) => window.postMessage({ source: 'grp-ext', type, requestId, ...body }, '*');
+// 返信は、このページ自身の origin だけに送る（'*' にしない。ほかの origin のページに、応答が渡らないように）
+const reply = (type, requestId, body) => window.postMessage({ source: 'grp-ext', type, requestId, ...body }, window.location.origin);
 
 const relay = (message, replyType, requestId) => {
   chrome.runtime.sendMessage(message, (res) => {

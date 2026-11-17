@@ -4,7 +4,6 @@
  * - 英語のときは `obj.en[key]`、無ければ日本語の欄（`obj[key]`）。日本語のときは日本語の欄。
  * - 処理（数値の抽出・判定・gcsim の設定文）では使わない。日本語の欄をそのまま見る。
  */
-import type { DataSourceQuote } from '../types/genshin';
 import { currentLanguage, t } from './index';
 import { labelForKey, labelForKeyEn } from '../masterdata/effectKeyDisplay';
 import { CHARACTER_LINKED_EFFECTS } from '../masterdata/characterLinkedEffects';
@@ -92,12 +91,4 @@ export function frameSourceText(source: string | undefined): string {
 export function reportText(text: string, nameEn?: (ja: string) => string | undefined): string {
   if (currentLanguage !== 'en') return text;
   return reportTextEnglish(text, nameEn) ?? text;
-}
-
-/** 根拠の引用（D258。英語のときは en.dataSource、無ければ日本語の原文） */
-export function locDataSource(obj: { dataSource?: DataSourceQuote; en?: { dataSource?: DataSourceQuote } } | undefined | null, key: keyof DataSourceQuote): string | undefined {
-  if (!obj) return undefined;
-  const ja = obj.dataSource?.[key];
-  if (currentLanguage !== 'en') return ja;
-  return obj.en?.dataSource?.[key] || ja;
 }

@@ -33,5 +33,5 @@ export async function resolveAscension(
   // 両方とも 1 以上ずれているときは、決められない（そのまま）
   if (Math.min(diffBefore, diffAfter) > 2) return owned;
   const ascended = diffAfter < diffBefore;
-  return { ...owned, maxLevel: ascended ? after : before, ambiguousAscension: false, warnings: owned.warnings.filter(w => !w.includes('突破前か突破後か')) };
+  return { ...owned, maxLevel: ascended ? after : before, ambiguousAscension: false, warnings: owned.warnings.filter(w => !w.startsWith('ambiguousLevel')) };
 }

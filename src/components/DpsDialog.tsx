@@ -10,7 +10,7 @@ import { previewFinalStats, type FinalStats } from '../utils/gcsim/finalStatsPre
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
-import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult } from '../utils/gcsim/dpsCalc';
+import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult, type DpsSettings } from '../utils/gcsim/dpsCalc';
 import { loadDpsSettings, saveDpsSettings } from '../utils/appSettings';
 import { ER_DEFAULT_ENEMY_PARTICLES, type EnemyParticles } from '../utils/gcsim/requiredEnergyRecharge';
 
@@ -47,7 +47,9 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<DpsProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [result, setResult] = useState<{ result: DpsResult; members: { characterId: string; name: string }[]; ranAt: number; elapsedMs: number; settingsText: string; energy: boolean; loops: number } | null>(null);
+  // configText・settings: 実行したときの設定文と設定。開き直したとき、編成・ローテーションが変わっていないかの確認に使う（D353）
+  const [result, setResult] = useState<{ result: DpsResult; members: { characterId: string; name: string }[]; elapsedMs: number; energy: boolean; loops: number; configText: string; settings: DpsSettings } | null>(null);
+  const [stale, setStale] = useState(false);
   // 計算中の途中経過の表に使う、編成のキャラ（結果が出るまでの間）
   const [runMembers, setRunMembers] = useState<{ characterId: string; name: string }[]>([]);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
@@ -63,7 +65,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     if (Number.isFinite(n) && n >= 1) setWasmCores(n);
   };
 
-  const settingsNow = () => ({
+  const settingsNow = (): DpsSettings => ({
     loops: Math.min(DPS_MAX_LOOPS, Math.max(1, Math.floor(num(loops, DPS_DEFAULT_LOOPS)))),
     runs: Math.min(DPS_MAX_RUNS, Math.max(1, Math.floor(num(runs, DPS_DEFAULT_RUNS)))),
     enemies: enemies.map(fromInput),
@@ -77,7 +79,8 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   /** 設定文を作る（エネルギーを考慮しないときは、爆発を無視し、粒子も出さない） */
   const buildFor = (s: ReturnType<typeof settingsNow>) => buildRef.current({
     loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy,
-    enemyParticles: s.energy && s.particles.amount > 0 ? s.particles : undefined,
+    // 粒子の間隔の最大が 0 のときは出さない（チャージ効率の計算と同じ）
+    enemyParticles: s.energy && s.particles.amount > 0 && s.particles.maxSeconds > 0 ? s.particles : undefined,
   });
 
   // 開いたとき: 保存した設定を読み、実行できるかを確かめる
@@ -93,7 +96,10 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     setPAmount(String(s.particles.amount));
     setMessage(null);
     const base = buildRef.current({ loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy });
-    setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
+    const errors = base.warnings.filter(w => w.level === 'error').map(w => w.message);
+    setNotRunnable(base.runnable ? [] : errors.length > 0 ? errors : [t('gcsim:dps.notRunnableUnknown')]);
+    // 前の結果があるときは、実行したときの設定で作り直した設定文が、そのときと同じか確かめる（違えば、編成・ローテーションが変わっている）
+    setStale(result ? buildFor(result.settings).config !== result.configText : false);
   }, [isOpen]);
 
   // 装備・ステータスの表示用: 編成の各キャラの最終ステータスを求める
@@ -127,14 +133,15 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     const parallel = (await resolveEngine()) === 'wasm' ? wasmParallelism() : 1;
     let outcome: DpsOutcome;
     try {
-      outcome = await computeDps({ config, runs: s.runs, parallel, run: runGcsimSample, onProgress: setProgress, shouldCancel: () => cancelRef.current });
+      outcome = await computeDps({ config, runs: s.runs, loops: s.loops, parallel, run: runGcsimSample, onProgress: setProgress, shouldCancel: () => cancelRef.current });
     } catch (e) {
       outcome = { status: 'error', message: e instanceof Error ? e.message : String(e) };
     }
     setRunning(false);
     setProgress(null);
     if (outcome.status === 'ok') {
-      setResult({ result: outcome.result, members: outcome.members.map(m => ({ characterId: m.characterId, name: m.name })), ranAt: Date.now(), elapsedMs: Date.now() - t0, settingsText: `${s.loops}/${s.runs}`, energy: s.energy, loops: s.loops });
+      setResult({ result: outcome.result, members: outcome.members.map(m => ({ characterId: m.characterId, name: m.name })), elapsedMs: Date.now() - t0, energy: s.energy, loops: s.loops, configText: config.config, settings: s });
+      setStale(false);
     } else if (outcome.status === 'cancelled') {
       setMessage(t('gcsim:dps.cancelled'));
     } else {
@@ -159,7 +166,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const r = running ? progress?.partial : result?.result;
   // 爆発のエネルギー待ちの回数（1 周あたり）。割る数 = ローテーションの周数 − 1（最初の 1 周は、初動を含むので除く）。計算中は、画面の設定
   const waitEnergyOn = running ? energy : (result?.energy ?? false);
-  const waitLoops = running ? Math.max(1, Math.floor(Number(loops)) || 1) : (result?.loops ?? 1);
+  const waitLoops = running ? settingsNow().loops : (result?.loops ?? 1);
   const perLap = (n: number): string | null => (waitLoops >= 2 ? (n / (waitLoops - 1)).toFixed(2) : null);
   const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
 
@@ -191,9 +198,10 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
               <button onClick={() => void start()} disabled={notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-rose-500 hover:bg-rose-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"><Play className="w-3.5 h-3.5" />{t('gcsim:dps.start')}</button>
             )}
             {running && <span className="text-xs text-slate-300">{progress ? t('gcsim:dps.progress', { done: progress.done, total: progress.total }) : t('gcsim:dps.running')}</span>}
-            {result && !running && <span className="text-xs text-slate-500">{t('gcsim:dps.lastRun', { loops: result.settingsText.split('/')[0], runs: r?.runs ?? 0, seconds: (result.elapsedMs / 1000).toFixed(1) })}</span>}
+            {result && !running && <span className="text-xs text-slate-500">{t('gcsim:dps.lastRun', { loops: result.loops, runs: r?.runs ?? 0, seconds: (result.elapsedMs / 1000).toFixed(1) })}</span>}
           </div>
           {message && <p className="text-xs text-amber-300">{message}</p>}
+          {stale && !running && result && <p className="text-xs text-amber-300" data-testid="dps-stale">{t('gcsim:dps.stale')}</p>}
 
           {r && r.runs > 0 && (
             <div className="space-y-3" data-testid="dps-result">
@@ -204,6 +212,11 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                   {t('gcsim:dps.spread', { sd: fmt(r.dps.sd), min: fmt(r.dps.min), max: fmt(r.dps.max) })}
                 </div>
                 <div className="text-[11px] text-slate-500">{t('gcsim:dps.totalDamage', { total: fmt(r.total.mean), seconds: r.seconds.toFixed(1) })}</div>
+                {r.truncated && (
+                  <div className="text-[11px] text-amber-300" data-testid="dps-truncated">
+                    {t('gcsim:dps.truncated', { loops: waitLoops, worst: r.truncated.worst, count: r.truncated.count, runs: r.runs })}
+                  </div>
+                )}
                 {waitEnergyOn && (
                   <div className="text-[11px] text-slate-500" data-testid="dps-energy-waits">
                     {perLap(r.energyWaits) === null ? t('gcsim:dps.energyWaitsNoLap') : t('gcsim:dps.energyWaitsTotal', { n: perLap(r.energyWaits), laps: waitLoops - 1 })}
@@ -275,7 +288,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                 <span>{t('gcsim:er.enemyParticlesEvery')}</span>
                 <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
                 <span>{t('gcsim:er.enemyParticlesUnit')}</span>
-                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
               </div>
             )}
             <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
@@ -286,7 +299,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
             <div className="flex items-center gap-1.5">
               <Stepper value={loops} onChange={setLoops} step={1} min={1} max={DPS_MAX_LOOPS} disabled={running} widthClass="w-14" />
               <span>{t('gcsim:dps.loopsUnit')}</span>
-              <button onClick={() => setLoops(String(DPS_DEFAULT_LOOPS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              <button onClick={() => setLoops(String(DPS_DEFAULT_LOOPS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.loopsNote', { max: DPS_MAX_LOOPS })}</p>
           </div>
@@ -296,7 +309,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
             <div className="flex items-center gap-1.5">
               <Stepper value={runs} onChange={setRuns} step={10} min={1} max={DPS_MAX_RUNS} disabled={running} widthClass="w-16" />
               <span>{t('gcsim:dps.runsUnit')}</span>
-              <button onClick={() => setRuns(String(DPS_DEFAULT_RUNS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              <button onClick={() => setRuns(String(DPS_DEFAULT_RUNS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.runsNote', { max: DPS_MAX_RUNS })}</p>
             <div className="flex items-center gap-1.5 pt-1">
@@ -315,7 +328,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                   <span className="ml-2">{t('gcsim:dps.enemyLevel')}</span>
                   <Stepper value={e.level} onChange={v => updateEnemy(i, { level: v })} step={1} min={1} max={200} disabled={running} widthClass="w-14" />
                   <span className="ml-2">{t('gcsim:dps.enemyResistAll')}</span>
-                  <Stepper value={e.resist.physical} onChange={v => setAllResist(i, v)} step={5} min={-100} max={200} disabled={running} widthClass="w-14" />
+                  <Stepper value={ENEMY_RESIST_KEYS.every(k => num(e.resist[k], NaN) === num(e.resist.physical, NaN)) ? e.resist.physical : ''} onChange={v => setAllResist(i, v)} step={5} min={-100} max={200} disabled={running} widthClass="w-14" />
                   <span>%</span>
                   {enemies.length > 1 && (
                     <button onClick={() => setEnemies(list => list.filter((_, j) => j !== i))} disabled={running} className="ml-auto p-1 rounded text-slate-400 hover:text-rose-300 hover:bg-slate-800 disabled:opacity-40" title={t('gcsim:dps.enemyRemove')}><Trash2 className="w-3.5 h-3.5" /></button>
@@ -333,7 +346,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
             ))}
             <div className="flex items-center gap-2">
               <button onClick={() => setEnemies(list => [...list, toInput(DEFAULT_ENEMY)])} disabled={running || enemies.length >= DPS_MAX_ENEMIES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40"><Plus className="w-3 h-3" />{t('gcsim:dps.enemyAdd')}</button>
-              <button onClick={() => setEnemies([toInput(DEFAULT_ENEMY)])} disabled={running} className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+              <button onClick={() => setEnemies([toInput(DEFAULT_ENEMY)])} disabled={running} className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.enemiesNote', { max: DPS_MAX_ENEMIES })}</p>
           </div>

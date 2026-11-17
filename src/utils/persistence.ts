@@ -40,6 +40,8 @@ export const SETTING_KEYS = {
   ownedCharacters: 'ownedCharacters',
   /** HoYoLAB の取り込みで入力した原神の UID（文字列。入力の手間を減らすため） */
   hoyolabUid: 'hoyolabUid',
+  /** 持ちキャラの取り込みで、Enka.Network の最新の値で上書きするか（'true' | 'false'。既定: true。D352） */
+  ownedUseEnka: 'ownedUseEnka',
 } as const;
 
 /** この端末だけの設定のキー（バックアップに含めない） */
@@ -53,8 +55,6 @@ export const DEVICE_KEYS = {
   /** 利用者が最後に確認した、DB（マスターデータ）のバージョン。更新の通知（versionNotice.ts）に使う */
   lastSeenDbVersion: 'app_last_seen_db_version',
 } as const;
-
-export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];
 
 /** バックアップに含める設定のキーの一覧 */
 export const BACKUP_SETTING_KEYS: readonly string[] = Object.values(SETTING_KEYS);

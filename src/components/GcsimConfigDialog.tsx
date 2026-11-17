@@ -73,9 +73,13 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
     const target = result.config;
     setValidating(true);
     setValidation(null);
-    const res = await validateGcsimConfig(target);
-    setValidating(false);
-    setValidation(res);
+    try {
+      setValidation(await validateGcsimConfig(target));
+    } catch (e) {
+      setValidation({ status: 'unreachable', message: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setValidating(false);
+    }
   };
   const handleRun = async () => {
     setRunOutcome(null);
@@ -85,8 +89,16 @@ export const GcsimConfigDialog: React.FC<GcsimConfigDialogProps> = ({ isOpen, on
       return;
     }
     setRunning(true);
-    const res = await runGcsimForConfig(result, calculated);
-    setRunning(false);
+    let res: Awaited<ReturnType<typeof runGcsimForConfig>>;
+    try {
+      res = await runGcsimForConfig(result, calculated);
+    } catch (e) {
+      // 想定外の例外でも、「実行中」のまま固まらないようにする（D351）
+      setRunOutcome({ status: 'error', message: e instanceof Error ? e.message : String(e) });
+      return;
+    } finally {
+      setRunning(false);
+    }
     if (res.status !== 'ok') {
       setRunOutcome({ status: res.status, message: res.message });
       return;

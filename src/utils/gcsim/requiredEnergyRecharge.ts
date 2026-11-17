@@ -58,7 +58,6 @@ const VERIFY_MAX_ROUNDS = 100;
 export const ER_DEFAULT_BURST_WAIT_SECONDS = 0;
 /** 同、フレーム数（60 フレーム = 1 秒） */
 export const ER_BURST_DELAY_FRAMES = ER_DEFAULT_BURST_WAIT_SECONDS * 60;
-/** 実行回数の見積り（基準 + 集計 + 検証。残り時間の推定に使う） */
 
 /** 敵から出る粒子（秒の間隔のランダム範囲と、1 回の個数。クリア粒子） */
 export interface EnemyParticles {
@@ -392,13 +391,11 @@ export async function computeRequiredEr(args: {
   const seedTotal = Math.min(ER_MAX_SEEDS, Math.max(1, Math.floor(args.seeds ?? ER_DEFAULT_SEEDS)));
   const runsEstimate = seedTotal * 6;
   let seedCount = seedTotal;
-  let inFinal = false; // 見直しの実行（最後の段）に入ったか
   let refineChunksDone = 0; // 目安・安定の求め直しで実行した塊の数（求め直しは 2 段 × 2〜5 回の見込み）
   const chunkCost = () => Math.ceil(seedCount / parallel);
   const priorTrials = 5 + 1.5 * Math.max(0, Math.log2(0.2 / verifyTolerance));
   const estimateLeft = (): { low: number; high: number } => {
     if (!verify) return { low: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone), high: phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel) : Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) };
-    const finalChunks = 0;
     const refine = levelsVerify ? { low: Math.max(0, 6 * chunkCost() - refineChunksDone), high: Math.max(chunkCost(), 15 * chunkCost() - refineChunksDone) } : { low: 0, high: 0 };
     const trialChunks = (chunkCost() + 1) / 2; // 絞りの 1 回は、通る（全種）かずれる（1 塊）かが半々
     // 見直しをする編成は、検証は見直しの値の確認（ふつうは 1 周で通る）
@@ -406,7 +403,7 @@ export async function computeRequiredEr(args: {
     const v = phase === 'verify' && verifyEstimate ? verifyEstimate() : prior;
     const early = phase === 'baseline' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) + Math.ceil(seedTotal / parallel)
       : phase === 'collect' ? Math.max(0, Math.ceil(seedTotal / parallel) - phaseChunksDone) : 0;
-    return { low: early + v.low + finalChunks + refine.low, high: early + v.high + finalChunks + refine.high };
+    return { low: early + v.low + refine.low, high: early + v.high + refine.high };
   };
   const report = () => {
     const left = estimateLeft();

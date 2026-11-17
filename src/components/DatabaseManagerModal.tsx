@@ -360,6 +360,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
         },
       });
     };
+    reader.onerror = () => showStatus(t('save:message.importFileFailed'), 10000, 'error');
     reader.readAsText(file);
     if (e.target) e.target.value = '';
   };

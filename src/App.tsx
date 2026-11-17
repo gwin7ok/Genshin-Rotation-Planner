@@ -343,7 +343,7 @@ export default function App() {
     /** JSON から読み込んだときの編成名（slotId が無いとき、この名前の保存編成として登録して、読み込み中の編成にする。issue #23） */
     name?: string;
     totalDuration?: number;
-  }) => {
+  }): Promise<boolean> => {
     // ファイルから読み込んだ編成（slotId なし・名前あり）は、その名前の保存編成として登録する。
     // 同じ名前の保存編成があるときは、「上書き」か「名前を変更して保存」かを尋ねる（やめたときは、何も読み込まない）
     let importName: string | null = null;
@@ -361,7 +361,7 @@ export default function App() {
           break;
         }
         const input = await prompt(t('app:import.rename'), importName);
-        if (input === null || !input.trim()) return; // やめる
+        if (input === null || !input.trim()) return false; // やめる
         importName = input.trim();
       }
     }
@@ -405,9 +405,10 @@ export default function App() {
         setActiveSlotId(null);
         showAlert(`${t('app:import.notRegistered')}\n${SLOT_WRITE_FAILED_MESSAGE}`);
       }
-      return;
+      return true;
     }
     setActiveSlotId(slot.slotId ?? null);
+    return true;
   };
 
   // 9. Reset to the initial state (empty party)
@@ -428,11 +429,11 @@ export default function App() {
     setElapsedTime(0);
   };
   const handleSeek = (time: number) => {
-    const t = Math.max(0, Math.min(time, totalDuration));
+    const seekTime = Math.max(0, Math.min(time, totalDuration)); // 翻訳関数 t を上書きしない名前にする
     // 初動（ループ開始点より前）は1周目にしか存在しない。ループ区間内なら今の周のまま移動する
-    setElapsedTime(playbackCycleCount === 1 || t < loopStartTime
-      ? t
-      : totalDuration + (playbackCycleCount - 2) * loopPeriod + (t - loopStartTime));
+    setElapsedTime(playbackCycleCount === 1 || seekTime < loopStartTime
+      ? seekTime
+      : totalDuration + (playbackCycleCount - 2) * loopPeriod + (seekTime - loopStartTime));
   };
 
   // 11. Notation Copy & Display
@@ -666,8 +667,16 @@ export default function App() {
     }
     setGcsimComputing(true);
     setGcsimBanner({ level: 'running', title: t('app:gcsim.running'), message: t('app:gcsim.runningHint') });
-    const outcome = await runGcsimForConfig(result, calculatedResult);
-    setGcsimComputing(false);
+    let outcome: Awaited<ReturnType<typeof runGcsimForConfig>>;
+    try {
+      outcome = await runGcsimForConfig(result, calculatedResult);
+    } catch (e) {
+      // 想定外の例外でも、「計算中」のまま固まらないようにする（D351）
+      setGcsimBanner({ level: 'error', title: t('app:gcsim.runError'), message: e instanceof Error ? e.message : String(e) });
+      return;
+    } finally {
+      setGcsimComputing(false);
+    }
     if (outcome.status !== 'ok') {
       setGcsimBanner(outcome.status === 'unreachable'
         ? (getLastGcsimEngine() === 'wasm'
@@ -732,8 +741,13 @@ export default function App() {
     });
   };
 
-  const handleCopyNotation = () => {
-    navigator.clipboard.writeText(rotationNotation);
+  const handleCopyNotation = async () => {
+    try {
+      await navigator.clipboard.writeText(rotationNotation);
+    } catch (e) {
+      showAlert(t('save:message.copyFailed', { message: e instanceof Error ? e.message : String(e) }));
+      return;
+    }
     setCopiedNotation(true);
     setTimeout(() => setCopiedNotation(false), 2000);
   };
@@ -762,7 +776,7 @@ export default function App() {
   };
 
   /** 編成の JSON の文字列を読み込む（ファイル選択・URL の引数で共通。検証 → 同名の確認 → 読み込み） */
-  const importRotationText = (text: string, fileName = ''): boolean => {
+  const importRotationText = async (text: string, fileName = ''): Promise<boolean> => {
     try {
       const result = parseRotationPayload(JSON.parse(text));
       if (result.ok === false) {
@@ -770,7 +784,8 @@ export default function App() {
         return false;
       }
       const v = result.value;
-      handleLoadCustomSlot({
+      // 同名の保存編成の確認（上書き・名前変更）が終わるまで待つ。やめたときは、読み込まれていないので、「除外した」の通知も出さない
+      const loaded = await handleLoadCustomSlot({
         party: v.party,
         stints: v.stints,
         loopStartIndex: v.loopStartIndex,
@@ -780,9 +795,10 @@ export default function App() {
         reactions: v.reactions,
         name: v.name || nameFromFileName(fileName),
       });
+      if (!loaded) return false;
       if (totalSkipped(result.skipped) > 0) showAlert(t('save:message.skipped', { items: describeSkipped(result.skipped) }));
       return true;
-    } catch (err) {
+    } catch {
       showAlert(t('save:message.importFileFailed'));
       return false;
     }
@@ -793,7 +809,8 @@ export default function App() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (ev) => importRotationText(String(ev.target?.result ?? ''), file.name);
+    reader.onload = (ev) => { void importRotationText(String(ev.target?.result ?? ''), file.name); };
+    reader.onerror = () => showAlert(t('save:message.importFileFailed'));
     reader.readAsText(file);
     e.target.value = '';
   };
@@ -817,7 +834,7 @@ export default function App() {
         showAlert(t(key, { host: check.host, status: fetched.status ?? '' }));
         return;
       }
-      importRotationText(fetched.text, fetched.fileName);
+      await importRotationText(fetched.text, fetched.fileName);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

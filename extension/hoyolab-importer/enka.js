@@ -8,7 +8,19 @@
 
 const BASE = 'https://enka.network/api/uid/';
 
-const cache = new Map(); // uid → { expires, data }
+// uid → { expires, data }。サービスワーカーは、しばらく使わないと止まって、メモリ上の変数が消える。
+// ttl の間は再取得しない約束（上のルール）を守るため、ブラウザを閉じるまで残る chrome.storage.session に持つ。
+const CACHE_PREFIX = 'enka-cache:';
+const readCache = async (uid) => {
+  try {
+    const got = await chrome.storage.session.get(CACHE_PREFIX + uid);
+    const hit = got[CACHE_PREFIX + uid];
+    return hit && hit.expires > Date.now() ? hit.data : null;
+  } catch { return null; }
+};
+const writeCache = async (uid, expires, data) => {
+  try { await chrome.storage.session.set({ [CACHE_PREFIX + uid]: { expires, data } }); } catch { /* 容量超過などは、キャッシュなしで続ける */ }
+};
 
 const fail = (message, code) => {
   const e = new Error(message);
@@ -19,8 +31,8 @@ const fail = (message, code) => {
 /** 展示キャラの詳細（生のレスポンス）を返す。キャラが 1 つも無いときは、avatarInfoList が無い（空）ものを返す */
 export const fetchEnka = async (uid) => {
   if (!/^\d{9,10}$/.test(String(uid))) throw fail('UID は 9〜10 桁の数字です', 'bad_uid');
-  const hit = cache.get(uid);
-  if (hit && hit.expires > Date.now()) return hit.data;
+  const cached = await readCache(String(uid));
+  if (cached) return cached;
 
   let res;
   try {
@@ -36,6 +48,6 @@ export const fetchEnka = async (uid) => {
 
   const data = await res.json();
   const ttlSec = Number(data.ttl) > 0 ? Number(data.ttl) : 60;
-  cache.set(uid, { expires: Date.now() + ttlSec * 1000, data });
+  await writeCache(String(uid), Date.now() + ttlSec * 1000, data);
   return data;
 };

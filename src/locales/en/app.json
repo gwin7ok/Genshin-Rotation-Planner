@@ -52,5 +52,10 @@
     "tooLarge": "The file at {{host}} is too large, so nothing was loaded.",
     "timeout": "{{host}} took too long to respond, so the fetch was cancelled.",
     "driveNoKey": "This is a Google Drive share link, but no API key is configured on this site, so it cannot be loaded."
+  },
+  "master": {
+    "loading": "Loading data…",
+    "failed": "Could not load the bundled data. Check your connection and reload the page.",
+    "reload": "Reload"
   }
 }

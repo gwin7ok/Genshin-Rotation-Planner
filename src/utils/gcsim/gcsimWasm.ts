@@ -20,12 +20,6 @@ export function getEnginePreference(): GcsimEnginePreference {
   return 'auto';
 }
 
-export function setEnginePreference(pref: GcsimEnginePreference): void {
-  if (pref === 'auto') removeKey(DEVICE_KEYS.gcsimEngine);
-  else writeString(DEVICE_KEYS.gcsimEngine, pref);
-  cachedWasmAvailable = null;
-}
-
 let cachedWasmAvailable: Promise<boolean> | null = null;
 
 /** main.wasm が配信されているか（開発サーバーは、無いファイルにも HTML を返すので、種類で見分ける） */

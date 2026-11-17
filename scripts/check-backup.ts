@@ -24,6 +24,9 @@ const server = await createServer({ server: { middlewareMode: true }, appType: '
 const backup = await server.ssrLoadModule('/src/utils/backup.ts');
 const storage = await server.ssrLoadModule('/src/utils/storage.ts');
 const dbService = await server.ssrLoadModule('/src/utils/databaseService.ts');
+// 同梱のマスターは、アプリでは起動のときに読み込む（main.tsx）。ここでも、先に読み込む（D354）
+const { loadMasterData } = await server.ssrLoadModule('/src/data/masterBundle.ts');
+await loadMasterData();
 
 const results: string[] = [];
 const check = (name: string, fn: () => void) => {
@@ -346,6 +349,33 @@ check('保存編成の保存・削除: 容量超過のときは ok: false で、
   assert.equal(storage.tryDeleteSlot('slot_new').ok, true);
   assert.equal(storage.saveSlot(slot('slot_x', 'x', '2026-10-03T00:00:00.000Z'))[0].id, 'slot_x', '従来の saveSlot も、一覧を返す');
 });
+check('保存編成の保存・削除: 読めない（旧形式・壊れた）編成は、ほかの編成の保存・削除で消えない（D350）', () => {
+  store.clear();
+  const ls = (globalThis as any).localStorage;
+  const key = 'genshin_rotation_saved_slots_v2';
+  const legacy = { id: 'slot_legacy', name: '旧形式', characters: [] }; // 今の形式（party・stints）ではないので、一覧には出ない
+  ls.setItem(key, JSON.stringify([slot('slot_good', '良い編成', '2026-10-01T00:00:00.000Z'), legacy]));
+  const rawIds = () => JSON.parse(ls.getItem(key)).map((r: any) => r.id);
+  assert.deepEqual(storage.getSavedSlots().map((s: any) => s.id), ['slot_good'], '読めない編成は、一覧に出ない');
+  assert.equal(storage.trySaveSlot(slot('slot_new', '新しい編成', '2026-10-02T00:00:00.000Z')).ok, true);
+  assert.deepEqual(rawIds(), ['slot_new', 'slot_good', 'slot_legacy'], '保存しても、読めない編成が残る');
+  assert.equal(storage.trySaveSlot(slot('slot_good', '良い編成（更新）', '2026-10-03T00:00:00.000Z')).ok, true);
+  assert.deepEqual(rawIds(), ['slot_new', 'slot_good', 'slot_legacy'], '更新しても、順序・読めない編成は変わらない');
+  assert.equal(storage.tryDeleteSlot('slot_new').ok, true);
+  assert.deepEqual(rawIds(), ['slot_good', 'slot_legacy'], '削除しても、読めない編成が残る');
+  assert.equal(storage.tryDeleteSlot('slot_legacy').ok, true);
+  assert.deepEqual(rawIds(), ['slot_good'], '読めない編成を、ID を指定して削除はできる');
+});
+check('全データ完全消去: 版を現在にして保存するので、再読み込みしても同梱のマスターに戻らない（D348）', () => {
+  store.clear();
+  const cleared = dbService.clearAllDatabaseData(dbService.loadDatabase());
+  assert.equal(cleared.version, dbService.loadDatabase().version, '消去後の版が、現在の版');
+  const reloaded = dbService.loadDatabase();
+  assert.equal(reloaded.characters.length, cleared.characters.length, 'キャラが、同梱のマスターで置き換わらない');
+  assert.equal(reloaded.weapons.length, cleared.weapons.length, '武器が、同梱のマスターで置き換わらない');
+  assert.equal(reloaded.artifacts.length, cleared.artifacts.length, '聖遺物が、同梱のマスターで置き換わらない');
+  assert.ok(cleared.characters.length < masterDb.characters.length, '消去で、キャラが減っている');
+});
 // --- 保存層（persistence.ts。D175） ---
 const persistence = await server.ssrLoadModule('/src/utils/persistence.ts');
 const settings = await server.ssrLoadModule('/src/utils/appSettings.ts');
@@ -356,7 +386,7 @@ check('保存層: キーの文字列が、公開済みのデータと同じ（�
     savedSlots: 'genshin_rotation_saved_slots_v2',
     database: 'genshin_app_db_v1',
   });
-  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', hoyolabUid: 'hoyolabUid' });
+  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
   assert.equal(persistence.DEVICE_KEYS.gcsimEngine, 'gcsim_engine');
   assert.equal(persistence.DEVICE_KEYS.gcsimCores, 'gcsim_cores');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_cores'), '端末だけの設定（コアの数）は、バックアップに含めない');

@@ -52,6 +52,9 @@ jobs:
       - name: gcsim の WebAssembly 版をビルド
         run: npm run wasm:build
 
+      - name: 型の検査
+        run: npm run lint
+
       - name: 計算結果のスナップショットの確認
         run: npm run check:snapshots
 

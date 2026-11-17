@@ -93,7 +93,6 @@
     "confirmReset": "現在の編集内容を初期状態（キャラ未設定の編成）に戻しますか？"
   },
   "gcsimImport": {
-    "title": "gcsim の設定文から読み込む",
     "hint": "gcsim の設定文を貼り付けると、キャラ・凸・武器・精錬・聖遺物と、行動の並びを読み込みます（現在の編成は置き換わります）。天賦レベル・ステータス・options・target などは読み込みません",
     "placeholder": "ここに gcsim の設定文を貼り付けてください…\n例:\nraiden char lvl=90/90 cons=0 talent=9,9,9;\nraiden add weapon=\"engulfinglightning\" refine=1 lvl=90/90;\nraiden skill, burst;",
     "run": "設定文から読込",

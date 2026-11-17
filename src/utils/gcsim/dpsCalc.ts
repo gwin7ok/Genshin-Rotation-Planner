@@ -41,6 +41,8 @@ export interface DpsRun {
   byChar: number[];
   /** キャラ別の、爆発のエネルギー待ちの回数（char_index の順。爆発がエネルギー不足で撃てず、待った回数） */
   energyWaits: number[];
+  /** 始まったローテーションの周数（設定文の `print("loop ", i)` の数）。設定の周数より少なければ、時間内に終わらず打ち切られている */
+  loopsStarted: number;
 }
 
 /**
@@ -56,8 +58,11 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
   const closeWait = (i: number) => { if (waitIsEnergy[i]) energyWaits[i]++; waitIsEnergy[i] = false; };
   let total = 0;
   let endFrame = 0;
+  let loopsStarted = 0;
   for (const l of logs) {
-    if (l.event === 'damage') {
+    if (l.event === 'user') {
+      if (/^loop \d+$/.test(l.msg)) loopsStarted++;
+    } else if (l.event === 'damage') {
       const d = Number((l.logs as { damage?: unknown } | undefined)?.damage);
       if (!Number.isFinite(d)) continue;
       total += d;
@@ -76,7 +81,7 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
     }
   }
   for (let i = 0; i < memberCount; i++) closeWait(i);
-  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits };
+  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits, loopsStarted };
 }
 
 export interface DpsStats {
@@ -106,11 +111,14 @@ export interface DpsResult {
   byChar: { damage: number; dps: number; share: number; /** 1 回の実行あたりの、爆発のエネルギー待ちの回数の平均 */ energyWaits: number }[];
   /** 全員の、1 回の実行あたりの爆発のエネルギー待ちの回数の平均 */
   energyWaits: number;
+  /** 設定の周数より少ない周数で打ち切られた実行（count = その実行の数・worst = 最も短かった実行の周数）。無ければ undefined */
+  truncated?: { count: number; worst: number };
 }
 
 /** 実行ごとの集計から、結果を作る */
-export function aggregateDps(runs: DpsRun[], memberCount: number): DpsResult {
+export function aggregateDps(runs: DpsRun[], memberCount: number, loops?: number): DpsResult {
   const valid = runs.filter(r => r.seconds > 0);
+  const cut = loops === undefined ? [] : valid.filter(r => r.loopsStarted < loops);
   const dps = statsOf(valid.map(r => r.total / r.seconds));
   const total = statsOf(valid.map(r => r.total));
   const seconds = valid.length ? valid.reduce((a, r) => a + r.seconds, 0) / valid.length : 0;
@@ -121,7 +129,10 @@ export function aggregateDps(runs: DpsRun[], memberCount: number): DpsResult {
     const energyWaits = valid.length ? valid.reduce((a, r) => a + (r.energyWaits?.[i] ?? 0), 0) / valid.length : 0;
     return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0, energyWaits };
   });
-  return { runs: valid.length, dps, total, seconds, byChar, energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0) };
+  return {
+    runs: valid.length, dps, total, seconds, byChar, energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0),
+    ...(cut.length > 0 ? { truncated: { count: cut.length, worst: Math.min(...cut.map(r => r.loopsStarted)) } } : {}),
+  };
 }
 
 export interface DpsProgress {
@@ -140,6 +151,8 @@ export type DpsOutcome =
 export async function computeDps(args: {
   config: GcsimConfigResult;
   runs: number;
+  /** ローテーションの周数（設定文の loopIterations）。渡すと、これより少ない周数で打ち切られた実行を数える */
+  loops?: number;
   parallel: number;
   run: (config: string, seed: number) => Promise<GcsimSampleResult>;
   onProgress?: (p: DpsProgress) => void;
@@ -159,7 +172,7 @@ export async function computeDps(args: {
       if (r.status !== 'ok') return { status: r.status, message: r.message };
       collected.push(summarizeDamage(r.logs, config.members.length));
     }
-    args.onProgress?.({ done: collected.length, total: runs, partial: aggregateDps(collected, config.members.length) });
+    args.onProgress?.({ done: collected.length, total: runs, partial: aggregateDps(collected, config.members.length, args.loops) });
   }
-  return { status: 'ok', result: aggregateDps(collected, config.members.length), members: config.members };
+  return { status: 'ok', result: aggregateDps(collected, config.members.length, args.loops), members: config.members };
 }

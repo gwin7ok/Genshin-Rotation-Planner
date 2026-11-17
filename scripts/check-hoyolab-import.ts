@@ -56,7 +56,7 @@ for (const hc of raw.list) {
   const key = master.source?.gcsimKey;
   if (!key) { noKey++; continue; } // gcsim 未実装のキャラ（突き合わせ不可）
   const { lines, warnings } = buildOwnedCharacterLines(owned, key, { weapons, artifacts }, isTravelerKey(key) ? travelerParams(false) /* この旅人は真月未達成 */ : []);
-  for (const w of [...owned.warnings.filter(w => !w.includes('突破前か突破後か')), ...warnings]) problems.push(`${owned.name}: ${w}`);
+  for (const w of [...owned.warnings.filter(w => !w.startsWith('ambiguousLevel')), ...warnings]) problems.push(`${owned.name}: ${w}`);
   const config = [...lines, 'options iteration=1 duration=1;', 'target lvl=100 resist=0.1;', `active ${key};`, `${key} attack;`].join('\n');
   let snap: number[];
   try {

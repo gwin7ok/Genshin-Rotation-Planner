@@ -434,13 +434,15 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     : Math.ceil(estimated * DURATION_MARGIN_FACTOR + DURATION_MARGIN_SECONDS);
 
   const firstKey = input.stints.map(s => keyOf.get(s.characterId)).find(Boolean);
+  const hurtLine = hurtStatement(input.hurt);
 
   const config: string[] = [
     ...lines,
     '',
     `options iteration=1 duration=${duration} swap_delay=${SWAP_DELAY_FRAMES}${input.ignoreBurstEnergy === false ? '' : ' ignore_burst_energy=true'}${input.defHalt === false ? ' defhalt=false' : ''};`,
     ...targetStatements(input.enemies),
-    ...(input.enemyParticles && input.enemyParticles.amount > 0
+    // 最大の間隔が 0 のときは出さない（最小 0・最大 0 だと、1 フレームごとに粒子が出て、実行が止まらなくなる）
+    ...(input.enemyParticles && input.enemyParticles.amount > 0 && input.enemyParticles.maxSeconds > 0
       ? (() => {
         // 最小と最大が同じだと gcsim が止まる（Intn の引数が 0）。最大を 1 フレーム広げる
         const minF = Math.round(input.enemyParticles.minSeconds * 60);
@@ -448,7 +450,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         return [`energy every interval=${minF},${maxF} amount=${input.enemyParticles.amount};`];
       })()
       : []),
-    ...(hurtStatement(input.hurt) ? [hurtStatement(input.hurt)!] : []),
+    ...(hurtLine ? [hurtLine] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',
     ...initialLines,

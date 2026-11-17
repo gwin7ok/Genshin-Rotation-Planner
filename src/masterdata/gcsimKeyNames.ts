@@ -45,8 +45,6 @@ export interface NameSources {
   en: LanguageNames;
 }
 
-export type NameSource = 'manual' | 'rule' | 'partial';
-
 const ELEMENTS_JA: Record<string, string> = {
   pyro: '炎', hydro: '水', electro: '雷', cryo: '氷', dendro: '草', anemo: '風', geo: '岩', physical: '物理',
 };

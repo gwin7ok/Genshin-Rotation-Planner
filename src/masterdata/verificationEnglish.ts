@@ -240,6 +240,3 @@ export function reportMissingEnglish(): void {
   const out = process.env.VERIFICATION_MISSING_OUT;
   if (out) fs.appendFileSync(out, [...missing].map(s => s.replace(/\n/g, ' ') + '\n').join(''));
 }
-
-/** 辞書に無かった文（スクリプトの検査用） */
-export const missingEnglish = (): string[] => [...missing];

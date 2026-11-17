@@ -862,19 +862,6 @@ export interface CharacterConfig {
   };
 }
 
-export interface BuffDefinition {
-  id: string;
-  name: string;
-  sourceCharacterId?: string;
-  sourceType: 'talent' | 'weapon' | 'artifact' | 'constellation';
-  duration: number; // in seconds
-  description: string;
-  color: string;
-  iconName?: string;
-  statsEffect?: string;
-  snapshotable?: boolean;
-}
-
 export interface ActiveBuffSpan {
   id: string;
   buffId: string;

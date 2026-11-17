@@ -1,23 +1,7 @@
-import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem } from '../types/database';
-import { MASTER_CHARACTERS } from './characters';
-import weaponsMasterJson from './weapons_master_data.json';
-import artifactsMasterJson from './artifacts_master_data.json';
-import { t } from '../i18n';
+// マスターデータ（3 つの JSON）は、ここに置かない。画面の最初のコードが大きくならないよう、別のファイル（masterData.ts）に分けて、
+// 起動のときに読み込む（masterBundle.ts の loadMasterData）。ここには、軽い定数だけを置く（画面のどこからでも読める）。
 
 /** DB 形式のバージョン。キャラや装備のデータ構造・マスター値を更新したら上げる (loadDatabase で旧データを自動移行) */
 /** 取り込んでいる原神本体のバージョン（画面下部の出典表示。ゲームの新バージョンを取り込むときに更新する） */
 export const GAME_VERSION = '7.2';
-export const DATABASE_VERSION = 91; // 91: バレリーの命ノ星座 1・4 を衝撃エネルギーに反映。90: ミティヤの変形ビーコンに期限（10 秒）を追加。89: ミティヤの長押し E（オーバーロード）とバレリーの進撃指令（18 秒）を追加（wiki の記述）。88: gcsim v2.50.0 に更新（辞書・マスター再生成。サンドローネが gcsim 対応・重撃はビームの本数を選ぶ）。87: 原神 v7.2（genshin-db 5.2.15）を取り込み（ミティヤ・バレリー・秘星の聖典）。86: gcsim v2.49.5 に更新（辞書・マスター再生成。セノの諭示・新武器 Heretic's Molten Blade）。85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）
-
-export const MASTER_WEAPONS = weaponsMasterJson as WeaponDatabaseItem[];
-export const MASTER_ARTIFACTS = artifactsMasterJson as ArtifactSetDatabaseItem[];
-
-/** 同梱のマスター JSON から作る初期データベース (オフラインで即座に使える) */
-export const INITIAL_MASTER_DATABASE: AppDatabase = {
-  version: DATABASE_VERSION,
-  lastSyncedAt: t('messages:db.bundled'),
-  lastSync: { key: 'messages:db.bundled' },
-  characters: MASTER_CHARACTERS,
-  weapons: MASTER_WEAPONS,
-  artifacts: MASTER_ARTIFACTS,
-};
+export const DATABASE_VERSION = 92; // 92: モード維持の既定を全キャラ「維持しない」に変更（D347）。91: バレリーの命ノ星座 1・4 を衝撃エネルギーに反映。90: ミティヤの変形ビーコンに期限（10 秒）を追加。89: ミティヤの長押し E（オーバーロード）とバレリーの進撃指令（18 秒）を追加（wiki の記述）。88: gcsim v2.50.0 に更新（辞書・マスター再生成。サンドローネが gcsim 対応・重撃はビームの本数を選ぶ）。87: 原神 v7.2（genshin-db 5.2.15）を取り込み（ミティヤ・バレリー・秘星の聖典）。86: gcsim v2.49.5 に更新（辞書・マスター再生成。セノの諭示・新武器 Heretic's Molten Blade）。85: gcsim v2.49.4 に更新（辞書・マスター再生成）。84: gcsim の設定文の別名対応表を追加（D326。キャラ・武器・聖遺物のデータ自体は v2.49.0 のまま）

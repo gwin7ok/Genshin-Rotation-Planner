@@ -63,7 +63,7 @@ gcsim のバージョンを上げたとき、または新しい第三者のデ�
 （参考）外部のサービス（持ちキャラの取り込み。拡張機能）
 --------------------------------------------------------------------------------
 - HoYoLAB（HoYoverse）の戦績 API: ご自身の UID の取り込みに使う。genshin.py（MIT。https://github.com/thesadru/genshin.py）の実装を参考にした。
-- Enka.Network（https://enka.network）の API: 他のアカウントの UID の取り込みと、自分の UID の取り込みで HoYoLAB の反映が遅れているキャラの更新に使う。HoYoverse・HoYoLAB とは別の、非公式のサービス。
+- Enka.Network（https://enka.network）の API: 他のアカウントの UID の取り込みと、自分の UID の取り込みで HoYoLAB の反映が遅れているキャラの更新に使う（後者は、取り込み画面のチェックで、使わないようにできる。既定はオン）。HoYoverse・HoYoLAB とは別の、非公式のサービス。
   API のライセンス表記・利用規約は見つからなかったため、公開されている「Before You Request」のルール（総当たりをしない・User-Agent を付ける・ttl の間は再取得しない）に従う。
   Enka のドキュメントのデータ表（store/*.json）は、コピーしていない。
 - このアプリは、HoYoverse・HoYoLAB・Enka.Network と、提携・承認の関係にない。

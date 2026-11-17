@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
   Save, 
@@ -68,8 +68,8 @@ interface SaveLoadModalProps {
     reactions?: unknown;
   }) => void;
   onResetToDefault: () => void;
-  /** JSON の文字列を読み込む（検証・確認・読み込みは App と共通）。読み込みを始めたら true */
-  onImportText: (text: string, fileName?: string) => boolean;
+  /** JSON の文字列を読み込む（検証・確認・読み込みは App と共通）。同名の確認が済んで読み込めたら true（やめた・失敗したら false） */
+  onImportText: (text: string, fileName?: string) => Promise<boolean>;
   /** 現在の編成を gcsim の設定文にしてコピーする（ヘッダーのボタンと同じ処理。書き出しの区画から呼ぶ） */
   onCopyGcsimConfig?: () => void;
 }
@@ -110,10 +110,25 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
   // 編成付き読込 URL の生成中（D325）
   const [sharing, setSharing] = useState(false);
 
+  // 通知の自動消去のタイマー。新しい通知を出すたびに前のタイマーを止め（前の通知のタイマーが、新しい通知を早く消さないように）、閉じたときにも止める
+  const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (messageTimer.current !== null) clearTimeout(messageTimer.current);
+    if (copiedTimer.current !== null) clearTimeout(copiedTimer.current);
+  }, []);
+  /** 通知を出す。ms を渡すと、その時間のあとに消す（渡さなければ、消えない） */
+  const showMessage = (msg: string | null, ms?: number) => {
+    if (messageTimer.current !== null) clearTimeout(messageTimer.current);
+    messageTimer.current = null;
+    setSaveSuccessMsg(msg);
+    if (msg !== null && ms !== undefined) messageTimer.current = setTimeout(() => setSaveSuccessMsg(null), ms);
+  };
+
   // 開いたときだけリセットするもの
   useEffect(() => {
     if (isOpen) {
-      setSaveSuccessMsg(null);
+      showMessage(null);
       setDuplicateSlot(null);
       setRenamingSlot(null);
     }
@@ -167,8 +182,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     setSavedSlots(updated);
     onSlotsChanged(updated, newSlot.id);
     setDuplicateSlot(null);
-    setSaveSuccessMsg(dup ? t('save:message.overwritten', { name: newSlot.name }) : t('save:message.saved', { name: newSlot.name }));
-    setTimeout(() => setSaveSuccessMsg(null), 3000);
+    showMessage(dup ? t('save:message.overwritten', { name: newSlot.name }) : t('save:message.saved', { name: newSlot.name }), 3000);
   };
 
   // 保存編成の名前を変える（内容・更新日時は、そのまま）
@@ -188,8 +202,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     setSavedSlots(updated);
     onSlotsChanged(updated);
     setRenamingSlot(null);
-    setSaveSuccessMsg(t('save:rename.renamed', { name: newName }));
-    setTimeout(() => setSaveSuccessMsg(null), 3000);
+    showMessage(t('save:rename.renamed', { name: newName }), 3000);
   };
 
   // Overwrite existing slot
@@ -218,8 +231,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = saved.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated, slot.id);
-    setSaveSuccessMsg(t('save:message.overwritten', { name: slotDisplayName(slot) }));
-    setTimeout(() => setSaveSuccessMsg(null), 3000);
+    showMessage(t('save:message.overwritten', { name: slotDisplayName(slot) }), 3000);
   };
 
   // プリセット編成（同梱の 5 編成）を、保存編成に復元する（同じ名前の保存編成は、上書き）
@@ -235,8 +247,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       showAlert(`${SLOT_WRITE_FAILED_MESSAGE}\n\n${t('save:message.presetsPartial', { added: result.added, overwritten: result.overwritten })}`);
       return;
     }
-    setSaveSuccessMsg(t('save:message.presetsRestored', { count: PRESET_COUNT, added: result.added, overwritten: result.overwritten }));
-    setTimeout(() => setSaveSuccessMsg(null), 4000);
+    showMessage(t('save:message.presetsRestored', { count: PRESET_COUNT, added: result.added, overwritten: result.overwritten }), 4000);
   };
 
   // Delete slot
@@ -254,8 +265,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     const updated = deleted.slots;
     setSavedSlots(updated);
     onSlotsChanged(updated);
-    setSaveSuccessMsg(t('save:message.deleted', { name }));
-    setTimeout(() => setSaveSuccessMsg(null), 3000);
+    showMessage(t('save:message.deleted', { name }), 3000);
   };
 
   // Load slot
@@ -347,7 +357,8 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     }
     const targetId = slot ? slot.id : 'current';
     setCopiedId(targetId);
-    setTimeout(() => setCopiedId(null), 2000);
+    if (copiedTimer.current !== null) clearTimeout(copiedTimer.current);
+    copiedTimer.current = setTimeout(() => setCopiedId(null), 2000);
   };
 
   // Import JSON from file（検証・読み込みは、App の importRotationText と共通）
@@ -357,8 +368,10 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
 
     const reader = new FileReader();
     reader.onload = (ev) => {
-      if (onImportText(String(ev.target?.result ?? ''), file.name)) onClose();
+      // 同名の確認などが済んで、読み込めたときだけ閉じる（やめたときは、開いたままにする）
+      onImportText(String(ev.target?.result ?? ''), file.name).then(ok => { if (ok) onClose(); }, () => showAlert(t('save:message.importFileFailed')));
     };
+    reader.onerror = () => showAlert(t('save:message.importFileFailed'));
     reader.readAsText(file);
     e.target.value = '';
   };
@@ -374,7 +387,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
     a.click();
     URL.revokeObjectURL(url);
     const s = summarizeBackup(backup);
-    setSaveSuccessMsg(t('save:message.backupExported', { slots: s.slots, settings: s.settings, items: s.characters + s.weapons + s.artifacts }));
+    showMessage(t('save:message.backupExported', { slots: s.slots, settings: s.settings, items: s.characters + s.weapons + s.artifacts }));
   };
 
   // 全データのバックアップの復元（確認 → 復元 → 画面の再読み込み）
@@ -409,6 +422,7 @@ export const SaveLoadModal: React.FC<SaveLoadModalProps> = ({
       }
       window.location.reload();
     };
+    reader.onerror = () => showAlert(t('save:message.importFileFailed'));
     reader.readAsText(file);
   };
 

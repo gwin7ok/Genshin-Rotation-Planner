@@ -86,10 +86,15 @@ const fetchNickname = async (uid, server) => {
 /** 他のアカウントの UID: 詳細の一括取得は許可されない（retcode 10104）。1 キャラずつ取得し、取得できたものだけ集める */
 const NOT_ALLOWED = 10104;
 const MAX_CONSECUTIVE_DENIED = 20; // 1 つも取得できないまま、これだけ続けて拒否されたら、あきらめる
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const fetchOneByOne = async (uid, server, ids, firstError) => {
   const merged = { list: [] };
   let denied = 0;
+  let first = true;
   for (const id of ids) {
+    // 連続した問い合わせの間に、少し待つ（HoYoLAB の回数制限にかかりにくくする）
+    if (!first) await sleep(100 + Math.random() * 100);
+    first = false;
     try {
       const part = await call('character/detail', uid, server, { character_ids: [id] });
       merged.list.push(...(part.list ?? []));

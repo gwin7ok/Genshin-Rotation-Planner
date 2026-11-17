@@ -3,7 +3,7 @@
  * ファイル名: アプリ名 + 日時 + 編成名（保存編成の名前。無ければ、パーティメンバーの名前を「・」でつないだもの）
  */
 import type { PartyMember, SavedReactions, Stint } from '../types/genshin';
-import { currentLanguage, joinList, t } from '../i18n';
+import { currentLanguage } from '../i18n';
 
 export const APP_FILE_PREFIX = currentLanguage === 'en' ? 'GenshinRotationPlanner' : '原神ローテーションプランナー';
 /** ファイル名から編成名を読むときに認める接頭辞（どちらの言語で書き出したファイルも読む） */
@@ -50,14 +50,6 @@ export function fileTimestamp(d: Date = new Date()): string {
 
 /** ファイル名に使えない文字を除く */
 const sanitize = (s: string) => s.replace(/[\/:*?"<>|]/g, '').replace(/\s+/g, '_').trim();
-
-/** 編成名（保存編成の名前。無ければ、パーティメンバーの名前をつないだもの。空枠は除く） */
-export function rotationDisplayName(slotName: string | undefined, memberNames: string[]): string {
-  const trimmed = slotName?.trim();
-  if (trimmed) return trimmed;
-  const members = memberNames.filter(Boolean);
-  return members.length > 0 ? joinList(members) : t('save:manager.defaultName');
-}
 
 export function rotationFileName(name: string, date: Date = new Date()): string {
   return `${APP_FILE_PREFIX}_${fileTimestamp(date)}_${sanitize(name) || 'rotation'}.json`;

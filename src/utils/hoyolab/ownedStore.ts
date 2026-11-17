@@ -56,4 +56,7 @@ export const loadHoyolabUid = (): string => {
   const v = readString(SETTING_KEYS.hoyolabUid);
   return v && /^\d{9,10}$/.test(v) ? v : '';
 };
+/** 取り込みで、Enka.Network の最新の値で上書きするか（既定: する）。オフなら、他のアカウント・中国サーバーの UID を除いて、enka.network に通信しない */
+export const loadUseEnka = (): boolean => readString(SETTING_KEYS.ownedUseEnka) !== 'false';
+export const saveUseEnka = (value: boolean): boolean => writeString(SETTING_KEYS.ownedUseEnka, String(value));
 export const saveHoyolabUid = (uid: string): boolean => (/^\d{9,10}$/.test(uid) ? writeString(SETTING_KEYS.hoyolabUid, uid) : false);

@@ -62,8 +62,6 @@
     "loopFirst": "先頭（基準なし・全周同一）",
     "loopBetween": "{{index}}番目の出場（{{prev}} と {{next}} の間）",
     "title": "ローテーション ガントチャート",
-    "total": "総時間:",
-    "position": "再生位置:",
     "snapLines": "交代垂直スナップ線 (端点一致)",
     "loopPoint": "ループ基準点:",
     "loopAtStart": "先頭 (全周同一)",

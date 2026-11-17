@@ -9,6 +9,7 @@
  */
 
 import type { PartyMember } from '../../types/genshin';
+import { t } from '../../i18n';
 
 /** HoYoLAB のレスポンス（使う項目だけ） */
 export interface HoyolabProperty { property_type: number; value: string; times: number }
@@ -57,8 +58,10 @@ export interface OwnedCharacter {
   artifactSets: { name: string; count: number }[];
   /** 聖遺物の合計ステータス（gcsim の `add stats` のキー。割合は小数: 0.466 = 46.6%） */
   artifactStats: Record<string, number>;
-  /** 取り込み時に気づいた注意（日本語の文） */
+  /** 取り込み時に気づいた注意。言語に依存しない短い記号（例: `talentCount:5`。「:」のあとが値）。画面には出さない診断用 */
   warnings: string[];
+  /** Enka の応答に武器が無いなど、不完全なデータ。HoYoLAB の値を上書きしない（mergeOwned.ts） */
+  incomplete?: boolean;
   /** 取得元（HoYoLAB の戦績 / Enka.Network のキャラクター詳細表示）。古い保存には無い */
   source?: 'hoyolab' | 'enka';
   /** このキャラを取得した日時（ISO）。古い保存には無い */
@@ -81,7 +84,7 @@ const normalizeText = (s: string) => s.replace(/<[^>]+>/g, '').replace(/・/g, '
 export function baseTalentLevels(c: HoyolabCharacter, warnings: string[]): [number, number, number] {
   const skills = c.skills.filter(s => s.skill_type === 1);
   // 並びは [通常, スキル, (ダッシュ系)?, 爆発]
-  if (skills.length < 3 || skills.length > 4) warnings.push(`天賦の数が想定外です（${skills.length} 個）。レベルをそのまま使います`);
+  if (skills.length < 3 || skills.length > 4) warnings.push(`talentCount:${skills.length}`); // レベルは、そのまま使う
   const boosted = new Set<number>();
   for (const x of c.constellations) {
     if (!x.is_actived) continue;
@@ -110,7 +113,7 @@ export function sumArtifactStats(c: HoyolabCharacter, warnings: string[]): Recor
   for (const r of c.relics) {
     for (const p of [r.main_property, ...r.sub_property_list]) {
       const key = STAT_KEYS[p.property_type];
-      if (!key) { warnings.push(`未対応のステータス（種類 ${p.property_type}）を無視しました`); continue; }
+      if (!key) { warnings.push(`unsupportedStat:${p.property_type}`); continue; }
       total[key] = (total[key] ?? 0) + parseValue(p.value);
     }
   }
@@ -121,7 +124,7 @@ export function sumArtifactStats(c: HoyolabCharacter, warnings: string[]): Recor
 export function convertCharacter(c: HoyolabCharacter): OwnedCharacter {
   const warnings: string[] = [];
   const { maxLevel, ambiguous } = characterMaxLevel(c.base.level);
-  if (ambiguous) warnings.push(`Lv.${c.base.level} は突破前か突破後か分かりません（突破前として扱います）`);
+  if (ambiguous) warnings.push(`ambiguousLevel:${c.base.level}`); // 突破前として扱う
   const setCounts = new Map<string, number>();
   for (const r of c.relics) setCounts.set(r.set.name, (setCounts.get(r.set.name) ?? 0) + 1);
   const wCap = WEAPON_CAPS[c.weapon.promote_level] ?? 90;
@@ -177,13 +180,13 @@ export function buildOwnedCharacterLines(
 
   const weapon = masters.weapons.find(w => w.id === String(owned.weapon.genshinId))
     ?? masters.weapons.find(w => w.name === owned.weapon.name);
-  if (!weapon?.gcsimKey) warnings.push(`武器「${owned.weapon.name}」がマスターにありません`);
+  if (!weapon?.gcsimKey) warnings.push(t('hoyolab:warn.noWeapon', { name: owned.weapon.name }));
   else lines.push(`${key} add weapon="${weapon.gcsimKey}" refine=${owned.weapon.refinement} lvl=${owned.weapon.level}/${owned.weapon.maxLevel};`);
 
   for (const s of owned.artifactSets) {
     if (s.count < 2) continue;
     const art = masters.artifacts.find(a => a.name === s.name);
-    if (!art?.gcsimKey) { warnings.push(`聖遺物セット「${s.name}」がマスターにありません`); continue; }
+    if (!art?.gcsimKey) { warnings.push(t('hoyolab:warn.noSet', { name: s.name })); continue; }
     lines.push(`${key} add set="${art.gcsimKey}" count=${s.count >= 4 ? 4 : 2};`);
   }
 
@@ -199,12 +202,12 @@ export function ownedToPartyFields(
 ): { fields: Pick<PartyMember, 'constellation' | 'weaponId' | 'weaponRefinementRank' | 'artifactSetId' | 'artifactSetMode' | 'build'>; warnings: string[] } {
   const warnings: string[] = [];
   const weapon = masters.weapons.find(w => w.id === String(owned.weapon.genshinId)) ?? masters.weapons.find(w => w.name === owned.weapon.name);
-  if (!weapon) warnings.push(`武器「${owned.weapon.name}」がマスターにありません`);
+  if (!weapon) warnings.push(t('hoyolab:warn.noWeapon', { name: owned.weapon.name }));
   const sets: { id: string; count: number }[] = [];
   for (const s of owned.artifactSets) {
     if (s.count < 2) continue;
     const art = masters.artifacts.find(a => a.name === s.name);
-    if (!art) { warnings.push(`聖遺物セット「${s.name}」がマスターにありません`); continue; }
+    if (!art) { warnings.push(t('hoyolab:warn.noSet', { name: s.name })); continue; }
     sets.push({ id: art.id, count: s.count >= 4 ? 4 : 2 });
   }
   const four = sets.find(s => s.count === 4);

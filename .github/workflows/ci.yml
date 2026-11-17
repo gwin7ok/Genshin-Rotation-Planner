@@ -1,8 +1,7 @@
 # 検査（型・確認スクリプト）。プルリクエストと main への push で動かす。
 #
 # gcsim のサーバー・WebAssembly を使わない検査だけを動かす（高速・ネットワーク不要）。
-#   動かさないもの: check:hitlag・check:sacrificial-seed（gcsim の実行が要る）、check:release（WASM が要る。deploy.yml が動かす）、
-#                   verify:master-effects（生成物の改行コードの差が出る環境があるため。ローカルで確認する）
+#   動かさないもの: check:hitlag・check:sacrificial-seed（gcsim の実行が要る）、check:release（WASM が要る。deploy.yml が動かす）
 name: ci
 
 on:
@@ -72,6 +71,21 @@ jobs:
 
       - name: マスターの効果の網羅の確認
         run: npm run verify:master-effects
+
+      - name: gcsim の取り込みの確認
+        run: npm run check:gcsim-import
+
+      - name: HoYoLAB 取り込みの確認
+        run: npm run check:hoyolab-import
+
+      - name: 持ちキャラの照合の確認
+        run: npm run check:owned-match
+
+      - name: 持ちキャラの統合の確認
+        run: npm run check:owned-merge
+
+      - name: URL 取り込みの確認
+        run: npm run check:url-import
 
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict

@@ -54,6 +54,13 @@ const wr = dps.summarizeDamage(wl, 2);
 check(wr.energyWaits[0] === 1 && wr.energyWaits[1] === 2, '爆発のエネルギー待ち: CT 待ちは数えず、CT 明けの待ちを 1 かたまり 1 回と数える');
 const agg = dps.aggregateDps([{ total: 300, seconds: 3, byChar: [200, 100] }, { total: 500, seconds: 5, byChar: [400, 100] }], 2);
 check(agg.dps.mean === 100 && agg.dps.sd === 0 && agg.runs === 2 && Math.abs(agg.byChar[0].share - 0.75) < 1e-9, '統計: DPS 平均・標準偏差・割合');
+// 周数の打ち切り（M-3）: 設定文の print("loop ", i) の数を数え、設定の周数より少ない実行を知らせる
+const lp = dps.summarizeDamage([{ event: 'user', frame: 1, msg: 'loop 1' }, { event: 'user', frame: 400, msg: 'loop 2' }, { event: 'user', frame: 500, msg: 'loop x' }, { event: 'damage', frame: 600, msg: 'a', char_index: 0, logs: { damage: 10 } }], 2);
+check(lp.loopsStarted === 2, '周数: print の「loop N」だけ数える（始まった周数 2）');
+const mk = (loopsStarted: number) => ({ total: 10, seconds: 5, byChar: [10, 0], energyWaits: [0, 0], loopsStarted });
+const cut = dps.aggregateDps([mk(3), mk(5), mk(4)], 2, 5);
+check(cut.truncated?.count === 2 && cut.truncated?.worst === 3, '周数: 設定（5 周）より少ない実行の数（2 回）と、最も短い周数（3 周）');
+check(dps.aggregateDps([mk(5), mk(5)], 2, 5).truncated === undefined && dps.aggregateDps([mk(1)], 2).truncated === undefined, '周数: すべて終わっている・周数を渡さないときは、知らせない');
 
 // 3. 実機（ベネット + 香菱）
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
@@ -89,6 +96,8 @@ if (o2.status === 'ok' && o5.status === 'ok') {
   const two = await dps.computeDps({ config: build(2, [DEFAULT_ENEMY, DEFAULT_ENEMY]), runs: 3, parallel: 3, run: runGcsimSample });
   check(two.status === 'ok', '敵 2 体の設定文が実行できる');
   const withEnergy = buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], loopIterations: 2, ignoreBurstEnergy: false, enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } });
+  const zeroMax = buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], loopIterations: 2, ignoreBurstEnergy: false, enemyParticles: { minSeconds: 0, maxSeconds: 0, amount: 1 } });
+  check(!zeroMax.config.includes('energy every'), '粒子の間隔の最大が 0: 粒子の行を出さない（1 フレームごとの粒子で止まらなくなるのを防ぐ）');
   check(!withEnergy.config.includes('ignore_burst_energy') && withEnergy.config.includes('energy every interval=300,480 amount=1;') && c2.config.includes('ignore_burst_energy=true') && !c2.config.includes('energy every'), 'エネルギーを考慮: ignore_burst_energy が無く、敵の粒子の行が出る（考慮しない場合は、従来どおり）');
   const oe = await dps.computeDps({ config: withEnergy, runs: 3, parallel: 3, run: runGcsimSample });
   check(oe.status === 'ok' && oe.result.dps.mean > 0, 'エネルギーを考慮した設定文が実行できる');

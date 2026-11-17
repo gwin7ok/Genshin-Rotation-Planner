@@ -17,7 +17,9 @@ chrome.declarativeNetRequest.updateSessionRules({
 // content.js（アプリのページ）・popup.js からのメッセージを受ける。
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === 'hoyolab-fetch') {
-    fetchCharacters(msg.uid)
+    // Enka と同じく、UID の形（9〜10 桁の数字）を、ここでも確かめる（content script を通らない呼び出しに備える）
+    if (!/^\d{9,10}$/.test(String(msg.uid))) { sendResponse({ ok: false, error: 'UID は 9〜10 桁の数字です' }); return false; }
+    fetchCharacters(String(msg.uid))
       .then((data) => sendResponse({ ok: true, data }))
       .catch((e) => sendResponse({ ok: false, error: String(e.message || e), retcode: e.retcode }));
     return true; // 非同期で応答する

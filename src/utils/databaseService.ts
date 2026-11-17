@@ -1,6 +1,7 @@
 import { AppDatabase, WeaponDatabaseItem, ArtifactSetDatabaseItem, type SyncMessageKey } from '../types/database';
 import { ActionDefinition, CharacterConfig } from '../types/genshin';
-import { INITIAL_MASTER_DATABASE, DATABASE_VERSION, MASTER_WEAPONS, MASTER_ARTIFACTS } from '../data/databaseMaster';
+import { DATABASE_VERSION } from '../data/databaseMaster';
+import { getMasterBundle } from '../data/masterBundle';
 import { noteStoredDbVersion } from './versionNotice';
 import { migrateLegacyCharacter } from './legacyMigration';
 import {
@@ -12,11 +13,9 @@ import {
   generateWeaponsMasterOnline,
   generateArtifactsMasterOnline,
   attachGcsimEquipmentKeys,
-  generateEquipmentMaster,
   type EquipmentGenerationProgress,
   type WeaponGenerationReport,
   type ArtifactGenerationReport,
-  type EquipmentGenerationReport,
 } from '../masterdata/equipmentMasterGenerator';
 
 import { indexCatalog, linkCharacterBuffs, linkEquipmentBuffs } from '../masterdata/buffGcsimLink';
@@ -163,11 +162,11 @@ export function loadDatabase(): AppDatabase {
   try {
     const raw = readString(STORAGE_KEYS.database);
     if (!raw) {
-      return INITIAL_MASTER_DATABASE;
+      return getMasterBundle().initialDatabase;
     }
     const parsed = JSON.parse(raw) as AppDatabase;
     if (!parsed || !Array.isArray(parsed.characters) || !Array.isArray(parsed.weapons) || !Array.isArray(parsed.artifacts)) {
-      return INITIAL_MASTER_DATABASE;
+      return getMasterBundle().initialDatabase;
     }
 
     const characters = parsed.characters.map(c => migrateLegacyCharacter(c as unknown as Record<string, unknown>));
@@ -181,18 +180,18 @@ export function loadDatabase(): AppDatabase {
         ...parsed,
         version: DATABASE_VERSION,
         characters: mergeMasterWithProtected(
-          INITIAL_MASTER_DATABASE.characters,
+          getMasterBundle().initialDatabase.characters,
           characters,
           c => isCustomCharacter(c) || isLockedCharacter(c),
         ),
         weapons: mergeItemsWithProtected(
-          INITIAL_MASTER_DATABASE.weapons,
+          getMasterBundle().initialDatabase.weapons,
           parsed.weapons,
           isLockedWeapon,
           isCustomWeapon,
         ),
         artifacts: mergeItemsWithProtected(
-          INITIAL_MASTER_DATABASE.artifacts,
+          getMasterBundle().initialDatabase.artifacts,
           parsed.artifacts,
           isLockedArtifact,
           isCustomArtifact,
@@ -204,13 +203,13 @@ export function loadDatabase(): AppDatabase {
 
     return {
       ...parsed,
-      characters: fillCharacterReferences(characters, INITIAL_MASTER_DATABASE.characters),
-      weapons: fillGcsimKeys(parsed.weapons, MASTER_WEAPONS),
-      artifacts: fillGcsimKeys(parsed.artifacts, MASTER_ARTIFACTS),
+      characters: fillCharacterReferences(characters, getMasterBundle().initialDatabase.characters),
+      weapons: fillGcsimKeys(parsed.weapons, getMasterBundle().weapons),
+      artifacts: fillGcsimKeys(parsed.artifacts, getMasterBundle().artifacts),
     };
   } catch (err) {
     console.warn('Failed to parse database from localStorage, falling back to master:', err);
-    return INITIAL_MASTER_DATABASE;
+    return getMasterBundle().initialDatabase;
   }
 }
 
@@ -247,7 +246,7 @@ export async function syncCharactersMasterOnline(
   attachDurations(extras, catalogEntries as any[]);
   linkActionEffects(latestChars, { table: actionTable, overrides: ACTION_EFFECT_KEY_OVERRIDES, extras, included: ACTION_EFFECT_INCLUDED });
   attachHandwrittenCharacterEnglish(latestChars); // 手で書いた名前・説明の英語（D255。結び付けの後）
-  const mergedCharacters = mergeMasterWithProtected(withBundledMissing(latestChars, INITIAL_MASTER_DATABASE.characters), currentDb.characters, isLockedCharacter);
+  const mergedCharacters = mergeMasterWithProtected(withBundledMissing(latestChars, getMasterBundle().initialDatabase.characters), currentDb.characters, isLockedCharacter);
 
   const updatedDb: AppDatabase = {
     ...currentDb,
@@ -276,7 +275,7 @@ export async function syncWeaponsMasterOnline(
   linkEquipmentBuffs(latestWeapons, [], catalogIndex);
   attachHandwrittenEquipmentEnglish(latestWeapons, []);
   const mergedWeapons = mergeItemsWithProtected(
-    withBundledMissing(latestWeapons, MASTER_WEAPONS),
+    withBundledMissing(latestWeapons, getMasterBundle().weapons),
     currentDb.weapons,
     isLockedWeapon,
     isCustomWeapon,
@@ -308,7 +307,7 @@ export async function syncArtifactsMasterOnline(
   linkEquipmentBuffs([], latestArtifacts, catalogIndex);
   attachHandwrittenEquipmentEnglish([], latestArtifacts);
   const mergedArtifacts = mergeItemsWithProtected(
-    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
+    withBundledMissing(latestArtifacts, getMasterBundle().artifacts),
     currentDb.artifacts,
     isLockedArtifact,
     isCustomArtifact,
@@ -326,91 +325,11 @@ export async function syncArtifactsMasterOnline(
 }
 
 /**
- * genshin-db API から武器・聖遺物の両方をオンラインで取得・解析し、一括でDB に反映する。
- */
-export async function syncEquipmentMasterOnline(
-  currentDb: AppDatabase,
-  onProgress?: (p: EquipmentGenerationProgress) => void,
-): Promise<{ db: AppDatabase; report: EquipmentGenerationReport }> {
-  const { weapons: latestWeapons, artifacts: latestArtifacts, report } = await generateEquipmentMaster(onProgress);
-  const { index: catalogIndex, commit: catalogCommit } = await loadCatalogIndex();
-  linkEquipmentBuffs(latestWeapons, latestArtifacts, catalogIndex);
-  attachHandwrittenEquipmentEnglish(latestWeapons, latestArtifacts);
-  const mergedWeapons = mergeItemsWithProtected(
-    withBundledMissing(latestWeapons, MASTER_WEAPONS),
-    currentDb.weapons,
-    isLockedWeapon,
-    isCustomWeapon,
-  );
-  const mergedArtifacts = mergeItemsWithProtected(
-    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
-    currentDb.artifacts,
-    isLockedArtifact,
-    isCustomArtifact,
-  );
-
-  const updatedDb: AppDatabase = {
-    ...currentDb,
-    version: DATABASE_VERSION,
-    ...syncStamp('messages:db.equipment', { catalog: catalogCommit }),
-    weapons: mergedWeapons,
-    artifacts: mergedArtifacts,
-  };
-
-  saveDatabase(updatedDb);
-  return { db: updatedDb, report };
-}
-
-/**
- * Syncs only Weapons master roster (オフライン・同梱JSON使用)
- */
-export function syncWeaponsMaster(currentDb: AppDatabase): AppDatabase {
-  const latestWeapons = MASTER_WEAPONS;
-  const mergedWeapons = mergeItemsWithProtected(
-    withBundledMissing(latestWeapons, MASTER_WEAPONS),
-    currentDb.weapons,
-    isLockedWeapon,
-    isCustomWeapon,
-  );
-
-  const updatedDb: AppDatabase = {
-    ...currentDb,
-    ...syncStamp('messages:db.bundledWeapons'),
-    weapons: mergedWeapons
-  };
-
-  saveDatabase(updatedDb);
-  return updatedDb;
-}
-
-/**
- * Syncs only Artifacts master roster (オフライン・同梱JSON使用)
- */
-export function syncArtifactsMaster(currentDb: AppDatabase): AppDatabase {
-  const latestArtifacts = MASTER_ARTIFACTS;
-  const mergedArtifacts = mergeItemsWithProtected(
-    withBundledMissing(latestArtifacts, MASTER_ARTIFACTS),
-    currentDb.artifacts,
-    isLockedArtifact,
-    isCustomArtifact,
-  );
-
-  const updatedDb: AppDatabase = {
-    ...currentDb,
-    ...syncStamp('messages:db.bundledArtifacts'),
-    artifacts: mergedArtifacts
-  };
-
-  saveDatabase(updatedDb);
-  return updatedDb;
-}
-
-/**
  * Resets database completely back to initial official master
  */
 export function resetDatabaseToMaster(): AppDatabase {
   const resetDb = {
-    ...INITIAL_MASTER_DATABASE,
+    ...getMasterBundle().initialDatabase,
     ...syncStamp('messages:db.reset'),
   };
   saveDatabase(resetDb);
@@ -485,7 +404,7 @@ export function deleteAllCharactersFromDb(db: AppDatabase): AppDatabase {
  */
 export function clearAllDatabaseData(db: AppDatabase): AppDatabase {
   const emptyDb: AppDatabase = {
-    version: 1.0,
+    version: DATABASE_VERSION, // 版を現在にして、再読み込みで同梱のマスターに戻らないようにする（D348）
     ...syncStamp('messages:db.cleared'),
     characters: db.characters.filter(isLockedCharacter), // ロック中のキャラは残す
     weapons: db.weapons.filter(isLockedWeapon),          // ロック中の武器は残す

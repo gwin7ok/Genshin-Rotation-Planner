@@ -67,8 +67,6 @@ export interface WeaponDatabaseItem {
   updatedAt?: string;
 }
 
-export type WeaponMasterItem = WeaponDatabaseItem;
-
 export interface ArtifactSetDatabaseItem {
   id: string;
   name: string;
@@ -100,8 +98,6 @@ export interface ArtifactSetDatabaseItem {
   isCustom?: boolean;
   updatedAt?: string;
 }
-
-export type ArtifactSetMasterItem = ArtifactSetDatabaseItem;
 
 /** 同期の記録の文のキー（messages の db.*） */
 export type SyncMessageKey = `messages:db.${string}`;

@@ -32,6 +32,15 @@ interface PartyConfigModalProps {
   onUpdatePartyAndStints: (newParty: PartyMember[], newStints: Stint[]) => void;
 }
 
+/**
+ * 持ちキャラの装備（build）の使用を解除する。Lv・天賦・武器 Lv・聖遺物ステータスは、仮値（customStats）に引き継ぐ
+ * （手で変えた項目だけが変わり、ほかは持ちキャラの値のまま。既定の仮値に戻すのは「仮値を使う」を押したときだけ）
+ */
+const releaseBuild = (m: PartyMember): Pick<PartyMember, 'build' | 'customStats'> => ({
+  build: undefined,
+  customStats: m.build ? statsOfBuild(m.build) : m.customStats,
+});
+
 /** 手で変えたら、持ちキャラの装備（build）の使用を解除する項目 */
 const BUILD_LINKED_FIELDS: string[] = ['constellation', 'weaponId', 'weaponRefinementRank', 'artifactSetId', 'artifactSetMode'];
 
@@ -159,8 +168,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
     updated[selectedSlot] = {
       ...updated[selectedSlot],
       [field]: val,
-      // 武器・聖遺物・精錬・凸を手で変えたら、持ちキャラの装備（build）の使用は解除する（値が食い違わないように）
-      ...(BUILD_LINKED_FIELDS.includes(field as string) ? { build: undefined } : {}),
+      // 武器・聖遺物・精錬・凸を手で変えたら、持ちキャラの装備（build）の使用は解除する（値が食い違わないように）。Lv・天賦・聖遺物ステータスは仮値に引き継ぐ
+      ...(BUILD_LINKED_FIELDS.includes(field as string) ? releaseBuild(updated[selectedSlot]) : {}),
     };
     setEditingParty(updated);
   };
@@ -183,7 +192,8 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
 
   const handleRevertOwned = () => {
     const updated = [...editingParty];
-    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined };
+    // 「仮値を使う」: 持ちキャラの値も捨てて、既定の仮値にする（customStats も消す）
+    updated[selectedSlot] = { ...updated[selectedSlot], build: undefined, customStats: undefined };
     setEditingParty(updated);
     setOwnedWarnings([]);
   };
@@ -330,7 +340,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       onKeyDown={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         const updated = [...editingParty];
-                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10), build: undefined };
+                        updated[idx] = { ...updated[idx], constellation: parseInt(e.target.value, 10), ...releaseBuild(updated[idx]) };
                         setEditingParty(updated);
                       }}
                       className="absolute bottom-2 right-2 bg-slate-950 text-amber-300 font-mono text-[10px] font-bold px-1 py-0.5 rounded border border-slate-700 focus:outline-none focus:border-amber-400 cursor-pointer"
@@ -497,7 +507,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           ...updated[selectedSlot],
                           weaponId: newWeaponId,
                           weaponRefinementRank: defaultRank,
-                          build: undefined,
+                          ...releaseBuild(updated[selectedSlot]),
                         };
                         setEditingParty(updated);
                       }}
@@ -597,7 +607,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                           updated[selectedSlot] = {
                             ...updated[selectedSlot],
                             artifactSetMode: mode,
-                            build: undefined,
+                            ...releaseBuild(updated[selectedSlot]),
                             ...(mode === '2+2' ? { artifactSetId: undefined } : {}),
                           };
                           setEditingParty(updated);

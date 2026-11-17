@@ -77,7 +77,7 @@
     const heads = [...doc.querySelectorAll('h3,h4')];
     // 武器: 見出し「武器…」の次の、最初の太字の名前
     let weapon = null;
-    const wh = heads.find((e) => /^武器/.test(e.textContent.trim()));
+    const wh = (heads.find((e) => e.textContent.trim() === '武器') || heads.find((e) => /^武器/.test(e.textContent.trim())));
     if (wh) {
       let el = wh.nextElementSibling;
       for (let n = 0; el && n < 8 && !weapon && !/^H[23]$/.test(el.tagName); n++, el = el.nextElementSibling) {

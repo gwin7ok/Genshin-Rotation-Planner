@@ -1,5 +1,5 @@
 {
-  "name": "雷電ナショナル",
+  "name": "[プリセット]雷電ナショナル",
   "description": "雷電将軍・行秋・ベネット・香菱",
   "party": [
     {
@@ -8,7 +8,36 @@
       "energyRecharge": 100,
       "weaponId": "13502",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15020"
+      "artifactSetId": "15020",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15020",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5318,
+          "cr": 0.587,
+          "er": 0.428,
+          "atk%": 0.973,
+          "cd": 0.972,
+          "atk": 340,
+          "def": 19,
+          "def%": 0.248,
+          "hp%": 0.093
+        }
+      }
     },
     {
       "characterId": "10000025-hydro",
@@ -16,15 +45,74 @@
       "energyRecharge": 100,
       "weaponId": "11401",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15020"
+      "artifactSetId": "15020",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          5,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15020",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5258,
+          "er": 0.648,
+          "cd": 0.568,
+          "cr": 0.75,
+          "atk%": 0.39,
+          "atk": 325,
+          "em": 56,
+          "def": 35,
+          "hydro%": 0.466,
+          "hp%": 0.134
+        }
+      }
     },
     {
       "characterId": "10000032-pyro",
       "constellation": 6,
       "energyRecharge": 100,
-      "weaponId": "11401",
+      "weaponId": "11417",
       "weaponRefinementRank": 5,
-      "artifactSetId": "10007"
+      "artifactSetId": "10007",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "10007",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4515,
+          "cd": 0.322,
+          "cr": 0.436,
+          "def": 28,
+          "er": 0.869,
+          "atk": 271,
+          "hp%": 0.55,
+          "def%": 0.105,
+          "em": 17
+        }
+      }
     },
     {
       "characterId": "10000023-pyro",
@@ -32,7 +120,36 @@
       "energyRecharge": 100,
       "weaponId": "13415",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15020"
+      "artifactSetId": "15020",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          4,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15020",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5856,
+          "cd": 0.66,
+          "hp%": 0.099,
+          "er": 0.997,
+          "atk%": 0.396,
+          "atk": 344,
+          "em": 75,
+          "cr": 0.443,
+          "pyro%": 0.466
+        }
+      }
     }
   ],
   "stints": [
@@ -457,5 +574,6 @@
   "loopStartIndex": 1,
   "loopStartTime": 1.2,
   "totalDuration": 23.18,
-  "switchDelay": 0.5
+  "switchDelay": 0.5,
+  "exportedAt": "2026-11-17T05:48:26.058Z"
 }

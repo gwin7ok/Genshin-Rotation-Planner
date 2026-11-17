@@ -1,5 +1,5 @@
 {
-  "name": "ゴロゴロ蒸発フリーナ改",
+  "name": "[プリセット]ゴロゴロ蒸発フリーナ改",
   "description": "早柚・フリーナ・香菱・シトラリ",
   "party": [
     {
@@ -8,15 +8,73 @@
       "energyRecharge": 100,
       "weaponId": "12401",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15002"
+      "artifactSetId": "15002",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          1,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15002",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5886,
+          "er": 0.422,
+          "em": 98,
+          "cr": 0.672,
+          "atk": 330,
+          "atk%": 0.973,
+          "def": 16,
+          "hp%": 0.157,
+          "cd": 0.264,
+          "def%": 0.175
+        }
+      }
     },
     {
       "characterId": "10000089-hydro",
       "constellation": 2,
       "energyRecharge": 100,
-      "weaponId": "11511",
+      "weaponId": "11513",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15032"
+      "artifactSetId": "15032",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          6,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15032",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4780,
+          "cr": 0.35,
+          "hp%": 0.781,
+          "er": 0.984,
+          "cd": 1.274,
+          "atk": 311,
+          "em": 95,
+          "def": 19
+        }
+      }
     },
     {
       "characterId": "10000023-pyro",
@@ -24,15 +82,75 @@
       "energyRecharge": 100,
       "weaponId": "13415",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15020"
+      "artifactSetId": "15020",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          4,
+          9,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15020",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5856,
+          "cd": 0.66,
+          "hp%": 0.099,
+          "er": 0.997,
+          "atk%": 0.396,
+          "atk": 344,
+          "em": 75,
+          "cr": 0.443,
+          "pyro%": 0.466
+        }
+      }
     },
     {
       "characterId": "10000107-cryo",
       "constellation": 2,
       "energyRecharge": 100,
-      "weaponId": "14517",
-      "weaponRefinementRank": 1,
-      "artifactSetId": "15037"
+      "weaponId": "14403",
+      "weaponRefinementRank": 5,
+      "artifactSetId": "15037",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          1,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15037",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4780,
+          "er": 0.951,
+          "em": 436,
+          "hp%": 0.379,
+          "def": 86,
+          "atk": 330,
+          "atk%": 0.047,
+          "cr": 0.132,
+          "cd": 0.194,
+          "def%": 0.073,
+          "heal": 0.359
+        }
+      }
     }
   ],
   "stints": [
@@ -68,6 +186,22 @@
           "offset": 0.833,
           "duration": 20,
           "gcsimKey": "khaj-nisut-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk50xqp_1",
+          "passiveEffectId": "wbuff_11513",
+          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-hp-buff）",
+          "offset": 2.033,
+          "duration": 6,
+          "gcsimKey": "splendoroftranquilwaters-hp-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk50xqp_3",
+          "passiveEffectId": "wbuff_11513",
+          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-skill-buff）",
+          "offset": 2.033,
+          "duration": 6,
+          "gcsimKey": "splendoroftranquilwaters-skill-buff"
         }
       ]
     },
@@ -204,6 +338,22 @@
           "offset": 1.217,
           "duration": 20.3,
           "gcsimKey": "khaj-nisut-team-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk50xqp_2",
+          "passiveEffectId": "wbuff_11513",
+          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-hp-buff）",
+          "offset": 0.85,
+          "duration": 22.167,
+          "gcsimKey": "splendoroftranquilwaters-hp-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk50xqp_4",
+          "passiveEffectId": "wbuff_11513",
+          "name": "静水流転の輝き: 湖光の朝夕（splendoroftranquilwaters-skill-buff）",
+          "offset": 2.5,
+          "duration": 20.517,
+          "gcsimKey": "splendoroftranquilwaters-skill-buff"
         }
       ],
       "groups": []
@@ -295,7 +445,7 @@
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-hydro）",
           "offset": 2.667,
-          "duration": 20.65,
+          "duration": 20.633,
           "gcsimKey": "citlali-a1-hydro",
           "cooldown": 8
         },
@@ -304,7 +454,7 @@
           "passiveEffectId": "10000107-cryo_p1",
           "name": "五重天の寒雨（citlali-a1-pyro）",
           "offset": 2.667,
-          "duration": 20.65,
+          "duration": 20.633,
           "gcsimKey": "citlali-a1-pyro",
           "cooldown": 8
         },
@@ -329,7 +479,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+12%",
           "offset": 3.133,
-          "duration": 23.167,
+          "duration": 15.817,
           "gcsimKey": "scroll-4pc-hydro"
         },
         {
@@ -337,7 +487,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
           "offset": 3.133,
-          "duration": 28.167,
+          "duration": 20.817,
           "gcsimKey": "scroll-4pc-nightsoul-hydro"
         },
         {
@@ -345,7 +495,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 炎元素ダメージ+12%",
           "offset": 3.4,
-          "duration": 15.033,
+          "duration": 22.9,
           "gcsimKey": "scroll-4pc-pyro"
         },
         {
@@ -353,7 +503,7 @@
           "passiveEffectId": "abuff_15037",
           "name": "絵巻4: 炎元素ダメージ+28%（夜魂の加護中）",
           "offset": 3.4,
-          "duration": 20.033,
+          "duration": 27.9,
           "gcsimKey": "scroll-4pc-nightsoul-pyro"
         },
         {
@@ -362,7 +512,8 @@
           "name": "五重天の寒雨（citlali-a1-hydro）",
           "offset": 13.233,
           "duration": 12,
-          "gcsimKey": "citlali-a1-hydro"
+          "gcsimKey": "citlali-a1-hydro",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6e_2",
@@ -370,7 +521,8 @@
           "name": "五重天の寒雨（citlali-a1-pyro）",
           "offset": 13.233,
           "duration": 12,
-          "gcsimKey": "citlali-a1-pyro"
+          "gcsimKey": "citlali-a1-pyro",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6e_3",
@@ -378,7 +530,8 @@
           "name": "絵巻4: 氷元素ダメージ+12%",
           "offset": 13.233,
           "duration": 15,
-          "gcsimKey": "scroll-4pc-cryo"
+          "gcsimKey": "scroll-4pc-cryo",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6e_4",
@@ -386,7 +539,8 @@
           "name": "絵巻4: 氷元素ダメージ+28%（夜魂の加護中）",
           "offset": 13.233,
           "duration": 20,
-          "gcsimKey": "scroll-4pc-nightsoul-cryo"
+          "gcsimKey": "scroll-4pc-nightsoul-cryo",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6e_5",
@@ -394,7 +548,8 @@
           "name": "絵巻4: 水元素ダメージ+12%",
           "offset": 13.233,
           "duration": 15,
-          "gcsimKey": "scroll-4pc-hydro"
+          "gcsimKey": "scroll-4pc-hydro",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6e_6",
@@ -402,7 +557,8 @@
           "name": "絵巻4: 水元素ダメージ+28%（夜魂の加護中）",
           "offset": 13.233,
           "duration": 20,
-          "gcsimKey": "scroll-4pc-nightsoul-hydro"
+          "gcsimKey": "scroll-4pc-nightsoul-hydro",
+          "gcsimMissed": true
         }
       ]
     },
@@ -476,17 +632,17 @@
           "id": "ptrg_gcsim_mv4y8nos_3",
           "passiveEffectId": "10000053-anemo_p1",
           "name": "適任の人を探そう",
-          "offset": 8.95,
+          "offset": 8.867,
           "duration": 0,
           "gcsimKey": "sayu-a1-icd",
-          "cooldown": 2
+          "cooldown": 2.033
         },
         {
           "id": "ptrg_gcsim_mv4y8not_4",
           "passiveEffectId": "abuff_15002",
           "name": "翠緑4: 拡散耐性-40%（vvpyro）",
           "offset": 0.7,
-          "duration": 10.267,
+          "duration": 18.25,
           "gcsimKey": "vvpyro"
         },
         {
@@ -495,7 +651,8 @@
           "name": "翠緑4: 拡散耐性-40%（vvcryo）",
           "offset": 2.95,
           "duration": 14.183,
-          "gcsimKey": "vvcryo"
+          "gcsimKey": "vvcryo",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mv4y8not_6",
@@ -503,7 +660,8 @@
           "name": "翠緑4: 拡散耐性-40%（vvhydro）",
           "offset": 4.55,
           "duration": 14.417,
-          "gcsimKey": "vvhydro"
+          "gcsimKey": "vvhydro",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mv4y8not_7",
@@ -511,7 +669,8 @@
           "name": "翠緑4: 拡散耐性-40%（vvhydro）",
           "offset": 16.417,
           "duration": 2.85,
-          "gcsimKey": "vvhydro"
+          "gcsimKey": "vvhydro",
+          "gcsimMissed": true
         },
         {
           "id": "ptrg_gcsim_mvxa5m6d_0",
@@ -519,7 +678,16 @@
           "name": "翠緑4: 拡散耐性-40%（vvcryo）",
           "offset": 16.417,
           "duration": 1.017,
-          "gcsimKey": "vvcryo"
+          "gcsimKey": "vvcryo",
+          "gcsimMissed": true
+        },
+        {
+          "id": "ptrg_gcsim_mwk50xqo_0",
+          "passiveEffectId": "abuff_15002",
+          "name": "翠緑4: 拡散耐性-40%（vvpyro）",
+          "offset": 16.417,
+          "duration": 2.833,
+          "gcsimKey": "vvpyro"
         }
       ]
     }
@@ -527,5 +695,6 @@
   "loopStartIndex": 0,
   "loopStartTime": 0,
   "totalDuration": 20.57,
-  "switchDelay": 0.5
+  "switchDelay": 0.5,
+  "exportedAt": "2026-11-17T05:48:30.888Z"
 }

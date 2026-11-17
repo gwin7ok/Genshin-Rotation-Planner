@@ -1,14 +1,44 @@
 {
-  "name": "豊穣月開花",
+  "name": "[プリセット]豊穣月開花",
   "description": "ナヒーダ・ニィロウ・コロンビーナ・ラウマ",
   "party": [
     {
       "characterId": "10000073-dendro",
       "constellation": 2,
       "energyRecharge": 100,
-      "weaponId": "14403",
+      "weaponId": "14405",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15025"
+      "artifactSetId": "15025",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15025",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4989,
+          "er": 0.687,
+          "hp%": 0.105,
+          "em": 624,
+          "def": 53,
+          "atk": 329,
+          "atk%": 0.403,
+          "cd": 0.458,
+          "def%": 0.182,
+          "cr": 0.105
+        }
+      }
     },
     {
       "characterId": "10000070-hydro",
@@ -16,7 +46,40 @@
       "energyRecharge": 100,
       "weaponId": "11511",
       "weaponRefinementRank": 1,
-      "artifactSetMode": "2+2"
+      "artifactSetMode": "2+2",
+      "artifactSetId": "15026",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          9,
+          9
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15026",
+            "count": 2
+          },
+          {
+            "id": "15017",
+            "count": 2
+          }
+        ],
+        "artifactStats": {
+          "hp": 5318,
+          "hp%": 1.713,
+          "em": 124,
+          "atk": 389,
+          "er": 0.324,
+          "atk%": 0.058,
+          "cd": 0.582,
+          "cr": 0.171,
+          "def%": 0.139
+        }
+      }
     },
     {
       "characterId": "10000125-hydro",
@@ -24,7 +87,36 @@
       "energyRecharge": 100,
       "weaponId": "14406",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15043"
+      "artifactSetId": "15043",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          10,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15043",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5318,
+          "cr": 0.404,
+          "cd": 1.336,
+          "hp%": 1.176,
+          "def": 92,
+          "atk": 311,
+          "er": 0.155,
+          "atk%": 0.146,
+          "em": 47
+        }
+      }
     },
     {
       "characterId": "10000119-dendro",
@@ -32,7 +124,36 @@
       "energyRecharge": 100,
       "weaponId": "14432",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15042"
+      "artifactSetId": "15042",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          1,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15042",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5258,
+          "em": 642,
+          "er": 0.602,
+          "cr": 0.334,
+          "cd": 0.506,
+          "atk": 389,
+          "def": 46,
+          "hp%": 0.099,
+          "def%": 0.058
+        }
+      }
     }
   ],
   "stints": [
@@ -72,7 +193,10 @@
           "naturalDuration": 0.467,
           "durationManual": true,
           "gcsimBaseDuration": 0.467,
-          "effectDuration": 25
+          "effectDuration": 25,
+          "cooldown": 5,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0.183
         },
         {
           "id": "act_1793505161971_x57t",
@@ -97,7 +221,7 @@
           "gcsimBaseDuration": 1.85,
           "cooldown": 13.5,
           "gcsimCdResonance": 1,
-          "effectDuration": 23.517,
+          "effectDuration": 24.017,
           "gcsimCtOffset": 0,
           "extraEffects": [
             {
@@ -128,6 +252,22 @@
           "offset": 0.717,
           "duration": 27.483,
           "gcsimKey": "dm-4pc"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9pbqy_14",
+          "passiveEffectId": "wbuff_14405",
+          "name": "匣中日月: 日月の輝き（solar-na-buff）",
+          "offset": 0.717,
+          "duration": 6,
+          "gcsimKey": "solar-na-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9pbqy_15",
+          "passiveEffectId": "wbuff_14405",
+          "name": "匣中日月: 日月の輝き（solar-skill-burst-buff）",
+          "offset": 1.45,
+          "duration": 6,
+          "gcsimKey": "solar-skill-burst-buff"
         }
       ]
     },
@@ -922,5 +1062,6 @@
         ]
       }
     ]
-  }
+  },
+  "exportedAt": "2026-11-17T05:48:24.379Z"
 }

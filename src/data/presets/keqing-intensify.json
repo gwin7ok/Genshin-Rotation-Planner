@@ -1,5 +1,5 @@
 {
-  "name": "激化刻晴",
+  "name": "[プリセット]激化刻晴",
   "description": "刻晴・ナヒーダ・楓原万葉・フィッシュル",
   "party": [
     {
@@ -8,15 +8,98 @@
       "energyRecharge": 100,
       "weaponId": "11509",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15005"
+      "artifactSetId": "15005",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          10,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15005",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5019,
+          "atk%": 0.915,
+          "er": 0.169,
+          "cd": 1.299,
+          "cr": 0.606,
+          "atk": 311,
+          "hp%": 0.105,
+          "electro%": 0.466,
+          "def%": 0.073,
+          "em": 23
+        }
+      }
     },
     {
       "characterId": "10000073-dendro",
       "constellation": 2,
       "energyRecharge": 100,
-      "weaponId": "14403",
+      "weaponId": "14405",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15025"
+      "artifactSetId": "15025",
+      "artifactSetMode": "4pc",
+      "customStats": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactStats": {
+          "hp": 4989,
+          "er": 0.687,
+          "hp%": 0.105,
+          "em": 624,
+          "def": 53,
+          "atk": 329,
+          "atk%": 0.403,
+          "cd": 0.458,
+          "def%": 0.182,
+          "cr": 0.105
+        }
+      },
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15025",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4989,
+          "er": 0.687,
+          "hp%": 0.105,
+          "em": 624,
+          "def": 53,
+          "atk": 329,
+          "atk%": 0.403,
+          "cd": 0.458,
+          "def%": 0.182,
+          "cr": 0.105
+        }
+      }
     },
     {
       "characterId": "10000047-anemo",
@@ -24,7 +107,36 @@
       "energyRecharge": 100,
       "weaponId": "11407",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15002"
+      "artifactSetId": "15002",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15002",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4780,
+          "em": 649,
+          "er": 0.868,
+          "cd": 0.35,
+          "cr": 0.276,
+          "atk": 311,
+          "def": 83,
+          "atk%": 0.106,
+          "hp%": 0.105
+        }
+      }
     },
     {
       "characterId": "10000031-electro",
@@ -32,7 +144,36 @@
       "energyRecharge": 100,
       "weaponId": "15503",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15032"
+      "artifactSetId": "15032",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          9
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15032",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 5049,
+          "er": 0.427,
+          "cd": 1.167,
+          "cr": 0.439,
+          "atk%": 0.396,
+          "atk": 327,
+          "hp%": 0.105,
+          "em": 187,
+          "electro%": 0.466
+        }
+      }
     }
   ],
   "stints": [
@@ -108,7 +249,10 @@
           "durationManual": true,
           "gcsimBaseDuration": 0.533,
           "effectDuration": 25.8,
-          "naturalDuration": 0.533
+          "naturalDuration": 0.533,
+          "cooldown": 5,
+          "gcsimCdResonance": 1,
+          "gcsimCtOffset": 0.183
         },
         {
           "id": "act_1790659559619_44e9",
@@ -121,7 +265,7 @@
           "gcsimBaseDuration": 1.85,
           "cooldown": 13.5,
           "gcsimCdResonance": 1,
-          "effectDuration": 20.683,
+          "effectDuration": 21.017,
           "naturalDuration": 1.85,
           "gcsimCtOffset": 0,
           "extraEffects": [
@@ -161,6 +305,14 @@
           "offset": 3.717,
           "duration": 24.717,
           "gcsimKey": "nahida-c2"
+        },
+        {
+          "id": "ptrg_gcsim_mwk7ir5w_0",
+          "passiveEffectId": "wbuff_14405",
+          "name": "匣中日月: 日月の輝き（solar-na-buff）",
+          "offset": 0.717,
+          "duration": 6,
+          "gcsimKey": "solar-na-buff"
         }
       ]
     },
@@ -651,10 +803,10 @@
           "id": "ptrg_gcsim_mv57a5h8_a",
           "passiveEffectId": "10000042-electro_c2",
           "name": "2凸「苛捐」",
-          "offset": 2.25,
+          "offset": 3.367,
           "duration": 0,
           "gcsimKey": "keqing-c2-icd",
-          "cooldown": 5.3
+          "cooldown": 5.2
         },
         {
           "id": "ptrg_gcsim_mv57a5h8_c",
@@ -708,5 +860,6 @@
   "loopStartIndex": 1,
   "loopStartTime": 2.383,
   "totalDuration": 23.57,
-  "switchDelay": 0.5
+  "switchDelay": 0.5,
+  "exportedAt": "2026-11-17T05:48:32.020Z"
 }

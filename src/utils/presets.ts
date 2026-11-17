@@ -41,7 +41,7 @@ interface PresetFile {
 const PRESET_FILES: { key: string; file: PresetFile; en: { name: string; description: string } }[] = [
   { key: 'keqing-intensify', file: keqingIntensify as unknown as PresetFile, en: { name: 'Aggravate Keqing', description: 'Keqing, Nahida, Kaedehara Kazuha, Fischl' } },
   { key: 'furina-vaporize', file: furinaVaporize as unknown as PresetFile, en: { name: 'Rolling Vaporize Furina (Revised)', description: 'Sayu, Furina, Xiangling, Citlali' } },
-  { key: 'sandrone-stellar-conduct', file: sandroneStellarConduct as unknown as PresetFile, en: { name: 'Sandrone Stellar-Conduct', description: 'Odette, Yae Miko, Qiqi, Sandrone' } },
+  { key: 'sandrone-stellar-conduct', file: sandroneStellarConduct as unknown as PresetFile, en: { name: 'Sandrone Stellar-Conduct', description: 'Nicole, Yae Miko, Qiqi, Sandrone' } },
   { key: 'raiden-national', file: raidenNational as unknown as PresetFile, en: { name: 'Raiden National', description: 'Raiden Shogun, Xingqiu, Bennett, Xiangling' } },
   { key: 'lunar-bloom', file: lunarBloom as unknown as PresetFile, en: { name: 'Bountiful Lunar-Bloom', description: 'Nahida, Nilou, Columbina, Lauma' } },
 ];

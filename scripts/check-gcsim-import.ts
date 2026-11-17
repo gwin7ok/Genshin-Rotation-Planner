@@ -50,7 +50,8 @@ const presetDir = path.join('src', 'data', 'presets');
 for (const f of fs.readdirSync(presetDir).filter(x => x.endsWith('.json'))) {
   check(`往復: ${f}`, () => {
     const preset = readJson(path.join(presetDir, f));
-    const chars = resolvePartyCharacters(preset.party, characters);
+    // 設定文の読み込みは、天賦・ステータスを取り込まない（アプリの値を使う）ので、往復は build / customStats を外して比べる
+    const chars = resolvePartyCharacters(preset.party.map((m: any) => ({ ...m, build: undefined, customStats: undefined })), characters);
     const switchDelay = preset.switchDelay ?? 0.5;
     const stints = preset.stints.filter((s: any) => chars.some((c: any) => c.id === s.characterId));
     const build = (cs: any[], ss: any[], loop: number, delay: number) =>

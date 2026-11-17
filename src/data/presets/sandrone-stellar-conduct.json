@@ -1,22 +1,79 @@
 {
-  "name": "サンドローネ星電導",
-  "description": "オデット・八重神子・七七・サンドローネ",
+  "name": "[プリセット]サンドローネ星電導",
+  "description": "ニコ・八重神子・七七・サンドローネ",
   "party": [
     {
-      "characterId": "10000150-cryo",
+      "characterId": "10000131-pyro",
       "constellation": 0,
       "energyRecharge": 100,
-      "weaponId": "11522",
+      "weaponId": "14523",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15048"
+      "artifactSetId": "15045",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          1,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15045",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 6214,
+          "cd": 0.427,
+          "em": 56,
+          "atk%": 1.76,
+          "atk": 358,
+          "er": 0.596,
+          "cr": 0.089,
+          "def%": 0.255
+        }
+      }
     },
     {
       "characterId": "10000058-electro",
       "constellation": 2,
       "energyRecharge": 100,
-      "weaponId": "14402",
-      "weaponRefinementRank": 5,
-      "artifactSetId": "15046"
+      "weaponId": "14437",
+      "weaponRefinementRank": 2,
+      "artifactSetId": "15026",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15026",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4780,
+          "cd": 0.971,
+          "cr": 0.587,
+          "er": 0.2,
+          "atk%": 1.014,
+          "atk": 311,
+          "em": 126,
+          "hp%": 0.21,
+          "def": 23
+        }
+      }
     },
     {
       "characterId": "10000035-cryo",
@@ -24,7 +81,37 @@
       "energyRecharge": 100,
       "weaponId": "11425",
       "weaponRefinementRank": 5,
-      "artifactSetId": "15017"
+      "artifactSetId": "15017",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          9,
+          9,
+          9
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15017",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 4780,
+          "cd": 0.459,
+          "atk%": 1.532,
+          "em": 72,
+          "er": 0.713,
+          "atk": 341,
+          "def%": 0.437,
+          "cr": 0.062,
+          "hp%": 0.192,
+          "def": 21
+        }
+      }
     },
     {
       "characterId": "10000133-cryo",
@@ -32,7 +119,36 @@
       "energyRecharge": 100,
       "weaponId": "12516",
       "weaponRefinementRank": 1,
-      "artifactSetId": "15046"
+      "artifactSetId": "15046",
+      "artifactSetMode": "4pc",
+      "build": {
+        "level": 90,
+        "maxLevel": 90,
+        "talents": [
+          10,
+          10,
+          10
+        ],
+        "weaponLevel": 90,
+        "weaponMaxLevel": 90,
+        "artifactSets": [
+          {
+            "id": "15046",
+            "count": 4
+          }
+        ],
+        "artifactStats": {
+          "hp": 6005,
+          "em": 135,
+          "atk%": 1.253,
+          "cd": 1.011,
+          "atk": 346,
+          "cr": 0.19,
+          "er": 0.278,
+          "def": 21,
+          "def%": 0.182
+        }
+      }
     }
   ],
   "stints": [
@@ -126,7 +242,7 @@
           "passiveEffectId": "10000058-electro_c1",
           "name": "1凸「野狐供真編」（yae-c1-electro）",
           "offset": 2.517,
-          "duration": 31.45,
+          "duration": 30.533,
           "gcsimKey": "yae-c1-electro"
         },
         {
@@ -134,8 +250,35 @@
           "passiveEffectId": "10000058-electro_c1",
           "name": "1凸「野狐供真編」（yae-c1-ssc）",
           "offset": 2.517,
-          "duration": 31.45,
+          "duration": 30.533,
           "gcsimKey": "yae-c1-ssc"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_10",
+          "passiveEffectId": "abuff_15026",
+          "name": "金メッキの夢4: 効果",
+          "offset": 2.517,
+          "duration": 8,
+          "gcsimKey": "gd-4pc",
+          "cooldown": 8
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_11",
+          "passiveEffectId": "abuff_15026",
+          "name": "金メッキの夢4: 効果",
+          "offset": 11.317,
+          "duration": 8,
+          "gcsimKey": "gd-4pc",
+          "cooldown": 8
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_12",
+          "passiveEffectId": "abuff_15026",
+          "name": "金メッキの夢4: 効果",
+          "offset": 20.117,
+          "duration": 8,
+          "gcsimKey": "gd-4pc",
+          "cooldown": 8
         }
       ],
       "extraEffects": [
@@ -149,76 +292,67 @@
     },
     {
       "id": "stint_1791158015563",
-      "characterId": "10000150-cryo",
+      "characterId": "10000131-pyro",
       "note": "",
       "actions": [
         {
-          "id": "act_1791158070140_9g7a",
-          "actionTypeId": "10000150-cryo_e",
-          "name": "元素スキル: 柔きファントムの夜の舞",
+          "id": "act_1794893840108_u20d",
+          "actionTypeId": "10000131-pyro_e",
+          "name": "元素スキル: 聖言黙示・顕れぬ光",
           "shortName": "E",
           "type": "skill",
-          "duration": 0.683,
-          "naturalDuration": 0.683,
+          "duration": 0.517,
           "durationManual": true,
-          "gcsimBaseDuration": 0.683,
-          "cooldown": 15,
+          "gcsimBaseDuration": 0.517,
+          "cooldown": 16,
           "gcsimCdResonance": 1,
-          "effectDuration": 21.033,
-          "gcsimCtOffset": 0.233
-        },
-        {
-          "id": "act_1791158071663_phmh",
-          "actionTypeId": "10000150-cryo_e_recast",
-          "name": "特殊元素スキル（柔きファントムの夜の舞の後）",
-          "shortName": "spE",
-          "type": "skill",
-          "duration": 1.283,
-          "naturalDuration": 1.283,
-          "cooldownPool": "special",
-          "durationManual": true,
-          "gcsimBaseDuration": 1.283,
-          "cooldown": 15,
-          "gcsimCdResonance": 1,
-          "effectDuration": 20,
-          "gcsimCtOffset": 0
+          "gcsimCtOffset": 0,
+          "effectDuration": 20
         }
       ],
       "startTime": 3.417,
-      "endTime": 6.083,
-      "duration": 2.6660000000000004,
+      "endTime": 3.917,
+      "duration": 0.5,
       "passiveTriggers": [
         {
-          "id": "ptrg_gcsim_mwd7zomf_d",
-          "passiveEffectId": "wbuff_11522",
-          "name": "蝶の羽化: 繭を破りし自由の舞（beyond-the-chrysalis-crit-dmg）",
+          "id": "ptrg_gcsim_mwk9i1v2_v",
+          "passiveEffectId": "10000131-pyro_p1_1",
+          "name": "分かち合い (20秒)",
+          "offset": 0.65,
+          "duration": 19.983,
+          "gcsimKey": "guidance-of-theosis"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_w",
+          "passiveEffectId": "wbuff_14523",
+          "name": "塵と光の七つの誓約: 末臨者の華冠",
+          "offset": 0.633,
+          "duration": 20,
+          "gcsimKey": "angelos-heptades-buff"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_x",
+          "passiveEffectId": "abuff_15045",
+          "name": "天からの贈り物4: 効果（celestialgift-4pc-active）",
           "offset": 0.5,
-          "duration": 10.05,
-          "gcsimKey": "beyond-the-chrysalis-crit-dmg"
+          "duration": 20,
+          "gcsimKey": "celestialgift-4pc-active"
         },
         {
-          "id": "ptrg_gcsim_mwd7zomf_e",
-          "passiveEffectId": "wbuff_11522",
-          "name": "蝶の羽化: 繭を破りし自由の舞（beyond-the-chrysalis-stellar-buff）",
-          "offset": 1.283,
-          "duration": 10.05,
-          "gcsimKey": "beyond-the-chrysalis-stellar-buff"
+          "id": "ptrg_gcsim_mwk9i1v3_y",
+          "passiveEffectId": "abuff_15045",
+          "name": "天からの贈り物4: 効果（celestialgift-4pc-holder）",
+          "offset": 0.5,
+          "duration": 20,
+          "gcsimKey": "celestialgift-4pc-holder"
         },
         {
-          "id": "ptrg_gcsim_mwd7zomf_f",
-          "passiveEffectId": "abuff_15048",
-          "name": "炉炎溶錬の心4: 効果（furnace-4pc-atk）",
-          "offset": 2.317,
-          "duration": 30.283,
-          "gcsimKey": "furnace-4pc-atk"
-        },
-        {
-          "id": "ptrg_gcsim_mwd7zomf_g",
-          "passiveEffectId": "abuff_15048",
-          "name": "炉炎溶錬の心4: 効果（furnace-4pc-react）",
-          "offset": 2.317,
-          "duration": 30.283,
-          "gcsimKey": "furnace-4pc-react"
+          "id": "ptrg_gcsim_mwk9i1v3_z",
+          "passiveEffectId": "abuff_15045",
+          "name": "天からの贈り物4: 効果（celestialgift-4pc-holder-pyro）",
+          "offset": 0.5,
+          "duration": 20.117,
+          "gcsimKey": "celestialgift-4pc-holder-pyro"
         }
       ]
     },
@@ -258,8 +392,8 @@
           "gcsimCtOffset": 0.05
         }
       ],
-      "startTime": 6.083,
-      "endTime": 9.733,
+      "startTime": 3.917,
+      "endTime": 7.567,
       "duration": 3.6500000000000004,
       "passiveTriggers": [
         {
@@ -303,6 +437,14 @@
           "offset": 0.5,
           "duration": 12.117,
           "gcsimKey": "qiqi-c6"
+        },
+        {
+          "id": "ptrg_gcsim_mwk9i1v3_13",
+          "passiveEffectId": "10000035-cryo_p1",
+          "name": "延命妙法",
+          "offset": 3.017,
+          "duration": 8,
+          "gcsimKey": "qiqi-a1"
         }
       ]
     },
@@ -318,7 +460,7 @@
           "shortName": "E",
           "type": "skill",
           "duration": 0.767,
-          "naturalDuration": 0.1,
+          "naturalDuration": 0.767,
           "groupId": "grp_1794467998605_cbeg",
           "durationManual": true,
           "gcsimBaseDuration": 0.767,
@@ -387,7 +529,7 @@
           "shortName": "E",
           "type": "skill",
           "duration": 0.767,
-          "naturalDuration": 0.167,
+          "naturalDuration": 0.767,
           "groupId": "grp_1794467961851_d3xk",
           "durationManual": true,
           "gcsimBaseDuration": 0.767,
@@ -422,9 +564,9 @@
           "gcsimCtOffset": 0
         }
       ],
-      "startTime": 9.733,
-      "endTime": 26.332,
-      "duration": 16.599,
+      "startTime": 7.567,
+      "endTime": 24.283,
+      "duration": 16.716,
       "passiveTriggers": [
         {
           "id": "ptrg_gcsim_mwd7zomg_p",
@@ -453,7 +595,7 @@
   ],
   "loopStartIndex": 1,
   "loopStartTime": 1.05,
-  "totalDuration": 26.45,
+  "totalDuration": 24.9,
   "switchDelay": 0.5,
   "reactions": {
     "gcsimVersion": "v2.50.0",
@@ -469,65 +611,65 @@
               "offset": 0.583
             },
             "end": {
-              "actionId": "act_1794468063113_pvbs",
-              "offset": 0.983
+              "actionId": "act_1794468064016_zkpn",
+              "offset": 0.55
             },
             "count": 0
           },
           {
             "start": {
-              "actionId": "act_1794468063113_pvbs",
-              "offset": 0.983
+              "actionId": "act_1794468064016_zkpn",
+              "offset": 0.55
             },
             "end": {
               "actionId": "act_1794467985955_b1w0",
-              "offset": 0.467
+              "offset": 2.017
             },
-            "count": 4
+            "count": 3
           },
           {
             "start": {
               "actionId": "act_1794467985955_b1w0",
-              "offset": 0.467
+              "offset": 2.017
             },
             "end": {
               "actionId": "act_1794468404007_e5n7",
-              "offset": 0.433
+              "offset": 1.983
             },
-            "count": 7
+            "count": 5
           },
           {
             "start": {
               "actionId": "act_1794468404007_e5n7",
-              "offset": 0.433
+              "offset": 1.983
             },
             "end": {
               "actionId": "act_1794468406569_5vma",
-              "offset": 2.2
+              "offset": 3.75
             },
-            "count": 9
+            "count": 5
           },
           {
             "start": {
               "actionId": "act_1794468406569_5vma",
-              "offset": 2.2
+              "offset": 3.75
             },
             "end": {
               "actionId": "act_1794467937093_g1mu",
-              "offset": 1.5
+              "offset": 3.05
             },
             "count": 6
           },
           {
             "start": {
               "actionId": "act_1794467937093_g1mu",
-              "offset": 1.5
+              "offset": 3.05
             },
             "end": {
               "actionId": "act_1794468016736_z4j9",
               "offset": 1.05
             },
-            "count": 8
+            "count": 5
           }
         ]
       },
@@ -542,90 +684,91 @@
               "offset": 0
             },
             "end": {
-              "actionId": "act_1791158030996_djub",
-              "offset": 0.617
+              "actionId": "act_1791799011949_9f53",
+              "offset": 0.733
             },
-            "count": 8
+            "count": 5
           },
           {
             "start": {
-              "actionId": "act_1791158030996_djub",
-              "offset": 0.617
-            },
-            "end": {
-              "actionId": "act_1791158071663_phmh",
-              "offset": 1.467
-            },
-            "count": 4
-          },
-          {
-            "start": {
-              "actionId": "act_1791158071663_phmh",
-              "offset": 1.467
+              "actionId": "act_1791799011949_9f53",
+              "offset": 0.733
             },
             "end": {
               "actionId": "act_1794468064016_zkpn",
-              "offset": 1.6
+              "offset": 0.7
             },
             "count": 3
           },
           {
             "start": {
               "actionId": "act_1794468064016_zkpn",
-              "offset": 1.6
+              "offset": 0.7
             },
             "end": {
               "actionId": "act_1794467985955_b1w0",
-              "offset": 3.067
+              "offset": 2.167
+            },
+            "count": 3
+          },
+          {
+            "start": {
+              "actionId": "act_1794467985955_b1w0",
+              "offset": 2.167
+            },
+            "end": {
+              "actionId": "act_1794468404007_e5n7",
+              "offset": 2.133
+            },
+            "count": 5
+          },
+          {
+            "start": {
+              "actionId": "act_1794468404007_e5n7",
+              "offset": 2.133
+            },
+            "end": {
+              "actionId": "act_1794467935137_jkbp",
+              "offset": 0.067
             },
             "count": 6
           },
           {
             "start": {
-              "actionId": "act_1794467985955_b1w0",
-              "offset": 3.067
-            },
-            "end": {
-              "actionId": "act_1794468406569_5vma",
-              "offset": 0.8
-            },
-            "count": 8
-          },
-          {
-            "start": {
-              "actionId": "act_1794468406569_5vma",
-              "offset": 0.8
+              "actionId": "act_1794467935137_jkbp",
+              "offset": 0.067
             },
             "end": {
               "actionId": "act_1794467937093_g1mu",
-              "offset": 0.1
+              "offset": 3.2
             },
-            "count": 8
+            "count": 5
           },
           {
             "start": {
               "actionId": "act_1794467937093_g1mu",
-              "offset": 0.1
+              "offset": 3.2
             },
             "end": {
               "actionId": "act_1794468016736_z4j9",
-              "offset": 0.267
+              "offset": 3.367
             },
-            "count": 7
+            "count": 5
           },
           {
             "start": {
               "actionId": "act_1794468016736_z4j9",
-              "offset": 0.267
+              "offset": 3.367
             },
             "end": {
               "actionId": "act_1794468016736_z4j9",
-              "offset": 4.283
+              "offset": 7.383
             },
-            "count": 6
+            "count": 2
           }
         ]
       }
     ]
-  }
+  },
+  "exportedAt": "2026-11-17T05:48:27.123Z"
 }

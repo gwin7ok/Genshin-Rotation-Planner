@@ -119,6 +119,10 @@ const TERMS: Record<string, string> = {
   // CT の短縮・層の効果
   '周天の回転（CT −15%）': 'Atmospheric Revolution (CD −15%)',
   '粛正（最大層）攻撃力 +40%': 'Disciplinary Action (max stacks) ATK +40%',
+  '検知コア': 'Detection Core',
+  '変形ビーコン': 'Transformation Beacon',
+  '衝撃エネルギー': 'Impact Energy',
+  '諭示: 連携フリーズキャッツクローの受付': "Revelation: window for the linked Freezing Cat's Claw",
 };
 
 /** 説明文・ヒント・注記（完全一致） */
@@ -250,6 +254,14 @@ const SENTENCES: Record<string, string> = {
   '2セット効果なし': 'No 2-piece effect',
   '4セット効果なし': 'No 4-piece effect',
   '常時発動または特殊効果なし': 'Always active or no special effect',
+  '検知コアが存在する間（25 秒）。一回押しの E は安定状態・長押しの E はオーバーロード。E を 6 秒以内にもう一度使うと、検知コアの状態を切り替える（CT なし）。オーバーロードのとき、変形ビーコンが 1 つ以上あれば、重撃が特殊重撃「段階的爆破」になり、ビーコンをすべて消費する':
+    'While the Detection Core exists (25s). A tapped E gives the Stable state and a held E gives Overload. Using E again within 6s switches the Detection Core state (no CD). During Overload, with at least 1 Transformation Beacon, Charged Attacks become the special Charged Attack "Phased Detonation" and consume all Beacons',
+  '変形ビーコンは、検知コアの間の元素爆発（3 つ）と命ノ星座 1 の元素スキル（1 つ）だけを数えています。期限は 10 秒です（wiki: 6 秒、固有天賦 2 で 10 秒。固有天賦 2 は解放済みとして数えています）。固有天賦による獲得は数えていません。特殊重撃は、長押しの E（オーバーロード）のときだけです。ビーコンが足りない・安定状態のとき、重撃は普通の重撃になります':
+    'Only Beacons from the Elemental Burst during the Detection Core (3) and from the C1 Elemental Skill (1) are counted. They expire after 10s (wiki: 6s, 10s with Ascension Talent 2, which is counted as unlocked). Beacons gained from Ascension Talents are not counted. The special Charged Attack applies only to a held E (Overload). With too few Beacons, or in the Stable state, Charged Attacks are normal Charged Attacks',
+  '衝撃エネルギー（元素スキルで 40 獲得）。40 以上のとき、重撃が特殊重撃「重砲直射・至近爆撃」になり、衝撃エネルギーをすべて消費する。交代しても続く':
+    'Impact Energy (40 gained from the Elemental Skill). At 40 or more, Charged Attacks become the special Charged Attack "Heavy Cannon: Point-Blank Blast" and consume all Impact Energy. Continues after character switch',
+  '上限 100 は wiki の記述です（命ノ星座 4 で 130）。命ノ星座 1 の最初の E の追加（+60）・命ノ星座 4 の獲得効率 +30% は数えています（最初の E は、編成の最初の 1 回だけ）。固有天賦による獲得（元素爆発の間の他のキャラの雷元素攻撃 +5。命中数が分からないため）は数えていません。足りないとき、重撃は普通の重撃になります':
+    "The cap of 100 is from the wiki (130 at C4). The extra 60 from the first E at C1 and the +30% gain at C4 are counted (the first E counts only once at the start of the party). Gains from Ascension Talents (+5 from other characters' Electro attacks during the Elemental Burst; hit counts are unknown) are not counted. With too little, Charged Attacks are normal Charged Attacks",
   'バフ効果': 'Buff',
   '4セット効果バフ': '4-piece buff',
 };

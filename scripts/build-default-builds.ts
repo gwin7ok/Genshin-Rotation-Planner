@@ -28,9 +28,11 @@ const warnings: string[] = [];
 let added = 0;
 for (const [name, r] of Object.entries(raw)) {
   if (r.error || !r.main) { warnings.push(`${name}: 取得できていない（${r.error ?? '表なし'}）`); continue; }
-  const chars = characters.filter(c => c.name === name);
+  // 旅人は、元素ごとのページ（主人公/風 など）。名前は「traveler-<元素>」で渡す。空・蛍は同じ既定を使うので、キーも「traveler-<元素>」
+  const travelerElement = /^traveler-(\w+)$/.exec(name)?.[1];
+  const chars = travelerElement ? characters.filter(c => c.id === `10000005-${travelerElement}`) : characters.filter(c => c.name === name);
   if (chars.length === 0) { warnings.push(`${name}: マスターにいない`); continue; }
-  const genshinId = String(chars[0].id).split('-')[0];
+  const genshinId = travelerElement ? name : String(chars[0].id).split('-')[0];
   const weaponType = chars[0].weaponType;
 
   const entry: Record<string, unknown> = { name, sands: r.main.sands, goblet: r.main.goblet, circlet: r.main.circlet, sub: r.sub };
@@ -53,7 +55,7 @@ for (const [name, r] of Object.entries(raw)) {
   added++;
 }
 
-const sorted = Object.fromEntries(Object.entries(existing).sort(([a], [b]) => Number(a) - Number(b)));
+const sorted = Object.fromEntries(Object.entries(existing).sort(([a], [b]) => (Number(a) || Infinity) - (Number(b) || Infinity)));
 fs.writeFileSync(OUT, JSON.stringify(sorted, null, 1) + '\n', 'utf-8');
 console.log(`${added} キャラを ${OUT} に統合しました（全 ${Object.keys(sorted).length} キャラ）`);
 for (const w of warnings) console.log('  警告: ' + w);

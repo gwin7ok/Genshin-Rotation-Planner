@@ -133,7 +133,12 @@ interface DefaultBuild {
   sets?: { id: string; count: number }[];
 }
 const DEFAULT_BUILDS = defaultBuildsJson as unknown as Record<string, DefaultBuild>;
-const defaultBuildOf = (characterId: string): DefaultBuild | undefined => DEFAULT_BUILDS[characterId.split('-')[0]];
+const defaultBuildOf = (characterId: string): DefaultBuild | undefined => {
+  const [genshinId, element] = characterId.split('-');
+  // 旅人（空・蛍）は、元素ごとの共通の既定（キーは「traveler-<元素>」）
+  if (genshinId === '10000005' || genshinId === '10000007') return DEFAULT_BUILDS[`traveler-${element}`];
+  return DEFAULT_BUILDS[genshinId];
+};
 
 /** メインステータスの値（5 つ星・Lv20） */
 const MAIN_VALUE: Record<string, number> = { 'atk%': 0.466, 'hp%': 0.466, 'def%': 0.583, em: 187, er: 0.518, cr: 0.311, cd: 0.622, heal: 0.359, phys: 0.583, elem: 0.466 };

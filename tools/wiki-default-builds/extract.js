@@ -71,7 +71,7 @@
 
   /** 1 キャラのページから取り出す */
   const extractOne = async (name, page) => {
-    const res = await fetch('/genshinwiki/' + encodeURIComponent(page || name));
+    const res = await fetch('/genshinwiki/' + (page || name).split('/').map(encodeURIComponent).join('/'));
     if (!res.ok) return { name, error: 'HTTP ' + res.status };
     const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
     const heads = [...doc.querySelectorAll('h3,h4')];

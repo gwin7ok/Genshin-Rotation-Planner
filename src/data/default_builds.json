@@ -4350,5 +4350,266 @@
     "count": 4
    }
   ]
+ },
+ "traveler-anemo": {
+  "name": "traveler-anemo",
+  "sands": [
+   "atk%",
+   "em"
+  ],
+  "goblet": [
+   "elem",
+   "em"
+  ],
+  "circlet": [
+   "cr",
+   "cd",
+   "em"
+  ],
+  "sub": [
+   [
+    "em"
+   ],
+   [
+    "cr",
+    "cd"
+   ]
+  ],
+  "weaponId": "11503",
+  "sets": [
+   {
+    "id": "15002",
+    "count": 4
+   },
+   {
+    "id": "15026",
+    "count": 4
+   }
+  ]
+ },
+ "traveler-geo": {
+  "name": "traveler-geo",
+  "sands": [
+   "atk%"
+  ],
+  "goblet": [
+   "elem"
+  ],
+  "circlet": [
+   "cr",
+   "cd"
+  ],
+  "sub": [
+   [
+    "cr",
+    "cd"
+   ],
+   [
+    "atk%"
+   ],
+   [
+    "er"
+   ]
+  ],
+  "weaponId": "11509",
+  "sets": [
+   {
+    "id": "15034",
+    "count": 4
+   },
+   {
+    "id": "15014",
+    "count": 2
+   }
+  ]
+ },
+ "traveler-electro": {
+  "name": "traveler-electro",
+  "sands": [
+   "er"
+  ],
+  "goblet": [
+   "elem",
+   "em"
+  ],
+  "circlet": [
+   "cr",
+   "cd",
+   "em"
+  ],
+  "sub": [
+   [
+    "er"
+   ],
+   [
+    "cr",
+    "cd"
+   ],
+   [
+    "em"
+   ]
+  ],
+  "weaponId": "11401",
+  "sets": [
+   {
+    "id": "15020",
+    "count": 4
+   },
+   {
+    "id": "15026",
+    "count": 4
+   }
+  ]
+ },
+ "traveler-dendro": {
+  "name": "traveler-dendro",
+  "sands": [
+   "er",
+   "em"
+  ],
+  "goblet": [
+   "elem"
+  ],
+  "circlet": [
+   "cr",
+   "cd"
+  ],
+  "sub": [
+   [
+    "er"
+   ],
+   [
+    "cr",
+    "cd"
+   ],
+   [
+    "em"
+   ],
+   [
+    "atk%"
+   ]
+  ],
+  "weaponId": "11503",
+  "sets": [
+   {
+    "id": "15025",
+    "count": 4
+   },
+   {
+    "id": "15020",
+    "count": 4
+   }
+  ]
+ },
+ "traveler-hydro": {
+  "name": "traveler-hydro",
+  "sands": [
+   "atk%",
+   "er"
+  ],
+  "goblet": [
+   "elem"
+  ],
+  "circlet": [
+   "cr",
+   "cd"
+  ],
+  "sub": [
+   [
+    "cr",
+    "cd"
+   ],
+   [
+    "er"
+   ],
+   [
+    "atk%"
+   ],
+   [
+    "hp%"
+   ]
+  ],
+  "weaponId": "11505",
+  "sets": [
+   {
+    "id": "15020",
+    "count": 4
+   },
+   {
+    "id": "15032",
+    "count": 4
+   }
+  ]
+ },
+ "traveler-pyro": {
+  "name": "traveler-pyro",
+  "sands": [
+   "er",
+   "atk%"
+  ],
+  "goblet": [
+   "elem"
+  ],
+  "circlet": [
+   "cr",
+   "cd"
+  ],
+  "sub": [
+   [
+    "er"
+   ],
+   [
+    "cr",
+    "atk%"
+   ]
+  ],
+  "weaponId": "11503",
+  "sets": [
+   {
+    "id": "15037",
+    "count": 4
+   },
+   {
+    "id": "15017",
+    "count": 4
+   }
+  ]
+ },
+ "traveler-cryo": {
+  "name": "traveler-cryo",
+  "sands": [
+   "atk%"
+  ],
+  "goblet": [
+   "atk%"
+  ],
+  "circlet": [
+   "cd",
+   "cr"
+  ],
+  "sub": [
+   [
+    "cr",
+    "cd",
+    "atk%"
+   ],
+   [
+    "em"
+   ],
+   [
+    "er"
+   ]
+  ],
+  "weaponId": "11521",
+  "sets": [
+   {
+    "id": "15046",
+    "count": 4
+   },
+   {
+    "id": "15044",
+    "count": 4
+   }
+  ]
  }
 }

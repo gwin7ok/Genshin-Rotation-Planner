@@ -128,6 +128,9 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
       updated[selectedSlot] = { ...updated[selectedSlot], ...fields, customStats: undefined };
       setOwnedWarnings(warnings);
     } else {
+      // 持ちキャラが無いときは、「仮値を使う」と同じ既定（Wiki のおすすめの武器・聖遺物セット・聖遺物ステータス）にする
+      const equipment = defaultEquipmentFor(newRosterChar.id, { weapons: database.weapons, artifacts: database.artifacts });
+      updated[selectedSlot] = { ...updated[selectedSlot], ...equipment, customStats: defaultCustomStatsFor(newRosterChar.id) };
       setOwnedWarnings([]);
     }
     setEditingParty(updated);

@@ -20,7 +20,10 @@ const EXTENSIONS_PAGE = 'chrome://extensions';
 /** 拡張機能の導入手順（5 つの手順カード＋うまくいかないとき）。拡張機能を検知できないときだけ出す */
 const InstallGuide: React.FC = () => {
   const [copied, setCopied] = useState(false);
+  // Chrome は、Web ページから chrome:// のページを開くことを禁止している。代わりに、アドレスをコピーしたうえで、空の新しいタブを開く
+  // （このアプリのタブを、拡張機能の画面に置き換えてしまわないように）。利用者は、開いたタブのアドレス欄に貼り付ける
   const copyAddress = async () => {
+    window.open('about:blank', '_blank', 'noopener');
     try {
       await navigator.clipboard.writeText(EXTENSIONS_PAGE);
       setCopied(true);

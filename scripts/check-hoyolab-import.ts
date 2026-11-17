@@ -3,6 +3,7 @@
  *
  *   npm run check:hoyolab-import [-- <HoYoLAB の JSON のパス>]
  *
+ * 手元でだけ実行する検査（CI では実行しない。取得データは個人のアカウントのもので Git に入らず、gcsim サーバーも要る）。
  * 既定の入力: tools/hoyolab-fetch/out/hoyolab-raw.json（拡張機能・試作スクリプトで取得。Git には入らない）。
  * 1. 変換: 全キャラを変換し、注意（突破段階が不明・天賦の数が想定外など）とマスターに無い武器・聖遺物を一覧にする。
  * 2. 突き合わせ: gcsim サーバー（http://localhost:54321）で、変換した設定を 1 キャラずつ実行し、

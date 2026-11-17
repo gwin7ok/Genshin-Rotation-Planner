@@ -75,8 +75,8 @@ jobs:
       - name: gcsim の取り込みの確認
         run: npm run check:gcsim-import
 
-      - name: HoYoLAB 取り込みの確認
-        run: npm run check:hoyolab-import
+      # check:hoyolab-import は、CI では実行しない（ご自身の HoYoLAB の取得データ tools/hoyolab-fetch/out/hoyolab-raw.json と、
+      # localhost の gcsim サーバーが要る。Git に入らないデータなので、手元でだけ実行する）
 
       - name: 持ちキャラの照合の確認
         run: npm run check:owned-match

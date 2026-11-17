@@ -20,6 +20,8 @@ interface StatsEditModalProps {
 }
 
 const MAX_LEVELS = [20, 40, 50, 60, 70, 80, 90, 95, 100];
+/** 設定値を最後に変えてから、最終ステータスを計算するまでの待ち時間 */
+const PREVIEW_DELAY_MS = 2000;
 const toText = (n: number) => String(Number(n.toFixed(4)));
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 
@@ -66,15 +68,16 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level, maxLevel, talents, weaponLevel, weaponMaxLevel, statTexts]);
 
-  // gcsim が計算する最終ステータス（参考）。入力を止めてから、少し待って 1 回だけ実行する
+  // gcsim が計算する最終ステータス（参考）。設定値を変えるたびに、待ち時間（2 秒）をはじめから数え直し、入力が止まって 2 秒たってから 1 回だけ実行する。
+  // 待っている間は、前の結果を出したままにする（初回だけ「計算中…」）
   const [preview, setPreview] = useState<FinalStatsResult | 'loading' | null>(null);
   useEffect(() => {
     if (!previewChar || !current) { setPreview(null); return; }
     let cancelled = false;
-    setPreview('loading');
+    setPreview(p => (p !== null && p !== 'loading' && p.status === 'ok' ? p : 'loading'));
     const timer = setTimeout(() => {
       previewFinalStats(previewChar, current, database).then(r => { if (!cancelled) setPreview(r); }).catch(e => { if (!cancelled) setPreview({ status: 'error', message: String(e) }); });
-    }, 400);
+    }, PREVIEW_DELAY_MS);
     return () => { cancelled = true; clearTimeout(timer); };
   }, [previewChar, current, database]);
 

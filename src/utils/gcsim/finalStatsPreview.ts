@@ -10,14 +10,14 @@ import { runGcsimSample } from './gcsimClient';
 
 /** gcsim の snapshot の並び（Stat の列挙）: 2=DEF 3=HP 5=ATK 7=ER 8=EM 9=CR 10=CD 11=Heal 12..18=炎水氷雷風岩草 19=物理 */
 const SNAP = { def: 2, hp: 3, atk: 5, er: 7, em: 8, cr: 9, cd: 10, heal: 11 } as const;
-const ELEMENT_SNAP: Record<string, number> = { pyro: 12, hydro: 13, cryo: 14, electro: 15, anemo: 16, geo: 17, dendro: 18, physical: 19 };
+const DMG_BONUS_SNAP: Record<string, number> = { 'pyro%': 12, 'hydro%': 13, 'cryo%': 14, 'electro%': 15, 'anemo%': 16, 'geo%': 17, 'dendro%': 18, 'phys%': 19 };
 
 export interface FinalStats {
   hp: number; atk: number; def: number; em: number;
   /** 割合は小数（0.5 = 50%）。er は基礎の 1.0 を含む */
   cr: number; cd: number; er: number; heal: number;
-  /** そのキャラの元素ダメージバフ（割合）、物理ダメージバフ */
-  elementDmg: number; physDmg: number;
+  /** 元素・物理ダメージバフ（割合）。キー: pyro% hydro% cryo% electro% anemo% geo% dendro% phys%（聖遺物ステータスのキーと同じ） */
+  dmgBonus: Record<string, number>;
 }
 
 export type FinalStatsResult =
@@ -51,7 +51,7 @@ export async function previewFinalStats(
     stats: {
       hp: snap[SNAP.hp], atk: snap[SNAP.atk], def: snap[SNAP.def], em: snap[SNAP.em],
       cr: snap[SNAP.cr], cd: snap[SNAP.cd], er: snap[SNAP.er], heal: snap[SNAP.heal],
-      elementDmg: snap[ELEMENT_SNAP[char.element] ?? ELEMENT_SNAP.physical], physDmg: snap[ELEMENT_SNAP.physical],
+      dmgBonus: Object.fromEntries(Object.entries(DMG_BONUS_SNAP).map(([k, i]) => [k, snap[i] ?? 0])),
     },
   };
 }

@@ -146,11 +146,12 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
                   {([
                     ['hp', Math.round(preview.stats.hp)], ['atk', Math.round(preview.stats.atk)], ['def', Math.round(preview.stats.def)],
                     ['em', Math.round(preview.stats.em)], ['cr', pct(preview.stats.cr)], ['cd', pct(preview.stats.cd)],
-                    ['er', pct(preview.stats.er)], ['heal', pct(preview.stats.heal)], ['elementDmg', pct(preview.stats.elementDmg)],
-                    ['phys%', pct(preview.stats.physDmg)],
+                    ['er', pct(preview.stats.er)], ['heal', pct(preview.stats.heal)],
+                    // 0% のダメージバフは出さない
+                    ...Object.entries(preview.stats.dmgBonus).filter(([, v]) => Math.abs(v) >= 0.00005).map(([k, v]) => [k, pct(v)]),
                   ] as [string, string | number][]).map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-2">
-                      <span className="text-slate-400 font-sans">{t(`party:stats.final.${k}` as TranslationKey)}</span>
+                      <span className="text-slate-400 font-sans">{t((k.endsWith('%') && k !== 'hp%' ? `party:stats.key.${k}` : `party:stats.final.${k}`) as TranslationKey)}</span>
                       <span className="text-slate-100" data-testid={`stats-final-${k}`}>{v}</span>
                     </div>
                   ))}

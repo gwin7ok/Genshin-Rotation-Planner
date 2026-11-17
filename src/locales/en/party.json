@@ -110,9 +110,7 @@
       "cr": "CRIT Rate",
       "cd": "CRIT DMG",
       "er": "Energy Recharge",
-      "heal": "Healing Bonus",
-      "elementDmg": "Elemental DMG Bonus",
-      "phys%": "Physical DMG Bonus"
+      "heal": "Healing Bonus"
     }
   }
 }

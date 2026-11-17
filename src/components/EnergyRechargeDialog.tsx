@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Zap, Play, Square, AlertTriangle, ChevronUp, ChevronDown } from 'lucide-react';
+import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
+import { Stepper } from './Stepper';
 import { t, dateLocale, currentLanguage, joinList } from '../i18n';
 import { charName } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
@@ -23,31 +24,6 @@ import {
   type RequiredErProgress,
   type RequiredErResult,
 } from '../utils/gcsim/requiredEnergyRecharge';
-
-/** 数の入力。右の上下ボタンで step ずつ増減する（範囲内に収める）。decimals を指定すると、小数 decimals 桁（x.x など）にそろえて表示する */
-const Stepper: React.FC<{ value: string; onChange: (v: string) => void; step: number; min?: number; max?: number; decimals?: number; disabled?: boolean; widthClass: string }> = ({ value, onChange, step, min, max, decimals, disabled, widthClass }) => {
-  const fmt = (n: number) => decimals === undefined ? String(n) : n.toFixed(decimals);
-  const move = (dir: 1 | -1) => {
-    const cur = Number(value);
-    const next = (Number.isFinite(cur) ? cur : 0) + dir * step;
-    const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, next));
-    onChange(fmt(Math.round(clamped * 1000) / 1000));
-  };
-  return (
-    <span className="inline-flex items-stretch">
-      <input
-        type="number" min={min} max={max} step={step} value={value} disabled={disabled}
-        onChange={e => onChange(e.target.value)}
-        onBlur={() => { const n = Number(value); if (decimals !== undefined && value !== '' && Number.isFinite(n)) onChange(fmt(n)); }}
-        className={`${widthClass} bg-slate-800 border border-slate-700 rounded-l px-1.5 py-0.5 text-right [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
-      />
-      <span className="flex flex-col border border-l-0 border-slate-700 rounded-r overflow-hidden">
-        <button type="button" onClick={() => move(1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center"><ChevronUp className="w-3 h-3" /></button>
-        <button type="button" onClick={() => move(-1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center border-t border-slate-700"><ChevronDown className="w-3 h-3" /></button>
-      </span>
-    </span>
-  );
-};
 
 interface EnergyRechargeDialogProps {
   isOpen: boolean;

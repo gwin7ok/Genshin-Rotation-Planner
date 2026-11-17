@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { X } from 'lucide-react';
+import { Stepper } from './Stepper';
 import { t, type TranslationKey } from '../i18n';
 import type { CharacterConfig, CustomStats } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
@@ -32,7 +33,7 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
   // 聖遺物ステータス（% の項目は、百分率で入力する）
   const initialStatText = (key: string, percent: boolean) => {
     const v = initial.artifactStats[key];
-    return v === undefined ? '' : toText(percent ? v * 100 : v);
+    return v === undefined ? '0' : toText(percent ? v * 100 : v);
   };
   const [statTexts, setStatTexts] = useState<Record<string, string>>(
     () => Object.fromEntries(ARTIFACT_STAT_KEYS.map(s => [s.key, initialStatText(s.key, s.percent)])),
@@ -87,11 +88,10 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
     setWeaponLevel(String(d.weaponLevel)); setWeaponMaxLevel(d.weaponMaxLevel);
     setStatTexts(Object.fromEntries(ARTIFACT_STAT_KEYS.map(s => {
       const v = d.artifactStats[s.key];
-      return [s.key, v === undefined ? '' : toText(s.percent ? v * 100 : v)];
+      return [s.key, v === undefined ? '0' : toText(s.percent ? v * 100 : v)];
     })));
   };
 
-  const inputCls = (ok: boolean) => `w-20 bg-slate-950 border rounded-lg px-2 py-1 text-white font-mono text-right focus:outline-none focus:border-sky-400 ${ok ? 'border-slate-700' : 'border-red-500'}`;
   const selectCls = 'bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-white font-mono';
 
   return (
@@ -107,7 +107,7 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
           <div className="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-2 items-center">
             <span className="font-semibold text-slate-200">{t('party:stats.charLevel')}</span>
             <span className="flex items-center gap-1.5">
-              <input type="text" inputMode="numeric" value={level} onChange={e => setLevel(e.target.value.replace(/\D/g, ''))} className={inputCls(levelN !== null)} data-testid="stats-level" />
+              <Stepper value={level} onChange={setLevel} step={1} min={1} max={maxLevel} widthClass="w-16" invalid={levelN === null} testId="stats-level" />
               <span>/</span>
               <select value={maxLevel} onChange={e => setMaxLevel(Number(e.target.value))} className={selectCls} data-testid="stats-max-level">
                 {MAX_LEVELS.map(n => <option key={n} value={n}>{n}</option>)}
@@ -118,13 +118,13 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
               {(['normal', 'skill', 'burst'] as const).map((k, i) => (
                 <label key={k} className="flex items-center gap-1">
                   <span className="text-[10px] text-slate-500">{t(`party:stats.talent_${k}`)}</span>
-                  <input type="text" inputMode="numeric" value={talents[i]} onChange={e => setTalents(talents.map((x, j) => j === i ? e.target.value.replace(/\D/g, '') : x))} className={`${inputCls(talentNs[i] !== null)} w-12`} data-testid={`stats-talent-${i}`} />
+                  <Stepper value={talents[i]} onChange={v => setTalents(talents.map((x, j) => j === i ? v : x))} step={1} min={1} max={15} widthClass="w-11" invalid={talentNs[i] === null} testId={`stats-talent-${i}`} />
                 </label>
               ))}
             </span>
             <span className="font-semibold text-slate-200">{t('party:stats.weaponLevel')}</span>
             <span className="flex items-center gap-1.5">
-              <input type="text" inputMode="numeric" value={weaponLevel} onChange={e => setWeaponLevel(e.target.value.replace(/\D/g, ''))} className={inputCls(weaponLevelN !== null)} data-testid="stats-weapon-level" />
+              <Stepper value={weaponLevel} onChange={setWeaponLevel} step={1} min={1} max={weaponMaxLevel} widthClass="w-16" invalid={weaponLevelN === null} testId="stats-weapon-level" />
               <span>/</span>
               <select value={weaponMaxLevel} onChange={e => setWeaponMaxLevel(Number(e.target.value))} className={selectCls} data-testid="stats-weapon-max-level">
                 {MAX_LEVELS.map(n => <option key={n} value={n}>{n}</option>)}
@@ -167,10 +167,9 @@ export const StatsEditModal: React.FC<StatsEditModalProps> = ({ initial, fromOwn
               {ARTIFACT_STAT_KEYS.map((s, i) => (
                 <label key={s.key} className="flex items-center gap-2">
                   <span className="w-28 text-slate-300">{t(`party:stats.key.${s.key}` as TranslationKey)}</span>
-                  <input
-                    type="text" inputMode="decimal" value={statTexts[s.key]}
-                    onChange={e => setStatTexts({ ...statTexts, [s.key]: e.target.value })}
-                    className={inputCls(statNs[i].ok)} data-testid={`stats-art-${s.key}`}
+                  <Stepper
+                    value={statTexts[s.key]} onChange={v => setStatTexts({ ...statTexts, [s.key]: v })}
+                    step={1} min={0} widthClass="w-20" invalid={!statNs[i].ok} testId={`stats-art-${s.key}`}
                   />
                   <span className="text-slate-500">{s.percent ? '%' : ''}</span>
                 </label>

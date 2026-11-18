@@ -5,7 +5,8 @@
 #       → HoYoLAB 取り込みの拡張機能: Chrome 用の zip を添付。Firefox 用は、その版が未署名なら、AMO（非公開 = unlisted）で署名して、
 #         署名済みの xpi を添付（鍵は Secrets の AMO_JWT_ISSUER・AMO_JWT_SECRET。docs/リリース手順.md の「Firefox 版の拡張機能」）
 #       → deploy（GitHub Pages への公開）を、main から起動（タグのチェックアウトを指定）。deploy が、署名済みの xpi を公開サイトに同梱する
-#         （署名のあとに deploy を起動するので、更新用 JSON が、まだ無い xpi を指すことはない）
+#         （署名のあとに deploy を起動するので、更新用 JSON が、まだ無い xpi を指すことはない。署名が失敗しても、deploy は起動し、
+#         最後に、この job を失敗として表示する）
 #
 # なぜ deploy を別ワークフローから起動するか:
 #   `github-pages` 環境は、既定で main ブランチからのデプロイだけを許可する（タグのままでは拒否される）。
@@ -99,7 +100,11 @@ jobs:
           gh release upload "${GITHUB_REF_NAME}" "${zip_name}" --clobber
           echo "拡張機能 ${zip_name} を添付しました"
 
+      # 署名が失敗しても、アプリの公開（deploy）は止めない（Firefox 版のためだけに、アプリの更新が出せなくなるのを避ける）。
+      # 失敗は、いちばん最後の手順で、この job の失敗（赤）として表示する
       - name: Firefox 版の拡張機能を、AMO（非公開 = unlisted）で署名して、Release に添付
+        id: sign
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
@@ -139,3 +144,9 @@ jobs:
         run: |
           gh workflow run deploy.yml --ref main -f ref="${GITHUB_REF_NAME}"
           echo "deploy を起動しました（タグ ${GITHUB_REF_NAME} をビルドして公開します）"
+
+      - name: Firefox 版の署名の失敗を、この job の失敗として表示
+        if: steps.sign.outcome == 'failure'
+        run: |
+          echo "::error::Firefox 版の拡張機能の署名に失敗しました（アプリの公開 = deploy は、起動済みです）。署名の手順のログを確認してください（docs/リリース手順.md の「失敗したとき」）"
+          exit 1

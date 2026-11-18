@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-18
+
 ### 追加
 - 持ちキャラ取込の拡張機能が、Firefox（パソコン版。140 以降）に対応した。署名済みのファイルを入れると、そのあとは自動で更新される
 - 持ちキャラ取込の導入・更新の案内が、使っているブラウザ（Chrome 系・Firefox）に合わせて切り替わる。スマートフォンや Safari には、対象外の案内を出す
@@ -329,7 +331,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.9.0...v1.10.0

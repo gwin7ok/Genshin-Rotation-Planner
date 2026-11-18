@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.11.1] - 2026-11-18
+
+### 修正
+- 拡張機能を入れられないブラウザ（Safari・スマートフォン・古い Firefox・古い Chrome 系）に、「持ちキャラの取り込みはできません」と理由・対処を表示し、UID の入力欄を隠す
+
 ## [1.11.0] - 2026-11-18
 
 ### 追加
@@ -331,7 +336,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.1...HEAD
+[1.11.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.0...v1.10.1

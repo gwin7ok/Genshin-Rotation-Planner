@@ -8,6 +8,8 @@ import { t } from '../i18n';
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
 /** プライバシーポリシー（docs/privacy.md。Google の同意画面にも、この URL を登録している） */
 const PRIVACY_URL = `${APP_REPO_URL}/blob/main/docs/privacy.md`;
+/** 更新履歴（CHANGELOG.md。リリースのたびに、利用者に見える変更が書かれる） */
+const CHANGELOG_URL = `${APP_REPO_URL}/blob/main/CHANGELOG.md`;
 
 /**
  * ライセンスとソースの入手先の表示（AGPL-3.0。画面の下部）。
@@ -36,6 +38,8 @@ export function SourceNotice() {
       <div className="space-y-0.5">
       <p>
         <a className={linkClass} href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('notice:source.privacy')}</a>
+        <span aria-hidden="true" className="mx-2 text-slate-700">|</span>
+        <a className={linkClass} href={CHANGELOG_URL} target="_blank" rel="noreferrer" data-testid="changelog-link">{t('notice:source.changelog')}</a>
       </p>
       <p>
         <Trans

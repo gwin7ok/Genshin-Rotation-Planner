@@ -28,7 +28,7 @@ export function buildJwt(issuer: string, secret: string, nowSec: number = Math.f
 function describeValue(name: string, value: string): string[] {
   const lines: string[] = [];
   lines.push(`${name}: 長さ ${value.length} 文字`);
-  lines.push(`  前後の空白・改行: ${value !== value.trim() ? 'あります' : 'ありません'}`);
+  lines.push(`  前後の空白・改行: ${value !== value.trim() ? 'あります' : 'ありません'}（取り除いた長さ: ${value.trim().length} 文字）`);
   lines.push(`  途中の空白・改行: ${/\s/.test(value.trim()) ? 'あります（要修正）' : 'ありません'}`);
   lines.push(`  引用符で囲まれている: ${/^["'`]|["'`]$/.test(value.trim()) ? 'はい（要修正）' : 'いいえ'}`);
   return lines;

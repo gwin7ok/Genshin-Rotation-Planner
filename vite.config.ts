@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 
 // アプリの版（package.json の version。唯一の出どころ）と、ビルドしたコミット（画面のフッター・バックアップに記録する）
@@ -32,6 +32,30 @@ export default defineConfig(() => {
           const manifest = path.resolve(__dirname, 'extension/hoyolab-importer/manifest.json');
           server.watcher.add(manifest);
           server.watcher.on('change', (f) => { if (path.resolve(f) === manifest) void server.restart(); });
+        },
+      },
+      {
+        // 開発サーバーは、存在しないファイルにも、index.html（画面の戻り先）を 200 で返す。downloads/ の下の、まだ無い拡張機能
+        // （署名済みの .xpi など）をダウンロードすると、HTML が .xpi として保存され、Firefox が「壊れているため、インストールできません」と出す。
+        // downloads/ の下で、無いファイルは、404 にする（公開サイトの GitHub Pages は、もとから 404）
+        name: 'downloads-not-found',
+        configureServer(server) {
+          const dir = path.resolve(__dirname, 'public', 'downloads');
+          server.middlewares.use((req, res, next) => {
+            let pathname = '';
+            try { pathname = decodeURIComponent((req.url ?? '').split('?')[0]); } catch { /* 読めない URL は、そのまま次へ */ }
+            const prefix = `${server.config.base}downloads/`;
+            if (pathname.startsWith(prefix)) {
+              const file = path.resolve(dir, pathname.slice(prefix.length));
+              if (!file.startsWith(dir + path.sep) || !existsSync(file)) {
+                res.statusCode = 404;
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+                res.end('Not Found');
+                return;
+              }
+            }
+            next();
+          });
         },
       },
     ],

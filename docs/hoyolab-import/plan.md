@@ -35,6 +35,8 @@ HoYoLAB の戦績（全キャラクター）から、所持キャラの詳細（
 - **HoYoLAB と Enka の突き合わせ**（2026-11-17。UID 808******。ゲーム内で詳細表示をオンにして、Enka から 12 キャラ）: 両方をアプリの変換で持ちキャラにして比べ、**12 キャラすべて一致**（レベル・突破・凸・天賦・武器の ID/Lv/精錬・聖遺物セット・聖遺物ステータス）。凸 6 のキャラ（刻晴・ファルザン・フィッシュル・早柚・香菱）も、天賦が基礎レベルで一致 → Enka の skillLevelMap は基礎レベル。
   最初は神里綾華の通常攻撃だけ不一致だった（Enka の skillLevelMap に、ダッシュの代わりの技 10013 が入り、通常攻撃のスキル ID が最大のため、ID の昇順で並べると外れる）。綾華・アンバー・旅人は、並びを明示して直した（`SKILL_ORDER_EXCEPTIONS`）。確認: `npm run check:enka-vs-hoyolab -- <HoYoLAB の JSON> <Enka の JSON>`。
 
+- **Firefox での実機確認（F-0。2026-11-18。Firefox 160.0.1。UID 808******。[issue #60](https://github.com/gwin7ok/Genshin-Rotation-Planner/issues/60)）**: manifest だけ直したコピーを一時的に読み込み、アプリの画面から、HoYoLAB の取り込み（92 キャラ）と Enka.Network の上書き（12 キャラ）まで通った。A: HoYoLAB の Cookie は、通常のタブでログインしておくだけで付く／B: Enka への User-Agent は、`declarativeNetRequest` のセッションルール（`tabIds: [-1]`）で付く／C: `chrome.*` の Promise 呼び出しも動く／アプリの検知（`postMessage`、`ev.source === window`）も、そのまま通った。**Firefox は、一致パターンのポート指定に対応しない**（`http://localhost:3000/*` は、どのページにも一致しない。ポートを外した `http://localhost/*` で入る）。`background` は `service_worker` と `scripts` の併記で動く。`browser_specific_settings.gecko` の `id` が要る。未確認: 署名版でのホスト権限の許可（導入時）、`data_collection_permissions`（F-4 で確認）。詳細: issue #60 のコメント。
+
 ## 変換時の注意（未実装）
 
 1. **天賦レベルは凸の加算込み**（刻晴 C6: 10/13/13）。gcsim には基礎レベルを渡す。凸の説明文の「スキルLv.+3」から、どの天賦が加算されたかを判定する。

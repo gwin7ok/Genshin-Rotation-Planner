@@ -1,0 +1,26 @@
+# AMO（Firefox のアドオン配布サイト）の署名用の鍵が、使えるかの確認（手動起動。Actions の「amo-check」→「Run workflow」）。
+#
+# リリースの署名（release.yml）が「Error decoding signature.」で失敗したときに、リリースをやり直さずに、
+# Secrets の AMO_JWT_ISSUER・AMO_JWT_SECRET の「形」と、AMO での認証の結果を、確かめるためのもの。
+# 値は表示しない（形だけ）。署名はしない（同じ版は、1 回しか署名できないため）。詳細: scripts/check-amo-credentials.ts、docs/リリース手順.md
+name: amo-check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: AMO の鍵の確認
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: node scripts/check-amo-credentials.ts

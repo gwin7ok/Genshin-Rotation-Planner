@@ -19,6 +19,8 @@
 | [phase-4-config-converter/](phase-4-config-converter/) | フェーズ4: 編成 → gcsim 設定文の変換 |
 | [phase-5-key-catalog/](phase-5-key-catalog/) | フェーズ5: gcsim キーの辞書の生成 |
 | [phase-6-run-and-apply/](phase-6-run-and-apply/) | フェーズ6: gcsim 実行と結果のガントチャート反映 |
+| [phase-7-required-er/](phase-7-required-er/) | フェーズ7: 必要元素チャージ効率の算出（issue #46） |
+| [phase-8-abyss-mode/](phase-8-abyss-mode/) | フェーズ8: 幽境用モード（戦闘条件の設定。issue #54） |
 
 各フェーズのフォルダには `plan.md`（計画）と `progress.md`（進捗）がある。
 

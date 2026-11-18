@@ -32,6 +32,7 @@
     "check:release": "node scripts/check-release.ts",
     "wasm:build": "node scripts/build-gcsim-wasm.ts",
     "ext:pack": "node scripts/pack-extension.ts",
+    "check:extension-manifest": "node scripts/check-extension-manifest.ts",
     "build:master:appside": "node scripts/regenerate-appside-characters.ts",
     "build:master": "node scripts/build-character-master.ts",
     "build:equipment": "node scripts/build-equipment-master.ts",

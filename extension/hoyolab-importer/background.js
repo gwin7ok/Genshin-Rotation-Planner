@@ -2,7 +2,7 @@ import { fetchCharacters } from './hoyolab.js';
 import { fetchEnka } from './enka.js';
 
 // Enka.Network の API ルール（独自の User-Agent を付ける）に従うため、この拡張機能自身の通信（タブからではない通信）にだけ、User-Agent を付ける。
-// タブの条件（tabIds）は、実行時に登録するルール（セッションルール）でしか使えない。サービスワーカーが起動するたびに登録し直す。
+// タブの条件（tabIds）は、実行時に登録するルール（セッションルール）でしか使えない。サービスワーカー（Firefox では、バックグラウンドスクリプト）が起動するたびに登録し直す。
 const version = chrome.runtime.getManifest().version;
 chrome.declarativeNetRequest.updateSessionRules({
   removeRuleIds: [1],

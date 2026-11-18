@@ -94,6 +94,15 @@ HoYoLAB の戦績（全キャラクター）から、所持キャラの詳細（
 - [ ] Edge での動作確認（Chrome だけ確認済み）
 - [x] 利用者向けの使い方（ヘルプ画面）の追記（guide.json の `owned` の節）
 
+## Firefox 対応の状況（issue #60。2026-11-18〜）
+
+- [x] F-0 実機確認（Firefox 160.0.1。HoYoLAB・Enka.Network の取り込みまで通った）
+- [x] F-1 manifest・コードの調整（2026-11-18）: Firefox 用の manifest は、`manifest.json`（Chrome 用。版の出どころ）に、`extension/firefox-manifest-overrides.json`（`background.scripts`・`gecko` の ID / 下限の版 140 / 更新用の URL / データ収集の申告）を重ね、一致パターンのポートを外して作る（`scripts/extension-manifest.ts`。確認は `npm run check:extension-manifest`）。拡張機能のコードは、変えていない（F-0 で、`chrome.*` のまま Firefox で動くと確認済みのため、`browser` への置き換えは不要。コメントだけ直した）。配る版の Firefox 用は `localhost` を入れず、開発用（`dev: true`）だけ、ポート無しの `localhost` を入れる。`host_permissions` に `content_scripts` の一致パターンを重ねるのは、不具合票 1766752 の回避策（要否は、署名した版で確かめる）
+  - **更新用 JSON の URL は仮**（`https://gwin7ok.github.io/Genshin-Rotation-Planner/downloads/grp-hoyolab-importer-updates.json`）。導入済みの拡張機能は、導入時の URL を持ち続けるので、**最初の配布（F-4）の前に確定する**。配ったあとは変えられない
+- [ ] F-2 パックを 2 種類にする（Chrome 用 zip・Firefox 用。開発用のフォルダも出す）
+- [ ] F-3 アプリの案内の切り替え（ブラウザの検知、ja / en）
+- [ ] F-4 署名・配布・リリース手順（GitHub Actions で自動署名。Secrets `AMO_JWT_ISSUER`・`AMO_JWT_SECRET` の登録が要る。更新用 JSON の出し方・順番の設計）
+
 ## 拡張（PhaseX1）
 
 - [PhaseX1: 戦績（深境螺旋・幻想シアター・幽境の危戦）の使用編成を取り込む](phase-x1-record-teams/plan.md)（案。2026-11-18。未着手）

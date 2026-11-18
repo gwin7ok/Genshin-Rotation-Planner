@@ -8,7 +8,7 @@
 
 const BASE = 'https://enka.network/api/uid/';
 
-// uid → { expires, data }。サービスワーカーは、しばらく使わないと止まって、メモリ上の変数が消える。
+// uid → { expires, data }。サービスワーカー（Firefox のバックグラウンドスクリプトも同じ）は、しばらく使わないと止まって、メモリ上の変数が消える。
 // ttl の間は再取得しない約束（上のルール）を守るため、ブラウザを閉じるまで残る chrome.storage.session に持つ。
 const CACHE_PREFIX = 'enka-cache:';
 const readCache = async (uid) => {

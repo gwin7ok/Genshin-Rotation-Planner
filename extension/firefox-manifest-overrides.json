@@ -1,0 +1,11 @@
+{
+  "background": { "scripts": ["background.js"], "service_worker": "background.js", "type": "module" },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "grp-hoyolab-importer@gwin7ok.github.io",
+      "strict_min_version": "140.0",
+      "update_url": "https://gwin7ok.github.io/Genshin-Rotation-Planner/downloads/grp-hoyolab-importer-updates.json",
+      "data_collection_permissions": { "required": ["personallyIdentifyingInfo"] }
+    }
+  }
+}

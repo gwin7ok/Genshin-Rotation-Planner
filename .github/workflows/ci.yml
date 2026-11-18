@@ -87,5 +87,11 @@ jobs:
       - name: URL 取り込みの確認
         run: npm run check:url-import
 
+      - name: 拡張機能の manifest（Chrome 用・Firefox 用）・署名済み xpi の取得の確認
+        run: npm run check:extension-manifest
+
+      - name: 拡張機能の案内の出し分け（ブラウザの判定）の確認
+        run: npm run check:browser-detect
+
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict

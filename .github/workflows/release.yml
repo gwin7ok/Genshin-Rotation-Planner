@@ -2,7 +2,10 @@
 #
 # 流れ: 版の検証（タグ = package.json の version / タグのコミットが main に含まれる）
 #       → CHANGELOG.md から、その版の節を抽出 → GitHub Release を作成
-#       → deploy（GitHub Pages への公開）を、main から起動（タグのチェックアウトを指定）
+#       → HoYoLAB 取り込みの拡張機能: Chrome 用の zip を添付。Firefox 用は、その版が未署名なら、AMO（非公開 = unlisted）で署名して、
+#         署名済みの xpi を添付（鍵は Secrets の AMO_JWT_ISSUER・AMO_JWT_SECRET。docs/リリース手順.md の「Firefox 版の拡張機能」）
+#       → deploy（GitHub Pages への公開）を、main から起動（タグのチェックアウトを指定）。deploy が、署名済みの xpi を公開サイトに同梱する
+#         （署名のあとに deploy を起動するので、更新用 JSON が、まだ無い xpi を指すことはない）
 #
 # なぜ deploy を別ワークフローから起動するか:
 #   `github-pages` 環境は、既定で main ブランチからのデプロイだけを許可する（タグのままでは拒否される）。
@@ -26,6 +29,11 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      # 拡張機能のパック（scripts/pack-extension.ts）は、Node の型の取り除き（22.18 以降）で動く。依存パッケージは要らない
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
 
       - name: 版の検証（タグ = package.json の version）
         id: ver
@@ -90,6 +98,40 @@ jobs:
           (cd extension/hoyolab-importer && zip -r "../../${zip_name}" . -x "README.md")
           gh release upload "${GITHUB_REF_NAME}" "${zip_name}" --clobber
           echo "拡張機能 ${zip_name} を添付しました"
+
+      - name: Firefox 版の拡張機能を、AMO（非公開 = unlisted）で署名して、Release に添付
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: |
+          ev=$(node -p "require('./extension/hoyolab-importer/manifest.json').version")
+          xpi_name="grp-hoyolab-importer-${ev}.xpi"
+          # AMO は、同じ版を、署名し直せない。どれかの Release に、この版の署名済みファイルがあれば、飛ばす
+          # （拡張機能の中身を変えたときは、manifest.json の version を上げる。docs/リリース手順.md）
+          if gh api --paginate "repos/${GITHUB_REPOSITORY}/releases?per_page=100" --jq '.[].assets[].name' | grep -qx "${xpi_name}"; then
+            echo "拡張機能 v${ev} は、署名済みです（${xpi_name}）。署名を飛ばします"
+            exit 0
+          fi
+          # 鍵（Secrets）が未登録のときは、署名だけ飛ばして、リリースは続ける（Firefox 版は、鍵を登録してから、版を上げて出す）
+          if [ -z "${AMO_JWT_ISSUER}" ] || [ -z "${AMO_JWT_SECRET}" ]; then
+            echo "::warning::Secrets の AMO_JWT_ISSUER / AMO_JWT_SECRET が未登録のため、Firefox 版の署名を飛ばしました（docs/リリース手順.md の「Firefox 版の拡張機能」）"
+            exit 0
+          fi
+          npm run ext:pack
+          npx --yes web-ext@8 sign \
+            --source-dir build/extension/firefox \
+            --artifacts-dir build/extension/signed \
+            --channel unlisted \
+            --api-key "${AMO_JWT_ISSUER}" \
+            --api-secret "${AMO_JWT_SECRET}"
+          signed=(build/extension/signed/*.xpi)
+          if [ "${#signed[@]}" -ne 1 ] || [ ! -f "${signed[0]}" ]; then
+            echo "::error::署名済みの xpi が、ちょうど 1 つ（build/extension/signed/）に、できていません"; exit 1
+          fi
+          mv "${signed[0]}" "build/extension/signed/${xpi_name}"
+          gh release upload "${GITHUB_REF_NAME}" "build/extension/signed/${xpi_name}" --clobber
+          echo "Firefox 版の拡張機能 ${xpi_name} を署名して添付しました"
 
       - name: deploy（GitHub Pages への公開）を main から起動
         env:

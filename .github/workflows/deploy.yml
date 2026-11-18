@@ -73,6 +73,13 @@ jobs:
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict
 
+      # Firefox 版の拡張機能（署名済みの xpi）と、その自動更新用の JSON を、公開サイトの downloads/ に置く。
+      # 署名は release.yml が行い、xpi は Release に添付されている。まだ 1 つも無ければ、何も置かずに続ける（scripts/extension-updates.ts）
+      - name: 署名済みの Firefox 版の拡張機能を、Release から取得して同梱
+        run: npm run ext:fetch-signed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 画面をビルド（base = /<リポジトリ名>/）
         run: npm run build
         env:

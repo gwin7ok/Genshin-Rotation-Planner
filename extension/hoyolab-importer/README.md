@@ -8,7 +8,8 @@ Genshin Rotation Planner に、HoYoLAB の持ちキャラのデータを渡す�
 2. 「パッケージ化されていない拡張機能を読み込む」で、この `hoyolab-importer` フォルダ（リリースの zip を展開したフォルダ）を選ぶ。
 3. HoYoLAB（https://www.hoyolab.com/）にログインした状態にしておく。
 
-## Firefox 版（開発中。issue #60）
+## Firefox 版（issue #60）
+利用者向けの導入は、アプリの「持ちキャラ取込」の画面（署名済みの `.xpi`。非公開の自己配布）。署名・配布の手順: [docs/リリース手順.md](../../docs/リリース手順.md)の「Firefox 版の拡張機能」。
 このフォルダの `manifest.json` は、Chrome 用。Firefox 用の manifest は、これに `extension/firefox-manifest-overrides.json`（Firefox だけの項目）を重ねて、`scripts/extension-manifest.ts` が作る。コードは、Chrome・Firefox で共通。
 - Firefox は、一致パターンのポート指定に対応しない。Firefox 用では、ポートを外す（配る版には `localhost` を入れない）。
 - `npm run ext:pack`（`npm run dev` の前に自動）が、Firefox 用を `build/extension/` の下に作る（Git には入れない）。

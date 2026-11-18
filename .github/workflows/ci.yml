@@ -1,7 +1,7 @@
 # 検査（型・確認スクリプト）。プルリクエストと main への push で動かす。
 #
-# gcsim のサーバー・WebAssembly を使わない検査だけを動かす（高速・ネットワーク不要）。
-#   動かさないもの: check:hitlag・check:sacrificial-seed（gcsim の実行が要る）、check:release（WASM が要る。deploy.yml が動かす）
+# gcsim の WebAssembly 版（public/gcsim/main.wasm。Git 管理外）を使わない検査だけを動かす（高速・ネットワーク不要）。
+#   動かさないもの: check:hitlag・check:sacrificial-seed・check:dps・check:required-er（gcsim の実行が要る）、check:release（WASM が要る。deploy.yml が動かす）
 name: ci
 
 on:
@@ -76,7 +76,7 @@ jobs:
         run: npm run check:gcsim-import
 
       # check:hoyolab-import は、CI では実行しない（ご自身の HoYoLAB の取得データ tools/hoyolab-fetch/out/hoyolab-raw.json と、
-      # localhost の gcsim サーバーが要る。Git に入らないデータなので、手元でだけ実行する）
+      # WebAssembly 版の main.wasm が要る。Git に入らないデータなので、手元でだけ実行する）
 
       - name: 持ちキャラの照合の確認
         run: npm run check:owned-match

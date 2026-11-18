@@ -42,7 +42,7 @@
   "changeCharges": " 回数 {{count}}",
   "roster": "キャラクター入替 ({{shown}} / 全 {{total}} 人)",
   "searchPlaceholder": "キャラ名・英語名・ID検索...",
-  "importArticleNote": "＊「持ちキャラ取り込み」機能を使えば、ゲーム内の装備・ステータスをそのまま設定できます（<link>使い方の記事（HoYoLAB）</link>）",
+  "importArticleNote": "＊「持ちキャラ取り込み」機能を使えば、ゲーム内の装備・ステータスをそのまま設定できます（<articleLink>使い方の記事（HoYoLAB）</articleLink>）",
   "noMatch": "条件に該当するキャラクターが見つかりません",
   "noMatchHint": "元素・武器フィルター解除または検索キーワードを変更してください。",
   "footerHint": "「編成を保存・適用」を押すと変更が反映されます",

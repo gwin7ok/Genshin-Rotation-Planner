@@ -771,7 +771,7 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
               <p data-testid="import-article-note" className="text-[11px] text-slate-400 leading-relaxed">
                 <Trans
                   i18nKey="party:importArticleNote"
-                  components={{ link: <a className="underline hover:text-slate-200" href={articleUrl('importFeature')} target="_blank" rel="noreferrer" /> }}
+                  components={{ articleLink: <a className="underline hover:text-slate-200" href={articleUrl('importFeature')} target="_blank" rel="noreferrer" /> }}
                 />
               </p>
             )}

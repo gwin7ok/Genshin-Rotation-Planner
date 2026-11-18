@@ -5,7 +5,7 @@
  * - 言語ごとに持つ。英語の記事は、まだ無いので、en も日本語の記事を指す
  *   （英語表示では、リンクの文言に「日本語の記事」と注記を付けている。locales/en の `party:importArticleNote`・`notice:source.article`・`guide:articleLink`）。
  *   英語の記事を投稿したら、`en` の URL を英語の記事に差し替え、locales/en の「in Japanese」の注記を外す。
- * - リンクを出す場所: 編成設定（importFeature。持ちキャラを取り込んでいるときは出さない）・画面最下部と使い方（intro）。
+ * - リンクを出す場所: 編成設定（importFeature。持ちキャラを取り込んでいるときは出さない）・使い方の「持ちキャラの取り込み」の節（importFeature）・画面最下部と使い方の冒頭（intro）。
  */
 import { currentLanguage } from '../i18n';
 import type { Language } from '../i18n/language';

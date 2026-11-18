@@ -17,7 +17,7 @@ const GUIDE_SECTIONS: { id: string; items: number }[] = [
   { id: 'group', items: 5 },
   { id: 'chart', items: 6 },
   { id: 'gcsim', items: 5 },
-  { id: 'owned', items: 7 },
+  { id: 'owned', items: 8 },
   { id: 'save', items: 4 },
   { id: 'notation', items: 4 },
 ];
@@ -29,6 +29,7 @@ const ITEM_COMPONENTS = {
   ok: <span className="text-emerald-300" />,
   ng: <span className="text-red-300" />,
   warn: <span className="text-amber-300" />,
+  articleLink: <a className="text-sky-300 underline hover:text-sky-200" href={articleUrl('importFeature')} target="_blank" rel="noreferrer" />,
 };
 
 export const UsageGuideModal: React.FC<UsageGuideModalProps> = ({ isOpen, onClose }) => {

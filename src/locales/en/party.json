@@ -42,7 +42,7 @@
   "changeCharges": " charges {{count}}",
   "roster": "Swap character ({{shown}} / {{total}})",
   "searchPlaceholder": "Search by name, English name or ID...",
-  "importArticleNote": "* With the \"Import Chars\" feature, you can set your in-game gear and stats as they are (<link>how-to article on HoYoLAB, in Japanese</link>)",
+  "importArticleNote": "* With the \"Import Chars\" feature, you can set your in-game gear and stats as they are (<articleLink>how-to article on HoYoLAB, in Japanese</articleLink>)",
   "noMatch": "No characters match the filters",
   "noMatchHint": "Clear the element/weapon filters or change the search keyword.",
   "footerHint": "Changes are applied when you press \"Save & apply team\"",

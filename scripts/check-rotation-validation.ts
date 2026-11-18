@@ -375,6 +375,55 @@ check('gcsim の設定文: 渡された命令が、決まった形でなけれ�
   assert.equal(run('skill;\ninjected_statement_marker;\nfor let i = 0; i < 99999999; i = i + 1 { print("x"); }'), normal, '不正な命令は、無視して、既定の命令になる');
   assert.equal(run('skill[recast=1]').includes('skill[recast=1];'), true, '決まった形（skill[recast=1]）は、そのまま入る');
 });
+check('gcsim のキー（キャラ・武器・聖遺物の gcsimKey）: 決まった形だけ通す。DB 管理の取り込み・バックアップの復元で、引用符・`;`・改行を含むキーの項目は除外する', () => {
+  for (const ok of ['keqing', 'skywardblade', 'gildeddreams', 'aetherpyro', 'a1_b2']) assert.equal(limits.isSafeGcsimKey(ok), true, ok);
+  for (const bad of ['x"; injected;', 'x"\ninjected', 'a b', 'A', '1abc', '', 'a'.repeat(65), 'x;', "x'", 5, null, {}]) assert.equal(limits.isSafeGcsimKey(bad), false, JSON.stringify(bad));
+  const readMaster = (f: string) => JSON.parse(fs.readFileSync(`src/data/${f}`, 'utf8'));
+  const cm = readMaster('characters_master_data.json');
+  const c0 = (Array.isArray(cm) ? cm : cm.characters ?? Object.values(cm)).find((c: any) => c.source?.gcsimKey);
+  const w0 = readMaster('weapons_master_data.json').find((w: any) => w.gcsimKey);
+  const a0 = readMaster('artifacts_master_data.json').find((a: any) => a.gcsimKey);
+  const evil = 'x"; injected_statement_marker; for let i = 0; i < 99999999; i = i + 1 { print("x"); } "';
+  assert.equal(dbValidation.isValidCharacterItem(c0), true);
+  assert.equal(dbValidation.isValidCharacterItem({ ...c0, id: 'c2', source: { ...c0.source, gcsimKey: evil } }), false);
+  assert.equal(dbValidation.isValidCharacterItem({ ...c0, id: 'c3', source: { gcsimKey: 5 } }), false);
+  assert.equal(dbValidation.isValidCharacterItem({ ...c0, id: 'c4', source: { genshinId: 1 } }), true, 'gcsimKey が無い項目（gcsim 未実装のキャラ）は通る');
+  assert.equal(dbValidation.isValidWeaponItem(w0), true);
+  assert.equal(dbValidation.isValidWeaponItem({ ...w0, id: 'w2', gcsimKey: evil }), false);
+  assert.equal(dbValidation.isValidWeaponItem({ ...w0, id: 'w3', gcsimKey: undefined }), true);
+  assert.equal(dbValidation.isValidArtifactItem(a0), true);
+  assert.equal(dbValidation.isValidArtifactItem({ ...a0, id: 'a2', gcsimKey: evil }), false);
+  // DB 管理の JSON 取り込み・バックアップの復元: 悪いキーの項目だけ除外する
+  const imp = dbImport.parseDatabaseFile(JSON.stringify({ version: 1, characters: [c0, { ...c0, id: 'c2', source: { ...c0.source, gcsimKey: evil } }], weapons: [w0, { ...w0, id: 'w2', gcsimKey: evil }], artifacts: [a0, { ...a0, id: 'a2', gcsimKey: evil }] }));
+  assert.equal(imp.ok, true);
+  assert.equal(imp.counts.characters + imp.counts.weapons + imp.counts.artifacts, 3);
+  assert.equal(imp.skipped, 3);
+});
+check('gcsim の設定文: キーが決まった形でなければ、設定文に入れない（検査を通らない経路に残ったデータ = 保存済みの DB などにも効く）', () => {
+  const base = JSON.parse(fs.readFileSync('src/data/presets/lunar-bloom.json', 'utf8'));
+  const master = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+  const chars = Array.isArray(master) ? master : master.characters ?? Object.values(master);
+  const weapons = JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8'));
+  const artifacts = JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8'));
+  const evil = 'x"; injected_statement_marker; for let i = 0; i < 99999999; i = i + 1 { print("x"); } "';
+  const run = (characters: any[], w: any[], a: any[]) => buildGcsimConfig({
+    characters, stints: base.stints, loopStartIndex: base.loopStartIndex ?? 0, switchDelay: base.switchDelay ?? 0.5, defHalt: true, weapons: w, artifacts: a,
+  });
+  const characters = resolvePartyCharacters(base.party, chars);
+  const normal = run(characters, weapons, artifacts);
+  assert.equal(normal.runnable, true);
+  // キャラ: キーが不正なキャラは、設定文に入らず、エラーになる
+  const badChar = run(characters.map((c: any, i: number) => (i === 0 ? { ...c, source: { ...c.source, gcsimKey: evil } } : c)), weapons, artifacts);
+  assert.equal(badChar.config.includes('injected_statement_marker'), false);
+  assert.equal(badChar.runnable, false);
+  // 武器・聖遺物: 不正なキーは入らず、エラーになる
+  const badWeapons = run(characters, weapons.map((w: any) => ({ ...w, gcsimKey: evil })), artifacts);
+  assert.equal(badWeapons.config.includes('injected_statement_marker'), false);
+  assert.equal(badWeapons.runnable, false);
+  const badArtifacts = run(characters, weapons, artifacts.map((a: any) => ({ ...a, gcsimKey: evil })));
+  assert.equal(badArtifacts.config.includes('injected_statement_marker'), false);
+  assert.equal(badArtifacts.runnable, false);
+});
 check('反応の行の復元: 行・区間の数・位置の大きさに上限（極端に大量・遠い位置の行は、読まない）', () => {
   const V = 'v-test';
   const anchor = (offset: number) => ({ actionId: 'a1', offset });

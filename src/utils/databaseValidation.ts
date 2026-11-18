@@ -7,7 +7,11 @@
  *       マスターのデータ（同梱のもの）は、すべて通ること（scripts/check-backup.ts が確かめる）。
  */
 
+import { isSafeGcsimKey } from './rotationLimits';
+
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+/** gcsim のキー: 無い（undefined）か、決まった形（rotationLimits.ts の isSafeGcsimKey）のときだけ true。設定文に入るので、引用符・`;`・改行を含むものは通さない */
+const isOptionalGcsimKey = (v: unknown): boolean => v === undefined || isSafeGcsimKey(v);
 const isNonEmptyString = (v: unknown): v is string => typeof v === 'string' && v.length > 0;
 const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 
@@ -34,6 +38,7 @@ export function isValidCharacterItem(v: unknown): boolean {
     && typeof v.element === 'string' && typeof v.weaponType === 'string'
     && Array.isArray(v.availableActions) && v.availableActions.every(isValidActionDefinition)
     && (v.passiveEffects === undefined || (Array.isArray(v.passiveEffects) && v.passiveEffects.every(isValidPassiveEffect)))
+    && (v.source === undefined || (isRecord(v.source) && isOptionalGcsimKey(v.source.gcsimKey)))
     && optional(v, {
       string: ['englishName', 'avatarUrl', 'color', 'accentColor'],
       number: ['rarity', 'energyRecharge', 'constellation'],
@@ -47,6 +52,7 @@ export function isValidCharacterItem(v: unknown): boolean {
 export function isValidWeaponItem(v: unknown): boolean {
   return isRecord(v) && isNonEmptyString(v.id) && typeof v.name === 'string' && typeof v.weaponType === 'string'
     && isFiniteNumber(v.rarity) && typeof v.passiveName === 'string'
+    && isOptionalGcsimKey(v.gcsimKey)
     && optional(v, {
       string: ['englishName', 'description', 'avatarUrl', 'gcsimKey'],
       number: ['baseAttack', 'refinementRank'],
@@ -60,6 +66,7 @@ export function isValidWeaponItem(v: unknown): boolean {
 export function isValidArtifactItem(v: unknown): boolean {
   return isRecord(v) && isNonEmptyString(v.id) && typeof v.name === 'string'
     && isFiniteNumber(v.rarity) && typeof v.effect2p === 'string' && typeof v.effect4p === 'string'
+    && isOptionalGcsimKey(v.gcsimKey)
     && optional(v, {
       string: ['englishName', 'avatarUrl', 'gcsimKey'],
       boolean: ['isCustom', 'isLocked'],

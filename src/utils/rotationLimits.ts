@@ -47,3 +47,12 @@ export const MAX_TIMELINE_TICKS = 150;
 const GCSIM_COMMAND_PATTERN = /^[a-z][a-z0-9_]{0,39}(?::\d{1,3})?(?:\[[a-z0-9_]{1,40}=[\w.+-]{1,20}(?:,[a-z0-9_]{1,40}=[\w.+-]{1,20}){0,7}\])?$/;
 
 export const isSafeGcsimCommand = (v: unknown): v is string => typeof v === 'string' && GCSIM_COMMAND_PATTERN.test(v);
+
+/**
+ * gcsim のキー（キャラ・武器・聖遺物の `gcsimKey`）の形: 小文字で始まる、小文字・数字・_ だけ（例: `keqing`・`skywardblade`・`gildeddreams`。同梱のマスターの全件が、この形）。
+ * キーは、設定文に、そのまま（キャラ）または `"…"` の中（武器・聖遺物）に入る。引用符・`;`・改行を含むキーで、別の命令を差し込めないようにする。
+ * DB 管理の JSON 取り込み・バックアップの復元で、外から入ってくる
+ */
+const GCSIM_KEY_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
+
+export const isSafeGcsimKey = (v: unknown): v is string => typeof v === 'string' && GCSIM_KEY_PATTERN.test(v);

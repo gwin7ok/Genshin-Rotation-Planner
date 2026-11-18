@@ -10,7 +10,7 @@ import { REVELATION_GCSIM_KEYS, REVELATION_GCSIM_PARAM } from '../../masterdata/
 import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
-import { isSafeGcsimCommand } from '../rotationLimits.ts';
+import { isSafeGcsimCommand, isSafeGcsimKey } from '../rotationLimits.ts';
 import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import { isTravelerKey, travelerParams } from '../hoyolab/importCharacters';
@@ -181,6 +181,12 @@ export function withConfigTitle(config: string, name: string | undefined): strin
 
 const isEmptySlot = (c: CharacterConfig) => c.id.startsWith('empty_slot_');
 
+/**
+ * 設定文に入れてよい gcsim のキー（決まった形のものだけ。無い・不正なものは undefined = キー無しの扱い）。
+ * キーは、設定文に、そのまま、または `"…"` の中に入る。DB 管理の取り込みなどで入った、引用符・`;`・改行を含むキーで、別の命令を差し込めないようにする
+ */
+const safeGcsimKey = (key: string | undefined): string | undefined => (isSafeGcsimKey(key) ? key : undefined);
+
 export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult {
   // グループの回数を展開する（追加作業 20-A）
   const input: GcsimConfigInput = { ...rawInput, stints: expandGroupedStints(rawInput.stints) };
@@ -199,7 +205,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
 
   // 1. キャラごと（キャラ・武器・聖遺物・仮ステータス）
   for (const c of members) {
-    const key = c.source?.gcsimKey;
+    const key = safeGcsimKey(c.source?.gcsimKey);
     if (!key) {
       error(t('messages:config.noCharKey', { name: charName(c) }));
       continue;
@@ -211,8 +217,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       characterId: c.id,
       name: charName(c),
       gcsimKey: key,
-      weaponKey: weaponForInfo?.gcsimKey,
-      artifactKey: artifactForInfo?.gcsimKey,
+      weaponKey: safeGcsimKey(weaponForInfo?.gcsimKey),
+      artifactKey: safeGcsimKey(artifactForInfo?.gcsimKey),
     });
     // 持ちキャラの装備（build）があれば、その値を使う。必要チャージ効率の算出（addedEnergyRecharge が渡る実行）も、同じ設定値で行う
     // （聖遺物ステータスの元素チャージ効率だけは、算出で動かす値に置き換える。下の add stats）
@@ -238,7 +244,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       warn(t('messages:config.noWeapon', { name: charName(c) }));
     } else if (!weapon) {
       error(t('messages:config.weaponNotFound', { name: charName(c) }));
-    } else if (!weapon.gcsimKey) {
+    } else if (!safeGcsimKey(weapon.gcsimKey)) {
       error(t('messages:config.noWeaponKey', { name: charName(c), weapon: loc(weapon, 'name') }));
     } else {
       const refine = c.weaponRefinementRank ?? weapon.refinementRank ?? (weapon.rarity >= 5 ? 1 : 5);
@@ -250,7 +256,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       for (const set of build.artifactSets) {
         const artifact = input.artifacts.find(a => a.id === set.id);
         if (!artifact) error(t('messages:config.artifactNotFound', { name: charName(c) }));
-        else if (!artifact.gcsimKey) error(t('messages:config.noArtifactKey', { name: charName(c), artifact: loc(artifact, 'name') }));
+        else if (!safeGcsimKey(artifact.gcsimKey)) error(t('messages:config.noArtifactKey', { name: charName(c), artifact: loc(artifact, 'name') }));
         else lines.push(`${key} add set="${artifact.gcsimKey}" count=${set.count >= 4 ? 4 : 2};`);
       }
     } else if (c.artifactSetMode !== '2+2') {
@@ -260,7 +266,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         warn(t('messages:config.noArtifact', { name: charName(c) }));
       } else if (!artifact) {
         error(t('messages:config.artifactNotFound', { name: charName(c) }));
-      } else if (!artifact.gcsimKey) {
+      } else if (!safeGcsimKey(artifact.gcsimKey)) {
         error(t('messages:config.noArtifactKey', { name: charName(c), artifact: loc(artifact, 'name') }));
       } else {
         lines.push(`${key} add set="${artifact.gcsimKey}" count=4;`);

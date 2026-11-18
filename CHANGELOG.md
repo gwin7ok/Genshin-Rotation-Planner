@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.13.1] - 2026-11-18
+
 ### 追加
 - 画面の最下部の情報欄に、更新履歴（CHANGELOG）を別のタブで開くリンクを追加した（プライバシーのリンクの横）
 
@@ -353,7 +355,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.1...HEAD
+[1.13.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.1
 [1.13.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...v1.11.1

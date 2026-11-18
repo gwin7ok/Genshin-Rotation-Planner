@@ -24,6 +24,7 @@
     "s3Body": "Press the button below. An empty new tab opens and the address of the extensions page is copied. Click the address bar of the new tab, paste (Ctrl+V) and press Enter. When the extensions page opens, turn on \"Developer mode\" at the top right.",
     "s3Button": "Open a new tab and copy {{address}}",
     "s3Copied": "Copied",
+    "copyFailed": "Could not copy automatically. Please copy this address yourself (select the text and press Ctrl+C) and paste it into the address bar of the new tab: {{address}}",
     "s4Title": "Load the extracted folder",
     "s4Body": "Click \"Load unpacked\" at the top left and choose the folder you extracted in step 2 (the one that contains manifest.json). It worked if \"Genshin Rotation Planner - HoYoLAB import\" appears in the list.",
     "s5Title": "Reload this page",

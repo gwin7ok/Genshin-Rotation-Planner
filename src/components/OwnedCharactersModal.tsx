@@ -14,6 +14,7 @@ import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '..
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
 import { detectBrowser, FIREFOX_MIN_MAJOR } from '../utils/hoyolab/browser';
+import { copyTextFromClick } from '../utils/clipboard';
 import { clearOwned, loadHoyolabUid, loadOwned, loadUseEnka, saveHoyolabUid, saveOwned, saveUseEnka, type OwnedStore } from '../utils/hoyolab/ownedStore';
 
 /** 拡張機能の zip を置く、GitHub のリリースページ */
@@ -39,16 +40,18 @@ const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'insta
   const browser = useMemo(() => detectBrowser(), []);
   const isFirefox = browser.kind === 'firefox';
   const address = isFirefox ? FIREFOX_ADDONS_PAGE : EXTENSIONS_PAGE;
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   // ブラウザは、Web ページから chrome:// ・about: のページを開くことを禁止している。代わりに、アドレスをコピーしたうえで、空の新しいタブを開く
-  // （このアプリのタブを、拡張機能の画面に置き換えてしまわないように）。利用者は、開いたタブのアドレス欄に貼り付ける
-  const copyAddress = async () => {
+  // （このアプリのタブを、拡張機能の画面に置き換えてしまわないように）。利用者は、開いたタブのアドレス欄に貼り付ける。
+  // コピーは、新しいタブを開く「前」に始める（Firefox は、先にタブを開くと、コピーを断ることがある。src/utils/clipboard.ts）。
+  // コピーできなかったときは、アドレスを画面に出して、手でコピーしてもらう
+  const copyAddress = () => {
+    const copying = copyTextFromClick(address);
     window.open('about:blank', '_blank', 'noopener');
-    try {
-      await navigator.clipboard.writeText(address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* コピーできないときは、画面の文字を手で写す */ }
+    void copying.then(ok => {
+      setCopyState(ok ? 'copied' : 'failed');
+      if (ok) setTimeout(() => setCopyState('idle'), 2000);
+    });
   };
 
   if (browser.kind === 'unsupported') {
@@ -67,10 +70,15 @@ const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'insta
     </a>
   );
   const copyButton = (
-    <button type="button" onClick={() => void copyAddress()} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
-      {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
-      {copied ? t('hoyolab:install.s3Copied') : t('hoyolab:install.s3Button', { address })}
-    </button>
+    <>
+      <button type="button" onClick={copyAddress} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
+        {copyState === 'copied' ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+        {copyState === 'copied' ? t('hoyolab:install.s3Copied') : t('hoyolab:install.s3Button', { address })}
+      </button>
+      {copyState === 'failed' && (
+        <p className="mt-1.5 text-[11px] text-amber-300/90 leading-relaxed select-text" data-testid="ext-copy-failed">{t('hoyolab:install.copyFailed', { address })}</p>
+      )}
+    </>
   );
   const reloadButton = (
     <button type="button" onClick={() => window.location.reload()} data-testid="ext-reload" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>

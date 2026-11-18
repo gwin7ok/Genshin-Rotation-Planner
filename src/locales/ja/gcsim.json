@@ -22,7 +22,7 @@
     "ctNote": "※ アプリ自身の判定です。gcsim で実際に実行したときのCT待ち（アプリの判定と一致しないことがあります）は、下の「gcsim で実行して読み取り結果を見る」で確認できます。",
     "validate": "gcsim で文法チェック",
     "validating": "チェック中...",
-    "validateTitle": "gcsim で、この設定文の文法をチェックします（実行はしません。ブラウザ内の WebAssembly 版。無ければ localhost:54321 のサーバー）",
+    "validateTitle": "gcsim で、この設定文の文法をチェックします（実行はしません。ブラウザ内の WebAssembly 版を使います）",
     "syntaxError": "文法エラー",
     "run": "gcsim で実行して読み取り結果を見る",
     "running": "実行中...",

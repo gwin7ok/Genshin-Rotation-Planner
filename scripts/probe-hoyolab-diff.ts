@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createServer } from 'vite';
+import { gcsimSample } from './gcsim-node.ts';
 
 const raw = JSON.parse(fs.readFileSync(path.resolve('tools/hoyolab-fetch/out/hoyolab-raw.json'), 'utf-8'));
 const readJson = (f: string) => JSON.parse(fs.readFileSync(path.resolve('src/data', f), 'utf-8'));
@@ -20,8 +21,7 @@ const BASE_IDX: Record<string, number> = { HP: 23, ATK: 24, DEF: 25 };
 
 const run = async (lines: string[], key: string) => {
   const config = [...lines, 'options iteration=1 duration=1;', 'target lvl=100 resist=0.1;', `active ${key};`, `${key} attack;`].join('\n');
-  const res = await fetch('http://localhost:54321/sample/probe', { method: 'POST', body: JSON.stringify({ config, seed: 1 }) });
-  return JSON.parse(await res.text()).character_details[0].snapshot as number[];
+  return JSON.parse(await gcsimSample(config, 1)).character_details[0].snapshot as number[];
 };
 const fmt = (snap: number[]) => Object.entries(IDX).map(([k, i]) => `${k}=${Number(snap[i].toFixed(3))}`).join(' ');
 

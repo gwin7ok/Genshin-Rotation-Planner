@@ -1,5 +1,5 @@
 /**
- * 祭礼の武器の、種の探索の確認（フェーズ 6 / 6-4・D86。2026-10-09）。gcsim のサーバーが要る（npm run gcsim:start）。
+ * 祭礼の武器の、種の探索の確認（フェーズ 6 / 6-4・D86。2026-10-09）。gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   npm run check:sacrificial-seed
  *
@@ -11,9 +11,10 @@
  */
 import fs from 'node:fs';
 import { createServer } from 'vite';
-import './require-gcsim-server.ts';
+import { useNodeGcsim } from './gcsim-node.ts';
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
+await useNodeGcsim(server);
 const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');
 const { buildGcsimConfig } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
 const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');

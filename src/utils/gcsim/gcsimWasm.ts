@@ -1,47 +1,13 @@
 /**
  * gcsim の WebAssembly 版（public/gcsim/main.wasm。`npm run wasm:build` で生成）を、Web Worker で動かすクライアント。
  *
- * 実行エンジンは 2 つ:
- *   - 'wasm'   … ブラウザの中で実行する（利用者の手間なし。公開サイトの既定）
- *   - 'server' … 公式リリースの server_*（localhost:54321）を使う（開発・検証用）
- * 選び方（localStorage の `gcsim_engine`）: 'auto'（既定。main.wasm があれば wasm、無ければ server）／'wasm'／'server'。
+ * 画面の計算は、すべて、ブラウザの中のこの WebAssembly 版で動く（公開サイトも、開発中の画面も同じ。localhost のサーバーは使わない）。
+ * 検査・調査のスクリプト（Node）は、同じ main.wasm を Node で動かす部品（scripts/gcsim-node.ts）に、setWasmTransport で差し替える。
  */
-export type GcsimEngine = 'wasm' | 'server';
-export type GcsimEnginePreference = 'auto' | GcsimEngine;
-
 import { DEVICE_KEYS, readString, removeKey, writeString } from '../persistence';
 import { t } from '../../i18n';
 
 const baseUrl = (): string => (import.meta as unknown as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
-
-export function getEnginePreference(): GcsimEnginePreference {
-  const v = readString(DEVICE_KEYS.gcsimEngine);
-  if (v === 'wasm' || v === 'server') return v;
-  return 'auto';
-}
-
-let cachedWasmAvailable: Promise<boolean> | null = null;
-
-/** main.wasm が配信されているか（開発サーバーは、無いファイルにも HTML を返すので、種類で見分ける） */
-function isWasmAvailable(): Promise<boolean> {
-  if (!cachedWasmAvailable) {
-    cachedWasmAvailable = fetch(`${baseUrl()}gcsim/main.wasm`, { method: 'HEAD' })
-      .then(r => r.ok && (r.headers.get('content-type') ?? '').includes('wasm'))
-      // 通信の失敗（オフラインなど）は、答えが出ていないので、覚えない（次の呼び出しで、もう一度調べる）
-      .catch(() => {
-        cachedWasmAvailable = null;
-        return false;
-      });
-  }
-  return cachedWasmAvailable;
-}
-
-/** 今回使うエンジンを決める */
-export async function resolveEngine(): Promise<GcsimEngine> {
-  const pref = getEnginePreference();
-  if (pref !== 'auto') return pref;
-  return (await isWasmAvailable()) ? 'wasm' : 'server';
-}
 
 interface Pending {
   resolve: (out: string) => void;
@@ -129,8 +95,8 @@ function resetWorker(reason: Error): void {
   failAll(reason);
 }
 
-/** WASM の gcsim を実行して、JSON 文字列を得る（signal が中断されたら、Worker を捨てて AbortError にする。同時に複数呼べば、Worker を並べて動かす） */
-export function wasmCall(
+/** WASM の gcsim を、Web Worker で実行して、JSON 文字列を得る（signal が中断されたら、Worker を捨てて AbortError にする。同時に複数呼べば、Worker を並べて動かす） */
+function workerCall(
   kind: 'sample' | 'validate',
   payload: { config: string; seed?: number },
   signal: AbortSignal,
@@ -164,13 +130,35 @@ export function wasmCall(
   });
 }
 
+/** gcsim を 1 回呼ぶ窓口（kind = sample / validate）。返すのは、gcsim の WASM が返す JSON 文字列か、平文のエラー文 */
+export type WasmTransport = (
+  kind: 'sample' | 'validate',
+  payload: { config: string; seed?: number },
+  signal: AbortSignal,
+) => Promise<string>;
+
+/** 既定は、ブラウザの Web Worker。Node のスクリプトだけが、setWasmTransport で差し替える */
+let transport: WasmTransport = workerCall;
+
+export function setWasmTransport(next: WasmTransport): void {
+  transport = next;
+}
+
+/** WASM の gcsim を実行して、JSON 文字列を得る（signal が中断されたら、AbortError にする） */
+export function wasmCall(
+  kind: 'sample' | 'validate',
+  payload: { config: string; seed?: number },
+  signal: AbortSignal,
+): Promise<string> {
+  return transport(kind, payload, signal);
+}
+
 /**
  * 画面（gcsim.config.json のコミット）と、配信している WASM（wasm-info.json）の版が合っているかを調べる。
- * 合っていなければ、利用者に出す警告文を返す。調べられないとき（WASM を使わない・取得できない）は null。
+ * 合っていなければ、利用者に出す警告文を返す。調べられないとき（取得できない）は null。
  */
 export async function checkWasmVersionMismatch(expectedCommit: string): Promise<string | null> {
   try {
-    if ((await resolveEngine()) !== 'wasm') return null;
     const res = await fetch(`${baseUrl()}gcsim/wasm-info.json`, { cache: 'no-store' });
     if (!res.ok) return null;
     const info = (await res.json()) as { gcsimCommit?: unknown; gcsimVersion?: unknown };

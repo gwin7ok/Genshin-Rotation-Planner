@@ -1,6 +1,6 @@
 /**
  * ダッシュ・ジャンプの所要時間を、実測で作る（D215。2026-10-15）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   node scripts/probe-dash-jump.ts            … src/data/dash_jump_frames.json を書き、マスター（characters_master_data.json）のダッシュ・ジャンプの defaultDuration を差し替える
  *
@@ -9,8 +9,7 @@
  * 生成（characterMasterGenerator）は、この JSON があれば、その値を使う。
  */
 import fs from 'node:fs';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const masterPath = 'src/data/characters_master_data.json';
@@ -19,9 +18,8 @@ const characters: any[] = Array.isArray(raw) ? raw : raw.characters ?? Object.va
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
 async function run(config: string): Promise<any[] | undefined> {
-  const res = await fetch(`${GCSIM_SERVER_URL}/sample/dj_${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
   try {
-    const j = JSON.parse(await res.text());
+    const j = JSON.parse(await gcsimSample(config, 1));
     return j.error ? undefined : j.logs;
   } catch {
     return undefined;

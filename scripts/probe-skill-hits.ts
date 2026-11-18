@@ -1,6 +1,6 @@
 /**
  * スキルの命中時刻の表を、実測で作る（フェーズ 6 / 6-4 の続き。祭礼の武器効果をアプリの計算に入れるためのデータ。2026-10-09）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   node scripts/probe-skill-hits.ts
  *
@@ -13,10 +13,8 @@
  */
 import fs from 'node:fs';
 import { HOLD_FRAMES_ACTIONS, mapAction } from '../src/utils/gcsim/actionMapping.ts';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
-const SERVER = GCSIM_SERVER_URL;
 /** 記録する長さ（フレーム）。祭礼の内部 CT（最長 16 秒）とスキルの CT（最長 30 秒台）を覆う */
 const MAX_FRAMES = 40 * 60;
 const ATTACK_TAG_ELEMENTAL_ART = 4;
@@ -36,8 +34,7 @@ const headerOf = (c: any, k: string, cons: number) => [
 ];
 
 async function run(config: string): Promise<{ logs?: any[]; error?: string }> {
-  const res = await fetch(`${SERVER}/sample/hits_${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
+  const text = await gcsimSample(config, 1);
   try {
     const j = JSON.parse(text);
     return j.error ? { error: String(j.error) } : { logs: j.logs };

@@ -1,6 +1,6 @@
 /**
  * アクションの「ヒットストップで延びるフレーム」を、実測で作る（D215 第 2 段。2026-10-15）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   node scripts/probe-hitlag.ts            … src/data/hitlag_frames.json を書く
  *
@@ -15,9 +15,8 @@
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
 import { ATTACK_SPEED_EFFECTS } from '../src/masterdata/attackSpeedEffects.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
@@ -27,9 +26,8 @@ const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimat
 const MAX_DELTA = 90;
 
 async function run(config: string): Promise<any[] | undefined> {
-  const res = await fetch(`${GCSIM_SERVER_URL}/sample/hl_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
   try {
-    const j = JSON.parse(await res.text());
+    const j = JSON.parse(await gcsimSample(config, 1));
     return j.error ? undefined : j.logs;
   } catch {
     return undefined;

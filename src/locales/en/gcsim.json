@@ -22,7 +22,7 @@
     "ctNote": "* These are the app's own checks. Cooldown waits when actually running gcsim (which may differ from the app's checks) can be checked with \"Run in gcsim and show the parsed results\" below.",
     "validate": "Check syntax with gcsim",
     "validating": "Checking...",
-    "validateTitle": "Check the syntax of this config with gcsim (does not run it; uses the in-browser WebAssembly build, or the server on localhost:54321 if unavailable)",
+    "validateTitle": "Check the syntax of this config with gcsim (does not run it; uses the in-browser WebAssembly build)",
     "syntaxError": "Syntax error",
     "run": "Run in gcsim and show the parsed results",
     "running": "Running...",

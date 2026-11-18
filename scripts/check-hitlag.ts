@@ -1,6 +1,6 @@
 /**
  * 「アプリの事前計算」と「gcsim の実測」の所要時間が、ヒットストップを含めて一致するかの検査（D215 第 2 段。2026-10-15）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   npm run check:hitlag            … 差が 1f（約 0.017 秒）を超えるものがあれば、一覧を出して終了コード 1
  *
@@ -13,8 +13,14 @@
 import fs from 'node:fs';
 import { createServer } from 'vite';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
+
+/** gcsim を 1 回実行して、JSON を返す。実行エラー（JSON でないエラー文・{"error": ...}）は、例外にする */
+const sampleJson = async (cfg: string): Promise<any> => {
+  const j = JSON.parse(await gcsimSample(cfg, 1));
+  if (j.error) throw new Error(String(j.error));
+  return j;
+};
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
 const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');
@@ -50,10 +56,9 @@ async function gcsimFrames(k: string, weapon: string, defhalt: boolean, cmds: st
     `active ${k};`,
     cmds.map(c => (c === 'swap' ? `${other} swap;` : `${k} ${c};`) + (delayFrames > 0 ? ` delay(${delayFrames});` : '')).join(' '),
   ].join('\n');
-  const res = await fetch(`${GCSIM_SERVER_URL}/sample/ch_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
   let logs: any[];
   try {
-    const j = JSON.parse(await res.text());
+    const j = JSON.parse(await gcsimSample(cfg, 1));
     if (j.error) return undefined;
     logs = j.logs;
   } catch {
@@ -243,8 +248,7 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
           `active ${k};`,
           cmds.map(x => `${k} ${x};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`).join(' '),
         ].join('\n');
-        const res = await fetch(`${GCSIM_SERVER_URL}/sample/cw_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
-        const logs = (await res.json()).logs as any[];
+        const logs = (await sampleJson(cfg)).logs as any[];
         // 前置き（爆発・重撃）の後の、通常攻撃 n 段 + 次の実行フレーム
         const g = logs.filter(l => l.event === 'action' && /^executed (attack|charge|burst|skill)/.test(l.msg)).map(l => l.frame as number).slice(prefix.length);
         const cw: any = { ...structuredClone(c), weaponId: w.id ?? c.weaponId, weaponRefinementRank: refine, ...(isArtifact ? { artifactSetId: art.id, artifactSetMode: '4pc' } : {}) };
@@ -338,8 +342,7 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
             `active ${k};`,
             sc.steps.map(st => `${st.who === 'self' ? k : ok} ${st.cmd};${st.delay + delayFrames > 0 ? ` delay(${st.delay + delayFrames});` : ''}`).join(' '),
           ].join('\n');
-          const res = await fetch(`${GCSIM_SERVER_URL}/sample/cc_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
-          const logs = ((await res.json()).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|skill|burst)/.test(l.msg));
+          const logs = ((await sampleJson(cfg)).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|skill|burst)/.test(l.msg));
           const g = logs.map(l => l.frame as number);
           if (g.length !== sc.steps.length) { fails.push(`${c.name}(C${cn}) ${sc.name}: gcsim の実行数が合いません（${g.length} / ${sc.steps.length}）`); continue; }
           const cw = { ...structuredClone(c), constellation: cn };
@@ -397,8 +400,7 @@ for (const effect of ATTACK_SPEED_EFFECTS as any[]) {
           'target lvl=100 resist=0.1;', `active ${ok};`,
           [...(withBuff ? [`${ok} skill;`] : [`${ok} attack;`]), ...sq.wanSteps.map(x => `${wk} ${x};${delayFrames > 0 ? ` delay(${delayFrames});` : ''}`)].join(' '),
         ].join('\n');
-        const res = await fetch(`${GCSIM_SERVER_URL}/sample/wc_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
-        const logs = ((await res.json()).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|charge|skill)/.test(l.msg));
+        const logs = ((await sampleJson(cfg)).logs as any[]).filter(l => l.event === 'action' && /^executed (attack|charge|skill)/.test(l.msg));
         const g = logs.map(l => l.frame as number).slice(1);
         const cw = structuredClone(wan);
         const ow = structuredClone(owner);
@@ -443,9 +445,8 @@ if (!speedOnly) {
           'target lvl=100 resist=0.1;', `active ${k};`,
           `${k} attack;${d} ${k} attack;${d} wait(${W}); ${k} attack;${d}`,
         ].join('\n');
-        const res = await fetch(`${GCSIM_SERVER_URL}/sample/cwt_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
         let logs: any[];
-        try { logs = (await res.json()).logs; } catch { continue; }
+        try { logs = (await sampleJson(cfg)).logs; } catch { continue; }
         const f = logs.filter(l => l.event === 'action' && /^executed attack/.test(l.msg)).map(l => l.frame as number);
         if (f.length < 3) continue;
         const stints = [{ id: 's', characterId: c.id, holdMode: false, actions: [act(c, 'n', delayFrames / 60), act(c, 'n', delayFrames / 60), { id: `w${++seq}`, actionTypeId: 'wait', name: '待機', shortName: 'w', type: 'wait', duration: W / 60, delayAfter: 0 }, act(c, 'n', delayFrames / 60)] }];
@@ -479,9 +480,8 @@ if (!speedOnly) {
             'target lvl=100 resist=0.1;', `active ${k};`,
             `${k} ${command};${d} wait(${W}); ${k} attack;${d}`,
           ].join('\n');
-          const res = await fetch(`${GCSIM_SERVER_URL}/sample/cwe_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config: cfg, seed: 1 }) });
           let logs: any[];
-          try { logs = (await res.json()).logs; } catch { continue; }
+          try { logs = (await sampleJson(cfg)).logs; } catch { continue; }
           if (logs.some(l => l.event === 'sim' && /not ready/.test(l.msg))) continue;
           const ex = logs.filter(l => l.event === 'action' && /^executed (skill|burst|attack)/.test(l.msg)).map(l => l.frame as number);
           if (ex.length < 2) continue;

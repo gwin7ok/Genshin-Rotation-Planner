@@ -1,23 +1,22 @@
 /**
  * gcsim の実行で出るキーの網羅確認（フェーズ5 / 5-2b の続き）
  *
- * 全キャラ・全武器・全聖遺物を、1 つずつ gcsim のローカルサーバー（npm run gcsim:start。ポートは gcsim.config.json）で実行し、
+ * 全キャラ・全武器・全聖遺物を、1 つずつ gcsim（WebAssembly 版を Node で動かす。scripts/gcsim-node.ts）で実行し、
  * 詳細ログの status イベント（バフ・状態・内部CTのキー）を集める。辞書（public/data/gcsim_key_catalog.json）で引けるかを確かめ、
  * 実行で確認できたキーを src/data/gcsim_key_observed.json に書き出す（npm run build:catalog が辞書に合成する）。
  *
  *   node scripts/run-catalog-coverage.mjs            全件（数分）
  *   node scripts/run-catalog-coverage.mjs nahida     キーが一致するキャラ・武器・聖遺物だけ（動作確認用）
  *
- * 事前に gcsim のローカルサーバーを起動しておく。
+ * 事前に、public/gcsim/main.wasm を用意しておく（無ければ `npm run wasm:build`。Go が要る）。
  *  - キャラ: 1 人で、凸 0 と凸 6 を実行（スキル・爆発・通常攻撃・重撃・長押しスキル。実行できないアクションは外して再試行）
  *  - 武器: 武器種ごとの汎用キャラに持たせて実行（精錬 1 と 5）。武器なしの実行に出るキーは除く
  *  - 聖遺物: 汎用キャラに 4 セットで実行。聖遺物なしの実行に出るキーは除く
  * 1 人・1 対象での実行なので、チームバフ・反応・命ノ星座の条件付きの効果など、出ないキーがある。
  */
 import fs from 'node:fs';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
-const SERVER = GCSIM_SERVER_URL + '/sample/coverage';
 const root = process.cwd();
 const read = p => JSON.parse(fs.readFileSync(`${root}/${p}`, 'utf8'));
 const catalog = read('public/data/gcsim_key_catalog.json');
@@ -37,8 +36,7 @@ const lookup = key => exact.get(key) ?? patterns.find(p => p.re.test(key))?.e;
 
 // ---- gcsim の実行 -------------------------------------------------------------
 async function sample(config) {
-  const res = await fetch(SERVER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
+  const text = await gcsimSample(config, 1);
   try {
     const json = JSON.parse(text);
     return { logs: json.logs ?? [], error: json.error };

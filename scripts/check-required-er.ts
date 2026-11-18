@@ -1,5 +1,5 @@
 /**
- * 必要元素チャージ効率の算出の確認（フェーズ7 / issue #46。D242）。gcsim のサーバーが要る（npm run gcsim:start）。
+ * 必要元素チャージ効率の算出の確認（フェーズ7 / issue #46。D242）。gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   npm run check:required-er
  *
@@ -12,9 +12,10 @@
  */
 import fs from 'node:fs';
 import { createServer } from 'vite';
-import './require-gcsim-server.ts';
+import { useNodeGcsim } from './gcsim-node.ts';
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
+await useNodeGcsim(server);
 const { buildGcsimConfig } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
 const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');
 const er = await server.ssrLoadModule('/src/utils/gcsim/requiredEnergyRecharge.ts');

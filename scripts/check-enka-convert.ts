@@ -4,13 +4,14 @@
  *   npm run check:enka-convert -- <Enka の JSON のパス>     （例: https://enka.network/api/uid/<UID> の応答を保存したもの）
  *
  * 1. 変換: 全キャラを変換し、マスターに無いキャラ・武器・聖遺物セットと、変換の注意を一覧にする。
- * 2. 突き合わせ: gcsim サーバー（http://localhost:54321）で、変換した設定を 1 キャラずつ実行し、
+ * 2. 突き合わせ: gcsim（WebAssembly 版。scripts/gcsim-node.ts）で、変換した設定を 1 キャラずつ実行し、
  *    gcsim が計算した最終ステータスを、Enka の fightPropMap（ゲームの画面の最終値）と比べる。
  *    gcsim は、武器・天賦の戦闘中の効果を開始時に足すため、その分の差は出る（HoYoLAB の確認と同じ）。
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { createServer } from 'vite';
+import { gcsimSample } from './gcsim-node.ts';
 
 const inputPath = process.argv[2];
 if (!inputPath) { console.error('使い方: npm run check:enka-convert -- <Enka の JSON のパス>'); process.exit(1); }
@@ -33,9 +34,11 @@ const masters = {
 };
 
 const runSample = async (config: string) => {
-  const res = await fetch('http://localhost:54321/sample/enka-check', { method: 'POST', body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { throw new Error(text.trim().slice(0, 300)); }
+  const text = await gcsimSample(config, 1);
+  let json: any;
+  try { json = JSON.parse(text); } catch { throw new Error(text.trim().slice(0, 300)); }
+  if (json?.error) throw new Error(String(json.error).trim().slice(0, 300)); // WebAssembly 版は、エラーも JSON（{"error": "..."}）で返す
+  return json;
 };
 
 const avatars: any[] = raw.avatarInfoList ?? [];

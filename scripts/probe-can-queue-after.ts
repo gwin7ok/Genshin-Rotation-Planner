@@ -1,6 +1,6 @@
 /**
  * スキル・爆発の「次の行動を受け付け始めるフレーム」（gcsim の CanQueueAfter）を、実測で作る（2026-10-09）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   node scripts/probe-can-queue-after.ts
  *
@@ -12,8 +12,7 @@
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
 const catalog = JSON.parse(fs.readFileSync('public/data/gcsim_key_catalog.json', 'utf8'));
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
@@ -21,8 +20,7 @@ const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.v
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
 async function run(config: string): Promise<any[] | undefined> {
-  const res = await fetch(`${GCSIM_SERVER_URL}/sample/cqa_${Date.now()}_${Math.random().toString(36).slice(2)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
+  const text = await gcsimSample(config, 1);
   try {
     const j = JSON.parse(text);
     return j.error ? undefined : j.logs;

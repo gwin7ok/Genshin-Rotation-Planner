@@ -1,6 +1,6 @@
 /**
  * スキル・爆発の「アクション定義 ID → 効果の gcsim キー」の対応表を、実測で作る（フェーズ6 / 6-3b'）。
- * 事前に gcsim のローカルサーバーを起動しておく（npm run gcsim:start。バージョン・ポートは gcsim.config.json）。
+ * gcsim は、WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   node scripts/probe-effect-keys.ts
  *
@@ -17,10 +17,8 @@
  */
 import fs from 'node:fs';
 import { mapAction } from '../src/utils/gcsim/actionMapping.ts';
-import { GCSIM_SERVER_URL } from '../src/utils/gcsim/gcsimConfig.ts';
-import './require-gcsim-server.ts';
+import { gcsimSample } from './gcsim-node.ts';
 
-const SERVER = GCSIM_SERVER_URL;
 const MAX_LAG_FRAMES = 6 * 60;
 const MAX_EVENTS_PER_CAST = 4;
 
@@ -37,8 +35,7 @@ const characters: any[] = (Array.isArray(raw) ? raw : raw.characters ?? Object.v
 const weapons: Record<string, string> = { sword: 'dullblade', claymore: 'ultimateoverlordsmegamagicsword', polearm: 'beginnersprotector', bow: 'huntersbow', catalyst: 'apprenticesnotes' };
 
 async function run(config: string): Promise<{ logs?: any[]; error?: string }> {
-  const res = await fetch(`${SERVER}/sample/probe_${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
+  const text = await gcsimSample(config, 1);
   try {
     const j = JSON.parse(text);
     return j.error ? { error: String(j.error) } : { logs: j.logs };

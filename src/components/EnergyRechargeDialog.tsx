@@ -7,7 +7,7 @@ import type { CharacterConfig } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
 import { previewFinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
-import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
+import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { loadRequiredEr, saveRequiredEr } from '../utils/appSettings';
 import {
@@ -138,8 +138,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setProgress(null);
     setStartedAt(Date.now());
     setNow(Date.now());
-    // WASM（ブラウザの中で実行）のときは、Worker を並べて、種を同時に実行する
-    const parallel = (await resolveEngine()) === 'wasm' ? wasmParallelism() : 1;
+    // Worker を並べて、種を同時に実行する
+    const parallel = wasmParallelism();
     let outcome: Awaited<ReturnType<typeof computeRequiredEr>>;
     try {
       outcome = await computeRequiredEr({

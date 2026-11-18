@@ -3,16 +3,17 @@
  *
  *   npm run check:hoyolab-import [-- <HoYoLAB の JSON のパス>]
  *
- * 手元でだけ実行する検査（CI では実行しない。取得データは個人のアカウントのもので Git に入らず、gcsim サーバーも要る）。
+ * 手元でだけ実行する検査（CI では実行しない。取得データは個人のアカウントのもので Git に入らない）。
  * 既定の入力: tools/hoyolab-fetch/out/hoyolab-raw.json（拡張機能・試作スクリプトで取得。Git には入らない）。
  * 1. 変換: 全キャラを変換し、注意（突破段階が不明・天賦の数が想定外など）とマスターに無い武器・聖遺物を一覧にする。
- * 2. 突き合わせ: gcsim サーバー（http://localhost:54321）で、変換した設定を 1 キャラずつ実行し、
+ * 2. 突き合わせ: gcsim（WebAssembly 版。scripts/gcsim-node.ts）で、変換した設定を 1 キャラずつ実行し、
  *    gcsim が計算した最終ステータス（HP・攻撃・防御・熟知・会心・会心ダメ・チャージ効率・元素ダメージ）を、
  *    HoYoLAB の画面の最終値と比べる。差が大きいキャラを一覧にする。
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { createServer } from 'vite';
+import { gcsimSample } from './gcsim-node.ts';
 
 const inputPath = process.argv[2] ?? path.resolve('tools/hoyolab-fetch/out/hoyolab-raw.json');
 const raw = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
@@ -41,9 +42,11 @@ const findMaster = (hc: any) => {
 };
 
 const runSample = async (config: string) => {
-  const res = await fetch('http://localhost:54321/sample/hoyolab-check', { method: 'POST', body: JSON.stringify({ config, seed: 1 }) });
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { throw new Error(text.trim().slice(0, 300)); }
+  const text = await gcsimSample(config, 1);
+  let json: any;
+  try { json = JSON.parse(text); } catch { throw new Error(text.trim().slice(0, 300)); }
+  if (json?.error) throw new Error(String(json.error).trim().slice(0, 300)); // WebAssembly 版は、エラーも JSON（{"error": "..."}）で返す
+  return json;
 };
 
 let converted = 0, noMaster = 0, noKey = 0, ambiguous = 0, ok = 0, ng = 0, errors = 0;

@@ -17,7 +17,6 @@ import { setWriteFailureHandler } from './utils/persistence';
 import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
 import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
-import { getLastGcsimEngine } from './utils/gcsim/gcsimClient.ts';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT, GCSIM_VERSION } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
@@ -685,9 +684,7 @@ export default function App() {
     }
     if (outcome.status !== 'ok') {
       setGcsimBanner(outcome.status === 'unreachable'
-        ? (getLastGcsimEngine() === 'wasm'
-          ? { level: 'error', title: t('app:gcsim.wasmFailed'), message: outcome.message + '\n' + t('app:gcsim.wasmFailedHint') }
-          : { level: 'error', title: t('app:gcsim.serverUnreachable'), message: outcome.message + '\n' + t('app:gcsim.serverUnreachableHint') })
+        ? { level: 'error', title: t('app:gcsim.wasmFailed'), message: outcome.message + '\n' + t('app:gcsim.wasmFailedHint') }
         : { level: 'error', title: t('app:gcsim.runError'), message: outcome.message });
       return;
     }

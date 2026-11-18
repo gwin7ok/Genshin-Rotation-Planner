@@ -1,5 +1,5 @@
 /**
- * DPS 計算の確認（D343）。gcsim のサーバーが要る（npm run gcsim:start）。
+ * DPS 計算の確認（D343）。gcsim の WebAssembly 版（public/gcsim/main.wasm。Node で動かす。scripts/gcsim-node.ts）を使う。
  *
  *   npm run check:dps
  *
@@ -10,9 +10,10 @@
  */
 import fs from 'node:fs';
 import { createServer } from 'vite';
-import './require-gcsim-server.ts';
+import { useNodeGcsim } from './gcsim-node.ts';
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
+await useNodeGcsim(server);
 const { buildGcsimConfig, targetStatements, DEFAULT_ENEMY } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
 const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');
 const dps = await server.ssrLoadModule('/src/utils/gcsim/dpsCalc.ts');

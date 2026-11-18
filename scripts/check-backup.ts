@@ -387,10 +387,9 @@ check('保存層: キーの文字列が、公開済みのデータと同じ（�
     database: 'genshin_app_db_v1',
   });
   assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
-  assert.equal(persistence.DEVICE_KEYS.gcsimEngine, 'gcsim_engine');
   assert.equal(persistence.DEVICE_KEYS.gcsimCores, 'gcsim_cores');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_cores'), '端末だけの設定（コアの数）は、バックアップに含めない');
-  assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '端末だけの設定は、バックアップに含めない');
+  assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '使わなくなった端末だけの設定（実行エンジンの選択）は、バックアップに含めない');
 });
 check('保存層: 書き込みが失敗しても例外を投げない（容量超過）', () => {
   persistence.setPersistenceBackend({

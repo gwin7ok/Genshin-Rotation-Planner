@@ -27,8 +27,6 @@
     "runningHint": "祭礼の武器があると、種を探すので、数十秒かかることがあります。",
     "wasmFailed": "gcsim（ブラウザ内の WebAssembly 版）を実行できませんでした",
     "wasmFailedHint": "ページを再読み込みしてください。直らないときは、別のブラウザをお試しください。",
-    "serverUnreachable": "gcsim サーバーに接続できませんでした",
-    "serverUnreachableHint": "サーバーを起動してください（npm run gcsim:start）。",
     "runError": "gcsim の実行エラー",
     "waitLine": "{{name}}（出場 #{{index}}）「{{action}}」: {{kind}} {{seconds}} 秒",
     "staminaWait": "スタミナ待ち",

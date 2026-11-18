@@ -8,7 +8,7 @@ import type { AppDatabase } from '../types/database';
 import { DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type EnemySetting, type EnemyResistKey, type GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
 import { previewFinalStats, type FinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
-import { resolveEngine, wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
+import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult, type DpsSettings } from '../utils/gcsim/dpsCalc';
 import { loadDpsSettings, saveDpsSettings } from '../utils/appSettings';
@@ -130,7 +130,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
     setMessage(null);
     setProgress(null);
     const t0 = Date.now();
-    const parallel = (await resolveEngine()) === 'wasm' ? wasmParallelism() : 1;
+    const parallel = wasmParallelism();
     let outcome: DpsOutcome;
     try {
       outcome = await computeDps({ config, runs: s.runs, loops: s.loops, parallel, run: runGcsimSample, onProgress: setProgress, shouldCancel: () => cancelRef.current });

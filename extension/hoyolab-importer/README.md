@@ -11,6 +11,9 @@ Genshin Rotation Planner に、HoYoLAB の持ちキャラのデータを渡す�
 ## Firefox 版（開発中。issue #60）
 このフォルダの `manifest.json` は、Chrome 用。Firefox 用の manifest は、これに `extension/firefox-manifest-overrides.json`（Firefox だけの項目）を重ねて、`scripts/extension-manifest.ts` が作る。コードは、Chrome・Firefox で共通。
 - Firefox は、一致パターンのポート指定に対応しない。Firefox 用では、ポートを外す（配る版には `localhost` を入れない）。
+- `npm run ext:pack`（`npm run dev` の前に自動）が、Firefox 用を `build/extension/` の下に作る（Git には入れない）。
+  - `build/extension/firefox-dev/` … 開発用（`localhost` に入る）。Firefox で `about:debugging#/runtime/this-firefox` を開き、「一時的なアドオンを読み込む」で、この中の `manifest.json` を選ぶ（再起動すると消える）。拡張機能を直したら、`ext:pack` をやり直して、「再読み込み」する。
+  - `build/extension/firefox/` … 配る版（署名の入力。署名は AMO）。署名のない拡張機能は、Firefox の正式版に常設できない。
 - 確認: `npm run check:extension-manifest`
 - 実機（Firefox 160）での確認結果と決定: [docs/hoyolab-import/plan.md](../../docs/hoyolab-import/plan.md)
 

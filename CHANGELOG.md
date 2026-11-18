@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-11-18
+
 ### 追加
 - ヘッダーの「CT違反あり」「CT警告」の横に、▲▼ ボタンを追加した。押すと、ガントチャートの前・次の印（赤・黄）の場所へ画面が移動し、そのバーが光って、再生位置も印の時刻に合う。最後の印から先へ進むと、最初の印に戻る。ボタンの説明に「n 件中 m 件目」を出す
 
@@ -339,7 +341,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...v1.11.0
 [1.10.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.1...v1.10.2

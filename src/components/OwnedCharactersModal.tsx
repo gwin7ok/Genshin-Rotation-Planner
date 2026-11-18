@@ -13,7 +13,7 @@ import { isHoyolabUid } from '../utils/hoyolab/uid';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
-import { detectBrowser, FIREFOX_MIN_MAJOR } from '../utils/hoyolab/browser';
+import { CHROMIUM_MIN_MAJOR, detectBrowser, FIREFOX_MIN_MAJOR, installBlock, type DetectedBrowser, type InstallBlock } from '../utils/hoyolab/browser';
 import { copyTextFromClick } from '../utils/clipboard';
 import { clearOwned, loadHoyolabUid, loadOwned, loadUseEnka, saveHoyolabUid, saveOwned, saveUseEnka, type OwnedStore } from '../utils/hoyolab/ownedStore';
 
@@ -30,6 +30,24 @@ const FIREFOX_ADDONS_PAGE = 'about:addons';
 const ENKA_MIN_EXTENSION_VERSION = '0.2.0';
 
 interface GuideStep { title: string; body: string; note?: string; action?: React.ReactNode }
+
+/**
+ * 拡張機能を入れられないブラウザ（Chrome 系・Firefox 以外、または、版が古い）に、手順のかわりに出す案内。
+ * 「このブラウザでは、持ちキャラの取り込みはできません」と、はっきり書き、何をすればよいか（対応ブラウザで開く・更新する）を示す。
+ */
+const BlockedNotice: React.FC<{ reason: InstallBlock; browser: DetectedBrowser }> = ({ reason, browser }) => {
+  const [title, body] = reason === 'oldFirefox'
+    ? [t('hoyolab:blocked.oldFirefoxTitle', { major: browser.firefoxMajor }), t('hoyolab:blocked.oldFirefoxBody', { min: FIREFOX_MIN_MAJOR })]
+    : reason === 'oldChromium'
+      ? [t('hoyolab:blocked.oldChromiumTitle', { major: browser.chromiumMajor }), t('hoyolab:blocked.oldChromiumBody', { min: CHROMIUM_MIN_MAJOR })]
+      : [t('hoyolab:blocked.otherTitle'), t('hoyolab:blocked.otherBody')];
+  return (
+    <div className="space-y-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3" data-testid="ext-blocked" data-reason={reason}>
+      <p className="font-semibold text-amber-200 flex items-start gap-1.5"><AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />{title}</p>
+      <p className="text-[11px] text-amber-100/90 leading-relaxed">{body}</p>
+    </div>
+  );
+};
 
 /**
  * 拡張機能の導入・更新の手順（手順カード＋うまくいかないとき）。拡張機能を検知できないとき（導入）・版が古いとき（更新）だけ出す。
@@ -54,14 +72,9 @@ const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'insta
     });
   };
 
-  if (browser.kind === 'unsupported') {
-    return (
-      <div className="space-y-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3" data-testid="ext-unsupported">
-        <p className="font-semibold text-amber-200 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 shrink-0" />{t('hoyolab:unsupported.title')}</p>
-        <p className="text-[11px] text-amber-100/90 leading-relaxed">{t('hoyolab:unsupported.body')}</p>
-      </div>
-    );
-  }
+  // 導入のとき、入れられないブラウザには、手順のかわりに案内を出す。更新のとき（拡張機能は、すでに動いている）は、出さない
+  const blockReason = isUpdate ? null : installBlock(browser);
+  if (blockReason) return <BlockedNotice reason={blockReason} browser={browser} />;
 
   const btn = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border font-semibold transition-colors';
   const downloadButton = (href: string, fileName: string, label: string) => (
@@ -119,17 +132,11 @@ const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'insta
   const troubles: TranslationKey[] = isFirefox
     ? ['hoyolab:installFx.trouble1', 'hoyolab:installFx.trouble2', 'hoyolab:installFx.trouble3']
     : ['hoyolab:install.trouble1', 'hoyolab:install.trouble2', 'hoyolab:install.trouble3', 'hoyolab:install.trouble4'];
-  const tooOld = isFirefox && !isUpdate && browser.firefoxMajor !== null && browser.firefoxMajor < FIREFOX_MIN_MAJOR;
 
   return (
     <div className="space-y-2" data-testid="ext-install-guide" data-browser={browser.kind}>
       {!isUpdate && <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>}
       <p className="text-[11px] text-slate-400">{intro}</p>
-      {tooOld && (
-        <p className="text-[11px] text-amber-300/90 leading-relaxed flex items-start gap-1.5" data-testid="ext-old-firefox">
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />{t('hoyolab:installFx.oldFirefox', { major: browser.firefoxMajor, min: FIREFOX_MIN_MAJOR })}
-        </p>
-      )}
       <ol className="space-y-1.5">
         {steps.map((st, i) => (
           <li key={i} className="flex gap-2.5 rounded-lg border border-slate-700/70 bg-slate-900/60 p-2.5">
@@ -188,6 +195,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
     void checkExtension();
   }, [isOpen, checkExtension]);
 
+  // 拡張機能を入れられないブラウザ（対象外・版が古い）か。そうなら、取り込みの入力欄は出さず、理由を出す
+  const blockReason = useMemo(() => installBlock(detectBrowser()), []);
   const masterIds = useMemo(() => database.characters.map(c => c.id), [database.characters]);
   const masterById = useMemo(() => new Map(database.characters.map(c => [c.id, c])), [database.characters]);
 
@@ -343,6 +352,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
 
   const characters = store?.characters ?? [];
   const extOk = extVersion !== 'checking' && extVersion !== null;
+  // 拡張機能が検知できれば、UA が対象外・古くても、そのまま使える（UA は偽装・省略されることがある）
+  const installBlocked = blockReason !== null && !extOk;
 
   return (
     <div
@@ -389,8 +400,8 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
             <p className="text-[10px] text-slate-500">{t('hoyolab:ext.note')}</p>
           </div>
 
-          {/* 取り込み */}
-          <div className="space-y-1.5">
+          {/* 取り込み（拡張機能を入れられないブラウザでは、出さない。上の案内に、理由を出している） */}
+          {!installBlocked && <div className="space-y-1.5">
             <label className="font-semibold text-slate-200" htmlFor="owned-uid">{t('hoyolab:uid.label')}</label>
             <div className="flex items-center gap-2">
               <input
@@ -438,7 +449,7 @@ export const OwnedCharactersModal: React.FC<OwnedCharactersModalProps> = ({ isOp
                 <span>{message.text}</span>
               </div>
             )}
-          </div>
+          </div>}
 
           {/* 取り込み済みの一覧 */}
           <div className="space-y-2">

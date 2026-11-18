@@ -97,7 +97,6 @@
   },
   "installFx": {
     "intro": "3 つの手順で、Firefox に拡張機能を入れます（最初に一度だけ。1〜2 分ほど。Firefox 140 以降が対象です）。",
-    "oldFirefox": "お使いの Firefox は、バージョン {{major}} です。この拡張機能は、Firefox {{min}} 以降が対象のため、入れられません。先に Firefox を更新してください。",
     "s1Title": "ファイルをダウンロードする",
     "s1Body": "下のボタンで、拡張機能のファイル（.xpi）をダウンロードします。",
     "s1Button": "拡張機能をダウンロード（xpi）",
@@ -118,9 +117,13 @@
     "s2Body": "アドオンの画面の歯車（⚙）→「アドオンの更新を確認」を押します。しばらくして、「Genshin Rotation Planner - HoYoLAB 取り込み」の版が新しくなります。",
     "s2Note": "自動で更新されないときは、下のボタンで新しいファイル（.xpi）をダウンロードし、歯車（⚙）→「ファイルからアドオンをインストール」で入れ直してください（上書きで更新されます）。"
   },
-  "unsupported": {
-    "title": "このブラウザは、拡張機能の対象外です",
-    "body": "持ちキャラの取り込みには、パソコン版の Chrome・Edge・Firefox が要ります。スマートフォン・タブレットや Safari では、拡張機能を入れられません。パソコンのブラウザで、もう一度開いてください。"
+  "blocked": {
+    "otherTitle": "このブラウザでは、持ちキャラの取り込みはできません",
+    "otherBody": "取り込みには拡張機能が要り、拡張機能は、パソコン版の Chrome 系（Chrome・Edge など）と Firefox にだけ入れられます。スマートフォン・タブレットや Safari などでは、入れられません。パソコンの Chrome・Edge・Firefox で、もう一度開いてください。",
+    "oldFirefoxTitle": "お使いの Firefox（バージョン {{major}}）では、持ちキャラの取り込みはできません",
+    "oldFirefoxBody": "拡張機能は、Firefox {{min}} 以降が対象です。Firefox を更新して、このページを開き直してください。",
+    "oldChromiumTitle": "お使いのブラウザ（バージョン {{major}}）では、持ちキャラの取り込みはできません",
+    "oldChromiumBody": "拡張機能は、Chrome の {{min}} 以降が対象です（Edge など、Chrome 系のブラウザも同じ基準です）。ブラウザを更新して、このページを開き直してください。"
   },
   "warn": {
     "noWeapon": "武器「{{name}}」がマスターにありません",

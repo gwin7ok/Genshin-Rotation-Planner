@@ -97,7 +97,6 @@
   },
   "installFx": {
     "intro": "Install the extension in Firefox in 3 steps (only once; about 1-2 minutes; Firefox 140 or later).",
-    "oldFirefox": "Your Firefox is version {{major}}. This extension needs Firefox {{min}} or later, so it cannot be installed. Please update Firefox first.",
     "s1Title": "Download the file",
     "s1Body": "Download the extension file (.xpi) with the button below.",
     "s1Button": "Download the extension (xpi)",
@@ -118,9 +117,13 @@
     "s2Body": "On the add-ons page, click the gear (⚙) → \"Check for Updates\". After a moment, the version of \"Genshin Rotation Planner - HoYoLAB Importer\" is updated.",
     "s2Note": "If it is not updated automatically, download the new file (.xpi) with the button below and install it again with the gear (⚙) → \"Install Add-on From File\" (it is updated in place)."
   },
-  "unsupported": {
-    "title": "This browser is not supported",
-    "body": "Importing owned characters needs desktop Chrome, Edge or Firefox. The extension cannot be installed on smartphones, tablets or Safari. Please open this page in a desktop browser."
+  "blocked": {
+    "otherTitle": "Owned characters cannot be imported in this browser",
+    "otherBody": "Importing needs the extension, and the extension can only be installed in desktop Chrome-based browsers (Chrome, Edge, etc.) and Firefox. It cannot be installed on smartphones, tablets, Safari and other browsers. Please open this page again in desktop Chrome, Edge or Firefox.",
+    "oldFirefoxTitle": "Owned characters cannot be imported in your Firefox (version {{major}})",
+    "oldFirefoxBody": "The extension needs Firefox {{min}} or later. Please update Firefox and open this page again.",
+    "oldChromiumTitle": "Owned characters cannot be imported in your browser (version {{major}})",
+    "oldChromiumBody": "The extension needs Chrome {{min}} or later (the same standard applies to Chrome-based browsers such as Edge). Please update the browser and open this page again."
   },
   "warn": {
     "noWeapon": "Weapon \"{{name}}\" is not in the master data",

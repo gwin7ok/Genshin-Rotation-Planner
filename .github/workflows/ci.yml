@@ -96,5 +96,8 @@ jobs:
       - name: CT 違反・警告の印の一覧と、ヘッダーの ▲▼ の「前・次」の選び方の確認
         run: npm run check:ct-marks
 
+      - name: CT バーの「CT 残り秒数」（ゲーム画面に合わせた切り下げ）の確認
+        run: npm run check:ct-remaining
+
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict

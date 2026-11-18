@@ -129,6 +129,7 @@
     "stockTitle": "【スキルのストック {{count}} / {{max}}】{{lap}}周目 [{{start}}s ~ {{end}}s]（クリックで開始位置へシーク）",
     "stockFull": "\n時間 0 は満タンの仮定",
     "carryCtTitle": "【1周目からの持ち越し{{kind}}】{{inactive}}\n期間: [{{start}}s ~ {{end}}s]\n残りCT: {{remaining}}s (クリックで開始位置へシーク)",
+    "ctRemaining": "CT残り {{seconds}}s",
     "ctTitle": "【{{kind}}】{{duration}}s [{{start}}s ~ {{end}}s] (クリックで開始位置へシーク){{info}}",
     "kindSkillCt": "スキルCT",
     "kindSpecialCt": "特殊スキルCT",

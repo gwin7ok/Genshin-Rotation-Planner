@@ -29,6 +29,7 @@ import {
 import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { ctActionTarget, ctPassiveTarget } from '../utils/ctMarks';
+import { formatCtRemaining } from '../utils/ctRemaining';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig, getAvailableBuffsForCharacter, isGlobalRowBuff, buffTimingLabel, type TriggerableBuffDefinition } from '../utils/buffUtils';
 import { GlobalBuffRow, TimelessBuffChip, selfTimelessBuffItems, type TimelessBuffItem } from './GlobalBuffRow';
@@ -246,6 +247,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
   // ホバーの経過時間の表示の高さ（ポインタの位置。チャートの上端からの px）
   const [hoveredY, setHoveredY] = useState<number>(0);
+  // ポインタが CT バーの上にあるときの、その時点の CT 残り秒数（文字。CT バーの外なら null）
+  const [hoveredCtRemaining, setHoveredCtRemaining] = useState<string | null>(null);
   // 出場ブロックごとの、キャラ名の行の高さ（時間指定のない効果が折り返すと、高くなる。左の見出しをそろえる）
   const [topRowHeights, setTopRowHeights] = useState<Record<string, number>>({});
   const setTopRowHeight = (stintId: string, h: number) =>
@@ -503,8 +506,13 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     if (clickX >= 0) {
       setHoveredTime(Number((clickX / pixelsPerSecond).toFixed(2)));
       setHoveredY(Math.max(0, e.clientY - rect.top + containerRef.current.scrollTop));
+      // CT バーの上なら、その時点の CT 残り秒数（ゲーム画面の表示に合わせた切り下げ。issue #51）。バーの終わりは data-ct-end
+      const ctBar = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-ct-end]') : null;
+      const ctEnd = ctBar ? Number(ctBar.dataset.ctEnd) : NaN;
+      setHoveredCtRemaining(Number.isFinite(ctEnd) ? formatCtRemaining(ctEnd, clickX / pixelsPerSecond) : null);
     } else {
       setHoveredTime(null);
+      setHoveredCtRemaining(null);
     }
   };
 
@@ -1279,7 +1287,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
           onScroll={handleContainerScroll}
           onMouseDown={handlePanMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseLeave={() => setHoveredTime(null)}
+          onMouseLeave={() => { setHoveredTime(null); setHoveredCtRemaining(null); }}
           className="relative z-10 overflow-x-auto rounded-b-xl border border-slate-800 bg-slate-900/60 shadow-2xl custom-scrollbar w-full border-t-0"
         >
           <div style={{ width: chartWidth + GANTT_LABEL_WIDTH, minWidth: '100%' }} className="relative select-none pt-3 pb-4">
@@ -1916,6 +1924,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindSkillCt'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
                                         : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindSkillCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
+                                    data-ct-end={isBarActive ? cd.endTime : undefined}
                                   >
                                     <span className="truncate">
                                       ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}E-CT {(cd.endTime - cd.startTime).toFixed(1)}s
@@ -1966,6 +1975,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindSpecialCt'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
                                         : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindSpecialCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
+                                    data-ct-end={isBarActive ? cd.endTime : undefined}
                                   >
                                     <span className="truncate">
                                       ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}spE-CT {(cd.endTime - cd.startTime).toFixed(1)}s
@@ -2016,6 +2026,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         ? t('chart:gantt.carryCtTitle', { kind: t('chart:gantt.kindBurstCtLong'), inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', start: cd.startTime.toFixed(2), end: cd.endTime.toFixed(2), remaining: (cd.endTime - cd.startTime).toFixed(1) })
                                         : t('chart:gantt.ctTitle', { kind: t('chart:gantt.kindBurstCt'), duration: cd.duration.toFixed(1), start: cd.startTime.toFixed(1), end: cd.endTime.toFixed(1), info: ctActionInfo(char, stint, cd.actionInstanceId) })
                                     }
+                                    data-ct-end={isBarActive ? cd.endTime : undefined}
                                   >
                                     <span className="truncate">
                                       ⏱️ {isCarryOver ? `${t('chart:gantt.carried')} ` : ''}Q-CT {(cd.endTime - cd.startTime).toFixed(1)}s
@@ -2197,6 +2208,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                               : badgeCfg.cooldownBarClass
                                           }`}
                                           title={t('chart:gantt.carryPassiveCtTitle', { label: badgeCfg.label, inactive: !isBarActive ? t('chart:gantt.inactiveShort') : '', name: cp.name, description: cp.description ? `\n${cp.description}` : '', remaining: cdDur.toFixed(2), start: start.toFixed(2), end: cdEnd.toFixed(2) })}
+                                          data-ct-end={isBarActive ? cdEnd : undefined}
                                         >
                                           <span className="truncate">⏱️ {t('chart:gantt.carried')} {t('chart:gantt.passiveCtLabel', { label: badgeCfg.label })} {cdDur.toFixed(1)}s</span>
                                         </div>
@@ -2240,6 +2252,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         <div
                                           key={`reg_p_cd_${p.id}`}
                                           data-ct-target={ctPassiveTarget(p.id)}
+                                          data-ct-end={isPending ? undefined : start + p.cooldown}
                                           data-no-pan
                                           onMouseDown={p.auto ? undefined : startDrag}
                                           onClick={(e) => e.stopPropagation()}
@@ -2317,6 +2330,9 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   style={{ top: `${hoveredY + 14}px` }}
                 >
                   {fmtTime(hoveredTime, 1)}
+                  {hoveredCtRemaining !== null && (
+                    <span className="ml-1.5 font-bold text-amber-200">{t('chart:gantt.ctRemaining', { seconds: hoveredCtRemaining })}</span>
+                  )}
                 </div>
               </div>
             )}

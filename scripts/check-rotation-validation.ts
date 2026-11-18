@@ -292,6 +292,100 @@ check('検査の補強: 保存編成・自動保存・バックアップの数�
   assert.equal('switchDelay' in parsedBackup.backup.currentState, false);
 });
 
+// --- 外から読み込む編成の上限（2026-11-18 のセキュリティ確認。src/utils/rotationLimits.ts） ---
+const limits = await server.ssrLoadModule('/src/utils/rotationLimits.ts');
+const savedReactions = await server.ssrLoadModule('/src/utils/gcsim/savedReactions.ts');
+const { buildGcsimConfig } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
+const { resolvePartyCharacters } = await server.ssrLoadModule('/src/utils/party.ts');
+const sanitizedActionIds = (a: unknown[]) => v.sanitizeStints([stint('s1', a)]).stints[0].actions.map((x: any) => x.id);
+
+check('上限: 時間の値（所要時間・発動バフの位置・副次効果・グループ複製・CT など）が極端に大きいと、その要素を除外する（画面が固まるのを防ぐ）', () => {
+  const T = limits.MAX_TIME_SECONDS;
+  assert.deepEqual(sanitizedActionIds([act('ok1', { duration: T }), act('ok2', { duration: -5 }), act('b1', { duration: T + 1 }), act('b2', { duration: 1e7 }), act('b3', { duration: 1e300 }), act('b4', { duration: -1e7 })]), ['ok1', 'ok2']);
+  assert.deepEqual(sanitizedActionIds([act('b1', { cooldown: 1e9 }), act('b2', { delayAfter: 1e9 }), act('b3', { holdSeconds: 1e9 }), act('b4', { effectDuration: 1e9 }), act('ok', { cooldown: 900 })]), ['ok']);
+  const cd = (o: Record<string, unknown>) => ({ '1': { base: 1, duration: 1, gcsimBaseDuration: 1, ...o } });
+  assert.deepEqual(sanitizedActionIds([act('b1', { copyDurations: cd({ duration: 1e9 }) }), act('b2', { extraEffects: [{ key: 'k', offset: 1e9, duration: 1 }] }), act('ok', { copyDurations: cd({}) })]), ['ok']);
+  const r = v.sanitizeStints([stint('s1', [act('a1')], { passiveTriggers: [{ id: 'p1', passiveEffectId: 'e', offset: 1e9 }, { id: 'p2', passiveEffectId: 'e', offset: 1, duration: 1e9 }, { id: 'p3', passiveEffectId: 'e', offset: 20, duration: 30 }] })]);
+  assert.deepEqual(r.stints[0].passiveTriggers.map((p: any) => p.id), ['p3']);
+});
+check('上限: 編成の数値（総時間・交代遅延・ループ基準）が上限を超えたら、既定に任せる／正しい値は、そのまま', () => {
+  const huge = v.parseRotationPayload({ party: [member('c1')], stints: [], switchDelay: 1e6, loopStartIndex: 1e9, loopStartTime: 1e9, totalDuration: 1e12 });
+  assert.equal(huge.ok, true);
+  for (const k of ['switchDelay', 'loopStartIndex', 'loopStartTime', 'totalDuration']) assert.equal(huge.value[k], undefined, k);
+  const fine = v.parseRotationPayload({ party: [member('c1')], stints: [], switchDelay: 0.5, loopStartIndex: 2, loopStartTime: 12.3, totalDuration: 24.9 });
+  assert.deepEqual([fine.value.switchDelay, fine.value.loopStartIndex, fine.value.loopStartTime, fine.value.totalDuration], [0.5, 2, 12.3, 24.9]);
+  const slot = v.sanitizeSlot({ id: 'x', name: 'n', updatedAt: '', party: [member('c1')], stints: [], switchDelay: 1e6, totalDuration: 1e12, loopStartTime: 1e9, loopStartIndex: 1e9 });
+  for (const k of ['switchDelay', 'loopStartIndex', 'loopStartTime', 'totalDuration']) assert.equal(k in slot.slot, false, `${k} を取り除く`);
+  // 自動保存（起動のたびに読む）も、同じ検査を通る: 極端な値が残って、開くたびに固まることがない
+  store.clear();
+  store.set('genshin_rotation_current_state_v2', JSON.stringify({ party: [member('c1')], stints: [stint('s1', [act('bad', { duration: 1e7 }), act('ok')])], switchDelay: 1e6, lastSavedAt: '' }));
+  const active = storage.loadActiveState();
+  assert.deepEqual(active.stints[0].actions.map((a: any) => a.id), ['ok']);
+  assert.equal('switchDelay' in active, false);
+});
+check('上限: 編成の枠（8 まで）・出場（200 まで）・展開後のアクション（2000 まで）・文字の長さ', () => {
+  assert.equal(v.isValidParty(Array.from({ length: limits.MAX_PARTY }, (_, i) => member(`c${i}`))), true);
+  assert.equal(v.parseRotationPayload({ party: Array.from({ length: limits.MAX_PARTY + 1 }, (_, i) => member(`c${i}`)), stints: [] }).ok, false);
+  assert.equal(v.parseRotationPayload({ party: Array.from({ length: 20000 }, (_, i) => member(`c${i}`)), stints: [] }).ok, false);
+  assert.equal(v.isValidParty([member('c'.repeat(limits.MAX_ID_LENGTH + 1))]), false);
+  const many = v.sanitizeStints(Array.from({ length: limits.MAX_STINTS + 5 }, (_, i) => stint(`s${i}`, [act(`a${i}`)])));
+  assert.equal(many.stints.length, limits.MAX_STINTS);
+  assert.equal(many.skipped.stints, 5);
+  // グループの繰り返しで、展開後に増える分も数える（30 アクション × 99 回 = 2970 件は、除外）
+  const grouped = (n: number, repeat: number) => stint('g', Array.from({ length: n }, (_, i) => act(`a${i}`, { groupId: 'g1' })), { groups: [{ id: 'g1', repeat }] });
+  assert.equal(v.sanitizeStints([grouped(30, 99)]).stints.length, 0);
+  assert.equal(v.sanitizeStints([grouped(20, 99)]).stints.length, 1, '20 × 99 = 1980 件は、上限内');
+  const bigStint = v.sanitizeStints([stint('s1', Array.from({ length: limits.MAX_EXPANDED_ACTIONS + 10 }, (_, i) => act(`a${i}`)))]);
+  assert.equal(bigStint.stints[0].actions.length, limits.MAX_EXPANDED_ACTIONS);
+  assert.equal(bigStint.skipped.actions, 10);
+  // 文字の長さ: 名前・メモの長すぎるアクションは除外／出場のメモは外す／編成名・説明は切り詰める
+  assert.deepEqual(sanitizedActionIds([act('b1', { name: 'あ'.repeat(limits.MAX_NAME_LENGTH + 1) }), act('b2', { note: 'あ'.repeat(limits.MAX_TEXT_LENGTH + 1) }), act('ok', { name: 'あ'.repeat(limits.MAX_NAME_LENGTH), note: 'あ'.repeat(limits.MAX_TEXT_LENGTH) })]), ['ok']);
+  const longNote = v.sanitizeStints([stint('s1', [act('a1')], { note: 'x'.repeat(limits.MAX_TEXT_LENGTH + 1) })]);
+  assert.equal('note' in longNote.stints[0], false);
+  const p = v.parseRotationPayload({ party: [member('c1')], stints: [], name: 'A'.repeat(4_000_000), description: 'B'.repeat(4_000_000) });
+  assert.equal(p.ok, true);
+  assert.equal(p.value.name.length, limits.MAX_NAME_LENGTH);
+  assert.equal(p.value.description.length, limits.MAX_TEXT_LENGTH);
+  const slot = v.sanitizeSlot({ id: 'x', name: 'A'.repeat(5000), description: 'B'.repeat(50000), updatedAt: '', party: [member('c1')], stints: [] });
+  assert.equal(slot.slot.name.length, limits.MAX_NAME_LENGTH);
+  assert.equal(slot.slot.description.length, limits.MAX_TEXT_LENGTH);
+});
+check('gcsim の命令（gcsimCommand）: 決まった形だけ通す。改行・`;`・ループなどを含むものは、アクションごと除外する', () => {
+  for (const ok of ['skill', 'skill[recast=1]', 'attack:3', 'charge', 'aim[weakspot=1]', 'skill[hold=1.5,travel=10]']) {
+    assert.equal(limits.isSafeGcsimCommand(ok), true, ok);
+  }
+  for (const bad of ['skill;\ninjected;', 'skill; print("x")', 'skill\nattack', 'for let i = 0; i < 9; i = i + 1 { print(i); }', 'skill[recast=1];', 'skill[hold=1\n]', 'SKILL', 'skill ', ' skill', 'skill[a=b c]', '', 'x'.repeat(500), 'skill{', 'skill(1)', 5, null, {}]) {
+    assert.equal(limits.isSafeGcsimCommand(bad), false, JSON.stringify(bad));
+  }
+  assert.deepEqual(sanitizedActionIds([act('b1', { gcsimCommand: 'skill;\ninjected;' }), act('b2', { gcsimCommand: 7 }), act('ok', { gcsimCommand: 'skill[recast=1]' })]), ['ok']);
+});
+check('gcsim の設定文: 渡された命令が、決まった形でなければ使わない（読み込みの検査を通らない経路 = DB 管理の取り込みなどにも効く）', () => {
+  const base = JSON.parse(fs.readFileSync('src/data/presets/lunar-bloom.json', 'utf8'));
+  const master = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+  const chars = Array.isArray(master) ? master : master.characters ?? Object.values(master);
+  const characters = resolvePartyCharacters(base.party, chars);
+  const target = base.stints[0].actions[0];
+  const run = (command: string | undefined) => buildGcsimConfig({
+    characters, stints: base.stints, loopStartIndex: base.loopStartIndex ?? 0, switchDelay: base.switchDelay ?? 0.5, defHalt: true,
+    weapons: JSON.parse(fs.readFileSync('src/data/weapons_master_data.json', 'utf8')), artifacts: JSON.parse(fs.readFileSync('src/data/artifacts_master_data.json', 'utf8')),
+    commandByActionId: command === undefined ? {} : { [target.id]: command },
+  }).config as string;
+  const normal = run(undefined);
+  assert.equal(run('skill;\ninjected_statement_marker;\nfor let i = 0; i < 99999999; i = i + 1 { print("x"); }').includes('injected_statement_marker'), false);
+  assert.equal(run('skill;\ninjected_statement_marker;\nfor let i = 0; i < 99999999; i = i + 1 { print("x"); }'), normal, '不正な命令は、無視して、既定の命令になる');
+  assert.equal(run('skill[recast=1]').includes('skill[recast=1];'), true, '決まった形（skill[recast=1]）は、そのまま入る');
+});
+check('反応の行の復元: 行・区間の数・位置の大きさに上限（極端に大量・遠い位置の行は、読まない）', () => {
+  const V = 'v-test';
+  const anchor = (offset: number) => ({ actionId: 'a1', offset });
+  const row = (segments: unknown[]) => ({ kind: 'stellarconduct', lap: 1, segments });
+  const ok = savedReactions.unpackReactions({ gcsimVersion: V, rows: [row([{ start: anchor(0), end: anchor(3) }])] }, V);
+  assert.equal(ok?.length, 1);
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: V, rows: Array.from({ length: limits.MAX_REACTION_ROWS + 1 }, () => row([])) }, V), null);
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: V, rows: [row(Array.from({ length: limits.MAX_REACTION_SEGMENTS + 1 }, () => ({ start: anchor(0), end: anchor(1) })))] }, V), null);
+  assert.equal(savedReactions.unpackReactions({ gcsimVersion: V, rows: [row([{ start: anchor(1e9), end: anchor(1e9 + 1) }])] }, V), null);
+});
+
 console.log(`\n✓ 編成の検査: ${passed} 項目すべて合格`);
 await server.close();
 process.exit(0);

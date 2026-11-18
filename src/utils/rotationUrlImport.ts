@@ -34,9 +34,11 @@ export type ImportUrlCheck =
   | { ok: false; reason: 'invalid' | 'insecure' | 'driveNoKey' };
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
+/** 開発中（npm run dev）か。localhost の http を許すのは、開発中だけ（公開サイトでは、https のみ） */
+const IS_DEV = import.meta.env?.DEV === true;
 
 /**
- * リンクを検査する。https のみ許可（開発中の localhost は http も許可）。
+ * リンクを検査する。https のみ許可（開発中だけ、localhost は http も許可）。
  * GitHub の画面のリンク（github.com/…/blob/…）は、中身を返す raw.githubusercontent.com に直す。
  */
 export function checkImportUrl(raw: string): ImportUrlCheck {
@@ -46,7 +48,7 @@ export function checkImportUrl(raw: string): ImportUrlCheck {
   } catch {
     return { ok: false, reason: 'invalid' };
   }
-  const local = LOCAL_HOSTS.has(u.hostname);
+  const local = IS_DEV && LOCAL_HOSTS.has(u.hostname);
   if (u.protocol !== 'https:' && !(u.protocol === 'http:' && local)) {
     return { ok: false, reason: u.protocol === 'http:' ? 'insecure' : 'invalid' };
   }

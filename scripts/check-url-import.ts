@@ -4,6 +4,7 @@
  *   npm run check:url-import
  *
  * 偽の fetch で、本文を少しずつ読んで上限（5 MB）で打ち切ること・通常の取得・HTTP エラーを確かめる（ネットワークは使わない）。
+ * あわせて、リンクの検査（https のみ・認証情報つきや javascript: などは拒否）を確かめる。
  */
 import { createServer } from 'vite';
 
@@ -63,6 +64,19 @@ try {
   globalThis.fetch = (async () => { throw new TypeError('Failed to fetch'); }) as typeof fetch;
   const net = await fetchImportText('https://example.com/n.json');
   check(net.ok === false && net.reason === 'network', '通信失敗: network');
+
+  // 7. リンクの検査（2026-11-18 のセキュリティ確認）。この確認は開発モードで動くので、localhost の http は通る（公開サイトでは、通らない。ビルドの結果で確認済み）
+  const { checkImportUrl } = await server.ssrLoadModule('/src/utils/rotationUrlImport.ts');
+  check(checkImportUrl('https://example.com/a.json').ok === true, 'リンクの検査: https は通る');
+  const plainHttp = checkImportUrl('http://example.com/a.json');
+  check(plainHttp.ok === false && plainHttp.reason === 'insecure', 'リンクの検査: 外部の http は、insecure');
+  check(checkImportUrl('http://localhost:3000/a.json').ok === true && checkImportUrl('http://127.0.0.1:8765/a.json').ok === true, 'リンクの検査: 開発中は、localhost の http が通る');
+  check(checkImportUrl('http://127.0.0.2:8765/a.json').ok === false && checkImportUrl('http://192.168.0.5/a.json').ok === false, 'リンクの検査: localhost 以外のローカルアドレスの http は、通らない');
+  for (const bad of ['javascript:alert(1)', 'data:text/html,<script>alert(1)</script>', 'file:///C:/a.json', 'ftp://example.com/a.json', 'https://user:pass@example.com/a.json', 'not a url']) {
+    check(checkImportUrl(bad).ok === false, `リンクの検査: 受け付けない（${bad.slice(0, 40)}）`);
+  }
+  const gh = checkImportUrl('https://github.com/o/r/blob/main/a.json');
+  check(gh.ok === true && gh.fetchUrl === 'https://raw.githubusercontent.com/o/r/main/a.json', 'リンクの検査: GitHub の画面のリンクは、raw に直す');
 } finally {
   globalThis.fetch = realFetch;
   await server.close();

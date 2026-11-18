@@ -266,7 +266,8 @@ check('DB 取り込み: 形の検査・壊れた要素の除外・ID の重複',
 const presetsForFailure = await server.ssrLoadModule('/src/utils/presets.ts');
 check('保存の失敗: 容量がぎりぎりのときも、書いた順の逆に戻して、元の状態に戻せる（戻す順が悪いと、戻す書き込みも容量超過になる）', () => {
   store.clear();
-  const bigSlot = slot('slot_x', 'あ'.repeat(600), '2026-10-01T00:00:00.000Z');
+  // 大きな保存編成（名前は 200 文字、説明は 10000 文字までの上限があるので、説明で大きくする。合計は、以前の 名前 600 + 説明 600 文字と同じくらい）
+  const bigSlot = { ...slot('slot_x', 'あ'.repeat(150), '2026-10-01T00:00:00.000Z'), description: 'あ'.repeat(1050) };
   store.set('genshin_rotation_saved_slots_v2', JSON.stringify([bigSlot]));
   store.set('gcsimDefHalt', 'true');
   const total = () => [...store.entries()].reduce((n, [k, v]) => n + k.length + v.length, 0);

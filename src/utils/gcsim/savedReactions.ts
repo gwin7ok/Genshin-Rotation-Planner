@@ -7,6 +7,7 @@
  */
 import type { ReactionKind, ReactionRowRef, SavedReactions } from '../../types/genshin.ts';
 import { GCSIM_VERSION } from './gcsimConfig.ts';
+import { MAX_REACTION_ROWS, MAX_REACTION_SEGMENTS, MAX_TIME_SECONDS } from '../rotationLimits.ts';
 
 const KINDS: ReadonlySet<string> = new Set<ReactionKind>([
   'lunarcharged', 'lunarcrystallize', 'verdantdew', 'moonridgedew', 'stellarconduct', 'stellarswirl', 'stellarswirl_airborne',
@@ -18,8 +19,11 @@ export function packReactions(rows: ReactionRowRef[] | null | undefined): SavedR
   return { gcsimVersion: GCSIM_VERSION, rows };
 }
 
-const isAnchor = (a: unknown): boolean =>
-  !!a && typeof a === 'object' && typeof (a as { actionId?: unknown }).actionId === 'string' && Number.isFinite((a as { offset?: unknown }).offset);
+const isAnchor = (a: unknown): boolean => {
+  if (!a || typeof a !== 'object') return false;
+  const { actionId, offset } = a as { actionId?: unknown; offset?: unknown };
+  return typeof actionId === 'string' && typeof offset === 'number' && Number.isFinite(offset) && Math.abs(offset) <= MAX_TIME_SECONDS;
+};
 
 /**
  * 保存された反応の行を読む。次のときは null（出さない）:
@@ -30,14 +34,15 @@ export function unpackReactions(saved: unknown, currentGcsimVersion: string = GC
   if (!saved || typeof saved !== 'object') return null;
   const s = saved as { gcsimVersion?: unknown; rows?: unknown };
   if (s.gcsimVersion !== currentGcsimVersion) return null;
-  if (!Array.isArray(s.rows) || s.rows.length === 0) return null;
+  // 行・区間の数に上限を置く（外から読み込んだ編成で、極端に大量の行を描画して、画面が止まるのを防ぐ）
+  if (!Array.isArray(s.rows) || s.rows.length === 0 || s.rows.length > MAX_REACTION_ROWS) return null;
   const rows: ReactionRowRef[] = [];
   for (const r of s.rows as unknown[]) {
     if (!r || typeof r !== 'object') return null;
     const row = r as { kind?: unknown; lap?: unknown; max?: unknown; segments?: unknown };
     if (typeof row.kind !== 'string' || !KINDS.has(row.kind)) return null;
     if (row.lap !== 1 && row.lap !== 2) return null;
-    if (!Array.isArray(row.segments)) return null;
+    if (!Array.isArray(row.segments) || row.segments.length > MAX_REACTION_SEGMENTS) return null;
     for (const sg of row.segments as unknown[]) {
       const g = sg as { start?: unknown; end?: unknown; count?: unknown };
       if (!isAnchor(g?.start) || !isAnchor(g?.end)) return null;

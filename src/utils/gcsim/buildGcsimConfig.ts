@@ -10,6 +10,7 @@ import { REVELATION_GCSIM_KEYS, REVELATION_GCSIM_PARAM } from '../../masterdata/
 import type { CharacterConfig, Stint } from '../../types/genshin.ts';
 import type { ArtifactSetDatabaseItem, WeaponDatabaseItem } from '../../types/database.ts';
 import { actionDelayOf } from '../actionDelay.ts';
+import { isSafeGcsimCommand } from '../rotationLimits.ts';
 import { applyHoldSeconds, mapAction } from './actionMapping.ts';
 import { CHARGE_REQUIRES_ATTACK, PREVIOUS_ACTION_LABELS } from './chargeRules.ts';
 import { isTravelerKey, travelerParams } from '../hoyolab/importCharacters';
@@ -351,7 +352,10 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
           continue;
         }
         if (act.type === 'plunge_low' || act.type === 'plunge_high') plungeChars.add(charName(char));
-        const command = input.commandByActionId?.[act.id] ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
+        // 渡された命令（計算結果の gcsimCommand。読み込んだ編成・DB 管理の取り込みを通ってくることがある）は、決まった形（skill[recast=1] など）だけ設定文に入れる。
+        // 改行・`;`・ループなどを含むものは、使わない（別の命令の差し込みを防ぐ）
+        const givenCommand = input.commandByActionId?.[act.id];
+        const command = (isSafeGcsimCommand(givenCommand) ? givenCommand : undefined) ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
         const modeHold = Math.max(0, input.modeHoldByActionId?.[act.id] ?? 0);

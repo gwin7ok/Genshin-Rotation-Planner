@@ -29,6 +29,7 @@ import {
 import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
 import { ctActionTarget, ctPassiveTarget } from '../utils/ctMarks';
+import { MAX_TIMELINE_TICKS } from '../utils/rotationLimits';
 import { formatCtRemaining } from '../utils/ctRemaining';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig, getAvailableBuffsForCharacter, isGlobalRowBuff, buffTimingLabel, type TriggerableBuffDefinition } from '../utils/buffUtils';
@@ -557,10 +558,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const timelineTicks = useMemo(() => {
     const list: { absTime: number; relTime: number; label: string; isZero: boolean; isNegative: boolean; isCycle2?: boolean }[] = [];
     const c1End = totalDuration;
+    // 目盛りは、1 秒ごと。極端に長い編成（読み込んだ外部のデータなど）では、部品の数が増えて画面が固まるので、MAX_TIMELINE_TICKS 個以内に間引く
+    const step = Math.max(1, Math.ceil(c1End / MAX_TIMELINE_TICKS));
 
     if (!loopStartTime || loopStartTime <= 0) {
       const maxSeconds = Math.floor(c1End);
-      for (let s = 0; s <= maxSeconds; s++) {
+      for (let s = 0; s <= maxSeconds; s += step) {
         list.push({
           absTime: s,
           relTime: s,
@@ -586,7 +589,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
         });
       }
 
-      for (let r = minRel; r <= maxRel; r++) {
+      // 間引くときも、基準（0s）は、必ず通す（step の倍数から始める）
+      for (let r = Math.ceil(minRel / step) * step; r <= maxRel; r += step) {
         const absTime = Number((loopStartTime + r).toFixed(3));
         if (absTime >= -0.001 && absTime <= c1End) {
           list.push({

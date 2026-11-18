@@ -39,7 +39,7 @@
   "uid": {
     "label": "Genshin UID",
     "placeholder": "9-10 digits",
-    "loginHint": "Before importing, log in to HoYoLAB in this Chrome. You cannot import without logging in.",
+    "loginHint": "Before importing, log in to HoYoLAB in this browser. You cannot import without logging in.",
     "loginLink": "Open HoYoLAB",
     "hint": "For the UID of the account you are logged in with, all characters are imported even if the HoYoLAB \"Character Details\" privacy setting is off. For another account's UID, HoYoLAB does not provide the details, so only the characters that account has placed in its in-game \"Character Showcase\" are imported from Enka.Network (an unofficial service). HoYoLAB can lag behind equipment changes made in game (even 30 minutes after logging out), so the characters (up to 12) placed in the in-game \"Character Showcase\" are overwritten with the latest values from Enka.Network (log out of the game before importing). Characters not in the showcase keep their HoYoLAB values. Importing again replaces the previous import.",
     "useEnka": "Overwrite the in-game Character Showcase characters with the latest values from Enka.Network",
@@ -93,6 +93,33 @@
     "s4Title": "Reload the extension",
     "s4Body": "On the card of \"Genshin Rotation Planner - HoYoLAB Importer\", press the \"Reload\" (circular arrow) button. The version is updated.",
     "s5Body": "Press the button below to reload, then open \"Import owned characters\" again. If the version shown in \"Extension detected\" is the new one, the update is complete."
+  },
+  "installFx": {
+    "intro": "Install the extension in Firefox in 3 steps (only once; about 1-2 minutes; Firefox 140 or later).",
+    "oldFirefox": "Your Firefox is version {{major}}. This extension needs Firefox {{min}} or later, so it cannot be installed. Please update Firefox first.",
+    "s1Title": "Download the file",
+    "s1Body": "Download the extension file (.xpi) with the button below.",
+    "s1Button": "Download the extension (xpi)",
+    "s1Note": "If Firefox asks to install it right after the download, press \"Add\" and you are done (step 2 is not needed).",
+    "s2Title": "Install the file from the Firefox add-ons page",
+    "s2Body": "Press the button below. An empty new tab opens and the address of the add-ons page is copied. Click the address bar of the new tab, paste (Ctrl+V) and press Enter. On the add-ons page, click the gear (⚙) → \"Install Add-on From File\", choose the downloaded .xpi, and press \"Add\" in the confirmation.",
+    "s2Note": "You can also drag the downloaded file onto the Firefox window to install it.",
+    "trouble1": "Still \"Extension not found\": check that you reloaded in step 3 and that the extension is enabled (switch on) in the add-ons page. Also check, in the extension's details under \"Permissions\", that access to the site is allowed.",
+    "trouble2": "The extension may not run in a private window. In the add-ons page, open this extension's details and allow \"Run in Private Windows\".",
+    "trouble3": "\"Could not be added\" or similar: Firefox older than 140 cannot install it. Please update Firefox. If it still fails, try again with a freshly downloaded file (button above).",
+    "update": "To update: Firefox updates the extension automatically (it checks about once a day). To update right away, click the gear (⚙) on the add-ons page → \"Check for Updates\", then reload this page."
+  },
+  "updateFx": {
+    "intro": "Firefox updates the extension automatically (it checks about once a day). To update right away, follow these 3 steps.",
+    "s1Title": "Open the Firefox add-ons page",
+    "s1Body": "Press the button below to open an empty new tab and copy the address of the add-ons page. Paste it into the address bar of the opened tab (Ctrl+V) and press Enter.",
+    "s2Title": "Check for add-on updates",
+    "s2Body": "On the add-ons page, click the gear (⚙) → \"Check for Updates\". After a moment, the version of \"Genshin Rotation Planner - HoYoLAB Importer\" is updated.",
+    "s2Note": "If it is not updated automatically, download the new file (.xpi) with the button below and install it again with the gear (⚙) → \"Install Add-on From File\" (it is updated in place)."
+  },
+  "unsupported": {
+    "title": "This browser is not supported",
+    "body": "Importing owned characters needs desktop Chrome, Edge or Firefox. The extension cannot be installed on smartphones, tablets or Safari. Please open this page in a desktop browser."
   },
   "warn": {
     "noWeapon": "Weapon \"{{name}}\" is not in the master data",

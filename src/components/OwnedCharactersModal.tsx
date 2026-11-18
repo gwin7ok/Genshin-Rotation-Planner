@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { X, UserCheck, RefreshCw, AlertTriangle, CheckCircle2, ExternalLink, Trash2, Download, Copy, Check } from 'lucide-react';
-import { t, dateLocale, currentLanguage } from '../i18n';
+import { t, dateLocale, currentLanguage, type TranslationKey } from '../i18n';
 import { charName, loc, unlistedCharName } from '../i18n/loc';
 import type { AppDatabase } from '../types/database';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -13,73 +13,119 @@ import { isHoyolabUid } from '../utils/hoyolab/uid';
 import { convertResponse, matchMasterCharacterId, type OwnedCharacter } from '../utils/hoyolab/importCharacters';
 import { resolveAscension } from '../utils/hoyolab/resolveAscension';
 import { BUNDLED_EXTENSION_VERSION, isOlderVersion } from '../utils/hoyolab/extensionVersion';
+import { detectBrowser, FIREFOX_MIN_MAJOR } from '../utils/hoyolab/browser';
 import { clearOwned, loadHoyolabUid, loadOwned, loadUseEnka, saveHoyolabUid, saveOwned, saveUseEnka, type OwnedStore } from '../utils/hoyolab/ownedStore';
 
 /** 拡張機能の zip を置く、GitHub のリリースページ */
 const RELEASES_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner/releases';
 /** 拡張機能の zip（アプリに同梱。ビルドのとき npm run ext:pack で作る）。サイトの公開先のパスに合わせる */
 const EXTENSION_ZIP_URL = `${import.meta.env.BASE_URL}downloads/grp-hoyolab-importer.zip`;
+/** Firefox の拡張機能（署名済みの .xpi）。公開サイトの downloads に置く（署名のあと、リリースの手順で同梱する。docs/リリース手順.md） */
+const EXTENSION_XPI_URL = `${import.meta.env.BASE_URL}downloads/grp-hoyolab-importer.xpi`;
 const EXTENSIONS_PAGE = 'chrome://extensions';
+const FIREFOX_ADDONS_PAGE = 'about:addons';
 
-/** 拡張機能の導入手順（5 つの手順カード＋うまくいかないとき）。拡張機能を検知できないときだけ出す */
 /** Enka.Network からの取り込みに要る、拡張機能の最低の版 */
 const ENKA_MIN_EXTENSION_VERSION = '0.2.0';
 
+interface GuideStep { title: string; body: string; note?: string; action?: React.ReactNode }
+
+/**
+ * 拡張機能の導入・更新の手順（手順カード＋うまくいかないとき）。拡張機能を検知できないとき（導入）・版が古いとき（更新）だけ出す。
+ * 使っているブラウザ（navigator.userAgent）で、Chrome 系（zip を展開して読み込む）・Firefox（署名済みの .xpi を入れる）・対象外に出し分ける。
+ */
 const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'install' }) => {
   const isUpdate = mode === 'update';
+  const browser = useMemo(() => detectBrowser(), []);
+  const isFirefox = browser.kind === 'firefox';
+  const address = isFirefox ? FIREFOX_ADDONS_PAGE : EXTENSIONS_PAGE;
   const [copied, setCopied] = useState(false);
-  // Chrome は、Web ページから chrome:// のページを開くことを禁止している。代わりに、アドレスをコピーしたうえで、空の新しいタブを開く
+  // ブラウザは、Web ページから chrome:// ・about: のページを開くことを禁止している。代わりに、アドレスをコピーしたうえで、空の新しいタブを開く
   // （このアプリのタブを、拡張機能の画面に置き換えてしまわないように）。利用者は、開いたタブのアドレス欄に貼り付ける
   const copyAddress = async () => {
     window.open('about:blank', '_blank', 'noopener');
     try {
-      await navigator.clipboard.writeText(EXTENSIONS_PAGE);
+      await navigator.clipboard.writeText(address);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch { /* コピーできないときは、画面の文字を手で写す */ }
   };
+
+  if (browser.kind === 'unsupported') {
+    return (
+      <div className="space-y-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3" data-testid="ext-unsupported">
+        <p className="font-semibold text-amber-200 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 shrink-0" />{t('hoyolab:unsupported.title')}</p>
+        <p className="text-[11px] text-amber-100/90 leading-relaxed">{t('hoyolab:unsupported.body')}</p>
+      </div>
+    );
+  }
+
   const btn = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border font-semibold transition-colors';
-  const steps: { n: number; title: string; body: string; note?: string; action?: React.ReactNode }[] = [
-    {
-      n: 1, title: t('hoyolab:install.s1Title'), body: t('hoyolab:install.s1Body'),
-      action: (
-        <a href={EXTENSION_ZIP_URL} download="grp-hoyolab-importer.zip" data-testid="ext-download" className={`${btn} border-sky-500/60 bg-sky-500/15 text-sky-200 hover:bg-sky-500/25`}>
-          <Download className="w-3.5 h-3.5" />{t('hoyolab:install.s1Button')}
-        </a>
-      ),
-    },
-    isUpdate
-      ? { n: 2, title: t('hoyolab:update.s2Title'), body: t('hoyolab:update.s2Body'), note: t('hoyolab:update.s2Note') }
-      : { n: 2, title: t('hoyolab:install.s2Title'), body: t('hoyolab:install.s2Body'), note: t('hoyolab:install.s2Note') },
-    {
-      n: 3, title: t('hoyolab:install.s3Title'), body: isUpdate ? t('hoyolab:update.s3Body') : t('hoyolab:install.s3Body'),
-      action: (
-        <button type="button" onClick={() => void copyAddress()} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? t('hoyolab:install.s3Copied') : t('hoyolab:install.s3Button', { address: EXTENSIONS_PAGE })}
-        </button>
-      ),
-    },
-    isUpdate
-      ? { n: 4, title: t('hoyolab:update.s4Title'), body: t('hoyolab:update.s4Body') }
-      : { n: 4, title: t('hoyolab:install.s4Title'), body: t('hoyolab:install.s4Body') },
-    {
-      n: 5, title: t('hoyolab:install.s5Title'), body: isUpdate ? t('hoyolab:update.s5Body') : t('hoyolab:install.s5Body'),
-      action: (
-        <button type="button" onClick={() => window.location.reload()} data-testid="ext-reload" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
-          <RefreshCw className="w-3.5 h-3.5" />{t('hoyolab:install.s5Button')}
-        </button>
-      ),
-    },
-  ];
+  const downloadButton = (href: string, fileName: string, label: string) => (
+    <a href={href} download={fileName} data-testid="ext-download" className={`${btn} border-sky-500/60 bg-sky-500/15 text-sky-200 hover:bg-sky-500/25`}>
+      <Download className="w-3.5 h-3.5" />{label}
+    </a>
+  );
+  const copyButton = (
+    <button type="button" onClick={() => void copyAddress()} data-testid="ext-copy-address" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
+      {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+      {copied ? t('hoyolab:install.s3Copied') : t('hoyolab:install.s3Button', { address })}
+    </button>
+  );
+  const reloadButton = (
+    <button type="button" onClick={() => window.location.reload()} data-testid="ext-reload" className={`${btn} border-slate-600 text-slate-200 hover:bg-slate-800`}>
+      <RefreshCw className="w-3.5 h-3.5" />{t('hoyolab:install.s5Button')}
+    </button>
+  );
+
+  const xpiButton = downloadButton(EXTENSION_XPI_URL, 'grp-hoyolab-importer.xpi', t('hoyolab:installFx.s1Button'));
+  const steps: GuideStep[] = isFirefox
+    ? isUpdate
+      ? [
+        { title: t('hoyolab:updateFx.s1Title'), body: t('hoyolab:updateFx.s1Body'), action: copyButton },
+        { title: t('hoyolab:updateFx.s2Title'), body: t('hoyolab:updateFx.s2Body'), note: t('hoyolab:updateFx.s2Note'), action: xpiButton },
+        { title: t('hoyolab:install.s5Title'), body: t('hoyolab:update.s5Body'), action: reloadButton },
+      ]
+      : [
+        { title: t('hoyolab:installFx.s1Title'), body: t('hoyolab:installFx.s1Body'), note: t('hoyolab:installFx.s1Note'), action: xpiButton },
+        { title: t('hoyolab:installFx.s2Title'), body: t('hoyolab:installFx.s2Body'), note: t('hoyolab:installFx.s2Note'), action: copyButton },
+        { title: t('hoyolab:install.s5Title'), body: t('hoyolab:install.s5Body'), action: reloadButton },
+      ]
+    : [
+      {
+        title: t('hoyolab:install.s1Title'), body: t('hoyolab:install.s1Body'),
+        action: downloadButton(EXTENSION_ZIP_URL, 'grp-hoyolab-importer.zip', t('hoyolab:install.s1Button')),
+      },
+      isUpdate
+        ? { title: t('hoyolab:update.s2Title'), body: t('hoyolab:update.s2Body'), note: t('hoyolab:update.s2Note') }
+        : { title: t('hoyolab:install.s2Title'), body: t('hoyolab:install.s2Body'), note: t('hoyolab:install.s2Note') },
+      { title: t('hoyolab:install.s3Title'), body: isUpdate ? t('hoyolab:update.s3Body') : t('hoyolab:install.s3Body'), action: copyButton },
+      isUpdate
+        ? { title: t('hoyolab:update.s4Title'), body: t('hoyolab:update.s4Body') }
+        : { title: t('hoyolab:install.s4Title'), body: t('hoyolab:install.s4Body') },
+      { title: t('hoyolab:install.s5Title'), body: isUpdate ? t('hoyolab:update.s5Body') : t('hoyolab:install.s5Body'), action: reloadButton },
+    ];
+  const intro = isFirefox
+    ? (isUpdate ? t('hoyolab:updateFx.intro') : t('hoyolab:installFx.intro'))
+    : (isUpdate ? t('hoyolab:update.intro') : t('hoyolab:install.intro'));
+  const troubles: TranslationKey[] = isFirefox
+    ? ['hoyolab:installFx.trouble1', 'hoyolab:installFx.trouble2', 'hoyolab:installFx.trouble3']
+    : ['hoyolab:install.trouble1', 'hoyolab:install.trouble2', 'hoyolab:install.trouble3', 'hoyolab:install.trouble4'];
+  const tooOld = isFirefox && !isUpdate && browser.firefoxMajor !== null && browser.firefoxMajor < FIREFOX_MIN_MAJOR;
+
   return (
-    <div className="space-y-2" data-testid="ext-install-guide">
+    <div className="space-y-2" data-testid="ext-install-guide" data-browser={browser.kind}>
       {!isUpdate && <p className="font-semibold text-slate-200">{t('hoyolab:ext.installTitle')}</p>}
-      <p className="text-[11px] text-slate-400">{isUpdate ? t('hoyolab:update.intro') : t('hoyolab:install.intro')}</p>
+      <p className="text-[11px] text-slate-400">{intro}</p>
+      {tooOld && (
+        <p className="text-[11px] text-amber-300/90 leading-relaxed flex items-start gap-1.5" data-testid="ext-old-firefox">
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />{t('hoyolab:installFx.oldFirefox', { major: browser.firefoxMajor, min: FIREFOX_MIN_MAJOR })}
+        </p>
+      )}
       <ol className="space-y-1.5">
-        {steps.map(st => (
-          <li key={st.n} className="flex gap-2.5 rounded-lg border border-slate-700/70 bg-slate-900/60 p-2.5">
-            <span className="shrink-0 w-5 h-5 rounded-full bg-sky-500/20 border border-sky-500/50 text-sky-300 text-[11px] font-bold flex items-center justify-center">{st.n}</span>
+        {steps.map((st, i) => (
+          <li key={i} className="flex gap-2.5 rounded-lg border border-slate-700/70 bg-slate-900/60 p-2.5">
+            <span className="shrink-0 w-5 h-5 rounded-full bg-sky-500/20 border border-sky-500/50 text-sky-300 text-[11px] font-bold flex items-center justify-center">{i + 1}</span>
             <div className="min-w-0 flex-1 space-y-1">
               <p className="font-semibold text-slate-100">{st.title}</p>
               <p className="text-slate-300 leading-relaxed">{st.body}</p>
@@ -92,13 +138,10 @@ const InstallGuide: React.FC<{ mode?: 'install' | 'update' }> = ({ mode = 'insta
       {!isUpdate && <details className="rounded-lg border border-slate-700/70 bg-slate-900/40 p-2.5 text-[11px] text-slate-300">
         <summary className="cursor-pointer font-semibold text-slate-200">{t('hoyolab:install.troubleTitle')}</summary>
         <ul className="list-disc pl-5 mt-1.5 space-y-1 text-slate-400 leading-relaxed">
-          <li>{t('hoyolab:install.trouble1')}</li>
-          <li>{t('hoyolab:install.trouble2')}</li>
-          <li>{t('hoyolab:install.trouble3')}</li>
-          <li>{t('hoyolab:install.trouble4')}</li>
+          {troubles.map(key => <li key={key}>{t(key)}</li>)}
         </ul>
       </details>}
-      {!isUpdate && <p className="text-[11px] text-slate-500">{t('hoyolab:install.update')}</p>}
+      {!isUpdate && <p className="text-[11px] text-slate-500">{isFirefox ? t('hoyolab:installFx.update') : t('hoyolab:install.update')}</p>}
       {!isUpdate && <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] text-sky-300 hover:text-sky-200 underline">
         <ExternalLink className="w-3 h-3" />{t('hoyolab:ext.releaseLink')}
       </a>}

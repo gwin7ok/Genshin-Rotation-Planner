@@ -2326,7 +2326,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 className="absolute top-0 bottom-0 w-0 border-l border-sky-400/60 pointer-events-none z-10"
               >
                 <div
-                  className="absolute left-2 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded whitespace-nowrap"
+                  className="absolute left-7 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded whitespace-nowrap"
                   style={{ top: `${hoveredY + 14}px` }}
                 >
                   {fmtTime(hoveredTime, 1)}

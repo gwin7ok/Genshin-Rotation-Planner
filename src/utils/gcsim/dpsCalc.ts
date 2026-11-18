@@ -41,6 +41,8 @@ export interface DpsRun {
   byChar: number[];
   /** キャラ別の、爆発のエネルギー待ちの回数（char_index の順。爆発がエネルギー不足で撃てず、待った回数） */
   energyWaits: number[];
+  /** キャラ別の、爆発のエネルギー待ちに使ったフレーム数の合計（char_index の順。待ちの間の、爆発の CT が明けているフレームだけ。CT 待ちは含めない） */
+  energyWaitFrames: number[];
   /** 始まったローテーションの周数（設定文の `print("loop ", i)` の数）。設定の周数より少なければ、時間内に終わらず打ち切られている */
   loopsStarted: number;
 }
@@ -50,12 +52,20 @@ export interface DpsRun {
 export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): DpsRun {
   const byChar = new Array<number>(memberCount).fill(0);
   const energyWaits = new Array<number>(memberCount).fill(0);
+  const energyWaitFrames = new Array<number>(memberCount).fill(0);
   // 爆発のエネルギー待ち: gcsim は、撃てない爆発を毎フレーム「could not execute burst; action not ready」と記録する（CT 待ちも同じ）。
-  // 連続したフレームを 1 回の待ちとし、その間に、爆発の CT が明けている（CT 中でない）フレームがあれば、エネルギー待ちと数える
+  // 連続したフレームを 1 回の待ちとし、その間に、爆発の CT が明けている（CT 中でない）フレームがあれば、エネルギー待ちと数える。
+  // 待ち時間は、その待ちの中の、CT が明けているフレームの数（同じフレームの重複ログは 1 フレーム）。CT 待ちの部分は含めない
   const burstCd = new Array<boolean>(memberCount).fill(false);
   const waitLast = new Array<number>(memberCount).fill(-2);
   const waitIsEnergy = new Array<boolean>(memberCount).fill(false);
-  const closeWait = (i: number) => { if (waitIsEnergy[i]) energyWaits[i]++; waitIsEnergy[i] = false; };
+  const waitFrames = new Array<number>(memberCount).fill(0);
+  const waitCounted = new Array<number>(memberCount).fill(-1);
+  const closeWait = (i: number) => {
+    if (waitIsEnergy[i]) { energyWaits[i]++; energyWaitFrames[i] += waitFrames[i]; }
+    waitIsEnergy[i] = false;
+    waitFrames[i] = 0;
+  };
   let total = 0;
   let endFrame = 0;
   let loopsStarted = 0;
@@ -77,11 +87,14 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
       const i = l.char_index;
       if (l.frame !== waitLast[i] && l.frame !== waitLast[i] + 1) closeWait(i);
       waitLast[i] = l.frame;
-      if (!burstCd[i]) waitIsEnergy[i] = true;
+      if (!burstCd[i]) {
+        waitIsEnergy[i] = true;
+        if (l.frame !== waitCounted[i]) { waitFrames[i]++; waitCounted[i] = l.frame; }
+      }
     }
   }
   for (let i = 0; i < memberCount; i++) closeWait(i);
-  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits, loopsStarted };
+  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits, energyWaitFrames, loopsStarted };
 }
 
 export interface DpsStats {
@@ -108,12 +121,23 @@ export interface DpsResult {
   /** 経過時間（秒）の平均 */
   seconds: number;
   /** キャラ別（char_index の順）: ダメージの平均・DPS の平均・全体に占める割合（平均ダメージの比） */
-  byChar: { damage: number; dps: number; share: number; /** 1 回の実行あたりの、爆発のエネルギー待ちの回数の平均 */ energyWaits: number }[];
+  byChar: {
+    damage: number; dps: number; share: number;
+    /** 1 回の実行あたりの、爆発のエネルギー待ちの回数の平均 */
+    energyWaits: number;
+    /** 爆発のエネルギー待ち 1 回あたりの平均の待ち時間（秒）。全実行の待ち時間の合計 ÷ 全実行の待ちの回数。待ちが 1 回も無ければ null */
+    energyWaitSeconds: number | null;
+  }[];
   /** 全員の、1 回の実行あたりの爆発のエネルギー待ちの回数の平均 */
   energyWaits: number;
+  /** 全員の、爆発のエネルギー待ち 1 回あたりの平均の待ち時間（秒）。待ちが 1 回も無ければ null */
+  energyWaitSeconds: number | null;
   /** 設定の周数より少ない周数で打ち切られた実行（count = その実行の数・worst = 最も短かった実行の周数）。無ければ undefined */
   truncated?: { count: number; worst: number };
 }
+
+/** 待ち 1 回あたりの平均の待ち時間（秒）。全実行の合計フレーム ÷ 全実行の合計回数（実行ごとの平均の平均にはしない）。待ちが 1 回も無ければ null */
+const waitSecondsOf = (frames: number, count: number): number | null => (count > 0 ? frames / GCSIM_FPS / count : null);
 
 /** 実行ごとの集計から、結果を作る */
 export function aggregateDps(runs: DpsRun[], memberCount: number, loops?: number): DpsResult {
@@ -123,14 +147,19 @@ export function aggregateDps(runs: DpsRun[], memberCount: number, loops?: number
   const total = statsOf(valid.map(r => r.total));
   const seconds = valid.length ? valid.reduce((a, r) => a + r.seconds, 0) / valid.length : 0;
   const meanTotal = total.mean;
+  // エネルギー待ち: キャラごとの、全実行の合計（回数・フレーム数）。平均の待ち時間は、この合計から出す
+  const waitCounts = Array.from({ length: memberCount }, (_, i) => valid.reduce((a, r) => a + (r.energyWaits?.[i] ?? 0), 0));
+  const waitFrames = Array.from({ length: memberCount }, (_, i) => valid.reduce((a, r) => a + (r.energyWaitFrames?.[i] ?? 0), 0));
+  const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
   const byChar = Array.from({ length: memberCount }, (_, i) => {
     const damage = valid.length ? valid.reduce((a, r) => a + (r.byChar[i] ?? 0), 0) / valid.length : 0;
     const cdps = valid.length ? valid.reduce((a, r) => a + (r.byChar[i] ?? 0) / r.seconds, 0) / valid.length : 0;
-    const energyWaits = valid.length ? valid.reduce((a, r) => a + (r.energyWaits?.[i] ?? 0), 0) / valid.length : 0;
-    return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0, energyWaits };
+    const energyWaits = valid.length ? waitCounts[i] / valid.length : 0;
+    return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0, energyWaits, energyWaitSeconds: waitSecondsOf(waitFrames[i], waitCounts[i]) };
   });
   return {
-    runs: valid.length, dps, total, seconds, byChar, energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0),
+    runs: valid.length, dps, total, seconds, byChar,
+    energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0), energyWaitSeconds: waitSecondsOf(sum(waitFrames), sum(waitCounts)),
     ...(cut.length > 0 ? { truncated: { count: cut.length, worst: Math.min(...cut.map(r => r.loopsStarted)) } } : {}),
   };
 }

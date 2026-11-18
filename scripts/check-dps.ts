@@ -53,12 +53,34 @@ const wl = [
 ];
 const wr = dps.summarizeDamage(wl, 2);
 check(wr.energyWaits[0] === 1 && wr.energyWaits[1] === 2, '爆発のエネルギー待ち: CT 待ちは数えず、CT 明けの待ちを 1 かたまり 1 回と数える');
+// 待ち時間: エネルギー待ちの間の、CT が明けているフレームだけを数える（CT 待ちの部分は含めない）
+check(wr.energyWaitFrames[0] === 2 && wr.energyWaitFrames[1] === 2, '爆発のエネルギー待ちの時間: 待ち（フレーム 20〜23）のうち、CT 明け（22・23）の 2 フレームだけ。もう 1 人は 1 フレームの待ちが 2 回で 2 フレーム');
+const ctOnly = dps.summarizeDamage([
+  { event: 'cooldown', frame: 10, msg: 'burst cooldown triggered', char_index: 0 },
+  { event: 'sim', frame: 20, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 21, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'cooldown', frame: 22, msg: 'burst cooldown ready', char_index: 0 },
+], 1);
+check(ctOnly.energyWaits[0] === 0 && ctOnly.energyWaitFrames[0] === 0, '爆発のエネルギー待ちの時間: CT 待ちだけの場合は、回数も時間も 0');
+const dup = dps.summarizeDamage([
+  { event: 'sim', frame: 100, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 100, msg: 'could not execute burst; action not ready', char_index: 0 },
+  { event: 'sim', frame: 101, msg: 'could not execute burst; action not ready', char_index: 0 },
+], 1);
+check(dup.energyWaits[0] === 1 && dup.energyWaitFrames[0] === 2, '爆発のエネルギー待ちの時間: 同じフレームの重複ログは 1 フレームと数える（2 フレーム）');
+// 平均は、全実行を合算して割る（実行ごとの平均の平均にしない）。待ちが 1 回も無ければ null
+const waitAgg = dps.aggregateDps([
+  { total: 10, seconds: 5, byChar: [10, 0], energyWaits: [1, 0], energyWaitFrames: [60, 0] },
+  { total: 10, seconds: 5, byChar: [10, 0], energyWaits: [3, 0], energyWaitFrames: [30, 0] },
+], 2);
+check(Math.abs(waitAgg.byChar[0].energyWaitSeconds - 0.375) < 1e-9 && waitAgg.byChar[1].energyWaitSeconds === null && Math.abs(waitAgg.energyWaitSeconds - 0.375) < 1e-9, '平均の待ち時間: 全実行の合計 90 フレーム ÷ 60 ÷ 4 回 = 0.375 秒（実行ごとの平均の平均 0.583 ではない）。待ちが無いキャラは null');
+check(dps.aggregateDps([{ total: 10, seconds: 5, byChar: [10, 0] }], 2).energyWaitSeconds === null, '平均の待ち時間: 待ちの記録が無い実行だけなら null');
 const agg = dps.aggregateDps([{ total: 300, seconds: 3, byChar: [200, 100] }, { total: 500, seconds: 5, byChar: [400, 100] }], 2);
 check(agg.dps.mean === 100 && agg.dps.sd === 0 && agg.runs === 2 && Math.abs(agg.byChar[0].share - 0.75) < 1e-9, '統計: DPS 平均・標準偏差・割合');
 // 周数の打ち切り（M-3）: 設定文の print("loop ", i) の数を数え、設定の周数より少ない実行を知らせる
 const lp = dps.summarizeDamage([{ event: 'user', frame: 1, msg: 'loop 1' }, { event: 'user', frame: 400, msg: 'loop 2' }, { event: 'user', frame: 500, msg: 'loop x' }, { event: 'damage', frame: 600, msg: 'a', char_index: 0, logs: { damage: 10 } }], 2);
 check(lp.loopsStarted === 2, '周数: print の「loop N」だけ数える（始まった周数 2）');
-const mk = (loopsStarted: number) => ({ total: 10, seconds: 5, byChar: [10, 0], energyWaits: [0, 0], loopsStarted });
+const mk = (loopsStarted: number) => ({ total: 10, seconds: 5, byChar: [10, 0], energyWaits: [0, 0], energyWaitFrames: [0, 0], loopsStarted });
 const cut = dps.aggregateDps([mk(3), mk(5), mk(4)], 2, 5);
 check(cut.truncated?.count === 2 && cut.truncated?.worst === 3, '周数: 設定（5 周）より少ない実行の数（2 回）と、最も短い周数（3 周）');
 check(dps.aggregateDps([mk(5), mk(5)], 2, 5).truncated === undefined && dps.aggregateDps([mk(1)], 2).truncated === undefined, '周数: すべて終わっている・周数を渡さないときは、知らせない');

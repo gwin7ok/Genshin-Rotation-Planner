@@ -168,6 +168,8 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const waitEnergyOn = running ? energy : (result?.energy ?? false);
   const waitLoops = running ? settingsNow().loops : (result?.loops ?? 1);
   const perLap = (n: number): string | null => (waitLoops >= 2 ? (n / (waitLoops - 1)).toFixed(2) : null);
+  // 爆発のエネルギー待ち 1 回あたりの平均の待ち時間（秒）。待ちが 1 回も無ければ null（周数には依らない）
+  const waitSeconds = (s: number | null): string | null => (s === null ? null : s.toFixed(2));
   const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
 
   return (
@@ -222,6 +224,11 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                     {perLap(r.energyWaits) === null ? t('gcsim:dps.energyWaitsNoLap') : t('gcsim:dps.energyWaitsTotal', { n: perLap(r.energyWaits), laps: waitLoops - 1 })}
                   </div>
                 )}
+                {waitEnergyOn && (
+                  <div className="text-[11px] text-slate-500" data-testid="dps-energy-wait-seconds">
+                    {waitSeconds(r.energyWaitSeconds) === null ? t('gcsim:dps.energyWaitSecondsNone') : t('gcsim:dps.energyWaitSecondsTotal', { n: waitSeconds(r.energyWaitSeconds) })}
+                  </div>
+                )}
               </div>
               <table className="w-full text-xs border-collapse">
                 <thead>
@@ -230,6 +237,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                     <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:dps.colDps')}</th>
                     <th className="py-1.5 pr-2 font-semibold text-right">{t('gcsim:dps.colDamage')}</th>
                     {waitEnergyOn && <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:dps.colEnergyWaitsTitle', { laps: Math.max(1, waitLoops - 1) })}>{t('gcsim:dps.colEnergyWaits')}</th>}
+                    {waitEnergyOn && <th className="py-1.5 pr-2 font-semibold text-right" title={t('gcsim:dps.colEnergyWaitSecondsTitle')}>{t('gcsim:dps.colEnergyWaitSeconds')}</th>}
                     <th className="py-1.5 font-semibold text-right">{t('gcsim:dps.colShare')}</th>
                   </tr>
                 </thead>
@@ -243,6 +251,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
                         <td className="py-1.5 pr-2 text-right font-mono text-rose-200">{fmt(row.dps)}</td>
                         <td className="py-1.5 pr-2 text-right font-mono text-slate-300">{fmt(row.damage)}</td>
                         {waitEnergyOn && <td className="py-1.5 pr-2 text-right font-mono text-slate-300" data-testid="dps-energy-wait-cell">{perLap(row.energyWaits) ?? '-'}</td>}
+                        {waitEnergyOn && <td className="py-1.5 pr-2 text-right font-mono text-slate-300" data-testid="dps-energy-wait-seconds-cell">{waitSeconds(row.energyWaitSeconds) ?? '-'}</td>}
                         <td className="py-1.5 text-right">
                           <span className="inline-block align-middle h-1.5 rounded bg-rose-500/60 mr-1.5" style={{ width: `${Math.round(row.share * 80)}px` }} />
                           <span className="font-mono text-slate-300">{pct(row.share)}</span>

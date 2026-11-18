@@ -50,6 +50,6 @@
 - 方針: **1-A（ブラウザ内 WASM）を採用**。1-C（サーバー側の実行）は負荷が大きいので採らない。ネイティブアプリ（2-C）を作る場合は別に検討する。
 - AGPL: gcsim は自分の GitHub にフォーク（ミラー）し、配布版のコミットにタグ `app-wasm-<version>` を付ける。アプリ本体は AGPL-3.0-or-later で公開。
 - 実装: `public/gcsim/worker.js`（Worker）・`src/utils/gcsim/gcsimWasm.ts`（エンジンの選択と Worker の呼び出し）・`gcsimClient.ts`（エンジンの切り替え）・`scripts/build-gcsim-wasm.ts`（`npm run wasm:build`）・`src/components/SourceNotice.tsx`（画面下部の表示）・`LICENSE`・`NOTICE`。
-- エンジンの選び方（localStorage の `gcsim_engine`）: `auto`（既定。`public/gcsim/main.wasm` があれば WASM、無ければ localhost のサーバー）／`wasm`／`server`。
+- エンジンの選び方（当時）: localStorage の `gcsim_engine`（`auto`／`wasm`／`server`）で、WASM と localhost のサーバーを選べた。**2026-11-18 に、localhost のサーバーを全廃し、エンジンは WASM だけにした**（`gcsim_engine` の設定・サーバーへの通信・`gcsim:start` などは、もう無い。スクリプトは `scripts/gcsim-node.ts` で、Node から同じ `main.wasm` を動かす）。以下の記述のうち、サーバーとの比較は、当時の検証の記録。
 - 注意: `main.wasm` は 44MB。開発サーバー（Vite）の監視の対象から外した（`vite.config.ts`）。外さないと、`wasm:build` の書き込み中に EBUSY で開発サーバーが落ちた。
 - **ユーザーの作業が要るもの**: ① GitHub で `gwin7ok/gcsim` を、genshinsim/gcsim のフォークとして作る ② 配布版のコミット（`1f9c1f2e`）にタグ `app-wasm-v2.48.8` を付けて push する（手順は `docs/gcsim-サーバー更新手順.md` の 6-B）③ 公開サイトのビルドの前に `npm run wasm:build` を実行する。

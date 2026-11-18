@@ -26,12 +26,9 @@ Copyright (c) 2021 The gcsim contributors
       - 利用者のブラウザの中（Web Worker）で動く。画面の JavaScript とは、メッセージ（JSON の文字列）だけでやり取りする。
       - 配布に当たるので、AGPL-3.0 の義務として、(1) ソースの入手先を画面の下部に出す (2) LICENSE（全文）と本 NOTICE を同梱する (3) ビルドを再現できるようにする。
       - この生成物は Git に入れない（.gitignore）。公開サイトのビルドの前に `npm run wasm:build` を実行する。
-  (a) gcsim サーバー（実行ファイル）
-      - 開発・検証用と、将来のネイティブアプリ（ランチャー）での利用。公開サイトの既定は (c)。
-      - 公式リリース（https://github.com/genshinsim/gcsim/releases）の `server_*` を、利用者のマシンに取得して使う。
-        `npm run gcsim:install` が、gcsim.config.json の URL から取得し、SHA-256 を検証する。
-      - この実行ファイルは、このリポジトリに含めない（.gcsim/ は Git 管理外）。このアプリは gcsim を配布しない。
-      - 改変しない。アプリとは HTTP（localhost）で通信する別のプログラムとして使う。
+  (a) （廃止）gcsim サーバー（公式リリースの実行ファイル）
+      - 2026-11-18 に使うのをやめた。開発中の画面・検査のスクリプトも、(c) の WebAssembly 版だけを使う。
+      - 以前は、公式リリースの `server_*` を、開発者のマシンに取得して使っていた（このリポジトリには含めていない）。
   (b) gcsim のソースから作ったデータ（このリポジトリの src/data/ にある）
       - gcsim_key_catalog.json（効果のキーの辞書）、gcsim_key_map.json、action_effect_keys.json、
         action_effect_links_by_duration.json、effect_key_coverage.json

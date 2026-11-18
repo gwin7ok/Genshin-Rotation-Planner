@@ -70,11 +70,7 @@
     "verify:effectkeys": "node scripts/build-effect-coverage.ts --check",
     "coverage:master-effects": "node scripts/build-master-effect-coverage.ts",
     "verify:master-effects": "node scripts/build-master-effect-coverage.ts --check",
-    "gcsim:install": "node scripts/gcsim-server.ts install",
-    "gcsim:start": "node scripts/gcsim-server.ts start",
-    "gcsim:stop": "node scripts/gcsim-server.ts stop",
-    "gcsim:status": "node scripts/gcsim-server.ts status",
-    "gcsim:check": "node scripts/gcsim-server.ts check",
+    "gcsim:check": "node scripts/check-gcsim-version.ts",
     "check:snapshots": "node scripts/check-rotation-snapshots.ts"
   },
   "dependencies": {

@@ -34,12 +34,45 @@ function describeValue(name: string, value: string): string[] {
   return lines;
 }
 
+function codePointLabel(ch: string): string {
+  return `U+${ch.codePointAt(0)!.toString(16).toUpperCase().padStart(4, '0')}`;
+}
+
+/**
+ * 英数字でない文字の説明（前後の空白を除いた値について）。
+ * 本物の secret の中身が分からないよう、表示するのは「見えない文字・ASCII 以外の文字のコードポイントと個数」と
+ * 「ASCII の記号の個数（種類・位置は出さない）」だけ。全部が同じ 1 種類の文字（= マスク表示のコピーの疑い）のときだけ、その文字を示す
+ */
+export function describeUnusualChars(value: string): string[] {
+  const chars = [...value.trim()];
+  const unusual = chars.filter((c) => !/^[A-Za-z0-9]$/.test(c));
+  if (unusual.length === 0) return [];
+  const lines: string[] = [];
+  if (new Set(chars).size === 1) {
+    lines.push(`  全部が同じ 1 種類の文字です（${codePointLabel(chars[0])}）。マスク表示（● や * など）を、コピーしている可能性があります`);
+    return lines;
+  }
+  const asciiSymbols = unusual.filter((c) => c.codePointAt(0)! < 128 && !/[\x00-\x1f\x7f]/.test(c));
+  lines.push(`  英数字でない文字: ${unusual.length} 個（全体 ${chars.length} 文字のうち）`);
+  if (asciiSymbols.length > 0) lines.push(`    ASCII の記号: ${asciiSymbols.length} 個（種類・位置は表示しません）`);
+  const others = new Map<string, number>();
+  for (const c of unusual) {
+    if (asciiSymbols.includes(c)) continue;
+    const label = codePointLabel(c);
+    others.set(label, (others.get(label) ?? 0) + 1);
+  }
+  for (const [label, n] of others) lines.push(`    ${label}（見えない文字・ASCII 以外の文字）: ${n} 個`);
+  return lines;
+}
+
 /** 鍵の形の説明（値は含めない） */
 export function describeShape(issuer: string, secret: string): string[] {
   const lines = [...describeValue('AMO_JWT_ISSUER', issuer)];
   lines.push(`  user:数字:数字 の形: ${/^user:\d+:\d+$/.test(issuer) ? 'はい' : 'いいえ（AMO の JWT issuer は、この形です）'}`);
   lines.push(...describeValue('AMO_JWT_SECRET', secret));
-  lines.push(`  前後の空白を除いて、英数字のみ: ${/^[A-Za-z0-9]+$/.test(secret.trim()) ? 'はい' : 'いいえ（見えない文字・記号が、混ざっているかもしれません）'}`);
+  lines.push(`  前後の空白を除いて、英数字のみ: ${/^[A-Za-z0-9]+$/.test(secret.trim()) ? 'はい' : 'いいえ（見えない文字・記号が、混ざっています）'}`);
+  lines.push(...describeUnusualChars(secret));
+  lines.push(`  前後の空白を除いて、0-9 と a-f（16 進数）のみ: ${/^[0-9a-f]+$/.test(secret.trim()) ? 'はい' : 'いいえ'}`);
   if (/^user:/.test(secret.trim())) {
     lines.push('注意: AMO_JWT_SECRET が user: で始まっています。issuer と secret が、逆に登録されているかもしれません');
   }

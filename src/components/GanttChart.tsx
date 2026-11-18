@@ -171,6 +171,18 @@ function buffCountStyle(count: number, maxCount: number): { backgroundColor: str
   return { backgroundColor: 'rgb(255, 30, 30)', color: '#fff' };
 }
 
+/**
+ * マウスの位置の時刻・CT 残りのラベルの高さ（ポインタからの px）。
+ * バーの説明（title のツールチップ）は、ブラウザが、ポインタの下に出すので、バーの上では、ラベルをポインタの上に出す。
+ * ただし、上に出すと固定表示のヘッダーに隠れるとき（ヘッダーの真下）と、画面の下端に近くてツールチップが上に反転しそうなときは、下のまま
+ */
+const HOVER_LABEL_BELOW_OFFSET_PX = 14;
+const HOVER_LABEL_ABOVE_OFFSET_PX = -25;
+/** ラベルを上に出すのに必要な、固定表示のヘッダーの下端からポインタまでの余白 */
+const HOVER_LABEL_ABOVE_MIN_ROOM_PX = 30;
+/** ツールチップがポインタの下に収まるのに必要な、ポインタから画面の下端までの余白（これより狭いと、上に反転しやすい） */
+const HOVER_TOOLTIP_MIN_ROOM_BELOW_PX = 140;
+
 interface GanttChartProps {
   characters: CharacterConfig[];
   stints: Stint[];
@@ -249,6 +261,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   const [hoveredY, setHoveredY] = useState<number>(0);
   // ポインタが CT バーの上にあるときの、その時点の CT 残り秒数（文字。CT バーの外なら null）
   const [hoveredCtRemaining, setHoveredCtRemaining] = useState<string | null>(null);
+  // ラベルをポインタの上に出すか（バーの説明のツールチップが下に出るとき。HOVER_LABEL_* の説明）
+  const [hoveredLabelAbove, setHoveredLabelAbove] = useState<boolean>(false);
   // 出場ブロックごとの、キャラ名の行の高さ（時間指定のない効果が折り返すと、高くなる。左の見出しをそろえる）
   const [topRowHeights, setTopRowHeights] = useState<Record<string, number>>({});
   const setTopRowHeight = (stintId: string, h: number) =>
@@ -510,6 +524,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({
       const ctBar = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-ct-end]') : null;
       const ctEnd = ctBar ? Number(ctBar.dataset.ctEnd) : NaN;
       setHoveredCtRemaining(Number.isFinite(ctEnd) ? formatCtRemaining(ctEnd, clickX / pixelsPerSecond) : null);
+      // バー（title の説明が付いた要素）の上では、ラベルを上に出して、ブラウザのツールチップ（ポインタの下）に隠れないようにする
+      const hasTooltip = e.target instanceof Element && e.target.closest('[title]') !== null;
+      const pinnedBottom = document.getElementById(GANTT_STICKY_HEADER_ID)?.getBoundingClientRect().bottom ?? 0;
+      setHoveredLabelAbove(
+        hasTooltip
+          && e.clientY - pinnedBottom >= HOVER_LABEL_ABOVE_MIN_ROOM_PX
+          && window.innerHeight - e.clientY >= HOVER_TOOLTIP_MIN_ROOM_BELOW_PX,
+      );
     } else {
       setHoveredTime(null);
       setHoveredCtRemaining(null);
@@ -2327,7 +2349,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               >
                 <div
                   className="absolute left-7 bg-sky-950/90 text-sky-200 border border-sky-700 text-[10px] font-mono px-1 rounded whitespace-nowrap"
-                  style={{ top: `${hoveredY + 14}px` }}
+                  style={{ top: `${hoveredY + (hoveredLabelAbove ? HOVER_LABEL_ABOVE_OFFSET_PX : HOVER_LABEL_BELOW_OFFSET_PX)}px` }}
                 >
                   {fmtTime(hoveredTime, 1)}
                   {hoveredCtRemaining !== null && (

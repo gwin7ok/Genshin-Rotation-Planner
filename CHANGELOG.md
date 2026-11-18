@@ -6,6 +6,17 @@
 
 ## [Unreleased]
 
+## [1.14.1] - 2026-11-18
+
+### 追加
+- 編成設定・画面最下部・使い方に、HoYoLAB の解説記事へのリンクを追加
+- 使い方の「持ちキャラの取り込み」の節に、解説記事へのリンクを追加（編成設定の注記でリンクの文字が出ない不具合も修正）
+
+### 修正
+- 外部から読み込む編成の安全性を強化（極端に大きい数値・件数で画面が固まらないよう上限を設け、gcsim の設定文に任意の命令が入らないようにし、公開サイトでは localhost の http 読み込みを不可に）
+- DB 管理の JSON 取り込みとバックアップの復元で、gcsim のキーが決まった形でない項目（引用符・; ・改行を含むもの）を除外し、設定文にも入れないようにした
+- 使い方の「仮値」の説明を、いまの仕様（原神 Wiki のおすすめの武器・聖遺物セットと聖遺物ステータス）に合わせて直した
+
 ## [1.14.0] - 2026-11-18
 
 ### 追加
@@ -360,7 +371,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...HEAD
+[1.14.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.1...v1.14.0
 [1.13.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.1
 [1.13.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.0

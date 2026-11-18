@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-11-18
+
 ### 追加
 - ガントチャートの CT バー（スキル・特殊スキル・爆発・発動バフの CT）にマウスを乗せると、その時点の CT の残り秒数を、ポインタの横の時刻の表示に出す。ゲーム画面の CT の表示に合わせて、小数第 1 位までの切り下げ（CT の開始の直後は必ず ?.9 から）
 
@@ -348,7 +350,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.10.2...v1.11.0

@@ -4,6 +4,7 @@ import { DATABASE_VERSION, GAME_VERSION } from '../data/databaseMaster';
 import { ANALYTICS_ENABLED } from '../utils/analytics';
 import { Trans } from 'react-i18next';
 import { t } from '../i18n';
+import { articleUrl } from '../utils/articleLinks';
 
 const APP_REPO_URL = 'https://github.com/gwin7ok/Genshin-Rotation-Planner';
 /** プライバシーポリシー（docs/privacy.md。Google の同意画面にも、この URL を登録している） */
@@ -40,6 +41,8 @@ export function SourceNotice() {
         <a className={linkClass} href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('notice:source.privacy')}</a>
         <span aria-hidden="true" className="mx-2 text-slate-700">|</span>
         <a className={linkClass} href={CHANGELOG_URL} target="_blank" rel="noreferrer" data-testid="changelog-link">{t('notice:source.changelog')}</a>
+        <span aria-hidden="true" className="mx-2 text-slate-700">|</span>
+        <a className={linkClass} href={articleUrl('intro')} target="_blank" rel="noreferrer" data-testid="intro-article-link">{t('notice:source.article')}</a>
       </p>
       <p>
         <Trans

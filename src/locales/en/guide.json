@@ -1,6 +1,7 @@
 {
   "title": "Guide",
   "intro": "A tool for building Genshin Impact combat rotations (who uses what, and when) along a timeline, and checking Skill/Burst cooldowns and buff overlaps. Rotations are saved only in this browser.",
+  "articleLink": "Intro article for this app (HoYoLAB, in Japanese)",
   "sections": {
     "basic": {
       "title": "Basic flow (start here)",

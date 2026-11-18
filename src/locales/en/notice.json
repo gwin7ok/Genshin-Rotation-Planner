@@ -6,7 +6,8 @@
     "analytics": "Visits are counted with Cloudflare Web Analytics (no cookies).\nOnly access information such as the page URL and browser type is sent; team and settings data are not.",
     "license": "This app is released under AGPL-3.0-or-later (source: <appLink>{{appRepo}}</appLink>).\nCalculations use gcsim {{gcsimVersion}} (AGPL-3.0, unmodified; source: <gcsimLink>{{gcsimRepo}}</gcsimLink>, commit {{commit}}).\nSee NOTICE and LICENSE in the repository for details.",
     "privacy": "Privacy",
-    "changelog": "Changelog"
+    "changelog": "Changelog",
+    "article": "Intro article (HoYoLAB, in Japanese)"
   },
   "update": {
     "title": "Master data has been updated",

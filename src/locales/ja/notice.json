@@ -6,7 +6,8 @@
     "analytics": "アクセス数の集計に、Cloudflare Web Analytics（Cookie なし）を使っています。\n送られるのは、ページの URL・ブラウザの種類などのアクセス情報だけで、編成・設定のデータは送りません。",
     "license": "このアプリは AGPL-3.0-or-later で公開しています（ソース: <appLink>{{appRepo}}</appLink>）。\n計算に、gcsim {{gcsimVersion}}（AGPL-3.0。無改変）を使っています（ソース: <gcsimLink>{{gcsimRepo}}</gcsimLink>・コミット {{commit}}）。\n詳しくは、リポジトリの NOTICE と LICENSE を参照してください。",
     "privacy": "プライバシー",
-    "changelog": "更新履歴"
+    "changelog": "更新履歴",
+    "article": "紹介記事（HoYoLAB）"
   },
   "update": {
     "title": "マスターデータが更新されました",

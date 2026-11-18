@@ -20,7 +20,9 @@ import { buildMatchesOwned } from '../utils/hoyolab/ownedMatch';
 import { StatsEditModal } from './StatsEditModal';
 import { DEFAULT_CUSTOM_STATS, defaultCustomStatsFor, defaultEquipmentFor, statsOfBuild } from '../utils/customStats';
 import type { CustomStats } from '../types/genshin';
+import { Trans } from 'react-i18next';
 import { currentLanguage, t } from '../i18n';
+import { articleUrl } from '../utils/articleLinks';
 import { elementLabel, weaponTypeLabel } from '../i18n/labels';
 import { charName, actionName, loc } from '../i18n/loc';
 
@@ -763,6 +765,16 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                 )}
               </div>
             </div>
+
+            {/* 持ちキャラ取り込みの解説記事への案内（取り込み済みのときは出さない） */}
+            {!(ownedStore && ownedStore.characters.length > 0) && (
+              <p data-testid="import-article-note" className="text-[11px] text-slate-400 leading-relaxed">
+                <Trans
+                  i18nKey="party:importArticleNote"
+                  components={{ link: <a className="underline hover:text-slate-200" href={articleUrl('importFeature')} target="_blank" rel="noreferrer" /> }}
+                />
+              </p>
+            )}
 
             {/* Filter Buttons Section（DB管理画面と共通） */}
             <CharacterFilterBar

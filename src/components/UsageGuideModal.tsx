@@ -2,6 +2,7 @@ import React from 'react';
 import { X, HelpCircle, Sparkles } from 'lucide-react';
 import { Trans } from 'react-i18next';
 import { t, TranslationKey } from '../i18n';
+import { articleUrl } from '../utils/articleLinks';
 
 interface UsageGuideModalProps {
   isOpen: boolean;
@@ -53,6 +54,11 @@ export const UsageGuideModal: React.FC<UsageGuideModalProps> = ({ isOpen, onClos
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
           <p className="text-xs text-slate-400 leading-relaxed">
             {t('guide:intro')}
+          </p>
+          <p className="text-xs">
+            <a className="text-sky-300 underline hover:text-sky-200" href={articleUrl('intro')} target="_blank" rel="noreferrer" data-testid="guide-article-link">
+              {t('guide:articleLink')}
+            </a>
           </p>
           {GUIDE_SECTIONS.map(section => (
             <section key={section.id} className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">

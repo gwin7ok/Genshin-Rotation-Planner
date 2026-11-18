@@ -32,6 +32,8 @@ import { ER_LOOP_ITERATIONS, type EnemyParticles } from './utils/gcsim/requiredE
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
+import { buildCtMarks, ctMarkPosition, ctTargetKey, stepCtMark, type CtMarkKind } from './utils/ctMarks';
+import { scrollToCtMark } from './utils/scrollToStintCard';
 import { normalizeGroups } from './utils/actionGroups';
 import { buildGcsimConfig, DEFAULT_HURT, withConfigTitle, type GcsimConfigResult, type HurtSetting, type EnemySetting } from './utils/gcsim/buildGcsimConfig';
 import { PartyMember, Stint, SavedRotationSlot, ReactionRow, ReactionRowRef } from './types/genshin';
@@ -284,13 +286,6 @@ export default function App() {
     setIsPlaying(false);
     setElapsedTime(0);
   }, [calculatedResult]);
-
-  // CT警告件数: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）、落下攻撃の前提を満たさない配置（gcsim では実行エラー）
-  const totalCTWarnings = useMemo(
-    () => calculatedResult.passiveSpans.filter(p => p.hasCTViolation).length
-      + calculatedResult.validationIssues.filter(v => v.id.startsWith('special_window_') || v.id.startsWith('plunge_prereq_') || v.id.startsWith('gcsim_unsupported_') || v.id.startsWith('mode_blocks_') || v.id.startsWith('mode_blocked_')).length,
-    [calculatedResult],
-  );
 
   // 出場キャラの削除などで基準番号が出場キャラの数を超えたら、基準を解除して先頭に戻す
   useEffect(() => {
@@ -603,14 +598,25 @@ export default function App() {
     () => calculatedResult.validationIssues.filter(v => /^(skill|burst)_ct_/.test(v.id) && !(v.actionId && verifiedActionIds?.has(v.actionId))),
     [calculatedResult, verifiedActionIds],
   );
-  // 全体のCT違反件数（スキル・爆発の発動時点でのクールタイム未終了。確認済みは除く）
-  const totalCTCollisions = useMemo(() => {
-    let count = 0;
-    displayStints.forEach(s => {
-      count += s.actions.filter(a => a.hasCTCollision && !a.ctGcsimVerified).length;
-    });
-    return count;
-  }, [displayStints]);
+  // CT 違反・CT 警告の印の一覧（ヘッダーの件数と、▲▼ ボタンの移動先。件数は、この一覧の数）
+  // - CT 違反: スキル・爆発の発動時点でのクールタイム未終了（gcsim で確認済みは除く）
+  // - CT 警告: 発動バフ（固有天賦・武器・聖遺物）のCT中の発動（効果が発動しないだけ）と、特殊スキルの受付時間外（gcsim では通常のスキルになる）、落下攻撃の前提を満たさない配置（gcsim では実行エラー）など
+  const ctMarks = useMemo(
+    () => buildCtMarks(displayStints, calculatedResult.passiveSpans, calculatedResult.validationIssues),
+    [displayStints, calculatedResult],
+  );
+  const totalCTCollisions = ctMarks.violations.length;
+  const totalCTWarnings = ctMarks.warnings.length;
+  // ▲▼ で最後に移動した印（移動の続きを、印の ID で覚える。編集で一覧が変わっても、続けられる）
+  const [ctCursor, setCtCursor] = useState<Record<CtMarkKind, string | null>>({ violation: null, warning: null });
+  const jumpToCtMark = (kind: CtMarkKind, dir: 1 | -1) => {
+    const list = kind === 'violation' ? ctMarks.violations : ctMarks.warnings;
+    const mark = stepCtMark(list, ctCursor[kind], dir);
+    if (!mark) return;
+    setCtCursor(prev => ({ ...prev, [kind]: mark.id }));
+    handleSeek(mark.time); // 再生位置も、その印の時刻へ移す（ガントのアクションをクリックしたときと同じ）
+    scrollToCtMark(ctTargetKey(mark), mark.stintId);
+  };
 
   const handleCopyGcsimConfig = () => {
     const built = buildCurrentGcsimConfig();
@@ -895,6 +901,9 @@ export default function App() {
         onChangeNotationMode={setNotationMode}
         totalCTCollisions={totalCTCollisions}
         totalCTWarnings={totalCTWarnings}
+        ctViolationPosition={ctMarkPosition(ctMarks.violations, ctCursor.violation)}
+        ctWarningPosition={ctMarkPosition(ctMarks.warnings, ctCursor.warning)}
+        onJumpToCt={jumpToCtMark}
       />
 
       {/* 「gcsim で計算」の結果（実行中・反映・警告・エラー） */}

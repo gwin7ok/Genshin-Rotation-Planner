@@ -9,6 +9,25 @@
   scrollbar-width: none;
 }
 
+/* ヘッダーの ▲▼ で移動した CT 違反・CT 警告の印を、少しのあいだ光らせる（scrollToCtMark） */
+@keyframes ct-jump-flash {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0);
+  }
+  30%, 70% {
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 1), 0 0 16px 6px rgba(250, 204, 21, 0.75);
+  }
+}
+.ct-jump-flash {
+  animation: ct-jump-flash 0.6s ease-in-out 3;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-jump-flash {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 1);
+  }
+}
+
 /* Custom scrollbar styling for dark theme Gantt chart */
 .custom-scrollbar::-webkit-scrollbar {
   height: 10px;

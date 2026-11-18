@@ -1,7 +1,8 @@
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2, UserCheck, Swords } from 'lucide-react';
+import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2, UserCheck, Swords, ChevronUp, ChevronDown } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
+import type { CtMarkKind } from '../utils/ctMarks';
 import { ListSelect } from './ListSelect';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { PlaybackControls } from './PlaybackControls';
@@ -50,6 +51,11 @@ interface HeaderProps {
   totalCTCollisions?: number;
   /** 発動バフのCT警告の件数（CT中の発動。効果が発動しないだけで、gcsim の計算は止めない） */
   totalCTWarnings?: number;
+  /** ▲▼ で最後に移動した CT 違反・CT 警告が、一覧の何件目か（1 から。まだ移動していなければ 0。ボタンの説明に出す） */
+  ctViolationPosition?: number;
+  ctWarningPosition?: number;
+  /** ▲（dir = -1。上・前の印へ）・▼（dir = 1。下・次の印へ）を押したとき */
+  onJumpToCt?: (kind: CtMarkKind, dir: 1 | -1) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -89,6 +95,9 @@ export const Header: React.FC<HeaderProps> = ({
   onChangeNotationMode,
   totalCTCollisions = 0,
   totalCTWarnings = 0,
+  ctViolationPosition = 0,
+  ctWarningPosition = 0,
+  onJumpToCt,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -104,6 +113,40 @@ export const Header: React.FC<HeaderProps> = ({
     window.addEventListener('resize', updateHeight);
     return () => window.removeEventListener('resize', updateHeight);
   }, [isCollapsed, isPlaying, currentTime, totalDuration]);
+
+  // CT 違反・CT 警告の ▲▼ ボタン（▲ = 上・前の印へ、▼ = 下・次の印へ。issue #57）。ボタンの説明に、何件目かを出す
+  const ctNav = (kind: CtMarkKind, total: number, position: number) => {
+    if (!onJumpToCt || total === 0) return null;
+    const isViolation = kind === 'violation';
+    const where = position > 0 ? t('header:ct.position', { position, total }) : t('header:ct.positionNone', { total });
+    const buttonClass = `flex items-center justify-center w-6 h-6 rounded-md border transition-colors ${
+      isViolation
+        ? 'bg-red-950/90 border-red-500/80 text-red-300 hover:bg-red-900'
+        : 'bg-amber-950/80 border-amber-500/80 text-amber-300 hover:bg-amber-900'
+    }`;
+    return (
+      <div className="flex items-center gap-0.5 shrink-0">
+        {([-1, 1] as const).map(dir => {
+          const label = dir < 0
+            ? (isViolation ? t('header:ct.prevViolation') : t('header:ct.prevWarning'))
+            : (isViolation ? t('header:ct.nextViolation') : t('header:ct.nextWarning'));
+          return (
+            <button
+              key={dir}
+              type="button"
+              data-testid={`ct-${kind}-${dir < 0 ? 'prev' : 'next'}`}
+              onClick={() => onJumpToCt(kind, dir)}
+              title={`${label}（${where}）`}
+              aria-label={label}
+              className={buttonClass}
+            >
+              {dir < 0 ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
 
   const collapseToggle = (
   <button
@@ -200,12 +243,15 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Overall CT Collision Status Badge (Always Visible between Play Controls & Collapse Toggle) */}
           {totalCTCollisions > 0 ? (
-            <div
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0"
-              title={t('header:ct.collisionTitle', { count: totalCTCollisions })}
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-              <span>{t('header:ct.collision', { count: totalCTCollisions })}</span>
+            <div className="flex items-center gap-1 shrink-0">
+              <div
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-950/90 border border-red-500 text-red-300 text-xs font-bold shadow-red-500/30 shadow animate-pulse shrink-0"
+                title={t('header:ct.collisionTitle', { count: totalCTCollisions })}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                <span>{t('header:ct.collision', { count: totalCTCollisions })}</span>
+              </div>
+              {ctNav('violation', totalCTCollisions, ctViolationPosition)}
             </div>
           ) : (
             <div
@@ -218,12 +264,15 @@ export const Header: React.FC<HeaderProps> = ({
           )}
 
           {totalCTWarnings > 0 && (
-            <div
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0"
-              title={t('header:ct.warningTitle', { count: totalCTWarnings })}
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>{t('header:ct.warning', { count: totalCTWarnings })}</span>
+            <div className="flex items-center gap-1 shrink-0">
+              <div
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs font-bold shrink-0"
+                title={t('header:ct.warningTitle', { count: totalCTWarnings })}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>{t('header:ct.warning', { count: totalCTWarnings })}</span>
+              </div>
+              {ctNav('warning', totalCTWarnings, ctWarningPosition)}
             </div>
           )}
 

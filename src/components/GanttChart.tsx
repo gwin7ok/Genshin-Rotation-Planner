@@ -28,6 +28,7 @@ import {
 } from '../types/genshin';
 import { ELEMENT_COLORS } from '../data/characters';
 import { scrollStintCardBelowSticky, focusStintInGantt, GANTT_STICKY_HEADER_ID, GANTT_SCROLL_CONTAINER_ID, ganttStintRowId } from '../utils/scrollToStintCard';
+import { ctActionTarget, ctPassiveTarget } from '../utils/ctMarks';
 import { actionDisplayName, formatCharacterCooldowns, formatSpanDurations } from '../utils/characterActions';
 import { getBuffBadgeConfig, getAvailableBuffsForCharacter, isGlobalRowBuff, buffTimingLabel, type TriggerableBuffDefinition } from '../utils/buffUtils';
 import { GlobalBuffRow, TimelessBuffChip, selfTimelessBuffItems, type TimelessBuffItem } from './GlobalBuffRow';
@@ -416,15 +417,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({
     });
     return list;
   }, [stints, characterMap]);
-
-  // 全体のCT違反（スキル・爆発）の合計数。発動バフのCT中の発動は「CT警告」（黄色）で、含めない
-  const totalCTCollisions = useMemo(() => {
-    let count = 0;
-    stints.forEach(s => {
-      count += s.actions.filter(a => a.hasCTCollision && !a.ctGcsimVerified).length;
-    });
-    return count;
-  }, [stints]);
 
   // Total timeline duration (single cycle width [0, totalDuration])
   const chartWidth = Math.max(800, Math.ceil(totalDuration + 2) * pixelsPerSecond);
@@ -1736,6 +1728,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                     return (
                                       <div
                                         key={act.id}
+                                        data-ct-target={ctActionTarget(act.id)}
                                         onMouseDown={(e) => {
                                           // 交代アクションは動かせない。ボタン類のクリックは、ドラッグにしない
                                           if (e.button !== 0 || !onUpdateStints || isSwapAction || isGroupCopy(act)) return;
@@ -2133,6 +2126,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         )}
                                         <div
                                           key={`reg_p_eff_${p.id}`}
+                                          data-ct-target={ctPassiveTarget(p.id)}
                                           data-no-pan
                                           onMouseDown={p.auto ? undefined : startDrag}
                                           onClick={(e) => e.stopPropagation()}
@@ -2245,6 +2239,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                         )}
                                         <div
                                           key={`reg_p_cd_${p.id}`}
+                                          data-ct-target={ctPassiveTarget(p.id)}
                                           data-no-pan
                                           onMouseDown={p.auto ? undefined : startDrag}
                                           onClick={(e) => e.stopPropagation()}

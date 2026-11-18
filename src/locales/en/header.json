@@ -38,7 +38,13 @@
     "okTitle": "[✅ All clear] Every action in the rotation is used after its cooldown has recovered",
     "warning_one": "Cooldown warning ({{count}})",
     "warning_other": "Cooldown warnings ({{count}})",
-    "warningTitle": "[Cooldown warnings] {{count}} in total: triggered buffs (passive talents, weapons, artifacts) placed during their cooldown, special skills placed outside their window, and plunging attacks that do not meet gcsim's requirements (triggered buffs simply do not activate, special skills are treated as normal skills, and plunging attacks cause a gcsim error)"
+    "warningTitle": "[Cooldown warnings] {{count}} in total: triggered buffs (passive talents, weapons, artifacts) placed during their cooldown, special skills placed outside their window, and plunging attacks that do not meet gcsim's requirements (triggered buffs simply do not activate, special skills are treated as normal skills, and plunging attacks cause a gcsim error)",
+    "prevViolation": "Go to the previous cooldown conflict (up)",
+    "nextViolation": "Go to the next cooldown conflict (down)",
+    "prevWarning": "Go to the previous cooldown warning (up)",
+    "nextWarning": "Go to the next cooldown warning (down)",
+    "position": "{{position}} of {{total}}",
+    "positionNone": "{{total}} in total"
   },
   "collapse": {
     "expand": "▼ Show menu",

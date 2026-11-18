@@ -93,5 +93,8 @@ jobs:
       - name: 拡張機能の案内の出し分け（ブラウザの判定）の確認
         run: npm run check:browser-detect
 
+      - name: CT 違反・警告の印の一覧と、ヘッダーの ▲▼ の「前・次」の選び方の確認
+        run: npm run check:ct-marks
+
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict

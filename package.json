@@ -35,6 +35,7 @@
     "ext:fetch-signed": "node scripts/fetch-signed-extension.ts",
     "check:extension-manifest": "node scripts/check-extension-manifest.ts",
     "check:browser-detect": "node scripts/check-browser-detect.ts",
+    "check:ct-marks": "node scripts/check-ct-marks.ts",
     "build:master:appside": "node scripts/regenerate-appside-characters.ts",
     "build:master": "node scripts/build-character-master.ts",
     "build:equipment": "node scripts/build-equipment-master.ts",

@@ -1,3 +1,5 @@
+import { GANTT_LABEL_WIDTH } from './ganttLayout';
+
 /** アクション構築エリアの固定表示部分（sticky）の要素ID */
 export const ACTION_BUILDER_STICKY_ID = 'action-builder-sticky';
 /** アクション構築エリア末尾の、スクロール位置合わせ用の下余白の要素ID */
@@ -33,8 +35,40 @@ export const GANTT_SCROLL_CONTAINER_ID = 'gantt-scroll-container';
 /** ガントチャートの出場キャラ行の要素ID */
 export const ganttStintRowId = (stintId: string) => `gantt-stint-row-${stintId}`;
 
-/** ガントチャート左端のキャラ名列の幅（px） */
-const GANTT_LABEL_COLUMN_PX = 180;
+/**
+ * 要素（出場キャラ行・CT 違反の印など）を、ガントチャートの固定表示部分（ページヘッダー + ガントチャートのヘッダー）を除いた
+ * 表示範囲のちょうど縦の真ん中へ、ページをスクロールする（縦のスクロールはページ）
+ */
+function scrollPageToCenterGanttTarget(target: HTMLElement): void {
+  const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
+  const ganttHeader = document.getElementById(GANTT_STICKY_HEADER_ID);
+  const ganttHeaderHeight = ganttHeader?.offsetHeight ?? 0;
+  // ガントチャートのヘッダーが固定されていないとき（ページ上部付近）の、本来の位置（ページ座標）
+  const ganttHeaderNaturalTop = ganttHeader?.parentElement
+    ? ganttHeader.parentElement.getBoundingClientRect().top + window.scrollY
+    : 0;
+  const rowRect = target.getBoundingClientRect();
+  const rowDocTop = window.scrollY + rowRect.top;
+  const rowHeight = rowRect.height;
+  const viewportHeight = window.innerHeight;
+
+  // (1) ガントチャートのヘッダーが固定された状態: 表示範囲の上端は一定
+  const pinnedVisibleTop = headerHeight + ganttHeaderHeight;
+  const pinnedVisibleHeight = viewportHeight - pinnedVisibleTop;
+  let top = rowHeight >= pinnedVisibleHeight
+    ? rowDocTop - pinnedVisibleTop - GAP_PX // 行が表示範囲より高いときは上端をそろえる
+    : rowDocTop - pinnedVisibleTop - (pinnedVisibleHeight - rowHeight) / 2;
+
+  // (2) その位置ではまだヘッダーが固定されない（ページ上部付近）場合: ヘッダーも一緒に動くので、
+  //     表示範囲の上端 = ヘッダーの本来の位置 - s + ヘッダー高さ として、行の中心 = 表示範囲の中心 を s について解く
+  //     （行が表示範囲より高い場合、ヘッダーと行の位置関係はスクロールで変わらないので固定され始める位置にする）
+  const pinStartScroll = ganttHeaderNaturalTop - headerHeight;
+  if (top < pinStartScroll) {
+    const unpinned = 2 * rowDocTop + rowHeight - ganttHeaderNaturalTop - ganttHeaderHeight - viewportHeight;
+    top = rowHeight >= pinnedVisibleHeight ? pinStartScroll : Math.min(unpinned, pinStartScroll);
+  }
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
 
 /**
  * ガントチャートの出場キャラ行を、ガントチャートの固定表示部分（ページヘッダー + ガントチャートのヘッダー）を除いた
@@ -45,40 +79,60 @@ export function scrollToGanttStintRow(stintId: string): void {
   requestAnimationFrame(() => {
     const row = document.getElementById(ganttStintRowId(stintId));
     if (!row) return;
-    const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 0;
-    const ganttHeader = document.getElementById(GANTT_STICKY_HEADER_ID);
-    const ganttHeaderHeight = ganttHeader?.offsetHeight ?? 0;
-    // ガントチャートのヘッダーが固定されていないとき（ページ上部付近）の、本来の位置（ページ座標）
-    const ganttHeaderNaturalTop = ganttHeader?.parentElement
-      ? ganttHeader.parentElement.getBoundingClientRect().top + window.scrollY
-      : 0;
-    const rowRect = row.getBoundingClientRect();
-    const rowDocTop = window.scrollY + rowRect.top;
-    const rowHeight = rowRect.height;
-    const viewportHeight = window.innerHeight;
-
-    // (1) ガントチャートのヘッダーが固定された状態: 表示範囲の上端は一定
-    const pinnedVisibleTop = headerHeight + ganttHeaderHeight;
-    const pinnedVisibleHeight = viewportHeight - pinnedVisibleTop;
-    let top = rowHeight >= pinnedVisibleHeight
-      ? rowDocTop - pinnedVisibleTop - GAP_PX // 行が表示範囲より高いときは上端をそろえる
-      : rowDocTop - pinnedVisibleTop - (pinnedVisibleHeight - rowHeight) / 2;
-
-    // (2) その位置ではまだヘッダーが固定されない（ページ上部付近）場合: ヘッダーも一緒に動くので、
-    //     表示範囲の上端 = ヘッダーの本来の位置 - s + ヘッダー高さ として、行の中心 = 表示範囲の中心 を s について解く
-    //     （行が表示範囲より高い場合、ヘッダーと行の位置関係はスクロールで変わらないので固定され始める位置にする）
-    const pinStartScroll = ganttHeaderNaturalTop - headerHeight;
-    if (top < pinStartScroll) {
-      const unpinned = 2 * rowDocTop + rowHeight - ganttHeaderNaturalTop - ganttHeaderHeight - viewportHeight;
-      top = rowHeight >= pinnedVisibleHeight ? pinStartScroll : Math.min(unpinned, pinStartScroll);
-    }
-    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    scrollPageToCenterGanttTarget(row);
 
     const container = document.getElementById(GANTT_SCROLL_CONTAINER_ID);
     const startPx = Number(row.dataset.startPx);
     if (container && Number.isFinite(startPx)) {
       container.scrollTo({ left: Math.max(0, startPx - 24), behavior: 'smooth' });
     }
+  });
+}
+
+/** ガントチャートの CT 違反・CT 警告の印（アクション・発動バフのバー）に付ける目印の属性名（data-ct-target。値は ctMarks.ts の ctActionTarget など） */
+const CT_TARGET_ATTRIBUTE = 'data-ct-target';
+/** 移動先の印を光らせるアニメーションの CSS クラス（src/index.css） */
+const CT_JUMP_FLASH_CLASS = 'ct-jump-flash';
+/** 移動のスクロールが落ち着いてから光らせる（ミリ秒）と、光らせる長さ */
+const CT_JUMP_FLASH_DELAY_MS = 350;
+const CT_JUMP_FLASH_DURATION_MS = 1900;
+
+function findCtTarget(key: string): HTMLElement | null {
+  for (const el of document.querySelectorAll<HTMLElement>(`[${CT_TARGET_ATTRIBUTE}]`)) {
+    if (el.getAttribute(CT_TARGET_ATTRIBUTE) === key) return el;
+  }
+  return null;
+}
+
+/**
+ * CT 違反・CT 警告の印（targetKey の目印が付いたバー）を、表示範囲の縦の真ん中・横の真ん中へスクロールし、少しのあいだ光らせる
+ * （ヘッダーの ▲▼ ボタンから使う）。印が見つからないとき（出場ブロック全体の警告など）は、その出場ブロックの行へ移動する
+ */
+export function scrollToCtMark(targetKey: string | null, stintId?: string): void {
+  requestAnimationFrame(() => {
+    const target = targetKey ? findCtTarget(targetKey) : null;
+    if (!target) {
+      if (stintId) scrollToGanttStintRow(stintId);
+      return;
+    }
+    scrollPageToCenterGanttTarget(target);
+
+    // 横: キャラ名列（固定）を除いた表示範囲の真ん中に、印を置く。長いバーは、先頭に近い所を基準にする（先頭の印が見えるように）
+    const container = document.getElementById(GANTT_SCROLL_CONTAINER_ID);
+    if (container) {
+      const c = container.getBoundingClientRect();
+      const r = target.getBoundingClientRect();
+      const centerX = c.left + GANTT_LABEL_WIDTH + (c.width - GANTT_LABEL_WIDTH) / 2;
+      const anchorX = r.left + Math.min(r.width / 2, 80);
+      container.scrollTo({ left: Math.max(0, container.scrollLeft + (anchorX - centerX)), behavior: 'smooth' });
+    }
+
+    window.setTimeout(() => {
+      target.classList.remove(CT_JUMP_FLASH_CLASS);
+      void target.offsetWidth; // 連続して押したときに、アニメーションを最初からやり直す
+      target.classList.add(CT_JUMP_FLASH_CLASS);
+      window.setTimeout(() => target.classList.remove(CT_JUMP_FLASH_CLASS), CT_JUMP_FLASH_DURATION_MS);
+    }, CT_JUMP_FLASH_DELAY_MS);
   });
 }
 

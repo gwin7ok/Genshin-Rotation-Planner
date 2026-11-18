@@ -1,7 +1,7 @@
 import type { CustomStats, OwnedBuild } from '../types/genshin';
 import defaultBuildsJson from '../data/default_builds.json';
 
-/** 仮値（D2）: キャラ・武器 Lv90/90、天賦レベル 9/9/9、聖遺物ステータスは会心率 100% だけ */
+/** 仮値の土台（D2）: キャラ・武器 Lv90/90、天賦レベル 9/9/9、聖遺物ステータスは会心率 100% だけ（編成設定の「仮値を使う」では、聖遺物ステータスを defaultCustomStatsFor でキャラごとに差し替える） */
 export const DEFAULT_CUSTOM_STATS: CustomStats = {
   level: 90,
   maxLevel: 90,

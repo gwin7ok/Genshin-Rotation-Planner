@@ -5,6 +5,7 @@
  *
  *   node scripts/solo-dps.ts                       全キャラ（gcsim のキーがあり、既定の装備が決まるもの）
  *   node scripts/solo-dps.ts ナヒーダ ニィロウ    名前を指定
+ *   node scripts/solo-dps.ts --owned=tools/hoyolab-fetch/out/owned-characters.json   持ちキャラの実際の装備・凸・天賦で、持っているキャラだけ測る
  *   node scripts/solo-dps.ts --runs=10 --seconds=30 --filler=4 --top=20 --out=結果.json
  *
  * 装備は、アプリの「仮値を使う」と同じ（Wiki のおすすめの武器・聖遺物セット・ステータス。src/utils/customStats.ts）。凸は、アプリの既定（星 5 = 0 凸・星 4 = 6 凸）。
@@ -21,6 +22,7 @@ const opt = (name: string, def: number) => {
   return a ? Number(a.split('=')[1]) : def;
 };
 const outPath = args.find(x => x.startsWith('--out='))?.split('=')[1];
+const ownedPath = args.find(x => x.startsWith('--owned='))?.split('=')[1];
 const names = args.filter(x => !x.startsWith('--'));
 const RUNS = opt('runs', 10);
 const SECONDS = opt('seconds', 30);
@@ -45,6 +47,7 @@ const { buildGcsimConfig } = await server.ssrLoadModule('/src/utils/gcsim/buildG
 const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');
 const dps = await server.ssrLoadModule('/src/utils/gcsim/dpsCalc.ts');
 const cs = await server.ssrLoadModule('/src/utils/customStats.ts');
+const imp = await server.ssrLoadModule('/src/utils/hoyolab/importCharacters.ts');
 
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const all: any[] = Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw);
@@ -62,15 +65,26 @@ interface Trial { template: string; dps: number; sd: number; seconds: number; to
 interface Row { name: string; element: string; weaponType: string; best?: Trial; trials: Trial[]; note?: string }
 const rows: Row[] = [];
 
-const targets = names.length > 0 ? names.map(n => all.find(c => c.name === n || c.englishName === n)).filter(Boolean) : all;
+// --owned=<持ちキャラの JSON>: 持ちキャラ（アプリの localStorage の ownedCharacters.characters を書き出したもの）の装備で測る。持っているキャラだけが対象
+const owned: any[] = ownedPath ? JSON.parse(fs.readFileSync(ownedPath, 'utf8')).characters : [];
+const ownedOf = (master: any) => owned.find(o => imp.matchMasterCharacterId(o, [master.id]) === master.id);
+const pool = ownedPath ? all.filter(c => ownedOf(c)) : all;
+const targets = names.length > 0 ? names.map(n => pool.find(c => c.name === n || c.englishName === n)).filter(Boolean) : pool;
 for (const master of targets) {
   const row: Row = { name: master.name, element: master.element, weaponType: master.weaponType, trials: [] };
   rows.push(row);
   if (!master.source?.gcsimKey) { row.note = 'gcsim 未対応'; continue; }
-  const eq = cs.defaultEquipmentFor(master.id, { weapons, artifacts });
-  const weapon = weapons.find(w => w.id === eq.weaponId);
-  if (!weapon?.gcsimKey) { row.note = '既定の武器なし'; continue; }
-  const char = { ...structuredClone(master), ...eq, customStats: cs.defaultCustomStatsFor(master.id) };
+  const o = ownedPath ? ownedOf(master) : undefined;
+  let char: any;
+  if (o) {
+    const { fields, warnings } = imp.ownedToPartyFields(o, { weapons, artifacts });
+    char = { ...structuredClone(master), ...fields };
+    if (!weapons.find(w => w.id === fields.weaponId)?.gcsimKey) { row.note = `持ちキャラの武器が gcsim 未対応（${warnings.join(' ')}）`; continue; }
+  } else {
+    const eq = cs.defaultEquipmentFor(master.id, { weapons, artifacts });
+    if (!weapons.find(w => w.id === eq.weaponId)?.gcsimKey) { row.note = '既定の武器なし'; continue; }
+    char = { ...structuredClone(master), ...eq, customStats: cs.defaultCustomStatsFor(master.id) };
+  }
   const errors: string[] = [];
   for (const tpl of TEMPLATES) {
     const actions = tpl.steps.map(s => makeAction(char, s));

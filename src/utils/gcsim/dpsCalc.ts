@@ -9,11 +9,11 @@
 import type { GcsimConfigResult, EnemySetting } from './buildGcsimConfig';
 import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
 import { GCSIM_FPS } from './readGcsimLog';
-import type { EnemyParticles, TimedParticle } from './requiredEnergyRecharge';
+import { ER_DEFAULT_LOOPS, type EnemyParticles, type TimedParticle } from './requiredEnergyRecharge';
 import { makeDamageFactor, type EnemyStateWindow } from './enemyStates';
 
 /** 周数の既定・上限 */
-export const DPS_DEFAULT_LOOPS = 5;
+export const DPS_DEFAULT_LOOPS = ER_DEFAULT_LOOPS; // 周回数の既定は、ER 計算と共通
 export const DPS_MAX_LOOPS = 20;
 /** 実行回数（種の数）の既定・上限 */
 export const DPS_DEFAULT_RUNS = 100;

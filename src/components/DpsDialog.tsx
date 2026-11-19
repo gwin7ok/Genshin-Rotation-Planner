@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Swords, Play, Square, Plus, Trash2 } from 'lucide-react';
 import { Stepper } from './Stepper';
+import { CountSetting, CoresSetting, EnemyParticlesInputs, useCoresSetting } from './SharedSettings';
 import { t, rangeMark, dotMark } from '../i18n';
 import { charName, loc } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
@@ -43,7 +44,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
   const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
-  const [cores, setCores] = useState(String(getWasmCores()));
+  const { cores, changeCores } = useCoresSetting();
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<DpsProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -58,12 +59,6 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const cancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
-
-  const changeCores = (v: string) => {
-    setCores(v);
-    const n = Math.floor(Number(v));
-    if (Number.isFinite(n) && n >= 1) setWasmCores(n);
-  };
 
   const settingsNow = (): DpsSettings => ({
     loops: Math.min(DPS_MAX_LOOPS, Math.max(1, Math.floor(num(loops, DPS_DEFAULT_LOOPS)))),
@@ -296,46 +291,18 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
               {t('gcsim:dps.energy')}
             </label>
             {energy && (
-              <div className="flex items-center gap-1.5 flex-wrap">
+              <div className="space-y-1.5">
                 <span>{t('gcsim:er.enemyParticles')}</span>
-                <Stepper value={pMin} onChange={setPMin} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>{rangeMark}</span>
-                <Stepper value={pMax} onChange={setPMax} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>{t('gcsim:er.enemyParticlesEvery')}</span>
-                <Stepper value={pAmount} onChange={setPAmount} step={1} min={0} disabled={running} widthClass="w-12" />
-                <span>{t('gcsim:er.enemyParticlesUnit')}</span>
-                <button onClick={() => { setPMin(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds)); setPMax(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds)); setPAmount(String(ER_DEFAULT_ENEMY_PARTICLES.amount)); }} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
+                <EnemyParticlesInputs pMin={pMin} pMax={pMax} pAmount={pAmount} setPMin={setPMin} setPMax={setPMax} setPAmount={setPAmount} disabled={running} />
               </div>
             )}
             <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
           </div>
 
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:dps.loops')}</p>
-            <>
-                <div className="flex items-center gap-1.5">
-                  <Stepper value={loops} onChange={setLoops} step={1} min={1} max={DPS_MAX_LOOPS} disabled={running} widthClass="w-14" />
-                  <span>{t('gcsim:dps.loopsUnit')}</span>
-                  <button onClick={() => setLoops(String(DPS_DEFAULT_LOOPS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
-                </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.loopsNote', { max: DPS_MAX_LOOPS })}</p>
-              </>
-          </div>
+          <CountSetting title={t('gcsim:dps.loops')} unit={t('gcsim:dps.loopsUnit')} note={t('gcsim:dps.loopsNote', { max: DPS_MAX_LOOPS })} value={loops} onChange={setLoops} def={DPS_DEFAULT_LOOPS} max={DPS_MAX_LOOPS} disabled={running} />
 
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:dps.runs')}</p>
-            <div className="flex items-center gap-1.5">
-              <Stepper value={runs} onChange={setRuns} step={10} min={1} max={DPS_MAX_RUNS} disabled={running} widthClass="w-16" />
-              <span>{t('gcsim:dps.runsUnit')}</span>
-              <button onClick={() => setRuns(String(DPS_DEFAULT_RUNS))} disabled={running} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.runsNote', { max: DPS_MAX_RUNS })}</p>
-            <div className="flex items-center gap-1.5 pt-1">
-              <span>{t('gcsim:er.cores')}</span>
-              <Stepper value={cores} onChange={changeCores} step={1} min={1} max={wasmMaxCores()} disabled={running} widthClass="w-14" />
-              <span className="text-[11px] text-slate-500">{t('gcsim:er.coresNote', { max: wasmMaxCores(), def: WASM_DEFAULT_CORES })}</span>
-            </div>
-          </div>
+          <CountSetting title={t('gcsim:dps.runs')} unit={t('gcsim:dps.runsUnit')} note={t('gcsim:dps.runsNote', { max: DPS_MAX_RUNS })} value={runs} onChange={setRuns} def={DPS_DEFAULT_RUNS} max={DPS_MAX_RUNS} step={10} widthClass="w-16" disabled={running} />
+          <CoresSetting cores={cores} onChange={changeCores} disabled={running} />
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-2">
             <p className="font-bold">{t('gcsim:dps.enemies')}</p>

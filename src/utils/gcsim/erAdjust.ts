@@ -42,7 +42,8 @@ export const benchFactor = (partyCount: number): number => Math.max(0, 1 - 0.1 *
  * - 粒子: 西風系（`favonius-<キャラ>`）・ディシアのスキルの粒子（`dehya`。ディシアの粒子は、このスキルのダメージだけ）
  * - 固定のエネルギー: アルベド C1・クレー固有天賦 4・ロサリア C4・鶴の鳴き（`crane`）・月光（`moonglow`）・桂木斬長正（`nagamasa`）・`kitain`・
  *   ルミドゥ（`lumidouceelegy-energy`）・旅人（氷）C1・ミカ C4
- * スカークの粒子（`skirk`）は、確認が済むまで入れない（出る扱い）
+ * スカークの粒子（`skirk`）は入れない（出る扱い）。gcsim では氷元素の攻撃の命中（`OnEnemyDamage`）で出て、ダメージの値は見ない。
+ * ユーザーの確認（2026-11-19）: 攻撃が命中すれば、ダメージが 0 でも出る（スキルの命中の粒子と同じ）
  */
 const DAMAGE_CONDITIONAL_SOURCES: ReadonlySet<string> = new Set([
   'dehya', 'albedo-c1', 'klee-a4', 'rosaria-c4', 'crane', 'moonglow', 'nagamasa', 'kitain', 'lumidouceelegy-energy', 'travelercryo-c1', 'mika-c4',

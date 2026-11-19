@@ -21,7 +21,6 @@ interface HeaderProps {
   onOpenOwnedModal: () => void;
   /** アプリ全体のモード（通常 / 幽境）と、切り替え（フェーズ8 / issue #54） */
   appMode: AppMode;
-  onChangeAppMode: (mode: AppMode) => void;
   onOpenEnergyRechargeModal: () => void;
   /** DPS 計算の窓を開く（D343） */
   onOpenDpsModal: () => void;
@@ -72,7 +71,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPartyModal,
   onOpenOwnedModal,
   appMode,
-  onChangeAppMode,
   onOpenEnergyRechargeModal,
   onOpenDpsModal,
   onOpenHelpModal,
@@ -192,25 +190,8 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* アプリ全体のモード（通常 / 幽境）。幽境モードのときは、目立つ色のラベルを常に出す（切り替え忘れの防止） */}
+          {/* アプリ全体のモード（通常 / 幽境）。切り替えは、チャージ効率計算の画面にある。幽境モードのときは、目立つ色のラベルを常に出す（切り替え忘れの防止） */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <div role="group" aria-label={t('header:mode.label')} data-testid="app-mode-switch" className="flex items-center rounded-lg border border-slate-700 overflow-hidden text-xs font-bold">
-              {(['normal', 'abyss'] as const).map(m => (
-                <button
-                  key={m}
-                  type="button"
-                  aria-pressed={appMode === m}
-                  data-testid={`app-mode-${m}`}
-                  onClick={() => onChangeAppMode(m)}
-                  title={t(`header:mode.${m}Title`)}
-                  className={`px-2.5 py-1 transition-colors ${appMode === m
-                    ? (m === 'abyss' ? 'bg-fuchsia-600 text-white' : 'bg-slate-600 text-white')
-                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'}`}
-                >
-                  {t(`header:mode.${m}`)}
-                </button>
-              ))}
-            </div>
             {appMode === 'abyss' && (
               <span data-testid="app-mode-badge" className="px-2 py-0.5 rounded-md bg-fuchsia-950/90 border border-fuchsia-500 text-fuchsia-200 text-xs font-bold shadow shadow-fuchsia-500/30" title={t('header:mode.abyssBadgeTitle')}>
                 {t('header:mode.abyssBadge')}

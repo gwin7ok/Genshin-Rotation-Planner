@@ -68,7 +68,7 @@ export interface BurstTimingResult {
   /** ループ部分を回した周数 */
   loops: number;
   entries: BurstTimingEntry[];
-  /** キャラ別の、爆発のエネルギー待ち（爆発のあるキャラだけ） */
+  /** キャラ別の、爆発のエネルギー待ち（編成の全員。爆発を撃たないキャラは 0） */
   waits: BurstEnergyWait[];
   /** 全員の合計の、ループ 1 周あたりの待ちの回数・待ち 1 回あたりの平均の待ち時間 */
   waitsTotal: { perLoop: number; avgSeconds: number | null };
@@ -187,6 +187,5 @@ export async function computeBurstTiming(args: {
   }
   const entries = summarizeBurstTiming(perSeed, base.members);
   const w = summarizeEnergyWaits(testRuns, base.members, abyss.loops);
-  const withBurst = new Set(entries.map(e => e.characterId));
-  return { status: 'ok', result: { ranAt: Date.now(), seeds, loops: abyss.loops, entries, waits: w.waits.filter(x => withBurst.has(x.characterId)), waitsTotal: w.total } };
+  return { status: 'ok', result: { ranAt: Date.now(), seeds, loops: abyss.loops, entries, waits: w.waits, waitsTotal: w.total } };
 }

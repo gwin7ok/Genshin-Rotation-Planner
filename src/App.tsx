@@ -890,7 +890,6 @@ export default function App() {
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
         onOpenOwnedModal={() => setIsOwnedModalOpen(true)}
         appMode={appMode}
-        onChangeAppMode={setAppMode}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenDpsModal={() => setIsDpsOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
@@ -1085,6 +1084,7 @@ export default function App() {
         characters={characters}
         database={database}
         mode={appMode}
+        onChangeMode={setAppMode}
       />
 
       {/* DPS 計算（D343） */}

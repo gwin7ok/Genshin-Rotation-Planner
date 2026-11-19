@@ -46,6 +46,8 @@ interface EnergyRechargeDialogProps {
   database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
   /** アプリ全体のモード。幽境モードは、開始エネルギー 0・最初の爆発も判定・時刻指定の粒子・戦闘時間で求め、結果は通常モードとは別に保存する（フェーズ8） */
   mode?: AppMode;
+  /** モードの切り替え（アプリ全体のモード。ヘッダーから、この画面へ移した） */
+  onChangeMode?: (mode: AppMode) => void;
 }
 
 /** 時刻指定の粒子の入力 1 行（入力中は文字列） */
@@ -62,7 +64,7 @@ const formatDuration = (ms: number): string => {
 };
 
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
-export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database, mode = 'normal' }) => {
+export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database, mode = 'normal', onChangeMode }) => {
   const isAbyss = mode === 'abyss';
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
   const [currentFingerprint, setCurrentFingerprint] = useState<string | null>(null);
@@ -312,6 +314,24 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <Zap className="w-5 h-5" />
             </div>
             <h3 className="font-bold text-base text-white">{t('gcsim:er.title')}</h3>
+            <div role="group" aria-label={t('header:mode.label')} data-testid="app-mode-switch" className="ml-2 flex items-center rounded-lg border border-slate-700 overflow-hidden text-xs font-bold">
+              {(['normal', 'abyss'] as const).map(m => (
+                <button
+                  key={m}
+                  type="button"
+                  disabled={running || timingRunning}
+                  aria-pressed={mode === m}
+                  data-testid={`app-mode-${m}`}
+                  onClick={() => onChangeMode?.(m)}
+                  title={t(`header:mode.${m}Title`)}
+                  className={`px-2.5 py-1 transition-colors ${mode === m
+                    ? (m === 'abyss' ? 'bg-fuchsia-600 text-white' : 'bg-slate-600 text-white')
+                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'}`}
+                >
+                  {t(`header:mode.${m}`)}
+                </button>
+              ))}
+            </div>
           </div>
           <button onClick={onClose} disabled={running || timingRunning} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors disabled:opacity-40" title={t('action.close')}>
             <X className="w-5 h-5" />
@@ -455,60 +475,38 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   <Play className="w-3.5 h-3.5" />{timingRunning ? t('gcsim:er.timingRunning') : t('gcsim:er.timingStart')}
                 </button>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
-                {shownTiming && shownTiming.entries.length === 0 && <p className="text-slate-500">{t('gcsim:er.timingNone')}</p>}
-                {shownTiming && shownTiming.entries.length > 0 && (
-                  <div className="rounded-md border border-slate-800 p-2 space-y-1" data-testid="er-timing-waits">
+                {shownTiming && (
+                  <div className="space-y-1" data-testid="er-timing-waits">
                     <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
-                    <p className="text-slate-300" data-testid="er-timing-waits-total">
-                      {t('gcsim:er.waitsTotal', { n: shownTiming.waitsTotal.perLoop.toFixed(2), loops: shownTiming.loops })}
-                      {' '}
-                      {shownTiming.waitsTotal.avgSeconds === null ? t('gcsim:er.waitsNone') : t('gcsim:er.waitsAvg', { n: shownTiming.waitsTotal.avgSeconds.toFixed(2) })}
-                    </p>
-                    {shownTiming.waits.map(wt => {
-                      const c = charOf(wt.characterId);
-                      return (
-                        <p key={wt.characterId} className="text-slate-400" data-testid={`er-timing-wait-${wt.characterId}`}>
-                          {c ? charName(c) : wt.name}: {t('gcsim:er.waitsChar', { n: wt.perLoop.toFixed(2) })}{wt.avgSeconds === null ? '' : ` / ${t('gcsim:er.waitsAvg', { n: wt.avgSeconds.toFixed(2) })}`}
-                        </p>
-                      );
-                    })}
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.waitsNote')}</p>
-                  </div>
-                )}
-                {shownTiming?.entries.map(e => {
-                  const c = charOf(e.characterId);
-                  const first = e.bursts[0];
-                  const okCount = e.bursts.filter(b => b.missed === 0 && b.delayMaxSeconds !== null && b.delayMaxSeconds <= BURST_TIMING_ON_TIME_SECONDS).length;
-                  return (
-                    <div key={e.characterId} className="space-y-1" data-testid={`er-timing-${e.characterId}`}>
-                      <div className="font-semibold text-slate-200">
-                        {c ? charName(c) : e.name}
-                        <span className="ml-2 font-normal text-slate-400">{t('gcsim:er.timingSummary', { total: e.bursts.length, ok: okCount })}</span>
-                      </div>
-                      <div className="text-slate-400" data-testid={`er-timing-first-${e.characterId}`}>
-                        {first.missed > 0
-                          ? t('gcsim:er.timingFirstMissed', { planned: fmt(first.plannedSeconds), missed: first.missed, total: first.total })
-                          : (first.delayMaxSeconds ?? 0) <= BURST_TIMING_ON_TIME_SECONDS
-                            ? t('gcsim:er.timingFirstOnTime', { planned: fmt(first.plannedSeconds) })
-                            : t('gcsim:er.timingFirstLate', { planned: fmt(first.plannedSeconds), from: fmt(first.plannedSeconds + (first.delayMedianSeconds ?? 0)), to: fmt(first.plannedSeconds + (first.delayMaxSeconds ?? 0)) })}
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {e.bursts.map(b => {
-                          const late = b.delayMaxSeconds !== null && b.delayMaxSeconds > BURST_TIMING_ON_TIME_SECONDS;
-                          const cls = b.missed > 0 ? 'border-rose-700/70 bg-rose-950/40 text-rose-300' : late ? 'border-amber-700/70 bg-amber-950/40 text-amber-300' : 'border-emerald-800/70 bg-emerald-950/30 text-emerald-300';
-                          const title = b.delayMaxSeconds === null
-                            ? t('gcsim:er.timingChipTitleMissed', { n: b.n, planned: fmt(b.plannedSeconds), missed: b.missed, total: b.total })
-                            : t('gcsim:er.timingChipTitle', { n: b.n, planned: fmt(b.plannedSeconds), median: fmt(b.delayMedianSeconds ?? 0), max: fmt(b.delayMaxSeconds), onTime: b.onTime, total: b.total, missed: b.missed });
+                    <table className="w-full text-left" data-testid="er-timing-table">
+                      <thead>
+                        <tr className="text-[11px] text-slate-400 border-b border-slate-800">
+                          <th className="py-1 pr-2 font-normal">{t('gcsim:er.waitsColChar')}</th>
+                          <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColCountTitle', { loops: shownTiming.loops })}>{t('gcsim:er.waitsColCount')}</th>
+                          <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColSecondsTitle')}>{t('gcsim:er.waitsColSeconds')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {shownTiming.waits.map(wt => {
+                          const c = charOf(wt.characterId);
                           return (
-                            <span key={b.n} title={title} className={`px-1.5 py-0.5 rounded border font-mono text-[10px] ${cls}`} data-testid={`er-timing-chip-${e.characterId}-${b.n}`}>
-                              {b.n}: {fmt(b.plannedSeconds)}s {b.missed > 0 ? t('gcsim:er.timingMissedShort') : `+${fmt(b.delayMaxSeconds ?? 0)}`}
-                            </span>
+                            <tr key={wt.characterId} className="border-b border-slate-900" data-testid={`er-timing-wait-${wt.characterId}`}>
+                              <td className="py-1 pr-2 text-slate-200">{c ? charName(c) : wt.name}</td>
+                              <td className="py-1 pr-2 text-right font-mono">{wt.perLoop.toFixed(2)}</td>
+                              <td className="py-1 pr-2 text-right font-mono">{wt.avgSeconds === null ? '-' : wt.avgSeconds.toFixed(2)}</td>
+                            </tr>
                           );
                         })}
-                      </div>
-                    </div>
-                  );
-                })}
+                        <tr className="font-bold text-slate-100" data-testid="er-timing-waits-total">
+                          <td className="py-1 pr-2">{t('gcsim:er.waitsRowTotal')}</td>
+                          <td className="py-1 pr-2 text-right font-mono">{shownTiming.waitsTotal.perLoop.toFixed(2)}</td>
+                          <td className="py-1 pr-2 text-right font-mono">{shownTiming.waitsTotal.avgSeconds === null ? '-' : shownTiming.waitsTotal.avgSeconds.toFixed(2)}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.waitsNote', { loops: shownTiming.loops })}</p>
+                  </div>
+                )}
               </div>
             );
           })()}

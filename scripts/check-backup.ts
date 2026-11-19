@@ -387,7 +387,7 @@ check('保存層: キーの文字列が、公開済みのデータと同じ（�
     savedSlots: 'genshin_rotation_saved_slots_v2',
     database: 'genshin_app_db_v1',
   });
-  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', appMode: 'appMode', abyssBattleCondition: 'abyssBattleCondition', requiredEnergyRechargeAbyss: 'requiredEnergyRechargeAbyss', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
+  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', appMode: 'appMode', abyssBattleCondition: 'abyssBattleCondition', requiredEnergyRechargeAbyss: 'requiredEnergyRechargeAbyss', abyssConditionPresets: 'abyssConditionPresets', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
   assert.equal(persistence.DEVICE_KEYS.gcsimCores, 'gcsim_cores');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_cores'), '端末だけの設定（コアの数）は、バックアップに含めない');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '使わなくなった端末だけの設定（実行エンジンの選択）は、バックアップに含めない');
@@ -427,6 +427,54 @@ check('設定: 既定値と、保存・読み込みの往復', () => {
   assert.equal(settings.loadDefHalt(), false);
   assert.equal(settings.loadNotationMode(), 'name');
   assert.equal(settings.loadHurt().enabled, true);
+});
+// --- 名前を付けて保存した戦闘条件（フェーズ8 段階 3。D367） ---
+const battle = await server.ssrLoadModule('/src/utils/battleCondition.ts');
+check('戦闘条件の保存: 名前を付けて保存 → 同じ名前は上書き（id は変えない）→ 削除 → 保存と読み込みの往復', () => {
+  store.clear();
+  assert.deepEqual(settings.loadBattlePresets(), [], '無いときは空');
+  let n = 0;
+  const newId = () => `p${++n}`;
+  const a = { ...battle.defaultBattleCondition(), battleSeconds: 120, timedParticles: [{ seconds: 30, amount: 3 }] };
+  const b = { ...battle.defaultBattleCondition(), battleSeconds: 90, firstBurstWaitSeconds: 2 };
+  let r = battle.savePreset([], '  ボス A  ', a, newId);
+  assert.equal(r.overwritten, false);
+  assert.equal(r.list[0].name, 'ボス A', '名前の前後の空白は除く');
+  r = battle.savePreset(r.list, 'ボス B', b, newId);
+  assert.deepEqual(r.list.map((p: any) => p.id), ['p1', 'p2']);
+  const over = battle.savePreset(r.list, 'ボス A', { ...a, battleSeconds: 200 }, newId);
+  assert.equal(over.overwritten, true);
+  assert.equal(over.id, 'p1', '同じ名前の上書きは、id を変えない');
+  assert.equal(over.list.length, 2);
+  assert.equal(over.list[0].condition.battleSeconds, 200);
+  assert.equal(battle.savePreset(over.list, '   ', a, newId).reason, 'empty', '名前が空は保存しない');
+  assert.equal(settings.saveBattlePresets(over.list), true);
+  assert.deepEqual(settings.loadBattlePresets(), over.list, '保存 → 読み込みで同じ内容');
+  assert.deepEqual(battle.removePreset(over.list, 'p1').map((p: any) => p.id), ['p2']);
+});
+check('戦闘条件の保存: 壊れた項目・id の重複・上限・範囲外の値を直して読み込む', () => {
+  const broken = [
+    { id: 'x', name: 'OK', condition: { battleSeconds: 99999, firstBurstWaitSeconds: -5, timedParticles: [{ seconds: 5, amount: 2 }, { seconds: 'a', amount: 1 }] } },
+    { id: 'x', name: '同じ id', condition: {} },
+    { id: '', name: 'id なし', condition: {} },
+    { id: 'y', name: '   ', condition: {} },
+    null,
+    'text',
+    { id: 'z', name: 'あ'.repeat(100), condition: null },
+  ];
+  const list = battle.sanitizeBattlePresets(broken);
+  assert.deepEqual(list.map((p: any) => p.id), ['x', 'z']);
+  assert.equal(list[0].condition.battleSeconds, 600, '戦闘時間は上限に収める');
+  assert.equal(list[0].condition.firstBurstWaitSeconds, 0, '待ちは 0 以上');
+  assert.equal(list[0].condition.timedParticles.length, 1, '不正な粒子は捨てる');
+  assert.equal(list[1].name.length, battle.BATTLE_PRESET_NAME_MAX, '名前は上限の長さまで');
+  assert.equal(battle.sanitizeBattlePresets('x').length, 0);
+  const many = Array.from({ length: 50 }, (_, i) => ({ id: `i${i}`, name: `n${i}`, condition: {} }));
+  assert.equal(battle.sanitizeBattlePresets(many).length, battle.BATTLE_PRESET_MAX, '件数の上限');
+  let full = battle.sanitizeBattlePresets(many);
+  const r = battle.savePreset(full, '新しい', battle.defaultBattleCondition(), () => 'new');
+  assert.equal(r.reason, 'full', '上限に達していると、新しく足せない');
+  assert.equal(battle.savePreset(full, 'n0', battle.defaultBattleCondition(), () => 'new').overwritten, true, '上限でも、同じ名前の上書きはできる');
 });
 
 // --- 反応の行（gcsim の結果）の保存: gcsim のバージョンつき。古いバージョンのものは出さない（D205） ---

@@ -44,6 +44,8 @@ export const SETTING_KEYS = {
   abyssBattleCondition: 'abyssBattleCondition',
   /** 幽境モードの、必要元素チャージ効率の最後の算出結果（JSON。通常モードの結果は requiredEnergyRecharge に別に持つ） */
   requiredEnergyRechargeAbyss: 'requiredEnergyRechargeAbyss',
+  /** 名前を付けて保存した幽境モードの戦闘条件（JSON。[{ id, name, condition }]。ボスごとの条件の呼び出し用。src/utils/battleCondition.ts） */
+  abyssConditionPresets: 'abyssConditionPresets',
   /** HoYoLAB の取り込みで入力した原神の UID（文字列。入力の手間を減らすため） */
   hoyolabUid: 'hoyolabUid',
   /** 持ちキャラの取り込みで、Enka.Network の最新の値で上書きするか（'true' | 'false'。既定: true。D352） */

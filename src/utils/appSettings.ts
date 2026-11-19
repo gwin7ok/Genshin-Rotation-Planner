@@ -5,7 +5,7 @@
 import { DEFAULT_HURT, DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type HurtSetting, type EnemySetting } from './gcsim/buildGcsimConfig';
 import { DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsSettings } from './gcsim/dpsCalc';
 import { ER_DEFAULT_ENEMY_PARTICLES, type RequiredErResult } from './gcsim/requiredEnergyRecharge';
-import { sanitizeBattleCondition, type AppMode, type BattleCondition } from './battleCondition';
+import { sanitizeBattleCondition, sanitizeBattlePresets, type AppMode, type BattleCondition, type BattleConditionPreset } from './battleCondition';
 import type { NotationMode } from './rotationNotation';
 import { SETTING_KEYS, readJson, readString, writeJson, writeString } from './persistence';
 
@@ -45,6 +45,15 @@ export function loadBattleCondition(): BattleCondition {
 
 export function saveBattleCondition(value: BattleCondition): void {
   writeJson(SETTING_KEYS.abyssBattleCondition, sanitizeBattleCondition(value));
+}
+
+/** 名前を付けて保存した戦闘条件の一覧（無い・壊れた項目は捨てる） */
+export function loadBattlePresets(): BattleConditionPreset[] {
+  return sanitizeBattlePresets(readJson<unknown>(SETTING_KEYS.abyssConditionPresets));
+}
+
+export function saveBattlePresets(list: BattleConditionPreset[]): boolean {
+  return writeJson(SETTING_KEYS.abyssConditionPresets, sanitizeBattlePresets(list));
 }
 
 const requiredErKey = (mode: AppMode) => (mode === 'abyss' ? SETTING_KEYS.requiredEnergyRechargeAbyss : SETTING_KEYS.requiredEnergyRecharge);

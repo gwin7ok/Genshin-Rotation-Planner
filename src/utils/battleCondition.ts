@@ -68,6 +68,57 @@ export function sanitizeBattleCondition(v: unknown): BattleCondition {
   };
 }
 
+/** 名前を付けて保存した戦闘条件（ボスごとの条件の呼び出し用。D367）。キーは名前ではなく id */
+export interface BattleConditionPreset {
+  id: string;
+  name: string;
+  condition: BattleCondition;
+}
+
+/** 保存できる件数・名前の長さの上限 */
+export const BATTLE_PRESET_MAX = 30;
+export const BATTLE_PRESET_NAME_MAX = 40;
+
+/** 保存された戦闘条件の一覧を、正しい形に直す（壊れた項目・id の重複・名前の無いものは捨てる。上限の件数まで） */
+export function sanitizeBattlePresets(v: unknown): BattleConditionPreset[] {
+  if (!Array.isArray(v)) return [];
+  const seen = new Set<string>();
+  const out: BattleConditionPreset[] = [];
+  for (const p of v) {
+    if (!p || typeof p !== 'object') continue;
+    const o = p as Partial<Record<keyof BattleConditionPreset, unknown>>;
+    const name = typeof o.name === 'string' ? o.name.trim().slice(0, BATTLE_PRESET_NAME_MAX) : '';
+    if (typeof o.id !== 'string' || o.id === '' || seen.has(o.id) || name === '') continue;
+    seen.add(o.id);
+    out.push({ id: o.id, name, condition: sanitizeBattleCondition(o.condition) });
+    if (out.length >= BATTLE_PRESET_MAX) break;
+  }
+  return out;
+}
+
+/**
+ * 名前を付けて保存する。同じ名前（前後の空白を除いて比べる）があれば、その条件を上書きする（id は変えない）。
+ * 名前が空のとき・上限に達していて新しく足せないときは、変えずに reason を返す
+ */
+export function savePreset(
+  list: BattleConditionPreset[],
+  name: string,
+  condition: BattleCondition,
+  newId: () => string,
+): { list: BattleConditionPreset[]; id?: string; overwritten?: boolean; reason?: 'empty' | 'full' } {
+  const trimmed = name.trim().slice(0, BATTLE_PRESET_NAME_MAX);
+  if (trimmed === '') return { list, reason: 'empty' };
+  const cond = sanitizeBattleCondition(condition);
+  const existing = list.find(p => p.name === trimmed);
+  if (existing) return { list: list.map(p => (p.id === existing.id ? { ...p, condition: cond } : p)), id: existing.id, overwritten: true };
+  if (list.length >= BATTLE_PRESET_MAX) return { list, reason: 'full' };
+  const id = newId();
+  return { list: [...list, { id, name: trimmed, condition: cond }], id, overwritten: false };
+}
+
+/** 一覧から消す */
+export const removePreset = (list: BattleConditionPreset[], id: string): BattleConditionPreset[] => list.filter(p => p.id !== id);
+
 /** 戦闘条件のうち、ER の計算に渡す分 */
 export const toAbyssRunCondition = (c: BattleCondition): AbyssRunCondition => ({
   battleSeconds: c.battleSeconds,

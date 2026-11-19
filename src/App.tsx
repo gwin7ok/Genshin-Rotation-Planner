@@ -1070,7 +1070,8 @@ export default function App() {
 
       {/* アプリの更新の通知（マスターデータの全削除 → 動的生成の案内） */}
       <UpdateNoticeModal
-        isOpen={versionNotice.show}
+        // アプリの更新の通知（更新履歴）を閉じてから、出す（2 つを重ねない）
+        isOpen={versionNotice.show && !appUpdate.show}
         previous={versionNotice.previous}
         current={versionNotice.current}
         onClose={dismissVersionNotice}

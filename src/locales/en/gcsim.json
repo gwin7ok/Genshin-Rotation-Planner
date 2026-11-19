@@ -150,7 +150,7 @@
     "coresNote": "Number of cores (parallel Workers) used for the calculation (1–{{max}}, default {{def}}; saved on this device). More cores are faster but with diminishing returns, and use more memory (several hundred MB per core) and heat the CPU. This applies when calculating in the browser (WASM).",
     "seeds": "Number of seeds",
     "seedsUnit": "seeds",
-    "seedsNote": "Random outcomes (particles etc.) are tried with seeds 1 to this number (1–{{max}}, default 20). More seeds get closer to the true value and raise the Certain probability, but time grows in proportion. The same settings and count always give the same result.",
+    "seedsNote": "Random outcomes (particles etc.) are tried with seeds 1 to this number (1–{{max}}, default 10). More seeds get closer to the true value and raise the Certain probability, but time grows in proportion. The same settings and count always give the same result.",
     "burstWait": "Wait before a burst",
     "burstWaitUnit": "seconds at most",
     "burstWaitNote": "When a burst lacks energy, it counts as enough if the burst can go off within this many seconds once particles arrive (0.1 s steps; default 0 s). The longer it is, the lower and steadier the required ER. Raise it only if you can wait in real play.",

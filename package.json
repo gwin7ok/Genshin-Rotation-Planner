@@ -51,6 +51,7 @@
     "probe:queue-frames": "node scripts/probe-can-queue-after.ts",
     "probe:dash-jump": "node scripts/probe-dash-jump.ts",
     "probe:hitlag": "node scripts/probe-hitlag.ts",
+    "probe:solo-dps": "node scripts/solo-dps.ts",
     "check:hitlag": "node scripts/check-hitlag.ts",
     "check:hoyolab-import": "node scripts/check-hoyolab-import.ts",
     "check:enka-convert": "node scripts/check-enka-convert.ts",

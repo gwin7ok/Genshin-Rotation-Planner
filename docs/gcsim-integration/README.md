@@ -21,6 +21,7 @@
 | [phase-6-run-and-apply/](phase-6-run-and-apply/) | フェーズ6: gcsim 実行と結果のガントチャート反映 |
 | [phase-7-required-er/](phase-7-required-er/) | フェーズ7: 必要元素チャージ効率の算出（issue #46） |
 | [phase-8-abyss-mode/](phase-8-abyss-mode/) | フェーズ8: 幽境用モード（戦闘条件の設定。issue #54） |
+| [phase-9-auto-rotation-search/](phase-9-auto-rotation-search/) | フェーズ9: ローテーションの自動探索（構想・単独 DPS の測定） |
 
 各フェーズのフォルダには `plan.md`（計画）と `progress.md`（進捗）がある。
 

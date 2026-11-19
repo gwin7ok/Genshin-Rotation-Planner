@@ -968,7 +968,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                 className={`absolute top-[43px] bottom-0 w-0.5 pointer-events-none z-10 shadow-md ${
                   isPlayheadLoop
                     ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
-                    : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
+                    : 'bg-gradient-to-b from-orange-500 via-orange-400 to-orange-600 shadow-orange-500/50'
                 }`}
               />
 
@@ -1171,7 +1171,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       <div className="-translate-x-1/2 flex items-center relative">
                         <svg 
                           className={`w-2.5 h-2.5 shrink-0 drop-shadow relative z-10 ${
-                            isPlayheadLoop ? 'text-purple-400 fill-purple-400' : 'text-amber-400 fill-amber-400'
+                            isPlayheadLoop ? 'text-purple-400 fill-purple-400' : 'text-orange-400 fill-orange-400'
                           }`} 
                           viewBox="0 0 10 10"
                         >
@@ -1181,7 +1181,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                       <span className={`ml-0.5 text-[9px] font-mono font-black leading-none px-1.5 py-0.5 rounded shadow-md whitespace-nowrap border ${
                         isPlayheadLoop
                           ? 'bg-purple-600 text-white border-purple-400/80 shadow-purple-900/50'
-                          : 'bg-amber-500 text-slate-950 border-amber-300 shadow-amber-900/50'
+                          : 'bg-orange-500 text-slate-950 border-orange-300 shadow-orange-900/50'
                       }`}>
                         {fmtTime(activeTime, 1)}
                       </span>
@@ -2377,7 +2377,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
               className={`absolute top-0 bottom-0 w-0.5 pointer-events-none z-20 shadow-lg ${
                 isPlayheadLoop
                   ? 'bg-gradient-to-b from-purple-400 via-fuchsia-300 to-purple-500 shadow-purple-500/50'
-                  : 'bg-gradient-to-b from-amber-400 via-yellow-300 to-amber-500 shadow-amber-400/50'
+                  : 'bg-gradient-to-b from-orange-500 via-orange-400 to-orange-600 shadow-orange-500/50'
               }`}
             />
 

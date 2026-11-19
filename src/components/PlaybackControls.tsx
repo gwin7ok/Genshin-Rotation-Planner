@@ -34,7 +34,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
       title={isPlaying ? t('header:playback.pause') : t('header:playback.play')}
       className={`p-1 rounded-lg font-medium transition-all ${
         isPlaying 
-          ? 'bg-amber-500 text-slate-950 shadow ring-2 ring-amber-400/50' 
+          ? 'bg-orange-500 text-slate-950 shadow ring-2 ring-orange-400/50' 
           : 'bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white'
       }`}
     >
@@ -84,7 +84,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           const curLoopPeriod = loopPeriod > 0 ? loopPeriod : Math.max(0, totalDuration - loopStartTime);
           return (
             <div title={t('header:playback.positionFirst', { time: currentTime.toFixed(2) })}>
-              <span className={`font-bold ${rel < 0 ? 'text-amber-300' : 'text-purple-300'}`}>
+              <span className={`font-bold ${rel < 0 ? 'text-orange-300' : 'text-purple-300'}`}>
                 {relStr}
               </span>
               <span className="text-sky-300 font-semibold" title={t('header:playback.loopPeriodFromStart')}>
@@ -96,7 +96,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
 
         return (
           <div>
-            <span className="text-amber-400 font-bold">{currentTime.toFixed(1)}s</span>
+            <span className="text-orange-400 font-bold">{currentTime.toFixed(1)}s</span>
             <span className="text-sky-300 font-semibold" title={t('header:playback.total')}>/{totalDuration.toFixed(1)}s</span>
           </div>
         );
@@ -111,7 +111,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           onClick={() => onChangeSpeed(spd)}
           className={`px-1 py-0.5 transition-colors ${
             playbackSpeed === spd 
-              ? 'bg-amber-500/30 text-amber-300 font-bold' 
+              ? 'bg-orange-500/30 text-orange-300 font-bold' 
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >

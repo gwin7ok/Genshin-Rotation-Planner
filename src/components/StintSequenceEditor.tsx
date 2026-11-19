@@ -551,6 +551,16 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
       actions: targetStint.actions.filter((_, i) => i !== actionIndex),
       ...(removingHold ? { holdMode: false } : {}),
     };
+    // 削除したアクションの選択は外す（残すと、次の Ctrl+クリックで、存在しない ID が複数選択に混ざる）
+    const removedId = targetStint.actions[actionIndex]?.id;
+    if (removedId) {
+      if (selectedAction?.stintId === targetStint.id && selectedAction.actionId === removedId) onSelectAction?.(targetStint.id, '');
+      setMultiSel(prev => {
+        if (!prev || !prev.ids.includes(removedId)) return prev;
+        const ids = prev.ids.filter(x => x !== removedId);
+        return ids.length > 0 ? { ...prev, ids } : null;
+      });
+    }
     onUpdateStints(sanitizeStintsForUpdate(nextStints));
   };
 

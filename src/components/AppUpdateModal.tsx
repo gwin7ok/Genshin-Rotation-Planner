@@ -16,9 +16,13 @@ interface AppUpdateModalProps {
   onClose: () => void;
 }
 
-/** 更新履歴の文の中の `コード` を、等幅にする */
+/** 更新履歴の文の中の `コード` を等幅に、**太字** を太字にする */
 const renderItem = (text: string): React.ReactNode =>
-  text.split('`').map((part, i) => (i % 2 === 1 ? <code key={i} className="px-1 rounded bg-slate-800 text-slate-200">{part}</code> : <React.Fragment key={i}>{part}</React.Fragment>));
+  text.split(/(`[^`]+`|\*\*[^*]+\*\*)/).map((part, i) => {
+    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) return <code key={i} className="px-1 rounded bg-slate-800 text-slate-200">{part.slice(1, -1)}</code>;
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) return <b key={i} className="text-white">{part.slice(2, -2)}</b>;
+    return <React.Fragment key={i}>{part}</React.Fragment>;
+  });
 
 /**
  * アプリの版が上がったときの、更新履歴の案内（起動時に 1 度だけ出す）。

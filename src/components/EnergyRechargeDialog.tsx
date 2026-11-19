@@ -86,6 +86,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // 戦闘条件のうち、この画面では編集しない分（敵・敵の状態の時間帯。DPS 計算の画面で編集する）。保存するとき・名前を付けて保存するときに、そのまま持ち回る
   const [dpsPart, setDpsPart] = useState<Pick<BattleCondition, 'enemies' | 'enemyStates'>>(() => { const d = defaultBattleCondition(); return { enemies: d.enemies, enemyStates: d.enemyStates }; });
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
+  // 種の開始番号（種は、この番号から「試す種の数」個。既定は 1。「種を選び直す」で、乱数に変える。保存しない）
+  const [seedStart, setSeedStart] = useState(1);
   // 爆発のタイミングの確認（幽境モード。結果は保存しない。編成・条件が変わったら表示しない）
   const [timing, setTiming] = useState<{ key: string; result: BurstTimingResult } | null>(null);
   const [timingRunning, setTimingRunning] = useState(false);
@@ -245,6 +247,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         onProgress: setTimingProgress,
         shouldCancel: () => timingCancelRef.current,
         seeds: seedCount(),
+        seedStart,
         parallel: wasmParallelism(),
         run: runGcsimSample,
       });
@@ -278,6 +281,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         parallel,
         verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
         seeds: seedCount(),
+        seedStart,
         burstWaitSeconds: (() => { const v = Number(wait); return Number.isFinite(v) && v >= 0 ? Math.round(v * 10) / 10 : ER_DEFAULT_BURST_WAIT_SECONDS; })(),
         run: runGcsimSample,
         gcsimVersion: GCSIM_VERSION,
@@ -599,7 +603,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
           <CoresSetting cores={cores} onChange={changeCores} disabled={running} />
 
-          <CountSetting title={t('gcsim:er.seeds')} unit={t('gcsim:er.seedsUnit')} note={t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })} value={seeds} onChange={setSeeds} def={ER_DEFAULT_SEEDS} max={ER_MAX_SEEDS} step={10} disabled={running} />
+          <CountSetting title={t('gcsim:er.seeds')} unit={t('gcsim:er.seedsUnit')} note={t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })} value={seeds} onChange={setSeeds} def={ER_DEFAULT_SEEDS} max={ER_MAX_SEEDS} step={10} disabled={running || timingRunning} extra={(
+            <button type="button" onClick={() => setSeedStart(1 + Math.floor(Math.random() * 1_000_000))} disabled={running || timingRunning} title={t('gcsim:er.seedsRerollTitle')} className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-seeds-reroll">{t('gcsim:er.seedsReroll')}</button>
+          )}>
+            <p className="text-[11px] text-slate-400" data-testid="er-seeds-range">{t('gcsim:er.seedsRange', { from: seedStart, to: seedStart + seedCount() - 1 })}</p>
+          </CountSetting>
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>

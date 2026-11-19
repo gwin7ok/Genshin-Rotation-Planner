@@ -64,6 +64,8 @@ export function CountSetting(p: {
   value: string; onChange: (v: string) => void;
   def: number; max: number; step?: number; widthClass?: string;
   disabled?: boolean; testId?: string; children?: React.ReactNode;
+  /** 「既定に戻す」の右に置くボタンなど */
+  extra?: React.ReactNode;
 }) {
   return (
     <div className={BOX}>
@@ -72,6 +74,7 @@ export function CountSetting(p: {
         <Stepper value={p.value} onChange={p.onChange} step={p.step ?? 1} min={1} max={p.max} disabled={p.disabled} widthClass={p.widthClass ?? 'w-14'} testId={p.testId} />
         <span>{p.unit}</span>
         <button onClick={() => p.onChange(String(p.def))} disabled={p.disabled} className={RESET_BTN}>{t('gcsim:er.enemyParticlesReset')}</button>
+        {p.extra}
       </div>
       <p className="text-[11px] text-slate-500 leading-relaxed">{p.note}</p>
       {p.children}

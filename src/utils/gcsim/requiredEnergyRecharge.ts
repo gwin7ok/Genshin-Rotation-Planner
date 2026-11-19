@@ -465,6 +465,8 @@ export async function computeRequiredEr(args: {
   verifyLevels?: boolean;
   /** 試す種の数（既定 ER_DEFAULT_SEEDS） */
   seeds?: number;
+  /** 種の開始番号（種は、これから seeds 個。既定 1） */
+  seedStart?: number;
   /** 爆発の前に待ってよい秒数（既定 ER_DEFAULT_BURST_WAIT_SECONDS） */
   burstWaitSeconds?: number;
   /** ループ部分を回す周数（既定 ER_DEFAULT_LOOPS）。結果に残す。幽境モードは、戦闘条件の周数（abyss.loops）が優先される */
@@ -563,7 +565,8 @@ export async function computeRequiredEr(args: {
     for (let i = 0; i < list.length; i += parallel) out.push(list.slice(i, i + parallel));
     return out;
   };
-  const allSeeds = Array.from({ length: seedTotal }, (_, i) => i + 1);
+  const seedStart = Math.max(1, Math.floor(args.seedStart ?? 1));
+  const allSeeds = Array.from({ length: seedTotal }, (_, i) => seedStart + i);
 
   // 1. 基準（種ごと）。実行の失敗はそのまま返す
   const baseline = new Map<number, string>();
@@ -575,7 +578,7 @@ export async function computeRequiredEr(args: {
       const res = results[k];
       if (res.status !== 'ok') return { status: res.status, message: res.message };
       baseline.set(chunk[k], burstSignature(res.logs));
-      if (chunk[k] === 1) baseEr = energyRechargeByCharIndex(res.logs);
+      if (chunk[k] === seedStart) baseEr = energyRechargeByCharIndex(res.logs);
     }
   }
 

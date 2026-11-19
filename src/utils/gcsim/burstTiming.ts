@@ -165,6 +165,8 @@ export async function computeBurstTiming(args: {
   /** 増減する ER（キャラ ID → 割合。マイナスで下げる）。今のステータスの上に足す */
   erDelta?: Record<string, number>;
   seeds: number;
+  /** 種の開始番号（種は、これから seeds 個。既定 1） */
+  seedStart?: number;
   /** 同時に実行する種の数（既定 1） */
   parallel?: number;
   run: RunSample;
@@ -180,7 +182,8 @@ export async function computeBurstTiming(args: {
   const seeds = Math.max(1, Math.floor(args.seeds));
   const perSeed: Map<number, BurstDelay[]>[] = [];
   const testRuns: { logs: Parameters<typeof summarizeDamage>[0] }[] = [];
-  const all = Array.from({ length: seeds }, (_, i) => i + 1);
+  const seedStart = Math.max(1, Math.floor(args.seedStart ?? 1));
+  const all = Array.from({ length: seeds }, (_, i) => seedStart + i);
   // 進み具合は、実行 1 回ごとに数える（種ごとに、基準と試験の 2 回。並列のときも、平均の速さから残りが出る）
   const runTotal = all.length * 2;
   let runsDone = 0;

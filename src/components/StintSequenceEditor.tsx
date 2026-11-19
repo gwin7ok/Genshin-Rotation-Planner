@@ -1,5 +1,6 @@
 import { GcsimMissingBadge } from './GcsimMissingBadge';
 import { RepeatButton } from './RepeatButton';
+import { Stepper } from './Stepper';
 import React, { useState, useMemo, useRef, useLayoutEffect, useEffect } from 'react';
 import { 
   Plus, 
@@ -1216,22 +1217,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                             <Clock className="w-2.5 h-2.5 text-amber-400" />
                             <span className="font-bold">+{delayValue.toFixed(2)}s</span>
                             <div className="flex flex-col ml-0.5">
-                              <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue + 0.05); }}
-                                className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
-                                title={t('editor:delayUp')}
-                              >
-                                ▲
-                              </button>
-                              <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); updateActionDelay(stintIndex, act.id, delayValue - 0.05); }}
-                                className="leading-none text-amber-400 hover:text-amber-200 text-[9px]"
-                                title={t('editor:delayDown')}
-                              >
-                                ▼
-                              </button>
+                              <RepeatButton onStep={(m) => updateActionDelay(stintIndex, act.id, delayValue + 0.05 * m)} className="leading-none text-amber-400 hover:text-amber-200 text-[9px] select-none" title={t('editor:delayUp')}>▲</RepeatButton>
+                              <RepeatButton onStep={(m) => updateActionDelay(stintIndex, act.id, delayValue - 0.05 * m)} className="leading-none text-amber-400 hover:text-amber-200 text-[9px] select-none" title={t('editor:delayDown')}>▼</RepeatButton>
                             </div>
                           </div>
                         ) : null;
@@ -1276,28 +1263,8 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                                 <div className="flex items-center gap-0.5 ml-1 h-5 bg-slate-950/90 rounded px-1.5 border border-slate-700 text-[11px] font-mono shrink-0">
                                   <span className="text-slate-200 font-bold">{act.duration.toFixed(1)}s</span>
                                   <div className="flex flex-col ml-0.5">
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onUpdateSwitchDelay?.(Number((switchDelay + 0.05).toFixed(2)));
-                                      }}
-                                      className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold"
-                                      title={t('editor:swapUp')}
-                                    >
-                                      ▲
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05).toFixed(2))));
-                                      }}
-                                      className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold"
-                                      title={t('editor:swapDown')}
-                                    >
-                                      ▼
-                                    </button>
+                                    <RepeatButton onStep={(m) => onUpdateSwitchDelay?.(Number((switchDelay + 0.05 * m).toFixed(2)))} className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold select-none" title={t('editor:swapUp')}>▲</RepeatButton>
+                                    <RepeatButton onStep={(m) => onUpdateSwitchDelay?.(Math.max(0, Number((switchDelay - 0.05 * m).toFixed(2))))} className="leading-none text-sky-400 hover:text-sky-200 text-[9px] hover:font-bold select-none" title={t('editor:swapDown')}>▼</RepeatButton>
                                   </div>
                                 </div>
                               </div>
@@ -1662,13 +1629,13 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
               {hurt.enabled && (
                 <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] text-slate-300">
                   <span>{t('editor:interval')}</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMin} onChange={e => onUpdateHurt?.({ ...hurt, intervalMin: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMin')} />
+                  <Stepper value={String(hurt.intervalMin)} onChange={v => onUpdateHurt?.({ ...hurt, intervalMin: Number(v) })} step={0.1} min={0.1} widthClass="w-16" inputClassName="bg-slate-900 border border-slate-700 px-1 py-0.5" ariaLabel={t('editor:intervalMin')} />
                   <span>{rangeMark}</span>
-                  <input type="number" min={0.1} step={0.1} value={hurt.intervalMax} onChange={e => onUpdateHurt?.({ ...hurt, intervalMax: Number(e.target.value) })} className="w-16 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:intervalMax')} />
+                  <Stepper value={String(hurt.intervalMax)} onChange={v => onUpdateHurt?.({ ...hurt, intervalMax: Number(v) })} step={0.1} min={0.1} widthClass="w-16" inputClassName="bg-slate-900 border border-slate-700 px-1 py-0.5" ariaLabel={t('editor:intervalMax')} />
                   <span className="ml-2">{t('editor:damage')}</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMin} onChange={e => onUpdateHurt?.({ ...hurt, amountMin: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMin')} />
+                  <Stepper value={String(hurt.amountMin)} onChange={v => onUpdateHurt?.({ ...hurt, amountMin: Number(v) })} step={100} min={1} widthClass="w-20" inputClassName="bg-slate-900 border border-slate-700 px-1 py-0.5" ariaLabel={t('editor:damageMin')} />
                   <span>{rangeMark}</span>
-                  <input type="number" min={1} step={100} value={hurt.amountMax} onChange={e => onUpdateHurt?.({ ...hurt, amountMax: Number(e.target.value) })} className="w-20 bg-slate-900 border border-slate-700 rounded px-1 py-0.5" aria-label={t('editor:damageMax')} />
+                  <Stepper value={String(hurt.amountMax)} onChange={v => onUpdateHurt?.({ ...hurt, amountMax: Number(v) })} step={100} min={1} widthClass="w-20" inputClassName="bg-slate-900 border border-slate-700 px-1 py-0.5" ariaLabel={t('editor:damageMax')} />
                   {!hurtStatement(hurt) && <span className="text-amber-300">{t('editor:hurtInvalid')}</span>}
                 </div>
               )}

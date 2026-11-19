@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Stepper } from '../Stepper';
 import { X, Shield } from 'lucide-react';
 import { ArtifactSetDatabaseItem } from '../../types/database';
 import { ItemLockButton } from './ItemLockButton';
@@ -160,34 +161,34 @@ export const EditArtifactSubModal: React.FC<EditArtifactSubModalProps> = ({ arti
                 </div>
                 <div>
                   <label className="block text-slate-400 text-[10px]">{t('database:edit.durationSeconds')}</label>
-                  <input
-                    type="number"
-                    step="any"
-                    min="0"
-                    value={form.buffEffect.duration}
-                    onChange={e => setForm({
+                  <Stepper
+                    value={String(form.buffEffect.duration)}
+                    onChange={v => setForm({
                       ...form,
-                      buffEffect: { ...form.buffEffect!, duration: parseFloat(e.target.value) || 0 }
+                      buffEffect: { ...form.buffEffect!, duration: parseFloat(v) || 0 }
                     })}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-amber-300 font-bold"
+                    step={1}
+                    min={0}
+                    widthClass="flex-1 min-w-0" className="w-full"
+                    inputClassName="bg-slate-900 border border-slate-700 px-2 py-1 text-amber-300 font-bold"
                   />
                 </div>
                 <div>
                   <label className="block text-slate-400 text-[10px]">{t('database:edit.cooldownSeconds')}</label>
-                  <input
-                    type="number"
-                    step="any"
-                    min="0"
-                    placeholder={t('noneShort')}
-                    value={form.buffEffect.cooldown ?? ''}
-                    onChange={e => {
-                      const val = e.target.value === '' ? undefined : (parseFloat(e.target.value) || undefined);
+                  <Stepper
+                    value={String(form.buffEffect.cooldown ?? '')}
+                    onChange={v => {
+                      const val = v === '' ? undefined : (parseFloat(v) || undefined);
                       setForm({
                         ...form,
                         buffEffect: { ...form.buffEffect!, cooldown: val }
                       });
                     }}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-bold placeholder-slate-600"
+                    step={1}
+                    min={0}
+                    placeholder={t('noneShort')}
+                    widthClass="flex-1 min-w-0" className="w-full"
+                    inputClassName="bg-slate-900 border border-slate-700 px-2 py-1 text-cyan-300 font-bold placeholder-slate-600"
                   />
                 </div>
               </div>

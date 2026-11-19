@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Stepper } from '../Stepper';
 import { X, Plus, Trash2, Zap } from 'lucide-react';
 import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../../types/genshin';
 import { t } from '../../i18n';
@@ -168,25 +169,25 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                         className="flex-1 min-w-[160px] bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white font-semibold"
                       />
                       <span className="text-lime-400 font-bold">{t('database:edit.effectDuration')}</span>
-                      <input
-                        type="number"
+                      <Stepper
+                        value={String(p.duration ?? '')}
+                        onChange={v => updatePassive(idx, { duration: v === '' ? undefined : Math.max(0, parseFloat(v) || 0) })}
+                        step={1}
                         min={0}
-                        step="any" /* ▲▼は1秒単位。小数も保存できるよう step 制限はかけない */
-                        value={p.duration ?? ''}
                         placeholder={t('notSet')}
-                        onChange={e => updatePassive(idx, { duration: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
-                        className="w-16 bg-slate-950 border border-lime-900/60 focus:border-lime-500 rounded px-1.5 py-0.5 text-lime-300 font-mono font-bold text-center"
+                        widthClass="w-16"
+                        inputClassName="bg-slate-950 border border-lime-900/60 focus:border-lime-500 px-1.5 py-0.5 text-lime-300 font-mono font-bold text-center"
                       />
                       <span className="text-slate-500">s</span>
                       <span className="text-sky-400 font-bold">CT:</span>
-                      <input
-                        type="number"
+                      <Stepper
+                        value={String(p.cooldown ?? '')}
+                        onChange={v => updatePassive(idx, { cooldown: v === '' ? undefined : Math.max(0, parseFloat(v) || 0) })}
+                        step={1}
                         min={0}
-                        step="any"
-                        value={p.cooldown ?? ''}
                         placeholder={t('noneShort')}
-                        onChange={e => updatePassive(idx, { cooldown: e.target.value === '' ? undefined : Math.max(0, parseFloat(e.target.value) || 0) })}
-                        className="w-16 bg-slate-950 border border-sky-900/60 focus:border-sky-500 rounded px-1.5 py-0.5 text-sky-300 font-mono font-bold text-center"
+                        widthClass="w-16"
+                        inputClassName="bg-slate-950 border border-sky-900/60 focus:border-sky-500 px-1.5 py-0.5 text-sky-300 font-mono font-bold text-center"
                       />
                       <span className="text-slate-500">s</span>
                       <button
@@ -292,24 +293,22 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                     <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] font-mono border-t border-slate-800/60">
                       <div className="flex items-center gap-1">
                         <span className="text-slate-400">{t('database:edit.motionTime')}</span>
-                        <input
-                          type="number"
-                          step="0.05"
-                          value={act.defaultDuration}
-                          onChange={e => handleActionChange(idx, 'defaultDuration', parseFloat(e.target.value) || 0.1)}
-                          className="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
+                        <Stepper
+                          value={String(act.defaultDuration)}
+                          onChange={v => handleActionChange(idx, 'defaultDuration', parseFloat(v) || 0.1)}
+                          step={1}
+                          widthClass="w-16"
+                          inputClassName="bg-slate-950 border border-slate-700 px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
                         />
                         <span className="text-slate-500">s</span>
                       </div>
 
                       <div className="flex items-center gap-1">
                         <span className="text-amber-400 font-bold">{t('database:edit.cooldown')}</span>
-                        <input
-                          type="number"
-                          step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
-                          value={actCooldown}
-                          onChange={e => {
-                            const val = parseFloat(e.target.value) || 0;
+                        <Stepper
+                          value={String(actCooldown)}
+                          onChange={v => {
+                            const val = parseFloat(v) || 0;
                             const updated = [...actions];
                             updated[idx] = {
                               ...updated[idx],
@@ -319,19 +318,19 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                             };
                             setActions(updated);
                           }}
-                          className="w-16 bg-slate-950 border border-amber-900/60 focus:border-amber-500 rounded px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
+                          step={1}
+                          widthClass="w-16"
+                          inputClassName="bg-slate-950 border border-amber-900/60 focus:border-amber-500 px-1.5 py-0.5 text-amber-300 font-mono font-bold text-center"
                         />
                         <span className="text-slate-500">s</span>
                       </div>
 
                       <div className="flex items-center gap-1">
                         <span className="text-purple-400 font-bold">{t('database:edit.effectDuration')}</span>
-                        <input
-                          type="number"
-                          step="any" /* ▲▼は1秒単位（step="any" の既定の増減幅は1）。小数の値もそのまま保存できるよう step 制限はかけない */
-                          value={actDuration}
-                          onChange={e => {
-                            const val = parseFloat(e.target.value) || 0;
+                        <Stepper
+                          value={String(actDuration)}
+                          onChange={v => {
+                            const val = parseFloat(v) || 0;
                             const updated = [...actions];
                             updated[idx] = {
                               ...updated[idx],
@@ -339,7 +338,9 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                             };
                             setActions(updated);
                           }}
-                          className="w-16 bg-slate-950 border border-purple-900/60 focus:border-purple-500 rounded px-1.5 py-0.5 text-purple-300 font-mono font-bold text-center"
+                          step={1}
+                          widthClass="w-16"
+                          inputClassName="bg-slate-950 border border-purple-900/60 focus:border-purple-500 px-1.5 py-0.5 text-purple-300 font-mono font-bold text-center"
                         />
                         <span className="text-slate-500">s</span>
                       </div>

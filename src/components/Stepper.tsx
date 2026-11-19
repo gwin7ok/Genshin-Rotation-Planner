@@ -15,7 +15,13 @@ export const Stepper: React.FC<{
   /** 入力に誤りがあるとき、枠を赤くする */
   invalid?: boolean;
   testId?: string;
-}> = ({ value, onChange, step, min, max, decimals, disabled, widthClass, invalid, testId }) => {
+  placeholder?: string;
+  ariaLabel?: string;
+  /** 入力欄の色・枠・余白（省略すると、標準の見た目） */
+  inputClassName?: string;
+  /** 全体（入力欄＋上下ボタン）の追加のクラス */
+  className?: string;
+}> = ({ value, onChange, step, min, max, decimals, disabled, widthClass, invalid, testId, placeholder, ariaLabel, inputClassName, className }) => {
   const fmt = (n: number) => decimals === undefined ? String(n) : n.toFixed(decimals);
   const move = (dir: 1 | -1, multiplier = 1) => {
     const cur = Number(value);
@@ -24,13 +30,13 @@ export const Stepper: React.FC<{
     onChange(fmt(Math.round(clamped * 1000) / 1000));
   };
   return (
-    <span className="inline-flex items-stretch">
+    <span className={`inline-flex items-stretch ${className ?? ''}`}>
       <input
-        type="number" min={min} max={max} step={step} value={value} disabled={disabled}
+        type="number" min={min} max={max} step={step} value={value} disabled={disabled} placeholder={placeholder} aria-label={ariaLabel}
         data-testid={testId}
         onChange={e => onChange(e.target.value)}
         onBlur={() => { const n = Number(value); if (decimals !== undefined && value !== '' && Number.isFinite(n)) onChange(fmt(n)); }}
-        className={`${widthClass} bg-slate-800 border ${invalid ? 'border-red-500' : 'border-slate-700'} rounded-l px-1.5 py-0.5 text-right [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+        className={`${widthClass} ${inputClassName ?? `bg-slate-800 border ${invalid ? 'border-red-500' : 'border-slate-700'} px-1.5 py-0.5 text-right`} rounded-l [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
       />
       <span className="flex flex-col border border-l-0 border-slate-700 rounded-r overflow-hidden">
         <RepeatButton onStep={m => move(1, m)} disabled={disabled} title="" className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center select-none"><ChevronUp className="w-3 h-3" /></RepeatButton>

@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.15.1] - 2026-11-19
+
+### 修正
+- 英語表示で、幽境の激戦の呼び方を Abyss から Stygian Onslaught に直した
+
 ## [1.15.0] - 2026-11-19
 
 ### 追加
@@ -392,7 +397,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.1...HEAD
+[1.15.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...v1.15.1
 [1.15.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...v1.15.0
 [1.14.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.1...v1.14.0

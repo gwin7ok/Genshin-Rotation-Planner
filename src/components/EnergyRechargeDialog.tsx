@@ -465,8 +465,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {(() => {
             const shownTiming = timing !== null && timing.key === timingKeyNow ? timing.result : null;
             return (
-              <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
-                <p className="font-bold text-fuchsia-200">{t('gcsim:er.timingTitle')}</p>
+              <div className="text-xs text-slate-300 bg-slate-950/50 border border-emerald-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
+                <p className="font-bold text-emerald-200">{t('gcsim:er.timingTitle')}</p>
                 <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timingNote', { sec: BURST_TIMING_ON_TIME_SECONDS })}</p>
                 <div className="flex items-center gap-3 flex-wrap">
                   {timingRunning ? (
@@ -474,7 +474,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                       <Square className="w-3.5 h-3.5" />{t('gcsim:er.cancel')}
                     </button>
                   ) : (
-                    <button type="button" onClick={() => void runTiming()} disabled={running || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
+                    <button type="button" onClick={() => void runTiming()} disabled={running || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
                       <Play className="w-3.5 h-3.5" />{t('gcsim:er.timingStart')}
                     </button>
                   )}

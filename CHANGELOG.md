@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-11-19
+
 ### 追加
 - **幽境モード**を追加。チャージ効率計算の画面のタイトルの右で「通常 / 幽境」を切り替える。通常との違いは、開始エネルギー（満タン / 0）と、幽境の戦闘条件（無し / あり）だけ。幽境の戦闘条件は、最初の爆発の待ち・時刻指定の粒子（ボスの盾が割れたときなど）・敵の粒子・ダメージ無効の時間帯で、名前を付けて保存・呼び出しもできる（ボスごと。バックアップにも入る）
 - チャージ効率計算に「**足りているかの確認**」を追加。いまの編成・ローテーションを決めた周数だけ回し、爆発がエネルギー不足で待った回数（1 周あたり）と平均の待ち時間を、キャラごとの表と全員の合計で出す。通常・幽境のどちらでも使える。表の「元素チャージ効率」は、キャラごとに 1% 単位で変えて、足りるかを試せる（既定はいまの値）。実行中は、経過時間・残り時間を表示し、途中で中止できる。設定を変えても、前の結果は、ボタンを押すまで残る
@@ -389,7 +391,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...v1.15.0
 [1.14.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.0...v1.14.1
 [1.14.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.13.1...v1.14.0
 [1.13.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.12.0...v1.13.1

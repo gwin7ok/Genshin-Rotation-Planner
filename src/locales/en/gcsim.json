@@ -162,7 +162,7 @@
     "battleSecondsNote": "The rotation (opening + loop) repeats until this time is over (the number of loops is chosen automatically; the last loop may run past the battle length). The rotation length is estimated from the action durations.",
     "firstBurstWait": "The first burst may wait up to",
     "firstBurstWaitUnit": "s after its planned time",
-    "firstBurstWaitNote": "Everyone starts with 0 energy, so the first burst is delayed until enough particles arrive. It counts as enough if it can go off within this many seconds of its planned time (0.5 s steps; default 10 s). Later bursts use \"Wait before a burst\" below.",
+    "firstBurstWaitNote": "Everyone starts with 0 energy, so the first burst is delayed until enough particles arrive. It counts as enough if it can go off within this many seconds of its planned time (0.5 s steps; default 0.5 s). If the opening (first lap only) uses skills only to build burst energy, the default 0.5 s is enough. If the opening itself fires a burst, no amount of ER lets it go off at the planned time and the result is \"Unreachable\", so raise this value. Later bursts use \"Wait before a burst\" below.",
     "timedParticles": "Timed particles",
     "timedParticlesAt": "s:",
     "timedParticlesAdd": "Add particles",

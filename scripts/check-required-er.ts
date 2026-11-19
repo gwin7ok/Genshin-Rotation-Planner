@@ -155,15 +155,21 @@ for (const e of result.entries.filter((x: any) => x.status === 'ok')) {
     check(anyMismatch, `${e.name}: 3 刻み分小さくすると、どれかの種で爆発がずれる`);
   }
 }
-// 幽境モードの算出（開始エネルギー 0・時刻指定の粒子・戦闘時間）。CT を守る回し方（香菱の後に 8 秒の待機）で、実際の画面と同じ関数を通す
+// 幽境モードの算出（開始エネルギー 0・時刻指定の粒子・戦闘時間）。実際の画面と同じ関数を通す。
+// 幽境の想定の形: 初動（1 周目だけ）はスキルだけで爆発のエネルギーを貯め、ループ基準点の後（ループ）で爆発を撃つ。
+// ループは、CT を守る回し方（香菱の後に 8 秒の待機）。最初の爆発の待ちは 0.5 秒（既定）
 const abyssStints = [
-  stints[0],
-  { ...stints[1], actions: [...stints[1].actions, { id: 'w1', actionTypeId: 'wait', name: 'w', shortName: 'w', type: 'wait', duration: 8 }] },
+  { id: 'o0', characterId: chars[0].id, actions: [makeAction(chars[0], 'e')] }, // 初動: ベネット E
+  // 初動: 香菱 E → 30 秒待つ（敵・時刻指定の粒子が貯まるのを待つ。短いと、ベネットの爆発（60）に、ER +500% でも届かない）
+  { id: 'o1', characterId: chars[1].id, actions: [makeAction(chars[1], 'e'), { id: 'w0', actionTypeId: 'wait', name: 'w', shortName: 'w', type: 'wait', duration: 30 }] },
+  { id: 'l0', characterId: chars[0].id, actions: ['e', 'q'].map(s => makeAction(chars[0], s)) }, // ループ: ベネット E → Q
+  { id: 'l1', characterId: chars[1].id, actions: [...['e', 'q'].map(s => makeAction(chars[1], s)), { id: 'w1', actionTypeId: 'wait', name: 'w', shortName: 'w', type: 'wait', duration: 8 }] }, // ループ: 香菱 E → Q → 待機
 ];
-const abyssCond = { battleSeconds: 60, firstBurstWaitSeconds: 30, timedParticles: [{ seconds: 20, amount: 3 }] };
+const ABYSS_LOOP_START = 2;
+const abyssCond = { battleSeconds: 90, firstBurstWaitSeconds: er.ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS, timedParticles: [{ seconds: 20, amount: 3 }] };
 const enemyP = { minSeconds: 5, maxSeconds: 8, amount: 1 };
 const buildAbyss = (extra: any) => buildGcsimConfig({
-  characters: chars, stints: abyssStints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [],
+  characters: chars, stints: abyssStints, loopStartIndex: ABYSS_LOOP_START, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [],
   ignoreBurstEnergy: extra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: extra.added, loopIterations: er.ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: extra.enemyParticles,
   ...(extra.abyss ? { startEnergyZero: true, timedParticles: extra.abyss.timedParticles, battleSeconds: extra.abyss.battleSeconds } : {}),
 });
@@ -173,7 +179,7 @@ if (abyssOutcome.status !== 'ok') {
   failed++;
 } else {
   const ar = abyssOutcome.result;
-  check(ar.entries.length === 2 && ar.abyss?.battleSeconds === 60 && ar.entries.every((e: any) => e.status === 'ok'), `幽境: 算出が成功し、結果に戦闘条件が残る（${ar.seeds} 種・窓 ${ar.windows}）`);
+  check(ar.entries.length === 2 && ar.abyss?.battleSeconds === 90 && ar.entries.every((e: any) => e.status === 'ok'), `幽境: 算出が成功し、結果に戦闘条件が残る（${ar.seeds} 種・窓 ${ar.windows}）`);
   for (const e of ar.entries) console.log(`  [幽境] ${e.name}: ${e.status} ${e.status === 'ok' ? `目安 ${e.typicalEr}% / 安定 ${e.stableEr}% / 確実 ${e.certainEr}%（足す ${e.addedEr}）` : ''}`);
   for (const e of ar.entries.filter((x: any) => x.status === 'ok')) check(e.typicalEr <= e.stableEr && e.stableEr <= e.certainEr, `[幽境] ${e.name}: 目安 ≤ 安定 ≤ 確実`);
   const firstDelay = Math.round(abyssCond.firstBurstWaitSeconds * 60);

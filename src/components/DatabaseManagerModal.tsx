@@ -1,5 +1,8 @@
 import { GcsimMissingBadge, GcsimMissingTag, isGcsimMissingEquipment } from './GcsimMissingBadge';
 import { CharacterAvatar } from './CharacterAvatar';
+import { OwnedBadge } from './OwnedBadge';
+import { loadOwned, type OwnedStore } from '../utils/hoyolab/ownedStore';
+import { matchMasterCharacterId } from '../utils/hoyolab/importCharacters';
 import { EquipmentIcon } from './ItemIcon';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
@@ -97,6 +100,10 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
   // gcsim に未実装（genshin-db にあって gcsim にキーが無い）ものだけを表示（キャラ・武器・聖遺物タブ共通）。カスタムは対象外
   const [gcsimMissingOnly, setGcsimMissingOnly] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  // 取り込み済みの持ちキャラ（キャラ一覧に「持ちキャラ」タグを付ける。開くたびに読み直す）
+  const [ownedStore, setOwnedStore] = useState<OwnedStore | null>(null);
+  useEffect(() => { if (isOpen) setOwnedStore(loadOwned()); }, [isOpen]);
+  const isOwnedChar = (c: CharacterConfig): boolean => !!ownedStore?.characters.some(x => matchMasterCharacterId(x, [c.id]) === c.id);
   // どの生成を実行中か（回転するアイコンを、押したボタンの種類だけにする。issue #2）
   const [syncingKind, setSyncingKind] = useState<'character' | 'weapon' | 'artifact' | null>(null);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
@@ -758,7 +765,7 @@ export const DatabaseManagerModal: React.FC<DatabaseManagerModalProps> = ({
                           <CharacterAvatar char={char} className="w-10 h-10 rounded-lg text-base" borderWidth={1.5} />
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{charName(char)}</span><GcsimMissingBadge char={char} /></h3>
+                              <h3 className="font-bold text-sm text-white flex items-center gap-1.5 flex-wrap"><span>{charName(char)}</span><GcsimMissingBadge char={char} />{!isCustom && isOwnedChar(char) && <OwnedBadge />}</h3>
                               {isCustom && (
                                 <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                                   {t('custom')}

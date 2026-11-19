@@ -49,8 +49,8 @@
   "apply": "Save & apply team",
   "trueMoon": "True Moon",
   "trueMoonTitle": "Traveler: whether the story quest \"True Moon\" is completed (the buffs apply if it is; gcsim's default is completed). Switchable per party, like constellations and Revelation",
-  "notOwned": "Not owned",
-  "notOwnedTitle": "Not in the imported owned characters (shown on every character if you have not imported yet)",
+  "ownedTag": "Owned",
+  "ownedTagTitle": "Imported as an owned character",
   "owned": {
     "appliedOwned": "Owned character's build & stats applied",
     "appliedDefault": "Defaults applied",

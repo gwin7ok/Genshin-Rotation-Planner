@@ -66,7 +66,7 @@ export const BattlePresetsPanel: React.FC<BattlePresetsPanelProps> = ({ isOpen, 
               <li key={x.id} className="flex items-center gap-1.5" data-testid={`${p}-preset-row`}>
                 <button type="button" onClick={() => onApply(x.condition)} disabled={busy} title={t('gcsim:er.presetLoadTitle')} className="flex-1 min-w-0 text-left px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-40" data-testid={`${p}-preset-load`}>
                   <span className="font-semibold">{x.name}</span>
-                  <span className="ml-2 text-[10px] text-slate-400">{t('gcsim:er.presetSummary', { battle: x.condition.battleSeconds, first: x.condition.firstBurstWaitSeconds.toFixed(1), timed: x.condition.timedParticles.length, enemies: x.condition.enemies.length, states: x.condition.enemyStates.length })}</span>
+                  <span className="ml-2 text-[10px] text-slate-400">{t('gcsim:er.presetSummary', { loops: x.condition.loops, first: x.condition.firstBurstWaitSeconds.toFixed(1), timed: x.condition.timedParticles.length, enemies: x.condition.enemies.length, states: x.condition.enemyStates.length })}</span>
                   {JSON.stringify(x.condition) === currentJson && <span className="ml-2 text-[10px] text-emerald-300" data-testid={`${p}-preset-active`}>{t('gcsim:er.presetActive')}</span>}
                 </button>
                 <button type="button" onClick={() => void deletePreset(x)} disabled={busy} className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" title={t('gcsim:er.presetDelete')} data-testid={`${p}-preset-delete`}><Trash2 className="w-3.5 h-3.5" /></button>

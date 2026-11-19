@@ -8,7 +8,8 @@
  * 決定: docs/gcsim-integration/phase-8-abyss-mode/plan.md
  */
 import {
-  ABYSS_DEFAULT_BATTLE_SECONDS,
+  ABYSS_DEFAULT_LOOPS,
+  ABYSS_MAX_LOOPS,
   ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS,
   ABYSS_MAX_BATTLE_SECONDS,
   ABYSS_MAX_TIMED_PARTICLES,
@@ -40,7 +41,7 @@ export interface BattleCondition extends AbyssRunCondition {
 }
 
 export const defaultBattleCondition = (): BattleCondition => ({
-  battleSeconds: ABYSS_DEFAULT_BATTLE_SECONDS,
+  loops: ABYSS_DEFAULT_LOOPS,
   firstBurstWaitSeconds: ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS,
   timedParticles: [],
   enemyParticles: { ...ER_DEFAULT_ENEMY_PARTICLES },
@@ -71,7 +72,7 @@ export function sanitizeBattleCondition(v: unknown): BattleCondition {
   const minSeconds = finiteOr(ep.minSeconds, d.enemyParticles.minSeconds, 0, 600);
   const maxSeconds = finiteOr(ep.maxSeconds, d.enemyParticles.maxSeconds, 0, 600);
   return {
-    battleSeconds: Math.round(finiteOr(o.battleSeconds, d.battleSeconds, 10, ABYSS_MAX_BATTLE_SECONDS)),
+    loops: Math.round(finiteOr(o.loops, d.loops, 1, ABYSS_MAX_LOOPS)),
     firstBurstWaitSeconds: Math.round(finiteOr(o.firstBurstWaitSeconds, d.firstBurstWaitSeconds, 0, 60) * 10) / 10,
     timedParticles: sanitizeTimedParticles(o.timedParticles),
     enemyParticles: { minSeconds: Math.min(minSeconds, maxSeconds), maxSeconds: Math.max(minSeconds, maxSeconds), amount: finiteOr(ep.amount, d.enemyParticles.amount, 0, 99) },
@@ -153,7 +154,7 @@ export function particleLimits(c: Pick<BattleCondition, 'timedParticles' | 'enem
 export const toAbyssRunCondition = (c: BattleCondition): AbyssRunCondition => {
   const invulnerable = c.enemyStates.filter(s => s.kind === 'invulnerable').map(s => ({ fromSeconds: s.fromSeconds, toSeconds: s.toSeconds }));
   return {
-    battleSeconds: c.battleSeconds,
+    loops: c.loops,
     firstBurstWaitSeconds: c.firstBurstWaitSeconds,
     timedParticles: c.timedParticles.map(p => ({ ...p })),
     ...(invulnerable.length > 0 ? { invulnerable } : {}),

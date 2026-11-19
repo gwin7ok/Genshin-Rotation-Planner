@@ -90,8 +90,8 @@ export interface InvulnerableWindow {
  * 開始エネルギーは 0 になり、最初の爆発も判定に含める（docs/gcsim-integration/phase-8-abyss-mode/plan.md）
  */
 export interface AbyssRunCondition {
-  /** 戦闘時間（秒）。ループを回す周数は、ローテーションの長さから自動で決める */
-  battleSeconds: number;
+  /** ループ部分を回す周数（初動のあと。時間の制限は無く、この周数だけ回す） */
+  loops: number;
   /** 最初の爆発だけ、計画した時刻から待ってよい秒数（2 回目以降は burstWaitSeconds） */
   firstBurstWaitSeconds: number;
   /** 時刻指定の粒子（全部。gcsim に渡せない分は、アプリが ER の時系列に書き足す。D371） */
@@ -111,8 +111,11 @@ export interface AbyssRunCondition {
  * 初動の中で爆発を撃つ形（同梱のプリセット 5 編成。ER +1000% でも、0 スタートの最初の爆発が計画から 0.7〜7.2 秒遅れる）は、
  * 0.5 秒でも「届かない」になる。そのときは、画面でこの秒数を増やす
  */
-export const ABYSS_DEFAULT_BATTLE_SECONDS = 180;
+/** ループ部分を回す周数の既定・上限（幽境モード。時間の制限は無く、決めた周数だけ回す） */
+export const ABYSS_DEFAULT_LOOPS = 3;
+export const ABYSS_MAX_LOOPS = 10;
 export const ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS = 0.5;
+/** 時刻指定の粒子・ダメージ無効の時間帯の、秒の上限 */
 export const ABYSS_MAX_BATTLE_SECONDS = 600;
 export const ABYSS_MAX_TIMED_PARTICLES = 20;
 

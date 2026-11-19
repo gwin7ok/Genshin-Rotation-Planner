@@ -13,6 +13,7 @@ import { computeBurstTiming, BURST_TIMING_ON_TIME_SECONDS, type BurstTimingResul
 import { loadBattleCondition, loadRequiredEr, saveBattleCondition, saveRequiredEr } from '../utils/appSettings';
 import { defaultBattleCondition, sameAbyssRunCondition, sanitizeBattleCondition, toAbyssRunCondition, type AppMode, type BattleCondition } from '../utils/battleCondition';
 import { BattlePresetsPanel } from './BattlePresetsPanel';
+import { ENEMY_STATE_MAX } from '../utils/gcsim/enemyStates';
 import { ErAdjustNotice } from './ErAdjustNotice';
 import {
   computeRequiredEr,
@@ -24,6 +25,7 @@ import {
   ER_MAX_SEEDS,
   ER_DEFAULT_ENEMY_PARTICLES,
   ABYSS_MAX_BATTLE_SECONDS,
+  ABYSS_MAX_LOOPS,
   ABYSS_MAX_TIMED_PARTICLES,
   verifyCharacters,
   ER_VERIFY_TOLERANCE_PRECISE,
@@ -82,7 +84,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [currentEr, setCurrentEr] = useState<Record<string, number>>({});
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   // 幽境モードの戦闘条件（入力中は文字列。変えるたびに保存する）
-  const [battleSeconds, setBattleSeconds] = useState(String(defaultBattleCondition().battleSeconds));
+  const [loops, setLoops] = useState(String(defaultBattleCondition().loops));
   const [firstWait, setFirstWait] = useState(defaultBattleCondition().firstBurstWaitSeconds.toFixed(1));
   const [timed, setTimed] = useState<TimedInput[]>([]);
   const timedKey = useRef(0);
@@ -112,7 +114,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     // 幽境モード: 戦闘条件は、保存した条件（モードごと。ER・DPS で共通）から読む。通常モードは、最後の結果の値（古い保存は既定）
     const cond = isAbyss ? loadBattleCondition() : null;
     if (cond) {
-      setBattleSeconds(String(cond.battleSeconds));
+      setLoops(String(cond.loops));
       setFirstWait(cond.firstBurstWaitSeconds.toFixed(1));
       setTimed(cond.timedParticles.map(p => ({ key: ++timedKey.current, seconds: String(p.seconds), amount: String(p.amount) })));
       setDpsPart({ enemies: cond.enemies, enemyStates: cond.enemyStates });
@@ -138,7 +140,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     const raw = (s: string) => (s.trim() === '' ? NaN : Number(s));
     const n = (s: string) => { const v = Number(s); return Number.isFinite(v) && v >= 0 ? v : 0; };
     return sanitizeBattleCondition({
-      battleSeconds: raw(battleSeconds),
+      loops: raw(loops),
       firstBurstWaitSeconds: raw(firstWait),
       timedParticles: timed.map(x => ({ seconds: raw(x.seconds), amount: raw(x.amount) })),
       enemyParticles: { minSeconds: Math.min(n(pMin), n(pMax)), maxSeconds: Math.max(n(pMin), n(pMax)), amount: n(pAmount) },
@@ -149,7 +151,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
   // 幽境モードの戦闘条件は、入力を変えるたびに保存する（閉じても残る。DPS 計算が共通で使う設定の元になる）。
   // 開いた直後の読み込み（上の effect）で入力が入りきる前の保存を避けるため、開いている間だけ・変わったときだけ保存する
-  const abyssInputs = JSON.stringify([battleSeconds, firstWait, timed.map(x => [x.seconds, x.amount]), pMin, pMax, pAmount, dpsPart]);
+  const abyssInputs = JSON.stringify([loops, firstWait, timed.map(x => [x.seconds, x.amount]), pMin, pMax, pAmount, dpsPart]);
   const lastSavedInputs = useRef<string | null>(null);
   useEffect(() => {
     if (!isOpen || !isAbyss) { lastSavedInputs.current = null; return; }
@@ -187,7 +189,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
   /** 保存した戦闘条件を、入力欄に入れる（入力が変わるので、上の自動保存が、いまの条件として保存する） */
   const applyCondition = (c: BattleCondition) => {
-    setBattleSeconds(String(c.battleSeconds));
+    setLoops(String(c.loops));
     setFirstWait(c.firstBurstWaitSeconds.toFixed(1));
     setTimed(c.timedParticles.map(p => ({ key: ++timedKey.current, seconds: String(p.seconds), amount: String(p.amount) })));
     setPMin(String(c.enemyParticles.minSeconds));
@@ -376,7 +378,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           )}
 
           {shown?.abyss && !running && (
-            <p className="text-xs text-fuchsia-200/90" data-testid="er-abyss-result-condition">{t('gcsim:er.abyssResultCondition', { battle: shown.abyss.battleSeconds, first: shown.abyss.firstBurstWaitSeconds.toFixed(1), timed: shown.abyss.timedParticles.length })}</p>
+            <p className="text-xs text-fuchsia-200/90" data-testid="er-abyss-result-condition">{t('gcsim:er.abyssResultCondition', { loops: shown.abyss.loops ?? '-', first: shown.abyss.firstBurstWaitSeconds.toFixed(1), timed: shown.abyss.timedParticles.length })}</p>
           )}
           {shown?.adjusted && !running && (
             <p className="text-xs text-sky-300" data-testid="er-adjusted-result">{t('gcsim:er.adjustedResult', { timed: shown.adjusted.timedInjected, windows: shown.adjusted.invulnerableWindows })}</p>
@@ -449,6 +451,25 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 </button>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
                 {shownTiming && shownTiming.entries.length === 0 && <p className="text-slate-500">{t('gcsim:er.timingNone')}</p>}
+                {shownTiming && shownTiming.entries.length > 0 && (
+                  <div className="rounded-md border border-slate-800 p-2 space-y-1" data-testid="er-timing-waits">
+                    <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
+                    <p className="text-slate-300" data-testid="er-timing-waits-total">
+                      {t('gcsim:er.waitsTotal', { n: shownTiming.waitsTotal.perLoop.toFixed(2), loops: shownTiming.loops })}
+                      {' '}
+                      {shownTiming.waitsTotal.avgSeconds === null ? t('gcsim:er.waitsNone') : t('gcsim:er.waitsAvg', { n: shownTiming.waitsTotal.avgSeconds.toFixed(2) })}
+                    </p>
+                    {shownTiming.waits.map(wt => {
+                      const c = charOf(wt.characterId);
+                      return (
+                        <p key={wt.characterId} className="text-slate-400" data-testid={`er-timing-wait-${wt.characterId}`}>
+                          {c ? charName(c) : wt.name}: {t('gcsim:er.waitsChar', { n: wt.perLoop.toFixed(2) })}{wt.avgSeconds === null ? '' : ` / ${t('gcsim:er.waitsAvg', { n: wt.avgSeconds.toFixed(2) })}`}
+                        </p>
+                      );
+                    })}
+                    <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.waitsNote')}</p>
+                  </div>
+                )}
                 {shownTiming?.entries.map(e => {
                   const c = charOf(e.characterId);
                   const first = e.bursts[0];
@@ -526,11 +547,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <p className="font-bold text-fuchsia-200">{t('gcsim:er.abyssConditions')}</p>
               <BattlePresetsPanel isOpen={isOpen} current={readCondition()} onApply={applyCondition} busy={running || timingRunning} testIdPrefix="er" />
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span>{t('gcsim:er.battleSeconds')}</span>
-                <Stepper value={battleSeconds} onChange={setBattleSeconds} step={10} min={10} max={ABYSS_MAX_BATTLE_SECONDS} disabled={running} widthClass="w-16" testId="er-battle-seconds" />
-                <span>{t('gcsim:er.battleSecondsUnit')}</span>
+                <span>{t('gcsim:er.loops')}</span>
+                <Stepper value={loops} onChange={setLoops} step={1} min={1} max={ABYSS_MAX_LOOPS} disabled={running} widthClass="w-14" testId="er-loops" />
+                <span>{t('gcsim:er.loopsUnit')}</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.battleSecondsNote')}</p>
+              <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.loopsNote')}</p>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span>{t('gcsim:er.firstBurstWait')}</span>
                 <Stepper value={firstWait} onChange={setFirstWait} step={0.5} min={0} max={60} decimals={1} disabled={running} widthClass="w-14" testId="er-first-wait" />
@@ -551,6 +572,29 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 <button type="button" onClick={() => setTimed(list => [...list, { key: ++timedKey.current, seconds: String(list.length > 0 ? Math.min(ABYSS_MAX_BATTLE_SECONDS, Number(list[list.length - 1].seconds) + 30 || 30) : 30), amount: '3' }])} disabled={running || timed.length >= ABYSS_MAX_TIMED_PARTICLES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-timed-add"><Plus className="w-3.5 h-3.5" />{t('gcsim:er.timedParticlesAdd')}</button>
                 <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timedParticlesNote', { max: ABYSS_MAX_TIMED_PARTICLES })}</p>
                 <ErAdjustNotice condition={readCondition()} testId="er-adjust" />
+              </div>
+              <div className="space-y-1.5" data-testid="er-invulnerable">
+                <p className="font-semibold">{t('gcsim:er.invulnerableTitle')}</p>
+                {dpsPart.enemyStates.map((w, idx) => {
+                  if (w.kind !== 'invulnerable') return null;
+                  const bad = !(w.toSeconds > w.fromSeconds);
+                  const setWin = (patch: Partial<{ fromSeconds: number; toSeconds: number }>) => setDpsPart(p => ({ ...p, enemyStates: p.enemyStates.map((x, j) => (j === idx ? { ...x, ...patch } : x)) }));
+                  const num = (v: string, old: number) => { const n = Number(v); return v.trim() !== '' && Number.isFinite(n) ? n : old; };
+                  return (
+                    <div key={idx} className="flex items-center gap-1.5 flex-wrap" data-testid="er-invulnerable-row">
+                      <span>{t('gcsim:dps.stateFrom')}</span>
+                      <Stepper value={String(w.fromSeconds)} onChange={v => setWin({ fromSeconds: num(v, w.fromSeconds) })} step={1} min={0} max={ABYSS_MAX_BATTLE_SECONDS} disabled={running} invalid={bad} widthClass="w-16" testId="er-invulnerable-from" />
+                      <span>{t('gcsim:dps.stateSecondsUnit')}</span>
+                      <span>{rangeMark}</span>
+                      <span>{t('gcsim:dps.stateTo')}</span>
+                      <Stepper value={String(w.toSeconds)} onChange={v => setWin({ toSeconds: num(v, w.toSeconds) })} step={1} min={0} max={ABYSS_MAX_BATTLE_SECONDS} disabled={running} invalid={bad} widthClass="w-16" testId="er-invulnerable-to" />
+                      <span>{t('gcsim:dps.stateSecondsUnit')}</span>
+                      <button type="button" onClick={() => setDpsPart(p => ({ ...p, enemyStates: p.enemyStates.filter((_, j) => j !== idx) }))} disabled={running} className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" title={t('gcsim:dps.stateRemove')} data-testid="er-invulnerable-remove"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  );
+                })}
+                <button type="button" onClick={() => setDpsPart(p => { const last = p.enemyStates.filter(w => w.kind === 'invulnerable').pop(); const from = last ? Math.min(ABYSS_MAX_BATTLE_SECONDS - 10, last.toSeconds + 10) : 30; return { ...p, enemyStates: [...p.enemyStates, { fromSeconds: from, toSeconds: from + 10, kind: 'invulnerable' as const }] }; })} disabled={running || dpsPart.enemyStates.length >= ENEMY_STATE_MAX} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-invulnerable-add"><Plus className="w-3.5 h-3.5" />{t('gcsim:er.invulnerableAdd')}</button>
+                <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.invulnerableNote', { max: ENEMY_STATE_MAX })}</p>
               </div>
             </div>
           )}

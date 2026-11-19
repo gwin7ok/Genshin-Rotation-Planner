@@ -560,11 +560,11 @@ export default function App() {
   const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles; abyss?: DpsAbyssRun }) => buildGcsimConfig({
       characters,
       ...(dpsExtra ? { loopIterations: dpsExtra.loopIterations, enemies: dpsExtra.enemies, ignoreBurstEnergy: dpsExtra.ignoreBurstEnergy, enemyParticles: dpsExtra.enemyParticles } : {}),
-      // 幽境モードの DPS 計算: 戦闘時間から周数を決める。エネルギーを考慮するときは、開始エネルギー 0・時刻指定の粒子
-      ...(dpsExtra?.abyss ? { startEnergyZero: dpsExtra.abyss.startEnergyZero, timedParticles: dpsExtra.abyss.timedParticles, battleSeconds: dpsExtra.abyss.battleSeconds } : {}),
+      // （幽境モードの DPS 計算は、画面から外した。型だけ残っている）
+      ...(dpsExtra?.abyss ? { startEnergyZero: dpsExtra.abyss.startEnergyZero, timedParticles: dpsExtra.abyss.timedParticles, } : {}),
       ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
       // 幽境モード: 開始エネルギー 0・時刻指定の粒子・戦闘時間（周数は、ローテーションの長さから自動で決まる）
-      ...(erExtra?.abyss ? { startEnergyZero: true, timedParticles: erExtra.abyss.timedParticles, battleSeconds: erExtra.abyss.battleSeconds } : {}),
+      ...(erExtra?.abyss ? { startEnergyZero: true, timedParticles: erExtra.abyss.timedParticles, loopIterations: erExtra.abyss.loops } : {}),
       stints: stintsArg,
       loopStartIndex,
       switchDelay,
@@ -1090,7 +1090,6 @@ export default function App() {
       {/* DPS 計算（D343） */}
       <DpsDialog
         isOpen={isDpsOpen}
-        appMode={appMode}
         onClose={() => setIsDpsOpen(false)}
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, undefined, extra)}
         characters={characters}

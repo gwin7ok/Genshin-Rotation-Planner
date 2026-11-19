@@ -221,12 +221,12 @@ const abyssStints = [
   { id: 'l1', characterId: chars[1].id, actions: [...['e', 'q'].map(s => makeAction(chars[1], s)), { id: 'w1', actionTypeId: 'wait', name: 'w', shortName: 'w', type: 'wait', duration: 8 }] }, // ループ: 香菱 E → Q → 待機
 ];
 const ABYSS_LOOP_START = 2;
-const abyssCond = { battleSeconds: 90, firstBurstWaitSeconds: er.ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS, timedParticles: [{ seconds: 20, amount: 3 }] };
+const abyssCond = { loops: 3, firstBurstWaitSeconds: er.ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS, timedParticles: [{ seconds: 20, amount: 3 }] };
 const enemyP = { minSeconds: 5, maxSeconds: 8, amount: 1 };
 const buildAbyss = (extra: any) => buildGcsimConfig({
   characters: chars, stints: abyssStints, loopStartIndex: ABYSS_LOOP_START, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [],
   ignoreBurstEnergy: extra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: extra.added, loopIterations: er.ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: extra.enemyParticles,
-  ...(extra.abyss ? { startEnergyZero: true, timedParticles: extra.abyss.timedParticles, battleSeconds: extra.abyss.battleSeconds } : {}),
+  ...(extra.abyss ? { startEnergyZero: true, timedParticles: extra.abyss.timedParticles, loopIterations: extra.abyss.loops } : {}),
 });
 // 検証ありの算出は、gcsim が正確に扱える粒子（敵の周期の粒子なし・時刻指定が 1 件）で行う。周期の粒子との併用・2 件以上は、アプリが書き足すので、検証はしない（下で別に確認）
 const abyssOutcome = await er.computeRequiredEr({ build: buildAbyss, abyss: abyssCond, enemyParticles: undefined, run: runGcsimSample, gcsimVersion: 'check', verify: true, verifyTolerance: er.ER_VERIFY_TOLERANCE_ROUGH, seeds: 8 });
@@ -235,7 +235,7 @@ if (abyssOutcome.status !== 'ok') {
   failed++;
 } else {
   const ar = abyssOutcome.result;
-  check(ar.entries.length === 2 && ar.abyss?.battleSeconds === 90 && ar.entries.every((e: any) => e.status === 'ok'), `幽境: 算出が成功し、結果に戦闘条件が残る（${ar.seeds} 種・窓 ${ar.windows}）`);
+  check(ar.entries.length === 2 && ar.abyss?.loops === 3 && ar.entries.every((e: any) => e.status === 'ok'), `幽境: 算出が成功し、結果に戦闘条件が残る（${ar.seeds} 種・窓 ${ar.windows}）`);
   for (const e of ar.entries) console.log(`  [幽境] ${e.name}: ${e.status} ${e.status === 'ok' ? `目安 ${e.typicalEr}% / 安定 ${e.stableEr}% / 確実 ${e.certainEr}%（足す ${e.addedEr}）` : ''}`);
   for (const e of ar.entries.filter((x: any) => x.status === 'ok')) check(e.typicalEr <= e.stableEr && e.stableEr <= e.certainEr, `[幽境] ${e.name}: 目安 ≤ 安定 ≤ 確実`);
   const firstDelay = Math.round(abyssCond.firstBurstWaitSeconds * 60);
@@ -292,6 +292,15 @@ const bt = await server.ssrLoadModule('/src/utils/gcsim/burstTiming.ts');
   const b0 = sum[0].bursts[0];
   const b1 = sum[0].bursts[1];
   check(sum.length === 1 && b0.total === 3 && b0.onTime === 3 && b0.delayMaxSeconds === 0.5 && b1.total === 3 && b1.missed === 1 && b1.onTime === 2, '爆発のタイミング: 種ごとの結果を、爆発の順ごとにまとめる（計画どおりの数・撃てなかった数・最大の遅れ）');
+  // 爆発のエネルギー待ち（ループの分だけ・1 周あたり・平均の待ち時間）
+  const wl = (frame: number, extra: Record<string, unknown> = {}) => ({ event: 'sim', msg: 'could not execute burst; action not ready', frame, char_index: 0, ...extra });
+  const waitLogs = [
+    { event: 'user', msg: 'loop 1', frame: 100, char_index: -1 },
+    ...Array.from({ length: 10 }, (_, k) => wl(200 + k)), // ループの中: 10 フレーム待ち（CT は明けている）
+  ];
+  const earlyLogs = [...Array.from({ length: 5 }, (_, k) => wl(50 + k)), ...waitLogs]; // 初動の待ちは数えない
+  const ew = bt.summarizeEnergyWaits([{ logs: earlyLogs }, { logs: waitLogs }], [{ characterId: 'x', name: 'X' }, { characterId: 'y', name: 'Y' }], 2);
+  check(Math.abs(ew.total.perLoop - 0.5) < 1e-9 && Math.abs((ew.total.avgSeconds ?? -1) - 10 / 60) < 1e-9 && ew.waits[1].perLoop === 0 && ew.waits[1].avgSeconds === null, '爆発のエネルギー待ち: 初動の分は数えず、ループ 1 周あたりの回数と、1 回あたりの平均の待ち時間を求める');
 }
 // 実機の実行: ベネット + 香菱の幽境の形で、ER を足さないと遅れ・撃てない爆発が出て、十分に足すと、全て計画どおりになる
 {
@@ -307,6 +316,7 @@ const bt = await server.ssrLoadModule('/src/utils/gcsim/burstTiming.ts');
     for (const e of low.result.entries) console.log(`  [タイミング・ER 足さず] ${e.name}: ${e.bursts.map((x: any) => `${x.n}回目 計画 ${x.plannedSeconds.toFixed(1)}s 遅れ ${x.delayMaxSeconds === null ? '撃てず' : x.delayMaxSeconds.toFixed(1)}`).join(' / ')}`);
     check(low.result.entries.length === 2 && bursts(low).length > 0 && bursts(low).every((x: any) => x.total === 4), `爆発のタイミング: 2 キャラ分の結果が、種の数（4）で求まる（爆発 ${bursts(low).length} 件）`);
     check(bursts(low).some((x: any) => x.onTime < x.total), '爆発のタイミング: ER を足さないと、計画どおりに撃てない爆発がある');
+    check(low.result.loops === abyssCond.loops && low.result.waitsTotal.perLoop >= high.result.waitsTotal.perLoop && low.result.waits.length === 2, `爆発のエネルギー待ち: 周数が結果に残り、ER を足さないほうが待ちが多い（足さず ${low.result.waitsTotal.perLoop.toFixed(2)} 回/周・平均 ${low.result.waitsTotal.avgSeconds?.toFixed(2) ?? '-'} 秒 / +${er.ER_MAX_ADDED * 100}% で ${high.result.waitsTotal.perLoop.toFixed(2)} 回/周）`);
     check(bursts(high).every((x: any) => x.missed === 0 && x.delayMaxSeconds !== null && x.delayMaxSeconds <= abyssCond.firstBurstWaitSeconds), `爆発のタイミング: ER を十分に足すと（+${er.ER_MAX_ADDED * 100}%）、全ての爆発が計画どおり（遅れ ${abyssCond.firstBurstWaitSeconds} 秒以内）`);
   }
 }

@@ -1,12 +1,16 @@
 /**
  * 爆発のタイミングの確認（フェーズ8 段階 2。幽境モード）。
  *
- * 「いまのビルド」（編成・装備のまま。ER を足さない）で、開始エネルギー 0 から戦闘時間の分だけ回し、
+ * 「いまのビルド」（編成・装備のまま。ER を足さない）で、開始エネルギー 0 から、決めた周数（時間の制限なし）だけ回し、
  * 各爆発が、計画した時刻（爆発のエネルギーを無視して回した実行の、爆発の時刻）より何秒遅れるかを、種ごとに調べる。
  * ER の算出（requiredEnergyRecharge.ts）の結果は使わない。画面の「繰り返しの位置の爆発が毎回撃てるか」の確認に使う。
  *
+ * あわせて、爆発のエネルギー待ち（爆発の CT が明けているのに、エネルギーが足りず、粒子が入るまで待った回数と時間）を、
+ * ループ 1 周あたりの回数と、1 回あたりの平均の待ち時間で出す（初動の分は数えない）。
+ *
  * 遅れは、計画との差。前の爆発が遅れると、後ろの行動も同じだけずれるので、遅れは積み上がる。
  */
+import { summarizeDamage } from './dpsCalc';
 import {
   burstSignature,
   plannedBurstFrames,
@@ -48,12 +52,43 @@ export interface BurstTimingEntry {
   bursts: BurstTimingBurst[];
 }
 
+/** 爆発のエネルギー待ち（ループの分だけ。全ての種の平均） */
+export interface BurstEnergyWait {
+  characterId: string;
+  name: string;
+  /** ループ 1 周あたりの待ちの回数 */
+  perLoop: number;
+  /** 待ち 1 回あたりの平均の待ち時間（秒。CT 待ちは含まない）。待ちが 1 回も無ければ null */
+  avgSeconds: number | null;
+}
+
 export interface BurstTimingResult {
   ranAt: number;
   seeds: number;
-  /** この秒までに計画された爆発だけを数えた */
-  battleSeconds: number;
+  /** ループ部分を回した周数 */
+  loops: number;
   entries: BurstTimingEntry[];
+  /** キャラ別の、爆発のエネルギー待ち（爆発のあるキャラだけ） */
+  waits: BurstEnergyWait[];
+  /** 全員の合計の、ループ 1 周あたりの待ちの回数・待ち 1 回あたりの平均の待ち時間 */
+  waitsTotal: { perLoop: number; avgSeconds: number | null };
+}
+
+/** 種ごとの実行ログから、爆発のエネルギー待ちを、キャラごとにまとめる（ループが始まる前の分は数えない） */
+export function summarizeEnergyWaits(runs: { logs: Parameters<typeof summarizeDamage>[0] }[], members: { characterId: string; name: string }[], loops: number): { waits: BurstEnergyWait[]; total: { perLoop: number; avgSeconds: number | null } } {
+  const counts = new Array<number>(members.length).fill(0);
+  const frames = new Array<number>(members.length).fill(0);
+  for (const r of runs) {
+    const loop1 = r.logs.find(l => l.event === 'user' && l.msg === 'loop 1')?.frame;
+    const d = summarizeDamage(r.logs, members.length, loop1 !== undefined ? { waitsFromFrame: loop1 } : undefined);
+    d.energyWaits.forEach((n, i) => { counts[i] += n; });
+    d.energyWaitFrames.forEach((n, i) => { frames[i] += n; });
+  }
+  const n = Math.max(1, runs.length) * Math.max(1, loops);
+  const avg = (c: number, f: number): number | null => (c > 0 ? f / 60 / c : null);
+  const waits = members.map((m, i) => ({ characterId: m.characterId, name: m.name, perLoop: counts[i] / n, avgSeconds: avg(counts[i], frames[i]) }));
+  const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+  return { waits, total: { perLoop: sum(counts) / n, avgSeconds: avg(sum(counts), sum(frames)) } };
 }
 
 export type BurstTimingOutcome =
@@ -134,10 +169,10 @@ export async function computeBurstTiming(args: {
   const base = args.build({ ignoreBurstEnergy: true, added: {}, enemyParticles, abyss });
   if (!base.runnable) return { status: 'error', message: base.warnings.filter(w => w.level === 'error').map(w => w.message).join(' / ') };
   const test = args.build({ ignoreBurstEnergy: false, added: args.added ?? {}, enemyParticles, abyss });
-  const limitFrame = Math.round(Math.max(0, abyss.battleSeconds) * 60);
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
   const seeds = Math.max(1, Math.floor(args.seeds));
   const perSeed: Map<number, BurstDelay[]>[] = [];
+  const testRuns: { logs: Parameters<typeof summarizeDamage>[0] }[] = [];
   const all = Array.from({ length: seeds }, (_, i) => i + 1);
   for (let i = 0; i < all.length; i += parallel) {
     if (args.shouldCancel?.()) return { status: 'cancelled' };
@@ -146,8 +181,12 @@ export async function computeBurstTiming(args: {
     for (const { b, t } of results) {
       if (b.status !== 'ok') return { status: b.status, message: b.message };
       if (t.status !== 'ok') return { status: t.status, message: t.message };
-      perSeed.push(burstDelays(burstSignature(b.logs), burstSignature(t.logs), limitFrame));
+      perSeed.push(burstDelays(burstSignature(b.logs), burstSignature(t.logs)));
+      testRuns.push({ logs: t.logs });
     }
   }
-  return { status: 'ok', result: { ranAt: Date.now(), seeds, battleSeconds: abyss.battleSeconds, entries: summarizeBurstTiming(perSeed, base.members) } };
+  const entries = summarizeBurstTiming(perSeed, base.members);
+  const w = summarizeEnergyWaits(testRuns, base.members, abyss.loops);
+  const withBurst = new Set(entries.map(e => e.characterId));
+  return { status: 'ok', result: { ranAt: Date.now(), seeds, loops: abyss.loops, entries, waits: w.waits.filter(x => withBurst.has(x.characterId)), waitsTotal: w.total } };
 }

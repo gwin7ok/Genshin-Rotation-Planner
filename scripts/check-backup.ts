@@ -435,18 +435,18 @@ check('戦闘条件の保存: 名前を付けて保存 → 同じ名前は上書
   assert.deepEqual(settings.loadBattlePresets(), [], '無いときは空');
   let n = 0;
   const newId = () => `p${++n}`;
-  const a = { ...battle.defaultBattleCondition(), battleSeconds: 120, timedParticles: [{ seconds: 30, amount: 3 }] };
-  const b = { ...battle.defaultBattleCondition(), battleSeconds: 90, firstBurstWaitSeconds: 2 };
+  const a = { ...battle.defaultBattleCondition(), loops: 5, timedParticles: [{ seconds: 30, amount: 3 }] };
+  const b = { ...battle.defaultBattleCondition(), loops: 4, firstBurstWaitSeconds: 2 };
   let r = battle.savePreset([], '  ボス A  ', a, newId);
   assert.equal(r.overwritten, false);
   assert.equal(r.list[0].name, 'ボス A', '名前の前後の空白は除く');
   r = battle.savePreset(r.list, 'ボス B', b, newId);
   assert.deepEqual(r.list.map((p: any) => p.id), ['p1', 'p2']);
-  const over = battle.savePreset(r.list, 'ボス A', { ...a, battleSeconds: 200 }, newId);
+  const over = battle.savePreset(r.list, 'ボス A', { ...a, loops: 8 }, newId);
   assert.equal(over.overwritten, true);
   assert.equal(over.id, 'p1', '同じ名前の上書きは、id を変えない');
   assert.equal(over.list.length, 2);
-  assert.equal(over.list[0].condition.battleSeconds, 200);
+  assert.equal(over.list[0].condition.loops, 8);
   assert.equal(battle.savePreset(over.list, '   ', a, newId).reason, 'empty', '名前が空は保存しない');
   assert.equal(settings.saveBattlePresets(over.list), true);
   assert.deepEqual(settings.loadBattlePresets(), over.list, '保存 → 読み込みで同じ内容');
@@ -454,7 +454,7 @@ check('戦闘条件の保存: 名前を付けて保存 → 同じ名前は上書
 });
 check('戦闘条件の保存: 壊れた項目・id の重複・上限・範囲外の値を直して読み込む', () => {
   const broken = [
-    { id: 'x', name: 'OK', condition: { battleSeconds: 99999, firstBurstWaitSeconds: -5, timedParticles: [{ seconds: 5, amount: 2 }, { seconds: 'a', amount: 1 }] } },
+    { id: 'x', name: 'OK', condition: { loops: 99999, firstBurstWaitSeconds: -5, timedParticles: [{ seconds: 5, amount: 2 }, { seconds: 'a', amount: 1 }] } },
     { id: 'x', name: '同じ id', condition: {} },
     { id: '', name: 'id なし', condition: {} },
     { id: 'y', name: '   ', condition: {} },
@@ -464,7 +464,7 @@ check('戦闘条件の保存: 壊れた項目・id の重複・上限・範囲�
   ];
   const list = battle.sanitizeBattlePresets(broken);
   assert.deepEqual(list.map((p: any) => p.id), ['x', 'z']);
-  assert.equal(list[0].condition.battleSeconds, 600, '戦闘時間は上限に収める');
+  assert.equal(list[0].condition.loops, 10, "周数は上限に収める");
   assert.equal(list[0].condition.firstBurstWaitSeconds, 0, '待ちは 0 以上');
   assert.equal(list[0].condition.timedParticles.length, 1, '不正な粒子は捨てる');
   assert.equal(list[1].name.length, battle.BATTLE_PRESET_NAME_MAX, '名前は上限の長さまで');

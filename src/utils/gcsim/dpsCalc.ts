@@ -21,9 +21,8 @@ export const DPS_MAX_RUNS = 1000;
 /** 敵の数の上限 */
 export const DPS_MAX_ENEMIES = 4;
 
-/** 幽境モードの DPS 計算で、設定文に足す条件（戦闘時間から周数を自動で決める。エネルギーを考慮するときは、開始エネルギー 0 と時刻指定の粒子） */
+/** 幽境モードの DPS 計算で、設定文に足す条件（画面からは外した。エネルギーを考慮するときは、開始エネルギー 0 と時刻指定の粒子） */
 export interface DpsAbyssRun {
-  battleSeconds: number;
   startEnergyZero: boolean;
   timedParticles: TimedParticle[];
 }
@@ -46,6 +45,8 @@ export interface DpsSettings {
  */
 export interface DamageContext {
   battleSeconds?: number;
+  /** この時刻（フレーム）より前のエネルギー待ちは、数えない（幽境モード: 初動の分を除き、ループの分だけ数える） */
+  waitsFromFrame?: number;
   enemyStates?: EnemyStateWindow[];
   enemies?: EnemySetting[];
 }
@@ -116,6 +117,7 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number, cont
       else if (l.msg === 'burst cooldown ready') burstCd[l.char_index] = false;
     } else if (l.event === 'sim' && l.msg.startsWith('could not execute burst') && l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) {
       if (battleFrames !== undefined && l.frame > battleFrames) continue;
+      if (context?.waitsFromFrame !== undefined && l.frame < context.waitsFromFrame) continue;
       const i = l.char_index;
       if (l.frame !== waitLast[i] && l.frame !== waitLast[i] + 1) closeWait(i);
       waitLast[i] = l.frame;

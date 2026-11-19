@@ -406,14 +406,17 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{t('header:menu.energyRecharge')}</span>
             </button>
 
-            <button
-              onClick={onOpenDpsModal}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 transition-colors shrink-0"
-              title={t('header:menu.dpsTitle')}
-            >
-              <Swords className="w-3.5 h-3.5" />
-              <span>{t('header:menu.dps')}</span>
-            </button>
+            {/* 幽境モードでは、DPS 計算は使わない（敵のギミックに対応できないため。爆発のエネルギー待ちは、チャージ効率計算の画面で確認する。D374） */}
+            {appMode !== 'abyss' && (
+              <button
+                onClick={onOpenDpsModal}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 transition-colors shrink-0"
+                title={t('header:menu.dpsTitle')}
+              >
+                <Swords className="w-3.5 h-3.5" />
+                <span>{t('header:menu.dps')}</span>
+              </button>
+            )}
 
             {/* 改行（記法コピーは、次の行から） */}
             <div className="basis-full h-0" aria-hidden="true" />

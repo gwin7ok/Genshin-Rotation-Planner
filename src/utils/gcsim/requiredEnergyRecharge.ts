@@ -24,7 +24,7 @@ import { adjustTimelines, needsAdjust, periodicParticlesOn, splitTimedParticles,
  * （実測: ラウマ +15% → 5 周 +78%）。窓は、爆発の間（周数 − 1 個）。
  */
 /** ループ部分を回す周数の既定・上限（通常モード・幽境モードの共通。計算にも、爆発のタイミングの確認にも使う。画面で変えられる） */
-export const ER_DEFAULT_LOOPS = 5;
+export const ER_DEFAULT_LOOPS = 3;
 export const ER_MAX_LOOPS = 10;
 export const ER_LOOP_ITERATIONS = ER_DEFAULT_LOOPS;
 /** 立ち上がりとして数えない窓の数。0 = 最初の窓（最初の爆発から 2 回目の爆発まで）も、遅れの許容の設定にしたがって数える（1 周目は粒子が少なく、ここで遅れると次の窓の粒子が捨てられて連鎖するため。D308・D309） */

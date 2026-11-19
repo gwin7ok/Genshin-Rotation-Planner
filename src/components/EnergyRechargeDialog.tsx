@@ -487,7 +487,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   {timingRunning && <RunProgress label={t('gcsim:er.timingRunning')} startedAt={timingStartedAt} progress={timingProgress} />}
                 </div>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
-                <div className={`space-y-1 ${timingStale ? 'opacity-50' : ''}`} data-testid="er-timing-waits" data-stale={timingStale ? 'true' : 'false'}>
+                <div className="space-y-1" data-testid="er-timing-waits" data-stale={timingStale ? 'true' : 'false'}>
                   {timingStale && <p className="text-[11px] text-amber-300" data-testid="er-timing-stale">{t('gcsim:er.timingStale')}</p>}
                   <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
                   <table className="w-full text-left" data-testid="er-timing-table">

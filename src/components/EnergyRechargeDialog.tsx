@@ -97,6 +97,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
   const { cores, changeCores } = useCoresSetting();
   const cancelRef = useRef(false);
+  const timingCancelRef = useRef(false);
   const buildRef = useRef(build);
   buildRef.current = build;
 
@@ -228,6 +229,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     const { condition, particles } = resolveRun();
     if (condition) saveBattleCondition(condition);
     const key = timingKeyNow;
+    timingCancelRef.current = false;
     setTimingRunning(true);
     setTimingMessage(null);
     setTimingProgress(null);
@@ -241,6 +243,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         loops: loopsN(),
         erDelta: erDeltaMap(),
         onProgress: setTimingProgress,
+        shouldCancel: () => timingCancelRef.current,
         seeds: seedCount(),
         parallel: wasmParallelism(),
         run: runGcsimSample,
@@ -250,7 +253,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     }
     setTimingRunning(false);
     if (outcome.status === 'ok') setTiming({ key, result: outcome.result });
-    else if (outcome.status !== 'cancelled') setTimingMessage(t('gcsim:er.timingFailed', { message: outcome.message }));
+    else if (outcome.status === 'cancelled') setTimingMessage(t('gcsim:er.cancelled'));
+    else setTimingMessage(t('gcsim:er.timingFailed', { message: outcome.message }));
   };
 
   const start = async () => {
@@ -464,10 +468,18 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
                 <p className="font-bold text-fuchsia-200">{t('gcsim:er.timingTitle')}</p>
                 <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timingNote', { sec: BURST_TIMING_ON_TIME_SECONDS })}</p>
-                <button type="button" onClick={() => void runTiming()} disabled={running || timingRunning || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
-                  <Play className="w-3.5 h-3.5" />{timingRunning ? t('gcsim:er.timingRunning') : t('gcsim:er.timingStart')}
-                </button>
-                {timingRunning && <div><RunProgress label={t('gcsim:er.timingRunning')} startedAt={timingStartedAt} progress={timingProgress} /></div>}
+                <div className="flex items-center gap-3 flex-wrap">
+                  {timingRunning ? (
+                    <button type="button" onClick={() => { timingCancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white" data-testid="er-timing-cancel">
+                      <Square className="w-3.5 h-3.5" />{t('gcsim:er.cancel')}
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => void runTiming()} disabled={running || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
+                      <Play className="w-3.5 h-3.5" />{t('gcsim:er.timingStart')}
+                    </button>
+                  )}
+                  {timingRunning && <RunProgress label={t('gcsim:er.timingRunning')} startedAt={timingStartedAt} progress={timingProgress} />}
+                </div>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
                 <div className="space-y-1" data-testid="er-timing-waits">
                   <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>

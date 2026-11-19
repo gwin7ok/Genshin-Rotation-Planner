@@ -189,8 +189,14 @@ export async function computeBurstTiming(args: {
   for (let i = 0; i < all.length; i += parallel) {
     if (args.shouldCancel?.()) return { status: 'cancelled' };
     const chunk = all.slice(i, i + parallel);
-    const results = await Promise.all(chunk.map(async seed => ({ b: await args.run(base.config, seed).then(r => { tick(); return r; }), t: await args.run(test.config, seed).then(r => { tick(); return r; }) })));
-    for (const { b, t } of results) {
+    const results = await Promise.all(chunk.map(async seed => {
+      const b = await args.run(base.config, seed).then(r => { tick(); return r; });
+      // 中止されたら、試験の実行はしない（基準の実行のあとで見る）
+      if (args.shouldCancel?.()) return null;
+      return { b, t: await args.run(test.config, seed).then(r => { tick(); return r; }) };
+    }));
+    if (results.some(x => x === null) || args.shouldCancel?.()) return { status: 'cancelled' };
+    for (const { b, t } of results as { b: Awaited<ReturnType<RunSample>>; t: Awaited<ReturnType<RunSample>> }[]) {
       if (b.status !== 'ok') return { status: b.status, message: b.message };
       if (t.status !== 'ok') return { status: t.status, message: t.message };
       perSeed.push(burstDelays(burstSignature(b.logs), burstSignature(t.logs)));

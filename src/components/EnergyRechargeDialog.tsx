@@ -206,7 +206,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const seedCount = (): number => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; };
 
   // 爆発のタイミングの確認（幽境モード）: いまのビルドで、開始エネルギー 0 から回し、各爆発の計画からの遅れを調べる
-  const timingKeyNow = `${currentFingerprint ?? ''}|${JSON.stringify(readCondition())}|${JSON.stringify(checkEr)}`;
+  const timingKeyNow = `${mode}|${currentFingerprint ?? ''}|${JSON.stringify(readCondition())}|${JSON.stringify(checkEr)}`;
   /** 確認に使う ER（%）。編集した値、無ければ、いまの ER。いまの ER が未計算なら undefined */
   const checkErOf = (id: string): number | undefined => {
     const cur = currentEr[id] === undefined ? undefined : Math.round(currentEr[id] * 1000) / 10;
@@ -467,7 +467,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
           {(() => {
-            const shownTiming = timing !== null && timing.key === timingKeyNow ? timing.result : null;
+            // 前の結果は、「足りているか確認」を押すまで消さない。設定を変えたあとは、薄く表示して、古い結果であることを示す
+            const shownTiming = timing !== null ? timing.result : null;
+            const timingStale = timing !== null && timing.key !== timingKeyNow;
             return (
               <div className="text-xs text-slate-300 bg-slate-950/50 border border-emerald-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
                 <p className="font-bold text-emerald-200">{t('gcsim:er.timingTitle')}</p>
@@ -485,7 +487,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   {timingRunning && <RunProgress label={t('gcsim:er.timingRunning')} startedAt={timingStartedAt} progress={timingProgress} />}
                 </div>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
-                <div className="space-y-1" data-testid="er-timing-waits">
+                <div className={`space-y-1 ${timingStale ? 'opacity-50' : ''}`} data-testid="er-timing-waits" data-stale={timingStale ? 'true' : 'false'}>
+                  {timingStale && <p className="text-[11px] text-amber-300" data-testid="er-timing-stale">{t('gcsim:er.timingStale')}</p>}
                   <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
                   <table className="w-full text-left" data-testid="er-timing-table">
                     <thead>

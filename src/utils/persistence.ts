@@ -50,6 +50,8 @@ export const SETTING_KEYS = {
   hoyolabUid: 'hoyolabUid',
   /** 持ちキャラの取り込みで、Enka.Network の最新の値で上書きするか（'true' | 'false'。既定: true。D352） */
   ownedUseEnka: 'ownedUseEnka',
+  /** 利用者が変えたキャラの役割（JSON。{ キャラ ID: ['attacker' | 'subAttacker' | 'supporter', ...] }。無いキャラはマスターの初期値。src/utils/characterRoleStore.ts） */
+  characterRoleOverrides: 'characterRoleOverrides',
 } as const;
 
 /** この端末だけの設定のキー（バックアップに含めない） */

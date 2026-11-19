@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Stepper } from '../Stepper';
 import { X, Plus, Trash2, Zap } from 'lucide-react';
-import { CharacterConfig, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../../types/genshin';
+import { CharacterConfig, CharacterRole, ElementType, WeaponType, ActionDefinition, PassiveEffectDefinition } from '../../types/genshin';
 import { t } from '../../i18n';
 import { elementLabel } from '../../i18n/labels';
 import { CharacterLockButton } from './ItemLockButton';
+import { ROLE_ORDER, effectiveRoles, normalizeRoles, saveRoleOverride } from '../../utils/characterRoleStore';
 
 /* =========================================================================
    SUB-MODALS: CHARACTER EDIT FORM
@@ -19,6 +20,12 @@ interface EditCharacterSubModalProps {
 export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ character, onToggleLock, onClose, onSave }) => {
   const [form, setForm] = useState<CharacterConfig>({ ...character });
   const [actions, setActions] = useState<ActionDefinition[]>([...character.availableActions]);
+  // 役割: 利用者の上書き（設定に保存。マスターの値 character.roles は変えない）
+  const [roles, setRoles] = useState<CharacterRole[]>(() => effectiveRoles(character));
+  const defaultRoles = normalizeRoles(character.roles ?? []);
+  const rolesChanged = JSON.stringify(normalizeRoles(roles)) !== JSON.stringify(defaultRoles);
+  const roleHint = (r: CharacterRole): string => (r === 'attacker' ? t('database:edit.roleAttackerHint') : r === 'subAttacker' ? t('database:edit.roleSubAttackerHint') : t('database:edit.roleSupporterHint'));
+  const toggleRole = (r: CharacterRole) => setRoles(prev => normalizeRoles(prev.includes(r) ? prev.filter(x => x !== r) : [...prev, r]));
   const [passives, setPassives] = useState<PassiveEffectDefinition[]>([...(character.passiveEffects ?? [])]);
   const updatePassive = (index: number, patch: Partial<PassiveEffectDefinition>) => {
     setPassives(prev => prev.map((p, i) => (i === index ? { ...p, ...patch } : p)));
@@ -26,8 +33,10 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
 
   const handleSaveForm = (e: React.FormEvent) => {
     e.preventDefault();
+    saveRoleOverride(form.id, roles, character.roles);
     onSave({
       ...form,
+      roles: character.roles,
       availableActions: actions,
       passiveEffects: passives,
     });
@@ -134,6 +143,25 @@ export const EditCharacterSubModal: React.FC<EditCharacterSubModalProps> = ({ ch
                   className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 font-mono text-[11px]"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-slate-400 mb-1">{t('database:edit.roles')}</label>
+              <div className="flex flex-wrap items-center gap-2">
+                {ROLE_ORDER.map(r => (
+                  <label key={r} title={roleHint(r)} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border cursor-pointer select-none font-bold ${roles.includes(r) ? 'bg-amber-900/50 border-amber-600 text-amber-100' : 'bg-slate-900 border-slate-700 text-slate-400'}`}>
+                    <input type="checkbox" checked={roles.includes(r)} onChange={() => toggleRole(r)} />
+                    {t(`database:edit.role.${r}`)}
+                  </label>
+                ))}
+                {rolesChanged && (
+                  <button type="button" onClick={() => setRoles(defaultRoles)} className="px-2 py-1 rounded-lg border border-slate-600 text-slate-300 hover:text-white">{t('database:edit.roleReset')}</button>
+                )}
+              </div>
+              <p className="mt-1 text-[11px] text-slate-500">
+                {t('database:edit.roleDefault', { roles: defaultRoles.map(r => t(`database:edit.role.${r}`)).join('・') || t('database:edit.roleNone') })}
+                {rolesChanged && <span className="text-amber-300"> {t('database:edit.roleChanged')}</span>}
+              </p>
             </div>
           </div>
 

@@ -9,6 +9,7 @@ import { previewFinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
+import { computeBurstTiming, BURST_TIMING_ON_TIME_SECONDS, type BurstTimingResult } from '../utils/gcsim/burstTiming';
 import { loadBattleCondition, loadRequiredEr, saveBattleCondition, saveRequiredEr } from '../utils/appSettings';
 import { defaultBattleCondition, sameAbyssRunCondition, sanitizeBattleCondition, toAbyssRunCondition, type AppMode, type BattleCondition } from '../utils/battleCondition';
 import {
@@ -84,6 +85,10 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [timed, setTimed] = useState<TimedInput[]>([]);
   const timedKey = useRef(0);
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
+  // 爆発のタイミングの確認（幽境モード。結果は保存しない。編成・条件が変わったら表示しない）
+  const [timing, setTiming] = useState<{ key: string; result: BurstTimingResult } | null>(null);
+  const [timingRunning, setTimingRunning] = useState(false);
+  const [timingMessage, setTimingMessage] = useState<string | null>(null);
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
   const [cores, setCores] = useState(String(getWasmCores()));
   const changeCores = (v: string) => {
@@ -173,15 +178,49 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
   if (!isOpen) return null;
 
-  const start = async () => {
+  /** 実行する戦闘条件と、敵の粒子（入力中の値から）。幽境モードは、敵の周期の粒子も戦闘条件に含まれる */
+  const resolveRun = () => {
     const num = (s: string) => { const v = Number(s); return Number.isFinite(v) && v >= 0 ? v : 0; };
     const minS = num(pMin);
-    // 幽境モードの戦闘条件（敵の周期の粒子を含む）。実行する条件を、そのまま保存する
     const condition = isAbyss ? readCondition() : null;
-    if (condition) saveBattleCondition(condition);
     const particles = condition
       ? (condition.enemyParticles.amount > 0 && condition.enemyParticles.maxSeconds > 0 ? condition.enemyParticles : undefined)
       : num(pAmount) > 0 && num(pMax) > 0 ? { minSeconds: Math.min(minS, num(pMax)), maxSeconds: Math.max(minS, num(pMax)), amount: num(pAmount) } : undefined;
+    return { condition, particles };
+  };
+  const seedCount = (): number => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; };
+
+  // 爆発のタイミングの確認（幽境モード）: いまのビルドで、開始エネルギー 0 から回し、各爆発の計画からの遅れを調べる
+  const timingKeyNow = `${currentFingerprint ?? ''}|${JSON.stringify(readCondition())}`;
+  const runTiming = async () => {
+    const { condition, particles } = resolveRun();
+    if (!condition) return;
+    saveBattleCondition(condition);
+    const key = timingKeyNow;
+    setTimingRunning(true);
+    setTimingMessage(null);
+    let outcome: Awaited<ReturnType<typeof computeBurstTiming>>;
+    try {
+      outcome = await computeBurstTiming({
+        build: extra => buildRef.current(extra),
+        enemyParticles: particles,
+        abyss: toAbyssRunCondition(condition),
+        seeds: seedCount(),
+        parallel: wasmParallelism(),
+        run: runGcsimSample,
+      });
+    } catch (e) {
+      outcome = { status: 'error', message: e instanceof Error ? e.message : String(e) };
+    }
+    setTimingRunning(false);
+    if (outcome.status === 'ok') setTiming({ key, result: outcome.result });
+    else if (outcome.status !== 'cancelled') setTimingMessage(t('gcsim:er.timingFailed', { message: outcome.message }));
+  };
+
+  const start = async () => {
+    // 幽境モードの戦闘条件（敵の周期の粒子を含む）。実行する条件を、そのまま保存する
+    const { condition, particles } = resolveRun();
+    if (condition) saveBattleCondition(condition);
     cancelRef.current = false;
     setRunning(true);
     setMessage(null);
@@ -198,7 +237,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         ...(condition ? { abyss: toAbyssRunCondition(condition) } : {}),
         parallel,
         verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
-        seeds: (() => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; })(),
+        seeds: seedCount(),
         burstWaitSeconds: (() => { const v = Number(wait); return Number.isFinite(v) && v >= 0 ? Math.round(v * 10) / 10 : ER_DEFAULT_BURST_WAIT_SECONDS; })(),
         run: runGcsimSample,
         gcsimVersion: GCSIM_VERSION,
@@ -249,7 +288,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
             <h3 className="font-bold text-base text-white">{t('gcsim:er.title')}</h3>
           </div>
-          <button onClick={onClose} disabled={running} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors disabled:opacity-40" title={t('action.close')}>
+          <button onClick={onClose} disabled={running || timingRunning} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors disabled:opacity-40" title={t('action.close')}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -279,7 +318,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 <Square className="w-3.5 h-3.5" />{t('gcsim:er.cancel')}
               </button>
             ) : (
-              <button onClick={() => void start()} disabled={notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed">
+              <button onClick={() => void start()} disabled={notRunnable.length > 0 || timingRunning} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed">
                 <Play className="w-3.5 h-3.5" />{t('gcsim:er.start')}
               </button>
             )}
@@ -376,6 +415,56 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </table>
           )}
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
+
+          {isAbyss && (() => {
+            const shownTiming = timing !== null && timing.key === timingKeyNow ? timing.result : null;
+            const fmt = (x: number) => x.toFixed(1);
+            return (
+              <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
+                <p className="font-bold text-fuchsia-200">{t('gcsim:er.timingTitle')}</p>
+                <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timingNote', { sec: BURST_TIMING_ON_TIME_SECONDS })}</p>
+                <button type="button" onClick={() => void runTiming()} disabled={running || timingRunning || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
+                  <Play className="w-3.5 h-3.5" />{timingRunning ? t('gcsim:er.timingRunning') : t('gcsim:er.timingStart')}
+                </button>
+                {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
+                {shownTiming && shownTiming.entries.length === 0 && <p className="text-slate-500">{t('gcsim:er.timingNone')}</p>}
+                {shownTiming?.entries.map(e => {
+                  const c = charOf(e.characterId);
+                  const first = e.bursts[0];
+                  const okCount = e.bursts.filter(b => b.missed === 0 && b.delayMaxSeconds !== null && b.delayMaxSeconds <= BURST_TIMING_ON_TIME_SECONDS).length;
+                  return (
+                    <div key={e.characterId} className="space-y-1" data-testid={`er-timing-${e.characterId}`}>
+                      <div className="font-semibold text-slate-200">
+                        {c ? charName(c) : e.name}
+                        <span className="ml-2 font-normal text-slate-400">{t('gcsim:er.timingSummary', { total: e.bursts.length, ok: okCount })}</span>
+                      </div>
+                      <div className="text-slate-400" data-testid={`er-timing-first-${e.characterId}`}>
+                        {first.missed > 0
+                          ? t('gcsim:er.timingFirstMissed', { planned: fmt(first.plannedSeconds), missed: first.missed, total: first.total })
+                          : (first.delayMaxSeconds ?? 0) <= BURST_TIMING_ON_TIME_SECONDS
+                            ? t('gcsim:er.timingFirstOnTime', { planned: fmt(first.plannedSeconds) })
+                            : t('gcsim:er.timingFirstLate', { planned: fmt(first.plannedSeconds), from: fmt(first.plannedSeconds + (first.delayMedianSeconds ?? 0)), to: fmt(first.plannedSeconds + (first.delayMaxSeconds ?? 0)) })}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {e.bursts.map(b => {
+                          const late = b.delayMaxSeconds !== null && b.delayMaxSeconds > BURST_TIMING_ON_TIME_SECONDS;
+                          const cls = b.missed > 0 ? 'border-rose-700/70 bg-rose-950/40 text-rose-300' : late ? 'border-amber-700/70 bg-amber-950/40 text-amber-300' : 'border-emerald-800/70 bg-emerald-950/30 text-emerald-300';
+                          const title = b.delayMaxSeconds === null
+                            ? t('gcsim:er.timingChipTitleMissed', { n: b.n, planned: fmt(b.plannedSeconds), missed: b.missed, total: b.total })
+                            : t('gcsim:er.timingChipTitle', { n: b.n, planned: fmt(b.plannedSeconds), median: fmt(b.delayMedianSeconds ?? 0), max: fmt(b.delayMaxSeconds), onTime: b.onTime, total: b.total, missed: b.missed });
+                          return (
+                            <span key={b.n} title={title} className={`px-1.5 py-0.5 rounded border font-mono text-[10px] ${cls}`} data-testid={`er-timing-chip-${e.characterId}-${b.n}`}>
+                              {b.n}: {fmt(b.plannedSeconds)}s {b.missed > 0 ? t('gcsim:er.timingMissedShort') : `+${fmt(b.delayMaxSeconds ?? 0)}`}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
 

@@ -201,6 +201,35 @@ if (abyssOutcome.status !== 'ok') {
     }
   }
 }
+// 爆発のタイミングの確認（フェーズ8 段階 2）。まず、並びの比較（合成）
+const bt = await server.ssrLoadModule('/src/utils/gcsim/burstTiming.ts');
+{
+  const d = bt.burstDelays('0@100,1@200,0@1100,1@1300', '0@100,1@260,0@1190', Infinity);
+  check(d.get(0)?.map((x: any) => `${x.planned}:${x.delay}`).join() === '100:0,1100:90' && d.get(1)?.map((x: any) => `${x.planned}:${x.delay}`).join() === '200:60,1300:null', '爆発のタイミング: 計画との差（フレーム）と、撃てなかった爆発（null）を求める');
+  const lim = bt.burstDelays('0@100,0@1100,0@2100', '0@100,0@1100,0@2100', 1200);
+  check(lim.get(0)?.length === 2, '爆発のタイミング: 戦闘時間（上限のフレーム）を超えて計画された爆発は数えない');
+  const sum = bt.summarizeBurstTiming([lim, bt.burstDelays('0@100,0@1100', '0@130,0@1100', 1200), bt.burstDelays('0@100,0@1100', '0@100', 1200)], [{ characterId: 'x', name: 'X' }]);
+  const b0 = sum[0].bursts[0];
+  const b1 = sum[0].bursts[1];
+  check(sum.length === 1 && b0.total === 3 && b0.onTime === 3 && b0.delayMaxSeconds === 0.5 && b1.total === 3 && b1.missed === 1 && b1.onTime === 2, '爆発のタイミング: 種ごとの結果を、爆発の順ごとにまとめる（計画どおりの数・撃てなかった数・最大の遅れ）');
+}
+// 実機の実行: ベネット + 香菱の幽境の形で、ER を足さないと遅れ・撃てない爆発が出て、十分に足すと、全て計画どおりになる
+{
+  const allMax = Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED]));
+  const timingOf = (added: Record<string, number>) => bt.computeBurstTiming({ build: buildAbyss, enemyParticles: enemyP, abyss: abyssCond, added, seeds: 4, run: runGcsimSample });
+  const low = await timingOf({});
+  const high = await timingOf(allMax);
+  if (low.status !== 'ok' || high.status !== 'ok') {
+    console.log(`✗ 爆発のタイミングが求まらなかった: ${low.status} ${low.message ?? ''} / ${high.status} ${high.message ?? ''}`);
+    failed++;
+  } else {
+    const bursts = (r: any) => r.result.entries.flatMap((e: any) => e.bursts);
+    for (const e of low.result.entries) console.log(`  [タイミング・ER 足さず] ${e.name}: ${e.bursts.map((x: any) => `${x.n}回目 計画 ${x.plannedSeconds.toFixed(1)}s 遅れ ${x.delayMaxSeconds === null ? '撃てず' : x.delayMaxSeconds.toFixed(1)}`).join(' / ')}`);
+    check(low.result.entries.length === 2 && bursts(low).length > 0 && bursts(low).every((x: any) => x.total === 4), `爆発のタイミング: 2 キャラ分の結果が、種の数（4）で求まる（爆発 ${bursts(low).length} 件）`);
+    check(bursts(low).some((x: any) => x.onTime < x.total), '爆発のタイミング: ER を足さないと、計画どおりに撃てない爆発がある');
+    check(bursts(high).every((x: any) => x.missed === 0 && x.delayMaxSeconds !== null && x.delayMaxSeconds <= abyssCond.firstBurstWaitSeconds), `爆発のタイミング: ER を十分に足すと（+${er.ER_MAX_ADDED * 100}%）、全ての爆発が計画どおり（遅れ ${abyssCond.firstBurstWaitSeconds} 秒以内）`);
+  }
+}
 await server.close();
 console.log(failed === 0 ? '\n合格' : `\n${failed} 件が不合格`);
 process.exit(failed === 0 ? 0 : 1);

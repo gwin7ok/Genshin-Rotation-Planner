@@ -750,7 +750,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                         isSelected
                           ? 'bg-slate-900 ring-2 ring-yellow-400 border-yellow-400 shadow-[0_0_14px_rgba(250,204,21,0.6)] font-bold scale-[1.02]'
                           : isCurrent
-                          ? 'bg-amber-500/20 border-amber-400 shadow-md ring-1 ring-amber-400/50'
+                          ? 'bg-orange-500/20 border-orange-400 shadow-md ring-1 ring-orange-400/50'
                           : dragOverIndex === idx
                           ? 'bg-sky-500/20 border-sky-400 scale-105'
                           : 'bg-slate-900 border-slate-700/80 hover:border-slate-500'
@@ -949,7 +949,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
                   isStintSelected
                     ? 'bg-slate-950/70 border-yellow-400 ring-2 ring-yellow-400 shadow-xl shadow-yellow-500/10'
                     : isCurrentlyActive 
-                    ? 'bg-slate-850 border-amber-400/80 shadow-lg shadow-amber-500/10 ring-1 ring-amber-400/40' 
+                    ? 'bg-slate-850 border-orange-400/80 shadow-lg shadow-orange-500/10 ring-1 ring-orange-400/40' 
                     : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
                 }`}
               >

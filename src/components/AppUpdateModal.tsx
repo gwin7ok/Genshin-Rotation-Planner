@@ -71,9 +71,11 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({ isOpen, previous
         </div>
 
         <div className="flex items-center justify-between gap-2 px-5 py-3 border-t border-slate-800 bg-slate-950/80">
+          {allEntries.length > entries.length ? (
           <button onClick={() => setShowAll(v => !v)} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors" data-testid="app-update-toggle-all">
             {t(showAll ? 'notice:appUpdate.showRecent' : 'notice:appUpdate.showAll', { count: allEntries.length })}
           </button>
+          ) : <span />}
           <button onClick={onClose} className="px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition-colors shadow" data-testid="app-update-close">
             {t('action.close')}
           </button>

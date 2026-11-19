@@ -6,7 +6,7 @@
  *
  * 判定:
  *   - 記録がある: 今の版が、記録より新しい → 通知する（記録の版より新しく、今の版以下の節を出す）
- *   - 記録がない かつ 保存データがある（この機能の導入前から使っている利用者）: 通知する（今の版の節だけを出す。前の版は不明）
+ *   - 記録がない かつ 保存データがある（この機能の導入前から使っている利用者）: 通知する（前の版が不明なので、今の版以下の全ての節を出す）
  *   - 記録がない かつ 保存データもない（初めての利用者）→ 通知しない（記録だけする）
  *   - 今の版が記録と同じ・古い → 通知しない（古い版を開いたときに、記録は進めない）
  *   - 開発中の版（0.0.0-dev）→ 通知しない・記録しない
@@ -103,7 +103,7 @@ export function evaluateAppUpdate(current: string, changelog: ChangelogEntry[], 
     return { show: true, previous, current, entries };
   }
   if (!hasStoredData) return none;
-  return { show: true, previous: null, current, entries: changelog.filter(e => e.version === current) };
+  return { show: true, previous: null, current, entries: changelog.filter(e => compareVersions(e.version, current) <= 0) };
 }
 
 /** この端末に、保存データ（編成・DB など）があるか。初めての利用者かの判定に使う */

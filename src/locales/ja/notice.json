@@ -25,7 +25,7 @@
   "appUpdate": {
     "title": "アプリが更新されました",
     "versionChanged": "最後に開いた版 <strong>v{{previous}}</strong> → 今の版 <strong>v{{current}}</strong>",
-    "versionUnknown": "今の版 <strong>v{{current}}</strong>（前に開いた版は不明です）",
+    "versionUnknown": "今の版 <strong>v{{current}}</strong>（前に開いた版は不明のため、すべての更新履歴を表示しています）",
     "noEntries": "更新履歴に、この間の版の記載はありません。",
     "note": "更新履歴は、画面の最下部の「更新履歴」のリンクからも見られます。",
     "showAll": "すべての更新履歴を表示（{{count}} 版）",

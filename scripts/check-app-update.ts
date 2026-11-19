@@ -92,11 +92,12 @@ check('記録あり・今の版が古い（古い版を開いた）: 通知せ�
 check('記録なし・保存データなし（初めての利用者）: 通知しない', () => {
   assert.equal(c.evaluateAppUpdate('1.2.0', sample, false).show, false);
 });
-check('記録なし・保存データあり（導入前からの利用者）: 今の版の節だけを出す（前の版は不明）', () => {
+check('記録なし・保存データあり（導入前からの利用者）: 前の版が不明なので、今の版以下の全ての節を出す', () => {
   const n = c.evaluateAppUpdate('1.2.0', sample, true);
   assert.equal(n.show, true);
   assert.equal(n.previous, null);
-  assert.deepEqual(n.entries.map((e: any) => e.version), ['1.2.0']);
+  assert.deepEqual(n.entries.map((e: any) => e.version), ['1.2.0', '1.1.0', '1.0.0']);
+  assert.deepEqual(c.evaluateAppUpdate('1.1.0', sample, true).entries.map((e: any) => e.version), ['1.1.0', '1.0.0']);
 });
 check('開発中の版（0.0.0-dev）: 通知せず、記録もしない', () => {
   store.set(KEY, '1.0.0');

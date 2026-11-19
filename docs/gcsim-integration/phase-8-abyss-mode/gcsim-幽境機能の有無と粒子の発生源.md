@@ -1,0 +1,92 @@
+# gcsim の幽境相当の機能の有無と、粒子・エネルギーの発生源の切り分け
+
+調べた日: 2026-11-19（フェーズ 8。決定ログ D370）。
+対象: gcsim のリポジトリ全体。ローカルの `G:\Cursor_Folder\gcsim`（ユーザーのフォーク `gwin7ok/gcsim` の `main`。コミット `b107b5dc` = `gcsim.config.json` の v2.50.0 と同じ。ダウンロードはしていない）。
+調べ方: キーワード検索（`.go`・`.md`・`.ts`・`.tsx`・`.proto`・`.json`・`.yml`）と、該当箇所のコードの読み取り。
+
+## 1. gcsim に、幽境モードのような機能はあるか → **無い**
+
+| 調べた言葉 | 結果 |
+|---|---|
+| `abyss` | 152 行・26 ファイル。中身は、敵の名前（深淵の魔術師・使徒・導き手など）、聖遺物「深廊の終曲」の入手先の注記（`Relic_SpiralAbyss`）、ドキュメントの説明文（「螺旋 8 層で当たり判定を確かめる」など）、`hp_mult` の説明（既定 2.5 =「螺旋 12 層」の HP 倍率）。**モードや設定の機能ではない** |
+| `hard_challenge`・`hard challenge`（幽境の危戦） | 0 件 |
+| `invuln`・`invincib`・`untarget`・`immune`・`no damage` | 5 行。キャラ固有の記述（アンバーの矢の注記・マヴイカのダッシュ）と、`freeze_resist`（凍結耐性）の説明だけ。**敵のダメージ無効の設定は無い** |
+| `wave`・`spawn`・`despawn` | 敵の出現・退場・波の機能は無い（`kill_target` で倒す命令はあるが、出現・復活の命令は無い） |
+
+gcsim にある、近い部品（すべて固定値か、1 回だけの設定）:
+
+- **敵（`target`）**: レベル・耐性（全元素まとめ、元素別）・位置・半径・凍結耐性・`hp`・`particle_threshold`・`particle_drop_count`・`particle_element`・`type`（敵の名前で HP・耐性・粒子を設定。`hp_mult`・`particles` つき）。**耐性は、戦闘開始時の固定値。時間で変える設定は無い**。`hp` を指定すると `duration` が無視される。
+- **開始エネルギー**: キャラ行の `+params=[start_energy=…]`（アプリは使用済み）。
+- **敵から入るエネルギー**: `energy every` / `energy once`（下の 2 を参照）。
+- **被ダメージ**: `hurt every` / `hurt once`（同じく最後の 1 行だけ）。
+- **スクリプト（GCSL）の関数**: `kill_target`・`is_target_dead`・`set_target_pos`・`set_default_target`・`set_player_pos`・`set_particle_delay`・`set_swap_icd`・`set_on_tick`（実験的。毎フレーム呼ばれる関数）。**ダメージ無効・耐性の変更・粒子やエネルギーの追加は、できない**。
+
+**結論**: ダメージ無効、耐性の時間変化、時刻指定の複数の粒子は、gcsim だけでは実現できない。アプリ側の補正が要る（段階 4 の設計のとおり）。
+
+## 2. 公式ドキュメントと実装の食い違い（`energy once` の複数行）
+
+- ドキュメント（`ui/packages/docs/docs/reference/config.md` の 40〜49 行）: 「`energy once` の行は複数書ける。別々の時刻に粒子を出せる」。
+- 実装:
+  - `pkg/core/info/actionlist.go` の `EnergySettings` は、**1 つの構造体**。
+  - `pkg/gcs/parser/parseEnergy.go` が、`energy` の行ごとに、その構造体を**上書き**する。
+  - `pkg/simulation/setup.go` の `handleEnergy` が、`once` を 1 回出して `Active = false` にする。
+- よって、**最後の 1 行しか効かない**。2026-11-19 の実測（D369）と一致する。ドキュメントの誤り（または未実装）で、`hurt` も同じ作り。
+- フォーク（`gwin7ok/gcsim`）で直す手はあるが、WebAssembly 版は「公式のソースを無改変でビルドする」方針（`NOTICE`）なので採らない。
+
+## 3. 粒子・エネルギーの発生源の切り分け
+
+### 3-1. 切り分けの軸（gcsim の仕組み）
+
+敵への 1 回の命中で、gcsim は次の 3 つを呼ぶ（`pkg/enemy/attack.go` の `HandleAttack`）。**gcsim の敵は無敵にならないので、必ず全部呼ばれる**。
+
+| 呼び出し | タイミング | 渡されるもの | 意味 |
+|---|---|---|---|
+| `OnEnemyHit` | 命中。ダメージ計算の前 | 攻撃 | 「当たったら」 |
+| `OnEnemyDamage` | ダメージの適用後 | 攻撃・**ダメージ値・会心** | 「ダメージが入ったら」 |
+| 攻撃のコールバック（`AttackCB`） | ダメージの適用後 | 対象・攻撃・**ダメージ値・会心** | 「その攻撃が当たったら」 |
+
+「ダメージが 0 のときは出ない」を、コードで明示しているのは、`dmg == 0` の確認（西風・祭礼・アルベド C1・ディシアのスキル。3-3）。
+
+### 3-2. ユーザーの回答（2026-11-19。ゲームでの動き）
+
+- **スキルが敵にヒットしたときなどの、通常の粒子は、ダメージ無効の間も出る**。
+- **祭礼・西風など、敵にダメージが入ることが条件のものは、出ない**。
+
+### 3-3. 発生源の一覧と、ダメージ無効の間の扱い
+
+「確定」は、コードを読んで、回答と合うと確かめたもの。「候補」は、gcsim のフック（`OnEnemyDamage` など）の種類から機械的に分けたもので、**ゲームでの動きは未確認**（個別の確認が要る）。
+
+| 区分 | gcsim での目印 | 件数・例 | 無効の間 |
+|---|---|---|---|
+| **A. 敵が時間で出す粒子**（アプリの入力） | `energy once/every`（ログの source は `enemy`・`drop`） | 時刻指定・周期の粒子 | 命中と無関係なので、出る扱い（回答に該当なし） |
+| **B. スキルの命中で出る粒子** | キャラの `*ParticleCB`（命中のコールバック。**ダメージ値・会心は見ない**。対象が敵で、ICD が空いていれば出る） | **131 件**（キャラの粒子 133 件のうち。残り 2 件は、ディシア = 区分 C と、スカーク = 区分 D）。例: 行秋・ベネット・香菱 | **出る（回答のとおり）**。確定 |
+| **C. ダメージが条件（コードに `dmg == 0` の確認あり）** | 西風系（`weapons/common/favonius.go`: `dmg == 0` なら出ない。会心のときだけ、確率で、無色の粒子 3 個） | 西風の剣・大剣・長柄・弓・法器（1 つの実装を共有） | **出ない（回答のとおり）**。確定 |
+| | 祭礼系（`weapons/common/sacrificial.go`: スキルのダメージで、確率で、スキルの CT をリセット。`dmg == 0` なら何もしない）。**エネルギーそのものではなく、スキルの回数が増えて、粒子が増える間接の効果** | 祭礼の剣・大剣・弓・断片 | **出ない（回答のとおり）**。確定 |
+| | アルベド C1（`albedo/skill.go`: `OnEnemyDamage` で `dmg == 0` なら何もしない。そうでなければ、エネルギー 1.2） | アルベド | 出ない。確定（コードの確認のみ） |
+| | ディシアのスキル（`dehya/skill.go`: 領域のダメージで `dmg == 0` なら何もしない。そうでなければ、炎の粒子 1 個） | ディシア | 出ない。確定（コードの確認のみ） |
+| **D. ダメージ後のフックで動く（候補）** | `OnEnemyDamage` を購読 | 武器 7 ファイル: `cranesechoingcall`・`moonglow`・`nocturnes`・`nagamasa`・`kitain`・`lumidouceelegy`・`whitelakefrostfeather`。キャラ 10 ファイル: アルベド・シャルロット・ファルザン・フリンズ・ミカ・ニィロウ・オロロン・旅人（氷の命ノ星座・雷の爆発）・八重神子。スカーク（`skirk/skill.go`: 氷元素のダメージで、ICD つきで、氷の粒子 4 個）。本体（`pkg/core/energy.go`）: **通常攻撃・重撃の命中のランダムなエネルギー**（1 エネルギー。確率・ICD 12 フレーム。source は `na-ca-on-hit`） | 候補: 出ない。**ゲームでの確認が要る**（特に、通常攻撃・重撃の命中のエネルギー） |
+| **E. 会心が条件（候補）** | `IsCrit` を見る | ディシア（命ノ星座）・クレー（固有天賦）・ロサリア（命ノ星座） | 候補: 出ない（会心 = ダメージが入る） |
+| **F. 命中で動く（候補）** | `OnEnemyHit`・攻撃のコールバックの中の固定エネルギー | キャラ: 約 57 ファイル（コールバック）+ 12 ファイル（`OnEnemyHit`）。武器: `exaiphanesblade`。例: 雷電将軍（爆発中の命中で全員に回復）・サラ（スキルの命中）・九条裟羅 | B と同じ「命中」の扱いなら、出る。**ゲームでの確認が要る**（回答は、粒子についてだけ） |
+| **G. 反応で動く（候補）** | 元素反応のイベント（`OnOverload`・`OnLunarBloom` など）を購読 | 聖遺物 `scrolloftheheroofcindercity`・武器 `frostbreath`・`flameforgedinsight`・`songofthevigil`・キャラ: アリョーシャ・イネファ・フリンズ・旅人（炎）ほか約 20 ファイル | 反応には、ダメージ（元素の付着）が要る。無効の間は起きない見込み。**ゲームでの確認が要る** |
+| **H. 使用で動く** | `OnSkill`・`OnBurst`・`OnCharacterSwap`、またはスキル・爆発の関数の中 | 聖遺物: `exile`（爆発）・`reminiscence`（スキル）。武器: `prototype`・`amenoma`・`beyondthechrysalis`・`powersaw`・`dockhand`・`jadefallssplendor`。キャラ: 爆発・スキルの関数の中の固定エネルギー（`diona/burst.go`・`dori/burst.go`・`kaeya/burst.go`・`tartaglia/burst.go` など。コードの目印による分類で、個別には読んでいない） | **無効と関係なく、出る** |
+| **I. 回復・シールド・HP で動く** | `OnHeal`・`OnShielded`・`OnPlayerHPDrain`・`OnHPDebt` | 武器: `angelosheptades`・`eternalflow`・`dialoguesofthedesertsages`・`rightfulreward`。キャラ: 約 6 ファイル（`gaming/cons.go`・`barbara/cons.go`・`sigewinne/skill.go` など） | 無効と関係なく、出る |
+| **J. 粒子を受け取って動く** | `OnParticleReceived`（聖遺物 `scholar`） | 学者（粒子を受け取ると、別のキャラにエネルギー） | 粒子が出る・出ないに従う（B・A なら出る） |
+| **K. 敵の HP で出る粒子** | `particle_threshold`（`pkg/enemy/attack.go`。`hp` 指定のときだけ） | アプリは使わない | HP が減らない間は出ない（アプリは使わないので無関係） |
+
+件数は、コードの検索による機械的な集計（`AddEnergy(` を含むファイル: キャラ 84・武器 22・聖遺物 4・本体 4。`QueueParticle(` を含むファイル: キャラ 120・武器 1・本体 1）。**区分 D〜G の中の個別の効果は、1 つずつ読んで、ゲームの動きと照らしていない**。
+
+### 3-4. アプリでの扱いの案（Q4b の実装に使う場合）
+
+- ER 計算のログには、粒子・エネルギーの出どころ（`source`）が残る。例: 粒子 = `favonius-<キャラ>`・`enemy`・`drop`・キャラのキー。固定のエネルギー = `na-ca-on-hit`・`albedo-c1` など。
+- 「出ない」と決めた区分の `source` を、**無効の時間帯のイベントとして、ER の時系列から外す**ことで、アプリ側の補正ができる（粒子の時系列を、アプリが再生する今の仕組みの上）。
+- ただし、gcsim 本体の実行（爆発のタイミング）には効かない。DPS 計算にも効かない（警告が残る）。
+- 祭礼は、アプリが「確率 100%・内部の CT だけ」で扱う（D86）。無効の間のスキルには、祭礼が働かない扱いにするかは、別に決める。
+
+## 4. 再現のしかた（検索の例）
+
+```text
+gcsim のフォルダで:
+grep -rnE "AddEnergy\(|QueueParticle\(" --include=*.go internal pkg
+grep -rlE "(dmg|damage|Damage) (==|<=) 0" --include=*.go internal
+grep -rn "func (c \*char) .*[pP]articleCB" --include=*.go internal/characters
+```

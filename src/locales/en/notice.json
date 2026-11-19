@@ -21,5 +21,14 @@
     "noteRotations": "• Your rotations (saved and current) are kept. To be safe, first export a backup of all data from \"Manage Teams → JSON backup & share\".",
     "closeTitle": "Do not show again for this master data version",
     "openDatabase": "Open Database"
+  },
+  "appUpdate": {
+    "title": "The app has been updated",
+    "versionChanged": "Last opened version <strong>v{{previous}}</strong> → current version <strong>v{{current}}</strong>",
+    "versionUnknown": "Current version <strong>v{{current}}</strong> (the version you opened before is unknown)",
+    "noEntries": "The change log has no entry for the versions in between.",
+    "note": "The change log (in Japanese) is also available from the “Change log” link at the bottom of the screen.",
+    "showAll": "Show the whole change log ({{count}} versions)",
+    "showRecent": "Show only this update"
   }
 }

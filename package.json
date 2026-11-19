@@ -17,6 +17,7 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "check:version-notice": "node scripts/check-version-notice.ts",
+    "check:app-update": "node scripts/check-app-update.ts",
     "check:groups": "node scripts/check-groups.ts",
     "check:effects": "node scripts/check-effect-keys.ts",
     "check:backup": "node scripts/check-backup.ts",

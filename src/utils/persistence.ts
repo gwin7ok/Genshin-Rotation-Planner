@@ -60,6 +60,8 @@ export const DEVICE_KEYS = {
   editorGuideVisible: 'editor_guide_visible',
   /** 利用者が最後に確認した、DB（マスターデータ）のバージョン。更新の通知（versionNotice.ts）に使う */
   lastSeenDbVersion: 'app_last_seen_db_version',
+  /** 利用者が最後に開いた、アプリの版（package.json の version）。更新履歴のポップアップ（changelog.ts）に使う */
+  lastSeenAppVersion: 'app_last_seen_app_version',
 } as const;
 
 /** バックアップに含める設定のキーの一覧 */

@@ -13,6 +13,10 @@ import { UsageGuideModal } from './components/UsageGuideModal';
 import { SourceNotice } from './components/SourceNotice';
 import { UpdateNoticeModal } from './components/UpdateNoticeModal';
 import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
+import { evaluateAppUpdate, hasAnyStoredData, markAppVersionSeen } from './utils/changelog';
+import { CHANGELOG } from './utils/changelogData';
+import { APP_VERSION } from './utils/appVersion';
+import { AppUpdateModal } from './components/AppUpdateModal';
 import { setWriteFailureHandler } from './utils/persistence';
 import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
@@ -168,6 +172,17 @@ export default function App() {
   const [isUsageOpen, setIsUsageOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isDatabaseModalOpen, setIsDatabaseModalOpen] = useState<boolean>(false);
+  // アプリの更新の通知: 最後に開いた版より、今の版が新しければ、その間の更新履歴を出す（起動時に 1 度。閉じると、今の版を記録）
+  const [appUpdate, setAppUpdate] = useState(() => evaluateAppUpdate(APP_VERSION, CHANGELOG, hasAnyStoredData()));
+  useEffect(() => {
+    // 通知しないとき（初めての利用・同じ版）は、今の版を記録する
+    if (!appUpdate.show) markAppVersionSeen(APP_VERSION);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const dismissAppUpdate = () => {
+    markAppVersionSeen(APP_VERSION);
+    setAppUpdate(n => ({ ...n, show: false }));
+  };
   // マスターデータ（DB）の更新の通知: DB のバージョンが、最後に確認した版より新しければ、DB管理で「全削除 → 動的生成」を促す（D196・D198）
   const [versionNotice, setVersionNotice] = useState(() => evaluateVersionNotice(DATABASE_VERSION));
   useEffect(() => {
@@ -1049,6 +1064,9 @@ export default function App() {
           setStints(mergeHiddenStints(newStints, stints, characters, newParty));
         }}
       />
+
+      {/* アプリの版が上がったときの、更新履歴 */}
+      <AppUpdateModal isOpen={appUpdate.show} previous={appUpdate.previous} current={appUpdate.current} entries={appUpdate.entries} allEntries={CHANGELOG} onClose={dismissAppUpdate} />
 
       {/* アプリの更新の通知（マスターデータの全削除 → 動的生成の案内） */}
       <UpdateNoticeModal

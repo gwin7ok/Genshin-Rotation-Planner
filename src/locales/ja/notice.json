@@ -21,5 +21,14 @@
     "noteRotations": "・編成（保存編成・現在の編成）は消えません。不安なときは、先に「編成管理 → JSON バックアップ・共有」で、全データのバックアップを書き出してください。",
     "closeTitle": "このバージョンのマスターデータでは、もう表示しません",
     "openDatabase": "DB管理を開く"
+  },
+  "appUpdate": {
+    "title": "アプリが更新されました",
+    "versionChanged": "最後に開いた版 <strong>v{{previous}}</strong> → 今の版 <strong>v{{current}}</strong>",
+    "versionUnknown": "今の版 <strong>v{{current}}</strong>（前に開いた版は不明です）",
+    "noEntries": "更新履歴に、この間の版の記載はありません。",
+    "note": "更新履歴は、画面の最下部の「更新履歴」のリンクからも見られます。",
+    "showAll": "すべての更新履歴を表示（{{count}} 版）",
+    "showRecent": "今回の更新だけを表示"
   }
 }

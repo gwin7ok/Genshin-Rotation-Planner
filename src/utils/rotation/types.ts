@@ -63,6 +63,8 @@ export interface RotationOptions {
   externalCtWaits?: Record<string, number>;
   /** externalCtWaits のうち、原因がスタミナ不足だったアクション ID（表示の理由だけが変わる。D214） */
   externalStaminaWaitIds?: string[];
+  /** 幽境モード: 敵がダメージ無効の時間帯（戦闘開始からの秒。[from, to)）。この間は、祭礼の武器のスキル CT のリセットが起きない（ダメージが入らないため。D373） */
+  noSacrificialProcWindows?: Array<{ from: number; to: number }>;
 }
 
 /** モード（スキル・爆発で入る状態）の窓。calculateRotation の計算中の状態（モードの開始・終わり・ゲージなど） */

@@ -62,7 +62,7 @@ export function calculateRotation(
   const sacrificialProcs: SacrificialProc[] = [];
   const stockLogs: StockLog[] = [];
   const usedSpecialCharged = new Set<string>();
-  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs, stockLogs, usedSpecialCharged)) {
+  for (const span of checkCooldownViolations(ctEvents, safeLoopStartIndex, loopPeriod, isActiveAt, sacrificialProcs, stockLogs, usedSpecialCharged, options?.noSacrificialProcWindows)) {
     skillCooldowns.push(span);
     charStates[span.characterId]?.skillCooldowns.push(span);
   }

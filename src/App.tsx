@@ -257,8 +257,9 @@ export default function App() {
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
   const previewedStints = useMemo(() => applyDragPreview(visibleStints, dragPreview), [visibleStints, dragPreview]);
   const calculatedResult = useMemo(() => {
-    return calculateRotation(characters, previewedStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined, externalStaminaWaitIds: gcsimStaminaWaitIds });
-  }, [characters, previewedStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits, gcsimStaminaWaitIds]);
+    const noSacrificialProcWindows = enemyStateBands.filter(b => b.kind === 'invulnerable').map(b => ({ from: b.fromSeconds, to: b.toSeconds }));
+    return calculateRotation(characters, previewedStints, { switchDelay, database, loopStartIndex, defHalt, externalCtWaits: gcsimCtWaits ?? undefined, externalStaminaWaitIds: gcsimStaminaWaitIds, ...(noSacrificialProcWindows.length > 0 ? { noSacrificialProcWindows } : {}) });
+  }, [characters, previewedStints, switchDelay, database, loopStartIndex, defHalt, gcsimCtWaits, gcsimStaminaWaitIds, enemyStateBands]);
 
   // 反応の区間を、現在のアクションの開始時刻に直す（アクションが見つからない区間は出さない）
   const reactionRows = useMemo<ReactionRow[]>(() => {

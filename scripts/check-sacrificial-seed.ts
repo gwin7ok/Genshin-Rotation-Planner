@@ -102,6 +102,24 @@ for (const [name, steps, cons = 0] of CASES) {
     }
     console.log(`✗ ${name} ${steps.join(' ')}: 一致する種が見つからない（アプリ ${s.expected} / 一致 ${s.matched} / 不足 ${s.missing} / 余分 ${s.extras}。探索 ${s.searched} 個）`); }
 }
+// ダメージ無効の時間帯（幽境モード。D373）: 全期間が無効なら発動せず、時間帯が無ければ発動する
+{
+  const [name, steps, cons = 0] = CASES[0];
+  seq = 0;
+  const c0 = all.find((x: any) => x.name === name);
+  const chars = [byName(name, { weaponId: SAC_IDS[c0.weaponType], weaponRefinementRank: 5, constellation: cons }), byName('ベネット', { weaponId: dull.id, weaponRefinementRank: 1 })];
+  const stints = [
+    { id: 's0', characterId: chars[0].id, actions: steps.map((s: string) => makeAction(chars[0], s)), holdMode: true },
+    { id: 's1', characterId: chars[1].id, actions: ['e', 'w80'].map((s: string) => makeAction(chars[1], s)) },
+  ];
+  const opt = { switchDelay: 0.5, loopStartIndex: 0, defHalt: true, database: { weapons: weaponDb } };
+  const normal = calculateRotation(chars, stints, opt).sacrificialProcs.length;
+  const noDmg = calculateRotation(chars, stints, { ...opt, noSacrificialProcWindows: [{ from: 0, to: 1000 }] }).sacrificialProcs.length;
+  const outside = calculateRotation(chars, stints, { ...opt, noSacrificialProcWindows: [{ from: 500, to: 600 }] }).sacrificialProcs.length;
+  const ok = normal > 0 && noDmg === 0 && outside === normal;
+  if (!ok) failed++;
+  console.log(`${ok ? '✓' : '✗'} ダメージ無効の間は祭礼が発動しない（通常 ${normal} 回 / 全期間が無効 ${noDmg} 回 / 範囲外の時間帯 ${outside} 回）`);
+}
 await server.close();
 console.log(failed === 0 ? `\n全 ${checked} 並びで、アプリの発動と gcsim の発動が一致する種が見つかった` : `\n${failed} / ${checked} 並びで、一致する種が見つからなかった`);
 process.exit(failed === 0 ? 0 : 1);

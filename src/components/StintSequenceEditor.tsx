@@ -1461,7 +1461,7 @@ export const StintSequenceEditor: React.FC<StintSequenceEditorProps> = ({
 
                               {/* Remove Action（右端。順序の入れ替えはドラッグ＆ドロップ） */}
                               <button
-                                onClick={() => removeActionFromStint(stintIndex, actIdx)}
+                                onClick={(e) => { e.stopPropagation(); removeActionFromStint(stintIndex, actIdx); }}
                                 disabled={stint.actions.filter(a => a.type !== 'swap').length === 0}
                                 className="p-0.5 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none ml-0.5 flex items-center justify-center shrink-0"
                                 title={t('editor:deleteActionTitle')}

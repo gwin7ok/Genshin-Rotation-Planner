@@ -23,7 +23,10 @@ import { adjustTimelines, needsAdjust, periodicParticlesOn, splitTimedParticles,
  * ループを回す周数。エネルギーは 1〜2 周目に初期状態の影響が残り（初期エネルギーが満タン・スキルの CT など）、2 周では必要な ER が低く出る
  * （実測: ラウマ +15% → 5 周 +78%）。窓は、爆発の間（周数 − 1 個）。
  */
-export const ER_LOOP_ITERATIONS = 4;
+/** ループ部分を回す周数の既定・上限（通常モード・幽境モードの共通。計算にも、爆発のタイミングの確認にも使う。画面で変えられる） */
+export const ER_DEFAULT_LOOPS = 5;
+export const ER_MAX_LOOPS = 10;
+export const ER_LOOP_ITERATIONS = ER_DEFAULT_LOOPS;
 /** 立ち上がりとして数えない窓の数。0 = 最初の窓（最初の爆発から 2 回目の爆発まで）も、遅れの許容の設定にしたがって数える（1 周目は粒子が少なく、ここで遅れると次の窓の粒子が捨てられて連鎖するため。D308・D309） */
 export const ER_WARMUP_WINDOWS = 0;
 /** 試す乱数の種の数の既定（1 〜 この数）。粒子の出方は種で変わる。画面で変えられる */
@@ -112,8 +115,8 @@ export interface AbyssRunCondition {
  * 0.5 秒でも「届かない」になる。そのときは、画面でこの秒数を増やす
  */
 /** ループ部分を回す周数の既定・上限（幽境モード。時間の制限は無く、決めた周数だけ回す） */
-export const ABYSS_DEFAULT_LOOPS = 3;
-export const ABYSS_MAX_LOOPS = 10;
+export const ABYSS_DEFAULT_LOOPS = ER_DEFAULT_LOOPS;
+export const ABYSS_MAX_LOOPS = ER_MAX_LOOPS;
 export const ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS = 0.5;
 /** 時刻指定の粒子・ダメージ無効の時間帯の、秒の上限 */
 export const ABYSS_MAX_BATTLE_SECONDS = 600;
@@ -170,6 +173,8 @@ export interface RequiredErResult {
   levelsVerified?: boolean;
   /** 爆発の前に待ってよいとした秒数（古い保存には無い。無いときは 0.5 秒だった） */
   burstWaitSeconds?: number;
+  /** 回した周数（ループ部分。古い保存には無い） */
+  loops?: number;
   /** 幽境モードで求めたときの戦闘条件（開始エネルギー 0。無ければ通常モードの結果） */
   abyss?: AbyssRunCondition;
   /**
@@ -202,7 +207,7 @@ export type RequiredErOutcome =
   | { status: 'cancelled' }
   | { status: 'error' | 'unreachable'; message: string };
 
-export type BuildForEr = (extra: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }) => GcsimConfigResult;
+export type BuildForEr = (extra: { loops?: number; ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }) => GcsimConfigResult;
 export type RunSample = (config: string, seed: number) => Promise<GcsimSampleResult>;
 
 /** 設定文の短い指紋（変更の検出用。暗号用ではない） */
@@ -462,6 +467,8 @@ export async function computeRequiredEr(args: {
   seeds?: number;
   /** 爆発の前に待ってよい秒数（既定 ER_DEFAULT_BURST_WAIT_SECONDS） */
   burstWaitSeconds?: number;
+  /** ループ部分を回す周数（既定 ER_DEFAULT_LOOPS）。結果に残す。幽境モードは、戦闘条件の周数（abyss.loops）が優先される */
+  loops?: number;
   /**
    * 幽境モードの戦闘条件（あれば、開始エネルギー 0・最初の爆発も判定・時刻指定の粒子・戦闘時間の周数になる。無ければ通常モード）。
    * 設定文を作る build が、extra.abyss で受け取る
@@ -489,7 +496,7 @@ export async function computeRequiredEr(args: {
   const split = abyss ? splitTimedParticles(abyss.timedParticles, periodicParticlesOn(enemyParticles)) : { toGcsim: [] as TimedParticle[], injected: [] as TimedParticle[] };
   const invulnerable = abyss?.invulnerable ?? [];
   const adjusts = abyss !== undefined && needsAdjust(split.injected, invulnerable);
-  const build: BuildForEr = extra => args.build({ ...extra, enemyParticles, ...(abyss ? { abyss: { ...abyss, timedParticles: split.toGcsim } } : {}) });
+  const build: BuildForEr = extra => args.build({ ...extra, loops: args.loops, enemyParticles, ...(abyss ? { abyss: { ...abyss, timedParticles: split.toGcsim } } : {}) });
   const cancelled = () => shouldCancel?.() === true;
   const startedAt = Date.now();
   let runsDone = 0;
@@ -881,6 +888,6 @@ export async function computeRequiredEr(args: {
   report();
   return {
     status: 'ok',
-    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, ...(abyss ? { abyss } : {}), ...(adjusts ? { adjusted: { timedInjected: split.injected.length, invulnerableWindows: invulnerable.length } } : {}), fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
+    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, loops: args.loops ?? abyss?.loops ?? ER_DEFAULT_LOOPS, ...(abyss ? { abyss } : {}), ...(adjusts ? { adjusted: { timedInjected: split.injected.length, invulnerableWindows: invulnerable.length } } : {}), fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
   };
 }

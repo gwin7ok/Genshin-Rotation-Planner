@@ -557,12 +557,12 @@ export default function App() {
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
-  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles; abyss?: DpsAbyssRun }) => buildGcsimConfig({
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { loops?: number; ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles; abyss?: DpsAbyssRun }) => buildGcsimConfig({
       characters,
       ...(dpsExtra ? { loopIterations: dpsExtra.loopIterations, enemies: dpsExtra.enemies, ignoreBurstEnergy: dpsExtra.ignoreBurstEnergy, enemyParticles: dpsExtra.enemyParticles } : {}),
       // （幽境モードの DPS 計算は、画面から外した。型だけ残っている）
       ...(dpsExtra?.abyss ? { startEnergyZero: dpsExtra.abyss.startEnergyZero, timedParticles: dpsExtra.abyss.timedParticles, } : {}),
-      ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
+      ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: erExtra.loops ?? ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
       // 幽境モード: 開始エネルギー 0・時刻指定の粒子・戦闘時間（周数は、ローテーションの長さから自動で決まる）
       ...(erExtra?.abyss ? { startEnergyZero: true, timedParticles: erExtra.abyss.timedParticles, loopIterations: erExtra.abyss.loops } : {}),
       stints: stintsArg,

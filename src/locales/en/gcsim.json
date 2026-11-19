@@ -159,7 +159,7 @@
     "abyssConditions": "Abyss battle conditions",
     "loops": "Loop count",
     "loopsUnit": "loops",
-    "loopsNote": "After the opening, the loop part of the rotation runs this many times (no time limit). The seconds of timed particles and no-damage periods are times from the start of the battle (the start of the opening).",
+    "loopsNote": "The number of times the loop part runs after the actions before the loop reference point (the opening) (default {{def}}, max {{max}}; no time limit). Used both for the required-ER calculation and for the Abyss-mode burst timing check. More loops catch the worst window more often, so the required ER creeps up, but it takes longer. In Abyss mode, the seconds of timed particles and no-damage periods are times from the start of the battle (the start of the opening).",
     "firstBurstWait": "The first burst may wait up to",
     "firstBurstWaitUnit": "s after its planned time",
     "firstBurstWaitNote": "Everyone starts with 0 energy, so the first burst is delayed until enough particles arrive. It counts as enough if it can go off within this many seconds of its planned time (0.5 s steps; default 0.5 s). If the opening (first lap only) uses skills only to build burst energy, the default 0.5 s is enough. If the opening itself fires a burst, no amount of ER lets it go off at the planned time and the result is \"Unreachable\", so raise this value. Later bursts use \"Wait before a burst\" below.",

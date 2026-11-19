@@ -18,14 +18,14 @@ import { ErAdjustNotice } from './ErAdjustNotice';
 import {
   computeRequiredEr,
   fingerprintOf,
-  ER_LOOP_ITERATIONS,
+  ER_DEFAULT_LOOPS,
+  ER_MAX_LOOPS,
   ER_MAX_ADDED,
   ER_DEFAULT_BURST_WAIT_SECONDS,
   ER_DEFAULT_SEEDS,
   ER_MAX_SEEDS,
   ER_DEFAULT_ENEMY_PARTICLES,
   ABYSS_MAX_BATTLE_SECONDS,
-  ABYSS_MAX_LOOPS,
   ABYSS_MAX_TIMED_PARTICLES,
   verifyCharacters,
   ER_VERIFY_TOLERANCE_PRECISE,
@@ -84,7 +84,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [currentEr, setCurrentEr] = useState<Record<string, number>>({});
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
   // 幽境モードの戦闘条件（入力中は文字列。変えるたびに保存する）
-  const [loops, setLoops] = useState(String(defaultBattleCondition().loops));
+  const [loops, setLoops] = useState(String(ER_DEFAULT_LOOPS));
   const [firstWait, setFirstWait] = useState(defaultBattleCondition().firstBurstWaitSeconds.toFixed(1));
   const [timed, setTimed] = useState<TimedInput[]>([]);
   const timedKey = useRef(0);
@@ -119,6 +119,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
       setTimed(cond.timedParticles.map(p => ({ key: ++timedKey.current, seconds: String(p.seconds), amount: String(p.amount) })));
       setDpsPart({ enemies: cond.enemies, enemyStates: cond.enemyStates });
     }
+    if (!cond) setLoops(String(last?.loops ?? ER_DEFAULT_LOOPS));
     const p = cond?.enemyParticles ?? last?.enemyParticles ?? ER_DEFAULT_ENEMY_PARTICLES;
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
@@ -134,6 +135,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setCurrentMembers(base.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
   }, [isOpen, mode]);
+
+  /** 周回数（ループ部分。範囲に収める。計算にも、爆発のタイミングの確認にも使う） */
+  const loopsN = (): number => { const v = Math.round(Number(loops)); return Number.isFinite(v) ? Math.min(ER_MAX_LOOPS, Math.max(1, v)) : ER_DEFAULT_LOOPS; };
 
   /** 入力中の値から、幽境モードの戦闘条件を作る（空欄・不正な値は、既定・範囲に収める） */
   const readCondition = (): BattleCondition => {
@@ -253,6 +257,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     try {
       outcome = await computeRequiredEr({
         build: extra => buildRef.current(extra),
+        loops: loopsN(),
         enemyParticles: particles,
         ...(condition ? { abyss: toAbyssRunCondition(condition) } : {}),
         parallel,
@@ -314,7 +319,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         </div>
 
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
-          <p className="text-xs text-slate-400 leading-relaxed">{isAbyss ? t('gcsim:er.introAbyss') : t('gcsim:er.intro', { laps: ER_LOOP_ITERATIONS })}</p>
+          <p className="text-xs text-slate-400 leading-relaxed">{isAbyss ? t('gcsim:er.introAbyss') : t('gcsim:er.intro', { laps: loopsN() })}</p>
           {isAbyss && (
             <div className="text-xs text-fuchsia-200 bg-fuchsia-950/30 border border-fuchsia-900/60 rounded-lg p-3 leading-relaxed" data-testid="er-abyss-banner">{t('gcsim:er.abyssBanner')}</div>
           )}
@@ -510,6 +515,16 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
 
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5" data-testid="er-loops-section">
+            <p className="font-bold">{t('gcsim:er.loops')}</p>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Stepper value={loops} onChange={setLoops} step={1} min={1} max={ER_MAX_LOOPS} disabled={running || timingRunning} widthClass="w-14" testId="er-loops" />
+              <span>{t('gcsim:er.loopsUnit')}</span>
+              <button onClick={() => setLoops(String(ER_DEFAULT_LOOPS))} disabled={running || timingRunning} className="ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:er.enemyParticlesReset')}</button>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.loopsNote', { def: ER_DEFAULT_LOOPS, max: ER_MAX_LOOPS })}</p>
+          </div>
+
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.precision')}</p>
             <div className="flex items-center gap-1.5">
@@ -546,12 +561,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-abyss-conditions">
               <p className="font-bold text-fuchsia-200">{t('gcsim:er.abyssConditions')}</p>
               <BattlePresetsPanel isOpen={isOpen} current={readCondition()} onApply={applyCondition} busy={running || timingRunning} testIdPrefix="er" />
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span>{t('gcsim:er.loops')}</span>
-                <Stepper value={loops} onChange={setLoops} step={1} min={1} max={ABYSS_MAX_LOOPS} disabled={running} widthClass="w-14" testId="er-loops" />
-                <span>{t('gcsim:er.loopsUnit')}</span>
-              </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.loopsNote')}</p>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span>{t('gcsim:er.firstBurstWait')}</span>
                 <Stepper value={firstWait} onChange={setFirstWait} step={0.5} min={0} max={60} decimals={1} disabled={running} widthClass="w-14" testId="er-first-wait" />

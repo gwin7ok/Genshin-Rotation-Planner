@@ -1241,7 +1241,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           isDraggingThis ? 'opacity-70 ring-2 ring-amber-300 shadow-xl cursor-grabbing' : 'transition-all'
                         } ${
                           isCurrent
-                            ? 'border-amber-400 ring-2 ring-amber-400/40 shadow-md font-bold'
+                            ? 'border-orange-400 ring-2 ring-orange-400/40 shadow-md font-bold'
                             : 'border-slate-700/80 hover:border-slate-500'
                         }`}
                         title={t('chart:gantt.stintTitle', { name: charName(char), start: (stint.startTime ?? 0).toFixed(2), end: (stint.endTime ?? 0).toFixed(2), duration: (stint.duration ?? 0).toFixed(2) })}
@@ -1538,7 +1538,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                           isStintSelected
                             ? 'bg-slate-950 border-l-4 border-l-yellow-400 ring-2 ring-inset ring-yellow-400 shadow-md'
                             : isStintCurrentlyOnField 
-                            ? 'bg-slate-900 border-l-2 border-l-amber-400' 
+                            ? 'bg-slate-900 border-l-2 border-l-orange-400' 
                             : 'bg-slate-950'
                         }`}>
                           {/* Row 0: Character Info & Controls (Height: h-9 = 36px) */}
@@ -1770,7 +1770,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                                 <div
                                   className={`absolute h-7 rounded-lg flex items-center overflow-hidden border shadow-sm transition-all ${
                                     isStintCurrentlyOnField
-                                      ? 'border-amber-400 ring-2 ring-amber-400/50 shadow-amber-500/20'
+                                      ? 'border-orange-400 ring-2 ring-orange-400/50 shadow-orange-500/20'
                                       : 'border-slate-700 hover:border-slate-500'
                                   }`}
                                   style={{

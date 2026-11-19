@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Zap, Play, Square, AlertTriangle, Plus, Trash2 } from 'lucide-react';
 import { Stepper } from './Stepper';
+import { RunProgress, formatDuration, type ChunkProgress } from './RunProgress';
 import { CountSetting, CoresSetting, EnemyParticlesInputs, useCoresSetting } from './SharedSettings';
 import { t, dateLocale, currentLanguage, joinList, rangeMark, dotMark } from '../i18n';
 import { charName } from '../i18n/loc';
@@ -56,14 +57,6 @@ interface TimedInput { key: number; seconds: string; amount: string }
 
 const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify', refine: 'phaseRefine' } as const;
 
-/** 秒数を「m分ss秒」（英語は m:ss）にする */
-const formatDuration = (ms: number): string => {
-  const total = Math.max(0, Math.round(ms / 1000));
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return currentLanguage === 'en' ? `${m}:${String(s).padStart(2, '0')}` : m > 0 ? `${m}分${String(s).padStart(2, '0')}秒` : `${s}秒`;
-};
-
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
 export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database, mode = 'normal', onChangeMode }) => {
   const isAbyss = mode === 'abyss';
@@ -74,7 +67,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [progress, setProgress] = useState<RequiredErProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number | null>(null);
-  const [now, setNow] = useState(() => Date.now());
   // 敵の粒子の設定（実行前に変えられる。入力中は文字列。最後に実行した値があればそれを使う）
   const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
   const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
@@ -98,6 +90,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [timing, setTiming] = useState<{ key: string; result: BurstTimingResult } | null>(null);
   const [timingRunning, setTimingRunning] = useState(false);
   const [timingMessage, setTimingMessage] = useState<string | null>(null);
+  const [timingStartedAt, setTimingStartedAt] = useState<number | null>(null);
+  const [timingProgress, setTimingProgress] = useState<ChunkProgress | null>(null);
   // 確認に使う ER（キャラ ID → %の文字列。編集したキャラだけ。無いキャラは、いまの ER）
   const [checkEr, setCheckEr] = useState<Record<string, string>>({});
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
@@ -183,13 +177,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     return () => { cancelled = true; };
   }, [isOpen, characters, database]);
 
-  // 計算中は、1 秒ごとに経過時間を更新する
-  useEffect(() => {
-    if (!running) return;
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, [running]);
-
   if (!isOpen) return null;
 
   /** 保存した戦闘条件を、入力欄に入れる（入力が変わるので、上の自動保存が、いまの条件として保存する） */
@@ -243,6 +230,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     const key = timingKeyNow;
     setTimingRunning(true);
     setTimingMessage(null);
+    setTimingProgress(null);
+    setTimingStartedAt(Date.now());
     let outcome: Awaited<ReturnType<typeof computeBurstTiming>>;
     try {
       outcome = await computeBurstTiming({
@@ -251,6 +240,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         abyss: condition ? toAbyssRunCondition(condition) : undefined,
         loops: loopsN(),
         erDelta: erDeltaMap(),
+        onProgress: setTimingProgress,
         seeds: seedCount(),
         parallel: wasmParallelism(),
         run: runGcsimSample,
@@ -272,7 +262,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setMessage(null);
     setProgress(null);
     setStartedAt(Date.now());
-    setNow(Date.now());
     // Worker を並べて、種を同時に実行する
     const parallel = wasmParallelism();
     let outcome: Awaited<ReturnType<typeof computeRequiredEr>>;
@@ -388,22 +377,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               </button>
             )}
             {running && (
-              <span className="text-xs text-slate-300">
-                {progress ? t(`gcsim:er.${PHASE_KEY[progress.phase]}`) : t('gcsim:er.running')}
-                {startedAt !== null && (() => {
-                  const elapsed = now - startedAt;
-                  // 残り時間 = 塊（同時に実行する種のまとまり）の平均時間 × 残りの塊の数。検証は何回で収まるか分からないので、最小〜最大の幅で出す
-                  if (!progress || progress.chunksDone < 2 || elapsed < 5000) return `${dotMark}${t('gcsim:er.elapsedRunningNoEstimate', { elapsed: formatDuration(elapsed) })}`;
-                  const perChunk = elapsed / progress.chunksDone;
-                  const low = progress.chunksLeftLow * perChunk;
-                  const high = progress.chunksLeftHigh * perChunk;
-                  if (high < 4000) return `${dotMark}${t('gcsim:er.elapsedRunningSoon', { elapsed: formatDuration(elapsed) })}`;
-                  const mid = (low + high) / 2;
-                  return `${dotMark}${high - low < Math.max(8000, mid * 0.25)
-                    ? t('gcsim:er.elapsedRunning', { elapsed: formatDuration(elapsed), remaining: formatDuration(mid) })
-                    : t('gcsim:er.elapsedRunningRange', { elapsed: formatDuration(elapsed), low: formatDuration(low), high: formatDuration(high) })}`;
-                })()}
-              </span>
+              <RunProgress label={progress ? t(`gcsim:er.${PHASE_KEY[progress.phase]}`) : t('gcsim:er.running')} startedAt={startedAt} progress={progress} />
             )}
             {shown && !running && (
               <span className="text-xs text-slate-500">
@@ -493,6 +467,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 <button type="button" onClick={() => void runTiming()} disabled={running || timingRunning || notRunnable.length > 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white disabled:opacity-40 disabled:cursor-not-allowed" data-testid="er-timing-start">
                   <Play className="w-3.5 h-3.5" />{timingRunning ? t('gcsim:er.timingRunning') : t('gcsim:er.timingStart')}
                 </button>
+                {timingRunning && <div><RunProgress label={t('gcsim:er.timingRunning')} startedAt={timingStartedAt} progress={timingProgress} /></div>}
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
                 <div className="space-y-1" data-testid="er-timing-waits">
                   <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>

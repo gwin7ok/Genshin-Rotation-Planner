@@ -168,6 +168,8 @@ export async function computeBurstTiming(args: {
   /** 同時に実行する種の数（既定 1） */
   parallel?: number;
   run: RunSample;
+  /** gcsim の実行を 1 回終えるたびに呼ぶ（chunksDone = 終えた実行の数。経過・残り時間の表示に使う） */
+  onProgress?: (p: { chunksDone: number; chunksLeftLow: number; chunksLeftHigh: number }) => void;
   shouldCancel?: () => boolean;
 }): Promise<BurstTimingOutcome> {
   const { abyss, enemyParticles } = args;
@@ -179,10 +181,15 @@ export async function computeBurstTiming(args: {
   const perSeed: Map<number, BurstDelay[]>[] = [];
   const testRuns: { logs: Parameters<typeof summarizeDamage>[0] }[] = [];
   const all = Array.from({ length: seeds }, (_, i) => i + 1);
+  // 進み具合は、実行 1 回ごとに数える（種ごとに、基準と試験の 2 回。並列のときも、平均の速さから残りが出る）
+  const runTotal = all.length * 2;
+  let runsDone = 0;
+  const tick = () => { runsDone++; args.onProgress?.({ chunksDone: runsDone, chunksLeftLow: runTotal - runsDone, chunksLeftHigh: runTotal - runsDone }); };
+  args.onProgress?.({ chunksDone: 0, chunksLeftLow: runTotal, chunksLeftHigh: runTotal });
   for (let i = 0; i < all.length; i += parallel) {
     if (args.shouldCancel?.()) return { status: 'cancelled' };
     const chunk = all.slice(i, i + parallel);
-    const results = await Promise.all(chunk.map(async seed => ({ b: await args.run(base.config, seed), t: await args.run(test.config, seed) })));
+    const results = await Promise.all(chunk.map(async seed => ({ b: await args.run(base.config, seed).then(r => { tick(); return r; }), t: await args.run(test.config, seed).then(r => { tick(); return r; }) })));
     for (const { b, t } of results) {
       if (b.status !== 'ok') return { status: b.status, message: b.message };
       if (t.status !== 'ok') return { status: t.status, message: t.message };

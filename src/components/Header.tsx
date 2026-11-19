@@ -20,7 +20,6 @@ interface HeaderProps {
   onOpenPartyModal: () => void;
   onOpenOwnedModal: () => void;
   /** アプリ全体のモード（通常 / 幽境）と、切り替え（フェーズ8 / issue #54） */
-  appMode: AppMode;
   onOpenEnergyRechargeModal: () => void;
   /** DPS 計算の窓を開く（D343） */
   onOpenDpsModal: () => void;
@@ -70,7 +69,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSaveAs,
   onOpenPartyModal,
   onOpenOwnedModal,
-  appMode,
   onOpenEnergyRechargeModal,
   onOpenDpsModal,
   onOpenHelpModal,
@@ -170,8 +168,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       ref={headerRef}
-      className={`bg-slate-900/95 backdrop-blur border-b sticky top-0 z-50 px-3 sm:px-4 py-2 shadow-xl transition-all ${appMode === 'abyss' ? 'border-fuchsia-500/80' : 'border-slate-800'}`}
-      data-app-mode={appMode}
+      className={`bg-slate-900/95 backdrop-blur border-b sticky top-0 z-50 px-3 sm:px-4 py-2 shadow-xl transition-all border-slate-800`}
     >
       <div className="w-full flex flex-col items-center gap-1">
         {/* Main Header Row */}
@@ -188,15 +185,6 @@ export const Header: React.FC<HeaderProps> = ({
                 </h1>
               </div>
             </div>
-          </div>
-
-          {/* アプリ全体のモード（通常 / 幽境）。切り替えは、チャージ効率計算の画面にある。幽境モードのときは、目立つ色のラベルを常に出す（切り替え忘れの防止） */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {appMode === 'abyss' && (
-              <span data-testid="app-mode-badge" className="px-2 py-0.5 rounded-md bg-fuchsia-950/90 border border-fuchsia-500 text-fuchsia-200 text-xs font-bold shadow shadow-fuchsia-500/30" title={t('header:mode.abyssBadgeTitle')}>
-                {t('header:mode.abyssBadge')}
-              </span>
-            )}
           </div>
 
           {/* Saved Party (Slot) Selector & Save/Load */}
@@ -387,8 +375,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{t('header:menu.energyRecharge')}</span>
             </button>
 
-            {/* 幽境モードでは、DPS 計算は使わない（敵のギミックに対応できないため。爆発のエネルギー待ちは、チャージ効率計算の画面で確認する。D374） */}
-            {appMode !== 'abyss' && (
               <button
                 onClick={onOpenDpsModal}
                 className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 transition-colors shrink-0"
@@ -397,7 +383,6 @@ export const Header: React.FC<HeaderProps> = ({
                 <Swords className="w-3.5 h-3.5" />
                 <span>{t('header:menu.dps')}</span>
               </button>
-            )}
 
             {/* 改行（記法コピーは、次の行から） */}
             <div className="basis-full h-0" aria-hidden="true" />

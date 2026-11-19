@@ -159,6 +159,8 @@ export async function computeBurstTiming(args: {
   abyss: AbyssRunCondition;
   /** 足す ER（キャラ ID → 割合）。既定は足さない（いまのビルドのまま） */
   added?: Record<string, number>;
+  /** 増減する ER（キャラ ID → 割合。マイナスで下げる）。今のステータスの上に足す */
+  erDelta?: Record<string, number>;
   seeds: number;
   /** 同時に実行する種の数（既定 1） */
   parallel?: number;
@@ -168,7 +170,7 @@ export async function computeBurstTiming(args: {
   const { abyss, enemyParticles } = args;
   const base = args.build({ ignoreBurstEnergy: true, added: {}, enemyParticles, abyss });
   if (!base.runnable) return { status: 'error', message: base.warnings.filter(w => w.level === 'error').map(w => w.message).join(' / ') };
-  const test = args.build({ ignoreBurstEnergy: false, added: args.added ?? {}, enemyParticles, abyss });
+  const test = args.build({ ignoreBurstEnergy: false, added: args.added ?? {}, erDelta: args.erDelta, enemyParticles, abyss });
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
   const seeds = Math.max(1, Math.floor(args.seeds));
   const perSeed: Map<number, BurstDelay[]>[] = [];

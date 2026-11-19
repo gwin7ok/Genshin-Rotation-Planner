@@ -207,7 +207,7 @@ export type RequiredErOutcome =
   | { status: 'cancelled' }
   | { status: 'error' | 'unreachable'; message: string };
 
-export type BuildForEr = (extra: { loops?: number; ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }) => GcsimConfigResult;
+export type BuildForEr = (extra: { loops?: number; ignoreBurstEnergy: boolean; added: Record<string, number>; erDelta?: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }) => GcsimConfigResult;
 export type RunSample = (config: string, seed: number) => Promise<GcsimSampleResult>;
 
 /** 設定文の短い指紋（変更の検出用。暗号用ではない） */

@@ -98,6 +98,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [timing, setTiming] = useState<{ key: string; result: BurstTimingResult } | null>(null);
   const [timingRunning, setTimingRunning] = useState(false);
   const [timingMessage, setTimingMessage] = useState<string | null>(null);
+  // 確認に使う ER（キャラ ID → %の文字列。編集したキャラだけ。無いキャラは、いまの ER）
+  const [checkEr, setCheckEr] = useState<Record<string, string>>({});
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
   const { cores, changeCores } = useCoresSetting();
   const cancelRef = useRef(false);
@@ -125,6 +127,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setWait((last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS).toFixed(1));
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
+    setCheckEr({});
     const base = buildRef.current({ ignoreBurstEnergy: true, added: {} });
     setPrecise(last?.precise ?? false); // 初期値は概算検証（最後の実行があれば、そのときの選択）
     setCurrentFingerprint(fingerprintOf(base.config));
@@ -213,7 +216,27 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const seedCount = (): number => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; };
 
   // 爆発のタイミングの確認（幽境モード）: いまのビルドで、開始エネルギー 0 から回し、各爆発の計画からの遅れを調べる
-  const timingKeyNow = `${currentFingerprint ?? ''}|${JSON.stringify(readCondition())}`;
+  const timingKeyNow = `${currentFingerprint ?? ''}|${JSON.stringify(readCondition())}|${JSON.stringify(checkEr)}`;
+  /** 確認に使う ER（%）。編集した値、無ければ、いまの ER。いまの ER が未計算なら undefined */
+  const checkErOf = (id: string): number | undefined => {
+    const cur = currentEr[id] === undefined ? undefined : Math.round(currentEr[id] * 1000) / 10;
+    const v = checkEr[id];
+    if (v === undefined) return cur;
+    const n = Number(v);
+    return v.trim() !== '' && Number.isFinite(n) ? n : cur;
+  };
+  /** いまの ER との差（割合）。変えていないキャラは含めない */
+  const erDeltaMap = (): Record<string, number> => {
+    const out: Record<string, number> = {};
+    for (const m of currentMembers) {
+      const cur = currentEr[m.characterId];
+      const target = checkErOf(m.characterId);
+      if (cur === undefined || target === undefined) continue;
+      const d = target / 100 - Math.round(cur * 1000) / 1000;
+      if (Math.abs(d) > 1e-6) out[m.characterId] = d;
+    }
+    return out;
+  };
   const runTiming = async () => {
     const { condition, particles } = resolveRun();
     if (!condition) return;
@@ -227,6 +250,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         build: extra => buildRef.current(extra),
         enemyParticles: particles,
         abyss: toAbyssRunCondition(condition),
+        erDelta: erDeltaMap(),
         seeds: seedCount(),
         parallel: wasmParallelism(),
         run: runGcsimSample,
@@ -471,38 +495,49 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                   <Play className="w-3.5 h-3.5" />{timingRunning ? t('gcsim:er.timingRunning') : t('gcsim:er.timingStart')}
                 </button>
                 {timingMessage && <p className="text-amber-300">{timingMessage}</p>}
-                {shownTiming && (
-                  <div className="space-y-1" data-testid="er-timing-waits">
-                    <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
-                    <table className="w-full text-left" data-testid="er-timing-table">
-                      <thead>
-                        <tr className="text-[11px] text-slate-400 border-b border-slate-800">
-                          <th className="py-1 pr-2 font-normal">{t('gcsim:er.waitsColChar')}</th>
-                          <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColCountTitle', { loops: shownTiming.loops })}>{t('gcsim:er.waitsColCount')}</th>
-                          <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColSecondsTitle')}>{t('gcsim:er.waitsColSeconds')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {shownTiming.waits.map(wt => {
-                          const c = charOf(wt.characterId);
-                          return (
-                            <tr key={wt.characterId} className="border-b border-slate-900" data-testid={`er-timing-wait-${wt.characterId}`}>
-                              <td className="py-1 pr-2 text-slate-200">{c ? charName(c) : wt.name}</td>
-                              <td className="py-1 pr-2 text-right font-mono">{wt.perLoop.toFixed(2)}</td>
-                              <td className="py-1 pr-2 text-right font-mono">{wt.avgSeconds === null ? '-' : wt.avgSeconds.toFixed(2)}</td>
-                            </tr>
-                          );
-                        })}
-                        <tr className="font-bold text-slate-100" data-testid="er-timing-waits-total">
-                          <td className="py-1 pr-2">{t('gcsim:er.waitsRowTotal')}</td>
-                          <td className="py-1 pr-2 text-right font-mono">{shownTiming.waitsTotal.perLoop.toFixed(2)}</td>
-                          <td className="py-1 pr-2 text-right font-mono">{shownTiming.waitsTotal.avgSeconds === null ? '-' : shownTiming.waitsTotal.avgSeconds.toFixed(2)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.waitsNote', { loops: shownTiming.loops })}</p>
-                  </div>
-                )}
+                <div className="space-y-1" data-testid="er-timing-waits">
+                  <p className="font-semibold text-slate-200">{t('gcsim:er.waitsTitle')}</p>
+                  <table className="w-full text-left" data-testid="er-timing-table">
+                    <thead>
+                      <tr className="text-[11px] text-slate-400 border-b border-slate-800">
+                        <th className="py-1 pr-2 font-normal">{t('gcsim:er.waitsColChar')}</th>
+                        <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.checkColErTitle')}>{t('gcsim:er.checkColEr')}</th>
+                        <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColCountTitle', { loops: shownTiming?.loops ?? loopsN() })}>{t('gcsim:er.waitsColCount')}</th>
+                        <th className="py-1 pr-2 font-normal text-right" title={t('gcsim:er.waitsColSecondsTitle')}>{t('gcsim:er.waitsColSeconds')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentMembers.map(m => {
+                        const c = charOf(m.characterId);
+                        const wt = shownTiming?.waits.find(x => x.characterId === m.characterId);
+                        const cur = currentEr[m.characterId];
+                        return (
+                          <tr key={m.characterId} className="border-b border-slate-900" data-testid={`er-timing-wait-${m.characterId}`}>
+                            <td className="py-1 pr-2 text-slate-200">{c ? charName(c) : m.name}</td>
+                            <td className="py-1 pr-2 text-right">
+                              {cur === undefined ? <span className="text-slate-600">-</span> : (
+                                <span className="inline-flex items-center gap-1">
+                                  <Stepper value={checkEr[m.characterId] ?? (Math.round(cur * 1000) / 10).toFixed(1)} onChange={v => setCheckEr(prev => ({ ...prev, [m.characterId]: v }))} step={1} min={0} max={ER_MAX_ADDED * 100 + 100} decimals={1} disabled={running || timingRunning} widthClass="w-16" testId={`er-check-er-${m.characterId}`} />
+                                  <span>%</span>
+                                  <button type="button" onClick={() => setCheckEr(prev => { const n = { ...prev }; delete n[m.characterId]; return n; })} disabled={running || timingRunning || checkEr[m.characterId] === undefined} title={t('gcsim:er.checkErReset')} className="px-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30">↺</button>
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-1 pr-2 text-right font-mono">{wt ? wt.perLoop.toFixed(2) : '-'}</td>
+                            <td className="py-1 pr-2 text-right font-mono">{wt && wt.avgSeconds !== null ? wt.avgSeconds.toFixed(2) : '-'}</td>
+                          </tr>
+                        );
+                      })}
+                      <tr className="font-bold text-slate-100" data-testid="er-timing-waits-total">
+                        <td className="py-1 pr-2">{t('gcsim:er.waitsRowTotal')}</td>
+                        <td className="py-1 pr-2" />
+                        <td className="py-1 pr-2 text-right font-mono">{shownTiming ? shownTiming.waitsTotal.perLoop.toFixed(2) : '-'}</td>
+                        <td className="py-1 pr-2 text-right font-mono">{shownTiming && shownTiming.waitsTotal.avgSeconds !== null ? shownTiming.waitsTotal.avgSeconds.toFixed(2) : '-'}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.waitsNote', { loops: shownTiming?.loops ?? loopsN() })}</p>
+                </div>
               </div>
             );
           })()}

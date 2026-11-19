@@ -152,6 +152,8 @@ export interface GcsimConfigInput {
   battleSeconds?: number;
   /** キャラ ID → 仮ステータスに足す元素チャージ効率（割合。1 = +100%。武器・聖遺物のサブステの分は gcsim が別に足す）。無いキャラは足さない */
   addedEnergyRechargeByCharacterId?: Record<string, number>;
+  /** キャラ ID → 元素チャージ効率の増減（割合。+0.1 = +10%、マイナスは下げる）。今のステータスの上に、そのまま足す（爆発のタイミングの確認で、ER を指定するのに使う） */
+  energyRechargeDeltaByCharacterId?: Record<string, number>;
   weapons: WeaponDatabaseItem[];
   artifacts: ArtifactSetDatabaseItem[];
   /** 長押しの秒数（アクション ID → 秒）。計算後のアクションの holdSeconds。無いアクションは最短の長押し（hold=1）になる */
@@ -314,6 +316,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     const statEntries = Object.entries(stats.artifactStats).filter(([k]) => addedEr === undefined || k !== 'er').map(([k, v]) => `${k}=${v}`);
     if (addedEr !== undefined) statEntries.push(`er=${Number(addedEr.toFixed(4))}`);
     if (statEntries.length > 0) lines.push(`${key} add stats ${statEntries.join(' ')};`);
+    const erDelta = input.energyRechargeDeltaByCharacterId?.[c.id];
+    if (erDelta !== undefined && Math.abs(erDelta) > 1e-9) lines.push(`${key} add stats er=${Number(erDelta.toFixed(4))};`);
   }
 
   // 2. ローテーション本体

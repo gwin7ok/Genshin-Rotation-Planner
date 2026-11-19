@@ -33,6 +33,7 @@ import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { EnergyRechargeDialog } from './components/EnergyRechargeDialog';
 import { DpsDialog } from './components/DpsDialog';
+import { AutoSearchDialog } from './components/AutoSearchDialog';
 import { ER_LOOP_ITERATIONS, type AbyssRunCondition, type EnemyParticles } from './utils/gcsim/requiredEnergyRecharge';
 import type { DpsAbyssRun } from './utils/gcsim/dpsCalc';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
@@ -120,6 +121,8 @@ export default function App() {
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
   const [isEnergyRechargeOpen, setIsEnergyRechargeOpen] = useState(false);
   const [isDpsOpen, setIsDpsOpen] = useState(false);
+  // ローテーション自動探索（フェーズ 9）
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   // アプリ全体のモード（通常 / 幽境。フェーズ8 / issue #54）。回転ごとではなく、アプリ全体の設定（既定: 通常）
   const [appMode, setAppModeState] = useState<AppMode>(() => loadAppMode());
   const setAppMode = (mode: AppMode) => {
@@ -906,6 +909,7 @@ export default function App() {
         onOpenOwnedModal={() => setIsOwnedModalOpen(true)}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenDpsModal={() => setIsDpsOpen(true)}
+        onOpenSearchModal={() => setIsSearchOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
         onOpenSaveModal={() => setIsSaveModalOpen(true)}
         onOpenDatabaseModal={() => setIsDatabaseModalOpen(true)}
@@ -1112,6 +1116,22 @@ export default function App() {
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, undefined, extra)}
         characters={characters}
         database={database}
+      />
+
+      {/* ローテーション自動探索（フェーズ 9）: 1 位をガントチャートに置く */}
+      <AutoSearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        characters={characters}
+        database={database}
+        switchDelay={switchDelay}
+        defHalt={defHalt}
+        hurt={hurt}
+        stintCount={visibleStints.length}
+        onApply={next => {
+          updateStints(next);
+          setLoopStartIndex(0);
+        }}
       />
 
       {/* gcsim 設定文 */}

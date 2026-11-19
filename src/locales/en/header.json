@@ -85,7 +85,9 @@
     "copied": "Copied",
     "copyNotationTitle": "Copy the text notation (e.g. Xingqiu(Q E) ➔ [Bennett(Q E) ➔ Xiangling(Q E)]; [ ] is the part repeated from the 2nd cycle on)",
     "dps": "DPS Calc (gcsim)",
-    "dpsTitle": "Calculate the party DPS of the current rotation with gcsim"
+    "dpsTitle": "Calculate the party DPS of the current rotation with gcsim",
+    "search": "Auto Rotation Search",
+    "searchTitle": "Search for the highest-DPS rotation from the party roles and place it"
   },
   "notation": {
     "title": "Current rotation notation",

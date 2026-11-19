@@ -1,6 +1,6 @@
 import { staleReactionsBadge } from './StaleReactionsBadge';
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2, UserCheck, Swords, ChevronUp, ChevronDown } from 'lucide-react';
+import { Play, RotateCcw, Users, Settings2, Zap, Copy, Check, HelpCircle, Save, Database, FilePlus2, FolderCog, AlertTriangle, CheckCircle2, UserCheck, Swords, Sparkles, ChevronUp, ChevronDown } from 'lucide-react';
 import { SavedRotationSlot } from '../types/genshin';
 import type { CtMarkKind } from '../utils/ctMarks';
 import { ListSelect } from './ListSelect';
@@ -23,6 +23,7 @@ interface HeaderProps {
   onOpenEnergyRechargeModal: () => void;
   /** DPS 計算の窓を開く（D343） */
   onOpenDpsModal: () => void;
+  onOpenSearchModal: () => void;
   onOpenHelpModal: () => void;
   onOpenSaveModal: () => void;
   onOpenDatabaseModal: () => void;
@@ -71,6 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenOwnedModal,
   onOpenEnergyRechargeModal,
   onOpenDpsModal,
+  onOpenSearchModal,
   onOpenHelpModal,
   onOpenSaveModal,
   onOpenDatabaseModal,
@@ -382,6 +384,15 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <Swords className="w-3.5 h-3.5" />
                 <span>{t('header:menu.dps')}</span>
+              </button>
+
+              <button
+                onClick={onOpenSearchModal}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 border border-violet-500/40 transition-colors shrink-0"
+                title={t('header:menu.searchTitle')}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{t('header:menu.search')}</span>
               </button>
 
             {/* 改行（記法コピーは、次の行から） */}

@@ -292,5 +292,41 @@
     "notRunnableUnknown": "The config could not be built (the cause is unknown). Check the party and the rotation.",
     "stale": "The party or the rotation has changed. This result is from before the change.",
     "truncated": "Of the {{loops}} rotation loops, the shortest run was cut off at loop {{worst}} ({{count}} of {{runs}} runs; the energy may have run short). The DPS covers only what could be executed."
+  },
+  "search": {
+    "title": "Auto Rotation Search",
+    "intro": "Builds combinations of on-field order and actions from the roles (attacker / sub-attacker / supporter) of the party members, runs the ones without cooldown violations through gcsim, and ranks them by DPS. The best one is placed on the Gantt chart right away.",
+    "rolesTitle": "Roles of the party members (editable in Database management → edit character)",
+    "roleNone": "No role (treated as a supporter)",
+    "settings": "Search settings",
+    "settingsHint": "More runs and more kept candidates make the ranking more accurate but take longer (a few minutes).",
+    "battleSeconds": "Battle time (s)",
+    "keep1": "Candidates kept after stage 1",
+    "runs1": "gcsim runs in stage 1",
+    "keep2": "Candidates going to stage 2",
+    "runs2": "gcsim runs in stage 2",
+    "overwrite": "The current actions ({{count}} on-field blocks) will be replaced by the search result.",
+    "noMembers": "The party has no characters. Build a party first.",
+    "start": "Start search",
+    "cancel": "Cancel",
+    "phase": {
+      "generate": "Building candidates…",
+      "quick": "Stage 1: narrowing candidates ({{done}} / {{total}})",
+      "verify": "Stage 2: checking the ranking ({{done}} / {{total}})"
+    },
+    "cancelled": "Cancelled.",
+    "failed": "The search failed: {{message}}",
+    "noCandidates": "No candidates could be built (no character has the attacker role, or no usable actions).",
+    "noValid": "No candidate was free of cooldown violations.",
+    "resultTitle": "Results (highest DPS first)",
+    "summary": "Of {{candidates}} candidates, {{rejected}} were removed for cooldown violations etc., and {{quick}} were run in gcsim ({{seconds}} s).",
+    "colRank": "Rank",
+    "colDps": "DPS",
+    "colLength": "Length",
+    "colRoute": "On-field order and actions",
+    "apply": "Use this",
+    "applied": "In use",
+    "appliedFirst": "The top result was placed on the Gantt chart. To switch to another one, press \"Use this\" on its row.",
+    "energyNote": "Burst energy shortage is not considered. A party with too little Energy Recharge may not be able to run this in the actual game (check it with \"Energy Recharge Calc\")."
   }
 }

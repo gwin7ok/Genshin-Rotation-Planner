@@ -17,8 +17,8 @@
     "screen": {
       "title": "Reading the screen",
       "items": {
-        "1": "<b>Top row</b>: choose a saved rotation, Save, Save as / play and reset (cycle, time, speed 0.5x–2x) / cooldown status (<ok>No cooldown conflicts</ok> / <ng>Cooldown conflicts</ng> / <warn>Cooldown warnings</warn>) / <b>Hide</b> (show or hide the button row below).",
-        "2": "<b>Button row</b>: Guide / Import Chars, Team Setup, Manage Teams, Manage DB / Apply gcsim, Copy gcsim config, Back to app calculation / Copy notation (and the current notation, with Short/Names switch).",
+        "1": "<b>Top row</b>: <b>Normal / Abyss</b> (mode switch; see \"Abyss mode\" below) / choose a saved rotation, Save, Save as / play and reset (cycle, time, speed 0.5x–2x) / cooldown status (<ok>No cooldown conflicts</ok> / <ng>Cooldown conflicts</ng> / <warn>Cooldown warnings</warn>) / <b>Hide</b> (show or hide the button row below).",
+        "2": "<b>Button row</b>: Guide / Import Chars, Team Setup, Manage Teams, Manage DB / Apply gcsim, Copy gcsim config, Back to app calculation / ER Calc, DPS Calc / Copy notation (and the current notation, with Short/Names switch).",
         "3": "<b>Build area</b> (list of stints): edit the order and the actions here. The chips of \"Quick reorder\" above change the stint order at a glance.",
         "4": "<b>Gantt chart</b>: the horizontal axis is time (seconds). From the top: stint flow, number of overlapping buffs (Synergy), and one row per character (actions, cooldowns, effects, triggered buffs). Zoom with the slider at the top right."
       }
@@ -62,6 +62,27 @@
         "3": "To discard applied values and return to the app's calculation (master frames and cooldowns), use \"<b>Back to app calculation</b>\".",
         "4": "\"<b>Copy gcsim config</b>\" gives you the gcsim config (to run it in gcsim elsewhere; conversion warnings are shown too).",
         "5": "Characters and effects gcsim does not support are marked \"Not simulated\" and keep the app's calculation."
+      }
+    },
+    "er": {
+      "title": "Energy Recharge calculation (ER needed for your bursts)",
+      "items": {
+        "1": "\"<b>ER Calc (gcsim)</b>\" in the header finds, with gcsim, the <b>Energy Recharge (total ER%)</b> each character needs so that every burst can go off every lap without waiting for energy, with the current team and rotation. Press \"Start calculation\"; it takes a few minutes.",
+        "2": "For each character the table shows <b>Typical</b> (the ER at which about 70% of the bursts go off without waiting), <b>Stable</b> (about 90%) and <b>Certain</b> (all bursts go off without waiting; verified in gcsim). Use Certain if you never want a burst to wait. Characters without a burst show \"No burst\"; if Certain exceeds the search limit (+500%), \"Unreachable\" is shown.",
+        "3": "\"<b>Current</b>\" is the total ER with the current team setup (owned-character gear or temporary values). The color shows whether it is enough (green = enough for Certain, yellow = enough for Stable, red = not enough).",
+        "4": "The conditions can be changed lower on the screen (interval and amount of enemy particles, wait before a burst, number of seeds, verification mode, number of cores). When you change the team or the rotation, the previous result is hidden, so calculate again."
+      }
+    },
+    "abyss": {
+      "title": "Abyss mode (start from 0 energy and check that bursts go off every time)",
+      "items": {
+        "1": "\"<b>Normal / Abyss</b>\" in the header switches the whole app between modes. In Abyss mode the header shows \"<b>Abyss mode</b>\". It is for rotations like the Abyss ones (actions done only on the first lap + actions that repeat): it checks that burst energy builds up and that the bursts at the repeated positions can go off every time.",
+        "2": "How to build the rotation: in the actions done only on the first lap, use <b>skills only</b> to build burst energy, then put the <b>loop reference point</b>, and fire the bursts after it (the repeated part).",
+        "3": "In Abyss mode the ER calculation starts everyone from <b>0 energy</b> and also judges the <b>first burst</b>. It runs the rotation for the <b>battle length</b> (default 180 s; the number of loops is chosen automatically). \"<b>The first burst may wait up to</b> … s after its planned time\" (default 0.5 s) is how late the first burst may be. If the opening itself fires a burst, no amount of ER lets it go off at the planned time and the result is \"Unreachable\", so raise this value.",
+        "4": "\"<b>Timed particles</b>\": add particles that appear at fixed times (seconds from the start of the battle), for example when a boss shield breaks. They are handled like enemy particles (Energy Recharge applies, and the on-field character gets more) and are calculated as colorless particles.",
+        "5": "\"<b>Check timing</b>\" under \"Burst timing with the current build\": runs the rotation as it is now (no extra ER) from 0 energy for the whole battle length and lists, for each character, <b>how many seconds each burst is late</b> compared with its planned time (the maximum over the seeds tried). Green = on time (within 0.5 s), orange = late, red = missed in some seeds. When a burst is late, the actions after it shift by the same amount, so the delays add up. You can use it before the ER calculation.",
+        "6": "\"<b>Saved battle conditions</b>\": save the battle conditions (battle length, first-burst wait, timed particles, enemy particles) under a name and call them up per boss (up to 30; included in the backup). Click a name to put it into the fields; saving under the same name overwrites it.",
+        "7": "Abyss-mode results are saved separately from normal mode (switching keeps the other mode's conditions and results). \"DPS Calc (gcsim)\" in the header does not support the Abyss conditions yet (it calculates with the same conditions as normal mode)."
       }
     },
     "owned": {

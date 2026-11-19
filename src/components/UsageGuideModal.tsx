@@ -17,6 +17,8 @@ const GUIDE_SECTIONS: { id: string; items: number }[] = [
   { id: 'group', items: 5 },
   { id: 'chart', items: 6 },
   { id: 'gcsim', items: 5 },
+  { id: 'er', items: 4 },
+  { id: 'abyss', items: 7 },
   { id: 'owned', items: 8 },
   { id: 'save', items: 4 },
   { id: 'notation', items: 4 },

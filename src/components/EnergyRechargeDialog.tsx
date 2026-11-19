@@ -239,8 +239,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   };
   const runTiming = async () => {
     const { condition, particles } = resolveRun();
-    if (!condition) return;
-    saveBattleCondition(condition);
+    if (condition) saveBattleCondition(condition);
     const key = timingKeyNow;
     setTimingRunning(true);
     setTimingMessage(null);
@@ -249,7 +248,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
       outcome = await computeBurstTiming({
         build: extra => buildRef.current(extra),
         enemyParticles: particles,
-        abyss: toAbyssRunCondition(condition),
+        abyss: condition ? toAbyssRunCondition(condition) : undefined,
+        loops: loopsN(),
         erDelta: erDeltaMap(),
         seeds: seedCount(),
         parallel: wasmParallelism(),
@@ -484,9 +484,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           )}
           {!shown && !running && !stale && <p className="text-xs text-slate-500">{t('gcsim:er.never')}</p>}
 
-          {isAbyss && (() => {
+          {(() => {
             const shownTiming = timing !== null && timing.key === timingKeyNow ? timing.result : null;
-            const fmt = (x: number) => x.toFixed(1);
             return (
               <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-timing">
                 <p className="font-bold text-fuchsia-200">{t('gcsim:er.timingTitle')}</p>
@@ -544,26 +543,6 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:er.note')}</p>
 
-          <div data-testid="er-loops-section">
-            <CountSetting title={t('gcsim:er.loops')} unit={t('gcsim:er.loopsUnit')} note={t('gcsim:er.loopsNote', { def: ER_DEFAULT_LOOPS, max: ER_MAX_LOOPS })} value={loops} onChange={setLoops} def={ER_DEFAULT_LOOPS} max={ER_MAX_LOOPS} disabled={running || timingRunning} testId="er-loops" />
-          </div>
-
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <p className="font-bold">{t('gcsim:er.precision')}</p>
-            <div className="flex items-center gap-1.5">
-              {([false, true] as const).map(v => (
-                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
-                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
-                </button>
-              ))}
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
-          </div>
-
-          <CoresSetting cores={cores} onChange={changeCores} disabled={running} />
-
-          <CountSetting title={t('gcsim:er.seeds')} unit={t('gcsim:er.seedsUnit')} note={t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })} value={seeds} onChange={setSeeds} def={ER_DEFAULT_SEEDS} max={ER_MAX_SEEDS} step={10} disabled={running} />
-
           {isAbyss && (
             <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-abyss-conditions">
               <p className="font-bold text-fuchsia-200">{t('gcsim:er.abyssConditions')}</p>
@@ -614,6 +593,26 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
               </div>
             </div>
           )}
+
+          <div data-testid="er-loops-section">
+            <CountSetting title={t('gcsim:er.loops')} unit={t('gcsim:er.loopsUnit')} note={t('gcsim:er.loopsNote', { def: ER_DEFAULT_LOOPS, max: ER_MAX_LOOPS })} value={loops} onChange={setLoops} def={ER_DEFAULT_LOOPS} max={ER_MAX_LOOPS} disabled={running || timingRunning} testId="er-loops" />
+          </div>
+
+          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
+            <p className="font-bold">{t('gcsim:er.precision')}</p>
+            <div className="flex items-center gap-1.5">
+              {([false, true] as const).map(v => (
+                <button key={String(v)} onClick={() => setPrecise(v)} disabled={running} className={`px-2.5 py-0.5 rounded border disabled:opacity-40 ${precise === v ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`}>
+                  {t(v ? 'gcsim:er.precisionPrecise' : 'gcsim:er.precisionRough')}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.precisionNote')}</p>
+          </div>
+
+          <CoresSetting cores={cores} onChange={changeCores} disabled={running} />
+
+          <CountSetting title={t('gcsim:er.seeds')} unit={t('gcsim:er.seedsUnit')} note={t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })} value={seeds} onChange={setSeeds} def={ER_DEFAULT_SEEDS} max={ER_MAX_SEEDS} step={10} disabled={running} />
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>

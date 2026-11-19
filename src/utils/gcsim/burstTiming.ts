@@ -156,7 +156,10 @@ export function summarizeBurstTiming(perSeed: Map<number, BurstDelay[]>[], membe
 export async function computeBurstTiming(args: {
   build: BuildForEr;
   enemyParticles?: EnemyParticles;
-  abyss: AbyssRunCondition;
+  /** 幽境の戦闘条件（開始エネルギー 0・時刻指定の粒子など）。通常モードは無し（開始エネルギーは満タン） */
+  abyss?: AbyssRunCondition;
+  /** 周回数（ループの周数） */
+  loops: number;
   /** 足す ER（キャラ ID → 割合）。既定は足さない（いまのビルドのまま） */
   added?: Record<string, number>;
   /** 増減する ER（キャラ ID → 割合。マイナスで下げる）。今のステータスの上に足す */
@@ -168,9 +171,9 @@ export async function computeBurstTiming(args: {
   shouldCancel?: () => boolean;
 }): Promise<BurstTimingOutcome> {
   const { abyss, enemyParticles } = args;
-  const base = args.build({ ignoreBurstEnergy: true, added: {}, enemyParticles, abyss });
+  const base = args.build({ ignoreBurstEnergy: true, added: {}, loops: args.loops, enemyParticles, abyss });
   if (!base.runnable) return { status: 'error', message: base.warnings.filter(w => w.level === 'error').map(w => w.message).join(' / ') };
-  const test = args.build({ ignoreBurstEnergy: false, added: args.added ?? {}, erDelta: args.erDelta, enemyParticles, abyss });
+  const test = args.build({ ignoreBurstEnergy: false, added: args.added ?? {}, erDelta: args.erDelta, loops: args.loops, enemyParticles, abyss });
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
   const seeds = Math.max(1, Math.floor(args.seeds));
   const perSeed: Map<number, BurstDelay[]>[] = [];
@@ -188,6 +191,6 @@ export async function computeBurstTiming(args: {
     }
   }
   const entries = summarizeBurstTiming(perSeed, base.members);
-  const w = summarizeEnergyWaits(testRuns, base.members, abyss.loops);
-  return { status: 'ok', result: { ranAt: Date.now(), seeds, loops: abyss.loops, entries, waits: w.waits, waitsTotal: w.total } };
+  const w = summarizeEnergyWaits(testRuns, base.members, args.loops);
+  return { status: 'ok', result: { ranAt: Date.now(), seeds, loops: args.loops, entries, waits: w.waits, waitsTotal: w.total } };
 }

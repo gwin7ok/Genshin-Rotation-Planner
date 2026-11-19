@@ -305,7 +305,7 @@ const bt = await server.ssrLoadModule('/src/utils/gcsim/burstTiming.ts');
 // 実機の実行: ベネット + 香菱の幽境の形で、ER を足さないと遅れ・撃てない爆発が出て、十分に足すと、全て計画どおりになる
 {
   const allMax = Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED]));
-  const timingOf = (added: Record<string, number>) => bt.computeBurstTiming({ build: buildAbyss, enemyParticles: enemyP, abyss: abyssCond, added, seeds: 4, run: runGcsimSample });
+  const timingOf = (added: Record<string, number>) => bt.computeBurstTiming({ build: buildAbyss, enemyParticles: enemyP, abyss: abyssCond, loops: abyssCond.loops, added, seeds: 4, run: runGcsimSample });
   const low = await timingOf({});
   const high = await timingOf(allMax);
   if (low.status !== 'ok' || high.status !== 'ok') {

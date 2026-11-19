@@ -195,7 +195,7 @@
     "abyssResultCondition": "Conditions of this result: loops {{loops}}, first burst may wait {{first}} s, {{timed}} timed particle entries",
     "abyssConditionChanged": "The current battle conditions differ from those this result was calculated with. Press Start to calculate again.",
     "timingTitle": "Check that the Energy Recharge is enough",
-    "timingNote": "Change the Energy Recharge in the table in 1% steps (defaults to the current value); it runs from 0 energy for the chosen number of loops and shows, per character, how many times and how long bursts waited for lack of energy. It does not use the ER calculation result, so you can check it without calculating first.",
+    "timingNote": "Change the Energy Recharge in the table in 1% steps (defaults to the current value); it runs for the chosen number of loops and shows, per character, how many times and how long bursts waited for lack of energy. Start energy is full in normal mode and 0 in abyss mode (the abyss battle conditions also apply). It does not use the ER calculation result, so you can check it without calculating first.",
     "timingStart": "Check",
     "timingRunning": "Checking...",
     "timingFailed": "The check failed: {{message}}",

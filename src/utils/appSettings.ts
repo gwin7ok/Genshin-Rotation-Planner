@@ -5,6 +5,7 @@
 import { DEFAULT_HURT, DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type HurtSetting, type EnemySetting } from './gcsim/buildGcsimConfig';
 import { DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsSettings } from './gcsim/dpsCalc';
 import { ER_DEFAULT_ENEMY_PARTICLES, type RequiredErResult } from './gcsim/requiredEnergyRecharge';
+import { sanitizeBattleCondition, type AppMode, type BattleCondition } from './battleCondition';
 import type { NotationMode } from './rotationNotation';
 import { SETTING_KEYS, readJson, readString, writeJson, writeString } from './persistence';
 
@@ -28,16 +29,36 @@ export function saveHurt(value: HurtSetting): void {
   writeJson(SETTING_KEYS.gcsimHurt, value);
 }
 
-/** 必要元素チャージ効率の最後の算出結果（無い・形が違うときは null） */
-export function loadRequiredEr(): RequiredErResult | null {
-  const v = readJson<Partial<RequiredErResult>>(SETTING_KEYS.requiredEnergyRecharge);
+/** アプリ全体のモード（既定: 通常） */
+export function loadAppMode(): AppMode {
+  return readString(SETTING_KEYS.appMode) === 'abyss' ? 'abyss' : 'normal';
+}
+
+export function saveAppMode(mode: AppMode): void {
+  writeString(SETTING_KEYS.appMode, mode);
+}
+
+/** 幽境モードの戦闘条件（無い・壊れた項目は既定に戻す） */
+export function loadBattleCondition(): BattleCondition {
+  return sanitizeBattleCondition(readJson<unknown>(SETTING_KEYS.abyssBattleCondition));
+}
+
+export function saveBattleCondition(value: BattleCondition): void {
+  writeJson(SETTING_KEYS.abyssBattleCondition, sanitizeBattleCondition(value));
+}
+
+const requiredErKey = (mode: AppMode) => (mode === 'abyss' ? SETTING_KEYS.requiredEnergyRechargeAbyss : SETTING_KEYS.requiredEnergyRecharge);
+
+/** 必要元素チャージ効率の最後の算出結果（モードごとに別に持つ。無い・形が違うときは null） */
+export function loadRequiredEr(mode: AppMode = 'normal'): RequiredErResult | null {
+  const v = readJson<Partial<RequiredErResult>>(requiredErKey(mode));
   if (!v || typeof v !== 'object' || !Array.isArray(v.entries) || typeof v.fingerprint !== 'string' || v.entries.some(e => !e || typeof e.status !== 'string' || (e.status === 'ok' && !Number.isFinite(e.certainEr))) || typeof v.gcsimVersion !== 'string' || !Number.isFinite(v.ranAt)) return null;
   return v as RequiredErResult;
 }
 
-/** 算出結果を保存する（前の結果は上書き） */
-export function saveRequiredEr(value: RequiredErResult): void {
-  writeJson(SETTING_KEYS.requiredEnergyRecharge, value);
+/** 算出結果を保存する（そのモードの前の結果は上書き） */
+export function saveRequiredEr(value: RequiredErResult, mode: AppMode = 'normal'): void {
+  writeJson(requiredErKey(mode), value);
 }
 
 /** 記法のモード（既定: 略号） */

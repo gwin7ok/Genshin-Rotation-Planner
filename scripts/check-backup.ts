@@ -387,7 +387,7 @@ check('保存層: キーの文字列が、公開済みのデータと同じ（�
     savedSlots: 'genshin_rotation_saved_slots_v2',
     database: 'genshin_app_db_v1',
   });
-  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
+  assert.deepEqual({ ...persistence.SETTING_KEYS }, { gcsimDefHalt: 'gcsimDefHalt', gcsimHurt: 'gcsimHurt', rotationNotationMode: 'rotationNotationMode', requiredEnergyRecharge: 'requiredEnergyRecharge', dpsSettings: 'dpsSettings', language: 'appLanguage', ownedCharacters: 'ownedCharacters', appMode: 'appMode', abyssBattleCondition: 'abyssBattleCondition', requiredEnergyRechargeAbyss: 'requiredEnergyRechargeAbyss', hoyolabUid: 'hoyolabUid', ownedUseEnka: 'ownedUseEnka' });
   assert.equal(persistence.DEVICE_KEYS.gcsimCores, 'gcsim_cores');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_cores'), '端末だけの設定（コアの数）は、バックアップに含めない');
   assert.ok(!persistence.BACKUP_SETTING_KEYS.includes('gcsim_engine'), '使わなくなった端末だけの設定（実行エンジンの選択）は、バックアップに含めない');

@@ -13,9 +13,12 @@ import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult, type DpsSettings } from '../utils/gcsim/dpsCalc';
 import { loadDpsSettings, saveDpsSettings } from '../utils/appSettings';
 import { ER_DEFAULT_ENEMY_PARTICLES, type EnemyParticles } from '../utils/gcsim/requiredEnergyRecharge';
+import type { AppMode } from '../utils/battleCondition';
 
 interface DpsDialogProps {
   isOpen: boolean;
+  /** アプリ全体のモード。幽境モードの戦闘条件は、DPS 計算にはまだ反映されない（段階 4）ので、そのことを知らせる */
+  appMode?: AppMode;
   onClose: () => void;
   /** 今の編成・ローテーションから、DPS 計算用の gcsim 設定文を作る（周数と敵を渡す） */
   build: (extra: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles }) => GcsimConfigResult;
@@ -35,7 +38,7 @@ const fromInput = (e: EnemyInput): EnemySetting => ({
 });
 
 /** DPS 計算（D343）: 初動 + ループ N 周を、種を変えて複数回 gcsim で実行し、DPS の平均とばらつき・キャラ別の内訳を表示する */
-export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, characters, database }) => {
+export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, appMode = 'normal', onClose, build, characters, database }) => {
   const [loops, setLoops] = useState(String(DPS_DEFAULT_LOOPS));
   const [runs, setRuns] = useState(String(DPS_DEFAULT_RUNS));
   const [enemies, setEnemies] = useState<EnemyInput[]>([toInput(DEFAULT_ENEMY)]);
@@ -185,6 +188,9 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
 
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
           <p className="text-xs text-slate-400 leading-relaxed">{t('gcsim:dps.intro')}</p>
+          {appMode === 'abyss' && (
+            <div className="text-xs text-fuchsia-200 bg-fuchsia-950/30 border border-fuchsia-900/60 rounded-lg p-3 leading-relaxed" data-testid="dps-abyss-notice">{t('gcsim:dps.abyssNotice')}</div>
+          )}
 
           {notRunnable.length > 0 && (
             <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-900/60 rounded-lg p-3 space-y-1">

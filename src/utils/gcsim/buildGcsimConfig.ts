@@ -22,6 +22,8 @@ import { DEFAULT_CUSTOM_STATS } from '../customStats';
 
 /** ループ部分を回す周数（2周目の先頭で、1周目から続くCTが間に合うかを確かめるため 2周） */
 export const LOOP_ITERATIONS = 2;
+/** 戦闘時間（battleSeconds）から自動で決める周数の上限（ローテーションが極端に短いときの、実行時間の暴走を防ぐ） */
+export const AUTO_LOOP_MAX = 30;
 /** duration の余裕（CT待ちで周が延びても足りるように、見積りの倍＋固定秒） */
 const DURATION_MARGIN_FACTOR = 2;
 const DURATION_MARGIN_SECONDS = 30;
@@ -94,6 +96,19 @@ export function targetStatements(enemies: EnemySetting[] | undefined): string[] 
   });
 }
 
+/**
+ * 時刻指定の粒子の行（`energy once interval=<フレーム> amount=<個数>;`。1 件 1 行）。
+ * 時刻の早い順に並べる（同じ入力から同じ設定文になる）。個数が 1 未満・時刻が不正なものは出さない
+ */
+export function timedParticleStatements(list: { seconds: number; amount: number }[] | undefined): string[] {
+  if (!list) return [];
+  return list
+    .filter(p => Number.isFinite(p.seconds) && p.seconds >= 0 && Number.isFinite(p.amount) && Math.round(p.amount) >= 1)
+    .map(p => ({ frame: Math.max(1, Math.round(p.seconds * 60)), amount: Math.round(p.amount) }))
+    .sort((a, b) => a.frame - b.frame || a.amount - b.amount)
+    .map(p => `energy once interval=${p.frame} amount=${p.amount};`);
+}
+
 export interface GcsimConfigInput {
   /** 編成を DB と合わせて解決したキャラ（未設定枠を含む 4 枠） */
   characters: CharacterConfig[];
@@ -120,6 +135,21 @@ export interface GcsimConfigInput {
   tightDuration?: boolean;
   /** 敵から出る粒子（gcsim の `energy every`。クリア粒子 = 元素なし）。必要な元素チャージ効率の算出で使う。無い・amount 0 以下なら出さない */
   enemyParticles?: { minSeconds: number; maxSeconds: number; amount: number };
+  /**
+   * 開始エネルギーを 0 にするか（gcsim の `+params=[start_energy=0]`。全キャラ。幽境モード。既定 false = 満タン）。
+   * 爆発のエネルギーを使う実行（ignoreBurstEnergy = false）のときに意味がある
+   */
+  startEnergyZero?: boolean;
+  /**
+   * 時刻指定の粒子（gcsim の `energy once interval=<フレーム> amount=<個数>`。クリア粒子 = 元素なし。ER が掛かり、控えのキャラは gcsim が減らして計算する）。
+   * seconds = 戦闘開始からの秒。amount = 個数（整数に丸める。1 個未満は出さない）。複数指定できる。幽境モード
+   */
+  timedParticles?: { seconds: number; amount: number }[];
+  /**
+   * 戦闘時間（秒）。指定すると、ループを回す周数を、ローテーションの見積りの長さから自動で決める
+   * （初動 + ループ × 周数 ≧ 戦闘時間。1〜AUTO_LOOP_MAX 周）。このとき loopIterations は使わない。幽境モード
+   */
+  battleSeconds?: number;
   /** キャラ ID → 仮ステータスに足す元素チャージ効率（割合。1 = +100%。武器・聖遺物のサブステの分は gcsim が別に足す）。無いキャラは足さない */
   addedEnergyRechargeByCharacterId?: Record<string, number>;
   weapons: WeaponDatabaseItem[];
@@ -190,7 +220,8 @@ const safeGcsimKey = (key: string | undefined): string | undefined => (isSafeGcs
 export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult {
   // グループの回数を展開する（追加作業 20-A）
   const input: GcsimConfigInput = { ...rawInput, stints: expandGroupedStints(rawInput.stints) };
-  const loopIterations = Math.max(1, Math.floor(rawInput.loopIterations ?? LOOP_ITERATIONS));
+  // 戦闘時間（battleSeconds）の指定があるときは、ローテーションの長さが分かってから、下で決め直す
+  let loopIterations = Math.max(1, Math.floor(rawInput.loopIterations ?? LOOP_ITERATIONS));
   const warnings: GcsimWarning[] = [];
   const error = (message: string) => warnings.push({ level: 'error', message });
   const warn = (message: string) => warnings.push({ level: 'warn', message });
@@ -231,6 +262,8 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       ...(REVELATION_GCSIM_KEYS.has(key) ? [`${REVELATION_GCSIM_PARAM}=${c.revelation === false ? 0 : 1}`] : []),
       // 旅人の真月（gcsim の既定は有効なので、未達成のときだけ渡す）
       ...(build && isTravelerKey(key) ? travelerParams(c.trueMoon !== false) : []),
+      // 開始エネルギー 0（幽境モード。全キャラ）
+      ...(input.startEnergyZero ? ['start_energy=0'] : []),
     ];
     const hexText = paramList.length > 0 ? ` +params=[${paramList.join(',')}]` : '';
     // 持ちキャラの装備が無ければ、「ステータスを変更」で保存した仮値、それも無ければ既定の仮値（D2）
@@ -283,6 +316,18 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   const loopStart = input.loopStartIndex > 0 && input.loopStartIndex < input.stints.length ? input.loopStartIndex : 0;
   const initialStints = input.stints.slice(0, loopStart);
   const loopStints = input.stints.slice(loopStart);
+
+  // 出場 1 回の長さの見積り（秒）。シミュレーション時間の見積りと、戦闘時間からの周数の決定に使う
+  const stintSeconds = (s: Stint) =>
+    input.switchDelay + s.actions
+      .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
+      .reduce((sum, a) => sum + Math.max(0, a.duration || 0) + actionDelayOf(a), 0);
+  const initialSeconds = initialStints.reduce((t, s) => t + stintSeconds(s), 0);
+  const loopSeconds = loopStints.reduce((t, s) => t + stintSeconds(s), 0);
+  // 戦闘時間が指定されたとき: 戦闘が終わるまでローテーションが続く周数にする（最後の周は、戦闘時間をはみ出してもよい）
+  if (input.battleSeconds !== undefined && Number.isFinite(input.battleSeconds) && input.battleSeconds > 0 && loopSeconds > 0) {
+    loopIterations = Math.min(AUTO_LOOP_MAX, Math.max(1, Math.ceil((input.battleSeconds - initialSeconds) / loopSeconds - 1e-9)));
+  }
 
   const charById = new Map(input.characters.map(c => [c.id, c]));
   // 落下攻撃を含むキャラ（gcsim は空中状態などの前提条件があり、実行できない場合がある。D48）
@@ -433,12 +478,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
   }
 
   // 3. シミュレーション時間の見積り（初動 + ループ×周数）を余裕付きで
-  const stintSeconds = (s: Stint) =>
-    input.switchDelay + s.actions
-      .filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char')
-      .reduce((sum, a) => sum + Math.max(0, a.duration || 0) + actionDelayOf(a), 0);
-  const estimated = initialStints.reduce((t, s) => t + stintSeconds(s), 0)
-    + loopStints.reduce((t, s) => t + stintSeconds(s), 0) * loopIterations;
+  const estimated = initialSeconds + loopSeconds * loopIterations;
   const duration = input.tightDuration
     ? Math.ceil(estimated * TIGHT_DURATION_MARGIN_FACTOR + TIGHT_DURATION_MARGIN_SECONDS)
     : Math.ceil(estimated * DURATION_MARGIN_FACTOR + DURATION_MARGIN_SECONDS);
@@ -460,6 +500,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         return [`energy every interval=${minF},${maxF} amount=${input.enemyParticles.amount};`];
       })()
       : []),
+    ...timedParticleStatements(input.timedParticles),
     ...(hurtLine ? [hurtLine] : []),
     ...(firstKey ? [`active ${firstKey};`] : []),
     '',

@@ -38,6 +38,12 @@ export const SETTING_KEYS = {
   language: 'appLanguage',
   /** HoYoLAB から取り込んだ持ちキャラ（JSON。{ importedAt, characters }。src/utils/hoyolab/ownedStore.ts） */
   ownedCharacters: 'ownedCharacters',
+  /** アプリ全体のモード（'normal' | 'abyss'。既定: normal。フェーズ8 / issue #54） */
+  appMode: 'appMode',
+  /** 幽境モードの戦闘条件（JSON。戦闘時間・最初の爆発の待ち許容・時刻指定の粒子・敵の粒子。src/utils/battleCondition.ts） */
+  abyssBattleCondition: 'abyssBattleCondition',
+  /** 幽境モードの、必要元素チャージ効率の最後の算出結果（JSON。通常モードの結果は requiredEnergyRecharge に別に持つ） */
+  requiredEnergyRechargeAbyss: 'requiredEnergyRechargeAbyss',
   /** HoYoLAB の取り込みで入力した原神の UID（文字列。入力の手間を減らすため） */
   hoyolabUid: 'hoyolabUid',
   /** 持ちキャラの取り込みで、Enka.Network の最新の値で上書きするか（'true' | 'false'。既定: true。D352） */

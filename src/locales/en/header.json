@@ -46,6 +46,15 @@
     "position": "{{position}} of {{total}}",
     "positionNone": "{{total}} in total"
   },
+  "mode": {
+    "label": "Mode",
+    "normal": "Normal",
+    "normalTitle": "Normal mode: characters start with full energy. Enemy particles are periodic only (as before)",
+    "abyss": "Abyss",
+    "abyssTitle": "Abyss mode: sets start energy 0, timed particles and the battle length, so the Energy Recharge calc matches an Abyss fight. Results are saved separately from normal mode",
+    "abyssBadge": "Abyss mode",
+    "abyssBadgeTitle": "Abyss mode is on. The Energy Recharge calc uses start energy 0, timed particles and the battle length (the DPS calc does not support the Abyss conditions yet)"
+  },
   "collapse": {
     "expand": "▼ Show menu",
     "collapse": "△ Hide",

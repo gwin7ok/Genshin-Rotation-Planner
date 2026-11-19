@@ -16,7 +16,8 @@ import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
 import { setWriteFailureHandler } from './utils/persistence';
 import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
-import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode } from './utils/appSettings';
+import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode, loadAppMode, saveAppMode } from './utils/appSettings';
+import type { AppMode } from './utils/battleCondition';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT, GCSIM_VERSION } from './utils/gcsim/gcsimConfig.ts';
 import { SaveLoadModal } from './components/SaveLoadModal';
@@ -27,7 +28,7 @@ import { DatabaseManagerModal } from './components/DatabaseManagerModal';
 import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { EnergyRechargeDialog } from './components/EnergyRechargeDialog';
 import { DpsDialog } from './components/DpsDialog';
-import { ER_LOOP_ITERATIONS, type EnemyParticles } from './utils/gcsim/requiredEnergyRecharge';
+import { ER_LOOP_ITERATIONS, type AbyssRunCondition, type EnemyParticles } from './utils/gcsim/requiredEnergyRecharge';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
@@ -113,6 +114,12 @@ export default function App() {
   // 敵の防御ヒットストップ（gcsim の defhalt）。回転ごとではなく、アプリ全体の設定（既定: 有効）
   const [isEnergyRechargeOpen, setIsEnergyRechargeOpen] = useState(false);
   const [isDpsOpen, setIsDpsOpen] = useState(false);
+  // アプリ全体のモード（通常 / 幽境。フェーズ8 / issue #54）。回転ごとではなく、アプリ全体の設定（既定: 通常）
+  const [appMode, setAppModeState] = useState<AppMode>(() => loadAppMode());
+  const setAppMode = (mode: AppMode) => {
+    setAppModeState(mode);
+    saveAppMode(mode);
+  };
   const [defHalt, setDefHaltState] = useState<boolean>(() => loadDefHalt());
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
@@ -542,10 +549,12 @@ export default function App() {
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
-  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles }) => buildGcsimConfig({
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles }) => buildGcsimConfig({
       characters,
       ...(dpsExtra ? { loopIterations: dpsExtra.loopIterations, enemies: dpsExtra.enemies, ignoreBurstEnergy: dpsExtra.ignoreBurstEnergy, enemyParticles: dpsExtra.enemyParticles } : {}),
       ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
+      // 幽境モード: 開始エネルギー 0・時刻指定の粒子・戦闘時間（周数は、ローテーションの長さから自動で決まる）
+      ...(erExtra?.abyss ? { startEnergyZero: true, timedParticles: erExtra.abyss.timedParticles, battleSeconds: erExtra.abyss.battleSeconds } : {}),
       stints: stintsArg,
       loopStartIndex,
       switchDelay,
@@ -870,6 +879,8 @@ export default function App() {
         })}
         onOpenPartyModal={() => setIsPartyModalOpen(true)}
         onOpenOwnedModal={() => setIsOwnedModalOpen(true)}
+        appMode={appMode}
+        onChangeAppMode={setAppMode}
         onOpenEnergyRechargeModal={() => setIsEnergyRechargeOpen(true)}
         onOpenDpsModal={() => setIsDpsOpen(true)}
         onOpenHelpModal={() => setIsUsageOpen(true)}
@@ -1062,11 +1073,13 @@ export default function App() {
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, extra)}
         characters={characters}
         database={database}
+        mode={appMode}
       />
 
       {/* DPS 計算（D343） */}
       <DpsDialog
         isOpen={isDpsOpen}
+        appMode={appMode}
         onClose={() => setIsDpsOpen(false)}
         build={extra => buildGcsimConfigFor(visibleStints, calculatedResult, undefined, extra)}
         characters={characters}

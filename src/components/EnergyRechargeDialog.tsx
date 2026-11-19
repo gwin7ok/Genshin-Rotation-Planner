@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Zap, Play, Square, AlertTriangle } from 'lucide-react';
+import { X, Zap, Play, Square, AlertTriangle, Plus, Trash2 } from 'lucide-react';
 import { Stepper } from './Stepper';
 import { t, dateLocale, currentLanguage, joinList, rangeMark, dotMark } from '../i18n';
 import { charName } from '../i18n/loc';
@@ -9,7 +9,8 @@ import { previewFinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
-import { loadRequiredEr, saveRequiredEr } from '../utils/appSettings';
+import { loadBattleCondition, loadRequiredEr, saveBattleCondition, saveRequiredEr } from '../utils/appSettings';
+import { defaultBattleCondition, sameAbyssRunCondition, sanitizeBattleCondition, toAbyssRunCondition, type AppMode, type BattleCondition } from '../utils/battleCondition';
 import {
   computeRequiredEr,
   fingerprintOf,
@@ -19,6 +20,8 @@ import {
   ER_DEFAULT_SEEDS,
   ER_MAX_SEEDS,
   ER_DEFAULT_ENEMY_PARTICLES,
+  ABYSS_MAX_BATTLE_SECONDS,
+  ABYSS_MAX_TIMED_PARTICLES,
   verifyCharacters,
   ER_VERIFY_TOLERANCE_PRECISE,
   ER_VERIFY_TOLERANCE_ROUGH,
@@ -36,7 +39,12 @@ interface EnergyRechargeDialogProps {
   characters: CharacterConfig[];
   /** いまの元素チャージ効率（枠の設定から gcsim で計算）に使う */
   database: Pick<AppDatabase, 'weapons' | 'artifacts'>;
+  /** アプリ全体のモード。幽境モードは、開始エネルギー 0・最初の爆発も判定・時刻指定の粒子・戦闘時間で求め、結果は通常モードとは別に保存する（フェーズ8） */
+  mode?: AppMode;
 }
+
+/** 時刻指定の粒子の入力 1 行（入力中は文字列） */
+interface TimedInput { key: number; seconds: string; amount: string }
 
 const PHASE_KEY = { baseline: 'phaseBaseline', collect: 'phaseCollect', verify: 'phaseVerify', refine: 'phaseRefine' } as const;
 
@@ -49,7 +57,8 @@ const formatDuration = (ms: number): string => {
 };
 
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
-export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database }) => {
+export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database, mode = 'normal' }) => {
+  const isAbyss = mode === 'abyss';
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
   const [currentFingerprint, setCurrentFingerprint] = useState<string | null>(null);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
@@ -69,6 +78,11 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // いまの元素チャージ効率（キャラ ID → 割合。枠の設定（持ちキャラの装備・仮値）から、gcsim で計算した最終値。計算できなかったキャラは無い）
   const [currentEr, setCurrentEr] = useState<Record<string, number>>({});
   const [wait, setWait] = useState(ER_DEFAULT_BURST_WAIT_SECONDS.toFixed(1));
+  // 幽境モードの戦闘条件（入力中は文字列。変えるたびに保存する）
+  const [battleSeconds, setBattleSeconds] = useState(String(defaultBattleCondition().battleSeconds));
+  const [firstWait, setFirstWait] = useState(defaultBattleCondition().firstBurstWaitSeconds.toFixed(1));
+  const [timed, setTimed] = useState<TimedInput[]>([]);
+  const timedKey = useRef(0);
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   // 使うコアの数（この端末の設定。変えると、すぐ保存する）
   const [cores, setCores] = useState(String(getWasmCores()));
@@ -84,10 +98,16 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   // 開いたとき: 最後の結果を読み、今の設定文の指紋を求める（編成・ローテーションが変わっていないかの判定に使う）
   useEffect(() => {
     if (!isOpen) return;
-    const last = loadRequiredEr();
+    const last = loadRequiredEr(mode);
     setSaved(last);
-    // 古い保存（この設定が無かった頃）は、既定にする
-    const p = last?.enemyParticles ?? ER_DEFAULT_ENEMY_PARTICLES;
+    // 幽境モード: 戦闘条件は、保存した条件（モードごと。ER・DPS で共通）から読む。通常モードは、最後の結果の値（古い保存は既定）
+    const cond = isAbyss ? loadBattleCondition() : null;
+    if (cond) {
+      setBattleSeconds(String(cond.battleSeconds));
+      setFirstWait(cond.firstBurstWaitSeconds.toFixed(1));
+      setTimed(cond.timedParticles.map(p => ({ key: ++timedKey.current, seconds: String(p.seconds), amount: String(p.amount) })));
+    }
+    const p = cond?.enemyParticles ?? last?.enemyParticles ?? ER_DEFAULT_ENEMY_PARTICLES;
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
     setPAmount(String(p.amount));
@@ -101,7 +121,32 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setVerifyNames(verifyCharacters(base.members).map(m => { const c = characters.find(x => x.id === m.characterId); return c ? charName(c) : m.name; }));
     setCurrentMembers(base.members.map(m => ({ characterId: m.characterId, name: m.name })));
     setNotRunnable(base.runnable ? [] : base.warnings.filter(w => w.level === 'error').map(w => w.message));
-  }, [isOpen]);
+  }, [isOpen, mode]);
+
+  /** 入力中の値から、幽境モードの戦闘条件を作る（空欄・不正な値は、既定・範囲に収める） */
+  const readCondition = (): BattleCondition => {
+    const raw = (s: string) => (s.trim() === '' ? NaN : Number(s));
+    const n = (s: string) => { const v = Number(s); return Number.isFinite(v) && v >= 0 ? v : 0; };
+    return sanitizeBattleCondition({
+      battleSeconds: raw(battleSeconds),
+      firstBurstWaitSeconds: raw(firstWait),
+      timedParticles: timed.map(x => ({ seconds: raw(x.seconds), amount: raw(x.amount) })),
+      enemyParticles: { minSeconds: Math.min(n(pMin), n(pMax)), maxSeconds: Math.max(n(pMin), n(pMax)), amount: n(pAmount) },
+    });
+  };
+
+  // 幽境モードの戦闘条件は、入力を変えるたびに保存する（閉じても残る。DPS 計算が共通で使う設定の元になる）。
+  // 開いた直後の読み込み（上の effect）で入力が入りきる前の保存を避けるため、開いている間だけ・変わったときだけ保存する
+  const abyssInputs = JSON.stringify([battleSeconds, firstWait, timed.map(x => [x.seconds, x.amount]), pMin, pMax, pAmount]);
+  const lastSavedInputs = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isOpen || !isAbyss) { lastSavedInputs.current = null; return; }
+    // 開いた直後の最初の値は、保存済みの値の読み込みなので、保存し直さない
+    if (lastSavedInputs.current === null) { lastSavedInputs.current = abyssInputs; return; }
+    if (lastSavedInputs.current === abyssInputs) return;
+    lastSavedInputs.current = abyssInputs;
+    saveBattleCondition(readCondition());
+  }, [isOpen, isAbyss, abyssInputs]);
 
   // いまの元素チャージ効率: 開いたとき、編成の各キャラについて、設定（持ちキャラの装備・保存した仮値・既定の仮値）のまま gcsim で計算する
   useEffect(() => {
@@ -131,7 +176,12 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const start = async () => {
     const num = (s: string) => { const v = Number(s); return Number.isFinite(v) && v >= 0 ? v : 0; };
     const minS = num(pMin);
-    const particles = num(pAmount) > 0 && num(pMax) > 0 ? { minSeconds: Math.min(minS, num(pMax)), maxSeconds: Math.max(minS, num(pMax)), amount: num(pAmount) } : undefined;
+    // 幽境モードの戦闘条件（敵の周期の粒子を含む）。実行する条件を、そのまま保存する
+    const condition = isAbyss ? readCondition() : null;
+    if (condition) saveBattleCondition(condition);
+    const particles = condition
+      ? (condition.enemyParticles.amount > 0 && condition.enemyParticles.maxSeconds > 0 ? condition.enemyParticles : undefined)
+      : num(pAmount) > 0 && num(pMax) > 0 ? { minSeconds: Math.min(minS, num(pMax)), maxSeconds: Math.max(minS, num(pMax)), amount: num(pAmount) } : undefined;
     cancelRef.current = false;
     setRunning(true);
     setMessage(null);
@@ -145,6 +195,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
       outcome = await computeRequiredEr({
         build: extra => buildRef.current(extra),
         enemyParticles: particles,
+        ...(condition ? { abyss: toAbyssRunCondition(condition) } : {}),
         parallel,
         verifyTolerance: precise ? ER_VERIFY_TOLERANCE_PRECISE : ER_VERIFY_TOLERANCE_ROUGH,
         seeds: (() => { const v = Math.floor(Number(seeds)); return Number.isFinite(v) && v >= 1 ? Math.min(v, ER_MAX_SEEDS) : ER_DEFAULT_SEEDS; })(),
@@ -161,7 +212,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setRunning(false);
     setProgress(null);
     if (outcome.status === 'ok') {
-      saveRequiredEr(outcome.result);
+      saveRequiredEr(outcome.result, mode);
       setSaved(outcome.result);
       setCurrentFingerprint(outcome.result.fingerprint);
     } else if (outcome.status === 'cancelled') {
@@ -204,7 +255,10 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
         </div>
 
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
-          <p className="text-xs text-slate-400 leading-relaxed">{t('gcsim:er.intro', { laps: ER_LOOP_ITERATIONS })}</p>
+          <p className="text-xs text-slate-400 leading-relaxed">{isAbyss ? t('gcsim:er.introAbyss') : t('gcsim:er.intro', { laps: ER_LOOP_ITERATIONS })}</p>
+          {isAbyss && (
+            <div className="text-xs text-fuchsia-200 bg-fuchsia-950/30 border border-fuchsia-900/60 rounded-lg p-3 leading-relaxed" data-testid="er-abyss-banner">{t('gcsim:er.abyssBanner')}</div>
+          )}
 
           {notRunnable.length > 0 && (
             <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-900/60 rounded-lg p-3 space-y-1">
@@ -262,6 +316,13 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           )}
           {oldVersion && !running && shown && (
             <p className="text-xs text-amber-300 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.oldVersion', { saved: shown.gcsimVersion, current: GCSIM_VERSION })}</p>
+          )}
+
+          {shown?.abyss && !running && (
+            <p className="text-xs text-fuchsia-200/90" data-testid="er-abyss-result-condition">{t('gcsim:er.abyssResultCondition', { battle: shown.abyss.battleSeconds, first: shown.abyss.firstBurstWaitSeconds.toFixed(1), timed: shown.abyss.timedParticles.length })}</p>
+          )}
+          {shown?.abyss && !running && !sameAbyssRunCondition(shown.abyss, toAbyssRunCondition(readCondition())) && (
+            <p className="text-xs text-amber-300 flex items-center gap-1.5" data-testid="er-abyss-condition-changed"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.abyssConditionChanged')}</p>
           )}
 
           {(shown || currentMembers.length > 0) && (
@@ -349,6 +410,38 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.seedsNote', { max: ER_MAX_SEEDS })}</p>
           </div>
+
+          {isAbyss && (
+            <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-abyss-conditions">
+              <p className="font-bold text-fuchsia-200">{t('gcsim:er.abyssConditions')}</p>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span>{t('gcsim:er.battleSeconds')}</span>
+                <Stepper value={battleSeconds} onChange={setBattleSeconds} step={10} min={10} max={ABYSS_MAX_BATTLE_SECONDS} disabled={running} widthClass="w-16" testId="er-battle-seconds" />
+                <span>{t('gcsim:er.battleSecondsUnit')}</span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.battleSecondsNote')}</p>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span>{t('gcsim:er.firstBurstWait')}</span>
+                <Stepper value={firstWait} onChange={setFirstWait} step={0.5} min={0} max={60} decimals={1} disabled={running} widthClass="w-14" testId="er-first-wait" />
+                <span>{t('gcsim:er.firstBurstWaitUnit')}</span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.firstBurstWaitNote')}</p>
+              <div className="space-y-1.5">
+                <p className="font-semibold">{t('gcsim:er.timedParticles')}</p>
+                {timed.map(row => (
+                  <div key={row.key} className="flex items-center gap-1.5 flex-wrap" data-testid="er-timed-row">
+                    <Stepper value={row.seconds} onChange={v => setTimed(list => list.map(x => x.key === row.key ? { ...x, seconds: v } : x))} step={1} min={0} max={ABYSS_MAX_BATTLE_SECONDS} decimals={1} disabled={running} widthClass="w-16" />
+                    <span>{t('gcsim:er.timedParticlesAt')}</span>
+                    <Stepper value={row.amount} onChange={v => setTimed(list => list.map(x => x.key === row.key ? { ...x, amount: v } : x))} step={1} min={1} max={99} disabled={running} widthClass="w-12" />
+                    <span>{t('gcsim:er.enemyParticlesUnit')}</span>
+                    <button type="button" onClick={() => setTimed(list => list.filter(x => x.key !== row.key))} disabled={running} className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" title={t('gcsim:er.timedParticlesRemove')}><Trash2 className="w-3.5 h-3.5" /></button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => setTimed(list => [...list, { key: ++timedKey.current, seconds: String(list.length > 0 ? Math.min(ABYSS_MAX_BATTLE_SECONDS, Number(list[list.length - 1].seconds) + 30 || 30) : 30), amount: '3' }])} disabled={running || timed.length >= ABYSS_MAX_TIMED_PARTICLES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-timed-add"><Plus className="w-3.5 h-3.5" />{t('gcsim:er.timedParticlesAdd')}</button>
+                <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timedParticlesNote', { max: ABYSS_MAX_TIMED_PARTICLES })}</p>
+              </div>
+            </div>
+          )}
 
           <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
             <p className="font-bold">{t('gcsim:er.enemyParticles')}</p>

@@ -72,6 +72,34 @@ export interface EnemyParticles {
  */
 export const ER_DEFAULT_ENEMY_PARTICLES: EnemyParticles = { minSeconds: 5, maxSeconds: 8, amount: 1 };
 
+/** 時刻指定の粒子（戦闘開始からの秒と、個数。クリア粒子。幽境モード） */
+export interface TimedParticle {
+  seconds: number;
+  amount: number;
+}
+
+/**
+ * 幽境モードの戦闘条件のうち、ER の計算に渡す分（敵の周期の粒子は enemyParticles で別に渡す）。
+ * 開始エネルギーは 0 になり、最初の爆発も判定に含める（docs/gcsim-integration/phase-8-abyss-mode/plan.md）
+ */
+export interface AbyssRunCondition {
+  /** 戦闘時間（秒）。ループを回す周数は、ローテーションの長さから自動で決める */
+  battleSeconds: number;
+  /** 最初の爆発だけ、計画した時刻から待ってよい秒数（2 回目以降は burstWaitSeconds） */
+  firstBurstWaitSeconds: number;
+  /** 時刻指定の粒子 */
+  timedParticles: TimedParticle[];
+}
+
+/**
+ * 幽境モードの既定値。最初の爆発の待ち許容の既定は、同梱のプリセット 5 編成の実測（ER +1000% でも、0 スタートの最初の爆発が計画の時刻から 0.7〜7.2 秒遅れる。
+ * 遅れは、先に撃つキャラの待ちの分も含む）より長い 10 秒。短いと、ER をいくら上げても届かない（「届かない」）編成が出る
+ */
+export const ABYSS_DEFAULT_BATTLE_SECONDS = 180;
+export const ABYSS_DEFAULT_FIRST_BURST_WAIT_SECONDS = 10;
+export const ABYSS_MAX_BATTLE_SECONDS = 600;
+export const ABYSS_MAX_TIMED_PARTICLES = 20;
+
 export interface RequiredErEntry {
   characterId: string;
   name: string;
@@ -123,6 +151,8 @@ export interface RequiredErResult {
   levelsVerified?: boolean;
   /** 爆発の前に待ってよいとした秒数（古い保存には無い。無いときは 0.5 秒だった） */
   burstWaitSeconds?: number;
+  /** 幽境モードで求めたときの戦闘条件（開始エネルギー 0。無ければ通常モードの結果） */
+  abyss?: AbyssRunCondition;
   /** 求めたときの編成・ローテーションの指紋（今の設定文と比べて、変わっていないかを調べる） */
   fingerprint: string;
   entries: RequiredErEntry[];
@@ -148,7 +178,7 @@ export type RequiredErOutcome =
   | { status: 'cancelled' }
   | { status: 'error' | 'unreachable'; message: string };
 
-export type BuildForEr = (extra: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles }) => GcsimConfigResult;
+export type BuildForEr = (extra: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }) => GcsimConfigResult;
 export type RunSample = (config: string, seed: number) => Promise<GcsimSampleResult>;
 
 /** 設定文の短い指紋（変更の検出用。暗号用ではない） */
@@ -181,7 +211,38 @@ export function energyRechargeByCharIndex(logs: GcsimLogEvent[]): Map<number, nu
 export interface EnergyTimeline {
   /** エネルギーの上限（爆発のエネルギー） */
   max: number;
-  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number; exec: number })[];
+  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number; exec: number; planned?: number })[];
+}
+
+/**
+ * 開始エネルギーが 0 のとき（幽境モード）の判定の条件。最初の爆発も数え、最初の爆発だけ、計画した時刻（planned）から
+ * firstDelayFrames まで待ってよいとする（2 回目以降は delayFrames）
+ */
+export interface ZeroStart {
+  firstDelayFrames: number;
+}
+
+/** 基準の爆発の並び（`キャラ@フレーム`）から、キャラごとの、爆発の計画した時刻（フレーム。爆発の順）を求める */
+export function plannedBurstFrames(baselineSig: string): Map<number, number[]> {
+  const out = new Map<number, number[]>();
+  for (const part of baselineSig.split(',')) {
+    if (!part) continue;
+    const [c, f] = part.split('@').map(Number);
+    if (!Number.isFinite(c) || !Number.isFinite(f)) continue;
+    out.set(c, [...(out.get(c) ?? []), f]);
+  }
+  return out;
+}
+
+/** タイムラインの爆発に、計画した時刻（基準の実行の、同じ順の爆発のフレーム）を付ける。基準に無い爆発は付けない */
+export function withPlannedFrames(tls: Map<number, EnergyTimeline>, baselineSig: string): Map<number, EnergyTimeline> {
+  const planned = plannedBurstFrames(baselineSig);
+  const out = new Map<number, EnergyTimeline>();
+  for (const [idx, tl] of tls) {
+    let n = 0;
+    out.set(idx, { max: tl.max, events: tl.events.map(ev => ev.kind === 'burst' ? { ...ev, planned: planned.get(idx)?.[n++] } : ev) });
+  }
+  return out;
 }
 
 /**
@@ -243,11 +304,12 @@ function withReferenceCosts(tl: EnergyTimeline, ref: EnergyTimeline | undefined)
  * ER（合計 %）のときの、爆発ごとの成否を数える（最初の爆発は、初期エネルギーが満タンなので数えない）。
  * エネルギーは、粒子 × ER + 固定の回復を足して上限で切り、爆発で消費量を引く（足りなかった爆発も、消費したものとして続ける。窓どうしを独立に数えるため）。
  */
-export function passCount(timelines: EnergyTimeline[], erPercent: number, delayFrames = 0, warmupWindows = 0): { passed: number; total: number } {
+export function passCount(timelines: EnergyTimeline[], erPercent: number, delayFrames = 0, warmupWindows = 0, zeroStart?: ZeroStart): { passed: number; total: number } {
   let passed = 0;
   let total = 0;
   for (const tl of timelines) {
-    let energy = tl.max;
+    // 開始エネルギー 0（幽境モード）: 0 から始め、最初の爆発も数える
+    let energy = zeroStart ? 0 : tl.max;
     let bursts = 0;
     const gain = (ev: EnergyTimeline['events'][number]) => ev.kind === 'particle' ? (ev.raw * erPercent) / 100 : ev.kind === 'flat' ? ev.amount : 0;
     let windowStart = 0; // 直前の爆発の次のイベント
@@ -258,12 +320,15 @@ export function passCount(timelines: EnergyTimeline[], erPercent: number, delayF
         before[i] = energy;
         energy = Math.min(tl.max, energy + gain(ev));
       } else {
-        if (++bursts <= 1 + warmupWindows) { /* 最初の爆発と、立ち上がりの窓は数えない */ }
+        // 開始エネルギーが満タンのとき: 最初の爆発と、立ち上がりの窓は数えない。0 のとき: 最初の爆発も数え、立ち上がりの窓（warmupWindows 個）だけ数えない
+        if (++bursts <= (zeroStart ? warmupWindows : 1 + warmupWindows)) { /* 数えない */ }
         else {
           total++;
           // 爆発は、実行（executed burst）の時点のエネルギーで判定される（エネルギーを消費するログは、実行の少し後）。
-          // 実行から消費までに入った分は数えない。爆発が delayFrames 以内に遅れてもよいとして、その間に入る分は足す
-          const limit = ev.exec + delayFrames;
+          // 実行から消費までに入った分は数えない。爆発が delayFrames 以内に遅れてもよいとして、その間に入る分は足す。
+          // 0 スタートの最初の爆発は、計画した時刻（planned）から firstDelayFrames まで待ってよいとする
+          // （集計の実行は、爆発のエネルギーが貯まるまで待つので、実行の時刻（exec）は計画より遅れている。判定は、計画の時刻から測る）
+          const limit = zeroStart && bursts === 1 ? (ev.planned ?? ev.exec) + zeroStart.firstDelayFrames : ev.exec + delayFrames;
           let k = windowStart;
           while (k < i && tl.events[k].frame <= limit) k++;
           let e = k < i ? before[k] : energy;
@@ -285,9 +350,9 @@ const ER_SEARCH_CAP_PERCENT = (ER_MAX_ADDED + 2) * 100;
  * 爆発の rate（0〜1）の割合が足りる最小の ER（合計 %）。rate = 0.7 で目安、0.9 で安定、1 で確実（全ての爆発）。
  * 爆発が無い（数える爆発が 0）ときは undefined。上限でも足りないときは Infinity
  */
-export function requiredErForRate(timelines: EnergyTimeline[], rate: number, delayFrames = 0, warmupWindows = 0): number | undefined {
-  const ok = (er: number) => { const { passed, total } = passCount(timelines, er, delayFrames, warmupWindows); return passed >= Math.ceil(total * rate - 1e-9); };
-  if (passCount(timelines, 0, delayFrames, warmupWindows).total === 0) return undefined;
+export function requiredErForRate(timelines: EnergyTimeline[], rate: number, delayFrames = 0, warmupWindows = 0, zeroStart?: ZeroStart): number | undefined {
+  const ok = (er: number) => { const { passed, total } = passCount(timelines, er, delayFrames, warmupWindows, zeroStart); return passed >= Math.ceil(total * rate - 1e-9); };
+  if (passCount(timelines, 0, delayFrames, warmupWindows, zeroStart).total === 0) return undefined;
   if (ok(0)) return 0;
   if (!ok(ER_SEARCH_CAP_PERCENT)) return Infinity;
   let lo = 0;
@@ -309,14 +374,14 @@ export const ER_INTERVAL_RESAMPLES = 1000;
  * これを繰り返した値の分布の、両端（信頼度 80% なら 10%・90% の位置）を範囲にする。同じ種の窓どうしの相関も含まれる。
  * 乱数は固定の種から出すので、同じデータなら毎回同じ結果になる。決まらない側（取り直した値が上限に届かないなど）は undefined
  */
-export function requiredErInterval(timelines: EnergyTimeline[], rate: number, delayFrames = 0, warmupWindows = 0, confidence = ER_INTERVAL_CONFIDENCE, resamples = ER_INTERVAL_RESAMPLES): { low?: number; high?: number } | undefined {
-  if (timelines.length < 2 || passCount(timelines, 0, delayFrames, warmupWindows).total < 1) return undefined;
+export function requiredErInterval(timelines: EnergyTimeline[], rate: number, delayFrames = 0, warmupWindows = 0, confidence = ER_INTERVAL_CONFIDENCE, resamples = ER_INTERVAL_RESAMPLES, zeroStart?: ZeroStart): { low?: number; high?: number } | undefined {
+  if (timelines.length < 2 || passCount(timelines, 0, delayFrames, warmupWindows, zeroStart).total < 1) return undefined;
   let state = 0x9e3779b9;
   const rnd = (): number => { state = (state + 0x6d2b79f5) | 0; let x = Math.imul(state ^ (state >>> 15), 1 | state); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
   const values: number[] = [];
   for (let b = 0; b < resamples; b++) {
     const list = Array.from({ length: timelines.length }, () => timelines[Math.floor(rnd() * timelines.length)]);
-    const v = requiredErForRate(list, rate, delayFrames, warmupWindows);
+    const v = requiredErForRate(list, rate, delayFrames, warmupWindows, zeroStart);
     values.push(v === undefined ? Infinity : v);
   }
   values.sort((a, c) => a - c);
@@ -328,8 +393,11 @@ export function requiredErInterval(timelines: EnergyTimeline[], rate: number, de
 /** 0.1% 単位に切り上げる */
 const ceil1 = (x: number): number => Math.ceil(x * 10 - 1e-9) / 10 + 0; // + 0 で -0 を 0 にする
 
-/** 並びの違いから、最初にずれた爆発のキャラ（char_index）。同じなら undefined */
-export function firstMismatchChar(baseline: string, test: string, delayFrames = 0, warmupWindows = 0): number | undefined {
+/**
+ * 並びの違いから、最初にずれた爆発のキャラ（char_index）。同じなら undefined。
+ * firstDelayFrames = 各キャラの最初の爆発だけに許す遅れ（既定は delayFrames と同じ。開始エネルギー 0 の幽境モードで、長くする。Infinity = 最初の爆発の遅れは問わない）
+ */
+export function firstMismatchChar(baseline: string, test: string, delayFrames = 0, warmupWindows = 0, firstDelayFrames = delayFrames): number | undefined {
   if (baseline === test) return undefined;
   const a = baseline.split(',');
   const b = test.split(',');
@@ -345,7 +413,7 @@ export function firstMismatchChar(baseline: string, test: string, delayFrames = 
     const n = (counts.get(ca) ?? 0) + 1;
     counts.set(ca, n);
     const d = fb - fa;
-    if (n <= 1 + warmupWindows) { offset = Math.max(offset, d); if (n === 1 && d > delayFrames) return ca; continue; }
+    if (n <= 1 + warmupWindows) { offset = Math.max(offset, d); if (n === 1 && d > firstDelayFrames) return ca; continue; }
     if (d - offset > delayFrames) return ca;
   }
   return undefined;
@@ -366,6 +434,11 @@ export async function computeRequiredEr(args: {
   seeds?: number;
   /** 爆発の前に待ってよい秒数（既定 ER_DEFAULT_BURST_WAIT_SECONDS） */
   burstWaitSeconds?: number;
+  /**
+   * 幽境モードの戦闘条件（あれば、開始エネルギー 0・最初の爆発も判定・時刻指定の粒子・戦闘時間の周数になる。無ければ通常モード）。
+   * 設定文を作る build が、extra.abyss で受け取る
+   */
+  abyss?: AbyssRunCondition;
   /** 同時に実行する種の数（既定 1。WASM の Worker を並べるときに増やす） */
   parallel?: number;
   run: RunSample;
@@ -378,8 +451,12 @@ export async function computeRequiredEr(args: {
   const verifyTolerance = args.verifyTolerance ?? ER_VERIFY_TOLERANCE_PRECISE;
   const burstWaitSeconds = Math.max(0, args.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS);
   const delayFrames = Math.round(burstWaitSeconds * 60);
+  // 幽境モード: 最初の爆発だけ、待ってよい秒数を別に持つ（開始エネルギー 0 の最初の爆発は、粒子が貯まるまで遅れるため）
+  const abyss = args.abyss;
+  const firstDelayFrames = abyss ? Math.round(Math.max(0, abyss.firstBurstWaitSeconds) * 60) : delayFrames;
+  const zeroStart: ZeroStart | undefined = abyss ? { firstDelayFrames } : undefined;
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
-  const build: BuildForEr = extra => args.build({ ...extra, enemyParticles });
+  const build: BuildForEr = extra => args.build({ ...extra, enemyParticles, ...(abyss ? { abyss } : {}) });
   const cancelled = () => shouldCancel?.() === true;
   const startedAt = Date.now();
   let runsDone = 0;
@@ -471,9 +548,12 @@ export async function computeRequiredEr(args: {
     for (let k = 0; k < chunk.length; k++) {
       const res = results[k];
       if (res.status !== 'ok') return { status: res.status, message: res.message };
-      if (burstSignature(res.logs) !== baseline.get(chunk[k])) continue;
+      // 基準と同じ爆発の並びの種だけ使う。幽境モード（開始エネルギー 0）は、最初の爆発が粒子の足りない分だけ遅れ、以降もその分ずれるので、
+      // 並び（誰がどの順で撃つか）と、最初の爆発以降の相対的な遅れで見る（最初の爆発の遅れは問わない。許容の判定は、窓の集計でする）
+      const sig = burstSignature(res.logs);
+      if (abyss ? firstMismatchChar(baseline.get(chunk[k])!, sig, delayFrames, 0, Infinity) !== undefined : sig !== baseline.get(chunk[k])) continue;
       seeds.push(chunk[k]);
-      const collected = collectEnergyTimelines(res.logs);
+      const collected = abyss ? withPlannedFrames(collectEnergyTimelines(res.logs), baseline.get(chunk[k])!) : collectEnergyTimelines(res.logs);
       referenceBySeed.set(chunk[k], collected);
       for (const [i, tl] of collected) timelines.set(i, [...(timelines.get(i) ?? []), tl]);
     }
@@ -488,12 +568,12 @@ export async function computeRequiredEr(args: {
   let maxWindows = 0;
   members.forEach((m, idx) => {
     const list = timelines.get(idx) ?? [];
-    const certain = requiredErForRate(list, 1, delayFrames, ER_WARMUP_WINDOWS);
+    const certain = requiredErForRate(list, 1, delayFrames, ER_WARMUP_WINDOWS, zeroStart);
     if (certain === undefined) {
       entries.push({ characterId: m.characterId, name: m.name, status: 'noBurst' });
       return;
     }
-    maxWindows = Math.max(maxWindows, passCount(list, 0, delayFrames, ER_WARMUP_WINDOWS).total);
+    maxWindows = Math.max(maxWindows, passCount(list, 0, delayFrames, ER_WARMUP_WINDOWS, zeroStart).total);
     // 装備（武器・聖遺物）の ER は考慮しない。合計 ER が 100% 未満にはならないとして、そこから探す（足す分は、装備の ER との差で、マイナスもある）
     const added = Math.max(certain / 100, ER_FLOOR_FRACTION) - baseFraction(idx);
     if (!Number.isFinite(certain) || added > ER_MAX_ADDED) {
@@ -507,8 +587,8 @@ export async function computeRequiredEr(args: {
       characterId: m.characterId,
       name: m.name,
       status: 'ok',
-      typicalEr: ceil1(requiredErForRate(list, 0.7, delayFrames, ER_WARMUP_WINDOWS)!),
-      stableEr: ceil1(requiredErForRate(list, 0.9, delayFrames, ER_WARMUP_WINDOWS)!),
+      typicalEr: ceil1(requiredErForRate(list, 0.7, delayFrames, ER_WARMUP_WINDOWS, zeroStart)!),
+      stableEr: ceil1(requiredErForRate(list, 0.9, delayFrames, ER_WARMUP_WINDOWS, zeroStart)!),
       certainEr: ceil1(certain),
     });
   });
@@ -547,7 +627,7 @@ export async function computeRequiredEr(args: {
           let moved = false;
           entries.forEach((e, idx) => {
             if (e.status !== 'ok' || e[pick] === undefined || !movable(idx)) return;
-            const v = requiredErForRate(tls.get(idx) ?? [], rate, delayFrames, ER_WARMUP_WINDOWS);
+            const v = requiredErForRate(tls.get(idx) ?? [], rate, delayFrames, ER_WARMUP_WINDOWS, zeroStart);
             if (v === undefined || !Number.isFinite(v)) return;
             const next = ceil1(v);
             if (Math.abs(next - e[pick]!) > verifyTolerance * 100) moved = true;
@@ -624,7 +704,7 @@ export async function computeRequiredEr(args: {
         const res = results[k];
         if (res.status !== 'ok') return { status: res.status, message: res.message };
         // 検証は、立ち上がりの窓（数えない窓）も含め、全ての窓に遅れの許容（delayFrames）を適用する（立ち上がりの窓で遅れると、次の窓の粒子がエネルギーの上限で捨てられ、以降が連鎖して遅れるため）
-        const ng = firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0);
+        const ng = firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0, firstDelayFrames);
         if (ng !== undefined) { bump = ng; lastFailSeed = chunk[k]; break; }
       }
       if (bump !== undefined) break;
@@ -683,7 +763,7 @@ export async function computeRequiredEr(args: {
         for (let k = 0; k < chunk.length; k++) {
           const res = results[k];
           if (res.status !== 'ok') return { error: { status: res.status, message: res.message } };
-          if (firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0) !== undefined) { lastFailSeed = chunk[k]; return { ok: false }; }
+          if (firstMismatchChar(baseline.get(chunk[k])!, burstSignature(res.logs), delayFrames, 0, firstDelayFrames) !== undefined) { lastFailSeed = chunk[k]; return { ok: false }; }
         }
       }
       return { ok: true };
@@ -738,7 +818,7 @@ export async function computeRequiredEr(args: {
     if (e.status !== 'ok') return;
     const pct = (er: number | undefined, lastOne: boolean, list: EnergyTimeline[]): number | undefined => {
       if (er === undefined) return undefined;
-      const { passed, total } = passCount(list, er, delayFrames, ER_WARMUP_WINDOWS);
+      const { passed, total } = passCount(list, er, delayFrames, ER_WARMUP_WINDOWS, zeroStart);
       if (total === 0) return undefined;
       return Math.round((lastOne && passed === total ? total / (total + 1) : passed / total) * 100);
     };
@@ -750,8 +830,8 @@ export async function computeRequiredEr(args: {
       const list = timelines.get(idx) ?? [];
       const floor1 = (x: number | undefined) => x === undefined ? undefined : Math.floor(x * 10 + 1e-9) / 10;
       const ceil1o = (x: number | undefined) => x === undefined ? undefined : ceil1(x);
-      const ti = requiredErInterval(list, 0.7, delayFrames, ER_WARMUP_WINDOWS);
-      const si = requiredErInterval(list, 0.9, delayFrames, ER_WARMUP_WINDOWS);
+      const ti = requiredErInterval(list, 0.7, delayFrames, ER_WARMUP_WINDOWS, ER_INTERVAL_CONFIDENCE, ER_INTERVAL_RESAMPLES, zeroStart);
+      const si = requiredErInterval(list, 0.9, delayFrames, ER_WARMUP_WINDOWS, ER_INTERVAL_CONFIDENCE, ER_INTERVAL_RESAMPLES, zeroStart);
       e.typicalErLow = floor1(ti?.low);
       e.typicalErHigh = ceil1o(ti?.high);
       e.stableErLow = floor1(si?.low);
@@ -762,6 +842,6 @@ export async function computeRequiredEr(args: {
   report();
   return {
     status: 'ok',
-    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
+    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, ...(abyss ? { abyss } : {}), fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
   };
 }

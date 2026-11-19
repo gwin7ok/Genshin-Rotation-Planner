@@ -17,6 +17,7 @@ import type { ActionDefinition, ActionFrames, ActionType, CharacterConfig, Eleme
 import { parseGoFile, findHitmark, type FrameTable, type ParsedGoFile } from './gcsimParser.ts';
 import { buildConstellations, emptyConstellationReport, type ConstellationReport, type GenshinDbConstellation } from './constellationEffects.ts';
 import { characterKey } from '../data/characterKeys.ts';
+import { CHARACTER_ROLES } from './characterRoles.ts';
 import { buildPassiveEffects, type GenshinDbPassive } from './passiveEffects.ts';
 import { attachCharacterEnglish, type EnglishMissing } from './englishTexts.ts';
 import { EFFECT_DURATION_OVERRIDES, EFFECT_DURATION_SUPPRESSED } from './effectDurationOverrides.ts';
@@ -2427,6 +2428,7 @@ export async function generateCharacterMaster(
       element: u.element,
       weaponType: u.weaponType,
       rarity: u.rarity,
+      ...(CHARACTER_ROLES[u.id] ? { roles: [...CHARACTER_ROLES[u.id]] } : {}),
       avatarUrl: u.avatarUrl,
       color: ELEMENT_HEX[u.element],
       accentColor: ELEMENT_HEX[u.element],

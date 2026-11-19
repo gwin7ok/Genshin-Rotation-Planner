@@ -3,6 +3,9 @@ import { loc } from '../i18n/loc';
  * Types for Genshin Impact Rotation Gantt Chart Planner
  */
 
+/** キャラの役割（ローテーションの自動探索で使う。1 キャラに複数つく。定義と初期値: src/masterdata/characterRoles.ts） */
+export type CharacterRole = 'attacker' | 'subAttacker' | 'supporter';
+
 export type ElementType = 'pyro' | 'hydro' | 'electro' | 'dendro' | 'cryo' | 'anemo' | 'geo' | 'physical';
 
 export type WeaponType = 'sword' | 'claymore' | 'polearm' | 'bow' | 'catalyst';
@@ -812,6 +815,8 @@ export interface CharacterConfig {
   element: ElementType;
   weaponType: WeaponType;
   rarity?: number;
+  /** 役割の初期値（マスターの値。src/masterdata/characterRoles.ts） */
+  roles?: CharacterRole[];
   avatarUrl: string;
   color: string;
   accentColor: string;

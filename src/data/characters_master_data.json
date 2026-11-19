@@ -6,6 +6,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ayaka.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -446,6 +449,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Qin.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -868,6 +874,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -1282,6 +1291,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -1677,6 +1689,10 @@
     "element": "dendro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -2046,6 +2062,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -2416,6 +2435,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -2792,6 +2814,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -3254,6 +3279,9 @@
     "element": "pyro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -3715,6 +3743,9 @@
     "element": "electro",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Lisa.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -4158,6 +4189,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -4572,6 +4606,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -5015,6 +5052,10 @@
     "element": "dendro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -5384,6 +5425,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -5752,6 +5796,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -6130,6 +6177,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -6592,6 +6642,9 @@
     "element": "pyro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -7101,6 +7154,9 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Barbara.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -7515,6 +7571,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kaeya.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -7929,6 +7988,9 @@
     "element": "pyro",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Diluc.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -8424,6 +8486,9 @@
     "element": "electro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Razor.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -8923,6 +8988,9 @@
     "element": "pyro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ambor.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -9349,6 +9417,10 @@
     "element": "anemo",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Venti.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -9817,6 +9889,9 @@
     "element": "pyro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Xiangling.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -10274,6 +10349,9 @@
     "element": "electro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Beidou.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -10647,6 +10725,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Xingqiu.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -11023,6 +11104,9 @@
     "element": "anemo",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Xiao.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -11513,6 +11597,9 @@
     "element": "geo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ningguang.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -11842,6 +11929,9 @@
     "element": "pyro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Klee.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -12259,6 +12349,9 @@
     "element": "geo",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Zhongli.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -12662,6 +12755,9 @@
     "element": "electro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Fischl.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -13136,6 +13232,9 @@
     "element": "pyro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -13584,6 +13683,9 @@
     "element": "hydro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Tartaglia.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -14011,6 +14113,9 @@
     "element": "geo",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Noel.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -14435,6 +14540,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Qiqi.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -14881,6 +14989,10 @@
     "element": "cryo",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Chongyun.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -15296,6 +15408,9 @@
     "element": "cryo",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ganyu.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -15726,6 +15841,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Albedo.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -16179,6 +16297,9 @@
     "element": "cryo",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Diona.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -16628,6 +16749,10 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Mona.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -17093,6 +17218,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Keqing.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -17595,6 +17723,10 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Sucrose.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -18030,6 +18162,10 @@
     "element": "pyro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Xinyan.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -18459,6 +18595,9 @@
     "element": "cryo",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Rosaria.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -18907,6 +19046,9 @@
     "element": "pyro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Hutao.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -19390,6 +19532,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kazuha.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -19856,6 +20001,9 @@
     "element": "pyro",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Feiyan.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -20251,6 +20399,9 @@
     "element": "pyro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Yoimiya.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -20662,6 +20813,9 @@
     "element": "pyro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Tohma.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -21019,6 +21173,9 @@
     "element": "cryo",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Eula.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -21496,6 +21653,10 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Shougun.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -22007,6 +22168,9 @@
     "element": "anemo",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Sayu.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -22413,6 +22577,10 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kokomi.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -22792,6 +22960,9 @@
     "element": "geo",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Gorou.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -23141,6 +23312,9 @@
     "element": "electro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Sara.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -23526,6 +23700,9 @@
     "element": "geo",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Itto.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -23956,6 +24133,9 @@
     "element": "electro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Yae.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -24406,6 +24586,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Heizo.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -24868,6 +25051,9 @@
     "element": "hydro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Yelan.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -25244,6 +25430,10 @@
     "element": "dendro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Momoka.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -25691,6 +25881,9 @@
     "element": "cryo",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Aloy.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -26022,6 +26215,9 @@
     "element": "cryo",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Shenhe.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -26519,6 +26715,9 @@
     "element": "geo",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Yunjin.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -26996,6 +27195,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Shinobu.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -27359,6 +27561,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ayato.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -27841,6 +28046,9 @@
     "element": "dendro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Collei.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -28207,6 +28415,9 @@
     "element": "electro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Dori.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -28576,6 +28787,9 @@
     "element": "dendro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Tighnari.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -28962,6 +29176,10 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Nilou.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -29549,6 +29767,9 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Cyno.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -30157,6 +30378,9 @@
     "element": "hydro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Candace.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -30603,6 +30827,10 @@
     "element": "dendro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Nahida.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -31055,6 +31283,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Layla.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -31413,6 +31644,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Wanderer.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -31874,6 +32108,9 @@
     "element": "anemo",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Faruzan.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -32249,6 +32486,9 @@
     "element": "dendro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Yaoyao.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -32635,6 +32875,9 @@
     "element": "dendro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Alhatham.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -33142,6 +33385,9 @@
     "element": "pyro",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Dehya.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -33697,6 +33943,9 @@
     "element": "cryo",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Mika.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -34119,6 +34368,9 @@
     "element": "dendro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kaveh.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -34566,6 +34818,9 @@
     "element": "dendro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Baizhuer.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -34940,6 +35195,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Linette.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -35405,6 +35663,9 @@
     "element": "pyro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Liney.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -35785,6 +36046,9 @@
     "element": "cryo",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Freminet.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -36286,6 +36550,9 @@
     "element": "cryo",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Wriothesley.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -36740,6 +37007,9 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Neuvillette.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -37081,6 +37351,9 @@
     "element": "cryo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Charlotte.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -37545,6 +37818,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Furina.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -37989,6 +38265,9 @@
     "element": "pyro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Chevreuse.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -38417,6 +38696,9 @@
     "element": "geo",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Navia.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -38852,6 +39134,9 @@
     "element": "pyro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Gaming.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -39281,6 +39566,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Liuyun.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -39817,6 +40105,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Chiori.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -40317,6 +40608,9 @@
     "element": "hydro",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Sigewinne.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -40753,6 +41047,9 @@
     "element": "pyro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Arlecchino.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -41252,6 +41549,9 @@
     "element": "electro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Sethos.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -41638,6 +41938,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Clorinde.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -42101,6 +42404,9 @@
     "element": "dendro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Emilie.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -42567,6 +42873,10 @@
     "element": "geo",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "attacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kachina.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -43192,6 +43502,9 @@
     "element": "dendro",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Kinich.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -43846,6 +44159,9 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Mualani.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -44199,6 +44515,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Xilonen.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -44655,6 +44974,9 @@
     "element": "anemo",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Chasca.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -45037,6 +45359,9 @@
     "element": "electro",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Olorun.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -45422,6 +45747,9 @@
     "element": "pyro",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Mavuika.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -45980,6 +46308,10 @@
     "element": "cryo",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Citlali.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -46346,6 +46678,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Lanyan.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -46902,6 +47237,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Mizuki.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -47343,6 +47681,9 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Iansan.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -47711,6 +48052,9 @@
     "element": "electro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Varesa.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -48311,6 +48655,9 @@
     "element": "cryo",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Escoffier.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -48752,6 +49099,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ifa.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -49226,6 +49576,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -49659,6 +50012,9 @@
     "element": "hydro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Dahlia.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -50028,6 +50384,10 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Ineffa.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -50394,6 +50754,9 @@
     "element": "dendro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Lauma.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -50872,6 +51235,9 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Flins.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -51435,6 +51801,9 @@
     "element": "hydro",
     "weaponType": "claymore",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Aino.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -51797,6 +52166,9 @@
     "element": "dendro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Nefer.png",
     "color": "#10b981",
     "accentColor": "#10b981",
@@ -52196,6 +52568,9 @@
     "element": "pyro",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Durin.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -52719,6 +53094,9 @@
     "element": "anemo",
     "weaponType": "bow",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Jahoda.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -53058,6 +53436,10 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Columbina.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -53476,6 +53858,9 @@
     "element": "geo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Zibai.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -53962,6 +54347,9 @@
     "element": "geo",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Illuga.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -54361,6 +54749,9 @@
     "element": "anemo",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Varka.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -55001,6 +55392,9 @@
     "element": "cryo",
     "weaponType": "polearm",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Lohen.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -55287,6 +55681,10 @@
     "element": "geo",
     "weaponType": "bow",
     "rarity": 5,
+    "roles": [
+      "subAttacker",
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Linnea.png",
     "color": "#f59e0b",
     "accentColor": "#f59e0b",
@@ -55689,6 +56087,9 @@
     "element": "pyro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Nicole.png",
     "color": "#ef4444",
     "accentColor": "#ef4444",
@@ -56088,6 +56489,9 @@
     "element": "anemo",
     "weaponType": "catalyst",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Prune.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -56504,6 +56908,9 @@
     "element": "cryo",
     "weaponType": "claymore",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_MarionetteNew.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",
@@ -56934,6 +57341,10 @@
     "element": "electro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "attacker",
+      "subAttacker"
+    ],
     "avatarUrl": "",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -57365,6 +57776,9 @@
     "element": "electro",
     "weaponType": "sword",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -57667,6 +58081,9 @@
     "element": "hydro",
     "weaponType": "catalyst",
     "rarity": 5,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Vodyanitsa.png",
     "color": "#0ea5e9",
     "accentColor": "#0ea5e9",
@@ -58085,6 +58502,9 @@
     "element": "anemo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "attacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Vesna.png",
     "color": "#14b8a6",
     "accentColor": "#14b8a6",
@@ -58459,6 +58879,9 @@
     "element": "electro",
     "weaponType": "polearm",
     "rarity": 4,
+    "roles": [
+      "supporter"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Alyosha.png",
     "color": "#a855f7",
     "accentColor": "#a855f7",
@@ -58908,6 +59331,9 @@
     "element": "cryo",
     "weaponType": "sword",
     "rarity": 5,
+    "roles": [
+      "subAttacker"
+    ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Odette.png",
     "color": "#06b6d4",
     "accentColor": "#06b6d4",

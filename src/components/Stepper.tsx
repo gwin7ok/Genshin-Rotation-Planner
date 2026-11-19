@@ -1,7 +1,8 @@
 import React from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import { RepeatButton } from './RepeatButton';
 
-/** 数の入力。右の上下ボタンで step ずつ増減する（範囲内に収める）。decimals を指定すると、小数 decimals 桁（x.x など）にそろえて表示する */
+/** 数の入力。右の上下ボタンで step ずつ増減する（長押しで連続して増減し、長く押すほど大きく動く）（範囲内に収める）。decimals を指定すると、小数 decimals 桁（x.x など）にそろえて表示する */
 export const Stepper: React.FC<{
   value: string;
   onChange: (v: string) => void;
@@ -16,9 +17,9 @@ export const Stepper: React.FC<{
   testId?: string;
 }> = ({ value, onChange, step, min, max, decimals, disabled, widthClass, invalid, testId }) => {
   const fmt = (n: number) => decimals === undefined ? String(n) : n.toFixed(decimals);
-  const move = (dir: 1 | -1) => {
+  const move = (dir: 1 | -1, multiplier = 1) => {
     const cur = Number(value);
-    const next = (Number.isFinite(cur) ? cur : 0) + dir * step;
+    const next = (Number.isFinite(cur) ? cur : 0) + dir * step * multiplier;
     const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, next));
     onChange(fmt(Math.round(clamped * 1000) / 1000));
   };
@@ -32,8 +33,8 @@ export const Stepper: React.FC<{
         className={`${widthClass} bg-slate-800 border ${invalid ? 'border-red-500' : 'border-slate-700'} rounded-l px-1.5 py-0.5 text-right [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
       />
       <span className="flex flex-col border border-l-0 border-slate-700 rounded-r overflow-hidden">
-        <button type="button" onClick={() => move(1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center"><ChevronUp className="w-3 h-3" /></button>
-        <button type="button" onClick={() => move(-1)} disabled={disabled} className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center border-t border-slate-700"><ChevronDown className="w-3 h-3" /></button>
+        <RepeatButton onStep={m => move(1, m)} disabled={disabled} title="" className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center select-none"><ChevronUp className="w-3 h-3" /></RepeatButton>
+        <RepeatButton onStep={m => move(-1, m)} disabled={disabled} title="" className="flex-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40 flex items-center border-t border-slate-700 select-none"><ChevronDown className="w-3 h-3" /></RepeatButton>
       </span>
     </span>
   );

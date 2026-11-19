@@ -17,6 +17,7 @@
 import { t } from '../../i18n';
 import type { GcsimConfigResult } from './buildGcsimConfig';
 import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
+import { adjustTimelines, needsAdjust, periodicParticlesOn, splitTimedParticles, type AdjustOptions } from './erAdjust';
 
 /**
  * ループを回す周数。エネルギーは 1〜2 周目に初期状態の影響が残り（初期エネルギーが満タン・スキルの CT など）、2 周では必要な ER が低く出る
@@ -78,6 +79,12 @@ export interface TimedParticle {
   amount: number;
 }
 
+/** ダメージ無効の時間帯（戦闘開始からの秒。[開始, 終了)）。敵の状態の時間帯（enemyStates）のうち、ダメージ無効のもの */
+export interface InvulnerableWindow {
+  fromSeconds: number;
+  toSeconds: number;
+}
+
 /**
  * 幽境モードの戦闘条件のうち、ER の計算に渡す分（敵の周期の粒子は enemyParticles で別に渡す）。
  * 開始エネルギーは 0 になり、最初の爆発も判定に含める（docs/gcsim-integration/phase-8-abyss-mode/plan.md）
@@ -87,8 +94,13 @@ export interface AbyssRunCondition {
   battleSeconds: number;
   /** 最初の爆発だけ、計画した時刻から待ってよい秒数（2 回目以降は burstWaitSeconds） */
   firstBurstWaitSeconds: number;
-  /** 時刻指定の粒子 */
+  /** 時刻指定の粒子（全部。gcsim に渡せない分は、アプリが ER の時系列に書き足す。D371） */
   timedParticles: TimedParticle[];
+  /**
+   * ダメージ無効の時間帯。この間は、ダメージが入ることが条件の発生源（西風・クレーなど）のエネルギーを、ER の時系列から取り除く（D371）。
+   * 無いとき・空のときは省く（古い保存と、条件の比較が合うように）
+   */
+  invulnerable?: InvulnerableWindow[];
 }
 
 /**
@@ -157,6 +169,11 @@ export interface RequiredErResult {
   burstWaitSeconds?: number;
   /** 幽境モードで求めたときの戦闘条件（開始エネルギー 0。無ければ通常モードの結果） */
   abyss?: AbyssRunCondition;
+  /**
+   * アプリが ER の時系列を補正して求めたか（D371）。補正したときは、gcsim で最後に確かめる実行（検証）をしない（verified = false）。
+   * timedInjected = gcsim に渡せず、アプリが書き足した時刻指定の粒子の件数 / invulnerableWindows = 補正に使ったダメージ無効の時間帯の件数
+   */
+  adjusted?: { timedInjected: number; invulnerableWindows: number };
   /** 求めたときの編成・ローテーションの指紋（今の設定文と比べて、変わっていないかを調べる） */
   fingerprint: string;
   entries: RequiredErEntry[];
@@ -215,7 +232,8 @@ export function energyRechargeByCharIndex(logs: GcsimLogEvent[]): Map<number, nu
 export interface EnergyTimeline {
   /** エネルギーの上限（爆発のエネルギー） */
   max: number;
-  events: ({ kind: 'particle'; raw: number; frame: number } | { kind: 'flat'; amount: number; frame: number } | { kind: 'burst'; cost: number; frame: number; exec: number; planned?: number })[];
+  /** particle・flat の source = ログの出どころ（粒子の source・`adding energy` の source。ダメージ無効の間の補正で使う。D371） */
+  events: ({ kind: 'particle'; raw: number; frame: number; source?: string } | { kind: 'flat'; amount: number; frame: number; source?: string } | { kind: 'burst'; cost: number; frame: number; exec: number; planned?: number })[];
 }
 
 /**
@@ -282,17 +300,20 @@ export function collectEnergyTimelines(logs: GcsimLogEvent[]): Map<number, Energ
     } else if (l.msg === 'particle') {
       const er = Number(l.logs?.ER);
       const amt = Number(l.logs?.amt);
-      if (Number.isFinite(er) && er > 0 && Number.isFinite(amt)) tl.events.push({ kind: 'particle', raw: amt / er, frame });
+      if (Number.isFinite(er) && er > 0 && Number.isFinite(amt)) tl.events.push({ kind: 'particle', raw: amt / er, frame, source: srcOf(l) });
     } else if (l.msg === 'adding energy') {
       const rec = Number(l.logs?.["rec'd"]);
       const pre = Number(l.logs?.pre_recovery);
       const post = Number(l.logs?.post_recovery);
       const amount = Number.isFinite(rec) ? rec : Number.isFinite(pre) && Number.isFinite(post) ? post - pre : 0;
-      tl.events.push({ kind: 'flat', amount, frame });
+      tl.events.push({ kind: 'flat', amount, frame, source: srcOf(l) });
     }
   }
   return out;
 }
+
+/** ログの粒子・回復の出どころ（`source`）。無ければ undefined */
+const srcOf = (l: GcsimLogEvent): string | undefined => (typeof l.logs?.source === 'string' ? l.logs.source : undefined);
 
 /**
  * 爆発を基準のタイミングで出す実行（ignore_burst_energy）では、エネルギーが足りないまま爆発するので、ログの消費量が実際より小さい。
@@ -460,7 +481,12 @@ export async function computeRequiredEr(args: {
   const firstDelayFrames = abyss ? Math.round(Math.max(0, abyss.firstBurstWaitSeconds) * 60) : delayFrames;
   const zeroStart: ZeroStart | undefined = abyss ? { firstDelayFrames } : undefined;
   const parallel = Math.max(1, Math.floor(args.parallel ?? 1));
-  const build: BuildForEr = extra => args.build({ ...extra, enemyParticles, ...(abyss ? { abyss } : {}) });
+  // 時刻指定の粒子: gcsim は `energy` の行を 1 行しか使わないので、gcsim に渡せない分は、アプリが ER の時系列に書き足す（D371）。
+  // ダメージ無効の時間帯の補正も、時系列の加工。どちらかをしたときは、gcsim で最後に確かめる実行（検証）をしない（書き足し・取り除いた分が、検証の実行に反映されないため）
+  const split = abyss ? splitTimedParticles(abyss.timedParticles, periodicParticlesOn(enemyParticles)) : { toGcsim: [] as TimedParticle[], injected: [] as TimedParticle[] };
+  const invulnerable = abyss?.invulnerable ?? [];
+  const adjusts = abyss !== undefined && needsAdjust(split.injected, invulnerable);
+  const build: BuildForEr = extra => args.build({ ...extra, enemyParticles, ...(abyss ? { abyss: { ...abyss, timedParticles: split.toGcsim } } : {}) });
   const cancelled = () => shouldCancel?.() === true;
   const startedAt = Date.now();
   let runsDone = 0;
@@ -511,7 +537,13 @@ export async function computeRequiredEr(args: {
     return { status: 'error', message: base.warnings.filter(w => w.level === 'error').map(w => w.message).join('\n') };
   }
   const members = base.members;
-  const verify = args.verify !== false;
+  const verify = args.verify !== false && !adjusts;
+  // 補正（書き足し・取り除き）に使う、最初の出場キャラと編成の人数
+  const adjustOpts: AdjustOptions = { injected: split.injected, invulnerable, partyCount: members.length, firstActive: Math.max(0, members.findIndex(m => m.gcsimKey === base.firstActiveKey)) };
+  const collectTimelines = (logs: GcsimLogEvent[]): Map<number, EnergyTimeline> => {
+    const tls = collectEnergyTimelines(logs);
+    return adjusts ? adjustTimelines(tls, logs, adjustOpts) : tls;
+  };
   const levelsVerify = verify && (args.verifyLevels ?? verifyCharacters(members).length > 0);
   const memberIds = members.map(m => m.characterId);
   report();
@@ -557,7 +589,7 @@ export async function computeRequiredEr(args: {
       const sig = burstSignature(res.logs);
       if (abyss ? firstMismatchChar(baseline.get(chunk[k])!, sig, delayFrames, 0, Infinity) !== undefined : sig !== baseline.get(chunk[k])) continue;
       seeds.push(chunk[k]);
-      const collected = abyss ? withPlannedFrames(collectEnergyTimelines(res.logs), baseline.get(chunk[k])!) : collectEnergyTimelines(res.logs);
+      const collected = abyss ? withPlannedFrames(collectTimelines(res.logs), baseline.get(chunk[k])!) : collectTimelines(res.logs);
       referenceBySeed.set(chunk[k], collected);
       for (const [i, tl] of collected) timelines.set(i, [...(timelines.get(i) ?? []), tl]);
     }
@@ -625,7 +657,7 @@ export async function computeRequiredEr(args: {
             for (let k = 0; k < chunk.length; k++) {
               const res = results[k];
               if (res.status !== 'ok') return { status: res.status, message: res.message };
-              for (const [i, tl] of collectEnergyTimelines(res.logs)) tls.set(i, [...(tls.get(i) ?? []), withReferenceCosts(tl, referenceBySeed.get(chunk[k])?.get(i))]);
+              for (const [i, tl] of collectTimelines(res.logs)) tls.set(i, [...(tls.get(i) ?? []), withReferenceCosts(tl, referenceBySeed.get(chunk[k])?.get(i))]);
             }
           }
           let moved = false;
@@ -846,6 +878,6 @@ export async function computeRequiredEr(args: {
   report();
   return {
     status: 'ok',
-    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, ...(abyss ? { abyss } : {}), fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
+    result: { gcsimVersion, ranAt: Date.now(), elapsedMs: Date.now() - startedAt, seeds: seeds.length, windows: maxWindows, enemyParticles: enemyParticles ?? { minSeconds: 0, maxSeconds: 0, amount: 0 }, precise: verify && verifyTolerance <= ER_VERIFY_TOLERANCE_PRECISE, verified: verify, levelsVerified: levelsVerify, burstWaitSeconds, ...(abyss ? { abyss } : {}), ...(adjusts ? { adjusted: { timedInjected: split.injected.length, invulnerableWindows: invulnerable.length } } : {}), fingerprint: fingerprintOf(args.build({ ignoreBurstEnergy: true, added: {} }).config), entries },
   };
 }

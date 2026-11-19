@@ -183,6 +183,8 @@ export interface GcsimConfigResult {
   swapDelayFrames: number;
   /** ループ部分を回す周数（設定文の `while i <= N` の N。戦闘時間を指定したときは、ローテーションの長さから自動で決まった周数） */
   loopIterations: number;
+  /** 最初の出場キャラの gcsim のキー（設定文の `active <キー>;`。無ければ undefined）。ER 計算が、時刻指定の粒子を書き足すときの、最初の出場キャラに使う */
+  firstActiveKey?: string;
 }
 
 export interface GcsimActionRef {
@@ -523,5 +525,6 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     actionRefs,
     swapDelayFrames: SWAP_DELAY_FRAMES,
     loopIterations,
+    ...(firstKey ? { firstActiveKey: firstKey } : {}),
   };
 }

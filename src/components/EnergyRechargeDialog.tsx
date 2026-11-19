@@ -13,7 +13,7 @@ import { computeBurstTiming, BURST_TIMING_ON_TIME_SECONDS, type BurstTimingResul
 import { loadBattleCondition, loadRequiredEr, saveBattleCondition, saveRequiredEr } from '../utils/appSettings';
 import { defaultBattleCondition, sameAbyssRunCondition, sanitizeBattleCondition, toAbyssRunCondition, type AppMode, type BattleCondition } from '../utils/battleCondition';
 import { BattlePresetsPanel } from './BattlePresetsPanel';
-import { ParticleLimitNotice } from './ParticleLimitNotice';
+import { ErAdjustNotice } from './ErAdjustNotice';
 import {
   computeRequiredEr,
   fingerprintOf,
@@ -378,6 +378,9 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {shown?.abyss && !running && (
             <p className="text-xs text-fuchsia-200/90" data-testid="er-abyss-result-condition">{t('gcsim:er.abyssResultCondition', { battle: shown.abyss.battleSeconds, first: shown.abyss.firstBurstWaitSeconds.toFixed(1), timed: shown.abyss.timedParticles.length })}</p>
           )}
+          {shown?.adjusted && !running && (
+            <p className="text-xs text-sky-300" data-testid="er-adjusted-result">{t('gcsim:er.adjustedResult', { timed: shown.adjusted.timedInjected, windows: shown.adjusted.invulnerableWindows })}</p>
+          )}
           {shown?.abyss && !running && !sameAbyssRunCondition(shown.abyss, toAbyssRunCondition(readCondition())) && (
             <p className="text-xs text-amber-300 flex items-center gap-1.5" data-testid="er-abyss-condition-changed"><AlertTriangle className="w-3.5 h-3.5 shrink-0" />{t('gcsim:er.abyssConditionChanged')}</p>
           )}
@@ -547,7 +550,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 ))}
                 <button type="button" onClick={() => setTimed(list => [...list, { key: ++timedKey.current, seconds: String(list.length > 0 ? Math.min(ABYSS_MAX_BATTLE_SECONDS, Number(list[list.length - 1].seconds) + 30 || 30) : 30), amount: '3' }])} disabled={running || timed.length >= ABYSS_MAX_TIMED_PARTICLES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-timed-add"><Plus className="w-3.5 h-3.5" />{t('gcsim:er.timedParticlesAdd')}</button>
                 <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timedParticlesNote', { max: ABYSS_MAX_TIMED_PARTICLES })}</p>
-                <ParticleLimitNotice condition={readCondition()} testId="er-particle-limit" />
+                <ErAdjustNotice condition={readCondition()} testId="er-adjust" />
               </div>
             </div>
           )}

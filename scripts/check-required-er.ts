@@ -126,6 +126,61 @@ const partial = [er.collectEnergyTimelines([
 const pr = er.requiredErForRate(partial, 1);
 check(Math.abs(pr - 600) < 0.1, `必要 ERの計算: 一部だけ消費した残りのエネルギーを引き継ぐ（${pr}）`);
 
+// ER の時系列の補正（D371）: 時刻指定の粒子の書き足しと、ダメージ無効の間の補正（合成）
+const adj = await server.ssrLoadModule('/src/utils/gcsim/erAdjust.ts');
+{
+  const T = (seconds: number, amount: number) => ({ seconds, amount });
+  const sp = (timed: any[], periodic: boolean) => adj.splitTimedParticles(timed, periodic);
+  check(sp([], true).toGcsim.length === 0 && sp([], true).injected.length === 0, '粒子の振り分け: 時刻指定の粒子が無ければ、どちらにも無い');
+  check(sp([T(30, 3)], false).toGcsim.length === 1 && sp([T(30, 3)], false).injected.length === 0, '粒子の振り分け: 周期の粒子が無く、時刻指定が 1 件なら、gcsim に渡す（書き足さない）');
+  check(sp([T(30, 3)], true).toGcsim.length === 0 && sp([T(30, 3)], true).injected.length === 1, '粒子の振り分け: 周期の粒子と併用なら、時刻指定は書き足す（gcsim には周期の粒子だけ）');
+  check(sp([T(30, 3), T(60, 3)], false).toGcsim.length === 0 && sp([T(30, 3), T(60, 3)], false).injected.length === 2, '粒子の振り分け: 時刻指定が 2 件以上なら、全部書き足す');
+  check(adj.periodicParticlesOn({ amount: 1, maxSeconds: 8 }) && !adj.periodicParticlesOn({ amount: 0, maxSeconds: 8 }) && !adj.periodicParticlesOn({ amount: 1, maxSeconds: 0 }) && !adj.periodicParticlesOn(undefined), '周期の粒子が有効か: 個数・間隔が有効なときだけ');
+  check(['favonius-bennett', 'dehya', 'albedo-c1', 'klee-a4', 'rosaria-c4', 'crane', 'moonglow', 'nagamasa', 'kitain', 'lumidouceelegy-energy', 'travelercryo-c1', 'mika-c4'].every(s => adj.isDamageConditionalSource(s))
+    && ['enemy', 'drop', 'xingqiu', 'bennett', 'na-ca-on-hit', 'raiden-burst', 'skirk', undefined].every(s => !adj.isDamageConditionalSource(s)), 'ダメージが条件の発生源: 確認した発生源だけが対象（敵・スキルの粒子・通常攻撃のエネルギー・命中の固定エネルギー・スカークは対象外）');
+  const swapLog = (frame: number, idx: number) => ({ event: 'action', frame, char_index: idx, msg: 'executed swap', logs: {} });
+  const swapLogs = [swapLog(100, 1)];
+  check(adj.activeCharAt(adj.readSwaps(swapLogs), 0, 99) === 0 && adj.activeCharAt(adj.readSwaps(swapLogs), 0, 100) === 1 && adj.activeCharAt([], 2, 500) === 2, '出場キャラ: 交代のログから、そのフレームの出場キャラを求める（交代が無ければ最初のキャラ）');
+  const mk = () => new Map<number, any>([
+    [0, { max: 80, events: [{ kind: 'burst', cost: 80, frame: 50, exec: 50 }, { kind: 'particle', raw: 4, frame: 120, source: 'xingqiu' }] }],
+    [1, { max: 60, events: [{ kind: 'burst', cost: 60, frame: 70, exec: 70 }] }],
+  ]);
+  const orig = mk();
+  const inj = adj.adjustTimelines(orig, swapLogs, { injected: [T(1, 3), T(3, 2)], invulnerable: [], partyCount: 4, firstActive: 0 });
+  const e0 = inj.get(0).events;
+  const e1 = inj.get(1).events;
+  const near = (a: number, b: number) => Math.abs(a - b) < 1e-9;
+  check(e0.map((e: any) => e.frame).join() === '50,61,120,181' && near(e0[1].raw, 6) && near(e0[3].raw, 2 * 2 * 0.6), '粒子の書き足し: 出場中は満額（2 × 個数）、控えは 1 − 0.1 × 人数（0.6）を掛け、フレームは interval の次（61・181）で、順に並ぶ（キャラ 0）');
+  check(e1.map((e: any) => e.frame).join() === '61,70,181' && near(e1[0].raw, 2 * 3 * 0.6) && near(e1[2].raw, 2 * 2), '粒子の書き足し: 交代のあとは、出場キャラが入れ替わる（キャラ 1 は、61 で控え・181 で出場中）');
+  check(orig.get(0).events.length === 2 && orig.get(1).events.length === 1, '粒子の書き足し: 元の時系列は変えない');
+  // ダメージ無効の間の補正: 窓 [2 秒, 4 秒) = フレーム [120, 240)
+  const src = new Map<number, any>([[0, { max: 80, events: [
+    { kind: 'particle', raw: 6, frame: 150, source: 'favonius-bennett' }, // 窓の中 → 取り除く
+    { kind: 'particle', raw: 2, frame: 150, source: 'xingqiu' }, // スキルの粒子 → 残す
+    { kind: 'particle', raw: 6, frame: 300, source: 'favonius-bennett' }, // 窓の外 → 残す
+    { kind: 'flat', amount: -3, frame: 130, source: 'nagamasa' }, // 窓の中: スキルのダメージ → これと、そのあとの回復 3 回を取り除く
+    { kind: 'flat', amount: 3, frame: 250, source: 'nagamasa' },
+    { kind: 'flat', amount: 3, frame: 370, source: 'nagamasa' },
+    { kind: 'flat', amount: 3, frame: 490, source: 'nagamasa' },
+    { kind: 'flat', amount: -3, frame: 600, source: 'nagamasa' }, // 窓の外 → 残す（そのあとの回復も残す）
+    { kind: 'flat', amount: 3, frame: 720, source: 'nagamasa' },
+    { kind: 'flat', amount: 1.2, frame: 160, source: 'albedo-c1' }, // 窓の中 → 取り除く
+    { kind: 'flat', amount: 5, frame: 170, source: 'raiden-burst' }, // 命中の固定エネルギー → 残す
+    { kind: 'flat', amount: 1, frame: 180, source: 'na-ca-on-hit' }, // 通常攻撃のエネルギー → 残す
+  ] }]]);
+  const dropped = adj.adjustTimelines(src, [], { injected: [], invulnerable: [{ fromSeconds: 2, toSeconds: 4 }], partyCount: 4, firstActive: 0 });
+  const keptNames = dropped.get(0).events.map((e: any) => `${e.source}@${e.frame}`).sort().join();
+  const wantNames = ['xingqiu@150', 'favonius-bennett@300', 'raiden-burst@170', 'na-ca-on-hit@180', 'nagamasa@600', 'nagamasa@720'].sort().join();
+  check(keptNames === wantNames, `無効の間の補正: 窓の中のダメージが条件の発生源（西風・アルベド C1・桂木斬長正と、その回復）だけを取り除く（残り ${keptNames}）`);
+  check(adj.adjustTimelines(src, [], { injected: [], invulnerable: [], partyCount: 4, firstActive: 0 }).get(0).events.length === 12, '無効の間の補正: 時間帯が無ければ、何も取り除かない');
+  check(!adj.needsAdjust([], undefined) && !adj.needsAdjust([], []) && adj.needsAdjust([T(1, 1)], []) && adj.needsAdjust([], [{ fromSeconds: 1, toSeconds: 2 }]), '補正が要るか: 書き足す粒子か、無効の時間帯があるときだけ');
+  // 書き足した粒子で、必要な ER が下がる（爆発 60・粒子 12 → 500%。書き足し 6（ER 100% 換算）で 18 → 333.3%。探索の上限は 700%）
+  const base1 = new Map<number, any>([[0, { max: 60, events: [{ kind: 'burst', cost: 60, frame: 10, exec: 10 }, { kind: 'particle', raw: 12, frame: 100, source: 'x' }, { kind: 'burst', cost: 60, frame: 200, exec: 200 }] }]]);
+  const without = er.requiredErForRate([base1.get(0)], 1);
+  const withInj = er.requiredErForRate([adj.adjustTimelines(base1, [], { injected: [T(1, 3)], invulnerable: [], partyCount: 4, firstActive: 0 }).get(0)], 1);
+  check(Math.abs(without - 500) < 0.2 && Math.abs(withInj - 333.4) < 0.2, `粒子の書き足し: 必要な ER に反映される（書き足し前 ${without}% → 後 ${withInj}%）`);
+}
+
 const outcome = await er.computeRequiredEr({ build, run: runGcsimSample, gcsimVersion: "check", verify: true, verifyTolerance: er.ER_VERIFY_TOLERANCE_ROUGH });
 if (outcome.status !== 'ok') {
   console.log(`✗ 算出が成功しなかった: ${outcome.status} ${outcome.message ?? ''}`);
@@ -173,7 +228,8 @@ const buildAbyss = (extra: any) => buildGcsimConfig({
   ignoreBurstEnergy: extra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: extra.added, loopIterations: er.ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: extra.enemyParticles,
   ...(extra.abyss ? { startEnergyZero: true, timedParticles: extra.abyss.timedParticles, battleSeconds: extra.abyss.battleSeconds } : {}),
 });
-const abyssOutcome = await er.computeRequiredEr({ build: buildAbyss, abyss: abyssCond, enemyParticles: enemyP, run: runGcsimSample, gcsimVersion: 'check', verify: true, verifyTolerance: er.ER_VERIFY_TOLERANCE_ROUGH, seeds: 8 });
+// 検証ありの算出は、gcsim が正確に扱える粒子（敵の周期の粒子なし・時刻指定が 1 件）で行う。周期の粒子との併用・2 件以上は、アプリが書き足すので、検証はしない（下で別に確認）
+const abyssOutcome = await er.computeRequiredEr({ build: buildAbyss, abyss: abyssCond, enemyParticles: undefined, run: runGcsimSample, gcsimVersion: 'check', verify: true, verifyTolerance: er.ER_VERIFY_TOLERANCE_ROUGH, seeds: 8 });
 if (abyssOutcome.status !== 'ok') {
   console.log(`✗ 幽境モードの算出が成功しなかった: ${abyssOutcome.status} ${abyssOutcome.message ?? ''}`);
   failed++;
@@ -183,10 +239,10 @@ if (abyssOutcome.status !== 'ok') {
   for (const e of ar.entries) console.log(`  [幽境] ${e.name}: ${e.status} ${e.status === 'ok' ? `目安 ${e.typicalEr}% / 安定 ${e.stableEr}% / 確実 ${e.certainEr}%（足す ${e.addedEr}）` : ''}`);
   for (const e of ar.entries.filter((x: any) => x.status === 'ok')) check(e.typicalEr <= e.stableEr && e.stableEr <= e.certainEr, `[幽境] ${e.name}: 目安 ≤ 安定 ≤ 確実`);
   const firstDelay = Math.round(abyssCond.firstBurstWaitSeconds * 60);
-  const abBase = (seed: number) => runGcsimSample(buildAbyss({ ignoreBurstEnergy: true, added: {}, enemyParticles: enemyP, abyss: abyssCond }).config, seed).then((r: any) => er.burstSignature(r.logs));
+  const abBase = (seed: number) => runGcsimSample(buildAbyss({ ignoreBurstEnergy: true, added: {}, enemyParticles: undefined, abyss: abyssCond }).config, seed).then((r: any) => er.burstSignature(r.logs));
   const abSig = async (id: string, x: number, seed: number) => {
     const added = { ...Object.fromEntries(chars.map(c => [c.id, er.ER_MAX_ADDED])), [id]: x };
-    return er.burstSignature((await runGcsimSample(buildAbyss({ ignoreBurstEnergy: false, added, enemyParticles: enemyP, abyss: abyssCond }).config, seed)).logs);
+    return er.burstSignature((await runGcsimSample(buildAbyss({ ignoreBurstEnergy: false, added, enemyParticles: undefined, abyss: abyssCond }).config, seed)).logs);
   };
   const abDiffers = (a: string, b: string) => er.firstMismatchChar(a, b, er.ER_BURST_DELAY_FRAMES, 0, firstDelay) !== undefined;
   for (const e of ar.entries.filter((x: any) => x.status === 'ok')) {
@@ -199,6 +255,30 @@ if (abyssOutcome.status !== 'ok') {
       for (let seed = 1; seed <= ar.seeds && !anyMismatch; seed++) if (abDiffers(await abBase(seed), await abSig(e.characterId, e.addedEr - 0.15, seed))) anyMismatch = true;
       check(anyMismatch, `[幽境] ${e.name}: 0.15 刻み分小さくすると、どれかの種で爆発がずれる`);
     }
+  }
+}
+// 粒子の書き足し・無効の間の補正（D371）: 実機の実行。いずれも、計算のみ（検証なし）になり、結果に補正の記録が残る
+{
+  const calc = (abyss: any, enemyParticles: any) => er.computeRequiredEr({ build: buildAbyss, abyss, enemyParticles, run: runGcsimSample, gcsimVersion: 'check', verify: false, seeds: 8 });
+  const certainOf = (o: any) => o.result.entries.map((e: any) => (e.status === 'ok' ? e.certainEr : e.status));
+  const two = { ...abyssCond, timedParticles: [{ seconds: 10, amount: 3 }, { seconds: 50, amount: 3 }] };
+  const none = { ...abyssCond, timedParticles: [] as any[] };
+  const oTwo = await calc(two, undefined);
+  const oNone = await calc(none, undefined);
+  const oPlain = await calc({ ...none, invulnerable: [{ fromSeconds: 20, toSeconds: 40 }] }, undefined);
+  const oMix = await calc(abyssCond, enemyP);
+  if ([oTwo, oNone, oPlain, oMix].some(o => o.status !== 'ok')) {
+    console.log(`✗ 書き足しの算出が成功しなかった: ${[oTwo, oNone, oPlain, oMix].map(o => o.status).join(' / ')}`);
+    failed++;
+  } else {
+    check(oTwo.result.adjusted?.timedInjected === 2 && oTwo.result.verified === false && oTwo.result.abyss?.timedParticles.length === 2, `粒子の書き足し（2 件）: 結果に書き足した件数が残り、検証はしない（検証 ${oTwo.result.verified}）`);
+    check(oMix.result.adjusted?.timedInjected === 1 && oMix.result.verified === false, '粒子の書き足し（周期の粒子と併用）: 1 件を書き足し、検証はしない');
+    check(oNone.result.adjusted === undefined, '粒子の書き足し: 時刻指定の粒子が無ければ、補正の記録は残らない');
+    const higher = oNone.result.entries.every((e: any, i: number) => e.status !== 'ok' || oTwo.result.entries[i].status !== 'ok' || oTwo.result.entries[i].certainEr <= e.certainEr + 1e-9);
+    check(higher, `粒子の書き足し: 粒子が増えると、必要な ER は上がらない（書き足しなし ${certainOf(oNone).join('/')} → 2 件 ${certainOf(oTwo).join('/')}）`);
+    check(oPlain.result.adjusted?.invulnerableWindows === 1 && oPlain.result.verified === false, '無効の間の補正: 時間帯があると、補正の記録が残り、検証はしない');
+    const sameVals = oPlain.result.entries.every((e: any, i: number) => e.status === oNone.result.entries[i].status && e.certainEr === oNone.result.entries[i].certainEr);
+    check(sameVals, `無効の間の補正: ダメージが条件の発生源が無い編成（ベネット + 香菱）では、時間帯を入れても値が変わらない（${certainOf(oPlain).join('/')} = ${certainOf(oNone).join('/')}）`);
   }
 }
 // 爆発のタイミングの確認（フェーズ8 段階 2）。まず、並びの比較（合成）

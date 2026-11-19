@@ -138,6 +138,9 @@ export const removePreset = (list: BattleConditionPreset[], id: string): BattleC
  * - 時刻指定の粒子が 1 件以上ある: いちばん遅い 1 件だけ。ほかの時刻指定の粒子と、敵の周期の粒子は、効かない
  * - 時刻指定の粒子が無い: 敵の周期の粒子（個数・間隔が有効なとき）
  * 戻り値: ignoredTimed = 効かない時刻指定の粒子の件数・usedTimedSeconds = 効く 1 件の時刻（無ければ undefined）・periodicIgnored = 敵の周期の粒子が効かない
+ *
+ * これは、**gcsim の実行だけ**に当てはまる制限（DPS 計算・爆発のタイミングの確認）。**ER 計算は、gcsim に渡せない時刻指定の粒子を、アプリが時系列に書き足す**ので、
+ * 制限を受けない（D371。`splitTimedParticles`）
  */
 export function particleLimits(c: Pick<BattleCondition, 'timedParticles' | 'enemyParticles'>): { ignoredTimed: number; usedTimedSeconds?: number; periodicIgnored: boolean } {
   const timed = [...c.timedParticles].sort((a, b) => a.seconds - b.seconds);
@@ -146,12 +149,16 @@ export function particleLimits(c: Pick<BattleCondition, 'timedParticles' | 'enem
   return { ignoredTimed: timed.length - 1, usedTimedSeconds: timed[timed.length - 1].seconds, periodicIgnored: periodicOn };
 }
 
-/** 戦闘条件のうち、ER の計算に渡す分 */
-export const toAbyssRunCondition = (c: BattleCondition): AbyssRunCondition => ({
-  battleSeconds: c.battleSeconds,
-  firstBurstWaitSeconds: c.firstBurstWaitSeconds,
-  timedParticles: c.timedParticles.map(p => ({ ...p })),
-});
+/** 戦闘条件のうち、ER の計算に渡す分（ダメージ無効の時間帯は、あるときだけ入れる） */
+export const toAbyssRunCondition = (c: BattleCondition): AbyssRunCondition => {
+  const invulnerable = c.enemyStates.filter(s => s.kind === 'invulnerable').map(s => ({ fromSeconds: s.fromSeconds, toSeconds: s.toSeconds }));
+  return {
+    battleSeconds: c.battleSeconds,
+    firstBurstWaitSeconds: c.firstBurstWaitSeconds,
+    timedParticles: c.timedParticles.map(p => ({ ...p })),
+    ...(invulnerable.length > 0 ? { invulnerable } : {}),
+  };
+};
 
 /** 2 つの戦闘条件が同じか（結果が、いまの条件で求めたものかの判定に使う） */
 export const sameAbyssRunCondition = (a: AbyssRunCondition | undefined, b: AbyssRunCondition | undefined): boolean => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);

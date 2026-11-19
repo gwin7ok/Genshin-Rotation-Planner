@@ -50,10 +50,10 @@
     "label": "Mode",
     "normal": "Normal",
     "normalTitle": "Normal mode: characters start with full energy. Enemy particles are periodic only (as before)",
-    "abyss": "Abyss",
-    "abyssTitle": "Abyss mode: sets start energy 0, timed particles and the battle length, so the Energy Recharge calc matches an Abyss fight. Results are saved separately from normal mode",
-    "abyssBadge": "Abyss mode",
-    "abyssBadgeTitle": "Abyss mode is on. The Energy Recharge calc uses start energy 0, timed particles and the number of loops (the DPS calc is not available). The mode switch is in the Energy Recharge dialog"
+    "abyss": "Stygian Onslaught",
+    "abyssTitle": "Stygian Onslaught mode: sets start energy 0, timed particles and the battle length, so the Energy Recharge calc matches a Stygian Onslaught fight. Results are saved separately from normal mode",
+    "abyssBadge": "Stygian Onslaught mode",
+    "abyssBadgeTitle": "Stygian Onslaught mode is on. The Energy Recharge calc uses start energy 0, timed particles and the number of loops (the DPS calc is not available). The mode switch is in the Energy Recharge dialog"
   },
   "collapse": {
     "expand": "▼ Show menu",

@@ -264,9 +264,10 @@ export const PartyConfigModal: React.FC<PartyConfigModalProps> = ({
                       : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
                   }`}
                 >
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">
-                    SLOT {idx + 1}
-                  </span>
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="text-[10px] font-bold text-slate-400">SLOT {idx + 1}</span>
+                    {ownedForCurrent(c) && <OwnedBadge />}
+                  </div>
                   <div className={`flex items-center gap-2 ${isEmptySlotCharacter(c) ? 'opacity-50' : ''}`}>
                     <CharacterAvatar char={c} className="w-7 h-7 rounded-lg text-xs" borderWidth={1.5} />
                     <div className="truncate">

@@ -17,6 +17,8 @@ await useNodeGcsim(server);
 const { buildGcsimConfig, targetStatements, DEFAULT_ENEMY } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
 const { runGcsimSample } = await server.ssrLoadModule('/src/utils/gcsim/gcsimClient.ts');
 const dps = await server.ssrLoadModule('/src/utils/gcsim/dpsCalc.ts');
+const es = await server.ssrLoadModule('/src/utils/gcsim/enemyStates.ts');
+const battle = await server.ssrLoadModule('/src/utils/battleCondition.ts');
 
 let failed = 0;
 const check = (ok: boolean, label: string) => {
@@ -85,6 +87,49 @@ const cut = dps.aggregateDps([mk(3), mk(5), mk(4)], 2, 5);
 check(cut.truncated?.count === 2 && cut.truncated?.worst === 3, '周数: 設定（5 周）より少ない実行の数（2 回）と、最も短い周数（3 周）');
 check(dps.aggregateDps([mk(5), mk(5)], 2, 5).truncated === undefined && dps.aggregateDps([mk(1)], 2).truncated === undefined, '周数: すべて終わっている・周数を渡さないときは、知らせない');
 
+// 2b. 幽境モード（段階 4）: 戦闘時間での打ち切りと、敵の状態の時間帯の補正
+check(Math.abs(es.resistMultiplier(0.1) - 0.9) < 1e-12 && Math.abs(es.resistMultiplier(-0.2) - 1.1) < 1e-12 && Math.abs(es.resistMultiplier(0.8) - 1 / 4.2) < 1e-12 && Math.abs(es.resistMultiplier(0) - 1) < 1e-12, '耐性の倍率: 10% → 0.9・−20% → 1.1・80% → 1/4.2（ゲームと同じ式）');
+const sw = es.sanitizeEnemyStates([
+  { fromSeconds: 50, toSeconds: 60, kind: 'invulnerable' },
+  { fromSeconds: 10, toSeconds: 20, kind: 'resist', resist: { pyro: 0.7, hydro: 'x', foo: 1 } },
+  { fromSeconds: 30, toSeconds: 30, kind: 'invulnerable' },
+  { fromSeconds: 30, toSeconds: 20, kind: 'invulnerable' },
+  { fromSeconds: 5, toSeconds: 9, kind: 'resist', resist: {} },
+  { fromSeconds: 'a', toSeconds: 9, kind: 'invulnerable' },
+  { fromSeconds: 0, toSeconds: 9, kind: 'unknown' },
+  null,
+]);
+check(sw.length === 2 && sw[0].kind === 'resist' && sw[0].fromSeconds === 10 && sw[0].resist.pyro === 0.7 && Object.keys(sw[0].resist).length === 1 && sw[1].kind === 'invulnerable' && sw[1].fromSeconds === 50, '時間帯の検査: 終了が開始以前・耐性が空・種類が不明・数でないものは捨て、開始の早い順にそろえる');
+check(es.sanitizeEnemyStates('x').length === 0 && es.sanitizeEnemyStates(Array.from({ length: 30 }, (_, i) => ({ fromSeconds: i, toSeconds: i + 1, kind: 'invulnerable' }))).length === es.ENEMY_STATE_MAX, '時間帯の検査: 配列でなければ空・件数の上限');
+const dmg = (frame: number, damage: number, ele: string, target = 1, char_index = 0) => ({ event: 'damage', frame, msg: 'x', char_index, logs: { damage, ele, target } });
+const base = [dmg(60, 100, 'pyro'), dmg(1200, 100, 'pyro'), dmg(1300, 100, 'hydro'), dmg(3700, 100, 'pyro')];
+const none = dps.summarizeDamage(base, 1);
+check(none.total === 400 && none.stateAdjust === 0 && none.short === false, '補正なし: 合計も補正量も従来どおり（400・0）');
+const wins = es.sanitizeEnemyStates([
+  { fromSeconds: 10, toSeconds: 15, kind: 'invulnerable' },
+  { fromSeconds: 20, toSeconds: 30, kind: 'resist', resist: { pyro: 0.7 } },
+]);
+const adj = dps.summarizeDamage(base, 1, { enemyStates: wins, enemies: [DEFAULT_ENEMY] });
+// 60f(1 秒): 時間帯の外 → 100。1200f(20 秒): 炎の耐性 70% → 100 × 0.3 / 0.9。1300f(21.7 秒): 水は指定なし → 100。3700f(61.7 秒): 時間帯の外 → 100
+const expectedAdj = 100 + 100 * 0.3 / 0.9 + 100 + 100;
+check(Math.abs(adj.total - expectedAdj) < 1e-9 && Math.abs(adj.stateAdjust - (expectedAdj - 400)) < 1e-9, `耐性の変化: 炎だけ（変化後 70%・元 10%）→ ダメージ × 0.3 ÷ 0.9。ほかの元素・時間帯の外は変えない（合計 ${adj.total.toFixed(2)}）`);
+const inv = dps.summarizeDamage([dmg(600, 100, 'pyro'), dmg(899, 50, 'pyro'), dmg(900, 25, 'pyro'), dmg(1000, 10, 'geo', 1, 1)], 2, { enemyStates: es.sanitizeEnemyStates([{ fromSeconds: 10, toSeconds: 15, kind: 'invulnerable' }]), enemies: [DEFAULT_ENEMY] });
+check(inv.total === 35 && inv.byChar[0] === 25 && inv.byChar[1] === 10 && inv.stateAdjust === -150, 'ダメージ無効: 開始以上（10 秒 = 600f・899f）のダメージが 0、終了（15 秒 = 900f）以降は数える。キャラ別も同じ。補正量 −150');
+const both = dps.summarizeDamage([dmg(630, 100, 'pyro')], 1, { enemyStates: es.sanitizeEnemyStates([{ fromSeconds: 10, toSeconds: 20, kind: 'resist', resist: { pyro: 0.7 } }, { fromSeconds: 10, toSeconds: 20, kind: 'invulnerable' }]), enemies: [DEFAULT_ENEMY] });
+check(both.total === 0, '時間帯が重なる: ダメージ無効が、耐性の変化より優先');
+const tg = dps.summarizeDamage([dmg(630, 100, 'pyro', 2)], 1, { enemyStates: es.sanitizeEnemyStates([{ fromSeconds: 10, toSeconds: 20, kind: 'resist', resist: { pyro: 0.7 } }]), enemies: [DEFAULT_ENEMY, { level: 100, resist: { ...DEFAULT_ENEMY.resist, pyro: -0.2 } }] });
+check(Math.abs(tg.total - 100 * 0.3 / 1.1) < 1e-9, '敵が複数: ログの target（1 始まり）の敵の元の耐性（−20%）で補正する');
+const unk = dps.summarizeDamage([{ event: 'damage', frame: 630, msg: 'x', char_index: 0, logs: { damage: 100 } }], 1, { enemyStates: es.sanitizeEnemyStates([{ fromSeconds: 10, toSeconds: 20, kind: 'resist', resist: { pyro: 0.7 } }]), enemies: [DEFAULT_ENEMY] });
+check(unk.total === 100, '元素のログが無いダメージは、耐性の変化の補正をしない');
+// 戦闘時間: それより後のダメージ・爆発待ちは数えない。時間 = 戦闘時間（終わるのが早ければ、終わった時刻）
+const cutLogs = [dmg(60, 100, 'pyro'), dmg(1800, 100, 'pyro'), dmg(1801, 100, 'pyro'), { event: 'action', frame: 2400, msg: 'executed attack', char_index: 0 }, { event: 'sim', frame: 2000, msg: 'could not execute burst; action not ready', char_index: 0 }];
+const bc = dps.summarizeDamage(cutLogs, 1, { battleSeconds: 30 });
+check(bc.total === 200 && bc.seconds === 30 && bc.short === false && bc.energyWaits[0] === 0, '戦闘時間 30 秒: 1800f までのダメージだけ数える。時間は 30 秒。戦闘後の爆発待ちは数えない');
+const sh = dps.summarizeDamage([dmg(60, 100, 'pyro'), dmg(600, 100, 'pyro')], 1, { battleSeconds: 30 });
+check(sh.short === true && sh.seconds === 10 && sh.total === 200, '戦闘時間より早く終わった実行: 終わった時刻（10 秒）で計算し、short = true');
+const aggShort = dps.aggregateDps([{ ...mk(1), stateAdjust: -10, short: true }, { ...mk(1), stateAdjust: -30, short: false }], 2);
+check(aggShort.shortRuns === 1 && aggShort.stateAdjust === -20 && dps.aggregateDps([mk(1)], 2).shortRuns === undefined, '集計: 戦闘時間に届かなかった実行の数と、補正量の平均（未指定なら無し・0）');
+
 // 3. 実機（ベネット + 香菱）
 const raw = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
 const all: any[] = Array.isArray(raw) ? raw : raw.characters ?? Object.values(raw);
@@ -124,6 +169,42 @@ if (o2.status === 'ok' && o5.status === 'ok') {
   check(!withEnergy.config.includes('ignore_burst_energy') && withEnergy.config.includes('energy every interval=300,480 amount=1;') && c2.config.includes('ignore_burst_energy=true') && !c2.config.includes('energy every'), 'エネルギーを考慮: ignore_burst_energy が無く、敵の粒子の行が出る（考慮しない場合は、従来どおり）');
   const oe = await dps.computeDps({ config: withEnergy, runs: 3, parallel: 3, run: runGcsimSample });
   check(oe.status === 'ok' && oe.result.dps.mean > 0, 'エネルギーを考慮した設定文が実行できる');
+  // 幽境モード（段階 4）: 戦闘時間から周数を決め、開始エネルギー 0・時刻指定の粒子で回す。ダメージ無効の時間帯は、同じログを補正するだけ
+  const abyssCfg = buildGcsimConfig({ characters: chars, stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons: [wB, wX], artifacts: [], ignoreBurstEnergy: false, startEnergyZero: true, battleSeconds: 40, enemyParticles: { minSeconds: 1, maxSeconds: 2, amount: 10 } }); // 粒子を多くして、0 スタートでも爆発が撃てる（この確認は、爆発が撃てることが目的ではない）
+  check(Number.isInteger(abyssCfg.loopIterations) && abyssCfg.loopIterations >= 2, `設定文の結果に、周数（loopIterations）が入る（戦闘 40 秒 → ${abyssCfg.loopIterations} 周）`);
+  check(abyssCfg.config.includes('start_energy=0') && abyssCfg.config.includes('energy every interval=60,120 amount=10;') && abyssCfg.config.includes(`while i <= ${abyssCfg.loopIterations} {`), '幽境モードの設定文: 開始エネルギー 0・敵の周期の粒子・自動の周数');
+  // gcsim の粒子の設定（energy の行）は、最後の 1 行しか使われない（D369）。この制限が変わったら（gcsim を更新したときなど）、ここが落ちるので、画面の制限の知らせ（particleLimits）を見直す
+  const withEnergyLines = (lines: string[]) => abyssCfg.config.split('\n').filter(l => !l.startsWith('energy ')).join('\n').replace('active bennett;', [...lines, 'active bennett;'].join('\n'));
+  const enemyDrops = async (lines: string[]) => {
+    const r = await runGcsimSample(withEnergyLines(lines), 1);
+    if (r.status !== 'ok') return `error: ${r.message}`;
+    const frames = [...new Set(r.logs.filter((x: any) => x.event === 'energy' && x.msg === 'particle' && x.logs?.is_active && x.logs?.source !== 'bennett' && x.logs?.source !== 'xiangling').map((x: any) => x.frame))];
+    return frames.length > 3 ? 'every' : frames.join(',');
+  };
+  const O1 = 'energy once interval=120 amount=3;';
+  const O2 = 'energy once interval=600 amount=2;';
+  const EV = 'energy every interval=300,480 amount=1;';
+  check(await enemyDrops([O1]) === '121' && await enemyDrops([O1, O2]) === '601' && await enemyDrops([EV, O1]) === '121' && await enemyDrops([O1, EV]) === 'every', 'gcsim の粒子の設定は、最後の 1 行だけ有効（once 2 行 → 後ろだけ。every と once → 後ろだけ）');
+  const bc = (timed: { seconds: number; amount: number }[], amount = 1, maxSeconds = 8) => ({ timedParticles: timed, enemyParticles: { minSeconds: 5, maxSeconds, amount } });
+  const lim0 = battle.particleLimits(bc([]));
+  const lim1 = battle.particleLimits(bc([{ seconds: 30, amount: 3 }]));
+  const lim3 = battle.particleLimits(bc([{ seconds: 60, amount: 3 }, { seconds: 10, amount: 1 }, { seconds: 30, amount: 2 }]));
+  check(lim0.ignoredTimed === 0 && !lim0.periodicIgnored && lim1.ignoredTimed === 0 && lim1.periodicIgnored && lim1.usedTimedSeconds === 30 && lim3.ignoredTimed === 2 && lim3.usedTimedSeconds === 60, '粒子の制限の判定: 時刻指定なし → 制限なし。1 件 → 周期の粒子が効かない。3 件 → いちばん遅い 1 件（60 秒）だけが効き、2 件が無視される');
+  check(!battle.particleLimits(bc([{ seconds: 30, amount: 3 }], 0)).periodicIgnored && !battle.particleLimits(bc([{ seconds: 30, amount: 3 }], 1, 0)).periodicIgnored, '粒子の制限の判定: 敵の周期の粒子が個数 0・間隔の最大 0（出さない設定）なら、効かないものは無い');
+  check(c2.loopIterations === 2 && c5.loopIterations === 5, '通常モードの周数: 指定した周数のまま（結果にも入る）');
+  const ctx = { battleSeconds: 40, enemies: [DEFAULT_ENEMY] };
+  const plain = await dps.computeDps({ config: abyssCfg, runs: 4, parallel: 4, run: runGcsimSample, context: ctx });
+  const stateWins = es.sanitizeEnemyStates([{ fromSeconds: 5, toSeconds: 15, kind: 'invulnerable' }, { fromSeconds: 20, toSeconds: 30, kind: 'resist', resist: { pyro: 0.7 } }]);
+  const withWin = await dps.computeDps({ config: abyssCfg, runs: 4, parallel: 4, run: runGcsimSample, context: { ...ctx, enemyStates: stateWins } });
+  check(plain.status === 'ok' && withWin.status === 'ok', '幽境モードの設定文が実行できる');
+  if (plain.status === 'ok' && withWin.status === 'ok') {
+    const p = plain.result;
+    const w = withWin.result;
+    console.log(`  幽境 40 秒: DPS ${p.dps.mean.toFixed(0)}（時間 ${p.seconds.toFixed(1)} 秒）→ 時間帯あり ${w.dps.mean.toFixed(0)}（補正 ${w.stateAdjust.toFixed(0)}）`);
+    check(p.stateAdjust === 0 && w.stateAdjust < 0, '時間帯なしは補正 0・ダメージ無効と耐性変化ありは、ダメージが減る');
+    check(Math.abs(w.total.mean - (p.total.mean + w.stateAdjust)) < 1e-6 * p.total.mean, '補正後の総ダメージ = 補正前の総ダメージ + 補正量（同じ種・同じログから補正するだけ）');
+    check(p.seconds <= 40 + 1e-9 && p.total.mean > 0 && p.runs === 4, '戦闘時間 40 秒までで数える（時間が 40 秒を超えない）');
+  }
   const seen: { done: number; mean?: number }[] = [];
   await dps.computeDps({ config: c2, runs: 4, parallel: 2, run: runGcsimSample, onProgress: (pr: any) => seen.push({ done: pr.done, mean: pr.partial?.dps.mean }) });
   check(seen.length === 3 && seen[0].mean === undefined && seen[1].done === 2 && (seen[1].mean ?? 0) > 0 && seen[2].done === 4, '途中経過: 実行を終えるごとに、ここまでの平均 DPS が渡る');

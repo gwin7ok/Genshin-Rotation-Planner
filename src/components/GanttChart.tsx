@@ -43,8 +43,9 @@ import type { GenshinDatabase } from '../types/database';
 import type { BuffOverlapSegment } from '../utils/rotationCalculator';
 import { GANTT_LABEL_WIDTH } from '../utils/ganttLayout';
 import { summarizeEquipment, constellationOf } from '../utils/equipmentSummary';
-import { t, currentLanguage } from '../i18n';
+import { t, currentLanguage, dotMark, type TranslationKey } from '../i18n';
 import { charName, actionName } from '../i18n/loc';
+import type { EnemyStateWindow } from '../utils/gcsim/enemyStates';
 
 // Organization structure for active buffs into independent non-overlapping rows.
 // Distinct buffs (such as Xiangling's E and Q effects) are placed on separate independent rows.
@@ -223,6 +224,11 @@ interface GanttChartProps {
   elapsedTime: number;
   /** 全体の行で、武器・聖遺物の発動バフを引くマスターデータ */
   database?: GenshinDatabase;
+  /**
+   * 幽境モードの、敵の状態の時間帯（戦闘開始からの秒。ダメージ無効・敵耐性の変化。D368）。あるときだけ、「敵の状態」の行を出す。
+   * チャートの時刻（ローテーションの計画した時刻。0 秒 = 戦闘開始）の位置に出す。実際の戦闘（gcsim）は、爆発のエネルギー待ちなどで計画より遅れるので、目安
+   */
+  enemyStateBands?: EnemyStateWindow[];
 }
 
 export const GanttChart: React.FC<GanttChartProps> = ({
@@ -255,6 +261,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({
   loopStartIndex = 0,
   onUpdateLoopStartIndex,
   switchDelay = 0.5,
+  enemyStateBands = [],
 }) => {
   const [pixelsPerSecond, setPixelsPerSecond] = useState<number>(55);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
@@ -1062,6 +1069,35 @@ export const GanttChart: React.FC<GanttChartProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* 敵の状態の時間帯（幽境モード。ダメージ無効・敵耐性の変化。チャートの範囲に入る分だけ） */}
+              {enemyStateBands.some(w => w.fromSeconds < totalDuration) && (
+                <div className="flex border-b border-fuchsia-900/60 bg-slate-950 items-center h-6 select-none" data-testid="gantt-enemy-state-row">
+                  <div style={{ width: GANTT_LABEL_WIDTH }} className="shrink-0 px-3 border-r border-slate-800 flex items-center text-[11px] font-bold text-fuchsia-300 sticky left-0 z-30 bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)] h-full" title={t('chart:gantt.enemyStateRowTitle')}>
+                    <span className="truncate">{t('chart:gantt.enemyStateRow')}</span>
+                  </div>
+                  <div className="relative flex-1 h-full bg-slate-950/80">
+                    {enemyStateBands.filter(w => w.fromSeconds < totalDuration).map((w, i) => {
+                      const to = Math.min(w.toSeconds, totalDuration);
+                      const resistText = w.kind === 'resist' && w.resist
+                        ? Object.entries(w.resist).map(([k, v]) => `${t(`gcsim:dps.resist.${k}` as TranslationKey)} ${Math.round((v as number) * 1000) / 10}%`).join(dotMark)
+                        : '';
+                      const label = w.kind === 'invulnerable' ? t('chart:gantt.enemyStateInvulnerable') : t('chart:gantt.enemyStateResist', { resist: resistText });
+                      return (
+                        <div
+                          key={`enemy_state_${i}`}
+                          style={{ left: `${w.fromSeconds * pixelsPerSecond}px`, width: `${Math.max(2, (to - w.fromSeconds) * pixelsPerSecond)}px` }}
+                          className={`absolute inset-y-0.5 rounded-sm border px-1 flex items-center overflow-hidden pointer-events-auto ${w.kind === 'invulnerable' ? 'bg-slate-500/40 border-slate-300/60 text-slate-100' : 'bg-fuchsia-500/25 border-fuchsia-400/60 text-fuchsia-100'}`}
+                          title={t('chart:gantt.enemyStateTitle', { label, from: w.fromSeconds, to: w.toSeconds })}
+                          data-testid="gantt-enemy-state-band"
+                        >
+                          <span className="text-[10px] font-bold truncate">{label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* 2. Top Time Ruler（経過時間の目盛り） */}
               <div className="flex border-b border-slate-800 bg-slate-900 h-6">

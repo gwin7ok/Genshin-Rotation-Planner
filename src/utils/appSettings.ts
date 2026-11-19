@@ -2,7 +2,8 @@
  * アプリ全体の設定（回転ごとではなく、利用者ごとの設定）の読み書き。D175。
  * 保存先は persistence.ts（キーは SETTING_KEYS）。画面の初期値の読み込みと、変更の保存に使う。
  */
-import { DEFAULT_HURT, DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type HurtSetting, type EnemySetting } from './gcsim/buildGcsimConfig';
+import { DEFAULT_HURT, DEFAULT_ENEMY, type HurtSetting } from './gcsim/buildGcsimConfig';
+import { sanitizeEnemies } from './gcsim/enemyStates';
 import { DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsSettings } from './gcsim/dpsCalc';
 import { ER_DEFAULT_ENEMY_PARTICLES, type RequiredErResult } from './gcsim/requiredEnergyRecharge';
 import { sanitizeBattleCondition, sanitizeBattlePresets, type AppMode, type BattleCondition, type BattleConditionPreset } from './battleCondition';
@@ -88,12 +89,7 @@ export function loadDpsSettings(): DpsSettings {
   const v = readJson<Partial<DpsSettings>>(SETTING_KEYS.dpsSettings);
   if (!v || typeof v !== 'object') return d;
   const int = (x: unknown, lo: number, hi: number, fb: number) => (Number.isFinite(x) ? Math.min(hi, Math.max(lo, Math.floor(x as number))) : fb);
-  const enemies: EnemySetting[] = Array.isArray(v.enemies)
-    ? v.enemies.slice(0, DPS_MAX_ENEMIES).filter(e => e && typeof e === 'object').map(e => ({
-      level: int((e as EnemySetting).level, 1, 200, DEFAULT_ENEMY.level),
-      resist: Object.fromEntries(ENEMY_RESIST_KEYS.map(k => [k, Number.isFinite((e as EnemySetting).resist?.[k]) ? (e as EnemySetting).resist[k] : DEFAULT_ENEMY.resist[k]])) as EnemySetting['resist'],
-    }))
-    : [];
+  const enemies = sanitizeEnemies(v.enemies, DPS_MAX_ENEMIES);
   const pv = v.particles as Partial<DpsSettings['particles']> | undefined;
   const nn = (x: unknown, fb: number) => (Number.isFinite(x) && (x as number) >= 0 ? (x as number) : fb);
   const particles = { minSeconds: nn(pv?.minSeconds, d.particles.minSeconds), maxSeconds: nn(pv?.maxSeconds, d.particles.maxSeconds), amount: nn(pv?.amount, d.particles.amount) };

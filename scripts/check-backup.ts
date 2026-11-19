@@ -476,6 +476,30 @@ check('戦闘条件の保存: 壊れた項目・id の重複・上限・範囲�
   assert.equal(r.reason, 'full', '上限に達していると、新しく足せない');
   assert.equal(battle.savePreset(full, 'n0', battle.defaultBattleCondition(), () => 'new').overwritten, true, '上限でも、同じ名前の上書きはできる');
 });
+check('戦闘条件の保存: 敵・敵の状態の時間帯（段階 4。D368）を含めて往復し、無い・壊れた項目は既定に直す', () => {
+  store.clear();
+  const boss = {
+    ...battle.defaultBattleCondition(),
+    enemies: [{ level: 95, resist: { physical: 0.1, pyro: -0.2, hydro: 0.1, cryo: 0.1, electro: 0.1, anemo: 0.1, geo: 0.1, dendro: 0.1 } }],
+    enemyStates: [{ fromSeconds: 20, toSeconds: 30, kind: 'invulnerable' }, { fromSeconds: 40, toSeconds: 60, kind: 'resist', resist: { pyro: 0.7, geo: -0.1 } }],
+  };
+  const r = battle.savePreset([], 'ボス', boss, () => 'p1');
+  assert.equal(settings.saveBattlePresets(r.list), true);
+  const back = settings.loadBattlePresets();
+  assert.deepEqual(back[0].condition.enemies, boss.enemies, '敵のレベル・耐性が往復する');
+  assert.deepEqual(back[0].condition.enemyStates, boss.enemyStates, '敵の状態の時間帯が往復する');
+  // 敵・時間帯が無い古い保存は、既定（敵 1 体・時間帯なし）
+  const old = battle.sanitizeBattleCondition({ battleSeconds: 100 });
+  assert.equal(old.enemies.length, 1);
+  assert.equal(old.enemies[0].level, 100);
+  assert.deepEqual(old.enemyStates, []);
+  // 壊れた時間帯・敵は直す
+  const fixed = battle.sanitizeBattleCondition({ enemies: [{ level: 9999, resist: { pyro: 'x' } }, 'bad'], enemyStates: [{ fromSeconds: 5, toSeconds: 3, kind: 'invulnerable' }, { fromSeconds: 1, toSeconds: 2, kind: 'invulnerable' }] });
+  assert.equal(fixed.enemies.length, 1);
+  assert.equal(fixed.enemies[0].level, 200, 'レベルは上限に収める');
+  assert.equal(fixed.enemies[0].resist.pyro, 0.1, '耐性の不正な値は既定');
+  assert.equal(fixed.enemyStates.length, 1, '終了が開始以前の時間帯は捨てる');
+});
 
 // --- 反応の行（gcsim の結果）の保存: gcsim のバージョンつき。古いバージョンのものは出さない（D205） ---
 const savedReactions = await server.ssrLoadModule('/src/utils/gcsim/savedReactions.ts');

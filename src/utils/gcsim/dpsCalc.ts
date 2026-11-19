@@ -9,7 +9,8 @@
 import type { GcsimConfigResult, EnemySetting } from './buildGcsimConfig';
 import type { GcsimLogEvent, GcsimSampleResult } from './gcsimClient';
 import { GCSIM_FPS } from './readGcsimLog';
-import type { EnemyParticles } from './requiredEnergyRecharge';
+import type { EnemyParticles, TimedParticle } from './requiredEnergyRecharge';
+import { makeDamageFactor, type EnemyStateWindow } from './enemyStates';
 
 /** 周数の既定・上限 */
 export const DPS_DEFAULT_LOOPS = 5;
@@ -19,6 +20,13 @@ export const DPS_DEFAULT_RUNS = 100;
 export const DPS_MAX_RUNS = 1000;
 /** 敵の数の上限 */
 export const DPS_MAX_ENEMIES = 4;
+
+/** 幽境モードの DPS 計算で、設定文に足す条件（戦闘時間から周数を自動で決める。エネルギーを考慮するときは、開始エネルギー 0 と時刻指定の粒子） */
+export interface DpsAbyssRun {
+  battleSeconds: number;
+  startEnergyZero: boolean;
+  timedParticles: TimedParticle[];
+}
 
 /** 画面の入力（保存する） */
 export interface DpsSettings {
@@ -31,10 +39,25 @@ export interface DpsSettings {
   particles: EnemyParticles;
 }
 
+/**
+ * 幽境モードの集計の条件（フェーズ8。段階 4）。無ければ、従来どおり（時間の区切りも補正もなし）。
+ * - battleSeconds: 戦闘時間。この時刻までのダメージ・爆発待ちだけを数え、DPS = ダメージ ÷ 戦闘時間（ローテーションが終わるのが早いときは、終わった時刻）
+ * - enemyStates・enemies: 敵の状態の時間帯の補正（enemyStates.ts）。enemies は、補正の元になる耐性
+ */
+export interface DamageContext {
+  battleSeconds?: number;
+  enemyStates?: EnemyStateWindow[];
+  enemies?: EnemySetting[];
+}
+
 /** 1 回の実行の集計 */
 export interface DpsRun {
-  /** 総ダメージ */
+  /** 総ダメージ（敵の状態の時間帯の補正後） */
   total: number;
+  /** 敵の状態の時間帯の補正で増減したダメージ（補正後 − 補正前。マイナス = 減った。補正が無ければ 0） */
+  stateAdjust: number;
+  /** 戦闘時間まで、ローテーションが続かなかった（戦闘時間を指定したときだけ。true = 終わるのが早かった） */
+  short: boolean;
   /** 経過時間（秒） */
   seconds: number;
   /** キャラ別のダメージ（char_index の順） */
@@ -49,7 +72,10 @@ export interface DpsRun {
 
 /**
  * ログから 1 回分を集計する。char_index が範囲外のダメージは、総ダメージにだけ入れる */
-export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): DpsRun {
+export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number, context?: DamageContext): DpsRun {
+  const battleFrames = context?.battleSeconds !== undefined && Number.isFinite(context.battleSeconds) && context.battleSeconds > 0 ? Math.round(context.battleSeconds * GCSIM_FPS) : undefined;
+  const factorOf = makeDamageFactor(context?.enemyStates, context?.enemies);
+  let stateAdjust = 0;
   const byChar = new Array<number>(memberCount).fill(0);
   const energyWaits = new Array<number>(memberCount).fill(0);
   const energyWaitFrames = new Array<number>(memberCount).fill(0);
@@ -73,17 +99,23 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
     if (l.event === 'user') {
       if (/^loop \d+$/.test(l.msg)) loopsStarted++;
     } else if (l.event === 'damage') {
-      const d = Number((l.logs as { damage?: unknown } | undefined)?.damage);
-      if (!Number.isFinite(d)) continue;
+      const raw = Number((l.logs as { damage?: unknown } | undefined)?.damage);
+      if (!Number.isFinite(raw)) continue;
+      if (l.frame > endFrame) endFrame = l.frame;
+      // 戦闘時間より後のダメージは数えない
+      if (battleFrames !== undefined && l.frame > battleFrames) continue;
+      const lg = l.logs as { ele?: unknown; target?: unknown } | undefined;
+      const d = raw * factorOf(l.frame, lg?.ele, lg?.target);
+      stateAdjust += d - raw;
       total += d;
       if (l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) byChar[l.char_index] += d;
-      if (l.frame > endFrame) endFrame = l.frame;
     } else if (l.event === 'action' && l.msg.startsWith('executed ') && l.frame > endFrame) {
       endFrame = l.frame;
     } else if (l.event === 'cooldown' && l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) {
       if (l.msg === 'burst cooldown triggered') burstCd[l.char_index] = true;
       else if (l.msg === 'burst cooldown ready') burstCd[l.char_index] = false;
     } else if (l.event === 'sim' && l.msg.startsWith('could not execute burst') && l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) {
+      if (battleFrames !== undefined && l.frame > battleFrames) continue;
       const i = l.char_index;
       if (l.frame !== waitLast[i] && l.frame !== waitLast[i] + 1) closeWait(i);
       waitLast[i] = l.frame;
@@ -94,7 +126,10 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number): Dps
     }
   }
   for (let i = 0; i < memberCount; i++) closeWait(i);
-  return { total, seconds: endFrame / GCSIM_FPS, byChar, energyWaits, energyWaitFrames, loopsStarted };
+  // 戦闘時間を指定したとき: 時間は戦闘時間（それより早く終わったときは、終わった時刻）
+  const short = battleFrames !== undefined && endFrame < battleFrames;
+  const seconds = (battleFrames !== undefined ? Math.min(endFrame, battleFrames) : endFrame) / GCSIM_FPS;
+  return { total, stateAdjust, short, seconds, byChar, energyWaits, energyWaitFrames, loopsStarted };
 }
 
 export interface DpsStats {
@@ -134,6 +169,10 @@ export interface DpsResult {
   energyWaitSeconds: number | null;
   /** 設定の周数より少ない周数で打ち切られた実行（count = その実行の数・worst = 最も短かった実行の周数）。無ければ undefined */
   truncated?: { count: number; worst: number };
+  /** 敵の状態の時間帯の補正で増減したダメージの平均（1 回の実行あたり。マイナス = 減った。補正が無ければ 0）。総ダメージは補正後 */
+  stateAdjust: number;
+  /** 戦闘時間まで、ローテーションが続かなかった実行の数（戦闘時間を指定したときだけ。無ければ undefined） */
+  shortRuns?: number;
 }
 
 /** 待ち 1 回あたりの平均の待ち時間（秒）。全実行の合計フレーム ÷ 全実行の合計回数（実行ごとの平均の平均にはしない）。待ちが 1 回も無ければ null */
@@ -157,10 +196,13 @@ export function aggregateDps(runs: DpsRun[], memberCount: number, loops?: number
     const energyWaits = valid.length ? waitCounts[i] / valid.length : 0;
     return { damage, dps: cdps, share: meanTotal > 0 ? damage / meanTotal : 0, energyWaits, energyWaitSeconds: waitSecondsOf(waitFrames[i], waitCounts[i]) };
   });
+  const shortRuns = valid.filter(r => r.short).length;
   return {
     runs: valid.length, dps, total, seconds, byChar,
     energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0), energyWaitSeconds: waitSecondsOf(sum(waitFrames), sum(waitCounts)),
     ...(cut.length > 0 ? { truncated: { count: cut.length, worst: Math.min(...cut.map(r => r.loopsStarted)) } } : {}),
+    stateAdjust: valid.length ? valid.reduce((a, r) => a + (r.stateAdjust ?? 0), 0) / valid.length : 0,
+    ...(shortRuns > 0 ? { shortRuns } : {}),
   };
 }
 
@@ -182,6 +224,8 @@ export async function computeDps(args: {
   runs: number;
   /** ローテーションの周数（設定文の loopIterations）。渡すと、これより少ない周数で打ち切られた実行を数える */
   loops?: number;
+  /** 幽境モード: 戦闘時間・敵の状態の時間帯の補正（無ければ、従来どおり） */
+  context?: DamageContext;
   parallel: number;
   run: (config: string, seed: number) => Promise<GcsimSampleResult>;
   onProgress?: (p: DpsProgress) => void;
@@ -199,7 +243,7 @@ export async function computeDps(args: {
     const results = await Promise.all(seeds.map(seed => run(config.config, seed)));
     for (const r of results) {
       if (r.status !== 'ok') return { status: r.status, message: r.message };
-      collected.push(summarizeDamage(r.logs, config.members.length));
+      collected.push(summarizeDamage(r.logs, config.members.length, args.context));
     }
     args.onProgress?.({ done: collected.length, total: runs, partial: aggregateDps(collected, config.members.length, args.loops) });
   }

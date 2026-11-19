@@ -16,7 +16,8 @@ import { evaluateVersionNotice, markVersionSeen } from './utils/versionNotice';
 import { setWriteFailureHandler } from './utils/persistence';
 import { describeSkipped, parseRotationPayload, totalSkipped } from './utils/rotationValidation';
 import { DATABASE_VERSION } from './data/databaseMaster';
-import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode, loadAppMode, saveAppMode } from './utils/appSettings';
+import { loadDefHalt, saveDefHalt, loadHurt, saveHurt, loadNotationMode, saveNotationMode, loadAppMode, saveAppMode, loadBattleCondition } from './utils/appSettings';
+import type { EnemyStateWindow } from './utils/gcsim/enemyStates';
 import type { AppMode } from './utils/battleCondition';
 import { checkWasmVersionMismatch } from './utils/gcsim/gcsimWasm.ts';
 import { GCSIM_COMMIT, GCSIM_VERSION } from './utils/gcsim/gcsimConfig.ts';
@@ -29,6 +30,7 @@ import { GcsimConfigDialog } from './components/GcsimConfigDialog';
 import { EnergyRechargeDialog } from './components/EnergyRechargeDialog';
 import { DpsDialog } from './components/DpsDialog';
 import { ER_LOOP_ITERATIONS, type AbyssRunCondition, type EnemyParticles } from './utils/gcsim/requiredEnergyRecharge';
+import type { DpsAbyssRun } from './utils/gcsim/dpsCalc';
 import { resetToAppCalculation } from './utils/gcsim/resetToAppCalculation';
 import { extractReactionRows, anchorReactionRows, reactionLapInputs } from './utils/gcsim/readReactions';
 import { applyDragPreview, type DragPreview } from './utils/dragPreview';
@@ -120,6 +122,11 @@ export default function App() {
     setAppModeState(mode);
     saveAppMode(mode);
   };
+  // 幽境モードの、敵の状態の時間帯（ガントチャートの「敵の状態」の行）。DPS 計算・チャージ効率計算の画面で変わるので、それらを開閉したとき・モードを切り替えたときに読み直す
+  const [enemyStateBands, setEnemyStateBands] = useState<EnemyStateWindow[]>(() => (loadAppMode() === 'abyss' ? loadBattleCondition().enemyStates : []));
+  useEffect(() => {
+    setEnemyStateBands(appMode === 'abyss' ? loadBattleCondition().enemyStates : []);
+  }, [appMode, isDpsOpen, isEnergyRechargeOpen]);
   const [defHalt, setDefHaltState] = useState<boolean>(() => loadDefHalt());
   const setDefHalt = (value: boolean) => {
     setDefHaltState(value);
@@ -549,9 +556,11 @@ export default function App() {
   // スキル・爆発の効果と gcsim のキーの紐付け（アクション定義から集める。gcsim の結果の書き戻しに使う）
   const actionLinks = useMemo(() => buildActionLinkTables(characters), [characters]);
   // 指定の出場・計算結果から gcsim の設定文を作る（コピー・「gcsim で計算」・反映後の「確認済み」の判定で使う）
-  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles }) => buildGcsimConfig({
+  const buildGcsimConfigFor = (stintsArg: Stint[], calculatedArg: typeof calculatedResult, erExtra?: { ignoreBurstEnergy: boolean; added: Record<string, number>; enemyParticles?: EnemyParticles; abyss?: AbyssRunCondition }, dpsExtra?: { loopIterations: number; enemies: EnemySetting[]; ignoreBurstEnergy: boolean; enemyParticles?: EnemyParticles; abyss?: DpsAbyssRun }) => buildGcsimConfig({
       characters,
       ...(dpsExtra ? { loopIterations: dpsExtra.loopIterations, enemies: dpsExtra.enemies, ignoreBurstEnergy: dpsExtra.ignoreBurstEnergy, enemyParticles: dpsExtra.enemyParticles } : {}),
+      // 幽境モードの DPS 計算: 戦闘時間から周数を決める。エネルギーを考慮するときは、開始エネルギー 0・時刻指定の粒子
+      ...(dpsExtra?.abyss ? { startEnergyZero: dpsExtra.abyss.startEnergyZero, timedParticles: dpsExtra.abyss.timedParticles, battleSeconds: dpsExtra.abyss.battleSeconds } : {}),
       ...(erExtra ? { ignoreBurstEnergy: erExtra.ignoreBurstEnergy, addedEnergyRechargeByCharacterId: erExtra.added, loopIterations: ER_LOOP_ITERATIONS, tightDuration: true, enemyParticles: erExtra.enemyParticles } : {}),
       // 幽境モード: 開始エネルギー 0・時刻指定の粒子・戦闘時間（周数は、ローテーションの長さから自動で決まる）
       ...(erExtra?.abyss ? { startEnergyZero: true, timedParticles: erExtra.abyss.timedParticles, battleSeconds: erExtra.abyss.battleSeconds } : {}),
@@ -958,6 +967,7 @@ export default function App() {
           loopStartIndex={loopStartIndex}
           onUpdateLoopStartIndex={setLoopStartIndex}
           switchDelay={switchDelay}
+          enemyStateBands={enemyStateBands}
         />
 
         {/* 2-Tier Sequence Editor (Macro Stint DnD + Micro Action Reordering) */}

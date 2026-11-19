@@ -53,7 +53,7 @@
     "abyss": "Abyss",
     "abyssTitle": "Abyss mode: sets start energy 0, timed particles and the battle length, so the Energy Recharge calc matches an Abyss fight. Results are saved separately from normal mode",
     "abyssBadge": "Abyss mode",
-    "abyssBadgeTitle": "Abyss mode is on. The Energy Recharge calc uses start energy 0, timed particles and the battle length (the DPS calc does not support the Abyss conditions yet)"
+    "abyssBadgeTitle": "Abyss mode is on. The Energy Recharge calc and the DPS calc use start energy 0, timed particles and the battle length (the DPS calc also corrects the damage by the enemy-state periods)"
   },
   "collapse": {
     "expand": "▼ Show menu",

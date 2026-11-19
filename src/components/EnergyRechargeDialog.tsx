@@ -10,9 +10,10 @@ import { runGcsimSample } from '../utils/gcsim/gcsimClient';
 import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
 import { computeBurstTiming, BURST_TIMING_ON_TIME_SECONDS, type BurstTimingResult } from '../utils/gcsim/burstTiming';
-import { loadBattleCondition, loadBattlePresets, loadRequiredEr, saveBattleCondition, saveBattlePresets, saveRequiredEr } from '../utils/appSettings';
-import { BATTLE_PRESET_MAX, BATTLE_PRESET_NAME_MAX, defaultBattleCondition, removePreset, sameAbyssRunCondition, sanitizeBattleCondition, savePreset, toAbyssRunCondition, type AppMode, type BattleCondition, type BattleConditionPreset } from '../utils/battleCondition';
-import { useDialogs } from './DialogProvider';
+import { loadBattleCondition, loadRequiredEr, saveBattleCondition, saveRequiredEr } from '../utils/appSettings';
+import { defaultBattleCondition, sameAbyssRunCondition, sanitizeBattleCondition, toAbyssRunCondition, type AppMode, type BattleCondition } from '../utils/battleCondition';
+import { BattlePresetsPanel } from './BattlePresetsPanel';
+import { ParticleLimitNotice } from './ParticleLimitNotice';
 import {
   computeRequiredEr,
   fingerprintOf,
@@ -61,10 +62,6 @@ const formatDuration = (ms: number): string => {
 /** チャージ効率計算（フェーズ7）: 全キャラの爆発が毎周出るために必要な ER を、gcsim で求めて表示する。結果は保存し、開き直すと最後の結果を表示する */
 export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOpen, onClose, build, characters, database, mode = 'normal' }) => {
   const isAbyss = mode === 'abyss';
-  const { confirm, alert: showAlert } = useDialogs();
-  // 名前を付けて保存した戦闘条件（幽境モード。ボスごとの条件の呼び出し。D367）
-  const [presets, setPresets] = useState<BattleConditionPreset[]>([]);
-  const [presetName, setPresetName] = useState('');
   const [saved, setSaved] = useState<RequiredErResult | null>(null);
   const [currentFingerprint, setCurrentFingerprint] = useState<string | null>(null);
   const [notRunnable, setNotRunnable] = useState<string[]>([]);
@@ -89,6 +86,8 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
   const [firstWait, setFirstWait] = useState(defaultBattleCondition().firstBurstWaitSeconds.toFixed(1));
   const [timed, setTimed] = useState<TimedInput[]>([]);
   const timedKey = useRef(0);
+  // 戦闘条件のうち、この画面では編集しない分（敵・敵の状態の時間帯。DPS 計算の画面で編集する）。保存するとき・名前を付けて保存するときに、そのまま持ち回る
+  const [dpsPart, setDpsPart] = useState<Pick<BattleCondition, 'enemies' | 'enemyStates'>>(() => { const d = defaultBattleCondition(); return { enemies: d.enemies, enemyStates: d.enemyStates }; });
   const [seeds, setSeeds] = useState(String(ER_DEFAULT_SEEDS));
   // 爆発のタイミングの確認（幽境モード。結果は保存しない。編成・条件が変わったら表示しない）
   const [timing, setTiming] = useState<{ key: string; result: BurstTimingResult } | null>(null);
@@ -116,13 +115,12 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
       setBattleSeconds(String(cond.battleSeconds));
       setFirstWait(cond.firstBurstWaitSeconds.toFixed(1));
       setTimed(cond.timedParticles.map(p => ({ key: ++timedKey.current, seconds: String(p.seconds), amount: String(p.amount) })));
+      setDpsPart({ enemies: cond.enemies, enemyStates: cond.enemyStates });
     }
     const p = cond?.enemyParticles ?? last?.enemyParticles ?? ER_DEFAULT_ENEMY_PARTICLES;
     setPMin(String(p.minSeconds));
     setPMax(String(p.maxSeconds));
     setPAmount(String(p.amount));
-    setPresets(loadBattlePresets());
-    setPresetName('');
     setWait((last?.burstWaitSeconds ?? ER_DEFAULT_BURST_WAIT_SECONDS).toFixed(1));
     setSeeds(String(last?.seeds ?? ER_DEFAULT_SEEDS));
     setMessage(null);
@@ -144,12 +142,14 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
       firstBurstWaitSeconds: raw(firstWait),
       timedParticles: timed.map(x => ({ seconds: raw(x.seconds), amount: raw(x.amount) })),
       enemyParticles: { minSeconds: Math.min(n(pMin), n(pMax)), maxSeconds: Math.max(n(pMin), n(pMax)), amount: n(pAmount) },
+      enemies: dpsPart.enemies,
+      enemyStates: dpsPart.enemyStates,
     });
   };
 
   // 幽境モードの戦闘条件は、入力を変えるたびに保存する（閉じても残る。DPS 計算が共通で使う設定の元になる）。
   // 開いた直後の読み込み（上の effect）で入力が入りきる前の保存を避けるため、開いている間だけ・変わったときだけ保存する
-  const abyssInputs = JSON.stringify([battleSeconds, firstWait, timed.map(x => [x.seconds, x.amount]), pMin, pMax, pAmount]);
+  const abyssInputs = JSON.stringify([battleSeconds, firstWait, timed.map(x => [x.seconds, x.amount]), pMin, pMax, pAmount, dpsPart]);
   const lastSavedInputs = useRef<string | null>(null);
   useEffect(() => {
     if (!isOpen || !isAbyss) { lastSavedInputs.current = null; return; }
@@ -193,24 +193,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
     setPMin(String(c.enemyParticles.minSeconds));
     setPMax(String(c.enemyParticles.maxSeconds));
     setPAmount(String(c.enemyParticles.amount));
-  };
-  /** いまの入力の戦闘条件に、名前を付けて保存する（同じ名前は、確認して上書き） */
-  const saveCurrentAsPreset = async () => {
-    const name = presetName.trim().slice(0, BATTLE_PRESET_NAME_MAX);
-    if (name === '') return;
-    if (presets.some(p => p.name === name) && !(await confirm(t('gcsim:er.presetOverwriteConfirm', { name }), { okLabel: t('gcsim:er.presetOverwrite'), danger: true }))) return;
-    const r = savePreset(presets, name, readCondition(), () => `bc_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`);
-    if (r.reason === 'full') { await showAlert(t('gcsim:er.presetFull', { max: BATTLE_PRESET_MAX })); return; }
-    if (r.reason) return;
-    if (!saveBattlePresets(r.list)) { await showAlert(t('gcsim:er.presetSaveFailed')); return; }
-    setPresets(r.list);
-    setPresetName('');
-  };
-  const deletePreset = async (p: BattleConditionPreset) => {
-    if (!(await confirm(t('gcsim:er.presetDeleteConfirm', { name: p.name }), { okLabel: t('gcsim:er.presetDelete'), danger: true }))) return;
-    const list = removePreset(presets, p.id);
-    if (!saveBattlePresets(list)) { await showAlert(t('gcsim:er.presetSaveFailed')); return; }
-    setPresets(list);
+    setDpsPart({ enemies: c.enemies, enemyStates: c.enemyStates });
   };
 
   /** 実行する戦闘条件と、敵の粒子（入力中の値から）。幽境モードは、敵の周期の粒子も戦闘条件に含まれる */
@@ -538,38 +521,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
           {isAbyss && (
             <div className="text-xs text-slate-300 bg-slate-950/50 border border-fuchsia-900/60 rounded-lg p-3 space-y-2" data-testid="er-abyss-conditions">
               <p className="font-bold text-fuchsia-200">{t('gcsim:er.abyssConditions')}</p>
-              {(() => {
-                const currentJson = JSON.stringify(readCondition());
-                const busy = running || timingRunning;
-                return (
-                  <div className="space-y-1.5 pb-2 border-b border-slate-800" data-testid="er-presets">
-                    <p className="font-semibold">{t('gcsim:er.presetsTitle')}</p>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.presetsNote', { max: BATTLE_PRESET_MAX })}</p>
-                    {presets.length === 0
-                      ? <p className="text-slate-500" data-testid="er-presets-empty">{t('gcsim:er.presetsEmpty')}</p>
-                      : (
-                        <ul className="space-y-1">
-                          {presets.map(p => (
-                            <li key={p.id} className="flex items-center gap-1.5" data-testid="er-preset-row">
-                              <button type="button" onClick={() => applyCondition(p.condition)} disabled={busy} title={t('gcsim:er.presetLoadTitle')} className="flex-1 min-w-0 text-left px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-40" data-testid="er-preset-load">
-                                <span className="font-semibold">{p.name}</span>
-                                <span className="ml-2 text-[10px] text-slate-400">{t('gcsim:er.presetSummary', { battle: p.condition.battleSeconds, first: p.condition.firstBurstWaitSeconds.toFixed(1), timed: p.condition.timedParticles.length })}</span>
-                                {JSON.stringify(p.condition) === currentJson && <span className="ml-2 text-[10px] text-emerald-300" data-testid="er-preset-active">{t('gcsim:er.presetActive')}</span>}
-                              </button>
-                              <button type="button" onClick={() => void deletePreset(p)} disabled={busy} className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" title={t('gcsim:er.presetDelete')} data-testid="er-preset-delete"><Trash2 className="w-3.5 h-3.5" /></button>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <input type="text" value={presetName} maxLength={BATTLE_PRESET_NAME_MAX} onChange={e => setPresetName(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') void saveCurrentAsPreset(); }} placeholder={t('gcsim:er.presetNamePlaceholder')} disabled={busy} className="w-52 px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-100 text-xs placeholder:text-slate-500 disabled:opacity-40" data-testid="er-preset-name" />
-                      <button type="button" onClick={() => void saveCurrentAsPreset()} disabled={busy || presetName.trim() === ''} className="px-2.5 py-1 rounded bg-fuchsia-700 hover:bg-fuchsia-600 text-white font-bold disabled:opacity-40" data-testid="er-preset-save">
-                        {presets.some(p => p.name === presetName.trim()) ? t('gcsim:er.presetOverwrite') : t('gcsim:er.presetSave')}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })()}
+              <BattlePresetsPanel isOpen={isOpen} current={readCondition()} onApply={applyCondition} busy={running || timingRunning} testIdPrefix="er" />
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span>{t('gcsim:er.battleSeconds')}</span>
                 <Stepper value={battleSeconds} onChange={setBattleSeconds} step={10} min={10} max={ABYSS_MAX_BATTLE_SECONDS} disabled={running} widthClass="w-16" testId="er-battle-seconds" />
@@ -595,6 +547,7 @@ export const EnergyRechargeDialog: React.FC<EnergyRechargeDialogProps> = ({ isOp
                 ))}
                 <button type="button" onClick={() => setTimed(list => [...list, { key: ++timedKey.current, seconds: String(list.length > 0 ? Math.min(ABYSS_MAX_BATTLE_SECONDS, Number(list[list.length - 1].seconds) + 30 || 30) : 30), amount: '3' }])} disabled={running || timed.length >= ABYSS_MAX_TIMED_PARTICLES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40" data-testid="er-timed-add"><Plus className="w-3.5 h-3.5" />{t('gcsim:er.timedParticlesAdd')}</button>
                 <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:er.timedParticlesNote', { max: ABYSS_MAX_TIMED_PARTICLES })}</p>
+                <ParticleLimitNotice condition={readCondition()} testId="er-particle-limit" />
               </div>
             </div>
           )}

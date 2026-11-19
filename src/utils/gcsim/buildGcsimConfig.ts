@@ -181,6 +181,8 @@ export interface GcsimConfigResult {
   actionRefs: GcsimActionRef[];
   /** 交代遅延（`swap_delay`）のフレーム数。出場の開始位置（アプリは交代遅延を出場に含める）を合わせるために使う */
   swapDelayFrames: number;
+  /** ループ部分を回す周数（設定文の `while i <= N` の N。戦闘時間を指定したときは、ローテーションの長さから自動で決まった周数） */
+  loopIterations: number;
 }
 
 export interface GcsimActionRef {
@@ -520,5 +522,6 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     members: memberInfos,
     actionRefs,
     swapDelayFrames: SWAP_DELAY_FRAMES,
+    loopIterations,
   };
 }

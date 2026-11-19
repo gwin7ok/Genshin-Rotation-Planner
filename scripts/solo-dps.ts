@@ -5,11 +5,11 @@
  *
  *   node scripts/solo-dps.ts                       全キャラ（gcsim のキーがあり、既定の装備が決まるもの）
  *   node scripts/solo-dps.ts ナヒーダ ニィロウ    名前を指定
- *   node scripts/solo-dps.ts --runs=30 --seconds=30 --filler=4 --top=20
+ *   node scripts/solo-dps.ts --runs=10 --seconds=30 --filler=4 --top=20 --out=結果.json
  *
  * 装備は、アプリの「仮値を使う」と同じ（Wiki のおすすめの武器・聖遺物セット・ステータス。src/utils/customStats.ts）。凸は、アプリの既定（星 5 = 0 凸・星 4 = 6 凸）。
- * ローテーションは、E → Q → 通常攻撃 N 回 を繰り返す（出場は 1 人だけなので交代なし）。爆発のエネルギーは無視する（アプリの通常の計算と同じ）。
- * 結果は、標準出力の表と、--out=<ファイル> の JSON。
+ * ローテーションは、TEMPLATES の数種類（通常攻撃・重撃・落下・長押し E など）を試して、最大の DPS を採る（出場は 1 人だけなので交代なし）。
+ * 爆発のエネルギーは無視する（アプリの通常の計算と同じ）。
  */
 import fs from 'node:fs';
 import { createServer } from 'vite';
@@ -22,10 +22,22 @@ const opt = (name: string, def: number) => {
 };
 const outPath = args.find(x => x.startsWith('--out='))?.split('=')[1];
 const names = args.filter(x => !x.startsWith('--'));
-const RUNS = opt('runs', 20);
+const RUNS = opt('runs', 10);
 const SECONDS = opt('seconds', 30);
 const FILLER = opt('filler', 4);
 const TOP = opt('top', 0);
+
+/** 測るローテーション（出場は 1 人。必要なアクションが無いキャラは、そのローテーションを飛ばす） */
+const rep = (step: string, n: number) => Array.from({ length: n }, () => step);
+const TEMPLATES: { name: string; steps: string[] }[] = [
+  { name: '通常攻撃', steps: ['e', 'q', ...rep('n', FILLER)] },
+  { name: '通常攻撃長め', steps: ['e', 'q', ...rep('n', FILLER * 2)] },
+  { name: '通常+重撃', steps: ['e', 'q', 'n', 'n', 'ca', 'n', 'n', 'ca'] },
+  { name: '重撃のみ', steps: ['e', 'q', ...rep('ca', 4)] },
+  { name: '落下', steps: ['e', 'q', 'jump', 'lp', 'jump', 'lp', 'jump', 'lp'] },
+  { name: '高落下', steps: ['e', 'q', 'jump', 'hp', 'jump', 'hp', 'jump', 'hp'] },
+  { name: '長押しE', steps: ['e_hold', 'q', ...rep('n', FILLER)] },
+];
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
 await useNodeGcsim(server);
@@ -46,39 +58,40 @@ const makeAction = (char: any, step: string) => {
   return { id: `a${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: def.defaultDuration };
 };
 
-interface Row { name: string; element: string; weaponType: string; dps?: number; sd?: number; seconds?: number; total?: number; note?: string }
+interface Trial { template: string; dps: number; sd: number; seconds: number; total: number; note?: string }
+interface Row { name: string; element: string; weaponType: string; best?: Trial; trials: Trial[]; note?: string }
 const rows: Row[] = [];
 
 const targets = names.length > 0 ? names.map(n => all.find(c => c.name === n || c.englishName === n)).filter(Boolean) : all;
 for (const master of targets) {
-  const row: Row = { name: master.name, element: master.element, weaponType: master.weaponType };
+  const row: Row = { name: master.name, element: master.element, weaponType: master.weaponType, trials: [] };
   rows.push(row);
   if (!master.source?.gcsimKey) { row.note = 'gcsim 未対応'; continue; }
   const eq = cs.defaultEquipmentFor(master.id, { weapons, artifacts });
   const weapon = weapons.find(w => w.id === eq.weaponId);
   if (!weapon?.gcsimKey) { row.note = '既定の武器なし'; continue; }
   const char = { ...structuredClone(master), ...eq, customStats: cs.defaultCustomStatsFor(master.id) };
-  const steps = ['e', 'q', ...Array.from({ length: FILLER }, () => 'n')];
-  const actions = steps.map(s => makeAction(char, s));
-  if (actions.some(a => a === null)) { row.note = `アクション不足（${steps.filter((_, i) => actions[i] === null).join(',')}）`; continue; }
-  const stints = [{ id: 's0', characterId: char.id, actions }];
-  const cfg = buildGcsimConfig({ characters: [char], stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS });
-  if (!cfg.runnable) { row.note = `設定文を作れない: ${cfg.warnings.map((w: any) => w.message ?? w).join(' / ').slice(0, 80)}`; continue; }
-  const out = await dps.computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: { battleSeconds: SECONDS, enemies: undefined } });
-  if (out.status !== 'ok') { row.note = `実行失敗: ${String(out.message ?? out.status).slice(0, 80)}`; continue; }
-  row.dps = out.result.dps.mean;
-  row.sd = out.result.dps.sd;
-  row.seconds = out.result.seconds;
-  row.total = out.result.total.mean;
-  if (out.result.shortRuns) row.note = `戦闘時間に届かない実行 ${out.result.shortRuns} 回`;
-  console.log(`${master.name.padEnd(10, '　')} DPS ${row.dps.toFixed(0).padStart(7)} ±${row.sd.toFixed(0)}${row.note ? '  ' + row.note : ''}`);
+  const errors: string[] = [];
+  for (const tpl of TEMPLATES) {
+    const actions = tpl.steps.map(s => makeAction(char, s));
+    if (actions.some(a => a === null)) continue; // そのキャラに無いアクション
+    const stints = [{ id: 's0', characterId: char.id, actions }];
+    const cfg = buildGcsimConfig({ characters: [char], stints, loopStartIndex: 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS });
+    if (!cfg.runnable) { errors.push(`${tpl.name}: 設定文を作れない`); continue; }
+    const out = await dps.computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: { battleSeconds: SECONDS, enemies: undefined } });
+    if (out.status !== 'ok') { errors.push(`${tpl.name}: ${String(out.message ?? out.status).slice(0, 60)}`); continue; }
+    row.trials.push({ template: tpl.name, dps: out.result.dps.mean, sd: out.result.dps.sd, seconds: out.result.seconds, total: out.result.total.mean, ...(out.result.shortRuns ? { note: `戦闘時間に届かない実行 ${out.result.shortRuns} 回` } : {}) });
+  }
+  if (row.trials.length === 0) { row.note = errors.join(' / ') || 'アクション不足'; continue; }
+  row.best = row.trials.reduce((a, b) => (b.dps > a.dps ? b : a));
+  console.log(`${master.name.padEnd(10, '　')} 最大 ${row.best.dps.toFixed(0).padStart(7)} (${row.best.template})  ${row.trials.map(t => `${t.template}=${t.dps.toFixed(0)}`).join(' ')}${errors.length ? '  [失敗: ' + errors.join(' / ') + ']' : ''}`);
 }
 
-const ok = rows.filter(r => r.dps !== undefined).sort((a, b) => b.dps! - a.dps!);
-console.log(`\n=== 単独 DPS（${SECONDS} 秒・${RUNS} 回・E→Q→通常攻撃×${FILLER}）===`);
-for (const [i, r] of (TOP > 0 ? ok.slice(0, TOP) : ok).entries()) console.log(`${String(i + 1).padStart(3)}. ${r.name.padEnd(10, '　')} ${r.element.padEnd(7)} ${r.weaponType.padEnd(9)} ${r.dps!.toFixed(0).padStart(7)} ±${r.sd!.toFixed(0)}`);
-const ng = rows.filter(r => r.dps === undefined);
+const ok = rows.filter(r => r.best).sort((a, b) => b.best!.dps - a.best!.dps);
+console.log(`\n=== 単独 DPS（${SECONDS} 秒・${RUNS} 回・ローテーション ${TEMPLATES.length} 種の最大）===`);
+for (const [i, r] of (TOP > 0 ? ok.slice(0, TOP) : ok).entries()) console.log(`${String(i + 1).padStart(3)}. ${r.name.padEnd(10, '　')} ${r.element.padEnd(7)} ${r.weaponType.padEnd(9)} ${r.best!.dps.toFixed(0).padStart(7)} ±${r.best!.sd.toFixed(0)}  ${r.best!.template}`);
+const ng = rows.filter(r => !r.best);
 if (ng.length > 0) console.log(`\n測れなかったもの ${ng.length} 件:\n${ng.map(r => `  ${r.name}: ${r.note}`).join('\n')}`);
-if (outPath) fs.writeFileSync(outPath, JSON.stringify({ seconds: SECONDS, runs: RUNS, filler: FILLER, rows: ok }, null, 1));
+if (outPath) fs.writeFileSync(outPath, JSON.stringify({ seconds: SECONDS, runs: RUNS, templates: TEMPLATES, rows: ok }, null, 1));
 await server.close();
 process.exit(0);

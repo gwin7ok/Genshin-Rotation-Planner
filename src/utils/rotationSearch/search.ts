@@ -283,7 +283,8 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     // ④b 山登り: アタッカーの割り当てごとに別々に、その中で gcsim の結果が一番良い候補から、1 か所だけ変えた候補（出場の入れ替え・分割・結合・移動、動作の消去・移動・差し込み）を
     //   全部試し、良くなったらそこへ移る。割り当て同士を比べて早く切ることはしない（出発点が低くても、登った先が一番高いことがある。例: 手で組んだ形は、出発点では 6 割だった）。
     //   その割り当ての中で、良くならない回が 2 回続いたら、その割り当てはそこで終わり
-    const budget = settings.refineBudget ?? DEFAULT_REFINE_BUDGET;
+    // 割り当てが多いと、1 つあたりの山登りが薄くなる（月開花: 5〜7 通り）。3 通りを超えた分、予算を増やす（上限 2 倍）
+    const budget = Math.round((settings.refineBudget ?? DEFAULT_REFINE_BUDGET) * Math.min(2, Math.max(1, byGroup.size / 3)));
     if (budget > 0 && !cancelled()) {
       const tried = new Set<string>(r1.map(r => r.sc.candidate.label));
       let used = 0;

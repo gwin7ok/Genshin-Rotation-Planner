@@ -80,8 +80,16 @@ export function roleAssignments(characters: CharacterConfig[], roles: Record<str
     const subs = options.some(o => o.includes('subAttacker'));
     options.forEach((o, i) => { if (!subs || o.includes('subAttacker')) options[i] = [...o, 'attacker']; });
   }
-  return product(options)
-    .filter(pick => pick.includes('attacker'))
+  const picks = product(options).filter(pick => pick.includes('attacker'));
+  // サブアタッカー（アタッカーの役割は持たない）を、単独のアタッカーにした割り当ても足す。手組みでは、サブアタッカーの役割のキャラが、主な火力になることがある
+  // （例: 月開花のコロンビーナ。マスターの役割はサブアタッカーだが、最後に重撃を撃つ主役にすると、探索の 1 位が 142.9k → 165.0k）。ほかの人は、アタッカー以外の役割にする
+  options.forEach((o, i) => {
+    if (!o.includes('subAttacker') || o.includes('attacker')) return;
+    picks.push(options.map((oo, j) => (j === i ? 'attacker' : oo.find(r => r !== 'attacker') ?? 'supporter')));
+  });
+  const seen = new Set<string>();
+  return picks
+    .filter(pick => { const k = pick.join(','); if (seen.has(k)) return false; seen.add(k); return true; })
     .map(pick => Object.fromEntries(characters.map((c, i) => [c.id, pick[i]])));
 }
 

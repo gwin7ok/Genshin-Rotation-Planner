@@ -31,7 +31,12 @@ const assignments = cand.roleAssignments(party, roles);
 assert.ok(assignments.length >= 1, '割り当てがある');
 for (const a of assignments) assert.ok(Object.values(a).includes('attacker'), 'アタッカーが 1 人以上');
 const multi = cand.roleAssignments(party, { ...roles, [party[1].id]: ['attacker', 'subAttacker'] });
-assert.ok(multi.length > assignments.length, '複数の役割を持つキャラがいると、割り当てが増える');
+const single = cand.roleAssignments(party, { ...roles, [party[1].id]: ['attacker'] });
+assert.ok(multi.length > single.length, '複数の役割を持つキャラがいると、割り当てが増える');
+// サブアタッカーだけのキャラは、単独のアタッカーにした割り当てもできる（ほかの人はアタッカーではなくなる）
+const subOnly = cand.roleAssignments(party, { [party[0].id]: ['attacker'], [party[1].id]: ['subAttacker'], [party[2].id]: ['supporter'], [party[3].id]: ['supporter'] });
+assert.ok(subOnly.some(x => x[party[1].id] === 'attacker' && x[party[0].id] !== 'attacker'), 'サブアタッカーを単独のアタッカーにした割り当てがある');
+assert.ok(subOnly.every(x => Object.values(x).includes('attacker')), 'どの割り当てにも、アタッカーがいる');
 for (const a of cand.roleAssignments(party, { [party[0].id]: ['supporter'] })) assert.ok(Object.values(a).includes('attacker'), 'アタッカーの役割を持つキャラがいなくても、誰かをアタッカーにする');
 
 // 候補

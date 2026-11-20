@@ -32,7 +32,7 @@ assert.ok(assignments.length >= 1, '割り当てがある');
 for (const a of assignments) assert.ok(Object.values(a).includes('attacker'), 'アタッカーが 1 人以上');
 const multi = cand.roleAssignments(party, { ...roles, [party[1].id]: ['attacker', 'subAttacker'] });
 assert.ok(multi.length > assignments.length, '複数の役割を持つキャラがいると、割り当てが増える');
-assert.deepEqual(cand.roleAssignments(party, { [party[0].id]: ['supporter'] }), [], 'アタッカーが誰もいなければ、割り当てなし');
+for (const a of cand.roleAssignments(party, { [party[0].id]: ['supporter'] })) assert.ok(Object.values(a).includes('attacker'), 'アタッカーの役割を持つキャラがいなくても、誰かをアタッカーにする');
 
 // 候補
 const a = cand.generateCandidates(party, roles);

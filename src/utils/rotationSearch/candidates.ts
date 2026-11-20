@@ -73,6 +73,11 @@ export function roleAssignments(characters: CharacterConfig[], roles: Record<str
     const r = roles[c.id] ?? [];
     return r.length > 0 ? r : (['supporter'] as SearchRole[]);
   });
+  // 編成にアタッカーの役割を持つキャラがいないとき（例: 蒸発フリーナ編成）は、サブアタッカー（それもいなければ全員）にアタッカーの役割も許す
+  if (!options.some(o => o.includes('attacker'))) {
+    const subs = options.some(o => o.includes('subAttacker'));
+    options.forEach((o, i) => { if (!subs || o.includes('subAttacker')) options[i] = [...o, 'attacker']; });
+  }
   return product(options)
     .filter(pick => pick.includes('attacker'))
     .map(pick => Object.fromEntries(characters.map((c, i) => [c.id, pick[i]])));

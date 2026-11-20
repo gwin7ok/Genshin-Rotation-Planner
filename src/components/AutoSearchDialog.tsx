@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { X, Sparkles, Play, Square, Check } from 'lucide-react';
 import { t } from '../i18n';
 import { charName } from '../i18n/loc';
-import type { CharacterConfig, Stint } from '../types/genshin';
+import type { CharacterConfig, CharacterRole, Stint } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
 import type { HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { wasmParallelism } from '../utils/gcsim/gcsimWasm';
 import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
 import { saveDpsSettings } from '../utils/appSettings';
-import { effectiveRoles, loadRoleOverrides } from '../utils/characterRoleStore';
+import { effectiveRoles, loadRoleOverrides, normalizeRoles, ROLE_ORDER } from '../utils/characterRoleStore';
 import { DEFAULT_SEARCH_SETTINGS, searchRotation, stintsForApp, type SearchOutcome, type SearchProgress, type SearchSettings } from '../utils/rotationSearch/search';
 
 interface AutoSearchDialogProps {
@@ -56,9 +56,16 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
   useEffect(() => { if (isOpen) cond.loadSaved(); }, [isOpen]);
 
   const members = useMemo(() => characters.filter(c => !c.id.startsWith('empty_slot_')), [characters]);
-  // 開くたびに、上書きを読み直す（データベース管理で変えたあとに反映される）
+  // 役割の既定は、開くたびにマスターのキャラの役割（データベース管理で変えていれば、その上書き）から作る。この画面での変更は、この探索だけに使い、保存しない
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const roles = useMemo(() => { const o = loadRoleOverrides(); return Object.fromEntries(members.map(c => [c.id, effectiveRoles(c, o)])); }, [members, isOpen]);
+  const defaultRoles = useMemo(() => { const o = loadRoleOverrides(); return Object.fromEntries(members.map(c => [c.id, effectiveRoles(c, o)])) as Record<string, CharacterRole[]>; }, [members, isOpen]);
+  const [roleEdit, setRoleEdit] = useState<Record<string, CharacterRole[]>>({});
+  useEffect(() => { setRoleEdit({}); }, [defaultRoles]);
+  const roles: Record<string, CharacterRole[]> = useMemo(() => Object.fromEntries(members.map(c => [c.id, roleEdit[c.id] ?? defaultRoles[c.id] ?? []])), [members, roleEdit, defaultRoles]);
+  const toggleRole = (id: string, r: CharacterRole) => setRoleEdit(prev => {
+    const cur = prev[id] ?? defaultRoles[id] ?? [];
+    return { ...prev, [id]: normalizeRoles(cur.includes(r) ? cur.filter(x => x !== r) : [...cur, r]) };
+  });
 
   if (!isOpen) return null;
 
@@ -98,8 +105,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     setProgress(null);
     if (out.status === 'ok') {
       setOutcome(out);
-      setApplied(0);
-      onApply(stintsForApp(out.results[0].candidate.stints), out.results[0].candidate.loopStartIndex ?? 0);
+      // ガントチャートには、利用者が選んだ候補だけを置く（自動では置かない）
     } else if (out.status === 'cancelled') {
       setMessage(t('gcsim:search.cancelled'));
     } else {
@@ -134,14 +140,27 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             {members.length === 0 ? (
               <p className="text-xs text-amber-300">{t('gcsim:search.noMembers')}</p>
             ) : (
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {members.map(c => (
-                  <li key={c.id} className="flex items-center gap-2 text-xs bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1.5">
-                    <span className="font-bold text-slate-200">{charName(c)}</span>
-                    <span className="text-amber-200">{(roles[c.id] ?? []).length > 0 ? (roles[c.id] ?? []).map(roleName).join('・') : t('gcsim:search.roleNone')}</span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {members.map(c => (
+                    <li key={c.id} className="flex items-center gap-2 text-xs bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1.5 flex-wrap">
+                      <span className="font-bold text-slate-200 mr-1">{charName(c)}</span>
+                      {ROLE_ORDER.map(r => {
+                        const on = (roles[c.id] ?? []).includes(r);
+                        return (
+                          <button key={r} onClick={() => toggleRole(c.id, r)} disabled={running} aria-pressed={on} data-testid={`role-${c.id}-${r}`}
+                            className={`px-2 py-0.5 rounded border font-bold disabled:opacity-40 ${on ? 'bg-amber-500/20 border-amber-500/50 text-amber-200' : 'bg-slate-900 border-slate-700 text-slate-500 hover:text-slate-300'}`}>{roleName(r)}</button>
+                        );
+                      })}
+                      {(roles[c.id] ?? []).length === 0 && <span className="text-slate-500">{t('gcsim:search.roleNone')}</span>}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center gap-3 text-[11px] text-slate-500">
+                  <span>{t('gcsim:search.rolesHint')}</span>
+                  <button onClick={() => setRoleEdit({})} disabled={running} className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
+                </div>
+              </>
             )}
           </div>
 
@@ -192,7 +211,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-slate-200">{t('gcsim:search.resultTitle')}</h4>
               <p className="text-xs text-slate-400">{t('gcsim:search.summary', { candidates: outcome.counts.candidates, rejected: outcome.counts.rejected, quick: outcome.counts.quick, seconds: (outcome.elapsedMs / 1000).toFixed(1) })}</p>
-              <p className="text-xs text-emerald-300">{t('gcsim:search.appliedFirst')}</p>
+              {applied === null && <p className="text-xs text-amber-300">{t('gcsim:search.appliedFirst')}</p>}
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>

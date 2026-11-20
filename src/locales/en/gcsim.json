@@ -296,7 +296,8 @@
   "search": {
     "title": "Auto Rotation Search",
     "intro": "Builds combinations of on-field order and actions from the roles (attacker / sub-attacker / supporter) of the party members, runs the ones without cooldown violations through gcsim, and ranks them by DPS. The best one is placed on the Gantt chart right away.",
-    "rolesTitle": "Roles of the party members (editable in Database management → edit character)",
+    "rolesTitle": "Roles of the party members (click to toggle; used for this search only)",
+    "rolesHint": "Defaults come from the master data roles of each character (or your Database management setting). Rebuilt every time this dialog opens.",
     "roleNone": "No role (treated as a supporter)",
     "settings": "Search settings",
     "settingsHint": "More runs and more kept candidates make the ranking more accurate but take longer (a few minutes).",
@@ -329,7 +330,7 @@
     "colRoute": "On-field order and actions",
     "apply": "Use this",
     "applied": "In use",
-    "appliedFirst": "The top result was placed on the Gantt chart. To switch to another one, press \"Use this\" on its row.",
+    "appliedFirst": "Nothing has been placed on the Gantt chart yet. Press \"Use this\" on the row you want.",
     "energyNote": "Burst energy shortage is not considered. A party with too little Energy Recharge may not be able to run this in the actual game (check it with \"Energy Recharge Calc\")."
   }
 }

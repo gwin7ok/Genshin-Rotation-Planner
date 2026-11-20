@@ -30,7 +30,7 @@ const TOP = num('top', 10);
 const MAX = num('max', 20000);
 const ownedPath = str('owned');
 const outPath = str('out');
-if (names.length < 1 || names.length > 4) {
+if (!str('preset') && (names.length < 1 || names.length > 4)) {
   console.error('編成のキャラ名を 1〜4 人、指定してください（例: node scripts/search-rotation.ts ナヒーダ 胡桃 香菱 ベネット）');
   process.exit(1);
 }
@@ -47,7 +47,11 @@ const owned: any[] = ownedPath ? JSON.parse(fs.readFileSync(ownedPath, 'utf8')).
 
 // 編成のキャラを作る
 const characters: any[] = [];
-for (const n of names) {
+// --preset=keqing-intensify: 手組みプリセットの編成・装備（凸・武器・聖遺物・ビルド）をそのまま使う（手組みとの比較用。名前は要らない）
+const presetName = str('preset');
+const preset = presetName ? JSON.parse(fs.readFileSync(`src/data/presets/${presetName}.json`, 'utf8')) : undefined;
+if (preset) for (const pc of preset.party) { const { characterId, ...fields } = pc; const m = master.find(c => c.id === characterId); characters.push({ ...structuredClone(m), ...fields }); }
+for (const n of preset ? [] : names) {
   const m = master.find(c => c.name === n || c.englishName === n);
   if (!m) { console.error(`キャラが見つかりません: ${n}`); process.exit(1); }
   if (!m.source?.gcsimKey) { console.error(`gcsim 未対応のキャラです: ${n}`); process.exit(1); }

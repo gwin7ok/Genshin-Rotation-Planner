@@ -40,6 +40,10 @@ const FILL_TEMPLATES: { name: string; steps: string[] }[] = [
   { name: '重撃', steps: ['n', 'ca'] },
   { name: '落下', steps: ['jump', 'lp'] },
   { name: '高落下', steps: ['jump', 'hp'] },
+  // スキルを挟む型（スキルの CT が短いキャラは、スキルと重撃・通常攻撃を交互に出す。例: サンドローネの E C E C）
+  { name: 'E+重撃', steps: ['e', 'ca'] },
+  { name: 'E+通常+重撃', steps: ['e', 'n', 'ca'] },
+  { name: 'E+通常', steps: ['e', 'n', 'n'] },
 ];
 
 const defOf = (c: CharacterConfig, step: string) => c.availableActions.find(a => a.id === `${c.id}_${step}`);
@@ -70,31 +74,34 @@ export function roleAssignments(characters: CharacterConfig[], roles: Record<str
 }
 
 /** 1 人分の使い方（使うスキル・爆発） */
-interface Use { e: 'e' | 'e_hold' | null; q: boolean }
+interface Use { /** E の使い方（アクションの並び。空 = 使わない）。回数のあるスキル・再発動つきのスキルは、それも使う並びを持つ */ es: string[]; q: boolean }
 
 function useOptions(c: CharacterConfig, role: SearchRole): Use[] {
-  const hasE = !!defOf(c, 'e');
-  const hasHold = !!defOf(c, 'e_hold');
+  const eDef = defOf(c, 'e');
   const hasQ = !!defOf(c, 'q');
-  const es: Array<'e' | 'e_hold' | null> = [];
-  if (hasE) es.push('e');
-  if (hasHold && role === 'attacker') es.push('e_hold');
-  es.push(null);
+  // E の使い方の選択肢: 使わない / 1 回 / 回数ぶん（八重神子の 3 回など）/ 再発動つき（オデットの E → 特殊スキル）/ 長押し（アタッカーのみ）
+  const esOptions: string[][] = [[]];
+  if (eDef) {
+    esOptions.push(['e']);
+    const charges = eDef.charges ?? 1;
+    if (charges > 1) esOptions.push(Array.from({ length: charges }, () => 'e'));
+    if (defOf(c, 'e_recast')) esOptions.push(['e', 'e_recast']);
+  }
+  if (role === 'attacker' && defOf(c, 'e_hold')) esOptions.push(['e_hold']);
   const out: Use[] = [];
-  for (const e of es) {
+  for (const es of esOptions) {
     if (role === 'supporter') {
       // サポーターは、E・Q とも外せる（両方外すのは、場に出さないのと同じなので作らない）
-      if (hasQ) out.push({ e, q: true });
-      if (e === 'e') out.push({ e, q: false });
+      if (hasQ && es.length <= 1) out.push({ es, q: true });
+      if (es.length > 0) out.push({ es, q: false });
     } else if (hasQ) {
       // アタッカー・サブアタッカーの Q は使う
-      out.push({ e, q: true });
-    } else if (e !== null) {
-      out.push({ e, q: false });
+      out.push({ es, q: true });
+    } else if (es.length > 0) {
+      out.push({ es, q: false });
     }
   }
-  // 何も使わない（e = null で Q も無い）使い方は、サポーターに限って、Q だけの使い方で表す
-  return out.filter((u, i) => out.findIndex(v => v.e === u.e && v.q === u.q) === i);
+  return out;
 }
 
 let seq = 0;
@@ -105,7 +112,7 @@ const instance = (c: CharacterConfig, step: string): CharacterActionInstance | n
 };
 
 /** 使い方 → アクションの並び（E → Q の順） */
-const useSteps = (u: Use): string[] => [...(u.e ? [u.e] : []), ...(u.q ? ['q'] : [])];
+const useSteps = (u: Use): string[] => [...u.es, ...(u.q ? ['q'] : [])];
 
 const cooldownOf = (c: CharacterConfig, step: string): number => defOf(c, step)?.cooldown ?? 0;
 const durationOf = (c: CharacterConfig, step: string): number => defOf(c, step)?.defaultDuration ?? 0;
@@ -152,7 +159,7 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
       // 目安の長さ = 使う E・Q の最長 CT + pad（決定 A）。何も使わないときは作らない
       const cts = characters.flatMap(c => {
         const u = useOf.get(c.id)!;
-        return [...(u.e ? [cooldownOf(c, 'e')] : []), ...(u.q ? [cooldownOf(c, 'q')] : [])];
+        return [...(u.es.length > 0 ? [cooldownOf(c, u.es[0] === 'e_hold' ? 'e' : 'e')] : []), ...(u.q ? [cooldownOf(c, 'q')] : [])];
       });
       if (cts.length === 0) continue;
       const target = Math.max(...cts) + pad;

@@ -147,7 +147,7 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
     const P = byRole('supporter');
     const S = byRole('subAttacker');
     const A = byRole('attacker');
-    // 出場の順番: サポーター → サブアタッカー → アタッカー。同じ役割の中は、並べ替えを全部試す
+    // 出場の順番: サポーター → サブアタッカー → アタッカー。同じ役割の中は、並べ替えを全部試す（役割をまたぐ入れ替えは、近傍探索 neighborsOf が試す）
     const orders = product([permutations(P), permutations(S), permutations(A)]).map(([p, s, a]) => [...p, ...s, ...a] as CharacterConfig[]);
     // 使い方: キャラごとの選択肢の直積
     const useLists = characters.map(c => useOptions(c, assignment[c.id]));
@@ -217,4 +217,59 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
     return true;
   });
   return thin(unique, maxCandidates).map((c, i) => ({ ...c, id: `c${i}` }));
+}
+
+/** 近傍探索で、1 人の出場に入れる・並べ替える動作の種類 */
+const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
+
+/**
+ * 近傍: 候補を、1 か所だけ変えたもの（gcsim で良かった候補の周りを調べるのに使う。CT 違反などは、呼び出し側が評価で除く）
+ *   ・隣り合う 2 人の出場を入れ替える
+ *   ・出場の中の動作を 1 つ消す / 1 つ移す / 1 つ差し込む（e・q・ca・n・e_recast）
+ */
+export function neighborsOf(characters: CharacterConfig[], base: Candidate): Candidate[] {
+  const out = new Map<string, Candidate>();
+  const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>): void => {
+    const stints: Stint[] = [];
+    for (const { c, steps } of plan) {
+      const actions = steps.map(s => instance(c, s));
+      if (actions.length === 0 || actions.some(a => a === null)) return;
+      stints.push({ id: `s${stints.length}`, characterId: c.id, actions: actions as CharacterActionInstance[] });
+    }
+    const label = describe(characters, stints);
+    if (label === base.label || out.has(label)) return;
+    out.set(label, { ...base, id: 'n', label, stints });
+  };
+  const plan0 = base.stints.map(s => ({
+    c: characters.find(c => c.id === s.characterId)!,
+    steps: s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '')),
+  }));
+  const clone = () => plan0.map(p => ({ c: p.c, steps: [...p.steps] }));
+  // 出場の入れ替え
+  for (let i = 0; i + 1 < plan0.length; i++) {
+    const pl = clone();
+    [pl[i], pl[i + 1]] = [pl[i + 1], pl[i]];
+    make(pl);
+  }
+  plan0.forEach((p, si) => {
+    const n = p.steps.length;
+    for (let i = 0; i < n; i++) {
+      // 消す
+      if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl); }
+      // 移す
+      for (let j = 0; j < n; j++) {
+        if (j === i || p.steps[i] === p.steps[j]) continue;
+        const pl = clone();
+        const [x] = pl[si].steps.splice(i, 1);
+        pl[si].steps.splice(j, 0, x);
+        make(pl);
+      }
+    }
+    // 差し込む
+    for (const s of NEIGHBOR_STEPS) {
+      if (!defOf(p.c, s)) continue;
+      for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl); }
+    }
+  });
+  return [...out.values()];
 }

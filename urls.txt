@@ -20,6 +20,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/LICENSE
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/NOTICE
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/README.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/bun.lock
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/Auto-Rotation-Search/Gmini4HydrogenReview.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/EQUIPMENT_MASTER_SPECIFICATION.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/Google\343\203\211\343\203\251\343\202\244\343\203\226\351\200\243\346\220\272\343\201\256\350\250\255\345\256\232\346\211\213\351\240\206.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/REQUIREMENTS_SPECIFICATION.md
@@ -174,6 +175,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/check-version-notice.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/check-wasm-source.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/coverage-links.ts
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/detect-macros.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/extension-manifest.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/extension-updates.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/scripts/fetch-signed-extension.ts
@@ -211,6 +213,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/comp
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/CharacterFilterBar.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/DatabaseManagerModal.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/DialogProvider.tsx
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/DpsConditions.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/DpsDialog.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/ElementIcon.tsx
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/components/EnergyRechargeDialog.tsx
@@ -353,6 +356,8 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/mast
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/passiveEffects.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/preRunDecisions.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/revelationCharacters.ts
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/sequenceMacros.detected.json
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/sequenceRules.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/masterdata/verificationEnglish.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/models/CharacterModel.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/models/WeaponModel.ts
@@ -386,6 +391,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/util
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/equipmentSummary.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/ganttLayout.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/gcsim/actionMapping.ts
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/gcsim/appGcsimExtras.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/gcsim/applyBuffEffects.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/gcsim/applyGcsimResult.ts
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/src/utils/gcsim/buildGcsimConfig.ts

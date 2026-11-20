@@ -38,6 +38,8 @@ const FILL_TEMPLATES: { name: string; steps: string[] }[] = [
   { name: '通常+重撃', steps: ['n', 'n', 'ca'] },
   // 重撃は、直前に通常攻撃が要る（gcsim の規則）ので、通常攻撃 1 回を前に付ける
   { name: '重撃', steps: ['n', 'ca'] },
+  // 重撃だけを続ける型（コロンビーナのように、通常攻撃を挟まず重撃を出せるキャラ。挟まないと gcsim が実行できないキャラは、その候補が失敗して落ちる）
+  { name: '重撃のみ', steps: ['ca'] },
   { name: '落下', steps: ['jump', 'lp'] },
   { name: '高落下', steps: ['jump', 'hp'] },
   // スキルを挟む型（スキルの CT が短いキャラは、スキルと重撃・通常攻撃を交互に出す。例: サンドローネの E C E C）
@@ -85,9 +87,17 @@ function useOptions(c: CharacterConfig, role: SearchRole): Use[] {
     esOptions.push(['e']);
     const charges = eDef.charges ?? 1;
     if (charges > 1) esOptions.push(Array.from({ length: charges }, () => 'e'));
+    // E の連続（ニィロウの E×4 のように、全部そろって初めて効く形。1 回ずつ足す山登りでは届かないので、出発点に入れる）
+    // マスターデータから導く: 「モード中にもう一度 E」を使い切る回数（mode.repress.frames の数 + 最初の 1 回。maxUses があればそれ）。
+    // 使い切ると別の効果（ニィロウの E×4 → 天を滌う水環）が出るので、その全部そろった並びを出発点に入れる
+    const repress = eDef.mode?.repress;
+    if (repress && (!repress.actions || repress.actions.includes('e'))) {
+      const n = Math.min(1 + (repress.maxUses ?? repress.frames.length), 6);
+      if (n >= 2 && n !== charges) esOptions.push(Array.from({ length: n }, () => 'e'));
+    }
     if (defOf(c, 'e_recast')) esOptions.push(['e', 'e_recast']);
   }
-  if (role === 'attacker' && defOf(c, 'e_hold')) esOptions.push(['e_hold']);
+  if (defOf(c, 'e_hold')) esOptions.push(['e_hold']); // 長押しは、役割を問わず試す（例: ラウマの長押しスキル）
   const out: Use[] = [];
   for (const es of esOptions) {
     // Q は、使う・使わないの両方を試す（手で組んだ例: 八重神子・オデットは Q を使わない方が速い。決定 A）。
@@ -136,11 +146,49 @@ function thin<T>(xs: T[], max: number): T[] {
   return Array.from({ length: max }, (_, i) => xs[Math.floor(i * step)]);
 }
 
+/** 生成の上限（アタッカーの割り当てごと）: 使い方の組み合わせ / 出場の順番。超えた分は間引く（山登りの近傍が、順番の入れ替え・動作の差し込みなどで補う） */
+const MAX_USES = 260;
+const MAX_ORDERS = 6;
+
+/** 層ごとに、ほぼ同じ数ずつ残す（少ない層は全部残し、余りを多い層に回す。乱数なし） */
+function thinStratified<T>(xs: T[], max: number, keyOf: (x: T) => string): T[] {
+  if (xs.length <= max) return xs;
+  const groups = new Map<string, T[]>();
+  for (const x of xs) { const k = keyOf(x); const l = groups.get(k); if (l) l.push(x); else groups.set(k, [x]); }
+  const sorted = [...groups.values()].sort((a, b) => a.length - b.length);
+  const out: T[] = [];
+  let remaining = max;
+  sorted.forEach((g, i) => {
+    const quota = Math.floor(remaining / (sorted.length - i));
+    const taken = thin(g, quota);
+    out.push(...taken);
+    remaining -= taken.length;
+  });
+  return out;
+}
+
 export function generateCandidates(characters: CharacterConfig[], roles: Record<string, SearchRole[]>, options: CandidateOptions = {}): Candidate[] {
   const pad = options.lengthPad ?? 1;
   const swap = options.switchDelay ?? 0.5;
   const maxCandidates = options.maxCandidates ?? 20000;
-  const all: Candidate[] = [];
+  // 候補は、まず軽い形（動作の並びだけ）で貯め、間引いたあとで Stint に組み立てる（全部を組み立てると、メモリが足りなくなる）
+  interface Slim { label: string; assignment: Record<string, SearchRole>; target: number; plan: Array<[CharacterConfig, string[]]> }
+  const all: Slim[] = [];
+  const pushPlan = (plan: Array<[CharacterConfig, string[]]>, assignment: Record<string, SearchRole>, target: number): void => {
+    if (plan.length === 0) return;
+    const parts: string[] = [];
+    for (const [c, steps] of plan) {
+      const names: Array<{ s: string; n: number }> = [];
+      for (const st of steps) {
+        const d = defOf(c, st);
+        if (!d) return;
+        const last = names[names.length - 1];
+        if (last && last.s === d.shortName) last.n++; else names.push({ s: d.shortName, n: 1 });
+      }
+      parts.push(`${c.name}[${names.map(x => (x.n > 1 ? `${x.s}×${x.n}` : x.s)).join(' ')}]`);
+    }
+    all.push({ label: parts.join(' → '), assignment, target, plan });
+  };
 
   for (const assignment of roleAssignments(characters, roles)) {
     const byRole = (r: SearchRole) => characters.filter(c => assignment[c.id] === r);
@@ -148,11 +196,12 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
     const S = byRole('subAttacker');
     const A = byRole('attacker');
     // 出場の順番: サポーター → サブアタッカー → アタッカー。同じ役割の中は、並べ替えを全部試す（役割をまたぐ入れ替えは、近傍探索 neighborsOf が試す）
-    const orders = product([permutations(P), permutations(S), permutations(A)]).map(([p, s, a]) => [...p, ...s, ...a] as CharacterConfig[]);
+    const orders = thin(product([permutations(P), permutations(S), permutations(A)]).map(([p, s, a]) => [...p, ...s, ...a] as CharacterConfig[]), MAX_ORDERS);
     // 使い方: キャラごとの選択肢の直積
     const useLists = characters.map(c => useOptions(c, assignment[c.id]));
     if (useLists.some(l => l.length === 0)) continue;
-    for (const uses of product(useLists)) {
+    // 使い方の組み合わせは、E の連続・長押しを足すと数万通りになる。決まった間隔で間引いて残し（足りない分は、山登りの近傍が補う）
+    for (const uses of thin(product(useLists), MAX_USES)) {
       const useOf = new Map(characters.map((c, i) => [c.id, uses[i]]));
       // 目安の長さ = 使う E・Q の最長 CT + pad（決定 A）。何も使わないときは作らない
       const cts = characters.flatMap(c => {
@@ -174,7 +223,7 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
           const cycle = Math.max(0.1, Math.min(...attackers.map(c => tpl.steps.reduce((x, s) => x + durationOf(c, s), 0))));
           const r0 = Math.max(1, Math.round(fill / cycle));
           // 繰り返しの回数: 1 回から目安 +1 回まで（上限 5 回）。手で組んだ例は、目安より短い 1 周の方が DPS が高かった
-          for (let r = 1; r <= Math.min(r0 + 1, 5); r++) {
+          for (let r = Math.max(1, r0 - 1); r <= Math.min(r0 + 1, 5); r++) {
             // アタッカーごとの並び（スキル → 攻撃の型の繰り返し（→ 最後に E を足す）、Q はどこかに差し込む）の選択肢
             const withTail = tpl.steps.includes('e') ? [false, true] : [false];
             const variants = (c: CharacterConfig): string[][] => {
@@ -187,22 +236,23 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
                 if (!u.q) { out.push(base); continue; }
                 // Q の位置: 先頭・末尾・「E の直後」・「重撃の直前」（アタッカーが 2 人以上のときは、先頭と末尾だけ）
                 const pos = new Set<number>([0, base.length]);
-                if (attackers.length === 1) base.forEach((s, i) => { if (s === 'ca') pos.add(i); if (s === 'e') pos.add(i + 1); });
+                if (attackers.length === 1) { const i = base.findIndex(s => s === 'e'); if (i >= 0) pos.add(i + 1); }
                 for (const p of [...pos].sort((a, b) => a - b)) out.push([...base.slice(0, p), 'q', ...base.slice(p)]);
               }
               return out;
             };
             for (const attackerSteps of product(attackers.map(variants))) {
-              const stints: Stint[] = [];
-              let ok = true;
-              for (const c of [...others, ...attackers]) {
-                const steps = assignment[c.id] === 'attacker' ? attackerSteps[attackers.indexOf(c)] : useSteps(useOf.get(c.id)!);
-                const actions = steps.map(s => instance(c, s));
-                if (actions.some(a => a === null)) { ok = false; break; }
-                stints.push({ id: `s${stints.length}`, characterId: c.id, actions: actions as CharacterActionInstance[] });
+              pushPlan([...others, ...attackers].map(c => [c, assignment[c.id] === 'attacker' ? attackerSteps[attackers.indexOf(c)] : useSteps(useOf.get(c.id)!)] as [CharacterConfig, string[]]), assignment, target);
+            }
+            // アタッカーが 1 人のとき: 出場を 2 つに分ける型（スキル・爆発だけの出場を、他のキャラと同じ並びに置き、攻撃だけの出場を最後に置く。例: コロンビーナ [E Q] → … → [重撃]）
+            if (attackers.length === 1 && useSteps(useOf.get(attackers[0].id)!).length > 0) {
+              const a = attackers[0];
+              for (const tail of withTail) {
+                const fill: string[] = [];
+                for (let i = 0; i < r; i++) fill.push(...tpl.steps);
+                if (tail) fill.push('e');
+                pushPlan([...others.map(c => [c, useSteps(useOf.get(c.id)!)] as [CharacterConfig, string[]]), [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
               }
-              if (!ok || stints.length === 0) continue;
-              all.push({ id: 'c', label: describe(characters, stints), assignment, targetSeconds: target, stints });
             }
           }
         }
@@ -216,7 +266,15 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
     seen.add(c.label);
     return true;
   });
-  return thin(unique, maxCandidates).map((c, i) => ({ ...c, id: `c${i}` }));
+  const slimKey = (s: Slim): string => {
+    const atk = Object.entries(s.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id).sort();
+    return `${atk.join('+')}|${atk.some(id => s.plan.filter(([c]) => c.id === id).length > 1) ? 'split' : 'one'}`;
+  };
+  return thinStratified(unique, maxCandidates, slimKey).map((s, i) => {
+    const stints: Stint[] = [];
+    for (const [c, steps] of s.plan) stints.push({ id: `s${stints.length}`, characterId: c.id, actions: steps.map(st => instance(c, st) as CharacterActionInstance) });
+    return { id: `c${i}`, label: s.label, assignment: s.assignment, targetSeconds: s.target, stints };
+  });
 }
 
 /** 近傍探索で、1 人の出場に入れる・並べ替える動作の種類 */
@@ -245,12 +303,34 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     steps: s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '')),
   }));
   const clone = () => plan0.map(p => ({ c: p.c, steps: [...p.steps] }));
-  // 出場の入れ替え
+  // 出場の入れ替え（隣どうし）と、出場を別の位置へ移す
   for (let i = 0; i + 1 < plan0.length; i++) {
     const pl = clone();
     [pl[i], pl[i + 1]] = [pl[i + 1], pl[i]];
     make(pl);
   }
+  for (let i = 0; i < plan0.length; i++) {
+    for (let j = 0; j < plan0.length; j++) {
+      if (j === i || Math.abs(i - j) === 1) continue;
+      const pl = clone();
+      const [x] = pl.splice(i, 1);
+      pl.splice(j, 0, x);
+      make(pl);
+    }
+  }
+  // 出場を 2 つに分ける（例: コロンビーナの [E Q] と、あとの [重撃]）/ 同じキャラの隣り合う出場を 1 つにまとめる
+  plan0.forEach((p, si) => {
+    for (let k = 1; k < p.steps.length; k++) {
+      const pl = clone();
+      pl.splice(si, 1, { c: p.c, steps: p.steps.slice(0, k) }, { c: p.c, steps: p.steps.slice(k) });
+      make(pl);
+    }
+    if (si + 1 < plan0.length && plan0[si + 1].c.id === p.c.id) {
+      const pl = clone();
+      pl.splice(si, 2, { c: p.c, steps: [...p.steps, ...plan0[si + 1].steps] });
+      make(pl);
+    }
+  });
   plan0.forEach((p, si) => {
     const n = p.steps.length;
     for (let i = 0; i < n; i++) {
@@ -264,6 +344,16 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
         pl[si].steps.splice(j, 0, x);
         make(pl);
       }
+    }
+    // 同じ動作をまとめて差し込む（E を 2〜4 回、重撃を 2〜5 回）/ 先頭から続く同じ動作の連続をまとめて消す
+    for (const [s, ks] of [['e', [2, 3, 4]], ['ca', [2, 3, 5]]] as Array<[string, number[]]>) {
+      if (!defOf(p.c, s)) continue;
+      for (const k of ks) for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...Array.from({ length: k }, () => s)); make(pl); }
+    }
+    for (let i = 0; i < n; i++) {
+      let j = i;
+      while (j < n && p.steps[j] === p.steps[i]) j++;
+      if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl); }
     }
     // 差し込む
     for (const s of NEIGHBOR_STEPS) {

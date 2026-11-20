@@ -28,11 +28,13 @@ export interface SearchSettings {
   refineBudget?: number;
 }
 
-const DEFAULT_REFINE_BUDGET = 360;
+const DEFAULT_REFINE_BUDGET = 700;
 /** 探索中（④④b）の戦闘時間の上限（秒） */
 const EXPLORE_SECONDS = 60;
 /** 山登りの 1 回で試す近傍の数の上限 */
 const REFINE_BATCH = 70;
+/** 許す CT 違反（CT 待ち）の数。gcsim が待ってから動くので、DPS は実測で正しく出る。決めた数を超える候補は捨てる（evaluate.ts の maxCtIssues） */
+const TOLERATED_CT_ISSUES = 4;
 /** 山登りの先行 1 回の足切り（いまの最良に対する割合） */
 const REFINE_PREFILTER = 0.85;
 
@@ -67,7 +69,7 @@ export interface SearchCounts {
 }
 
 export type SearchOutcome =
-  | { status: 'ok'; results: SearchResultItem[]; counts: SearchCounts; elapsedMs: number; spearman?: number; bestQuickScoreRank?: number }
+  | { status: 'ok'; results: SearchResultItem[]; counts: SearchCounts; elapsedMs: number; spearman?: number; bestQuickScoreRank?: number; groupBest?: Array<{ key: string; dps: number; label: string }> }
   | { status: 'cancelled' }
   | { status: 'error'; message: string };
 
@@ -106,7 +108,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     args.onProgress?.({ phase: 'generate', done: 0, total: 1 });
     const candidates = generateCandidates(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });
     if (candidates.length === 0) return { status: 'error', message: 'NO_CANDIDATES' };
-    const ev = evaluateCandidates(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt });
+    const ev = evaluateCandidates(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
     if (ev.scored.length === 0) return { status: 'error', message: 'NO_VALID_CANDIDATES' };
     if (cancelled()) return { status: 'cancelled' };
 
@@ -150,46 +152,65 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     // ④ 少ない回数（簡易スコアの順に、成功が keep1 個になるまで。補う上限は keep1 の 3 倍）
     // 探索中の戦闘時間は短め（最大 60 秒）にして速くする。最後の確認（⑤）だけ、指定の戦闘時間で行う
     const exploreSeconds = Math.min(settings.battleSeconds, EXPLORE_SECONDS);
-    const r1 = await mapLimit(ev.scored.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1), exploreSeconds);
+    // 出発点は、アタッカーの割り当てごとに均等に取る（簡易スコアの上位だけだと、1 つの割り当てに偏り、別の割り当てに良い形があっても届かない）
+    const groupOf = (sc: ScoredCandidate): string => Object.entries(sc.candidate.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id).sort().join('+');
+    const byGroup = new Map<string, ScoredCandidate[]>();
+    for (const sc of ev.scored) { const k = groupOf(sc); const l = byGroup.get(k); if (l) l.push(sc); else byGroup.set(k, [sc]); }
+    const seedPool: ScoredCandidate[] = [];
+    for (let i = 0; seedPool.length < ev.scored.length; i++) {
+      let any = false;
+      for (const l of byGroup.values()) if (i < l.length) { seedPool.push(l[i]); any = true; }
+      if (!any) break;
+    }
+    const r1 = await mapLimit(seedPool.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1), exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);
     const quickFailed: Record<string, number> = {};
     for (const r of r1) if (r.dps === undefined) quickFailed[r.error ?? '?'] = (quickFailed[r.error ?? '?'] ?? 0) + 1;
     if (ok1.length === 0) return { status: 'error', message: Object.keys(quickFailed)[0] ?? 'ALL_FAILED' };
 
-    // ④b 山登り: gcsim の結果が一番良い候補（上位 2 つ）から、1 か所だけ変えた候補（出場の入れ替え・動作の消去・移動・差し込み）を全部試し、良くなったらそこへ移る。
-    //   簡易スコアが外れても、良い形に寄っていける（手で組んだ例と同じ DPS の形まで、実測で到達した）
+    // ④b 山登り: アタッカーの割り当てごとに別々に、その中で gcsim の結果が一番良い候補から、1 か所だけ変えた候補（出場の入れ替え・分割・結合・移動、動作の消去・移動・差し込み）を
+    //   全部試し、良くなったらそこへ移る。割り当て同士を比べて早く切ることはしない（出発点が低くても、登った先が一番高いことがある。例: 手で組んだ形は、出発点では 6 割だった）。
+    //   その割り当ての中で、良くならない回が 2 回続いたら、その割り当てはそこで終わり
     const budget = settings.refineBudget ?? DEFAULT_REFINE_BUDGET;
-    const bestOf = () => r1.reduce((m, r) => (r.dps !== undefined ? Math.max(m, r.dps) : m), 0);
     if (budget > 0 && !cancelled()) {
       const tried = new Set<string>(r1.map(r => r.sc.candidate.label));
       let used = 0;
       args.onProgress?.({ phase: 'refine', done: 0, total: budget });
-      let stale = 0;
-      for (let round = 0; round < 12 && used < budget && !cancelled(); round++) {
-        const frontier = r1.filter(r => r.dps !== undefined).sort((x, y) => y.dps! - x.dps!).slice(0, 2);
-        const pool = new Map<string, Candidate>();
-        for (const f of frontier) for (const n of neighborsOf(characters, f.sc.candidate)) if (!tried.has(n.label)) pool.set(n.label, n);
-        if (pool.size === 0) break;
-        const ev2 = evaluateCandidates(characters, [...pool.values()], { switchDelay: args.switchDelay, defHalt: args.defHalt });
-        for (const c of pool.keys()) tried.add(c);
-        const batch = ev2.scored.slice(0, Math.min(REFINE_BATCH, budget - used));
-        if (batch.length === 0) break;
-        const before = bestOf();
-        // 先に 1 回だけ回して、明らかに悪い候補（いまの最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
-        const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds);
-        const keepSc = first.filter(r => r.dps !== undefined && r.dps >= before * REFINE_PREFILTER).map(r => r.sc);
-        const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds);
-        used += batch.length;
-        args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
-        r1.push(...rr);
-        // 良くならない回が 2 回続いたら終わり
-        stale = bestOf() > before * 1.003 ? 0 : stale + 1;
-        if (stale >= 2) break;
+      const stale = new Map<string, number>();
+      const bestIn = (g: string): QuickRun | undefined => r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!)[0];
+      const groups = [...byGroup.keys()].filter(g => bestIn(g));
+      for (let round = 0; round < 14 && used < budget && !cancelled(); round++) {
+        let progressed = false;
+        for (const g of groups) {
+          if ((stale.get(g) ?? 0) >= 2 || used >= budget || cancelled()) continue;
+          const start = bestIn(g)!;
+          const pool = new Map<string, Candidate>();
+          for (const n of neighborsOf(characters, start.sc.candidate)) if (!tried.has(n.label)) pool.set(n.label, n);
+          if (pool.size === 0) { stale.set(g, 99); continue; }
+          const ev2 = evaluateCandidates(characters, [...pool.values()], { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
+          for (const c of pool.keys()) tried.add(c);
+          const batch = ev2.scored.slice(0, Math.min(REFINE_BATCH, budget - used));
+          if (batch.length === 0) { stale.set(g, 99); continue; }
+          progressed = true;
+          const before = start.dps!;
+          // 先に 1 回だけ回して、明らかに悪い候補（その割り当ての最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
+          const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds);
+          const keepSc = first.filter(r => r.dps !== undefined && r.dps >= before * REFINE_PREFILTER).map(r => r.sc);
+          const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds);
+          used += batch.length;
+          args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
+          r1.push(...rr);
+          stale.set(g, (bestIn(g)?.dps ?? 0) > before * 1.003 ? 0 : (stale.get(g) ?? 0) + 1);
+        }
+        if (!progressed) break;
       }
     }
     if (cancelled()) return { status: 'cancelled' };
     const okAll = r1.filter(r => r.dps !== undefined);
+    // 診断用: アタッカーの割り当てごとの、探索中（短い戦闘時間）の最良
+    const groupBestMap = new Map<string, { key: string; dps: number; label: string }>();
+    for (const r of okAll) { const k = groupOf(r.sc); const cur = groupBestMap.get(k); if (!cur || r.dps! > cur.dps) groupBestMap.set(k, { key: k, dps: r.dps!, label: r.sc.candidate.label }); }
 
     let spearman: number | undefined;
     let bestQuickScoreRank: number | undefined;
@@ -212,7 +233,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score }))
       .sort((x, y) => y.dps - x.dps);
     return {
-      status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank,
+      status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank, groupBest: [...groupBestMap.values()],
       counts: { candidates: candidates.length, rejected: ev.rejected, rejectedBy: ev.rejectedBy, scored: ev.scored.length, quick: r1.length, quickOk: okAll.length, quickFailed },
     };
   } catch (e) {

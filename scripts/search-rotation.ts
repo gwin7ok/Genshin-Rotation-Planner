@@ -4,7 +4,7 @@
  *
  *   node scripts/search-rotation.ts ナヒーダ 胡桃 香菱 ベネット
  *   node scripts/search-rotation.ts 胡桃 香菱 ナヒーダ 行秋 --owned=tools/hoyolab-fetch/out/owned-characters.json
- *   オプション: --seconds=40（戦闘時間）--keep1=200（簡易スコアで残す数）--runs1=3 --keep2=30（少ない回数の gcsim で残す数）--runs2=10 --top=10 --max=20000（候補の上限）--out=結果.json
+ *   オプション: --seconds=40（戦闘時間）--keep1=200（簡易スコアで残す数）--runs1=3 --keep2=30（少ない回数の gcsim で残す数）--runs2=10 --top=10 --max=20000（候補の上限）--out=結果.json --attacker=コロンビーナ（役割にアタッカーを足す）
  *
  * 役割は、マスターの初期値（roles）を使う。--owned を付けると、持ちキャラの実際の装備・凸・天賦を使う（付けないと、アプリの「仮値」）。
  * 爆発のエネルギーは無視する（アプリの通常の計算と同じ）。
@@ -61,7 +61,12 @@ for (const n of names) {
     characters.push({ ...structuredClone(m), ...eq, customStats: cs.defaultCustomStatsFor(m.id) });
   }
 }
-const roles: Record<string, string[]> = Object.fromEntries(characters.map(c => [c.id, c.roles ?? []]));
+const roles: Record<string, string[]> = Object.fromEntries(characters.map(c => [c.id, [...(c.roles ?? [])]]));
+// --attacker=名前,名前: その人にアタッカーの役割を足す（役割の上書きの代わり）
+for (const n of (str('attacker') ?? '').split(',').filter(Boolean)) {
+  const c = characters.find(x => x.name === n || x.englishName === n);
+  if (c && !roles[c.id].includes('attacker')) roles[c.id].push('attacker');
+}
 console.log(`編成: ${characters.map(c => `${c.name}(${(c.roles ?? []).join('+') || '役割なし'})`).join(' / ')}`);
 
 // 探索の本体は、画面と共通（src/utils/rotationSearch/search.ts）
@@ -86,6 +91,7 @@ console.log(`候補 ${c.candidates} 個 → CT 違反などで ${c.rejected} 個
 for (const [k, v] of Object.entries(c.rejectedBy).sort((a, b) => b[1] - a[1]).slice(0, 5)) console.log(`   捨てた ${v} 個: ${k}`);
 for (const [k, v] of Object.entries(c.quickFailed)) console.log(`   gcsim で失敗 ${v} 個: ${k.slice(0, 80)}`);
 if (out.spearman !== undefined) console.log(`簡易スコアと gcsim DPS の順位相関（スピアマン）: ${out.spearman.toFixed(2)} / gcsim 最良の候補の、簡易スコアの順位: ${out.bestQuickScoreRank} 位（${c.scored} 個中）`);
+for (const g of (out.groupBest ?? []).sort((a: any, b: any) => b.dps - a.dps)) console.log(`   アタッカー ${g.key.split('+').map((id: string) => characters.find((c: any) => c.id === id)?.name).join('+')}: 探索中の最良 ${(g.dps / 1000).toFixed(1)}k ${g.label.slice(0, 120)}`);
 console.log(`所要時間 ${(out.elapsedMs / 1000).toFixed(1)} 秒`);
 console.log(`\n=== 順位（戦闘 ${SECONDS} 秒・gcsim ${RUNS2} 回。DPS の単位は千）===`);
 for (const [i, r] of out.results.slice(0, TOP).entries()) {

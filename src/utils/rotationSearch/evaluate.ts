@@ -13,6 +13,12 @@ export interface ScoreOptions {
   defHalt?: boolean;
   /** 重なりの重み（既定 0.25） */
   overlapWeight?: number;
+  /**
+   * 許す CT 違反（スキル・爆発の CT 待ち）の数（既定 0 = 1 件でもあれば捨てる）。
+   * gcsim は CT が明けるまで待ってから動くので、待ちを含む形も実測の DPS は正しく出る（手で組んだ例にも、周回の継ぎ目で CT 待ちが出るものがある）。
+   * 許した候補は、違反 1 件につき簡易スコアを 7% 下げて並べる
+   */
+  maxCtIssues?: number;
 }
 
 export interface ScoredCandidate {
@@ -23,6 +29,8 @@ export interface ScoredCandidate {
   /** アタッカーの表の 1 秒あたりの、他のキャラの効果の重なった秒数 */
   overlapPerSecond: number;
   score: number;
+  /** 許した CT 違反の数 */
+  ctIssues: number;
 }
 
 export interface EvaluateResult {
@@ -63,7 +71,8 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
   for (const candidate of candidates) {
     const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: 0, defHalt: options.defHalt ?? true });
     const bad = result.validationIssues.filter(v => v.severity !== 'info');
-    if (bad.length > 0) {
+    const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
+    if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {
       rejected++;
       const key = bad[0].title;
       rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
@@ -71,7 +80,7 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
     }
     const attackerIds = new Set(Object.entries(candidate.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id));
     const s = simpleScore(result, attackerIds, weight);
-    scored.push({ candidate, totalSeconds: result.totalDuration, ...s });
+    scored.push({ candidate, totalSeconds: result.totalDuration, ...s, score: s.score * 0.93 ** bad.length, ctIssues: bad.length });
   }
   scored.sort((a, b) => b.score - a.score);
   return { scored, rejected, rejectedBy };

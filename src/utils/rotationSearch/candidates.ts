@@ -376,7 +376,14 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     if (!defOf(c, 'n')) continue;
     for (let i = 0; i <= plan0.length; i++) { const pl = clone(); pl.splice(i, 0, { c, steps: ['n'] }); make(pl, 'newN'); }
     // 先頭に足して、そこまでを 1 回目だけにする（周回の開始位置を 1 つ後ろへ。1 回で届くようにする）
-    if ((base.loopStartIndex ?? 0) === 0) { const pl = clone(); pl.unshift({ c, steps: ['n'] }); loop = 1; make(pl, 'newN'); loop = 0; }
+  }
+  // 1 周目だけ行う動作（周回の前の、1 回きりの出場）を、先頭に足す: どのキャラの、基本の動作（E・Q・重撃・通常攻撃など）でも試す。周回の開始位置は 1 つ後ろへ（1 周目だけ置く出場は、最大 2 つ）
+  // 例: アタッカーが周回の前に E を 1 回だけ使って、周回の中では別の並びにする。サポーターが先に爆発を撃っておく
+  if ((base.loopStartIndex ?? 0) < 2) {
+    for (const c of seenChars.values()) for (const st of NEIGHBOR_STEPS) {
+      if (!defOf(c, st)) continue;
+      const pl = clone(); pl.unshift({ c, steps: [st] }); loop = (base.loopStartIndex ?? 0) + 1; make(pl, st === 'n' ? 'newN' : 'pre'); loop = 0;
+    }
   }
   loop = base.loopStartIndex ?? 0; // 出場の中だけを変える操作は、周回の開始位置を保つ
   plan0.forEach((p, si) => {

@@ -7,6 +7,7 @@
  *  - 使う E・Q（決定 A）: 使わない E・Q も候補。アタッカー・サブアタッカーの Q は使う
  *  - アタッカーの攻撃の型: 通常攻撃・通常＋重撃・重撃・落下・高落下の繰り返し。回数は、ローテーションの長さの目安（使う E・Q の最長 CT + 1 秒）から決める
  */
+import { macrosOf } from '../../masterdata/sequenceRules';
 import type { CharacterActionInstance, CharacterConfig, CharacterRole, Stint } from '../../types/genshin';
 
 export type SearchRole = CharacterRole;
@@ -99,7 +100,12 @@ function useOptions(c: CharacterConfig, role: SearchRole): Use[] {
     }
     if (defOf(c, 'e_recast')) esOptions.push(['e', 'e_recast']);
   }
-  if (defOf(c, 'e_hold')) esOptions.push(['e_hold']); // 長押しは、役割を問わず試す（例: ラウマの長押しスキル）
+  // マスターデータの「ひとまとまりの並び」（sequenceRules）。E・長押し・再発動だけの部分は E の使い方に、末尾の Q は Q を使うかどうかに入れる
+  for (const m of macrosOf(c.id)) {
+    const body = m[m.length - 1] === 'q' ? m.slice(0, -1) : m;
+    if (body.length > 0 && body.every(s => s !== 'q' && s !== 'n' && s !== 'ca' && !!defOf(c, s)) && !esOptions.some(o => o.join() === body.join())) esOptions.push(body);
+  }
+  if (defOf(c, 'e_hold') && !esOptions.some(o => o.join() === 'e_hold')) esOptions.push(['e_hold']); // 長押しは、役割を問わず試す（例: ラウマの長押しスキル）
   const out: Use[] = [];
   for (const es of esOptions) {
     // Q は、使う・使わないの両方を試す（手で組んだ例: 八重神子・オデットは Q を使わない方が速い。決定 A）。
@@ -353,6 +359,11 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     }
   });
   // 新しい出場（通常攻撃 1 回だけ）を、どこかに足す（手組みでは、アタッカーが最初に通常攻撃を 1 回だけ当ててから、他のキャラのスキルに移る形が、DPS を大きく上げた）
+  // マスターデータの並び（sequenceRules）をひとまとまりで差し込む
+  for (const p of plan0) for (const m of macrosOf(p.c.id)) {
+    if (!m.every(s => !!defOf(p.c, s))) continue;
+    plan0.forEach((q, si) => { if (q.c.id !== p.c.id) return; for (let i = 0; i <= q.steps.length; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...m); make(pl); } });
+  }
   const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
   for (const c of seenChars.values()) {
     if (!defOf(c, 'n')) continue;

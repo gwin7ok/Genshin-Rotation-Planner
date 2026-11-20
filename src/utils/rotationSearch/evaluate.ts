@@ -4,6 +4,7 @@
  * 簡易スコアは、正しさではなく足切り。多少外れても、次の段（gcsim の少ない回数の実行）が拾い直す。
  *   スコア = アタッカーの表の時間の割合 ×（1 + 重なりの重み × アタッカーの表の 1 秒あたりの、他のキャラの効果の重なった秒数）
  */
+import { prerequisiteViolations } from '../../masterdata/sequenceRules';
 import type { CharacterConfig } from '../../types/genshin';
 import { calculateRotation, type CalculatedRotation } from '../rotationCalculator';
 import type { Candidate } from './candidates';
@@ -70,6 +71,14 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
   let rejected = 0;
   for (const candidate of candidates) {
     const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: candidate.loopStartIndex ?? 0, defHalt: options.defHalt ?? true });
+    // 前提条件（マスターデータの sequenceRules）を満たさない並びは、gcsim で実行できないので、測る前に捨てる
+    const pre = prerequisiteViolations(candidate.stints, id => characters.find(c => c.id === id)?.element);
+    if (pre.length > 0) {
+      rejected++;
+      const key = `${characters.find(c => c.id === pre[0].rule.characterId)?.name ?? ''}: ${pre[0].rule.resource}が無いのに使っている`;
+      rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
+      continue;
+    }
     const bad = result.validationIssues.filter(v => v.severity !== 'info');
     const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
     if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {

@@ -46,6 +46,7 @@
     "build:aliases": "node scripts/build-key-aliases.ts",
     "check:catalog": "node scripts/check-catalog-sample.mjs",
     "coverage:catalog": "node scripts/run-catalog-coverage.mjs",
+    "probe:macros": "node scripts/detect-macros.ts",
     "probe:effects": "node scripts/probe-effect-keys.ts",
     "probe:skill-hits": "node scripts/probe-skill-hits.ts",
     "probe:queue-frames": "node scripts/probe-can-queue-after.ts",

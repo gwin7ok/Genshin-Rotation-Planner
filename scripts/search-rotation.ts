@@ -10,6 +10,7 @@
  * 爆発のエネルギーは無視する（アプリの通常の計算と同じ）。
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import { createServer } from 'vite';
 import { useNodeGcsim } from './gcsim-node.ts';
 
@@ -65,14 +66,16 @@ console.log(`編成: ${characters.map(c => `${c.name}(${(c.roles ?? []).join('+'
 
 // 探索の本体は、画面と共通（src/utils/rotationSearch/search.ts）
 const { searchRotation } = await server.ssrLoadModule('/src/utils/rotationSearch/search.ts');
-const cores = Math.max(1, Math.min(6, Number(process.env.GCSIM_NODE_WORKERS) || 6));
+const cores = Math.max(1, Math.min(24, Number(process.env.GCSIM_NODE_WORKERS) || Math.max(6, os.availableParallelism() - 4)));
 let lastPhase = '';
-const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, verify: `⑤ gcsim ${RUNS2} 回ずつ` };
+const T0 = Date.now();
+const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, refine: '④b 山登り', verify: `⑤ gcsim ${RUNS2} 回ずつ` };
 const out = await searchRotation({
   characters, roles, weapons, artifacts, switchDelay: 0.5, defHalt: true, cores,
   settings: { battleSeconds: SECONDS, keep1: KEEP1, runs1: RUNS1, keep2: KEEP2, runs2: RUNS2, maxCandidates: MAX },
   onProgress: (p: any) => {
-    if (p.phase !== lastPhase) { lastPhase = p.phase; process.stdout.write(`\n${phaseName[p.phase]}（${p.total} 個）…`); }
+    if (p.phase !== lastPhase) { process.stdout.write(`
+[経過 ${((Date.now() - T0) / 1000).toFixed(0)} 秒]`); lastPhase = p.phase; process.stdout.write(`\n${phaseName[p.phase]}（${p.total} 個）…`); }
     else if (p.done % 25 === 0) process.stdout.write(` ${p.done}`);
   },
 });

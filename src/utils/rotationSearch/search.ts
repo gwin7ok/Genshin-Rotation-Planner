@@ -33,8 +33,10 @@ const DEFAULT_REFINE_BUDGET = 360;
 const EXPLORE_SECONDS = 60;
 /** 山登りの 1 回で試す近傍の数の上限 */
 const REFINE_BATCH = 70;
+/** 山登りの先行 1 回の足切り（いまの最良に対する割合） */
+const REFINE_PREFILTER = 0.85;
 
-export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 40, keep1: 200, runs1: 3, keep2: 30, runs2: 10, maxCandidates: 20000 };
+export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 60, keep1: 30, runs1: 3, keep2: 6, runs2: 10, maxCandidates: 20000 };
 
 export type SearchPhase = 'generate' | 'quick' | 'refine' | 'verify';
 
@@ -174,7 +176,10 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         const batch = ev2.scored.slice(0, Math.min(REFINE_BATCH, budget - used));
         if (batch.length === 0) break;
         const before = bestOf();
-        const rr = await mapLimit(batch, settings.runs1, 'refine', batch.length, exploreSeconds);
+        // 先に 1 回だけ回して、明らかに悪い候補（いまの最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
+        const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds);
+        const keepSc = first.filter(r => r.dps !== undefined && r.dps >= before * REFINE_PREFILTER).map(r => r.sc);
+        const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds);
         used += batch.length;
         args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
         r1.push(...rr);

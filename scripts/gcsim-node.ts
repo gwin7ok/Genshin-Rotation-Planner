@@ -65,8 +65,7 @@ function dropWorker(w: Worker): void {
   void w.terminate();
 }
 
-async function createWorker(): Promise<Worker> {
-  const module = await loadModule();
+function createWorker(module: WebAssembly.Module): Worker {
   const w = new Worker(WORKER_PATH, { workerData: { module, wasmExecPath: fileURLToPath(WASM_EXEC_PATH) } });
   w.on('message', (m: { id: number; ok: boolean; out?: string; error?: string }) => {
     const p = pending.get(m.id);
@@ -91,17 +90,19 @@ async function createWorker(): Promise<Worker> {
 }
 
 /** 空いている Worker を返す（全部使用中で、上限未満なら、新しく作る。上限なら、一番空いているものに並べる） */
-async function pickWorker(): Promise<Worker> {
+// 同期で選ぶ（選んでから仕事を数えるまでの間に await を挟むと、同時に呼ばれた要求が全部同じ Worker を「空き」と見てしまい、直列になる）
+function pickWorker(module: WebAssembly.Module): Worker {
   const idle = workers.find(w => (inFlight.get(w) ?? 0) === 0);
   if (idle) return idle;
-  if (workers.length < maxWorkers()) return createWorker();
+  if (workers.length < maxWorkers()) return createWorker(module);
   return workers.reduce((a, b) => ((inFlight.get(a) ?? 0) <= (inFlight.get(b) ?? 0) ? a : b));
 }
 
 /** gcsim を 1 回呼んで、gcsim が返す文字列（JSON か、平文のエラー文）を得る */
 export async function gcsimCall(kind: Kind, payload: { config: string; seed?: number }, signal?: AbortSignal): Promise<string> {
   if (signal?.aborted) throw new DOMException('aborted', 'AbortError');
-  const w = await pickWorker();
+  const module = await loadModule();
+  const w = pickWorker(module);
   return new Promise<string>((resolve, reject) => {
     const id = nextId++;
     const onAbort = () => {

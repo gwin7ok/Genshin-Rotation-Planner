@@ -24,6 +24,8 @@ export interface Candidate {
   stints: Stint[];
   /** 周回の開始位置（出場の番号。0 = 最初から。1 以上 = 最初の数個の出場は 1 回目だけで、それ以降を繰り返す。手組みの「最初に通常攻撃を 1 回だけ当てる」形） */
   loopStartIndex?: number;
+  /** 近傍操作で作ったときの、操作の種類（山登りで、種類ごとに均等に測るのに使う） */
+  op?: string;
 }
 
 export interface CandidateOptions {
@@ -310,7 +312,7 @@ const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
 export function neighborsOf(characters: CharacterConfig[], base: Candidate): Candidate[] {
   const out = new Map<string, Candidate>();
   let loop = base.loopStartIndex ?? 0;
-  const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>): void => {
+  const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string): void => {
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
       const actions = steps.map(s => instance(c, s));
@@ -319,7 +321,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     }
     const label = describe(characters, stints, loop);
     if (label === base.label || out.has(label)) return;
-    out.set(label, { ...base, id: 'n', label, stints, loopStartIndex: loop });
+    out.set(label, { ...base, id: 'n', label, stints, loopStartIndex: loop, op });
   };
   const plan0 = base.stints.map(s => ({
     c: characters.find(c => c.id === s.characterId)!,
@@ -331,7 +333,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     if (k === (base.loopStartIndex ?? 0)) continue;
     const stints = base.stints;
     const label = describe(characters, stints, k);
-    if (!out.has(label)) out.set(label, { ...base, id: 'n', label, loopStartIndex: k });
+    if (!out.has(label)) out.set(label, { ...base, id: 'n', label, loopStartIndex: k, op: 'loop' });
   }
   // 出場の並びを変える操作では、周回の開始位置は 0 に戻す（位置がずれるため）。開始位置の変更は上の操作でできる
   loop = 0;
@@ -339,7 +341,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
   for (let i = 0; i + 1 < plan0.length; i++) {
     const pl = clone();
     [pl[i], pl[i + 1]] = [pl[i + 1], pl[i]];
-    make(pl);
+    make(pl, 'swap');
   }
   for (let i = 0; i < plan0.length; i++) {
     for (let j = 0; j < plan0.length; j++) {
@@ -347,7 +349,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
       const pl = clone();
       const [x] = pl.splice(i, 1);
       pl.splice(j, 0, x);
-      make(pl);
+      make(pl, 'move');
     }
   }
   // 出場を 2 つに分ける（例: コロンビーナの [E Q] と、あとの [重撃]）/ 同じキャラの隣り合う出場を 1 つにまとめる
@@ -355,56 +357,58 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     for (let k = 1; k < p.steps.length; k++) {
       const pl = clone();
       pl.splice(si, 1, { c: p.c, steps: p.steps.slice(0, k) }, { c: p.c, steps: p.steps.slice(k) });
-      make(pl);
+      make(pl, 'split');
     }
     if (si + 1 < plan0.length && plan0[si + 1].c.id === p.c.id) {
       const pl = clone();
       pl.splice(si, 2, { c: p.c, steps: [...p.steps, ...plan0[si + 1].steps] });
-      make(pl);
+      make(pl, 'merge');
     }
   });
   // 新しい出場（通常攻撃 1 回だけ）を、どこかに足す（手組みでは、アタッカーが最初に通常攻撃を 1 回だけ当ててから、他のキャラのスキルに移る形が、DPS を大きく上げた）
   // マスターデータの並び（sequenceRules）をひとまとまりで差し込む
   for (const p of plan0) for (const m of macrosOf(p.c.id)) {
     if (!m.every(s => !!defOf(p.c, s))) continue;
-    plan0.forEach((q, si) => { if (q.c.id !== p.c.id) return; for (let i = 0; i <= q.steps.length; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...m); make(pl); } });
+    plan0.forEach((q, si) => { if (q.c.id !== p.c.id) return; for (let i = 0; i <= q.steps.length; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...m); make(pl, 'macro'); } });
   }
   const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
   for (const c of seenChars.values()) {
     if (!defOf(c, 'n')) continue;
-    for (let i = 0; i <= plan0.length; i++) { const pl = clone(); pl.splice(i, 0, { c, steps: ['n'] }); make(pl); }
+    for (let i = 0; i <= plan0.length; i++) { const pl = clone(); pl.splice(i, 0, { c, steps: ['n'] }); make(pl, 'newN'); }
     // 先頭に足して、そこまでを 1 回目だけにする（周回の開始位置を 1 つ後ろへ。1 回で届くようにする）
-    if ((base.loopStartIndex ?? 0) === 0) { const pl = clone(); pl.unshift({ c, steps: ['n'] }); loop = 1; make(pl); loop = 0; }
+    if ((base.loopStartIndex ?? 0) === 0) { const pl = clone(); pl.unshift({ c, steps: ['n'] }); loop = 1; make(pl, 'newN'); loop = 0; }
   }
   loop = base.loopStartIndex ?? 0; // 出場の中だけを変える操作は、周回の開始位置を保つ
   plan0.forEach((p, si) => {
     const n = p.steps.length;
     for (let i = 0; i < n; i++) {
       // 消す
-      if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl); }
+      if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl, 'del'); }
       // 移す
       for (let j = 0; j < n; j++) {
         if (j === i || p.steps[i] === p.steps[j]) continue;
         const pl = clone();
         const [x] = pl[si].steps.splice(i, 1);
         pl[si].steps.splice(j, 0, x);
-        make(pl);
+        make(pl, 'mv');
       }
     }
     // 同じ動作をまとめて差し込む（E を 2〜4 回、重撃を 2〜5 回）/ 先頭から続く同じ動作の連続をまとめて消す
     for (const [s, ks] of [['e', [2, 3, 4]], ['ca', [2, 3, 5]]] as Array<[string, number[]]>) {
       if (!defOf(p.c, s)) continue;
-      for (const k of ks) for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...Array.from({ length: k }, () => s)); make(pl); }
+      for (const k of ks) for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, ...Array.from({ length: k }, () => s)); make(pl, 'bulk'); }
     }
     for (let i = 0; i < n; i++) {
       let j = i;
       while (j < n && p.steps[j] === p.steps[i]) j++;
-      if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl); }
+      if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl, 'del'); }
     }
     // 差し込む
-    for (const s of NEIGHBOR_STEPS) {
+    // 差し込む動作の語彙: 基本（e / q / ca / n / e_recast）+ そのキャラが持つ、ほかのアクション全部（ダッシュ・ジャンプ・落下・長押し・特殊スキルなど。手組みでは、ダッシュキャンセルや長押しが使われている）
+    const vocabulary = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
+    for (const s of vocabulary) {
       if (!defOf(p.c, s)) continue;
-      for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl); }
+      for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl, NEIGHBOR_STEPS.includes(s) ? 'ins' : `ins:${s}`); }
     }
   });
   return [...out.values()];

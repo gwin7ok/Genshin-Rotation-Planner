@@ -263,7 +263,16 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           if (pool.size === 0) { stale.set(g, 99); continue; }
           const ev2 = evaluateCandidates(characters, [...pool.values()], { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
           for (const c of pool.keys()) tried.add(c);
-          const batch = ev2.scored.slice(0, Math.min(REFINE_BATCH, budget - used));
+          // 近傍は操作の種類（入れ替え・移動・分割・消去・差し込みなど）ごとに簡易スコア順に並べ、種類を順に回って均等に取る（簡易スコアは当てにならないので、上位だけだと、ある種類の近傍が全く測られない）
+          const limit = Math.min(REFINE_BATCH, budget - used);
+          const byOp = new Map<string, ScoredCandidate[]>();
+          for (const sc of ev2.scored) { const k = sc.candidate.op ?? '?'; const l = byOp.get(k); if (l) l.push(sc); else byOp.set(k, [sc]); }
+          const batch: ScoredCandidate[] = [];
+          for (let i = 0; batch.length < limit; i++) {
+            let any = false;
+            for (const l of byOp.values()) if (i < l.length && batch.length < limit) { batch.push(l[i]); any = true; }
+            if (!any) break;
+          }
           if (batch.length === 0) { stale.set(g, 99); continue; }
           progressed = true;
           const before = bestIn(g)!.dps!;

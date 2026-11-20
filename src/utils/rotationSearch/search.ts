@@ -308,7 +308,19 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     }
 
     // ⑤ 多い回数（山登りで見つけたものも含める。上位は偶然に良かったものも混じるので、多めの回数で確かめ直す）
-    const stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).slice(0, Math.max(1, settings.keep2)).map(r => r.sc);
+    // 出場の分け方だけが違う（同じキャラの隣り合う出場を 1 つにすると同じ並びになる）候補は、1 つにまとめる（上位が、ほぼ同じ回転で埋まるのを避ける）
+    const mergedKey = (sc: ScoredCandidate): string => {
+      const parts: string[] = [];
+      let prev: string | undefined;
+      for (const s of sc.candidate.stints) {
+        const acts = s.actions.map(x => x.actionTypeId).join(',');
+        if (prev === s.characterId) parts[parts.length - 1] += ',' + acts; else parts.push(s.characterId + ':' + acts);
+        prev = s.characterId;
+      }
+      return parts.join('|') + '@' + (sc.candidate.loopStartIndex ?? 0);
+    };
+    const seenKeys = new Set<string>();
+    const stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => r.sc);
     const r2 = (await mapLimit(stage2, settings.runs2, 'verify')).filter(r => r.dps !== undefined);
     if (cancelled()) return { status: 'cancelled' };
     if (r2.length === 0) return { status: 'error', message: 'ALL_FAILED' };

@@ -1128,9 +1128,9 @@ export default function App() {
         defHalt={defHalt}
         hurt={hurt}
         stintCount={visibleStints.length}
-        onApply={next => {
+        onApply={(next, loopStart) => {
           updateStints(next);
-          setLoopStartIndex(0);
+          setLoopStartIndex(loopStart);
         }}
       />
 

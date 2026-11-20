@@ -20,7 +20,7 @@ interface AutoSearchDialogProps {
   /** いまのアクション（出場の数。0 でなければ、置き換わる旨を出す） */
   stintCount: number;
   /** 選んだ候補の出場を、ガントチャートに置く */
-  onApply: (stints: Stint[]) => void;
+  onApply: (stints: Stint[], loopStartIndex: number) => void;
 }
 
 const num = (s: string, fb: number, min: number, max: number): number => {
@@ -91,7 +91,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     if (out.status === 'ok') {
       setOutcome(out);
       setApplied(0);
-      onApply(stintsForApp(out.results[0].candidate.stints));
+      onApply(stintsForApp(out.results[0].candidate.stints), out.results[0].candidate.loopStartIndex ?? 0);
     } else if (out.status === 'cancelled') {
       setMessage(t('gcsim:search.cancelled'));
     } else {
@@ -200,7 +200,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                           {applied === i ? (
                             <span className="inline-flex items-center gap-1 text-emerald-300"><Check className="w-3.5 h-3.5" />{t('gcsim:search.applied')}</span>
                           ) : (
-                            <button onClick={() => { setApplied(i); onApply(stintsForApp(r.candidate.stints)); }} className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold">{t('gcsim:search.apply')}</button>
+                            <button onClick={() => { setApplied(i); onApply(stintsForApp(r.candidate.stints), r.candidate.loopStartIndex ?? 0); }} className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold">{t('gcsim:search.apply')}</button>
                           )}
                         </td>
                       </tr>

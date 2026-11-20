@@ -22,9 +22,9 @@ const num = (name: string, def: number) => {
 const str = (name: string) => args.find(x => x.startsWith(`--${name}=`))?.split('=')[1];
 const names = args.filter(x => !x.startsWith('--'));
 const SECONDS = num('seconds', 40);
-const KEEP1 = num('keep1', 200);
-const RUNS1 = num('runs1', 3);
-const KEEP2 = num('keep2', 30);
+const KEEP1 = num('keep1', 900);
+const RUNS1 = num('runs1', 1);
+const KEEP2 = num('keep2', 12);
 const RUNS2 = num('runs2', 10);
 const TOP = num('top', 10);
 const MAX = num('max', 20000);
@@ -98,7 +98,7 @@ for (const [i, r] of out.results.slice(0, TOP).entries()) {
   console.log(`${String(i + 1).padStart(2)}. ${(r.dps / 1000).toFixed(1).padStart(6)} ±${(r.sd / 1000).toFixed(1)}  長さ ${r.totalSeconds.toFixed(1)}s  スコア ${r.score.toFixed(3)}  ${r.candidate.label}`);
 }
 if (outPath) {
-  fs.writeFileSync(outPath, JSON.stringify({ party: names, seconds: SECONDS, counts: c, results: out.results.map((r: any) => ({ dps: r.dps, sd: r.sd, totalSeconds: r.totalSeconds, score: r.score, label: r.candidate.label })) }, null, 1));
+  fs.writeFileSync(outPath, JSON.stringify({ party: names, seconds: SECONDS, counts: c, results: out.results.map((r: any) => ({ dps: r.dps, sd: r.sd, totalSeconds: r.totalSeconds, score: r.score, label: r.candidate.label, rot: { loop: r.candidate.loopStartIndex ?? 0, stints: r.candidate.stints.map((x: any) => ({ c: x.characterId, a: x.actions.map((y: any) => y.actionTypeId.slice(x.characterId.length + 1)) })) } })) }, null, 1));
 }
 await server.close();
 process.exit(0);

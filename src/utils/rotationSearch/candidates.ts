@@ -21,6 +21,8 @@ export interface Candidate {
   /** ローテーションの長さの目安（秒） */
   targetSeconds: number;
   stints: Stint[];
+  /** 周回の開始位置（出場の番号。0 = 最初から。1 以上 = 最初の数個の出場は 1 回目だけで、それ以降を繰り返す。手組みの「最初に通常攻撃を 1 回だけ当てる」形） */
+  loopStartIndex?: number;
 }
 
 export interface CandidateOptions {
@@ -126,16 +128,16 @@ const cooldownOf = (c: CharacterConfig, step: string): number => defOf(c, step)?
 const durationOf = (c: CharacterConfig, step: string): number => defOf(c, step)?.defaultDuration ?? 0;
 
 /** 候補の要約（出場ごとに「キャラ名[アクション…]」。同じアクションの連続は ×n にまとめる） */
-function describe(characters: CharacterConfig[], stints: Stint[]): string {
+function describe(characters: CharacterConfig[], stints: Stint[], loopStartIndex = 0): string {
   const name = (id: string) => characters.find(c => c.id === id)?.name ?? id;
-  return stints.map(s => {
+  return stints.map((s, si) => {
     const parts: Array<{ s: string; n: number }> = [];
     for (const a of s.actions) {
       const last = parts[parts.length - 1];
       if (last && last.s === a.shortName) last.n++;
       else parts.push({ s: a.shortName, n: 1 });
     }
-    return `${name(s.characterId)}[${parts.map(p => (p.n > 1 ? `${p.s}×${p.n}` : p.s)).join(' ')}]`;
+    return `${loopStartIndex > 0 && si === loopStartIndex ? '↻' : ''}${name(s.characterId)}[${parts.map(p => (p.n > 1 ? `${p.s}×${p.n}` : p.s)).join(' ')}]`;
   }).join(' → ');
 }
 
@@ -172,9 +174,9 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
   const swap = options.switchDelay ?? 0.5;
   const maxCandidates = options.maxCandidates ?? 20000;
   // 候補は、まず軽い形（動作の並びだけ）で貯め、間引いたあとで Stint に組み立てる（全部を組み立てると、メモリが足りなくなる）
-  interface Slim { label: string; assignment: Record<string, SearchRole>; target: number; plan: Array<[CharacterConfig, string[]]> }
+  interface Slim { label: string; assignment: Record<string, SearchRole>; target: number; plan: Array<[CharacterConfig, string[]]>; loop: number }
   const all: Slim[] = [];
-  const pushPlan = (plan: Array<[CharacterConfig, string[]]>, assignment: Record<string, SearchRole>, target: number): void => {
+  const pushPlan = (plan: Array<[CharacterConfig, string[]]>, assignment: Record<string, SearchRole>, target: number, loop = 0): void => {
     if (plan.length === 0) return;
     const parts: string[] = [];
     for (const [c, steps] of plan) {
@@ -185,9 +187,9 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
         const last = names[names.length - 1];
         if (last && last.s === d.shortName) last.n++; else names.push({ s: d.shortName, n: 1 });
       }
-      parts.push(`${c.name}[${names.map(x => (x.n > 1 ? `${x.s}×${x.n}` : x.s)).join(' ')}]`);
+      parts.push(`${loop > 0 && parts.length === loop ? '↻' : ''}${c.name}[${names.map(x => (x.n > 1 ? `${x.s}×${x.n}` : x.s)).join(' ')}]`);
     }
-    all.push({ label: parts.join(' → '), assignment, target, plan });
+    all.push({ label: parts.join(' → '), assignment, target, plan, loop });
   };
 
   for (const assignment of roleAssignments(characters, roles)) {
@@ -254,7 +256,13 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
                 const fill: string[] = [];
                 for (let i = 0; i < r; i++) fill.push(...tpl.steps);
                 if (tail) fill.push('e');
-                pushPlan([...others.map(c => [c, useSteps(useOf.get(c.id)!)] as [CharacterConfig, string[]]), [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
+                const rest = others.map(c => [c, useSteps(useOf.get(c.id)!)] as [CharacterConfig, string[]]);
+                pushPlan([...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
+                // 最初にアタッカーが通常攻撃を 1 回だけ当てる形
+                if (defOf(a, 'n')) {
+                  pushPlan([[a, ['n']], ...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
+                  pushPlan([[a, ['n']], ...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target, 1);
+                }
               }
             }
           }
@@ -276,7 +284,7 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
   return thinStratified(unique, maxCandidates, slimKey).map((s, i) => {
     const stints: Stint[] = [];
     for (const [c, steps] of s.plan) stints.push({ id: `s${stints.length}`, characterId: c.id, actions: steps.map(st => instance(c, st) as CharacterActionInstance) });
-    return { id: `c${i}`, label: s.label, assignment: s.assignment, targetSeconds: s.target, stints };
+    return { id: `c${i}`, label: s.label, assignment: s.assignment, targetSeconds: s.target, stints, ...(s.loop > 0 ? { loopStartIndex: s.loop } : {}) };
   });
 }
 
@@ -290,6 +298,7 @@ const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
  */
 export function neighborsOf(characters: CharacterConfig[], base: Candidate): Candidate[] {
   const out = new Map<string, Candidate>();
+  let loop = base.loopStartIndex ?? 0;
   const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>): void => {
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
@@ -297,15 +306,24 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
       if (actions.length === 0 || actions.some(a => a === null)) return;
       stints.push({ id: `s${stints.length}`, characterId: c.id, actions: actions as CharacterActionInstance[] });
     }
-    const label = describe(characters, stints);
+    const label = describe(characters, stints, loop);
     if (label === base.label || out.has(label)) return;
-    out.set(label, { ...base, id: 'n', label, stints });
+    out.set(label, { ...base, id: 'n', label, stints, loopStartIndex: loop });
   };
   const plan0 = base.stints.map(s => ({
     c: characters.find(c => c.id === s.characterId)!,
     steps: s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '')),
   }));
   const clone = () => plan0.map(p => ({ c: p.c, steps: [...p.steps] }));
+  // 周回の開始位置を変える（最初の数個の出場を 1 回目だけにする / 戻す）。出場の並びは変えない
+  for (let k = 0; k < plan0.length; k++) {
+    if (k === (base.loopStartIndex ?? 0)) continue;
+    const stints = base.stints;
+    const label = describe(characters, stints, k);
+    if (!out.has(label)) out.set(label, { ...base, id: 'n', label, loopStartIndex: k });
+  }
+  // 出場の並びを変える操作では、周回の開始位置は 0 に戻す（位置がずれるため）。開始位置の変更は上の操作でできる
+  loop = 0;
   // 出場の入れ替え（隣どうし）と、出場を別の位置へ移す
   for (let i = 0; i + 1 < plan0.length; i++) {
     const pl = clone();
@@ -334,6 +352,15 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
       make(pl);
     }
   });
+  // 新しい出場（通常攻撃 1 回だけ）を、どこかに足す（手組みでは、アタッカーが最初に通常攻撃を 1 回だけ当ててから、他のキャラのスキルに移る形が、DPS を大きく上げた）
+  const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
+  for (const c of seenChars.values()) {
+    if (!defOf(c, 'n')) continue;
+    for (let i = 0; i <= plan0.length; i++) { const pl = clone(); pl.splice(i, 0, { c, steps: ['n'] }); make(pl); }
+    // 先頭に足して、そこまでを 1 回目だけにする（周回の開始位置を 1 つ後ろへ。1 回で届くようにする）
+    if ((base.loopStartIndex ?? 0) === 0) { const pl = clone(); pl.unshift({ c, steps: ['n'] }); loop = 1; make(pl); loop = 0; }
+  }
+  loop = base.loopStartIndex ?? 0; // 出場の中だけを変える操作は、周回の開始位置を保つ
   plan0.forEach((p, si) => {
     const n = p.steps.length;
     for (let i = 0; i < n; i++) {

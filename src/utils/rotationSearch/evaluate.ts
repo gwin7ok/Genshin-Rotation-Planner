@@ -69,7 +69,7 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
   const rejectedBy: Record<string, number> = {};
   let rejected = 0;
   for (const candidate of candidates) {
-    const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: 0, defHalt: options.defHalt ?? true });
+    const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: candidate.loopStartIndex ?? 0, defHalt: options.defHalt ?? true });
     const bad = result.validationIssues.filter(v => v.severity !== 'info');
     const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
     if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {

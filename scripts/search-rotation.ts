@@ -71,6 +71,9 @@ for (const n of (str('attacker') ?? '').split(',').filter(Boolean)) {
   const c = characters.find(x => x.name === n || x.englishName === n);
   if (c && !roles[c.id].includes('attacker')) roles[c.id].push('attacker');
 }
+// --only-attacker=名前: その人だけをアタッカーにする（ほかの人のアタッカーの役割は外す。外して空になる人は、サポーター）
+const only = str('only-attacker');
+if (only) for (const c of characters) { const isOnly = c.name === only || c.englishName === only; roles[c.id] = roles[c.id].filter(r => r !== 'attacker'); if (isOnly) roles[c.id].push('attacker'); else if (roles[c.id].length === 0) roles[c.id].push('supporter'); }
 console.log(`編成: ${characters.map(c => `${c.name}(${(c.roles ?? []).join('+') || '役割なし'})`).join(' / ')}`);
 
 // 探索の本体は、画面と共通（src/utils/rotationSearch/search.ts）

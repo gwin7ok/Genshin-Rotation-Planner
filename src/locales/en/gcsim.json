@@ -312,6 +312,7 @@
     "phase": {
       "generate": "Building candidates…",
       "quick": "Stage 1: narrowing candidates ({{done}} / {{total}})",
+      "refine": "Stage 1.5: trying similar rotations ({{done}} / {{total}})",
       "verify": "Stage 2: checking the ranking ({{done}} / {{total}})"
     },
     "cancelled": "Cancelled.",

@@ -24,11 +24,15 @@ export interface SearchSettings {
   runs2: number;
   /** 候補の上限 */
   maxCandidates: number;
+  /** ④b 近傍の探索で試す候補の数の上限（0 で行わない。既定 DEFAULT_REFINE_BUDGET） */
+  refineBudget?: number;
 }
+
+const DEFAULT_REFINE_BUDGET = 150;
 
 export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 40, keep1: 200, runs1: 3, keep2: 30, runs2: 10, maxCandidates: 20000 };
 
-export type SearchPhase = 'generate' | 'quick' | 'verify';
+export type SearchPhase = 'generate' | 'quick' | 'refine' | 'verify';
 
 export interface SearchProgress {
   phase: SearchPhase;
@@ -99,7 +103,6 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     const ev = evaluateCandidates(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt });
     if (ev.scored.length === 0) return { status: 'error', message: 'NO_VALID_CANDIDATES' };
     if (cancelled()) return { status: 'cancelled' };
-    const stage1 = ev.scored.slice(0, Math.max(1, settings.keep1));
 
     // 1 候補ぶんの gcsim 実行。同時に動かす候補の数 = コア数 ÷ 1 候補の並列数
     const runOne = async (sc: ScoredCandidate, runs: number, parallel: number): Promise<QuickRun> => {
@@ -117,31 +120,76 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }
     };
-    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase): Promise<QuickRun[]> => {
+    // wanted: 成功がこの数に届くまで、後ろの候補で補う（gcsim が実行できない候補が混じるので、その分を減らさない）。items の最後まで試したら終わる
+    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase, wanted = items.length): Promise<QuickRun[]> => {
       const parallel = Math.max(1, Math.min(runs, args.cores));
       const concurrent = Math.max(1, Math.floor(args.cores / parallel));
-      const out: QuickRun[] = new Array(items.length);
+      const out: QuickRun[] = [];
       let next = 0;
       let done = 0;
-      args.onProgress?.({ phase, done: 0, total: items.length });
+      let okCount = 0;
+      args.onProgress?.({ phase, done: 0, total: wanted });
       await Promise.all(Array.from({ length: concurrent }, async () => {
-        while (next < items.length && !cancelled()) {
+        while (next < items.length && okCount < wanted && !cancelled()) {
           const i = next++;
-          out[i] = await runOne(items[i], runs, parallel);
-          done++;
-          args.onProgress?.({ phase, done, total: items.length });
+          const r = await runOne(items[i], runs, parallel);
+          out.push(r);
+          if (r.dps !== undefined) { okCount++; done = okCount; }
+          args.onProgress?.({ phase, done, total: wanted });
         }
       }));
-      return out.filter(Boolean);
+      return out;
     };
 
-    // ④ 少ない回数
-    const r1 = await mapLimit(stage1, settings.runs1, 'quick');
+    // ④ 少ない回数（簡易スコアの順に、成功が keep1 個になるまで。補う上限は keep1 の 3 倍）
+    const r1 = await mapLimit(ev.scored.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1));
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);
     const quickFailed: Record<string, number> = {};
     for (const r of r1) if (r.dps === undefined) quickFailed[r.error ?? '?'] = (quickFailed[r.error ?? '?'] ?? 0) + 1;
     if (ok1.length === 0) return { status: 'error', message: Object.keys(quickFailed)[0] ?? 'ALL_FAILED' };
+
+    // ④b 近傍の探索: gcsim の結果の良い候補から、「1 人の出場の中身だけが違う」「出場の順番だけが違う」候補を順に試す（簡易スコアが外れても、良い形に寄っていける）
+    const budget = settings.refineBudget ?? DEFAULT_REFINE_BUDGET;
+    if (budget > 0 && !cancelled()) {
+      const profile = (sc: ScoredCandidate) => sc.candidate.stints.map(s => `${s.characterId}:${s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '')).join(',')}`);
+      const orderKey = (sc: ScoredCandidate) => sc.candidate.stints.map(s => s.characterId).join('|');
+      const byOneDiff = new Map<string, ScoredCandidate[]>();
+      const bySameSet = new Map<string, ScoredCandidate[]>();
+      const push = (m: Map<string, ScoredCandidate[]>, k: string, sc: ScoredCandidate) => { const l = m.get(k); if (l) l.push(sc); else m.set(k, [sc]); };
+      for (const sc of ev.scored) {
+        const p = profile(sc);
+        const ok = orderKey(sc);
+        p.forEach((_, i) => push(byOneDiff, `${ok}#${i}#${p.filter((_, j) => j !== i).join(';')}`, sc));
+        push(bySameSet, [...p].sort().join(';'), sc);
+      }
+      const neighborsOf = (sc: ScoredCandidate): ScoredCandidate[] => {
+        const p = profile(sc);
+        const ok = orderKey(sc);
+        const out = new Set<ScoredCandidate>(bySameSet.get([...p].sort().join(';')) ?? []);
+        p.forEach((_, i) => { for (const x of byOneDiff.get(`${ok}#${i}#${p.filter((_, j) => j !== i).join(';')}`) ?? []) out.add(x); });
+        out.delete(sc);
+        return [...out];
+      };
+      const tried = new Set<ScoredCandidate>(r1.map(r => r.sc));
+      let used = 0;
+      args.onProgress?.({ phase: 'refine', done: 0, total: budget });
+      for (let round = 0; round < 6 && used < budget && !cancelled(); round++) {
+        const frontier = r1.filter(r => r.dps !== undefined).sort((x, y) => y.dps! - x.dps!).slice(0, 5);
+        const next: ScoredCandidate[] = [];
+        for (const f of frontier) for (const n of neighborsOf(f.sc)) if (!tried.has(n)) { tried.add(n); next.push(n); }
+        if (next.length === 0) break;
+        // 簡易スコアの高い順に、予算の残りぶんだけ
+        const batch = next.sort((x, y) => y.score - x.score).slice(0, budget - used);
+        const before = r1.filter(r => r.dps !== undefined).reduce((m, r) => Math.max(m, r.dps!), 0);
+        const rr = await mapLimit(batch, settings.runs1, 'refine', batch.length);
+        used += batch.length;
+        args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
+        r1.push(...rr);
+        const after = r1.filter(r => r.dps !== undefined).reduce((m, r) => Math.max(m, r.dps!), 0);
+        if (after <= before * 1.01) break;
+      }
+    }
 
     let spearman: number | undefined;
     let bestQuickScoreRank: number | undefined;
@@ -165,7 +213,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       .sort((x, y) => y.dps - x.dps);
     return {
       status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank,
-      counts: { candidates: candidates.length, rejected: ev.rejected, rejectedBy: ev.rejectedBy, scored: ev.scored.length, quick: stage1.length, quickOk: ok1.length, quickFailed },
+      counts: { candidates: candidates.length, rejected: ev.rejected, rejectedBy: ev.rejectedBy, scored: ev.scored.length, quick: r1.length, quickOk: ok1.length, quickFailed },
     };
   } catch (e) {
     return { status: 'error', message: e instanceof Error ? e.message : String(e) };

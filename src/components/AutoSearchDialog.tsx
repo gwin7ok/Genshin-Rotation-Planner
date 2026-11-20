@@ -102,6 +102,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
   const progressText = (p: SearchProgress): string =>
     p.phase === 'generate' ? t('gcsim:search.phase.generate')
       : p.phase === 'quick' ? t('gcsim:search.phase.quick', { done: p.done, total: p.total })
+        : p.phase === 'refine' ? t('gcsim:search.phase.refine', { done: p.done, total: p.total })
         : t('gcsim:search.phase.verify', { done: p.done, total: p.total });
   const roleName = (r: string): string => (r === 'attacker' ? t('database:edit.role.attacker') : r === 'subAttacker' ? t('database:edit.role.subAttacker') : t('database:edit.role.supporter'));
   const input = 'w-20 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono text-right';

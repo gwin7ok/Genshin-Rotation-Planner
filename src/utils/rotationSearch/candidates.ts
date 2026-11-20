@@ -90,16 +90,14 @@ function useOptions(c: CharacterConfig, role: SearchRole): Use[] {
   if (role === 'attacker' && defOf(c, 'e_hold')) esOptions.push(['e_hold']);
   const out: Use[] = [];
   for (const es of esOptions) {
+    // Q は、使う・使わないの両方を試す（手で組んだ例: 八重神子・オデットは Q を使わない方が速い。決定 A）。
+    // アタッカー以外は、E・Q とも外す（何もしない）のは、場に出さないのと同じなので作らない
     if (role === 'supporter') {
-      // サポーターは、E・Q とも外せる（両方外すのは、場に出さないのと同じなので作らない）
       if (hasQ && es.length <= 1) out.push({ es, q: true });
-      if (es.length > 0) out.push({ es, q: false });
     } else if (hasQ) {
-      // アタッカー・サブアタッカーの Q は使う
       out.push({ es, q: true });
-    } else if (es.length > 0) {
-      out.push({ es, q: false });
     }
+    if (es.length > 0 || role === 'attacker') out.push({ es, q: false });
   }
   return out;
 }
@@ -175,18 +173,37 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
           if (attackers.some(c => tpl.steps.some(s => !defOf(c, s)))) continue;
           const cycle = Math.max(0.1, Math.min(...attackers.map(c => tpl.steps.reduce((x, s) => x + durationOf(c, s), 0))));
           const r0 = Math.max(1, Math.round(fill / cycle));
-          for (const r of new Set([r0 - 1, r0, r0 + 1].filter(x => x >= 1))) {
-            const stints: Stint[] = [];
-            let ok = true;
-            for (const c of [...others, ...attackers]) {
-              const steps = useSteps(useOf.get(c.id)!);
-              if (assignment[c.id] === 'attacker') for (let i = 0; i < r; i++) steps.push(...tpl.steps);
-              const actions = steps.map(s => instance(c, s));
-              if (actions.some(a => a === null)) { ok = false; break; }
-              stints.push({ id: `s${stints.length}`, characterId: c.id, actions: actions as CharacterActionInstance[] });
+          // 繰り返しの回数: 1 回から目安 +1 回まで（上限 5 回）。手で組んだ例は、目安より短い 1 周の方が DPS が高かった
+          for (let r = 1; r <= Math.min(r0 + 1, 5); r++) {
+            // アタッカーごとの並び（スキル → 攻撃の型の繰り返し（→ 最後に E を足す）、Q はどこかに差し込む）の選択肢
+            const withTail = tpl.steps.includes('e') ? [false, true] : [false];
+            const variants = (c: CharacterConfig): string[][] => {
+              const u = useOf.get(c.id)!;
+              const out: string[][] = [];
+              for (const tail of withTail) {
+                const base = [...u.es];
+                for (let i = 0; i < r; i++) base.push(...tpl.steps);
+                if (tail) base.push('e');
+                if (!u.q) { out.push(base); continue; }
+                // Q の位置: 先頭・末尾・「E の直後」・「重撃の直前」（アタッカーが 2 人以上のときは、先頭と末尾だけ）
+                const pos = new Set<number>([0, base.length]);
+                if (attackers.length === 1) base.forEach((s, i) => { if (s === 'ca') pos.add(i); if (s === 'e') pos.add(i + 1); });
+                for (const p of [...pos].sort((a, b) => a - b)) out.push([...base.slice(0, p), 'q', ...base.slice(p)]);
+              }
+              return out;
+            };
+            for (const attackerSteps of product(attackers.map(variants))) {
+              const stints: Stint[] = [];
+              let ok = true;
+              for (const c of [...others, ...attackers]) {
+                const steps = assignment[c.id] === 'attacker' ? attackerSteps[attackers.indexOf(c)] : useSteps(useOf.get(c.id)!);
+                const actions = steps.map(s => instance(c, s));
+                if (actions.some(a => a === null)) { ok = false; break; }
+                stints.push({ id: `s${stints.length}`, characterId: c.id, actions: actions as CharacterActionInstance[] });
+              }
+              if (!ok || stints.length === 0) continue;
+              all.push({ id: 'c', label: describe(characters, stints), assignment, targetSeconds: target, stints });
             }
-            if (!ok || stints.length === 0) continue;
-            all.push({ id: 'c', label: describe(characters, stints), assignment, targetSeconds: target, stints });
           }
         }
       }

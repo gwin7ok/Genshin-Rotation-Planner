@@ -311,6 +311,7 @@
     "phase": {
       "generate": "候補を作っています…",
       "quick": "1 段目: 候補を絞っています（{{done}} / {{total}}）",
+      "refine": "1.5 段目: 近い形を試しています（{{done}} / {{total}}）",
       "verify": "2 段目: 順位を確かめています（{{done}} / {{total}}）"
     },
     "cancelled": "中止しました。",

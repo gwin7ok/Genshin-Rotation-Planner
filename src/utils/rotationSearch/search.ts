@@ -72,8 +72,12 @@ export interface ParticleInfo {
   total: number;
   /** うち、敵から出る粒子（設定した間隔で出るので、どの候補でも同じくらい） */
   enemy: number;
+  /** 粒子から受け取ったエネルギーの、全員の合計（元素チャージ効率を掛ける前）の平均 */
+  energy: number;
   /** 評価した時間（秒） */
   seconds: number;
+  /** 1 人あたり・10 秒あたりの、粒子から受け取ったエネルギー（ER 反映前）。粒子の色の違い・表と裏の受け取りの違いを、すべて含んだ値 */
+  energyPerMember10s: number;
 }
 
 export interface SearchResultItem {
@@ -163,7 +167,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
-        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, seconds: out.result.seconds } };
+        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0 } };
       } catch (e) {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }

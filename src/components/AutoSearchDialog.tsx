@@ -230,7 +230,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                         <td className="px-2 py-1.5 text-slate-300 font-bold">{i + 1}</td>
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>
-                        <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) }) : undefined}>{r.particles && r.particles.seconds > 0 ? <>{((r.particles.total / r.particles.seconds) * 10).toFixed(1)} <span className="text-slate-500">{t('gcsim:search.particlesRateUnit')}</span></> : '-'}</td>
+                        <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) }) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
                         <td className="px-2 py-1.5 text-slate-300 break-words">{r.candidate.label}</td>
                         <td className="px-2 py-1.5 text-right">
                           {applied === i ? (

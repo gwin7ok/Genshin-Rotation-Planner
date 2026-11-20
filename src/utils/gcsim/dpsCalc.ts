@@ -73,6 +73,8 @@ export interface DpsRun {
   particles: number;
   /** うち、敵から出る粒子（gcsim の `energy every`。ログの source が `drop`） */
   particlesEnemy: number;
+  /** 粒子から受け取ったエネルギーの、全員の合計（元素チャージ効率を掛ける前 = ログの `amt` ÷ `ER`。粒子の色・出ているキャラ・控えの減りを、すべて反映した値） */
+  particleEnergy: number;
 }
 
 /**
@@ -102,6 +104,7 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number, cont
   let loopsStarted = 0;
   let particles = 0;
   let particlesEnemy = 0;
+  let particleEnergy = 0;
   for (const l of logs) {
     if (l.event === 'user') {
       if (/^loop \d+$/.test(l.msg)) loopsStarted++;
@@ -117,10 +120,14 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number, cont
       total += d;
       if (l.char_index !== undefined && l.char_index >= 0 && l.char_index < memberCount) byChar[l.char_index] += d;
     } else if (l.event === 'energy' && l.msg === 'particle') {
-      // 1 回の粒子は、パーティの全員に 1 件ずつ記録される。先頭のキャラ（char_index 0）の分だけ数える
-      if (l.char_index !== 0) continue;
       if (battleFrames !== undefined && l.frame > battleFrames) continue;
-      const lg = l.logs as { count?: unknown; source?: unknown } | undefined;
+      const lg = l.logs as { count?: unknown; source?: unknown; amt?: unknown; ER?: unknown } | undefined;
+      // 受け取ったエネルギー（ER を掛ける前）: 全員の分を足す（粒子の色の一致・控えの減りが入る）
+      const amt = Number(lg?.amt);
+      const er = Number(lg?.ER);
+      if (Number.isFinite(amt) && Number.isFinite(er) && er > 0) particleEnergy += amt / er;
+      // 1 回の粒子は、パーティの全員に 1 件ずつ記録される。個数は、先頭のキャラ（char_index 0）の分だけ数える
+      if (l.char_index !== 0) continue;
       const n = Number(lg?.count);
       if (!Number.isFinite(n)) continue;
       particles += n;
@@ -146,7 +153,7 @@ export function summarizeDamage(logs: GcsimLogEvent[], memberCount: number, cont
   // 戦闘時間を指定したとき: 時間は戦闘時間（それより早く終わったときは、終わった時刻）
   const short = battleFrames !== undefined && endFrame < battleFrames;
   const seconds = (battleFrames !== undefined ? Math.min(endFrame, battleFrames) : endFrame) / GCSIM_FPS;
-  return { total, stateAdjust, short, seconds, byChar, energyWaits, energyWaitFrames, loopsStarted, particles, particlesEnemy };
+  return { total, stateAdjust, short, seconds, byChar, energyWaits, energyWaitFrames, loopsStarted, particles, particlesEnemy, particleEnergy };
 }
 
 export interface DpsStats {
@@ -189,7 +196,7 @@ export interface DpsResult {
   /** 敵の状態の時間帯の補正で増減したダメージの平均（1 回の実行あたり。マイナス = 減った。補正が無ければ 0）。総ダメージは補正後 */
   stateAdjust: number;
   /** 発生した粒子の数の平均（1 回の実行あたり。全員分・敵の粒子を含む）と、そのうち敵から出る粒子 */
-  particles: { total: number; enemy: number };
+  particles: { total: number; enemy: number; /** 粒子から受け取ったエネルギーの全員の合計（ER 反映前）の平均 */ energy: number };
   /** 戦闘時間まで、ローテーションが続かなかった実行の数（戦闘時間を指定したときだけ。無ければ undefined） */
   shortRuns?: number;
 }
@@ -221,7 +228,7 @@ export function aggregateDps(runs: DpsRun[], memberCount: number, loops?: number
     energyWaits: byChar.reduce((a, c) => a + c.energyWaits, 0), energyWaitSeconds: waitSecondsOf(sum(waitFrames), sum(waitCounts)),
     ...(cut.length > 0 ? { truncated: { count: cut.length, worst: Math.min(...cut.map(r => r.loopsStarted)) } } : {}),
     stateAdjust: valid.length ? valid.reduce((a, r) => a + (r.stateAdjust ?? 0), 0) / valid.length : 0,
-    particles: { total: valid.length ? valid.reduce((a, r) => a + (r.particles ?? 0), 0) / valid.length : 0, enemy: valid.length ? valid.reduce((a, r) => a + (r.particlesEnemy ?? 0), 0) / valid.length : 0 },
+    particles: { total: valid.length ? valid.reduce((a, r) => a + (r.particles ?? 0), 0) / valid.length : 0, enemy: valid.length ? valid.reduce((a, r) => a + (r.particlesEnemy ?? 0), 0) / valid.length : 0, energy: valid.length ? valid.reduce((a, r) => a + (r.particleEnergy ?? 0), 0) / valid.length : 0 },
     ...(shortRuns > 0 ? { shortRuns } : {}),
   };
 }

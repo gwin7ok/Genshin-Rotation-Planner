@@ -102,7 +102,7 @@ for (const g of (out.groupBest ?? []).sort((a: any, b: any) => b.dps - a.dps)) c
 console.log(`所要時間 ${(out.elapsedMs / 1000).toFixed(1)} 秒`);
 console.log(`\n=== 順位（戦闘 ${SECONDS} 秒・gcsim ${RUNS2} 回。DPS の単位は千）===`);
 for (const [i, r] of out.results.slice(0, TOP).entries()) {
-  console.log(`${String(i + 1).padStart(2)}. ${(r.dps / 1000).toFixed(1).padStart(6)} ±${(r.sd / 1000).toFixed(1)}  長さ ${r.totalSeconds.toFixed(1)}s  スコア ${r.score.toFixed(3)}  ${r.candidate.label}${r.particles ? `  粒子 ${((r.particles.total / r.particles.seconds) * 10).toFixed(1)}個/10秒（敵 ${r.particles.enemy.toFixed(0)}・全体 ${r.particles.total.toFixed(0)}）` : ''}`);
+  console.log(`${String(i + 1).padStart(2)}. ${(r.dps / 1000).toFixed(1).padStart(6)} ±${(r.sd / 1000).toFixed(1)}  長さ ${r.totalSeconds.toFixed(1)}s  スコア ${r.score.toFixed(3)}  ${r.candidate.label}${r.particles ? `  粒子E ${r.particles.energyPerMember10s.toFixed(1)}/人/10秒（粒子 敵 ${r.particles.enemy.toFixed(0)}・全体 ${r.particles.total.toFixed(0)}）` : ''}`);
 }
 if (outPath) {
   fs.writeFileSync(outPath, JSON.stringify({ party: names, seconds: SECONDS, counts: c, results: out.results.map((r: any) => ({ dps: r.dps, sd: r.sd, totalSeconds: r.totalSeconds, score: r.score, particles: r.particles, label: r.candidate.label, rot: { loop: r.candidate.loopStartIndex ?? 0, stints: r.candidate.stints.map((x: any) => ({ c: x.characterId, a: x.actions.map((y: any) => y.actionTypeId.slice(x.characterId.length + 1)) })) } })) }, null, 1));

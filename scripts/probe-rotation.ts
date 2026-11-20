@@ -54,7 +54,7 @@ const stints = rot.stints.map((s: any, i: number) => {
 // --screen: 画面の「DPS 計算」と同じ条件（初動 + ループ N 周・敵の粒子 5〜8 秒に 1 個・開始エネルギーは既定・時間はエネルギー待ちを含む）
 const SCREEN = args.includes('--screen');
 const cfg = SCREEN
-  ? buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, loopIterations: num('loops', 5), ignoreBurstEnergy: false, enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } })
+  ? buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, loopIterations: num('loops', 5), ignoreBurstEnergy: args.includes('--no-energy'), ...(args.includes('--no-energy') ? {} : { enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } }) })
   : buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS, ...(args.includes('--energy') ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) });
 const out = await computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: SCREEN ? {} : { battleSeconds: SECONDS } });
 if (out.status !== 'ok') console.log('失敗', out.status, out.message);

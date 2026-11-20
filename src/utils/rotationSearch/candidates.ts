@@ -384,6 +384,8 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     for (let i = 0; i < n; i++) {
       // 消す
       if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl, 'del'); }
+      // 隣り合う 2 つをまとめて消す（「重撃 → E」の 1 組を減らすなど。1 つずつ消すと、途中で下がって届かない）
+      if (n > 2 && i + 1 < n) { const pl = clone(); pl[si].steps.splice(i, 2); make(pl, 'del2'); }
       // 移す
       for (let j = 0; j < n; j++) {
         if (j === i || p.steps[i] === p.steps[j]) continue;

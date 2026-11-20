@@ -4,12 +4,24 @@
  * gcsim の呼び出し口は gcsimClient（画面は Web Worker、スクリプトは Node の worker_threads に差し替わる）。
  */
 import type { CharacterConfig, Stint } from '../../types/genshin';
-import type { HurtSetting } from '../gcsim/buildGcsimConfig';
+import type { EnemySetting, HurtSetting } from '../gcsim/buildGcsimConfig';
+import type { EnemyParticles } from '../gcsim/requiredEnergyRecharge';
 import { buildGcsimConfig } from '../gcsim/buildGcsimConfig';
 import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
 import { generateCandidates, neighborsOf, type Candidate, type SearchRole } from './candidates';
 import { evaluateCandidates, type ScoredCandidate } from './evaluate';
+
+/**
+ * 画面の「DPS 計算」と同じ条件で評価する（初動 + ループ N 周・開始エネルギーは満タン・足りない爆発は溜まるまで待つ・敵の粒子・敵の設定。時間 = 最後のアクション・ダメージの遅いほう）。
+ * 指定すると、戦闘時間（battleSeconds）は使わない。手組みの DPS 計算の結果と、そのまま比べられる
+ */
+export interface DpsConditions {
+  loops: number;
+  energy: boolean;
+  particles: EnemyParticles;
+  enemies: EnemySetting[];
+}
 
 export interface SearchSettings {
   /** 戦闘時間（秒）。DPS = この時間までのダメージ ÷ この時間 */
@@ -31,6 +43,8 @@ export interface SearchSettings {
 const DEFAULT_REFINE_BUDGET = 700;
 /** 探索中（④④b）の戦闘時間の上限（秒） */
 const EXPLORE_SECONDS = 60;
+/** 画面の DPS 計算と同じ条件で探索するとき、探索中のループの周数の上限 */
+const EXPLORE_LOOPS = 3;
 /** 山登りの 1 回で試す近傍の数の上限 */
 const CROSS_PER_GROUP = 6;
 const BEAM = 4;
@@ -88,6 +102,8 @@ export interface SearchArgs {
   switchDelay: number;
   defHalt: boolean;
   hurt?: HurtSetting;
+  /** 画面の DPS 計算と同じ条件で評価する（指定すると、energy・battleSeconds は使わない） */
+  dps?: DpsConditions;
   /** エネルギーを考慮して探索する（幽境用: 初期エネルギー 0・爆発のエネルギー消費あり）。無ければ、エネルギーは無視する */
   energy?: boolean;
   /** 同時に動かす gcsim の数（Worker の数） */
@@ -119,15 +135,20 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     if (cancelled()) return { status: 'cancelled' };
 
     // 1 候補ぶんの gcsim 実行。同時に動かす候補の数 = コア数 ÷ 1 候補の並列数
-    const runOne = async (sc: ScoredCandidate, runs: number, parallel: number, seconds: number): Promise<QuickRun> => {
+    const runOne = async (sc: ScoredCandidate, runs: number, parallel: number, seconds: number, final: boolean): Promise<QuickRun> => {
+      const dps = args.dps;
+      // 探索中は周数を減らして速くする（最後の確認だけ指定の周数）
+      const loopsUsed = dps ? (final ? dps.loops : Math.min(dps.loops, EXPLORE_LOOPS)) : 0;
       const cfg = buildGcsimConfig({
         characters, stints: sc.candidate.stints, loopStartIndex: sc.candidate.loopStartIndex ?? 0, switchDelay: args.switchDelay, defHalt: args.defHalt,
-        ...(args.hurt ? { hurt: args.hurt } : {}), weapons: args.weapons, artifacts: args.artifacts, battleSeconds: seconds,
-        ...(args.energy ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}),
+        ...(args.hurt ? { hurt: args.hurt } : {}), weapons: args.weapons, artifacts: args.artifacts,
+        ...(dps
+          ? { loopIterations: loopsUsed, enemies: dps.enemies, ignoreBurstEnergy: !dps.energy, ...(dps.energy && dps.particles.amount > 0 && dps.particles.maxSeconds > 0 ? { enemyParticles: dps.particles } : {}) }
+          : { battleSeconds: seconds, ...(args.energy ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) }),
       });
       if (!cfg.runnable) return { sc, error: cfg.warnings.find(w => w.level === 'error')?.message ?? 'NOT_RUNNABLE' };
       try {
-        const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: { battleSeconds: seconds }, shouldCancel: cancelled });
+        const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
         return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd };
@@ -147,7 +168,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       await Promise.all(Array.from({ length: concurrent }, async () => {
         while (next < items.length && okCount < wanted && !cancelled()) {
           const i = next++;
-          const r = await runOne(items[i], runs, parallel, seconds);
+          const r = await runOne(items[i], runs, parallel, seconds, phase === 'verify');
           out.push(r);
           if (r.dps !== undefined) { okCount++; done = okCount; }
           args.onProgress?.({ phase, done, total: wanted });

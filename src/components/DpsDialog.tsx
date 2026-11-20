@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Swords, Play, Square, Plus, Trash2 } from 'lucide-react';
-import { Stepper } from './Stepper';
-import { CountSetting, CoresSetting, EnemyParticlesInputs, useCoresSetting } from './SharedSettings';
+import { X, Swords, Play, Square } from 'lucide-react';
+import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
 import { t, rangeMark, dotMark } from '../i18n';
 import { charName, loc } from '../i18n/loc';
 import type { CharacterConfig } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
-import { DEFAULT_ENEMY, ENEMY_RESIST_KEYS, type EnemySetting, type EnemyResistKey, type GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
+import type { EnemySetting, GcsimConfigResult } from '../utils/gcsim/buildGcsimConfig';
+import { wasmParallelism } from '../utils/gcsim/gcsimWasm';
+import { saveDpsSettings } from '../utils/appSettings';
+import type { EnemyParticles } from '../utils/gcsim/requiredEnergyRecharge';
 import { previewFinalStats, type FinalStats } from '../utils/gcsim/finalStatsPreview';
 import { runGcsimSample } from '../utils/gcsim/gcsimClient';
-import { wasmParallelism, getWasmCores, setWasmCores, wasmMaxCores, WASM_DEFAULT_CORES } from '../utils/gcsim/gcsimWasm';
 import { GCSIM_VERSION } from '../utils/gcsim/gcsimConfig';
-import { computeDps, DPS_DEFAULT_LOOPS, DPS_DEFAULT_RUNS, DPS_MAX_ENEMIES, DPS_MAX_LOOPS, DPS_MAX_RUNS, type DpsOutcome, type DpsProgress, type DpsResult, type DpsSettings } from '../utils/gcsim/dpsCalc';
-import { loadDpsSettings, saveDpsSettings } from '../utils/appSettings';
-import { ER_DEFAULT_ENEMY_PARTICLES, type EnemyParticles } from '../utils/gcsim/requiredEnergyRecharge';
+import { computeDps, type DpsOutcome, type DpsProgress, type DpsResult, type DpsSettings } from '../utils/gcsim/dpsCalc';
 
 interface DpsDialogProps {
   isOpen: boolean;
@@ -27,24 +26,10 @@ interface DpsDialogProps {
 const num = (s: string, fb: number) => { const v = Number(s); return Number.isFinite(v) ? v : fb; };
 const fmt = (n: number) => Math.round(n).toLocaleString();
 
-/** 敵の入力（耐性は % の文字列で持つ） */
-interface EnemyInput { level: string; resist: Record<EnemyResistKey, string> }
-const toInput = (e: EnemySetting): EnemyInput => ({ level: String(e.level), resist: Object.fromEntries(ENEMY_RESIST_KEYS.map(k => [k, String(Math.round(e.resist[k] * 1000) / 10)])) as Record<EnemyResistKey, string> });
-const fromInput = (e: EnemyInput): EnemySetting => ({
-  level: Math.min(200, Math.max(1, Math.floor(num(e.level, DEFAULT_ENEMY.level)))),
-  resist: Object.fromEntries(ENEMY_RESIST_KEYS.map(k => [k, num(e.resist[k], DEFAULT_ENEMY.resist[k] * 100) / 100])) as Record<EnemyResistKey, number>,
-});
-
 /** DPS 計算（D343）: 初動 + ループ N 周を、種を変えて複数回 gcsim で実行し、DPS の平均とばらつき・キャラ別の内訳を表示する */
 export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, characters, database }) => {
-  const [loops, setLoops] = useState(String(DPS_DEFAULT_LOOPS));
-  const [runs, setRuns] = useState(String(DPS_DEFAULT_RUNS));
-  const [enemies, setEnemies] = useState<EnemyInput[]>([toInput(DEFAULT_ENEMY)]);
-  const [energy, setEnergy] = useState(true);
-  const [pMin, setPMin] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
-  const [pMax, setPMax] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
-  const [pAmount, setPAmount] = useState(String(ER_DEFAULT_ENEMY_PARTICLES.amount));
-  const { cores, changeCores } = useCoresSetting();
+  const cond = useDpsConditions();
+  const { energy } = cond;
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<DpsProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -60,17 +45,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   const buildRef = useRef(build);
   buildRef.current = build;
 
-  const settingsNow = (): DpsSettings => ({
-    loops: Math.min(DPS_MAX_LOOPS, Math.max(1, Math.floor(num(loops, DPS_DEFAULT_LOOPS)))),
-    runs: Math.min(DPS_MAX_RUNS, Math.max(1, Math.floor(num(runs, DPS_DEFAULT_RUNS)))),
-    enemies: enemies.map(fromInput),
-    energy,
-    particles: (() => {
-      const lo = Math.max(0, num(pMin, ER_DEFAULT_ENEMY_PARTICLES.minSeconds));
-      const hi = Math.max(0, num(pMax, ER_DEFAULT_ENEMY_PARTICLES.maxSeconds));
-      return { minSeconds: Math.min(lo, hi), maxSeconds: Math.max(lo, hi), amount: Math.max(0, num(pAmount, ER_DEFAULT_ENEMY_PARTICLES.amount)) };
-    })(),
-  });
+  const settingsNow = (): DpsSettings => cond.settingsNow();
   /** 設定文を作る（エネルギーを考慮しないときは、爆発を無視し、粒子も出さない） */
   const buildFor = (s: ReturnType<typeof settingsNow>) => buildRef.current({
     loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy,
@@ -81,14 +56,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   // 開いたとき: 保存した設定を読み、実行できるかを確かめる
   useEffect(() => {
     if (!isOpen) return;
-    const s = loadDpsSettings();
-    setLoops(String(s.loops));
-    setRuns(String(s.runs));
-    setEnergy(s.energy);
-    setEnemies(s.enemies.map(toInput));
-    setPMin(String(s.particles.minSeconds));
-    setPMax(String(s.particles.maxSeconds));
-    setPAmount(String(s.particles.amount));
+    const s = cond.loadSaved();
     setMessage(null);
     const base = buildRef.current({ loopIterations: s.loops, enemies: s.enemies, ignoreBurstEnergy: !s.energy });
     const errors = base.warnings.filter(w => w.level === 'error').map(w => w.message);
@@ -146,8 +114,6 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
   };
 
   const charOf = (id: string) => characters.find(c => c.id === id);
-  const updateEnemy = (i: number, patch: Partial<EnemyInput>) => setEnemies(list => list.map((e, j) => (j === i ? { ...e, ...patch } : e)));
-  const setAllResist = (i: number, v: string) => updateEnemy(i, { resist: Object.fromEntries(ENEMY_RESIST_KEYS.map(k => [k, v])) as Record<EnemyResistKey, string> });
   const equipText = (c: CharacterConfig): string => {
     const w = c.weaponId ? database.weapons.find(x => x.id === c.weaponId) : undefined;
     const sets = c.build?.artifactSets?.length
@@ -285,56 +251,7 @@ export const DpsDialog: React.FC<DpsDialogProps> = ({ isOpen, onClose, build, ch
             <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.buildNote')}</p>
           </div>
 
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-1.5">
-            <label className="flex items-center gap-2 font-bold cursor-pointer">
-              <input type="checkbox" checked={energy} onChange={e => setEnergy(e.target.checked)} disabled={running} data-testid="dps-energy" />
-              {t('gcsim:dps.energy')}
-            </label>
-            {energy && (
-              <div className="space-y-1.5">
-                <span>{t('gcsim:er.enemyParticles')}</span>
-                <EnemyParticlesInputs pMin={pMin} pMax={pMax} pAmount={pAmount} setPMin={setPMin} setPMax={setPMax} setPAmount={setPAmount} disabled={running} />
-              </div>
-            )}
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t(energy ? 'gcsim:dps.energyNoteOn' : 'gcsim:dps.energyNoteOff')}</p>
-          </div>
-
-          <CountSetting title={t('gcsim:dps.loops')} unit={t('gcsim:dps.loopsUnit')} note={t('gcsim:dps.loopsNote', { max: DPS_MAX_LOOPS })} value={loops} onChange={setLoops} def={DPS_DEFAULT_LOOPS} max={DPS_MAX_LOOPS} disabled={running} />
-
-          <CountSetting title={t('gcsim:dps.runs')} unit={t('gcsim:dps.runsUnit')} note={t('gcsim:dps.runsNote', { max: DPS_MAX_RUNS })} value={runs} onChange={setRuns} def={DPS_DEFAULT_RUNS} max={DPS_MAX_RUNS} step={10} widthClass="w-16" disabled={running} />
-          <CoresSetting cores={cores} onChange={changeCores} disabled={running} />
-
-          <div className="text-xs text-slate-300 bg-slate-950/50 border border-slate-800 rounded-lg p-3 space-y-2">
-            <p className="font-bold">{t('gcsim:dps.enemies')}</p>
-            {enemies.map((e, i) => (
-              <div key={i} className="border border-slate-800 rounded-md p-2 space-y-1.5">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-semibold text-slate-200">{t('gcsim:dps.enemyN', { n: i + 1 })}</span>
-                  <span className="ml-2">{t('gcsim:dps.enemyLevel')}</span>
-                  <Stepper value={e.level} onChange={v => updateEnemy(i, { level: v })} step={1} min={1} max={200} disabled={running} widthClass="w-14" />
-                  <span className="ml-2">{t('gcsim:dps.enemyResistAll')}</span>
-                  <Stepper value={ENEMY_RESIST_KEYS.every(k => num(e.resist[k], NaN) === num(e.resist.physical, NaN)) ? e.resist.physical : ''} onChange={v => setAllResist(i, v)} step={5} min={-100} max={200} disabled={running} widthClass="w-14" />
-                  <span>%</span>
-                  {enemies.length > 1 && (
-                    <button onClick={() => setEnemies(list => list.filter((_, j) => j !== i))} disabled={running} className="ml-auto p-1 rounded text-slate-400 hover:text-rose-300 hover:bg-slate-800 disabled:opacity-40" title={t('gcsim:dps.enemyRemove')}><Trash2 className="w-3.5 h-3.5" /></button>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {ENEMY_RESIST_KEYS.map(k => (
-                    <label key={k} className="flex items-center gap-1 text-[11px] text-slate-400">
-                      {t(`gcsim:dps.resist.${k}`)}
-                      <Stepper value={e.resist[k]} onChange={v => updateEnemy(i, { resist: { ...e.resist, [k]: v } })} step={5} min={-100} max={200} disabled={running} widthClass="w-12" />
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
-            <div className="flex items-center gap-2">
-              <button onClick={() => setEnemies(list => [...list, toInput(DEFAULT_ENEMY)])} disabled={running || enemies.length >= DPS_MAX_ENEMIES} className="flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40"><Plus className="w-3 h-3" />{t('gcsim:dps.enemyAdd')}</button>
-              <button onClick={() => setEnemies([toInput(DEFAULT_ENEMY)])} disabled={running} className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40">{t('gcsim:dps.reset')}</button>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">{t('gcsim:dps.enemiesNote', { max: DPS_MAX_ENEMIES })}</p>
-          </div>
+          <DpsConditionsForm c={cond} disabled={running} />
 
           <p className="text-[11px] text-slate-500 leading-relaxed whitespace-pre-line">{t('gcsim:dps.note', { version: GCSIM_VERSION })}</p>
         </div>

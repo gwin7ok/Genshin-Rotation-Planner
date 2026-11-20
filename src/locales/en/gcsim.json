@@ -300,6 +300,8 @@
     "roleNone": "No role (treated as a supporter)",
     "settings": "Search settings",
     "settingsHint": "More runs and more kept candidates make the ranking more accurate but take longer (a few minutes).",
+    "conditions": "Calculation conditions (shared with DPS calculation)",
+    "conditionsHint": "The search measures DPS under the same conditions as the DPS calculation (initial + N loops, full starting energy, bursts wait until energy builds up, enemy particles, enemy settings), so results compare directly with a hand-made rotation. While searching, loops are capped at 3 for speed (only the final check uses the chosen number). These settings are shared with the DPS calculation.",
     "battleSeconds": "Battle time (s)",
     "keep1": "Candidates kept after stage 1",
     "runs1": "gcsim runs in stage 1",

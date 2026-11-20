@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { X, Sparkles, Play, Square, Check } from 'lucide-react';
 import { t } from '../i18n';
 import { charName } from '../i18n/loc';
@@ -6,6 +6,8 @@ import type { CharacterConfig, Stint } from '../types/genshin';
 import type { AppDatabase } from '../types/database';
 import type { HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { wasmParallelism } from '../utils/gcsim/gcsimWasm';
+import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
+import { saveDpsSettings } from '../utils/appSettings';
 import { effectiveRoles, loadRoleOverrides } from '../utils/characterRoleStore';
 import { DEFAULT_SEARCH_SETTINGS, searchRotation, stintsForApp, type SearchOutcome, type SearchProgress, type SearchSettings } from '../utils/rotationSearch/search';
 
@@ -37,7 +39,6 @@ const errorText = (message: string): string => {
 
 /** ローテーション自動探索（フェーズ 9）: 編成の役割から候補を作り、gcsim で DPS の高い順に並べて、1 位をガントチャートに置く */
 export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onClose, characters, database, switchDelay, defHalt, hurt, stintCount, onApply }) => {
-  const [battle, setBattle] = useState(String(DEFAULT_SEARCH_SETTINGS.battleSeconds));
   const [keep1, setKeep1] = useState(String(DEFAULT_SEARCH_SETTINGS.keep1));
   const [runs1, setRuns1] = useState(String(DEFAULT_SEARCH_SETTINGS.runs1));
   const [keep2, setKeep2] = useState(String(DEFAULT_SEARCH_SETTINGS.keep2));
@@ -49,6 +50,10 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
   /** 置いている候補（outcome.results の番号） */
   const [applied, setApplied] = useState<number | null>(null);
   const cancelRef = useRef(false);
+  const cond = useDpsConditions();
+  // 開くたびに、保存した DPS 計算の設定を読む（DPS 計算と共有）
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (isOpen) cond.loadSaved(); }, [isOpen]);
 
   const members = useMemo(() => characters.filter(c => !c.id.startsWith('empty_slot_')), [characters]);
   // 開くたびに、上書きを読み直す（データベース管理で変えたあとに反映される）
@@ -58,7 +63,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
   if (!isOpen) return null;
 
   const settingsNow = (): SearchSettings => ({
-    battleSeconds: num(battle, DEFAULT_SEARCH_SETTINGS.battleSeconds, 5, 300),
+    battleSeconds: DEFAULT_SEARCH_SETTINGS.battleSeconds,
     keep1: num(keep1, DEFAULT_SEARCH_SETTINGS.keep1, 1, 2000),
     runs1: num(runs1, DEFAULT_SEARCH_SETTINGS.runs1, 1, 50),
     keep2: num(keep2, DEFAULT_SEARCH_SETTINGS.keep2, 1, 200),
@@ -73,6 +78,8 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     setOutcome(null);
     setApplied(null);
     setProgress({ phase: 'generate', done: 0, total: 1 });
+    const dpsSettings = cond.settingsNow();
+    saveDpsSettings(dpsSettings);
     const out = await searchRotation({
       characters: members,
       roles: Object.fromEntries(members.map(c => [c.id, roles[c.id] ?? []])),
@@ -82,6 +89,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
       switchDelay,
       defHalt,
       hurt,
+      dps: { loops: dpsSettings.loops, energy: dpsSettings.energy, particles: dpsSettings.particles, enemies: dpsSettings.enemies },
       cores: wasmParallelism(),
       onProgress: setProgress,
       shouldCancel: () => cancelRef.current,
@@ -141,7 +149,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.settings')}</summary>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
               {([
-                ['battleSeconds', battle, setBattle],
                 ['keep1', keep1, setKeep1],
                 ['runs1', runs1, setRuns1],
                 ['keep2', keep2, setKeep2],
@@ -154,6 +161,14 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
               ))}
             </div>
             <p className="mt-2 text-slate-500">{t('gcsim:search.settingsHint')}</p>
+          </details>
+
+          <details className="text-xs" open>
+            <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.conditions')}</summary>
+            <div className="mt-2 space-y-2">
+              <p className="text-slate-500 leading-relaxed">{t('gcsim:search.conditionsHint')}</p>
+              <DpsConditionsForm c={cond} disabled={running} showRuns={false} />
+            </div>
           </details>
 
           {stintCount > 0 && <p className="text-xs text-amber-300">{t('gcsim:search.overwrite', { count: stintCount })}</p>}
@@ -208,7 +223,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                   </tbody>
                 </table>
               </div>
-              <p className="text-[11px] text-slate-500">{t('gcsim:search.energyNote')}</p>
+              {!cond.energy && <p className="text-[11px] text-slate-500">{t('gcsim:search.energyNote')}</p>}
             </div>
           )}
         </div>

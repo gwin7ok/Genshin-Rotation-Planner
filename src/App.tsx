@@ -48,6 +48,7 @@ import { packReactions, unpackReactions, reactionsStatus } from './utils/gcsim/s
 import { seedPresetsOnFirstRun, slotDisplayName } from './utils/presets';
 import { AppDatabase } from './types/database';
 import { calculateRotation } from './utils/rotationCalculator';
+import { appGcsimExtras } from './utils/gcsim/appGcsimExtras';
 import { getAvailableBuffsForCharacter } from './utils/buffUtils';
 import { buildActionLinkTables } from './masterdata/actionGcsimLink';
 import { loadActiveState, saveActiveStateDebounced, flushActiveState, clearActiveState, getSavedSlots, trySaveSlot, SLOT_WRITE_FAILED_MESSAGE, buildDefaultSlotName, buildPartyMemberNames, findSlotByName } from './utils/storage';
@@ -590,27 +591,8 @@ export default function App() {
       hurt,
       weapons: database.weapons,
       artifacts: database.artifacts,
-      // 標準より長くした分（所要時間の編集）と、モードの維持のための自動の待ち（出場の最後のアクション。待機のアクションにも足す）
-      extraWaitByActionId: Object.fromEntries(
-        calculatedArg.calculatedStints.flatMap(s => s.actions)
-          .filter(a => a.type !== 'swap')
-          .map(a => {
-            const manual = a.durationManual && a.holdSeconds === undefined && a.naturalDuration !== undefined && a.type !== 'wait' ? Math.max(0, a.duration - a.naturalDuration) : 0;
-            // 維持のアクション（待機）: 長さが自動のときは、計算した長さを gcsim の `wait` に渡す（元の所要時間は 0）
-            if (isModeHoldAction(a) && !a.durationManual) return [a.id, Number(a.duration.toFixed(3))] as const;
-            return [a.id, Number(((manual >= 0.005 ? manual : 0) + (a.modeHoldSeconds ?? 0)).toFixed(3))] as const;
-          })
-          .filter(([, extra]) => extra > 0),
-      ),
-      modeHoldByActionId: Object.fromEntries(
-        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.modeHoldSeconds).map(a => [a.id, a.modeHoldSeconds as number]),
-      ),
-      holdSecondsByActionId: Object.fromEntries(
-        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.holdSeconds !== undefined).map(a => [a.id, a.holdSeconds as number]),
-      ),
-      commandByActionId: Object.fromEntries(
-        calculatedArg.calculatedStints.flatMap(s => s.actions).filter(a => a.gcsimCommand).map(a => [a.id, a.gcsimCommand as string]),
-      ),
+      // 標準より長くした分・モードの維持・長押しの秒数・コマンド（探索と共通の作り方）
+      ...appGcsimExtras(calculatedArg.calculatedStints),
     });
   const buildCurrentGcsimConfig = () => buildGcsimConfigFor(visibleStints, calculatedResult);
 
@@ -1127,7 +1109,6 @@ export default function App() {
         switchDelay={switchDelay}
         defHalt={defHalt}
         hurt={hurt}
-        stintCount={visibleStints.length}
         onApply={(next, loopStart) => {
           updateStints(next);
           setLoopStartIndex(loopStart);

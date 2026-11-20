@@ -311,7 +311,6 @@
     "colParticles": "Particle E",
     "colParticlesTitle": "Energy received from particles before Energy Recharge is applied, averaged per party member per 10 seconds (sum over the party ÷ members ÷ seconds × 10). Includes particle element matching and on-field/off-field differences. At the same DPS, a higher value lets you lower Energy Recharge and put the stats elsewhere.",
     "particlesDetail": "Average over the evaluated {{seconds}} s: particles generated: {{own}} from skills etc. + {{enemy}} from enemies",
-    "overwrite": "The current actions ({{count}} on-field blocks) will be replaced by the search result.",
     "noMembers": "The party has no characters. Build a party first.",
     "start": "Start search",
     "cancel": "Cancel",

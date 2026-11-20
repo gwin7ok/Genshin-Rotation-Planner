@@ -56,7 +56,24 @@ const SCREEN = args.includes('--screen');
 const cfg = SCREEN
   ? buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, loopIterations: num('loops', 5), ignoreBurstEnergy: args.includes('--no-energy'), ...(args.includes('--no-energy') ? {} : { enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } }) })
   : buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS, ...(args.includes('--energy') ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) });
-const out = await computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: SCREEN ? {} : { battleSeconds: SECONDS } });
+// --app: アプリの DPS 計算と同じ作り方（所要時間の手入力・長押し・コマンドを反映）で測る。--preset だけなら保存データの出場をそのまま、--rot もあれば、その回転を使う（--screen と合わせて使う）
+let cfgUse = cfg;
+if (args.includes('--app')) {
+  const appStints: any[] = preset && !str('rot') ? preset.stints : stints;
+  const { calculateRotation } = await server.ssrLoadModule('/src/utils/rotationCalculator.ts');
+  const { appGcsimExtras } = await server.ssrLoadModule('/src/utils/gcsim/appGcsimExtras.ts');
+  const loopStart = rot.loop ?? 0;
+  const calc = calculateRotation(characters, appStints, { switchDelay: preset?.switchDelay ?? 0.5, database: { characters: master, weapons, artifacts }, loopStartIndex: loopStart, defHalt: true });
+  const acts: any[] = calc.calculatedStints.flatMap((x: any) => x.actions);
+  cfgUse = buildGcsimConfig({
+    characters, stints: appStints, loopStartIndex: loopStart, switchDelay: preset?.switchDelay ?? 0.5, defHalt: true, weapons, artifacts,
+    loopIterations: num('loops', 5), ignoreBurstEnergy: args.includes('--no-energy'), ...(args.includes('--no-energy') ? {} : { enemyParticles: { minSeconds: 5, maxSeconds: 8, amount: 1 } }),
+    ...appGcsimExtras(calc.calculatedStints),
+  });
+  if (args.includes('--app-debug')) for (const x of acts) if (x.holdSeconds !== undefined || x.modeHoldSeconds || x.gcsimCommand || (x.durationManual && x.naturalDuration !== undefined && x.duration - x.naturalDuration >= 0.005)) console.log('  ', x.actionTypeId, 'dur', x.duration, 'nat', x.naturalDuration, 'hold', x.holdSeconds, 'modeHold', x.modeHoldSeconds, 'cmd', x.gcsimCommand, x.type);
+  if (!cfgUse.runnable) { console.log('実行できません', cfgUse.warnings.map((w: any) => w.message).join(' / ')); process.exit(1); }
+}
+const out = await computeDps({ config: cfgUse, runs: RUNS, parallel: 6, run: runGcsimSample, context: SCREEN ? {} : { battleSeconds: SECONDS } });
 if (out.status !== 'ok') console.log('失敗', out.status, out.message);
 else console.log(`DPS ${(out.result.dps.mean / 1000).toFixed(1)}k ±${(out.result.dps.sd / 1000).toFixed(1)}（戦闘 ${SECONDS} 秒・${RUNS} 回）  粒子E ${((out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10).toFixed(1)}/人/10秒（粒子 敵 ${out.result.particles.enemy.toFixed(0)}・全体 ${out.result.particles.total.toFixed(0)}）`);
 await server.close();

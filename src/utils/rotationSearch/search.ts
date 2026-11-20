@@ -7,9 +7,11 @@ import type { CharacterConfig, Stint } from '../../types/genshin';
 import type { EnemySetting, HurtSetting } from '../gcsim/buildGcsimConfig';
 import type { EnemyParticles } from '../gcsim/requiredEnergyRecharge';
 import { buildGcsimConfig } from '../gcsim/buildGcsimConfig';
+import { appGcsimExtras } from '../gcsim/appGcsimExtras';
+import { calculateRotation } from '../rotationCalculator';
 import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
-import { generateCandidates, neighborsOf, type Candidate, type SearchRole } from './candidates';
+import { generateCandidates, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
 import { evaluateCandidates, type ScoredCandidate } from './evaluate';
 
 /**
@@ -78,6 +80,8 @@ export interface ParticleInfo {
   seconds: number;
   /** 1 人あたり・10 秒あたりの、粒子から受け取ったエネルギー（ER 反映前）。粒子の色の違い・表と裏の受け取りの違いを、すべて含んだ値 */
   energyPerMember10s: number;
+  /** キャラごとの、10 秒あたりの値（キャラ ID・値）。同じ基準（ER 反映前） */
+  energyByChar10s: Array<{ characterId: string; energy10s: number }>;
 }
 
 export interface SearchResultItem {
@@ -155,7 +159,10 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       const dps = args.dps;
       // 探索中は周数を減らして速くする（最後の確認だけ指定の周数）
       const loopsUsed = dps ? (final ? dps.loops : Math.min(dps.loops, EXPLORE_LOOPS)) : 0;
+      // アプリの計算（長押しの秒数・所要時間など）を通した値を、gcsim に渡す。置いたあとの DPS 計算と同じ結果にするため
+      const calc = calculateRotation(characters, sc.candidate.stints, { switchDelay: args.switchDelay, loopStartIndex: sc.candidate.loopStartIndex ?? 0, defHalt: args.defHalt });
       const cfg = buildGcsimConfig({
+        ...appGcsimExtras(calc.calculatedStints),
         characters, stints: sc.candidate.stints, loopStartIndex: sc.candidate.loopStartIndex ?? 0, switchDelay: args.switchDelay, defHalt: args.defHalt,
         ...(args.hurt ? { hurt: args.hurt } : {}), weapons: args.weapons, artifacts: args.artifacts,
         ...(dps
@@ -167,7 +174,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
-        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0 } };
+        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) } };
       } catch (e) {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }
@@ -360,7 +367,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       return parts.join('|') + '@' + (sc.candidate.loopStartIndex ?? 0);
     };
     const seenKeys = new Set<string>();
-    const stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => r.sc);
+    const stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => ({ ...r.sc, candidate: mergeAdjacentStints(characters, r.sc.candidate) }));
     const r2 = (await mapLimit(stage2, settings.runs2, 'verify')).filter(r => r.dps !== undefined);
     if (cancelled()) return { status: 'cancelled' };
     if (r2.length === 0) return { status: 'error', message: 'ALL_FAILED' };

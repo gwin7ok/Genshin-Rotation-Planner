@@ -19,8 +19,6 @@ interface AutoSearchDialogProps {
   switchDelay: number;
   defHalt: boolean;
   hurt: HurtSetting;
-  /** いまのアクション（出場の数。0 でなければ、置き換わる旨を出す） */
-  stintCount: number;
   /** 選んだ候補の出場を、ガントチャートに置く */
   onApply: (stints: Stint[], loopStartIndex: number) => void;
 }
@@ -38,7 +36,7 @@ const errorText = (message: string): string => {
 };
 
 /** ローテーション自動探索（フェーズ 9）: 編成の役割から候補を作り、gcsim で DPS の高い順に並べて、1 位をガントチャートに置く */
-export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onClose, characters, database, switchDelay, defHalt, hurt, stintCount, onApply }) => {
+export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onClose, characters, database, switchDelay, defHalt, hurt, onApply }) => {
   const [keep1, setKeep1] = useState(String(DEFAULT_SEARCH_SETTINGS.keep1));
   const [runs1, setRuns1] = useState(String(DEFAULT_SEARCH_SETTINGS.runs1));
   const [keep2, setKeep2] = useState(String(DEFAULT_SEARCH_SETTINGS.keep2));
@@ -190,8 +188,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             </div>
           </details>
 
-          {stintCount > 0 && <p className="text-xs text-amber-300">{t('gcsim:search.overwrite', { count: stintCount })}</p>}
-
           <div className="flex items-center gap-3 flex-wrap">
             {running ? (
               <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white"><Square className="w-3.5 h-3.5" />{t('gcsim:search.cancel')}</button>
@@ -230,7 +226,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                         <td className="px-2 py-1.5 text-slate-300 font-bold">{i + 1}</td>
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>
-                        <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) }) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
+                        <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? [...r.particles.energyByChar10s.map(x => `${charName(members.find(c => c.id === x.characterId) ?? { name: x.characterId })}: ${x.energy10s.toFixed(1)}`), t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) })].join(String.fromCharCode(10)) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
                         <td className="px-2 py-1.5 text-slate-300 break-words">{r.candidate.label}</td>
                         <td className="px-2 py-1.5 text-right">
                           {applied === i ? (

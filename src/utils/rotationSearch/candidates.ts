@@ -140,6 +140,25 @@ const useSteps = (u: Use): string[] => [...u.es, ...(u.q ? ['q'] : [])];
 const cooldownOf = (c: CharacterConfig, step: string): number => defOf(c, step)?.cooldown ?? 0;
 const durationOf = (c: CharacterConfig, step: string): number => defOf(c, step)?.defaultDuration ?? 0;
 
+/**
+ * 同じキャラの隣り合う出場を 1 つにまとめた候補を返す（探索の途中は、出場の分け方も試すので分かれているが、結果としては 1 つの出場として見せる・置く）。
+ * 周回の開始位置をまたぐ（1 周目だけの出場と周回の出場の間）ところは、まとめない。まとめた分、開始位置を前へずらす
+ */
+export function mergeAdjacentStints(characters: CharacterConfig[], candidate: Candidate): Candidate {
+  const loop = candidate.loopStartIndex ?? 0;
+  const stints: Stint[] = [];
+  let newLoop = loop;
+  candidate.stints.forEach((s, i) => {
+    const prev = stints[stints.length - 1];
+    if (prev && prev.characterId === s.characterId && i !== loop) {
+      stints[stints.length - 1] = { ...prev, actions: [...prev.actions, ...s.actions] };
+      if (i < loop) newLoop--;
+    } else stints.push({ ...s, actions: [...s.actions] });
+  });
+  if (stints.length === candidate.stints.length) return candidate;
+  return { ...candidate, stints, loopStartIndex: newLoop, label: describe(characters, stints, newLoop) };
+}
+
 /** 候補の要約（出場ごとに「キャラ名[アクション…]」。同じアクションの連続は ×n にまとめる） */
 function describe(characters: CharacterConfig[], stints: Stint[], loopStartIndex = 0): string {
   const name = (id: string) => characters.find(c => c.id === id)?.name ?? id;

@@ -53,13 +53,13 @@ const thinned = cand.generateCandidates(party, roles, { maxCandidates: 50 });
 assert.equal(thinned.length, 50, '上限で間引く');
 
 // 評価: 通った候補に CT 違反などがない
-const r = ev.evaluateCandidates(party, a.slice(0, 300), {});
+const r = ev.evaluateCandidates(party, a, {});
 assert.ok(r.scored.length > 0, '残る候補がある');
-assert.equal(r.scored.length + r.rejected, 300);
+assert.equal(r.scored.length + r.rejected, a.length);
 for (let i = 1; i < r.scored.length; i++) assert.ok(r.scored[i - 1].score >= r.scored[i].score, 'スコアの高い順');
 const again = ev.evaluateCandidates(party, r.scored.map((s: any) => s.candidate), {});
 assert.equal(again.rejected, 0, '通った候補を、もう一度評価しても、捨てられない');
 
-console.log(`OK: 割り当て ${assignments.length} 通り・候補 ${a.length} 個・評価を通った ${r.scored.length}/300 個`);
+console.log(`OK: 割り当て ${assignments.length} 通り・候補 ${a.length} 個・評価を通った ${r.scored.length}/${a.length} 個`);
 await server.close();
 process.exit(0);

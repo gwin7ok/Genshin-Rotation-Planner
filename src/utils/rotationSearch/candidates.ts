@@ -223,7 +223,10 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
           const cycle = Math.max(0.1, Math.min(...attackers.map(c => tpl.steps.reduce((x, s) => x + durationOf(c, s), 0))));
           const r0 = Math.max(1, Math.round(fill / cycle));
           // 繰り返しの回数: 1 回から目安 +1 回まで（上限 5 回）。手で組んだ例は、目安より短い 1 周の方が DPS が高かった
-          for (let r = Math.max(1, r0 - 1); r <= Math.min(r0 + 1, 5); r++) {
+          // E を含む型は、E の CT より短い間隔で繰り返せない（CT 違反になる）ので、回数を E の CT で抑える
+          const eCt = tpl.steps.includes('e') ? Math.max(...attackers.map(c => cooldownOf(c, 'e'))) : 0;
+          const rMax = eCt > 0 ? Math.max(1, Math.min(5, Math.floor((fill + cycle) / Math.max(eCt, cycle)))) : Math.min(r0 + 1, 5);
+          for (let r = Math.max(1, Math.min(r0 - 1, rMax)); r <= rMax; r++) {
             // アタッカーごとの並び（スキル → 攻撃の型の繰り返し（→ 最後に E を足す）、Q はどこかに差し込む）の選択肢
             const withTail = tpl.steps.includes('e') ? [false, true] : [false];
             const variants = (c: CharacterConfig): string[][] => {

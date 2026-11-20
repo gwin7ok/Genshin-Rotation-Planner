@@ -14,7 +14,7 @@ const num = (name: string, def: number) => { const s = str(name); return s ? Num
 const names = args.filter(x => !x.startsWith('--'));
 const SECONDS = num('seconds', 120);
 const RUNS = num('runs', 10);
-const rot = str('rot') ? JSON.parse(fs.readFileSync(str('rot')!, 'utf8')) : (() => { const p = JSON.parse(fs.readFileSync(`src/data/presets/${str('preset')}.json`, 'utf8')); return { loop: p.loopStartIndex ?? 0, stints: p.stints.map((s: any) => ({ c: s.characterId, a: s.actions.map((a: any) => a.actionTypeId.slice(s.characterId.length + 1)) })) }; })();
+const rot = str('rot') ? JSON.parse(fs.readFileSync(str('rot')!, 'utf8')) : (() => { const p = JSON.parse(fs.readFileSync((str("preset")!.endsWith(".json") ? str("preset")! : `src/data/presets/${str("preset")}.json`), 'utf8')); return { loop: p.loopStartIndex ?? 0, stints: p.stints.map((s: any) => ({ c: s.characterId, a: s.actions.map((a: any) => a.actionTypeId.slice(s.characterId.length + 1)) })) }; })();
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true, include: [] } });
 await useNodeGcsim(server);
@@ -32,7 +32,7 @@ const owned: any[] = ownedPath ? JSON.parse(fs.readFileSync(ownedPath, 'utf8')).
 const characters: any[] = [];
 // --preset=名前: 手組みプリセットの編成・装備をそのまま使う（--rot を省くと、そのプリセットの出場の並びを測る）
 const presetName = str('preset');
-const preset = presetName ? JSON.parse(fs.readFileSync(`src/data/presets/${presetName}.json`, 'utf8')) : undefined;
+const preset = presetName ? JSON.parse(fs.readFileSync((presetName.endsWith(".json") ? presetName : `src/data/presets/${presetName}.json`), 'utf8')) : undefined;
 if (preset) for (const pc of preset.party) { const { characterId, ...fields } = pc; const m = master.find((c: any) => c.id === characterId); characters.push({ ...structuredClone(m), ...fields }); }
 for (const n of preset ? [] : names) {
   const m = master.find(c => c.name === n || c.englishName === n);
@@ -51,7 +51,7 @@ const stints = rot.stints.map((s: any, i: number) => {
     }),
   };
 });
-const cfg = buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS });
+const cfg = buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS, ...(args.includes('--energy') ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) });
 const out = await computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: { battleSeconds: SECONDS } });
 if (out.status !== 'ok') console.log('失敗', out.status, out.message);
 else console.log(`DPS ${(out.result.dps.mean / 1000).toFixed(1)}k ±${(out.result.dps.sd / 1000).toFixed(1)}（戦闘 ${SECONDS} 秒・${RUNS} 回）`);

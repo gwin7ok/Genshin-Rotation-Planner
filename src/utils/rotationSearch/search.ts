@@ -88,6 +88,8 @@ export interface SearchArgs {
   switchDelay: number;
   defHalt: boolean;
   hurt?: HurtSetting;
+  /** エネルギーを考慮して探索する（幽境用: 初期エネルギー 0・爆発のエネルギー消費あり）。無ければ、エネルギーは無視する */
+  energy?: boolean;
   /** 同時に動かす gcsim の数（Worker の数） */
   cores: number;
   onProgress?: (p: SearchProgress) => void;
@@ -121,6 +123,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       const cfg = buildGcsimConfig({
         characters, stints: sc.candidate.stints, loopStartIndex: sc.candidate.loopStartIndex ?? 0, switchDelay: args.switchDelay, defHalt: args.defHalt,
         ...(args.hurt ? { hurt: args.hurt } : {}), weapons: args.weapons, artifacts: args.artifacts, battleSeconds: seconds,
+        ...(args.energy ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}),
       });
       if (!cfg.runnable) return { sc, error: cfg.warnings.find(w => w.level === 'error')?.message ?? 'NOT_RUNNABLE' };
       try {

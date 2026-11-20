@@ -49,7 +49,7 @@ const owned: any[] = ownedPath ? JSON.parse(fs.readFileSync(ownedPath, 'utf8')).
 const characters: any[] = [];
 // --preset=keqing-intensify: 手組みプリセットの編成・装備（凸・武器・聖遺物・ビルド）をそのまま使う（手組みとの比較用。名前は要らない）
 const presetName = str('preset');
-const preset = presetName ? JSON.parse(fs.readFileSync(`src/data/presets/${presetName}.json`, 'utf8')) : undefined;
+const preset = presetName ? JSON.parse(fs.readFileSync((presetName.endsWith(".json") ? presetName : `src/data/presets/${presetName}.json`), 'utf8')) : undefined;
 if (preset) for (const pc of preset.party) { const { characterId, ...fields } = pc; const m = master.find(c => c.id === characterId); characters.push({ ...structuredClone(m), ...fields }); }
 for (const n of preset ? [] : names) {
   const m = master.find(c => c.name === n || c.englishName === n);
@@ -80,7 +80,7 @@ let lastPhase = '';
 const T0 = Date.now();
 const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, refine: '④b 山登り', verify: `⑤ gcsim ${RUNS2} 回ずつ` };
 const out = await searchRotation({
-  characters, roles, weapons, artifacts, switchDelay: 0.5, defHalt: true, cores,
+  characters, roles, weapons, artifacts, switchDelay: 0.5, defHalt: true, cores, energy: args.includes('--energy'),
   settings: { battleSeconds: SECONDS, keep1: KEEP1, runs1: RUNS1, keep2: KEEP2, runs2: RUNS2, maxCandidates: MAX },
   onProgress: (p: any) => {
     if (p.phase !== lastPhase) { process.stdout.write(`

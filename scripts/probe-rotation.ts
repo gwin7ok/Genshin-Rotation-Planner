@@ -58,6 +58,6 @@ const cfg = SCREEN
   : buildGcsimConfig({ characters, stints, loopStartIndex: rot.loop ?? 0, switchDelay: 0.5, defHalt: true, weapons, artifacts, battleSeconds: SECONDS, ...(args.includes('--energy') ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) });
 const out = await computeDps({ config: cfg, runs: RUNS, parallel: 6, run: runGcsimSample, context: SCREEN ? {} : { battleSeconds: SECONDS } });
 if (out.status !== 'ok') console.log('失敗', out.status, out.message);
-else console.log(`DPS ${(out.result.dps.mean / 1000).toFixed(1)}k ±${(out.result.dps.sd / 1000).toFixed(1)}（戦闘 ${SECONDS} 秒・${RUNS} 回）`);
+else console.log(`DPS ${(out.result.dps.mean / 1000).toFixed(1)}k ±${(out.result.dps.sd / 1000).toFixed(1)}（戦闘 ${SECONDS} 秒・${RUNS} 回）  粒子 ${((out.result.particles.total / out.result.seconds) * 10).toFixed(1)}個/10秒（敵 ${out.result.particles.enemy.toFixed(0)}・全体 ${out.result.particles.total.toFixed(0)}）`);
 await server.close();
 process.exit(0);

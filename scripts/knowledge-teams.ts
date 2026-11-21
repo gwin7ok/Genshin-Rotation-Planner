@@ -3,6 +3,7 @@
  * 辞書の候補づくり（scripts/knowledge-candidates.ts）の、入力を作る。
  *
  *   node scripts/knowledge-teams.ts 胡桃
+ *   node scripts/knowledge-teams.ts 魈 --page=ショウ   （Wiki のページ名が違うとき）
  *   → data/knowledge-teams/胡桃.json  { character, source, teams: [{ title, members: [名前 ×4] }] }
  *
  * 読み取りの方法: 「編成例」の見出し以下にある、「キャラ」の行の表を、編成 1 つとして読む。
@@ -11,10 +12,11 @@
  */
 import fs from 'node:fs';
 
-const name = process.argv[2];
+const name = process.argv.slice(2).find(a => !a.startsWith('--'));
+const pageName = process.argv.slice(2).find(a => a.startsWith('--page='))?.slice(7) ?? name; // Wiki のページ名が、キャラ名と違うとき（魈 → ショウ）
 if (!name) { console.error('使い方: node scripts/knowledge-teams.ts <キャラ名>（例: 胡桃）'); process.exit(1); }
 
-const url = `https://wikiwiki.jp/genshinwiki/${encodeURIComponent(name)}`;
+const url = `https://wikiwiki.jp/genshinwiki/${encodeURIComponent(pageName!)}`;
 const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (knowledge-teams script)' } });
 if (!res.ok) { console.error(`ページを取得できません: ${url}（${res.status}）`); process.exit(1); }
 const html = (await res.text()).replace(/<script[\s\S]*?<\/script>/g, '');
@@ -38,7 +40,7 @@ let title = '';
 for (const m of seg.matchAll(/<h([2-4])[^>]*>([\s\S]*?)<\/h\1>|<tr><th[^>]*>キャラ<\/th>([\s\S]*?)<\/tr>/g)) {
   if (m[1]) { title = strip(m[2]).replace(/\s*†\s*$/, ''); continue; }
   // 画像（*.webp）・nolink の指定を除き、キャラのページへのリンクの title だけを、順に拾う
-  const members = [...new Set([...m[3].matchAll(/title="([^"]*)"/g)].map(x => x[1]).filter(t => !/\.webp$|nolink/.test(t)))];
+  const members = [...new Set([...m[3].matchAll(/title="([^"]*)"/g)].map(x => x[1]).filter(t => !/\.webp$|nolink/.test(t)).map(t => (t === pageName ? name : t)))]; // ページ名の表記（ショウ）は、マスターの名前（魈）に直す
   if (members.length !== 4) { skipped.push(`${title}: ${members.length} 人（${members.join('・') || '読み取れず'}）`); continue; }
   const bad = members.filter(n => !known(n));
   if (bad.length > 0) { skipped.push(`${title}: ${bad.join('・')} がマスターにない／gcsim 未対応`); continue; }

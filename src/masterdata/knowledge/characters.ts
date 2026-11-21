@@ -8,6 +8,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000125-hydro', // コロンビーナ
     archetypes: [
+      { name: 'E と Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], withCharacters: ['10000096-pyro', '10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    
       {
         name: '重撃を最後にまとめる（月開花）',
         role: 'attacker',
@@ -46,7 +48,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   // ── 蒸発フリーナ（フリーナ・シトラリ・香菱・早柚）。手組み 63.2k、探索 72.3k（旧計算）──
   {
     characterId: '10000089-hydro', // フリーナ
-    archetypes: [{ name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く' }],
+    archetypes: [
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+    { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く' }],
   },
   {
     characterId: '10000107-cryo', // シトラリ
@@ -74,6 +78,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000032-pyro', // ベネット
     archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], withCharacters: ['10000096-pyro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    
       { name: 'Q・通常攻撃・E', role: 'supporter', slot: 10, use: ['q', 'n', 'e'], evidence: '手組み「雷電ナショナル」' },
       { name: 'Q だけ', role: 'supporter', slot: 10, use: ['q'], evidence: '探索の上位（48.5k）' },
     ],
@@ -105,11 +111,15 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   // ── 胡桃の編成例の探索から（Overvape 編成。胡桃・夜蘭・コロンビーナ・イネファ）。実測は plan.md ──
   {
     characterId: '10000060-hydro', // 夜蘭
-    archetypes: [{ name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000046-pyro'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000096-pyro', '10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000046-pyro'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
   },
   {
     characterId: '10000116-electro', // イネファ
-    archetypes: [{ name: 'E', role: 'subAttacker', slot: 20, use: ['e'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000125-hydro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' }],
+    archetypes: [
+      { name: 'E', role: 'subAttacker', slot: 25, use: ['e'], withCharacters: ['10000096-pyro', '10000125-hydro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    { name: 'E', role: 'subAttacker', slot: 20, use: ['e'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000125-hydro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' }],
   },
 
   // ── 激化刻晴（フィッシュル・ナヒーダ・万葉・刻晴）。手組み 54.8k ──
@@ -156,6 +166,30 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     archetypes: [
       { name: 'E と重撃を交互に（Q を挟む）', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca', 'e', 'q', 'ca', 'e', 'ca', 'e'], lead: ['e'], evidence: '手組み「星電導サンドローネ」（E と重撃を交互に撃ち、途中で Q）' },
       { name: 'E と重撃を交互に', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca'], fillRepeat: [3, 4], evidence: '探索の上位（サンドローネ[C E C E C E Q]）' },
+    ],
+  },
+  {
+    characterId: '10000026-anemo',
+    archetypes: [
+      { name: 'E×2・Q・通常攻撃・重撃のあと 落下を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q', 'n', 'n', 'ca'], fill: ['jump', 'hp'], fillRepeat: [4, 5, 6], withCharacters: ['10000093-anemo'], evidence: '編成例の探索（魈・閑雲・ファルザン・フリーナ）の上位に出る形。実測: 辞書ありで 43.2k → 48.4k（207 秒）' },
+    ],
+  },
+  {
+    characterId: '10000093-anemo',
+    archetypes: [
+      { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+    ],
+  },
+  {
+    characterId: '10000076-anemo',
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+    ],
+  },
+  {
+    characterId: '10000096-pyro',
+    archetypes: [
+      { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], withCharacters: ['10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     ],
   },
 ];

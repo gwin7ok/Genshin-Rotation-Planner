@@ -1,0 +1,28 @@
+{
+ "characterId": "10000096-pyro",
+ "archetypes": [
+  {
+   "name": "E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "withCharacters": [
+    "10000116-electro"
+   ],
+   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+  }
+ ]
+}

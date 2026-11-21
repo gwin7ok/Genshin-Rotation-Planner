@@ -2,6 +2,18 @@
  "characterId": "10000089-hydro",
  "archetypes": [
   {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "withCharacters": [
+    "10000026-anemo"
+   ],
+   "evidence": "編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 10,

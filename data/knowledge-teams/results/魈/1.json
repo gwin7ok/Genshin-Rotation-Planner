@@ -1,0 +1,511 @@
+{
+ "party": [
+  "魈",
+  "閑雲",
+  "ファルザン",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 8374,
+  "rejectedBy": {
+   "重撃の直前が通常攻撃でない": 4440,
+   "閑雲: 元素爆発CT違反": 223,
+   "ファルザン: 元素爆発CT違反": 331,
+   "フリーナ: 元素爆発CT違反": 50,
+   "フリーナ: スキルCT違反": 346,
+   "閑雲: スキルCT違反": 22,
+   "魈: スキルCT違反": 2921,
+   "魈: 元素爆発CT違反": 41
+  },
+  "scored": 11626,
+  "quick": 814,
+  "quickOk": 814,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 43162.41975776157,
+   "sd": 1877.7023815223465,
+   "totalSeconds": 22,
+   "score": 1.3283863636363638,
+   "particles": {
+    "total": 147.95,
+    "enemy": 39.35,
+    "energy": 864.2400000000046,
+    "seconds": 118.41333333333333,
+    "energyPerMember10s": 18.246256052246466,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 24.427147843711285
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.99037270577634
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 16.282794730323126
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.284708929174618
+     }
+    ]
+   },
+   "label": "フリーナ[E] → ファルザン[E Q] → 閑雲[Q] → 魈[E×2 Q N×2 C J hP N J hP N J hP J hP J hP N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 42898.8952987501,
+   "sd": 1627.1200519875474,
+   "totalSeconds": 21.6,
+   "score": 1.3297800925925924,
+   "particles": {
+    "total": 144.9,
+    "enemy": 38.55,
+    "energy": 846.2000000000044,
+    "seconds": 116.41833333333332,
+    "energyPerMember10s": 18.1715365563844,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 23.94725916593892
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.9842808263303
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 16.501696468196556
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.252909765071347
+     }
+    ]
+   },
+   "label": "フリーナ[E] → ファルザン[E Q] → 閑雲[Q] → 魈[E×2 Q N×2 C J hP N J hP J hP J hP J hP N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 42444.346681725074,
+   "sd": 2509.621415296452,
+   "totalSeconds": 21.79,
+   "score": 1.3287976135842128,
+   "particles": {
+    "total": 146.35,
+    "enemy": 38.45,
+    "energy": 856.4000000000044,
+    "seconds": 118.94916666666668,
+    "energyPerMember10s": 17.999285409033362,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 23.716013142869137
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.733625708460856
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 16.4608130924274
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.086689692375572
+     }
+    ]
+   },
+   "label": "フリーナ[E] → ファルザン[E Q] → 閑雲[Q] → 魈[E×2 Q N×2 C J hP N J hP J hP N J hP J hP N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 42381.26849229871,
+   "sd": 1373.6869803548313,
+   "totalSeconds": 21.8,
+   "score": 1.3376490825688072,
+   "particles": {
+    "total": 146.3,
+    "enemy": 39,
+    "energy": 852.9200000000046,
+    "seconds": 117.405,
+    "energyPerMember10s": 18.1619181465867,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 23.883991312124696
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.909799412290752
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 16.565733997700228
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.288147864230629
+     }
+    ]
+   },
+   "label": "フリーナ[E D] → ファルザン[E Q] → 閑雲[Q] → 魈[E×2 Q N×2 C J hP N J hP J hP J hP J hP N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 41818.86192141943,
+   "sd": 2488.0673953755086,
+   "totalSeconds": 22.52,
+   "score": 1.3262988454706925,
+   "particles": {
+    "total": 144.3,
+    "enemy": 38.4,
+    "energy": 842.0800000000045,
+    "seconds": 119.44583333333335,
+    "energyPerMember10s": 17.624725293892023,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 23.21889280357204
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.403704608085913
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 16.06920849757557
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.807095266334086
+     }
+    ]
+   },
+   "label": "フリーナ[E] → ファルザン[E Q] → 閑雲[Q] → 魈[E×2 Q N×3 C J hP J hP J hP J hP J hP N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 41723.10424132463,
+   "sd": 2854.9380573977987,
+   "totalSeconds": 21.6,
+   "score": 1.3349884259259257,
+   "particles": {
+    "total": 142.75,
+    "enemy": 38.7,
+    "energy": 832.6400000000045,
+    "seconds": 117.38833333333332,
+    "energyPerMember10s": 17.732596936095394,
+    "energyByChar10s": [
+     {
+      "characterId": "10000026-anemo",
+      "energy10s": 23.40692573083639
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 17.699373873042433
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 15.891698493603819
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.932389646898447
+     }
+    ]
+   },
+   "label": "フリーナ[E] → ファルザン[Q E] → 閑雲[Q] → 魈[E×2 Q N×2 C J hP N J hP J hP J hP J hP N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000076-anemo",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000026-anemo",
+      "a": [
+       "e",
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "jump",
+       "hp",
+       "n",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "jump",
+       "hp",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

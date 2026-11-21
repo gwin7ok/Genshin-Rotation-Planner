@@ -3,7 +3,7 @@
  * 上位の結果から、キャラごとの運用型（Archetype）の候補を書き出す。
  *
  *   node scripts/knowledge-candidates.ts 胡桃
- *   オプション: --force（探索済みの編成も、やり直す）--aggregate-only（探索せず、保存済みの結果から候補だけを作り直す）
+ *   オプション: --light（探索の絞りを強めて速くする。複数編成を探索するとき用。候補の質は少し粗くなる）--teams=1（探索する編成の数。Wiki の上から数える）--force（探索済みの編成も、やり直す）--aggregate-only（探索せず、保存済みの結果から候補だけを作り直す）
  *             --near=0.97（各編成の 1 位の DPS に対する、この割合以上の結果を、根拠に使う）--top=6
  *
  * 出力: data/knowledge-teams/results/<名前>/<番号>.json（編成ごとの探索結果）、
@@ -24,7 +24,9 @@ const aggregateOnly = args.includes('--aggregate-only');
 
 const file = `data/knowledge-teams/${name}.json`;
 if (!fs.existsSync(file)) { console.error(`${file} がありません。先に node scripts/knowledge-teams.ts ${name} を実行してください`); process.exit(1); }
-const { teams } = JSON.parse(fs.readFileSync(file, 'utf8')) as { teams: Array<{ title: string; members: string[] }> };
+// 辞書なしの探索は時間がかかる（1 編成 5 分前後）ので、既定では、編成例の先頭（Wiki で一番上）の 1 件だけ。--teams=N で、先頭から N 件にする
+const allTeams = (JSON.parse(fs.readFileSync(file, 'utf8')) as { teams: Array<{ title: string; members: string[] }> }).teams;
+const teams = allTeams.slice(0, num('teams', 1));
 const dir = `data/knowledge-teams/results/${name}`;
 fs.mkdirSync(dir, { recursive: true });
 
@@ -36,7 +38,7 @@ if (!aggregateOnly) {
     console.log(`[${i + 1}/${teams.length}] ${t.title}: ${t.members.join(' ')} を探索中…`);
     const t0 = Date.now();
     try {
-      execFileSync('node', ['scripts/search-rotation.ts', ...t.members, '--screen', '--runs1=3', '--keep1=400', '--keep2=6', '--runs2=20', `--top=${TOP}`, `--out=${out}`], { stdio: 'pipe', maxBuffer: 1 << 28 });
+      execFileSync('node', ['scripts/search-rotation.ts', ...t.members, '--screen', ...(args.includes('--light') ? ['--runs1=2', '--keep1=150', '--keep2=4', '--runs2=10'] : ['--runs1=3', '--keep1=400', '--keep2=6', '--runs2=20']), `--top=${TOP}`, `--out=${out}`], { stdio: 'pipe', maxBuffer: 1 << 28 });
       console.log(`   完了（${((Date.now() - t0) / 1000).toFixed(0)} 秒）`);
     } catch (e: any) {
       console.log(`   失敗: ${String(e.stdout ?? e.message).split('\n').slice(-3).join(' / ').slice(0, 200)}`);

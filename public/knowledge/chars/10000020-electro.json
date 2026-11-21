@@ -1,0 +1,22 @@
+{
+ "characterId": "10000020-electro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    18
+   ],
+   "evidence": "自動編成（レザー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.7k → 38.3k"
+  }
+ ]
+}

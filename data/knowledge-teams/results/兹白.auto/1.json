@@ -1,0 +1,190 @@
+{
+ "party": [
+  "兹白",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 13708,
+  "rejectedBy": {
+   "ベネット: 元素爆発CT違反": 159,
+   "兹白: ゲージが足りません": 12581,
+   "鍾離: 元素爆発CT違反": 46,
+   "フリーナ: 元素爆発CT違反": 39,
+   "フリーナ: スキルCT違反": 169,
+   "鍾離: スキルCT違反": 74,
+   "ベネット: スキルCT違反": 24,
+   "兹白: 元素爆発CT違反": 34,
+   "兹白: スキルCT違反": 582
+  },
+  "scored": 6292,
+  "quick": 510,
+  "quickOk": 374,
+  "quickFailed": {
+   "zibai: need to use attack right before charge": 3
+  }
+ },
+ "results": [
+  {
+   "dps": 12350.586084034454,
+   "sd": 2478.2300500378174,
+   "totalSeconds": 21.96,
+   "score": 1.1861734972677593,
+   "particles": {
+    "total": 62.4,
+    "enemy": 29.4,
+    "energy": 343.9999999999992,
+    "seconds": 136.75333333333333,
+    "energyPerMember10s": 6.288694973918964,
+    "energyByChar10s": [
+     {
+      "characterId": "10000126-geo",
+      "energy10s": 10.123336420806318
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 4.080339297031156
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 6.133671330375863
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 4.81743284746259
+     }
+    ]
+   },
+   "label": "フリーナ[E] → 鍾離[hE] → ベネット[Q] → ↻兹白[E Q N×2 C N×2 C E N×2 C N×2 C N×2 C D]",
+   "rot": {
+    "loop": 3,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000126-geo",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "dash"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 10543.01584854352,
+   "sd": 1578.6401072703468,
+   "totalSeconds": 22.13,
+   "score": 1.185981134206959,
+   "particles": {
+    "total": 62.8,
+    "enemy": 29.8,
+    "energy": 346.2399999999992,
+    "seconds": 157.53333333333336,
+    "energyPerMember10s": 5.494710114261519,
+    "energyByChar10s": [
+     {
+      "characterId": "10000126-geo",
+      "energy10s": 8.838764282691491
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 3.572577232331785
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 5.355057130765976
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 4.212441811256882
+     }
+    ]
+   },
+   "label": "フリーナ[E] → 鍾離[hE] → ベネット[Q] → ↻兹白[E Q N×2 C N×2 C E N×2 C N×2 C N×2 C J]",
+   "rot": {
+    "loop": 3,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000126-geo",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "jump"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

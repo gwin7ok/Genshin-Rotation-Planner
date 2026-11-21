@@ -1,0 +1,21 @@
+{
+ "characterId": "10000048-pyro",
+ "archetypes": [
+  {
+   "name": "通常攻撃 2 回 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "自動編成（煙緋 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.8k → 28.2k"
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "characterId": "10000059-anemo",
+ "archetypes": [
+  {
+   "name": "Q・E のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    15,
+    20
+   ],
+   "evidence": "自動編成（鹿野院平蔵 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 28.8k → 29.6k"
+  }
+ ]
+}

@@ -1,0 +1,188 @@
+{
+ "party": [
+  "ファルカ",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 1150,
+  "rejectedBy": {
+   "鍾離: 元素爆発CT違反": 15,
+   "フリーナ: 元素爆発CT違反": 6,
+   "ベネット: 元素爆発CT違反": 130,
+   "フリーナ: スキルCT違反": 142,
+   "鍾離: スキルCT違反": 54,
+   "ファルカ: 元素爆発CT違反": 17,
+   "ファルカ: スキルCT違反": 786
+  },
+  "scored": 18850,
+  "quick": 651,
+  "quickOk": 651,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 32599.07649696673,
+   "sd": 257.40844460762753,
+   "totalSeconds": 21.93,
+   "score": 1.2841997264021887,
+   "particles": {
+    "total": 123,
+    "enemy": 30.4,
+    "energy": 565.7600000000026,
+    "seconds": 127.88,
+    "energyPerMember10s": 11.060369096027578,
+    "energyByChar10s": [
+     {
+      "characterId": "10000128-anemo",
+      "energy10s": 15.72411635908664
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 7.854238348451674
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 9.768532999687201
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 10.894588676884565
+     }
+    ]
+   },
+   "label": "フリーナ[E D] → 鍾離[hE] → ベネット[Q] → ファルカ[tE N×2 C N×7 spE N×6]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000128-anemo",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e_specialskill",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 31873.4145589518,
+   "sd": 823.2138752514451,
+   "totalSeconds": 23.23,
+   "score": 1.2823396470081792,
+   "particles": {
+    "total": 123.2,
+    "enemy": 31.2,
+    "energy": 569.7600000000026,
+    "seconds": 128.49333333333334,
+    "energyPerMember10s": 11.085400020753397,
+    "energyByChar10s": [
+     {
+      "characterId": "10000128-anemo",
+      "energy10s": 15.801598007678733
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 7.763826917090382
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 9.612950088201718
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 11.163225070042524
+     }
+    ]
+   },
+   "label": "フリーナ[E D] → 鍾離[hE] → ベネット[Q] → ファルカ[tE N×9 spE N×6 J N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000128-anemo",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e_specialskill",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "jump",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "characterId": "10000109-anemo",
+ "archetypes": [
+  {
+   "name": "E・Q・ダッシュのあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "dash"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    10,
+    12
+   ],
+   "evidence": "自動編成（夢見月瑞希 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 23.8k"
+  }
+ ]
+}

@@ -1,0 +1,205 @@
+{
+ "party": [
+  "セトス",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 1652,
+  "rejectedBy": {
+   "セトス: スキルCT違反": 1567,
+   "ベネット: 元素爆発CT違反": 28,
+   "フリーナ: スキルCT違反": 21,
+   "鍾離: 元素爆発CT違反": 6,
+   "鍾離: スキルCT違反": 15,
+   "フリーナ: 元素爆発CT違反": 4,
+   "ベネット: スキルCT違反": 5,
+   "セトス: 元素爆発CT違反": 6
+  },
+  "scored": 18348,
+  "quick": 832,
+  "quickOk": 732,
+  "quickFailed": {
+   "error encountered on sethos executing aim: sethos: Cannot aim while in burst": 47
+  }
+ },
+ "results": [
+  {
+   "dps": 31315.349737438803,
+   "sd": 410.19255594798403,
+   "totalSeconds": 26.73,
+   "score": 1.167471006359895,
+   "particles": {
+    "total": 134.2,
+    "enemy": 41.4,
+    "energy": 632.1600000000038,
+    "seconds": 119.03666666666666,
+    "energyPerMember10s": 13.276581445493068,
+    "energyByChar10s": [
+     {
+      "characterId": "10000097-electro",
+      "energy10s": 16.727618940942566
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 12.466746940718528
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.458654196186039
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 12.453305704124757
+     }
+    ]
+   },
+   "label": "セトス[N] → フリーナ[E] → 鍾離[hE] → ベネット[hE Q] → セトス[E Q N×2 D N×11 E J N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000097-electro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000097-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "jump",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 31026.621357385477,
+   "sd": 1455.3417319442403,
+   "totalSeconds": 25.86,
+   "score": 1.1648395204949726,
+   "particles": {
+    "total": 133.4,
+    "enemy": 39.8,
+    "energy": 628.0000000000036,
+    "seconds": 120.01666666666665,
+    "energyPerMember10s": 13.081516456047847,
+    "energyByChar10s": [
+     {
+      "characterId": "10000097-electro",
+      "energy10s": 16.29773642549646
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 12.251631717816952
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.245104846549083
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 12.531592834328544
+     }
+    ]
+   },
+   "label": "セトス[N] → フリーナ[E] → 鍾離[hE] → ベネット[hE Q] → セトス[E Q N×2 D N×11 E N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000097-electro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000097-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

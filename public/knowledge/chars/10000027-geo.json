@@ -1,0 +1,24 @@
+{
+ "characterId": "10000027-geo",
+ "archetypes": [
+  {
+   "name": "E・ダッシュ・Q のあと 重撃 + 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "dash",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "n"
+   ],
+   "fillRepeat": [
+    4,
+    6
+   ],
+   "evidence": "自動編成（凝光 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 38.3k"
+  }
+ ]
+}

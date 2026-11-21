@@ -1,0 +1,21 @@
+{
+ "characterId": "10000104-anemo",
+ "archetypes": [
+  {
+   "name": "E のあと 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "自動編成（チャスカ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.0k → 49.9k"
+  }
+ ]
+}

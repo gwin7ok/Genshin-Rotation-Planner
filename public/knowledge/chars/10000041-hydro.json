@@ -1,0 +1,22 @@
+{
+ "characterId": "10000041-hydro",
+ "archetypes": [
+  {
+   "name": "Q のあと 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k"
+  }
+ ]
+}

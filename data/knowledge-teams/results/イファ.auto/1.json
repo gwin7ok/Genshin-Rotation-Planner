@@ -1,0 +1,206 @@
+{
+ "party": [
+  "イファ",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 9782,
+  "rejectedBy": {
+   "イファ: 落下攻撃の前提": 1179,
+   "イファ: モードを終わらせずに交代": 8435,
+   "ベネット: 元素爆発CT違反": 54,
+   "鍾離: 元素爆発CT違反": 6,
+   "フリーナ: スキルCT違反": 44,
+   "鍾離: スキルCT違反": 53,
+   "フリーナ: 元素爆発CT違反": 1,
+   "ベネット: スキルCT違反": 6,
+   "イファ: 元素爆発CT違反": 4
+  },
+  "scored": 10218,
+  "quick": 532,
+  "quickOk": 507,
+  "quickFailed": {
+   "error encountered on ifa executing low_plunge: only plunge after skill ends": 19
+  }
+ },
+ "results": [
+  {
+   "dps": 27460.330765086866,
+   "sd": 537.7547357142702,
+   "totalSeconds": 38.38,
+   "score": 1.0943525273579988,
+   "particles": {
+    "total": 160.8,
+    "enemy": 59,
+    "energy": 769.7600000000064,
+    "seconds": 153.76,
+    "energyPerMember10s": 12.515608740895006,
+    "energyByChar10s": [
+     {
+      "characterId": "10000113-anemo",
+      "energy10s": 16.01196670135275
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.554110301768967
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.516649323621195
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 11.979708636836598
+     }
+    ]
+   },
+   "label": "イファ[N] → ベネット[tE Q] → 鍾離[hE Q] → フリーナ[E] → イファ[tE C×5 N×12 C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000113-anemo",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000113-anemo",
+      "a": [
+       "e",
+       "ca",
+       "ca",
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 27145.568308508373,
+   "sd": 720.2566657106921,
+   "totalSeconds": 35.43,
+   "score": 1.0822184589331074,
+   "particles": {
+    "total": 155.4,
+    "enemy": 54.4,
+    "energy": 740.9600000000058,
+    "seconds": 146.54666666666668,
+    "energyPerMember10s": 12.640342098080346,
+    "energyByChar10s": [
+     {
+      "characterId": "10000113-anemo",
+      "energy10s": 15.888454189791645
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.691474843053383
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.739605131471173
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 12.2418342280047
+     }
+    ]
+   },
+   "label": "イファ[N] → ベネット[tE Q] → 鍾離[hE Q] → フリーナ[E] → イファ[tE C×5 N×12]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000113-anemo",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000113-anemo",
+      "a": [
+       "e",
+       "ca",
+       "ca",
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

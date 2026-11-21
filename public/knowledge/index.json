@@ -48,6 +48,25 @@
   "10000043-anemo": "chars/10000043-anemo.json",
   "10000071-electro": "chars/10000071-electro.json",
   "10000085-cryo": "chars/10000085-cryo.json",
-  "10000034-geo": "chars/10000034-geo.json"
+  "10000034-geo": "chars/10000034-geo.json",
+  "10000020-electro": "chars/10000020-electro.json",
+  "10000027-geo": "chars/10000027-geo.json",
+  "10000029-pyro": "chars/10000029-pyro.json",
+  "10000036-cryo": "chars/10000036-cryo.json",
+  "10000041-hydro": "chars/10000041-hydro.json",
+  "10000044-pyro": "chars/10000044-pyro.json",
+  "10000054-hydro": "chars/10000054-hydro.json",
+  "10000057-geo": "chars/10000057-geo.json",
+  "10000059-anemo": "chars/10000059-anemo.json",
+  "10000062-cryo": "chars/10000062-cryo.json",
+  "10000075-anemo": "chars/10000075-anemo.json",
+  "10000086-cryo": "chars/10000086-cryo.json",
+  "10000104-anemo": "chars/10000104-anemo.json",
+  "10000113-anemo": "chars/10000113-anemo.json",
+  "10000114-cryo": "chars/10000114-cryo.json",
+  "10000128-anemo": "chars/10000128-anemo.json",
+  "10000016-pyro": "chars/10000016-pyro.json",
+  "10000048-pyro": "chars/10000048-pyro.json",
+  "10000109-anemo": "chars/10000109-anemo.json"
  }
 }

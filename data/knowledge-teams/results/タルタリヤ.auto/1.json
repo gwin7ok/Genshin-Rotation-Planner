@@ -1,0 +1,185 @@
+{
+ "party": [
+  "タルタリヤ",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 1392,
+  "rejectedBy": {
+   "ベネット: 元素爆発CT違反": 70,
+   "タルタリヤ: スキルCT違反": 1204,
+   "鍾離: 元素爆発CT違反": 10,
+   "フリーナ: 元素爆発CT違反": 34,
+   "フリーナ: スキルCT違反": 31,
+   "鍾離: スキルCT違反": 40,
+   "ベネット: スキルCT違反": 3
+  },
+  "scored": 18608,
+  "quick": 538,
+  "quickOk": 513,
+  "quickFailed": {
+   "error encountered on tartaglia executing aim: aim called when not in ranged stance": 25
+  }
+ },
+ "results": [
+  {
+   "dps": 26983.58569820368,
+   "sd": 568.6911672962498,
+   "totalSeconds": 23.27,
+   "score": 1.01377309840997,
+   "particles": {
+    "total": 136,
+    "enemy": 42.8,
+    "energy": 722.640000000005,
+    "seconds": 128.88666666666668,
+    "energyPerMember10s": 14.016965809755435,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 18.83204882842807
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 11.607096674080562
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 12.072621941757586
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.556095794755054
+     }
+    ]
+   },
+   "label": "フリーナ[E] → 鍾離[hE Q] → ベネット[hE D Q] → タルタリヤ[N×2 C N×2 Q C N×2 C N×2 C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "dash",
+       "q"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "q",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 26745.944761878673,
+   "sd": 898.496211776287,
+   "totalSeconds": 23.35,
+   "score": 1.0094004282655247,
+   "particles": {
+    "total": 135.4,
+    "enemy": 42.4,
+    "energy": 718.5600000000047,
+    "seconds": 130.96333333333334,
+    "energyPerMember10s": 13.716816411718382,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 18.316577159001245
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 11.377230268013923
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.90867672885538
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.264781491002545
+     }
+    ]
+   },
+   "label": "フリーナ[E] → 鍾離[hE Q] → ベネット[hE Q] → タルタリヤ[N×2 C N×2 Q C N×2 C N×2 C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "q",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

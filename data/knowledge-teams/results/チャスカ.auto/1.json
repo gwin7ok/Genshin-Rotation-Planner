@@ -1,0 +1,169 @@
+{
+ "party": [
+  "チャスカ",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 2892,
+  "rejectedBy": {
+   "チャスカ: 落下攻撃の前提": 1671,
+   "チャスカ: スキルCT違反": 1077,
+   "ベネット: 元素爆発CT違反": 37,
+   "鍾離: 元素爆発CT違反": 6,
+   "フリーナ: スキルCT違反": 44,
+   "鍾離: スキルCT違反": 49,
+   "フリーナ: 元素爆発CT違反": 2,
+   "ベネット: スキルCT違反": 1,
+   "チャスカ: 元素爆発CT違反": 5
+  },
+  "scored": 17108,
+  "quick": 753,
+  "quickOk": 686,
+  "quickFailed": {
+   "error encountered on chasca executing low_plunge: only plunge after skill ends": 30
+  }
+ },
+ "results": [
+  {
+   "dps": 42980.881038156294,
+   "sd": 1225.7720036159458,
+   "totalSeconds": 26.83,
+   "score": 1.1870946701453595,
+   "particles": {
+    "total": 70.6,
+    "enemy": 35.2,
+    "energy": 353.11999999999887,
+    "seconds": 52.583333333333336,
+    "energyPerMember10s": 16.78858954041199,
+    "energyByChar10s": [
+     {
+      "characterId": "10000104-anemo",
+      "energy10s": 25.23232963549921
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 13.669730586370854
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 13.989223454833613
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.26307448494455
+     }
+    ]
+   },
+   "label": "鍾離[hE J] → フリーナ[E D Q] → ベネット[hE Q] → ↻チャスカ[E C×4]",
+   "rot": {
+    "loop": 3,
+    "stints": [
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "jump"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash",
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000104-anemo",
+      "a": [
+       "e",
+       "ca",
+       "ca",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 42298.29949752354,
+   "sd": 2418.5620124293173,
+   "totalSeconds": 26.85,
+   "score": 1.1860521415270018,
+   "particles": {
+    "total": 70.6,
+    "enemy": 35,
+    "energy": 352.7999999999989,
+    "seconds": 52.6,
+    "energyPerMember10s": 16.76806083650185,
+    "energyByChar10s": [
+     {
+      "characterId": "10000104-anemo",
+      "energy10s": 25.186311787072242
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 13.642585551330813
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 14.007604562737658
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 14.235741444866935
+     }
+    ]
+   },
+   "label": "鍾離[hE D] → フリーナ[E Q] → ベネット[hE Q] → ↻チャスカ[E C×4]",
+   "rot": {
+    "loop": 3,
+    "stints": [
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000104-anemo",
+      "a": [
+       "e",
+       "ca",
+       "ca",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,209 @@
+{
+ "party": [
+  "レザー",
+  "ベネット",
+  "鍾離",
+  "フリーナ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 14635,
+  "rejectedBy": {
+   "レザー: gcsim 未実装のアクション": 10244,
+   "レザー: 落下攻撃の前提": 3855,
+   "レザー: スキルCT違反": 536
+  },
+  "scored": 5365,
+  "quick": 787,
+  "quickOk": 787,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 35696.18023871743,
+   "sd": 956.7949814879432,
+   "totalSeconds": 24.76,
+   "score": 1.2251322697899836,
+   "particles": {
+    "total": 137.4,
+    "enemy": 48.2,
+    "energy": 641.2800000000046,
+    "seconds": 134.66,
+    "energyPerMember10s": 11.90553987821188,
+    "energyByChar10s": [
+     {
+      "characterId": "10000020-electro",
+      "energy10s": 15.208673696717659
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 8.774691816426559
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.519382147631044
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 12.119411852071853
+     }
+    ]
+   },
+   "label": "鍾離[tE] → フリーナ[E] → レザー[N] → ベネット[Q] → レザー[tE J Q N×4 J N×4 tE N×4 D N×3 hE N×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000020-electro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000020-electro",
+      "a": [
+       "e",
+       "jump",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "jump",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "e_hold",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 35394.94241785324,
+   "sd": 492.1065025463758,
+   "totalSeconds": 24.76,
+   "score": 1.214962742326333,
+   "particles": {
+    "total": 139.2,
+    "enemy": 48.2,
+    "energy": 648.4800000000049,
+    "seconds": 135.76666666666665,
+    "energyPerMember10s": 11.941075374416982,
+    "energyByChar10s": [
+     {
+      "characterId": "10000020-electro",
+      "energy10s": 15.199607169162782
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 8.800392830837225
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 11.540387920451728
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 12.223913577215779
+     }
+    ]
+   },
+   "label": "レザー[N] → 鍾離[tE] → フリーナ[E] → レザー[N] → ベネット[Q] → レザー[tE J Q N×4 J N×4 tE N×4 D N×3 hE N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000020-electro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000020-electro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000020-electro",
+      "a": [
+       "e",
+       "jump",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "jump",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "e_hold",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

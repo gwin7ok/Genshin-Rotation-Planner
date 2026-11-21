@@ -232,6 +232,9 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       }
       const out = new Map<string, string>();
       for (const c of characters) out.set(c.id, [...(per.get(c.id) ?? new Map()).entries()].sort().map(([k, n]) => k + n).join(',') || '-');
+      // 同じキャラが、間に別のキャラを挟んで 2 回出る形（先置き型。スキル・爆発の出場と、攻撃の出場に分ける）は、簡易スコアが低く（アタッカーの表の時間が短い）、上位に入らない。別の使い方として数え、出発点に入れる
+      const ids = sc.candidate.stints.map(x => x.characterId);
+      ids.forEach((id, i) => { if (ids.indexOf(id) < i && ids[i - 1] !== id && ids.slice(ids.indexOf(id), i).some(x => x !== id)) out.set(id, out.get(id) + '|S'); });
       const first = sc.candidate.stints[0];
       if (first && first.actions.every(x => x.actionTypeId.endsWith('_n'))) out.set(first.characterId, out.get(first.characterId) + '|N>');
       if ((sc.candidate.loopStartIndex ?? 0) > 0) for (const [k, v] of out) out.set(k, v + '|L');

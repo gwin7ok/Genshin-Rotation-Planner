@@ -303,6 +303,8 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
                 if (tail) fill.push('e');
                 const rest = others.map(c => [c, useSteps(useOf.get(c.id)!)] as [CharacterConfig, string[]]);
                 pushPlan([...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
+                // 先置き（サンドイッチ）型: スキル・爆発の出場を、他のキャラの前・間に置き、攻撃だけの出場を最後に置く。例: コロンビーナ [E Q] → ラウマ [hE Q] → コロンビーナ [重撃 ×5]
+                for (let p = 0; p < rest.length; p++) pushPlan([...rest.slice(0, p), [a, useSteps(useOf.get(a.id)!)], ...rest.slice(p), [a, fill]], assignment, target);
                 // 最初にアタッカーが通常攻撃を 1 回だけ当てる形
                 if (defOf(a, 'n')) {
                   pushPlan([[a, ['n']], ...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);

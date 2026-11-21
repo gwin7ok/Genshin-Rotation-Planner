@@ -8,6 +8,34 @@ import { prerequisiteViolations } from '../../masterdata/sequenceRules';
 import type { CharacterConfig } from '../../types/genshin';
 import { calculateRotation, type CalculatedRotation } from '../rotationCalculator';
 import type { Candidate } from './candidates';
+import { mapAction } from '../gcsim/actionMapping';
+import { CHARGE_REQUIRES_ATTACK } from '../gcsim/chargeRules';
+
+/**
+ * 重撃の直前が通常攻撃でない並び（gcsim は実行エラーにする）があるか。buildGcsimConfig の検査と同じ規則を、gcsim に渡す前に見る。
+ * 初動 → ループ → ループ（2 周）の順に、直前の動作を追う
+ */
+export function chargeViolation(characters: CharacterConfig[], stints: Candidate['stints'], loopStartIndex: number): boolean {
+  const sequence = [...stints.slice(0, loopStartIndex), ...stints.slice(loopStartIndex), ...stints.slice(loopStartIndex)];
+  let prev = 'none';
+  let prevCharId: string | undefined;
+  for (const stint of sequence) {
+    const c = characters.find(x => x.id === stint.characterId);
+    if (!c) continue;
+    if (prevCharId !== undefined && prevCharId !== stint.characterId) prev = 'swap';
+    prevCharId = stint.characterId;
+    const needs = CHARGE_REQUIRES_ATTACK.has(c.source?.gcsimKey ?? '');
+    for (const act of stint.actions) {
+      if (act.type === 'swap' || act.actionTypeId === 'action_switch_char' || act.type === 'wait') continue;
+      const command = mapAction(act.actionTypeId, c.weaponType).command;
+      if (!command) continue;
+      const base = command.replace(/\[.*$/, '');
+      if (base === 'charge' && needs && prev !== 'attack') return true;
+      prev = base;
+    }
+  }
+  return false;
+}
 
 export interface ScoreOptions {
   switchDelay?: number;
@@ -77,6 +105,11 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
       rejected++;
       const key = `${characters.find(c => c.id === pre[0].rule.characterId)?.name ?? ''}: ${pre[0].rule.resource}が無いのに使っている`;
       rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
+      continue;
+    }
+    if (chargeViolation(characters, candidate.stints, candidate.loopStartIndex ?? 0)) {
+      rejected++;
+      rejectedBy['重撃の直前が通常攻撃でない'] = (rejectedBy['重撃の直前が通常攻撃でない'] ?? 0) + 1;
       continue;
     }
     const bad = result.validationIssues.filter(v => v.severity !== 'info');

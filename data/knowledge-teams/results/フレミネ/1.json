@@ -1,0 +1,220 @@
+{
+ "party": [
+  "フレミネ",
+  "イネファ",
+  "フリーナ",
+  "エスコフィエ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 14793,
+  "rejectedBy": {
+   "重撃の直前が通常攻撃でない": 2939,
+   "フレミネ: 元素爆発CT違反": 158,
+   "イネファ: スキルCT違反": 3107,
+   "フリーナ: 元素爆発CT違反": 96,
+   "エスコフィエ: 元素爆発CT違反": 136,
+   "エスコフィエ: スキルCT違反": 210,
+   "フリーナ: スキルCT違反": 289,
+   "フレミネ: スキルCT違反": 398,
+   "フレミネ: gcsim 未実装のアクション": 5170,
+   "フレミネ: 落下攻撃の前提": 2211,
+   "イネファ: 元素爆発CT違反": 79
+  },
+  "scored": 5207,
+  "quick": 843,
+  "quickOk": 741,
+  "quickFailed": {
+   "ln37: character escoffier: key hold is invalid for action skill": 10,
+   "ln33: character escoffier: key hold is invalid for action skill": 18,
+   "ln35: character escoffier: key hold is invalid for action skill": 3,
+   "ln39: character escoffier: key hold is invalid for action skill": 9,
+   "ln43: character escoffier: key hold is invalid for action skill": 3,
+   "ln41: character escoffier: key hold is invalid for action skill": 6,
+   "ln31: character escoffier: key hold is invalid for action skill": 5,
+   "ln45: character escoffier: key hold is invalid for action skill": 1,
+   "ln47: character escoffier: key hold is invalid for action skill": 1
+  }
+ },
+ "results": [
+  {
+   "dps": 59297.63664636222,
+   "sd": 325.0399569537275,
+   "totalSeconds": 24.8,
+   "score": 1.4386491935483872,
+   "particles": {
+    "total": 173.6,
+    "enemy": 35.8,
+    "energy": 863.6800000000048,
+    "seconds": 129.67,
+    "energyPerMember10s": 16.651499961440674,
+    "energyByChar10s": [
+     {
+      "characterId": "10000085-cryo",
+      "energy10s": 24.033315338937303
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 13.452610472738467
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.594509138582538
+     },
+     {
+      "characterId": "10000112-cryo",
+      "energy10s": 15.52556489550393
+     }
+    ]
+   },
+   "label": "フリーナ[E] → エスコフィエ[tE] → フレミネ[E N] → イネファ[E] → フレミネ[N×5 D N×3 D N×3 E N×8]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000112-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000085-cryo",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000085-cryo",
+      "a": [
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 57817.13936034677,
+   "sd": 286.0379775135608,
+   "totalSeconds": 25,
+   "score": 1.4391400000000003,
+   "particles": {
+    "total": 169.2,
+    "enemy": 35.2,
+    "energy": 845.2800000000046,
+    "seconds": 130.45,
+    "energyPerMember10s": 16.199310080490697,
+    "energyByChar10s": [
+     {
+      "characterId": "10000085-cryo",
+      "energy10s": 23.61057876581065
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.792640858566479
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 13.295515523188943
+     },
+     {
+      "characterId": "10000112-cryo",
+      "energy10s": 15.098505174396282
+     }
+    ]
+   },
+   "label": "フリーナ[E] → エスコフィエ[tE] → フレミネ[E N] → イネファ[E] → フレミネ[N D N×7 D N×3 E N×8]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000112-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000085-cryo",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000085-cryo",
+      "a": [
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

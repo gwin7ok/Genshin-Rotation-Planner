@@ -22,12 +22,28 @@ const TOP = num('top', 6);
 const force = args.includes('--force');
 const aggregateOnly = args.includes('--aggregate-only');
 
-const file = `data/knowledge-teams/${name}.json`;
-if (!fs.existsSync(file)) { console.error(`${file} がありません。先に node scripts/knowledge-teams.ts ${name} を実行してください`); process.exit(1); }
-// 辞書なしの探索は時間がかかる（1 編成 5 分前後）ので、既定では、編成例の先頭（Wiki で一番上）の 1 件だけ。--teams=N で、先頭から N 件にする
-const allTeams = (JSON.parse(fs.readFileSync(file, 'utf8')) as { teams: Array<{ title: string; members: string[] }> }).teams;
+// --auto-team: 編成例がなくても、そのキャラ + 定番のサポート 3 人の編成を作って探索する（Wiki の編成例が読めないキャラ用）
+const auto = args.includes('--auto-team');
+let allTeams: Array<{ title: string; members: string[] }>;
+if (auto) {
+  const m0: any[] = JSON.parse(fs.readFileSync('src/data/characters_master_data.json', 'utf8'));
+  const supported = (n: string) => m0.some(c => c.name === n && c.source?.gcsimKey);
+  if (!supported(name)) { console.error(`${name} は、マスターにない、または gcsim 未対応です`); process.exit(1); }
+  // 定番の組。元素反応に偏らない、シールド・回復・バフ役を中心にする（自分と重なる人は、次の人で補う）
+  const SETS = [['ベネット', '鍾離', 'フリーナ'], ['ナヒーダ', '夜蘭', 'ファルザン'], ['香菱', '行秋', 'ジン']];
+  const POOL = ['ベネット', '鍾離', 'フリーナ', 'ナヒーダ', '行秋', '香菱', '夜蘭', 'ファルザン', 'ジン', 'シトラリ'];
+  allTeams = SETS.map((set, i) => {
+    const members = [name, ...set.filter(n => n !== name && supported(n))];
+    for (const n of POOL) { if (members.length >= 4) break; if (n !== name && !members.includes(n) && supported(n)) members.push(n); }
+    return { title: `自動編成${i + 1}`, members: members.slice(0, 4) };
+  });
+} else {
+  const file = `data/knowledge-teams/${name}.json`;
+  if (!fs.existsSync(file)) { console.error(`${file} がありません。先に node scripts/knowledge-teams.ts ${name} を実行する（編成例が読めないキャラは --auto-team）`); process.exit(1); }
+  allTeams = (JSON.parse(fs.readFileSync(file, 'utf8')) as { teams: Array<{ title: string; members: string[] }> }).teams;
+}
 const teams = allTeams.slice(0, num('teams', 1));
-const dir = `data/knowledge-teams/results/${name}`;
+const dir = `data/knowledge-teams/results/${name}${auto ? '.auto' : ''}`;
 fs.mkdirSync(dir, { recursive: true });
 
 // ── 1. 編成ごとに、辞書なしで探索する（画面の DPS 計算と同じ条件）──
@@ -159,6 +175,6 @@ for (const [id, map] of perChar) {
   }
   lines.push('');
 }
-const outMd = `data/knowledge-teams/${name}.candidates.md`;
+const outMd = `data/knowledge-teams/${name}${auto ? '.auto' : ''}.candidates.md`;
 fs.writeFileSync(outMd, lines.join('\n'));
 console.log(`候補を ${outMd} に書きました（${perChar.size} キャラ・結果 ${used} 件を使用）`);

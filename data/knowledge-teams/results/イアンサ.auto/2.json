@@ -1,0 +1,171 @@
+{
+ "party": [
+  "イアンサ",
+  "ナヒーダ",
+  "夜蘭",
+  "ファルザン"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 10660,
+  "rejectedBy": {
+   "ナヒーダ: スキルCT違反": 10656,
+   "ファルザン: 元素爆発CT違反": 1,
+   "イアンサ: スキルCT違反": 2,
+   "夜蘭: 元素爆発CT違反": 1
+  },
+  "scored": 9340,
+  "quick": 723,
+  "quickOk": 723,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 8212.048637107391,
+   "sd": 129.40029802228653,
+   "totalSeconds": 18.05,
+   "score": 1.1397645429362881,
+   "particles": {
+    "total": 46.6,
+    "enemy": 32.6,
+    "energy": 243.35999999999962,
+    "seconds": 163.5,
+    "energyPerMember10s": 3.7211009174311864,
+    "energyByChar10s": [
+     {
+      "characterId": "10000110-electro",
+      "energy10s": 3.493577981651378
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 4.198165137614681
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 4.286238532110092
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 2.906422018348625
+     }
+    ]
+   },
+   "label": "夜蘭[Q] → イアンサ[E Q] → ナヒーダ[N×13 hE(0.42s) N D N Q]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000110-electro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e_hold",
+       "n",
+       "dash",
+       "n",
+       "q"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 7783.581650584665,
+   "sd": 267.0397990877985,
+   "totalSeconds": 18.17,
+   "score": 1.1386763896532746,
+   "particles": {
+    "total": 47.6,
+    "enemy": 33.6,
+    "energy": 248.95999999999964,
+    "seconds": 163.75666666666666,
+    "energyPerMember10s": 3.800761292161128,
+    "energyByChar10s": [
+     {
+      "characterId": "10000110-electro",
+      "energy10s": 3.561381724917054
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 4.274635129358603
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 4.391882264335295
+     },
+     {
+      "characterId": "10000076-anemo",
+      "energy10s": 2.9751460500335876
+     }
+    ]
+   },
+   "label": "夜蘭[Q] → イアンサ[E Q] → ナヒーダ[N×9 D N×4 hE(0.42s) N C Q]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000110-electro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e_hold",
+       "n",
+       "ca",
+       "q"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

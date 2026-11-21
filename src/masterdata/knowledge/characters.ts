@@ -321,4 +321,22 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
       { name: 'E・通常攻撃・重撃', role: 'subAttacker', slot: 30, use: ['e', 'n', 'n', 'n', 'n', 'ca', 'n', 'n', 'n', 'ca'], evidence: '編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒' },
     ],
   },
+  {
+    characterId: '10000071-electro',
+    archetypes: [
+      { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [9, 10, 12], evidence: '編成例の探索（セノ・ナヒーダ・行秋・久岐忍）の上位に出る形。実測: 最短の設定で 38.4k → 37.8k（誤差）' },
+    ],
+  },
+  {
+    characterId: '10000085-cryo',
+    archetypes: [
+      { name: 'E・通常攻撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n'], fillRepeat: [12, 14, 16], evidence: '編成例の探索（フレミネ・イネファ・フリーナ・エスコフィエ）の上位に出る形。実測: 最短の設定で 59.3k → 59.3k（同じ）' },
+    ],
+  },
+  {
+    characterId: '10000034-geo',
+    archetypes: [
+      { name: '先頭 N・E と Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [18, 21, 24], lead: ['n'], evidence: '編成例の探索（ノエル・ゴロー・アルベド・ベネット）の上位に出る形。実測: 最短の設定で 17.0k ±5.4 → 18.9k ±5.0（誤差）' },
+    ],
+  },
 ];

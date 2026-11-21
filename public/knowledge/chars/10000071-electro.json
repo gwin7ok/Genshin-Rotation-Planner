@@ -1,0 +1,23 @@
+{
+ "characterId": "10000071-electro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    9,
+    10,
+    12
+   ],
+   "evidence": "編成例の探索（セノ・ナヒーダ・行秋・久岐忍）の上位に出る形。実測: 最短の設定で 38.4k → 37.8k（誤差）"
+  }
+ ]
+}

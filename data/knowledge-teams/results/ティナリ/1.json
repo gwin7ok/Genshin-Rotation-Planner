@@ -1,0 +1,167 @@
+{
+ "party": [
+  "ティナリ",
+  "八重神子",
+  "ナヒーダ",
+  "鍾離"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 3054,
+  "rejectedBy": {
+   "ナヒーダ: 元素爆発CT違反": 9,
+   "ティナリ: スキルCT違反": 873,
+   "鍾離: 元素爆発CT違反": 6,
+   "鍾離: スキルCT違反": 9,
+   "ナヒーダ: スキルCT違反": 213,
+   "ティナリ: 元素爆発CT違反": 2,
+   "八重神子: 落下攻撃の前提": 1604,
+   "八重神子: スキルCT違反": 338
+  },
+  "scored": 16946,
+  "quick": 799,
+  "quickOk": 799,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 46544.2284235644,
+   "sd": 1030.2020710711843,
+   "totalSeconds": 15.72,
+   "score": 1.4504770992366411,
+   "particles": {
+    "total": 118.2,
+    "enemy": 29.2,
+    "energy": 605.6800000000029,
+    "seconds": 79.38333333333334,
+    "energyPerMember10s": 19.07453285744288,
+    "energyByChar10s": [
+     {
+      "characterId": "10000069-dendro",
+      "energy10s": 27.47680033592273
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 15.927776611379379
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.134788998530315
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 14.758765483938692
+     }
+    ]
+   },
+   "label": "八重神子[E×3] → 鍾離[hE] → ナヒーダ[tE] → ティナリ[Q E C×2 J C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000069-dendro",
+      "a": [
+       "q",
+       "e",
+       "ca",
+       "ca",
+       "jump",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 43422.74210491185,
+   "sd": 620.8308431276035,
+   "totalSeconds": 15.72,
+   "score": 1.287181933842239,
+   "particles": {
+    "total": 117.6,
+    "enemy": 29.6,
+    "energy": 607.440000000003,
+    "seconds": 84.16,
+    "energyPerMember10s": 18.044201520912637,
+    "energyByChar10s": [
+     {
+      "characterId": "10000069-dendro",
+      "energy10s": 22.975285171102627
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 15.019011406844104
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 17.652091254752825
+     },
+     {
+      "characterId": "10000030-geo",
+      "energy10s": 16.530418250950568
+     }
+    ]
+   },
+   "label": "ナヒーダ[tE] → 八重神子[E×3] → ティナリ[Q E C×2 J C×2] → 鍾離[hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000069-dendro",
+      "a": [
+       "q",
+       "e",
+       "ca",
+       "ca",
+       "jump",
+       "ca",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000030-geo",
+      "a": [
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "characterId": "10000110-electro",
+ "archetypes": [
+  {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "編成例の探索（ヴァレサ・イアンサ・閑雲・フリーナ）の上位に出る形。実測: 最短の設定で 32.1k → 32.1k（同じ）"
+  }
+ ]
+}

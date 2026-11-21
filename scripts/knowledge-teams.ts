@@ -37,10 +37,12 @@ type Team = { title: string; members: string[] };
 const teams: Team[] = [];
 const skipped: string[] = [];
 let title = '';
-for (const m of seg.matchAll(/<h([2-4])[^>]*>([\s\S]*?)<\/h\1>|<tr><th[^>]*>キャラ<\/th>([\s\S]*?)<\/tr>/g)) {
+for (const m of seg.matchAll(/<h([2-4])[^>]*>([\s\S]*?)<\/h\1>|<tr><th[^>]*>キャラ<\/th>([\s\S]*?)<\/tr>(?:\s*<tr>(?!<th)([\s\S]*?)<\/tr>)?/g)) {
   if (m[1]) { title = strip(m[2]).replace(/\s*†\s*$/, ''); continue; }
   // 画像（*.webp）・nolink の指定を除き、キャラのページへのリンクの title だけを、順に拾う
-  const members = [...new Set([...m[3].matchAll(/title="([^"]*)"/g)].map(x => x[1]).filter(t => !/\.webp$|nolink/.test(t)).map(t => (t === pageName ? name : t)))]; // ページ名の表記（ショウ）は、マスターの名前（魈）に直す
+  const members = [...new Set([...(m[3] + (m[4] ?? '')).matchAll(/title="([^"]*)"/g)].map(x => x[1]).filter(t => !/nolink/.test(t)).map(t => t.replace(/_[0-9a-z]*\.webp$/, '')).map(t => (t === pageName ? name : t)))]; // 画像だけの表は、画像の title（○○_0.webp）から名前を取る。ページ名の表記（ショウ）は、マスターの名前（魈）に直す
+  // そのキャラのページでは、本人にリンクがない表がある（3 人 + 本人）。本人を先頭に足す
+  if (members.length === 3 && !members.includes(name)) members.unshift(name);
   if (members.length !== 4) { skipped.push(`${title}: ${members.length} 人（${members.join('・') || '読み取れず'}）`); continue; }
   const bad = members.filter(n => !known(n));
   if (bad.length > 0) { skipped.push(`${title}: ${bad.join('・')} がマスターにない／gcsim 未対応`); continue; }

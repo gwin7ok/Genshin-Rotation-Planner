@@ -1,0 +1,27 @@
+{
+ "characterId": "10000111-electro",
+ "archetypes": [
+  {
+   "name": "先頭 N・E×2・Q のあと 重撃 + 落下を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "hp"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "lead": [
+    "n"
+   ],
+   "evidence": "編成例の探索（ヴァレサ・イアンサ・閑雲・フリーナ）の上位に出る形。実測: 最短の設定で 32.1k → 32.1k（同じ）"
+  }
+ ]
+}

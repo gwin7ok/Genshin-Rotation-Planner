@@ -37,6 +37,14 @@
   "10000022-anemo": "chars/10000022-anemo.json",
   "10000123-pyro": "chars/10000123-pyro.json",
   "10000030-geo": "chars/10000030-geo.json",
-  "10000087-hydro": "chars/10000087-hydro.json"
+  "10000087-hydro": "chars/10000087-hydro.json",
+  "10000066-hydro": "chars/10000066-hydro.json",
+  "10000112-cryo": "chars/10000112-cryo.json",
+  "10000078-dendro": "chars/10000078-dendro.json",
+  "10000065-electro": "chars/10000065-electro.json",
+  "10000111-electro": "chars/10000111-electro.json",
+  "10000110-electro": "chars/10000110-electro.json",
+  "10000120-electro": "chars/10000120-electro.json",
+  "10000043-anemo": "chars/10000043-anemo.json"
  }
 }

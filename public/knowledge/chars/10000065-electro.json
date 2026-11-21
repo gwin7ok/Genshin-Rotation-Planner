@@ -1,0 +1,14 @@
+{
+ "characterId": "10000065-electro",
+ "archetypes": [
+  {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
+  }
+ ]
+}

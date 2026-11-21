@@ -38,7 +38,7 @@ if (!aggregateOnly) {
     console.log(`[${i + 1}/${teams.length}] ${t.title}: ${t.members.join(' ')} を探索中…`);
     const t0 = Date.now();
     try {
-      execFileSync('node', ['scripts/search-rotation.ts', ...t.members, '--screen', ...(args.includes('--light') ? ['--runs1=2', '--keep1=150', '--keep2=4', '--runs2=10'] : ['--runs1=3', '--keep1=400', '--keep2=6', '--runs2=20']), `--top=${TOP}`, `--out=${out}`], { stdio: 'pipe', maxBuffer: 1 << 28 });
+      execFileSync('node', ['scripts/search-rotation.ts', ...t.members, '--screen', ...(args.includes('--fast') ? ['--runs1=1', '--keep1=60', '--keep2=2', '--runs2=5'] : args.includes('--light') ? ['--runs1=2', '--keep1=150', '--keep2=4', '--runs2=10'] : ['--runs1=3', '--keep1=400', '--keep2=6', '--runs2=20']), `--top=${TOP}`, `--out=${out}`], { stdio: 'pipe', maxBuffer: 1 << 28 });
       console.log(`   完了（${((Date.now() - t0) / 1000).toFixed(0)} 秒）`);
     } catch (e: any) {
       console.log(`   失敗: ${String(e.stdout ?? e.message).split('\n').slice(-3).join(' / ').slice(0, 200)}`);

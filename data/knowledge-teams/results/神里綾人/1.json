@@ -1,0 +1,210 @@
+{
+ "party": [
+  "神里綾人",
+  "フリーナ",
+  "シトラリ",
+  "エスコフィエ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 12938,
+  "rejectedBy": {
+   "神里綾人: 元素爆発CT違反": 187,
+   "シトラリ: スキルCT違反": 3996,
+   "フリーナ: 元素爆発CT違反": 128,
+   "エスコフィエ: 元素爆発CT違反": 184,
+   "エスコフィエ: スキルCT違反": 213,
+   "フリーナ: スキルCT違反": 307,
+   "神里綾人: スキルCT違反": 1420,
+   "神里綾人: 落下攻撃の前提": 1832,
+   "重撃の直前が通常攻撃でない": 2492,
+   "神里綾人: モードの間に置けない操作": 2095,
+   "シトラリ: 元素爆発CT違反": 84
+  },
+  "scored": 7062,
+  "quick": 830,
+  "quickOk": 757,
+  "quickFailed": {
+   "ln35: character escoffier: key hold is invalid for action skill": 4,
+   "ln43: character escoffier: key hold is invalid for action skill": 3,
+   "ln41: character escoffier: key hold is invalid for action skill": 9,
+   "ln37: character escoffier: key hold is invalid for action skill": 7,
+   "ln39: character escoffier: key hold is invalid for action skill": 5,
+   "ln33: character escoffier: key hold is invalid for action skill": 9,
+   "error encountered on kamisatoayato executing charge: charged attack called in skill state": 3,
+   "ln31: character escoffier: key hold is invalid for action skill": 1
+  }
+ },
+ "results": [
+  {
+   "dps": 44456.94834202346,
+   "sd": 1866.192934487215,
+   "totalSeconds": 20.67,
+   "score": 1.4212506047411708,
+   "particles": {
+    "total": 139,
+    "enemy": 28,
+    "energy": 786.8000000000027,
+    "seconds": 156.01000000000002,
+    "energyPerMember10s": 12.60816614319599,
+    "energyByChar10s": [
+     {
+      "characterId": "10000066-hydro",
+      "energy10s": 18.929555797705273
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 11.622331901801164
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 9.945516313056839
+     },
+     {
+      "characterId": "10000112-cryo",
+      "energy10s": 9.935260560220481
+     }
+    ]
+   },
+   "label": "フリーナ[E] → シトラリ[E] → エスコフィエ[tE] → 神里綾人[Q D E N×21 D]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000112-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000066-hydro",
+      "a": [
+       "q",
+       "dash",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 44111.33517970015,
+   "sd": 1465.563350637467,
+   "totalSeconds": 20.25,
+   "score": 1.4146913580246916,
+   "particles": {
+    "total": 137.2,
+    "enemy": 27,
+    "energy": 776.4000000000026,
+    "seconds": 157.06,
+    "energyPerMember10s": 12.358334394498957,
+    "energyByChar10s": [
+     {
+      "characterId": "10000066-hydro",
+      "energy10s": 18.477015153444544
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 11.452947917993122
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 9.74150006366992
+     },
+     {
+      "characterId": "10000112-cryo",
+      "energy10s": 9.761874442888054
+     }
+    ]
+   },
+   "label": "フリーナ[E] → シトラリ[E] → エスコフィエ[tE] → 神里綾人[Q D E N×21]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000112-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000066-hydro",
+      "a": [
+       "q",
+       "dash",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

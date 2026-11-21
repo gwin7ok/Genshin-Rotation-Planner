@@ -1,0 +1,178 @@
+{
+ "party": [
+  "ディルック",
+  "閑雲",
+  "シトラリ",
+  "ベネット"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 8087,
+  "rejectedBy": {
+   "ディルック: 元素爆発CT違反": 6,
+   "シトラリ: スキルCT違反": 1288,
+   "閑雲: 元素爆発CT違反": 12,
+   "ベネット: 元素爆発CT違反": 20,
+   "ディルック: スキルCT違反": 91,
+   "ベネット: スキルCT違反": 8,
+   "閑雲: スキルCT違反": 9,
+   "ディルック: gcsim 未実装のアクション": 5168,
+   "ディルック: 落下攻撃の前提": 1481,
+   "シトラリ: 元素爆発CT違反": 4
+  },
+  "scored": 11913,
+  "quick": 792,
+  "quickOk": 731,
+  "quickFailed": {
+   "error encountered on diluc executing low_plunge: low_plunge can only be used while airborne": 1,
+   "error encountered on diluc executing high_plunge: high_plunge can only be used while airborne": 4
+  }
+ },
+ "results": [
+  {
+   "dps": 4812.457666567744,
+   "sd": 107.3017488156251,
+   "totalSeconds": 19.42,
+   "score": 1.2031925849639546,
+   "particles": {
+    "total": 43.4,
+    "enemy": 28,
+    "energy": 229.19999999999973,
+    "seconds": 164.08,
+    "energyPerMember10s": 3.492198927352507,
+    "energyByChar10s": [
+     {
+      "characterId": "10000016-pyro",
+      "energy10s": 3.8785958069234527
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 3.7420770355923945
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 3.3422720624085818
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 3.005850804485617
+     }
+    ]
+   },
+   "label": "閑雲[Q] → ベネット[Q] → シトラリ[E] → ディルック[N Q E N E N×8]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000016-pyro",
+      "a": [
+       "n",
+       "q",
+       "e",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 4006.687143515257,
+   "sd": 150.88716541300658,
+   "totalSeconds": 17.84,
+   "score": 1.1148531390134528,
+   "particles": {
+    "total": 38.2,
+    "enemy": 25.6,
+    "energy": 198.95999999999987,
+    "seconds": 172.7733333333333,
+    "energyPerMember10s": 2.8789164994597916,
+    "energyByChar10s": [
+     {
+      "characterId": "10000016-pyro",
+      "energy10s": 3.0583423367803677
+     },
+     {
+      "characterId": "10000093-anemo",
+      "energy10s": 3.1509492205587293
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 2.910171322734991
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 2.3962031177650873
+     }
+    ]
+   },
+   "label": "閑雲[Q] → ベネット[Q] → シトラリ[E] → ディルック[N Q E N×8]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000093-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000016-pyro",
+      "a": [
+       "n",
+       "q",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

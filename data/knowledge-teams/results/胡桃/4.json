@@ -1,0 +1,484 @@
+{
+ "party": [
+  "胡桃",
+  "夜蘭",
+  "コロンビーナ",
+  "イネファ"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 12594,
+  "rejectedBy": {
+   "重撃の直前が通常攻撃でない": 3428,
+   "胡桃: 元素爆発CT違反": 189,
+   "イネファ: スキルCT違反": 2191,
+   "夜蘭: 元素爆発CT違反": 381,
+   "夜蘭: スキルCT違反": 155,
+   "胡桃: スキルCT違反": 2031,
+   "コロンビーナ: スキルCT違反": 2422,
+   "イネファ: 元素爆発CT違反": 78,
+   "コロンビーナ: 元素爆発CT違反": 81,
+   "胡桃: 落下攻撃の前提": 1638
+  },
+  "scored": 7406,
+  "quick": 826,
+  "quickOk": 826,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 93572.33832779658,
+   "sd": 5123.762281754482,
+   "totalSeconds": 18.85,
+   "score": 1.2361803713527848,
+   "particles": {
+    "total": 147.85,
+    "enemy": 30.75,
+    "energy": 756.600000000003,
+    "seconds": 116.48416666666665,
+    "energyPerMember10s": 16.238258418526186,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 15.839062533534598
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 19.765776464612486
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 16.37475765661997
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.973437019337375
+     }
+    ]
+   },
+   "label": "コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[N E N C N C N C N C N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 93436.25896902029,
+   "sd": 3910.2829501713613,
+   "totalSeconds": 17.97,
+   "score": 1.1984418475236507,
+   "particles": {
+    "total": 146.7,
+    "enemy": 30,
+    "energy": 751.1600000000033,
+    "seconds": 116.00333333333333,
+    "energyPerMember10s": 16.188327921611517,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 15.744375161633283
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 19.75115657596044
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 16.430562340162616
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.82721760868939
+     }
+    ]
+   },
+   "label": "コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[N E N C N C N C N C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 92053.03367589654,
+   "sd": 3820.392280435853,
+   "totalSeconds": 17.97,
+   "score": 1.1984418475236507,
+   "particles": {
+    "total": 145.1,
+    "enemy": 30.2,
+    "energy": 743.7400000000032,
+    "seconds": 115.70500000000001,
+    "energyPerMember10s": 16.06974633766914,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 15.489391123979082
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 19.79344021433817
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 16.32081586794
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.67533814441898
+     }
+    ]
+   },
+   "label": "コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[E N×2 C N C N C N C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 91928.51355533522,
+   "sd": 4015.974252556658,
+   "totalSeconds": 19.43,
+   "score": 1.2592897581060218,
+   "particles": {
+    "total": 145.75,
+    "enemy": 30.75,
+    "energy": 747.0200000000032,
+    "seconds": 117.12750000000001,
+    "energyPerMember10s": 15.944590296898744,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 15.511301786514691
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 19.49499477065589
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 16.13967684787942
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.632387782544647
+     }
+    ]
+   },
+   "label": "コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[N E N C N×2 C N C N C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 90758.32458875296,
+   "sd": 5988.002894053338,
+   "totalSeconds": 18.4,
+   "score": 1.2175000000000002,
+   "particles": {
+    "total": 144.05,
+    "enemy": 30.9,
+    "energy": 740.2600000000032,
+    "seconds": 119.87583333333335,
+    "energyPerMember10s": 15.438057434428744,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 14.981334853424716
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 18.92041070274101
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 15.658702407352028
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.191781774196894
+     }
+    ]
+   },
+   "label": "コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[D N E N C N C N C N C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "dash",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 88882.32930934925,
+   "sd": 4836.094180751055,
+   "totalSeconds": 18.59,
+   "score": 1.1773534158149546,
+   "particles": {
+    "total": 145.65,
+    "enemy": 31.55,
+    "energy": 748.5400000000034,
+    "seconds": 121.27166666666668,
+    "energyPerMember10s": 15.431056993252133,
+    "energyByChar10s": [
+     {
+      "characterId": "10000046-pyro",
+      "energy10s": 15.029066970850565
+     },
+     {
+      "characterId": "10000060-hydro",
+      "energy10s": 18.90796146393082
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 15.655759108338003
+     },
+     {
+      "characterId": "10000116-electro",
+      "energy10s": 12.131440429888801
+     }
+    ]
+   },
+   "label": "胡桃[N] → コロンビーナ[E Q] → イネファ[E] → 夜蘭[E Q] → 胡桃[J E N C N C N C N C N C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000116-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000060-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000046-pyro",
+      "a": [
+       "jump",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "ca"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

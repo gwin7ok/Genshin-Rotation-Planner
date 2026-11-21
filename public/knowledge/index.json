@@ -35,6 +35,8 @@
   "10000105-electro": "chars/10000105-electro.json",
   "10000091-geo": "chars/10000091-geo.json",
   "10000022-anemo": "chars/10000022-anemo.json",
-  "10000123-pyro": "chars/10000123-pyro.json"
+  "10000123-pyro": "chars/10000123-pyro.json",
+  "10000030-geo": "chars/10000030-geo.json",
+  "10000087-hydro": "chars/10000087-hydro.json"
  }
 }

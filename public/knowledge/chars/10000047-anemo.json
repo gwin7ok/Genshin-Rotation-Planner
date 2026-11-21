@@ -2,6 +2,18 @@
  "characterId": "10000047-anemo",
  "archetypes": [
   {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "withCharacters": [
+    "10000087-hydro"
+   ],
+   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
+  },
+  {
    "name": "E・高い落下",
    "role": "supporter",
    "slot": 30,

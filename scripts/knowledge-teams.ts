@@ -25,8 +25,8 @@ const strip = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').re
 const heads = [...html.matchAll(/<h([2-4])[^>]*>([\s\S]*?)<\/h\1>/g)].map(m => ({ pos: m.index!, level: Number(m[1]), text: strip(m[2]).replace(/\s*†\s*$/, '') }));
 const start = heads.find(h => h.text.startsWith('編成例'));
 if (!start) { console.error('「編成例」の見出しが見つかりません'); process.exit(1); }
-// 終わり: 「編成」を含まない、同じかそれより上の見出し（Wiki の見出しの階層は不ぞろいなので、文字で判断する）
-const end = heads.find(h => h.pos > start.pos && h.level <= 3 && !h.text.includes('編成') && !h.text.startsWith('その他の'))
+// 終わり: 「編成」を含まない h2 の見出し（Wiki の見出しの階層は不ぞろい。たたみ表示の見出しは h3・h4 なので、h2 だけで区切る）
+const end = heads.find(h => h.pos > start.pos && h.level <= 2 && !h.text.includes('編成'))
   ?? { pos: html.length };
 const seg = html.slice(start.pos, end.pos);
 

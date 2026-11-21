@@ -1,0 +1,33 @@
+{
+ "characterId": "10000087-hydro",
+ "archetypes": [
+  {
+   "name": "先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "lead": [
+    "n"
+   ],
+   "withCharacters": [
+    "10000105-electro",
+    "10000047-anemo",
+    "10000030-geo"
+   ],
+   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
+  }
+ ]
+}

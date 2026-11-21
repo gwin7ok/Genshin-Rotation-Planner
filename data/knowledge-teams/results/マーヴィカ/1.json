@@ -1,0 +1,488 @@
+{
+ "party": [
+  "マーヴィカ",
+  "シトラリ",
+  "シロネン",
+  "ベネット"
+ ],
+ "seconds": 40,
+ "counts": {
+  "candidates": 20000,
+  "rejected": 8936,
+  "rejectedBy": {
+   "マーヴィカ: 元素爆発CT違反": 78,
+   "シトラリ: スキルCT違反": 3758,
+   "シロネン: 元素爆発CT違反": 129,
+   "ベネット: 元素爆発CT違反": 337,
+   "シロネン: スキルCT違反": 369,
+   "ベネット: スキルCT違反": 56,
+   "マーヴィカ: スキルCT違反": 3135,
+   "マーヴィカ: 落下攻撃の前提": 972,
+   "シトラリ: 元素爆発CT違反": 102
+  },
+  "scored": 11064,
+  "quick": 727,
+  "quickOk": 723,
+  "quickFailed": {
+   "error encountered on mavuika executing low_plunge: low_plunge can only be used while airborne": 4
+  }
+ },
+ "results": [
+  {
+   "dps": 43405.09589963352,
+   "sd": 217.95483444310054,
+   "totalSeconds": 20.48,
+   "score": 1.1676427001953127,
+   "particles": {
+    "total": 114.85,
+    "enemy": 34,
+    "energy": 585.5000000000011,
+    "seconds": 89.75,
+    "energyPerMember10s": 16.309192200557135,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 22.87799442896936
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 13.378272980501407
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 12.669637883008368
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.310863509749286
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シトラリ[E] → シロネン[E] → マーヴィカ[Q tE N×2 C N D N C N×2 C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 43364.87340075078,
+   "sd": 169.6599754573926,
+   "totalSeconds": 20.23,
+   "score": 1.1677062530894713,
+   "particles": {
+    "total": 115.05,
+    "enemy": 34,
+    "energy": 586.7000000000013,
+    "seconds": 89.79999999999997,
+    "energyPerMember10s": 16.333518930957723,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 22.923162583518938
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 13.361915367483313
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 12.667037861915382
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.381959910913128
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シトラリ[E] → シロネン[E] → マーヴィカ[Q N tE N×2 C N D C N×2 C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 43336.24942115264,
+   "sd": 217.40128737067334,
+   "totalSeconds": 22.43,
+   "score": 1.2550490414623274,
+   "particles": {
+    "total": 117.95,
+    "enemy": 36.9,
+    "energy": 602.9400000000013,
+    "seconds": 90.15000000000003,
+    "energyPerMember10s": 16.720465890183057,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 23.45535219079311
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 13.696062118691078
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 13.012756516916255
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.717692734331646
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シトラリ[E] → シロネン[E] → マーヴィカ[Q C tE N×2 C N D N C N×2 C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "ca",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 43122.589669856075,
+   "sd": 170.3160955444304,
+   "totalSeconds": 19.2,
+   "score": 1.1678039062500003,
+   "particles": {
+    "total": 114.25,
+    "enemy": 33.1,
+    "energy": 582.2600000000011,
+    "seconds": 89.20000000000003,
+    "energyPerMember10s": 16.31894618834083,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 22.815022421524652
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 13.382286995515699
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 12.69618834080718
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.38228699551568
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シトラリ[E] → シロネン[E] → マーヴィカ[Q N tE N×2 C N D C N C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40707.57328411825,
+   "sd": 245.1848049352835,
+   "totalSeconds": 20.48,
+   "score": 1.153077392578125,
+   "particles": {
+    "total": 114.95,
+    "enemy": 34.1,
+    "energy": 586.0600000000013,
+    "seconds": 89.75,
+    "energyPerMember10s": 16.324791086351013,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 21.97325905292479
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 14.251810584958227
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 12.736490250696392
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.3376044568245
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シロネン[E] → シトラリ[E] → マーヴィカ[Q tE N×2 C N D N C N×2 C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40464.676552367324,
+   "sd": 275.14688429630917,
+   "totalSeconds": 20.23,
+   "score": 1.1529609490855166,
+   "particles": {
+    "total": 115.1,
+    "enemy": 34.15,
+    "energy": 586.9400000000013,
+    "seconds": 89.79999999999997,
+    "energyPerMember10s": 16.34020044543434,
+    "energyByChar10s": [
+     {
+      "characterId": "10000106-pyro",
+      "energy10s": 22.00556792873052
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 14.261692650334092
+     },
+     {
+      "characterId": "10000103-geo",
+      "energy10s": 12.71158129175948
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.381959910913128
+     }
+    ]
+   },
+   "label": "ベネット[tE Q] → シロネン[E] → シトラリ[E] → マーヴィカ[Q N tE N×2 C N D C N×2 C N D N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000103-geo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000106-pyro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "ca",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "dash",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

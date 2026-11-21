@@ -798,12 +798,6 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     ],
   },
   {
-    characterId: '10000081-dendro',
-    archetypes: [
-      { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [8, 12, 16], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発中に開花を起こすドライバー運用。爆発始動型のアタッカーに近い' },
-    ],
-  },
-  {
     characterId: '10000084-pyro',
     archetypes: [
       { name: 'E・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [4, 5, 6], lead: ['n'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 重撃・スキル・爆発を満遍なく使うメインアタッカー' },
@@ -815,20 +809,6 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
       { name: 'E・落下・Q のあと E + 落下を繰り返す', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['e', 'hp'], fillRepeat: [2, 3], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 特殊落下攻撃を連発する形' },
     
       { name: 'E・落下・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['n'], fillRepeat: [6, 8, 10], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで跳んでの特殊落下攻撃が主力。爆発は補助' },
-    ],
-  },
-  {
-    characterId: '10000097-electro',
-    archetypes: [
-      { name: 'E・Q のあと 通常攻撃を繰り返す（爆発中）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [10, 12, 14], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発中は通常攻撃が重撃扱いになる' },
-    
-      { name: 'E・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 2 段チャージ重撃が主なダメージ源' },
-    ],
-  },
-  {
-    characterId: '10000098-electro',
-    archetypes: [
-      { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [10, 12, 14], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 強化中の高速な通常攻撃で戦うメインアタッカー' },
     ],
   },
   {

@@ -1,0 +1,31 @@
+{
+ "characterId": "10000123-pyro",
+ "archetypes": [
+  {
+   "name": "E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4,
+    5
+   ],
+   "withCharacters": [
+    "10000022-anemo",
+    "10000076-anemo",
+    "10000131-pyro"
+   ],
+   "evidence": "編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "characterId": "10000080-cryo",
+ "archetypes": [
+  {
+   "name": "長押し E",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e_hold"
+   ],
+   "withCharacters": [
+    "10000049-pyro"
+   ],
+   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 未"
+  }
+ ]
+}

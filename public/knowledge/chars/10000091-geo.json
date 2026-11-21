@@ -1,0 +1,24 @@
+{
+ "characterId": "10000091-geo",
+ "archetypes": [
+  {
+   "name": "Q・長押し E 2 回・通常攻撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e_hold@4.41",
+    "e_hold",
+    "n",
+    "dash",
+    "n"
+   ],
+   "withCharacters": [
+    "10000103-geo",
+    "10000089-hydro",
+    "10000105-electro"
+   ],
+   "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "characterId": "10000105-electro",
+ "archetypes": [
+  {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "withCharacters": [
+    "10000091-geo"
+   ],
+   "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未"
+  }
+ ]
+}

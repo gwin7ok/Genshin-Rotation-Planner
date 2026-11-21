@@ -2,6 +2,19 @@
  "characterId": "10000131-pyro",
  "archetypes": [
   {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "withCharacters": [
+    "10000022-anemo"
+   ],
+   "evidence": "編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未"
+  },
+  {
    "name": "E",
    "role": "supporter",
    "slot": 30,

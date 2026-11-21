@@ -49,6 +49,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000089-hydro', // フリーナ
     archetypes: [
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未' },
+    
       { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く' }],
   },
@@ -126,6 +128,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000031-electro', // フィッシュル
     archetypes: [
+    
       { name: 'Q だけ', role: 'supporter', slot: 10, use: ['q'], evidence: '手組み「激化刻晴」' },
       { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '探索の上位' },
     ],
@@ -133,6 +136,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000047-anemo', // 楓原万葉
     archetypes: [
+    
       { name: 'E・高い落下', role: 'supporter', slot: 30, use: ['e', 'hp'], evidence: '手組み「激化刻晴」・探索の上位（拡散）' },
       { name: 'E・Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '探索の上位' },
     ],
@@ -152,7 +156,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   },
   {
     characterId: '10000131-pyro', // ニコ
-    archetypes: [{ name: 'E', role: 'supporter', slot: 30, use: ['e'], evidence: '手組み「星電導サンドローネ」' }],
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], withCharacters: ['10000022-anemo'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未' },
+    { name: 'E', role: 'supporter', slot: 30, use: ['e'], evidence: '手組み「星電導サンドローネ」' }],
   },
   {
     characterId: '10000035-cryo', // 七七
@@ -183,6 +189,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000076-anemo',
     archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000022-anemo'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未' },
+    
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     ],
   },
@@ -190,6 +198,70 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     characterId: '10000096-pyro',
     archetypes: [
       { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], withCharacters: ['10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    ],
+  },
+  {
+    characterId: '10000003-anemo',
+    archetypes: [
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000080-cryo',
+    archetypes: [
+      { name: '長押し E', role: 'supporter', slot: 20, use: ['e_hold'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000064-geo',
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000049-pyro',
+    archetypes: [
+      { name: 'E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [17, 19, 21], withCharacters: ['10000064-geo', '10000080-cryo', '10000003-anemo'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000103-geo',
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000105-electro',
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000091-geo',
+    archetypes: [
+      { name: 'Q・長押し E 2 回・通常攻撃', role: 'attacker', slot: 40, use: ['q', 'e_hold@4.41', 'e_hold', 'n', 'dash', 'n'], withCharacters: ['10000103-geo', '10000089-hydro', '10000105-electro'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000082-dendro',
+    archetypes: [
+    ],
+  },
+  {
+    characterId: '10000098-electro',
+    archetypes: [
+    ],
+  },
+  {
+    characterId: '10000022-anemo',
+    archetypes: [
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000123-pyro'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未' },
+    ],
+  },
+  {
+    characterId: '10000123-pyro',
+    archetypes: [
+      { name: 'E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], withCharacters: ['10000022-anemo', '10000076-anemo', '10000131-pyro'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 未' },
     ],
   },
 ];

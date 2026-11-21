@@ -92,6 +92,14 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     ],
   },
 
+  // ── 胡桃（手組みなし。Wiki の運用の要約から起こし、探索で確かめた。結果は plan.md）──
+  {
+    characterId: '10000046-pyro', // 胡桃
+    archetypes: [
+      { name: 'E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca'], fillRepeat: [4, 5, 6], evidence: '実測（胡桃・行秋・香菱・ベネット、標準ビルド）: 辞書なしの探索の 1 位が 胡桃[E N C ×5] 32.5k。辞書ありは同じ結果を 228 秒 → 119 秒で出した（DPS は同じ）。Wiki の N2CD は、標準ビルドでは上位に出なかった' },
+    ],
+  },
+
   // ── 激化刻晴（フィッシュル・ナヒーダ・万葉・刻晴）。手組み 54.8k ──
   {
     characterId: '10000031-electro', // フィッシュル

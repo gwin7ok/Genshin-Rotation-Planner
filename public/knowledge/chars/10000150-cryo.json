@@ -1,0 +1,16 @@
+{
+ "characterId": "10000150-cryo",
+ "archetypes": [
+  {
+   "name": "q e e_recast の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q",
+    "e",
+    "e_recast"
+   ],
+   "evidence": "自動編成（オデット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 52.7k → 55.4k"
+  }
+ ]
+}

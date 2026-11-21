@@ -1,0 +1,14 @@
+{
+ "characterId": "10000077-dendro",
+ "archetypes": [
+  {
+   "name": "e の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "自動編成（ヨォーヨ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.0k → 41.0k"
+  }
+ ]
+}

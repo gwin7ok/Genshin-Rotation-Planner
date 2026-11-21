@@ -30,7 +30,11 @@ if (auto) {
   const supported = (n: string) => m0.some(c => c.name === n && c.source?.gcsimKey);
   if (!supported(name)) { console.error(`${name} は、マスターにない、または gcsim 未対応です`); process.exit(1); }
   // 定番の組。元素反応に偏らない、シールド・回復・バフ役を中心にする（自分と重なる人は、次の人で補う）
-  const SETS = [['ベネット', '鍾離', 'フリーナ'], ['ナヒーダ', '夜蘭', 'ファルザン'], ['香菱', '行秋', 'ジン']];
+  // サポート役（アタッカーの役割がない人）は、主役のアタッカーを 1 人入れる（サポートだけの編成では、エネルギーも火力も成り立たない）
+  const isAttacker = (m0.find(c => c.name === name)?.roles ?? []).includes('attacker');
+  const SETS = isAttacker
+    ? [['ベネット', '鍾離', 'フリーナ'], ['ナヒーダ', '夜蘭', 'ファルザン'], ['香菱', '行秋', 'ジン']]
+    : [['雷電将軍', 'ベネット', 'フリーナ'], ['胡桃', '行秋', '鍾離'], ['刻晴', 'ナヒーダ', 'フィッシュル']];
   const POOL = ['ベネット', '鍾離', 'フリーナ', 'ナヒーダ', '行秋', '香菱', '夜蘭', 'ファルザン', 'ジン', 'シトラリ'];
   allTeams = SETS.map((set, i) => {
     const members = [name, ...set.filter(n => n !== name && supported(n))];

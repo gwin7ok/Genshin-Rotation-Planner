@@ -1,0 +1,14 @@
+{
+ "characterId": "10000090-pyro",
+ "archetypes": [
+  {
+   "name": "e_hold の出場",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e_hold"
+   ],
+   "evidence": "自動編成（シュヴルーズ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.8k → 43.6k"
+  }
+ ]
+}

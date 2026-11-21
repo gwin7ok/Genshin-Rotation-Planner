@@ -1,0 +1,14 @@
+{
+ "characterId": "10000021-pyro",
+ "archetypes": [
+  {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（アンバー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.3k → 43.1k"
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "characterId": "10000094-geo",
+ "archetypes": [
+  {
+   "name": "e e の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "e"
+   ],
+   "evidence": "自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k"
+  }
+ ]
+}

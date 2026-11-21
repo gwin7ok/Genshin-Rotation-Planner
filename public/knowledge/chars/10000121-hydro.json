@@ -1,0 +1,14 @@
+{
+ "characterId": "10000121-hydro",
+ "archetypes": [
+  {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（アイノ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.5k → 41.0k"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "characterId": "10000015-cryo",
+ "archetypes": [
+  {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k"
+  }
+ ]
+}

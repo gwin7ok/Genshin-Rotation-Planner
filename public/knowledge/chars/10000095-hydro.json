@@ -1,0 +1,15 @@
+{
+ "characterId": "10000095-hydro",
+ "archetypes": [
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（シグウィン + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 47.9k → 47.1k"
+  }
+ ]
+}

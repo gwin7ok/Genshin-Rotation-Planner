@@ -1,0 +1,15 @@
+{
+ "characterId": "10000067-dendro",
+ "archetypes": [
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（コレイ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 48.7k → 48.2k"
+  }
+ ]
+}

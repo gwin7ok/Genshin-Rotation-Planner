@@ -1,0 +1,15 @@
+{
+ "characterId": "10000055-geo",
+ "archetypes": [
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（ゴロー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.7k → 37.8k"
+  }
+ ]
+}

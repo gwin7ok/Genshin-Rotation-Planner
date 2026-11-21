@@ -453,4 +453,196 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
       { name: 'E・Q・ダッシュのあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q', 'dash'], fill: ['n'], fillRepeat: [10, 12], evidence: '自動編成（夢見月瑞希 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 23.8k' },
     ],
   },
+  {
+    characterId: '10000006-electro',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（リサ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 42.3k → 42.8k' },
+    ],
+  },
+  {
+    characterId: '10000014-hydro',
+    archetypes: [
+      { name: 'e の出場', role: 'supporter', slot: 30, use: ['e'], evidence: '自動編成（バーバラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 37.9k' },
+    ],
+  },
+  {
+    characterId: '10000015-cryo',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k' },
+    ],
+  },
+  {
+    characterId: '10000021-pyro',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（アンバー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.3k → 43.1k' },
+    ],
+  },
+  {
+    characterId: '10000024-electro',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（北斗 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.6k → 39.6k' },
+    ],
+  },
+  {
+    characterId: '10000038-geo',
+    archetypes: [
+      { name: 'e の出場', role: 'supporter', slot: 30, use: ['e'], evidence: '自動編成（アルベド + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 42.3k → 41.7k' },
+    ],
+  },
+  {
+    characterId: '10000039-cryo',
+    archetypes: [
+      { name: 'e_hold q の出場', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: '自動編成（ディオナ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.6k → 41.4k' },
+    ],
+  },
+  {
+    characterId: '10000045-cryo',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（ロサリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.3k → 41.3k' },
+    ],
+  },
+  {
+    characterId: '10000050-pyro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（トーマ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.5k → 38.6k' },
+    ],
+  },
+  {
+    characterId: '10000055-geo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（ゴロー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.7k → 37.8k' },
+    ],
+  },
+  {
+    characterId: '10000056-electro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（九条裟羅 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 42.0k → 42.6k' },
+    ],
+  },
+  {
+    characterId: '10000061-dendro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（綺良々 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.4k → 41.2k' },
+    ],
+  },
+  {
+    characterId: '10000063-cryo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k' },
+    ],
+  },
+  {
+    characterId: '10000067-dendro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（コレイ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 48.7k → 48.2k' },
+    ],
+  },
+  {
+    characterId: '10000068-electro',
+    archetypes: [
+      { name: 'q e の出場', role: 'supporter', slot: 20, use: ['q', 'e'], evidence: '自動編成（ドリー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.2k → 41.3k' },
+    ],
+  },
+  {
+    characterId: '10000072-hydro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '自動編成（キャンディス + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.8k → 37.9k' },
+    ],
+  },
+  {
+    characterId: '10000074-cryo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（レイラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.8k → 38.8k' },
+    ],
+  },
+  {
+    characterId: '10000077-dendro',
+    archetypes: [
+      { name: 'e の出場', role: 'supporter', slot: 30, use: ['e'], evidence: '自動編成（ヨォーヨ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.0k → 41.0k' },
+    ],
+  },
+  {
+    characterId: '10000082-dendro',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 10, use: ['q'], evidence: '自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k' },
+    ],
+  },
+  {
+    characterId: '10000083-anemo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（リネット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 48.9k → 48.6k' },
+    ],
+  },
+  {
+    characterId: '10000088-cryo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（シャルロット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.8k → 44.3k' },
+    ],
+  },
+  {
+    characterId: '10000090-pyro',
+    archetypes: [
+      { name: 'e_hold の出場', role: 'supporter', slot: 20, use: ['e_hold'], evidence: '自動編成（シュヴルーズ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.8k → 43.6k' },
+    ],
+  },
+  {
+    characterId: '10000094-geo',
+    archetypes: [
+      { name: 'e e の出場', role: 'supporter', slot: 30, use: ['e', 'e'], evidence: '自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k' },
+    ],
+  },
+  {
+    characterId: '10000095-hydro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（シグウィン + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 47.9k → 47.1k' },
+    ],
+  },
+  {
+    characterId: '10000108-anemo',
+    archetypes: [
+      { name: 'e e の出場', role: 'supporter', slot: 30, use: ['e', 'e'], evidence: '自動編成（藍硯 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 44.5k' },
+    ],
+  },
+  {
+    characterId: '10000115-hydro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（ダリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.0k → 39.7k' },
+    ],
+  },
+  {
+    characterId: '10000121-hydro',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（アイノ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.5k → 41.0k' },
+    ],
+  },
+  {
+    characterId: '10000124-anemo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（ヤフォダ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.6k → 44.1k' },
+    ],
+  },
+  {
+    characterId: '10000127-geo',
+    archetypes: [
+      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（イルーガ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.4k → 36.7k' },
+    ],
+  },
+  {
+    characterId: '10000132-anemo',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（プルーネ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 54.8k → 53.5k' },
+    ],
+  },
+  {
+    characterId: '10000148-electro',
+    archetypes: [
+      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（アリョーシャ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 52.6k → 50.8k' },
+    ],
+  },
+  {
+    characterId: '10000150-cryo',
+    archetypes: [
+      { name: 'q e e_recast の出場', role: 'supporter', slot: 30, use: ['q', 'e', 'e_recast'], evidence: '自動編成（オデット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 52.7k → 55.4k' },
+    ],
+  },
 ];

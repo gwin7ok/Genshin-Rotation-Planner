@@ -1,0 +1,14 @@
+{
+ "characterId": "10000014-hydro",
+ "archetypes": [
+  {
+   "name": "e の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "自動編成（バーバラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 37.9k"
+  }
+ ]
+}

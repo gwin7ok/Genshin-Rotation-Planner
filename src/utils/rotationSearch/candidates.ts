@@ -172,7 +172,7 @@ export function mergeAdjacentStints(characters: CharacterConfig[], candidate: Ca
 }
 
 /** 候補の要約（出場ごとに「キャラ名[アクション…]」。同じアクションの連続は ×n にまとめる） */
-function describe(characters: CharacterConfig[], stints: Stint[], loopStartIndex = 0): string {
+export function describe(characters: CharacterConfig[], stints: Stint[], loopStartIndex = 0): string {
   const name = (id: string) => characters.find(c => c.id === id)?.name ?? id;
   return stints.map((s, si) => {
     const parts: Array<{ s: string; n: number }> = [];

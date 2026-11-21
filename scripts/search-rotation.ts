@@ -81,11 +81,14 @@ const { searchRotation } = await server.ssrLoadModule('/src/utils/rotationSearch
 const { DEFAULT_ENEMY } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
 const cores = Math.max(1, Math.min(30, Number(process.env.GCSIM_NODE_WORKERS) || Math.max(6, os.availableParallelism() - 4)));
 process.env.GCSIM_NODE_WORKERS ??= String(cores); // gcsim-node の worker の上限（既定 6）を、探索のコア数に合わせる
+// --seed-hand: 手組み（--preset の出場）を、出発点に足す（--seeds-only: 手組みだけから登る。辞書で作った少数の候補だけから登る場合の、効果と時間の測定用）
+const { expandGroupedStints } = await server.ssrLoadModule('/src/utils/actionGroups.ts');
+const extraSeeds = preset && (args.includes('--seed-hand') || args.includes('--seeds-only')) ? [{ stints: expandGroupedStints(structuredClone(preset.stints)), loopStartIndex: preset.loopStartIndex ?? 0 }] : [];
 let lastPhase = '';
 const T0 = Date.now();
 const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, refine: '④b 山登り', verify: `⑤ gcsim ${RUNS2} 回ずつ` };
 const out = await searchRotation({
-  characters, roles, weapons, artifacts, switchDelay: 0.5, defHalt: true, cores, energy: args.includes('--energy'),
+  characters, roles, weapons, artifacts, switchDelay: 0.5, defHalt: true, cores, extraSeeds, seedsOnly: args.includes('--seeds-only'), energy: args.includes('--energy'),
   // --screen: 画面の「DPS 計算」と同じ条件で評価する（初動 + ループ --loops=5 周・開始エネルギー満タン・敵の粒子 5〜8 秒に 1 個・敵は Lv100 全耐性 10%）。--no-energy でエネルギー無視
   ...(args.includes('--screen') ? { dps: { loops: Number(str('loops') ?? 5), energy: !args.includes('--no-energy'), particles: { minSeconds: 5, maxSeconds: 8, amount: 1 }, enemies: [DEFAULT_ENEMY] } } : {}),
   settings: { battleSeconds: SECONDS, keep1: KEEP1, runs1: RUNS1, keep2: KEEP2, runs2: RUNS2, maxCandidates: MAX },

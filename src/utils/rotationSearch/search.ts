@@ -11,7 +11,7 @@ import { appGcsimExtras } from '../gcsim/appGcsimExtras';
 import { calculateRotation } from '../rotationCalculator';
 import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
-import { generateCandidates, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
+import { describe, generateCandidates, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
 import { evaluateCandidates, type ScoredCandidate } from './evaluate';
 
 /**
@@ -130,6 +130,10 @@ export interface SearchArgs {
   dps?: DpsConditions;
   /** エネルギーを考慮して探索する（幽境用: 初期エネルギー 0・爆発のエネルギー消費あり）。無ければ、エネルギーは無視する */
   energy?: boolean;
+  /** 追加の出発点（手組みなど。測定・検証用。グループ展開済みの出場と周回の開始位置。アタッカーは、最後の出場のキャラ） */
+  extraSeeds?: Array<{ stints: Stint[]; loopStartIndex: number }>;
+  /** true のとき、生成した候補を使わず、extraSeeds だけを出発点にする（辞書で作った少数の候補だけから登る場合の、効果と時間を測る） */
+  seedsOnly?: boolean;
   /** 同時に動かす gcsim の数（Worker の数） */
   cores: number;
   onProgress?: (p: SearchProgress) => void;
@@ -152,7 +156,13 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
   const cancelled = () => !!args.shouldCancel?.();
   try {
     args.onProgress?.({ phase: 'generate', done: 0, total: 1 });
-    const candidates = generateCandidates(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });
+    const seedCands: Candidate[] = (args.extraSeeds ?? []).map((x, i) => {
+      const atk = x.stints[x.stints.length - 1]?.characterId;
+      const assignment = Object.fromEntries(characters.map(c => [c.id, (c.id === atk ? 'attacker' : (args.roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter') as SearchRole]));
+      return { id: `seed${i}`, label: describe(characters, x.stints, x.loopStartIndex), assignment, targetSeconds: 0, stints: x.stints, loopStartIndex: x.loopStartIndex, op: 'seed' };
+    });
+    const generated = args.seedsOnly ? [] : generateCandidates(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });
+    const candidates = [...seedCands, ...generated];
     if (candidates.length === 0) return { status: 'error', message: 'NO_CANDIDATES' };
     const ev = evaluateCandidates(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
     if (ev.scored.length === 0) return { status: 'error', message: 'NO_VALID_CANDIDATES' };
@@ -253,7 +263,12 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       for (const l of byGroup.values()) if (i < l.length) { seedPool.push(l[i]); any = true; }
       if (!any) break;
     }
-    const r1 = await mapLimit(seedPool.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1), exploreSeconds);
+    // 追加の出発点は、必ず先頭に入れる
+    const seedLabels = new Set(seedCands.map(c => c.label));
+    const seedFirst = ev.scored.filter(sc => seedLabels.has(sc.candidate.label));
+    seedPool.unshift(...seedFirst);
+    const poolDedup = [...new Set(seedPool)];
+    const r1 = await mapLimit(poolDedup.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1), exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);
     const quickFailed: Record<string, number> = {};

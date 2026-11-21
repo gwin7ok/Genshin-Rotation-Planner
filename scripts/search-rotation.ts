@@ -79,7 +79,8 @@ console.log(`編成: ${characters.map(c => `${c.name}(${(c.roles ?? []).join('+'
 // 探索の本体は、画面と共通（src/utils/rotationSearch/search.ts）
 const { searchRotation } = await server.ssrLoadModule('/src/utils/rotationSearch/search.ts');
 const { DEFAULT_ENEMY } = await server.ssrLoadModule('/src/utils/gcsim/buildGcsimConfig.ts');
-const cores = Math.max(1, Math.min(24, Number(process.env.GCSIM_NODE_WORKERS) || Math.max(6, os.availableParallelism() - 4)));
+const cores = Math.max(1, Math.min(30, Number(process.env.GCSIM_NODE_WORKERS) || Math.max(6, os.availableParallelism() - 4)));
+process.env.GCSIM_NODE_WORKERS ??= String(cores); // gcsim-node の worker の上限（既定 6）を、探索のコア数に合わせる
 let lastPhase = '';
 const T0 = Date.now();
 const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, refine: '④b 山登り', verify: `⑤ gcsim ${RUNS2} 回ずつ` };

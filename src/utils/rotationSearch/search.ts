@@ -53,6 +53,10 @@ const BEAM = 4;
 const BEAM_RATIO = 0.9;
 const STALE_LIMIT = 3;
 const REFINE_BATCH = 70;
+/** ダメージの割合がこれ未満のキャラ（アタッカー以外）の動作を、先に削ってみる */
+const LOW_SHARE = 0.06;
+/** 上のキャラを狙った近傍を、1 回の山登りの測定に先に入れる最大数 */
+const FOCUS_MAX = 20;
 /** 許す CT 違反（CT 待ち）の数。gcsim が待ってから動くので、DPS は実測で正しく出る。決めた数を超える候補は捨てる（evaluate.ts の maxCtIssues） */
 const TOLERATED_CT_ISSUES = 4;
 /** 山登りの先行 1 回の足切り（いまの最良に対する割合） */
@@ -132,7 +136,7 @@ export interface SearchArgs {
   shouldCancel?: () => boolean;
 }
 
-interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; error?: string }
+interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
 
 /** 順位（小さい順に 0 から） */
 const ranksOf = (xs: number[]): number[] => {
@@ -174,7 +178,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
-        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) } };
+        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, share: Object.fromEntries(characters.map((c, i) => [c.id, out.result.byChar[i]?.share ?? 0])), particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) } };
       } catch (e) {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }
@@ -307,7 +311,9 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           if (!start) { stale.set(g, 99); continue; }
           expanded.add(start.sc.candidate.label);
           const pool = new Map<string, Candidate>();
-          for (const n of neighborsOf(characters, start.sc.candidate)) if (!tried.has(n.label)) pool.set(n.label, n);
+          // ダメージの割合が小さいキャラ（アタッカー以外。全体の 6% 未満）は、動作を削る近傍を先に測る
+          const lowShare = start.share ? characters.filter(c => groupOf(start.sc).split('+').indexOf(c.id) < 0 && (start.share![c.id] ?? 1) < LOW_SHARE).map(c => c.id) : [];
+          for (const n of neighborsOf(characters, start.sc.candidate, { lowShare })) if (!tried.has(n.label)) pool.set(n.label, n);
           if (pool.size === 0) { stale.set(g, 99); continue; }
           const ev2 = evaluateCandidates(characters, [...pool.values()], { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
           for (const c of pool.keys()) tried.add(c);
@@ -316,6 +322,8 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           const byOp = new Map<string, ScoredCandidate[]>();
           for (const sc of ev2.scored) { const k = sc.candidate.op ?? '?'; const l = byOp.get(k); if (l) l.push(sc); else byOp.set(k, [sc]); }
           const batch: ScoredCandidate[] = [];
+          // ダメージの割合が小さいキャラを狙った近傍を、先に最大 FOCUS_MAX 個入れる
+          for (const sc of ev2.scored) if (sc.candidate.focus && batch.length < Math.min(FOCUS_MAX, limit)) { batch.push(sc); byOp.get(sc.candidate.op ?? '?')?.splice(byOp.get(sc.candidate.op ?? '?')!.indexOf(sc), 1); }
           for (let i = 0; batch.length < limit; i++) {
             let any = false;
             for (const l of byOp.values()) if (i < l.length && batch.length < limit) { batch.push(l[i]); any = true; }
@@ -361,7 +369,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       const parts: string[] = [];
       let prev: string | undefined;
       for (const s of sc.candidate.stints) {
-        const acts = s.actions.map(x => x.actionTypeId).join(',');
+        const acts = s.actions.map(x => x.actionTypeId + (x.durationManual ? `@${x.duration}` : '')).join(',');
         if (prev === s.characterId) parts[parts.length - 1] += ',' + acts; else parts.push(s.characterId + ':' + acts);
         prev = s.characterId;
       }

@@ -26,6 +26,8 @@ export interface Candidate {
   loopStartIndex?: number;
   /** 近傍操作で作ったときの、操作の種類（山登りで、種類ごとに均等に測るのに使う） */
   op?: string;
+  /** 近傍操作が、ダメージの少ないキャラの動作を狙って削ったもの（山登りで、先に測る） */
+  focus?: boolean;
 }
 
 export interface CandidateOptions {
@@ -53,7 +55,8 @@ const FILL_TEMPLATES: { name: string; steps: string[] }[] = [
   { name: 'E+通常', steps: ['e', 'n', 'n'] },
 ];
 
-const defOf = (c: CharacterConfig, step: string) => c.availableActions.find(a => a.id === `${c.id}_${step}`);
+// 動作の名前に「@秒」がつくものは、所要時間（長押しの長さ）を手で決めた動作（例: e_hold@6.6）
+const defOf = (c: CharacterConfig, step: string) => c.availableActions.find(a => a.id === `${c.id}_${step.split('@')[0]}`);
 
 /** 配列の並べ替え（全部。4 人までなので少ない） */
 function permutations<T>(xs: T[]): T[][] {
@@ -139,7 +142,8 @@ let seq = 0;
 const instance = (c: CharacterConfig, step: string): CharacterActionInstance | null => {
   const def = defOf(c, step);
   if (!def) return null;
-  return { id: `r${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: def.defaultDuration };
+  const manual = step.includes('@') ? Number(step.split('@')[1]) : NaN;
+  return { id: `r${++seq}`, actionTypeId: def.id, name: def.name, shortName: def.shortName, type: def.type, duration: Number.isFinite(manual) ? manual : def.defaultDuration, ...(Number.isFinite(manual) ? { durationManual: true } : {}) };
 };
 
 /** 使い方 → アクションの並び（E → Q の順） */
@@ -174,8 +178,9 @@ function describe(characters: CharacterConfig[], stints: Stint[], loopStartIndex
     const parts: Array<{ s: string; n: number }> = [];
     for (const a of s.actions) {
       const last = parts[parts.length - 1];
-      if (last && last.s === a.shortName) last.n++;
-      else parts.push({ s: a.shortName, n: 1 });
+      const key = a.durationManual ? `${a.shortName}(${a.duration}s)` : a.shortName;
+      if (last && last.s === key) last.n++;
+      else parts.push({ s: key, n: 1 });
     }
     return `${loopStartIndex > 0 && si === loopStartIndex ? '↻' : ''}${name(s.characterId)}[${parts.map(p => (p.n > 1 ? `${p.s}×${p.n}` : p.s)).join(' ')}]`;
   }).join(' → ');
@@ -336,10 +341,10 @@ const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
  *   ・隣り合う 2 人の出場を入れ替える
  *   ・出場の中の動作を 1 つ消す / 1 つ移す / 1 つ差し込む（e・q・ca・n・e_recast）
  */
-export function neighborsOf(characters: CharacterConfig[], base: Candidate): Candidate[] {
+export function neighborsOf(characters: CharacterConfig[], base: Candidate, hints?: { lowShare?: string[] }): Candidate[] {
   const out = new Map<string, Candidate>();
   let loop = base.loopStartIndex ?? 0;
-  const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string): void => {
+  const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string, who?: string): void => {
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
       const actions = steps.map(s => instance(c, s));
@@ -348,11 +353,11 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
     }
     const label = describe(characters, stints, loop);
     if (label === base.label || out.has(label)) return;
-    out.set(label, { ...base, id: 'n', label, stints, loopStartIndex: loop, op });
+    out.set(label, { ...base, id: 'n', label, stints, loopStartIndex: loop, op, ...(who && hints?.lowShare?.includes(who) ? { focus: true } : {}) });
   };
   const plan0 = base.stints.map(s => ({
     c: characters.find(c => c.id === s.characterId)!,
-    steps: s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '')),
+    steps: s.actions.map(a => a.actionTypeId.replace(`${s.characterId}_`, '') + (a.durationManual ? `@${a.duration}` : '')),
   }));
   const clone = () => plan0.map(p => ({ c: p.c, steps: [...p.steps] }));
   // 周回の開始位置を変える（最初の数個の出場を 1 回目だけにする / 戻す）。出場の並びは変えない
@@ -407,19 +412,24 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
   // 1 周目だけ行う動作（周回の前の、1 回きりの出場）を、先頭に足す: どのキャラの、基本の動作（E・Q・重撃・通常攻撃など）でも試す。周回の開始位置は 1 つ後ろへ（1 周目だけ置く出場は、最大 2 つ）
   // 例: アタッカーが周回の前に E を 1 回だけ使って、周回の中では別の並びにする。サポーターが先に爆発を撃っておく
   if ((base.loopStartIndex ?? 0) < 2) {
-    for (const c of seenChars.values()) for (const st of NEIGHBOR_STEPS) {
+    for (const c of seenChars.values()) for (const st of new Set([...NEIGHBOR_STEPS, ...c.availableActions.map(a => a.id.slice(c.id.length + 1)).filter(x => /^(e_|q_)/.test(x))])) {
       if (!defOf(c, st)) continue;
       const pl = clone(); pl.unshift({ c, steps: [st] }); loop = (base.loopStartIndex ?? 0) + 1; make(pl, st === 'n' ? 'newN' : 'pre'); loop = 0;
     }
+  }
+  // 出場を、まるごと消す（そのキャラが少ししかダメージを出していないとき、先に試す。gcsim の結果から）
+  if (hints?.lowShare?.length) {
+    loop = 0;
+    plan0.forEach((p, si) => { if (plan0.length <= 2 || !hints.lowShare!.includes(p.c.id)) return; const pl = clone(); pl.splice(si, 1); make(pl, 'drop', p.c.id); });
   }
   loop = base.loopStartIndex ?? 0; // 出場の中だけを変える操作は、周回の開始位置を保つ
   plan0.forEach((p, si) => {
     const n = p.steps.length;
     for (let i = 0; i < n; i++) {
       // 消す
-      if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl, 'del'); }
+      if (n > 1) { const pl = clone(); pl[si].steps.splice(i, 1); make(pl, 'del', p.c.id); }
       // 隣り合う 2 つをまとめて消す（「重撃 → E」の 1 組を減らすなど。1 つずつ消すと、途中で下がって届かない）
-      if (n > 2 && i + 1 < n) { const pl = clone(); pl[si].steps.splice(i, 2); make(pl, 'del2'); }
+      if (n > 2 && i + 1 < n) { const pl = clone(); pl[si].steps.splice(i, 2); make(pl, 'del2', p.c.id); }
       // 移す
       for (let j = 0; j < n; j++) {
         if (j === i || p.steps[i] === p.steps[j]) continue;
@@ -438,6 +448,25 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate): Can
       let j = i;
       while (j < n && p.steps[j] === p.steps[i]) j++;
       if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl, 'del'); }
+    }
+    // 置き換える: 動作 1 つを、別の動作にする（例: 通常攻撃 → ダッシュ、E → 長押し E。消してから差し込む 2 手では、途中で下がって届かない）
+    {
+      const vocab = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
+      for (let i = 0; i < n; i++) for (const s of vocab) {
+        if (s === p.steps[i] || !defOf(p.c, s)) continue;
+        const pl = clone(); pl[si].steps[i] = s; make(pl, 'rep');
+      }
+    }
+    // 長押しの長さを変える（標準の所要時間の 4 割〜8.5 割。手組みでは、標準より短い長押しが使われる。例: 早柚の長押し E）
+    for (let i = 0; i < n; i++) {
+      const base0 = p.steps[i].split('@')[0];
+      const d = defOf(p.c, base0);
+      if (d?.cooldownStart?.from !== 'holdEnd') continue;
+      for (const f of [undefined, 0.4, 0.55, 0.7, 0.85]) {
+        const step = f === undefined ? base0 : `${base0}@${Number((d.defaultDuration * f).toFixed(2))}`;
+        if (step === p.steps[i]) continue;
+        const pl = clone(); pl[si].steps[i] = step; make(pl, 'hold');
+      }
     }
     // 差し込む
     // 差し込む動作の語彙: 基本（e / q / ca / n / e_recast）+ そのキャラが持つ、ほかのアクション全部（ダッシュ・ジャンプ・落下・長押し・特殊スキルなど。手組みでは、ダッシュキャンセルや長押しが使われている）

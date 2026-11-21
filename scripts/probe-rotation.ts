@@ -76,5 +76,11 @@ if (args.includes('--app')) {
 const out = await computeDps({ config: cfgUse, runs: RUNS, parallel: 6, run: runGcsimSample, context: SCREEN ? {} : { battleSeconds: SECONDS } });
 if (out.status !== 'ok') console.log('失敗', out.status, out.message);
 else console.log(`DPS ${(out.result.dps.mean / 1000).toFixed(1)}k ±${(out.result.dps.sd / 1000).toFixed(1)}（戦闘 ${SECONDS} 秒・${RUNS} 回）  粒子E ${((out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10).toFixed(1)}/人/10秒（粒子 敵 ${out.result.particles.enemy.toFixed(0)}・全体 ${out.result.particles.total.toFixed(0)}）`);
+// --detail: 画面の計算に使う秒数・総ダメージ・キャラ別のダメージの割合・エネルギー待ち
+if (args.includes('--detail') && out.status === 'ok') {
+  const r = out.result;
+  console.log(`  計算の秒数 ${r.seconds.toFixed(1)} / エネルギー待ち ${r.energyWaits} 回（${(r.energyWaitSeconds ?? 0).toFixed(1)} 秒）`);
+  characters.forEach((c: any, i: number) => console.log(`  ${c.name}: ダメージ ${(r.byChar[i].damage / 1000).toFixed(0)}k（${(r.byChar[i].share * 100).toFixed(0)}%）・DPS ${(r.byChar[i].dps / 1000).toFixed(1)}k・エネルギー待ち ${r.byChar[i].energyWaits}`));
+}
 await server.close();
 process.exit(0);

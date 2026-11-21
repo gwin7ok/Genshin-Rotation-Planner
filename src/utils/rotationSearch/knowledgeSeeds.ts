@@ -26,21 +26,22 @@ function permutations<T>(xs: T[]): T[][] {
 
 export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle): KnowledgeSeed[] {
   const ids = new Set(characters.map(c => c.id));
-  const members = characters.filter(c => (bundle[c.id]?.archetypes.length ?? 0) > 0);
+  // 編成の条件を満たす運用型が 1 つもないキャラは、出発点に入れない（辞書にないキャラも同じ）
+  const applicable = (c: CharacterConfig) => (bundle[c.id]?.archetypes ?? []).filter(a => (a.withCharacters ?? []).every(id => ids.has(id)));
+  const members = characters.filter(c => applicable(c).length > 0);
   if (members.length === 0) return [];
-  const options = members.map(c => bundle[c.id].archetypes.filter(a => (a.withCharacters ?? []).every(id => ids.has(id))));
-  if (options.some(o => o.length === 0)) return [];
+  const options = members.map(applicable);
   const out = new Map<string, KnowledgeSeed>();
   for (const combo of product(options).slice(0, MAX_COMBOS)) {
     const picked = members.map((c, i) => ({ c, a: combo[i] as Archetype }));
-    const attackers = picked.filter(p => p.a.role === 'attacker' && (p.a.fill?.length ?? 0) > 0);
+    const attackers = picked.filter(p => p.a.role === 'attacker');
     if (attackers.length === 0) continue;
     // 先置き・サポートの出場: slot の小さい順。同じ slot は、並べ替えを全部試す
     const setups = picked.filter(p => p.a.use.length > 0);
     const slots = [...new Set(setups.map(p => p.a.slot))].sort((x, y) => x - y);
     const orders = product(slots.map(s => permutations(setups.filter(p => p.a.slot === s)))).map(groups => groups.flat());
     for (const order of orders) {
-      for (const repeats of product(attackers.map(p => p.a.fillRepeat ?? [1]))) {
+      for (const repeats of product(attackers.map(p => ((p.a.fill?.length ?? 0) > 0 ? p.a.fillRepeat ?? [1] : [0])))) {
         for (const leads of product(attackers.map(p => (p.a.lead && p.a.lead.length > 0 ? [true, false] : [false])))) {
           const stints: Stint[] = [];
           let ok = true;
@@ -51,7 +52,7 @@ export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeB
           attackers.forEach((p, i) => { if (leads[i]) push(p.c, p.a.lead!); });
           const loopStartIndex = stints.length;
           for (const p of order) push(p.c, p.a.use);
-          attackers.forEach((p, i) => push(p.c, Array.from({ length: repeats[i] }, () => p.a.fill!).flat()));
+          attackers.forEach((p, i) => { if (repeats[i] > 0) push(p.c, Array.from({ length: repeats[i] }, () => p.a.fill!).flat()); });
           if (!ok || stints.length === 0) continue;
           const assignment = Object.fromEntries(characters.map(c => [c.id, (picked.find(p => p.c.id === c.id)?.a.role ?? 'supporter') as SearchRole]));
           const key = stints.map(s => `${s.characterId}:${s.actions.map(a => a.actionTypeId).join(',')}`).join('|') + `@${loopStartIndex}`;

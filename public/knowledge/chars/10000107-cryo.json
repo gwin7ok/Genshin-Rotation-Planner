@@ -1,0 +1,29 @@
+{
+ "characterId": "10000107-cryo",
+ "archetypes": [
+  {
+   "name": "E・Q・E",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q",
+    "e"
+   ],
+   "evidence": "手組み「蒸発フリーナ」"
+  },
+  {
+   "name": "Q のあと E・通常攻撃 2 回・E",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "q",
+    "e",
+    "n",
+    "n",
+    "e"
+   ],
+   "evidence": "探索の上位（71.8k）"
+  }
+ ]
+}

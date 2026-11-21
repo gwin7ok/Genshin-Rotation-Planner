@@ -10,6 +10,9 @@
     "n",
     "q"
    ],
+   "withCharacters": [
+    "10000125-hydro"
+   ],
    "evidence": "手組み「月開花」の出場（E のあと通常攻撃 1 回、Q）"
   },
   {
@@ -20,7 +23,36 @@
     "e",
     "q"
    ],
+   "withCharacters": [
+    "10000125-hydro"
+   ],
    "evidence": "探索の上位に出る形"
+  },
+  {
+   "name": "長押し E と Q（刻晴編成）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "withCharacters": [
+    "10000042-electro"
+   ],
+   "evidence": "探索の上位（ナヒーダ[hE Q]）"
+  },
+  {
+   "name": "E と Q（刻晴編成）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "withCharacters": [
+    "10000042-electro"
+   ],
+   "evidence": "手組み「激化刻晴」"
   }
  ]
 }

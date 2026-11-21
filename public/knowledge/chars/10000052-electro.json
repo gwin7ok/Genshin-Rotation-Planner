@@ -1,0 +1,47 @@
+{
+ "characterId": "10000052-electro",
+ "archetypes": [
+  {
+   "name": "爆発のあと通常攻撃（ダッシュキャンセル）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "lead": [
+    "e"
+   ],
+   "evidence": "手組み「雷電ナショナル」。最初に E を 1 回だけ使い、Q のあと通常攻撃 5 回 + ダッシュを繰り返す"
+  },
+  {
+   "name": "E・Q のあと通常攻撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    10,
+    18,
+    20
+   ],
+   "evidence": "探索の上位（雷電[E Q N×18 D …]）"
+  }
+ ]
+}

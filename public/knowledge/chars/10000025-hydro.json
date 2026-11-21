@@ -1,0 +1,26 @@
+{
+ "characterId": "10000025-hydro",
+ "archetypes": [
+  {
+   "name": "E・ダッシュ・Q",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "dash",
+    "q"
+   ],
+   "evidence": "手組み「雷電ナショナル」・探索の上位"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位"
+  }
+ ]
+}

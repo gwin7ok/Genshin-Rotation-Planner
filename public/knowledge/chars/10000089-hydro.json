@@ -1,0 +1,15 @@
+{
+ "characterId": "10000089-hydro",
+ "archetypes": [
+  {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く"
+  }
+ ]
+}

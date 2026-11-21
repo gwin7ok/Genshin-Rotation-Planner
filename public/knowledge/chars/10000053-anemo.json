@@ -1,0 +1,25 @@
+{
+ "characterId": "10000053-anemo",
+ "archetypes": [
+  {
+   "name": "長押し E と Q",
+   "role": "supporter",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "探索の上位（早柚[hE Q]）"
+  },
+  {
+   "name": "Q のあと長押し E",
+   "role": "supporter",
+   "slot": 40,
+   "use": [
+    "q",
+    "e_hold"
+   ],
+   "evidence": "手組み「蒸発フリーナ」（長押し 8.4 秒）"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "characterId": "10000131-pyro",
+ "archetypes": [
+  {
+   "name": "E",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "手組み「星電導サンドローネ」"
+  }
+ ]
+}

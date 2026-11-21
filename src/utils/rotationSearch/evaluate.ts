@@ -37,6 +37,9 @@ export function chargeViolation(characters: CharacterConfig[], stints: Candidate
   return false;
 }
 
+/** 周回の長さが、全体に対してこの割合に満たない並びは捨てる */
+const MIN_LOOP_RATIO = 0.5;
+
 export interface ScoreOptions {
   switchDelay?: number;
   defHalt?: boolean;
@@ -105,6 +108,13 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
       rejected++;
       const key = `${characters.find(c => c.id === pre[0].rule.characterId)?.name ?? ''}: ${pre[0].rule.resource}が無いのに使っている`;
       rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
+      continue;
+    }
+    // 周回の部分が短すぎる並び（初動で全部のバフ・爆発を使い切り、周回は通常攻撃 1 回だけなど）は、繰り返せるローテーションではない。
+    // 画面の DPS 計算（初動 + 周回）では、初動の爆発が薄まらず、DPS が高く出てしまう。周回が全体の半分に満たないものは捨てる
+    if ((candidate.loopStartIndex ?? 0) > 0 && result.totalDuration > 0 && result.loopPeriod < result.totalDuration * MIN_LOOP_RATIO) {
+      rejected++;
+      rejectedBy['周回の部分が短すぎる'] = (rejectedBy['周回の部分が短すぎる'] ?? 0) + 1;
       continue;
     }
     if (chargeViolation(characters, candidate.stints, candidate.loopStartIndex ?? 0)) {

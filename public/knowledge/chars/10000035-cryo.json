@@ -1,0 +1,25 @@
+{
+ "characterId": "10000035-cryo",
+ "archetypes": [
+  {
+   "name": "Q のあと E",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "手組み「星電導サンドローネ」"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位（七七[E Q]）"
+  }
+ ]
+}

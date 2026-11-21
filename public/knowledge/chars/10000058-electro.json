@@ -1,0 +1,16 @@
+{
+ "characterId": "10000058-electro",
+ "archetypes": [
+  {
+   "name": "E×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ）"
+  }
+ ]
+}

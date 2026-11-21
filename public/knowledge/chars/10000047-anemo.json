@@ -1,0 +1,25 @@
+{
+ "characterId": "10000047-anemo",
+ "archetypes": [
+  {
+   "name": "E・高い落下",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "hp"
+   ],
+   "evidence": "手組み「激化刻晴」・探索の上位（拡散）"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位"
+  }
+ ]
+}

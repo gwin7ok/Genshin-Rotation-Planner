@@ -1,0 +1,24 @@
+{
+ "characterId": "10000031-electro",
+ "archetypes": [
+  {
+   "name": "Q だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "evidence": "手組み「激化刻晴」"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位"
+  }
+ ]
+}

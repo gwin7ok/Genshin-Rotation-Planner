@@ -1,0 +1,25 @@
+{
+ "characterId": "10000032-pyro",
+ "archetypes": [
+  {
+   "name": "Q・通常攻撃・E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e"
+   ],
+   "evidence": "手組み「雷電ナショナル」"
+  },
+  {
+   "name": "Q だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "evidence": "探索の上位（48.5k）"
+  }
+ ]
+}

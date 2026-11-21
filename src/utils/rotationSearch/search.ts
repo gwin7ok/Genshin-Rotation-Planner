@@ -57,6 +57,10 @@ const STALE_LIMIT = 3;
 const REFINE_BATCH = 70;
 /** ダメージの割合がこれ未満のキャラ（アタッカー以外）の動作を、先に削ってみる */
 const LOW_SHARE = 0.06;
+/** 知識辞書の出発点があるとき、広く浅く測る出発点の数（keep1 の代わり。上限） */
+const DICT_KEEP1 = 100;
+/** 知識辞書の出発点があるとき、山登りする割り当ての下限（全体の最良に対する割合） */
+const DICT_GROUP_RATIO = 0.8;
 /** 上のキャラを狙った近傍を、1 回の山登りの測定に先に入れる最大数 */
 const FOCUS_MAX = 20;
 /** 許す CT 違反（CT 待ち）の数。gcsim が待ってから動くので、DPS は実測で正しく出る。決めた数を超える候補は捨てる（evaluate.ts の maxCtIssues） */
@@ -275,7 +279,10 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     const seedFirst = ev.scored.filter(sc => seedLabels.has(sc.candidate.label));
     seedPool.unshift(...seedFirst);
     const poolDedup = [...new Set(seedPool)];
-    const r1 = await mapLimit(poolDedup.slice(0, Math.max(1, settings.keep1) * 3), settings.runs1, 'quick', Math.max(1, settings.keep1), exploreSeconds);
+    // 知識辞書の出発点があるときは、総当たりの出発点を減らす（辞書の出発点が、全部そろった形を持つので、広く浅く測る量を減らせる）
+    const dictSeeds = args.knowledge ? seedFirst.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label)).length : 0;
+    const keep1Eff = dictSeeds > 0 && !args.seedsOnly ? Math.min(Math.max(1, settings.keep1), DICT_KEEP1) : Math.max(1, settings.keep1);
+    const r1 = await mapLimit(poolDedup.slice(0, keep1Eff * 3), settings.runs1, 'quick', keep1Eff, exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);
     const quickFailed: Record<string, number> = {};
@@ -310,14 +317,18 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     //   全部試し、良くなったらそこへ移る。割り当て同士を比べて早く切ることはしない（出発点が低くても、登った先が一番高いことがある。例: 手で組んだ形は、出発点では 6 割だった）。
     //   その割り当ての中で、良くならない回が 2 回続いたら、その割り当てはそこで終わり
     // 割り当てが多いと、1 つあたりの山登りが薄くなる（月開花: 5〜7 通り）。3 通りを超えた分、予算を増やす（上限 2 倍）
-    const budget = Math.round((settings.refineBudget ?? DEFAULT_REFINE_BUDGET) * Math.min(2, Math.max(1, byGroup.size / 3)));
+    // 辞書の出発点があるときは、1 次の最良が全体の最良の DICT_GROUP_RATIO 未満の割り当ては、山登りしない（明らかに低い割り当てに、予算を使わない）
+    const bestOfGroup = (g: string): number => Math.max(0, ...r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).map(r => r.dps!));
+    const bestAll = Math.max(0, ...[...byGroup.keys()].map(bestOfGroup));
+    const climbGroups = [...byGroup.keys()].filter(g => dictSeeds === 0 || args.seedsOnly || bestOfGroup(g) >= bestAll * DICT_GROUP_RATIO);
+    const budget = Math.round((settings.refineBudget ?? DEFAULT_REFINE_BUDGET) * Math.min(2, Math.max(1, climbGroups.length / 3)));
     if (budget > 0 && !cancelled()) {
       const tried = new Set<string>(r1.map(r => r.sc.candidate.label));
       let used = 0;
       args.onProgress?.({ phase: 'refine', done: 0, total: budget });
       const stale = new Map<string, number>();
       const bestIn = (g: string): QuickRun | undefined => r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!)[0];
-      const groups = [...byGroup.keys()].filter(g => bestIn(g));
+      const groups = climbGroups.filter(g => bestIn(g));
       // ビーム: 最良だけでなく、最良の 92% 以上の上位 BEAM 個のうち、まだ広げていないものを順に広げる（少し下がってから大きく上がる形に届くように。例: 周回の開始位置を変えてから、別のキャラの爆発を足すと、はじめて 1.2 倍になる）
       const expanded = new Set<string>();
       const nextStart = (g: string): QuickRun | undefined => {

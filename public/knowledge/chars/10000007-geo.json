@@ -1,0 +1,15 @@
+{
+ "characterId": "10000007-geo",
+ "archetypes": [
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキル・爆発で岩の設置物を出すサポート"
+  }
+ ]
+}

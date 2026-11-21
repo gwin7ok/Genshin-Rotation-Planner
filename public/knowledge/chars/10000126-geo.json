@@ -1,0 +1,25 @@
+{
+ "characterId": "10000126-geo",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃 4 段 + E を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    4
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 基本はスキル → (通常 4 段 → 特殊スキル) × 4。爆発は強化中に使う"
+  }
+ ]
+}

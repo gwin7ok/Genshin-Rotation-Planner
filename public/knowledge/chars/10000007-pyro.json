@@ -1,0 +1,25 @@
+{
+ "characterId": "10000007-pyro",
+ "archetypes": [
+  {
+   "name": "長押し E・Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（長押しの形）"
+  },
+  {
+   "name": "E・Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで控えから継続的に炎付着するサブアタッカー"
+  }
+ ]
+}

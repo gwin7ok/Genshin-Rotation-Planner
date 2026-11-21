@@ -1,0 +1,23 @@
+{
+ "characterId": "10000098-electro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    10,
+    12,
+    14
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 強化中の高速な通常攻撃で戦うメインアタッカー"
+  }
+ ]
+}

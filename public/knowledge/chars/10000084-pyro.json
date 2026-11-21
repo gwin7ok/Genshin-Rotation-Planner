@@ -1,0 +1,26 @@
+{
+ "characterId": "10000084-pyro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "lead": [
+    "n"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 重撃・スキル・爆発を満遍なく使うメインアタッカー"
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "characterId": "10000033-hydro",
+ "archetypes": [
+  {
+   "name": "E・Q（サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の回転率が高いサブアタッカー運用"
+  },
+  {
+   "name": "狙い撃ち・E・Q のあと 通常攻撃を繰り返す（双剣）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    12,
+    16,
+    20
+   ],
+   "lead": [
+    "ca"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで双剣に切り替え、断流を乗せて通常攻撃を連打する"
+  }
+ ]
+}

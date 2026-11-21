@@ -1,0 +1,45 @@
+{
+ "characterId": "10000101-dendro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと E + 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 夜魂値がたまり次第スキルを使い直す"
+  },
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    10,
+    14,
+    18
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルのあと通常攻撃を連打するのが基本"
+  }
+ ]
+}

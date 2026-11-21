@@ -1,0 +1,23 @@
+{
+ "characterId": "10000081-dendro",
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    12,
+    16
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発中に開花を起こすドライバー運用。爆発始動型のアタッカーに近い"
+  }
+ ]
+}

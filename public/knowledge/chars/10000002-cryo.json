@@ -1,0 +1,38 @@
+{
+ "characterId": "10000002-cryo",
+ "archetypes": [
+  {
+   "name": "E・Q（爆発サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発サブアタッカー型の運用"
+  },
+  {
+   "name": "E・Q のあと ダッシュ + 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    2,
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: ダッシュで氷付与してから通常攻撃を振るのが基本。爆発も主力"
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+ "characterId": "10000051-cryo",
+ "archetypes": [
+  {
+   "name": "E・Q・長押し E のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "e_hold"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発でスキルの CT が戻る連携（2 つ目の例）"
+  },
+  {
+   "name": "E・通常攻撃・長押し E・Q・E・通常攻撃・長押し E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "e_hold",
+    "q",
+    "e",
+    "n",
+    "e_hold"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    6,
+    8,
+    10
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 短押し → 通常攻撃 → 長押し → 爆発 → 短押し → 通常攻撃 → 長押し の連携の例が載っている"
+  }
+ ]
+}

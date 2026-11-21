@@ -1,0 +1,19 @@
+{
+ "characterId": "10000116-electro",
+ "archetypes": [
+  {
+   "name": "E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "withCharacters": [
+    "10000046-pyro",
+    "10000060-hydro",
+    "10000125-hydro"
+   ],
+   "evidence": "編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず"
+  }
+ ]
+}

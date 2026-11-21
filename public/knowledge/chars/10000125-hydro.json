@@ -21,6 +21,21 @@
     "n"
    ],
    "evidence": "手組み「月開花」184k（探索で登った後）。E・Q を先に置き、重撃を最後に撃つと、バフが重なる"
+  },
+  {
+   "name": "E と Q（Overvape 編成）",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "withCharacters": [
+    "10000046-pyro",
+    "10000060-hydro",
+    "10000116-electro"
+   ],
+   "evidence": "編成例の探索（Overvape）の上位に出る形。実測: 効果は確認できず"
   }
  ]
 }

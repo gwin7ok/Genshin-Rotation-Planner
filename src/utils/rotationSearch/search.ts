@@ -280,7 +280,8 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     seedPool.unshift(...seedFirst);
     const poolDedup = [...new Set(seedPool)];
     // 知識辞書の出発点があるときは、総当たりの出発点を減らす（辞書の出発点が、全部そろった形を持つので、広く浅く測る量を減らせる）
-    const dictSeeds = args.knowledge ? seedFirst.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label)).length : 0;
+    // 辞書の出発点のうち、編成の全員が出場する形だけを数える（一部の人しか辞書にないと、出発点が偏って、予算を絞ると探索が悪化する。胡桃・夜蘭・行秋・鍾離で 36.5k → 13.7k）
+    const dictSeeds = args.knowledge ? seedFirst.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label) && characters.every(c => sc.candidate.stints.some(st => st.characterId === c.id))).length : 0;
     const keep1Eff = dictSeeds > 0 && !args.seedsOnly ? Math.min(Math.max(1, settings.keep1), DICT_KEEP1) : Math.max(1, settings.keep1);
     const r1 = await mapLimit(poolDedup.slice(0, keep1Eff * 3), settings.runs1, 'quick', keep1Eff, exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };

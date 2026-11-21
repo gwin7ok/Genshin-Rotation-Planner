@@ -18,6 +18,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
         lead: ['n'],
         evidence: '手組み「月開花」184k（探索で登った後）。E・Q を先に置き、重撃を最後に撃つと、バフが重なる',
       },
+      { name: 'E と Q（Overvape 編成）', role: 'subAttacker', slot: 10, use: ['e', 'q'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000116-electro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: 効果は確認できず' },
     ],
   },
   {
@@ -97,7 +98,18 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     characterId: '10000046-pyro', // 胡桃
     archetypes: [
       { name: 'E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca'], fillRepeat: [4, 5, 6], evidence: '実測（胡桃・行秋・香菱・ベネット、標準ビルド）: 辞書なしの探索の 1 位が 胡桃[E N C ×5] 32.5k。辞書ありは同じ結果を 228 秒 → 119 秒で出した（DPS は同じ）。Wiki の N2CD は、標準ビルドでは上位に出なかった' },
+      { name: '通常攻撃・E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['n', 'e'], fill: ['n', 'ca'], fillRepeat: [5, 6], evidence: '編成例の探索（Overvape 編成）の上位に出る形（93.6k）。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' },
     ],
+  },
+
+  // ── 胡桃の編成例の探索から（Overvape 編成。胡桃・夜蘭・コロンビーナ・イネファ）。実測は plan.md ──
+  {
+    characterId: '10000060-hydro', // 夜蘭
+    archetypes: [{ name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000046-pyro'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
+  },
+  {
+    characterId: '10000116-electro', // イネファ
+    archetypes: [{ name: 'E', role: 'subAttacker', slot: 20, use: ['e'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000125-hydro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' }],
   },
 
   // ── 激化刻晴（フィッシュル・ナヒーダ・万葉・刻晴）。手組み 54.8k ──

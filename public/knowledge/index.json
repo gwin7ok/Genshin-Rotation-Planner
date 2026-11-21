@@ -1,0 +1,10 @@
+{
+ "version": 1,
+ "gcsimVersion": "v2.50.0",
+ "chars": {
+  "10000125-hydro": "chars/10000125-hydro.json",
+  "10000073-dendro": "chars/10000073-dendro.json",
+  "10000070-hydro": "chars/10000070-hydro.json",
+  "10000119-dendro": "chars/10000119-dendro.json"
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "characterId": "10000119-dendro",
+ "archetypes": [
+  {
+   "name": "長押し E と Q",
+   "role": "subAttacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "手組み「月開花」。長押しで得た詠月を Q が消費する（+26k の実測）"
+  }
+ ]
+}

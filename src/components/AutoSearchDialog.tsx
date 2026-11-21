@@ -9,6 +9,7 @@ import { wasmParallelism } from '../utils/gcsim/gcsimWasm';
 import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
 import { saveDpsSettings } from '../utils/appSettings';
 import { effectiveRoles, loadRoleOverrides, normalizeRoles, ROLE_ORDER } from '../utils/characterRoleStore';
+import { knowledgeSource } from '../utils/knowledge/source';
 import { DEFAULT_SEARCH_SETTINGS, searchRotation, stintsForApp, type SearchOutcome, type SearchProgress, type SearchSettings } from '../utils/rotationSearch/search';
 
 interface AutoSearchDialogProps {
@@ -85,7 +86,10 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     setProgress({ phase: 'generate', done: 0, total: 1 });
     const dpsSettings = cond.settingsNow();
     saveDpsSettings(dpsSettings);
+    // 知識辞書（サーバー側）から、編成のキャラの分だけ取得する。取得できなければ、辞書なしで探索する
+    const knowledge = await knowledgeSource.load(members.map(c => c.id)).catch(() => ({}));
     const out = await searchRotation({
+      knowledge,
       characters: members,
       roles: Object.fromEntries(members.map(c => [c.id, roles[c.id] ?? []])),
       weapons: database.weapons,

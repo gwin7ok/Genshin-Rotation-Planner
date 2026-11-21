@@ -1,0 +1,26 @@
+{
+ "characterId": "10000125-hydro",
+ "archetypes": [
+  {
+   "name": "重撃を最後にまとめる（月開花）",
+   "role": "attacker",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "lead": [
+    "n"
+   ],
+   "evidence": "手組み「月開花」184k（探索で登った後）。E・Q を先に置き、重撃を最後に撃つと、バフが重なる"
+  }
+ ]
+}

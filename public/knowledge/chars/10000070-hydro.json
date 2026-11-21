@@ -1,0 +1,17 @@
+{
+ "characterId": "10000070-hydro",
+ "archetypes": [
+  {
+   "name": "E×4",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる"
+  }
+ ]
+}

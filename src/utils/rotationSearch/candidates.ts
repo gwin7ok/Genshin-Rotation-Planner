@@ -138,6 +138,13 @@ function useOptions(c: CharacterConfig, role: SearchRole): Use[] {
   return out;
 }
 
+/** 動作の並び（種類。「@秒」つきも可）から、出場を作る。動作が無いキャラは null（知識辞書の出発点を組むのに使う） */
+export function stintOf(c: CharacterConfig, steps: string[], id: string): Stint | null {
+  const actions = steps.map(s => instance(c, s));
+  if (actions.length === 0 || actions.some(a => a === null)) return null;
+  return { id, characterId: c.id, actions: actions as CharacterActionInstance[] };
+}
+
 let seq = 0;
 const instance = (c: CharacterConfig, step: string): CharacterActionInstance | null => {
   const def = defOf(c, step);

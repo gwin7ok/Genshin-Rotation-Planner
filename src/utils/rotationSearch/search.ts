@@ -13,6 +13,8 @@ import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
 import { describe, generateCandidates, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
 import { evaluateCandidates, type ScoredCandidate } from './evaluate';
+import { knowledgeSeeds } from './knowledgeSeeds';
+import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
 
 /**
  * 画面の「DPS 計算」と同じ条件で評価する（初動 + ループ N 周・開始エネルギーは満タン・足りない爆発は溜まるまで待つ・敵の粒子・敵の設定。時間 = 最後のアクション・ダメージの遅いほう）。
@@ -131,7 +133,9 @@ export interface SearchArgs {
   /** エネルギーを考慮して探索する（幽境用: 初期エネルギー 0・爆発のエネルギー消費あり）。無ければ、エネルギーは無視する */
   energy?: boolean;
   /** 追加の出発点（手組みなど。測定・検証用。グループ展開済みの出場と周回の開始位置。アタッカーは、最後の出場のキャラ） */
-  extraSeeds?: Array<{ stints: Stint[]; loopStartIndex: number }>;
+  extraSeeds?: Array<{ stints: Stint[]; loopStartIndex: number; assignment?: Record<string, SearchRole> }>;
+  /** 知識辞書（取得できたキャラの分）。運用型の組み合わせから出発点を組み、必ず出発点に入れる */
+  knowledge?: KnowledgeBundle;
   /** true のとき、生成した候補を使わず、extraSeeds だけを出発点にする（辞書で作った少数の候補だけから登る場合の、効果と時間を測る） */
   seedsOnly?: boolean;
   /** 同時に動かす gcsim の数（Worker の数） */
@@ -156,9 +160,9 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
   const cancelled = () => !!args.shouldCancel?.();
   try {
     args.onProgress?.({ phase: 'generate', done: 0, total: 1 });
-    const seedCands: Candidate[] = (args.extraSeeds ?? []).map((x, i) => {
+    const seedCands: Candidate[] = [...(args.extraSeeds ?? []), ...(args.knowledge ? knowledgeSeeds(characters, args.knowledge) : [])].map((x, i) => {
       const atk = x.stints[x.stints.length - 1]?.characterId;
-      const assignment = Object.fromEntries(characters.map(c => [c.id, (c.id === atk ? 'attacker' : (args.roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter') as SearchRole]));
+      const assignment = x.assignment ?? Object.fromEntries(characters.map(c => [c.id, (c.id === atk ? 'attacker' : (args.roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter') as SearchRole]));
       return { id: `seed${i}`, label: describe(characters, x.stints, x.loopStartIndex), assignment, targetSeconds: 0, stints: x.stints, loopStartIndex: x.loopStartIndex, op: 'seed' };
     });
     const generated = args.seedsOnly ? [] : generateCandidates(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });

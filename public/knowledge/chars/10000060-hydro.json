@@ -9,10 +9,6 @@
     "e",
     "q"
    ],
-   "withCharacters": [
-    "10000096-pyro",
-    "10000116-electro"
-   ],
    "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
   },
   {
@@ -22,9 +18,6 @@
    "use": [
     "e",
     "q"
-   ],
-   "withCharacters": [
-    "10000046-pyro"
    ],
    "evidence": "編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず"
   }

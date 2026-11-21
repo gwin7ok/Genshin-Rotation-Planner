@@ -8,7 +8,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000125-hydro', // コロンビーナ
     archetypes: [
-      { name: 'E と Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], withCharacters: ['10000096-pyro', '10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+      { name: 'E と Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     
       {
         name: '重撃を最後にまとめる（月開花）',
@@ -20,16 +20,16 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
         lead: ['n'],
         evidence: '手組み「月開花」184k（探索で登った後）。E・Q を先に置き、重撃を最後に撃つと、バフが重なる',
       },
-      { name: 'E と Q（Overvape 編成）', role: 'subAttacker', slot: 10, use: ['e', 'q'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000116-electro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: 効果は確認できず' },
+      { name: 'E と Q（Overvape 編成）', role: 'subAttacker', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: 効果は確認できず' },
     ],
   },
   {
     characterId: '10000073-dendro', // ナヒーダ
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], withCharacters: ['10000125-hydro'], evidence: '手組み「月開花」の出場（E のあと通常攻撃 1 回、Q）' },
-      { name: 'E と Q（通常攻撃なし）', role: 'supporter', slot: 10, use: ['e', 'q'], withCharacters: ['10000125-hydro'], evidence: '探索の上位に出る形' },
-      { name: '長押し E と Q（刻晴編成）', role: 'supporter', slot: 20, use: ['e_hold', 'q'], withCharacters: ['10000042-electro'], evidence: '探索の上位（ナヒーダ[hE Q]）' },
-      { name: 'E と Q（刻晴編成）', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000042-electro'], evidence: '手組み「激化刻晴」' },
+      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], evidence: '手組み「月開花」の出場（E のあと通常攻撃 1 回、Q）' },
+      { name: 'E と Q（通常攻撃なし）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '探索の上位に出る形' },
+      { name: '長押し E と Q（刻晴編成）', role: 'supporter', slot: 20, use: ['e_hold', 'q'], evidence: '探索の上位（ナヒーダ[hE Q]）' },
+      { name: 'E と Q（刻晴編成）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '手組み「激化刻晴」' },
     ],
   },
   {
@@ -49,9 +49,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000089-hydro', // フリーナ
     archetypes: [
-      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     
-      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く' }],
   },
   {
@@ -65,7 +65,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000023-pyro', // 香菱
     archetypes: [
-      { name: '主役（E・Q のあと通常攻撃）', role: 'attacker', slot: 30, use: ['e', 'q'], fill: ['n'], fillRepeat: [1, 3, 12], lead: ['n'], withCharacters: ['10000089-hydro'], evidence: '探索の上位に、香菱[E Q N×12 …] の形が出る（蒸発の火力役）' },
+      { name: '主役（E・Q のあと通常攻撃）', role: 'attacker', slot: 30, use: ['e', 'q'], fill: ['n'], fillRepeat: [1, 3, 12], lead: ['n'], evidence: '探索の上位に、香菱[E Q N×12 …] の形が出る（蒸発の火力役）' },
       { name: 'E と Q だけ', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」・「雷電ナショナル」' },
     ],
   },
@@ -82,7 +82,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     characterId: '10000032-pyro', // ベネット
     archetypes: [
     
-      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], withCharacters: ['10000096-pyro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     
       { name: 'Q・通常攻撃・E', role: 'supporter', slot: 10, use: ['q', 'n', 'e'], evidence: '手組み「雷電ナショナル」' },
       { name: 'Q だけ', role: 'supporter', slot: 10, use: ['q'], evidence: '探索の上位（48.5k）' },
@@ -116,14 +116,14 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000060-hydro', // 夜蘭
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000096-pyro', '10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
-    { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000046-pyro'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
   },
   {
     characterId: '10000116-electro', // イネファ
     archetypes: [
-      { name: 'E', role: 'subAttacker', slot: 25, use: ['e'], withCharacters: ['10000096-pyro', '10000125-hydro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
-    { name: 'E', role: 'subAttacker', slot: 20, use: ['e'], withCharacters: ['10000046-pyro', '10000060-hydro', '10000125-hydro'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' }],
+      { name: 'E', role: 'subAttacker', slot: 25, use: ['e'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+    { name: 'E', role: 'subAttacker', slot: 20, use: ['e'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' }],
   },
 
   // ── 激化刻晴（フィッシュル・ナヒーダ・万葉・刻晴）。手組み 54.8k ──
@@ -138,7 +138,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000047-anemo', // 楓原万葉
     archetypes: [
-      { name: 'E だけ', role: 'supporter', slot: 20, use: ['e'], withCharacters: ['10000087-hydro'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
+      { name: 'E だけ', role: 'supporter', slot: 20, use: ['e'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
     
     
       { name: 'E・高い落下', role: 'supporter', slot: 30, use: ['e', 'hp'], evidence: '手組み「激化刻晴」・探索の上位（拡散）' },
@@ -161,7 +161,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000131-pyro', // ニコ
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], withCharacters: ['10000022-anemo'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     { name: 'E', role: 'supporter', slot: 30, use: ['e'], evidence: '手組み「星電導サンドローネ」' }],
   },
   {
@@ -187,90 +187,90 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000093-anemo',
     archetypes: [
-      { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+      { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     ],
   },
   {
     characterId: '10000076-anemo',
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000022-anemo'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     
-      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000026-anemo'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     ],
   },
   {
     characterId: '10000096-pyro',
     archetypes: [
-      { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], withCharacters: ['10000116-electro'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
+      { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     ],
   },
   {
     characterId: '10000003-anemo',
     archetypes: [
-      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
   {
     characterId: '10000080-cryo',
     archetypes: [
-      { name: '長押し E', role: 'supporter', slot: 20, use: ['e_hold'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
+      { name: '長押し E', role: 'supporter', slot: 20, use: ['e_hold'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
   {
     characterId: '10000064-geo',
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000049-pyro'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
   {
     characterId: '10000049-pyro',
     archetypes: [
-      { name: 'E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [17, 19, 21], withCharacters: ['10000064-geo', '10000080-cryo', '10000003-anemo'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
+      { name: 'E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [17, 19, 21], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
   {
     characterId: '10000103-geo',
     archetypes: [
     
-      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
   },
   {
     characterId: '10000105-electro',
     archetypes: [
-      { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], withCharacters: ['10000087-hydro'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
+      { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
     
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000091-geo'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
   },
   {
     characterId: '10000091-geo',
     archetypes: [
-      { name: 'Q・長押し E 2 回・通常攻撃', role: 'attacker', slot: 40, use: ['q', 'e_hold@4.41', 'e_hold', 'n', 'dash', 'n'], withCharacters: ['10000103-geo', '10000089-hydro', '10000105-electro'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
+      { name: 'Q・長押し E 2 回・通常攻撃', role: 'attacker', slot: 40, use: ['q', 'e_hold@4.41', 'e_hold', 'n', 'dash', 'n'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
   },
   {
     characterId: '10000022-anemo',
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], withCharacters: ['10000123-pyro'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
+      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     ],
   },
   {
     characterId: '10000123-pyro',
     archetypes: [
-      { name: 'E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], withCharacters: ['10000022-anemo', '10000076-anemo', '10000131-pyro'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
+      { name: 'E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     ],
   },
   {
     characterId: '10000030-geo',
     archetypes: [
-      { name: '長押し E', role: 'supporter', slot: 10, use: ['e_hold'], withCharacters: ['10000087-hydro'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
+      { name: '長押し E', role: 'supporter', slot: 10, use: ['e_hold'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
     ],
   },
   {
     characterId: '10000087-hydro',
     archetypes: [
-      { name: '先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca', 'n', 'n'], fillRepeat: [4, 5, 6], lead: ['n'], withCharacters: ['10000105-electro', '10000047-anemo', '10000030-geo'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
+      { name: '先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca', 'n', 'n'], fillRepeat: [4, 5, 6], lead: ['n'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
     ],
   },
 ];

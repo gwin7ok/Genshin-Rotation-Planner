@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%A5%93%E5%8E%9F%E4%B8%87%E8%91%89",
  "archetypes": [
   {
+   "name": "E→HP→Q のあと、もう一度 E→HP",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "hp"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 141 件。平均 62.9k（最大 170.8k）（探索の比較なし）"
+  },
+  {
    "name": "E→落下→Q",
    "role": "subAttacker",
    "slot": 20,

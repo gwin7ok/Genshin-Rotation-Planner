@@ -147,6 +147,18 @@ for (const name of wanted) {
       const avg = r.dps.reduce((a, b) => a + b, 0) / r.dps.length;
       lines.push(`- ${r.n} 件（最初の出場 ${r.first} 件）平均 ${(avg / 1000).toFixed(1)}k・最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k: ${f}`);
     }
+    // 複数回の出場の形: 出場の並び（このキャラの出場は形、ほかのキャラは名前）ごとに、件数と DPS。条件つき（?）・swap を含むものは除く
+    const seqs = new Map<string, { n: number; dps: number[] }>();
+    for (const p of mine) {
+      if (p.stints.filter(s => s.who === key).length < 2) continue;
+      if (p.stints.some(s => s.who === key && s.actions.some(a => a.startsWith('?') || a === 'swap'))) continue;
+      const seq = process.env.SEQ_ONLY_SELF ? p.stints.filter(s => s.who === key).map(s => `[${compact(s.actions)}]`).join(' ') : p.stints.map(s => (s.who === key ? `[${compact(s.actions)}]` : `(${nameOfKey.get(s.who) ?? s.who})`)).join(' ');
+      const r = seqs.get(seq) ?? { n: 0, dps: [] }; r.n++; r.dps.push(p.dps); seqs.set(seq, r);
+    }
+    if (seqs.size > 0) {
+      lines.push('', '## 複数回出場の形（出場の並び。[ ] がこのキャラ、( ) がほかのキャラ。件数順）');
+      for (const [q, r] of [...seqs].sort((a, b) => b[1].n - a[1].n).slice(0, TOP)) lines.push(`- ${r.n} 件 平均 ${(r.dps.reduce((a, b) => a + b, 0) / r.dps.length / 1000).toFixed(1)}k・最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k: ${q}`);
+    }
     const best = [...mine].sort((a, b) => b.dps - a.dps).slice(0, 3);
     lines.push('', '## DPS が高い設定の、この人の出場（上位 3 件）');
     for (const p of best) {

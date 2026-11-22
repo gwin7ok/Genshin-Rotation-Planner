@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A6%E3%82%A7%E3%83%B3%E3%83%86%E3%82%A3",
  "archetypes": [
   {
+   "name": "E→Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ウェンティ 64 件中 32 件。平均 46.7k（最大 152.3k）（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 30,

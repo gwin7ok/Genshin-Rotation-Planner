@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A3%E3%83%83%E3%82%B7%E3%83%A5%E3%83%AB",
  "archetypes": [
   {
+   "name": "E→N のあと、もう一度 N→N→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "n",
+      "q"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: フィッシュル 1,367 件中 113 件。平均 66.7k（最大 122.3k）（探索の比較なし）"
+  },
+  {
    "name": "n→e",
    "role": "subAttacker",
    "slot": 20,

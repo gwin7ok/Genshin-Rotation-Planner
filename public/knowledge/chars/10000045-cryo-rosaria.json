@@ -3,6 +3,24 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%82%B5%E3%83%AA%E3%82%A2",
  "archetypes": [
   {
+   "name": "E→Q のあと、もう一度 E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ロサリア 345 件中 64 件。平均 51.9k（最大 93.3k）（探索の比較なし）"
+  },
+  {
    "name": "q の出場",
    "role": "supporter",
    "slot": 30,

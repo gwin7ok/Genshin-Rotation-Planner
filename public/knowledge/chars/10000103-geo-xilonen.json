@@ -3,6 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%AD%E3%83%8D%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→N→N のあと、もう一度 E→N→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: シロネン 676 件中 113 件。平均 188.5k（最大 2063.3k。ドゥリン・シトラリ・ニコ編成の「1 周に E 2 回」）（探索の比較なし）"
+  },
+  {
    "name": "e→n×2",
    "role": "supporter",
    "slot": 20,

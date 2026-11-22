@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B9%85%E5%B2%90%E5%BF%8D",
  "archetypes": [
   {
+   "name": "E→N のあと、もう一度 Q→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 久岐忍 257 件中 32 件。平均 76.4k（最大 81.6k）（探索の比較なし）"
+  },
+  {
    "name": "E だけ",
    "role": "supporter",
    "slot": 30,

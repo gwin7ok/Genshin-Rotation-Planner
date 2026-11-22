@@ -3,6 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%A1%8C%E7%A7%8B",
  "archetypes": [
   {
+   "name": "Q→N のあと、もう一度 E→DASH→N→N",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "dash",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 行秋 710 件中 37 件。平均 61.5k（最大 102.5k）（探索の比較なし）"
+  },
+  {
    "name": "e→dash→n×2",
    "role": "subAttacker",
    "slot": 20,

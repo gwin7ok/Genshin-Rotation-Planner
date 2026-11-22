@@ -211,21 +211,23 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       }
     };
     // wanted: 成功がこの数に届くまで、後ろの候補で補う（gcsim が実行できない候補が混じるので、その分を減らさない）。items の最後まで試したら終わる
-    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase, wanted = items.length, seconds = settings.battleSeconds): Promise<QuickRun[]> => {
+    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase, wanted = items.length, seconds = settings.battleSeconds, prog?: { base: number; total: number; fixed?: number }): Promise<QuickRun[]> => {
       const parallel = Math.max(1, Math.min(runs, args.cores));
       const concurrent = Math.max(1, Math.floor(args.cores / parallel));
       const out: QuickRun[] = [];
       let next = 0;
       let done = 0;
       let okCount = 0;
-      args.onProgress?.({ phase, done: 0, total: wanted });
+      // 進捗は、prog があれば、全体（base + この回の分 / total）で出す（山登りは、70 個ずつの回を繰り返すので、回ごとの「n / 70」ではなく、全体の予算で出す）
+      const report = (d: number) => args.onProgress?.(prog ? { phase, done: Math.min(prog.total, prog.base + (prog.fixed ?? d)), total: prog.total } : { phase, done: d, total: wanted });
+      report(0);
       await Promise.all(Array.from({ length: concurrent }, async () => {
         while (next < items.length && okCount < wanted && !cancelled()) {
           const i = next++;
           const r = await runOne(items[i], runs, parallel, seconds, phase === 'verify');
           out.push(r);
           if (r.dps !== undefined) { okCount++; done = okCount; }
-          args.onProgress?.({ phase, done, total: wanted });
+          report(done);
         }
       }));
       return out;
@@ -377,9 +379,9 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           const before = bestIn(g)!.dps!;
           const startDps = start.dps!;
           // 先に 1 回だけ回して、明らかに悪い候補（その割り当ての最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
-          const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds);
+          const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds, { base: used, total: budget });
           const keepSc = first.filter(r => r.dps !== undefined && r.dps >= startDps * REFINE_PREFILTER).map(r => r.sc);
-          const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds);
+          const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds, { base: used, total: budget, fixed: batch.length });
           used += batch.length;
           args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
           r1.push(...rr);

@@ -44,7 +44,7 @@ function nameOfShort(short: string): string {
 const sec = (v: number) => `${v.toFixed(1)}s`;
 
 /** アクション列の記法（グループの外・中で共通）。連続する通常攻撃は N + 回数にまとめる。詰めて書く */
-function notationOf(actions: Stint['actions'], mode: NotationMode): string {
+function notationOf(actions: Stint['actions'], mode: NotationMode, times = true): string {
   const out: string[] = [];
   let normals = 0;
   const flush = () => {
@@ -58,10 +58,10 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
       continue;
     }
     flush();
-    if (a.type === 'wait') out.push(`${mode === 'name' ? t('messages:notation.wait') : 'w'}@${sec(a.duration ?? 0)}`);
+    if (a.type === 'wait') { if (times) out.push(`${mode === 'name' ? t('messages:notation.wait') : 'w'}@${sec(a.duration ?? 0)}`); } // 時間を書かないときは、待機は出さない（時間が無いと意味がない）
     else {
       const label = mode === 'name' ? nameOfShort(a.shortName) : a.shortName;
-      out.push(a.holdSeconds === undefined ? label : `${label}@${sec(a.holdSeconds)}`);
+      out.push(a.holdSeconds === undefined || !times ? label : `${label}@${sec(a.holdSeconds)}`);
     }
   }
   flush();
@@ -77,7 +77,7 @@ function notationOf(actions: Stint['actions'], mode: NotationMode): string {
  *   - 1 つのアクションだけのグループ: 括弧なしで、回数 + 略号（C を 3 回 → `3C`。名称は `3×重撃`）
  *   - 交代・維持は出さない。それ以外は、アクションの略号（E・tE・hE・Q・C・D・J・lP・hP …）
  */
-export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): string {
+export function buildStintNotation(stint: Stint, mode: NotationMode = 'short', times = true): string {
   const actions = stripGroupCopies(stint.actions);
   const runs = groupRuns({ actions, groups: stint.groups });
   const parts: { text: string; spaced: boolean }[] = [];
@@ -87,12 +87,12 @@ export function buildStintNotation(stint: Stint, mode: NotationMode = 'short'): 
     if (!run) {
       // 次のグループの手前まで
       const nextStart = runs.find(r => r.start > i)?.start ?? actions.length;
-      const text = notationOf(actions.slice(i, nextStart), mode);
+      const text = notationOf(actions.slice(i, nextStart), mode, times);
       if (text) parts.push({ text, spaced: false });
       i = nextStart;
       continue;
     }
-    const inner = notationOf(actions.slice(run.start, run.end + 1), mode);
+    const inner = notationOf(actions.slice(run.start, run.end + 1), mode, times);
     // 略号: 2[N1C]（KQM）／名称: 2×[通常 重撃]
     // 1 つのアクションだけのグループは、括弧なし: 3C／3×重撃
     const single = run.start === run.end;
@@ -119,11 +119,13 @@ export function buildRotationNotation(
   stints: Stint[],
   loopStartIndex: number,
   mode: NotationMode = 'short',
+  /** false のとき、秒数（長押しの hE@2.0s・待機の w@1.0s）を書かない */
+  times = true,
 ): string {
   const charMap = new Map(characters.map(c => [c.id, charName(c)]));
   const parts = stints.map(s => {
     const charName = charMap.get(s.characterId) || t('messages:notation.unknown');
-    const acts = buildStintNotation(s, mode);
+    const acts = buildStintNotation(s, mode, times);
     return acts ? `${charName} ${acts}` : charName;
   });
   if (parts.length === 0) return '';

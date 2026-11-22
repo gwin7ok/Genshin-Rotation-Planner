@@ -313,14 +313,17 @@
     "particlesDetail": "Average over the evaluated {{seconds}} s: particles generated: {{own}} from skills etc. + {{enemy}} from enemies",
     "noMembers": "The party has no characters. Build a party first.",
     "modeTitle": "Search mode",
-    "mode": { "party": "Search from the party", "current": "Search from the current rotation" },
+    "mode": {
+      "party": "Search from the party",
+      "current": "Search from the current rotation"
+    },
     "modeHint": {
       "party": "Builds combinations of on-field order and actions from the party members' roles and looks for the highest DPS.",
       "current": "Starts from the rotation currently on the Gantt chart and changes actions and on-field order one step at a time to find a higher DPS. The knowledge dictionary is not used. The row marked \"Current\" in the results is your current rotation, for comparison."
     },
     "modeNoCurrent": "There are no on-field turns of the party members on the Gantt chart.",
     "currentBadge": "Current",
-        "start": "Start search",
+    "start": "Start search",
     "cancel": "Cancel",
     "phase": {
       "generate": "Building candidates…",
@@ -341,6 +344,12 @@
     "apply": "Use this",
     "applied": "In use",
     "appliedFirst": "Nothing has been placed on the Gantt chart yet. Press \"Use this\" on the row you want.",
-    "energyNote": "Burst energy shortage is not considered. A party with too little Energy Recharge may not be able to run this in the actual game (check it with \"Energy Recharge Calc\")."
+    "energyNote": "Burst energy shortage is not considered. A party with too little Energy Recharge may not be able to run this in the actual game (check it with \"Energy Recharge Calc\").",
+    "energyWaitLabel": "Burst energy waits",
+    "energyWaitItem": "{{name}} {{n}}/loop · {{s}} s each",
+    "energyWaitItemNone": "{{name}} no waits",
+    "energyWaitNoLap": "Loops is 1, so per-loop values are unavailable",
+    "energyWaitSep": ", ",
+    "energyWaitTitle": "Times a burst was attempted but waited for lack of energy (per loop = count ÷ (loops − 1)) and the average wait per time (from the burst cooldown being ready until it goes off; cooldown waits not included). Same as the DPS calculation"
   }
 }

@@ -7,7 +7,8 @@ import type { AppDatabase } from '../types/database';
 import type { HurtSetting } from '../utils/gcsim/buildGcsimConfig';
 import { wasmParallelism } from '../utils/gcsim/gcsimWasm';
 import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
-import { saveDpsSettings } from '../utils/appSettings';
+import { loadNotationMode, saveDpsSettings } from '../utils/appSettings';
+import { buildRotationNotation } from '../utils/rotationNotation';
 import { effectiveRoles, loadRoleOverrides, normalizeRoles, ROLE_ORDER } from '../utils/characterRoleStore';
 import { knowledgeSource } from '../utils/knowledge/source';
 import { expandGroupedStints } from '../utils/actionGroups';
@@ -79,6 +80,9 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     return st.length > 0 && st.some(x => x.actions.length > 0) ? { stints: st, loopStartIndex: Math.min(currentLoopStartIndex, st.length - 1) } : null;
   }, [members, currentStints, currentLoopStartIndex]);
   const effectiveMode = mode === 'current' && currentSeed ? 'current' : 'party';
+  // 結果のローテーションは、メイン画面の記法（略号 / 名称）で書く。時間（長押しの秒数・待機）は書かない
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const notationMode = useMemo(() => loadNotationMode(), [isOpen]);
 
   if (!isOpen) return null;
 
@@ -144,6 +148,22 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
         : p.phase === 'refine' ? t('gcsim:search.phase.refine', { done: p.done, total: p.total })
         : t('gcsim:search.phase.verify', { done: p.done, total: p.total });
   const roleName = (r: string): string => (r === 'attacker' ? t('database:edit.role.attacker') : r === 'subAttacker' ? t('database:edit.role.subAttacker') : t('database:edit.role.supporter'));
+  // キャラごとの、爆発のエネルギー待ち（DPS 計算と同じ仕様: 1 周あたりの回数 = 回数 ÷（周数 − 1）、待ち 1 回の平均時間。エネルギーの計算が有効なときだけ）
+  const energyWaitLine = (r: { energyWaits?: Array<{ characterId: string; waits: number; seconds: number | null }>; loops?: number }): React.ReactNode => {
+    if (!r.energyWaits || r.loops === undefined) return null;
+    const loops = r.loops;
+    const items = r.energyWaits.map(w => {
+      const c = members.find(x => x.id === w.characterId);
+      const name = c ? charName(c) : w.characterId;
+      if (loops < 2) return null;
+      return w.waits <= 0 || w.seconds === null ? t('gcsim:search.energyWaitItemNone', { name }) : t('gcsim:search.energyWaitItem', { name, n: (w.waits / (loops - 1)).toFixed(2), s: w.seconds.toFixed(2) });
+    });
+    return (
+      <div className="mt-1 text-[11px] text-slate-500" title={t('gcsim:search.energyWaitTitle')} data-testid="search-energy-waits">
+        {t('gcsim:search.energyWaitLabel')}: {loops < 2 ? t('gcsim:search.energyWaitNoLap') : items.filter(Boolean).join(t('gcsim:search.energyWaitSep'))}
+      </div>
+    );
+  };
   const input = 'w-20 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono text-right';
 
   return (
@@ -206,7 +226,22 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             )}
           </div>
 
-          <details className="text-xs">
+          <div className="flex items-center gap-3 flex-wrap">
+            {running ? (
+              <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white"><Square className="w-3.5 h-3.5" />{t('gcsim:search.cancel')}</button>
+            ) : (
+              <button onClick={() => void start()} disabled={members.length === 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-violet-500 hover:bg-violet-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"><Play className="w-3.5 h-3.5" />{t('gcsim:search.start')}</button>
+            )}
+            {running && progress && (
+              <div className="flex-1 min-w-[200px] space-y-1">
+                <span className="text-xs text-slate-300">{progressText(progress)}</span>
+                <div className="h-1.5 rounded bg-slate-800 overflow-hidden"><div className="h-full bg-violet-400 transition-all" style={{ width: `${progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0}%` }} /></div>
+              </div>
+            )}
+          </div>
+          {message && <p className="text-xs text-amber-300">{message}</p>}
+
+          <details className="text-xs" open>
             <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.settings')}</summary>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
               {([
@@ -232,20 +267,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             </div>
           </details>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            {running ? (
-              <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white"><Square className="w-3.5 h-3.5" />{t('gcsim:search.cancel')}</button>
-            ) : (
-              <button onClick={() => void start()} disabled={members.length === 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-violet-500 hover:bg-violet-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"><Play className="w-3.5 h-3.5" />{t('gcsim:search.start')}</button>
-            )}
-            {running && progress && (
-              <div className="flex-1 min-w-[200px] space-y-1">
-                <span className="text-xs text-slate-300">{progressText(progress)}</span>
-                <div className="h-1.5 rounded bg-slate-800 overflow-hidden"><div className="h-full bg-violet-400 transition-all" style={{ width: `${progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0}%` }} /></div>
-              </div>
-            )}
-          </div>
-          {message && <p className="text-xs text-amber-300">{message}</p>}
 
           {outcome && (
             <div className="space-y-2">
@@ -271,7 +292,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? [...r.particles.energyByChar10s.map(x => `${charName(members.find(c => c.id === x.characterId) ?? { name: x.characterId })}: ${x.energy10s.toFixed(1)}`), t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) })].join(String.fromCharCode(10)) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
-                        <td className="px-2 py-1.5 text-slate-300 break-words">{r.isCurrent && <span className="mr-1.5 px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-200 font-bold">{t('gcsim:search.currentBadge')}</span>}{r.candidate.label}</td>
+                        <td className="px-2 py-1.5 text-slate-300 break-words">{r.isCurrent && <span className="mr-1.5 px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-200 font-bold">{t('gcsim:search.currentBadge')}</span>}<span className="font-mono break-words" title={r.candidate.label}>{buildRotationNotation(members, stintsForApp(r.candidate.stints), r.candidate.loopStartIndex ?? 0, notationMode, false)}</span>{energyWaitLine(r)}</td>
                         <td className="px-2 py-1.5 text-right">
                           {applied === i ? (
                             <span className="inline-flex items-center gap-1 text-emerald-300"><Check className="w-3.5 h-3.5" />{t('gcsim:search.applied')}</span>

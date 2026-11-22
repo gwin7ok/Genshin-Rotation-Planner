@@ -94,6 +94,9 @@ export interface ParticleInfo {
   energyByChar10s: Array<{ characterId: string; energy10s: number }>;
 }
 
+/** キャラごとの、爆発のエネルギー待ち（DPS 計算と同じ。回数は 1 回の実行あたりの平均、秒は待ち 1 回あたりの平均で、待ちが無ければ null） */
+export interface EnergyWaitInfo { characterId: string; waits: number; seconds: number | null }
+
 export interface SearchResultItem {
   candidate: Candidate;
   dps: number;
@@ -106,6 +109,10 @@ export interface SearchResultItem {
   isCurrent?: boolean;
   /** 発生した粒子 */
   particles?: ParticleInfo;
+  /** キャラごとの爆発のエネルギー待ち（エネルギーの計算が有効なときだけ） */
+  energyWaits?: EnergyWaitInfo[];
+  /** 評価したローテーションの周数（1 周あたりの待ち回数 = 回数 ÷ （周数 − 1）） */
+  loops?: number;
 }
 
 export interface SearchCounts {
@@ -152,7 +159,7 @@ export interface SearchArgs {
   shouldCancel?: () => boolean;
 }
 
-interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
+interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; energyWaits?: EnergyWaitInfo[]; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
 
 /** 順位（小さい順に 0 から） */
 const ranksOf = (xs: number[]): number[] => {
@@ -200,7 +207,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
-        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, share: Object.fromEntries(characters.map((c, i) => [c.id, out.result.byChar[i]?.share ?? 0])), particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) } };
+        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, share: Object.fromEntries(characters.map((c, i) => [c.id, out.result.byChar[i]?.share ?? 0])), particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) }, energyWaits: characters.map((c, i) => ({ characterId: c.id, waits: out.result.byChar[i]?.energyWaits ?? 0, seconds: out.result.byChar[i]?.energyWaitSeconds ?? null })) };
       } catch (e) {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }
@@ -423,7 +430,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     if (cancelled()) return { status: 'cancelled' };
     if (r2.length === 0) return { status: 'error', message: 'ALL_FAILED' };
     const results: SearchResultItem[] = r2
-      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}), ...(ownKey !== undefined && mergedKey(r.sc) === ownKey ? { isCurrent: true } : {}) }))
+      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}), ...(r.energyWaits && args.dps?.energy ? { energyWaits: r.energyWaits, loops: args.dps.loops } : {}), ...(ownKey !== undefined && mergedKey(r.sc) === ownKey ? { isCurrent: true } : {}) }))
       .sort((x, y) => y.dps - x.dps);
     return {
       status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank, groupBest: [...groupBestMap.values()],

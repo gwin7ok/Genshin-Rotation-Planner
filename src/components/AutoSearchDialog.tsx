@@ -116,7 +116,8 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     const assignment = Object.fromEntries(members.map(c => [c.id, attackerIds.includes(c.id) ? 'attacker' : ((roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter')])) as Record<string, CharacterRole>;
     const out = await searchRotation({
       knowledge,
-      ...(fromCurrent ? { extraSeeds: [{ stints: currentSeed!.stints, loopStartIndex: currentSeed!.loopStartIndex, assignment }], seedsOnly: true, keepFirstSeed: true } : {}),
+      // どちらのモードも、いまのローテーションを順位に載せる（結果の一番上に出す）。「いまのローテーションから探索」は、それだけを出発点にする
+      ...(currentSeed ? { extraSeeds: [{ stints: currentSeed.stints, loopStartIndex: currentSeed.loopStartIndex, assignment }], keepFirstSeed: true, ...(fromCurrent ? { seedsOnly: true } : {}) } : {}),
       characters: members,
       roles: Object.fromEntries(members.map(c => [c.id, roles[c.id] ?? []])),
       weapons: database.weapons,
@@ -259,7 +260,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                     </tr>
                   </thead>
                   <tbody>
-                    {outcome.results.map((r, i) => ({ r, i })).filter(({ r, i }) => i < 10 || r.isCurrent).map(({ r, i }) => (
+                    {outcome.results.map((r, i) => ({ r, i })).filter(({ r, i }) => i < 10 || r.isCurrent).sort((a, b) => Number(!!b.r.isCurrent) - Number(!!a.r.isCurrent) || a.i - b.i).map(({ r, i }) => (
                       <tr key={r.candidate.id} className={`border-t border-slate-800 ${applied === i ? 'bg-violet-950/40' : ''}`}>
                         <td className="px-2 py-1.5 text-slate-300 font-bold">{i + 1}</td>
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>

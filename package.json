@@ -64,6 +64,7 @@
     "check:owned-merge": "node scripts/check-owned-merge.ts",
     "check:roles": "node scripts/check-character-roles.ts",
     "check:rotation-search": "node scripts/check-rotation-search.ts",
+    "check:search-from-current": "node scripts/check-search-from-current.ts",
     "build:knowledge": "node scripts/build-knowledge.ts",
     "check:knowledge": "node scripts/build-knowledge.ts --check",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",

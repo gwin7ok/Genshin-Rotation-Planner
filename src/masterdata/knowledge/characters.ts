@@ -300,6 +300,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000111-electro',
     archetypes: [
+      { name: '公式推奨コンボ（E→重撃→落下→E→重撃→落下→Q）×2', role: 'attacker', slot: 40, use: ['e', 'ca', 'hp', 'e', 'ca', 'hp', 'q'], fill: ['e', 'ca', 'hp', 'e', 'ca', 'hp', 'q'], fillRepeat: [1], evidence: 'Wiki 本文の「コンボについて」: (元素スキル→重撃→落下攻撃→元素スキル→重撃→落下攻撃→元素爆発)×2 セット（EAAEAAQ の表記）。公式チュートリアルの推奨' },
       { name: '先頭 N・E×2・Q のあと 重撃 + 落下を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['ca', 'hp'], fillRepeat: [3, 4], lead: ['n'], evidence: '編成例の探索（ヴァレサ・イアンサ・閑雲・フリーナ）の上位に出る形。実測: 最短の設定で 32.1k → 32.1k（同じ）' },
     ],
   },

@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%B4%E3%82%A1%E3%83%AC%E3%82%B5",
  "archetypes": [
   {
+   "name": "公式推奨コンボ（E→重撃→落下→E→重撃→落下→Q）×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "hp",
+    "e",
+    "ca",
+    "hp",
+    "q"
+   ],
+   "fill": [
+    "e",
+    "ca",
+    "hp",
+    "e",
+    "ca",
+    "hp",
+    "q"
+   ],
+   "fillRepeat": [
+    1
+   ],
+   "evidence": "Wiki 本文の「コンボについて」: (元素スキル→重撃→落下攻撃→元素スキル→重撃→落下攻撃→元素爆発)×2 セット（EAAEAAQ の表記）。公式チュートリアルの推奨"
+  },
+  {
    "name": "先頭 N・E×2・Q のあと 重撃 + 落下を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -18,3 +18,4 @@ public/downloads/
 
 # HoYoLAB の API の生データの保存先（調査用。2MB 級・アカウントの情報を含むため Git に入れない）
 tools/hoyolab-fetch/out/
+.cache/

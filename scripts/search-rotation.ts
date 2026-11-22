@@ -22,7 +22,7 @@ const num = (name: string, def: number) => {
 const str = (name: string) => args.find(x => x.startsWith(`--${name}=`))?.split('=')[1];
 const names = args.filter(x => !x.startsWith('--'));
 const SECONDS = num('seconds', 40);
-const KEEP1 = num('keep1', 900);
+const KEEP1 = num('keep1', 300);
 const RUNS1 = num('runs1', 1);
 const KEEP2 = num('keep2', 12);
 const RUNS2 = num('runs2', 10);

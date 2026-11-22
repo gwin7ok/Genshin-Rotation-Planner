@@ -57,8 +57,6 @@ const STALE_LIMIT = 3;
 const REFINE_BATCH = 70;
 /** ダメージの割合がこれ未満のキャラ（アタッカー以外）の動作を、先に削ってみる */
 const LOW_SHARE = 0.06;
-/** 知識辞書の出発点があるとき、広く浅く測る出発点の数（keep1 の代わり。上限） */
-const DICT_KEEP1 = 100;
 /** 知識辞書の出発点があるとき、山登りする割り当ての下限（全体の最良に対する割合） */
 const DICT_GROUP_RATIO = 0.8;
 /** 上のキャラを狙った近傍を、1 回の山登りの測定に先に入れる最大数 */
@@ -68,7 +66,7 @@ const TOLERATED_CT_ISSUES = 4;
 /** 山登りの先行 1 回の足切り（いまの最良に対する割合） */
 const REFINE_PREFILTER = 0.85;
 
-export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 60, keep1: 900, runs1: 1, keep2: 12, runs2: 10, maxCandidates: 20000 };
+export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 60, keep1: 300, runs1: 1, keep2: 12, runs2: 10, maxCandidates: 20000 };
 
 export type SearchPhase = 'generate' | 'quick' | 'refine' | 'verify';
 
@@ -175,7 +173,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
   const cancelled = () => !!args.shouldCancel?.();
   try {
     args.onProgress?.({ phase: 'generate', done: 0, total: 1 });
-    const seedCands: Candidate[] = [...(args.extraSeeds ?? []), ...(args.knowledge ? knowledgeSeeds(characters, args.knowledge) : [])].map((x, i) => {
+    const seedCands: Candidate[] = [...(args.extraSeeds ?? []), ...(args.knowledge ? knowledgeSeeds(characters, args.knowledge, Math.max(1, settings.keep1)) : [])].map((x, i) => {
       const atk = x.stints[x.stints.length - 1]?.characterId;
       const assignment = x.assignment ?? Object.fromEntries(characters.map(c => [c.id, (c.id === atk ? 'attacker' : (args.roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter') as SearchRole]));
       return { id: `seed${i}`, label: describe(characters, x.stints, x.loopStartIndex), assignment, targetSeconds: 0, stints: x.stints, loopStartIndex: x.loopStartIndex, op: 'seed' };
@@ -293,7 +291,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     // 知識辞書の出発点があるときは、総当たりの出発点を減らす（辞書の出発点が、全部そろった形を持つので、広く浅く測る量を減らせる）
     // 辞書の出発点のうち、編成の全員が出場する形だけを数える（一部の人しか辞書にないと、出発点が偏って、予算を絞ると探索が悪化する。胡桃・夜蘭・行秋・鍾離で 36.5k → 13.7k）
     const dictSeeds = args.knowledge ? seedFirst.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label) && characters.every(c => sc.candidate.stints.some(st => st.characterId === c.id))).length : 0;
-    const keep1Eff = dictSeeds > 0 && !args.seedsOnly ? Math.min(Math.max(1, settings.keep1), DICT_KEEP1) : Math.max(1, settings.keep1);
+    const keep1Eff = Math.max(1, settings.keep1);
     const r1 = await mapLimit(poolDedup.slice(0, keep1Eff * 3), settings.runs1, 'quick', keep1Eff, exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);

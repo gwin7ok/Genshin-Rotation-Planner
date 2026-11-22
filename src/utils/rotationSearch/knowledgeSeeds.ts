@@ -14,10 +14,8 @@ export interface KnowledgeSeed {
   assignment: Record<string, SearchRole>;
 }
 
-/** 組み合わせ（キャラごとの運用型の選び方）の上限 */
-const MAX_COMBOS = 400;
-/** 出発点の上限（探索の 1 次の枠は、keep1 の 3 倍まで。それより後ろは使われない）。組み合わせを交互に並べて、この数に切る */
-const MAX_SEEDS = 300;
+/** 出発点の既定の上限（画面の設定「1 段目で残す候補の数」を渡す。組み合わせを交互に並べて、この数に切る） */
+const DEFAULT_MAX_SEEDS = 300;
 
 function product<T>(lists: T[][]): T[][] {
   return lists.reduce<T[][]>((acc, list) => acc.flatMap(a => list.map(x => [...a, x])), [[]]);
@@ -28,7 +26,7 @@ function permutations<T>(xs: T[]): T[][] {
   return xs.flatMap((x, i) => permutations([...xs.slice(0, i), ...xs.slice(i + 1)]).map(r => [x, ...r]));
 }
 
-export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle): KnowledgeSeed[] {
+export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle, maxSeeds: number = DEFAULT_MAX_SEEDS): KnowledgeSeed[] {
   const ids = new Set(characters.map(c => c.id));
   // 編成の条件を満たす運用型が 1 つもないキャラは、出発点に入れない（辞書にないキャラも同じ）
   // 凸数の条件（constellation）も見る。凸数は、編成の設定（未指定は、星 4 = 6 凸・星 5 = 0 凸）
@@ -39,16 +37,16 @@ export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeB
   const members = characters.filter(c => applicable(c).length > 0);
   if (members.length === 0) return [];
   const options = members.map(applicable);
-  const perCombo = combosOf(options).map(combo => variantsOf(characters, members, combo as Archetype[]));
+  const perCombo = combosOf(options, maxSeeds).map(combo => variantsOf(characters, members, combo as Archetype[]));
   // 組み合わせごとの形（並べ方・繰り返し・先頭の違い）を、組み合わせを交互にして並べる（探索の 1 次の枠は、先頭の一部だけ。全部の組み合わせの代表が、先に入るようにする）
   const out = new Map<string, KnowledgeSeed>();
-  for (let round = 0; out.size < MAX_SEEDS; round++) {
+  for (let round = 0; out.size < maxSeeds; round++) {
     let any = false;
     for (const variants of perCombo) {
       if (round >= variants.length) continue;
       any = true;
       const v = variants[round];
-      if (!out.has(v.key) && out.size < MAX_SEEDS) out.set(v.key, v.seed);
+      if (!out.has(v.key) && out.size < maxSeeds) out.set(v.key, v.seed);
     }
     if (!any) break;
   }
@@ -61,9 +59,9 @@ const isKqm = (a: Archetype): boolean => a.evidence.startsWith('KQM');
 /**
  * キャラごとの運用型の選び方（組み合わせ）を並べる。
  * 基準は 2 つ: 全員が先頭の形（手作り・測定済みの形が先頭）と、全員が KQM 由来の形（なければ先頭）。先頭の形が外れても、もう一方が出発点に入る。
- * 続けて、それぞれの基準から 1 人だけ別の運用型にした組み合わせを全部（どの運用型も、必ず 1 回は入る）。残りは、全組み合わせから等間隔に取る（上限 MAX_COMBOS）。
+ * 続けて、それぞれの基準から 1 人だけ別の運用型にした組み合わせを全部（どの運用型も、必ず 1 回は入る）。残りは、全組み合わせから等間隔に取る（上限 maxCombos = 出発点の上限）。
  */
-function combosOf(options: Archetype[][]): Archetype[][] {
+function combosOf(options: Archetype[][], maxCombos: number): Archetype[][] {
   const bases: Archetype[][] = [options.map(o => o[0])];
   const kqmBase = options.map(o => o.find(isKqm) ?? o[0]);
   if (kqmBase.some((a, i) => a !== bases[0][i])) bases.push(kqmBase);
@@ -82,11 +80,11 @@ function combosOf(options: Archetype[][]): Archetype[][] {
     });
   }
   const total = options.reduce((n, o) => n * o.length, 1);
-  const rest = Math.max(0, MAX_COMBOS - list.length);
+  const rest = Math.max(0, maxCombos - list.length);
   const seen = new Set(list.map(c => c.map((a, i) => i + ':' + options[i].indexOf(a)).join('|')));
   const all = product(options) as Archetype[][];
   const step = total / Math.max(1, rest);
-  for (let x = 0; x < total && list.length < MAX_COMBOS; x += Math.max(1, step)) {
+  for (let x = 0; x < total && list.length < maxCombos; x += Math.max(1, step)) {
     const c = all[Math.floor(x)];
     const k = c.map((a, i) => i + ':' + options[i].indexOf(a)).join('|');
     if (seen.has(k)) continue;

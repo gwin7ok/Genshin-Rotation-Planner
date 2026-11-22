@@ -27,6 +27,8 @@ export interface Archetype {
 
 export interface CharacterKnowledge {
   characterId: string;
+  /** 原神 Wiki（wikiwiki.jp）の、そのキャラのページ。書き出し時に build-knowledge.ts が付ける（手で書かない） */
+  wikiUrl?: string;
   archetypes: Archetype[];
 }
 

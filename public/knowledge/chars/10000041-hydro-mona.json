@@ -3,6 +3,36 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A2%E3%83%8A",
  "archetypes": [
   {
+   "name": "Q→通常",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "n"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）"
+  },
+  {
+   "name": "E→通常→重撃（層を 3 つ）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "ca"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）"
+  },
+  {
    "name": "Q のあと 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,77 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%94%BE%E6%B5%AA%E8%80%85",
  "archetypes": [
   {
+   "name": "E のあと 重撃を繰り返す（重撃型）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 浮遊中は重撃にスタミナを使わず、高速で連打できる（探索の比較なし）"
+  },
+  {
+   "name": "E のあと 通常2→重撃を繰り返す（混成型）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    6,
+    7,
+    8
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 重撃と通常 2 発を繰り返し、通常 3 打目を重撃でキャンセルするコンボ（探索の比較なし）"
+  },
+  {
+   "name": "E→重撃→通常を繰り返す（砂上型）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    18,
+    22
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 浮遊後の初回攻撃に重撃を挟む（探索の比較なし）"
+  },
+  {
+   "name": "E→通常を繰り返す→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    18,
+    22
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 浮遊→通常攻撃連打→元素爆発（空居力消費後）を繰り返す基本の運用（探索の比較なし）"
+  },
+  {
    "name": "重撃 3 回・E のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%A1%8C%E7%A7%8B",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発→スキルの順だと、粒子を安定して回収できる（探索の比較なし）"
+  },
+  {
    "name": "E・ダッシュ・Q",
    "role": "supporter",
    "slot": 20,

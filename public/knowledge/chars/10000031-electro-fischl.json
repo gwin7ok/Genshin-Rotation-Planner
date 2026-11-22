@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A3%E3%83%83%E3%82%B7%E3%83%A5%E3%83%AB",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし）"
+  },
+  {
    "name": "Q だけ",
    "role": "supporter",
    "slot": 10,

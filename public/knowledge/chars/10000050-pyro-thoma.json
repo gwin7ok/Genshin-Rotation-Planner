@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%88%E3%83%BC%E3%83%9E",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）"
+  },
+  {
+   "name": "Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）"
+  },
+  {
    "name": "e q の出場",
    "role": "supporter",
    "slot": 30,

@@ -3,6 +3,44 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%8F%E3%82%A4%E3%82%BC%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→落下→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E→重撃（鏡の補充）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "ca"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）"
+  },
+  {
    "name": "Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

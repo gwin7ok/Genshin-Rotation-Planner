@@ -36,6 +36,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000070-hydro', // ニィロウ
     archetypes: [
+      { name: 'E×3', role: 'supporter', slot: 10, use: ['e', 'e', 'e'], evidence: 'Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）' },
       { name: 'E×4', role: 'supporter', slot: 20, use: ['e', 'e', 'e', 'e'], evidence: '手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる' },
     ],
   },
@@ -50,6 +51,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000089-hydro', // フリーナ
     archetypes: [
+      { name: '重撃→通常4→重撃', role: 'supporter', slot: 10, use: ['ca', 'n', 'n', 'n', 'n', 'ca'], evidence: 'Wiki 本文のコンボの記述: サロンメンバーを出した状態で控えに回りたいので、重撃→通常 4 回→重撃で効果を 6 回使い切る（探索の比較なし）' },
       { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     
       { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
@@ -82,6 +84,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000032-pyro', // ベネット
     archetypes: [
+      { name: 'Q→E', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発→スキルの順（吸収まで待つか、裏で受け取る）（探索の比較なし）' },
     
       { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     
@@ -92,6 +95,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000025-hydro', // 行秋
     archetypes: [
+      { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発→スキルの順だと、粒子を安定して回収できる（探索の比較なし）' },
       { name: 'E・ダッシュ・Q', role: 'supporter', slot: 20, use: ['e', 'dash', 'q'], evidence: '手組み「雷電ナショナル」・探索の上位' },
       { name: 'E・Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '探索の上位' },
     ],
@@ -108,6 +112,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000046-pyro', // 胡桃
     archetypes: [
+      { name: 'Q→E→（通常2→重撃）×n', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [8, 9, 10], evidence: 'Wiki 本文のコンボの記述: 同上（爆発を先に使う形）（探索の比較なし）' },
+      { name: 'E→（通常2→重撃）×n', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca'], fillRepeat: [8, 9, 10, 11], evidence: 'Wiki 本文のコンボの記述: 理論上最大火力のコンボ: スキル→N2C×n（最大 11、現実的には 8〜10）→爆発（探索の比較なし）' },
       { name: 'E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca'], fillRepeat: [4, 5, 6], evidence: '実測（胡桃・行秋・香菱・ベネット、標準ビルド）: 辞書なしの探索の 1 位が 胡桃[E N C ×5] 32.5k。辞書ありは同じ結果を 228 秒 → 119 秒で出した（DPS は同じ）。Wiki の N2CD は、標準ビルドでは上位に出なかった' },
       { name: '通常攻撃・E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['n', 'e'], fill: ['n', 'ca'], fillRepeat: [5, 6], evidence: '編成例の探索（Overvape 編成）の上位に出る形（93.6k）。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' },
     ],
@@ -131,6 +137,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000031-electro', // フィッシュル
     archetypes: [
+      { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし）' },
     
       { name: 'Q だけ', role: 'supporter', slot: 10, use: ['q'], evidence: '手組み「激化刻晴」' },
       { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '探索の上位' },
@@ -159,11 +166,13 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   // ── 星電導サンドローネ（八重神子・ニコ・七七・サンドローネ）。手組み 151.0k ──
   {
     characterId: '10000058-electro', // 八重神子
-    archetypes: [{ name: 'E×3', role: 'supporter', slot: 10, use: ['e', 'e', 'e'], evidence: '手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ）' }],
+    archetypes: [
+      { name: 'E×3→Q→E×3', role: 'subAttacker', slot: 20, use: ['e', 'e', 'e', 'q', 'e', 'e', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル設置で追加雷撃×3→爆発で CT リセット→スキル設置で追加雷撃×3（探索の比較なし）' },{ name: 'E×3', role: 'supporter', slot: 10, use: ['e', 'e', 'e'], evidence: '手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ）' }],
   },
   {
     characterId: '10000131-pyro', // ニコ
     archetypes: [
+      { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発の順番を守る（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     { name: 'E', role: 'supporter', slot: 30, use: ['e'], evidence: '手組み「星電導サンドローネ」' }],
   },
@@ -200,6 +209,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000076-anemo',
     archetypes: [
+      { name: 'E→重撃2→Q', role: 'supporter', slot: 10, use: ['e', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 1 凸すれば、スキル直当て→特殊重撃×2→爆発（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
@@ -208,12 +218,14 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000096-pyro',
     archetypes: [
+      { name: 'E→重撃→Q のあと 通常 6 段を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'q'], fill: ['n', 'n', 'n', 'n', 'n', 'n'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）' },
       { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     ],
   },
   {
     characterId: '10000003-anemo',
     archetypes: [
+      { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: 他キャラのスキル→ジンに交代して受け取り→スキル→爆発（探索の比較なし）' },
       { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
@@ -254,6 +266,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000091-geo',
     archetypes: [
+      { name: 'E→通常→E', role: 'attacker', slot: 40, use: ['e', 'n', 'e'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: スキル→通常→スキルと繋ぐと、最大スタックで戦える（探索の比較なし）' },
       { name: 'Q・長押し E 2 回・通常攻撃', role: 'attacker', slot: 40, use: ['q', 'e_hold@4.41', 'e_hold', 'n', 'dash', 'n'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
   },
@@ -266,6 +279,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000123-pyro',
     archetypes: [
+      { name: 'E→Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル始動→爆発→急降下か爪攻撃（探索の比較なし）' },
       { name: 'E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     ],
   },
@@ -298,6 +312,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000078-dendro',
     archetypes: [
+      { name: 'E→落下→Q', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）' },
+      { name: 'Q→E→重撃（鏡の補充）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）' },
       { name: 'Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['n'], fillRepeat: [12, 18], evidence: '編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）' },
     ],
   },
@@ -317,6 +333,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000110-electro',
     archetypes: [
+      { name: 'E→重撃', role: 'attacker', slot: 40, use: ['e', 'ca'], evidence: 'Wiki 本文のコンボの記述: 特殊重撃の命中で固有天賦が発動するので、スキル→重撃を心がける（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ヴァレサ・イアンサ・閑雲・フリーナ）の上位に出る形。実測: 最短の設定で 32.1k → 32.1k（同じ）' },
     ],
   },
@@ -371,6 +388,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000029-pyro',
     archetypes: [
+      { name: 'E→Q→通常→重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 通常→重撃をキャンセルを使って繰り返す（探索の比較なし）' },
       { name: 'E・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（クレー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.7k → 37.7k' },
     ],
   },
@@ -383,6 +401,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000041-hydro',
     archetypes: [
+      { name: 'Q→通常', role: 'attacker', slot: 40, use: ['q', 'n'], evidence: 'Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）' },
+      { name: 'E→通常→重撃（層を 3 つ）', role: 'attacker', slot: 40, use: ['e', 'n', 'ca'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）' },
       { name: 'Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k' },
     ],
   },
@@ -416,12 +436,17 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000062-cryo',
     archetypes: [
+      { name: 'Q→E', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 交代してから、爆発→スキルのサポーター運用が強力（探索の比較なし）' },
       { name: 'E・ジャンプ・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'jump', 'q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（アーロイ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 26.2k' },
     ],
   },
   {
     characterId: '10000075-anemo',
     archetypes: [
+      { name: 'E のあと 重撃を繰り返す（重撃型）', role: 'attacker', slot: 40, use: ['e'], fill: ['ca'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: 浮遊中は重撃にスタミナを使わず、高速で連打できる（探索の比較なし）' },
+      { name: 'E のあと 通常2→重撃を繰り返す（混成型）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca'], fillRepeat: [6, 7, 8], evidence: 'Wiki 本文のコンボの記述: 重撃と通常 2 発を繰り返し、通常 3 打目を重撃でキャンセルするコンボ（探索の比較なし）' },
+      { name: 'E→重撃→通常を繰り返す（砂上型）', role: 'attacker', slot: 40, use: ['e', 'ca'], fill: ['n'], fillRepeat: [14, 18, 22], evidence: 'Wiki 本文のコンボの記述: 浮遊後の初回攻撃に重撃を挟む（探索の比較なし）' },
+      { name: 'E→通常を繰り返す→Q', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [14, 18, 22], evidence: 'Wiki 本文のコンボの記述: 浮遊→通常攻撃連打→元素爆発（空居力消費後）を繰り返す基本の運用（探索の比較なし）' },
       { name: '重撃 3 回・E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['ca', 'ca', 'ca', 'e'], fill: ['n'], fillRepeat: [17, 19, 21], evidence: '自動編成（放浪者 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.2k → 36.2k' },
     ],
   },
@@ -436,18 +461,21 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000104-anemo',
     archetypes: [
+      { name: 'E→重撃→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 先にスキル→重撃を撃ち切ってから、爆発を使う（探索の比較なし）' },
       { name: 'E のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['ca'], fillRepeat: [4, 5], evidence: '自動編成（チャスカ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.0k → 49.9k' },
     ],
   },
   {
     characterId: '10000113-anemo',
     archetypes: [
+      { name: 'Q→E', role: 'attacker', slot: 40, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発後は元素熟知が上がるので、爆発→スキル攻撃の立ち回りが強力（探索の比較なし）' },
       { name: 'E・重撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'ca', 'ca'], fill: ['n'], fillRepeat: [10, 12, 14], evidence: '自動編成（イファ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.5k → 27.5k' },
     ],
   },
   {
     characterId: '10000114-cryo',
     archetypes: [
+      { name: '通常5→Q のあと 通常を繰り返す', role: 'attacker', slot: 40, use: ['n', 'n', 'n', 'n', 'n', 'q'], fill: ['n'], fillRepeat: [12, 15, 18], evidence: 'Wiki 本文のコンボの記述: 通常 5 段→爆発→次の通常攻撃で、後隙をキャンセルする（探索の比較なし）' },
       { name: 'E・Q・通常攻撃・重撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'ca'], fill: ['n'], fillRepeat: [15, 17, 19], evidence: '自動編成（スカーク + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.4k → 49.6k' },
     ],
   },
@@ -497,6 +525,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000015-cryo',
     archetypes: [
+      { name: 'E→Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発（溶解編成の立ち回り）（探索の比較なし）' },
       { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k' },
     ],
   },
@@ -534,12 +563,15 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000050-pyro',
     archetypes: [
+      { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）' },
+      { name: 'Q→E', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（トーマ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.5k → 38.6k' },
     ],
   },
   {
     characterId: '10000055-geo',
     archetypes: [
+      { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発→スキルで、旗指物の効果を乗せたスキルが撃てる（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（ゴロー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.7k → 37.8k' },
     ],
   },
@@ -553,12 +585,14 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000061-dendro',
     archetypes: [
+      { name: '長押しE→E', role: 'supporter', slot: 10, use: ['e_hold', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル長押し→再発動で、印を 2 つ得られる（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（綺良々 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.4k → 41.2k' },
     ],
   },
   {
     characterId: '10000063-cryo',
     archetypes: [
+      { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→他の氷キャラが攻撃、の順（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k' },
     ],
   },
@@ -595,6 +629,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000082-dendro',
     archetypes: [
+      { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→スキル→キャラチェンジで、粒子を効率よく分配（探索の比較なし）' },
       { name: 'q の出場', role: 'supporter', slot: 10, use: ['q'], evidence: '自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k' },
     ],
   },
@@ -663,6 +698,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000132-anemo',
     archetypes: [
+      { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→追加スキルの順で、粒子を無駄にしない（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（プルーネ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 54.8k → 53.5k' },
     ],
   },
@@ -675,6 +711,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000150-cryo',
     archetypes: [
+      { name: 'E→Q→特殊スキル', role: 'subAttacker', slot: 20, use: ['e', 'q', 'e_recast'], evidence: 'Wiki 本文のコンボの記述: 「雪鳥の夢」と「春の華」のバフを両方乗せるなら、スキル→爆発→特殊スキル（探索の比較なし）' },
+      { name: 'Q→特殊スキル', role: 'subAttacker', slot: 20, use: ['q', 'e_recast'], evidence: 'Wiki 本文のコンボの記述: スキルの代わりに、爆発→特殊スキルでもよい（探索の比較なし）' },
+      { name: 'E→特殊スキル', role: 'subAttacker', slot: 20, use: ['e', 'e_recast'], evidence: 'Wiki 本文のコンボの記述: 基本は、スキル→特殊スキル（星反応のダメージが出る）（探索の比較なし）' },
       { name: 'q e e_recast の出場', role: 'supporter', slot: 30, use: ['q', 'e', 'e_recast'], evidence: '自動編成（オデット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 52.7k → 55.4k' },
     ],
   },
@@ -851,6 +890,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000099-dendro',
     archetypes: [
+      { name: 'E→Q のあと 通常1→重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'ca'], fillRepeat: [6, 8, 10], evidence: 'Wiki 本文のコンボの記述: 通常 1 段→重撃のループが一番使いやすい（探索の比較なし）' },
       { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキル・爆発で自己強化して通常攻撃を振るメインアタッカー型' },
     
       { name: 'E・Q（燃焼サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 燃焼サブアタッカー型。スキル・爆発の大火力を押し付ける' },
@@ -905,6 +945,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000100-geo', // カチーナ
     archetypes: [
+      { name: 'E→Q（搭乗せず）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: 搭乗中の攻撃をせず、スキル→爆発とつなぎ続ける（探索の比較なし）' },
       { name: 'E（設置・控えから攻撃）', role: 'supporter', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: スキルで出す乗り物は、控えでも設置物として戦える' },
       { name: 'E のあと 通常攻撃を繰り返す（アタッカー型）', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 乗って通常攻撃扱いで戦うアタッカー型' },
     ],

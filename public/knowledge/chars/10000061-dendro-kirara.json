@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%B6%BA%E8%89%AF%E3%80%85",
  "archetypes": [
   {
+   "name": "長押しE→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル長押し→再発動で、印を 2 つ得られる（探索の比較なし）"
+  },
+  {
    "name": "e q の出場",
    "role": "supporter",
    "slot": 30,

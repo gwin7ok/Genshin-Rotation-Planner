@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%BC%E3%83%AD%E3%82%A4",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 交代してから、爆発→スキルのサポーター運用が強力（探索の比較なし）"
+  },
+  {
    "name": "E・ジャンプ・Q のあと 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

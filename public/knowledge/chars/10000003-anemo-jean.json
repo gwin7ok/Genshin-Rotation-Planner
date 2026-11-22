@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B8%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 他キャラのスキル→ジンに交代して受け取り→スキル→爆発（探索の比較なし）"
+  },
+  {
    "name": "E だけ",
    "role": "supporter",
    "slot": 10,

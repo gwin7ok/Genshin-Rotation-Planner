@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%95%E3%82%A1",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発後は元素熟知が上がるので、爆発→スキル攻撃の立ち回りが強力（探索の比較なし）"
+  },
+  {
    "name": "E・重撃のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

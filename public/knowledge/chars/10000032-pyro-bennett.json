@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%99%E3%83%8D%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発→スキルの順（吸収まで待つか、裏で受け取る）（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 10,

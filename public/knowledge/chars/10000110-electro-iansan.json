@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%82%A2%E3%83%B3%E3%82%B5",
  "archetypes": [
   {
+   "name": "E→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 特殊重撃の命中で固有天賦が発動するので、スキル→重撃を心がける（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 20,

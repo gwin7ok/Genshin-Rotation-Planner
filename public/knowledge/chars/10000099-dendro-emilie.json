@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A8%E3%83%9F%E3%83%AA%E3%82%A8",
  "archetypes": [
   {
+   "name": "E→Q のあと 通常1→重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    6,
+    8,
+    10
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常 1 段→重撃のループが一番使いやすい（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

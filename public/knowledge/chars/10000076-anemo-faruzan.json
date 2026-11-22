@@ -3,6 +3,18 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A1%E3%83%AB%E3%82%B6%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→重撃2→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 1 凸すれば、スキル直当て→特殊重撃×2→爆発（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 20,

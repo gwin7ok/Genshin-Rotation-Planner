@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%89%E3%82%A5%E3%83%AA%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル始動→爆発→急降下か爪攻撃（探索の比較なし）"
+  },
+  {
    "name": "E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

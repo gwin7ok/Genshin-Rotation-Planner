@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%B4%E3%82%A3%E3%82%A2",
  "archetypes": [
   {
+   "name": "E→通常→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→通常→スキルと繋ぐと、最大スタックで戦える（探索の比較なし）"
+  },
+  {
    "name": "Q・長押し E 2 回・通常攻撃",
    "role": "attacker",
    "slot": 40,

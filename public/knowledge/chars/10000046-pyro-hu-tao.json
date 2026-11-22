@@ -3,6 +3,46 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%83%A1%E6%A1%83",
  "archetypes": [
   {
+   "name": "Q→E→（通常2→重撃）×n",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    8,
+    9,
+    10
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 同上（爆発を先に使う形）（探索の比較なし）"
+  },
+  {
+   "name": "E→（通常2→重撃）×n",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 理論上最大火力のコンボ: スキル→N2C×n（最大 11、現実的には 8〜10）→爆発（探索の比較なし）"
+  },
+  {
    "name": "E のあと 通常攻撃 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

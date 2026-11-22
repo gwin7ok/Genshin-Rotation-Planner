@@ -3,6 +3,20 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%8A",
  "archetypes": [
   {
+   "name": "重撃→通常4→重撃",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "ca",
+    "n",
+    "n",
+    "n",
+    "n",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: サロンメンバーを出した状態で控えに回りたいので、重撃→通常 4 回→重撃で効果を 6 回使い切る（探索の比較なし）"
+  },
+  {
    "name": "E だけ",
    "role": "supporter",
    "slot": 10,

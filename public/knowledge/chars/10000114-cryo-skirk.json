@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B9%E3%82%AB%E3%83%BC%E3%82%AF",
  "archetypes": [
   {
+   "name": "通常5→Q のあと 通常を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    12,
+    15,
+    18
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常 5 段→爆発→次の通常攻撃で、後隙をキャンセルする（探索の比較なし）"
+  },
+  {
    "name": "E・Q・通常攻撃・重撃のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%AC%E3%83%83%E3%82%AD%E3%83%BC%E3%83%8E",
  "archetypes": [
   {
+   "name": "E→重撃→Q のあと 通常 6 段を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）"
+  },
+  {
    "name": "E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,17 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8B%E3%82%A3%E3%83%AD%E3%82%A6",
  "archetypes": [
   {
+   "name": "E×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）"
+  },
+  {
    "name": "E×4",
    "role": "supporter",
    "slot": 20,

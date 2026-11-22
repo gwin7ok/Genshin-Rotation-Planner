@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AF%E3%83%AC%E3%83%BC",
  "archetypes": [
   {
+   "name": "E→Q→通常→重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常→重撃をキャンセルを使って繰り返す（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃 2 回 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

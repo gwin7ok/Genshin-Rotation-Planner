@@ -10,6 +10,7 @@ import { calculateRotation, type CalculatedRotation } from '../rotationCalculato
 import type { Candidate } from './candidates';
 import { mapAction } from '../gcsim/actionMapping';
 import { CHARGE_REQUIRES_ATTACK } from '../gcsim/chargeRules';
+import { CT_WARNING_ISSUE_PATTERN } from '../ctMarks';
 
 /**
  * 重撃の直前が通常攻撃でない並び（gcsim は実行エラーにする）があるか。buildGcsimConfig の検査と同じ規則を、gcsim に渡す前に見る。
@@ -122,7 +123,8 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
       rejectedBy['重撃の直前が通常攻撃でない'] = (rejectedBy['重撃の直前が通常攻撃でない'] ?? 0) + 1;
       continue;
     }
-    const bad = result.validationIssues.filter(v => v.severity !== 'info');
+    // 捨てるのは、CT 違反（スキル・爆発の CT 中の使用）などだけ。画面の「CT 警告」（発動バフ・特殊スキルの受付時間外など。gcsim の計算は止まらない）は、捨てる理由にしない
+    const bad = result.validationIssues.filter(v => v.severity !== 'info' && !CT_WARNING_ISSUE_PATTERN.test(v.id) && !v.id.startsWith('passive_ct_'));
     const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
     if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {
       rejected++;

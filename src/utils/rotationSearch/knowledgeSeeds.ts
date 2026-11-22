@@ -55,17 +55,35 @@ export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeB
   return [...out.values()];
 }
 
+/** KQM Sim Database 由来の形か（evidence の書き出しで見分ける） */
+const isKqm = (a: Archetype): boolean => a.evidence.startsWith('KQM');
+
 /**
- * キャラごとの運用型の選び方（組み合わせ）を並べる。先頭は、全員が最初の運用型の組み合わせ。
- * 次に、1 人だけ別の運用型にした組み合わせを全部（どの運用型も、必ず 1 回は入る）。残りは、全組み合わせから等間隔に取る（上限 MAX_COMBOS）。
+ * キャラごとの運用型の選び方（組み合わせ）を並べる。
+ * 基準は 2 つ: 全員が先頭の形（手作り・測定済みの形が先頭）と、全員が KQM 由来の形（なければ先頭）。先頭の形が外れても、もう一方が出発点に入る。
+ * 続けて、それぞれの基準から 1 人だけ別の運用型にした組み合わせを全部（どの運用型も、必ず 1 回は入る）。残りは、全組み合わせから等間隔に取る（上限 MAX_COMBOS）。
  */
 function combosOf(options: Archetype[][]): Archetype[][] {
-  const base = options.map(o => o[0]);
-  const list: Archetype[][] = [base];
-  options.forEach((o, i) => { for (let j = 1; j < o.length; j++) list.push(base.map((a, k) => (k === i ? o[j] : a))); });
+  const bases: Archetype[][] = [options.map(o => o[0])];
+  const kqmBase = options.map(o => o.find(isKqm) ?? o[0]);
+  if (kqmBase.some((a, i) => a !== bases[0][i])) bases.push(kqmBase);
+  const list: Archetype[][] = [...bases];
+  const seenKey = (c: Archetype[]) => c.map(a => a.name).join('|');
+  const seenOfat = new Set(list.map(seenKey));
+  for (const base of bases) {
+    options.forEach((o, i) => {
+      for (let j = 0; j < o.length; j++) {
+        if (o[j] === base[i]) continue;
+        const c = base.map((a, k) => (k === i ? o[j] : a));
+        if (seenOfat.has(seenKey(c))) continue;
+        seenOfat.add(seenKey(c));
+        list.push(c);
+      }
+    });
+  }
   const total = options.reduce((n, o) => n * o.length, 1);
   const rest = Math.max(0, MAX_COMBOS - list.length);
-  const seen = new Set(list.map(c => c.map(a => options.findIndex(o => o.includes(a)) + ':' + a.name).join('|')));
+  const seen = new Set(list.map(c => c.map((a, i) => i + ':' + options[i].indexOf(a)).join('|')));
   const all = product(options) as Archetype[][];
   const step = total / Math.max(1, rest);
   for (let x = 0; x < total && list.length < MAX_COMBOS; x += Math.max(1, step)) {

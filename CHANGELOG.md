@@ -6,6 +6,16 @@
 
 ## [Unreleased]
 
+## [1.16.0] - 2026-11-23
+
+### 追加
+- **ローテーション自動探索**: 編成から、DPS の高いローテーションを自動で探す機能を追加（ヘッダーのボタンから開く）。
+  - 探索は 2 つのモード: 「編成から探索」と、「いまのローテーションから探索」（いまの形を出発点に、より DPS の高い形を探す）。
+  - 探索の出発点には、キャラごとの使い方を集めた「知識辞書」（全 136 キャラ。Wiki の運用の記述と、KQM の公開設定から作成）を使う。凸数に合う使い方だけが選ばれ、同じキャラが 1 周に複数回出る形にも対応。
+  - 探索の条件は、DPS 計算と同じ設定（爆発のエネルギー・敵の粒子・周数・敵）。キャラの役割（アタッカー・サブアタッカー・サポーター）は、探索の画面とデータベース管理の画面で変更できる。
+  - 結果は、一番上の行に「いまのローテーション」を表示し、順位表と比べられる。DPS・長さ・粒子の数のほか、メイン画面と同じ記法のローテーションと、キャラごとの爆発のエネルギー待ち（待ちがあるキャラは赤）を表示する。選んだ候補は、ガントチャートに置ける。
+  - 「探索の設定」（1 段目で残す候補の数など）を画面で変えられる。既定は、1 段目で残す候補の数 300。
+
 ## [1.15.1] - 2026-11-19
 
 ### 修正
@@ -397,7 +407,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.1...v1.16.0
 [1.15.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...v1.15.1
 [1.15.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...v1.15.0
 [1.14.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.0...v1.14.1

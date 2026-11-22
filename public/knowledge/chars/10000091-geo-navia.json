@@ -3,6 +3,21 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%B4%E3%82%A3%E3%82%A2",
  "archetypes": [
   {
+   "name": "e_hold→n×3→dash→n×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 56 件・平均 61.9k・最大 84.0k。e_hold n×3 dash n×2（探索の比較なし）"
+  },
+  {
    "name": "E→通常→E",
    "role": "attacker",
    "slot": 40,

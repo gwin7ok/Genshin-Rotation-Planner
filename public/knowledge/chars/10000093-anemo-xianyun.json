@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%96%91%E9%9B%B2",
  "archetypes": [
   {
+   "name": "e→lp→n→q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "lp",
+    "n",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 38 件・平均 58.8k・最大 90.8k。e lp n q（探索の比較なし）"
+  },
+  {
+   "name": "e→lp→q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "lp",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 241 件・平均 76.5k・最大 663.6k。e lp q（探索の比較なし）"
+  },
+  {
    "name": "Q だけ",
    "role": "supporter",
    "slot": 30,

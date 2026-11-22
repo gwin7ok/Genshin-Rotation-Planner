@@ -3,6 +3,17 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%A6%99%E8%8F%B1",
  "archetypes": [
   {
+   "name": "q→e→dash",
+   "role": "attacker",
+   "slot": 30,
+   "use": [
+    "q",
+    "e",
+    "dash"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 154 件・平均 61.9k・最大 219.9k。q e dash（探索の比較なし）"
+  },
+  {
    "name": "主役（E・Q のあと通常攻撃）",
    "role": "attacker",
    "slot": 30,

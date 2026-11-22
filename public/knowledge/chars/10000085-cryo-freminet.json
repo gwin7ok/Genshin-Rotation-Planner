@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AC%E3%83%9F%E3%83%8D",
  "archetypes": [
   {
+   "name": "e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "n",
+    "n",
+    "e",
+    "e",
+    "n",
+    "n",
+    "e",
+    "n",
+    "e",
+    "n",
+    "n",
+    "e",
+    "n",
+    "e",
+    "n",
+    "n",
+    "e"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 56.3k・最大 81.0k。e q n×2 e×2 n×2 e n e n×2 e n e n×2 e（探索の比較なし）"
+  },
+  {
    "name": "E・通常攻撃のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

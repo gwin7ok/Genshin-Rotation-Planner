@@ -3,6 +3,36 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%98%89%E6%98%8E",
  "archetypes": [
   {
+   "name": "q→n×2→e→hp→n→e→hp→dash",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "n",
+    "n",
+    "e",
+    "hp",
+    "n",
+    "e",
+    "hp",
+    "dash"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 66.6k・最大 79.3k。q n×2 e hp n e hp dash（探索の比較なし）"
+  },
+  {
+   "name": "q→e→hp→e→hp",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "hp",
+    "e",
+    "hp"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 85.0k・最大 103.6k。q e hp e hp（探索の比較なし）"
+  },
+  {
    "name": "E・落下・Q のあと E + 落下を繰り返す",
    "role": "attacker",
    "slot": 40,

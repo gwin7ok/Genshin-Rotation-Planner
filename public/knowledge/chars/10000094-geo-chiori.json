@@ -3,6 +3,17 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8D%83%E7%B9%94",
  "archetypes": [
   {
+   "name": "q→e×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "e"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 86.2k・最大 391.6k。q e×2（探索の比較なし）"
+  },
+  {
    "name": "E→通常2→E の繰り返し",
    "role": "attacker",
    "slot": 40,

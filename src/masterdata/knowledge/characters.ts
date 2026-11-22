@@ -26,6 +26,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000073-dendro', // ナヒーダ
     archetypes: [
+      { name: 'e→n→ca', role: 'supporter', slot: 10, use: ['e', 'n', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 83 件・平均 63.5k・最大 98.3k。e n ca（探索の比較なし）' },
       { name: 'E→通常4→重撃', role: 'supporter', slot: 10, use: ['e', 'n', 'n', 'n', 'n', 'ca'], evidence: 'Wiki 本文のコンボの記述: 通常 4 段→重撃のコンボで、合計 3 回の元素付着ができる（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], evidence: '手組み「月開花」の出場（E のあと通常攻撃 1 回、Q）' },
       { name: 'E と Q（通常攻撃なし）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '探索の上位に出る形' },
@@ -36,6 +37,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000070-hydro', // ニィロウ
     archetypes: [
+      { name: 'e→n×2→e', role: 'supporter', slot: 10, use: ['e', 'n', 'n', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 57 件・平均 94.7k・最大 1115.1k。e n×2 e（探索の比較なし）' },
       { name: 'E×3', role: 'supporter', slot: 10, use: ['e', 'e', 'e'], evidence: 'Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）' },
       { name: 'E×4', role: 'supporter', slot: 20, use: ['e', 'e', 'e', 'e'], evidence: '手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる' },
     ],
@@ -43,6 +45,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000119-dendro', // ラウマ
     archetypes: [
+      { name: 'n→e→q', role: 'subAttacker', slot: 40, use: ['n', 'e', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 13 件・平均 131.0k・最大 141.3k。n e q（探索の比較なし）' },
+      { name: 'n→e_hold→q', role: 'subAttacker', slot: 40, use: ['n', 'e_hold', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 9 件・平均 223.5k・最大 1059.0k。n e_hold q（探索の比較なし）' },
       { name: '長押し E と Q', role: 'subAttacker', slot: 40, use: ['e_hold', 'q'], evidence: '手組み「月開花」。長押しで得た詠月を Q が消費する（+26k の実測）' },
     ],
   },
@@ -60,6 +64,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000107-cryo', // シトラリ
     archetypes: [
+      { name: 'e→q→n', role: 'supporter', slot: 20, use: ['e', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 50 件・平均 110.1k・最大 210.8k。e q n（探索の比較なし）' },
+      { name: 'e→n', role: 'supporter', slot: 20, use: ['e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 53 件・平均 297.8k・最大 2063.3k。e n（探索の比較なし）' },
     
       { name: 'E・Q・E', role: 'supporter', slot: 20, use: ['e', 'q', 'e'], evidence: '手組み「蒸発フリーナ」' },
       { name: 'Q のあと E・通常攻撃 2 回・E', role: 'supporter', slot: 20, use: ['q', 'e', 'n', 'n', 'e'], evidence: '探索の上位（71.8k）' },
@@ -68,6 +74,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000023-pyro', // 香菱
     archetypes: [
+      { name: 'q→e→dash', role: 'attacker', slot: 30, use: ['q', 'e', 'dash'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 154 件・平均 61.9k・最大 219.9k。q e dash（探索の比較なし）' },
       { name: '主役（E・Q のあと通常攻撃）', role: 'attacker', slot: 30, use: ['e', 'q'], fill: ['n'], fillRepeat: [1, 3, 12], lead: ['n'], evidence: '探索の上位に、香菱[E Q N×12 …] の形が出る（蒸発の火力役）' },
       { name: 'E と Q だけ', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '手組み「蒸発フリーナ」・「雷電ナショナル」' },
     ],
@@ -95,6 +102,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000025-hydro', // 行秋
     archetypes: [
+      { name: 'e→dash→n×2', role: 'subAttacker', slot: 20, use: ['e', 'dash', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 60 件・平均 59.4k・最大 102.5k。e dash n×2（探索の比較なし）' },
+      { name: 'n→e→dash→n×2', role: 'subAttacker', slot: 20, use: ['n', 'e', 'dash', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 64 件・平均 69.2k・最大 167.7k。n e dash n×2（探索の比較なし）' },
       { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発→スキルの順だと、粒子を安定して回収できる（探索の比較なし）' },
       { name: 'E・ダッシュ・Q', role: 'supporter', slot: 20, use: ['e', 'dash', 'q'], evidence: '手組み「雷電ナショナル」・探索の上位' },
       { name: 'E・Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '探索の上位' },
@@ -103,6 +112,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000052-electro', // 雷電将軍
     archetypes: [
+      { name: 'q→n×4→e→n×4→dash→n×4→dash→n×4', role: 'attacker', slot: 40, use: ['q', 'n', 'n', 'n', 'n', 'e', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 153 件・平均 71.4k・最大 787.5k。q n×4 e n×4 dash n×4 dash n×4（探索の比較なし）' },
       { name: '爆発のあと通常攻撃（ダッシュキャンセル）', role: 'attacker', slot: 40, use: ['q'], fill: ['n', 'n', 'n', 'n', 'n', 'dash'], fillRepeat: [2, 3], lead: ['e'], evidence: '手組み「雷電ナショナル」。最初に E を 1 回だけ使い、Q のあと通常攻撃 5 回 + ダッシュを繰り返す' },
       { name: 'E・Q のあと通常攻撃', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [10, 18, 20], evidence: '探索の上位（雷電[E Q N×18 D …]）' },
     ],
@@ -123,6 +133,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000060-hydro', // 夜蘭
     archetypes: [
+      { name: 'n→e→n', role: 'supporter', slot: 30, use: ['n', 'e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 96 件・平均 71.4k・最大 484.7k。n e n（探索の比較なし）' },
+      { name: 'q→n→e→n', role: 'supporter', slot: 30, use: ['q', 'n', 'e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 109 件・平均 68.4k・最大 353.2k。q n e n（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（水2・凍結溶解・Overvape）の上位に出る形。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' }],
   },
@@ -137,6 +149,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000031-electro', // フィッシュル
     archetypes: [
+      { name: 'n→e', role: 'subAttacker', slot: 20, use: ['n', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 292 件・平均 66.9k・最大 282.6k。n e（探索の比較なし）' },
+      { name: 'n×2→q', role: 'subAttacker', slot: 20, use: ['n', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 537 件・平均 65.3k・最大 282.6k。n×2 q（探索の比較なし）' },
       { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし）' },
     
       { name: 'Q だけ', role: 'supporter', slot: 10, use: ['q'], evidence: '手組み「激化刻晴」' },
@@ -158,6 +172,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000042-electro', // 刻晴
     archetypes: [
+      { name: 'e→q→e→n→ca→n→ca→n→e→n→ca→n→ca', role: 'attacker', slot: 40, use: ['e', 'q', 'e', 'n', 'ca', 'n', 'ca', 'n', 'e', 'n', 'ca', 'n', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 58.8k・最大 69.4k。e q e n ca n ca n e n ca n ca（探索の比較なし）' },
       { name: 'E×2・Q のあと通常攻撃', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n'], fillRepeat: [10, 14, 17], evidence: '探索の上位（刻晴[E×2 N×10 Q]）' },
       { name: 'E×2・通常攻撃・重撃・Q', role: 'attacker', slot: 40, use: ['e', 'e', 'n', 'ca', 'q'], evidence: '手組み「激化刻晴」' },
     ],
@@ -172,6 +187,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000131-pyro', // ニコ
     archetypes: [
+      { name: 'q→e', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 35 件・平均 107.2k・最大 774.7k。q e（探索の比較なし）' },
       { name: 'E→通常', role: 'supporter', slot: 10, use: ['e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ニコ 206 件中 15 件。平均 787.7k（最大 2063.3k。ドゥリン・シトラリ・シロネン編成）（探索の比較なし）' },
       { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発の順番を守る（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
@@ -196,6 +212,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000026-anemo',
     archetypes: [
+      { name: 'E×2→Q→（ジャンプ→落下）×n', role: 'attacker', slot: 40, use: ['e', 'e', 'q', 'jump', 'hp'], fill: ['jump', 'hp'], fillRepeat: [4, 6, 8], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 34 件・平均 65.7k・最大 141.0k。e×2 q jump hp（探索の比較なし）' },
       { name: '落下→通常1→重撃（JET）', role: 'attacker', slot: 40, use: ['q'], fill: ['hp', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Wiki 本文のコンボの記述: 落下攻撃→通常 1→重撃→落下攻撃…のコンボ（通称 JET）（探索の比較なし）' },
       { name: 'ジャンプ→E→落下の繰り返し', role: 'attacker', slot: 40, use: ['q'], fill: ['jump', 'e', 'hp'], fillRepeat: [3, 4, 5], evidence: 'Wiki 本文のコンボの記述: 爆発中の、ジャンプ→スキル→落下攻撃の基本の動き（探索の比較なし）' },
       { name: 'E×2・Q・通常攻撃・重撃のあと 落下を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q', 'n', 'n', 'ca'], fill: ['jump', 'hp'], fillRepeat: [4, 5, 6], evidence: '編成例の探索（魈・閑雲・ファルザン・フリーナ）の上位に出る形。実測: 閑雲編成で 43.2k → 48.4k（207 秒）。条件なしにして、鍾離・ファルザン・ベネットの編成で 19.5k → 33.1k、鍾離・ジン・アルベドの編成で 21.5k → 21.2k（同じ）' },
@@ -204,6 +221,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000093-anemo',
     archetypes: [
+      { name: 'e→lp→n→q', role: 'supporter', slot: 30, use: ['e', 'lp', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 38 件・平均 58.8k・最大 90.8k。e lp n q（探索の比較なし）' },
+      { name: 'e→lp→q', role: 'supporter', slot: 30, use: ['e', 'lp', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 241 件・平均 76.5k・最大 663.6k。e lp q（探索の比較なし）' },
       { name: 'Q だけ', role: 'supporter', slot: 30, use: ['q'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
     ],
   },
@@ -219,6 +238,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000096-pyro',
     archetypes: [
+      { name: 'ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3', role: 'attacker', slot: 40, use: ['ca', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 81.1k・最大 175.3k。ca n×3 dash n×3 dash n×3 dash n×3 dash n×3 dash n×3（探索の比較なし）' },
       { name: 'E→重撃→Q のあと 通常 6 段を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'q'], fill: ['n', 'n', 'n', 'n', 'n', 'n'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）' },
       { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
     ],
@@ -233,6 +253,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000080-cryo',
     archetypes: [
+      { name: 'q→n→e', role: 'supporter', slot: 20, use: ['q', 'n', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 54.8k・最大 98.5k。q n e（探索の比較なし）' },
       { name: '長押し E', role: 'supporter', slot: 20, use: ['e_hold'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
     ],
   },
@@ -252,6 +273,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000103-geo',
     archetypes: [
+      { name: 'e→n×2', role: 'supporter', slot: 20, use: ['e', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 543 件・平均 119.5k・最大 2063.3k。e n×2（探索の比較なし）' },
     
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
@@ -267,6 +289,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000091-geo',
     archetypes: [
+      { name: 'e_hold→n×3→dash→n×2', role: 'attacker', slot: 40, use: ['e_hold', 'n', 'n', 'n', 'dash', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 56 件・平均 61.9k・最大 84.0k。e_hold n×3 dash n×2（探索の比較なし）' },
       { name: 'E→通常→E', role: 'attacker', slot: 40, use: ['e', 'n', 'e'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: スキル→通常→スキルと繋ぐと、最大スタックで戦える（探索の比較なし）' },
       { name: 'Q・長押し E 2 回・通常攻撃', role: 'attacker', slot: 40, use: ['q', 'e_hold@4.41', 'e_hold', 'n', 'dash', 'n'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
     ],
@@ -280,6 +303,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000123-pyro',
     archetypes: [
+      { name: 'e→n→q', role: 'subAttacker', slot: 20, use: ['e', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 41 件・平均 123.7k・最大 1279.7k。e n q（探索の比較なし）' },
       { name: 'E→Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル始動→爆発→急降下か爪攻撃（探索の比較なし）' },
       { name: 'E×2・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     ],
@@ -293,6 +317,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000087-hydro',
     archetypes: [
+      { name: '重撃を繰り返す', role: 'attacker', slot: 40, use: ['ca', 'ca'], fill: ['ca'], fillRepeat: [3, 5], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）' },
+      { name: 'ca→q→e→ca', role: 'attacker', slot: 40, use: ['ca', 'q', 'e', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）' },
+      { name: 'ca→e→ca→q', role: 'attacker', slot: 40, use: ['ca', 'e', 'ca', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）' },
       { name: 'E→Q→特殊重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4], evidence: 'Wiki 本文のコンボの記述: ローテーションの 1 つ。スキル + 爆発→特殊重撃 3 回（凸で 4 回）（探索の比較なし）' },
       { name: '先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca', 'n', 'n'], fillRepeat: [4, 5, 6], lead: ['n'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
     ],
@@ -300,6 +327,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000066-hydro',
     archetypes: [
+      { name: 'e→n×15', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 66 件・平均 49.7k・最大 74.6k。e n×15（探索の比較なし）' },
+      { name: 'e→n×15→q', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 35 件・平均 68.9k・最大 241.3k。e n×15 q（探索の比較なし）' },
       { name: 'Q→E→通常を繰り返す', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n'], fillRepeat: [12, 16, 20], evidence: 'Wiki 本文のコンボの記述: 爆発→スキル→通常の順で、聖遺物のバフも発動する。メイン火力は通常（探索の比較なし）' },
       { name: 'Q・ダッシュ・E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q', 'dash', 'e'], fill: ['n'], fillRepeat: [18, 21, 24], evidence: '編成例の探索（綾人・フリーナ・シトラリ・エスコフィエ）の上位に出る形。実測: 最短の設定で 44.5k → 44.5k（同じ）' },
     ],
@@ -313,6 +342,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000078-dendro',
     archetypes: [
+      { name: 'e_hold→lp→n×2→ca→dash→n×3→ca→dash', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'ca', 'dash', 'n', 'n', 'n', 'ca', 'dash'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 72.5k・最大 94.9k。e_hold lp n×2 ca dash n×3 ca dash（探索の比較なし）' },
+      { name: 'e_hold→lp→n×3→dash→n×3→dash→n×3', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）' },
       { name: 'E→落下→Q', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）' },
       { name: 'Q→E→重撃（鏡の補充）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）' },
       { name: 'Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['n'], fillRepeat: [12, 18], evidence: '編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）' },
@@ -341,6 +372,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000120-electro',
     archetypes: [
+      { name: 'e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n', role: 'attacker', slot: 40, use: ['e', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'e', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 3 件・平均 1080.0k・最大 1463.8k。e n e n q n×3 dash n×3 e n q n×3 dash n×3 e q n（探索の比較なし）' },
+      { name: 'e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4', role: 'attacker', slot: 40, use: ['e', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 4 件・平均 119.5k・最大 149.0k。e n e n q n×4 dash n×4 dash n×2 e n q n×4（探索の比較なし）' },
       { name: 'E→E（特殊）→Q（特殊）のあと 通常 + E + Q', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'n', 'n', 'e', 'q'], fillRepeat: [1, 2], evidence: 'Wiki 本文のコンボの記述: 初動は、スキル→スキル（特殊）→爆発（特殊）。そのあとはスキル→特殊爆発→通常を 2 回繰り返すのが基本（探索の比較なし）' },
       { name: 'Q・E のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], evidence: '編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒' },
     ],
@@ -348,6 +381,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000043-anemo',
     archetypes: [
+      { name: 'n→e→dash', role: 'subAttacker', slot: 30, use: ['n', 'e', 'dash'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 23 件・平均 84.8k・最大 217.3k。n e dash（探索の比較なし）' },
       { name: 'E・通常攻撃・重撃', role: 'subAttacker', slot: 30, use: ['e', 'n', 'n', 'n', 'n', 'ca', 'n', 'n', 'n', 'ca'], evidence: '編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒' },
     ],
   },
@@ -362,6 +396,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000085-cryo',
     archetypes: [
+      { name: 'e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'e', 'e', 'n', 'n', 'e', 'n', 'e', 'n', 'n', 'e', 'n', 'e', 'n', 'n', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 56.3k・最大 81.0k。e q n×2 e×2 n×2 e n e n×2 e n e n×2 e（探索の比較なし）' },
       { name: 'E・通常攻撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n'], fillRepeat: [12, 14, 16], evidence: '編成例の探索（フレミネ・イネファ・フリーナ・エスコフィエ）の上位に出る形。実測: 最短の設定で 59.3k → 59.3k（同じ）' },
     ],
   },
@@ -402,6 +437,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000041-hydro',
     archetypes: [
+      { name: 'e→q→n', role: 'attacker', slot: 40, use: ['e', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 19 件・平均 106.8k・最大 249.1k。e q n（探索の比較なし）' },
+      { name: 'n→e→n', role: 'attacker', slot: 40, use: ['n', 'e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 26 件・平均 99.2k・最大 151.3k。n e n（探索の比較なし）' },
       { name: 'Q→通常', role: 'attacker', slot: 40, use: ['q', 'n'], evidence: 'Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）' },
       { name: 'E→通常→重撃（層を 3 つ）', role: 'attacker', slot: 40, use: ['e', 'n', 'ca'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）' },
       { name: 'Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k' },
@@ -480,6 +517,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000114-cryo',
     archetypes: [
+      { name: 'e_hold→q', role: 'attacker', slot: 40, use: ['e_hold', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 18 件・平均 94.7k・最大 125.5k。e_hold q（探索の比較なし）' },
       { name: '通常5→Q のあと 通常を繰り返す', role: 'attacker', slot: 40, use: ['n', 'n', 'n', 'n', 'n', 'q'], fill: ['n'], fillRepeat: [12, 15, 18], evidence: 'Wiki 本文のコンボの記述: 通常 5 段→爆発→次の通常攻撃で、後隙をキャンセルする（探索の比較なし）' },
       { name: 'E・Q・通常攻撃・重撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'ca'], fill: ['n'], fillRepeat: [15, 17, 19], evidence: '自動編成（スカーク + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.4k → 49.6k' },
     ],
@@ -530,6 +568,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000015-cryo',
     archetypes: [
+      { name: 'e→dash→q', role: 'subAttacker', slot: 20, use: ['e', 'dash', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 87.1k・最大 159.7k。e dash q（探索の比較なし）' },
       { name: 'E→Q', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発（溶解編成の立ち回り）（探索の比較なし）' },
       { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k' },
     ],
@@ -568,6 +607,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000050-pyro',
     archetypes: [
+      { name: 'e→n→q→n', role: 'supporter', slot: 10, use: ['e', 'n', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 18 件・平均 57.0k・最大 72.8k。e n q n（探索の比較なし）' },
       { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）' },
       { name: 'Q→E', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（トーマ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.5k → 38.6k' },
@@ -576,6 +616,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000055-geo',
     archetypes: [
+      { name: 'e→n', role: 'subAttacker', slot: 20, use: ['e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 12 件・平均 104.4k・最大 406.2k。e n（探索の比較なし）' },
       { name: 'Q→E', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発→スキルで、旗指物の効果を乗せたスキルが撃てる（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（ゴロー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.7k → 37.8k' },
     ],
@@ -583,6 +624,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000056-electro',
     archetypes: [
+      { name: 'e→ca→n', role: 'subAttacker', slot: 20, use: ['e', 'ca', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 20 件・平均 56.1k・最大 87.2k。e ca n（探索の比較なし）' },
       { name: 'E→重撃→Q', role: 'subAttacker', slot: 20, use: ['e', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→少し待つ→爆発（裟羅本人にバフを乗せる）。スキル→重撃→爆発で、天狗呪雷の効果を自身で受ける（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（九条裟羅 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 42.0k → 42.6k' },
     ],
@@ -611,18 +653,21 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000068-electro',
     archetypes: [
+      { name: 'e→n×2→dash→n×2', role: 'supporter', slot: 20, use: ['e', 'n', 'n', 'dash', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 24 件・平均 61.2k・最大 81.4k。e n×2 dash n×2（探索の比較なし）' },
       { name: 'q e の出場', role: 'supporter', slot: 20, use: ['q', 'e'], evidence: '自動編成（ドリー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.2k → 41.3k' },
     ],
   },
   {
     characterId: '10000072-hydro',
     archetypes: [
+      { name: 'e→n→q→n', role: 'supporter', slot: 10, use: ['e', 'n', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 14 件・平均 64.2k・最大 100.3k。e n q n（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '自動編成（キャンディス + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.8k → 37.9k' },
     ],
   },
   {
     characterId: '10000074-cryo',
     archetypes: [
+      { name: 'q→n→e', role: 'supporter', slot: 30, use: ['q', 'n', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 36 件・平均 66.6k・最大 116.4k。q n e（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（レイラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.8k → 38.8k' },
     ],
   },
@@ -635,6 +680,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000082-dendro',
     archetypes: [
+      { name: 'e→q→n', role: 'supporter', slot: 10, use: ['e', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 62.6k・最大 81.3k。e q n（探索の比較なし）' },
+      { name: 'e→n→q', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 61.9k・最大 73.5k。e n q（探索の比較なし）' },
       { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→スキル→キャラチェンジで、粒子を効率よく分配（探索の比較なし）' },
       { name: 'q の出場', role: 'supporter', slot: 10, use: ['q'], evidence: '自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k' },
     ],
@@ -648,18 +695,21 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000088-cryo',
     archetypes: [
+      { name: 'e→n→q→n', role: 'supporter', slot: 20, use: ['e', 'n', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 20 件・平均 70.2k・最大 93.5k。e n q n（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（シャルロット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.8k → 44.3k' },
     ],
   },
   {
     characterId: '10000090-pyro',
     archetypes: [
+      { name: 'q→e_hold×3', role: 'supporter', slot: 20, use: ['q', 'e_hold', 'e_hold', 'e_hold'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 53 件・平均 85.6k・最大 787.5k。q e_hold×3（探索の比較なし）' },
       { name: 'e_hold の出場', role: 'supporter', slot: 20, use: ['e_hold'], evidence: '自動編成（シュヴルーズ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.8k → 43.6k' },
     ],
   },
   {
     characterId: '10000094-geo',
     archetypes: [
+      { name: 'q→e×2', role: 'attacker', slot: 40, use: ['q', 'e', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 86.2k・最大 391.6k。q e×2（探索の比較なし）' },
       { name: 'E→通常2→E の繰り返し', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'e'], fillRepeat: [7, 8], evidence: 'Wiki 本文のコンボの記述: [スキル→通常 2 回→スキル]×8（探索の比較なし）' },
       { name: 'E→通常3→E の繰り返し', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'e'], fillRepeat: [5, 6], evidence: 'Wiki 本文のコンボの記述: [スキル→通常 3 回→スキル]×6（探索の比較なし）' },
       { name: 'e e の出場', role: 'supporter', slot: 30, use: ['e', 'e'], evidence: '自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k' },
@@ -680,6 +730,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000115-hydro',
     archetypes: [
+      { name: 'e→n→q', role: 'supporter', slot: 30, use: ['e', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 8 件・平均 78.6k・最大 99.2k。e n q（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（ダリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.0k → 39.7k' },
     ],
   },
@@ -704,6 +755,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000132-anemo',
     archetypes: [
+      { name: 'q→e', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 5 件・平均 613.0k・最大 1382.5k。q e（探索の比較なし）' },
       { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→追加スキルの順で、粒子を無駄にしない（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '自動編成（プルーネ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 54.8k → 53.5k' },
     ],
@@ -864,6 +916,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000069-dendro',
     archetypes: [
+      { name: 'e→ca→q→ca×2', role: 'attacker', slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 30 件・平均 64.3k・最大 237.3k。e ca q ca×2（探索の比較なし）' },
       { name: 'E→重撃×3→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 基本の立ち回りは、スキル→重撃（スキルで 3 発分チャージ短縮）（探索の比較なし）' },
       { name: 'E・Q（サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 瞬間火力型。スキルと爆発で草付着' },
     
@@ -873,6 +926,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000079-pyro',
     archetypes: [
+      { name: 'q→n×10', role: 'attacker', slot: 40, use: ['q', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 76 件・平均 48.2k・最大 93.3k。q n×10（探索の比較なし）' },
       { name: 'E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の強化攻撃を連打する爆発アタッカー型' },
     
       { name: 'E（炎付着サポート）', role: 'supporter', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型' },
@@ -890,6 +944,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000092-pyro',
     archetypes: [
+      { name: 'q→n×2→e→hp→n→e→hp→dash', role: 'attacker', slot: 40, use: ['q', 'n', 'n', 'e', 'hp', 'n', 'e', 'hp', 'dash'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 66.6k・最大 79.3k。q n×2 e hp n e hp dash（探索の比較なし）' },
+      { name: 'q→e→hp→e→hp', role: 'attacker', slot: 40, use: ['q', 'e', 'hp', 'e', 'hp'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 85.0k・最大 103.6k。q e hp e hp（探索の比較なし）' },
       { name: 'E・落下・Q のあと E + 落下を繰り返す', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['e', 'hp'], fillRepeat: [2, 3], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 特殊落下攻撃を連発する形' },
     
       { name: 'E・落下・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['n'], fillRepeat: [6, 8, 10], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで跳んでの特殊落下攻撃が主力。爆発は補助' },
@@ -924,6 +980,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000106-pyro',
     archetypes: [
+      { name: 'e→n', role: 'subAttacker', slot: 20, use: ['e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 63 件・平均 206.1k・最大 1710.1k。e n（探索の比較なし）' },
       { name: 'E・Q（サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから自動攻撃する輪で炎下地を作るサブ運用' },
     
       { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（通常攻撃の形）' },

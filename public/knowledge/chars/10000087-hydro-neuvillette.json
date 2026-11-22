@@ -3,6 +3,47 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8C%E3%83%B4%E3%82%A3%E3%83%AC%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "ca"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    5
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）"
+  },
+  {
+   "name": "ca→q→e→ca",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "q",
+    "e",
+    "ca"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）"
+  },
+  {
+   "name": "ca→e→ca→q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "e",
+    "ca",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）"
+  },
+  {
    "name": "E→Q→特殊重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

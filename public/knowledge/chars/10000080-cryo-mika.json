@@ -3,6 +3,17 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9F%E3%82%AB",
  "archetypes": [
   {
+   "name": "q→n→e",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "q",
+    "n",
+    "e"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 54.8k・最大 98.5k。q n e（探索の比較なし）"
+  },
+  {
    "name": "長押し E",
    "role": "supporter",
    "slot": 20,

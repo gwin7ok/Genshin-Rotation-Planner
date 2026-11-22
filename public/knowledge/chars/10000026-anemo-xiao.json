@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A7%E3%82%A6",
  "archetypes": [
   {
+   "name": "E×2→Q→（ジャンプ→落下）×n",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "e",
+    "q",
+    "jump",
+    "hp"
+   ],
+   "fill": [
+    "jump",
+    "hp"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 34 件・平均 65.7k・最大 141.0k。e×2 q jump hp（探索の比較なし）"
+  },
+  {
    "name": "落下→通常1→重撃（JET）",
    "role": "attacker",
    "slot": 40,

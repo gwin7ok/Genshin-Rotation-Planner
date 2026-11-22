@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A9%E3%82%A6%E3%83%9E",
  "archetypes": [
   {
+   "name": "n→e→q",
+   "role": "subAttacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "e",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 13 件・平均 131.0k・最大 141.3k。n e q（探索の比較なし）"
+  },
+  {
+   "name": "n→e_hold→q",
+   "role": "subAttacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "e_hold",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 9 件・平均 223.5k・最大 1059.0k。n e_hold q（探索の比較なし）"
+  },
+  {
    "name": "長押し E と Q",
    "role": "subAttacker",
    "slot": 40,

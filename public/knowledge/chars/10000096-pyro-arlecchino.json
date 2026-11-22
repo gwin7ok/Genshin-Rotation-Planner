@@ -3,6 +3,38 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%AC%E3%83%83%E3%82%AD%E3%83%BC%E3%83%8E",
  "archetypes": [
   {
+   "name": "ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 81.1k・最大 175.3k。ca n×3 dash n×3 dash n×3 dash n×3 dash n×3 dash n×3（探索の比較なし）"
+  },
+  {
    "name": "E→重撃→Q のあと 通常 6 段を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -19,7 +19,10 @@
     "ca",
     "dash"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 72.5k・最大 94.9k。e_hold lp n×2 ca dash n×3 ca dash（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 72.5k・最大 94.9k。e_hold lp n×2 ca dash n×3 ca dash（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（15 件。分布 0〜6 凸 = 15/0/0/0/0/0/0）"
   },
   {
    "name": "e_hold→lp→n×3→dash→n×3→dash→n×3",
@@ -40,7 +43,10 @@
     "n",
     "n"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）"
   },
   {
    "name": "E→落下→Q",

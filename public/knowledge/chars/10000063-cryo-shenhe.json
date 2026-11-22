@@ -19,7 +19,10 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 38 件。平均 56.9k（最大 72.8k）（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 38 件。平均 56.9k（最大 72.8k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（66 件。分布 0〜6 凸 = 63/0/0/0/0/0/3）"
   },
   {
    "name": "長押しE→Q",
@@ -29,7 +32,10 @@
     "e_hold",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（24 件。分布 0〜6 凸 = 17/0/0/0/0/0/7）"
   },
   {
    "name": "E→Q→E",

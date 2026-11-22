@@ -28,7 +28,10 @@
     "n",
     "n"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 153 件・平均 71.4k・最大 787.5k。q n×4 e n×4 dash n×4 dash n×4（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 153 件・平均 71.4k・最大 787.5k。q n×4 e n×4 dash n×4 dash n×4（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（153 件。分布 0〜6 凸 = 139/1/2/4/0/0/7）"
   },
   {
    "name": "爆発のあと通常攻撃（ダッシュキャンセル）",

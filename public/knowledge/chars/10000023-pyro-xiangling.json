@@ -11,7 +11,10 @@
     "e",
     "dash"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 154 件・平均 61.9k・最大 219.9k。q e dash（探索の比較なし）"
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 154 件・平均 61.9k・最大 219.9k。q e dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（154 件。分布 0〜6 凸 = 0/0/0/0/0/0/154）"
   },
   {
    "name": "主役（E・Q のあと通常攻撃）",

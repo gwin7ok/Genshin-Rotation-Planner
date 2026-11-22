@@ -21,7 +21,10 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 行秋 710 件中 37 件。平均 61.5k（最大 102.5k）（探索の比較なし）"
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 行秋 710 件中 37 件。平均 61.5k（最大 102.5k）（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（117 件。分布 0〜6 凸 = 0/0/0/0/0/0/117）"
   },
   {
    "name": "e→dash→n×2",
@@ -33,7 +36,10 @@
     "n",
     "n"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 60 件・平均 59.4k・最大 102.5k。e dash n×2（探索の比較なし）"
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 60 件・平均 59.4k・最大 102.5k。e dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（60 件。分布 0〜6 凸 = 0/0/0/0/0/0/60）"
   },
   {
    "name": "n→e→dash→n×2",
@@ -46,7 +52,10 @@
     "n",
     "n"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 64 件・平均 69.2k・最大 167.7k。n e dash n×2（探索の比較なし）"
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 64 件・平均 69.2k・最大 167.7k。n e dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（64 件。分布 0〜6 凸 = 0/0/0/0/0/0/64）"
   },
   {
    "name": "Q→E",

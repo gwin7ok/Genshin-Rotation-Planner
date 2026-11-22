@@ -17,7 +17,10 @@
     3,
     5
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（240 件。分布 0〜6 凸 = 238/0/2/0/0/0/0）"
   },
   {
    "name": "ca→q→e→ca",
@@ -29,7 +32,10 @@
     "e",
     "ca"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（115 件。分布 0〜6 凸 = 112/0/2/0/0/0/1）"
   },
   {
    "name": "ca→e→ca→q",
@@ -41,7 +47,10 @@
     "ca",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）"
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（124 件。分布 0〜6 凸 = 121/0/0/0/0/0/3）"
   },
   {
    "name": "E→Q→特殊重撃を繰り返す",

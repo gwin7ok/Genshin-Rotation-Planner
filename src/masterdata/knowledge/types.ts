@@ -4,6 +4,14 @@
  * このファイルは、型だけ（node のスクリプトからも読めるよう、import を持たない）。
  */
 
+/** 運用型の、続きの出場（同じキャラの 2 回目以降の出場。間に別のキャラが入る） */
+export interface ArchetypePart {
+  /** 出場の順番（小さい順）。Archetype.slot と同じ尺度。別のキャラの出場を、この出場の前後に挟むために使う */
+  slot: number;
+  /** 出場の中の動作（use と同じ書式） */
+  use: string[];
+}
+
 /** 運用型: 編成の中での、そのキャラの使い方（出場の組み方） */
 export interface Archetype {
   /** 型の名前（表示・記録用） */
@@ -13,6 +21,13 @@ export interface Archetype {
   slot: number;
   /** 出場の中の動作（アクションの種類。e / e_hold / q / n / ca …。「@秒」で所要時間を決める）。アタッカーでは、スキル・爆発の出場（先置き） */
   use: string[];
+  /**
+   * 続きの出場（同じキャラが、間に別のキャラを挟んで、もう一度出る形）。slot の大きい順に、use の後ろに並ぶ。
+   * slot は、use の slot より大きくする。同じ slot の続きと use は、1 つの出場に結合する。
+   * アタッカーの攻撃の出場（fill）は、続きの出場よりも、さらに後ろ。
+   * 例: ドゥリン use=[e, q, e] slot=30 / then=[{ slot: 50, use: [e, e, q] }]（支援を slot 40 に置くと、その間に出る）
+   */
+  then?: ArchetypePart[];
   /** アタッカーの攻撃の出場の型（1 回分）。回数は fillRepeat から選ぶ */
   fill?: string[];
   /** fill の繰り返し回数の候補 */

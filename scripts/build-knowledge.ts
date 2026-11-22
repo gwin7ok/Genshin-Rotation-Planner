@@ -20,6 +20,14 @@ const fileNameOf = (id: string, englishName: string): string =>
   `${id}-${englishName.replace(/\s*\(.*$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.json`;
 const fileOf = new Map(KNOWLEDGE.map(k => [k.characterId, fileNameOf(k.characterId, master.find(m => m.id === k.characterId)!.englishName)]));
 if (new Set(fileOf.values()).size !== fileOf.size) { console.error('辞書のファイル名が重複しています'); process.exit(1); }
+// 続きの出場（then）の検査: 各出場の slot は、use の slot より大きく、小さい順で、動作が空でない
+for (const k of KNOWLEDGE) for (const a of k.archetypes) {
+  let prev = a.slot;
+  for (const part of a.then ?? []) {
+    if (part.use.length === 0 || part.slot <= prev) { console.error(`続きの出場が不正: ${k.characterId} ${a.name}（slot は use より大きく、小さい順。動作は空にしない）`); process.exit(1); }
+    prev = part.slot;
+  }
+}
 const files = new Map<string, string>();
 // Wiki（wikiwiki.jp 原神Wiki）のページ名: 名前と同じ。違うものだけ書く（魈 → ショウ、旅人 空(風) → 主人公/風）
 const WIKI_PAGE_OVERRIDE: Record<string, string> = { 魈: 'ショウ' };

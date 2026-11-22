@@ -36,10 +36,19 @@ export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeB
     const picked = members.map((c, i) => ({ c, a: combo[i] as Archetype }));
     const attackers = picked.filter(p => p.a.role === 'attacker');
     if (attackers.length === 0) continue;
-    // 先置き・サポートの出場: slot の小さい順。同じ slot は、並べ替えを全部試す
-    const setups = picked.filter(p => p.a.use.length > 0);
-    const slots = [...new Set(setups.map(p => p.a.slot))].sort((x, y) => x - y);
-    const orders = product(slots.map(s => permutations(setups.filter(p => p.a.slot === s)))).map(groups => groups.flat());
+    // 先置き・サポートの出場: slot の小さい順。同じ slot は、並べ替えを全部試す。
+    // 1 人の運用型は、出場を複数持てる（use と、続きの出場 then）。同じキャラで同じ slot の出場は、1 つに結合する
+    const setups = picked.flatMap(p => {
+      const parts: Array<{ slot: number; use: string[] }> = [];
+      for (const part of [{ slot: p.a.slot, use: p.a.use }, ...(p.a.then ?? [])]) {
+        if (part.use.length === 0) continue;
+        const same = parts.find(x => x.slot === part.slot);
+        if (same) same.use = [...same.use, ...part.use]; else parts.push({ slot: part.slot, use: [...part.use] });
+      }
+      return parts.map(x => ({ c: p.c, a: p.a, slot: x.slot, use: x.use }));
+    });
+    const slots = [...new Set(setups.map(p => p.slot))].sort((x, y) => x - y);
+    const orders = product(slots.map(s => permutations(setups.filter(p => p.slot === s)))).map(groups => groups.flat());
     for (const order of orders) {
       for (const repeats of product(attackers.map(p => ((p.a.fill?.length ?? 0) > 0 ? p.a.fillRepeat ?? [1] : [0])))) {
         for (const leads of product(attackers.map(p => (p.a.lead && p.a.lead.length > 0 ? [true, false] : [false])))) {
@@ -51,7 +60,7 @@ export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeB
           };
           attackers.forEach((p, i) => { if (leads[i]) push(p.c, p.a.lead!); });
           const loopStartIndex = stints.length;
-          for (const p of order) push(p.c, p.a.use);
+          for (const p of order) push(p.c, p.use);
           attackers.forEach((p, i) => { if (repeats[i] > 0) push(p.c, Array.from({ length: repeats[i] }, () => p.a.fill!).flat()); });
           if (!ok || stints.length === 0) continue;
           const assignment = Object.fromEntries(characters.map(c => [c.id, (picked.find(p => p.c.id === c.id)?.a.role ?? 'supporter') as SearchRole]));

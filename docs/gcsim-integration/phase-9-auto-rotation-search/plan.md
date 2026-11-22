@@ -424,3 +424,6 @@
 - 探索の本体（`search.ts`）: `keepFirstSeed`（最初の出発点を、上位に入らなくても、順位に載せる）と、結果の `isCurrent` を追加。画面は、その行に「いま」の印を付け、上位 10 件の外でも、その行だけは表示する。
 - 画面確認（サンドローネ・七七・八重神子・オデットの編成）: 新モードで探索 → 1 位 174.2k、「いま」の行は 12 位・162.9k（+7%）。`check:i18n`・`check:rotation-search`・型検査 OK。
 - 検査 `npm run check:search-from-current`（gcsim を使う小さな探索）: 出発点が 1 つだけ（candidates = 1）・「いま」の行がちょうど 1 つ・DPS 順・1 位がいま以上・`keepFirstSeed` なしでは印が付かない。
+
+## 2026-11-22 辞書に「続きの出場（then）」を追加（段階 A）
+複数回出場する形を辞書に書けるようにした: 型（ArchetypePart・Archetype.then）、出発点の組み立て（knowledgeSeeds）、書き出しの検査（build-knowledge）、単体の検査（`npm run check:knowledge-seeds`）。辞書の中身は変えていない。段階 B（KQM 由来の複数回の形の登録）・段階 C（出発点の爆発の抑制）は、これから。

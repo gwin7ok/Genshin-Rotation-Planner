@@ -444,8 +444,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000041-hydro',
     archetypes: [
-      { name: 'e→q→n', role: 'attacker', slot: 40, use: ['e', 'q', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 19 件・平均 106.8k・最大 249.1k。e q n（探索の比較なし）' },
-      { name: 'n→e→n', role: 'attacker', slot: 40, use: ['n', 'e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 26 件・平均 99.2k・最大 151.3k。n e n（探索の比較なし）' },
+      { name: 'e→q→n', role: 'attacker', slot: 40, use: ['e', 'q', 'n'], constellation: { min: 2 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 19 件・平均 106.8k・最大 249.1k。e q n（探索の比較なし）。凸数の分布: 19 件中 0 凸は 1 件、2 凸以上が 18 件' },
+      { name: 'n→e→n', role: 'attacker', slot: 40, use: ['n', 'e', 'n'], constellation: { min: 4 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 26 件・平均 99.2k・最大 151.3k。n e n（探索の比較なし）。凸数の分布: 26 件中 0 凸は 1 件、4 凸が 25 件' },
       { name: 'Q→通常', role: 'attacker', slot: 40, use: ['q', 'n'], evidence: 'Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）' },
       { name: 'E→通常→重撃（層を 3 つ）', role: 'attacker', slot: 40, use: ['e', 'n', 'ca'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）' },
       { name: 'Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k' },
@@ -936,7 +936,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000079-pyro',
     archetypes: [
-      { name: 'q→n×10', role: 'attacker', slot: 40, use: ['q', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 76 件・平均 48.2k・最大 93.3k。q n×10（探索の比較なし）' },
+      { name: 'q→n×10', role: 'attacker', slot: 40, use: ['q', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'], constellation: { min: 1 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 76 件・平均 48.2k・最大 93.3k。q n×10（探索の比較なし）。凸数の分布: 76 件中 0 凸は 2 件、1 凸が 70 件' },
       { name: 'E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の強化攻撃を連打する爆発アタッカー型' },
     
       { name: 'E（炎付着サポート）', role: 'supporter', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型' },

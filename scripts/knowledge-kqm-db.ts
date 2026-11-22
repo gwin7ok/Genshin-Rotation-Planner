@@ -120,6 +120,35 @@ const consOf = (config: string, team: string[]): Map<string, number> => {
 };
 const bandOf = (n: number | undefined): string => (n === undefined ? '?' : n === 0 ? '0凸' : n === 6 ? '6凸' : '1〜5凸');
 
+// --cons-report: 辞書の「KQM 由来」の形ごとに、その形（use と同じ出場）を使う設定の凸数の分布（0〜6 凸の件数）を出す
+if (args.includes('--cons-report')) {
+  const kidx = JSON.parse(fs.readFileSync('public/knowledge/index.json', 'utf8')).chars;
+  const parsedAll = entries.map(e => ({ cons: consOf(e.config, e.summary?.char_names ?? []), stints: stintsOf(e.config, e.summary?.char_names ?? []), team: e.summary?.char_names ?? [] }));
+  const rows: string[] = [];
+  for (const [id, file] of Object.entries<string>(kidx)) {
+    const m = master.find(c => c.id === id);
+    const key = m?.source?.gcsimKey;
+    if (!key) continue;
+    for (const a of JSON.parse(fs.readFileSync(`public/knowledge/${file}`, 'utf8')).archetypes) {
+      if (!String(a.evidence).includes('KQM')) continue;
+      const want = compact(a.use);
+      const hist = [0, 0, 0, 0, 0, 0, 0];
+      let total = 0;
+      for (const p of parsedAll) {
+        if (!p.team.includes(key)) continue;
+        if (!p.stints.some(s => s.who === key && compact(s.actions) === want)) continue;
+        const c = p.cons.get(key);
+        if (c === undefined) continue;
+        hist[c]++; total++;
+      }
+      rows.push(`${m.name}	${a.name}	${a.slot}	${want}	${total}	${hist.join(',')}	${a.constellation ? JSON.stringify(a.constellation) : ''}`);
+    }
+  }
+  fs.writeFileSync(`${CACHE}/cons-report.tsv`, rows.join('\n') + '\n');
+  console.log(`${rows.length} 形を ${CACHE}/cons-report.tsv に書きました`);
+  process.exit(0);
+}
+
 const TOP = opt('top', 8), MIN = opt('min', 1);
 const wanted = args.includes('--all') ? [...keyOf.keys()] : args.filter(a => !a.startsWith('--'));
 if (wanted.length === 0) { console.error('使い方: node scripts/knowledge-kqm-db.ts <キャラ名...> | --all | --fetch'); process.exit(1); }

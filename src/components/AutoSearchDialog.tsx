@@ -157,11 +157,15 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
       const c = members.find(x => x.id === w.characterId);
       const name = c ? charName(c) : w.characterId;
       if (loops < 2) return null;
-      return w.waits <= 0 || w.seconds === null ? t('gcsim:search.energyWaitItemNone', { name }) : t('gcsim:search.energyWaitItem', { name, n: (w.waits / (loops - 1)).toFixed(2), s: w.seconds.toFixed(2) });
-    });
+      const waited = w.waits > 0 && w.seconds !== null;
+      // 待ちがあるキャラは、DPS の赤と同じ色で表示する
+      return { id: w.characterId, waited, text: !waited || w.seconds === null ? t('gcsim:search.energyWaitItemNone', { name }) : t('gcsim:search.energyWaitItem', { name, n: (w.waits / (loops - 1)).toFixed(2), s: w.seconds.toFixed(2) }) };
+    }).filter((x): x is { id: string; waited: boolean; text: string } => x !== null);
     return (
       <div className="mt-1 text-[11px] text-slate-500" title={t('gcsim:search.energyWaitTitle')} data-testid="search-energy-waits">
-        {t('gcsim:search.energyWaitLabel')}: {loops < 2 ? t('gcsim:search.energyWaitNoLap') : items.filter(Boolean).join(t('gcsim:search.energyWaitSep'))}
+        {t('gcsim:search.energyWaitLabel')}: {loops < 2 ? t('gcsim:search.energyWaitNoLap') : items.map((x, i) => (
+          <React.Fragment key={x.id}>{i > 0 && t('gcsim:search.energyWaitSep')}<span className={x.waited ? 'text-rose-300 font-mono' : undefined}>{x.text}</span></React.Fragment>
+        ))}
       </div>
     );
   };

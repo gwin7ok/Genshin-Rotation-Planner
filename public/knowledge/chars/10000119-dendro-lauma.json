@@ -3,6 +3,53 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A9%E3%82%A6%E3%83%9E",
  "archetypes": [
   {
+   "name": "N→E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ラウマ 76 件中 5 件。平均 77.4k（最大 87.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ラウマ 76 件中 5 件。平均 95.8k（最大 114.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "N のあと、もう一度 N→E→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ラウマ 76 件中 13 件。平均 131.0k（最大 141.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 13/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "n→e→q",
    "role": "subAttacker",
    "slot": 40,

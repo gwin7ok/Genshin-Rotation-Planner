@@ -52,7 +52,7 @@ const keyOf = new Map<string, string>(master.filter(c => c.source?.gcsimKey).map
 const nameOfKey = new Map<string, string>([...keyOf].map(([n, k]) => [k, n]));
 
 // 行動 1 つ（`attack:2`・`skill[hold=1]` など）を、辞書の行動 ID の並びに直す
-const ACTION: Record<string, string> = { attack: 'n', charge: 'ca', skill: 'e', burst: 'q', dash: 'dash', jump: 'jump', high_plunge: 'hp', low_plunge: 'lp' };
+const ACTION: Record<string, string> = { attack: 'n', charge: 'ca', aim: 'ca', skill: 'e', burst: 'q', dash: 'dash', jump: 'jump', high_plunge: 'hp', low_plunge: 'lp' };
 const translate = (raw: string): string[] => {
   const m = /^([a-z_]+)(\[[^\]]*\])?(?::(\d+))?$/.exec(raw.trim());
   if (!m) return [raw.trim()];
@@ -146,6 +146,84 @@ if (args.includes('--cons-report')) {
   }
   fs.writeFileSync(`${CACHE}/cons-report.tsv`, rows.join('\n') + '\n');
   console.log(`${rows.length} 形を ${CACHE}/cons-report.tsv に書きました`);
+  process.exit(0);
+}
+
+// --multi: KQM の「1 周に複数回出場する形」の候補を出す。--apply を付けると、辞書（characters.ts）に書き足す
+// 基準・役割・slot・凸数の決め方は、docs/gcsim-integration/phase-9-auto-rotation-search/plan.md「KQM の 1 周に複数回出場する形を、辞書に自動で取り込む」
+const SINGLE = args.includes('--single'); // --single: 自分の出場が 1 回だけの設定の形（単数回形）。--multi と同じ基準で、then なしの形を出す
+if (args.includes('--multi') || SINGLE) {
+  const NL = String.fromCharCode(10);
+  const MIN_COUNT = opt('multi-min', 10), MIN_SHARE = 0.03, PER_CHAR = opt('multi-per-char', 3), MAX_STINTS = 4, MAX_ACTIONS = 40;
+  const ALLOWED = new Set(['n', 'ca', 'e', 'e_hold', 'q', 'dash', 'jump', 'hp', 'lp']);
+  const kidx = JSON.parse(fs.readFileSync('public/knowledge/index.json', 'utf8')).chars;
+  const parsedAll = entries.map(e => ({ cons: consOf(e.config, e.summary?.char_names ?? []), stints: stintsOf(e.config, e.summary?.char_names ?? []), team: e.summary?.char_names ?? [], dps: e.summary?.mean_dps_per_target ?? 0 }));
+  const label = (acts: string[]) => compact(acts).split(' ').join('→').toUpperCase();
+  const { KNOWLEDGE } = await import('../src/masterdata/knowledge/characters.ts');
+  const lines: string[] = [];
+  const items: Array<{ id: string; who: string; text: string }> = [];
+  for (const m of master) {
+    const key = m.source?.gcsimKey;
+    if (!key) continue;
+    // 辞書の元データ（characters.ts）と照合する（書き出し前の形も含む。辞書にないキャラは、形が 0 件として扱う）
+    const dict = (KNOWLEDGE.find((k: any) => k.characterId === m.id)?.archetypes ?? []) as any[];
+    const mine = parsedAll.filter(p => p.team.includes(key));
+    if (mine.length === 0) continue;
+    const seqs = new Map<string, { acts: string[][]; dps: number[]; cons: number[] }>();
+    for (const p of mine) {
+      const own = p.stints.filter(s => s.who === key).map(s => s.actions);
+      if (SINGLE ? own.length !== 1 : own.length < 2 || own.length > MAX_STINTS) continue;
+      if (own.some(a => a.length === 0 || a.some(x => !ALLOWED.has(x))) || own.flat().length > MAX_ACTIONS) continue;
+      const k = JSON.stringify(own);
+      const r = seqs.get(k) ?? { acts: own, dps: [], cons: [] };
+      r.dps.push(p.dps);
+      const c = p.cons.get(key); if (c !== undefined) r.cons.push(c);
+      seqs.set(k, r);
+    }
+    const sameForm = (a: any, acts: string[][]) => JSON.stringify(a.use) === JSON.stringify(acts[0]) && JSON.stringify((a.then ?? []).map((t: any) => t.use)) === JSON.stringify(acts.slice(1));
+    const picked = [...seqs.values()].filter(r => r.dps.length >= MIN_COUNT && r.dps.length >= mine.length * MIN_SHARE)
+      .sort((a, b) => b.dps.length - a.dps.length).slice(0, PER_CHAR) // 上位 PER_CHAR 件のうち、辞書にまだない形だけを取り込む（何度実行しても、増え続けない）
+      .filter(r => !dict.some(a => sameForm(a, r.acts)));
+    for (const r of picked) {
+      // 役割: 辞書に同じ 1 回目の動作の形があればその役割。なければ、マスターの役割（複数あるときは サポーター → サブアタッカー → アタッカー）
+      const sameFirst = dict.find(a => JSON.stringify(a.use) === JSON.stringify(r.acts[0]));
+      const roles: string[] = m.roles ?? [];
+      const longLast = r.acts[r.acts.length - 1].length >= 10 && roles.includes('attacker'); // 最後の出場が長い（攻撃の連続）なら、アタッカー
+      const role = sameFirst?.role ?? (longLast ? 'attacker' : roles.length === 1 ? roles[0] : roles.includes('supporter') ? 'supporter' : roles.includes('subAttacker') ? 'subAttacker' : 'attacker');
+      const base = role === 'attacker' ? 40 : role === 'subAttacker' ? 20 : 10;
+      const laterStart = role === 'attacker' ? 50 : 30;
+      const thenParts = r.acts.slice(1).map((a, i) => `{ slot: ${laterStart + i * 5}, use: [${a.map(x => `'${x}'`).join(', ')}] }`);
+      const avg = r.dps.reduce((a, b) => a + b, 0) / r.dps.length;
+      const minCons = r.cons.length ? Math.min(...r.cons) : 0;
+      const hist = [0, 0, 0, 0, 0, 0, 0]; for (const c of r.cons) hist[c]++;
+      const name = SINGLE ? `${label(r.acts[0])}（KQM）` : `${label(r.acts[0])} のあと、もう一度 ${r.acts.slice(1).map(label).join('、さらに ')}`;
+      const text = `{ name: '${name}', role: '${role}', slot: ${base}, use: [${r.acts[0].map(x => `'${x}'`).join(', ')}],${SINGLE ? '' : ` then: [${thenParts.join(', ')}],`} constellation: { min: ${minCons} }, evidence: 'KQM Sim Database（db.kqm.gg）の${SINGLE ? '単数回の形' : '複数回出場の形'}: ${m.name} ${mine.length} 件中 ${r.dps.length} 件。平均 ${(avg / 1000).toFixed(1)}k（最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k）。凸数: 使われている設定の最小は ${minCons} 凸（分布 0〜6 凸 = ${hist.join('/')}）（探索の比較なし）' },`;
+      items.push({ id: m.id, who: m.name, text });
+      lines.push(`${m.name}（${role}）${r.dps.length}/${mine.length} 件 平均 ${(avg / 1000).toFixed(1)}k 最小 ${minCons} 凸: ${r.acts.map(a => `[${compact(a)}]`).join(' ')}`);
+    }
+  }
+  fs.writeFileSync(`${CACHE}/${SINGLE ? 'single' : 'multi'}-candidates.txt`, lines.join(NL) + NL);
+  console.log(`${items.length} 件の候補（${new Set(items.map(i => i.id)).size} キャラ）を ${CACHE}/${SINGLE ? 'single' : 'multi'}-candidates.txt に書きました`);
+  if (args.includes('--apply')) {
+    const file = 'src/masterdata/knowledge/characters.ts';
+    let src = fs.readFileSync(file, 'utf8');
+    const nl = src.includes(String.fromCharCode(13, 10)) ? String.fromCharCode(13, 10) : NL;
+    const missing = new Map<string, { who: string; texts: string[] }>();
+    for (const it of items.reverse()) {
+      const i = src.indexOf(`characterId: '${it.id}'`);
+      if (i < 0) { missing.set(it.id, { who: it.who, texts: [it.text, ...(missing.get(it.id)?.texts ?? [])] }); continue; }
+      const j = src.indexOf('archetypes: [', i) + 'archetypes: ['.length;
+      src = src.slice(0, j) + nl + '      ' + it.text + src.slice(j);
+    }
+    // 辞書にまだ無いキャラは、末尾に新しい項目として足す
+    for (const [id, v] of missing) {
+      const end = src.lastIndexOf('];');
+      src = src.slice(0, end) + `  {${nl}    characterId: '${id}', // ${v.who}${nl}    archetypes: [${nl}${v.texts.map(t => '      ' + t).join(nl)}${nl}    ],${nl}  },${nl}` + src.slice(end);
+      console.log(`辞書にキャラを追加: ${v.who}（${v.texts.length} 件）`);
+    }
+    fs.writeFileSync(file, src);
+    console.log(`${items.length} 件を ${file} に書き足しました。続けて npm run build:knowledge を実行してください`);
+  }
   process.exit(0);
 }
 

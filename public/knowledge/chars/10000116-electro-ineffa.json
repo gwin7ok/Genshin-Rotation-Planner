@@ -3,6 +3,19 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%8D%E3%83%95%E3%82%A1",
  "archetypes": [
   {
+   "name": "E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: イネファ 165 件中 7 件。平均 457.0k（最大 1463.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/2）（探索の比較なし）"
+  },
+  {
    "name": "E",
    "role": "subAttacker",
    "slot": 25,

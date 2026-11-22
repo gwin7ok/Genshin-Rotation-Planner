@@ -3,6 +3,20 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%9B%B2%E8%8F%AB",
  "archetypes": [
   {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雲菫 73 件中 3 件。平均 49.7k（最大 57.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 30,

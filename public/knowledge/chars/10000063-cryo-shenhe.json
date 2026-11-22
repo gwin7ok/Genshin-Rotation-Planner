@@ -3,6 +3,89 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%94%B3%E9%B6%B4",
  "archetypes": [
   {
+   "name": "E_HOLD→N→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "n",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 申鶴 301 件中 12 件。平均 77.6k（最大 110.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 12/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 15 件。平均 71.1k（最大 370.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 13/0/0/1/0/0/1）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 N→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 60.9k（最大 93.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "N→E_HOLD→N のあと、もう一度 N→E_HOLD→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e_hold",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e_hold",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 51.7k（最大 65.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "E→Q のあと、もう一度 E→N",
    "role": "supporter",
    "slot": 10,

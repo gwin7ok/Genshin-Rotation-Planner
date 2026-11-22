@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%A5%9E%E9%87%8C%E7%B6%BE%E8%8F%AF",
  "archetypes": [
   {
+   "name": "E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "dash",
+    "q",
+    "n",
+    "n",
+    "ca",
+    "dash",
+    "n",
+    "n",
+    "ca"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "dash",
+      "n",
+      "n",
+      "ca",
+      "e",
+      "dash",
+      "n",
+      "n",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 神里綾華 142 件中 6 件。平均 65.4k（最大 71.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "E・Q（爆発サブ）",
    "role": "subAttacker",
    "slot": 20,

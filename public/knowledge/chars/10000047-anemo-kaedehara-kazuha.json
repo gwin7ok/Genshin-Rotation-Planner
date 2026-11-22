@@ -3,6 +3,57 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%A5%93%E5%8E%9F%E4%B8%87%E8%91%89",
  "archetypes": [
   {
+   "name": "Q のあと、もう一度 E→HP、さらに E→HP",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "hp"
+     ]
+    },
+    {
+     "slot": 35,
+     "use": [
+      "e",
+      "hp"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 50 件。平均 58.2k（最大 88.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 50/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→HP のあと、もう一度 E→HP→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "hp"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "hp",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 36 件。平均 58.1k（最大 205.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 34/0/0/0/0/0/2）（探索の比較なし）"
+  },
+  {
    "name": "E→HP→Q のあと、もう一度 E→HP",
    "role": "supporter",
    "slot": 10,

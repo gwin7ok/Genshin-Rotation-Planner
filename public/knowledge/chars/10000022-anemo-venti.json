@@ -3,6 +3,34 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A6%E3%82%A7%E3%83%B3%E3%83%86%E3%82%A3",
  "archetypes": [
   {
+   "name": "Q のあと、もう一度 E→N、さらに E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    },
+    {
+     "slot": 35,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ウェンティ 64 件中 3 件。平均 40.2k（最大 45.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 3/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "E→Q のあと、もう一度 E→N",
    "role": "supporter",
    "slot": 10,

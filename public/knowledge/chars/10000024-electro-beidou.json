@@ -3,6 +3,160 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8C%97%E6%96%97",
  "archetypes": [
   {
+   "name": "E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 5 件。平均 42.6k（最大 61.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 4 件。平均 50.9k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 9 件。平均 50.5k（最大 67.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E→N×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 5 件。平均 49.6k（最大 53.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 N→E→N×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 5 件。平均 51.8k（最大 64.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→DASH のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "dash"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 4 件。平均 52.9k（最大 62.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 2
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 12 件。平均 45.8k（最大 53.7k）。凸数: 使われている設定の最小は 2 凸（分布 0〜6 凸 = 0/0/2/0/0/0/10）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 13 件。平均 48.8k（最大 68.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
+  },
+  {
    "name": "通常2→E→Q",
    "role": "subAttacker",
    "slot": 20,

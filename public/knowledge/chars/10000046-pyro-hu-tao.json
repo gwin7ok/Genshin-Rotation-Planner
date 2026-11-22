@@ -3,6 +3,47 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%83%A1%E6%A1%83",
  "archetypes": [
   {
+   "name": "E→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N×2→CA→JUMP→N（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "ca",
+    "jump",
+    "n",
+    "n",
+    "ca",
+    "jump",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 胡桃 198 件中 16 件。平均 70.5k（最大 83.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 16/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "Q→E→（通常2→重撃）×n",
    "role": "attacker",
    "slot": 40,

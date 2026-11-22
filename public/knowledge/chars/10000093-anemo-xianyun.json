@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%96%91%E9%9B%B2",
  "archetypes": [
   {
+   "name": "E→HP→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 閑雲 398 件中 20 件。平均 65.1k（最大 94.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 20/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→LP→Q のあと、もう一度 N×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "lp",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 閑雲 398 件中 22 件。平均 62.8k（最大 83.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 22/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "e→lp→n→q",
    "role": "supporter",
    "slot": 30,

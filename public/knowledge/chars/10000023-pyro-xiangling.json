@@ -3,6 +3,19 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%A6%99%E8%8F%B1",
  "archetypes": [
   {
+   "name": "Q→E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 香菱 531 件中 29 件。平均 51.2k（最大 168.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/29）（探索の比較なし）"
+  },
+  {
    "name": "q→e→dash",
    "role": "attacker",
    "slot": 30,

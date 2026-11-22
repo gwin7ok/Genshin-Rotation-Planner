@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AC%E3%82%A4%E3%82%A2",
  "archetypes": [
   {
+   "name": "E→N→Q（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ガイア 67 件中 4 件。平均 84.8k（最大 116.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q のあと、もう一度 E→N",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 2
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ガイア 67 件中 3 件。平均 53.1k（最大 78.5k）。凸数: 使われている設定の最小は 2 凸（分布 0〜6 凸 = 0/0/1/0/0/0/2）（探索の比較なし）"
+  },
+  {
    "name": "e→dash→q",
    "role": "subAttacker",
    "slot": 20,

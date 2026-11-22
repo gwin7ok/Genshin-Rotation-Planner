@@ -3,6 +3,35 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%A4%9C%E8%98%AD",
  "archetypes": [
   {
+   "name": "E→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 80 件。平均 65.5k（最大 143.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 80/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 65 件。平均 71.5k（最大 112.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 65/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "n→e→n",
    "role": "supporter",
    "slot": 30,

@@ -3,6 +3,98 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9",
  "archetypes": [
   {
+   "name": "E→N×2→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 6 件。平均 65.1k（最大 67.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 5
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 3 件。平均 87.6k（最大 100.5k）。凸数: 使われている設定の最小は 5 凸（分布 0〜6 凸 = 0/0/0/0/0/2/1）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 3 件。平均 59.7k（最大 63.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N のあと、もう一度 E→N×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: キャンディス 93 件中 3 件。平均 40.2k（最大 48.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "N→E のあと、もう一度 N→E→Q→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e",
+      "q",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: キャンディス 93 件中 3 件。平均 37.9k（最大 44.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e→n→q→n",
    "role": "supporter",
    "slot": 10,

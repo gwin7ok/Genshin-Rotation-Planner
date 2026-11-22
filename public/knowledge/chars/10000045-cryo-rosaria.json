@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%82%B5%E3%83%AA%E3%82%A2",
  "archetypes": [
   {
+   "name": "E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ロサリア 345 件中 87 件。平均 60.4k（最大 118.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 3/0/0/0/0/0/84）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ロサリア 345 件中 13 件。平均 65.5k（最大 119.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
+  },
+  {
    "name": "E→Q のあと、もう一度 E",
    "role": "supporter",
    "slot": 10,

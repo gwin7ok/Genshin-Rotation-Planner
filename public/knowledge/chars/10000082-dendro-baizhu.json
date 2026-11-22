@@ -3,6 +3,78 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%99%BD%E6%9C%AE",
  "archetypes": [
   {
+   "name": "N→E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 白朮 157 件中 7 件。平均 58.7k（最大 85.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 白朮 157 件中 9 件。平均 63.8k（最大 73.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 9/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 白朮 157 件中 5 件。平均 70.5k（最大 75.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/1）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 白朮 157 件中 25 件。平均 66.3k（最大 219.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 24/0/0/0/0/0/1）（探索の比較なし）"
+  },
+  {
    "name": "e→q→n",
    "role": "supporter",
    "slot": 10,

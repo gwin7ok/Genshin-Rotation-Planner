@@ -3,6 +3,51 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%97%8D%E7%A1%AF",
  "archetypes": [
   {
+   "name": "E×2 のあと、もう一度 E×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 藍硯 89 件中 4 件。平均 67.4k（最大 78.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E×2→Q のあと、もう一度 E×2",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 藍硯 89 件中 3 件。平均 60.7k（最大 74.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e e の出場",
    "role": "supporter",
    "slot": 30,

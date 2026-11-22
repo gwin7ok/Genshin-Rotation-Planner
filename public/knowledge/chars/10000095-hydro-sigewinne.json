@@ -3,6 +3,60 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→N×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シグウィン 53 件中 6 件。平均 67.0k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "N×2→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シグウィン 53 件中 5 件。平均 61.5k（最大 64.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "N→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シグウィン 53 件中 3 件。平均 63.1k（最大 68.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 3/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→DASH（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "dash"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シグウィン 53 件中 11 件。平均 64.8k（最大 95.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 11/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "e q の出場",
    "role": "supporter",
    "slot": 30,

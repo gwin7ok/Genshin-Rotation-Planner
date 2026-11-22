@@ -3,6 +3,66 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%AE%B5%E5%AE%AE",
  "archetypes": [
   {
+   "name": "E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 宵宮 211 件中 32 件。平均 58.0k（最大 74.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 32/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→N×5→DASH→N×5→DASH→N×5（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 宵宮 211 件中 15 件。平均 55.2k（最大 71.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "Q のあと 通常5×3 セット",
    "role": "attacker",
    "slot": 40,

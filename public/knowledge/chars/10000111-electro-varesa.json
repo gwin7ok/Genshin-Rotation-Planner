@@ -3,6 +3,18 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%B4%E3%82%A1%E3%83%AC%E3%82%B5",
  "archetypes": [
   {
+   "name": "N（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヴァレサ 79 件中 11 件。平均 202.1k（最大 1245.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/1）（探索の比較なし）"
+  },
+  {
    "name": "公式推奨コンボ（E→重撃→落下→E→重撃→落下→Q）×2",
    "role": "attacker",
    "slot": 40,

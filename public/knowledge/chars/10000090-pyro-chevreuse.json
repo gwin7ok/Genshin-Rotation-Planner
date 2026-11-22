@@ -3,6 +3,60 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A5%E3%83%B4%E3%83%AB%E3%83%BC%E3%82%BA",
  "archetypes": [
   {
+   "name": "Q→E_HOLD×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e_hold",
+    "e_hold"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 17 件。平均 63.9k（最大 92.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/17）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E_HOLD（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e_hold"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 38 件。平均 88.2k（最大 774.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/38）（探索の比較なし）"
+  },
+  {
+   "name": "E_HOLD→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 27 件。平均 86.1k（最大 124.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/27）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E_HOLD→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e_hold",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 23 件。平均 63.7k（最大 96.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 1/0/0/0/0/0/22）（探索の比較なし）"
+  },
+  {
    "name": "q→e_hold×3",
    "role": "supporter",
    "slot": 20,

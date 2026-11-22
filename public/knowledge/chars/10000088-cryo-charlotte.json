@@ -3,6 +3,47 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A3%E3%83%AB%E3%83%AD%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "Q→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シャルロット 97 件中 4 件。平均 54.4k（最大 58.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E_HOLD→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シャルロット 97 件中 4 件。平均 64.2k（最大 76.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シャルロット 97 件中 16 件。平均 64.2k（最大 93.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/16）（探索の比較なし）"
+  },
+  {
    "name": "e→n→q→n",
    "role": "supporter",
    "slot": 20,

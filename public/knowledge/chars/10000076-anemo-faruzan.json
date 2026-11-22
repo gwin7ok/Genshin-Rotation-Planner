@@ -3,6 +3,54 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A1%E3%83%AB%E3%82%B6%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→CA→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ファルザン 195 件中 9 件。平均 46.3k（最大 53.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E→CA",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ファルザン 195 件中 6 件。平均 52.4k（最大 56.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+  },
+  {
+   "name": "Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ファルザン 195 件中 25 件。平均 73.5k（最大 207.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/25）（探索の比較なし）"
+  },
+  {
    "name": "E→重撃2→Q",
    "role": "supporter",
    "slot": 10,

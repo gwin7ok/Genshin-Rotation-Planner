@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B9%E3%82%AB%E3%83%BC%E3%82%AF",
  "archetypes": [
   {
+   "name": "E_HOLD→Q のあと、もう一度 E_HOLD→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e_hold",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: スカーク 180 件中 7 件。平均 101.2k（最大 113.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "e_hold→q",
    "role": "attacker",
    "slot": 40,

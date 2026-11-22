@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E7%82%8E",
  "archetypes": [
   {
+   "name": "E→Q のあと、もう一度 E→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 蛍(炎) 45 件中 3 件。平均 76.0k（最大 79.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "長押し E・Q",
    "role": "subAttacker",
    "slot": 20,

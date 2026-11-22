@@ -3,6 +3,118 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B3%E3%83%AC%E3%82%A4",
  "archetypes": [
   {
+   "name": "N→E→N→Q（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "n",
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: コレイ 106 件中 5 件。平均 52.7k（最大 57.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: コレイ 106 件中 4 件。平均 47.8k（最大 116.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E のあと、もう一度 E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 8 件。平均 45.8k（最大 53.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/8）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→N→E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 5 件。平均 46.0k（最大 53.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 4 件。平均 51.0k（最大 60.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと、もう一度 E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 4 件。平均 51.1k（最大 60.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
    "name": "e q の出場",
    "role": "supporter",
    "slot": 30,

@@ -3,6 +3,50 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%88%E3%83%BC%E3%83%9E",
  "archetypes": [
   {
+   "name": "E→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 5 件。平均 48.0k（最大 59.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 15 件。平均 55.3k（最大 66.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/15）（探索の比較なし）"
+  },
+  {
+   "name": "Q→N→E→N×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 10 件。平均 46.4k（最大 60.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
+  },
+  {
    "name": "e→n→q→n",
    "role": "supporter",
    "slot": 10,

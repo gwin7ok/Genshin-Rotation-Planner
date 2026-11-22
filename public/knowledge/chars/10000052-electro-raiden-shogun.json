@@ -3,6 +3,110 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%9B%B7%E9%9B%BB%E5%B0%86%E8%BB%8D",
  "archetypes": [
   {
+   "name": "E→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雷電将軍 501 件中 45 件。平均 70.6k（最大 167.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 44/0/0/0/0/0/1）（探索の比較なし）"
+  },
+  {
+   "name": "N→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雷電将軍 501 件中 22 件。平均 65.4k（最大 79.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 22/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→N×4→E→N×4→DASH→N×4→DASH→N×4",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "e",
+      "n",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 雷電将軍 501 件中 130 件。平均 74.4k（最大 787.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 117/0/2/4/0/0/7）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→N×4→DASH→N×4→E→N×4→DASH→N×4",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "n",
+      "e",
+      "n",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 雷電将軍 501 件中 26 件。平均 50.3k（最大 78.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 26/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "q→n×4→e→n×4→dash→n×4→dash→n×4",
    "role": "attacker",
    "slot": 40,

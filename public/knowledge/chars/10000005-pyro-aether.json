@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E7%82%8E",
  "archetypes": [
   {
+   "name": "E_HOLD→N（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e_hold",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 空(炎) 20 件中 3 件。平均 63.4k（最大 75.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "N→E_HOLD→N（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "n",
+    "e_hold",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 空(炎) 20 件中 3 件。平均 63.7k（最大 71.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "長押し E・Q",
    "role": "subAttacker",
    "slot": 20,

@@ -3,6 +3,21 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8B%E3%82%A3%E3%83%AD%E3%82%A6",
  "archetypes": [
   {
+   "name": "E→N×3（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ニィロウ 92 件中 3 件。平均 1098.6k（最大 1160.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e→n×2→e",
    "role": "supporter",
    "slot": 10,

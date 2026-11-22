@@ -3,6 +3,50 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%80%E3%83%AA%E3%82%A2",
  "archetypes": [
   {
+   "name": "N→E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 5 件。平均 76.0k（最大 98.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "N→E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 4 件。平均 100.1k（最大 124.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→N×2→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 3 件。平均 70.2k（最大 73.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e→n→q",
    "role": "supporter",
    "slot": 30,

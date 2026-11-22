@@ -3,6 +3,89 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%86%E3%82%A3%E3%83%8A%E3%83%AA",
  "archetypes": [
   {
+   "name": "E→CA→Q→CA×2 のあと、もう一度 E→CA×3",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "q",
+    "ca",
+    "ca"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e",
+      "ca",
+      "ca",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 8 件。平均 63.2k（最大 79.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→CA→Q→CA×2 のあと、もう一度 E→CA→Q→CA×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "q",
+    "ca",
+    "ca"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e",
+      "ca",
+      "q",
+      "ca",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 5 件。平均 63.1k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E→CA×3→Q のあと、もう一度 E→CA×3→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e",
+      "ca",
+      "ca",
+      "ca",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 4 件。平均 55.5k（最大 62.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "e→ca→q→ca×2",
    "role": "attacker",
    "slot": 40,

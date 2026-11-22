@@ -3,6 +3,136 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%87%E3%82%A3%E3%82%B7%E3%82%A2",
  "archetypes": [
   {
+   "name": "N→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ディシア 172 件中 6 件。平均 55.7k（最大 60.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ディシア 172 件中 22 件。平均 58.1k（最大 77.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 21/1/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→N×10、さらに E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    },
+    {
+     "slot": 35,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 1
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ディシア 172 件中 38 件。平均 46.3k（最大 56.2k）。凸数: 使われている設定の最小は 1 凸（分布 0〜6 凸 = 0/38/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q→N×10、さらに E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    },
+    {
+     "slot": 35,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ディシア 172 件中 18 件。平均 49.8k（最大 93.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 1/15/0/0/2/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E×2 のあと、もう一度 Q→N×10",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 1
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ディシア 172 件中 11 件。平均 53.2k（最大 77.8k）。凸数: 使われている設定の最小は 1 凸（分布 0〜6 凸 = 0/9/2/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "q→n×10",
    "role": "attacker",
    "slot": 40,

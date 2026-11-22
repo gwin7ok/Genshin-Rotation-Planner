@@ -3,6 +3,56 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B9%9D%E6%9D%A1%E8%A3%9F%E7%BE%85",
  "archetypes": [
   {
+   "name": "E→CA のあと、もう一度 Q、さらに E→CA",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    },
+    {
+     "slot": 35,
+     "use": [
+      "e",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 九条裟羅 147 件中 5 件。平均 53.9k（最大 83.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→CA→N のあと、もう一度 Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "ca",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 九条裟羅 147 件中 15 件。平均 53.6k（最大 64.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/15）（探索の比較なし）"
+  },
+  {
    "name": "E→CA のあと、もう一度 Q",
    "role": "supporter",
    "slot": 10,

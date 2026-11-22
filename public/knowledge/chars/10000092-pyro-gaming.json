@@ -3,6 +3,65 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%98%89%E6%98%8E",
  "archetypes": [
   {
+   "name": "Q→E→HP（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "hp"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 9 件。平均 94.5k（最大 110.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E→HP→E→HP→DASH（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "hp",
+    "e",
+    "hp",
+    "dash"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 6 件。平均 87.4k（最大 101.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+  },
+  {
+   "name": "Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "n",
+    "n",
+    "e",
+    "lp",
+    "e",
+    "lp",
+    "e",
+    "lp",
+    "e",
+    "lp",
+    "e",
+    "lp",
+    "e",
+    "lp",
+    "e",
+    "lp"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 10 件。平均 73.1k（最大 92.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
+  },
+  {
    "name": "q→n×2→e→hp→n→e→hp→dash",
    "role": "attacker",
    "slot": 40,

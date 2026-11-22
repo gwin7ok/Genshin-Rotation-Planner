@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%BE%9B%E7%82%8E",
  "archetypes": [
   {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 辛炎 48 件中 3 件。平均 45.1k（最大 59.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 辛炎 48 件中 13 件。平均 47.3k（最大 73.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
+  },
+  {
    "name": "ダッシュ・E・Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

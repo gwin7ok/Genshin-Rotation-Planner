@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A3%E3%83%83%E3%82%B7%E3%83%A5%E3%83%AB",
  "archetypes": [
   {
+   "name": "N→E のあと、もう一度 N×2→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "n",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "n",
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: フィッシュル 1367 件中 174 件。平均 67.0k（最大 282.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/174）（探索の比較なし）"
+  },
+  {
    "name": "E→N のあと、もう一度 N→N→Q",
    "role": "subAttacker",
    "slot": 20,

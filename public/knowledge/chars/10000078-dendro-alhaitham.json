@@ -3,6 +3,119 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%8F%E3%82%A4%E3%82%BC%E3%83%B3",
  "archetypes": [
   {
+   "name": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "lp",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "q"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "ca",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 8 件。平均 57.0k（最大 65.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "lp",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "q"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "ca",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 7 件。平均 53.4k（最大 66.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "e_hold→lp→n×2→ca→dash→n×3→ca→dash",
    "role": "attacker",
    "slot": 40,

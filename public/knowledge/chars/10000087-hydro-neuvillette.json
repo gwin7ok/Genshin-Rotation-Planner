@@ -3,6 +3,128 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8C%E3%83%B4%E3%82%A3%E3%83%AC%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "ca",
+      "q",
+      "e",
+      "ca"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "ca",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 17 件。平均 69.5k（最大 92.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 17/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 CA→E→CA→Q、さらに CA×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "ca",
+      "e",
+      "ca",
+      "q"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "ca",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 105 件。平均 80.9k（最大 104.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 105/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "ca",
+      "q",
+      "e",
+      "ca"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "ca",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 78 件。平均 81.2k（最大 170.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 77/0/1/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e",
+      "ca",
+      "q",
+      "ca"
+     ]
+    },
+    {
+     "slot": 55,
+     "use": [
+      "ca",
+      "e",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 26 件。平均 55.8k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 26/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,20 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%89%E3%82%A5%E3%83%AA%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→Q→E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドゥリン 298 件中 40 件。平均 333.6k（最大 1815.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 32/0/0/0/0/0/8）（探索の比較なし）"
+  },
+  {
    "name": "e→n→q",
    "role": "subAttacker",
    "slot": 20,

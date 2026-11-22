@@ -3,6 +3,46 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B9%85%E5%B2%90%E5%BF%8D",
  "archetypes": [
   {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 4
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 久岐忍 257 件中 8 件。平均 63.8k（最大 104.9k）。凸数: 使われている設定の最小は 4 凸（分布 0〜6 凸 = 0/0/0/0/1/0/7）（探索の比較なし）"
+  },
+  {
+   "name": "E→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n"
+   ],
+   "constellation": {
+    "min": 2
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 久岐忍 257 件中 22 件。平均 51.7k（最大 84.9k）。凸数: 使われている設定の最小は 2 凸（分布 0〜6 凸 = 0/0/1/0/0/0/21）（探索の比較なし）"
+  },
+  {
+   "name": "N→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 久岐忍 257 件中 11 件。平均 58.6k（最大 71.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/11）（探索の比較なし）"
+  },
+  {
    "name": "E→N のあと、もう一度 Q→N",
    "role": "supporter",
    "slot": 10,

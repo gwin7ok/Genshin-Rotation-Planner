@@ -3,6 +3,49 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%AC%E3%83%83%E3%82%AD%E3%83%BC%E3%83%8E",
  "archetypes": [
   {
+   "name": "E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "ca",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルレッキーノ 260 件中 18 件。平均 77.0k（最大 104.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 18/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3",
    "role": "attacker",
    "slot": 40,

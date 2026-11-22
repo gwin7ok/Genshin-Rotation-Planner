@@ -3,6 +3,60 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%87%8D%E9%9B%B2",
  "archetypes": [
   {
+   "name": "Q→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 重雲 142 件中 57 件。平均 59.7k（最大 139.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/57）（探索の比較なし）"
+  },
+  {
+   "name": "E→N のあと、もう一度 Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 重雲 142 件中 13 件。平均 72.4k（最大 113.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 重雲 142 件中 10 件。平均 56.4k（最大 85.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
+  },
+  {
    "name": "Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

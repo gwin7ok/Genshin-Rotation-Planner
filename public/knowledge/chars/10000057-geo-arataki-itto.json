@@ -3,6 +3,40 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%8D%92%E7%80%A7%E4%B8%80%E6%96%97",
  "archetypes": [
   {
+   "name": "N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "q",
+    "n",
+    "e",
+    "n",
+    "n",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "dash",
+    "n",
+    "n",
+    "n",
+    "n",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "e",
+    "ca"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 荒瀧一斗 76 件中 4 件。平均 54.9k（最大 66.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "通常→Q→通常→E→重撃連打の周回",
    "role": "attacker",
    "slot": 40,

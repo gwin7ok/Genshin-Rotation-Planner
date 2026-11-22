@@ -3,6 +3,104 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9F%E3%82%AB",
  "archetypes": [
   {
+   "name": "N→Q→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 4 件。平均 85.1k（最大 112.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "Q→N→E→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 3 件。平均 50.9k（最大 58.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "E→N→Q（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 3 件。平均 36.4k（最大 50.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ミカ 84 件中 5 件。平均 52.7k（最大 61.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと、もう一度 N→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "n",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ミカ 84 件中 4 件。平均 50.1k（最大 56.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 1
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 12 件。平均 59.7k（最大 156.0k）。凸数: 使われている設定の最小は 1 凸（分布 0〜6 凸 = 0/1/0/0/0/0/11）（探索の比較なし）"
+  },
+  {
    "name": "q→n→e",
    "role": "supporter",
    "slot": 20,

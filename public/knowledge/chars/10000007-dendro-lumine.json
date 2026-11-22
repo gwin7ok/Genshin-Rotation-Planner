@@ -3,6 +3,93 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E8%8D%89",
  "archetypes": [
   {
+   "name": "Q→E→N×2→CA（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e",
+    "n",
+    "n",
+    "ca"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 蛍(草) 59 件中 3 件。平均 51.1k（最大 56.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N×2 のあと、もう一度 E→N×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n",
+      "n",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 蛍(草) 59 件中 5 件。平均 42.4k（最大 50.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 蛍(草) 59 件中 4 件。平均 59.2k（最大 68.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N のあと、もう一度 E→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 蛍(草) 59 件中 3 件。平均 80.5k（最大 106.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "E・Q",
    "role": "supporter",
    "slot": 10,

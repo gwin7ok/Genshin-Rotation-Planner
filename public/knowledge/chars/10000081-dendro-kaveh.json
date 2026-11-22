@@ -1,5 +1,36 @@
 {
  "characterId": "10000081-dendro",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AB%E3%83%BC%E3%83%B4%E3%82%A7",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "Q→E→N×12→E→N×4（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "e",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: カーヴェ 30 件中 3 件。平均 62.8k（最大 63.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  }
+ ]
 }

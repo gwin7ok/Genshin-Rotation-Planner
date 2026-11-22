@@ -3,6 +3,94 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A8%E3%82%A9%E3%83%BC%E3%83%A8",
  "archetypes": [
   {
+   "name": "E→N×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 5 件。平均 52.9k（最大 63.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "N→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 5 件。平均 57.3k（最大 72.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+  },
+  {
+   "name": "Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "dash",
+    "n",
+    "dash",
+    "n",
+    "jump",
+    "n",
+    "jump",
+    "n",
+    "dash",
+    "n",
+    "dash",
+    "n",
+    "jump",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 3 件。平均 60.4k（最大 69.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "n",
+    "e",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "dash",
+      "n",
+      "n",
+      "dash",
+      "n"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヨォーヨ 82 件中 3 件。平均 37.0k（最大 43.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e の出場",
    "role": "supporter",
    "slot": 30,

@@ -3,6 +3,58 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%87%E3%82%A3%E3%82%AA%E3%83%8A",
  "archetypes": [
   {
+   "name": "E_HOLD→N→Q→N（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "n",
+    "q",
+    "n"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ディオナ 69 件中 7 件。平均 51.8k（最大 59.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E_HOLD×2（KQM）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e_hold",
+    "e_hold"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ディオナ 69 件中 3 件。平均 79.2k（最大 107.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→N のあと、もう一度 E→DASH",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "dash"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ディオナ 69 件中 3 件。平均 18.2k（最大 19.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+  },
+  {
    "name": "e_hold q の出場",
    "role": "supporter",
    "slot": 10,

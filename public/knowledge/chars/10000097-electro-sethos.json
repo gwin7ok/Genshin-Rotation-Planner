@@ -1,5 +1,27 @@
 {
  "characterId": "10000097-electro",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BB%E3%83%88%E3%82%B9",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "CA のあと、もう一度 E→CA",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca"
+   ],
+   "then": [
+    {
+     "slot": 50,
+     "use": [
+      "e",
+      "ca"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: セトス 58 件中 6 件。平均 57.2k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+  }
+ ]
 }

@@ -3,6 +3,55 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%85%AB%E9%87%8D%E7%A5%9E%E5%AD%90",
  "archetypes": [
   {
+   "name": "E×3 のあと、もう一度 E×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 36 件。平均 56.5k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 36/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E×3 のあと、もう一度 Q→E×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "e",
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 16 件。平均 52.6k（最大 90.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/1/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
    "name": "E×3→Q→E×3",
    "role": "subAttacker",
    "slot": 20,

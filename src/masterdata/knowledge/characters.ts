@@ -851,4 +851,48 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
       { name: 'E・Q のあと 通常攻撃 4 段 + E を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [4], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 基本はスキル → (通常 4 段 → 特殊スキル) × 4。爆発は強化中に使う' },
     ],
   },
+  {
+    characterId: '10000081-dendro', // カーヴェ（辞書ありで探索結果が悪くなったため、形を外した）
+    archetypes: [],
+  },
+  {
+    characterId: '10000097-electro', // セトス（辞書ありで探索結果が悪くなったため、形を外した）
+    archetypes: [],
+  },
+  {
+    characterId: '10000098-electro', // クロリンデ（辞書ありで探索結果が悪くなったため、形を外した）
+    archetypes: [],
+  },
+  {
+    characterId: '10000100-geo', // カチーナ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000122-dendro', // ネフェル（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000129-cryo', // ローエン（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000130-geo', // リンネア（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000136-electro', // ミティヤ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000137-electro', // バレリー（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000140-hydro', // ヴォジャニーツァ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
+  {
+    characterId: '10000143-anemo', // ヴェスナ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
+    archetypes: [],
+  },
 ];

@@ -10,6 +10,7 @@ import { DpsConditionsForm, useDpsConditions } from './DpsConditions';
 import { saveDpsSettings } from '../utils/appSettings';
 import { effectiveRoles, loadRoleOverrides, normalizeRoles, ROLE_ORDER } from '../utils/characterRoleStore';
 import { knowledgeSource } from '../utils/knowledge/source';
+import { expandGroupedStints } from '../utils/actionGroups';
 import { DEFAULT_SEARCH_SETTINGS, searchRotation, stintsForApp, type SearchOutcome, type SearchProgress, type SearchSettings } from '../utils/rotationSearch/search';
 
 interface AutoSearchDialogProps {
@@ -22,6 +23,9 @@ interface AutoSearchDialogProps {
   hurt: HurtSetting;
   /** 選んだ候補の出場を、ガントチャートに置く */
   onApply: (stints: Stint[], loopStartIndex: number) => void;
+  /** いまガントチャートにあるローテーション（「いまのローテーションから探索」の出発点） */
+  currentStints: Stint[];
+  currentLoopStartIndex: number;
 }
 
 const num = (s: string, fb: number, min: number, max: number): number => {
@@ -37,11 +41,13 @@ const errorText = (message: string): string => {
 };
 
 /** ローテーション自動探索（フェーズ 9）: 編成の役割から候補を作り、gcsim で DPS の高い順に並べて、1 位をガントチャートに置く */
-export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onClose, characters, database, switchDelay, defHalt, hurt, onApply }) => {
+export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onClose, characters, database, switchDelay, defHalt, hurt, onApply, currentStints, currentLoopStartIndex }) => {
   const [keep1, setKeep1] = useState(String(DEFAULT_SEARCH_SETTINGS.keep1));
   const [runs1, setRuns1] = useState(String(DEFAULT_SEARCH_SETTINGS.runs1));
   const [keep2, setKeep2] = useState(String(DEFAULT_SEARCH_SETTINGS.keep2));
   const [runs2, setRuns2] = useState(String(DEFAULT_SEARCH_SETTINGS.runs2));
+  /** party: 編成のキャラだけから探索 / current: いまガントチャートにあるローテーションを出発点に、より DPS の高いものを探索 */
+  const [mode, setMode] = useState<'party' | 'current'>('party');
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<SearchProgress | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -66,6 +72,14 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     return { ...prev, [id]: normalizeRoles(cur.includes(r) ? cur.filter(x => x !== r) : [...cur, r]) };
   });
 
+  // いまのローテーション（編成にいるキャラの出場だけ。グループは展開する）。出場が無ければ、「いまのローテーションから探索」は使えない
+  const currentSeed = useMemo(() => {
+    const ids = new Set(members.map(c => c.id));
+    const st = expandGroupedStints(currentStints.filter(x => ids.has(x.characterId)));
+    return st.length > 0 && st.some(x => x.actions.length > 0) ? { stints: st, loopStartIndex: Math.min(currentLoopStartIndex, st.length - 1) } : null;
+  }, [members, currentStints, currentLoopStartIndex]);
+  const effectiveMode = mode === 'current' && currentSeed ? 'current' : 'party';
+
   if (!isOpen) return null;
 
   const settingsNow = (): SearchSettings => ({
@@ -87,9 +101,18 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     const dpsSettings = cond.settingsNow();
     saveDpsSettings(dpsSettings);
     // 知識辞書（サーバー側）から、編成のキャラの分だけ取得する。取得できなければ、辞書なしで探索する
-    const knowledge = await knowledgeSource.load(members.map(c => c.id)).catch(() => ({}));
+    const fromCurrent = effectiveMode === 'current' && currentSeed !== null;
+    // 「いまのローテーションから探索」では、辞書は使わない（いまのローテーションだけを出発点に、そこから変えて登る）
+    const knowledge = fromCurrent ? {} : await knowledgeSource.load(members.map(c => c.id)).catch(() => ({}));
+    // アタッカー: 役割にアタッカーを持つキャラ（いまのローテーションに出るもの）。いなければ、最後に出るキャラ
+    const inRot = new Set(currentSeed?.stints.map(x => x.characterId));
+    const attackers = members.filter(c => inRot.has(c.id) && (roles[c.id] ?? []).includes('attacker')).map(c => c.id);
+    const lastId = currentSeed?.stints[currentSeed.stints.length - 1]?.characterId;
+    const attackerIds = attackers.length > 0 ? attackers : lastId ? [lastId] : [];
+    const assignment = Object.fromEntries(members.map(c => [c.id, attackerIds.includes(c.id) ? 'attacker' : ((roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter')])) as Record<string, CharacterRole>;
     const out = await searchRotation({
       knowledge,
+      ...(fromCurrent ? { extraSeeds: [{ stints: currentSeed!.stints, loopStartIndex: currentSeed!.loopStartIndex, assignment }], seedsOnly: true, keepFirstSeed: true } : {}),
       characters: members,
       roles: Object.fromEntries(members.map(c => [c.id, roles[c.id] ?? []])),
       weapons: database.weapons,
@@ -136,6 +159,23 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
 
         <div className="p-5 overflow-y-auto space-y-4 flex-1 text-sm">
           <p className="text-xs text-slate-400 leading-relaxed">{t('gcsim:search.intro')}</p>
+
+          <div className="space-y-1.5" role="radiogroup" aria-label={t('gcsim:search.modeTitle')}>
+            <p className="text-xs font-bold text-slate-300">{t('gcsim:search.modeTitle')}</p>
+            {(['party', 'current'] as const).map(m => {
+              const disabled = running || (m === 'current' && !currentSeed);
+              return (
+                <label key={m} className={`flex items-start gap-2 text-xs rounded-lg border px-2.5 py-1.5 ${effectiveMode === m ? 'bg-violet-950/40 border-violet-500/50' : 'bg-slate-950/60 border-slate-800'} ${disabled ? 'opacity-50' : 'cursor-pointer'}`}>
+                  <input type="radio" name="search-mode" checked={effectiveMode === m} disabled={disabled} onChange={() => setMode(m)} data-testid={`search-mode-${m}`} className="mt-0.5" />
+                  <span>
+                    <span className="font-bold text-slate-200">{t(`gcsim:search.mode.${m}`)}</span>
+                    <span className="block text-slate-400 leading-relaxed">{t(`gcsim:search.modeHint.${m}`)}</span>
+                    {m === 'current' && !currentSeed && <span className="block text-amber-300">{t('gcsim:search.modeNoCurrent')}</span>}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
 
           <div className="space-y-1.5">
             <p className="text-xs font-bold text-slate-300">{t('gcsim:search.rolesTitle')}</p>
@@ -225,13 +265,13 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                     </tr>
                   </thead>
                   <tbody>
-                    {outcome.results.slice(0, 10).map((r, i) => (
+                    {outcome.results.map((r, i) => ({ r, i })).filter(({ r, i }) => i < 10 || r.isCurrent).map(({ r, i }) => (
                       <tr key={r.candidate.id} className={`border-t border-slate-800 ${applied === i ? 'bg-violet-950/40' : ''}`}>
                         <td className="px-2 py-1.5 text-slate-300 font-bold">{i + 1}</td>
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? [...r.particles.energyByChar10s.map(x => `${charName(members.find(c => c.id === x.characterId) ?? { name: x.characterId })}: ${x.energy10s.toFixed(1)}`), t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) })].join(String.fromCharCode(10)) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
-                        <td className="px-2 py-1.5 text-slate-300 break-words">{r.candidate.label}</td>
+                        <td className="px-2 py-1.5 text-slate-300 break-words">{r.isCurrent && <span className="mr-1.5 px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-200 font-bold">{t('gcsim:search.currentBadge')}</span>}{r.candidate.label}</td>
                         <td className="px-2 py-1.5 text-right">
                           {applied === i ? (
                             <span className="inline-flex items-center gap-1 text-emerald-300"><Check className="w-3.5 h-3.5" />{t('gcsim:search.applied')}</span>

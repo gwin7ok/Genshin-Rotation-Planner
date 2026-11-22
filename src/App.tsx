@@ -1109,6 +1109,8 @@ export default function App() {
         switchDelay={switchDelay}
         defHalt={defHalt}
         hurt={hurt}
+        currentStints={visibleStints}
+        currentLoopStartIndex={loopStartIndex}
         onApply={(next, loopStart) => {
           updateStints(next);
           setLoopStartIndex(loopStart);

@@ -102,6 +102,8 @@ export interface SearchResultItem {
   totalSeconds: number;
   /** 簡易スコア */
   score: number;
+  /** 出発点にした「いまのローテーション」と同じ並び（keepFirstSeed のとき） */
+  isCurrent?: boolean;
   /** 発生した粒子 */
   particles?: ParticleInfo;
 }
@@ -140,8 +142,10 @@ export interface SearchArgs {
   extraSeeds?: Array<{ stints: Stint[]; loopStartIndex: number; assignment?: Record<string, SearchRole> }>;
   /** 知識辞書（取得できたキャラの分）。運用型の組み合わせから出発点を組み、必ず出発点に入れる */
   knowledge?: KnowledgeBundle;
-  /** true のとき、生成した候補を使わず、extraSeeds だけを出発点にする（辞書で作った少数の候補だけから登る場合の、効果と時間を測る） */
+  /** true のとき、生成した候補を使わず、extraSeeds だけを出発点にする（辞書で作った少数の候補だけから登る場合の、効果と時間を測る。画面の「いまのローテーションから探索」も、これを使う） */
   seedsOnly?: boolean;
+  /** true のとき、最初の extraSeeds（候補の ID は seed0）を、順位に載せる（上位に入らなくても。「いまのローテーション」との比較に使う） */
+  keepFirstSeed?: boolean;
   /** 同時に動かす gcsim の数（Worker の数） */
   cores: number;
   onProgress?: (p: SearchProgress) => void;
@@ -410,12 +414,16 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       return parts.join('|') + '@' + (sc.candidate.loopStartIndex ?? 0);
     };
     const seenKeys = new Set<string>();
-    const stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => ({ ...r.sc, candidate: mergeAdjacentStints(characters, r.sc.candidate) }));
+    let stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => ({ ...r.sc, candidate: mergeAdjacentStints(characters, r.sc.candidate) }));
+    // 「いまのローテーション」（最初の出発点）は、上位に入らなくても、順位に載せて比べられるようにする
+    const ownRun = args.keepFirstSeed ? okAll.find(r => r.sc.candidate.id === 'seed0') : undefined;
+    const ownKey = ownRun ? mergedKey(ownRun.sc) : undefined;
+    if (ownRun && !stage2.some(x => mergedKey(x) === ownKey)) stage2 = [...stage2, { ...ownRun.sc, candidate: mergeAdjacentStints(characters, ownRun.sc.candidate) }];
     const r2 = (await mapLimit(stage2, settings.runs2, 'verify')).filter(r => r.dps !== undefined);
     if (cancelled()) return { status: 'cancelled' };
     if (r2.length === 0) return { status: 'error', message: 'ALL_FAILED' };
     const results: SearchResultItem[] = r2
-      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}) }))
+      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}), ...(ownKey !== undefined && mergedKey(r.sc) === ownKey ? { isCurrent: true } : {}) }))
       .sort((x, y) => y.dps - x.dps);
     return {
       status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank, groupBest: [...groupBestMap.values()],

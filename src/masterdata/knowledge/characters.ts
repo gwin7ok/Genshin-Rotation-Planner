@@ -172,6 +172,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000131-pyro', // ニコ
     archetypes: [
+      { name: 'E→通常', role: 'supporter', slot: 10, use: ['e', 'n'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ニコ 206 件中 15 件。平均 787.7k（最大 2063.3k。ドゥリン・シトラリ・シロネン編成）（探索の比較なし）' },
       { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発の順番を守る（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     { name: 'E', role: 'supporter', slot: 30, use: ['e'], evidence: '手組み「星電導サンドローネ」' }],
@@ -421,6 +422,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000057-geo',
     archetypes: [
+      { name: '通常→Q→通常→E→重撃連打の周回', role: 'attacker', slot: 40, use: ['n', 'q', 'n', 'e', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'n', 'n', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'e', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 最も多い形（76 件中 33 件。平均 46.5k・最大 88.5k）。通常 2 → 重撃 5 → 通常 4 → 重撃 5（探索の比較なし）' },
+      { name: 'Q→E→重撃→E→重撃（マーヴィカ編成など）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca', 'n', 'e', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（421.6k・111.7k・96.8k）の形: 爆発→スキル→重撃→通常→スキル→重撃（探索の比較なし）' },
       { name: 'Q→通常1→E→重撃', role: 'attacker', slot: 40, use: ['q', 'n', 'e', 'ca'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: 爆発→（通常 1 発→）スキル→重撃で、爆発の効果時間を使い切れる（探索の比較なし）' },
       { name: '通常2→重撃の繰り返し', role: 'attacker', slot: 40, use: [], fill: ['n', 'n', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 通常 2 回→すぐトドメの重撃のループ（探索の比較なし）' },
       { name: 'E→重撃の繰り返し（爆発なし）', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 爆発を使わない前提なら、スキル 1 回→すぐ重撃のループがダメージを出しやすい（探索の比較なし）' },
@@ -468,6 +471,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000113-anemo',
     archetypes: [
+      { name: 'E→重撃を連打（固定回数）', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'ca'], fill: ['ca'], fillRepeat: [1, 2, 3], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 同上。重撃の回数を固定にして、繰り返す形（探索の比較なし）' },
+      { name: 'E→重撃を連打→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'ca', 'ca', 'ca', 'q'], fill: ['ca'], fillRepeat: [0], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ナイトソウルが多い間は重撃を連打し、爆発が使えれば爆発。7 件中 5 件が同じ型（e → ca 連打 → q）。DPS 上位は 80k〜100k（探索の比較なし）' },
       { name: 'Q→E', role: 'attacker', slot: 40, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 爆発後は元素熟知が上がるので、爆発→スキル攻撃の立ち回りが強力（探索の比較なし）' },
       { name: 'E・重撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'ca', 'ca'], fill: ['n'], fillRepeat: [10, 12, 14], evidence: '自動編成（イファ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.5k → 27.5k' },
     ],
@@ -592,6 +597,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000063-cryo',
     archetypes: [
+      { name: '長押しE→Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）' },
       { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→他の氷キャラが攻撃、の順（探索の比較なし）' },
       { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k' },
     ],
@@ -875,6 +881,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000084-pyro',
     archetypes: [
+      { name: '重撃×4→Q→E→重撃→E', role: 'attacker', slot: 40, use: ['ca', 'ca', 'ca', 'ca', 'q', 'e', 'ca', 'e'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 分岐つきの設定（85.3k 平均）の、爆発が使えるときの形（探索の比較なし）' },
+      { name: '重撃×3→E→Q→E→重撃', role: 'attacker', slot: 40, use: ['ca', 'ca', 'ca', 'e', 'q', 'e', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（106.8k）の形: 重撃 3 回のあと E→Q→E、重撃（探索の比較なし）' },
       { name: 'Q→重撃→E→重撃→E→Q', role: 'attacker', slot: 40, use: ['q', 'ca', 'e', 'ca', 'e', 'q'], fill: ['ca', 'e', 'ca', 'e'], fillRepeat: [1, 2], evidence: 'Wiki 本文のコンボの記述: 爆発と重撃でプロップ残数を得て、スキルで消費する一連の流れ（探索の比較なし）' },
       { name: 'E・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [4, 5, 6], lead: ['n'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 重撃・スキル・爆発を満遍なく使うメインアタッカー' },
     ],

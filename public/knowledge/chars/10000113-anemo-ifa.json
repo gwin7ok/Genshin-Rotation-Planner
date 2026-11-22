@@ -3,6 +3,49 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%95%E3%82%A1",
  "archetypes": [
   {
+   "name": "E→重撃を連打（固定回数）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "ca"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    1,
+    2,
+    3
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 同上。重撃の回数を固定にして、繰り返す形（探索の比較なし）"
+  },
+  {
+   "name": "E→重撃を連打→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    0
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ナイトソウルが多い間は重撃を連打し、爆発が使えれば爆発。7 件中 5 件が同じ型（e → ca 連打 → q）。DPS 上位は 80k〜100k（探索の比較なし）"
+  },
+  {
    "name": "Q→E",
    "role": "attacker",
    "slot": 40,

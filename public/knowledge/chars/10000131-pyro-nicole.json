@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8B%E3%82%B3",
  "archetypes": [
   {
+   "name": "E→通常",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ニコ 206 件中 15 件。平均 787.7k（最大 2063.3k。ドゥリン・シトラリ・シロネン編成）（探索の比較なし）"
+  },
+  {
    "name": "E→Q",
    "role": "supporter",
    "slot": 10,

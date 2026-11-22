@@ -3,6 +3,50 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%8D%92%E7%80%A7%E4%B8%80%E6%96%97",
  "archetypes": [
   {
+   "name": "通常→Q→通常→E→重撃連打の周回",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "q",
+    "n",
+    "e",
+    "n",
+    "n",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "n",
+    "n",
+    "n",
+    "n",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "e",
+    "ca"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 最も多い形（76 件中 33 件。平均 46.5k・最大 88.5k）。通常 2 → 重撃 5 → 通常 4 → 重撃 5（探索の比較なし）"
+  },
+  {
+   "name": "Q→E→重撃→E→重撃（マーヴィカ編成など）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "ca",
+    "n",
+    "e",
+    "ca"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（421.6k・111.7k・96.8k）の形: 爆発→スキル→重撃→通常→スキル→重撃（探索の比較なし）"
+  },
+  {
    "name": "Q→通常1→E→重撃",
    "role": "attacker",
    "slot": 40,

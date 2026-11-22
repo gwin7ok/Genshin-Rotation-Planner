@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%94%B3%E9%B6%B4",
  "archetypes": [
   {
+   "name": "長押しE→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）"
+  },
+  {
    "name": "E→Q→E",
    "role": "supporter",
    "slot": 10,

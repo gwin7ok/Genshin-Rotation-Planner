@@ -74,35 +74,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 537 件・平均 65.3k・最大 282.6k。n×2 q（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（537 件。分布 0〜6 凸 = 0/0/0/0/0/0/537）"
-  },
-  {
-   "name": "Q→E",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし）"
-  },
-  {
-   "name": "Q だけ",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q"
-   ],
-   "evidence": "手組み「激化刻晴」"
-  },
-  {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "探索の上位"
   }
  ]
 }

@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B9%85%E5%B2%90%E5%BF%8D",
  "archetypes": [
   {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
+  },
+  {
    "name": "E→N→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -63,15 +72,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 久岐忍 257 件中 32 件。平均 76.4k（最大 81.6k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（83 件。分布 0〜6 凸 = 3/0/1/0/0/0/79）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
   }
  ]
 }

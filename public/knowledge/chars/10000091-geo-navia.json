@@ -3,24 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%B4%E3%82%A3%E3%82%A2",
  "archetypes": [
   {
-   "name": "e_hold→n×3→dash→n×2",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 56 件・平均 61.9k・最大 84.0k。e_hold n×3 dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（56 件。分布 0〜6 凸 = 56/0/0/0/0/0/0）"
-  },
-  {
    "name": "E→通常→E",
    "role": "attacker",
    "slot": 40,
@@ -52,6 +34,24 @@
     "n"
    ],
    "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒"
+  },
+  {
+   "name": "e_hold→n×3→dash→n×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 56 件・平均 61.9k・最大 84.0k。e_hold n×3 dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（56 件。分布 0〜6 凸 = 56/0/0/0/0/0/0）"
   }
  ]
 }

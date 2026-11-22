@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B8%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 他キャラのスキル→ジンに交代して受け取り→スキル→爆発（探索の比較なし）"
+  },
+  {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
+  },
+  {
    "name": "E→Q のあと、もう一度 E→N",
    "role": "supporter",
    "slot": 10,
@@ -89,25 +108,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 6 件。平均 52.1k（最大 67.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 他キャラのスキル→ジンに交代して受け取り→スキル→爆発（探索の比較なし）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
   }
  ]
 }

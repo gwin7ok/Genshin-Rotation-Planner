@@ -3,37 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AA%E3%83%8D",
  "archetypes": [
   {
-   "name": "重撃×4→Q→E→重撃→E",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "ca",
-    "ca",
-    "ca",
-    "q",
-    "e",
-    "ca",
-    "e"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 分岐つきの設定（85.3k 平均）の、爆発が使えるときの形（探索の比較なし）"
-  },
-  {
-   "name": "重撃×3→E→Q→E→重撃",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "ca",
-    "ca",
-    "e",
-    "q",
-    "e",
-    "ca"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（106.8k）の形: 重撃 3 回のあと E→Q→E、重撃（探索の比較なし）"
-  },
-  {
    "name": "Q→重撃→E→重撃→E→Q",
    "role": "attacker",
    "slot": 40,
@@ -77,6 +46,37 @@
     "n"
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 重撃・スキル・爆発を満遍なく使うメインアタッカー"
+  },
+  {
+   "name": "重撃×4→Q→E→重撃→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "q",
+    "e",
+    "ca",
+    "e"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 分岐つきの設定（85.3k 平均）の、爆発が使えるときの形（探索の比較なし）"
+  },
+  {
+   "name": "重撃×3→E→Q→E→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "ca",
+    "ca",
+    "e",
+    "q",
+    "e",
+    "ca"
+   ],
+   "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（106.8k）の形: 重撃 3 回のあと E→Q→E、重撃（探索の比較なし）"
   }
  ]
 }

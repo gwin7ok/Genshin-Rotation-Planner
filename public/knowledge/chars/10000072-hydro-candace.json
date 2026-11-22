@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9",
  "archetypes": [
   {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（キャンディス + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.8k → 37.9k"
+  },
+  {
    "name": "E→N×2→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -108,16 +118,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 14 件・平均 64.2k・最大 100.3k。e n q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（14 件。分布 0〜6 凸 = 0/0/0/0/0/0/14）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（キャンディス + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.8k → 37.9k"
   }
  ]
 }

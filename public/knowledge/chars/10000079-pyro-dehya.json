@@ -3,6 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%87%E3%82%A3%E3%82%B7%E3%82%A2",
  "archetypes": [
   {
+   "name": "E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の強化攻撃を連打する爆発アタッカー型"
+  },
+  {
+   "name": "E（炎付着サポート）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型"
+  },
+  {
    "name": "N→E（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -153,33 +180,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 76 件・平均 48.2k・最大 93.3k。q n×10（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（76 件。分布 0〜6 凸 = 2/70/2/0/2/0/0）"
-  },
-  {
-   "name": "E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    4,
-    6,
-    8
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の強化攻撃を連打する爆発アタッカー型"
-  },
-  {
-   "name": "E（炎付着サポート）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型"
   }
  ]
 }

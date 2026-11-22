@@ -3,6 +3,54 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%A4%9C%E8%98%AD",
  "archetypes": [
   {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+  },
+  {
+   "name": "E",
+   "role": "subAttacker",
+   "slot": 25,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+  },
+  {
+   "name": "Q→E",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし）"
+  },
+  {
+   "name": "Q だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "evidence": "手組み「激化刻晴」"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位"
+  },
+  {
    "name": "E→Q→N（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -59,16 +107,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 109 件・平均 68.4k・最大 353.2k。q n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（109 件。分布 0〜6 凸 = 108/0/0/0/1/0/0）"
-  },
-  {
-   "name": "E と Q",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
   },
   {
    "name": "E と Q",

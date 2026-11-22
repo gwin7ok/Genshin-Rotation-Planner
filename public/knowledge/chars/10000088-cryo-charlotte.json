@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A3%E3%83%AB%E3%83%AD%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（シャルロット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.8k → 44.3k"
+  },
+  {
    "name": "Q→E（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -57,16 +67,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 20 件・平均 70.2k・最大 93.5k。e n q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（20 件。分布 0〜6 凸 = 0/0/0/0/0/0/20）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（シャルロット + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.8k → 44.3k"
   }
  ]
 }

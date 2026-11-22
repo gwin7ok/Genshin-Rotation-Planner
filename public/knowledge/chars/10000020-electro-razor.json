@@ -3,6 +3,42 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AC%E3%82%B6%E3%83%BC",
  "archetypes": [
   {
+   "name": "長押しE→Q→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 雷の印を消費（長押しスキル）→爆発→スキルというコンボ（探索の比較なし）"
+  },
+  {
+   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    18
+   ],
+   "evidence": "自動編成（レザー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.7k → 38.3k"
+  },
+  {
    "name": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）",
    "role": "attacker",
    "slot": 40,
@@ -81,42 +117,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レザー 149 件中 5 件。平均 68.7k（最大 82.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "長押しE→Q→E",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "q",
-    "e"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    8,
-    10,
-    12
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 雷の印を消費（長押しスキル）→爆発→スキルというコンボ（探索の比較なし）"
-  },
-  {
-   "name": "E・Q のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    14,
-    18
-   ],
-   "evidence": "自動編成（レザー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.7k → 38.3k"
   }
  ]
 }

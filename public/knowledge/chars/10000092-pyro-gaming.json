@@ -3,6 +3,44 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%98%89%E6%98%8E",
  "archetypes": [
   {
+   "name": "E・落下・Q のあと E + 落下を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "fill": [
+    "e",
+    "hp"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 特殊落下攻撃を連発する形"
+  },
+  {
+   "name": "E・落下・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    6,
+    8,
+    10
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで跳んでの特殊落下攻撃が主力。爆発は補助"
+  },
+  {
    "name": "Q→E→HP（KQM）",
    "role": "attacker",
    "slot": 40,
@@ -96,44 +134,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 85.0k・最大 103.6k。q e hp e hp（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（15 件。分布 0〜6 凸 = 0/0/0/0/0/0/15）"
-  },
-  {
-   "name": "E・落下・Q のあと E + 落下を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "hp",
-    "q"
-   ],
-   "fill": [
-    "e",
-    "hp"
-   ],
-   "fillRepeat": [
-    2,
-    3
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 特殊落下攻撃を連発する形"
-  },
-  {
-   "name": "E・落下・Q のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "hp",
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    6,
-    8,
-    10
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで跳んでの特殊落下攻撃が主力。爆発は補助"
   }
  ]
 }

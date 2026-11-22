@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A9%E3%82%A6%E3%83%9E",
  "archetypes": [
   {
+   "name": "長押し E と Q",
+   "role": "subAttacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "手組み「月開花」。長押しで得た詠月を Q が消費する（+26k の実測）"
+  },
+  {
    "name": "N→E（KQM）",
    "role": "subAttacker",
    "slot": 20,
@@ -76,16 +86,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 9 件・平均 223.5k・最大 1059.0k。n e_hold q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（9 件。分布 0〜6 凸 = 8/0/0/0/0/0/1）"
-  },
-  {
-   "name": "長押し E と Q",
-   "role": "subAttacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "q"
-   ],
-   "evidence": "手組み「月開花」。長押しで得た詠月を Q が消費する（+26k の実測）"
   }
  ]
 }

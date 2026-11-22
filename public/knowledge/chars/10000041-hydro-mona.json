@@ -3,6 +3,53 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A2%E3%83%8A",
  "archetypes": [
   {
+   "name": "Q→通常",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "n"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）"
+  },
+  {
+   "name": "E→通常→重撃（層を 3 つ）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "ca"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k"
+  },
+  {
    "name": "E→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -92,53 +139,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 26 件・平均 99.2k・最大 151.3k。n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（26 件。分布 0〜6 凸 = 1/0/0/0/25/0/0）"
-  },
-  {
-   "name": "Q→通常",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）"
-  },
-  {
-   "name": "E→通常→重撃（層を 3 つ）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n",
-    "ca"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    2,
-    3
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "fill": [
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    5,
-    6
-   ],
-   "evidence": "自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k"
   }
  ]
 }

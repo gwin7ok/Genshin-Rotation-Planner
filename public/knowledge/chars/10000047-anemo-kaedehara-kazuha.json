@@ -3,6 +3,57 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%A5%93%E5%8E%9F%E4%B8%87%E8%91%89",
  "archetypes": [
   {
+   "name": "E→落下→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→落下攻撃（乱れ嵐斬）→爆発（探索の比較なし）"
+  },
+  {
+   "name": "E→通常→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 立ち回りの例: スキル→通常（霧切 1 層）→爆発（霧切 2・3 層）（探索の比較なし）"
+  },
+  {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
+  },
+  {
+   "name": "E・高い落下",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "hp"
+   ],
+   "evidence": "手組み「激化刻晴」・探索の上位（拡散）"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "探索の上位"
+  },
+  {
    "name": "Q のあと、もう一度 E→HP、さらに E→HP",
    "role": "supporter",
    "slot": 10,
@@ -75,57 +126,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 141 件。平均 62.9k（最大 170.8k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（278 件。分布 0〜6 凸 = 272/0/2/0/0/0/4）"
-  },
-  {
-   "name": "E→落下→Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "hp",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→落下攻撃（乱れ嵐斬）→爆発（探索の比較なし）"
-  },
-  {
-   "name": "E→通常→Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 立ち回りの例: スキル→通常（霧切 1 層）→爆発（霧切 2・3 層）（探索の比較なし）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
-  },
-  {
-   "name": "E・高い落下",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "hp"
-   ],
-   "evidence": "手組み「激化刻晴」・探索の上位（拡散）"
-  },
-  {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "探索の上位"
   }
  ]
 }

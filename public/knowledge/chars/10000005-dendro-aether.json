@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E8%8D%89",
  "archetypes": [
   {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作る"
+  },
+  {
+   "name": "E・Q（サブアタッカー）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作るサブアタッカー"
+  },
+  {
    "name": "E→N→Q→N のあと、もう一度 E→N×3",
    "role": "supporter",
    "slot": 10,
@@ -27,26 +47,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 空(草) 17 件中 3 件。平均 48.5k（最大 49.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
-  },
-  {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作る"
-  },
-  {
-   "name": "E・Q（サブアタッカー）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作るサブアタッカー"
   }
  ]
 }

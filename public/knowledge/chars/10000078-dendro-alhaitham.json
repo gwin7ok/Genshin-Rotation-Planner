@@ -3,6 +3,60 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%8F%E3%82%A4%E3%82%BC%E3%83%B3",
  "archetypes": [
   {
+   "name": "E→落下→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）"
+  },
+  {
+   "name": "Q→E→重撃（鏡の補充）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "ca"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    12,
+    18
+   ],
+   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
+  },
+  {
    "name": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
    "role": "attacker",
    "slot": 40,
@@ -160,60 +214,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）"
-  },
-  {
-   "name": "E→落下→Q",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "hp",
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    8,
-    10,
-    12
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E→重撃（鏡の補充）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e",
-    "ca"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    8,
-    10,
-    12
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    12,
-    18
-   ],
-   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
   }
  ]
 }

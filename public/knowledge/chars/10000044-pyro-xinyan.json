@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%BE%9B%E7%82%8E",
  "archetypes": [
   {
+   "name": "ダッシュ・E・Q のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "dash",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    18,
+    20,
+    22
+   ],
+   "evidence": "自動編成（辛炎 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 21.9k → 24.8k"
+  },
+  {
    "name": "E→N→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -28,25 +47,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 辛炎 48 件中 13 件。平均 47.3k（最大 73.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
-  },
-  {
-   "name": "ダッシュ・E・Q のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "dash",
-    "e",
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    18,
-    20,
-    22
-   ],
-   "evidence": "自動編成（辛炎 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 21.9k → 24.8k"
   }
  ]
 }

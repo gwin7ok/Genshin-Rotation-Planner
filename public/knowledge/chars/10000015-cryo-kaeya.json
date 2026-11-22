@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AC%E3%82%A4%E3%82%A2",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→爆発（溶解編成の立ち回り）（探索の比較なし）"
+  },
+  {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k"
+  },
+  {
    "name": "E→N→Q（KQM）",
    "role": "subAttacker",
    "slot": 20,
@@ -52,25 +71,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 87.1k・最大 159.7k。e dash q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（17 件。分布 0〜6 凸 = 1/0/1/0/0/0/15）"
-  },
-  {
-   "name": "E→Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→爆発（溶解編成の立ち回り）（探索の比較なし）"
-  },
-  {
-   "name": "q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q"
-   ],
-   "evidence": "自動編成（ガイア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 49.1k"
   }
  ]
 }

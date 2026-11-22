@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AA%E3%83%AD%E3%83%AB%E3%83%B3",
  "archetypes": [
   {
+   "name": "Q だけ",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
+  },
+  {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒"
+  },
+  {
    "name": "N→E→Q（KQM）",
    "role": "subAttacker",
    "slot": 20,
@@ -78,25 +97,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: オロルン 257 件中 10 件。平均 117.0k（最大 424.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
-  },
-  {
-   "name": "Q だけ",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q"
-   ],
-   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
-  },
-  {
-   "name": "E と Q",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒"
   }
  ]
 }

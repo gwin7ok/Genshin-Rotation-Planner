@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%99%BD%E6%9C%AE",
  "archetypes": [
   {
+   "name": "E→Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→爆発→スキル→キャラチェンジで、粒子を効率よく分配（探索の比較なし）"
+  },
+  {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k"
+  },
+  {
    "name": "N→E→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -101,26 +121,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 61.9k・最大 73.5k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）"
-  },
-  {
-   "name": "E→Q→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→爆発→スキル→キャラチェンジで、粒子を効率よく分配（探索の比較なし）"
-  },
-  {
-   "name": "q の出場",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q"
-   ],
-   "evidence": "自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k"
   }
  ]
 }

@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%82%B5%E3%83%AA%E3%82%A2",
  "archetypes": [
   {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（ロサリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.3k → 41.3k"
+  },
+  {
    "name": "E→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -49,15 +58,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ロサリア 345 件中 64 件。平均 51.9k（最大 93.3k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（203 件。分布 0〜6 凸 = 4/0/0/0/0/0/199）"
-  },
-  {
-   "name": "q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q"
-   ],
-   "evidence": "自動編成（ロサリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.3k → 41.3k"
   }
  ]
 }

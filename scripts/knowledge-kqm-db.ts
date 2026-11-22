@@ -209,10 +209,11 @@ if (args.includes('--multi') || SINGLE) {
     let src = fs.readFileSync(file, 'utf8');
     const nl = src.includes(String.fromCharCode(13, 10)) ? String.fromCharCode(13, 10) : NL;
     const missing = new Map<string, { who: string; texts: string[] }>();
-    for (const it of items.reverse()) {
+    for (const it of items) {
       const i = src.indexOf(`characterId: '${it.id}'`);
-      if (i < 0) { missing.set(it.id, { who: it.who, texts: [it.text, ...(missing.get(it.id)?.texts ?? [])] }); continue; }
-      const j = src.indexOf('archetypes: [', i) + 'archetypes: ['.length;
+      if (i < 0) { missing.set(it.id, { who: it.who, texts: [...(missing.get(it.id)?.texts ?? []), it.text] }); continue; }
+      // 既存の形（手で作った形・測った形）より後ろに足す。先頭の形が、探索の出発点の基準になるため（KQM 由来を前に置くと、編成によっては DPS が下がる）
+      const j = src.indexOf(nl + '    ],', i);
       src = src.slice(0, j) + nl + '      ' + it.text + src.slice(j);
     }
     // 辞書にまだ無いキャラは、末尾に新しい項目として足す

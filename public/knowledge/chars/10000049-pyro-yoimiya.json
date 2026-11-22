@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%AE%B5%E5%AE%AE",
  "archetypes": [
   {
+   "name": "Q のあと 通常5×3 セット",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 立ち回り: 爆発→通常攻撃 5 段×3 セット（探索の比較なし）"
+  },
+  {
+   "name": "E のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    17,
+    19,
+    21
+   ],
+   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
+  },
+  {
    "name": "E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）",
    "role": "attacker",
    "slot": 40,
@@ -61,43 +98,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 宵宮 211 件中 15 件。平均 55.2k（最大 71.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと 通常5×3 セット",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "fillRepeat": [
-    3,
-    4
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 立ち回り: 爆発→通常攻撃 5 段×3 セット（探索の比較なし）"
-  },
-  {
-   "name": "E のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    17,
-    19,
-    21
-   ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
   }
  ]
 }

@@ -3,6 +3,46 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%86%E3%82%A3%E3%83%8A%E3%83%AA",
  "archetypes": [
   {
+   "name": "E→重撃×3→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 基本の立ち回りは、スキル→重撃（スキルで 3 発分チャージ短縮）（探索の比較なし）"
+  },
+  {
+   "name": "E・Q（サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 瞬間火力型。スキルと爆発で草付着"
+  },
+  {
+   "name": "E・Q のあと 狙い撃ちを繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで 3 発分の 2 段チャージを短縮 → 狙い撃ち → 爆発の一連で戦う"
+  },
+  {
    "name": "E→CA→Q→CA×2 のあと、もう一度 E→CA×3",
    "role": "attacker",
    "slot": 40,
@@ -97,46 +137,6 @@
     "ca"
    ],
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 30 件・平均 64.3k・最大 237.3k。e ca q ca×2（探索の比較なし）"
-  },
-  {
-   "name": "E→重撃×3→Q",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "ca",
-    "ca",
-    "ca",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 基本の立ち回りは、スキル→重撃（スキルで 3 発分チャージ短縮）（探索の比較なし）"
-  },
-  {
-   "name": "E・Q（サブ）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 瞬間火力型。スキルと爆発で草付着"
-  },
-  {
-   "name": "E・Q のあと 狙い撃ちを繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "ca"
-   ],
-   "fillRepeat": [
-    3,
-    4
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで 3 発分の 2 段チャージを短縮 → 狙い撃ち → 爆発の一連で戦う"
   }
  ]
 }

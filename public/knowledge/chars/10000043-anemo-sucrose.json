@@ -3,20 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B9",
  "archetypes": [
   {
-   "name": "n→e→dash",
-   "role": "subAttacker",
-   "slot": 30,
-   "use": [
-    "n",
-    "e",
-    "dash"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 23 件・平均 84.8k・最大 217.3k。n e dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（23 件。分布 0〜6 凸 = 0/0/0/0/0/0/23）"
-  },
-  {
    "name": "E・通常攻撃・重撃",
    "role": "subAttacker",
    "slot": 30,
@@ -33,6 +19,20 @@
     "ca"
    ],
    "evidence": "編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒"
+  },
+  {
+   "name": "n→e→dash",
+   "role": "subAttacker",
+   "slot": 30,
+   "use": [
+    "n",
+    "e",
+    "dash"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 23 件・平均 84.8k・最大 217.3k。n e dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（23 件。分布 0〜6 凸 = 0/0/0/0/0/0/23）"
   }
  ]
 }

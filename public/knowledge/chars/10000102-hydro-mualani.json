@@ -3,30 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A0%E3%82%A2%E3%83%A9%E3%83%8B",
  "archetypes": [
   {
-   "name": "E→N→E のあと、もう一度 E→N→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n",
-      "e"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ムアラニ 123 件中 7 件。平均 92.9k（最大 136.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
    "name": "E・通常攻撃・E（絵巻 4 セット型）",
    "role": "supporter",
    "slot": 10,
@@ -54,6 +30,30 @@
     12
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 倍率の高いシンプルなアタッカー運用（蒸発向き）"
+  },
+  {
+   "name": "E→N→E のあと、もう一度 E→N→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "n",
+      "e"
+     ]
+    }
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ムアラニ 123 件中 7 件。平均 92.9k（最大 136.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
   }
  ]
 }

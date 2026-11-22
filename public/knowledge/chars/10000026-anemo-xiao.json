@@ -3,31 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A7%E3%82%A6",
  "archetypes": [
   {
-   "name": "E×2→Q→（ジャンプ→落下）×n",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "e",
-    "q",
-    "jump",
-    "hp"
-   ],
-   "fill": [
-    "jump",
-    "hp"
-   ],
-   "fillRepeat": [
-    4,
-    6,
-    8
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 34 件・平均 65.7k・最大 141.0k。e×2 q jump hp（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（34 件。分布 0〜6 凸 = 34/0/0/0/0/0/0）"
-  },
-  {
    "name": "落下→通常1→重撃（JET）",
    "role": "attacker",
    "slot": 40,
@@ -86,6 +61,31 @@
     6
    ],
    "evidence": "編成例の探索（魈・閑雲・ファルザン・フリーナ）の上位に出る形。実測: 閑雲編成で 43.2k → 48.4k（207 秒）。条件なしにして、鍾離・ファルザン・ベネットの編成で 19.5k → 33.1k、鍾離・ジン・アルベドの編成で 21.5k → 21.2k（同じ）"
+  },
+  {
+   "name": "E×2→Q→（ジャンプ→落下）×n",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "e",
+    "q",
+    "jump",
+    "hp"
+   ],
+   "fill": [
+    "jump",
+    "hp"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 34 件・平均 65.7k・最大 141.0k。e×2 q jump hp（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（34 件。分布 0〜6 凸 = 34/0/0/0/0/0/0）"
   }
  ]
 }

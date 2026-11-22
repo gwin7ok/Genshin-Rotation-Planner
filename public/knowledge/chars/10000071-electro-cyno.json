@@ -3,26 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BB%E3%83%8E",
  "archetypes": [
   {
-   "name": "E→Q→N→E→N×4→E（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q",
-    "n",
-    "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: セノ 104 件中 5 件。平均 61.1k（最大 62.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
    "name": "通常4→E の繰り返し（1 凸・雷怒 4）",
    "role": "attacker",
    "slot": 40,
@@ -87,6 +67,26 @@
     12
    ],
    "evidence": "編成例の探索（セノ・ナヒーダ・行秋・久岐忍）の上位に出る形。実測: 最短の設定で 38.4k → 37.8k（誤差）"
+  },
+  {
+   "name": "E→Q→N→E→N×4→E（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "n",
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: セノ 104 件中 5 件。平均 61.1k（最大 62.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
   }
  ]
 }

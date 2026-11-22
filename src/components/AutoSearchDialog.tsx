@@ -241,33 +241,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
           </div>
           {message && <p className="text-xs text-amber-300">{message}</p>}
 
-          <details className="text-xs" open>
-            <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.settings')}</summary>
-            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-              {([
-                ['keep1', keep1, setKeep1],
-                ['runs1', runs1, setRuns1],
-                ['keep2', keep2, setKeep2],
-                ['runs2', runs2, setRuns2],
-              ] as const).map(([key, value, set]) => (
-                <label key={key} className="flex items-center justify-between gap-2 text-slate-400">
-                  <span>{t(`gcsim:search.${key}`)}</span>
-                  <input type="number" min={1} value={value} onChange={e => set(e.target.value)} disabled={running} className={input} />
-                </label>
-              ))}
-            </div>
-            <p className="mt-2 text-slate-500">{t('gcsim:search.settingsHint')}</p>
-          </details>
-
-          <details className="text-xs" open>
-            <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.conditions')}</summary>
-            <div className="mt-2 space-y-2">
-              <p className="text-slate-500 leading-relaxed">{t('gcsim:search.conditionsHint')}</p>
-              <DpsConditionsForm c={cond} disabled={running} showRuns={false} />
-            </div>
-          </details>
-
-
           {outcome && (
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-slate-200">{t('gcsim:search.resultTitle')}</h4>
@@ -308,6 +281,33 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
               {!cond.energy && <p className="text-[11px] text-slate-500">{t('gcsim:search.energyNote')}</p>}
             </div>
           )}
+
+          <details className="text-xs" open>
+            <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.settings')}</summary>
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+              {([
+                ['keep1', keep1, setKeep1],
+                ['runs1', runs1, setRuns1],
+                ['keep2', keep2, setKeep2],
+                ['runs2', runs2, setRuns2],
+              ] as const).map(([key, value, set]) => (
+                <label key={key} className="flex items-center justify-between gap-2 text-slate-400">
+                  <span>{t(`gcsim:search.${key}`)}</span>
+                  <input type="number" min={1} value={value} onChange={e => set(e.target.value)} disabled={running} className={input} />
+                </label>
+              ))}
+            </div>
+            <p className="mt-2 text-slate-500">{t('gcsim:search.settingsHint')}</p>
+          </details>
+
+          <details className="text-xs" open>
+            <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.conditions')}</summary>
+            <div className="mt-2 space-y-2">
+              <p className="text-slate-500 leading-relaxed">{t('gcsim:search.conditionsHint')}</p>
+              <DpsConditionsForm c={cond} disabled={running} showRuns={false} />
+            </div>
+          </details>
+
         </div>
       </div>
     </div>

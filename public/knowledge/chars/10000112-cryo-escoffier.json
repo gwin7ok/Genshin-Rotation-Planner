@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A8%E3%82%B9%E3%82%B3%E3%83%95%E3%82%A3%E3%82%A8",
  "archetypes": [
   {
+   "name": "E だけ",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "編成例の探索（綾人・フリーナ・シトラリ・エスコフィエ）の上位に出る形。実測: 最短の設定で 44.5k → 44.5k（同じ）"
+  },
+  {
    "name": "E→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -43,15 +52,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: エスコフィエ 426 件中 15 件。平均 87.5k（最大 108.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（綾人・フリーナ・シトラリ・エスコフィエ）の上位に出る形。実測: 最短の設定で 44.5k → 44.5k（同じ）"
   }
  ]
 }

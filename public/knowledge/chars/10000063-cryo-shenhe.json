@@ -3,6 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%94%B3%E9%B6%B4",
  "archetypes": [
   {
+   "name": "E→Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→爆発→他の氷キャラが攻撃、の順（探索の比較なし）"
+  },
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k"
+  },
+  {
    "name": "E_HOLD→N→Q→N（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -119,27 +140,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（24 件。分布 0〜6 凸 = 17/0/0/0/0/0/7）"
-  },
-  {
-   "name": "E→Q→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→爆発→他の氷キャラが攻撃、の順（探索の比較なし）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k"
   }
  ]
 }

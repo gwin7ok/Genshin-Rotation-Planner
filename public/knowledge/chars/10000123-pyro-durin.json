@@ -3,34 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%89%E3%82%A5%E3%83%AA%E3%83%B3",
  "archetypes": [
   {
-   "name": "E→Q→E（KQM）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q",
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドゥリン 298 件中 40 件。平均 333.6k（最大 1815.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 32/0/0/0/0/0/8）（探索の比較なし）"
-  },
-  {
-   "name": "e→n→q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 41 件・平均 123.7k・最大 1279.7k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（41 件。分布 0〜6 凸 = 39/0/1/0/0/0/1）"
-  },
-  {
    "name": "E→Q",
    "role": "subAttacker",
    "slot": 20,
@@ -60,6 +32,34 @@
     5
    ],
    "evidence": "編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒"
+  },
+  {
+   "name": "E→Q→E（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドゥリン 298 件中 40 件。平均 333.6k（最大 1815.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 32/0/0/0/0/0/8）（探索の比較なし）"
+  },
+  {
+   "name": "e→n→q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 41 件・平均 123.7k・最大 1279.7k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（41 件。分布 0〜6 凸 = 39/0/1/0/0/0/1）"
   }
  ]
 }

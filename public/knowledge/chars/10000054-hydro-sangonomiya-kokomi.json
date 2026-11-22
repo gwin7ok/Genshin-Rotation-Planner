@@ -3,6 +3,24 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%8F%8A%E7%91%9A%E5%AE%AE%E5%BF%83%E6%B5%B7",
  "archetypes": [
   {
+   "name": "Q・E のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    15,
+    16
+   ],
+   "evidence": "自動編成（珊瑚宮心海 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.3k → 36.2k"
+  },
+  {
    "name": "E→DASH（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -26,24 +44,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 珊瑚宮心海 210 件中 12 件。平均 47.9k（最大 63.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 12/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "Q・E のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    14,
-    15,
-    16
-   ],
-   "evidence": "自動編成（珊瑚宮心海 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.3k → 36.2k"
   }
  ]
 }

@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9F%E3%82%AB",
  "archetypes": [
   {
+   "name": "長押し E",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e_hold"
+   ],
+   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
+  },
+  {
    "name": "N→Q→E（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -113,15 +122,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 54.8k・最大 98.5k。q n e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（16 件。分布 0〜6 凸 = 0/0/0/0/0/0/16）"
-  },
-  {
-   "name": "長押し E",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e_hold"
-   ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
   }
  ]
 }

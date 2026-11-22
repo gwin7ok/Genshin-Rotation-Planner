@@ -18,15 +18,6 @@
   {
    "name": "E",
    "role": "subAttacker",
-   "slot": 25,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
-  },
-  {
-   "name": "E",
-   "role": "subAttacker",
    "slot": 20,
    "use": [
     "e"

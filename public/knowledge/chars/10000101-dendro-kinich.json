@@ -3,18 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AD%E3%82%A3%E3%83%8B%E3%83%81",
  "archetypes": [
   {
-   "name": "Q（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キィニチ 93 件中 4 件。平均 68.3k（最大 73.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
    "name": "通常2→E を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -72,6 +60,18 @@
     18
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルのあと通常攻撃を連打するのが基本"
+  },
+  {
+   "name": "Q（KQM）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キィニチ 93 件中 4 件。平均 68.3k（最大 73.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）"
   }
  ]
 }

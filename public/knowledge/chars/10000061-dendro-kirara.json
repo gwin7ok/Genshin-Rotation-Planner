@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%B6%BA%E8%89%AF%E3%80%85",
  "archetypes": [
   {
+   "name": "長押しE→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル長押し→再発動で、印を 2 つ得られる（探索の比較なし）"
+  },
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（綺良々 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.4k → 41.2k"
+  },
+  {
    "name": "E_HOLD→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -77,26 +97,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 綺良々 118 件中 12 件。平均 53.4k（最大 66.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/12）（探索の比較なし）"
-  },
-  {
-   "name": "長押しE→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル長押し→再発動で、印を 2 つ得られる（探索の比較なし）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（綺良々 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.4k → 41.2k"
   }
  ]
 }

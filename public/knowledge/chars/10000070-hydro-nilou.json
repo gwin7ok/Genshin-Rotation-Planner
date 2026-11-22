@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8B%E3%82%A3%E3%83%AD%E3%82%A6",
  "archetypes": [
   {
+   "name": "E×3",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）"
+  },
+  {
+   "name": "E×4",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる"
+  },
+  {
    "name": "E→N×3（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -31,29 +54,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 57 件・平均 94.7k・最大 1115.1k。e n×2 e（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（57 件。分布 0〜6 凸 = 46/5/4/0/0/0/2）"
-  },
-  {
-   "name": "E×3",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "e",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）"
-  },
-  {
-   "name": "E×4",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "e",
-    "e",
-    "e"
-   ],
-   "evidence": "手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる"
   }
  ]
 }

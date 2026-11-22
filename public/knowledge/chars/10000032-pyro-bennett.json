@@ -3,6 +3,46 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%99%E3%83%8D%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発→スキルの順（吸収まで待つか、裏で受け取る）（探索の比較なし）"
+  },
+  {
+   "name": "E と Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+  },
+  {
+   "name": "Q・通常攻撃・E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e"
+   ],
+   "evidence": "手組み「雷電ナショナル」"
+  },
+  {
+   "name": "Q だけ",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q"
+   ],
+   "evidence": "探索の上位（48.5k）"
+  },
+  {
    "name": "Q→E のあと、もう一度 E",
    "role": "supporter",
    "slot": 10,
@@ -43,46 +83,6 @@
     "min": 5
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ベネット 1,750 件中 109 件。平均 61.9k（最大 260.5k）（探索の比較なし）。凸数: 使われている設定の最小は 5 凸（742 件。分布 0〜6 凸 = 0/0/0/0/0/40/702）"
-  },
-  {
-   "name": "Q→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発→スキルの順（吸収まで待つか、裏で受け取る）（探索の比較なし）"
-  },
-  {
-   "name": "E と Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
-  },
-  {
-   "name": "Q・通常攻撃・E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "n",
-    "e"
-   ],
-   "evidence": "手組み「雷電ナショナル」"
-  },
-  {
-   "name": "Q だけ",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q"
-   ],
-   "evidence": "探索の上位（48.5k）"
   }
  ]
 }

@@ -3,18 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A8%E3%83%9F%E3%83%AA%E3%82%A8",
  "archetypes": [
   {
-   "name": "Q（KQM）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: エミリエ 238 件中 9 件。平均 108.3k（最大 504.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/1）（探索の比較なし）"
-  },
-  {
    "name": "E→Q のあと 通常1→重撃を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -60,6 +48,18 @@
     "q"
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 燃焼サブアタッカー型。スキル・爆発の大火力を押し付ける"
+  },
+  {
+   "name": "Q（KQM）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: エミリエ 238 件中 9 件。平均 108.3k（最大 504.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/1）（探索の比較なし）"
   }
  ]
 }

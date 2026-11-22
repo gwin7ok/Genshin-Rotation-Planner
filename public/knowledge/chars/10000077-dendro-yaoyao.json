@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A8%E3%82%A9%E3%83%BC%E3%83%A8",
  "archetypes": [
   {
+   "name": "e の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e"
+   ],
+   "evidence": "自動編成（ヨォーヨ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.0k → 41.0k"
+  },
+  {
    "name": "E→N×2（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -89,15 +98,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヨォーヨ 82 件中 3 件。平均 37.0k（最大 43.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
-  },
-  {
-   "name": "e の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e"
-   ],
-   "evidence": "自動編成（ヨォーヨ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.0k → 41.0k"
   }
  ]
 }

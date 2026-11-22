@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%82%A4%E3%83%8E",
  "archetypes": [
   {
+   "name": "q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q"
+   ],
+   "evidence": "自動編成（アイノ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.5k → 41.0k"
+  },
+  {
    "name": "Q→E（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -27,15 +36,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: アイノ 29 件中 20 件。平均 86.8k（最大 154.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/20）（探索の比較なし）"
-  },
-  {
-   "name": "q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q"
-   ],
-   "evidence": "自動編成（アイノ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.5k → 41.0k"
   }
  ]
 }

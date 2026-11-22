@@ -3,6 +3,36 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%88%E3%83%BC%E3%83%9E",
  "archetypes": [
   {
+   "name": "E→Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）"
+  },
+  {
+   "name": "Q→E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）"
+  },
+  {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（トーマ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.5k → 38.6k"
+  },
+  {
    "name": "E→Q→N（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -60,36 +90,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 18 件・平均 57.0k・最大 72.8k。e n q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（18 件。分布 0〜6 凸 = 0/0/0/0/0/0/18）"
-  },
-  {
-   "name": "E→Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）"
-  },
-  {
-   "name": "Q→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（トーマ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.5k → 38.6k"
   }
  ]
 }

@@ -3,6 +3,49 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%AC%E3%83%83%E3%82%AD%E3%83%BC%E3%83%8E",
  "archetypes": [
   {
+   "name": "E→重撃→Q のあと 通常 6 段を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）"
+  },
+  {
+   "name": "E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+  },
+  {
    "name": "E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3",
    "role": "attacker",
    "slot": 40,
@@ -79,49 +122,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 81.1k・最大 175.3k。ca n×3 dash n×3 dash n×3 dash n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 24/1/0/0/0/0/0）"
-  },
-  {
-   "name": "E→重撃→Q のあと 通常 6 段を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "ca",
-    "q"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "fillRepeat": [
-    2,
-    3
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）"
-  },
-  {
-   "name": "E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    5,
-    6
-   ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
   }
  ]
 }

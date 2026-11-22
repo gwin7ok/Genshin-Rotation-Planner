@@ -3,6 +3,24 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AC%E3%83%9F%E3%83%8D",
  "archetypes": [
   {
+   "name": "E・通常攻撃のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    12,
+    14,
+    16
+   ],
+   "evidence": "編成例の探索（フレミネ・イネファ・フリーナ・エスコフィエ）の上位に出る形。実測: 最短の設定で 59.3k → 59.3k（同じ）"
+  },
+  {
    "name": "E→N×4→E→DASH×3（KQM）",
    "role": "attacker",
    "slot": 40,
@@ -148,24 +166,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 56.3k・最大 81.0k。e q n×2 e×2 n×2 e n e n×2 e n e n×2 e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（17 件。分布 0〜6 凸 = 0/0/0/0/0/0/17）"
-  },
-  {
-   "name": "E・通常攻撃のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    12,
-    14,
-    16
-   ],
-   "evidence": "編成例の探索（フレミネ・イネファ・フリーナ・エスコフィエ）の上位に出る形。実測: 最短の設定で 59.3k → 59.3k（同じ）"
   }
  ]
 }

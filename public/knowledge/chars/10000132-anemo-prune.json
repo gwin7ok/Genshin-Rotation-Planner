@@ -3,19 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%97%E3%83%AB%E3%83%BC%E3%83%8D",
  "archetypes": [
   {
-   "name": "q→e",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 5 件・平均 613.0k・最大 1382.5k。q e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（5 件。分布 0〜6 凸 = 0/0/0/0/0/0/5）"
-  },
-  {
    "name": "E→Q→E",
    "role": "supporter",
    "slot": 10,
@@ -35,6 +22,19 @@
     "q"
    ],
    "evidence": "自動編成（プルーネ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 54.8k → 53.5k"
+  },
+  {
+   "name": "q→e",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 5 件・平均 613.0k・最大 1382.5k。q e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（5 件。分布 0〜6 凸 = 0/0/0/0/0/0/5）"
   }
  ]
 }

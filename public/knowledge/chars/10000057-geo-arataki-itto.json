@@ -3,6 +3,80 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%8D%92%E7%80%A7%E4%B8%80%E6%96%97",
  "archetypes": [
   {
+   "name": "Q→通常1→E→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "n",
+    "e",
+    "ca"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発→（通常 1 発→）スキル→重撃で、爆発の効果時間を使い切れる（探索の比較なし）"
+  },
+  {
+   "name": "通常2→重撃の繰り返し",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常 2 回→すぐトドメの重撃のループ（探索の比較なし）"
+  },
+  {
+   "name": "E→重撃の繰り返し（爆発なし）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "e",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発を使わない前提なら、スキル 1 回→すぐ重撃のループがダメージを出しやすい（探索の比較なし）"
+  },
+  {
+   "name": "E・Q のあと 通常攻撃 3 回 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "自動編成（荒瀧一斗 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.6k → 36.7k"
+  },
+  {
    "name": "N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）",
    "role": "attacker",
    "slot": 40,
@@ -82,80 +156,6 @@
     "ca"
    ],
    "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（421.6k・111.7k・96.8k）の形: 爆発→スキル→重撃→通常→スキル→重撃（探索の比較なし）"
-  },
-  {
-   "name": "Q→通常1→E→重撃",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n",
-    "e",
-    "ca"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    2,
-    3
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発→（通常 1 発→）スキル→重撃で、爆発の効果時間を使い切れる（探索の比較なし）"
-  },
-  {
-   "name": "通常2→重撃の繰り返し",
-   "role": "attacker",
-   "slot": 40,
-   "use": [],
-   "fill": [
-    "n",
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    6,
-    8
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 通常 2 回→すぐトドメの重撃のループ（探索の比較なし）"
-  },
-  {
-   "name": "E→重撃の繰り返し（爆発なし）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [],
-   "fill": [
-    "e",
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    6,
-    8
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発を使わない前提なら、スキル 1 回→すぐ重撃のループがダメージを出しやすい（探索の比較なし）"
-  },
-  {
-   "name": "E・Q のあと 通常攻撃 3 回 + 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    3,
-    4
-   ],
-   "evidence": "自動編成（荒瀧一斗 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.6k → 36.7k"
   }
  ]
 }

@@ -3,6 +3,38 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%95%E3%82%A1",
  "archetypes": [
   {
+   "name": "Q→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発後は元素熟知が上がるので、爆発→スキル攻撃の立ち回りが強力（探索の比較なし）"
+  },
+  {
+   "name": "E・重撃のあと 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    10,
+    12,
+    14
+   ],
+   "evidence": "自動編成（イファ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.5k → 27.5k"
+  },
+  {
    "name": "E→重撃を連打（固定回数）",
    "role": "attacker",
    "slot": 40,
@@ -44,38 +76,6 @@
     0
    ],
    "evidence": "KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: ナイトソウルが多い間は重撃を連打し、爆発が使えれば爆発。7 件中 5 件が同じ型（e → ca 連打 → q）。DPS 上位は 80k〜100k（探索の比較なし）"
-  },
-  {
-   "name": "Q→E",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発後は元素熟知が上がるので、爆発→スキル攻撃の立ち回りが強力（探索の比較なし）"
-  },
-  {
-   "name": "E・重撃のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "ca",
-    "ca",
-    "ca",
-    "ca",
-    "ca"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    10,
-    12,
-    14
-   ],
-   "evidence": "自動編成（イファ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.5k → 27.5k"
   }
  ]
 }

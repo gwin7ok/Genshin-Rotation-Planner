@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%8D%BE%E9%9B%A2",
  "archetypes": [
   {
+   "name": "長押し E",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold"
+   ],
+   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
+  },
+  {
    "name": "N→E_HOLD→DASH（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -105,15 +114,6 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 鍾離 530 件中 17 件。平均 64.0k（最大 82.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 16/1/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "長押し E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold"
-   ],
-   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
   }
  ]
 }

@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%87%E3%82%A3%E3%82%AA%E3%83%8A",
  "archetypes": [
   {
+   "name": "e_hold q の出場",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "自動編成（ディオナ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.6k → 41.4k"
+  },
+  {
    "name": "E_HOLD→N→Q→N（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -53,16 +63,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ディオナ 69 件中 3 件。平均 18.2k（最大 19.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
-  },
-  {
-   "name": "e_hold q の出場",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold",
-    "q"
-   ],
-   "evidence": "自動編成（ディオナ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.6k → 41.4k"
   }
  ]
 }

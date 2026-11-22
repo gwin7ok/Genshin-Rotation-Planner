@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%80%E3%83%AA%E3%82%A2",
  "archetypes": [
   {
+   "name": "e q の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "自動編成（ダリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.0k → 39.7k"
+  },
+  {
    "name": "N→E→N→Q（KQM）",
    "role": "supporter",
    "slot": 10,
@@ -59,16 +69,6 @@
     "min": 6
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 8 件・平均 78.6k・最大 99.2k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（8 件。分布 0〜6 凸 = 0/0/0/0/0/0/8）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（ダリア + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.0k → 39.7k"
   }
  ]
 }

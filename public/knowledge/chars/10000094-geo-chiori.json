@@ -3,20 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8D%83%E7%B9%94",
  "archetypes": [
   {
-   "name": "q→e×2",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e",
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 86.2k・最大 391.6k。q e×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（16 件。分布 0〜6 凸 = 14/0/1/0/0/0/1）"
-  },
-  {
    "name": "E→通常2→E の繰り返し",
    "role": "attacker",
    "slot": 40,
@@ -62,6 +48,20 @@
     "e"
    ],
    "evidence": "自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k"
+  },
+  {
+   "name": "q→e×2",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e",
+    "e"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 86.2k・最大 391.6k。q e×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（16 件。分布 0〜6 凸 = 14/0/1/0/0/0/1）"
   }
  ]
 }

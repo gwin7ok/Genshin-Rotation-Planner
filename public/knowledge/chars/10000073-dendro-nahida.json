@@ -3,20 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%92%E3%83%BC%E3%83%80",
  "archetypes": [
   {
-   "name": "e→n→ca",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "ca"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 83 件・平均 63.5k・最大 98.3k。e n ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（83 件。分布 0〜6 凸 = 82/0/1/0/0/0/0）"
-  },
-  {
    "name": "E→通常4→重撃",
    "role": "supporter",
    "slot": 10,
@@ -70,6 +56,20 @@
     "q"
    ],
    "evidence": "手組み「激化刻晴」"
+  },
+  {
+   "name": "e→n→ca",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "ca"
+   ],
+   "constellation": {
+    "min": 0
+   },
+   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 83 件・平均 63.5k・最大 98.3k。e n ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（83 件。分布 0〜6 凸 = 82/0/1/0/0/0/0）"
   }
  ]
 }

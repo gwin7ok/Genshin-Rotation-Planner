@@ -1,5 +1,36 @@
 {
  "characterId": "10000130-geo",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AA%E3%83%B3%E3%83%8D%E3%82%A2",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "E（月結晶サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 控えから継続的にダメージを出すサブアタッカー・サポーター型"
+  },
+  {
+   "name": "E×3（連打の瞬間火力）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 連打すると瞬間火力型になる"
+  },
+  {
+   "name": "E・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 爆発は回復。状況に応じて使う"
+  }
+ ]
 }

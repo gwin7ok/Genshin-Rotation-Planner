@@ -1,5 +1,27 @@
 {
  "characterId": "10000136-electro",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9F%E3%83%86%E3%82%A3%E3%83%A4",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "長押し E・重撃・Q・重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "ca",
+    "q",
+    "ca"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: メイン型: スキル長押し → 特殊重撃 → 爆発 → 特殊重撃"
+  },
+  {
+   "name": "E（短押しのサブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 短押しは、通常・爆発を使わず、すぐ退場するサブ型"
+  }
+ ]
 }

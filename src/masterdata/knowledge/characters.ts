@@ -864,35 +864,59 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     archetypes: [],
   },
   {
-    characterId: '10000100-geo', // カチーナ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000100-geo', // カチーナ
+    archetypes: [
+      { name: 'E（設置・控えから攻撃）', role: 'supporter', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: スキルで出す乗り物は、控えでも設置物として戦える' },
+      { name: 'E のあと 通常攻撃を繰り返す（アタッカー型）', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 乗って通常攻撃扱いで戦うアタッカー型' },
+    ],
   },
   {
-    characterId: '10000122-dendro', // ネフェル（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000122-dendro', // ネフェル
+    archetypes: [
+      { name: 'E・重撃 3 回を繰り返す', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca', 'ca', 'ca'], fillRepeat: [2, 3, 4], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 基本の立ち回りは、スキル → 重撃 3 回 → スキル → 重撃 3 回' },
+      { name: 'E・重撃 3 回・Q のあと E・重撃 3 回を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], fill: ['e', 'ca', 'ca', 'ca'], fillRepeat: [1, 2, 3], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 同上。爆発を 1 回入れる形' },
+    ],
   },
   {
-    characterId: '10000129-cryo', // ローエン（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000129-cryo', // ローエン
+    archetypes: [
+      { name: 'E・Q のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 奇策状態では、通常 1 → 重撃の素早いループが強い' },
+      { name: 'E（氷下地）', role: 'subAttacker', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 氷付着で下地を作る役（イネーブラー）としての運用' },
+    ],
   },
   {
-    characterId: '10000130-geo', // リンネア（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000130-geo', // リンネア
+    archetypes: [
+      { name: 'E（月結晶サブ）', role: 'subAttacker', slot: 20, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 控えから継続的にダメージを出すサブアタッカー・サポーター型' },
+      { name: 'E×3（連打の瞬間火力）', role: 'subAttacker', slot: 20, use: ['e', 'e', 'e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 連打すると瞬間火力型になる' },
+      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 爆発は回復。状況に応じて使う' },
+    ],
   },
   {
-    characterId: '10000136-electro', // ミティヤ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000136-electro', // ミティヤ
+    archetypes: [
+      { name: '長押し E・重撃・Q・重撃', role: 'attacker', slot: 40, use: ['e_hold', 'ca', 'q', 'ca'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: メイン型: スキル長押し → 特殊重撃 → 爆発 → 特殊重撃' },
+      { name: 'E（短押しのサブ）', role: 'subAttacker', slot: 20, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 短押しは、通常・爆発を使わず、すぐ退場するサブ型' },
+    ],
   },
   {
-    characterId: '10000137-electro', // バレリー（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000137-electro', // バレリー
+    archetypes: [
+      { name: 'E・重撃・Q', role: 'supporter', slot: 10, use: ['e', 'ca', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 基本は、スキル → 重撃 の順で、前後に爆発' },
+      { name: 'Q・E・重撃', role: 'supporter', slot: 10, use: ['q', 'e', 'ca'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 同上（爆発を先に使う形）' },
+    ],
   },
   {
-    characterId: '10000140-hydro', // ヴォジャニーツァ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000140-hydro', // ヴォジャニーツァ
+    archetypes: [
+      { name: 'E', role: 'supporter', slot: 10, use: ['e'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: スキルだけで、回復・中断耐性・耐性デバフ・加算バフが出る' },
+      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 同上（爆発も使う形）' },
+    ],
   },
   {
-    characterId: '10000143-anemo', // ヴェスナ（gcsim 未対応。対応したら、Wiki の記述から形を作る）
-    archetypes: [],
+    characterId: '10000143-anemo', // ヴェスナ
+    archetypes: [
+      { name: 'E・通常攻撃・重撃・Q のあと 特殊スキルと重撃を交互に繰り返す', role: 'attacker', slot: 40, use: ['e', 'n', 'ca', 'q'], fill: ['e', 'ca'], fillRepeat: [4, 5], evidence: 'Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: ゲージをためてから、特殊スキル 5 回。特殊スキルと重撃を交互に撃つ' },
+    ],
   },
 ];

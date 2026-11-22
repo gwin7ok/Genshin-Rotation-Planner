@@ -1,5 +1,26 @@
 {
  "characterId": "10000143-anemo",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%B4%E3%82%A7%E3%82%B9%E3%83%8A",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "E・通常攻撃・重撃・Q のあと 特殊スキルと重撃を交互に繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "e",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: ゲージをためてから、特殊スキル 5 回。特殊スキルと重撃を交互に撃つ"
+  }
+ ]
 }

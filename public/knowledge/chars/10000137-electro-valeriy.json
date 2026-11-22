@@ -1,5 +1,28 @@
 {
  "characterId": "10000137-electro",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%90%E3%83%AC%E3%83%AA%E3%83%BC",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "E・重撃・Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 基本は、スキル → 重撃 の順で、前後に爆発"
+  },
+  {
+   "name": "Q・E・重撃",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "e",
+    "ca"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 同上（爆発を先に使う形）"
+  }
+ ]
 }

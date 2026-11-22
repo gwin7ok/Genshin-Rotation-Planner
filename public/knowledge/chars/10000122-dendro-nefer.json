@@ -1,5 +1,48 @@
 {
  "characterId": "10000122-dendro",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8D%E3%83%95%E3%82%A7%E3%83%AB",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "E・重撃 3 回を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "e",
+    "ca",
+    "ca",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 基本の立ち回りは、スキル → 重撃 3 回 → スキル → 重撃 3 回"
+  },
+  {
+   "name": "E・重撃 3 回・Q のあと E・重撃 3 回を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "e",
+    "ca",
+    "ca",
+    "ca"
+   ],
+   "fillRepeat": [
+    1,
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 同上。爆発を 1 回入れる形"
+  }
+ ]
 }

@@ -1,5 +1,34 @@
 {
  "characterId": "10000129-cryo",
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%83%BC%E3%82%A8%E3%83%B3",
- "archetypes": []
+ "archetypes": [
+  {
+   "name": "E・Q のあと 通常攻撃 + 重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    6,
+    8
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 奇策状態では、通常 1 → 重撃の素早いループが強い"
+  },
+  {
+   "name": "E（氷下地）",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 氷付着で下地を作る役（イネーブラー）としての運用"
+  }
+ ]
 }

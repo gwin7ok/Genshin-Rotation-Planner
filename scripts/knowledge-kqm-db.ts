@@ -110,11 +110,21 @@ const stintsOf = (config: string, team: string[]): Stint[] => {
   return stints;
 };
 
+// 設定の中の、キャラ（キー）ごとの凸数: `<別名> char … cons=N;`（別名 → キーは、stintsOf と同じ対応）
+const consOf = (config: string, team: string[]): Map<string, number> => {
+  const out = new Map<string, number>();
+  const decl = [...config.matchAll(/^\s*([a-z0-9_]+)\s+char(?![a-z_])[^;]*?\bcons=(\d+)/gm)];
+  const aliases = [...config.matchAll(/^\s*([a-z0-9_]+)\s+char(?![a-z_])/gm)].map(m => m[1]);
+  for (const m of decl) { const i = aliases.indexOf(m[1]); const k = aliases.length === team.length ? team[i] : m[1]; if (k) out.set(k, Number(m[2])); }
+  return out;
+};
+const bandOf = (n: number | undefined): string => (n === undefined ? '?' : n === 0 ? '0凸' : n === 6 ? '6凸' : '1〜5凸');
+
 const TOP = opt('top', 8), MIN = opt('min', 1);
 const wanted = args.includes('--all') ? [...keyOf.keys()] : args.filter(a => !a.startsWith('--'));
 if (wanted.length === 0) { console.error('使い方: node scripts/knowledge-kqm-db.ts <キャラ名...> | --all | --fetch'); process.exit(1); }
 
-const parsed = entries.map(e => ({ e, stints: stintsOf(e.config, e.summary?.char_names ?? []), dps: e.summary?.mean_dps_per_target ?? 0, team: e.summary?.char_names ?? [] }));
+const parsed = entries.map(e => ({ e, cons: consOf(e.config, e.summary?.char_names ?? []), stints: stintsOf(e.config, e.summary?.char_names ?? []), dps: e.summary?.mean_dps_per_target ?? 0, team: e.summary?.char_names ?? [] }));
 fs.mkdirSync(CACHE, { recursive: true });
 for (const name of wanted) {
   const key = keyOf.get(name) ?? name;
@@ -123,7 +133,7 @@ for (const name of wanted) {
   lines.push(`# ${name}（${key}）: KQM DB ${mine.length} 件`);
   if (mine.length === 0) { lines.push('（データなし）'); }
   // 形ごとの集計: 出場の行動の並び → 件数・DPS
-  const forms = new Map<string, { n: number; dps: number[]; first: number }>();
+  const forms = new Map<string, { n: number; dps: number[]; first: number; bands: Map<string, number[]> }>();
   const perEntryCounts: number[] = [];
   for (const p of mine) {
     const st = p.stints.filter(s => s.who === key);
@@ -133,8 +143,9 @@ for (const name of wanted) {
       const f = compact(s.actions);
       if (seen.has(f)) return; // 1 件の中で同じ形が何度出ても、1 件と数える
       seen.add(f);
-      const r = forms.get(f) ?? { n: 0, dps: [], first: 0 };
+      const r = forms.get(f) ?? { n: 0, dps: [], first: 0, bands: new Map<string, number[]>() };
       r.n++; r.dps.push(p.dps); if (idx === 0) r.first++;
+      const b = bandOf(p.cons.get(key)); r.bands.set(b, [...(r.bands.get(b) ?? []), p.dps]);
       forms.set(f, r);
     });
   }
@@ -146,6 +157,7 @@ for (const name of wanted) {
     for (const [f, r] of sorted) {
       const avg = r.dps.reduce((a, b) => a + b, 0) / r.dps.length;
       lines.push(`- ${r.n} 件（最初の出場 ${r.first} 件）平均 ${(avg / 1000).toFixed(1)}k・最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k: ${f}`);
+      lines.push(`    凸数別: ${['0凸', '1〜5凸', '6凸', '?'].filter(b => r.bands.has(b)).map(b => { const d = r.bands.get(b)!; return `${b} ${d.length} 件（平均 ${(d.reduce((x, y) => x + y, 0) / d.length / 1000).toFixed(1)}k）`; }).join(' / ')}`);
     }
     // 複数回の出場の形: 出場の並び（このキャラの出場は形、ほかのキャラは名前）ごとに、件数と DPS。条件つき（?）・swap を含むものは除く
     const seqs = new Map<string, { n: number; dps: number[] }>();

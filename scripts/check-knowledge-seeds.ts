@@ -57,6 +57,14 @@ const perm = ks.knowledgeSeeds(party, {
   [xiangling.id]: { archetypes: [arche('supporter', 30, ['e'])] },
 });
 assert.deepEqual(new Set(view(perm)), new Set(['ベネット[e]→ベネット[q]→香菱[e]→胡桃[e]', 'ベネット[e]→香菱[e]→ベネット[q]→胡桃[e]']), '同じ slot の出場は、両方の順番を試す');
+// 凸数の条件: 範囲の外の形は、出発点に使わない（凸数の未指定は、星 5 = 0 凸・星 4 = 6 凸）
+const consBundle = {
+  [hutao.id]: { archetypes: [arche('attacker', 40, ['e'], { constellation: { min: 2 } }), arche('attacker', 40, ['q'], { constellation: { max: 1 } })] },
+};
+const withCons = (n: number | undefined) => view(ks.knowledgeSeeds([{ ...hutao, constellation: n }], consBundle));
+assert.deepEqual(withCons(0), ['胡桃[q]'], '0 凸は、max: 1 の形だけ');
+assert.deepEqual(withCons(2), ['胡桃[e]'], '2 凸は、min: 2 の形だけ');
+assert.deepEqual(withCons(undefined), ['胡桃[q]'], '凸数の未指定は、星 5 = 0 凸として扱う（胡桃は星 5）');
 assert.equal(new Set(base.map(shape)).size, base.length, '重複なし');
 console.log('OK: 続きの出場を含む出発点の組み立て');
 await server.close();

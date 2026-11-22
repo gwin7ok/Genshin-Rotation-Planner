@@ -233,7 +233,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000076-anemo',
     archetypes: [
-      { name: 'E→重撃2→Q', role: 'supporter', slot: 10, use: ['e', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 1 凸すれば、スキル直当て→特殊重撃×2→爆発（探索の比較なし）' },
+      { name: 'E→重撃2→Q', role: 'supporter', slot: 10, use: ['e', 'ca', 'ca', 'q'], constellation: { min: 1 }, evidence: 'Wiki 本文のコンボの記述: 1 凸すれば、スキル直当て→特殊重撃×2→爆発（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
     
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k' },
@@ -395,7 +395,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000071-electro',
     archetypes: [
-      { name: '通常4→E の繰り返し（1 凸・雷怒 4）', role: 'attacker', slot: 40, use: [], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [4, 5, 6], evidence: 'Wiki 本文のコンボの記述: 1 凸と雷怒 4 セットで可能になる、通常 4 段→スキルのループ（探索の比較なし）' },
+      { name: '通常4→E の繰り返し（1 凸・雷怒 4）', role: 'attacker', slot: 40, use: [], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [4, 5, 6], constellation: { min: 1 }, evidence: 'Wiki 本文のコンボの記述: 1 凸と雷怒 4 セットで可能になる、通常 4 段→スキルのループ（探索の比較なし）' },
       { name: 'E→Q→通常3→E のあと 通常5→E を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'n', 'e'], fill: ['n', 'n', 'n', 'n', 'n', 'e'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキル→爆発のあと、3 回攻撃→スキル、あとは 5 回攻撃→スキルを繰り返す（探索の比較なし）' },
       { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [9, 10, 12], evidence: '編成例の探索（セノ・ナヒーダ・行秋・久岐忍）の上位に出る形。実測: 最短の設定で 38.4k → 37.8k（誤差）' },
     ],
@@ -423,8 +423,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000027-geo',
     archetypes: [
-      { name: 'E→Q→重撃→E', role: 'attacker', slot: 40, use: ['e', 'q', 'ca', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→重撃→スキル（2 凸）のコンボ（探索の比較なし）' },
-      { name: 'E→Q→E→重撃', role: 'attacker', slot: 40, use: ['e', 'q', 'e', 'ca'], evidence: 'Wiki 本文のコンボの記述: 完凸・高天賦のとき、スキル→爆発→スキル→重撃のコンボ（探索の比較なし）' },
+      { name: 'E→Q→重撃→E', role: 'attacker', slot: 40, use: ['e', 'q', 'ca', 'e'], constellation: { min: 2 }, evidence: 'Wiki 本文のコンボの記述: スキル→爆発→重撃→スキル（2 凸）のコンボ（探索の比較なし）' },
+      { name: 'E→Q→E→重撃', role: 'attacker', slot: 40, use: ['e', 'q', 'e', 'ca'], constellation: { min: 6 }, evidence: 'Wiki 本文のコンボの記述: 完凸・高天賦のとき、スキル→爆発→スキル→重撃のコンボ（探索の比較なし）' },
       { name: 'E・ダッシュ・Q のあと 重撃 + 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'dash', 'q'], fill: ['ca', 'n'], fillRepeat: [4, 6], evidence: '自動編成（凝光 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 38.3k' },
     ],
   },
@@ -500,7 +500,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000086-cryo',
     archetypes: [
-      { name: '通常5→強化重撃の繰り返し（1 凸）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: 1 凸以降の「通常 5 段→強化重撃」（探索の比較なし）' },
+      { name: '通常5→強化重撃の繰り返し（1 凸）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], constellation: { min: 1 }, evidence: 'Wiki 本文のコンボの記述: 1 凸以降の「通常 5 段→強化重撃」（探索の比較なし）' },
       { name: 'E→通常→重撃', role: 'attacker', slot: 40, use: ['e', 'n', 'ca'], fill: ['n', 'ca'], fillRepeat: [2, 3, 4], evidence: 'Wiki 本文のコンボの記述: 基本コンボ。スキル→通常→重撃（探索の比較なし）' },
       { name: 'E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [18, 20, 22], evidence: '自動編成（リオセスリ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.0k → 38.0k' },
     ],

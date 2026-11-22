@@ -22,6 +22,8 @@ const fileOf = new Map(KNOWLEDGE.map(k => [k.characterId, fileNameOf(k.character
 if (new Set(fileOf.values()).size !== fileOf.size) { console.error('辞書のファイル名が重複しています'); process.exit(1); }
 // 続きの出場（then）の検査: 各出場の slot は、use の slot より大きく、小さい順で、動作が空でない
 for (const k of KNOWLEDGE) for (const a of k.archetypes) {
+  const cn = a.constellation;
+  if (cn && ((cn.min ?? 0) < 0 || (cn.max ?? 6) > 6 || (cn.min ?? 0) > (cn.max ?? 6))) { console.error(`凸数の範囲が不正: ${k.characterId} ${a.name}（0〜6 で、min ≤ max）`); process.exit(1); }
   let prev = a.slot;
   for (const part of a.then ?? []) {
     if (part.use.length === 0 || part.slot <= prev) { console.error(`続きの出場が不正: ${k.characterId} ${a.name}（slot は use より大きく、小さい順。動作は空にしない）`); process.exit(1); }

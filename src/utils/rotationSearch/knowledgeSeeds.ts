@@ -6,6 +6,7 @@
 import type { CharacterConfig, Stint } from '../../types/genshin';
 import type { Archetype, KnowledgeBundle } from '../../masterdata/knowledge/types';
 import { stintOf, type SearchRole } from './candidates';
+import { defaultConstellation } from '../../models/CharacterModel';
 
 export interface KnowledgeSeed {
   stints: Stint[];
@@ -27,7 +28,11 @@ function permutations<T>(xs: T[]): T[][] {
 export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle): KnowledgeSeed[] {
   const ids = new Set(characters.map(c => c.id));
   // 編成の条件を満たす運用型が 1 つもないキャラは、出発点に入れない（辞書にないキャラも同じ）
-  const applicable = (c: CharacterConfig) => (bundle[c.id]?.archetypes ?? []).filter(a => (a.withCharacters ?? []).every(id => ids.has(id)));
+  // 凸数の条件（constellation）も見る。凸数は、編成の設定（未指定は、星 4 = 6 凸・星 5 = 0 凸）
+  const applicable = (c: CharacterConfig) => {
+    const cons = c.constellation ?? defaultConstellation(c.rarity);
+    return (bundle[c.id]?.archetypes ?? []).filter(a => (a.withCharacters ?? []).every(id => ids.has(id)) && cons >= (a.constellation?.min ?? 0) && cons <= (a.constellation?.max ?? 6));
+  };
   const members = characters.filter(c => applicable(c).length > 0);
   if (members.length === 0) return [];
   const options = members.map(applicable);

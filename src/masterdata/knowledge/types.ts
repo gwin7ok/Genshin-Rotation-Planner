@@ -28,6 +28,12 @@ export interface Archetype {
    * 例: ドゥリン use=[e, q, e] slot=30 / then=[{ slot: 50, use: [e, e, q] }]（支援を slot 40 に置くと、その間に出る）
    */
   then?: ArchetypePart[];
+  /**
+   * この形を出発点に使うキャラの凸数の範囲（0〜6。両端を含む。省略は、その側に制限なし）。
+   * 凸数で最適な動作が変わるキャラは、凸数の範囲ごとに別の形として書く。省略した形は、どの凸数でも使う。
+   * 例: { min: 2 }（2 凸以上）、{ max: 1 }（1 凸まで）、{ min: 0, max: 0 }（0 凸だけ）
+   */
+  constellation?: { min?: number; max?: number };
   /** アタッカーの攻撃の出場の型（1 回分）。回数は fillRepeat から選ぶ */
   fill?: string[];
   /** fill の繰り返し回数の候補 */

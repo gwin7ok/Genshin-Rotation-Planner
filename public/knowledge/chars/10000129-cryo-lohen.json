@@ -3,6 +3,47 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%83%BC%E3%82%A8%E3%83%B3",
  "archetypes": [
   {
+   "name": "通常1→重撃のループ",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    6,
+    8,
+    10
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常 1→重撃を素早くループさせるのが重要なテクニック（探索の比較なし）"
+  },
+  {
+   "name": "E→重撃2→特殊E→重撃5→Q→重撃5",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "q",
+    "ca",
+    "ca",
+    "ca",
+    "ca",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→重撃 2 回→特殊スキルか爆発→重撃 5 回→特殊スキルか爆発→重撃 5〜6 回（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

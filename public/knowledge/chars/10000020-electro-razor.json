@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AC%E3%82%B6%E3%83%BC",
  "archetypes": [
   {
+   "name": "長押しE→Q→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    8,
+    10,
+    12
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 雷の印を消費（長押しスキル）→爆発→スキルというコンボ（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

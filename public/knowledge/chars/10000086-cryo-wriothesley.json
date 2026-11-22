@@ -3,6 +3,47 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AA%E3%82%AA%E3%82%BB%E3%82%B9%E3%83%AA",
  "archetypes": [
   {
+   "name": "通常5→強化重撃の繰り返し（1 凸）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 1 凸以降の「通常 5 段→強化重撃」（探索の比較なし）"
+  },
+  {
+   "name": "E→通常→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "ca"
+   ],
+   "fill": [
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 基本コンボ。スキル→通常→重撃（探索の比較なし）"
+  },
+  {
    "name": "E のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

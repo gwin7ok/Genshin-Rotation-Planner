@@ -3,6 +3,17 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B9%9D%E6%9D%A1%E8%A3%9F%E7%BE%85",
  "archetypes": [
   {
+   "name": "E→重撃→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "ca",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→少し待つ→爆発（裟羅本人にバフを乗せる）。スキル→重撃→爆発で、天狗呪雷の効果を自身で受ける（探索の比較なし）"
+  },
+  {
    "name": "e q の出場",
    "role": "supporter",
    "slot": 30,

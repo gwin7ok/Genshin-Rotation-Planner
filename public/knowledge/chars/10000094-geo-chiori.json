@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8D%83%E7%B9%94",
  "archetypes": [
   {
+   "name": "E→通常2→E の繰り返し",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    7,
+    8
+   ],
+   "evidence": "Wiki 本文のコンボの記述: [スキル→通常 2 回→スキル]×8（探索の比較なし）"
+  },
+  {
+   "name": "E→通常3→E の繰り返し",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    5,
+    6
+   ],
+   "evidence": "Wiki 本文のコンボの記述: [スキル→通常 3 回→スキル]×6（探索の比較なし）"
+  },
+  {
    "name": "e e の出場",
    "role": "supporter",
    "slot": 30,

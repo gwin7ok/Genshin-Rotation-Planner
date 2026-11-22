@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%AE%B5%E5%AE%AE",
  "archetypes": [
   {
+   "name": "Q のあと 通常5×3 セット",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 立ち回り: 爆発→通常攻撃 5 段×3 セット（探索の比較なし）"
+  },
+  {
    "name": "E のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

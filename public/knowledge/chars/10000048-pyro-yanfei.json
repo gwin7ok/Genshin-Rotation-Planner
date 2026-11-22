@@ -3,6 +3,35 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%85%99%E7%B7%8B",
  "archetypes": [
   {
+   "name": "E→重撃（サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 表に出さず、スキルの CT ごとに出して、スキル→重撃をして退場させるサブアタッカー運用（探索の比較なし）"
+  },
+  {
+   "name": "Q のあと 通常2→重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発中は、通常 2 段→重撃で印 4 重の攻撃ができる（探索の比較なし）"
+  },
+  {
    "name": "通常攻撃 2 回 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

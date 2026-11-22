@@ -3,6 +3,28 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%A5%93%E5%8E%9F%E4%B8%87%E8%91%89",
  "archetypes": [
   {
+   "name": "E→落下→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "hp",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→落下攻撃（乱れ嵐斬）→爆発（探索の比較なし）"
+  },
+  {
+   "name": "E→通常→Q",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "n",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 立ち回りの例: スキル→通常（霧切 1 層）→爆発（霧切 2・3 層）（探索の比較なし）"
+  },
+  {
    "name": "E だけ",
    "role": "supporter",
    "slot": 20,

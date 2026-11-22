@@ -3,6 +3,51 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BB%E3%83%8E",
  "archetypes": [
   {
+   "name": "通常4→E の繰り返し（1 凸・雷怒 4）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 1 凸と雷怒 4 セットで可能になる、通常 4 段→スキルのループ（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→通常3→E のあと 通常5→E を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→爆発のあと、3 回攻撃→スキル、あとは 5 回攻撃→スキルを繰り返す（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

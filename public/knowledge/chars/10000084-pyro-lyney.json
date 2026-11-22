@@ -3,6 +3,30 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AA%E3%83%8D",
  "archetypes": [
   {
+   "name": "Q→重撃→E→重撃→E→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "ca",
+    "e",
+    "ca",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "e",
+    "ca",
+    "e"
+   ],
+   "fillRepeat": [
+    1,
+    2
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発と重撃でプロップ残数を得て、スキルで消費する一連の流れ（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

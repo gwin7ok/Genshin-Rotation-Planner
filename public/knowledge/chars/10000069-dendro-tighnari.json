@@ -3,6 +3,19 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%86%E3%82%A3%E3%83%8A%E3%83%AA",
  "archetypes": [
   {
+   "name": "E→重撃×3→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca",
+    "ca",
+    "q"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 基本の立ち回りは、スキル→重撃（スキルで 3 発分チャージ短縮）（探索の比較なし）"
+  },
+  {
    "name": "E・Q（サブ）",
    "role": "subAttacker",
    "slot": 20,

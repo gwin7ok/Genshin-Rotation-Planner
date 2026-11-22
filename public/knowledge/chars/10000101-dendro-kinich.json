@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AD%E3%82%A3%E3%83%8B%E3%83%81",
  "archetypes": [
   {
+   "name": "通常2→E を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    6,
+    8,
+    10
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常攻撃 2 回→廻狩貫鱗砲のループ（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと E + 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

@@ -3,6 +3,23 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8C%E3%83%B4%E3%82%A3%E3%83%AC%E3%83%83%E3%83%88",
  "archetypes": [
   {
+   "name": "E→Q→特殊重撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: ローテーションの 1 つ。スキル + 爆発→特殊重撃 3 回（凸で 4 回）（探索の比較なし）"
+  },
+  {
    "name": "先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す",
    "role": "attacker",
    "slot": 40,

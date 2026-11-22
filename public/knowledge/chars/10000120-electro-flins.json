@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AA%E3%83%B3%E3%82%BA",
  "archetypes": [
   {
+   "name": "E→E（特殊）→Q（特殊）のあと 通常 + E + Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e",
+    "q"
+   ],
+   "fillRepeat": [
+    1,
+    2
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 初動は、スキル→スキル（特殊）→爆発（特殊）。そのあとはスキル→特殊爆発→通常を 2 回繰り返すのが基本（探索の比較なし）"
+  },
+  {
    "name": "Q・E のあと 通常攻撃 2 回 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,

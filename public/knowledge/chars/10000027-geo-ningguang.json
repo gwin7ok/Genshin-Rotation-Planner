@@ -3,6 +3,30 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%87%9D%E5%85%89",
  "archetypes": [
   {
+   "name": "E→Q→重撃→E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "ca",
+    "e"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル→爆発→重撃→スキル（2 凸）のコンボ（探索の比較なし）"
+  },
+  {
+   "name": "E→Q→E→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "e",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 完凸・高天賦のとき、スキル→爆発→スキル→重撃のコンボ（探索の比較なし）"
+  },
+  {
    "name": "E・ダッシュ・Q のあと 重撃 + 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

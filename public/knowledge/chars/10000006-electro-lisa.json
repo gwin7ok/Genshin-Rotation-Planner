@@ -3,6 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AA%E3%82%B5",
  "archetypes": [
   {
+   "name": "E→重撃→長押しE",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca",
+    "e_hold"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル一回押し→重撃→スキル長押し。誘雷 0 から 3 にして長押しを当てる（探索の比較なし）"
+  },
+  {
+   "name": "E→通常2→長押しE",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "e_hold"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキル一回押し→通常 12→スキル長押し。過負荷・超電導を用いたクイックチャージコンボ（探索の比較なし）"
+  },
+  {
    "name": "q の出場",
    "role": "supporter",
    "slot": 30,

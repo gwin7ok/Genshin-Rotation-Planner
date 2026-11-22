@@ -3,6 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A7%E3%82%A6",
  "archetypes": [
   {
+   "name": "落下→通常1→重撃（JET）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "hp",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 落下攻撃→通常 1→重撃→落下攻撃…のコンボ（通称 JET）（探索の比較なし）"
+  },
+  {
+   "name": "ジャンプ→E→落下の繰り返し",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "jump",
+    "e",
+    "hp"
+   ],
+   "fillRepeat": [
+    3,
+    4,
+    5
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発中の、ジャンプ→スキル→落下攻撃の基本の動き（探索の比較なし）"
+  },
+  {
    "name": "E×2・Q・通常攻撃・重撃のあと 落下を繰り返す",
    "role": "attacker",
    "slot": 40,

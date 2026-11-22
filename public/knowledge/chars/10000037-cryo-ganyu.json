@@ -3,6 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%94%98%E9%9B%A8",
  "archetypes": [
   {
+   "name": "E→重撃→E→重撃",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "e",
+    "ca"
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    1,
+    2,
+    3
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 元素スキル→重撃の動きを 2 回行うと、高い瞬間火力が出る（2 重・4 重の効果）（探索の比較なし）"
+  },
+  {
    "name": "E・Q（爆発サブ）",
    "role": "subAttacker",
    "slot": 20,

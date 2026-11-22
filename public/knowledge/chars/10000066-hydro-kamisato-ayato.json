@@ -3,6 +3,24 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%A5%9E%E9%87%8C%E7%B6%BE%E4%BA%BA",
  "archetypes": [
   {
+   "name": "Q→E→通常を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    12,
+    16,
+    20
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発→スキル→通常の順で、聖遺物のバフも発動する。メイン火力は通常（探索の比較なし）"
+  },
+  {
    "name": "Q・ダッシュ・E のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,

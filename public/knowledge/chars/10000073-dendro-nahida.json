@@ -3,6 +3,20 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%92%E3%83%BC%E3%83%80",
  "archetypes": [
   {
+   "name": "E→通常4→重撃",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 通常 4 段→重撃のコンボで、合計 3 回の元素付着ができる（探索の比較なし）"
+  },
+  {
    "name": "E と Q",
    "role": "supporter",
    "slot": 10,

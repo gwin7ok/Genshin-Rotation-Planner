@@ -3,6 +3,44 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B5%E3%83%B3%E3%83%89%E3%83%AD%E3%83%BC%E3%83%8D",
  "archetypes": [
   {
+   "name": "重撃→Eの繰り返し（爆発なし）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "ca",
+    "e"
+   ],
+   "fillRepeat": [
+    3,
+    4,
+    5
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 爆発は、打てるときだけでよい。3 回程度で交代（探索の比較なし）"
+  },
+  {
+   "name": "重撃→E→重撃→E→重撃→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "e",
+    "ca",
+    "e",
+    "ca",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "e"
+   ],
+   "fillRepeat": [
+    1,
+    2
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 基本のコンボ。重撃のゲージ最大を、スキルでリセットしながら重撃を打ち続ける（探索の比較なし）"
+  },
+  {
    "name": "E と重撃を交互に（Q を挟む）",
    "role": "attacker",
    "slot": 40,

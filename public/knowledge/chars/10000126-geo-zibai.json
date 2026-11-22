@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%85%B9%E7%99%BD",
  "archetypes": [
   {
+   "name": "E→通常4→E の繰り返し",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    4
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 基本の立ち回り。スキル→（通常 4 段→特殊スキル）×4（探索の比較なし）"
+  },
+  {
    "name": "E・Q のあと 通常攻撃 4 段 + E を繰り返す",
    "role": "attacker",
    "slot": 40,

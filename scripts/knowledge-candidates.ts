@@ -138,8 +138,9 @@ for (const [i, t] of teams.entries()) {
 
 // ── 4. 候補を書き出す ──
 const existing = (id: string): any[] => {
-  const f = `public/knowledge/chars/${id}.json`;
-  return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')).archetypes : [];
+  const rel: string | undefined = JSON.parse(fs.readFileSync('public/knowledge/index.json', 'utf8')).chars[id];
+  const f = `public/knowledge/${rel}`;
+  return rel && fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')).archetypes : [];
 };
 const q = (xs: string[]) => `[${xs.map(x => `'${x}'`).join(', ')}]`;
 const lines: string[] = [];

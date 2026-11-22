@@ -86,7 +86,7 @@ const { expandGroupedStints } = await server.ssrLoadModule('/src/utils/actionGro
 const extraSeeds = preset && (args.includes('--seed-hand') || args.includes('--seeds-only')) ? [{ stints: expandGroupedStints(structuredClone(preset.stints)), loopStartIndex: preset.loopStartIndex ?? 0 }] : [];
 // --knowledge: 知識辞書（public/knowledge/）から、編成のキャラの分を読む（画面は、同じファイルをサーバーから取得する）
 const knowledge: Record<string, any> = {};
-if (args.includes('--knowledge')) for (const c of characters) { const f = `public/knowledge/chars/${c.id}.json`; if (fs.existsSync(f)) knowledge[c.id] = JSON.parse(fs.readFileSync(f, 'utf8')); }
+if (args.includes('--knowledge')) for (const c of characters) { const kidx = JSON.parse(fs.readFileSync('public/knowledge/index.json', 'utf8')).chars; const f = `public/knowledge/${kidx[c.id]}`; if (kidx[c.id] && fs.existsSync(f)) knowledge[c.id] = JSON.parse(fs.readFileSync(f, 'utf8')); }
 let lastPhase = '';
 const T0 = Date.now();
 const phaseName: Record<string, string> = { generate: '① 候補の生成', quick: `④ gcsim ${RUNS1} 回ずつ`, refine: '④b 山登り', verify: `⑤ gcsim ${RUNS2} 回ずつ` };

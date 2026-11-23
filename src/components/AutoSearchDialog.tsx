@@ -269,9 +269,11 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-300" title={r.particles ? [...r.particles.energyByChar10s.map(x => `${charName(members.find(c => c.id === x.characterId) ?? { name: x.characterId })}: ${x.energy10s.toFixed(1)}`), t('gcsim:search.particlesDetail', { own: (r.particles.total - r.particles.enemy).toFixed(0), enemy: r.particles.enemy.toFixed(0), seconds: r.particles.seconds.toFixed(0) })].join(String.fromCharCode(10)) : undefined}>{r.particles && r.particles.seconds > 0 ? r.particles.energyPerMember10s.toFixed(1) : '-'}</td>
-                        <td className="px-2 py-1.5 text-slate-300 break-words">{r.isCurrent && <span className="mr-1.5 px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-200 font-bold">{t('gcsim:search.currentBadge')}</span>}<span className="font-mono break-words" title={r.candidate.label}>{buildRotationNotation(members, stintsForApp(r.candidate.stints), r.candidate.loopStartIndex ?? 0, notationMode, false)}</span>{energyWaitLine(r)}</td>
+                        <td className="px-2 py-1.5 text-slate-300 break-words"><span className="font-mono break-words" title={r.candidate.label}>{buildRotationNotation(members, stintsForApp(r.candidate.stints), r.candidate.loopStartIndex ?? 0, notationMode, false)}</span>{energyWaitLine(r)}</td>
                         <td className="px-2 py-1.5 text-right">
-                          {applied === i ? (
+                          {r.isCurrent ? (
+                            <span className="inline-flex items-center gap-1 text-sky-200"><span className="px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-200 font-bold text-[10px]">{t('gcsim:search.currentBadge')}</span></span>
+                          ) : applied === i ? (
                             <span className="inline-flex items-center gap-1 text-emerald-300"><Check className="w-3.5 h-3.5" />{t('gcsim:search.applied')}</span>
                           ) : (
                             <button onClick={() => { setApplied(i); onApply(stintsForApp(r.candidate.stints), r.candidate.loopStartIndex ?? 0); }} className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold">{t('gcsim:search.apply')}</button>

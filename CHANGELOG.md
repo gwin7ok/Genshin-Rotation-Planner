@@ -6,6 +6,17 @@
 
 ## [Unreleased]
 
+## [1.16.1] - 2026-11-23
+
+### 変更
+- urls.txtを更新
+
+### 修正
+- 探索の設定の4項目に増減ボタンを設置（Stepper 共通部品を使用）
+- 結果表示セクションの改善
+- - 役割ボタンに `select-none` を追加し、連続クリック時の文字選択や テキスト選択系ブラウザ拡張機能の誤作動を抑止 - 探索結果テーブルの `<tr>` key を `${r.candidate.id}_${i}` に変更し、 近傍候補（`id: 'n'`）が複数並んだ際の key 重複警告を解消
+- コロンビーナの役割をアタッカー、サブアタッカーに変更
+
 ## [1.16.0] - 2026-11-23
 
 ### 追加
@@ -407,7 +418,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.0...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.1...HEAD
+[1.16.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.0...v1.16.1
 [1.16.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.1...v1.16.0
 [1.15.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...v1.15.1
 [1.15.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.14.1...v1.15.0

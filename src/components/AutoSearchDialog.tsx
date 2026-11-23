@@ -148,7 +148,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
     p.phase === 'generate' ? t('gcsim:search.phase.generate')
       : p.phase === 'quick' ? t('gcsim:search.phase.quick', { done: p.done, total: p.total })
         : p.phase === 'refine' ? t('gcsim:search.phase.refine', { done: p.done, total: p.total })
-        : t('gcsim:search.phase.verify', { done: p.done, total: p.total });
+          : t('gcsim:search.phase.verify', { done: p.done, total: p.total });
   const roleName = (r: string): string => (r === 'attacker' ? t('database:edit.role.attacker') : r === 'subAttacker' ? t('database:edit.role.subAttacker') : t('database:edit.role.supporter'));
   // キャラごとの、爆発のエネルギー待ち（DPS 計算と同じ仕様: 1 周あたりの回数 = 回数 ÷（周数 − 1）、待ち 1 回の平均時間。エネルギーの計算が有効なときだけ）
   const energyWaitLine = (r: { energyWaits?: Array<{ characterId: string; waits: number; seconds: number | null }>; loops?: number }): React.ReactNode => {
@@ -215,7 +215,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                         const on = (roles[c.id] ?? []).includes(r);
                         return (
                           <button key={r} onClick={() => toggleRole(c.id, r)} disabled={running} aria-pressed={on} data-testid={`role-${c.id}-${r}`}
-                            className={`px-2 py-0.5 rounded border font-bold disabled:opacity-40 ${on ? 'bg-amber-500/20 border-amber-500/50 text-amber-200' : 'bg-slate-900 border-slate-700 text-slate-500 hover:text-slate-300'}`}>{roleName(r)}</button>
+                            className={`select-none px-2 py-0.5 rounded border font-bold disabled:opacity-40 ${on ? 'bg-amber-500/20 border-amber-500/50 text-amber-200' : 'bg-slate-900 border-slate-700 text-slate-500 hover:text-slate-300'}`}>{roleName(r)}</button>
                         );
                       })}
                       {(roles[c.id] ?? []).length === 0 && <span className="text-slate-500">{t('gcsim:search.roleNone')}</span>}
@@ -264,7 +264,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                   </thead>
                   <tbody>
                     {outcome.results.map((r, i) => ({ r, i })).filter(({ r, i }) => i < 10 || r.isCurrent).sort((a, b) => Number(!!b.r.isCurrent) - Number(!!a.r.isCurrent) || a.i - b.i).map(({ r, i }) => (
-                      <tr key={r.candidate.id} className={`border-t border-slate-800 ${applied === i ? 'bg-violet-950/40' : ''}`}>
+                      <tr key={`${r.candidate.id}_${i}`} className={`border-t border-slate-800 ${applied === i ? 'bg-violet-950/40' : ''}`}>
                         <td className="px-2 py-1.5 text-slate-300 font-bold">{i + 1}</td>
                         <td className="px-2 py-1.5 text-right font-mono text-rose-300">{Math.round(r.dps).toLocaleString()} <span className="text-slate-500">±{Math.round(r.sd).toLocaleString()}</span></td>
                         <td className="px-2 py-1.5 text-right font-mono text-slate-400">{r.totalSeconds.toFixed(1)}s</td>

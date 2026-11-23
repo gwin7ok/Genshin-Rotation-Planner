@@ -12,6 +12,7 @@ import { buildRotationNotation } from '../utils/rotationNotation';
 import { effectiveRoles, loadRoleOverrides, normalizeRoles, ROLE_ORDER } from '../utils/characterRoleStore';
 import { knowledgeSource } from '../utils/knowledge/source';
 import { expandGroupedStints } from '../utils/actionGroups';
+import { Stepper } from './Stepper';
 import { DEFAULT_SEARCH_SETTINGS, searchRotation, stintsForApp, type SearchOutcome, type SearchProgress, type SearchSettings } from '../utils/rotationSearch/search';
 
 interface AutoSearchDialogProps {
@@ -169,8 +170,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
       </div>
     );
   };
-  const input = 'w-20 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white text-xs font-mono text-right';
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
       <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -291,14 +290,14 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             <summary className="cursor-pointer text-slate-300 font-bold">{t('gcsim:search.settings')}</summary>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
               {([
-                ['keep1', keep1, setKeep1],
-                ['runs1', runs1, setRuns1],
-                ['keep2', keep2, setKeep2],
-                ['runs2', runs2, setRuns2],
-              ] as const).map(([key, value, set]) => (
+                ['keep1', keep1, setKeep1, 2000],
+                ['runs1', runs1, setRuns1, 50],
+                ['keep2', keep2, setKeep2, 200],
+                ['runs2', runs2, setRuns2, 200],
+              ] as const).map(([key, value, set, max]) => (
                 <label key={key} className="flex items-center justify-between gap-2 text-slate-400">
                   <span>{t(`gcsim:search.${key}`)}</span>
-                  <input type="number" min={1} value={value} onChange={e => set(e.target.value)} disabled={running} className={input} />
+                  <Stepper value={value} onChange={set} step={1} min={1} max={max} disabled={running} widthClass="w-14" />
                 </label>
               ))}
             </div>

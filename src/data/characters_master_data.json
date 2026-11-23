@@ -53437,8 +53437,8 @@
     "weaponType": "catalyst",
     "rarity": 5,
     "roles": [
-      "subAttacker",
-      "supporter"
+      "attacker",
+      "subAttacker"
     ],
     "avatarUrl": "https://enka.network/ui/UI_AvatarIcon_Columbina.png",
     "color": "#0ea5e9",

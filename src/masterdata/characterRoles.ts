@@ -134,7 +134,7 @@ export const CHARACTER_ROLES: Record<string, CharacterRole[]> = {
   '10000122-dendro': ['attacker'], // ネフェル
   '10000123-pyro': ['subAttacker'], // ドゥリン
   '10000124-anemo': ['supporter'], // ヤフォダ
-  '10000125-hydro': ['subAttacker', 'supporter'], // コロンビーナ
+  '10000125-hydro': ['attacker', 'subAttacker'], // コロンビーナ
   '10000126-geo': ['attacker'], // 兹白
   '10000127-geo': ['supporter'], // イルーガ
   '10000128-anemo': ['attacker'], // ファルカ

@@ -249,7 +249,6 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             <div className="space-y-2">
               <h4 className="text-xs font-bold text-slate-200">{t('gcsim:search.resultTitle')}</h4>
               <p className="text-xs text-slate-400">{t('gcsim:search.summary', { candidates: outcome.counts.candidates, rejected: outcome.counts.rejected, quick: outcome.counts.quick, seconds: (outcome.elapsedMs / 1000).toFixed(1) })}</p>
-              {applied === null && <p className="text-xs text-amber-300">{t('gcsim:search.appliedFirst')}</p>}
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
@@ -303,7 +302,22 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
                 </label>
               ))}
             </div>
-            <p className="mt-2 text-slate-500">{t('gcsim:search.settingsHint')}</p>
+            <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-500">
+              <span>{t('gcsim:search.settingsHint')}</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setKeep1(String(DEFAULT_SEARCH_SETTINGS.keep1));
+                  setRuns1(String(DEFAULT_SEARCH_SETTINGS.runs1));
+                  setKeep2(String(DEFAULT_SEARCH_SETTINGS.keep2));
+                  setRuns2(String(DEFAULT_SEARCH_SETTINGS.runs2));
+                }}
+                disabled={running}
+                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-40"
+              >
+                {t('gcsim:dps.reset')}
+              </button>
+            </div>
           </details>
 
           <details className="text-xs" open>

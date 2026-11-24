@@ -295,7 +295,7 @@
   },
   "search": {
     "title": "Auto Rotation Search",
-    "intro": "Builds combinations of on-field order and actions from the roles (attacker / sub-attacker / supporter) of the party members, runs the ones without cooldown violations through gcsim, and ranks them by DPS. The best one is placed on the Gantt chart right away.",
+    "intro": "Builds combinations of on-field order and actions from the roles (attacker / sub-attacker / supporter) of the party members, runs the ones without cooldown violations through gcsim, and ranks them by DPS.",
     "rolesTitle": "Roles of the party members (click to toggle; used for this search only)",
     "rolesHint": "Defaults come from the master data roles of each character (or your Database management setting). Rebuilt every time this dialog opens.",
     "roleNone": "No role (treated as a supporter)",

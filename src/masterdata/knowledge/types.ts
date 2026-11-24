@@ -42,6 +42,8 @@ export interface Archetype {
   lead?: string[];
   /** 編成の条件: この ID のキャラが、編成にいるとき */
   withCharacters?: string[];
+  /** true のとき、このキャラが西風シリーズの武器を装備しているときだけ使う（西風粒子を出すための通常攻撃を挟む型など） */
+  requiresFavonius?: boolean;
   /** 根拠（gcsim の実測・手組みなど。文章の転載はしない） */
   evidence: string;
 }

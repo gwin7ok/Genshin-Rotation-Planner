@@ -118,6 +118,19 @@ const consOf = (config: string, team: string[]): Map<string, number> => {
   for (const m of decl) { const i = aliases.indexOf(m[1]); const k = aliases.length === team.length ? team[i] : m[1]; if (k) out.set(k, Number(m[2])); }
   return out;
 };
+// 設定の中の、キャラ（キー）ごとの武器キー: `<別名> add weapon="<キー>"`
+const weaponOf = (config: string, team: string[]): Map<string, string> => {
+  const out = new Map<string, string>();
+  const decl = [...config.matchAll(/^\s*([a-z0-9_]+)\s+add\s+weapon="([^"]+)"/gm)];
+  const aliases = [...config.matchAll(/^\s*([a-z0-9_]+)\s+char(?![a-z_])/gm)].map(m => m[1]);
+  for (const m of decl) { const i = aliases.indexOf(m[1]); const k = aliases.length === team.length ? team[i] : m[1]; if (k) out.set(k, m[2]); }
+  return out;
+};
+// スキル仕様自体でサポーターでも通常攻撃が元素化・追撃発動するキャラ（シロネン・行秋・夜蘭・重雲・トーマ・キャンディスなど。法器キャラとあわせて西風限定にしない）
+const KIT_USES_N = new Set([
+  '10000024-electro', '10000025-hydro', '10000036-cryo', '10000050-pyro', '10000052-electro',
+  '10000060-hydro', '10000070-hydro', '10000072-hydro', '10000094-geo', '10000103-geo',
+]);
 const bandOf = (n: number | undefined): string => (n === undefined ? '?' : n === 0 ? '0凸' : n === 6 ? '6凸' : '1〜5凸');
 
 // --cons-report: 辞書の「KQM 由来」の形ごとに、その形（use と同じ出場）を使う設定の凸数の分布（0〜6 凸の件数）を出す
@@ -157,7 +170,7 @@ if (args.includes('--multi') || SINGLE) {
   const MIN_COUNT = opt('multi-min', 10), MIN_SHARE = 0.03, PER_CHAR = opt('multi-per-char', 3), MAX_STINTS = 4, MAX_ACTIONS = 40;
   const ALLOWED = new Set(['n', 'ca', 'e', 'e_hold', 'q', 'dash', 'jump', 'hp', 'lp']);
   const kidx = JSON.parse(fs.readFileSync('public/knowledge/index.json', 'utf8')).chars;
-  const parsedAll = entries.map(e => ({ cons: consOf(e.config, e.summary?.char_names ?? []), stints: stintsOf(e.config, e.summary?.char_names ?? []), team: e.summary?.char_names ?? [], dps: e.summary?.mean_dps_per_target ?? 0 }));
+  const parsedAll = entries.map(e => ({ cons: consOf(e.config, e.summary?.char_names ?? []), weapons: weaponOf(e.config, e.summary?.char_names ?? []), stints: stintsOf(e.config, e.summary?.char_names ?? []), team: e.summary?.char_names ?? [], dps: e.summary?.mean_dps_per_target ?? 0 }));
   const label = (acts: string[]) => compact(acts).split(' ').join('→').toUpperCase();
   const { KNOWLEDGE } = await import('../src/masterdata/knowledge/characters.ts');
   const lines: string[] = [];
@@ -169,15 +182,16 @@ if (args.includes('--multi') || SINGLE) {
     const dict = (KNOWLEDGE.find((k: any) => k.characterId === m.id)?.archetypes ?? []) as any[];
     const mine = parsedAll.filter(p => p.team.includes(key));
     if (mine.length === 0) continue;
-    const seqs = new Map<string, { acts: string[][]; dps: number[]; cons: number[] }>();
+    const seqs = new Map<string, { acts: string[][]; dps: number[]; cons: number[]; fav: number }>();
     for (const p of mine) {
       const own = p.stints.filter(s => s.who === key).map(s => s.actions);
       if (SINGLE ? own.length !== 1 : own.length < 2 || own.length > MAX_STINTS) continue;
       if (own.some(a => a.length === 0 || a.some(x => !ALLOWED.has(x))) || own.flat().length > MAX_ACTIONS) continue;
       const k = JSON.stringify(own);
-      const r = seqs.get(k) ?? { acts: own, dps: [], cons: [] };
+      const r = seqs.get(k) ?? { acts: own, dps: [], cons: [], fav: 0 };
       r.dps.push(p.dps);
       const c = p.cons.get(key); if (c !== undefined) r.cons.push(c);
+      if (/^fav/i.test(p.weapons.get(key) ?? '')) r.fav++;
       seqs.set(k, r);
     }
     const sameForm = (a: any, acts: string[][]) => JSON.stringify(a.use) === JSON.stringify(acts[0]) && JSON.stringify((a.then ?? []).map((t: any) => t.use)) === JSON.stringify(acts.slice(1));
@@ -197,7 +211,8 @@ if (args.includes('--multi') || SINGLE) {
       const minCons = r.cons.length ? Math.min(...r.cons) : 0;
       const hist = [0, 0, 0, 0, 0, 0, 0]; for (const c of r.cons) hist[c]++;
       const name = SINGLE ? `${label(r.acts[0])}（KQM）` : `${label(r.acts[0])} のあと、もう一度 ${r.acts.slice(1).map(label).join('、さらに ')}`;
-      const text = `{ name: '${name}', role: '${role}', slot: ${base}, use: [${r.acts[0].map(x => `'${x}'`).join(', ')}],${SINGLE ? '' : ` then: [${thenParts.join(', ')}],`} constellation: { min: ${minCons} }, evidence: 'KQM Sim Database（db.kqm.gg）の${SINGLE ? '単数回の形' : '複数回出場の形'}: ${m.name} ${mine.length} 件中 ${r.dps.length} 件。平均 ${(avg / 1000).toFixed(1)}k（最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k）。凸数: 使われている設定の最小は ${minCons} 凸（分布 0〜6 凸 = ${hist.join('/')}）（探索の比較なし）' },`;
+      const reqFav = role !== 'attacker' && m.weaponType !== 'catalyst' && !KIT_USES_N.has(m.id) && r.acts.flat().includes('n') && r.dps.length > 0 && r.fav / r.dps.length >= 0.6;
+      const text = `{ name: '${name}', role: '${role}', slot: ${base}, use: [${r.acts[0].map(x => `'${x}'`).join(', ')}],${SINGLE ? '' : ` then: [${thenParts.join(', ')}],`} constellation: { min: ${minCons} },${reqFav ? ' requiresFavonius: true,' : ''} evidence: 'KQM Sim Database（db.kqm.gg）の${SINGLE ? '単数回の形' : '複数回出場の形'}: ${m.name} ${mine.length} 件中 ${r.dps.length} 件。平均 ${(avg / 1000).toFixed(1)}k（最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k）。凸数: 使われている設定の最小は ${minCons} 凸（分布 0〜6 凸 = ${hist.join('/')}）（探索の比較なし）' },`;
       items.push({ id: m.id, who: m.name, text });
       lines.push(`${m.name}（${role}）${r.dps.length}/${mine.length} 件 平均 ${(avg / 1000).toFixed(1)}k 最小 ${minCons} 凸: ${r.acts.map(a => `[${compact(a)}]`).join(' ')}`);
     }

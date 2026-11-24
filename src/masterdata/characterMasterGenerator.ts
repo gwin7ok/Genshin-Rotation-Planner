@@ -1846,6 +1846,36 @@ function buildActions(ctx: BuildContext): BuildResult {
     }
   }
 
+  // 旅人(風): 長押しの長さ（hold_ticks）ごとの派生。gcsim の skill.go: SkillHold は、1 ティック目の着弾が 31f、以降 15f ごと（2 ティック目の後に +5f）、
+  // 爆発（Storm）は「最後の着弾 − 15f + 5f」。後隙は skillHoldDelayFrames（先頭添字が性別）。`skill[hold=1,hold_ticks=n]` で渡す（actionMapping.ts）。
+  // 最大（6 ティック）は、既存の `e_hold`（`skill[hold=1]`）。DPS に効く長さだけを探索できるよう、1・2・3・5 ティックを別アクションにする
+  if (id === '10000005-anemo' || id === '10000007-anemo') {
+    const female = id === '10000007-anemo';
+    // 後隙（hitmark からの追加フレーム）。既定 = 通常攻撃・元素爆発など
+    const delay = { base: female ? 30 : 44, attack: female ? 29 : 44, swap: female ? 29 : 35, dash: 0, jump: 0 };
+    for (const n of [1, 2, 3, 5]) {
+      const hitmark = 31 + 15 * n + (n >= 2 ? 5 : 0) - 15 + 5;
+      const total = hitmark + delay.base;
+      const cancels: ActionFrames['cancels'] = {
+        ...(delay.attack !== delay.base ? { attack: hitmark + delay.attack } : {}),
+        swap: hitmark + delay.swap, dash: hitmark + delay.dash, jump: hitmark + delay.jump,
+      };
+      actions.push({
+        id: `${id}_e_hold${n}`,
+        name: skillName ? `元素スキル(長押し ${n} ティック): ${skillName}` : `元素スキル(長押し ${n} ティック)`,
+        shortName: `hE(${n}Tick)`,
+        type: 'skill_hold',
+        startsSkillCooldown: true,
+        cooldown: 8,
+        effectDuration: 0,
+        cooldownStart: { from: 'motionStart', delay: framesToSec(hitmark - 5) },
+        defaultDuration: framesToSec(total),
+        frames: { total, hitmark, cancels, source: `traveler/common/anemo/skill.go:SkillHold(holdTicks=${n}) + skillHoldDelayFrames` },
+        dataSource: { cooldown: 'gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)' },
+      });
+    }
+  }
+
   // 長押し系（hE）が存在するキャラの一回押しは tE、存在しないキャラのスキルは E (D36)
   if (actions.some(a => a.type === 'skill_hold')) {
     const tap = actions.find(a => a.id === `${id}_e`);

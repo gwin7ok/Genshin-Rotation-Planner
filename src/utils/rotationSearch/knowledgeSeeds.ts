@@ -26,14 +26,68 @@ function permutations<T>(xs: T[]): T[][] {
   return xs.flatMap((x, i) => permutations([...xs.slice(0, i), ...xs.slice(i + 1)]).map(r => [x, ...r]));
 }
 
+/** 西風シリーズの武器 ID（西風剣・西風大剣・西風長槍・西風秘典・西風猟弓） */
+export const FAVONIUS_WEAPON_IDS = new Set(['11401', '12401', '13407', '14401', '15401']);
+export const isFavoniusWeapon = (weaponId?: string): boolean => !!weaponId && FAVONIUS_WEAPON_IDS.has(weaponId);
+
+/** スキル・爆発で無凸から自身の通常攻撃に元素付与・元素変化・元素追撃が発生するサポーター／サブアタッカー */
+export const SELF_ELEMENT_NORMAL_IDS = new Set([
+  '10000024-electro', // 北斗
+  '10000025-hydro',   // 行秋
+  '10000036-cryo',    // 重雲
+  '10000050-pyro',    // トーマ
+  '10000052-electro', // 雷電将軍
+  '10000060-hydro',   // 夜蘭
+  '10000070-hydro',   // ニィロウ
+  '10000072-hydro',   // キャンディス
+  '10000094-geo',     // 千織
+  '10000103-geo',     // シロネン
+]);
+
+/** 6 凸（完凸）効果でスキル・爆発後に自身の通常攻撃に元素付与を得るサポーター／サブアタッカー */
+export const C6_INFUSION_IDS = new Set([
+  '10000005-pyro',    // 空(炎)
+  '10000007-pyro',    // 蛍(炎)
+  '10000032-pyro',    // ベネット
+  '10000047-anemo',   // 楓原万葉
+  '10000068-electro', // ドリー
+  '10000083-anemo',   // リネット
+  '10000089-hydro',   // フリーナ
+  '10000099-dendro',  // エミリエ
+]);
+
+/** 西風粒子、または通常攻撃による元素攻撃・元素付与・追撃が有効な状態か */
+export function canUseFavoniusOrElementNormal(c: CharacterConfig, party?: CharacterConfig[]): boolean {
+  if (isFavoniusWeapon(c.weaponId)) return true;
+  if (c.weaponType === 'catalyst') return true;
+  if (SELF_ELEMENT_NORMAL_IDS.has(c.id)) return true;
+  const cons = c.constellation ?? defaultConstellation(c.rarity);
+  if (cons >= 6 && C6_INFUSION_IDS.has(c.id)) return true;
+  const isMelee = c.weaponType === 'sword' || c.weaponType === 'claymore' || c.weaponType === 'polearm';
+  if (isMelee && party) {
+    // 編成内に、味方の近接通常攻撃へ元素付与を配るキャラ（重雲・キャンディス・6凸ベネット）がいるとき
+    if (party.some(p => p.id === '10000036-cryo' || p.id === '10000072-hydro' || (p.id === '10000032-pyro' && (p.constellation ?? defaultConstellation(p.rarity)) >= 6))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function applicableArchetypes(c: CharacterConfig, bundle: KnowledgeBundle, partyIds: Set<string>, party?: CharacterConfig[]): Archetype[] {
+  const cons = c.constellation ?? defaultConstellation(c.rarity);
+  const allowFavOrElemN = canUseFavoniusOrElementNormal(c, party);
+  return (bundle[c.id]?.archetypes ?? []).filter(
+    a => (a.withCharacters ?? []).every(id => partyIds.has(id))
+      && cons >= (a.constellation?.min ?? 0) && cons <= (a.constellation?.max ?? 6)
+      && (!a.requiresFavonius || allowFavOrElemN),
+  );
+}
+
 export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle, maxSeeds: number = DEFAULT_MAX_SEEDS): KnowledgeSeed[] {
   const ids = new Set(characters.map(c => c.id));
   // 編成の条件を満たす運用型が 1 つもないキャラは、出発点に入れない（辞書にないキャラも同じ）
   // 凸数の条件（constellation）も見る。凸数は、編成の設定（未指定は、星 4 = 6 凸・星 5 = 0 凸）
-  const applicable = (c: CharacterConfig) => {
-    const cons = c.constellation ?? defaultConstellation(c.rarity);
-    return (bundle[c.id]?.archetypes ?? []).filter(a => (a.withCharacters ?? []).every(id => ids.has(id)) && cons >= (a.constellation?.min ?? 0) && cons <= (a.constellation?.max ?? 6));
-  };
+  const applicable = (c: CharacterConfig) => applicableArchetypes(c, bundle, ids, characters);
   const members = characters.filter(c => applicable(c).length > 0);
   if (members.length === 0) return [];
   const options = members.map(applicable);

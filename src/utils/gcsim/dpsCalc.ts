@@ -13,7 +13,7 @@ import { type EnemyParticles, type TimedParticle } from './requiredEnergyRecharg
 import { makeDamageFactor, type EnemyStateWindow } from './enemyStates';
 
 /** 周数の既定・上限 */
-export const DPS_DEFAULT_LOOPS = 5; // DPS 計算の周数の既定（ER 計算は 3。別々に決める。D384）
+export const DPS_DEFAULT_LOOPS = 3; // DPS 計算・探索の周数の既定（ER 計算と同じ 3）
 export const DPS_MAX_LOOPS = 20;
 /** 実行回数（種の数）の既定・上限 */
 export const DPS_DEFAULT_RUNS = 100;

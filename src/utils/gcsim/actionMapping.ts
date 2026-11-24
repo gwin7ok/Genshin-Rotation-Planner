@@ -16,6 +16,8 @@ export const CHARACTER_ACTION_OVERRIDES: Record<string, string> = {
   '10000005-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
   '10000007-hydro_e_shorthold': 'skill[hold=1,hold_ticks=1]',
   '10000007-hydro_e_shorthold0ticks': 'skill[hold=1,hold_ticks=0]',
+  // 旅人(風): 長押しの長さ（ティック数）ごとの派生。最大（6 ティック）は e_hold（skill[hold=1]）
+  ...Object.fromEntries(['10000005', '10000007'].flatMap(g => [1, 2, 3, 5].map(n => [`${g}-anemo_e_hold${n}`, `skill[hold=1,hold_ticks=${n}]`]))),
   // 段のある長押し（追加作業 17）: 雲菫（溜め Lv.1 / Lv.2）・シグウィン（hold=1 短押し長押し / hold=2 長押し）
   '10000064-geo_e_shorthold': 'skill[hold=1]',
   '10000064-geo_e_hold': 'skill[hold=2]',

@@ -85,7 +85,25 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フリーナ 1786 件中 176 件。平均 69.2k（最大 130.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 174/0/2/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "E のあと、もう一度 Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "evidence": "サロンメンバー（E）を先に置き、アタッカー・長押しの直前に再度出て爆発（Q）のバフを合わせる形（蒸発フリーナ等）"
   },
   {
    "name": "N→E→DASH→N のあと、もう一度 Q",
@@ -108,6 +126,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: フリーナ 1786 件中 75 件。平均 84.6k（最大 113.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 75/0/0/0/0/0/0）（探索の比較なし）"
   },
   {

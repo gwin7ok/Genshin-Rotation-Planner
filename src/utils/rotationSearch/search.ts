@@ -7,6 +7,7 @@ import type { CharacterConfig, Stint } from '../../types/genshin';
 import type { EnemySetting, HurtSetting } from '../gcsim/buildGcsimConfig';
 import type { EnemyParticles } from '../gcsim/requiredEnergyRecharge';
 import { buildGcsimConfig } from '../gcsim/buildGcsimConfig';
+import { HOLD_FRAMES_ACTIONS } from '../gcsim/actionMapping';
 import { appGcsimExtras } from '../gcsim/appGcsimExtras';
 import { calculateRotation } from '../rotationCalculator';
 import { computeDps } from '../gcsim/dpsCalc';
@@ -42,19 +43,21 @@ export interface SearchSettings {
   maxCandidates: number;
   /** ④b 近傍の探索で試す候補の数の上限（0 で行わない。既定 DEFAULT_REFINE_BUDGET） */
   refineBudget?: number;
+  /** ④b 1 ラウンドで試す近傍の上限（既定 REFINE_BATCH） */
+  refineBatch?: number;
+  /** ④b 同時に広げる上位候補の数（ビーム幅。既定 BEAM） */
+  beamWidth?: number;
 }
 
-const DEFAULT_REFINE_BUDGET = 700;
+const DEFAULT_REFINE_BUDGET = 2000;
 /** 探索中（④④b）の戦闘時間の上限（秒） */
 const EXPLORE_SECONDS = 60;
-/** 画面の DPS 計算と同じ条件で探索するとき、探索中のループの周数の上限 */
-const EXPLORE_LOOPS = 3;
 /** 山登りの 1 回で試す近傍の数の上限 */
 const CROSS_PER_GROUP = 6;
-const BEAM = 4;
+const BEAM = 8;
 const BEAM_RATIO = 0.9;
 const STALE_LIMIT = 3;
-const REFINE_BATCH = 70;
+const REFINE_BATCH = 200;
 /** ダメージの割合がこれ未満のキャラ（アタッカー以外）の動作を、先に削ってみる */
 const LOW_SHARE = 0.06;
 /** 知識辞書の出発点があるとき、山登りする割り当ての下限（全体の最良に対する割合） */
@@ -66,7 +69,10 @@ const TOLERATED_CT_ISSUES = 4;
 /** 山登りの先行 1 回の足切り（いまの最良に対する割合） */
 const REFINE_PREFILTER = 0.85;
 
-export const DEFAULT_SEARCH_SETTINGS: SearchSettings = { battleSeconds: 60, keep1: 300, runs1: 1, keep2: 12, runs2: 10, maxCandidates: 20000 };
+export const DEFAULT_SEARCH_SETTINGS: SearchSettings = {
+  battleSeconds: 60, keep1: 600, runs1: 2, keep2: 20, runs2: 10, maxCandidates: 20000,
+  refineBudget: DEFAULT_REFINE_BUDGET, refineBatch: REFINE_BATCH, beamWidth: BEAM,
+};
 
 export type SearchPhase = 'generate' | 'quick' | 'refine' | 'verify';
 
@@ -74,6 +80,9 @@ export interface SearchProgress {
   phase: SearchPhase;
   done: number;
   total: number;
+  /** 1.5 段目の測り直し（精査）中の進捗 */
+  subDone?: number;
+  subTotal?: number;
 }
 
 /** 発生した粒子（1 回の実行の平均。元素チャージ効率を調整して、他のステータスに回せる余地の目安） */
@@ -198,10 +207,10 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     if (cancelled()) return { status: 'cancelled' };
 
     // 1 候補ぶんの gcsim 実行。同時に動かす候補の数 = コア数 ÷ 1 候補の並列数
-    const runOne = async (sc: ScoredCandidate, runs: number, parallel: number, seconds: number, final: boolean): Promise<QuickRun> => {
+    // 候補から gcsim の設定を作る（実行用と、重複判定用で共通）
+    const buildCfgFor = (sc: ScoredCandidate, seconds: number, _final: boolean) => {
       const dps = args.dps;
-      // 探索中は周数を減らして速くする（最後の確認だけ指定の周数）
-      const loopsUsed = dps ? (final ? dps.loops : Math.min(dps.loops, EXPLORE_LOOPS)) : 0;
+      const loopsUsed = dps ? dps.loops : 0;
       // アプリの計算（長押しの秒数・所要時間など）を通した値を、gcsim に渡す。置いたあとの DPS 計算と同じ結果にするため
       const calc = calculateRotation(characters, sc.candidate.stints, { switchDelay: args.switchDelay, loopStartIndex: sc.candidate.loopStartIndex ?? 0, defHalt: args.defHalt });
       const cfg = buildGcsimConfig({
@@ -212,6 +221,11 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           ? { loopIterations: loopsUsed, enemies: dps.enemies, ignoreBurstEnergy: !dps.energy, ...(dps.energy && dps.particles.amount > 0 && dps.particles.maxSeconds > 0 ? { enemyParticles: dps.particles } : {}) }
           : { battleSeconds: seconds, ...(args.energy ? { ignoreBurstEnergy: false, startEnergyZero: true } : {}) }),
       });
+      return cfg;
+    };
+    const runOne = async (sc: ScoredCandidate, runs: number, parallel: number, seconds: number, final: boolean): Promise<QuickRun> => {
+      const dps = args.dps;
+      const cfg = buildCfgFor(sc, seconds, final);
       if (!cfg.runnable) return { sc, error: cfg.warnings.find(w => w.level === 'error')?.message ?? 'NOT_RUNNABLE' };
       try {
         const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
@@ -223,7 +237,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       }
     };
     // wanted: 成功がこの数に届くまで、後ろの候補で補う（gcsim が実行できない候補が混じるので、その分を減らさない）。items の最後まで試したら終わる
-    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase, wanted = items.length, seconds = settings.battleSeconds, prog?: { base: number; total: number; fixed?: number }): Promise<QuickRun[]> => {
+    const mapLimit = async (items: ScoredCandidate[], runs: number, phase: SearchPhase, wanted = items.length, seconds = settings.battleSeconds, prog?: { base: number; total: number; fixed?: number; sub?: boolean }): Promise<QuickRun[]> => {
       const parallel = Math.max(1, Math.min(runs, args.cores));
       const concurrent = Math.max(1, Math.floor(args.cores / parallel));
       const out: QuickRun[] = [];
@@ -231,7 +245,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       let done = 0;
       let okCount = 0;
       // 進捗は、prog があれば、全体（base + この回の分 / total）で出す（山登りは、70 個ずつの回を繰り返すので、回ごとの「n / 70」ではなく、全体の予算で出す）
-      const report = (d: number) => args.onProgress?.(prog ? { phase, done: Math.min(prog.total, prog.base + (prog.fixed ?? d)), total: prog.total } : { phase, done: d, total: wanted });
+      const report = (d: number) => args.onProgress?.(prog ? { phase, done: Math.min(prog.total, prog.base + (prog.fixed ?? d)), total: prog.total, ...(prog.sub ? { subDone: d, subTotal: wanted } : {}) } : { phase, done: d, total: wanted });
       report(0);
       await Promise.all(Array.from({ length: concurrent }, async () => {
         while (next < items.length && okCount < wanted && !cancelled()) {
@@ -354,11 +368,13 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       const bestIn = (g: string): QuickRun | undefined => r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!)[0];
       const groups = climbGroups.filter(g => bestIn(g));
       // ビーム: 最良だけでなく、最良の 92% 以上の上位 BEAM 個のうち、まだ広げていないものを順に広げる（少し下がってから大きく上がる形に届くように。例: 周回の開始位置を変えてから、別のキャラの爆発を足すと、はじめて 1.2 倍になる）
+      const beamWidth = Math.max(1, settings.beamWidth ?? BEAM);
+      const refineBatch = Math.max(1, settings.refineBatch ?? REFINE_BATCH);
       const expanded = new Set<string>();
       const nextStart = (g: string): QuickRun | undefined => {
         const all = r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!);
         if (all.length === 0) return undefined;
-        return all.slice(0, BEAM).find(r => r.dps! >= all[0].dps! * BEAM_RATIO && !expanded.has(r.sc.candidate.label));
+        return all.slice(0, beamWidth).find(r => r.dps! >= all[0].dps! * BEAM_RATIO && !expanded.has(r.sc.candidate.label));
       };
       for (let round = 0; round < 24 && used < budget && !cancelled(); round++) {
         let progressed = false;
@@ -370,12 +386,12 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           const pool = new Map<string, Candidate>();
           // ダメージの割合が小さいキャラ（アタッカー以外。全体の 6% 未満）は、動作を削る近傍を先に測る
           const lowShare = start.share ? characters.filter(c => groupOf(start.sc).split('+').indexOf(c.id) < 0 && (start.share![c.id] ?? 1) < LOW_SHARE).map(c => c.id) : [];
-          for (const n of neighborsOf(characters, start.sc.candidate, { lowShare })) if (!tried.has(n.label)) pool.set(n.label, n);
+          for (const n of neighborsOf(characters, start.sc.candidate, { lowShare, knowledge: args.knowledge })) if (!tried.has(n.label)) pool.set(n.label, n);
           if (pool.size === 0) { stale.set(g, 99); continue; }
           const ev2 = evaluateCandidates(characters, [...pool.values()], { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
           for (const c of pool.keys()) tried.add(c);
           // 近傍は操作の種類（入れ替え・移動・分割・消去・差し込みなど）ごとに簡易スコア順に並べ、種類を順に回って均等に取る（簡易スコアは当てにならないので、上位だけだと、ある種類の近傍が全く測られない）
-          const limit = Math.min(REFINE_BATCH, budget - used);
+          const limit = Math.min(refineBatch, budget - used);
           const byOp = new Map<string, ScoredCandidate[]>();
           for (const sc of ev2.scored) { const k = sc.candidate.op ?? '?'; const l = byOp.get(k); if (l) l.push(sc); else byOp.set(k, [sc]); }
           const batch: ScoredCandidate[] = [];
@@ -393,7 +409,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           // 先に 1 回だけ回して、明らかに悪い候補（その割り当ての最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
           const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds, { base: used, total: budget });
           const keepSc = first.filter(r => r.dps !== undefined && r.dps >= startDps * REFINE_PREFILTER).map(r => r.sc);
-          const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds, { base: used, total: budget, fixed: batch.length });
+          const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds, { base: used, total: budget, fixed: batch.length, sub: true });
           used += batch.length;
           args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
           r1.push(...rr);
@@ -426,14 +442,29 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       const parts: string[] = [];
       let prev: string | undefined;
       for (const s of sc.candidate.stints) {
-        const acts = s.actions.map(x => x.actionTypeId + (x.durationManual ? `@${x.duration}` : '')).join(',');
+        const acts = s.actions.map(x => x.actionTypeId + (x.durationManual && HOLD_FRAMES_ACTIONS.has(x.actionTypeId) ? `@${x.duration}` : '')).join(',');
         if (prev === s.characterId) parts[parts.length - 1] += ',' + acts; else parts.push(s.characterId + ':' + acts);
         prev = s.characterId;
       }
       return parts.join('|') + '@' + (sc.candidate.loopStartIndex ?? 0);
     };
     const seenKeys = new Set<string>();
-    let stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => { const k = mergedKey(r.sc); if (seenKeys.has(k)) return false; seenKeys.add(k); return true; }).slice(0, Math.max(1, settings.keep2)).map(r => ({ ...r.sc, candidate: mergeAdjacentStints(characters, r.sc.candidate) }));
+    // 安全網: gcsim に渡るスクリプトが同じ候補（アプリの計算上の長さだけが違うもの。options duration= の推定余裕時間の差は除く）は、DPS の高い方（先に来る方）の 1 件にまとめる
+    const seenScripts = new Set<string>();
+    const scriptKey = (sc: ScoredCandidate): string | undefined => {
+      try {
+        const cfg = buildCfgFor(sc, settings.battleSeconds, true);
+        return cfg.runnable ? cfg.config.replace(/^(options\b[^\n;]*?\bduration=)\d+/m, '$1*') : undefined;
+      } catch { return undefined; }
+    };
+    let stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => {
+      const k = mergedKey(r.sc);
+      if (seenKeys.has(k)) return false;
+      seenKeys.add(k);
+      const sk = scriptKey(r.sc);
+      if (sk !== undefined) { if (seenScripts.has(sk)) return false; seenScripts.add(sk); }
+      return true;
+    }).slice(0, Math.max(1, settings.keep2)).map(r => ({ ...r.sc, candidate: mergeAdjacentStints(characters, r.sc.candidate) }));
     // 「いまのローテーション」（最初の出発点）は、上位に入らなくても、順位に載せて比べられるようにする
     const ownRun = args.keepFirstSeed ? okAll.find(r => r.sc.candidate.id === 'seed0') : undefined;
     const ownKey = ownRun ? mergedKey(ownRun.sc) : undefined;

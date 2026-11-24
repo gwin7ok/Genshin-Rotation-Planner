@@ -36,6 +36,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: エスコフィエ 426 件中 35 件。平均 80.3k（最大 130.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 35/0/0/0/0/0/0）（探索の比較なし）"
   },
   {

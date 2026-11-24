@@ -65,6 +65,14 @@ const withCons = (n: number | undefined) => view(ks.knowledgeSeeds([{ ...hutao, 
 assert.deepEqual(withCons(0), ['胡桃[q]'], '0 凸は、max: 1 の形だけ');
 assert.deepEqual(withCons(2), ['胡桃[e]'], '2 凸は、min: 2 の形だけ');
 assert.deepEqual(withCons(undefined), ['胡桃[q]'], '凸数の未指定は、星 5 = 0 凸として扱う（胡桃は星 5）');
+// 西風武器・元素付与の条件: requiresFavonius の形は、西風武器を装備しているか、元素付与（法器・完凸付与など）があるときだけ使う
+const favBundle = {
+  [bennett.id]: { archetypes: [arche('supporter', 10, ['e', 'n'], { requiresFavonius: true }), arche('supporter', 10, ['e'])] },
+  [hutao.id]: { archetypes: [arche('attacker', 40, ['e'])] },
+};
+assert.deepEqual(view(ks.knowledgeSeeds([{ ...bennett, constellation: 5, weaponId: '11405' }, hutao], favBundle)), ['ベネット[e]→胡桃[e]'], '西風以外の武器・元素付与なし（ベネット 5 凸）では requiresFavonius の形を除外');
+assert.deepEqual(view(ks.knowledgeSeeds([{ ...bennett, constellation: 5, weaponId: '11401' }, hutao], favBundle)), ['ベネット[e,n]→胡桃[e]', 'ベネット[e]→胡桃[e]'], '西風武器を装備していれば requiresFavonius の形も使う');
+assert.deepEqual(view(ks.knowledgeSeeds([{ ...bennett, constellation: 6, weaponId: '11405' }, hutao], favBundle)), ['ベネット[e,n]→胡桃[e]', 'ベネット[e]→胡桃[e]'], '元素付与状態（ベネット 6 凸）なら西風以外の武器でも N の形を捨てない');
 assert.equal(new Set(base.map(shape)).size, base.length, '重複なし');
 console.log('OK: 続きの出場を含む出発点の組み立て');
 await server.close();

@@ -36,6 +36,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 申鶴 301 件中 12 件。平均 77.6k（最大 110.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 12/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -58,6 +59,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 15 件。平均 71.1k（最大 370.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 13/0/0/1/0/0/1）（探索の比較なし）"
   },
   {
@@ -80,6 +82,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 60.9k（最大 93.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -104,6 +107,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 51.7k（最大 65.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -126,6 +130,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 38 件。平均 56.9k（最大 72.8k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（66 件。分布 0〜6 凸 = 63/0/0/0/0/0/3）"
   },
   {

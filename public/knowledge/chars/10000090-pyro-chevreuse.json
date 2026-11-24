@@ -63,6 +63,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 23 件。平均 63.7k（最大 96.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 1/0/0/0/0/0/22）（探索の比較なし）"
   },
   {

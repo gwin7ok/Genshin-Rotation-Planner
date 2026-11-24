@@ -262,7 +262,7 @@
     "buildNote": "Stats are the final values at the start (weapon, artifacts and placeholder values included; buffs during the rotation are not). “Placeholder” is a slot that does not use an owned character’s equipment.",
     "loops": "Rotation loops",
     "loopsUnit": "loops (opening + loops)",
-    "loopsNote": "DPS = total damage ÷ time (opening + N loops). Default 5 loops, 1–{{max}}. With few loops the opening has a larger effect.",
+    "loopsNote": "DPS = total damage ÷ time (opening + N loops). Default 3 loops, 1–{{max}}. With few loops the opening has a larger effect.",
     "runs": "Number of runs",
     "runsUnit": "runs",
     "runsNote": "Number of runs with different seeds (default 100, 1–{{max}}). More runs reduce the spread but take longer.",
@@ -302,12 +302,15 @@
     "settings": "Search settings",
     "settingsHint": "More runs and more kept candidates make the ranking more accurate but take longer (a few minutes).",
     "conditions": "Calculation conditions (shared with DPS calculation)",
-    "conditionsHint": "The search measures DPS under the same conditions as the DPS calculation (initial + N loops, full starting energy, bursts wait until energy builds up, enemy particles, enemy settings), so results compare directly with a hand-made rotation. While searching, loops are capped at 3 for speed (only the final check uses the chosen number). These settings are shared with the DPS calculation.",
+    "conditionsHint": "The search measures DPS under the same conditions as the DPS calculation (initial + N loops, full starting energy, bursts wait until energy builds up, enemy particles, enemy settings), so results compare directly with a hand-made rotation. These settings are shared with the DPS calculation.",
     "battleSeconds": "Battle time (s)",
     "keep1": "Candidates kept after stage 1",
     "runs1": "gcsim runs in stage 1",
     "keep2": "Candidates going to stage 2",
     "runs2": "gcsim runs in stage 2",
+    "refineBatch": "Stage 1.5: candidates per round",
+    "refineBudget": "Stage 1.5: max total candidates",
+    "beamWidth": "Stage 1.5: parallel search beams",
     "colParticles": "Particle E",
     "colParticlesTitle": "Energy received from particles before Energy Recharge is applied, averaged per party member per 10 seconds (sum over the party ÷ members ÷ seconds × 10). Includes particle element matching and on-field/off-field differences. At the same DPS, a higher value lets you lower Energy Recharge and put the stats elsewhere.",
     "particlesDetail": "Average over the evaluated {{seconds}} s: particles generated: {{own}} from skills etc. + {{enemy}} from enemies",
@@ -319,7 +322,7 @@
     },
     "modeHint": {
       "party": "Builds combinations of on-field order and actions from the party members' roles and looks for the highest DPS.",
-      "current": "Starts from the rotation currently on the Gantt chart and changes actions and on-field order one step at a time to find a higher DPS. The knowledge dictionary is not used. The row marked \"Current\" in the results is your current rotation, for comparison."
+      "current": "Starts from the rotation currently on the Gantt chart and changes actions and on-field order to find a higher DPS. The knowledge dictionary is used for per-character combo replacements. The row marked \"Current\" in the results is your current rotation, for comparison."
     },
     "modeNoCurrent": "There are no on-field turns of the party members on the Gantt chart.",
     "currentBadge": "Current",
@@ -329,6 +332,7 @@
       "generate": "Building candidates…",
       "quick": "Stage 1: narrowing candidates ({{done}} / {{total}})",
       "refine": "Stage 1.5: trying similar rotations ({{done}} / {{total}})",
+      "refineSub": "Stage 1.5: trying similar rotations ({{done}} / {{total}} · verifying: {{subDone}} / {{subTotal}})",
       "verify": "Stage 2: checking the ranking ({{done}} / {{total}})"
     },
     "cancelled": "Cancelled.",

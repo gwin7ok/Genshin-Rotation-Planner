@@ -41,6 +41,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 9 件。平均 56.1k（最大 81.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 9/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -84,6 +85,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 6 件。平均 53.6k（最大 77.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
   },
   {

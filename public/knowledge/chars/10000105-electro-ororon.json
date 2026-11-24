@@ -60,6 +60,7 @@
    "constellation": {
     "min": 6
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: オロルン 257 件中 14 件。平均 65.9k（最大 81.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/14）（探索の比較なし）"
   },
   {

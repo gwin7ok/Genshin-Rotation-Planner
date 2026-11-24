@@ -23,6 +23,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 18 件。平均 48.4k（最大 87.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 17/0/0/0/0/0/1）（探索の比較なし）"
   },
   {
@@ -51,6 +52,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 25 件。平均 72.3k（最大 96.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 25/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -65,6 +67,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 20 件。平均 50.8k（最大 79.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 20/0/0/0/0/0/0）（探索の比較なし）"
   },
   {
@@ -91,6 +94,7 @@
    "constellation": {
     "min": 0
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 鍾離 530 件中 36 件。平均 54.7k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 36/0/0/0/0/0/0）（探索の比較なし）"
   },
   {

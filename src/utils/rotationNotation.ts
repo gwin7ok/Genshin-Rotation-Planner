@@ -1,5 +1,6 @@
 import { CharacterConfig, Stint } from '../types/genshin';
 import { groupRuns, stripGroupCopies } from './actionGroups';
+import { calculateRotation } from './rotationCalculator';
 import { t } from '../i18n';
 import { charName } from '../i18n/loc';
 
@@ -134,4 +135,19 @@ export function buildRotationNotation(
   const setup = parts.slice(0, loopFrom);
   const loop = `{${parts.slice(loopFrom).join(' > ')}}`;
   return [...setup, loop].join(' > ');
+}
+
+/**
+ * 未計算のローテーション（stints）から、メイン画面と同じ計算（長押しの秒数 holdSeconds 等の算出）を通した記法文字列を返す共通ヘルパー。
+ * 探索結果など、calculateRotation の結果が手元に無い場所でもメイン画面と同一の表示にするために使う。
+ */
+export function buildCalculatedRotationNotation(
+  characters: CharacterConfig[],
+  stints: Stint[],
+  options: { switchDelay: number; loopStartIndex: number; defHalt: boolean },
+  mode: NotationMode = 'short',
+  times = true,
+): string {
+  const calc = calculateRotation(characters, stints, options);
+  return buildRotationNotation(characters, calc.calculatedStints, options.loopStartIndex, mode, times);
 }

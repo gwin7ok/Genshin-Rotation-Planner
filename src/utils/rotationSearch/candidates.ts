@@ -8,6 +8,9 @@
  *  - アタッカーの攻撃の型: 通常攻撃・通常＋重撃・重撃・落下・高落下の繰り返し。回数は、ローテーションの長さの目安（使う E・Q の最長 CT + 1 秒）から決める
  */
 import { macrosOf } from '../../masterdata/sequenceRules';
+import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
+import { applicableArchetypes } from './knowledgeSeeds';
+import { HOLD_FRAMES_ACTIONS } from '../gcsim/actionMapping';
 import type { CharacterActionInstance, CharacterConfig, CharacterRole, Stint } from '../../types/genshin';
 
 export type SearchRole = CharacterRole;
@@ -371,10 +374,12 @@ const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
  *   ・隣り合う 2 人の出場を入れ替える
  *   ・出場の中の動作を 1 つ消す / 1 つ移す / 1 つ差し込む（e・q・ca・n・e_recast）
  */
-export function neighborsOf(characters: CharacterConfig[], base: Candidate, hints?: { lowShare?: string[] }): Candidate[] {
+export function neighborsOf(characters: CharacterConfig[], base: Candidate, hints?: { lowShare?: string[]; knowledge?: KnowledgeBundle }): Candidate[] {
   const out = new Map<string, Candidate>();
   let loop = base.loopStartIndex ?? 0;
   const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string, who?: string): void => {
+    // 出場の先頭（戦闘開始直後やキャラチェンジ直後の 1 手目）に空ダッシュ・空ジャンプを置くだけの手は無意味なので近傍として作らない
+    if (plan.some(p => { const h = p.steps[0]?.split('@')[0]; return h === 'dash' || h === 'jump'; })) return;
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
       const actions = steps.map(s => instance(c, s));
@@ -482,18 +487,30 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
     // 置き換える: 動作 1 つを、別の動作にする（例: 通常攻撃 → ダッシュ、E → 長押し E。消してから差し込む 2 手では、途中で下がって届かない）
     {
       const vocab = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
-      for (let i = 0; i < n; i++) for (const s of vocab) {
-        if (s === p.steps[i] || !defOf(p.c, s)) continue;
-        const pl = clone(); pl[si].steps[i] = s; make(pl, 'rep');
+      for (let i = 0; i < n; i++) {
+        const base0 = p.steps[i].split('@')[0];
+        for (const s of vocab) {
+          if (s === base0 || !defOf(p.c, s)) continue;
+          const pl = clone(); pl[si].steps[i] = s; make(pl, 'rep');
+        }
       }
     }
-    // 長押しの長さを変える（標準の所要時間の 4 割〜8.5 割。手組みでは、標準より短い長押しが使われる。例: 早柚の長押し E）
+    // 長押しの長さを変える（1 秒刻みで 1 秒〜最大長押しまで全パターン試す。例: 早柚の長押し E で @1.0s〜@10.0s）
     for (let i = 0; i < n; i++) {
       const base0 = p.steps[i].split('@')[0];
       const d = defOf(p.c, base0);
-      if (d?.cooldownStart?.from !== 'holdEnd') continue;
-      for (const f of [undefined, 0.4, 0.55, 0.7, 0.85]) {
-        const step = f === undefined ? base0 : `${base0}@${Number((d.defaultDuration * f).toFixed(2))}`;
+      // 長押しの長さの探索方針（長さを変えた近傍を作るのは、HOLD_FRAMES_ACTIONS に載っている動作だけ）:
+      //   載せない（短押し / 長押しの 2 択だけを探索し、長さ違いは作らない）: ナヒーダ・シュヴルーズ・スカーク・シャルロット
+      //   シャルロットの注意: docs/gcsim-integration/シャルロット-長押しのマーク差.md
+      //   旅人（風）: 長押しは hold_ticks（1・2・3・5）を別アクションとして探索する
+      // 長押しの長さを gcsim の命令（hold=）に渡せる動作だけ。渡せない動作は、長さを変えても gcsim の結果が同じ（アプリの計算上の長さだけが違う重複になる）
+      if (!d || d.cooldownStart?.from !== 'holdEnd' || !HOLD_FRAMES_ACTIONS.has(d.id)) continue;
+      const maxHold = Math.min(10, Math.max(1, Math.ceil(d.holdInFrames ?? (HOLD_FRAMES_ACTIONS.get(d.id) ?? 60) / 60)));
+      const baseMotion = Math.max(0.05, d.defaultDuration - (d.holdInFrames ?? 0));
+      const holdSteps: Array<number | undefined> = [undefined];
+      for (let h = 1; h < maxHold; h++) holdSteps.push(h);
+      for (const h of holdSteps) {
+        const step = h === undefined ? base0 : `${base0}@${Number((baseMotion + h).toFixed(2))}`;
         if (step === p.steps[i]) continue;
         const pl = clone(); pl[si].steps[i] = step; make(pl, 'hold');
       }
@@ -504,6 +521,29 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
     for (const s of vocabulary) {
       if (!defOf(p.c, s)) continue;
       for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl, NEIGHBOR_STEPS.includes(s) ? 'ins' : `ins:${s}`); }
+    }
+    // 知識辞書の運用型（コンボの塊）で、このキャラの出場を一括差し替えする（1 手ずつでは届かないコンボ変更に使う）
+    if (hints?.knowledge) {
+      const partyIds = new Set(characters.map(c => c.id));
+      const sameCount = plan0.filter(x => x.c.id === p.c.id).length;
+      for (const a of applicableArchetypes(p.c, hints.knowledge, partyIds, characters)) {
+        const chunks: string[][] = [];
+        if (a.use.length > 0) chunks.push(a.use);
+        for (const t of a.then ?? []) if (t.use.length > 0) chunks.push(t.use);
+        if (a.fill && a.fill.length > 0) {
+          for (const r of a.fillRepeat ?? [1]) {
+            const fillSteps = Array.from({ length: r }, () => a.fill!).flat();
+            if (fillSteps.length > 0) {
+              chunks.push(fillSteps);
+              if (a.use.length > 0 && sameCount === 1) chunks.push([...a.use, ...fillSteps]);
+            }
+          }
+        }
+        for (const steps of chunks) {
+          if (!steps.every(s => !!defOf(p.c, s))) continue;
+          const pl = clone(); pl[si].steps = [...steps]; make(pl, 'dict');
+        }
+      }
     }
   });
   return [...out.values()];

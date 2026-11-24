@@ -1081,6 +1081,130 @@
         }
       },
       {
+        "id": "10000005-anemo_e_hold1",
+        "name": "元素スキル(長押し 1 ティック): 旋風の剣",
+        "shortName": "hE(1Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.517
+        },
+        "defaultDuration": 1.333,
+        "frames": {
+          "total": 80,
+          "hitmark": 36,
+          "cancels": {
+            "swap": 71,
+            "dash": 36,
+            "jump": 36
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=1) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000005-anemo_e_hold2",
+        "name": "元素スキル(長押し 2 ティック): 旋風の剣",
+        "shortName": "hE(2Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.85
+        },
+        "defaultDuration": 1.667,
+        "frames": {
+          "total": 100,
+          "hitmark": 56,
+          "cancels": {
+            "swap": 91,
+            "dash": 56,
+            "jump": 56
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=2) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000005-anemo_e_hold3",
+        "name": "元素スキル(長押し 3 ティック): 旋風の剣",
+        "shortName": "hE(3Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.1
+        },
+        "defaultDuration": 1.917,
+        "frames": {
+          "total": 115,
+          "hitmark": 71,
+          "cancels": {
+            "swap": 106,
+            "dash": 71,
+            "jump": 71
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=3) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000005-anemo_e_hold5",
+        "name": "元素スキル(長押し 5 ティック): 旋風の剣",
+        "shortName": "hE(5Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.6
+        },
+        "defaultDuration": 2.417,
+        "frames": {
+          "total": 145,
+          "hitmark": 101,
+          "cancels": {
+            "swap": 136,
+            "dash": 101,
+            "jump": 101
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=5) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
         "id": "10000005-anemo_q",
         "name": "元素爆発: 激風の息",
         "shortName": "Q",
@@ -4393,6 +4517,134 @@
         "gcsimEffect": {
           "keys": [],
           "status": "nokey"
+        }
+      },
+      {
+        "id": "10000007-anemo_e_hold1",
+        "name": "元素スキル(長押し 1 ティック): 旋風の剣",
+        "shortName": "hE(1Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.517
+        },
+        "defaultDuration": 1.1,
+        "frames": {
+          "total": 66,
+          "hitmark": 36,
+          "cancels": {
+            "attack": 65,
+            "swap": 65,
+            "dash": 36,
+            "jump": 36
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=1) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000007-anemo_e_hold2",
+        "name": "元素スキル(長押し 2 ティック): 旋風の剣",
+        "shortName": "hE(2Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 0.85
+        },
+        "defaultDuration": 1.433,
+        "frames": {
+          "total": 86,
+          "hitmark": 56,
+          "cancels": {
+            "attack": 85,
+            "swap": 85,
+            "dash": 56,
+            "jump": 56
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=2) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000007-anemo_e_hold3",
+        "name": "元素スキル(長押し 3 ティック): 旋風の剣",
+        "shortName": "hE(3Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.1
+        },
+        "defaultDuration": 1.683,
+        "frames": {
+          "total": 101,
+          "hitmark": 71,
+          "cancels": {
+            "attack": 100,
+            "swap": 100,
+            "dash": 71,
+            "jump": 71
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=3) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
+        }
+      },
+      {
+        "id": "10000007-anemo_e_hold5",
+        "name": "元素スキル(長押し 5 ティック): 旋風の剣",
+        "shortName": "hE(5Tick)",
+        "type": "skill_hold",
+        "startsSkillCooldown": true,
+        "cooldown": 8,
+        "effectDuration": 0,
+        "cooldownStart": {
+          "from": "motionStart",
+          "delay": 1.6
+        },
+        "defaultDuration": 2.183,
+        "frames": {
+          "total": 131,
+          "hitmark": 101,
+          "cancels": {
+            "attack": 130,
+            "swap": 130,
+            "dash": 101,
+            "jump": 101
+          },
+          "source": "traveler/common/anemo/skill.go:SkillHold(holdTicks=5) + skillHoldDelayFrames"
+        },
+        "dataSource": {
+          "cooldown": "gcsim: traveler/common/anemo/skill.go: SetCDWithDelay(ActionSkill, 8*60, hitmark-5)"
+        },
+        "description": "風の力を握りしめ、手のひらに真空の渦を集中させ、前方の敵に風元素ダメージを持続的に与える。\nスキル終了時、真空の渦は爆発し、より広範囲で強力な風元素ダメージを与える。\n\n長押し\nダメージと影響範囲が徐々に大きくなる。\n\n元素変化\n真空の渦が継続時間中に水元素/炎元素/氷元素/雷元素に接触すると、接触した元素の属性を獲得し、該当元素の付加ダメージを追加で与える。\n元素変化はスキル継続中に1回のみ発生する。",
+        "en": {
+          "description": "Grasping the wind's might, you form a vortex of vacuum in your palm, causing continuous Anemo DMG to opponents in front of you.\nThe vacuum vortex explodes when the skill duration ends, causing a greater amount of Anemo DMG over a larger area.\n\nHold\nDMG and AoE will gradually increase.\n\nElemental Absorption\nIf the vortex comes into contact with Hydro/Pyro/Cryo/Electro, it will deal additional elemental DMG of that type.\nElemental Absorption may only occur once per use."
         }
       },
       {

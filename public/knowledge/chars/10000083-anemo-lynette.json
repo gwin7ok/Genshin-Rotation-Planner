@@ -24,6 +24,7 @@
    "constellation": {
     "min": 6
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: リネット 128 件中 5 件。平均 65.6k（最大 99.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
   },
   {
@@ -46,6 +47,7 @@
    "constellation": {
     "min": 6
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: リネット 128 件中 9 件。平均 76.0k（最大 86.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
   },
   {
@@ -104,6 +106,7 @@
    "constellation": {
     "min": 6
    },
+   "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: リネット 128 件中 4 件。平均 77.2k（最大 89.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
   }
  ]

@@ -11,8 +11,8 @@ import { appGcsimExtras } from '../gcsim/appGcsimExtras';
 import { calculateRotation } from '../rotationCalculator';
 import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
-import { describe, generateCandidates, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
-import { evaluateCandidates, type ScoredCandidate } from './evaluate';
+import { describe, generateCandidatesAsync, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
+import { evaluateCandidates, evaluateCandidatesAsync, type ScoredCandidate } from './evaluate';
 import { knowledgeSeeds } from './knowledgeSeeds';
 import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
 
@@ -159,6 +159,10 @@ export interface SearchArgs {
 
 interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; energyWaits?: EnergyWaitInfo[]; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
 
+const yieldToPaint = () => new Promise<void>(resolve => {
+  setTimeout(resolve, 0);
+});
+
 /** 順位（小さい順に 0 から） */
 const ranksOf = (xs: number[]): number[] => {
   const idx = xs.map((x, i) => [x, i] as const).sort((a, b) => a[0] - b[0]);
@@ -173,15 +177,23 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
   const cancelled = () => !!args.shouldCancel?.();
   try {
     args.onProgress?.({ phase: 'generate', done: 0, total: 1 });
+    // 「候補を作っています…」と「□ 中止」ボタンを先に画面へ描画させる
+    await yieldToPaint();
+    if (cancelled()) return { status: 'cancelled' };
     const seedCands: Candidate[] = [...(args.extraSeeds ?? []), ...(args.knowledge ? knowledgeSeeds(characters, args.knowledge, Math.max(1, settings.keep1)) : [])].map((x, i) => {
       const atk = x.stints[x.stints.length - 1]?.characterId;
       const assignment = x.assignment ?? Object.fromEntries(characters.map(c => [c.id, (c.id === atk ? 'attacker' : (args.roles[c.id] ?? []).find(r => r !== 'attacker') ?? 'supporter') as SearchRole]));
       return { id: `seed${i}`, label: describe(characters, x.stints, x.loopStartIndex), assignment, targetSeconds: 0, stints: x.stints, loopStartIndex: x.loopStartIndex, op: 'seed' };
     });
-    const generated = args.seedsOnly ? [] : generateCandidates(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });
+    await yieldToPaint();
+    if (cancelled()) return { status: 'cancelled' };
+    const generated = args.seedsOnly ? [] : await generateCandidatesAsync(characters, args.roles, { maxCandidates: settings.maxCandidates, switchDelay: args.switchDelay });
+    await yieldToPaint();
+    if (cancelled()) return { status: 'cancelled' };
     const candidates = [...seedCands, ...generated];
     if (candidates.length === 0) return { status: 'error', message: 'NO_CANDIDATES' };
-    const ev = evaluateCandidates(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
+    const ev = await evaluateCandidatesAsync(characters, candidates, { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES, shouldCancel: cancelled });
+    await yieldToPaint();
     if (ev.scored.length === 0) return { status: 'error', message: 'NO_VALID_CANDIDATES' };
     if (cancelled()) return { status: 'cancelled' };
 

@@ -52,6 +52,10 @@ export interface ScoreOptions {
    * 許した候補は、違反 1 件につき簡易スコアを 7% 下げて並べる
    */
   maxCtIssues?: number;
+  /** 非同期実行時にメインスレッドを譲る間隔（候補数。既定 150） */
+  yieldChunkSize?: number;
+  /** 中断チェック */
+  shouldCancel?: () => boolean;
 }
 
 export interface ScoredCandidate {
@@ -95,46 +99,79 @@ export function simpleScore(result: CalculatedRotation, attackerIds: Set<string>
   return { attackerFraction, overlapPerSecond, score: attackerFraction * (1 + overlapWeight * overlapPerSecond) };
 }
 
-/** 候補を、アプリの計算に通し、CT 違反などがあるものを捨て、簡易スコアをつける */
+function evaluateOne(
+  candidate: Candidate,
+  characters: CharacterConfig[],
+  weight: number,
+  options: ScoreOptions,
+): { scored?: ScoredCandidate; rejectedKey?: string } {
+  const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: candidate.loopStartIndex ?? 0, defHalt: options.defHalt ?? true });
+  // 前提条件（マスターデータの sequenceRules）を満たさない並びは、gcsim で実行できないので、測る前に捨てる
+  const pre = prerequisiteViolations(candidate.stints, id => characters.find(c => c.id === id)?.element);
+  if (pre.length > 0) {
+    const key = `${characters.find(c => c.id === pre[0].rule.characterId)?.name ?? ''}: ${pre[0].rule.resource}が無いのに使っている`;
+    return { rejectedKey: key };
+  }
+  // 周回の部分が短すぎる並び（初動で全部のバフ・爆発を使い切り、周回は通常攻撃 1 回だけなど）は、繰り返せるローテーションではない。
+  // 画面の DPS 計算（初動 + 周回）では、初動の爆発が薄まらず、DPS が高く出てしまう。周回が全体の半分に満たないものは捨てる
+  if ((candidate.loopStartIndex ?? 0) > 0 && result.totalDuration > 0 && result.loopPeriod < result.totalDuration * MIN_LOOP_RATIO) {
+    return { rejectedKey: '周回の部分が短すぎる' };
+  }
+  if (chargeViolation(characters, candidate.stints, candidate.loopStartIndex ?? 0)) {
+    return { rejectedKey: '重撃の直前が通常攻撃でない' };
+  }
+  // 捨てるのは、CT 違反（スキル・爆発の CT 中の使用）などだけ。画面の「CT 警告」（発動バフ・特殊スキルの受付時間外など。gcsim の計算は止まらない）は、捨てる理由にしない
+  const bad = result.validationIssues.filter(v => v.severity !== 'info' && !CT_WARNING_ISSUE_PATTERN.test(v.id) && !v.id.startsWith('passive_ct_'));
+  const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
+  if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {
+    return { rejectedKey: bad[0].title };
+  }
+  const attackerIds = new Set(Object.entries(candidate.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id));
+  const s = simpleScore(result, attackerIds, weight);
+  return { scored: { candidate, totalSeconds: result.totalDuration, ...s, score: s.score * 0.93 ** bad.length, ctIssues: bad.length } };
+}
+
+/** 候補を、アプリの計算に通し、CT 違反などがあるものを捨て、簡易スコアをつける（同期版） */
 export function evaluateCandidates(characters: CharacterConfig[], candidates: Candidate[], options: ScoreOptions = {}): EvaluateResult {
   const weight = options.overlapWeight ?? 0.25;
   const scored: ScoredCandidate[] = [];
   const rejectedBy: Record<string, number> = {};
   let rejected = 0;
   for (const candidate of candidates) {
-    const result = calculateRotation(characters, candidate.stints, { switchDelay: options.switchDelay ?? 0.5, loopStartIndex: candidate.loopStartIndex ?? 0, defHalt: options.defHalt ?? true });
-    // 前提条件（マスターデータの sequenceRules）を満たさない並びは、gcsim で実行できないので、測る前に捨てる
-    const pre = prerequisiteViolations(candidate.stints, id => characters.find(c => c.id === id)?.element);
-    if (pre.length > 0) {
+    const res = evaluateOne(candidate, characters, weight, options);
+    if (res.rejectedKey) {
       rejected++;
-      const key = `${characters.find(c => c.id === pre[0].rule.characterId)?.name ?? ''}: ${pre[0].rule.resource}が無いのに使っている`;
-      rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
-      continue;
+      rejectedBy[res.rejectedKey] = (rejectedBy[res.rejectedKey] ?? 0) + 1;
+    } else if (res.scored) {
+      scored.push(res.scored);
     }
-    // 周回の部分が短すぎる並び（初動で全部のバフ・爆発を使い切り、周回は通常攻撃 1 回だけなど）は、繰り返せるローテーションではない。
-    // 画面の DPS 計算（初動 + 周回）では、初動の爆発が薄まらず、DPS が高く出てしまう。周回が全体の半分に満たないものは捨てる
-    if ((candidate.loopStartIndex ?? 0) > 0 && result.totalDuration > 0 && result.loopPeriod < result.totalDuration * MIN_LOOP_RATIO) {
+  }
+  scored.sort((a, b) => b.score - a.score);
+  return { scored, rejected, rejectedBy };
+}
+
+/** 候補を評価する非同期版（一定件数ごとにメインスレッドを譲り、UI のホバーや描画を滑らかに保つ） */
+export async function evaluateCandidatesAsync(characters: CharacterConfig[], candidates: Candidate[], options: ScoreOptions = {}): Promise<EvaluateResult> {
+  const weight = options.overlapWeight ?? 0.25;
+  const chunkSize = options.yieldChunkSize ?? 150;
+  const scored: ScoredCandidate[] = [];
+  const rejectedBy: Record<string, number> = {};
+  let rejected = 0;
+  let last = performance.now();
+  for (let i = 0; i < candidates.length; i++) {
+    // 件数ではなく経過時間（約 40ms）で譲る（1 件が重くても固まらない）
+    if (i > 0 && (i % Math.max(1, Math.floor(chunkSize / 10)) === 0) && performance.now() - last > 40) {
+      await new Promise<void>(resolve => { setTimeout(resolve, 0); });
+      last = performance.now();
+      if (options.shouldCancel?.()) break;
+    }
+    const res = evaluateOne(candidates[i], characters, weight, options);
+    if (res.rejectedKey) {
       rejected++;
-      rejectedBy['周回の部分が短すぎる'] = (rejectedBy['周回の部分が短すぎる'] ?? 0) + 1;
-      continue;
+      rejectedBy[res.rejectedKey] = (rejectedBy[res.rejectedKey] ?? 0) + 1;
+    } else if (res.scored) {
+      scored.push(res.scored);
     }
-    if (chargeViolation(characters, candidate.stints, candidate.loopStartIndex ?? 0)) {
-      rejected++;
-      rejectedBy['重撃の直前が通常攻撃でない'] = (rejectedBy['重撃の直前が通常攻撃でない'] ?? 0) + 1;
-      continue;
-    }
-    // 捨てるのは、CT 違反（スキル・爆発の CT 中の使用）などだけ。画面の「CT 警告」（発動バフ・特殊スキルの受付時間外など。gcsim の計算は止まらない）は、捨てる理由にしない
-    const bad = result.validationIssues.filter(v => v.severity !== 'info' && !CT_WARNING_ISSUE_PATTERN.test(v.id) && !v.id.startsWith('passive_ct_'));
-    const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
-    if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {
-      rejected++;
-      const key = bad[0].title;
-      rejectedBy[key] = (rejectedBy[key] ?? 0) + 1;
-      continue;
-    }
-    const attackerIds = new Set(Object.entries(candidate.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id));
-    const s = simpleScore(result, attackerIds, weight);
-    scored.push({ candidate, totalSeconds: result.totalDuration, ...s, score: s.score * 0.93 ** bad.length, ctIssues: bad.length });
   }
   scored.sort((a, b) => b.score - a.score);
   return { scored, rejected, rejectedBy };

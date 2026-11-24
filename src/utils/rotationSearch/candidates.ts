@@ -221,7 +221,27 @@ function thinStratified<T>(xs: T[], max: number, keyOf: (x: T) => string): T[] {
   return out;
 }
 
+/** 同期版（スクリプト・テスト用） */
 export function generateCandidates(characters: CharacterConfig[], roles: Record<string, SearchRole[]>, options: CandidateOptions = {}): Candidate[] {
+  const it = generateCandidatesGen(characters, roles, options);
+  for (;;) { const r = it.next(); if (r.done) return r.value; }
+}
+
+/** 非同期版: 約 sliceMs ごとにメインスレッドを譲り、UI（ホバー等）を固めない */
+export async function generateCandidatesAsync(characters: CharacterConfig[], roles: Record<string, SearchRole[]>, options: CandidateOptions = {}, sliceMs = 40): Promise<Candidate[]> {
+  const it = generateCandidatesGen(characters, roles, options);
+  let last = performance.now();
+  for (;;) {
+    const r = it.next();
+    if (r.done) return r.value;
+    if (performance.now() - last > sliceMs) {
+      await new Promise<void>(resolve => { setTimeout(resolve, 0); });
+      last = performance.now();
+    }
+  }
+}
+
+function* generateCandidatesGen(characters: CharacterConfig[], roles: Record<string, SearchRole[]>, options: CandidateOptions = {}): Generator<void, Candidate[], void> {
   const pad = options.lengthPad ?? 1;
   const swap = options.switchDelay ?? 0.5;
   const maxCandidates = options.maxCandidates ?? 20000;
@@ -265,6 +285,7 @@ export function generateCandidates(characters: CharacterConfig[], roles: Record<
       if (cts.length === 0) continue;
       const target = Math.max(...cts) + pad;
       for (const order of orders) {
+        yield;
         // アタッカー以外の出場（使うスキル・爆発がある人だけ）
         const others = order.filter(c => assignment[c.id] !== 'attacker' && useSteps(useOf.get(c.id)!).length > 0);
         const attackers = order.filter(c => assignment[c.id] === 'attacker');

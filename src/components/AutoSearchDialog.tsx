@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { X, Sparkles, Play, Square, Check } from 'lucide-react';
 import { t } from '../i18n';
 import { charName } from '../i18n/loc';
@@ -34,6 +35,10 @@ const num = (s: string, fb: number, min: number, max: number): number => {
   const v = Math.floor(Number(s));
   return Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : fb;
 };
+
+const yieldToPaint = (ms = 0) => new Promise<void>(resolve => {
+  setTimeout(resolve, ms);
+});
 
 /** 探索の失敗の理由（内部の符号は、読める文に直す） */
 const errorText = (message: string): string => {
@@ -97,18 +102,13 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
   });
 
   const start = async () => {
-    cancelRef.current = false;
-    setRunning(true);
-    setMessage(null);
-    setOutcome(null);
-    setApplied(null);
-    setProgress({ phase: 'generate', done: 0, total: 1 });
     const dpsSettings = cond.settingsNow();
     saveDpsSettings(dpsSettings);
     // 知識辞書（サーバー側）から、編成のキャラの分だけ取得する。取得できなければ、辞書なしで探索する
     const fromCurrent = effectiveMode === 'current' && currentSeed !== null;
     // 「いまのローテーションから探索」では、辞書は使わない（いまのローテーションだけを出発点に、そこから変えて登る）
     const knowledge = fromCurrent ? {} : await knowledgeSource.load(members.map(c => c.id)).catch(() => ({}));
+    if (cancelRef.current) { setRunning(false); setProgress(null); return; }
     // アタッカー: 役割にアタッカーを持つキャラ（いまのローテーションに出るもの）。いなければ、最後に出るキャラ
     const inRot = new Set(currentSeed?.stints.map(x => x.characterId));
     const attackers = members.filter(c => inRot.has(c.id) && (roles[c.id] ?? []).includes('attacker')).map(c => c.id);
@@ -129,7 +129,7 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
       hurt,
       dps: { loops: dpsSettings.loops, energy: dpsSettings.energy, particles: dpsSettings.particles, enemies: dpsSettings.enemies },
       cores: wasmParallelism(),
-      onProgress: setProgress,
+      onProgress: p => { flushSync(() => setProgress(p)); },
       shouldCancel: () => cancelRef.current,
     });
     setRunning(false);
@@ -234,7 +234,24 @@ export const AutoSearchDialog: React.FC<AutoSearchDialogProps> = ({ isOpen, onCl
             {running ? (
               <button onClick={() => { cancelRef.current = true; }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-700 hover:bg-slate-600 text-white"><Square className="w-3.5 h-3.5" />{t('gcsim:search.cancel')}</button>
             ) : (
-              <button onClick={() => void start()} disabled={members.length === 0} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-violet-500 hover:bg-violet-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"><Play className="w-3.5 h-3.5" />{t('gcsim:search.start')}</button>
+              <button
+                type="button"
+                onClick={() => {
+                  cancelRef.current = false;
+                  flushSync(() => {
+                    setRunning(true);
+                    setMessage(null);
+                    setOutcome(null);
+                    setApplied(null);
+                    setProgress({ phase: 'generate', done: 0, total: 1 });
+                  });
+                  setTimeout(() => { void start(); }, 30);
+                }}
+                disabled={members.length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-violet-500 hover:bg-violet-400 text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <Play className="w-3.5 h-3.5" />{t('gcsim:search.start')}
+              </button>
             )}
             {running && progress && (
               <div className="flex-1 min-w-[200px] space-y-1">

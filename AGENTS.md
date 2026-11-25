@@ -5,6 +5,8 @@
   → `.agents/skills/gcsim-integration/SKILL.md` を読む
 - UI / i18n（Trans・用語）・HoYoLAB 記事リンク・リリース手順・トラブル調査を扱うとき:
   → `.agents/skills/ui-i18n-and-docs/SKILL.md` を読む
+- 「自律改善ループを実行して」など、ローテーション探索の自律改善ループを回すとき:
+  → `.agents/skills/rotation-search-improvement-loop/SKILL.md` を読む
 
 ## 1. 会話・確認・エラー時の基本姿勢
 - **言語**: 英語作業（英訳・英語 Wiki 調査）中も含め、返答・進捗・確認事項・表の見出しはすべて**日本語**で行う。

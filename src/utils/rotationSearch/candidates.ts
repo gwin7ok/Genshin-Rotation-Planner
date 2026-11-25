@@ -456,7 +456,11 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   let loop = base.loopStartIndex ?? 0;
   const canUseUsefulNormal = (c: CharacterConfig): boolean => canSupporterUseNormal(c, characters);
   const allowNewN = (c: CharacterConfig): boolean =>
-    isFavoniusWeapon(c.weaponId) || (base.assignment[c.id] === 'attacker' && c.weaponType === 'catalyst');
+    isFavoniusWeapon(c.weaponId)
+    || (c.weaponType === 'catalyst'
+      && (c.element === 'hydro' || c.element === 'dendro' || c.element === 'cryo' || c.element === 'electro')
+      && plan0.length > 0
+      && plan0[0].c.element !== c.element);
   const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string, who?: string): void => {
     // 出場の先頭や、硬直短縮にならない空ダッシュ・空ジャンプ（および D と重複する J）を含む並びは近傍として作らない
     if (plan.some(p => hasUselessCancelStep(p.c, p.steps))) return;
@@ -532,9 +536,25 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   }
   const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
   for (const c of seenChars.values()) {
-    // 先頭に通常攻撃 1 回だけの出場を足す（手組みでは、法器のアタッカーや西風持ちが最初に通常攻撃を 1 回だけ当ててから他のキャラのスキルに移る形が有効。物理の空振りになるキャラやループ途中への単独 N 挿入は行わない）
+    // 先頭に通常攻撃 1 回だけの出場を足す（西風持ち、または直後の別元素キャラで即反応を起動できる水・草・氷・雷の法器キャラのみ）
     if (!defOf(c, 'n') || !allowNewN(c)) continue;
     { const pl = clone(); pl.unshift({ c, steps: ['n'] }); make(pl, 'newN'); }
+  }
+  // 初動スキル先置き（newE）: まだ初動が付いていない候補（loop === 0）に対し、短 CT（<=12s）または長持続（>=18s）の E を 1 周目先頭に置く
+  if ((base.loopStartIndex ?? 0) === 0 && plan0.length > 0) {
+    for (const c of seenChars.values()) {
+      if (c.id === plan0[0].c.id) continue;
+      const eDef = defOf(c, 'e');
+      if (!eDef) continue;
+      const shortCt = eDef.cooldown !== undefined && eDef.cooldown <= 12;
+      const longDur = (eDef.effectDuration ?? 0) >= 18;
+      if (!shortCt && !longDur) continue;
+      const pl = clone();
+      pl.unshift({ c, steps: ['e'] });
+      loop = 1;
+      make(pl, 'newE');
+      loop = 0;
+    }
   }
   // 1 周目だけ行う動作（周回の前の、1 回きりの出場）を、先頭に足す: どのキャラの、基本の動作（E・Q・重撃・通常攻撃など）でも試す。周回の開始位置は 1 つ後ろへ（1 周目だけ置く出場は、最大 2 つ）
   // 例: アタッカーが周回の前に E を 1 回だけ使って、周回の中では別の並びにする。サポーターが先に爆発を撃っておく

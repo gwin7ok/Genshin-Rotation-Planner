@@ -266,7 +266,13 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
             if (lastBase === 'dash' || lastBase === 'jump') s *= 0.995;
           }
           if (loopIdx > 0 && si < loopIdx && acts.length === 1 && acts[0].actionTypeId.slice(st.characterId.length + 1).split('@')[0] === 'n') {
-            s *= 0.990;
+            const nextSt = stints[si + 1];
+            const nextCh = nextSt ? charById.get(nextSt.characterId) : undefined;
+            const isEarlyPrimeCatalyst = !!ch
+              && ch.weaponType === 'catalyst'
+              && (ch.element === 'hydro' || ch.element === 'dendro' || ch.element === 'cryo' || ch.element === 'electro')
+              && !!nextCh && nextCh.element !== ch.element;
+            s *= isEarlyPrimeCatalyst ? 0.998 : 0.990;
           }
           if (si >= loopIdx) {
             const cnt = (loopCounts.get(st.characterId) ?? 0) + 1;

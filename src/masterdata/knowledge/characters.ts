@@ -194,8 +194,8 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000133-cryo', // サンドローネ
     archetypes: [
-      { name: '重撃→E→Q のあと重撃→E 連打', role: 'attacker', slot: 40, use: ['ca', 'e', 'q'], fill: ['ca', 'e'], fillRepeat: [2, 3], evidence: 'Phase 3-1精鋭辞書: 基本Q込み重撃→Eループ' },
-      { name: '重撃→E の繰り返し（爆発なし）', role: 'attacker', slot: 40, use: [], fill: ['ca', 'e'], fillRepeat: [3, 4, 5], evidence: 'Phase 3-1精鋭辞書: 爆発なし重撃→Eループ' },
+      { name: '重撃→E→Q のあと重撃→E 連打', role: 'attacker', slot: 40, use: ['ca', 'e', 'q'], fill: ['ca', 'e'], fillRepeat: [2, 3], lead: ['e'], evidence: 'Phase 3-1精鋭辞書: 基本Q込み重撃→Eループ＋初動E早期星電導' },
+      { name: '重撃→E の繰り返し（爆発なし）', role: 'attacker', slot: 40, use: [], fill: ['ca', 'e'], fillRepeat: [3, 4, 5], lead: ['e'], evidence: 'Phase 3-1精鋭辞書: 爆発なし重撃→Eループ＋初動E' },
       { name: '重撃→E×2→重撃→Q のあと重撃→E', role: 'attacker', slot: 40, use: ['ca', 'e', 'ca', 'e', 'ca', 'q'], fill: ['ca', 'e'], fillRepeat: [1, 2], evidence: 'Phase 3-1精鋭辞書: Wiki基本コンボ' },
       { name: 'E→重撃 の繰り返し', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-1精鋭辞書: E先行交互ループ' },
     ],

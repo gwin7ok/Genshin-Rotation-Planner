@@ -3,6 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%87%9D%E5%85%89",
  "archetypes": [
   {
+   "name": "E・ダッシュ・Q のあと 重撃 + 通常攻撃を繰り返す",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "dash",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "n"
+   ],
+   "fillRepeat": [
+    4,
+    6
+   ],
+   "evidence": "自動編成（凝光 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 38.3k"
+  },
+  {
    "name": "E→Q→重撃→E",
    "role": "attacker",
    "slot": 40,
@@ -31,25 +50,6 @@
     "min": 6
    },
    "evidence": "Wiki 本文のコンボの記述: 完凸・高天賦のとき、スキル→爆発→スキル→重撃のコンボ（探索の比較なし）"
-  },
-  {
-   "name": "E・ダッシュ・Q のあと 重撃 + 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "dash",
-    "q"
-   ],
-   "fill": [
-    "ca",
-    "n"
-   ],
-   "fillRepeat": [
-    4,
-    6
-   ],
-   "evidence": "自動編成（凝光 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 38.3k"
   }
  ]
 }

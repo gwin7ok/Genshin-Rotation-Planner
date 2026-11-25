@@ -4,60 +4,22 @@
  "archetypes": [
   {
    "name": "E→落下→Q",
-   "role": "subAttacker",
-   "slot": 20,
+   "role": "supporter",
+   "slot": 10,
    "use": [
     "e",
     "hp",
     "q"
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→落下攻撃（乱れ嵐斬）→爆発（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: 翠緑拡散＋元素バフの基本形"
   },
   {
-   "name": "E→通常→Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 立ち回りの例: スキル→通常（霧切 1 層）→爆発（霧切 2・3 層）（探索の比較なし）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
-  },
-  {
-   "name": "E・高い落下",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "hp"
-   ],
-   "evidence": "手組み「激化刻晴」・探索の上位（拡散）"
-  },
-  {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "探索の上位"
-  },
-  {
-   "name": "Q のあと、もう一度 E→HP、さらに E→HP",
+   "name": "E→落下→Q のあと、もう一度 E→落下",
    "role": "supporter",
    "slot": 10,
    "use": [
+    "e",
+    "hp",
     "q"
    ],
    "then": [
@@ -67,22 +29,12 @@
       "e",
       "hp"
      ]
-    },
-    {
-     "slot": 35,
-     "use": [
-      "e",
-      "hp"
-     ]
     }
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 50 件。平均 58.2k（最大 88.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 50/0/0/0/0/0/0）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(154件/21.7%, 最多): 2回出場翠緑更新"
   },
   {
-   "name": "E→HP のあと、もう一度 E→HP→Q",
+   "name": "E→落下 のあと、もう一度 E→落下→Q",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -99,33 +51,17 @@
      ]
     }
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 36 件。平均 58.1k（最大 205.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 34/0/0/0/0/0/2）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(39件/5.5%): 先置き拡散→再爆発"
   },
   {
-   "name": "E→HP→Q のあと、もう一度 E→HP",
+   "name": "E→落下（翠緑更新）",
    "role": "supporter",
-   "slot": 10,
+   "slot": 20,
    "use": [
     "e",
-    "hp",
-    "q"
+    "hp"
    ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "hp"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 楓原万葉 747 件中 141 件。平均 62.9k（最大 170.8k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（278 件。分布 0〜6 凸 = 272/0/2/0/0/0/4）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(36件/5.1%): 爆発温存・短縮形"
   }
  ]
 }

@@ -24,8 +24,12 @@ const pageOf = (n: string) => {
   const t = /^[空蛍]\((.)\)$/.exec(n);
   return t ? `主人公/${t[1]}` : (OVERRIDE[n] ?? n);
 };
-const names = args.includes('--all') ? [...new Set(master.map(c => c.name as string))] : args.filter(a => !a.startsWith('--'));
-if (names.length === 0) { console.error('使い方: node scripts/knowledge-wiki-combos.ts <キャラ名...> | --all'); process.exit(1); }
+const dumpText = args.includes('--dump-text');
+const charsArg = args.find(a => a.startsWith('--chars='))?.slice(8);
+const names = charsArg
+  ? charsArg.split(',').map(s => s.trim()).filter(Boolean).map(t => master.find(c => c.name === t || c.id === t)?.name ?? t)
+  : args.includes('--all') ? [...new Set(master.map(c => c.name as string))] : args.filter(a => !a.startsWith('--'));
+if (names.length === 0) { console.error('使い方: node scripts/knowledge-wiki-combos.ts <キャラ名...> | --all | --dump-text --chars=...'); process.exit(1); }
 
 const DIR = '.cache/knowledge-wiki';
 fs.mkdirSync(DIR, { recursive: true });
@@ -104,10 +108,31 @@ for (const name of names) {
     while (j < body.length && !(/^#([2-6]) /.test(body[j]) && Number(/^#([2-6])/.exec(body[j])![1]) <= Number(m[1]))) j++;
     secs.push(`### 節: ${l.replace(/^#\d /, '')}\n${body.slice(i + 1, j).join('\n')}`);
   });
-  // 2. コンボらしい行（天賦の説明の中も含む）
-  const combo = body.filter(l => !l.includes(' | ') && isCombo(l)).map(l => l.trim());
+  // 2. コンボらしい行（表形式含む、天賦の説明の中も含む）
+  const combo = body.filter(l => isCombo(l)).map(l => l.trim());
   // 3. 下書き
-  const drafts = [...new Set(body.filter(l => !l.includes(' | ') && isChain(l)).map(l => `${translateChain(l.trim())}    ← ${l.trim().slice(0, 90)}`))];
+  const drafts = [...new Set(body.filter(l => isChain(l)).map(l => `${translateChain(l.trim())}    ← ${l.trim().slice(0, 90)}`))];
+  if (dumpText) {
+    const out: string[] = [`### ${name}（Wiki 抜粋）`];
+    const pickedLines: string[] = [];
+    for (const s of secs) {
+      for (const l of s.split('\n')) {
+        const t = l.trim();
+        if (!t) continue;
+        pickedLines.push(t);
+        if (pickedLines.length >= 20) break;
+      }
+      if (pickedLines.length >= 20) break;
+    }
+    for (const c of combo) {
+      if (pickedLines.length >= 25) break;
+      if (!pickedLines.includes(c)) pickedLines.push(c);
+    }
+    if (pickedLines.length === 0) out.push('- （Wiki に該当記述なし）');
+    else for (const l of pickedLines) out.push(`- ${l.slice(0, 180)}`);
+    console.log(out.join('\n') + '\n');
+    continue;
+  }
   fs.writeFileSync(path.join(DIR, `${safe(name)}.combo.md`), [`# ${name}（${pageOf(name)}）`, '', '## 1. 運用・立ち回り・コンボの節（全文）', ...(secs.length ? secs : ['（該当する見出しなし）']), '', '## 2. コンボらしい行', ...combo.map(l => `- ${l}`), '', '## 3. アクション ID の下書き（「→」の行）', ...drafts.map(d => `- ${d}`), ''].join('\n'));
   rows.push(`${name}\t節 ${secs.length}・コンボらしい行 ${combo.length}・下書き ${drafts.length}`);
   console.log(rows[rows.length - 1]);

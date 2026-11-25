@@ -21,9 +21,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 7 件。平均 70.2k（最大 82.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
   },
   {
@@ -35,9 +32,6 @@
     "q",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 7 件。平均 48.2k（最大 61.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
   },
@@ -51,9 +45,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 4 件。平均 51.8k（最大 55.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
   },
@@ -82,9 +73,6 @@
     "n",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 4 件。平均 69.1k（最大 81.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
   },
   {
@@ -95,9 +83,6 @@
     "e",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 12 件。平均 59.8k（最大 72.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/12）（探索の比較なし）"
   },
   {
@@ -112,9 +97,6 @@
     "n",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 24 件・平均 61.2k・最大 81.4k。e n×2 dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（24 件。分布 0〜6 凸 = 0/0/0/0/0/0/24）"
   }
  ]

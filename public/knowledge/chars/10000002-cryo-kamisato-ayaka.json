@@ -3,16 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%A5%9E%E9%87%8C%E7%B6%BE%E8%8F%AF",
  "archetypes": [
   {
-   "name": "E・Q（爆発サブ）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発サブアタッカー型の運用"
-  },
-  {
    "name": "E・Q のあと ダッシュ + 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -34,6 +24,16 @@
     4
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: ダッシュで氷付与してから通常攻撃を振るのが基本。爆発も主力"
+  },
+  {
+   "name": "E・Q（爆発サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発サブアタッカー型の運用"
   },
   {
    "name": "E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA",

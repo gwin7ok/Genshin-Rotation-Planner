@@ -3,33 +3,73 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%85%AB%E9%87%8D%E7%A5%9E%E5%AD%90",
  "archetypes": [
   {
-   "name": "E→Q",
-   "role": "supporter",
+   "name": "E×3",
+   "role": "subAttacker",
    "slot": 10,
    "use": [
     "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→爆発の順番を守る（探索の比較なし）"
-  },
-  {
-   "name": "E と Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
     "e",
-    "q"
-   ],
-   "evidence": "編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒"
-  },
-  {
-   "name": "E",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
     "e"
    ],
-   "evidence": "手組み「星電導サンドローネ」"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(50件/18.7%, 最多): 殺生桜3本設置"
+  },
+  {
+   "name": "E×3 のあと、もう一度 E×3",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e",
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(36件/13.5%): 2回出場再設置"
+  },
+  {
+   "name": "E×3 のあと、もう一度 Q→E×3",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q",
+      "e",
+      "e",
+      "e"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(22件/8.2%): 2回出場Q→再設置"
+  },
+  {
+   "name": "E×3→Q→E×3",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "e",
+    "e",
+    "q",
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 1出場完結E×3→Q→E×3"
   }
  ]
 }

@@ -13,16 +13,6 @@
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作る"
   },
   {
-   "name": "E・Q（サブアタッカー）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作るサブアタッカー"
-  },
-  {
    "name": "E→N→Q→N のあと、もう一度 E→N×3",
    "role": "supporter",
    "slot": 10,

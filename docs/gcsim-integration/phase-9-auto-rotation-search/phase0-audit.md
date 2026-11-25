@@ -1,0 +1,471 @@
+# Phase 0 知識辞書 品質監査レポート
+
+- 監査対象: KNOWLEDGE 136 キャラ / マスター 136 キャラ
+- 検出合計: 429 件（error: 128 件 / warn: 301 件）
+
+## 種別サマリー
+
+| 種別 | 件数 | 重大度 |
+| :--- | ---: | :--- |
+| `wrong-character` | 19 | error |
+| `inline-closing-bug-risk` | 109 | error |
+| `invalid-action` | 0 | warn |
+| `duplicate-shape` | 10 | warn |
+| `bad-first-entry` | 36 | warn |
+| `four-star-high-constellation` | 128 | warn |
+| `excessive-stints` | 14 | warn |
+| `excessive-length` | 45 | warn |
+| `bloat-or-sparse` | 68 | warn |
+
+## wrong-character（19 件）
+
+- **コロンビーナ** (`10000125-hydro`) [#0: E と Q]: 編成括弧「アルレッキーノ・Overvape 編成」に当人「コロンビーナ」が含まれていません（誤混入の疑い）
+- **ニィロウ** (`10000070-hydro`) [#0: E×3]: 他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし））
+- **フリーナ** (`10000089-hydro`) [#2: E だけ]: 編成括弧「魈・閑雲編成」に当人「フリーナ」が含まれていません（誤混入の疑い）
+- **ベネット** (`10000032-pyro`) [#1: E と Q]: 編成括弧「アルレッキーノ・Overvape 編成」に当人「ベネット」が含まれていません（誤混入の疑い）
+- **夜蘭** (`10000060-hydro`) [#0: E と Q]: 編成括弧「アルレッキーノ・Overvape 編成」に当人「夜蘭」が含まれていません（誤混入の疑い）
+- **夜蘭** (`10000060-hydro`) [#1: E]: 編成括弧「アルレッキーノ・Overvape 編成」に当人「夜蘭」が含まれていません（誤混入の疑い）
+- **夜蘭** (`10000060-hydro`) [#2: Q→E]: 他キャラ固有語「オズ」を含んでいます（evidence: Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし））
+- **八重神子** (`10000058-electro`) [#1: E と Q]: 編成括弧「ウェンティ・ドゥリン・ファルザン・ニコ」に当人「八重神子」が含まれていません（誤混入の疑い）
+- **七七** (`10000035-cryo`) [#2: E×3 のあと、もう一度 E×3]: KQM根拠の対象キャラが「八重神子」になっており別キャラ誤混入です
+- **七七** (`10000035-cryo`) [#2: E×3 のあと、もう一度 E×3]: 他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 36 件。平均 56.5k（最大 77.5k）。凸数: 使われ）
+- **七七** (`10000035-cryo`) [#3: E×3 のあと、もう一度 Q→E×3]: KQM根拠の対象キャラが「八重神子」になっており別キャラ誤混入です
+- **七七** (`10000035-cryo`) [#3: E×3 のあと、もう一度 Q→E×3]: 他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 16 件。平均 52.6k（最大 90.6k）。凸数: 使われ）
+- **七七** (`10000035-cryo`) [#4: E×3→Q→E×3]: 他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文のコンボの記述: スキル設置で追加雷撃×3→爆発で CT リセット→スキル設置で追加雷撃×3（探索の比較なし））
+- **七七** (`10000035-cryo`) [#5: E×3]: 他キャラ固有語「殺生桜」を含んでいます（evidence: 手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ））
+- **七七** (`10000035-cryo`) [#5: E×3]: 他キャラ固有語「E×3」を含んでいます（evidence: 手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ））
+- **ファルザン** (`10000076-anemo`) [#2: E と Q]: 編成括弧「魈・閑雲編成」に当人「ファルザン」が含まれていません（誤混入の疑い）
+- **神里綾人** (`10000066-hydro`) [#1: Q・ダッシュ・E のあと 通常攻撃を繰り返す]: 編成括弧「綾人・フリーナ・シトラリ・エスコフィエ」に当人「神里綾人」が含まれていません（誤混入の疑い）
+- **フレミネ** (`10000085-cryo`) [#4: E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）]: 他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 10 件。平均 55.5k（最大 72.2k）。凸数: 使われてい）
+- **リンネア** (`10000130-geo`) [#1: E×3（連打の瞬間火力）]: 他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 連打すると瞬間火力型になる）
+
+## inline-closing-bug-risk（109 件）
+
+- **ラウマ** (`10000119-dendro`): characters.ts:52 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **フリーナ** (`10000089-hydro`): characters.ts:71 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **フリーナ** (`10000089-hydro`): characters.ts:72 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **フリーナ** (`10000089-hydro`): characters.ts:73 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **早柚** (`10000053-anemo`): characters.ts:98 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ベネット** (`10000032-pyro`): characters.ts:112 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ベネット** (`10000032-pyro`): characters.ts:113 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **行秋** (`10000025-hydro`): characters.ts:126 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **行秋** (`10000025-hydro`): characters.ts:127 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **雷電将軍** (`10000052-electro`): characters.ts:139 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **雷電将軍** (`10000052-electro`): characters.ts:140 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **夜蘭** (`10000060-hydro`): characters.ts:171 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **イネファ** (`10000116-electro`): characters.ts:177 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **フィッシュル** (`10000031-electro`): characters.ts:184 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **フィッシュル** (`10000031-electro`): characters.ts:185 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **楓原万葉** (`10000047-anemo`): characters.ts:200 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **楓原万葉** (`10000047-anemo`): characters.ts:201 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **楓原万葉** (`10000047-anemo`): characters.ts:202 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **刻晴** (`10000042-electro`): characters.ts:210 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **八重神子** (`10000058-electro`): characters.ts:221 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **七七** (`10000035-cryo`): characters.ts:228 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **七七** (`10000035-cryo`): characters.ts:229 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **七七** (`10000035-cryo`): characters.ts:230 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **閑雲** (`10000093-anemo`): characters.ts:262 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ファルザン** (`10000076-anemo`): characters.ts:275 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **アルレッキーノ** (`10000096-pyro`): characters.ts:284 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ジン** (`10000003-anemo`): characters.ts:293 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ジン** (`10000003-anemo`): characters.ts:294 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ジン** (`10000003-anemo`): characters.ts:295 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ジン** (`10000003-anemo`): characters.ts:296 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ミカ** (`10000080-cryo`): characters.ts:306 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ミカ** (`10000080-cryo`): characters.ts:307 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **シロネン** (`10000103-geo`): characters.ts:333 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **シロネン** (`10000103-geo`): characters.ts:334 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **シロネン** (`10000103-geo`): characters.ts:335 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **シロネン** (`10000103-geo`): characters.ts:336 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **オロルン** (`10000105-electro`): characters.ts:350 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ウェンティ** (`10000022-anemo`): characters.ts:365 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ウェンティ** (`10000022-anemo`): characters.ts:366 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **鍾離** (`10000030-geo`): characters.ts:386 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **鍾離** (`10000030-geo`): characters.ts:387 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ヌヴィレット** (`10000087-hydro`): characters.ts:395 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ヌヴィレット** (`10000087-hydro`): characters.ts:396 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ヌヴィレット** (`10000087-hydro`): characters.ts:397 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ヌヴィレット** (`10000087-hydro`): characters.ts:398 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **神里綾人** (`10000066-hydro`): characters.ts:409 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **神里綾人** (`10000066-hydro`): characters.ts:410 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **神里綾人** (`10000066-hydro`): characters.ts:411 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **アルハイゼン** (`10000078-dendro`): characters.ts:431 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **アルハイゼン** (`10000078-dendro`): characters.ts:432 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **久岐忍** (`10000065-electro`): characters.ts:444 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **重雲** (`10000036-cryo`): characters.ts:534 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **重雲** (`10000036-cryo`): characters.ts:535 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **モナ** (`10000041-hydro`): characters.ts:547 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **スカーク** (`10000114-cryo`): characters.ts:632 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **リサ** (`10000006-electro`): characters.ts:671 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **リサ** (`10000006-electro`): characters.ts:673 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ガイア** (`10000015-cryo`): characters.ts:688 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **北斗** (`10000024-electro`): characters.ts:705 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **北斗** (`10000024-electro`): characters.ts:706 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **北斗** (`10000024-electro`): characters.ts:707 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **北斗** (`10000024-electro`): characters.ts:708 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **北斗** (`10000024-electro`): characters.ts:710 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **アルベド** (`10000038-geo`): characters.ts:718 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **アルベド** (`10000038-geo`): characters.ts:721 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ディオナ** (`10000039-cryo`): characters.ts:730 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ロサリア** (`10000045-cryo`): characters.ts:739 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ゴロー** (`10000055-geo`): characters.ts:759 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ゴロー** (`10000055-geo`): characters.ts:760 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **九条裟羅** (`10000056-electro`): characters.ts:769 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **九条裟羅** (`10000056-electro`): characters.ts:770 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **九条裟羅** (`10000056-electro`): characters.ts:771 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **綺良々** (`10000061-dendro`): characters.ts:781 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **綺良々** (`10000061-dendro`): characters.ts:782 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **綺良々** (`10000061-dendro`): characters.ts:783 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **申鶴** (`10000063-cryo`): characters.ts:792 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **申鶴** (`10000063-cryo`): characters.ts:793 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **申鶴** (`10000063-cryo`): characters.ts:794 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **申鶴** (`10000063-cryo`): characters.ts:795 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **コレイ** (`10000067-dendro`): characters.ts:805 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **コレイ** (`10000067-dendro`): characters.ts:806 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **コレイ** (`10000067-dendro`): characters.ts:807 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **コレイ** (`10000067-dendro`): characters.ts:808 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **キャンディス** (`10000072-hydro`): characters.ts:830 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **キャンディス** (`10000072-hydro`): characters.ts:831 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **レイラ** (`10000074-cryo`): characters.ts:841 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ヨォーヨ** (`10000077-dendro`): characters.ts:853 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **白朮** (`10000082-dendro`): characters.ts:862 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **白朮** (`10000082-dendro`): characters.ts:863 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **リネット** (`10000083-anemo`): characters.ts:874 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **リネット** (`10000083-anemo`): characters.ts:875 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **リネット** (`10000083-anemo`): characters.ts:876 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **藍硯** (`10000108-anemo`): characters.ts:923 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **藍硯** (`10000108-anemo`): characters.ts:924 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **神里綾華** (`10000002-cryo`): characters.ts:986 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **空(草)** (`10000005-dendro`): characters.ts:1003 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **蛍(草)** (`10000007-dendro`): characters.ts:1059 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **蛍(草)** (`10000007-dendro`): characters.ts:1060 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **蛍(草)** (`10000007-dendro`): characters.ts:1061 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **蛍(炎)** (`10000007-pyro`): characters.ts:1098 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ティナリ** (`10000069-dendro`): characters.ts:1134 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ティナリ** (`10000069-dendro`): characters.ts:1135 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ティナリ** (`10000069-dendro`): characters.ts:1136 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ディシア** (`10000079-pyro`): characters.ts:1148 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ディシア** (`10000079-pyro`): characters.ts:1149 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ディシア** (`10000079-pyro`): characters.ts:1150 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **ムアラニ** (`10000102-hydro`): characters.ts:1202 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **セトス** (`10000097-electro`): characters.ts:1235 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+- **クロリンデ** (`10000098-electro`): characters.ts:1243 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\n    ],') が素通りする原因になります
+
+## duplicate-shape（10 件）
+
+- **コロンビーナ** (`10000125-hydro`) [#2: E と Q（Overvape 編成）]: index 0（「E と Q」）とアクション列が完全重複しています
+- **ナヒーダ** (`10000073-dendro`) [#4: E と Q（刻晴編成）]: index 2（「E と Q（通常攻撃なし）」）とアクション列が完全重複しています
+- **フリーナ** (`10000089-hydro`) [#2: E だけ]: index 1（「E だけ」）とアクション列が完全重複しています
+- **夜蘭** (`10000060-hydro`) [#4: E・Q]: index 0（「E と Q」）とアクション列が完全重複しています
+- **夜蘭** (`10000060-hydro`) [#9: E と Q]: index 0（「E と Q」）とアクション列が完全重複しています
+- **八重神子** (`10000058-electro`) [#1: E と Q]: index 0（「E→Q」）とアクション列が完全重複しています
+- **ファルザン** (`10000076-anemo`) [#2: E と Q]: index 1（「E と Q」）とアクション列が完全重複しています
+- **トーマ** (`10000050-pyro`) [#2: e q の出場]: index 0（「E→Q」）とアクション列が完全重複しています
+- **空(草)** (`10000005-dendro`) [#1: E・Q（サブアタッカー）]: index 0（「E・Q」）とアクション列が完全重複しています
+- **蛍(草)** (`10000007-dendro`) [#1: E・Q（サブアタッカー）]: index 0（「E・Q」）とアクション列が完全重複しています
+
+## bad-first-entry（36 件）
+
+- **フリーナ** (`10000089-hydro`) [#0: 重撃→通常4→重撃]: 先頭 o[0] として不適切な可能性: サポーター先頭に通常/重撃コンボ
+- **香菱** (`10000023-pyro`) [#0: 主役（E・Q のあと通常攻撃）]: 先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker
+- **行秋** (`10000025-hydro`) [#0: Q→E]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致
+- **フィッシュル** (`10000031-electro`) [#0: N→E のあと、もう一度 N×2→Q]: 先頭 o[0] として不適切な可能性: 凸制限 min=6
+- **楓原万葉** (`10000047-anemo`) [#0: E→落下→Q]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致
+- **八重神子** (`10000058-electro`) [#0: E→Q]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **ファルザン** (`10000076-anemo`) [#0: E→重撃2→Q]: 先頭 o[0] として不適切な可能性: 凸制限 min=1
+- **オロルン** (`10000105-electro`) [#0: Q だけ]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **イアンサ** (`10000110-electro`) [#0: E→重撃]: 先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[supporter] と不一致 / 非アタッカーの先頭が attacker
+- **スクロース** (`10000043-anemo`) [#0: E・通常攻撃・重撃]: 先頭 o[0] として不適切な可能性: useが長大(10手) / role=subAttacker がマスター roles=[attacker,supporter] と不一致
+- **セノ** (`10000071-electro`) [#0: 通常4→E の繰り返し（1 凸・雷怒 4）]: 先頭 o[0] として不適切な可能性: 凸制限 min=1
+- **凝光** (`10000027-geo`) [#0: E→Q→重撃→E]: 先頭 o[0] として不適切な可能性: 凸制限 min=2
+- **アーロイ** (`10000062-cryo`) [#0: Q→E]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致
+- **リオセスリ** (`10000086-cryo`) [#0: 通常5→強化重撃の繰り返し（1 凸）]: 先頭 o[0] として不適切な可能性: 凸制限 min=1
+- **煙緋** (`10000048-pyro`) [#0: E→重撃（サブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **リサ** (`10000006-electro`) [#0: E→重撃→長押しE]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **アンバー** (`10000021-pyro`) [#0: q の出場]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **北斗** (`10000024-electro`) [#0: 通常2→E→Q]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致 / サポーター先頭に通常/重撃コンボ
+- **アルベド** (`10000038-geo`) [#0: e の出場]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **ロサリア** (`10000045-cryo`) [#0: q の出場]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **ゴロー** (`10000055-geo`) [#0: Q→E]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致
+- **九条裟羅** (`10000056-electro`) [#0: E→重撃→Q]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致
+- **コレイ** (`10000067-dendro`) [#0: e q の出場]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **リネット** (`10000083-anemo`) [#0: e q の出場]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致
+- **千織** (`10000094-geo`) [#0: E→通常2→E の繰り返し]: 先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker
+- **神里綾華** (`10000002-cryo`) [#0: E・Q（爆発サブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **空(氷)** (`10000005-cryo`) [#0: E・Q（星拡散のサブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **蛍(氷)** (`10000007-cryo`) [#0: E・Q（星拡散のサブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **タルタリヤ** (`10000033-hydro`) [#0: E・Q（サブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **エウルア** (`10000051-cryo`) [#0: E→Q→E→通常5→長押しE→通常2]: 先頭 o[0] として不適切な可能性: useが長大(11手)
+- **ディシア** (`10000079-pyro`) [#0: E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）]: 先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[supporter] と不一致 / 非アタッカーの先頭が attacker
+- **エミリエ** (`10000099-dendro`) [#0: E→Q のあと 通常1→重撃を繰り返す]: 先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker
+- **ムアラニ** (`10000102-hydro`) [#0: E・通常攻撃・E（絵巻 4 セット型）]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致
+- **マーヴィカ** (`10000106-pyro`) [#0: E・Q（サブ）]: 先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致
+- **カーヴェ** (`10000081-dendro`) [#0: E（設置・控えから攻撃）]: 先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致
+- **セトス** (`10000097-electro`) [#0: CA のあと、もう一度 E→CA]: 先頭 o[0] として不適切な可能性: 凸制限 min=6
+
+## four-star-high-constellation（128 件）
+
+- **香菱** (`10000023-pyro`) [#2: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **香菱** (`10000023-pyro`) [#3: q→e→dash]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **早柚** (`10000053-anemo`) [#2: Q のあと、もう一度 E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ベネット** (`10000032-pyro`) [#4: Q→E のあと、もう一度 E]: 星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ベネット** (`10000032-pyro`) [#5: E→Q のあと、もう一度 E]: 星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#3: N→E→DASH→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#5: Q→N→E→DASH→N×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#6: E→Q→N（KQM）]: 星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#7: Q→N のあと、もう一度 N→E→DASH→N×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#8: Q→N のあと、もう一度 E→DASH→N→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#9: e→dash→n×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **行秋** (`10000025-hydro`) [#10: n→e→dash→n×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フィッシュル** (`10000031-electro`) [#0: N→E のあと、もう一度 N×2→Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フィッシュル** (`10000031-electro`) [#1: E→N のあと、もう一度 N→N→Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フィッシュル** (`10000031-electro`) [#2: n→e]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フィッシュル** (`10000031-electro`) [#3: n×2→q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ファルザン** (`10000076-anemo`) [#3: E→CA→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ファルザン** (`10000076-anemo`) [#4: E→Q のあと、もう一度 E→CA]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ファルザン** (`10000076-anemo`) [#5: Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#1: N→Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#2: Q→N→E→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#3: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#4: Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#5: Q のあと、もう一度 N→E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ミカ** (`10000080-cryo`) [#7: q→n→e]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **雲菫** (`10000064-geo`) [#1: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **オロルン** (`10000105-electro`) [#2: N→E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **オロルン** (`10000105-electro`) [#3: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **オロルン** (`10000105-electro`) [#4: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **オロルン** (`10000105-electro`) [#5: E→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **オロルン** (`10000105-electro`) [#6: E→Q のあと、もう一度 E→Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **久岐忍** (`10000065-electro`) [#1: E→N→Q（KQM）]: 星4キャラに constellation.min=4 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **久岐忍** (`10000065-electro`) [#3: N→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **スクロース** (`10000043-anemo`) [#1: n→e→dash]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フレミネ** (`10000085-cryo`) [#1: E→N×4→E→DASH×3（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フレミネ** (`10000085-cryo`) [#2: E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フレミネ** (`10000085-cryo`) [#3: E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フレミネ** (`10000085-cryo`) [#4: E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **フレミネ** (`10000085-cryo`) [#5: e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レザー** (`10000020-electro`) [#2: E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レザー** (`10000020-electro`) [#3: E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **凝光** (`10000027-geo`) [#1: E→Q→E→重撃]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **重雲** (`10000036-cryo`) [#1: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **重雲** (`10000036-cryo`) [#2: E→N のあと、もう一度 Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **重雲** (`10000036-cryo`) [#3: E のあと、もう一度 Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **辛炎** (`10000044-pyro`) [#1: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **辛炎** (`10000044-pyro`) [#2: E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **リサ** (`10000006-electro`) [#3: N→Q のあと、もう一度 E_HOLD]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ガイア** (`10000015-cryo`) [#2: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#2: E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#3: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#4: E→Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#5: E→Q のあと、もう一度 E→N×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#6: E→Q のあと、もう一度 N→E→N×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#7: E→Q→DASH のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **北斗** (`10000024-electro`) [#9: E→Q のあと、もう一度 E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ディオナ** (`10000039-cryo`) [#1: E_HOLD→N→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ディオナ** (`10000039-cryo`) [#2: Q→E_HOLD×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ディオナ** (`10000039-cryo`) [#3: E→Q→N のあと、もう一度 E→DASH]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ロサリア** (`10000045-cryo`) [#2: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **トーマ** (`10000050-pyro`) [#3: E→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **トーマ** (`10000050-pyro`) [#4: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **トーマ** (`10000050-pyro`) [#5: Q→N→E→N×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **トーマ** (`10000050-pyro`) [#6: e→n→q→n]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ゴロー** (`10000055-geo`) [#2: E→Q のあと、もう一度 N×2→E→Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ゴロー** (`10000055-geo`) [#3: E→Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ゴロー** (`10000055-geo`) [#4: e→n]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **九条裟羅** (`10000056-electro`) [#2: E→CA のあと、もう一度 Q、さらに E→CA]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **九条裟羅** (`10000056-electro`) [#3: E→CA→N のあと、もう一度 Q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **綺良々** (`10000061-dendro`) [#2: E_HOLD→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **綺良々** (`10000061-dendro`) [#3: E_HOLD のあと、もう一度 E_HOLD]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **綺良々** (`10000061-dendro`) [#4: E→Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **綺良々** (`10000061-dendro`) [#5: Q→E_HOLD のあと、もう一度 E_HOLD]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#1: N→E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#2: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#3: Q→E のあと、もう一度 E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#4: E のあと、もう一度 Q→N→E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#5: E のあと、もう一度 Q→E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **コレイ** (`10000067-dendro`) [#6: Q のあと、もう一度 E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#1: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#2: E→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#3: E→N×2→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#4: E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#5: E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ドリー** (`10000068-electro`) [#6: e→n×2→dash→n×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#1: E→N×2→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#2: E→Q→N×2（KQM）]: 星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#3: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#4: E→Q→N のあと、もう一度 E→N×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#5: N→E のあと、もう一度 N→E→Q→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **キャンディス** (`10000072-hydro`) [#6: e→n→q→n]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レイラ** (`10000074-cryo`) [#1: Q→N→E→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レイラ** (`10000074-cryo`) [#2: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レイラ** (`10000074-cryo`) [#3: Q→E のあと、もう一度 Q→E]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レイラ** (`10000074-cryo`) [#4: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **レイラ** (`10000074-cryo`) [#5: q→n→e]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ヨォーヨ** (`10000077-dendro`) [#1: E→N×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ヨォーヨ** (`10000077-dendro`) [#2: N→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ヨォーヨ** (`10000077-dendro`) [#3: Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ヨォーヨ** (`10000077-dendro`) [#4: N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **リネット** (`10000083-anemo`) [#1: E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **リネット** (`10000083-anemo`) [#2: E→Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **リネット** (`10000083-anemo`) [#3: Q→E→N×2→CA→N×2→CA→N のあと、もう一度 E→N×2→CA→N→CA→N→CA]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **リネット** (`10000083-anemo`) [#4: E→N→Q のあと、もう一度 E→N]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シャルロット** (`10000088-cryo`) [#1: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シャルロット** (`10000088-cryo`) [#2: E_HOLD→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シャルロット** (`10000088-cryo`) [#3: E→Q→N（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シャルロット** (`10000088-cryo`) [#4: e→n→q→n]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シュヴルーズ** (`10000090-pyro`) [#1: Q→E_HOLD×2（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シュヴルーズ** (`10000090-pyro`) [#2: Q→E_HOLD（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シュヴルーズ** (`10000090-pyro`) [#3: E_HOLD→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **シュヴルーズ** (`10000090-pyro`) [#5: q→e_hold×3]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **藍硯** (`10000108-anemo`) [#1: E×2 のあと、もう一度 E×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **藍硯** (`10000108-anemo`) [#2: E×2→Q のあと、もう一度 E×2]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ダリア** (`10000115-hydro`) [#1: N→E→N→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ダリア** (`10000115-hydro`) [#2: N→E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ダリア** (`10000115-hydro`) [#3: E→N×2→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **ダリア** (`10000115-hydro`) [#4: e→n→q]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **アイノ** (`10000121-hydro`) [#1: Q→E（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **アイノ** (`10000121-hydro`) [#2: E→Q（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **プルーネ** (`10000132-anemo`) [#2: q→e]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **嘉明** (`10000092-pyro`) [#2: Q→E→HP（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **嘉明** (`10000092-pyro`) [#3: Q→E→HP→E→HP→DASH（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **嘉明** (`10000092-pyro`) [#4: Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **嘉明** (`10000092-pyro`) [#5: q→n×2→e→hp→n→e→hp→dash]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **嘉明** (`10000092-pyro`) [#6: q→e→hp→e→hp]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **カーヴェ** (`10000081-dendro`) [#2: Q→E→N×12→E→N×4（KQM）]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+- **セトス** (`10000097-electro`) [#0: CA のあと、もう一度 E→CA]: 星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）
+
+## excessive-stints（14 件）
+
+- **楓原万葉** (`10000047-anemo`) [#5: Q のあと、もう一度 E→HP、さらに E→HP]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **シロネン** (`10000103-geo`) [#1: Q のあと、もう一度 E→N×2、さらに E→N×2]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ウェンティ** (`10000022-anemo`) [#1: Q のあと、もう一度 E→N、さらに E→N]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ヌヴィレット** (`10000087-hydro`) [#2: E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ヌヴィレット** (`10000087-hydro`) [#3: E のあと、もう一度 CA→E→CA→Q、さらに CA×2]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ヌヴィレット** (`10000087-hydro`) [#4: E のあと、もう一度 CA→Q→E→CA、さらに CA×2]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ヌヴィレット** (`10000087-hydro`) [#5: N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **神里綾人** (`10000066-hydro`) [#2: Q のあと、もう一度 E→N×15、さらに E→N×15→Q]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **神里綾人** (`10000066-hydro`) [#3: Q のあと、もう一度 E→N×15、さらに E→N×15]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **アルハイゼン** (`10000078-dendro`) [#3: E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **アルハイゼン** (`10000078-dendro`) [#4: E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **九条裟羅** (`10000056-electro`) [#2: E→CA のあと、もう一度 Q、さらに E→CA]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ディシア** (`10000079-pyro`) [#4: E のあと、もう一度 Q→N×10、さらに E]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+- **ディシア** (`10000079-pyro`) [#5: E のあと、もう一度 Q→N×10、さらに E→N]: 1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）
+
+## excessive-length（45 件）
+
+- **雷電将軍** (`10000052-electro`) [#4: E のあと、もう一度 Q→N×4→E→N×4→DASH→N×4→DASH→N×4]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **雷電将軍** (`10000052-electro`) [#5: E のあと、もう一度 Q→N×4→DASH→N×4→E→N×4→DASH→N×4]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **雷電将軍** (`10000052-electro`) [#6: q→n×4→e→n×4→dash→n×4→dash→n×4]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **胡桃** (`10000046-pyro`) [#4: E→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N×2→CA→JUMP→N（KQM）]: 1出場に 30 手べた書きされています（fill への抽象化または削減を検討）
+- **刻晴** (`10000042-electro`) [#2: E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA のあと、もう一度 E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA]: 1出場に 13 手べた書きされています（fill への抽象化または削減を検討）
+- **刻晴** (`10000042-electro`) [#3: e→q→e→n→ca→n→ca→n→e→n→ca→n→ca]: 1出場に 13 手べた書きされています（fill への抽象化または削減を検討）
+- **アルレッキーノ** (`10000096-pyro`) [#2: E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3]: 1出場に 24 手べた書きされています（fill への抽象化または削減を検討）
+- **アルレッキーノ** (`10000096-pyro`) [#3: ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3]: 1出場に 24 手べた書きされています（fill への抽象化または削減を検討）
+- **宵宮** (`10000049-pyro`) [#2: E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **宵宮** (`10000049-pyro`) [#3: E→N×5→DASH→N×5→DASH→N×5（KQM）]: 1出場に 18 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾人** (`10000066-hydro`) [#2: Q のあと、もう一度 E→N×15、さらに E→N×15→Q]: 1出場に 17 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾人** (`10000066-hydro`) [#3: Q のあと、もう一度 E→N×15、さらに E→N×15]: 1出場に 16 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾人** (`10000066-hydro`) [#4: E→N×15→Q のあと、もう一度 E→N×15]: 1出場に 17 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾人** (`10000066-hydro`) [#5: e→n×15]: 1出場に 16 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾人** (`10000066-hydro`) [#6: e→n×15→q]: 1出場に 17 手べた書きされています（fill への抽象化または削減を検討）
+- **アルハイゼン** (`10000078-dendro`) [#3: E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **アルハイゼン** (`10000078-dendro`) [#4: E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3]: 1出場に 19 手べた書きされています（fill への抽象化または削減を検討）
+- **アルハイゼン** (`10000078-dendro`) [#5: e_hold→lp→n×2→ca→dash→n×3→ca→dash]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **アルハイゼン** (`10000078-dendro`) [#6: e_hold→lp→n×3→dash→n×3→dash→n×3]: 1出場に 13 手べた書きされています（fill への抽象化または削減を検討）
+- **フリンズ** (`10000120-electro`) [#2: e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n]: 1出場に 25 手べた書きされています（fill への抽象化または削減を検討）
+- **フリンズ** (`10000120-electro`) [#3: e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4]: 1出場に 24 手べた書きされています（fill への抽象化または削減を検討）
+- **スクロース** (`10000043-anemo`) [#0: E・通常攻撃・重撃]: 1出場に 10 手べた書きされています（fill への抽象化または削減を検討）
+- **フレミネ** (`10000085-cryo`) [#2: E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）]: 1出場に 23 手べた書きされています（fill への抽象化または削減を検討）
+- **フレミネ** (`10000085-cryo`) [#3: E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）]: 1出場に 20 手べた書きされています（fill への抽象化または削減を検討）
+- **フレミネ** (`10000085-cryo`) [#4: E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）]: 1出場に 21 手べた書きされています（fill への抽象化または削減を検討）
+- **フレミネ** (`10000085-cryo`) [#5: e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e]: 1出場に 19 手べた書きされています（fill への抽象化または削減を検討）
+- **レザー** (`10000020-electro`) [#2: E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）]: 1出場に 27 手べた書きされています（fill への抽象化または削減を検討）
+- **レザー** (`10000020-electro`) [#3: E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）]: 1出場に 31 手べた書きされています（fill への抽象化または削減を検討）
+- **荒瀧一斗** (`10000057-geo`) [#4: N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）]: 1出場に 23 手べた書きされています（fill への抽象化または削減を検討）
+- **荒瀧一斗** (`10000057-geo`) [#5: 通常→Q→通常→E→重撃連打の周回]: 1出場に 22 手べた書きされています（fill への抽象化または削減を検討）
+- **ディルック** (`10000016-pyro`) [#1: 最大ダメージのコンボ（通常1 E 通常1 E 通常2〜4 E 通常1〜3 E 通常4）]: 1出場に 13 手べた書きされています（fill への抽象化または削減を検討）
+- **ドリー** (`10000068-electro`) [#4: E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）]: 1出場に 19 手べた書きされています（fill への抽象化または削減を検討）
+- **ヨォーヨ** (`10000077-dendro`) [#3: Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）]: 1出場に 15 手べた書きされています（fill への抽象化または削減を検討）
+- **ヨォーヨ** (`10000077-dendro`) [#4: N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N]: 1出場に 14 手べた書きされています（fill への抽象化または削減を検討）
+- **神里綾華** (`10000002-cryo`) [#2: E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA]: 1出場に 10 手べた書きされています（fill への抽象化または削減を検討）
+- **エウルア** (`10000051-cryo`) [#0: E→Q→E→通常5→長押しE→通常2]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **エウルア** (`10000051-cryo`) [#1: E→Q→長押しE→通常4→ダッシュ→通常4]: 1出場に 12 手べた書きされています（fill への抽象化または削減を検討）
+- **エウルア** (`10000051-cryo`) [#2: E→Q→通常4→長押しE→通常4]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **ディシア** (`10000079-pyro`) [#4: E のあと、もう一度 Q→N×10、さらに E]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **ディシア** (`10000079-pyro`) [#5: E のあと、もう一度 Q→N×10、さらに E→N]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **ディシア** (`10000079-pyro`) [#6: E×2 のあと、もう一度 Q→N×10]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **ディシア** (`10000079-pyro`) [#7: q→n×10]: 1出場に 11 手べた書きされています（fill への抽象化または削減を検討）
+- **嘉明** (`10000092-pyro`) [#4: Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）]: 1出場に 17 手べた書きされています（fill への抽象化または削減を検討）
+- **カーヴェ** (`10000081-dendro`) [#2: Q→E→N×12→E→N×4（KQM）]: 1出場に 19 手べた書きされています（fill への抽象化または削減を検討）
+- **ローエン** (`10000129-cryo`) [#1: E→重撃2→特殊E→重撃5→Q→重撃5]: 1出場に 15 手べた書きされています（fill への抽象化または削減を検討）
+
+## bloat-or-sparse（68 件）
+
+- **ナヒーダ** (`10000073-dendro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ラウマ** (`10000119-dendro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **フリーナ** (`10000089-hydro`): 運用型が 10 件あり肥大化しています（推奨 2〜4 件）
+- **ベネット** (`10000032-pyro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **行秋** (`10000025-hydro`): 運用型が 11 件あり肥大化しています（推奨 2〜4 件）
+- **雷電将軍** (`10000052-electro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **夜蘭** (`10000060-hydro`): 運用型が 10 件あり肥大化しています（推奨 2〜4 件）
+- **イネファ** (`10000116-electro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **楓原万葉** (`10000047-anemo`): 運用型が 8 件あり肥大化しています（推奨 2〜4 件）
+- **七七** (`10000035-cryo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ニコ** (`10000131-pyro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **ファルザン** (`10000076-anemo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ジン** (`10000003-anemo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ミカ** (`10000080-cryo`): 運用型が 8 件あり肥大化しています（推奨 2〜4 件）
+- **雲菫** (`10000064-geo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **シロネン** (`10000103-geo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **オロルン** (`10000105-electro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **鍾離** (`10000030-geo`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **ヌヴィレット** (`10000087-hydro`): 運用型が 9 件あり肥大化しています（推奨 2〜4 件）
+- **神里綾人** (`10000066-hydro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **アルハイゼン** (`10000078-dendro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **スクロース** (`10000043-anemo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **フレミネ** (`10000085-cryo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ノエル** (`10000034-geo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **クレー** (`10000029-pyro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **モナ** (`10000041-hydro`): 運用型が 9 件あり肥大化しています（推奨 2〜4 件）
+- **荒瀧一斗** (`10000057-geo`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **鹿野院平蔵** (`10000059-anemo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **アーロイ** (`10000062-cryo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **チャスカ** (`10000104-anemo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **ファルカ** (`10000128-anemo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **夢見月瑞希** (`10000109-anemo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **リサ** (`10000006-electro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **バーバラ** (`10000014-hydro`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **アンバー** (`10000021-pyro`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **北斗** (`10000024-electro`): 運用型が 10 件あり肥大化しています（推奨 2〜4 件）
+- **アルベド** (`10000038-geo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **トーマ** (`10000050-pyro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **九条裟羅** (`10000056-electro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **綺良々** (`10000061-dendro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **申鶴** (`10000063-cryo`): 運用型が 8 件あり肥大化しています（推奨 2〜4 件）
+- **コレイ** (`10000067-dendro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **ドリー** (`10000068-electro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **キャンディス** (`10000072-hydro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **レイラ** (`10000074-cryo`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **白朮** (`10000082-dendro`): 運用型が 8 件あり肥大化しています（推奨 2〜4 件）
+- **シュヴルーズ** (`10000090-pyro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **ヤフォダ** (`10000124-anemo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **イルーガ** (`10000127-geo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **アリョーシャ** (`10000148-electro`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **空(氷)** (`10000005-cryo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **空(風)** (`10000005-anemo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **空(雷)** (`10000005-electro`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **空(岩)** (`10000005-geo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **空(水)** (`10000005-hydro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **蛍(氷)** (`10000007-cryo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **蛍(草)** (`10000007-dendro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **蛍(風)** (`10000007-anemo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **蛍(雷)** (`10000007-electro`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **蛍(岩)** (`10000007-geo`): 運用型が 1 件のみです（定番形漏れの確認対象）
+- **蛍(水)** (`10000007-hydro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **タルタリヤ** (`10000033-hydro`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **ティナリ** (`10000069-dendro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **ディシア** (`10000079-pyro`): 運用型が 8 件あり肥大化しています（推奨 2〜4 件）
+- **嘉明** (`10000092-pyro`): 運用型が 7 件あり肥大化しています（推奨 2〜4 件）
+- **マーヴィカ** (`10000106-pyro`): 運用型が 6 件あり肥大化しています（推奨 2〜4 件）
+- **兹白** (`10000126-geo`): 運用型が 2 件のみです（定番形漏れの確認対象）
+- **セトス** (`10000097-electro`): 運用型が 1 件のみです（定番形漏れの確認対象）

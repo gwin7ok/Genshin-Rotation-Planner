@@ -3,73 +3,52 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8A%E3%83%92%E3%83%BC%E3%83%80",
  "archetypes": [
   {
-   "name": "E→通常4→重撃",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "ca"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 通常 4 段→重撃のコンボで、合計 3 回の元素付着ができる（探索の比較なし）"
-  },
-  {
-   "name": "E と Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "手組み「月開花」の出場（E のあと通常攻撃 1 回、Q）"
-  },
-  {
-   "name": "E と Q（通常攻撃なし）",
+   "name": "E→Q",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "探索の上位に出る形"
+   "evidence": "Phase 3-1精鋭辞書: 控え草付着＋熟知バフ基本形"
   },
   {
-   "name": "長押し E と Q（刻晴編成）",
+   "name": "長押しE→Q",
    "role": "supporter",
-   "slot": 20,
+   "slot": 10,
    "use": [
     "e_hold",
     "q"
    ],
-   "evidence": "探索の上位（ナヒーダ[hE Q]）"
+   "evidence": "Phase 3-1精鋭辞書: 複数体マーク用長押し形"
   },
   {
-   "name": "E と Q（刻晴編成）",
+   "name": "E だけ",
    "role": "supporter",
-   "slot": 20,
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 爆発省略・短時間ローテ形"
+  },
+  {
+   "name": "E→Q のあと N2C 連打（ドライバー）",
+   "role": "attacker",
+   "slot": 40,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "手組み「激化刻晴」"
-  },
-  {
-   "name": "e→n→ca",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
+   "fill": [
+    "n",
     "n",
     "ca"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 83 件・平均 63.5k・最大 98.3k。e n ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（83 件。分布 0〜6 凸 = 82/0/1/0/0/0/0）"
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 開花/超開花表ドライバー形"
   }
  ]
 }

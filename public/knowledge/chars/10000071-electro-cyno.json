@@ -3,28 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BB%E3%83%8E",
  "archetypes": [
   {
-   "name": "通常4→E の繰り返し（1 凸・雷怒 4）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [],
-   "fill": [
-    "n",
-    "n",
-    "n",
-    "n",
-    "e"
-   ],
-   "fillRepeat": [
-    4,
-    5,
-    6
-   ],
-   "constellation": {
-    "min": 1
-   },
-   "evidence": "Wiki 本文のコンボの記述: 1 凸と雷怒 4 セットで可能になる、通常 4 段→スキルのループ（探索の比較なし）"
-  },
-  {
    "name": "E→Q→通常3→E のあと 通常5→E を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -87,6 +65,28 @@
     "min": 0
    },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: セノ 104 件中 5 件。平均 61.1k（最大 62.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
+  },
+  {
+   "name": "通常4→E の繰り返し（1 凸・雷怒 4）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "constellation": {
+    "min": 1
+   },
+   "evidence": "Wiki 本文のコンボの記述: 1 凸と雷怒 4 セットで可能になる、通常 4 段→スキルのループ（探索の比較なし）"
   }
  ]
 }

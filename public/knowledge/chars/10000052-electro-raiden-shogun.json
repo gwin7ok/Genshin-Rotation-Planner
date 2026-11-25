@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%9B%B7%E9%9B%BB%E5%B0%86%E8%BB%8D",
  "archetypes": [
   {
-   "name": "爆発のあと通常攻撃（ダッシュキャンセル）",
+   "name": "初動E→爆発中N3C→末尾E締め",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -11,6 +11,30 @@
    ],
    "fill": [
     "n",
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "lead": [
+    "e"
+   ],
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 初動E(295件)＋王道N3C＋末尾E締め(42.0k)"
+  },
+  {
+   "name": "初動E→爆発中N4D→末尾E締め",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
     "n",
     "n",
     "n",
@@ -24,10 +48,13 @@
    "lead": [
     "e"
    ],
-   "evidence": "手組み「雷電ナショナル」。最初に E を 1 回だけ使い、Q のあと通常攻撃 5 回 + ダッシュを繰り返す"
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(151件/32.8%): N4Dループ＋末尾E締め"
   },
   {
-   "name": "E・Q のあと通常攻撃",
+   "name": "E・Q のあと N3C 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -35,149 +62,25 @@
     "q"
    ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "n",
+    "ca"
    ],
    "fillRepeat": [
-    10,
-    18,
-    20
+    2,
+    3
    ],
-   "evidence": "探索の上位（雷電[E Q N×18 D …]）"
+   "evidence": "Phase 3-1精鋭辞書: 1周完結E→Q→N3C型"
   },
   {
-   "name": "E→N（KQM）",
+   "name": "E だけ（控え雷付着）",
    "role": "supporter",
    "slot": 10,
    "use": [
-    "e",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雷電将軍 501 件中 45 件。平均 70.6k（最大 167.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 44/0/0/0/0/0/1）（探索の比較なし）"
-  },
-  {
-   "name": "N→E（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "n",
     "e"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雷電将軍 501 件中 22 件。平均 65.4k（最大 79.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 22/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E のあと、もう一度 Q→N×4→E→N×4→DASH→N×4→DASH→N×4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "q",
-      "n",
-      "n",
-      "n",
-      "n",
-      "e",
-      "n",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 雷電将軍 501 件中 130 件。平均 74.4k（最大 787.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 117/0/2/4/0/0/7）（探索の比較なし）"
-  },
-  {
-   "name": "E のあと、もう一度 Q→N×4→DASH→N×4→E→N×4→DASH→N×4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "q",
-      "n",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "n",
-      "e",
-      "n",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 雷電将軍 501 件中 26 件。平均 50.3k（最大 78.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 26/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "q→n×4→e→n×4→dash→n×4→dash→n×4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n",
-    "n",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 153 件・平均 71.4k・最大 787.5k。q n×4 e n×4 dash n×4 dash n×4（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（153 件。分布 0〜6 凸 = 139/1/2/4/0/0/7）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(16件): 超開花/激化サポーター形"
   }
  ]
 }

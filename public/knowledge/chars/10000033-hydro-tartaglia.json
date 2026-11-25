@@ -3,17 +3,58 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BF%E3%83%AB%E3%82%BF%E3%83%AA%E3%83%A4",
  "archetypes": [
   {
-   "name": "E・Q（サブ）",
-   "role": "subAttacker",
-   "slot": 20,
+   "name": "初動E→弓Q→双剣 N2C ダッシュ",
+   "role": "attacker",
+   "slot": 40,
    "use": [
-    "e",
-    "q"
+    "q",
+    "e"
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の回転率が高いサブアタッカー運用"
+   "fill": [
+    "n",
+    "n",
+    "ca",
+    "dash"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "lead": [
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 初動水付着→弓Q→双剣N2CD"
   },
   {
-   "name": "狙い撃ち・E・Q のあと 通常攻撃を繰り返す（双剣）",
+   "name": "先置きE のあと、弓Q→双剣 N2C ダッシュ",
+   "role": "attacker",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "q",
+      "e"
+     ]
+    }
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca",
+    "dash"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 先置きE→万葉拡散→弓Q→双剣N2CD"
+  },
+  {
+   "name": "E→近接Q→双剣 N2C ダッシュ",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -21,17 +62,36 @@
     "q"
    ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "ca",
+    "dash"
    ],
    "fillRepeat": [
-    12,
-    16,
-    20
+    3,
+    4
    ],
-   "lead": [
-    "ca"
+   "evidence": "Phase 3-1精鋭辞書: 1周完結・近接Q→双剣N2CD"
+  },
+  {
+   "name": "E→双剣 N3C ダッシュ（爆発温存）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで双剣に切り替え、断流を乗せて通常攻撃を連打する"
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "ca",
+    "dash"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 爆発温存時の双剣通常重撃型"
   }
  ]
 }

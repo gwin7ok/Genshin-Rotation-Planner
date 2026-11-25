@@ -3,16 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%85%99%E7%B7%8B",
  "archetypes": [
   {
-   "name": "E→重撃（サブ）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "ca"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 表に出さず、スキルの CT ごとに出して、スキル→重撃をして退場させるサブアタッカー運用（探索の比較なし）"
-  },
-  {
    "name": "Q のあと 通常2→重撃を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -46,6 +36,16 @@
     5
    ],
    "evidence": "自動編成（煙緋 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 27.8k → 28.2k"
+  },
+  {
+   "name": "E→重撃（サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "ca"
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 表に出さず、スキルの CT ごとに出して、スキル→重撃をして退場させるサブアタッカー運用（探索の比較なし）"
   }
  ]
 }

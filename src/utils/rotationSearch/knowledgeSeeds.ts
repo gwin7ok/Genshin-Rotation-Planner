@@ -76,6 +76,29 @@ export const C6_INFUSION_IDS = new Set([
   '10000099-dendro',  // エミリエ
 ]);
 
+/** スキル後の通常攻撃が固有ギミックとして必須なサポーター */
+export const SUPPORTER_GIMMICK_NORMAL_IDS = new Set([
+  '10000103-geo',   // シロネン
+  '10000070-hydro', // ニィロウ
+]);
+
+/** サポーターの通常攻撃挿入を許可する自由通常判定（西風武器・固有ギミック必須キャラのみ） */
+export function canSupporterUseFreeNormal(c: CharacterConfig): boolean {
+  if (isFavoniusWeapon(c.weaponId)) return true;
+  if (SUPPORTER_GIMMICK_NORMAL_IDS.has(c.id)) return true;
+  return false;
+}
+
+/** 編成内に通常連動追撃キャラがいるか（追撃トリガー用1手Nの許可判定） */
+export function canSupporterUseTriggerNormal(party?: CharacterConfig[]): boolean {
+  return partyHasNormalAttackTrigger(party);
+}
+
+/** サポーターの通常攻撃挿入を許可する判定（自由通常または追撃トリガー） */
+export function canSupporterUseNormal(c: CharacterConfig, party?: CharacterConfig[]): boolean {
+  return canSupporterUseFreeNormal(c) || canSupporterUseTriggerNormal(party);
+}
+
 /** 西風粒子、または通常攻撃による元素攻撃・元素付与・追撃が有効な状態か */
 export function canUseFavoniusOrElementNormal(c: CharacterConfig, party?: CharacterConfig[]): boolean {
   if (isFavoniusWeapon(c.weaponId)) return true;
@@ -96,11 +119,18 @@ export function canUseFavoniusOrElementNormal(c: CharacterConfig, party?: Charac
 export function applicableArchetypes(c: CharacterConfig, bundle: KnowledgeBundle, partyIds: Set<string>, party?: CharacterConfig[]): Archetype[] {
   const cons = c.constellation ?? defaultConstellation(c.rarity);
   const allowFavOrElemN = canUseFavoniusOrElementNormal(c, party);
-  return (bundle[c.id]?.archetypes ?? []).filter(
+  const list = (bundle[c.id]?.archetypes ?? []).filter(
     a => (a.withCharacters ?? []).every(id => partyIds.has(id))
       && cons >= (a.constellation?.min ?? 0) && cons <= (a.constellation?.max ?? 6)
       && (!a.requiresFavonius || allowFavOrElemN),
   );
+  // 他に専任アタッカー（roles が attacker のみ）が編成にいる場合、兼任キャラの attacker 型は後回しにする
+  const hasDedicatedAttacker = party?.some(p => p.id !== c.id && p.roles?.length === 1 && p.roles[0] === 'attacker');
+  const isHybrid = (c.roles?.length ?? 0) > 1 && c.roles?.some(r => r !== 'attacker');
+  if (hasDedicatedAttacker && isHybrid) {
+    return [...list.filter(a => a.role !== 'attacker'), ...list.filter(a => a.role === 'attacker')];
+  }
+  return list;
 }
 
 export function knowledgeSeeds(characters: CharacterConfig[], bundle: KnowledgeBundle, maxSeeds: number = DEFAULT_MAX_SEEDS): KnowledgeSeed[] {
@@ -172,7 +202,12 @@ function combosOf(options: Archetype[][], maxCombos: number): Archetype[][] {
 function variantsOf(characters: CharacterConfig[], members: CharacterConfig[], combo: Archetype[]): Array<{ key: string; seed: KnowledgeSeed }> {
   const out = new Map<string, KnowledgeSeed>();
   const picked = members.map((c, i) => ({ c, a: combo[i] }));
-  const attackers = picked.filter(p => p.a.role === 'attacker');
+  let attackers = picked.filter(p => p.a.role === 'attacker');
+  // 全員がサポーター/サブアタッカー（例: フリーナ蒸発）のときは、slot 最大のメンバーを暫定アタッカー扱いしてシードを組む
+  if (attackers.length === 0 && picked.length > 0) {
+    const lastBySlot = [...picked].sort((x, y) => y.a.slot - x.a.slot)[0];
+    attackers = [lastBySlot];
+  }
   if (attackers.length === 0) return [];
   // 先置き・サポートの出場: slot の小さい順。同じ slot は、並べ替えを全部試す。
   // 1 人の運用型は、出場を複数持てる（use と、続きの出場 then）。同じキャラで同じ slot の出場は、1 つに結合する
@@ -196,15 +231,23 @@ function variantsOf(characters: CharacterConfig[], members: CharacterConfig[], c
           const s = stintOf(c, steps, `k${stints.length}`);
           if (!s) ok = false; else stints.push(s);
         };
-        attackers.forEach((p, i) => { if (leads[i] && canUseFavoniusOrElementNormal(p.c, characters)) push(p.c, p.a.lead!); });
+        attackers.forEach((p, i) => {
+          if (!leads[i]) return;
+          const onlyNormal = p.a.lead!.every(s => s.split('@')[0] === 'n');
+          if (!onlyNormal || canUseFavoniusOrElementNormal(p.c, characters)) push(p.c, p.a.lead!);
+        });
         const loopStartIndex = stints.length;
         for (const p of order) push(p.c, p.use);
         attackers.forEach((p, i) => {
-          if (repeats[i] <= 0) return;
+          const tailSteps = p.a.tail ?? [];
+          if (repeats[i] <= 0) {
+            if (tailSteps.length > 0) push(p.c, tailSteps);
+            return;
+          }
           const fillSteps = Array.from({ length: repeats[i] }, () => p.a.fill!).flat();
           // スキル・爆発を使わない攻撃だけの別出場が、元素攻撃・西風・連動追撃も無い物理の通常攻撃 1 回だけ（例: 香菱[N]）になる形は作らない
-          if (fillSteps.length === 1 && fillSteps[0] === 'n' && !canUseFavoniusOrElementNormal(p.c, characters) && !partyHasNormalAttackTrigger(characters)) return;
-          push(p.c, fillSteps);
+          if (fillSteps.length === 1 && fillSteps[0] === 'n' && tailSteps.length === 0 && !canUseFavoniusOrElementNormal(p.c, characters) && !partyHasNormalAttackTrigger(characters)) return;
+          push(p.c, [...fillSteps, ...tailSteps]);
         });
         if (!ok || stints.length === 0) continue;
         const assignment = Object.fromEntries(characters.map(c => [c.id, (picked.find(p => p.c.id === c.id)?.a.role ?? 'supporter') as SearchRole]));

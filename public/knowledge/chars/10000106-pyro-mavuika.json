@@ -3,16 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9E%E3%83%BC%E3%83%B4%E3%82%A3%E3%82%AB",
  "archetypes": [
   {
-   "name": "E・Q（サブ）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから自動攻撃する輪で炎下地を作るサブ運用"
-  },
-  {
    "name": "E・Q のあと 通常攻撃を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -47,6 +37,16 @@
     5
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の高い瞬間火力のあと、重撃・双駆輪で攻める"
+  },
+  {
+   "name": "E・Q（サブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから自動攻撃する輪で炎下地を作るサブ運用"
   },
   {
    "name": "Q→E（KQM）",

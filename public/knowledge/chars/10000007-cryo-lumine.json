@@ -3,16 +3,6 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E6%B0%B7",
  "archetypes": [
   {
-   "name": "E・Q（星拡散のサブ）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 星拡散型は控えから氷付着するサブアタッカー"
-  },
-  {
    "name": "E・通常攻撃・Q のあと 通常攻撃 + 重撃を繰り返す",
    "role": "attacker",
    "slot": 40,
@@ -35,6 +25,16 @@
     3
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 星電導型: スキル → 通常攻撃・重撃でバフ → 爆発"
+  },
+  {
+   "name": "E・Q（星拡散のサブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 星拡散型は控えから氷付着するサブアタッカー"
   }
  ]
 }

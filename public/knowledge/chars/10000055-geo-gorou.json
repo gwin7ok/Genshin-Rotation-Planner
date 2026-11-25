@@ -41,9 +41,6 @@
      ]
     }
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ゴロー 92 件中 8 件。平均 42.6k（最大 47.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/8）（探索の比較なし）"
   },
@@ -64,9 +61,6 @@
      ]
     }
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ゴロー 92 件中 3 件。平均 41.1k（最大 48.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
   },
@@ -78,9 +72,6 @@
     "e",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 12 件・平均 104.4k・最大 406.2k。e n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（12 件。分布 0〜6 凸 = 0/0/0/0/0/0/12）"
   }

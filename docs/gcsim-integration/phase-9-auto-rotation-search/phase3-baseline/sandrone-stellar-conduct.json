@@ -1,0 +1,1249 @@
+{
+ "party": [
+  {
+   "id": "10000131-pyro",
+   "name": "ニコ",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000058-electro",
+   "name": "八重神子",
+   "roles": [
+    "subAttacker"
+   ]
+  },
+  {
+   "id": "10000035-cryo",
+   "name": "七七",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000133-cryo",
+   "name": "サンドローネ",
+   "roles": [
+    "attacker"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 262357,
+ "spearman": -0.24142456486195973,
+ "bestQuickScoreRank": 2383,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 4829,
+  "rejectedBy": {
+   "サンドローネ: スキルCT違反": 1380,
+   "七七: 元素爆発CT違反": 29,
+   "八重神子: 落下攻撃の前提": 1376,
+   "ニコ: 元素爆発CT違反": 1,
+   "サンドローネ: 元素爆発CT違反": 9,
+   "八重神子: スキルCT違反": 2025,
+   "ニコ: スキルCT違反": 9
+  },
+  "scored": 15471,
+  "quick": 1627,
+  "quickOk": 1138,
+  "quickFailed": {
+   "error encountered on sandrone executing charge: decode too high to fire 3 beams. need <21.2, got 90": 73,
+   "error encountered on sandrone executing charge: decode too high to fire 3 beams. need <21.2, got 92.5": 7,
+   "error encountered on sandrone executing charge: decode too high to fire 3 beams. need <21.2, got 95": 9
+  }
+ },
+ "results": [
+  {
+   "dps": 157046.9064064145,
+   "sd": 3515.857947486701,
+   "totalSeconds": 23.63,
+   "score": 2.3513813612238517,
+   "particles": {
+    "total": 163.1,
+    "enemy": 43.1,
+    "energy": 826.5600000000055,
+    "seconds": 121.23333333333332,
+    "energyPerMember10s": 17.04481715699764,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.24718174319491
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.665933461644185
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 15.972504811657924
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 24.293648611492983
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E D C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "dash",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 156290.23079973127,
+   "sd": 3555.301515885071,
+   "totalSeconds": 23.53,
+   "score": 2.3536914111585823,
+   "particles": {
+    "total": 162.5,
+    "enemy": 42.5,
+    "energy": 823.2000000000053,
+    "seconds": 120.83333333333333,
+    "energyPerMember10s": 17.031724137931143,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.23806896551721
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.635034482758593
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 15.96579310344824
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 24.287999999999993
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 155656.6524233623,
+   "sd": 2898.465684542934,
+   "totalSeconds": 23.53,
+   "score": 2.3536914111585823,
+   "particles": {
+    "total": 155.6,
+    "enemy": 39.6,
+    "energy": 790.960000000005,
+    "seconds": 110.96666666666667,
+    "energyPerMember10s": 17.81976569540414,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.906878942625383
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.99549414238507
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.588765395013482
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 25.787924301592064
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → ↻八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 155437.69962047687,
+   "sd": 2648.5052569317177,
+   "totalSeconds": 24.58,
+   "score": 2.259083018979134,
+   "particles": {
+    "total": 164,
+    "enemy": 43,
+    "energy": 832.0000000000055,
+    "seconds": 121.88333333333335,
+    "energyPerMember10s": 17.065499794885927,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.222480514152842
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.620538766580031
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.156433748119746
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 24.26254615069054
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "サンドローネ[E] → ↻七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 153385.09558282964,
+   "sd": 2634.263819355511,
+   "totalSeconds": 23.85,
+   "score": 2.346393919793014,
+   "particles": {
+    "total": 162.6,
+    "enemy": 42.6,
+    "energy": 823.7600000000051,
+    "seconds": 121.63333333333335,
+    "energyPerMember10s": 16.931214031241538,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.154288846259215
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.548643463962698
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.271855302822654
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 23.750068511921064
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C Q E C E C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "q",
+       "e",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 152780.33190703433,
+   "sd": 3556.443082963919,
+   "totalSeconds": 23.95,
+   "score": 2.344172942689198,
+   "particles": {
+    "total": 163.3,
+    "enemy": 43.3,
+    "energy": 827.6800000000054,
+    "seconds": 122.03333333333333,
+    "energyPerMember10s": 16.956022944550778,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.160338705271752
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.56323408904668
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.3004643540016
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 23.800054629882542
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C Q E C E D C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "q",
+       "e",
+       "ca",
+       "e",
+       "dash",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 153501.7224496333,
+   "sd": 5782.433406133829,
+   "totalSeconds": 22.53,
+   "score": 2.3787444690265485,
+   "particles": {
+    "total": 160,
+    "enemy": 41,
+    "energy": 810.800000000005,
+    "seconds": 116.83333333333333,
+    "energyPerMember10s": 17.349500713266867,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.390014265335203
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.862196861626218
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.704136947218224
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 24.441654778887305
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C(2) E C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca_beams2",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 152384.33936697384,
+   "sd": 3385.1433065243277,
+   "totalSeconds": 21.07,
+   "score": 1.864335729872409,
+   "particles": {
+    "total": 155.2,
+    "enemy": 39.2,
+    "energy": 788.7200000000049,
+    "seconds": 108.5,
+    "energyPerMember10s": 18.173271889401036,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 14.141935483870935
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 15.284792626728084
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.892165898617474
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 26.374193548387094
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 151988.17249681338,
+   "sd": 3523.70436346043,
+   "totalSeconds": 25.82,
+   "score": 2.6033253487057046,
+   "particles": {
+    "total": 163.3,
+    "enemy": 43.3,
+    "energy": 827.6800000000055,
+    "seconds": 123.11666666666665,
+    "energyPerMember10s": 16.806822796805314,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.031541897928765
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.519561391633927
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 15.734669013131144
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 23.941518884526864
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "八重神子[Q] → ↻七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000058-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 150339.85965690762,
+   "sd": 2880.790560451201,
+   "totalSeconds": 26.02,
+   "score": 2.811994651608444,
+   "particles": {
+    "total": 163,
+    "enemy": 43,
+    "energy": 826.0000000000055,
+    "seconds": 123.31666666666663,
+    "energyPerMember10s": 16.745506149479773,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 12.98121367752396
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.42140829841868
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 15.738343019326905
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 23.841059602649004
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ニコ[Q] → ↻七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 149635.63576125534,
+   "sd": 3906.309181441747,
+   "totalSeconds": 23.67,
+   "score": 2.3505714953271024,
+   "particles": {
+    "total": 161.9,
+    "enemy": 41.9,
+    "energy": 819.8400000000053,
+    "seconds": 121.63333333333335,
+    "energyPerMember10s": 16.850644012058204,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.072074540970092
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 14.512469169635487
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 15.768703754453238
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 24.049328583173455
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "七七[Q] → 八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E C Q E C E]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "ca",
+       "q",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 149167.07310589857,
+   "sd": 3004.398244884263,
+   "totalSeconds": 23.35,
+   "score": 2.2106952123649153,
+   "particles": {
+    "total": 155.3,
+    "enemy": 39.3,
+    "energy": 789.2800000000049,
+    "seconds": 110.78333333333333,
+    "energyPerMember10s": 17.8113434632166,
+    "energyByChar10s": [
+     {
+      "characterId": "10000131-pyro",
+      "energy10s": 13.868512110726613
+     },
+     {
+      "characterId": "10000058-electro",
+      "energy10s": 15.002256657138533
+     },
+     {
+      "characterId": "10000035-cryo",
+      "energy10s": 16.59094328268388
+     },
+     {
+      "characterId": "10000133-cryo",
+      "energy10s": 25.78366180231683
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000131-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000058-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000035-cryo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000133-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "八重神子[Q] → ↻八重神子[E×3] → 七七[E] → ニコ[E] → サンドローネ[C E Q C E C E]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000058-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000058-electro",
+      "a": [
+       "e",
+       "e",
+       "e"
+      ]
+     },
+     {
+      "c": "10000035-cryo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000131-pyro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000133-cryo",
+      "a": [
+       "ca",
+       "e",
+       "q",
+       "ca",
+       "e",
+       "ca",
+       "e"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

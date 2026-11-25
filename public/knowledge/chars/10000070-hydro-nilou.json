@@ -3,45 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8B%E3%82%A3%E3%83%AD%E3%82%A6",
  "archetypes": [
   {
-   "name": "E×3",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "e",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし）"
-  },
-  {
-   "name": "E×4",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "e",
-    "e",
-    "e"
-   ],
-   "evidence": "手組み「月開花」。E×4 で別の効果（天を滌う水環）が出る。×2 にすると 124k に下がる"
-  },
-  {
-   "name": "E→N×3（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ニィロウ 92 件中 3 件。平均 1098.6k（最大 1160.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
-  },
-  {
-   "name": "e→n×2→e",
+   "name": "E→N×2→E（最速水環）",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -50,10 +12,39 @@
     "n",
     "e"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 57 件・平均 94.7k・最大 1115.1k。e n×2 e（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（57 件。分布 0〜6 凸 = 46/5/4/0/0/0/2）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 最速水環展開形"
+  },
+  {
+   "name": "E→N×2→E のあと、もう一度 Q",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 水環展開→後半Q水付着形"
+  },
+  {
+   "name": "E×4（スキル連打水環）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "e",
+    "e",
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 手組み月開花実績(E×4水環)"
   }
  ]
 }

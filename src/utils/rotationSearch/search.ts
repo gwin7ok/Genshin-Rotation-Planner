@@ -14,7 +14,7 @@ import { computeDps } from '../gcsim/dpsCalc';
 import { runGcsimSample } from '../gcsim/gcsimClient';
 import { describe, generateCandidatesAsync, mergeAdjacentStints, neighborsOf, type Candidate, type SearchRole } from './candidates';
 import { evaluateCandidates, evaluateCandidatesAsync, type ScoredCandidate } from './evaluate';
-import { knowledgeSeeds } from './knowledgeSeeds';
+import { canSupporterUseFreeNormal, canSupporterUseTriggerNormal, knowledgeSeeds } from './knowledgeSeeds';
 import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
 
 /**
@@ -120,6 +120,10 @@ export interface SearchResultItem {
   energyWaits?: EnergyWaitInfo[];
   /** 評価したローテーションの周数（1 周あたりの待ち回数 = 回数 ÷ （周数 − 1）） */
   loops?: number;
+  /** 指定周数未満で打ち切られたサンプル情報 */
+  truncated?: { count: number; worst: number };
+  /** 許容された CT 違反数 */
+  ctIssues?: number;
 }
 
 export interface SearchCounts {
@@ -166,7 +170,7 @@ export interface SearchArgs {
   shouldCancel?: () => boolean;
 }
 
-interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; energyWaits?: EnergyWaitInfo[]; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
+interface QuickRun { sc: ScoredCandidate; dps?: number; sd?: number; particles?: ParticleInfo; energyWaits?: EnergyWaitInfo[]; truncated?: { count: number; worst: number }; /** キャラ ID → ダメージの割合（全体に対して） */ share?: Record<string, number>; error?: string }
 
 const yieldToPaint = () => new Promise<void>(resolve => {
   setTimeout(resolve, 0);
@@ -223,15 +227,65 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       });
       return cfg;
     };
+    const charById = new Map(characters.map(c => [c.id, c]));
+    const rankScoreOf = (r: QuickRun, isFinal: boolean): number => {
+      const dpsVal = r.dps ?? 0;
+      let s = isFinal ? Math.max(0, dpsVal - 0.35 * (r.sd ?? 0)) : dpsVal;
+      if (r.truncated) {
+        const ratio = Math.max(0.1, r.truncated.worst / Math.max(1, args.dps?.loops ?? 3));
+        s *= 0.35 * ratio;
+      }
+      if (args.dps?.energy && r.energyWaits) {
+        const totalWaitSec = r.energyWaits.reduce((sum, w) => sum + w.waits * (w.seconds ?? 0), 0);
+        const waitPerLoop = totalWaitSec / Math.max(1, (args.dps.loops ?? 3) - 1);
+        s *= 1 / (1 + Math.max(0, waitPerLoop - 0.3) * 0.12);
+      }
+      s *= 0.97 ** r.sc.ctIssues;
+      if (isFinal) {
+        const loopIdx = r.sc.candidate.loopStartIndex ?? 0;
+        const stints = r.sc.candidate.stints;
+        const loopCounts = new Map<string, number>();
+        const isTriggerParty = canSupporterUseTriggerNormal(characters);
+        for (let si = 0; si < stints.length; si++) {
+          const st = stints[si];
+          const ch = charById.get(st.characterId);
+          const acts = st.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char' && a.type !== 'wait');
+          if (r.sc.candidate.assignment[st.characterId] !== 'attacker' && ch && !canSupporterUseFreeNormal(ch)) {
+            const nCount = acts.filter(a => a.actionTypeId.slice(st.characterId.length + 1).split('@')[0] === 'n').length;
+            if (nCount > 0) {
+              const hasSkillOrBurst = acts.some(a => { const b = a.actionTypeId.slice(st.characterId.length + 1).split('@')[0]; return b === 'e' || b === 'e_hold' || b === 'q'; });
+              if (isTriggerParty && hasSkillOrBurst) {
+                if (nCount >= 2) s *= 0.994 ** (nCount - 1);
+              } else {
+                s *= 0.994 ** nCount;
+              }
+            }
+          }
+          if (acts.length > 0) {
+            const lastBase = acts[acts.length - 1].actionTypeId.slice(st.characterId.length + 1).split('@')[0];
+            if (lastBase === 'dash' || lastBase === 'jump') s *= 0.995;
+          }
+          if (loopIdx > 0 && si < loopIdx && acts.length === 1 && acts[0].actionTypeId.slice(st.characterId.length + 1).split('@')[0] === 'n') {
+            s *= 0.990;
+          }
+          if (si >= loopIdx) {
+            const cnt = (loopCounts.get(st.characterId) ?? 0) + 1;
+            loopCounts.set(st.characterId, cnt);
+            if (cnt >= 3) s *= 0.985;
+          }
+        }
+      }
+      return s;
+    };
     const runOne = async (sc: ScoredCandidate, runs: number, parallel: number, seconds: number, final: boolean): Promise<QuickRun> => {
       const dps = args.dps;
       const cfg = buildCfgFor(sc, seconds, final);
       if (!cfg.runnable) return { sc, error: cfg.warnings.find(w => w.level === 'error')?.message ?? 'NOT_RUNNABLE' };
       try {
-        const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, shouldCancel: cancelled });
+        const out = await computeDps({ config: cfg, runs, parallel, run: runGcsimSample, context: dps ? {} : { battleSeconds: seconds }, ...(dps ? { loops: dps.loops } : {}), shouldCancel: cancelled });
         if (out.status === 'cancelled') return { sc, error: 'CANCELLED' };
         if (out.status !== 'ok') return { sc, error: out.message || out.status };
-        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, share: Object.fromEntries(characters.map((c, i) => [c.id, out.result.byChar[i]?.share ?? 0])), particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) }, energyWaits: characters.map((c, i) => ({ characterId: c.id, waits: out.result.byChar[i]?.energyWaits ?? 0, seconds: out.result.byChar[i]?.energyWaitSeconds ?? null })) };
+        return { sc, dps: out.result.dps.mean, sd: out.result.dps.sd, ...(out.result.truncated ? { truncated: out.result.truncated } : {}), share: Object.fromEntries(characters.map((c, i) => [c.id, out.result.byChar[i]?.share ?? 0])), particles: { total: out.result.particles.total, enemy: out.result.particles.enemy, energy: out.result.particles.energy, seconds: out.result.seconds, energyPerMember10s: out.result.seconds > 0 ? (out.result.particles.energy / Math.max(1, characters.length) / out.result.seconds) * 10 : 0, energyByChar10s: characters.map((c, i) => ({ characterId: c.id, energy10s: out.result.seconds > 0 ? ((out.result.particles.energyByChar[i] ?? 0) / out.result.seconds) * 10 : 0 })) }, energyWaits: characters.map((c, i) => ({ characterId: c.id, waits: out.result.byChar[i]?.energyWaits ?? 0, seconds: out.result.byChar[i]?.energyWaitSeconds ?? null })) };
       } catch (e) {
         return { sc, error: e instanceof Error ? e.message : String(e) };
       }
@@ -311,15 +365,29 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       for (const l of byGroup.values()) if (i < l.length) { seedPool.push(l[i]); any = true; }
       if (!any) break;
     }
-    // 追加の出発点は、必ず先頭に入れる
-    const seedLabels = new Set(seedCands.map(c => c.label));
-    const seedFirst = ev.scored.filter(sc => seedLabels.has(sc.candidate.label));
-    seedPool.unshift(...seedFirst);
-    const poolDedup = [...new Set(seedPool)];
+    // 追加の出発点・知識シードは seedCands の生成順を保ったまま先頭枠に配置し、残りは総当たり候補と交互に混ぜる
+    const scoredByLabel = new Map(ev.scored.map(sc => [sc.candidate.label, sc]));
+    const seedOrdered: ScoredCandidate[] = [];
+    for (const sc0 of seedCands) {
+      const sc = scoredByLabel.get(sc0.label);
+      if (sc) seedOrdered.push(sc);
+    }
+    const keep1Eff = Math.max(1, settings.keep1);
+    const seedCap = Math.floor(keep1Eff * 0.65);
+    const seedHead = seedOrdered.slice(0, seedCap);
+    const seedHeadSet = new Set(seedHead);
+    const restPool = seedPool.filter(sc => !seedHeadSet.has(sc));
+    const seedTail = seedOrdered.slice(seedCap);
+    const mixedTail: ScoredCandidate[] = [];
+    const maxTailLen = Math.max(restPool.length, seedTail.length);
+    for (let i = 0; i < maxTailLen; i++) {
+      if (i < restPool.length) mixedTail.push(restPool[i]);
+      if (i < seedTail.length) mixedTail.push(seedTail[i]);
+    }
+    const poolDedup = [...new Set([...seedHead, ...mixedTail])];
     // 知識辞書の出発点があるときは、総当たりの出発点を減らす（辞書の出発点が、全部そろった形を持つので、広く浅く測る量を減らせる）
     // 辞書の出発点のうち、編成の全員が出場する形だけを数える（一部の人しか辞書にないと、出発点が偏って、予算を絞ると探索が悪化する。胡桃・夜蘭・行秋・鍾離で 36.5k → 13.7k）
-    const dictSeeds = args.knowledge ? seedFirst.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label) && characters.every(c => sc.candidate.stints.some(st => st.characterId === c.id))).length : 0;
-    const keep1Eff = Math.max(1, settings.keep1);
+    const dictSeeds = args.knowledge ? seedOrdered.filter(sc => !(args.extraSeeds ?? []).some(x => describe(characters, x.stints, x.loopStartIndex) === sc.candidate.label) && characters.every(c => sc.candidate.stints.some(st => st.characterId === c.id))).length : 0;
     const r1 = await mapLimit(poolDedup.slice(0, keep1Eff * 3), settings.runs1, 'quick', keep1Eff, exploreSeconds);
     if (cancelled()) return { status: 'cancelled' };
     const ok1 = r1.filter(r => r.dps !== undefined);
@@ -356,7 +424,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     //   その割り当ての中で、良くならない回が 2 回続いたら、その割り当てはそこで終わり
     // 割り当てが多いと、1 つあたりの山登りが薄くなる（月開花: 5〜7 通り）。3 通りを超えた分、予算を増やす（上限 2 倍）
     // 辞書の出発点があるときは、1 次の最良が全体の最良の DICT_GROUP_RATIO 未満の割り当ては、山登りしない（明らかに低い割り当てに、予算を使わない）
-    const bestOfGroup = (g: string): number => Math.max(0, ...r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).map(r => r.dps!));
+    const bestOfGroup = (g: string): number => Math.max(0, ...r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).map(r => rankScoreOf(r, false)));
     const bestAll = Math.max(0, ...[...byGroup.keys()].map(bestOfGroup));
     const climbGroups = [...byGroup.keys()].filter(g => dictSeeds === 0 || args.seedsOnly || bestOfGroup(g) >= bestAll * DICT_GROUP_RATIO);
     const budget = Math.round((settings.refineBudget ?? DEFAULT_REFINE_BUDGET) * Math.min(2, Math.max(1, climbGroups.length / 3)));
@@ -365,16 +433,17 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
       let used = 0;
       args.onProgress?.({ phase: 'refine', done: 0, total: budget });
       const stale = new Map<string, number>();
-      const bestIn = (g: string): QuickRun | undefined => r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!)[0];
+      const bestIn = (g: string): QuickRun | undefined => r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => rankScoreOf(y, false) - rankScoreOf(x, false))[0];
       const groups = climbGroups.filter(g => bestIn(g));
       // ビーム: 最良だけでなく、最良の 92% 以上の上位 BEAM 個のうち、まだ広げていないものを順に広げる（少し下がってから大きく上がる形に届くように。例: 周回の開始位置を変えてから、別のキャラの爆発を足すと、はじめて 1.2 倍になる）
       const beamWidth = Math.max(1, settings.beamWidth ?? BEAM);
       const refineBatch = Math.max(1, settings.refineBatch ?? REFINE_BATCH);
       const expanded = new Set<string>();
       const nextStart = (g: string): QuickRun | undefined => {
-        const all = r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => y.dps! - x.dps!);
+        const all = r1.filter(r => r.dps !== undefined && groupOf(r.sc) === g).sort((x, y) => rankScoreOf(y, false) - rankScoreOf(x, false));
         if (all.length === 0) return undefined;
-        return all.slice(0, beamWidth).find(r => r.dps! >= all[0].dps! * BEAM_RATIO && !expanded.has(r.sc.candidate.label));
+        const topScore = rankScoreOf(all[0], false);
+        return all.slice(0, beamWidth).find(r => rankScoreOf(r, false) >= topScore * BEAM_RATIO && !expanded.has(r.sc.candidate.label));
       };
       for (let round = 0; round < 24 && used < budget && !cancelled(); round++) {
         let progressed = false;
@@ -404,16 +473,17 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
           }
           if (batch.length === 0) { stale.set(g, 99); continue; }
           progressed = true;
-          const before = bestIn(g)!.dps!;
-          const startDps = start.dps!;
+          const before = rankScoreOf(bestIn(g)!, false);
+          const startRank = rankScoreOf(start, false);
           // 先に 1 回だけ回して、明らかに悪い候補（その割り当ての最良の 85% 未満）を落とし、残りだけ決めた回数で測り直す（1 回の値は、ばらつきが大きいので、落とす基準は緩め）
           const first = await mapLimit(batch, 1, 'refine', batch.length, exploreSeconds, { base: used, total: budget });
-          const keepSc = first.filter(r => r.dps !== undefined && r.dps >= startDps * REFINE_PREFILTER).map(r => r.sc);
+          const keepSc = first.filter(r => r.dps !== undefined && rankScoreOf(r, false) >= startRank * REFINE_PREFILTER).map(r => r.sc);
           const rr = settings.runs1 <= 1 ? first : await mapLimit(keepSc, settings.runs1, 'refine', keepSc.length, exploreSeconds, { base: used, total: budget, fixed: batch.length, sub: true });
           used += batch.length;
           args.onProgress?.({ phase: 'refine', done: Math.min(used, budget), total: budget });
           r1.push(...rr);
-          stale.set(g, (bestIn(g)?.dps ?? 0) > before * 1.003 ? 0 : (stale.get(g) ?? 0) + 1);
+          const afterBest = bestIn(g);
+          stale.set(g, (afterBest ? rankScoreOf(afterBest, false) : 0) > before * 1.003 ? 0 : (stale.get(g) ?? 0) + 1);
         }
         if (!progressed) break;
       }
@@ -469,7 +539,7 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
         return cfg.runnable ? cfg.config.replace(/^(options\b[^\n;]*?\bduration=)\d+/m, '$1*') : undefined;
       } catch { return undefined; }
     };
-    let stage2 = [...okAll].sort((x, y) => y.dps! - x.dps!).filter(r => {
+    let stage2 = [...okAll].sort((x, y) => rankScoreOf(y, false) - rankScoreOf(x, false)).filter(r => {
       const k = mergedKey(r.sc);
       if (seenKeys.has(k)) return false;
       seenKeys.add(k);
@@ -481,12 +551,84 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     const ownRun = args.keepFirstSeed ? okAll.find(r => r.sc.candidate.id === 'seed0') : undefined;
     const ownKey = ownRun ? mergedKey(ownRun.sc) : undefined;
     if (ownRun && !stage2.some(x => mergedKey(x) === ownKey)) stage2 = [...stage2, { ...ownRun.sc, candidate: mergeAdjacentStints(characters, ownRun.sc.candidate) }];
+    // 最終検証前のクリーンアップパス（オッカムの剃刀）: 上位 8 件からゴミ手（末尾 dash/jump、サポーター不要 N、先頭単独 N）を削った版を検証に追加
+    {
+      const cleanCands: Candidate[] = [];
+      const actBase = (cid: string, actId: string) => actId.slice(cid.length + 1).split('@')[0];
+      const pushClean = (base: Candidate, stints: Stint[], loopIdx: number) => {
+        if (stints.length === 0 || stints.some(s => s.actions.length === 0)) return;
+        const fixed = mergeAdjacentStints(characters, { ...base, id: 'clean', stints, loopStartIndex: Math.min(loopIdx, stints.length - 1) });
+        fixed.label = describe(characters, fixed.stints, fixed.loopStartIndex);
+        cleanCands.push(fixed);
+      };
+      for (const sc of stage2.slice(0, 8)) {
+        const base = sc.candidate;
+        const loop0 = base.loopStartIndex ?? 0;
+        const stripTailDash = (s: Stint): Stint => {
+          const acts = [...s.actions];
+          while (acts.length > 1) {
+            const b = actBase(s.characterId, acts[acts.length - 1].actionTypeId);
+            if (b === 'dash' || b === 'jump') acts.pop(); else break;
+          }
+          return { ...s, actions: acts };
+        };
+        // 1. Stint 末尾の dash/jump を 1 箇所ずつ / 全部削る
+        base.stints.forEach((s, si) => {
+          const ns = stripTailDash(s);
+          if (ns.actions.length !== s.actions.length) {
+            pushClean(base, base.stints.map((x, idx) => (idx === si ? ns : x)), loop0);
+          }
+        });
+        const allDashStripped = base.stints.map(stripTailDash);
+        if (allDashStripped.some((s, i) => s.actions.length !== base.stints[i].actions.length)) {
+          pushClean(base, allDashStripped, loop0);
+        }
+        // 2. 非アタッカーかつ !canSupporterUseNormal の Stint から n を削る（1 キャラずつ / 全員分）
+        const stripN = (s: Stint): Stint => {
+          const ch = charById.get(s.characterId);
+          if (base.assignment[s.characterId] === 'attacker' || !ch || canSupporterUseFreeNormal(ch)) return s;
+          const acts = s.actions.filter(a => actBase(s.characterId, a.actionTypeId) !== 'n');
+          return acts.length > 0 ? { ...s, actions: acts } : s;
+        };
+        const supIds = new Set(base.stints.map(s => s.characterId).filter(id => base.assignment[id] !== 'attacker'));
+        for (const cid of supIds) {
+          const ns = base.stints.map(s => (s.characterId === cid ? stripN(s) : s));
+          if (ns.some((s, i) => s.actions.length !== base.stints[i].actions.length)) pushClean(base, ns, loop0);
+        }
+        const allNStripped = base.stints.map(stripN);
+        if (allNStripped.some((s, i) => s.actions.length !== base.stints[i].actions.length)) {
+          pushClean(base, allNStripped, loop0);
+        }
+        // 3. loopStartIndex === 1 で先頭 Stint が n 1 手のみの場合に先頭を削除
+        if (loop0 === 1 && base.stints.length > 1) {
+          const first = base.stints[0];
+          const real0 = first.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char' && a.type !== 'wait');
+          if (real0.length === 1 && actBase(first.characterId, real0[0].actionTypeId) === 'n') {
+            pushClean(base, base.stints.slice(1), 0);
+          }
+        }
+      }
+      if (cleanCands.length > 0) {
+        const evClean = evaluateCandidates(characters, cleanCands, { switchDelay: args.switchDelay, defHalt: args.defHalt, maxCtIssues: TOLERATED_CT_ISSUES });
+        const stageKeys = new Set(stage2.map(mergedKey));
+        const stageScripts = new Set(stage2.map(scriptKey).filter((x): x is string => x !== undefined));
+        for (const sc of evClean.scored) {
+          const k = mergedKey(sc);
+          if (stageKeys.has(k)) continue;
+          const sk = scriptKey(sc);
+          if (sk !== undefined && stageScripts.has(sk)) continue;
+          stageKeys.add(k);
+          if (sk !== undefined) stageScripts.add(sk);
+          stage2.push(sc);
+        }
+      }
+    }
     const r2 = (await mapLimit(stage2, settings.runs2, 'verify')).filter(r => r.dps !== undefined);
     if (cancelled()) return { status: 'cancelled' };
     if (r2.length === 0) return { status: 'error', message: 'ALL_FAILED' };
     const results: SearchResultItem[] = r2
-      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}), ...(r.energyWaits && args.dps?.energy ? { energyWaits: r.energyWaits, loops: args.dps.loops } : {}), ...(ownKey !== undefined && mergedKey(r.sc) === ownKey ? { isCurrent: true } : {}) }))
-      .sort((x, y) => y.dps - x.dps);
+      .sort((x, y) => rankScoreOf(y, true) - rankScoreOf(x, true))
+      .map(r => ({ candidate: r.sc.candidate, dps: r.dps!, sd: r.sd!, totalSeconds: r.sc.totalSeconds, score: r.sc.score, ...(r.particles ? { particles: r.particles } : {}), ...(r.energyWaits && args.dps?.energy ? { energyWaits: r.energyWaits, loops: args.dps.loops } : {}), ...(r.truncated ? { truncated: r.truncated } : {}), ...(r.sc.ctIssues > 0 ? { ctIssues: r.sc.ctIssues } : {}), ...(ownKey !== undefined && mergedKey(r.sc) === ownKey ? { isCurrent: true } : {}) }));
     return {
       status: 'ok', results, elapsedMs: Date.now() - t0, spearman, bestQuickScoreRank, groupBest: [...groupBestMap.values()],
       counts: { candidates: candidates.length, rejected: ev.rejected, rejectedBy: ev.rejectedBy, scored: ev.scored.length, quick: r1.length, quickOk: okAll.length, quickFailed },

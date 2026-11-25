@@ -20,18 +20,24 @@ export function chargeViolation(characters: CharacterConfig[], stints: Candidate
   const sequence = [...stints.slice(0, loopStartIndex), ...stints.slice(loopStartIndex), ...stints.slice(loopStartIndex)];
   let prev = 'none';
   let prevCharId: string | undefined;
+  let inMelee = false;
   for (const stint of sequence) {
     const c = characters.find(x => x.id === stint.characterId);
     if (!c) continue;
-    if (prevCharId !== undefined && prevCharId !== stint.characterId) prev = 'swap';
+    if (prevCharId !== undefined && prevCharId !== stint.characterId) { prev = 'swap'; inMelee = false; }
     prevCharId = stint.characterId;
-    const needs = CHARGE_REQUIRES_ATTACK.has(c.source?.gcsimKey ?? '');
+    const gcsimKey = c.source?.gcsimKey ?? '';
+    const needs = CHARGE_REQUIRES_ATTACK.has(gcsimKey);
     for (const act of stint.actions) {
       if (act.type === 'swap' || act.actionTypeId === 'action_switch_char' || act.type === 'wait') continue;
       const command = act.gcsimCommand ?? mapAction(act.actionTypeId, c.weaponType).command;
       if (!command) continue;
-      const base = command.replace(/\[.*$/, '');
-      if (base === 'charge' && needs && prev !== 'attack' && !(c.source?.gcsimKey === 'iansan' && prev === 'skill')) return true;
+      let base = command.replace(/\[.*$/, '');
+      if (gcsimKey === 'tartaglia') {
+        if (base === 'skill') inMelee = !inMelee;
+        else if (act.actionTypeId === '10000033-hydro_ca') base = inMelee ? 'charge' : 'aim';
+      }
+      if (base === 'charge' && needs && prev !== 'attack' && !(gcsimKey === 'iansan' && prev === 'skill')) return true;
       prev = base;
     }
   }
@@ -44,7 +50,7 @@ const MIN_LOOP_RATIO = 0.5;
 export interface ScoreOptions {
   switchDelay?: number;
   defHalt?: boolean;
-  /** 重なりの重み（既定 0.25） */
+  /** 重なりの重み（既定 0.35） */
   overlapWeight?: number;
   /**
    * 許す CT 違反（スキル・爆発の CT 待ち）の数（既定 0 = 1 件でもあれば捨てる）。
@@ -81,7 +87,7 @@ export interface EvaluateResult {
 const overlap = (a0: number, a1: number, b0: number, b1: number): number => Math.max(0, Math.min(a1, b1) - Math.max(a0, b0));
 
 /** 1 候補の簡易スコア（計算結果から） */
-export function simpleScore(result: CalculatedRotation, attackerIds: Set<string>, overlapWeight: number): { attackerFraction: number; overlapPerSecond: number; score: number } {
+export function simpleScore(result: CalculatedRotation, attackerIds: Set<string>, overlapWeight: number, totalMembersOpt?: number): { attackerFraction: number; overlapPerSecond: number; score: number } {
   const windows = result.calculatedStints.filter(s => attackerIds.has(s.characterId)).map(s => [s.startTime ?? 0, s.endTime ?? 0] as const);
   const attackerTime = windows.reduce((sum, [a, b]) => sum + Math.max(0, b - a), 0);
   const total = Math.max(0.01, result.totalDuration);
@@ -96,7 +102,31 @@ export function simpleScore(result: CalculatedRotation, attackerIds: Set<string>
   }
   const overlapPerSecond = attackerTime > 0 ? overlapSeconds / attackerTime : 0;
   const attackerFraction = attackerTime / total;
-  return { attackerFraction, overlapPerSecond, score: attackerFraction * (1 + overlapWeight * overlapPerSecond) };
+
+  // チーム参加率（スキル・爆発を使ったメンバー割合）と爆発カバー率
+  const activeMembers = new Set<string>();
+  const burstMembers = new Set<string>();
+  for (const s of result.calculatedStints) {
+    for (const a of s.actions) {
+      if (a.type === 'skill' || a.type === 'skill_hold' || a.type === 'burst') activeMembers.add(s.characterId);
+      if (a.type === 'burst') burstMembers.add(s.characterId);
+    }
+  }
+  const totalMembers = Math.max(1, totalMembersOpt ?? new Set(result.calculatedStints.map(s => s.characterId)).size);
+  const teamParticipation = 0.4 + 0.6 * (activeMembers.size / totalMembers);
+  const burstCoverage = 0.65 + 0.35 * (burstMembers.size / totalMembers);
+
+  // アタッカー表時間の適正カーブ（0.30〜0.65 を最適帯とし、0.72 超のサポート放置型を減点）
+  const atkBase = Math.min(1, attackerFraction / 0.45);
+  const atkPenalty = attackerFraction > 0.72 ? Math.max(0.55, 1 - (attackerFraction - 0.72) * 1.6) : 1;
+
+  // ローテ長の適正カーブ（14〜24s を 1.0 とする）
+  const dur = result.loopPeriod > 0 ? result.loopPeriod : total;
+  const durCurve = dur < 14 ? Math.max(0.5, dur / 14) : dur > 24 ? Math.max(0.65, 1 - (dur - 24) * 0.03) : 1;
+
+  const weight = overlapWeight || 0.35;
+  const score = teamParticipation * burstCoverage * atkBase * atkPenalty * durCurve * (1 + weight * overlapPerSecond);
+  return { attackerFraction, overlapPerSecond, score };
 }
 
 function evaluateOne(
@@ -132,17 +162,6 @@ function evaluateOne(
   if (result.calculatedStints.some(s => s.actions.some(a => a.gcsimCommand === 'skill[recast=1]' || a.actionTypeId === '10000031-electro_e_recast'))) {
     return { rejectedKey: '設置物の位置直しのみのスキル再発動' };
   }
-  // タルタリヤの近接モード（E）中は弓の狙い撃ち（ca / aim）が実行できない
-  for (const s of result.calculatedStints) {
-    if (s.characterId !== '10000033-hydro') continue;
-    let inMelee = false;
-    for (const a of s.actions) {
-      if (a.actionTypeId === '10000033-hydro_e') inMelee = !inMelee;
-      else if (inMelee && a.actionTypeId === '10000033-hydro_ca') {
-        return { rejectedKey: 'タルタリヤ: 近接モード中の狙い撃ち' };
-      }
-    }
-  }
   // 放浪者の低空落下（lp）は、浮遊モード終了（同出場内の 2 回目の E）の直後、またはジャンプ直後のみ
   for (const s of result.calculatedStints) {
     if (s.characterId !== '10000075-anemo') continue;
@@ -163,13 +182,13 @@ function evaluateOne(
     return { rejectedKey: bad[0].title };
   }
   const attackerIds = new Set(Object.entries(candidate.assignment).filter(([, r]) => r === 'attacker').map(([id]) => id));
-  const s = simpleScore(result, attackerIds, weight);
+  const s = simpleScore(result, attackerIds, weight, characters.length);
   return { scored: { candidate, totalSeconds: result.totalDuration, ...s, score: s.score * 0.93 ** bad.length, ctIssues: bad.length } };
 }
 
 /** 候補を、アプリの計算に通し、CT 違反などがあるものを捨て、簡易スコアをつける（同期版） */
 export function evaluateCandidates(characters: CharacterConfig[], candidates: Candidate[], options: ScoreOptions = {}): EvaluateResult {
-  const weight = options.overlapWeight ?? 0.25;
+  const weight = options.overlapWeight ?? 0.35;
   const scored: ScoredCandidate[] = [];
   const rejectedBy: Record<string, number> = {};
   let rejected = 0;
@@ -188,7 +207,7 @@ export function evaluateCandidates(characters: CharacterConfig[], candidates: Ca
 
 /** 候補を評価する非同期版（一定件数ごとにメインスレッドを譲り、UI のホバーや描画を滑らかに保つ） */
 export async function evaluateCandidatesAsync(characters: CharacterConfig[], candidates: Candidate[], options: ScoreOptions = {}): Promise<EvaluateResult> {
-  const weight = options.overlapWeight ?? 0.25;
+  const weight = options.overlapWeight ?? 0.35;
   const chunkSize = options.yieldChunkSize ?? 150;
   const scored: ScoredCandidate[] = [];
   const rejectedBy: Record<string, number> = {};

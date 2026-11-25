@@ -4,74 +4,24 @@
  "archetypes": [
   {
    "name": "E→重撃→Q",
-   "role": "subAttacker",
-   "slot": 20,
+   "role": "supporter",
+   "slot": 30,
    "use": [
     "e",
     "ca",
     "q"
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→少し待つ→爆発（裟羅本人にバフを乗せる）。スキル→重撃→爆発で、天狗呪雷の効果を自身で受ける（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋王道プローブ42.0k（粒子供給＋バフ）"
   },
   {
-   "name": "e q の出場",
+   "name": "E→Q（短縮バフ）",
    "role": "supporter",
    "slot": 30,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "自動編成（九条裟羅 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 42.0k → 42.6k"
-  },
-  {
-   "name": "E→CA のあと、もう一度 Q、さらに E→CA",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "ca"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "q"
-     ]
-    },
-    {
-     "slot": 35,
-     "use": [
-      "e",
-      "ca"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 九条裟羅 147 件中 5 件。平均 53.9k（最大 83.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→CA→N のあと、もう一度 Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "ca",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "q"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 九条裟羅 147 件中 15 件。平均 53.6k（最大 64.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/15）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: 2凸以上や時間短縮用のE→Q形"
   },
   {
    "name": "E→CA のあと、もう一度 Q",
@@ -89,18 +39,7 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 九条裟羅 147 件中 23 件。平均 60.8k（最大 157.4k）（探索の比較なし）"
-  },
-  {
-   "name": "e→ca→n",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "ca",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 20 件・平均 56.1k・最大 87.2k。e ca n（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(24件/17.0%, 最多): 分割バフ型"
   }
  ]
 }

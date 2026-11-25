@@ -1,0 +1,1441 @@
+{
+ "party": [
+  {
+   "id": "10000052-electro",
+   "name": "雷電将軍",
+   "roles": [
+    "attacker",
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000056-electro",
+   "name": "九条裟羅",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000047-anemo",
+   "name": "楓原万葉",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000032-pyro",
+   "name": "ベネット",
+   "roles": [
+    "supporter"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 313810,
+ "spearman": -0.0967441694454092,
+ "bestQuickScoreRank": 3981,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 12015,
+  "rejectedBy": {
+   "雷電将軍: 落下攻撃の前提": 4931,
+   "重撃の直前が通常攻撃でない": 3681,
+   "九条裟羅: 元素爆発CT違反": 9,
+   "雷電将軍: スキルCT違反": 3314,
+   "楓原万葉: 元素爆発CT違反": 23,
+   "ベネット: 元素爆発CT違反": 19,
+   "ベネット: スキルCT違反": 9,
+   "九条裟羅: スキルCT違反": 25,
+   "雷電将軍: 元素爆発CT違反": 4
+  },
+  "scored": 8285,
+  "quick": 2327,
+  "quickOk": 2300,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 41271.35000203573,
+   "sd": 1608.4481403751024,
+   "totalSeconds": 22.82,
+   "score": 0.4964723926380368,
+   "particles": {
+    "total": 124.8,
+    "enemy": 37.2,
+    "energy": 708.0800000000038,
+    "seconds": 103.79999999999998,
+    "energyPerMember10s": 17.053949903660982,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.069364161849723
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.28709055876685
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.109826589595368
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.749518304431605
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 41062.748165277466,
+   "sd": 1625.796439706824,
+   "totalSeconds": 22.77,
+   "score": 0.5026789635485286,
+   "particles": {
+    "total": 122.5,
+    "enemy": 37.2,
+    "energy": 695.2400000000039,
+    "seconds": 103.78333333333333,
+    "energyPerMember10s": 16.7473903966598,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 23.682029869921312
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 20.671912638509696
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.025212783041587
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.610406295166218
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "九条裟羅[E C] → ベネット[N Q N] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "n",
+       "q",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40508.07726519778,
+   "sd": 1099.9374362355845,
+   "totalSeconds": 24.77,
+   "score": 0.4601332256762212,
+   "particles": {
+    "total": 132.3,
+    "enemy": 39,
+    "energy": 745.3200000000039,
+    "seconds": 105.88333333333335,
+    "energyPerMember10s": 17.597670391940905,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.742326459940195
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.803242562568848
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.76798362978118
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.077128915473008
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C D N C N×3]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40486.534001477616,
+   "sd": 1535.6678464661723,
+   "totalSeconds": 24.93,
+   "score": 0.46387886081026874,
+   "particles": {
+    "total": 132.3,
+    "enemy": 38.9,
+    "energy": 745.680000000004,
+    "seconds": 106.63333333333335,
+    "energyPerMember10s": 17.482338230697184,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.596436386370748
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.659268521412926
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.635511097217856
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.038136917786812
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C D N×2 C N×2]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "dash",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40478.57977105166,
+   "sd": 999.4424750408001,
+   "totalSeconds": 22.35,
+   "score": 0.5121252796420581,
+   "particles": {
+    "total": 124.8,
+    "enemy": 36.8,
+    "energy": 709.2000000000037,
+    "seconds": 103.36666666666665,
+    "energyPerMember10s": 17.152531441470586,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.456626894550155
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.23702031602708
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.199613028055456
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.71686552724928
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "九条裟羅[E C] → ベネット[Q N] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40405.053784996315,
+   "sd": 938.7607318593035,
+   "totalSeconds": 24.7,
+   "score": 0.45868421052631586,
+   "particles": {
+    "total": 131.4,
+    "enemy": 37.4,
+    "energy": 742.5600000000039,
+    "seconds": 105.68333333333337,
+    "energyPerMember10s": 17.56568364611269,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.79861220627661
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.952373442674634
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.572622614729513
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.939126320769594
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 40111.08152795028,
+   "sd": 1371.219432356396,
+   "totalSeconds": 24.77,
+   "score": 0.4600928542591846,
+   "particles": {
+    "total": 131.6,
+    "enemy": 38.4,
+    "energy": 741.600000000004,
+    "seconds": 105.88333333333335,
+    "energyPerMember10s": 17.509837871871646,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.64599401857391
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.66913269321579
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.716984101999032
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.00724067369747
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C D N×5]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 39794.12515755198,
+   "sd": 1053.7316216798592,
+   "totalSeconds": 24.83,
+   "score": 0.46163914619412005,
+   "particles": {
+    "total": 132.6,
+    "enemy": 38.2,
+    "energy": 747.7600000000037,
+    "seconds": 106.21666666666667,
+    "energyPerMember10s": 17.59987447042218,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.85862231288248
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.781892358386933
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.741722893456746
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.017260316962188
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E D Q N×3 C N×5]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 39781.820391682486,
+   "sd": 1488.0457637860366,
+   "totalSeconds": 24.77,
+   "score": 0.46009285425918456,
+   "particles": {
+    "total": 144.1,
+    "enemy": 40.7,
+    "energy": 792.0800000000037,
+    "seconds": 112.31666666666663,
+    "energyPerMember10s": 17.630508977593202,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 22.041252411336984
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.047633179997028
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 17.201365187713307
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 10.231785131325129
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C D N×5] → 楓原万葉[tE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 39600.52390742671,
+   "sd": 1475.813975172607,
+   "totalSeconds": 26.33,
+   "score": 0.4302886441321686,
+   "particles": {
+    "total": 132.7,
+    "enemy": 38.3,
+    "energy": 750.6400000000039,
+    "seconds": 107.31666666666663,
+    "energyPerMember10s": 17.48656623699342,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.287001087125347
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.547445255474447
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.148780866594166
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.963037738779319
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[hE] → ↻九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e_hold"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 39456.856361628496,
+   "sd": 2479.8203131500472,
+   "totalSeconds": 24.73,
+   "score": 0.46738778811160536,
+   "particles": {
+    "total": 138.5,
+    "enemy": 37.6,
+    "energy": 770.4000000000035,
+    "seconds": 105.88333333333335,
+    "energyPerMember10s": 18.189831575633637,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.3645521800724
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.376357626318256
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.949315284117711
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 13.069101212025798
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE] → ↻九条裟羅[E C] → ベネット[tE Q] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[E Q N×3 C N×5]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 39404.28610386697,
+   "sd": 1445.8670772132887,
+   "totalSeconds": 22.55,
+   "score": 0.4905764966740575,
+   "particles": {
+    "total": 126.8,
+    "enemy": 37,
+    "energy": 720.1600000000038,
+    "seconds": 103.53333333333333,
+    "energyPerMember10s": 17.389568576947937,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 24.575660012878302
+     },
+     {
+      "characterId": "10000056-electro",
+      "energy10s": 21.8325820991629
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.298132646490652
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 9.851899549259501
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000056-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "九条裟羅[E C] → ベネット[Q N×2] → 九条裟羅[Q] → 楓原万葉[tE Q] → 九条裟羅[E C] → 雷電将軍[Q N×2 E N C N×5]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000056-electro",
+      "a": [
+       "e",
+       "ca"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -3,7 +3,26 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B5%E3%83%B3%E3%83%89%E3%83%AD%E3%83%BC%E3%83%8D",
  "archetypes": [
   {
-   "name": "重撃→Eの繰り返し（爆発なし）",
+   "name": "重撃→E→Q のあと重撃→E 連打",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "ca",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "ca",
+    "e"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 基本Q込み重撃→Eループ"
+  },
+  {
+   "name": "重撃→E の繰り返し（爆発なし）",
    "role": "attacker",
    "slot": 40,
    "use": [],
@@ -16,10 +35,10 @@
     4,
     5
    ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発は、打てるときだけでよい。3 回程度で交代（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: 爆発なし重撃→Eループ"
   },
   {
-   "name": "重撃→E→重撃→E→重撃→Q",
+   "name": "重撃→E×2→重撃→Q のあと重撃→E",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -38,30 +57,10 @@
     1,
     2
    ],
-   "evidence": "Wiki 本文のコンボの記述: 基本のコンボ。重撃のゲージ最大を、スキルでリセットしながら重撃を打ち続ける（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: Wiki基本コンボ"
   },
   {
-   "name": "E と重撃を交互に（Q を挟む）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [],
-   "fill": [
-    "e",
-    "ca",
-    "e",
-    "q",
-    "ca",
-    "e",
-    "ca",
-    "e"
-   ],
-   "lead": [
-    "e"
-   ],
-   "evidence": "手組み「星電導サンドローネ」（E と重撃を交互に撃ち、途中で Q）"
-  },
-  {
-   "name": "E と重撃を交互に",
+   "name": "E→重撃 の繰り返し",
    "role": "attacker",
    "slot": 40,
    "use": [],
@@ -73,7 +72,7 @@
     3,
     4
    ],
-   "evidence": "探索の上位（サンドローネ[C E C E C E Q]）"
+   "evidence": "Phase 3-1精鋭辞書: E先行交互ループ"
   }
  ]
 }

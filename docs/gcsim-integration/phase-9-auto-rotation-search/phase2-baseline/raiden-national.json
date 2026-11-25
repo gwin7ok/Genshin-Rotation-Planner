@@ -1,0 +1,2275 @@
+{
+ "party": [
+  {
+   "id": "10000052-electro",
+   "name": "雷電将軍",
+   "roles": [
+    "attacker",
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000025-hydro",
+   "name": "行秋",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000032-pyro",
+   "name": "ベネット",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000023-pyro",
+   "name": "香菱",
+   "roles": [
+    "subAttacker"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 175887,
+ "spearman": 0.12427637151364479,
+ "bestQuickScoreRank": 381,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 14870,
+  "rejectedBy": {
+   "ベネット: スキルCT違反": 91,
+   "雷電将軍: スキルCT違反": 3421,
+   "ベネット: 元素爆発CT違反": 287,
+   "行秋: スキルCT違反": 288,
+   "行秋: 元素爆発CT違反": 132,
+   "重撃の直前が通常攻撃でない": 4311,
+   "雷電将軍: 落下攻撃の前提": 1430,
+   "雷電将軍: 元素爆発CT違反": 135,
+   "香菱: 落下攻撃の前提": 1385,
+   "香菱: スキルCT違反": 3354,
+   "香菱: 元素爆発CT違反": 36
+  },
+  "scored": 5430,
+  "quick": 576,
+  "quickOk": 574,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 49496.28696808672,
+   "sd": 1060.9942445942893,
+   "totalSeconds": 23,
+   "score": 1.7261421635752519,
+   "particles": {
+    "total": 149.5,
+    "enemy": 33.4,
+    "energy": 765.9600000000042,
+    "seconds": 109.70833333333333,
+    "energyPerMember10s": 17.454462590201388,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 21.462362324344856
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.881959741739422
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.825598176984402
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.647930117736394
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 2.9166666666666665
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×15]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48923.907396730036,
+   "sd": 973.3456564879597,
+   "totalSeconds": 22.23,
+   "score": 1.7624967320261435,
+   "particles": {
+    "total": 145.9,
+    "enemy": 35.9,
+    "energy": 751.0800000000042,
+    "seconds": 109.35,
+    "energyPerMember10s": 17.171467764060456,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.656607224508456
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.876543209876502
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.637860082304494
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.514860539551863
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.3,
+     "seconds": 1.4444444444444444
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[Q N×4 E N×4 D N×4 D N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48935.77611531003,
+   "sd": 1273.339375398328,
+   "totalSeconds": 21.38,
+   "score": 1.7534150326797386,
+   "particles": {
+    "total": 144.1,
+    "enemy": 34.9,
+    "energy": 744.5200000000045,
+    "seconds": 107.13500000000002,
+    "energyPerMember10s": 17.373407383208203,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.792458113594993
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.88397815839824
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.729080132543018
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.088113128296044
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.5,
+     "seconds": 1.8033333333333335
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 1.4,
+     "seconds": 0.16666666666666669
+    }
+   ],
+   "loops": 5,
+   "label": "行秋[Q N E D N×2] → ベネット[Q tE] → 香菱[Q E D] → 雷電将軍[Q N×4 E N×4 D N×4 D N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48525.45508705685,
+   "sd": 1602.2972561955155,
+   "totalSeconds": 21.88,
+   "score": 1.7786795048143054,
+   "particles": {
+    "total": 144.6,
+    "enemy": 34.7,
+    "energy": 742.6800000000044,
+    "seconds": 109.325,
+    "energyPerMember10s": 16.983306654470717,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.355819803338665
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.780013720557932
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.423736565286957
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.373656528698803
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.4,
+     "seconds": 1.4375
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[Q N×4 E N×4 D N×4 D N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48452.858639054095,
+   "sd": 846.9886483792131,
+   "totalSeconds": 22.02,
+   "score": 1.7734668169462307,
+   "particles": {
+    "total": 144.2,
+    "enemy": 33,
+    "energy": 739.1200000000042,
+    "seconds": 107.18833333333332,
+    "energyPerMember10s": 17.238816413477934,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.621647256386737
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.97956867196364
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.789031766516853
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.56501795904402
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.3,
+     "seconds": 1.5611111111111111
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×14]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48192.461309604245,
+   "sd": 817.1638560595502,
+   "totalSeconds": 23.8,
+   "score": 1.6916992766512509,
+   "particles": {
+    "total": 147.8,
+    "enemy": 35.7,
+    "energy": 758.3600000000044,
+    "seconds": 114.77666666666667,
+    "energyPerMember10s": 16.518165713124134,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 19.807161734382714
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.09929428164838
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.14419307060085
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.022013765864113
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 1.1
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[Q N×4 E N×14]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47767.96050983084,
+   "sd": 539.4817236009179,
+   "totalSeconds": 22.65,
+   "score": 1.741476953782823,
+   "particles": {
+    "total": 146.2,
+    "enemy": 33.1,
+    "energy": 750.2000000000041,
+    "seconds": 109.56166666666668,
+    "energyPerMember10s": 17.118213487077384,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.629478071709993
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.679541202062726
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.682492355903037
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.48134231863331
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.3,
+     "seconds": 0.9833333333333334
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[E Q N×15]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47865.28148956988,
+   "sd": 1028.500670832292,
+   "totalSeconds": 25.77,
+   "score": 1.5642288036037502,
+   "particles": {
+    "total": 155.9,
+    "enemy": 35.9,
+    "energy": 794.4400000000046,
+    "seconds": 118.09499999999998,
+    "energyPerMember10s": 16.817816164952045,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.895042127101068
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.18616368178158
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.15051441635968
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.039544434565364
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 2.2333333333333334
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "雷電将軍[E] → ↻ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×18]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47537.75706279925,
+   "sd": 1363.2339631425968,
+   "totalSeconds": 23.45,
+   "score": 1.7062377472821244,
+   "particles": {
+    "total": 141.1,
+    "enemy": 34.9,
+    "energy": 727.5600000000039,
+    "seconds": 115.575,
+    "energyPerMember10s": 15.737832576249273,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 18.260004326195112
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 16.56067488643734
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.636383300886845
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 13.494267791477368
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.4,
+     "seconds": 2.6875
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[Q N×4 E N×14]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47572.212212158796,
+   "sd": 1003.576026928169,
+   "totalSeconds": 24.08,
+   "score": 1.6762518817423755,
+   "particles": {
+    "total": 149.7,
+    "enemy": 35,
+    "energy": 767.4800000000047,
+    "seconds": 114.41666666666667,
+    "energyPerMember10s": 16.76941005098335,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.663073561544067
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.219519300801124
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.121922796795308
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.073124544792396
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×17]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47473.27771676964,
+   "sd": 806.2772385488006,
+   "totalSeconds": 23.68,
+   "score": 1.696489552238806,
+   "particles": {
+    "total": 145.9,
+    "enemy": 34.1,
+    "energy": 749.8400000000041,
+    "seconds": 112.63666666666668,
+    "energyPerMember10s": 16.64289307803862,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.27048622414252
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.2909946435441
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.003995146636647
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.006096297830751
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.2,
+     "seconds": 1.0916666666666666
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×16]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 48139.317365460054,
+   "sd": 1981.9064355893752,
+   "totalSeconds": 21.35,
+   "score": 1.755043558000917,
+   "particles": {
+    "total": 138.1,
+    "enemy": 34.6,
+    "energy": 715.2800000000041,
+    "seconds": 107.68000000000002,
+    "energyPerMember10s": 16.60661218424972,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 19.16604754829123
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.45728083209506
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.236627043090607
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.566493313521516
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.8,
+     "seconds": 1.86875
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 1.5,
+     "seconds": 0.16666666666666666
+    }
+   ],
+   "loops": 5,
+   "label": "行秋[Q N E D N×2] → ベネット[Q tE] → 香菱[Q E] → 雷電将軍[Q N×4 E N×4 D N×4 D N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47062.76566471667,
+   "sd": 1248.4040205716951,
+   "totalSeconds": 21.67,
+   "score": 1.789906976744186,
+   "particles": {
+    "total": 141.9,
+    "enemy": 32.3,
+    "energy": 727.280000000004,
+    "seconds": 106.82166666666664,
+    "energyPerMember10s": 17.020891517014434,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.228106033420193
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.902735088075108
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.539918555848509
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.412806390713467
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 0.5166666666666667
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[E Q N×14]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 47090.41976012981,
+   "sd": 1204.2865451962793,
+   "totalSeconds": 24.03,
+   "score": 1.6807199076023391,
+   "particles": {
+    "total": 151.9,
+    "enemy": 36,
+    "energy": 778.8000000000046,
+    "seconds": 115.505,
+    "energyPerMember10s": 16.856413142288314,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.925501060560148
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.23734903250938
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.159516904030097
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.103285572053126
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 1.7
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×13 E N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 46053.25100690525,
+   "sd": 1119.710335169386,
+   "totalSeconds": 21.84,
+   "score": 2.0655068693602145,
+   "particles": {
+    "total": 141.9,
+    "enemy": 34.1,
+    "energy": 733.4400000000041,
+    "seconds": 107.70666666666666,
+    "energyPerMember10s": 17.024015845506412,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.27729636048527
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.76306016340675
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.616489230007398
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.439217628125746
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.5,
+     "seconds": 1.7533333333333334
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 0.13333333333333333
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N E D N×2] → 香菱[E Q] → 雷電将軍[Q N×4 E N×4 D N×4 D N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n",
+       "dash",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 46216.75976302868,
+   "sd": 1105.906735298617,
+   "totalSeconds": 24.03,
+   "score": 1.6807199076023391,
+   "particles": {
+    "total": 152.8,
+    "enemy": 35.6,
+    "energy": 782.4400000000046,
+    "seconds": 115.52666666666669,
+    "energyPerMember10s": 16.932021466905283,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 21.013330255640827
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.29124588839513
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.286513936176323
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.136995787408358
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 1.4333333333333333
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E Q N×14 E N×3]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 46203.444471918614,
+   "sd": 1102.7080776886244,
+   "totalSeconds": 24.7,
+   "score": 1.621868951930654,
+   "particles": {
+    "total": 151.9,
+    "enemy": 36,
+    "energy": 778.6800000000045,
+    "seconds": 117.49666666666664,
+    "energyPerMember10s": 16.568129592328958,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.441430962580505
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 16.97580073193562
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.991063576271639
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 13.864223098527596
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 1.5666666666666667
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E D] → 雷電将軍[E D Q N×18]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 45892.726069532495,
+   "sd": 1248.9453708842034,
+   "totalSeconds": 23.33,
+   "score": 1.711138362146318,
+   "particles": {
+    "total": 143.5,
+    "enemy": 33.2,
+    "energy": 738.7200000000041,
+    "seconds": 112.25,
+    "energyPerMember10s": 16.452561247216128,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 19.889532293986637
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.142093541202637
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.872160356347411
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 13.906458797327366
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[E Q N×16]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 45537.26453703857,
+   "sd": 826.0823940121488,
+   "totalSeconds": 23.68,
+   "score": 1.6945601566322872,
+   "particles": {
+    "total": 149.2,
+    "enemy": 35.3,
+    "energy": 766.0000000000044,
+    "seconds": 115.21833333333333,
+    "energyPerMember10s": 16.6206188251292,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 20.356135452980574
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.071935889832307
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.089612474866529
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 13.964791482836901
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.1,
+     "seconds": 0.5166666666666667
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[E Q N×13 E N×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "e",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 45323.14614914632,
+   "sd": 988.5082865932885,
+   "totalSeconds": 23.73,
+   "score": 1.6910872598536135,
+   "particles": {
+    "total": 151.4,
+    "enemy": 34,
+    "energy": 773.6000000000046,
+    "seconds": 114.56166666666668,
+    "energyPerMember10s": 16.881737637662493,
+    "energyByChar10s": [
+     {
+      "characterId": "10000052-electro",
+      "energy10s": 21.11701121666642
+     },
+     {
+      "characterId": "10000025-hydro",
+      "energy10s": 17.30072595545335
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 15.073104732531208
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.036108645998485
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000052-electro",
+     "waits": 0.2,
+     "seconds": 1.5583333333333333
+    },
+    {
+     "characterId": "10000025-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ベネット[tE Q] → 行秋[Q N×2 E D N×2] → 香菱[Q E] → 雷電将軍[E Q N×17]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000025-hydro",
+      "a": [
+       "q",
+       "n",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000052-electro",
+      "a": [
+       "e",
+       "q",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

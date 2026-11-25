@@ -1,0 +1,2108 @@
+{
+ "party": [
+  {
+   "id": "10000073-dendro",
+   "name": "ナヒーダ",
+   "roles": [
+    "attacker",
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000070-hydro",
+   "name": "ニィロウ",
+   "roles": [
+    "attacker",
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000125-hydro",
+   "name": "コロンビーナ",
+   "roles": [
+    "attacker",
+    "subAttacker"
+   ]
+  },
+  {
+   "id": "10000119-dendro",
+   "name": "ラウマ",
+   "roles": [
+    "subAttacker"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 582110,
+ "spearman": 0.016962455744892857,
+ "bestQuickScoreRank": 3576,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 11881,
+  "rejectedBy": {
+   "ラウマ: 草露が無いのに使っている": 4263,
+   "重撃の直前が通常攻撃でない": 1308,
+   "ニィロウ: スキルCT違反": 1115,
+   "ナヒーダ: スキルCT違反": 1810,
+   "ニィロウ: 元素爆発CT違反": 52,
+   "ラウマ: スキルCT違反": 1367,
+   "ナヒーダ: 元素爆発CT違反": 127,
+   "コロンビーナ: スキルCT違反": 1805,
+   "ラウマ: 元素爆発CT違反": 19,
+   "コロンビーナ: 元素爆発CT違反": 15
+  },
+  "scored": 8419,
+  "quick": 2378,
+  "quickOk": 2266,
+  "quickFailed": {
+   "error encountered on lauma executing skill: lauma: Cannot use Skill Hold without Dew": 13,
+   "nilou: need to use attack right before charge": 12
+  }
+ },
+ "results": [
+  {
+   "dps": 187519.75461986213,
+   "sd": 2389.621371741632,
+   "totalSeconds": 19.65,
+   "score": 1.4618177867902666,
+   "particles": {
+    "total": 156.1,
+    "enemy": 37.8,
+    "energy": 875.3200000000043,
+    "seconds": 102.06666666666665,
+    "energyPerMember10s": 21.439908556499127,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.934683213585863
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.514696276943152
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 26.541476159372962
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.76877857609403
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.4,
+     "seconds": 0.3
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ニィロウ[E N×2 E] → コロンビーナ[E Q] → ナヒーダ[tE] → ラウマ[N hE Q] → コロンビーナ[C×3 D N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 187212.05461951406,
+   "sd": 2965.34829708163,
+   "totalSeconds": 19.35,
+   "score": 1.5344005686640638,
+   "particles": {
+    "total": 157.1,
+    "enemy": 38,
+    "energy": 887.0000000000045,
+    "seconds": 101.84,
+    "energyPerMember10s": 21.774351924587698,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.550274941084016
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 20.17871170463469
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 26.345247446975645
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 21.02317360565589
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.4,
+     "seconds": 0.2375
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 D N C D C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "dash",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 186686.75802242622,
+   "sd": 2571.3874834954995,
+   "totalSeconds": 19.15,
+   "score": 1.5316920652737003,
+   "particles": {
+    "total": 150.9,
+    "enemy": 36.5,
+    "energy": 850.4800000000041,
+    "seconds": 100.53333333333333,
+    "energyPerMember10s": 21.14920424403193,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.859416445623303
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 20.188328912466815
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.74668435013262
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 19.80238726790447
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.6,
+     "seconds": 0.7333333333333334
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 D C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 185253.43119441968,
+   "sd": 1930.5002051108002,
+   "totalSeconds": 19.32,
+   "score": 1.4618177867902666,
+   "particles": {
+    "total": 152.2,
+    "enemy": 36.7,
+    "energy": 861.7200000000041,
+    "seconds": 100.98333333333333,
+    "energyPerMember10s": 21.333223304175707,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.638719260604024
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.747813170490147
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.903284370358136
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 21.043076415250006
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.4,
+     "seconds": 0.4083333333333333
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ニィロウ[E N×2 E] → コロンビーナ[E Q] → ナヒーダ[tE] → ラウマ[hE Q] → コロンビーナ[C×3 D N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 186183.7697504743,
+   "sd": 2093.7710984890305,
+   "totalSeconds": 19.57,
+   "score": 1.5372371655971329,
+   "particles": {
+    "total": 153.5,
+    "enemy": 37.7,
+    "energy": 867.4400000000044,
+    "seconds": 102.575,
+    "energyPerMember10s": 21.141603704606492,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.162563977577342
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.653911771874206
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.670972459176205
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.078966609797675
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.7,
+     "seconds": 0.2857142857142857
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 N C D C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "dash",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 185459.73512246757,
+   "sd": 1675.9066794434102,
+   "totalSeconds": 19.57,
+   "score": 1.5372371655971329,
+   "particles": {
+    "total": 155.8,
+    "enemy": 37.5,
+    "energy": 881.0800000000045,
+    "seconds": 102.48333333333332,
+    "energyPerMember10s": 21.493250935111515,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.634412099528344
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 20.013010245568353
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.832493088307046
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.49308830704176
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.6,
+     "seconds": 0.3
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×2 N C D C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "dash",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 185901.34043489923,
+   "sd": 2961.356379014382,
+   "totalSeconds": 19.65,
+   "score": 1.538295191193511,
+   "particles": {
+    "total": 154.5,
+    "enemy": 37.1,
+    "energy": 870.8000000000044,
+    "seconds": 102.94166666666665,
+    "energyPerMember10s": 21.14789929571775,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.020480854853044
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.669392050514023
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.630049380717242
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.271674896786177
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.3,
+     "seconds": 0.45555555555555555
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 D N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 185488.60089641175,
+   "sd": 2835.6375784607053,
+   "totalSeconds": 19.35,
+   "score": 1.5344005686640638,
+   "particles": {
+    "total": 156.8,
+    "enemy": 38.3,
+    "energy": 889.4800000000047,
+    "seconds": 102.115,
+    "energyPerMember10s": 21.776428536454112,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 20.19096117122848
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.84233462272925
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.917837731968856
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 21.154580619889302
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1,
+     "seconds": 0.225
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C D C×2 D N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "dash",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 185264.4761179142,
+   "sd": 2283.9164965624154,
+   "totalSeconds": 19.87,
+   "score": 1.5409938816163913,
+   "particles": {
+    "total": 154.9,
+    "enemy": 36.8,
+    "energy": 865.400000000004,
+    "seconds": 104.06500000000001,
+    "energyPerMember10s": 20.78989093355124,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.605054533224394
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.063085571517774
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 24.548118964108966
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 19.94330466535335
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1,
+     "seconds": 0.6283333333333333
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0.1,
+     "seconds": 0.3333333333333333
+    }
+   ],
+   "loops": 5,
+   "label": "ニィロウ[E N×2 E] → ナヒーダ[tE] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 184884.66975805143,
+   "sd": 2824.850144281476,
+   "totalSeconds": 19.57,
+   "score": 1.5372371655971329,
+   "particles": {
+    "total": 153,
+    "enemy": 37.4,
+    "energy": 865.3600000000044,
+    "seconds": 102.39166666666667,
+    "energyPerMember10s": 21.128672580776538,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.333604622772
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.50158704321638
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.40441116627329
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.275087490843944
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1,
+     "seconds": 0.3
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C N C×2 D C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "n",
+       "ca",
+       "ca",
+       "dash",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 183222.61610788276,
+   "sd": 3094.05520519457,
+   "totalSeconds": 19.23,
+   "score": 1.5372371655971329,
+   "particles": {
+    "total": 151.2,
+    "enemy": 36.2,
+    "energy": 864.8000000000044,
+    "seconds": 100.67333333333332,
+    "energyPerMember10s": 21.4753989802001,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.739090126481656
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.818555062578614
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.528110721144298
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.81584001059529
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.1,
+     "seconds": 0.4681818181818182
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C N C×2 D C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "n",
+       "ca",
+       "ca",
+       "dash",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 183055.95806247165,
+   "sd": 2781.4110448284187,
+   "totalSeconds": 19.23,
+   "score": 1.5372371655971329,
+   "particles": {
+    "total": 151.1,
+    "enemy": 36.2,
+    "energy": 863.0800000000041,
+    "seconds": 101.38666666666666,
+    "energyPerMember10s": 21.28189110994224,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.554839558127266
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.633745397159363
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.125591793792736
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.813387690689073
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.6,
+     "seconds": 0.64375
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×2 N C D C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "dash",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 183989.75611033346,
+   "sd": 2542.2137663291055,
+   "totalSeconds": 20.68,
+   "score": 1.2672656913388054,
+   "particles": {
+    "total": 161.6,
+    "enemy": 39.3,
+    "energy": 908.4400000000044,
+    "seconds": 106.53666666666668,
+    "energyPerMember10s": 21.31754325584316,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.949938988141756
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.199023810268734
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.510465880291605
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.610744344670028
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0.6,
+     "seconds": 0.3527777777777778
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.2,
+     "seconds": 0.3
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ニィロウ[E N×2 E] → コロンビーナ[E Q] → ナヒーダ[tE Q] → ラウマ[N hE Q] → ナヒーダ[C] → コロンビーナ[C×4]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 183798.39750849112,
+   "sd": 2749.515686266397,
+   "totalSeconds": 19.87,
+   "score": 1.5409938816163913,
+   "particles": {
+    "total": 153.2,
+    "enemy": 36.6,
+    "energy": 861.6800000000039,
+    "seconds": 103.03333333333333,
+    "energyPerMember10s": 20.907796829505113,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.234875444839822
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.682950501455814
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.354901326431577
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.35846004529275
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0.7,
+     "seconds": 0.6285714285714287
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 182442.77450519076,
+   "sd": 2974.215150585104,
+   "totalSeconds": 19.32,
+   "score": 1.538295191193511,
+   "particles": {
+    "total": 151.1,
+    "enemy": 36.4,
+    "energy": 861.4800000000043,
+    "seconds": 100.97166666666665,
+    "energyPerMember10s": 21.329745968341065,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.476750903718834
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.746133403760105
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.482396051697677
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.613703514187115
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.6,
+     "seconds": 0.5947916666666667
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0.1,
+     "seconds": 1
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×3 D N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 182028.5939897198,
+   "sd": 2943.806349029265,
+   "totalSeconds": 19.02,
+   "score": 1.5344005686640638,
+   "particles": {
+    "total": 151.7,
+    "enemy": 37,
+    "energy": 865.5600000000046,
+    "seconds": 101.04333333333332,
+    "energyPerMember10s": 21.41556427935221,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.360010556526873
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.993402170685815
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 25.511826609045624
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.797017781149965
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.8,
+     "seconds": 0.5037037037037037
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0.1,
+     "seconds": 1
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×3 D N C D C]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "dash",
+       "n",
+       "ca",
+       "dash",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 180351.4224911063,
+   "sd": 2477.3200319059333,
+   "totalSeconds": 19.53,
+   "score": 1.5409938816163913,
+   "particles": {
+    "total": 153,
+    "enemy": 35.9,
+    "energy": 867.0800000000039,
+    "seconds": 103.33166666666666,
+    "energyPerMember10s": 20.9780802916177,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 18.950628235939256
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.113211503411318
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 24.981693253116983
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 20.86678817400277
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.4,
+     "seconds": 0.6285714285714287
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0.1,
+     "seconds": 0.2
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[tE] → ニィロウ[E N×2 E] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 183265.6607839533,
+   "sd": 3145.9216054323183,
+   "totalSeconds": 20.85,
+   "score": 1.4880032186417707,
+   "particles": {
+    "total": 155.3,
+    "enemy": 37.4,
+    "energy": 867.400000000004,
+    "seconds": 105.27666666666669,
+    "energyPerMember10s": 20.598106576322795,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.261628091061613
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.007060760535705
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 24.56954690814678
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 19.554190545546614
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.1,
+     "seconds": 0.6287878787878788
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "コロンビーナ[N] → ↻ニィロウ[E N×2 E] → ナヒーダ[tE] → コロンビーナ[E Q] → ラウマ[N hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "n",
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 178678.91314624116,
+   "sd": 2726.771283237532,
+   "totalSeconds": 19.53,
+   "score": 1.5409938816163913,
+   "particles": {
+    "total": 153.7,
+    "enemy": 35.7,
+    "energy": 859.600000000004,
+    "seconds": 103.2,
+    "energyPerMember10s": 20.82364341085281,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.56201550387594
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 19.271317829457335
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 24.577519379844965
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 19.88372093023252
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 0.9,
+     "seconds": 1.1351851851851853
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ニィロウ[E N×2 E] → ナヒーダ[tE] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 176391.31618177507,
+   "sd": 3631.5521664190474,
+   "totalSeconds": 20.52,
+   "score": 1.4880032186417707,
+   "particles": {
+    "total": 153.2,
+    "enemy": 36.3,
+    "energy": 856.0400000000038,
+    "seconds": 104.11666666666665,
+    "energyPerMember10s": 20.55482631663208,
+    "energyByChar10s": [
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.437810148871428
+     },
+     {
+      "characterId": "10000070-hydro",
+      "energy10s": 18.79622218664957
+     },
+     {
+      "characterId": "10000125-hydro",
+      "energy10s": 24.293901072514807
+     },
+     {
+      "characterId": "10000119-dendro",
+      "energy10s": 19.69137185849205
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000070-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000125-hydro",
+     "waits": 1.2,
+     "seconds": 1.2972222222222223
+    },
+    {
+     "characterId": "10000119-dendro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "コロンビーナ[N] → ↻ニィロウ[E N×2 E] → ナヒーダ[tE] → コロンビーナ[E Q] → ラウマ[hE Q] → コロンビーナ[C×3 N C×2]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "n"
+      ]
+     },
+     {
+      "c": "10000070-hydro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "e"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000119-dendro",
+      "a": [
+       "e_hold",
+       "q"
+      ]
+     },
+     {
+      "c": "10000125-hydro",
+      "a": [
+       "ca",
+       "ca",
+       "ca",
+       "n",
+       "ca",
+       "ca"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

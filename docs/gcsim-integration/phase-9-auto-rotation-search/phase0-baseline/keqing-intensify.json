@@ -1,0 +1,1357 @@
+{
+ "party": [
+  {
+   "id": "10000042-electro",
+   "name": "刻晴",
+   "roles": [
+    "attacker"
+   ]
+  },
+  {
+   "id": "10000073-dendro",
+   "name": "ナヒーダ",
+   "roles": [
+    "attacker",
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000047-anemo",
+   "name": "楓原万葉",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000031-electro",
+   "name": "フィッシュル",
+   "roles": [
+    "subAttacker"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 503960,
+ "spearman": -0.2627147204944218,
+ "bestQuickScoreRank": 2300,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 15099,
+  "rejectedBy": {
+   "刻晴: 落下攻撃の前提": 1357,
+   "重撃の直前が通常攻撃でない": 2592,
+   "設置物の位置直しのみのスキル再発動": 10813,
+   "刻晴: スキルCT違反": 233,
+   "ナヒーダ: 元素爆発CT違反": 2,
+   "楓原万葉: 元素爆発CT違反": 3,
+   "ナヒーダ: スキルCT違反": 98,
+   "刻晴: 元素爆発CT違反": 1
+  },
+  "scored": 5201,
+  "quick": 1939,
+  "quickOk": 1938,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 77270.37011177465,
+   "sd": 1262.3577439651035,
+   "totalSeconds": 17.87,
+   "score": 0.7584157806379407,
+   "particles": {
+    "total": 183.3,
+    "enemy": 37.4,
+    "energy": 962.4400000000039,
+    "seconds": 86.4,
+    "energyPerMember10s": 27.848379629629743,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 40.21527777777778
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.854166666666615
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.465277777777725
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.85879629629629
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.4,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 77270.37011177465,
+   "sd": 1262.3577439651035,
+   "totalSeconds": 17.52,
+   "score": 0.7503433219178082,
+   "particles": {
+    "total": 184,
+    "enemy": 38.1,
+    "energy": 966.360000000004,
+    "seconds": 86.4,
+    "energyPerMember10s": 27.96180555555567,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 40.37731481481481
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.951388888888836
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.56249999999995
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.956018518518505
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.4,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E D N C N C N E N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 76580.95444116936,
+   "sd": 1293.7242966795354,
+   "totalSeconds": 18.59,
+   "score": 0.7605338891877353,
+   "particles": {
+    "total": 183.6,
+    "enemy": 37.9,
+    "energy": 962.840000000004,
+    "seconds": 87.65166666666666,
+    "energyPerMember10s": 27.462113289346203,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.67294784278679
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.406362305337368
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.226027267022822
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.54311574223726
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.8,
+     "seconds": 0.4395833333333333
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "刻晴[E] → ↻楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75832.55019842097,
+   "sd": 1563.6641781459678,
+   "totalSeconds": 17.68,
+   "score": 0.7544677601809955,
+   "particles": {
+    "total": 183.7,
+    "enemy": 38.6,
+    "energy": 962.9200000000039,
+    "seconds": 87.19166666666665,
+    "energyPerMember10s": 27.609289878620018,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.776737073497095
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.600496989391143
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.43572589123574
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.624199560355535
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.3,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E D Q E D N C N C N E N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75832.55019842097,
+   "sd": 1563.6641781459678,
+   "totalSeconds": 17.68,
+   "score": 0.7544677601809955,
+   "particles": {
+    "total": 183.4,
+    "enemy": 38.3,
+    "energy": 961.240000000004,
+    "seconds": 87.19166666666665,
+    "energyPerMember10s": 27.561120137627952,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.70792315779415
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.55920863996937
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.39443754181397
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.58291121093376
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.3,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E D Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75738.30430032691,
+   "sd": 1597.6703523291983,
+   "totalSeconds": 17.67,
+   "score": 0.7537763157894737,
+   "particles": {
+    "total": 181.7,
+    "enemy": 37.7,
+    "energy": 952.5600000000038,
+    "seconds": 87.81500000000001,
+    "energyPerMember10s": 27.118373854125256,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 38.98650572225702
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.454535102203447
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 22.989238740534027
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.043215851505998
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.8,
+     "seconds": 0.41458333333333336
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N×2 C N C E N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75480.36537832693,
+   "sd": 2007.7152659388707,
+   "totalSeconds": 17.7,
+   "score": 0.7547317796610172,
+   "particles": {
+    "total": 182.1,
+    "enemy": 38.3,
+    "energy": 963.7600000000041,
+    "seconds": 87.53166666666667,
+    "energyPerMember10s": 27.52603819570072,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.231516213179994
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 21.01182429216088
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 22.65237342675979
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.20843885070164
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 1,
+     "seconds": 0.3816666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N C N C N E D N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75480.36537832693,
+   "sd": 2007.7152659388707,
+   "totalSeconds": 17.7,
+   "score": 0.7547317796610172,
+   "particles": {
+    "total": 183,
+    "enemy": 39.2,
+    "energy": 968.800000000004,
+    "seconds": 87.53166666666667,
+    "energyPerMember10s": 27.669986100268588,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.43715607684838
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 21.135208210361913
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 22.775757344960823
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.33182276890267
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 1,
+     "seconds": 0.3816666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E D N C N C N E D N C N]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75392.82990142227,
+   "sd": 1698.872623057557,
+   "totalSeconds": 19.72,
+   "score": 0.6666336206896553,
+   "particles": {
+    "total": 184.5,
+    "enemy": 38.6,
+    "energy": 967.960000000004,
+    "seconds": 88.60000000000002,
+    "energyPerMember10s": 27.31264108352155,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.51918735891648
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.352144469525907
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 22.96839729119633
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.41083521444694
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.4,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フィッシュル[C] → ↻楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000031-electro",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75356.26000583605,
+   "sd": 1395.8748635000904,
+   "totalSeconds": 19.97,
+   "score": 0.715138332498748,
+   "particles": {
+    "total": 183.7,
+    "enemy": 38.5,
+    "energy": 963.7600000000042,
+    "seconds": 88.85000000000002,
+    "energyPerMember10s": 27.117613956105906,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.0320765334834
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.385481148002196
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 22.946539110860943
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.10635903207652
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.4,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "ナヒーダ[Q] → ↻楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75279.24812562938,
+   "sd": 1467.9291833154052,
+   "totalSeconds": 18.75,
+   "score": 0.7643360000000001,
+   "particles": {
+    "total": 183.3,
+    "enemy": 38.8,
+    "energy": 960.840000000004,
+    "seconds": 88.34166666666667,
+    "energyPerMember10s": 27.191019715121328,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.17743609093482
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.31364965569281
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.085369304782514
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.187623809074605
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.5,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "刻晴[E] → ↻楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E D Q E N C N C N E N C N]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "e",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 75279.24812562938,
+   "sd": 1467.9291833154052,
+   "totalSeconds": 18.75,
+   "score": 0.7643360000000001,
+   "particles": {
+    "total": 184,
+    "enemy": 39.5,
+    "energy": 964.7600000000041,
+    "seconds": 88.34166666666667,
+    "energyPerMember10s": 27.30195264597691,
+    "energyByChar10s": [
+     {
+      "characterId": "10000042-electro",
+      "energy10s": 39.33591170644279
+     },
+     {
+      "characterId": "10000073-dendro",
+      "energy10s": 19.40873502499759
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 23.180454674087297
+     },
+     {
+      "characterId": "10000031-electro",
+      "energy10s": 27.28270917837939
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000042-electro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000073-dendro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0.5,
+     "seconds": 0.4166666666666667
+    },
+    {
+     "characterId": "10000031-electro",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "刻晴[E] → ↻楓原万葉[tE hP Q] → フィッシュル[Q] → ナヒーダ[tE N] → 楓原万葉[tE hP] → 刻晴[E D Q E D N C N C N E N C N]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp",
+       "q"
+      ]
+     },
+     {
+      "c": "10000031-electro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000073-dendro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "hp"
+      ]
+     },
+     {
+      "c": "10000042-electro",
+      "a": [
+       "e",
+       "dash",
+       "q",
+       "e",
+       "dash",
+       "n",
+       "ca",
+       "n",
+       "ca",
+       "n",
+       "e",
+       "n",
+       "ca",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

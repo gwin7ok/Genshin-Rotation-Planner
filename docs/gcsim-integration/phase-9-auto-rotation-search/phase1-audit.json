@@ -1,0 +1,1085 @@
+{
+  "summary": {
+    "wrong-character": 0,
+    "inline-closing-bug-risk": 0,
+    "invalid-action": 0,
+    "duplicate-shape": 0,
+    "bad-first-entry": 1,
+    "four-star-high-constellation": 6,
+    "excessive-stints": 14,
+    "excessive-length": 45,
+    "bloat-or-sparse": 68
+  },
+  "issues": [
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000125-hydro",
+      "characterName": "コロンビーナ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000119-dendro",
+      "characterName": "ラウマ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "detail": "運用型が 9 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "detail": "運用型が 11 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×4→E→N×4→DASH→N×4→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×4→DASH→N×4→E→N×4→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 6,
+      "archetypeName": "q→n×4→e→n×4→dash→n×4→dash→n×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000046-pyro",
+      "characterName": "胡桃",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N×2→CA→JUMP→N（KQM）",
+      "detail": "1出場に 30 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000116-electro",
+      "characterName": "イネファ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "archetypeIndex": 5,
+      "archetypeName": "Q のあと、もう一度 E→HP、さらに E→HP",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000042-electro",
+      "characterName": "刻晴",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA のあと、もう一度 E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000042-electro",
+      "characterName": "刻晴",
+      "archetypeIndex": 3,
+      "archetypeName": "e→q→e→n→ca→n→ca→n→e→n→ca→n→ca",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000058-electro",
+      "characterName": "八重神子",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 4,
+      "archetypeName": "Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000096-pyro",
+      "characterName": "アルレッキーノ",
+      "archetypeIndex": 2,
+      "archetypeName": "E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000096-pyro",
+      "characterName": "アルレッキーノ",
+      "archetypeIndex": 3,
+      "archetypeName": "ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000064-geo",
+      "characterName": "雲菫",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000049-pyro",
+      "characterName": "宵宮",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000049-pyro",
+      "characterName": "宵宮",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N×5→DASH→N×5→DASH→N×5（KQM）",
+      "detail": "1出場に 18 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "archetypeIndex": 1,
+      "archetypeName": "Q のあと、もう一度 E→N×2、さらに E→N×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000022-anemo",
+      "characterName": "ウェンティ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q のあと、もう一度 E→N、さらに E→N",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000030-geo",
+      "characterName": "鍾離",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "運用型が 9 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 3,
+      "archetypeName": "E のあと、もう一度 CA→E→CA→Q、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 5,
+      "archetypeName": "N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 2,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15→Q",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 2,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15→Q",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 3,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15",
+      "detail": "1出場に 16 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 3,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N×15→Q のあと、もう一度 E→N×15",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 5,
+      "archetypeName": "e→n×15",
+      "detail": "1出場に 16 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 6,
+      "archetypeName": "e→n×15→q",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 4,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 4,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 5,
+      "archetypeName": "e_hold→lp→n×2→ca→dash→n×3→ca→dash",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 6,
+      "archetypeName": "e_hold→lp→n×3→dash→n×3→dash→n×3",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000120-electro",
+      "characterName": "フリンズ",
+      "archetypeIndex": 2,
+      "archetypeName": "e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n",
+      "detail": "1出場に 25 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000120-electro",
+      "characterName": "フリンズ",
+      "archetypeIndex": 3,
+      "archetypeName": "e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "archetypeIndex": 1,
+      "archetypeName": "E・通常攻撃・重撃",
+      "detail": "1出場に 10 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）",
+      "detail": "1出場に 23 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）",
+      "detail": "1出場に 21 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 5,
+      "archetypeName": "e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000034-geo",
+      "characterName": "ノエル",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 2,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "1出場に 27 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 3,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "1出場に 31 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000027-geo",
+      "characterName": "凝光",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→E→重撃",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000029-pyro",
+      "characterName": "クレー",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000041-hydro",
+      "characterName": "モナ",
+      "detail": "運用型が 9 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "archetypeIndex": 4,
+      "archetypeName": "N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）",
+      "detail": "1出場に 23 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "archetypeIndex": 5,
+      "archetypeName": "通常→Q→通常→E→重撃連打の周回",
+      "detail": "1出場に 22 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000059-anemo",
+      "characterName": "鹿野院平蔵",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000062-cryo",
+      "characterName": "アーロイ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000104-anemo",
+      "characterName": "チャスカ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000128-anemo",
+      "characterName": "ファルカ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000016-pyro",
+      "characterName": "ディルック",
+      "archetypeIndex": 1,
+      "archetypeName": "最大ダメージのコンボ（通常1 E 通常1 E 通常2〜4 E 通常1〜3 E 通常4）",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000109-anemo",
+      "characterName": "夢見月瑞希",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000014-hydro",
+      "characterName": "バーバラ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000021-pyro",
+      "characterName": "アンバー",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "運用型が 10 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000038-geo",
+      "characterName": "アルベド",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "archetypeIndex": 2,
+      "archetypeName": "E→CA のあと、もう一度 Q、さらに E→CA",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）",
+      "detail": "1出場に 15 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 4,
+      "archetypeName": "N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N",
+      "detail": "1出場に 14 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000082-dendro",
+      "characterName": "白朮",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→E_HOLD×2（KQM）",
+      "detail": "星4キャラに constellation.min=4 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 5,
+      "archetypeName": "q→e_hold×3",
+      "detail": "星4キャラに constellation.min=4 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "archetypeIndex": 1,
+      "archetypeName": "E×2 のあと、もう一度 E×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "archetypeIndex": 2,
+      "archetypeName": "E×2→Q のあと、もう一度 E×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000124-anemo",
+      "characterName": "ヤフォダ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000127-geo",
+      "characterName": "イルーガ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000148-electro",
+      "characterName": "アリョーシャ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000002-cryo",
+      "characterName": "神里綾華",
+      "archetypeIndex": 2,
+      "archetypeName": "E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA",
+      "detail": "1出場に 10 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-cryo",
+      "characterName": "空(氷)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-dendro",
+      "characterName": "空(草)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-anemo",
+      "characterName": "空(風)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-electro",
+      "characterName": "空(雷)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-geo",
+      "characterName": "空(岩)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-hydro",
+      "characterName": "空(水)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-cryo",
+      "characterName": "蛍(氷)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-anemo",
+      "characterName": "蛍(風)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-electro",
+      "characterName": "蛍(雷)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-geo",
+      "characterName": "蛍(岩)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-hydro",
+      "characterName": "蛍(水)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000033-hydro",
+      "characterName": "タルタリヤ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q→E→通常5→長押しE→通常2",
+      "detail": "先頭 o[0] として不適切な可能性: useが長大(11手)"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q→E→通常5→長押しE→通常2",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 1,
+      "archetypeName": "E→Q→長押しE→通常4→ダッシュ→通常4",
+      "detail": "1出場に 12 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→通常4→長押しE→通常4",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000069-dendro",
+      "characterName": "ティナリ",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E→N",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E→N",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 6,
+      "archetypeName": "E×2 のあと、もう一度 Q→N×10",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 7,
+      "archetypeName": "q→n×10",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 4,
+      "archetypeName": "Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000106-pyro",
+      "characterName": "マーヴィカ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000126-geo",
+      "characterName": "兹白",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000081-dendro",
+      "characterName": "カーヴェ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E→N×12→E→N×4（KQM）",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000097-electro",
+      "characterName": "セトス",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000129-cryo",
+      "characterName": "ローエン",
+      "archetypeIndex": 1,
+      "archetypeName": "E→重撃2→特殊E→重撃5→Q→重撃5",
+      "detail": "1出場に 15 手べた書きされています（fill への抽象化または削減を検討）"
+    }
+  ]
+}

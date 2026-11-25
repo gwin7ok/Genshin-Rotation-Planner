@@ -3,6 +3,15 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%87%E3%82%A3%E3%82%B7%E3%82%A2",
  "archetypes": [
   {
+   "name": "E（炎付着サポート）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型"
+  },
+  {
    "name": "E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）",
    "role": "attacker",
    "slot": 40,
@@ -19,15 +28,6 @@
     8
    ],
    "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の強化攻撃を連打する爆発アタッカー型"
-  },
-  {
-   "name": "E（炎付着サポート）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから炎付着するサポート型"
   },
   {
    "name": "N→E（KQM）",

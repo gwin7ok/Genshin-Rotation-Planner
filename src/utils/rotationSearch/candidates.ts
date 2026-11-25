@@ -9,7 +9,7 @@
  */
 import { macrosOf } from '../../masterdata/sequenceRules';
 import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
-import { applicableArchetypes, canUseFavoniusOrElementNormal, partyHasNormalAttackTrigger } from './knowledgeSeeds';
+import { applicableArchetypes, canSupporterUseFreeNormal, canSupporterUseNormal, canSupporterUseTriggerNormal, canUseFavoniusOrElementNormal, isFavoniusWeapon } from './knowledgeSeeds';
 import { HOLD_FRAMES_ACTIONS } from '../gcsim/actionMapping';
 import type { ActionFrames, CancelTarget, CharacterActionInstance, CharacterConfig, CharacterRole, Stint } from '../../types/genshin';
 
@@ -454,14 +454,22 @@ function hasUselessCancelStep(c: CharacterConfig, steps: string[]): boolean {
 export function neighborsOf(characters: CharacterConfig[], base: Candidate, hints?: { lowShare?: string[]; knowledge?: KnowledgeBundle }): Candidate[] {
   const out = new Map<string, Candidate>();
   let loop = base.loopStartIndex ?? 0;
-  const hasPartyNormalTrigger = partyHasNormalAttackTrigger(characters);
-  const canUseUsefulNormal = (c: CharacterConfig): boolean =>
-    canUseFavoniusOrElementNormal(c, characters) || hasPartyNormalTrigger;
+  const canUseUsefulNormal = (c: CharacterConfig): boolean => canSupporterUseNormal(c, characters);
+  const allowNewN = (c: CharacterConfig): boolean =>
+    isFavoniusWeapon(c.weaponId) || (base.assignment[c.id] === 'attacker' && c.weaponType === 'catalyst');
   const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string, who?: string): void => {
     // 出場の先頭や、硬直短縮にならない空ダッシュ・空ジャンプ（および D と重複する J）を含む並びは近傍として作らない
     if (plan.some(p => hasUselessCancelStep(p.c, p.steps))) return;
     // 周回（loopStartIndex 以降）の中に、スキルも爆発も重撃も使わず「物理の通常攻撃 1 回だけ（西風・元素攻撃・連動追撃も無し）」で交代する単独出場がある並びは不自然なので作らない
     if (plan.some((p, idx) => idx >= loop && p.steps.length === 1 && p.steps[0].split('@')[0] === 'n' && !canUseUsefulNormal(p.c))) return;
+    // 同一キャラの 1 周内（loopStartIndex 以降）出場回数が 4 回以上になる近傍は拒否する
+    const loopCounts = new Map<string, number>();
+    for (let idx = loop; idx < plan.length; idx++) {
+      const cid = plan[idx].c.id;
+      const cnt = (loopCounts.get(cid) ?? 0) + 1;
+      if (cnt >= 4) return;
+      loopCounts.set(cid, cnt);
+    }
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
       const actions = steps.map(s => instance(c, s));
@@ -503,10 +511,12 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   }
   // 出場を 2 つに分ける（例: コロンビーナの [E Q] と、あとの [重撃]）/ 同じキャラの隣り合う出場を 1 つにまとめる
   plan0.forEach((p, si) => {
-    for (let k = 1; k < p.steps.length; k++) {
-      const pl = clone();
-      pl.splice(si, 1, { c: p.c, steps: p.steps.slice(0, k) }, { c: p.c, steps: p.steps.slice(k) });
-      make(pl, 'split');
+    if (plan0.filter(x => x.c.id === p.c.id).length < 2) {
+      for (let k = 1; k < p.steps.length; k++) {
+        const pl = clone();
+        pl.splice(si, 1, { c: p.c, steps: p.steps.slice(0, k) }, { c: p.c, steps: p.steps.slice(k) });
+        make(pl, 'split');
+      }
     }
     if (si + 1 < plan0.length && plan0[si + 1].c.id === p.c.id) {
       const pl = clone();
@@ -523,7 +533,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
   for (const c of seenChars.values()) {
     // 先頭に通常攻撃 1 回だけの出場を足す（手組みでは、法器のアタッカーや西風持ちが最初に通常攻撃を 1 回だけ当ててから他のキャラのスキルに移る形が有効。物理の空振りになるキャラやループ途中への単独 N 挿入は行わない）
-    if (!defOf(c, 'n') || !canUseFavoniusOrElementNormal(c, characters)) continue;
+    if (!defOf(c, 'n') || !allowNewN(c)) continue;
     { const pl = clone(); pl.unshift({ c, steps: ['n'] }); make(pl, 'newN'); }
   }
   // 1 周目だけ行う動作（周回の前の、1 回きりの出場）を、先頭に足す: どのキャラの、基本の動作（E・Q・重撃・通常攻撃など）でも試す。周回の開始位置は 1 つ後ろへ（1 周目だけ置く出場は、最大 2 つ）
@@ -531,7 +541,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   if ((base.loopStartIndex ?? 0) < 2) {
     for (const c of seenChars.values()) for (const st of new Set([...NEIGHBOR_STEPS, ...c.availableActions.map(a => a.id.slice(c.id.length + 1)).filter(x => /^(e_|q_)/.test(x))])) {
       if (!defOf(c, st)) continue;
-      if (st === 'n' && !canUseFavoniusOrElementNormal(c, characters)) continue;
+      if (st === 'n' && !allowNewN(c)) continue;
       const pl = clone(); pl.unshift({ c, steps: [st] }); loop = (base.loopStartIndex ?? 0) + 1; make(pl, st === 'n' ? 'newN' : 'pre'); loop = 0;
     }
   }
@@ -568,14 +578,19 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
       if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl, 'del'); }
     }
     // 置き換える: 動作 1 つを、別の動作にする（例: 通常攻撃 → ダッシュ、E → 長押し E。消してから差し込む 2 手では、途中で下がって届かない）
-    const allowNormalForChar = base.assignment[p.c.id] === 'attacker' || canUseUsefulNormal(p.c);
+    const isFreeNormal = base.assignment[p.c.id] === 'attacker' || canSupporterUseFreeNormal(p.c);
+    const isTriggerParty = canSupporterUseTriggerNormal(characters);
+    const hasSkillOrBurst = p.steps.some(st => { const b = st.split('@')[0]; return b === 'e' || b === 'e_hold' || b === 'q'; });
+    const nCountInStint = p.steps.filter(st => st.split('@')[0] === 'n').length;
+    const allowOneTriggerN = !isFreeNormal && isTriggerParty && hasSkillOrBurst && nCountInStint === 0;
     {
       const vocab = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
       for (let i = 0; i < n; i++) {
         const base0 = p.steps[i].split('@')[0];
         for (const s of vocab) {
           if (s === base0 || !defOf(p.c, s)) continue;
-          if (s === 'n' && !allowNormalForChar) continue;
+          if (s === 'n' && !isFreeNormal && !allowOneTriggerN) continue;
+          if (s === 'ca' && !isFreeNormal && isTriggerParty) continue;
           const pl = clone(); pl[si].steps[i] = s; make(pl, 'rep');
         }
       }
@@ -605,7 +620,8 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
     const vocabulary = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
     for (const s of vocabulary) {
       if (!defOf(p.c, s)) continue;
-      if (s === 'n' && !allowNormalForChar) continue;
+      if (s === 'n' && !isFreeNormal && !allowOneTriggerN) continue;
+      if (s === 'ca' && !isFreeNormal && isTriggerParty) continue;
       for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl, NEIGHBOR_STEPS.includes(s) ? 'ins' : `ins:${s}`); }
     }
     // 知識辞書の運用型（コンボの塊）で、このキャラの出場を一括差し替えする（1 手ずつでは届かないコンボ変更に使う）

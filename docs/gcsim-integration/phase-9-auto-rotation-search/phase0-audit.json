@@ -1,0 +1,3522 @@
+{
+  "summary": {
+    "wrong-character": 19,
+    "inline-closing-bug-risk": 109,
+    "invalid-action": 0,
+    "duplicate-shape": 10,
+    "bad-first-entry": 36,
+    "four-star-high-constellation": 128,
+    "excessive-stints": 14,
+    "excessive-length": 45,
+    "bloat-or-sparse": 68
+  },
+  "issues": [
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000119-dendro",
+      "characterName": "ラウマ",
+      "detail": "characters.ts:52 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "detail": "characters.ts:71 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "detail": "characters.ts:72 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "detail": "characters.ts:73 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000053-anemo",
+      "characterName": "早柚",
+      "detail": "characters.ts:98 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "detail": "characters.ts:112 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "detail": "characters.ts:113 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "detail": "characters.ts:126 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "detail": "characters.ts:127 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "detail": "characters.ts:139 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "detail": "characters.ts:140 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "detail": "characters.ts:171 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000116-electro",
+      "characterName": "イネファ",
+      "detail": "characters.ts:177 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "detail": "characters.ts:184 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "detail": "characters.ts:185 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "detail": "characters.ts:200 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "detail": "characters.ts:201 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "detail": "characters.ts:202 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000042-electro",
+      "characterName": "刻晴",
+      "detail": "characters.ts:210 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000058-electro",
+      "characterName": "八重神子",
+      "detail": "characters.ts:221 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "detail": "characters.ts:228 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "detail": "characters.ts:229 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "detail": "characters.ts:230 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000093-anemo",
+      "characterName": "閑雲",
+      "detail": "characters.ts:262 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "detail": "characters.ts:275 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000096-pyro",
+      "characterName": "アルレッキーノ",
+      "detail": "characters.ts:284 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "characters.ts:293 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "characters.ts:294 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "characters.ts:295 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "characters.ts:296 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "detail": "characters.ts:306 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "detail": "characters.ts:307 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "characters.ts:333 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "characters.ts:334 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "characters.ts:335 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "characters.ts:336 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "detail": "characters.ts:350 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000022-anemo",
+      "characterName": "ウェンティ",
+      "detail": "characters.ts:365 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000022-anemo",
+      "characterName": "ウェンティ",
+      "detail": "characters.ts:366 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000030-geo",
+      "characterName": "鍾離",
+      "detail": "characters.ts:386 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000030-geo",
+      "characterName": "鍾離",
+      "detail": "characters.ts:387 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "characters.ts:395 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "characters.ts:396 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "characters.ts:397 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "characters.ts:398 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "detail": "characters.ts:409 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "detail": "characters.ts:410 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "detail": "characters.ts:411 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "detail": "characters.ts:431 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "detail": "characters.ts:432 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000065-electro",
+      "characterName": "久岐忍",
+      "detail": "characters.ts:444 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000036-cryo",
+      "characterName": "重雲",
+      "detail": "characters.ts:534 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000036-cryo",
+      "characterName": "重雲",
+      "detail": "characters.ts:535 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000041-hydro",
+      "characterName": "モナ",
+      "detail": "characters.ts:547 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000114-cryo",
+      "characterName": "スカーク",
+      "detail": "characters.ts:632 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "detail": "characters.ts:671 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "detail": "characters.ts:673 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000015-cryo",
+      "characterName": "ガイア",
+      "detail": "characters.ts:688 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "characters.ts:705 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "characters.ts:706 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "characters.ts:707 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "characters.ts:708 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "characters.ts:710 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000038-geo",
+      "characterName": "アルベド",
+      "detail": "characters.ts:718 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000038-geo",
+      "characterName": "アルベド",
+      "detail": "characters.ts:721 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000039-cryo",
+      "characterName": "ディオナ",
+      "detail": "characters.ts:730 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000045-cryo",
+      "characterName": "ロサリア",
+      "detail": "characters.ts:739 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "detail": "characters.ts:759 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "detail": "characters.ts:760 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "detail": "characters.ts:769 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "detail": "characters.ts:770 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "detail": "characters.ts:771 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "detail": "characters.ts:781 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "detail": "characters.ts:782 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "detail": "characters.ts:783 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "characters.ts:792 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "characters.ts:793 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "characters.ts:794 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "characters.ts:795 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "characters.ts:805 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "characters.ts:806 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "characters.ts:807 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "characters.ts:808 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "detail": "characters.ts:830 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "detail": "characters.ts:831 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "detail": "characters.ts:841 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "detail": "characters.ts:853 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000082-dendro",
+      "characterName": "白朮",
+      "detail": "characters.ts:862 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000082-dendro",
+      "characterName": "白朮",
+      "detail": "characters.ts:863 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "detail": "characters.ts:874 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "detail": "characters.ts:875 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "detail": "characters.ts:876 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "detail": "characters.ts:923 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "detail": "characters.ts:924 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000002-cryo",
+      "characterName": "神里綾華",
+      "detail": "characters.ts:986 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000005-dendro",
+      "characterName": "空(草)",
+      "detail": "characters.ts:1003 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000007-dendro",
+      "characterName": "蛍(草)",
+      "detail": "characters.ts:1059 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000007-dendro",
+      "characterName": "蛍(草)",
+      "detail": "characters.ts:1060 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000007-dendro",
+      "characterName": "蛍(草)",
+      "detail": "characters.ts:1061 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000007-pyro",
+      "characterName": "蛍(炎)",
+      "detail": "characters.ts:1098 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000069-dendro",
+      "characterName": "ティナリ",
+      "detail": "characters.ts:1134 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000069-dendro",
+      "characterName": "ティナリ",
+      "detail": "characters.ts:1135 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000069-dendro",
+      "characterName": "ティナリ",
+      "detail": "characters.ts:1136 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "detail": "characters.ts:1148 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "detail": "characters.ts:1149 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "detail": "characters.ts:1150 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000102-hydro",
+      "characterName": "ムアラニ",
+      "detail": "characters.ts:1202 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000097-electro",
+      "characterName": "セトス",
+      "detail": "characters.ts:1235 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "inline-closing-bug-risk",
+      "severity": "error",
+      "characterId": "10000098-electro",
+      "characterName": "クロリンデ",
+      "detail": "characters.ts:1243 で archetypes 配列が 1 行閉じ（}],）になっており、knowledge-kqm-db.ts --apply の indexOf('\\n    ],') が素通りする原因になります"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000125-hydro",
+      "characterName": "コロンビーナ",
+      "archetypeIndex": 0,
+      "archetypeName": "E と Q",
+      "detail": "編成括弧「アルレッキーノ・Overvape 編成」に当人「コロンビーナ」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000125-hydro",
+      "characterName": "コロンビーナ",
+      "archetypeIndex": 2,
+      "archetypeName": "E と Q（Overvape 編成）",
+      "detail": "index 0（「E と Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000073-dendro",
+      "characterName": "ナヒーダ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000073-dendro",
+      "characterName": "ナヒーダ",
+      "archetypeIndex": 4,
+      "archetypeName": "E と Q（刻晴編成）",
+      "detail": "index 2（「E と Q（通常攻撃なし）」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000070-hydro",
+      "characterName": "ニィロウ",
+      "archetypeIndex": 0,
+      "archetypeName": "E×3",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文のコンボの記述: スキルを 3 連続で使うと、水環が発動する（探索の比較なし））"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000119-dendro",
+      "characterName": "ラウマ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "detail": "運用型が 10 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "archetypeIndex": 0,
+      "archetypeName": "重撃→通常4→重撃",
+      "detail": "先頭 o[0] として不適切な可能性: サポーター先頭に通常/重撃コンボ"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "archetypeIndex": 2,
+      "archetypeName": "E だけ",
+      "detail": "編成括弧「魈・閑雲編成」に当人「フリーナ」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000089-hydro",
+      "characterName": "フリーナ",
+      "archetypeIndex": 2,
+      "archetypeName": "E だけ",
+      "detail": "index 1（「E だけ」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000023-pyro",
+      "characterName": "香菱",
+      "archetypeIndex": 0,
+      "archetypeName": "主役（E・Q のあと通常攻撃）",
+      "detail": "先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000023-pyro",
+      "characterName": "香菱",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000023-pyro",
+      "characterName": "香菱",
+      "archetypeIndex": 3,
+      "archetypeName": "q→e→dash",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000053-anemo",
+      "characterName": "早柚",
+      "archetypeIndex": 2,
+      "archetypeName": "Q のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "archetypeIndex": 1,
+      "archetypeName": "E と Q",
+      "detail": "編成括弧「アルレッキーノ・Overvape 編成」に当人「ベネット」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "archetypeIndex": 4,
+      "archetypeName": "Q→E のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000032-pyro",
+      "characterName": "ベネット",
+      "archetypeIndex": 5,
+      "archetypeName": "E→Q のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "detail": "運用型が 11 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 0,
+      "archetypeName": "Q→E",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 3,
+      "archetypeName": "N→E→DASH→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 5,
+      "archetypeName": "Q→N→E→DASH→N×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 6,
+      "archetypeName": "E→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 7,
+      "archetypeName": "Q→N のあと、もう一度 N→E→DASH→N×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 8,
+      "archetypeName": "Q→N のあと、もう一度 E→DASH→N→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 9,
+      "archetypeName": "e→dash→n×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000025-hydro",
+      "characterName": "行秋",
+      "archetypeIndex": 10,
+      "archetypeName": "n→e→dash→n×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×4→E→N×4→DASH→N×4→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×4→DASH→N×4→E→N×4→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000052-electro",
+      "characterName": "雷電将軍",
+      "archetypeIndex": 6,
+      "archetypeName": "q→n×4→e→n×4→dash→n×4→dash→n×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000046-pyro",
+      "characterName": "胡桃",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N×2→CA→JUMP→N（KQM）",
+      "detail": "1出場に 30 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "detail": "運用型が 10 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "archetypeIndex": 0,
+      "archetypeName": "E と Q",
+      "detail": "編成括弧「アルレッキーノ・Overvape 編成」に当人「夜蘭」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "archetypeIndex": 1,
+      "archetypeName": "E",
+      "detail": "編成括弧「アルレッキーノ・Overvape 編成」に当人「夜蘭」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E",
+      "detail": "他キャラ固有語「オズ」を含んでいます（evidence: Wiki 本文のコンボの記述: 戦闘が長引くときは、爆発→スキルの順でオズを出す（探索の比較なし））"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "archetypeIndex": 4,
+      "archetypeName": "E・Q",
+      "detail": "index 0（「E と Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000060-hydro",
+      "characterName": "夜蘭",
+      "archetypeIndex": 9,
+      "archetypeName": "E と Q",
+      "detail": "index 0（「E と Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000116-electro",
+      "characterName": "イネファ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "archetypeIndex": 0,
+      "archetypeName": "N→E のあと、もう一度 N×2→Q",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=6"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "archetypeIndex": 0,
+      "archetypeName": "N→E のあと、もう一度 N×2→Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N のあと、もう一度 N→N→Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "archetypeIndex": 2,
+      "archetypeName": "n→e",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000031-electro",
+      "characterName": "フィッシュル",
+      "archetypeIndex": 3,
+      "archetypeName": "n×2→q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "archetypeIndex": 0,
+      "archetypeName": "E→落下→Q",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000047-anemo",
+      "characterName": "楓原万葉",
+      "archetypeIndex": 5,
+      "archetypeName": "Q のあと、もう一度 E→HP、さらに E→HP",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000042-electro",
+      "characterName": "刻晴",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA のあと、もう一度 E→Q→E→N→CA→N→CA→N→E→N→CA→N→CA",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000042-electro",
+      "characterName": "刻晴",
+      "archetypeIndex": 3,
+      "archetypeName": "e→q→e→n→ca→n→ca→n→e→n→ca→n→ca",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000058-electro",
+      "characterName": "八重神子",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000058-electro",
+      "characterName": "八重神子",
+      "archetypeIndex": 1,
+      "archetypeName": "E と Q",
+      "detail": "編成括弧「ウェンティ・ドゥリン・ファルザン・ニコ」に当人「八重神子」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000058-electro",
+      "characterName": "八重神子",
+      "archetypeIndex": 1,
+      "archetypeName": "E と Q",
+      "detail": "index 0（「E→Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 2,
+      "archetypeName": "E×3 のあと、もう一度 E×3",
+      "detail": "KQM根拠の対象キャラが「八重神子」になっており別キャラ誤混入です"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 2,
+      "archetypeName": "E×3 のあと、もう一度 E×3",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 36 件。平均 56.5k（最大 77.5k）。凸数: 使われ）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 3,
+      "archetypeName": "E×3 のあと、もう一度 Q→E×3",
+      "detail": "KQM根拠の対象キャラが「八重神子」になっており別キャラ誤混入です"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 3,
+      "archetypeName": "E×3 のあと、もう一度 Q→E×3",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の複数回出場の形: 八重神子 321 件中 16 件。平均 52.6k（最大 90.6k）。凸数: 使われ）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 4,
+      "archetypeName": "E×3→Q→E×3",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文のコンボの記述: スキル設置で追加雷撃×3→爆発で CT リセット→スキル設置で追加雷撃×3（探索の比較なし））"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 5,
+      "archetypeName": "E×3",
+      "detail": "他キャラ固有語「殺生桜」を含んでいます（evidence: 手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ））"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000035-cryo",
+      "characterName": "七七",
+      "archetypeIndex": 5,
+      "archetypeName": "E×3",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: 手組み「星電導サンドローネ」・「八重神子」の探索の上位（E×3 で殺生桜 3 つ））"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000131-pyro",
+      "characterName": "ニコ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 0,
+      "archetypeName": "E→重撃2→Q",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=1"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 2,
+      "archetypeName": "E と Q",
+      "detail": "編成括弧「魈・閑雲編成」に当人「ファルザン」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 2,
+      "archetypeName": "E と Q",
+      "detail": "index 1（「E と Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 3,
+      "archetypeName": "E→CA→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q のあと、もう一度 E→CA",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000076-anemo",
+      "characterName": "ファルザン",
+      "archetypeIndex": 5,
+      "archetypeName": "Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000096-pyro",
+      "characterName": "アルレッキーノ",
+      "archetypeIndex": 2,
+      "archetypeName": "E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000096-pyro",
+      "characterName": "アルレッキーノ",
+      "archetypeIndex": 3,
+      "archetypeName": "ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000003-anemo",
+      "characterName": "ジン",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 1,
+      "archetypeName": "N→Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→N→E→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 4,
+      "archetypeName": "Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 5,
+      "archetypeName": "Q のあと、もう一度 N→E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000080-cryo",
+      "characterName": "ミカ",
+      "archetypeIndex": 7,
+      "archetypeName": "q→n→e",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000064-geo",
+      "characterName": "雲菫",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000064-geo",
+      "characterName": "雲菫",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000049-pyro",
+      "characterName": "宵宮",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000049-pyro",
+      "characterName": "宵宮",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N×5→DASH→N×5→DASH→N×5（KQM）",
+      "detail": "1出場に 18 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000103-geo",
+      "characterName": "シロネン",
+      "archetypeIndex": 1,
+      "archetypeName": "Q のあと、もう一度 E→N×2、さらに E→N×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 0,
+      "archetypeName": "Q だけ",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 2,
+      "archetypeName": "N→E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 5,
+      "archetypeName": "E→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000105-electro",
+      "characterName": "オロルン",
+      "archetypeIndex": 6,
+      "archetypeName": "E→Q のあと、もう一度 E→Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000022-anemo",
+      "characterName": "ウェンティ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q のあと、もう一度 E→N、さらに E→N",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000030-geo",
+      "characterName": "鍾離",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "detail": "運用型が 9 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 3,
+      "archetypeName": "E のあと、もう一度 CA→E→CA→Q、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 CA→Q→E→CA、さらに CA×2",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000087-hydro",
+      "characterName": "ヌヴィレット",
+      "archetypeIndex": 5,
+      "archetypeName": "N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 1,
+      "archetypeName": "Q・ダッシュ・E のあと 通常攻撃を繰り返す",
+      "detail": "編成括弧「綾人・フリーナ・シトラリ・エスコフィエ」に当人「神里綾人」が含まれていません（誤混入の疑い）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 2,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15→Q",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 2,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15→Q",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 3,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15",
+      "detail": "1出場に 16 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 3,
+      "archetypeName": "Q のあと、もう一度 E→N×15、さらに E→N×15",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N×15→Q のあと、もう一度 E→N×15",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 5,
+      "archetypeName": "e→n×15",
+      "detail": "1出場に 16 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000066-hydro",
+      "characterName": "神里綾人",
+      "archetypeIndex": 6,
+      "archetypeName": "e→n×15→q",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 4,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 4,
+      "archetypeName": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 5,
+      "archetypeName": "e_hold→lp→n×2→ca→dash→n×3→ca→dash",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000078-dendro",
+      "characterName": "アルハイゼン",
+      "archetypeIndex": 6,
+      "archetypeName": "e_hold→lp→n×3→dash→n×3→dash→n×3",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000065-electro",
+      "characterName": "久岐忍",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=4 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000065-electro",
+      "characterName": "久岐忍",
+      "archetypeIndex": 3,
+      "archetypeName": "N→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000110-electro",
+      "characterName": "イアンサ",
+      "archetypeIndex": 0,
+      "archetypeName": "E→重撃",
+      "detail": "先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[supporter] と不一致 / 非アタッカーの先頭が attacker"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000120-electro",
+      "characterName": "フリンズ",
+      "archetypeIndex": 2,
+      "archetypeName": "e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n",
+      "detail": "1出場に 25 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000120-electro",
+      "characterName": "フリンズ",
+      "archetypeIndex": 3,
+      "archetypeName": "e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4",
+      "detail": "1出場に 24 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "archetypeIndex": 0,
+      "archetypeName": "E・通常攻撃・重撃",
+      "detail": "先頭 o[0] として不適切な可能性: useが長大(10手) / role=subAttacker がマスター roles=[attacker,supporter] と不一致"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "archetypeIndex": 0,
+      "archetypeName": "E・通常攻撃・重撃",
+      "detail": "1出場に 10 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000043-anemo",
+      "characterName": "スクロース",
+      "archetypeIndex": 1,
+      "archetypeName": "n→e→dash",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000071-electro",
+      "characterName": "セノ",
+      "archetypeIndex": 0,
+      "archetypeName": "通常4→E の繰り返し（1 凸・雷怒 4）",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=1"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N×4→E→DASH×3（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）",
+      "detail": "1出場に 23 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）",
+      "detail": "1出場に 20 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 10 件。平均 55.5k（最大 72.2k）。凸数: 使われてい）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）",
+      "detail": "1出場に 21 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 5,
+      "archetypeName": "e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000085-cryo",
+      "characterName": "フレミネ",
+      "archetypeIndex": 5,
+      "archetypeName": "e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000034-geo",
+      "characterName": "ノエル",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 2,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 2,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "1出場に 27 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 3,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000020-electro",
+      "characterName": "レザー",
+      "archetypeIndex": 3,
+      "archetypeName": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）",
+      "detail": "1出場に 31 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000027-geo",
+      "characterName": "凝光",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q→重撃→E",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=2"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000027-geo",
+      "characterName": "凝光",
+      "archetypeIndex": 1,
+      "archetypeName": "E→Q→E→重撃",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000029-pyro",
+      "characterName": "クレー",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000036-cryo",
+      "characterName": "重雲",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000036-cryo",
+      "characterName": "重雲",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N のあと、もう一度 Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000036-cryo",
+      "characterName": "重雲",
+      "archetypeIndex": 3,
+      "archetypeName": "E のあと、もう一度 Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000041-hydro",
+      "characterName": "モナ",
+      "detail": "運用型が 9 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000044-pyro",
+      "characterName": "辛炎",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000044-pyro",
+      "characterName": "辛炎",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "archetypeIndex": 4,
+      "archetypeName": "N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）",
+      "detail": "1出場に 23 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000057-geo",
+      "characterName": "荒瀧一斗",
+      "archetypeIndex": 5,
+      "archetypeName": "通常→Q→通常→E→重撃連打の周回",
+      "detail": "1出場に 22 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000059-anemo",
+      "characterName": "鹿野院平蔵",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000062-cryo",
+      "characterName": "アーロイ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000062-cryo",
+      "characterName": "アーロイ",
+      "archetypeIndex": 0,
+      "archetypeName": "Q→E",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000086-cryo",
+      "characterName": "リオセスリ",
+      "archetypeIndex": 0,
+      "archetypeName": "通常5→強化重撃の繰り返し（1 凸）",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=1"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000104-anemo",
+      "characterName": "チャスカ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000128-anemo",
+      "characterName": "ファルカ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000016-pyro",
+      "characterName": "ディルック",
+      "archetypeIndex": 1,
+      "archetypeName": "最大ダメージのコンボ（通常1 E 通常1 E 通常2〜4 E 通常1〜3 E 通常4）",
+      "detail": "1出場に 13 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000048-pyro",
+      "characterName": "煙緋",
+      "archetypeIndex": 0,
+      "archetypeName": "E→重撃（サブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000109-anemo",
+      "characterName": "夢見月瑞希",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "archetypeIndex": 0,
+      "archetypeName": "E→重撃→長押しE",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000006-electro",
+      "characterName": "リサ",
+      "archetypeIndex": 3,
+      "archetypeName": "N→Q のあと、もう一度 E_HOLD",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000014-hydro",
+      "characterName": "バーバラ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000015-cryo",
+      "characterName": "ガイア",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000021-pyro",
+      "characterName": "アンバー",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000021-pyro",
+      "characterName": "アンバー",
+      "archetypeIndex": 0,
+      "archetypeName": "q の出場",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "detail": "運用型が 10 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 0,
+      "archetypeName": "通常2→E→Q",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致 / サポーター先頭に通常/重撃コンボ"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 5,
+      "archetypeName": "E→Q のあと、もう一度 E→N×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 6,
+      "archetypeName": "E→Q のあと、もう一度 N→E→N×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 7,
+      "archetypeName": "E→Q→DASH のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000024-electro",
+      "characterName": "北斗",
+      "archetypeIndex": 9,
+      "archetypeName": "E→Q のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000038-geo",
+      "characterName": "アルベド",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000038-geo",
+      "characterName": "アルベド",
+      "archetypeIndex": 0,
+      "archetypeName": "e の出場",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000039-cryo",
+      "characterName": "ディオナ",
+      "archetypeIndex": 1,
+      "archetypeName": "E_HOLD→N→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000039-cryo",
+      "characterName": "ディオナ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E_HOLD×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000039-cryo",
+      "characterName": "ディオナ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→Q→N のあと、もう一度 E→DASH",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000045-cryo",
+      "characterName": "ロサリア",
+      "archetypeIndex": 0,
+      "archetypeName": "q の出場",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000045-cryo",
+      "characterName": "ロサリア",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "archetypeIndex": 2,
+      "archetypeName": "e q の出場",
+      "detail": "index 0（「E→Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "archetypeIndex": 3,
+      "archetypeName": "E→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "archetypeIndex": 5,
+      "archetypeName": "Q→N→E→N×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000050-pyro",
+      "characterName": "トーマ",
+      "archetypeIndex": 6,
+      "archetypeName": "e→n→q→n",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "archetypeIndex": 0,
+      "archetypeName": "Q→E",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q のあと、もう一度 N×2→E→Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "archetypeIndex": 3,
+      "archetypeName": "E→Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000055-geo",
+      "characterName": "ゴロー",
+      "archetypeIndex": 4,
+      "archetypeName": "e→n",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "archetypeIndex": 0,
+      "archetypeName": "E→重撃→Q",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[supporter] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "archetypeIndex": 2,
+      "archetypeName": "E→CA のあと、もう一度 Q、さらに E→CA",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "archetypeIndex": 2,
+      "archetypeName": "E→CA のあと、もう一度 Q、さらに E→CA",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000056-electro",
+      "characterName": "九条裟羅",
+      "archetypeIndex": 3,
+      "archetypeName": "E→CA→N のあと、もう一度 Q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "archetypeIndex": 2,
+      "archetypeName": "E_HOLD→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD のあと、もう一度 E_HOLD",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000061-dendro",
+      "characterName": "綺良々",
+      "archetypeIndex": 5,
+      "archetypeName": "Q→E_HOLD のあと、もう一度 E_HOLD",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000063-cryo",
+      "characterName": "申鶴",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 0,
+      "archetypeName": "e q の出場",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 1,
+      "archetypeName": "N→E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→E のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N→E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000067-dendro",
+      "characterName": "コレイ",
+      "archetypeIndex": 6,
+      "archetypeName": "Q のあと、もう一度 E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N×2→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 5,
+      "archetypeName": "E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000068-electro",
+      "characterName": "ドリー",
+      "archetypeIndex": 6,
+      "archetypeName": "e→n×2→dash→n×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N×2→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→N×2（KQM）",
+      "detail": "星4キャラに constellation.min=5 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 4,
+      "archetypeName": "E→Q→N のあと、もう一度 E→N×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 5,
+      "archetypeName": "N→E のあと、もう一度 N→E→Q→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000072-hydro",
+      "characterName": "キャンディス",
+      "archetypeIndex": 6,
+      "archetypeName": "e→n→q→n",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→N→E→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "archetypeIndex": 2,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→E のあと、もう一度 Q→E",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "archetypeIndex": 4,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000074-cryo",
+      "characterName": "レイラ",
+      "archetypeIndex": 5,
+      "archetypeName": "q→n→e",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 2,
+      "archetypeName": "N→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→DASH→N→DASH→N→JUMP→N→JUMP→N→DASH→N→DASH→N→JUMP→E（KQM）",
+      "detail": "1出場に 15 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 4,
+      "archetypeName": "N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000077-dendro",
+      "characterName": "ヨォーヨ",
+      "archetypeIndex": 4,
+      "archetypeName": "N→E→N のあと、もう一度 Q→N×2→DASH→N×2→DASH→N×2→DASH→N×2→DASH→N",
+      "detail": "1出場に 14 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000082-dendro",
+      "characterName": "白朮",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "archetypeIndex": 0,
+      "archetypeName": "e q の出場",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[subAttacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "archetypeIndex": 1,
+      "archetypeName": "E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→E→N×2→CA→N×2→CA→N のあと、もう一度 E→N×2→CA→N→CA→N→CA",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000083-anemo",
+      "characterName": "リネット",
+      "archetypeIndex": 4,
+      "archetypeName": "E→N→Q のあと、もう一度 E→N",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000088-cryo",
+      "characterName": "シャルロット",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000088-cryo",
+      "characterName": "シャルロット",
+      "archetypeIndex": 2,
+      "archetypeName": "E_HOLD→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000088-cryo",
+      "characterName": "シャルロット",
+      "archetypeIndex": 3,
+      "archetypeName": "E→Q→N（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000088-cryo",
+      "characterName": "シャルロット",
+      "archetypeIndex": 4,
+      "archetypeName": "e→n→q→n",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→E_HOLD×2（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E_HOLD（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 3,
+      "archetypeName": "E_HOLD→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000090-pyro",
+      "characterName": "シュヴルーズ",
+      "archetypeIndex": 5,
+      "archetypeName": "q→e_hold×3",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000094-geo",
+      "characterName": "千織",
+      "archetypeIndex": 0,
+      "archetypeName": "E→通常2→E の繰り返し",
+      "detail": "先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "archetypeIndex": 1,
+      "archetypeName": "E×2 のあと、もう一度 E×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000108-anemo",
+      "characterName": "藍硯",
+      "archetypeIndex": 2,
+      "archetypeName": "E×2→Q のあと、もう一度 E×2",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000115-hydro",
+      "characterName": "ダリア",
+      "archetypeIndex": 1,
+      "archetypeName": "N→E→N→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000115-hydro",
+      "characterName": "ダリア",
+      "archetypeIndex": 2,
+      "archetypeName": "N→E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000115-hydro",
+      "characterName": "ダリア",
+      "archetypeIndex": 3,
+      "archetypeName": "E→N×2→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000115-hydro",
+      "characterName": "ダリア",
+      "archetypeIndex": 4,
+      "archetypeName": "e→n→q",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000121-hydro",
+      "characterName": "アイノ",
+      "archetypeIndex": 1,
+      "archetypeName": "Q→E（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000121-hydro",
+      "characterName": "アイノ",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000124-anemo",
+      "characterName": "ヤフォダ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000127-geo",
+      "characterName": "イルーガ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000132-anemo",
+      "characterName": "プルーネ",
+      "archetypeIndex": 2,
+      "archetypeName": "q→e",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000148-electro",
+      "characterName": "アリョーシャ",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000002-cryo",
+      "characterName": "神里綾華",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q（爆発サブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000002-cryo",
+      "characterName": "神里綾華",
+      "archetypeIndex": 2,
+      "archetypeName": "E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA",
+      "detail": "1出場に 10 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-cryo",
+      "characterName": "空(氷)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000005-cryo",
+      "characterName": "空(氷)",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q（星拡散のサブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000005-dendro",
+      "characterName": "空(草)",
+      "archetypeIndex": 1,
+      "archetypeName": "E・Q（サブアタッカー）",
+      "detail": "index 0（「E・Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-anemo",
+      "characterName": "空(風)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-electro",
+      "characterName": "空(雷)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-geo",
+      "characterName": "空(岩)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000005-hydro",
+      "characterName": "空(水)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-cryo",
+      "characterName": "蛍(氷)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000007-cryo",
+      "characterName": "蛍(氷)",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q（星拡散のサブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-dendro",
+      "characterName": "蛍(草)",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "duplicate-shape",
+      "severity": "warn",
+      "characterId": "10000007-dendro",
+      "characterName": "蛍(草)",
+      "archetypeIndex": 1,
+      "archetypeName": "E・Q（サブアタッカー）",
+      "detail": "index 0（「E・Q」）とアクション列が完全重複しています"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-anemo",
+      "characterName": "蛍(風)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-electro",
+      "characterName": "蛍(雷)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-geo",
+      "characterName": "蛍(岩)",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000007-hydro",
+      "characterName": "蛍(水)",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000033-hydro",
+      "characterName": "タルタリヤ",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000033-hydro",
+      "characterName": "タルタリヤ",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q（サブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q→E→通常5→長押しE→通常2",
+      "detail": "先頭 o[0] として不適切な可能性: useが長大(11手)"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q→E→通常5→長押しE→通常2",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 1,
+      "archetypeName": "E→Q→長押しE→通常4→ダッシュ→通常4",
+      "detail": "1出場に 12 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000051-cryo",
+      "characterName": "エウルア",
+      "archetypeIndex": 2,
+      "archetypeName": "E→Q→通常4→長押しE→通常4",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000069-dendro",
+      "characterName": "ティナリ",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "detail": "運用型が 8 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q のあと 通常攻撃を繰り返す（爆発アタッカー）",
+      "detail": "先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[supporter] と不一致 / 非アタッカーの先頭が attacker"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 4,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E→N",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-stints",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 5,
+      "archetypeName": "E のあと、もう一度 Q→N×10、さらに E→N",
+      "detail": "1周に 3 回出場する形です（不自然な細切れ出場の原因になりやすい）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 6,
+      "archetypeName": "E×2 のあと、もう一度 Q→N×10",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000079-pyro",
+      "characterName": "ディシア",
+      "archetypeIndex": 7,
+      "archetypeName": "q→n×10",
+      "detail": "1出場に 11 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "detail": "運用型が 7 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E→HP（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 3,
+      "archetypeName": "Q→E→HP→E→HP→DASH（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 4,
+      "archetypeName": "Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 4,
+      "archetypeName": "Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）",
+      "detail": "1出場に 17 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 5,
+      "archetypeName": "q→n×2→e→hp→n→e→hp→dash",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000092-pyro",
+      "characterName": "嘉明",
+      "archetypeIndex": 6,
+      "archetypeName": "q→e→hp→e→hp",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000099-dendro",
+      "characterName": "エミリエ",
+      "archetypeIndex": 0,
+      "archetypeName": "E→Q のあと 通常1→重撃を繰り返す",
+      "detail": "先頭 o[0] として不適切な可能性: role=attacker がマスター roles=[subAttacker] と不一致 / 非アタッカーの先頭が attacker"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000102-hydro",
+      "characterName": "ムアラニ",
+      "archetypeIndex": 0,
+      "archetypeName": "E・通常攻撃・E（絵巻 4 セット型）",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000106-pyro",
+      "characterName": "マーヴィカ",
+      "detail": "運用型が 6 件あり肥大化しています（推奨 2〜4 件）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000106-pyro",
+      "characterName": "マーヴィカ",
+      "archetypeIndex": 0,
+      "archetypeName": "E・Q（サブ）",
+      "detail": "先頭 o[0] として不適切な可能性: role=subAttacker がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000126-geo",
+      "characterName": "兹白",
+      "detail": "運用型が 2 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000081-dendro",
+      "characterName": "カーヴェ",
+      "archetypeIndex": 0,
+      "archetypeName": "E（設置・控えから攻撃）",
+      "detail": "先頭 o[0] として不適切な可能性: role=supporter がマスター roles=[attacker] と不一致"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000081-dendro",
+      "characterName": "カーヴェ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E→N×12→E→N×4（KQM）",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000081-dendro",
+      "characterName": "カーヴェ",
+      "archetypeIndex": 2,
+      "archetypeName": "Q→E→N×12→E→N×4（KQM）",
+      "detail": "1出場に 19 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "bloat-or-sparse",
+      "severity": "warn",
+      "characterId": "10000097-electro",
+      "characterName": "セトス",
+      "detail": "運用型が 1 件のみです（定番形漏れの確認対象）"
+    },
+    {
+      "kind": "bad-first-entry",
+      "severity": "warn",
+      "characterId": "10000097-electro",
+      "characterName": "セトス",
+      "archetypeIndex": 0,
+      "archetypeName": "CA のあと、もう一度 E→CA",
+      "detail": "先頭 o[0] として不適切な可能性: 凸制限 min=6"
+    },
+    {
+      "kind": "four-star-high-constellation",
+      "severity": "warn",
+      "characterId": "10000097-electro",
+      "characterName": "セトス",
+      "archetypeIndex": 0,
+      "archetypeName": "CA のあと、もう一度 E→CA",
+      "detail": "星4キャラに constellation.min=6 が付いています（KQMの6凸偏りによる誤制限か要確認）"
+    },
+    {
+      "kind": "excessive-length",
+      "severity": "warn",
+      "characterId": "10000129-cryo",
+      "characterName": "ローエン",
+      "archetypeIndex": 1,
+      "archetypeName": "E→重撃2→特殊E→重撃5→Q→重撃5",
+      "detail": "1出場に 15 手べた書きされています（fill への抽象化または削減を検討）"
+    },
+    {
+      "kind": "wrong-character",
+      "severity": "error",
+      "characterId": "10000130-geo",
+      "characterName": "リンネア",
+      "archetypeIndex": 1,
+      "archetypeName": "E×3（連打の瞬間火力）",
+      "detail": "他キャラ固有語「E×3」を含んでいます（evidence: Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 連打すると瞬間火力型になる）"
+    }
+  ]
+}

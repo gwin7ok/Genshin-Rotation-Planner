@@ -1,0 +1,1290 @@
+{
+ "party": [
+  {
+   "id": "10000033-hydro",
+   "name": "タルタリヤ",
+   "roles": [
+    "attacker"
+   ]
+  },
+  {
+   "id": "10000023-pyro",
+   "name": "香菱",
+   "roles": [
+    "subAttacker"
+   ]
+  },
+  {
+   "id": "10000032-pyro",
+   "name": "ベネット",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000047-anemo",
+   "name": "楓原万葉",
+   "roles": [
+    "supporter"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 127321,
+ "spearman": -0.17119090338761778,
+ "bestQuickScoreRank": 8802,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 9640,
+  "rejectedBy": {
+   "ベネット: 元素爆発CT違反": 80,
+   "ベネット: スキルCT違反": 21,
+   "楓原万葉: スキルCT違反": 3,
+   "タルタリヤ: 近接モード中の狙い撃ち": 3457,
+   "タルタリヤ: スキルCT違反": 532,
+   "楓原万葉: 元素爆発CT違反": 76,
+   "香菱: 落下攻撃の前提": 1890,
+   "タルタリヤ: 元素爆発CT違反": 15,
+   "香菱: スキルCT違反": 1660,
+   "重撃の直前が通常攻撃でない": 1904,
+   "香菱: 元素爆発CT違反": 2
+  },
+  "scored": 10660,
+  "quick": 1215,
+  "quickOk": 1213,
+  "quickFailed": {
+   "error encountered on tartaglia executing aim: aim called when not in ranged stance": 2
+  }
+ },
+ "results": [
+  {
+   "dps": 25074.34025520205,
+   "sd": 838.9223747827764,
+   "totalSeconds": 15.13,
+   "score": 0.36969986151850637,
+   "particles": {
+    "total": 37.2,
+    "enemy": 21.4,
+    "energy": 202.39999999999958,
+    "seconds": 26.300000000000004,
+    "energyPerMember10s": 19.2395437262357,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 20.12167300380228
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 20.395437262357426
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 21.520912547528532
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.92015209125475
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 119.28333333333333
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N×2] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 25058.460369036635,
+   "sd": 838.3910749887411,
+   "totalSeconds": 15.15,
+   "score": 0.37019933630198026,
+   "particles": {
+    "total": 37.3,
+    "enemy": 21.5,
+    "energy": 202.95999999999958,
+    "seconds": 26.31666666666667,
+    "energyPerMember10s": 19.280557314756134,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 20.184927169094365
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 20.428119062697924
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 21.55288157061433
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.95630145661811
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 119.26666666666668
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E D N×2] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 24748.66406302038,
+   "sd": 796.0639418120148,
+   "totalSeconds": 15.12,
+   "score": 0.36994437200892866,
+   "particles": {
+    "total": 36.8,
+    "enemy": 21.4,
+    "energy": 203.83999999999955,
+    "seconds": 26.28333333333334,
+    "energyPerMember10s": 19.388712745719673,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 19.312618896639183
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 20.134432466708958
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 23.2694990488269
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.838300570703867
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 119.3
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N×2] → ↻ベネット[tE Q] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 24591.21562883973,
+   "sd": 1296.1807468090506,
+   "totalSeconds": 15.1,
+   "score": 0.34256818868543065,
+   "particles": {
+    "total": 37.1,
+    "enemy": 21.5,
+    "energy": 200.31999999999954,
+    "seconds": 26.26666666666666,
+    "energyPerMember10s": 19.0659898477157,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 20.482233502538072
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 20.329949238578706
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 20.512690355329973
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.939086294416253
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 119.31666666666668
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[N Q] → 香菱[E D N] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "dash",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 24552.991251581563,
+   "sd": 1329.0199118853127,
+   "totalSeconds": 15.08,
+   "score": 0.34203041173408505,
+   "particles": {
+    "total": 37.1,
+    "enemy": 21.5,
+    "energy": 200.31999999999954,
+    "seconds": 26.25,
+    "energyPerMember10s": 19.078095238095194,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 20.495238095238093
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 20.342857142857163
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 20.525714285714308
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 14.94857142857143
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 119.33333333333333
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[N Q] → 香菱[E N] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 24502.987474923888,
+   "sd": 907.616741803679,
+   "totalSeconds": 14.66,
+   "score": 0.351829373052524,
+   "particles": {
+    "total": 31.6,
+    "enemy": 18.3,
+    "energy": 168.83999999999975,
+    "seconds": 25.833333333333336,
+    "energyPerMember10s": 16.339354838709653,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 18.108387096774187
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.61290322580646
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 16.49806451612904
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 13.138064516129027
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 99.75
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N] → ベネット[Q tE] → ↻タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 3,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 23210.644793178908,
+   "sd": 6348.397760968924,
+   "totalSeconds": 15.13,
+   "score": 0.3696998615185064,
+   "particles": {
+    "total": 37.3,
+    "enemy": 21.9,
+    "energy": 201.51999999999956,
+    "seconds": 37.831666666666656,
+    "energyPerMember10s": 13.316886206440785,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 14.421780695184815
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.168025023128788
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.231463941142799
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 10.446275166306886
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 122.72166666666666
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N×2]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 23095.886047033004,
+   "sd": 6392.974553585414,
+   "totalSeconds": 15.06,
+   "score": 0.36732035949203196,
+   "particles": {
+    "total": 37.3,
+    "enemy": 21.9,
+    "energy": 201.51999999999956,
+    "seconds": 37.831666666666656,
+    "energyPerMember10s": 13.316886206440785,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 14.421780695184815
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 14.168025023128788
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.231463941142799
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 10.446275166306886
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 122.72166666666666
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q N E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "n",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 21621.49176768348,
+   "sd": 5826.665254552927,
+   "totalSeconds": 15.85,
+   "score": 0.3952050800465302,
+   "particles": {
+    "total": 36.8,
+    "enemy": 21.4,
+    "energy": 199.51999999999958,
+    "seconds": 38.55666666666666,
+    "energyPerMember10s": 12.93680297397767,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 13.72525287455693
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 13.414022650644089
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 14.49295409354199
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 10.114982277167808
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 118.49833333333333
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N×3] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 20489.426832299036,
+   "sd": 7967.230133501642,
+   "totalSeconds": 15.55,
+   "score": 0.35971439902090036,
+   "particles": {
+    "total": 37.4,
+    "enemy": 21.5,
+    "energy": 203.11999999999955,
+    "seconds": 49.84999999999998,
+    "energyPerMember10s": 10.186559679037092,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 10.635907723169513
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 10.772316950852574
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 11.358074222668018
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 7.97993981945838
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 118.31166666666665
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[N Q] → 香菱[E N×2] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 18745.575851996673,
+   "sd": 9176.406101272738,
+   "totalSeconds": 15.08,
+   "score": 0.3420304117340851,
+   "particles": {
+    "total": 38.2,
+    "enemy": 22,
+    "energy": 205.51999999999958,
+    "seconds": 62.02833333333333,
+    "energyPerMember10s": 8.283311389956186,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 8.905607652416906
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 8.815326329365622
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 8.828223661230094
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 6.58408791681221
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 121.25833333333333
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[Q] → 香菱[E N] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE N] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 16575.955690355528,
+   "sd": 9758.87236247904,
+   "totalSeconds": 15.56,
+   "score": 0.3604447265408098,
+   "particles": {
+    "total": 37.7,
+    "enemy": 21.8,
+    "energy": 204.79999999999956,
+    "seconds": 73.51166666666668,
+    "energyPerMember10s": 6.964880857913693,
+    "energyByChar10s": [
+     {
+      "characterId": "10000033-hydro",
+      "energy10s": 7.294080304713536
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 7.353934749586239
+     },
+     {
+      "characterId": "10000032-pyro",
+      "energy10s": 7.751150611014128
+     },
+     {
+      "characterId": "10000047-anemo",
+      "energy10s": 5.460357766340942
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000033-hydro",
+     "waits": 1,
+     "seconds": 118.905
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000032-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000047-anemo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "楓原万葉[N Q] → 香菱[E D N×2] → ↻ベネット[Q tE] → タルタリヤ[E Q] → 楓原万葉[tE] → 香菱[Q E N]",
+   "rot": {
+    "loop": 2,
+    "stints": [
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "dash",
+       "n",
+       "n"
+      ]
+     },
+     {
+      "c": "10000032-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000033-hydro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000047-anemo",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "n"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

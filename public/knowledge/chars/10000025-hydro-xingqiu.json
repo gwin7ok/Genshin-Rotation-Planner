@@ -3,69 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E8%A1%8C%E7%A7%8B",
  "archetypes": [
   {
+   "name": "E→ダッシュ→Q→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "dash",
+    "q",
+    "n"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 雨簾剣維持＋水付着基本形"
+  },
+  {
    "name": "Q→E",
-   "role": "subAttacker",
+   "role": "supporter",
    "slot": 20,
    "use": [
     "q",
     "e"
    ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発→スキルの順だと、粒子を安定して回収できる（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: 短縮交代形"
   },
   {
-   "name": "E・ダッシュ・Q",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "dash",
-    "q"
-   ],
-   "evidence": "手組み「雷電ナショナル」・探索の上位"
-  },
-  {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "探索の上位"
-  },
-  {
-   "name": "N→E→DASH→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "n",
-    "e",
-    "dash",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 行秋 710 件中 27 件。平均 54.4k（最大 68.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/27）（探索の比較なし）"
-  },
-  {
-   "name": "E→DASH→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "dash",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 2
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 行秋 710 件中 212 件。平均 62.9k（最大 224.0k）。凸数: 使われている設定の最小は 2 凸（分布 0〜6 凸 = 0/0/1/0/0/0/211）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N→E→DASH→N×2（KQM）",
+   "name": "Q→N→E→ダッシュ→N×2",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -76,54 +36,12 @@
     "n",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 行秋 710 件中 37 件。平均 49.4k（最大 75.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/37）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 祭礼/西風連動追撃形"
   },
   {
-   "name": "E→Q→N（KQM）",
+   "name": "Q→N のあと、もう一度 E→ダッシュ→N×2",
    "role": "supporter",
    "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 5
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 行秋 710 件中 32 件。平均 60.4k（最大 104.4k）。凸数: 使われている設定の最小は 5 凸（分布 0〜6 凸 = 0/0/0/0/0/1/31）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N のあと、もう一度 N→E→DASH→N×2",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "q",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "n",
-      "e",
-      "dash",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 行秋 710 件中 47 件。平均 73.6k（最大 167.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/47）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N のあと、もう一度 E→DASH→N→N",
-   "role": "subAttacker",
-   "slot": 20,
    "use": [
     "q",
     "n"
@@ -139,41 +57,7 @@
      ]
     }
    ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 行秋 710 件中 37 件。平均 61.5k（最大 102.5k）（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（117 件。分布 0〜6 凸 = 0/0/0/0/0/0/117）"
-  },
-  {
-   "name": "e→dash→n×2",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "dash",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 60 件・平均 59.4k・最大 102.5k。e dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（60 件。分布 0〜6 凸 = 0/0/0/0/0/0/60）"
-  },
-  {
-   "name": "n→e→dash→n×2",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "n",
-    "e",
-    "dash",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 64 件・平均 69.2k・最大 167.7k。n e dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（64 件。分布 0〜6 凸 = 0/0/0/0/0/0/64）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 2回出場型"
   }
  ]
 }

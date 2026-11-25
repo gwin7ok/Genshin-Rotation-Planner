@@ -3,63 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%8A",
  "archetypes": [
   {
-   "name": "重撃→通常4→重撃",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "ca",
-    "n",
-    "n",
-    "n",
-    "n",
-    "ca"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: サロンメンバーを出した状態で控えに回りたいので、重撃→通常 4 回→重撃で効果を 6 回使い切る（探索の比較なし）"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒"
-  },
-  {
-   "name": "E だけ",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "編成例の探索（魈・閑雲編成）の上位に出る形。実測: 魈の編成で 43.2k → 48.4k"
-  },
-  {
-   "name": "E・Q・E",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "q",
-    "e"
-   ],
-   "evidence": "手組み「蒸発フリーナ」"
-  },
-  {
-   "name": "Q のあと E・通常攻撃 2 回・E",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "q",
-    "e",
-    "n",
-    "n",
-    "e"
-   ],
-   "evidence": "探索の上位（71.8k）"
-  },
-  {
-   "name": "E→DASH→Q（KQM）",
+   "name": "E→ダッシュ→Q",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -67,33 +11,15 @@
     "dash",
     "q"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フリーナ 1786 件中 698 件。平均 66.2k（最大 431.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 685/0/3/4/1/0/5）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計(最多): スキル硬直キャンセル→爆発"
   },
   {
-   "name": "E→DASH→N→Q（KQM）",
+   "name": "E→ダッシュ のあと、もう一度 Q",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
-    "dash",
-    "n",
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フリーナ 1786 件中 176 件。平均 69.2k（最大 130.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 174/0/2/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E のあと、もう一度 Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e"
+    "dash"
    ],
    "then": [
     {
@@ -103,41 +29,27 @@
      ]
     }
    ],
-   "evidence": "サロンメンバー（E）を先に置き、アタッカー・長押しの直前に再度出て爆発（Q）のバフを合わせる形（蒸発フリーナ等）"
+   "evidence": "Phase 3-1精鋭辞書: サロン先置き→バフ合わせ再爆発"
   },
   {
-   "name": "N→E→DASH→N のあと、もう一度 Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "n",
-    "e",
-    "dash",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "q"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: フリーナ 1786 件中 75 件。平均 84.6k（最大 113.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 75/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E と Q",
+   "name": "E→Q",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "手組み「蒸発フリーナ」と探索の上位が、先頭に E・Q を置く"
+   "evidence": "Phase 3-1精鋭辞書: シンプルE→Q形"
+  },
+  {
+   "name": "E→ダッシュ（爆発温存）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "dash"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: 爆発温存・スキルのみ形"
   }
  ]
 }

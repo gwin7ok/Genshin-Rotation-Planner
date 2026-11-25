@@ -19,7 +19,7 @@ export const CHARGE_REQUIRES_ATTACK = new Set<string>([
   'kamisatoayaka', 'kamisatoayato', 'keqing', 'kinich', 'kirara', 'kukishinobu', 'layla',
   'lumineanemo', 'luminecryo', 'luminedendro', 'lumineelectro', 'luminegeo', 'luminehydro', 'luminepyro',
   'lynette', 'mika', 'nilou', 'odette', 'prune', 'qiqi', 'raidenshogun', 'rosaria', 'shenhe', 'shikanoinheizou',
-  'thoma', 'wriothesley', 'xiangling', 'xiao', 'xilonen', 'xingqiu', 'yaoyao', 'yunjin', 'zhongli',
+  'tartaglia', 'thoma', 'wriothesley', 'xiangling', 'xiao', 'xilonen', 'xingqiu', 'yaoyao', 'yunjin', 'zhongli',
 ]);
 
 /** 直前のアクション（gcsim の命令）の表示名 */

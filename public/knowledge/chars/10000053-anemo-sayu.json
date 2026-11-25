@@ -3,27 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E6%97%A9%E6%9F%9A",
  "archetypes": [
   {
-   "name": "長押し E と Q",
-   "role": "supporter",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "q"
-   ],
-   "evidence": "探索の上位（早柚[hE Q]）"
-  },
-  {
-   "name": "Q のあと長押し E",
+   "name": "Q のあと長押しE",
    "role": "supporter",
    "slot": 40,
    "use": [
     "q",
     "e_hold"
    ],
-   "evidence": "手組み「蒸発フリーナ」（長押し 8.4 秒）"
+   "evidence": "Phase 3-1精鋭辞書: 蒸発フリーナ等での風車ドライバー形"
   },
   {
-   "name": "Q のあと、もう一度 E",
+   "name": "長押しE と Q",
+   "role": "supporter",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "Phase 3-1精鋭辞書: スキル先出し形"
+  },
+  {
+   "name": "Q のあと、もう一度 長押しE",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -31,16 +31,13 @@
    ],
    "then": [
     {
-     "slot": 30,
+     "slot": 40,
      "use": [
-      "e"
+      "e_hold"
      ]
     }
    ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 早柚 34 件中 6 件。平均 55.4k（最大 60.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+   "evidence": "Phase 3-1精鋭辞書: 回復先置き→後から風車形"
   }
  ]
 }

@@ -1,0 +1,3231 @@
+{
+ "party": [
+  {
+   "id": "10000053-anemo",
+   "name": "早柚",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000089-hydro",
+   "name": "フリーナ",
+   "roles": [
+    "supporter"
+   ]
+  },
+  {
+   "id": "10000023-pyro",
+   "name": "香菱",
+   "roles": [
+    "subAttacker"
+   ]
+  },
+  {
+   "id": "10000107-cryo",
+   "name": "シトラリ",
+   "roles": [
+    "subAttacker",
+    "supporter"
+   ]
+  }
+ ],
+ "seconds": 40,
+ "elapsedMs": 316318,
+ "spearman": -0.42782316352459415,
+ "bestQuickScoreRank": 10896,
+ "counts": {
+  "candidates": 20300,
+  "rejected": 9227,
+  "rejectedBy": {
+   "早柚: 元素爆発CT違反": 269,
+   "シトラリ: スキルCT違反": 2716,
+   "フリーナ: 元素爆発CT違反": 97,
+   "フリーナ: スキルCT違反": 247,
+   "シトラリ: 元素爆発CT違反": 58,
+   "香菱: 落下攻撃の前提": 1364,
+   "重撃の直前が通常攻撃でない": 2566,
+   "香菱: スキルCT違反": 1891,
+   "香菱: 元素爆発CT違反": 19
+  },
+  "scored": 11073,
+  "quick": 1066,
+  "quickOk": 1066,
+  "quickFailed": {}
+ },
+ "results": [
+  {
+   "dps": 84436.74137989004,
+   "sd": 2498.315501334734,
+   "totalSeconds": 21.05,
+   "score": 0,
+   "particles": {
+    "total": 187.9,
+    "enemy": 38.4,
+    "energy": 917.1200000000057,
+    "seconds": 115.03166666666667,
+    "energyPerMember10s": 19.931902809371454,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.751720540720665
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.946087309291613
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.339573161013597
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.690230226459327
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.7,
+     "seconds": 1.6714285714285713
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 83358.29025668609,
+   "sd": 2162.233653835531,
+   "totalSeconds": 25.37,
+   "score": 0,
+   "particles": {
+    "total": 194.9,
+    "enemy": 43.1,
+    "energy": 953.8400000000065,
+    "seconds": 127.16000000000001,
+    "energyPerMember10s": 18.75275243787367,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.73199119219879
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.3312362378106
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.544196288140888
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.403586033343768
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 3.1166666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E D] → シトラリ[E N Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 83241.1455238536,
+   "sd": 3135.994528769067,
+   "totalSeconds": 25.37,
+   "score": 0,
+   "particles": {
+    "total": 195,
+    "enemy": 43,
+    "energy": 954.4000000000066,
+    "seconds": 126.835,
+    "energyPerMember10s": 18.811842157133412,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.968423542397602
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.63866440651237
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.187960736389762
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.452319943233285
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 83481.04035938464,
+   "sd": 3719.7267118547525,
+   "totalSeconds": 23.05,
+   "score": 0,
+   "particles": {
+    "total": 193.2,
+    "enemy": 41.5,
+    "energy": 947.1200000000065,
+    "seconds": 122.56833333333331,
+    "energyPerMember10s": 19.318203451136235,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.364925687711615
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.35547517711206
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.648672169266085
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.903740770454526
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.3,
+     "seconds": 2.9444444444444446
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 82647.38648592826,
+   "sd": 2743.381563264768,
+   "totalSeconds": 23.95,
+   "score": 0,
+   "particles": {
+    "total": 194.8,
+    "enemy": 43.1,
+    "energy": 953.2800000000065,
+    "seconds": 125.49833333333333,
+    "energyPerMember10s": 18.98989362408544,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.021819678880195
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.591481958591718
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.75479090027752
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.591481958591697
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[E D Q] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "dash",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81739.51079468508,
+   "sd": 2146.6653734166443,
+   "totalSeconds": 24.08,
+   "score": 0,
+   "particles": {
+    "total": 193.3,
+    "enemy": 41.9,
+    "energy": 946.8000000000065,
+    "seconds": 125.915,
+    "energyPerMember10s": 18.798395743160196,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.68196799428184
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.558551403724707
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.578763451534723
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.37430012309886
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 82591.20922185216,
+   "sd": 3301.7181955806973,
+   "totalSeconds": 23.97,
+   "score": 0,
+   "particles": {
+    "total": 194.5,
+    "enemy": 42.7,
+    "energy": 951.6000000000065,
+    "seconds": 125.74166666666667,
+    "energyPerMember10s": 18.91974285903651,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.125190536152154
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.609119225926136
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.435283981708494
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.50937769235862
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 1.8666666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81632.18225603404,
+   "sd": 3084.282051863023,
+   "totalSeconds": 24.08,
+   "score": 0,
+   "particles": {
+    "total": 193.8,
+    "enemy": 41.8,
+    "energy": 949.6000000000064,
+    "seconds": 126.00666666666666,
+    "energyPerMember10s": 18.840273001428624,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.846410242844286
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.862546955187526
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.205491772922027
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.44664303476001
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81985.0704953055,
+   "sd": 2622.284115774515,
+   "totalSeconds": 23.02,
+   "score": 0,
+   "particles": {
+    "total": 192.3,
+    "enemy": 41.2,
+    "energy": 942.1600000000064,
+    "seconds": 122.47,
+    "energyPerMember10s": 19.232465093492415,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.259573773168935
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.259165509920766
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.61631419939573
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.794806891483574
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.4,
+     "seconds": 3.1458333333333335
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 82419.84116191676,
+   "sd": 3110.3608807612654,
+   "totalSeconds": 26.02,
+   "score": 0,
+   "particles": {
+    "total": 201.1,
+    "enemy": 43.4,
+    "energy": 983.7600000000068,
+    "seconds": 127.61166666666665,
+    "energyPerMember10s": 19.272532553188846,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.580916060443794
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.15194535504849
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.59095955176508
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.766309245497354
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "早柚[hE(short)] → ↻フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "e_shorthold"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 82661.94148728724,
+   "sd": 5201.718105791514,
+   "totalSeconds": 23.93,
+   "score": 0,
+   "particles": {
+    "total": 193.9,
+    "enemy": 42.4,
+    "energy": 948.2400000000064,
+    "seconds": 125.62500000000003,
+    "energyPerMember10s": 18.870447761194153,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.063880597014908
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.580895522388026
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.348656716417867
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.488358208955166
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 1.8833333333333333
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81834.28597906852,
+   "sd": 3723.546638767778,
+   "totalSeconds": 23.95,
+   "score": 0,
+   "particles": {
+    "total": 194.4,
+    "enemy": 42.7,
+    "energy": 950.8000000000065,
+    "seconds": 126.06833333333331,
+    "energyPerMember10s": 18.854853849103133,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.985946774897204
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.547626287330917
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.414907259290562
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.470935074893198
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.2,
+     "seconds": 2.975
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q N] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 83508.33247311944,
+   "sd": 2956.823534068318,
+   "totalSeconds": 21.02,
+   "score": 0,
+   "particles": {
+    "total": 186.8,
+    "enemy": 37.9,
+    "energy": 911.4400000000056,
+    "seconds": 115.28333333333335,
+    "energyPerMember10s": 19.76521613416233,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.592308804394957
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.627150498771115
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.308659823622918
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.53274540985971
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 1,
+     "seconds": 2.058333333333333
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81579.3686457169,
+   "sd": 3493.6802156190342,
+   "totalSeconds": 24.12,
+   "score": 0,
+   "particles": {
+    "total": 194.8,
+    "enemy": 42.8,
+    "energy": 956.1600000000066,
+    "seconds": 126.14499999999998,
+    "energyPerMember10s": 18.949621467359123,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.954536446153227
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.014190019422067
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.314558642831624
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.51520076102892
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81783.68802938651,
+   "sd": 3485.671193318231,
+   "totalSeconds": 25.4,
+   "score": 0,
+   "particles": {
+    "total": 195.1,
+    "enemy": 43.2,
+    "energy": 954.7200000000064,
+    "seconds": 127.32833333333333,
+    "energyPerMember10s": 18.74523868738314,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.90770579996596
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.44152257287587
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.2477584198332
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.383967956856896
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 4.5
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E D] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 80821.12223935254,
+   "sd": 3229.7937184237135,
+   "totalSeconds": 23.17,
+   "score": 0,
+   "particles": {
+    "total": 192.1,
+    "enemy": 40.4,
+    "energy": 943.1200000000063,
+    "seconds": 122.38666666666666,
+    "energyPerMember10s": 19.265170497875715,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.14304390456476
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.53796709881248
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.560627519337583
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.8190434687874
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.2,
+     "seconds": 2.7416666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81267.07036125728,
+   "sd": 3154.77188955577,
+   "totalSeconds": 21.2,
+   "score": 0,
+   "particles": {
+    "total": 187.6,
+    "enemy": 37.7,
+    "energy": 916.3200000000058,
+    "seconds": 115.47666666666665,
+    "energyPerMember10s": 19.83777386485017,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.518171059088413
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 19.053199780619437
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.265825707935186
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.513898911757014
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.6,
+     "seconds": 2.138888888888889
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81206.15776565348,
+   "sd": 3808.6983331585666,
+   "totalSeconds": 23.93,
+   "score": 0,
+   "particles": {
+    "total": 194.2,
+    "enemy": 42.7,
+    "energy": 949.9200000000062,
+    "seconds": 125.54666666666667,
+    "energyPerMember10s": 18.915675446049402,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.93808411214952
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.496707731520786
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.702527612574302
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.52538232795237
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 1.4
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 80724.98318916334,
+   "sd": 2681.7450897322137,
+   "totalSeconds": 23.2,
+   "score": 0,
+   "particles": {
+    "total": 193.1,
+    "enemy": 41.1,
+    "energy": 949.7600000000064,
+    "seconds": 122.53166666666668,
+    "energyPerMember10s": 19.37784790326323,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.20706211999618
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.728219915940063
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.68140208653541
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.894707490580608
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 0.43333333333333335
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 79709.0679289969,
+   "sd": 2370.1464946977153,
+   "totalSeconds": 25.52,
+   "score": 0,
+   "particles": {
+    "total": 194.3,
+    "enemy": 42.4,
+    "energy": 952.1600000000066,
+    "seconds": 127.93166666666669,
+    "energyPerMember10s": 18.606808322151274,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.56517151083259
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.615654190388064
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.008546229106642
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.23786135827715
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 4.933333333333334
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 80452.9708870957,
+   "sd": 3695.4634570439885,
+   "totalSeconds": 25.55,
+   "score": 0,
+   "particles": {
+    "total": 195,
+    "enemy": 43.1,
+    "energy": 957.4400000000065,
+    "seconds": 128.06166666666667,
+    "energyPerMember10s": 18.6909952236554,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.598487707744958
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.772687637466294
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.14534664289336
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.247458906516336
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 4.933333333333334
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E] → シトラリ[E N Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 79560.3830311773,
+   "sd": 2460.6897516124086,
+   "totalSeconds": 23.17,
+   "score": 0,
+   "particles": {
+    "total": 191.8,
+    "enemy": 40.4,
+    "energy": 941.6800000000064,
+    "seconds": 122.24333333333334,
+    "energyPerMember10s": 19.258309928285243,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.983666457611854
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 19.371199520082865
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.892891227878778
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.78548250756682
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 79196.20755615103,
+   "sd": 2566.108334763329,
+   "totalSeconds": 23.55,
+   "score": 0,
+   "particles": {
+    "total": 193,
+    "enemy": 41.3,
+    "energy": 944.0800000000063,
+    "seconds": 123.86166666666665,
+    "energyPerMember10s": 19.055128705410734,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.035375486093344
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.698278994039022
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 15.804728393234349
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.68213194827558
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.1,
+     "seconds": 3.1166666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 79100.6538087067,
+   "sd": 2218.73899069693,
+   "totalSeconds": 24.1,
+   "score": 0,
+   "particles": {
+    "total": 194,
+    "enemy": 42,
+    "energy": 951.3600000000066,
+    "seconds": 126.06499999999998,
+    "energyPerMember10s": 18.866457779716946,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.86756831793122
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.721016935707738
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.43913853964221
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.438107325585953
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E Q N] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 82198.32174751651,
+   "sd": 4291.784929826915,
+   "totalSeconds": 20.66,
+   "score": 0,
+   "particles": {
+    "total": 185.7,
+    "enemy": 37.6,
+    "energy": 905.4400000000056,
+    "seconds": 113.95,
+    "energyPerMember10s": 19.86485300570438,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.798157086441417
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.602896007020593
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.36726634488807
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.691092584466816
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.8,
+     "seconds": 2.75625
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 80675.42554974506,
+   "sd": 4083.616279907797,
+   "totalSeconds": 21.17,
+   "score": 0,
+   "particles": {
+    "total": 186.9,
+    "enemy": 37,
+    "energy": 912.5600000000059,
+    "seconds": 115.58666666666667,
+    "energyPerMember10s": 19.737570654054803,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.367747144999417
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 19.010843234513757
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.16287922482405
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.40881301188136
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.7,
+     "seconds": 2.469047619047619
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E] → シトラリ[E N Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 81093.15220843627,
+   "sd": 5146.963070522115,
+   "totalSeconds": 23.02,
+   "score": 0,
+   "particles": {
+    "total": 192.8,
+    "enemy": 41,
+    "energy": 945.5200000000062,
+    "seconds": 123.10333333333332,
+    "energyPerMember10s": 19.20175462348717,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.96932116649968
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 19.05391134818984
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.019062576155495
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.76472340310303
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.7,
+     "seconds": 2.542857142857143
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E N Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "n",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 77737.21561081252,
+   "sd": 4279.152350811764,
+   "totalSeconds": 23.55,
+   "score": 0,
+   "particles": {
+    "total": 193.3,
+    "enemy": 41.6,
+    "energy": 945.2000000000064,
+    "seconds": 124.75333333333333,
+    "energyPerMember10s": 18.941377651899877,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.05509538823277
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.809544167156485
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.389141238711016
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.511729813498583
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.2,
+     "seconds": 4.341666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 80129.45428605442,
+   "sd": 4425.202126490835,
+   "totalSeconds": 21.03,
+   "score": 0,
+   "particles": {
+    "total": 187,
+    "enemy": 38,
+    "energy": 912.2400000000056,
+    "seconds": 115.85833333333332,
+    "energyPerMember10s": 19.6843846651803,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.43033877580378
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.672804430698385
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 17.20204272459178
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.43235272962665
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.9,
+     "seconds": 2.8740740740740742
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q N] → 香菱[Q E] → フリーナ[Q] → 早柚[Q hE(8.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q",
+       "n"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 77083.09566692302,
+   "sd": 4956.2055202711335,
+   "totalSeconds": 22.66,
+   "score": 0,
+   "particles": {
+    "total": 192.4,
+    "enemy": 40.8,
+    "energy": 942.8000000000063,
+    "seconds": 121.02166666666668,
+    "energyPerMember10s": 19.47585143156197,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.54619696197649
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 18.466114883009897
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.859790946524686
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.031302934736146
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.2,
+     "seconds": 3.225
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 79006.14849767226,
+   "sd": 3558.657611847106,
+   "totalSeconds": 25.02,
+   "score": 0,
+   "particles": {
+    "total": 192.7,
+    "enemy": 42.4,
+    "energy": 941.7600000000064,
+    "seconds": 126.53500000000001,
+    "energyPerMember10s": 18.606709606037978,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.70992215592522
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.414944481763907
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.087248587347336
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.214723199114815
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.5,
+     "seconds": 5.04
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "シトラリ[C] → ↻フリーナ[E D] → シトラリ[E Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 1,
+    "stints": [
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "ca"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 74493.10166269902,
+   "sd": 3401.0837846647496,
+   "totalSeconds": 22.63,
+   "score": 0,
+   "particles": {
+    "total": 192.1,
+    "enemy": 40.1,
+    "energy": 941.3600000000064,
+    "seconds": 120.19833333333334,
+    "energyPerMember10s": 19.579306424104736,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 23.46122381064628
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 19.527725010052798
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.153302181117276
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 19.17497469460192
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[E Q] → フリーナ[Q] → 早柚[Q hE(10.85s)]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "dps": 77113.5554306208,
+   "sd": 2509.6483894977696,
+   "totalSeconds": 23.58,
+   "score": 0,
+   "particles": {
+    "total": 193.3,
+    "enemy": 42.3,
+    "energy": 944.7200000000064,
+    "seconds": 125.26500000000001,
+    "energyPerMember10s": 18.854428611344076,
+    "energyByChar10s": [
+     {
+      "characterId": "10000053-anemo",
+      "energy10s": 22.98008222568155
+     },
+     {
+      "characterId": "10000089-hydro",
+      "energy10s": 17.778309982836355
+     },
+     {
+      "characterId": "10000023-pyro",
+      "energy10s": 16.232786492635572
+     },
+     {
+      "characterId": "10000107-cryo",
+      "energy10s": 18.426535744222193
+     }
+    ]
+   },
+   "energyWaits": [
+    {
+     "characterId": "10000053-anemo",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000089-hydro",
+     "waits": 0,
+     "seconds": null
+    },
+    {
+     "characterId": "10000023-pyro",
+     "waits": 0.5,
+     "seconds": 4.746666666666667
+    },
+    {
+     "characterId": "10000107-cryo",
+     "waits": 0,
+     "seconds": null
+    }
+   ],
+   "loops": 5,
+   "label": "フリーナ[E D] → シトラリ[E Q] → 香菱[Q E D] → フリーナ[Q] → 早柚[Q hE]",
+   "rot": {
+    "loop": 0,
+    "stints": [
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000107-cryo",
+      "a": [
+       "e",
+       "q"
+      ]
+     },
+     {
+      "c": "10000023-pyro",
+      "a": [
+       "q",
+       "e",
+       "dash"
+      ]
+     },
+     {
+      "c": "10000089-hydro",
+      "a": [
+       "q"
+      ]
+     },
+     {
+      "c": "10000053-anemo",
+      "a": [
+       "q",
+       "e_hold"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

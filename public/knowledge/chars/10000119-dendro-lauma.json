@@ -3,89 +3,44 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A9%E3%82%A6%E3%83%9E",
  "archetypes": [
   {
-   "name": "長押し E と Q",
+   "name": "長押しE→Q",
    "role": "subAttacker",
-   "slot": 40,
+   "slot": 30,
    "use": [
     "e_hold",
     "q"
    ],
-   "evidence": "手組み「月開花」。長押しで得た詠月を Q が消費する（+26k の実測）"
+   "evidence": "Phase 3-1精鋭辞書: 詠月獲得→Q消費（手組み月開花+26k）"
   },
   {
-   "name": "N→E（KQM）",
+   "name": "E→Q",
    "role": "subAttacker",
    "slot": 20,
    "use": [
-    "n",
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ラウマ 76 件中 5 件。平均 77.4k（最大 87.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E（KQM）",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ラウマ 76 件中 5 件。平均 95.8k（最大 114.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "N のあと、もう一度 N→E→Q",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "n",
-      "e",
-      "q"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ラウマ 76 件中 13 件。平均 131.0k（最大 141.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 13/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "n→e→q",
-   "role": "subAttacker",
-   "slot": 40,
-   "use": [
-    "n",
     "e",
     "q"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 13 件・平均 131.0k・最大 141.3k。n e q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（13 件。分布 0〜6 凸 = 13/0/0/0/0/0/0）"
+   "evidence": "Phase 3-1精鋭辞書: 短押しスキル→Q形"
   },
   {
-   "name": "n→e_hold→q",
+   "name": "N→長押しE→Q",
    "role": "subAttacker",
-   "slot": 40,
+   "slot": 30,
    "use": [
     "n",
     "e_hold",
     "q"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 9 件・平均 223.5k・最大 1059.0k。n e_hold q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（9 件。分布 0〜6 凸 = 8/0/0/0/0/0/1）"
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 通常1挟み長押しE→Q"
+  },
+  {
+   "name": "E だけ",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "Phase 3-1精鋭辞書＋KQM新集計: 爆発温存形"
   }
  ]
 }

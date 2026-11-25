@@ -20,9 +20,6 @@
     "n",
     "n"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 5 件。平均 52.9k（最大 63.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
   },
@@ -34,9 +31,6 @@
     "n",
     "e"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 5 件。平均 57.3k（最大 72.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
   },
@@ -61,9 +55,6 @@
     "jump",
     "e"
    ],
-   "constellation": {
-    "min": 6
-   },
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ヨォーヨ 82 件中 3 件。平均 60.4k（最大 69.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
   },
   {
@@ -96,9 +87,6 @@
      ]
     }
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヨォーヨ 82 件中 3 件。平均 37.0k（最大 43.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
   }

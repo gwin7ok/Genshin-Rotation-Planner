@@ -33,9 +33,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ロサリア 345 件中 13 件。平均 65.5k（最大 119.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
   },

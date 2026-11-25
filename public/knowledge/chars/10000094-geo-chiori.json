@@ -3,6 +3,16 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8D%83%E7%B9%94",
  "archetypes": [
   {
+   "name": "e e の出場",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
+    "e"
+   ],
+   "evidence": "自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k"
+  },
+  {
    "name": "E→通常2→E の繰り返し",
    "role": "attacker",
    "slot": 40,
@@ -38,16 +48,6 @@
     6
    ],
    "evidence": "Wiki 本文のコンボの記述: [スキル→通常 3 回→スキル]×6（探索の比較なし）"
-  },
-  {
-   "name": "e e の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "e"
-   ],
-   "evidence": "自動編成（千織 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 44.8k → 46.6k"
   },
   {
    "name": "q→e×2",

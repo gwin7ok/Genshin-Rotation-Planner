@@ -11,6 +11,7 @@
  */
 import fs from 'node:fs';
 import os from 'node:os';
+import path from 'node:path';
 import { createServer } from 'vite';
 import { useNodeGcsim } from './gcsim-node.ts';
 
@@ -121,10 +122,13 @@ for (const g of (out.groupBest ?? []).sort((a: any, b: any) => b.dps - a.dps)) c
 console.log(`所要時間 ${(out.elapsedMs / 1000).toFixed(1)} 秒`);
 console.log(`\n=== 順位（戦闘 ${SECONDS} 秒・gcsim ${RUNS2} 回。DPS の単位は千）===`);
 for (const [i, r] of out.results.slice(0, TOP).entries()) {
-  console.log(`${String(i + 1).padStart(2)}. ${(r.dps / 1000).toFixed(1).padStart(6)} ±${(r.sd / 1000).toFixed(1)}  長さ ${r.totalSeconds.toFixed(1)}s  スコア ${r.score.toFixed(3)}  ${r.candidate.label}${r.particles ? `  粒子E ${r.particles.energyPerMember10s.toFixed(1)}/人/10秒（粒子 敵 ${r.particles.enemy.toFixed(0)}・全体 ${r.particles.total.toFixed(0)}）` : ''}`);
+  const ew = r.energyWaits?.filter((w: any) => w.waits > 0).map((w: any) => `${characters.find((ch: any) => ch.id === w.characterId)?.name ?? w.characterId}:${w.waits}回(${w.seconds !== null ? `${w.seconds.toFixed(1)}s` : '-'})`).join(',') ?? '';
+  const tr = r.truncated ? `  打ち切り[${r.truncated.count}回/最小${r.truncated.worst}周]` : '';
+  console.log(`${String(i + 1).padStart(2)}. ${(r.dps / 1000).toFixed(1).padStart(6)} ±${(r.sd / 1000).toFixed(1)}  長さ ${r.totalSeconds.toFixed(1)}s  スコア ${r.score.toFixed(3)}  ${r.candidate.label}${r.particles ? `  粒子E ${r.particles.energyPerMember10s.toFixed(1)}/人/10秒（粒子 敵 ${r.particles.enemy.toFixed(0)}・全体 ${r.particles.total.toFixed(0)}）` : ''}${ew ? `  爆発待ち[${ew}]` : ''}${tr}`);
 }
 if (outPath) {
-  fs.writeFileSync(outPath, JSON.stringify({ party: names, seconds: SECONDS, counts: c, results: out.results.map((r: any) => ({ dps: r.dps, sd: r.sd, totalSeconds: r.totalSeconds, score: r.score, particles: r.particles, label: r.candidate.label, rot: { loop: r.candidate.loopStartIndex ?? 0, stints: r.candidate.stints.map((x: any) => ({ c: x.characterId, a: x.actions.map((y: any) => y.actionTypeId.slice(x.characterId.length + 1)) })) } })) }, null, 1));
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, JSON.stringify({ party: characters.map((x: any) => ({ id: x.id, name: x.name, roles: roles[x.id] })), seconds: SECONDS, elapsedMs: out.elapsedMs, spearman: out.spearman, bestQuickScoreRank: out.bestQuickScoreRank, counts: c, results: out.results.map((r: any) => ({ dps: r.dps, sd: r.sd, totalSeconds: r.totalSeconds, score: r.score, particles: r.particles, energyWaits: r.energyWaits, loops: r.loops, ...(r.truncated ? { truncated: r.truncated } : {}), ...(r.ctIssues ? { ctIssues: r.ctIssues } : {}), label: r.candidate.label, rot: { loop: r.candidate.loopStartIndex ?? 0, stints: r.candidate.stints.map((x: any) => ({ c: x.characterId, a: x.actions.map((y: any) => y.actionTypeId.slice(x.characterId.length + 1)) })) } })) }, null, 1));
 }
 await server.close();
 process.exit(0);

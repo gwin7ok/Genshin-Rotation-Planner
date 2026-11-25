@@ -53,11 +53,12 @@ const nameOfKey = new Map<string, string>([...keyOf].map(([n, k]) => [k, n]));
 
 // 行動 1 つ（`attack:2`・`skill[hold=1]` など）を、辞書の行動 ID の並びに直す
 const ACTION: Record<string, string> = { attack: 'n', charge: 'ca', aim: 'ca', skill: 'e', burst: 'q', dash: 'dash', jump: 'jump', high_plunge: 'hp', low_plunge: 'lp' };
+const VALID_ACTIONS = new Set(['n', 'ca', 'e', 'e_hold', 'q', 'dash', 'jump', 'hp', 'lp']);
 const translate = (raw: string): string[] => {
   const m = /^([a-z_]+)(\[[^\]]*\])?(?::(\d+))?$/.exec(raw.trim());
   if (!m) return [raw.trim()];
   let id = ACTION[m[1]] ?? m[1];
-  if (m[1] === 'skill' && /hold\s*=\s*1/.test(m[2] ?? '')) id = 'e_hold';
+  if (m[1] === 'skill' && /\bhold\s*=\s*([1-9]\d*)/.test(m[2] ?? '')) id = 'e_hold';
   return Array(Number(m[3] ?? 1)).fill(id);
 };
 // 連続する同じ行動は「×N」にまとめて、読みやすくする
@@ -68,23 +69,24 @@ const compact = (ids: string[]): string => {
 };
 
 type Stint = { who: string; actions: string[] };
-// 行動リスト（`active` 以降）を、出場（同じキャラが続くまとまり）に区切る
-const stintsOf = (config: string, team: string[]): Stint[] => {
-  // 設定の中のキャラ名は、短い別名（itto・kazuha …）のことがある。`<別名> char …` の宣言の順が、編成（char_names）の順と同じことを使って、キー（aratakiitto …）に直す
+type ParsedConfig = { lead: Stint[]; loop: Stint[]; hasLoop: boolean };
+
+// 従来の平坦パーサー（旧パーサー比のカバレッジ比較用）
+const stintsOfLegacy = (config: string, team: string[]): Stint[] => {
   const aliases = [...config.matchAll(/^\s*([a-z0-9_]+)\s+char(?![a-z_])/gm)].map(m => m[1]);
   const keyOfAlias = new Map<string, string>(aliases.length === team.length ? aliases.map((al, i) => [al, team[i]]) : team.map(k => [k, k]));
   const i = config.indexOf('active ');
   if (i < 0) return [];
   const text = config.slice(i).replace(/#[^\n]*/g, '');
   const stints: Stint[] = [];
-  const condDepth: boolean[] = []; // いま入っているブロックが、条件つき（if・while・else）か
+  const condDepth: boolean[] = [];
   let pos = 0;
   while (pos < text.length) {
     const rest = text.slice(pos);
     const ws = /^\s+/.exec(rest);
     if (ws) { pos += ws[0].length; continue; }
     if (text[pos] === '}') { condDepth.pop(); pos++; continue; }
-    if (text[pos] === '{') { condDepth.push(false); pos++; continue; } // 見出しのない { }（読み飛ばさず、入れ子の深さだけ合わせる）
+    if (text[pos] === '{') { condDepth.push(false); pos++; continue; }
     if (text[pos] === ';') { pos++; continue; }
     const head = /^(for|if|else|while|let|switch|fn)\b/.exec(rest);
     if (head) {
@@ -108,6 +110,189 @@ const stintsOf = (config: string, team: string[]): Stint[] => {
     if (last && last.who === who) last.actions.push(...acts); else stints.push({ who, actions: acts });
   }
   return stints;
+};
+
+// ブロックの閉じ `}` 位置を探す（文字リテラル・ネスト対応）
+const findMatchingBrace = (text: string, openIdx: number): number => {
+  let depth = 0;
+  let quote: string | null = null;
+  let escaped = false;
+  for (let p = openIdx; p < text.length; p++) {
+    const ch = text[p];
+    if (escaped) { escaped = false; continue; }
+    if (quote) {
+      if (ch === '\\') escaped = true;
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") { quote = ch; continue; }
+    if (ch === '{') depth++;
+    else if (ch === '}') { depth--; if (depth === 0) return p; }
+  }
+  return text.length - 1;
+};
+
+// 新パーサー: 初動（setup）とループ本体（while/for）を分離し、if 骨格抽出・fn 単純展開を行う
+const parseConfigV2 = (config: string, team: string[]): ParsedConfig => {
+  const aliases = [...config.matchAll(/^\s*([a-z0-9_]+)\s+char(?![a-z_])/gm)].map(m => m[1]);
+  const keyOfAlias = new Map<string, string>(aliases.length === team.length ? aliases.map((al, i) => [al, team[i]]) : team.map(k => [k, k]));
+  const i = config.indexOf('active ');
+  if (i < 0) return { lead: [], loop: [], hasLoop: false };
+  const text = config.slice(i).replace(/#[^\n]*/g, '').replace(/\/\/[^\n]*/g, '');
+
+  // fn 定義を収集
+  const fnDefs = new Map<string, string>();
+  let scanPos = 0;
+  while (scanPos < text.length) {
+    const fnMatch = /\bfn\s+([a-zA-Z0-9_]+)\s*\([^)]*\)\s*\{/.exec(text.slice(scanPos));
+    if (!fnMatch) break;
+    const braceIdx = scanPos + fnMatch.index + fnMatch[0].length - 1;
+    const closeIdx = findMatchingBrace(text, braceIdx);
+    fnDefs.set(fnMatch[1], text.slice(braceIdx + 1, closeIdx));
+    scanPos = closeIdx + 1;
+  }
+
+  const pushActs = (stints: Stint[], who: string, acts: string[]) => {
+    const clean = acts.filter(a => VALID_ACTIONS.has(a));
+    if (clean.length === 0) return;
+    const last = stints[stints.length - 1];
+    if (last && last.who === who) last.actions.push(...clean);
+    else stints.push({ who, actions: clean });
+  };
+
+  const parseBlock = (block: string, out: Stint[], fnDepth = 0) => {
+    let pos = 0;
+    while (pos < block.length) {
+      const rest = block.slice(pos);
+      const ws = /^\s+/.exec(rest);
+      if (ws) { pos += ws[0].length; continue; }
+      if (block[pos] === ';' || block[pos] === '}' || block[pos] === '{') { pos++; continue; }
+
+      const head = /^(fn|let|if|else|while|for|switch)\b/.exec(rest);
+      if (head) {
+        const kw = head[1];
+        if (kw === 'let') {
+          const e = rest.indexOf(';');
+          pos += e < 0 ? rest.length : e + 1;
+          continue;
+        }
+        const bOpen = rest.indexOf('{');
+        if (bOpen < 0) break;
+        const absOpen = pos + bOpen;
+        const absClose = findMatchingBrace(block, absOpen);
+        if (kw === 'fn' || kw === 'else' || kw === 'switch') {
+          // fn 定義本体・else 分岐・switch はスキップ（if の主骨格のみ採用）
+          pos = absClose + 1;
+          continue;
+        }
+        // if / while / for の内側を展開
+        parseBlock(block.slice(absOpen + 1, absClose), out, fnDepth);
+        pos = absClose + 1;
+        continue;
+      }
+
+      const e = rest.search(/[;{}]/);
+      if (e < 0) break;
+      const stmt = rest.slice(0, e).trim();
+      pos += e + (rest[e] === ';' ? 1 : 0);
+
+      // fn 呼び出しの単純展開
+      const fnCall = /^([a-zA-Z0-9_]+)\s*\([^)]*\)$/.exec(stmt);
+      if (fnCall) {
+        const body = fnDefs.get(fnCall[1]);
+        if (body && fnDepth < 3) parseBlock(body, out, fnDepth + 1);
+        continue;
+      }
+
+      const m = /^([a-z0-9_]+)\s+(.+)$/s.exec(stmt);
+      if (!m || !keyOfAlias.has(m[1])) continue;
+      const who = keyOfAlias.get(m[1])!;
+      const acts = m[2].split(',').flatMap(translate);
+      pushActs(out, who, acts);
+    }
+  };
+
+  // トップレベルで最初の while / for ブロックを探して lead と loop に分離する
+  const lead: Stint[] = [];
+  const loop: Stint[] = [];
+  let pos = 0;
+  let foundLoop = false;
+  while (pos < text.length) {
+    const rest = text.slice(pos);
+    const ws = /^\s+/.exec(rest);
+    if (ws) { pos += ws[0].length; continue; }
+    if (text[pos] === ';' || text[pos] === '}' || text[pos] === '{') { pos++; continue; }
+
+    const head = /^(fn|let|while|for|if|else|switch)\b/.exec(rest);
+    if (head) {
+      const kw = head[1];
+      if (kw === 'let') { const e = rest.indexOf(';'); pos += e < 0 ? rest.length : e + 1; continue; }
+      const bOpen = rest.indexOf('{');
+      if (bOpen < 0) break;
+      const absOpen = pos + bOpen;
+      const absClose = findMatchingBrace(text, absOpen);
+      if (kw === 'fn' || kw === 'else' || kw === 'switch') { pos = absClose + 1; continue; }
+      if (kw === 'while' || kw === 'for') {
+        foundLoop = true;
+        parseBlock(text.slice(absOpen + 1, absClose), loop);
+        break; // メインループを 1 周分として取得
+      }
+      parseBlock(text.slice(absOpen + 1, absClose), lead);
+      pos = absClose + 1;
+      continue;
+    }
+    const e = rest.search(/[;{}]/);
+    if (e < 0) break;
+    const stmt = rest.slice(0, e).trim();
+    pos += e + (rest[e] === ';' ? 1 : 0);
+    const fnCall = /^([a-zA-Z0-9_]+)\s*\([^)]*\)$/.exec(stmt);
+    if (fnCall) {
+      const body = fnDefs.get(fnCall[1]);
+      if (body) parseBlock(body, lead, 1);
+      continue;
+    }
+    const m = /^([a-z0-9_]+)\s+(.+)$/s.exec(stmt);
+    if (!m || !keyOfAlias.has(m[1])) continue;
+    pushActs(lead, keyOfAlias.get(m[1])!, m[2].split(',').flatMap(translate));
+  }
+
+  if (!foundLoop) return { lead: [], loop: lead, hasLoop: false };
+  return { lead, loop, hasLoop: true };
+};
+
+const stintsOf = (config: string, team: string[]): Stint[] => parseConfigV2(config, team).loop;
+
+// 周期圧縮: 出場シーケンスから繰り返しパターン（N1CJ×8 や N×12）を use + fill (+ tail) に分離正規化する
+type CompressedStint = { use: string[]; fill?: string[]; tail?: string[]; raw: string[] };
+const compressStint = (acts: string[]): CompressedStint => {
+  // 1. 周期 p = 1..4 の 2 回以上連続繰り返しを後ろ側から（あるいは最長カバー）探す
+  let best: { start: number; period: number; count: number; tailStart: number } | null = null;
+  for (let start = 0; start < acts.length; start++) {
+    for (let period = 1; period <= 4; period++) {
+      if (start + period * 2 > acts.length) continue;
+      const unit = acts.slice(start, start + period);
+      // 1手繰り返し（period === 1）は、n なら 6 回以上、それ以外（e 等）は圧縮しない
+      if (period === 1 && unit[0] !== 'n') continue;
+      let count = 1;
+      while (start + (count + 1) * period <= acts.length) {
+        const next = acts.slice(start + count * period, start + (count + 1) * period);
+        if (next.every((v, idx) => v === unit[idx])) count++; else break;
+      }
+      if (period === 1 && count < 6) continue;
+      if (count < 2) continue;
+      const covered = count * period;
+      const tailLen = acts.length - (start + covered);
+      if (tailLen > 2) continue; // 末尾に長い別動作が残るものは誤検出とみなす
+      if (!best || covered > best.count * best.period) {
+        best = { start, period, count, tailStart: start + covered };
+      }
+    }
+  }
+  if (!best) return { use: acts, raw: acts };
+  const use = acts.slice(0, best.start);
+  const fill = acts.slice(best.start, best.start + best.period);
+  const tail = best.tailStart < acts.length ? acts.slice(best.tailStart) : undefined;
+  return { use, fill, ...(tail?.length ? { tail } : {}), raw: acts };
 };
 
 // 設定の中の、キャラ（キー）ごとの凸数: `<別名> char … cons=N;`（別名 → キーは、stintsOf と同じ対応）
@@ -212,7 +397,7 @@ if (args.includes('--multi') || SINGLE) {
       const hist = [0, 0, 0, 0, 0, 0, 0]; for (const c of r.cons) hist[c]++;
       const name = SINGLE ? `${label(r.acts[0])}（KQM）` : `${label(r.acts[0])} のあと、もう一度 ${r.acts.slice(1).map(label).join('、さらに ')}`;
       const reqFav = role !== 'attacker' && m.weaponType !== 'catalyst' && !KIT_USES_N.has(m.id) && r.acts.flat().includes('n') && r.dps.length > 0 && r.fav / r.dps.length >= 0.6;
-      const text = `{ name: '${name}', role: '${role}', slot: ${base}, use: [${r.acts[0].map(x => `'${x}'`).join(', ')}],${SINGLE ? '' : ` then: [${thenParts.join(', ')}],`} constellation: { min: ${minCons} },${reqFav ? ' requiresFavonius: true,' : ''} evidence: 'KQM Sim Database（db.kqm.gg）の${SINGLE ? '単数回の形' : '複数回出場の形'}: ${m.name} ${mine.length} 件中 ${r.dps.length} 件。平均 ${(avg / 1000).toFixed(1)}k（最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k）。凸数: 使われている設定の最小は ${minCons} 凸（分布 0〜6 凸 = ${hist.join('/')}）（探索の比較なし）' },`;
+      const text = `{ name: '${name}', role: '${role}', slot: ${base}, use: [${r.acts[0].map(x => `'${x}'`).join(', ')}],${SINGLE ? '' : ` then: [${thenParts.join(', ')}],`}${reqFav ? ' requiresFavonius: true,' : ''} evidence: 'KQM Sim Database（db.kqm.gg）の${SINGLE ? '単数回の形' : '複数回出場の形'}: ${m.name} ${mine.length} 件中 ${r.dps.length} 件。平均 ${(avg / 1000).toFixed(1)}k（最大 ${(Math.max(...r.dps) / 1000).toFixed(1)}k）。凸数: 使われている設定の最小は ${minCons} 凸（分布 0〜6 凸 = ${hist.join('/')}）（探索の比較なし）' },`;
       items.push({ id: m.id, who: m.name, text });
       lines.push(`${m.name}（${role}）${r.dps.length}/${mine.length} 件 平均 ${(avg / 1000).toFixed(1)}k 最小 ${minCons} 凸: ${r.acts.map(a => `[${compact(a)}]`).join(' ')}`);
     }
@@ -224,12 +409,46 @@ if (args.includes('--multi') || SINGLE) {
     let src = fs.readFileSync(file, 'utf8');
     const nl = src.includes(String.fromCharCode(13, 10)) ? String.fromCharCode(13, 10) : NL;
     const missing = new Map<string, { who: string; texts: string[] }>();
+    const findArchetypesCloseBracket = (text: string, charIdx: number): number => {
+      const archIdx = text.indexOf('archetypes:', charIdx);
+      if (archIdx < 0) return -1;
+      const openIdx = text.indexOf('[', archIdx);
+      if (openIdx < 0) return -1;
+      let depth = 0;
+      let quote: string | null = null;
+      let escaped = false;
+      for (let p = openIdx; p < text.length; p++) {
+        const ch = text[p];
+        if (escaped) { escaped = false; continue; }
+        if (quote) {
+          if (ch === '\\') escaped = true;
+          else if (ch === quote) quote = null;
+          continue;
+        }
+        if (ch === '\'' || ch === '"' || ch === '`') { quote = ch; continue; }
+        if (ch === '[') depth++;
+        else if (ch === ']') {
+          depth--;
+          if (depth === 0) return p;
+        }
+      }
+      return -1;
+    };
     for (const it of items) {
       const i = src.indexOf(`characterId: '${it.id}'`);
       if (i < 0) { missing.set(it.id, { who: it.who, texts: [...(missing.get(it.id)?.texts ?? []), it.text] }); continue; }
       // 既存の形（手で作った形・測った形）より後ろに足す。先頭の形が、探索の出発点の基準になるため（KQM 由来を前に置くと、編成によっては DPS が下がる）
-      const j = src.indexOf(nl + '    ],', i);
-      src = src.slice(0, j) + nl + '      ' + it.text + src.slice(j);
+      const closeIdx = findArchetypesCloseBracket(src, i);
+      if (closeIdx < 0) throw new Error(`archetypes の閉じ括弧が見つかりません: ${it.id}`);
+      const lineStart = src.lastIndexOf('\n', closeIdx - 1) + 1;
+      const beforeOnLine = src.slice(lineStart, closeIdx);
+      if (/\S/.test(beforeOnLine)) {
+        const beforeTrim = src.slice(0, closeIdx).replace(/\s+$/, '');
+        const needComma = beforeTrim.endsWith('}') ? ',' : '';
+        src = beforeTrim + needComma + nl + '      ' + it.text + nl + '    ' + src.slice(closeIdx);
+      } else {
+        src = src.slice(0, lineStart) + '      ' + it.text + nl + src.slice(lineStart);
+      }
     }
     // 辞書にまだ無いキャラは、末尾に新しい項目として足す
     for (const [id, v] of missing) {
@@ -240,6 +459,93 @@ if (args.includes('--multi') || SINGLE) {
     fs.writeFileSync(file, src);
     console.log(`${items.length} 件を ${file} に書き足しました。続けて npm run build:knowledge を実行してください`);
   }
+  process.exit(0);
+}
+
+// --dump-summary --chars=<名前またはIDのカンマ区切り>: 新パーサーによる正規化集計＋lead統計を Markdown 出力
+if (args.includes('--dump-summary')) {
+  const charsArg = args.find(a => a.startsWith('--chars='))?.slice(8) ?? '';
+  const targets = charsArg.split(',').map(s => s.trim()).filter(Boolean);
+  const targetMasters = targets.length > 0
+    ? targets.map(t => master.find(c => c.name === t || c.id === t || c.source?.gcsimKey === t)).filter(Boolean)
+    : master.filter(c => c.source?.gcsimKey);
+  const parsedV2 = entries.map(e => ({
+    v2: parseConfigV2(e.config, e.summary?.char_names ?? []),
+    legacy: stintsOfLegacy(e.config, e.summary?.char_names ?? []),
+    dps: e.summary?.mean_dps_per_target ?? 0,
+    team: e.summary?.char_names ?? [],
+  }));
+  const outLines: string[] = [];
+  for (const m of targetMasters) {
+    const key = m.source?.gcsimKey;
+    if (!key) continue;
+    const mine = parsedV2.filter(p => p.team.includes(key));
+    const legacyValid = mine.filter(p => {
+      const own = p.legacy.filter(s => s.who === key).map(s => s.actions);
+      return own.length >= 1 && own.every(a => a.length > 0 && a.every(x => VALID_ACTIONS.has(x)));
+    }).length;
+    const v2Valid = mine.filter(p => p.v2.loop.some(s => s.who === key)).length;
+    const patterns = new Map<string, { n: number; dps: number[]; compressed: CompressedStint[]; sampleRaw: string[][] }>();
+    const leads = new Map<string, { n: number; acts: string[] }>();
+    const loopTails = new Map<string, number>();
+
+    for (const p of mine) {
+      const ownLoop = p.v2.loop.filter(s => s.who === key).map(s => s.actions);
+      if (ownLoop.length === 0) continue;
+      const comp = ownLoop.map(compressStint);
+      const sig = JSON.stringify(comp.map(c => ({ use: c.use, ...(c.fill ? { fill: c.fill } : {}), ...(c.tail ? { tail: c.tail } : {}) })));
+      const rec = patterns.get(sig) ?? { n: 0, dps: [], compressed: comp, sampleRaw: ownLoop };
+      rec.n++;
+      rec.dps.push(p.dps);
+      patterns.set(sig, rec);
+
+      const ownLead = p.v2.lead.filter(s => s.who === key).flatMap(s => s.actions);
+      if (ownLead.length > 0) {
+        const lk = compact(ownLead);
+        const lr = leads.get(lk) ?? { n: 0, acts: ownLead };
+        lr.n++;
+        leads.set(lk, lr);
+      }
+      const lastStint = p.v2.loop[p.v2.loop.length - 1];
+      if (lastStint && lastStint.who === key && lastStint.actions.length > 0) {
+        const tailAct = lastStint.actions[lastStint.actions.length - 1];
+        loopTails.set(tailAct, (loopTails.get(tailAct) ?? 0) + 1);
+      }
+    }
+
+    outLines.push(`### ${m.name} (\`${m.id}\` / \`${key}\`)`);
+    outLines.push(`- 集計総件数: 登場 **${mine.length}** 件 / 新パーサー有効 **${v2Valid}** 件（旧パーサー有効 ${legacyValid} 件 → **+${v2Valid - legacyValid} 件**）`);
+    const topPat = [...patterns.values()].sort((a, b) => b.n - a.n).slice(0, 5);
+    if (topPat.length > 0) {
+      outLines.push('- ループ内正規化パターン上位 5 件:');
+      for (const [idx, r] of topPat.entries()) {
+        const pct = ((r.n / Math.max(1, v2Valid)) * 100).toFixed(1);
+        const avg = (r.dps.reduce((a, b) => a + b, 0) / r.dps.length / 1000).toFixed(1);
+        const max = (Math.max(...r.dps) / 1000).toFixed(1);
+        const useStr = `use=${JSON.stringify(r.compressed[0].use)}`;
+        const thenArr = r.compressed.slice(1).map(c => c.use);
+        const thenStr = thenArr.length > 0 ? ` then=${JSON.stringify(thenArr)}` : '';
+        const fillC = r.compressed.find(c => c.fill);
+        const fillStr = fillC ? ` fill=${JSON.stringify(fillC.fill)}` : '';
+        const tailStr = fillC?.tail ? ` tail=${JSON.stringify(fillC.tail)}` : '';
+        const rawStr = r.sampleRaw.map(a => `[${compact(a)}]`).join(' → ');
+        outLines.push(`  ${idx + 1}. **${r.n}件 (${pct}%)** 平均 ${avg}k / 最大 ${max}k | \`${useStr}${thenStr}${fillStr}${tailStr}\` | 代表生: \`${rawStr}\``);
+      }
+    }
+    const topLeads = [...leads.entries()].sort((a, b) => b[1].n - a[1].n).slice(0, 3);
+    if (topLeads.length > 0) {
+      outLines.push(`- 頻出 lead（初動）上位 3 件: ${topLeads.map(([lk, lr]) => `\`${lk}\` (${lr.n}件)`).join(', ')}`);
+    }
+    const topTails = [...loopTails.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+    if (topTails.length > 0) {
+      outLines.push(`- ループ最終Stint末尾アクション: ${topTails.map(([a, n]) => `\`${a}\` (${n}件)`).join(', ')}`);
+    }
+    outLines.push('');
+  }
+  const outArg = args.find(a => a.startsWith('--out='))?.slice(6);
+  const md = outLines.join('\n');
+  if (outArg) fs.writeFileSync(outArg, md, 'utf8');
+  else console.log(md);
   process.exit(0);
 }
 

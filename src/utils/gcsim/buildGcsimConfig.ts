@@ -356,6 +356,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     const out: string[] = [];
     let prevKey = firstPrevKey;
     let isFirst = true;
+    let inMelee = false;
     for (const stint of stintList) {
       const char = charById.get(stint.characterId);
       const key = keyOf.get(stint.characterId);
@@ -380,6 +381,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
       if (waitFrames > 0) out.push(`${indent}wait(${waitFrames});`);
       // 条件つきの交代で、交代しない周: 交代の 1f がないので、その分を足す
       if (missingWhen && switchFrames > 0) out.push(`${indent}if ${missingWhen} {`, `${indent}  wait(1);`, `${indent}}`);
+      if (prevKey !== key) inMelee = false;
       isFirst = false;
       prevKey = key;
       // 出場の最後のアクション（次は交代）: 標準より長くした分は `wait` で渡す。`delay` は次の交代が実行できる状態になった「後」に入り、
@@ -414,7 +416,13 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         // 渡された命令（計算結果の gcsimCommand。読み込んだ編成・DB 管理の取り込みを通ってくることがある）は、決まった形（skill[recast=1] など）だけ設定文に入れる。
         // 改行・`;`・ループなどを含むものは、使わない（別の命令の差し込みを防ぐ）
         const givenCommand = input.commandByActionId?.[act.id];
-        const command = (isSafeGcsimCommand(givenCommand) ? givenCommand : undefined) ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
+        let command = (isSafeGcsimCommand(givenCommand) ? givenCommand : undefined) ?? applyHoldSeconds(act.actionTypeId, mapped.command, input.holdSecondsByActionId?.[act.id]);
+        if (key === 'tartaglia' && act.actionTypeId === '10000033-hydro_ca' && !givenCommand) {
+          command = inMelee ? 'charge' : 'aim';
+        }
+        if (key === 'tartaglia' && command.replace(/\[.*$/, '') === 'skill') {
+          inMelee = !inMelee;
+        }
         out.push(`${indent}${key} ${command};`);
         const extra = Math.max(0, input.extraWaitByActionId?.[act.id] ?? 0);
         const modeHold = Math.max(0, input.modeHoldByActionId?.[act.id] ?? 0);
@@ -464,17 +472,22 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
     const sequence = [...initialStints, ...loopStints, ...loopStints];
     let prev = 'none';
     let prevCharId: string | undefined;
+    let inMelee = false;
     for (const stint of sequence) {
       const char = charById.get(stint.characterId);
       const key = keyOf.get(stint.characterId);
       if (!char || !key) continue;
-      if (prevCharId !== undefined && prevCharId !== stint.characterId) prev = 'swap';
+      if (prevCharId !== undefined && prevCharId !== stint.characterId) { prev = 'swap'; inMelee = false; }
       prevCharId = stint.characterId;
       for (const act of stint.actions) {
         if (act.type === 'swap' || act.actionTypeId === 'action_switch_char' || act.type === 'wait') continue;
         const command = mapAction(act.actionTypeId, char.weaponType).command;
         if (!command) continue;
-        const base = command.replace(/\[.*$/, '');
+        let base = command.replace(/\[.*$/, '');
+        if (key === 'tartaglia') {
+          if (base === 'skill') inMelee = !inMelee;
+          else if (act.actionTypeId === '10000033-hydro_ca') base = inMelee ? 'charge' : 'aim';
+        }
         if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !(key === 'iansan' && prev === 'skill') && !reported.has(act.id)) {
           reported.add(act.id);
           const prevLabel = prev === 'none' ? t('messages:config.rotationStart') : t('messages:config.quoted', { label: PREVIOUS_ACTION_LABELS[prev] ?? prev });

@@ -22,9 +22,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 5 件。平均 76.0k（最大 98.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
   },
@@ -37,9 +34,6 @@
     "e",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 4 件。平均 100.1k（最大 124.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
   },
@@ -53,9 +47,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ダリア 31 件中 3 件。平均 70.2k（最大 73.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
   },
@@ -68,9 +59,6 @@
     "n",
     "q"
    ],
-   "constellation": {
-    "min": 6
-   },
    "requiresFavonius": true,
    "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 8 件・平均 78.6k・最大 99.2k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（8 件。分布 0〜6 凸 = 0/0/0/0/0/0/8）"
   }

@@ -456,6 +456,7 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
     characterId: '10000110-electro',
     archetypes: [
       { name: 'E→重撃', role: 'attacker', slot: 40, use: ['e', 'ca'], evidence: 'Wiki 本文のコンボの記述: 特殊重撃の命中で固有天賦が発動するので、スキル→重撃を心がける（探索の比較なし）' },
+      { name: 'E→重撃→Q', role: 'supporter', slot: 20, use: ['e', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 特殊重撃の命中で固有天賦（攻撃力アップ・夜魂回復）が発動するため、スキル→重撃→爆発が基本（探索の比較なし）' },
       { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ヴァレサ・イアンサ・閑雲・フリーナ）の上位に出る形。実測: 最短の設定で 32.1k → 32.1k（同じ）' },
     ],
   },
@@ -1234,8 +1235,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
       { name: 'CA のあと、もう一度 E→CA', role: 'attacker', slot: 40, use: ['ca'], then: [{ slot: 50, use: ['e', 'ca'] }], constellation: { min: 6 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: セトス 58 件中 6 件。平均 57.2k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）' },],
   },
   {
-    characterId: '10000098-electro', // クロリンデ（辞書ありで探索結果が悪くなったため、形を外した）
+    characterId: '10000098-electro', // クロリンデ
     archetypes: [
+      { name: 'Q→E→（通常3→E）×5', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'n', 'e'], fillRepeat: [5, 6], evidence: 'Wiki 本文のコンボの記述: 夜巡り中は通常 3 回で命の契約 100% 以上→スキル（穿夜・契約全消費）のループが基本（5〜6 セット）' },
+      { name: 'E→（通常3→E）×5→Q', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'e'], fillRepeat: [5, 6], evidence: 'Wiki 本文のコンボの記述: スキルで夜巡りに入り（通常 3 回→スキル）×5〜6' },
       { name: 'Q（KQM）', role: 'attacker', slot: 40, use: ['q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: クロリンデ 186 件中 48 件。平均 80.1k（最大 325.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 47/0/0/0/0/0/1）（探索の比較なし）' },
       { name: 'Q のあと、もう一度 Q', role: 'attacker', slot: 40, use: ['q'], then: [{ slot: 50, use: ['q'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: クロリンデ 186 件中 11 件。平均 171.9k（最大 502.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/3）（探索の比較なし）' },],
   },

@@ -437,12 +437,24 @@ export async function searchRotation(args: SearchArgs): Promise<SearchOutcome> {
     }
 
     // ⑤ 多い回数（山登りで見つけたものも含める。上位は偶然に良かったものも混じるので、多めの回数で確かめ直す）
-    // 出場の分け方だけが違う（同じキャラの隣り合う出場を 1 つにすると同じ並びになる）候補は、1 つにまとめる（上位が、ほぼ同じ回転で埋まるのを避ける）
+    // 出場の分け方だけが違う（同じキャラの隣り合う出場を 1 つにすると同じ並びになる）候補や、
+    // 同じ位置の硬直キャンセルがダッシュ（_dash）か落下攻撃に繋がらないジャンプ（_jump）かだけ違う候補、
+    // あるいはモード中の再押し（フィッシュルのオズ配置直し等）で実際に gcsim に渡る命令（gcsimCommand）が同じ候補は、1 つにまとめる（上位が実質同じ回転の微差で埋まるのを避ける）
     const mergedKey = (sc: ScoredCandidate): string => {
+      const calc = calculateRotation(characters, sc.candidate.stints, { switchDelay: args.switchDelay, loopStartIndex: sc.candidate.loopStartIndex ?? 0, defHalt: args.defHalt });
       const parts: string[] = [];
       let prev: string | undefined;
-      for (const s of sc.candidate.stints) {
-        const acts = s.actions.map(x => x.actionTypeId + (x.durationManual && HOLD_FRAMES_ACTIONS.has(x.actionTypeId) ? `@${x.duration}` : '')).join(',');
+      for (const s of calc.calculatedStints) {
+        const realActs = s.actions.filter(a => a.type !== 'swap' && a.actionTypeId !== 'action_switch_char');
+        const acts = realActs.map((x, idx) => {
+          const nextType = realActs[idx + 1]?.type;
+          const normId = x.type === 'jump' && nextType !== 'plunge_low' && nextType !== 'plunge_high'
+            ? `${s.characterId}_dash`
+            : x.gcsimCommand || x.actionTypeId === '10000031-electro_e_recast'
+              ? `${s.characterId}_cmd:${x.gcsimCommand ?? 'skill[recast=1]'}`
+              : x.actionTypeId;
+          return normId + (x.durationManual && HOLD_FRAMES_ACTIONS.has(x.actionTypeId) ? `@${x.duration}` : '');
+        }).join(',');
         if (prev === s.characterId) parts[parts.length - 1] += ',' + acts; else parts.push(s.characterId + ':' + acts);
         prev = s.characterId;
       }

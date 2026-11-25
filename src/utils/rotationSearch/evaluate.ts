@@ -28,10 +28,10 @@ export function chargeViolation(characters: CharacterConfig[], stints: Candidate
     const needs = CHARGE_REQUIRES_ATTACK.has(c.source?.gcsimKey ?? '');
     for (const act of stint.actions) {
       if (act.type === 'swap' || act.actionTypeId === 'action_switch_char' || act.type === 'wait') continue;
-      const command = mapAction(act.actionTypeId, c.weaponType).command;
+      const command = act.gcsimCommand ?? mapAction(act.actionTypeId, c.weaponType).command;
       if (!command) continue;
       const base = command.replace(/\[.*$/, '');
-      if (base === 'charge' && needs && prev !== 'attack') return true;
+      if (base === 'charge' && needs && prev !== 'attack' && !(c.source?.gcsimKey === 'iansan' && prev === 'skill')) return true;
       prev = base;
     }
   }
@@ -117,10 +117,46 @@ function evaluateOne(
   if ((candidate.loopStartIndex ?? 0) > 0 && result.totalDuration > 0 && result.loopPeriod < result.totalDuration * MIN_LOOP_RATIO) {
     return { rejectedKey: '周回の部分が短すぎる' };
   }
-  if (chargeViolation(characters, candidate.stints, candidate.loopStartIndex ?? 0)) {
+  if (chargeViolation(characters, result.calculatedStints, candidate.loopStartIndex ?? 0)) {
     return { rejectedKey: '重撃の直前が通常攻撃でない' };
   }
-  // 捨てるのは、CT 違反（スキル・爆発の CT 中の使用）などだけ。画面の「CT 警告」（発動バフ・特殊スキルの受付時間外など。gcsim の計算は止まらない）は、捨てる理由にしない
+  // 捨てるのは、CT 違反（スキル・爆発の CT 中の使用）と、gcsim で実行エラーになる警告（落下攻撃の前提不足・ゲージ不足・未対応アクション・モード中の禁止操作）。
+  // 画面の「CT 警告」のうち、発動バフの内部 CT（passive_ct_）や特殊スキルの受付時間外（special_window_）など gcsim の計算が止まらないものは、捨てる理由にしない
+  const isGcsimFatalWarning = (id: string) =>
+    id.startsWith('plunge_prereq_') || id.startsWith('mode_gauge_') || id.startsWith('gcsim_unsupported_') || id.startsWith('mode_blocked_') || id.startsWith('mode_blocks_');
+  const fatalWarning = result.validationIssues.find(v => isGcsimFatalWarning(v.id));
+  if (fatalWarning) {
+    return { rejectedKey: fatalWarning.title };
+  }
+  // 設置物の位置を動かすだけのスキル再発動（フィッシュルのオズ再配置など）は、探索では無意味な別出場を増やすだけなので捨てる
+  if (result.calculatedStints.some(s => s.actions.some(a => a.gcsimCommand === 'skill[recast=1]' || a.actionTypeId === '10000031-electro_e_recast'))) {
+    return { rejectedKey: '設置物の位置直しのみのスキル再発動' };
+  }
+  // タルタリヤの近接モード（E）中は弓の狙い撃ち（ca / aim）が実行できない
+  for (const s of result.calculatedStints) {
+    if (s.characterId !== '10000033-hydro') continue;
+    let inMelee = false;
+    for (const a of s.actions) {
+      if (a.actionTypeId === '10000033-hydro_e') inMelee = !inMelee;
+      else if (inMelee && a.actionTypeId === '10000033-hydro_ca') {
+        return { rejectedKey: 'タルタリヤ: 近接モード中の狙い撃ち' };
+      }
+    }
+  }
+  // 放浪者の低空落下（lp）は、浮遊モード終了（同出場内の 2 回目の E）の直後、またはジャンプ直後のみ
+  for (const s of result.calculatedStints) {
+    if (s.characterId !== '10000075-anemo') continue;
+    let skillCount = 0;
+    let prevReal: string | undefined;
+    for (const a of s.actions) {
+      if (a.type === 'swap' || a.actionTypeId === 'action_switch_char' || a.type === 'wait') continue;
+      if (a.actionTypeId === '10000075-anemo_e') skillCount++;
+      else if (a.actionTypeId === '10000075-anemo_lp' && prevReal !== '10000075-anemo_jump' && !(skillCount >= 2 && prevReal === '10000075-anemo_e')) {
+        return { rejectedKey: '放浪者: 浮遊終了後以外の低空落下' };
+      }
+      prevReal = a.actionTypeId;
+    }
+  }
   const bad = result.validationIssues.filter(v => v.severity !== 'info' && !CT_WARNING_ISSUE_PATTERN.test(v.id) && !v.id.startsWith('passive_ct_'));
   const isCt = (id: string) => id.startsWith('skill_ct_') || id.startsWith('burst_ct_');
   if (bad.length > (options.maxCtIssues ?? 0) || (bad.length > 0 && bad.some(v => !isCt(v.id)))) {

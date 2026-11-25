@@ -9,9 +9,9 @@
  */
 import { macrosOf } from '../../masterdata/sequenceRules';
 import type { KnowledgeBundle } from '../../masterdata/knowledge/types';
-import { applicableArchetypes } from './knowledgeSeeds';
+import { applicableArchetypes, canUseFavoniusOrElementNormal, partyHasNormalAttackTrigger } from './knowledgeSeeds';
 import { HOLD_FRAMES_ACTIONS } from '../gcsim/actionMapping';
-import type { CharacterActionInstance, CharacterConfig, CharacterRole, Stint } from '../../types/genshin';
+import type { ActionFrames, CancelTarget, CharacterActionInstance, CharacterConfig, CharacterRole, Stint } from '../../types/genshin';
 
 export type SearchRole = CharacterRole;
 
@@ -52,10 +52,11 @@ const FILL_TEMPLATES: { name: string; steps: string[] }[] = [
   { name: '重撃のみ', steps: ['ca'] },
   { name: '落下', steps: ['jump', 'lp'] },
   { name: '高落下', steps: ['jump', 'hp'] },
-  // スキルを挟む型（スキルの CT が短いキャラは、スキルと重撃・通常攻撃を交互に出す。例: サンドローネの E C E C）
+  // スキルを挟む型（スキルの CT が短いキャラや、モード中にスキルで派生攻撃を出すキャラ。例: サンドローネの E C E C、キィニチの N×2 E、クロリンデの N×3 E）
   { name: 'E+重撃', steps: ['e', 'ca'] },
   { name: 'E+通常+重撃', steps: ['e', 'n', 'ca'] },
   { name: 'E+通常', steps: ['e', 'n', 'n'] },
+  { name: '通常3+E', steps: ['n', 'n', 'n', 'e'] },
 ];
 
 // 動作の名前に「@秒」がつくものは、所要時間（長押しの長さ）を手で決めた動作（例: e_hold@6.6）
@@ -301,8 +302,13 @@ function* generateCandidatesGen(characters: CharacterConfig[], roles: Record<str
           const cycle = Math.max(0.1, Math.min(...attackers.map(c => tpl.steps.reduce((x, s) => x + durationOf(c, s), 0))));
           const r0 = Math.max(1, Math.round(fill / cycle));
           // 繰り返しの回数: 1 回から目安 +1 回まで（上限 5 回）。手で組んだ例は、目安より短い 1 周の方が DPS が高かった
-          // E を含む型は、E の CT より短い間隔で繰り返せない（CT 違反になる）ので、回数を E の CT で抑える
-          const eCt = tpl.steps.includes('e') ? Math.max(...attackers.map(c => cooldownOf(c, 'e'))) : 0;
+          // E を含む型は、E の CT より短い間隔で繰り返せない（CT 違反になる）ので、回数を E の CT で抑える。
+          // ただし、モード中に E を別の動作（repress。クロリンデの突きやキィニチの廻狩貫鱗砲など）として連発できるキャラは CT で抑えない
+          const hasUnlimitedRepressE = attackers.every(c => {
+            const rp = defOf(c, 'e')?.mode?.repress;
+            return rp && (!rp.actions || rp.actions.includes('e')) && (rp.maxUses ?? Infinity) >= 3;
+          });
+          const eCt = tpl.steps.includes('e') && !hasUnlimitedRepressE ? Math.max(...attackers.map(c => cooldownOf(c, 'e'))) : 0;
           const rMax = eCt > 0 ? Math.max(1, Math.min(5, Math.floor((fill + cycle) / Math.max(eCt, cycle)))) : Math.min(r0 + 1, 5);
           for (let r = Math.max(1, Math.min(r0 - 1, rMax)); r <= rMax; r++) {
             // アタッカーごとの並び（スキル → 攻撃の型の繰り返し（→ 最後に E を足す）、Q はどこかに差し込む）の選択肢
@@ -336,8 +342,8 @@ function* generateCandidatesGen(characters: CharacterConfig[], roles: Record<str
                 pushPlan([...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
                 // 先置き（サンドイッチ）型: スキル・爆発の出場を、他のキャラの前・間に置き、攻撃だけの出場を最後に置く。例: コロンビーナ [E Q] → ラウマ [hE Q] → コロンビーナ [重撃 ×5]
                 for (let p = 0; p < rest.length; p++) pushPlan([...rest.slice(0, p), [a, useSteps(useOf.get(a.id)!)], ...rest.slice(p), [a, fill]], assignment, target);
-                // 最初にアタッカーが通常攻撃を 1 回だけ当てる形
-                if (defOf(a, 'n')) {
+                // 最初にアタッカーが通常攻撃を 1 回だけ当てる形（法器・西風武器など、スキル・爆発の前でも通常攻撃 1 回に意味があるキャラのみ）
+                if (defOf(a, 'n') && canUseFavoniusOrElementNormal(a, characters)) {
                   pushPlan([[a, ['n']], ...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target);
                   pushPlan([[a, ['n']], ...rest, [a, useSteps(useOf.get(a.id)!)], [a, fill]], assignment, target, 1);
                 }
@@ -369,6 +375,77 @@ function* generateCandidatesGen(characters: CharacterConfig[], roles: Record<str
 /** 近傍探索で、1 人の出場に入れる・並べ替える動作の種類 */
 const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
 
+/** ダッシュキャンセル・ジャンプキャンセルとして意味があるとみなす最小の硬直短縮フレーム（60fps で 15f = 0.25秒） */
+const MIN_CANCEL_SAVE_FRAMES = 15;
+
+function cancelTargetOfStep(c: CharacterConfig, nextStep: string | undefined): CancelTarget {
+  if (!nextStep) return 'swap';
+  const def = defOf(c, nextStep);
+  if (!def) return 'swap';
+  switch (def.type) {
+    case 'normal': return 'attack';
+    case 'charged': return c.weaponType === 'bow' ? 'aim' : 'charge';
+    case 'skill':
+    case 'skill_hold':
+    case 'skill_reset': return 'skill';
+    case 'burst': return 'burst';
+    case 'dash': return 'dash';
+    case 'jump': return 'jump';
+    case 'plunge_low': return 'lowPlunge';
+    case 'plunge_high': return 'highPlunge';
+    default: return 'swap';
+  }
+}
+
+function framesOfStepAt(c: CharacterConfig, steps: string[], index: number): ActionFrames | undefined {
+  const step = steps[index];
+  if (!step) return undefined;
+  const def = defOf(c, step);
+  if (!def) return undefined;
+  if (def.type === 'normal' && def.normalHits && def.normalHits.length > 0) {
+    let streak = 0;
+    for (let k = index - 1; k >= 0; k--) {
+      if (defOf(c, steps[k])?.type === 'normal') streak++;
+      else break;
+    }
+    return def.normalHits[streak % def.normalHits.length]?.frames ?? def.frames;
+  }
+  return def.frames;
+}
+
+/**
+ * 出場内の動作の並び steps に、意味のない空ダッシュ・空ジャンプや、不自然なスキル置き直しが含まれるか判定する:
+ *   - 先頭（1手目）の dash / jump、または dash / jump の連続
+ *   - 直後の行動へのキャンセルフレームと比べて MIN_CANCEL_SAVE_FRAMES（15f）以上早くキャンセルできない dash / jump
+ *   - 落下攻撃（lp / hp）に繋がらない jump のうち、dash よりもキャンセルフレームが明確（5f 以上）に早くないもの（D と J の重複亜種を防ぐ）
+ *   - 設置スキルを置き直すだけの `e_recast`（フィッシュルのオズ再配置など）
+ */
+function hasUselessCancelStep(c: CharacterConfig, steps: string[]): boolean {
+  const hasFischlRecast = c.id === '10000031-electro' && steps.some(s => s.split('@')[0] === 'e_recast');
+  if (hasFischlRecast) return true;
+  for (let i = 0; i < steps.length; i++) {
+    const h = steps[i].split('@')[0];
+    if (h !== 'dash' && h !== 'jump') continue;
+    if (i === 0) return true;
+    const prevBase = steps[i - 1].split('@')[0];
+    if (prevBase === 'dash' || prevBase === 'jump') return true;
+    const nextBase = steps[i + 1]?.split('@')[0];
+    // 落下攻撃（lp / hp）の直前のジャンプは落下攻撃の前提動作なので許可する
+    if (h === 'jump' && (nextBase === 'lp' || nextBase === 'hp')) continue;
+    const prevFrames = framesOfStepAt(c, steps, i - 1);
+    if (!prevFrames) return true;
+    const nextTarget = cancelTargetOfStep(c, steps[i + 1]);
+    const directFrame = prevFrames.cancels[nextTarget] ?? prevFrames.total;
+    const dashCancel = prevFrames.cancels.dash ?? prevFrames.total;
+    const jumpCancel = prevFrames.cancels.jump ?? prevFrames.total;
+    const cancelFrame = h === 'dash' ? dashCancel : jumpCancel;
+    if (directFrame - cancelFrame < MIN_CANCEL_SAVE_FRAMES) return true;
+    // 落下攻撃に繋がらないジャンプキャンセルは、ダッシュキャンセルより 5f 以上早い特殊な動作でない限り、ダッシュと重複させない
+    if (h === 'jump' && dashCancel - jumpCancel < 5) return true;
+  }
+  return false;
+}
+
 /**
  * 近傍: 候補を、1 か所だけ変えたもの（gcsim で良かった候補の周りを調べるのに使う。CT 違反などは、呼び出し側が評価で除く）
  *   ・隣り合う 2 人の出場を入れ替える
@@ -377,9 +454,14 @@ const NEIGHBOR_STEPS = ['e', 'q', 'ca', 'n', 'e_recast'];
 export function neighborsOf(characters: CharacterConfig[], base: Candidate, hints?: { lowShare?: string[]; knowledge?: KnowledgeBundle }): Candidate[] {
   const out = new Map<string, Candidate>();
   let loop = base.loopStartIndex ?? 0;
+  const hasPartyNormalTrigger = partyHasNormalAttackTrigger(characters);
+  const canUseUsefulNormal = (c: CharacterConfig): boolean =>
+    canUseFavoniusOrElementNormal(c, characters) || hasPartyNormalTrigger;
   const make = (plan: Array<{ c: CharacterConfig; steps: string[] }>, op: string, who?: string): void => {
-    // 出場の先頭（戦闘開始直後やキャラチェンジ直後の 1 手目）に空ダッシュ・空ジャンプを置くだけの手は無意味なので近傍として作らない
-    if (plan.some(p => { const h = p.steps[0]?.split('@')[0]; return h === 'dash' || h === 'jump'; })) return;
+    // 出場の先頭や、硬直短縮にならない空ダッシュ・空ジャンプ（および D と重複する J）を含む並びは近傍として作らない
+    if (plan.some(p => hasUselessCancelStep(p.c, p.steps))) return;
+    // 周回（loopStartIndex 以降）の中に、スキルも爆発も重撃も使わず「物理の通常攻撃 1 回だけ（西風・元素攻撃・連動追撃も無し）」で交代する単独出場がある並びは不自然なので作らない
+    if (plan.some((p, idx) => idx >= loop && p.steps.length === 1 && p.steps[0].split('@')[0] === 'n' && !canUseUsefulNormal(p.c))) return;
     const stints: Stint[] = [];
     for (const { c, steps } of plan) {
       const actions = steps.map(s => instance(c, s));
@@ -440,15 +522,16 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
   }
   const seenChars = new Map(plan0.map(p => [p.c.id, p.c]));
   for (const c of seenChars.values()) {
-    if (!defOf(c, 'n')) continue;
-    for (let i = 0; i <= plan0.length; i++) { const pl = clone(); pl.splice(i, 0, { c, steps: ['n'] }); make(pl, 'newN'); }
-    // 先頭に足して、そこまでを 1 回目だけにする（周回の開始位置を 1 つ後ろへ。1 回で届くようにする）
+    // 先頭に通常攻撃 1 回だけの出場を足す（手組みでは、法器のアタッカーや西風持ちが最初に通常攻撃を 1 回だけ当ててから他のキャラのスキルに移る形が有効。物理の空振りになるキャラやループ途中への単独 N 挿入は行わない）
+    if (!defOf(c, 'n') || !canUseFavoniusOrElementNormal(c, characters)) continue;
+    { const pl = clone(); pl.unshift({ c, steps: ['n'] }); make(pl, 'newN'); }
   }
   // 1 周目だけ行う動作（周回の前の、1 回きりの出場）を、先頭に足す: どのキャラの、基本の動作（E・Q・重撃・通常攻撃など）でも試す。周回の開始位置は 1 つ後ろへ（1 周目だけ置く出場は、最大 2 つ）
   // 例: アタッカーが周回の前に E を 1 回だけ使って、周回の中では別の並びにする。サポーターが先に爆発を撃っておく
   if ((base.loopStartIndex ?? 0) < 2) {
     for (const c of seenChars.values()) for (const st of new Set([...NEIGHBOR_STEPS, ...c.availableActions.map(a => a.id.slice(c.id.length + 1)).filter(x => /^(e_|q_)/.test(x))])) {
       if (!defOf(c, st)) continue;
+      if (st === 'n' && !canUseFavoniusOrElementNormal(c, characters)) continue;
       const pl = clone(); pl.unshift({ c, steps: [st] }); loop = (base.loopStartIndex ?? 0) + 1; make(pl, st === 'n' ? 'newN' : 'pre'); loop = 0;
     }
   }
@@ -485,12 +568,14 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
       if (j - i >= 2 && !(i === 0 && j === n)) { const pl = clone(); pl[si].steps.splice(i, j - i); make(pl, 'del'); }
     }
     // 置き換える: 動作 1 つを、別の動作にする（例: 通常攻撃 → ダッシュ、E → 長押し E。消してから差し込む 2 手では、途中で下がって届かない）
+    const allowNormalForChar = base.assignment[p.c.id] === 'attacker' || canUseUsefulNormal(p.c);
     {
       const vocab = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
       for (let i = 0; i < n; i++) {
         const base0 = p.steps[i].split('@')[0];
         for (const s of vocab) {
           if (s === base0 || !defOf(p.c, s)) continue;
+          if (s === 'n' && !allowNormalForChar) continue;
           const pl = clone(); pl[si].steps[i] = s; make(pl, 'rep');
         }
       }
@@ -520,6 +605,7 @@ export function neighborsOf(characters: CharacterConfig[], base: Candidate, hint
     const vocabulary = [...NEIGHBOR_STEPS, ...p.c.availableActions.map(a => a.id.slice(p.c.id.length + 1)).filter(s => !NEIGHBOR_STEPS.includes(s))];
     for (const s of vocabulary) {
       if (!defOf(p.c, s)) continue;
+      if (s === 'n' && !allowNormalForChar) continue;
       for (let i = 0; i <= n; i++) { const pl = clone(); pl[si].steps.splice(i, 0, s); make(pl, NEIGHBOR_STEPS.includes(s) ? 'ins' : `ins:${s}`); }
     }
     // 知識辞書の運用型（コンボの塊）で、このキャラの出場を一括差し替えする（1 手ずつでは届かないコンボ変更に使う）

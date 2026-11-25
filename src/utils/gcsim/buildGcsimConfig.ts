@@ -475,7 +475,7 @@ export function buildGcsimConfig(rawInput: GcsimConfigInput): GcsimConfigResult 
         const command = mapAction(act.actionTypeId, char.weaponType).command;
         if (!command) continue;
         const base = command.replace(/\[.*$/, '');
-        if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !reported.has(act.id)) {
+        if (base === 'charge' && CHARGE_REQUIRES_ATTACK.has(key) && prev !== 'attack' && !(key === 'iansan' && prev === 'skill') && !reported.has(act.id)) {
           reported.add(act.id);
           const prevLabel = prev === 'none' ? t('messages:config.rotationStart') : t('messages:config.quoted', { label: PREVIOUS_ACTION_LABELS[prev] ?? prev });
           error(t('messages:config.chargeNeedsNormal', { name: charName(char), index: stintNumber.get(stint.id), action: actionName(char, act), prev: prevLabel }));

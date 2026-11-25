@@ -3,6 +3,45 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AF%E3%83%AD%E3%83%AA%E3%83%B3%E3%83%87",
  "archetypes": [
   {
+   "name": "Q→E→（通常3→E）×5",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    5,
+    6
+   ],
+   "evidence": "Wiki 本文のコンボの記述: 夜巡り中は通常 3 回で命の契約 100% 以上→スキル（穿夜・契約全消費）のループが基本（5〜6 セット）"
+  },
+  {
+   "name": "E→（通常3→E）×5→Q",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    5,
+    6
+   ],
+   "evidence": "Wiki 本文のコンボの記述: スキルで夜巡りに入り（通常 3 回→スキル）×5〜6"
+  },
+  {
    "name": "Q（KQM）",
    "role": "attacker",
    "slot": 40,

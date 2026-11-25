@@ -16,7 +16,7 @@ export const CHARGE_REQUIRES_ATTACK = new Set<string>([
   'aetheranemo', 'aethercryo', 'aetherdendro', 'aetherelectro', 'aethergeo', 'aetherhydro', 'aetherpyro',
   'albedo', 'alhaitham', 'bennett', 'candace', 'chevreuse', 'chiori', 'clorinde', 'cyno', 'dahlia', 'durin',
   'emilie', 'escoffier', 'flins', 'hutao', 'iansan', 'ineffa', 'jean', 'kaedeharakazuha', 'kaeya',
-  'kamisatoayaka', 'kamisatoayato', 'keqing', 'kirara', 'kukishinobu', 'layla',
+  'kamisatoayaka', 'kamisatoayato', 'keqing', 'kinich', 'kirara', 'kukishinobu', 'layla',
   'lumineanemo', 'luminecryo', 'luminedendro', 'lumineelectro', 'luminegeo', 'luminehydro', 'luminepyro',
   'lynette', 'mika', 'nilou', 'odette', 'prune', 'qiqi', 'raidenshogun', 'rosaria', 'shenhe', 'shikanoinheizou',
   'thoma', 'wriothesley', 'xiangling', 'xiao', 'xilonen', 'xingqiu', 'yaoyao', 'yunjin', 'zhongli',

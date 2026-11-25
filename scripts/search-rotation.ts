@@ -30,6 +30,7 @@ const TOP = num('top', 10);
 const MAX = num('max', 20000);
 const ownedPath = str('owned');
 const outPath = str('out');
+const erPct = num('er', 0);
 if (!str('preset') && (names.length < 1 || names.length > 4)) {
   console.error('編成のキャラ名を 1〜4 人、指定してください（例: node scripts/search-rotation.ts ナヒーダ 胡桃 香菱 ベネット）');
   process.exit(1);
@@ -64,6 +65,14 @@ for (const n of preset ? [] : names) {
     const eq = cs.defaultEquipmentFor(m.id, { weapons, artifacts });
     characters.push({ ...structuredClone(m), ...eq, customStats: cs.defaultCustomStatsFor(m.id) });
   }
+}
+if (erPct > 100) {
+  const minArtifactEr = (erPct - 100) / 100;
+  for (const c of characters) {
+    const stats = c.customStats?.artifactStats ?? {};
+    c.customStats = { ...c.customStats, artifactStats: { ...stats, er: Math.max(stats.er ?? 0, minArtifactEr) } };
+  }
+  console.log(`仮値ER調整: 全員の聖遺物ERを最低 ${(minArtifactEr * 100).toFixed(0)}%（総ER ${erPct}% 以上）に設定`);
 }
 const roles: Record<string, string[]> = Object.fromEntries(characters.map(c => [c.id, [...(c.roles ?? [])]]));
 // --attacker=名前,名前: その人にアタッカーの役割を足す（役割の上書きの代わり）

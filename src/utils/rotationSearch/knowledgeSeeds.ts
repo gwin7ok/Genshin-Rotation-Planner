@@ -44,6 +44,26 @@ export const SELF_ELEMENT_NORMAL_IDS = new Set([
   '10000103-geo',     // シロネン
 ]);
 
+/** 味方（表のキャラ）の通常攻撃に連動して裏から元素追撃を発動するキャラ（行秋・夜蘭・北斗・トーマ・6凸フィッシュル・1凸キャンディス） */
+export const PARTY_NORMAL_TRIGGER_IDS = new Set([
+  '10000024-electro', // 北斗（雷斫り）
+  '10000025-hydro',   // 行秋（裁雨留虹）
+  '10000050-pyro',    // トーマ（真紅熾炎の大鎧）
+  '10000060-hydro',   // 夜蘭（玲瓏一擲）
+]);
+
+/** 編成内に、表のキャラの通常攻撃に連動して元素追撃を発動するキャラがいるか */
+export function partyHasNormalAttackTrigger(party?: CharacterConfig[]): boolean {
+  if (!party) return false;
+  return party.some(p => {
+    if (PARTY_NORMAL_TRIGGER_IDS.has(p.id)) return true;
+    const cons = p.constellation ?? defaultConstellation(p.rarity);
+    if (p.id === '10000031-electro' && cons >= 6) return true; // 6凸フィッシュル
+    if (p.id === '10000072-hydro' && cons >= 1) return true;   // キャンディス爆発の通常連動追撃
+    return false;
+  });
+}
+
 /** 6 凸（完凸）効果でスキル・爆発後に自身の通常攻撃に元素付与を得るサポーター／サブアタッカー */
 export const C6_INFUSION_IDS = new Set([
   '10000005-pyro',    // 空(炎)
@@ -176,10 +196,16 @@ function variantsOf(characters: CharacterConfig[], members: CharacterConfig[], c
           const s = stintOf(c, steps, `k${stints.length}`);
           if (!s) ok = false; else stints.push(s);
         };
-        attackers.forEach((p, i) => { if (leads[i]) push(p.c, p.a.lead!); });
+        attackers.forEach((p, i) => { if (leads[i] && canUseFavoniusOrElementNormal(p.c, characters)) push(p.c, p.a.lead!); });
         const loopStartIndex = stints.length;
         for (const p of order) push(p.c, p.use);
-        attackers.forEach((p, i) => { if (repeats[i] > 0) push(p.c, Array.from({ length: repeats[i] }, () => p.a.fill!).flat()); });
+        attackers.forEach((p, i) => {
+          if (repeats[i] <= 0) return;
+          const fillSteps = Array.from({ length: repeats[i] }, () => p.a.fill!).flat();
+          // スキル・爆発を使わない攻撃だけの別出場が、元素攻撃・西風・連動追撃も無い物理の通常攻撃 1 回だけ（例: 香菱[N]）になる形は作らない
+          if (fillSteps.length === 1 && fillSteps[0] === 'n' && !canUseFavoniusOrElementNormal(p.c, characters) && !partyHasNormalAttackTrigger(characters)) return;
+          push(p.c, fillSteps);
+        });
         if (!ok || stints.length === 0) continue;
         const assignment = Object.fromEntries(characters.map(c => [c.id, (picked.find(p => p.c.id === c.id)?.a.role ?? 'supporter') as SearchRole]));
         const key = stints.map(s => `${s.characterId}:${s.actions.map(a => a.actionTypeId).join(',')}`).join('|') + `@${loopStartIndex}`;

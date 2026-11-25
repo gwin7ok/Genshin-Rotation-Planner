@@ -1,3 +1,5 @@
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.agents/skills/gcsim-integration/SKILL.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.agents/skills/ui-i18n-and-docs/SKILL.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.claude/launch.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.env.example
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.github/ISSUE_TEMPLATE/bug.yml
@@ -14,8 +16,9 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.gitigno
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.npmrc
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/.vscode/tasks.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/1
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/AGENTS.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/CHANGELOG.md
-https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/CLAUDE.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/CLAUDE.md.backup
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/LICENSE
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/NOTICE
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/README.md
@@ -315,6 +318,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gc
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/phase-9-auto-rotation-search/\350\276\236\346\233\270\350\250\255\350\250\210.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/plan.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/progress.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/\343\202\267\343\203\243\343\203\253\343\203\255\343\203\203\343\203\210-\351\225\267\346\212\274\343\201\227\343\201\256\343\203\236\343\203\274\343\202\257\345\267\256.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/\344\273\225\346\247\230\347\242\272\350\252\215-wiki\347\205\247\345\220\210.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/\346\254\241\343\201\256\343\202\273\343\203\203\343\202\267\343\203\247\343\203\263\347\224\250\343\203\227\343\203\255\343\203\263\343\203\227\343\203\210.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-\343\202\265\343\203\274\343\203\220\343\203\274\346\233\264\346\226\260\346\211\213\351\240\206.md"

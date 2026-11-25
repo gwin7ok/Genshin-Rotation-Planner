@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+## [1.16.2] - 2026-11-25
+
+### 追加
+- ローテーション探索を非同期化し、UI応答性とキャンセル機能を強化
+- ローテーション自動探索の応答性・探索精度・UI表示を改善
+- ローテーション自動探索の候補生成・事前検証・キャラ辞書を改善
+
 ## [1.16.1] - 2026-11-23
 
 ### 変更
@@ -418,7 +425,8 @@
 ### 変更
 - 保存・設定の読み書きを 1 か所（`persistence.ts`）に集約（保存データの形式は変更なし）。
 
-[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.1...HEAD
+[Unreleased]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.2...HEAD
+[1.16.2]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.1...v1.16.2
 [1.16.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.16.0...v1.16.1
 [1.16.0]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.1...v1.16.0
 [1.15.1]: https://github.com/gwin7ok/Genshin-Rotation-Planner/compare/v1.15.0...v1.15.1

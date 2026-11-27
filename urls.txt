@@ -344,7 +344,9 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcs
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-1d-result.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-2-batchA-audit.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-2-batchA-materials.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-2-batchB-audit.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-2-batchB-materials.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-2-batchC-materials.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-baseline/furina-vaporize.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-baseline/international-childe.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-baseline/keqing-intensify.json
@@ -367,7 +369,9 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gc
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/\346\254\241\343\201\256\343\202\273\343\203\203\343\202\267\343\203\247\343\203\263\347\224\250\343\203\227\343\203\255\343\203\263\343\203\227\343\203\210.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-\343\202\265\343\203\274\343\203\220\343\203\274\346\233\264\346\226\260\346\211\213\351\240\206.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/README.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/auto-search-heuristics-spec.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-gimmicks-system.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-mechanics-batch2.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-mechanics.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/combat-system.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/team-archetypes.md

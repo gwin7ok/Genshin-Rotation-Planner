@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%85%B9%E7%99%BD",
  "archetypes": [
   {
-   "name": "E→通常4→E の繰り返し",
+   "name": "E のあと N×4→E ループ（月結晶主力）",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -17,12 +17,13 @@
     "e"
    ],
    "fillRepeat": [
+    3,
     4
    ],
-   "evidence": "Wiki 本文のコンボの記述: 基本の立ち回り。スキル→（通常 4 段→特殊スキル）×4（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 月結晶主力N4→Eループ形"
   },
   {
-   "name": "E・Q のあと 通常攻撃 4 段 + E を繰り返す",
+   "name": "E→Q のあと N×4→E ループ",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -37,9 +38,31 @@
     "e"
    ],
    "fillRepeat": [
+    3,
     4
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 基本はスキル → (通常 4 段 → 特殊スキル) × 4。爆発は強化中に使う"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E→Q込みN4→Eループ形"
+  },
+  {
+   "name": "Q→E のあと N×4→E ループ（爆発先行）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行N4→Eループ形"
   }
  ]
 }

@@ -3,13 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%90%E3%83%BC%E3%83%90%E3%83%A9",
  "archetypes": [
   {
-   "name": "e の出場",
+   "name": "E だけ（水環回復・TTDS）",
    "role": "supporter",
    "slot": 30,
    "use": [
     "e"
    ],
-   "evidence": "自動編成（バーバラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 37.9k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 龍殺し交代前提E回復・水環形"
+  },
+  {
+   "name": "E→Q（全体即時回復）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 全体即時回復Q込み形"
+  },
+  {
+   "name": "E→N（水付着トリガー・KQM最多15%）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 15% 最多水付着Nトリガー形"
   }
  ]
 }

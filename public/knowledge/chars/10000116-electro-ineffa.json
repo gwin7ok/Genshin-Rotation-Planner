@@ -3,26 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%8D%E3%83%95%E3%82%A1",
  "archetypes": [
   {
-   "name": "E→Q（KQM）",
-   "role": "supporter",
+   "name": "E→Q（KQM圧勝57%）",
+   "role": "subAttacker",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: イネファ 165 件中 7 件。平均 457.0k（最大 1463.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/2）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 57% 最多月感電・控え雷サブ形"
   },
   {
-   "name": "E",
+   "name": "E だけ（時短・KQM 12%）",
    "role": "subAttacker",
    "slot": 20,
    "use": [
     "e"
    ],
-   "evidence": "編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 12% 爆発省略時短E形"
+  },
+  {
+   "name": "Q→E（爆発先行）",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行展開形"
   }
  ]
 }

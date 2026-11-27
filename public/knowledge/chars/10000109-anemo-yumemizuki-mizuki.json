@@ -3,22 +3,40 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%A4%A2%E8%A6%8B%E6%9C%88%E7%91%9E%E5%B8%8C",
  "archetypes": [
   {
-   "name": "E・Q・ダッシュのあと 通常攻撃を繰り返す",
+   "name": "E→Q のあと通常連打（浮遊拡散ドライバー）",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "q",
-    "dash"
+    "q"
    ],
    "fill": [
     "n"
    ],
    "fillRepeat": [
-    10,
-    12
+    8,
+    10
    ],
-   "evidence": "自動編成（夢見月瑞希 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 23.8k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 浮遊拡散ドライバー形"
+  },
+  {
+   "name": "E→Q（翠緑拡散・回復サポート・KQM最多）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 最多翠緑拡散＋全体回復サポート形"
+  },
+  {
+   "name": "E だけ（時短拡散）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短拡散形"
   }
  ]
 }

@@ -129,8 +129,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000116-electro', // イネファ
     archetypes: [
-      { name: 'E→Q（KQM）', role: 'supporter', slot: 10, use: ['e', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: イネファ 165 件中 7 件。平均 457.0k（最大 1463.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/2）（探索の比較なし）' },
-      { name: 'E', role: 'subAttacker', slot: 20, use: ['e'], evidence: '編成例の探索（Overvape）の上位に出る形。実測: Overvape で効果は確認できず' },
+      { name: 'E→Q（KQM圧勝57%）', role: 'subAttacker', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 57% 最多月感電・控え雷サブ形' },
+      { name: 'E だけ（時短・KQM 12%）', role: 'subAttacker', slot: 20, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 12% 爆発省略時短E形' },
+      { name: 'Q→E（爆発先行）', role: 'subAttacker', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行展開形' },
     ],
   },
 
@@ -255,8 +256,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000064-geo',
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
-      { name: 'E→N→Q（KQM）', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 雲菫 73 件中 3 件。平均 49.7k（最大 57.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）' },
+      { name: 'E→Q（通常ダメ加算・KQM最多17%）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 17% 最多通常バフ＋岩粒子形' },
+      { name: '長押しE→Q（最大粒子・KQM 9%）', role: 'supporter', slot: 20, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 9% 2段階チャージ最大粒子形' },
+      { name: 'E→N→Q（西風粒子・KQM 11%）', role: 'supporter', slot: 20, use: ['e', 'n', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 11% 西風槍粒子トリガー形' },
     ],
   },
   {
@@ -419,7 +421,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000034-geo',
     archetypes: [
-      { name: '先頭 N・E と Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [18, 21, 24], lead: ['n'], evidence: '編成例の探索（ノエル・ゴロー・アルベド・ベネット）の上位に出る形。実測: 最短の設定で 17.0k ±5.4 → 18.9k ±5.0（誤差）' },
+      { name: 'E→Q のあと N3D 連打（王道岩アタッカー）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 王道N3D連打岩アタッカー形' },
+      { name: 'E→Q のあと通常連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [16, 20], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: キャンセル省略通常連打形' },
+      { name: 'Q→E のあとジャンプ高い落下連打（閑雲落下編成）', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['jump', 'hp', 'dash'], fillRepeat: [5, 6], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 閑雲落下連打形' },
     ],
   },
   {
@@ -442,8 +446,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000029-pyro',
     archetypes: [
-      { name: 'E→Q→通常→重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 通常→重撃をキャンセルを使って繰り返す（探索の比較なし）' },
-      { name: 'E・Q のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（クレー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.7k → 37.7k' },
+      { name: 'E→Q のあと N1C 連打（定番）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'ca'], fillRepeat: [4, 5, 6], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 定番N1C連打炎アタッカー形' },
+      { name: 'E→Q のあと N2C 連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N2C連打炎付着形' },
+      { name: 'E→Q のあと N1J 連打→重撃（ジャンプキャンセル）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'jump'], fillRepeat: [4, 5], tail: ['ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N1Jキャンセル＋末尾CA形' },
     ],
   },
   {
@@ -492,14 +497,17 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000059-anemo',
     archetypes: [
-      { name: 'Q・E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n'], fillRepeat: [15, 20], evidence: '自動編成（鹿野院平蔵 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 28.8k → 29.6k' },
+      { name: 'Q→E のあと通常連打（ドライバー）', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n'], fillRepeat: [12, 16], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 感電/拡散ドライバー通常連打形' },
+      { name: 'N→CA→Q→E（クイックスワップ）', role: 'attacker', slot: 40, use: ['n', 'ca', 'q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 変格4層溜め正論拳クイックスワップ形' },
+      { name: 'Q→E のあと、もう一度 Q→E（2回出場）', role: 'attacker', slot: 20, use: ['q', 'e'], then: [{ slot: 40, use: ['q', 'e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場クイックスワップ形' },
     ],
   },
   {
     characterId: '10000062-cryo',
     archetypes: [
-      { name: 'E・ジャンプ・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'jump', 'q'], fill: ['ca'], fillRepeat: [4, 5, 6], evidence: '自動編成（アーロイ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 26.2k' },
-      { name: 'Q→E', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Wiki 本文のコンボの記述: 交代してから、爆発→スキルのサポーター運用が強力（探索の比較なし）' },
+      { name: 'E→Q のあと重撃連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E→Q後氷重撃連打形' },
+      { name: 'Q→E（爆発クイックサブ）', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行溶解サブ火力形' },
+      { name: 'E→Q（粒子先出しサブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E粒子先出しサブ火力形' },
     ],
   },
   {
@@ -523,8 +531,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000104-anemo',
     archetypes: [
-      { name: 'E→重撃→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 先にスキル→重撃を撃ち切ってから、爆発を使う（探索の比較なし）' },
-      { name: 'E のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['ca'], fillRepeat: [4, 5], evidence: '自動編成（チャスカ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 43.0k → 49.9k' },
+      { name: 'E のあと重撃×4〜5→末尾Q締め（KQM圧勝75%）', role: 'attacker', slot: 40, use: ['e'], fill: ['ca'], fillRepeat: [4, 5], tail: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 75% 圧勝E→特殊重撃連打→末尾Q形' },
+      { name: 'E のあと重撃×4〜5（爆発温存）', role: 'attacker', slot: 40, use: ['e'], fill: ['ca'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発温存E→特殊重撃連打形' },
+      { name: 'E→Q のあと重撃連打（爆発先撃ち）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行E重撃連打形' },
     ],
   },
   {
@@ -548,7 +557,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000128-anemo',
     archetypes: [
-      { name: 'E・通常攻撃・重撃のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'ca'], fill: ['n'], fillRepeat: [6, 7, 8], evidence: '自動編成（ファルカ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 32.6k → 34.1k' },
+      { name: 'E のあと N2C 連打（KQM主流）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E後N2C連打主流形' },
+      { name: 'E のあと (E→N2C) ループ（スキル織り交ぜ）', role: 'attacker', slot: 40, use: ['e', 'n', 'n'], fill: ['e', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 特殊E織り交ぜN2Cループ形' },
+      { name: 'E→Q のあと N2C 連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E→Q後N2C連打形' },
     ],
   },
   {
@@ -571,7 +582,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000109-anemo',
     archetypes: [
-      { name: 'E・Q・ダッシュのあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q', 'dash'], fill: ['n'], fillRepeat: [10, 12], evidence: '自動編成（夢見月瑞希 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 23.8k' },
+      { name: 'E→Q のあと通常連打（浮遊拡散ドライバー）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [8, 10], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 浮遊拡散ドライバー形' },
+      { name: 'E→Q（翠緑拡散・回復サポート・KQM最多）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 最多翠緑拡散＋全体回復サポート形' },
+      { name: 'E だけ（時短拡散）', role: 'supporter', slot: 20, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短拡散形' },
     ],
   },
   {
@@ -586,7 +599,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000014-hydro',
     archetypes: [
-      { name: 'e の出場', role: 'supporter', slot: 30, use: ['e'], evidence: '自動編成（バーバラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.1k → 37.9k' },
+      { name: 'E だけ（水環回復・TTDS）', role: 'supporter', slot: 30, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 龍殺し交代前提E回復・水環形' },
+      { name: 'E→Q（全体即時回復）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 全体即時回復Q込み形' },
+      { name: 'E→N（水付着トリガー・KQM最多15%）', role: 'supporter', slot: 20, use: ['e', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 15% 最多水付着Nトリガー形' },
     ],
   },
   {
@@ -602,7 +617,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000021-pyro',
     archetypes: [
-      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（アンバー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.3k → 43.1k' },
+      { name: 'Q だけ（終焉起動・炎付着・時短）', role: 'subAttacker', slot: 20, use: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 終焉弓4ヒット即起動＋2U炎付着時短形' },
+      { name: 'Q→E（爆発＋ウサギ伯爵）', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q＋E炎粒子回収形' },
+      { name: 'E→Q（粒子先出し）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E粒子先出しQ形' },
     ],
   },
   {
@@ -813,13 +830,17 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000124-anemo',
     archetypes: [
-      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（ヤフォダ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.6k → 44.1k' },
+      { name: 'E→Q（標準サポート）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 標準E→Q翠緑サポート形' },
+      { name: 'E のあと、もう一度 Q（2回出場・KQM 67%）', role: 'supporter', slot: 10, use: ['e'], then: [{ slot: 30, use: ['q'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 67% 最多2回出場E→後半Q形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行サポート形' },
     ],
   },
   {
     characterId: '10000127-geo',
     archetypes: [
-      { name: 'q の出場', role: 'supporter', slot: 30, use: ['q'], evidence: '自動編成（イルーガ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.4k → 36.7k' },
+      { name: 'E→Q（標準サポート）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 標準E→Q月結晶サポート形' },
+      { name: 'Q だけ（時短）', role: 'supporter', slot: 30, use: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 時短Qバフ形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行サポート形' },
     ],
   },
   {
@@ -833,7 +854,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000148-electro',
     archetypes: [
-      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（アリョーシャ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 52.6k → 50.8k' },
+      { name: 'E→Q（標準サポート）', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 標準E→Q雷サポート形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行サポート形' },
+      { name: 'E だけ（時短）', role: 'supporter', slot: 20, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短E形' },
     ],
   },
   {
@@ -857,43 +880,49 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000005-cryo',
     archetypes: [
-      { name: 'E・通常攻撃・Q のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'q'], fill: ['n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 星電導型: スキル → 通常攻撃・重撃でバフ → 爆発' },
-      { name: 'E・Q（星拡散のサブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 星拡散型は控えから氷付着するサブアタッカー' },
+      { name: 'E→N×3→Q のあと N×4→重撃 連打', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'q'], fill: ['n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 氷付与主軸N4C連打形' },
+      { name: 'E→Q（星拡散サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: サブ氷付着・星反応起点形' },
+      { name: 'E→Q→N→重撃（短時間コンボ）', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 短時間クイックスワップ形' },
     ],
   },
   {
     characterId: '10000005-dendro',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の草付着で下地を作る' },
-      { name: 'E→N→Q→N のあと、もう一度 E→N×3', role: 'supporter', slot: 10, use: ['e', 'n', 'q', 'n'], then: [{ slot: 30, use: ['e', 'n', 'n', 'n'] }], constellation: { min: 6 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 空(草) 17 件中 3 件。平均 48.5k（最大 49.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）' },
+      { name: 'E→Q（草付着サポート）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 基本E粒子受け取りQ草付着形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行草蓮ランプ形' },
+      { name: 'E→Q のあと、もう一度 E（2回出場粒子）', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子回収形' },
     ],
   },
   {
     characterId: '10000005-anemo',
     archetypes: [
-      { name: '長押し E・Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（長押しの形）' },
-    
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから出してスキル・爆発を撃ってすぐ引っ込める' },
+      { name: '長押しE→Q（翠緑拡散）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 翠緑4拡散＋長押し粒子形' },
+      { name: '短押しE→Q（時短拡散）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 時短拡散＋耐性ダウン形' },
+      { name: 'E→Q のあと、もう一度 E（2回出場）', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子回収形' },
     ],
   },
   {
     characterId: '10000005-electro',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルと爆発でエネルギーを配るサポート' },
+      { name: 'E→Q（バッテリー＋雷追撃）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 勾玉供給＋雷追撃基本形' },
+      { name: 'E のあと、もう一度 E（勾玉バッテリー2回）', role: 'supporter', slot: 10, use: ['e'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場勾玉バッテリー供給形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行バッテリー形' },
     ],
   },
   {
     characterId: '10000005-geo',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキル・爆発で岩の設置物を出すサポート' },
+      { name: 'Q→E（会心率+10%＋岩粒子・KQM最多）', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 最多1凸会心率+10%領域＋岩粒子形' },
+      { name: 'E→Q（粒子先出し）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E粒子先出しQ形' },
+      { name: 'Q→E のあと、もう一度 E（2回出場）', role: 'supporter', slot: 10, use: ['q', 'e'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場荒星粒子回収形' },
     ],
   },
   {
     characterId: '10000005-hydro',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（短押しの形）' },
-    
-      { name: '長押し E・Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルは長押しが主。戦闘では水付着の下地役' },
+      { name: '長押しE→Q（雫生成＋爆発）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 源水の雫生成＋Q水付着形' },
+      { name: '短押しE→Q（時短）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 短押し時短水付着形' },
+      { name: 'E のあと、もう一度 Q（2回出場）', role: 'supporter', slot: 10, use: ['e'], then: [{ slot: 30, use: ['q'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場粒子・水付着形' },
     ],
   },
   {
@@ -909,8 +938,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000007-cryo',
     archetypes: [
-      { name: 'E・通常攻撃・Q のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'q'], fill: ['n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 星電導型: スキル → 通常攻撃・重撃でバフ → 爆発' },
-      { name: 'E・Q（星拡散のサブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 星拡散型は控えから氷付着するサブアタッカー' },
+      { name: 'E→N×3→Q のあと N×4→重撃 連打', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'q'], fill: ['n', 'n', 'n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 氷付与主軸N4C連打形' },
+      { name: 'E→Q（星拡散サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: サブ氷付着・星反応起点形' },
+      { name: 'E→Q→N→重撃（短時間コンボ）', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 短時間クイックスワップ形' },
     ],
   },
   {
@@ -926,29 +956,33 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000007-anemo',
     archetypes: [
-      { name: '長押し E・Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（長押しの形）' },
-    
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから出してスキル・爆発を撃ってすぐ引っ込める' },
+      { name: '長押しE→Q（翠緑拡散）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 翠緑4拡散＋長押し粒子形' },
+      { name: '短押しE→Q（時短拡散）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 時短拡散＋耐性ダウン形' },
+      { name: 'E→Q のあと、もう一度 E（2回出場）', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子回収形' },
     ],
   },
   {
     characterId: '10000007-electro',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルと爆発でエネルギーを配るサポート' },
+      { name: 'E→Q（バッテリー＋雷追撃）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 勾玉供給＋雷追撃基本形' },
+      { name: 'E のあと、もう一度 E（勾玉バッテリー2回）', role: 'supporter', slot: 10, use: ['e'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場勾玉バッテリー供給形' },
+      { name: 'Q→E（爆発先行）', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行バッテリー形' },
     ],
   },
   {
     characterId: '10000007-geo',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキル・爆発で岩の設置物を出すサポート' },
+      { name: 'Q→E（会心率+10%＋岩粒子・KQM最多）', role: 'supporter', slot: 10, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 最多1凸会心率+10%領域＋岩粒子形' },
+      { name: 'E→Q（粒子先出し）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E粒子先出しQ形' },
+      { name: 'Q→E のあと、もう一度 E（2回出場）', role: 'supporter', slot: 10, use: ['q', 'e'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場荒星粒子回収形' },
     ],
   },
   {
     characterId: '10000007-hydro',
     archetypes: [
-      { name: 'E・Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（短押しの形）' },
-    
-      { name: '長押し E・Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルは長押しが主。戦闘では水付着の下地役' },
+      { name: '長押しE→Q（雫生成＋爆発）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 源水の雫生成＋Q水付着形' },
+      { name: '短押しE→Q（時短）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 短押し時短水付着形' },
+      { name: 'E のあと、もう一度 Q（2回出場）', role: 'supporter', slot: 10, use: ['e'], then: [{ slot: 30, use: ['q'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場粒子・水付着形' },
     ],
   },
   {
@@ -1061,8 +1095,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000126-geo',
     archetypes: [
-      { name: 'E→通常4→E の繰り返し', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [4], evidence: 'Wiki 本文のコンボの記述: 基本の立ち回り。スキル→（通常 4 段→特殊スキル）×4（探索の比較なし）' },
-      { name: 'E・Q のあと 通常攻撃 4 段 + E を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [4], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 基本はスキル → (通常 4 段 → 特殊スキル) × 4。爆発は強化中に使う' },
+      { name: 'E のあと N×4→E ループ（月結晶主力）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 月結晶主力N4→Eループ形' },
+      { name: 'E→Q のあと N×4→E ループ', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: E→Q込みN4→Eループ形' },
+      { name: 'Q→E のあと N×4→E ループ（爆発先行）', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'n', 'n', 'e'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行N4→Eループ形' },
     ],
   },
   {
@@ -1076,7 +1111,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000097-electro', // セトス（辞書ありで探索結果が悪くなったため、形を外した）
     archetypes: [
-      { name: 'CA のあと、もう一度 E→CA', role: 'attacker', slot: 40, use: ['ca'], then: [{ slot: 50, use: ['e', 'ca'] }], evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: セトス 58 件中 6 件。平均 57.2k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）' },
+      { name: 'E→Q のあと通常連打→末尾E（爆発貫通矢型）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [14, 16], tail: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発寂寥の貫矢N連打→末尾E形' },
+      { name: 'E→重撃×2（元素エネルギー消費速射・KQM最多）', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 最多固有天賦エネルギー消費速射CA形' },
+      { name: '重撃 のあと、もう一度 E→重撃（2回出場クイック）', role: 'attacker', slot: 20, use: ['ca'], then: [{ slot: 40, use: ['e', 'ca'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 2回出場速射クイックスワップ形' },
+      { name: '初動重撃→E→Q のあと通常連打→末尾E', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [14, 16], lead: ['ca'], tail: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 初動CA込みQ貫通矢ループ形' },
     ],
   },
   {

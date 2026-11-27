@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%B9%BF%E9%87%8E%E9%99%A2%E5%B9%B3%E8%94%B5",
  "archetypes": [
   {
-   "name": "Q・E のあと 通常攻撃を繰り返す",
+   "name": "Q→E のあと通常連打（ドライバー）",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -14,10 +14,41 @@
     "n"
    ],
    "fillRepeat": [
-    15,
-    20
+    12,
+    16
    ],
-   "evidence": "自動編成（鹿野院平蔵 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 28.8k → 29.6k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 感電/拡散ドライバー通常連打形"
+  },
+  {
+   "name": "N→CA→Q→E（クイックスワップ）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "n",
+    "ca",
+    "q",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 変格4層溜め正論拳クイックスワップ形"
+  },
+  {
+   "name": "Q→E のあと、もう一度 Q→E（2回出場）",
+   "role": "attacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "q",
+      "e"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場クイックスワップ形"
   }
  ]
 }

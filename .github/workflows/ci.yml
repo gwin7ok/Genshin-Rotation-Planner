@@ -101,3 +101,12 @@ jobs:
 
       - name: 言語ファイルの確認（未訳が残っていれば失敗）
         run: npm run check:i18n -- --strict
+
+      - name: 知識辞書のビルド整合性の確認
+        run: npm run check:knowledge
+
+      - name: 知識辞書シード組み立ての確認
+        run: npm run check:knowledge-seeds
+
+      - name: 知識辞書の品質検査（strict）
+        run: npm run check:knowledge-quality:strict

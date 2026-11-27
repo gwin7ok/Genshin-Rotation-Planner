@@ -3,24 +3,62 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%82%A1%E3%83%AB%E3%82%AB",
  "archetypes": [
   {
-   "name": "E・通常攻撃・重撃のあと 通常攻撃を繰り返す",
+   "name": "E のあと N2C 連打（KQM主流）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E後N2C連打主流形"
+  },
+  {
+   "name": "E のあと (E→N2C) ループ（スキル織り交ぜ）",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
     "n",
+    "n"
+   ],
+   "fill": [
+    "e",
+    "n",
     "n",
     "ca"
    ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 特殊E織り交ぜN2Cループ形"
+  },
+  {
+   "name": "E→Q のあと N2C 連打",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "ca"
    ],
    "fillRepeat": [
-    6,
-    7,
-    8
+    3,
+    4
    ],
-   "evidence": "自動編成（ファルカ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 32.6k → 34.1k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E→Q後N2C連打形"
   }
  ]
 }

@@ -3,24 +3,41 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E4%B8%BB%E4%BA%BA%E5%85%AC/%E6%B0%B4",
  "archetypes": [
   {
-   "name": "E・Q",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（短押しの形）"
-  },
-  {
-   "name": "長押し E・Q",
+   "name": "長押しE→Q（雫生成＋爆発）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e_hold",
     "q"
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルは長押しが主。戦闘では水付着の下地役"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 源水の雫生成＋Q水付着形"
+  },
+  {
+   "name": "短押しE→Q（時短）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 短押し時短水付着形"
+  },
+  {
+   "name": "E のあと、もう一度 Q（2回出場）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "q"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場粒子・水付着形"
   }
  ]
 }

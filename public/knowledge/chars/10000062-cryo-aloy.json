@@ -3,12 +3,11 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%BC%E3%83%AD%E3%82%A4",
  "archetypes": [
   {
-   "name": "E・ジャンプ・Q のあと 重撃を繰り返す",
+   "name": "E→Q のあと重撃連打",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "jump",
     "q"
    ],
    "fill": [
@@ -16,20 +15,29 @@
    ],
    "fillRepeat": [
     4,
-    5,
-    6
+    5
    ],
-   "evidence": "自動編成（アーロイ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 24.7k → 26.2k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E→Q後氷重撃連打形"
   },
   {
-   "name": "Q→E",
-   "role": "supporter",
-   "slot": 10,
+   "name": "Q→E（爆発クイックサブ）",
+   "role": "subAttacker",
+   "slot": 20,
    "use": [
     "q",
     "e"
    ],
-   "evidence": "Wiki 本文のコンボの記述: 交代してから、爆発→スキルのサポーター運用が強力（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行溶解サブ火力形"
+  },
+  {
+   "name": "E→Q（粒子先出しサブ）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E粒子先出しサブ火力形"
   }
  ]
 }

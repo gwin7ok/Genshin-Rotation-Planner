@@ -3,7 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8E%E3%82%A8%E3%83%AB",
  "archetypes": [
   {
-   "name": "先頭 N・E と Q のあと 通常攻撃を繰り返す",
+   "name": "E→Q のあと N3D 連打（王道岩アタッカー）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 王道N3D連打岩アタッカー形"
+  },
+  {
+   "name": "E→Q のあと通常連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -14,14 +34,29 @@
     "n"
    ],
    "fillRepeat": [
-    18,
-    21,
-    24
+    16,
+    20
    ],
-   "lead": [
-    "n"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: キャンセル省略通常連打形"
+  },
+  {
+   "name": "Q→E のあとジャンプ高い落下連打（閑雲落下編成）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q",
+    "e"
    ],
-   "evidence": "編成例の探索（ノエル・ゴロー・アルベド・ベネット）の上位に出る形。実測: 最短の設定で 17.0k ±5.4 → 18.9k ±5.0（誤差）"
+   "fill": [
+    "jump",
+    "hp",
+    "dash"
+   ],
+   "fillRepeat": [
+    5,
+    6
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 閑雲落下連打形"
   }
  ]
 }

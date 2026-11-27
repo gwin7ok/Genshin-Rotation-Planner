@@ -7,6 +7,7 @@ description: gcsim 連携（WebAssembly 版・計画書運用・ゲーム挙動�
 
 ## 1. 計画・進捗管理（作業前に必ず読む）
 - 運用ルール: `docs/gcsim-integration/README.md`
+- **戦闘仕様DB・辞書品質ガードレール**: ローテーション探索（`src/utils/rotationSearch/*`）や知識辞書（`src/masterdata/knowledge/*`）を変更する前に `docs/genshin-mechanics/README.md`（特に `auto-search-heuristics-spec.md`・`combat-system.md`・`character-mechanics.json`）を参照すること。辞書編集後は `node scripts/build-knowledge.ts` 実行と `node scripts/check-knowledge-quality.ts --strict` の通過を必須とし、新たな仕様の落とし穴を発見したら `docs/genshin-mechanics/` に追記すること。
 - 作業着手前・作業中・完了時に `docs/gcsim-integration/`（全体 `plan.md` / `progress.md`、該当 `phase-*/` の文書）を確認・更新する。
 - ユーザーの決定事項は `progress.md` の決定ログに追記し、関連計画書に反映する。文書とコードが食い違えばコードを正として文書を直す。
 - 決定事項の代表（正本は計画書側）:

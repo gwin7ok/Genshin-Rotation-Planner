@@ -7,6 +7,10 @@
   → `.agents/skills/ui-i18n-and-docs/SKILL.md` を読む
 - 「自律改善ループを実行して」など、ローテーション探索の自律改善ループを回すとき:
   → `.agents/skills/rotation-search-improvement-loop/SKILL.md` を読む
+- **ローテーション探索（`src/utils/rotationSearch/*`）・知識辞書（`src/masterdata/knowledge/*`）の変更時必須ルール**:
+  - 変更前に `docs/genshin-mechanics/README.md`（特に `auto-search-heuristics-spec.md`・`combat-system.md`・`character-mechanics.json`）を参照すること。
+  - 辞書編集後は `node scripts/build-knowledge.ts` の実行と `node scripts/check-knowledge-quality.ts --strict` の通過を必須とする。
+  - 新たなゲーム仕様の落とし穴を発見したら `docs/genshin-mechanics/` に 1 項目追記すること。
 
 ## 1. 会話・確認・エラー時の基本姿勢
 - **言語**: 英語作業（英訳・英語 Wiki 調査）中も含め、返答・進捗・確認事項・表の見出しはすべて**日本語**で行う。

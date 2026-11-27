@@ -3,25 +3,35 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E9%9B%B2%E8%8F%AB",
  "archetypes": [
   {
-   "name": "E と Q",
+   "name": "E→Q（通常ダメ加算・KQM最多17%）",
    "role": "supporter",
-   "slot": 30,
+   "slot": 20,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 17% 最多通常バフ＋岩粒子形"
   },
   {
-   "name": "E→N→Q（KQM）",
+   "name": "長押しE→Q（最大粒子・KQM 9%）",
    "role": "supporter",
-   "slot": 10,
+   "slot": 20,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 9% 2段階チャージ最大粒子形"
+  },
+  {
+   "name": "E→N→Q（西風粒子・KQM 11%）",
+   "role": "supporter",
+   "slot": 20,
    "use": [
     "e",
     "n",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 雲菫 73 件中 3 件。平均 49.7k（最大 57.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 11% 西風槍粒子トリガー形"
   }
  ]
 }

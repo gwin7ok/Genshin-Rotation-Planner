@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AF%E3%83%AC%E3%83%BC",
  "archetypes": [
   {
-   "name": "E→Q→通常→重撃を繰り返す",
+   "name": "E→Q のあと N1C 連打（定番）",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -11,26 +11,6 @@
     "q"
    ],
    "fill": [
-    "n",
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    6,
-    8
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 通常→重撃をキャンセルを使って繰り返す（探索の比較なし）"
-  },
-  {
-   "name": "E・Q のあと 通常攻撃 2 回 + 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "n",
     "n",
     "ca"
    ],
@@ -39,7 +19,47 @@
     5,
     6
    ],
-   "evidence": "自動編成（クレー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.7k → 37.7k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 定番N1C連打炎アタッカー形"
+  },
+  {
+   "name": "E→Q のあと N2C 連打",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "ca"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: N2C連打炎付着形"
+  },
+  {
+   "name": "E→Q のあと N1J 連打→重撃（ジャンプキャンセル）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "jump"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "tail": [
+    "ca"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: N1Jキャンセル＋末尾CA形"
   }
  ]
 }

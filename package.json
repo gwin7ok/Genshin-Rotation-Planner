@@ -69,6 +69,7 @@
     "check:knowledge": "node scripts/build-knowledge.ts --check",
     "check:knowledge-seeds": "node scripts/check-knowledge-seeds.ts",
     "check:knowledge-quality": "node scripts/check-knowledge-quality.ts",
+    "check:knowledge-quality:strict": "node scripts/check-knowledge-quality.ts --strict",
     "check:sacrificial-seed": "node scripts/check-sacrificial-seed.ts",
     "review:effects": "node scripts/review-effect-keys.ts",
     "review:buff-scopes": "node scripts/review-buff-scopes.ts",

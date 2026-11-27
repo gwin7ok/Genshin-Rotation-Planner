@@ -3,22 +3,76 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%BB%E3%83%88%E3%82%B9",
  "archetypes": [
   {
-   "name": "CA のあと、もう一度 E→CA",
+   "name": "E→Q のあと通常連打→末尾E（爆発貫通矢型）",
    "role": "attacker",
    "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    16
+   ],
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発寂寥の貫矢N連打→末尾E形"
+  },
+  {
+   "name": "E→重撃×2（元素エネルギー消費速射・KQM最多）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "ca",
+    "ca"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 最多固有天賦エネルギー消費速射CA形"
+  },
+  {
+   "name": "重撃 のあと、もう一度 E→重撃（2回出場クイック）",
+   "role": "attacker",
+   "slot": 20,
    "use": [
     "ca"
    ],
    "then": [
     {
-     "slot": 50,
+     "slot": 40,
      "use": [
       "e",
       "ca"
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: セトス 58 件中 6 件。平均 57.2k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場速射クイックスワップ形"
+  },
+  {
+   "name": "初動重撃→E→Q のあと通常連打→末尾E",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    14,
+    16
+   ],
+   "lead": [
+    "ca"
+   ],
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 初動CA込みQ貫通矢ループ形"
   }
  ]
 }

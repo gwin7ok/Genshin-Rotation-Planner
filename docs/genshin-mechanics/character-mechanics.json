@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "description": "ローテーション自動探索・辞書設計用のキャラ別技術仕様DB（パイロット20＋バッチA 20＋バッチB 21＝主要61キャラ。Phase 3-2 バッチCで全キャラへ拡張）",
+    "description": "ローテーション自動探索・辞書設計用のキャラ別技術仕様DB（全 136 キャラ統合完了）",
     "characters": [
         {
             "id": "10000052-electro",
@@ -998,6 +998,1152 @@
             "earlyPriming": null,
             "energyNote": "Q消費60前後のメインアタッカー想定。重撃主体で戦う",
             "comboNote": "E始動のN1C連打または特殊E経由の重撃連打が主力",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000037-cryo",
+            "name": "甘雨",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "E発動時2個＋花爆発時2個（計4個）",
+            "normalAttackTrigger": "重撃主体のため行秋・夜蘭は不発",
+            "earlyPriming": null,
+            "energyNote": "Qは完全スナップショット＋持続15s/CT15s（凍結編成で常時維持）",
+            "comboNote": "溶解型はE→重撃連打（Qは炎下地を奪うため省略も多い）、凍結型はE→Q→重撃",
+            "constellationBreakpoints": {
+                "6": "E直後の重撃1回がチャージ時間0（E→即CAが可能）"
+            }
+        },
+        {
+            "id": "10000026-anemo",
+            "name": "魈",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E1回につき風3個（Q中は粒子生成0）",
+            "normalAttackTrigger": "落下主体のため行秋・夜蘭は落下合間にN1を挟む場合のみ発動",
+            "earlyPriming": null,
+            "energyNote": "Q中はEで粒子が出ないため、必ず Q 発動直前に E×2 → 即 Q で粒子を自給する",
+            "comboNote": "E×2→Q→高い落下連打（閑雲・ファルザンと組むのが王道）",
+            "constellationBreakpoints": {
+                "1": "E使用回数+1（初動E×3可）"
+            }
+        },
+        {
+            "id": "10000075-anemo",
+            "name": "放浪者",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中攻撃で風1個ずつ（計4〜5個）",
+            "normalAttackTrigger": "通常攻撃主体（行秋・夜蘭・6凸フィッシュルと好相性）",
+            "earlyPriming": null,
+            "energyNote": "0〜1凸はQをローテ冒頭または2周に1回、2凸以上は空居力消費後のE終盤でQ締めが最大火力",
+            "comboNote": "E→通常連打（N3 または N2C）→（2凸以上は終盤Q締め）",
+            "constellationBreakpoints": {
+                "2": "空居力消費量に応じQダメ最大+200%（E終盤のQ締めが必須化）"
+            }
+        },
+        {
+            "id": "10000071-electro",
+            "name": "セノ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "通常Eで雷3個 / Q中Eで雷1〜2個",
+            "normalAttackTrigger": "通常主体（行秋・夜蘭と好相性）",
+            "earlyPriming": null,
+            "energyNote": "Q持続最大18sの超長時間居座り型。サポーターの持続時間（ナヒーダ・白朮・フリーナ等）との相性が最重要",
+            "comboNote": "E→Q→（N4〜N5＋末路の眼タイミングE）の繰り返し。雷怒4装備時はE回数増加",
+            "constellationBreakpoints": {
+                "1": "Q中の通常攻撃速度+20%（コンボ手数増加）"
+            }
+        },
+        {
+            "id": "10000084-pyro",
+            "name": "リネ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで炎5個（CT15s）",
+            "normalAttackTrigger": "重撃主体のため行秋・夜蘭は不発",
+            "earlyPriming": null,
+            "energyNote": "炎元素付与敵への特効のためモノパイロ（炎3＋風/岩）が基本",
+            "comboNote": "重撃でプロップ残数を3〜5層溜める → Q（即キャンセル可）→ E で一斉起爆",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000086-cryo",
+            "name": "リオセスリ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中通常で氷1個ずつ（計4〜5個）",
+            "normalAttackTrigger": "通常主体（行秋・夜蘭・トーマと好相性）",
+            "earlyPriming": null,
+            "energyNote": "0凸はHP50〜60%未満で強化重撃解放。1凸は通常5段命中または2.5s経過で確定解放",
+            "comboNote": "0凸は N3C / N5C、1凸以上は E→(N5C)×n が定番（溶解ではN3C/N5Cで重撃に溶解を合わせる）",
+            "constellationBreakpoints": {
+                "1": "通常5段目命中または2.5s毎に強化重撃確定（N5Cループ確立）"
+            }
+        },
+        {
+            "id": "10000091-geo",
+            "name": "ナヴィア",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E1発につき岩3〜4個（2チャージ・CT9s）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": {
+                "action": "q",
+                "reason": "Q先置きで控え岩追撃により裂晶の欠片を自動蓄積"
+            },
+            "energyNote": "結晶回収で裂晶の欠片（最大6枚）を溜めて E を撃つ。1周に E を2回撃つのが基本",
+            "comboNote": "先置きQ → サポート（結晶生成）→ E→N3D→N2→E→N3D（欠片を3〜6枚消費して2発撃つ）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000094-geo",
+            "name": "千織",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "たもと攻撃で岩1個ずつ",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "0凸は岩創造物がある編成でたもと2体、1凸で岩キャラが他に1人いれば創造物不要で2体",
+            "comboNote": "E→E で即座に次のキャラへ交代（たもと切替＋自動連撃）。Qは火力型のみ",
+            "constellationBreakpoints": {
+                "1": "岩創造物なしでたもと2体召喚可",
+                "6": "EのCT-12s（表アタッカー運用解放）"
+            }
+        },
+        {
+            "id": "10000098-electro",
+            "name": "クロリンデ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中攻撃で雷1個ずつ",
+            "normalAttackTrigger": "E中の射撃は通常攻撃扱い（行秋・夜蘭・6凸フィッシュルと好相性）",
+            "earlyPriming": null,
+            "energyNote": "E（夜巡り・7.5s）中はN×3で命の契約100%以上→強化E（穿夜）の固定リズムが最重要",
+            "comboNote": "Q → E → (N×3 → E)×5〜6。Nが1〜2回でEを撃つと火力が激減する",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000099-dendro",
+            "name": "エミリエ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの瓶攻撃で草粒子継続生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "早期の草設置→炎キャラで燃焼状態を即起動して瓶をランク2へ昇格"
+            },
+            "energyNote": "燃焼維持が火力の大前提（水・雷を混ぜて燃焼を消さない構成）。Qでランク2瓶を引き継ぎ",
+            "comboNote": "基本は E だけ または Q だけ（交互運用で常にランク2瓶を維持）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000101-dendro",
+            "name": "キィニチ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中攻撃で草5個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "燃焼・烈開花反応で夜魂値を急速蓄積し、20溜まるごとに廻狩貫鱗砲(E)を発射",
+            "comboNote": "炎下地（燃焼）を作ってから E → (N挟み＋貫鱗砲E)×4〜5発（＋Qで滞在時間延長）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000102-hydro",
+            "name": "ムアラニ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E初回噛みつきで水4〜5個",
+            "normalAttackTrigger": "波乗り噛みつきは通常攻撃ダメ扱いだが手数が少なく蒸発1撃重視",
+            "earlyPriming": null,
+            "energyNote": "3層サメ噛みつき×3回＋Qのすべてに炎下地（蒸発2.0倍）を合わせるのが最重要",
+            "comboNote": "E → (3層溜め噛みつき)×3 → Q（合間に他キャラで水付着を奪わないこと）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000111-electro",
+            "name": "ヴァレサ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷粒子生成",
+            "normalAttackTrigger": "なし（落下攻撃主体）",
+            "earlyPriming": null,
+            "energyNote": "E→N→落下を2セットで極限ドライブ突入→低コスト特殊Qを撃つ循環ループ",
+            "comboNote": "(E→N→落下)×2 → 特殊Q の繰り返し（過負荷・閑雲落下編成の主力）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000114-cryo",
+            "name": "スカーク",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷粒子生成",
+            "normalAttackTrigger": "通常主体モードあり",
+            "earlyPriming": null,
+            "energyNote": "元素エネルギーなし（固有ゲージ消費）。水＋氷のみのチーム縛りで火力最大化",
+            "comboNote": "凍結反応で虚境の裂け目を生成し、回収しながら通常連打型または爆発瞬間火力型で回す",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000112-cryo",
+            "name": "エスコフィエ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "水＋氷キャラの人数に応じて敵の水・氷耐性ダウン（4人全員水氷で最大-55%）。Q全体回復でフリーナと好相性",
+            "comboNote": "E→Q（またはQ→E）の1回出場で完結。黄金4適性高",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000093-anemo",
+            "name": "閑雲",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E落下命中で風5個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q全体回復＋落下バフ8回（16秒）。フリーナQの直後に撃つとテンションが一気に溜まる",
+            "comboNote": "E→落下→Q（翠緑拡散＋粒子回収＋落下バフ起動）",
+            "constellationBreakpoints": {
+                "1": "E使用回数+1（ER大幅緩和）"
+            }
+        },
+        {
+            "id": "10000076-anemo",
+            "name": "ファルザン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E後の重撃(風圧崩潰)で風2個（CT5.5s）。6凸はQ中に自動発生",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "0〜5凸は爆発80族かつ粒子少のため E→CA→Q（超高ER）必須。6凸でQ単体運用＋千岩4起動が可能に",
+            "comboNote": "0〜5凸: E→CA→Q / 6凸: Q だけ（または E→Q）",
+            "constellationBreakpoints": {
+                "1": "E後に重撃2回可能",
+                "6": "Q中3s毎に自動風圧崩潰＋風会心ダメ+40%（Q単体運用解放）"
+            }
+        },
+        {
+            "id": "10000065-electro",
+            "name": "久岐忍",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E継続ヒットで確率で雷1個ずつ",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "超開花起爆役（熟知特化）のためQは基本不要（Eだけで完結）",
+            "comboNote": "E だけ（15s周期、2凸で持続15s＝完全常時維持）",
+            "constellationBreakpoints": {
+                "2": "E持続12s→15s（常時維持）"
+            }
+        },
+        {
+            "id": "10000054-hydro",
+            "name": "珊瑚宮心海",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "化海月ヒットで確率で水1個ずつ",
+            "normalAttackTrigger": "ドライバー時は通常主体",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "化海月設置で継続水付着（凍結/開花下地）"
+            },
+            "energyNote": "Q発動時に場上の化海月の持続時間をリセットできるため、E→サポート→Qで化海月を常時維持可能",
+            "comboNote": "凍結サポート時は E だけ（TTDS装備時はアタッカー直前）＋次周Qリセット。モノハイドロ/開花ドライバー時は Q→N2D/N3D",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000039-cryo",
+            "name": "ディオナ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tE氷2個 / hE氷4〜5個（祭礼弓でE_HOLD×2＝最大10個の最強氷バッテリー）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "長押しE直後にアタッカーへ交代して氷粒子を食べさせる運用が定番",
+            "comboNote": "Q→E_HOLD または E_HOLD→Q（祭礼弓装備時は E_HOLD×2）",
+            "constellationBreakpoints": {
+                "6": "Qエリア内HP50%以上で熟知+200"
+            }
+        },
+        {
+            "id": "10000045-cryo",
+            "name": "ロサリア",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "Eで氷3個（CT6sの超優秀氷バッテリー）",
+            "normalAttackTrigger": "なし（西風長槍装備時はN挟み可）",
+            "earlyPriming": null,
+            "energyNote": "Qはスナップショット＋会心率配布（10s）。短CTのEを1周2回撃つ運用も強い",
+            "comboNote": "E→Q（または E→Q → 後半E）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000055-geo",
+            "name": "ゴロー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩2個（CT10s）",
+            "normalAttackTrigger": "なし（西風猟弓装備時はN挟みで粒子生成）",
+            "earlyPriming": null,
+            "energyNote": "岩3人編成で防御＋岩ダメ+15%＋6凸岩会心ダメ+40%。一斗/ノエルのQスナップショット直前に必ず発動",
+            "comboNote": "E→Q（西風装備時は E→N→Q）",
+            "constellationBreakpoints": {
+                "6": "E/Q後に岩会心ダメ最大+40%"
+            }
+        },
+        {
+            "id": "10000088-cryo",
+            "name": "シャルロット",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tE氷3個 / hE氷5個",
+            "normalAttackTrigger": "なし（法器氷付着・TTDS対応）",
+            "earlyPriming": null,
+            "energyNote": "Q全体即時回復でフリーナと好相性。基本はモーションが短い tE→Q（または Q→tE）",
+            "comboNote": "Q→E または E→Q（TTDS装備時はアタッカー直前）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000095-hydro",
+            "name": "シグウィン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで水4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "E全体回復＋控えスキルダメ加算（フリーナ・八重・千織・フィッシュルと好相性）。Qは時間が長いため通常省略",
+            "comboNote": "E_HOLD だけ（または E だけ）の時短出場が基本",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000100-geo",
+            "name": "カチーナ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "コマちゃん命中で岩粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "絵巻4の超手軽な起動役（控えから結晶反応を起こしてダメバフ+40%）",
+            "comboNote": "E だけ または E→Q",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000110-electro",
+            "name": "イアンサ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷4個",
+            "normalAttackTrigger": "なし（E後の1回N/CAで固有効果・夜魂起動）",
+            "earlyPriming": null,
+            "energyNote": "Q攻撃力バフは出場キャラの移動量で夜魂値を維持（ヴァレサ・キィニチ・マーヴィカ・クロリンデ等と好相性）",
+            "comboNote": "E→N→Q または E→CA→Q",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000108-anemo",
+            "name": "藍硯",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風3個（6凸で2チャージ）",
+            "normalAttackTrigger": "なし（法器風拡散・翠緑4・TTDS対応）",
+            "earlyPriming": null,
+            "energyNote": "シールド＋翠緑4＋TTDSを1枠でこなせる。TTDS時はアタッカー直前(slot 30)",
+            "comboNote": "E→Q または E だけ（6凸は E×2）",
+            "constellationBreakpoints": {
+                "6": "E使用回数+1（E×2 が可能）"
+            }
+        },
+        {
+            "id": "10000083-anemo",
+            "name": "リネット",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風4個（CT12s、4凸で2チャージ）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "翠緑4＋Qデコイ＆攻撃力バフ",
+            "comboNote": "E→Q（4凸以上は E×2→Q）",
+            "constellationBreakpoints": {
+                "4": "E使用回数+1（E×2 が可能）"
+            }
+        },
+        {
+            "id": "10000015-cryo",
+            "name": "ガイア",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "Eで氷2〜3個（CT6s・凍結時追加粒子）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Qはスナップショット。短CTのEで氷バッテリー役としても優秀",
+            "comboNote": "E→Q（または E→Q → 後半E）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000036-cryo",
+            "name": "重雲",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷4個",
+            "normalAttackTrigger": "Eエリア内の近接キャラに氷付与（表アタッカー用）",
+            "earlyPriming": null,
+            "energyNote": "2凸のEエリア内CT-15%はスキル/爆発発動の瞬間にエリア内にいる必要がある",
+            "comboNote": "E→Q または Q→E（溶解3連ヒット）",
+            "constellationBreakpoints": {
+                "2": "Eエリア内で発動したスキル/爆発のCT-15%"
+            }
+        },
+        {
+            "id": "10000048-pyro",
+            "name": "煙緋",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで炎3個",
+            "normalAttackTrigger": "通常＋重撃主体（行秋・夜蘭と好相性）",
+            "earlyPriming": null,
+            "energyNote": "丹火の印を最大層（3層、6凸で4層）溜めて重撃で消費するループ。4凸シールドサポート型もあり",
+            "comboNote": "Q→CA→E→CA→(N2C)×n（Q中は印が自動生成されるためN2Cで最大層）",
+            "constellationBreakpoints": {
+                "4": "Q発動時にHP上限45%シールド（サポート運用解放）",
+                "6": "丹火の印上限3→4"
+            }
+        },
+        {
+            "id": "10000027-geo",
+            "name": "凝光",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩3〜4個（粒子生成CT6sのため2凸連続Eでは粒子2重獲得不可）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "爆発40族で軽い。2凸で璇璣屏破壊時Eリセット（E→Q→E）",
+            "comboNote": "E→Q→(2凸E)→CA→N2C連打",
+            "constellationBreakpoints": {
+                "2": "璇璣屏破壊時にEのCTリセット（E→Q→E）",
+                "6": "Q後に星璇7個生成（Q→CAの瞬間火力強化）"
+            }
+        },
+        {
+            "id": "10000113-anemo",
+            "name": "イファ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風粒子生成",
+            "normalAttackTrigger": "拡散・感電ドライバー運用あり",
+            "earlyPriming": null,
+            "energyNote": "ナタ風ヒーラー兼ドライバー（絵巻4 / 翠緑4適性）",
+            "comboNote": "E→攻撃連打（ドライバー）または E→Q（サポート）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000115-hydro",
+            "name": "ダリア",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで水粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "水シールド＋攻撃速度バフサポート",
+            "comboNote": "E→Q（西風装備時は E→N→Q）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000121-hydro",
+            "name": "アイノ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで水粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "月反応編成での控え水付着起動"
+            },
+            "energyNote": "控え水サブ（月兆・月反応対応）",
+            "comboNote": "E→Q または Q→E",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000122-dendro",
+            "name": "ネフェル",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで草粒子生成",
+            "normalAttackTrigger": "なし（月開花・草露消費重撃主体）",
+            "earlyPriming": null,
+            "energyNote": "月開花で溜めた草露を消費して特殊重撃を撃つメインアタッカー。水＋草の早期開花起動が前提",
+            "comboNote": "サポートで開花・草露生成 → ネフェル出場で特殊重撃ループ",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000123-pyro",
+            "name": "ドゥリン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで炎粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "炎サブ／サポート（魔導・風/炎編成の主力枠）",
+            "comboNote": "E→Q または Q→E の短時間出場",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000130-geo",
+            "name": "リンネア",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "月結晶対応キャラ。E連打（E×3）による瞬間火力型あり",
+            "comboNote": "E×3 / E→Q",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000132-anemo",
+            "name": "プルーネ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "星拡散・風サポート",
+            "comboNote": "E→Q または Q→E",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000150-cryo",
+            "name": "オデット",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷粒子生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "星拡散対応の氷キャラ",
+            "comboNote": "スキル・爆発を軸とした星拡散コンボ",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000116-electro",
+            "name": "イネファ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E設置追撃で雷粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "初動Eで控えから月感電起点となる雷追撃を展開可能"
+            },
+            "energyNote": "Qは高火力＋追撃補助だが、時間制限が厳しい場合はEのみ運用(12%)も選択される",
+            "comboNote": "基本はE→Q(57%)の短時間出場",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000064-geo",
+            "name": "雲菫",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで岩2個 / 2段階hEで岩3個",
+            "normalAttackTrigger": "なし（西風長槍装備時はE→N→Qで粒子誘発）",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。防御力＋ERの両立が重要で、対単体でも粒子が欲しい時はhEや西風Nを使う",
+            "comboNote": "通常攻撃ダメージ加算バフは30回制限（各敵ごとにカウント消費）",
+            "constellationBreakpoints": {
+                "2": "Q後12秒間、通常攻撃ダメージ+15%",
+                "6": "Q効果中、通常攻撃速度+12%"
+            }
+        },
+        {
+            "id": "10000034-geo",
+            "name": "ノエル",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "E発動時の粒子生成は0（西風大剣や岩バッテリー依存）",
+            "normalAttackTrigger": "なし（N3D連打または閑雲落下連打が主力）",
+            "earlyPriming": null,
+            "energyNote": "Q発動時の防御力→攻撃力変換がスナップショットされる。自身で粒子を出せないため他キャラの粒子供給が必須",
+            "comboNote": "Qは途中交代しても持続が切れないため、他キャラで粒子生成してから再出場することも可能",
+            "constellationBreakpoints": {
+                "6": "Qの防御力→攻撃力変換+50%＆敵撃破でQ延長最大10秒"
+            }
+        },
+        {
+            "id": "10000029-pyro",
+            "name": "クレー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E（ボンボン爆弾）1回につき炎4個（2チャージ）",
+            "normalAttackTrigger": "なし（N1CまたはN1Jキャンセルで後隙を消す）",
+            "earlyPriming": null,
+            "energyNote": "Qは出場継続が必要（交代で即終了）。重撃の爆裂花火（スタミナ消費0）を絡めて回転する",
+            "comboNote": "N1C・N2CやN1J→CA等で重撃モーションを短縮するのが定番",
+            "constellationBreakpoints": {
+                "2": "Eのブービートラップ命中で敵防御力-23%（10秒）",
+                "4": "Q中に退場すると周囲に炎範囲大ダメージ"
+            }
+        },
+        {
+            "id": "10000059-anemo",
+            "name": "鹿野院平蔵",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風2〜3個（変格4層最大溜めで風3個）",
+            "normalAttackTrigger": "なし（法器通常＋重撃で変格スタックと感電/拡散を同時起動）",
+            "earlyPriming": null,
+            "energyNote": "Q消費40と極めて軽く、固有天賦の熟知+80バフと翠緑デバフを回しやすい",
+            "comboNote": "ドライバー時はQ→E通常連打、クイックスワップ時はN→CA→Q→Eまたは2回出場",
+            "constellationBreakpoints": {
+                "6": "Eの変格1層につきE会心率+4%、4層時E会心ダメ+32%"
+            }
+        },
+        {
+            "id": "10000062-cryo",
+            "name": "アーロイ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷5個（非常に多いがCT20秒と長い）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費40。サブ運用ではQ→EまたはE→Qの瞬間火力＋氷5粒子供給役として機能",
+            "comboNote": "氷馳状態になるには冷凍爆弾4個命中が必要で不安定なため、サブ火力運用が安定",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000104-anemo",
+            "name": "チャスカ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中のシャドウハント弾で風粒子生成",
+            "normalAttackTrigger": "なし（長押し照準の重撃チャージでマルチ元素弾を発射）",
+            "earlyPriming": null,
+            "energyNote": "他元素（炎水氷雷）キャラを多く入れるほど弾丸が元素変化して大ダメージが出る",
+            "comboNote": "E→特殊重撃×4〜5→末尾Q締め（KQM 75%）が圧倒的定番",
+            "constellationBreakpoints": {
+                "2": "弾丸変化条件緩和＆範囲攻撃化（2色編成でも最大火力）",
+                "6": "重撃チャージ時間短縮＆会心ダメ+120%"
+            }
+        },
+        {
+            "id": "10000128-anemo",
+            "name": "ファルカ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風粒子を生成",
+            "normalAttackTrigger": "なし（N2C連打および特殊E織り交ぜで高火力）",
+            "earlyPriming": null,
+            "energyNote": "Q消費とEクールタイムに応じて通常重撃主軸(N2C)で出場時間を確保する",
+            "comboNote": "E後N2C連打、または特殊Eを挟んだ(E→N2C)ループが主力",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000109-anemo",
+            "name": "夢見月瑞希",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E中の夢浮状態で風粒子生成",
+            "normalAttackTrigger": "なし（E中は通常攻撃を封印し浮遊移動で拡散・追撃を回す）",
+            "earlyPriming": null,
+            "energyNote": "サポーター時はE→Qで翠緑拡散＋回復、ドライバー時は浮遊状態で通常/移動",
+            "comboNote": "裏の自動追撃（フリーナ・フィッシュル・香菱等）と組み合わせた拡散反応が軸",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000014-hydro",
+            "name": "バーバラ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "粒子生成0（E・Qともに粒子なし）",
+            "normalAttackTrigger": "なし（開花編成ではE＋通常で水付着トリガー、その他はTTDS交代）",
+            "earlyPriming": null,
+            "energyNote": "粒子生成0・Q消費80のため、全体緊急回復が不要ならEだけ撃ってTTDSを渡す形が最短",
+            "comboNote": "Eの歌声の輪は近接時に敵へ水付着を与える",
+            "constellationBreakpoints": {
+                "2": "EのCT-15%＆水ダメバフ+15%",
+                "6": "控えで味方が戦闘不能時に自動蘇生（CT15分）"
+            }
+        },
+        {
+            "id": "10000021-pyro",
+            "name": "アンバー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E（ウサギ伯爵）爆発時に炎4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費40。Qは2秒間に18ヒットするため終焉を嘆く詩の4ヒット条件を一瞬で満たす",
+            "comboNote": "胡桃炎共鳴＋終焉起動＋2U炎付着としてQだけ撃って交代する運用が最速",
+            "constellationBreakpoints": {
+                "4": "E使用回数+1＆CT-20%",
+                "6": "Q発動後10秒間、チーム全員の攻撃力+15%・移動速度+15%"
+            }
+        },
+        {
+            "id": "10000124-anemo",
+            "name": "ヤフォダ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで風粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "2回出場（E→他キャラ→Q）によるバフ・翠緑更新もKQMで多用される（67%）",
+            "comboNote": "E→Qまたは先置きE→後半Qの柔軟なサポート運用",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000127-geo",
+            "name": "イルーガ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "月結晶編成のサポーターとしてE→Q（または時短Qのみ）でバフを展開",
+            "comboNote": "短時間出場で月結晶サポーターとして機能する",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000148-electro",
+            "name": "アリョーシャ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準サポートとしてE→Q・Q→E・Eのみを使い分ける",
+            "comboNote": "短時間出場の雷サポート枠",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000126-geo",
+            "name": "兹白",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E連携で岩粒子を生成",
+            "normalAttackTrigger": "なし（N×4→Eの循環で月結晶を回す主力アタッカー）",
+            "earlyPriming": null,
+            "energyNote": "E始動またはE→Q後にN4→Eループで火力と月結晶反応を維持する",
+            "comboNote": "N×4→Eのセットを3〜4周繰り返すのが基本",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000097-electro",
+            "name": "セトス",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷2個（元素反応を起こすと自身のエネルギーを12回復）",
+            "normalAttackTrigger": "なし（Q中の通常攻撃は貫通矢の重撃ダメージ扱い）",
+            "earlyPriming": null,
+            "energyNote": "特殊重撃（貫通矢）は元素エネルギーを消費してチャージ短縮。速射型（E→CA×2）とQ型（E→Q→N連打→E）がある",
+            "comboNote": "Q型は爆発後に通常攻撃（貫通矢）を14〜16回連打し末尾Eでエネルギーを回収",
+            "constellationBreakpoints": {
+                "1": "貫通矢の会心率+15%",
+                "2": "エネルギー消費/E発動で雷ダメバフ+15%×2層"
+            }
+        },
+        {
+            "id": "10000005-cryo",
+            "name": "空(氷)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "アタッカー時はE→N×3→Q→N4C連打、サブ時はE→Qで星反応・氷付着を担う",
+            "comboNote": "旅人（氷）共通仕様（蛍(氷)と同一）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000007-cryo",
+            "name": "蛍(氷)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷粒子を生成",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "アタッカー時はE→N×3→Q→N4C連打、サブ時はE→Qで星反応・氷付着を担う",
+            "comboNote": "旅人（氷）共通仕様（空(氷)と同一）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000005-dendro",
+            "name": "空(草)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで草2〜3個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80と重いため、祭礼剣や2回出場E→Q→…→Eでエネルギー回収が重要",
+            "comboNote": "Qの草蓮ランプは炎変化で即爆発するため、開花/超開花では水または雷変化を優先する（蛍(草)と同一）",
+            "constellationBreakpoints": {
+                "1": "E命中時エネルギー3.5回復",
+                "6": "Q領域内のキャラに草＋変化元素ダメバフ+12%"
+            }
+        },
+        {
+            "id": "10000005-anemo",
+            "name": "空(風)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで風2個 / hEで風3〜4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。6凸でQ変化元素耐性-20%を持つため翠緑4と合わせて最大-60%デバフが可能",
+            "comboNote": "Qの竜巻は敵を押し流すため対大型または壁際で真価を発揮（蛍(風)と同一）",
+            "constellationBreakpoints": {
+                "6": "Qが命中した敵の風耐性-20%＆変化元素耐性-20%"
+            }
+        },
+        {
+            "id": "10000007-anemo",
+            "name": "蛍(風)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで風2個 / hEで風3〜4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。6凸でQ変化元素耐性-20%を持つため翠緑4と合わせて最大-60%デバフが可能",
+            "comboNote": "Qの竜巻は敵を押し流すため対大型または壁際で真価を発揮（空(風)と同一）",
+            "constellationBreakpoints": {
+                "6": "Qが命中した敵の風耐性-20%＆変化元素耐性-20%"
+            }
+        },
+        {
+            "id": "10000005-electro",
+            "name": "空(雷)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷1個＋豊穣の勾玉を最大3個生成（拾得キャラのエネルギー回復＆ER上昇）",
+            "normalAttackTrigger": "Qの雷追撃は通常・重撃命中時に発動（エネルギー回復効果あり）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80。バッテリー特化性能のため2回出場でEの勾玉を2回供給する形も有効",
+            "comboNote": "勾玉は出場アタッカーに拾わせることで実質的なエネルギー軽減となる（蛍(雷)と同一）",
+            "constellationBreakpoints": {
+                "1": "Eで生成される勾玉が3個に増加",
+                "6": "Q追撃2回ごとに次回追撃強化＆エネルギー追加回復"
+            }
+        },
+        {
+            "id": "10000007-electro",
+            "name": "蛍(雷)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷1個＋豊穣の勾玉を最大3個生成（拾得キャラのエネルギー回復＆ER上昇）",
+            "normalAttackTrigger": "Qの雷追撃は通常・重撃命中時に発動（エネルギー回復効果あり）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80。バッテリー特化性能のため2回出場でEの勾玉を2回供給する形も有効",
+            "comboNote": "勾玉は出場アタッカーに拾わせることで実質的なエネルギー軽減となる（空(雷)と同一）",
+            "constellationBreakpoints": {
+                "1": "Eで生成される勾玉が3個に増加",
+                "6": "Q追撃2回ごとに次回追撃強化＆エネルギー追加回復"
+            }
+        },
+        {
+            "id": "10000005-geo",
+            "name": "空(岩)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩3〜4個（CT6秒と優秀な岩バッテリー）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60だが4凸効果でQ命中敵1体につきエネルギー5回復（最大25）し非常に回転が良い",
+            "comboNote": "1凸のQ岩嶂内会心率+10%バフを目的としたQ→E運用が最多（蛍(岩)と同一）",
+            "constellationBreakpoints": {
+                "1": "Q領域内の出場キャラ会心率+10%＆中断耐性",
+                "4": "Q衝撃波命中ごとに自身のエネルギー5回復（最大25）"
+            }
+        },
+        {
+            "id": "10000007-geo",
+            "name": "蛍(岩)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで岩3〜4個（CT6秒と優秀な岩バッテリー）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60だが4凸効果でQ命中敵1体につきエネルギー5回復（最大25）し非常に回転が良い",
+            "comboNote": "1凸のQ岩嶂内会心率+10%バフを目的としたQ→E運用が最多（空(岩)と同一）",
+            "constellationBreakpoints": {
+                "1": "Q領域内の出場キャラ会心率+10%＆中断耐性",
+                "4": "Q衝撃波命中ごとに自身のエネルギー5回復（最大25）"
+            }
+        },
+        {
+            "id": "10000005-hydro",
+            "name": "空(水)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで水3〜4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80。hEで源水の雫を生成できるためヌヴィレット等と組むことも可能",
+            "comboNote": "Qの浮遊水玉は移動し続けるため大型や凍結対象向け（蛍(水)と同一）",
+            "constellationBreakpoints": {
+                "2": "Qの移動速度-30%＆持続+3秒"
+            }
+        },
+        {
+            "id": "10000007-hydro",
+            "name": "蛍(水)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで水3〜4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80。hEで源水の雫を生成できるためヌヴィレット等と組むことも可能",
+            "comboNote": "Qの浮遊水玉は移動し続けるため大型や凍結対象向け（空(水)と同一）",
+            "constellationBreakpoints": {
+                "2": "Qの移動速度-30%＆持続+3秒"
+            }
+        },
+        {
+            "id": "10000005-pyro",
+            "name": "空(炎)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000007-dendro",
+            "name": "蛍(草)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000007-pyro",
+            "name": "蛍(炎)",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000044-pyro",
+            "name": "辛炎",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000136-electro",
+            "name": "ミティヤ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000137-electro",
+            "name": "バレリー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000140-hydro",
+            "name": "ヴォジャニーツァ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
+            "constellationBreakpoints": {}
+        },
+        {
+            "id": "10000143-anemo",
+            "name": "ヴェスナ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E発動時に元素粒子を生成（詳細は個別仕様参照）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "標準的なエネルギー運用（E→Q / Q→E）",
+            "comboNote": "標準ローテーション（Phase 3-2 統合骨格）",
             "constellationBreakpoints": {}
         }
     ]

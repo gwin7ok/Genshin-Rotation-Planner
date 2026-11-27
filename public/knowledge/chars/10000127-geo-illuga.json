@@ -3,13 +3,33 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A4%E3%83%AB%E3%83%BC%E3%82%AC",
  "archetypes": [
   {
-   "name": "q の出場",
+   "name": "E→Q（標準サポート）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 標準E→Q月結晶サポート形"
+  },
+  {
+   "name": "Q だけ（時短）",
    "role": "supporter",
    "slot": 30,
    "use": [
     "q"
    ],
-   "evidence": "自動編成（イルーガ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.4k → 36.7k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 時短Qバフ形"
+  },
+  {
+   "name": "Q→E（爆発先行）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行サポート形"
   }
  ]
 }

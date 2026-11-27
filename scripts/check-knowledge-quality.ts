@@ -46,6 +46,7 @@ const argVal = (flag: string): string | undefined =>
 
 const outMd = argVal('out-md');
 const outJson = argVal('out-json');
+const strict = args.includes('--strict');
 
 const master: MasterChar[] = JSON.parse(
     fs.readFileSync('src/data/characters_master_data.json', 'utf8'),
@@ -381,4 +382,23 @@ if (outJson) {
     fs.mkdirSync(path.dirname(outJson), { recursive: true });
     fs.writeFileSync(outJson, JSON.stringify({ summary: Object.fromEntries(order.map(k => [k, (byKind.get(k) ?? []).length])), issues }, null, 2) + '\n', 'utf8');
     console.log(`JSON レポート出力: ${outJson}`);
+}
+
+if (strict) {
+    const violations = issues.filter(i =>
+        i.severity === 'error'
+        || i.kind === 'duplicate-shape'
+        || i.kind === 'bad-first-entry'
+        || i.kind === 'excessive-length'
+        || (i.kind === 'bloat-or-sparse' && i.detail.includes('肥大化'))
+    );
+    if (violations.length > 0) {
+        console.error(`strict チェック失敗: ${violations.length} 件の禁止違反を検出しました`);
+        for (const v of violations) {
+            const idxPart = v.archetypeIndex !== undefined ? ` [#${v.archetypeIndex}: ${v.archetypeName}]` : '';
+            console.error(`  - [${v.kind}] ${v.characterName} (${v.characterId})${idxPart}: ${v.detail}`);
+        }
+        process.exit(1);
+    }
+    console.log('strict チェック合格: 重大エラー・重複・長大・肥大化 0 件');
 }

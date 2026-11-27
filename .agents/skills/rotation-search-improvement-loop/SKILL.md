@@ -9,6 +9,7 @@ description: 「自律改善ループを実行して」と指示されたとき�
 
 ## 1. 開始前の確認とワークスペース分離
 - **前提確認**: 開始前に `npm run gcsim:check` を実行し、WASM（`public/gcsim/main.wasm`）とバージョン一致を確認する（無い場合は `npm run wasm:build`）。ポート 3000 の開発サーバーは止めない。
+- **戦闘仕様DBの参照**: 探索ロジック（`src/utils/rotationSearch/*`）や知識辞書（`src/masterdata/knowledge/*`）を変更する前に、必ず `docs/genshin-mechanics/README.md`（`auto-search-heuristics-spec.md`・`combat-system.md`・`character-mechanics.json`）を参照して仕様誤解を防ぐ。新たなゲーム仕様の落とし穴を発見したら `docs/genshin-mechanics/` に 1 項目追記する。
 - **分離ワークツリーでの実行**: メインリポジトリは直接編集せず、`invoke_subagent`（`TypeName: "self"`, `Workspace: "branch"`）で実行用サブエージェントを起動し、すべての検証・修正をその分離ワークツリー内で行う。
 
 ## 2. 1 サイクルの実行手順
@@ -25,7 +26,7 @@ description: 「自律改善ループを実行して」と指示されたとき�
 3. **結果精査・原因調査・改善と検証**:
    - 上位 1〜5 位に不自然なアクション（無意味な `D`/`J`、物理通常 1 回だけの単独出場、モード違反、スキル/爆発欠落、gcsim エラー多発等）がないか確認する。
    - 問題があれば `src/utils/rotationSearch/`・`src/utils/gcsim/`・`src/masterdata/knowledge/characters.ts`（必要に応じて `G:\Cursor_Folder\gcsim` の仕様も参照）を調査して分離ワークツリー内で修正する。
-   - 辞書変更時は `npm run build:knowledge`、コード変更時は毎回 `npx tsc --noEmit` と `npm run check:rotation-search`（辞書シード変更時は `npm run check:knowledge-seeds`）を実行し、対象編成を再検証する。
+   - 辞書変更時は `npm run build:knowledge` と `node scripts/check-knowledge-quality.ts --strict`、コード変更時は毎回 `npx tsc --noEmit` と `npm run check:rotation-search`（辞書シード変更時は `npm run check:knowledge-seeds`）を実行し、対象編成を再検証する。
 4. **サイクル末尾の KQM DB 実例照合**:
    - 探索終了時の各編成の上位ローテーションが、`.cache/kqm-db/`（KQM Sim Database）に登録されている同編成・同凸数（仮値基準: ★4=6凸 / ★5=0凸）の事例と出場順・コンボ骨格で一致・整合しているか検証する。
    - 乖離がある場合は「仮値 ER 300% による差異（粒子回収省略等）」か「探索ロジック・辞書の不足」かを切り分けて報告する。

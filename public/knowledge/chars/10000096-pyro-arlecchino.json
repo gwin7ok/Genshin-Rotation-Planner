@@ -3,125 +3,113 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%AC%E3%83%83%E3%82%AD%E3%83%BC%E3%83%8E",
  "archetypes": [
   {
-   "name": "E→重撃→Q のあと 通常 6 段を繰り返す",
+   "name": "先置きE のあと CA回収→N3D連打（命の契約王道）",
    "role": "attacker",
-   "slot": 40,
+   "slot": 10,
    "use": [
-    "e",
-    "ca",
-    "q"
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "ca"
+     ]
+    }
    ],
    "fill": [
     "n",
     "n",
     "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "fillRepeat": [
-    2,
-    3
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）"
-  },
-  {
-   "name": "E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n"
-   ],
-   "fill": [
-    "n",
-    "n",
-    "ca"
+    "dash"
    ],
    "fillRepeat": [
     4,
     5,
     6
    ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 命の契約CA回収→N3D王道形"
   },
   {
-   "name": "E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3",
+   "name": "初動E→CA回収→N3D連打→末尾E",
    "role": "attacker",
    "slot": 40,
+   "use": [
+    "ca"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "lead": [
+    "e"
+   ],
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 初動E＋末尾E次周繋ぎ形"
+  },
+  {
+   "name": "先置きE のあと CA回収→通常連打",
+   "role": "attacker",
+   "slot": 10,
    "use": [
     "e"
    ],
    "then": [
     {
-     "slot": 50,
+     "slot": 40,
      "use": [
-      "ca",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n"
+      "ca"
      ]
     }
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルレッキーノ 260 件中 18 件。平均 77.0k（最大 104.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 18/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
+   "fill": [
     "n",
     "n",
     "n"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 81.1k・最大 175.3k。ca n×3 dash n×3 dash n×3 dash n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 24/1/0/0/0/0/0）"
+   "fillRepeat": [
+    4,
+    5,
+    6
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: ダッシュ省略通常連打形"
+  },
+  {
+   "name": "Q→E のあと CA回収→N3D連打（回復リセット型）",
+   "role": "attacker",
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "ca"
+     ]
+    }
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q回復リセット＋N3D連打形"
   }
  ]
 }

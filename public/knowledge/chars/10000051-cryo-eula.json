@@ -3,46 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A8%E3%82%A6%E3%83%AB%E3%82%A2",
  "archetypes": [
   {
-   "name": "E→Q→E→通常5→長押しE→通常2",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q",
-    "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "e_hold",
-    "n",
-    "n"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル短押し→爆発→スキル短押し→通常 5 段→スキル長押し→通常 1〜2 段（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→長押しE→通常4→ダッシュ→通常4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q",
-    "e_hold",
-    "n",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル短押し→爆発→スキル長押し→通常 4 段→ステップ→通常 3〜4 段（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→通常4→長押しE→通常4",
+   "name": "E→Q→N×4→長押しE のあと通常連打（王道光臨の剣）",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -52,20 +13,66 @@
     "n",
     "n",
     "n",
-    "e_hold",
-    "n",
-    "n",
-    "n",
-    "n"
+    "e_hold"
    ],
    "fill": [
     "n"
    ],
    "fillRepeat": [
     4,
-    8
+    5
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキル短押し→爆発→通常 4 段→スキル長押し→通常 4 段（そのあと光臨の剣が爆発）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 王道光臨の剣N4→hE→N4形"
+  },
+  {
+   "name": "先置きE のあと Q→N×4→長押しE→通常連打",
+   "role": "attacker",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "q",
+      "n",
+      "n",
+      "n",
+      "n",
+      "e_hold"
+     ]
+    }
+   ],
+   "fill": [
+    "n"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 先置きE冷却稼ぎ光臨の剣形"
+  },
+  {
+   "name": "E→Q→長押しE のあと N4D 連打",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "q",
+    "e_hold"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    2
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: N4Dダッシュキャンセル形"
   }
  ]
 }

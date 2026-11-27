@@ -60,7 +60,7 @@ const allNames = master
 const SIGNATURE_TERMS: Array<{ term: string; ownerIds: string[] }> = [
     { term: 'オズ', ownerIds: ['10000031-electro'] },
     { term: '殺生桜', ownerIds: ['10000058-electro'] },
-    { term: 'E×3', ownerIds: ['10000058-electro', '10000026-anemo', '10000016-pyro', '10000070-hydro', '10000085-cryo', '10000130-geo'] },
+    { term: 'E×3', ownerIds: ['10000058-electro', '10000026-anemo', '10000016-pyro', '10000070-hydro', '10000085-cryo', '10000090-pyro', '10000130-geo'] },
     { term: '乱れ嵐斬', ownerIds: ['10000047-anemo'] },
     { term: '天狗呪雷', ownerIds: ['10000056-electro'] },
 ];
@@ -74,6 +74,7 @@ const shapeKey = (a: Archetype): string =>
         then: (a.then ?? []).map(t => t.use),
         fill: a.fill ?? null,
         lead: a.lead ?? null,
+        tail: a.tail ?? null,
     });
 
 // 1. characters.ts の生テキストで `}],` の1行閉じ（--apply の文字列挿入バグ誘発箇所）を検出

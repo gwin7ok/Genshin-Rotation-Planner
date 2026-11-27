@@ -3,25 +3,32 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9E%E3%83%BC%E3%83%B4%E3%82%A3%E3%82%AB",
  "archetypes": [
   {
-   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "name": "先置きE のあと Q→重撃連打（メイン）",
    "role": "attacker",
-   "slot": 40,
+   "slot": 10,
    "use": [
-    "e",
-    "q"
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "q"
+     ]
+    }
    ],
    "fill": [
-    "n"
+    "ca"
    ],
    "fillRepeat": [
-    8,
-    10,
-    12
+    3,
+    4,
+    5
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（通常攻撃の形）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 先置きE→Q重撃メイン形"
   },
   {
-   "name": "E・Q のあと 重撃を繰り返す",
+   "name": "E→Q のあと重撃連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -36,58 +43,29 @@
     4,
     5
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の高い瞬間火力のあと、重撃・双駆輪で攻める"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: EQ連続重撃メイン形"
   },
   {
-   "name": "E・Q（サブ）",
+   "name": "Q→E（爆発＋控え炎サブ）",
    "role": "subAttacker",
    "slot": 20,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから自動攻撃する輪で炎下地を作るサブ運用"
-  },
-  {
-   "name": "Q→E（KQM）",
-   "role": "attacker",
-   "slot": 40,
    "use": [
     "q",
     "e"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: マーヴィカ 394 件中 19 件。平均 105.6k（最大 468.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 18/1/0/0/0/0/0）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 7.6% 最多Q→E控え炎サブ形"
   },
   {
-   "name": "Q→CA→E→DASH（KQM）",
-   "role": "attacker",
-   "slot": 40,
+   "name": "Q→CA→E→ダッシュ（瞬間火力サブ）",
+   "role": "subAttacker",
+   "slot": 20,
    "use": [
     "q",
     "ca",
     "e",
     "dash"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: マーヴィカ 394 件中 12 件。平均 113.4k（最大 504.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 11/0/0/0/0/0/1）（探索の比較なし）"
-  },
-  {
-   "name": "e→n",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 63 件・平均 206.1k・最大 1710.1k。e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（63 件。分布 0〜6 凸 = 52/0/1/0/0/0/10）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 4.7% 瞬間火力サブ形"
   }
  ]
 }

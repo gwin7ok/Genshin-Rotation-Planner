@@ -109,11 +109,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000046-pyro', // 胡桃
     archetypes: [
-      { name: 'Q→E→（通常2→重撃）×n', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [8, 9, 10], evidence: 'Wiki 本文のコンボの記述: 同上（爆発を先に使う形）（探索の比較なし）' },
-      { name: 'E→（通常2→重撃）×n', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca'], fillRepeat: [8, 9, 10, 11], evidence: 'Wiki 本文のコンボの記述: 理論上最大火力のコンボ: スキル→N2C×n（最大 11、現実的には 8〜10）→爆発（探索の比較なし）' },
-      { name: 'E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca'], fillRepeat: [4, 5, 6], evidence: '実測（胡桃・行秋・香菱・ベネット、標準ビルド）: 辞書なしの探索の 1 位が 胡桃[E N C ×5] 32.5k。辞書ありは同じ結果を 228 秒 → 119 秒で出した（DPS は同じ）。Wiki の N2CD は、標準ビルドでは上位に出なかった' },
-      { name: '通常攻撃・E のあと 通常攻撃 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['n', 'e'], fill: ['n', 'ca'], fillRepeat: [5, 6], evidence: '編成例の探索（Overvape 編成）の上位に出る形（93.6k）。実測: Overvape で 93.6k → 95.0k（誤差）。効果は確認できず' },
-      { name: 'E→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N→CA→JUMP→N×2→CA→JUMP→N（KQM）', role: 'attacker', slot: 40, use: ['e', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'ca', 'jump', 'n', 'n', 'ca', 'jump', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 胡桃 198 件中 16 件。平均 70.5k（最大 83.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 16/0/0/0/0/0/0）（探索の比較なし）' },
+      { name: 'E のあと N1CJ 連打（0凸定番）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca', 'jump'], fillRepeat: [7, 8, 9], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 0凸定番N1CJ連打形' },
+      { name: 'E のあと N2CD 連打（1凸定番）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca', 'dash'], fillRepeat: [8, 9, 10], constellation: { min: 1 }, evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 1凸定番N2CD連打形' },
+      { name: 'E のあと N1CJ 連打→末尾Q締め', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'ca', 'jump'], fillRepeat: [7, 8], tail: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N1CJ末尾Q締め形' },
+      { name: 'E のあと N2CJ 連打', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'ca', 'jump'], fillRepeat: [7, 8], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N2CJ連打形' },
     ],
   },
 
@@ -121,12 +120,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000060-hydro', // 夜蘭
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
-      { name: 'E', role: 'subAttacker', slot: 25, use: ['e'], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
-      { name: 'E→Q→N（KQM）', role: 'supporter', slot: 10, use: ['e', 'q', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 80 件。平均 65.5k（最大 143.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 80/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→N→Q→N（KQM）', role: 'supporter', slot: 10, use: ['e', 'n', 'q', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 65 件。平均 71.5k（最大 112.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 65/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'n→e→n', role: 'supporter', slot: 30, use: ['n', 'e', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 96 件・平均 71.4k・最大 484.7k。n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（96 件。分布 0〜6 凸 = 94/0/0/0/1/0/1）' },
-      { name: 'q→n→e→n', role: 'supporter', slot: 30, use: ['q', 'n', 'e', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 109 件・平均 68.4k・最大 353.2k。q n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（109 件。分布 0〜6 凸 = 108/0/0/0/1/0/0）' },
+      { name: 'E→Q→N', role: 'supporter', slot: 10, use: ['e', 'q', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 9.5% E粒子受け取りQ→N定番形' },
+      { name: 'Q→N→E→N（爆発先行）', role: 'supporter', slot: 10, use: ['q', 'n', 'e', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q先行擲骰トリガーE→N形' },
+      { name: 'E→打破重撃→Q→N', role: 'supporter', slot: 10, use: ['e', 'ca', 'q', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 9.9% 最多打破重撃込み形' },
+      { name: 'E→Q のあと、もう一度 E', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 祭礼/2回出場E粒子回収形' },
     ],
   },
   {
@@ -232,10 +229,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000096-pyro',
     archetypes: [
-      { name: 'E→重撃→Q のあと 通常 6 段を繰り返す', role: 'attacker', slot: 40, use: ['e', 'ca', 'q'], fill: ['n', 'n', 'n', 'n', 'n', 'n'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: スキルで印をつけ、光ったら重撃で命の契約を得て、赤死の宴に入る（探索の比較なし）' },
-      { name: 'E・通常攻撃のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'n'], fill: ['n', 'n', 'ca'], fillRepeat: [4, 5, 6], evidence: '編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒' },
-      { name: 'E のあと、もう一度 CA→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3→DASH→N×3', role: 'attacker', slot: 40, use: ['e'], then: [{ slot: 50, use: ['ca', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: アルレッキーノ 260 件中 18 件。平均 77.0k（最大 104.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 18/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'ca→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3→dash→n×3', role: 'attacker', slot: 40, use: ['ca', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 81.1k・最大 175.3k。ca n×3 dash n×3 dash n×3 dash n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 24/1/0/0/0/0/0）' },
+      { name: '先置きE のあと CA回収→N3D連打（命の契約王道）', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 40, use: ['ca'] }], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [4, 5, 6], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 命の契約CA回収→N3D王道形' },
+      { name: '初動E→CA回収→N3D連打→末尾E', role: 'attacker', slot: 40, use: ['ca'], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [4, 5, 6], lead: ['e'], tail: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 初動E＋末尾E次周繋ぎ形' },
+      { name: '先置きE のあと CA回収→通常連打', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 40, use: ['ca'] }], fill: ['n', 'n', 'n'], fillRepeat: [4, 5, 6], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: ダッシュ省略通常連打形' },
+      { name: 'Q→E のあと CA回収→N3D連打（回復リセット型）', role: 'attacker', slot: 10, use: ['q', 'e'], then: [{ slot: 40, use: ['ca'] }], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q回復リセット＋N3D連打形' },
     ],
   },
   {
@@ -272,22 +269,19 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000049-pyro',
     archetypes: [
-      { name: 'Q のあと 通常5×3 セット', role: 'attacker', slot: 40, use: ['q'], fill: ['n', 'n', 'n', 'n', 'n'], fillRepeat: [3, 4], evidence: 'Wiki 本文のコンボの記述: 立ち回り: 爆発→通常攻撃 5 段×3 セット（探索の比較なし）' },
-      { name: 'E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [17, 19, 21], evidence: '編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒' },
-      { name: 'E→N×5→DASH→N×5→DASH→N×5→DASH→N（KQM）', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'n', 'dash', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 宵宮 211 件中 32 件。平均 58.0k（最大 74.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 32/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→N×5→DASH→N×5→DASH→N×5（KQM）', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 宵宮 211 件中 15 件。平均 55.2k（最大 71.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/0/0/0/0/0/0）（探索の比較なし）' },
+      { name: 'E のあと N5D×3→末尾Q締め（KQM最多）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'n', 'dash'], fillRepeat: [3], tail: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 32.4% 最多E→N5D×3→末尾Q形' },
+      { name: 'E のあと N5D 連打（しめ縄4・爆発なし）', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'n', 'dash'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 16.9% しめ縄4爆発省略N5D形' },
+      { name: 'E のあと通常5段連打', role: 'attacker', slot: 40, use: ['e'], fill: ['n', 'n', 'n', 'n', 'n'], fillRepeat: [3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: キャンセル無し通常5段連打形' },
+      { name: '先置きQ のあと E→N5D 連打', role: 'attacker', slot: 10, use: ['q'], then: [{ slot: 40, use: ['e'] }], fill: ['n', 'n', 'n', 'n', 'n', 'dash'], fillRepeat: [3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 蒼翠/爆発先置きE→N5D形' },
     ],
   },
   {
     characterId: '10000103-geo',
     archetypes: [
-    
-      { name: 'E と Q', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '編成例の探索（ナヴィア・シロネン・フリーナ・オロルン）の上位に出る形。実測: 50.4k → 52.1k。時間 345 → 152 秒' },
-      { name: 'Q のあと、もう一度 E→N×2、さらに E→N×2', role: 'supporter', slot: 10, use: ['q'], then: [{ slot: 30, use: ['e', 'n', 'n'] }, { slot: 35, use: ['e', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: シロネン 676 件中 60 件。平均 66.0k（最大 105.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 60/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→N×2→Q のあと、もう一度 E→N×2', role: 'supporter', slot: 10, use: ['e', 'n', 'n', 'q'], then: [{ slot: 30, use: ['e', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: シロネン 676 件中 38 件。平均 77.4k（最大 373.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 36/0/1/0/0/0/1）（探索の比較なし）' },
-      { name: 'E→Q→N×2 のあと、もう一度 E→N×2', role: 'supporter', slot: 10, use: ['e', 'q', 'n', 'n'], then: [{ slot: 30, use: ['e', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: シロネン 676 件中 26 件。平均 103.1k（最大 436.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 24/0/0/0/0/0/2）（探索の比較なし）' },
-      { name: 'E→N→N のあと、もう一度 E→N→N', role: 'supporter', slot: 10, use: ['e', 'n', 'n'], then: [{ slot: 30, use: ['e', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: シロネン 676 件中 113 件。平均 188.5k（最大 2063.3k。ドゥリン・シトラリ・ニコ編成の「1 周に E 2 回」）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（543 件。分布 0〜6 凸 = 470/0/14/0/2/0/57）' },
-      { name: 'e→n×2', role: 'supporter', slot: 20, use: ['e', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 543 件・平均 119.5k・最大 2063.3k。e n×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（543 件。分布 0〜6 凸 = 470/0/14/0/2/0/57）' },
+      { name: 'E→N×2（サンプル起動・定番）', role: 'supporter', slot: 10, use: ['e', 'n', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 26.6% 最多サンプル起動定番形' },
+      { name: 'E→N×2→Q（デバフ＋回復）', role: 'supporter', slot: 10, use: ['e', 'n', 'n', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: デバフ＋回復Q込み形' },
+      { name: 'E→N×2 のあと、もう一度 E→N×2', role: 'supporter', slot: 10, use: ['e', 'n', 'n'], then: [{ slot: 30, use: ['e', 'n', 'n'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 19.5% 2回出場粒子・結晶更新形' },
+      { name: 'E→N×2→Q のあと、もう一度 E→N×2', role: 'supporter', slot: 10, use: ['e', 'n', 'n', 'q'], then: [{ slot: 30, use: ['e', 'n', 'n'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 7.4% Q込み2回出場形' },
     ],
   },
   {
@@ -314,9 +308,9 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000022-anemo',
     archetypes: [
-      { name: 'E と Q', role: 'supporter', slot: 30, use: ['e', 'q'], evidence: '編成例の探索（ウェンティ・ドゥリン・ファルザン・ニコ）の上位に出る形。実測: 55.8k → 54.6k ±4.6（誤差）。時間 243 → 175 秒' },
-      { name: 'Q のあと、もう一度 E→N、さらに E→N', role: 'supporter', slot: 10, use: ['q'], then: [{ slot: 30, use: ['e', 'n'] }, { slot: 35, use: ['e', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ウェンティ 64 件中 3 件。平均 40.2k（最大 45.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 3/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→Q のあと、もう一度 E→N', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e', 'n'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ウェンティ 64 件中 32 件。平均 46.7k（最大 152.3k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（47 件。分布 0〜6 凸 = 44/0/0/0/0/0/3）' },
+      { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 17.5% 基本E粒子受け取りQ形' },
+      { name: 'E→Q のあと、もう一度 E', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 54.0% 最多2回出場E粒子回収形' },
+      { name: 'E だけ', role: 'supporter', slot: 20, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短翠緑拡散形' },
     ],
   },
   {
@@ -331,39 +325,28 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000030-geo',
     archetypes: [
-      { name: '長押し E', role: 'supporter', slot: 10, use: ['e_hold'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
-      { name: 'N→E_HOLD→DASH（KQM）', role: 'supporter', slot: 10, use: ['n', 'e_hold', 'dash'], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 18 件。平均 48.4k（最大 87.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 17/0/0/0/0/0/1）（探索の比較なし）' },
-      { name: 'E_HOLD→DASH（KQM）', role: 'supporter', slot: 10, use: ['e_hold', 'dash'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 40 件。平均 59.6k（最大 241.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 39/0/0/0/0/0/1）（探索の比較なし）' },
-      { name: 'E_HOLD→DASH×2→N（KQM）', role: 'supporter', slot: 10, use: ['e_hold', 'dash', 'dash', 'n'], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 25 件。平均 72.3k（最大 96.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 25/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E_HOLD→DASH→N（KQM）', role: 'supporter', slot: 10, use: ['e_hold', 'dash', 'n'], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 鍾離 530 件中 20 件。平均 50.8k（最大 79.2k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 20/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E_HOLD→DASH×2→N のあと、もう一度 E_HOLD→DASH×2→N', role: 'supporter', slot: 10, use: ['e_hold', 'dash', 'dash', 'n'], then: [{ slot: 30, use: ['e_hold', 'dash', 'dash', 'n'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 鍾離 530 件中 36 件。平均 54.7k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 36/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E_HOLD→DASH のあと、もう一度 E_HOLD→DASH', role: 'supporter', slot: 10, use: ['e_hold', 'dash'], then: [{ slot: 30, use: ['e_hold', 'dash'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 鍾離 530 件中 17 件。平均 64.0k（最大 82.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 16/1/0/0/0/0/0）（探索の比較なし）' },
+      { name: '長押しE→ダッシュ（シールド定番）', role: 'supporter', slot: 10, use: ['e_hold', 'dash'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 9.7% 硬直ダッシュキャンセル定番形' },
+      { name: '長押しE→ダッシュ→N（西風粒子）', role: 'supporter', slot: 10, use: ['e_hold', 'dash', 'n'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 14.5% 最多西風粒子トリガー形' },
+      { name: '長押しE だけ', role: 'supporter', slot: 10, use: ['e_hold'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 最短シールド展開形' },
+      { name: '長押しE→ダッシュ→Q', role: 'supporter', slot: 10, use: ['e_hold', 'dash', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 岩共鳴/石化Q込み形' },
     ],
   },
   {
     characterId: '10000087-hydro',
     archetypes: [
-      { name: 'E→Q→特殊重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4], evidence: 'Wiki 本文のコンボの記述: ローテーションの 1 つ。スキル + 爆発→特殊重撃 3 回（凸で 4 回）（探索の比較なし）' },
-      { name: '先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca', 'n', 'n'], fillRepeat: [4, 5, 6], lead: ['n'], evidence: '編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒' },
-      { name: 'E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2', role: 'attacker', slot: 40, use: ['e', 'n'], then: [{ slot: 50, use: ['ca', 'q', 'e', 'ca'] }, { slot: 55, use: ['ca', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 17 件。平均 69.5k（最大 92.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 17/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E のあと、もう一度 CA→E→CA→Q、さらに CA×2', role: 'attacker', slot: 40, use: ['e'], then: [{ slot: 50, use: ['ca', 'e', 'ca', 'q'] }, { slot: 55, use: ['ca', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 105 件。平均 80.9k（最大 104.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 105/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E のあと、もう一度 CA→Q→E→CA、さらに CA×2', role: 'attacker', slot: 40, use: ['e'], then: [{ slot: 50, use: ['ca', 'q', 'e', 'ca'] }, { slot: 55, use: ['ca', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 78 件。平均 81.2k（最大 170.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 77/0/1/0/0/0/0）（探索の比較なし）' },
-      { name: 'N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA', role: 'attacker', slot: 40, use: ['n'], then: [{ slot: 50, use: ['e', 'ca', 'q', 'ca'] }, { slot: 55, use: ['ca', 'e', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 26 件。平均 55.8k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 26/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: '重撃を繰り返す', role: 'attacker', slot: 40, use: ['ca', 'ca'], fill: ['ca'], fillRepeat: [3, 5], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（240 件。分布 0〜6 凸 = 238/0/2/0/0/0/0）' },
-      { name: 'ca→q→e→ca', role: 'attacker', slot: 40, use: ['ca', 'q', 'e', 'ca'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（115 件。分布 0〜6 凸 = 112/0/2/0/0/0/1）' },
-      { name: 'ca→e→ca→q', role: 'attacker', slot: 40, use: ['ca', 'e', 'ca', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（124 件。分布 0〜6 凸 = 121/0/0/0/0/0/3）' },
+      { name: 'E→Q のあと特殊重撃連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 基本Q込み特殊重撃ループ' },
+      { name: '先置きE のあと CA→Q→E→重撃連打', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 40, use: ['ca', 'q', 'e'] }], fill: ['ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 先置きEからの雫回収重撃ループ' },
+      { name: 'E → CA→Q→E→CA → CA×2（雫4重撃）', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 30, use: ['ca', 'q', 'e', 'ca'] }, { slot: 40, use: ['ca', 'ca'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 24.9% 雫4重撃分割形' },
+      { name: 'E → CA→E→CA→Q → CA×2（KQM最多33%）', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 30, use: ['ca', 'e', 'ca', 'q'] }, { slot: 40, use: ['ca', 'ca'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 33.4% 最多雫4重撃分割形' },
     ],
   },
   {
     characterId: '10000066-hydro',
     archetypes: [
-      { name: 'Q→E→通常を繰り返す', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n'], fillRepeat: [12, 16, 20], evidence: 'Wiki 本文のコンボの記述: 爆発→スキル→通常の順で、聖遺物のバフも発動する。メイン火力は通常（探索の比較なし）' },
-      { name: 'Q・ダッシュ・E のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q', 'dash', 'e'], fill: ['n'], fillRepeat: [18, 21, 24], evidence: '編成例の探索（綾人・フリーナ・シトラリ・エスコフィエ）の上位に出る形。実測: 最短の設定で 44.5k → 44.5k（同じ）' },
-      { name: 'Q のあと、もう一度 E→N×15、さらに E→N×15→Q', role: 'attacker', slot: 40, use: ['q'], then: [{ slot: 50, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'] }, { slot: 55, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'q'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 神里綾人 132 件中 4 件。平均 46.0k（最大 50.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'Q のあと、もう一度 E→N×15、さらに E→N×15', role: 'attacker', slot: 40, use: ['q'], then: [{ slot: 50, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'] }, { slot: 55, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 神里綾人 132 件中 15 件。平均 48.8k（最大 58.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 15/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→N×15→Q のあと、もう一度 E→N×15', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'q'], then: [{ slot: 50, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 神里綾人 132 件中 11 件。平均 54.6k（最大 69.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 11/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'e→n×15', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 66 件・平均 49.7k・最大 74.6k。e n×15（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（66 件。分布 0〜6 凸 = 66/0/0/0/0/0/0）' },
-      { name: 'e→n×15→q', role: 'attacker', slot: 40, use: ['e', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 35 件・平均 68.9k・最大 241.3k。e n×15 q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（35 件。分布 0〜6 凸 = 33/0/0/0/0/0/2）' },
+      { name: '先置きQ のあと E→通常連打', role: 'attacker', slot: 10, use: ['q'], then: [{ slot: 40, use: ['e'] }], fill: ['n'], fillRepeat: [13, 15, 16], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 28.0% 最多先置きQ→E通常連打形' },
+      { name: 'Q→E のあと通常連打', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n'], fillRepeat: [13, 15, 16], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q→E連続通常連打形' },
+      { name: 'E のあと通常連打（爆発温存）', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [13, 15, 16], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発温存E通常連打形' },
+      { name: '初動Q→E通常連打→末尾Q締め', role: 'attacker', slot: 40, use: ['e'], fill: ['n'], fillRepeat: [13, 15], lead: ['q'], tail: ['q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 19.5% 初動Q＋末尾Q締め形' },
     ],
   },
   {
@@ -378,13 +361,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000078-dendro',
     archetypes: [
-      { name: 'E→落下→Q', role: 'attacker', slot: 40, use: ['e', 'hp', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）' },
-      { name: 'Q→E→重撃（鏡の補充）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）' },
-      { name: 'Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['q'], fill: ['n'], fillRepeat: [12, 18], evidence: '編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）' },
-      { name: 'E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], then: [{ slot: 50, use: ['q'] }, { slot: 55, use: ['n', 'n', 'n', 'dash', 'n', 'n', 'n', 'ca', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 8 件。平均 57.0k（最大 65.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], then: [{ slot: 50, use: ['q'] }, { slot: 55, use: ['n', 'n', 'n', 'dash', 'n', 'n', 'n', 'ca', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 7 件。平均 53.4k（最大 66.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'e_hold→lp→n×2→ca→dash→n×3→ca→dash', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'ca', 'dash', 'n', 'n', 'n', 'ca', 'dash'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 72.5k・最大 94.9k。e_hold lp n×2 ca dash n×3 ca dash（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（15 件。分布 0〜6 凸 = 15/0/0/0/0/0/0）' },
-      { name: 'e_hold→lp→n×3→dash→n×3→dash→n×3', role: 'attacker', slot: 40, use: ['e_hold', 'lp', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）' },
+      { name: 'Q のあと N3D 連打（鏡3枚スタート）', role: 'attacker', slot: 40, use: ['q'], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [3, 4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q鏡3枚N3D連打形' },
+      { name: 'Q→N3D のあと、もう一度 長押しE→落下→N3D（分割運用）', role: 'attacker', slot: 20, use: ['q', 'n', 'n', 'n', 'dash', 'n', 'n', 'n'], then: [{ slot: 40, use: ['e_hold', 'lp'] }], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q始動→途中再出場の分割鏡維持形' },
+      { name: '長押しE→落下 のあと N3D 連打', role: 'attacker', slot: 40, use: ['e_hold', 'lp'], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略長押しE落下N3D形' },
+      { name: 'Q→E→重撃 のあと N3D 連打', role: 'attacker', slot: 40, use: ['q', 'e', 'ca'], fill: ['n', 'n', 'n', 'dash'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 鏡補充N3D連打形' },
     ],
   },
   {
@@ -416,17 +396,18 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000120-electro',
     archetypes: [
-      { name: 'E→E（特殊）→Q（特殊）のあと 通常 + E + Q', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'n', 'n', 'e', 'q'], fillRepeat: [1, 2], evidence: 'Wiki 本文のコンボの記述: 初動は、スキル→スキル（特殊）→爆発（特殊）。そのあとはスキル→特殊爆発→通常を 2 回繰り返すのが基本（探索の比較なし）' },
-      { name: 'Q・E のあと 通常攻撃 2 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4, 5], evidence: '編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒' },
-      { name: 'e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n', role: 'attacker', slot: 40, use: ['e', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'e', 'q', 'n'], constellation: { min: 6 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 3 件・平均 1080.0k・最大 1463.8k。e n e n q n×3 dash n×3 e n q n×3 dash n×3 e q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（3 件。分布 0〜6 凸 = 0/0/0/0/0/0/3）' },
-      { name: 'e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4', role: 'attacker', slot: 40, use: ['e', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'e', 'n', 'q', 'n', 'n', 'n', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 4 件・平均 119.5k・最大 149.0k。e n e n q n×4 dash n×4 dash n×2 e n q n×4（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（4 件。分布 0〜6 凸 = 4/0/0/0/0/0/0）' },
+      { name: 'E→N→E→Q のあと通常＋E→Q ループ', role: 'attacker', slot: 40, use: ['e', 'n', 'e', 'q'], fill: ['n', 'n', 'n', 'n', 'dash', 'n', 'n', 'e', 'n', 'q'], fillRepeat: [1, 2], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 特殊スキル→特殊爆発月感電ループ' },
+      { name: 'E→E→Q のあと N×4→E→Q ループ', role: 'attacker', slot: 40, use: ['e', 'e', 'q'], fill: ['n', 'n', 'n', 'n', 'e', 'q'], fillRepeat: [1, 2], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: シンプル特殊E→Qループ' },
+      { name: 'Q→E のあと N2C 連打', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: Q始動N2C連打形' },
     ],
   },
   {
     characterId: '10000043-anemo',
     archetypes: [
-      { name: 'n→e→dash', role: 'subAttacker', slot: 30, use: ['n', 'e', 'dash'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 23 件・平均 84.8k・最大 217.3k。n e dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（23 件。分布 0〜6 凸 = 0/0/0/0/0/0/23）' },
-      { name: 'E・通常攻撃・重撃', role: 'subAttacker', slot: 30, use: ['e', 'n', 'n', 'n', 'n', 'ca', 'n', 'n', 'n', 'ca'], evidence: '編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒' },
+      { name: 'E→ダッシュ→Q（翠緑＋熟知バフ）', role: 'supporter', slot: 20, use: ['e', 'dash', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 6.0% 最多翠緑＋熟知バフ形' },
+      { name: 'E→ダッシュ（時短拡散）', role: 'supporter', slot: 20, use: ['e', 'dash'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短拡散形' },
+      { name: 'N→E→ダッシュ（拡散トリガー）', role: 'supporter', slot: 20, use: ['n', 'e', 'dash'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 通常付着からの翠緑拡散形' },
+      { name: 'E→Q のあと N2C 連打（ドライバー）', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 感電/開花ドライバー形' },
     ],
   },
   {
@@ -521,13 +502,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000057-geo',
     archetypes: [
-      { name: 'Q→通常1→E→重撃', role: 'attacker', slot: 40, use: ['q', 'n', 'e', 'ca'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Wiki 本文のコンボの記述: 爆発→（通常 1 発→）スキル→重撃で、爆発の効果時間を使い切れる（探索の比較なし）' },
-      { name: '通常2→重撃の繰り返し', role: 'attacker', slot: 40, use: [], fill: ['n', 'n', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 通常 2 回→すぐトドメの重撃のループ（探索の比較なし）' },
-      { name: 'E→重撃の繰り返し（爆発なし）', role: 'attacker', slot: 40, use: [], fill: ['e', 'ca'], fillRepeat: [4, 6, 8], evidence: 'Wiki 本文のコンボの記述: 爆発を使わない前提なら、スキル 1 回→すぐ重撃のループがダメージを出しやすい（探索の比較なし）' },
-      { name: 'E・Q のあと 通常攻撃 3 回 + 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n', 'n', 'n', 'ca'], fillRepeat: [3, 4], evidence: '自動編成（荒瀧一斗 + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 36.6k → 36.7k' },
-      { name: 'N→Q→N→E→N×2→CA×5→DASH→N×4→CA×5→E→CA（KQM）', role: 'attacker', slot: 40, use: ['n', 'q', 'n', 'e', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'dash', 'n', 'n', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'e', 'ca'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 荒瀧一斗 76 件中 4 件。平均 54.9k（最大 66.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: '通常→Q→通常→E→重撃連打の周回', role: 'attacker', slot: 40, use: ['n', 'q', 'n', 'e', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'n', 'n', 'n', 'n', 'ca', 'ca', 'ca', 'ca', 'ca', 'e', 'ca'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 最も多い形（76 件中 33 件。平均 46.5k・最大 88.5k）。通常 2 → 重撃 5 → 通常 4 → 重撃 5（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（33 件。分布 0〜6 凸 = 33/0/0/0/0/0/0）' },
-      { name: 'Q→E→重撃→E→重撃（マーヴィカ編成など）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca', 'n', 'e', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: DPS 上位の設定（421.6k・111.7k・96.8k）の形: 爆発→スキル→重撃→通常→スキル→重撃（探索の比較なし）' },
+      { name: 'N→Q→N→E→N×2 のあと重撃連打→E→重撃', role: 'attacker', slot: 40, use: ['n', 'q', 'n', 'e', 'n', 'n'], fill: ['ca'], fillRepeat: [4, 5], tail: ['e', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 30.3% 最多荒瀧逆袈裟ループ形' },
+      { name: 'Q→N→E のあと N×3→重撃×4 連打', role: 'attacker', slot: 40, use: ['q', 'n', 'e'], fill: ['n', 'n', 'n', 'ca', 'ca', 'ca', 'ca'], fillRepeat: [2], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 27.6% N3→CA4交互ループ形' },
+      { name: 'Q→E のあと通常2→重撃連打', role: 'attacker', slot: 40, use: ['q', 'e'], fill: ['n', 'n', 'ca'], fillRepeat: [3, 4], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N2Cシンプル循環形' },
+      { name: 'Q→E→重撃→N→E→重撃（短時間型）', role: 'attacker', slot: 40, use: ['q', 'e', 'ca', 'n', 'e', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 短時間サブ/2ローテ兼用形' },
     ],
   },
   {
@@ -735,14 +713,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000063-cryo',
     archetypes: [
-      { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→他の氷キャラが攻撃、の順（探索の比較なし）' },
-      { name: 'e q の出場', role: 'supporter', slot: 20, use: ['e', 'q'], evidence: '自動編成（申鶴 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 33.7k → 34.1k' },
-      { name: 'E_HOLD→N→Q→N（KQM）', role: 'supporter', slot: 10, use: ['e_hold', 'n', 'q', 'n'], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 申鶴 301 件中 12 件。平均 77.6k（最大 110.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 12/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'Q→E のあと、もう一度 E→N', role: 'supporter', slot: 10, use: ['q', 'e'], then: [{ slot: 30, use: ['e', 'n'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 15 件。平均 71.1k（最大 370.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 13/0/0/1/0/0/1）（探索の比較なし）' },
-      { name: 'E→Q のあと、もう一度 N→E', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['n', 'e'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 60.9k（最大 93.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'N→E_HOLD→N のあと、もう一度 N→E_HOLD→N', role: 'supporter', slot: 10, use: ['n', 'e_hold', 'n'], then: [{ slot: 30, use: ['n', 'e_hold', 'n'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 10 件。平均 51.7k（最大 65.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→Q のあと、もう一度 E→N', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e', 'n'] }], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 申鶴 301 件中 38 件。平均 56.9k（最大 72.8k）（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（66 件。分布 0〜6 凸 = 63/0/0/0/0/0/3）' },
-      { name: '長押しE→Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg。gcsim の公開設定）の行動の形: 申鶴 301 件中 24 件。平均 145.9k（最大 980.5k）で、形ごとの平均が最も高い（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（24 件。分布 0〜6 凸 = 17/0/0/0/0/0/7）' },
+      { name: '長押しE→Q（通常/重撃氷翎）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 11.8% 通常/重撃強化長押しE→Q形' },
+      { name: '短押しE→Q（スキル/爆発氷翎）', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: スキル/爆発強化短押しE→Q形' },
+      { name: 'E→Q のあと、もう一度 E（氷翎2回）', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 14.1% 最多氷翎2回更新形' },
+      { name: 'E→Q→E（1凸2チャージ）', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], constellation: { min: 1 }, evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 1凸2チャージ連続E形' },
     ],
   },
   {
@@ -805,14 +779,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000082-dendro',
     archetypes: [
-      { name: 'E→Q→E', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], evidence: 'Wiki 本文のコンボの記述: スキル→爆発→スキル→キャラチェンジで、粒子を効率よく分配（探索の比較なし）' },
-      { name: 'q の出場', role: 'supporter', slot: 10, use: ['q'], evidence: '自動編成（白朮 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.8k → 43.5k' },
-      { name: 'N→E→Q（KQM）', role: 'supporter', slot: 10, use: ['n', 'e', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 白朮 157 件中 7 件。平均 58.7k（最大 85.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→N→Q のあと、もう一度 E→N', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], then: [{ slot: 30, use: ['e', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 白朮 157 件中 9 件。平均 63.8k（最大 73.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 9/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→Q のあと、もう一度 E→N', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e', 'n'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 白朮 157 件中 5 件。平均 70.5k（最大 75.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/1）（探索の比較なし）' },
-      { name: 'E→Q（KQM）', role: 'supporter', slot: 10, use: ['e', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: 白朮 157 件中 25 件。平均 66.3k（最大 219.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 24/0/0/0/0/0/1）（探索の比較なし）' },
-      { name: 'e→q→n', role: 'supporter', slot: 10, use: ['e', 'q', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 62.6k・最大 81.3k。e q n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（16 件。分布 0〜6 凸 = 16/0/0/0/0/0/0）' },
-      { name: 'e→n→q', role: 'supporter', slot: 10, use: ['e', 'n', 'q'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 61.9k・最大 73.5k。e n q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）' },
+      { name: 'E→Q', role: 'supporter', slot: 10, use: ['e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 17.8% 最多基本E→Q形' },
+      { name: 'E→Q のあと、もう一度 E', role: 'supporter', slot: 10, use: ['e', 'q'], then: [{ slot: 30, use: ['e'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 5.9% 2回出場E草付着・粒子形' },
+      { name: 'E だけ', role: 'supporter', slot: 10, use: ['e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略短時間草付着・回復形' },
+      { name: 'E→Q→E（1凸2チャージ）', role: 'supporter', slot: 10, use: ['e', 'q', 'e'], constellation: { min: 1 }, evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 1凸2チャージ連続E形' },
     ],
   },
   {
@@ -838,12 +808,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000090-pyro',
     archetypes: [
-      { name: 'e_hold の出場', role: 'supporter', slot: 20, use: ['e_hold'], evidence: '自動編成（シュヴルーズ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.8k → 43.6k' },
-      { name: 'Q→E_HOLD×2（KQM）', role: 'supporter', slot: 10, use: ['q', 'e_hold', 'e_hold'], constellation: { min: 4 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 17 件。平均 63.9k（最大 92.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/17）（探索の比較なし）' },
-      { name: 'Q→E_HOLD（KQM）', role: 'supporter', slot: 10, use: ['q', 'e_hold'], evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 38 件。平均 88.2k（最大 774.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/38）（探索の比較なし）' },
-      { name: 'E_HOLD→Q（KQM）', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 27 件。平均 86.1k（最大 124.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/27）（探索の比較なし）' },
-      { name: 'Q→E_HOLD→N（KQM）', role: 'supporter', slot: 10, use: ['q', 'e_hold', 'n'], constellation: { min: 0 }, requiresFavonius: true, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 23 件。平均 63.7k（最大 96.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 1/0/0/0/0/0/22）（探索の比較なし）' },
-      { name: 'q→e_hold×3', role: 'supporter', slot: 20, use: ['q', 'e_hold', 'e_hold', 'e_hold'], constellation: { min: 4 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 53 件・平均 85.6k・最大 787.5k。q e_hold×3（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（53 件。分布 0〜6 凸 = 0/0/0/0/0/0/53）' },
+      { name: 'Q→長押しE（過負荷バフ定番）', role: 'supporter', slot: 10, use: ['q', 'e_hold'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 19.0% 過負荷起爆→長押しE攻撃バフ定番形' },
+      { name: '長押しE→Q', role: 'supporter', slot: 10, use: ['e_hold', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 12.8% 長押しE先行形' },
+      { name: '長押しE だけ', role: 'supporter', slot: 20, use: ['e_hold'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短バフ形' },
+      { name: 'Q→長押しE×3（4凸CTリセット）', role: 'supporter', slot: 10, use: ['q', 'e_hold', 'e_hold', 'e_hold'], constellation: { min: 4 }, evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 21.3% 最多4凸E3連発形' },
     ],
   },
   {
@@ -929,9 +897,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000002-cryo',
     archetypes: [
-      { name: 'E・Q のあと ダッシュ + 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['dash', 'n', 'n', 'n', 'n', 'n'], fillRepeat: [2, 3, 4], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: ダッシュで氷付与してから通常攻撃を振るのが基本。爆発も主力' },
-      { name: 'E・Q（爆発サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発サブアタッカー型の運用' },
-      { name: 'E→DASH→Q→N×2→CA→DASH→N×2→CA のあと、もう一度 DASH→N×2→CA→E→DASH→N×2→CA', role: 'attacker', slot: 40, use: ['e', 'dash', 'q', 'n', 'n', 'ca', 'dash', 'n', 'n', 'ca'], then: [{ slot: 50, use: ['dash', 'n', 'n', 'ca', 'e', 'dash', 'n', 'n', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: 神里綾華 142 件中 6 件。平均 65.4k（最大 71.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）' },
+      { name: 'ダッシュ→E→Q のあと N2C 連打', role: 'attacker', slot: 40, use: ['dash', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 氷付与ダッシュE→Q→N2C王道形' },
+      { name: 'E→ダッシュ→Q→N2C のあと、もう一度 ダッシュ→E→N2C', role: 'attacker', slot: 20, use: ['e', 'dash', 'q', 'n', 'n', 'ca'], then: [{ slot: 40, use: ['dash', 'e'] }], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 4.4% 最多2回出場N2C形' },
+      { name: 'ダッシュ→N→E→Q のあと N2C 連打（霧切対応）', role: 'attacker', slot: 40, use: ['dash', 'n', 'e', 'q'], fill: ['n', 'n', 'ca'], fillRepeat: [2, 3], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 霧切スタック用ダッシュN始動形' },
+      { name: 'ダッシュ→E→Q（爆発サブ）', role: 'subAttacker', slot: 20, use: ['dash', 'e', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 爆発サブ火力形' },
     ],
   },
   {
@@ -1061,23 +1030,18 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000051-cryo',
     archetypes: [
-      { name: 'E→Q→E→通常5→長押しE→通常2', role: 'attacker', slot: 40, use: ['e', 'q', 'e', 'n', 'n', 'n', 'n', 'n', 'e_hold', 'n', 'n'], evidence: 'Wiki 本文のコンボの記述: スキル短押し→爆発→スキル短押し→通常 5 段→スキル長押し→通常 1〜2 段（探索の比較なし）' },
-      { name: 'E→Q→長押しE→通常4→ダッシュ→通常4', role: 'attacker', slot: 40, use: ['e', 'q', 'e_hold', 'n', 'n', 'n', 'n', 'dash', 'n', 'n', 'n', 'n'], evidence: 'Wiki 本文のコンボの記述: スキル短押し→爆発→スキル長押し→通常 4 段→ステップ→通常 3〜4 段（探索の比較なし）' },
-      { name: 'E→Q→通常4→長押しE→通常4', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'n', 'n', 'e_hold', 'n', 'n', 'n', 'n'], fill: ['n'], fillRepeat: [4, 8], evidence: 'Wiki 本文のコンボの記述: スキル短押し→爆発→通常 4 段→スキル長押し→通常 4 段（そのあと光臨の剣が爆発）（探索の比較なし）' },
-    
+      { name: 'E→Q→N×4→長押しE のあと通常連打（王道光臨の剣）', role: 'attacker', slot: 40, use: ['e', 'q', 'n', 'n', 'n', 'n', 'e_hold'], fill: ['n'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 王道光臨の剣N4→hE→N4形' },
+      { name: '先置きE のあと Q→N×4→長押しE→通常連打', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 40, use: ['q', 'n', 'n', 'n', 'n', 'e_hold'] }], fill: ['n'], fillRepeat: [4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 先置きE冷却稼ぎ光臨の剣形' },
+      { name: 'E→Q→長押しE のあと N4D 連打', role: 'attacker', slot: 40, use: ['e', 'q', 'e_hold'], fill: ['n', 'n', 'n', 'n', 'dash'], fillRepeat: [2], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: N4Dダッシュキャンセル形' },
     ],
   },
   {
     characterId: '10000069-dendro',
     archetypes: [
-      { name: 'E→重撃×3→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], evidence: 'Wiki 本文のコンボの記述: 基本の立ち回りは、スキル→重撃（スキルで 3 発分チャージ短縮）（探索の比較なし）' },
-      { name: 'E・Q（サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 瞬間火力型。スキルと爆発で草付着' },
-    
-      { name: 'E・Q のあと 狙い撃ちを繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで 3 発分の 2 段チャージを短縮 → 狙い撃ち → 爆発の一連で戦う' },
-      { name: 'E→CA→Q→CA×2 のあと、もう一度 E→CA×3', role: 'attacker', slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'], then: [{ slot: 50, use: ['e', 'ca', 'ca', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 8 件。平均 63.2k（最大 79.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→CA→Q→CA×2 のあと、もう一度 E→CA→Q→CA×2', role: 'attacker', slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'], then: [{ slot: 50, use: ['e', 'ca', 'q', 'ca', 'ca'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 5 件。平均 63.1k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 5/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'E→CA×3→Q のあと、もう一度 E→CA×3→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], then: [{ slot: 50, use: ['e', 'ca', 'ca', 'ca', 'q'] }], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の複数回出場の形: ティナリ 85 件中 4 件。平均 55.5k（最大 62.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 4/0/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'e→ca→q→ca×2', role: 'attacker', slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'], evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 30 件・平均 64.3k・最大 237.3k。e ca q ca×2（探索の比較なし）' },
+      { name: 'E→重撃→Q→重撃×2（KQM最多）', role: 'attacker', slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 20.0% 最多CA→Q→CA2形' },
+      { name: 'E→重撃×3→Q', role: 'attacker', slot: 40, use: ['e', 'ca', 'ca', 'ca', 'q'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: CA3→Q締め形' },
+      { name: 'E→重撃→Q→重撃×2（2回出場）', role: 'attacker', slot: 20, use: ['e', 'ca', 'q', 'ca', 'ca'], then: [{ slot: 40, use: ['e', 'ca', 'q', 'ca', 'ca'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 13.8% クイックスワップ2回出場形' },
+      { name: 'E→重撃→Q→重撃×2 のあと E→重撃×3', role: 'attacker', slot: 20, use: ['e', 'ca', 'q', 'ca', 'ca'], then: [{ slot: 40, use: ['e', 'ca', 'ca', 'ca'] }], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 12.5% 2回目爆発省略2回出場形' },
     ],
   },
   {
@@ -1145,12 +1109,10 @@ export const KNOWLEDGE: CharacterKnowledge[] = [
   {
     characterId: '10000106-pyro',
     archetypes: [
-      { name: 'E・Q のあと 通常攻撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['n'], fillRepeat: [8, 10, 12], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 同上（通常攻撃の形）' },
-      { name: 'E・Q のあと 重撃を繰り返す', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4, 5], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 爆発の高い瞬間火力のあと、重撃・双駆輪で攻める' },
-      { name: 'E・Q（サブ）', role: 'subAttacker', slot: 20, use: ['e', 'q'], evidence: 'Wiki 本文の運用の記述から解釈（探索の比較なし）: 控えから自動攻撃する輪で炎下地を作るサブ運用' },
-      { name: 'Q→E（KQM）', role: 'attacker', slot: 40, use: ['q', 'e'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: マーヴィカ 394 件中 19 件。平均 105.6k（最大 468.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 18/1/0/0/0/0/0）（探索の比較なし）' },
-      { name: 'Q→CA→E→DASH（KQM）', role: 'attacker', slot: 40, use: ['q', 'ca', 'e', 'dash'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の単数回の形: マーヴィカ 394 件中 12 件。平均 113.4k（最大 504.6k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 11/0/0/0/0/0/1）（探索の比較なし）' },
-      { name: 'e→n', role: 'subAttacker', slot: 20, use: ['e', 'n'], constellation: { min: 0 }, evidence: 'KQM Sim Database（db.kqm.gg）の行動の形: 63 件・平均 206.1k・最大 1710.1k。e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（63 件。分布 0〜6 凸 = 52/0/1/0/0/0/10）' },
+      { name: '先置きE のあと Q→重撃連打（メイン）', role: 'attacker', slot: 10, use: ['e'], then: [{ slot: 40, use: ['q'] }], fill: ['ca'], fillRepeat: [3, 4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 先置きE→Q重撃メイン形' },
+      { name: 'E→Q のあと重撃連打', role: 'attacker', slot: 40, use: ['e', 'q'], fill: ['ca'], fillRepeat: [3, 4, 5], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: EQ連続重撃メイン形' },
+      { name: 'Q→E（爆発＋控え炎サブ）', role: 'subAttacker', slot: 20, use: ['q', 'e'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 7.6% 最多Q→E控え炎サブ形' },
+      { name: 'Q→CA→E→ダッシュ（瞬間火力サブ）', role: 'subAttacker', slot: 20, use: ['q', 'ca', 'e', 'dash'], evidence: 'Phase 3-2精鋭辞書＋KQM新集計: 4.7% 瞬間火力サブ形' },
     ],
   },
   {

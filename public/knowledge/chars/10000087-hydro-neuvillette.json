@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%8C%E3%83%B4%E3%82%A3%E3%83%AC%E3%83%83%E3%83%88",
  "archetypes": [
   {
-   "name": "E→Q→特殊重撃を繰り返す",
+   "name": "E→Q のあと特殊重撃連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -17,42 +17,44 @@
     3,
     4
    ],
-   "evidence": "Wiki 本文のコンボの記述: ローテーションの 1 つ。スキル + 爆発→特殊重撃 3 回（凸で 4 回）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 基本Q込み特殊重撃ループ"
   },
   {
-   "name": "先頭 N・E と Q のあと 重撃 + 通常攻撃 2 回を繰り返す",
+   "name": "先置きE のあと CA→Q→E→重撃連打",
    "role": "attacker",
-   "slot": 40,
+   "slot": 10,
    "use": [
-    "e",
-    "q"
-   ],
-   "fill": [
-    "ca",
-    "n",
-    "n"
-   ],
-   "fillRepeat": [
-    4,
-    5,
-    6
-   ],
-   "lead": [
-    "n"
-   ],
-   "evidence": "編成例の探索（ヌヴィレット・オロルン・楓原万葉・鍾離）の上位に出る形。実測: 31.1k → 32.9k。時間 239 → 197 秒"
-  },
-  {
-   "name": "E→N のあと、もう一度 CA→Q→E→CA、さらに CA×2",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n"
+    "e"
    ],
    "then": [
     {
-     "slot": 50,
+     "slot": 40,
+     "use": [
+      "ca",
+      "q",
+      "e"
+     ]
+    }
+   ],
+   "fill": [
+    "ca"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 先置きEからの雫回収重撃ループ"
+  },
+  {
+   "name": "E → CA→Q→E→CA → CA×2（雫4重撃）",
+   "role": "attacker",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "then": [
+    {
+     "slot": 30,
      "use": [
       "ca",
       "q",
@@ -61,28 +63,25 @@
      ]
     },
     {
-     "slot": 55,
+     "slot": 40,
      "use": [
       "ca",
       "ca"
      ]
     }
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 17 件。平均 69.5k（最大 92.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 17/0/0/0/0/0/0）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 24.9% 雫4重撃分割形"
   },
   {
-   "name": "E のあと、もう一度 CA→E→CA→Q、さらに CA×2",
+   "name": "E → CA→E→CA→Q → CA×2（KQM最多33%）",
    "role": "attacker",
-   "slot": 40,
+   "slot": 10,
    "use": [
     "e"
    ],
    "then": [
     {
-     "slot": 50,
+     "slot": 30,
      "use": [
       "ca",
       "e",
@@ -91,128 +90,14 @@
      ]
     },
     {
-     "slot": 55,
+     "slot": 40,
      "use": [
       "ca",
       "ca"
      ]
     }
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 105 件。平均 80.9k（最大 104.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 105/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E のあと、もう一度 CA→Q→E→CA、さらに CA×2",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "ca",
-      "q",
-      "e",
-      "ca"
-     ]
-    },
-    {
-     "slot": 55,
-     "use": [
-      "ca",
-      "ca"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 78 件。平均 81.2k（最大 170.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 77/0/1/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "N のあと、もう一度 E→CA→Q→CA、さらに CA→E→CA",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "e",
-      "ca",
-      "q",
-      "ca"
-     ]
-    },
-    {
-     "slot": 55,
-     "use": [
-      "ca",
-      "e",
-      "ca"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ヌヴィレット 380 件中 26 件。平均 55.8k（最大 77.5k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 26/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "ca"
-   ],
-   "fill": [
-    "ca"
-   ],
-   "fillRepeat": [
-    3,
-    5
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 240 件・平均 79.2k・最大 170.8k。ca×2（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（240 件。分布 0〜6 凸 = 238/0/2/0/0/0/0）"
-  },
-  {
-   "name": "ca→q→e→ca",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "q",
-    "e",
-    "ca"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 115 件・平均 82.3k・最大 468.0k。ca q e ca（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（115 件。分布 0〜6 凸 = 112/0/2/0/0/0/1）"
-  },
-  {
-   "name": "ca→e→ca→q",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "ca",
-    "e",
-    "ca",
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 124 件・平均 88.7k・最大 603.2k。ca e ca q（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（124 件。分布 0〜6 凸 = 121/0/0/0/0/0/3）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 33.4% 最多雫4重撃分割形"
   }
  ]
 }

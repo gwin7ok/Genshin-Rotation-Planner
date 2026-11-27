@@ -3,7 +3,35 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AA%E3%83%B3%E3%82%BA",
  "archetypes": [
   {
-   "name": "E→E（特殊）→Q（特殊）のあと 通常 + E + Q",
+   "name": "E→N→E→Q のあと通常＋E→Q ループ",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "e",
+    "q"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "e",
+    "n",
+    "q"
+   ],
+   "fillRepeat": [
+    1,
+    2
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 特殊スキル→特殊爆発月感電ループ"
+  },
+  {
+   "name": "E→E→Q のあと N×4→E→Q ループ",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -23,10 +51,10 @@
     1,
     2
    ],
-   "evidence": "Wiki 本文のコンボの記述: 初動は、スキル→スキル（特殊）→爆発（特殊）。そのあとはスキル→特殊爆発→通常を 2 回繰り返すのが基本（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: シンプル特殊E→Qループ"
   },
   {
-   "name": "Q・E のあと 通常攻撃 2 回 + 重撃を繰り返す",
+   "name": "Q→E のあと N2C 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -40,81 +68,9 @@
    ],
    "fillRepeat": [
     3,
-    4,
-    5
+    4
    ],
-   "evidence": "編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒"
-  },
-  {
-   "name": "e→n→e→n→q→n×3→dash→n×3→e→n→q→n×3→dash→n×3→e→q→n",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n",
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "e",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 6
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 3 件・平均 1080.0k・最大 1463.8k。e n e n q n×3 dash n×3 e n q n×3 dash n×3 e q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（3 件。分布 0〜6 凸 = 0/0/0/0/0/0/3）"
-  },
-  {
-   "name": "e→n→e→n→q→n×4→dash→n×4→dash→n×2→e→n→q→n×4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n",
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "n",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 4 件・平均 119.5k・最大 149.0k。e n e n q n×4 dash n×4 dash n×2 e n q n×4（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（4 件。分布 0〜6 凸 = 4/0/0/0/0/0/0）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q始動N2C連打形"
   }
  ]
 }

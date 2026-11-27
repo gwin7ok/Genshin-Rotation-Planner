@@ -3,26 +3,82 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%A2%E3%83%AB%E3%83%8F%E3%82%A4%E3%82%BC%E3%83%B3",
  "archetypes": [
   {
-   "name": "E→落下→Q",
+   "name": "Q のあと N3D 連打（鏡3枚スタート）",
    "role": "attacker",
    "slot": 40,
    "use": [
-    "e",
-    "hp",
     "q"
    ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "n",
+    "dash"
    ],
    "fillRepeat": [
-    8,
-    10,
-    12
+    3,
+    4,
+    5
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキルのあと落下攻撃を当てると、鏡 3 枚と光幕攻撃が出る（スキル始動のコンボ）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q鏡3枚N3D連打形"
   },
   {
-   "name": "Q→E→重撃（鏡の補充）",
+   "name": "Q→N3D のあと、もう一度 長押しE→落下→N3D（分割運用）",
+   "role": "attacker",
+   "slot": 20,
+   "use": [
+    "q",
+    "n",
+    "n",
+    "n",
+    "dash",
+    "n",
+    "n",
+    "n"
+   ],
+   "then": [
+    {
+     "slot": 40,
+     "use": [
+      "e_hold",
+      "lp"
+     ]
+    }
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    2,
+    3
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q始動→途中再出場の分割鏡維持形"
+  },
+  {
+   "name": "長押しE→落下 のあと N3D 連打",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e_hold",
+    "lp"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略長押しE落下N3D形"
+  },
+  {
+   "name": "Q→E→重撃 のあと N3D 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -31,189 +87,16 @@
     "ca"
    ],
    "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    8,
-    10,
-    12
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発で鏡 3 枚→スキルで補充→重撃で補充（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと 通常攻撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "fill": [
-    "n"
-   ],
-   "fillRepeat": [
-    12,
-    18
-   ],
-   "evidence": "編成例の探索（アルハイゼン・久岐忍・鍾離・ナヒーダ）の上位に出る形。実測: 最短の設定で 41.2k → 40.2k ±2.9（誤差）"
-  },
-  {
-   "name": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×4",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "lp",
     "n",
     "n",
     "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "q"
-     ]
-    },
-    {
-     "slot": 55,
-     "use": [
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "ca",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 8 件。平均 57.0k（最大 65.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 8/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E_HOLD→LP→N×3→DASH→N×3→DASH→N×3 のあと、もう一度 Q、さらに N×3→DASH→N×3→CA→N×3→DASH→N×3→DASH→N×3",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "lp",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "q"
-     ]
-    },
-    {
-     "slot": 55,
-     "use": [
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "ca",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n",
-      "dash",
-      "n",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: アルハイゼン 175 件中 7 件。平均 53.4k（最大 66.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "e_hold→lp→n×2→ca→dash→n×3→ca→dash",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "lp",
-    "n",
-    "n",
-    "ca",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "ca",
     "dash"
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 72.5k・最大 94.9k。e_hold lp n×2 ca dash n×3 ca dash（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（15 件。分布 0〜6 凸 = 15/0/0/0/0/0/0）"
-  },
-  {
-   "name": "e_hold→lp→n×3→dash→n×3→dash→n×3",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e_hold",
-    "lp",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n"
+   "fillRepeat": [
+    3,
+    4
    ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 25 件・平均 58.1k・最大 78.9k。e_hold lp n×3 dash n×3 dash n×3（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（25 件。分布 0〜6 凸 = 25/0/0/0/0/0/0）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 鏡補充N3D連打形"
   }
  ]
 }

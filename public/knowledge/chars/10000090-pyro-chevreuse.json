@@ -3,67 +3,38 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B7%E3%83%A5%E3%83%B4%E3%83%AB%E3%83%BC%E3%82%BA",
  "archetypes": [
   {
-   "name": "e_hold の出場",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e_hold"
-   ],
-   "evidence": "自動編成（シュヴルーズ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.8k → 43.6k"
-  },
-  {
-   "name": "Q→E_HOLD×2（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e_hold",
-    "e_hold"
-   ],
-   "constellation": {
-    "min": 4
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 17 件。平均 63.9k（最大 92.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/17）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E_HOLD（KQM）",
+   "name": "Q→長押しE（過負荷バフ定番）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "q",
     "e_hold"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 38 件。平均 88.2k（最大 774.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/38）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 19.0% 過負荷起爆→長押しE攻撃バフ定番形"
   },
   {
-   "name": "E_HOLD→Q（KQM）",
+   "name": "長押しE→Q",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e_hold",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 27 件。平均 86.1k（最大 124.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/27）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 12.8% 長押しE先行形"
   },
   {
-   "name": "Q→E_HOLD→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e_hold",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: シュヴルーズ 437 件中 23 件。平均 63.7k（最大 96.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 1/0/0/0/0/0/22）（探索の比較なし）"
-  },
-  {
-   "name": "q→e_hold×3",
+   "name": "長押しE だけ",
    "role": "supporter",
    "slot": 20,
+   "use": [
+    "e_hold"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短バフ形"
+  },
+  {
+   "name": "Q→長押しE×3（4凸CTリセット）",
+   "role": "supporter",
+   "slot": 10,
    "use": [
     "q",
     "e_hold",
@@ -73,7 +44,7 @@
    "constellation": {
     "min": 4
    },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 53 件・平均 85.6k・最大 787.5k。q e_hold×3（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（53 件。分布 0〜6 凸 = 0/0/0/0/0/0/53）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 21.3% 最多4凸E3連発形"
   }
  ]
 }

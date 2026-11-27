@@ -3,33 +3,55 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B9",
  "archetypes": [
   {
-   "name": "n→e→dash",
-   "role": "subAttacker",
-   "slot": 30,
+   "name": "E→ダッシュ→Q（翠緑＋熟知バフ）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "dash",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 6.0% 最多翠緑＋熟知バフ形"
+  },
+  {
+   "name": "E→ダッシュ（時短拡散）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e",
+    "dash"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短拡散形"
+  },
+  {
+   "name": "N→E→ダッシュ（拡散トリガー）",
+   "role": "supporter",
+   "slot": 20,
    "use": [
     "n",
     "e",
     "dash"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 23 件・平均 84.8k・最大 217.3k。n e dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（23 件。分布 0〜6 凸 = 0/0/0/0/0/0/23）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 通常付着からの翠緑拡散形"
   },
   {
-   "name": "E・通常攻撃・重撃",
-   "role": "subAttacker",
-   "slot": 30,
+   "name": "E→Q のあと N2C 連打（ドライバー）",
+   "role": "attacker",
+   "slot": 40,
    "use": [
     "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "ca",
-    "n",
+    "q"
+   ],
+   "fill": [
     "n",
     "n",
     "ca"
    ],
-   "evidence": "編成例の探索（フリンズ・イネファ・コロンビーナ・スクロース）の上位に出る形。実測: 最短の設定で 128.4k → 131.4k ±4.1。時間 106 → 87 秒"
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 感電/開花ドライバー形"
   }
  ]
 }

@@ -3,81 +3,57 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%A4%9C%E8%98%AD",
  "archetypes": [
   {
-   "name": "E と Q",
+   "name": "E→Q→N",
    "role": "supporter",
-   "slot": 30,
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 9.5% E粒子受け取りQ→N定番形"
+  },
+  {
+   "name": "Q→N→E→N（爆発先行）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行擲骰トリガーE→N形"
+  },
+  {
+   "name": "E→打破重撃→Q→N",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "ca",
+    "q",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 9.9% 最多打破重撃込み形"
+  },
+  {
+   "name": "E→Q のあと、もう一度 E",
+   "role": "supporter",
+   "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
-  },
-  {
-   "name": "E",
-   "role": "subAttacker",
-   "slot": 25,
-   "use": [
-    "e"
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
    ],
-   "evidence": "編成例の探索（アルレッキーノ・Overvape 編成）の上位に出る形。実測: 軽い設定で 93.1k → 95.2k、326 秒 → 172 秒"
-  },
-  {
-   "name": "E→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 80 件。平均 65.5k（最大 143.8k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 80/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 夜蘭 919 件中 65 件。平均 71.5k（最大 112.9k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 65/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "n→e→n",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "n",
-    "e",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 96 件・平均 71.4k・最大 484.7k。n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（96 件。分布 0〜6 凸 = 94/0/0/0/1/0/1）"
-  },
-  {
-   "name": "q→n→e→n",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q",
-    "n",
-    "e",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 109 件・平均 68.4k・最大 353.2k。q n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（109 件。分布 0〜6 凸 = 108/0/0/0/1/0/0）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 祭礼/2回出場E粒子回収形"
   }
  ]
 }

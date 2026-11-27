@@ -357,6 +357,7 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcs
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-pilot-audit.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-pilot-materials.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase3-pilot-result.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/phase4-final-audit.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/gcsim-integration/phase-9-auto-rotation-search/plan.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/phase-9-auto-rotation-search/\345\244\226\351\203\250\343\203\255\343\203\274\343\203\206\343\203\274\343\202\267\343\203\247\343\203\263\350\252\277\346\237\273.md"
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gcsim-integration/phase-9-auto-rotation-search/\345\275\271\345\211\262\343\201\256\344\270\213\346\233\270\343\201\215.md"
@@ -371,10 +372,12 @@ https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/"docs/gc
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/README.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/auto-search-heuristics-spec.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-gimmicks-system.md
-https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-mechanics-batch2.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/character-mechanics.json
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/combat-system.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/enemy-and-envir docs/genshin-mechanics/enemy-and-environment-rules.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/gcsim-quirks.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/team-archetypes.md
+https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/team-synergy-and-stats.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/genshin-mechanics/weapons-artifacts-rules.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/hoyolab-import/design.md
 https://raw.githubusercontent.com/gwin7ok/Genshin-Rotation-Planner/main/docs/hoyolab-import/phase-x1-record-teams/plan.md

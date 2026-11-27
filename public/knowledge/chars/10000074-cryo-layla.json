@@ -3,80 +3,35 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AC%E3%82%A4%E3%83%A9",
  "archetypes": [
   {
-   "name": "e q の出場",
+   "name": "Q→E（星光飛星連動・KQM 24%）",
    "role": "supporter",
-   "slot": 30,
+   "slot": 10,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 24% Q先行飛星＋シールド形"
+  },
+  {
+   "name": "Q→N→E（西風粒子・KQM最多31%）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "q",
+    "n",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 31% 最多西風粒子トリガー込み形"
+  },
+  {
+   "name": "E→Q（シールド先張り）",
+   "role": "supporter",
+   "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "自動編成（レイラ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 38.8k → 38.8k"
-  },
-  {
-   "name": "Q→N→E→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "n",
-    "e",
-    "n"
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レイラ 117 件中 9 件。平均 65.9k（最大 94.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レイラ 117 件中 5 件。平均 60.5k（最大 76.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E のあと、もう一度 Q→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "q",
-      "e"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: レイラ 117 件中 4 件。平均 47.1k（最大 66.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レイラ 117 件中 26 件。平均 53.5k（最大 113.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/26）（探索の比較なし）"
-  },
-  {
-   "name": "q→n→e",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q",
-    "n",
-    "e"
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 36 件・平均 66.6k・最大 116.4k。q n e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（36 件。分布 0〜6 凸 = 0/0/0/0/0/0/36）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Eシールド先張り→Q形"
   }
  ]
 }

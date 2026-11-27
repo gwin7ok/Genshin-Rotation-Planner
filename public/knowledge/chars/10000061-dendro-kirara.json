@@ -3,88 +3,51 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E7%B6%BA%E8%89%AF%E3%80%85",
  "archetypes": [
   {
-   "name": "長押しE→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold",
-    "e"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: スキル長押し→再発動で、印を 2 つ得られる（探索の比較なし）"
-  },
-  {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "自動編成（綺良々 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 40.4k → 41.2k"
-  },
-  {
-   "name": "E_HOLD→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 綺良々 118 件中 5 件。平均 57.8k（最大 67.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E_HOLD のあと、もう一度 E_HOLD",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e_hold"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e_hold"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 綺良々 118 件中 8 件。平均 76.6k（最大 105.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/8）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E→N",
+   "name": "E→Q（短押しシールド＋草付着・KQM最多13%）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 綺良々 118 件中 7 件。平均 62.8k（最大 68.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 13% 最多短押しE→Q形"
   },
   {
-   "name": "Q→E_HOLD のあと、もう一度 E_HOLD",
+   "name": "長押しE→Q（強化シールド）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e_hold",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 長押し強化シールド＋Q形"
+  },
+  {
+   "name": "Q→E のあと、もう一度 E（2回出場・KQM 11%）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "q",
-    "e_hold"
+    "e"
    ],
    "then": [
     {
      "slot": 30,
      "use": [
-      "e_hold"
+      "e"
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 綺良々 118 件中 12 件。平均 53.4k（最大 66.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/12）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 11% 祭礼/2回出場Eシールド更新形"
+  },
+  {
+   "name": "E だけ（時短シールド）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短シールド形"
   }
  ]
 }

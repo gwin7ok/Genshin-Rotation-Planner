@@ -3,113 +3,41 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B8%E3%83%B3",
  "archetypes": [
   {
-   "name": "E→Q",
+   "name": "E→Q（翠緑拡散＋全体回復）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "Wiki 本文のコンボの記述: 他キャラのスキル→ジンに交代して受け取り→スキル→爆発（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 基本翠緑拡散＋全体回復形"
   },
   {
-   "name": "E だけ",
+   "name": "E→Q のあと、もう一度 E（粒子・拡散2回）",
    "role": "supporter",
    "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子・拡散更新形"
+  },
+  {
+   "name": "E だけ（時短拡散）",
+   "role": "supporter",
+   "slot": 20,
    "use": [
     "e"
    ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E→N",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 9 件。平均 56.1k（最大 81.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 9/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 7 件。平均 47.6k（最大 53.0k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 7/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 N→E",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "n",
-      "e"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 6 件。平均 53.6k（最大 77.7k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E→N×2",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ジン 117 件中 6 件。平均 52.1k（最大 67.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 6/0/0/0/0/0/0）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 爆発省略時短翠緑拡散形"
   }
  ]
 }

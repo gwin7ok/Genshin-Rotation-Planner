@@ -3,7 +3,30 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AC%E3%82%B6%E3%83%BC",
  "archetypes": [
   {
-   "name": "長押しE→Q→E",
+   "name": "E→ダッシュ→Q→E のあと N3D 連打（KQM王道）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "dash",
+    "q",
+    "e",
+    "dash"
+   ],
+   "fill": [
+    "n",
+    "n",
+    "n",
+    "dash"
+   ],
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 雷印E→QリセットE→N3D連打形"
+  },
+  {
+   "name": "長押しE→Q→E のあと N3D 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -12,17 +35,19 @@
     "e"
    ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "n",
+    "dash"
    ],
    "fillRepeat": [
-    8,
-    10,
-    12
+    3,
+    4
    ],
-   "evidence": "Wiki 本文のコンボの記述: 雷の印を消費（長押しスキル）→爆発→スキルというコンボ（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 長押しE始動N3D連打形"
   },
   {
-   "name": "E・Q のあと 通常攻撃を繰り返す",
+   "name": "E→Q のあと通常連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -33,13 +58,13 @@
     "n"
    ],
    "fillRepeat": [
-    14,
-    18
+    12,
+    16
    ],
-   "evidence": "自動編成（レザー + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 35.7k → 38.3k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: ダッシュ省略通常連打形"
   },
   {
-   "name": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3（KQM）",
+   "name": "E→ダッシュ→N→Q→E→ダッシュ（クイック型・KQM最多17%）",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -47,70 +72,14 @@
     "dash",
     "n",
     "q",
-    "n",
     "e",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "e",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n"
+    "dash"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レザー 149 件中 5 件。平均 90.1k（最大 112.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→DASH→N→Q→N→E→DASH→N×3→DASH→N×3→DASH→N×3→E→DASH→N×3→DASH→N×3→DASH→N×3（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
+   "lead": [
     "e",
-    "dash",
-    "n",
-    "q",
-    "n",
-    "e",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "e",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "n"
+    "dash"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: レザー 149 件中 5 件。平均 68.7k（最大 82.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 17% 最多超開花/過負荷クイック型"
   }
  ]
 }

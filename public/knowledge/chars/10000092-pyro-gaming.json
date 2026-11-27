@@ -3,7 +3,25 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%98%89%E6%98%8E",
  "archetypes": [
   {
-   "name": "E・落下・Q のあと E + 落下を繰り返す",
+   "name": "Q のあと E→高い落下 連打（KQM最多16%）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "q"
+   ],
+   "fill": [
+    "e",
+    "hp"
+   ],
+   "fillRepeat": [
+    3,
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 16% 最多Q→E高い落下連打形"
+  },
+  {
+   "name": "E→高い落下→Q のあと E→高い落下 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -16,109 +34,48 @@
     "hp"
    ],
    "fillRepeat": [
-    2,
-    3
+    3,
+    4
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: 特殊落下攻撃を連発する形"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E落下先出し→Q連打形"
   },
   {
-   "name": "E・落下・Q のあと 通常攻撃を繰り返す",
+   "name": "Q→N×2 のあと E→低い落下 連打（最速落下）",
    "role": "attacker",
    "slot": 40,
    "use": [
-    "e",
-    "hp",
-    "q"
-   ],
-   "fill": [
+    "q",
+    "n",
     "n"
    ],
-   "fillRepeat": [
-    6,
-    8,
-    10
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（探索の比較なし）: スキルで跳んでの特殊落下攻撃が主力。爆発は補助"
-  },
-  {
-   "name": "Q→E→HP（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e",
-    "hp"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 9 件。平均 94.5k（最大 110.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E→HP→E→HP→DASH（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "e",
-    "hp",
-    "e",
-    "hp",
-    "dash"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 6 件。平均 87.4k（最大 101.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N×2→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP→E→LP（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n",
-    "n",
-    "e",
-    "lp",
-    "e",
-    "lp",
-    "e",
-    "lp",
-    "e",
-    "lp",
-    "e",
-    "lp",
-    "e",
-    "lp",
+   "fill": [
     "e",
     "lp"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 嘉明 113 件中 10 件。平均 73.1k（最大 92.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
-  },
-  {
-   "name": "q→n×2→e→hp→n→e→hp→dash",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n",
-    "n",
-    "e",
-    "hp",
-    "n",
-    "e",
-    "hp",
-    "dash"
+   "fillRepeat": [
+    4,
+    5,
+    6
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 66.6k・最大 79.3k。q n×2 e hp n e hp dash（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（17 件。分布 0〜6 凸 = 0/0/0/0/0/0/17）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 低空落下連打高速形"
   },
   {
-   "name": "q→e→hp→e→hp",
+   "name": "Q のあと N→E→高い落下 連打（追撃連動）",
    "role": "attacker",
    "slot": 40,
    "use": [
-    "q",
-    "e",
-    "hp",
+    "q"
+   ],
+   "fill": [
+    "n",
     "e",
     "hp"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 15 件・平均 85.0k・最大 103.6k。q e hp e hp（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（15 件。分布 0〜6 凸 = 0/0/0/0/0/0/15）"
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 行秋/夜蘭等追撃連動N1→E落下形"
   }
  ]
 }

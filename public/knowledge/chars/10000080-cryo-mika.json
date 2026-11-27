@@ -3,71 +3,38 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%9F%E3%82%AB",
  "archetypes": [
   {
-   "name": "長押し E",
+   "name": "Q→E（攻撃速度＋全体回復）",
    "role": "supporter",
    "slot": 20,
    "use": [
-    "e_hold"
-   ],
-   "evidence": "編成例の探索（宵宮・雲菫・ミカ・ジン）の上位に出る形。実測: 24.2k → 23.5k（誤差）。時間 134 → 96 秒"
-  },
-  {
-   "name": "N→Q→E（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "n",
     "q",
     "e"
    ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 4 件。平均 85.1k（最大 112.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 全体回復＋速度バフ基本形"
   },
   {
-   "name": "Q→N→E→N（KQM）",
+   "name": "Q→N→E（西風粒子・KQM最多24%）",
    "role": "supporter",
-   "slot": 10,
+   "slot": 20,
    "use": [
     "q",
     "n",
-    "e",
-    "n"
+    "e"
    ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 3 件。平均 50.9k（最大 58.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 最多西風粒子トリガー込み形"
   },
   {
-   "name": "E→N→Q（KQM）",
+   "name": "長押しE→Q（対複数物理バフ）",
    "role": "supporter",
-   "slot": 10,
+   "slot": 20,
    "use": [
-    "e",
-    "n",
+    "e_hold",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 3 件。平均 36.4k（最大 50.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 偵明スタック稼ぎ長押しE形"
   },
   {
-   "name": "Q のあと、もう一度 E→N",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ミカ 84 件中 5 件。平均 52.7k（最大 61.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと、もう一度 N→E",
+   "name": "Q のあと、もう一度 E（2回出場）",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -77,38 +44,11 @@
     {
      "slot": 30,
      "use": [
-      "n",
       "e"
      ]
     }
    ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: ミカ 84 件中 4 件。平均 50.1k（最大 56.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "constellation": {
-    "min": 1
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ミカ 84 件中 12 件。平均 59.7k（最大 156.0k）。凸数: 使われている設定の最小は 1 凸（分布 0〜6 凸 = 0/1/0/0/0/0/11）（探索の比較なし）"
-  },
-  {
-   "name": "q→n→e",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "q",
-    "n",
-    "e"
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 16 件・平均 54.8k・最大 98.5k。q n e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（16 件。分布 0〜6 凸 = 0/0/0/0/0/0/16）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子回収形"
   }
  ]
 }

@@ -3,23 +3,43 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%A2%E3%83%8A",
  "archetypes": [
   {
-   "name": "Q→通常",
-   "role": "attacker",
-   "slot": 40,
+   "name": "E→Q（星異バフ・KQM最多15%）",
+   "role": "supporter",
+   "slot": 30,
    "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 最多E水付着＋星異バフ形"
+  },
+  {
+   "name": "Q→E（爆発先行）",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "q",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行星異展開形"
+  },
+  {
+   "name": "E→Q→N（水付着・西風）",
+   "role": "supporter",
+   "slot": 30,
+   "use": [
+    "e",
     "q",
     "n"
    ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発の 5 秒以内に通常攻撃が当たると、確定で重撃が追加発動する（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 西風/水付着N追加形"
   },
   {
-   "name": "E→通常→重撃（層を 3 つ）",
+   "name": "E→Q のあと N2C 連打（ドライバー）",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "n",
-    "ca"
+    "q"
    ],
    "fill": [
     "n",
@@ -30,115 +50,7 @@
     2,
     3
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→通常→重撃で 3 層たまる（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと 重撃を繰り返す",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q"
-   ],
-   "fill": [
-    "ca"
-   ],
-   "fillRepeat": [
-    4,
-    5,
-    6
-   ],
-   "evidence": "自動編成（モナ + ベネット・鍾離・フリーナ）の探索の上位に出る形。実測（最短の設定）: 25.4k → 26.7k"
-  },
-  {
-   "name": "E→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: モナ 216 件中 30 件。平均 75.0k（最大 151.4k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 29/0/0/0/0/0/1）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "e"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: モナ 216 件中 11 件。平均 52.7k（最大 107.3k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 11/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "N→E→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "n",
-    "e",
-    "q"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: モナ 216 件中 10 件。平均 46.6k（最大 67.1k）。凸数: 使われている設定の最小は 0 凸（分布 0〜6 凸 = 10/0/0/0/0/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N のあと、もう一度 N→E→N",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "q",
-    "n"
-   ],
-   "then": [
-    {
-     "slot": 50,
-     "use": [
-      "n",
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "constellation": {
-    "min": 4
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: モナ 216 件中 13 件。平均 100.5k（最大 151.3k）。凸数: 使われている設定の最小は 4 凸（分布 0〜6 凸 = 0/0/0/0/13/0/0）（探索の比較なし）"
-  },
-  {
-   "name": "e→q→n",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 19 件・平均 106.8k・最大 249.1k。e q n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（19 件。分布 0〜6 凸 = 1/0/5/0/13/0/0）"
-  },
-  {
-   "name": "n→e→n",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "n",
-    "e",
-    "n"
-   ],
-   "constellation": {
-    "min": 0
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 26 件・平均 99.2k・最大 151.3k。n e n（探索の比較なし）。凸数: 使われている設定の最小は 0 凸（26 件。分布 0〜6 凸 = 1/0/0/0/25/0/0）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 法器ドライバーN2C連打形"
   }
  ]
 }

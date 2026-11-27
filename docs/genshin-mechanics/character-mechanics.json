@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "description": "ローテーション自動探索・辞書設計用のキャラ別技術仕様DB（パイロット20＋バッチA 20＝主要40キャラ。Phase 3-2 バッチB/Cで全キャラへ拡張）",
+    "description": "ローテーション自動探索・辞書設計用のキャラ別技術仕様DB（パイロット20＋バッチA 20＋バッチB 21＝主要61キャラ。Phase 3-2 バッチCで全キャラへ拡張）",
     "characters": [
         {
             "id": "10000052-electro",
@@ -641,6 +641,364 @@
             "constellationBreakpoints": {
                 "1": "E使用回数+1（E×2 が可能）"
             }
+        },
+        {
+            "id": "10000024-electro",
+            "name": "北斗",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "Eで雷2個（ジャストガード/最大蓄積で雷4個）",
+            "normalAttackTrigger": "Qの閃雷は通常・重撃の命中時に発動（CT1秒。Luna VIII魔導強化時は重撃も含む）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80と重いため、フィッシュル等との雷共鳴や2回出場Eでの粒子回収が有効",
+            "comboNote": "雷電Qの抜刀は爆発ダメ扱いのため閃雷が発動しない点に注意",
+            "constellationBreakpoints": {
+                "2": "閃雷が敵2体追加跳躍（対複数火力大幅上昇）",
+                "6": "Q発動中、周囲の敵の雷耐性-15%"
+            }
+        },
+        {
+            "id": "10000041-hydro",
+            "name": "モナ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの破裂時に水3〜4個（遅延発生）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60＋突破ステがチャージ効率のため龍殺し装備時は特にER確保が重要",
+            "comboNote": "凍結編成では凍結中の泡影延長により星異バフが実質約13秒持続する",
+            "constellationBreakpoints": {
+                "1": "星異状態の敵への水関連反応ダメージ+15%（凍結延長は挙動注意）",
+                "4": "星異状態の敵への会心率+15%"
+            }
+        },
+        {
+            "id": "10000080-cryo",
+            "name": "ミカ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷4個",
+            "normalAttackTrigger": "なし（西風長槍装備時はQ→N→E等で会心粒子を誘発）",
+            "earlyPriming": null,
+            "energyNote": "Q消費70。固有天賦・西風長槍で物理アタッカーへ粒子供給",
+            "comboNote": "Eの攻撃速度バフは交代後も継続。対複数では長押しEの照準命中で物理バフ層数を稼ぐ",
+            "constellationBreakpoints": {
+                "6": "物理会心ダメージ+60%＆偵明上限+1層"
+            }
+        },
+        {
+            "id": "10000079-pyro",
+            "name": "ディシア",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの領域追撃（2.5秒毎）で炎1個",
+            "normalAttackTrigger": "なし（Q中の連打は自動パンチ加速用の特殊入力）",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "サポーター時は初動Eで中断耐性＋炎領域を設置。爆発型も先置きE→後半Q連打→末尾E再設置が王道"
+            },
+            "energyNote": "爆発アタッカー運用時はQ消費70が重いためベネット等の炎バッテリーが必須",
+            "comboNote": "Qの自動連打はジャンプでキャンセルすると最終蹴りが不発になるため注意",
+            "constellationBreakpoints": {
+                "1": "HP上限+20%＆E/QのHP参照倍率大幅強化",
+                "2": "E再設置時の持続+6秒（実質常時維持可能）"
+            }
+        },
+        {
+            "id": "10000105-electro",
+            "name": "オロルン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷3個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。控えから感電・夜魂バーストトリガーで自動追撃し絵巻4を発動可能",
+            "comboNote": "基本はE→QまたはQ→Eの短時間出場で十分",
+            "constellationBreakpoints": {
+                "6": "固有天賦追撃で攻撃力+10%×最大3層バフ"
+            }
+        },
+        {
+            "id": "10000067-dendro",
+            "name": "コレイ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで草3個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。祭礼の弓を持たせて2回出場でEを撃つと粒子と草付着が安定",
+            "comboNote": "ブーメラン戻りにも草付着があり、固有天賦でキャラ周囲に草ダメ領域を展開する",
+            "constellationBreakpoints": {
+                "2": "新葉状態がブーメラン発射時点で即時発動＆延長可能",
+                "4": "Q発動時、チーム全員の熟知+60"
+            }
+        },
+        {
+            "id": "10000068-electro",
+            "name": "ドリー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで雷2個",
+            "normalAttackTrigger": "なし（完凸時はE後の通常攻撃に雷付与されドライバー運用が可能）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80だが固有天賦でE発動時に自身のエネルギーを回復。ランプ接続キャラへ持続エネルギー供給",
+            "comboNote": "基本はE→Qのサポート運用。完凸激化ドライバー時のみQ→E→N2D連打",
+            "constellationBreakpoints": {
+                "4": "ランプ接続キャラの受ける治療効果+50%・元チャ+30%",
+                "6": "E発動後3秒間、通常攻撃が雷付与＆全体回復"
+            }
+        },
+        {
+            "id": "10000072-hydro",
+            "name": "キャンディス",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで水2個 / hEで水3個",
+            "normalAttackTrigger": "なし（西風長槍装備時はE→N→Q→Nで粒子を稼ぐ）",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。1凸でQ持続9秒→12秒に延長され快適度が大幅に上がる",
+            "comboNote": "近接キャラへ水付与＋通常元素ダメバフ。交代時に水衝撃波を発生させる",
+            "constellationBreakpoints": {
+                "1": "Qの赤冠の祝福持続+3秒（12秒）",
+                "6": "完凸で出場キャラ通常攻撃に連動した水範囲追撃を追加"
+            }
+        },
+        {
+            "id": "10000092-pyro",
+            "name": "嘉明",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの落下攻撃命中ごとに炎2個（CT3秒）",
+            "normalAttackTrigger": "なし（行秋・夜蘭編成ではE前のN1で追撃を発動させる）",
+            "earlyPriming": null,
+            "energyNote": "Q消費60、ウェンツァイ回収でEのCTがリセットされるため粒子生成量が多い",
+            "comboNote": "Q後のE→高い落下(または最速低い落下)の繰り返しが主力。待機中のウェンツァイ合流待ちに注意",
+            "constellationBreakpoints": {
+                "4": "Eの落下攻撃命中時、自身のエネルギー2回復",
+                "6": "E落下攻撃の会心率+20%、会心ダメ+40%、攻撃範囲拡大"
+            }
+        },
+        {
+            "id": "10000003-anemo",
+            "name": "ジン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで風2〜3個（CT6秒）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80だが固有天賦でQ後16回復（実質64）。短CTのEを2回挟むと回収が楽",
+            "comboNote": "サンファイア（ベネットQ＋ジンQの自キャラ炎拡散）やフリーナ編成の全体即時回復役として優秀",
+            "constellationBreakpoints": {
+                "2": "元素オーブ/粒子獲得でチーム全員の攻撃速度・移動速度+15%",
+                "4": "Qエリア内の敵の風耐性-40%"
+            }
+        },
+        {
+            "id": "10000085-cryo",
+            "name": "フレミネ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E初段で氷2個（Q中はEのCTが短縮）",
+            "normalAttackTrigger": "なし（N×2でペールタイマー圧力ランク4を稼いでEで起爆）",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。Q中は圧力ランク上昇量が2倍になりN2→Eループが高速化する",
+            "comboNote": "物理主力はN2→E、氷/高圧交互はN2→E×2ループを使い分ける",
+            "constellationBreakpoints": {
+                "1": "高圧粉砕の会心率+15%",
+                "6": "氷砕き/超電導/凍結発生で会心ダメ+12%×最大3層"
+            }
+        },
+        {
+            "id": "10000006-electro",
+            "name": "リサ",
+            "snapshot": {
+                "e": false,
+                "q": true
+            },
+            "particles": "tEは粒子0 / hEで雷5個（敵に命中時）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80と重く、tEでは粒子が出ないためhEまたは龍殺し・西風サポートが重要",
+            "comboNote": "固有天賦でQ命中敵の防御力-15%（10秒）。時短ではQだけ撃って交代する形も強い",
+            "constellationBreakpoints": {
+                "4": "Qの落雷本数が1〜3本に増加（対複数時）",
+                "6": "出場時に周囲の敵へ誘雷3層を即座に付与（即hEが可能）"
+            }
+        },
+        {
+            "id": "10000038-geo",
+            "name": "アルベド",
+            "snapshot": {
+                "e": true,
+                "q": false
+            },
+            "particles": "Eの刹那の花（2秒毎）命中時に67%確率で岩1個",
+            "normalAttackTrigger": "なし（KQMではN→Eの形が多い）",
+            "earlyPriming": {
+                "action": "e",
+                "reason": "持続30秒/CT4秒。初動Eで岩追撃＋粒子生成を早期開始できる"
+            },
+            "energyNote": "Q消費40と軽いが、防御型ビルドでは火力寄与が小さいため熟知+125バフが不要ならEだけ運用が速い",
+            "comboNote": "Eの刹那の花は設置時の防御力をスナップショットする",
+            "constellationBreakpoints": {
+                "2": "Qに防御力参照ダメージ追加",
+                "4": "陽華エリア内の落下攻撃ダメ+30%"
+            }
+        },
+        {
+            "id": "10000050-pyro",
+            "name": "トーマ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで炎3〜4個",
+            "normalAttackTrigger": "Qの熾炎崩破は出場キャラの通常攻撃モーションで発動（CT1秒）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80と非常に重いため、4凸（Q後15回復）や喜多院・西風＋高いERが重要",
+            "comboNote": "烈開花トリガーや放浪者/リオセスリ等のシールド＋炎共鳴要員として運用",
+            "constellationBreakpoints": {
+                "4": "Q発動時、自身のエネルギー15回復",
+                "6": "シールド獲得/更新時、チーム全員の通常・重撃・落下ダメ+15%"
+            }
+        },
+        {
+            "id": "10000061-dendro",
+            "name": "綺良々",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで草3個 / hEで最大4個",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費60。祭礼の剣を持たせてQ→E後にもう一度Eを撃つとシールド耐久と粒子が安定",
+            "comboNote": "基本はtE→Qの時短シールド＋草付着。4凸でシールド中の通常/重撃/落下に連動草追撃が付く",
+            "constellationBreakpoints": {
+                "4": "シールド中の味方通常・重撃・落下に連動して草範囲追撃（CT3.8秒）",
+                "6": "E/Q発動後15秒間、全元素ダメバフ+12%"
+            }
+        },
+        {
+            "id": "10000074-cryo",
+            "name": "レイラ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの飛星が敵に命中するたびに33%〜50%程度で氷1〜2個（合計約3〜4個）",
+            "normalAttackTrigger": "なし（西風剣装備時はQ→N→Eで粒子を誘発）",
+            "earlyPriming": null,
+            "energyNote": "Q消費40と軽く回転しやすい。E中のスキル発動でも飛星の星光が溜まる",
+            "comboNote": "Qは星光蓄積を加速するためQ→EまたはQ→N→Eの順が定番",
+            "constellationBreakpoints": {
+                "4": "飛星発射時、HP上限5%分の通常・重撃ダメ加算バフ",
+                "6": "E/Qダメージ+40%＆飛星生成間隔-20%"
+            }
+        },
+        {
+            "id": "10000020-electro",
+            "name": "レザー",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "tEで雷3個（hEは粒子なし）",
+            "normalAttackTrigger": "Qの雷狼は通常攻撃の振りに連動して追加雷ダメージ",
+            "earlyPriming": null,
+            "energyNote": "QでtEのCTがリセットされるため、E→Q→Eで一気に粒子とエネルギーを回収可能",
+            "comboNote": "物理主力はE→D→Q→E→N3D連打。ベネット6凸超開花/過負荷型ではE→D→N→Q→E→D等のクイック形もある",
+            "constellationBreakpoints": {
+                "4": "tE命中敵の防御力-15%（7秒）",
+                "6": "通常攻撃とは別に10秒毎の雷追撃＋雷印獲得"
+            }
+        },
+        {
+            "id": "10000016-pyro",
+            "name": "ディルック",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "E各段で炎1〜2個（3段合計約4個）",
+            "normalAttackTrigger": "Q後の炎付与通常攻撃とEを交互に挟む（N→E）×3が基本",
+            "earlyPriming": null,
+            "energyNote": "Q消費40と非常に軽く、E3段と合わせてエネルギーに困りにくい",
+            "comboNote": "通常編成ではQ→(N→E)×3、閑雲編成ではQ→ジャンプ高い落下連打が高い倍率を発揮",
+            "constellationBreakpoints": {
+                "2": "被弾時攻撃力+10%・攻撃速度+5%×3層",
+                "6": "E発動後、通常攻撃2回の速度+30%・ダメ+30%＆コンボ中断無効"
+            }
+        },
+        {
+            "id": "10000077-dendro",
+            "name": "ヨォーヨ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eの月桂（1秒毎投擲）で草粒子を順次生成（合計約4〜5個）",
+            "normalAttackTrigger": "なし",
+            "earlyPriming": null,
+            "energyNote": "Q消費80。Q中の移動による全体回復が不要な編成ではEだけで回すとローテが短縮できる",
+            "comboNote": "Q中は出場維持が必要なため、短時間サポート時はEのみ、全体緊急回復や大量草付着時はE→Q→ダッシュ通常",
+            "constellationBreakpoints": {
+                "1": "月桂の爆発で草ダメバフ+15%＆スタミナ回復",
+                "2": "Q中、爆発が敵に当たると自身エネルギー3回復"
+            }
+        },
+        {
+            "id": "10000081-dendro",
+            "name": "カーヴェ",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで草2個",
+            "normalAttackTrigger": "なし（Q中の草付与通常攻撃で開花を起こすドライバー）",
+            "earlyPriming": null,
+            "energyNote": "Q消費80と重いため、末尾にEを挟んで次の周回分の粒子を稼ぐ形が定番",
+            "comboNote": "Qで草原核ダメージを強化しつつ通常連打し、Eで即時起爆する",
+            "constellationBreakpoints": {
+                "4": "自身が起動した開花ダメージ+60%",
+                "6": "通常・重撃・落下命中時に周囲の草原核を即時起爆（CT3秒）"
+            }
+        },
+        {
+            "id": "10000129-cryo",
+            "name": "ローエン",
+            "snapshot": {
+                "e": false,
+                "q": false
+            },
+            "particles": "Eで氷粒子を生成",
+            "normalAttackTrigger": "なし（N1C連打で固有資源を循環）",
+            "earlyPriming": null,
+            "energyNote": "Q消費60前後のメインアタッカー想定。重撃主体で戦う",
+            "comboNote": "E始動のN1C連打または特殊E経由の重撃連打が主力",
+            "constellationBreakpoints": {}
         }
     ]
 }

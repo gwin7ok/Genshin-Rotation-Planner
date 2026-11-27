@@ -3,17 +3,27 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%89%E3%83%AA%E3%83%BC",
  "archetypes": [
   {
-   "name": "q e の出場",
+   "name": "E→Q（KQM最多13%）",
    "role": "supporter",
-   "slot": 20,
+   "slot": 10,
+   "use": [
+    "e",
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 13% 最多E→Q回復バッテリー形"
+  },
+  {
+   "name": "Q→E（爆発先行）",
+   "role": "supporter",
+   "slot": 10,
    "use": [
     "q",
     "e"
    ],
-   "evidence": "自動編成（ドリー + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 45.2k → 41.3k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行バッテリー形"
   },
   {
-   "name": "E→N→Q（KQM）",
+   "name": "E→N→Q（西風粒子）",
    "role": "supporter",
    "slot": 10,
    "use": [
@@ -21,83 +31,29 @@
     "n",
     "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 7 件。平均 70.2k（最大 82.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 西風粒子トリガー込み形"
   },
   {
-   "name": "E→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
+   "name": "Q→E のあと N2D 連打（完凸雷付与ドライバー）",
+   "role": "attacker",
+   "slot": 40,
    "use": [
-    "e",
     "q",
-    "n"
+    "e"
    ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 7 件。平均 48.2k（最大 61.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
-  },
-  {
-   "name": "E→N×2→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
+   "fill": [
     "n",
     "n",
-    "q"
+    "dash"
    ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 4 件。平均 51.8k（最大 55.9k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "E→N×2→DASH→N×2→Q→E→N×2→DASH→N×2→E→N×2→DASH→N×2（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "q",
-    "e",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n"
+   "fillRepeat": [
+    3,
+    4
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 4 件。平均 69.1k（最大 81.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: ドリー 103 件中 12 件。平均 59.8k（最大 72.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/12）（探索の比較なし）"
-  },
-  {
-   "name": "e→n×2→dash→n×2",
-   "role": "supporter",
-   "slot": 20,
-   "use": [
-    "e",
-    "n",
-    "n",
-    "dash",
-    "n",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 24 件・平均 61.2k・最大 81.4k。e n×2 dash n×2（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（24 件。分布 0〜6 凸 = 0/0/0/0/0/0/24）"
+   "constellation": {
+    "min": 6
+   },
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 6凸雷付与N2Dドライバー形"
   }
  ]
 }

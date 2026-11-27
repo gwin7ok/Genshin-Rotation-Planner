@@ -3,57 +3,53 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AB%E3%83%BC%E3%83%B4%E3%82%A7",
  "archetypes": [
   {
-   "name": "E のあと 通常攻撃を繰り返す（アタッカー型）",
+   "name": "Q→E のあと通常連打→末尾E（開花ドライバー・KQM最多21%）",
    "role": "attacker",
    "slot": 40,
    "use": [
+    "q",
     "e"
    ],
    "fill": [
     "n"
    ],
    "fillRepeat": [
-    4,
-    6,
-    8
+    10,
+    12
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 乗って通常攻撃扱いで戦うアタッカー型"
-  },
-  {
-   "name": "E（設置・控えから攻撃）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
+   "tail": [
     "e"
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: スキルで出す乗り物は、控えでも設置物として戦える"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 21% 最多Q→E通常連打→末尾E開花起爆形"
   },
   {
-   "name": "Q→E→N×12→E→N×4（KQM）",
+   "name": "E→Q のあと通常連打→末尾E（KQM 14%）",
    "role": "attacker",
    "slot": 40,
    "use": [
-    "q",
     "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "n",
+    "q"
+   ],
+   "fill": [
     "n"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: カーヴェ 30 件中 3 件。平均 62.8k（最大 63.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "fillRepeat": [
+    10,
+    12
+   ],
+   "tail": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 14% E先出し通常連打→末尾E形"
+  },
+  {
+   "name": "E だけ（即時起爆サブ）",
+   "role": "supporter",
+   "slot": 20,
+   "use": [
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 即時開花起爆サポーター形"
   }
  ]
 }

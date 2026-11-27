@@ -3,103 +3,54 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9",
  "archetypes": [
   {
-   "name": "e q の出場",
+   "name": "E→Q（定番水付与・ダメバフ）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "自動編成（キャンディス + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 37.8k → 37.9k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 定番水付与＋通常ダメバフ形"
   },
   {
-   "name": "E→N×2→Q（KQM）",
+   "name": "E→N→Q→N（KQM最多11%）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "n",
-    "n",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 6 件。平均 65.1k（最大 67.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/6）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→N×2（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "n",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 3 件。平均 87.6k（最大 100.5k）。凸数: 使われている設定の最小は 5 凸（分布 0〜6 凸 = 0/0/0/0/0/2/1）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: キャンディス 93 件中 3 件。平均 59.7k（最大 63.5k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→N のあと、もう一度 E→N×2",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
     "q",
     "n"
    ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: キャンディス 93 件中 3 件。平均 40.2k（最大 48.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 11% 最多西風/水付着N込み形"
   },
   {
-   "name": "N→E のあと、もう一度 N→E→Q→N",
+   "name": "Q→E（爆発先行）",
    "role": "supporter",
    "slot": 10,
    "use": [
-    "n",
+    "q",
     "e"
    ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "n",
-      "e",
-      "q",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: キャンディス 93 件中 3 件。平均 37.9k（最大 44.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/3）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行交代波紋形"
   },
   {
-   "name": "e→n→q→n",
+   "name": "E→Q のあと、もう一度 E",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
-    "n",
-    "q",
-    "n"
+    "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 14 件・平均 64.2k・最大 100.3k。e n q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（14 件。分布 0〜6 凸 = 0/0/0/0/0/0/14）"
+   "then": [
+    {
+     "slot": 30,
+     "use": [
+      "e"
+     ]
+    }
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 2回出場E粒子回収形"
   }
  ]
 }

@@ -3,42 +3,29 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%82%B3%E3%83%AC%E3%82%A4",
  "archetypes": [
   {
-   "name": "e q の出場",
-   "role": "supporter",
-   "slot": 30,
+   "name": "E→Q（KQM最多21%）",
+   "role": "subAttacker",
+   "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "自動編成（コレイ + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 48.7k → 48.2k"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 21% 最多E→Q草付着形"
   },
   {
-   "name": "N→E→N→Q（KQM）",
+   "name": "Q→E（爆発先行）",
    "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "n",
-    "e",
-    "n",
-    "q"
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: コレイ 106 件中 5 件。平均 52.7k（最大 57.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "Q→E（KQM）",
-   "role": "subAttacker",
-   "slot": 20,
+   "slot": 10,
    "use": [
     "q",
     "e"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: コレイ 106 件中 4 件。平均 47.8k（最大 116.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行草付着形"
   },
   {
-   "name": "Q→E のあと、もう一度 E",
+   "name": "Q→E のあと、もう一度 E（2回出場）",
    "role": "subAttacker",
-   "slot": 20,
+   "slot": 10,
    "use": [
     "q",
     "e"
@@ -51,32 +38,12 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 8 件。平均 45.8k（最大 53.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/8）（探索の比較なし）"
-  },
-  {
-   "name": "E のあと、もう一度 Q→N→E",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "e"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "q",
-      "n",
-      "e"
-     ]
-    }
-   ],
-   "requiresFavonius": true,
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 5 件。平均 46.0k（最大 53.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 祭礼/2回出場E粒子回収形"
   },
   {
    "name": "E のあと、もう一度 Q→E",
    "role": "subAttacker",
-   "slot": 20,
+   "slot": 10,
    "use": [
     "e"
    ],
@@ -89,24 +56,7 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 4 件。平均 51.0k（最大 60.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "Q のあと、もう一度 E",
-   "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: コレイ 106 件中 4 件。平均 51.1k（最大 60.0k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 先置きE→後半Q→E形"
   }
  ]
 }

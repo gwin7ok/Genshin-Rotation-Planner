@@ -3,71 +3,36 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%88%E3%83%BC%E3%83%9E",
  "archetypes": [
   {
-   "name": "E→Q",
+   "name": "E→Q（シールド＋通常連動炎追撃）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "evidence": "Wiki 本文のコンボの記述: 始動時は、スキル→爆発（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 基本E粒子受け取りQシールド形"
   },
   {
-   "name": "Q→E",
+   "name": "E→N→Q→N（西風粒子・KQM最多18%）",
+   "role": "supporter",
+   "slot": 10,
+   "use": [
+    "e",
+    "n",
+    "q",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 18% 最多西風粒子トリガー形"
+  },
+  {
+   "name": "Q→E（爆発先行）",
    "role": "supporter",
    "slot": 10,
    "use": [
     "q",
     "e"
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキルと爆発を併用するときは、爆発→スキルの順（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 5 件。平均 48.0k（最大 59.7k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 15 件。平均 55.3k（最大 66.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/15）（探索の比較なし）"
-  },
-  {
-   "name": "Q→N→E→N×2（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "q",
-    "n",
-    "e",
-    "n",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: トーマ 118 件中 10 件。平均 46.4k（最大 60.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
-  },
-  {
-   "name": "e→n→q→n",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q",
-    "n"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 18 件・平均 57.0k・最大 72.8k。e n q n（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（18 件。分布 0〜6 凸 = 0/0/0/0/0/0/18）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q先行シールド形"
   }
  ]
 }

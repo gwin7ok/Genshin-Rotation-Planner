@@ -3,154 +3,78 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%95%E3%83%AC%E3%83%9F%E3%83%8D",
  "archetypes": [
   {
-   "name": "E・通常攻撃のあと 通常攻撃を繰り返す",
+   "name": "E→Q のあと N×2→E 圧力ループ（物理主力）",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "n"
+    "q"
    ],
    "fill": [
-    "n"
+    "n",
+    "n",
+    "e"
    ],
    "fillRepeat": [
-    12,
-    14,
-    16
+    4,
+    5,
+    6
    ],
-   "evidence": "編成例の探索（フレミネ・イネファ・フリーナ・エスコフィエ）の上位に出る形。実測: 最短の設定で 59.3k → 59.3k（同じ）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 物理ランク4圧力ループ形"
   },
   {
-   "name": "E→N×4→E→DASH×3（KQM）",
+   "name": "E→Q のあと N×2→E×2 ループ（氷/高圧交互）",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "n",
-    "n",
-    "n",
-    "n",
-    "e",
-    "dash",
-    "dash",
-    "dash"
+    "q"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 7 件。平均 56.2k（最大 60.6k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/7）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q→N×2→E×2→N×2→E→N×2→E→N×2→E→N×2→E→N×3→E（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "n",
-    "n",
-    "e"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 5 件。平均 52.1k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q→N×2→E×2→N×2→E→N→E→N×2→E→N→E→N×2→E（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "n",
-    "q",
-    "n",
-    "n",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 17 件。平均 56.0k（最大 88.8k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/17）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→E×3→N×2→E×2→N×2→E×2→N×2→E×2→N×2→E×2（KQM）",
-   "role": "attacker",
-   "slot": 40,
-   "use": [
-    "e",
-    "q",
-    "e",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "e",
+   "fill": [
     "n",
     "n",
     "e",
     "e"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: フレミネ 110 件中 10 件。平均 55.5k（最大 72.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/10）（探索の比較なし）"
+   "fillRepeat": [
+    3,
+    4
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 氷/高圧交互ループ形"
   },
   {
-   "name": "e→q→n×2→e×2→n×2→e→n→e→n×2→e→n→e→n×2→e",
+   "name": "E→N→Q のあと N×2→E 圧力ループ",
    "role": "attacker",
    "slot": 40,
    "use": [
     "e",
-    "q",
     "n",
-    "n",
-    "e",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "e",
-    "n",
-    "n",
-    "e",
-    "n",
-    "e",
+    "q"
+   ],
+   "fill": [
     "n",
     "n",
     "e"
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の行動の形: 17 件・平均 56.3k・最大 81.0k。e q n×2 e×2 n×2 e n e n×2 e n e n×2 e（探索の比較なし）。凸数: 使われている設定の最小は 6 凸（17 件。分布 0〜6 凸 = 0/0/0/0/0/0/17）"
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E後N挟みQ圧力ループ形"
+  },
+  {
+   "name": "E→N×4→E（爆発なし短時間）",
+   "role": "attacker",
+   "slot": 40,
+   "use": [
+    "e",
+    "n",
+    "n",
+    "n",
+    "n",
+    "e"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: Q省略短時間物理圧力形"
   }
  ]
 }

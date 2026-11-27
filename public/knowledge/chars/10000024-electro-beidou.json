@@ -3,144 +3,18 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E5%8C%97%E6%96%97",
  "archetypes": [
   {
-   "name": "E→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 5 件。平均 42.6k（最大 61.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "q の出場",
-   "role": "supporter",
-   "slot": 30,
-   "use": [
-    "q"
-   ],
-   "evidence": "自動編成（北斗 + 雷電将軍・ベネット・フリーナ）の探索の上位に出る形。実測（最短の設定）: 41.6k → 39.6k"
-  },
-  {
-   "name": "通常2→E→Q",
+   "name": "E→Q（カウンター＋雷追撃）",
    "role": "subAttacker",
-   "slot": 20,
-   "use": [
-    "n",
-    "n",
-    "e",
-    "q"
-   ],
-   "evidence": "Wiki 本文のコンボの記述: 爆発前に、効果を 4 層にするための操作（通常 2 回）を入れる（探索の比較なし）"
-  },
-  {
-   "name": "E→N→Q（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "n",
-    "q"
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 4 件。平均 50.9k（最大 62.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E→N",
-   "role": "supporter",
    "slot": 10,
    "use": [
     "e",
     "q"
    ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 9 件。平均 50.5k（最大 67.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/9）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 基本カウンター粒子＋閃雷起動形"
   },
   {
-   "name": "E→Q のあと、もう一度 E→N×2",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 5 件。平均 49.6k（最大 53.4k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 N→E→N×2",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "n",
-      "e",
-      "n",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 5 件。平均 51.8k（最大 64.1k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/5）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→DASH のあと、もう一度 E→N",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "dash"
-   ],
-   "then": [
-    {
-     "slot": 30,
-     "use": [
-      "e",
-      "n"
-     ]
-    }
-   ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 4 件。平均 52.9k（最大 62.2k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/4）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q→N（KQM）",
-   "role": "supporter",
-   "slot": 10,
-   "use": [
-    "e",
-    "q",
-    "n"
-   ],
-   "constellation": {
-    "min": 2
-   },
-   "evidence": "KQM Sim Database（db.kqm.gg）の単数回の形: 北斗 128 件中 12 件。平均 45.8k（最大 53.7k）。凸数: 使われている設定の最小は 2 凸（分布 0〜6 凸 = 0/0/2/0/0/0/10）（探索の比較なし）"
-  },
-  {
-   "name": "E→Q のあと、もう一度 E",
-   "role": "supporter",
+   "name": "E→Q のあと、もう一度 E（粒子稼ぎ・KQM最多12%）",
+   "role": "subAttacker",
    "slot": 10,
    "use": [
     "e",
@@ -154,7 +28,27 @@
      ]
     }
    ],
-   "evidence": "KQM Sim Database（db.kqm.gg）の複数回出場の形: 北斗 128 件中 13 件。平均 48.8k（最大 68.3k）。凸数: 使われている設定の最小は 6 凸（分布 0〜6 凸 = 0/0/0/0/0/0/13）（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 最多2回出場E粒子回収形"
+  },
+  {
+   "name": "E→Q→N（西風/追撃起動）",
+   "role": "subAttacker",
+   "slot": 10,
+   "use": [
+    "e",
+    "q",
+    "n"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 西風・閃雷初動トリガー形"
+  },
+  {
+   "name": "Q だけ（時短）",
+   "role": "subAttacker",
+   "slot": 20,
+   "use": [
+    "q"
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E省略時短Q展開形"
   }
  ]
 }

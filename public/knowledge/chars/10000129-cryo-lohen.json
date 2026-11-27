@@ -3,7 +3,7 @@
  "wikiUrl": "https://wikiwiki.jp/genshinwiki/%E3%83%AD%E3%83%BC%E3%82%A8%E3%83%B3",
  "archetypes": [
   {
-   "name": "通常1→重撃のループ",
+   "name": "E のあと N1C 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -15,13 +15,12 @@
    ],
    "fillRepeat": [
     6,
-    8,
-    10
+    8
    ],
-   "evidence": "Wiki 本文のコンボの記述: 通常 1→重撃を素早くループさせるのが重要なテクニック（探索の比較なし）"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E後N1C連打基本形"
   },
   {
-   "name": "E→重撃2→特殊E→重撃5→Q→重撃5",
+   "name": "E→重撃×2→E→Q のあと重撃連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -29,22 +28,19 @@
     "ca",
     "ca",
     "e",
-    "ca",
-    "ca",
-    "ca",
-    "ca",
-    "ca",
-    "q",
-    "ca",
-    "ca",
-    "ca",
-    "ca",
+    "q"
+   ],
+   "fill": [
     "ca"
    ],
-   "evidence": "Wiki 本文のコンボの記述: スキル→重撃 2 回→特殊スキルか爆発→重撃 5 回→特殊スキルか爆発→重撃 5〜6 回（探索の比較なし）"
+   "fillRepeat": [
+    4,
+    5
+   ],
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: 特殊E経由Q重撃連打形"
   },
   {
-   "name": "E・Q のあと 通常攻撃 + 重撃を繰り返す",
+   "name": "E→Q のあと N1C 連打",
    "role": "attacker",
    "slot": 40,
    "use": [
@@ -57,19 +53,9 @@
    ],
    "fillRepeat": [
     4,
-    6,
-    8
+    6
    ],
-   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 奇策状態では、通常 1 → 重撃の素早いループが強い"
-  },
-  {
-   "name": "E（氷下地）",
-   "role": "subAttacker",
-   "slot": 10,
-   "use": [
-    "e"
-   ],
-   "evidence": "Wiki 本文の運用の記述から解釈（gcsim 未対応のため、探索の比較なし）: 氷付着で下地を作る役（イネーブラー）としての運用"
+   "evidence": "Phase 3-2精鋭辞書＋KQM新集計: E→Q後N1C連打形"
   }
  ]
 }
